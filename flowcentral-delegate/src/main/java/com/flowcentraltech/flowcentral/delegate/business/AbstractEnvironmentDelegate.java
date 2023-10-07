@@ -32,8 +32,6 @@ import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleNa
 import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.EntityFieldDef;
-import com.flowcentraltech.flowcentral.application.data.EntityFieldSchema;
-import com.flowcentraltech.flowcentral.application.data.EntitySchema;
 import com.flowcentraltech.flowcentral.common.AbstractFlowCentralComponent;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentDelegate;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentDelegateUtilities;
@@ -43,11 +41,8 @@ import com.flowcentraltech.flowcentral.connect.common.constants.DataSourceOperat
 import com.flowcentraltech.flowcentral.connect.common.data.BaseResponse;
 import com.flowcentraltech.flowcentral.connect.common.data.DataSourceRequest;
 import com.flowcentraltech.flowcentral.connect.common.data.EntityDTO;
-import com.flowcentraltech.flowcentral.connect.common.data.EntityFieldDTO;
-import com.flowcentraltech.flowcentral.connect.common.data.EntityListingDTO;
 import com.flowcentraltech.flowcentral.connect.common.data.JsonDataSourceResponse;
 import com.flowcentraltech.flowcentral.connect.common.data.PseudoDataSourceResponse;
-import com.flowcentraltech.flowcentral.connect.common.data.RedirectErrorDTO;
 import com.flowcentraltech.flowcentral.delegate.data.DelegateEntityListingDTO;
 import com.tcdng.unify.common.constants.EnumConst;
 import com.tcdng.unify.core.UnifyException;
@@ -68,7 +63,6 @@ import com.tcdng.unify.core.database.DataSourceEntityListProvider;
 import com.tcdng.unify.core.database.DatabaseSession;
 import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.database.Query;
-import com.tcdng.unify.core.task.TaskMonitor;
 import com.tcdng.unify.core.util.DataUtils;
 
 /**
@@ -80,10 +74,10 @@ import com.tcdng.unify.core.util.DataUtils;
 public abstract class AbstractEnvironmentDelegate extends AbstractFlowCentralComponent implements EnvironmentDelegate {
 
     @Configurable
-    private AppletUtilities au;
+    protected AppletUtilities au;
 
     @Configurable(ApplicationModuleNameConstants.DELEGATE_ENTITYLIST_PROVIDER)
-    private DataSourceEntityListProvider dataSourceEntityListProvider;
+    protected DataSourceEntityListProvider dataSourceEntityListProvider;
 
     @Override
     public boolean isDirect() {
@@ -96,102 +90,6 @@ public abstract class AbstractEnvironmentDelegate extends AbstractFlowCentralCom
 
     public final void setDataSourceEntityListProvider(DataSourceEntityListProvider dataSourceEntityListProvider) {
         this.dataSourceEntityListProvider = dataSourceEntityListProvider;
-    }
-
-    @Override
-    public void delegateCreateSynchronization(TaskMonitor taskMonitor) throws UnifyException {
-        logInfo(taskMonitor, "Performing create synchronization of entities for delegate [0]...", getName());
-        DelegateEntityListingDTO delegateEntityListingDTO = getDelegatedEntityList();
-        if (delegateEntityListingDTO != null) {
-            if (!DataUtils.isBlank(delegateEntityListingDTO.getRedirectErrors())) {
-                for (RedirectErrorDTO redirectErrorDTO : delegateEntityListingDTO.getRedirectErrors()) {
-                    logWarn(taskMonitor, "Unable to synchronize with redirect [{0}]. Error [{1}].",
-                            redirectErrorDTO.getRedirect(), redirectErrorDTO.getErrorMsg());
-                }
-            }
-
-            if (!DataUtils.isBlank(delegateEntityListingDTO.getListings())) {
-                final String delegate = getName();
-                logInfo(taskMonitor, "[{0}] entities detected...", delegateEntityListingDTO.getListings().size());
-                for (EntityListingDTO entityListingDTO : delegateEntityListingDTO.getListings()) {
-                    final String entity = entityListingDTO.getEntity();
-                    // TODO Get existing set for restriction
-                    logInfo(taskMonitor, "Fetching schema information for [{0}]...", entity);
-                    EntityDTO entityDTO = getDelegatedEntitySchema(entity);
-                    if (entityDTO != null) {
-                        logInfo(taskMonitor, "Creating entity schema...");
-                        List<EntityFieldSchema> fields = new ArrayList<EntityFieldSchema>();
-                        for (EntityFieldDTO entityFieldDTO : entityDTO.getFields()) {
-                            fields.add(new EntityFieldSchema(entityFieldDTO.getName(), entityFieldDTO.getDescription(),
-                                    entityFieldDTO.getColumn(), entityFieldDTO.getReferences(),
-                                    entityFieldDTO.getScale(), entityFieldDTO.getPrecision(),
-                                    entityFieldDTO.getLength()));
-                        }
-
-                        EntitySchema entitySchema = new EntitySchema(delegate, entityDTO.getDataSourceAlias(), entity,
-                                entityDTO.getName(), entityDTO.getDescription(), entityDTO.getTableName(), fields);
-                        //au.updateEntitySchema(entitySchema); TODO
-                        logInfo(taskMonitor, "Entity schema create for [{0}] completed...", entity);
-                    } else {
-                        logWarn(taskMonitor, "Could no retreive schema information for entity [{0}]...", entity);
-                    }
-                }
-            } else {
-                logInfo(taskMonitor, "No entity listings found for this delegate.");
-            }
-            
-            logInfo(taskMonitor, "Delegate synchronization completed.");
-        } else {
-            logInfo(taskMonitor, "Could not retrieve synchronization information.");
-        }
-    }
-
-    @Override
-    public void delegateUpdateSynchronization(TaskMonitor taskMonitor) throws UnifyException {
-        logInfo(taskMonitor, "Performing update synchronization of entities for delegate [0]...", getName());
-        DelegateEntityListingDTO delegateEntityListingDTO = getDelegatedEntityList();
-        if (delegateEntityListingDTO != null) {
-            if (!DataUtils.isBlank(delegateEntityListingDTO.getRedirectErrors())) {
-                for (RedirectErrorDTO redirectErrorDTO : delegateEntityListingDTO.getRedirectErrors()) {
-                    logWarn(taskMonitor, "Unable to synchronize with redirect [{0}]. Error [{1}].",
-                            redirectErrorDTO.getRedirect(), redirectErrorDTO.getErrorMsg());
-                }
-            }
-
-            if (!DataUtils.isBlank(delegateEntityListingDTO.getListings())) {
-                final String delegate = getName();
-                logInfo(taskMonitor, "[{0}] entities detected...", delegateEntityListingDTO.getListings().size());
-                for (EntityListingDTO entityListingDTO : delegateEntityListingDTO.getListings()) {
-                    final String entity = entityListingDTO.getEntity();
-                    // TODO Get existing set for restriction
-                    logInfo(taskMonitor, "Fetching schema information for [{0}]...", entity);
-                    EntityDTO entityDTO = getDelegatedEntitySchema(entity);
-                    if (entityDTO != null) {
-                        logInfo(taskMonitor, "Updating entity schema...");
-                        List<EntityFieldSchema> fields = new ArrayList<EntityFieldSchema>();
-                        for (EntityFieldDTO entityFieldDTO : entityDTO.getFields()) {
-                            fields.add(new EntityFieldSchema(entityFieldDTO.getName(), entityFieldDTO.getDescription(),
-                                    entityFieldDTO.getColumn(), entityFieldDTO.getReferences(),
-                                    entityFieldDTO.getScale(), entityFieldDTO.getPrecision(),
-                                    entityFieldDTO.getLength()));
-                        }
-
-                        EntitySchema entitySchema = new EntitySchema(delegate, entityDTO.getDataSourceAlias(), entity,
-                                entityDTO.getName(), entityDTO.getDescription(), entityDTO.getTableName(), fields);
-                        au.updateEntitySchema(entitySchema);
-                        logInfo(taskMonitor, "Entity schema update for [{0}] completed...", entity);
-                    } else {
-                        logWarn(taskMonitor, "Could no retreive schema information for entity [{0}]...", entity);
-                    }
-                }
-            } else {
-                logInfo(taskMonitor, "No entity listings found for this delegate.");
-            }
-            
-            logInfo(taskMonitor, "Delegate synchronization completed.");
-        } else {
-            logInfo(taskMonitor, "Could not retrieve synchronization information.");
-        }
     }
 
     protected abstract DelegateEntityListingDTO getDelegatedEntityList() throws UnifyException;

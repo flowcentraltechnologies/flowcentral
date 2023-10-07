@@ -15,10 +15,22 @@
  */
 package com.flowcentraltech.flowcentral.connect.springboot;
 
+import java.lang.reflect.Field;
+import java.util.Map;
+
+import javax.persistence.Column;
+import javax.persistence.Lob;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.flowcentraltech.flowcentral.connect.common.Interconnect;
+import com.flowcentraltech.flowcentral.connect.common.AbstractInterconnect;
+import com.flowcentraltech.flowcentral.connect.common.data.EntityFieldInfo;
+import com.flowcentraltech.flowcentral.connect.common.data.EntityInfo;
+import com.flowcentraltech.flowcentral.connect.configuration.constants.ConnectFieldDataType;
 
 /**
  * Flowcentral spring boot interconnect.
@@ -27,10 +39,54 @@ import com.flowcentraltech.flowcentral.connect.common.Interconnect;
  * @since 1.0
  */
 @Component
-public class SpringBootInterconnect extends Interconnect {
+public class SpringBootInterconnect extends AbstractInterconnect {
 
     @Autowired
     public SpringBootInterconnect() {
         super(RefType.OBJECT);
+    }
+
+    @Override
+    protected String getTableName(Class<?> entityClass) throws Exception {
+        Table ta = entityClass.getAnnotation(Table.class);
+        return  ta != null ? ta.name() : null;
+    }
+
+    @Override
+    protected EntityFieldInfo createEntityFieldInfo(Map<String, EntityInfo> _entitiesbyclassname, Field field)
+            throws Exception {
+        FieldTypeInfo fieldTypeInfo = getFieldTypeInfo(_entitiesbyclassname, field);
+        final String name = field.getName();
+        ConnectFieldDataType type = fieldTypeInfo.getType();
+        String description = null;
+        String column = null;
+        int length = 0;
+        int precision = 0;
+        int scale = 0;
+        boolean nullable = false;
+
+        Column ca = field.getAnnotation(Column.class);
+        if (ca != null) {
+            column = ca.name();
+            length = ca.length();
+            precision = ca.precision();
+            scale = ca.scale();
+            nullable = ca.nullable();
+        }
+
+        if (type.isString()) {
+            Lob la = field.getAnnotation(Lob.class);
+            if (la != null) {
+                type = ConnectFieldDataType.CLOB;
+            }
+        } else if (type.isDate()) {
+            Temporal ta = field.getAnnotation(Temporal.class);
+            if (ta != null && (TemporalType.TIMESTAMP.equals(ta.value()) || TemporalType.TIME.equals(ta.value()))) {
+                type = ConnectFieldDataType.TIMESTAMP;
+            }
+        }
+
+        return new EntityFieldInfo(type, name, description, column, fieldTypeInfo.getReferences(),
+                fieldTypeInfo.getEnumImplClass(), precision, scale, length, nullable);
     }
 }

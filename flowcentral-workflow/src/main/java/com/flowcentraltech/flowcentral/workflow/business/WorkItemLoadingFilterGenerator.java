@@ -13,28 +13,30 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.common.business;
 
-import com.flowcentraltech.flowcentral.common.AbstractFlowCentralComponent;
+package com.flowcentraltech.flowcentral.workflow.business;
+
+import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.criterion.Restriction;
 
 /**
- * Base class for environment delegate utilities.
+ * Work-item loading filter generator.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class AbstractEnvironmentDelegateUtilities extends AbstractFlowCentralComponent
-        implements EnvironmentDelegateUtilities {
+public interface WorkItemLoadingFilterGenerator extends FlowCentralComponent {
 
-    @Override
-    protected void onInitialize() throws UnifyException {
-
-    }
-
-    @Override
-    protected void onTerminate() throws UnifyException {
-
-    }
-
+    /**
+     * Generates restriction based on supplied workflow step information.
+     * 
+     * @param workflow
+     *                 the workflow long name
+     * @param step
+     *                 the workflow step name
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    Restriction generate(String workflow, String step) throws UnifyException;
 }

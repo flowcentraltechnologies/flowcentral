@@ -55,7 +55,10 @@ public class MyWorkItemsApplet extends ManageLoadingListApplet {
         final LoadingSearch loadingSearch = getLoadingSearch();
         loadingSearch.getLoadingTable().setAltTableLoadingDefs(altTableLoadingDefs);
         loadingSearch.getLoadingTable().setDisableLinks(true);
-        loadingSearch.applySearchEntriesToSearch();
     }
 
+    public void applySearch() throws UnifyException {
+        final LoadingSearch loadingSearch = getLoadingSearch();
+        loadingSearch.applySearchEntriesToSearch();
+    }
 }

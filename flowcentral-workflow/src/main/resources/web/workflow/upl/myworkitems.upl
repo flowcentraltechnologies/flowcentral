@@ -42,5 +42,5 @@
 !fc-manageloadinglistappletpanel:appletPanel style:$s{width:100%;height:100%;} binding:applet
 
 // Actions
-!ui-post:refreshWorkItemsAct  path:$n{/refreshSlate} 
+!ui-post:refreshWorkItemsAct  path:$n{/refreshSlate} components:$c{appletPanel} 
 !ui-post:switchWorkItemsAct  path:$n{/loadWorkItemsSlate} components:$c{stepSelect}

@@ -43,7 +43,7 @@ public class WfChannelDestinationListCommand extends AbstractWorkflowListCommand
     public List<? extends Listable> execute(Locale locale, WfChannelDestinationParams params) throws UnifyException {
         if (params.isPresent()) {
             if (ChannelDirectionType.INWARD.equals(params.getDirection())) {
-                return au().getApplicationEntities(new WorkflowQuery().entity(params.getEntity()));
+                return au().getApplicationEntitiesListables(new WorkflowQuery().entity(params.getEntity()));
             }
         }
 

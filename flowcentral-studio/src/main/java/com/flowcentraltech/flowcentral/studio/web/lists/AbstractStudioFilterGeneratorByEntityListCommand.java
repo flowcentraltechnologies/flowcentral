@@ -13,28 +13,30 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.common.business;
 
-import com.flowcentraltech.flowcentral.common.AbstractFlowCentralComponent;
+package com.flowcentraltech.flowcentral.studio.web.lists;
+
+import com.flowcentraltech.flowcentral.application.business.EntityBasedFilterGenerator;
+import com.flowcentraltech.flowcentral.common.web.lists.AbstractEntityTypeListCommand;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.list.StringParam;
 
 /**
- * Base class for environment delegate utilities.
+ * Base class for studio filter generator list command.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class AbstractEnvironmentDelegateUtilities extends AbstractFlowCentralComponent
-        implements EnvironmentDelegateUtilities {
+public abstract class AbstractStudioFilterGeneratorByEntityListCommand
+        extends AbstractEntityTypeListCommand<EntityBasedFilterGenerator, StringParam> {
 
-    @Override
-    protected void onInitialize() throws UnifyException {
-
+    public AbstractStudioFilterGeneratorByEntityListCommand() {
+        super(EntityBasedFilterGenerator.class, StringParam.class);
     }
 
     @Override
-    protected void onTerminate() throws UnifyException {
-
+    protected String getEntityName(StringParam param) throws UnifyException {
+        return param.getValue();
     }
 
 }

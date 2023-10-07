@@ -19,11 +19,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
-import com.flowcentraltech.flowcentral.connect.configuration.constants.EntityBaseType;
-import com.flowcentraltech.flowcentral.connect.configuration.constants.FieldDataType;
+import com.flowcentraltech.flowcentral.connect.configuration.constants.ConnectEntityBaseType;
+import com.flowcentraltech.flowcentral.connect.configuration.constants.ConnectFieldDataType;
 
 /**
  * Entity information.
@@ -37,7 +39,7 @@ public class EntityInfo {
 
     private String dataSourceAlias;
 
-    private EntityBaseType baseType;
+    private ConnectEntityBaseType baseType;
 
     private String name;
 
@@ -71,7 +73,7 @@ public class EntityInfo {
 
     private Map<String, String> fieldFromLocal;
 
-    public EntityInfo(String entityManagerFactory, String dataSourceAlias, EntityBaseType baseType, String name,
+    public EntityInfo(String entityManagerFactory, String dataSourceAlias, ConnectEntityBaseType baseType, String name,
             String description, String tableName, String idFieldName, String versionNoFieldName, String handler,
             String actionPolicy, Class<?> implClass, Map<String, EntityFieldInfo> fieldsByName) {
         this.entityManagerFactory = entityManagerFactory;
@@ -131,7 +133,7 @@ public class EntityInfo {
         return dataSourceAlias;
     }
 
-    public EntityBaseType getBaseType() {
+    public ConnectEntityBaseType getBaseType() {
         return baseType;
     }
 
@@ -228,6 +230,14 @@ public class EntityInfo {
         return local != null ? local : fieldName;
     }
 
+    public boolean isField(String fieldName) {
+        return fieldsByName.containsKey(fieldName);
+    }
+
+    public Set<String> getFieldNames() {
+        return fieldsByName.keySet();
+    }
+    
     public EntityFieldInfo getEntityFieldInfo(String fieldName) throws Exception {
         String local = getLocalFieldName(fieldName);
         EntityFieldInfo entityFieldInfo = fieldsByName.get(local);
@@ -248,7 +258,7 @@ public class EntityInfo {
 
         private String dataSourceAlias;
 
-        private EntityBaseType baseType;
+        private ConnectEntityBaseType baseType;
 
         private String name;
 
@@ -270,7 +280,7 @@ public class EntityInfo {
 
         public Builder(String entityManagerFactory) {
             this.entityManagerFactory = entityManagerFactory;
-            this.fieldsByName = new HashMap<String, EntityFieldInfo>();
+            this.fieldsByName = new LinkedHashMap<String, EntityFieldInfo>();
         }
 
         public Builder dataSourceAlias(String dataSourceAlias) {
@@ -278,7 +288,7 @@ public class EntityInfo {
             return this;
         }
 
-        public Builder baseType(EntityBaseType baseType) {
+        public Builder baseType(ConnectEntityBaseType baseType) {
             this.baseType = baseType;
             return this;
         }
@@ -323,14 +333,14 @@ public class EntityInfo {
             return this;
         }
         
-        public Builder addField(FieldDataType type, String fieldName, String description, String column)
+        public Builder addField(ConnectFieldDataType type, String fieldName, String description, String column)
                 throws Exception {
-            return addField(type, fieldName, description, column, null, null, 0, 0, 0);
+            return addField(type, fieldName, description, column, null, null, 0, 0, 0, true);
         }
         
         @SuppressWarnings("unchecked")
-        public Builder addField(FieldDataType type, String fieldName, String description, String column, String references,
-                String enumImpl, int scale, int precision, int length)
+        public Builder addField(ConnectFieldDataType type, String fieldName, String description, String column, String references,
+                String enumImpl, int precision, int scale, int length, boolean nullable)
                 throws Exception {
             if (type == null) {
                 throw new RuntimeException("Entity information field type is required");
@@ -350,10 +360,10 @@ public class EntityInfo {
                     ? (Class<? extends Enum<?>>) Class.forName(enumImpl)
                     : null;
             fieldsByName.put(fieldName, new EntityFieldInfo(type, fieldName, description, column, references,
-                     enumImplClass, scale, precision, length));
+                     enumImplClass, precision, scale, length, nullable));
             return this;
         }
-
+        
         public EntityInfo build() throws Exception {
             if (baseType == null) {
                 throw new RuntimeException("Entity base type is required. Entity name [" + name + "]");

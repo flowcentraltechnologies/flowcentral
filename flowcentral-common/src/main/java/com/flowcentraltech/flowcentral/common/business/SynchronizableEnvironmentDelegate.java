@@ -15,26 +15,35 @@
  */
 package com.flowcentraltech.flowcentral.common.business;
 
-import com.flowcentraltech.flowcentral.common.AbstractFlowCentralComponent;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.task.TaskMonitor;
 
 /**
- * Base class for environment delegate utilities.
+ * Synchronizable environment delegate.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class AbstractEnvironmentDelegateUtilities extends AbstractFlowCentralComponent
-        implements EnvironmentDelegateUtilities {
+public interface SynchronizableEnvironmentDelegate extends EnvironmentDelegate {
 
-    @Override
-    protected void onInitialize() throws UnifyException {
+    /**
+     * Perform delegate create synchronization.
+     * 
+     * @param taskMonitor
+     *                    the task monitor
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    void delegateCreateSynchronization(TaskMonitor taskMonitor) throws UnifyException;
 
-    }
-
-    @Override
-    protected void onTerminate() throws UnifyException {
-
-    }
+    /**
+     * Perform delegate update synchronization.
+     * 
+     * @param taskMonitor
+     *                    the task monitor
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    void delegateUpdateSynchronization(TaskMonitor taskMonitor) throws UnifyException;
 
 }

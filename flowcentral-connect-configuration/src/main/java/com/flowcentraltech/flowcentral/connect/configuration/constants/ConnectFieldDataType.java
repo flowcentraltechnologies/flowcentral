@@ -20,12 +20,12 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 /**
- * Field data type.
+ * Interconnect field data type.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public enum FieldDataType {
+public enum ConnectFieldDataType {
 
     CHAR(
             Character.class),
@@ -70,7 +70,7 @@ public enum FieldDataType {
 
     private final Class<?> javaClass;
 
-    private FieldDataType(Class<?> javaClass) {
+    private ConnectFieldDataType(Class<?> javaClass) {
         this.javaClass = javaClass;
     }
 

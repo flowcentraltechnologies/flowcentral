@@ -65,6 +65,10 @@ public class TableDef extends BaseApplicationEntityDef {
 
     private String detailsPanelName;
 
+    private String loadingSearchInput;
+
+    private String loadingFilterGen;
+
     private int sortHistory;
 
     private int itemsPerPage;
@@ -105,12 +109,12 @@ public class TableDef extends BaseApplicationEntityDef {
 
     private TableDef(EntityDef entityDef, List<TableLoadingDef> loadingDefList, List<TableColumnDef> columnDefList,
             List<TableColumnDef> visibleColumnDefList, List<ButtonInfo> actionBtnInfos,
-            Map<String, TableFilterDef> filterDefMap, String label, String detailsPanelName, int sortHistory,
-            int itemsPerPage, int summaryTitleColumns, boolean serialNo, boolean sortable, boolean showLabelHeader,
-            boolean headerToUpperCase, boolean headerCenterAlign, boolean basicSearch, boolean totalSummary,
-            boolean headerless, boolean multiSelect, boolean nonConforming, boolean fixedRows,
-            boolean limitSelectToColumns, ApplicationEntityNameParts nameParts, String description, Long id,
-            long version) {
+            Map<String, TableFilterDef> filterDefMap, String label, String detailsPanelName, String loadingSearchInput,
+            String loadingFilterGen, int sortHistory, int itemsPerPage, int summaryTitleColumns, boolean serialNo,
+            boolean sortable, boolean showLabelHeader, boolean headerToUpperCase, boolean headerCenterAlign,
+            boolean basicSearch, boolean totalSummary, boolean headerless, boolean multiSelect, boolean nonConforming,
+            boolean fixedRows, boolean limitSelectToColumns, ApplicationEntityNameParts nameParts, String description,
+            Long id, long version) {
         super(nameParts, description, id, version);
         this.entityDef = entityDef;
         this.loadingDefList = loadingDefList;
@@ -119,6 +123,8 @@ public class TableDef extends BaseApplicationEntityDef {
         this.actionBtnInfos = actionBtnInfos;
         this.label = label;
         this.detailsPanelName = detailsPanelName;
+        this.loadingSearchInput = loadingSearchInput;
+        this.loadingFilterGen = loadingFilterGen;
         this.sortHistory = sortHistory;
         this.itemsPerPage = itemsPerPage;
         this.summaryTitleColumns = summaryTitleColumns;
@@ -297,6 +303,22 @@ public class TableDef extends BaseApplicationEntityDef {
         return !StringUtils.isBlank(detailsPanelName);
     }
 
+    public String getLoadingSearchInput() {
+        return loadingSearchInput;
+    }
+
+    public boolean isWithLoadingSearchInput() {
+        return !StringUtils.isBlank(loadingSearchInput);
+    }
+
+    public String getLoadingFilterGen() {
+        return loadingFilterGen;
+    }
+
+    public boolean isWithLoadingFilterGen() {
+        return !StringUtils.isBlank(loadingFilterGen);
+    }
+
     public int getSortHistory() {
         return sortHistory;
     }
@@ -417,6 +439,10 @@ public class TableDef extends BaseApplicationEntityDef {
 
         private String detailsPanelName;
 
+        private String loadingSearchInput;
+
+        private String loadingFilterGen;
+
         private int sortHistory;
 
         private int itemsPerPage;
@@ -490,6 +516,16 @@ public class TableDef extends BaseApplicationEntityDef {
 
         public Builder detailsPanelName(String detailsPanelName) {
             this.detailsPanelName = detailsPanelName;
+            return this;
+        }
+
+        public Builder loadingSearchInput(String loadingSearchInput) {
+            this.loadingSearchInput = loadingSearchInput;
+            return this;
+        }
+
+        public Builder loadingFilterGen(String loadingFilterGen) {
+            this.loadingFilterGen = loadingFilterGen;
             return this;
         }
 
@@ -710,9 +746,10 @@ public class TableDef extends BaseApplicationEntityDef {
             return new TableDef(entityDef, DataUtils.unmodifiableList(loadingDefList),
                     DataUtils.unmodifiableList(columnDefList), DataUtils.unmodifiableList(_visibleColumnDefList),
                     DataUtils.unmodifiableList(actionBtnInfos), DataUtils.unmodifiableMap(filterDefMap), label,
-                    detailsPanelName, sortHistory, itemsPerPage, summaryTitleColumns, serialNo, sortable,
-                    showLabelHeader, headerToUpperCase, headerCenterAlign, basicSearch, totalSummary, headerless,
-                    multiSelect, nonConforming, fixedRows, limitSelectToColumns, nameParts, description, id, version);
+                    detailsPanelName, loadingSearchInput, loadingFilterGen, sortHistory, itemsPerPage,
+                    summaryTitleColumns, serialNo, sortable, showLabelHeader, headerToUpperCase, headerCenterAlign,
+                    basicSearch, totalSummary, headerless, multiSelect, nonConforming, fixedRows, limitSelectToColumns,
+                    nameParts, description, id, version);
         }
     }
 

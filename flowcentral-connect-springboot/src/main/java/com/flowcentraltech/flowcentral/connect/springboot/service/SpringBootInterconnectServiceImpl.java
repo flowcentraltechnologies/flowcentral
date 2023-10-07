@@ -69,7 +69,7 @@ import com.flowcentraltech.flowcentral.connect.common.data.ProcedureRequest;
 import com.flowcentraltech.flowcentral.connect.common.data.QueryDef;
 import com.flowcentraltech.flowcentral.connect.common.data.ResolvedCondition;
 import com.flowcentraltech.flowcentral.connect.common.data.UpdateDef;
-import com.flowcentraltech.flowcentral.connect.configuration.constants.FieldDataType;
+import com.flowcentraltech.flowcentral.connect.configuration.constants.ConnectFieldDataType;
 import com.flowcentraltech.flowcentral.connect.springboot.SpringBootInterconnect;
 import com.tcdng.unify.convert.util.ConverterUtils;
 
@@ -580,8 +580,8 @@ public class SpringBootInterconnectServiceImpl implements SpringBootInterconnect
                 paramA = resolved.getParamA();
                 paramB = resolved.getParamB();
             } else {
-                FieldDataType fieldDataType = _entityFieldInfo.getType();
-                Class<?> javaClass = fieldDataType.javaClass();
+                ConnectFieldDataType connectFieldDataType = _entityFieldInfo.getType();
+                Class<?> javaClass = connectFieldDataType.javaClass();
                 if (paramA != null) {
                     if (type.isAmongst()) {
                         paramA = ConverterUtils.convert(List.class, javaClass,

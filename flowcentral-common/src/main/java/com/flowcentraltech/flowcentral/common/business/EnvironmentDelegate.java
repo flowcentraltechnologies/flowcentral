@@ -20,7 +20,6 @@ import java.util.List;
 
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.database.Database;
-import com.tcdng.unify.core.task.TaskMonitor;
 
 /**
  * Environment delegate.
@@ -69,23 +68,4 @@ public interface EnvironmentDelegate extends Database {
      */
     String getDataSourceByEntityAlias(String entityLongName) throws UnifyException;
 
-    /**
-     * Perform delegate create synchronization.
-     * 
-     * @param taskMonitor
-     *                    the task monitor
-     * @throws UnifyException
-     *                        if an error occurs
-     */
-    void delegateCreateSynchronization(TaskMonitor taskMonitor) throws UnifyException;
-
-    /**
-     * Perform delegate update synchronization.
-     * 
-     * @param taskMonitor
-     *                    the task monitor
-     * @throws UnifyException
-     *                        if an error occurs
-     */
-    void delegateUpdateSynchronization(TaskMonitor taskMonitor) throws UnifyException;
 }

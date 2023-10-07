@@ -17,6 +17,8 @@ package com.flowcentraltech.flowcentral.application.data;
 
 import java.util.List;
 
+import com.flowcentraltech.flowcentral.configuration.constants.EntityBaseType;
+
 /**
  * Entity schema.
  * 
@@ -24,6 +26,8 @@ import java.util.List;
  * @since 1.0
  */
 public class EntitySchema {
+
+    private EntityBaseType baseType;
 
     private String delegate;
 
@@ -39,8 +43,9 @@ public class EntitySchema {
 
     private List<EntityFieldSchema> fields;
 
-    public EntitySchema(String delegate, String dataSourceAlias, String entity, String name, String description,
-            String tableName, List<EntityFieldSchema> fields) {
+    public EntitySchema(EntityBaseType baseType, String delegate, String dataSourceAlias, String entity, String name,
+            String description, String tableName, List<EntityFieldSchema> fields) {
+        this.baseType = baseType;
         this.delegate = delegate;
         this.dataSourceAlias = dataSourceAlias;
         this.entity = entity;
@@ -48,6 +53,10 @@ public class EntitySchema {
         this.description = description;
         this.tableName = tableName;
         this.fields = fields;
+    }
+
+    public EntityBaseType getBaseType() {
+        return baseType;
     }
 
     public String getDelegate() {

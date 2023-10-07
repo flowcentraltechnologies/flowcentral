@@ -26,6 +26,7 @@ import com.flowcentraltech.flowcentral.application.policies.AbstractApplicationL
 import com.flowcentraltech.flowcentral.application.policies.LoadingParams;
 import com.flowcentraltech.flowcentral.application.web.widgets.InputArrayEntries;
 import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
+import com.flowcentraltech.flowcentral.workflow.business.WorkItemLoadingFilterGenerator;
 import com.flowcentraltech.flowcentral.workflow.business.WorkflowModuleService;
 import com.flowcentraltech.flowcentral.workflow.constants.WfReviewMode;
 import com.flowcentraltech.flowcentral.workflow.constants.WorkflowModuleNameConstants;
@@ -36,6 +37,7 @@ import com.flowcentraltech.flowcentral.workflow.util.WorkflowEntityUtils;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
+import com.tcdng.unify.core.criterion.Restriction;
 import com.tcdng.unify.core.data.BeanValueStore;
 import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.data.ValueStoreReader;
@@ -49,7 +51,7 @@ import com.tcdng.unify.core.util.DataUtils;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@Component(WorkflowModuleNameConstants.WORKFLOW_MY_WORKITEMS_LOADING_TABLE_PROVIDER) 
+@Component(WorkflowModuleNameConstants.WORKFLOW_MY_WORKITEMS_LOADING_TABLE_PROVIDER)
 public class MyWorkItemsLoadingTableProvider extends AbstractApplicationLoadingTableProvider {
 
     @Configurable
@@ -102,6 +104,16 @@ public class MyWorkItemsLoadingTableProvider extends AbstractApplicationLoadingT
             Query<? extends Entity> query = application().queryOf(getSourceEntity());
             if (params.isWithRestriction()) {
                 query.addRestriction(params.getRestriction());
+            }
+            
+            if (workflowStepInfo.isWithWorkItemFilterGen()) {
+                WorkItemLoadingFilterGenerator loadingFilterGenerator = getComponent(
+                        WorkItemLoadingFilterGenerator.class, workflowStepInfo.getWorkItemFilterGenName());
+                Restriction restriction = loadingFilterGenerator.generate(workflowStepInfo.getWorkflowLongName(),
+                        workflowStepInfo.getStepName());
+                if (restriction != null) {
+                    query.addRestriction(restriction);
+                }
             }
 
             query.addAmongst("id", workItemIdList);

@@ -340,6 +340,11 @@
 			dataType="string" inputType="string"
 			editor="!ui-select list:studiotablefiltergeneratorlist listParams:$l{appTableId} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
+		<widgetType name="tableworkitemfiltergenlist"
+			description="$m{studio.widgettype.tableworkitemfiltergenlist}"
+			dataType="string" inputType="string"
+			editor="!ui-select list:studiotableworkitemfiltergenlist listParams:$l{entity} blankOption:$m{blank.none}"
+			renderer="!ui-label" />
 		<widgetType name="tableloadingproviderlist"
 			description="$m{studio.widgettype.tableloadingproviderlist}"
 			dataType="string" inputType="string"
@@ -3707,6 +3712,8 @@
 						column="1" required="true" switchOnChange="true" />
 					<field name="loadingSearchInput"
 						inputWidget="studio.tablesearchinputlist" column="1" />
+					<field name="loadingFilterGen"
+						inputWidget="studio.tableworkitemfiltergenlist" column="1" />
 					<field name="detailsPanelName"
 						inputWidget="studio.detailspanellist" column="1" />
 					<field name="itemsPerPage" inputWidget="application.integer"

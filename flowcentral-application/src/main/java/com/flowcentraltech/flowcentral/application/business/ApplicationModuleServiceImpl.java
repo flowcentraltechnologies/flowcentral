@@ -54,12 +54,10 @@ import com.flowcentraltech.flowcentral.application.data.AppletWorkflowCopyInfo;
 import com.flowcentraltech.flowcentral.application.data.ApplicationDef;
 import com.flowcentraltech.flowcentral.application.data.ApplicationMenuDef;
 import com.flowcentraltech.flowcentral.application.data.AssignmentPageDef;
+import com.flowcentraltech.flowcentral.application.data.DelegateEntityInfo;
 import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
-import com.flowcentraltech.flowcentral.application.data.DelegateEntityInfo;
 import com.flowcentraltech.flowcentral.application.data.EntityFieldDef;
-import com.flowcentraltech.flowcentral.application.data.EntityFieldSchema;
-import com.flowcentraltech.flowcentral.application.data.EntitySchema;
 import com.flowcentraltech.flowcentral.application.data.EntitySearchInputDef;
 import com.flowcentraltech.flowcentral.application.data.EntityUploadDef;
 import com.flowcentraltech.flowcentral.application.data.FieldSequenceDef;
@@ -298,7 +296,6 @@ import com.tcdng.unify.core.constant.OrderType;
 import com.tcdng.unify.core.criterion.And;
 import com.tcdng.unify.core.criterion.Equals;
 import com.tcdng.unify.core.criterion.Restriction;
-import com.tcdng.unify.core.criterion.Update;
 import com.tcdng.unify.core.data.BeanValueStore;
 import com.tcdng.unify.core.data.FactoryMap;
 import com.tcdng.unify.core.data.ListData;
@@ -1020,6 +1017,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     }
 
                     tdb.detailsPanelName(appTable.getDetailsPanelName());
+                    tdb.loadingSearchInput(appTable.getLoadingSearchInput());
+                    tdb.loadingFilterGen(appTable.getLoadingFilterGen());
                     tdb.sortHistory(appTable.getSortHistory());
                     tdb.itemsPerPage(appTable.getItemsPerPage());
                     tdb.summaryTitleColumns(appTable.getSummaryTitleColumns());
@@ -1390,40 +1389,6 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         }
 
         return delegateHolder.getEntityLongName();
-    }
-
-    @Override
-    @Synchronized("app:updateentityschema")
-    public boolean updateEntitySchema(EntitySchema entitySchema) throws UnifyException {
-        ApplicationEntityNameParts np = ApplicationNameUtils.getApplicationEntityNameParts(entitySchema.getEntity());
-        AppEntity appEntity = environment().findLean(new AppEntityQuery().delegate(entitySchema.getDelegate())
-                .applicationName(np.getApplicationName()).name(np.getEntityName()));
-        if (appEntity != null) {
-            final Long appEntityId = appEntity.getId();
-
-            // Update fields
-            for (EntityFieldSchema entityFieldSchema : entitySchema.getFields()) {
-                if (!StringUtils.isBlank(entityFieldSchema.getColumn())) {
-                    environment().updateAll(
-                            new AppEntityFieldQuery().appEntityId(appEntityId).name(entityFieldSchema.getName()),
-                            new Update().add("columnName", entityFieldSchema.getColumn()));
-                }
-            }
-
-            // Update entity
-            if (!StringUtils.isBlank(entitySchema.getTableName())) {
-                appEntity.setTableName(entitySchema.getTableName());
-            }
-
-            if (!StringUtils.isBlank(entitySchema.getDataSourceAlias())) {
-                appEntity.setDataSourceName(entitySchema.getDataSourceAlias());
-            }
-
-            environment().updateLeanByIdVersion(appEntity);
-            return true;
-        }
-
-        return false;
     }
 
     private static final Class<?>[] WRAPPER_PARAMS_0 = { EntityClassDef.class };
@@ -2856,8 +2821,12 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         }
 
         fieldName = entityDef.isWithDescriptionField() ? "description" : fieldName;
-        return environment().value(String.class, fieldName,
-                Query.of((Class<? extends Entity>) entityClassDef.getEntityClass()).addEquals("id", entityId));
+        if (fieldName != null) {
+            return environment().value(String.class, fieldName,
+                    Query.of((Class<? extends Entity>) entityClassDef.getEntityClass()).addEquals("id", entityId));
+        }
+
+        return null;
     }
 
     @SuppressWarnings("unchecked")
@@ -3300,6 +3269,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             srcAppTable.setLabel(ctx.messageSwap(srcAppTable.getLabel()));
             srcAppTable.setEntity(ctx.entitySwap(srcAppTable.getEntity()));
             srcAppTable.setDetailsPanelName(ctx.componentSwap(srcAppTable.getDetailsPanelName()));
+            srcAppTable.setLoadingFilterGen(ctx.componentSwap(srcAppTable.getLoadingFilterGen()));
+            srcAppTable.setLoadingSearchInput(ctx.componentSwap(srcAppTable.getLoadingSearchInput()));
 
             // Columns
             for (AppTableColumn appTableColumn : srcAppTable.getColumnList()) {
@@ -4285,6 +4256,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appTable.setDescription(description);
                     appTable.setLabel(label);
                     appTable.setDetailsPanelName(appTableConfig.getDetailsPanelName());
+                    appTable.setLoadingFilterGen(appTableConfig.getLoadingFilterGen());
+                    appTable.setLoadingSearchInput(appTableConfig.getLoadingSearchInput());
                     appTable.setSortHistory(appTableConfig.getSortHistory());
                     appTable.setItemsPerPage(appTableConfig.getItemsPerPage());
                     appTable.setSummaryTitleColumns(appTableConfig.getSummaryTitleColumns());
@@ -4311,6 +4284,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                         oldAppTable.setDescription(description);
                         oldAppTable.setLabel(label);
                         oldAppTable.setDetailsPanelName(appTableConfig.getDetailsPanelName());
+                        oldAppTable.setLoadingFilterGen(appTableConfig.getLoadingFilterGen());
+                        oldAppTable.setLoadingSearchInput(appTableConfig.getLoadingSearchInput());
                         oldAppTable.setSortHistory(appTableConfig.getSortHistory());
                         oldAppTable.setItemsPerPage(appTableConfig.getItemsPerPage());
                         oldAppTable.setSummaryTitleColumns(appTableConfig.getSummaryTitleColumns());

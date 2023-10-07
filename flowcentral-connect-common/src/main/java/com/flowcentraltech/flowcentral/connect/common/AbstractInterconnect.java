@@ -17,7 +17,10 @@ package com.flowcentraltech.flowcentral.connect.common;
 
 import java.io.BufferedReader;
 import java.io.StringReader;
-import java.text.DateFormat;
+import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -27,6 +30,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -50,15 +54,13 @@ import com.flowcentraltech.flowcentral.connect.common.data.ProcedureRequest;
 import com.flowcentraltech.flowcentral.connect.common.data.QueryDef;
 import com.flowcentraltech.flowcentral.connect.common.data.ResolvedCondition;
 import com.flowcentraltech.flowcentral.connect.common.data.UpdateDef;
-import com.flowcentraltech.flowcentral.connect.configuration.constants.EntityBaseType;
-import com.flowcentraltech.flowcentral.connect.configuration.constants.FieldDataType;
+import com.flowcentraltech.flowcentral.connect.configuration.constants.ConnectEntityBaseType;
+import com.flowcentraltech.flowcentral.connect.configuration.constants.ConnectFieldDataType;
 import com.flowcentraltech.flowcentral.connect.configuration.xml.ApplicationConfig;
 import com.flowcentraltech.flowcentral.connect.configuration.xml.EntitiesConfig;
 import com.flowcentraltech.flowcentral.connect.configuration.xml.EntityConfig;
 import com.flowcentraltech.flowcentral.connect.configuration.xml.EntityFieldConfig;
 import com.flowcentraltech.flowcentral.connect.configuration.xml.util.XmlUtils;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.tcdng.unify.convert.util.ConverterUtils;
 
 /**
@@ -67,12 +69,37 @@ import com.tcdng.unify.convert.util.ConverterUtils;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class Interconnect {
+public abstract class AbstractInterconnect {
 
-    private static final Logger LOGGER = Logger.getLogger(Interconnect.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(AbstractInterconnect.class.getName());
 
-    private final Gson gson = new GsonBuilder().disableHtmlEscaping().serializeNulls().setDateFormat(DateFormat.LONG)
-            .setPrettyPrinting().setVersion(1.0).create();
+    private static final Map<Class<?>, ConnectFieldDataType> classToConnectDataTypeMap;
+
+    static {
+        Map<Class<?>, ConnectFieldDataType> map = new HashMap<Class<?>, ConnectFieldDataType>();
+        map.put(boolean.class, ConnectFieldDataType.BOOLEAN);
+        map.put(Boolean.class, ConnectFieldDataType.BOOLEAN);
+        map.put(byte.class, ConnectFieldDataType.INTEGER);
+        map.put(Byte.class, ConnectFieldDataType.INTEGER);
+        map.put(byte[].class, ConnectFieldDataType.BLOB);
+        map.put(char.class, ConnectFieldDataType.CHAR);
+        map.put(Character.class, ConnectFieldDataType.CHAR);
+        map.put(short.class, ConnectFieldDataType.SHORT);
+        map.put(Short.class, ConnectFieldDataType.SHORT);
+        map.put(int.class, ConnectFieldDataType.INTEGER);
+        map.put(Integer.class, ConnectFieldDataType.INTEGER);
+        map.put(long.class, ConnectFieldDataType.LONG);
+        map.put(Long.class, ConnectFieldDataType.LONG);
+        map.put(float.class, ConnectFieldDataType.FLOAT);
+        map.put(Float.class, ConnectFieldDataType.FLOAT);
+        map.put(double.class, ConnectFieldDataType.DOUBLE);
+        map.put(Double.class, ConnectFieldDataType.DOUBLE);
+        map.put(BigDecimal.class, ConnectFieldDataType.DECIMAL);
+        map.put(Date.class, ConnectFieldDataType.DATE);
+        map.put(String.class, ConnectFieldDataType.STRING);
+        map.put(List.class, ConnectFieldDataType.CHILD_LIST);
+        classToConnectDataTypeMap = Collections.unmodifiableMap(map);
+    }
 
     protected enum RefType {
         PRIMITIVE,
@@ -97,22 +124,27 @@ public class Interconnect {
 
     private boolean initialized;
 
-    public Interconnect(RefType refType) {
+    public AbstractInterconnect(RefType refType) {
         this.refType = refType;
         this.entities = Collections.emptyMap();
     }
 
-    public String prettyJSON(Object src) {
-        return gson.toJson(src, src.getClass());
+    public String prettyJSON(Object src) throws Exception {
+        if (src != null) {
+            ObjectMapper objectMapper = new ObjectMapper();
+            return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(src);
+        }
+
+        return null;
     }
 
     public boolean init(String configurationFile, EntityInstFinder entityInstFinder) throws Exception {
         if (!initialized) {
-            synchronized (Interconnect.class) {
+            synchronized (AbstractInterconnect.class) {
                 if (!initialized) {
                     LOGGER.log(Level.INFO, "Initializing flowCentral interconnect using configuration [{0}]...",
                             configurationFile);
-                    entities = new HashMap<String, EntityInfo>();
+                    Map<String, EntityInfo> _entitiesbyclassname = new HashMap<String, EntityInfo>();
                     List<ApplicationConfig> applicationConfigList = XmlUtils.readInterconnectConfig(configurationFile);
                     for (ApplicationConfig applicationConfig : applicationConfigList) {
                         final String appEntityManagerFactory = applicationConfig.getEntityManagerFactory();
@@ -126,9 +158,14 @@ public class Interconnect {
                                         applicationName);
 
                                 for (EntityConfig entityConfig : entityConfigList) {
+                                    if (entityConfig.getBase() == null) {
+                                        throw new IllegalArgumentException(
+                                                "Entity configuration for [" + applicationName + "."
+                                                        + entityConfig.getName() + "] requires a base type.");
+                                    }
+
+                                    final ConnectEntityBaseType base = entityConfig.getBase();
                                     EntityInfo.Builder eib = EntityInfo.newBuilder(appEntityManagerFactory);
-                                    EntityBaseType base = entityConfig.getBase() != null ? entityConfig.getBase()
-                                            : EntityBaseType.BASE_ENTITY;
                                     eib.dataSourceAlias(applicationConfig.getDataSourceAlias()).baseType(base)
                                             .name(ensureLongName(applicationName, entityConfig.getName()))
                                             .tableName(entityConfig.getTable())
@@ -139,16 +176,19 @@ public class Interconnect {
                                             .handler(entityConfig.getHandler())
                                             .actionPolicy(entityConfig.getActionPolicy());
                                     populateBaseFields(eib, base);
-                                    for (EntityFieldConfig entityFieldConfig : entityConfig.getEntityFieldList()) {
-                                        eib.addField(entityFieldConfig.getType(), entityFieldConfig.getName(),
-                                                entityFieldConfig.getDescription(), entityFieldConfig.getColumn(),
-                                                ensureLongName(applicationName, entityFieldConfig.getReferences()),
-                                                entityFieldConfig.getEnumImplClass(), entityFieldConfig.getScale(),
-                                                entityFieldConfig.getPrecision(), entityFieldConfig.getLength());
+                                    if (entityConfig.getEntityFieldList() != null) {
+                                        for (EntityFieldConfig entityFieldConfig : entityConfig.getEntityFieldList()) {
+                                            eib.addField(entityFieldConfig.getType(), entityFieldConfig.getName(),
+                                                    entityFieldConfig.getDescription(), entityFieldConfig.getColumn(),
+                                                    ensureLongName(applicationName, entityFieldConfig.getReferences()),
+                                                    entityFieldConfig.getEnumImplClass(),
+                                                    entityFieldConfig.getPrecision(), entityFieldConfig.getScale(),
+                                                    entityFieldConfig.getLength(), entityFieldConfig.isNullable());
+                                        }
                                     }
 
                                     EntityInfo entityInfo = eib.build();
-                                    entities.put(entityInfo.getName(), entityInfo);
+                                    _entitiesbyclassname.put(entityConfig.getImplementation(), entityInfo);
                                 }
 
                                 LOGGER.log(Level.INFO,
@@ -158,6 +198,7 @@ public class Interconnect {
                         }
                     }
 
+                    entities = detectAndApplyImplicitFields(_entitiesbyclassname);
                     this.entityInstFinder = entityInstFinder;
                     initialized = true;
                     LOGGER.log(Level.INFO, "Total of [{0}] entity information loaded.", entities.size());
@@ -171,23 +212,162 @@ public class Interconnect {
         return false;
     }
 
-    private void populateBaseFields(EntityInfo.Builder eib, EntityBaseType base) throws Exception {
+    private Map<String, EntityInfo> detectAndApplyImplicitFields(Map<String, EntityInfo> _entitiesbyclassname)
+            throws Exception {
+        Map<String, EntityInfo> entities = new HashMap<String, EntityInfo>();
+        for (EntityInfo _entityInfo : _entitiesbyclassname.values()) {
+            EntityInfo.Builder eib = EntityInfo.newBuilder(_entityInfo.getEntityManagerFactory());
+            final String tableName = _entityInfo.getTableName() != null && !_entityInfo.getTableName().isEmpty()
+                    ? _entityInfo.getTableName()
+                    : getTableName(_entityInfo.getImplClass());
+            eib.dataSourceAlias(_entityInfo.getDataSourceAlias()).baseType(_entityInfo.getBaseType())
+                    .name(_entityInfo.getName()).tableName(tableName).description(_entityInfo.getDescription())
+                    .implementation(_entityInfo.getImplClass().getName()).idFieldName(_entityInfo.getIdFieldName())
+                    .versionNoFieldName(_entityInfo.getVersionNoFieldName()).handler(_entityInfo.getHandler())
+                    .actionPolicy(_entityInfo.getActionPolicy());
+            for (EntityFieldInfo _entityFieldInfo : _entityInfo.getAllFields()) {
+                eib.addField(_entityFieldInfo.getType(), _entityFieldInfo.getName(), _entityFieldInfo.getDescription(),
+                        _entityFieldInfo.getColumn(), _entityFieldInfo.getReferences(),
+                        _entityFieldInfo.getEnumImplClass() != null ? _entityFieldInfo.getEnumImplClass().getName()
+                                : null,
+                        _entityFieldInfo.getPrecision(), _entityFieldInfo.getScale(), _entityFieldInfo.getLength(),
+                        _entityFieldInfo.isNullable());
+            }
+
+            // Implicit fields
+            Set<String> existing = _entityInfo.getFieldNames();
+            Class<?> clazz = _entityInfo.getImplClass();
+            do {
+                for (Field field : clazz.getDeclaredFields()) {
+                    if (!existing.contains(field.getName())) {
+                        EntityFieldInfo _entityFieldInfo = createEntityFieldInfo(_entitiesbyclassname, field);
+                        if (_entityFieldInfo != null) {
+                            eib.addField(_entityFieldInfo.getType(), _entityFieldInfo.getName(),
+                                    _entityFieldInfo.getDescription(), _entityFieldInfo.getColumn(),
+                                    _entityFieldInfo.getReferences(),
+                                    _entityFieldInfo.getEnumImplClass() != null
+                                            ? _entityFieldInfo.getEnumImplClass().getName()
+                                            : null,
+                                    _entityFieldInfo.getPrecision(), _entityFieldInfo.getScale(),
+                                    _entityFieldInfo.getLength(), _entityFieldInfo.isNullable());
+                        }
+                    }
+                }
+            } while ((clazz = clazz.getSuperclass()) != null);
+
+            EntityInfo entityInfo = eib.build();
+            entities.put(entityInfo.getName(), entityInfo);
+        }
+
+        return entities;
+    }
+
+    @SuppressWarnings("unchecked")
+    protected FieldTypeInfo getFieldTypeInfo(Map<String, EntityInfo> _entitiesbyclassname, Field field)
+            throws Exception {
+        ConnectFieldDataType type = classToConnectDataTypeMap.get(field.getType());
+        if (type == null) {
+            if (Enum.class.equals(field.getType())) {
+                type = ConnectFieldDataType.STRING;
+                return new FieldTypeInfo(ConnectFieldDataType.STRING, (Class<? extends Enum<?>>) field.getType());
+            }
+
+            EntityInfo _refEntityInfo = _entitiesbyclassname.get(field.getType().getName());
+            if (_refEntityInfo == null) {
+                throw new IllegalArgumentException("Can not to refer to an interconnect undefined type ["
+                        + field.getType().getName() + "], field = [" + field.getName() + "]");
+            }
+
+            return new FieldTypeInfo(ConnectFieldDataType.REF, _refEntityInfo.getName());
+        } else if (ConnectFieldDataType.CHILD_LIST.equals(type)) {
+            if (field.getGenericType() instanceof ParameterizedType) {
+                Type[] argTypes = ((ParameterizedType) field.getGenericType()).getActualTypeArguments();
+                if (argTypes.length == 1) {
+                    if (argTypes[0] instanceof Class) {
+                        EntityInfo _refEntityInfo = _entitiesbyclassname.get(((Class<?>) argTypes[0]).getName());
+                        if (_refEntityInfo == null) {
+                            throw new IllegalArgumentException("Can not to refer to an interconnect undefined type ["
+                                    + ((Class<?>) argTypes[0]).getName() + "], field = [" + field.getName() + "]");
+                        }
+
+                        return new FieldTypeInfo(type, _refEntityInfo.getName());
+                    }
+                }
+            }
+        }
+
+        return new FieldTypeInfo(type);
+    }
+
+    protected abstract String getTableName(Class<?> entityClass) throws Exception;
+
+    protected abstract EntityFieldInfo createEntityFieldInfo(Map<String, EntityInfo> _entitiesbyclassname, Field field)
+            throws Exception;
+
+    protected class FieldTypeInfo {
+
+        private final ConnectFieldDataType type;
+
+        private final Class<? extends Enum<?>> enumImplClass;
+
+        private final String references;
+
+        public FieldTypeInfo(ConnectFieldDataType type, Class<? extends Enum<?>> enumImplClass) {
+            this.type = type;
+            this.enumImplClass = enumImplClass;
+            this.references = null;
+        }
+
+        public FieldTypeInfo(ConnectFieldDataType type, String references) {
+            this.type = type;
+            this.enumImplClass = null;
+            this.references = references;
+        }
+
+        public FieldTypeInfo(ConnectFieldDataType type) {
+            this.type = type;
+            this.enumImplClass = null;
+            this.references = null;
+        }
+
+        public ConnectFieldDataType getType() {
+            return type;
+        }
+
+        public Class<? extends Enum<?>> getEnumImplClass() {
+            return enumImplClass;
+        }
+
+        public boolean isWithEnumImplClass() {
+            return enumImplClass != null;
+        }
+
+        public String getReferences() {
+            return references;
+        }
+
+        public boolean isWithReferences() {
+            return references != null;
+        }
+    }
+
+    private void populateBaseFields(EntityInfo.Builder eib, ConnectEntityBaseType base) throws Exception {
         switch (base) {
             case BASE_WORK_ENTITY:
-                eib.addField(FieldDataType.STRING, "workBranchCode", "Work Branch Code", "work_branch_cd");
-                eib.addField(FieldDataType.BOOLEAN, "inWorkflow", "In Workflow", "in_workflow_fg");
-                eib.addField(FieldDataType.LONG, "originalCopyId", "Original Copy ID", "original_copy_id");
-                eib.addField(FieldDataType.STRING, "wfItemVersionType", "Work Item Version Type",
+                eib.addField(ConnectFieldDataType.STRING, "workBranchCode", "Work Branch Code", "work_branch_cd");
+                eib.addField(ConnectFieldDataType.BOOLEAN, "inWorkflow", "In Workflow", "in_workflow_fg");
+                eib.addField(ConnectFieldDataType.LONG, "originalCopyId", "Original Copy ID", "original_copy_id");
+                eib.addField(ConnectFieldDataType.STRING, "wfItemVersionType", "Work Item Version Type",
                         "wf_item_version_type");
             case BASE_AUDIT_ENTITY:
-                eib.addField(FieldDataType.STRING, "createdBy", "Created By", "created_by");
-                eib.addField(FieldDataType.STRING, "updatedBy", "Updated By", "updated_by");
-                eib.addField(FieldDataType.TIMESTAMP, "createDt", "Created On", "created_on");
-                eib.addField(FieldDataType.TIMESTAMP, "updateDt", "Updated On", "updated_on");
+                eib.addField(ConnectFieldDataType.STRING, "createdBy", "Created By", "created_by");
+                eib.addField(ConnectFieldDataType.STRING, "updatedBy", "Updated By", "updated_by");
+                eib.addField(ConnectFieldDataType.TIMESTAMP, "createDt", "Created On", "created_on");
+                eib.addField(ConnectFieldDataType.TIMESTAMP, "updateDt", "Updated On", "updated_on");
             case BASE_VERSION_ENTITY:
-                eib.addField(FieldDataType.LONG, "versionNo", "Version No.", "version_no");
+                eib.addField(ConnectFieldDataType.LONG, "versionNo", "Version No.", "version_no");
             case BASE_ENTITY:
-                eib.addField(FieldDataType.LONG, "id", "ID", "id");
+                eib.addField(ConnectFieldDataType.LONG, "id", "ID", "id");
             default:
                 break;
         }
@@ -633,7 +813,7 @@ public class Interconnect {
     public List<String> getAllEntityNames() {
         return new ArrayList<String>(entities.keySet());
     }
-    
+
     public EntityInfo getEntityInfo(String entity) throws Exception {
         checkInitialized();
         EntityInfo entityInfo = entities.get(entity);

@@ -32,8 +32,8 @@ import com.flowcentraltech.flowcentral.application.util.ApplicationPageUtils;
 import com.flowcentraltech.flowcentral.application.util.InputWidgetUtils;
 import com.flowcentraltech.flowcentral.chart.entities.Chart;
 import com.flowcentraltech.flowcentral.common.business.AbstractFlowCentralService;
-import com.flowcentraltech.flowcentral.common.business.EnvironmentDelegate;
 import com.flowcentraltech.flowcentral.common.business.StudioProvider;
+import com.flowcentraltech.flowcentral.common.business.SynchronizableEnvironmentDelegate;
 import com.flowcentraltech.flowcentral.common.constants.CollaborationType;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralContainerPropertyConstants;
 import com.flowcentraltech.flowcentral.configuration.data.ModuleInstall;
@@ -244,7 +244,8 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
             limit = TaskExecLimit.ALLOW_SINGLE, schedulable = false)
     public int delegateCreateSynchronizationTask(TaskMonitor taskMonitor, DelegateSynchronizationItem delegateSyncItem)
             throws UnifyException {
-        EnvironmentDelegate environmentDelegate = getComponent(EnvironmentDelegate.class, delegateSyncItem.getDelegate());
+        SynchronizableEnvironmentDelegate environmentDelegate = getComponent(SynchronizableEnvironmentDelegate.class,
+                delegateSyncItem.getDelegate());
         environmentDelegate.delegateCreateSynchronization(taskMonitor);
         return 0;
     }
@@ -257,7 +258,8 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
             limit = TaskExecLimit.ALLOW_SINGLE, schedulable = false)
     public int delegateUpdateSynchronizationTask(TaskMonitor taskMonitor, DelegateSynchronizationItem delegateSyncItem)
             throws UnifyException {
-        EnvironmentDelegate environmentDelegate = getComponent(EnvironmentDelegate.class, delegateSyncItem.getDelegate());
+        SynchronizableEnvironmentDelegate environmentDelegate = getComponent(SynchronizableEnvironmentDelegate.class,
+                delegateSyncItem.getDelegate());
         environmentDelegate.delegateUpdateSynchronization(taskMonitor);
         return 0;
     }

@@ -13,28 +13,27 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.connect.configuration.xml.adapter;
+package com.flowcentraltech.flowcentral.application.business;
 
-import javax.xml.bind.annotation.adapters.XmlAdapter;
-
-import com.flowcentraltech.flowcentral.connect.configuration.constants.ConnectEntityBaseType;
+import com.flowcentraltech.flowcentral.common.AbstractFlowCentralComponent;
+import com.tcdng.unify.core.UnifyException;
 
 /**
- * Interconnect entity base type XML adapter.
+ * Convenient abstract base class for entity schema manager component.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class EntityBaseTypeXmlAdapter extends XmlAdapter<String, ConnectEntityBaseType> {
+public abstract class AbstractEntitySchemaManager extends AbstractFlowCentralComponent implements EntitySchemaManager {
 
     @Override
-    public ConnectEntityBaseType unmarshal(String str) throws Exception {
-        return str != null ? ConnectEntityBaseType.valueOf(str.toUpperCase()) : null;
+    protected void onInitialize() throws UnifyException {
+
     }
 
     @Override
-    public String marshal(ConnectEntityBaseType type) throws Exception {
-        return type != null ? type.name() : null;
+    protected void onTerminate() throws UnifyException {
+
     }
 
 }

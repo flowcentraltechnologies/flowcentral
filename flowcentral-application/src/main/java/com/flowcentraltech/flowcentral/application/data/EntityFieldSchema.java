@@ -15,6 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.application.data;
 
+import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldDataType;
 
 /**
  * Entity field schema.
@@ -23,6 +24,8 @@ package com.flowcentraltech.flowcentral.application.data;
  * @since 1.0
  */
 public class EntityFieldSchema {
+
+    private EntityFieldDataType dataType;
 
     private String name;
 
@@ -38,8 +41,11 @@ public class EntityFieldSchema {
 
     private int length;
 
-    public EntityFieldSchema(String name, String description, String column, String references, int scale,
-            int precision, int length) {
+    private boolean nullable;
+
+    public EntityFieldSchema(EntityFieldDataType dataType, String name, String description, String column,
+            String references, int scale, int precision, int length, boolean nullable) {
+        this.dataType =dataType;
         this.name = name;
         this.description = description;
         this.column = column;
@@ -47,6 +53,11 @@ public class EntityFieldSchema {
         this.scale = scale;
         this.precision = precision;
         this.length = length;
+        this.nullable = nullable;
+    }
+
+    public EntityFieldDataType getDataType() {
+        return dataType;
     }
 
     public String getName() {
@@ -75,5 +86,9 @@ public class EntityFieldSchema {
 
     public int getLength() {
         return length;
+    }
+
+    public boolean isNullable() {
+        return nullable;
     }
 }

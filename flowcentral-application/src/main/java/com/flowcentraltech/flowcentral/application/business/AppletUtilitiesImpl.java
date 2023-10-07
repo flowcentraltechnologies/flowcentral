@@ -32,12 +32,11 @@ import com.flowcentraltech.flowcentral.application.data.AppletFilterDef;
 import com.flowcentraltech.flowcentral.application.data.AppletSetValuesDef;
 import com.flowcentraltech.flowcentral.application.data.ApplicationDef;
 import com.flowcentraltech.flowcentral.application.data.AssignmentPageDef;
+import com.flowcentraltech.flowcentral.application.data.DelegateEntityInfo;
 import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
-import com.flowcentraltech.flowcentral.application.data.DelegateEntityInfo;
 import com.flowcentraltech.flowcentral.application.data.EntityFieldDef;
 import com.flowcentraltech.flowcentral.application.data.EntityFormEventHandlers;
-import com.flowcentraltech.flowcentral.application.data.EntitySchema;
 import com.flowcentraltech.flowcentral.application.data.FieldSequenceDef;
 import com.flowcentraltech.flowcentral.application.data.FilterDef;
 import com.flowcentraltech.flowcentral.application.data.FilterGroupDef;
@@ -433,12 +432,20 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
     }
 
     @Override
-    public boolean updateEntitySchema(EntitySchema entitySchema) throws UnifyException {
-        return applicationModuleService.updateEntitySchema(entitySchema);
+    public List<String> getApplicationEntitiesLongNames(Query<? extends BaseApplicationEntity> query)
+            throws UnifyException {
+        if (!query.isEmptyCriteria() || query.isIgnoreEmptyCriteria()) {
+            final Query<? extends BaseApplicationEntity> _query = query.copy();
+            _query.addSelect("applicationName", "name", "description");
+            List<? extends BaseApplicationEntity> list = environment().listAll(_query);
+            return ApplicationNameUtils.getApplicationEntityLongNames(list);
+        }
+
+        return Collections.emptyList();
     }
 
     @Override
-    public List<? extends Listable> getApplicationEntities(final Query<? extends BaseApplicationEntity> query)
+    public List<? extends Listable> getApplicationEntitiesListables(final Query<? extends BaseApplicationEntity> query)
             throws UnifyException {
         if (!query.isEmptyCriteria() || query.isIgnoreEmptyCriteria()) {
             final Query<? extends BaseApplicationEntity> _query = query.copy();

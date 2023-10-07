@@ -38,7 +38,7 @@ import com.tcdng.unify.core.util.DataUtils;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class AbstractJsonEnvironmentDelegate extends AbstractEnvironmentDelegate {
+public abstract class AbstractJsonEnvironmentDelegate extends AbstractSynchronizableEnvironmentDelegate {
 
     @Override
     public String[] executeProcedure(String operation, String... payload) throws UnifyException {

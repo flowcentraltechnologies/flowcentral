@@ -15,7 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.connect.common.data;
 
-import com.flowcentraltech.flowcentral.connect.configuration.constants.FieldDataType;
+import com.flowcentraltech.flowcentral.connect.configuration.constants.ConnectFieldDataType;
 
 /**
  * Entity field DTO.
@@ -25,7 +25,7 @@ import com.flowcentraltech.flowcentral.connect.configuration.constants.FieldData
  */
 public class EntityFieldDTO {
 
-    private FieldDataType type;
+    private ConnectFieldDataType type;
 
     private String name;
 
@@ -41,6 +41,8 @@ public class EntityFieldDTO {
 
     private int length;
 
+    private boolean nullable;
+
     public EntityFieldDTO(EntityFieldInfo entityFieldInfo) {
         this.type = entityFieldInfo.getType();
         this.name = entityFieldInfo.getName();
@@ -50,17 +52,18 @@ public class EntityFieldDTO {
         this.scale = entityFieldInfo.getScale();
         this.precision = entityFieldInfo.getPrecision();
         this.length = entityFieldInfo.getLength();
+        this.nullable = entityFieldInfo.isNullable();
     }
 
     public EntityFieldDTO() {
 
     }
 
-    public FieldDataType getType() {
+    public ConnectFieldDataType getType() {
         return type;
     }
 
-    public void setType(FieldDataType type) {
+    public void setType(ConnectFieldDataType type) {
         this.type = type;
     }
 
@@ -118,6 +121,21 @@ public class EntityFieldDTO {
 
     public void setLength(int length) {
         this.length = length;
+    }
+
+    public boolean isNullable() {
+        return nullable;
+    }
+
+    public void setNullable(boolean nullable) {
+        this.nullable = nullable;
+    }
+
+    @Override
+    public String toString() {
+        return "[type=" + type + ", name=" + name + ", description=" + description + ", column=" + column
+                + ", references=" + references + ", scale=" + scale + ", precision=" + precision + ", length=" + length
+                + ", nullable=" + nullable + "]";
     }
 
 }

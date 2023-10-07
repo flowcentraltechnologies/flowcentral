@@ -13,28 +13,18 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.connect.configuration.xml.adapter;
+package com.flowcentraltech.flowcentral.studio.web.lists;
 
-import javax.xml.bind.annotation.adapters.XmlAdapter;
-
-import com.flowcentraltech.flowcentral.connect.configuration.constants.ConnectEntityBaseType;
+import com.tcdng.unify.core.annotation.Component;
 
 /**
- * Interconnect entity base type XML adapter.
+ * Studio work-item filter generator list command
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class EntityBaseTypeXmlAdapter extends XmlAdapter<String, ConnectEntityBaseType> {
-
-    @Override
-    public ConnectEntityBaseType unmarshal(String str) throws Exception {
-        return str != null ? ConnectEntityBaseType.valueOf(str.toUpperCase()) : null;
-    }
-
-    @Override
-    public String marshal(ConnectEntityBaseType type) throws Exception {
-        return type != null ? type.name() : null;
-    }
+@Component("studiotableworkitemfiltergenlist")
+public class StudioTableWorkItemFilterGeneratorListCommand
+        extends AbstractStudioWorkItemLoadingFilterGeneratorListCommand {
 
 }

@@ -51,4 +51,9 @@ public class EntityListingDTO {
         this.redirect = redirect;
     }
 
+    @Override
+    public String toString() {
+        return "[entity=" + entity + ", redirect=" + redirect + "]";
+    }
+
 }

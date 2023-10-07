@@ -18,8 +18,8 @@ package com.flowcentraltech.flowcentral.application.business;
 import java.util.Collections;
 import java.util.List;
 
+import com.flowcentraltech.flowcentral.common.AbstractFlowCentralComponent;
 import com.flowcentraltech.flowcentral.common.business.ApplicationPrivilegeManager;
-import com.tcdng.unify.core.AbstractUnifyComponent;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 
@@ -30,7 +30,7 @@ import com.tcdng.unify.core.annotation.Component;
  * @since 1.0
  */
 @Component("test-applicationprivilegemanager")
-public class TestApplicationPrivilegeManagerImpl extends AbstractUnifyComponent implements ApplicationPrivilegeManager {
+public class TestApplicationPrivilegeManagerImpl extends AbstractFlowCentralComponent implements ApplicationPrivilegeManager {
 
     @Override
     public void registerPrivilege(Long applicationId, String privilegeCategoryCode, String privilegeCode,

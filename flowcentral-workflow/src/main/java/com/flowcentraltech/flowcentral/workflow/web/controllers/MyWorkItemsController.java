@@ -67,6 +67,12 @@ public class MyWorkItemsController extends AbstractEntityFormAppletController<My
 
     @Action
     public String refreshSlate() throws UnifyException {
+        MyWorkItemsPageBean pageBean = getPageBean();
+        MyWorkItemsApplet applet = pageBean.getApplet();
+        if (applet != null) {
+            applet.applySearch();
+        }
+        
         return "refreshSlate";
     }
 

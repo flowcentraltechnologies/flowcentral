@@ -18,7 +18,7 @@ package com.flowcentraltech.flowcentral.connect.configuration.xml;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import com.flowcentraltech.flowcentral.connect.configuration.constants.FieldDataType;
+import com.flowcentraltech.flowcentral.connect.configuration.constants.ConnectFieldDataType;
 import com.flowcentraltech.flowcentral.connect.configuration.xml.adapter.FieldDataTypeXmlAdapter;
 
 /**
@@ -29,7 +29,7 @@ import com.flowcentraltech.flowcentral.connect.configuration.xml.adapter.FieldDa
  */
 public class EntityFieldConfig {
 
-    private FieldDataType type;
+    private ConnectFieldDataType type;
 
     private String name;
 
@@ -47,13 +47,19 @@ public class EntityFieldConfig {
 
     private int length;
 
-    public FieldDataType getType() {
+    private boolean nullable;
+
+    public EntityFieldConfig() {
+        this.nullable = true;
+    }
+    
+    public ConnectFieldDataType getType() {
         return type;
     }
 
     @XmlJavaTypeAdapter(FieldDataTypeXmlAdapter.class)
     @XmlAttribute(required = true)
-    public void setType(FieldDataType type) {
+    public void setType(ConnectFieldDataType type) {
         this.type = type;
     }
 
@@ -127,6 +133,15 @@ public class EntityFieldConfig {
     @XmlAttribute
     public void setLength(int length) {
         this.length = length;
+    }
+
+    public boolean isNullable() {
+        return nullable;
+    }
+
+    @XmlAttribute
+    public void setNullable(boolean nullable) {
+        this.nullable = nullable;
     }
 
 }

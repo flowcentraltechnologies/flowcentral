@@ -23,10 +23,9 @@ import com.flowcentraltech.flowcentral.application.data.AppletWorkflowCopyInfo;
 import com.flowcentraltech.flowcentral.application.data.ApplicationDef;
 import com.flowcentraltech.flowcentral.application.data.ApplicationMenuDef;
 import com.flowcentraltech.flowcentral.application.data.AssignmentPageDef;
+import com.flowcentraltech.flowcentral.application.data.DelegateEntityInfo;
 import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
-import com.flowcentraltech.flowcentral.application.data.EntitySchema;
-import com.flowcentraltech.flowcentral.application.data.DelegateEntityInfo;
 import com.flowcentraltech.flowcentral.application.data.FieldSequenceDef;
 import com.flowcentraltech.flowcentral.application.data.FilterDef;
 import com.flowcentraltech.flowcentral.application.data.FilterGroupDef;
@@ -104,16 +103,6 @@ import com.tcdng.unify.core.database.dynamic.DynamicEntityInfo;
  * @since 1.0
  */
 public interface ApplicationModuleService extends FlowCentralService {
-
-    /**
-     * Update entity schema.
-     * 
-     * @param entitySchema
-     *                     the entity schema
-     * @throws UnifyException
-     *                        if an error occurs
-     */
-    boolean updateEntitySchema(EntitySchema entitySchema) throws UnifyException;
 
     /**
      * Creates a wrapper instance initialized with a new instance of wrapped entity

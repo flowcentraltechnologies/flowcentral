@@ -331,6 +331,10 @@ public class EntityDef extends BaseApplicationEntityDef {
         return type.isCustom();
     }
 
+    public boolean isWorkType() {
+        return baseType.isWorkEntityType();
+    }
+    
     public void setListOnlyTypesResolved() {
         this.listOnlyTypesResolved = true;
     }
@@ -1205,13 +1209,6 @@ public class EntityDef extends BaseApplicationEntityDef {
                 List<UniqueConditionDef> conditionList, boolean caseInsensitive) {
             if (uniqueConstraintList == null) {
                 uniqueConstraintList = new ArrayList<UniqueConstraintDef>();
-            }
-
-            if (baseType.isWorkEntityType()) {
-                List<String> _fieldList = new ArrayList<String>();
-                _fieldList.add("originalCopyId");
-                _fieldList.addAll(fieldList);
-                fieldList = _fieldList;
             }
 
             uniqueConstraintList

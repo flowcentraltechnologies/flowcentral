@@ -42,6 +42,9 @@ public class AppTable extends BaseApplicationEntity {
     @Column(length = 64, nullable = true)
     private String loadingSearchInput;
 
+    @Column(length = 64, nullable = true)
+    private String loadingFilterGen;
+
     @Column
     private int sortHistory;
 
@@ -129,6 +132,14 @@ public class AppTable extends BaseApplicationEntity {
 
     public void setLoadingSearchInput(String loadingSearchInput) {
         this.loadingSearchInput = loadingSearchInput;
+    }
+
+    public String getLoadingFilterGen() {
+        return loadingFilterGen;
+    }
+
+    public void setLoadingFilterGen(String loadingFilterGen) {
+        this.loadingFilterGen = loadingFilterGen;
     }
 
     public int getSortHistory() {
