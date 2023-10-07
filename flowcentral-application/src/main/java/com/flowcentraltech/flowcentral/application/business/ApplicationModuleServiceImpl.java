@@ -202,7 +202,6 @@ import com.flowcentraltech.flowcentral.common.business.SuggestionProvider;
 import com.flowcentraltech.flowcentral.common.business.policies.SweepingCommitPolicy;
 import com.flowcentraltech.flowcentral.common.constants.ConfigType;
 import com.flowcentraltech.flowcentral.common.constants.OwnershipType;
-import com.flowcentraltech.flowcentral.common.constants.WfItemVersionType;
 import com.flowcentraltech.flowcentral.common.data.Attachment;
 import com.flowcentraltech.flowcentral.common.data.EntityAuditInfo;
 import com.flowcentraltech.flowcentral.common.data.ParamValuesDef;
@@ -3614,15 +3613,10 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 Entity _inst = null;
                 boolean createRecord = true;
                 if (entityDef.isWithUniqueConstraints()) {
-                    final boolean isWorkType = entityDef.isWorkType();
                     for (UniqueConstraintDef constDef : entityDef.getUniqueConstraintList()) {
                         Query<?> query = Query.of((Class<? extends Entity>) entityClassDef.getEntityClass());
                         for (String fieldName : constDef.getFieldList()) {
                             query.addEquals(fieldName, recMap.get(fieldName).getVal());
-                        }
-
-                        if (isWorkType) {
-                            query.addEquals("wfItemVersionType", WfItemVersionType.ORIGINAL);
                         }
                         
                         if (constDef.isWithConditionList()) {
