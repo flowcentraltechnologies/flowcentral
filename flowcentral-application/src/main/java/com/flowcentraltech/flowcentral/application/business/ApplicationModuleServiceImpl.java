@@ -3618,7 +3618,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                         for (String fieldName : constDef.getFieldList()) {
                             query.addEquals(fieldName, recMap.get(fieldName).getVal());
                         }
-
+                        
                         if (constDef.isWithConditionList()) {
                             for (UniqueConditionDef ucd : constDef.getConditionList()) {
                                 query.addRestriction(ucd.getRestriction());
