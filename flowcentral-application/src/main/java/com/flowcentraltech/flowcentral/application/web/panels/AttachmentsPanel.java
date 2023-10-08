@@ -72,7 +72,7 @@ public class AttachmentsPanel extends AbstractFlowCentralPanel implements FormPa
         super.switchState();
         Attachments attachments = getValue(Attachments.class);
         if (attachments != null) {
-            BeanListTable attachmentsTable = getAttachmentsTable();
+            BeanListTable attachmentsTable = getAttachmentsTable(attachments.isEnableUpload());
             attachmentsTable.setSourceObjectClearSelected(attachments.getAttachments());
         }
     }
@@ -82,16 +82,17 @@ public class AttachmentsPanel extends AbstractFlowCentralPanel implements FormPa
         return Collections.emptyList();
     }
 
-    private BeanListTable getAttachmentsTable() throws UnifyException {
+    private BeanListTable getAttachmentsTable(boolean enableUpload) throws UnifyException {
         BeanListTable attachmentsTable = getPageAttribute(BeanListTable.class, ATTACHMENTS_TABLE_PAGE_ATTRIBUTE);
         if (attachmentsTable == null) {
-            EventHandler[] maintainActHandlers = getWidgetByShortName(Widget.class, "viewActHolder")
+            EventHandler[] viewActHandlers = getWidgetByShortName(Widget.class, "viewActHolder")
                     .getUplAttribute(EventHandler[].class, "eventHandler");
             attachmentsTable = new BeanListTable(appletUtilities,
                     appletUtilities.getTableDef(ApplicationPredefinedTableConstants.ATTACHMENT_TABLE), null);
-            attachmentsTable.setCrudMode(true);
+            attachmentsTable
+                    .setCrudMode(enableUpload ? BeanListTable.CrudMode.EXTENDED_UPLOAD : BeanListTable.CrudMode.SIMPLE);
             attachmentsTable.setViewOnly(true);
-            attachmentsTable.setCrudActionHandlers(Arrays.asList(maintainActHandlers));
+            attachmentsTable.setCrudActionHandlers(Arrays.asList(viewActHandlers));
             setPageAttribute(ATTACHMENTS_TABLE_PAGE_ATTRIBUTE, attachmentsTable);
         }
 

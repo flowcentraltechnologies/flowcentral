@@ -110,6 +110,8 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
 
     private Control editCtrl;
 
+    private Control uploadCtrl;
+
     private List<SummaryPanel> summaryPanelList;
 
     private DetailsPanel detailsPanel;
@@ -338,6 +340,11 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
         return table != null && table.isCrudMode();
     }
 
+    public boolean isUploadMode() throws UnifyException {
+        T table = getTable();
+        return table != null && table.isUploadCrudMode();
+    }
+
     public boolean isDetails() throws UnifyException {
         return !StringUtils.isBlank(getDetails());
     }
@@ -429,6 +436,16 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
         }
 
         return editCtrl;
+    }
+
+    public Control getUploadCtrl() throws UnifyException {
+        if (uploadCtrl == null) {
+            uploadCtrl = (Control) addInternalChildWidget(
+                    "!ui-fileuploadbutton styleClass:$e{"
+                            + getUplAttribute(String.class, "viewButtonClass") + " g_fsm}");
+        }
+
+        return uploadCtrl;
     }
 
     public Control[] getActionCtrl() {

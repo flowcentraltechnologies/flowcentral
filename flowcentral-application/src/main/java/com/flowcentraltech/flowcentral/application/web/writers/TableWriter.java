@@ -196,6 +196,7 @@ public class TableWriter extends AbstractControlWriter {
             final boolean isActionColumn = isTableEditable && tableWidget.isActionColumn();
             final boolean focusManagement = tableWidget.isFocusManagement();
             final boolean isCrudMode = tableWidget.isCrudMode();
+            final boolean isUploadMode = tableWidget.isUploadMode();
             final Control[] fixedCtrl = isFixedRows ? tableWidget.getFixedCtrl() : null;
             final Control[] actionCtrl = tableWidget.getActionCtrl();
             final RowChangeInfo lastRowChangeInfo = focusManagement ? table.getLastRowChangeInfo() : null;
@@ -296,8 +297,14 @@ public class TableWriter extends AbstractControlWriter {
                             writer.writeBehavior(eventHandler, _crudCtrl.getId(), null);
                         }
                     }
-                 }
+                }
 
+                if (isUploadMode) {
+                    Control _uploadCtrl = tableWidget.getUploadCtrl();
+                    _uploadCtrl.setValueStore(valueStore);
+                    writer.writeBehavior(_uploadCtrl);
+                }
+                
                 // Details
                 if (details && detailsIndex == i) {
                     DetailsPanel detailsPanel = tableWidget.getDetailsPanel();
@@ -418,6 +425,7 @@ public class TableWriter extends AbstractControlWriter {
         final TableDef tableDef = table.getTableDef();
         final boolean multiSelect = tableDef.isMultiSelect() || tableWidget.isMultiSelect();
         final boolean isCrudMode = tableWidget.isCrudMode();
+        final boolean isUploadMode = tableWidget.isUploadMode();
 
         // Column widths
         writer.write("<colgroup>");
@@ -459,6 +467,11 @@ public class TableWriter extends AbstractControlWriter {
         }
 
         if (isCrudMode) {
+            writer.write("<col class=\"ccrudh\">");
+            columnCount++;
+        }
+
+        if (isUploadMode) {
             writer.write("<col class=\"ccrudh\">");
             columnCount++;
         }
@@ -559,6 +572,10 @@ public class TableWriter extends AbstractControlWriter {
                 writer.write("<th class=\"mcrudh\"></th>");
             }
 
+            if (tableWidget.isUploadMode()) {
+                writer.write("<th class=\"mcrudh\"></th>");
+            }
+
             writer.write("</tr>");
         }
     }
@@ -608,6 +625,7 @@ public class TableWriter extends AbstractControlWriter {
                         && !tableWidget.isFixedRows() && !tableWidget.isActionColumn();
                 final boolean rowColors = tableDef.isRowColorFilters();
                 final boolean isCrudMode = tableWidget.isCrudMode();
+                final boolean isUploadMode = tableWidget.isUploadMode();
                 final Date now = table.au().getNow();
                 final String even = isRowAction && !isDisableLinks ? "even pnt" : "even";
                 final String odd = isRowAction && !isDisableLinks ? "odd pnt" : "odd";
@@ -769,6 +787,15 @@ public class TableWriter extends AbstractControlWriter {
                         writer.writeStructureAndContent(_crudCtrl);
                         writer.write("</td>");
                     }
+
+                    if (isUploadMode) {
+                        writer.write("<td>");
+                        Control _uploadCtrl = tableWidget.getUploadCtrl();
+                        _uploadCtrl.setValueStore(valueStore);
+                        writer.writeStructureAndContent(_uploadCtrl);
+                        writer.write("</td>");
+                    }
+
                     writer.write("</tr>");
 
                     // Details

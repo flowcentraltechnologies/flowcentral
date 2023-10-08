@@ -21,6 +21,7 @@ import java.util.Set;
 
 import com.flowcentraltech.flowcentral.application.data.TableDef;
 import com.flowcentraltech.flowcentral.application.web.panels.applet.ManageLoadingDetailsApplet;
+import com.flowcentraltech.flowcentral.application.web.widgets.EntityListTable;
 import com.flowcentraltech.flowcentral.application.web.widgets.LoadingTable;
 import com.flowcentraltech.flowcentral.common.business.policies.EntryTablePolicy;
 import com.flowcentraltech.flowcentral.common.business.policies.FixedRowActionType;
@@ -122,7 +123,7 @@ public abstract class AbstractLoadingDetailsPageController<T extends AbstractLoa
                 EventHandler[] viewActHandlers = getPageWidgetByShortName(Widget.class, "viewActHolder")
                         .getUplAttribute(EventHandler[].class, "eventHandler");
                 resultTable.setCrudActionHandlers(Arrays.asList(viewActHandlers));
-                resultTable.setCrudMode(true);
+                resultTable.setCrudMode(EntityListTable.CrudMode.SIMPLE);
                 resultTable.setViewOnly(true);
             }
 

@@ -1870,7 +1870,7 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
         final EntityClassDef entityClassDef = ctx.au().getEntityClassDef(formAppletDef.getEntity());
         TableDef tableDef = ctx.au().getTableDef(tableName);
         EntityTable entityTable = new EntityTable(ctx.au(), tableDef, filterGroupDef);
-        entityTable.setCrudMode(true);
+        entityTable.setCrudMode(EntityTable.CrudMode.SIMPLE);
         entityTable.setFixedRows(fixedRows);
         if (!StringUtils.isBlank(entryTablePolicy)) {
             ChildListEditPolicy policy = ctx.au().getComponent(ChildListEditPolicy.class, entryTablePolicy);

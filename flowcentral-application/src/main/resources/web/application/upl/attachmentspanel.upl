@@ -23,6 +23,7 @@
 	viewButtonClass:$s{mbtn mblue}
 
 !ui-hidden:viewActHolder eventHandler:$d{!ui-event event:onclick action:$c{viewAct}}
+!ui-hidden:uploadActHolder eventHandler:$d{!ui-event event:onclick action:$c{viewAct}}
 
 !ui-postcommand:viewAct command:view debounce:true
 	
