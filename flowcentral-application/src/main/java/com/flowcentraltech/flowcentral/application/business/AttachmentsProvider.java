@@ -52,4 +52,18 @@ public interface AttachmentsProvider extends FlowCentralComponent {
      *                        if an error occurs
      */
     FileAttachmentInfo getFileAttachmentInfo(Attachment attachment) throws UnifyException;
+
+    /**
+     * Saves attachment file data.
+     * 
+     * @param attachment
+     *                   the attachment source
+     * @param filename
+     *                   the file name
+     * @param fileData
+     *                   the file data
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    void saveAttachmentData(Attachment attachment, String filename, byte[] fileData) throws UnifyException;
 }

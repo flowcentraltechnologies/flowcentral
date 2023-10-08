@@ -189,6 +189,11 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
     }
 
     @Override
+    public int countReportDefinitions(ReportableDefinitionQuery query) throws UnifyException {
+        return environment().countAll(query);
+    }
+
+    @Override
     public Long getReportableDefinitionId(String reportableName) throws UnifyException {
         ApplicationEntityNameParts np = ApplicationNameUtils.getApplicationEntityNameParts(reportableName);
         return environment().value(Long.class, "id", new ReportableDefinitionQuery()

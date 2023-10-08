@@ -36,10 +36,13 @@ public class Attachments {
 
     private List<Attachment> attachments;
 
-    public Attachments(String provider, String caption, List<Attachment> attachments) {
+    private boolean enableUpload;
+
+    public Attachments(String provider, String caption, List<Attachment> attachments, boolean enableUpload) {
         this.provider = provider;
         this.caption = caption;
         this.attachments = attachments;
+        this.enableUpload = enableUpload;
     }
 
     public String getProvider() {
@@ -57,7 +60,11 @@ public class Attachments {
     public Attachment getAttachment(int index) {
         return attachments.get(index);
     }
-    
+
+    public boolean isEnableUpload() {
+        return enableUpload;
+    }
+
     public static Builder newBuilder(String provider) {
         return new Builder(provider);
     }
@@ -70,6 +77,8 @@ public class Attachments {
 
         private List<Attachment> attachments;
 
+        private boolean enableUpload;
+
         public Builder(String provider) {
             this.provider = provider;
             this.attachments = new ArrayList<Attachment>();
@@ -80,18 +89,24 @@ public class Attachments {
             return this;
         }
 
+        public Builder enableUpload(boolean enableUpload) {
+            this.enableUpload = enableUpload;
+            return this;
+        }
+
         public Builder addAttachments(List<Attachment> attachments) {
             this.attachments.addAll(attachments);
             return this;
         }
 
-        public Builder addAttachment(Long id, String name, String description, String format, Date createdOn) {
-            attachments.add(new Attachment(id, name, description, format, createdOn));
+        public Builder addAttachment(Long id, String name, String description, String format, Date createdOn,
+                boolean mandatory, boolean present) {
+            attachments.add(new Attachment(id, name, description, format, createdOn, mandatory, present));
             return this;
         }
 
         public Attachments build() {
-            return new Attachments(provider, caption, DataUtils.unmodifiableList(attachments));
+            return new Attachments(provider, caption, DataUtils.unmodifiableList(attachments), enableUpload);
         }
     }
 }

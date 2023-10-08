@@ -127,7 +127,7 @@ public abstract class AbstractEntityDetailsPageController<T extends AbstractEnti
                 EventHandler[] viewActHandlers = getPageWidgetByShortName(Widget.class, "viewActHolder")
                         .getUplAttribute(EventHandler[].class, "eventHandler");
                 resultTable.setCrudActionHandlers(Arrays.asList(viewActHandlers));
-                resultTable.setCrudMode(true);
+                resultTable.setCrudMode(EntityListTable.CrudMode.SIMPLE);
                 resultTable.setViewOnly(true);
             }
 

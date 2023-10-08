@@ -30,6 +30,7 @@ import com.flowcentraltech.flowcentral.application.entities.AppEntityField;
 import com.flowcentraltech.flowcentral.application.entities.AppEntityFieldQuery;
 import com.flowcentraltech.flowcentral.application.entities.AppEntityQuery;
 import com.flowcentraltech.flowcentral.application.entities.AppRef;
+import com.flowcentraltech.flowcentral.application.entities.AppRefQuery;
 import com.flowcentraltech.flowcentral.application.util.ApplicationCodeGenUtils;
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityNameParts;
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityUtils;
@@ -39,6 +40,7 @@ import com.flowcentraltech.flowcentral.common.constants.ConfigType;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldType;
 import com.flowcentraltech.flowcentral.report.business.ReportModuleService;
 import com.flowcentraltech.flowcentral.report.entities.ReportableDefinition;
+import com.flowcentraltech.flowcentral.report.entities.ReportableDefinitionQuery;
 import com.flowcentraltech.flowcentral.report.entities.ReportableField;
 import com.flowcentraltech.flowcentral.report.util.ReportEntityUtils;
 import com.tcdng.unify.core.UnifyException;
@@ -194,40 +196,47 @@ public class StudioEntitySchemaManagerImpl extends AbstractEntitySchemaManager {
         final Long applicationId = appEntity.getApplicationId();
         final String nameDesc = appEntity.getDescription();
 
-        // Create application reference
-        AppRef appRef = new AppRef();
-        appRef.setApplicationId(applicationId);
-        appRef.setName(appEntity.getName() + "Ref");
-        appRef.setDescription(resolveSessionMessage("$m{application.appref.reference.template}", nameDesc));
-        appRef.setEntity(entity);
-        au.application().createAppRef(appRef);
+        if (au.application().countAppRefs(
+                (AppRefQuery) new AppRefQuery().applicationId(applicationId).name(appEntity.getName() + "Ref")) == 0) {
+            // Create application reference
+            AppRef appRef = new AppRef();
+            appRef.setApplicationId(applicationId);
+            appRef.setName(appEntity.getName() + "Ref");
+            appRef.setDescription(resolveSessionMessage("$m{application.appref.reference.template}", nameDesc));
+            appRef.setEntity(entity);
+            au.application().createAppRef(appRef);
+        }
 
         // Create reportable if necessary
         if (appEntity.isReportable()) {
-            String description = resolveApplicationMessage("$m{report.managedreport.description}", nameDesc);
-            ReportableDefinition reportableDefinition = new ReportableDefinition();
-            reportableDefinition.setApplicationId(applicationId);
-            reportableDefinition.setEntity(entity);
-            reportableDefinition.setTitle(description);
-            reportableDefinition.setName(appEntity.getName());
-            reportableDefinition.setDescription(description);
-            List<ReportableField> baseReportableFieldList = ReportEntityUtils
-                    .getEntityBaseTypeReportableFieldList(messageResolver, appEntity.getBaseType());
-            reportableDefinition.setFieldList(baseReportableFieldList);
-            reportModuleService.createReportableDefinition(reportableDefinition);
+            if (reportModuleService.countReportDefinitions((ReportableDefinitionQuery) new ReportableDefinitionQuery()
+                    .applicationId(applicationId).name(appEntity.getName())) == 0) {
+                String description = resolveApplicationMessage("$m{report.managedreport.description}", nameDesc);
+                ReportableDefinition reportableDefinition = new ReportableDefinition();
+                reportableDefinition.setApplicationId(applicationId);
+                reportableDefinition.setEntity(entity);
+                reportableDefinition.setTitle(description);
+                reportableDefinition.setName(appEntity.getName());
+                reportableDefinition.setDescription(description);
+                List<ReportableField> baseReportableFieldList = ReportEntityUtils
+                        .getEntityBaseTypeReportableFieldList(messageResolver, appEntity.getBaseType());
+                reportableDefinition.setFieldList(baseReportableFieldList);
+                reportModuleService.createReportableDefinition(reportableDefinition);
 
-            final String privilegeCode = PrivilegeNameUtils.getReportablePrivilegeName(
-                    ApplicationNameUtils.ensureLongNameReference(np.getApplicationName(), appEntity.getName()));
-            if (!au.applicationPrivilegeManager().isRegisteredPrivilege(
-                    ApplicationPrivilegeConstants.APPLICATION_REPORTABLE_CATEGORY_CODE, privilegeCode)) {
-                au.applicationPrivilegeManager().registerPrivilege(applicationId,
-                        ApplicationPrivilegeConstants.APPLICATION_REPORTABLE_CATEGORY_CODE, privilegeCode, description);
-            }
+                final String privilegeCode = PrivilegeNameUtils.getReportablePrivilegeName(
+                        ApplicationNameUtils.ensureLongNameReference(np.getApplicationName(), appEntity.getName()));
+                if (!au.applicationPrivilegeManager().isRegisteredPrivilege(
+                        ApplicationPrivilegeConstants.APPLICATION_REPORTABLE_CATEGORY_CODE, privilegeCode)) {
+                    au.applicationPrivilegeManager().registerPrivilege(applicationId,
+                            ApplicationPrivilegeConstants.APPLICATION_REPORTABLE_CATEGORY_CODE, privilegeCode,
+                            description);
+                }
 
-            UserToken userToken = getUserToken();
-            if (!userToken.isReservedUser() && au.system().getSysParameterValue(boolean.class,
-                    ApplicationModuleSysParamConstants.ASSIGN_APPLICATIONENTITY_ONCREATE)) {
-                au.applicationPrivilegeManager().assignPrivilegeToRole(userToken.getRoleCode(), privilegeCode);
+                UserToken userToken = getUserToken();
+                if (!userToken.isReservedUser() && au.system().getSysParameterValue(boolean.class,
+                        ApplicationModuleSysParamConstants.ASSIGN_APPLICATIONENTITY_ONCREATE)) {
+                    au.applicationPrivilegeManager().assignPrivilegeToRole(userToken.getRoleCode(), privilegeCode);
+                }
             }
         }
     }

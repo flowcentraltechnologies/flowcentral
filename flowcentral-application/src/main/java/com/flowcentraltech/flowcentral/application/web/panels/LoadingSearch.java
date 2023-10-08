@@ -87,7 +87,7 @@ public class LoadingSearch {
         this.searchEntries = new SearchEntries(appletContext.au(), tableDef.getEntityDef(),
                 tableDef.getLabelSuggestionDef(), appAppletSearchConfigName, columns, showConditions);
         this.loadingTable = new LoadingTable(appletContext.au(), tableDef);
-        this.loadingTable.setCrudMode(true);
+        this.loadingTable.setCrudMode(LoadingTable.CrudMode.SIMPLE);
         this.loadingTable.setViewOnly(true);
         this.appAppletId = appAppletId;
         this.mode = mode;

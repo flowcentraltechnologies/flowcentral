@@ -53,6 +53,7 @@ import com.tcdng.unify.web.ui.util.DataTransferUtils;
 import com.tcdng.unify.web.ui.widget.Control;
 import com.tcdng.unify.web.ui.widget.EventHandler;
 import com.tcdng.unify.web.ui.widget.Page;
+import com.tcdng.unify.web.ui.widget.UploadControl;
 import com.tcdng.unify.web.ui.widget.Widget;
 import com.tcdng.unify.web.ui.widget.panel.StandalonePanel;
 
@@ -109,6 +110,8 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
     private Control viewCtrl;
 
     private Control editCtrl;
+
+    private UploadControl uploadCtrl;
 
     private List<SummaryPanel> summaryPanelList;
 
@@ -173,6 +176,10 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
                     tabMemCtrl.populate(childBlock);
                 } else if (control == sortColumnCtrl) {
                     sortColumnCtrl.populate(childBlock);
+                } else if (control == uploadCtrl) {
+                    childBlock = childBlock.getChildBlock();
+                    uploadCtrl.setValueStore(getValueList().get(childBlock.getItemIndex()));
+                    uploadCtrl.populate(childBlock);
                 } else {
                     control.setValueStore(getValueList().get(childBlock.getItemIndex()));
                     control.populate(childBlock);
@@ -338,6 +345,11 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
         return table != null && table.isCrudMode();
     }
 
+    public boolean isUploadMode() throws UnifyException {
+        T table = getTable();
+        return table != null && table.isUploadCrudMode();
+    }
+
     public boolean isDetails() throws UnifyException {
         return !StringUtils.isBlank(getDetails());
     }
@@ -429,6 +441,16 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
         }
 
         return editCtrl;
+    }
+
+    public UploadControl getUploadCtrl() throws UnifyException {
+        if (uploadCtrl == null) {
+            uploadCtrl = (UploadControl) addInternalChildWidget(
+                    "!ui-fileuploadbutton styleClass:$s{"
+                            + getUplAttribute(String.class, "viewButtonClass") + " g_fsm}");
+        }
+
+        return uploadCtrl;
     }
 
     public Control[] getActionCtrl() {

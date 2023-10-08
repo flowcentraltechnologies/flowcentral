@@ -63,6 +63,19 @@ public abstract class AbstractTable<T, U> {
 
     public static final int SORT_DISABLED = 0x00000002;
 
+    public enum CrudMode {
+        SIMPLE,
+        EXTENDED_UPLOAD;
+        
+        public boolean isSimple() {
+            return SIMPLE.equals(this);
+        }
+        
+        public boolean isExtendedUpload() {
+            return EXTENDED_UPLOAD.equals(this);
+        }
+    };
+
     protected final AppletUtilities au;
 
     private FilterGroupDef filterGroupDef;
@@ -76,6 +89,8 @@ public abstract class AbstractTable<T, U> {
     private Order order;
 
     private Order defaultOrder;
+
+    private CrudMode crudMode;
 
     private String[] refreshPanelIds;
 
@@ -102,8 +117,6 @@ public abstract class AbstractTable<T, U> {
     private boolean multiSelectDetailLinked;
 
     private boolean basicSearchMode;
-
-    private boolean crudMode;
 
     private boolean viewOnly;
 
@@ -132,6 +145,8 @@ public abstract class AbstractTable<T, U> {
     private List<EventHandler> switchOnChangeHandlers;
 
     private List<EventHandler> crudActionHandlers;
+
+    private List<EventHandler> extCrudActionHandlers;
 
     private RowChangeInfo lastRowChangeInfo;
 
@@ -211,6 +226,14 @@ public abstract class AbstractTable<T, U> {
 
     public void setCrudActionHandlers(List<EventHandler> crudActionHandlers) {
         this.crudActionHandlers = crudActionHandlers;
+    }
+
+    public List<EventHandler> getExtCrudActionHandlers() {
+        return extCrudActionHandlers;
+    }
+
+    public void setExtCrudActionHandlers(List<EventHandler> extCrudActionHandlers) {
+        this.extCrudActionHandlers = extCrudActionHandlers;
     }
 
     public List<?> getSelectedItems() throws UnifyException {
@@ -343,10 +366,14 @@ public abstract class AbstractTable<T, U> {
     }
 
     public boolean isCrudMode() {
-        return crudMode;
+        return crudMode != null;
     }
 
-    public void setCrudMode(boolean crudMode) {
+    public boolean isUploadCrudMode() {
+        return crudMode != null && crudMode.isExtendedUpload();
+    }
+
+    public void setCrudMode(CrudMode crudMode) {
         this.crudMode = crudMode;
     }
 

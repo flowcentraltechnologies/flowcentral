@@ -116,6 +116,17 @@ public interface ReportModuleService extends FlowCentralService, ReportProvider 
     List<ReportableDefinition> findReportDefinitions(ReportableDefinitionQuery query) throws UnifyException;
 
     /**
+     * Counts reportable definitions by criteria.
+     * 
+     * @param query
+     *              the search query
+     * @return count of reportable definitions
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    int countReportDefinitions(ReportableDefinitionQuery query) throws UnifyException;
+
+    /**
      * Gets the reportable definition ID for reportable.
      * 
      * @param reportableName

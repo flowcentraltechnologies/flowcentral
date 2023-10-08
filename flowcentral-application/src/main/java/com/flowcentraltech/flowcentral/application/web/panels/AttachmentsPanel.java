@@ -25,6 +25,7 @@ import com.flowcentraltech.flowcentral.application.business.AttachmentsProvider;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationPredefinedTableConstants;
 import com.flowcentraltech.flowcentral.application.data.Attachment;
 import com.flowcentraltech.flowcentral.application.data.Attachments;
+import com.flowcentraltech.flowcentral.application.web.widgets.AbstractTableWidget;
 import com.flowcentraltech.flowcentral.application.web.widgets.BeanListTable;
 import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
 import com.flowcentraltech.flowcentral.common.data.FormValidationErrors;
@@ -33,8 +34,11 @@ import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.UplBinding;
+import com.tcdng.unify.core.constant.FileAttachmentType;
 import com.tcdng.unify.web.annotation.Action;
 import com.tcdng.unify.web.ui.widget.EventHandler;
+import com.tcdng.unify.web.ui.widget.UploadControl;
+import com.tcdng.unify.web.ui.widget.UploadControlHandler;
 import com.tcdng.unify.web.ui.widget.Widget;
 import com.tcdng.unify.web.ui.widget.data.FileAttachmentInfo;
 
@@ -46,7 +50,7 @@ import com.tcdng.unify.web.ui.widget.data.FileAttachmentInfo;
  */
 @Component("fc-attachmentspanel")
 @UplBinding("web/application/upl/attachmentspanel.upl")
-public class AttachmentsPanel extends AbstractFlowCentralPanel implements FormPanel {
+public class AttachmentsPanel extends AbstractFlowCentralPanel implements FormPanel, UploadControlHandler {
 
     private static final String ATTACHMENTS_TABLE_PAGE_ATTRIBUTE = "page.attachments.viewer.table";
 
@@ -61,9 +65,9 @@ public class AttachmentsPanel extends AbstractFlowCentralPanel implements FormPa
     public void view() throws UnifyException {
         final int targetIndex = getRequestTarget(int.class);
         Attachments attachments = getValue(Attachments.class);
-        Attachment item = attachments.getAttachment(targetIndex);
+        Attachment attachment = attachments.getAttachment(targetIndex);
         FileAttachmentInfo fileAttachmentInfo = getComponent(AttachmentsProvider.class, attachments.getProvider())
-                .getFileAttachmentInfo(item);
+                .getFileAttachmentInfo(attachment);
         showAttachment(fileAttachmentInfo);
     }
 
@@ -72,7 +76,7 @@ public class AttachmentsPanel extends AbstractFlowCentralPanel implements FormPa
         super.switchState();
         Attachments attachments = getValue(Attachments.class);
         if (attachments != null) {
-            BeanListTable attachmentsTable = getAttachmentsTable();
+            BeanListTable attachmentsTable = getAttachmentsTable(attachments.isEnableUpload());
             attachmentsTable.setSourceObjectClearSelected(attachments.getAttachments());
         }
     }
@@ -82,16 +86,46 @@ public class AttachmentsPanel extends AbstractFlowCentralPanel implements FormPa
         return Collections.emptyList();
     }
 
-    private BeanListTable getAttachmentsTable() throws UnifyException {
+    @Override
+    public void saveUpload(int dataIndex, FileAttachmentType type, String filename, byte[] fileData)
+            throws UnifyException {
+        Attachments attachments = getValue(Attachments.class);
+        if (attachments != null) {
+            Attachment attachment = attachments.getAttachment(dataIndex);
+            AttachmentsProvider provider = getComponent(AttachmentsProvider.class, attachments.getProvider());
+            provider.saveAttachmentData(attachment, filename, fileData);
+        }
+    }
+
+    @Override
+    public boolean isFileDataPresent(int dataIndex) throws UnifyException {
+        Attachments attachments = getValue(Attachments.class);
+        if (attachments != null) {
+            Attachment attachment = attachments.getAttachment(dataIndex);
+            return attachment.isPresent();
+        }
+
+        return false;
+    }
+
+    private BeanListTable getAttachmentsTable(boolean enableUpload) throws UnifyException {
         BeanListTable attachmentsTable = getPageAttribute(BeanListTable.class, ATTACHMENTS_TABLE_PAGE_ATTRIBUTE);
         if (attachmentsTable == null) {
-            EventHandler[] maintainActHandlers = getWidgetByShortName(Widget.class, "viewActHolder")
+            if (enableUpload) {
+                AbstractTableWidget<?, ?, ?> tableWidget = getWidgetByShortName(AbstractTableWidget.class,
+                        "attachmentsTable");
+                UploadControl uploadControl = tableWidget.getUploadCtrl();
+                uploadControl.setUploadHandler(this);
+            }
+
+            EventHandler[] viewActHandlers = getWidgetByShortName(Widget.class, "viewActHolder")
                     .getUplAttribute(EventHandler[].class, "eventHandler");
             attachmentsTable = new BeanListTable(appletUtilities,
                     appletUtilities.getTableDef(ApplicationPredefinedTableConstants.ATTACHMENT_TABLE), null);
-            attachmentsTable.setCrudMode(true);
+            attachmentsTable
+                    .setCrudMode(enableUpload ? BeanListTable.CrudMode.EXTENDED_UPLOAD : BeanListTable.CrudMode.SIMPLE);
             attachmentsTable.setViewOnly(true);
-            attachmentsTable.setCrudActionHandlers(Arrays.asList(maintainActHandlers));
+            attachmentsTable.setCrudActionHandlers(Arrays.asList(viewActHandlers));
             setPageAttribute(ATTACHMENTS_TABLE_PAGE_ATTRIBUTE, attachmentsTable);
         }
 

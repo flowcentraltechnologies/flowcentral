@@ -1196,6 +1196,17 @@ public interface ApplicationModuleService extends FlowCentralService {
     List<AppRef> findAppRefs(AppRefQuery query) throws UnifyException;
 
     /**
+     * Counts application references.
+     * 
+     * @param query
+     *              the query object
+     * @return the application references count
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    int countAppRefs(AppRefQuery query) throws UnifyException;
+
+    /**
      * Gets a application reference definition.
      * 
      * @param refName
