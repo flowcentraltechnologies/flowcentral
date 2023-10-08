@@ -18,8 +18,8 @@
 
 !ui-label:attachmentsCaption styleClass:$e{cap} binding:caption
 
-!ui-panel:attachmentsPanel style:$s{width:75%;} components:$c{attachmentsViewerTable}
-!fc-beanlisttable:attachmentsViewerTable binding:$s{page.attachments.viewer.table}
+!ui-panel:attachmentsPanel style:$s{width:75%;} components:$c{attachmentsTable}
+!fc-beanlisttable:attachmentsTable binding:$s{page.attachments.viewer.table}
 	viewButtonClass:$s{mbtn mblue}
 
 !ui-hidden:viewActHolder eventHandler:$d{!ui-event event:onclick action:$c{viewAct}}

@@ -778,7 +778,7 @@ public class TableWriter extends AbstractControlWriter {
                     }
 
                     if (isCrudMode) {
-                        writer.write("<td>");
+                        writer.write("<td class=\"celld\">");
                         Control _crudCtrl = !tableWidget.isContainerEditable() || table.isViewOnly()
                                 || (fixedType != null && (fixedType.fixed() || !fixedType.editable()))
                                         ? tableWidget.getViewCtrl()
@@ -789,7 +789,7 @@ public class TableWriter extends AbstractControlWriter {
                     }
 
                     if (isUploadMode) {
-                        writer.write("<td>");
+                        writer.write("<td class=\"celld\">");
                         Control _uploadCtrl = tableWidget.getUploadCtrl();
                         _uploadCtrl.setValueStore(valueStore);
                         writer.writeStructureAndContent(_uploadCtrl);

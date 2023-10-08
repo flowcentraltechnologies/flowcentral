@@ -99,8 +99,9 @@ public class Attachments {
             return this;
         }
 
-        public Builder addAttachment(Long id, String name, String description, String format, Date createdOn) {
-            attachments.add(new Attachment(id, name, description, format, createdOn));
+        public Builder addAttachment(Long id, String name, String description, String format, Date createdOn,
+                boolean mandatory) {
+            attachments.add(new Attachment(id, name, description, format, createdOn, mandatory));
             return this;
         }
 

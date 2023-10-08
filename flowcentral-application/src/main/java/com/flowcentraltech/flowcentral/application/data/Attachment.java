@@ -27,21 +27,24 @@ import java.util.Date;
 public class Attachment {
 
     private Long id;
-    
+
     private String name;
-    
+
     private String description;
-    
+
     private String format;
-    
+
     private Date createdOn;
 
-    public Attachment(Long id, String name, String description, String format, Date createdOn) {
+    private boolean mandatory;
+
+    public Attachment(Long id, String name, String description, String format, Date createdOn, boolean mandatory) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.format = format;
         this.createdOn = createdOn;
+        this.mandatory = mandatory;
     }
 
     public Long getId() {
@@ -62,6 +65,10 @@ public class Attachment {
 
     public Date getCreatedOn() {
         return createdOn;
+    }
+
+    public boolean isMandatory() {
+        return mandatory;
     }
 
 }
