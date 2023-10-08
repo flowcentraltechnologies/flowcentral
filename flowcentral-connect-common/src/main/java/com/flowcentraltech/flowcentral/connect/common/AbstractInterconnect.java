@@ -267,7 +267,7 @@ public abstract class AbstractInterconnect {
             throws Exception {
         ConnectFieldDataType type = classToConnectDataTypeMap.get(field.getType());
         if (type == null) {
-            if (Enum.class.equals(field.getType())) {
+            if (Enum.class.isAssignableFrom(field.getType())) {
                 type = ConnectFieldDataType.STRING;
                 return new FieldTypeInfo(ConnectFieldDataType.STRING, (Class<? extends Enum<?>>) field.getType());
             }
