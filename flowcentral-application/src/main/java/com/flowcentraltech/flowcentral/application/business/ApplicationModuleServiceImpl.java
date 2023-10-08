@@ -2372,6 +2372,11 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
+    public int countAppRefs(AppRefQuery query) throws UnifyException {
+        return environment().countAll(query);
+    }
+
+    @Override
     public RefDef getRefDef(String refName) throws UnifyException {
         return refDefFactoryMap.get(refName);
     }
