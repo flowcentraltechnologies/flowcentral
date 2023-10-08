@@ -616,6 +616,8 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-table .table .mbtnr {margin-right:6px;}
 .fc-table .table .mblue {background-color:#1f6dcc; font-weight:bold; color: #FFF; border: 1px solid #1a5dbc;}
 .fc-table .table .mblue:hover:enabled {background-color:#005dbc;color: #FFF;}
+.fc-table .table .mblue:disabled {background-color:#d5d5d5;color: #f8f8f8;border: 1px solid #e8e8e8;}
+.fc-table .table .mblue:hover:disabled{background-color:#d5d5d5;}
 .fc-table .table .msection {display:block;text-align:left; font-weight:bold; font-size:8pt;color:#121212; padding: 6px 8px;}
 .fc-table .table .mnorec {display:block;text-align:center; font-size:8pt;color: #606060;}
 .fc-table .mwarn {border: 1px solid #ff823b;font-size: 8pt;color:#b35b29;font-weight: bold;background-color: #ffe6d7;padding: 6px 0px;}

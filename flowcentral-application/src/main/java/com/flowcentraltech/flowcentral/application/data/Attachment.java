@@ -38,13 +38,17 @@ public class Attachment {
 
     private boolean mandatory;
 
-    public Attachment(Long id, String name, String description, String format, Date createdOn, boolean mandatory) {
+    private boolean present;
+
+    public Attachment(Long id, String name, String description, String format, Date createdOn, boolean mandatory,
+            boolean present) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.format = format;
         this.createdOn = createdOn;
         this.mandatory = mandatory;
+        this.present = present;
     }
 
     public Long getId() {
@@ -69,6 +73,10 @@ public class Attachment {
 
     public boolean isMandatory() {
         return mandatory;
+    }
+
+    public boolean isPresent() {
+        return present;
     }
 
 }

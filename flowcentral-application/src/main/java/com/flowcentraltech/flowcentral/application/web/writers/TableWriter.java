@@ -49,6 +49,8 @@ import com.tcdng.unify.web.ui.widget.Control;
 import com.tcdng.unify.web.ui.widget.EventHandler;
 import com.tcdng.unify.web.ui.widget.PushType;
 import com.tcdng.unify.web.ui.widget.ResponseWriter;
+import com.tcdng.unify.web.ui.widget.UploadControl;
+import com.tcdng.unify.web.ui.widget.UploadControlHandler;
 import com.tcdng.unify.web.ui.widget.Widget;
 import com.tcdng.unify.web.ui.widget.WriteWork;
 import com.tcdng.unify.web.ui.widget.panel.StandalonePanel;
@@ -292,6 +294,12 @@ public class TableWriter extends AbstractControlWriter {
                                     ? tableWidget.getViewCtrl()
                                     : tableWidget.getEditCtrl();
                     _crudCtrl.setValueStore(valueStore);
+                    if (isUploadMode) {
+                        UploadControl _uploadCtrl = tableWidget.getUploadCtrl();
+                        UploadControlHandler handler = _uploadCtrl.getUploadHandler();
+                        _crudCtrl.setDisabled(handler != null && !handler.isFileDataPresent(i));
+                    }
+                    
                     if (crudActionHandlers != null) {
                         for (EventHandler eventHandler : crudActionHandlers) {
                             writer.writeBehavior(eventHandler, _crudCtrl.getId(), null);
@@ -784,13 +792,19 @@ public class TableWriter extends AbstractControlWriter {
                                         ? tableWidget.getViewCtrl()
                                         : tableWidget.getEditCtrl();
                         _crudCtrl.setValueStore(valueStore);
+                        if (isUploadMode) {
+                            UploadControl _uploadCtrl = tableWidget.getUploadCtrl();
+                            UploadControlHandler handler = _uploadCtrl.getUploadHandler();
+                            _crudCtrl.setDisabled(handler != null && !handler.isFileDataPresent(i));
+                        }
+                        
                         writer.writeStructureAndContent(_crudCtrl);
                         writer.write("</td>");
                     }
 
                     if (isUploadMode) {
                         writer.write("<td class=\"celld\">");
-                        Control _uploadCtrl = tableWidget.getUploadCtrl();
+                        UploadControl _uploadCtrl = tableWidget.getUploadCtrl();
                         _uploadCtrl.setValueStore(valueStore);
                         writer.writeStructureAndContent(_uploadCtrl);
                         writer.write("</td>");

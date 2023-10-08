@@ -97,6 +97,17 @@ public class AttachmentsPanel extends AbstractFlowCentralPanel implements FormPa
         }
     }
 
+    @Override
+    public boolean isFileDataPresent(int dataIndex) throws UnifyException {
+        Attachments attachments = getValue(Attachments.class);
+        if (attachments != null) {
+            Attachment attachment = attachments.getAttachment(dataIndex);
+            return attachment.isPresent();
+        }
+
+        return false;
+    }
+
     private BeanListTable getAttachmentsTable(boolean enableUpload) throws UnifyException {
         BeanListTable attachmentsTable = getPageAttribute(BeanListTable.class, ATTACHMENTS_TABLE_PAGE_ATTRIBUTE);
         if (attachmentsTable == null) {
