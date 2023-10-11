@@ -55,6 +55,8 @@ public class EntityInfo {
 
     private String actionPolicy;
 
+    private boolean ignoreOnSync;
+
     private Class<?> implClass;
 
     private Map<String, EntityFieldInfo> fieldsByName;
@@ -75,7 +77,7 @@ public class EntityInfo {
 
     public EntityInfo(String entityManagerFactory, String dataSourceAlias, ConnectEntityBaseType baseType, String name,
             String description, String tableName, String idFieldName, String versionNoFieldName, String handler,
-            String actionPolicy, Class<?> implClass, Map<String, EntityFieldInfo> fieldsByName) {
+            String actionPolicy, boolean ignoreOnSync, Class<?> implClass, Map<String, EntityFieldInfo> fieldsByName) {
         this.entityManagerFactory = entityManagerFactory;
         this.dataSourceAlias = dataSourceAlias;
         this.baseType = baseType;
@@ -86,6 +88,7 @@ public class EntityInfo {
         this.versionNoFieldName = versionNoFieldName;
         this.handler = handler;
         this.actionPolicy = actionPolicy;
+        this.ignoreOnSync = ignoreOnSync;
         this.implClass = implClass;
         this.fieldsByName = fieldsByName;
         this.refFieldList = new ArrayList<EntityFieldInfo>();
@@ -175,6 +178,10 @@ public class EntityInfo {
 
     public boolean isWithActionPolicy() {
         return actionPolicy != null && !actionPolicy.trim().isEmpty();
+    }
+
+    public boolean isIgnoreOnSync() {
+        return ignoreOnSync;
     }
 
     public Class<?> getImplClass() {
@@ -276,6 +283,8 @@ public class EntityInfo {
 
         private String implementation;
 
+        private boolean ignoreOnSync;
+
         private Map<String, EntityFieldInfo> fieldsByName;
 
         public Builder(String entityManagerFactory) {
@@ -325,6 +334,11 @@ public class EntityInfo {
 
         public Builder actionPolicy(String actionPolicy) {
             this.actionPolicy = actionPolicy;
+            return this;
+        }
+
+        public Builder ignoreOnSync(boolean ignoreOnSync) {
+            this.ignoreOnSync = ignoreOnSync;
             return this;
         }
 
@@ -379,7 +393,7 @@ public class EntityInfo {
 
             Class<?> implClass = Class.forName(implementation);
             return new EntityInfo(entityManagerFactory, dataSourceAlias, baseType, name, description, tableName,
-                    idFieldName, versionNoFieldName, handler, actionPolicy, implClass, fieldsByName);
+                    idFieldName, versionNoFieldName, handler, actionPolicy, ignoreOnSync, implClass, fieldsByName);
         }
     }
 

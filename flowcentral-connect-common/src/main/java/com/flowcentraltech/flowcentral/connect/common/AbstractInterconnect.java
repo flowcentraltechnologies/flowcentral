@@ -174,12 +174,16 @@ public abstract class AbstractInterconnect {
                                             .idFieldName(entityConfig.getIdFieldName())
                                             .versionNoFieldName(entityConfig.getVersionNoFieldName())
                                             .handler(entityConfig.getHandler())
-                                            .actionPolicy(entityConfig.getActionPolicy());
+                                            .actionPolicy(entityConfig.getActionPolicy())
+                                            .ignoreOnSync(entityConfig.isIgnoreOnSync());
                                     populateBaseFields(eib, base);
                                     if (entityConfig.getEntityFieldList() != null) {
                                         for (EntityFieldConfig entityFieldConfig : entityConfig.getEntityFieldList()) {
-                                            eib.addField(entityFieldConfig.getType(), entityFieldConfig.getName(),
-                                                    entityFieldConfig.getDescription(), entityFieldConfig.getColumn(),
+                                            eib.addField(
+                                                    entityFieldConfig.getType().isEnum() ? ConnectFieldDataType.STRING
+                                                            : entityFieldConfig.getType(),
+                                                    entityFieldConfig.getName(), entityFieldConfig.getDescription(),
+                                                    entityFieldConfig.getColumn(),
                                                     ensureLongName(applicationName, entityFieldConfig.getReferences()),
                                                     entityFieldConfig.getEnumImplClass(),
                                                     entityFieldConfig.getPrecision(), entityFieldConfig.getScale(),
