@@ -5853,7 +5853,6 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                         : DynamicFieldType.INFO_ONLY;
                 if (entityFieldDef.isRefDataType()) {
                     if (entityFieldDef.isEnumDataType()) {
-                        System.out.println("@prime: entityFieldDef = " + StringUtils.toXmlString(entityFieldDef));
                         deib.addForeignKeyField(type,
                                 listManager.getStaticListEnumType(entityFieldDef.getReferences()).getName(),
                                 entityFieldDef.getColumnName(), entityFieldDef.getFieldName(),
