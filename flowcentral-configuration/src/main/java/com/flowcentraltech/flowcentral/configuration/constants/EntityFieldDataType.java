@@ -407,7 +407,7 @@ public enum EntityFieldDataType implements EnumConst {
     }
 
     public static EntityFieldDataType fromInterconnect(ConnectFieldDataType dataType) {
-        return dataType != null ? fromName(dataType.name()) : null;
+        return dataType != null ? (dataType.isEnum() ? EntityFieldDataType.STRING : fromName(dataType.name())) : null;
     }
 
 }

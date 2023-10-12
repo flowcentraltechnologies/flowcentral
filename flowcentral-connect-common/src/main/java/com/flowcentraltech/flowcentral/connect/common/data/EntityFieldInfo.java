@@ -115,6 +115,10 @@ public class EntityFieldInfo {
         return type.isEnum();
     }
     
+    public boolean isLob() {
+        return type.isLob();
+    }
+    
     public boolean isListOnly() {
         return type.isListOnly();
     }
@@ -153,6 +157,13 @@ public class EntityFieldInfo {
     
     public boolean isDecimal() {
         return type.isDecimal();
+    }
+
+    @Override
+    public String toString() {
+        return "EntityFieldInfo [type=" + type + ", name=" + name + ", description=" + description + ", column="
+                + column + ", references=" + references + ", enumImplClass=" + enumImplClass + ", precision="
+                + precision + ", scale=" + scale + ", length=" + length + ", nullable=" + nullable + "]";
     }
 
 }
