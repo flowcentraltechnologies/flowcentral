@@ -143,6 +143,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         boolean enableAttachment = false;
         boolean enableCreateSubmit = false;
         boolean enableUpdateSubmit = false;
+        boolean capture = false;
         if (viewMode.isCreateForm()) {
             EntityDef formEntityDef = form.getFormDef().getEntityDef();
             enableCreate = isContextEditable
@@ -153,6 +154,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
             if (form.isSingleFormType()) {
                 final AppletDef _appletDef = applet.getRootAppletDef();
                 final EntityDef _entityDef = applet.getEntityDef();
+                capture = _appletDef.getPropValue(boolean.class, AppletPropertyConstants.MAINTAIN_FORM_CAPTURE, false);
                 enableUpdate = isContextEditable
                         && _appletDef.getPropValue(boolean.class, AppletPropertyConstants.MAINTAIN_FORM_UPDATE, false)
                         && applicationPrivilegeManager.isRoleWithPrivilege(roleCode, _entityDef.getEditPrivilege())
@@ -168,6 +170,8 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
             } else {
                 EntityDef formEntityDef = form.getFormDef().getEntityDef();
                 if (formAppletDef != null) { // Normal, null for workflow applet root
+                    capture = formAppletDef.getPropValue(boolean.class, AppletPropertyConstants.MAINTAIN_FORM_CAPTURE,
+                            false);
                     enableSaveAs = formAppletDef.getPropValue(boolean.class,
                             AppletPropertyConstants.MAINTAIN_FORM_SAVEAS, false)
                             && applicationPrivilegeManager.isRoleWithPrivilege(roleCode,
@@ -213,13 +217,15 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
             }
         }
 
+        appCtx.setCapture(capture);
         if (viewMode.isInForm()) {
             boolean showAlternateFormActions = au().system().getSysParameterValue(boolean.class,
                     ApplicationModuleSysParamConstants.SHOW_FORM_ALTERNATE_ACTIONS);
             if (viewMode.isSingleForm()) {
                 setVisible("singleFormPanel.altActionPanel", showAlternateFormActions);
                 setVisible("singleFormPanel.emailsPanel", appCtx.isReview() && appCtx.isEmails());
-                setVisible("singleFormPanel.attachmentsPanel", appCtx.isReview() && appCtx.isAttachments());
+                setVisible("singleFormPanel.attachmentsPanel",
+                        appCtx.isCapture() || (appCtx.isAttachments() && appCtx.isReview()));
                 setVisible("singleFormPanel.commentsPanel", appCtx.isReview() && appCtx.isComments());
                 setVisible("singleFormPanel.errorsPanel", appCtx.isReview() && appCtx.isRecovery());
                 setVisible("sfrmActionBtns", !DataUtils.isBlank(form.getFormActionDefList()));
@@ -229,7 +235,8 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
             } else {
                 setVisible("formPanel.altActionPanel", showAlternateFormActions);
                 setVisible("formPanel.emailsPanel", isRootForm && appCtx.isReview() && appCtx.isEmails());
-                setVisible("formPanel.attachmentsPanel", appCtx.isReview() && appCtx.isAttachments());
+                setVisible("formPanel.attachmentsPanel",
+                        appCtx.isCapture() || (appCtx.isAttachments() && appCtx.isReview()));
                 setVisible("formPanel.commentsPanel", isRootForm && appCtx.isReview() && appCtx.isComments());
                 setVisible("formPanel.errorsPanel", isRootForm && appCtx.isReview() && appCtx.isRecovery());
                 setVisible("frmActionBtns", !DataUtils.isBlank(form.getFormActionDefList()));

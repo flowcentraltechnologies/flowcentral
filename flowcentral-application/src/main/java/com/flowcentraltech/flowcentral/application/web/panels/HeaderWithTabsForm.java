@@ -35,7 +35,11 @@ public class HeaderWithTabsForm extends AbstractForm {
         MAINTAIN_INST,
         NAV_BACK_TO_PREVIOUS,
         FORMACTION_ON_INST,
-        UPDATE_INST
+        UPDATE_INST;
+
+        public boolean isMaintain() {
+            return MAINTAIN_INST.equals(this);
+        }
     }
 
     private MiniForm headerForm;
@@ -86,7 +90,7 @@ public class HeaderWithTabsForm extends AbstractForm {
     public boolean isTabSheetInStateForDisplay() {
         return tabSheet != null && tabSheet.isInStateForDisplay();
     }
-
+    
     public void setRelatedListTabSheet(TabSheet relatedListTabSheet) {
         this.relatedListTabSheet = relatedListTabSheet;
     }

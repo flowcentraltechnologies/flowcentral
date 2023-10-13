@@ -48,7 +48,8 @@ public class ListingAppletPanel extends AbstractAppletPanel {
 
         final AppletContext appCtx = applet.getCtx();
         setVisible("listingPanel.emailsPanel", appCtx.isReview() && appCtx.isEmails());
-        setVisible("listingPanel.attachmentsPanel", appCtx.isReview() && appCtx.isAttachments());
+        setVisible("listingPanel.attachmentsPanel",
+                appCtx.isCapture() || (appCtx.isAttachments() && appCtx.isReview()));
         setVisible("listingPanel.commentsPanel", appCtx.isReview() && appCtx.isComments());
         setVisible("listingPanel.errorsPanel", appCtx.isReview() && appCtx.isRecovery());
         setEditable("listingPanel.errorsPanel", false);
@@ -74,7 +75,7 @@ public class ListingAppletPanel extends AbstractAppletPanel {
 
     @Override
     protected void onReviewErrors(EntityActionResult entityActionResult) throws UnifyException {
-        
+
     }
 
     private FormContext evaluateCurrentFormContext(EvaluationMode evaluationMode) throws UnifyException {
@@ -90,12 +91,14 @@ public class ListingAppletPanel extends AbstractAppletPanel {
         if (evaluationMode.evaluation()) {
             if (evaluationMode.review() && ctx.getAppletContext().isReview()) {
                 if (commentRequired) {
-                    FormPanel commentsFormPanel = getWidgetByShortName(FormPanel.class, "listingPanel.commentsPanel");;
+                    FormPanel commentsFormPanel = getWidgetByShortName(FormPanel.class, "listingPanel.commentsPanel");
+                    ;
                     ctx.mergeValidationErrors(commentsFormPanel.validate(evaluationMode));
                 }
 
                 if (ctx.getAppletContext().isEmails()) {
-                    FormPanel emailsFormPanel = getWidgetByShortName(FormPanel.class, "listingPanel.emailsPanel");;
+                    FormPanel emailsFormPanel = getWidgetByShortName(FormPanel.class, "listingPanel.emailsPanel");
+                    ;
                     ctx.mergeValidationErrors(emailsFormPanel.validate(evaluationMode));
                 }
             }
@@ -107,7 +110,6 @@ public class ListingAppletPanel extends AbstractAppletPanel {
 
         return ctx;
     }
-
 
     private ListingApplet getListEntityApplet() throws UnifyException {
         return getValue(ListingApplet.class);

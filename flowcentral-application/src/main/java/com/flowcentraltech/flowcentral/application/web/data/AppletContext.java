@@ -60,6 +60,8 @@ public class AppletContext extends AbstractContext {
 
     private boolean review;
 
+    private boolean capture;
+
     private boolean recovery;
 
     private boolean emails;
@@ -166,6 +168,14 @@ public class AppletContext extends AbstractContext {
 
     public void setReview(boolean review) {
         this.review = review;
+    }
+
+    public boolean isCapture() {
+        return capture;
+    }
+
+    public void setCapture(boolean capture) {
+        this.capture = capture;
     }
 
     public boolean isRecovery() {

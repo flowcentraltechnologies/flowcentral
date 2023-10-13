@@ -90,12 +90,14 @@ public abstract class AbstractEntitySingleFormAppletPanel extends AbstractApplet
         boolean enableCreate = false;
         boolean enableCreateSubmit = false;
         boolean enableUpdateSubmit = false;
+        boolean capture = false;
         if (viewMode.isCreateForm()) {
             enableCreate = isContextEditable
                     && applicationPrivilegeManager.isRoleWithPrivilege(roleCode, _entityDef.getAddPrivilege());
             enableCreateSubmit = applet
                     .formBeanMatchAppletPropertyCondition(AppletPropertyConstants.CREATE_FORM_SUBMIT_CONDITION);
         } else if (viewMode.isMaintainForm()) {
+            capture = _appletDef.getPropValue(boolean.class, AppletPropertyConstants.MAINTAIN_FORM_CAPTURE, false);
             enableUpdate = isContextEditable && !isUpdateCopy
                     && _appletDef.getPropValue(boolean.class, AppletPropertyConstants.MAINTAIN_FORM_UPDATE, false)
                     && applicationPrivilegeManager.isRoleWithPrivilege(roleCode, _entityDef.getEditPrivilege())
@@ -110,12 +112,14 @@ public abstract class AbstractEntitySingleFormAppletPanel extends AbstractApplet
                     .formBeanMatchAppletPropertyCondition(AppletPropertyConstants.MAINTAIN_FORM_SUBMIT_CONDITION);
         }
 
+        appCtx.setCapture(capture);
         if (viewMode.isInForm()) {
             boolean showAlternateFormActions = systemModuleService.getSysParameterValue(boolean.class,
                     ApplicationModuleSysParamConstants.SHOW_FORM_ALTERNATE_ACTIONS);
             setVisible("formPanel.altActionPanel", showAlternateFormActions);
             setVisible("formPanel.emailsPanel", appCtx.isReview() && appCtx.isEmails());
-            setVisible("formPanel.attachmentsPanel", appCtx.isReview() && appCtx.isAttachments());
+            setVisible("formPanel.attachmentsPanel",
+                    appCtx.isCapture() || (appCtx.isAttachments() && appCtx.isReview()));
             setVisible("formPanel.commentsPanel", appCtx.isReview() && appCtx.isComments());
             setVisible("formPanel.errorsPanel", appCtx.isReview() && appCtx.isRecovery());
             setVisible("frmActionBtns", !DataUtils.isBlank(form.getFormActionDefList()));

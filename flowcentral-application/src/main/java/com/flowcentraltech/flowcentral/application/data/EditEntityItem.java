@@ -27,9 +27,13 @@ import com.tcdng.unify.core.database.Entity;
  */
 public class EditEntityItem extends EntityItem {
 
-    public EditEntityItem(Entity entity, InputArrayEntries emails, Comments comments,
-            Attachments attachments, Errors errors) {
+    public EditEntityItem(Entity entity, InputArrayEntries emails, Comments comments, Attachments attachments,
+            Errors errors) {
         super(MaintainType.EDIT, entity, emails, comments, attachments, errors, null, null);
+    }
+
+    public EditEntityItem(Entity entity, Attachments attachments) {
+        super(MaintainType.EDIT, entity, null, null, attachments, null, null, null);
     }
 
     public EditEntityItem(Entity entity) {
