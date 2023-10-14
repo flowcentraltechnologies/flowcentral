@@ -25,7 +25,6 @@ import com.tcdng.unify.core.notification.Email;
 import com.tcdng.unify.core.notification.EmailRecipient;
 import com.tcdng.unify.core.notification.EmailServer;
 import com.tcdng.unify.core.notification.EmailServerConfig;
-import com.tcdng.unify.core.util.IOUtils;
 import com.tcdng.unify.core.util.StringUtils;
 
 /**
@@ -107,8 +106,7 @@ public abstract class AbstractRestEmailServer extends AbstractFlowCentralCompone
             req.setBody(email.getMessage());
 
             // Send REST request
-            RestEmailResponse resp = IOUtils.postObjectToEndpointUsingJson(RestEmailResponse.class, getRestEndPoint(),
-                    req);
+            RestEmailResponse resp = postJsonObject(RestEmailResponse.class, getRestEndPoint(), req);
             if (resp.getErrorCode() == null) {
                 email.setSent(true);
             } else {

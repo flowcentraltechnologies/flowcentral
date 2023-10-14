@@ -19,6 +19,7 @@ import com.flowcentraltech.flowcentral.common.constants.FlowCentralContainerProp
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralEditionConstants;
 import com.tcdng.unify.core.AbstractUnifyComponent;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.util.IOUtils;
 
 /**
  * Base class for flowCentral components.
@@ -28,6 +29,23 @@ import com.tcdng.unify.core.UnifyException;
  */
 public abstract class AbstractFlowCentralComponent extends AbstractUnifyComponent implements FlowCentralComponent {
 
+    /**
+     * Posts a JSON object.
+     * 
+     * @param respClass
+     *                  the response type
+     * @param endpoint
+     *                  the endpoint
+     * @param req
+     *                  the request object
+     * @return the response object
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    protected <T, U> T postJsonObject(Class<T> respClass, String endpoint, U req) throws UnifyException {
+        return IOUtils.postObjectToEndpointUsingJson(respClass, endpoint, req);
+    }
+  
     protected final boolean isEnterprise() throws UnifyException {
         return FlowCentralEditionConstants.ENTERPRISE.equalsIgnoreCase(getContainerSetting(String.class,
                 FlowCentralContainerPropertyConstants.FLOWCENTRAL_INSTALLATION_TYPE));
