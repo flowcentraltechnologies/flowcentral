@@ -26,6 +26,8 @@ import java.util.Date;
  */
 public class Attachment {
 
+    private Long ownerId;
+
     private Long id;
 
     private String name;
@@ -40,8 +42,9 @@ public class Attachment {
 
     private boolean present;
 
-    public Attachment(Long id, String name, String description, String format, Date createdOn, boolean mandatory,
-            boolean present) {
+    public Attachment(Long ownerId, Long id, String name, String description, String format, Date createdOn,
+            boolean mandatory, boolean present) {
+        this.ownerId = ownerId;
         this.id = id;
         this.name = name;
         this.description = description;
@@ -49,6 +52,10 @@ public class Attachment {
         this.createdOn = createdOn;
         this.mandatory = mandatory;
         this.present = present;
+    }
+
+    public Long getOwnerId() {
+        return ownerId;
     }
 
     public Long getId() {
