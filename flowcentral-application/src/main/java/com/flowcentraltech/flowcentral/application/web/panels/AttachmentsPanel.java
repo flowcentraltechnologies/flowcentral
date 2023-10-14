@@ -94,6 +94,8 @@ public class AttachmentsPanel extends AbstractFlowCentralPanel implements FormPa
             Attachment attachment = attachments.getAttachment(dataIndex);
             AttachmentsProvider provider = getComponent(AttachmentsProvider.class, attachments.getProvider());
             provider.saveAttachmentData(attachment, filename, fileData);
+            attachment.setPresent(true);
+            hintUser("$m{attachmentspanel.upload.success.hint}", attachment.getDescription());
         }
     }
 

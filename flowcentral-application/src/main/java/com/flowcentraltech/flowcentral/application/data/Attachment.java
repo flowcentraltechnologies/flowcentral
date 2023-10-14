@@ -82,6 +82,10 @@ public class Attachment {
         return mandatory;
     }
 
+    public void setPresent(boolean present) {
+        this.present = present;
+    }
+
     public boolean isPresent() {
         return present;
     }
