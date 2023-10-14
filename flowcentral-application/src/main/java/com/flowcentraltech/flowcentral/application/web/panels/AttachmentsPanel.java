@@ -124,8 +124,8 @@ public class AttachmentsPanel extends AbstractFlowCentralPanel implements FormPa
                     .getUplAttribute(EventHandler[].class, "eventHandler");
             attachmentsTable = new BeanListTable(appletUtilities,
                     appletUtilities.getTableDef(ApplicationPredefinedTableConstants.ATTACHMENT_TABLE), null);
-            attachmentsTable
-                    .setCrudMode(enableUpload ? BeanListTable.CrudMode.EXTENDED_UPLOAD : BeanListTable.CrudMode.SIMPLE);
+            attachmentsTable.setCrudMode(
+                    enableUpload ? BeanListTable.CrudMode.ENABLED_UPLOAD : BeanListTable.CrudMode.DISABLED_UPLOAD);
             attachmentsTable.setViewOnly(true);
             attachmentsTable.setCrudActionHandlers(Arrays.asList(viewActHandlers));
             setPageAttribute(ATTACHMENTS_TABLE_PAGE_ATTRIBUTE, attachmentsTable);

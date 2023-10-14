@@ -683,6 +683,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 @Override
                 protected EntityDef create(String longName, Object... arg1) throws Exception {
                     final WidgetTypeDef textWidgetTypeDef = widgetDefFactoryMap.get("application.text");
+                    final WidgetTypeDef manLabelWidgetTypeDef = widgetDefFactoryMap.get("application.mandatorylabel");
                     if (ApplicationPredefinedEntityConstants.PROPERTYITEM_ENTITY.equals(longName)) {
                         EntityDef.Builder edb = EntityDef.newBuilder(ConfigType.STATIC,
                                 PropertyListItem.class.getName(),
@@ -736,6 +737,9 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                         edb.addFieldDef(textWidgetTypeDef, textWidgetTypeDef, EntityFieldDataType.STRING,
                                 EntityFieldType.STATIC, "format",
                                 getApplicationMessage("application.attachment.format"));
+                        edb.addFieldDef(manLabelWidgetTypeDef, manLabelWidgetTypeDef, EntityFieldDataType.BOOLEAN,
+                                EntityFieldType.STATIC, "mandatory",
+                                getApplicationMessage("application.attachment.mandatory"));
                         edb.addFieldDef(textWidgetTypeDef, textWidgetTypeDef, EntityFieldDataType.TIMESTAMP,
                                 EntityFieldType.STATIC, "createdOn",
                                 getApplicationMessage("application.attachment.createdon"));
@@ -964,12 +968,12 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                                         ApplicationPredefinedTableConstants.ATTACHMENT_TABLE,
                                         getApplicationMessage("application.attachment.table.description"), 0L, 1L)
                                 .serialNo(true);
-                        WidgetTypeDef widgetTypeDef = getWidgetTypeDef("application.text");
-                        String renderer = widgetTypeDef.getRenderer();
-                        tdb.addColumnDef("name", renderer, 2, false);
-                        tdb.addColumnDef("description", renderer, 3, false);
-                        tdb.addColumnDef("format", renderer, 2, false);
-                        tdb.addColumnDef("createdOn", renderer, 2, false);
+                        tdb.addColumnDef("name", "!ui-label", 2, false);
+                        tdb.addColumnDef("description", "!ui-label", 3, false);
+                        tdb.addColumnDef("format", "!ui-label", 2, false);
+                        tdb.addColumnDef("mandatory",
+                                "!ui-booleanlabel onTrue:$m{label.mandatory} onFalse:$m{label.optional}", 2, false);
+                        tdb.addColumnDef("createdOn", "!ui-label", 2, false);
                         tdb.itemsPerPage(-1);
                         return tdb.build();
                     }
@@ -3623,7 +3627,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                         for (String fieldName : constDef.getFieldList()) {
                             query.addEquals(fieldName, recMap.get(fieldName).getVal());
                         }
-                        
+
                         if (constDef.isWithConditionList()) {
                             for (UniqueConditionDef ucd : constDef.getConditionList()) {
                                 query.addRestriction(ucd.getRestriction());

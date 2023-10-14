@@ -199,6 +199,7 @@ public class TableWriter extends AbstractControlWriter {
             final boolean focusManagement = tableWidget.isFocusManagement();
             final boolean isCrudMode = tableWidget.isCrudMode();
             final boolean isUploadMode = tableWidget.isUploadMode();
+            final boolean isUploadEnabled = tableWidget.isUploadEnabled();
             final Control[] fixedCtrl = isFixedRows ? tableWidget.getFixedCtrl() : null;
             final Control[] actionCtrl = tableWidget.getActionCtrl();
             final RowChangeInfo lastRowChangeInfo = focusManagement ? table.getLastRowChangeInfo() : null;
@@ -307,7 +308,7 @@ public class TableWriter extends AbstractControlWriter {
                     }
                 }
 
-                if (isUploadMode) {
+                if (isUploadEnabled) {
                     Control _uploadCtrl = tableWidget.getUploadCtrl();
                     _uploadCtrl.setValueStore(valueStore);
                     writer.writeBehavior(_uploadCtrl);
@@ -433,7 +434,7 @@ public class TableWriter extends AbstractControlWriter {
         final TableDef tableDef = table.getTableDef();
         final boolean multiSelect = tableDef.isMultiSelect() || tableWidget.isMultiSelect();
         final boolean isCrudMode = tableWidget.isCrudMode();
-        final boolean isUploadMode = tableWidget.isUploadMode();
+        final boolean isUploadEnabled = tableWidget.isUploadEnabled();
 
         // Column widths
         writer.write("<colgroup>");
@@ -479,7 +480,7 @@ public class TableWriter extends AbstractControlWriter {
             columnCount++;
         }
 
-        if (isUploadMode) {
+        if (isUploadEnabled) {
             writer.write("<col class=\"ccrudh\">");
             columnCount++;
         }
@@ -580,7 +581,7 @@ public class TableWriter extends AbstractControlWriter {
                 writer.write("<th class=\"mcrudh\"></th>");
             }
 
-            if (tableWidget.isUploadMode()) {
+            if (tableWidget.isUploadEnabled()) {
                 writer.write("<th class=\"mcrudh\"></th>");
             }
 
@@ -634,6 +635,7 @@ public class TableWriter extends AbstractControlWriter {
                 final boolean rowColors = tableDef.isRowColorFilters();
                 final boolean isCrudMode = tableWidget.isCrudMode();
                 final boolean isUploadMode = tableWidget.isUploadMode();
+                final boolean isUploadEnabled = tableWidget.isUploadEnabled();
                 final Date now = table.au().getNow();
                 final String even = isRowAction && !isDisableLinks ? "even pnt" : "even";
                 final String odd = isRowAction && !isDisableLinks ? "odd pnt" : "odd";
@@ -802,7 +804,7 @@ public class TableWriter extends AbstractControlWriter {
                         writer.write("</td>");
                     }
 
-                    if (isUploadMode) {
+                    if (isUploadEnabled) {
                         writer.write("<td class=\"celld\">");
                         UploadControl _uploadCtrl = tableWidget.getUploadCtrl();
                         _uploadCtrl.setValueStore(valueStore);

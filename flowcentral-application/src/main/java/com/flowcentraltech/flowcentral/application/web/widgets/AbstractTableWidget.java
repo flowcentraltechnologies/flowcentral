@@ -350,6 +350,11 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
         return table != null && table.isUploadCrudMode();
     }
 
+    public boolean isUploadEnabled() throws UnifyException {
+        T table = getTable();
+        return table != null && table.isUploadEnabled();
+    }
+
     public boolean isDetails() throws UnifyException {
         return !StringUtils.isBlank(getDetails());
     }
