@@ -113,12 +113,10 @@ public class AttachmentsPanel extends AbstractFlowCentralPanel implements FormPa
     private BeanListTable getAttachmentsTable(boolean enableUpload) throws UnifyException {
         BeanListTable attachmentsTable = getPageAttribute(BeanListTable.class, ATTACHMENTS_TABLE_PAGE_ATTRIBUTE);
         if (attachmentsTable == null) {
-            if (enableUpload) {
-                AbstractTableWidget<?, ?, ?> tableWidget = getWidgetByShortName(AbstractTableWidget.class,
-                        "attachmentsTable");
-                UploadControl uploadControl = tableWidget.getUploadCtrl();
-                uploadControl.setUploadHandler(this);
-            }
+            AbstractTableWidget<?, ?, ?> tableWidget = getWidgetByShortName(AbstractTableWidget.class,
+                    "attachmentsTable");
+            UploadControl uploadControl = tableWidget.getUploadCtrl();
+            uploadControl.setUploadHandler(this);
 
             EventHandler[] viewActHandlers = getWidgetByShortName(Widget.class, "viewActHolder")
                     .getUplAttribute(EventHandler[].class, "eventHandler");
