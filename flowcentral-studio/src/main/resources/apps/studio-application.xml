@@ -2930,7 +2930,7 @@
 						column="0" required="true" saveAs="true" />
 					<field name="configType" inputWidget="application.enumlist"
 						column="1" disabled="true" required="true" />
-					<field name="entity" inputWidget="studio.entitybynamelist"
+					<field name="entity" inputWidget="studio.entitysearch"
 						column="1" switchOnChange="true" required="true" />
 					<field name="searchField"
 						inputWidget="studio.entitysearchfieldlist" column="1" />

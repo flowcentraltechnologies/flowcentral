@@ -87,6 +87,9 @@ public enum FormReviewType implements EnumConst {
 
     public boolean isSubmit() {
         return ON_SUBMIT.equals(this) || ON_SUBMIT_NEXT.equals(this);
+
+    public boolean formClosedOrReplacedAndNotDeleted() {
+        return formClosedOrReplaced && !FormReviewType.ON_DELETE.equals(this);
     }
 
     public static FormReviewType fromCode(String code) {
