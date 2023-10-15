@@ -38,6 +38,7 @@ import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.data.AppletSetValuesDef;
 import com.flowcentraltech.flowcentral.application.data.AppletWorkflowCopyInfo;
 import com.flowcentraltech.flowcentral.application.data.Attachments;
+import com.flowcentraltech.flowcentral.application.data.AttachmentsOptions;
 import com.flowcentraltech.flowcentral.application.data.Comments;
 import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
@@ -897,7 +898,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         if (wfStepDef.isWithAttachmentProviderName()) {
             AttachmentsProvider attachmentsProvider = getComponent(AttachmentsProvider.class,
                     wfStepDef.getAttachmentProviderName());
-            attachments = attachmentsProvider.provide(reader);
+            attachments = attachmentsProvider.provide(reader, new AttachmentsOptions(true));
         }
 
         Errors errors = null;
@@ -1277,6 +1278,10 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                 ParameterizedStringGenerator generator = appletUtil
                         .getStringGenerator(new BeanValueStore(workInst).getReader(), wfDef.getDescFormat());
                 itemDesc = generator.generate();
+            }
+            
+            if (StringUtils.isBlank(itemDesc)) {
+                itemDesc = entityClassDef.getLongName() + " - " + workRecId;
             }
 
             WfItemHist wfItemHist = new WfItemHist();

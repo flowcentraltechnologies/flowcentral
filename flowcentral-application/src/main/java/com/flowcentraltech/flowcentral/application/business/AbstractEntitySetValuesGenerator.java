@@ -58,6 +58,10 @@ public abstract class AbstractEntitySetValuesGenerator extends AbstractFlowCentr
 
     }
 
+    protected final AppletUtilities au() {
+        return appletUtilities;
+    }
+
     protected final ApplicationModuleService application() {
         return appletUtilities.application();
     }

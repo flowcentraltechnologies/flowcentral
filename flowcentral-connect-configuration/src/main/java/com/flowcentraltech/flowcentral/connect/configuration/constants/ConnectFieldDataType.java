@@ -114,8 +114,12 @@ public enum ConnectFieldDataType {
         return BOOLEAN.equals(this);
     }
 
+    public boolean isLob() {
+        return BLOB.equals(this) || CLOB.equals(this);
+    }
+
     public boolean isString() {
-        return STRING.equals(javaClass);
+        return STRING.equals(this);
     }
     
     public boolean isInteger() {

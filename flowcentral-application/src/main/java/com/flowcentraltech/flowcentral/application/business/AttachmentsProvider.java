@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.application.business;
 
 import com.flowcentraltech.flowcentral.application.data.Attachment;
 import com.flowcentraltech.flowcentral.application.data.Attachments;
+import com.flowcentraltech.flowcentral.application.data.AttachmentsOptions;
 import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.ValueStoreReader;
@@ -35,12 +36,14 @@ public interface AttachmentsProvider extends FlowCentralComponent {
      * Provides attachment based on supplied reader.
      * 
      * @param reader
-     *               the reader to use
+     *                the reader to use
+     * @param options
+     *                the attachments options
      * @return the attachments
      * @throws UnifyException
      *                        if an error occurs
      */
-    Attachments provide(ValueStoreReader reader) throws UnifyException;
+    Attachments provide(ValueStoreReader reader, AttachmentsOptions options) throws UnifyException;
 
     /**
      * Gets file attachment information.
@@ -66,4 +69,5 @@ public interface AttachmentsProvider extends FlowCentralComponent {
      *                        if an error occurs
      */
     void saveAttachmentData(Attachment attachment, String filename, byte[] fileData) throws UnifyException;
+
 }

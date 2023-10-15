@@ -23,6 +23,7 @@ import java.util.Set;
 import java.util.Stack;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
+import com.flowcentraltech.flowcentral.application.business.AttachmentsProvider;
 import com.flowcentraltech.flowcentral.application.constants.AppletPropertyConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleErrorConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleNameConstants;
@@ -30,6 +31,8 @@ import com.flowcentraltech.flowcentral.application.constants.WorkflowDraftType;
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.data.AppletFilterDef;
 import com.flowcentraltech.flowcentral.application.data.AssignmentPageDef;
+import com.flowcentraltech.flowcentral.application.data.Attachments;
+import com.flowcentraltech.flowcentral.application.data.AttachmentsOptions;
 import com.flowcentraltech.flowcentral.application.data.EditEntityItem;
 import com.flowcentraltech.flowcentral.application.data.EntityAttachmentDef;
 import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
@@ -1250,6 +1253,11 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         au.onFormConstruct(_currentFormAppletDef, form.getCtx(), childFkFieldName, formMode.isCreate());
         final Long overrideTenantId = au.getOverrideTenantId(currParentEntityDef, currParentInst);
         form.getCtx().getFormValueStore().setTempValue(WidgetTempValueConstants.OVERRIDE_TENANT_ID, overrideTenantId);
+
+        if (formMode.isMaintain()) {
+            loadFormAppendables(_currentFormAppletDef, form, inst);
+        }
+
         return form;
     }
 
@@ -1258,6 +1266,27 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         form.getCtx().resetTabIndex();
         form.setUpdateType(updateType);
         au.updateHeaderWithTabsForm(form, inst);
+
+        if (updateType.isMaintain()) {
+            final AppletDef _currentFormAppletDef = getFormAppletDef();
+            loadFormAppendables(_currentFormAppletDef, form, inst);
+        }
+    }
+
+    private void loadFormAppendables(AppletDef formAppletDef, HeaderWithTabsForm form, Entity inst)
+            throws UnifyException {
+        if (!getCtx().isReview()
+                && formAppletDef.getPropValue(boolean.class, AppletPropertyConstants.MAINTAIN_FORM_CAPTURE, false)) {
+            String attachmentProviderName = formAppletDef.getPropValue(String.class,
+                    AppletPropertyConstants.MAINTAIN_FORM_CAPTURE_ATTACHMENT_PROVIDER);
+            if (!StringUtils.isBlank(attachmentProviderName)) {
+                AttachmentsProvider attachmentsProvider = au.getComponent(AttachmentsProvider.class,
+                        attachmentProviderName);
+                Attachments attachments = attachmentsProvider.provide(form.getFormValueStoreReader(),
+                        new AttachmentsOptions());
+                form.setAppendables(new EditEntityItem(inst, attachments));
+            }
+        }
     }
 
     protected void setTabDefAndSaveCurrentForm(int childTabIndex) throws UnifyException {

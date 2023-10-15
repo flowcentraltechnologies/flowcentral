@@ -5,6 +5,11 @@
 	label="$m{application.label}" module="application">
 	<!-- Widget Types -->
 	<widgetTypes>
+		<widgetType name="mandatorylabel"
+			description="$m{application.widgettype.mandatorylabel}"
+			dataType="boolean" inputType="boolean" listOption="true"
+			editor="!ui-booleanlabel onTrue:$m{label.mandatory} onFalse:$m{label.optional}"
+			renderer="!ui-booleanlabel onTrue:$m{label.mandatory} onFalse:$m{label.optional}" />
 		<widgetType name="datatypeeditorlist"
 			description="$m{application.widgettype.datatypeeditorlist}"
 			dataType="string" inputType="string"

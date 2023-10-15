@@ -94,6 +94,8 @@ public class AttachmentsPanel extends AbstractFlowCentralPanel implements FormPa
             Attachment attachment = attachments.getAttachment(dataIndex);
             AttachmentsProvider provider = getComponent(AttachmentsProvider.class, attachments.getProvider());
             provider.saveAttachmentData(attachment, filename, fileData);
+            attachment.setPresent(true);
+            hintUser("$m{attachmentspanel.upload.success.hint}", attachment.getDescription());
         }
     }
 
@@ -111,19 +113,17 @@ public class AttachmentsPanel extends AbstractFlowCentralPanel implements FormPa
     private BeanListTable getAttachmentsTable(boolean enableUpload) throws UnifyException {
         BeanListTable attachmentsTable = getPageAttribute(BeanListTable.class, ATTACHMENTS_TABLE_PAGE_ATTRIBUTE);
         if (attachmentsTable == null) {
-            if (enableUpload) {
-                AbstractTableWidget<?, ?, ?> tableWidget = getWidgetByShortName(AbstractTableWidget.class,
-                        "attachmentsTable");
-                UploadControl uploadControl = tableWidget.getUploadCtrl();
-                uploadControl.setUploadHandler(this);
-            }
+            AbstractTableWidget<?, ?, ?> tableWidget = getWidgetByShortName(AbstractTableWidget.class,
+                    "attachmentsTable");
+            UploadControl uploadControl = tableWidget.getUploadCtrl();
+            uploadControl.setUploadHandler(this);
 
             EventHandler[] viewActHandlers = getWidgetByShortName(Widget.class, "viewActHolder")
                     .getUplAttribute(EventHandler[].class, "eventHandler");
             attachmentsTable = new BeanListTable(appletUtilities,
                     appletUtilities.getTableDef(ApplicationPredefinedTableConstants.ATTACHMENT_TABLE), null);
-            attachmentsTable
-                    .setCrudMode(enableUpload ? BeanListTable.CrudMode.EXTENDED_UPLOAD : BeanListTable.CrudMode.SIMPLE);
+            attachmentsTable.setCrudMode(
+                    enableUpload ? BeanListTable.CrudMode.ENABLED_UPLOAD : BeanListTable.CrudMode.DISABLED_UPLOAD);
             attachmentsTable.setViewOnly(true);
             attachmentsTable.setCrudActionHandlers(Arrays.asList(viewActHandlers));
             setPageAttribute(ATTACHMENTS_TABLE_PAGE_ATTRIBUTE, attachmentsTable);

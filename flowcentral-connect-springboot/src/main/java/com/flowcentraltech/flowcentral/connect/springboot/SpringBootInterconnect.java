@@ -65,15 +65,6 @@ public class SpringBootInterconnect extends AbstractInterconnect {
         int scale = 0;
         boolean nullable = false;
 
-        Column ca = field.getAnnotation(Column.class);
-        if (ca != null) {
-            column = ca.name();
-            length = ca.length();
-            precision = ca.precision();
-            scale = ca.scale();
-            nullable = ca.nullable();
-        }
-
         if (type.isString()) {
             Lob la = field.getAnnotation(Lob.class);
             if (la != null) {
@@ -84,6 +75,15 @@ public class SpringBootInterconnect extends AbstractInterconnect {
             if (ta != null && (TemporalType.TIMESTAMP.equals(ta.value()) || TemporalType.TIME.equals(ta.value()))) {
                 type = ConnectFieldDataType.TIMESTAMP;
             }
+        }
+
+        Column ca = field.getAnnotation(Column.class);
+        if (ca != null) {
+            column = ca.name();
+            length = type.isString() ? ca.length() : 0;
+            precision = ca.precision();
+            scale = ca.scale();
+            nullable = ca.nullable();
         }
 
         return new EntityFieldInfo(type, name, description, column, fieldTypeInfo.getReferences(),

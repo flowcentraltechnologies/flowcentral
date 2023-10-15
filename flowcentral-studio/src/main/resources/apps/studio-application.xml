@@ -4908,6 +4908,12 @@
 				<property name="maintainForm.delete"
 					description="$m{studio.appappletprop.createentity.maintainform.delete}"
 					inputWidget="application.checkbox" />
+				<property name="maintainForm.capture"
+					description="$m{studio.appappletprop.createentity.maintainform.capture}"
+					inputWidget="application.checkbox" />
+				<property name="maintainForm.capture.attachmentprovider"
+					description="$m{studio.appappletprop.createentity.maintainform.capture.attachmentprovider}"
+					inputWidget="studio.propertyappletattachmentproviderlist" />
 				<property name="maintainForm.attachments"
 					description="$m{studio.appappletprop.createentity.maintainform.attachments}"
 					inputWidget="application.checkbox" />
@@ -5015,6 +5021,12 @@
 				<property name="maintainForm.delete"
 					description="$m{studio.appappletprop.createentitysingleform.maintainform.delete}"
 					inputWidget="application.checkbox" />
+				<property name="maintainForm.capture"
+					description="$m{studio.appappletprop.createentitysingleform.maintainform.capture}"
+					inputWidget="application.checkbox" />
+				<property name="maintainForm.capture.attachmentprovider"
+					description="$m{studio.appappletprop.createentitysingleform.maintainform.capture.attachmentprovider}"
+					inputWidget="studio.propertyappletattachmentproviderlist" />
 			</propertySet>
 			<propertySet
 				label="$m{studio.appappletprop.createentitysingleform.workflowproperties}">
@@ -5202,6 +5214,12 @@
 				<property name="maintainForm.delete.pseudo"
 					description="$m{studio.appappletprop.manageentity.maintainform.delete.pseudo}"
 					inputWidget="application.checkbox" />
+				<property name="maintainForm.capture"
+					description="$m{studio.appappletprop.manageentity.maintainform.capture}"
+					inputWidget="application.checkbox" />
+				<property name="maintainForm.capture.attachmentprovider"
+					description="$m{studio.appappletprop.manageentity.maintainform.capture.attachmentprovider}"
+					inputWidget="studio.propertyappletattachmentproviderlist" />
 				<property name="maintainForm.attachments"
 					description="$m{studio.appappletprop.manageentity.maintainform.attachments}"
 					inputWidget="application.checkbox" />
@@ -5423,6 +5441,12 @@
 				<property name="maintainForm.delete"
 					description="$m{studio.appappletprop.manageentitysingleform.maintainform.delete}"
 					inputWidget="application.checkbox" />
+				<property name="maintainForm.capture"
+					description="$m{studio.appappletprop.manageentitysingleform.maintainform.capture}"
+					inputWidget="application.checkbox" />
+				<property name="maintainForm.capture.attachmentprovider"
+					description="$m{studio.appappletprop.manageentitysingleform.maintainform.capture.attachmentprovider}"
+					inputWidget="studio.propertyappletattachmentproviderlist" />
 			</propertySet>
 			<propertySet
 				label="$m{studio.appappletprop.manageentity.workflowcopyproperties}">

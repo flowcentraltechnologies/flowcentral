@@ -65,14 +65,23 @@ public abstract class AbstractTable<T, U> {
 
     public enum CrudMode {
         SIMPLE,
-        EXTENDED_UPLOAD;
+        ENABLED_UPLOAD,
+        DISABLED_UPLOAD;
         
         public boolean isSimple() {
             return SIMPLE.equals(this);
         }
         
-        public boolean isExtendedUpload() {
-            return EXTENDED_UPLOAD.equals(this);
+        public boolean isEnabledUpload() {
+            return ENABLED_UPLOAD.equals(this);
+        }
+        
+        public boolean isDisabledUpload() {
+            return DISABLED_UPLOAD.equals(this);
+        }
+        
+        public boolean isUpload() {
+            return ENABLED_UPLOAD.equals(this) || DISABLED_UPLOAD.equals(this);
         }
     };
 
@@ -370,7 +379,11 @@ public abstract class AbstractTable<T, U> {
     }
 
     public boolean isUploadCrudMode() {
-        return crudMode != null && crudMode.isExtendedUpload();
+        return crudMode != null && crudMode.isUpload();
+    }
+
+    public boolean isUploadEnabled() {
+        return crudMode != null && crudMode.isEnabledUpload();
     }
 
     public void setCrudMode(CrudMode crudMode) {

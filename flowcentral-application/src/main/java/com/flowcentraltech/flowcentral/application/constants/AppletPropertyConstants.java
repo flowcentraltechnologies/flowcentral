@@ -124,6 +124,10 @@ public interface AppletPropertyConstants {
 
     String MAINTAIN_FORM_SUBMIT_CONDITION = "maintainForm.submit.condition";
 
+    String MAINTAIN_FORM_CAPTURE = "maintainForm.capture";
+
+    String MAINTAIN_FORM_CAPTURE_ATTACHMENT_PROVIDER = "maintainForm.capture.attachmentprovider";
+
     String MAINTAIN_FORM_DELETE = "maintainForm.delete";
 
     String MAINTAIN_FORM_DELETE_PSEUDO = "maintainForm.delete.pseudo";

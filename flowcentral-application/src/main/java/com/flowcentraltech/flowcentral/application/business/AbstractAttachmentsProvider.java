@@ -20,6 +20,7 @@ import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.data.Attachment;
 import com.flowcentraltech.flowcentral.application.data.Attachments;
+import com.flowcentraltech.flowcentral.application.data.AttachmentsOptions;
 import com.flowcentraltech.flowcentral.common.AbstractFlowCentralComponent;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
 import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
@@ -45,11 +46,11 @@ public abstract class AbstractAttachmentsProvider extends AbstractFlowCentralCom
     }
 
     @Override
-    public final Attachments provide(ValueStoreReader reader) throws UnifyException {
+    public final Attachments provide(ValueStoreReader reader, AttachmentsOptions options) throws UnifyException {
         Attachments.Builder ab = Attachments.newBuilder(getName());
-        ab.caption(getCaption(reader));
-        ab.addAttachments(getAttachments(reader));
-        ab.enableUpload(isUploadEnabled());
+        ab.caption(getCaption(reader, options));
+        ab.addAttachments(getAttachments(reader, options));
+        ab.enableUpload(isUploadEnabled(reader, options));
         return ab.build();
     }
 
@@ -84,11 +85,14 @@ public abstract class AbstractAttachmentsProvider extends AbstractFlowCentralCom
         return appletUtilities.system();
     }
 
-    protected abstract boolean isUploadEnabled() throws UnifyException;
-    
-    protected abstract String getCaption(ValueStoreReader reader) throws UnifyException;
+    protected boolean isUploadEnabled(ValueStoreReader reader, AttachmentsOptions options) throws UnifyException {
+        return !options.isReview();
+    }
 
-    protected abstract List<Attachment> getAttachments(ValueStoreReader reader) throws UnifyException;
+    protected abstract String getCaption(ValueStoreReader reader, AttachmentsOptions options) throws UnifyException;
+
+    protected abstract List<Attachment> getAttachments(ValueStoreReader reader, AttachmentsOptions options)
+            throws UnifyException;
 
     protected abstract byte[] getData(FileAttachmentType resolvedType, Attachment attachment) throws UnifyException;
 }

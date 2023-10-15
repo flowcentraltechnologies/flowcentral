@@ -50,6 +50,8 @@ public class EntityConfig {
 
     private String actionPolicy;
 
+    private boolean ignoreOnSync;
+
     private List<EntityFieldConfig> entityFieldList;
 
     public ConnectEntityBaseType getBase() {
@@ -129,9 +131,18 @@ public class EntityConfig {
         return actionPolicy;
     }
 
-    @XmlAttribute(name = "actionPolicy")
+    @XmlAttribute(name = "action-policy")
     public void setActionPolicy(String actionPolicy) {
         this.actionPolicy = actionPolicy;
+    }
+
+    public boolean isIgnoreOnSync() {
+        return ignoreOnSync;
+    }
+
+    @XmlAttribute(name = "ignore-on-sync")
+    public void setIgnoreOnSync(boolean ignoreOnSync) {
+        this.ignoreOnSync = ignoreOnSync;
     }
 
     public List<EntityFieldConfig> getEntityFieldList() {

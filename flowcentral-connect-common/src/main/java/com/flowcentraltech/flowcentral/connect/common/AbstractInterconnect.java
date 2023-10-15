@@ -174,7 +174,8 @@ public abstract class AbstractInterconnect {
                                             .idFieldName(entityConfig.getIdFieldName())
                                             .versionNoFieldName(entityConfig.getVersionNoFieldName())
                                             .handler(entityConfig.getHandler())
-                                            .actionPolicy(entityConfig.getActionPolicy());
+                                            .actionPolicy(entityConfig.getActionPolicy())
+                                            .ignoreOnSync(entityConfig.isIgnoreOnSync());
                                     populateBaseFields(eib, base);
                                     if (entityConfig.getEntityFieldList() != null) {
                                         for (EntityFieldConfig entityFieldConfig : entityConfig.getEntityFieldList()) {
@@ -268,8 +269,7 @@ public abstract class AbstractInterconnect {
         ConnectFieldDataType type = classToConnectDataTypeMap.get(field.getType());
         if (type == null) {
             if (Enum.class.isAssignableFrom(field.getType())) {
-                type = ConnectFieldDataType.STRING;
-                return new FieldTypeInfo(ConnectFieldDataType.STRING, (Class<? extends Enum<?>>) field.getType());
+                return new FieldTypeInfo(ConnectFieldDataType.ENUM_REF, (Class<? extends Enum<?>>) field.getType());
             }
 
             EntityInfo _refEntityInfo = _entitiesbyclassname.get(field.getType().getName());
@@ -820,7 +820,7 @@ public abstract class AbstractInterconnect {
         if (entityInfo == null) {
             throw new RuntimeException("No interconnect entity information for [" + entity + "].");
         }
-
+        
         return entityInfo;
     }
 
@@ -918,7 +918,7 @@ public abstract class AbstractInterconnect {
                 }
             }
         } else {
-            for (EntityFieldInfo entityFieldInfo : entityInfo.getRefFieldList()) {
+            for (EntityFieldInfo entityFieldInfo : entityInfo.getRefFieldList()) { 
                 Object val = map.get(entityInfo.getFieldNameFromLocal(entityFieldInfo.getName()));
                 val = ConverterUtils.convert(entityFieldInfo.getJavaClass(), val);
                 PropertyUtils.setProperty(bean, entityFieldInfo.getName(), val);

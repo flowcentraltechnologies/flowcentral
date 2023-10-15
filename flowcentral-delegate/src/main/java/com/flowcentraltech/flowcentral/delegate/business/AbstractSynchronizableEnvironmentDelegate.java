@@ -77,26 +77,30 @@ public abstract class AbstractSynchronizableEnvironmentDelegate extends Abstract
                         logInfo(taskMonitor, "Fetching schema information for [{0}]...", entity);
                         EntityDTO entityDTO = getDelegatedEntitySchema(entity);
                         if (entityDTO != null) {
-                            logInfo(taskMonitor, "Creating entity schema...");
-                            List<EntityFieldSchema> fields = new ArrayList<EntityFieldSchema>();
-                            for (EntityFieldDTO entityFieldDTO : entityDTO.getFields()) {
-                                EntityFieldDataType dataType = EntityFieldDataType
-                                        .fromInterconnect(entityFieldDTO.getType());
-                                fields.add(new EntityFieldSchema(dataType, entityFieldDTO.getName(),
-                                        entityFieldDTO.getDescription(), entityFieldDTO.getColumn(),
-                                        entityFieldDTO.getReferences(), entityFieldDTO.getScale(),
-                                        entityFieldDTO.getPrecision(), entityFieldDTO.getLength(),
-                                        entityFieldDTO.isNullable()));
-                            }
+                            if (!entityDTO.isIgnoreOnSync()) {
+                                logInfo(taskMonitor, "Creating entity schema...");
+                                List<EntityFieldSchema> fields = new ArrayList<EntityFieldSchema>();
+                                for (EntityFieldDTO entityFieldDTO : entityDTO.getFields()) {
+                                    EntityFieldDataType dataType = EntityFieldDataType
+                                            .fromInterconnect(entityFieldDTO.getType());
+                                    fields.add(new EntityFieldSchema(dataType, entityFieldDTO.getName(),
+                                            entityFieldDTO.getDescription(), entityFieldDTO.getColumn(),
+                                            entityFieldDTO.getReferences(), entityFieldDTO.getScale(),
+                                            entityFieldDTO.getPrecision(), entityFieldDTO.getLength(),
+                                            entityFieldDTO.isNullable()));
+                                }
 
-                            EntityBaseType baseType = EntityBaseType.fromInterconnect(entityDTO.getBaseType());
-                            EntitySchema entitySchema = new EntitySchema(baseType, delegate,
-                                    entityDTO.getDataSourceAlias(), entity, entityDTO.getName(),
-                                    entityDTO.getDescription(), entityDTO.getTableName(), fields);
-                            entitySchemaManager.createEntitySchema(entitySchema);
-                            logInfo(taskMonitor, "Entity schema create for [{0}] completed...", entity);
+                                EntityBaseType baseType = EntityBaseType.fromInterconnect(entityDTO.getBaseType());
+                                EntitySchema entitySchema = new EntitySchema(baseType, delegate,
+                                        entityDTO.getDataSourceAlias(), entity, entityDTO.getName(),
+                                        entityDTO.getDescription(), entityDTO.getTableName(), fields);
+                                entitySchemaManager.createEntitySchema(entitySchema);
+                                logInfo(taskMonitor, "Entity schema create for [{0}] completed.", entity);
+                            } else {
+                                logInfo(taskMonitor, "Entity schema creation for [{0}] ignored.", entity);
+                            }
                         } else {
-                            logWarn(taskMonitor, "Could no retreive schema information for entity [{0}]...", entity);
+                            logWarn(taskMonitor, "Could no retreive schema information for entity [{0}].", entity);
                         }
                     } else {
                         logInfo(taskMonitor, "Skipping entity schema create for [{0}]. Already exists.", entity);
@@ -135,26 +139,30 @@ public abstract class AbstractSynchronizableEnvironmentDelegate extends Abstract
                         logInfo(taskMonitor, "Fetching schema information for [{0}]...", entity);
                         EntityDTO entityDTO = getDelegatedEntitySchema(entity);
                         if (entityDTO != null) {
-                            logInfo(taskMonitor, "Updating entity schema...");
-                            List<EntityFieldSchema> fields = new ArrayList<EntityFieldSchema>();
-                            for (EntityFieldDTO entityFieldDTO : entityDTO.getFields()) {
-                                EntityFieldDataType dataType = EntityFieldDataType
-                                        .fromInterconnect(entityFieldDTO.getType());
-                                fields.add(new EntityFieldSchema(dataType, entityFieldDTO.getName(),
-                                        entityFieldDTO.getDescription(), entityFieldDTO.getColumn(),
-                                        entityFieldDTO.getReferences(), entityFieldDTO.getScale(),
-                                        entityFieldDTO.getPrecision(), entityFieldDTO.getLength(),
-                                        entityFieldDTO.isNullable()));
-                            }
+                            if (!entityDTO.isIgnoreOnSync()) {
+                                logInfo(taskMonitor, "Updating entity schema...");
+                                List<EntityFieldSchema> fields = new ArrayList<EntityFieldSchema>();
+                                for (EntityFieldDTO entityFieldDTO : entityDTO.getFields()) {
+                                    EntityFieldDataType dataType = EntityFieldDataType
+                                            .fromInterconnect(entityFieldDTO.getType());
+                                    fields.add(new EntityFieldSchema(dataType, entityFieldDTO.getName(),
+                                            entityFieldDTO.getDescription(), entityFieldDTO.getColumn(),
+                                            entityFieldDTO.getReferences(), entityFieldDTO.getScale(),
+                                            entityFieldDTO.getPrecision(), entityFieldDTO.getLength(),
+                                            entityFieldDTO.isNullable()));
+                                }
 
-                            EntityBaseType baseType = EntityBaseType.fromInterconnect(entityDTO.getBaseType());
-                            EntitySchema entitySchema = new EntitySchema(baseType, delegate,
-                                    entityDTO.getDataSourceAlias(), entity, entityDTO.getName(),
-                                    entityDTO.getDescription(), entityDTO.getTableName(), fields);
-                            entitySchemaManager.updateEntitySchema(entitySchema);
-                            logInfo(taskMonitor, "Entity schema update for [{0}] completed...", entity);
+                                EntityBaseType baseType = EntityBaseType.fromInterconnect(entityDTO.getBaseType());
+                                EntitySchema entitySchema = new EntitySchema(baseType, delegate,
+                                        entityDTO.getDataSourceAlias(), entity, entityDTO.getName(),
+                                        entityDTO.getDescription(), entityDTO.getTableName(), fields);
+                                entitySchemaManager.updateEntitySchema(entitySchema);
+                                logInfo(taskMonitor, "Entity schema update for [{0}] completed.", entity);
+                            } else {
+                                logInfo(taskMonitor, "Entity schema update for [{0}] ignored.", entity);
+                            }
                         } else {
-                            logWarn(taskMonitor, "Could no retreive schema information for entity [{0}]...", entity);
+                            logWarn(taskMonitor, "Could no retreive schema information for entity [{0}].", entity);
                         }
                     } else {
                         logInfo(taskMonitor, "Skipping entity schema update for [{0}]. Does not exist.", entity);
