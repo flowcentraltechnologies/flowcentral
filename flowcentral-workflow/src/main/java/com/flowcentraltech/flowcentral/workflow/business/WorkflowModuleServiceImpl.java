@@ -1279,6 +1279,10 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                         .getStringGenerator(new BeanValueStore(workInst).getReader(), wfDef.getDescFormat());
                 itemDesc = generator.generate();
             }
+            
+            if (StringUtils.isBlank(itemDesc)) {
+                itemDesc = entityClassDef.getLongName() + " - " + workRecId;
+            }
 
             WfItemHist wfItemHist = new WfItemHist();
             wfItemHist.setApplicationName(wfDef.getApplicationName());
