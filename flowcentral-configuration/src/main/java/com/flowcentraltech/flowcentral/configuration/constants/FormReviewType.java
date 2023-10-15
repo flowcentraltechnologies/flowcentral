@@ -31,28 +31,37 @@ import com.tcdng.unify.core.util.EnumUtils;
 public enum FormReviewType implements EnumConst {
 
     ON_SAVE(
-            "ONS", false),
+            "ONS",
+            false),
     ON_SAVE_NEXT(
-            "OSN", true),
+            "OSN",
+            true),
     ON_SAVE_CLOSE(
-            "OSC", true),
+            "OSC",
+            true),
     ON_UPDATE(
-            "ONU", false),
+            "ONU",
+            false),
     ON_UPDATE_CLOSE(
-            "OUC", true),
+            "OUC",
+            true),
     ON_DELETE(
-            "OND", true),
-   ON_SUBMIT(
-            "ONB", true),
+            "OND",
+            true),
+    ON_SUBMIT(
+            "ONB",
+            true),
     ON_SUBMIT_NEXT(
-            "OBN", true),
+            "OBN",
+            true),
     ON_CLOSE(
-            "OCL", true);
+            "OCL",
+            true);
 
     private final String code;
 
     private final boolean formClosedOrReplaced;
-    
+
     private FormReviewType(String code, boolean formClosedOrReplaced) {
         this.code = code;
         this.formClosedOrReplaced = formClosedOrReplaced;
@@ -71,7 +80,15 @@ public enum FormReviewType implements EnumConst {
     public boolean formClosedOrReplaced() {
         return formClosedOrReplaced;
     }
-    
+
+    public boolean isSave() {
+        return ON_SAVE.equals(this) || ON_SAVE_NEXT.equals(this) ||ON_SAVE_CLOSE.equals(this);
+    }
+
+    public boolean isSubmit() {
+        return ON_SUBMIT.equals(this) || ON_SUBMIT_NEXT.equals(this);
+    }
+
     public static FormReviewType fromCode(String code) {
         return EnumUtils.fromCode(FormReviewType.class, code);
     }
