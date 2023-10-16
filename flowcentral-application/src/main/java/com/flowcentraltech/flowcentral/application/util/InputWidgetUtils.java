@@ -487,7 +487,7 @@ public final class InputWidgetUtils {
         if (!StringUtils.isBlank(valueGenerator) || appSetValues != null) {
             SetValuesDef.Builder svdb = SetValuesDef.newBuilder();
             svdb.name(name).description(description).valueGenerator(valueGenerator);
-            if (appSetValues != null) {
+            if (appSetValues != null && !StringUtils.isBlank(appSetValues.getDefinition())) {
                 try (BufferedReader reader = new BufferedReader(new StringReader(appSetValues.getDefinition()))) {
                     String line = null;
                     while ((line = reader.readLine()) != null) {
