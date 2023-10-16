@@ -340,9 +340,9 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
         return (table != null && table.isFixedRows()) || getUplAttribute(boolean.class, "fixedRows");
     }
 
-    public boolean isCrudMode() throws UnifyException {
+    public boolean isInCrudMode() throws UnifyException {
         T table = getTable();
-        return table != null && table.isCrudMode();
+        return table != null && table.isInCrudMode();
     }
 
     public boolean isUploadMode() throws UnifyException {
