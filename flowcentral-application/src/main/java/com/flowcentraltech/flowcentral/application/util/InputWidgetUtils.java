@@ -333,6 +333,7 @@ public final class InputWidgetUtils {
             case "application.namewithupper":
             case "application.alphanumericwithupper":
             case "application.alphanumericwithspaceupper":
+            case "application.fullnamewithuppernospace":
             case "application.alphanumericwithspecialupper": {
                 editor = String.format(editor, efa.getMinLen(), efa.getMaxLen(),
                         TextCase.UPPER.toString().toLowerCase());
