@@ -197,7 +197,7 @@ public class TableWriter extends AbstractControlWriter {
             final boolean isFixedRows = tableWidget.isContainerEditable() && tableWidget.isFixedRows();
             final boolean isActionColumn = isTableEditable && tableWidget.isActionColumn();
             final boolean focusManagement = tableWidget.isFocusManagement();
-            final boolean isCrudMode = tableWidget.isCrudMode();
+            final boolean isCrudMode = tableWidget.isInCrudMode();
             final boolean isUploadMode = tableWidget.isUploadMode();
             final boolean isUploadEnabled = tableWidget.isUploadEnabled();
             final Control[] fixedCtrl = isFixedRows ? tableWidget.getFixedCtrl() : null;
@@ -433,7 +433,7 @@ public class TableWriter extends AbstractControlWriter {
         final AbstractTable<?, ?> table = tableWidget.getTable(); // Must call this here to initialize table
         final TableDef tableDef = table.getTableDef();
         final boolean multiSelect = tableDef.isMultiSelect() || tableWidget.isMultiSelect();
-        final boolean isCrudMode = tableWidget.isCrudMode();
+        final boolean isCrudMode = tableWidget.isInCrudMode();
         final boolean isUploadEnabled = tableWidget.isUploadEnabled();
 
         // Column widths
@@ -577,7 +577,7 @@ public class TableWriter extends AbstractControlWriter {
                 writer.write("<th class=\"mactionh\"></th>");
             }
 
-            if (tableWidget.isCrudMode()) {
+            if (tableWidget.isInCrudMode()) {
                 writer.write("<th class=\"mcrudh\"></th>");
             }
 
@@ -633,7 +633,7 @@ public class TableWriter extends AbstractControlWriter {
                 final boolean isRowAction = !DataUtils.isBlank(table.getCrudActionHandlers())
                         && !tableWidget.isFixedRows() && !tableWidget.isActionColumn();
                 final boolean rowColors = tableDef.isRowColorFilters();
-                final boolean isCrudMode = tableWidget.isCrudMode();
+                final boolean isCrudMode = tableWidget.isInCrudMode();
                 final boolean isUploadMode = tableWidget.isUploadMode();
                 final boolean isUploadEnabled = tableWidget.isUploadEnabled();
                 final Date now = table.au().getNow();

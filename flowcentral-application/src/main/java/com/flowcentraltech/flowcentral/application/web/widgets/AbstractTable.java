@@ -374,7 +374,7 @@ public abstract class AbstractTable<T, U> {
         return (entryMode & SORT_DISABLED) > 0;
     }
 
-    public boolean isCrudMode() {
+    public boolean isInCrudMode() {
         return crudMode != null;
     }
 
