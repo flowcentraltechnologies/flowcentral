@@ -137,10 +137,10 @@
 			inputType="string"
 			editor="!ui-fullname minLen:%s maxLen:%s case:$s{%s}"
 			renderer="!ui-label" />
-		<widgetType name="fullnamewithuppernospace" listOption="true"
-			description="$m{application.widgettype.fullnamewithuppernospace}" dataType="string"
+		<widgetType name="fullnamewithupper" listOption="true"
+			description="$m{application.widgettype.fullnamewithupper}" dataType="string"
 			inputType="string"
-			editor="!ui-fullname minLen:%s maxLen:%s case:$s{%s} space:false"
+			editor="!ui-fullname minLen:%s maxLen:%s case:$s{%s}"
 			renderer="!ui-label" />
 		<widgetType name="fullnamewithspecial" listOption="true"
 			description="$m{application.widgettype.fullnamewithspecial}"
