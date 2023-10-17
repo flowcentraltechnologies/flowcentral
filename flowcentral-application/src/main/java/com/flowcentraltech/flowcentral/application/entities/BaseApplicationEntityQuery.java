@@ -69,4 +69,8 @@ public abstract class BaseApplicationEntityQuery<T extends BaseApplicationEntity
         return (BaseApplicationEntityQuery<T>) addEquals("devVersionType", DevelopmentVersionType.CURRENT);
     }
 
+    public final BaseApplicationEntityQuery<T> classified(boolean classified) {
+        return (BaseApplicationEntityQuery<T>) addEquals("classified", classified);
+    }
+
 }

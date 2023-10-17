@@ -935,6 +935,20 @@ public interface ApplicationModuleService extends FlowCentralService {
             throws UnifyException;
 
     /**
+     * Finds all non-classified application component IDs.
+     * 
+     * @param applicationName
+     *                        the application name
+     * @param componentClazz
+     *                        the application component type
+     * @return list of non-classified application component IDs
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    <T extends BaseApplicationEntity> List<Long> findNonClassifiedAppComponentIdList(String applicationName,
+            Class<T> componentClazz) throws UnifyException;
+
+    /**
      * Finds all application component names.
      * 
      * @param applicationName

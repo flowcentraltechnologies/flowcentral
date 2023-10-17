@@ -523,6 +523,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             workflow.setLoadingTable(appletWorkflowCopyInfo.getAppletSearchTable());
             workflow.setDescFormat(null); // TODO
             workflow.setAppletVersionNo(appletWorkflowCopyInfo.getAppletVersionNo());
+            workflow.setClassified(true);
             final List<WfStep> stepList = WorkflowDesignUtils.generateWorkflowSteps(designType, stepLabel,
                     appletWorkflowCopyInfo);
             workflow.setStepList(stepList);
@@ -534,6 +535,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                 workflow.setDescription(workflowDesc);
                 workflow.setLabel(workflowLabel);
                 workflow.setLoadingTable(appletWorkflowCopyInfo.getAppletSearchTable());
+                workflow.setClassified(true);
                 final List<WfStep> stepList = WorkflowDesignUtils.generateWorkflowSteps(designType, stepLabel,
                         appletWorkflowCopyInfo);
                 keepAlreadyAssignedRoles(wnp.getApplicationName(), wnp.getEntityName(), stepList);
@@ -589,6 +591,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             loadingApplet.setLabel(loadingAppletLabel);
             loadingApplet.setEntity(appTable.getEntity());
             loadingApplet.setMenuAccess(false);
+            loadingApplet.setClassified(true);
             final List<AppAppletProp> propList = WorkflowDesignUtils.generateLoadingAppletProperties(loadingTableName,
                     appTable.getLoadingSearchInput());
             loadingApplet.setPropList(propList);
@@ -599,6 +602,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                 loadingApplet.setConfigType(ConfigType.STATIC_INSTALL);
                 loadingApplet.setDescription(loadingAppletDesc);
                 loadingApplet.setLabel(loadingAppletLabel);
+                loadingApplet.setClassified(true);
                 final List<AppAppletProp> propList = WorkflowDesignUtils
                         .generateLoadingAppletProperties(loadingTableName, appTable.getLoadingSearchInput());
                 loadingApplet.setPropList(propList);

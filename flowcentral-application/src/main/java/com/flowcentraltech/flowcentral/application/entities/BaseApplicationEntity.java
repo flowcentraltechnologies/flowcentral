@@ -50,6 +50,9 @@ public abstract class BaseApplicationEntity extends BaseConfigNamedEntity {
     @Column(length = 36, nullable = true)
     private String devMergeVersionNo;
 
+    @Column
+    private boolean classified;
+
     @ListOnly(key = "applicationId", property = "name")
     private String applicationName;
 
@@ -81,6 +84,14 @@ public abstract class BaseApplicationEntity extends BaseConfigNamedEntity {
 
     public final void setDevMergeVersionNo(String devMergeVersionNo) {
         this.devMergeVersionNo = devMergeVersionNo;
+    }
+
+    public boolean isClassified() {
+        return classified;
+    }
+
+    public void setClassified(boolean classified) {
+        this.classified = classified;
     }
 
     public final String getApplicationName() {

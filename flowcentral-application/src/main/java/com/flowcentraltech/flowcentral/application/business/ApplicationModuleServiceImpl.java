@@ -2164,6 +2164,13 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
+    public <T extends BaseApplicationEntity> List<Long> findNonClassifiedAppComponentIdList(String applicationName,
+            Class<T> componentClazz) throws UnifyException {
+        return environment().valueList(Long.class, "id", Query.of(componentClazz)
+                .addEquals("applicationName", applicationName).addNotEquals("classified", true).addOrder("id"));
+    }
+
+    @Override
     public <T extends BaseApplicationEntity> List<String> findAppComponentNames(String applicationName,
             Class<T> componentClazz) throws UnifyException {
         return environment().valueList(String.class, "name",
