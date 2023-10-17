@@ -69,10 +69,10 @@ import com.tcdng.unify.core.util.StringUtils;
  */
 public final class ApplicationEntityUtils {
 
-    public static final Set<String> RESERVED_BASE_FIELDS = Collections
-            .unmodifiableSet(new HashSet<String>(Arrays.asList("id", "versionNo", "createDt", "createdBy", "updateDt",
-                    "updatedBy", "originWorkRecId", "originalCopyId", "wfItemVersionType", "inWorkflow",
-                    "workBranchCode", "workDepartmentCode", "processingStatus", "devVersionType")));
+    public static final Set<String> RESERVED_BASE_FIELDS = Collections.unmodifiableSet(
+            new HashSet<String>(Arrays.asList("id", "versionNo", "createDt", "createdBy", "updateDt", "updatedBy",
+                    "originWorkRecId", "originalCopyId", "wfItemVersionType", "inWorkflow", "workBranchCode",
+                    "workDepartmentCode", "processingStatus", "devVersionType", "devMergeVersionNo", "classified")));
 
     public static final List<EntityBaseType> BASE_WORK_TYPES = Collections
             .unmodifiableList(Arrays.asList(EntityBaseType.BASE_WORK_ENTITY, EntityBaseType.BASE_STATUS_WORK_ENTITY,
@@ -133,7 +133,7 @@ public final class ApplicationEntityUtils {
     public static boolean isReservedFieldName(String fieldName) {
         return RESERVED_BASE_FIELDS.contains(fieldName);
     }
-    
+
     public static String getBaseFieldColumnName(String fieldName) {
         return baseFieldColumns.get(fieldName);
     }
@@ -415,6 +415,9 @@ public final class ApplicationEntityUtils {
                                 msgResolver.resolveApplicationMessage(
                                         "$m{baseapplicationentity.field.label.devmergeversionno}"),
                                 null, null, null, null, null, "application.text", null, 32, configType));
+                list.add(ApplicationEntityUtils.createBaseAppEntityField(EntityFieldDataType.BOOLEAN, "classified",
+                        msgResolver.resolveApplicationMessage("$m{baseapplicationentity.field.label.classified}"), null,
+                        null, null, null, null, "application.checkbox", null, null, configType));
                 break;
             case BASE_AUDIT_ENTITY:
                 list.add(ApplicationEntityUtils.createBaseAppEntityField(EntityFieldDataType.TIMESTAMP_UTC, "createDt",
