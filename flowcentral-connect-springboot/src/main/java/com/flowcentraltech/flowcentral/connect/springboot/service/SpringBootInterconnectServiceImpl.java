@@ -36,6 +36,7 @@ import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaDelete;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
@@ -710,32 +711,32 @@ public class SpringBootInterconnectServiceImpl implements SpringBootInterconnect
             case GREATER_THAN_PARAM:
                 break;
             case IBEGINS_WITH:
-                paramA =  paramA.toString().toLowerCase();
-                return cb.like(cb.lower(index.getRoot().get(fieldName)), paramA + "%");
+                paramA = paramToLowerCase(paramA);
+                return cb.like(lowerCriterion(cb, index, paramA, fieldName), paramA + "%");
             case IBEGINS_WITH_FIELD:
                 break;
             case IBEGINS_WITH_PARAM:
                 break;
             case IENDS_WITH:
-                paramA = paramA.toString().toLowerCase();
-                return cb.like(cb.lower(index.getRoot().get(fieldName)), "%" + paramA);
+                paramA = paramToLowerCase(paramA);
+                return cb.like(lowerCriterion(cb, index, paramA, fieldName), "%" + paramA);
             case IENDS_WITH_FIELD:
                 break;
             case IENDS_WITH_PARAM:
                 break;
             case IEQUALS:
-                paramA = paramA.toString().toLowerCase();
-                return cb.equal(cb.lower(index.getRoot().get(fieldName)), paramA);
+                paramA = paramToLowerCase(paramA);
+                return cb.equal(lowerCriterion(cb, index, paramA, fieldName), paramA);
             case ILIKE:
-                paramA = paramA.toString().toLowerCase();
-                return cb.like(cb.lower(index.getRoot().get(fieldName)), "%" + paramA + "%");
+                paramA = paramToLowerCase(paramA);
+                return cb.like(lowerCriterion(cb, index, paramA, fieldName), "%" + paramA + "%");
             case ILIKE_FIELD:
                 break;
             case ILIKE_PARAM:
                 break;
             case INOT_EQUALS:
-                paramA = paramA.toString().toLowerCase();
-                return cb.equal(cb.lower(index.getRoot().get(fieldName)), paramA).not();
+                paramA = paramToLowerCase(paramA);
+                return cb.equal(lowerCriterion(cb, index, paramA, fieldName), paramA).not();
             case IS_NOT_NULL:
                 return cb.isNotNull(index.getRoot().get(fieldName));
             case IS_NULL:
@@ -895,6 +896,15 @@ public class SpringBootInterconnectServiceImpl implements SpringBootInterconnect
 
     private void logSevere(String message, Exception e) {
         LOGGER.log(Level.SEVERE, message, e);
+    }
+
+    private String paramToLowerCase(Object param) {
+        return param != null && param.getClass().isEnum() ? param.toString() : ((String) param).toLowerCase();
+    }
+
+    private Expression<String> lowerCriterion(CriteriaBuilder cb, Index index, Object param, String fieldName) {
+        return param != null && param.getClass().isEnum() ? index.getRoot().get(fieldName)
+                : cb.lower(index.getRoot().get(fieldName));
     }
 
     private PlatformInfo getPlatform(EntityInfo entityInfo) {
