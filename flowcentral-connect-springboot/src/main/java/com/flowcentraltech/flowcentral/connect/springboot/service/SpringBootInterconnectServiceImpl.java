@@ -710,31 +710,31 @@ public class SpringBootInterconnectServiceImpl implements SpringBootInterconnect
             case GREATER_THAN_PARAM:
                 break;
             case IBEGINS_WITH:
-                paramA = ((String) paramA).toLowerCase();
+                paramA =  paramA.toString().toLowerCase();
                 return cb.like(cb.lower(index.getRoot().get(fieldName)), paramA + "%");
             case IBEGINS_WITH_FIELD:
                 break;
             case IBEGINS_WITH_PARAM:
                 break;
             case IENDS_WITH:
-                paramA = ((String) paramA).toLowerCase();
+                paramA = paramA.toString().toLowerCase();
                 return cb.like(cb.lower(index.getRoot().get(fieldName)), "%" + paramA);
             case IENDS_WITH_FIELD:
                 break;
             case IENDS_WITH_PARAM:
                 break;
             case IEQUALS:
-                paramA = ((String) paramA).toLowerCase();
+                paramA = paramA.toString().toLowerCase();
                 return cb.equal(cb.lower(index.getRoot().get(fieldName)), paramA);
             case ILIKE:
-                paramA = ((String) paramA).toLowerCase();
+                paramA = paramA.toString().toLowerCase();
                 return cb.like(cb.lower(index.getRoot().get(fieldName)), "%" + paramA + "%");
             case ILIKE_FIELD:
                 break;
             case ILIKE_PARAM:
                 break;
             case INOT_EQUALS:
-                paramA = ((String) paramA).toLowerCase();
+                paramA = paramA.toString().toLowerCase();
                 return cb.equal(cb.lower(index.getRoot().get(fieldName)), paramA).not();
             case IS_NOT_NULL:
                 return cb.isNotNull(index.getRoot().get(fieldName));
