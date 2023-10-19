@@ -898,8 +898,11 @@ public class SpringBootInterconnectServiceImpl implements SpringBootInterconnect
         LOGGER.log(Level.SEVERE, message, e);
     }
 
-    private String paramToLowerCase(Object param) {
-        return param != null && param.getClass().isEnum() ? param.toString() : ((String) param).toLowerCase();
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    private Object paramToLowerCase(Object param) {
+        return param != null && param.getClass().isEnum()
+                ? Enum.valueOf((Class<? extends Enum>) param.getClass(), param.toString())
+                : ((String) param).toLowerCase();
     }
 
     private Expression<String> lowerCriterion(CriteriaBuilder cb, Index index, Object param, String fieldName) {
