@@ -28,13 +28,13 @@ import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.data.ValueStoreReader;
 
 /**
- * Workflow copy deletion approval pending email sender.
+ * Draft workflow deletion approval pending email sender.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
 @Component(name = WorkflowModuleNameConstants.WORKFLOW_COPY_DELETION_APPROVAL_PENDING_EMAIL_SENDER,
-        description = "Workflow Copy Deletion Approval Pending Email Sender.")
+        description = "Draft Workflow Deletion Approval Pending Email Sender.")
 public class WorkflowCopyDeletionPendingApprovalEmailSender extends AbstractResourceBundleNotificationAlertSender {
 
     public WorkflowCopyDeletionPendingApprovalEmailSender() {

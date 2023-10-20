@@ -50,15 +50,15 @@ public final class WorkflowDesignUtils {
                 ""),
         WORKFLOW_COPY_CREATE(
                 "draftApproval",
-                " Create (Workflow Copy)",
+                " Create for Draft Workflow",
                 " Create"),
         WORKFLOW_COPY_UPDATE(
                 "draftApproval",
-                " Update (Workflow Copy)",
+                " Update for Draft Workflow",
                 " Update"),
         WORKFLOW_COPY_DELETE(
                 "draftApproval",
-                " Delete (Workflow Copy)",
+                " Delete for Draft Workflow",
                 " Delete");
 
         private final String startNext;
