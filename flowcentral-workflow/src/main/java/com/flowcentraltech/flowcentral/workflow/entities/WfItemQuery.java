@@ -18,7 +18,7 @@ package com.flowcentraltech.flowcentral.workflow.entities;
 
 import java.util.Date;
 
-import com.flowcentraltech.flowcentral.common.entities.BaseTenantEntityQuery;
+import com.flowcentraltech.flowcentral.common.entities.BaseAuditTenantEntityQuery;
 import com.tcdng.unify.core.criterion.Equals;
 import com.tcdng.unify.core.criterion.IsNull;
 import com.tcdng.unify.core.criterion.NotEquals;
@@ -30,7 +30,7 @@ import com.tcdng.unify.core.criterion.Or;
  * @author FlowCentral Technologies Limited
  * @version 1.0
  */
-public class WfItemQuery extends BaseTenantEntityQuery<WfItem> {
+public class WfItemQuery extends BaseAuditTenantEntityQuery<WfItem> {
 
     public WfItemQuery() {
         super(WfItem.class);
