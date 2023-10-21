@@ -436,6 +436,7 @@ public class ApplicationWorkflowInstallerImpl extends AbstractApplicationArtifac
                 wfStep.setNewCommentCaption(stepConfig.getNewCommentCaption());
                 wfStep.setPolicy(stepConfig.getPolicy());
                 wfStep.setValueGenerator(stepConfig.getValueGenerator());
+                wfStep.setAppletSetValuesName(stepConfig.getAppletSetValuesName());
                 wfStep.setRule(stepConfig.getRule());
                 wfStep.setConfigType(ConfigType.MUTABLE_INSTALL);
                 populateChildList(stepConfig, applicationName, wfStep);

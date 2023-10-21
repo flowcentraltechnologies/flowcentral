@@ -301,8 +301,9 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                                 wfStep.getRecordActionType(), wfStep.getAppletName(), wfStep.getNextStepName(),
                                 wfStep.getAltNextStepName(), wfStep.getBinaryConditionName(),
                                 wfStep.getReadOnlyConditionName(), wfStep.getAutoLoadConditionName(),
-                                wfStep.getAttachmentProviderName(), wfStep.getNewCommentCaption(), wfStep.getPolicy(),
-                                wfStep.getRule(), wfStep.getName(), wfStep.getDescription(), wfStep.getLabel(),
+                                wfStep.getAttachmentProviderName(), wfStep.getNewCommentCaption(),
+                                wfStep.getAppletSetValuesName(), wfStep.getPolicy(), wfStep.getRule(), wfStep.getName(),
+                                wfStep.getDescription(), wfStep.getLabel(),
                                 DataUtils.convert(int.class, wfStep.getCriticalMinutes()),
                                 DataUtils.convert(int.class, wfStep.getExpiryMinutes()), wfStep.isAudit(),
                                 wfStep.isBranchOnly(), wfStep.isIncludeForwarder(), wfStep.isForwarderPreffered(),
@@ -796,7 +797,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
 
     private List<WorkflowStepInfo> findWorkflowLoadingStepInfoByRole(WorkflowStepType type, String loadingTableName,
             String roleCode) throws UnifyException {
-       if (StringUtils.isBlank(roleCode)) {
+        if (StringUtils.isBlank(roleCode)) {
             List<WfStep> wfStepList = environment()
                     .listAll(new WfStepQuery().workflowLoadingTable(loadingTableName).type(type).addSelect("name",
                             "description", "label", "entityName", "applicationName", "workflowName"));
@@ -1281,7 +1282,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                         .getStringGenerator(new BeanValueStore(workInst).getReader(), wfDef.getDescFormat());
                 itemDesc = generator.generate();
             }
-            
+
             if (StringUtils.isBlank(itemDesc)) {
                 itemDesc = entityClassDef.getLongName() + " - " + workRecId;
             }
@@ -1375,6 +1376,15 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             if (wfSetValuesDef != null && wfSetValuesDef.isSetValues()) {
                 wfSetValuesDef.getSetValues().apply(appletUtil, entityDef, now, wfEntityInst,
                         transitionItem.getVariables(), null);
+                transitionItem.setUpdated();
+            }
+
+            if (nextWfStep.isWithAppletSetValues()) {
+                final AppletDef appletDef = appletUtil.getAppletDef(nextWfStep.getStepAppletName());
+                final AppletSetValuesDef appletSetValuesDef = appletDef
+                        .getSetValues(nextWfStep.getAppletSetValuesName());
+                appletSetValuesDef.getSetValuesDef().apply(appletUtil, entityDef, now, wfEntityInst,
+                        Collections.emptyMap(), null);
                 transitionItem.setUpdated();
             }
 

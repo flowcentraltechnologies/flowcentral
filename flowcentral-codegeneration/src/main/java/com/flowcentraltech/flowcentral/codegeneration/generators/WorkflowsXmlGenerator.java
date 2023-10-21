@@ -185,6 +185,7 @@ public class WorkflowsXmlGenerator extends AbstractStaticArtifactGenerator {
                         wfStepConfig.setPolicy(wfStep.getPolicy());
                         wfStepConfig.setRule(wfStep.getRule());
                         wfStepConfig.setValueGenerator(wfStep.getValueGenerator());
+                        wfStepConfig.setAppletSetValuesName(wfStep.getAppletSetValuesName());
 
                         // Set values
                         if (wfStep.getSetValues() != null) {

@@ -389,7 +389,7 @@ public final class WorkflowDesignUtils {
                 }
             }
 
-            // Add actual action step
+            // Add actual action steps
             if (type.isWorkflowCopyCreate()) {
                 // Add delete draft step
                 final WfStep deleteDraftWfStep = new WfStep();
