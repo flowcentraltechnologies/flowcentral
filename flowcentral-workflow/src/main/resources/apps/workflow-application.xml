@@ -282,6 +282,8 @@
 				type="string" />
 			<field name="comments" label="$m{workflow.step.comments}"
 				type="string" />
+			<field name="appletSetValuesName" label="$m{workflow.step.appletsetvaluesname}"
+				type="string" />
 			<field name="typeDesc" label="$m{workflow.step.typedesc}"
 				type="list_only" key="type" property="description" />
 			<field name="priorityDesc"

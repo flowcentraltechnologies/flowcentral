@@ -81,8 +81,9 @@ public abstract class AbstractMenuWriter extends AbstractPanelWriter {
         writer.write(resolveSymbolHtmlHexCode(icon));
         writer.write("</span>");
         writer.write("<span class=\"acl\">")
-                .writeWithHtmlEscape(appletDef.getLabel())
-                .write("</span>");
+            .writeWithHtmlEscape(
+                    draft ? resolveSessionMessage("$m{label.draft.applet}", appletDef.getLabel()) : appletDef.getLabel())
+              .write("</span>");
     }
 
     private void writeAppletDefJs(ResponseWriter writer, StringBuilder misb, AppletDef appletDef, boolean appendISym,

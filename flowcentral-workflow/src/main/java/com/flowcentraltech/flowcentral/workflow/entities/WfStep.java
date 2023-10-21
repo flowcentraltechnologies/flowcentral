@@ -88,6 +88,9 @@ public class WfStep extends BaseConfigNamedEntity {
     @Column(length = 128, nullable = true) 
     private String valueGenerator;
 
+    @Column(name = "APPLET_SET_VALUES_NM", length = 64, nullable = true)
+    private String appletSetValuesName;
+
     @Column
     private int designX;
 
@@ -292,6 +295,14 @@ public class WfStep extends BaseConfigNamedEntity {
 
     public void setValueGenerator(String valueGenerator) {
         this.valueGenerator = valueGenerator;
+    }
+
+    public String getAppletSetValuesName() {
+        return appletSetValuesName;
+    }
+
+    public void setAppletSetValuesName(String appletSetValuesName) {
+        this.appletSetValuesName = appletSetValuesName;
     }
 
     public int getDesignX() {
