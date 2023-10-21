@@ -188,31 +188,76 @@ public interface AppletPropertyConstants {
 
     String PAGE_MULTIPLE = "page.multiple";
     
+    
     String WORKFLOWCOPY = "workflowCopy";
 
-    String WORKFLOWCOPY_CREATE_SETVALUES = "workflowCopy.create.setvalues";
+    String WORKFLOWCOPY_ATTACHMENT_PROVIDER = "workflowCopy.attachmentprovider";
 
-    String WORKFLOWCOPY_UPDATE_SETVALUES = "workflowCopy.update.setvalues";
+    String WORKFLOWCOPY_CREATE_SUBMIT_ALERT = "workflowCopy.create.alert";
 
-    String WORKFLOWCOPY_CREATE_APPROVAL_SETVALUES = "workflowCopy.create.approval.setvalues";
-
-    String WORKFLOWCOPY_UPDATE_APPROVAL_SETVALUES = "workflowCopy.update.approval.setvalues";
-
-    String WORKFLOWCOPY_ABORT_SETVALUES = "workflowCopy.abort.setvalues";
-
-    String WORKFLOWCOPY_CREATE_ALERT = "workflowCopy.create.alert";
-
-    String WORKFLOWCOPY_UPDATE_ALERT= "workflowCopy.update.alert";
+    String WORKFLOWCOPY_CREATE_SUBMIT_SETVALUES = "workflowCopy.create.setvalues";
 
     String WORKFLOWCOPY_CREATE_APPROVAL_ALERT = "workflowCopy.create.approval.alert";
 
-    String WORKFLOWCOPY_UPDATE_APPROVAL_ALERT = "workflowCopy.update.approval.alert";
+    String WORKFLOWCOPY_CREATE_APPROVAL_SETVALUES = "workflowCopy.create.approval.setvalues";
 
     String WORKFLOWCOPY_CREATE_REJECTION_ALERT = "workflowCopy.create.rejection.alert";
 
+    String WORKFLOWCOPY_CREATE_REJECTION_SETVALUES = "workflowCopy.create.rejection.setvalues";
+
+    String WORKFLOWCOPY_CREATE_RESUBMIT_ALERT = "workflowCopy.create.resubmit.alert";
+
+    String WORKFLOWCOPY_CREATE_RESUBMIT_SETVALUES = "workflowCopy.create.resubmit.setvalues";
+
+    String WORKFLOWCOPY_CREATE_DISCARD_ALERT = "workflowCopy.create.discard.alert";
+
+    String WORKFLOWCOPY_CREATE_DISCARD_SETVALUES = "workflowCopy.create.discard.setvalues";
+
+    String WORKFLOWCOPY_CREATE_ABORT_ALERT = "workflowCopy.create.abort.alert";
+
+    String WORKFLOWCOPY_CREATE_ABORT_SETVALUES = "workflowCopy.create.abort.setvalues";
+    
+
+    String WORKFLOWCOPY_UPDATE_SUBMIT_ALERT= "workflowCopy.update.alert";
+
+    String WORKFLOWCOPY_UPDATE_SUBMIT_SETVALUES = "workflowCopy.update.setvalues";
+
+    String WORKFLOWCOPY_UPDATE_APPROVAL_ALERT = "workflowCopy.update.approval.alert";
+
+    String WORKFLOWCOPY_UPDATE_APPROVAL_SETVALUES = "workflowCopy.update.approval.setvalues";
+
     String WORKFLOWCOPY_UPDATE_REJECTION_ALERT = "workflowCopy.update.rejection.alert";
 
-    String WORKFLOWCOPY_CREATE_ATTACHMENT_PROVIDER = "workflowCopy.create.attachmentprovider";
+    String WORKFLOWCOPY_UPDATE_REJECTION_SETVALUES = "workflowCopy.update.rejection.setvalues";
 
-    String WORKFLOWCOPY_UPDATE_ATTACHMENT_PROVIDER = "workflowCopy.update.attachmentprovider";
+    String WORKFLOWCOPY_UPDATE_RESUBMIT_ALERT = "workflowCopy.update.resubmit.alert";
+
+    String WORKFLOWCOPY_UPDATE_RESUBMIT_SETVALUES = "workflowCopy.update.resubmit.setvalues";
+
+    String WORKFLOWCOPY_UPDATE_DISCARD_ALERT = "workflowCopy.update.discard.alert";
+
+    String WORKFLOWCOPY_UPDATE_DISCARD_SETVALUES = "workflowCopy.update.discard.setvalues";
+
+    String WORKFLOWCOPY_UPDATE_ABORT_ALERT = "workflowCopy.update.abort.alert";
+
+    String WORKFLOWCOPY_UPDATE_ABORT_SETVALUES = "workflowCopy.update.abort.setvalues";
+    
+
+    String WORKFLOWCOPY_DELETE_SUBMIT_ALERT= "workflowCopy.delete.alert";
+
+    String WORKFLOWCOPY_DELETE_SUBMIT_SETVALUES = "workflowCopy.delete.setvalues";
+
+    String WORKFLOWCOPY_DELETE_APPROVAL_ALERT = "workflowCopy.delete.approval.alert";
+
+    String WORKFLOWCOPY_DELETE_APPROVAL_SETVALUES = "workflowCopy.delete.approval.setvalues";
+
+    String WORKFLOWCOPY_DELETE_REJECTION_ALERT = "workflowCopy.delete.rejection.alert";
+
+    String WORKFLOWCOPY_DELETE_REJECTION_SETVALUES = "workflowCopy.delete.rejection.setvalues";
+
+    String WORKFLOWCOPY_DELETE_ABORT_ALERT = "workflowCopy.delete.abort.alert";
+
+    String WORKFLOWCOPY_DELETE_ABORT_SETVALUES = "workflowCopy.delete.abort.setvalues";
+    
+    
 }

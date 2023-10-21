@@ -242,7 +242,7 @@ public final class WorkflowDesignUtils {
             approvalWfStep.setLabel(stepLabel + " Approval");
             approvalWfStep.setAppletName(appletWorkflowCopyInfo.getAppletName());
             approvalWfStep.setReadOnlyConditionName(ApplicationFilterConstants.RESERVED_ALWAYS_FILTERNAME);
-            approvalWfStep.setAttachmentProviderName(workflowCopyInfo.getAttachmentProviderName());
+            approvalWfStep.setAttachmentProviderName(appletWorkflowCopyInfo.getAttachmentProvider());
             approvalWfStep.setAppletSetValuesName(submitEventInfo.getSetValuesName());
             if (submitEventInfo.isWithAlert()) {
                 WfStepAlert wfStepAlert = createWfStepAlert(WorkflowAlertType.USER_INTERACT,
@@ -293,7 +293,7 @@ public final class WorkflowDesignUtils {
                 reviewWfStep.setLabel(stepLabel + " Review");
                 reviewWfStep.setAppletName(appletWorkflowCopyInfo.getAppletName());
                 reviewWfStep.setReadOnlyConditionName(null);
-                reviewWfStep.setAttachmentProviderName(workflowCopyInfo.getAttachmentProviderName());
+                reviewWfStep.setAttachmentProviderName(appletWorkflowCopyInfo.getAttachmentProvider());
                 if (rejectEventInfo.isWithAlert()) {
                     WfStepAlert wfStepAlert = createWfStepAlert(WorkflowAlertType.USER_INTERACT,
                             appletWorkflowCopyInfo.getAppletAlertDef(rejectEventInfo.getAlertName()));

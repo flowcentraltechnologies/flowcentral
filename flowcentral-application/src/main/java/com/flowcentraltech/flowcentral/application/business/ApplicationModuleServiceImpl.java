@@ -87,6 +87,8 @@ import com.flowcentraltech.flowcentral.application.data.Usage;
 import com.flowcentraltech.flowcentral.application.data.WidgetRuleEntryDef;
 import com.flowcentraltech.flowcentral.application.data.WidgetRulesDef;
 import com.flowcentraltech.flowcentral.application.data.WidgetTypeDef;
+import com.flowcentraltech.flowcentral.application.data.AppletWorkflowCopyInfo.EventType;
+import com.flowcentraltech.flowcentral.application.data.AppletWorkflowCopyInfo.WorkflowCopyType;
 import com.flowcentraltech.flowcentral.application.entities.AppApplet;
 import com.flowcentraltech.flowcentral.application.entities.AppAppletAlert;
 import com.flowcentraltech.flowcentral.application.entities.AppAppletAlertQuery;
@@ -1721,65 +1723,81 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
     @Override
     public AppletWorkflowCopyInfo getAppletWorkflowCopyInfo(String appletName) throws UnifyException {
-        ApplicationEntityNameParts np = ApplicationNameUtils.getApplicationEntityNameParts(appletName);
+        final ApplicationEntityNameParts np = ApplicationNameUtils.getApplicationEntityNameParts(appletName);
         final long appletVersionNo = environment().value(long.class, "versionNo",
                 new AppAppletQuery().applicationName(np.getApplicationName()).name(np.getEntityName()));
+        final AppletWorkflowCopyInfo.Builder awcb = AppletWorkflowCopyInfo.newBuilder(appletName,
+                getAppletProperty(np, AppletPropertyConstants.SEARCH_TABLE),
+                getAppletProperty(np, AppletPropertyConstants.WORKFLOWCOPY_ATTACHMENT_PROVIDER), appletVersionNo);
+        // Creation workflow
+        awcb.withEvent(WorkflowCopyType.CREATION, EventType.ON_SUBMIT,
+                getAppletProperty(np, AppletPropertyConstants.WORKFLOWCOPY_CREATE_SUBMIT_ALERT),
+                getAppletProperty(np, AppletPropertyConstants.WORKFLOWCOPY_CREATE_SUBMIT_SETVALUES));
+        awcb.withEvent(WorkflowCopyType.CREATION, EventType.ON_APPROVE,
+                getAppletProperty(np, AppletPropertyConstants.WORKFLOWCOPY_CREATE_APPROVAL_ALERT),
+                getAppletProperty(np, AppletPropertyConstants.WORKFLOWCOPY_CREATE_APPROVAL_SETVALUES));
+        awcb.withEvent(WorkflowCopyType.CREATION, EventType.ON_REJECT,
+                getAppletProperty(np, AppletPropertyConstants.WORKFLOWCOPY_CREATE_REJECTION_ALERT),
+                getAppletProperty(np, AppletPropertyConstants.WORKFLOWCOPY_CREATE_REJECTION_SETVALUES));
+        awcb.withEvent(WorkflowCopyType.CREATION, EventType.ON_RESUBMIT,
+                getAppletProperty(np, AppletPropertyConstants.WORKFLOWCOPY_CREATE_RESUBMIT_ALERT),
+                getAppletProperty(np, AppletPropertyConstants.WORKFLOWCOPY_CREATE_RESUBMIT_SETVALUES));
+        awcb.withEvent(WorkflowCopyType.CREATION, EventType.ON_DISCARD,
+                getAppletProperty(np, AppletPropertyConstants.WORKFLOWCOPY_CREATE_DISCARD_ALERT),
+                getAppletProperty(np, AppletPropertyConstants.WORKFLOWCOPY_CREATE_DISCARD_SETVALUES));
+        awcb.withEvent(WorkflowCopyType.CREATION, EventType.ON_ABORT,
+                getAppletProperty(np, AppletPropertyConstants.WORKFLOWCOPY_CREATE_ABORT_ALERT),
+                getAppletProperty(np, AppletPropertyConstants.WORKFLOWCOPY_CREATE_ABORT_SETVALUES));
+        
+        // Update workflow
+        awcb.withEvent(WorkflowCopyType.UPDATE, EventType.ON_SUBMIT,
+                getAppletProperty(np, AppletPropertyConstants.WORKFLOWCOPY_UPDATE_SUBMIT_ALERT),
+                getAppletProperty(np, AppletPropertyConstants.WORKFLOWCOPY_UPDATE_SUBMIT_SETVALUES));
+        awcb.withEvent(WorkflowCopyType.UPDATE, EventType.ON_APPROVE,
+                getAppletProperty(np, AppletPropertyConstants.WORKFLOWCOPY_UPDATE_APPROVAL_ALERT),
+                getAppletProperty(np, AppletPropertyConstants.WORKFLOWCOPY_UPDATE_APPROVAL_SETVALUES));
+        awcb.withEvent(WorkflowCopyType.UPDATE, EventType.ON_REJECT,
+                getAppletProperty(np, AppletPropertyConstants.WORKFLOWCOPY_UPDATE_REJECTION_ALERT),
+                getAppletProperty(np, AppletPropertyConstants.WORKFLOWCOPY_UPDATE_REJECTION_SETVALUES));
+        awcb.withEvent(WorkflowCopyType.UPDATE, EventType.ON_RESUBMIT,
+                getAppletProperty(np, AppletPropertyConstants.WORKFLOWCOPY_UPDATE_RESUBMIT_ALERT),
+                getAppletProperty(np, AppletPropertyConstants.WORKFLOWCOPY_UPDATE_RESUBMIT_SETVALUES));
+        awcb.withEvent(WorkflowCopyType.UPDATE, EventType.ON_DISCARD,
+                getAppletProperty(np, AppletPropertyConstants.WORKFLOWCOPY_UPDATE_DISCARD_ALERT),
+                getAppletProperty(np, AppletPropertyConstants.WORKFLOWCOPY_UPDATE_DISCARD_SETVALUES));
+        awcb.withEvent(WorkflowCopyType.UPDATE, EventType.ON_ABORT,
+                getAppletProperty(np, AppletPropertyConstants.WORKFLOWCOPY_UPDATE_ABORT_ALERT),
+                getAppletProperty(np, AppletPropertyConstants.WORKFLOWCOPY_UPDATE_ABORT_SETVALUES));
 
-        final String createApprovalSetValuesName = environment().valueOptional(String.class, "value",
-                new AppAppletPropQuery().applicationName(np.getApplicationName()).appletName(np.getEntityName())
-                        .name(AppletPropertyConstants.WORKFLOWCOPY_CREATE_APPROVAL_SETVALUES));
+        // Deletion workflow
+        awcb.withEvent(WorkflowCopyType.DELETION, EventType.ON_SUBMIT,
+                getAppletProperty(np, AppletPropertyConstants.WORKFLOWCOPY_DELETE_SUBMIT_ALERT),
+                getAppletProperty(np, AppletPropertyConstants.WORKFLOWCOPY_DELETE_SUBMIT_SETVALUES));
+        awcb.withEvent(WorkflowCopyType.DELETION, EventType.ON_APPROVE,
+                getAppletProperty(np, AppletPropertyConstants.WORKFLOWCOPY_DELETE_APPROVAL_ALERT),
+                getAppletProperty(np, AppletPropertyConstants.WORKFLOWCOPY_DELETE_APPROVAL_SETVALUES));
+        awcb.withEvent(WorkflowCopyType.DELETION, EventType.ON_REJECT,
+                getAppletProperty(np, AppletPropertyConstants.WORKFLOWCOPY_DELETE_REJECTION_ALERT),
+                getAppletProperty(np, AppletPropertyConstants.WORKFLOWCOPY_DELETE_REJECTION_SETVALUES));
+        awcb.withEvent(WorkflowCopyType.DELETION, EventType.ON_ABORT,
+                getAppletProperty(np, AppletPropertyConstants.WORKFLOWCOPY_DELETE_ABORT_ALERT),
+                getAppletProperty(np, AppletPropertyConstants.WORKFLOWCOPY_DELETE_ABORT_SETVALUES));
 
-        final String updateApprovalSetValuesName = environment().valueOptional(String.class, "value",
-                new AppAppletPropQuery().applicationName(np.getApplicationName()).appletName(np.getEntityName())
-                        .name(AppletPropertyConstants.WORKFLOWCOPY_UPDATE_APPROVAL_SETVALUES));
-
-        final String abortSetValuesName = environment().valueOptional(String.class, "value",
-                new AppAppletPropQuery().applicationName(np.getApplicationName()).appletName(np.getEntityName())
-                        .name(AppletPropertyConstants.WORKFLOWCOPY_ABORT_SETVALUES));
-
-        final String appletSearchTable = environment().valueOptional(String.class, "value",
-                new AppAppletPropQuery().applicationName(np.getApplicationName()).appletName(np.getEntityName())
-                        .name(AppletPropertyConstants.SEARCH_TABLE));
-
-        final String onCreateAlertName = environment().valueOptional(String.class, "value",
-                new AppAppletPropQuery().applicationName(np.getApplicationName()).appletName(np.getEntityName())
-                        .name(AppletPropertyConstants.WORKFLOWCOPY_CREATE_ALERT));
-
-        final String onUpdateAlertName = environment().valueOptional(String.class, "value",
-                new AppAppletPropQuery().applicationName(np.getApplicationName()).appletName(np.getEntityName())
-                        .name(AppletPropertyConstants.WORKFLOWCOPY_UPDATE_ALERT));
-
-        final String onCreateApprovalAlertName = environment().valueOptional(String.class, "value",
-                new AppAppletPropQuery().applicationName(np.getApplicationName()).appletName(np.getEntityName())
-                        .name(AppletPropertyConstants.WORKFLOWCOPY_CREATE_APPROVAL_ALERT));
-
-        final String onUpdateApprovalAlertName = environment().valueOptional(String.class, "value",
-                new AppAppletPropQuery().applicationName(np.getApplicationName()).appletName(np.getEntityName())
-                        .name(AppletPropertyConstants.WORKFLOWCOPY_UPDATE_APPROVAL_ALERT));
-
-        final String onCreateRejectionAlertName = environment().valueOptional(String.class, "value",
-                new AppAppletPropQuery().applicationName(np.getApplicationName()).appletName(np.getEntityName())
-                        .name(AppletPropertyConstants.WORKFLOWCOPY_CREATE_REJECTION_ALERT));
-
-        final String onUpdateRejectionAlertName = environment().valueOptional(String.class, "value",
-                new AppAppletPropQuery().applicationName(np.getApplicationName()).appletName(np.getEntityName())
-                        .name(AppletPropertyConstants.WORKFLOWCOPY_UPDATE_REJECTION_ALERT));
-
-        final String createAttachmentProviderName = environment().valueOptional(String.class, "value",
-                new AppAppletPropQuery().applicationName(np.getApplicationName()).appletName(np.getEntityName())
-                        .name(AppletPropertyConstants.WORKFLOWCOPY_CREATE_ATTACHMENT_PROVIDER));
-
-        final String updateAttachmentProviderName = environment().valueOptional(String.class, "value",
-                new AppAppletPropQuery().applicationName(np.getApplicationName()).appletName(np.getEntityName())
-                        .name(AppletPropertyConstants.WORKFLOWCOPY_UPDATE_ATTACHMENT_PROVIDER));
-
-        final Map<String, AppAppletAlert> map = environment().findAllMap(String.class, "name",
+        // Alert
+        final List<AppAppletAlert> alerts = environment().findAll(
                 new AppAppletAlertQuery().applicationName(np.getApplicationName()).appletName(np.getEntityName()));
+        for (AppAppletAlert appAppletAlert : alerts) {
+            awcb.withAlert(appAppletAlert.getName(), appAppletAlert.getDescription(),
+                    appAppletAlert.getRecipientPolicy(), appAppletAlert.getRecipientNameRule(),
+                    appAppletAlert.getRecipientContactRule(), appAppletAlert.getSender());
+        }
 
-        return new AppletWorkflowCopyInfo(appletName, createApprovalSetValuesName, updateApprovalSetValuesName,
-                abortSetValuesName, appletSearchTable, onCreateAlertName, onUpdateAlertName, onCreateApprovalAlertName,
-                onUpdateApprovalAlertName, onCreateRejectionAlertName, onUpdateRejectionAlertName,
-                createAttachmentProviderName, updateAttachmentProviderName, appletVersionNo, map);
+        return awcb.build();
+    }
+
+    private String getAppletProperty(ApplicationEntityNameParts np, String propertyName) throws UnifyException {
+        return environment().valueOptional(String.class, "value", new AppAppletPropQuery()
+                .applicationName(np.getApplicationName()).appletName(np.getEntityName()).name(propertyName));
     }
 
     @Override

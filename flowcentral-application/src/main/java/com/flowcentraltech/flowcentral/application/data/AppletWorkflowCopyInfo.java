@@ -85,16 +85,19 @@ public class AppletWorkflowCopyInfo {
 
     private String appletSearchTable;
 
+    private String attachmentProvider;
+
     private long appletVersionNo;
 
     private Map<WorkflowCopyType, WorkflowCopyInfo> workflowCopyInfos;
 
     private Map<String, AppletAlertDef> alerts;
 
-    public AppletWorkflowCopyInfo(String appletName, String appletSearchTable, long appletVersionNo,
+    public AppletWorkflowCopyInfo(String appletName, String appletSearchTable, String attachmentProvider, long appletVersionNo,
             Map<WorkflowCopyType, WorkflowCopyInfo> workflowCopyInfos, Map<String, AppletAlertDef> alerts) {
         this.appletName = appletName;
         this.appletSearchTable = appletSearchTable;
+        this.attachmentProvider = attachmentProvider;
         this.appletVersionNo = appletVersionNo;
         this.workflowCopyInfos = DataUtils.unmodifiableMap(workflowCopyInfos);
         this.alerts = DataUtils.unmodifiableMap(alerts);
@@ -110,6 +113,14 @@ public class AppletWorkflowCopyInfo {
 
     public String getAppletSearchTable() {
         return appletSearchTable;
+    }
+
+    public String getAttachmentProvider() {
+        return attachmentProvider;
+    }
+
+    public boolean isWithAttachmentProvide() {
+        return !StringUtils.isBlank(attachmentProvider);
     }
 
     public long getAppletVersionNo() {
@@ -136,8 +147,6 @@ public class AppletWorkflowCopyInfo {
 
         private WorkflowCopyType type;
 
-        private String attachmentProviderName;
-
         private Map<EventType, EventInfo> eventInfos;
 
         private WorkflowCopyInfo(WorkflowCopyType type) {
@@ -147,24 +156,11 @@ public class AppletWorkflowCopyInfo {
 
         private WorkflowCopyInfo(WorkflowCopyInfo workflowCopyInfo) {
             this.type = workflowCopyInfo.type;
-            this.attachmentProviderName = workflowCopyInfo.attachmentProviderName;
             this.eventInfos = Collections.unmodifiableMap(workflowCopyInfo.eventInfos);
         }
 
         public WorkflowCopyType getType() {
             return type;
-        }
-
-        private void setAttachmentProviderName(String attachmentProviderName) {
-            this.attachmentProviderName = attachmentProviderName;
-        }
-
-        public String getAttachmentProviderName() {
-            return attachmentProviderName;
-        }
-
-        public boolean isWithAttachmentProvide() {
-            return !StringUtils.isBlank(attachmentProviderName);
         }
 
         public Map<EventType, EventInfo> getEventInfos() {
@@ -185,26 +181,18 @@ public class AppletWorkflowCopyInfo {
 
         private EventType type;
 
-        private String setValuesName;
-
         private String alertName;
 
-        public EventInfo(EventType type, String setValuesName, String alertName) {
+        private String setValuesName;
+
+        public EventInfo(EventType type, String alertName, String setValuesName) {
             this.type = type;
-            this.setValuesName = setValuesName;
             this.alertName = alertName;
+            this.setValuesName = setValuesName;
         }
 
         public EventType getType() {
             return type;
-        }
-
-        public String getSetValuesName() {
-            return setValuesName;
-        }
-
-        public boolean isWithSetValues() {
-            return !StringUtils.isBlank(setValuesName);
         }
  
         public String getAlertName() {
@@ -214,10 +202,18 @@ public class AppletWorkflowCopyInfo {
         public boolean isWithAlert() {
             return !StringUtils.isBlank(alertName);
         }
+
+        public String getSetValuesName() {
+            return setValuesName;
+        }
+
+        public boolean isWithSetValues() {
+            return !StringUtils.isBlank(setValuesName);
+        }
     }
 
-    public static Builder newBuilder(String appletName, String appletSearchTable, long appletVersionNo) {
-        return new Builder(appletName, appletSearchTable, appletVersionNo);
+    public static Builder newBuilder(String appletName, String appletSearchTable, String attachmentProvider, long appletVersionNo) {
+        return new Builder(appletName, appletSearchTable, attachmentProvider, appletVersionNo);
     }
 
     public static class Builder {
@@ -226,28 +222,26 @@ public class AppletWorkflowCopyInfo {
 
         private String appletSearchTable;
 
+        private String attachmentProvider;
+
         private long appletVersionNo;
 
         private Map<WorkflowCopyType, WorkflowCopyInfo> workflowCopyInfos;
 
         private Map<String, AppletAlertDef> alerts;
 
-        public Builder(String appletName, String appletSearchTable, long appletVersionNo) {
+        public Builder(String appletName, String appletSearchTable, String attachmentProvider, long appletVersionNo) {
             this.appletName = appletName;
             this.appletSearchTable = appletSearchTable;
+            this.attachmentProvider = attachmentProvider;
             this.appletVersionNo = appletVersionNo;
             this.workflowCopyInfos = new HashMap<WorkflowCopyType, WorkflowCopyInfo>();
             this.alerts = new HashMap<String, AppletAlertDef>();
         }
 
-        public Builder useAttachmentProvider(WorkflowCopyType copyType, String attachmentProviderName) {
-            getWorkflowCopyInfo(copyType).setAttachmentProviderName(attachmentProviderName);
-            return this;
-        }
-
-        public Builder withEvent(WorkflowCopyType copyType, EventType eventType, String setValuesName, String alertName) {
+        public Builder withEvent(WorkflowCopyType copyType, EventType eventType, String alertName, String setValuesName) {
             getWorkflowCopyInfo(copyType).getEventInfos().put(eventType,
-                    new EventInfo(eventType, setValuesName, alertName));
+                    new EventInfo(eventType, alertName, setValuesName));
             return this;
         }
 
@@ -275,7 +269,7 @@ public class AppletWorkflowCopyInfo {
                 _workflowCopyInfos.put(entry.getKey(), new WorkflowCopyInfo(entry.getValue()));
             }
 
-            return new AppletWorkflowCopyInfo(appletName, appletSearchTable, appletVersionNo,
+            return new AppletWorkflowCopyInfo(appletName, appletSearchTable, attachmentProvider, appletVersionNo,
                     Collections.unmodifiableMap(_workflowCopyInfos), Collections.unmodifiableMap(alerts));
         }
     }
