@@ -235,6 +235,7 @@ public final class WorkflowDesignUtils {
             // Draft approval step in read-only mode
             final WfStep approvalWfStep = new WfStep();
             final EventInfo submitEventInfo = workflowCopyInfo.getEventInfo(EventType.ON_SUBMIT);
+            final EventInfo resubmitEventInfo = workflowCopyInfo.getEventInfo(EventType.ON_RESUBMIT);
             approvalWfStep.setType(WorkflowStepType.USER_ACTION);
             approvalWfStep.setPriority(WorkflowStepPriority.NORMAL);
             approvalWfStep.setName("draftApproval");
@@ -247,6 +248,7 @@ public final class WorkflowDesignUtils {
             if (submitEventInfo.isWithAlert()) {
                 WfStepAlert wfStepAlert = createWfStepAlert(WorkflowAlertType.USER_INTERACT,
                         appletWorkflowCopyInfo.getAppletAlertDef(submitEventInfo.getAlertName()));
+                wfStepAlert.setFireOnPrevStepName("start");
                 approvalWfStep.setAlertList(Arrays.asList(wfStepAlert));
             } else {
                 final String sender = type.isWorkflowCopyCreate()
@@ -257,7 +259,14 @@ public final class WorkflowDesignUtils {
                 WfStepAlert wfStepAlert = createWfStepAlert(WorkflowAlertType.USER_INTERACT, sender);
                 approvalWfStep.setAlertList(Arrays.asList(wfStepAlert));
             }
-
+            
+            if (resubmitEventInfo.isWithAlert()) {
+                WfStepAlert wfStepAlert = createWfStepAlert(WorkflowAlertType.USER_INTERACT,
+                        appletWorkflowCopyInfo.getAppletAlertDef(resubmitEventInfo.getAlertName()));
+                wfStepAlert.setFireOnPrevStepName("draftReview");
+                approvalWfStep.setAlertList(Arrays.asList(wfStepAlert));
+            }
+            
             final WfStepUserAction approveUserAction = new WfStepUserAction();
             final EventInfo approveEventInfo = workflowCopyInfo.getEventInfo(EventType.ON_APPROVE);
             approveUserAction.setName("approve");
@@ -275,17 +284,12 @@ public final class WorkflowDesignUtils {
             rejectUserAction.setLabel("Reject");
             rejectUserAction.setCommentRequirement(RequirementType.OPTIONAL);
             rejectUserAction.setHighlightType(HighlightType.RED);
-            rejectUserAction.setAppletSetValuesName(rejectEventInfo.getSetValuesName());
-            rejectUserAction.setNextStepName(
-                    (type.isWorkflowCopyCreate() || type.isWorkflowCopyUpdate()) && rejectEventInfo.isWithAlert()
-                            ? "rejectNotif"
-                            : type.reviewNext());
+            rejectUserAction.setNextStepName(type.reviewNext());
 
             approvalWfStep.setUserActionList(Arrays.asList(approveUserAction, rejectUserAction));
             stepList.add(approvalWfStep);
 
             // Draft review step
-            final EventInfo resubmitEventInfo = workflowCopyInfo.getEventInfo(EventType.ON_RESUBMIT);
             final EventInfo discardEventInfo = workflowCopyInfo.getEventInfo(EventType.ON_DISCARD);
             if (type.isWorkflowCopyCreate() || type.isWorkflowCopyUpdate()) {
                 final WfStep reviewWfStep = new WfStep();
@@ -301,7 +305,7 @@ public final class WorkflowDesignUtils {
                 if (rejectEventInfo.isWithAlert()) {
                     WfStepAlert wfStepAlert = createWfStepAlert(WorkflowAlertType.USER_INTERACT,
                             appletWorkflowCopyInfo.getAppletAlertDef(rejectEventInfo.getAlertName()));
-                    approvalWfStep.setAlertList(Arrays.asList(wfStepAlert));
+                    reviewWfStep.setAlertList(Arrays.asList(wfStepAlert));
                 }
 
                 final WfStepUserAction resubmitUserAction = new WfStepUserAction();
@@ -311,8 +315,7 @@ public final class WorkflowDesignUtils {
                 resubmitUserAction.setCommentRequirement(RequirementType.OPTIONAL);
                 resubmitUserAction.setHighlightType(HighlightType.GREEN);
                 resubmitUserAction.setAppletSetValuesName(resubmitEventInfo.getSetValuesName());
-                resubmitUserAction
-                        .setNextStepName(resubmitEventInfo.isWithAlert() ? "resubmitNotif" : type.resubmitNext());
+                resubmitUserAction.setNextStepName(type.resubmitNext());
 
                 final WfStepUserAction discardUserAction = new WfStepUserAction();
                 discardUserAction.setName("discard");
@@ -343,39 +346,7 @@ public final class WorkflowDesignUtils {
                 stepList.add(notifWfStep);
             }
 
-            // Add rejection notification step
-            if (rejectEventInfo.isWithAlert()) {
-                final WfStep notifWfStep = new WfStep();
-                notifWfStep.setType(WorkflowStepType.NOTIFICATION);
-                notifWfStep.setPriority(WorkflowStepPriority.NORMAL);
-                notifWfStep.setName("rejectNotif");
-                notifWfStep.setDescription("Rejection Notification");
-                notifWfStep.setLabel("Rejection Notification");
-                notifWfStep.setNextStepName(type.reviewNext());
-
-                WfStepAlert wfStepAlert = createWfStepAlert(WorkflowAlertType.PASS_THROUGH,
-                        appletWorkflowCopyInfo.getAppletAlertDef(rejectEventInfo.getAlertName()));
-                notifWfStep.setAlertList(Arrays.asList(wfStepAlert));
-                stepList.add(notifWfStep);
-            }
-
             if (type.isWorkflowCopyCreate() || type.isWorkflowCopyUpdate()) {
-                // Add resubmit notification step
-                if (resubmitEventInfo.isWithAlert()) {
-                    final WfStep notifWfStep = new WfStep();
-                    notifWfStep.setType(WorkflowStepType.NOTIFICATION);
-                    notifWfStep.setPriority(WorkflowStepPriority.NORMAL);
-                    notifWfStep.setName("resubmitNotif");
-                    notifWfStep.setDescription("Resubmit Notification");
-                    notifWfStep.setLabel("Resubmit Notification");
-                    notifWfStep.setNextStepName(type.resubmitNext());
-
-                    WfStepAlert wfStepAlert = createWfStepAlert(WorkflowAlertType.PASS_THROUGH,
-                            appletWorkflowCopyInfo.getAppletAlertDef(resubmitEventInfo.getAlertName()));
-                    notifWfStep.setAlertList(Arrays.asList(wfStepAlert));
-                    stepList.add(notifWfStep);
-                }
-
                 // Add discard notification step
                 if (discardEventInfo.isWithAlert()) {
                     final WfStep notifWfStep = new WfStep();
