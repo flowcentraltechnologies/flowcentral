@@ -97,6 +97,8 @@
 				value="userCreationReject" />
 			<property name="workflowCopy.create.rejection.setvalues"
 				value="onRejectSetValues" />
+			<property name="workflowCopy.create.resubmit.alert"
+				value="userCreationResubmit" />
 			<property name="workflowCopy.update.copy.setvalues"
 				value="onCopySetValues" />
 			<property name="workflowCopy.update.alert"
@@ -109,6 +111,8 @@
 				value="userUpdateReject" />
 			<property name="workflowCopy.update.rejection.setvalues"
 				value="onRejectSetValues" />
+			<property name="workflowCopy.update.resubmit.alert"
+				value="userUpdateResubmit" />
 			<alert name="userCreationApproval"
 				description="User Creation Approval Pending"
 				sender="usercreation-approvalpending" />
@@ -120,12 +124,18 @@
 			<alert name="userCreationReject"
 				description="User Creation Review Pending"
 				sender="usercreation-reviewpending" />
+			<alert name="userCreationResubmit"
+				description="User Creation Resubmit Pending"
+				sender="usercreation-resubmitpending" />
 			<alert name="userUpdateApproval"
 				description="User Update Approval Pending"
 				sender="userupdate-approvalpending" />
 			<alert name="userUpdateReject"
 				description="User Update Review Pending"
 				sender="userupdate-reviewpending" />
+			<alert name="userUpdateResubmit"
+				description="User Update Resubmit Pending"
+				sender="userupdate-resubmitpending" />
 			<filter name="nonSystemRecords"
 				description="$m{common.filter.nonsystemrecords}">
 				<restriction type="greater_than" field="id" paramA="0" />

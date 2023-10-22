@@ -249,11 +249,12 @@ public final class WorkflowDesignUtils {
             approvalWfStep.setReadOnlyConditionName(ApplicationFilterConstants.RESERVED_ALWAYS_FILTERNAME);
             approvalWfStep.setAttachmentProviderName(appletWorkflowCopyInfo.getAttachmentProvider());
             approvalWfStep.setAppletSetValuesName(submitEventInfo.getSetValuesName());
+            List<WfStepAlert> alertList = new ArrayList<WfStepAlert> ();
             if (submitEventInfo.isWithAlert()) {
                 WfStepAlert wfStepAlert = createWfStepAlert(WorkflowAlertType.USER_INTERACT,
                         appletWorkflowCopyInfo.getAppletAlertDef(submitEventInfo.getAlertName()));
                 wfStepAlert.setFireOnPrevStepName("start");
-                approvalWfStep.setAlertList(Arrays.asList(wfStepAlert));
+                alertList.add(wfStepAlert);
             } else {
                 final String sender = type.isWorkflowCopyCreate()
                         ? WorkflowModuleNameConstants.WORKFLOW_COPY_CREATE_APPROVAL_PENDING_EMAIL_SENDER
@@ -261,16 +262,18 @@ public final class WorkflowDesignUtils {
                                 ? WorkflowModuleNameConstants.WORKFLOW_COPY_UPDATE_APPROVAL_PENDING_EMAIL_SENDER
                                 : WorkflowModuleNameConstants.WORKFLOW_COPY_DELETION_APPROVAL_PENDING_EMAIL_SENDER);
                 WfStepAlert wfStepAlert = createWfStepAlert(WorkflowAlertType.USER_INTERACT, sender);
-                approvalWfStep.setAlertList(Arrays.asList(wfStepAlert));
+                alertList.add(wfStepAlert);
             }
             
             if (type.isWorkflowCopyCreateOrUpdate() && resubmitEventInfo.isWithAlert()) {
                 WfStepAlert wfStepAlert = createWfStepAlert(WorkflowAlertType.USER_INTERACT,
                         appletWorkflowCopyInfo.getAppletAlertDef(resubmitEventInfo.getAlertName()));
                 wfStepAlert.setFireOnPrevStepName("draftReview");
-                approvalWfStep.setAlertList(Arrays.asList(wfStepAlert));
+                alertList.add(wfStepAlert);
             }
             
+            approvalWfStep.setAlertList(alertList);
+          
             final WfStepUserAction approveUserAction = new WfStepUserAction();
             final EventInfo approveEventInfo = workflowCopyInfo.getEventInfo(EventType.ON_APPROVE);
             approveUserAction.setName("approve");
