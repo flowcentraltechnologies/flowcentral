@@ -164,6 +164,10 @@ public final class WorkflowDesignUtils {
         public boolean isWorkflowCopyDelete() {
             return WORKFLOW_COPY_DELETE.equals(this);
         }
+
+        public boolean isWorkflowCopyCreateOrUpdate() {
+            return WORKFLOW_COPY_CREATE.equals(this) || WORKFLOW_COPY_UPDATE.equals(this);
+        }
     }
 
     private WorkflowDesignUtils() {
@@ -260,7 +264,7 @@ public final class WorkflowDesignUtils {
                 approvalWfStep.setAlertList(Arrays.asList(wfStepAlert));
             }
             
-            if (resubmitEventInfo.isWithAlert()) {
+            if (type.isWorkflowCopyCreateOrUpdate() && resubmitEventInfo.isWithAlert()) {
                 WfStepAlert wfStepAlert = createWfStepAlert(WorkflowAlertType.USER_INTERACT,
                         appletWorkflowCopyInfo.getAppletAlertDef(resubmitEventInfo.getAlertName()));
                 wfStepAlert.setFireOnPrevStepName("draftReview");
@@ -291,7 +295,7 @@ public final class WorkflowDesignUtils {
 
             // Draft review step
             final EventInfo discardEventInfo = workflowCopyInfo.getEventInfo(EventType.ON_DISCARD);
-            if (type.isWorkflowCopyCreate() || type.isWorkflowCopyUpdate()) {
+            if (type.isWorkflowCopyCreateOrUpdate()) {
                 final WfStep reviewWfStep = new WfStep();
                 reviewWfStep.setType(WorkflowStepType.USER_ACTION);
                 reviewWfStep.setPriority(WorkflowStepPriority.NORMAL);
@@ -346,7 +350,7 @@ public final class WorkflowDesignUtils {
                 stepList.add(notifWfStep);
             }
 
-            if (type.isWorkflowCopyCreate() || type.isWorkflowCopyUpdate()) {
+            if (type.isWorkflowCopyCreateOrUpdate()) {
                 // Add discard notification step
                 if (discardEventInfo.isWithAlert()) {
                     final WfStep notifWfStep = new WfStep();
