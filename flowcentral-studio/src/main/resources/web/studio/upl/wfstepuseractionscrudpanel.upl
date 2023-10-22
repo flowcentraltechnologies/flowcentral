@@ -27,7 +27,7 @@
 !ui-select:frmSetValuesName caption:$m{wfstepuseractionscrudpanel.setvalues}
 	list:$s{studioworkflowuseractionsetvalueslist} listParamType:$s{PANEL} listParams:$l{workflowId} blankOption:$s{}
 	binding:setValuesName
-!ui-text:frmAppletSetValuesName caption:$m{wfstepuseractionscrudpanel.appletsetvalues} readOnly:true
+!ui-text:frmAppletSetValuesName caption:$m{wfstepuseractionscrudpanel.appletsetvalues} size:32 disabled:true
 	binding:appletSetValuesName
 !ui-select:frmComment caption:$m{wfstepuseractionscrudpanel.commentrequirement}
 	list:$s{requirementtypelist} blankOption:$s{} binding:commentRequirement required:true

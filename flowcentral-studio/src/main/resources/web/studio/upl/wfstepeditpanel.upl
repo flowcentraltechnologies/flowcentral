@@ -30,7 +30,7 @@
 !ui-text:frmLabel styleClass:$e{fc-formfield} caption:$m{wfstepeditpanel.label} binding:label required:true
 !ui-select:frmAppletName styleClass:$e{fc-formfield} caption:$m{wfstepeditpanel.applet} listParams:$l{entityName}
 	list:$s{studioentityappletlist} blankOption:$s{} binding:appletName required:true
-!ui-text:frmAppletSetValuesName caption:$m{wfstepeditpanel.appletsetvalues} readOnly:true
+!ui-text:frmAppletSetValuesName caption:$m{wfstepeditpanel.appletsetvalues} size:32 disabled:true
 	binding:appletSetValuesName
 !ui-text:frmNextStepName styleClass:$e{fc-formfield} caption:$m{wfstepeditpanel.nextstepname} size:32 binding:nextStepName
 !ui-text:frmAltNextStepName styleClass:$e{fc-formfield} caption:$m{wfstepeditpanel.altnextstepname} size:32 binding:altNextStepName

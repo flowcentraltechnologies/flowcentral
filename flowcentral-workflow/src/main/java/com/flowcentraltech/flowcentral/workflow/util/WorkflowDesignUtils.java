@@ -276,7 +276,10 @@ public final class WorkflowDesignUtils {
             rejectUserAction.setCommentRequirement(RequirementType.OPTIONAL);
             rejectUserAction.setHighlightType(HighlightType.RED);
             rejectUserAction.setAppletSetValuesName(rejectEventInfo.getSetValuesName());
-            rejectUserAction.setNextStepName(type.reviewNext());
+            rejectUserAction.setNextStepName(
+                    (type.isWorkflowCopyCreate() || type.isWorkflowCopyUpdate()) && rejectEventInfo.isWithAlert()
+                            ? "rejectNotif"
+                            : type.reviewNext());
 
             approvalWfStep.setUserActionList(Arrays.asList(approveUserAction, rejectUserAction));
             stepList.add(approvalWfStep);

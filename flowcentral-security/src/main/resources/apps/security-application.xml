@@ -93,9 +93,9 @@
 				value="userCreationApproved" />
 			<property name="workflowCopy.create.approval.setvalues"
 				value="onApproveSetValues" />
-			<property name="workflowCopy.create.reject.alert"
+			<property name="workflowCopy.create.rejection.alert"
 				value="userCreationReject" />
-			<property name="workflowCopy.create.reject.setvalues"
+			<property name="workflowCopy.create.rejection.setvalues"
 				value="onRejectSetValues" />
 			<property name="workflowCopy.update.copy.setvalues"
 				value="onCopySetValues" />
@@ -105,9 +105,9 @@
 				value="onSubmitSetValues" />
 			<property name="workflowCopy.update.approval.setvalues"
 				value="onApproveSetValues" />
-			<property name="workflowCopy.update.reject.alert"
+			<property name="workflowCopy.update.rejection.alert"
 				value="userUpdateReject" />
-			<property name="workflowCopy.update.reject.setvalues"
+			<property name="workflowCopy.update.rejection.setvalues"
 				value="onRejectSetValues" />
 			<alert name="userCreationApproval"
 				description="User Creation Approval Pending"
