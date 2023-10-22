@@ -1379,7 +1379,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                 transitionItem.setUpdated();
             }
 
-            if (nextWfStep.isWithAppletSetValues()) {
+            if (nextWfStep != null && nextWfStep.isWithAppletSetValues()) {
                 final AppletDef appletDef = appletUtil.getAppletDef(nextWfStep.getStepAppletName());
                 final AppletSetValuesDef appletSetValuesDef = appletDef
                         .getSetValues(nextWfStep.getAppletSetValuesName());
