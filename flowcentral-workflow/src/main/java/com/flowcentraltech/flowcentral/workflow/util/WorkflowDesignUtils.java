@@ -311,13 +311,13 @@ public final class WorkflowDesignUtils {
                         .setNextStepName(resubmitEventInfo.isWithAlert() ? "resubmitNotif" : type.resubmitNext());
 
                 final WfStepUserAction discardUserAction = new WfStepUserAction();
-                rejectUserAction.setName("discard");
-                rejectUserAction.setDescription("Discard Draft");
-                rejectUserAction.setLabel("Discard");
-                rejectUserAction.setCommentRequirement(RequirementType.OPTIONAL);
-                rejectUserAction.setHighlightType(HighlightType.RED);
-                rejectUserAction.setAppletSetValuesName(discardEventInfo.getSetValuesName());
-                rejectUserAction.setNextStepName(discardEventInfo.isWithAlert() ? "discardNotif" : type.discardNext());
+                discardUserAction.setName("discard");
+                discardUserAction.setDescription("Discard Draft");
+                discardUserAction.setLabel("Discard");
+                discardUserAction.setCommentRequirement(RequirementType.OPTIONAL);
+                discardUserAction.setHighlightType(HighlightType.RED);
+                discardUserAction.setAppletSetValuesName(discardEventInfo.getSetValuesName());
+                discardUserAction.setNextStepName(discardEventInfo.isWithAlert() ? "discardNotif" : type.discardNext());
 
                 reviewWfStep.setUserActionList(Arrays.asList(resubmitUserAction, discardUserAction));
                 stepList.add(reviewWfStep);

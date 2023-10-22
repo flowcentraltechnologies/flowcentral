@@ -83,10 +83,6 @@
 			<property name="maintainForm.update" value="true" />
 			<property name="maintainForm.delete" value="true" />
 			<property name="workflowCopy" value="true" />
-			<property name="workflowCopy.create.setvalues"/>
-			<property name="workflowCopy.update.setvalues" />
-			<property name="workflowCopy.create.approval.setvalues"/>
-			<property name="workflowCopy.update.approval.setvalues"/>
 			<property name="workflowCopy.create.alert"
 				value="roleCreationApproval" />
 			<property name="workflowCopy.update.alert"

@@ -85,14 +85,14 @@
 			<property name="workflowCopy" value="true" />
 			<property name="workflowCopy.create.alert"
 				value="userCreationApproval" />
-			<property name="workflowCopy.create.approval.alert"
-				value="userCreationApproved" />
-			<property name="workflowCopy.update.alert"
-				value="userUpdateApproval" />
 			<property name="workflowCopy.create.setvalues"
 				value="createSetValues" />
+			<property name="workflowCopy.create.approval.alert"
+				value="userCreationApproved" />
 			<property name="workflowCopy.create.approval.setvalues"
 				value="createApprovedSetValues" />
+			<property name="workflowCopy.update.alert"
+				value="userUpdateApproval" />
 			<property name="workflowCopy.update.setvalues"
 				value="createSetValues" />
 			<property name="workflowCopy.update.approval.setvalues"
