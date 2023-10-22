@@ -91,12 +91,20 @@
 				value="userCreationApproved" />
 			<property name="workflowCopy.create.approval.setvalues"
 				value="createApprovedSetValues" />
+			<property name="workflowCopy.create.reject.alert"
+				value="userCreationReject" />
+			<property name="workflowCopy.create.reject.setvalues"
+				value="createRejectedSetValues" />
 			<property name="workflowCopy.update.alert"
 				value="userUpdateApproval" />
 			<property name="workflowCopy.update.setvalues"
 				value="createSetValues" />
 			<property name="workflowCopy.update.approval.setvalues"
 				value="createApprovedSetValues" />
+			<property name="workflowCopy.update.reject.alert"
+				value="userUpdateReject" />
+			<property name="workflowCopy.update.reject.setvalues"
+				value="createRejectedSetValues" />
 			<alert name="userCreationApproval"
 				description="User Creation Approval Pending"
 				sender="usercreation-approvalpending" />
@@ -105,9 +113,15 @@
 				sender="usercreation-approved"
 				recipientPolicy="entity-wfrecipientpolicy"
 				recipientNameRule="fullName" recipientContactRule="email" />
+			<alert name="userCreationReject"
+				description="User Creation Review Pending"
+				sender="usercreation-reviewpending" />
 			<alert name="userUpdateApproval"
 				description="User Update Approval Pending"
 				sender="userupdate-approvalpending" />
+			<alert name="userUpdateReject"
+				description="User Update Review Pending"
+				sender="userupdate-reviewpending" />
 			<filter name="nonSystemRecords"
 				description="$m{common.filter.nonsystemrecords}">
 				<restriction type="greater_than" field="id" paramA="0" />
@@ -122,6 +136,12 @@
 				description="$m{security.user.setvalues.createapproved}">
 				<setValues>
 					<setValue field="workflowStatus" value="APR" />
+				</setValues>
+			</values>
+			<values name="createRejectedSetValues"
+				description="$m{security.user.setvalues.createrejected}">
+				<setValues>
+					<setValue field="workflowStatus" value="AWR" />
 				</setValues>
 			</values>
 		</applet>

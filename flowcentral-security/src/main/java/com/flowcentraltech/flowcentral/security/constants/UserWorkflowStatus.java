@@ -37,6 +37,8 @@ public enum UserWorkflowStatus implements EnumConst {
             "ERR"),
     AWAITING_APPROVAL(
             "AWA"),
+    AWAITING_REVIEW(
+            "AWR"),
     APPROVED(
             "APR");
 
