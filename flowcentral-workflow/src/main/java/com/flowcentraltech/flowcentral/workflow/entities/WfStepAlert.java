@@ -61,6 +61,9 @@ public class WfStepAlert extends BaseNamedEntity {
     @Column(name = "FIRE_ON_PREV_STEP_NM", length = 64, nullable = true)
     private String fireOnPrevStepName;
 
+    @Column(name = "FIRE_ON_ACTION_NM", length = 64, nullable = true)
+    private String fireOnActionName;
+
     @Column(name = "FIRE_ON_CONDITION_NM", length = 64, nullable = true)
     private String fireOnConditionName;
 
@@ -149,6 +152,14 @@ public class WfStepAlert extends BaseNamedEntity {
 
     public void setFireOnPrevStepName(String fireOnPrevStepName) {
         this.fireOnPrevStepName = fireOnPrevStepName;
+    }
+
+    public String getFireOnActionName() {
+        return fireOnActionName;
+    }
+
+    public void setFireOnActionName(String fireOnActionName) {
+        this.fireOnActionName = fireOnActionName;
     }
 
     public String getFireOnConditionName() {

@@ -32,16 +32,16 @@ import com.tcdng.unify.core.data.Listable;
  * @since 1.0
  */
 @Component("wfeditprevsteplist")
-public class WfEditPrevStepListCommand extends AbstractApplicationListCommand<PrevStepsParams> {
+public class WfEditPrevStepListCommand extends AbstractApplicationListCommand<ListablesParams> {
 
     public WfEditPrevStepListCommand() {
-        super(PrevStepsParams.class);
+        super(ListablesParams.class);
     }
 
     @Override
-    public List<? extends Listable> execute(Locale locale, PrevStepsParams params) throws UnifyException {
+    public List<? extends Listable> execute(Locale locale, ListablesParams params) throws UnifyException {
         if (params.isPresent()) {
-            return params.getPrevStepList();
+            return params.getListables();
         }
 
         return Collections.emptyList();

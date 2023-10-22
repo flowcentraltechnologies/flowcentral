@@ -23,25 +23,25 @@ import com.tcdng.unify.core.list.AbstractListParam;
 import com.tcdng.unify.core.util.DataUtils;
 
 /**
- * Previous steps parameters.
+ * Listable parameters.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class PrevStepsParams extends AbstractListParam {
+public class ListablesParams extends AbstractListParam {
 
-    private List<? extends Listable> prevStepList;
+    private List<? extends Listable> listables;
 
-    public PrevStepsParams(List<? extends Listable> prevStepList) {
-        this.prevStepList = prevStepList;
+    public ListablesParams(List<? extends Listable> listables) {
+        this.listables = listables;
     }
 
-    public List<? extends Listable> getPrevStepList() {
-        return prevStepList;
+    public List<? extends Listable> getListables() {
+        return listables;
     }
 
     @Override
     public boolean isPresent() {
-        return !DataUtils.isBlank(prevStepList);
+        return !DataUtils.isBlank(listables);
     }
 }

@@ -34,10 +34,12 @@ public class StepDialogCrudInfo<T> extends DialogCrudInfo<T> {
     private Long workflowId;
     
     private List<? extends Listable> prevStepList;
+    
+    private List<? extends Listable> actionList;
 
     public StepDialogCrudInfo(Class<T> typeClass, String entityName, Long workflowId) {
         super(typeClass);
-        this.entityName = entityName;
+        this.entityName = entityName; 
         this.workflowId = workflowId;
     }
 
@@ -55,6 +57,14 @@ public class StepDialogCrudInfo<T> extends DialogCrudInfo<T> {
 
     public void setPrevStepList(List<? extends Listable> prevStepList) {
         this.prevStepList = prevStepList;
+    }
+
+    public List<? extends Listable> getActionList() {
+        return actionList;
+    }
+
+    public void setActionList(List<? extends Listable> actionList) {
+        this.actionList = actionList;
     }
 
 }

@@ -41,6 +41,8 @@ public class WfAlertConfig extends BaseNameConfig {
     private String generator;
 
     private String fireOnPrevStepName;
+    
+    private String fireOnActionName;
 
     private String fireOnCondition;
 
@@ -120,6 +122,15 @@ public class WfAlertConfig extends BaseNameConfig {
     @XmlAttribute
     public void setFireOnPrevStepName(String fireOnPrevStepName) {
         this.fireOnPrevStepName = fireOnPrevStepName;
+    }
+
+    public String getFireOnActionName() {
+        return fireOnActionName;
+    }
+
+    @XmlAttribute
+    public void setFireOnActionName(String fireOnActionName) {
+        this.fireOnActionName = fireOnActionName;
     }
 
     public String getFireOnCondition() {

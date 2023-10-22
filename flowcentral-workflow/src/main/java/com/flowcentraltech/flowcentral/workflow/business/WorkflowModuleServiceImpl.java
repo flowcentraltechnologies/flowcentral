@@ -354,8 +354,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                                     wfStepAlert.getDescription(), wfStepAlert.getRecipientPolicy(),
                                     wfStepAlert.getRecipientNameRule(), wfStepAlert.getRecipientContactRule(),
                                     wfStepAlert.getGenerator(), wfStepAlert.getFireOnPrevStepName(),
-                                    wfStepAlert.getFireOnConditionName(), wfStepAlert.isAlertHeldBy(),
-                                    wfStepAlert.isAlertWorkflowRoles());
+                                    wfStepAlert.getFireOnActionName(), wfStepAlert.getFireOnConditionName(),
+                                    wfStepAlert.isAlertHeldBy(), wfStepAlert.isAlertWorkflowRoles());
                         }
 
                         for (WfStepRole wfStepRole : wfStep.getRoleList()) {
@@ -1007,6 +1007,10 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                         new Update().add("processingStatus", nextWfStepDef.getProcessingStatus()));
             }
 
+            // Check if action triggered notifications need to be sent
+            final TransitionItem currentTransitionItem = new TransitionItem(wfItem, wfDef, wfEntityInst);
+            sendUserActionAlertsByAction(currentWfStepDef, currentTransitionItem, userAction);
+            
             pushToWfTransitionQueue(wfDef, wfItemId);
             return true;
         }
@@ -1500,7 +1504,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             }
 
             if (type.sendUserActionAlert()) {
-                sendUserActionAlerts(currWfStepDef, transitionItem, prevStepName);
+                sendUserActionAlertsByPreviousStep(currWfStepDef, transitionItem, prevStepName);
             }
 
             if (transitionItem.isUpdated() && type.isFlowing() && nextWfStep != null
@@ -1606,10 +1610,19 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         }
     }
 
-    private void sendUserActionAlerts(final WfStepDef wfStepDef, final TransitionItem transitionItem,
+    private void sendUserActionAlertsByPreviousStep(final WfStepDef wfStepDef, final TransitionItem transitionItem,
             final String prevStepName) throws UnifyException {
         for (WfAlertDef wfAlertDef : wfStepDef.getAlertList()) {
             if (wfAlertDef.isUserInteract() && wfAlertDef.isFireAlertOnPreviousStep(prevStepName)) {
+                sendAlert(wfStepDef, wfAlertDef, transitionItem);
+            }
+        }
+    }
+
+    private void sendUserActionAlertsByAction(final WfStepDef wfStepDef, final TransitionItem transitionItem,
+            final String actionName) throws UnifyException {
+        for (WfAlertDef wfAlertDef : wfStepDef.getAlertList()) {
+            if (wfAlertDef.isUserInteract() && wfAlertDef.isFireAlertOnAction(actionName)) {
                 sendAlert(wfStepDef, wfAlertDef, transitionItem);
             }
         }

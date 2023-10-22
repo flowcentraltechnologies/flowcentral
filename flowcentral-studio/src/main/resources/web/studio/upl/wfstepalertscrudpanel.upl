@@ -16,7 +16,7 @@
 !fc-wfstepalertscrudpanel
 	tableComponents:$c{nameLabel descLabel}
 	formSection:$d{!ui-section components:$c{frmName frmDesc frmSender
-		frmFireOnPrevStepName frmFireOnConditionName frmRecipientPolicy frmRecipientNameRule frmRecipientContactRule frmType
+		frmFireOnPrevStepName frmFireOnActionName frmFireOnConditionName frmRecipientPolicy frmRecipientNameRule frmRecipientContactRule frmType
 		frmAlertHeldBy frmAlertWorkflowRoles}}
 !ui-label:nameLabel styleClass:$e{fc-formfield} caption:$m{wfstepalertscrudpanel.name} binding:name
 !ui-label:descLabel styleClass:$e{fc-formfield} caption:$m{wfstepalertscrudpanel.description} binding:description
@@ -28,6 +28,9 @@
 !ui-select:frmFireOnPrevStepName styleClass:$e{fc-formfield} caption:$m{wfstepalertscrudpanel.fireonprevstepname}
 	list:$s{wfeditprevsteplist} listParamType:$s{PANEL} listParams:$l{prevStepList} blankOption:$s{}
 	binding:fireOnPrevStepName
+!ui-select:frmFireOnActionName styleClass:$e{fc-formfield} caption:$m{wfstepalertscrudpanel.fireonactionname}
+	list:$s{wfeditstepactionlist} listParamType:$s{PANEL} listParams:$l{actionList} blankOption:$s{}
+	binding:fireOnActionName
 !ui-select:frmFireOnConditionName styleClass:$e{fc-formfield} caption:$m{wfstepalertscrudpanel.fireoncondition}
 	list:$s{studioworkflowfilterlist} listParamType:$s{PANEL} listParams:$l{workflowId} blankOption:$s{}
 	binding:fireOnConditionName

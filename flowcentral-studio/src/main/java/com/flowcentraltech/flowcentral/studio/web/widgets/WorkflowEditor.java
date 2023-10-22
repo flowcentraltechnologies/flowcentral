@@ -342,6 +342,13 @@ public class WorkflowEditor {
                     }
                 }
                 alertsCrudInfo.setPrevStepList(prevList);
+
+                List<ListData> actionList = new ArrayList<ListData>();
+                for (WfStepUserAction wfStepUserAction : step.getUserActionList()) {
+                    actionList.add(new ListData(wfStepUserAction.getName(), wfStepUserAction.getDescription()));
+                }
+                alertsCrudInfo.setActionList(actionList);
+
                 return stepAlertsPanelName;
             case MULTI_ROUTING:
                 routingsCrudInfo.setTitle(
@@ -516,10 +523,11 @@ public class WorkflowEditor {
 
         public Builder addStep(WfStep step) throws UnifyException {
             if (step.getType().isError() && DataUtils.isBlank(step.getUserActionList())) {
-                final WfStepUserAction recoverUserAction = WorkflowDesignUtils.createErrorRecoveryUserAction(step.getId());
+                final WfStepUserAction recoverUserAction = WorkflowDesignUtils
+                        .createErrorRecoveryUserAction(step.getId());
                 step.setUserActionList(Arrays.asList(recoverUserAction));
             }
-            
+
             workflowSteps.put(step.getName(), step);
             stepList.add(DesignWfStep.from(au, step, routingLabels));
             return this;
