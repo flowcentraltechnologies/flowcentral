@@ -83,28 +83,32 @@
 			<property name="maintainForm.delete" value="true" />
 			<property name="maintainForm.attachments" value="true" />
 			<property name="workflowCopy" value="true" />
+			<property name="workflowCopy.create.copy.setvalues"
+				value="onCopySetValues" />
 			<property name="workflowCopy.create.alert"
 				value="userCreationApproval" />
 			<property name="workflowCopy.create.setvalues"
-				value="createSetValues" />
+				value="onSubmitSetValues" />
 			<property name="workflowCopy.create.approval.alert"
 				value="userCreationApproved" />
 			<property name="workflowCopy.create.approval.setvalues"
-				value="createApprovedSetValues" />
+				value="onApproveSetValues" />
 			<property name="workflowCopy.create.reject.alert"
 				value="userCreationReject" />
 			<property name="workflowCopy.create.reject.setvalues"
-				value="createRejectedSetValues" />
+				value="onRejectSetValues" />
+			<property name="workflowCopy.update.copy.setvalues"
+				value="onCopySetValues" />
 			<property name="workflowCopy.update.alert"
 				value="userUpdateApproval" />
 			<property name="workflowCopy.update.setvalues"
-				value="createSetValues" />
+				value="onSubmitSetValues" />
 			<property name="workflowCopy.update.approval.setvalues"
-				value="createApprovedSetValues" />
+				value="onApproveSetValues" />
 			<property name="workflowCopy.update.reject.alert"
 				value="userUpdateReject" />
 			<property name="workflowCopy.update.reject.setvalues"
-				value="createRejectedSetValues" />
+				value="onRejectSetValues" />
 			<alert name="userCreationApproval"
 				description="User Creation Approval Pending"
 				sender="usercreation-approvalpending" />
@@ -126,20 +130,26 @@
 				description="$m{common.filter.nonsystemrecords}">
 				<restriction type="greater_than" field="id" paramA="0" />
 			</filter>
-			<values name="createSetValues"
-				description="$m{security.user.setvalues.create}">
+			<values name="onCopySetValues"
+				description="$m{security.user.setvalues.oncopy}">
+				<setValues>
+					<setValue field="workflowStatus" value="AWS" />
+				</setValues>
+			</values>
+			<values name="onSubmitSetValues"
+				description="$m{security.user.setvalues.onsubmit}">
 				<setValues>
 					<setValue field="workflowStatus" value="AWA" />
 				</setValues>
 			</values>
-			<values name="createApprovedSetValues"
-				description="$m{security.user.setvalues.createapproved}">
+			<values name="onApproveSetValues"
+				description="$m{security.user.setvalues.onapprove}">
 				<setValues>
 					<setValue field="workflowStatus" value="APR" />
 				</setValues>
 			</values>
-			<values name="createRejectedSetValues"
-				description="$m{security.user.setvalues.createrejected}">
+			<values name="onRejectSetValues"
+				description="$m{security.user.setvalues.onreject}">
 				<setValues>
 					<setValue field="workflowStatus" value="AWR" />
 				</setValues>

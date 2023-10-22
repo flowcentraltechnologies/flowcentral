@@ -204,6 +204,7 @@ import com.flowcentraltech.flowcentral.common.business.SuggestionProvider;
 import com.flowcentraltech.flowcentral.common.business.policies.SweepingCommitPolicy;
 import com.flowcentraltech.flowcentral.common.constants.ConfigType;
 import com.flowcentraltech.flowcentral.common.constants.OwnershipType;
+import com.flowcentraltech.flowcentral.common.constants.WfItemVersionType;
 import com.flowcentraltech.flowcentral.common.data.Attachment;
 import com.flowcentraltech.flowcentral.common.data.EntityAuditInfo;
 import com.flowcentraltech.flowcentral.common.data.ParamValuesDef;
@@ -214,6 +215,7 @@ import com.flowcentraltech.flowcentral.common.entities.FileAttachmentDoc;
 import com.flowcentraltech.flowcentral.common.entities.FileAttachmentQuery;
 import com.flowcentraltech.flowcentral.common.entities.ParamValues;
 import com.flowcentraltech.flowcentral.common.entities.ParamValuesQuery;
+import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
 import com.flowcentraltech.flowcentral.common.util.CommonInputUtils;
 import com.flowcentraltech.flowcentral.common.util.ConfigUtils;
 import com.flowcentraltech.flowcentral.common.util.EntityUtils;
@@ -1722,6 +1724,13 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
+    public boolean isWorkEntityWithPendingDraft(Class<? extends WorkEntity> entityClass, Long id)
+            throws UnifyException {
+        return environment().countAll(Query.of(entityClass).addEquals("originalCopyId", id)
+                .addEquals("wfItemVersionType", WfItemVersionType.DRAFT)) > 0;
+    }
+
+    @Override
     public AppletWorkflowCopyInfo getAppletWorkflowCopyInfo(String appletName) throws UnifyException {
         final ApplicationEntityNameParts np = ApplicationNameUtils.getApplicationEntityNameParts(appletName);
         final long appletVersionNo = environment().value(long.class, "versionNo",
@@ -2185,7 +2194,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     public <T extends BaseApplicationEntity> List<Long> findNonClassifiedAppComponentIdList(String applicationName,
             Class<T> componentClazz) throws UnifyException {
         return environment().valueList(Long.class, "id", Query.of(componentClazz)
-                .addEquals("applicationName", applicationName).addNotEquals("classified", true).addOrder("id"));
+                .addEquals("applicationName", applicationName)/*.addNotEquals("classified", true)*/.addOrder("id"));
     }
 
     @Override

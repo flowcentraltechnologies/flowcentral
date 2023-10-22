@@ -235,7 +235,7 @@ public class WfStepConfig extends BaseNameConfig {
         return appletSetValuesName;
     }
 
-    @XmlAttribute
+    @XmlAttribute(name = "appletSetValues")
     public void setAppletSetValuesName(String appletSetValuesName) {
         this.appletSetValuesName = appletSetValuesName;
     }

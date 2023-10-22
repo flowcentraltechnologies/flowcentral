@@ -35,6 +35,8 @@ public enum UserWorkflowStatus implements EnumConst {
             "NEW"),
     PROCESS_ERROR(
             "ERR"),
+    AWAITING_SUBMISSION(
+            "AWS"),
     AWAITING_APPROVAL(
             "AWA"),
     AWAITING_REVIEW(

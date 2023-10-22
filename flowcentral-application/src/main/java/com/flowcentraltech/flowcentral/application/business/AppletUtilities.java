@@ -83,6 +83,7 @@ import com.flowcentraltech.flowcentral.common.business.policies.TableSummaryLine
 import com.flowcentraltech.flowcentral.common.constants.OwnershipType;
 import com.flowcentraltech.flowcentral.common.data.FormListingOptions;
 import com.flowcentraltech.flowcentral.common.data.ParamValuesDef;
+import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
 import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
 import com.tcdng.unify.common.util.StringToken;
 import com.tcdng.unify.core.UnifyComponent;
@@ -626,6 +627,19 @@ public interface AppletUtilities extends FlowCentralComponent {
      *                        if an error occurs.
      */
     boolean isAppletWithWorkflowCopy(String appletName) throws UnifyException;
+
+    /**
+     * Checks if work entity is with pending draft
+     * 
+     * @param entityClass
+     *                    the entity class
+     * @param id
+     *                    the entity ID
+     * @return true if a draft exists otherwise false
+     * @throws UnifyException
+     *                        if an error occurs.
+     */
+    boolean isWorkEntityWithPendingDraft(Class<? extends WorkEntity> entityClass, Long id) throws UnifyException;;
 
     /**
      * Gets a application entity class definition.

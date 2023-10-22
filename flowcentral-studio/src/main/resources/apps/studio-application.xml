@@ -5265,6 +5265,9 @@
 				<property name="workflowCopy.attachmentprovider"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.attachmentprovider}"
 					inputWidget="studio.propertyappletattachmentproviderlist" />					
+				<property name="workflowCopy.create.copy.setvalues"
+					description="$m{studio.appappletprop.manageentity.workflowcopy.create.copysetvalues}"
+					inputWidget="studio.propertyappletsetvalueslist" />
 				<property name="workflowCopy.create.alert"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.create.submitalert}"
 					inputWidget="studio.propertyappletalertlist" />					
@@ -5301,6 +5304,9 @@
 				<property name="workflowCopy.create.abort.setvalues"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.create.abortsetvalues}"
 					inputWidget="studio.propertyappletsetvalueslist" />					
+				<property name="workflowCopy.update.copy.setvalues"
+					description="$m{studio.appappletprop.manageentity.workflowcopy.update.copysetvalues}"
+					inputWidget="studio.propertyappletsetvalueslist" />
 				<property name="workflowCopy.update.alert"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.update.submitalert}"
 					inputWidget="studio.propertyappletalertlist" />					
@@ -5516,6 +5522,9 @@
 				<property name="workflowCopy.attachmentprovider"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.attachmentprovider}"
 					inputWidget="studio.propertyappletattachmentproviderlist" />					
+				<property name="workflowCopy.create.copy.setvalues"
+					description="$m{studio.appappletprop.manageentity.workflowcopy.create.copysetvalues}"
+					inputWidget="studio.propertyappletsetvalueslist" />
 				<property name="workflowCopy.create.alert"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.create.submitalert}"
 					inputWidget="studio.propertyappletalertlist" />					
@@ -5552,6 +5561,9 @@
 				<property name="workflowCopy.create.abort.setvalues"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.create.abortsetvalues}"
 					inputWidget="studio.propertyappletsetvalueslist" />					
+				<property name="workflowCopy.update.copy.setvalues"
+					description="$m{studio.appappletprop.manageentity.workflowcopy.update.copysetvalues}"
+					inputWidget="studio.propertyappletsetvalueslist" />
 				<property name="workflowCopy.update.alert"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.update.submitalert}"
 					inputWidget="studio.propertyappletalertlist" />					

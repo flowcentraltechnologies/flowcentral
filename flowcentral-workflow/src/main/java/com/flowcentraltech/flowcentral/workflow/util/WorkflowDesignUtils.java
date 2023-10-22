@@ -294,6 +294,7 @@ public final class WorkflowDesignUtils {
                 reviewWfStep.setAppletName(appletWorkflowCopyInfo.getAppletName());
                 reviewWfStep.setReadOnlyConditionName(null);
                 reviewWfStep.setAttachmentProviderName(appletWorkflowCopyInfo.getAttachmentProvider());
+                reviewWfStep.setAppletSetValuesName(rejectEventInfo.getSetValuesName());
                 if (rejectEventInfo.isWithAlert()) {
                     WfStepAlert wfStepAlert = createWfStepAlert(WorkflowAlertType.USER_INTERACT,
                             appletWorkflowCopyInfo.getAppletAlertDef(rejectEventInfo.getAlertName()));

@@ -80,6 +80,7 @@ import com.flowcentraltech.flowcentral.common.constants.ConfigType;
 import com.flowcentraltech.flowcentral.common.constants.OwnershipType;
 import com.flowcentraltech.flowcentral.common.data.ParamValuesDef;
 import com.flowcentraltech.flowcentral.common.entities.EntityWrapper;
+import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityBaseType;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldDataType;
 import com.flowcentraltech.flowcentral.configuration.constants.FormElementType;
@@ -449,6 +450,19 @@ public interface ApplicationModuleService extends FlowCentralService {
      *                        if an error occurs.
      */
     boolean isAppletWithWorkflowCopy(String appletName) throws UnifyException;
+
+    /**
+     * Checks if work entity is with pending draft
+     * 
+     * @param entityClass
+     *                    the entity class
+     * @param id
+     *                    the entity ID
+     * @return true if a draft exists otherwise false
+     * @throws UnifyException
+     *                        if an error occurs.
+     */
+    boolean isWorkEntityWithPendingDraft(Class<? extends WorkEntity> entityClass, Long id) throws UnifyException;
 
     /**
      * Gets applet workflow copy information.

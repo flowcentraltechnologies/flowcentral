@@ -193,6 +193,8 @@ public interface AppletPropertyConstants {
 
     String WORKFLOWCOPY_ATTACHMENT_PROVIDER = "workflowCopy.attachmentprovider";
 
+    String WORKFLOWCOPY_CREATE_COPY_SETVALUES = "workflowCopy.create.copy.setvalues";
+
     String WORKFLOWCOPY_CREATE_SUBMIT_ALERT = "workflowCopy.create.alert";
 
     String WORKFLOWCOPY_CREATE_SUBMIT_SETVALUES = "workflowCopy.create.setvalues";
@@ -217,6 +219,8 @@ public interface AppletPropertyConstants {
 
     String WORKFLOWCOPY_CREATE_ABORT_SETVALUES = "workflowCopy.create.abort.setvalues";
     
+
+    String WORKFLOWCOPY_UPDATE_COPY_SETVALUES = "workflowCopy.update.copy.setvalues";
 
     String WORKFLOWCOPY_UPDATE_SUBMIT_ALERT= "workflowCopy.update.alert";
 
