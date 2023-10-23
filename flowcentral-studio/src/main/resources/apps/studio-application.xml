@@ -4559,6 +4559,8 @@
 			<tab name="setValues" label="$m{studio.workflow.form.setvalues}"
 				contentType="child_list" applet="manageWorkflowSetValues"
 				reference="setValuesList" />
+			<tab name="changeLog" label="$m{application.form.audit}"
+				contentType="miniform_changelog" />
 			<formStatePolicy type="on_switch"
 				name="onStaticPolicy"
 				description="$m{studio.common.form.formstatepolicy.onstatic}">
