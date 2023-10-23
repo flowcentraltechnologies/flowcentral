@@ -334,7 +334,7 @@ public final class InputWidgetUtils {
             case "application.alphanumericwithupper":
             case "application.alphanumericwithspaceupper":
             case "application.fullnamewithupper":
-            case "application.shortnamewithupper":	
+            case "application.wordwithupper":	
             case "application.alphanumericwithspecialupper": {
                 editor = String.format(editor, efa.getMinLen(), efa.getMaxLen(),
                         TextCase.UPPER.toString().toLowerCase());
@@ -360,6 +360,7 @@ public final class InputWidgetUtils {
                 break;
             case "application.javafieldname":
             case "application.columnname":
+            case "application.word":	
                 editor = String.format(editor, efa.getMinLen(), efa.getMaxLen());
                 break;
             case "application.integer":

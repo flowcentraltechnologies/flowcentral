@@ -132,13 +132,13 @@
 			inputType="string"
 			editor="!ui-series minLen:%s maxLen:%s case:$s{%s}"
 			renderer="!ui-label" />
-		<widgetType name="shortname" listOption="true"
-			description="$m{application.widgettype.shortname}" dataType="string"
+		<widgetType name="word" listOption="true"
+			description="$m{application.widgettype.word}" dataType="string"
 			inputType="string"
 			editor="!ui-word minLen:%s maxLen:%s case:$s{%s}"
 			renderer="!ui-label" />
-		<widgetType name="shortnamewithupper" listOption="true"
-			description="$m{application.widgettype.shortnamewithupper}"
+		<widgetType name="wordwithupper" listOption="true"
+			description="$m{application.widgettype.wordwithupper}"
 			dataType="string"
 			inputType="string"
 			editor="!ui-word minLen:%s maxLen:%s case:$s{%s}"
