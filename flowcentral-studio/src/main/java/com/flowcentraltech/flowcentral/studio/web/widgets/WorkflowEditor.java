@@ -337,7 +337,7 @@ public class WorkflowEditor {
                 alertsCrudInfo.setItemList(step.getAlertList());
                 List<ListData> prevList = new ArrayList<ListData>();
                 for (WfStep prevStep : workflowSteps.values()) {
-                    if (!prevStep.getName().equals(stepName) && prevStep.getType().isFlowing()) {
+                    if (!prevStep.getName().equals(stepName) /*&& prevStep.getType().isFlowing()*/) {
                         prevList.add(new ListData(prevStep.getName(), prevStep.getDescription()));
                     }
                 }
