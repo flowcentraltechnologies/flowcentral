@@ -121,7 +121,7 @@ public class WfAlertDef {
     }
 
     public boolean isFireAlertOnAction(String actionName) {
-        return fireOnAction.equals(actionName);
+        return fireOnAction != null && fireOnAction.equals(actionName);
     }
 
     public boolean isWithFireAlertOnCondition() {
