@@ -132,13 +132,25 @@
 			inputType="string"
 			editor="!ui-series minLen:%s maxLen:%s case:$s{%s}"
 			renderer="!ui-label" />
+		<widgetType name="word" listOption="true"
+			description="$m{application.widgettype.word}" dataType="string"
+			inputType="string"
+			editor="!ui-word minLen:%s maxLen:%s case:$s{%s}"
+			renderer="!ui-label" />
+		<widgetType name="wordwithupper" listOption="true"
+			description="$m{application.widgettype.wordwithupper}"
+			dataType="string"
+			inputType="string"
+			editor="!ui-word minLen:%s maxLen:%s case:$s{%s}"
+			renderer="!ui-label" />
 		<widgetType name="fullname" listOption="true"
 			description="$m{application.widgettype.fullname}" dataType="string"
 			inputType="string"
 			editor="!ui-fullname minLen:%s maxLen:%s case:$s{%s}"
 			renderer="!ui-label" />
 		<widgetType name="fullnamewithupper" listOption="true"
-			description="$m{application.widgettype.fullnamewithupper}" dataType="string"
+			description="$m{application.widgettype.fullnamewithupper}"
+			dataType="string"
 			inputType="string"
 			editor="!ui-fullname minLen:%s maxLen:%s case:$s{%s}"
 			renderer="!ui-label" />
@@ -206,7 +218,8 @@
 		<widgetType name="textareamedium" listOption="true"
 			description="$m{application.widgettype.textareamedium}"
 			dataType="string" inputType="string"
-			editor="!ui-textarea minLen:%s maxLen:%s rows:8" renderer="!ui-label" />
+			editor="!ui-textarea minLen:%s maxLen:%s rows:8"
+			renderer="!ui-label" />
 		<widgetType name="textarealarge" listOption="true"
 			description="$m{application.widgettype.textarealarge}"
 			dataType="string" inputType="string"
@@ -262,7 +275,8 @@
 			editor="!ui-name minLen:%s maxLen:%s underscore:true dollar:true"
 			renderer="!ui-label" />
 		<widgetType name="columnname" listOption="true"
-			description="$m{application.widgettype.columnname}" dataType="string"
+			description="$m{application.widgettype.columnname}"
+			dataType="string"
 			inputType="string"
 			editor="!ui-name minLen:%s maxLen:%s underscore:true"
 			renderer="!ui-label" />
@@ -301,7 +315,8 @@
 			editor="!ui-listlabel list:$s{%s}"
 			renderer="!ui-listlabel list:$s{%s}" />
 		<widgetType name="entitylist"
-			description="$m{application.widgettype.entitylist}" dataType="string"
+			description="$m{application.widgettype.entitylist}"
+			dataType="string"
 			inputType="string"
 			editor="!fc-entitylist ref:$s{%s} listKey:$s{%s} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
@@ -379,7 +394,8 @@
 			renderer="!ui-label formatter:$d{!fixeddatetimeformat pattern:$s{HH:mm:ss}}" />
 		<widgetType name="timeclearable"
 			description="$m{application.widgettype.timeclearable}"
-			dataType="date" inputType="datetime" editor="!ui-time clearable:true"
+			dataType="date" inputType="datetime"
+			editor="!ui-time clearable:true"
 			renderer="!ui-label formatter:$d{!fixeddatetimeformat pattern:$s{HH:mm:ss}}" />
 		<widgetType name="timetext"
 			description="$m{application.widgettype.timetext}" dataType="date"
@@ -424,7 +440,8 @@
 			editor="!ui-select list:fileattachmenttypelist blankOption:$m{blank.none}"
 			renderer="!ui-listlabel list:fileattachmenttypelist" />
 		<widgetType name="fileupload"
-			description="$m{application.widgettype.fileupload}" dataType="string"
+			description="$m{application.widgettype.fileupload}"
+			dataType="string"
 			inputType="string"
 			editor="!ui-fileuploadview handler:$s{refblob-fileuploadviewhandler} category:$s{%s} parentCategory:$s{%s} parentFieldName:$s{%s}"
 			renderer="!ui-label" stretch="false" />
@@ -440,7 +457,8 @@
 			stretch="false" />
 		<widgetType name="fileuploadcsv"
 			description="$m{application.widgettype.fileupload.csv}"
-			dataType="blob" inputType="file" editor="!ui-fileuploadview type:csv"
+			dataType="blob" inputType="file"
+			editor="!ui-fileuploadview type:csv"
 			renderer="!ui-label" stretch="false" />
 		<widgetType name="fileuploadexcel"
 			description="$m{application.widgettype.fileupload.excel}"
@@ -449,7 +467,8 @@
 			stretch="false" />
 		<widgetType name="fileuploadpdf"
 			description="$m{application.widgettype.fileupload.pdf}"
-			dataType="blob" inputType="file" editor="!ui-fileuploadview type:pdf"
+			dataType="blob" inputType="file"
+			editor="!ui-fileuploadview type:pdf"
 			renderer="!ui-label" stretch="false" />
 		<widgetType name="fileuploadtext"
 			description="$m{application.widgettype.fileupload.text}"
@@ -633,7 +652,8 @@
 			type="com.flowcentraltech.flowcentral.application.entities.Application">
 			<field name="moduleId" basicSearch="true"
 				label="$m{application.application.module}" type="ref"
-				references="system.moduleRef" inputWidget="application.entitylist" />
+				references="system.moduleRef"
+				inputWidget="application.entitylist" />
 			<field name="label" label="$m{application.application.labelf}"
 				type="string" />
 			<field name="displayIndex"
@@ -664,13 +684,16 @@
 				label="$m{application.application.sectorcolor}" type="list_only"
 				key="moduleId" property="sectorColor" />
 			<field name="sectorShortCode"
-				label="$m{application.application.sectorshortcode}" type="list_only"
+				label="$m{application.application.sectorshortcode}"
+				type="list_only"
 				key="moduleId" property="sectorShortCode" />
 			<field name="sectorStatus"
-				label="$m{application.application.sectorstatus}" type="list_only"
+				label="$m{application.application.sectorstatus}"
+				type="list_only"
 				key="moduleId" property="sectorStatus" />
 			<uniqueConstraint name="nameUc"
-				description="$m{application.application.uc.name}" fieldList="name" />
+				description="$m{application.application.uc.name}"
+				fieldList="name" />
 			<uniqueConstraint name="descUc"
 				description="$m{application.application.uc.description}"
 				fieldList="description" />
@@ -701,7 +724,8 @@
 				label="$m{application.appapplet.assigndescfield}" type="string"
 				nullable="true" />
 			<field name="pseudoDeleteField"
-				label="$m{application.appapplet.pseudodeletefield}" type="string"
+				label="$m{application.appapplet.pseudodeletefield}"
+				type="string"
 				nullable="true" />
 			<field name="menuAccess"
 				label="$m{application.appapplet.menuaccess}" type="boolean" />
@@ -750,7 +774,8 @@
 			<field name="value" label="$m{application.appappletprop.value}"
 				type="string" />
 			<field name="appletName"
-				label="$m{application.appappletprop.appletname}" type="list_only"
+				label="$m{application.appappletprop.appletname}"
+				type="list_only"
 				key="appAppletId" property="name" />
 			<field name="applicationName"
 				label="$m{application.appappletprop.applicationname}"
@@ -781,13 +806,15 @@
 				label="$m{application.appappletfilter.owner}" type="string"
 				nullable="true" />
 			<field name="preferredForm"
-				label="$m{application.appappletfilter.preferredform}" type="string"
+				label="$m{application.appappletfilter.preferredform}"
+				type="string"
 				nullable="true" />
 			<field name="preferredChildListApplet"
 				label="$m{application.appappletfilter.preferredchildlistapplet}"
 				type="string" nullable="true" />
 			<field name="quickFilter"
-				label="$m{application.appappletfilter.quickfilter}" type="boolean" />
+				label="$m{application.appappletfilter.quickfilter}"
+				type="boolean" />
 			<field name="filterGenerator"
 				label="$m{application.appappletfilter.filtergenerator}"
 				type="string" nullable="true" />
@@ -799,7 +826,8 @@
 				type="list_only" key="ownershipType" property="description" />
 			<field name="childListActionTypeDesc"
 				label="$m{application.appappletfilter.childlistactiontypedesc}"
-				type="list_only" key="childListActionType" property="description" />
+				type="list_only" key="childListActionType"
+				property="description" />
 			<field name="filter"
 				label="$m{application.appappletfilter.filter}" type="child"
 				category="applet" references="appFilterRef" />
@@ -815,7 +843,8 @@
 			label="$m{application.appappletsetvalues.label}"
 			type="com.flowcentraltech.flowcentral.application.entities.AppAppletSetValues">
 			<field name="appAppletId"
-				label="$m{application.appappletsetvalues.appappletid}" type="ref"
+				label="$m{application.appappletsetvalues.appappletid}"
+				type="ref"
 				references="appAppletRef" inputWidget="application.entitylist" />
 			<field name="valueGenerator"
 				label="$m{application.appappletsetvalues.valuegenerator}"
@@ -838,13 +867,16 @@
 				label="$m{application.appappletalert.appappletid}" type="ref"
 				references="appAppletRef" inputWidget="application.entitylist" />
 			<field name="recipientPolicy"
-				label="$m{application.appappletalert.recipientpolicy}" type="string"
+				label="$m{application.appappletalert.recipientpolicy}"
+				type="string"
 				maxLen="64" nullable="true" />
 			<field name="recipientNameRule"
-				label="$m{application.appappletalert.recipientnamerule}" type="string"
+				label="$m{application.appappletalert.recipientnamerule}"
+				type="string"
 				maxLen="64" nullable="true" />
 			<field name="recipientContactRule"
-				label="$m{application.appappletalert.recipientcontactrule}" type="string"
+				label="$m{application.appappletalert.recipientcontactrule}"
+				type="string"
 				maxLen="64" nullable="true" />
 			<field name="sender"
 				label="$m{application.appappletalert.sender}" type="string" />
@@ -852,7 +884,8 @@
 				label="$m{application.appappletalert.applicationname}"
 				type="list_only" key="appAppletId" property="applicationName" />
 			<field name="appletName"
-				label="$m{application.appappletalert.appletname}" type="list_only"
+				label="$m{application.appappletalert.appletname}"
+				type="list_only"
 				key="appAppletId" property="name" />
 			<uniqueConstraint name="nameUc"
 				description="$m{application.appappletalert.uc.name}"
@@ -867,7 +900,8 @@
 			type="com.flowcentraltech.flowcentral.application.entities.AppEntity">
 			<field name="baseType"
 				label="$m{application.appentity.basetype}" type="enum_ref"
-				references="entitybasetypelist" inputWidget="application.enumlist" />
+				references="entitybasetypelist"
+				inputWidget="application.enumlist" />
 			<field name="label" maxLen="128"
 				label="$m{application.appentity.labelfield}" type="string" />
 			<field name="entityClass"
@@ -960,10 +994,12 @@
 				label="$m{application.appentityfield.inputwidget}" type="string"
 				nullable="true" />
 			<field name="suggestionType"
-				label="$m{application.appentityfield.suggestiontype}" type="string"
+				label="$m{application.appentityfield.suggestiontype}"
+				type="string"
 				nullable="true" />
 			<field name="inputListKey"
-				label="$m{application.appentityfield.inputlistkey}" type="string"
+				label="$m{application.appentityfield.inputlistkey}"
+				type="string"
 				nullable="true" />
 			<field name="autoFormat"
 				label="$m{application.appentityfield.autoformat}" type="string"
@@ -989,7 +1025,8 @@
 				label="$m{application.appentityfield.scale}" type="integer"
 				nullable="true" />
 			<field name="allowNegative"
-				label="$m{application.appentityfield.allownegative}" type="boolean" />
+				label="$m{application.appentityfield.allownegative}"
+				type="boolean" />
 			<field name="readOnly"
 				label="$m{application.appentityfield.readonly}" type="boolean" />
 			<field name="nullable"
@@ -999,11 +1036,14 @@
 			<field name="reportable"
 				label="$m{application.appentityfield.reportable}" type="boolean" />
 			<field name="descriptive"
-				label="$m{application.appentityfield.descriptive}" type="boolean" />
+				label="$m{application.appentityfield.descriptive}"
+				type="boolean" />
 			<field name="maintainLink"
-				label="$m{application.appentityfield.maintainlink}" type="boolean" />
+				label="$m{application.appentityfield.maintainlink}"
+				type="boolean" />
 			<field name="basicSearch"
-				label="$m{application.appentityfield.basicsearch}" type="boolean" />
+				label="$m{application.appentityfield.basicsearch}"
+				type="boolean" />
 			<field name="appEntityName"
 				label="$m{application.appentityfield.appentityname}"
 				type="list_only" key="appEntityId" property="name" />
@@ -1011,7 +1051,8 @@
 				label="$m{application.appentityfield.applicationname}"
 				type="list_only" key="appEntityId" property="applicationName" />
 			<field name="dataTypeDesc"
-				label="$m{application.appentityfield.datatypedesc}" type="list_only"
+				label="$m{application.appentityfield.datatypedesc}"
+				type="list_only"
 				key="dataType" property="description" />
 			<field name="typeDesc"
 				label="$m{application.appentityfield.typedesc}" type="list_only"
@@ -1022,7 +1063,8 @@
 			label="$m{application.appentityattachment.label}"
 			type="com.flowcentraltech.flowcentral.application.entities.AppEntityAttachment">
 			<field name="appEntityId"
-				label="$m{application.appentityattachment.appentityid}" type="ref"
+				label="$m{application.appentityattachment.appentityid}"
+				type="ref"
 				references="appEntityRef" inputWidget="application.entitylist" />
 			<field name="type"
 				label="$m{application.appentityattachment.type}" type="enum_ref"
@@ -1037,10 +1079,12 @@
 			label="$m{application.appentityexpression.label}"
 			type="com.flowcentraltech.flowcentral.application.entities.AppEntityExpression">
 			<field name="appEntityId"
-				label="$m{application.appentityexpression.appentityid}" type="ref"
+				label="$m{application.appentityexpression.appentityid}"
+				type="ref"
 				references="appEntityRef" inputWidget="application.entitylist" />
 			<field name="expression"
-				label="$m{application.appentityexpression.expression}" type="string"
+				label="$m{application.appentityexpression.expression}"
+				type="string"
 				inputWidget="application.textarea" />
 		</entity>
 		<entity name="appEntityUniqueConstraint"
@@ -1080,7 +1124,8 @@
 				label="$m{application.appentityupload.constraintactiondesc}"
 				type="list_only" key="constraintAction" property="description" />
 			<field name="fieldSequence"
-				label="$m{application.appentityupload.fieldsequence}" type="child"
+				label="$m{application.appentityupload.fieldsequence}"
+				type="child"
 				category="table" references="appFieldSequenceRef" />
 		</entity>
 		<entity name="appEntitySearchInput"
@@ -1088,7 +1133,8 @@
 			label="$m{application.appentitysearchinput.label}"
 			type="com.flowcentraltech.flowcentral.application.entities.AppEntitySearchInput">
 			<field name="appEntityId"
-				label="$m{application.appentitysearchinput.appentityid}" type="ref"
+				label="$m{application.appentitysearchinput.appentityid}"
+				type="ref"
 				references="appEntityRef" inputWidget="application.entitylist" />
 			<field name="searchInput"
 				label="$m{application.appentitysearchinput.searchinput}"
@@ -1146,7 +1192,8 @@
 			<field name="entity" label="$m{application.appfilter.entity}"
 				type="foster_parent_type" />
 			<field name="category"
-				label="$m{application.appfilter.category}" type="category_column" />
+				label="$m{application.appfilter.category}"
+				type="category_column" />
 			<field name="definition"
 				label="$m{application.appfilter.definition}" type="string" />
 		</entity>
@@ -1180,7 +1227,8 @@
 				label="$m{application.appfieldsequence.category}"
 				type="category_column" />
 			<field name="definition"
-				label="$m{application.appfieldsequence.definition}" type="string" />
+				label="$m{application.appfieldsequence.definition}"
+				type="string" />
 		</entity>
 		<entity name="appSetValues"
 			description="$m{application.appsetvalues}"
@@ -1193,7 +1241,8 @@
 				label="$m{application.appsetvalues.entity}"
 				type="foster_parent_type" />
 			<field name="category"
-				label="$m{application.appsetvalues.category}" type="category_column" />
+				label="$m{application.appsetvalues.category}"
+				type="category_column" />
 			<field name="definition"
 				label="$m{application.appsetvalues.definition}" type="string" />
 		</entity>
@@ -1224,7 +1273,8 @@
 				label="$m{application.apptable.detailspanelname}" type="string"
 				nullable="true" />
 			<field name="loadingSearchInput"
-				label="$m{application.apptable.loadingsearchinput}" type="string"
+				label="$m{application.apptable.loadingsearchinput}"
+				type="string"
 				maxLen="64" nullable="true" />
 			<field name="loadingFilterGen"
 				label="$m{application.apptable.loadingfiltergen}" type="string"
@@ -1236,9 +1286,11 @@
 			<field name="showLabelHeader"
 				label="$m{application.apptable.showlabelheader}" type="boolean" />
 			<field name="headerToUpperCase"
-				label="$m{application.apptable.headertouppercase}" type="boolean" />
+				label="$m{application.apptable.headertouppercase}"
+				type="boolean" />
 			<field name="headerCenterAlign"
-				label="$m{application.apptable.headercenteralign}" type="boolean" />
+				label="$m{application.apptable.headercenteralign}"
+				type="boolean" />
 			<field name="basicSearch"
 				label="$m{application.apptable.basicsearch}" type="boolean" />
 			<field name="totalSummary"
@@ -1252,11 +1304,13 @@
 			<field name="fixedRows"
 				label="$m{application.apptable.fixedrows}" type="boolean" />
 			<field name="limitSelectToColumns"
-				label="$m{application.apptable.limitselecttocolumns}" type="boolean" />
+				label="$m{application.apptable.limitselecttocolumns}"
+				type="boolean" />
 			<field name="itemsPerPage"
 				label="$m{application.apptable.itemsperpage}" type="integer" />
 			<field name="summaryTitleColumns"
-				label="$m{application.apptable.summarytitlecolumns}" type="integer"
+				label="$m{application.apptable.summarytitlecolumns}"
+				type="integer"
 				precision="2" />
 			<field name="columnList"
 				label="$m{application.apptable.columns}" type="child_list"
@@ -1291,7 +1345,8 @@
 			<field name="field"
 				label="$m{application.apptablecolumn.field}" type="string" />
 			<field name="renderWidget"
-				label="$m{application.apptablecolumn.renderwidget}" type="string" />
+				label="$m{application.apptablecolumn.renderwidget}"
+				type="string" />
 			<field name="linkAct"
 				label="$m{application.apptablecolumn.linkact}" type="string"
 				nullable="true" />
@@ -1301,7 +1356,8 @@
 			<field name="widthRatio"
 				label="$m{application.apptablecolumn.widthratio}" type="integer" />
 			<field name="switchOnChange"
-				label="$m{application.apptablecolumn.switchonchange}" type="boolean" />
+				label="$m{application.apptablecolumn.switchonchange}"
+				type="boolean" />
 			<field name="hidden"
 				label="$m{application.apptablecolumn.hidden}" type="boolean" />
 			<field name="disabled"
@@ -1341,11 +1397,13 @@
 				label="$m{application.apptableloading.apptableid}" type="ref"
 				references="appTableRef" inputWidget="application.entitylist" />
 			<field name="label"
-				label="$m{application.apptableloading.loadinglabel}" type="string" />
+				label="$m{application.apptableloading.loadinglabel}"
+				type="string" />
 			<field name="provider"
 				label="$m{application.apptableloading.provider}" type="string" />
 			<field name="orderIndex"
-				label="$m{application.apptableloading.orderindex}" type="integer" />
+				label="$m{application.apptableloading.orderindex}"
+				type="integer" />
 			<uniqueConstraint name="labelUc"
 				description="$m{application.apptableloading.uc.label}"
 				fieldList="appTableId,label" />
@@ -1364,7 +1422,8 @@
 				label="$m{application.apptablefilter.legendlabel}" type="string"
 				nullable="true" />
 			<field name="filterGenerator"
-				label="$m{application.apptablefilter.filtergenerator}" type="string"
+				label="$m{application.apptablefilter.filtergenerator}"
+				type="string"
 				nullable="true" />
 			<field name="filterGeneratorRule"
 				label="$m{application.apptablefilter.filtergeneratorrule}"
@@ -1388,7 +1447,8 @@
 			<field name="entity" label="$m{application.appform.entity}"
 				type="string" />
 			<field name="consolidatedValidation"
-				label="$m{application.appform.consolidatedvalidation}" type="string"
+				label="$m{application.appform.consolidatedvalidation}"
+				type="string"
 				nullable="true" />
 			<field name="consolidatedReview"
 				label="$m{application.appform.consolidatedreview}" type="string"
@@ -1423,13 +1483,15 @@
 				label="$m{application.appform.relatedlists}" type="child_list"
 				references="appFormRelatedListRef" />
 			<field name="fieldStateList"
-				label="$m{application.appform.fieldstatepolicies}" type="child_list"
+				label="$m{application.appform.fieldstatepolicies}"
+				type="child_list"
 				references="appFormStatePolicyRef" />
 			<field name="widgetRulesList"
 				label="$m{application.appform.widgetrulespolicies}"
 				type="child_list" references="appFormWidgetRulesPolicyRef" />
 			<field name="fieldValidationList"
-				label="$m{application.appform.fieldvalidations}" type="child_list"
+				label="$m{application.appform.fieldvalidations}"
+				type="child_list"
 				references="appFormFieldValidationPolicyRef" />
 			<field name="formValidationList"
 				label="$m{application.appform.validations}" type="child_list"
@@ -1456,7 +1518,8 @@
 				label="$m{application.appformfilter.appformid}" type="ref"
 				references="appFormRef" inputWidget="application.entitylist" />
 			<field name="filterGenerator"
-				label="$m{application.appformfilter.filtergenerator}" type="string"
+				label="$m{application.appformfilter.filtergenerator}"
+				type="string"
 				nullable="true" />
 			<field name="filterGeneratorRule"
 				label="$m{application.appformfilter.filtergeneratorrule}"
@@ -1496,7 +1559,8 @@
 				label="$m{application.appformelement.tabapplet}" type="string"
 				nullable="true" />
 			<field name="tabReference"
-				label="$m{application.appformelement.tabreference}" type="string"
+				label="$m{application.appformelement.tabreference}"
+				type="string"
 				nullable="true" />
 			<field name="filter"
 				label="$m{application.appformelement.filter}" type="string"
@@ -1511,25 +1575,30 @@
 				label="$m{application.appformelement.inputwidget}" type="string"
 				nullable="true" />
 			<field name="inputReference"
-				label="$m{application.appformelement.inputreference}" type="string"
+				label="$m{application.appformelement.inputreference}"
+				type="string"
 				nullable="true" />
 			<field name="annotation"
 				label="$m{application.appformelement.annotation}" type="string"
 				nullable="true" />
 			<field name="sectionColumns"
-				label="$m{application.appformelement.sectioncolumns}" type="integer" />
+				label="$m{application.appformelement.sectioncolumns}"
+				type="integer" />
 			<field name="fieldColumn"
-				label="$m{application.appformelement.fieldcolumn}" type="integer" />
+				label="$m{application.appformelement.fieldcolumn}"
+				type="integer" />
 			<field name="minLen"
 				label="$m{application.appformelement.minlen}" type="integer" />
 			<field name="maxLen"
 				label="$m{application.appformelement.maxlen}" type="integer" />
 			<field name="switchOnChange"
-				label="$m{application.appformelement.switchonchange}" type="boolean" />
+				label="$m{application.appformelement.switchonchange}"
+				type="boolean" />
 			<field name="saveAs"
 				label="$m{application.appformelement.saveas}" type="boolean" />
 			<field name="showAnnotation"
-				label="$m{application.appformelement.showannotation}" type="boolean" />
+				label="$m{application.appformelement.showannotation}"
+				type="boolean" />
 			<field name="required"
 				label="$m{application.appformelement.required}" type="boolean" />
 			<field name="ignoreParentCondition"
@@ -1566,7 +1635,8 @@
 			<field name="html"
 				label="$m{application.appformannotation.html}" type="boolean" />
 			<field name="typeDesc"
-				label="$m{application.appformannotation.typedesc}" type="list_only"
+				label="$m{application.appformannotation.typedesc}"
+				type="list_only"
 				key="type" property="description" />
 			<uniqueConstraint name="nameUc"
 				description="$m{application.appformannotation.uc.name}"
@@ -1586,8 +1656,10 @@
 				type="enum_ref" references="uiactiontypelist"
 				inputWidget="application.enumlist" />
 			<field name="highlightType"
-				label="$m{application.appformaction.highlighttype}" type="enum_ref"
-				references="highlighttypelist" inputWidget="application.enumlist"
+				label="$m{application.appformaction.highlighttype}"
+				type="enum_ref"
+				references="highlighttypelist"
+				inputWidget="application.enumlist"
 				nullable="true" />
 			<field name="label" label="$m{application.appformaction.label}"
 				type="string" />
@@ -1596,11 +1668,14 @@
 			<field name="orderIndex"
 				label="$m{application.appformaction.orderindex}" type="integer" />
 			<field name="showOnCreate"
-				label="$m{application.appformaction.showoncreate}" type="boolean" />
+				label="$m{application.appformaction.showoncreate}"
+				type="boolean" />
 			<field name="showOnMaintain"
-				label="$m{application.appformaction.showonmaintain}" type="boolean" />
+				label="$m{application.appformaction.showonmaintain}"
+				type="boolean" />
 			<field name="validateForm"
-				label="$m{application.appformaction.validateform}" type="boolean" />
+				label="$m{application.appformaction.validateform}"
+				type="boolean" />
 			<field name="typeDesc"
 				label="$m{application.appformaction.typedesc}" type="list_only"
 				key="type" property="description" />
@@ -1629,7 +1704,8 @@
 				label="$m{application.appformrelatedlist.filter}" type="string"
 				nullable="true" />
 			<field name="editAction"
-				label="$m{application.appformrelatedlist.editaction}" type="string"
+				label="$m{application.appformrelatedlist.editaction}"
+				type="string"
 				nullable="true" />
 			<uniqueConstraint name="nameUc"
 				description="$m{application.appformrelatedlist.uc.name}"
@@ -1655,7 +1731,8 @@
 			<field name="trigger"
 				label="$m{application.appformstatepolicy.trigger}" type="string" />
 			<field name="onCondition"
-				label="$m{application.appformstatepolicy.oncondition}" type="child"
+				label="$m{application.appformstatepolicy.oncondition}"
+				type="child"
 				category="formstatepolicy" references="appFilterRef" />
 			<field name="setStateList"
 				label="$m{application.appformstatepolicy.setstate}"
@@ -1664,7 +1741,8 @@
 				label="$m{application.appformstatepolicy.setvalue}" type="child"
 				category="formstatepolicy" references="appSetValuesRef" />
 			<field name="typeDesc"
-				label="$m{application.appformstatepolicy.typedesc}" type="list_only"
+				label="$m{application.appformstatepolicy.typedesc}"
+				type="list_only"
 				key="type" property="description" />
 		</entity>
 		<entity name="appFormWidgetRulesPolicy"
@@ -1713,7 +1791,8 @@
 				label="$m{application.appformsetstate.disabled}" type="enum"
 				references="tristatelist" inputWidget="application.enumlist" />
 			<field name="typeDesc"
-				label="$m{application.appformsetstate.typedesc}" type="list_only"
+				label="$m{application.appformsetstate.typedesc}"
+				type="list_only"
 				key="type" property="description" />
 		</entity>
 		<entity name="appFormFieldValidationPolicy"
@@ -1739,13 +1818,15 @@
 			label="$m{application.appformvalidationpolicy.label}"
 			type="com.flowcentraltech.flowcentral.application.entities.AppFormValidationPolicy">
 			<field name="appFormId"
-				label="$m{application.appformvalidationpolicy.appformid}" type="ref"
+				label="$m{application.appformvalidationpolicy.appformid}"
+				type="ref"
 				references="appFormRef" inputWidget="application.entitylist" />
 			<field name="message"
 				label="$m{application.appformvalidationpolicy.message}"
 				type="string" />
 			<field name="target"
-				label="$m{application.appformvalidationpolicy.target}" type="string" />
+				label="$m{application.appformvalidationpolicy.target}"
+				type="string" />
 			<field name="entityName"
 				label="$m{application.appformvalidationpolicy.entityname}"
 				type="list_only" key="appFormId" property="entity" />
@@ -1769,9 +1850,11 @@
 				type="enum_ref" references="messagetypelist"
 				inputWidget="application.enumlist" />
 			<field name="message"
-				label="$m{application.appformreviewpolicy.message}" type="string" />
+				label="$m{application.appformreviewpolicy.message}"
+				type="string" />
 			<field name="skippable"
-				label="$m{application.appformreviewpolicy.skippable}" type="boolean" />
+				label="$m{application.appformreviewpolicy.skippable}"
+				type="boolean" />
 			<field name="formEvents"
 				label="$m{application.appformreviewpolicy.event}" type="string" />
 			<field name="target"
@@ -1784,7 +1867,8 @@
 				type="string" nullable="true" />
 			<field name="errorCondition"
 				label="$m{application.appformreviewpolicy.errorcondition}"
-				type="child" category="formreviewpolicy" references="appFilterRef" />
+				type="child" category="formreviewpolicy"
+				references="appFilterRef" />
 			<field name="messageTypeDesc"
 				label="$m{application.appformreviewpolicy.messagetypedesc}"
 				type="list_only" key="messageType" property="description" />
@@ -1811,10 +1895,12 @@
 			<field name="enumOption"
 				label="$m{application.appwidgettype.enumoption}" type="boolean" />
 			<field name="dataTypeDesc"
-				label="$m{application.appwidgettype.datatypedesc}" type="list_only"
+				label="$m{application.appwidgettype.datatypedesc}"
+				type="list_only"
 				key="dataType" property="description" />
 			<field name="inputTypeDesc"
-				label="$m{application.appwidgettype.inputtypedesc}" type="list_only"
+				label="$m{application.appwidgettype.inputtypedesc}"
+				type="list_only"
 				key="inputType" property="description" />
 		</entity>
 		<entity name="appSuggestionType"
@@ -1833,17 +1919,20 @@
 			label="$m{application.appsuggestion.label}"
 			type="com.flowcentraltech.flowcentral.application.entities.AppSuggestion">
 			<field name="suggestionTypeId"
-				label="$m{application.appsuggestion.suggestiontypeid}" type="ref"
+				label="$m{application.appsuggestion.suggestiontypeid}"
+				type="ref"
 				references="appSuggestionTypeRef"
 				inputWidget="application.entitysearch" />
 			<field name="suggestion"
 				label="$m{application.appsuggestion.suggestion}" type="string" />
 			<field name="applicationName"
 				label="$m{application.appsuggestion.applicationname}"
-				type="list_only" key="suggestionTypeId" property="applicationName" />
+				type="list_only" key="suggestionTypeId"
+				property="applicationName" />
 			<field name="applicationDesc"
 				label="$m{application.appsuggestion.applicationdesc}"
-				type="list_only" key="suggestionTypeId" property="applicationDesc" />
+				type="list_only" key="suggestionTypeId"
+				property="applicationDesc" />
 			<field name="suggestionTypeName"
 				label="$m{application.appsuggestion.suggestiontypename}"
 				type="list_only" key="suggestionTypeId" property="name" />
@@ -1882,7 +1971,8 @@
 				contentType="miniform">
 				<section name="details" columns="type_2">
 					<field name="suggestionTypeId"
-						inputWidget="application.entitysearch" column="0" required="true" />
+						inputWidget="application.entitysearch" column="0"
+						required="true" />
 					<field name="suggestion" inputWidget="application.textarea"
 						column="1" required="true" />
 				</section>
