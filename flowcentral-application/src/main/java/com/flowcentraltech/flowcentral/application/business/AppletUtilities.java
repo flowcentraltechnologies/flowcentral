@@ -1886,7 +1886,7 @@ public interface AppletUtilities extends FlowCentralComponent {
      * @throws UnifyException
      *                        if an error occurs
      */
-    <T extends BaseMappedEntityProviderContext> MappedEntityProvider<T> getProvider(Query<? extends Entity> query)
+    <T extends BaseMappedEntityProviderContext> MappedEntityProvider<T> getMappingProvider(Query<? extends Entity> query)
             throws UnifyException;
 
     /**
@@ -1898,7 +1898,7 @@ public interface AppletUtilities extends FlowCentralComponent {
      * @throws UnifyException
      *                        if an error occurs
      */
-    MappedEntityProvider<? extends BaseMappedEntityProviderContext> getProvider(Class<? extends Entity> entityClass)
+    MappedEntityProvider<? extends BaseMappedEntityProviderContext> getMappingProvider(Class<? extends Entity> entityClass)
             throws UnifyException;
 
     /**

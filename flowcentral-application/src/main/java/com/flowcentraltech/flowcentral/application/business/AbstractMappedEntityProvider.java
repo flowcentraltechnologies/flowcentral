@@ -78,81 +78,88 @@ public abstract class AbstractMappedEntityProvider<U extends BaseMappedEntityPro
     }
 
     @Override
+    public Object create(Entity dest) throws UnifyException {
+        Entity srcInst = createSrcInst(dest);
+        return srcInst != null ? environment().create(srcInst) : null;
+    }
+
+    @Override
     public Entity find(Long id) throws UnifyException {
         Entity record = environment().find(getSrcEntityClass(), id);
-        return create(record);
+        return createDestInst(record);
     }
 
     @Override
     public Entity find(Long id, long versionNo) throws UnifyException {
         Entity record = environment().find(getSrcEntityClass(), id);
-        return create(record);
+        return createDestInst(record);
     }
 
     @Override
     public Entity find(Query<? extends Entity> query) throws UnifyException {
         Entity record = environment().find(convertQuery(query));
-        return create(record);
+        return createDestInst(record);
     }
 
     @Override
     public Entity findLean(Long id) throws UnifyException {
         Entity record = environment().findLean(getSrcEntityClass(), id);
-        return create(record);
+        return createDestInst(record);
     }
 
     @Override
     public Entity findLean(Long id, long versionNo) throws UnifyException {
         Entity record = environment().findLean(getSrcEntityClass(), id);
-        return create(record);
+        return createDestInst(record);
     }
 
     @Override
     public Entity findLean(Query<? extends Entity> query) throws UnifyException {
         Entity record = environment().findLean(convertQuery(query));
-        return create(record);
+        return createDestInst(record);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-    public List<? extends Entity> findAll(Query<? extends Entity> query) throws UnifyException {
-        List<? extends Entity> instList = environment().findAll(convertQuery(query));
-        return createList(instList);
+    public <T extends Entity> List<T> findAll(Query<T> query) throws UnifyException {
+      List<? extends Entity> instList = environment().findAll(convertQuery(query));
+      return (List<T>) createList(instList);
     }
 
     @Override
     public Entity list(Long id) throws UnifyException {
         Entity record = environment().list(getSrcEntityClass(), id);
-        return create(record);
+        return createDestInst(record);
     }
 
     @Override
     public Entity list(Long id, long versionNo) throws UnifyException {
         Entity record = environment().list(getSrcEntityClass(), id);
-        return create(record);
+        return createDestInst(record);
     }
 
     @Override
     public Entity list(Query<? extends Entity> query) throws UnifyException {
         Entity record = environment().list(convertQuery(query));
-        return create(record);
+        return createDestInst(record);
     }
 
     @Override
     public Entity listLean(Long id) throws UnifyException {
         Entity record = environment().listLean(getSrcEntityClass(), id);
-        return create(record);
+        return createDestInst(record);
     }
 
     @Override
     public Entity listLean(Long id, long versionNo) throws UnifyException {
         Entity record = environment().listLean(getSrcEntityClass(), id);
-        return create(record);
+        return createDestInst(record);
     }
 
     @Override
     public Entity listLean(Query<? extends Entity> query) throws UnifyException {
         Entity record = environment().listLean(convertQuery(query));
-        return create(record);
+        return createDestInst(record);
     }
 
     @Override
@@ -217,7 +224,10 @@ public abstract class AbstractMappedEntityProvider<U extends BaseMappedEntityPro
         return au.environment();
     }
 
-    protected abstract void doMappedCopy(U context, ValueStore destValueStore, ValueStore srcValueStore)
+    protected abstract void doMappedCopyFromSrcToDest(U context, ValueStore destValueStore, ValueStore srcValueStore)
+            throws UnifyException;
+
+    protected abstract void doMappedCopyFromDestToSrc(U context, ValueStore srcValueStore, ValueStore destValueStore)
             throws UnifyException;
 
     @SuppressWarnings("unchecked")
@@ -251,7 +261,7 @@ public abstract class AbstractMappedEntityProvider<U extends BaseMappedEntityPro
             for (int i = 0; i < len; i++) {
                 srcValueStore.setDataIndex(i);
                 Entity destInst = ReflectUtils.newInstance(destEntityClass);
-                doMappedCopy(context, new BeanValueStore(destInst), srcValueStore);
+                doMappedCopyFromSrcToDest(context, new BeanValueStore(destInst), srcValueStore);
                 resultList.add(destInst);
             }
 
@@ -262,14 +272,26 @@ public abstract class AbstractMappedEntityProvider<U extends BaseMappedEntityPro
     }
 
     @SuppressWarnings("unchecked")
-    private Entity create(Entity srcInst) throws UnifyException {
+    private Entity createDestInst(Entity srcInst) throws UnifyException {
         if (srcInst != null) {
             Class<? extends Entity> destEntityClass = (Class<? extends Entity>) au.getEntityClassDef(destEntityName)
                     .getEntityClass();
             U context = ReflectUtils.newInstance(contextClass);
             Entity destInst = ReflectUtils.newInstance(destEntityClass);
-            doMappedCopy(context, new BeanValueStore(destInst), new BeanValueStore(srcInst));
+            doMappedCopyFromSrcToDest(context, new BeanValueStore(destInst), new BeanValueStore(srcInst));
             return destInst;
+        }
+
+        return null;
+    }
+
+     private Entity createSrcInst(Entity destInst) throws UnifyException {
+        if (destInst != null) {
+            Class<? extends Entity> srcEntityClass = getSrcEntityClass();
+            U context = ReflectUtils.newInstance(contextClass);
+            Entity srcInst = ReflectUtils.newInstance(srcEntityClass);
+            doMappedCopyFromDestToSrc(context, new BeanValueStore(srcInst), new BeanValueStore(destInst));
+            return srcInst;
         }
 
         return null;

@@ -346,7 +346,7 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
 
     @Override
     @SuppressWarnings("unchecked")
-    public <T extends BaseMappedEntityProviderContext> MappedEntityProvider<T> getProvider(
+    public <T extends BaseMappedEntityProviderContext> MappedEntityProvider<T> getMappingProvider(
             Query<? extends Entity> query) throws UnifyException {
         return (MappedEntityProvider<T>) mappedEntityProviderInfo.getProvider(query.getEntityClass());
     }
@@ -357,7 +357,7 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
     }
 
     @Override
-    public MappedEntityProvider<? extends BaseMappedEntityProviderContext> getProvider(
+    public MappedEntityProvider<? extends BaseMappedEntityProviderContext> getMappingProvider(
             Class<? extends Entity> entityClass) throws UnifyException {
         return mappedEntityProviderInfo.getProvider(entityClass);
     }

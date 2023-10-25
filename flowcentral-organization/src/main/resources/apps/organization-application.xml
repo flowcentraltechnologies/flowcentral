@@ -104,6 +104,16 @@
 			<property name="assignmentPage"
 				value="rolePrivilegeAssignment" />
 		</applet>
+		<applet name="manageMappedRoleWfStep"
+			description="$m{organization.mappedrolewfstep.manage}"
+			label="$m{organization.mappedrolewfstep.label}"
+			type="manage_entitylist_assign" entity="mappedRoleWfStep"
+			baseField="roleId" assignField="wfStepId">
+			<property name="searchTable" value="mappedRoleWfStepTable" />
+			<property name="searchTable.edit" value="true" />
+			<property name="assignmentPage"
+				value="roleWfStepAssignment" />
+		</applet>
 		<applet name="manageZone"
 			description="$m{organization.zone.manage}"
 			label="$m{organization.zone.manage.label}" icon="globe-africa"
@@ -158,6 +168,9 @@
 		<reference name="mappedBranchRef"
 			description="$m{organization.mappedbranch.reference}"
 			entity="mappedBranch" searchField="description" />
+		<reference name="mappedRoleWfStepRef"
+			description="$m{organization.mappedrolewfstep.reference}"
+			entity="mappedRoleWfStep" searchField="wfStepDesc" />
 		<reference name="roleRef"
 			description="$m{organization.role.reference}" entity="role"
 			searchField="description" />
@@ -392,6 +405,9 @@
 			<field name="privilegeList"
 				label="$m{organization.role.privileges}" type="child_list"
 				references="rolePrivilegeRef" />
+			<field name="wfStepList"
+				label="$m{organization.role.wfsteps}" type="child_list"
+				references="mappedRoleWfStepRef" />
 			<uniqueConstraint name="codeUc"
 				description="$m{organization.role.uc.code}" fieldList="code" />
 			<uniqueConstraint name="descUc"
@@ -451,6 +467,35 @@
 			<uniqueConstraint name="privilegeUc"
 				description="$m{organization.roleprivilege.uc.privilege}"
 				fieldList="roleId,privilegeId" />
+		</entity>
+		<entity name="mappedRoleWfStep"
+			description="$m{organization.mappedrolewfstep}"
+			label="$m{organization.mappedrolewfstep.label}"
+			type="com.flowcentraltech.flowcentral.organization.entities.MappedRoleWfStep"
+			delegate="mappedentity-environmentdelegate" table="FC_MAPPEDROLEWFSTEP"
+			mapped="true" auditable="true" reportable="true">
+			<field name="roleId" label="$m{organization.mappedrolewfstep.roleid}"
+				type="ref" references="roleRef" inputWidget="application.entitysearch" />
+			<field name="wfStepId" label="$m{organization.mappedrolewfstep.stepid}"
+				type="long"  />
+			<field name="wfStepName" label="$m{organization.mappedrolewfstep.stepname}"
+				type="string"/>
+			<field name="wfStepDesc" label="$m{organization.mappedrolewfstep.stepdesc}"
+				type="string" />
+			<field name="wfStepLabel" label="$m{organization.mappedrolewfstep.steplabel}"
+				type="string" />
+			<field name="workflowName"
+				label="$m{organization.mappedrolewfstep.workflowname}" type="string"/>
+			<field name="workflowDesc"
+				label="$m{organization.mappedrolewfstep.workflowdesc}" type="string"/>
+			<field name="applicationName"
+				label="$m{organization.mappedrolewfstep.applicationname}" type="string"/>
+			<field name="applicationDesc"
+				label="$m{organization.mappedrolewfstep.applicationdesc}" type="string" />
+			<field name="roleCode" label="$m{organization.mappedrolewfstep.rolecode}"
+				type="string" />
+			<field name="roleDesc" label="$m{organization.mappedrolewfstep.roledesc}"
+				type="string" />
 		</entity>
 		<entity name="zone" description="$m{organization.zone}"
 			label="$m{organization.zone.label}"
@@ -573,6 +618,17 @@
 				widthRatio="1" />
 			<column field="updateDt" renderWidget="application.datetime"
 				widthRatio="1" />
+		</table>
+		<table name="mappedRoleWfStepTable"
+			description="$m{organization.mappedrolewfstep.table}"
+			label="$m{organization.mappedrolewfstep.table.label}" entity="mappedRoleWfStep"
+			itemsPerPage="20" serialNo="true">
+			<column field="workflowDesc" renderWidget="application.text"
+				label="$m{organization.mappedrolewfstep.workflow}" widthRatio="1" order="ASC"/>
+			<column field="wfStepDesc" renderWidget="application.text"
+				label="$m{organization.mappedrolewfstep.stepdesc}" widthRatio="1" />
+			<column field="wfStepLabel" renderWidget="application.text"
+				label="$m{organization.mappedrolewfstep.steplabel}" widthRatio="1" />
 		</table>
 	</tables>
 	<!-- Forms -->
@@ -703,6 +759,10 @@
 				label="$m{organization.role.form.privileges}"
 				contentType="child_list" applet="manageRolePrivilege"
 				reference="privilegeList" />
+			<tab name="workflowSteps"
+				label="$m{organization.role.form.wfsteps}"
+				contentType="child_list" applet="manageMappedRoleWfStep"
+				reference="wfStepList" />
 			<tab name="departmentDetails"
 				label="$m{organization.role.form.departmentdetails}"
 				mappedFieldName="departmentId"
@@ -754,5 +814,17 @@
 			assignCaption="$m{organization.role.privilege.assigned}"
 			unassignCaption="$m{organization.role.privilege.available}"
 			assignList="privilegeinlist" unassignList="privilegenotinlist" />
+		<assignmentPage name="roleWfStepAssignment"
+			description="$m{organization.role.wfstep.assignment}"
+			label="$m{organization.role.wfstep.assignment}"
+			entity="mappedRoleWfStep"
+			commitPolicy="rolewfstep-assignmenteditpolicy" baseField="roleId"
+			assignField="stepId"
+			filterCaption1="$m{organization.role.wfstep.workflow}"
+			filterCaption2="$m{organization.role.wfstep.application}"
+			filterList1="mappedworkflowlist" filterList2="applicationlist"
+			assignCaption="$m{organization.role.wfstep.assigned}"
+			unassignCaption="$m{organization.role.wfstep.available}"
+			assignList="mappedwfroleinlist" unassignList="mappedwfnotinlist" />
 	</assignmentPages>
 </application>
