@@ -15,7 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.organization.entities;
 
-import com.flowcentraltech.flowcentral.common.entities.BaseEntity;
+import com.flowcentraltech.flowcentral.common.entities.BaseAuditEntity;
 import com.tcdng.unify.core.annotation.Column;
 import com.tcdng.unify.core.annotation.ForeignKey;
 import com.tcdng.unify.core.annotation.Mapped;
@@ -30,7 +30,7 @@ import com.tcdng.unify.core.util.StringUtils;
  */
 @Mapped("default-mappedrolewfstepprovider")
 @TableName("FC_MAPPEDROLEWFSTEP")
-public class MappedRoleWfStep extends BaseEntity {
+public class MappedRoleWfStep extends BaseAuditEntity {
 
     @ForeignKey(Role.class)
     private Long roleId;

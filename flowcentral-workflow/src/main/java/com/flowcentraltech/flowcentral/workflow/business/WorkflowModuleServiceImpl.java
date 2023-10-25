@@ -1423,6 +1423,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                                     environment().updateByIdVersionEditableChildren(originalInst);
                                     fileAttachmentProvider.sychFileAttachments(WORK_CATEGORY, entityDef.getLongName(),
                                             originalCopyId, (Long) wfEntityInst.getId());
+                                    
+                                    environment().findEditableChildren(wfEntityInst);
                                 }
                             }
                                 break;

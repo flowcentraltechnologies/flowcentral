@@ -269,7 +269,7 @@ public class MappedEntityEnvironmentDelegate extends AbstractEnvironmentDelegate
 
     @Override
     public Object create(Entity record) throws UnifyException {
-        throw new UnsupportedOperationException();
+        return au().isMappingProviderPresent(record.getClass()) ? au().getMappingProvider(record.getClass()).create(record) : null;
     }
 
     @Override

@@ -84,6 +84,18 @@ public abstract class AbstractMappedEntityProvider<U extends BaseMappedEntityPro
     }
 
     @Override
+    public int updateById(Entity dest) throws UnifyException {
+        Entity srcInst = createSrcInst(dest);
+        return srcInst != null ? environment().updateById(srcInst) : 0;
+    }
+
+    @Override
+    public int updateByIdVersion(Entity dest) throws UnifyException {
+        Entity srcInst = createSrcInst(dest);
+        return srcInst != null ? environment().updateByIdVersion(srcInst) : 0;
+    }
+
+    @Override
     public Entity find(Long id) throws UnifyException {
         Entity record = environment().find(getSrcEntityClass(), id);
         return createDestInst(record);
@@ -122,8 +134,8 @@ public abstract class AbstractMappedEntityProvider<U extends BaseMappedEntityPro
     @SuppressWarnings("unchecked")
     @Override
     public <T extends Entity> List<T> findAll(Query<T> query) throws UnifyException {
-      List<? extends Entity> instList = environment().findAll(convertQuery(query));
-      return (List<T>) createList(instList);
+        List<? extends Entity> instList = environment().findAll(convertQuery(query));
+        return (List<T>) createList(instList);
     }
 
     @Override
@@ -190,7 +202,7 @@ public abstract class AbstractMappedEntityProvider<U extends BaseMappedEntityPro
     }
 
     @Override
-    public <T> Set<T> valueSet(Class<T> fieldClass, String fieldName, Query<? extends Entity> query)
+    public <T, V extends Entity> Set<T> valueSet(Class<T> fieldClass, String fieldName, Query<V> query)
             throws UnifyException {
         return environment().valueSet(fieldClass, fieldName, convertQuery(query));
     }
@@ -250,6 +262,7 @@ public abstract class AbstractMappedEntityProvider<U extends BaseMappedEntityPro
             _query.addRestriction(restriction);
         }
 
+        _query.setOrder(query.getOrder());
         return _query;
     }
 
@@ -290,7 +303,7 @@ public abstract class AbstractMappedEntityProvider<U extends BaseMappedEntityPro
         return null;
     }
 
-     private Entity createSrcInst(Entity destInst) throws UnifyException {
+    private Entity createSrcInst(Entity destInst) throws UnifyException {
         if (destInst != null) {
             Class<? extends Entity> srcEntityClass = getSrcEntityClass();
             U context = ReflectUtils.newInstance(contextClass);
