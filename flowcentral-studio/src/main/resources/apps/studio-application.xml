@@ -4618,7 +4618,10 @@
 					<field name="name" inputWidget="application.name" column="0"
 						required="true" />
 					<field name="description" inputWidget="application.text"
-						column="1" required="true" />
+						column="0" required="true" />
+					<field name="filterGenerator"
+						inputWidget="studio.workflowfiltergeneratorlist"
+						column="1" />
 				</section>
 			</tab>
 			<tab name="condition"
