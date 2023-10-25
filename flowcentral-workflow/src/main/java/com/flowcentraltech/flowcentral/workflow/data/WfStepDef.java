@@ -152,7 +152,10 @@ public class WfStepDef {
                 this.formActionDefList.add(new FormActionDef(UIActionType.BUTTON, wfUserActionDef.getHighlightType(),
                         wfUserActionDef.getName(), wfUserActionDef.getDescription(), wfUserActionDef.getLabel(),
                         wfUserActionDef.getSymbol(), wfUserActionDef.getStyleClass(), wfUserActionDef.getOrderIndex(),
-                        wfUserActionDef.isValidatePage(), null));
+                        wfUserActionDef.isValidatePage(),
+                        wfUserActionDef.isShowOnCondition() ? (appletDef.isFilter(wfUserActionDef.getShowOnCondition())
+                                ? appletDef.getFilterDef(wfUserActionDef.getShowOnCondition()).getFilterDef()
+                                : null) : null));
             }
         }
 
@@ -516,8 +519,8 @@ public class WfStepDef {
 
         public Builder addWfUserActionDef(RequirementType commentRequirement, HighlightType highlightType, String name,
                 String description, String label, String symbol, String styleClass, String nextStepName,
-                String setValuesName, String appletSetValuesName, int orderIndex, boolean formReview,
-                boolean validatePage, boolean forwarderPreferred) {
+                String setValuesName, String appletSetValuesName, String showOnCondition, int orderIndex,
+                boolean formReview, boolean validatePage, boolean forwarderPreferred) {
             if (userActionList == null) {
                 userActionList = new LinkedHashMap<String, WfUserActionDef>();
             }
@@ -532,8 +535,8 @@ public class WfStepDef {
 
             userActionList.put(name,
                     new WfUserActionDef(commentRequirement, highlightType, name, description, label, symbol, styleClass,
-                            nextStepName, setValuesName, appletSetValuesName, orderIndex, formReview, validatePage,
-                            forwarderPreferred));
+                            nextStepName, setValuesName, appletSetValuesName, showOnCondition, orderIndex, formReview,
+                            validatePage, forwarderPreferred));
             return this;
         }
 
@@ -564,8 +567,8 @@ public class WfStepDef {
         }
 
         public Builder addWfAlertDef(WorkflowAlertType type, String name, String description, String recipientPolicy,
-                String recipientNameRule, String recipientContactRule, String generator, String fireOnPrevStepName, String fireOnActionName,
-                String fireOnCondition, boolean alertHeldBy, boolean alertWorkflowRoles) {
+                String recipientNameRule, String recipientContactRule, String generator, String fireOnPrevStepName,
+                String fireOnActionName, String fireOnCondition, boolean alertHeldBy, boolean alertWorkflowRoles) {
             if (alertList == null) {
                 alertList = new LinkedHashMap<String, WfAlertDef>();
             }
@@ -576,7 +579,8 @@ public class WfStepDef {
 
             alertList.put(name,
                     new WfAlertDef(type, name, description, recipientPolicy, recipientNameRule, recipientContactRule,
-                            generator, fireOnPrevStepName, fireOnActionName, fireOnCondition, alertHeldBy, alertWorkflowRoles));
+                            generator, fireOnPrevStepName, fireOnActionName, fireOnCondition, alertHeldBy,
+                            alertWorkflowRoles));
             return this;
         }
 

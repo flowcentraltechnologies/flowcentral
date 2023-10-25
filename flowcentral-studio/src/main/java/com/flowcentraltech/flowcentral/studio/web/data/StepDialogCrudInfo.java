@@ -31,15 +31,17 @@ public class StepDialogCrudInfo<T> extends DialogCrudInfo<T> {
 
     private String entityName;
 
+    private String appletName;
+
     private Long workflowId;
-    
+
     private List<? extends Listable> prevStepList;
-    
+
     private List<? extends Listable> actionList;
 
     public StepDialogCrudInfo(Class<T> typeClass, String entityName, Long workflowId) {
         super(typeClass);
-        this.entityName = entityName; 
+        this.entityName = entityName;
         this.workflowId = workflowId;
     }
 
@@ -49,6 +51,14 @@ public class StepDialogCrudInfo<T> extends DialogCrudInfo<T> {
 
     public String getEntityName() {
         return entityName;
+    }
+
+    public void setAppletName(String appletName) {
+        this.appletName = appletName;
+    }
+
+    public String getAppletName() {
+        return appletName;
     }
 
     public List<? extends Listable> getPrevStepList() {

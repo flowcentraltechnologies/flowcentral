@@ -335,7 +335,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                                     wfStepUserAction.getDescription(), wfStepUserAction.getLabel(),
                                     wfStepUserAction.getSymbol(), wfStepUserAction.getStyleClass(),
                                     wfStepUserAction.getNextStepName(), wfStepUserAction.getSetValuesName(),
-                                    wfStepUserAction.getAppletSetValuesName(), wfStepUserAction.getOrderIndex(),
+                                    wfStepUserAction.getAppletSetValuesName(), wfStepUserAction.getShowOnCondition(), wfStepUserAction.getOrderIndex(),
                                     wfStepUserAction.isFormReview(), wfStepUserAction.isValidatePage(),
                                     wfStepUserAction.isForwarderPreferred());
                         }

@@ -332,6 +332,7 @@ public class WorkflowEditor {
         lastEditStepName = stepName;
         switch (studioWorkflowEditType) {
             case ALERT:
+                ((StepDialogCrudInfo<?>) alertsCrudInfo).setAppletName(step.getAppletName());
                 alertsCrudInfo
                         .setTitle(au.resolveSessionMessage("$m{wfstepalertscrudpanel.caption}", step.getDescription()));
                 alertsCrudInfo.setItemList(step.getAlertList());
@@ -351,6 +352,7 @@ public class WorkflowEditor {
 
                 return stepAlertsPanelName;
             case MULTI_ROUTING:
+                ((StepDialogCrudInfo<?>) routingsCrudInfo).setAppletName(step.getAppletName());
                 routingsCrudInfo.setTitle(
                         au.resolveSessionMessage("$m{wfsteproutingscrudpanel.caption}", step.getDescription()));
                 routingsCrudInfo.setItemList(step.getRoutingList());
@@ -371,6 +373,7 @@ public class WorkflowEditor {
                 dialogTitle = au.resolveSessionMessage("$m{wfstepeditpanel.caption}", itemDesc);
                 return editStepPanelName;
             case USER_ACTION:
+                ((StepDialogCrudInfo<?>) userActionsCrudInfo).setAppletName(step.getAppletName());
                 userActionsCrudInfo.setTitle(
                         au.resolveSessionMessage("$m{wfstepuseractionscrudpanel.caption}", step.getDescription()));
                 userActionsCrudInfo.setItemList(step.getUserActionList());

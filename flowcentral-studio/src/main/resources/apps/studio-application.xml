@@ -4619,6 +4619,9 @@
 						required="true" />
 					<field name="description" inputWidget="application.text"
 						column="1" required="true" />
+					<field name="filterGenerator"
+						inputWidget="studio.workflowfiltergeneratorlist"
+						column="1" />
 				</section>
 			</tab>
 			<tab name="condition"
