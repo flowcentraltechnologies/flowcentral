@@ -329,7 +329,7 @@ public class MappedEntityEnvironmentDelegate extends AbstractEnvironmentDelegate
 
     @Override
     public int deleteAll(Query<? extends Entity> query) throws UnifyException {
-        throw new UnsupportedOperationException();
+        return au().isMappingProviderPresent(query) ? au().getMappingProvider(query).deleteAll(query) : 0;
     }
 
     @Override

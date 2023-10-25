@@ -848,7 +848,7 @@
 			label="$m{organization.role.wfstep.assignment}"
 			entity="mappedRoleWfStep"
 			commitPolicy="roleprivilge-assignmenteditpolicy" baseField="roleId"
-			assignField="stepId"
+			assignField="wfStepId"
 			filterCaption1="$m{organization.role.wfstep.workflow}"
 			filterCaption2="$m{organization.role.wfstep.application}"
 			filterList1="mappedworkflowlist"

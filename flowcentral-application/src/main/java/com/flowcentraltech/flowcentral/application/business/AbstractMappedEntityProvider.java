@@ -174,6 +174,11 @@ public abstract class AbstractMappedEntityProvider<U extends BaseMappedEntityPro
     }
 
     @Override
+    public int deleteAll(Query<? extends Entity> query) throws UnifyException {
+        return environment().deleteAll(convertQuery(query));
+    }
+
+    @Override
     public <T> List<T> valueList(Class<T> fieldClass, String fieldName, Query<? extends Entity> query)
             throws UnifyException {
         return environment().valueList(fieldClass, fieldName, convertQuery(query));
