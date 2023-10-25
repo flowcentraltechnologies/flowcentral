@@ -64,7 +64,9 @@ public class WfStepConfig extends BaseNameConfig {
     private Integer criticalMinutes;
 
     private String valueGenerator;
-
+    
+    private String appletSetValuesName;
+    
     private Integer expiryMinutes;
 
     private boolean audit;
@@ -227,6 +229,15 @@ public class WfStepConfig extends BaseNameConfig {
     @XmlAttribute
     public void setValueGenerator(String valueGenerator) {
         this.valueGenerator = valueGenerator;
+    }
+
+    public String getAppletSetValuesName() {
+        return appletSetValuesName;
+    }
+
+    @XmlAttribute(name = "appletSetValues")
+    public void setAppletSetValuesName(String appletSetValuesName) {
+        this.appletSetValuesName = appletSetValuesName;
     }
 
     public Integer getExpiryMinutes() {

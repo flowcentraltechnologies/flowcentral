@@ -83,6 +83,7 @@ import com.flowcentraltech.flowcentral.common.business.policies.TableSummaryLine
 import com.flowcentraltech.flowcentral.common.constants.OwnershipType;
 import com.flowcentraltech.flowcentral.common.data.FormListingOptions;
 import com.flowcentraltech.flowcentral.common.data.ParamValuesDef;
+import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
 import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
 import com.tcdng.unify.common.util.StringToken;
 import com.tcdng.unify.core.UnifyComponent;
@@ -626,6 +627,19 @@ public interface AppletUtilities extends FlowCentralComponent {
      *                        if an error occurs.
      */
     boolean isAppletWithWorkflowCopy(String appletName) throws UnifyException;
+
+    /**
+     * Checks if work entity is with pending draft
+     * 
+     * @param entityClass
+     *                    the entity class
+     * @param id
+     *                    the entity ID
+     * @return true if a draft exists otherwise false
+     * @throws UnifyException
+     *                        if an error occurs.
+     */
+    boolean isWorkEntityWithPendingDraft(Class<? extends WorkEntity> entityClass, Long id) throws UnifyException;;
 
     /**
      * Gets a application entity class definition.
@@ -1872,7 +1886,7 @@ public interface AppletUtilities extends FlowCentralComponent {
      * @throws UnifyException
      *                        if an error occurs
      */
-    <T extends BaseMappedEntityProviderContext> MappedEntityProvider<T> getProvider(Query<? extends Entity> query)
+    <T extends BaseMappedEntityProviderContext> MappedEntityProvider<T> getMappingProvider(Query<? extends Entity> query)
             throws UnifyException;
 
     /**
@@ -1884,7 +1898,7 @@ public interface AppletUtilities extends FlowCentralComponent {
      * @throws UnifyException
      *                        if an error occurs
      */
-    MappedEntityProvider<? extends BaseMappedEntityProviderContext> getProvider(Class<? extends Entity> entityClass)
+    MappedEntityProvider<? extends BaseMappedEntityProviderContext> getMappingProvider(Class<? extends Entity> entityClass)
             throws UnifyException;
 
     /**

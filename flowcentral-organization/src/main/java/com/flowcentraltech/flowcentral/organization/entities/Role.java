@@ -58,9 +58,12 @@ public class Role extends BaseStatusWorkTenantEntity {
 
     @Column(name = "DASHBOARD_CD", length = 64, nullable = true)
     private String dashboardCode;
-
+    
     @ChildList
     private List<RolePrivilege> privilegeList;
+
+    @ChildList
+    private List<MappedRoleWfStep> wfStepList;
 
     public Long getDepartmentId() {
         return departmentId;
@@ -124,5 +127,13 @@ public class Role extends BaseStatusWorkTenantEntity {
 
     public void setPrivilegeList(List<RolePrivilege> privilegeList) {
         this.privilegeList = privilegeList;
+    }
+
+    public List<MappedRoleWfStep> getWfStepList() {
+        return wfStepList;
+    }
+
+    public void setWfStepList(List<MappedRoleWfStep> wfStepList) {
+        this.wfStepList = wfStepList;
     }
 }

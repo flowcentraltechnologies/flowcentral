@@ -17,11 +17,11 @@ package com.flowcentraltech.flowcentral.application.business;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.database.Entity;
+import com.tcdng.unify.core.database.MappedEntityRepository;
 import com.tcdng.unify.core.database.Query;
 
 /**
@@ -30,7 +30,8 @@ import com.tcdng.unify.core.database.Query;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface MappedEntityProvider<T extends BaseMappedEntityProviderContext> extends FlowCentralComponent {
+public interface MappedEntityProvider<T extends BaseMappedEntityProviderContext>
+        extends FlowCentralComponent, MappedEntityRepository {
 
     String destEntity();
 
@@ -47,8 +48,6 @@ public interface MappedEntityProvider<T extends BaseMappedEntityProviderContext>
     Entity findLean(Long id, long versionNo) throws UnifyException;
 
     Entity findLean(Query<? extends Entity> query) throws UnifyException;
-
-    List<? extends Entity> findAll(Query<? extends Entity> query) throws UnifyException;
 
     Entity list(Long id) throws UnifyException;
 
@@ -69,8 +68,6 @@ public interface MappedEntityProvider<T extends BaseMappedEntityProviderContext>
     <U> List<U> valueList(Class<U> fieldClass, String fieldName, Query<? extends Entity> query) throws UnifyException;
 
     <U> U value(Class<U> fieldClass, String fieldName, Query<? extends Entity> query) throws UnifyException;
-
-    <U> Set<U> valueSet(Class<U> fieldClass, String fieldName, Query<? extends Entity> query) throws UnifyException;
 
     <U, V> Map<U, V> valueMap(Class<U> keyClass, String keyName, Class<V> valueClass, String valueName,
             Query<? extends Entity> query) throws UnifyException;

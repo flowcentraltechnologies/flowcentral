@@ -346,7 +346,7 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
 
     @Override
     @SuppressWarnings("unchecked")
-    public <T extends BaseMappedEntityProviderContext> MappedEntityProvider<T> getProvider(
+    public <T extends BaseMappedEntityProviderContext> MappedEntityProvider<T> getMappingProvider(
             Query<? extends Entity> query) throws UnifyException {
         return (MappedEntityProvider<T>) mappedEntityProviderInfo.getProvider(query.getEntityClass());
     }
@@ -357,7 +357,7 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
     }
 
     @Override
-    public MappedEntityProvider<? extends BaseMappedEntityProviderContext> getProvider(
+    public MappedEntityProvider<? extends BaseMappedEntityProviderContext> getMappingProvider(
             Class<? extends Entity> entityClass) throws UnifyException {
         return mappedEntityProviderInfo.getProvider(entityClass);
     }
@@ -703,6 +703,11 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
     @Override
     public boolean isAppletWithWorkflowCopy(String appletName) throws UnifyException {
         return applicationModuleService.isAppletWithWorkflowCopy(appletName);
+    }
+
+    @Override
+    public boolean isWorkEntityWithPendingDraft(Class<? extends WorkEntity> entityClass, Long id) throws UnifyException {
+        return applicationModuleService.isWorkEntityWithPendingDraft(entityClass, id);
     }
 
     @Override
@@ -2105,7 +2110,7 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
 
         if (formAppletDef.getPropValue(boolean.class, AppletPropertyConstants.WORKFLOWCOPY)) {
             final String wfCopyCreateSetValuesName = formAppletDef.getPropValue(String.class,
-                    AppletPropertyConstants.WORKFLOWCOPY_CREATE_SETVALUES);
+                    AppletPropertyConstants.WORKFLOWCOPY_CREATE_COPY_SETVALUES);
             if (!StringUtils.isBlank(wfCopyCreateSetValuesName)) {
                 AppletSetValuesDef appletSetValuesDef = formAppletDef.getSetValues(wfCopyCreateSetValuesName);
                 appletSetValuesDef.getSetValuesDef().apply(this, _entityDef, getNow(), inst, Collections.emptyMap(),
@@ -2181,7 +2186,7 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
         ValueStore wfCopyValueStore = new BeanValueStore(entityClassDef.newInst());
         wfCopyValueStore.copyWithExclusions(new BeanValueStore(inst), ApplicationEntityUtils.RESERVED_BASE_FIELDS);
         final String wfCopyUpdateSetValuesName = formAppletDef.getPropValue(String.class,
-                AppletPropertyConstants.WORKFLOWCOPY_UPDATE_SETVALUES);
+                AppletPropertyConstants.WORKFLOWCOPY_UPDATE_COPY_SETVALUES);
         if (!StringUtils.isBlank(wfCopyUpdateSetValuesName)) {
             AppletSetValuesDef appletSetValuesDef = formAppletDef.getSetValues(wfCopyUpdateSetValuesName);
             appletSetValuesDef.getSetValuesDef().apply(this, entityClassDef.getEntityDef(), getNow(), wfCopyValueStore,

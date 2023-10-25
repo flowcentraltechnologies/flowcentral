@@ -83,20 +83,36 @@
 			<property name="maintainForm.delete" value="true" />
 			<property name="maintainForm.attachments" value="true" />
 			<property name="workflowCopy" value="true" />
+			<property name="workflowCopy.create.copy.setvalues"
+				value="onCopySetValues" />
 			<property name="workflowCopy.create.alert"
 				value="userCreationApproval" />
+			<property name="workflowCopy.create.setvalues"
+				value="onSubmitSetValues" />
 			<property name="workflowCopy.create.approval.alert"
 				value="userCreationApproved" />
+			<property name="workflowCopy.create.approval.setvalues"
+				value="onApproveSetValues" />
+			<property name="workflowCopy.create.rejection.alert"
+				value="userCreationReject" />
+			<property name="workflowCopy.create.rejection.setvalues"
+				value="onRejectSetValues" />
+			<property name="workflowCopy.create.resubmit.alert"
+				value="userCreationResubmit" />
+			<property name="workflowCopy.update.copy.setvalues"
+				value="onCopySetValues" />
 			<property name="workflowCopy.update.alert"
 				value="userUpdateApproval" />
-			<property name="workflowCopy.create.setvalues"
-				value="createSetValues" />
-			<property name="workflowCopy.create.approval.setvalues"
-				value="createApprovedSetValues" />
 			<property name="workflowCopy.update.setvalues"
-				value="createSetValues" />
+				value="onSubmitSetValues" />
 			<property name="workflowCopy.update.approval.setvalues"
-				value="createApprovedSetValues" />
+				value="onApproveSetValues" />
+			<property name="workflowCopy.update.rejection.alert"
+				value="userUpdateReject" />
+			<property name="workflowCopy.update.rejection.setvalues"
+				value="onRejectSetValues" />
+			<property name="workflowCopy.update.resubmit.alert"
+				value="userUpdateResubmit" />
 			<alert name="userCreationApproval"
 				description="User Creation Approval Pending"
 				sender="usercreation-approvalpending" />
@@ -105,23 +121,47 @@
 				sender="usercreation-approved"
 				recipientPolicy="entity-wfrecipientpolicy"
 				recipientNameRule="fullName" recipientContactRule="email" />
+			<alert name="userCreationReject"
+				description="User Creation Review Pending"
+				sender="usercreation-reviewpending" />
+			<alert name="userCreationResubmit"
+				description="User Creation Resubmit Pending"
+				sender="usercreation-resubmitpending" />
 			<alert name="userUpdateApproval"
 				description="User Update Approval Pending"
 				sender="userupdate-approvalpending" />
+			<alert name="userUpdateReject"
+				description="User Update Review Pending"
+				sender="userupdate-reviewpending" />
+			<alert name="userUpdateResubmit"
+				description="User Update Resubmit Pending"
+				sender="userupdate-resubmitpending" />
 			<filter name="nonSystemRecords"
 				description="$m{common.filter.nonsystemrecords}">
 				<restriction type="greater_than" field="id" paramA="0" />
 			</filter>
-			<values name="createSetValues"
-				description="$m{security.user.setvalues.create}">
+			<values name="onCopySetValues"
+				description="$m{security.user.setvalues.oncopy}">
+				<setValues>
+					<setValue field="workflowStatus" value="AWS" />
+				</setValues>
+			</values>
+			<values name="onSubmitSetValues"
+				description="$m{security.user.setvalues.onsubmit}">
 				<setValues>
 					<setValue field="workflowStatus" value="AWA" />
 				</setValues>
 			</values>
-			<values name="createApprovedSetValues"
-				description="$m{security.user.setvalues.createapproved}">
+			<values name="onApproveSetValues"
+				description="$m{security.user.setvalues.onapprove}">
 				<setValues>
 					<setValue field="workflowStatus" value="APR" />
+				</setValues>
+			</values>
+			<values name="onRejectSetValues"
+				description="$m{security.user.setvalues.onreject}">
+				<setValues>
+					<setValue field="workflowStatus" value="AWR" />
 				</setValues>
 			</values>
 		</applet>

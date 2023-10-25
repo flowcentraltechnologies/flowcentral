@@ -27,10 +27,7 @@ import com.flowcentraltech.flowcentral.application.web.data.FormContext;
 import com.flowcentraltech.flowcentral.application.web.panels.EntitySearch;
 import com.flowcentraltech.flowcentral.common.constants.WfItemVersionType;
 import com.tcdng.unify.core.UnifyException;
-import com.tcdng.unify.core.criterion.And;
 import com.tcdng.unify.core.criterion.Equals;
-import com.tcdng.unify.core.criterion.IsNull;
-import com.tcdng.unify.core.criterion.Or;
 import com.tcdng.unify.core.criterion.Restriction;
 
 /**
@@ -43,12 +40,11 @@ public class ManageEntityListApplet extends AbstractEntityFormApplet {
 
     private String appletDescription;
 
-    private static final Restriction UPDATE_DRAFT_BASE_RESTRICTION = new And()
-            .add(new Equals("wfItemVersionType", WfItemVersionType.DRAFT))
-            .add(new Or().add(new IsNull("inWorkflow")).add(new Equals("inWorkflow", Boolean.FALSE)));
+    private static final Restriction UPDATE_DRAFT_BASE_RESTRICTION = new Equals("wfItemVersionType",
+            WfItemVersionType.DRAFT);
 
-    private static final Restriction ORIGINAL_BASE_RESTRICTION = new And()
-            .add(new Equals("wfItemVersionType", WfItemVersionType.ORIGINAL));
+    private static final Restriction ORIGINAL_BASE_RESTRICTION = new Equals("wfItemVersionType",
+            WfItemVersionType.ORIGINAL);
 
     public ManageEntityListApplet(AppletUtilities au, String pathVariable,
             AppletWidgetReferences appletWidgetReferences, EntityFormEventHandlers formEventHandlers)
@@ -83,7 +79,7 @@ public class ManageEntityListApplet extends AbstractEntityFormApplet {
                                 isUpdateDraft ? UPDATE_DRAFT_BASE_RESTRICTION : ORIGINAL_BASE_RESTRICTION),
                         au.specialParamProvider());
             }
-         }
+        }
 
         navBackToSearch();
     }

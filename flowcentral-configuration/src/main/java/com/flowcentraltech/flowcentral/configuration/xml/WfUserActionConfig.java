@@ -35,6 +35,8 @@ public class WfUserActionConfig extends BaseNameConfig {
     private String nextStepName;
     
     private String setValuesName;
+    
+    private String appletSetValuesName;
 
     private RequirementType commentRequirement;
 
@@ -68,6 +70,15 @@ public class WfUserActionConfig extends BaseNameConfig {
     @XmlAttribute(name = "setValues")
     public void setSetValuesName(String setValuesName) {
         this.setValuesName = setValuesName;
+    }
+
+    public String getAppletSetValuesName() {
+        return appletSetValuesName;
+    }
+
+    @XmlAttribute(name = "appletSetValues")
+    public void setAppletSetValuesName(String appletSetValuesName) {
+        this.appletSetValuesName = appletSetValuesName;
     }
 
     public RequirementType getCommentRequirement() {

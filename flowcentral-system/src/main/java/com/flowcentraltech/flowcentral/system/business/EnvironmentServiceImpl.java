@@ -280,6 +280,11 @@ public class EnvironmentServiceImpl extends AbstractBusinessService implements E
     }
 
     @Override
+    public int updateById(Entity record) throws UnifyException {
+        return db(record.getClass()).updateById(record);
+    }
+
+    @Override
     public int updateByIdVersion(Entity record) throws UnifyException {
         return db(record.getClass()).updateByIdVersion(record);
     }

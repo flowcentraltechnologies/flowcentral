@@ -436,6 +436,7 @@ public class ApplicationWorkflowInstallerImpl extends AbstractApplicationArtifac
                 wfStep.setNewCommentCaption(stepConfig.getNewCommentCaption());
                 wfStep.setPolicy(stepConfig.getPolicy());
                 wfStep.setValueGenerator(stepConfig.getValueGenerator());
+                wfStep.setAppletSetValuesName(stepConfig.getAppletSetValuesName());
                 wfStep.setRule(stepConfig.getRule());
                 wfStep.setConfigType(ConfigType.MUTABLE_INSTALL);
                 populateChildList(stepConfig, applicationName, wfStep);
@@ -499,6 +500,7 @@ public class ApplicationWorkflowInstallerImpl extends AbstractApplicationArtifac
                 wfStepUserAction.setLabel(resolveApplicationMessage(wfUserActionConfig.getLabel()));
                 wfStepUserAction.setNextStepName(wfUserActionConfig.getNextStepName());
                 wfStepUserAction.setSetValuesName(wfUserActionConfig.getSetValuesName());
+                wfStepUserAction.setAppletSetValuesName(wfUserActionConfig.getAppletSetValuesName());
                 wfStepUserAction.setOrderIndex(wfUserActionConfig.getOrderIndex());
                 wfStepUserAction.setFormReview(wfUserActionConfig.isFormReview());
                 wfStepUserAction.setValidatePage(wfUserActionConfig.isValidatePage());
@@ -526,6 +528,7 @@ public class ApplicationWorkflowInstallerImpl extends AbstractApplicationArtifac
                 wfStepAlert.setAlertHeldBy(wfAlertConfig.isAlertHeldBy());
                 wfStepAlert.setAlertWorkflowRoles(wfAlertConfig.isAlertWorkflowRoles());
                 wfStepAlert.setFireOnPrevStepName(wfAlertConfig.getFireOnPrevStepName());
+                wfStepAlert.setFireOnActionName(wfAlertConfig.getFireOnActionName());
                 wfStepAlert.setFireOnConditionName(wfAlertConfig.getFireOnCondition());
                 alertList.add(wfStepAlert);
             }

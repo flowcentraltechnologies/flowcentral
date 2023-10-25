@@ -38,7 +38,13 @@ public class DefaultMappedDepartmentProvider
     }
 
     @Override
-    protected void doMappedCopy(DefaultMappedDepartmentProviderContext context, ValueStore destValueStore,
+    protected void doMappedCopyFromDestToSrc(DefaultMappedDepartmentProviderContext context, ValueStore srcValueStore,
+            ValueStore destValueStore) throws UnifyException {
+        srcValueStore.copy(destValueStore);
+    }
+
+    @Override
+    protected void doMappedCopyFromSrcToDest(DefaultMappedDepartmentProviderContext context, ValueStore destValueStore,
             ValueStore srcValueStore) throws UnifyException {
         destValueStore.copy(srcValueStore);
     }

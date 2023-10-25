@@ -427,6 +427,17 @@ public interface EnvironmentService extends BusinessService {
      * @throws UnifyException
      *                        if an error occurs
      */
+    int updateById(Entity inst) throws UnifyException;
+
+    /**
+     * Updates a record in database.
+     * 
+     * @param inst
+     *             the record to update
+     * @return the number of records updated
+     * @throws UnifyException
+     *                        if an error occurs
+     */
     int updateByIdVersion(Entity inst) throws UnifyException;
 
     /**

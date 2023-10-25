@@ -47,7 +47,13 @@ public abstract class AbstractTenantProvider extends AbstractMappedEntityProvide
     }
 
     @Override
-    protected void doMappedCopy(MappedTenantProviderContext context, ValueStore destValueStore, ValueStore srcValueStore)
+    protected void doMappedCopyFromDestToSrc(MappedTenantProviderContext context, ValueStore srcValueStore,
+            ValueStore destValueStore) throws UnifyException {
+        throwUnsupportedOperationException();
+    }
+
+    @Override
+    protected void doMappedCopyFromSrcToDest(MappedTenantProviderContext context, ValueStore destValueStore, ValueStore srcValueStore)
             throws UnifyException {
         destValueStore.store("id", srcValueStore.retrieve("id"));
         destValueStore.store("name", srcValueStore.retrieve(providerInfo.getNameField()));

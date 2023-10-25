@@ -39,7 +39,13 @@ public class DefaultMappedBranchProvider extends AbstractMappedEntityProvider<De
     }
 
     @Override
-    protected void doMappedCopy(DefaultMappedBranchProviderContext context, ValueStore destValueStore,
+    protected void doMappedCopyFromDestToSrc(DefaultMappedBranchProviderContext context, ValueStore srcValueStore,
+            ValueStore destValueStore) throws UnifyException {
+        srcValueStore.copy(destValueStore);
+    }
+
+    @Override
+    protected void doMappedCopyFromSrcToDest(DefaultMappedBranchProviderContext context, ValueStore destValueStore,
             ValueStore srcValueStore) throws UnifyException {
         destValueStore.copy(srcValueStore);
 

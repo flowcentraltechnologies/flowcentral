@@ -43,6 +43,8 @@ public class WfAlertDef {
 
     private String fireOnPrevStepName;
 
+    private String fireOnAction;
+
     private String fireOnCondition;
 
     private boolean alertHeldBy;
@@ -51,7 +53,7 @@ public class WfAlertDef {
 
     public WfAlertDef(WorkflowAlertType type, String name, String description, String recipientPolicy,
             String recipientNameRule, String recipientContactRule, String generator, String fireOnPrevStepName,
-            String fireOnCondition, boolean alertHeldBy, boolean alertWorkflowRoles) {
+            String fireOnAction, String fireOnCondition, boolean alertHeldBy, boolean alertWorkflowRoles) {
         this.type = type;
         this.name = name;
         this.description = description;
@@ -110,7 +112,16 @@ public class WfAlertDef {
     }
 
     public boolean isFireAlertOnPreviousStep(String prevStepName) {
-        return StringUtils.isBlank(fireOnPrevStepName) || fireOnPrevStepName.equals(prevStepName);
+        return StringUtils.isBlank(fireOnAction)
+                && (StringUtils.isBlank(fireOnPrevStepName) || fireOnPrevStepName.equals(prevStepName));
+    }
+
+    public String getFireOnAction() {
+        return fireOnAction;
+    }
+
+    public boolean isFireAlertOnAction(String actionName) {
+        return fireOnAction != null && fireOnAction.equals(actionName);
     }
 
     public boolean isWithFireAlertOnCondition() {

@@ -185,6 +185,7 @@ public class WorkflowsXmlGenerator extends AbstractStaticArtifactGenerator {
                         wfStepConfig.setPolicy(wfStep.getPolicy());
                         wfStepConfig.setRule(wfStep.getRule());
                         wfStepConfig.setValueGenerator(wfStep.getValueGenerator());
+                        wfStepConfig.setAppletSetValuesName(wfStep.getAppletSetValuesName());
 
                         // Set values
                         if (wfStep.getSetValues() != null) {
@@ -234,6 +235,7 @@ public class WorkflowsXmlGenerator extends AbstractStaticArtifactGenerator {
                                 wfUserActionConfig.setLabel("$m{" + labelKey + "}");
                                 wfUserActionConfig.setNextStepName(wfStepUserAction.getNextStepName());
                                 wfUserActionConfig.setSetValuesName(wfStepUserAction.getSetValuesName());
+                                wfUserActionConfig.setAppletSetValuesName(wfStepUserAction.getAppletSetValuesName());
                                 wfUserActionConfig.setOrderIndex(wfStepUserAction.getOrderIndex());
                                 wfUserActionConfig.setFormReview(wfStepUserAction.isFormReview());
                                 wfUserActionConfig.setValidatePage(wfStepUserAction.isValidatePage());
@@ -265,6 +267,7 @@ public class WorkflowsXmlGenerator extends AbstractStaticArtifactGenerator {
                                 wfAlertConfig.setAlertHeldBy(wfStepAlert.isAlertHeldBy());
                                 wfAlertConfig.setAlertWorkflowRoles(wfStepAlert.isAlertWorkflowRoles());
                                 wfAlertConfig.setFireOnPrevStepName(wfStepAlert.getFireOnPrevStepName());
+                                wfAlertConfig.setFireOnActionName(wfStepAlert.getFireOnActionName());
                                 wfAlertConfig.setFireOnCondition(wfStepAlert.getFireOnConditionName());
                                 wfAlertConfigList.add(wfAlertConfig);
                             }
