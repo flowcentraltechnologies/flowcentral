@@ -38,6 +38,8 @@ public class WfUserActionConfig extends BaseNameConfig {
     
     private String appletSetValuesName;
 
+    private String showOnCondition;
+    
     private RequirementType commentRequirement;
 
     private HighlightType highlightType;
@@ -79,6 +81,15 @@ public class WfUserActionConfig extends BaseNameConfig {
     @XmlAttribute(name = "appletSetValues")
     public void setAppletSetValuesName(String appletSetValuesName) {
         this.appletSetValuesName = appletSetValuesName;
+    }
+
+    public String getShowOnCondition() {
+        return showOnCondition;
+    }
+
+    @XmlAttribute
+        public void setShowOnCondition(String showOnCondition) {
+        this.showOnCondition = showOnCondition;
     }
 
     public RequirementType getCommentRequirement() {

@@ -555,6 +555,17 @@ public interface ApplicationModuleService extends FlowCentralService {
     List<AppAppletSetValues> findAppAppletSetValues(Long appAppletId) throws UnifyException;
 
     /**
+     * Finds application applet set values.
+     * 
+     * @param appletName
+     *                   the application applet name
+     * @return list of applet set values
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    List<AppAppletSetValues> findAppAppletSetValues(String appletName) throws UnifyException;
+
+    /**
      * Finds application applet alerts.
      * 
      * @param appAppletId

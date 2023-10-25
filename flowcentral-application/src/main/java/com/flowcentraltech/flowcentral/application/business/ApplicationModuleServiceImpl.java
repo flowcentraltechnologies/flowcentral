@@ -1845,6 +1845,14 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
+    public List<AppAppletSetValues> findAppAppletSetValues(String appletName) throws UnifyException {
+        ApplicationEntityNameParts nameParts = ApplicationNameUtils.getApplicationEntityNameParts(appletName);
+        Long appAppletId = environment().value(Long.class, "id",
+                new AppAppletQuery().applicationName(nameParts.getApplicationName()).name(nameParts.getEntityName()));
+        return environment().findAll(new AppAppletSetValuesQuery().appAppletId(appAppletId));
+    }
+
+    @Override
     public List<AppAppletAlert> findAppAppletAlerts(Long appAppletId) throws UnifyException {
         return environment().findAll(new AppAppletAlertQuery().appAppletId(appAppletId));
     }

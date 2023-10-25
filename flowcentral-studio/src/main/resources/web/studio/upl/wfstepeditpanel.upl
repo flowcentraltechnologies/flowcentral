@@ -30,8 +30,10 @@
 !ui-text:frmLabel styleClass:$e{fc-formfield} caption:$m{wfstepeditpanel.label} binding:label required:true
 !ui-select:frmAppletName styleClass:$e{fc-formfield} caption:$m{wfstepeditpanel.applet} listParams:$l{entityName}
 	list:$s{studioentityappletlist} blankOption:$s{} binding:appletName required:true
-!ui-text:frmAppletSetValuesName styleClass:$e{fc-formfield} caption:$m{wfstepeditpanel.appletsetvalues} size:32 disabled:true
-	binding:appletSetValuesName
+	eventHandler:$d{!ui-event event:onchange action:$c{switchAct}}
+!ui-select:frmAppletSetValuesName styleClass:$e{fc-formfield} caption:$m{wfstepeditpanel.appletsetvalues}
+	list:$s{studioappletnamesetvalueslist} listParams:$l{appletName} blankOption:$s{}
+	binding:appletSetValuesName 
 !ui-text:frmNextStepName styleClass:$e{fc-formfield} caption:$m{wfstepeditpanel.nextstepname} size:32 binding:nextStepName
 !ui-text:frmAltNextStepName styleClass:$e{fc-formfield} caption:$m{wfstepeditpanel.altnextstepname} size:32 binding:altNextStepName
 !ui-integer:frmCriticalMinutes styleClass:$e{fc-formfield} caption:$m{wfstepeditpanel.criticalminutes} precision:5 binding:criticalMinutes

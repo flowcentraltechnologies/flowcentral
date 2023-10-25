@@ -62,6 +62,9 @@ public class WfStepUserAction extends BaseNamedEntity {
     @Column(name = "APPLET_SET_VALUES_NM", length = 64, nullable = true)
     private String appletSetValuesName;
 
+    @Column(name = "SHOW_ON_CONDITION", length = 64, nullable = true)
+    private String showOnCondition;
+
     @Column
     private int orderIndex;
 
@@ -145,6 +148,14 @@ public class WfStepUserAction extends BaseNamedEntity {
 
     public void setAppletSetValuesName(String appletSetValuesName) {
         this.appletSetValuesName = appletSetValuesName;
+    }
+
+    public String getShowOnCondition() {
+        return showOnCondition;
+    }
+
+    public void setShowOnCondition(String showOnCondition) {
+        this.showOnCondition = showOnCondition;
     }
 
     public int getOrderIndex() {
