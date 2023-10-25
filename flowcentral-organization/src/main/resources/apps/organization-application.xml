@@ -171,6 +171,12 @@
 		<reference name="mappedRoleWfStepRef"
 			description="$m{organization.mappedrolewfstep.reference}"
 			entity="mappedRoleWfStep" searchField="wfStepDesc" />
+		<reference name="mappedWorkflowRef"
+			description="$m{organization.mappedworkflow.reference}"
+			entity="mappedWorkflow" searchField="description" />
+		<reference name="mappedWfStepRef"
+			description="$m{organization.mappedwfstep.reference}"
+			entity="mappedWfStep" searchField="description" />
 		<reference name="roleRef"
 			description="$m{organization.role.reference}" entity="role"
 			searchField="description" />
@@ -497,6 +503,29 @@
 			<field name="roleDesc" label="$m{organization.mappedrolewfstep.roledesc}"
 				type="string" />
 		</entity>
+		<entity name="mappedWorkflow"
+			description="$m{organization.mappedworkflow}"
+			label="$m{organization.mappedworkflow.label}"
+			type="com.flowcentraltech.flowcentral.organization.entities.MappedWorkflow"
+			delegate="mappedentity-environmentdelegate" table="FC_MAPPEDWORKFLOW"
+			mapped="true" auditable="true" reportable="true">
+			<field name="label" label="$m{organization.mappedworkflow.labelfield}"
+				type="string"/>
+		</entity>
+		<entity name="mappedWfStep"
+			description="$m{organization.mappedwfstep}"
+			label="$m{organization.mappedwfstep.label}"
+			type="com.flowcentraltech.flowcentral.organization.entities.MappedWfStep"
+			delegate="mappedentity-environmentdelegate" table="FC_MAPPEDWFSTEP"
+			mapped="true" auditable="true" reportable="true">
+			<field name="workflowId" label="$m{organization.mappedwfstep.workflowid}"
+				type="long" />
+			<field name="type" label="$m{organization.mappedwfstep.type}"
+				type="enum_ref" references="wfsteptypelist"
+				inputWidget="application.enumlist" />
+			<field name="label" label="$m{organization.mappedwfstep.labelfield}"
+				type="string"/>
+		</entity>
 		<entity name="zone" description="$m{organization.zone}"
 			label="$m{organization.zone.label}"
 			type="com.flowcentraltech.flowcentral.organization.entities.Zone"
@@ -818,13 +847,13 @@
 			description="$m{organization.role.wfstep.assignment}"
 			label="$m{organization.role.wfstep.assignment}"
 			entity="mappedRoleWfStep"
-			commitPolicy="rolewfstep-assignmenteditpolicy" baseField="roleId"
+			commitPolicy="roleprivilge-assignmenteditpolicy" baseField="roleId"
 			assignField="stepId"
 			filterCaption1="$m{organization.role.wfstep.workflow}"
 			filterCaption2="$m{organization.role.wfstep.application}"
-			filterList1="mappedworkflowlist" filterList2="applicationlist"
+			filterList1="mappedworkflowlist"
 			assignCaption="$m{organization.role.wfstep.assigned}"
 			unassignCaption="$m{organization.role.wfstep.available}"
-			assignList="mappedwfroleinlist" unassignList="mappedwfnotinlist" />
+			assignList="mappedwfstepinlist" unassignList="mappedwfstepnotinlist" />
 	</assignmentPages>
 </application>

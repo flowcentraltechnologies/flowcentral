@@ -44,7 +44,7 @@ import com.tcdng.unify.core.database.Entity;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@EntityReferences({ "organization.rolePrivilege" })
+@EntityReferences({ "organization.rolePrivilege", "organization.mappedRoleWfStep" })
 @Component("roleprivilge-assignmenteditpolicy")
 public class RolePrivilegeAssignmentEditPolicy extends AbstractChildListEditPolicy {
 
