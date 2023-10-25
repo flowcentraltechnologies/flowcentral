@@ -38,7 +38,7 @@
 		<applet name="manageWorkflow"
 			description="$m{workflow.workflow.manage}"
 			label="$m{workflow.workflow.manage.label}" icon="project-diagram"
-			type="manage_entitylist" entity="workflow" menuAccess="true">
+			type="manage_entitylist" entity="workflow" menuAccess="false">
 			<property name="searchTable" value="workflowTable" />
 			<property name="searchTable.new" value="false" />
 			<property name="searchTable.report" value="true" />
