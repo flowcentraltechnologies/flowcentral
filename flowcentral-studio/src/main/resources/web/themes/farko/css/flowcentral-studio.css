@@ -55,16 +55,16 @@
 .fc-tableeditor .fields .fld {border: solid 1px #909090;box-sizing: border-box; background-color:#ffffff; margin:4px 4px; padding:4px;cursor:grab;}
 .fc-tableeditor .fields .fld span {font-weight:bold; color:#404040;pointer-events:none;}
 .fc-tableeditor .design {height:100%;}
-.fc-tableeditor .designbase {display:flex;flex-wrap:nowrap;padding:16px;height: 428px; width: 100%; box-sizing: border-box; overflow-x: auto;}
+.fc-tableeditor .designbase {display:flex;flex-wrap:nowrap;padding:16px;height: 452px; width: 100%; box-sizing: border-box; overflow-x: auto;}
 .fc-tableeditor .drag {position:fixed;zIndex:400;opacity:0.7;}
-.fc-tableeditor .slot {display:inline-block;height:386px;padding:2px;margin:0px 2px;box-sizing: border-box;border: solid 1px #909090; background-color:#f3f3f3;}
+.fc-tableeditor .slot {display:inline-block;height:420px;padding:2px;margin:0px 2px;box-sizing: border-box;border: solid 1px #909090; background-color:#f3f3f3;}
 .fc-tableeditor .slothdr {border-bottom: solid 1px #909090;background-color:#505965;
 	 font-weight:bold; color:#ffffff; font-size:7pt;}
-.fc-tableeditor .slotcap {display:inline-block; width: 84px; cursor:grab;}
+.fc-tableeditor .slotcap {display:inline-block; width: 98px; cursor:grab;}
 .fc-tableeditor .slotcap span {display:block; text-align:center;margin:2px 4px;white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
 .fc-tableeditor .slotact {display:inline-block; width:30px;text-align: right;white-space: nowrap; overflow: hidden;text-overflow: ellipsis; margin: 2px 0px;}
 .fc-tableeditor .actbtn {padding:2px 2px; min-height:14px; min-width:14px; color:#ffffff; font-size:8px;cursor: pointer;}
-.fc-tableeditor .itm {width:110px; margin:2px; padding: 2px 1px;font-size:6pt;}
+.fc-tableeditor .itm {width:124px; margin:2px; padding: 2px 1px;font-size:7pt;}
 .fc-tableeditor .itmlabel {display:block; font-weight:bold; color:#000000;white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
 .fc-tableeditor .itmval {display:block; color:#404040;white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
 
@@ -175,16 +175,16 @@
 .fc-reporteditor .fields .fld {border: solid 1px #909090;box-sizing: border-box; background-color:#ffffff; margin:4px 4px; padding:4px;cursor:grab;}
 .fc-reporteditor .fields .fld span {font-weight:bold; color:#404040;pointer-events:none;}
 .fc-reporteditor .design {height:100%;}
-.fc-reporteditor .designbase {display:flex;flex-wrap:nowrap;padding:16px;height: 428px; width: 100%; box-sizing: border-box; overflow-x: auto;}
+.fc-reporteditor .designbase {display:flex;flex-wrap:nowrap;padding:16px;height: 452px; width: 100%; box-sizing: border-box; overflow-x: auto;}
 .fc-reporteditor .drag {position:fixed;zIndex:400;opacity:0.7;}
-.fc-reporteditor .slot {display:inline-block;height:386px;padding:2px;margin:0px 2px;box-sizing: border-box;border: solid 1px #909090; background-color:#f3f3f3;}
+.fc-reporteditor .slot {display:inline-block;height:420px;padding:2px;margin:0px 2px;box-sizing: border-box;border: solid 1px #909090; background-color:#f3f3f3;}
 .fc-reporteditor .slothdr {border-bottom: solid 1px #909090;background-color:#505965;
 	 font-weight:bold; color:#ffffff; font-size:7pt;}
-.fc-reporteditor .slotcap {display:inline-block; width: 84px; cursor:grab;}
+.fc-reporteditor .slotcap {display:inline-block; width: 98px; cursor:grab;}
 .fc-reporteditor .slotcap span {display:block; text-align:center;margin:2px 4px;white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
 .fc-reporteditor .slotact {display:inline-block; width:30px;text-align: right;white-space: nowrap; overflow: hidden;text-overflow: ellipsis; margin: 2px 0px;}
 .fc-reporteditor .actbtn {padding:2px 2px; min-height:14px; min-width:14px; color:#ffffff; font-size:8px;cursor: pointer;}
-.fc-reporteditor .itm {width:110px; margin:2px; padding: 2px 1px;font-size:6pt;}
+.fc-reporteditor .itm {width:124px; margin:2px; padding: 2px 1px;font-size:7pt;}
 .fc-reporteditor .itmlabel {display:block; font-weight:bold; color:#000000;white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
 .fc-reporteditor .itmval {display:block; color:#404040;white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
 

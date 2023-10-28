@@ -1228,7 +1228,7 @@ fuxstudio.rptWireSlot = function(evp) {
 fuxstudio.rptCreateSlot = function(evp) {
 	const editor = evp.editor;
 	const column = evp.column;
-	const caption = column.fldLabel;
+	const caption = column.description ? column.description : column.fldLabel;
 	const labels = editor.labels;
 	var html = "<div class=\"slothdr\">"
 			+ "<div class=\"slotcap\" id=\"" + evp.dragId + "\"><span>" + caption + "</span></div>"
