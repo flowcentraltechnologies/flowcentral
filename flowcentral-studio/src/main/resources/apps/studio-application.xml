@@ -3016,21 +3016,23 @@
 						column="0" required="true" saveAs="true" />
 					<field name="title" column="0" />
 					<field name="subTitle" column="0" />
-					<field name="type" column="0" required="true" />
-					<field name="paletteType" column="0" required="true" />
 					<field name="configType" inputWidget="application.enumlist"
 						column="1" disabled="true" required="true" />
+					<field name="type" column="1" required="true" />
+					<field name="paletteType" column="1" required="true" />
 					<field name="provider" column="1" required="true"
 						switchOnChange="true" />
 					<field name="rule" column="1" />
 					<field name="width" column="1" />
 					<field name="height" column="1" />
+				</section>
+				<section name="chartFlags" columns="type_1_2">
 					<field name="stacked" column="1" />
-					<field name="smooth" column="1" />
+					<field name="smooth" column="2" />
 					<field name="showGrid" column="1" />
-					<field name="showDataLabels" column="1" />
+					<field name="showDataLabels" column="2" />
 					<field name="formatDataLabels" column="1" />
-					<field name="formatYLabels" column="1" />
+					<field name="formatYLabels" column="2" />
 				</section>
 			</tab>
 			<tab name="changeLog" label="$m{application.form.audit}"

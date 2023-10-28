@@ -51,11 +51,11 @@ public class Chart extends BaseApplicationEntity {
     @Column(length = 64, nullable = true)
     private String rule;
 
-    @Column
-    private int width;
+    @Column(nullable = true)
+    private Integer width;
 
-    @Column
-    private int height;
+    @Column(nullable = true)
+    private Integer height;
 
     @Column
     private boolean stacked;
@@ -129,19 +129,19 @@ public class Chart extends BaseApplicationEntity {
         this.rule = rule;
     }
 
-    public int getWidth() {
+    public Integer getWidth() {
         return width;
     }
 
-    public void setWidth(int width) {
+    public void setWidth(Integer width) {
         this.width = width;
     }
 
-    public int getHeight() {
+    public Integer getHeight() {
         return height;
     }
 
-    public void setHeight(int height) {
+    public void setHeight(Integer height) {
         this.height = height;
     }
 
