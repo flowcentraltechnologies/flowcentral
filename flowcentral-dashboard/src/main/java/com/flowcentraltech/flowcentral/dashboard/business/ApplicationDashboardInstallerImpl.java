@@ -33,10 +33,12 @@ import com.flowcentraltech.flowcentral.common.util.ConfigUtils;
 import com.flowcentraltech.flowcentral.configuration.data.ApplicationInstall;
 import com.flowcentraltech.flowcentral.configuration.xml.AppConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppDashboardConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.DashboardSectionConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.DashboardTileConfig;
 import com.flowcentraltech.flowcentral.dashboard.constants.DashboardModuleNameConstants;
 import com.flowcentraltech.flowcentral.dashboard.entities.Dashboard;
 import com.flowcentraltech.flowcentral.dashboard.entities.DashboardQuery;
+import com.flowcentraltech.flowcentral.dashboard.entities.DashboardSection;
 import com.flowcentraltech.flowcentral.dashboard.entities.DashboardTile;
 import com.flowcentraltech.flowcentral.dashboard.entities.DashboardTileQuery;
 import com.tcdng.unify.core.UnifyException;
@@ -140,6 +142,19 @@ public class ApplicationDashboardInstallerImpl extends AbstractApplicationArtifa
 
     private void populateChildList(AppDashboardConfig dashboardConfig, Dashboard dashboard, String applicationName)
             throws UnifyException {
+        List<DashboardSection> sectionList = null;
+        if (!DataUtils.isBlank(dashboardConfig.getSectionList())) {
+            sectionList = new ArrayList<DashboardSection>();
+            for (DashboardSectionConfig dashboardSectionConfig : dashboardConfig.getSectionList()) {
+                DashboardSection dashboardSection = new DashboardSection();
+                dashboardSection.setType(dashboardSectionConfig.getType());
+                dashboardSection.setIndex(dashboardSectionConfig.getIndex());
+                sectionList.add(dashboardSection);
+            }
+        }
+
+        dashboard.setSectionList(sectionList);
+
         List<DashboardTile> tileList = null;
         if (!DataUtils.isBlank(dashboardConfig.getTileList())) {
             tileList = new ArrayList<DashboardTile>();

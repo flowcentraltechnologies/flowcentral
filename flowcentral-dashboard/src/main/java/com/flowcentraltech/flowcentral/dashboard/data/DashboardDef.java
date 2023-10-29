@@ -17,12 +17,15 @@
 package com.flowcentraltech.flowcentral.dashboard.data;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.flowcentraltech.flowcentral.application.data.BaseApplicationEntityDef;
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityNameParts;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.common.constants.RecordStatus;
+import com.flowcentraltech.flowcentral.configuration.constants.DashboardColumnsType;
 import com.flowcentraltech.flowcentral.configuration.constants.DashboardTileType;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.util.DataUtils;
@@ -35,105 +38,130 @@ import com.tcdng.unify.core.util.DataUtils;
  */
 public class DashboardDef extends BaseApplicationEntityDef {
 
-	private int sections;
+    private RecordStatus status;
 
-	private RecordStatus status;
+    private List<DashboardSectionDef> sectionList;
 
-	private List<List<DashboardTileDef>> tileList;
+    private DashboardDef(RecordStatus status, List<DashboardSectionDef> sectionList,
+            ApplicationEntityNameParts nameParts, String description, Long id, long version) {
+        super(nameParts, description, id, version);
+        this.status = status;
+        this.sectionList = sectionList;
+    }
 
-	private DashboardDef(int sections, RecordStatus status, List<List<DashboardTileDef>> tileList,
-			ApplicationEntityNameParts nameParts, String description, Long id, long version) {
-		super(nameParts, description, id, version);
-		this.sections = sections;
-		this.status = status;
-		this.tileList = tileList;
-	}
+    public int getSections() {
+        return sectionList.size();
+    }
 
-	public int getSections() {
-		return sections;
-	}
+    public List<DashboardTileDef> getTileList(int section) {
+        return sectionList.get(section).getTileList();
+    }
 
-	public RecordStatus getStatus() {
-		return status;
-	}
+    public RecordStatus getStatus() {
+        return status;
+    }
 
-	public boolean isActive() {
-		return RecordStatus.ACTIVE.equals(status);
-	}
+    public boolean isActive() {
+        return RecordStatus.ACTIVE.equals(status);
+    }
 
-	public List<DashboardTileDef> getTileList(int section) {
-		return tileList.get(section);
-	}
+    public static Builder newBuilder(RecordStatus status, String longName, String description, Long id, long version) {
+        return new Builder(status, longName, description, id, version);
+    }
 
-	public static Builder newBuilder(int sections, RecordStatus status, String longName, String description, Long id,
-			long version) {
-		return new Builder(sections, status, longName, description, id, version);
-	}
+    public static class Builder {
 
-	public static class Builder {
+        private RecordStatus status;
 
-		private int sections;
+        private List<Section> sections;
 
-		private RecordStatus status;
+        private String longName;
 
-		private List<DashboardTileDef> tileList;
+        private String description;
 
-		private String longName;
+        private Long id;
 
-		private String description;
+        private long version;
 
-		private Long id;
+        public Builder(RecordStatus status, String longName, String description, Long id, long version) {
+            this.status = status;
+            this.longName = longName;
+            this.description = description;
+            this.id = id;
+            this.version = version;
+            this.sections = new ArrayList<Section>();
+        }
 
-		private long version;
+        public Builder addSection(DashboardColumnsType type) {
+            sections.add(new Section(type, sections.size()));
+            return this;
+        }
 
-		public Builder(int sections, RecordStatus status, String longName, String description, Long id, long version) {
-			this.sections = sections <= 0 ? 1 : sections;
-			this.status = status;
-			this.longName = longName;
-			this.description = description;
-			this.id = id;
-			this.version = version;
-			this.tileList = new ArrayList<DashboardTileDef>();
-		}
+        public Builder addTile(DashboardTileType type, String name, String description, String chart, int section,
+                int index) {
+            if (section < 0 || section >= sections.size()) {
+                throw new RuntimeException(
+                        "Can not add tile to section [" + section + "] for dashboard with [" + sections + "] sections");
+            }
 
-		public Builder addTile(DashboardTileType type, String name, String description, String chart, int section,
-				int index) {
-			if (section < 0 || section >= sections) {
-				throw new RuntimeException(
-						"Can not add tile to section [" + section + "] for dashboard with [" + sections + "] sections");
-			}
+            sections.get(section)
+                    .addDashboardTileDef(new DashboardTileDef(type, name, description, chart, section, index));
+            return this;
+        }
 
-			tileList.add(new DashboardTileDef(type, name, description, chart, section, index));
-			return this;
-		}
+        private class Section {
 
-		@SuppressWarnings("unchecked")
-		public DashboardDef build() throws UnifyException {
-			Object[] tileListArr = new Object[sections];
-			for (int i = 0; i < sections; i++) {
-				tileListArr[i] = new ArrayList<DashboardTileDef>();
-			}
+            private DashboardColumnsType type;
 
-			for (DashboardTileDef dashboardTileDef : tileList) {
-				((List<DashboardTileDef>) tileListArr[dashboardTileDef.getSection()]).add(dashboardTileDef);
-			}
+            private List<DashboardTileDef> tileList;
 
-			List<List<DashboardTileDef>> finalTileList = new ArrayList<List<DashboardTileDef>>();
-			for (Object obj : tileListArr) {
-				List<DashboardTileDef> tileList = (List<DashboardTileDef>) obj;
-				DataUtils.sortAscending(tileList, DashboardTileDef.class, "index");
-				finalTileList.add(DataUtils.unmodifiableList(tileList));
-			}
+            private Set<Integer> usedIndexes;
 
-			return new DashboardDef(sections, status, DataUtils.unmodifiableList(finalTileList),
-					ApplicationNameUtils.getApplicationEntityNameParts(longName), description, id, version);
-		}
-	}
+            private int sessionIndex;
 
-	@Override
-    public String toString() {
-        return "DashboardDef [sections=" + sections + ", status=" + status + ", tileList=" + tileList
-                + ", getLongName()=" + getLongName() + "]";
+            public Section(DashboardColumnsType type, int sessionIndex) {
+                this.type = type;
+                this.sessionIndex = sessionIndex;
+                this.tileList = new ArrayList<DashboardTileDef>();
+                this.usedIndexes = new HashSet<Integer>();
+            }
+
+            public DashboardColumnsType getType() {
+                return type;
+            }
+
+            public void addDashboardTileDef(DashboardTileDef dashboardTileDef) {
+                if (tileList.size() >= type.columns()) {
+                    throw new RuntimeException("Can not add tile [" + dashboardTileDef.getName() + "] to section ["
+                            + sessionIndex + "] because all slots have been utilized.");
+                }
+
+                if (usedIndexes.contains(dashboardTileDef.getIndex())) {
+                    throw new RuntimeException("Can not add tile [" + dashboardTileDef.getName() + "] to section ["
+                            + sessionIndex + "] because index is in use by another tile.");
+                }
+
+                tileList.add(dashboardTileDef);
+            }
+
+            public List<DashboardTileDef> getTileList() {
+                return tileList;
+            }
+
+        }
+
+        public DashboardDef build() throws UnifyException {
+            List<DashboardSectionDef> sections = new ArrayList<DashboardSectionDef>();
+            int sectionIndex = 0;
+            for (Section section : this.sections) {
+                DataUtils.sortAscending(section.getTileList(), DashboardTileDef.class, "index");
+                sections.add(new DashboardSectionDef(section.getType(), sectionIndex,
+                        DataUtils.unmodifiableList(section.getTileList())));
+            }
+
+            return new DashboardDef(status, DataUtils.unmodifiableList(sections),
+                    ApplicationNameUtils.getApplicationEntityNameParts(longName), description, id, version);
+        }
     }
 
 }

@@ -72,10 +72,4 @@ public class DashboardTileDef {
         return index;
     }
 
-    @Override
-    public String toString() {
-        return "DashboardTileDef [type=" + type + ", name=" + name + ", description=" + description + ", chart=" + chart
-                + ", section=" + section + ", index=" + index + "]";
-    }
-
 }

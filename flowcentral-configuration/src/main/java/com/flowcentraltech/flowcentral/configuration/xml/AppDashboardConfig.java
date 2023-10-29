@@ -35,6 +35,8 @@ public class AppDashboardConfig extends BaseNameConfig {
 
     private int sections;
 
+    private List<DashboardSectionConfig> sectionList;
+    
     private List<DashboardTileConfig> tileList;
 
     public AppDashboardConfig() {
@@ -58,6 +60,15 @@ public class AppDashboardConfig extends BaseNameConfig {
     @XmlAttribute(required = true)
     public void setSections(int sections) {
         this.sections = sections;
+    }
+
+    public List<DashboardSectionConfig> getSectionList() {
+        return sectionList;
+    }
+
+    @XmlElement(name = "dashboard-section", required = true)
+    public void setSectionList(List<DashboardSectionConfig> sectionList) {
+        this.sectionList = sectionList;
     }
 
     public List<DashboardTileConfig> getTileList() {
