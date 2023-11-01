@@ -61,7 +61,7 @@ public class DashboardEditorWidget extends AbstractFlowCentralMultiControl {
 
     private String design;
 
-    private String tileName;
+    private String chartName;
 
     private int sectionIndex;
 
@@ -121,7 +121,7 @@ public class DashboardEditorWidget extends AbstractFlowCentralMultiControl {
         if (editMode != null) {
             switch (editMode) {
                 case CREATE:
-                    getDashboardEditor().prepareTileCreate(tileName, sectionIndex, column);
+                    getDashboardEditor().prepareTileCreate(chartName, sectionIndex, column);
                     commandRefreshPanels(getDashboardEditor().performTileAdd());
                     break;
                 case CREATE_SUB:
@@ -148,12 +148,12 @@ public class DashboardEditorWidget extends AbstractFlowCentralMultiControl {
         }
     }
 
-    public String getTileName() {
-        return tileName;
+    public String getChartName() {
+        return chartName;
     }
 
-    public void setTileName(String tileName) {
-        this.tileName = tileName;
+    public void setChartName(String chartName) {
+        this.chartName = chartName;
     }
 
     public int getSectionIndex() {
@@ -220,8 +220,8 @@ public class DashboardEditorWidget extends AbstractFlowCentralMultiControl {
         return getValue(DashboardEditor.class);
     }
 
-    public String getTileBaseId() throws UnifyException {
-        return getPrefixedId("tile_base_");
+    public String getChartBaseId() throws UnifyException {
+        return getPrefixedId("chart_base_");
     }
 
     public String getDesignBaseId() throws UnifyException {

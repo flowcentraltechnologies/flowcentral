@@ -59,6 +59,12 @@ public class EntityFieldInfo {
         this.nullable = nullable;
     }
 
+    public void overrideBlank(EntityFieldInfo _entityFieldInfo) {
+        if (column == null || column.isEmpty()) {
+            column = _entityFieldInfo.column;
+        }
+    }
+    
     public ConnectFieldDataType getType() {
         return type;
     }
@@ -157,13 +163,6 @@ public class EntityFieldInfo {
     
     public boolean isDecimal() {
         return type.isDecimal();
-    }
-
-    @Override
-    public String toString() {
-        return "EntityFieldInfo [type=" + type + ", name=" + name + ", description=" + description + ", column="
-                + column + ", references=" + references + ", enumImplClass=" + enumImplClass + ", precision="
-                + precision + ", scale=" + scale + ", length=" + length + ", nullable=" + nullable + "]";
     }
 
 }

@@ -158,6 +158,71 @@
 
 .fc-editortitle {color:#ffffff; background-color: #24303f;font-size:8pt; padding: 4px; font-weight: bold;}
 
+
+/** Dashboard Editor */
+.fc-dahsboardeditor {height:100%;}
+.fc-dahsboardeditor .fields {height:100%;}
+.fc-dahsboardeditor .fields .hdr {position:-webkit-sticky; position:sticky; top:0px; left:0px; padding:4px;background-color:#505965;
+	text-align:center;color:#ffffff;font-weight:bold;}
+.fc-dahsboardeditor .fields .bdy {background-color:#f0f0f0;border: solid 1px #c8c8c8;height:100%;overflow-y:scroll;max-height:calc(100vh - 172px);}
+.fc-dahsboardeditor .fields .fld {display:none;border: solid 1px #909090; background-color:#ffffff; margin:4px 4px; padding:4px;cursor:grab;}
+.fc-dahsboardeditor .fields .fld span {font-weight:bold; color:#404040;pointer-events:none;}
+.fc-dahsboardeditor .design {height:100%;}
+.fc-dahsboardeditor .designbase {display:block;padding:4px;width: 100%;box-sizing: border-box;height:100%;overflow-y:scroll;max-height:calc(100vh - 172px);}
+.fc-dahsboardeditor .drag {position:fixed;zIndex:400;opacity:0.7;}
+.fc-dahsboardeditor .grab {cursor:grab;}
+
+.fc-dahsboardeditor .tab {display:block;min-height:80px;box-sizing: border-box;padding:2px;margin-bottom:8px; background-color:#ffffff;border: solid 1px #c8c8c8;}
+.fc-dahsboardeditor .tabhdr {border-bottom: solid 1px #909090;background-color:#505965;
+	 font-weight:bold; color:#ffffff; font-size:8pt;}	 
+.fc-dahsboardeditor .secdesign {display:block;padding:4px 4px 4px 20px;min-height:80px;box-sizing: border-box;}
+.fc-dahsboardeditor .secdesignz {background-color: #f0f0f0;}
+.fc-dahsboardeditor .sec {display:block;min-height:80px;box-sizing: border-box;padding:2px;margin-bottom:8px; background-color:#ffffff;border: solid 1px #c8c8c8;}
+.fc-dahsboardeditor .sechdr {border-bottom: solid 1px #909090;background-color:#666E79;
+	 font-weight:bold; color:#ffffff; font-size:8pt;}
+.fc-dahsboardeditor .elcap {display:inline-block; width: calc(100% - 220px);}
+.fc-dahsboardeditor .elcap span {display:block; text-align:left;margin:2px 4px;white-space:nowrap; overflow:hidden; text-overflow:ellipsis;pointer-events:none;}
+.fc-dahsboardeditor .elact {display:inline-block; width:220px;text-align: right;white-space: nowrap; overflow: hidden;text-overflow: ellipsis; margin: 2px 0px;}
+.fc-dahsboardeditor .txtbtn {background-color:transparent;font-size:9px; font-weight:bolder; color:#ffffff;padding:0px 2px;
+	margin-right:4px; min-height:14px; min-width:14px; border:none; border-bottom:1px solid #ffffff; cursor: pointer !important;}
+.fc-dahsboardeditor .actbtn {color:#ffffff; padding:2px 2px; min-height:14px; min-width:14px; font-size:10px; cursor: pointer !important;}
+
+.fc-dahsboardeditor .placesec {display:block; box-sizing: border-box; height:72px;
+	margin:2px;border: dashed 2px #8090f0;background-color:#b7c1f6;color:#8090f0;}
+.fc-dahsboardeditor .placesec .plus {display:block; margin-top:10px; font-weight:bold; font-size:20pt; text-align:center;}
+.fc-dahsboardeditor .placesec .label {display:block; margin:4px 8px; font-weight:bold; text-align:center;}
+
+.fc-dahsboardeditor .tledesign {display:block;padding:4px;min-height:80px;box-sizing: border-box;}
+.fc-dahsboardeditor .tle {display:block;padding:2px; margin-bottom:4px; box-sizing: border-box; background-color:#ffffff;border: solid 1px #c8c8c8;}
+.fc-dahsboardeditor .tlehdr {font-weight:bold; font-size:8pt;}
+.fc-dahsboardeditor .tlecap {display: inline-block; background-color: #efefef; color: #404040; width: calc(100% - 48px); border: 1px solid #dfdfdf;}
+.fc-dahsboardeditor .tlecap span {display:block; text-align:left;margin:2px 4px;white-space:nowrap; overflow:hidden; text-overflow:ellipsis;pointer-events:none;}
+.fc-dahsboardeditor .tlecapz {width:100%;box-sizing: border-box;}
+.fc-dahsboardeditor .tleact {display:inline-block; width:42px;text-align: right;white-space: nowrap; overflow: hidden;text-overflow: ellipsis; margin: 2px 0px;}
+.fc-dahsboardeditor .tlebtn {color:#404040; padding:2px 2px; min-height:14px; min-width:14px; font-size:10px; cursor: pointer !important;}
+
+.fc-dahsboardeditor .placetile {display:block; box-sizing: border-box; height:28px;
+	margin:2px;border: dashed 2px #8090f0;background-color:#b7c1f6;color:#8090f0;}
+.fc-dahsboardeditor .placetile .plus {display:block; margin-top:1px; font-weight:bold; font-size:4pt; text-align:center;}
+.fc-dahsboardeditor .placetile .label {display:block; margin:1px 2px; font-weight:bold; font-size:6pt; text-align:center;}
+
+.dashboardtabsheet {height: calc(100% - 32px);}
+.dashboardtabsheet .tbody {height:100%;}
+
+/** Dashboard preview panel */
+.fc-dashboardpreviewpanel {}
+.fc-dashboardpreviewpanel .hdbar {background-color: #e3e7ea;}
+.fc-dashboardpreviewpanel .cltabsection {width:100%;margin-top:10px; padding:10px; box-sizing: border-box;}
+
+/** Dashboard editor page panel */
+.fc-dahsboardeditorpagepanel {height:100%;}
+.fc-dahsboardeditorpagepanel .hdbar {background-color: #e3e7ea;}
+.fc-dahsboardeditorpagepanel .hdtitle {display: block;font-weight:bold;}
+.fc-dahsboardeditorpagepanel .hdsubtitle {display: block;font-size:8pt;}
+.fc-dahsboardeditorpagepanel .editlabel {width: 120px; white-space: nowrap;overflow: hidden;text-overflow: ellipsis;vertical-align: middle;}	
+
+.fc-dashboardsectioneditorpanel {}			
+
 /* Studio application component applet panel*/
 .fc-studioappcomponentappletpanel {}
 

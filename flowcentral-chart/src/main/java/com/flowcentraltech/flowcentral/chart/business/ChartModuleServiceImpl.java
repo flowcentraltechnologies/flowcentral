@@ -15,7 +15,9 @@
  */
 package com.flowcentraltech.flowcentral.chart.business;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityNameParts;
@@ -134,6 +136,23 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
     @Override
     public List<ChartSnapshot> findChartSnapshots(ChartSnapshotQuery query) throws UnifyException {
         return environment().listAll(query);
+    }
+
+    @Override
+    public List<ChartDef> findChartDefs(String applicationName) throws UnifyException {
+        List<String> chartNames = environment().valueList(String.class, "name",
+                new ChartQuery().applicationName(applicationName));
+        if (!DataUtils.isBlank(chartNames)) {
+            List<ChartDef> resultList = new ArrayList<ChartDef>();
+            for (String chartName : chartNames) {
+                resultList.add(chartDefFactoryMap
+                        .get(ApplicationNameUtils.getApplicationEntityLongName(applicationName, chartName)));
+            }
+
+            return resultList;
+        }
+
+        return Collections.emptyList();
     }
 
     @Override
