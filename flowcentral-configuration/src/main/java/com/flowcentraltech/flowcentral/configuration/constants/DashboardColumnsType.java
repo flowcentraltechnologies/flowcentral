@@ -33,25 +33,25 @@ public enum DashboardColumnsType implements EnumConst {
     TYPE_1(
             "1", 1),
     TYPE_1_1(
-            "1-1", 2),
+            "1_1", 2),
     TYPE_1_2(
-            "1-2", 2),
+            "1_2", 2),
     TYPE_2_1(
-            "2-1", 2),
+            "2_1", 2),
     TYPE_1_1_1(
-            "1-1-1", 3),
+            "1_1_1", 3),
     TYPE_1_3(
-            "1-3", 2),
+            "1_3", 2),
     TYPE_1_1_2(
-            "1-1-2", 3),
+            "1_1_2", 3),
     TYPE_1_2_1(
-            "1-2-1", 3),
+            "1_2_1", 3),
     TYPE_2_1_1(
-            "2-1-1", 3),
+            "2_1_1", 3),
     TYPE_3_1(
-            "3-1", 2),
+            "3_1", 2),
     TYPE_1_1_1_1(
-            "1-1-1-1", 4);
+            "1_1_1_1", 4);
 
     private final String code;
 
@@ -84,3 +84,4 @@ public enum DashboardColumnsType implements EnumConst {
         return EnumUtils.fromName(DashboardColumnsType.class, name);
     }
 }
+

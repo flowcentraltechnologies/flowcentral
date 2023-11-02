@@ -29,8 +29,8 @@
 	<dashboards>
 		<dashboard name="sampleDashboard"
 			description="$m{dashboard.sampledashboard}" sections="2">
-			<dashboard-section type="1-1-1-1" index="0" />
-			<dashboard-section type="1-1" index="1" />
+			<dashboard-section type="TYPE_1_1_1_1" index="0" />
+			<dashboard-section type="TYPE_1_1" index="1" />
 			<dashboard-tile name="sampleTile1"
 				description="$m{dashboard.sampledashboard.sampletile1}"
 				type="SPARKLINE" chart="sampleChart1" section="0" index="0" />
