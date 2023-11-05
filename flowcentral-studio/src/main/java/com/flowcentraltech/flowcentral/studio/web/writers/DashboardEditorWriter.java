@@ -15,12 +15,11 @@
  */
 package com.flowcentraltech.flowcentral.studio.web.writers;
 
-import com.flowcentraltech.flowcentral.application.data.EntityFieldDef;
 import com.flowcentraltech.flowcentral.chart.business.ChartModuleService;
 import com.flowcentraltech.flowcentral.chart.data.ChartDef;
-import com.flowcentraltech.flowcentral.studio.web.widgets.DashboardEditorWidget;
 import com.flowcentraltech.flowcentral.studio.constants.StudioSessionAttributeConstants;
 import com.flowcentraltech.flowcentral.studio.web.widgets.DashboardEditor;
+import com.flowcentraltech.flowcentral.studio.web.widgets.DashboardEditorWidget;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -105,7 +104,7 @@ public class DashboardEditorWriter extends AbstractControlWriter {
         }
         jsonWriter.endArray();
         writer.write("</div></div>");
-        // End fields
+        // End charts
 
         // Design
         writer.write("<div class=\"design\" style=\"display:table-cell;vertical-align:top;\">");
@@ -140,18 +139,17 @@ public class DashboardEditorWriter extends AbstractControlWriter {
         final DashboardEditorWidget dashboardEditorWidget = (DashboardEditorWidget) widget;
         writer.writeBehavior(dashboardEditorWidget.getValueCtrl());
 
-        writer.beginFunction("fuxstudio.rigFormEditor");
+        writer.beginFunction("fuxstudio.rigDashboardEditor");
         writer.writeParam("pId", dashboardEditorWidget.getId());
         writer.writeCommandURLParam("pCmdURL");
         writer.writeParam("pContId", dashboardEditorWidget.getContainerId());
         writer.writeParam("pDsnBaseId", dashboardEditorWidget.getDesignBaseId());
-//        writer.writeParam("pFieldBaseId", dashboardEditorWidget.getFieldBaseId());
+        writer.writeParam("pChartBaseId", dashboardEditorWidget.getChartBaseId());
         writer.writeParam("pChoiceId", dashboardEditorWidget.getChoiceId());
         writer.writeParam("pStateId", dashboardEditorWidget.getValueCtrl().getId());
-//        writer.writeParam("pEditTabId", dashboardEditorWidget.getEditTabCtrl().getId());
         writer.writeParam("pEditSecId", dashboardEditorWidget.getEditSectionCtrl().getId());
-//        writer.writeParam("pEditFieldId", dashboardEditorWidget.getEditFieldCtrl().getId());
-//        writer.writeParam("pEditIndexId", dashboardEditorWidget.getEditIndexCtrl().getId());
+        writer.writeParam("pEditTileId", dashboardEditorWidget.getEditTileCtrl().getId());
+        writer.writeParam("pEditTileIndexId", dashboardEditorWidget.getEditTileIndexCtrl().getId());
         writer.writeParam("pEditColId", dashboardEditorWidget.getEditColCtrl().getId());
         writer.writeParam("pEditModeId", dashboardEditorWidget.getEditModeCtrl().getId());
         writer.writeResolvedParam("pContent",
