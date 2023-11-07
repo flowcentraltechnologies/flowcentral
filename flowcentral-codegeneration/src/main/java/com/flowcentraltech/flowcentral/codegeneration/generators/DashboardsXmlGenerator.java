@@ -22,9 +22,11 @@ import java.util.zip.ZipOutputStream;
 
 import com.flowcentraltech.flowcentral.configuration.xml.AppDashboardConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppDashboardsConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.DashboardSectionConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.DashboardTileConfig;
 import com.flowcentraltech.flowcentral.dashboard.business.DashboardModuleService;
 import com.flowcentraltech.flowcentral.dashboard.entities.Dashboard;
+import com.flowcentraltech.flowcentral.dashboard.entities.DashboardSection;
 import com.flowcentraltech.flowcentral.dashboard.entities.DashboardTile;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
@@ -67,6 +69,19 @@ public class DashboardsXmlGenerator extends AbstractStaticArtifactGenerator {
                 appDashboardConfig.setSections(dashboard.getSections());
                 appDashboardConfig.setAllowSecondaryTenants(dashboard.isAllowSecondaryTenants());
 
+                // Sections
+                if (!DataUtils.isBlank(dashboard.getSectionList())) {
+                    List<DashboardSectionConfig> sectionList = new ArrayList<DashboardSectionConfig>();
+                    for (DashboardSection dashboardSection : dashboard.getSectionList()) {
+                        DashboardSectionConfig dashboardSectionConfig = new DashboardSectionConfig();
+                        dashboardSectionConfig.setType(dashboardSection.getType());
+                        dashboardSectionConfig.setIndex(dashboardSection.getIndex());
+                        sectionList.add(dashboardSectionConfig);
+                    }
+                    
+                    appDashboardConfig.setSectionList(sectionList);
+                }
+                
                 // Tiles
                 if (!DataUtils.isBlank(dashboard.getTileList())) {
                     List<DashboardTileConfig> tileList = new ArrayList<DashboardTileConfig>();

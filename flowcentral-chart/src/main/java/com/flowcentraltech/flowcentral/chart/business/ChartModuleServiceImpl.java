@@ -15,7 +15,9 @@
  */
 package com.flowcentraltech.flowcentral.chart.business;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityNameParts;
@@ -38,6 +40,7 @@ import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Transactional;
 import com.tcdng.unify.core.data.FactoryMap;
+import com.tcdng.unify.core.util.DataUtils;
 
 /**
  * Default chart business service implementation.
@@ -74,8 +77,9 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
                     ChartDef.Builder cdb = ChartDef.newBuilder(chart.getType(), chart.getPaletteType(),
                             chart.getProvider(), chart.getRule(), longName, chart.getDescription(), chart.getId(),
                             chart.getVersionNo());
-                    cdb.title(chart.getTitle()).subTitle(chart.getSubTitle()).width(chart.getWidth())
-                            .height(chart.getHeight()).showGrid(chart.isShowGrid())
+                    cdb.title(chart.getTitle()).subTitle(chart.getSubTitle())
+                            .width(DataUtils.convert(int.class, chart.getWidth()))
+                            .height(DataUtils.convert(int.class, chart.getHeight())).showGrid(chart.isShowGrid())
                             .showDataLabels(chart.isShowDataLabels()).formatDataLabels(chart.isFormatDataLabels())
                             .formatYLabels(chart.isFormatYLabels()).stacked(chart.isStacked()).smooth(chart.isSmooth());
                     return cdb.build();
@@ -135,6 +139,23 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
     }
 
     @Override
+    public List<ChartDef> findChartDefs(String applicationName) throws UnifyException {
+        List<String> chartNames = environment().valueList(String.class, "name",
+                new ChartQuery().applicationName(applicationName));
+        if (!DataUtils.isBlank(chartNames)) {
+            List<ChartDef> resultList = new ArrayList<ChartDef>();
+            for (String chartName : chartNames) {
+                resultList.add(chartDefFactoryMap
+                        .get(ApplicationNameUtils.getApplicationEntityLongName(applicationName, chartName)));
+            }
+
+            return resultList;
+        }
+
+        return Collections.emptyList();
+    }
+
+    @Override
     public ChartDef getChartDef(String chartName) throws UnifyException {
         return chartDefFactoryMap.get(chartName);
     }
@@ -183,8 +204,10 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
                     "sampleSalesAndCostsChartSnapshot", "Sample Sales and Costs Chart Snapshot",
                     "[\"Sunday\", \"Monday\", \"Tuesday\", \"Wednesday\", \"Thursday\", \"Friday\", \"Saturday\"]");
             chartSnapshot.setSeriesList(Arrays.asList(
-                    new ChartSnapshotSeries(ChartSeriesDataType.INTEGER, "Sales", "[6000,4050,3820,5000,7200,5580,6240]"),
-                    new ChartSnapshotSeries(ChartSeriesDataType.INTEGER, "Costs", "[2500,400,3500,3840,4000,5830,5000]")));
+                    new ChartSnapshotSeries(ChartSeriesDataType.INTEGER, "Sales",
+                            "[6000,4050,3820,5000,7200,5580,6240]"),
+                    new ChartSnapshotSeries(ChartSeriesDataType.INTEGER, "Costs",
+                            "[2500,400,3500,3840,4000,5830,5000]")));
             environment().create(chartSnapshot);
         }
 

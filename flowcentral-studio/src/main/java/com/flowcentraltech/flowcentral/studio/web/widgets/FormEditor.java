@@ -344,11 +344,6 @@ public class FormEditor {
             }
         }
 
-        @Override
-        public String toString() {
-            return "Design [tabs=" + tabs + "]";
-        }
-
         private int getTabIndex(String name) {
             for (int i = 0; i < tabs.size(); i++) {
                 if (tabs.get(i).getName().equals(name)) {
@@ -409,9 +404,9 @@ public class FormEditor {
         private List<FormSection> sections;
 
         public FormTab(String contentType, String name, String label, String applet, String reference, String filter,
-                String mappedFieldName, String mappedForm, String editAction, String editViewOnly, String editAllowAddition, String editFixedRows,
-                boolean ignoreParentCondition, boolean showSearch, boolean quickEdit, boolean visible, boolean editable,
-                boolean disabled) {
+                String mappedFieldName, String mappedForm, String editAction, String editViewOnly,
+                String editAllowAddition, String editFixedRows, boolean ignoreParentCondition, boolean showSearch,
+                boolean quickEdit, boolean visible, boolean editable, boolean disabled) {
             this();
             this.contentType = contentType;
             this.name = name;
@@ -804,12 +799,6 @@ public class FormEditor {
             }
         }
 
-        @Override
-        public String toString() {
-            return "FormSection [name=" + name + ", label=" + label + ", columns=" + columns + ", visible=" + visible
-                    + ", editable=" + editable + ", disabled=" + disabled + ", fields=" + fields + "]";
-        }
-
         private int getFormFieldIndex(String name) {
             for (int i = 0; i < fields.size(); i++) {
                 if (fields.get(i).getName().equals(name)) {
@@ -1005,15 +994,6 @@ public class FormEditor {
 
         public void setDisabled(boolean disabled) {
             this.disabled = disabled;
-        }
-
-        @Override
-        public String toString() {
-            return "FormField [entity=" + entity + ", dataType=" + dataType + ", mode=" + mode + ", name=" + name
-                    + ", label=" + label + ", fldLabel=" + fldLabel + ", inputWidget=" + inputWidget + ", reference="
-                    + reference + ", color=" + color + ", column=" + column + ", switchOnChange=" + switchOnChange
-                    + ", saveAs=" + saveAs + ", required=" + required + ", visible=" + visible + ", editable="
-                    + editable + ", disabled=" + disabled + "]";
         }
     }
 }

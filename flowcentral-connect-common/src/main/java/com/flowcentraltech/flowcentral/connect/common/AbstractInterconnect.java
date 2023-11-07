@@ -236,21 +236,23 @@ public abstract class AbstractInterconnect {
             }
 
             // Implicit fields
-            Set<String> existing = _entityInfo.getFieldNames();
             Class<?> clazz = _entityInfo.getImplClass();
             do {
                 for (Field field : clazz.getDeclaredFields()) {
-                    if (!existing.contains(field.getName())) {
-                        EntityFieldInfo _entityFieldInfo = createEntityFieldInfo(_entitiesbyclassname, field);
-                        if (_entityFieldInfo != null) {
-                            eib.addField(_entityFieldInfo.getType(), _entityFieldInfo.getName(),
-                                    _entityFieldInfo.getDescription(), _entityFieldInfo.getColumn(),
-                                    _entityFieldInfo.getReferences(),
-                                    _entityFieldInfo.getEnumImplClass() != null
-                                            ? _entityFieldInfo.getEnumImplClass().getName()
+                    EntityFieldInfo implicitEntityFieldInfo = createEntityFieldInfo(_entitiesbyclassname, field);
+                    if (_entityInfo.isField(field.getName())) {
+                        EntityFieldInfo _entityFieldInfo = _entityInfo.getEntityFieldInfo(field.getName());
+                        _entityFieldInfo.overrideBlank(implicitEntityFieldInfo);
+                    } else {
+                        if (implicitEntityFieldInfo != null) {
+                            eib.addField(implicitEntityFieldInfo.getType(), implicitEntityFieldInfo.getName(),
+                                    implicitEntityFieldInfo.getDescription(), implicitEntityFieldInfo.getColumn(),
+                                    implicitEntityFieldInfo.getReferences(),
+                                    implicitEntityFieldInfo.getEnumImplClass() != null
+                                            ? implicitEntityFieldInfo.getEnumImplClass().getName()
                                             : null,
-                                    _entityFieldInfo.getPrecision(), _entityFieldInfo.getScale(),
-                                    _entityFieldInfo.getLength(), _entityFieldInfo.isNullable());
+                                    implicitEntityFieldInfo.getPrecision(), implicitEntityFieldInfo.getScale(),
+                                    implicitEntityFieldInfo.getLength(), implicitEntityFieldInfo.isNullable());
                         }
                     }
                 }

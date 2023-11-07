@@ -27,12 +27,14 @@ import com.flowcentraltech.flowcentral.dashboard.constants.DashboardModuleNameCo
 import com.flowcentraltech.flowcentral.dashboard.data.DashboardDef;
 import com.flowcentraltech.flowcentral.dashboard.entities.Dashboard;
 import com.flowcentraltech.flowcentral.dashboard.entities.DashboardQuery;
+import com.flowcentraltech.flowcentral.dashboard.entities.DashboardSection;
 import com.flowcentraltech.flowcentral.dashboard.entities.DashboardTile;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Transactional;
 import com.tcdng.unify.core.criterion.Update;
 import com.tcdng.unify.core.data.FactoryMap;
+import com.tcdng.unify.core.util.DataUtils;
 
 /**
  * Default dashboard business service implementation.
@@ -64,8 +66,14 @@ public class DashboardModuleServiceImpl extends AbstractFlowCentralService imple
 					throw new UnifyException(DashboardModuleErrorConstants.CANNOT_FIND_APPLICATION_DASHBOARD, longName);
 				}
 
-				DashboardDef.Builder ddb = DashboardDef.newBuilder(dashboard.getSections(), dashboard.getStatus(),
+				DashboardDef.Builder ddb = DashboardDef.newBuilder(dashboard.getStatus(),
 						longName, dashboard.getDescription(), dashboard.getId(), dashboard.getVersionNo());
+
+				DataUtils.sortAscending(dashboard.getSectionList(), DashboardSection.class, "index");
+				for (DashboardSection dashboardSection: dashboard.getSectionList()) {				    
+				    ddb.addSection(dashboardSection.getType());
+				}
+				
 				for (DashboardTile dashboardTile : dashboard.getTileList()) {
 					ddb.addTile(dashboardTile.getType(), dashboardTile.getName(), dashboardTile.getDescription(),
 							dashboardTile.getChart(), dashboardTile.getSection(), dashboardTile.getIndex());

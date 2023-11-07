@@ -30,8 +30,9 @@ import com.tcdng.unify.core.annotation.UniqueConstraint;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@Table(name = "FC_DASHBOARDTILE",
-        uniqueConstraints = { @UniqueConstraint({ "name" }), @UniqueConstraint({ "description" }) })
+@Table(name = "FC_DASHBOARDTILE", uniqueConstraints = {
+        @UniqueConstraint({ "dashboardId", "name" }),
+        @UniqueConstraint({ "dashboardId", "description" }) })
 public class DashboardTile extends BaseConfigNamedEntity {
 
     @ForeignKey(Dashboard.class)

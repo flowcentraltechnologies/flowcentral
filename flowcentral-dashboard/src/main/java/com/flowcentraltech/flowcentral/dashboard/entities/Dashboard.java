@@ -48,6 +48,9 @@ public class Dashboard extends BaseApplicationEntity {
     private String statusDesc;
     
     @ChildList
+    private List<DashboardSection> sectionList;
+    
+    @ChildList
     private List<DashboardTile> tileList;
 
     public Dashboard() {
@@ -86,7 +89,15 @@ public class Dashboard extends BaseApplicationEntity {
 		this.statusDesc = statusDesc;
 	}
 
-	public List<DashboardTile> getTileList() {
+	public List<DashboardSection> getSectionList() {
+        return sectionList;
+    }
+
+    public void setSectionList(List<DashboardSection> sectionList) {
+        this.sectionList = sectionList;
+    }
+
+    public List<DashboardTile> getTileList() {
         return tileList;
     }
 

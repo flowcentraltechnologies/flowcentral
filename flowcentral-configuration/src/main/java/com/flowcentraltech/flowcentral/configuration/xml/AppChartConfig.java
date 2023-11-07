@@ -46,9 +46,9 @@ public class AppChartConfig extends BaseNameConfig {
 
     private String rule;
 
-    private int width;
+    private Integer width;
 
-    private int height;
+    private Integer height;
 
     private boolean stacked;
 
@@ -122,21 +122,21 @@ public class AppChartConfig extends BaseNameConfig {
         this.rule = rule;
     }
 
-    public int getWidth() {
+    public Integer getWidth() {
         return width;
     }
 
     @XmlAttribute
-    public void setWidth(int width) {
+    public void setWidth(Integer width) {
         this.width = width;
     }
 
-    public int getHeight() {
+    public Integer getHeight() {
         return height;
     }
 
     @XmlAttribute
-    public void setHeight(int height) {
+    public void setHeight(Integer height) {
         this.height = height;
     }
 

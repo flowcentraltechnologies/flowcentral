@@ -79,6 +79,17 @@ public interface ChartModuleService extends FlowCentralService {
     List<ChartSnapshot> findChartSnapshots(ChartSnapshotQuery query) throws UnifyException;
 
     /**
+     * Finds chart definitions by application.
+     * 
+     * @param applicationName
+     *              the application name
+     * @return list of chart definitions
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    List<ChartDef> findChartDefs(String applicationName) throws UnifyException;
+
+    /**
      * Gets a chart definition.
      * 
      * @param chartName
