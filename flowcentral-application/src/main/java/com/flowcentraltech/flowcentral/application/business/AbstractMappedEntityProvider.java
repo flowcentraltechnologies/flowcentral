@@ -26,6 +26,7 @@ import com.flowcentraltech.flowcentral.common.AbstractFlowCentralComponent;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
+import com.tcdng.unify.core.criterion.Order;
 import com.tcdng.unify.core.criterion.Restriction;
 import com.tcdng.unify.core.data.BeanValueListStore;
 import com.tcdng.unify.core.data.BeanValueStore;
@@ -262,7 +263,12 @@ public abstract class AbstractMappedEntityProvider<U extends BaseMappedEntityPro
             _query.addRestriction(restriction);
         }
 
-        _query.setOrder(query.getOrder());
+        if (query.getOrder() != null) {
+            Order _order = query.getOrder().copy();
+            _order.fieldSwap(queryFieldMap);
+            _query.setOrder(_order);
+        }
+
         return _query;
     }
 
