@@ -22,6 +22,7 @@ import java.util.List;
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.configuration.constants.DashboardColumnsType;
 import com.flowcentraltech.flowcentral.configuration.constants.DashboardTileType;
+import com.flowcentraltech.flowcentral.dashboard.data.DashboardDef;
 import com.tcdng.unify.core.UnifyException;
 
 /**
@@ -34,11 +35,13 @@ public class DashboardEditor {
 
     private final AppletUtilities au;
 
+    private DashboardDef dashboardDef;
+
     private Design design;
 
-    private DashboardSection editSection;
+    private DDashboardSection editSection;
 
-    private DashboardTile editTile;
+    private DDashboardTile editTile;
 
     private String editorBodyPanelName;
 
@@ -52,8 +55,9 @@ public class DashboardEditor {
 
     private boolean readOnly;
 
-    private DashboardEditor(AppletUtilities au, Design design) {
+    private DashboardEditor(AppletUtilities au, DashboardDef dashboardDef, Design design) {
         this.au = au;
+        this.dashboardDef = dashboardDef;
         this.design = design;
     }
 
@@ -79,6 +83,10 @@ public class DashboardEditor {
         return editorBodyPanelName != null;
     }
 
+    public DashboardDef getDashboardDef() {
+        return dashboardDef;
+    }
+
     public Design getDesign() {
         return design;
     }
@@ -87,11 +95,11 @@ public class DashboardEditor {
         this.design = design;
     }
 
-    public DashboardSection getEditSection() {
+    public DDashboardSection getEditSection() {
         return editSection;
     }
 
-    public DashboardTile getEditTile() {
+    public DDashboardTile getEditTile() {
         return editTile;
     }
 
@@ -115,7 +123,7 @@ public class DashboardEditor {
     public String prepareSectionCreate(int sectionIndex) throws UnifyException {
         dialogTitle = au.resolveSessionMessage("$m{dashboardeditor.dashboardsectioneditorpanel.caption.add}");
         this.originSectionIndex = sectionIndex;
-        editSection = new DashboardSection();
+        editSection = new DDashboardSection();
         editSection.setMode("CREATE");
         return editSectionPanelName;
     }
@@ -134,8 +142,8 @@ public class DashboardEditor {
 
     // Fields
     public String performTileAdd() throws UnifyException {
-        DashboardSection dashboardSection = design.getDashboardSection(originSectionIndex);
-        dashboardSection.addDashboardTile(editTile, originSectionIndex);
+        DDashboardSection dDashboardSection = design.getDashboardSection(originSectionIndex);
+        dDashboardSection.addDashboardTile(editTile, originSectionIndex);
         if (editTile.getType() == null) {
             editTile.setType(DashboardTileType.SIMPLE.code());
         }
@@ -146,7 +154,7 @@ public class DashboardEditor {
     public String prepareTileCreate(String chart, int sectionIndex, int column) throws UnifyException {
         dialogTitle = au.resolveSessionMessage("$m{dashboardeditor.dashboardtileeditorpanel.caption.add}");
         this.originSectionIndex = sectionIndex;
-        editTile = new DashboardTile();
+        editTile = new DDashboardTile();
         editTile.setMode("CREATE");
         editTile.setType(DashboardTileType.SIMPLE.code());
         editTile.setChart(chart);
@@ -167,41 +175,44 @@ public class DashboardEditor {
         return editorBodyPanelName;
     }
 
-    public static Builder newBuilder() {
-        return new Builder();
+    public static Builder newBuilder(DashboardDef dashboardDef) {
+        return new Builder(dashboardDef);
     }
 
     public static class Builder {
+        
+        private DashboardDef dashboardDef;
 
-        private List<DashboardSection> sections;
+        private List<DDashboardSection> sections;
 
-        private DashboardSection currentSection;
+        private DDashboardSection currentSection;
 
-        public Builder() {
-            this.sections = new ArrayList<DashboardSection>();
+        public Builder(DashboardDef dashboardDef) {
+            this.dashboardDef = dashboardDef;
+            this.sections = new ArrayList<DDashboardSection>();
         }
 
         public Builder addSection(DashboardColumnsType columns) {
-            currentSection = new DashboardSection(columns.code());
+            currentSection = new DDashboardSection(columns.code());
             sections.add(currentSection);
             return this;
         }
 
         public Builder addTile(DashboardTileType type, String name, String description, String chart) {
-            currentSection.getTiles().add(new DashboardTile(name, description, type.code(), chart));
+            currentSection.getTiles().add(new DDashboardTile(name, description, type.code(), chart));
             return this;
         }
 
         public DashboardEditor build(AppletUtilities au) {
-            return new DashboardEditor(au, new Design(sections));
+            return new DashboardEditor(au, dashboardDef, new Design(sections));
         }
     }
 
     public static class Design {
 
-        private List<DashboardSection> sections;
+        private List<DDashboardSection> sections;
 
-        public Design(List<DashboardSection> sections) {
+        public Design(List<DDashboardSection> sections) {
             this.sections = sections;
         }
 
@@ -209,52 +220,52 @@ public class DashboardEditor {
 
         }
 
-        public List<DashboardSection> getSections() {
+        public List<DDashboardSection> getSections() {
             return sections;
         }
 
-        public void setSections(List<DashboardSection> sections) {
+        public void setSections(List<DDashboardSection> sections) {
             this.sections = sections;
         }
 
-        public void addDashboardSection(int originIndex, DashboardSection section) {
+        public void addDashboardSection(int originIndex, DDashboardSection section) {
             sections.add(originIndex + 1, section);
         }
 
-        public DashboardSection getDashboardSection(int index) {
+        public DDashboardSection getDashboardSection(int index) {
             return sections.get(index);
         }
 
-        public DashboardSection removeDashboardSection(int index) {
+        public DDashboardSection removeDashboardSection(int index) {
             return sections.remove(index);
         }
 
-        public DashboardTile getDashboardTile(int sectionIndex, int tileIndex) {
-            DashboardSection section = sections.get(sectionIndex);
+        public DDashboardTile getDashboardTile(int sectionIndex, int tileIndex) {
+            DDashboardSection section = sections.get(sectionIndex);
             return section.getDashboardTile(tileIndex);
         }
 
         public void removeDashboardTile(int sectionIndex, int tileIndex) {
-            DashboardSection section = sections.get(sectionIndex);
+            DDashboardSection section = sections.get(sectionIndex);
             section.removeDashboardTile(tileIndex);
         }
     }
 
-    public static class DashboardSection {
+    public static class DDashboardSection {
 
         private String mode;
 
         private String columns;
 
-        private List<DashboardTile> tiles;
+        private List<DDashboardTile> tiles;
 
-        public DashboardSection(String columns) {
-            this.tiles = new ArrayList<DashboardTile>();
+        public DDashboardSection(String columns) {
+            this.tiles = new ArrayList<DDashboardTile>();
             this.columns = columns;
         }
 
-        public DashboardSection() {
-            this.tiles = new ArrayList<DashboardTile>();
+        public DDashboardSection() {
+            this.tiles = new ArrayList<DDashboardTile>();
         }
 
         public String getMode() {
@@ -273,28 +284,28 @@ public class DashboardEditor {
             this.columns = columns;
         }
 
-        public List<DashboardTile> getTiles() {
+        public List<DDashboardTile> getTiles() {
             return tiles;
         }
 
-        public void setTiles(List<DashboardTile> tiles) {
+        public void setTiles(List<DDashboardTile> tiles) {
             this.tiles = tiles;
         }
 
-        public void addDashboardTile(DashboardTile editTile, int index) {
+        public void addDashboardTile(DDashboardTile editTile, int index) {
             tiles.add(index, editTile);
         }
 
-        public DashboardTile getDashboardTile(int index) {
+        public DDashboardTile getDashboardTile(int index) {
             return tiles.get(index);
         }
 
-        public DashboardTile removeDashboardTile(int index) {
+        public DDashboardTile removeDashboardTile(int index) {
             return tiles.remove(index);
         }
     }
 
-    public static class DashboardTile {
+    public static class DDashboardTile {
 
         private String mode;
 
@@ -306,14 +317,14 @@ public class DashboardEditor {
 
         private String chart;
 
-        public DashboardTile(String name, String description, String type, String chart) {
+        public DDashboardTile(String name, String description, String type, String chart) {
             this.name = name;
             this.description = description;
             this.type = type;
             this.chart = chart;
         }
 
-        public DashboardTile() {
+        public DDashboardTile() {
 
         }
 

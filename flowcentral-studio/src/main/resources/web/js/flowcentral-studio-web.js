@@ -1617,74 +1617,54 @@ fuxstudio.dshTileCrud = function(evp, mode) {
 
 fuxstudio.dshCreateSection = function(evp) {
 	const editor = evp.editor;
-	const tabInfo = evp.tabInfo;
-	const tab = tabInfo.tab;
-	const caption = tab.label ? tab.label:"&nbsp;";
+	const secInfo = evp.secInfo;
+	const sec = secInfo.sec;
+	const caption = sec.label ? sec.label:"&nbsp;";
 	const labels = editor.secLabels;
 	var html = null;
-	tabInfo.frozen = tab.contentType == TAB_MINIFORM_CHANGELOG;
-	tabInfo.allowSec = tab.contentType == TAB_MINIFORM;
-	tabInfo.stick = tabInfo.index == 0;
-	if (tabInfo.stick) {
-		html = "<div class=\"tabhdr\">"
-			+ "<div class=\"elcap\" id=\"" + tabInfo.dragId + "\"><span>" + editor.sectitle + " [" + tab.contentType + " - " + caption + "]</span></div>"
+	secInfo.stick = secInfo.index == 0;
+	if (secInfo.stick) {
+		html = "<div class=\"sechdr\">"
+			+ "<div class=\"elcap\" id=\"" + secInfo.dragId + "\"><span>" + editor.sectitle + " [" + sec.contentType + " - " + caption + "]</span></div>"
 			+ "<div class=\"elact\">";
 	    if (editor.editable) {
-	    	html += fuxstudio.editorTextButton(tabInfo.addBtnId, editor.addtab);
+	    	html += fuxstudio.editorTextButton(secInfo.addBtnId, editor.addsec);
 	    }
 	    
-		if (tabInfo.allowSec) {
-		    if (editor.editable) {
-		    	html += fuxstudio.editorTextButton(tabInfo.addSecBtnId, editor.addsec)
-		    }
-		}
+	    if (editor.editable) {
+	    	html += fuxstudio.editorTextButton(secInfo.addTileBtnId, editor.addtile)
+	    }
 			
-		html += fuxstudio.editorSymButton(tabInfo.editBtnId, editor.cog, "actbtn")
+		html += fuxstudio.editorSymButton(secInfo.editBtnId, editor.cog, "actbtn")
         html += "</div></div>";
 	} else {
-		html = "<div class=\"tabhdr\">"
-			+ "<div class=\"elcap grab\" id=\"" + tabInfo.dragId + "\"><span>" + editor.sectitle + " [" + tab.contentType + " - " + caption + "]</span></div>"
+		html = "<div class=\"sechdr\">"
+			+ "<div class=\"elcap grab\" id=\"" + secInfo.dragId + "\"><span>" + editor.sectitle + " [" + sec.contentType + " - " + caption + "]</span></div>"
 			+ "<div class=\"elact\">";
 	    if (editor.editable) {
-	    	html += fuxstudio.editorTextButton(tabInfo.addBtnId, editor.addtab);
+	    	html += fuxstudio.editorTextButton(secInfo.addBtnId, editor.addsec);
 	    }
-		if (!tabInfo.frozen) {
-			if (tabInfo.allowSec) {
-			    if (editor.editable) {
-					html += fuxstudio.editorTextButton(tabInfo.addSecBtnId, editor.addsec)
-			    }
-			}
-			
-			html += fuxstudio.editorSymButton(tabInfo.editBtnId, editor.cog, "actbtn");
-		    if (editor.editable) {
-		    	html += fuxstudio.editorSymButton(tabInfo.delBtnId,  editor.cross, "actbtn");
-		    }
-		}
+	    
+	    if (editor.editable) {
+			html += fuxstudio.editorTextButton(secInfo.addTileBtnId, editor.addtile)
+	    }
+		
+		html += fuxstudio.editorSymButton(secInfo.editBtnId, editor.cog, "actbtn");
+	    if (editor.editable) {
+	    	html += fuxstudio.editorSymButton(secInfo.delBtnId,  editor.cross, "actbtn");
+	    }
+
 	    html += "</div></div>";
 	}
 
-	if(tab.contentType == TAB_MINIFORM || tab.contentType == TAB_MINIFORM_CHANGELOG) {
-		tabInfo.designId = "secdesign_" + tabInfo.tabId;
-		if(tabInfo.frozen) {
-			html += "<div class=\"secdesign secdesignz\" id=\"" + tabInfo.designId + "\">"
-		} else {
-			html += "<div class=\"secdesign\" id=\"" + tabInfo.designId + "\">"
-		}
-		for (var i = 0; i < tab.sections.length; i++) {
-			const sectionInfo = fuxstudio.dshCreateSectionInfo(tabInfo, i);
-			html += fuxstudio.dshSectionHtml(editor, sectionInfo);
-		}
-	    html += "</div>";
-	} else {
-		html += "<div class=\"secdesign secdesignz\"></div>"
-	}
+	html += "<div class=\"secdesign secdesignz\"></div>"
     
-	const tabdiv = document.createElement("div");
-	tabdiv.className = "tab";
-	tabdiv.id = tabInfo.tabId;
-	tabdiv.innerHTML = html;
-	tabdiv.stick = tabInfo.stick;
-	return tabdiv;
+	const secdiv = document.createElement("div");
+	secdiv.className = "sec";
+	secdiv.id = secInfo.secId;
+	secdiv.innerHTML = html;
+	secdiv.stick = secInfo.stick;
+	return secdiv;
 }
 
 fuxstudio.dshCreateSectionInfo = function(tabInfo, index) {
