@@ -3105,6 +3105,10 @@
 						inputWidget="application.checkbox" column="1" />
 				</section>
 			</tab>
+			<tab name="design" label="$m{studio.dashboard.form.design}"
+				contentType="child_list" applet="manageDashboardTile"
+				reference="tileList" editAction="/designChildItem"
+				visible="false" />
 			<tab name="tiles" label="$m{studio.dashboard.form.tiles}"
 				contentType="child_list" applet="manageDashboardTile"
 				reference="tileList" />
