@@ -54,7 +54,7 @@ public class DashboardEditorPagePanel extends AbstractStudioEditorPagePanel {
     public void saveDesign() throws UnifyException {
         DashboardEditorPage dashboardEditorPage = getDashboardEditorPage();
         dashboardEditorPage.commitDesign();
-        hintUser("$m{studiodashboardapplet.formeditor.success.hint}", dashboardEditorPage.getSubTitle());
+        hintUser("$m{studiodashboardapplet.dashboardeditor.success.hint}", dashboardEditorPage.getSubTitle());
     }
 
     private DashboardEditorPage getDashboardEditorPage() throws UnifyException {
