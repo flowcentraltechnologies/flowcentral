@@ -98,6 +98,9 @@
 		<reference name="dashboardRef"
 			description="$m{dashboard.dashboard.reference}" entity="dashboard"
 			searchField="description" />
+		<reference name="dashboardSectionRef"
+			description="$m{dashboard.dashboardsection.reference}"
+			entity="dashboardSection" />
 		<reference name="dashboardTileRef"
 			description="$m{dashboard.dashboardtile.reference}"
 			entity="dashboardTile" searchField="description" />
@@ -118,8 +121,29 @@
 			<field name="statusDesc"
 				label="$m{dashboard.dashboard.statusdesc}" type="list_only"
 				key="status" property="description" />
+			<field name="sectionList" label="$m{dashboard.dashboard.sections}"
+				type="child_list" references="dashboardSectionRef" />
 			<field name="tileList" label="$m{dashboard.dashboard.tiles}"
 				type="child_list" references="dashboardTileRef" />
+		</entity>
+		<entity name="dashboardSection"
+			description="$m{dashboard.dashboardsection}"
+			label="$m{dashboard.dashboardsection.label}"
+			type="com.flowcentraltech.flowcentral.dashboard.entities.DashboardSection"
+			auditable="true" reportable="true">
+			<field name="dashboardId"
+				label="$m{dashboard.dashboardsection.dashboardid}" type="ref"
+				references="dashboardRef"
+				inputLabel="$m{dashboard.dashboardsection.dashboard}"
+				inputWidget="application.entitysearch" />
+			<field name="index" label="$m{dashboard.dashboardsection.index}"
+				type="integer" inputWidget="application.integer" />
+			<field name="type" label="$m{dashboard.dashboardsection.type}"
+				type="enum_ref" references="dashboardcolumnstypelist"
+				inputWidget="application.enumlist" />
+			<field name="typeDesc"
+				label="$m{dashboard.dashboardsection.typedesc}" type="list_only"
+				key="type" property="description" />
 		</entity>
 		<entity name="dashboardTile"
 			description="$m{dashboard.dashboardtile}"
