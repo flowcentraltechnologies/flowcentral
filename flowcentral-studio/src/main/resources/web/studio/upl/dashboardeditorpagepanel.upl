@@ -25,8 +25,8 @@
 !fc-dashboardsectioneditorpanel:editSectionPanel binding:dashboardEditor
 	dialogCaptionBinding:dialogTitle dialogFormBinding:editSection
 	refreshOnApply:$c{dashboardEditorBodyPanel}
-!fc-dashboardtileeditorpanel:editFieldPanel binding:dashboardEditor
-	dialogCaptionBinding:dialogTitle dialogFormBinding:editField
+!fc-dashboardtileeditorpanel:editTilePanel binding:dashboardEditor
+	dialogCaptionBinding:dialogTitle dialogFormBinding:editTile
 	refreshOnApply:$c{dashboardEditorBodyPanel}
 
 // Actions

@@ -42,9 +42,7 @@ import com.tcdng.unify.web.ui.widget.writer.AbstractControlWriter;
 public class DashboardEditorWriter extends AbstractControlWriter {
 
     private static final String[] SECTION_PROPERTY_KEYS = { "dashboardeditor.section.caption.prefix",
-            "dashboardeditor.section.contenttype", "dashboardeditor.section.label", "dashboardeditor.section.applet",
-            "dashboardeditor.section.reference", "dashboardeditor.section.editaction",
-            "dashboardeditor.section.editable", "dashboardeditor.section.disabled" };
+            "dashboardeditor.section.columns" };
 
     @Configurable
     private ChartModuleService chartModuleService;
@@ -134,7 +132,7 @@ public class DashboardEditorWriter extends AbstractControlWriter {
     @Override
     protected void doWriteBehavior(ResponseWriter writer, Widget widget, EventHandler[] handlers)
             throws UnifyException {
-        super.doWriteBehavior(writer, widget, handlers);
+        super.doWriteBehavior(writer, widget, handlers); 
 
         final DashboardEditorWidget dashboardEditorWidget = (DashboardEditorWidget) widget;
         writer.writeBehavior(dashboardEditorWidget.getValueCtrl());

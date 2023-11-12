@@ -825,16 +825,12 @@
 			type="manage_entitylist" entity="dashboard.dashboardTile"
 			menuAccess="false">
 			<property name="searchTable" value="dashboardTileTable" />
-			<property name="searchTable.new" value="true" />
-			<property name="searchTable.edit" value="false" />
+			<property name="searchTable.new" value="false" />
+			<property name="searchTable.edit" value="true" />
 			<property name="searchTable.report" value="false" />
-			<property name="createForm" value="dashboardTileForm" />
-			<property name="createForm.save" value="true" />
-			<property name="createForm.save.next" value="true" />
-			<property name="createForm.save.close" value="true" />
 			<property name="maintainForm" value="dashboardTileForm" />
-			<property name="maintainForm.update" value="true" />
-			<property name="maintainForm.delete" value="true" />
+			<property name="maintainForm.update" value="false" />
+			<property name="maintainForm.delete" value="false" />
 		</applet>
 		<applet name="manageAppTableColumn"
 			description="$m{studio.apptablecolumn.manage}"
@@ -3100,18 +3096,14 @@
 						column="0" required="true" saveAs="true" />
 					<field name="configType" inputWidget="application.enumlist"
 						column="1" disabled="true" required="true" />
-					<field name="sections" column="1" />
+					<field name="sections" column="1" disabled="true" />
 					<field name="allowSecondaryTenants"
 						inputWidget="application.checkbox" column="1" />
 				</section>
 			</tab>
 			<tab name="design" label="$m{studio.dashboard.form.design}"
 				contentType="child_list" applet="manageDashboardTile"
-				reference="tileList" editAction="/designChildItem"
-				visible="false" />
-			<tab name="tiles" label="$m{studio.dashboard.form.tiles}"
-				contentType="child_list" applet="manageDashboardTile"
-				reference="tileList" />
+				reference="tileList" editAction="/designChildItem" />
 			<tab name="changeLog" label="$m{application.form.audit}"
 				contentType="miniform_changelog" />
 			<formStatePolicy type="on_switch"

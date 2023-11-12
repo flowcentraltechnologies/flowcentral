@@ -3037,6 +3037,7 @@ fuxstudio.init = function() {
 	ux.setfn(fuxstudio.rigWorkflowEditor, "fuxstudio05"); 
 	ux.setfn(fuxstudio.rigReportColumnEditorPanel, "fuxstudio06");  
 	ux.setfn(fuxstudio.rigReportEditor, "fuxstudio07");  
+	ux.setfn(fuxstudio.rigDashboardEditor, "fuxstudio08");  
 }
 
 fuxstudio.init();

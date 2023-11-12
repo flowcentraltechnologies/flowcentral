@@ -38,12 +38,13 @@ public class StudioDashboardApplet extends StudioAppComponentApplet {
 
     private DashboardEditorPage dashboardEditorPage;
 
-    private DashboardModuleService dms;
+    private final  DashboardModuleService dms;
 
     public StudioDashboardApplet(StudioModuleService sms, DashboardModuleService dms, AppletUtilities au,
             String pathVariable, String applicationName, AppletWidgetReferences appletWidgetReferences,
             EntityFormEventHandlers formEventHandlers) throws UnifyException {
         super(sms, au, pathVariable, applicationName, appletWidgetReferences, formEventHandlers);
+        this.dms = dms;
     }
 
     public DashboardEditorPage getDashboardEditorPage() {

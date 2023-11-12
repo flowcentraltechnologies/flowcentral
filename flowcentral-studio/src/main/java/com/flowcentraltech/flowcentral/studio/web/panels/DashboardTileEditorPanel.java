@@ -37,8 +37,9 @@ public class DashboardTileEditorPanel extends AbstractDialogPanel {
 
     @Override
     public void onPageConstruct() throws UnifyException {
-        setDisabled("tileName", true);
-        setDisabled("tileColumn", true);
+        setDisabled("frmName", true);
+        setDisabled("frmDesc", true);
+        setDisabled("frmChart", true);
     }
 
     @Override
