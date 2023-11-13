@@ -185,7 +185,7 @@ public enum StudioAppComponentType implements EnumConst {
             "/studiodashboardapplet",
             "studiooncreatedashboard-policy",
             null,
-            null,
+            "studioondeletedashboard-policy",
             StudioAppComponentFlags.SUPPORTS_NEW | StudioAppComponentFlags.SUPPORTS_SAVEAS,
             AppletType.STUDIO_FC_COMPONENT,
             Dashboard.class),

@@ -48,6 +48,7 @@ public class StudioOnCreateDashboardPolicy extends StudioOnCreateComponentPolicy
             section.setType(DashboardColumnsType.TYPE_1);
             sectionList.add(section);
             dashboard.setSectionList(sectionList);
+            dashboard.setSections(1);
         }
         
         return null;
