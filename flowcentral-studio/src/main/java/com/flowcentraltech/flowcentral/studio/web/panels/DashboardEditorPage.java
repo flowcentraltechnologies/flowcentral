@@ -112,19 +112,17 @@ public class DashboardEditorPage extends AbstractStudioEditorPage implements Tab
                 section.setIndex(sectionIndex);
                 section.setType(DashboardColumnsType.fromName(dsection.getColumns()));
 
-                int tileIndex = 0;
-                for (DDashboardTile dtile: dsection.getTiles()) {
+                for (DDashboardTile dtile : dsection.getTiles()) {
                     DashboardTile tile = new DashboardTile();
                     tile.setType(DashboardTileType.fromName(dtile.getType()));
                     tile.setName(dtile.getName());
                     tile.setDescription(dtile.getDescription());
                     tile.setChart(dtile.getChart());
                     tile.setSection(sectionIndex);
-                    tile.setIndex(tileIndex);
+                    tile.setIndex(dtile.getColumn());
                     tileList.add(tile);
-                    tileIndex++;
                 }
-                
+
                 sectionList.add(section);
                 sectionIndex++;
             }
@@ -137,19 +135,21 @@ public class DashboardEditorPage extends AbstractStudioEditorPage implements Tab
 
     public void newEditor() throws UnifyException {
         DashboardEditor.Builder deb = DashboardEditor.newBuilder(dashboardDef);
-        Dashboard dashboard = getAu().environment().find(Dashboard.class, baseId);        
+        Dashboard dashboard = getAu().environment().find(Dashboard.class, baseId);
         for (DashboardSection dashboardSection : dashboard.getSectionList()) {
             deb.addSection(dashboardSection.getType());
         }
 
-        for(DashboardTile dashboardTile:dashboard.getTileList()) {
-            deb.addTile(dashboardTile.getType(), dashboardTile.getName(), dashboardTile.getDescription(), dashboardTile.getChart());
+        for (DashboardTile dashboardTile : dashboard.getTileList()) {
+            deb.addTile(dashboardTile.getType(), dashboardTile.getName(), dashboardTile.getDescription(),
+                    dashboardTile.getChart(), dashboardTile.getSection(), dashboardTile.getIndex());
         }
+
         dashboardEditor = deb.build(getAu());
 
         TabSheetDef.Builder tsdb = TabSheetDef.newBuilder(null, 1L);
-        tsdb.addTabDef("editor", getAu().resolveSessionMessage("$m{studio.dashboard.form.design}"), "!fc-dashboardeditor",
-                RendererType.SIMPLE_WIDGET);
+        tsdb.addTabDef("editor", getAu().resolveSessionMessage("$m{studio.dashboard.form.design}"),
+                "!fc-dashboardeditor", RendererType.SIMPLE_WIDGET);
         tsdb.addTabDef("preview", getAu().resolveSessionMessage("$m{studio.dashboard.form.preview}"),
                 "fc-dashboardpreviewpanel", RendererType.STANDALONE_PANEL);
         dashboardPreview = new DashboardPreview(getAu(), dashboardEditor);

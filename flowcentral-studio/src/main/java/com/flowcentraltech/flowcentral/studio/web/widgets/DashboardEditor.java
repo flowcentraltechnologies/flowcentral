@@ -180,12 +180,10 @@ public class DashboardEditor {
     }
 
     public static class Builder {
-        
+
         private DashboardDef dashboardDef;
 
         private List<DDashboardSection> sections;
-
-        private DDashboardSection currentSection;
 
         public Builder(DashboardDef dashboardDef) {
             this.dashboardDef = dashboardDef;
@@ -193,13 +191,18 @@ public class DashboardEditor {
         }
 
         public Builder addSection(DashboardColumnsType columns) {
-            currentSection = new DDashboardSection(columns.code());
-            sections.add(currentSection);
+            sections.add(new DDashboardSection(columns.code()));
             return this;
         }
 
-        public Builder addTile(DashboardTileType type, String name, String description, String chart) {
-            currentSection.getTiles().add(new DDashboardTile(name, description, type.code(), chart));
+        public Builder addTile(DashboardTileType type, String name, String description, String chart, int sectionIndex,
+                int column) {
+            if (sectionIndex >= sections.size()) {
+                throw new IllegalArgumentException("Invalid section index");
+            }
+
+            sections.get(sectionIndex).getTiles()
+                    .add(new DDashboardTile(name, description, type.code(), chart, column));
             return this;
         }
 
@@ -317,11 +320,17 @@ public class DashboardEditor {
 
         private String chart;
 
-        public DDashboardTile(String name, String description, String type, String chart) {
+        private int column;
+
+        private boolean filled;
+
+        public DDashboardTile(String name, String description, String type, String chart, int column) {
             this.name = name;
             this.description = description;
             this.type = type;
             this.chart = chart;
+            this.column = column;
+            this.filled = true;
         }
 
         public DDashboardTile() {
@@ -366,6 +375,22 @@ public class DashboardEditor {
 
         public void setChart(String chart) {
             this.chart = chart;
+        }
+
+        public int getColumn() {
+            return column;
+        }
+
+        public void setColumn(int column) {
+            this.column = column;
+        }
+
+        public boolean isFilled() {
+            return filled;
+        }
+
+        public void setFilled(boolean filled) {
+            this.filled = filled;
         }
 
     }
