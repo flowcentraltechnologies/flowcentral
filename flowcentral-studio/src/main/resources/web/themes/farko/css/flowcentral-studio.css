@@ -201,7 +201,7 @@
 .fc-dashboardeditor .tleact {display:inline-block; width:42px;text-align: right;white-space: nowrap; overflow: hidden;text-overflow: ellipsis; margin: 2px 0px;}
 .fc-dashboardeditor .tlebtn {color:#404040; padding:2px 2px; min-height:14px; min-width:14px; font-size:10px; cursor: pointer !important;}
 
-.fc-dashboardeditor .placetile {display:block; box-sizing: border-box; height:28px;
+.fc-dashboardeditor .placetile {display:block; box-sizing: border-box; height:128px;
 	margin:2px;border: dashed 2px #8090f0;background-color:#b7c1f6;color:#8090f0;}
 .fc-dashboardeditor .placetile .plus {display:block; margin-top:1px; font-weight:bold; font-size:4pt; text-align:center;}
 .fc-dashboardeditor .placetile .label {display:block; margin:1px 2px; font-weight:bold; font-size:6pt; text-align:center;}

@@ -79,7 +79,7 @@ public class DashboardEditorWidget extends AbstractFlowCentralMultiControl {
     protected void doOnPageConstruct() throws UnifyException {
         valueCtrl = (Control) addInternalChildWidget("!ui-hidden binding:design");
         editSectionCtrl = (Control) addInternalChildWidget("!ui-hidden binding:sectionIndex");
-        editTileCtrl = (Control) addInternalChildWidget("!ui-hidden binding:tileName");
+        editTileCtrl = (Control) addInternalChildWidget("!ui-hidden binding:chartName");
         editColCtrl = (Control) addInternalChildWidget("!ui-hidden binding:column");
         editTileIndexCtrl = (Control) addInternalChildWidget("!ui-hidden binding:tileIndex");
         editModeCtrl = (Control) addInternalChildWidget("!ui-hidden binding:editMode");
