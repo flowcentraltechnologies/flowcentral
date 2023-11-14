@@ -118,6 +118,13 @@ public class DashboardEditorWidget extends AbstractFlowCentralMultiControl {
 
     @Action
     public void editTile() throws UnifyException {
+        System.out.println("@prime: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+        System.out.println("@prime: editMode = " + editMode);
+        System.out.println("@prime: chartName = " + chartName);
+        System.out.println("@prime: sectionIndex = " + sectionIndex);
+        System.out.println("@prime: column = " + column);
+        System.out.println("@prime: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+
         if (editMode != null) {
             switch (editMode) {
                 case CREATE:

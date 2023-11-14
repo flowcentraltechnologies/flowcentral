@@ -1655,7 +1655,7 @@ fuxstudio.dshCreateTileInfo = function(secInfo, index) {
 }
 
 fuxstudio.dshTileHtml = function(editor, tileInfo) {
-	return "<div class=\"tle\" id=\"" + tileInfo.tleId + "\">"
+	return "<div class=\"tlebdy\" id=\"" + tileInfo.tleId + "\">"
 			+ fuxstudio.dshTileInnerHtml(editor, tileInfo)
 		    + "</div>";
 }
@@ -1748,11 +1748,11 @@ fuxstudio.dshChoiceDragEnd = function(uEv) {
 	fuxstudio.dragEvp = null;
 	
 	if (_index >= 0) {
-		const tileevp = {};
-		tileevp.editor = _editor;
-		tileevp.secInfo = _secInfo;
-		tileevp.tileInfo = {tile:{name: evp.tileInfo.tleNm}};
-		fuxstudio.dshTileAdd(tileevp, _column, _index);
+		const tevp = {};
+		tevp.editor = _editor;
+		tevp.secInfo = _secInfo;
+		tevp.tileInfo = {tile:{name: evp.tileInfo.tleNm}};
+		fuxstudio.dshTileAdd(tevp, _column, _index);
 	}
 }
 
