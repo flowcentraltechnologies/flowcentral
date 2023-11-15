@@ -18,7 +18,7 @@ package com.flowcentraltech.flowcentral.studio.web.panels;
 
 import com.flowcentraltech.flowcentral.common.constants.DialogFormMode;
 import com.flowcentraltech.flowcentral.studio.web.widgets.DashboardEditor;
-import com.flowcentraltech.flowcentral.studio.web.widgets.DashboardEditor.DDashboardSection;
+import com.flowcentraltech.flowcentral.studio.web.widgets.DashboardEditor.DDashboardTile;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.UplBinding;
@@ -26,28 +26,35 @@ import com.tcdng.unify.web.annotation.Action;
 import com.tcdng.unify.web.ui.widget.panel.AbstractDialogPanel;
 
 /**
- * Dashboard section editor panel.
+ * Dashboard tile editor panel.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@Component("fc-dashboardsectioneditorpanel")
-@UplBinding("web/studio/upl/dashboardsectioneditorpanel.upl")
-public class DashboardSectionEditorPanel extends AbstractDialogPanel {
+@Component("fc-dashboardtileeditorpanel")
+@UplBinding("web/studio/upl/dashboardtileeditorpanel.upl")
+public class DashboardTileEditorPanel extends AbstractDialogPanel {
+
+    @Override
+    public void onPageConstruct() throws UnifyException {
+        setDisabled("frmName", true);
+        setDisabled("frmDesc", true);
+        setDisabled("frmChart", true);
+    }
 
     @Override
     public void switchState() throws UnifyException {
         super.switchState();
 
-        DDashboardSection formSection = getValue(DashboardEditor.class).getEditSection();
-        boolean isCreate = DialogFormMode.CREATE.equals(DialogFormMode.fromName(formSection.getMode()));
+        DDashboardTile dashboardTile = getValue(DashboardEditor.class).getEditTile();
+        boolean isCreate = DialogFormMode.CREATE.equals(DialogFormMode.fromName(dashboardTile.getMode()));
         setVisible("addBtn", isCreate);
         setVisible("applyBtn", !isCreate);
     }
 
     @Action
     public void add() throws UnifyException {
-        getValue(DashboardEditor.class).performSectionAdd();
+        getValue(DashboardEditor.class).performTileAdd();
         commandHidePopup();
     }
 

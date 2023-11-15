@@ -41,7 +41,7 @@ import com.tcdng.unify.web.constant.Secured;
 import com.tcdng.unify.web.ui.AbstractPageController;
 
 /**
- * Studio dashboard controller.
+ * Studio application dashboard controller.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
@@ -60,13 +60,13 @@ import com.tcdng.unify.web.ui.AbstractPageController;
         @ResultMapping(name = "switchcreateapplication", response = {
                 "!switchpanelresponse panels:$l{switchApplicationPopup.searchBaseBodyPanel.createApplicationBasePanel}",
                 "!refreshpanelresponse panels:$l{switchApplicationPopup.entitySearchActionPanel}" }) })
-public class StudioDashboardController extends AbstractPageController<StudioDashboardPageBean> {
+public class ApplicationDashboardController extends AbstractPageController<ApplicationDashboardPageBean> {
 
     @Configurable
     private AppletUtilities appletUtils;
 
-    public StudioDashboardController() {
-        super(StudioDashboardPageBean.class, Secured.TRUE, ReadOnly.FALSE, ResetOnWrite.FALSE);
+    public ApplicationDashboardController() {
+        super(ApplicationDashboardPageBean.class, Secured.TRUE, ReadOnly.FALSE, ResetOnWrite.FALSE);
     }
 
     public final void setAppletUtils(AppletUtilities appletUtils) {
@@ -75,7 +75,7 @@ public class StudioDashboardController extends AbstractPageController<StudioDash
 
     @Action
     public String showSwitchApplication() throws UnifyException {
-        StudioDashboardPageBean pageBean = getPageBean();
+        ApplicationDashboardPageBean pageBean = getPageBean();
         pageBean.getSwitchApplicationSearch().applyFilterToSearch();
         return "showswitchapplication";
     }
@@ -94,7 +94,7 @@ public class StudioDashboardController extends AbstractPageController<StudioDash
 
     @Action
     public String createApplication() throws UnifyException {
-        StudioDashboardPageBean pageBean = getPageBean();
+        ApplicationDashboardPageBean pageBean = getPageBean();
         CreateAppForm createAppForm = pageBean.getCreateAppForm();
 
         Module module = null;
@@ -120,7 +120,7 @@ public class StudioDashboardController extends AbstractPageController<StudioDash
 
     @Action
     public String prepareNewApplication() throws UnifyException {
-        StudioDashboardPageBean pageBean = getPageBean();
+        ApplicationDashboardPageBean pageBean = getPageBean();
         pageBean.setCreateAppForm(new CreateAppForm());
         return "switchcreateapplication";
     }
@@ -138,7 +138,7 @@ public class StudioDashboardController extends AbstractPageController<StudioDash
     protected void onOpenPage() throws UnifyException {
         super.onOpenPage();
 
-        StudioDashboardPageBean pageBean = getPageBean();
+        ApplicationDashboardPageBean pageBean = getPageBean();
         if (pageBean.getSwitchApplicationSearch() == null) {
             TableDef _tableDef = appletUtils.getTableDef(StudioApplicationConstants.APPLICATION_SEARCH_TABLE);
 

@@ -1,0 +1,49 @@
+// UPL template for dashboard tile editor panel
+// Copyright 2021-2023 FlowCentral Technologies Limited.
+// 
+// Licensed under the Apache License, Version 2.0 (the "License"); you may not
+// use this file except in compliance with the License. You may obtain a copy of
+// the License at
+// 
+// http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+// WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+// License for the specific language governing permissions and limitations under
+// the License.
+
+!fc-dashboardtileeditorpanel
+    dialogBodyComponents:$c{formPanel}
+    dialogActionLayout:$d{!ui-horizontal style:$s{width:100%;}}
+    dialogActionComponents:$c{dialogActionPanel}
+	
+//Form   
+!ui-formpanel:formPanel
+	layout:$d{!ui-vertical style:$s{table-layout:fixed;}}
+    formCaptionSuffix:$s{:} formBinding:$g{dialogFormBinding} formColumns:1
+	formSection:$d{!ui-section components:$c{frmName frmDesc frmChart frmType}}
+!ui-text:frmName styleClass:$e{fc-formfield} caption:$m{dashboardeditor.tile.name} binding:name required:true focus:true
+!ui-text:frmDesc styleClass:$e{fc-formfield} caption:$m{dashboardeditor.tile.description} binding:description required:true
+!ui-text:frmChart styleClass:$e{fc-formfield} caption:$m{dashboardeditor.tile.chart} binding:chart required:true
+!ui-select:frmType styleClass:$e{fc-formfield} caption:$m{dashboardeditor.tile.type} binding:type required:true
+	list:dashboardtiletypelist blankOption:$s{}
+
+// Action buttons
+!ui-panel:dialogActionPanel layout:$d{!ui-horizontal} components:$c{addBtn applyBtn cancelBtn}
+!ui-button:addBtn caption:$m{button.add} styleClass:$e{fc-bluebutton}
+	eventHandler:$d{!ui-event event:onclick action:$c{addAct}}
+!ui-button:applyBtn caption:$m{button.apply} styleClass:$e{fc-bluebutton}
+	eventHandler:$d{!ui-event event:onclick action:$c{applyAct}}
+!ui-button:cancelBtn caption:$m{button.cancel}
+    eventHandler:$d{!ui-event event:onclick action:$c{closeDialogAct}}
+
+//Actions
+!ui-postcommand:applyAct command:apply components:$c{formPanel}
+    validations:$c{formValidation} refresh:$f{refreshOnApply}
+!ui-postcommand:addAct command:add components:$c{formPanel}
+    validations:$c{formValidation} refresh:$f{refreshOnApply}
+
+
+// Validations
+!ui-validation:formValidation components:$c{formPanel}

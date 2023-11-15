@@ -97,7 +97,7 @@ public class ApplicationDashboardInstallerImpl extends AbstractApplicationArtifa
                     }
 
                     populateChildList(dashboardConfig, oldDashboard, applicationName);
-                    environment().updateByIdVersion(oldDashboard);
+                    environment().updateByIdVersion(oldDashboard); 
                 }
 
                 applicationPrivilegeManager.registerPrivilege(applicationId,

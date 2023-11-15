@@ -83,7 +83,7 @@ fuxstudio.rigFormEditor = function(rgp) {
 
 	const editor = {};
 	editor.designId = rgp.pDsnBaseId;
-	editor.fieldsId = rgp.pFieldBaseId;
+	editor.choicesId = rgp.pFieldBaseId;
 	editor.editFieldId = rgp.pEditFieldId;
 	editor.stateId = rgp.pStateId;
 	editor.placeId = "place_" + id;
@@ -574,7 +574,7 @@ fuxstudio.frmChoiceDragEnd = function(uEv) {
 	}
 	
 	_design.removeChild(_placeslot);
-	const _fields = _id(_editor.fieldsId);
+	const _fields = _id(_editor.choicesId);
 	const _field = _id(evp.dragOriginId);
 	_fields.removeChild(_field);
 	
@@ -803,7 +803,7 @@ fuxstudio.rigTableEditor = function(rgp) {
 	const content = rgp.pContent;
 
 	const editor = {};
-	editor.fieldsId = rgp.pFieldBaseId;
+	editor.choicesId = rgp.pFieldBaseId;
 	editor.designId = rgp.pDsnBaseId;
 	editor.editColId = rgp.pEditColId;
 	editor.stateId = rgp.pStateId;
@@ -1021,7 +1021,7 @@ fuxstudio.tblSlotDragEnd = function(uEv) {
 		}
 		
 		_design.removeChild(_placeslot);
-		const _fields = _id(_editor.fieldsId);
+		const _fields = _id(_editor.choicesId);
 		const _field = _id(evp.dragOriginId);
 		_fields.removeChild(_field);
 	}
@@ -1139,7 +1139,7 @@ fuxstudio.rigReportEditor = function(rgp) {
 	const content = rgp.pContent;
 
 	const editor = {};
-	editor.fieldsId = rgp.pFieldBaseId;
+	editor.choicesId = rgp.pFieldBaseId;
 	editor.designId = rgp.pDsnBaseId;
 	editor.editColId = rgp.pEditColId;
 	editor.stateId = rgp.pStateId;
@@ -1360,7 +1360,7 @@ fuxstudio.rptSlotDragEnd = function(uEv) {
 		}
 		
 		_design.removeChild(_placeslot);
-		const _fields = _id(_editor.fieldsId);
+		const _fields = _id(_editor.choicesId);
 		const _field = _id(evp.dragOriginId);
 		_fields.removeChild(_field);
 	}
@@ -1414,7 +1414,7 @@ fuxstudio.rigDashboardEditor = function(rgp) {
 
 	const editor = {};
 	editor.designId = rgp.pDsnBaseId;
-	editor.chartsId = rgp.pChartBaseId;
+	editor.choicesId = rgp.pChartBaseId;
 	editor.editFieldId = rgp.pEditFieldId;
 	editor.stateId = rgp.pStateId;
 	editor.placeId = "place_" + id;
@@ -1445,15 +1445,18 @@ fuxstudio.rigDashboardEditor = function(rgp) {
 		const _design = _id(this.designId);
 		for(var i = 0; i < _design.children.length; i++) {
 			const secdiv = _design.children[i];
-			const section = secdiv.secInfo.sec;
-			if (secdiv.secInfo.designId) {
+			const secInfo = secdiv.secInfo;
+			const section = secInfo.section;
+			if (secInfo.designId) {
 				section.tiles = [];
 				for(var k = 0; k < secInfo.designId.length; k++) {
 					const _tledesign = _id(secInfo.designId[k]);
 					for(var l = 0; l < _tledesign.children.length; l++) {
-						const tile = _tledesign.children[l].tileInfo.tile;
-						section.tiles.push(tile);
-						usedChoice.add(tile.name);
+						if (_tledesign.children[l].tileInfo) {
+							const tile = _tledesign.children[l].tileInfo.tile;
+							section.tiles.push(tile);
+							usedChoice.add(tile.name);
+						}
 					}
 				}
 			}
@@ -1480,10 +1483,10 @@ fuxstudio.rigDashboardEditor = function(rgp) {
 	sevp.uRef = [ id, rgp.pEditSecId, rgp.pEditModeId ];
 	editor.secevp = sevp;
 
-	const eevp = ux.newEvPrm(rgp);
-	eevp.uCmd = id + "->editTile";
-	eevp.uRef = [ id, rgp.pEditSecId, rgp.pEditTileId, rgp.pEditColId, rgp.pEditIndexId, rgp.pEditModeId ];
-	editor.tleevp = eevp;
+	const tevp = ux.newEvPrm(rgp);
+	tevp.uCmd = id + "->editTile";
+	tevp.uRef = [ id, rgp.pEditSecId, rgp.pEditTileId, rgp.pEditColId, rgp.pEditIndexId, rgp.pEditModeId ];
+	editor.tileevp = tevp;
 	
 	const choiceId = rgp.pChoiceId;
 	for(var i = 0; i < content.charts.length; i++) {
@@ -1501,8 +1504,8 @@ fuxstudio.rigDashboardEditor = function(rgp) {
 	if (editor.secCount > 0) {
 		const design = _id(editor.designId);
 		for (var i = 0; i < editor.secCount; i++) {			
-			const evp = fuxstudio.dshNewSectionParam(editor, i);
-			evp.secInfo.sec = content.design.sections[i];
+			const evp = fuxstudio.dshCreateSectionPrm(editor, i);
+			evp.secInfo.section = content.design.sections[i];
 			const secdiv = fuxstudio.dshCreateSection(evp);
 			design.appendChild(secdiv);
 			fuxstudio.dshWireSection(evp);
@@ -1512,7 +1515,7 @@ fuxstudio.rigDashboardEditor = function(rgp) {
 	editor.changeState();
 }
 
-fuxstudio.dshNewSectionParam = function(editor, i) {
+fuxstudio.dshCreateSectionPrm = function(editor, i) {
 	const secInfo = {};
 	secInfo.index = i;
 	secInfo.secId = editor.secId + i;
@@ -1529,6 +1532,71 @@ fuxstudio.dshNewSectionParam = function(editor, i) {
 	evp.secInfo = secInfo;
 	editor.secInfo.push(secInfo);
 	return evp;
+}
+
+fuxstudio.dshCreateSection = function(evp) {
+	const editor = evp.editor;
+	const secInfo = evp.secInfo;
+	const secdiv = document.createElement("div");
+	const html = fuxstudio.dshSectionInnerHtml(editor, secInfo);
+	secdiv.className = "sec";
+	secdiv.id = secInfo.secId;
+	secdiv.innerHTML = html;
+	secdiv.stick = secInfo.stick;
+	return secdiv;
+}
+
+fuxstudio.dshSectionInnerHtml = function(editor, secInfo) {
+	const caption = secInfo.section.label ? secInfo.section.label:"&nbsp;";
+	var html = null;
+	secInfo.movable = secInfo.index != 0;
+	html = "<div class=\"sechdr\">"
+		+ "<div class=\"elcap grab\" id=\"" + secInfo.dragId + "\"><span>" + editor.sectiontitle + " [" + caption + "]</span></div>"
+		+ "<div class=\"elact\">";
+	if (editor.editable) {
+		html += fuxstudio.editorTextButton(secInfo.addId, editor.addsec);
+	}
+	html += fuxstudio.editorSymButton(secInfo.editId, editor.cog, "actbtn");
+	if (secInfo.movable && editor.editable) {
+		html += fuxstudio.editorSymButton(secInfo.delId,  editor.cross, "actbtn");
+	}
+    html += "</div></div>";
+	    
+	secInfo.tileCounter = -1;
+	secInfo.tileInfo = [];
+	secInfo.designId = [];
+	const section = secInfo.section;
+	const designRowId = "tledesign_" + secInfo.secId;
+	html += "<div style=\"display:table;table-layout:fixed;width:100%;\"><div id=\""
+			+ designRowId + "\" style=\"display:table-row;\">";
+	const colinfo = dashColumnsType.get(section.columns);
+	for (var i = 0; i < colinfo.columns; i++) {
+		const designId = designRowId + i;
+		html += "<div style=\"display:table-cell;vertical-align:top;\"><div class=\"tledesign\" id=\"" + designId + "\">";
+		var empty = true;
+		for (var j = 0; j < section.tiles.length; j++) {
+			const tile = section.tiles[j];
+			if (tile.column == i) {
+				const tileInfo = fuxstudio.dshCreateTileInfo(secInfo, j);
+				html += fuxstudio.dshTileHtml(editor, tileInfo);
+				tile.filled = true;
+				empty = false;
+				break;
+			}
+		}
+		
+		if(empty) {
+			html += "<div class=\"placetile\">";
+			html += fuxstudio.editorPlacement(editor.plus, editor.additem);
+			html += "</div>";
+		}
+		
+		html += "</div></div>";
+		secInfo.designId.push(designId);
+	}
+
+	html += "</div></div>";
+	return html;
 }
 
 fuxstudio.dshWireSection = function(evp) {
@@ -1554,12 +1622,8 @@ fuxstudio.dshWireSection = function(evp) {
 	}
 }
 
-fuxstudio.dshSectionbAdd = function(uEv) {
+fuxstudio.dshSectionAdd = function(uEv) {
 	fuxstudio.dshSectionCrud(uEv, "create");
-}
-
-fuxstudio.dshSectionTileAdd = function(uEv) {
-	fuxstudio.dshTabCrud(uEv, "create_sub");
 }
 
 fuxstudio.dshSectionEdit = function(uEv) {
@@ -1576,6 +1640,38 @@ fuxstudio.dshSectionCrud = function(uEv, mode) {
 	_id(editor.ctrl.uEditModeId).value = mode;
 	_id(editor.ctrl.uEditSectionId).value = evp.secInfo.sec.name;
 	ux.post({evp: editor.secevp});
+}
+
+fuxstudio.dshCreateTileInfo = function(secInfo, index) {
+	const tileInfo = {};
+	tileInfo.index = index;
+	tileInfo.tleId = "tle_" + secInfo.secId + (++secInfo.tileCounter);
+	tileInfo.dragId = "drag_" + tileInfo.tleId;
+	tileInfo.editId = "edit_" + tileInfo.tleId;
+	tileInfo.delId = "del_" + tileInfo.tleId;
+	tileInfo.tile = secInfo.section.tiles[index];
+	secInfo.tileInfo.push(tileInfo);
+	return tileInfo;
+}
+
+fuxstudio.dshTileHtml = function(editor, tileInfo) {
+	return "<div class=\"tlebdy\" id=\"" + tileInfo.tleId + "\">"
+			+ fuxstudio.dshTileInnerHtml(editor, tileInfo)
+		    + "</div>";
+}
+
+fuxstudio.dshTileInnerHtml = function(editor, tileInfo) {
+	const tile = tileInfo.tile;
+	const caption = tile.description;
+	var html = "<div class=\"tlehdr\">"
+			+ "<div class=\"tlecap grab\" id=\"" + tileInfo.dragId + "\"><span>" + caption + "</span></div>"
+			+ "<div class=\"tleact\">"
+			+ fuxstudio.editorSymButton(tileInfo.editId, editor.cog, "tlebtn");
+	if (editor.editable) {
+		html += fuxstudio.editorSymButton(tileInfo.delId,  editor.cross, "tlebtn");
+	}
+	html += "</div></div>";
+	return html;
 }
 
 fuxstudio.dshWireTile = function(evp) {
@@ -1610,199 +1706,20 @@ fuxstudio.dshTileDel = function(uEv) {
 fuxstudio.dshTileCrud = function(evp, mode) {
 	const editor = evp.editor;
 	_id(editor.ctrl.uEditModeId).value = mode;
-	_id(editor.ctrl.uEditSecId).value = evp.secInfo.sec.name;
+	_id(editor.ctrl.uEditSecId).value = evp.secInfo.index;
 	_id(editor.ctrl.uEditTileId).value = evp.tileInfo.tile.name;
 	ux.post({evp: editor.tileevp});
-}
-
-fuxstudio.dshCreateSection = function(evp) {
-	const editor = evp.editor;
-	const tabInfo = evp.tabInfo;
-	const tab = tabInfo.tab;
-	const caption = tab.label ? tab.label:"&nbsp;";
-	const labels = editor.secLabels;
-	var html = null;
-	tabInfo.frozen = tab.contentType == TAB_MINIFORM_CHANGELOG;
-	tabInfo.allowSec = tab.contentType == TAB_MINIFORM;
-	tabInfo.stick = tabInfo.index == 0;
-	if (tabInfo.stick) {
-		html = "<div class=\"tabhdr\">"
-			+ "<div class=\"elcap\" id=\"" + tabInfo.dragId + "\"><span>" + editor.sectitle + " [" + tab.contentType + " - " + caption + "]</span></div>"
-			+ "<div class=\"elact\">";
-	    if (editor.editable) {
-	    	html += fuxstudio.editorTextButton(tabInfo.addBtnId, editor.addtab);
-	    }
-	    
-		if (tabInfo.allowSec) {
-		    if (editor.editable) {
-		    	html += fuxstudio.editorTextButton(tabInfo.addSecBtnId, editor.addsec)
-		    }
-		}
-			
-		html += fuxstudio.editorSymButton(tabInfo.editBtnId, editor.cog, "actbtn")
-        html += "</div></div>";
-	} else {
-		html = "<div class=\"tabhdr\">"
-			+ "<div class=\"elcap grab\" id=\"" + tabInfo.dragId + "\"><span>" + editor.sectitle + " [" + tab.contentType + " - " + caption + "]</span></div>"
-			+ "<div class=\"elact\">";
-	    if (editor.editable) {
-	    	html += fuxstudio.editorTextButton(tabInfo.addBtnId, editor.addtab);
-	    }
-		if (!tabInfo.frozen) {
-			if (tabInfo.allowSec) {
-			    if (editor.editable) {
-					html += fuxstudio.editorTextButton(tabInfo.addSecBtnId, editor.addsec)
-			    }
-			}
-			
-			html += fuxstudio.editorSymButton(tabInfo.editBtnId, editor.cog, "actbtn");
-		    if (editor.editable) {
-		    	html += fuxstudio.editorSymButton(tabInfo.delBtnId,  editor.cross, "actbtn");
-		    }
-		}
-	    html += "</div></div>";
-	}
-
-	if(tab.contentType == TAB_MINIFORM || tab.contentType == TAB_MINIFORM_CHANGELOG) {
-		tabInfo.designId = "secdesign_" + tabInfo.tabId;
-		if(tabInfo.frozen) {
-			html += "<div class=\"secdesign secdesignz\" id=\"" + tabInfo.designId + "\">"
-		} else {
-			html += "<div class=\"secdesign\" id=\"" + tabInfo.designId + "\">"
-		}
-		for (var i = 0; i < tab.sections.length; i++) {
-			const sectionInfo = fuxstudio.dshCreateSectionInfo(tabInfo, i);
-			html += fuxstudio.dshSectionHtml(editor, sectionInfo);
-		}
-	    html += "</div>";
-	} else {
-		html += "<div class=\"secdesign secdesignz\"></div>"
-	}
-    
-	const tabdiv = document.createElement("div");
-	tabdiv.className = "tab";
-	tabdiv.id = tabInfo.tabId;
-	tabdiv.innerHTML = html;
-	tabdiv.stick = tabInfo.stick;
-	return tabdiv;
-}
-
-fuxstudio.dshCreateSectionInfo = function(tabInfo, index) {
-	const sectionInfo = {};
-	sectionInfo.tabName = tabInfo.tab.name;
-	sectionInfo.index = index;
-	sectionInfo.secId = "sec_" + tabInfo.tabId + (++tabInfo.sectionCounter);
-	sectionInfo.dragId = "drag_" + sectionInfo.secId;
-	sectionInfo.addId = "add_" + sectionInfo.secId;
-	sectionInfo.editId = "edit_" + sectionInfo.secId;
-	sectionInfo.delId = "del_" + sectionInfo.secId;
-	sectionInfo.frozen = tabInfo.frozen;
-	sectionInfo.section = tabInfo.tab.sections[index];
-	tabInfo.sectionInfo.push(sectionInfo);
-	return sectionInfo;
-}
-
-fuxstudio.dshSectionHtml = function(editor, sectionInfo) {
-	return "<div class=\"sec\" id=\"" + sectionInfo.secId + "\">"
-				+ fuxstudio.dshSectionInnerHtml(editor, sectionInfo)
-				+ "</div>";
-}
-
-fuxstudio.dshSectionInnerHtml = function(editor, sectionInfo) {
-	const caption = sectionInfo.section.label ? sectionInfo.section.label:"&nbsp;";
-	var html = null;
-	if (sectionInfo.frozen) {
-		html = "<div class=\"sechdr\">"
-			+ "<div class=\"elcap\"><span>" + editor.sectiontitle + " [" + caption + "]</span></div>"
-			+ "<div class=\"elact\">"
-	        + "</div></div>";
-	} else {
-		html = "<div class=\"sechdr\">"
-			+ "<div class=\"elcap grab\" id=\"" + sectionInfo.dragId + "\"><span>" + editor.sectiontitle + " [" + caption + "]</span></div>"
-			+ "<div class=\"elact\">";
-		if (editor.editable) {
-			html += fuxstudio.editorTextButton(sectionInfo.addId, editor.addsec);
-		}
-		html += fuxstudio.editorSymButton(sectionInfo.editId, editor.cog, "actbtn");
-		if (editor.editable) {
-			html += fuxstudio.editorSymButton(sectionInfo.delId,  editor.cross, "actbtn");
-		}
-	    html += "</div></div>";
-	}
-	sectionInfo.fieldCounter = -1;
-	sectionInfo.fieldInfo = [];
-	sectionInfo.designId = [];
-	const section = sectionInfo.section;
-	const designRowId = "flddesign_" + sectionInfo.secId;
-	html += "<div style=\"display:table;table-layout:fixed;width:100%;\"><div id=\""
-			+ designRowId + "\" style=\"display:table-row;\">";
-	const colinfo = dashColumnsType.get(section.columns);
-	for (var i = 0; i < colinfo.columns; i++) {
-		const designId = designRowId + i;
-		html += "<div style=\"display:table-cell;vertical-align:top;\"><div class=\"flddesign\" id=\"" + designId + "\">";
-		for (var j = 0; j < section.fields.length; j++) {
-			const field = section.fields[j];
-			if (field.column == i) {
-				const fieldInfo = fuxstudio.dshCreateFieldInfo(sectionInfo, j);
-				html += fuxstudio.dshFieldHtml(editor, fieldInfo);
-			}
-		}
-		html += "</div></div>";
-		sectionInfo.designId.push(designId);
-	}
-
-	html += "</div></div>";
-	return html;
-}
-
-fuxstudio.dshCreateFieldInfo = function(sectionInfo, index) {
-	const fieldInfo = {};
-	fieldInfo.index = index;
-	fieldInfo.fldId = "fld_" + sectionInfo.secId + (++sectionInfo.fieldCounter);
-	fieldInfo.dragId = "drag_" + fieldInfo.fldId;
-	fieldInfo.editId = "edit_" + fieldInfo.fldId;
-	fieldInfo.delId = "del_" + fieldInfo.fldId;
-	fieldInfo.frozen = sectionInfo.frozen;
-	fieldInfo.field = sectionInfo.section.fields[index];
-	sectionInfo.fieldInfo.push(fieldInfo);
-	return fieldInfo;
-}
-
-fuxstudio.dshFieldHtml = function(editor, fieldInfo) {
-	return "<div class=\"fld\" id=\"" + fieldInfo.fldId + "\">"
-			+ fuxstudio.dshFieldInnerHtml(editor, fieldInfo)
-		    + "</div>";
-}
-
-fuxstudio.dshFieldInnerHtml = function(editor, fieldInfo) {
-	const field = fieldInfo.field;
-	const caption = field.label ? field.label: field.fldLabel;
-	if (fieldInfo.frozen) {
-		return "<div class=\"fldhdr\">"
-			+ "<div class=\"fldcap fldcapz\"><span>" + caption + "</span></div>"
-		    + "</div>";
-	}
-	
-	var html = "<div class=\"fldhdr\">"
-			+ "<div class=\"fldcap grab\" id=\"" + fieldInfo.dragId + "\"><span>" + caption + "</span></div>"
-			+ "<div class=\"fldact\">"
-			+ fuxstudio.editorSymButton(fieldInfo.editId, editor.cog, "fldbtn");
-	if (editor.editable) {
-		html += fuxstudio.editorSymButton(fieldInfo.delId,  editor.cross, "fldbtn");
-	}
-	html += "</div></div>";
-	return html;
 }
 
 fuxstudio.dshChoiceDragStart = function(uEv) {
 	const evp = uEv.evp;
 	const editor = evp.editor;
-	const sectionInfo = fuxstudio.dshFindFirstSection(editor);
-	if (sectionInfo) {
-		evp.newSectionInfo = {sectionInfo:sectionInfo, column:0};
-		fuxstudio.editorChoiceDragStart(
-				evp, uEv.uTrg, sectionInfo.designId[0], uEv.clientX,
-				uEv.clientY, "placefield", fuxstudio.dshChoiceDrag,
+	const secInfo = fuxstudio.dshFindFirstSection(editor);
+	if (secInfo) {
+		evp.newSecInfo = {secInfo:secInfo, column:0};
+		fuxstudio.editorFixedChoiceDragStart(
+				evp, uEv.uTrg, secInfo.designId[0], uEv.clientX,
+				uEv.clientY, "placetile", fuxstudio.dshChoiceDrag,
 				fuxstudio.dshChoiceDragEnd);
 	}
 }
@@ -1811,57 +1728,40 @@ fuxstudio.dshChoiceDrag = function(uEv) {
 	const _drag = fuxstudio.editorChoiceDrag(uEv);
 	const evp = fuxstudio.dragEvp;
 	const editor = evp.editor;
-	const _sectionInfo = fuxstudio.editorSectionInfoAt(editor.secInfo, uEv.clientX, uEv.clientY);
-	if (_sectionInfo && fuxstudio.editorEvaluateDrag(editor, _sectionInfo.sectionInfo.designId[_sectionInfo.column],
-					_drag.id, uEv.clientX, uEv.clientY)) {
-		evp.newSectionInfo = _sectionInfo;
-	}
+	const _secInfo = fuxstudio.editorTablessSectionInfoAt(editor.secInfo, uEv.clientX, uEv.clientY);
+	evp.newSecInfo = _secInfo;
 }
 
 fuxstudio.dshChoiceDragEnd = function(uEv) {
 	const evp = fuxstudio.dragEvp;
-	const _sectionInfo = evp.newSectionInfo.sectionInfo;
-	const _column = evp.newSectionInfo.column;
 	const _editor = evp.editor;
-	const _placeslot = _id(_editor.placeId);
-	var _index = -1;
+	const _secInfo = evp.newSecInfo ? evp.newSecInfo.secInfo : null;
+	const _column = evp.newSecInfo ? evp.newSecInfo.column : -1;
+	var _index = _secInfo ? _secInfo.index : -1;
 	
-	const _design = _id(_sectionInfo.designId[_column]);
-	const _drop = fuxstudio.editorDesignSlotAt(_design, null, uEv.clientX, uEv.clientY);
-	if (_drop && (_drop.slot.id == _editor.placeId)) {
-		_index = _drop.index;
-	}
-	
-	_design.removeChild(_placeslot);
-	const _fields = _id(_editor.chartsId);
-	const _field = _id(evp.dragOriginId);
-	_fields.removeChild(_field);
+	const _charts = _id(_editor.choicesId);
+	const _chart = _id(evp.dragOriginId);
+	_charts.removeChild(_chart);
 	
 	ux.remDirectHdl(document, "mousemove", fuxstudio.dshChoiceDrag);
 	ux.remDirectHdl(document, "mouseup", fuxstudio.dshChoiceDragEnd);
 	fuxstudio.dragEvp = null;
 	
 	if (_index >= 0) {
-		const fevp = {};
-		fevp.editor = _editor;
-		fevp.sectionInfo = _sectionInfo;
-		fevp.fieldInfo = {field:{name: evp.fieldInfo.fldNm}};
-		fuxstudio.dshFieldAdd(fevp, _column, _index);
+		const tevp = {};
+		tevp.editor = _editor;
+		tevp.secInfo = _secInfo;
+		tevp.tileInfo = {tile:{name: evp.tileInfo.tleNm}};
+		fuxstudio.dshTileAdd(tevp, _column, _index);
 	}
 }
 
 fuxstudio.dshFindFirstSection = function(editor) {
 	const _design = _id(editor.designId);
 	for(var i = 0; i < _design.children.length; i++) {
-		const tabdiv = _design.children[i];
-		if (tabdiv.tabInfo.designId) {
-			const _secdesign = _id(tabdiv.tabInfo.designId);
-			for(var j = 0; j < _secdesign.children.length; j++) {
-				const secdiv = _secdesign.children[j];
-				if (secdiv.sectionInfo) {
-					return secdiv.sectionInfo;
-				}
-			}
+		const secdiv = _design.children[i];
+		if (secdiv.secInfo) {
+			return secdiv.secInfo;
 		}
 	}
 }
@@ -1942,7 +1842,7 @@ fuxstudio.dshFieldDragStart = function(uEv) {
 	evp.newSectionInfo = evp.sectionInfo;
 	fuxstudio.editorDragStart(
 			evp, "field", evp.sectionInfo.designId[fieldInfo.field.column],
-			evp.fieldInfo.fldId, uEv.clientX, uEv.clientY, "placefield",
+			evp.fieldInfo.fldId, uEv.clientX, uEv.clientY, "placetile",
 			fuxstudio.dshFieldDrag, fuxstudio.dshFieldDragEnd);
 }
 
@@ -2703,7 +2603,7 @@ fuxstudio.rigWorkflowEditor = function(rgp) {
 	const content = rgp.pContent;
 
 	const editor = {};
-	editor.fieldsId = rgp.pToolBaseId;
+	editor.choicesId = rgp.pToolBaseId;
 	editor.panelId = id;
 	editor.designId = rgp.pDsnBaseId;
 	editor.canvasId = rgp.pDsnCanvasId;
@@ -2774,7 +2674,7 @@ fuxstudio.wfeChoiceDrag = function(uEv) {
 fuxstudio.wfeChoiceDragEnd = function(uEv) {
 	const evp = fuxstudio.dragEvp;
 	const editor = evp.editor;
-	const tools = _id(editor.fieldsId);
+	const tools = _id(editor.choicesId);
 	const _drag = _id(evp.dragOriginId);
 	const cbox = _id(editor.canvasId).getBoundingClientRect();
 	const dbox = _drag.getBoundingClientRect();
@@ -2917,6 +2817,24 @@ fuxstudio.editorSectionInfoAt = function(tabInfos, x, y) {
 	return null;
 }
 
+fuxstudio.editorTablessSectionInfoAt = function(secInfos, x, y) {
+	for (var j = 0; j < secInfos.length; j++) {
+		const _secInfo = secInfos[j];
+		for(var k = 0; k < _secInfo.designId.length; k++) {
+			const designId = _secInfo.designId[k];
+			_design = _id(designId);
+			if (_design) {
+				var box = _design.getBoundingClientRect();
+				if (x > box.left && x < box.right && y > box.top && y < box.bottom) {
+					return {secInfo:_secInfo, column:k};
+				}
+			}
+		}
+	}
+
+	return null;
+}
+
 fuxstudio.editorDesignSlotAt = function(design, dragId, x, y) {
 	for (var i = 0; i < design.children.length; i++) {
 		const slot = design.children[i];
@@ -2950,24 +2868,31 @@ fuxstudio.editorChoiceDragStart = function(evp, target, designId, clientX,
 	ux.addDirectHdl(document, "mouseup", dragEndFunc);
 }
 
+fuxstudio.editorFixedChoiceDragStart = function(evp, target, designId, clientX,
+		clientY, placeClass, dragFunc, dragEndFunc) {
+	fuxstudio.editorChoiceDragClone(evp, target, clientX, clientY);
+	ux.addDirectHdl(document, "mousemove", dragFunc);
+	ux.addDirectHdl(document, "mouseup", dragEndFunc);
+}
+
 fuxstudio.editorChoiceDragClone = function(evp, target, clientX, clientY) {
 	const editor = evp.editor;
-	const _fields = _id(editor.fieldsId);
+	const _choices = _id(editor.choicesId);
 	const box = target.getBoundingClientRect();
 
-	const _nfield = target.cloneNode(true);
-	_nfield.id = "drag_" + target.id;
-	_fields.insertBefore(_nfield, target);
+	const _nchoice = target.cloneNode(true);
+	_nchoice.id = "drag_" + target.id;
+	_choices.insertBefore(_nchoice, target);
 
 	evp.dragType = "choice";
-	evp.dragOriginId = _nfield.id;
+	evp.dragOriginId = _nchoice.id;
 	evp.dragOffsetX = clientX - box.x;
 	evp.dragOffsetY = clientY - box.y;
-	_nfield.style.left = box.x + "px";
-	_nfield.style.top = box.y + "px";
-	_nfield.style.width = box.width.toFixed() + "px";
-	_nfield.style.height = box.height.toFixed() + "px";    
-	_nfield.classList.add("drag");           
+	_nchoice.style.left = box.x + "px";
+	_nchoice.style.top = box.y + "px";
+	_nchoice.style.width = box.width.toFixed() + "px";
+	_nchoice.style.height = box.height.toFixed() + "px";    
+	_nchoice.classList.add("drag");           
 	
 	fuxstudio.dragEvp = evp;
 }
@@ -3057,6 +2982,7 @@ fuxstudio.init = function() {
 	ux.setfn(fuxstudio.rigWorkflowEditor, "fuxstudio05"); 
 	ux.setfn(fuxstudio.rigReportColumnEditorPanel, "fuxstudio06");  
 	ux.setfn(fuxstudio.rigReportEditor, "fuxstudio07");  
+	ux.setfn(fuxstudio.rigDashboardEditor, "fuxstudio08");  
 }
 
 fuxstudio.init();

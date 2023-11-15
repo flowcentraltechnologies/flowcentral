@@ -20,12 +20,12 @@ import com.flowcentraltech.flowcentral.studio.web.data.CreateAppForm;
 import com.tcdng.unify.web.ui.AbstractPageBean;
 
 /**
- * Studio dashboard page bean.
+ * Studio application dashboard page bean.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class StudioDashboardPageBean extends AbstractPageBean {
+public class ApplicationDashboardPageBean extends AbstractPageBean {
 
     private EntitySearch switchApplicationSearch;
 

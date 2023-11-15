@@ -79,7 +79,7 @@ public class DashboardEditorWidget extends AbstractFlowCentralMultiControl {
     protected void doOnPageConstruct() throws UnifyException {
         valueCtrl = (Control) addInternalChildWidget("!ui-hidden binding:design");
         editSectionCtrl = (Control) addInternalChildWidget("!ui-hidden binding:sectionIndex");
-        editTileCtrl = (Control) addInternalChildWidget("!ui-hidden binding:tileName");
+        editTileCtrl = (Control) addInternalChildWidget("!ui-hidden binding:chartName");
         editColCtrl = (Control) addInternalChildWidget("!ui-hidden binding:column");
         editTileIndexCtrl = (Control) addInternalChildWidget("!ui-hidden binding:tileIndex");
         editModeCtrl = (Control) addInternalChildWidget("!ui-hidden binding:editMode");
@@ -118,6 +118,13 @@ public class DashboardEditorWidget extends AbstractFlowCentralMultiControl {
 
     @Action
     public void editTile() throws UnifyException {
+        System.out.println("@prime: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+        System.out.println("@prime: editMode = " + editMode);
+        System.out.println("@prime: chartName = " + chartName);
+        System.out.println("@prime: sectionIndex = " + sectionIndex);
+        System.out.println("@prime: column = " + column);
+        System.out.println("@prime: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+
         if (editMode != null) {
             switch (editMode) {
                 case CREATE:
