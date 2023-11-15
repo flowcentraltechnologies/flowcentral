@@ -357,27 +357,27 @@
 			description="$m{application.widgettype.date}" dataType="date"
 			inputType="date"
 			editor="!ui-date formatter:$d{!fixeddatetimeformat pattern:$s{yyyy-MM-dd}} clearable:true"
-			renderer="!ui-label formatter:$d{!fixeddatetimeformat pattern:$s{yyyy-MM-dd}}" />
+			renderer="!ui-label formatter:$d{!fixeddatetimeformat pattern:$s{yyyy-MM-dd}} useDateFormatOverride:true" />
 		<widgetType name="datefuture" listOption="true"
 			description="$m{application.widgettype.datefuture}" dataType="date"
 			inputType="date"
 			editor="!ui-date type:future formatter:$d{!fixeddatetimeformat pattern:$s{yyyy-MM-dd}} clearable:true"
-			renderer="!ui-label formatter:$d{!fixeddatetimeformat pattern:$s{yyyy-MM-dd}}" />
+			renderer="!ui-label formatter:$d{!fixeddatetimeformat pattern:$s{yyyy-MM-dd}} useDateFormatOverride:true" />
 		<widgetType name="datepast" listOption="true"
 			description="$m{application.widgettype.datepast}" dataType="date"
 			inputType="date"
 			editor="!ui-date type:past formatter:$d{!fixeddatetimeformat pattern:$s{yyyy-MM-dd}} clearable:true"
-			renderer="!ui-label formatter:$d{!fixeddatetimeformat pattern:$s{yyyy-MM-dd}}" />
+			renderer="!ui-label formatter:$d{!fixeddatetimeformat pattern:$s{yyyy-MM-dd}} useDateFormatOverride:true" />
 		<widgetType name="datepasttoday" listOption="true"
 			description="$m{application.widgettype.datepasttoday}"
 			dataType="date" inputType="date"
 			editor="!ui-date type:past_today formatter:$d{!fixeddatetimeformat pattern:$s{yyyy-MM-dd}} clearable:true"
-			renderer="!ui-label formatter:$d{!fixeddatetimeformat pattern:$s{yyyy-MM-dd}}" />
+			renderer="!ui-label formatter:$d{!fixeddatetimeformat pattern:$s{yyyy-MM-dd}} useDateFormatOverride:true" />
 		<widgetType name="datetext"
 			description="$m{application.widgettype.datetext}" dataType="date"
 			inputType="date"
 			editor="!ui-text formatter:$d{!fixeddatetimeformat pattern:$s{yyyy-MM-dd}}"
-			renderer="!ui-label formatter:$d{!fixeddatetimeformat pattern:$s{yyyy-MM-dd}}" />
+			renderer="!ui-label formatter:$d{!fixeddatetimeformat pattern:$s{yyyy-MM-dd}} useDateFormatOverride:true" />
 		<widgetType name="datetime" listOption="true"
 			description="$m{application.widgettype.datetime}"
 			dataType="timestamp" inputType="datetime"
