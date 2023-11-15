@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!-- Master system module configuration -->
-<module name="system" description="$m{system.module}" shortCode="SYS"
-	label="$m{system.label}">
+<module name="system" description="$m{system.module}"
+	shortCode="SYS" label="$m{system.label}">
 	<!-- applications -->
 	<applications>
 		<application name="system"
@@ -10,8 +10,8 @@
 			configFile="apps/system-application.xml" />
 		<application name="import"
 			shortDescription="$m{system.import.short.description}"
-			longDescription="$m{system.import.long.description}" autoInstall="true"
-			configFile="apps/import-application.xml" />
+			longDescription="$m{system.import.long.description}"
+			autoInstall="true" configFile="apps/import-application.xml" />
 	</applications>
 
 	<!-- Privileges -->
@@ -19,15 +19,15 @@
 	<!-- System Parameters -->
 	<sysParameters>
 		<sysParameter code="SYS-0001" defaultVal="Client Title"
-			description="$m{system.sysparam.clienttitle}" editor="!ui-text size:40"
-			editable="true" />
+			description="$m{system.sysparam.clienttitle}"
+			editor="!ui-text size:40" editable="true" />
 		<sysParameter code="SYS-0002"
 			defaultVal="web/images/applicationbanner.png"
-			description="$m{system.sysparam.applicationbanner}" editor="!ui-text size:48"
-			editable="true" />
+			description="$m{system.sysparam.applicationbanner}"
+			editor="!ui-text size:48" editable="true" />
 		<sysParameter code="SYS-0003" defaultVal="info@tcdng.com"
-			description="$m{system.sysparam.systememail}" editor="!ui-text size:48"
-			editable="true" />
+			description="$m{system.sysparam.systememail}"
+			editor="!ui-text size:48" editable="true" />
 		<sysParameter code="SYS-0004" defaultVal="false"
 			description="$m{system.sysparam.scheduleranabled}"
 			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
@@ -41,11 +41,11 @@
 			description="$m{system.sysparam.descriptivebuttons}"
 			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
 		<sysParameter code="SYS-0008"
-			description="$m{system.sysparam.loginpagetitle}" editor="!ui-textarea columns:32"
-			editable="false" />
+			description="$m{system.sysparam.loginpagetitle}"
+			editor="!ui-textarea columns:32" editable="false" />
 		<sysParameter code="SYS-0009"
-			description="$m{system.sysparam.loginpagesubtitle}" editor="!ui-textarea columns:32"
-			editable="false" />
+			description="$m{system.sysparam.loginpagesubtitle}"
+			editor="!ui-textarea columns:32" editable="false" />
 		<sysParameter code="SYS-000A" defaultVal="false"
 			description="$m{system.sysparam.downloadpathlogging}"
 			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
@@ -58,5 +58,13 @@
 		<sysParameter code="SYS-000D" defaultVal="false"
 			description="$m{system.sysparam.usetenantdateformat}"
 			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
+		<sysParameter code="SYS-000E"
+			description="$m{system.sysparam.systemdateformat}"
+			editor="!ui-select list:sysdateformattypelist blankOption:$s{}"
+			type="string" editable="true" />
+		<sysParameter code="SYS-000F"
+			description="$m{system.sysparam.systemdatetimeformat}"
+			editor="!ui-select list:sysdatetimeformattypelist blankOption:$s{}"
+			type="string" editable="true" />
 	</sysParameters>
 </module>

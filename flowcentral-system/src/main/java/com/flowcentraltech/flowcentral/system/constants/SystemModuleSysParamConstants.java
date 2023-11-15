@@ -48,4 +48,8 @@ public interface SystemModuleSysParamConstants {
     String SYSTEM_ACTUAL_PRIMARY_TENANT_ID = "SYS-000C";
     
     String SYSTEM_USE_TENANT_DATEFORMAT = "SYS-000D";
+    
+    String SYSTEM_DATE_FORMAT = "SYS-000E";
+    
+    String SYSTEM_DATETIME_FORMAT = "SYS-000F";
 }
