@@ -32,34 +32,34 @@ public enum SysDatetimeFormatType implements EnumConst {
 
     DD_MM_YYYY_SLASH(
             "DMYS",
-            "dd/MM/yyyy"),
+            "dd/MM/yyyy HH:mm:ss"),
     MM_DD_YYYY_SLASH(
             "MDYS",
-            "MM/dd/yyyy"),
+            "MM/dd/yyyy HH:mm:ss"),
     YYYY_MM_DD_SLASH(
             "YMDS",
-            "yyyy/MM/dd"),
+            "yyyy/MM/dd HH:mm:ss"),
     MM_DD_YY_SLASH(
             "MDZS",
-            "MM/dd/yy"),
+            "MM/dd/yy HH:mm:ss"),
     DD_MM_YY_SLASH(
             "DMZS",
-            "dd/MM/yy"),
+            "dd/MM/yy HH:mm:ss"),
     DD_MM_YYYY(
             "DMY",
-            "dd-MM-yyyy"),
+            "dd-MM-yyyy HH:mm:ss"),
     MM_DD_YYYY(
             "MDY",
-            "MM-dd-yyyy"),
+            "MM-dd-yyyy HH:mm:ss"),
     YYYY_MM_DD(
             "YMD",
-            "yyyy-MM-dd"),
+            "yyyy-MM-dd HH:mm:ss"),
     MM_DD_YY(
             "MDZ",
-            "MM-dd-yy"),
+            "MM-dd-yy HH:mm:ss"),
     DD_MM_YY(
             "DMZ",
-            "dd-MM-yy");
+            "dd-MM-yy HH:mm:ss");
 
     private final String code;
 
