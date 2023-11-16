@@ -219,6 +219,13 @@ public class LoadingSearch {
                         emails, listing)
                 : false;
     }
+    
+    public boolean isNewCommentRequired(String userAction, int index) throws UnifyException {
+         LoadingTableProvider loadingTableProvider = getLoadingTableProvider(index);
+        return loadingTableProvider != null
+                ? loadingTableProvider.isNewCommentRequired(userAction)
+                : false;
+    }
 
     public void setOrder(Order order) {
         loadingTable.setOrder(order);

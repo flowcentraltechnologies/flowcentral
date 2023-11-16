@@ -141,6 +141,17 @@ public interface LoadingTableProvider extends FlowCentralComponent {
             InputArrayEntries emails, boolean listing) throws UnifyException;
     
     /**
+     * Checks if a new user comment is required.
+     * 
+     * @param userAction
+     *                   the user action.
+     * @return true if required otherwise false
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    boolean isNewCommentRequired(String userAction) throws UnifyException;
+    
+    /**
      * Commit change to entity
      * 
      * @param itemValueStore

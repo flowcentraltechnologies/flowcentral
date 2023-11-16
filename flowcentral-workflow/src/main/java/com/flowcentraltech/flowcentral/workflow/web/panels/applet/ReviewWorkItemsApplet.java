@@ -194,7 +194,7 @@ public class ReviewWorkItemsApplet extends AbstractReviewWorkItemsApplet {
         return wfStepDef.getUserActionDef(actionName).isFormReview();
     }
 
-    public boolean isNewCommentRequired(String actionName) throws UnifyException {
+    public boolean isNewCommentRequired(String actionName) throws UnifyException { 
         RequirementType commentRequirementType = wfStepDef.getUserActionDef(actionName).getCommentRequirement();
         return RequirementType.MANDATORY.equals(commentRequirementType);
     }

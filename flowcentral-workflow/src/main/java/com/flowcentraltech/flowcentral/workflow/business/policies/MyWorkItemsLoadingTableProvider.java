@@ -37,6 +37,7 @@ import com.flowcentraltech.flowcentral.workflow.util.WorkflowEntityUtils;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
+import com.tcdng.unify.core.constant.RequirementType;
 import com.tcdng.unify.core.criterion.Restriction;
 import com.tcdng.unify.core.data.BeanValueStore;
 import com.tcdng.unify.core.data.ValueStore;
@@ -152,6 +153,14 @@ public class MyWorkItemsLoadingTableProvider extends AbstractApplicationLoadingT
                 .workflowName(workflowStepInfo.getWorkflowLongName()).wfStepName(workflowStepInfo.getStepName()));
         return workflowModuleService.applyUserAction(wfEntityInst, workItemId, workflowStepInfo.getStepName(),
                 userAction, comment, emails, WfReviewMode.NORMAL, listing);
+    }
+
+    @Override
+    public boolean isNewCommentRequired(String userAction) throws UnifyException {
+        final WorkflowStepInfo workflowStepInfo = getParameter(WorkflowStepInfo.class);
+        WfDef wfDef = workflowModuleService.getWfDef(workflowStepInfo.getWorkflowLongName());
+        WfStepDef wfStepDef = wfDef.getWfStepDef(workflowStepInfo.getStepName());
+        return RequirementType.MANDATORY.equals(wfStepDef.getUserActionDef(userAction).getCommentRequirement());
     }
 
     @Override

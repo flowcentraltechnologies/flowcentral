@@ -31,6 +31,7 @@ import com.flowcentraltech.flowcentral.workflow.entities.WfItemQuery;
 import com.flowcentraltech.flowcentral.workflow.util.WorkflowEntityUtils;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
+import com.tcdng.unify.core.constant.RequirementType;
 import com.tcdng.unify.core.data.BeanValueStore;
 import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.data.ValueStoreReader;
@@ -120,6 +121,13 @@ public abstract class AbstractWfStepLoadingTableProvider extends AbstractApplica
             InputArrayEntries emails, boolean listing) throws UnifyException {
         return workflowModuleService.applyUserAction(wfEntityInst, sourceItemId, wfStepName, userAction, comment,
                 emails, wfReviewMode, listing);
+    }
+
+    @Override
+    public boolean isNewCommentRequired(String userAction) throws UnifyException {
+        WfDef wfDef = workflowModuleService.getWfDef(workflowName);
+        WfStepDef wfStepDef = wfDef.getWfStepDef(wfStepName);
+        return RequirementType.MANDATORY.equals(wfStepDef.getUserActionDef(userAction).getCommentRequirement());
     }
 
     @Override

@@ -232,6 +232,10 @@ public class ManageLoadingListApplet extends AbstractEntityFormApplet {
         navBackToSearch();
     }
 
+    public boolean isNewCommentRequired(String actionName) throws UnifyException { 
+        return loadingSearch.isNewCommentRequired(actionName, mIndex);
+    }
+
     @Override
     public AppletDef getSingleFormAppletDef() throws UnifyException {
         return getAlternateFormAppletDef();

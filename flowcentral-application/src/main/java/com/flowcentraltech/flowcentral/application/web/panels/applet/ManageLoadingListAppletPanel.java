@@ -40,7 +40,7 @@ public class ManageLoadingListAppletPanel extends AbstractEntityFormAppletPanel 
         if (applet.getCtx().isReview()) {
             final String actionName = getRequestTarget(String.class);
             final FormContext ctx = evaluateCurrentFormContext(EvaluationMode.UPDATE,
-                    false);
+                    applet.isNewCommentRequired(actionName));
             if (!ctx.isWithFormErrors()) {
                 if (ctx.getFormDef() == null) {
                     applet.updateSingleFormInst();

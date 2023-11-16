@@ -88,6 +88,11 @@ public abstract class AbstractApplicationLoadingTableProvider extends AbstractFl
         return false;
     }
 
+    @Override
+    public boolean isNewCommentRequired(String userAction) throws UnifyException {
+        return false;
+    }
+
     protected EnvironmentService environment() {
         return au.environment();
     }
