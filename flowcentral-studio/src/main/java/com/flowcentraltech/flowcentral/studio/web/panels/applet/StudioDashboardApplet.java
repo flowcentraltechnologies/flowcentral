@@ -21,6 +21,7 @@ import com.flowcentraltech.flowcentral.application.data.EntityFormEventHandlers;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.web.controllers.AppletWidgetReferences;
 import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs;
+import com.flowcentraltech.flowcentral.chart.business.ChartModuleService;
 import com.flowcentraltech.flowcentral.dashboard.business.DashboardModuleService;
 import com.flowcentraltech.flowcentral.dashboard.data.DashboardDef;
 import com.flowcentraltech.flowcentral.dashboard.entities.Dashboard;
@@ -38,12 +39,16 @@ public class StudioDashboardApplet extends StudioAppComponentApplet {
 
     private DashboardEditorPage dashboardEditorPage;
 
-    private final  DashboardModuleService dms;
+    private final ChartModuleService cms;
 
-    public StudioDashboardApplet(StudioModuleService sms, DashboardModuleService dms, AppletUtilities au,
-            String pathVariable, String applicationName, AppletWidgetReferences appletWidgetReferences,
-            EntityFormEventHandlers formEventHandlers) throws UnifyException {
+    private final DashboardModuleService dms;
+
+    public StudioDashboardApplet(StudioModuleService sms, ChartModuleService cms, DashboardModuleService dms,
+            AppletUtilities au, String pathVariable, String applicationName,
+            AppletWidgetReferences appletWidgetReferences, EntityFormEventHandlers formEventHandlers)
+            throws UnifyException {
         super(sms, au, pathVariable, applicationName, appletWidgetReferences, formEventHandlers);
+        this.cms = cms;
         this.dms = dms;
     }
 
@@ -69,7 +74,7 @@ public class StudioDashboardApplet extends StudioAppComponentApplet {
         DashboardDef dashboardDef = dms.getDashboardDef(dashboardName);
         breadCrumbs.setLastCrumbTitle(au.resolveSessionMessage("$m{dashboardeditor.dashboarddesigner}"));
         breadCrumbs.setLastCrumbSubTitle(subTitle);
-        return new DashboardEditorPage(au, dashboardDef, id, breadCrumbs);
+        return new DashboardEditorPage(au, cms, dashboardDef, id, breadCrumbs);
     }
 
 }

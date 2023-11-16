@@ -26,6 +26,7 @@ import com.flowcentraltech.flowcentral.application.data.TabSheetDef;
 import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs;
 import com.flowcentraltech.flowcentral.application.web.widgets.TabSheet;
 import com.flowcentraltech.flowcentral.application.web.widgets.TabSheet.TabSheetItem;
+import com.flowcentraltech.flowcentral.chart.business.ChartModuleService;
 import com.flowcentraltech.flowcentral.application.web.widgets.TabSheetEventHandler;
 import com.flowcentraltech.flowcentral.configuration.constants.DashboardColumnsType;
 import com.flowcentraltech.flowcentral.configuration.constants.DashboardTileType;
@@ -50,6 +51,8 @@ public class DashboardEditorPage extends AbstractStudioEditorPage implements Tab
     private static final int DESIGN_INDEX = 0;
 
     private static final int PREVIEW_INDEX = 1;
+    
+    private final ChartModuleService cms;
 
     private final DashboardDef dashboardDef;
 
@@ -61,8 +64,9 @@ public class DashboardEditorPage extends AbstractStudioEditorPage implements Tab
 
     private DashboardPreview dashboardPreview;
 
-    public DashboardEditorPage(AppletUtilities au, DashboardDef dashboardDef, Object baseId, BreadCrumbs breadCrumbs) {
+    public DashboardEditorPage(AppletUtilities au, ChartModuleService cms, DashboardDef dashboardDef, Object baseId, BreadCrumbs breadCrumbs) {
         super(au, breadCrumbs);
+        this.cms = cms;
         this.dashboardDef = dashboardDef;
         this.baseId = baseId;
     }
@@ -134,7 +138,7 @@ public class DashboardEditorPage extends AbstractStudioEditorPage implements Tab
     }
 
     public void newEditor() throws UnifyException {
-        DashboardEditor.Builder deb = DashboardEditor.newBuilder(dashboardDef);
+        DashboardEditor.Builder deb = DashboardEditor.newBuilder(cms, dashboardDef);
         Dashboard dashboard = getAu().environment().find(Dashboard.class, baseId);
         for (DashboardSection dashboardSection : dashboard.getSectionList()) {
             deb.addSection(dashboardSection.getType());

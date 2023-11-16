@@ -20,6 +20,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
+import com.flowcentraltech.flowcentral.chart.business.ChartModuleService;
+import com.flowcentraltech.flowcentral.chart.data.ChartDef;
 import com.flowcentraltech.flowcentral.configuration.constants.DashboardColumnsType;
 import com.flowcentraltech.flowcentral.configuration.constants.DashboardTileType;
 import com.flowcentraltech.flowcentral.dashboard.data.DashboardDef;
@@ -34,6 +36,8 @@ import com.tcdng.unify.core.UnifyException;
 public class DashboardEditor {
 
     private final AppletUtilities au;
+
+    private final ChartModuleService cms;
 
     private DashboardDef dashboardDef;
 
@@ -55,8 +59,9 @@ public class DashboardEditor {
 
     private boolean readOnly;
 
-    private DashboardEditor(AppletUtilities au, DashboardDef dashboardDef, Design design) {
+    private DashboardEditor(AppletUtilities au, ChartModuleService cms, DashboardDef dashboardDef, Design design) {
         this.au = au;
+        this.cms = cms;
         this.dashboardDef = dashboardDef;
         this.design = design;
     }
@@ -154,12 +159,13 @@ public class DashboardEditor {
     public String prepareTileCreate(String chart, int sectionIndex, int column) throws UnifyException {
         dialogTitle = au.resolveSessionMessage("$m{dashboardeditor.dashboardtileeditorpanel.caption.add}");
         this.originSectionIndex = sectionIndex;
+        ChartDef chartDef = cms.getChartDef(chart);
         editTile = new DDashboardTile();
         editTile.setMode("CREATE");
         editTile.setType(DashboardTileType.SIMPLE.code());
         editTile.setChart(chart);
-        editTile.setName(null);
-        editTile.setDescription(null);
+        editTile.setName(chart);
+        editTile.setDescription(chartDef.getDescription());
         return editTilePanelName;
     }
 
@@ -175,17 +181,20 @@ public class DashboardEditor {
         return editorBodyPanelName;
     }
 
-    public static Builder newBuilder(DashboardDef dashboardDef) {
-        return new Builder(dashboardDef);
+    public static Builder newBuilder(ChartModuleService cms, DashboardDef dashboardDef) {
+        return new Builder(cms, dashboardDef);
     }
 
     public static class Builder {
 
-        private DashboardDef dashboardDef;
+        private final ChartModuleService cms;
+        
+        private final DashboardDef dashboardDef;
 
-        private List<DDashboardSection> sections;
+        private final List<DDashboardSection> sections;
 
-        public Builder(DashboardDef dashboardDef) {
+        public Builder(ChartModuleService cms, DashboardDef dashboardDef) {
+            this.cms = cms;
             this.dashboardDef = dashboardDef;
             this.sections = new ArrayList<DDashboardSection>();
         }
@@ -207,7 +216,7 @@ public class DashboardEditor {
         }
 
         public DashboardEditor build(AppletUtilities au) {
-            return new DashboardEditor(au, dashboardDef, new Design(sections));
+            return new DashboardEditor(au, cms, dashboardDef, new Design(sections));
         }
     }
 

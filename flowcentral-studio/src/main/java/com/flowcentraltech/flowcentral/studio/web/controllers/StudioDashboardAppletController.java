@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.studio.web.controllers;
 import com.flowcentraltech.flowcentral.application.data.EntityFormEventHandlers;
 import com.flowcentraltech.flowcentral.application.web.controllers.AbstractEntityFormAppletController;
 import com.flowcentraltech.flowcentral.application.web.controllers.AppletWidgetReferences;
+import com.flowcentraltech.flowcentral.chart.business.ChartModuleService;
 import com.flowcentraltech.flowcentral.dashboard.business.DashboardModuleService;
 import com.flowcentraltech.flowcentral.studio.business.StudioModuleService;
 import com.flowcentraltech.flowcentral.studio.constants.StudioSessionAttributeConstants;
@@ -48,6 +49,9 @@ public class StudioDashboardAppletController
     @Configurable
     private DashboardModuleService dashboardModuleService;
 
+    @Configurable
+    private ChartModuleService chartModuleService;
+
     public StudioDashboardAppletController() {
         super(StudioDashboardAppletPageBean.class, Secured.TRUE, ReadOnly.FALSE, ResetOnWrite.FALSE);
     }
@@ -58,6 +62,10 @@ public class StudioDashboardAppletController
 
     public final void setDashboardModuleService(DashboardModuleService dashboardModuleService) {
         this.dashboardModuleService = dashboardModuleService;
+    }
+
+    public final void setChartModuleService(ChartModuleService chartModuleService) {
+        this.chartModuleService = chartModuleService;
     }
 
     @Action
@@ -77,8 +85,8 @@ public class StudioDashboardAppletController
         if (pageBean.getApplet() == null) {
             AppletWidgetReferences appletWidgetReferences = getAppletWidgetReferences();
             EntityFormEventHandlers formEventHandlers = getEntityFormEventHandlers();
-            StudioDashboardApplet applet = new StudioDashboardApplet(studioModuleService, dashboardModuleService, au(),
-                    getPathVariable(),
+            StudioDashboardApplet applet = new StudioDashboardApplet(studioModuleService, chartModuleService,
+                    dashboardModuleService, au(), getPathVariable(),
                     (String) getSessionAttribute(StudioSessionAttributeConstants.CURRENT_APPLICATION_NAME),
                     appletWidgetReferences, formEventHandlers);
             pageBean.setApplet(applet);

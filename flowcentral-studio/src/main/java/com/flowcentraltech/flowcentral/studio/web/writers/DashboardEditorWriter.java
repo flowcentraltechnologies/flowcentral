@@ -95,7 +95,7 @@ public class DashboardEditorWriter extends AbstractControlWriter {
 
             jsonWriter.beginObject();
             jsonWriter.write("tleLabel", chartDef.getDescription());
-            jsonWriter.write("tleNm", chartDef.getName());
+            jsonWriter.write("tleNm", chartDef.getLongName());
             jsonWriter.endObject();
 
             i++;

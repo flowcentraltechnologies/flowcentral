@@ -1443,12 +1443,15 @@ fuxstudio.rigDashboardEditor = function(rgp) {
 		const usedChoice = new Set();
 		const sections = [];
 		const _design = _id(this.designId);
+		console.log("@prime: BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
 		for(var i = 0; i < _design.children.length; i++) {
 			const secdiv = _design.children[i];
 			const secInfo = secdiv.secInfo;
 			const section = secInfo.section;
+			console.log("@prime: secInfo.designId = " + secInfo.designId);
 			if (secInfo.designId) {
 				section.tiles = [];
+			console.log("@prime:  secInfo.designId.length= " +  secInfo.designId.length);
 				for(var k = 0; k < secInfo.designId.length; k++) {
 					const _tledesign = _id(secInfo.designId[k]);
 					for(var l = 0; l < _tledesign.children.length; l++) {
@@ -1463,10 +1466,15 @@ fuxstudio.rigDashboardEditor = function(rgp) {
 			
 			sections.push(section);
 		}
+		console.log("@prime: BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
 
 		this.sections = sections;
 		_id(this.stateId).value = JSON.stringify({sections:this.sections});
 
+		console.log("@prime: DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
+		console.log("@prime: usedChoice = " + JSON.stringify(usedChoice));
+		console.log("@prime: DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
+		
 		for(var i = 0; i < this.choice.length; i++) {
 			const tileInfo = this.choice[i];
 			const _tile = _id(tileInfo.tleId);
