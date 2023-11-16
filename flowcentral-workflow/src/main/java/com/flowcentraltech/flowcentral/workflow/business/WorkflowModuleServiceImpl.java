@@ -1210,6 +1210,10 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
     @Transactional(TransactionAttribute.REQUIRES_NEW)
     public boolean performWfTransition(WfTransitionQueue wfTransitionQueue) throws UnifyException {
         final WfItem wfItem = environment().list(WfItem.class, wfTransitionQueue.getWfItemId());
+        if (wfItem == null) {
+            return true;
+        }
+        
         final WfDef wfDef = getWfDef(wfItem.getWorkflowName());
         final EntityClassDef entityClassDef = appletUtil.getEntityClassDef(wfDef.getEntity());
         WorkEntity wfEntityInst = (WorkEntity) environment()
