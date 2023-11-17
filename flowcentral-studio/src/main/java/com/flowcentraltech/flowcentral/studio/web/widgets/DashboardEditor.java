@@ -182,6 +182,12 @@ public class DashboardEditor {
         return editorBodyPanelName;
     }
 
+    public String performTileMove(int srcSectionIndex, int srcTileIndex, int destSectionIndex, int destTileIndex)
+            throws UnifyException {
+        design.moveDashboardTile(srcSectionIndex, srcTileIndex, destSectionIndex, destTileIndex);
+        return editorBodyPanelName;
+    }
+
     public static Builder newBuilder(ChartModuleService cms, DashboardDef dashboardDef) {
         return new Builder(cms, dashboardDef);
     }
@@ -265,9 +271,18 @@ public class DashboardEditor {
             return section.getDashboardTile(tileIndex);
         }
 
-        public void removeDashboardTile(int sectionIndex, int tileIndex) {
+        public DDashboardTile removeDashboardTile(int sectionIndex, int tileIndex) {
             DDashboardSection section = sections.get(sectionIndex);
-            section.removeDashboardTile(tileIndex);
+            return section.removeDashboardTile(tileIndex);
+        }
+
+        public void moveDashboardTile(int srcSectionIndex, int srcTileIndex, int destSectionIndex, int destTileIndex) {
+            DDashboardTile tile = removeDashboardTile(srcSectionIndex, srcTileIndex);
+            if (tile != null) {
+                tile.setIndex(destTileIndex);
+                DDashboardSection section = getDashboardSection(destSectionIndex);
+                section.addDashboardTile(tile);
+            }
         }
     }
 

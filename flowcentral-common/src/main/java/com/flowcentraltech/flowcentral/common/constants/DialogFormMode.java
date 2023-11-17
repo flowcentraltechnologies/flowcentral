@@ -33,7 +33,9 @@ public enum DialogFormMode implements EnumConst {
     UPDATE(
             "U"),
     DELETE(
-            "D");
+            "D"),
+    MOVE(
+            "M");
 
     private final String code;
 
@@ -61,6 +63,10 @@ public enum DialogFormMode implements EnumConst {
 
     public boolean isDelete() {
         return DELETE.equals(this);
+    }
+
+    public boolean isMove() {
+        return MOVE.equals(this);
     }
 
     public static DialogFormMode fromCode(String code) {

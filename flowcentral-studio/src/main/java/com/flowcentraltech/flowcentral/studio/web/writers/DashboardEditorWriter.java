@@ -120,6 +120,7 @@ public class DashboardEditorWriter extends AbstractControlWriter {
         writer.writeStructureAndContent(dashboardEditorWidget.getEditTileCtrl());
         writer.writeStructureAndContent(dashboardEditorWidget.getEditTileIndexCtrl());
         writer.writeStructureAndContent(dashboardEditorWidget.getEditModeCtrl());
+        writer.writeStructureAndContent(dashboardEditorWidget.getEditMoveCtrl());
 
         writer.write("</div>");
         jsonWriter.endObject();
@@ -148,6 +149,7 @@ public class DashboardEditorWriter extends AbstractControlWriter {
         writer.writeParam("pEditTileId", dashboardEditorWidget.getEditTileCtrl().getId());
         writer.writeParam("pEditTileIndexId", dashboardEditorWidget.getEditTileIndexCtrl().getId());
         writer.writeParam("pEditModeId", dashboardEditorWidget.getEditModeCtrl().getId());
+        writer.writeParam("pEditMoveId", dashboardEditorWidget.getEditMoveCtrl().getId());
         writer.writeResolvedParam("pContent",
                 (String) dashboardEditorWidget.getWriteWork().get(DashboardEditorWidget.WORK_CONTENT));
         writer.endFunction();

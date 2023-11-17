@@ -26,6 +26,7 @@ import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.UplAttribute;
 import com.tcdng.unify.core.annotation.UplAttributes;
 import com.tcdng.unify.core.stream.JsonObjectStreamer;
+import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.annotation.Action;
 import com.tcdng.unify.web.ui.widget.Control;
@@ -57,9 +58,13 @@ public class DashboardEditorWidget extends AbstractFlowCentralMultiControl {
 
     private Control editModeCtrl;
 
+    private Control editMoveCtrl;
+
     private String design;
 
     private String chartName;
+
+    private String move;
 
     private int sectionIndex;
 
@@ -78,6 +83,7 @@ public class DashboardEditorWidget extends AbstractFlowCentralMultiControl {
         editTileCtrl = (Control) addInternalChildWidget("!ui-hidden binding:chartName");
         editTileIndexCtrl = (Control) addInternalChildWidget("!ui-hidden binding:tileIndex");
         editModeCtrl = (Control) addInternalChildWidget("!ui-hidden binding:editMode");
+        editMoveCtrl = (Control) addInternalChildWidget("!ui-hidden binding:move");
     }
 
     @Override
@@ -105,6 +111,8 @@ public class DashboardEditorWidget extends AbstractFlowCentralMultiControl {
                 case DELETE:
                     commandRefreshPanels(getDashboardEditor().performSectionDel(sectionIndex));
                     break;
+                case MOVE:
+                    break;
                 default:
                     break;
             }
@@ -113,13 +121,6 @@ public class DashboardEditorWidget extends AbstractFlowCentralMultiControl {
 
     @Action
     public void editTile() throws UnifyException {
-        System.out.println("@prime: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
-        System.out.println("@prime: editMode = " + editMode);
-        System.out.println("@prime: chartName = " + chartName);
-        System.out.println("@prime: sectionIndex = " + sectionIndex);
-        System.out.println("@prime: tileIndex = " + tileIndex);
-        System.out.println("@prime: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
-
         if (editMode != null) {
             switch (editMode) {
                 case CREATE:
@@ -133,6 +134,16 @@ public class DashboardEditorWidget extends AbstractFlowCentralMultiControl {
                     break;
                 case DELETE:
                     commandRefreshPanels(getDashboardEditor().performTileDel(sectionIndex, tileIndex));
+                    break;
+                case MOVE:
+                    if (!StringUtils.isBlank(move)) {
+                        String[] prms = move.split(",");
+                        if (prms.length == 4) {
+                            int[] _prms = DataUtils.convert(int[].class, prms);
+                            commandRefreshPanels(
+                                    getDashboardEditor().performTileMove(_prms[0], _prms[1], _prms[2], _prms[3]));
+                        }
+                    }
                     break;
                 default:
                     break;
@@ -156,6 +167,14 @@ public class DashboardEditorWidget extends AbstractFlowCentralMultiControl {
 
     public void setChartName(String chartName) {
         this.chartName = chartName;
+    }
+
+    public String getMove() {
+        return move;
+    }
+
+    public void setMove(String move) {
+        this.move = move;
     }
 
     public int getSectionIndex() {
@@ -200,6 +219,10 @@ public class DashboardEditorWidget extends AbstractFlowCentralMultiControl {
 
     public Control getEditModeCtrl() {
         return editModeCtrl;
+    }
+
+    public Control getEditMoveCtrl() {
+        return editMoveCtrl;
     }
 
     public String getChoiceWidth() throws UnifyException {
