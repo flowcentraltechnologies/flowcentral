@@ -148,7 +148,7 @@ public class DashboardEditor {
     // Fields
     public String performTileAdd() throws UnifyException {
         DDashboardSection dDashboardSection = design.getDashboardSection(originSectionIndex);
-        dDashboardSection.addDashboardTile(editTile, originSectionIndex);
+        dDashboardSection.addDashboardTile(editTile);
         if (editTile.getType() == null) {
             editTile.setType(DashboardTileType.SIMPLE.code());
         }
@@ -156,11 +156,12 @@ public class DashboardEditor {
         return editorBodyPanelName;
     }
 
-    public String prepareTileCreate(String chart, int sectionIndex, int column) throws UnifyException {
+    public String prepareTileCreate(String chart, int sectionIndex, int tileIndex) throws UnifyException {
         dialogTitle = au.resolveSessionMessage("$m{dashboardeditor.dashboardtileeditorpanel.caption.add}");
         this.originSectionIndex = sectionIndex;
         ChartDef chartDef = cms.getChartDef(chart);
         editTile = new DDashboardTile();
+        editTile.setIndex(tileIndex);
         editTile.setMode("CREATE");
         editTile.setType(DashboardTileType.SIMPLE.code());
         editTile.setChart(chart);
@@ -188,30 +189,37 @@ public class DashboardEditor {
     public static class Builder {
 
         private final ChartModuleService cms;
-        
+
         private final DashboardDef dashboardDef;
 
         private final List<DDashboardSection> sections;
+
+        private int sectionIndex;
 
         public Builder(ChartModuleService cms, DashboardDef dashboardDef) {
             this.cms = cms;
             this.dashboardDef = dashboardDef;
             this.sections = new ArrayList<DDashboardSection>();
+            this.sectionIndex = 0;
         }
 
         public Builder addSection(DashboardColumnsType columns) {
-            sections.add(new DDashboardSection(columns.code()));
+            sections.add(new DDashboardSection(columns.code(), sectionIndex++));
             return this;
         }
 
         public Builder addTile(DashboardTileType type, String name, String description, String chart, int sectionIndex,
-                int column) {
+                int tileIndex) {
             if (sectionIndex >= sections.size()) {
-                throw new IllegalArgumentException("Invalid section index");
+                throw new IllegalArgumentException("Invalid section index [" + sectionIndex + "]");
             }
 
-            sections.get(sectionIndex).getTiles()
-                    .add(new DDashboardTile(name, description, type.code(), chart, column));
+            DDashboardSection _section = sections.get(sectionIndex);
+            if (_section.getDashboardTile(tileIndex) != null) {
+                throw new IllegalArgumentException("Tile already placed at index [" + tileIndex + "]");
+            }
+
+            _section.addDashboardTile(new DDashboardTile(name, description, type.code(), chart, tileIndex));
             return this;
         }
 
@@ -269,11 +277,14 @@ public class DashboardEditor {
 
         private String columns;
 
+        private int index;
+
         private List<DDashboardTile> tiles;
 
-        public DDashboardSection(String columns) {
+        public DDashboardSection(String columns, int index) {
             this.tiles = new ArrayList<DDashboardTile>();
             this.columns = columns;
+            this.index = index;
         }
 
         public DDashboardSection() {
@@ -296,6 +307,14 @@ public class DashboardEditor {
             this.columns = columns;
         }
 
+        public int getIndex() {
+            return index;
+        }
+
+        public void setIndex(int index) {
+            this.index = index;
+        }
+
         public List<DDashboardTile> getTiles() {
             return tiles;
         }
@@ -304,16 +323,27 @@ public class DashboardEditor {
             this.tiles = tiles;
         }
 
-        public void addDashboardTile(DDashboardTile editTile, int index) {
-            tiles.add(index, editTile);
+        public void addDashboardTile(DDashboardTile editTile) {
+            tiles.add(editTile);
         }
 
-        public DDashboardTile getDashboardTile(int index) {
-            return tiles.get(index);
+        public DDashboardTile getDashboardTile(int tileIndex) {
+            for (DDashboardTile tile : tiles) {
+                if (tile.getIndex() == tileIndex) {
+                    return tile;
+                }
+            }
+
+            return null;
         }
 
-        public DDashboardTile removeDashboardTile(int index) {
-            return tiles.remove(index);
+        public DDashboardTile removeDashboardTile(int tileIndex) {
+            DDashboardTile tile = getDashboardTile(tileIndex);
+            if (tile != null) {
+                tiles.remove(tile);
+            }
+
+            return tile;
         }
     }
 
@@ -329,17 +359,14 @@ public class DashboardEditor {
 
         private String chart;
 
-        private int column;
+        private int index;
 
-        private boolean filled;
-
-        public DDashboardTile(String name, String description, String type, String chart, int column) {
+        public DDashboardTile(String name, String description, String type, String chart, int index) {
             this.name = name;
             this.description = description;
             this.type = type;
             this.chart = chart;
-            this.column = column;
-            this.filled = true;
+            this.index = index;
         }
 
         public DDashboardTile() {
@@ -386,20 +413,12 @@ public class DashboardEditor {
             this.chart = chart;
         }
 
-        public int getColumn() {
-            return column;
+        public int getIndex() {
+            return index;
         }
 
-        public void setColumn(int column) {
-            this.column = column;
-        }
-
-        public boolean isFilled() {
-            return filled;
-        }
-
-        public void setFilled(boolean filled) {
-            this.filled = filled;
+        public void setIndex(int index) {
+            this.index = index;
         }
 
     }

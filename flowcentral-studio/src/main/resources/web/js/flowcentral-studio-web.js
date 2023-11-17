@@ -1436,22 +1436,19 @@ fuxstudio.rigDashboardEditor = function(rgp) {
 	editor.sectiontitle = content.sectiontitle;	
 	editor.choice = content.charts;
 	editor.secInfo = [];	
-	editor.ctrl = {uEditSecId: rgp.pEditSecId, uEditColId: rgp.pEditColId, uEditTileId: rgp.pEditTileId,
+	editor.ctrl = {uEditSecId: rgp.pEditSecId, uEditTileId: rgp.pEditTileId,
 			uEditIndexId :rgp.pEditIndexId, uEditTileIndexId :rgp.pEditTileIndexId, uEditModeId: rgp.pEditModeId};
 	
 	editor.changeState = function() {
 		const usedChoice = new Set();
 		const sections = [];
 		const _design = _id(this.designId);
-		console.log("@prime: BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
 		for(var i = 0; i < _design.children.length; i++) {
 			const secdiv = _design.children[i];
 			const secInfo = secdiv.secInfo;
 			const section = secInfo.section;
-			console.log("@prime: secInfo.designId = " + secInfo.designId);
 			if (secInfo.designId) {
 				section.tiles = [];
-			console.log("@prime:  secInfo.designId.length= " +  secInfo.designId.length);
 				for(var k = 0; k < secInfo.designId.length; k++) {
 					const _tledesign = _id(secInfo.designId[k]);
 					for(var l = 0; l < _tledesign.children.length; l++) {
@@ -1466,15 +1463,10 @@ fuxstudio.rigDashboardEditor = function(rgp) {
 			
 			sections.push(section);
 		}
-		console.log("@prime: BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
 
 		this.sections = sections;
 		_id(this.stateId).value = JSON.stringify({sections:this.sections});
 
-		console.log("@prime: DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
-		console.log("@prime: usedChoice = " + JSON.stringify(usedChoice));
-		console.log("@prime: DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
-		
 		for(var i = 0; i < this.choice.length; i++) {
 			const tileInfo = this.choice[i];
 			const _tile = _id(tileInfo.tleId);
@@ -1493,7 +1485,7 @@ fuxstudio.rigDashboardEditor = function(rgp) {
 
 	const tevp = ux.newEvPrm(rgp);
 	tevp.uCmd = id + "->editTile";
-	tevp.uRef = [ id, rgp.pEditSecId, rgp.pEditTileId, rgp.pEditColId, rgp.pEditIndexId, rgp.pEditModeId ];
+	tevp.uRef = [ id, rgp.pEditSecId, rgp.pEditModeId, rgp.pEditTileId, rgp.pEditTileIndexId ];
 	editor.tileevp = tevp;
 	
 	const choiceId = rgp.pChoiceId;
@@ -1527,11 +1519,10 @@ fuxstudio.dshCreateSectionPrm = function(editor, i) {
 	const secInfo = {};
 	secInfo.index = i;
 	secInfo.secId = editor.secId + i;
-	secInfo.addBtnId = editor.secAddBtnId + i;
-	secInfo.editBtnId = editor.secEditBtnId + i;
-	secInfo.delBtnId = editor.secDelBtnId + i;
-	secInfo.addSecBtnId = editor.secAddSecBtnId + i;
-	secInfo.dragId = editor.secDragId + i;
+	secInfo.dragId = "drag_" + secInfo.secId;
+	secInfo.addId = "add_" + secInfo.secId;
+	secInfo.editId = "edit_" + secInfo.secId;
+	secInfo.delId = "del_" + secInfo.secId;
 	secInfo.tileCounter = -1;
 	secInfo.tileInfo = [];
 
@@ -1581,19 +1572,18 @@ fuxstudio.dshSectionInnerHtml = function(editor, secInfo) {
 	for (var i = 0; i < colinfo.columns; i++) {
 		const designId = designRowId + i;
 		html += "<div style=\"display:table-cell;vertical-align:top;\"><div class=\"tledesign\" id=\"" + designId + "\">";
-		var empty = true;
+		var filled = false;
 		for (var j = 0; j < section.tiles.length; j++) {
 			const tile = section.tiles[j];
-			if (tile.column == i) {
+			if (tile.index == i) {
 				const tileInfo = fuxstudio.dshCreateTileInfo(secInfo, j);
 				html += fuxstudio.dshTileHtml(editor, tileInfo);
-				tile.filled = true;
-				empty = false;
+				filled = true;
 				break;
 			}
 		}
 		
-		if(empty) {
+		if(!filled) {
 			html += "<div class=\"placetile\">";
 			html += fuxstudio.editorPlacement(editor.plus, editor.additem);
 			html += "</div>";
@@ -1615,18 +1605,18 @@ fuxstudio.dshWireSection = function(evp) {
 		ux.addHdl(_id(secInfo.dragId), "mousedown", fuxstudio.dshSectionDragStart, evp);
 	}
 
-	ux.addHdl(_id(secInfo.addBtnId), "click", fuxstudio.dshSectionAdd, evp);
-	ux.addHdl(_id(secInfo.editBtnId), "click", fuxstudio.dshSectionEdit, evp);
+	ux.addHdl(_id(secInfo.addId), "click", fuxstudio.dshSectionAdd, evp);
+	ux.addHdl(_id(secInfo.editId), "click", fuxstudio.dshSectionEdit, evp);
 	if (editor.editable) {
-		ux.addHdl(_id(secInfo.delBtnId), "click", fuxstudio.dshSectionDel, evp);
+		ux.addHdl(_id(secInfo.delId), "click", fuxstudio.dshSectionDel, evp);
 	}	
 
 	for (var i = 0; i < secInfo.tileInfo.length; i++) {
-		const tileevp = {};
-		tileevp.editor = editor;
-		tileevp.secInfo = secInfo;
-		tileevp.tileInfo = secInfo.tileInfo[i];
-		fuxstudio.dshWireTile(tileevp);
+		const tevp = {};
+		tevp.editor = editor;
+		tevp.secInfo = secInfo;
+		tevp.tileInfo = secInfo.tileInfo[i];
+		fuxstudio.dshWireTile(tevp);
 	}
 }
 
@@ -1646,7 +1636,7 @@ fuxstudio.dshSectionCrud = function(uEv, mode) {
 	const evp = uEv.evp;
 	const editor = evp.editor;
 	_id(editor.ctrl.uEditModeId).value = mode;
-	_id(editor.ctrl.uEditSectionId).value = evp.secInfo.sec.name;
+	_id(editor.ctrl.uEditSecId).value = evp.secInfo.section.index;
 	ux.post({evp: editor.secevp});
 }
 
@@ -1696,10 +1686,10 @@ fuxstudio.dshWireTile = function(evp) {
 	}
 }
 
-fuxstudio.dshTileAdd = function(evp, column, index) {
+fuxstudio.dshTileAdd = function(evp, tileIndex) {
 	const editor = evp.editor;
-	_id(editor.ctrl.uEditColId).value = column;
-	_id(editor.ctrl.uEditIndexId).value = index;
+	console.log("@prime: tileIndex = " + tileIndex);
+	_id(editor.ctrl.uEditTileIndexId).value = tileIndex;
 	fuxstudio.dshTileCrud(evp, "create");
 }
 
@@ -1713,6 +1703,9 @@ fuxstudio.dshTileDel = function(uEv) {
 
 fuxstudio.dshTileCrud = function(evp, mode) {
 	const editor = evp.editor;
+	console.log("@prime: mode = " + mode);
+	console.log("@prime: evp.secInfo.index = " + evp.secInfo.index);
+	console.log("@prime: evp.tileInfo.tile.name = " + evp.tileInfo.tile.name);
 	_id(editor.ctrl.uEditModeId).value = mode;
 	_id(editor.ctrl.uEditSecId).value = evp.secInfo.index;
 	_id(editor.ctrl.uEditTileId).value = evp.tileInfo.tile.name;
@@ -1744,8 +1737,8 @@ fuxstudio.dshChoiceDragEnd = function(uEv) {
 	const evp = fuxstudio.dragEvp;
 	const _editor = evp.editor;
 	const _secInfo = evp.newSecInfo ? evp.newSecInfo.secInfo : null;
-	const _column = evp.newSecInfo ? evp.newSecInfo.column : -1;
-	var _index = _secInfo ? _secInfo.index : -1;
+	const _tileIndex = evp.newSecInfo ? evp.newSecInfo.column : -1;
+	var _secIndex = _secInfo ? _secInfo.index : -1;
 	
 	const _charts = _id(_editor.choicesId);
 	const _chart = _id(evp.dragOriginId);
@@ -1755,12 +1748,12 @@ fuxstudio.dshChoiceDragEnd = function(uEv) {
 	ux.remDirectHdl(document, "mouseup", fuxstudio.dshChoiceDragEnd);
 	fuxstudio.dragEvp = null;
 	
-	if (_index >= 0) {
+	if (_secIndex >= 0) {
 		const tevp = {};
 		tevp.editor = _editor;
 		tevp.secInfo = _secInfo;
 		tevp.tileInfo = {tile:{name: evp.tileInfo.tleNm}};
-		fuxstudio.dshTileAdd(tevp, _column, _index);
+		fuxstudio.dshTileAdd(tevp, _tileIndex);
 	}
 }
 

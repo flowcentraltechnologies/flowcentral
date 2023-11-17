@@ -53,8 +53,6 @@ public class DashboardEditorWidget extends AbstractFlowCentralMultiControl {
 
     private Control editTileCtrl;
 
-    private Control editColCtrl;
-
     private Control editTileIndexCtrl;
 
     private Control editModeCtrl;
@@ -64,8 +62,6 @@ public class DashboardEditorWidget extends AbstractFlowCentralMultiControl {
     private String chartName;
 
     private int sectionIndex;
-
-    private int column;
 
     private int tileIndex;
 
@@ -80,7 +76,6 @@ public class DashboardEditorWidget extends AbstractFlowCentralMultiControl {
         valueCtrl = (Control) addInternalChildWidget("!ui-hidden binding:design");
         editSectionCtrl = (Control) addInternalChildWidget("!ui-hidden binding:sectionIndex");
         editTileCtrl = (Control) addInternalChildWidget("!ui-hidden binding:chartName");
-        editColCtrl = (Control) addInternalChildWidget("!ui-hidden binding:column");
         editTileIndexCtrl = (Control) addInternalChildWidget("!ui-hidden binding:tileIndex");
         editModeCtrl = (Control) addInternalChildWidget("!ui-hidden binding:editMode");
     }
@@ -122,13 +117,13 @@ public class DashboardEditorWidget extends AbstractFlowCentralMultiControl {
         System.out.println("@prime: editMode = " + editMode);
         System.out.println("@prime: chartName = " + chartName);
         System.out.println("@prime: sectionIndex = " + sectionIndex);
-        System.out.println("@prime: column = " + column);
+        System.out.println("@prime: tileIndex = " + tileIndex);
         System.out.println("@prime: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
 
         if (editMode != null) {
             switch (editMode) {
                 case CREATE:
-                    getDashboardEditor().prepareTileCreate(chartName, sectionIndex, column);
+                    getDashboardEditor().prepareTileCreate(chartName, sectionIndex, tileIndex);
                     commandRefreshPanels(getDashboardEditor().performTileAdd());
                     break;
                 case CREATE_SUB:
@@ -171,14 +166,6 @@ public class DashboardEditorWidget extends AbstractFlowCentralMultiControl {
         this.sectionIndex = sectionIndex;
     }
 
-    public int getColumn() {
-        return column;
-    }
-
-    public void setColumn(int column) {
-        this.column = column;
-    }
-
     public int getTileIndex() {
         return tileIndex;
     }
@@ -205,10 +192,6 @@ public class DashboardEditorWidget extends AbstractFlowCentralMultiControl {
 
     public Control getEditTileCtrl() {
         return editTileCtrl;
-    }
-
-    public Control getEditColCtrl() {
-        return editColCtrl;
     }
 
     public Control getEditTileIndexCtrl() {

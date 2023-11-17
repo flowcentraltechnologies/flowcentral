@@ -123,7 +123,7 @@ public class DashboardEditorPage extends AbstractStudioEditorPage implements Tab
                     tile.setDescription(dtile.getDescription());
                     tile.setChart(dtile.getChart());
                     tile.setSection(sectionIndex);
-                    tile.setIndex(dtile.getColumn());
+                    tile.setIndex(dtile.getIndex());
                     tileList.add(tile);
                 }
 
