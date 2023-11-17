@@ -1688,16 +1688,19 @@ fuxstudio.dshWireTile = function(evp) {
 
 fuxstudio.dshTileAdd = function(evp, tileIndex) {
 	const editor = evp.editor;
-	console.log("@prime: tileIndex = " + tileIndex);
 	_id(editor.ctrl.uEditTileIndexId).value = tileIndex;
 	fuxstudio.dshTileCrud(evp, "create");
 }
 
 fuxstudio.dshTileEdit = function(uEv) {
+	const evp = uEv.evp;
+	_id(evp.editor.ctrl.uEditTileIndexId).value = evp.tileInfo.tile.index;
 	fuxstudio.dshTileCrud(uEv.evp, "update");
 }
 
 fuxstudio.dshTileDel = function(uEv) {
+	const evp = uEv.evp;
+	_id(evp.editor.ctrl.uEditTileIndexId).value = evp.tileInfo.tile.index;
 	fuxstudio.dshTileCrud(uEv.evp, "delete");
 }
 
@@ -1730,7 +1733,9 @@ fuxstudio.dshChoiceDrag = function(uEv) {
 	const evp = fuxstudio.dragEvp;
 	const editor = evp.editor;
 	const _secInfo = fuxstudio.editorTablessSectionInfoAt(editor.secInfo, uEv.clientX, uEv.clientY);
-	evp.newSecInfo = _secInfo;
+	if (_secInfo && _secInfo.empty) {
+		evp.newSecInfo = _secInfo;
+	}
 }
 
 fuxstudio.dshChoiceDragEnd = function(uEv) {
@@ -1837,39 +1842,38 @@ fuxstudio.dshSecDragEnd = function(uEv) {
 			fuxstudio.dshSecDrag, fuxstudio.dshSecDragEnd);
 }
 
-fuxstudio.dshFieldDragStart = function(uEv) {
+fuxstudio.dshTileDragStart = function(uEv) {
 	const evp = uEv.evp;
-	const fieldInfo = evp.fieldInfo;
-	evp.newSectionInfo = evp.sectionInfo;
+	const tileInfo = evp.tileInfo;
+	evp.newSectionInfo = evp.secInfo;
 	fuxstudio.editorDragStart(
-			evp, "field", evp.sectionInfo.designId[fieldInfo.field.column],
-			evp.fieldInfo.fldId, uEv.clientX, uEv.clientY, "placetile",
-			fuxstudio.dshFieldDrag, fuxstudio.dshFieldDragEnd);
+			evp, "tile", evp.secInfo.designId[tileInfo.tile.index],
+			evp.tileInfo.tleId, uEv.clientX, uEv.clientY, "placetile",
+			fuxstudio.dshTileDrag, fuxstudio.dshTileDragEnd);
 }
 
-fuxstudio.dshFieldDrag = function(uEv) {
+fuxstudio.dshTileDrag = function(uEv) {
 	const _drag = fuxstudio.editorChoiceDrag(uEv);
 	const evp = fuxstudio.dragEvp;
 	const editor = evp.editor;
 
-	const _sectionInfo = fuxstudio.editorSectionInfoAt(editor.secInfo, uEv.clientX, uEv.clientY);
-	if (_sectionInfo && fuxstudio.editorEvaluateDrag(editor, _sectionInfo.sectionInfo.designId[_sectionInfo.column],
-					_drag.id, uEv.clientX, uEv.clientY)) {
-		evp.newSectionInfo = _sectionInfo.sectionInfo;
-		evp.fieldInfo.field.column = _sectionInfo.column;
+	const _secInfo = fuxstudio.editorTablessSectionInfoAt(editor.secInfo, uEv.clientX, uEv.clientY);
+	if (_secInfo && _secInfo.empty) {
+		evp.newSectionInfo =_secInfo;
+		evp.tileInfo.tile.index = _secInfo.column;
 	}
 }
 
-fuxstudio.dshFieldDragEnd = function(uEv) {
+fuxstudio.dshTileDragEnd = function(uEv) {
 	const evp = fuxstudio.dragEvp;
-	if (evp.newSectionInfo != evp.sectionInfo) {
-		fuxstudio.editorArrayRemove(evp.sectionInfo.fieldInfo, evp.fieldInfo);	
-		evp.newSectionInfo.fieldInfo.push(evp.fieldInfo);
-		evp.sectionInfo = evp.newSectionInfo;
+	if (evp.newSectionInfo != evp.secInfo) {
+		fuxstudio.editorArrayRemove(evp.secInfo.tileInfo, evp.tileInfo);	
+		evp.newSectionInfo.tileInfo.push(evp.tileInfo);
+		evp.secInfo = evp.newSectionInfo;
 	}
 
-	fuxstudio.editorDragEnd(evp, "field", evp.sectionInfo.designId[evp.fieldInfo.field.column],
-			fuxstudio.dshFieldDrag, fuxstudio.dshFieldDragEnd);
+	fuxstudio.editorDragEnd(evp, "tile", evp.secInfo.designId[evp.tileInfo.tile.index],
+			fuxstudio.dshTileDrag, fuxstudio.dshTileDragEnd);
 }
 
 
@@ -2827,7 +2831,17 @@ fuxstudio.editorTablessSectionInfoAt = function(secInfos, x, y) {
 			if (_design) {
 				var box = _design.getBoundingClientRect();
 				if (x > box.left && x < box.right && y > box.top && y < box.bottom) {
-					return {secInfo:_secInfo, column:k};
+					const section = secInfo.section;
+					var empty = true;
+					for (var n = 0; n < section.tiles.length; n++) {
+						const tile = section.tiles[n];
+						if (tile.index == k) {
+							empty = false;
+							break;
+						}
+					}
+					
+					return {secInfo:_secInfo, column:k, empty:empty};
 				}
 			}
 		}
