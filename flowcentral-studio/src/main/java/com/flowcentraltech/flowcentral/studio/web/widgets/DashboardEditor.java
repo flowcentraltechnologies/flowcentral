@@ -252,10 +252,12 @@ public class DashboardEditor {
 
         public void setSections(List<DDashboardSection> sections) {
             this.sections = sections;
+            resassignSectionIndexes();
         }
 
         public void addDashboardSection(int originIndex, DDashboardSection section) {
             sections.add(originIndex + 1, section);
+            resassignSectionIndexes();
         }
 
         public DDashboardSection getDashboardSection(int index) {
@@ -263,7 +265,9 @@ public class DashboardEditor {
         }
 
         public DDashboardSection removeDashboardSection(int index) {
-            return sections.remove(index);
+            DDashboardSection section = sections.remove(index);
+            resassignSectionIndexes();
+            return section;
         }
 
         public DDashboardTile getDashboardTile(int sectionIndex, int tileIndex) {
@@ -282,6 +286,13 @@ public class DashboardEditor {
                 tile.setIndex(destTileIndex);
                 DDashboardSection section = getDashboardSection(destSectionIndex);
                 section.addDashboardTile(tile);
+            }
+        }
+        
+        private void resassignSectionIndexes() {
+            final int len = sections.size();
+            for (int i = 0; i < len; i++) {
+                sections.get(i).setIndex(i);
             }
         }
     }
