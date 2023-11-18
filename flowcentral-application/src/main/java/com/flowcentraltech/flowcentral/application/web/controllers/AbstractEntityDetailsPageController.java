@@ -97,6 +97,17 @@ public abstract class AbstractEntityDetailsPageController<T extends AbstractEnti
     }
 
     @Action
+    public final String columns() throws UnifyException {
+        IndexedTarget target = getRequestTarget(IndexedTarget.class);
+        if (target.isValidIndex()) {
+            return onColumnSelect(target.getIndex(), getResultTable().getDispItemList().get(target.getIndex()),
+                    target.getBinding());
+        }
+
+        return noResult();
+    }
+
+    @Action
     public final String buttons() throws UnifyException {
         IndexedTarget target = getRequestTarget(IndexedTarget.class);
         if (target.isValidIndex()) {
@@ -254,6 +265,8 @@ public abstract class AbstractEntityDetailsPageController<T extends AbstractEnti
     protected abstract TableDef getTableDef() throws UnifyException;
 
     protected abstract String onView(int rowIndex, Entity inst) throws UnifyException;
+
+    protected abstract String onColumnSelect(int rowIndex, Entity inst, String columnName) throws UnifyException;
 
     protected abstract String onAction(int rowIndex, Entity inst, String action) throws UnifyException;
 

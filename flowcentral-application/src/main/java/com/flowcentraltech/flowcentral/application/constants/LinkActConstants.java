@@ -33,5 +33,7 @@ public interface LinkActConstants {
     
     String DETAILS_ACTION = "detailsAct";
     
+    String COLUMN_ACTION = "columnAct";
+    
     String BUTTON_ACTION = "buttonAct";
 }

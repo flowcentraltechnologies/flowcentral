@@ -65,5 +65,6 @@
 !ui-postcommand:applyTableAct command:applyTableAction refresh:$c{searchResultPanel} components:$c{searchResultTbl tblActionSel}
 !ui-postcommand:applyTableBtnAct command:applyTableBtnAction refresh:$c{searchResultPanel} components:$c{searchResultTbl}
 !ui-postcommand:detailsAct command:details refresh:$c{searchResultPanel} components:$c{searchResultTbl}
+!ui-post:columnAct  command:columns
 
 
