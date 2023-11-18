@@ -22,10 +22,11 @@
 !ui-formpanel:formPanel
 	layout:$d{!ui-vertical style:$s{table-layout:fixed;}}
     formCaptionSuffix:$s{:} formBinding:$g{dialogFormBinding} formColumns:1
-	formSection:$d{!ui-section components:$c{frmColumns}}
+	formSection:$d{!ui-section components:$c{frmColumns frmHeight}}
 	
 !ui-select:frmColumns styleClass:$e{fc-formfield} caption:$m{dashboardeditor.section.columns} binding:columns required:true
 	 list:dashboardcolumnstypelist
+!ui-integer:frmHeight styleClass:$e{fc-formfield} caption:$m{dashboardeditor.section.height} binding:height
 
 // Action buttons
 !ui-panel:dialogActionPanel layout:$d{!ui-horizontal} components:$c{addBtn applyBtn cancelBtn}

@@ -31,12 +31,15 @@ public class DashboardSectionDef {
     private DashboardColumnsType type;
 
     private int index;
-    
+
+    private int height;
+
     private List<DashboardTileDef> tileList;
 
-    public DashboardSectionDef(DashboardColumnsType type, int index,  List<DashboardTileDef> tileList) {
+    public DashboardSectionDef(DashboardColumnsType type, int index, int height, List<DashboardTileDef> tileList) {
         this.type = type;
         this.index = index;
+        this.height = height;
         this.tileList = tileList;
     }
 
@@ -48,8 +51,21 @@ public class DashboardSectionDef {
         return index;
     }
 
+    public int getHeight() {
+        return height;
+    }
+
     public List<DashboardTileDef> getTileList() {
         return tileList;
     }
 
+    public DashboardTileDef getTile(int tileIndex) {
+        for (DashboardTileDef dashboardTileDef : tileList) {
+            if (dashboardTileDef.getIndex() == tileIndex) {
+                return dashboardTileDef;
+            }
+        }
+
+        return null;
+    }
 }

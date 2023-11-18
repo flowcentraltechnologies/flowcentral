@@ -76,6 +76,7 @@ public class DashboardsXmlGenerator extends AbstractStaticArtifactGenerator {
                         DashboardSectionConfig dashboardSectionConfig = new DashboardSectionConfig();
                         dashboardSectionConfig.setType(dashboardSection.getType());
                         dashboardSectionConfig.setIndex(dashboardSection.getIndex());
+                        dashboardSectionConfig.setHeight(dashboardSection.getHeight());
                         sectionList.add(dashboardSectionConfig);
                     }
                     

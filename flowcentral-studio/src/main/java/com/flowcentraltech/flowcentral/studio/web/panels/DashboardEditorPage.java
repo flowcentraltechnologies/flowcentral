@@ -114,6 +114,7 @@ public class DashboardEditorPage extends AbstractStudioEditorPage implements Tab
             for (DDashboardSection dsection : dashboardEditor.getDesign().getSections()) {
                 DashboardSection section = new DashboardSection();
                 section.setIndex(sectionIndex);
+                section.setHeight(dsection.getHeight());
                 section.setType(DashboardColumnsType.fromCode(dsection.getColumns()));
 
                 for (DDashboardTile dtile : dsection.getTiles()) {
@@ -141,7 +142,7 @@ public class DashboardEditorPage extends AbstractStudioEditorPage implements Tab
         DashboardEditor.Builder deb = DashboardEditor.newBuilder(cms, dashboardDef);
         Dashboard dashboard = getAu().environment().find(Dashboard.class, baseId);
         for (DashboardSection dashboardSection : dashboard.getSectionList()) {
-            deb.addSection(dashboardSection.getType());
+            deb.addSection(dashboardSection.getType(), dashboardSection.getHeight());
         }
 
         for (DashboardTile dashboardTile : dashboard.getTileList()) {

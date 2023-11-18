@@ -46,8 +46,8 @@ public final class ChartUtils {
 
     }
 
-    public static JsonWriter getOptionsJsonWriter(ChartDef chartDef, ChartData chartData, boolean sparkLine)
-            throws UnifyException {
+    public static JsonWriter getOptionsJsonWriter(ChartDef chartDef, ChartData chartData, boolean sparkLine,
+            int preferredHeight) throws UnifyException {
         JsonWriter jw = new JsonWriter();
         jw.beginObject();
         final ChartType chartType = chartDef.getType();
@@ -96,8 +96,9 @@ public final class ChartUtils {
             jw.write("width", chartDef.getWidth());
         }
 
-        if (chartDef.getHeight() > 0) {
-            jw.write("height", chartDef.getHeight());
+        int _preferredHeight = chartDef.getHeight() > 0 ? chartDef.getHeight() : preferredHeight;
+        if (_preferredHeight > 0) {
+            jw.write("height", _preferredHeight);
         }
 
         jw.write("type", chartType.optionsType());
@@ -248,8 +249,8 @@ public final class ChartUtils {
         return jw;
     }
 
-    public static String getOptionsJson(ChartDef chartDef, ChartData chartData, boolean sparkLine)
+    public static String getOptionsJson(ChartDef chartDef, ChartData chartData, boolean sparkLine, int preferredHeight)
             throws UnifyException {
-        return ChartUtils.getOptionsJsonWriter(chartDef, chartData, sparkLine).toString();
+        return ChartUtils.getOptionsJsonWriter(chartDef, chartData, sparkLine, preferredHeight).toString();
     }
 }

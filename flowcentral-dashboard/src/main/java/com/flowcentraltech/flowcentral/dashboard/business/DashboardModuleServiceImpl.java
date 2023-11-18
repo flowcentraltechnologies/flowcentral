@@ -71,7 +71,7 @@ public class DashboardModuleServiceImpl extends AbstractFlowCentralService imple
 
 				DataUtils.sortAscending(dashboard.getSectionList(), DashboardSection.class, "index");
 				for (DashboardSection dashboardSection: dashboard.getSectionList()) {				    
-				    ddb.addSection(dashboardSection.getType());
+				    ddb.addSection(dashboardSection.getType(), dashboardSection.getHeight());
 				}
 				
 				for (DashboardTile dashboardTile : dashboard.getTileList()) {

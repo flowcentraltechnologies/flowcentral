@@ -15,6 +15,9 @@
  */
 package com.flowcentraltech.flowcentral.configuration.constants;
 
+import java.util.Arrays;
+import java.util.List;
+
 import com.tcdng.unify.common.annotation.StaticList;
 import com.tcdng.unify.common.constants.EnumConst;
 import com.tcdng.unify.core.annotation.Table;
@@ -31,34 +34,37 @@ import com.tcdng.unify.core.util.EnumUtils;
 public enum DashboardColumnsType implements EnumConst {
 
     TYPE_1(
-            "1", 1),
+            "1", "100%", 1),
     TYPE_1_1(
-            "1_1", 2),
+            "1_1", "50% 50%", 2),
     TYPE_1_2(
-            "1_2", 2),
+            "1_2", "33% 67%", 2),
     TYPE_2_1(
-            "2_1", 2),
+            "2_1", "67% 33%", 2),
     TYPE_1_1_1(
-            "1_1_1", 3),
+            "1_1_1", "33% 34% 33%", 3),
     TYPE_1_3(
-            "1_3", 2),
+            "1_3", "25% 75%", 2),
     TYPE_1_1_2(
-            "1_1_2", 3),
+            "1_1_2", "25% 25% 50%", 3),
     TYPE_1_2_1(
-            "1_2_1", 3),
+            "1_2_1", "25% 50% 25%", 3),
     TYPE_2_1_1(
-            "2_1_1", 3),
+            "2_1_1", "50% 25% 25%", 3),
     TYPE_3_1(
-            "3_1", 2),
+            "3_1", "75% 25%", 2),
     TYPE_1_1_1_1(
-            "1_1_1_1", 4);
+            "1_1_1_1", "25% 25% 25% 25%", 4);
 
     private final String code;
 
+    private final List<String> dimension;
+
     private final int columns;
 
-    private DashboardColumnsType(String code, int columns) {
+    private DashboardColumnsType(String code, String dimension, int columns) {
         this.code = code;
+        this.dimension = Arrays.asList(dimension.split("\\s+"));
         this.columns = columns;
     }
 
@@ -72,7 +78,11 @@ public enum DashboardColumnsType implements EnumConst {
         return TYPE_1.code;
     }
 
-    public int columns() {
+    public List<String> dimension() {
+        return this.dimension;
+    }
+
+   public int columns() {
         return columns;
     }
 

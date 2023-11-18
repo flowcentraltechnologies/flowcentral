@@ -214,8 +214,8 @@ public class DashboardEditor {
             this.sectionIndex = 0;
         }
 
-        public Builder addSection(DashboardColumnsType columns) {
-            sections.add(new DDashboardSection(columns.code(), sectionIndex++));
+        public Builder addSection(DashboardColumnsType columns, Integer height) {
+            sections.add(new DDashboardSection(columns.code(), sectionIndex++, height));
             return this;
         }
 
@@ -323,12 +323,15 @@ public class DashboardEditor {
 
         private int index;
 
+        private Integer height;
+
         private List<DDashboardTile> tiles;
 
-        public DDashboardSection(String columns, int index) {
+        public DDashboardSection(String columns, int index, Integer height) {
             this.tiles = new ArrayList<DDashboardTile>();
             this.columns = columns;
             this.index = index;
+            this.height = height;
         }
 
         public DDashboardSection() {
@@ -357,6 +360,14 @@ public class DashboardEditor {
 
         public void setIndex(int index) {
             this.index = index;
+        }
+
+        public Integer getHeight() {
+            return height;
+        }
+
+        public void setHeight(Integer height) {
+            this.height = height;
         }
 
         public List<DDashboardTile> getTiles() {

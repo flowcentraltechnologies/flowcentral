@@ -41,6 +41,9 @@ public class DashboardSection extends BaseAuditEntity {
     @Column(name = "DISPLAY_INDEX")
     private int index;
 
+    @Column(nullable = true)
+    private Integer height;
+
     @ListOnly(key = "type", property = "description")
     private String typeDesc;
 
@@ -71,6 +74,14 @@ public class DashboardSection extends BaseAuditEntity {
 
     public void setIndex(int index) {
         this.index = index;
+    }
+
+    public Integer getHeight() {
+        return height;
+    }
+
+    public void setHeight(Integer height) {
+        this.height = height;
     }
 
     public String getTypeDesc() {

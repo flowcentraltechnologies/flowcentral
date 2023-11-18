@@ -149,6 +149,7 @@ public class ApplicationDashboardInstallerImpl extends AbstractApplicationArtifa
                 DashboardSection dashboardSection = new DashboardSection();
                 dashboardSection.setType(dashboardSectionConfig.getType());
                 dashboardSection.setIndex(dashboardSectionConfig.getIndex());
+                dashboardSection.setHeight(dashboardSectionConfig.getHeight());
                 sectionList.add(dashboardSection);
             }
         }

@@ -1396,17 +1396,17 @@ fuxstudio.rptSlotDel = function(uEv) {
 /************************* DASHBOARD EDITOR *************************************/
 /********************************************************************************/
 /** Dashboard editor */
-const dashColumnsType = new Map([["1", {columns:1}],
-								["1_1", {columns:2}],
-								["1_2", {columns:2}],
-								["2_1", {columns:2}],
-								["1_1_1", {columns:3}],
-								["1_3", {columns:2}],
-								["1_1_2", {columns:3}],
-								["1_2_1", {columns:3}],
-								["2_1_1", {columns:3}],
-								["3_1", {columns:2}],
-								["1_1_1_1", {columns:4}]]);
+const dashColumnsType = new Map([["1", {columns:1, dim:"100%"}],
+								["1_1", {columns:2, dim:"50% 50%"}],
+								["1_2", {columns:2, dim:"33% 67%"}],
+								["2_1", {columns:2, dim:"67% 33%"}],
+								["1_1_1", {columns:3, dim:"33% 34% 33%"}],
+								["1_3", {columns:2, dim:"25% 75%"}],
+								["1_1_2", {columns:3, dim:"25% 25% 50%"}],
+								["1_2_1", {columns:3, dim:"25% 50% 25%"}],
+								["2_1_1", {columns:3, dim:"50% 25% 25%"}],
+								["3_1", {columns:2, dim:"75% 25%"}],
+								["1_1_1_1", {columns:4, dim:"25% 25% 25% 25%"}]]);
 
 fuxstudio.rigDashboardEditor = function(rgp) {
 	const id = rgp.pId;
@@ -1580,9 +1580,10 @@ fuxstudio.dshSectionInnerHtml = function(editor, secInfo) {
 	html += "<div style=\"display:table;table-layout:fixed;width:100%;\"><div id=\""
 			+ designRowId + "\" style=\"display:table-row;\">";
 	const colinfo = dashColumnsType.get(section.columns);
+	const dim = colinfo.dim.split(' ');
 	for (var i = 0; i < colinfo.columns; i++) {
 		const designId = designRowId + i;
-		html += "<div style=\"display:table-cell;vertical-align:top;\"><div class=\"tledesign\" id=\"" + designId + "\">";
+		html += "<div style=\"display:table-cell;vertical-align:top;width:" + dim[i] + ";\"><div class=\"tledesign\" id=\"" + designId + "\">";
 		var filled = false;
 		for (var j = 0; j < section.tiles.length; j++) {
 			const tile = section.tiles[j];
