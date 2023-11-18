@@ -26,6 +26,7 @@ import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.UplAttribute;
 import com.tcdng.unify.core.annotation.UplAttributes;
 import com.tcdng.unify.core.stream.JsonObjectStreamer;
+import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.annotation.Action;
 import com.tcdng.unify.web.ui.widget.Control;
@@ -53,19 +54,19 @@ public class DashboardEditorWidget extends AbstractFlowCentralMultiControl {
 
     private Control editTileCtrl;
 
-    private Control editColCtrl;
-
     private Control editTileIndexCtrl;
 
     private Control editModeCtrl;
+
+    private Control editMoveCtrl;
 
     private String design;
 
     private String chartName;
 
-    private int sectionIndex;
+    private String move;
 
-    private int column;
+    private int sectionIndex;
 
     private int tileIndex;
 
@@ -80,9 +81,9 @@ public class DashboardEditorWidget extends AbstractFlowCentralMultiControl {
         valueCtrl = (Control) addInternalChildWidget("!ui-hidden binding:design");
         editSectionCtrl = (Control) addInternalChildWidget("!ui-hidden binding:sectionIndex");
         editTileCtrl = (Control) addInternalChildWidget("!ui-hidden binding:chartName");
-        editColCtrl = (Control) addInternalChildWidget("!ui-hidden binding:column");
         editTileIndexCtrl = (Control) addInternalChildWidget("!ui-hidden binding:tileIndex");
         editModeCtrl = (Control) addInternalChildWidget("!ui-hidden binding:editMode");
+        editMoveCtrl = (Control) addInternalChildWidget("!ui-hidden binding:move");
     }
 
     @Override
@@ -110,6 +111,13 @@ public class DashboardEditorWidget extends AbstractFlowCentralMultiControl {
                 case DELETE:
                     commandRefreshPanels(getDashboardEditor().performSectionDel(sectionIndex));
                     break;
+                case MOVE:
+                    if (!StringUtils.isBlank(move)) {
+                        String[] prms = move.split(",");
+                        int[] _prms = DataUtils.convert(int[].class, prms);
+                        commandRefreshPanels(getDashboardEditor().performSectionMove(_prms));
+                    }
+                    break;
                 default:
                     break;
             }
@@ -118,17 +126,10 @@ public class DashboardEditorWidget extends AbstractFlowCentralMultiControl {
 
     @Action
     public void editTile() throws UnifyException {
-        System.out.println("@prime: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
-        System.out.println("@prime: editMode = " + editMode);
-        System.out.println("@prime: chartName = " + chartName);
-        System.out.println("@prime: sectionIndex = " + sectionIndex);
-        System.out.println("@prime: column = " + column);
-        System.out.println("@prime: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
-
         if (editMode != null) {
             switch (editMode) {
                 case CREATE:
-                    getDashboardEditor().prepareTileCreate(chartName, sectionIndex, column);
+                    getDashboardEditor().prepareTileCreate(chartName, sectionIndex, tileIndex);
                     commandRefreshPanels(getDashboardEditor().performTileAdd());
                     break;
                 case CREATE_SUB:
@@ -138,6 +139,16 @@ public class DashboardEditorWidget extends AbstractFlowCentralMultiControl {
                     break;
                 case DELETE:
                     commandRefreshPanels(getDashboardEditor().performTileDel(sectionIndex, tileIndex));
+                    break;
+                case MOVE:
+                    if (!StringUtils.isBlank(move)) {
+                        String[] prms = move.split(",");
+                        if (prms.length == 4) {
+                            int[] _prms = DataUtils.convert(int[].class, prms);
+                            commandRefreshPanels(
+                                    getDashboardEditor().performTileMove(_prms[0], _prms[1], _prms[2], _prms[3]));
+                        }
+                    }
                     break;
                 default:
                     break;
@@ -163,20 +174,20 @@ public class DashboardEditorWidget extends AbstractFlowCentralMultiControl {
         this.chartName = chartName;
     }
 
+    public String getMove() {
+        return move;
+    }
+
+    public void setMove(String move) {
+        this.move = move;
+    }
+
     public int getSectionIndex() {
         return sectionIndex;
     }
 
     public void setSectionIndex(int sectionIndex) {
         this.sectionIndex = sectionIndex;
-    }
-
-    public int getColumn() {
-        return column;
-    }
-
-    public void setColumn(int column) {
-        this.column = column;
     }
 
     public int getTileIndex() {
@@ -207,16 +218,16 @@ public class DashboardEditorWidget extends AbstractFlowCentralMultiControl {
         return editTileCtrl;
     }
 
-    public Control getEditColCtrl() {
-        return editColCtrl;
-    }
-
     public Control getEditTileIndexCtrl() {
         return editTileIndexCtrl;
     }
 
     public Control getEditModeCtrl() {
         return editModeCtrl;
+    }
+
+    public Control getEditMoveCtrl() {
+        return editMoveCtrl;
     }
 
     public String getChoiceWidth() throws UnifyException {

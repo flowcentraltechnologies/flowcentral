@@ -95,7 +95,7 @@ public class DashboardEditorWriter extends AbstractControlWriter {
 
             jsonWriter.beginObject();
             jsonWriter.write("tleLabel", chartDef.getDescription());
-            jsonWriter.write("tleNm", chartDef.getName());
+            jsonWriter.write("tleNm", chartDef.getLongName());
             jsonWriter.endObject();
 
             i++;
@@ -114,13 +114,13 @@ public class DashboardEditorWriter extends AbstractControlWriter {
         writer.write("</div></div>");
         // End body
 
-        // State transfer control
+        // State transfer controls
         writer.writeStructureAndContent(dashboardEditorWidget.getValueCtrl());
         writer.writeStructureAndContent(dashboardEditorWidget.getEditSectionCtrl());
         writer.writeStructureAndContent(dashboardEditorWidget.getEditTileCtrl());
         writer.writeStructureAndContent(dashboardEditorWidget.getEditTileIndexCtrl());
-        writer.writeStructureAndContent(dashboardEditorWidget.getEditColCtrl());
         writer.writeStructureAndContent(dashboardEditorWidget.getEditModeCtrl());
+        writer.writeStructureAndContent(dashboardEditorWidget.getEditMoveCtrl());
 
         writer.write("</div>");
         jsonWriter.endObject();
@@ -148,8 +148,8 @@ public class DashboardEditorWriter extends AbstractControlWriter {
         writer.writeParam("pEditSecId", dashboardEditorWidget.getEditSectionCtrl().getId());
         writer.writeParam("pEditTileId", dashboardEditorWidget.getEditTileCtrl().getId());
         writer.writeParam("pEditTileIndexId", dashboardEditorWidget.getEditTileIndexCtrl().getId());
-        writer.writeParam("pEditColId", dashboardEditorWidget.getEditColCtrl().getId());
         writer.writeParam("pEditModeId", dashboardEditorWidget.getEditModeCtrl().getId());
+        writer.writeParam("pEditMoveId", dashboardEditorWidget.getEditMoveCtrl().getId());
         writer.writeResolvedParam("pContent",
                 (String) dashboardEditorWidget.getWriteWork().get(DashboardEditorWidget.WORK_CONTENT));
         writer.endFunction();

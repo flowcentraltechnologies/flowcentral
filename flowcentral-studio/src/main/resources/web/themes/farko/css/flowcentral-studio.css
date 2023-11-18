@@ -194,13 +194,13 @@
 
 .fc-dashboardeditor .tledesign {display:block;padding:4px;min-height:80px;box-sizing: border-box;}
 .fc-dashboardeditor .tle {display:block;padding:2px; margin-bottom:4px; box-sizing: border-box; background-color:#ffffff;border: solid 1px #c8c8c8;}
-.fc-dashboardeditor .tlebdy {display:block;padding:2px; margin-bottom:4px; height:128px; box-sizing: border-box; background-color:#ffffff;border: solid 1px #c8c8c8;}
-.fc-dashboardeditor .tlehdr {font-weight:bold; font-size:8pt;height:22px;}
-.fc-dashboardeditor .tlecap {display: inline-block; background-color: #efefef; color: #404040; width: calc(100% - 48px); border: 1px solid #dfdfdf;}
+.fc-dashboardeditor .tlebdy {display:block;padding:2px; margin-bottom:4px; height:128px; box-sizing: border-box; background-color:#f6f6f6;border: solid 1px #c8c8c8;}
+.fc-dashboardeditor .tlehdr {font-weight:bold; background-color: #666E79; color:#ffffff; font-size:8pt;height:22px;}
+.fc-dashboardeditor .tlecap {display: inline-block; width: calc(100% - 48px);}
 .fc-dashboardeditor .tlecap span {display:block; text-align:left;margin:2px 4px;white-space:nowrap; overflow:hidden; text-overflow:ellipsis;pointer-events:none;}
 .fc-dashboardeditor .tlecapz {width:100%;box-sizing: border-box;}
 .fc-dashboardeditor .tleact {display:inline-block; width:42px;text-align: right;white-space: nowrap; overflow: hidden;text-overflow: ellipsis; margin: 2px 0px;}
-.fc-dashboardeditor .tlebtn {color:#404040; padding:2px 2px; min-height:14px; min-width:14px; font-size:10px; cursor: pointer !important;}
+.fc-dashboardeditor .tlebtn {color:#ffffff;padding:2px 2px; min-height:14px; min-width:14px; font-size:10px; cursor: pointer !important;}
 
 .fc-dashboardeditor .placetile {display:block; box-sizing: border-box; height:128px;
 	margin:2px;border: dashed 2px #8090f0;background-color:#b7c1f6;color:#8090f0;}

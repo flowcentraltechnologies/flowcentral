@@ -20,6 +20,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
+import com.flowcentraltech.flowcentral.chart.business.ChartModuleService;
+import com.flowcentraltech.flowcentral.chart.data.ChartDef;
 import com.flowcentraltech.flowcentral.configuration.constants.DashboardColumnsType;
 import com.flowcentraltech.flowcentral.configuration.constants.DashboardTileType;
 import com.flowcentraltech.flowcentral.dashboard.data.DashboardDef;
@@ -34,6 +36,8 @@ import com.tcdng.unify.core.UnifyException;
 public class DashboardEditor {
 
     private final AppletUtilities au;
+
+    private final ChartModuleService cms;
 
     private DashboardDef dashboardDef;
 
@@ -55,8 +59,9 @@ public class DashboardEditor {
 
     private boolean readOnly;
 
-    private DashboardEditor(AppletUtilities au, DashboardDef dashboardDef, Design design) {
+    private DashboardEditor(AppletUtilities au, ChartModuleService cms, DashboardDef dashboardDef, Design design) {
         this.au = au;
+        this.cms = cms;
         this.dashboardDef = dashboardDef;
         this.design = design;
     }
@@ -140,10 +145,15 @@ public class DashboardEditor {
         return editorBodyPanelName;
     }
 
-    // Fields
+    public String performSectionMove(int[] reorder) {
+        design.reorderDashboardSections(reorder);
+        originSectionIndex = 0;
+        return editorBodyPanelName;
+    }
+
     public String performTileAdd() throws UnifyException {
         DDashboardSection dDashboardSection = design.getDashboardSection(originSectionIndex);
-        dDashboardSection.addDashboardTile(editTile, originSectionIndex);
+        dDashboardSection.addDashboardTile(editTile);
         if (editTile.getType() == null) {
             editTile.setType(DashboardTileType.SIMPLE.code());
         }
@@ -151,15 +161,17 @@ public class DashboardEditor {
         return editorBodyPanelName;
     }
 
-    public String prepareTileCreate(String chart, int sectionIndex, int column) throws UnifyException {
+    public String prepareTileCreate(String chart, int sectionIndex, int tileIndex) throws UnifyException {
         dialogTitle = au.resolveSessionMessage("$m{dashboardeditor.dashboardtileeditorpanel.caption.add}");
         this.originSectionIndex = sectionIndex;
+        ChartDef chartDef = cms.getChartDef(chart);
         editTile = new DDashboardTile();
+        editTile.setIndex(tileIndex);
         editTile.setMode("CREATE");
         editTile.setType(DashboardTileType.SIMPLE.code());
         editTile.setChart(chart);
-        editTile.setName(null);
-        editTile.setDescription(null);
+        editTile.setName(chart);
+        editTile.setDescription(chartDef.getDescription());
         return editTilePanelName;
     }
 
@@ -175,39 +187,55 @@ public class DashboardEditor {
         return editorBodyPanelName;
     }
 
-    public static Builder newBuilder(DashboardDef dashboardDef) {
-        return new Builder(dashboardDef);
+    public String performTileMove(int srcSectionIndex, int srcTileIndex, int destSectionIndex, int destTileIndex)
+            throws UnifyException {
+        design.moveDashboardTile(srcSectionIndex, srcTileIndex, destSectionIndex, destTileIndex);
+        return editorBodyPanelName;
+    }
+
+    public static Builder newBuilder(ChartModuleService cms, DashboardDef dashboardDef) {
+        return new Builder(cms, dashboardDef);
     }
 
     public static class Builder {
 
-        private DashboardDef dashboardDef;
+        private final ChartModuleService cms;
 
-        private List<DDashboardSection> sections;
+        private final DashboardDef dashboardDef;
 
-        public Builder(DashboardDef dashboardDef) {
+        private final List<DDashboardSection> sections;
+
+        private int sectionIndex;
+
+        public Builder(ChartModuleService cms, DashboardDef dashboardDef) {
+            this.cms = cms;
             this.dashboardDef = dashboardDef;
             this.sections = new ArrayList<DDashboardSection>();
+            this.sectionIndex = 0;
         }
 
         public Builder addSection(DashboardColumnsType columns) {
-            sections.add(new DDashboardSection(columns.code()));
+            sections.add(new DDashboardSection(columns.code(), sectionIndex++));
             return this;
         }
 
         public Builder addTile(DashboardTileType type, String name, String description, String chart, int sectionIndex,
-                int column) {
+                int tileIndex) {
             if (sectionIndex >= sections.size()) {
-                throw new IllegalArgumentException("Invalid section index");
+                throw new IllegalArgumentException("Invalid section index [" + sectionIndex + "]");
             }
 
-            sections.get(sectionIndex).getTiles()
-                    .add(new DDashboardTile(name, description, type.code(), chart, column));
+            DDashboardSection _section = sections.get(sectionIndex);
+            if (_section.getDashboardTile(tileIndex) != null) {
+                throw new IllegalArgumentException("Tile already placed at index [" + tileIndex + "]");
+            }
+
+            _section.addDashboardTile(new DDashboardTile(name, description, type.code(), chart, tileIndex));
             return this;
         }
 
         public DashboardEditor build(AppletUtilities au) {
-            return new DashboardEditor(au, dashboardDef, new Design(sections));
+            return new DashboardEditor(au, cms, dashboardDef, new Design(sections));
         }
     }
 
@@ -229,10 +257,12 @@ public class DashboardEditor {
 
         public void setSections(List<DDashboardSection> sections) {
             this.sections = sections;
+            resassignSectionIndexes();
         }
 
         public void addDashboardSection(int originIndex, DDashboardSection section) {
             sections.add(originIndex + 1, section);
+            resassignSectionIndexes();
         }
 
         public DDashboardSection getDashboardSection(int index) {
@@ -240,7 +270,22 @@ public class DashboardEditor {
         }
 
         public DDashboardSection removeDashboardSection(int index) {
-            return sections.remove(index);
+            DDashboardSection section = sections.remove(index);
+            resassignSectionIndexes();
+            return section;
+        }
+
+        public void reorderDashboardSections(int[] reorder) {
+            if (reorder.length == sections.size()) {
+                List<DDashboardSection> _sections = sections;
+                sections = new ArrayList<DDashboardSection>();
+                for (int i = 0; i < reorder.length; i++) {
+                    DDashboardSection section = _sections.get(reorder[i]);
+                    sections.add(section);
+                }
+                
+                resassignSectionIndexes();
+            }
         }
 
         public DDashboardTile getDashboardTile(int sectionIndex, int tileIndex) {
@@ -248,9 +293,25 @@ public class DashboardEditor {
             return section.getDashboardTile(tileIndex);
         }
 
-        public void removeDashboardTile(int sectionIndex, int tileIndex) {
+        public DDashboardTile removeDashboardTile(int sectionIndex, int tileIndex) {
             DDashboardSection section = sections.get(sectionIndex);
-            section.removeDashboardTile(tileIndex);
+            return section.removeDashboardTile(tileIndex);
+        }
+
+        public void moveDashboardTile(int srcSectionIndex, int srcTileIndex, int destSectionIndex, int destTileIndex) {
+            DDashboardTile tile = removeDashboardTile(srcSectionIndex, srcTileIndex);
+            if (tile != null) {
+                tile.setIndex(destTileIndex);
+                DDashboardSection section = getDashboardSection(destSectionIndex);
+                section.addDashboardTile(tile);
+            }
+        }
+        
+        private void resassignSectionIndexes() {
+            final int len = sections.size();
+            for (int i = 0; i < len; i++) {
+                sections.get(i).setIndex(i);
+            }
         }
     }
 
@@ -260,11 +321,14 @@ public class DashboardEditor {
 
         private String columns;
 
+        private int index;
+
         private List<DDashboardTile> tiles;
 
-        public DDashboardSection(String columns) {
+        public DDashboardSection(String columns, int index) {
             this.tiles = new ArrayList<DDashboardTile>();
             this.columns = columns;
+            this.index = index;
         }
 
         public DDashboardSection() {
@@ -287,6 +351,14 @@ public class DashboardEditor {
             this.columns = columns;
         }
 
+        public int getIndex() {
+            return index;
+        }
+
+        public void setIndex(int index) {
+            this.index = index;
+        }
+
         public List<DDashboardTile> getTiles() {
             return tiles;
         }
@@ -295,16 +367,27 @@ public class DashboardEditor {
             this.tiles = tiles;
         }
 
-        public void addDashboardTile(DDashboardTile editTile, int index) {
-            tiles.add(index, editTile);
+        public void addDashboardTile(DDashboardTile editTile) {
+            tiles.add(editTile);
         }
 
-        public DDashboardTile getDashboardTile(int index) {
-            return tiles.get(index);
+        public DDashboardTile getDashboardTile(int tileIndex) {
+            for (DDashboardTile tile : tiles) {
+                if (tile.getIndex() == tileIndex) {
+                    return tile;
+                }
+            }
+
+            return null;
         }
 
-        public DDashboardTile removeDashboardTile(int index) {
-            return tiles.remove(index);
+        public DDashboardTile removeDashboardTile(int tileIndex) {
+            DDashboardTile tile = getDashboardTile(tileIndex);
+            if (tile != null) {
+                tiles.remove(tile);
+            }
+
+            return tile;
         }
     }
 
@@ -320,17 +403,14 @@ public class DashboardEditor {
 
         private String chart;
 
-        private int column;
+        private int index;
 
-        private boolean filled;
-
-        public DDashboardTile(String name, String description, String type, String chart, int column) {
+        public DDashboardTile(String name, String description, String type, String chart, int index) {
             this.name = name;
             this.description = description;
             this.type = type;
             this.chart = chart;
-            this.column = column;
-            this.filled = true;
+            this.index = index;
         }
 
         public DDashboardTile() {
@@ -377,21 +457,14 @@ public class DashboardEditor {
             this.chart = chart;
         }
 
-        public int getColumn() {
-            return column;
+        public int getIndex() {
+            return index;
         }
 
-        public void setColumn(int column) {
-            this.column = column;
-        }
-
-        public boolean isFilled() {
-            return filled;
-        }
-
-        public void setFilled(boolean filled) {
-            this.filled = filled;
+        public void setIndex(int index) {
+            this.index = index;
         }
 
     }
+
 }
