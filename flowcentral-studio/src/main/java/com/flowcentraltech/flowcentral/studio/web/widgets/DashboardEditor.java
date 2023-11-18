@@ -145,7 +145,12 @@ public class DashboardEditor {
         return editorBodyPanelName;
     }
 
-    // Fields
+    public String performSectionMove(int[] reorder) {
+        design.reorderDashboardSections(reorder);
+        originSectionIndex = 0;
+        return editorBodyPanelName;
+    }
+
     public String performTileAdd() throws UnifyException {
         DDashboardSection dDashboardSection = design.getDashboardSection(originSectionIndex);
         dDashboardSection.addDashboardTile(editTile);
@@ -268,6 +273,19 @@ public class DashboardEditor {
             DDashboardSection section = sections.remove(index);
             resassignSectionIndexes();
             return section;
+        }
+
+        public void reorderDashboardSections(int[] reorder) {
+            if (reorder.length == sections.size()) {
+                List<DDashboardSection> _sections = sections;
+                sections = new ArrayList<DDashboardSection>();
+                for (int i = 0; i < reorder.length; i++) {
+                    DDashboardSection section = _sections.get(reorder[i]);
+                    sections.add(section);
+                }
+                
+                resassignSectionIndexes();
+            }
         }
 
         public DDashboardTile getDashboardTile(int sectionIndex, int tileIndex) {
@@ -448,4 +466,5 @@ public class DashboardEditor {
         }
 
     }
+
 }

@@ -112,6 +112,11 @@ public class DashboardEditorWidget extends AbstractFlowCentralMultiControl {
                     commandRefreshPanels(getDashboardEditor().performSectionDel(sectionIndex));
                     break;
                 case MOVE:
+                    if (!StringUtils.isBlank(move)) {
+                        String[] prms = move.split(",");
+                        int[] _prms = DataUtils.convert(int[].class, prms);
+                        commandRefreshPanels(getDashboardEditor().performSectionMove(_prms));
+                    }
                     break;
                 default:
                     break;
