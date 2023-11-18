@@ -68,7 +68,8 @@ public class ChartWriter extends AbstractWidgetWriter {
         ChartData chartData = ((ChartDataProvider) getComponent(chartDef.getProvider())).provide(chartDef.getRule());
         writer.beginFunction("fux.rigChart");
         writer.writeParam("pId", chartWidget.getId());
-        writer.writeParam("pOptions", ChartUtils.getOptionsJsonWriter(chartDef, chartData, chartWidget.isSparkLine()));
+        writer.writeParam("pOptions", ChartUtils.getOptionsJsonWriter(chartDef, chartData, chartWidget.isSparkLine(),
+                chartWidget.getPreferredHeight()));
         writer.endFunction();
     }
 }

@@ -33,6 +33,8 @@ public class DashboardSectionConfig {
 
     private int index;
 
+    private Integer height;
+
     public DashboardSectionConfig() {
         type = DashboardColumnsType.TYPE_1;
     }
@@ -54,6 +56,15 @@ public class DashboardSectionConfig {
     @XmlAttribute
     public void setIndex(int index) {
         this.index = index;
+    }
+
+    public Integer getHeight() {
+        return height;
+    }
+
+    @XmlAttribute
+    public void setHeight(Integer height) {
+        this.height = height;
     }
 
 }

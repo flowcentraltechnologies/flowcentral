@@ -53,8 +53,8 @@ public class DashboardDef extends BaseApplicationEntityDef {
         return sectionList.size();
     }
 
-    public List<DashboardTileDef> getTileList(int section) {
-        return sectionList.get(section).getTileList();
+    public DashboardSectionDef getSection(int section) {
+        return sectionList.get(section);
     }
 
     public RecordStatus getStatus() {
@@ -92,8 +92,8 @@ public class DashboardDef extends BaseApplicationEntityDef {
             this.sections = new ArrayList<Section>();
         }
 
-        public Builder addSection(DashboardColumnsType type) {
-            sections.add(new Section(type, sections.size()));
+        public Builder addSection(DashboardColumnsType type, Integer height) {
+            sections.add(new Section(type, sections.size(), height));
             return this;
         }
 
@@ -117,11 +117,14 @@ public class DashboardDef extends BaseApplicationEntityDef {
 
             private Set<Integer> usedIndexes;
 
-            private int sessionIndex;
+            private int sectionIndex;
 
-            public Section(DashboardColumnsType type, int sessionIndex) {
+            private Integer height;
+
+            public Section(DashboardColumnsType type, int sectionIndex, Integer height) {
                 this.type = type;
-                this.sessionIndex = sessionIndex;
+                this.sectionIndex = sectionIndex;
+                this.height = height;
                 this.tileList = new ArrayList<DashboardTileDef>();
                 this.usedIndexes = new HashSet<Integer>();
             }
@@ -130,15 +133,19 @@ public class DashboardDef extends BaseApplicationEntityDef {
                 return type;
             }
 
+            public Integer getHeight() {
+                return height;
+            }
+
             public void addDashboardTileDef(DashboardTileDef dashboardTileDef) {
                 if (tileList.size() >= type.columns()) {
                     throw new RuntimeException("Can not add tile [" + dashboardTileDef.getName() + "] to section ["
-                            + sessionIndex + "] because all slots have been utilized.");
+                            + sectionIndex + "] because all slots have been utilized.");
                 }
 
                 if (usedIndexes.contains(dashboardTileDef.getIndex())) {
                     throw new RuntimeException("Can not add tile [" + dashboardTileDef.getName() + "] to section ["
-                            + sessionIndex + "] because index is in use by another tile.");
+                            + sectionIndex + "] because index is in use by another tile.");
                 }
 
                 tileList.add(dashboardTileDef);
@@ -156,6 +163,7 @@ public class DashboardDef extends BaseApplicationEntityDef {
             for (Section section : this.sections) {
                 DataUtils.sortAscending(section.getTileList(), DashboardTileDef.class, "index");
                 sections.add(new DashboardSectionDef(section.getType(), sectionIndex,
+                        DataUtils.convert(int.class, section.getHeight()),
                         DataUtils.unmodifiableList(section.getTileList())));
             }
 

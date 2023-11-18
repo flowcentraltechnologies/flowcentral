@@ -252,7 +252,7 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 
 /** Dashboard slate*/
 .fc-dashboardslate {width:100%;}
-.fc-dashboardslate .section {display:table;width:100%;}
+.fc-dashboardslate .section {display:table;width:100%;table-layout:fixed;}
 .fc-dashboardslate .sectionrow {display:table-row;}
 .fc-dashboardslate .sectioncell {display:table-cell;padding: 8px 4px; vertical-align: top;}
 .fc-dashboardslate .tile {box-shadow: 0px 1px 22px -12px #607D8b; padding: 4px;}

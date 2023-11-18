@@ -56,7 +56,7 @@ public class DashboardPreview {
                 int secIndex = -1;
                 for (DDashboardSection section : design.getSections()) {
                     secIndex++;
-                    ddb.addSection(DashboardColumnsType.fromName(section.getColumns()));
+                    ddb.addSection(DashboardColumnsType.fromName(section.getColumns()), section.getHeight());
                     int tileIndex = -1;
                     for (DDashboardTile tile : section.getTiles()) {
                         tileIndex++;

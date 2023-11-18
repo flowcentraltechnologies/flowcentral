@@ -29,10 +29,16 @@ import com.tcdng.unify.core.annotation.UplAttributes;
  * @since 1.0
  */
 @Component("fc-chart")
-@UplAttributes({ @UplAttribute(name = "sparkLine", type = boolean.class, defaultVal = "false") })
+@UplAttributes({
+    @UplAttribute(name = "sparkLine", type = boolean.class, defaultVal = "false"),
+    @UplAttribute(name = "preferredHeight", type = int.class)})
 public class ChartWidget extends AbstractFlowCentralControl {
 
     public boolean isSparkLine() throws UnifyException {
         return getUplAttribute(boolean.class, "sparkLine");
+    }
+
+    public int getPreferredHeight() throws UnifyException {
+        return getUplAttribute(int.class, "preferredHeight");
     }
 }

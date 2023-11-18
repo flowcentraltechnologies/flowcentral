@@ -20,7 +20,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.common.web.widgets.AbstractFlowCentralMultiControl;
+import com.flowcentraltech.flowcentral.configuration.constants.DashboardColumnsType;
 import com.flowcentraltech.flowcentral.dashboard.data.DashboardDef;
+import com.flowcentraltech.flowcentral.dashboard.data.DashboardSectionDef;
 import com.flowcentraltech.flowcentral.dashboard.data.DashboardTileDef;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
@@ -37,10 +39,10 @@ public class DashboardSlateWidget extends AbstractFlowCentralMultiControl {
 
     private DashboardSlate oldSlate;
 
-    private List<List<Widget>> tileList;
+    private List<List<DashboardSlot>> sectionList;
 
     public DashboardSlateWidget() {
-        tileList = new ArrayList<List<Widget>>();
+        sectionList = new ArrayList<List<DashboardSlot>>();
     }
 
     public DashboardSlate getDashboardSlate() throws UnifyException {
@@ -50,30 +52,40 @@ public class DashboardSlateWidget extends AbstractFlowCentralMultiControl {
             DashboardDef dashboardDef = slate != null ? slate.getDashboardDef() : null;
             if (dashboardDef != oldDashboardDef) {
                 removeAllExternalChildWidgets();
-                tileList.clear();
+                sectionList.clear();
 
                 if (dashboardDef != null) {
                     final int sections = dashboardDef.getSections();
-                    for (int i = 0; i < sections; i++) {
-                        List<Widget> widgetList = new ArrayList<Widget>();
-                        for (DashboardTileDef dashboardTileDef : dashboardDef.getTileList(i)) {
-                            String renderer = null;
-                            switch (dashboardTileDef.getType()) {
-                                case SPARKLINE:
-                                    renderer = "!fc-chart sparkLine:true binding:chart";
-                                    break;
-                                case SIMPLE:
-                                default:
-                                    renderer = "!fc-chart sparkLine:false binding:chart";
-                                    break;
+                    for (int sectionIndex = 0; sectionIndex < sections; sectionIndex++) {
+                        final DashboardSectionDef dashboardSectionDef = dashboardDef.getSection(sectionIndex);
+                        final DashboardColumnsType type = dashboardSectionDef.getType();
+                        final List<DashboardSlot> slotList = new ArrayList<DashboardSlot>();
+                        final int preferredHeight = dashboardSectionDef.getHeight();
+                        for (int tileIndex = 0; tileIndex < type.columns(); tileIndex++) {
+                            Widget widget = null;
+                            DashboardTileDef dashboardTileDef = dashboardSectionDef.getTile(tileIndex);
+                            if (dashboardTileDef != null) {
+                                String renderer = null;
+                                switch (dashboardTileDef.getType()) {
+                                    case SPARKLINE:
+                                        renderer = "!fc-chart sparkLine:true binding:chart preferredHeight:"
+                                                + preferredHeight;
+                                        break;
+                                    case SIMPLE:
+                                    default:
+                                        renderer = "!fc-chart sparkLine:false binding:chart preferredHeight:"
+                                                + preferredHeight;
+                                        break;
+                                }
+
+                                widget = addExternalChildWidget(renderer);
+                                widget.setValueStore(createValueStore(dashboardTileDef));
                             }
 
-                            Widget widget = addExternalChildWidget(renderer);
-                            widget.setValueStore(createValueStore(dashboardTileDef));
-                            widgetList.add(widget);
+                            slotList.add(new DashboardSlot(type.dimension().get(tileIndex), widget));
                         }
 
-                        tileList.add(widgetList);
+                        sectionList.add(slotList);
                     }
 
                 }
@@ -85,9 +97,14 @@ public class DashboardSlateWidget extends AbstractFlowCentralMultiControl {
         return slate;
     }
 
-    public List<List<Widget>> getTileList() throws UnifyException {
+    public List<DashboardSlot> getSection(int sectionIndex) throws UnifyException {
         getDashboardSlate();
-        return tileList;
+        return sectionList.get(sectionIndex);
+    }
+
+    public int getSections() throws UnifyException {
+        getDashboardSlate();
+        return sectionList.size();
     }
 
     @Override
@@ -95,4 +112,27 @@ public class DashboardSlateWidget extends AbstractFlowCentralMultiControl {
 
     }
 
+    public static class DashboardSlot {
+
+        private String width;
+
+        private Widget widget;
+
+        public DashboardSlot(String width, Widget widget) {
+            this.width = width;
+            this.widget = widget;
+        }
+
+        public String getWidth() {
+            return width;
+        }
+
+        public Widget getWidget() {
+            return widget;
+        }
+
+        public boolean isEmpty() {
+            return widget == null;
+        }
+    }
 }
