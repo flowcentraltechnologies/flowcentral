@@ -385,6 +385,12 @@ public abstract class AbstractEntitySingleFormAppletPanel extends AbstractApplet
             getEntityFormApplet().maintainInst(target.getIndex());
         }
     }
+    
+    @Action
+    public void columns() throws UnifyException {
+        IndexedTarget target = getRequestTarget(IndexedTarget.class);
+        // TODO
+    }
 
     @Override
     protected void onReviewErrors(EntityActionResult entityActionResult) throws UnifyException {
