@@ -150,6 +150,7 @@
 !ui-postcommand:formActionAct command:performFormAction components:$c{formPanel listingPanel}
 !ui-postcommand:maintainAct command:maintain pushComponents:$r{mainform.push.components} debounce:true
 !ui-postcommand:listingAct command:listing debounce:true
+!ui-postcommand:columnAct command:columns debounce:true
 !ui-postcommand:saveAssignCloseAct command:saveAssignAndClose components:$c{assignmentPanel}
 !ui-postcommand:saveEntryCloseAct command:saveEntryAndClose components:$c{entryTablePanel}
 !ui-postcommand:savePropListCloseAct command:savePropListAndClose components:$c{editPropertyListPanel}

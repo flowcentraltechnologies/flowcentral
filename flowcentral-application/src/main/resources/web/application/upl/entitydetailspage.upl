@@ -34,6 +34,7 @@
 	multiSelDependentList:$f{detailsMultiSelDependentList}
 
 // Actions
-!ui-post:detailsAct  path:$n{/details} components:$c{resultPanel}
+!ui-post:detailsAct path:$n{/details} components:$c{resultPanel}
+!ui-post:columnAct  path:$n{/columns}
 !ui-post:buttonAct  path:$n{/buttons} 
 !ui-post:viewAct  path:$n{/view}

@@ -97,10 +97,23 @@ public abstract class AbstractEntityDetailsPageController<T extends AbstractEnti
     }
 
     @Action
+    public final String columns() throws UnifyException {
+        IndexedTarget target = getRequestTarget(IndexedTarget.class);
+        if (target.isValidIndex()) {
+            return onColumnSelect(target.getIndex(),
+                    new BeanValueStore(getResultTable().getDispItemList().get(target.getIndex())).getReader(),
+                    target.getBinding());
+        }
+
+        return noResult();
+    }
+
+    @Action
     public final String buttons() throws UnifyException {
         IndexedTarget target = getRequestTarget(IndexedTarget.class);
         if (target.isValidIndex()) {
-            return onAction(target.getIndex(), getResultTable().getDispItemList().get(target.getIndex()),
+            return onAction(target.getIndex(),
+                    new BeanValueStore(getResultTable().getDispItemList().get(target.getIndex())).getReader(),
                     target.getTarget());
         }
 
@@ -110,7 +123,7 @@ public abstract class AbstractEntityDetailsPageController<T extends AbstractEnti
     @Action
     public final String view() throws UnifyException {
         final int index = getRequestTarget(int.class);
-        return onView(index, getResultTable().getDispItemList().get(index));
+        return onView(index, new BeanValueStore(getResultTable().getDispItemList().get(index)).getReader());
     }
 
     @Override
@@ -253,9 +266,12 @@ public abstract class AbstractEntityDetailsPageController<T extends AbstractEnti
 
     protected abstract TableDef getTableDef() throws UnifyException;
 
-    protected abstract String onView(int rowIndex, Entity inst) throws UnifyException;
+    protected abstract String onView(int rowIndex, ValueStoreReader instReader) throws UnifyException;
 
-    protected abstract String onAction(int rowIndex, Entity inst, String action) throws UnifyException;
+    protected abstract String onColumnSelect(int rowIndex, ValueStoreReader instReader, String columnName)
+            throws UnifyException;
+
+    protected abstract String onAction(int rowIndex, ValueStoreReader instReader, String action) throws UnifyException;
 
     private final String viewListingReport(TableDef tableDef, String generator, Map<String, Object> properties,
             Formats formats, boolean spreadSheet) throws UnifyException {

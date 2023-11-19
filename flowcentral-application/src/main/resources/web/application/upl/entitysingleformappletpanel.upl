@@ -82,4 +82,5 @@
 !ui-postcommand:formActionAct command:performFormAction components:$c{formPanel listingPanel}
 !ui-postcommand:maintainAct command:maintain debounce:true
 !ui-postcommand:listingAct command:listing debounce:true
+!ui-postcommand:columnAct command:columns debounce:true
 

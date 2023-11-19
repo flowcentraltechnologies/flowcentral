@@ -839,6 +839,12 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
             setCommandResultMapping(ResultMappingConstants.NONE);
         }
     }
+    
+    @Action
+    public void columns() throws UnifyException {
+        IndexedTarget target = getIndexedTarget();
+        // TODO
+    }
 
     @Action
     public void listing() throws UnifyException {

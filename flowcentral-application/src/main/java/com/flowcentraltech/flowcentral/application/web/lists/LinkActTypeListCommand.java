@@ -60,6 +60,8 @@ public class LinkActTypeListCommand extends AbstractListCommand<ZeroParams> {
                                     getApplicationMessage("application.select.action")),
                             new ListData(LinkActConstants.DETAILS_ACTION,
                                     getApplicationMessage("application.details.action")),
+                            new ListData(LinkActConstants.COLUMN_ACTION,
+                                    getApplicationMessage("application.column.action")),
                             new ListData(LinkActConstants.BUTTON_ACTION,
                                     getApplicationMessage("application.button.action"))));
                 }
