@@ -72,6 +72,9 @@ public enum DataSourceOperation {
             false),
     VALUE_SET(
             false,
+            false),
+    VALIDATE(
+            false,
             false);
 
     private final boolean entityResult;

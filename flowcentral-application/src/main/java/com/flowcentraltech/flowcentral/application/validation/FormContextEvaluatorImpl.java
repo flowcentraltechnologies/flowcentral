@@ -256,7 +256,12 @@ public class FormContextEvaluatorImpl extends AbstractFlowCentralComponent imple
                                 addValidationMessage(ctx, policyDef);
                             }
                         }
-                    }
+                    }                    
+                }
+                
+                if (!ctx.isWithFormErrors() && entityDef.delegated() && entityDef.isActionPolicy()) {
+                    List<String> errors = environmentService.validate((Entity) inst, evaluationMode);
+                    ctx.addValidationErrorMessages(errors);
                 }
             }
         }

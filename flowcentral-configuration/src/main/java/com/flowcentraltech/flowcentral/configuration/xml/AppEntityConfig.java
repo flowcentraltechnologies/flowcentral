@@ -46,6 +46,8 @@ public class AppEntityConfig extends BaseNameConfig {
     private Boolean auditable;
 
     private Boolean reportable;
+    
+    private Boolean actionPolicy;
 
     private List<EntityFieldConfig> entityFieldList;
 
@@ -65,6 +67,7 @@ public class AppEntityConfig extends BaseNameConfig {
         this.mapped = Boolean.FALSE;
         this.auditable = Boolean.FALSE;
         this.reportable = Boolean.FALSE;
+        this.actionPolicy = Boolean.FALSE;
     }
     
     public String getType() {
@@ -140,6 +143,16 @@ public class AppEntityConfig extends BaseNameConfig {
     @XmlAttribute
     public void setReportable(Boolean reportable) {
         this.reportable = reportable;
+    }
+
+    public Boolean getActionPolicy() {
+        return actionPolicy;
+    }
+
+    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
+    @XmlAttribute
+    public void setActionPolicy(Boolean actionPolicy) {
+        this.actionPolicy = actionPolicy;
     }
 
     public List<EntityFieldConfig> getEntityFieldList() {

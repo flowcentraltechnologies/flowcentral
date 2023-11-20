@@ -2290,6 +2290,8 @@
 						column="1" />
 					<field name="reportable" inputWidget="application.checkbox"
 						column="1" />
+					<field name="actionPolicy" inputWidget="application.checkbox"
+						column="1" disabled="true"/>
 				</section>
 			</tab>
 			<tab name="fields" label="$m{studio.appentity.form.fields}"

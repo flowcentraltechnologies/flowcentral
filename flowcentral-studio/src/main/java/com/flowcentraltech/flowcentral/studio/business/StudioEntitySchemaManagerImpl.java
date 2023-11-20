@@ -102,6 +102,7 @@ public class StudioEntitySchemaManagerImpl extends AbstractEntitySchemaManager {
             appEntity.setEntityClass(entityClass);
             appEntity.setDataSourceName(entitySchema.getDataSourceAlias());
             appEntity.setDelegate(entitySchema.getDelegate());
+            appEntity.setActionPolicy(entitySchema.isActionPolicy());
             appEntity.setAuditable(true);
             appEntity.setReportable(true);
 
@@ -179,6 +180,8 @@ public class StudioEntitySchemaManagerImpl extends AbstractEntitySchemaManager {
             if (!StringUtils.isBlank(entitySchema.getDataSourceAlias())) {
                 appEntity.setDataSourceName(entitySchema.getDataSourceAlias());
             }
+
+            appEntity.setActionPolicy(entitySchema.isActionPolicy());
 
             au.environment().updateLeanByIdVersion(appEntity);
             logDebug("Entity schema for [{0}] successfully updated.", entitySchema.getEntity());

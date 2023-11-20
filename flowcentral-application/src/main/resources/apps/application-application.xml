@@ -895,6 +895,8 @@
 				label="$m{application.appentity.auditable}" type="boolean" />
 			<field name="reportable"
 				label="$m{application.appentity.reportable}" type="boolean" />
+			<field name="actionPolicy"
+				label="$m{application.appentity.actionpolicy}" type="boolean" />
 			<field name="baseTypeDesc"
 				label="$m{application.appentity.basetypedesc}" type="list_only"
 				key="baseType" property="description" />

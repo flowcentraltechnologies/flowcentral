@@ -64,6 +64,9 @@ public class AppEntity extends BaseApplicationEntity {
     @Column(name = "REPORTABLE_FG")
     private boolean reportable;
 
+    @Column(name = "ACTION_POLICY_FG")
+    private boolean actionPolicy;
+
     @ListOnly(key = "baseType", property = "description")
     private String baseTypeDesc;
 
@@ -158,6 +161,14 @@ public class AppEntity extends BaseApplicationEntity {
 
     public void setReportable(boolean reportable) {
         this.reportable = reportable;
+    }
+
+    public boolean isActionPolicy() {
+        return actionPolicy;
+    }
+
+    public void setActionPolicy(boolean actionPolicy) {
+        this.actionPolicy = actionPolicy;
     }
 
     public boolean isMapped() {

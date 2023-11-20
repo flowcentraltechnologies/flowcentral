@@ -345,6 +345,14 @@ public class FormContext extends AbstractContext {
         formValidationErrors.addValidationError(message);
     }
 
+    public void addValidationErrorMessages(List<String> messages) {
+        if (messages != null && !messages.isEmpty()) {
+            for(String _message: messages) {
+                formValidationErrors.addValidationError(_message);
+            }
+        }
+    }
+
     public void addValidationErrors(List<FormMessage> messages) {
         if (messages != null) {
             for (FormMessage message : messages) {

@@ -15,6 +15,8 @@
  */
 package com.flowcentraltech.flowcentral.connect.springboot.service;
 
+import com.flowcentraltech.flowcentral.connect.configuration.constants.EvaluationMode;
+
 /**
  * Convenient abstract base class for entity action policies.
  * 
@@ -22,5 +24,12 @@ package com.flowcentraltech.flowcentral.connect.springboot.service;
  * @since 1.0
  */
 public abstract class AbstractEntityActionPolicy<T> implements EntityActionPolicy<T> {
+
+    private final static String[] NO_MESSAGES = new String[0];
+    
+    @Override
+    public String[] validate(EvaluationMode evaluationMode, T entityBean) {
+        return NO_MESSAGES;
+    }
 
 }

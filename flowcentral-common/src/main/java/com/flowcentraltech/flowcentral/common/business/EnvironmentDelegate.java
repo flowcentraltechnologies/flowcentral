@@ -18,8 +18,10 @@ package com.flowcentraltech.flowcentral.common.business;
 
 import java.util.List;
 
+import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.database.Database;
+import com.tcdng.unify.core.database.Entity;
 
 /**
  * Environment delegate.
@@ -28,6 +30,19 @@ import com.tcdng.unify.core.database.Database;
  * @since 1.0
  */
 public interface EnvironmentDelegate extends Database {
+
+    /**
+     * Validates an entity.
+     * 
+     * @param inst
+     *             the entity instance
+     * @param mode
+     *             the evalustion mode
+     * @return list of error messages if any
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    List<String> validate(Entity inst, EvaluationMode mode) throws UnifyException;
     
     /**
      * Returns true if delegate is direct.
