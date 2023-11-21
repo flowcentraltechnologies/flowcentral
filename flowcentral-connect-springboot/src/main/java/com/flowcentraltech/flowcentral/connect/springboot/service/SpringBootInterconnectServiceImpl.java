@@ -226,6 +226,14 @@ public class SpringBootInterconnectServiceImpl implements SpringBootInterconnect
                             result = new Object[] { count };
                         }
                             break;
+                        case VALIDATE: {
+                            Object reqBean = interconnect.getBeanFromJsonPayload(req);
+                            if (entityActionPolicy != null) {
+                                result = entityActionPolicy.validate(req.getEvalMode(), reqBean);
+                            }
+
+                            break;
+                        }
                         case CREATE: {
                             Object reqBean = interconnect.getBeanFromJsonPayload(req);
                             if (entityActionPolicy != null) {

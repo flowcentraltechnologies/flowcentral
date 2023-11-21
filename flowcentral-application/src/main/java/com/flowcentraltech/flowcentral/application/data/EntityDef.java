@@ -162,6 +162,8 @@ public class EntityDef extends BaseApplicationEntityDef {
 
     private boolean reportable;
 
+    private boolean actionPolicy;
+
     private boolean withListOnly;
 
     private boolean withCustomFields;
@@ -180,8 +182,8 @@ public class EntityDef extends BaseApplicationEntityDef {
             List<IndexDef> indexList, List<EntityUploadDef> uploadList,
             Map<String, EntitySearchInputDef> searchInputDefs, ApplicationEntityNameParts nameParts,
             String originClassName, String tableName, String label, String emailProducerConsumer, String delegate,
-            String dataSourceName, boolean mapped, boolean auditable, boolean reportable, String description, Long id,
-            long version) {
+            String dataSourceName, boolean mapped, boolean auditable, boolean reportable, boolean actionPolicy,
+            String description, Long id, long version) {
         super(nameParts, description, id, version);
         this.baseType = baseType;
         this.type = type;
@@ -194,6 +196,7 @@ public class EntityDef extends BaseApplicationEntityDef {
         this.dataSourceName = dataSourceName;
         this.auditable = auditable;
         this.reportable = reportable;
+        this.actionPolicy = actionPolicy;
         this.fieldDefList = fieldDefList;
         this.fieldDefMap = fieldDefMap;
         this.expressionDefMap = expressionDefMap;
@@ -334,7 +337,7 @@ public class EntityDef extends BaseApplicationEntityDef {
     public boolean isWorkType() {
         return baseType.isWorkEntityType();
     }
-    
+
     public void setListOnlyTypesResolved() {
         this.listOnlyTypesResolved = true;
     }
@@ -731,6 +734,10 @@ public class EntityDef extends BaseApplicationEntityDef {
         return reportable;
     }
 
+    public boolean isActionPolicy() {
+        return actionPolicy;
+    }
+
     public boolean emailProducerConsumer() {
         return !StringUtils.isBlank(emailProducerConsumer);
     }
@@ -900,7 +907,7 @@ public class EntityDef extends BaseApplicationEntityDef {
     public boolean isNotDelegateListOnly(String fieldName) {
         return !(delegated() && getFieldDef(fieldName).isListOnly());
     }
-    
+
     public Map<String, Object> extractValues(Entity inst) throws UnifyException {
         Map<String, Object> map = new HashMap<String, Object>();
         for (EntityFieldDef entityFieldDef : fieldDefList) {
@@ -987,16 +994,17 @@ public class EntityDef extends BaseApplicationEntityDef {
 
     public static Builder newBuilder(ConfigType type, String originClassName, String label,
             String emailProducerConsumer, String delegate, String dataSourceName, boolean mapped, boolean auditable,
-            boolean reportable, String longName, String description, Long id, long version) {
+            boolean reportable, boolean actionPolicy, String longName, String description, Long id, long version) {
         return new Builder(null, type, originClassName, null, label, emailProducerConsumer, delegate, dataSourceName,
-                mapped, auditable, reportable, longName, description, id, version);
+                mapped, auditable, reportable, actionPolicy, longName, description, id, version);
     }
 
     public static Builder newBuilder(EntityBaseType baseType, ConfigType type, String originClassName, String tableName,
             String label, String emailProducerConsumer, String delegate, String dataSourceName, boolean mapped,
-            boolean auditable, boolean reportable, String longName, String description, Long id, long version) {
+            boolean auditable, boolean reportable, boolean actionPolicy, String longName, String description, Long id,
+            long version) {
         return new Builder(baseType, type, originClassName, tableName, label, emailProducerConsumer, delegate,
-                dataSourceName, mapped, auditable, reportable, longName, description, id, version);
+                dataSourceName, mapped, auditable, reportable, actionPolicy, longName, description, id, version);
     }
 
     public static class Builder {
@@ -1037,6 +1045,8 @@ public class EntityDef extends BaseApplicationEntityDef {
 
         private boolean reportable;
 
+        private boolean actionPolicy;
+
         private String longName;
 
         private String description;
@@ -1054,7 +1064,7 @@ public class EntityDef extends BaseApplicationEntityDef {
 
         public Builder(EntityBaseType baseType, ConfigType type, String originClassName, String tableName, String label,
                 String emailProducerConsumer, String delegate, String dataSourceName, boolean mapped, boolean auditable,
-                boolean reportable, String longName, String description, Long id, long version) {
+                boolean reportable, boolean actionPolicy, String longName, String description, Long id, long version) {
             this.baseType = baseType;
             this.type = type;
             this.fieldDefMap = new LinkedHashMap<String, EntityFieldDef>();
@@ -1068,6 +1078,7 @@ public class EntityDef extends BaseApplicationEntityDef {
             this.mapped = mapped;
             this.auditable = auditable;
             this.reportable = reportable;
+            this.actionPolicy = actionPolicy;
             this.longName = longName;
             this.description = description;
             this.id = id;
@@ -1120,6 +1131,11 @@ public class EntityDef extends BaseApplicationEntityDef {
 
         public Builder reportable(boolean reportable) {
             this.reportable = reportable;
+            return this;
+        }
+
+        public Builder actionPolicy(boolean actionPolicy) {
+            this.actionPolicy = actionPolicy;
             return this;
         }
 
@@ -1257,8 +1273,8 @@ public class EntityDef extends BaseApplicationEntityDef {
                     DataUtils.unmodifiableMap(expressionDefMap), DataUtils.unmodifiableList(uniqueConstraintList),
                     DataUtils.unmodifiableList(indexList), DataUtils.unmodifiableList(uploadList),
                     DataUtils.unmodifiableMap(searchInputDefs), nameParts, originClassName, tableName, label,
-                    emailProducerConsumer, delegate, dataSourceName, mapped, auditable, reportable, description, id,
-                    version);
+                    emailProducerConsumer, delegate, dataSourceName, mapped, auditable, reportable, actionPolicy,
+                    description, id, version);
         }
     }
 

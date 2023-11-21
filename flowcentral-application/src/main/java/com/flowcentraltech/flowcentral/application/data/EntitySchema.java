@@ -41,10 +41,12 @@ public class EntitySchema {
 
     private String tableName;
 
+    private boolean actionPolicy;
+
     private List<EntityFieldSchema> fields;
 
     public EntitySchema(EntityBaseType baseType, String delegate, String dataSourceAlias, String entity, String name,
-            String description, String tableName, List<EntityFieldSchema> fields) {
+            String description, String tableName, boolean actionPolicy, List<EntityFieldSchema> fields) {
         this.baseType = baseType;
         this.delegate = delegate;
         this.dataSourceAlias = dataSourceAlias;
@@ -52,6 +54,7 @@ public class EntitySchema {
         this.name = name;
         this.description = description;
         this.tableName = tableName;
+        this.actionPolicy = actionPolicy;
         this.fields = fields;
     }
 
@@ -81,6 +84,10 @@ public class EntitySchema {
 
     public String getTableName() {
         return tableName;
+    }
+
+    public boolean isActionPolicy() {
+        return actionPolicy;
     }
 
     public List<EntityFieldSchema> getFields() {

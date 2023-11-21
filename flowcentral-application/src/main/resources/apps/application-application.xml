@@ -246,7 +246,7 @@
 			renderer="!ui-label" />
 		<widgetType name="emailset" listOption="true"
 			description="$m{application.widgettype.emailset}" dataType="string"
-			inputType="string" editor="!ui-text minLen:%s maxLen:%s case:$s{%s}"
+			inputType="string" editor="!ui-textarea minLen:%s maxLen:%s rows:2"
 			renderer="!ui-label" />
 		<widgetType name="mobile" listOption="true"
 			description="$m{application.widgettype.mobile}" dataType="string"
@@ -255,7 +255,7 @@
 			renderer="!ui-label" />
 		<widgetType name="mobileset" listOption="true"
 			description="$m{application.widgettype.mobileset}" dataType="string"
-			inputType="string" editor="!ui-text minLen:%s maxLen:%s case:$s{%s}"
+			inputType="string" editor="!ui-textarea minLen:%s maxLen:%s rows:2"
 			renderer="!ui-label" />
 		<widgetType name="domain" listOption="true"
 			description="$m{application.widgettype.domain}" dataType="string"
@@ -895,6 +895,8 @@
 				label="$m{application.appentity.auditable}" type="boolean" />
 			<field name="reportable"
 				label="$m{application.appentity.reportable}" type="boolean" />
+			<field name="actionPolicy"
+				label="$m{application.appentity.actionpolicy}" type="boolean" />
 			<field name="baseTypeDesc"
 				label="$m{application.appentity.basetypedesc}" type="list_only"
 				key="baseType" property="description" />

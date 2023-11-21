@@ -388,7 +388,6 @@ public abstract class AbstractEntitySingleFormAppletPanel extends AbstractApplet
     
     @Action
     public void columns() throws UnifyException {
-        IndexedTarget target = getRequestTarget(IndexedTarget.class);
         // TODO
     }
 

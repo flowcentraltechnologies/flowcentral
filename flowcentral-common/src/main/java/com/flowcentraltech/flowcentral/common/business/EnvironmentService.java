@@ -24,6 +24,7 @@ import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResu
 import com.flowcentraltech.flowcentral.common.business.policies.EntityListActionContext;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityListActionResult;
 import com.flowcentraltech.flowcentral.common.business.policies.SweepingCommitPolicy;
+import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
 import com.flowcentraltech.flowcentral.common.entities.EntityWrapper;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.business.BusinessService;
@@ -85,6 +86,19 @@ public interface EnvironmentService extends BusinessService {
      */
     void rollbackToSavePoint() throws UnifyException;
 
+    /**
+     * Performs validation on an entity record
+     * 
+     * @param inst
+     *             the record
+     * @param mode
+     *             the evaluation mode
+     * @return list of validation messages if any
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    List<String> validate(Entity inst, EvaluationMode mode) throws UnifyException;
+    
     /**
      * Performs policy action only on supplied entity.
      * 

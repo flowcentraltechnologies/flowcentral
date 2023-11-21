@@ -368,6 +368,7 @@ public class ApplicationXmlGenerator extends AbstractStaticArtifactGenerator {
                 appEntityConfig.setMapped(appEntity.isMapped());
                 appEntityConfig.setAuditable(appEntity.isAuditable());
                 appEntityConfig.setReportable(appEntity.isReportable());
+                appEntityConfig.setActionPolicy(appEntity.isActionPolicy());
 
                 // Fields
                 if (!DataUtils.isBlank(appEntity.getFieldList())) {

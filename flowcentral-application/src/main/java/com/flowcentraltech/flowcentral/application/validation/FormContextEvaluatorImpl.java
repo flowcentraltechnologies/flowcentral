@@ -71,10 +71,10 @@ public class FormContextEvaluatorImpl extends AbstractFlowCentralComponent imple
     static {
         Map<String, String> map = new HashMap<String, String>();
         map.put("application.email", "fc-emailvalidator");
-        map.put("application.emailset", "fc-emailvalidator");
+        map.put("application.emailset", "fc-emailsetvalidator");
         map.put("application.domain", "fc-domainvalidator");
         map.put("application.mobile", "fc-mobilevalidator");
-        map.put("application.mobileset", "fc-mobilevalidator");
+        map.put("application.mobileset", "fc-mobilesetvalidator");
         map.put("application.website", "fc-websitevalidator");
         map.put("application.javafieldname", "fc-javafieldnamevalidator");
         widgetValidatorMap = Collections.unmodifiableMap(map);
@@ -256,7 +256,12 @@ public class FormContextEvaluatorImpl extends AbstractFlowCentralComponent imple
                                 addValidationMessage(ctx, policyDef);
                             }
                         }
-                    }
+                    }                    
+                }
+                
+                if (!ctx.isWithFormErrors() && entityDef.delegated() && entityDef.isActionPolicy()) {
+                    List<String> errors = environmentService.validate((Entity) inst, evaluationMode);
+                    ctx.addValidationErrorMessages(errors);
                 }
             }
         }

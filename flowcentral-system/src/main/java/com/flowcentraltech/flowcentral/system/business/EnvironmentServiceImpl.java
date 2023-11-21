@@ -15,11 +15,13 @@
  */
 package com.flowcentraltech.flowcentral.system.business;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import com.flowcentraltech.flowcentral.common.business.EntityAuditInfoProvider;
+import com.flowcentraltech.flowcentral.common.business.EnvironmentDelegate;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentDelegateHolder;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentDelegateRegistrar;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
@@ -32,6 +34,7 @@ import com.flowcentraltech.flowcentral.common.business.policies.EntityListAction
 import com.flowcentraltech.flowcentral.common.business.policies.EntityListActionPolicy;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityListActionResult;
 import com.flowcentraltech.flowcentral.common.business.policies.SweepingCommitPolicy;
+import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
 import com.flowcentraltech.flowcentral.common.data.EntityAuditInfo;
 import com.flowcentraltech.flowcentral.common.entities.EntityWrapper;
 import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
@@ -110,6 +113,16 @@ public class EnvironmentServiceImpl extends AbstractBusinessService implements E
     @Override
     public void rollbackToSavePoint() throws UnifyException {
         super.rollbackToSavePoint();
+    }
+
+    @Override
+    public List<String> validate(Entity inst, EvaluationMode mode) throws UnifyException {
+        Database db = db(inst.getClass());
+        if (db instanceof EnvironmentDelegate) {
+            return ((EnvironmentDelegate) db).validate(inst, mode);
+        }
+        
+        return Collections.emptyList();
     }
 
     @Override

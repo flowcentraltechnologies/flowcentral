@@ -93,7 +93,8 @@ public abstract class AbstractSynchronizableEnvironmentDelegate extends Abstract
                                 EntityBaseType baseType = EntityBaseType.fromInterconnect(entityDTO.getBaseType());
                                 EntitySchema entitySchema = new EntitySchema(baseType, delegate,
                                         entityDTO.getDataSourceAlias(), entity, entityDTO.getName(),
-                                        entityDTO.getDescription(), entityDTO.getTableName(), fields);
+                                        entityDTO.getDescription(), entityDTO.getTableName(),
+                                        entityDTO.isActionPolicy(), fields);
                                 entitySchemaManager.createEntitySchema(entitySchema);
                                 logInfo(taskMonitor, "Entity schema create for [{0}] completed.", entity);
                             } else {
@@ -155,7 +156,8 @@ public abstract class AbstractSynchronizableEnvironmentDelegate extends Abstract
                                 EntityBaseType baseType = EntityBaseType.fromInterconnect(entityDTO.getBaseType());
                                 EntitySchema entitySchema = new EntitySchema(baseType, delegate,
                                         entityDTO.getDataSourceAlias(), entity, entityDTO.getName(),
-                                        entityDTO.getDescription(), entityDTO.getTableName(), fields);
+                                        entityDTO.getDescription(), entityDTO.getTableName(),
+                                        entityDTO.isActionPolicy(), fields);
                                 entitySchemaManager.updateEntitySchema(entitySchema);
                                 logInfo(taskMonitor, "Entity schema update for [{0}] completed.", entity);
                             } else {

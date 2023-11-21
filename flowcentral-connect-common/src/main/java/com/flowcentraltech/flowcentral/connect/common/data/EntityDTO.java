@@ -38,6 +38,8 @@ public class EntityDTO {
 
     private String tableName;
 
+    private boolean actionPolicy;
+
     private boolean ignoreOnSync;
 
     private List<EntityFieldDTO> fields;
@@ -49,6 +51,7 @@ public class EntityDTO {
         this.description = entityInfo.getDescription();
         this.tableName = entityInfo.getTableName();
         this.ignoreOnSync = entityInfo.isIgnoreOnSync();
+        this.actionPolicy = entityInfo.isWithActionPolicy();
         this.fields = new ArrayList<EntityFieldDTO>();
         for (EntityFieldInfo entityFieldInfo : entityInfo.getAllFields()) {
             EntityFieldDTO entityFieldDTO = new EntityFieldDTO(entityFieldInfo);
@@ -108,6 +111,14 @@ public class EntityDTO {
         this.ignoreOnSync = ignoreOnSync;
     }
 
+    public boolean isActionPolicy() {
+        return actionPolicy;
+    }
+
+    public void setActionPolicy(boolean actionPolicy) {
+        this.actionPolicy = actionPolicy;
+    }
+
     public List<EntityFieldDTO> getFields() {
         return fields;
     }
@@ -116,10 +127,4 @@ public class EntityDTO {
         this.fields = fields;
     }
 
-    @Override
-    public String toString() {
-        return "[baseType=" + baseType + ", dataSourceAlias=" + dataSourceAlias + ", name=" + name + ", description="
-                + description + ", tableName=" + tableName + ", ignoreOnSync=" + ignoreOnSync + ", fields=" + fields
-                + "]";
-    }
 }

@@ -842,7 +842,6 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
     
     @Action
     public void columns() throws UnifyException {
-        IndexedTarget target = getIndexedTarget();
         // TODO
     }
 

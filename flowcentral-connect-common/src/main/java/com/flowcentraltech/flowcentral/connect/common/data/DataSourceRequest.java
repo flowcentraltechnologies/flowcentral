@@ -16,6 +16,7 @@
 package com.flowcentraltech.flowcentral.connect.common.data;
 
 import com.flowcentraltech.flowcentral.connect.common.constants.DataSourceOperation;
+import com.flowcentraltech.flowcentral.connect.configuration.constants.EvaluationMode;
 
 /**
  * Data source request.
@@ -26,6 +27,8 @@ import com.flowcentraltech.flowcentral.connect.common.constants.DataSourceOperat
 public class DataSourceRequest extends BaseRequest {
 
     private DataSourceOperation operation;
+
+    private EvaluationMode evalMode;
     
     private String fieldName;
     
@@ -44,14 +47,24 @@ public class DataSourceRequest extends BaseRequest {
     private int limit;
     
     public DataSourceRequest(DataSourceOperation operation, Long id, Long versionNo) {
-        this();
         this.operation = operation;
         this.versionNo = versionNo;
         setId(id);
     }
+    
+    public DataSourceRequest(DataSourceOperation operation, EvaluationMode evalMode, Long id, Long versionNo) {
+        this.operation = operation;
+        this.evalMode = evalMode;
+        this.versionNo = versionNo;
+        setId(id);
+    }
+
+    public DataSourceRequest(DataSourceOperation operation, EvaluationMode evalMode) {
+        this.operation = operation;
+        this.evalMode = evalMode;
+    }
 
     public DataSourceRequest(DataSourceOperation operation) {
-        this();
         this.operation = operation;
     }
 
@@ -65,6 +78,14 @@ public class DataSourceRequest extends BaseRequest {
 
     public void setOperation(DataSourceOperation operation) {
         this.operation = operation;
+    }
+
+    public EvaluationMode getEvalMode() {
+        return evalMode;
+    }
+
+    public void setEvalMode(EvaluationMode evalMode) {
+        this.evalMode = evalMode;
     }
 
     public String getFieldName() {

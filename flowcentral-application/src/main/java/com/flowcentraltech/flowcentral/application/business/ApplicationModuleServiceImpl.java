@@ -692,7 +692,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                         EntityDef.Builder edb = EntityDef.newBuilder(ConfigType.STATIC,
                                 PropertyListItem.class.getName(),
                                 getApplicationMessage("application.propertyitem.label"), null, null, null, false, false,
-                                false, ApplicationPredefinedEntityConstants.PROPERTYITEM_ENTITY,
+                                false, false, ApplicationPredefinedEntityConstants.PROPERTYITEM_ENTITY,
                                 getApplicationMessage("application.propertyitem"), 0L, 1L);
                         edb.addFieldDef(textWidgetTypeDef, textWidgetTypeDef, EntityFieldDataType.STRING,
                                 EntityFieldType.STATIC, "name", getApplicationMessage("application.propertyitem.name"));
@@ -711,7 +711,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     if (ApplicationPredefinedEntityConstants.USAGE_ENTITY.equals(longName)) {
                         EntityDef.Builder edb = EntityDef.newBuilder(ConfigType.STATIC, Usage.class.getName(),
                                 getApplicationMessage("application.usage.label"), null, null, null, false, false, false,
-                                ApplicationPredefinedEntityConstants.USAGE_ENTITY,
+                                false, ApplicationPredefinedEntityConstants.USAGE_ENTITY,
                                 getApplicationMessage("application.usage"), 0L, 1L);
                         edb.addFieldDef(textWidgetTypeDef, textWidgetTypeDef, EntityFieldDataType.STRING,
                                 EntityFieldType.STATIC, "type", getApplicationMessage("application.usage.type"));
@@ -731,7 +731,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                         EntityDef.Builder edb = EntityDef.newBuilder(ConfigType.STATIC,
                                 com.flowcentraltech.flowcentral.application.data.Attachment.class.getName(),
                                 getApplicationMessage("application.attachment.label"), null, null, null, false, false,
-                                false, ApplicationPredefinedEntityConstants.ATTACHMENT_ENTITY,
+                                false, false, ApplicationPredefinedEntityConstants.ATTACHMENT_ENTITY,
                                 getApplicationMessage("application.attachment"), 0L, 1L);
                         edb.addFieldDef(textWidgetTypeDef, textWidgetTypeDef, EntityFieldDataType.STRING,
                                 EntityFieldType.STATIC, "name", getApplicationMessage("application.attachment.name"));
@@ -755,8 +755,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                             appEntity.getEntityClass(), appEntity.getTableName(), appEntity.getLabel(),
                             appEntity.getEmailProducerConsumer(), appEntity.getDelegate(),
                             appEntity.getDataSourceName(), appEntity.isMapped(), appEntity.isAuditable(),
-                            appEntity.isReportable(), longName, appEntity.getDescription(), appEntity.getId(),
-                            appEntity.getVersionNo());
+                            appEntity.isReportable(), appEntity.isActionPolicy(), longName, appEntity.getDescription(),
+                            appEntity.getId(), appEntity.getVersionNo());
 
                     for (AppEntityField appEntityField : appEntity.getFieldList()) {
                         WidgetTypeDef inputWidgetTypeDef = null;
@@ -1757,7 +1757,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         awcb.withEvent(WorkflowCopyType.CREATION, EventType.ON_ABORT,
                 getAppletProperty(np, AppletPropertyConstants.WORKFLOWCOPY_CREATE_ABORT_ALERT),
                 getAppletProperty(np, AppletPropertyConstants.WORKFLOWCOPY_CREATE_ABORT_SETVALUES));
-        
+
         // Update workflow
         awcb.withEvent(WorkflowCopyType.UPDATE, EventType.ON_SUBMIT,
                 getAppletProperty(np, AppletPropertyConstants.WORKFLOWCOPY_UPDATE_SUBMIT_ALERT),
@@ -4230,6 +4230,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appEntity.setMapped(appEntityConfig.getMapped());
                     appEntity.setAuditable(appEntityConfig.getAuditable());
                     appEntity.setReportable(appEntityConfig.getReportable());
+                    appEntity.setActionPolicy(appEntityConfig.getActionPolicy());
                     appEntity.setConfigType(ConfigType.STATIC_INSTALL);
                     populateChildList(appEntity, applicationName, appEntityConfig);
                     entityId = (Long) environment().create(appEntity);
@@ -4251,6 +4252,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                         oldAppEntity.setMapped(appEntityConfig.getMapped());
                         oldAppEntity.setAuditable(appEntityConfig.getAuditable());
                         oldAppEntity.setReportable(appEntityConfig.getReportable());
+                        oldAppEntity.setActionPolicy(appEntityConfig.getActionPolicy());
                     }
 
                     populateChildList(oldAppEntity, applicationName, appEntityConfig);

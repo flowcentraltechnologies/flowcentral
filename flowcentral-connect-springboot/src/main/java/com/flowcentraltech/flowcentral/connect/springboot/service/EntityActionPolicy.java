@@ -16,6 +16,8 @@
 
 package com.flowcentraltech.flowcentral.connect.springboot.service;
 
+import com.flowcentraltech.flowcentral.connect.configuration.constants.EvaluationMode;
+
 /**
  * Entity action policy.
  * 
@@ -25,12 +27,23 @@ package com.flowcentraltech.flowcentral.connect.springboot.service;
 public interface EntityActionPolicy<T> {
 
     /**
+     * Validates entity bean
+     * 
+     * @param evaluationMode
+     *                       the evaluation mode
+     * @param entityBean
+     *                       the entity bean
+     * @return error messages if any
+     */
+    String[] validate(EvaluationMode evaluationMode, T entityBean);
+
+    /**
      * Executes a pre-create action operation.
      * 
      * @param entityBean
-     *            the entity bean
+     *                   the entity bean
      * @throws Exception
-     *                        if an error occurs
+     *                   if an error occurs
      */
     void executePreCreateAction(T entityBean) throws Exception;
 
@@ -38,10 +51,10 @@ public interface EntityActionPolicy<T> {
      * Executes a post-create action operation.
      * 
      * @param entityBean
-     *            the entity bean
+     *                   the entity bean
      * @return the result object
      * @throws Exception
-     *                        if an error occurs
+     *                   if an error occurs
      */
     void executePostCreateAction(T entityBean) throws Exception;
 
@@ -49,9 +62,9 @@ public interface EntityActionPolicy<T> {
      * Executes a pre-update action operation.
      * 
      * @param entityBean
-     *            the entity bean
+     *                   the entity bean
      * @throws Exception
-     *                        if an error occurs
+     *                   if an error occurs
      */
     void executePreUpdateAction(T entityBean) throws Exception;
 
@@ -59,10 +72,10 @@ public interface EntityActionPolicy<T> {
      * Executes a post-update action operation.
      * 
      * @param entityBean
-     *            the entity bean
+     *                   the entity bean
      * @return the result object
      * @throws Exception
-     *                        if an error occurs
+     *                   if an error occurs
      */
     void executePostUpdateAction(T entityBean) throws Exception;
 
@@ -70,9 +83,9 @@ public interface EntityActionPolicy<T> {
      * Executes a pre-delete action operation.
      * 
      * @param entityBean
-     *            the entity bean
+     *                   the entity bean
      * @throws Exception
-     *                        if an error occurs
+     *                   if an error occurs
      */
     void executePreDeleteAction(T entityBean) throws Exception;
 
@@ -80,10 +93,10 @@ public interface EntityActionPolicy<T> {
      * Executes a post-delete action operation.
      * 
      * @param entityBean
-     *            the entity bean
+     *                   the entity bean
      * @return the result object
      * @throws Exception
-     *                        if an error occurs
+     *                   if an error occurs
      */
     void executePostDeleteAction(T entityBean) throws Exception;
 }

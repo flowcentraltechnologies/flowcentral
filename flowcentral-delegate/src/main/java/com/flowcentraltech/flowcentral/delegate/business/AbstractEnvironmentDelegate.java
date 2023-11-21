@@ -35,6 +35,7 @@ import com.flowcentraltech.flowcentral.application.data.EntityFieldDef;
 import com.flowcentraltech.flowcentral.common.AbstractFlowCentralComponent;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentDelegate;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentDelegateUtilities;
+import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
 import com.flowcentraltech.flowcentral.common.entities.BaseAuditEntity;
 import com.flowcentraltech.flowcentral.common.entities.BaseVersionEntity;
 import com.flowcentraltech.flowcentral.connect.common.constants.DataSourceOperation;
@@ -434,6 +435,17 @@ public abstract class AbstractEnvironmentDelegate extends AbstractFlowCentralCom
     }
 
     @Override
+    public List<String> validate(Entity record, EvaluationMode mode) throws UnifyException {
+        DataSourceRequest req = new DataSourceRequest(DataSourceOperation.VALIDATE);
+        com.flowcentraltech.flowcentral.connect.configuration.constants.EvaluationMode _mode =
+                com.flowcentraltech.flowcentral.connect.configuration.constants.EvaluationMode
+                .valueOf(mode.name());
+        req.setEvalMode(_mode);
+        req.setPayload(au.delegateUtilities().encodeDelegateEntity(record));
+        return listDataResultOperation(record.getClass(), req);
+    }
+
+    @Override
     public Object create(Entity record) throws UnifyException {
         DataSourceRequest req = new DataSourceRequest(DataSourceOperation.CREATE);
         setCreateAuditInformation(record);
@@ -701,6 +713,20 @@ public abstract class AbstractEnvironmentDelegate extends AbstractFlowCentralCom
                 : ((PseudoDataSourceResponse) resp).getPayload();
         if (payload != null) {
             return DataUtils.convert(List.class, resultClass, Arrays.asList(payload));
+        }
+
+        return Collections.emptyList();
+    }
+
+    private <T extends Entity> List<String> listDataResultOperation(Class<T> entityClass, DataSourceRequest req)
+            throws UnifyException {
+        req.setEntity(au.delegateRegistrar().resolveLongName(entityClass));
+        BaseResponse resp = sendToDelegateDatasourceService(req);
+        if (resp instanceof JsonDataSourceResponse) {
+            String[] payload = ((JsonDataSourceResponse) resp).getPayload();
+            if (payload != null && payload.length == 1) {
+                return Arrays.asList(payload);
+            }
         }
 
         return Collections.emptyList();
