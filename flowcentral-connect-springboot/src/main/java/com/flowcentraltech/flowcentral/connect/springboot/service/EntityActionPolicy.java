@@ -34,8 +34,10 @@ public interface EntityActionPolicy<T> {
      * @param entityBean
      *                       the entity bean
      * @return error messages if any
+     * @throws Exception
+     *                   if an error occurs
      */
-    String[] validate(EvaluationMode evaluationMode, T entityBean);
+    String[] validate(EvaluationMode evaluationMode, T entityBean) throws Exception;
 
     /**
      * Executes a pre-create action operation.
