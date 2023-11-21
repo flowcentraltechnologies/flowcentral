@@ -694,7 +694,8 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
     }
 
     @Override
-    public void ensureWorkflowUserInteractionLoadingApplet(String loadingTableName, boolean forceUpdate) throws UnifyException {
+    public void ensureWorkflowUserInteractionLoadingApplet(String loadingTableName, boolean forceUpdate)
+            throws UnifyException {
         if (applicationWorkItemUtilies != null) {
             applicationWorkItemUtilies.ensureWorkflowUserInteractionLoadingApplet(loadingTableName, forceUpdate);
         }
@@ -706,7 +707,8 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
     }
 
     @Override
-    public boolean isWorkEntityWithPendingDraft(Class<? extends WorkEntity> entityClass, Long id) throws UnifyException {
+    public boolean isWorkEntityWithPendingDraft(Class<? extends WorkEntity> entityClass, Long id)
+            throws UnifyException {
         return applicationModuleService.isWorkEntityWithPendingDraft(entityClass, id);
     }
 
@@ -2268,12 +2270,13 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
             throws UnifyException {
         final ValueStore formValueStore = formContext.getFormValueStore();
         final FormDef formDef = formContext.getFormDef();
+        final EntityDef entityDef = formDef.getEntityDef();
         formContext.setFixedReference(baseField);
         logDebug("Executing on-form-construct [{0}] using applet [{1}] and base field [{2}]...", formDef.getLongName(),
                 formAppletDef.getLongName(), baseField);
 
-        final Map<String, Object> variables = Collections.emptyMap();
         final Entity inst = (Entity) formContext.getInst();
+        final Date now = getNow();
         if (create) {
             // Apply create state policy
             String onCreateStatePolicy = formAppletDef.getPropValue(String.class,
@@ -2283,17 +2286,15 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
                 FormStatePolicyDef onCreateFormStatePolicyDef = formDef
                         .getOnCreateFormStatePolicyDef(onCreateStatePolicy);
                 if (onCreateFormStatePolicyDef.isSetValues()) {
-                    onCreateFormStatePolicyDef.getSetValuesDef().apply(this, formDef.getEntityDef(), getNow(),
-                            formValueStore, variables, null);
+                    applySetValues(onCreateFormStatePolicyDef, entityDef, formValueStore, now);
                 }
             }
 
             // Populate skeleton for auto-format fields
-            EntityDef _entityDef = formDef.getEntityDef();
-            if (_entityDef.isWithAutoFormatFields()) {
+            if (entityDef.isWithAutoFormatFields()) {
                 logDebug("Populating auto-format fields for form [{0}]...", inst.getId());
                 final SequenceCodeGenerator gen = sequenceCodeGenerator();
-                for (EntityFieldDef entityFieldDef : _entityDef.getAutoFormatFieldDefList()) {
+                for (EntityFieldDef entityFieldDef : entityDef.getAutoFormatFieldDefList()) {
                     if (entityFieldDef.isStringAutoFormat()) {
                         DataUtils.setBeanProperty(inst, entityFieldDef.getFieldName(),
                                 gen.getCodeSkeleton(entityFieldDef.getAutoFormat()));
@@ -2312,9 +2313,19 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
         // Fire on form construct value generators
         logDebug("Populating on-form-construct set values for form [{0}]...", inst.getId());
         for (FormStatePolicyDef formStatePolicyDef : formDef.getOnFormConstructSetValuesFormStatePolicyDefList()) {
-            if (formStatePolicyDef.isSetValues()) {
-                formStatePolicyDef.getSetValuesDef().apply(this, formDef.getEntityDef(), getNow(), formValueStore,
-                        variables, null);
+            applySetValues(formStatePolicyDef, entityDef, formValueStore, now);
+        }
+    }
+
+    private void applySetValues(FormStatePolicyDef formStatePolicyDef, EntityDef entityDef, ValueStore valueStore,
+            Date now) throws UnifyException {
+        if (formStatePolicyDef.isSetValues()) {
+            ObjectFilter objectFilter = formStatePolicyDef.isWithCondition()
+                    ? formStatePolicyDef.getOnCondition().getObjectFilter(entityDef, valueStore.getReader(), now)
+                    : null;
+            if (objectFilter == null || objectFilter.matchReader(valueStore.getReader())) {
+                formStatePolicyDef.getSetValuesDef().apply(this, entityDef, now, valueStore, Collections.emptyMap(),
+                        null);
             }
         }
     }
