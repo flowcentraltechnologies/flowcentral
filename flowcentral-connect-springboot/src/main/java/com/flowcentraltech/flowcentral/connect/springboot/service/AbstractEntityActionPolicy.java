@@ -39,7 +39,7 @@ public abstract class AbstractEntityActionPolicy<T> implements EntityActionPolic
     private boolean logging;
     
     @Override
-    public String[] validate(EvaluationMode evaluationMode, T entityBean) {
+    public String[] validate(EvaluationMode evaluationMode, T entityBean) throws Exception {
         return NO_MESSAGES;
     }
 
