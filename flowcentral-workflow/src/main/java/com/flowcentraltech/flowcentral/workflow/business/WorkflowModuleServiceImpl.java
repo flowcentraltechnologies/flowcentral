@@ -267,10 +267,11 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                             SystemModuleSysParamConstants.SYSTEM_DESCRIPTIVE_BUTTONS_ENABLED);
                     for (WfStep wfStep : workflow.getStepList()) {
                         AppletDef appletDef = null;
+                        AppletDef stepAppletDef = null;
                         if (wfStep.getType().isInteractive() && !StringUtils.isBlank(wfStep.getAppletName())) {
                             final boolean useraction = wfStep.getType().isUserAction();
-                            AppletDef _stepAppletDef = appletUtil.application().getAppletDef(wfStep.getAppletName());
-                            AppletType _reviewAppletType = _stepAppletDef.getType().isSingleForm()
+                            stepAppletDef = appletUtil.application().getAppletDef(wfStep.getAppletName());
+                            AppletType _reviewAppletType = stepAppletDef.getType().isSingleForm()
                                     ? AppletType.REVIEW_SINGLEFORMWORKITEMS
                                     : AppletType.REVIEW_WORKITEMS;
                             final String appletName = WorkflowNameUtils.getWfAppletName(longName, wfStep.getName());
@@ -297,9 +298,9 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                             appletDef = adb.build();
                         }
 
-                        WfStepDef.Builder wsdb = WfStepDef.newBuilder(appletDef, wfStep.getType(), wfStep.getPriority(),
-                                wfStep.getRecordActionType(), wfStep.getAppletName(), wfStep.getNextStepName(),
-                                wfStep.getAltNextStepName(), wfStep.getBinaryConditionName(),
+                        WfStepDef.Builder wsdb = WfStepDef.newBuilder(appletDef, stepAppletDef, wfStep.getType(),
+                                wfStep.getPriority(), wfStep.getRecordActionType(), wfStep.getAppletName(),
+                                wfStep.getNextStepName(), wfStep.getAltNextStepName(), wfStep.getBinaryConditionName(),
                                 wfStep.getReadOnlyConditionName(), wfStep.getAutoLoadConditionName(),
                                 wfStep.getAttachmentProviderName(), wfStep.getNewCommentCaption(),
                                 wfStep.getAppletSetValuesName(), wfStep.getPolicy(), wfStep.getRule(), wfStep.getName(),
@@ -335,9 +336,9 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                                     wfStepUserAction.getDescription(), wfStepUserAction.getLabel(),
                                     wfStepUserAction.getSymbol(), wfStepUserAction.getStyleClass(),
                                     wfStepUserAction.getNextStepName(), wfStepUserAction.getSetValuesName(),
-                                    wfStepUserAction.getAppletSetValuesName(), wfStepUserAction.getShowOnCondition(), wfStepUserAction.getOrderIndex(),
-                                    wfStepUserAction.isFormReview(), wfStepUserAction.isValidatePage(),
-                                    wfStepUserAction.isForwarderPreferred());
+                                    wfStepUserAction.getAppletSetValuesName(), wfStepUserAction.getShowOnCondition(),
+                                    wfStepUserAction.getOrderIndex(), wfStepUserAction.isFormReview(),
+                                    wfStepUserAction.isValidatePage(), wfStepUserAction.isForwarderPreferred());
                         }
 
                         for (WfStepAlert wfStepAlert : wfStep.getAlertList()) {
@@ -975,7 +976,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
 
                 update = true;
             }
-            
+
             // Set values
             final EntityDef entityDef = appletUtil.getEntityDef(wfDef.getEntity());
             final Date now = getNow();
@@ -1015,7 +1016,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             // Check if action triggered notifications need to be sent
             final TransitionItem currentTransitionItem = new TransitionItem(wfItem, wfDef, wfEntityInst);
             sendUserActionAlertsByAction(currentWfStepDef, currentTransitionItem, userAction);
-            
+
             pushToWfTransitionQueue(wfDef, wfItemId);
             return true;
         }
@@ -1213,7 +1214,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         if (wfItem == null) {
             return true;
         }
-        
+
         final WfDef wfDef = getWfDef(wfItem.getWorkflowName());
         final EntityClassDef entityClassDef = appletUtil.getEntityClassDef(wfDef.getEntity());
         WorkEntity wfEntityInst = (WorkEntity) environment()
@@ -1275,7 +1276,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             final EntityDef entityDef = appletUtil.getEntityDef(wfDef.getEntity());
             final Date now = getNow();
             applySetValues(entityDef, startStepDef, now, workInst, Collections.emptyMap());
-            
+
             Long workRecId = (Long) workInst.getId();
             if (workRecId == null) {
                 workInst.setInWorkflow(true);
@@ -1365,8 +1366,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                     ? wfDef.getWfStepDef(currWfStepDef.getNextStepName())
                     : null;
             transitionItem.clearUpdated();
-            
-             if (transitionItem.isFlowTransition()) {
+
+            if (transitionItem.isFlowTransition()) {
                 if (applySetValues(entityDef, currWfStepDef, now, wfEntityInst, transitionItem.getVariables())) {
                     transitionItem.setUpdated();
                 }
@@ -1427,7 +1428,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                                     environment().updateByIdVersionEditableChildren(originalInst);
                                     fileAttachmentProvider.sychFileAttachments(WORK_CATEGORY, entityDef.getLongName(),
                                             originalCopyId, (Long) wfEntityInst.getId());
-                                    
+
                                     environment().findEditableChildren(wfEntityInst);
                                 }
                             }
@@ -1560,7 +1561,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         return true;
     }
 
-    private Map<String, Object> getTransitionVariables(WfItem wfItem , EntityDef entityDef) throws UnifyException {
+    private Map<String, Object> getTransitionVariables(WfItem wfItem, EntityDef entityDef) throws UnifyException {
         Map<String, Object> variables = new HashMap<String, Object>();
         final String appTitle = getContainerSetting(String.class,
                 FlowCentralContainerPropertyConstants.FLOWCENTRAL_APPLICATION_TITLE);
@@ -1580,7 +1581,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         variables.put(ProcessVariable.APP_URL.variableKey(), appUrl);
         return variables;
     }
-    
+
     private boolean applySetValues(EntityDef entityDef, WfStepDef wfStepDef, Date now, WorkEntity wfEntityInst,
             Map<String, Object> variables) throws UnifyException {
         boolean updated = false;
@@ -1600,7 +1601,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
 
         return updated;
     }
-    
+
     private WfStepDef resolveMultiRouting(WfDef wfDef, WfStepDef wfStepDef, ValueStoreReader reader)
             throws UnifyException {
         if (!DataUtils.isBlank(wfStepDef.getRoutingList())) {
@@ -1788,7 +1789,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         public WorkEntity getWfEntityInst() {
             return wfEntityInst.getWfEntityInst();
         }
-        
+
         public void setVariables(Map<String, Object> variables) {
             this.variables.putAll(variables);
         }
@@ -1800,7 +1801,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         public boolean isFlowTransition() {
             return flowTransition;
         }
-        
+
         public void setFlowTransition() {
             flowTransition = true;
         }

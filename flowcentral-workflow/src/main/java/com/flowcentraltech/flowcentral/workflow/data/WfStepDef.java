@@ -110,14 +110,15 @@ public class WfStepDef {
 
     private Set<String> roleSet;
 
-    private WfStepDef(AppletDef appletDef, WorkflowStepType type, WorkflowStepPriority priority,
-            RecordActionType recordActionType, String stepAppletName, String nextStepName, String altNextStepName,
-            String binaryConditionName, String readOnlyConditionName, String autoLoadingConditionName,
-            String attachmentProviderName, String newCommentCaption, String appletSetValuesName, String policy,
-            String rule, String name, String description, String label, int criticalMinutes, int expiryMinutes,
-            boolean audit, boolean branchOnly, boolean includeForwarder, boolean forwarderPreferred, String emails,
-            String comments, WfStepSetValuesDef wfSetValuesDef, Map<String, WfUserActionDef> userActions,
-            List<WfRoutingDef> routingList, List<WfAlertDef> alertList, Set<String> roleSet) {
+    private WfStepDef(AppletDef appletDef, AppletDef stepAppletDef, WorkflowStepType type,
+            WorkflowStepPriority priority, RecordActionType recordActionType, String stepAppletName,
+            String nextStepName, String altNextStepName, String binaryConditionName, String readOnlyConditionName,
+            String autoLoadingConditionName, String attachmentProviderName, String newCommentCaption,
+            String appletSetValuesName, String policy, String rule, String name, String description, String label,
+            int criticalMinutes, int expiryMinutes, boolean audit, boolean branchOnly, boolean includeForwarder,
+            boolean forwarderPreferred, String emails, String comments, WfStepSetValuesDef wfSetValuesDef,
+            Map<String, WfUserActionDef> userActions, List<WfRoutingDef> routingList, List<WfAlertDef> alertList,
+            Set<String> roleSet) {
         this.appletDef = appletDef;
         this.type = type;
         this.priority = priority;
@@ -149,13 +150,16 @@ public class WfStepDef {
         if (!DataUtils.isBlank(userActions)) {
             this.formActionDefList = new ArrayList<FormActionDef>();
             for (WfUserActionDef wfUserActionDef : userActions.values()) {
-                this.formActionDefList.add(new FormActionDef(UIActionType.BUTTON, wfUserActionDef.getHighlightType(),
-                        wfUserActionDef.getName(), wfUserActionDef.getDescription(), wfUserActionDef.getLabel(),
-                        wfUserActionDef.getSymbol(), wfUserActionDef.getStyleClass(), wfUserActionDef.getOrderIndex(),
-                        wfUserActionDef.isValidatePage(),
-                        wfUserActionDef.isShowOnCondition() ? (appletDef.isFilter(wfUserActionDef.getShowOnCondition())
-                                ? appletDef.getFilterDef(wfUserActionDef.getShowOnCondition()).getFilterDef()
-                                : null) : null));
+                this.formActionDefList
+                        .add(new FormActionDef(UIActionType.BUTTON, wfUserActionDef.getHighlightType(),
+                                wfUserActionDef.getName(), wfUserActionDef.getDescription(), wfUserActionDef.getLabel(),
+                                wfUserActionDef.getSymbol(), wfUserActionDef.getStyleClass(),
+                                wfUserActionDef.getOrderIndex(), wfUserActionDef.isValidatePage(),
+                                wfUserActionDef.isShowOnCondition()
+                                        ? (stepAppletDef.isFilter(wfUserActionDef.getShowOnCondition()) ? stepAppletDef
+                                                .getFilterDef(wfUserActionDef.getShowOnCondition()).getFilterDef()
+                                                : null)
+                                        : null));
             }
         }
 
@@ -404,22 +408,25 @@ public class WfStepDef {
         return !roleSet.isEmpty();
     }
 
-    public static Builder newBuilder(AppletDef appletDef, WorkflowStepType type, WorkflowStepPriority priority,
-            RecordActionType recordActionType, String stepAppletName, String nextStepName, String altNextStepName,
-            String binaryConditionName, String readOnlyConditionName, String autoLoadingConditionName,
-            String attachmentProviderName, String newCommentCaption, String appletSetValuesName, String policy,
-            String rule, String name, String description, String label, int criticalMinutes, int expiryMinutes,
-            boolean audit, boolean branchOnly, boolean includeForwarder, boolean forwarderPreferred, String emails,
-            String comments) {
-        return new Builder(appletDef, type, priority, recordActionType, stepAppletName, nextStepName, altNextStepName,
-                binaryConditionName, readOnlyConditionName, autoLoadingConditionName, attachmentProviderName,
-                newCommentCaption, appletSetValuesName, policy, rule, name, description, label, criticalMinutes,
-                expiryMinutes, audit, branchOnly, includeForwarder, forwarderPreferred, emails, comments);
+    public static Builder newBuilder(AppletDef appletDef, AppletDef stepAppletDef, WorkflowStepType type,
+            WorkflowStepPriority priority, RecordActionType recordActionType, String stepAppletName,
+            String nextStepName, String altNextStepName, String binaryConditionName, String readOnlyConditionName,
+            String autoLoadingConditionName, String attachmentProviderName, String newCommentCaption,
+            String appletSetValuesName, String policy, String rule, String name, String description, String label,
+            int criticalMinutes, int expiryMinutes, boolean audit, boolean branchOnly, boolean includeForwarder,
+            boolean forwarderPreferred, String emails, String comments) {
+        return new Builder(appletDef, stepAppletDef, type, priority, recordActionType, stepAppletName, nextStepName,
+                altNextStepName, binaryConditionName, readOnlyConditionName, autoLoadingConditionName,
+                attachmentProviderName, newCommentCaption, appletSetValuesName, policy, rule, name, description, label,
+                criticalMinutes, expiryMinutes, audit, branchOnly, includeForwarder, forwarderPreferred, emails,
+                comments);
     }
 
     public static class Builder {
 
         private AppletDef appletDef;
+
+        private AppletDef stepAppletDef;
 
         private WorkflowStepType type;
 
@@ -481,14 +488,15 @@ public class WfStepDef {
 
         private Set<String> roleSet;
 
-        public Builder(AppletDef appletDef, WorkflowStepType type, WorkflowStepPriority priority,
-                RecordActionType recordActionType, String stepAppletName, String nextStepName, String altNextStepName,
-                String binaryConditionName, String readOnlyConditionName, String autoLoadingConditionName,
-                String attachmentProviderName, String newCommentCaption, String appletSetValuesName, String policy,
-                String rule, String name, String description, String label, int criticalMinutes, int expiryMinutes,
-                boolean audit, boolean branchOnly, boolean includeForwarder, boolean forwarderPreferred, String emails,
-                String comments) {
+        public Builder(AppletDef appletDef, AppletDef stepAppletDef, WorkflowStepType type,
+                WorkflowStepPriority priority, RecordActionType recordActionType, String stepAppletName,
+                String nextStepName, String altNextStepName, String binaryConditionName, String readOnlyConditionName,
+                String autoLoadingConditionName, String attachmentProviderName, String newCommentCaption,
+                String appletSetValuesName, String policy, String rule, String name, String description, String label,
+                int criticalMinutes, int expiryMinutes, boolean audit, boolean branchOnly, boolean includeForwarder,
+                boolean forwarderPreferred, String emails, String comments) {
             this.appletDef = appletDef;
+            this.stepAppletDef = stepAppletDef;
             this.type = type;
             this.priority = priority;
             this.recordActionType = recordActionType;
@@ -594,8 +602,8 @@ public class WfStepDef {
         }
 
         public WfStepDef build() {
-            return new WfStepDef(appletDef, type, priority, recordActionType, stepAppletName, nextStepName,
-                    altNextStepName, binaryConditionName, readOnlyConditionName, autoLoadingConditionName,
+            return new WfStepDef(appletDef, stepAppletDef, type, priority, recordActionType, stepAppletName,
+                    nextStepName, altNextStepName, binaryConditionName, readOnlyConditionName, autoLoadingConditionName,
                     attachmentProviderName, newCommentCaption, appletSetValuesName, policy, rule, name, description,
                     label, criticalMinutes, expiryMinutes, audit, branchOnly, includeForwarder, forwarderPreferred,
                     emails, comments, wfSetValuesDef, DataUtils.unmodifiableMap(userActionList),
