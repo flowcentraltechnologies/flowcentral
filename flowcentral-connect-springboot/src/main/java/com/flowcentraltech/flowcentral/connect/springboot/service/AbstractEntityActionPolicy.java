@@ -20,6 +20,7 @@ import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Value;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.flowcentraltech.flowcentral.connect.configuration.constants.EvaluationMode;
 
 /**
@@ -56,6 +57,15 @@ public abstract class AbstractEntityActionPolicy<T> implements EntityActionPolic
 
     protected void logSevere(String message, Exception e) {
         LOGGER.log(Level.SEVERE, message, e);
+    }
+
+    protected String prettyJSONForLog(Object src) throws Exception {
+        if (logging && src != null) {
+            ObjectMapper objectMapper = new ObjectMapper();
+            return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(src);
+        }
+
+        return null;
     }
 
 }
