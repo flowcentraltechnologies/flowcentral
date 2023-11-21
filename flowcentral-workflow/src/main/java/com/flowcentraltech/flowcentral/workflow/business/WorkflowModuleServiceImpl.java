@@ -870,7 +870,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             EmailListProducerConsumer emailProducerConsumer = (EmailListProducerConsumer) getComponent(
                     entityClassDef.getEntityDef().getEmailProducerConsumer());
             WidgetTypeDef widgetTypeDef = appletUtil.application().getWidgetTypeDef("application.emailset");
-            Validator validator = (Validator) getComponent("fc-emailvalidator");
+            Validator validator = (Validator) getComponent("fc-emailsetvalidator");
             InputArrayEntries.Builder ieb = InputArrayEntries.newBuilder(widgetTypeDef);
             ieb.columns(3); // TODO Get from system parameter
             ieb.validator(validator);
