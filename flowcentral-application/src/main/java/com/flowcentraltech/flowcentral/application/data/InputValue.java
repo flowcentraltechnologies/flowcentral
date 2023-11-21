@@ -62,9 +62,4 @@ public class InputValue {
         return selected;
     }
 
-    @Override
-    public String toString() {
-        return "InputValue [key=" + key + ", value=" + value + ", label=" + label + ", editable=" + editable
-                + ", selected=" + selected + "]";
-    }
 }

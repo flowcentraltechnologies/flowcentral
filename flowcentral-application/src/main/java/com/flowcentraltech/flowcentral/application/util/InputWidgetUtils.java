@@ -291,6 +291,8 @@ public final class InputWidgetUtils {
     private static String resolveEditor(String editor, WidgetTypeDef widgetTypeDef, EntityFieldAttributes efa,
             EntityFieldDef entityFieldDef, String reference) throws UnifyException {
         switch (widgetTypeDef.getLongName()) {
+            case "application.emailset":
+            case "application.mobileset":
             case "application.textarea":
             case "application.textareamedium":
             case "application.textarealarge":
@@ -318,8 +320,6 @@ public final class InputWidgetUtils {
             case "application.alphanumericwithspecial":
             case "application.wildname":
             case "application.email":
-            case "application.emailset":
-            case "application.mobileset":
             case "application.website":
             case "application.domain": {
                 String textCase = entityFieldDef != null
