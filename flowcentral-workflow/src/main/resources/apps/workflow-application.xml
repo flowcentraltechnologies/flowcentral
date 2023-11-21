@@ -376,6 +376,9 @@
 			<field name="appletSetValuesName"
 				label="$m{workflow.stepuseraction.appletsetvaluesname}"
 				type="string" maxLen="64" nullable="true" />
+			<field name="showOnCondition"
+				label="$m{workflow.stepuseraction.showoncondition}"
+				type="string" maxLen="64" nullable="true" />
 			<field name="orderIndex"
 				label="$m{workflow.stepuseraction.orderindex}" type="integer" />
 			<field name="formReview"
