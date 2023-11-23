@@ -17,6 +17,7 @@
 
 package com.flowcentraltech.flowcentral.delegate.business.policy;
 
+import com.flowcentraltech.flowcentral.connect.common.constants.FlowCentralInterconnectConstants;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.util.IOUtils;
 
@@ -34,7 +35,7 @@ public abstract class AbstractHttpPostDelegateWfProcessPolicy extends AbstractDe
 
     @Override
     protected String sendToDelegateProcedureService(String jsonReq) throws UnifyException {
-        return IOUtils.postJsonToEndpoint(getEndpoint() + "/procedure", jsonReq);
+        return IOUtils.postJsonToEndpoint(getEndpoint() + FlowCentralInterconnectConstants.INTERCONNECT_CONTROLLER + "/procedure", jsonReq);
     }
 
     protected abstract String getEndpoint() throws UnifyException;

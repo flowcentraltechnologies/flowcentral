@@ -17,6 +17,7 @@ package com.flowcentraltech.flowcentral.delegate.business;
 
 import java.util.Collection;
 
+import com.flowcentraltech.flowcentral.connect.common.constants.FlowCentralInterconnectConstants;
 import com.flowcentraltech.flowcentral.delegate.business.policy.AbstractDelegateFormActionPolicy;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.util.IOUtils;
@@ -39,7 +40,7 @@ public abstract class AbstractHttpPostDelegateFormActionPolicy extends AbstractD
 
     @Override
     protected String sendToDelegateProcedureService(String jsonReq) throws UnifyException {
-        return IOUtils.postJsonToEndpoint( getEndpoint() + "/procedure", jsonReq);
+        return IOUtils.postJsonToEndpoint( getEndpoint() + FlowCentralInterconnectConstants.INTERCONNECT_CONTROLLER + "/procedure", jsonReq);
     }
 
     protected abstract String getEndpoint() throws UnifyException;
