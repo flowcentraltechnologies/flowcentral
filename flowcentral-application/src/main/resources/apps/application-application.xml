@@ -1069,6 +1069,12 @@
 			<field name="typeDesc"
 				label="$m{application.appentityseries.typedesc}" type="list_only"
 				key="type" property="description" />
+			<uniqueConstraint name="nameUc"
+				description="$m{application.appentityseries.uc.name}" fieldList="appEntityId,name">
+			</uniqueConstraint>
+			<uniqueConstraint name="descUc"
+				description="$m{application.appentityseries.uc.description}" fieldList="appEntityId,description">
+			</uniqueConstraint>
 		</entity>
 		<entity name="appEntityCategory"
 			description="$m{application.appentitycategory}"
@@ -1092,6 +1098,12 @@
 			<field name="applicationName"
 				label="$m{application.appentitycategory.applicationname}"
 				type="list_only" key="appEntityId" property="applicationName" />
+			<uniqueConstraint name="nameUc"
+				description="$m{application.appentitycategory.uc.name}" fieldList="appEntityId,name">
+			</uniqueConstraint>
+			<uniqueConstraint name="descUc"
+				description="$m{application.appentitycategory.uc.description}" fieldList="appEntityId,description">
+			</uniqueConstraint>
 		</entity>
 		<entity name="appEntityAttachment"
 			description="$m{application.appentityattachment}"
