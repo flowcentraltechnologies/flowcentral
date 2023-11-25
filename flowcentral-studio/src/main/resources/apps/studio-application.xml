@@ -2384,6 +2384,14 @@
 				label="$m{studio.appentity.form.searchinputs}"
 				contentType="child_list" applet="manageAppEntitySearchInput"
 				reference="searchInputList" />
+			<tab name="series"
+				label="$m{studio.appentity.form.series}"
+				contentType="child_list" applet="manageAppEntitySeries"
+				reference="seriedList" />
+			<tab name="categories"
+				label="$m{studio.appentity.form.categories}"
+				contentType="child_list" applet="manageAppEntityCategory"
+				reference="categoryList" />
 			<tab name="usages" label="$m{studio.appentity.form.usages}"
 				contentType="usage_list" reference="entity-usagelistprovider" />
 			<tab name="changeLog" label="$m{application.form.audit}"
