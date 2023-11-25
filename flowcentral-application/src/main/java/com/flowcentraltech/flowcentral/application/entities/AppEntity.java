@@ -91,6 +91,12 @@ public class AppEntity extends BaseApplicationEntity {
     @ChildList
     private List<AppEntitySearchInput> searchInputList;
 
+    @ChildList
+    private List<AppEntitySeries> seriesList;
+
+    @ChildList
+    private List<AppEntityCategory> categoryList;
+
     public EntityBaseType getBaseType() {
         return baseType;
     }
@@ -241,6 +247,22 @@ public class AppEntity extends BaseApplicationEntity {
 
     public void setSearchInputList(List<AppEntitySearchInput> searchInputList) {
         this.searchInputList = searchInputList;
+    }
+
+    public List<AppEntitySeries> getSeriesList() {
+        return seriesList;
+    }
+
+    public void setSeriesList(List<AppEntitySeries> seriesList) {
+        this.seriesList = seriesList;
+    }
+
+    public List<AppEntityCategory> getCategoryList() {
+        return categoryList;
+    }
+
+    public void setCategoryList(List<AppEntityCategory> categoryList) {
+        this.categoryList = categoryList;
     }
 
 }

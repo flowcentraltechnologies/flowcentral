@@ -537,6 +537,12 @@
 		<reference name="appEntityFieldRef"
 			description="$m{application.appentityfield.reference}"
 			entity="appEntityField" searchField="description" />
+		<reference name="appEntitySeriesRef"
+			description="$m{application.appentityseries.reference}"
+			entity="appEntitySeries" searchField="description" />
+		<reference name="appEntityCategoryRef"
+			description="$m{application.appentitycategory.reference}"
+			entity="appEntityCategory" searchField="description" />
 		<reference name="appEntityAttachmentRef"
 			description="$m{application.appentityattachment.reference}"
 			entity="appEntityAttachment" searchField="description" />
@@ -903,6 +909,12 @@
 			<field name="fieldList"
 				label="$m{application.appentity.fields}" type="child_list"
 				references="appEntityFieldRef" />
+			<field name="seriesList"
+				label="$m{application.appentity.series}" type="child_list"
+				references="appEntitySeriesRef" />
+			<field name="categoryList"
+				label="$m{application.appentity.categories}" type="child_list"
+				references="appEntityCategoryRef" />
 			<field name="attachmentList"
 				label="$m{application.appentity.attachments}" type="child_list"
 				references="appEntityAttachmentRef" />
@@ -1027,6 +1039,59 @@
 			<field name="typeDesc"
 				label="$m{application.appentityfield.typedesc}" type="list_only"
 				key="type" property="description" />
+		</entity>
+		<entity name="appEntitySeries"
+			description="$m{application.appentityseries}"
+			label="$m{application.appentityseries.series.label}"
+			type="com.flowcentraltech.flowcentral.application.entities.AppEntitySeries">
+			<field name="appEntityId"
+				label="$m{application.appentityseries.appentityid}" type="ref"
+				references="appEntityRef" inputWidget="application.entitylist" />
+			<field name="type"
+				label="$m{application.appentityseries.type}" type="enum_ref"
+				references="seriestypelist"
+				inputWidget="application.enumlist" />
+			<field name="name" label="$m{application.appentityseries.name}"
+				type="string" inputWidget="application.name" />
+			<field name="description" label="$m{application.appentityseries.description}"
+				type="string" inputWidget="application.text" />
+			<field name="label" label="$m{application.appentityseries.label}"
+				type="string" inputWidget="application.text" />
+			<field name="fieldName"
+				label="$m{application.appentityseries.fieldname}" type="string"
+				inputWidget="application.name" nullable="true" />
+			<field name="appEntityName"
+				label="$m{application.appentityseries.appentityname}"
+				type="list_only" key="appEntityId" property="name" />
+			<field name="applicationName"
+				label="$m{application.appentityseries.applicationname}"
+				type="list_only" key="appEntityId" property="applicationName" />
+			<field name="typeDesc"
+				label="$m{application.appentityseries.typedesc}" type="list_only"
+				key="type" property="description" />
+		</entity>
+		<entity name="appEntityCategory"
+			description="$m{application.appentitycategory}"
+			label="$m{application.appentitycategory.category.label}"
+			type="com.flowcentraltech.flowcentral.application.entities.AppEntityCategory">
+			<field name="appEntityId"
+				label="$m{application.appentitycategory.appentityid}" type="ref"
+				references="appEntityRef" inputWidget="application.entitylist" />
+			<field name="name" label="$m{application.appentitycategory.name}"
+				type="string" inputWidget="application.name" />
+			<field name="description" label="$m{application.appentitycategory.description}"
+				type="string" inputWidget="application.text" />
+			<field name="label" label="$m{application.appentitycategory.label}"
+				type="string" inputWidget="application.text" />
+			<field name="filter"
+				label="$m{application.appentitycategory.filter}" type="child"
+				category="entitycat" references="appFilterRef" />
+			<field name="appEntityName"
+				label="$m{application.appentitycategory.appentityname}"
+				type="list_only" key="appEntityId" property="name" />
+			<field name="applicationName"
+				label="$m{application.appentitycategory.applicationname}"
+				type="list_only" key="appEntityId" property="applicationName" />
 		</entity>
 		<entity name="appEntityAttachment"
 			description="$m{application.appentityattachment}"

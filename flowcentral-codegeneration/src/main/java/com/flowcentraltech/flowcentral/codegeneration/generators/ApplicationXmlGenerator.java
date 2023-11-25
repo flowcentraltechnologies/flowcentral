@@ -29,6 +29,7 @@ import com.flowcentraltech.flowcentral.application.entities.AppAppletSetValues;
 import com.flowcentraltech.flowcentral.application.entities.AppAssignmentPage;
 import com.flowcentraltech.flowcentral.application.entities.AppEntity;
 import com.flowcentraltech.flowcentral.application.entities.AppEntityAttachment;
+import com.flowcentraltech.flowcentral.application.entities.AppEntityCategory;
 import com.flowcentraltech.flowcentral.application.entities.AppEntityExpression;
 import com.flowcentraltech.flowcentral.application.entities.AppEntityField;
 import com.flowcentraltech.flowcentral.application.entities.AppEntityIndex;
@@ -59,6 +60,7 @@ import com.flowcentraltech.flowcentral.application.entities.AppTableColumn;
 import com.flowcentraltech.flowcentral.application.entities.AppTableFilter;
 import com.flowcentraltech.flowcentral.application.entities.AppTableLoading;
 import com.flowcentraltech.flowcentral.application.entities.AppEntitySearchInput;
+import com.flowcentraltech.flowcentral.application.entities.AppEntitySeries;
 import com.flowcentraltech.flowcentral.application.entities.AppEntityUniqueCondition;
 import com.flowcentraltech.flowcentral.application.entities.AppWidgetType;
 import com.flowcentraltech.flowcentral.application.entities.Application;
@@ -84,12 +86,14 @@ import com.flowcentraltech.flowcentral.configuration.xml.AppletSetValuesConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppletsConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.ChoiceConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.EntityAttachmentConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.EntityCategoryConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.EntityExpressionConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.EntityFieldConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.EntityIndexConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.EntityUniqueConstraintConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.EntityUploadConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.FieldValidationPolicyConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.FilterConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.FormActionConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.FormAnnotationConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.FormFieldConfig;
@@ -119,6 +123,7 @@ import com.flowcentraltech.flowcentral.configuration.xml.TableColumnConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.TableFilterConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.TableLoadingConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.EntitySearchInputConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.EntitySeriesConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.EntityUniqueConditionConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.WidgetTypeConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.WidgetTypesConfig;
@@ -422,6 +427,48 @@ public class ApplicationXmlGenerator extends AbstractStaticArtifactGenerator {
                     }
 
                     appEntityConfig.setEntityFieldList(entityFieldConfigList);
+                }
+
+                // Series
+                if (!DataUtils.isBlank(appEntity.getSeriesList())) {
+                    List<EntitySeriesConfig> seriesList = new ArrayList<EntitySeriesConfig>();
+                    for (AppEntitySeries appEntitySeries : appEntity.getSeriesList()) {
+                        EntitySeriesConfig entitySeriesConfig = new EntitySeriesConfig();
+                        descKey = getDescriptionKey(entityDescKey, "series", appEntitySeries.getName());
+                        labelKey = getDescriptionKey(entityDescKey, "series.label", appEntitySeries.getName());
+                        ctx.addMessage(StaticMessageCategoryType.ENTITY, descKey, appEntitySeries.getDescription());
+                        ctx.addMessage(StaticMessageCategoryType.ENTITY, labelKey, appEntitySeries.getLabel());
+                        entitySeriesConfig.setType(appEntitySeries.getType());
+                        entitySeriesConfig.setName(appEntitySeries.getName());
+                        entitySeriesConfig.setDescription("$m{" + descKey + "}");
+                        entitySeriesConfig.setLabel("$m{" + labelKey + "}");
+                        entitySeriesConfig.setFieldName(appEntitySeries.getFieldName());
+                        seriesList.add(entitySeriesConfig);
+                    }
+
+                    appEntityConfig.setSeriesList(seriesList);
+                }
+
+                // Categories
+                if (!DataUtils.isBlank(appEntity.getCategoryList())) {
+                    List<EntityCategoryConfig> categoryList = new ArrayList<EntityCategoryConfig>();
+                    for (AppEntityCategory appEntityCategory : appEntity.getCategoryList()) {
+                        EntityCategoryConfig entityCategoryConfig = new EntityCategoryConfig();
+                        descKey = getDescriptionKey(entityDescKey, "category", appEntityCategory.getName());
+                        labelKey = getDescriptionKey(entityDescKey, "category.label", appEntityCategory.getName());
+                        ctx.addMessage(StaticMessageCategoryType.ENTITY, descKey, appEntityCategory.getDescription());
+                        ctx.addMessage(StaticMessageCategoryType.ENTITY, labelKey, appEntityCategory.getLabel());
+                        entityCategoryConfig.setName(appEntityCategory.getName());
+                        entityCategoryConfig.setDescription("$m{" + descKey + "}");
+                        entityCategoryConfig.setLabel("$m{" + labelKey + "}");
+                        FilterConfig filterConfig = InputWidgetUtils.getFilterConfig(au(),
+                                appEntityCategory.getFilter());
+                        entityCategoryConfig
+                                .setRestrictionList(filterConfig != null ? filterConfig.getRestrictionList() : null);
+                        categoryList.add(entityCategoryConfig);
+                    }
+
+                    appEntityConfig.setCategoryList(categoryList);
                 }
 
                 // Attachments
