@@ -28,11 +28,9 @@ import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
 import com.flowcentraltech.flowcentral.common.entities.EntityWrapper;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.business.BusinessService;
-import com.tcdng.unify.core.criterion.Aggregate;
 import com.tcdng.unify.core.criterion.AggregateFunction;
 import com.tcdng.unify.core.criterion.Update;
-import com.tcdng.unify.core.data.Aggregation;
-import com.tcdng.unify.core.data.GroupAggregation;
+import com.tcdng.unify.core.database.Aggregation;
 import com.tcdng.unify.core.database.Database;
 import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.database.Query;
@@ -790,50 +788,29 @@ public interface EnvironmentService extends BusinessService {
     int deleteByIdVersion(EntityWrapper wrappedInst) throws UnifyException;
 
     /**
-     * Executes an aggregate function for single selected field of records that
-     * match specified query.
+     * Executes an aggregate function that match specified query.
      * 
-     * @param aggregateFunction
-     *                          the aggregate function
-     * @param query
-     *                          the query to use
-     * @return the aggregate object
-     * @throws UnifyException
-     *                        If aggregate function field is unknown for entity. If
+     * @param aggregateFunction the aggregate function
+     * @param query             the query to use
+     * @return the aggregation
+     * @throws UnifyException If aggregate function field is unknown for entity. If
      *                        aggregate function field is not numeric. If an error
      *                        occurs
      */
     Aggregation aggregate(AggregateFunction aggregateFunction, Query<? extends Entity> query) throws UnifyException;
 
     /**
-     * Executes an aggregate function (individually) for selected properties of
-     * record that match specified criteria.
+     * Executes a list of aggregate functions that match specified query.
      * 
-     * @param aggregate
-     *                  the aggregate definition
-     * @param query
-     *                  the aggregated items query.
-     * @return list of aggregate result
-     * @throws UnifyException
-     *                        if selected fields are not numeric. If no field is
-     *                        selected. If an error occurs
+     * @param aggregateFunction the aggregate function
+     * @param query             the query to use
+     * @return the aggregation
+     * @throws UnifyException If aggregate function field is unknown for entity. If
+     *                        aggregate function field is not numeric. If an error
+     *                        occurs
      */
-    List<Aggregation> aggregateMany(Aggregate aggregate, Query<? extends Entity> query) throws UnifyException;
-
-    /**
-     * Executes a grouping aggregate function (individually) for selected properties
-     * of record that match specified criteria.
-     * 
-     * @param aggregate
-     *                  the aggregate definition
-     * @param query
-     *                  the aggregated items query. Must include group-by fields
-     * @return list of aggregate result
-     * @throws UnifyException
-     *                        if selected fields are not numeric. If no field is
-     *                        selected. If an error occurs
-     */
-    List<GroupAggregation> aggregateGroupMany(Aggregate aggregate, Query<? extends Entity> query) throws UnifyException;
+    List<Aggregation> aggregate(List<AggregateFunction> aggregateFunction, Query<? extends Entity> query)
+            throws UnifyException;
 
     /**
      * Populates list-only properties of a record

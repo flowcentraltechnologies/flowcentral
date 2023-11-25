@@ -18,6 +18,8 @@ package com.flowcentraltech.flowcentral.configuration.constants;
 import com.tcdng.unify.common.annotation.StaticList;
 import com.tcdng.unify.common.constants.EnumConst;
 import com.tcdng.unify.core.annotation.Table;
+import com.tcdng.unify.core.criterion.AggregateFunction;
+import com.tcdng.unify.core.criterion.AggregateType;
 import com.tcdng.unify.core.util.EnumUtils;
 
 /**
@@ -31,20 +33,23 @@ import com.tcdng.unify.core.util.EnumUtils;
 public enum SeriesType implements EnumConst {
 
     COUNT(
-            "COUNT"),
+            "COUNT", AggregateType.COUNT),
     SUM(
-            "SUM"),
+            "SUM", AggregateType.SUM),
     AVERAGE(
-            "AVG"),
+            "AVG", AggregateType.AVERAGE),
     MINIMUM(
-            "MIN"),
+            "MIN", AggregateType.MINIMUM),
     MAXIMUM(
-            "MAX");
+            "MAX", AggregateType.MAXIMUM);
 
     private final String code;
+    
+    private final AggregateType aggregateType;
 
-    private SeriesType(String code) {
+    private SeriesType(String code, AggregateType aggregateType) {
         this.code = code;
+        this.aggregateType = aggregateType;
     }
 
     @Override
@@ -57,6 +62,14 @@ public enum SeriesType implements EnumConst {
         return COUNT.code;
     }
 
+    public AggregateType aggregateType() {
+        return aggregateType;
+    }
+
+    public AggregateFunction function(String fieldName) {
+        return aggregateType.function(fieldName);
+    }
+    
     public static SeriesType fromCode(String code) {
         return EnumUtils.fromCode(SeriesType.class, code);
     }
