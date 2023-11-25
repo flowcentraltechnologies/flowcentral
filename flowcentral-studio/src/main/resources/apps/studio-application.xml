@@ -2387,7 +2387,7 @@
 			<tab name="series"
 				label="$m{studio.appentity.form.series}"
 				contentType="child_list" applet="manageAppEntitySeries"
-				reference="seriedList" />
+				reference="seriesList" />
 			<tab name="categories"
 				label="$m{studio.appentity.form.categories}"
 				contentType="child_list" applet="manageAppEntityCategory"
