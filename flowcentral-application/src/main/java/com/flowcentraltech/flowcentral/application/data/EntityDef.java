@@ -38,6 +38,7 @@ import com.flowcentraltech.flowcentral.common.constants.ConfigType;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityBaseType;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldDataType;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldType;
+import com.flowcentraltech.flowcentral.configuration.constants.SeriesType;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.batch.ConstraintAction;
 import com.tcdng.unify.core.constant.FileAttachmentType;
@@ -99,6 +100,10 @@ public class EntityDef extends BaseApplicationEntityDef {
     private Map<String, EntityExpressionDef> expressionDefMap;
 
     private Map<String, EntitySearchInputDef> searchInputDefs;
+
+    private Map<String, EntitySeriesDef> seriesDefs;
+
+    private Map<String, EntityCategoryDef> categoryDefs;
 
     private List<EntityAttachmentDef> attachmentList;
 
@@ -180,10 +185,11 @@ public class EntityDef extends BaseApplicationEntityDef {
             List<EntityFieldDef> fieldDefList, List<EntityAttachmentDef> attachmentList,
             Map<String, EntityExpressionDef> expressionDefMap, List<UniqueConstraintDef> uniqueConstraintList,
             List<IndexDef> indexList, List<EntityUploadDef> uploadList,
-            Map<String, EntitySearchInputDef> searchInputDefs, ApplicationEntityNameParts nameParts,
-            String originClassName, String tableName, String label, String emailProducerConsumer, String delegate,
-            String dataSourceName, boolean mapped, boolean auditable, boolean reportable, boolean actionPolicy,
-            String description, Long id, long version) {
+            Map<String, EntitySearchInputDef> searchInputDefs, Map<String, EntitySeriesDef> seriesDefs,
+            Map<String, EntityCategoryDef> categoryDefs, ApplicationEntityNameParts nameParts, String originClassName,
+            String tableName, String label, String emailProducerConsumer, String delegate, String dataSourceName,
+            boolean mapped, boolean auditable, boolean reportable, boolean actionPolicy, String description, Long id,
+            long version) {
         super(nameParts, description, id, version);
         this.baseType = baseType;
         this.type = type;
@@ -204,6 +210,8 @@ public class EntityDef extends BaseApplicationEntityDef {
         this.uniqueConstraintList = uniqueConstraintList;
         this.indexList = indexList;
         this.searchInputDefs = searchInputDefs;
+        this.seriesDefs = seriesDefs;
+        this.categoryDefs = categoryDefs;
 
         this.uploadMap = Collections.emptyMap();
         if (!DataUtils.isBlank(uploadList)) {
@@ -405,6 +413,26 @@ public class EntityDef extends BaseApplicationEntityDef {
         }
 
         return entitySearchInputDef;
+    }
+
+    public EntitySeriesDef getEntitySeriesDef(String name) {
+        EntitySeriesDef entitySeriesDef = seriesDefs.get(name);
+        if (entitySeriesDef == null) {
+            throw new RuntimeException(
+                    "Entity [" + getLongName() + "] has no series definition with name [" + name + "].");
+        }
+
+        return entitySeriesDef;
+    }
+
+    public EntityCategoryDef getEntityCategorysDef(String name) {
+        EntityCategoryDef entityCategoryDef = categoryDefs.get(name);
+        if (entityCategoryDef == null) {
+            throw new RuntimeException(
+                    "Entity [" + getLongName() + "] has no category definition with name [" + name + "].");
+        }
+
+        return entityCategoryDef;
     }
 
     public List<? extends Listable> getFilterFieldListables(LabelSuggestionDef labelSuggestionDef)
@@ -1019,6 +1047,10 @@ public class EntityDef extends BaseApplicationEntityDef {
 
         private Map<String, EntityExpressionDef> expressionDefMap;
 
+        private Map<String, EntitySeriesDef> seriesDefMap;
+
+        private Map<String, EntityCategoryDef> categoryDefMap;
+
         private List<UniqueConstraintDef> uniqueConstraintList;
 
         private List<IndexDef> indexList;
@@ -1208,6 +1240,32 @@ public class EntityDef extends BaseApplicationEntityDef {
             return this;
         }
 
+        public Builder addSeriesDef(SeriesType type, String name, String description, String label, String fieldName) {
+            if (seriesDefMap == null) {
+                seriesDefMap = new LinkedHashMap<String, EntitySeriesDef>();
+            }
+
+            if (seriesDefMap.containsKey(name)) {
+                throw new RuntimeException("Series with name [" + name + "] already exists in this definition.");
+            }
+
+            seriesDefMap.put(name, new EntitySeriesDef(type, name, description, label, fieldName));
+            return this;
+        }
+
+        public Builder addCategoryDef(String name, String description, String label, FilterDef filterDef) {
+            if (categoryDefMap == null) {
+                categoryDefMap = new LinkedHashMap<String, EntityCategoryDef>();
+            }
+
+            if (categoryDefMap.containsKey(name)) {
+                throw new RuntimeException("Category with name [" + name + "] already exists in this definition.");
+            }
+
+            categoryDefMap.put(name, new EntityCategoryDef(name, description, label, filterDef));
+            return this;
+        }
+
         public Builder addExpressionDef(String name, String description, String expression) {
             if (expressionDefMap == null) {
                 expressionDefMap = new LinkedHashMap<String, EntityExpressionDef>();
@@ -1272,7 +1330,8 @@ public class EntityDef extends BaseApplicationEntityDef {
                     DataUtils.unmodifiableList(fieldDefList), DataUtils.unmodifiableValuesList(attachmentDefMap),
                     DataUtils.unmodifiableMap(expressionDefMap), DataUtils.unmodifiableList(uniqueConstraintList),
                     DataUtils.unmodifiableList(indexList), DataUtils.unmodifiableList(uploadList),
-                    DataUtils.unmodifiableMap(searchInputDefs), nameParts, originClassName, tableName, label,
+                    DataUtils.unmodifiableMap(searchInputDefs), DataUtils.unmodifiableMap(seriesDefMap),
+                    DataUtils.unmodifiableMap(categoryDefMap), nameParts, originClassName, tableName, label,
                     emailProducerConsumer, delegate, dataSourceName, mapped, auditable, reportable, actionPolicy,
                     description, id, version);
         }

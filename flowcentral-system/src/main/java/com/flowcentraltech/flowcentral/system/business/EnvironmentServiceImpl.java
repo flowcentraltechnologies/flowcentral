@@ -45,13 +45,11 @@ import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.Transactional;
 import com.tcdng.unify.core.business.AbstractBusinessService;
-import com.tcdng.unify.core.criterion.Aggregate;
 import com.tcdng.unify.core.criterion.AggregateFunction;
 import com.tcdng.unify.core.criterion.Update;
-import com.tcdng.unify.core.data.Aggregation;
 import com.tcdng.unify.core.data.Audit;
 import com.tcdng.unify.core.data.BeanValueStore;
-import com.tcdng.unify.core.data.GroupAggregation;
+import com.tcdng.unify.core.database.Aggregation;
 import com.tcdng.unify.core.database.Database;
 import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.database.Query;
@@ -520,14 +518,9 @@ public class EnvironmentServiceImpl extends AbstractBusinessService implements E
     }
 
     @Override
-    public List<Aggregation> aggregateMany(Aggregate aggregate, Query<? extends Entity> query) throws UnifyException {
-        return db(query.getEntityClass()).aggregateMany(aggregate, query);
-    }
-
-    @Override
-    public List<GroupAggregation> aggregateGroupMany(Aggregate aggregate, Query<? extends Entity> query)
+    public List<Aggregation> aggregate(List<AggregateFunction> aggregateFunction, Query<? extends Entity> query)
             throws UnifyException {
-        return db(query.getEntityClass()).aggregateGroupMany(aggregate, query);
+        return db(query.getEntityClass()).aggregate(aggregateFunction, query);
     }
 
     @Override

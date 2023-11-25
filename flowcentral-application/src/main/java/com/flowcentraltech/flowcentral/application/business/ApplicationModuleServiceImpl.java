@@ -104,6 +104,8 @@ import com.flowcentraltech.flowcentral.application.entities.AppAssignmentPageQue
 import com.flowcentraltech.flowcentral.application.entities.AppEntity;
 import com.flowcentraltech.flowcentral.application.entities.AppEntityAttachment;
 import com.flowcentraltech.flowcentral.application.entities.AppEntityAttachmentQuery;
+import com.flowcentraltech.flowcentral.application.entities.AppEntityCategory;
+import com.flowcentraltech.flowcentral.application.entities.AppEntityCategoryQuery;
 import com.flowcentraltech.flowcentral.application.entities.AppEntityExpression;
 import com.flowcentraltech.flowcentral.application.entities.AppEntityExpressionQuery;
 import com.flowcentraltech.flowcentral.application.entities.AppEntityField;
@@ -113,6 +115,8 @@ import com.flowcentraltech.flowcentral.application.entities.AppEntityIndexQuery;
 import com.flowcentraltech.flowcentral.application.entities.AppEntityQuery;
 import com.flowcentraltech.flowcentral.application.entities.AppEntitySearchInput;
 import com.flowcentraltech.flowcentral.application.entities.AppEntitySearchInputQuery;
+import com.flowcentraltech.flowcentral.application.entities.AppEntitySeries;
+import com.flowcentraltech.flowcentral.application.entities.AppEntitySeriesQuery;
 import com.flowcentraltech.flowcentral.application.entities.AppEntityUniqueCondition;
 import com.flowcentraltech.flowcentral.application.entities.AppEntityUniqueConstraint;
 import com.flowcentraltech.flowcentral.application.entities.AppEntityUniqueConstraintQuery;
@@ -243,10 +247,12 @@ import com.flowcentraltech.flowcentral.configuration.xml.AppletPropConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppletSetValuesConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.ChoiceConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.EntityAttachmentConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.EntityCategoryConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.EntityExpressionConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.EntityFieldConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.EntityIndexConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.EntitySearchInputConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.EntitySeriesConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.EntityUniqueConditionConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.EntityUniqueConstraintConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.EntityUploadConfig;
@@ -817,6 +823,20 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     for (AppEntityAttachment appEntityAttachment : appEntity.getAttachmentList()) {
                         edb.addAttachmentDef(appEntityAttachment.getType(), appEntityAttachment.getName(),
                                 appEntityAttachment.getDescription());
+                    }
+
+                    for (AppEntitySeries appEntitySeries : appEntity.getSeriesList()) {
+                        edb.addSeriesDef(appEntitySeries.getType(), appEntitySeries.getName(),
+                                appEntitySeries.getDescription(), appEntitySeries.getLabel(),
+                                appEntitySeries.getFieldName());
+                    }
+
+                    for (AppEntityCategory appEntityCategory : appEntity.getCategoryList()) {
+                        FilterDef filterDef = InputWidgetUtils.getFilterDef(appletUtilities,
+                                appEntityCategory.getName(), appEntityCategory.getDescription(), null,
+                                appEntityCategory.getFilter());
+                        edb.addCategoryDef(appEntityCategory.getName(), appEntityCategory.getDescription(),
+                                appEntityCategory.getLabel(), filterDef);
                     }
 
                     for (AppEntityExpression appEntityExpression : appEntity.getExpressionList()) {
@@ -4922,6 +4942,70 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         }
 
         appEntity.setFieldList(fieldList);
+
+        List<AppEntitySeries> seriesList = null;
+        if (!DataUtils.isBlank(appEntityConfig.getSeriesList())) {
+            seriesList = new ArrayList<AppEntitySeries>();
+            Map<String, AppEntitySeries> map2 = appEntity.isIdBlank() ? Collections.emptyMap()
+                    : environment().findAllMap(String.class, "name",
+                            new AppEntitySeriesQuery().appEntityId(appEntity.getId()));
+            for (EntitySeriesConfig entitySeriesConfig : appEntityConfig.getSeriesList()) {
+                AppEntitySeries oldAppEntitySeries = map2.remove(entitySeriesConfig.getName());
+                if (oldAppEntitySeries == null) {
+                    AppEntitySeries appEntitySeries = new AppEntitySeries();
+                    appEntitySeries.setType(entitySeriesConfig.getType());
+                    appEntitySeries.setName(entitySeriesConfig.getName());
+                    appEntitySeries.setDescription(resolveApplicationMessage(entitySeriesConfig.getDescription()));
+                    appEntitySeries.setLabel(resolveApplicationMessage(entitySeriesConfig.getLabel()));
+                    appEntitySeries.setFieldName(entitySeriesConfig.getFieldName());
+                    appEntitySeries.setConfigType(ConfigType.STATIC_INSTALL);
+                    seriesList.add(appEntitySeries);
+                } else {
+                    if (ConfigUtils.isSetInstall(oldAppEntitySeries)) {
+                        oldAppEntitySeries.setType(entitySeriesConfig.getType());
+                        oldAppEntitySeries
+                                .setDescription(resolveApplicationMessage(entitySeriesConfig.getDescription()));
+                        oldAppEntitySeries.setLabel(resolveApplicationMessage(entitySeriesConfig.getLabel()));
+                        oldAppEntitySeries.setFieldName(entitySeriesConfig.getFieldName());
+                    }
+
+                    seriesList.add(oldAppEntitySeries);
+                }
+            }
+        }
+
+        appEntity.setSeriesList(seriesList);
+
+        List<AppEntityCategory> categoryList = null;
+        if (!DataUtils.isBlank(appEntityConfig.getCategoryList())) {
+            categoryList = new ArrayList<AppEntityCategory>();
+            Map<String, AppEntityCategory> map2 = appEntity.isIdBlank() ? Collections.emptyMap()
+                    : environment().findAllMap(String.class, "name",
+                            new AppEntityCategoryQuery().appEntityId(appEntity.getId()));
+            for (EntityCategoryConfig entityCategoryConfig : appEntityConfig.getCategoryList()) {
+                AppEntityCategory oldAppEntityCategory = map2.remove(entityCategoryConfig.getName());
+                if (oldAppEntityCategory == null) {
+                    AppEntityCategory appEntityCategory = new AppEntityCategory();
+                    appEntityCategory.setName(entityCategoryConfig.getName());
+                    appEntityCategory.setDescription(resolveApplicationMessage(entityCategoryConfig.getDescription()));
+                    appEntityCategory.setLabel(resolveApplicationMessage(entityCategoryConfig.getLabel()));
+                    appEntityCategory.setFilter(InputWidgetUtils.newAppFilter(entityCategoryConfig));
+                    appEntityCategory.setConfigType(ConfigType.STATIC_INSTALL);
+                    categoryList.add(appEntityCategory);
+                } else {
+                    if (ConfigUtils.isSetInstall(oldAppEntityCategory)) {
+                        oldAppEntityCategory
+                                .setDescription(resolveApplicationMessage(entityCategoryConfig.getDescription()));
+                        oldAppEntityCategory.setLabel(resolveApplicationMessage(entityCategoryConfig.getLabel()));
+                        oldAppEntityCategory.setFilter(InputWidgetUtils.newAppFilter(entityCategoryConfig));
+                    }
+
+                    categoryList.add(oldAppEntityCategory);
+                }
+            }
+        }
+
+        appEntity.setCategoryList(categoryList);
 
         List<AppEntityAttachment> attachmentList = null;
         if (!DataUtils.isBlank(appEntityConfig.getAttachmentList())) {

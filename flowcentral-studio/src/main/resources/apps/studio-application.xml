@@ -180,6 +180,11 @@
 			dataType="string" inputType="string"
 			editor="!ui-dropdownchecklist list:studioentityfieldlist listKey:$s{name} listParams:$l{appEntityId} columns:3"
 			renderer="!ui-label" />
+		<widgetType name="seriesentityfieldlist"
+			description="$m{studio.widgettype.seriesentityfieldlist}"
+			dataType="string" inputType="string"
+			editor="!ui-select list:studioseriesentityfieldlist listKey:$s{name} listParams:$l{appEntityId} blankOption:$m{blank.none}"
+			renderer="!ui-label" />			
 		<widgetType name="formannotationlist"
 			description="$m{studio.widgettype.formannotationlist}"
 			dataType="string" inputType="string"
@@ -653,6 +658,40 @@
 					<restriction type="equals" field="dataType" paramA="CL" />
 				</restriction>
 			</filter>
+		</applet>
+		<applet name="manageAppEntitySeries"
+			description="$m{studio.appentityseries.manage}"
+			label="$m{studio.appentityseries.manage.label}"
+			type="manage_entitylist" entity="application.appEntitySeries"
+			menuAccess="false">
+			<property name="searchTable" value="appEntitySeriesTable" />
+			<property name="searchTable.new" value="true" />
+			<property name="searchTable.report" value="false" />
+			<property name="searchTable.quickFilter" value="true" />
+			<property name="createForm" value="appEntitySeriesForm" />
+			<property name="createForm.save" value="true" />
+			<property name="createForm.save.next" value="true" />
+			<property name="createForm.save.close" value="true" />
+			<property name="maintainForm" value="appEntitySeriesForm" />
+			<property name="maintainForm.update" value="true" />
+			<property name="maintainForm.delete" value="true" />
+		</applet>
+		<applet name="manageAppEntityCategory"
+			description="$m{studio.appentitycategory.manage}"
+			label="$m{studio.appentitycategory.manage.label}"
+			type="manage_entitylist" entity="application.appEntityCategory"
+			menuAccess="false">
+			<property name="searchTable" value="appEntityCategoryTable" />
+			<property name="searchTable.new" value="true" />
+			<property name="searchTable.report" value="false" />
+			<property name="searchTable.quickFilter" value="true" />
+			<property name="createForm" value="appEntityCategoryForm" />
+			<property name="createForm.save" value="true" />
+			<property name="createForm.save.next" value="true" />
+			<property name="createForm.save.close" value="true" />
+			<property name="maintainForm" value="appEntityCategoryForm" />
+			<property name="maintainForm.update" value="true" />
+			<property name="maintainForm.delete" value="true" />
 		</applet>
 		<applet name="manageAppEntityAttachment"
 			description="$m{studio.appentityattachment.manage}"
@@ -1364,6 +1403,32 @@
 				widthRatio="2" editable="true" />
 			<column field="auditable" renderWidget="application.checkbox"
 				widthRatio="2" editable="true" />
+		</table>
+		<table name="appEntitySeriesTable"
+			description="$m{studio.appentityseries.table}"
+			label="$m{studio.appentityseries.table.label}"
+			entity="application.appEntitySeries" itemsPerPage="20" serialNo="true">
+			<column field="name" renderWidget="application.name"
+				widthRatio="1" linkAct="maintainAct" />
+			<column field="description" renderWidget="application.text"
+				widthRatio="2" />
+			<column field="label" renderWidget="application.text"
+				widthRatio="1" />
+			<column field="fieldName" renderWidget="application.text"
+				widthRatio="1" />
+			<column field="typeDesc" renderWidget="application.text"
+				label="$m{application.appentityseries.type}" widthRatio="1" />
+		</table>
+		<table name="appEntityCategoryTable"
+			description="$m{studio.appentitycategory.table}"
+			label="$m{studio.appentitycategory.table.label}"
+			entity="application.appEntityCategory" itemsPerPage="20" serialNo="true">
+			<column field="name" renderWidget="application.name"
+				widthRatio="1" linkAct="maintainAct" />
+			<column field="description" renderWidget="application.text"
+				widthRatio="2" />
+			<column field="label" renderWidget="application.text"
+				widthRatio="1" />
 		</table>
 		<table name="appEntityAttachmentTable"
 			description="$m{studio.appentityattachment.table}"
@@ -2319,6 +2384,14 @@
 				label="$m{studio.appentity.form.searchinputs}"
 				contentType="child_list" applet="manageAppEntitySearchInput"
 				reference="searchInputList" />
+			<tab name="series"
+				label="$m{studio.appentity.form.series}"
+				contentType="child_list" applet="manageAppEntitySeries"
+				reference="seriesList" />
+			<tab name="categories"
+				label="$m{studio.appentity.form.categories}"
+				contentType="child_list" applet="manageAppEntityCategory"
+				reference="categoryList" />
 			<tab name="usages" label="$m{studio.appentity.form.usages}"
 				contentType="usage_list" reference="entity-usagelistprovider" />
 			<tab name="changeLog" label="$m{application.form.audit}"
@@ -2680,6 +2753,74 @@
 						visible="true" />
 				</setStates>
 			</formStatePolicy>
+		</form>
+		<form name="appEntitySeriesForm"
+			description="$m{studio.appentityseries.form}"
+			entity="application.appEntitySeries">
+			<annotation name="staticAnnotation"
+				description="$m{studio.common.form.annotation.static}"
+				message="$m{studio.common.form.annotation.static.message}" />
+			<tab name="basicDetails"
+				label="$m{studio.appentityseries.form.basicdetails}"
+				contentType="miniform" editable="true">
+				<section name="entitySeriesDetails" columns="type_2">
+					<field name="appEntityId"
+						inputWidget="application.entitysearch"
+						label="$m{application.appentityseries.appentity}" column="0"
+						required="true" />
+					<field name="name" inputWidget="application.name"
+						column="0" required="true" />
+					<field name="description" inputWidget="application.text" column="0"
+						required="true" />
+					<field name="label" inputWidget="application.text" column="0"
+						required="true" />
+					<field name="type"
+						column="1" required="true" switchOnChange="true" />
+					<field name="fieldName" inputWidget="seriesentityfieldlist"
+						column="1" required="true" />
+				</section>
+			</tab>
+			<tab name="changeLog" label="$m{application.form.audit}"
+				contentType="miniform_changelog" />
+			<formStatePolicy type="on_switch"
+				name="fieldNamePolicy"
+				description="$m{studio.appentityseries.form.formstatepolicy.fieldname}">
+				<onCondition>
+					<restriction type="equals" field="type" paramA="COUNT" />
+				</onCondition>
+				<setStates>
+					<setState type="field" target="fieldName"
+						required="false" />
+				</setStates>
+			</formStatePolicy>
+		</form>
+		<form name="appEntityCategoryForm"
+			description="$m{studio.appentitycategory.form}"
+			entity="application.appEntityCategory">
+			<annotation name="staticAnnotation"
+				description="$m{studio.common.form.annotation.static}"
+				message="$m{studio.common.form.annotation.static.message}" />
+			<tab name="basicDetails"
+				label="$m{studio.appentitycategory.form.basicdetails}"
+				contentType="miniform" editable="true">
+				<section name="entityCategoryDetails" columns="type_2">
+					<field name="appEntityId"
+						inputWidget="application.entitysearch"
+						label="$m{application.appentitycategory.appentity}" column="0"
+						required="true" />
+					<field name="name" inputWidget="application.name"
+						column="0" required="true" />
+					<field name="description" inputWidget="application.text" column="0"
+						required="true" />
+					<field name="label" inputWidget="application.text" column="1"
+						required="true" />
+				</section>
+			</tab>
+			<tab name="condition"
+				label="$m{studio.appentitycategory.form.condition}" reference="app_entitycategory"
+				contentType="filter_condition" />
+			<tab name="changeLog" label="$m{application.form.audit}"
+				contentType="miniform_changelog" />
 		</form>
 		<form name="appEntityAttachmentForm"
 			description="$m{studio.appentityattachment.form}"

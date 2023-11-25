@@ -63,6 +63,10 @@ public class AppEntityConfig extends BaseNameConfig {
 
     private List<EntitySearchInputConfig> searchInputList;
 
+    private List<EntitySeriesConfig> seriesList;
+
+    private List<EntityCategoryConfig> categoryList;
+    
     public AppEntityConfig() {
         this.mapped = Boolean.FALSE;
         this.auditable = Boolean.FALSE;
@@ -216,6 +220,24 @@ public class AppEntityConfig extends BaseNameConfig {
     @XmlElement(name = "searchInput")
     public void setSearchInputList(List<EntitySearchInputConfig> searchInputList) {
         this.searchInputList = searchInputList;
+    }
+
+    public List<EntitySeriesConfig> getSeriesList() {
+        return seriesList;
+    }
+
+    @XmlElement(name = "series")
+    public void setSeriesList(List<EntitySeriesConfig> seriesList) {
+        this.seriesList = seriesList;
+    }
+
+    public List<EntityCategoryConfig> getCategoryList() {
+        return categoryList;
+    }
+
+    @XmlElement(name = "category")
+    public void setCategoryList(List<EntityCategoryConfig> categoryList) {
+        this.categoryList = categoryList;
     }
 
 }

@@ -50,14 +50,12 @@ import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.UserToken;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.constant.LocaleType;
-import com.tcdng.unify.core.criterion.Aggregate;
 import com.tcdng.unify.core.criterion.AggregateFunction;
 import com.tcdng.unify.core.criterion.Update;
-import com.tcdng.unify.core.data.Aggregation;
 import com.tcdng.unify.core.data.BeanValueStore;
-import com.tcdng.unify.core.data.GroupAggregation;
 import com.tcdng.unify.core.data.Listable;
 import com.tcdng.unify.core.data.ValueStore;
+import com.tcdng.unify.core.database.Aggregation;
 import com.tcdng.unify.core.database.CallableProc;
 import com.tcdng.unify.core.database.DataSource;
 import com.tcdng.unify.core.database.DataSourceEntityListProvider;
@@ -593,17 +591,14 @@ public abstract class AbstractEnvironmentDelegate extends AbstractFlowCentralCom
     @Override
     public Aggregation aggregate(AggregateFunction aggregateFunction, Query<? extends Entity> query)
             throws UnifyException {
+        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public List<Aggregation> aggregateMany(Aggregate aggregate, Query<? extends Entity> query) throws UnifyException {
-        return null;
-    }
-
-    @Override
-    public List<GroupAggregation> aggregateGroupMany(Aggregate aggregate, Query<? extends Entity> query)
+    public List<Aggregation> aggregate(List<AggregateFunction> aggregateFunction, Query<? extends Entity> query)
             throws UnifyException {
+        // TODO Auto-generated method stub
         return null;
     }
 

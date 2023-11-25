@@ -49,6 +49,13 @@ public enum EntityChildCategoryType implements EnumConst {
             "table",
             FilterConditionListType.IMMEDIATE_FIELD,
             null),
+    APP_ENTITYCATEGORY(
+            "ENTITYCATEGORY",
+            "application.appEntity",
+            "name",
+            "entity-category",
+            FilterConditionListType.IMMEDIATE_FIELD,
+            null),
     APP_ENTITYUPLOAD(
             "ENTITYUPLOAD",
             "application.appEntity",
