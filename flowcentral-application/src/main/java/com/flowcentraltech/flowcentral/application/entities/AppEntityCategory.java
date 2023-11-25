@@ -51,7 +51,7 @@ public class AppEntityCategory extends BaseConfigEntity {
     @ListOnly(key = "appEntityId", property = "applicationName")
     private String applicationName;
     
-    @Child(category = "entitycat")
+    @Child(category = "entity-category")
     private AppFilter filter;
 
     @Override
