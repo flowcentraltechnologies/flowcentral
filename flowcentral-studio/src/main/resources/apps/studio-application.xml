@@ -672,7 +672,7 @@
 			<property name="createForm.save" value="true" />
 			<property name="createForm.save.next" value="true" />
 			<property name="createForm.save.close" value="true" />
-			<property name="maintainForm" value="appEntityFieldForm" />
+			<property name="maintainForm" value="appEntitySeriesForm" />
 			<property name="maintainForm.update" value="true" />
 			<property name="maintainForm.delete" value="true" />
 		</applet>
