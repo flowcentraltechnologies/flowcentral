@@ -40,6 +40,8 @@ import com.flowcentraltech.flowcentral.application.data.FilterDef;
 import com.flowcentraltech.flowcentral.application.data.FilterRestrictionDef;
 import com.flowcentraltech.flowcentral.application.data.SearchInputDef;
 import com.flowcentraltech.flowcentral.application.data.SearchInputsDef;
+import com.flowcentraltech.flowcentral.application.data.PropertySequenceDef;
+import com.flowcentraltech.flowcentral.application.data.PropertySequenceEntryDef;
 import com.flowcentraltech.flowcentral.application.data.SetValueDef;
 import com.flowcentraltech.flowcentral.application.data.SetValuesDef;
 import com.flowcentraltech.flowcentral.application.data.WidgetRuleEntryDef;
@@ -51,6 +53,7 @@ import com.flowcentraltech.flowcentral.application.entities.AppFieldSequence;
 import com.flowcentraltech.flowcentral.application.entities.AppFilter;
 import com.flowcentraltech.flowcentral.application.entities.AppFormFilter;
 import com.flowcentraltech.flowcentral.application.entities.AppSearchInput;
+import com.flowcentraltech.flowcentral.application.entities.AppPropertySequence;
 import com.flowcentraltech.flowcentral.application.entities.AppSetValues;
 import com.flowcentraltech.flowcentral.application.entities.AppTableFilter;
 import com.flowcentraltech.flowcentral.application.entities.AppWidgetRules;
@@ -76,6 +79,8 @@ import com.flowcentraltech.flowcentral.configuration.xml.FilterRestrictionConfig
 import com.flowcentraltech.flowcentral.configuration.xml.FormFilterConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.SearchInputConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.SearchInputsConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.PropertySequenceConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.PropertySequenceEntryConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.SetValueConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.SetValuesConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.TableFilterConfig;
@@ -334,7 +339,7 @@ public final class InputWidgetUtils {
             case "application.alphanumericwithupper":
             case "application.alphanumericwithspaceupper":
             case "application.fullnamewithupper":
-            case "application.wordwithupper":	
+            case "application.wordwithupper":
             case "application.alphanumericwithspecialupper": {
                 editor = String.format(editor, efa.getMinLen(), efa.getMaxLen(),
                         TextCase.UPPER.toString().toLowerCase());
@@ -360,7 +365,7 @@ public final class InputWidgetUtils {
                 break;
             case "application.javafieldname":
             case "application.columnname":
-            case "application.word":	
+            case "application.word":
                 editor = String.format(editor, efa.getMinLen(), efa.getMaxLen());
                 break;
             case "application.integer":
@@ -621,6 +626,29 @@ public final class InputWidgetUtils {
         return new FieldSequenceConfig(entryList);
     }
 
+    public static String getFieldSequenceDefinition(FieldSequenceDef fieldSequenceDef) throws UnifyException {
+        String result = null;
+        try (StringWriter sw = new StringWriter(); BufferedWriter bw = new BufferedWriter(sw)) {
+            for (FieldSequenceEntryDef fieldSequenceEntryDef : fieldSequenceDef.getFieldSequenceList()) {
+                bw.write(fieldSequenceEntryDef.getFieldName());
+                bw.write(']');
+                if (fieldSequenceEntryDef.isWithStandardFormatCode()) {
+                    bw.write(fieldSequenceEntryDef.getStandardFormatCode());
+                    bw.write(']');
+                }
+
+                bw.newLine();
+            }
+
+            bw.flush();
+            result = sw.toString();
+        } catch (IOException e) {
+            throw new UnifyOperationException(e);
+        }
+
+        return result;
+    }
+
     public static AppFieldSequence newAppFieldSequence(FieldSequenceConfig fieldSequenceConfig) throws UnifyException {
         if (fieldSequenceConfig != null) {
             return new AppFieldSequence(InputWidgetUtils.getFieldSequenceDefinition(fieldSequenceConfig));
@@ -652,17 +680,57 @@ public final class InputWidgetUtils {
         return result;
     }
 
-    public static String getFieldSequenceDefinition(FieldSequenceDef fieldSequenceDef) throws UnifyException {
+    public static PropertySequenceDef getSequenceDef(AppPropertySequence appPropertySequence) throws UnifyException {
+        return InputWidgetUtils.getSequenceDef(null, null, appPropertySequence);
+    }
+
+    public static PropertySequenceDef getSequenceDef(String name, String description, AppPropertySequence appPropertySequence)
+            throws UnifyException {
+        if (appPropertySequence != null) {
+            PropertySequenceDef.Builder svdb = PropertySequenceDef.newBuilder();
+            svdb.name(name).description(description);
+            try (BufferedReader reader = new BufferedReader(new StringReader(appPropertySequence.getDefinition()))) {
+                String line = null;
+                while ((line = reader.readLine()) != null) {
+                    String[] p = line.split("]");
+                    String property = p[0];
+                    String label = p.length > 1 ? p[1] : null;
+                    svdb.addSequenceEntryDef(property, label);
+                }
+            } catch (IOException e) {
+                throw new UnifyOperationException(e);
+            }
+
+            return svdb.build();
+        }
+
+        return null;
+    }
+
+    public static PropertySequenceConfig getPropertySequenceConfig(AppPropertySequence appPropertySequence) throws UnifyException {
+        PropertySequenceDef propertySequenceDef = InputWidgetUtils.getSequenceDef(appPropertySequence);
+        return InputWidgetUtils.getPropertySequenceConfig(propertySequenceDef);
+    }
+
+    public static PropertySequenceConfig getPropertySequenceConfig(PropertySequenceDef propertySequenceDef) throws UnifyException {
+        List<PropertySequenceEntryConfig> entryList = new ArrayList<PropertySequenceEntryConfig>();
+        for (PropertySequenceEntryDef propertySequenceEntryDef : propertySequenceDef.getSequenceList()) {
+            entryList.add(new PropertySequenceEntryConfig(propertySequenceEntryDef.getProperty()));
+        }
+
+        return new PropertySequenceConfig(entryList);
+    }
+
+    public static String getPropertySequenceDefinition(PropertySequenceDef propertySequenceDef) throws UnifyException {
         String result = null;
         try (StringWriter sw = new StringWriter(); BufferedWriter bw = new BufferedWriter(sw)) {
-            for (FieldSequenceEntryDef fieldSequenceEntryDef : fieldSequenceDef.getFieldSequenceList()) {
-                bw.write(fieldSequenceEntryDef.getFieldName());
+            for (PropertySequenceEntryDef propertySequenceEntryDef : propertySequenceDef.getSequenceList()) {
+                bw.write(propertySequenceEntryDef.getProperty());
                 bw.write(']');
-                if (fieldSequenceEntryDef.isWithStandardFormatCode()) {
-                    bw.write(fieldSequenceEntryDef.getStandardFormatCode());
+                if (!StringUtils.isBlank(propertySequenceEntryDef.getLabel())) {
+                    bw.write(propertySequenceEntryDef.getLabel());
                     bw.write(']');
                 }
-
                 bw.newLine();
             }
 
@@ -1051,7 +1119,7 @@ public final class InputWidgetUtils {
     public static FilterDef getFilterDef(AppletUtilities au, Restriction restriction) throws UnifyException {
         return InputWidgetUtils.getFilterDef(au, null, null, restriction);
     }
-    
+
     public static FilterDef getFilterDef(AppletUtilities au, AppletDef appletDef, FilterDef filterDef,
             Restriction restriction, SpecialParamProvider specialParamProvider, Date now) throws UnifyException {
         EntityDef entityDef = au.getEntityDef(appletDef.getEntity());

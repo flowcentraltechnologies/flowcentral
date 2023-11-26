@@ -35,6 +35,7 @@ import com.flowcentraltech.flowcentral.application.data.PropertyListItem;
 import com.flowcentraltech.flowcentral.application.data.PropertyRuleDef;
 import com.flowcentraltech.flowcentral.application.data.RefDef;
 import com.flowcentraltech.flowcentral.application.data.SearchInputsDef;
+import com.flowcentraltech.flowcentral.application.data.PropertySequenceDef;
 import com.flowcentraltech.flowcentral.application.data.SetValuesDef;
 import com.flowcentraltech.flowcentral.application.data.SuggestionTypeDef;
 import com.flowcentraltech.flowcentral.application.data.TableDef;
@@ -1438,6 +1439,22 @@ public interface ApplicationModuleService extends FlowCentralService {
             throws UnifyException;
 
     /**
+     * Retrieves application sequence definition for an entity instance.
+     * 
+     * @param category
+     *                        the set values category
+     * @param ownerEntityName
+     *                        the entity type long name
+     * @param ownerInstId
+     *                        the entity instance ID
+     * @return the set values definition if found otherwise null
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    PropertySequenceDef retrieveSequenceDef(String category, String ownerEntityName, Long ownerInstId)
+            throws UnifyException;
+
+    /**
      * Saves application field sequence definition for an entity instance.
      * 
      * @param sweepingCommitPolicy
@@ -1455,6 +1472,25 @@ public interface ApplicationModuleService extends FlowCentralService {
      */
     void saveFieldSequenceDef(SweepingCommitPolicy sweepingCommitPolicy, String category, String ownerEntityName,
             Long ownerInstId, FieldSequenceDef fieldSequenceDef) throws UnifyException;
+
+    /**
+     * Saves application sequence definition for an entity instance.
+     * 
+     * @param sweepingCommitPolicy
+     *                             sweeping commit policy
+     * @param category
+     *                             the set values category
+     * @param ownerEntityName
+     *                             the entity type long name
+     * @param ownerInstId
+     *                             the entity instance ID
+     * @param propertySequenceDef
+     *                             the sequence definition to save
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    void saveSequenceDef(SweepingCommitPolicy sweepingCommitPolicy, String category, String ownerEntityName,
+            Long ownerInstId, PropertySequenceDef propertySequenceDef) throws UnifyException;
 
     /**
      * Retrieves application widget rules definition for an entity instance.

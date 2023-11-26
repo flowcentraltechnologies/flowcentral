@@ -105,6 +105,10 @@ public class EntityDef extends BaseApplicationEntityDef {
 
     private Map<String, EntityCategoryDef> categoryDefs;
 
+    private List<EntitySeriesDef> seriesDefList;
+
+    private List<EntityCategoryDef> categoryDefList;
+    
     private List<EntityAttachmentDef> attachmentList;
 
     private List<UniqueConstraintDef> uniqueConstraintList;
@@ -433,6 +437,34 @@ public class EntityDef extends BaseApplicationEntityDef {
         }
 
         return entityCategoryDef;
+    }
+
+    public List<EntitySeriesDef> getSeriesDefList() throws UnifyException {
+        if (seriesDefList == null) {
+            synchronized(this) {
+                if (seriesDefList == null) {
+                    seriesDefList = new ArrayList<EntitySeriesDef>(seriesDefs.values());
+                    DataUtils.sortAscending(seriesDefList, EntitySeriesDef.class, "description");
+                    seriesDefList = DataUtils.unmodifiableList(seriesDefList);
+                }
+            }
+        }
+        
+        return seriesDefList;
+    }
+
+    public List<EntityCategoryDef> getCategoryDefList() throws UnifyException {
+        if (categoryDefList == null) {
+            synchronized(this) {
+                if (categoryDefList == null) {
+                    categoryDefList = new ArrayList<EntityCategoryDef>(categoryDefs.values());
+                    DataUtils.sortAscending(categoryDefList, EntityCategoryDef.class, "description");
+                    categoryDefList = DataUtils.unmodifiableList(categoryDefList);
+                }
+            }
+        }
+
+        return categoryDefList;
     }
 
     public List<? extends Listable> getFilterFieldListables(LabelSuggestionDef labelSuggestionDef)
