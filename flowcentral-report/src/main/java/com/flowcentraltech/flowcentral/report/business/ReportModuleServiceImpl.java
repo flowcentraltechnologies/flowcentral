@@ -399,8 +399,11 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
                             columnName = sqlEntityInfo.getListFieldInfo(columnName).getPreferredColumnName();
                         }
 
-                        if (entityDef != null && entityDef.isWithPreferedColumnName(columnName.toUpperCase())) {
-                            columnName = entityDef.getPreferedColumnName(columnName);
+                        if (entityDef != null) {
+                            final String columnNameUpper = columnName.toUpperCase();
+                            if (entityDef.isWithPreferedColumnName(columnNameUpper)) {
+                                columnName = entityDef.getPreferedColumnName(columnNameUpper);
+                            }
                         }
                     }
 
