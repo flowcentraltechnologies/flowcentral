@@ -965,7 +965,7 @@ public class EntityDef extends BaseApplicationEntityDef {
     }
 
     public boolean isNotDelegateListOnly(String fieldName) {
-        return !(delegated() && getFieldDef(fieldName).isListOnly());
+        return isWithFieldDef(fieldName) && !(delegated() && getFieldDef(fieldName).isListOnly());
     }
 
     public Map<String, Object> extractValues(Entity inst) throws UnifyException {
