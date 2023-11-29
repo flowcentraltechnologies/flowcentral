@@ -1541,22 +1541,27 @@ public final class InputWidgetUtils {
                     case BETWEEN_PARAM:
                         paramA = CalendarUtils.getMidnightDate((Date) paramA);
                         paramB = CalendarUtils.getLastSecondDate((Date) paramB);
+                        type = FilterConditionType.BETWEEN;
                         break;
                     case GREATER_OR_EQUAL:
                     case GREATER_OR_EQUAL_PARAM:
                         paramA = CalendarUtils.getMidnightDate((Date) paramA);
+                        type = FilterConditionType.GREATER_OR_EQUAL;
                         break;
                     case GREATER_THAN:
                     case GREATER_THAN_PARAM:
                         paramA = CalendarUtils.getLastSecondDate((Date) paramA);
+                        type = FilterConditionType.GREATER_THAN;
                         break;
                     case LESS_OR_EQUAL:
                     case LESS_OR_EQUAL_PARAM:
                         paramA = CalendarUtils.getLastSecondDate((Date) paramA);
+                        type = FilterConditionType.LESS_OR_EQUAL;
                         break;
                     case LESS_THAN:
                     case LESS_THAN_PARAM:
                         paramA = CalendarUtils.getMidnightDate((Date) paramA);
+                        type = FilterConditionType.LESS_THAN;
                         break;
                     case NOT_EQUALS:
                     case NOT_EQUALS_PARAM:
@@ -1568,6 +1573,7 @@ public final class InputWidgetUtils {
                     case NOT_BETWEEN_PARAM:
                         paramA = CalendarUtils.getMidnightDate((Date) paramA);
                         paramB = CalendarUtils.getLastSecondDate((Date) paramB);
+                        type = FilterConditionType.NOT_BETWEEN;
                         break;
                     default:
                         break;
