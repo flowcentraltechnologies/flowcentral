@@ -20,6 +20,7 @@ import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.criterion.CriteriaBuilder;
 import com.tcdng.unify.core.criterion.FilterConditionType;
 import com.tcdng.unify.core.criterion.Restriction;
+import com.tcdng.unify.core.util.StringUtils;
 
 /**
  * Resolve condition.
@@ -66,5 +67,10 @@ public class ResolvedCondition {
     
     public Restriction createSimpleCriteria() throws UnifyException {
         return type.createSimpleCriteria(fieldName, paramA, paramB);
+    }
+
+    @Override
+    public String toString() {
+        return StringUtils.toXmlString(this);
     }
 }

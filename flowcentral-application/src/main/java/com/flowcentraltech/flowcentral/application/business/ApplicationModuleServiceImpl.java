@@ -74,6 +74,7 @@ import com.flowcentraltech.flowcentral.application.data.PropertyRuleDef;
 import com.flowcentraltech.flowcentral.application.data.RecLoadInfo;
 import com.flowcentraltech.flowcentral.application.data.RefDef;
 import com.flowcentraltech.flowcentral.application.data.SearchInputsDef;
+import com.flowcentraltech.flowcentral.application.data.PropertySequenceDef;
 import com.flowcentraltech.flowcentral.application.data.SetStatesDef;
 import com.flowcentraltech.flowcentral.application.data.SetValuesDef;
 import com.flowcentraltech.flowcentral.application.data.StandardAppletDef;
@@ -161,6 +162,8 @@ import com.flowcentraltech.flowcentral.application.entities.AppRef;
 import com.flowcentraltech.flowcentral.application.entities.AppRefQuery;
 import com.flowcentraltech.flowcentral.application.entities.AppSearchInput;
 import com.flowcentraltech.flowcentral.application.entities.AppSearchInputQuery;
+import com.flowcentraltech.flowcentral.application.entities.AppPropertySequence;
+import com.flowcentraltech.flowcentral.application.entities.AppPropertySequenceQuery;
 import com.flowcentraltech.flowcentral.application.entities.AppSetValues;
 import com.flowcentraltech.flowcentral.application.entities.AppSetValuesQuery;
 import com.flowcentraltech.flowcentral.application.entities.AppSuggestion;
@@ -2737,6 +2740,14 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
+    public PropertySequenceDef retrieveSequenceDef(String category, String ownerEntityName, Long ownerInstId)
+            throws UnifyException {
+        final EntityDef entityDef = getEntityDef(ownerEntityName);
+        return InputWidgetUtils.getSequenceDef(environment().find(new AppPropertySequenceQuery().category(category)
+                .entity(entityDef.getTableName()).entityInstId(ownerInstId)));
+    }
+
+    @Override
     public void saveFieldSequenceDef(SweepingCommitPolicy sweepingCommitPolicy, String category, String ownerEntityName,
             Long ownerInstId, FieldSequenceDef fieldSequenceDef) throws UnifyException {
         final EntityDef entityDef = getEntityDef(ownerEntityName);
@@ -2749,6 +2760,26 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             appFieldSequence.setCategory(category);
             appFieldSequence.setDefinition(InputWidgetUtils.getFieldSequenceDefinition(fieldSequenceDef));
             environment().create(appFieldSequence);
+        }
+
+        if (sweepingCommitPolicy != null) {
+            sweepingCommitPolicy.bumpAllParentVersions(db(), RecordActionType.UPDATE);
+        }
+    }
+
+    @Override
+    public void saveSequenceDef(SweepingCommitPolicy sweepingCommitPolicy, String category, String ownerEntityName,
+            Long ownerInstId, PropertySequenceDef propertySequenceDef) throws UnifyException {
+        final EntityDef entityDef = getEntityDef(ownerEntityName);
+        environment().deleteAll(new AppPropertySequenceQuery().category(category).entity(entityDef.getTableName())
+                .entityInstId(ownerInstId));
+        if (propertySequenceDef != null && !propertySequenceDef.isBlank()) {
+            AppPropertySequence appPropertySequence = new AppPropertySequence();
+            appPropertySequence.setEntityInstId(ownerInstId);
+            appPropertySequence.setEntity(entityDef.getTableName());
+            appPropertySequence.setCategory(category);
+            appPropertySequence.setDefinition(InputWidgetUtils.getPropertySequenceDefinition(propertySequenceDef));
+            environment().create(appPropertySequence);
         }
 
         if (sweepingCommitPolicy != null) {

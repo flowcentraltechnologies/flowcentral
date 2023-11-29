@@ -44,6 +44,8 @@ public enum TabContentType implements EnumConst {
             "FIL"),
     FIELD_SEQUENCE(
             "FSQ"),
+    SEQUENCE(
+            "SSQ"),
     PARAM_VALUES(
             "PMV"),
     PROPERTY_LIST(

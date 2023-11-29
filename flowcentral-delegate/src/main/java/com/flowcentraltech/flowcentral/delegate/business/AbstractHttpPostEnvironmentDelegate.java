@@ -52,22 +52,30 @@ public abstract class AbstractHttpPostEnvironmentDelegate extends AbstractJsonEn
 
     @Override
     protected String listEntities(String jsonReq) throws UnifyException {
-        return IOUtils.postJsonToEndpoint(getEndpointNode() + paths.get(ActionType.LIST_ENTITIES).getPath(), jsonReq);
+        final String endpoint = getEndpointNode() + paths.get(ActionType.LIST_ENTITIES).getPath();
+        logDebug("Sending to delegate list entities service [{0}] with request [{1}]...", endpoint, jsonReq);
+        return IOUtils.postJsonToEndpoint(endpoint, jsonReq);
     }
 
     @Override
     protected String getEntity(String jsonReq) throws UnifyException {
-        return IOUtils.postJsonToEndpoint(getEndpointNode() + paths.get(ActionType.GET_ENTITY).getPath(), jsonReq);
+        final String endpoint = getEndpointNode() + paths.get(ActionType.GET_ENTITY).getPath();
+        logDebug("Sending to delegateget entity service [{0}] with request [{1}]...", endpoint, jsonReq);
+        return IOUtils.postJsonToEndpoint(endpoint, jsonReq);
     }
 
     @Override
     protected String sendToDelegateProcedureService(String jsonReq) throws UnifyException {
-        return IOUtils.postJsonToEndpoint(getEndpointNode() + paths.get(ActionType.PROCEDURE).getPath(), jsonReq);
+        final String endpoint = getEndpointNode() + paths.get(ActionType.PROCEDURE).getPath();
+        logDebug("Sending to delegate procedure service [{0}] with request [{1}]...", endpoint, jsonReq);
+        return IOUtils.postJsonToEndpoint(endpoint, jsonReq);
     }
 
     @Override
     protected String sendToDelegateDatasourceService(String jsonReq) throws UnifyException {
-        return IOUtils.postJsonToEndpoint(getEndpointNode() + paths.get(ActionType.DATASOURCE).getPath(), jsonReq);
+        final String endpoint = getEndpointNode() + paths.get(ActionType.DATASOURCE).getPath();
+        logDebug("Sending to delegate data source service [{0}] with request [{1}]...", endpoint, jsonReq);
+        return IOUtils.postJsonToEndpoint(endpoint, jsonReq);
     }
 
     protected abstract String getEndpointNode() throws UnifyException;

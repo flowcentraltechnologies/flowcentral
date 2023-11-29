@@ -50,6 +50,7 @@ import com.flowcentraltech.flowcentral.application.data.PropertyListItem;
 import com.flowcentraltech.flowcentral.application.data.PropertyRuleDef;
 import com.flowcentraltech.flowcentral.application.data.RefDef;
 import com.flowcentraltech.flowcentral.application.data.SearchInputsDef;
+import com.flowcentraltech.flowcentral.application.data.PropertySequenceDef;
 import com.flowcentraltech.flowcentral.application.data.SetValuesDef;
 import com.flowcentraltech.flowcentral.application.data.TabSheetDef;
 import com.flowcentraltech.flowcentral.application.data.TableDef;
@@ -839,10 +840,23 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
     }
 
     @Override
+    public PropertySequenceDef retrieveSequenceDef(String category, String ownerEntityName, Long ownerInstId)
+            throws UnifyException {
+        return applicationModuleService.retrieveSequenceDef(category, ownerEntityName, ownerInstId);
+    }
+
+    @Override
     public void saveFieldSequenceDef(SweepingCommitPolicy sweepingCommitPolicy, String category, String ownerEntityName,
             Long ownerInstId, FieldSequenceDef fieldSequenceDef) throws UnifyException {
         applicationModuleService.saveFieldSequenceDef(sweepingCommitPolicy, category, ownerEntityName, ownerInstId,
                 fieldSequenceDef);
+    }
+
+    @Override
+    public void saveSequenceDef(SweepingCommitPolicy sweepingCommitPolicy, String category, String ownerEntityName,
+            Long ownerInstId, PropertySequenceDef propertySequenceDef) throws UnifyException {
+        applicationModuleService.saveSequenceDef(sweepingCommitPolicy, category, ownerEntityName, ownerInstId,
+                propertySequenceDef);
     }
 
     @Override
@@ -1141,6 +1155,25 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
                         break;
                     case FIELD_SEQUENCE: {
                         logDebug("Constructing field sequence tab [{0}] using reference [{1}]...", formTabDef.getName(),
+                                formTabDef.getReference());
+                        EntityChildCategoryType categoryType = EntityChildCategoryType
+                                .fromName(formTabDef.getReference());
+                        EntityDef _entityDef = getEntityDef(appletContext.getReference(categoryType));
+                        EntityFieldSequence _entityFieldSequence = constructEntityFieldSequence(formContext,
+                                sweepingCommitPolicy, formTabDef.getName(), formDef.getEntityDef(),
+                                EntityFieldSequence.ENABLE_ALL, formTabDef.isIgnoreParentCondition());
+                        _entityFieldSequence.setCategory(categoryType.category());
+                        _entityFieldSequence.setOwnerInstId((Long) inst.getId());
+                        _entityFieldSequence.load(_entityDef);
+                        tsdb.addTabDef(formTabDef.getName(), formTabDef.getLabel(), "fc-entityfieldsequencepanel",
+                                RendererType.STANDALONE_PANEL);
+                        tabSheetItemList.add(new TabSheetItem(formTabDef.getName(), formTabDef.getApplet(),
+                                _entityFieldSequence, tabIndex,
+                                !isCreateMode && formContext.getFormTab(formTabDef.getName()).isVisible()));
+                    }
+                        break;
+                    case SEQUENCE: {
+                        logDebug("Constructing sequence tab [{0}] using reference [{1}]...", formTabDef.getName(),
                                 formTabDef.getReference());
                         EntityChildCategoryType categoryType = EntityChildCategoryType
                                 .fromName(formTabDef.getReference());

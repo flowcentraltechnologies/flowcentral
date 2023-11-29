@@ -59,6 +59,7 @@ public class FormTabEditorPanel extends AbstractDialogPanel {
                     editActionVisible = true;
                     break;
                 case FIELD_SEQUENCE:
+                case SEQUENCE:
                     break;
                 case FILTER_CONDITION:
                     break;
