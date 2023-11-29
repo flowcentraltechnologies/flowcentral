@@ -831,6 +831,10 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-entityfieldsequencepanel {}
 .fc-entityfieldsequencepanel .fieldseqall {border-top: 1px solid #b8b8b8;border-bottom: 1px solid #b8b8b8;}
 
+/* Entity property sequence panel */
+.fc-entitypropertysequencepanel {}
+.fc-entitypropertysequencepanel .fieldseqall {border-top: 1px solid #b8b8b8;border-bottom: 1px solid #b8b8b8;}
+
 /* Entity set values panel */
 .fc-entitysetvaluespanel {}
 .fc-entitysetvaluespanel .fc-setvalues {}

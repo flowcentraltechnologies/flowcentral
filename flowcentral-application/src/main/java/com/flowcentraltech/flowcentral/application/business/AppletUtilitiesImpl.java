@@ -78,6 +78,7 @@ import com.flowcentraltech.flowcentral.application.web.panels.EntityChild;
 import com.flowcentraltech.flowcentral.application.web.panels.EntityFieldSequence;
 import com.flowcentraltech.flowcentral.application.web.panels.EntityFilter;
 import com.flowcentraltech.flowcentral.application.web.panels.EntityParamValues;
+import com.flowcentraltech.flowcentral.application.web.panels.EntityPropertySequence;
 import com.flowcentraltech.flowcentral.application.web.panels.EntitySearch;
 import com.flowcentraltech.flowcentral.application.web.panels.EntitySearchInput;
 import com.flowcentraltech.flowcentral.application.web.panels.EntitySelect;
@@ -1172,22 +1173,22 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
                                 !isCreateMode && formContext.getFormTab(formTabDef.getName()).isVisible()));
                     }
                         break;
-                    case SEQUENCE: {
-                        logDebug("Constructing sequence tab [{0}] using reference [{1}]...", formTabDef.getName(),
+                    case PROPERTY_SEQUENCE: {
+                        logDebug("Constructing property sequence tab [{0}] using reference [{1}]...", formTabDef.getName(),
                                 formTabDef.getReference());
                         EntityChildCategoryType categoryType = EntityChildCategoryType
                                 .fromName(formTabDef.getReference());
                         EntityDef _entityDef = getEntityDef(appletContext.getReference(categoryType));
-                        EntityFieldSequence _entityFieldSequence = constructEntityFieldSequence(formContext,
+                        EntityPropertySequence _entityPropertySequence = constructEntityPropertySequence(formContext,
                                 sweepingCommitPolicy, formTabDef.getName(), formDef.getEntityDef(),
-                                EntityFieldSequence.ENABLE_ALL, formTabDef.isIgnoreParentCondition());
-                        _entityFieldSequence.setCategory(categoryType.category());
-                        _entityFieldSequence.setOwnerInstId((Long) inst.getId());
-                        _entityFieldSequence.load(_entityDef);
-                        tsdb.addTabDef(formTabDef.getName(), formTabDef.getLabel(), "fc-entityfieldsequencepanel",
+                                EntityPropertySequence.ENABLE_ALL, formTabDef.isIgnoreParentCondition());
+                        _entityPropertySequence.setCategory(categoryType.category());
+                        _entityPropertySequence.setOwnerInstId((Long) inst.getId());
+                        _entityPropertySequence.load(_entityDef);
+                        tsdb.addTabDef(formTabDef.getName(), formTabDef.getLabel(), "fc-entitypropertysequencepanel",
                                 RendererType.STANDALONE_PANEL);
                         tabSheetItemList.add(new TabSheetItem(formTabDef.getName(), formTabDef.getApplet(),
-                                _entityFieldSequence, tabIndex,
+                                _entityPropertySequence, tabIndex,
                                 !isCreateMode && formContext.getFormTab(formTabDef.getName()).isVisible()));
                     }
                         break;
@@ -1505,6 +1506,20 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
                         _entityFieldSequence.setCategory(categoryType.category());
                         _entityFieldSequence.setOwnerInstId((Long) inst.getId());
                         _entityFieldSequence.load(_entityDef);
+                        tabSheetItem.setVisible(
+                                !isCreateMode && formContext.getFormTab(tabSheetItem.getName()).isVisible());
+                    }
+                        break;
+                    case PROPERTY_SEQUENCE: {
+                        logDebug("Updating property sequence tab [{0}] using reference [{1}]...", formTabDef.getName(),
+                                formTabDef.getReference());
+                        EntityChildCategoryType categoryType = EntityChildCategoryType
+                                .fromName(formTabDef.getReference());
+                        EntityDef _entityDef = getEntityDef(formContext.getAppletContext().getReference(categoryType));
+                        EntityPropertySequence _entityPropertySequence = (EntityPropertySequence) tabSheetItem.getValObject();
+                        _entityPropertySequence.setCategory(categoryType.category());
+                        _entityPropertySequence.setOwnerInstId((Long) inst.getId());
+                        _entityPropertySequence.load(_entityDef);
                         tabSheetItem.setVisible(
                                 !isCreateMode && formContext.getFormTab(tabSheetItem.getName()).isVisible());
                     }
@@ -1836,6 +1851,16 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
         logDebug("Constructing entity field sequence for [{0}] using entity definition [{1}]...", tabName,
                 ownerEntityDef.getLongName());
         return new EntityFieldSequence(ctx, sweepingCommitPolicy, tabName, ownerEntityDef, entityFieldSequenceMode,
+                isIgnoreParentCondition);
+    }
+
+    @Override
+    public EntityPropertySequence constructEntityPropertySequence(FormContext ctx, SweepingCommitPolicy sweepingCommitPolicy,
+            String tabName, EntityDef ownerEntityDef, int entityPropertySequenceMode, boolean isIgnoreParentCondition)
+            throws UnifyException {
+        logDebug("Constructing entity property sequence for [{0}] using entity definition [{1}]...", tabName,
+                ownerEntityDef.getLongName());
+        return new EntityPropertySequence(ctx, sweepingCommitPolicy, tabName, ownerEntityDef, entityPropertySequenceMode,
                 isIgnoreParentCondition);
     }
 
