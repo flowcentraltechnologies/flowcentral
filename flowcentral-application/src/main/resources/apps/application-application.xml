@@ -573,6 +573,9 @@
 		<reference name="appFieldSequenceRef"
 			description="$m{application.appfieldsequence.reference}"
 			entity="appFieldSequence" searchField="description" />
+		<reference name="appPropertySequenceRef"
+			description="$m{application.apppropertysequence.reference}"
+			entity="appPropertySequence" searchField="description" />
 		<reference name="appSetValuesRef"
 			description="$m{application.appsetvalues.reference}"
 			entity="appSetValues" searchField="description" />
@@ -1269,6 +1272,22 @@
 				type="category_column" />
 			<field name="definition"
 				label="$m{application.appfieldsequence.definition}" type="string" />
+		</entity>
+		<entity name="appPropertySequence"
+			description="$m{application.apppropertysequence}"
+			label="$m{application.apppropertysequence.label}"
+			type="com.flowcentraltech.flowcentral.application.entities.AppPropertySequence">
+			<field name="entityInstId"
+				label="$m{application.apppropertysequence.entityinstid}"
+				type="foster_parent_id" />
+			<field name="entity"
+				label="$m{application.apppropertysequence.entity}"
+				type="foster_parent_type" />
+			<field name="category"
+				label="$m{application.apppropertysequence.category}"
+				type="category_column" />
+			<field name="definition"
+				label="$m{application.apppropertysequence.definition}" type="string" />
 		</entity>
 		<entity name="appSetValues"
 			description="$m{application.appsetvalues}"

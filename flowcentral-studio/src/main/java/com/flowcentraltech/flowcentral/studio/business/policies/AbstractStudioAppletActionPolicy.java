@@ -81,6 +81,8 @@ public abstract class AbstractStudioAppletActionPolicy extends AbstractAppletAct
                 break;
             case CHART:
                 break;
+            case CHART_DATASOURCE:
+                break;
             case DASHBOARD:
                 privilegeCode = PrivilegeNameUtils.getDashboardPrivilegeName(
                         ApplicationNameUtils.getApplicationEntityLongName(applicationName, appEntity.getName()));

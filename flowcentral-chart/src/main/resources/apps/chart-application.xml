@@ -82,5 +82,35 @@
 				<condition field="devVersionType" value="CRN"/>
 			</uniqueConstraint>
 		</entity>
+		<entity name="chartDataSource" description="$m{chart.chartdatasource}"
+			label="$m{chart.chart.label}"
+			type="com.flowcentraltech.flowcentral.chart.entities.ChartDataSource" auditable="true"
+			reportable="true">
+			<field name="type" label="$m{chart.chartdatasource.type}" type="enum_ref"
+				references="chartdatasourcetypelist" inputWidget="application.enumlist" />
+			<field name="entity" label="$m{chart.chartdatasource.entity}"
+				type="string" />
+			<field name="categoryBase"
+				label="$m{chart.chartdatasource.categorybase}" type="child"
+				category="chart-datasource" references="application.appFilterRef" />
+			<field name="series"
+				label="$m{chart.chartdatasource.series}" type="child"
+				category="entity-series" references="application.appPropertySequenceRef" />
+			<field name="categories"
+				label="$m{chart.chartdatasource.categories}" type="child"
+				category="entity-category" references="application.appPropertySequenceRef" />
+			<field name="typeDesc" label="$m{chart.chartdatasource.typedesc}" type="list_only"
+				key="type" property="description" />
+			<uniqueConstraint name="nameUc"
+				description="$m{chart.chartdatasource.uc.name}"
+				fieldList="applicationId,name">
+				<condition field="devVersionType" value="CRN"/>
+			</uniqueConstraint>
+			<uniqueConstraint name="descUc"
+				description="$m{chart.chartdatasource.uc.description}"
+				fieldList="applicationId,description">
+				<condition field="devVersionType" value="CRN"/>
+			</uniqueConstraint>
+		</entity>
 	</entities>
 </application>

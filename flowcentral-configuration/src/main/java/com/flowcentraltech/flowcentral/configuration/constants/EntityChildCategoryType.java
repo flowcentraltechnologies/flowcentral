@@ -112,6 +112,27 @@ public enum EntityChildCategoryType implements EnumConst {
             "formreviewpolicy",
             FilterConditionListType.IMMEDIATE_FIELD,
             null),
+    CHART_CATEGORYBASE(
+            "CHARTCATEGORYBASE",
+            "chart.chartDataSource",
+            "entity",
+            "chart-datasource",
+            FilterConditionListType.IMMEDIATE_PARAM,
+            null),
+    CHART_SERIES(
+            "CHARTSERIES",
+            "chart.chartDataSource",
+            "entity",
+            "entity-series",
+            FilterConditionListType.IMMEDIATE_FIELD,
+            null),
+    CHART_CATEGORIES(
+            "CHARTCATEGORIES",
+            "chart.chartDataSource",
+            "entity",
+            "entity-category",
+            FilterConditionListType.IMMEDIATE_FIELD,
+            null),
     REPORT_CONFIG(
             "REPORTCONFIG",
             "report.reportConfig",
