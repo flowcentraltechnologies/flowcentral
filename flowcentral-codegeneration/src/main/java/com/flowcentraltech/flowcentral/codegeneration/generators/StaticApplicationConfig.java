@@ -20,6 +20,7 @@ import java.util.EnumMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import com.flowcentraltech.flowcentral.configuration.xml.AppChartDataSourcesConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppChartsConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppDashboardsConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppNotifLargeTextsConfig;
@@ -43,6 +44,8 @@ public class StaticApplicationConfig {
 
     private AppChartsConfig chartsConfig;
 
+    private AppChartDataSourcesConfig chartDataSourcesConfig;
+    
     private AppDashboardsConfig dashboardsConfig;
 
     private AppReportsConfig reportsConfig;
@@ -81,6 +84,14 @@ public class StaticApplicationConfig {
 
     public void setChartsConfig(AppChartsConfig chartsConfig) {
         this.chartsConfig = chartsConfig;
+    }
+
+    public AppChartDataSourcesConfig getChartDataSourcesConfig() {
+        return chartDataSourcesConfig;
+    }
+
+    public void setChartDataSourcesConfig(AppChartDataSourcesConfig chartDataSourcesConfig) {
+        this.chartDataSourcesConfig = chartDataSourcesConfig;
     }
 
     public AppDashboardsConfig getDashboardsConfig() {

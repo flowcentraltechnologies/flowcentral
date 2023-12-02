@@ -684,8 +684,8 @@ public final class InputWidgetUtils {
         return InputWidgetUtils.getSequenceDef(null, null, appPropertySequence);
     }
 
-    public static PropertySequenceDef getSequenceDef(String name, String description, AppPropertySequence appPropertySequence)
-            throws UnifyException {
+    public static PropertySequenceDef getSequenceDef(String name, String description,
+            AppPropertySequence appPropertySequence) throws UnifyException {
         if (appPropertySequence != null) {
             PropertySequenceDef.Builder svdb = PropertySequenceDef.newBuilder();
             svdb.name(name).description(description);
@@ -707,15 +707,18 @@ public final class InputWidgetUtils {
         return null;
     }
 
-    public static PropertySequenceConfig getPropertySequenceConfig(AppPropertySequence appPropertySequence) throws UnifyException {
+    public static PropertySequenceConfig getPropertySequenceConfig(AppPropertySequence appPropertySequence)
+            throws UnifyException {
         PropertySequenceDef propertySequenceDef = InputWidgetUtils.getSequenceDef(appPropertySequence);
         return InputWidgetUtils.getPropertySequenceConfig(propertySequenceDef);
     }
 
-    public static PropertySequenceConfig getPropertySequenceConfig(PropertySequenceDef propertySequenceDef) throws UnifyException {
+    public static PropertySequenceConfig getPropertySequenceConfig(PropertySequenceDef propertySequenceDef)
+            throws UnifyException {
         List<PropertySequenceEntryConfig> entryList = new ArrayList<PropertySequenceEntryConfig>();
         for (PropertySequenceEntryDef propertySequenceEntryDef : propertySequenceDef.getSequenceList()) {
-            entryList.add(new PropertySequenceEntryConfig(propertySequenceEntryDef.getProperty()));
+            entryList.add(new PropertySequenceEntryConfig(propertySequenceEntryDef.getProperty(),
+                    propertySequenceEntryDef.getLabel()));
         }
 
         return new PropertySequenceConfig(entryList);
@@ -731,6 +734,39 @@ public final class InputWidgetUtils {
                     bw.write(propertySequenceEntryDef.getLabel());
                     bw.write(']');
                 }
+                bw.newLine();
+            }
+
+            bw.flush();
+            result = sw.toString();
+        } catch (IOException e) {
+            throw new UnifyOperationException(e);
+        }
+
+        return result;
+    }
+
+    public static AppPropertySequence newAppPropertySequence(PropertySequenceConfig propertySequenceConfig)
+            throws UnifyException {
+        if (propertySequenceConfig != null) {
+            return new AppPropertySequence(InputWidgetUtils.getPropertySequenceDefinition(propertySequenceConfig));
+        }
+
+        return null;
+    }
+
+    public static String getPropertySequenceDefinition(PropertySequenceConfig propertySequenceConfig)
+            throws UnifyException {
+        String result = null;
+        try (StringWriter sw = new StringWriter(); BufferedWriter bw = new BufferedWriter(sw)) {
+            for (PropertySequenceEntryConfig entry : propertySequenceConfig.getEntryList()) {
+                bw.write(entry.getProperty());
+                bw.write(']');
+                if (entry.getLabel() != null) {
+                    bw.write(entry.getLabel());
+                    bw.write(']');
+                }
+
                 bw.newLine();
             }
 

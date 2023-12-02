@@ -20,6 +20,7 @@ import java.util.List;
 import com.flowcentraltech.flowcentral.chart.data.ChartDef;
 import com.flowcentraltech.flowcentral.chart.data.ChartSnapshotDef;
 import com.flowcentraltech.flowcentral.chart.entities.Chart;
+import com.flowcentraltech.flowcentral.chart.entities.ChartDataSource;
 import com.flowcentraltech.flowcentral.chart.entities.ChartQuery;
 import com.flowcentraltech.flowcentral.chart.entities.ChartSnapshot;
 import com.flowcentraltech.flowcentral.chart.entities.ChartSnapshotQuery;
@@ -66,6 +67,28 @@ public interface ChartModuleService extends FlowCentralService {
      *                        if an error occurs
      */
     List<Long> findChartIdList(String applicationName) throws UnifyException;
+
+    /**
+     * Finds chart data source by ID.
+     * 
+     * @param chartDataSourceId
+     *                          the chart data source ID
+     * @return the chart data source
+     * @throws UnifyException
+     *                        if chart with ID is not found. If an error occurs
+     */
+    ChartDataSource findChartDataSource(Long chartDataSourceId) throws UnifyException;
+
+    /**
+     * Finds chart data source ID list for application.
+     * 
+     * @param applicationName
+     *                        the application name
+     * @return list of application chart IDs
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    List<Long> findChartDataSourceIdList(String applicationName) throws UnifyException;
     
     /**
      * Finds snapshots by criteria.

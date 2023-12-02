@@ -13,47 +13,29 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
+
 package com.flowcentraltech.flowcentral.configuration.xml;
 
-import javax.xml.bind.annotation.XmlAttribute;
+import java.util.List;
+
+import javax.xml.bind.annotation.XmlElement;
 
 /**
- * Property sequence entry configuration.
+ * Charts data source configuration.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class PropertySequenceEntryConfig {
+public class AppChartDataSourcesConfig {
 
-    private String property;
+    private List<AppChartDataSourceConfig> chartDataSourceList;
 
-    private String label;
-
-    public PropertySequenceEntryConfig(String property, String label) {
-        this.property = property;
-        this.label = label;
+    public List<AppChartDataSourceConfig> getChartDataSourceList() {
+        return chartDataSourceList;
     }
 
-    public PropertySequenceEntryConfig() {
-
+    @XmlElement(name = "chart-datasource")
+    public void setChartDataSourceList(List<AppChartDataSourceConfig> chartDataSourceList) {
+        this.chartDataSourceList = chartDataSourceList;
     }
-
-    public String getProperty() {
-        return property;
-    }
-
-    @XmlAttribute(name = "property", required = true)
-    public void setProperty(String property) {
-        this.property = property;
-    }
-
-    public String getLabel() {
-        return label;
-    }
-
-    @XmlAttribute(name = "label", required = true)
-    public void setLabel(String label) {
-        this.label = label;
-    }
-
 }

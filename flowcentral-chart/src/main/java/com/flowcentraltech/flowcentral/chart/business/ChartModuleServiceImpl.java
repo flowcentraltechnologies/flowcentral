@@ -28,6 +28,8 @@ import com.flowcentraltech.flowcentral.chart.data.ChartData;
 import com.flowcentraltech.flowcentral.chart.data.ChartDef;
 import com.flowcentraltech.flowcentral.chart.data.ChartSnapshotDef;
 import com.flowcentraltech.flowcentral.chart.entities.Chart;
+import com.flowcentraltech.flowcentral.chart.entities.ChartDataSource;
+import com.flowcentraltech.flowcentral.chart.entities.ChartDataSourceQuery;
 import com.flowcentraltech.flowcentral.chart.entities.ChartQuery;
 import com.flowcentraltech.flowcentral.chart.entities.ChartSnapshot;
 import com.flowcentraltech.flowcentral.chart.entities.ChartSnapshotQuery;
@@ -131,6 +133,16 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
     @Override
     public List<Long> findChartIdList(String applicationName) throws UnifyException {
         return environment().valueList(Long.class, "id", new ChartQuery().applicationName(applicationName));
+    }
+
+    @Override
+    public ChartDataSource findChartDataSource(Long chartDataSourceId) throws UnifyException {
+        return environment().find(ChartDataSource.class, chartDataSourceId);
+    }
+
+    @Override
+    public List<Long> findChartDataSourceIdList(String applicationName) throws UnifyException {
+        return environment().valueList(Long.class, "id", new ChartDataSourceQuery().applicationName(applicationName));
     }
 
     @Override

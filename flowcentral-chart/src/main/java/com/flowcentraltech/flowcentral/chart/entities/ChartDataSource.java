@@ -23,6 +23,7 @@ import com.flowcentraltech.flowcentral.configuration.constants.ChartDataSourceTy
 import com.tcdng.unify.core.annotation.Child;
 import com.tcdng.unify.core.annotation.Column;
 import com.tcdng.unify.core.annotation.ForeignKey;
+import com.tcdng.unify.core.annotation.ListOnly;
 import com.tcdng.unify.core.annotation.Table;
 
 /**
@@ -39,6 +40,9 @@ public class ChartDataSource extends BaseApplicationEntity {
 
     @Column(length = 64)
     private String entity;
+
+    @ListOnly(key = "type", property = "description")
+    private String typeDesc;
     
     @Child(category = "chart-datasource")
     private AppFilter categoryBase;
@@ -63,6 +67,14 @@ public class ChartDataSource extends BaseApplicationEntity {
 
     public void setEntity(String entity) {
         this.entity = entity;
+    }
+
+    public String getTypeDesc() {
+        return typeDesc;
+    }
+
+    public void setTypeDesc(String typeDesc) {
+        this.typeDesc = typeDesc;
     }
 
     public AppFilter getCategoryBase() {

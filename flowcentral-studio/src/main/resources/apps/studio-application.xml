@@ -3210,7 +3210,7 @@
 			</formStatePolicy>
 		</form>
 		<form name="chartDataSourceForm" description="$m{studio.chartdatasource.form}"
-			entity="chart.chartdatasource">
+			entity="chart.chartDataSource">
 			<action type="button" name="lockResource" symbol="lock"
 				styleClass="fc-bluebutton"
 				description="$m{studio.common.form.action.lockresource}"
@@ -3240,21 +3240,21 @@
 					<field name="configType" inputWidget="application.enumlist"
 						column="1" disabled="true" required="true" />
 					<field name="type" column="1" required="true" />
-					<field name="entity" inputWidget="studio.entitysearch"
+					<field name="entity" inputWidget="studio.entitybynamelist"
 						column="1" switchOnChange="true" required="true" />
 				</section>
 			</tab>
-			<tab name="changeLog" label="$m{application.form.audit}"
-				contentType="miniform_changelog" />
-			<tab name="categoryBase"
-				label="$m{studio.chartdatasource.form.categorybase}"
-				reference="chart_categorybase" contentType="filter_condition" />
 			<tab name="series"
 				label="$m{studio.chartdatasource.form.series}"
 				reference="chart_series" contentType="property_sequence" />
 			<tab name="categories"
 				label="$m{studio.chartdatasource.form.categories}"
 				reference="chart_categories" contentType="property_sequence" />
+			<tab name="categoryBase"
+				label="$m{studio.chartdatasource.form.categorybase}"
+				reference="chart_categorybase" contentType="filter_condition" />
+			<tab name="changeLog" label="$m{application.form.audit}"
+				contentType="miniform_changelog" />
 			<formStatePolicy type="on_switch"
 				name="onStaticPolicy"
 				description="$m{studio.common.form.formstatepolicy.onstatic}">

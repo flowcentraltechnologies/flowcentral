@@ -21,13 +21,17 @@ import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.business.AbstractApplicationArtifactInstaller;
 import com.flowcentraltech.flowcentral.application.util.ApplicationReplicationContext;
+import com.flowcentraltech.flowcentral.application.util.InputWidgetUtils;
 import com.flowcentraltech.flowcentral.chart.constants.ChartModuleNameConstants;
 import com.flowcentraltech.flowcentral.chart.entities.Chart;
+import com.flowcentraltech.flowcentral.chart.entities.ChartDataSource;
+import com.flowcentraltech.flowcentral.chart.entities.ChartDataSourceQuery;
 import com.flowcentraltech.flowcentral.chart.entities.ChartQuery;
 import com.flowcentraltech.flowcentral.common.constants.ConfigType;
 import com.flowcentraltech.flowcentral.common.util.ConfigUtils;
 import com.flowcentraltech.flowcentral.configuration.data.ApplicationInstall;
 import com.flowcentraltech.flowcentral.configuration.xml.AppChartConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.AppChartDataSourceConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppConfig;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
@@ -104,6 +108,49 @@ public class ApplicationChartInstallerImpl extends AbstractApplicationArtifactIn
                 }
             }
         }
+
+        // Install configured chart data sources
+        if (applicationConfig.getChartDataSourcesConfig() != null
+                && !DataUtils.isBlank(applicationConfig.getChartDataSourcesConfig().getChartDataSourceList())) {
+            for (AppChartDataSourceConfig appChartDataSourceConfig : applicationConfig.getChartDataSourcesConfig()
+                    .getChartDataSourceList()) {
+                String description = resolveApplicationMessage(appChartDataSourceConfig.getDescription());
+                logDebug(taskMonitor, "Installing chart chart data source [{0}]...", description);
+
+                ChartDataSource oldChartDataSource = environment().findLean(new ChartDataSourceQuery()
+                        .applicationId(applicationId).name(appChartDataSourceConfig.getName()));
+                if (oldChartDataSource == null) {
+                    ChartDataSource chartDataSource = new ChartDataSource();
+                    chartDataSource.setApplicationId(applicationId);
+                    chartDataSource.setType(appChartDataSourceConfig.getType());
+                    chartDataSource.setEntity(appChartDataSourceConfig.getEntity());
+                    chartDataSource.setName(appChartDataSourceConfig.getName());
+                    chartDataSource.setDescription(description);
+                    chartDataSource
+                            .setCategoryBase(InputWidgetUtils.newAppFilter(appChartDataSourceConfig.getCategoryBase()));
+                    chartDataSource
+                            .setSeries(InputWidgetUtils.newAppPropertySequence(appChartDataSourceConfig.getSeries()));
+                    chartDataSource.setCategories(
+                            InputWidgetUtils.newAppPropertySequence(appChartDataSourceConfig.getCategories()));
+                    chartDataSource.setConfigType(ConfigType.MUTABLE_INSTALL);
+                    environment().create(chartDataSource);
+                } else {
+                    if (ConfigUtils.isSetInstall(oldChartDataSource)) {
+                        oldChartDataSource.setType(appChartDataSourceConfig.getType());
+                        oldChartDataSource.setEntity(appChartDataSourceConfig.getEntity());
+                        oldChartDataSource.setDescription(description);
+                        oldChartDataSource.setCategoryBase(
+                                InputWidgetUtils.newAppFilter(appChartDataSourceConfig.getCategoryBase()));
+                        oldChartDataSource.setSeries(
+                                InputWidgetUtils.newAppPropertySequence(appChartDataSourceConfig.getSeries()));
+                        oldChartDataSource.setCategories(
+                                InputWidgetUtils.newAppPropertySequence(appChartDataSourceConfig.getCategories()));
+                        environment().updateByIdVersion(oldChartDataSource);
+                    }
+                }
+            }
+        }
+
     }
 
     @Override

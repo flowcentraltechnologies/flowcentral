@@ -20,9 +20,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.ZipOutputStream;
 
+import com.flowcentraltech.flowcentral.application.util.InputWidgetUtils;
 import com.flowcentraltech.flowcentral.chart.business.ChartModuleService;
 import com.flowcentraltech.flowcentral.chart.entities.Chart;
+import com.flowcentraltech.flowcentral.chart.entities.ChartDataSource;
 import com.flowcentraltech.flowcentral.configuration.xml.AppChartConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.AppChartDataSourceConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.AppChartDataSourcesConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppChartsConfig;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
@@ -88,6 +92,36 @@ public class ChartsXmlGenerator extends AbstractStaticArtifactGenerator {
             ctx.setChartsConfig(appChartsConfig);
         }
 
+        List<Long> chartDataSourceIdList = chartModuleService.findChartDataSourceIdList(applicationName);
+        if (!DataUtils.isBlank(chartDataSourceIdList)) {
+            final String lowerCaseApplicationName = applicationName.toLowerCase();
+
+            AppChartDataSourcesConfig appChartDataSourcesConfig = new AppChartDataSourcesConfig();
+            List<AppChartDataSourceConfig> chartDataSourceConfigList = new ArrayList<AppChartDataSourceConfig>();
+            for (Long chartDataSourceId : chartDataSourceIdList) {
+                AppChartDataSourceConfig appChartDataSourceConfig = new AppChartDataSourceConfig();
+                ChartDataSource chartDataSource = chartModuleService.findChartDataSource(chartDataSourceId);
+                String descKey = getDescriptionKey(lowerCaseApplicationName, "chartdatasource",
+                        chartDataSource.getName());
+                ctx.addMessage(StaticMessageCategoryType.CHART, descKey, chartDataSource.getDescription());
+
+                appChartDataSourceConfig.setType(chartDataSource.getType());
+                appChartDataSourceConfig.setName(chartDataSource.getName());
+                appChartDataSourceConfig.setDescription("$m{" + descKey + "}");
+                appChartDataSourceConfig.setEntity(chartDataSource.getEntity());
+                appChartDataSourceConfig
+                        .setCategoryBase(InputWidgetUtils.getFilterConfig(au(), chartDataSource.getCategoryBase()));
+                appChartDataSourceConfig
+                        .setSeries(InputWidgetUtils.getPropertySequenceConfig(chartDataSource.getCategories()));
+                appChartDataSourceConfig
+                        .setCategories(InputWidgetUtils.getPropertySequenceConfig(chartDataSource.getCategories()));
+
+                chartDataSourceConfigList.add(appChartDataSourceConfig);
+            }
+
+            appChartDataSourcesConfig.setChartDataSourceList(chartDataSourceConfigList);
+            ctx.setChartDataSourcesConfig(appChartDataSourcesConfig);
+        }
     }
 
 }
