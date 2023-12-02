@@ -680,11 +680,11 @@ public final class InputWidgetUtils {
         return result;
     }
 
-    public static PropertySequenceDef getSequenceDef(AppPropertySequence appPropertySequence) throws UnifyException {
-        return InputWidgetUtils.getSequenceDef(null, null, appPropertySequence);
+    public static PropertySequenceDef getPropertySequenceDef(AppPropertySequence appPropertySequence) throws UnifyException {
+        return InputWidgetUtils.getPropertySequenceDef(null, null, appPropertySequence);
     }
 
-    public static PropertySequenceDef getSequenceDef(String name, String description,
+    public static PropertySequenceDef getPropertySequenceDef(String name, String description,
             AppPropertySequence appPropertySequence) throws UnifyException {
         if (appPropertySequence != null) {
             PropertySequenceDef.Builder svdb = PropertySequenceDef.newBuilder();
@@ -709,7 +709,7 @@ public final class InputWidgetUtils {
 
     public static PropertySequenceConfig getPropertySequenceConfig(AppPropertySequence appPropertySequence)
             throws UnifyException {
-        PropertySequenceDef propertySequenceDef = InputWidgetUtils.getSequenceDef(appPropertySequence);
+        PropertySequenceDef propertySequenceDef = InputWidgetUtils.getPropertySequenceDef(appPropertySequence);
         return InputWidgetUtils.getPropertySequenceConfig(propertySequenceDef);
     }
 

@@ -17,10 +17,12 @@ package com.flowcentraltech.flowcentral.chart.business;
 
 import java.util.List;
 
+import com.flowcentraltech.flowcentral.chart.data.ChartDataSourceDef;
 import com.flowcentraltech.flowcentral.chart.data.ChartDef;
 import com.flowcentraltech.flowcentral.chart.data.ChartSnapshotDef;
 import com.flowcentraltech.flowcentral.chart.entities.Chart;
 import com.flowcentraltech.flowcentral.chart.entities.ChartDataSource;
+import com.flowcentraltech.flowcentral.chart.entities.ChartDataSourceQuery;
 import com.flowcentraltech.flowcentral.chart.entities.ChartQuery;
 import com.flowcentraltech.flowcentral.chart.entities.ChartSnapshot;
 import com.flowcentraltech.flowcentral.chart.entities.ChartSnapshotQuery;
@@ -67,6 +69,17 @@ public interface ChartModuleService extends FlowCentralService {
      *                        if an error occurs
      */
     List<Long> findChartIdList(String applicationName) throws UnifyException;
+
+    /**
+     * Finds chart data sources by criteria.
+     * 
+     * @param query
+     *              the query object
+     * @return list of chart data sources
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    List<ChartDataSource> findChartDataSources(ChartDataSourceQuery query) throws UnifyException;
 
     /**
      * Finds chart data source by ID.
@@ -123,6 +136,17 @@ public interface ChartModuleService extends FlowCentralService {
      */
     ChartDef getChartDef(String chartName) throws UnifyException;
 
+    /**
+     * Gets a chart data source definition.
+     * 
+     * @param chartDataSourceName
+     *                  the chart data source long name
+     * @return the chart data source definition
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    ChartDataSourceDef getChartDataSourceDef(String chartDataSourceName) throws UnifyException; 
+    
     /**
      * Gets a chart snapshot definition.
      * 

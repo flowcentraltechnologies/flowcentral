@@ -20,11 +20,14 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityNameParts;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
+import com.flowcentraltech.flowcentral.application.util.InputWidgetUtils;
 import com.flowcentraltech.flowcentral.chart.constants.ChartModuleErrorConstants;
 import com.flowcentraltech.flowcentral.chart.constants.ChartModuleNameConstants;
 import com.flowcentraltech.flowcentral.chart.data.ChartData;
+import com.flowcentraltech.flowcentral.chart.data.ChartDataSourceDef;
 import com.flowcentraltech.flowcentral.chart.data.ChartDef;
 import com.flowcentraltech.flowcentral.chart.data.ChartSnapshotDef;
 import com.flowcentraltech.flowcentral.chart.entities.Chart;
@@ -40,6 +43,7 @@ import com.flowcentraltech.flowcentral.configuration.constants.ChartSeriesDataTy
 import com.flowcentraltech.flowcentral.configuration.data.ModuleInstall;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
+import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.Transactional;
 import com.tcdng.unify.core.data.FactoryMap;
 import com.tcdng.unify.core.util.DataUtils;
@@ -54,7 +58,12 @@ import com.tcdng.unify.core.util.DataUtils;
 @Component(ChartModuleNameConstants.CHART_MODULE_SERVICE)
 public class ChartModuleServiceImpl extends AbstractFlowCentralService implements ChartModuleService {
 
+    @Configurable
+    private AppletUtilities appletUtilities;
+
     private FactoryMap<String, ChartDef> chartDefFactoryMap;
+
+    private FactoryMap<String, ChartDataSourceDef> chartDataSourceDefFactoryMap;
 
     private FactoryMap<String, ChartSnapshotDef> chartSnapshotDefFactoryMap;
 
@@ -85,6 +94,34 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
                             .showDataLabels(chart.isShowDataLabels()).formatDataLabels(chart.isFormatDataLabels())
                             .formatYLabels(chart.isFormatYLabels()).stacked(chart.isStacked()).smooth(chart.isSmooth());
                     return cdb.build();
+                }
+
+            };
+
+        this.chartDataSourceDefFactoryMap = new FactoryMap<String, ChartDataSourceDef>(true)
+            {
+                @Override
+                protected boolean stale(String chartName, ChartDataSourceDef chartDataSourceDef) throws Exception {
+                    return environment().value(long.class, "versionNo",
+                            new ChartQuery().id(chartDataSourceDef.getId())) > chartDataSourceDef.getVersion();
+                }
+
+                @Override
+                protected ChartDataSourceDef create(String longName, Object... arg1) throws Exception {
+                    ApplicationEntityNameParts nameParts = ApplicationNameUtils.getApplicationEntityNameParts(longName);
+                    ChartDataSource chartDataSource = environment().list(new ChartDataSourceQuery()
+                            .applicationName(nameParts.getApplicationName()).name(nameParts.getEntityName()));
+                    if (chartDataSource == null) {
+                        throw new UnifyException(ChartModuleErrorConstants.CANNOT_FIND_APPLICATION_CHART, longName);
+                    }
+
+                    ChartDataSourceDef chartDataSourceDef = new ChartDataSourceDef(longName,
+                            chartDataSource.getDescription(), appletUtilities.getEntityDef(chartDataSource.getEntity()),
+                            InputWidgetUtils.getFilterDef(appletUtilities, null, chartDataSource.getCategoryBase()),
+                            InputWidgetUtils.getPropertySequenceDef(chartDataSource.getSeries()),
+                            InputWidgetUtils.getPropertySequenceDef(chartDataSource.getCategories()),
+                            chartDataSource.getId(), chartDataSource.getVersionNo());
+                    return chartDataSourceDef;
                 }
 
             };
@@ -120,6 +157,10 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
 
     }
 
+    public final void setAppletUtilities(AppletUtilities appletUtilities) {
+        this.appletUtilities = appletUtilities;
+    }
+
     @Override
     public List<Chart> findCharts(ChartQuery query) throws UnifyException {
         return environment().listAll(query);
@@ -133,6 +174,11 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
     @Override
     public List<Long> findChartIdList(String applicationName) throws UnifyException {
         return environment().valueList(Long.class, "id", new ChartQuery().applicationName(applicationName));
+    }
+
+    @Override
+    public List<ChartDataSource> findChartDataSources(ChartDataSourceQuery query) throws UnifyException {
+        return environment().listAll(query);
     }
 
     @Override
@@ -170,6 +216,11 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
     @Override
     public ChartDef getChartDef(String chartName) throws UnifyException {
         return chartDefFactoryMap.get(chartName);
+    }
+
+    @Override
+    public ChartDataSourceDef getChartDataSourceDef(String chartDataSourceName) throws UnifyException {
+        return chartDataSourceDefFactoryMap.get(chartDataSourceName);
     }
 
     @Override
