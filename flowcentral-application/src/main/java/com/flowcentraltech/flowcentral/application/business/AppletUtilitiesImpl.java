@@ -2192,16 +2192,7 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
         // fields
         applyDelayedSetValues(formContext);
 
-        EntityActionResult entityActionResult;
-        try {
-            entityActionResult = environment().create(eCtx);
-        } catch (UnifyException e) {
-            // Revert to skeleton values
-            revertAutoFormatFields(_entityDef, inst);
-            throw e;
-        }
-
-        return entityActionResult;
+        return create(formContext, eCtx);
     }
 
     @Override
@@ -2263,9 +2254,8 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
         EntityActionContext eCtx = new EntityActionContext(entityClassDef.getEntityDef(), copyInst,
                 RecordActionType.CREATE, scp, createPolicy);
         eCtx.setAll(formContext);
-        EntityActionResult entityActionResult = environment().create(eCtx);
-        entityActionResult.setWorkflowCopied(true);
-        return entityActionResult;
+        eCtx.setWorkflowCopied(true);
+        return create(formContext, eCtx);
     }
 
     @Override
@@ -2284,11 +2274,9 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
 
         applyDelayedSetValues(formContext);
 
-        EntityActionResult entityActionResult = environment().updateLean(eCtx);
-        formContext.addValidationErrors(eCtx.getFormMessages());
-        return entityActionResult;
+        return updateLean(formContext, eCtx);
     }
-
+    
     @Override
     public EntityActionResult deleteEntityInstByFormContext(AppletDef formAppletDef, FormContext formContext,
             SweepingCommitPolicy scp) throws UnifyException {
@@ -2312,12 +2300,12 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
             EntityActionContext eCtx = new EntityActionContext(_entityDef, inst, RecordActionType.UPDATE, scp,
                     deletePolicy);
             eCtx.setAll(formContext);
-            entityActionResult = environment().updateLean(eCtx);
+            entityActionResult = updateLean(formContext, eCtx);
         } else {
             EntityActionContext eCtx = new EntityActionContext(_entityDef, inst, RecordActionType.DELETE, scp,
                     deletePolicy);
             eCtx.setAll(formContext);
-            entityActionResult = environment().delete(eCtx);
+            entityActionResult = delete(formContext, eCtx);
         }
 
         return entityActionResult;
@@ -2586,6 +2574,52 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
                 }
             }
         }
+    }
+
+    private EntityActionResult create(FormContext formContext, EntityActionContext eCtx) throws UnifyException {
+        EntityActionResult entityActionResult = null;
+        try {
+            entityActionResult = environment().create(eCtx);
+            entityActionResult.setWorkflowCopied(eCtx.isWorkflowCopied());
+        } catch (UnifyException e) {
+            // Revert to skeleton values
+            revertAutoFormatFields(eCtx.getEntityDef(EntityDef.class), eCtx.getInst());
+            
+            if (!eCtx.isWithFormMessages()) {
+                throw e;
+            }
+        }
+
+        formContext.addValidationErrors(eCtx.getFormMessages());
+        return entityActionResult == null ?  new EntityActionResult(eCtx) : entityActionResult;
+    }
+
+    private EntityActionResult updateLean(FormContext formContext, EntityActionContext eCtx) throws UnifyException {
+        EntityActionResult entityActionResult = null;
+        try {
+            entityActionResult = environment().updateLean(eCtx);
+        } catch (UnifyException e) {
+            if (!eCtx.isWithFormMessages()) {
+                throw e;
+            }
+        }
+
+        formContext.addValidationErrors(eCtx.getFormMessages());
+        return entityActionResult == null ?  new EntityActionResult(eCtx) : entityActionResult;
+    }
+
+    private EntityActionResult delete(FormContext formContext, EntityActionContext eCtx) throws UnifyException {
+        EntityActionResult entityActionResult = null;
+        try {
+            entityActionResult = environment().delete(eCtx);
+        } catch (UnifyException e) {
+            if (!eCtx.isWithFormMessages()) {
+                throw e;
+            }
+        }
+
+        formContext.addValidationErrors(eCtx.getFormMessages());
+        return entityActionResult == null ?  new EntityActionResult(eCtx) : entityActionResult;
     }
 
     private SingleFormBean createSingleFormBeanForPanel(String panelName) throws UnifyException {

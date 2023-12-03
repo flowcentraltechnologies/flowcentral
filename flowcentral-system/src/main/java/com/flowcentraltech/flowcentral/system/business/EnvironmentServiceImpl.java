@@ -119,7 +119,7 @@ public class EnvironmentServiceImpl extends AbstractBusinessService implements E
         if (db instanceof EnvironmentDelegate) {
             return ((EnvironmentDelegate) db).validate(inst, mode);
         }
-        
+
         return Collections.emptyList();
     }
 
@@ -161,7 +161,7 @@ public class EnvironmentServiceImpl extends AbstractBusinessService implements E
             Entity inst = ctx.getInst();
             ctx.setResult(create(inst));
             if (suggestionProvider != null) {
-                suggestionProvider.saveSuggestions(ctx.getEntityDef(), inst);
+                suggestionProvider.saveSuggestions(ctx.getEntityDef(Object.class), inst);
             }
 
             if (inst instanceof WorkEntity && ((WorkEntity) inst).getOriginalCopyId() != null) {
@@ -328,7 +328,8 @@ public class EnvironmentServiceImpl extends AbstractBusinessService implements E
         if (result == null) {
             Entity inst = ctx.getInst();
             if (entityAuditInfoProvider != null) {
-                EntityAuditInfo entityAuditInfo = entityAuditInfoProvider.getEntityAuditInfo(ctx.getEntityDef());
+                EntityAuditInfo entityAuditInfo = entityAuditInfoProvider
+                        .getEntityAuditInfo(ctx.getEntityDef(Object.class));
                 if (entityAuditInfo.auditable() && entityAuditInfo.inclusions()) {
                     Entity _oldInst = findLean(inst.getClass(), inst.getId());
                     Audit audit = new BeanValueStore(inst).diff(new BeanValueStore(_oldInst),
@@ -339,7 +340,7 @@ public class EnvironmentServiceImpl extends AbstractBusinessService implements E
 
             ctx.setResult(db(inst.getClass()).updateByIdVersion(inst));
             if (suggestionProvider != null) {
-                suggestionProvider.saveSuggestions(ctx.getEntityDef(), inst);
+                suggestionProvider.saveSuggestions(ctx.getEntityDef(Object.class), inst);
             }
 
             return executeEntityPostActionPolicy(db(inst.getClass()), ctx);
@@ -354,7 +355,8 @@ public class EnvironmentServiceImpl extends AbstractBusinessService implements E
         if (result == null) {
             Entity inst = ctx.getInst();
             if (entityAuditInfoProvider != null) {
-                EntityAuditInfo entityAuditInfo = entityAuditInfoProvider.getEntityAuditInfo(ctx.getEntityDef());
+                EntityAuditInfo entityAuditInfo = entityAuditInfoProvider
+                        .getEntityAuditInfo(ctx.getEntityDef(Object.class));
                 if (entityAuditInfo.auditable() && entityAuditInfo.inclusions()) {
                     Entity _oldInst = findLean(inst.getClass(), inst.getId());
                     Audit audit = new BeanValueStore(inst).diff(new BeanValueStore(_oldInst),
@@ -365,7 +367,7 @@ public class EnvironmentServiceImpl extends AbstractBusinessService implements E
 
             ctx.setResult(db(inst.getClass()).updateLeanByIdVersion(inst));
             if (suggestionProvider != null) {
-                suggestionProvider.saveSuggestions(ctx.getEntityDef(), inst);
+                suggestionProvider.saveSuggestions(ctx.getEntityDef(Object.class), inst);
             }
 
             return executeEntityPostActionPolicy(db(inst.getClass()), ctx);
@@ -715,7 +717,8 @@ public class EnvironmentServiceImpl extends AbstractBusinessService implements E
 
     @Override
     public String getEntityDataSourceName(String entityLongName) throws UnifyException {
-        EnvironmentDelegateHolder delegateInfo = environmentDelegateRegistrar.getEnvironmentDelegateInfo(entityLongName);
+        EnvironmentDelegateHolder delegateInfo = environmentDelegateRegistrar
+                .getEnvironmentDelegateInfo(entityLongName);
         return delegateInfo != null ? delegateInfo.getDataSourceName() : db().getDataSourceName();
     }
 
