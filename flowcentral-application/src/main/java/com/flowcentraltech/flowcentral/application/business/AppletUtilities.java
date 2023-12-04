@@ -52,6 +52,7 @@ import com.flowcentraltech.flowcentral.application.web.panels.EntityChild;
 import com.flowcentraltech.flowcentral.application.web.panels.EntityFieldSequence;
 import com.flowcentraltech.flowcentral.application.web.panels.EntityFilter;
 import com.flowcentraltech.flowcentral.application.web.panels.EntityParamValues;
+import com.flowcentraltech.flowcentral.application.web.panels.EntityPropertySequence;
 import com.flowcentraltech.flowcentral.application.web.panels.EntitySearch;
 import com.flowcentraltech.flowcentral.application.web.panels.EntitySearchInput;
 import com.flowcentraltech.flowcentral.application.web.panels.EntitySelect;
@@ -1411,6 +1412,29 @@ public interface AppletUtilities extends FlowCentralComponent {
      */
     EntityFieldSequence constructEntityFieldSequence(FormContext ctx, SweepingCommitPolicy sweepingCommitPolicy,
             String tabName, EntityDef ownerEntityDef, int entityFieldSequenceMode, boolean isIgnoreParentCondition)
+            throws UnifyException;
+
+    /**
+     * Constructs entity property sequence.
+     * 
+     * @param ctx
+     *                                the form context
+     * @param sweepingCommitPolicy
+     *                                the sweepingCommitPolicy (optional)
+     * @param tabName
+     *                                the tab name (optional)
+     * @param ownerEntityDef
+     *                                the owner entity definition
+     * @param entityFieldSequenceMode
+     *                                the entity field sequence mode
+     * @param isIgnoreParentCondition
+     *                                ignore parent condition flag
+     * @return the entity set values
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    EntityPropertySequence constructEntityPropertySequence(FormContext ctx, SweepingCommitPolicy sweepingCommitPolicy,
+            String tabName, EntityDef ownerEntityDef, int entityPropertySequenceMode, boolean isIgnoreParentCondition)
             throws UnifyException;
 
     /**

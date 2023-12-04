@@ -3209,6 +3209,85 @@
 				</setStates>
 			</formStatePolicy>
 		</form>
+		<form name="chartDataSourceForm" description="$m{studio.chartdatasource.form}"
+			entity="chart.chartDataSource">
+			<action type="button" name="lockResource" symbol="lock"
+				styleClass="fc-bluebutton"
+				description="$m{studio.common.form.action.lockresource}"
+				label="$m{studio.common.form.action.lockresource.label}"
+				policy="lockresource-actionpolicy" showOnMaintain="true" />
+			<action type="button" name="unlockResource" symbol="unlock"
+				styleClass="fc-bluebutton"
+				description="$m{studio.common.form.action.unlockresource}"
+				label="$m{studio.common.form.action.unlockresource.label}"
+				policy="unlockresource-actionpolicy" showOnMaintain="true" />
+			<annotation name="staticAnnotation"
+				description="$m{studio.common.form.annotation.static}"
+				message="$m{studio.common.form.annotation.static.message}" />
+			<tab name="basicDetails"
+				label="$m{studio.chartdatasource.form.basicdetails}" contentType="miniform"
+				editable="true">
+				<section name="chartDataSourceDetails" columns="type_2">
+					<field name="applicationId"
+						reference="studio.applicationDevelopableRef"
+						inputWidget="application.entitysearch" column="0"
+						label="$m{studio.application}" disabled="true" required="true"
+						saveAs="true" />
+					<field name="name" inputWidget="application.name" column="0"
+						required="true" saveAs="true" />
+					<field name="description" inputWidget="application.text"
+						column="0" required="true" saveAs="true" />
+					<field name="configType" inputWidget="application.enumlist"
+						column="1" disabled="true" required="true" />
+					<field name="type" column="1" required="true" />
+					<field name="entity" inputWidget="studio.entitybynamelist"
+						column="1" switchOnChange="true" required="true" />
+				</section>
+			</tab>
+			<tab name="series"
+				label="$m{studio.chartdatasource.form.series}"
+				reference="chart_series" contentType="property_sequence" />
+			<tab name="categories"
+				label="$m{studio.chartdatasource.form.categories}"
+				reference="chart_categories" contentType="property_sequence" />
+			<tab name="categoryBase"
+				label="$m{studio.chartdatasource.form.categorybase}"
+				reference="chart_categorybase" contentType="filter_condition" />
+			<tab name="changeLog" label="$m{application.form.audit}"
+				contentType="miniform_changelog" />
+			<formStatePolicy type="on_switch"
+				name="onStaticPolicy"
+				description="$m{studio.common.form.formstatepolicy.onstatic}">
+				<onCondition>
+					<restriction type="and">
+						<restriction type="is_not_null" field="id" />
+						<restriction type="equals" field="configType"
+							paramA="S" />
+					</restriction>
+				</onCondition>
+				<setStates>
+					<setState type="annotation" target="staticAnnotation"
+						visible="true" />
+					<setState type="tab" target="basicDetails"
+						editable="false" />
+				</setStates>
+			</formStatePolicy>
+			<formStatePolicy type="on_switch"
+				name="immutableFormPolicy"
+				description="$m{studio.common.form.formstatepolicy.immutable}">
+				<onCondition>
+					<restriction type="and">
+						<restriction type="is_not_null" field="id" />
+						<restriction type="not_equals" field="configType"
+							paramA="C" />
+					</restriction>
+				</onCondition>
+				<setStates>
+					<setState type="field" target="name,description,entity"
+						disabled="true" />
+				</setStates>
+			</formStatePolicy>
+		</form>
 		<form name="dashboardForm"
 			description="$m{studio.dashboard.form}" entity="dashboard.dashboard">
 			<action type="button" name="lockResource" symbol="lock"
@@ -3579,10 +3658,6 @@
 			<tab name="design" label="$m{studio.reportconfiguration.form.design}"
 				contentType="child_list" applet="manageReportColumn"
 				reference="columnList" editAction="/designChildItem" />
-			<!-- tab name="columns"
-				label="$m{studio.reportconfiguration.form.columns}"
-				contentType="child_list" applet="manageReportColumn"
-				reference="columnList" /-->
 			<tab name="placements"
 				label="$m{studio.reportconfiguration.form.placements}"
 				contentType="child_list" applet="manageReportPlacement"

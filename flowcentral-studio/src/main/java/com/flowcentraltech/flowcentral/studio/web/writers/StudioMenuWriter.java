@@ -70,7 +70,8 @@ public class StudioMenuWriter extends AbstractPanelWriter {
     private static final List<StudioAppComponentType> menuCategoryList = Collections.unmodifiableList(
             Arrays.asList(StudioAppComponentType.CODEGENERATION, StudioAppComponentType.SYNCHRONIZATION,
                     StudioAppComponentType.APPLICATION, StudioAppComponentType.WIDGET, StudioAppComponentType.ENTITY,
-                    StudioAppComponentType.APPLET, StudioAppComponentType.REFERENCE, StudioAppComponentType.CHART,
+                    StudioAppComponentType.APPLET, StudioAppComponentType.REFERENCE,
+                    StudioAppComponentType.CHART_DATASOURCE, StudioAppComponentType.CHART,
                     StudioAppComponentType.DASHBOARD, StudioAppComponentType.NOTIFICATION_TEMPLATE,
                     StudioAppComponentType.NOTIFICATION_LARGETEXT, StudioAppComponentType.REPORT_CONFIGURATION,
                     StudioAppComponentType.TABLE, StudioAppComponentType.FORM, StudioAppComponentType.WORKFLOW));
@@ -79,7 +80,8 @@ public class StudioMenuWriter extends AbstractPanelWriter {
             .unmodifiableList(Arrays.asList(StudioAppComponentType.COLLABORATION, StudioAppComponentType.CODEGENERATION,
                     StudioAppComponentType.SYNCHRONIZATION, StudioAppComponentType.APPLICATION,
                     StudioAppComponentType.WIDGET, StudioAppComponentType.ENTITY, StudioAppComponentType.APPLET,
-                    StudioAppComponentType.REFERENCE, StudioAppComponentType.CHART, StudioAppComponentType.DASHBOARD,
+                    StudioAppComponentType.REFERENCE, StudioAppComponentType.CHART_DATASOURCE,
+                    StudioAppComponentType.CHART, StudioAppComponentType.DASHBOARD,
                     StudioAppComponentType.NOTIFICATION_TEMPLATE, StudioAppComponentType.NOTIFICATION_LARGETEXT,
                     StudioAppComponentType.REPORT_CONFIGURATION, StudioAppComponentType.TABLE,
                     StudioAppComponentType.FORM, StudioAppComponentType.WORKFLOW));

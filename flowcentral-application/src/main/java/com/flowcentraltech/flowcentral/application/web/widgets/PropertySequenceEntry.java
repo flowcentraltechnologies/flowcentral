@@ -15,6 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.application.web.widgets;
 
+import com.flowcentraltech.flowcentral.application.constants.PropertySequenceType;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.tcdng.unify.core.UnifyException;
 
@@ -28,15 +29,18 @@ public class PropertySequenceEntry {
 
     private EntityDef entityDef;
 
+    private PropertySequenceType type;
+
     private String property;
 
     private String label;
 
     private boolean editable;
 
-    public PropertySequenceEntry(EntityDef entityDef, boolean editable) {
+    public PropertySequenceEntry(EntityDef entityDef, PropertySequenceType type, boolean editable) {
         this.entityDef = entityDef;
         this.editable = editable;
+        this.type = type;
     }
 
     public String getProperty() {
@@ -59,6 +63,10 @@ public class PropertySequenceEntry {
         return entityDef;
     }
 
+    public PropertySequenceType getType() {
+        return type;
+    }
+
     public boolean isEditable() {
         return editable;
     }
@@ -66,7 +74,7 @@ public class PropertySequenceEntry {
     public boolean isWithProperty() {
         return property != null;
     }
-    
+
     public void normalize() throws UnifyException {
 
     }

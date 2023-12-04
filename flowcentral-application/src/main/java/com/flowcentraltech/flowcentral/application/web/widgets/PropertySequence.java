@@ -45,11 +45,6 @@ public class PropertySequence {
     private List<PropertySequenceEntry> viewEntryList;
 
     public PropertySequence(PropertySequenceType type, EntityDef entityDef,
-            PropertySequenceDef propertySequenceDef) throws UnifyException {
-        this(type, entityDef, propertySequenceDef, Editable.TRUE);
-    }
-
-    public PropertySequence(PropertySequenceType type, EntityDef entityDef,
             PropertySequenceDef propertySequenceDef, Editable editable) throws UnifyException {
         this.type = type;
         this.entityDef = entityDef;
@@ -59,7 +54,7 @@ public class PropertySequence {
     }
 
     public int addSequenceEntry(String property, String label, Editable editable) throws UnifyException {
-        PropertySequenceEntry se = new PropertySequenceEntry(entityDef, editable.isTrue());
+        PropertySequenceEntry se = new PropertySequenceEntry(entityDef, type, editable.isTrue());
         setProperty(se, property, label);
         entryList.add(se);
         return entryList.size() - 1;
@@ -124,7 +119,7 @@ public class PropertySequence {
 
         PropertySequenceEntry last = entryList.get(entryList.size() - 1);
         if (last.isWithProperty()) {
-            entryList.add(new PropertySequenceEntry(entityDef, true));
+            entryList.add(new PropertySequenceEntry(entityDef, type, true));
         }
     }
 
@@ -147,13 +142,13 @@ public class PropertySequence {
     private void loadEntryList(PropertySequenceDef propertySequenceDef, Editable editable) throws UnifyException {
         if (propertySequenceDef != null) {
             for (PropertySequenceEntryDef propertySequenceEntryDef : propertySequenceDef.getSequenceList()) {
-                PropertySequenceEntry fso = new PropertySequenceEntry(entityDef, editable.isTrue());
+                PropertySequenceEntry fso = new PropertySequenceEntry(entityDef, type, editable.isTrue());
                 setProperty(fso, propertySequenceEntryDef.getProperty(), propertySequenceEntryDef.getLabel());
                 entryList.add(fso);
             }
         }
 
-        entryList.add(new PropertySequenceEntry(entityDef, editable.isTrue()));
+        entryList.add(new PropertySequenceEntry(entityDef, type, editable.isTrue()));
     }
 
     private void setProperty(PropertySequenceEntry so, String property, String label) throws UnifyException {

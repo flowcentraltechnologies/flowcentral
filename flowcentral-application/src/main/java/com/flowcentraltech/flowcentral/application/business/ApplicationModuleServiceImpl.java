@@ -2743,7 +2743,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     public PropertySequenceDef retrieveSequenceDef(String category, String ownerEntityName, Long ownerInstId)
             throws UnifyException {
         final EntityDef entityDef = getEntityDef(ownerEntityName);
-        return InputWidgetUtils.getSequenceDef(environment().find(new AppPropertySequenceQuery().category(category)
+        return InputWidgetUtils.getPropertySequenceDef(environment().find(new AppPropertySequenceQuery().category(category)
                 .entity(entityDef.getTableName()).entityInstId(ownerInstId)));
     }
 

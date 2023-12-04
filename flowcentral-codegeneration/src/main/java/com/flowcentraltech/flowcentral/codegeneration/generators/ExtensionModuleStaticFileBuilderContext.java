@@ -23,6 +23,7 @@ import java.util.Map;
 import com.flowcentraltech.flowcentral.application.entities.AppEntity;
 import com.flowcentraltech.flowcentral.application.util.ApplicationCodeGenUtils;
 import com.flowcentraltech.flowcentral.codegeneration.data.DynamicModuleInfo;
+import com.flowcentraltech.flowcentral.configuration.xml.AppChartDataSourcesConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppChartsConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppDashboardsConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppNotifLargeTextsConfig;
@@ -41,7 +42,7 @@ import com.flowcentraltech.flowcentral.configuration.xml.WfChannelsConfig;
  * @since 1.0
  */
 public class ExtensionModuleStaticFileBuilderContext {
-    
+
     private ExtensionStaticFileBuilderContext mainCtx;
 
     private List<StaticApplicationConfig> staticApplicationConfigs;
@@ -57,7 +58,7 @@ public class ExtensionModuleStaticFileBuilderContext {
     private String moduleName;
 
     private DynamicModuleInfo dynamicModuleInfo;
-    
+
     public ExtensionModuleStaticFileBuilderContext(ExtensionStaticFileBuilderContext mainCtx, String moduleName,
             Map<String, String> messageReplacements) {
         this.staticApplicationConfigs = new ArrayList<StaticApplicationConfig>();
@@ -142,6 +143,10 @@ public class ExtensionModuleStaticFileBuilderContext {
         nextStaticApplicationConfig.setChartsConfig(chartsConfig);
     }
 
+    public void setChartDataSourcesConfig(AppChartDataSourcesConfig chartDataSourcesConfig) {
+        nextStaticApplicationConfig.setChartDataSourcesConfig(chartDataSourcesConfig);
+    }
+
     public void setDashboardsConfig(AppDashboardsConfig dashboardsConfig) {
         nextStaticApplicationConfig.setDashboardsConfig(dashboardsConfig);
     }
@@ -191,6 +196,7 @@ public class ExtensionModuleStaticFileBuilderContext {
     }
 
     public String getExtensionEntityClassName(AppEntity appEntity) {
-        return ApplicationCodeGenUtils.generateExtensionEntityClassName(mainCtx.getBasePackage(), moduleName, appEntity.getName());
+        return ApplicationCodeGenUtils.generateExtensionEntityClassName(mainCtx.getBasePackage(), moduleName,
+                appEntity.getName());
     }
 }

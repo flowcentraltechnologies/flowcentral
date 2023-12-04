@@ -55,6 +55,8 @@ public class EntityActionContext extends AbstractContext {
 
     private Audit audit;
 
+    private boolean workflowCopied;
+    
     private List<FormMessage> formMessages;
 
     public EntityActionContext(Object entityDef, Entity inst, String actionPolicyName) {
@@ -84,8 +86,13 @@ public class EntityActionContext extends AbstractContext {
         return formMessages != null ? formMessages : Collections.emptyList();
     }
 
-    public Object getEntityDef() {
-        return entityDef;
+    public boolean isWithFormMessages() {
+        return formMessages != null && !formMessages .isEmpty();
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T> T getEntityDef(Class<T> entityDefType) {
+        return (T) entityDef;
     }
 
     public Entity getInst() {
@@ -98,6 +105,14 @@ public class EntityActionContext extends AbstractContext {
 
     public void setAudit(Audit audit) {
         this.audit = audit;
+    }
+
+    public boolean isWorkflowCopied() {
+        return workflowCopied;
+    }
+
+    public void setWorkflowCopied(boolean workflowCopied) {
+        this.workflowCopied = workflowCopied;
     }
 
     public RecordActionType getActionType() {

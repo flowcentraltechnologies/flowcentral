@@ -74,6 +74,8 @@ public class AppConfig extends BaseNameConfig {
 
     private AppChartsConfig chartsConfig;
 
+    private AppChartDataSourcesConfig chartDataSourcesConfig;
+    
     private AppDashboardsConfig dashboardsConfig;
 
     private SuggestionTypesConfig suggestionTypesConfig;
@@ -274,6 +276,15 @@ public class AppConfig extends BaseNameConfig {
     @XmlElement(name = "charts")
     public void setChartsConfig(AppChartsConfig chartsConfig) {
         this.chartsConfig = chartsConfig;
+    }
+
+    public AppChartDataSourcesConfig getChartDataSourcesConfig() {
+        return chartDataSourcesConfig;
+    }
+
+    @XmlElement(name = "chart-datasources")
+    public void setChartDataSourcesConfig(AppChartDataSourcesConfig chartDataSourcesConfig) {
+        this.chartDataSourcesConfig = chartDataSourcesConfig;
     }
 
     public AppDashboardsConfig getDashboardsConfig() {

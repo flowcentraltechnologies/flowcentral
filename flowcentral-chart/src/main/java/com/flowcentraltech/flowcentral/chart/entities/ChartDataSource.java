@@ -16,12 +16,15 @@
 
 package com.flowcentraltech.flowcentral.chart.entities;
 
+import com.flowcentraltech.flowcentral.application.entities.AppFilter;
+import com.flowcentraltech.flowcentral.application.entities.AppPropertySequence;
 import com.flowcentraltech.flowcentral.application.entities.BaseApplicationEntity;
 import com.flowcentraltech.flowcentral.configuration.constants.ChartDataSourceType;
-import com.flowcentraltech.flowcentral.configuration.constants.ChartPaletteType;
+import com.tcdng.unify.core.annotation.Child;
 import com.tcdng.unify.core.annotation.Column;
 import com.tcdng.unify.core.annotation.ForeignKey;
 import com.tcdng.unify.core.annotation.ListOnly;
+import com.tcdng.unify.core.annotation.Table;
 
 /**
  * Chart data source entity.
@@ -29,159 +32,41 @@ import com.tcdng.unify.core.annotation.ListOnly;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-//@Table(name = "FC_CHARTDATASOURCE")
+@Table(name = "FC_CHARTDATASOURCE")
 public class ChartDataSource extends BaseApplicationEntity {
 
     @ForeignKey(name = "CHARTDATASOURCE_TY")
     private ChartDataSourceType type;
 
-    @ForeignKey(name = "PALETTE_TY")
-    private ChartPaletteType paletteType;
-
-    @Column(length = 128, nullable = true)
-    private String title;
-
-    @Column(length = 128, nullable = true)
-    private String subTitle;
-
     @Column(length = 64)
-    private String provider;
-
-    @Column(length = 64, nullable = true)
-    private String rule;
-
-    @Column(nullable = true)
-    private Integer width;
-
-    @Column(nullable = true)
-    private Integer height;
-
-    @Column
-    private boolean stacked;
-
-    @Column
-    private boolean showGrid;
-
-    @Column
-    private boolean showDataLabels;
-
-    @Column
-    private boolean formatDataLabels;
-
-    @Column
-    private boolean formatYLabels;
-
-    @Column
-    private boolean smooth;
+    private String entity;
 
     @ListOnly(key = "type", property = "description")
     private String typeDesc;
+    
+    @Child(category = "chart-datasource")
+    private AppFilter categoryBase;
+    
+    @Child(category = "entity-series")
+    private AppPropertySequence series;
+    
+    @Child(category = "entity-category")
+    private AppPropertySequence categories;
 
-    @ListOnly(key = "paletteType", property = "description")
-    private String paletteTypeDesc;
-
-    public ChartPaletteType getPaletteType() {
-        return paletteType;
+    public ChartDataSourceType getType() {
+        return type;
     }
 
-    public void setPaletteType(ChartPaletteType paletteType) {
-        this.paletteType = paletteType;
+    public void setType(ChartDataSourceType type) {
+        this.type = type;
     }
 
-    public String getTitle() {
-        return title;
+    public String getEntity() {
+        return entity;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getSubTitle() {
-        return subTitle;
-    }
-
-    public void setSubTitle(String subTitle) {
-        this.subTitle = subTitle;
-    }
-
-    public String getProvider() {
-        return provider;
-    }
-
-    public void setProvider(String provider) {
-        this.provider = provider;
-    }
-
-    public String getRule() {
-        return rule;
-    }
-
-    public void setRule(String rule) {
-        this.rule = rule;
-    }
-
-    public Integer getWidth() {
-        return width;
-    }
-
-    public void setWidth(Integer width) {
-        this.width = width;
-    }
-
-    public Integer getHeight() {
-        return height;
-    }
-
-    public void setHeight(Integer height) {
-        this.height = height;
-    }
-
-    public boolean isStacked() {
-        return stacked;
-    }
-
-    public void setStacked(boolean stacked) {
-        this.stacked = stacked;
-    }
-
-    public boolean isShowGrid() {
-        return showGrid;
-    }
-
-    public void setShowGrid(boolean showGrid) {
-        this.showGrid = showGrid;
-    }
-
-    public boolean isShowDataLabels() {
-        return showDataLabels;
-    }
-
-    public void setShowDataLabels(boolean showDataLabels) {
-        this.showDataLabels = showDataLabels;
-    }
-
-    public boolean isFormatDataLabels() {
-        return formatDataLabels;
-    }
-
-    public void setFormatDataLabels(boolean formatDataLabels) {
-        this.formatDataLabels = formatDataLabels;
-    }
-
-    public boolean isFormatYLabels() {
-        return formatYLabels;
-    }
-
-    public void setFormatYLabels(boolean formatYLabels) {
-        this.formatYLabels = formatYLabels;
-    }
-
-    public boolean isSmooth() {
-        return smooth;
-    }
-
-    public void setSmooth(boolean smooth) {
-        this.smooth = smooth;
+    public void setEntity(String entity) {
+        this.entity = entity;
     }
 
     public String getTypeDesc() {
@@ -192,12 +77,28 @@ public class ChartDataSource extends BaseApplicationEntity {
         this.typeDesc = typeDesc;
     }
 
-    public String getPaletteTypeDesc() {
-        return paletteTypeDesc;
+    public AppFilter getCategoryBase() {
+        return categoryBase;
     }
 
-    public void setPaletteTypeDesc(String paletteTypeDesc) {
-        this.paletteTypeDesc = paletteTypeDesc;
+    public void setCategoryBase(AppFilter categoryBase) {
+        this.categoryBase = categoryBase;
+    }
+
+    public AppPropertySequence getSeries() {
+        return series;
+    }
+
+    public void setSeries(AppPropertySequence series) {
+        this.series = series;
+    }
+
+    public AppPropertySequence getCategories() {
+        return categories;
+    }
+
+    public void setCategories(AppPropertySequence categories) {
+        this.categories = categories;
     }
 
 }

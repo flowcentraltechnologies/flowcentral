@@ -30,4 +30,6 @@ public interface ChartModuleNameConstants {
     String APPLICATION_CHART_INSTALLER = "application-chartinstaller";
 
     String CHARTSNAPSHOT_PROVIDER = "chartsnapshot-provider";
+
+    String CHARTDATASOURCE_PROVIDER = "chartdatasource-provider";
 }

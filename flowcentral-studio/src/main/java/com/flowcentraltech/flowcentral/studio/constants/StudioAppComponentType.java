@@ -28,6 +28,7 @@ import com.flowcentraltech.flowcentral.application.entities.AppTable;
 import com.flowcentraltech.flowcentral.application.entities.AppWidgetType;
 import com.flowcentraltech.flowcentral.application.entities.BaseApplicationEntity;
 import com.flowcentraltech.flowcentral.chart.entities.Chart;
+import com.flowcentraltech.flowcentral.chart.entities.ChartDataSource;
 import com.flowcentraltech.flowcentral.configuration.constants.AppletType;
 import com.flowcentraltech.flowcentral.dashboard.entities.Dashboard;
 import com.flowcentraltech.flowcentral.notification.entities.NotificationLargeText;
@@ -175,6 +176,20 @@ public enum StudioAppComponentType implements EnumConst {
             StudioAppComponentFlags.SUPPORTS_NEW | StudioAppComponentFlags.SUPPORTS_SAVEAS,
             AppletType.STUDIO_FC_COMPONENT,
             Chart.class),
+    CHART_DATASOURCE(
+            "chd_",
+            "chartDataSourceForm",
+            "$m{studio.application.component.type.chartdatasource}",
+            "$m{studio.application.component.type.chartdatasources}",
+            "studio.menu.label.chartdatasource",
+            "chart-bar",
+            "/studioappcomponentapplet",
+            "studiooncreatecomponent-policy",
+            null,
+            null,
+            StudioAppComponentFlags.SUPPORTS_NEW | StudioAppComponentFlags.SUPPORTS_SAVEAS,
+            AppletType.STUDIO_FC_COMPONENT,
+            ChartDataSource.class),
     DASHBOARD(
             "dsh_",
             "dashboardForm",
