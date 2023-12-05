@@ -51,6 +51,7 @@ import com.tcdng.unify.core.UserToken;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.constant.LocaleType;
 import com.tcdng.unify.core.criterion.AggregateFunction;
+import com.tcdng.unify.core.criterion.GroupingFunction;
 import com.tcdng.unify.core.criterion.Update;
 import com.tcdng.unify.core.data.BeanValueStore;
 import com.tcdng.unify.core.data.Listable;
@@ -61,6 +62,7 @@ import com.tcdng.unify.core.database.DataSource;
 import com.tcdng.unify.core.database.DataSourceEntityListProvider;
 import com.tcdng.unify.core.database.DatabaseSession;
 import com.tcdng.unify.core.database.Entity;
+import com.tcdng.unify.core.database.GroupingAggregation;
 import com.tcdng.unify.core.database.Query;
 import com.tcdng.unify.core.util.DataUtils;
 
@@ -591,14 +593,28 @@ public abstract class AbstractEnvironmentDelegate extends AbstractFlowCentralCom
     @Override
     public Aggregation aggregate(AggregateFunction aggregateFunction, Query<? extends Entity> query)
             throws UnifyException {
-        // TODO Auto-generated method stub
+        // TODO Implement direct reporting
         return null;
     }
 
     @Override
     public List<Aggregation> aggregate(List<AggregateFunction> aggregateFunction, Query<? extends Entity> query)
             throws UnifyException {
-        // TODO Auto-generated method stub
+        // TODO Implement direct reporting
+        return null;
+    }
+
+    @Override
+    public List<GroupingAggregation> aggregate(AggregateFunction aggregateFunction, Query<? extends Entity> query,
+            GroupingFunction groupingFunction) throws UnifyException {
+        // TODO  Implement direct reporting
+        return null;
+    }
+
+    @Override
+    public List<GroupingAggregation> aggregate(List<AggregateFunction> aggregateFunction, Query<? extends Entity> query,
+            GroupingFunction groupingFunction) throws UnifyException {
+        // TODO  Implement direct reporting
         return null;
     }
 
