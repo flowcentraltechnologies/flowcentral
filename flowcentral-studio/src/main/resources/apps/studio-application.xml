@@ -160,6 +160,16 @@
 			dataType="string" inputType="string"
 			editor="!ui-select list:studioentitybooleanfieldlist listKey:$s{name} listParams:$l{entity} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
+		<widgetType name="entitycategoryfieldlist"
+			description="$m{studio.widgettype.entitycategoryfieldlist}"
+			dataType="string" inputType="string"
+			editor="!ui-select list:studioentitycategoryfieldlist listKey:$s{name} listParams:$l{entity} blankOption:$m{blank.none}"
+			renderer="!ui-label" />
+		<widgetType name="entitycategorydatefieldlist"
+			description="$m{studio.widgettype.entitycategorydatefieldlist}"
+			dataType="string" inputType="string"
+			editor="!ui-select list:studioentitycategorydatefieldlist listKey:$s{name} listParams:$l{entity} blankOption:$m{blank.none}"
+			renderer="!ui-label" />
 		<widgetType name="entitysearchfieldlist"
 			description="$m{studio.widgettype.entitysearchfieldlist}"
 			dataType="string" inputType="string"
@@ -3242,6 +3252,12 @@
 					<field name="type" column="1" required="true" />
 					<field name="entity" inputWidget="studio.entitybynamelist"
 						column="1" switchOnChange="true" required="true" />
+					<field name="categoryField" inputWidget="studio.entitycategoryfieldlist"
+						column="1" switchOnChange="true"/>
+					<field name="categoryDateField" inputWidget="studio.entitycategorydatefieldlist"
+						column="1" switchOnChange="true"/>
+					<field name="timeSeriesType" inputWidget="application.enumlist"
+						column="1" visible="false" required="true" />
 				</section>
 			</tab>
 			<tab name="series"
@@ -3249,7 +3265,7 @@
 				reference="chart_series" contentType="property_sequence" />
 			<tab name="categories"
 				label="$m{studio.chartdatasource.form.categories}"
-				reference="chart_categories" contentType="property_sequence" />
+				reference="chart_categories" contentType="property_sequence" visible="true" />
 			<tab name="categoryBase"
 				label="$m{studio.chartdatasource.form.categorybase}"
 				reference="chart_categorybase" contentType="filter_condition" />
@@ -3285,6 +3301,31 @@
 				<setStates>
 					<setState type="field" target="name,description,entity"
 						disabled="true" />
+				</setStates>
+			</formStatePolicy>
+			<formStatePolicy type="on_switch"
+				name="dateCategoryFormPolicy"
+				description="$m{studio.chartdatasource.form.formstatepolicy.datecategory}">
+				<onCondition>
+					<restriction type="is_not_null" field="categoryDateField" />
+				</onCondition>
+				<setStates>
+					<setState type="field" target="timeSeriesType"
+						visible="true" />
+				</setStates>
+			</formStatePolicy>
+			<formStatePolicy type="on_switch"
+				name="categoriesFormPolicy"
+				description="$m{studio.chartdatasource.form.formstatepolicy.categories}">
+				<onCondition>
+					<restriction type="or">
+						<restriction type="is_not_null" field="categoryField" />
+						<restriction type="is_not_null" field="categoryDateField" />
+					</restriction>
+				</onCondition>
+				<setStates>
+					<setState type="tab" target="categories"
+						visible="false" />
 				</setStates>
 			</formStatePolicy>
 		</form>

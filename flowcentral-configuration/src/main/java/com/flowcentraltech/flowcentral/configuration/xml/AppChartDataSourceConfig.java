@@ -22,7 +22,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import com.flowcentraltech.flowcentral.configuration.constants.ChartDataSourceType;
+import com.flowcentraltech.flowcentral.configuration.constants.ChartTimeSeriesType;
 import com.flowcentraltech.flowcentral.configuration.xml.adapter.ChartDataSourceTypeXmlAdapter;
+import com.flowcentraltech.flowcentral.configuration.xml.adapter.ChartTimeSeriesTypeXmlAdapter;
 
 /**
  * Chart data source configuration.
@@ -35,7 +37,13 @@ public class AppChartDataSourceConfig extends BaseNameConfig {
     
     private ChartDataSourceType type;
 
+    private ChartTimeSeriesType timeSeriesType;
+    
     private String entity;
+    
+    private String categoryField;
+
+    private String categoryDateField;
 
     private FilterConfig categoryBase;
     
@@ -87,6 +95,34 @@ public class AppChartDataSourceConfig extends BaseNameConfig {
     @XmlElement(required = true)
     public void setCategories(PropertySequenceConfig categories) {
         this.categories = categories;
+    }
+
+    public ChartTimeSeriesType getTimeSeriesType() {
+        return timeSeriesType;
+    }
+
+    @XmlJavaTypeAdapter(ChartTimeSeriesTypeXmlAdapter.class)
+    @XmlAttribute(name = "timeseries")
+    public void setTimeSeriesType(ChartTimeSeriesType timeSeriesType) {
+        this.timeSeriesType = timeSeriesType;
+    }
+
+    public String getCategoryField() {
+        return categoryField;
+    }
+
+    @XmlAttribute(name = "preferred-category-field")
+    public void setCategoryField(String categoryField) {
+        this.categoryField = categoryField;
+    }
+
+    public String getCategoryDateField() {
+        return categoryDateField;
+    }
+
+    @XmlAttribute(name = "preferred-category-date-field")
+    public void setCategoryDateField(String categoryDateField) {
+        this.categoryDateField = categoryDateField;
     }
 
 }

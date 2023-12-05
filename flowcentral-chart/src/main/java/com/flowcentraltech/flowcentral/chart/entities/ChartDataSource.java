@@ -20,6 +20,7 @@ import com.flowcentraltech.flowcentral.application.entities.AppFilter;
 import com.flowcentraltech.flowcentral.application.entities.AppPropertySequence;
 import com.flowcentraltech.flowcentral.application.entities.BaseApplicationEntity;
 import com.flowcentraltech.flowcentral.configuration.constants.ChartDataSourceType;
+import com.flowcentraltech.flowcentral.configuration.constants.ChartTimeSeriesType;
 import com.tcdng.unify.core.annotation.Child;
 import com.tcdng.unify.core.annotation.Column;
 import com.tcdng.unify.core.annotation.ForeignKey;
@@ -38,11 +39,23 @@ public class ChartDataSource extends BaseApplicationEntity {
     @ForeignKey(name = "CHARTDATASOURCE_TY")
     private ChartDataSourceType type;
 
+    @ForeignKey(name = "CHARTTIMESERIES_TY", nullable = true)
+    private ChartTimeSeriesType timeSeriesType;
+    
     @Column(length = 64)
     private String entity;
 
+    @Column(length = 32, nullable = true)
+    private String categoryField;
+
+    @Column(length = 32, nullable = true)
+    private String categoryDateField;
+
     @ListOnly(key = "type", property = "description")
     private String typeDesc;
+
+    @ListOnly(key = "timeSeriesType", property = "description")
+    private String timeSeriesTypeDesc;
     
     @Child(category = "chart-datasource")
     private AppFilter categoryBase;
@@ -99,6 +112,38 @@ public class ChartDataSource extends BaseApplicationEntity {
 
     public void setCategories(AppPropertySequence categories) {
         this.categories = categories;
+    }
+
+    public ChartTimeSeriesType getTimeSeriesType() {
+        return timeSeriesType;
+    }
+
+    public void setTimeSeriesType(ChartTimeSeriesType timeSeriesType) {
+        this.timeSeriesType = timeSeriesType;
+    }
+
+    public String getCategoryField() {
+        return categoryField;
+    }
+
+    public void setCategoryField(String categoryField) {
+        this.categoryField = categoryField;
+    }
+
+    public String getCategoryDateField() {
+        return categoryDateField;
+    }
+
+    public void setCategoryDateField(String categoryDateField) {
+        this.categoryDateField = categoryDateField;
+    }
+
+    public String getTimeSeriesTypeDesc() {
+        return timeSeriesTypeDesc;
+    }
+
+    public void setTimeSeriesTypeDesc(String timeSeriesTypeDesc) {
+        this.timeSeriesTypeDesc = timeSeriesTypeDesc;
     }
 
 }

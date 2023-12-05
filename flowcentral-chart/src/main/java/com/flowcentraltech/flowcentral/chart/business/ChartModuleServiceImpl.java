@@ -115,8 +115,10 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
                         throw new UnifyException(ChartModuleErrorConstants.CANNOT_FIND_APPLICATION_CHART, longName);
                     }
 
-                    ChartDataSourceDef chartDataSourceDef = new ChartDataSourceDef(longName,
-                            chartDataSource.getDescription(), appletUtilities.getEntityDef(chartDataSource.getEntity()),
+                    ChartDataSourceDef chartDataSourceDef = new ChartDataSourceDef(chartDataSource.getType(),
+                            chartDataSource.getTimeSeriesType(), longName, chartDataSource.getDescription(),
+                            chartDataSource.getCategoryField(), chartDataSource.getCategoryDateField(),
+                            appletUtilities.getEntityDef(chartDataSource.getEntity()),
                             InputWidgetUtils.getFilterDef(appletUtilities, null, chartDataSource.getCategoryBase()),
                             InputWidgetUtils.getPropertySequenceDef(chartDataSource.getSeries()),
                             InputWidgetUtils.getPropertySequenceDef(chartDataSource.getCategories()),
