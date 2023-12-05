@@ -50,7 +50,7 @@ public class StudioEntityCategoryFieldListCommand extends AbstractApplicationLis
             return application().findAppEntityFields((AppEntityFieldQuery) new AppEntityFieldQuery()
                     .applicationName(np.getApplicationName()).appEntityName(np.getEntityName())
                     .dataTypeIn(EntityFieldDataType.STRING, EntityFieldDataType.ENUM, EntityFieldDataType.ENUM_REF)
-                    .addSelect("name"));
+                    .addSelect("name", "label").addOrder("label"));
         }
 
         return Collections.emptyList();

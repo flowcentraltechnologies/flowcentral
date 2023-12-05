@@ -51,7 +51,7 @@ public class StudioEntityCategoryDateFieldListCommand extends AbstractApplicatio
                     (AppEntityFieldQuery) new AppEntityFieldQuery().applicationName(np.getApplicationName())
                             .appEntityName(np.getEntityName()).dataTypeIn(EntityFieldDataType.DATE,
                                     EntityFieldDataType.TIMESTAMP, EntityFieldDataType.TIMESTAMP_UTC)
-                            .addSelect("name"));
+                            .addSelect("name", "label").addOrder("label"));
         }
 
         return Collections.emptyList();

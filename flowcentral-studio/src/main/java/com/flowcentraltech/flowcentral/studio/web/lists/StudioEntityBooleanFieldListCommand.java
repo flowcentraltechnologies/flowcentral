@@ -47,9 +47,9 @@ public class StudioEntityBooleanFieldListCommand extends AbstractApplicationList
     public List<? extends Listable> execute(Locale locale, StringParam params) throws UnifyException {
         if (params.isPresent()) {
             ApplicationEntityNameParts np = ApplicationNameUtils.getApplicationEntityNameParts(params.getValue());
-            return application().findAppEntityFields(
-                    (AppEntityFieldQuery) new AppEntityFieldQuery().applicationName(np.getApplicationName())
-                            .appEntityName(np.getEntityName()).dataType(EntityFieldDataType.BOOLEAN).addSelect("name"));
+            return application().findAppEntityFields((AppEntityFieldQuery) new AppEntityFieldQuery()
+                    .applicationName(np.getApplicationName()).appEntityName(np.getEntityName())
+                    .dataType(EntityFieldDataType.BOOLEAN).addSelect("name", "label").addOrder("label"));
         }
 
         return Collections.emptyList();

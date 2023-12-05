@@ -48,7 +48,7 @@ public class StudioEntitySeriesFieldListCommand extends AbstractApplicationListC
                     .appEntityId(params.getValue())
                     .dataTypeIn(EntityFieldDataType.DECIMAL, EntityFieldDataType.DOUBLE, EntityFieldDataType.FLOAT,
                             EntityFieldDataType.INTEGER, EntityFieldDataType.LONG, EntityFieldDataType.SHORT)
-                    .addSelect("id", "name").addOrder("name"));
+                    .addSelect("id", "name", "label").addOrder("name"));
         }
 
         return Collections.emptyList();

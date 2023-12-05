@@ -47,9 +47,9 @@ public class StudioEntityRefFieldListCommand extends AbstractApplicationListComm
     public List<? extends Listable> execute(Locale locale, StringParam params) throws UnifyException {
         if (params.isPresent()) {
             ApplicationEntityNameParts np = ApplicationNameUtils.getApplicationEntityNameParts(params.getValue());
-            return application().findAppEntityFields(
-                    (AppEntityFieldQuery) new AppEntityFieldQuery().applicationName(np.getApplicationName())
-                            .appEntityName(np.getEntityName()).dataType(EntityFieldDataType.REF).addSelect("name"));
+            return application().findAppEntityFields((AppEntityFieldQuery) new AppEntityFieldQuery()
+                    .applicationName(np.getApplicationName()).appEntityName(np.getEntityName())
+                    .dataType(EntityFieldDataType.REF).addSelect("name", "label"));
         }
 
         return Collections.emptyList();
