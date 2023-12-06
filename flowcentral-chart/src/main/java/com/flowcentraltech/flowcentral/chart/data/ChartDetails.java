@@ -17,13 +17,9 @@
 package com.flowcentraltech.flowcentral.chart.data;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-import com.flowcentraltech.flowcentral.configuration.constants.ChartCategoryDataType;
-import com.flowcentraltech.flowcentral.configuration.constants.ChartSeriesDataType;
 import com.tcdng.unify.core.UnifyException;
-import com.tcdng.unify.core.util.DataUtils;
 
 /**
  * Chart details.
@@ -34,7 +30,7 @@ import com.tcdng.unify.core.util.DataUtils;
 public class ChartDetails {
 
     private String title;
-    
+
     private String subTitle;
 
     private int titleOffsetX;
@@ -44,20 +40,17 @@ public class ChartDetails {
     private int subTitleOffsetX;
 
     private int subTitleFontSize;
-    
-    private ChartCategories<?> categories;
 
-    private List<ChartSeries<?>> series;
+    private List<AbstractSeries<?, ?>> series;
 
     private ChartDetails(String title, String subTitle, int titleOffsetX, int titleFontSize, int subTitleOffsetX,
-            int subTitleFontSize, ChartCategories<?> categories, List<ChartSeries<?>> series) {
+            int subTitleFontSize, List<AbstractSeries<?, ?>> series) {
         this.title = title;
         this.subTitle = subTitle;
         this.titleOffsetX = titleOffsetX;
         this.titleFontSize = titleFontSize;
         this.subTitleOffsetX = subTitleOffsetX;
         this.subTitleFontSize = subTitleFontSize;
-        this.categories = categories;
         this.series = series;
     }
 
@@ -85,11 +78,7 @@ public class ChartDetails {
         return subTitleFontSize;
     }
 
-    public ChartCategories<?> getCategories() {
-        return categories;
-    }
-
-    public List<ChartSeries<?>> getSeries() {
+    public List<AbstractSeries<?, ?>> getSeries() {
         return series;
     }
 
@@ -100,7 +89,7 @@ public class ChartDetails {
     public static class Builder {
 
         private String title;
-        
+
         private String subTitle;
 
         private int titleOffsetX;
@@ -111,12 +100,10 @@ public class ChartDetails {
 
         private int subTitleFontSize;
 
-        private ChartCategories<?> categories;
-
-        private List<ChartSeries<?>> series;
+        private List<AbstractSeries<?, ?>> series;
 
         public Builder() {
-            series = new ArrayList<ChartSeries<?>>();
+            series = new ArrayList<AbstractSeries<?, ?>>();
         }
 
         public Builder title(String title) {
@@ -148,105 +135,15 @@ public class ChartDetails {
             this.subTitleFontSize = subTitleFontSize;
             return this;
         }
-        
-        @SuppressWarnings("unchecked")
-        public Builder categories(ChartCategoryDataType type, List<?> categories) throws UnifyException {
-            switch (type) {
-                case DATE:
-                    categories(type,
-                            DataUtils.asJsonArrayString(DataUtils.toArray(Date.class, (List<Date>) categories)));
-                    break;
-                case INTEGER:
-                    categories(type,
-                            DataUtils.asJsonArrayString(DataUtils.toArray(Integer.class, (List<Integer>) categories)));
-                    break;
-                case LONG:
-                    categories(type,
-                            DataUtils.asJsonArrayString(DataUtils.toArray(Long.class, (List<Long>) categories)));
-                    break;
-                case STRING:
-                    categories(type,
-                            DataUtils.asJsonArrayString(DataUtils.toArray(String.class, (List<String>) categories)));
-                    break;
-                default:
-                    break;
-            }
-            
-            return this;
-        }
-        
-        public Builder categories(ChartCategoryDataType type, String categoriesJson) throws UnifyException {
-            switch (type) {
-                case DATE:
-                    categories = new DateChartCategories(
-                            DataUtils.convert(Date[].class, DataUtils.fromJsonString(Long[].class, categoriesJson)));
-                    break;
-                case INTEGER:
-                    categories = new IntegerChartCategories(DataUtils.fromJsonString(Integer[].class, categoriesJson));
-                    break;
-                case LONG:
-                    categories = new LongChartCategories(DataUtils.fromJsonString(Long[].class, categoriesJson));
-                    break;
-                case STRING:
-                    categories = new StringChartCategories(DataUtils.fromJsonString(String[].class, categoriesJson));
-                    break;
-                default:
-                    break;
-            }
-            return this;
-        }
 
-        @SuppressWarnings("unchecked")
-        public Builder addSeries(ChartSeriesDataType type, String name, List<?> series) throws UnifyException {
-            switch (type) {
-                case DOUBLE:
-                    addSeries(type, name,
-                            DataUtils.asJsonArrayString(DataUtils.toArray(Double.class, (List<Double>) series)));
-                    break;
-                case INTEGER:
-                    addSeries(type, name,
-                            DataUtils.asJsonArrayString(DataUtils.toArray(Integer.class, (List<Integer>) series)));
-                    break;
-                case LONG:
-                    addSeries(type, name,
-                            DataUtils.asJsonArrayString(DataUtils.toArray(Long.class, (List<Long>) series)));
-                    break;
-                default:
-                    break;
-
-            }
-            return this;
-        }
-
-        public Builder addSeries(ChartSeriesDataType type, String name, String seriesJson) throws UnifyException {
-            switch (type) {
-                case DOUBLE:
-                    series.add(new DoubleChartSeries(name, DataUtils.fromJsonString(Double[].class, seriesJson)));
-                    break;
-                case INTEGER:
-                    series.add(new IntegerChartSeries(name, DataUtils.fromJsonString(Integer[].class, seriesJson)));
-                    break;
-                case LONG:
-                    series.add(new LongChartSeries(name, DataUtils.fromJsonString(Long[].class, seriesJson)));
-                    break;
-                default:
-                    break;
-
-            }
+        public Builder addSeries(AbstractSeries<?, ?> series) throws UnifyException {
+            this.series.add(series);
             return this;
         }
 
         public ChartDetails build() throws UnifyException {
-            if (categories == null) {
-                throw new RuntimeException("Chart categories is required.");
-            }
-
-            if (series.size() == 0) {
-                throw new RuntimeException("At least one series is required.");
-            }
-
-            return new ChartDetails(title, subTitle, titleOffsetX, titleFontSize, subTitleOffsetX,
-                    subTitleFontSize, categories, series);
+            return new ChartDetails(title, subTitle, titleOffsetX, titleFontSize, subTitleOffsetX, subTitleFontSize,
+                    series);
         }
     }
 }

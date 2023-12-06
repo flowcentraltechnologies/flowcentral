@@ -54,8 +54,9 @@ public class ChartDataSourceChartDetailsProvider extends AbstractChartDetailsPro
     }
 
     protected ChartDetails getChartData(ChartDataSourceDef chartDataSourceDef) throws UnifyException {
+        ChartDetails.Builder cdb = ChartDetails.newBuilder();
         // TODO
-        return null;
+        return cdb.build();
     }
 
 }

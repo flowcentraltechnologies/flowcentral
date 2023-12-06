@@ -24,6 +24,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.flowcentraltech.flowcentral.chart.util.ChartUtils;
 import com.flowcentraltech.flowcentral.configuration.constants.ChartCategoryDataType;
 import com.flowcentraltech.flowcentral.configuration.constants.ChartSeriesDataType;
 import com.tcdng.unify.core.UnifyException;
@@ -65,9 +66,9 @@ public abstract class AbstractCategoryMappedSeriesChartDataProvider extends Abst
     public final ChartDetails provide(String rule) throws UnifyException {
         SimpleDateFormat format = getDateFormat();
         List<Object> categories = new ArrayList<Object>();
-        Map<String, List<Number>> series = new LinkedHashMap<String, List<Number>>();
+        Map<String, AbstractSeries<?, ?>> series = new LinkedHashMap<String, AbstractSeries<?, ?>>();
         for (String seriesName : seriesValuePropertyByNameMap.keySet()) {
-            series.put(seriesName, new ArrayList<Number>());
+            series.put(seriesName, ChartUtils.createSeries(categoryType, seriesType, seriesName));
         }
 
         List<? extends Entity> statistics = getStatistics(entity);
@@ -88,20 +89,19 @@ public abstract class AbstractCategoryMappedSeriesChartDataProvider extends Abst
 
             for (Map.Entry<String, String> entry : seriesValuePropertyByNameMap.entrySet()) {
                 Number seriesValue = valueStore.retrieve(seriesType.dataType(), entry.getValue());
-                series.get(entry.getKey()).add(seriesValue);
+                series.get(entry.getKey()).addData(categoryValue, seriesValue);
             }
         }
 
         ChartDetails.Builder cdb = ChartDetails.newBuilder();
-        setAdditionalProperties(cdb, Collections.unmodifiableList(categories), Collections.unmodifiableMap(series));
-        cdb.categories(categoryType, categories);
-        for (Map.Entry<String, List<Number>> entry : series.entrySet()) {
-            cdb.addSeries(seriesType, entry.getKey(), entry.getValue());
+        setAdditionalProperties(cdb, Collections.unmodifiableMap(series));
+        for (Map.Entry<String, AbstractSeries<?, ?>> entry : series.entrySet()) {
+            cdb.addSeries(entry.getValue());
         }
 
         return cdb.build();
     }
 
-    protected abstract void setAdditionalProperties(ChartDetails.Builder cdb, List<Object> categories,
-            Map<String, List<Number>> series) throws UnifyException;
+    protected abstract void setAdditionalProperties(ChartDetails.Builder cdb,
+            Map<String, AbstractSeries<?, ?>> series) throws UnifyException;
 }

@@ -39,7 +39,7 @@ public enum ChartCategoryDataType implements EnumConst {
     LONG(
             "LGN",
             "numeric",
-            Long.class),
+            Integer.class),
     DATE(
             "DTE",
             "datetime",

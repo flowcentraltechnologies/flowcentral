@@ -24,6 +24,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.flowcentraltech.flowcentral.chart.util.ChartUtils;
 import com.flowcentraltech.flowcentral.configuration.constants.ChartCategoryDataType;
 import com.flowcentraltech.flowcentral.configuration.constants.ChartSeriesDataType;
 import com.tcdng.unify.core.UnifyException;
@@ -101,8 +102,12 @@ public abstract class AbstractCategorySummarySeriesChartDataProvider extends Abs
 
         ChartDetails.Builder cdb = ChartDetails.newBuilder();
         setAdditionalProperties(cdb, Collections.unmodifiableList(_categories), Collections.unmodifiableList(series));
-        cdb.categories(categoryType, _categories);
-        cdb.addSeries(seriesType, seriesName, series);
+        AbstractSeries<?, ?> _series = ChartUtils.createSeries(categoryType, seriesType, seriesName);
+        for (int i = 0; i < categories.length; i++) {
+            _series.addData(_categories.get(i), series.get(i));
+        }
+        
+        cdb.addSeries(_series);
 
         return cdb.build();
     }

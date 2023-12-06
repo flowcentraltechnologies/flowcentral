@@ -16,18 +16,27 @@
 
 package com.flowcentraltech.flowcentral.chart.util;
 
+import org.apache.poi.ss.usermodel.charts.ChartSeries;
+
+import com.flowcentraltech.flowcentral.chart.data.AbstractSeries;
+import com.flowcentraltech.flowcentral.chart.data.CategoryDoubleSeries;
+import com.flowcentraltech.flowcentral.chart.data.CategoryIntegerSeries;
 import com.flowcentraltech.flowcentral.chart.data.ChartCategories;
-import com.flowcentraltech.flowcentral.chart.data.ChartDetails;
 import com.flowcentraltech.flowcentral.chart.data.ChartDef;
-import com.flowcentraltech.flowcentral.chart.data.ChartSeries;
+import com.flowcentraltech.flowcentral.chart.data.ChartDetails;
 import com.flowcentraltech.flowcentral.chart.data.DateChartCategories;
+import com.flowcentraltech.flowcentral.chart.data.DateTimeDoubleSeries;
+import com.flowcentraltech.flowcentral.chart.data.DateTimeIntegerSeries;
 import com.flowcentraltech.flowcentral.chart.data.DoubleChartSeries;
 import com.flowcentraltech.flowcentral.chart.data.IntegerChartCategories;
 import com.flowcentraltech.flowcentral.chart.data.IntegerChartSeries;
 import com.flowcentraltech.flowcentral.chart.data.LongChartCategories;
 import com.flowcentraltech.flowcentral.chart.data.LongChartSeries;
+import com.flowcentraltech.flowcentral.chart.data.NumericDoubleSeries;
+import com.flowcentraltech.flowcentral.chart.data.NumericIntegerSeries;
 import com.flowcentraltech.flowcentral.chart.data.StringChartCategories;
 import com.flowcentraltech.flowcentral.configuration.constants.ChartCategoryDataType;
+import com.flowcentraltech.flowcentral.configuration.constants.ChartSeriesDataType;
 import com.flowcentraltech.flowcentral.configuration.constants.ChartType;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.util.DataUtils;
@@ -46,6 +55,49 @@ public final class ChartUtils {
 
     }
 
+    public static AbstractSeries<?, ?> createSeries(ChartCategoryDataType categoryType, ChartSeriesDataType dataType, String name) {
+        switch(categoryType) {
+            case DATE:
+                switch(dataType) {
+                    case DOUBLE:
+                        return new DateTimeDoubleSeries(name);
+                    case INTEGER:
+                    case LONG:
+                        return new DateTimeIntegerSeries(name);
+                    default:
+                        break;                    
+                }
+                break;
+            case INTEGER:
+            case LONG:
+                switch(dataType) {
+                    case DOUBLE:
+                        return new NumericDoubleSeries(name);
+                    case INTEGER:
+                    case LONG:
+                        return new NumericIntegerSeries(name);
+                    default:
+                        break;                    
+                }
+                break;
+            case STRING:
+                switch(dataType) {
+                    case DOUBLE:
+                        return new CategoryDoubleSeries(name);
+                    case INTEGER:
+                    case LONG:
+                        return new CategoryIntegerSeries(name);
+                    default:
+                        break;                    
+                }
+                break;
+            default:
+                break;           
+        }
+        
+        return null;
+    }
+    
     public static JsonWriter getOptionsJsonWriter(ChartDef chartDef, ChartDetails chartDetails, boolean sparkLine,
             int preferredHeight) throws UnifyException {
         JsonWriter jw = new JsonWriter();
