@@ -26,12 +26,12 @@ import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.util.DataUtils;
 
 /**
- * Chart data.
+ * Chart details.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class ChartData {
+public class ChartDetails {
 
     private String title;
     
@@ -49,7 +49,7 @@ public class ChartData {
 
     private List<ChartSeries<?>> series;
 
-    private ChartData(String title, String subTitle, int titleOffsetX, int titleFontSize, int subTitleOffsetX,
+    private ChartDetails(String title, String subTitle, int titleOffsetX, int titleFontSize, int subTitleOffsetX,
             int subTitleFontSize, ChartCategories<?> categories, List<ChartSeries<?>> series) {
         this.title = title;
         this.subTitle = subTitle;
@@ -236,7 +236,7 @@ public class ChartData {
             return this;
         }
 
-        public ChartData build() throws UnifyException {
+        public ChartDetails build() throws UnifyException {
             if (categories == null) {
                 throw new RuntimeException("Chart categories is required.");
             }
@@ -245,7 +245,7 @@ public class ChartData {
                 throw new RuntimeException("At least one series is required.");
             }
 
-            return new ChartData(title, subTitle, titleOffsetX, titleFontSize, subTitleOffsetX,
+            return new ChartDetails(title, subTitle, titleOffsetX, titleFontSize, subTitleOffsetX,
                     subTitleFontSize, categories, series);
         }
     }

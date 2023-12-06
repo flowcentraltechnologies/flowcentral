@@ -21,8 +21,8 @@ import java.util.Locale;
 
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.chart.constants.ChartModuleNameConstants;
-import com.flowcentraltech.flowcentral.chart.data.AbstractChartDataProvider;
-import com.flowcentraltech.flowcentral.chart.data.ChartData;
+import com.flowcentraltech.flowcentral.chart.data.AbstractChartDetailsProvider;
+import com.flowcentraltech.flowcentral.chart.data.ChartDetails;
 import com.flowcentraltech.flowcentral.chart.data.ChartDataSourceDef;
 import com.flowcentraltech.flowcentral.chart.entities.ChartDataSource;
 import com.flowcentraltech.flowcentral.chart.entities.ChartDataSourceQuery;
@@ -31,16 +31,16 @@ import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.data.Listable;
 
 /**
- * Chart data source chart data provider.
+ * Chart data source chart details provider.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
 @Component(name = ChartModuleNameConstants.CHARTDATASOURCE_PROVIDER, description = "$m{chartdatasource.provider}")
-public class ChartDataSourceChartDataProvider extends AbstractChartDataProvider {
+public class ChartDataSourceChartDetailsProvider extends AbstractChartDetailsProvider {
 
     @Override
-    public ChartData provide(String rule) throws UnifyException {
+    public ChartDetails provide(String rule) throws UnifyException {
         ChartDataSourceDef chartDataSourceDef = chart().getChartDataSourceDef(rule);
         return getChartData(chartDataSourceDef);
     }
@@ -53,7 +53,7 @@ public class ChartDataSourceChartDataProvider extends AbstractChartDataProvider 
         return ApplicationNameUtils.getListableList(sourceList);
     }
 
-    protected ChartData getChartData(ChartDataSourceDef chartDataSourceDef) throws UnifyException {
+    protected ChartDetails getChartData(ChartDataSourceDef chartDataSourceDef) throws UnifyException {
         // TODO
         return null;
     }

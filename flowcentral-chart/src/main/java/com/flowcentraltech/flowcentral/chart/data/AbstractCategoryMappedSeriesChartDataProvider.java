@@ -39,7 +39,7 @@ import com.tcdng.unify.core.util.DataUtils;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class AbstractCategoryMappedSeriesChartDataProvider extends AbstractChartDataProvider {
+public abstract class AbstractCategoryMappedSeriesChartDataProvider extends AbstractChartDetailsProvider {
 
     private final ChartCategoryDataType categoryType;
 
@@ -62,7 +62,7 @@ public abstract class AbstractCategoryMappedSeriesChartDataProvider extends Abst
     }
 
     @Override
-    public final ChartData provide(String rule) throws UnifyException {
+    public final ChartDetails provide(String rule) throws UnifyException {
         SimpleDateFormat format = getDateFormat();
         List<Object> categories = new ArrayList<Object>();
         Map<String, List<Number>> series = new LinkedHashMap<String, List<Number>>();
@@ -92,7 +92,7 @@ public abstract class AbstractCategoryMappedSeriesChartDataProvider extends Abst
             }
         }
 
-        ChartData.Builder cdb = ChartData.newBuilder();
+        ChartDetails.Builder cdb = ChartDetails.newBuilder();
         setAdditionalProperties(cdb, Collections.unmodifiableList(categories), Collections.unmodifiableMap(series));
         cdb.categories(categoryType, categories);
         for (Map.Entry<String, List<Number>> entry : series.entrySet()) {
@@ -102,6 +102,6 @@ public abstract class AbstractCategoryMappedSeriesChartDataProvider extends Abst
         return cdb.build();
     }
 
-    protected abstract void setAdditionalProperties(ChartData.Builder cdb, List<Object> categories,
+    protected abstract void setAdditionalProperties(ChartDetails.Builder cdb, List<Object> categories,
             Map<String, List<Number>> series) throws UnifyException;
 }

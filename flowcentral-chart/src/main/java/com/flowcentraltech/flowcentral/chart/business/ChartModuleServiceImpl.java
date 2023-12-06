@@ -26,7 +26,7 @@ import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.util.InputWidgetUtils;
 import com.flowcentraltech.flowcentral.chart.constants.ChartModuleErrorConstants;
 import com.flowcentraltech.flowcentral.chart.constants.ChartModuleNameConstants;
-import com.flowcentraltech.flowcentral.chart.data.ChartData;
+import com.flowcentraltech.flowcentral.chart.data.ChartDetails;
 import com.flowcentraltech.flowcentral.chart.data.ChartDataSourceDef;
 import com.flowcentraltech.flowcentral.chart.data.ChartDef;
 import com.flowcentraltech.flowcentral.chart.data.ChartSnapshotDef;
@@ -144,14 +144,14 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
                                 chartSnapshotName);
                     }
 
-                    ChartData.Builder cdb = ChartData.newBuilder();
+                    ChartDetails.Builder cdb = ChartDetails.newBuilder();
                     cdb.categories(chartSnapshot.getCategoryDataType(), chartSnapshot.getCategories());
                     for (ChartSnapshotSeries series : chartSnapshot.getSeriesList()) {
                         cdb.addSeries(series.getSeriesDataType(), series.getName(), series.getSeries());
                     }
 
-                    ChartData chartData = cdb.build();
-                    return new ChartSnapshotDef(chartSnapshot.getName(), chartSnapshot.getDescription(), chartData,
+                    ChartDetails chartDetails = cdb.build();
+                    return new ChartSnapshotDef(chartSnapshot.getName(), chartSnapshot.getDescription(), chartDetails,
                             chartSnapshot.getId(), chartSnapshot.getVersionNo());
                 }
 

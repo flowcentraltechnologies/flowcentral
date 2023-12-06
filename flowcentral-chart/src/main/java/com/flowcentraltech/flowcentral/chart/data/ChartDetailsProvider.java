@@ -20,12 +20,12 @@ import com.flowcentraltech.flowcentral.common.business.RuleListComponent;
 import com.tcdng.unify.core.UnifyException;
 
 /**
- * Chart data provider.
+ * Chart details provider.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface ChartDataProvider extends RuleListComponent {
+public interface ChartDetailsProvider extends RuleListComponent {
 
     /**
      * Provides data.
@@ -36,5 +36,5 @@ public interface ChartDataProvider extends RuleListComponent {
      * @throws UnifyException
      *                        if an error occurs
      */
-    ChartData provide(String rule) throws UnifyException;
+    ChartDetails provide(String rule) throws UnifyException;
 }
