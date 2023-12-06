@@ -23,7 +23,7 @@
 		<widgetType name="chartproviderrulelist"
 			description="$m{chart.widgettype.chartproviderrulelist}" dataType="string"
 			inputType="string"
-			editor="!ui-select list:rulelist listKey:$s{name} listParams:$l{provider} blankOption:$m{blank.none}"
+			editor="!ui-select list:rulelist listParams:$l{provider} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 	</widgetTypes>
 	<!-- Applets -->
