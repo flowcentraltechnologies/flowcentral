@@ -68,7 +68,7 @@ public class StudioEntityPropertyListCommand extends AbstractApplicationListComm
                                             EntityFieldDataType.REF_FILEUPLOAD, EntityFieldDataType.CATEGORY_COLUMN,
                                             EntityFieldDataType.FOSTER_PARENT_ID,
                                             EntityFieldDataType.FOSTER_PARENT_TYPE, EntityFieldDataType.SCRATCH)
-                                    .addSelect("id", "name").addOrder("name"));
+                                    .addSelect("id", "name", "label").addOrder("name"));
                 }
             }
         }

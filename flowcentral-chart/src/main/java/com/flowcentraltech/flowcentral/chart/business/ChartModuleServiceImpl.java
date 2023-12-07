@@ -26,9 +26,9 @@ import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.util.InputWidgetUtils;
 import com.flowcentraltech.flowcentral.chart.constants.ChartModuleErrorConstants;
 import com.flowcentraltech.flowcentral.chart.constants.ChartModuleNameConstants;
-import com.flowcentraltech.flowcentral.chart.data.ChartData;
 import com.flowcentraltech.flowcentral.chart.data.ChartDataSourceDef;
 import com.flowcentraltech.flowcentral.chart.data.ChartDef;
+import com.flowcentraltech.flowcentral.chart.data.ChartDetails;
 import com.flowcentraltech.flowcentral.chart.data.ChartSnapshotDef;
 import com.flowcentraltech.flowcentral.chart.entities.Chart;
 import com.flowcentraltech.flowcentral.chart.entities.ChartDataSource;
@@ -103,7 +103,7 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
                 @Override
                 protected boolean stale(String chartName, ChartDataSourceDef chartDataSourceDef) throws Exception {
                     return environment().value(long.class, "versionNo",
-                            new ChartQuery().id(chartDataSourceDef.getId())) > chartDataSourceDef.getVersion();
+                            new ChartDataSourceQuery().id(chartDataSourceDef.getId())) > chartDataSourceDef.getVersion();
                 }
 
                 @Override
@@ -115,8 +115,10 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
                         throw new UnifyException(ChartModuleErrorConstants.CANNOT_FIND_APPLICATION_CHART, longName);
                     }
 
-                    ChartDataSourceDef chartDataSourceDef = new ChartDataSourceDef(longName,
-                            chartDataSource.getDescription(), appletUtilities.getEntityDef(chartDataSource.getEntity()),
+                    ChartDataSourceDef chartDataSourceDef = new ChartDataSourceDef(chartDataSource.getType(),
+                            chartDataSource.getTimeSeriesType(), longName, chartDataSource.getDescription(),
+                            chartDataSource.getCategoryField(),
+                            appletUtilities.getEntityDef(chartDataSource.getEntity()),
                             InputWidgetUtils.getFilterDef(appletUtilities, null, chartDataSource.getCategoryBase()),
                             InputWidgetUtils.getPropertySequenceDef(chartDataSource.getSeries()),
                             InputWidgetUtils.getPropertySequenceDef(chartDataSource.getCategories()),
@@ -142,14 +144,22 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
                                 chartSnapshotName);
                     }
 
-                    ChartData.Builder cdb = ChartData.newBuilder();
-                    cdb.categories(chartSnapshot.getCategoryDataType(), chartSnapshot.getCategories());
+                    ChartDetails.Builder cdb = ChartDetails.newBuilder(chartSnapshot.getCategoryDataType());
+                    String[] _categories = DataUtils.arrayFromJsonString(String[].class, chartSnapshot.getCategories());
                     for (ChartSnapshotSeries series : chartSnapshot.getSeriesList()) {
-                        cdb.addSeries(series.getSeriesDataType(), series.getName(), series.getSeries());
+                        cdb.createSeries(series.getSeriesDataType(), series.getName());
+                        Number[] _nseries = series.getSeriesDataType().isInteger()
+                                ? DataUtils.arrayFromJsonString(Integer[].class, series.getSeries())
+                                : DataUtils.arrayFromJsonString(Double[].class, series.getSeries());
+                        if (_nseries != null) {
+                            for (int i = 0; i < _nseries.length; i++) {
+                                cdb.addSeriesData(series.getName(), _categories[i], _nseries[i]);
+                            }
+                        }
                     }
 
-                    ChartData chartData = cdb.build();
-                    return new ChartSnapshotDef(chartSnapshot.getName(), chartSnapshot.getDescription(), chartData,
+                    ChartDetails chartDetails = cdb.build();
+                    return new ChartSnapshotDef(chartSnapshot.getName(), chartSnapshot.getDescription(), chartDetails,
                             chartSnapshot.getId(), chartSnapshot.getVersionNo());
                 }
 

@@ -20,25 +20,25 @@ import java.util.List;
 import java.util.Locale;
 
 import com.flowcentraltech.flowcentral.chart.constants.ChartModuleNameConstants;
-import com.flowcentraltech.flowcentral.chart.data.AbstractChartDataProvider;
-import com.flowcentraltech.flowcentral.chart.data.ChartData;
+import com.flowcentraltech.flowcentral.chart.data.AbstractChartDetailsProvider;
+import com.flowcentraltech.flowcentral.chart.data.ChartDetails;
 import com.flowcentraltech.flowcentral.chart.entities.ChartSnapshotQuery;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.data.Listable;
 
 /**
- * Chart snapshot chart data provider.
+ * Chart snapshot chart details provider.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
 @Component(name = ChartModuleNameConstants.CHARTSNAPSHOT_PROVIDER, description = "$m{chartsnapshot.provider}")
-public class ChartSnapshotChartDataProvider extends AbstractChartDataProvider {
+public class ChartSnapshotChartDetailsProvider extends AbstractChartDetailsProvider {
 
     @Override
-    public ChartData provide(String rule) throws UnifyException {
-        return chart().getChartSnapshotDef(rule).getChartData();
+    public ChartDetails provide(String rule) throws UnifyException {
+        return chart().getChartSnapshotDef(rule).getChartDetails();
     }
 
     @Override

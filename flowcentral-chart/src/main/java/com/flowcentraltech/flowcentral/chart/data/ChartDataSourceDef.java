@@ -17,8 +17,13 @@
 package com.flowcentraltech.flowcentral.chart.data;
 
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
+import com.flowcentraltech.flowcentral.application.data.EntityFieldDef;
 import com.flowcentraltech.flowcentral.application.data.FilterDef;
 import com.flowcentraltech.flowcentral.application.data.PropertySequenceDef;
+import com.flowcentraltech.flowcentral.configuration.constants.ChartDataSourceType;
+import com.flowcentraltech.flowcentral.configuration.constants.ChartTimeSeriesType;
+import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.util.StringUtils;
 
 /**
  * Chart snapshot definition.
@@ -28,9 +33,15 @@ import com.flowcentraltech.flowcentral.application.data.PropertySequenceDef;
  */
 public class ChartDataSourceDef {
 
-    private String name;
+    private final ChartDataSourceType type;
 
-    private String description;
+    private final ChartTimeSeriesType timeSeriesType;
+
+    private final String name;
+
+    private final String description;
+
+    private final String categoryField;
 
     private final EntityDef entityDef;
 
@@ -40,20 +51,40 @@ public class ChartDataSourceDef {
 
     private final PropertySequenceDef categories;
 
-    private Long id;
+    private final Long id;
 
-    private long version;
+    private final long version;
 
-    public ChartDataSourceDef(String name, String description, EntityDef entityDef, FilterDef categoryBase,
+    public ChartDataSourceDef(ChartDataSourceType type, ChartTimeSeriesType timeSeriesType, String name,
+            String description, String categoryField, EntityDef entityDef, FilterDef categoryBase,
             PropertySequenceDef series, PropertySequenceDef categories, Long id, long version) {
+        this.type = type;
+        this.timeSeriesType = timeSeriesType;
         this.name = name;
         this.description = description;
+        this.categoryField = categoryField;
         this.entityDef = entityDef;
         this.categoryBase = categoryBase;
         this.series = series;
         this.categories = categories;
         this.id = id;
         this.version = version;
+    }
+
+    public ChartDataSourceType getType() {
+        return type;
+    }
+
+    public ChartTimeSeriesType getTimeSeriesType() {
+        return timeSeriesType;
+    }
+
+    public String getCategoryField() {
+        return categoryField;
+    }
+
+    public EntityFieldDef getCategoryEntityFieldDef() throws UnifyException {
+        return !StringUtils.isBlank(categoryField) ? entityDef.getFieldDef(categoryField) : null;
     }
 
     public String getName() {
@@ -86,5 +117,13 @@ public class ChartDataSourceDef {
 
     public long getVersion() {
         return version;
+    }
+
+    public boolean isWithSeries() {
+        return series != null;
+    }
+
+    public boolean isWithCategories() {
+        return categories != null;
     }
 }

@@ -21,34 +21,37 @@ import java.util.List;
 import java.util.Locale;
 
 import com.flowcentraltech.flowcentral.application.entities.AppEntityFieldQuery;
+import com.flowcentraltech.flowcentral.application.util.ApplicationEntityNameParts;
+import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.web.lists.AbstractApplicationListCommand;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldDataType;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.data.Listable;
-import com.tcdng.unify.core.list.LongParam;
+import com.tcdng.unify.core.list.StringParam;
 
 /**
- * Studio entity series field list command
+ * Studio entity category field list command
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@Component("studioseriesentityfieldlist")
-public class StudioEntitySeriesFieldListCommand extends AbstractApplicationListCommand<LongParam> {
+@Component("studioentitycategoryfieldlist")
+public class StudioEntityCategoryFieldListCommand extends AbstractApplicationListCommand<StringParam> {
 
-    public StudioEntitySeriesFieldListCommand() {
-        super(LongParam.class);
+    public StudioEntityCategoryFieldListCommand() {
+        super(StringParam.class);
     }
 
     @Override
-    public List<? extends Listable> execute(Locale locale, LongParam params) throws UnifyException {
+    public List<? extends Listable> execute(Locale locale, StringParam params) throws UnifyException {
         if (params.isPresent()) {
+            ApplicationEntityNameParts np = ApplicationNameUtils.getApplicationEntityNameParts(params.getValue());
             return application().findAppEntityFields((AppEntityFieldQuery) new AppEntityFieldQuery()
-                    .appEntityId(params.getValue())
-                    .dataTypeIn(EntityFieldDataType.DECIMAL, EntityFieldDataType.DOUBLE, EntityFieldDataType.FLOAT,
-                            EntityFieldDataType.INTEGER, EntityFieldDataType.LONG, EntityFieldDataType.SHORT)
-                    .addSelect("id", "name", "label").addOrder("name"));
+                    .applicationName(np.getApplicationName()).appEntityName(np.getEntityName())
+                    .dataTypeIn(EntityFieldDataType.STRING, EntityFieldDataType.ENUM, EntityFieldDataType.ENUM_REF,
+                            EntityFieldDataType.DATE, EntityFieldDataType.TIMESTAMP, EntityFieldDataType.TIMESTAMP_UTC)
+                    .addSelect("name", "label").addOrder("label"));
         }
 
         return Collections.emptyList();

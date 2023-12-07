@@ -49,7 +49,8 @@ public enum ChartSeriesDataType implements EnumConst {
 
     private final Number zero;
 
-    private ChartSeriesDataType(String code, Class<? extends Number> dataType, Number zero) {
+    private ChartSeriesDataType(String code, Class<? extends Number> dataType,
+            Number zero) {
         this.code = code;
         this.dataType = dataType;
         this.zero = zero;
@@ -69,6 +70,10 @@ public enum ChartSeriesDataType implements EnumConst {
         return dataType;
     }
 
+    public boolean isInteger() {
+        return INTEGER.equals(this) || LONG.equals(this);
+    }
+    
     public Number zero() {
         return zero;
     }

@@ -46,12 +46,14 @@ import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.Transactional;
 import com.tcdng.unify.core.business.AbstractBusinessService;
 import com.tcdng.unify.core.criterion.AggregateFunction;
+import com.tcdng.unify.core.criterion.GroupingFunction;
 import com.tcdng.unify.core.criterion.Update;
 import com.tcdng.unify.core.data.Audit;
 import com.tcdng.unify.core.data.BeanValueStore;
 import com.tcdng.unify.core.database.Aggregation;
 import com.tcdng.unify.core.database.Database;
 import com.tcdng.unify.core.database.Entity;
+import com.tcdng.unify.core.database.GroupingAggregation;
 import com.tcdng.unify.core.database.Query;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.ReflectUtils;
@@ -516,13 +518,25 @@ public class EnvironmentServiceImpl extends AbstractBusinessService implements E
     @Override
     public Aggregation aggregate(AggregateFunction aggregateFunction, Query<? extends Entity> query)
             throws UnifyException {
-        return db(query.getEntityClass()).aggregate(aggregateFunction, query);
+        return db_direct(query.getEntityClass()).aggregate(aggregateFunction, query);
     }
 
     @Override
     public List<Aggregation> aggregate(List<AggregateFunction> aggregateFunction, Query<? extends Entity> query)
             throws UnifyException {
-        return db(query.getEntityClass()).aggregate(aggregateFunction, query);
+        return db_direct(query.getEntityClass()).aggregate(aggregateFunction, query);
+    }
+
+    @Override
+    public List<GroupingAggregation> aggregate(AggregateFunction aggregateFunction, Query<? extends Entity> query,
+            GroupingFunction groupingFunction) throws UnifyException {
+        return db_direct(query.getEntityClass()).aggregate(aggregateFunction, query, groupingFunction);
+    }
+
+    @Override
+    public List<GroupingAggregation> aggregate(List<AggregateFunction> aggregateFunction, Query<? extends Entity> query,
+            GroupingFunction groupingFunction) throws UnifyException {
+        return db_direct(query.getEntityClass()).aggregate(aggregateFunction, query, groupingFunction);
     }
 
     @Override
@@ -732,6 +746,11 @@ public class EnvironmentServiceImpl extends AbstractBusinessService implements E
         EnvironmentDelegateHolder delegateInfo = environmentDelegateRegistrar.getEnvironmentDelegateInfo(entityClass);
         return delegateInfo != null ? (delegateInfo.isDirect() ? db(delegateInfo.getDataSourceName())
                 : delegateInfo.getEnvironmentDelegate()) : db();
+    }
+
+    private Database db_direct(Class<? extends Entity> entityClass) throws UnifyException {
+        EnvironmentDelegateHolder delegateInfo = environmentDelegateRegistrar.getEnvironmentDelegateInfo(entityClass);
+        return delegateInfo != null ? db(delegateInfo.getDataSourceName()) : db();
     }
 
     private EntityActionResult executeEntityPreActionPolicy(EntityActionContext ctx) throws UnifyException {

@@ -28,16 +28,16 @@ public class ChartSnapshotDef {
 
     private String description;
 
-    private ChartData chartData;
+    private ChartDetails chartDetails;
 
     private Long id;
 
     private long version;
 
-    public ChartSnapshotDef(String name, String description, ChartData chartData, Long id, long version) {
+    public ChartSnapshotDef(String name, String description, ChartDetails chartDetails, Long id, long version) {
         this.name = name;
         this.description = description;
-        this.chartData = chartData;
+        this.chartDetails = chartDetails;
         this.id = id;
         this.version = version;
     }
@@ -50,8 +50,8 @@ public class ChartSnapshotDef {
         return description;
     }
 
-    public ChartData getChartData() {
-        return chartData;
+    public ChartDetails getChartDetails() {
+        return chartDetails;
     }
 
     public Long getId() {

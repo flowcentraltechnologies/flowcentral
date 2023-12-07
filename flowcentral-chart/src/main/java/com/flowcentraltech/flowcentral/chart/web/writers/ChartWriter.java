@@ -17,8 +17,8 @@
 package com.flowcentraltech.flowcentral.chart.web.writers;
 
 import com.flowcentraltech.flowcentral.chart.business.ChartModuleService;
-import com.flowcentraltech.flowcentral.chart.data.ChartData;
-import com.flowcentraltech.flowcentral.chart.data.ChartDataProvider;
+import com.flowcentraltech.flowcentral.chart.data.ChartDetails;
+import com.flowcentraltech.flowcentral.chart.data.ChartDetailsProvider;
 import com.flowcentraltech.flowcentral.chart.data.ChartDef;
 import com.flowcentraltech.flowcentral.chart.util.ChartUtils;
 import com.flowcentraltech.flowcentral.chart.web.widgets.ChartWidget;
@@ -65,10 +65,10 @@ public class ChartWriter extends AbstractWidgetWriter {
         ChartWidget chartWidget = (ChartWidget) widget;
         final String chartLongName = chartWidget.getValue(String.class);
         ChartDef chartDef = chartModuleService.getChartDef(chartLongName);
-        ChartData chartData = ((ChartDataProvider) getComponent(chartDef.getProvider())).provide(chartDef.getRule());
+        ChartDetails chartDetails = ((ChartDetailsProvider) getComponent(chartDef.getProvider())).provide(chartDef.getRule());
         writer.beginFunction("fux.rigChart");
         writer.writeParam("pId", chartWidget.getId());
-        writer.writeParam("pOptions", ChartUtils.getOptionsJsonWriter(chartDef, chartData, chartWidget.isSparkLine(),
+        writer.writeParam("pOptions", ChartUtils.getOptionsJsonWriter(chartDef, chartDetails, chartWidget.isSparkLine(),
                 chartWidget.getPreferredHeight()));
         writer.endFunction();
     }

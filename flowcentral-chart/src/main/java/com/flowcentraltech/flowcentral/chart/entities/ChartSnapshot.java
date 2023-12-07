@@ -71,6 +71,11 @@ public class ChartSnapshot extends BaseAuditEntity {
         return description;
     }
 
+    @Override
+    public String getListKey() {
+        return name;
+    }
+
     public ChartCategoryDataType getCategoryDataType() {
         return categoryDataType;
     }

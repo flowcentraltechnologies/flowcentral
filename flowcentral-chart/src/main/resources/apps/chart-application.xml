@@ -23,7 +23,7 @@
 		<widgetType name="chartproviderrulelist"
 			description="$m{chart.widgettype.chartproviderrulelist}" dataType="string"
 			inputType="string"
-			editor="!ui-select list:rulelist listKey:$s{name} listParams:$l{provider} blankOption:$m{blank.none}"
+			editor="!ui-select list:rulelist listParams:$l{provider} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 	</widgetTypes>
 	<!-- Applets -->
@@ -88,7 +88,11 @@
 			reportable="true">
 			<field name="type" label="$m{chart.chartdatasource.type}" type="enum_ref"
 				references="chartdatasourcetypelist" inputWidget="application.enumlist" />
+			<field name="timeSeriesType" label="$m{chart.chartdatasource.timeseriestype}" type="enum_ref"
+				references="charttimeseriestypelist" inputWidget="application.enumlist" />
 			<field name="entity" label="$m{chart.chartdatasource.entity}"
+				type="string" />
+			<field name="categoryField" label="$m{chart.chartdatasource.categoryfield}"
 				type="string" />
 			<field name="categoryBase"
 				label="$m{chart.chartdatasource.categorybase}" type="child"
@@ -101,6 +105,8 @@
 				category="entity-category" references="application.appPropertySequenceRef" />
 			<field name="typeDesc" label="$m{chart.chartdatasource.typedesc}" type="list_only"
 				key="type" property="description" />
+			<field name="timeSeriesTypeDesc" label="$m{chart.chartdatasource.timeseriestypedesc}" type="list_only"
+				key="timeSeriesType" property="description" />
 			<uniqueConstraint name="nameUc"
 				description="$m{chart.chartdatasource.uc.name}"
 				fieldList="applicationId,name">

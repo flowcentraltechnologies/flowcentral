@@ -16,7 +16,7 @@
 
 package com.flowcentraltech.flowcentral.chart.web.lists;
 
-import com.flowcentraltech.flowcentral.chart.data.ChartDataProvider;
+import com.flowcentraltech.flowcentral.chart.data.ChartDetailsProvider;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.list.AbstractTypeListCommand;
 
@@ -27,10 +27,10 @@ import com.tcdng.unify.core.list.AbstractTypeListCommand;
  * @since 1.0
  */
 @Component("chartproviderlist")
-public class ChartProviderListCommand extends AbstractTypeListCommand<ChartDataProvider> {
+public class ChartProviderListCommand extends AbstractTypeListCommand<ChartDetailsProvider> {
 
     public ChartProviderListCommand() {
-        super(ChartDataProvider.class);
+        super(ChartDetailsProvider.class);
     }
 
 }

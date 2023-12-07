@@ -16,21 +16,16 @@
 
 package com.flowcentraltech.flowcentral.chart.util;
 
-import com.flowcentraltech.flowcentral.chart.data.ChartCategories;
-import com.flowcentraltech.flowcentral.chart.data.ChartData;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import com.flowcentraltech.flowcentral.chart.data.AbstractSeries;
 import com.flowcentraltech.flowcentral.chart.data.ChartDef;
-import com.flowcentraltech.flowcentral.chart.data.ChartSeries;
-import com.flowcentraltech.flowcentral.chart.data.DateChartCategories;
-import com.flowcentraltech.flowcentral.chart.data.DoubleChartSeries;
-import com.flowcentraltech.flowcentral.chart.data.IntegerChartCategories;
-import com.flowcentraltech.flowcentral.chart.data.IntegerChartSeries;
-import com.flowcentraltech.flowcentral.chart.data.LongChartCategories;
-import com.flowcentraltech.flowcentral.chart.data.LongChartSeries;
-import com.flowcentraltech.flowcentral.chart.data.StringChartCategories;
+import com.flowcentraltech.flowcentral.chart.data.ChartDetails;
 import com.flowcentraltech.flowcentral.configuration.constants.ChartCategoryDataType;
 import com.flowcentraltech.flowcentral.configuration.constants.ChartType;
 import com.tcdng.unify.core.UnifyException;
-import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.core.util.json.JsonWriter;
 
@@ -45,26 +40,27 @@ public final class ChartUtils {
     private ChartUtils() {
 
     }
-
-    public static JsonWriter getOptionsJsonWriter(ChartDef chartDef, ChartData chartData, boolean sparkLine,
+    
+    public static JsonWriter getOptionsJsonWriter(ChartDef chartDef, ChartDetails chartDetails, boolean sparkLine,
             int preferredHeight) throws UnifyException {
         JsonWriter jw = new JsonWriter();
         jw.beginObject();
         final ChartType chartType = chartDef.getType();
-        final ChartCategories<?> categories = chartData.getCategories();
-        final ChartCategoryDataType categoryType = categories.getCategoryType();
+        final Map<String, AbstractSeries<?, ?>> series = chartDetails.getSeries();
+        final ChartCategoryDataType categoryType = chartDetails.getCategoryType();
+
         // Title
-        String title = !StringUtils.isBlank(chartData.getTitle()) ? chartData.getTitle() : chartDef.getTitle();
+        String title = !StringUtils.isBlank(chartDetails.getTitle()) ? chartDetails.getTitle() : chartDef.getTitle();
         if (!StringUtils.isBlank(title)) {
             jw.beginObject("title");
             jw.write("text", title);
-            if (chartData.getTitleOffsetX() > 0) {
-                jw.write("offsetX", chartData.getTitleOffsetX());
+            if (chartDetails.getTitleOffsetX() > 0) {
+                jw.write("offsetX", chartDetails.getTitleOffsetX());
             }
 
-            if (chartData.getTitleFontSize() > 0) {
+            if (chartDetails.getTitleFontSize() > 0) {
                 jw.beginObject("style");
-                jw.write("fontSize", chartData.getTitleFontSize() + "px");
+                jw.write("fontSize", chartDetails.getTitleFontSize() + "px");
                 jw.endObject();
             }
 
@@ -72,19 +68,19 @@ public final class ChartUtils {
         }
 
         // Sub-title
-        String subTitle = !StringUtils.isBlank(chartData.getSubTitle()) ? chartData.getSubTitle()
+        String subTitle = !StringUtils.isBlank(chartDetails.getSubTitle()) ? chartDetails.getSubTitle()
                 : chartDef.getSubTitle();
         if (!StringUtils.isBlank(subTitle)) {
             jw.beginObject("subtitle");
             jw.write("text", subTitle);
-            if (chartData.getSubTitleOffsetX() > 0) {
-                jw.write("offsetX", chartData.getSubTitleOffsetX());
+            if (chartDetails.getSubTitleOffsetX() > 0) {
+                jw.write("offsetX", chartDetails.getSubTitleOffsetX());
             }
 
             jw.beginObject("style");
             jw.write("color", "#a0a0a0");
-            if (chartData.getSubTitleFontSize() > 0) {
-                jw.write("fontSize", chartData.getSubTitleFontSize() + "px");
+            if (chartDetails.getSubTitleFontSize() > 0) {
+                jw.write("fontSize", chartDetails.getSubTitleFontSize() + "px");
             }
             jw.endObject();
             jw.endObject();
@@ -162,28 +158,14 @@ public final class ChartUtils {
             jw.endObject();
         }
 
+        List<AbstractSeries<?, ?>> actseries = new ArrayList<AbstractSeries<?, ?>>(series.values());
         if (chartType.axisChart()) {
             // Series
             boolean integers = true;
             jw.beginArray("series");
-            for (ChartSeries<?> series : chartData.getSeries()) {
-                jw.beginObject();
-                jw.write("name", series.getName());
-                switch (series.getSeriesType()) {
-                    case DOUBLE:
-                        jw.write("data", ((DoubleChartSeries) series).dataToArray());
-                        integers = false;
-                        break;
-                    case INTEGER:
-                        jw.write("data", ((IntegerChartSeries) series).dataToArray());
-                        break;
-                    case LONG:
-                        jw.write("data", ((LongChartSeries) series).dataToArray());
-                        break;
-                    default:
-                        break;
-                }
-                jw.endObject();
+            for (AbstractSeries<?, ?> _series : actseries) {
+                _series.writeAsObject(jw);
+                integers &= _series.getDataType().isInteger();
             }
             jw.endArray();
 
@@ -198,45 +180,17 @@ public final class ChartUtils {
             // X-axis
             jw.beginObject("xaxis");
             jw.write("type", categoryType.optionsType());
-            switch (categoryType) {
-                case DATE:
-                    jw.write("categories",
-                            DataUtils.convert(Long[].class, ((DateChartCategories) categories).categoriesToArray()));
-                    break;
-                case INTEGER:
-                    jw.write("categories", ((IntegerChartCategories) categories).categoriesToArray());
-                    break;
-                case LONG:
-                    jw.write("categories", ((LongChartCategories) categories).categoriesToArray());
-                    break;
-                case STRING:
-                    jw.write("categories", ((StringChartCategories) categories).categoriesToArray());
-                    break;
-                default:
-                    break;
-            }
             jw.endObject();
 
             // Legend
         } else {
+            AbstractSeries<?, ?> pseries = actseries.get(0);
+
             // Series
-            ChartSeries<?> series = chartData.getSeries().get(0);
-            switch (series.getSeriesType()) {
-                case DOUBLE:
-                    jw.write("series", ((DoubleChartSeries) series).dataToArray());
-                    break;
-                case INTEGER:
-                    jw.write("series", ((IntegerChartSeries) series).dataToArray());
-                    break;
-                case LONG:
-                    jw.write("series", ((LongChartSeries) series).dataToArray());
-                    break;
-                default:
-                    break;
-            }
+            pseries.writeYValuesArray("series", jw);
 
             // Labels
-            jw.write("labels", DataUtils.convert(String[].class, categories.categoriesToArray()));
+            pseries.writeXValuesArray("labels", jw);
 
             // Legend
             jw.beginObject("legend");
@@ -249,8 +203,8 @@ public final class ChartUtils {
         return jw;
     }
 
-    public static String getOptionsJson(ChartDef chartDef, ChartData chartData, boolean sparkLine, int preferredHeight)
+    public static String getOptionsJson(ChartDef chartDef, ChartDetails chartDetails, boolean sparkLine, int preferredHeight)
             throws UnifyException {
-        return ChartUtils.getOptionsJsonWriter(chartDef, chartData, sparkLine, preferredHeight).toString();
+        return ChartUtils.getOptionsJsonWriter(chartDef, chartDetails, sparkLine, preferredHeight).toString();
     }
 }

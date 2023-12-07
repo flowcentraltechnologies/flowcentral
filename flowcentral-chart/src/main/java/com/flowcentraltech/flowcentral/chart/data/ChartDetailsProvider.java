@@ -16,34 +16,25 @@
 
 package com.flowcentraltech.flowcentral.chart.data;
 
-import java.util.List;
-
-import com.flowcentraltech.flowcentral.configuration.constants.ChartCategoryDataType;
+import com.flowcentraltech.flowcentral.common.business.RuleListComponent;
+import com.tcdng.unify.core.UnifyException;
 
 /**
- * String chart categories.
+ * Chart details provider.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class StringChartCategories extends ChartCategories<String> {
+public interface ChartDetailsProvider extends RuleListComponent {
 
-    public StringChartCategories(List<String> categories) {
-        super(categories);
-    }
-
-    public StringChartCategories(String[] categories) {
-        super(categories);
-    }
-
-    @Override
-    public ChartCategoryDataType getCategoryType() {
-        return ChartCategoryDataType.STRING;
-    }
-
-    @Override
-    public Class<String> getDataType() {
-        return String.class;
-    }
-
+    /**
+     * Provides data.
+     * 
+     * @param rule
+     *             optional rule
+     * @return the chart data
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    ChartDetails provide(String rule) throws UnifyException;
 }

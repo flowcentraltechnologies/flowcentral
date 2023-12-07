@@ -35,12 +35,12 @@ import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.database.Query;
 
 /**
- * Convenient abstract base class for chart data providers.
+ * Convenient abstract base class for chart details providers.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class AbstractChartDataProvider extends AbstractFlowCentralComponent implements ChartDataProvider {
+public abstract class AbstractChartDetailsProvider extends AbstractFlowCentralComponent implements ChartDetailsProvider {
 
     @Configurable
     private ChartModuleService chartModuleService;
@@ -71,6 +71,10 @@ public abstract class AbstractChartDataProvider extends AbstractFlowCentralCompo
     @Override
     protected void onTerminate() throws UnifyException {
 
+    }
+
+    protected final AppletUtilities au() {
+        return appletUtilities;
     }
 
     protected final ApplicationModuleService application() {

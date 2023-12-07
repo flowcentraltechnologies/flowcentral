@@ -184,7 +184,7 @@ public class AppEntityField extends BaseConfigEntity {
 
     @Override
     public String getDescription() {
-        return name;
+        return label;
     }
 
     public Long getAppEntityId() {
