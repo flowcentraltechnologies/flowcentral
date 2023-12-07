@@ -71,6 +71,14 @@ public enum ChartCategoryDataType implements EnumConst {
         return INTEGER.code;
     }
 
+    public boolean isString() {
+        return STRING.equals(this);
+    }
+
+    public boolean isDate() {
+        return DATE.equals(this);
+    }
+    
     public Class<?> dataType() {
         return dataType;
     }

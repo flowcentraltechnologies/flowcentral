@@ -73,6 +73,10 @@ public abstract class AbstractChartDetailsProvider extends AbstractFlowCentralCo
 
     }
 
+    protected final AppletUtilities au() {
+        return appletUtilities;
+    }
+
     protected final ApplicationModuleService application() {
         return appletUtilities.application();
     }

@@ -1397,18 +1397,20 @@ public final class InputWidgetUtils {
 
     public static Restriction getRestriction(EntityDef entityDef, FilterDef filterDef,
             SpecialParamProvider specialParamProvider, Date now, Map<String, Object> parameters) throws UnifyException {
-        List<FilterRestrictionDef> conditionList = filterDef.getFilterRestrictionDefList();
-        if (!conditionList.isEmpty()) {
-            FilterRestrictionDef fo = conditionList.get(0);
-            if (conditionList.size() == 1 && !fo.getType().isCompound()) {
-                ResolvedCondition resolved = InputWidgetUtils.resolveFieldParam(entityDef, fo, specialParamProvider,
-                        now, parameters);
-                return resolved.createSimpleCriteria();
-            }
+        if (filterDef != null) {
+            List<FilterRestrictionDef> conditionList = filterDef.getFilterRestrictionDefList();
+            if (!conditionList.isEmpty()) {
+                FilterRestrictionDef fo = conditionList.get(0);
+                if (conditionList.size() == 1 && !fo.getType().isCompound()) {
+                    ResolvedCondition resolved = InputWidgetUtils.resolveFieldParam(entityDef, fo, specialParamProvider,
+                            now, parameters);
+                    return resolved.createSimpleCriteria();
+                }
 
-            CriteriaBuilder cb = new CriteriaBuilder();
-            addCompoundCriteria(cb, entityDef, filterDef, fo, 1, specialParamProvider, now, parameters);
-            return cb.build();
+                CriteriaBuilder cb = new CriteriaBuilder();
+                addCompoundCriteria(cb, entityDef, filterDef, fo, 1, specialParamProvider, now, parameters);
+                return cb.build();
+            }
         }
 
         return null;
