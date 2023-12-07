@@ -23,6 +23,7 @@ import com.flowcentraltech.flowcentral.application.data.PropertySequenceDef;
 import com.flowcentraltech.flowcentral.configuration.constants.ChartDataSourceType;
 import com.flowcentraltech.flowcentral.configuration.constants.ChartTimeSeriesType;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.util.StringUtils;
 
 /**
  * Chart snapshot definition.
@@ -50,9 +51,9 @@ public class ChartDataSourceDef {
 
     private final PropertySequenceDef categories;
 
-    private Long id;
+    private final Long id;
 
-    private long version;
+    private final long version;
 
     public ChartDataSourceDef(ChartDataSourceType type, ChartTimeSeriesType timeSeriesType, String name,
             String description, String categoryField, EntityDef entityDef, FilterDef categoryBase,
@@ -83,9 +84,9 @@ public class ChartDataSourceDef {
     }
 
     public EntityFieldDef getCategoryEntityFieldDef() throws UnifyException {
-        return entityDef.getFieldDef(categoryField);
+        return !StringUtils.isBlank(categoryField) ? entityDef.getFieldDef(categoryField) : null;
     }
-    
+
     public String getName() {
         return name;
     }

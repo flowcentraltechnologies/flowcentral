@@ -16,6 +16,8 @@
 
 package com.flowcentraltech.flowcentral.chart.util;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import com.flowcentraltech.flowcentral.chart.data.AbstractSeries;
@@ -156,11 +158,12 @@ public final class ChartUtils {
             jw.endObject();
         }
 
+        List<AbstractSeries<?, ?>> actseries = new ArrayList<AbstractSeries<?, ?>>(series.values());
         if (chartType.axisChart()) {
             // Series
             boolean integers = true;
             jw.beginArray("series");
-            for (AbstractSeries<?, ?> _series : series.values()) {
+            for (AbstractSeries<?, ?> _series : actseries) {
                 _series.writeAsObject(jw);
                 integers &= _series.getDataType().isInteger();
             }
@@ -181,15 +184,13 @@ public final class ChartUtils {
 
             // Legend
         } else {
+            AbstractSeries<?, ?> pseries = actseries.get(0);
+
             // Series
-            jw.beginArray("series");
-            for (AbstractSeries<?, ?> _series : series.values()) {
-                _series.writeAsObject(jw);
-            }
-            jw.endArray();
+            pseries.writeYValuesArray("series", jw);
 
             // Labels
-            //jw.write("labels", DataUtils.convert(String[].class, categories.categoriesToArray()));
+            pseries.writeXValuesArray("labels", jw);
 
             // Legend
             jw.beginObject("legend");

@@ -103,7 +103,7 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
                 @Override
                 protected boolean stale(String chartName, ChartDataSourceDef chartDataSourceDef) throws Exception {
                     return environment().value(long.class, "versionNo",
-                            new ChartQuery().id(chartDataSourceDef.getId())) > chartDataSourceDef.getVersion();
+                            new ChartDataSourceQuery().id(chartDataSourceDef.getId())) > chartDataSourceDef.getVersion();
                 }
 
                 @Override

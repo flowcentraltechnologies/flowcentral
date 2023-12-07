@@ -57,8 +57,10 @@ public class ChartDataSourceChartDetailsProvider extends AbstractChartDetailsPro
 
     protected ChartDetails getChartData(ChartDataSourceDef chartDataSourceDef) throws UnifyException {
         final EntityFieldDef categoryEntityFieldDef = chartDataSourceDef.getCategoryEntityFieldDef();
-        final ChartCategoryDataType chartCategoryType = categoryEntityFieldDef.isDate()
-                || categoryEntityFieldDef.isTimestamp() ? ChartCategoryDataType.DATE : ChartCategoryDataType.STRING;
+        final ChartCategoryDataType chartCategoryType = categoryEntityFieldDef != null
+                && (categoryEntityFieldDef.isDate() || categoryEntityFieldDef.isTimestamp())
+                        ? ChartCategoryDataType.DATE
+                        : ChartCategoryDataType.STRING;
         ChartDetails.Builder cdb = ChartDetails.newBuilder(chartCategoryType);
         // TODO
         return cdb.build();

@@ -3264,8 +3264,7 @@
 						inputWidget="studio.entitycategoryfieldlist" column="1"
 						switchOnChange="true" />
 					<field name="timeSeriesType"
-						inputWidget="application.enumlist" column="1" visible="false"
-						required="true" />
+						inputWidget="application.enumlist" column="1"/>
 				</section>
 			</tab>
 			<tab name="series" label="$m{studio.chartdatasource.form.series}"
@@ -3309,15 +3308,6 @@
 				<setStates>
 					<setState type="field" target="name,description,entity"
 						disabled="true" />
-				</setStates>
-			</formStatePolicy>
-			<formStatePolicy type="on_switch"
-				name="dateCategoryFormPolicy"
-				description="$m{studio.chartdatasource.form.formstatepolicy.datecategory}">
-				<onCondition valueGenerator = "chartadatasourcetimestamp-filtergenerator"/>
-				<setStates>
-					<setState type="field" target="timeSeriesType"
-						visible="true" />
 				</setStates>
 			</formStatePolicy>
 			<formStatePolicy type="on_switch"

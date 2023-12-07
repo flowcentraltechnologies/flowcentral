@@ -17,6 +17,7 @@ package com.flowcentraltech.flowcentral.chart.data;
 
 import com.flowcentraltech.flowcentral.configuration.constants.ChartCategoryDataType;
 import com.flowcentraltech.flowcentral.configuration.constants.ChartSeriesDataType;
+import com.tcdng.unify.core.util.json.JsonWriter;
 
 /**
  * Abstract base class for category series.
@@ -42,8 +43,11 @@ public abstract class AbstractCategorySeries<U extends Number> extends AbstractS
         }
 
         @Override
-        public void writeAsObject(StringBuilder sb) {
-            sb.append("{x:\"").append(getX()).append("\", y:").append(getY()).append("}");
+        public void writeAsObject(JsonWriter jw) {
+            jw.beginObject();
+            jw.write("x", getX());
+            jw.write("y", getY());
+            jw.endObject();
         }
 
     }

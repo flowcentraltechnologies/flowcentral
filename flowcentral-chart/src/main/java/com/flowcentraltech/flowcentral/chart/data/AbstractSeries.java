@@ -71,24 +71,32 @@ public abstract class AbstractSeries<T, U extends Number> {
     }
 
     public void writeAsObject(JsonWriter jw) {
-        final StringBuilder sb = new StringBuilder();
-        sb.append("[");
-        boolean sym = false;
-        for (AbstractSeriesData _data : data) {
-            if (sym) {
-                sb.append(",");
-            } else {
-                sym = true;
-            }
-
-            _data.writeAsObject(sb);
-        }
-        sb.append("]");
-
         jw.beginObject();
         jw.write("name", name);
-        jw.write("data", sb.toString());
+        jw.beginArray("data");
+        for (AbstractSeriesData _data: data) {
+            _data.writeAsObject(jw);
+        }
+        jw.endArray();
         jw.endObject();
+    }
+
+    public void writeXValuesArray(String field, JsonWriter jw) {
+        String[] x = new String[data.size()];
+        for (int i = 0; i < x.length; i++) {
+            x[i] = String.valueOf(data.get(i).getX());
+        }
+        
+        jw.write(field, x);
+    }
+
+    public void writeYValuesArray(String field, JsonWriter jw) {
+        Number[] y = new Number[data.size()];
+        for (int i = 0; i < y.length; i++) {
+            y[i] = data.get(i).getY();
+        }
+        
+        jw.write(field, y);
     }
 
     protected abstract AbstractSeriesData createData(T x, U y);
@@ -112,7 +120,8 @@ public abstract class AbstractSeries<T, U extends Number> {
             return y;
         }
 
-        public abstract void writeAsObject(StringBuilder sb);
+        public abstract void writeAsObject(JsonWriter jw);
+        
     }
 
 }
