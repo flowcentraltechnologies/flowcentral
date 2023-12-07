@@ -16,30 +16,14 @@
 
 package com.flowcentraltech.flowcentral.chart.util;
 
-import org.apache.poi.ss.usermodel.charts.ChartSeries;
+import java.util.Map;
 
 import com.flowcentraltech.flowcentral.chart.data.AbstractSeries;
-import com.flowcentraltech.flowcentral.chart.data.CategoryDoubleSeries;
-import com.flowcentraltech.flowcentral.chart.data.CategoryIntegerSeries;
-import com.flowcentraltech.flowcentral.chart.data.ChartCategories;
 import com.flowcentraltech.flowcentral.chart.data.ChartDef;
 import com.flowcentraltech.flowcentral.chart.data.ChartDetails;
-import com.flowcentraltech.flowcentral.chart.data.DateChartCategories;
-import com.flowcentraltech.flowcentral.chart.data.DateTimeDoubleSeries;
-import com.flowcentraltech.flowcentral.chart.data.DateTimeIntegerSeries;
-import com.flowcentraltech.flowcentral.chart.data.DoubleChartSeries;
-import com.flowcentraltech.flowcentral.chart.data.IntegerChartCategories;
-import com.flowcentraltech.flowcentral.chart.data.IntegerChartSeries;
-import com.flowcentraltech.flowcentral.chart.data.LongChartCategories;
-import com.flowcentraltech.flowcentral.chart.data.LongChartSeries;
-import com.flowcentraltech.flowcentral.chart.data.NumericDoubleSeries;
-import com.flowcentraltech.flowcentral.chart.data.NumericIntegerSeries;
-import com.flowcentraltech.flowcentral.chart.data.StringChartCategories;
 import com.flowcentraltech.flowcentral.configuration.constants.ChartCategoryDataType;
-import com.flowcentraltech.flowcentral.configuration.constants.ChartSeriesDataType;
 import com.flowcentraltech.flowcentral.configuration.constants.ChartType;
 import com.tcdng.unify.core.UnifyException;
-import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.core.util.json.JsonWriter;
 
@@ -54,57 +38,15 @@ public final class ChartUtils {
     private ChartUtils() {
 
     }
-
-    public static AbstractSeries<?, ?> createSeries(ChartCategoryDataType categoryType, ChartSeriesDataType dataType, String name) {
-        switch(categoryType) {
-            case DATE:
-                switch(dataType) {
-                    case DOUBLE:
-                        return new DateTimeDoubleSeries(name);
-                    case INTEGER:
-                    case LONG:
-                        return new DateTimeIntegerSeries(name);
-                    default:
-                        break;                    
-                }
-                break;
-            case INTEGER:
-            case LONG:
-                switch(dataType) {
-                    case DOUBLE:
-                        return new NumericDoubleSeries(name);
-                    case INTEGER:
-                    case LONG:
-                        return new NumericIntegerSeries(name);
-                    default:
-                        break;                    
-                }
-                break;
-            case STRING:
-                switch(dataType) {
-                    case DOUBLE:
-                        return new CategoryDoubleSeries(name);
-                    case INTEGER:
-                    case LONG:
-                        return new CategoryIntegerSeries(name);
-                    default:
-                        break;                    
-                }
-                break;
-            default:
-                break;           
-        }
-        
-        return null;
-    }
     
     public static JsonWriter getOptionsJsonWriter(ChartDef chartDef, ChartDetails chartDetails, boolean sparkLine,
             int preferredHeight) throws UnifyException {
         JsonWriter jw = new JsonWriter();
         jw.beginObject();
         final ChartType chartType = chartDef.getType();
-        final ChartCategories<?> categories = chartDetails.getCategories();
-        final ChartCategoryDataType categoryType = categories.getCategoryType();
+        final Map<String, AbstractSeries<?, ?>> series = chartDetails.getSeries();
+        final ChartCategoryDataType categoryType = chartDetails.getCategoryType();
+
         // Title
         String title = !StringUtils.isBlank(chartDetails.getTitle()) ? chartDetails.getTitle() : chartDef.getTitle();
         if (!StringUtils.isBlank(title)) {
@@ -218,24 +160,9 @@ public final class ChartUtils {
             // Series
             boolean integers = true;
             jw.beginArray("series");
-            for (ChartSeries<?> series : chartDetails.getSeries()) {
-                jw.beginObject();
-                jw.write("name", series.getName());
-                switch (series.getSeriesType()) {
-                    case DOUBLE:
-                        jw.write("data", ((DoubleChartSeries) series).dataToArray());
-                        integers = false;
-                        break;
-                    case INTEGER:
-                        jw.write("data", ((IntegerChartSeries) series).dataToArray());
-                        break;
-                    case LONG:
-                        jw.write("data", ((LongChartSeries) series).dataToArray());
-                        break;
-                    default:
-                        break;
-                }
-                jw.endObject();
+            for (AbstractSeries<?, ?> _series : series.values()) {
+                _series.writeAsObject(jw);
+                integers &= _series.getDataType().isInteger();
             }
             jw.endArray();
 
@@ -250,45 +177,19 @@ public final class ChartUtils {
             // X-axis
             jw.beginObject("xaxis");
             jw.write("type", categoryType.optionsType());
-            switch (categoryType) {
-                case DATE:
-                    jw.write("categories",
-                            DataUtils.convert(Long[].class, ((DateChartCategories) categories).categoriesToArray()));
-                    break;
-                case INTEGER:
-                    jw.write("categories", ((IntegerChartCategories) categories).categoriesToArray());
-                    break;
-                case LONG:
-                    jw.write("categories", ((LongChartCategories) categories).categoriesToArray());
-                    break;
-                case STRING:
-                    jw.write("categories", ((StringChartCategories) categories).categoriesToArray());
-                    break;
-                default:
-                    break;
-            }
             jw.endObject();
 
             // Legend
         } else {
             // Series
-            ChartSeries<?> series = chartDetails.getSeries().get(0);
-            switch (series.getSeriesType()) {
-                case DOUBLE:
-                    jw.write("series", ((DoubleChartSeries) series).dataToArray());
-                    break;
-                case INTEGER:
-                    jw.write("series", ((IntegerChartSeries) series).dataToArray());
-                    break;
-                case LONG:
-                    jw.write("series", ((LongChartSeries) series).dataToArray());
-                    break;
-                default:
-                    break;
+            jw.beginArray("series");
+            for (AbstractSeries<?, ?> _series : series.values()) {
+                _series.writeAsObject(jw);
             }
+            jw.endArray();
 
             // Labels
-            jw.write("labels", DataUtils.convert(String[].class, categories.categoriesToArray()));
+            //jw.write("labels", DataUtils.convert(String[].class, categories.categoriesToArray()));
 
             // Legend
             jw.beginObject("legend");

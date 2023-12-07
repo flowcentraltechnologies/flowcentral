@@ -165,11 +165,6 @@
 			dataType="string" inputType="string"
 			editor="!ui-select list:studioentitycategoryfieldlist listKey:$s{name} listParams:$l{entity} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
-		<widgetType name="entitycategorydatefieldlist"
-			description="$m{studio.widgettype.entitycategorydatefieldlist}"
-			dataType="string" inputType="string"
-			editor="!ui-select list:studioentitycategorydatefieldlist listKey:$s{name} listParams:$l{entity} blankOption:$m{blank.none}"
-			renderer="!ui-label" />
 		<widgetType name="entitysearchfieldlist"
 			description="$m{studio.widgettype.entitysearchfieldlist}"
 			dataType="string" inputType="string"
@@ -194,7 +189,7 @@
 			description="$m{studio.widgettype.seriesentityfieldlist}"
 			dataType="string" inputType="string"
 			editor="!ui-select list:studioseriesentityfieldlist listKey:$s{name} listParams:$l{appEntityId} blankOption:$m{blank.none}"
-			renderer="!ui-label" />			
+			renderer="!ui-label" />
 		<widgetType name="formannotationlist"
 			description="$m{studio.widgettype.formannotationlist}"
 			dataType="string" inputType="string"
@@ -503,13 +498,17 @@
 		</applet>
 		<applet name="delegateCreateSynchronization"
 			description="$m{studio.delegatecreatesynchronization.manage}"
-			label="$m{studio.delegatecreatesynchronization.manage.label}" icon="lock" type="path_page"
-			path="/studio/delegatecreatesynchronization/openPage" menuAccess="false">
+			label="$m{studio.delegatecreatesynchronization.manage.label}"
+			icon="lock" type="path_page"
+			path="/studio/delegatecreatesynchronization/openPage"
+			menuAccess="false">
 		</applet>
 		<applet name="delegateSynchronization"
 			description="$m{studio.delegateupdatesynchronization.manage}"
-			label="$m{studio.delegateupdatesynchronization.manage.label}" icon="lock" type="path_page"
-			path="/studio/delegateupdatesynchronization/openPage" menuAccess="false">
+			label="$m{studio.delegateupdatesynchronization.manage.label}"
+			icon="lock" type="path_page"
+			path="/studio/delegateupdatesynchronization/openPage"
+			menuAccess="false">
 		</applet>
 		<applet name="stuManageModule"
 			description="$m{studio.module.manage}"
@@ -1231,8 +1230,9 @@
 		</applet>
 		<applet name="manageNotifTemplateParam"
 			description="$m{studio.notificationtemplateparam.manage}"
-			label="$m{studio.notificationtemplateparam.manage.label}" type="manage_entitylist"
-			entity="notification.notifTemplateParam" menuAccess="false">
+			label="$m{studio.notificationtemplateparam.manage.label}"
+			type="manage_entitylist" entity="notification.notifTemplateParam"
+			menuAccess="false">
 			<property name="searchTable" value="notifTemplateParamTable" />
 			<property name="searchTable.new" value="true" />
 			<property name="searchTable.edit" value="false" />
@@ -1247,9 +1247,11 @@
 		</applet>
 		<applet name="manageNotifLargeTextParam"
 			description="$m{studio.notificationlargetextparam.manage}"
-			label="$m{studio.notificationlargetextparam.manage.label}" type="manage_entitylist"
-			entity="notification.notifLargeTextParam" menuAccess="false">
-			<property name="searchTable" value="notifLargeTextParamTable" />
+			label="$m{studio.notificationlargetextparam.manage.label}"
+			type="manage_entitylist" entity="notification.notifLargeTextParam"
+			menuAccess="false">
+			<property name="searchTable"
+				value="notifLargeTextParamTable" />
 			<property name="searchTable.new" value="true" />
 			<property name="searchTable.edit" value="false" />
 			<property name="searchTable.report" value="false" />
@@ -1257,7 +1259,8 @@
 			<property name="createForm.save" value="true" />
 			<property name="createForm.save.next" value="true" />
 			<property name="createForm.save.close" value="true" />
-			<property name="maintainForm" value="notifLargeTextParamForm" />
+			<property name="maintainForm"
+				value="notifLargeTextParamForm" />
 			<property name="maintainForm.update" value="true" />
 			<property name="maintainForm.delete" value="true" />
 		</applet>
@@ -1352,13 +1355,13 @@
 			<column field="moduleLabel" renderWidget="application.text"
 				widthRatio="1" label="$m{application.application.module}" />
 			<column field="label" renderWidget="application.text"
-				widthRatio="1"/>
+				widthRatio="1" />
 			<column field="developable" renderWidget="application.text"
-				widthRatio="1"/>
+				widthRatio="1" />
 			<column field="menuAccess" renderWidget="application.text"
-				widthRatio="1"/>
-			<column field="allowSecondaryTenants" renderWidget="application.text"
-				widthRatio="1"/>
+				widthRatio="1" />
+			<column field="allowSecondaryTenants"
+				renderWidget="application.text" widthRatio="1" />
 		</table>
 		<table name="appEntityFieldTable"
 			description="$m{studio.appentityfield.table}"
@@ -1417,7 +1420,8 @@
 		<table name="appEntitySeriesTable"
 			description="$m{studio.appentityseries.table}"
 			label="$m{studio.appentityseries.table.label}"
-			entity="application.appEntitySeries" itemsPerPage="20" serialNo="true">
+			entity="application.appEntitySeries" itemsPerPage="20"
+			serialNo="true">
 			<column field="name" renderWidget="application.name"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="description" renderWidget="application.text"
@@ -1432,7 +1436,8 @@
 		<table name="appEntityCategoryTable"
 			description="$m{studio.appentitycategory.table}"
 			label="$m{studio.appentitycategory.table.label}"
-			entity="application.appEntityCategory" itemsPerPage="20" serialNo="true">
+			entity="application.appEntityCategory" itemsPerPage="20"
+			serialNo="true">
 			<column field="name" renderWidget="application.name"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="description" renderWidget="application.text"
@@ -1460,7 +1465,7 @@
 			<column field="name" renderWidget="application.name"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="description" renderWidget="application.text"
-				widthRatio="1"/>
+				widthRatio="1" />
 		</table>
 		<table name="appEntityUniqueConstraintTable"
 			description="$m{studio.appentityuniqueconstraint.table}"
@@ -1470,7 +1475,7 @@
 			<column field="name" renderWidget="application.name"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="description" renderWidget="application.text"
-				widthRatio="1"/>
+				widthRatio="1" />
 			<column field="fieldList" renderWidget="application.text"
 				widthRatio="1" />
 		</table>
@@ -1481,7 +1486,7 @@
 			<column field="name" renderWidget="application.name"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="description" renderWidget="application.text"
-				widthRatio="1"/>
+				widthRatio="1" />
 			<column field="fieldList" renderWidget="application.text"
 				widthRatio="1" />
 		</table>
@@ -1493,7 +1498,7 @@
 			<column field="name" renderWidget="application.name"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="description" renderWidget="application.text"
-				widthRatio="1"  />
+				widthRatio="1" />
 			<column field="constraintActionDesc"
 				renderWidget="application.text"
 				label="$m{application.appentityupload.constraintaction}"
@@ -1519,7 +1524,7 @@
 			<column field="name" renderWidget="application.name"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="description" renderWidget="application.text"
-				widthRatio="1"/>
+				widthRatio="1" />
 			<column field="quickFilter" renderWidget="application.text"
 				widthRatio="1" />
 			<column field="ownershipTypeDesc"
@@ -1537,7 +1542,7 @@
 			<column field="name" renderWidget="application.name"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="description" renderWidget="application.text"
-				widthRatio="1"/>
+				widthRatio="1" />
 			<column field="createDt" renderWidget="application.datetime"
 				widthRatio="1" />
 			<column field="updateDt" renderWidget="application.datetime"
@@ -1650,7 +1655,7 @@
 			<column field="name" renderWidget="application.name"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="description" renderWidget="application.text"
-				widthRatio="1"/>
+				widthRatio="1" />
 			<column field="createDt" renderWidget="application.datetime"
 				widthRatio="1" />
 			<column field="updateDt" renderWidget="application.datetime"
@@ -1682,7 +1687,7 @@
 			<column field="name" renderWidget="application.name"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="description" renderWidget="application.text"
-				widthRatio="1"/>
+				widthRatio="1" />
 			<column field="label" renderWidget="application.text"
 				widthRatio="1" />
 			<column field="applet" renderWidget="application.text"
@@ -1695,7 +1700,7 @@
 			<column field="name" renderWidget="application.name"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="description" renderWidget="application.text"
-				widthRatio="1"/>
+				widthRatio="1" />
 			<column field="typeDesc" renderWidget="application.text"
 				widthRatio="1" />
 		</table>
@@ -1706,7 +1711,7 @@
 			<column field="name" renderWidget="application.name"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="description" renderWidget="application.text"
-				widthRatio="1"/>
+				widthRatio="1" />
 		</table>
 		<table name="appFormSetStateTable"
 			description="$m{studio.appformsetstate.table}"
@@ -1732,7 +1737,7 @@
 			<column field="name" renderWidget="application.name"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="description" renderWidget="application.text"
-				widthRatio="1"/>
+				widthRatio="1" />
 			<column field="fieldName" renderWidget="application.name"
 				widthRatio="1" />
 			<column field="validation" renderWidget="application.text"
@@ -1882,7 +1887,7 @@
 			<column field="name" renderWidget="application.name"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="label" renderWidget="application.text"
-				widthRatio="1"/>
+				widthRatio="1" />
 		</table>
 		<table name="notifLargeTextParamTable"
 			description="$m{studio.notificationlargetextparam.table}"
@@ -1891,7 +1896,7 @@
 			<column field="name" renderWidget="application.name"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="label" renderWidget="application.text"
-				widthRatio="1"/>
+				widthRatio="1" />
 		</table>
 		<table name="reportColumnTable"
 			description="$m{studio.reportcolumn.table}"
@@ -2011,10 +2016,11 @@
 					<setState type="field" target="name" editable="true" />
 				</setStates>
 			</formStatePolicy>
-			<formStatePolicy type="on_switch" name="onDevelopable"
-				description="Developable">
+			<formStatePolicy type="on_switch"
+				name="onDevelopable" description="Developable">
 				<onCondition>
-					<restriction type="equals" field="developable" paramA="true" />
+					<restriction type="equals" field="developable"
+						paramA="true" />
 				</onCondition>
 				<setStates>
 					<setState type="field" target="menuAccess" editable="true" />
@@ -2302,7 +2308,8 @@
 					<field name="description" inputWidget="application.text"
 						column="0" required="true" />
 					<field name="sender"
-						inputWidget="studio.appletentitynotifsenderlist" required="true" column="1" />
+						inputWidget="studio.appletentitynotifsenderlist" required="true"
+						column="1" />
 					<field name="recipientPolicy"
 						inputWidget="studio.wfrecipientpolicylist" column="1"
 						switchOnChange="true" />
@@ -2366,7 +2373,7 @@
 					<field name="reportable" inputWidget="application.checkbox"
 						column="1" />
 					<field name="actionPolicy" inputWidget="application.checkbox"
-						column="1" disabled="true"/>
+						column="1" disabled="true" />
 				</section>
 			</tab>
 			<tab name="fields" label="$m{studio.appentity.form.fields}"
@@ -2394,8 +2401,7 @@
 				label="$m{studio.appentity.form.searchinputs}"
 				contentType="child_list" applet="manageAppEntitySearchInput"
 				reference="searchInputList" />
-			<tab name="series"
-				label="$m{studio.appentity.form.series}"
+			<tab name="series" label="$m{studio.appentity.form.series}"
 				contentType="child_list" applet="manageAppEntitySeries"
 				reference="seriesList" />
 			<tab name="categories"
@@ -2505,7 +2511,8 @@
 					<restriction type="is_not_null" field="delegate" />
 				</onCondition>
 				<setStates>
-					<setState type="field" target="dataSourceName" visible="true" />
+					<setState type="field" target="dataSourceName"
+						visible="true" />
 				</setStates>
 			</formStatePolicy>
 			<formStatePolicy type="on_switch"
@@ -2663,7 +2670,8 @@
 						paramA="CD|CL|CU" />
 				</onCondition>
 				<setStates>
-					<setState type="field" target="references,readOnly" visible="true" />
+					<setState type="field" target="references,readOnly"
+						visible="true" />
 				</setStates>
 			</formStatePolicy>
 			<formStatePolicy type="on_switch"
@@ -2778,14 +2786,14 @@
 						inputWidget="application.entitysearch"
 						label="$m{application.appentityseries.appentity}" column="0"
 						required="true" />
-					<field name="name" inputWidget="application.name"
-						column="0" required="true" />
-					<field name="description" inputWidget="application.text" column="0"
+					<field name="name" inputWidget="application.name" column="0"
 						required="true" />
+					<field name="description" inputWidget="application.text"
+						column="0" required="true" />
 					<field name="label" inputWidget="application.text" column="0"
 						required="true" />
-					<field name="type"
-						column="1" required="true" switchOnChange="true" />
+					<field name="type" column="1" required="true"
+						switchOnChange="true" />
 					<field name="fieldName" inputWidget="seriesentityfieldlist"
 						column="1" required="true" />
 				</section>
@@ -2799,8 +2807,7 @@
 					<restriction type="equals" field="type" paramA="COUNT" />
 				</onCondition>
 				<setStates>
-					<setState type="field" target="fieldName"
-						required="false" />
+					<setState type="field" target="fieldName" required="false" />
 				</setStates>
 			</formStatePolicy>
 		</form>
@@ -2818,17 +2825,17 @@
 						inputWidget="application.entitysearch"
 						label="$m{application.appentitycategory.appentity}" column="0"
 						required="true" />
-					<field name="name" inputWidget="application.name"
-						column="0" required="true" />
-					<field name="description" inputWidget="application.text" column="0"
+					<field name="name" inputWidget="application.name" column="0"
 						required="true" />
+					<field name="description" inputWidget="application.text"
+						column="0" required="true" />
 					<field name="label" inputWidget="application.text" column="1"
 						required="true" />
 				</section>
 			</tab>
 			<tab name="condition"
-				label="$m{studio.appentitycategory.form.condition}" reference="app_entitycategory"
-				contentType="filter_condition" />
+				label="$m{studio.appentitycategory.form.condition}"
+				reference="app_entitycategory" contentType="filter_condition" />
 			<tab name="changeLog" label="$m{application.form.audit}"
 				contentType="miniform_changelog" />
 		</form>
@@ -3219,7 +3226,8 @@
 				</setStates>
 			</formStatePolicy>
 		</form>
-		<form name="chartDataSourceForm" description="$m{studio.chartdatasource.form}"
+		<form name="chartDataSourceForm"
+			description="$m{studio.chartdatasource.form}"
 			entity="chart.chartDataSource">
 			<action type="button" name="lockResource" symbol="lock"
 				styleClass="fc-bluebutton"
@@ -3235,8 +3243,8 @@
 				description="$m{studio.common.form.annotation.static}"
 				message="$m{studio.common.form.annotation.static.message}" />
 			<tab name="basicDetails"
-				label="$m{studio.chartdatasource.form.basicdetails}" contentType="miniform"
-				editable="true">
+				label="$m{studio.chartdatasource.form.basicdetails}"
+				contentType="miniform" editable="true">
 				<section name="chartDataSourceDetails" columns="type_2">
 					<field name="applicationId"
 						reference="studio.applicationDevelopableRef"
@@ -3252,20 +3260,20 @@
 					<field name="type" column="1" required="true" />
 					<field name="entity" inputWidget="studio.entitybynamelist"
 						column="1" switchOnChange="true" required="true" />
-					<field name="categoryField" inputWidget="studio.entitycategoryfieldlist"
-						column="1" switchOnChange="true"/>
-					<field name="categoryDateField" inputWidget="studio.entitycategorydatefieldlist"
-						column="1" switchOnChange="true"/>
-					<field name="timeSeriesType" inputWidget="application.enumlist"
-						column="1" visible="false" required="true" />
+					<field name="categoryField"
+						inputWidget="studio.entitycategoryfieldlist" column="1"
+						switchOnChange="true" />
+					<field name="timeSeriesType"
+						inputWidget="application.enumlist" column="1" visible="false"
+						required="true" />
 				</section>
 			</tab>
-			<tab name="series"
-				label="$m{studio.chartdatasource.form.series}"
+			<tab name="series" label="$m{studio.chartdatasource.form.series}"
 				reference="chart_series" contentType="property_sequence" />
 			<tab name="categories"
 				label="$m{studio.chartdatasource.form.categories}"
-				reference="chart_categories" contentType="property_sequence" visible="true" />
+				reference="chart_categories" contentType="property_sequence"
+				visible="true" />
 			<tab name="categoryBase"
 				label="$m{studio.chartdatasource.form.categorybase}"
 				reference="chart_categorybase" contentType="filter_condition" />
@@ -3306,9 +3314,7 @@
 			<formStatePolicy type="on_switch"
 				name="dateCategoryFormPolicy"
 				description="$m{studio.chartdatasource.form.formstatepolicy.datecategory}">
-				<onCondition>
-					<restriction type="is_not_null" field="categoryDateField" />
-				</onCondition>
+				<onCondition valueGenerator = "chartadatasourcetimestamp-filtergenerator"/>
 				<setStates>
 					<setState type="field" target="timeSeriesType"
 						visible="true" />
@@ -3318,14 +3324,10 @@
 				name="categoriesFormPolicy"
 				description="$m{studio.chartdatasource.form.formstatepolicy.categories}">
 				<onCondition>
-					<restriction type="or">
-						<restriction type="is_not_null" field="categoryField" />
-						<restriction type="is_not_null" field="categoryDateField" />
-					</restriction>
+					<restriction type="is_not_null" field="categoryField" />
 				</onCondition>
 				<setStates>
-					<setState type="tab" target="categories"
-						visible="false" />
+					<setState type="tab" target="categories" visible="false" />
 				</setStates>
 			</formStatePolicy>
 		</form>
@@ -3464,8 +3466,8 @@
 				<section name="messageDetails" columns="type_1">
 					<field name="subject" inputWidget="application.text"
 						column="0" required="true" />
-					<field name="template" inputWidget="application.textarealarge"
-						column="0" required="true" />
+					<field name="template"
+						inputWidget="application.textarealarge" column="0" required="true" />
 				</section>
 			</tab>
 			<tab name="params"
@@ -3516,8 +3518,8 @@
 				<section name="templateParamDetails" columns="type_2">
 					<field name="name" inputWidget="application.name" column="0"
 						required="true" />
-					<field name="label" inputWidget="application.text"
-						column="1" required="true"/>
+					<field name="label" inputWidget="application.text" column="1"
+						required="true" />
 				</section>
 			</tab>
 			<tab name="changeLog" label="$m{application.form.audit}"
@@ -3555,10 +3557,10 @@
 					<field name="configType" inputWidget="application.enumlist"
 						column="1" disabled="true" required="true" />
 					<field name="entity" inputWidget="studio.entitybynamelist"
-						column="1"/>
-					<field name="fontFamily" column="1"/>
-					<field name="fontSizeInPixels" inputWidget="application.integer"
-						column="1"/>
+						column="1" />
+					<field name="fontFamily" column="1" />
+					<field name="fontSizeInPixels"
+						inputWidget="application.integer" column="1" />
 				</section>
 				<section name="bodyDetails" columns="type_1">
 					<field name="body" inputWidget="application.textareaxxlarge"
@@ -3613,8 +3615,8 @@
 				<section name="templateParamDetails" columns="type_2">
 					<field name="name" inputWidget="application.name" column="0"
 						required="true" />
-					<field name="label" inputWidget="application.text"
-						column="1" required="true"/>
+					<field name="label" inputWidget="application.text" column="1"
+						required="true" />
 				</section>
 			</tab>
 			<tab name="changeLog" label="$m{application.form.audit}"
@@ -3665,7 +3667,7 @@
 						column="1" />
 					<field name="letterGenerator"
 						inputWidget="studio.reportablelettergeneratorlist" column="1"
-						required="true" visible="false"/>
+						required="true" visible="false" />
 					<field name="showGrandFooter"
 						inputWidget="application.checkbox" column="1" />
 					<field name="invertGroupColors"
@@ -3696,7 +3698,8 @@
 						column="1" required="true" visible="true" />
 				</section>
 			</tab>
-			<tab name="design" label="$m{studio.reportconfiguration.form.design}"
+			<tab name="design"
+				label="$m{studio.reportconfiguration.form.design}"
 				contentType="child_list" applet="manageReportColumn"
 				reference="columnList" editAction="/designChildItem" />
 			<tab name="placements"
@@ -3782,12 +3785,12 @@
 					<setState type="field"
 						target="processor,showGrandFooter,invertGroupColors,underlineRows,shadeOddRows,landscape"
 						visible="false" />
-					<setState type="field"
-						target="letterGenerator"
+					<setState type="field" target="letterGenerator"
 						visible="true" />
 					<setState type="tab" target="placements" visible="false" />
 					<setState type="tab" target="columns" visible="false" />
-					<setState type="section" target="pageDetails" visible="false" />
+					<setState type="section" target="pageDetails"
+						visible="false" />
 				</setStates>
 			</formStatePolicy>
 			<formStatePolicy type="on_switch"
@@ -3928,9 +3931,9 @@
 					<field name="label" inputWidget="application.text" column="0"
 						required="true" />
 					<field name="type" inputWidget="application.enumlist"
-						column="1" required="true" switchOnChange = "true"/>
-					<field name="editor" inputWidget="application.datatypeeditorlist"
-						column="1" />
+						column="1" required="true" switchOnChange="true" />
+					<field name="editor"
+						inputWidget="application.datatypeeditorlist" column="1" />
 					<field name="mandatory" inputWidget="application.checkbox"
 						column="1" />
 					<field name="defaultVal" inputWidget="application.text"
@@ -3975,8 +3978,8 @@
 						inputWidget="studio.detailspanellist" column="1" />
 					<field name="itemsPerPage" inputWidget="application.integer"
 						column="1" />
-					<field name="summaryTitleColumns" inputWidget="application.integer"
-						column="1" />
+					<field name="summaryTitleColumns"
+						inputWidget="application.integer" column="1" />
 				</section>
 				<section name="tableFlags" columns="type_1_2">
 					<field name="headerless" inputWidget="application.checkbox"
@@ -4188,8 +4191,8 @@
 						column="1" required="true" switchOnChange="true" />
 					<field name="type" inputWidget="application.enumlist"
 						column="1" required="true" switchOnChange="true" />
-					<field name="titleFormat" inputWidget="application.texttemplate"
-						column="1" />
+					<field name="titleFormat"
+						inputWidget="application.texttemplate" column="1" />
 					<field name="consolidatedValidation"
 						inputWidget="studio.consformvalidationpolicylist" column="1"
 						visible="false" />
@@ -4877,8 +4880,7 @@
 					<field name="description" inputWidget="application.text"
 						column="1" required="true" />
 					<field name="filterGenerator"
-						inputWidget="studio.workflowfiltergeneratorlist"
-						column="1" />
+						inputWidget="studio.workflowfiltergeneratorlist" column="1" />
 				</section>
 			</tab>
 			<tab name="condition"
@@ -5382,7 +5384,7 @@
 					inputWidget="application.checkbox" />
 				<property name="searchTable.selectByConstraint"
 					description="$m{studio.appappletprop.manageentity.searchtable.selectbyconstraint}"
-					inputWidget="studio.propertyappletuniqueconstraintlist"/>
+					inputWidget="studio.propertyappletuniqueconstraintlist" />
 				<property name="baseRestriction"
 					description="$m{studio.appappletprop.manageentity.baserestriction}"
 					inputWidget="studio.propertyappletfilterlist" />
@@ -5526,106 +5528,106 @@
 					inputWidget="application.checkbox" />
 				<property name="workflowCopy.attachmentprovider"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.attachmentprovider}"
-					inputWidget="studio.propertyappletattachmentproviderlist" />					
+					inputWidget="studio.propertyappletattachmentproviderlist" />
 				<property name="workflowCopy.create.copy.setvalues"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.create.copysetvalues}"
 					inputWidget="studio.propertyappletsetvalueslist" />
 				<property name="workflowCopy.create.alert"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.create.submitalert}"
-					inputWidget="studio.propertyappletalertlist" />					
+					inputWidget="studio.propertyappletalertlist" />
 				<property name="workflowCopy.create.setvalues"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.create.submitsetvalues}"
 					inputWidget="studio.propertyappletsetvalueslist" />
 				<property name="workflowCopy.create.approval.alert"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.create.approvalalert}"
-					inputWidget="studio.propertyappletalertlist" />					
+					inputWidget="studio.propertyappletalertlist" />
 				<property name="workflowCopy.create.approval.setvalues"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.create.approvalsetvalues}"
 					inputWidget="studio.propertyappletsetvalueslist" />
 				<property name="workflowCopy.create.rejection.alert"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.create.rejectionalert}"
-					inputWidget="studio.propertyappletalertlist" />					
+					inputWidget="studio.propertyappletalertlist" />
 				<property name="workflowCopy.create.rejection.setvalues"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.create.rejectionsetvalues}"
 					inputWidget="studio.propertyappletsetvalueslist" />
 				<property name="workflowCopy.create.resubmit.alert"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.create.resubmitalert}"
-					inputWidget="studio.propertyappletalertlist" />					
+					inputWidget="studio.propertyappletalertlist" />
 				<property name="workflowCopy.create.resubmit.setvalues"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.create.resubmitsetvalues}"
 					inputWidget="studio.propertyappletsetvalueslist" />
 				<property name="workflowCopy.create.discard.alert"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.create.discardalert}"
-					inputWidget="studio.propertyappletalertlist" />					
+					inputWidget="studio.propertyappletalertlist" />
 				<property name="workflowCopy.create.discard.setvalues"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.create.discardsetvalues}"
 					inputWidget="studio.propertyappletsetvalueslist" />
 				<property name="workflowCopy.create.abort.alert"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.create.abortalert}"
-					inputWidget="studio.propertyappletalertlist" />					
+					inputWidget="studio.propertyappletalertlist" />
 				<property name="workflowCopy.create.abort.setvalues"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.create.abortsetvalues}"
-					inputWidget="studio.propertyappletsetvalueslist" />					
+					inputWidget="studio.propertyappletsetvalueslist" />
 				<property name="workflowCopy.update.copy.setvalues"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.update.copysetvalues}"
 					inputWidget="studio.propertyappletsetvalueslist" />
 				<property name="workflowCopy.update.alert"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.update.submitalert}"
-					inputWidget="studio.propertyappletalertlist" />					
+					inputWidget="studio.propertyappletalertlist" />
 				<property name="workflowCopy.update.setvalues"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.update.submitsetvalues}"
 					inputWidget="studio.propertyappletsetvalueslist" />
 				<property name="workflowCopy.update.approval.alert"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.update.approvalalert}"
-					inputWidget="studio.propertyappletalertlist" />					
+					inputWidget="studio.propertyappletalertlist" />
 				<property name="workflowCopy.update.approval.setvalues"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.update.approvalsetvalues}"
 					inputWidget="studio.propertyappletsetvalueslist" />
 				<property name="workflowCopy.update.rejection.alert"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.update.rejectionalert}"
-					inputWidget="studio.propertyappletalertlist" />					
+					inputWidget="studio.propertyappletalertlist" />
 				<property name="workflowCopy.update.rejection.setvalues"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.update.rejectionsetvalues}"
 					inputWidget="studio.propertyappletsetvalueslist" />
 				<property name="workflowCopy.update.resubmit.alert"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.update.resubmitalert}"
-					inputWidget="studio.propertyappletalertlist" />					
+					inputWidget="studio.propertyappletalertlist" />
 				<property name="workflowCopy.update.resubmit.setvalues"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.update.resubmitsetvalues}"
 					inputWidget="studio.propertyappletsetvalueslist" />
 				<property name="workflowCopy.update.discard.alert"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.update.discardalert}"
-					inputWidget="studio.propertyappletalertlist" />					
+					inputWidget="studio.propertyappletalertlist" />
 				<property name="workflowCopy.update.discard.setvalues"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.update.discardsetvalues}"
 					inputWidget="studio.propertyappletsetvalueslist" />
 				<property name="workflowCopy.update.abort.alert"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.update.abortalert}"
-					inputWidget="studio.propertyappletalertlist" />					
+					inputWidget="studio.propertyappletalertlist" />
 				<property name="workflowCopy.update.abort.setvalues"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.update.abortsetvalues}"
-					inputWidget="studio.propertyappletsetvalueslist" />					
+					inputWidget="studio.propertyappletsetvalueslist" />
 				<property name="workflowCopy.delete.alert"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.delete.submitalert}"
-					inputWidget="studio.propertyappletalertlist" />					
+					inputWidget="studio.propertyappletalertlist" />
 				<property name="workflowCopy.delete.setvalues"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.delete.submitsetvalues}"
 					inputWidget="studio.propertyappletsetvalueslist" />
 				<property name="workflowCopy.delete.approval.alert"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.delete.approvalalert}"
-					inputWidget="studio.propertyappletalertlist" />					
+					inputWidget="studio.propertyappletalertlist" />
 				<property name="workflowCopy.delete.approval.setvalues"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.delete.approvalsetvalues}"
 					inputWidget="studio.propertyappletsetvalueslist" />
 				<property name="workflowCopy.delete.rejection.alert"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.delete.rejectionalert}"
-					inputWidget="studio.propertyappletalertlist" />					
+					inputWidget="studio.propertyappletalertlist" />
 				<property name="workflowCopy.delete.rejection.setvalues"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.delete.rejectionsetvalues}"
 					inputWidget="studio.propertyappletsetvalueslist" />
 				<property name="workflowCopy.delete.abort.alert"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.delete.abortalert}"
-					inputWidget="studio.propertyappletalertlist" />					
+					inputWidget="studio.propertyappletalertlist" />
 				<property name="workflowCopy.delete.abort.setvalues"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.delete.abortsetvalues}"
 					inputWidget="studio.propertyappletsetvalueslist" />
@@ -5783,106 +5785,106 @@
 					inputWidget="application.checkbox" />
 				<property name="workflowCopy.attachmentprovider"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.attachmentprovider}"
-					inputWidget="studio.propertyappletattachmentproviderlist" />					
+					inputWidget="studio.propertyappletattachmentproviderlist" />
 				<property name="workflowCopy.create.copy.setvalues"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.create.copysetvalues}"
 					inputWidget="studio.propertyappletsetvalueslist" />
 				<property name="workflowCopy.create.alert"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.create.submitalert}"
-					inputWidget="studio.propertyappletalertlist" />					
+					inputWidget="studio.propertyappletalertlist" />
 				<property name="workflowCopy.create.setvalues"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.create.submitsetvalues}"
 					inputWidget="studio.propertyappletsetvalueslist" />
 				<property name="workflowCopy.create.approval.alert"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.create.approvalalert}"
-					inputWidget="studio.propertyappletalertlist" />					
+					inputWidget="studio.propertyappletalertlist" />
 				<property name="workflowCopy.create.approval.setvalues"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.create.approvalsetvalues}"
 					inputWidget="studio.propertyappletsetvalueslist" />
 				<property name="workflowCopy.create.rejection.alert"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.create.rejectionalert}"
-					inputWidget="studio.propertyappletalertlist" />					
+					inputWidget="studio.propertyappletalertlist" />
 				<property name="workflowCopy.create.rejection.setvalues"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.create.rejectionsetvalues}"
 					inputWidget="studio.propertyappletsetvalueslist" />
 				<property name="workflowCopy.create.resubmit.alert"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.create.resubmitalert}"
-					inputWidget="studio.propertyappletalertlist" />					
+					inputWidget="studio.propertyappletalertlist" />
 				<property name="workflowCopy.create.resubmit.setvalues"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.create.resubmitsetvalues}"
 					inputWidget="studio.propertyappletsetvalueslist" />
 				<property name="workflowCopy.create.discard.alert"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.create.discardalert}"
-					inputWidget="studio.propertyappletalertlist" />					
+					inputWidget="studio.propertyappletalertlist" />
 				<property name="workflowCopy.create.discard.setvalues"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.create.discardsetvalues}"
 					inputWidget="studio.propertyappletsetvalueslist" />
 				<property name="workflowCopy.create.abort.alert"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.create.abortalert}"
-					inputWidget="studio.propertyappletalertlist" />					
+					inputWidget="studio.propertyappletalertlist" />
 				<property name="workflowCopy.create.abort.setvalues"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.create.abortsetvalues}"
-					inputWidget="studio.propertyappletsetvalueslist" />					
+					inputWidget="studio.propertyappletsetvalueslist" />
 				<property name="workflowCopy.update.copy.setvalues"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.update.copysetvalues}"
 					inputWidget="studio.propertyappletsetvalueslist" />
 				<property name="workflowCopy.update.alert"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.update.submitalert}"
-					inputWidget="studio.propertyappletalertlist" />					
+					inputWidget="studio.propertyappletalertlist" />
 				<property name="workflowCopy.update.setvalues"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.update.submitsetvalues}"
 					inputWidget="studio.propertyappletsetvalueslist" />
 				<property name="workflowCopy.update.approval.alert"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.update.approvalalert}"
-					inputWidget="studio.propertyappletalertlist" />					
+					inputWidget="studio.propertyappletalertlist" />
 				<property name="workflowCopy.update.approval.setvalues"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.update.approvalsetvalues}"
 					inputWidget="studio.propertyappletsetvalueslist" />
 				<property name="workflowCopy.update.rejection.alert"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.update.rejectionalert}"
-					inputWidget="studio.propertyappletalertlist" />					
+					inputWidget="studio.propertyappletalertlist" />
 				<property name="workflowCopy.update.rejection.setvalues"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.update.rejectionsetvalues}"
 					inputWidget="studio.propertyappletsetvalueslist" />
 				<property name="workflowCopy.update.resubmit.alert"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.update.resubmitalert}"
-					inputWidget="studio.propertyappletalertlist" />					
+					inputWidget="studio.propertyappletalertlist" />
 				<property name="workflowCopy.update.resubmit.setvalues"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.update.resubmitsetvalues}"
 					inputWidget="studio.propertyappletsetvalueslist" />
 				<property name="workflowCopy.update.discard.alert"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.update.discardalert}"
-					inputWidget="studio.propertyappletalertlist" />					
+					inputWidget="studio.propertyappletalertlist" />
 				<property name="workflowCopy.update.discard.setvalues"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.update.discardsetvalues}"
 					inputWidget="studio.propertyappletsetvalueslist" />
 				<property name="workflowCopy.update.abort.alert"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.update.abortalert}"
-					inputWidget="studio.propertyappletalertlist" />					
+					inputWidget="studio.propertyappletalertlist" />
 				<property name="workflowCopy.update.abort.setvalues"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.update.abortsetvalues}"
-					inputWidget="studio.propertyappletsetvalueslist" />					
+					inputWidget="studio.propertyappletsetvalueslist" />
 				<property name="workflowCopy.delete.alert"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.delete.submitalert}"
-					inputWidget="studio.propertyappletalertlist" />					
+					inputWidget="studio.propertyappletalertlist" />
 				<property name="workflowCopy.delete.setvalues"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.delete.submitsetvalues}"
 					inputWidget="studio.propertyappletsetvalueslist" />
 				<property name="workflowCopy.delete.approval.alert"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.delete.approvalalert}"
-					inputWidget="studio.propertyappletalertlist" />					
+					inputWidget="studio.propertyappletalertlist" />
 				<property name="workflowCopy.delete.approval.setvalues"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.delete.approvalsetvalues}"
 					inputWidget="studio.propertyappletsetvalueslist" />
 				<property name="workflowCopy.delete.rejection.alert"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.delete.rejectionalert}"
-					inputWidget="studio.propertyappletalertlist" />					
+					inputWidget="studio.propertyappletalertlist" />
 				<property name="workflowCopy.delete.rejection.setvalues"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.delete.rejectionsetvalues}"
 					inputWidget="studio.propertyappletsetvalueslist" />
 				<property name="workflowCopy.delete.abort.alert"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.delete.abortalert}"
-					inputWidget="studio.propertyappletalertlist" />					
+					inputWidget="studio.propertyappletalertlist" />
 				<property name="workflowCopy.delete.abort.setvalues"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.delete.abortsetvalues}"
 					inputWidget="studio.propertyappletsetvalueslist" />
@@ -6013,7 +6015,7 @@
 				label="$m{studio.appappletprop.pathpage.properties}">
 				<property name="page.multiple"
 					description="$m{studio.appappletprop.pathpage.property.pagemultiple}"
-					inputWidget="application.checkbox"/>
+					inputWidget="application.checkbox" />
 			</propertySet>
 		</propertyList>
 	</propertyLists>

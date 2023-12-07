@@ -94,8 +94,6 @@
 				type="string" />
 			<field name="categoryField" label="$m{chart.chartdatasource.categoryfield}"
 				type="string" />
-			<field name="categoryDateField" label="$m{chart.chartdatasource.categorydatefield}"
-				type="string" />
 			<field name="categoryBase"
 				label="$m{chart.chartdatasource.categorybase}" type="child"
 				category="chart-datasource" references="application.appFilterRef" />

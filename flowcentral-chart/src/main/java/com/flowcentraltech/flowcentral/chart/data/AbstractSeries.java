@@ -20,6 +20,7 @@ import java.util.List;
 
 import com.flowcentraltech.flowcentral.configuration.constants.ChartCategoryDataType;
 import com.flowcentraltech.flowcentral.configuration.constants.ChartSeriesDataType;
+import com.tcdng.unify.core.util.json.JsonWriter;
 
 /**
  * Abstract base class for series.
@@ -69,9 +70,9 @@ public abstract class AbstractSeries<T, U extends Number> {
         data.clear();
     }
 
-    public final String toJsonString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("{name:\"" + name + "\", data:[");
+    public void writeAsObject(JsonWriter jw) {
+        final StringBuilder sb = new StringBuilder();
+        sb.append("[");
         boolean sym = false;
         for (AbstractSeriesData _data : data) {
             if (sym) {
@@ -80,10 +81,14 @@ public abstract class AbstractSeries<T, U extends Number> {
                 sym = true;
             }
 
-            sb.append(_data);
+            _data.writeAsObject(sb);
         }
-        sb.append("]}");
-        return sb.toString();
+        sb.append("]");
+
+        jw.beginObject();
+        jw.write("name", name);
+        jw.write("data", sb.toString());
+        jw.endObject();
     }
 
     protected abstract AbstractSeriesData createData(T x, U y);
@@ -107,7 +112,7 @@ public abstract class AbstractSeries<T, U extends Number> {
             return y;
         }
 
-        public abstract String toJsonString();
+        public abstract void writeAsObject(StringBuilder sb);
     }
 
 }

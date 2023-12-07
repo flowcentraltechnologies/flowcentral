@@ -16,9 +16,11 @@
 
 package com.flowcentraltech.flowcentral.chart.data;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
+import com.flowcentraltech.flowcentral.configuration.constants.ChartCategoryDataType;
+import com.flowcentraltech.flowcentral.configuration.constants.ChartSeriesDataType;
 import com.tcdng.unify.core.UnifyException;
 
 /**
@@ -41,16 +43,19 @@ public class ChartDetails {
 
     private int subTitleFontSize;
 
-    private List<AbstractSeries<?, ?>> series;
+    private ChartCategoryDataType categoryType;
+
+    private Map<String, AbstractSeries<?, ?>> series;
 
     private ChartDetails(String title, String subTitle, int titleOffsetX, int titleFontSize, int subTitleOffsetX,
-            int subTitleFontSize, List<AbstractSeries<?, ?>> series) {
+            int subTitleFontSize, ChartCategoryDataType categoryType, Map<String, AbstractSeries<?, ?>> series) {
         this.title = title;
         this.subTitle = subTitle;
         this.titleOffsetX = titleOffsetX;
         this.titleFontSize = titleFontSize;
         this.subTitleOffsetX = subTitleOffsetX;
         this.subTitleFontSize = subTitleFontSize;
+        this.categoryType = categoryType;
         this.series = series;
     }
 
@@ -78,12 +83,16 @@ public class ChartDetails {
         return subTitleFontSize;
     }
 
-    public List<AbstractSeries<?, ?>> getSeries() {
+    public ChartCategoryDataType getCategoryType() {
+        return categoryType;
+    }
+
+    public Map<String, AbstractSeries<?, ?>> getSeries() {
         return series;
     }
 
-    public static Builder newBuilder() {
-        return new Builder();
+    public static Builder newBuilder(ChartCategoryDataType categoryType) {
+        return new Builder(categoryType);
     }
 
     public static class Builder {
@@ -100,10 +109,13 @@ public class ChartDetails {
 
         private int subTitleFontSize;
 
-        private List<AbstractSeries<?, ?>> series;
+        private ChartCategoryDataType categoryType;
 
-        public Builder() {
-            series = new ArrayList<AbstractSeries<?, ?>>();
+        private Map<String, AbstractSeries<?, ?>> series;
+
+        public Builder(ChartCategoryDataType categoryType) {
+            this.categoryType = categoryType;
+            this.series = new LinkedHashMap<String, AbstractSeries<?, ?>>();
         }
 
         public Builder title(String title) {
@@ -136,14 +148,86 @@ public class ChartDetails {
             return this;
         }
 
-        public Builder addSeries(AbstractSeries<?, ?> series) throws UnifyException {
-            this.series.add(series);
+        public ChartCategoryDataType getCategoryType() {
+            return categoryType;
+        }
+
+        public Map<String, AbstractSeries<?, ?>> getSeries() {
+            return series;
+        }
+
+        public boolean isWithSeries(String seriesName) {
+            return series.containsKey(seriesName);
+        }
+        
+        public Builder createSeries(ChartSeriesDataType dataType, String seriesName) throws UnifyException {
+            if (series.containsKey(seriesName)) {
+                throw new RuntimeException("Series with name [" + seriesName + "] already exists with this builder.");
+            }
+
+            AbstractSeries<?, ?> _series = createSeries(categoryType, dataType, seriesName);
+            series.put(seriesName, _series);
+            return this;
+        }
+
+        public Builder addSeriesData(String seriesName, Object x, Number y) throws UnifyException {
+            AbstractSeries<?, ?> _series = series.get(seriesName);
+            if (_series == null) {
+                throw new RuntimeException("Series with name [" + seriesName + "] is unknown.");
+            }
+            
+            _series.addData(x, y);
             return this;
         }
 
         public ChartDetails build() throws UnifyException {
             return new ChartDetails(title, subTitle, titleOffsetX, titleFontSize, subTitleOffsetX, subTitleFontSize,
-                    series);
+                    categoryType, series);
         }
+
+        private AbstractSeries<?, ?> createSeries(ChartCategoryDataType categoryType, ChartSeriesDataType dataType,
+                String name) {
+            switch (categoryType) {
+                case DATE:
+                    switch (dataType) {
+                        case DOUBLE:
+                            return new DateTimeDoubleSeries(name);
+                        case INTEGER:
+                        case LONG:
+                            return new DateTimeIntegerSeries(name);
+                        default:
+                            break;
+                    }
+                    break;
+                case INTEGER:
+                case LONG:
+                    switch (dataType) {
+                        case DOUBLE:
+                            return new NumericDoubleSeries(name);
+                        case INTEGER:
+                        case LONG:
+                            return new NumericIntegerSeries(name);
+                        default:
+                            break;
+                    }
+                    break;
+                case STRING:
+                    switch (dataType) {
+                        case DOUBLE:
+                            return new CategoryDoubleSeries(name);
+                        case INTEGER:
+                        case LONG:
+                            return new CategoryIntegerSeries(name);
+                        default:
+                            break;
+                    }
+                    break;
+                default:
+                    break;
+            }
+
+            return null;
+        }
+
     }
 }

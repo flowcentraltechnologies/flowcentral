@@ -42,8 +42,8 @@ public abstract class AbstractCategorySeries<U extends Number> extends AbstractS
         }
 
         @Override
-        public final String toJsonString() {
-            return "{x:\"" + getX() + "\", y:" + getY() + "}";
+        public void writeAsObject(StringBuilder sb) {
+            sb.append("{x:\"").append(getX()).append("\", y:").append(getY()).append("}");
         }
 
     }

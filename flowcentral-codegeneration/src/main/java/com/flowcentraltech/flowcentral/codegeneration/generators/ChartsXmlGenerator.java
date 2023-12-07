@@ -108,7 +108,6 @@ public class ChartsXmlGenerator extends AbstractStaticArtifactGenerator {
                 appChartDataSourceConfig.setType(chartDataSource.getType());
                 appChartDataSourceConfig.setTimeSeriesType(chartDataSource.getTimeSeriesType());
                 appChartDataSourceConfig.setCategoryField(chartDataSource.getCategoryField());
-                appChartDataSourceConfig.setCategoryDateField(chartDataSource.getCategoryDateField());
                 appChartDataSourceConfig.setName(chartDataSource.getName());
                 appChartDataSourceConfig.setDescription("$m{" + descKey + "}");
                 appChartDataSourceConfig.setEntity(chartDataSource.getEntity());

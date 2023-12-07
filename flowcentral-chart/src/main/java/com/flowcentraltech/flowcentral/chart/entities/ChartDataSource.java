@@ -48,9 +48,6 @@ public class ChartDataSource extends BaseApplicationEntity {
     @Column(length = 32, nullable = true)
     private String categoryField;
 
-    @Column(length = 32, nullable = true)
-    private String categoryDateField;
-
     @ListOnly(key = "type", property = "description")
     private String typeDesc;
 
@@ -128,14 +125,6 @@ public class ChartDataSource extends BaseApplicationEntity {
 
     public void setCategoryField(String categoryField) {
         this.categoryField = categoryField;
-    }
-
-    public String getCategoryDateField() {
-        return categoryDateField;
-    }
-
-    public void setCategoryDateField(String categoryDateField) {
-        this.categoryDateField = categoryDateField;
     }
 
     public String getTimeSeriesTypeDesc() {

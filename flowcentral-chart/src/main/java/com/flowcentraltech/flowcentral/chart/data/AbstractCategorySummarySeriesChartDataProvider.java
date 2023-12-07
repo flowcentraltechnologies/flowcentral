@@ -24,7 +24,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.flowcentraltech.flowcentral.chart.util.ChartUtils;
 import com.flowcentraltech.flowcentral.configuration.constants.ChartCategoryDataType;
 import com.flowcentraltech.flowcentral.configuration.constants.ChartSeriesDataType;
 import com.tcdng.unify.core.UnifyException;
@@ -100,19 +99,17 @@ public abstract class AbstractCategorySummarySeriesChartDataProvider extends Abs
 
         List<Number> series = new ArrayList<Number>(summary.values());
 
-        ChartDetails.Builder cdb = ChartDetails.newBuilder();
+        ChartDetails.Builder cdb = ChartDetails.newBuilder(categoryType);
         setAdditionalProperties(cdb, Collections.unmodifiableList(_categories), Collections.unmodifiableList(series));
-        AbstractSeries<?, ?> _series = ChartUtils.createSeries(categoryType, seriesType, seriesName);
+        cdb.createSeries(seriesType, seriesName);
         for (int i = 0; i < categories.length; i++) {
-            _series.addData(_categories.get(i), series.get(i));
+            cdb.addSeriesData(seriesName, _categories.get(i), series.get(i));
         }
-        
-        cdb.addSeries(_series);
 
         return cdb.build();
     }
 
-    protected abstract void setAdditionalProperties(ChartDetails.Builder cdb, List<Object> categories, List<Number> series)
-            throws UnifyException;
+    protected abstract void setAdditionalProperties(ChartDetails.Builder cdb, List<Object> categories,
+            List<Number> series) throws UnifyException;
 
 }

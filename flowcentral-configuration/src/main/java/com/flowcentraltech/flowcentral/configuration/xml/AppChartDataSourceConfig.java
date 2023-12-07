@@ -43,8 +43,6 @@ public class AppChartDataSourceConfig extends BaseNameConfig {
     
     private String categoryField;
 
-    private String categoryDateField;
-
     private FilterConfig categoryBase;
     
     private PropertySequenceConfig series;
@@ -114,15 +112,6 @@ public class AppChartDataSourceConfig extends BaseNameConfig {
     @XmlAttribute(name = "preferred-category-field")
     public void setCategoryField(String categoryField) {
         this.categoryField = categoryField;
-    }
-
-    public String getCategoryDateField() {
-        return categoryDateField;
-    }
-
-    @XmlAttribute(name = "preferred-category-date-field")
-    public void setCategoryDateField(String categoryDateField) {
-        this.categoryDateField = categoryDateField;
     }
 
 }

@@ -49,7 +49,8 @@ public class StudioEntityCategoryFieldListCommand extends AbstractApplicationLis
             ApplicationEntityNameParts np = ApplicationNameUtils.getApplicationEntityNameParts(params.getValue());
             return application().findAppEntityFields((AppEntityFieldQuery) new AppEntityFieldQuery()
                     .applicationName(np.getApplicationName()).appEntityName(np.getEntityName())
-                    .dataTypeIn(EntityFieldDataType.STRING, EntityFieldDataType.ENUM, EntityFieldDataType.ENUM_REF)
+                    .dataTypeIn(EntityFieldDataType.STRING, EntityFieldDataType.ENUM, EntityFieldDataType.ENUM_REF,
+                            EntityFieldDataType.DATE, EntityFieldDataType.TIMESTAMP, EntityFieldDataType.TIMESTAMP_UTC)
                     .addSelect("name", "label").addOrder("label"));
         }
 

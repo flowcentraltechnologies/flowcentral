@@ -19,6 +19,7 @@ package com.flowcentraltech.flowcentral.chart.data.provider;
 import java.util.List;
 import java.util.Locale;
 
+import com.flowcentraltech.flowcentral.application.data.EntityFieldDef;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.chart.constants.ChartModuleNameConstants;
 import com.flowcentraltech.flowcentral.chart.data.AbstractChartDetailsProvider;
@@ -26,6 +27,7 @@ import com.flowcentraltech.flowcentral.chart.data.ChartDetails;
 import com.flowcentraltech.flowcentral.chart.data.ChartDataSourceDef;
 import com.flowcentraltech.flowcentral.chart.entities.ChartDataSource;
 import com.flowcentraltech.flowcentral.chart.entities.ChartDataSourceQuery;
+import com.flowcentraltech.flowcentral.configuration.constants.ChartCategoryDataType;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.data.Listable;
@@ -54,7 +56,10 @@ public class ChartDataSourceChartDetailsProvider extends AbstractChartDetailsPro
     }
 
     protected ChartDetails getChartData(ChartDataSourceDef chartDataSourceDef) throws UnifyException {
-        ChartDetails.Builder cdb = ChartDetails.newBuilder();
+        final EntityFieldDef categoryEntityFieldDef = chartDataSourceDef.getCategoryEntityFieldDef();
+        final ChartCategoryDataType chartCategoryType = categoryEntityFieldDef.isDate()
+                || categoryEntityFieldDef.isTimestamp() ? ChartCategoryDataType.DATE : ChartCategoryDataType.STRING;
+        ChartDetails.Builder cdb = ChartDetails.newBuilder(chartCategoryType);
         // TODO
         return cdb.build();
     }

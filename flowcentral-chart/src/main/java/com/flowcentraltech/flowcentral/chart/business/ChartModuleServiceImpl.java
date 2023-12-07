@@ -26,9 +26,9 @@ import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.util.InputWidgetUtils;
 import com.flowcentraltech.flowcentral.chart.constants.ChartModuleErrorConstants;
 import com.flowcentraltech.flowcentral.chart.constants.ChartModuleNameConstants;
-import com.flowcentraltech.flowcentral.chart.data.ChartDetails;
 import com.flowcentraltech.flowcentral.chart.data.ChartDataSourceDef;
 import com.flowcentraltech.flowcentral.chart.data.ChartDef;
+import com.flowcentraltech.flowcentral.chart.data.ChartDetails;
 import com.flowcentraltech.flowcentral.chart.data.ChartSnapshotDef;
 import com.flowcentraltech.flowcentral.chart.entities.Chart;
 import com.flowcentraltech.flowcentral.chart.entities.ChartDataSource;
@@ -117,7 +117,7 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
 
                     ChartDataSourceDef chartDataSourceDef = new ChartDataSourceDef(chartDataSource.getType(),
                             chartDataSource.getTimeSeriesType(), longName, chartDataSource.getDescription(),
-                            chartDataSource.getCategoryField(), chartDataSource.getCategoryDateField(),
+                            chartDataSource.getCategoryField(),
                             appletUtilities.getEntityDef(chartDataSource.getEntity()),
                             InputWidgetUtils.getFilterDef(appletUtilities, null, chartDataSource.getCategoryBase()),
                             InputWidgetUtils.getPropertySequenceDef(chartDataSource.getSeries()),
@@ -144,10 +144,18 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
                                 chartSnapshotName);
                     }
 
-                    ChartDetails.Builder cdb = ChartDetails.newBuilder();
-                    cdb.categories(chartSnapshot.getCategoryDataType(), chartSnapshot.getCategories());
+                    ChartDetails.Builder cdb = ChartDetails.newBuilder(chartSnapshot.getCategoryDataType());
+                    String[] _categories = DataUtils.arrayFromJsonString(String[].class, chartSnapshot.getCategories());
                     for (ChartSnapshotSeries series : chartSnapshot.getSeriesList()) {
-                        cdb.addSeries(series.getSeriesDataType(), series.getName(), series.getSeries());
+                        cdb.createSeries(series.getSeriesDataType(), series.getName());
+                        Number[] _nseries = series.getSeriesDataType().isInteger()
+                                ? DataUtils.arrayFromJsonString(Integer[].class, series.getSeries())
+                                : DataUtils.arrayFromJsonString(Double[].class, series.getSeries());
+                        if (_nseries != null) {
+                            for (int i = 0; i < _nseries.length; i++) {
+                                cdb.addSeriesData(series.getName(), _categories[i], _nseries[i]);
+                            }
+                        }
                     }
 
                     ChartDetails chartDetails = cdb.build();

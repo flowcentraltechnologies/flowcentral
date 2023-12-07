@@ -44,8 +44,8 @@ public abstract class AbstractDateTimeSeries<U extends Number> extends AbstractS
         }
 
         @Override
-        public final String toJsonString() {
-            return "{x:" + getX().getTime() + ",y:" + getY() + "}";
+        public void writeAsObject(StringBuilder sb) {
+            sb.append("{x:").append(getX().getTime()).append(",y:").append(getY()).append("}");
         }
 
     }

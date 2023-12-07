@@ -42,8 +42,8 @@ public abstract class AbstractNumericSeries<T extends Number, U extends Number> 
         }
 
         @Override
-        public final String toJsonString() {
-            return "{x:" + getX() + ",y:" + getY() + "}";
+        public void writeAsObject(StringBuilder sb) {
+            sb.append("{x:").append(getX()).append(",y:").append(getY()).append("}");
         }
 
     }
