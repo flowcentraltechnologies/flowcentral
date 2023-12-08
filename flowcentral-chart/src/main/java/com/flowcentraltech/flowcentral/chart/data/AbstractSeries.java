@@ -70,8 +70,8 @@ public abstract class AbstractSeries<T, U extends Number> {
         data.clear();
     }
 
-    public List<T> getXList() {
-        List<T> list = new ArrayList<T>();
+    public List<Object> getXList() {
+        List<Object> list = new ArrayList<Object>();
         for (AbstractSeriesData _data: data) {
             list.add(_data.getX());
         }
@@ -79,8 +79,8 @@ public abstract class AbstractSeries<T, U extends Number> {
         return list;
     }
 
-    public List<U> getYList() {
-        List<U> list = new ArrayList<U>();
+    public List<Number> getYList() {
+        List<Number> list = new ArrayList<Number>();
         for (AbstractSeriesData _data: data) {
             list.add(_data.getY());
         }
