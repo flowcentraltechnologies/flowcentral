@@ -70,6 +70,24 @@ public abstract class AbstractSeries<T, U extends Number> {
         data.clear();
     }
 
+    public List<T> getXList() {
+        List<T> list = new ArrayList<T>();
+        for (AbstractSeriesData _data: data) {
+            list.add(_data.getX());
+        }
+        
+        return list;
+    }
+
+    public List<U> getYList() {
+        List<U> list = new ArrayList<U>();
+        for (AbstractSeriesData _data: data) {
+            list.add(_data.getY());
+        }
+        
+        return list;
+    }
+    
     public void writeAsObject(JsonWriter jw) {
         jw.beginObject();
         jw.write("name", name);
@@ -77,6 +95,7 @@ public abstract class AbstractSeries<T, U extends Number> {
         for (AbstractSeriesData _data: data) {
             _data.writeAsObject(jw);
         }
+
         jw.endArray();
         jw.endObject();
     }

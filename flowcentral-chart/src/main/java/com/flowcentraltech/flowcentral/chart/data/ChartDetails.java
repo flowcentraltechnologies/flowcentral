@@ -156,6 +156,10 @@ public class ChartDetails {
             return series;
         }
 
+        public AbstractSeries<?, ?> getSeries(String seriesName) {
+            return series.get(seriesName);
+        }
+        
         public boolean isWithSeries(String seriesName) {
             return series.containsKey(seriesName);
         }
