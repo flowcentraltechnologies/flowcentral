@@ -955,12 +955,15 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
                 @Override
                 protected TableDef create(String longName, Object... arg1) throws Exception {
+                    final boolean classicLink = appletUtilities.system().getSysParameterValue(boolean.class,
+                            ApplicationModuleSysParamConstants.ENABLE_CLASSIC_LINK_DECORATION);
                     if (ApplicationPredefinedTableConstants.PROPERTYITEM_TABLE.equals(longName)) {
                         TableDef.Builder tdb = TableDef.newBuilder(
                                 getEntityDef(ApplicationPredefinedEntityConstants.PROPERTYITEM_ENTITY),
                                 getApplicationMessage("application.propertyitem.table.label"), false, false,
                                 ApplicationPredefinedTableConstants.PROPERTYITEM_TABLE,
                                 getApplicationMessage("application.propertyitem.table.description"), 0L, 1L);
+                        tdb.classicLink(classicLink);
                         WidgetTypeDef widgetTypeDef = getWidgetTypeDef("application.text");
                         String renderer = widgetTypeDef.getRenderer();
                         tdb.addColumnDef("name", renderer, 2, false);
@@ -977,6 +980,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                                 getApplicationMessage("application.usage.table.label"), true, true,
                                 ApplicationPredefinedTableConstants.USAGE_TABLE,
                                 getApplicationMessage("application.usage.table.description"), 0L, 1L);
+                        tdb.classicLink(classicLink);
                         WidgetTypeDef widgetTypeDef = getWidgetTypeDef("application.text");
                         String renderer = widgetTypeDef.getRenderer();
                         tdb.addColumnDef("type", renderer, 2, false);
@@ -995,6 +999,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                                         ApplicationPredefinedTableConstants.ATTACHMENT_TABLE,
                                         getApplicationMessage("application.attachment.table.description"), 0L, 1L)
                                 .serialNo(true);
+                        tdb.classicLink(classicLink);
                         tdb.addColumnDef("name", "!ui-label", 2, false);
                         tdb.addColumnDef("description", "!ui-label", 3, false);
                         tdb.addColumnDef("format", "!ui-label", 2, false);
@@ -1010,6 +1015,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     TableDef.Builder tdb = TableDef.newBuilder(entityDef, appTable.getLabel(), appTable.isSerialNo(),
                             appTable.isSortable(), longName, appTable.getDescription(), appTable.getId(),
                             appTable.getVersionNo());
+                    tdb.classicLink(classicLink);
 
                     for (AppTableFilter appTableFilter : appTable.getFilterList()) {
                         FilterDef _filterDef = InputWidgetUtils.getFilterDef(appletUtilities, appTableFilter.getName(),
@@ -2743,8 +2749,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     public PropertySequenceDef retrieveSequenceDef(String category, String ownerEntityName, Long ownerInstId)
             throws UnifyException {
         final EntityDef entityDef = getEntityDef(ownerEntityName);
-        return InputWidgetUtils.getPropertySequenceDef(environment().find(new AppPropertySequenceQuery().category(category)
-                .entity(entityDef.getTableName()).entityInstId(ownerInstId)));
+        return InputWidgetUtils.getPropertySequenceDef(environment().find(new AppPropertySequenceQuery()
+                .category(category).entity(entityDef.getTableName()).entityInstId(ownerInstId)));
     }
 
     @Override

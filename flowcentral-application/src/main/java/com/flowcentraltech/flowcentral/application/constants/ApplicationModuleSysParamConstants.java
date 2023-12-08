@@ -88,4 +88,6 @@ public interface ApplicationModuleSysParamConstants {
     String SHOW_WORK_ITEMS_ON_LOGIN = "APP-0020";
     
     String ENABLE_STICKY_WORK_ITEMS_PAGE = "APP-0021";
+    
+    String ENABLE_CLASSIC_LINK_DECORATION = "APP-0022";
 }

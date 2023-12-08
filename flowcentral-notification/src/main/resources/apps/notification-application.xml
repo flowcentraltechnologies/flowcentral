@@ -462,9 +462,9 @@
 				renderWidget="application.text"
 				label="$m{notification.notificationchannel.type}" widthRatio="1" />
 			<column field="name" renderWidget="application.name"
-				widthRatio="1" />
-			<column field="description" renderWidget="application.text"
 				widthRatio="1" linkAct="maintainAct" />
+			<column field="description" renderWidget="application.text"
+				widthRatio="1" />
 			<column field="senderName" renderWidget="application.text"
 				widthRatio="1" />
 			<column field="senderContact" renderWidget="application.text"

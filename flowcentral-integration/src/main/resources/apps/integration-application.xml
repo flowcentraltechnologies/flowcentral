@@ -129,7 +129,7 @@
 			<column field="name" renderWidget="application.name"
 				widthRatio="1"  linkAct="maintainAct"/>
 			<column field="description" renderWidget="application.text"
-				widthRatio="1" linkAct="maintainAct" />
+				widthRatio="1" />
 			<column field="endpoint" renderWidget="application.text"
 				widthRatio="1" />
 			<column field="endpointTypeDesc" renderWidget="application.text"
@@ -142,7 +142,7 @@
 			<column field="name" renderWidget="application.name"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="description" renderWidget="application.text"
-				widthRatio="1" linkAct="maintainAct" />
+				widthRatio="1" />
 			<column field="endpointReader" renderWidget="application.text"
 				widthRatio="1" />
 			<column field="endpointReaderPeriod" renderWidget="application.text"
