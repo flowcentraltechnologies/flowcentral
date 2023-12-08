@@ -1340,7 +1340,7 @@
 			<column field="sectorDesc" renderWidget="application.text"
 				widthRatio="1" label="$m{application.application.sectorname}" />
 			<column field="name" renderWidget="application.name"
-				widthRatio="1" linkAct="dialogMaintainAct" />
+				widthRatio="1" />
 			<column field="description" renderWidget="application.text"
 				widthRatio="1" linkAct="dialogMaintainAct" order="ASC" />
 		</table>
