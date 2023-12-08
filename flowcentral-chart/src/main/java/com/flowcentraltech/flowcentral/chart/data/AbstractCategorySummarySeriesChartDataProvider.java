@@ -18,7 +18,6 @@ package com.flowcentraltech.flowcentral.chart.data;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -100,16 +99,15 @@ public abstract class AbstractCategorySummarySeriesChartDataProvider extends Abs
         List<Number> series = new ArrayList<Number>(summary.values());
 
         ChartDetails.Builder cdb = ChartDetails.newBuilder(categoryType);
-        setAdditionalProperties(cdb, Collections.unmodifiableList(_categories), Collections.unmodifiableList(series));
         cdb.createSeries(seriesType, seriesName);
         for (int i = 0; i < categories.length; i++) {
             cdb.addSeriesData(seriesName, _categories.get(i), series.get(i));
         }
 
+        setAdditionalProperties(cdb);
         return cdb.build();
     }
 
-    protected abstract void setAdditionalProperties(ChartDetails.Builder cdb, List<Object> categories,
-            List<Number> series) throws UnifyException;
+    protected abstract void setAdditionalProperties(ChartDetails.Builder cdb) throws UnifyException;
 
 }
