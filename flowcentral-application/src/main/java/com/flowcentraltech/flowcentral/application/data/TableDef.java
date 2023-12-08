@@ -449,6 +449,8 @@ public class TableDef extends BaseApplicationEntityDef {
 
         private int summaryTitleColumns;
 
+        private boolean classLink;
+
         private boolean serialNo;
 
         private boolean sortable;
@@ -536,6 +538,11 @@ public class TableDef extends BaseApplicationEntityDef {
 
         public Builder longName(String longName) {
             this.longName = longName;
+            return this;
+        }
+
+        public Builder classicLink(boolean classLink) {
+            this.classLink = classLink;
             return this;
         }
 
@@ -721,7 +728,11 @@ public class TableDef extends BaseApplicationEntityDef {
                                 + " alwaysValueIndex:true eventHandler:$d{!ui-event event:onclick action:$c{" + linkAct
                                 + "}}";
                     } else {
-                        String styleClass = entityFieldDef.getDataType().isNumber() ? " styleClass:$e{link-right}" : "";
+                        String styleClass = classLink
+                                ? (entityFieldDef.getDataType().isNumber()
+                                        ? " styleClass:$e{link-right ui-link-classic}"
+                                        : " styleClass:$e{ui-link-classic}")
+                                : (entityFieldDef.getDataType().isNumber() ? " styleClass:$e{link-right}" : "");
                         renderer = "!ui-link debounce:true preferredCaptionBinding:" + fieldName + formatter
                                 + " binding:" + fieldName + styleClass
                                 + " alwaysValueIndex:true eventHandler:$d{!ui-event event:onclick action:$c{" + linkAct

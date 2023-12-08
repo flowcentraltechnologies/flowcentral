@@ -479,7 +479,7 @@
 			<column field="name" renderWidget="application.name"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="description" renderWidget="application.text"
-				widthRatio="1" linkAct="maintainAct" />
+				widthRatio="1" />
 			<column field="email" renderWidget="application.text"
 				widthRatio="1" />
 			<column field="createDt" renderWidget="application.datetime"
@@ -523,7 +523,7 @@
 			<column field="loginId" renderWidget="application.name"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="fullName" renderWidget="application.text"
-				widthRatio="1" linkAct="maintainAct" />
+				widthRatio="1" />
 			<column field="email" renderWidget="application.text"
 				widthRatio="2" />
 			<column field="lastLoginDt"

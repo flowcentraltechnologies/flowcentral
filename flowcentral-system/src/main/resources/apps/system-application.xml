@@ -585,7 +585,7 @@
 			<column field="name" renderWidget="application.text"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="description" renderWidget="application.text"
-				widthRatio="2" linkAct="maintainAct" />
+				widthRatio="2" />
 			<column field="shortCode" renderWidget="application.text"
 				widthRatio="1" />
 			<column field="statusDesc" renderWidget="application.text"
@@ -601,7 +601,7 @@
 			<column field="name" renderWidget="application.text"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="description" renderWidget="application.text"
-				widthRatio="2" linkAct="maintainAct" />
+				widthRatio="2" />
 			<column field="label" renderWidget="application.text"
 				widthRatio="1" />
 			<column field="shortCode" renderWidget="application.text"
@@ -641,7 +641,7 @@
 			<column field="code" renderWidget="application.text"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="description" renderWidget="application.text"
-				widthRatio="1" linkAct="maintainAct" />
+				widthRatio="1" />
 			<column field="typeDesc" renderWidget="application.text"
 				label="$m{system.systemparameter.type}" widthRatio="1" />
 			<column field="value" renderWidget="application.text"
@@ -699,7 +699,7 @@
 			<column field="name" renderWidget="application.text"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="description" renderWidget="application.text"
-				widthRatio="1" linkAct="maintainAct" />
+				widthRatio="1" />
 			<column field="createDt" renderWidget="application.datetime"
 				widthRatio="1" />
 			<column field="updateDt" renderWidget="application.datetime"
@@ -728,7 +728,7 @@
 			<column field="name" renderWidget="application.text"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="description" renderWidget="application.text"
-				widthRatio="1" linkAct="maintainAct" />
+				widthRatio="1" />
 			<column field="variable" renderWidget="application.text"
 				widthRatio="1" />
 			<column field="createDt" renderWidget="application.datetime"

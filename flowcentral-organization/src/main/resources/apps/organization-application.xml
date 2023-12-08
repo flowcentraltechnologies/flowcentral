@@ -566,7 +566,7 @@
 			<column field="code" renderWidget="application.name"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="description" renderWidget="application.text"
-				widthRatio="1" linkAct="maintainAct" />
+				widthRatio="1" />
 			<column field="sortCode" renderWidget="application.text"
 				widthRatio="1" />
 			<column field="zoneDesc" renderWidget="application.text"
@@ -585,7 +585,7 @@
 			<column field="code" renderWidget="application.name"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="description" renderWidget="application.text"
-				widthRatio="1" linkAct="maintainAct" />
+				widthRatio="1" />
 			<column field="statusDesc" renderWidget="application.text"
 				label="$m{basestatusentity.field.label.status}" widthRatio="1" />
 			<column field="createDt" renderWidget="application.datetime"
@@ -600,7 +600,7 @@
 			<column field="code" renderWidget="application.name"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="description" renderWidget="application.text"
-				widthRatio="1" linkAct="maintainAct" />
+				widthRatio="1" />
 			<column field="activeAfter" renderWidget="application.time"
 				widthRatio="1" />
 			<column field="activeBefore" renderWidget="application.time"
@@ -636,7 +636,7 @@
 			<column field="code" renderWidget="application.name"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="description" renderWidget="application.text"
-				widthRatio="1" linkAct="maintainAct" />
+				widthRatio="1" />
 			<column field="languageTag" renderWidget="application.text"
 				widthRatio="1" />
 			<column field="timeZone" renderWidget="application.text"
