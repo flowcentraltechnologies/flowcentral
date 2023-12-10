@@ -15,13 +15,8 @@
  */
 package com.flowcentraltech.flowcentral.connect.unify.service;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.flowcentraltech.flowcentral.connect.configuration.constants.EvaluationMode;
 import com.tcdng.unify.core.AbstractUnifyComponent;
-import com.tcdng.unify.core.UnifyException;
 
 /**
  * Convenient abstract base class for flowcentral entity action policies.
@@ -32,45 +27,11 @@ import com.tcdng.unify.core.UnifyException;
 public abstract class AbstractUnifyEntityActionPolicy<T> extends AbstractUnifyComponent
         implements UnifyEntityActionPolicy<T> {
 
-    private final Logger LOGGER = Logger.getLogger(getClass().getName());
-
     private final static String[] NO_MESSAGES = new String[0];
-
-    private boolean logging;
 
     @Override
     public String[] validate(EvaluationMode evaluationMode, T entityBean) throws Exception {
         return NO_MESSAGES;
-    }
-
-    @Override
-    protected void onInitialize() throws UnifyException {
-        logging = getContainerSetting(boolean.class, "flowcentral.interconnect.logging.enabled", false);
-    }
-
-    protected void logInfo(String message, Object... params) {
-        if (logging) {
-            LOGGER.log(Level.INFO, message, params);
-        }
-    }
-
-    protected void logWarn(String message, Object... params) {
-        if (logging) {
-            LOGGER.log(Level.WARNING, message, params);
-        }
-    }
-
-    protected void logSevere(String message, Exception e) {
-        LOGGER.log(Level.SEVERE, message, e);
-    }
-
-    protected String prettyJSONForLog(Object src) throws Exception {
-        if (logging && src != null) {
-            ObjectMapper objectMapper = new ObjectMapper();
-            return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(src);
-        }
-
-        return null;
     }
 
 }
