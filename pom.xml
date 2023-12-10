@@ -46,6 +46,7 @@
 		<module>flowcentral-connect-common</module>
 		<module>flowcentral-connect-configuration</module>
 		<module>flowcentral-connect-springboot</module>
+		<module>flowcentral-connect-unify</module>
 		<module>flowcentral-javax</module>
 		<module>flowcentral-jetty</module>
 		<module>flowcentral-collaboration</module>

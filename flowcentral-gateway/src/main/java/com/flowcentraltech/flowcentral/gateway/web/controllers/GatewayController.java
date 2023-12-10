@@ -51,7 +51,7 @@ public class GatewayController extends AbstractPlainJsonController {
 
     @SuppressWarnings("unchecked")
     @Override
-    protected final String doExecute(String requestJson) throws UnifyException {
+    protected final String doExecute(String actionName, String requestJson) throws UnifyException {
         long startTime = System.currentTimeMillis();
         GatewayError error = null;
         BaseGatewayResponse response = null;

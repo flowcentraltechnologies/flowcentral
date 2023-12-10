@@ -31,7 +31,8 @@ import com.tcdng.unify.core.UnifyCoreErrorConstants;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
-import com.tcdng.unify.web.AbstractBeanJsonController;
+import com.tcdng.unify.web.AbstractJsonObjectController;
+import com.tcdng.unify.web.annotation.Action;
 
 /**
  * Workflow channel submission controller.
@@ -39,18 +40,14 @@ import com.tcdng.unify.web.AbstractBeanJsonController;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@Component("/workflowchannel/submit")
-public class WfChannelSubmissionController extends AbstractBeanJsonController<WfChannelSubmissionResult, WfChannelSubmission> {
+@Component("/workflowchannel")
+public class WfChannelSubmissionController extends AbstractJsonObjectController {
 
     @Configurable
     private ApplicationModuleService applicationModuleService;
 
     @Configurable
     private WorkflowModuleService workflowModuleService;
-
-    public WfChannelSubmissionController() {
-        super(WfChannelSubmissionResult.class, WfChannelSubmission.class);
-    }
 
     public final void setApplicationModuleService(ApplicationModuleService applicationModuleService) {
         this.applicationModuleService = applicationModuleService;
@@ -60,8 +57,8 @@ public class WfChannelSubmissionController extends AbstractBeanJsonController<Wf
         this.workflowModuleService = workflowModuleService;
     }
 
-    @Override
-    protected WfChannelSubmissionResult doExecute(WfChannelSubmission wfChannelSubmission) throws UnifyException {
+    @Action
+    public WfChannelSubmissionResult submit(WfChannelSubmission wfChannelSubmission) throws UnifyException {
         int errorCode = WfChannelErrorConstants.NO_ERROR;
         String errorMsg = null;
         try {

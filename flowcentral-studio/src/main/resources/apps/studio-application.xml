@@ -1340,7 +1340,7 @@
 			<column field="sectorDesc" renderWidget="application.text"
 				widthRatio="1" label="$m{application.application.sectorname}" />
 			<column field="name" renderWidget="application.name"
-				widthRatio="1" linkAct="dialogMaintainAct" />
+				widthRatio="1" />
 			<column field="description" renderWidget="application.text"
 				widthRatio="1" linkAct="dialogMaintainAct" order="ASC" />
 		</table>
@@ -1717,10 +1717,10 @@
 			description="$m{studio.appformsetstate.table}"
 			label="$m{studio.appformsetstate.table.label}"
 			entity="application.appFormSetState">
-			<column field="typeDesc" renderWidget="application.text"
-				widthRatio="1" label="$m{application.appformsetstate.type}" />
 			<column field="target" renderWidget="application.name"
 				widthRatio="1" linkAct="maintainAct" />
+			<column field="typeDesc" renderWidget="application.text"
+				widthRatio="1" label="$m{application.appformsetstate.type}" />
 			<column field="required" renderWidget="application.text"
 				widthRatio="1" />
 			<column field="visible" renderWidget="application.text"
@@ -1799,12 +1799,12 @@
 			description="$m{studio.workflow.step.table}"
 			label="$m{studio.workflow.step.table.label}" entity="workflow.wfStep"
 			itemsPerPage="20" serialNo="true">
-			<column field="workflowDesc" renderWidget="application.text"
-				label="$m{workflow.step.workflow}" widthRatio="1" />
 			<column field="name" renderWidget="application.text"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="description" renderWidget="application.text"
 				widthRatio="1" />
+			<column field="workflowDesc" renderWidget="application.text"
+				label="$m{workflow.step.workflow}" widthRatio="1" />
 			<column field="typeDesc" renderWidget="application.text"
 				label="$m{workflow.step.type}" widthRatio="1" />
 			<column field="priorityDesc" renderWidget="application.text"
@@ -1814,12 +1814,12 @@
 			description="$m{studio.workflow.steprouting.table}"
 			label="$m{studio.workflow.steprouting.table.label}"
 			entity="workflow.wfStepRouting" itemsPerPage="20" serialNo="true">
-			<column field="wfStepDesc" renderWidget="application.text"
-				label="$m{workflow.steprouting.step}" widthRatio="1" />
 			<column field="name" renderWidget="application.text"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="description" renderWidget="application.text"
 				widthRatio="1" />
+			<column field="wfStepDesc" renderWidget="application.text"
+				label="$m{workflow.steprouting.step}" widthRatio="1" />
 			<column field="nextStepName" renderWidget="application.text"
 				widthRatio="1" />
 		</table>
@@ -1827,14 +1827,14 @@
 			description="$m{studio.workflow.stepuseraction.table}"
 			label="$m{studio.workflow.stepuseraction.table.label}"
 			entity="workflow.wfStepUserAction" itemsPerPage="20" serialNo="true">
-			<column field="wfStepDesc" renderWidget="application.text"
-				label="$m{workflow.stepuseraction.step}" widthRatio="1" />
 			<column field="name" renderWidget="application.text"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="description" renderWidget="application.text"
 				widthRatio="1" />
 			<column field="label" renderWidget="application.text"
 				widthRatio="1" />
+			<column field="wfStepDesc" renderWidget="application.text"
+				label="$m{workflow.stepuseraction.step}" widthRatio="1" />
 			<column field="nextStepName" renderWidget="application.text"
 				widthRatio="1" />
 			<column field="commentRequirementDesc"
@@ -1849,12 +1849,12 @@
 			description="$m{studio.workflow.stepalert.table}"
 			label="$m{studio.workflow.stepalert.table.label}"
 			entity="workflow.wfStepAlert" itemsPerPage="20" serialNo="true">
-			<column field="wfStepDesc" renderWidget="application.text"
-				label="$m{workflow.stepalert.step}" widthRatio="1" />
 			<column field="name" renderWidget="application.text"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="description" renderWidget="application.text"
 				widthRatio="1" />
+			<column field="wfStepDesc" renderWidget="application.text"
+				label="$m{workflow.stepalert.step}" widthRatio="1" />
 			<column field="typeDesc" renderWidget="application.text"
 				label="$m{workflow.stepalert.type}" widthRatio="1" />
 			<column field="notificationTypeDesc"

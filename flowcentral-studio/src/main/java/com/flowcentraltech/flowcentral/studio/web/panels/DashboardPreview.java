@@ -20,6 +20,7 @@ import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.configuration.constants.DashboardColumnsType;
 import com.flowcentraltech.flowcentral.configuration.constants.DashboardTileType;
 import com.flowcentraltech.flowcentral.dashboard.data.DashboardDef;
+import com.flowcentraltech.flowcentral.dashboard.web.widgets.DashboardSlate;
 import com.flowcentraltech.flowcentral.studio.web.widgets.DashboardEditor;
 import com.flowcentraltech.flowcentral.studio.web.widgets.DashboardEditor.DDashboardSection;
 import com.flowcentraltech.flowcentral.studio.web.widgets.DashboardEditor.DDashboardTile;
@@ -38,11 +39,17 @@ public class DashboardPreview {
 
     private final DashboardEditor dashboardEditor;
 
+    private DashboardSlate dashboardSlate;
+    
     private Design oldDesign;
 
     public DashboardPreview(AppletUtilities au, DashboardEditor dashboardEditor) {
         this.au = au;
         this.dashboardEditor = dashboardEditor;
+    }
+
+    public DashboardSlate getDashboardSlate() {
+        return dashboardSlate;
     }
 
     public void reload() throws UnifyException {
@@ -53,21 +60,17 @@ public class DashboardPreview {
                     originDashboardDef.getLongName(), originDashboardDef.getDescription(), originDashboardDef.getId(),
                     originDashboardDef.getVersion());
             if (design != null && design.getSections() != null) {
-                int secIndex = -1;
                 for (DDashboardSection section : design.getSections()) {
-                    secIndex++;
-                    ddb.addSection(DashboardColumnsType.fromName(section.getColumns()), section.getHeight());
-                    int tileIndex = -1;
-                    for (DDashboardTile tile : section.getTiles()) {
-                        tileIndex++;
-                        final String tileName = tile.getName();
-                        ddb.addTile(DashboardTileType.fromName(tile.getType()), tile.getName(), tile.getDescription(), tile.getChart(), secIndex, tileIndex);
+                    ddb.addSection(DashboardColumnsType.fromCode(section.getColumns()), section.getHeight());
+                    for (DDashboardTile tile: section.getTiles()) {
+                        ddb.addTile(DashboardTileType.fromCode(tile.getType()), tile.getName(), tile.getDescription(),
+                                tile.getChart(), tile.getSectionIndex(), tile.getIndex());
                     }
                 }
-
             }
 
             final DashboardDef dashboardDef = ddb.build();
+            dashboardSlate = new DashboardSlate(dashboardDef);
             oldDesign = design;
         }
     }
