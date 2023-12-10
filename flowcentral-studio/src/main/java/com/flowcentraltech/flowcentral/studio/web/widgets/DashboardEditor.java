@@ -26,6 +26,7 @@ import com.flowcentraltech.flowcentral.configuration.constants.DashboardColumnsT
 import com.flowcentraltech.flowcentral.configuration.constants.DashboardTileType;
 import com.flowcentraltech.flowcentral.dashboard.data.DashboardDef;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.util.StringUtils;
 
 /**
  * Dashboard editor object.
@@ -376,10 +377,14 @@ public class DashboardEditor {
 
         public void setTiles(List<DDashboardTile> tiles) {
             this.tiles = tiles;
+            for (DDashboardTile tile: tiles) {
+                tile.setSectionIndex(index);
+            }
         }
 
         public void addDashboardTile(DDashboardTile editTile) {
             tiles.add(editTile);
+            editTile.setSectionIndex(index);
         }
 
         public DDashboardTile getDashboardTile(int tileIndex) {
@@ -400,6 +405,11 @@ public class DashboardEditor {
 
             return tile;
         }
+
+        @Override
+        public String toString() {
+            return StringUtils.toXmlString(this);
+        }
     }
 
     public static class DDashboardTile {
@@ -413,6 +423,8 @@ public class DashboardEditor {
         private String type;
 
         private String chart;
+
+        private int sectionIndex;
 
         private int index;
 
@@ -468,12 +480,25 @@ public class DashboardEditor {
             this.chart = chart;
         }
 
+        public int getSectionIndex() {
+            return sectionIndex;
+        }
+
+        public void setSectionIndex(int sectionIndex) {
+            this.sectionIndex = sectionIndex;
+        }
+
         public int getIndex() {
             return index;
         }
 
         public void setIndex(int index) {
             this.index = index;
+        }
+
+        @Override
+        public String toString() {
+            return StringUtils.toXmlString(this);
         }
 
     }

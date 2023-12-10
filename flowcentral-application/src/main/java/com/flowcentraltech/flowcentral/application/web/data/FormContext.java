@@ -258,10 +258,14 @@ public class FormContext extends AbstractContext {
     }
 
     public List<EventHandler> getFormSwitchOnChangeHandlers() {
-        return isCrudMode() ? formEventHandlers.getCrudSwitchOnChangeHandlers()
-                : (isSaveAsMode() ? formEventHandlers.getSaveAsSwitchOnChangeHandlers()
-                        : (isQuickEditMode() ? quickEditFormEventHandlers
-                                : formEventHandlers.getFormSwitchOnChangeHandlers()));
+        if (formEventHandlers != null) {
+            return isCrudMode() ? formEventHandlers.getCrudSwitchOnChangeHandlers()
+                    : (isSaveAsMode() ? formEventHandlers.getSaveAsSwitchOnChangeHandlers()
+                            : (isQuickEditMode() ? quickEditFormEventHandlers
+                                    : formEventHandlers.getFormSwitchOnChangeHandlers()));
+        }
+
+        return Collections.emptyList();
     }
 
     public EntityFormEventHandlers getFormEventHandlers() {

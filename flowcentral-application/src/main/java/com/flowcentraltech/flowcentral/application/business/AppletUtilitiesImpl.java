@@ -1057,7 +1057,7 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
                         logDebug("Constructing child list tab [{0}] using applet [{1}]...", formTabDef.getName(),
                                 formTabDef.getApplet());
                         AppletDef _appletDef = getAppletDef(formTabDef.getApplet());
-                        final boolean newButtonVisible = !hideAddActionButton(form, applet.getFormAppletDef(),
+                        final boolean newButtonVisible = applet == null || !hideAddActionButton(form, applet.getFormAppletDef(),
                                 formTabDef.getApplet());
                         final String editAction = formTabDef.getEditAction() == null ? "/assignToChildItem"
                                 : formTabDef.getEditAction();

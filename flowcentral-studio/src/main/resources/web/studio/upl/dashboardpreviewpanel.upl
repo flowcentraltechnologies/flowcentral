@@ -16,5 +16,9 @@
 !fc-dashboardpreviewpanel layout:$d{!ui-vertical style:$s{width:100%;}} components:$c{mainFormPanel}
 
 !ui-panel:mainFormPanel layout:$d{!ui-vertical style:$s{width:100%;}}
-	components:$c{}
+	components:$c{dashboardSlatePanel}
+	
+// Slate
+!ui-panel:dashboardSlatePanel style:$s{width:100%;} components:$c{dashboardSlate}
+!fc-dashboardslate:dashboardSlate binding:dashboardSlate
 	
