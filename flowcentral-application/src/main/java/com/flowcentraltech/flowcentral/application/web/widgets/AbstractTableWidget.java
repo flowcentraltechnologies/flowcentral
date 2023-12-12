@@ -586,6 +586,7 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
 
                 }
 
+                detailsPanelList = null;
                 summaryPanelList = null;
             }
 

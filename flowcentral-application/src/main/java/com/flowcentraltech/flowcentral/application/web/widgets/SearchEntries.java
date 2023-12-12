@@ -70,7 +70,7 @@ public class SearchEntries {
     private final int columns;
 
     private final boolean showConditions;
-
+    
     private List<SearchEntry> entryList;
 
     public SearchEntries(AppletUtilities au, EntityDef entityDef, LabelSuggestionDef labelSuggestion,

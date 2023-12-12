@@ -5408,6 +5408,9 @@
 				<property name="searchTable.viewItemInSeparateTab"
 					description="$m{studio.appappletprop.manageentity.searchtable.viewiteminseparatetab}"
 					inputWidget="application.checkbox" />
+				<property name="searchTable.showExpandedDetails"
+					description="$m{studio.appappletprop.manageentity.searchtable.showexpandeddetails}"
+					inputWidget="application.checkbox" />
 			</propertySet>
 			<propertySet
 				label="$m{studio.appappletprop.manageentity.formproperties}">

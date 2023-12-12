@@ -131,9 +131,11 @@
 !ui-colorlegend:colorLegend style:$s{width:100%;} columns:6 binding:entityTable.colorLegendInfo
 
 // Search result panel
-!ui-panel:searchResultPanel layout:$d{!ui-vertical style:$s{width:100%;}} components:$c{searchResultTbl}
+!ui-panel:searchResultPanel layout:$d{!ui-vertical style:$s{width:100%;}} components:$c{toggleDetailsBtn searchResultTbl}
 !fc-entitytable:searchResultTbl binding:entityTable multiSelect:false valueMarker:$f{searchResultMarker}
 	multiSelDependentList:$c{tblActionSel tblActionBtns}
+!ui-button:toggleDetailsBtn captionBinding:toggleDetails styleClass:$e{fc-purplebutton fc-tinybutton} style:$s{min-height:14px;}
+    eventHandler:$d{!ui-event event:onclick action:$c{toggleDetailsAct}}
 
 // Footer action panel
 !ui-panel:footerActionPanel styleClass:$e{footer} style:$s{width:100%;} components:$c{selFooterActionPanel tblActionBtns}
@@ -156,6 +158,7 @@
 !ui-postcommand:refreshAct command:refresh
 !ui-postcommand:searchAct command:search components:$c{searchEntries}
 !ui-postcommand:clearAct command:clear
+!ui-postcommand:toggleDetailsAct command:toggleDetails components:$c{searchEntries}
 !ui-postcommand:runFilterAct command:runFilter components:$c{searchFilter}
 !ui-postcommand:tackFilterAct command:tackFilter refresh:$c{searchFilterBody} components:$c{searchFilter}
 !ui-postcommand:quickFilterAct command:applyQuickFilter components:$c{quickFilter}

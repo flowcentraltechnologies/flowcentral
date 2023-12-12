@@ -30,10 +30,14 @@ import com.tcdng.unify.core.data.ValueStoreReader;
 public abstract class AbstractDetailsPanel<T> extends AbstractFlowCentralStandalonePanel implements DetailsPanel {
 
     @Override
-    public void loadDetails(ValueStore valueStore) throws UnifyException {
+    public final void loadDetails(ValueStore valueStore) throws UnifyException {
         T details = getDetails(valueStore);
-        ValueStore detailsValueStore = new BeanValueStore(details);
-        setValueStore(detailsValueStore);
+        super.setValueStore(new BeanValueStore(details));
+    }
+
+    @Override
+    public final void setValueStore(ValueStore valueStore) throws UnifyException {
+        
     }
 
     /**
@@ -47,7 +51,7 @@ public abstract class AbstractDetailsPanel<T> extends AbstractFlowCentralStandal
      * @throws UnifyException
      *                        if an error occurs
      */
-    protected <U> U getParentValue(Class<U> dataType, String propertyName) throws UnifyException {
+    protected final <U> U getParentValue(Class<U> dataType, String propertyName) throws UnifyException {
         ValueStoreReader parentReader = getValueStore().getTempValue(ValueStoreReader.class, "parentReader");
         return parentReader != null ? parentReader.read(dataType, propertyName) : null;
     }

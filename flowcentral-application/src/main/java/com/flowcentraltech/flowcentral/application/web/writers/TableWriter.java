@@ -189,7 +189,7 @@ public class TableWriter extends AbstractControlWriter {
             final boolean entryMode = table.isEntryMode();
             final int detailsIndex = table.getDetailsIndex();
             final boolean details = tableWidget.isDetails() && detailsIndex >= 0;
-            final boolean expandAllDetails = tableWidget.isExpandAllDetails();
+            final boolean expandAllDetails = tableWidget.isDetails() && tableWidget.isExpandAllDetails();
             final boolean multiSelect = tableDef.isMultiSelect() || tableWidget.isMultiSelect();
             final List<EventHandler> switchOnChangeHandlers = table.getSwitchOnChangeHandlers();
             final EventHandler switchOnChangeHandler = tableWidget.getSwitchOnChangeHandler();
@@ -316,7 +316,7 @@ public class TableWriter extends AbstractControlWriter {
                 }
 
                 // Details
-                if (details && (expandAllDetails || detailsIndex == i)) {
+                if ((details && detailsIndex == i) || expandAllDetails) {
                     DetailsPanel detailsPanel = tableWidget.getDetailsPanel(expandAllDetails ? i : 0);
                     if (detailsPanel != null) {
                         writer.writeBehavior(detailsPanel);
@@ -630,7 +630,7 @@ public class TableWriter extends AbstractControlWriter {
                 final Control[] actionCtrl = tableWidget.getActionCtrl();
                 final int detailsIndex = table.getDetailsIndex();
                 final boolean details = tableWidget.isDetails() && detailsIndex >= 0;
-                final boolean expandAllDetails = tableWidget.isExpandAllDetails();
+                final boolean expandAllDetails = tableWidget.isDetails() && tableWidget.isExpandAllDetails();
                 final boolean alternatingRows = tableWidget.isAlternatingRows();
                 final boolean isRowAction = !DataUtils.isBlank(table.getCrudActionHandlers())
                         && !tableWidget.isFixedRows() && !tableWidget.isActionColumn();
@@ -678,25 +678,13 @@ public class TableWriter extends AbstractControlWriter {
                     }
 
                     // Normal row
-                    String summaryClass = null;
+                    final String rowClass = resolveRowStyleClass(i, highlightRow, entryMessage, alternatingRows,
+                            even, odd, isRowAction, isDisableLinks);
                     String summaryColor = null;
                     Long id = valueStore.retrieve(Long.class, "id");
                     writer.write("<tr");
-                    if (i == highlightRow) {
-                        writeTagStyleClass(writer, MessageType.INFO.styleClass());
-                    } else if (entryMessage != null && entryMessage.isMessagePresent()
-                            && entryMessage.isRowReferred(i)) {
-                        writeTagStyleClass(writer, entryMessage.getMessageType().styleClass());
-                    } else if (alternatingRows) {
-                        if (i % 2 == 0) {
-                            summaryClass = even;
-                            writeTagStyleClass(writer, even);
-                        } else {
-                            summaryClass = odd;
-                            writeTagStyleClass(writer, odd);
-                        }
-                    } else if (isRowAction && !isDisableLinks) {
-                        writeTagStyleClass(writer, "pnt");
+                    if (!StringUtils.isBlank(rowClass)) {
+                        writeTagStyleClass(writer, rowClass);
                     }
 
                     writeTagName(writer, tableWidget.getRowId());
@@ -817,10 +805,14 @@ public class TableWriter extends AbstractControlWriter {
                     writer.write("</tr>");
 
                     // Details
-                    if (details && (expandAllDetails || detailsIndex == i)) {
-                        DetailsPanel detailsPanel = tableWidget.getDetailsPanel(expandAllDetails ? i :0);
+                    if ((details && detailsIndex == i) || expandAllDetails) {
+                        DetailsPanel detailsPanel = tableWidget.getDetailsPanel(expandAllDetails ? i : 0);
                         if (detailsPanel != null) {
                             writer.write("<tr");
+                            if (!StringUtils.isBlank(rowClass)) {
+                                writeTagStyleClass(writer, rowClass);
+                            }
+
                             writer.write(">");
 
                             if (supportSelect && isMultiSelect && !entryMode) {
@@ -849,8 +841,8 @@ public class TableWriter extends AbstractControlWriter {
                     SummaryPanel summaryPanel = tableWidget.getSummaryPanel(i);
                     if (summaryPanel != null) {
                         writer.write("<tr");
-                        if (summaryClass != null) {
-                            writeTagStyleClass(writer, summaryClass);
+                        if (!StringUtils.isBlank(rowClass)) {
+                            writeTagStyleClass(writer, rowClass);
                         }
 
                         if (summaryColor != null) {
@@ -889,6 +881,26 @@ public class TableWriter extends AbstractControlWriter {
             }
 
         }
+    }
+
+    private String resolveRowStyleClass(final int i, int highlightRow, EntryTableMessage entryMessage,
+            boolean alternatingRows, String even, String odd, boolean isRowAction, boolean isDisableLinks)
+            throws UnifyException {
+        if (i == highlightRow) {
+            return MessageType.INFO.styleClass();
+        } else if (entryMessage != null && entryMessage.isMessagePresent() && entryMessage.isRowReferred(i)) {
+            return entryMessage.getMessageType().styleClass();
+        } else if (alternatingRows) {
+            if (i % 2 == 0) {
+                return even;
+            }
+
+            return odd;
+        } else if (isRowAction && !isDisableLinks) {
+            return "pnt";
+        }
+
+        return null;
     }
 
     private void writeFixedActionRow(ResponseWriter writer, AbstractTableWidget<?, ?, ?> tableWidget, int columnCount)
