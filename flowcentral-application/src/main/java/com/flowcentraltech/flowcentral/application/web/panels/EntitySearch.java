@@ -59,6 +59,7 @@ public class EntitySearch extends AbstractPanelFormBinding {
     public static final int SHOW_QUICK_EDIT = 0x00000200;
     public static final int SHOW_REPORT = 0x00000400;
     public static final int SEARCH_ON_CRITERIA_ONLY = 0x00000800;
+    public static final int SHOW_EXPAND_DETAILS = 0x00001000;
 
     public static final int ENABLE_ALL = EDIT_FILTER_ENABLED | SHOW_FILTER_SAVE | SHOW_FILTER_THUMBTACK
             | SHOW_NEW_BUTTON | SHOW_EDIT_BUTTON | SHOW_QUICKFILTER | SHOW_ACTIONFOOTER | SHOW_SEARCH;
@@ -110,6 +111,8 @@ public class EntitySearch extends AbstractPanelFormBinding {
     private String appAppletFilterName;
 
     private String altTableLabel;
+
+    private String toggleDetails;
 
     private final boolean viewItemsInSeparateTabs;
 
@@ -211,10 +214,16 @@ public class EntitySearch extends AbstractPanelFormBinding {
         this.altTableLabel = altTableLabel;
     }
 
+    public String getToggleDetails() {
+        return toggleDetails;
+    }
+
+    public void setToggleDetails(String toggleDetails) {
+        this.toggleDetails = toggleDetails;
+    }
+
     public String getEntityTitle() throws UnifyException {
-        return altTableLabel != null
-                ? altTableLabel
-                : entityTable.getTableDef().getLabel();
+        return altTableLabel != null ? altTableLabel : entityTable.getTableDef().getLabel();
     }
 
     public EntityDef getEntityDef() {
@@ -565,6 +574,10 @@ public class EntitySearch extends AbstractPanelFormBinding {
 
     public boolean isShowReport() {
         return (mode & SHOW_REPORT) > 0;
+    }
+
+    public boolean isShowExpandDetails() {
+        return (mode & SHOW_EXPAND_DETAILS) > 0;
     }
 
     public boolean isSearchOnCriteriaOnly() {

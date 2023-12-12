@@ -68,11 +68,13 @@ public class EntitySelectPanel extends AbstractApplicationPanel {
         IndexedTarget indexedTarget = getRequestTarget(IndexedTarget.class);
         if (indexedTarget.isValidIndex()) {
             Popup popup = getCurrentPopup();
-            EntitySelect entitySelect = (EntitySelect) popup.getBackingBean();
-            entitySelect.select(indexedTarget.getIndex());
-            removeCurrentPopup();
-            setReloadOnSwitch();
-            setCommandResultMapping(ApplicationResultMappingConstants.REFRESH_CONTENT);
+            if (popup != null) {
+                EntitySelect entitySelect = (EntitySelect) popup.getBackingBean();
+                entitySelect.select(indexedTarget.getIndex());
+                removeCurrentPopup();
+                setReloadOnSwitch();
+                setCommandResultMapping(ApplicationResultMappingConstants.REFRESH_CONTENT);
+            }
         }
     }
 

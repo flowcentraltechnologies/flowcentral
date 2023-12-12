@@ -1690,6 +1690,11 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
             entitySearchMode = entitySearchMode & ~EntitySearch.SHOW_ACTIONFOOTER;
         }
 
+        if (_tableDef.isWithDetailsPanelName() && _appletDef.getPropValue(boolean.class,
+                AppletPropertyConstants.SEARCH_TABLE_SHOW_EXPANDED_DETAILS, false)) {
+            entitySearchMode |= EntitySearch.SHOW_EXPAND_DETAILS;
+        }
+
         if (!isIgnoreReport
                 && _appletDef.getPropValue(boolean.class, AppletPropertyConstants.SEARCH_TABLE_REPORT, false)
                 && systemModuleService.getSysParameterValue(boolean.class,

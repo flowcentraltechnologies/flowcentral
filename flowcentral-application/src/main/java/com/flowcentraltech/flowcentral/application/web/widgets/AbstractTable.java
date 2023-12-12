@@ -137,6 +137,8 @@ public abstract class AbstractTable<T, U> {
 
     private boolean disableLinks;
 
+    private boolean expandAllDetails;
+
     private ValueStoreReader parentReader;
 
     private TableStateOverride tableStateOverride;
@@ -447,6 +449,14 @@ public abstract class AbstractTable<T, U> {
 
     public void setDisableLinks(boolean disableLinks) {
         this.disableLinks = disableLinks;
+    }
+
+    public boolean isExpandAllDetails() {
+        return expandAllDetails;
+    }
+
+    public void setExpandAllDetails(boolean expandAllDetails) {
+        this.expandAllDetails = expandAllDetails;
     }
 
     public TableTotalSummary getTableTotalSummary() {

@@ -115,7 +115,7 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
 
     private List<SummaryPanel> summaryPanelList;
 
-    private DetailsPanel detailsPanel;
+    private List<DetailsPanel> detailsPanelList;
 
     private String tabMemoryId;
 
@@ -450,9 +450,8 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
 
     public UploadControl getUploadCtrl() throws UnifyException {
         if (uploadCtrl == null) {
-            uploadCtrl = (UploadControl) addInternalChildWidget(
-                    "!ui-fileuploadbutton styleClass:$s{"
-                            + getUplAttribute(String.class, "viewButtonClass") + " g_fsm}");
+            uploadCtrl = (UploadControl) addInternalChildWidget("!ui-fileuploadbutton styleClass:$s{"
+                    + getUplAttribute(String.class, "viewButtonClass") + " g_fsm}");
         }
 
         return uploadCtrl;
@@ -470,6 +469,11 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
         return isSummary() ? summaryPanelList.get(index) : null;
     }
 
+    public boolean isExpandAllDetails() throws UnifyException {
+        final T table = getValue(tableClass);
+        return table != null && table.isExpandAllDetails();
+    }
+
     public void validate(EvaluationMode evaluationMode, FormValidationErrors errors) throws UnifyException {
         List<ValueStore> valueList = getValueList();
         final int len = valueList.size();
@@ -483,15 +487,32 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
         }
     }
 
-    public DetailsPanel getDetailsPanel() throws UnifyException {
-        if (detailsPanel == null) {
-            String details = getDetails();
+    public DetailsPanel getDetailsPanel(int index) throws UnifyException {
+        final List<ValueStore> valueList = super.getValueList();
+        if (valueList == null) {
+            detailsPanelList = null;
+        } else {
+            detailsPanelList = Collections.emptyList();
+            final String details = getDetails();
             if (!StringUtils.isBlank(details)) {
-                detailsPanel = (DetailsPanel) addExternalChildStandalonePanel(details, getId() + "_dtl");
+                final T table = getValue(tableClass);
+                detailsPanelList = new ArrayList<DetailsPanel>();
+                if (table != null && table.isExpandAllDetails()) {
+                    final int len = valueList.size();
+                    for (int i = 0; i < len; i++) {
+                        DetailsPanel detailsPanel = (DetailsPanel) addExternalChildStandalonePanel(details,
+                                getId() + "_" + detailsPanelList.size() + "_dtl");
+                        detailsPanelList.add(detailsPanel);
+                    }
+                } else {
+                    DetailsPanel detailsPanel = (DetailsPanel) addExternalChildStandalonePanel(details,
+                            getId() + "_dtl");
+                    detailsPanelList.add(detailsPanel);
+                }
             }
         }
 
-        return detailsPanel;
+        return detailsPanelList != null && detailsPanelList.size() > index ? detailsPanelList.get(index) : null;
     }
 
     public EventHandler[] getActionEventHandler() throws UnifyException {
@@ -565,6 +586,7 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
 
                 }
 
+                detailsPanelList = null;
                 summaryPanelList = null;
             }
 
@@ -731,7 +753,7 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
         if (valueList == null) {
             summaryPanelList = null;
         } else {
-            String summary = getUplAttribute(String.class, "summary");
+            final String summary = getUplAttribute(String.class, "summary");
             if (!StringUtils.isBlank(summary)) {
                 if (summaryPanelList == null) {
                     summaryPanelList = new ArrayList<SummaryPanel>();

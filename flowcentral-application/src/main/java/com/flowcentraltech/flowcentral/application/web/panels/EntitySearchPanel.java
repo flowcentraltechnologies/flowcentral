@@ -57,7 +57,7 @@ public class EntitySearchPanel extends AbstractApplicationPanel {
 
         EntitySearch entitySearch = getEntitySearch();
         setVisible("sectorIcon", entitySearch.isWithSectorIcon());
-        
+
         // Makes sure edit button does not break on page scroll
         setRequestAttribute(entitySearch.getEditActionKey(), entitySearch.getEditAction());
 
@@ -70,6 +70,14 @@ public class EntitySearchPanel extends AbstractApplicationPanel {
         final EntityTable entityTable = entitySearch.getEntityTable();
         final TableDef tableDef = entityTable.getTableDef();
         final EntityDef entityDef = tableDef.getEntityDef();
+
+        setVisible("toggleDetailsBtn", entitySearch.isShowExpandDetails());
+        if (entitySearch.isShowExpandDetails()) {
+            entitySearch.setToggleDetails(
+                    entityTable.isExpandAllDetails() ? resolveSessionMessage("$m{button.collapsedetails}")
+                            : resolveSessionMessage("$m{button.expanddetails}"));
+        }
+
         setVisible("newBtn", entitySearch.isNewButtonVisible()
                 && applicationPrivilegeManager().isRoleWithPrivilege(roleCode, entityDef.getAddPrivilege()));
         setVisible("editBtn", entitySearch.isEditButtonVisible()
@@ -246,6 +254,13 @@ public class EntitySearchPanel extends AbstractApplicationPanel {
         entitySearch.setAppAppletFilterName(null);
         entitySearch.clearSearchEntries();
         entitySearch.applySearchEntriesToSearch();
+        getRequestContextUtil().setContentScrollReset();
+    }
+
+    @Action
+    public void toggleDetails() throws UnifyException {
+        EntitySearch entitySearch = getEntitySearch();
+        entitySearch.getEntityTable().setExpandAllDetails(!entitySearch.getEntityTable().isExpandAllDetails());
         getRequestContextUtil().setContentScrollReset();
     }
 
