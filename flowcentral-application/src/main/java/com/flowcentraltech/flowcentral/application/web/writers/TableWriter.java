@@ -189,6 +189,7 @@ public class TableWriter extends AbstractControlWriter {
             final boolean entryMode = table.isEntryMode();
             final int detailsIndex = table.getDetailsIndex();
             final boolean details = tableWidget.isDetails() && detailsIndex >= 0;
+            final boolean expandAllDetails = tableWidget.isExpandAllDetails();
             final boolean multiSelect = tableDef.isMultiSelect() || tableWidget.isMultiSelect();
             final List<EventHandler> switchOnChangeHandlers = table.getSwitchOnChangeHandlers();
             final EventHandler switchOnChangeHandler = tableWidget.getSwitchOnChangeHandler();
@@ -300,7 +301,7 @@ public class TableWriter extends AbstractControlWriter {
                         UploadControlHandler handler = _uploadCtrl.getUploadHandler();
                         _crudCtrl.setDisabled(handler != null && !handler.isFileDataPresent(i));
                     }
-                    
+
                     if (crudActionHandlers != null) {
                         for (EventHandler eventHandler : crudActionHandlers) {
                             writer.writeBehavior(eventHandler, _crudCtrl.getId(), null);
@@ -313,10 +314,10 @@ public class TableWriter extends AbstractControlWriter {
                     _uploadCtrl.setValueStore(valueStore);
                     writer.writeBehavior(_uploadCtrl);
                 }
-                
+
                 // Details
-                if (details && detailsIndex == i) {
-                    DetailsPanel detailsPanel = tableWidget.getDetailsPanel();
+                if (details && (expandAllDetails || detailsIndex == i)) {
+                    DetailsPanel detailsPanel = tableWidget.getDetailsPanel(expandAllDetails ? i : 0);
                     if (detailsPanel != null) {
                         writer.writeBehavior(detailsPanel);
                     }
@@ -629,6 +630,7 @@ public class TableWriter extends AbstractControlWriter {
                 final Control[] actionCtrl = tableWidget.getActionCtrl();
                 final int detailsIndex = table.getDetailsIndex();
                 final boolean details = tableWidget.isDetails() && detailsIndex >= 0;
+                final boolean expandAllDetails = tableWidget.isExpandAllDetails();
                 final boolean alternatingRows = tableWidget.isAlternatingRows();
                 final boolean isRowAction = !DataUtils.isBlank(table.getCrudActionHandlers())
                         && !tableWidget.isFixedRows() && !tableWidget.isActionColumn();
@@ -799,7 +801,7 @@ public class TableWriter extends AbstractControlWriter {
                             UploadControlHandler handler = _uploadCtrl.getUploadHandler();
                             _crudCtrl.setDisabled(handler != null && !handler.isFileDataPresent(i));
                         }
-                        
+
                         writer.writeStructureAndContent(_crudCtrl);
                         writer.write("</td>");
                     }
@@ -815,8 +817,8 @@ public class TableWriter extends AbstractControlWriter {
                     writer.write("</tr>");
 
                     // Details
-                    if (details && detailsIndex == i) {
-                        DetailsPanel detailsPanel = tableWidget.getDetailsPanel();
+                    if (details && (expandAllDetails || detailsIndex == i)) {
+                        DetailsPanel detailsPanel = tableWidget.getDetailsPanel(expandAllDetails ? i :0);
                         if (detailsPanel != null) {
                             writer.write("<tr");
                             writer.write(">");
