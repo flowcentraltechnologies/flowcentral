@@ -45,7 +45,7 @@ public class EntityListingResponse extends BaseBroadcastResponse {
     public EntityListingResponse(String errorCode, String errorMsg) {
         super(errorCode, errorMsg);
     }
-    
+
     public EntityListingResponse() {
 
     }
@@ -67,8 +67,8 @@ public class EntityListingResponse extends BaseBroadcastResponse {
                     listings.addAll(resp.getListings());
                 }
             }
-            
-            if (getRedirectErrors() == null) {
+
+            if (getRedirectErrors() == null || getRedirectErrors().isEmpty()) {
                 setRedirectErrors(resp.getRedirectErrors());
             } else {
                 if (resp.getRedirectErrors() != null) {
