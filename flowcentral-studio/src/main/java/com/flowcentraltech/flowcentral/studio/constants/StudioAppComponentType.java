@@ -290,7 +290,7 @@ public enum StudioAppComponentType implements EnumConst {
             "studioonupdateworkflow-policy",
             null,
             StudioAppComponentFlags.ENTITY_COMPONENT | StudioAppComponentFlags.SUPPORTS_NEW
-                    | StudioAppComponentFlags.SUPPORTS_SAVEAS,
+                    | StudioAppComponentFlags.SUPPORTS_SAVEAS | StudioAppComponentFlags.SHOW_CLASSIFIED,
             AppletType.STUDIO_FC_COMPONENT,
             Workflow.class);
 
@@ -319,6 +319,8 @@ public enum StudioAppComponentType implements EnumConst {
     private final boolean supportsNew;
 
     private final boolean supportsSaveAs;
+
+    private final boolean showClassified;
 
     private final AppletType appletType;
 
@@ -351,6 +353,7 @@ public enum StudioAppComponentType implements EnumConst {
         this.entityComponent = (StudioAppComponentFlags.ENTITY_COMPONENT & flags) > 0;
         this.supportsNew = (StudioAppComponentFlags.SUPPORTS_NEW & flags) > 0;
         this.supportsSaveAs = (StudioAppComponentFlags.SUPPORTS_SAVEAS & flags) > 0;
+        this.showClassified = (StudioAppComponentFlags.SHOW_CLASSIFIED & flags) > 0;
         this.appletType = appletType;
         this.componentType = componentType;
     }
@@ -409,6 +412,10 @@ public enum StudioAppComponentType implements EnumConst {
         return supportsSaveAs;
     }
 
+    public boolean isShowClassified() {
+        return showClassified;
+    }
+    
     public String labelKey() {
         return labelKey;
     }

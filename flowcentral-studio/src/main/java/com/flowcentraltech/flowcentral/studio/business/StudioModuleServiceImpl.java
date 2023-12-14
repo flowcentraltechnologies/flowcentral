@@ -213,8 +213,10 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
     @Override
     public List<AppletDef> findAppletDefs(String applicationName, StudioAppComponentType type) throws UnifyException {
         List<AppletDef> appletDefList = null;
-        List<Long> instIdList = appletUtilities.application().findNonClassifiedAppComponentIdList(applicationName,
-                type.componentType());
+        List<Long> instIdList = type.isShowClassified()
+                ? appletUtilities.application().findAppComponentIdList(applicationName, type.componentType())
+                : appletUtilities.application().findNonClassifiedAppComponentIdList(applicationName,
+                        type.componentType());
         if (!instIdList.isEmpty()) {
             appletDefList = new ArrayList<AppletDef>();
             for (Long instId : instIdList) {
