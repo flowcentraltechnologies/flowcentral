@@ -36,6 +36,7 @@
 			<property name="searchTable.new" value="true" />
 			<property name="searchTable.report" value="true" />
 			<property name="searchTable.quickFilter" value="true" />
+			<property name="searchTable.basicSearchOnly" value="true" />
 			<property name="createForm" value="endpointConfigForm" />
 			<property name="createForm.save" value="true" />
 			<property name="createForm.save.next" value="true" />
@@ -52,6 +53,7 @@
 			<property name="searchTable.new" value="true" />
 			<property name="searchTable.report" value="true" />
 			<property name="searchTable.quickFilter" value="true" />
+			<property name="searchTable.basicSearchOnly" value="true" />
 			<property name="createForm" value="readConfigForm" />
 			<property name="createForm.save" value="true" />
 			<property name="createForm.save.next" value="true" />
@@ -78,9 +80,9 @@
 			reportable="true">
 			<field name="endpointType" label="$m{integration.endpointconfig.endpointtype}"
 				type="enum_ref" references="endpointtypelist"
-				inputWidget="application.enumlist" />
+				inputWidget="application.enumlist" basicSearch="true" />
 			<field name="name" label="$m{integration.endpointconfig.name}" type="string"
-				inputWidget="application.name" maxLen="64"/>
+				inputWidget="application.name" maxLen="64" basicSearch="true"/>
 			<field name="description" label="$m{integration.endpointconfig.description}"
 				type="string" inputWidget="application.text" maxLen="96" />
 			<field name="endpoint" label="$m{integration.endpointconfig.endpoint}"
@@ -99,7 +101,7 @@
 			type="com.flowcentraltech.flowcentral.integration.entities.ReadConfig" auditable="true"
 			reportable="true">
 			<field name="name" label="$m{integration.readconfig.name}" type="string"
-				inputWidget="application.name"  maxLen="32"/>
+				inputWidget="application.name"  maxLen="32" basicSearch="true"/>
 			<field name="description" label="$m{integration.readconfig.description}"
 				type="string" inputWidget="application.text" maxLen="64" />
 			<field name="endpointReader" label="$m{integration.readconfig.endpointreader}"
@@ -125,7 +127,7 @@
 		<table name="endpointConfigTable"
 			description="$m{integration.endpointconfig.table}"
 			label="$m{integration.endpointconfig.table.label}" entity="endpointConfig"
-			itemsPerPage="20">
+			itemsPerPage="20" serialNo="true" basicSearch="true">
 			<column field="name" renderWidget="application.name"
 				widthRatio="1"  linkAct="maintainAct"/>
 			<column field="description" renderWidget="application.text"
@@ -138,7 +140,7 @@
 		<table name="readConfigTable"
 			description="$m{integration.readconfig.table}"
 			label="$m{integration.readconfig.table.label}" entity="readConfig"
-			itemsPerPage="20">
+			itemsPerPage="20" serialNo="true" basicSearch="true">
 			<column field="name" renderWidget="application.name"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="description" renderWidget="application.text"

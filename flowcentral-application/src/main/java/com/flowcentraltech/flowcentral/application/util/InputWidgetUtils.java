@@ -145,6 +145,30 @@ public final class InputWidgetUtils {
         defaultFormInputWidgets = Collections.unmodifiableMap(map);
     }
 
+    private static final Map<EntityFieldDataType, String> defaultSyncFormInputWidgets;
+
+    static {
+        Map<EntityFieldDataType, String> map = new EnumMap<EntityFieldDataType, String>(EntityFieldDataType.class);
+        map.put(EntityFieldDataType.CHAR, "application.text");
+        map.put(EntityFieldDataType.BOOLEAN, "application.booleanlist");
+        map.put(EntityFieldDataType.SHORT, "application.integer");
+        map.put(EntityFieldDataType.INTEGER, "application.integer");
+        map.put(EntityFieldDataType.LONG, "application.integer");
+        map.put(EntityFieldDataType.FLOAT, "application.decimal");
+        map.put(EntityFieldDataType.DOUBLE, "application.decimal");
+        map.put(EntityFieldDataType.DECIMAL, "application.decimal");
+        map.put(EntityFieldDataType.DATE, "application.date");
+        map.put(EntityFieldDataType.TIMESTAMP_UTC, "application.datetime");
+        map.put(EntityFieldDataType.TIMESTAMP, "application.datetime");
+        map.put(EntityFieldDataType.STRING, "application.text");
+        map.put(EntityFieldDataType.ENUM, "application.text");
+        map.put(EntityFieldDataType.ENUM_REF, "application.text");
+        map.put(EntityFieldDataType.REF, "application.entitylist");
+        map.put(EntityFieldDataType.REF_UNLINKABLE, "application.entitylist");
+        map.put(EntityFieldDataType.REF_FILEUPLOAD, "application.fileupload");
+        defaultSyncFormInputWidgets = Collections.unmodifiableMap(map);
+    }
+
     private InputWidgetUtils() {
 
     }
@@ -168,6 +192,10 @@ public final class InputWidgetUtils {
 
     public static String getDefaultEntityFieldWidget(EntityFieldDataType type) {
         return defaultFormInputWidgets.get(type);
+    }
+
+    public static String getDefaultSyncEntityFieldWidget(EntityFieldDataType type) {
+        return defaultSyncFormInputWidgets.get(type);
     }
 
     public static AbstractInput<?> newMultiInput(final EntityFieldDef entityFieldDef) throws UnifyException {

@@ -35,6 +35,7 @@ import com.flowcentraltech.flowcentral.application.util.ApplicationCodeGenUtils;
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityNameParts;
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityUtils;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
+import com.flowcentraltech.flowcentral.application.util.InputWidgetUtils;
 import com.flowcentraltech.flowcentral.application.util.PrivilegeNameUtils;
 import com.flowcentraltech.flowcentral.common.constants.ConfigType;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldType;
@@ -260,6 +261,8 @@ public class StudioEntitySchemaManagerImpl extends AbstractEntitySchemaManager {
         appEntityField
                 .setLabel(!StringUtils.isBlank(entityFieldSchema.getDescription()) ? entityFieldSchema.getDescription()
                         : NameUtils.describeName(entityFieldSchema.getName()));
+        appEntityField
+                .setInputWidget(InputWidgetUtils.getDefaultSyncEntityFieldWidget(entityFieldSchema.getDataType()));
         appEntityField.setMaxLen(entityFieldSchema.getLength() > 0 && entityFieldSchema.getDataType().isString()
                 ? entityFieldSchema.getLength()
                 : null);
