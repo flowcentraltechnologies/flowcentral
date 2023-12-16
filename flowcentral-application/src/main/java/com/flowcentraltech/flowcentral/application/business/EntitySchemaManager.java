@@ -59,4 +59,16 @@ public interface EntitySchemaManager extends FlowCentralComponent {
      *                        if an error occurs
      */
     void createDefaultComponents(String entity, AppEntity appEntity) throws UnifyException;
+
+    /**
+     * Updates default entity components.
+     * 
+     * @param entity
+     *                  the entity name
+     * @param appEntity
+     *                  the entity
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    void updateDefaultComponents(String entity, AppEntity appEntity) throws UnifyException;
 }

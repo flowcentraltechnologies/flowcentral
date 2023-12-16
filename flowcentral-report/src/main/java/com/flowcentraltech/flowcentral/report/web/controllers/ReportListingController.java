@@ -95,7 +95,7 @@ public class ReportListingController extends AbstractPageController<ReportListin
                 for (ReportConfiguration reportConfiguration : configurationList) {
                     final String reportConfigName = ApplicationNameUtils.getApplicationEntityLongName(
                             reportConfiguration.getApplicationName(), reportConfiguration.getName());
-                    lb.addLink(reportGroup.getName(), reportConfigName, reportConfiguration.getDescription());
+                    lb.addLink(reportGroup.getName(), reportConfigName, reportConfiguration.getTitle());
                 }
             }
         }

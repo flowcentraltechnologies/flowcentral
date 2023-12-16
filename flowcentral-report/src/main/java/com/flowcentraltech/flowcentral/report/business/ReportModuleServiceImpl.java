@@ -184,8 +184,18 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
     }
 
     @Override
+    public int updateReportableDefinition(ReportableDefinition reportableDefinition) throws UnifyException {
+        return environment().updateByIdVersion(reportableDefinition);
+    }
+
+    @Override
     public List<ReportableDefinition> findReportDefinitions(ReportableDefinitionQuery query) throws UnifyException {
         return environment().listAll(query);
+    }
+
+    @Override
+    public ReportableDefinition findReportDefinition(ReportableDefinitionQuery query) throws UnifyException {
+        return environment().find(query);
     }
 
     @Override

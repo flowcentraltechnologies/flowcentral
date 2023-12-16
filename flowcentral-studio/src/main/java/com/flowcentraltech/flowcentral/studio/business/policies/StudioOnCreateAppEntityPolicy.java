@@ -68,7 +68,7 @@ public class StudioOnCreateAppEntityPolicy extends StudioOnCreateComponentPolicy
         final AppEntity appEntity = (AppEntity) ctx.getInst();
         final String applicationName = application().getApplicationName(appEntity.getApplicationId());
         final String entity = ApplicationNameUtils.ensureLongNameReference(applicationName, appEntity.getName());
-        entitySchemaManager.createDefaultComponents(entity, appEntity);;
+        entitySchemaManager.createDefaultComponents(entity, appEntity);
         return result;
     }
 

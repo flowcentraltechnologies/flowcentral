@@ -129,7 +129,7 @@ public class EntityDef extends BaseApplicationEntityDef {
 
     private Set<String> fieldNames;
 
-    private Set<String> auditFieldNames;
+    private List<String> auditFieldNames;
 
     private List<String> childrenFieldNames;
 
@@ -867,18 +867,18 @@ public class EntityDef extends BaseApplicationEntityDef {
         return fieldNames;
     }
 
-    public Set<String> getAuditFieldNames() {
+    public List<String> getAuditFieldNames() {
         if (auditFieldNames == null) {
             synchronized (EntityDef.class) {
                 if (auditFieldNames == null) {
-                    auditFieldNames = new HashSet<String>();
+                    auditFieldNames = new ArrayList<String>();
                     for (EntityFieldDef entityFieldDef : fieldDefList) {
                         if (entityFieldDef.isAuditable()) {
                             auditFieldNames.add(entityFieldDef.getFieldName());
                         }
                     }
 
-                    auditFieldNames = Collections.unmodifiableSet(auditFieldNames);
+                    auditFieldNames = Collections.unmodifiableList(auditFieldNames);
                 }
             }
         }

@@ -118,10 +118,4 @@ public class ReportableField extends BaseEntity {
         this.parameterOnly = parameterOnly;
     }
 
-    @Override
-    public String toString() {
-        return "ReportableField [reportableId=" + reportableId + ", name=" + name + ", description=" + description
-                + ", type=" + type + ", formatter=" + formatter + ", horizontalAlign=" + horizontalAlign + ", width="
-                + width + ", parameterOnly=" + parameterOnly + "]";
-    }
 }

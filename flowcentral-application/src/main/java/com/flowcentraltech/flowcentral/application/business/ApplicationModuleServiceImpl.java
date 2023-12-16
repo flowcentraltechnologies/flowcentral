@@ -1555,10 +1555,10 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     public EntityAuditInfo getEntityAuditInfo(Object entityDef) throws UnifyException {
         EntityDef _entityDef = (EntityDef) entityDef;
         if (_entityDef.isAuditable()) {
-            return new EntityAuditInfo(_entityDef.getAuditFieldNames(), true);
+            return new EntityAuditInfo(_entityDef.getLongName(), _entityDef.getAuditFieldNames(), true);
         }
 
-        return new EntityAuditInfo();
+        return new EntityAuditInfo(_entityDef.getLongName());
     }
 
     @Override
