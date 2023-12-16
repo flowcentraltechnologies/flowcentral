@@ -17,7 +17,7 @@
 package com.flowcentraltech.flowcentral.common.data;
 
 import java.util.Collections;
-import java.util.Set;
+import java.util.List;
 
 /**
  * Entity audit information object.
@@ -27,26 +27,35 @@ import java.util.Set;
  */
 public class EntityAuditInfo {
 
-    private Set<String> inclusions;
-    
+    private final String entity;
+
+    private List<String> inclusions;
+
     private boolean auditable;
 
-    public EntityAuditInfo(Set<String> inclusions, boolean auditable) {
+    public EntityAuditInfo(String entity, List<String> inclusions, boolean auditable) {
+        this.entity = entity;
         this.inclusions = inclusions;
         this.auditable = auditable;
     }
 
-    public EntityAuditInfo(boolean auditable) {
+    public EntityAuditInfo(String entity, boolean auditable) {
+        this.entity = entity;
         this.auditable = auditable;
-        this.inclusions = Collections.emptySet();
+        this.inclusions = Collections.emptyList();
     }
 
-    public EntityAuditInfo() {
+    public EntityAuditInfo(String entity) {
+        this.entity = entity;
         this.auditable = false;
-        this.inclusions = Collections.emptySet();
+        this.inclusions = Collections.emptyList();
     }
 
-    public Set<String> getInclusions() {
+    public String getEntity() {
+        return entity;
+    }
+
+    public List<String> getInclusions() {
         return inclusions;
     }
 
@@ -57,5 +66,5 @@ public class EntityAuditInfo {
     public boolean auditable() {
         return auditable;
     }
-    
+
 }
