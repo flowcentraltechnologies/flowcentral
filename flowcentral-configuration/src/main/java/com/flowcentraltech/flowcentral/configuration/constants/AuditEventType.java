@@ -38,6 +38,8 @@ public enum AuditEventType implements EnumConst {
             "CRN"),
     CREATE_CLOSE(
             "CRC"),
+    CREATE_DRAFT(
+            "CRD"),
     CREATE_SUBMIT(
             "CRS"),
     UPDATE(

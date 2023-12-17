@@ -91,6 +91,7 @@ import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
 import com.tcdng.unify.common.util.StringToken;
 import com.tcdng.unify.core.UnifyComponent;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.UserToken;
 import com.tcdng.unify.core.criterion.Restriction;
 import com.tcdng.unify.core.data.Formats;
 import com.tcdng.unify.core.data.Listable;
@@ -326,6 +327,15 @@ public interface AppletUtilities extends FlowCentralComponent {
      */
     boolean isApplicationDevelopable(Long applicationId) throws UnifyException;
 
+    /**
+     * Gets a session user token.
+     * 
+     * @return the session user token
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    UserToken getSessionUserToken() throws UnifyException;
+    
     /**
      * Gets a session user ID.
      * 

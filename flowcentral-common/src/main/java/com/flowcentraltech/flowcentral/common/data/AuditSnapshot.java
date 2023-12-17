@@ -44,18 +44,25 @@ public class AuditSnapshot {
 
     private String userLoginId;
 
+    private String userName;
+
     private String userIpAddress;
+
+    private String roleCode;
 
     private List<EntityAuditSnapshot> snapshots;
 
     private AuditSnapshot(AuditSourceType sourceType, String sourceDesc, AuditEventType eventType, Date eventTimestamp,
-            String userLoginId, String userIpAddress, List<EntityAuditSnapshot> snapshots) {
+            String userLoginId, String userName, String userIpAddress, String roleCode,
+            List<EntityAuditSnapshot> snapshots) {
         this.sourceType = sourceType;
         this.sourceDesc = sourceDesc;
         this.eventType = eventType;
         this.eventTimestamp = eventTimestamp;
         this.userLoginId = userLoginId;
+        this.userName = userName;
         this.userIpAddress = userIpAddress;
+        this.roleCode = roleCode;
         this.snapshots = snapshots;
     }
 
@@ -79,8 +86,16 @@ public class AuditSnapshot {
         return userLoginId;
     }
 
+    public String getUserName() {
+        return userName;
+    }
+
     public String getUserIpAddress() {
         return userIpAddress;
+    }
+
+    public String getRoleCode() {
+        return roleCode;
     }
 
     public List<EntityAuditSnapshot> getSnapshots() {
@@ -109,7 +124,11 @@ public class AuditSnapshot {
 
         private String userLoginId;
 
+        private String userName;
+
         private String userIpAddress;
+
+        private String roleCode;
 
         private List<EntityAuditSnapshot> snapshots;
 
@@ -119,6 +138,11 @@ public class AuditSnapshot {
             this.eventType = eventType;
             this.eventTimestamp = eventTimestamp;
             this.snapshots = new ArrayList<EntityAuditSnapshot>();
+        }
+
+        public Builder userName(String userName) {
+            this.userName = userName;
+            return this;
         }
 
         public Builder userLoginId(String userLoginId) {
@@ -131,14 +155,19 @@ public class AuditSnapshot {
             return this;
         }
 
+        public Builder roleCode(String roleCode) {
+            this.roleCode = roleCode;
+            return this;
+        }
+
         public Builder addSnapshot(EntityAudit entityAudit, AuditEventType eventType) throws UnifyException {
             snapshots.add(entityAudit.takeSnapshot(eventType));
             return this;
         }
 
         public AuditSnapshot build() {
-            return new AuditSnapshot(sourceType, sourceDesc, eventType, eventTimestamp, userLoginId, userIpAddress,
-                    Collections.unmodifiableList(snapshots));
+            return new AuditSnapshot(sourceType, sourceDesc, eventType, eventTimestamp, userLoginId, userName,
+                    userIpAddress, roleCode, Collections.unmodifiableList(snapshots));
         }
     }
 }

@@ -97,6 +97,7 @@ import com.flowcentraltech.flowcentral.configuration.constants.AuditSourceType;
 import com.flowcentraltech.flowcentral.configuration.constants.FormReviewType;
 import com.flowcentraltech.flowcentral.configuration.constants.RecordActionType;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.UserToken;
 import com.tcdng.unify.core.criterion.Restriction;
 import com.tcdng.unify.core.data.BeanValueStore;
 import com.tcdng.unify.core.data.ValueStoreReader;
@@ -716,6 +717,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         final AppletDef _currFormAppletDef = getFormAppletDef();
         EntityActionResult entityActionResult = au.createEntityInstWorkflowDraftByFormContext(_currFormAppletDef,
                 form.getCtx(), this);
+        takeAuditSnapshot(AuditEventType.CREATE_DRAFT);
         updateForm(HeaderWithTabsForm.UpdateType.UPDATE_INST, form, reloadEntity(entityActionResult.getInst(), false));
     }
 
@@ -1347,6 +1349,12 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         if (isAuditingEnabled()) {
             AuditSnapshot.Builder asb = AuditSnapshot.newBuilder(AuditSourceType.APPLET, "", auditEventType,
                     au.getNow());
+            UserToken userToken = au.getSessionUserToken();
+            asb.userLoginId(userToken.getUserLoginId());
+            asb.userName(userToken.getUserName());
+            asb.userIpAddress(userToken.getIpAddress());
+            asb.roleCode(userToken.getRoleCode());
+            
             if (formStack != null && !formStack.isEmpty()) {
                 final int len = formStack.size();
                 for (int i = 0; i < len; i++) {
@@ -1620,6 +1628,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         Long entityInstId = (Long) inst.getId();
         if (viewMode.isCreateForm()) {
             entityActionResult = createInst();
+            takeAuditSnapshot(reviewType.auditEventType());
             entityInstId = (Long) entityActionResult.getResult();
             if (_entityDef.delegated()) {
                 ((AbstractSequencedEntity) inst).setId(entityInstId);

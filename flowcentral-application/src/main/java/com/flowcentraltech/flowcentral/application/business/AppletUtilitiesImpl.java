@@ -140,6 +140,7 @@ import com.tcdng.unify.core.UnifyComponent;
 import com.tcdng.unify.core.UnifyComponentConfig;
 import com.tcdng.unify.core.UnifyCoreErrorConstants;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.UserToken;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.Preferred;
@@ -561,6 +562,11 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
     @Override
     public boolean isApplicationDevelopable(Long applicationId) throws UnifyException {
         return applicationModuleService.isApplicationDevelopable(applicationId);
+    }
+
+    @Override
+    public UserToken getSessionUserToken() throws UnifyException {
+        return getSessionContext().getUserToken();
     }
 
     @Override
