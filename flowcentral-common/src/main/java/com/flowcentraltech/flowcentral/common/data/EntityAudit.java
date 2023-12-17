@@ -65,44 +65,31 @@ public class EntityAudit {
 
     public EntityAuditSnapshot takeSnapshot(AuditEventType eventType) throws UnifyException {
         List<EntityFieldAudit> fieldAudits = new ArrayList<EntityFieldAudit>();
-        switch (eventType) {
-            case CREATE:
-            case CREATE_CLOSE:
-            case CREATE_NEXT:
-            case CREATE_SUBMIT:
-                for (String fieldName : entityAuditInfo.getInclusions()) {
-                    Object newVal = DataUtils.getBeanProperty(Object.class, entity, fieldName);
-                    fieldAudits.add(new EntityFieldAudit(fieldName, null, newVal));
-                }
-                break;
-            case DELETE:
-            case DELETE_SUBMIT:
-                for (EntityFieldAudit oldFieldAudit : lastSnapshot.getFieldAudits()) {
-                    final boolean newAsOldSource = lastSnapshot.getEventType().isCreate()
-                            || lastSnapshot.getEventType().isUpdate();
-                    Object oldVal = newAsOldSource ? oldFieldAudit.getNewValue() : oldFieldAudit.getOldValue();
-                    fieldAudits.add(new EntityFieldAudit(oldFieldAudit.getFieldName(), oldVal, null));
-                }
-                break;
-            case UPDATE:
-            case UPDATE_CLOSE:
-            case UPDATE_SUBMIT:
+        if (eventType.isCreate()) {
+            for (String fieldName : entityAuditInfo.getInclusions()) {
+                Object newVal = DataUtils.getBeanProperty(Object.class, entity, fieldName);
+                fieldAudits.add(new EntityFieldAudit(fieldName, null, newVal));
+            }
+        } else if (eventType.isUpdate()) {
+            final boolean newAsOldSource = lastSnapshot.getEventType().isCreate()
+                    || lastSnapshot.getEventType().isUpdate();
+            for (EntityFieldAudit oldFieldAudit : lastSnapshot.getFieldAudits()) {
+                Object newVal = DataUtils.getBeanProperty(Object.class, entity, oldFieldAudit.getFieldName());
+                Object oldVal = newAsOldSource ? oldFieldAudit.getNewValue() : oldFieldAudit.getOldValue();
+                fieldAudits.add(new EntityFieldAudit(oldFieldAudit.getFieldName(), oldVal, newVal));
+            }
+        } else if (eventType.isDelete()) {
+            for (EntityFieldAudit oldFieldAudit : lastSnapshot.getFieldAudits()) {
                 final boolean newAsOldSource = lastSnapshot.getEventType().isCreate()
                         || lastSnapshot.getEventType().isUpdate();
-                for (EntityFieldAudit oldFieldAudit : lastSnapshot.getFieldAudits()) {
-                    Object newVal = DataUtils.getBeanProperty(Object.class, entity, oldFieldAudit.getFieldName());
-                    Object oldVal = newAsOldSource ? oldFieldAudit.getNewValue() : oldFieldAudit.getOldValue();
-                    fieldAudits.add(new EntityFieldAudit(oldFieldAudit.getFieldName(), oldVal, newVal));
-                }
-                break;
-            case VIEW:
-                for (String fieldName : entityAuditInfo.getInclusions()) {
-                    Object oldVal = DataUtils.getBeanProperty(Object.class, entity, fieldName);
-                    fieldAudits.add(new EntityFieldAudit(fieldName, oldVal, null));
-                }
-                break;
-            default:
-                break;
+                Object oldVal = newAsOldSource ? oldFieldAudit.getNewValue() : oldFieldAudit.getOldValue();
+                fieldAudits.add(new EntityFieldAudit(oldFieldAudit.getFieldName(), oldVal, null));
+            }
+        } else {
+            for (String fieldName : entityAuditInfo.getInclusions()) {
+                Object oldVal = DataUtils.getBeanProperty(Object.class, entity, fieldName);
+                fieldAudits.add(new EntityFieldAudit(fieldName, oldVal, null));
+            }
         }
 
         lastSnapshot = new EntityAuditSnapshot(eventType, entityAuditInfo.getEntity(), fieldAudits);

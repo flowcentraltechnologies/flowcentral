@@ -873,7 +873,8 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         }
 
         EntityActionResult entityActionResult = au.deleteEntityInstByFormContext(formAppletDef, form.getCtx(), this);
-        takeAuditSnapshot(AuditEventType.DELETE);
+        takeAuditSnapshot(
+                isWorkflowCopy() || form.isUpdateDraft() ? AuditEventType.DELETE_DRAFT : AuditEventType.DELETE);
         final boolean closePage = !navBackToPrevious();
         entityActionResult.setClosePage(closePage);
         entityActionResult.setRefreshMenu(closePage);
@@ -1354,7 +1355,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
             asb.userName(userToken.getUserName());
             asb.userIpAddress(userToken.getIpAddress());
             asb.roleCode(userToken.getRoleCode());
-            
+
             if (formStack != null && !formStack.isEmpty()) {
                 final int len = formStack.size();
                 for (int i = 0; i < len; i++) {
@@ -1364,13 +1365,13 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
                     }
                 }
             }
-            
+
             // TODO Check if not form mode but assignment or other
             FormContext fCtx = form.getCtx();
             if (fCtx.isSupportAudit()) {
                 asb.addSnapshot(fCtx.getEntityAudit(), auditEventType);
             }
-            
+
             AuditSnapshot auditSnapshot = asb.build();
             // TODO Write to audit store
             System.out.println("@prime: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
@@ -1661,7 +1662,8 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         final AppletDef _currFormAppletDef = getFormAppletDef();
         EntityActionResult entityActionResult = au.updateEntityInstByFormContext(_currFormAppletDef, form.getCtx(),
                 this);
-        takeAuditSnapshot(reviewType.auditEventType());
+        takeAuditSnapshot(
+                isWorkflowCopy() || form.isUpdateDraft() ? AuditEventType.UPDATE_DRAFT : reviewType.auditEventType());
         updateForm(HeaderWithTabsForm.UpdateType.UPDATE_INST, form, reloadEntity((Entity) form.getFormBean(), false));
 
         // Review form

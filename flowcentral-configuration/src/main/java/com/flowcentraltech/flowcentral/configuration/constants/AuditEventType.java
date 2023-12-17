@@ -50,10 +50,14 @@ public enum AuditEventType implements EnumConst {
             "UPC"),
     UPDATE_SUBMIT(
             "UPS"),
+    UPDATE_DRAFT(
+            "UDD"),
     DELETE(
             "DEL"),
     DELETE_SUBMIT(
-            "DES");
+            "DES"),
+    DELETE_DRAFT(
+            "DED");
 
     private final String code;
 
@@ -76,17 +80,17 @@ public enum AuditEventType implements EnumConst {
     }
 
     public boolean isCreate() {
-        return CREATE.equals(this) || CREATE_NEXT.equals(this) || CREATE_CLOSE.equals(this)
+        return CREATE.equals(this) || CREATE_NEXT.equals(this) || CREATE_DRAFT.equals(this) || CREATE_CLOSE.equals(this)
                 || CREATE_SUBMIT.equals(this);
     }
 
     public boolean isUpdate() {
-        return UPDATE.equals(this) || UPDATE_NEXT.equals(this) || UPDATE_CLOSE.equals(this)
+        return UPDATE.equals(this) || UPDATE_NEXT.equals(this) || UPDATE_DRAFT.equals(this) || UPDATE_CLOSE.equals(this)
                 || UPDATE_SUBMIT.equals(this);
     }
 
     public boolean isDelete() {
-        return DELETE.equals(this) || DELETE_SUBMIT.equals(this);
+        return DELETE.equals(this) || DELETE_DRAFT.equals(this) || DELETE_SUBMIT.equals(this);
     }
 
     public static AuditEventType fromCode(String code) {

@@ -52,7 +52,6 @@ import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralRequestAttributeConstants;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralResultMappingConstants;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants;
-import com.flowcentraltech.flowcentral.common.constants.WfItemVersionType;
 import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
 import com.flowcentraltech.flowcentral.configuration.constants.TabContentType;
 import com.tcdng.unify.core.UnifyException;
@@ -128,9 +127,8 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         final boolean isRootForm = applet.isRootForm();
         final boolean isWorkflowCopyForm = isRootForm && formAppletDef != null
                 && formAppletDef.getPropValue(boolean.class, AppletPropertyConstants.WORKFLOWCOPY);
-        final boolean isInWorkflow = inst instanceof WorkEntity && ((WorkEntity) inst).isInWorkflow();
-        final boolean isUpdateDraft = inst instanceof WorkEntity
-                && WfItemVersionType.DRAFT.equals(((WorkEntity) inst).getWfItemVersionType());
+        final boolean isInWorkflow = form != null && form.isInWorkflow();
+        final boolean isUpdateDraft = form != null && form.isUpdateDraft();
         if (isRootForm) {
             appCtx.setInWorkflow(isInWorkflow);
         }
