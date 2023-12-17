@@ -85,12 +85,15 @@ import com.flowcentraltech.flowcentral.common.business.policies.SweepingCommitPo
 import com.flowcentraltech.flowcentral.common.business.policies.TableActionResult;
 import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
 import com.flowcentraltech.flowcentral.common.constants.WfItemVersionType;
+import com.flowcentraltech.flowcentral.common.data.AuditSnapshot;
 import com.flowcentraltech.flowcentral.common.data.FormListingOptions;
 import com.flowcentraltech.flowcentral.common.data.RowChangeInfo;
 import com.flowcentraltech.flowcentral.common.entities.BaseEntity;
 import com.flowcentraltech.flowcentral.common.entities.BaseWorkEntity;
 import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
 import com.flowcentraltech.flowcentral.configuration.constants.AppletType;
+import com.flowcentraltech.flowcentral.configuration.constants.AuditEventType;
+import com.flowcentraltech.flowcentral.configuration.constants.AuditSourceType;
 import com.flowcentraltech.flowcentral.configuration.constants.FormReviewType;
 import com.flowcentraltech.flowcentral.configuration.constants.RecordActionType;
 import com.tcdng.unify.core.UnifyException;
@@ -669,6 +672,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         _inst = reloadEntity(_inst, true);
         if (form == null) {
             form = constructForm(_inst, FormMode.MAINTAIN, null, false);
+            takeAuditSnapshot(AuditEventType.VIEW);
         } else {
             updateForm(HeaderWithTabsForm.UpdateType.MAINTAIN_INST, form, _inst);
         }
@@ -867,6 +871,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         }
 
         EntityActionResult entityActionResult = au.deleteEntityInstByFormContext(formAppletDef, form.getCtx(), this);
+        takeAuditSnapshot(AuditEventType.DELETE);
         final boolean closePage = !navBackToPrevious();
         entityActionResult.setClosePage(closePage);
         entityActionResult.setRefreshMenu(closePage);
@@ -1338,6 +1343,33 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         return false;
     }
 
+    protected void takeAuditSnapshot(AuditEventType auditEventType) throws UnifyException {
+        if (isAuditingEnabled()) {
+            AuditSnapshot.Builder asb = AuditSnapshot.newBuilder(AuditSourceType.APPLET, "", auditEventType,
+                    au.getNow());
+            if (formStack != null && !formStack.isEmpty()) {
+                final int len = formStack.size();
+                for (int i = 0; i < len; i++) {
+                    FormContext fCtx = formStack.get(i).getForm().getCtx();
+                    if (fCtx.isSupportAudit()) {
+                        asb.addSnapshot(fCtx.getEntityAudit(), AuditEventType.VIEW);
+                    }
+                }
+            }
+            
+            // TODO Check if not form mode but assignment or other
+            FormContext fCtx = form.getCtx();
+            if (fCtx.isSupportAudit()) {
+                asb.addSnapshot(fCtx.getEntityAudit(), auditEventType);
+            }
+            
+            AuditSnapshot auditSnapshot = asb.build();
+            // TODO Write to audit store
+            System.out.println("@prime: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+            System.out.println("@prime: auditSnapshot = " + auditSnapshot);
+        }
+    }
+
     protected AppletDef getAppletDef(String appletName) throws UnifyException {
         return au.getAppletDef(appletName);
     }
@@ -1555,6 +1587,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         final FormContext formContext = form.getCtx();
         EntityActionResult entityActionResult = createInst();
         Long entityInstId = (Long) entityActionResult.getResult();
+        takeAuditSnapshot(reviewType.auditEventType());
 
         // Review form
         ReviewResult reviewResult = reviewFormContext(formContext, EvaluationMode.CREATE, reviewType);
@@ -1619,6 +1652,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         final AppletDef _currFormAppletDef = getFormAppletDef();
         EntityActionResult entityActionResult = au.updateEntityInstByFormContext(_currFormAppletDef, form.getCtx(),
                 this);
+        takeAuditSnapshot(reviewType.auditEventType());
         updateForm(HeaderWithTabsForm.UpdateType.UPDATE_INST, form, reloadEntity((Entity) form.getFormBean(), false));
 
         // Review form

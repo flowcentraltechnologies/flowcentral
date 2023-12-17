@@ -32,38 +32,50 @@ public enum FormReviewType implements EnumConst {
 
     ON_SAVE(
             "ONS",
+            AuditEventType.CREATE,
             false),
     ON_SAVE_NEXT(
             "OSN",
+            AuditEventType.CREATE_NEXT,
             true),
     ON_SAVE_CLOSE(
             "OSC",
+            AuditEventType.CREATE_CLOSE,
             true),
     ON_UPDATE(
             "ONU",
+            AuditEventType.UPDATE,
             false),
     ON_UPDATE_CLOSE(
             "OUC",
+            AuditEventType.UPDATE_CLOSE,
             true),
     ON_DELETE(
             "OND",
+            AuditEventType.DELETE,
             true),
     ON_SUBMIT(
             "ONB",
+            AuditEventType.CREATE_SUBMIT,
             true),
     ON_SUBMIT_NEXT(
             "OBN",
+            AuditEventType.CREATE_SUBMIT,
             true),
     ON_CLOSE(
             "OCL",
+            null,
             true);
 
     private final String code;
 
+    private final AuditEventType auditEventType;
+    
     private final boolean formClosedOrReplaced;
 
-    private FormReviewType(String code, boolean formClosedOrReplaced) {
+    private FormReviewType(String code, AuditEventType auditEventType, boolean formClosedOrReplaced) {
         this.code = code;
+        this.auditEventType = auditEventType;
         this.formClosedOrReplaced = formClosedOrReplaced;
     }
 
@@ -77,6 +89,10 @@ public enum FormReviewType implements EnumConst {
         return ON_SAVE.code;
     }
 
+    public AuditEventType auditEventType() {
+        return auditEventType;
+    }
+    
     public boolean formClosedOrReplaced() {
         return formClosedOrReplaced;
     }

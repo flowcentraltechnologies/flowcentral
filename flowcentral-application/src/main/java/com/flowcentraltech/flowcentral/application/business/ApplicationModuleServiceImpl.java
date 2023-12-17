@@ -51,6 +51,8 @@ import com.flowcentraltech.flowcentral.application.constants.ApplicationReplicat
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.data.AppletFilterDef;
 import com.flowcentraltech.flowcentral.application.data.AppletWorkflowCopyInfo;
+import com.flowcentraltech.flowcentral.application.data.AppletWorkflowCopyInfo.EventType;
+import com.flowcentraltech.flowcentral.application.data.AppletWorkflowCopyInfo.WorkflowCopyType;
 import com.flowcentraltech.flowcentral.application.data.ApplicationDef;
 import com.flowcentraltech.flowcentral.application.data.ApplicationMenuDef;
 import com.flowcentraltech.flowcentral.application.data.AssignmentPageDef;
@@ -71,10 +73,10 @@ import com.flowcentraltech.flowcentral.application.data.PropertyListDef;
 import com.flowcentraltech.flowcentral.application.data.PropertyListItem;
 import com.flowcentraltech.flowcentral.application.data.PropertyListItemDef;
 import com.flowcentraltech.flowcentral.application.data.PropertyRuleDef;
+import com.flowcentraltech.flowcentral.application.data.PropertySequenceDef;
 import com.flowcentraltech.flowcentral.application.data.RecLoadInfo;
 import com.flowcentraltech.flowcentral.application.data.RefDef;
 import com.flowcentraltech.flowcentral.application.data.SearchInputsDef;
-import com.flowcentraltech.flowcentral.application.data.PropertySequenceDef;
 import com.flowcentraltech.flowcentral.application.data.SetStatesDef;
 import com.flowcentraltech.flowcentral.application.data.SetValuesDef;
 import com.flowcentraltech.flowcentral.application.data.StandardAppletDef;
@@ -88,8 +90,6 @@ import com.flowcentraltech.flowcentral.application.data.Usage;
 import com.flowcentraltech.flowcentral.application.data.WidgetRuleEntryDef;
 import com.flowcentraltech.flowcentral.application.data.WidgetRulesDef;
 import com.flowcentraltech.flowcentral.application.data.WidgetTypeDef;
-import com.flowcentraltech.flowcentral.application.data.AppletWorkflowCopyInfo.EventType;
-import com.flowcentraltech.flowcentral.application.data.AppletWorkflowCopyInfo.WorkflowCopyType;
 import com.flowcentraltech.flowcentral.application.entities.AppApplet;
 import com.flowcentraltech.flowcentral.application.entities.AppAppletAlert;
 import com.flowcentraltech.flowcentral.application.entities.AppAppletAlertQuery;
@@ -157,13 +157,13 @@ import com.flowcentraltech.flowcentral.application.entities.AppPropertyRule;
 import com.flowcentraltech.flowcentral.application.entities.AppPropertyRuleChoice;
 import com.flowcentraltech.flowcentral.application.entities.AppPropertyRuleChoiceQuery;
 import com.flowcentraltech.flowcentral.application.entities.AppPropertyRuleQuery;
+import com.flowcentraltech.flowcentral.application.entities.AppPropertySequence;
+import com.flowcentraltech.flowcentral.application.entities.AppPropertySequenceQuery;
 import com.flowcentraltech.flowcentral.application.entities.AppPropertySet;
 import com.flowcentraltech.flowcentral.application.entities.AppRef;
 import com.flowcentraltech.flowcentral.application.entities.AppRefQuery;
 import com.flowcentraltech.flowcentral.application.entities.AppSearchInput;
 import com.flowcentraltech.flowcentral.application.entities.AppSearchInputQuery;
-import com.flowcentraltech.flowcentral.application.entities.AppPropertySequence;
-import com.flowcentraltech.flowcentral.application.entities.AppPropertySequenceQuery;
 import com.flowcentraltech.flowcentral.application.entities.AppSetValues;
 import com.flowcentraltech.flowcentral.application.entities.AppSetValuesQuery;
 import com.flowcentraltech.flowcentral.application.entities.AppSuggestion;
@@ -200,7 +200,6 @@ import com.flowcentraltech.flowcentral.application.web.widgets.EntitySearchWidge
 import com.flowcentraltech.flowcentral.common.annotation.LongName;
 import com.flowcentraltech.flowcentral.common.business.AbstractFlowCentralService;
 import com.flowcentraltech.flowcentral.common.business.ApplicationPrivilegeManager;
-import com.flowcentraltech.flowcentral.common.business.EntityAuditInfoProvider;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentDelegate;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentDelegateHolder;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentDelegateRegistrar;
@@ -213,7 +212,6 @@ import com.flowcentraltech.flowcentral.common.constants.ConfigType;
 import com.flowcentraltech.flowcentral.common.constants.OwnershipType;
 import com.flowcentraltech.flowcentral.common.constants.WfItemVersionType;
 import com.flowcentraltech.flowcentral.common.data.Attachment;
-import com.flowcentraltech.flowcentral.common.data.EntityAuditInfo;
 import com.flowcentraltech.flowcentral.common.data.ParamValuesDef;
 import com.flowcentraltech.flowcentral.common.entities.BaseEntity;
 import com.flowcentraltech.flowcentral.common.entities.EntityWrapper;
@@ -345,7 +343,7 @@ import com.tcdng.unify.core.util.StringUtils;
 @Transactional
 @Component(ApplicationModuleNameConstants.APPLICATION_MODULE_SERVICE)
 public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
-        implements ApplicationModuleService, FileAttachmentProvider, EntityAuditInfoProvider, SuggestionProvider,
+        implements ApplicationModuleService, FileAttachmentProvider, SuggestionProvider,
         PostBootSetup, EnvironmentDelegateRegistrar {
 
     private final Set<String> refProperties = Collections
@@ -1549,16 +1547,6 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         if (!StringUtils.isBlank(condition)) {
             fgdb.addFilter(filterType, _appletDef.getFilterDef(condition));
         }
-    }
-
-    @Override
-    public EntityAuditInfo getEntityAuditInfo(Object entityDef) throws UnifyException {
-        EntityDef _entityDef = (EntityDef) entityDef;
-        if (_entityDef.isAuditable()) {
-            return new EntityAuditInfo(_entityDef.getLongName(), _entityDef.getAuditFieldNames(), true);
-        }
-
-        return new EntityAuditInfo(_entityDef.getLongName());
     }
 
     @Override

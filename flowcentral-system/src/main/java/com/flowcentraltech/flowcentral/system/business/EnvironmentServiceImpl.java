@@ -20,7 +20,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.flowcentraltech.flowcentral.common.business.EntityAuditInfoProvider;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentDelegate;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentDelegateHolder;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentDelegateRegistrar;
@@ -35,7 +34,6 @@ import com.flowcentraltech.flowcentral.common.business.policies.EntityListAction
 import com.flowcentraltech.flowcentral.common.business.policies.EntityListActionResult;
 import com.flowcentraltech.flowcentral.common.business.policies.SweepingCommitPolicy;
 import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
-import com.flowcentraltech.flowcentral.common.data.EntityAuditInfo;
 import com.flowcentraltech.flowcentral.common.entities.EntityWrapper;
 import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
 import com.flowcentraltech.flowcentral.configuration.constants.RecordActionType;
@@ -48,8 +46,6 @@ import com.tcdng.unify.core.business.AbstractBusinessService;
 import com.tcdng.unify.core.criterion.AggregateFunction;
 import com.tcdng.unify.core.criterion.GroupingFunction;
 import com.tcdng.unify.core.criterion.Update;
-import com.tcdng.unify.core.data.Audit;
-import com.tcdng.unify.core.data.BeanValueStore;
 import com.tcdng.unify.core.database.Aggregation;
 import com.tcdng.unify.core.database.Database;
 import com.tcdng.unify.core.database.Entity;
@@ -73,17 +69,10 @@ public class EnvironmentServiceImpl extends AbstractBusinessService implements E
     private SuggestionProvider suggestionProvider;
 
     @Configurable
-    private EntityAuditInfoProvider entityAuditInfoProvider;
-
-    @Configurable
     private EnvironmentDelegateRegistrar environmentDelegateRegistrar;
 
     public final void setSuggestionProvider(SuggestionProvider suggestionProvider) {
         this.suggestionProvider = suggestionProvider;
-    }
-
-    public final void setEntityAuditInfoProvider(EntityAuditInfoProvider entityAuditInfoProvider) {
-        this.entityAuditInfoProvider = entityAuditInfoProvider;
     }
 
     public final void setEnvironmentDelegateRegistrar(EnvironmentDelegateRegistrar environmentDelegateRegistrar) {
@@ -328,18 +317,7 @@ public class EnvironmentServiceImpl extends AbstractBusinessService implements E
     public EntityActionResult updateByIdVersion(EntityActionContext ctx) throws UnifyException {
         EntityActionResult result = executeEntityPreActionPolicy(ctx);
         if (result == null) {
-            Entity inst = ctx.getInst();
-            if (entityAuditInfoProvider != null) {
-                EntityAuditInfo entityAuditInfo = entityAuditInfoProvider
-                        .getEntityAuditInfo(ctx.getEntityDef(Object.class));
-                if (entityAuditInfo.auditable() && entityAuditInfo.inclusions()) {
-                    Entity _oldInst = findLean(inst.getClass(), inst.getId());
-                    Audit audit = new BeanValueStore(inst).diff(new BeanValueStore(_oldInst),
-                            entityAuditInfo.getInclusions());
-                    ctx.setAudit(audit);
-                }
-            }
-
+            final Entity inst = ctx.getInst();
             ctx.setResult(db(inst.getClass()).updateByIdVersion(inst));
             if (suggestionProvider != null) {
                 suggestionProvider.saveSuggestions(ctx.getEntityDef(Object.class), inst);
@@ -355,18 +333,7 @@ public class EnvironmentServiceImpl extends AbstractBusinessService implements E
     public EntityActionResult updateLean(EntityActionContext ctx) throws UnifyException {
         EntityActionResult result = executeEntityPreActionPolicy(ctx);
         if (result == null) {
-            Entity inst = ctx.getInst();
-            if (entityAuditInfoProvider != null) {
-                EntityAuditInfo entityAuditInfo = entityAuditInfoProvider
-                        .getEntityAuditInfo(ctx.getEntityDef(Object.class));
-                if (entityAuditInfo.auditable() && entityAuditInfo.inclusions()) {
-                    Entity _oldInst = findLean(inst.getClass(), inst.getId());
-                    Audit audit = new BeanValueStore(inst).diff(new BeanValueStore(_oldInst),
-                            entityAuditInfo.getInclusions());
-                    ctx.setAudit(audit);
-                }
-            }
-
+            final Entity inst = ctx.getInst();
             ctx.setResult(db(inst.getClass()).updateLeanByIdVersion(inst));
             if (suggestionProvider != null) {
                 suggestionProvider.saveSuggestions(ctx.getEntityDef(Object.class), inst);

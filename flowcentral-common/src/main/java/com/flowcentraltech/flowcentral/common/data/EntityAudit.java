@@ -19,6 +19,11 @@ package com.flowcentraltech.flowcentral.common.data;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.flowcentraltech.flowcentral.configuration.constants.AuditEventType;
+import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.database.Entity;
+import com.tcdng.unify.core.util.DataUtils;
+
 /**
  * Entity audit information object.
  * 
@@ -29,37 +34,78 @@ public class EntityAudit {
 
     private EntityAuditInfo entityAuditInfo;
 
-    private Long id;
+    private Entity entity;
 
-    private int depth;
-    
-    private List<EntityFieldAudit> fields;
+    private EntityAuditSnapshot lastSnapshot;
 
-    public EntityAudit(EntityAuditInfo entityAuditInfo, Long id, int depth, String entity) {
+    public EntityAudit(EntityAuditInfo entityAuditInfo, Entity entity) {
         this.entityAuditInfo = entityAuditInfo;
-        this.id = id;
-        this.depth = depth;
-        this.fields = new ArrayList<EntityFieldAudit>();
+        this.entity = entity;
     }
 
     public EntityAuditInfo getEntityAuditInfo() {
         return entityAuditInfo;
     }
 
-    public Long getId() {
-        return id;
+    public EntityAuditSnapshot getLastSnapshot() {
+        return lastSnapshot;
     }
 
-    public int getDepth() {
-        return depth;
+    public boolean isWithLastSnapshot() {
+        return lastSnapshot != null;
     }
 
-    public String getEntity() {
-        return entityAuditInfo.getEntity();
+    public void setEntity(Entity entity) {
+        this.entity = entity;
     }
 
-    public List<EntityFieldAudit> getFields() {
-        return fields;
+    public Entity getEntity() {
+        return entity;
     }
 
+    public EntityAuditSnapshot takeSnapshot(AuditEventType eventType) throws UnifyException {
+        List<EntityFieldAudit> fieldAudits = new ArrayList<EntityFieldAudit>();
+        switch (eventType) {
+            case CREATE:
+            case CREATE_CLOSE:
+            case CREATE_NEXT:
+            case CREATE_SUBMIT:
+                for (String fieldName : entityAuditInfo.getInclusions()) {
+                    Object newVal = DataUtils.getBeanProperty(Object.class, entity, fieldName);
+                    fieldAudits.add(new EntityFieldAudit(fieldName, null, newVal));
+                }
+                break;
+            case DELETE:
+            case DELETE_SUBMIT:
+                for (EntityFieldAudit oldFieldAudit : lastSnapshot.getFieldAudits()) {
+                    final boolean newAsOldSource = lastSnapshot.getEventType().isCreate()
+                            || lastSnapshot.getEventType().isUpdate();
+                    Object oldVal = newAsOldSource ? oldFieldAudit.getNewValue() : oldFieldAudit.getOldValue();
+                    fieldAudits.add(new EntityFieldAudit(oldFieldAudit.getFieldName(), oldVal, null));
+                }
+                break;
+            case UPDATE:
+            case UPDATE_CLOSE:
+            case UPDATE_SUBMIT:
+                final boolean newAsOldSource = lastSnapshot.getEventType().isCreate()
+                        || lastSnapshot.getEventType().isUpdate();
+                for (EntityFieldAudit oldFieldAudit : lastSnapshot.getFieldAudits()) {
+                    Object newVal = DataUtils.getBeanProperty(Object.class, entity, oldFieldAudit.getFieldName());
+                    Object oldVal = newAsOldSource ? oldFieldAudit.getNewValue() : oldFieldAudit.getOldValue();
+                    fieldAudits.add(new EntityFieldAudit(oldFieldAudit.getFieldName(), oldVal, newVal));
+                }
+                break;
+            case VIEW:
+                for (String fieldName : entityAuditInfo.getInclusions()) {
+                    Object oldVal = DataUtils.getBeanProperty(Object.class, entity, fieldName);
+                    fieldAudits.add(new EntityFieldAudit(fieldName, oldVal, null));
+                }
+                break;
+            default:
+                break;
+        }
+
+        lastSnapshot = new EntityAuditSnapshot(eventType, entityAuditInfo.getEntity(), fieldAudits);
+        return lastSnapshot;
+    }
 }

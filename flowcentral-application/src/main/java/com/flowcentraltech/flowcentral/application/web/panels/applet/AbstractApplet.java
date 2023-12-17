@@ -116,6 +116,10 @@ public abstract class AbstractApplet {
         return rootAppletDef;
     }
 
+    public boolean isAuditingEnabled() {
+        return ctx.isAuditingEnabled();
+    }
+
     public boolean isWorkflowCopy() throws UnifyException {
         return getRootAppletDef().getPropValue(boolean.class, AppletPropertyConstants.WORKFLOWCOPY);
     }

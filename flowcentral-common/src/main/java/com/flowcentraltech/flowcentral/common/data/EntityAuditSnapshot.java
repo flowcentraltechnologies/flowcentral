@@ -16,55 +16,46 @@
 
 package com.flowcentraltech.flowcentral.common.data;
 
-import java.util.Date;
+import java.util.List;
 
-import com.flowcentraltech.flowcentral.common.constants.AuditEventType;
+import com.flowcentraltech.flowcentral.configuration.constants.AuditEventType;
+import com.tcdng.unify.core.util.StringUtils;
 
 /**
- * Entity audit information object.
+ * Entity audit snapshot information object.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class Audit {
+public class EntityAuditSnapshot {
 
     private AuditEventType eventType;
 
-    private Date eventTimestamp;
+    private String entity;
 
-    private String userLoginId;
+    private List<EntityFieldAudit> fieldAudits;
 
-    private String userIpAddress;
-
-    private EntityAudit rootEntityAudit;
-
-    public Audit(AuditEventType eventType, Date eventTimestamp, String userLoginId, String userIpAddress,
-            EntityAudit rootEntityAudit) {
+    public EntityAuditSnapshot(AuditEventType eventType, String entity, List<EntityFieldAudit> fieldAudits) {
         this.eventType = eventType;
-        this.eventTimestamp = eventTimestamp;
-        this.userLoginId = userLoginId;
-        this.userIpAddress = userIpAddress;
-        this.rootEntityAudit = rootEntityAudit;
+        this.entity = entity;
+        this.fieldAudits = fieldAudits;
     }
 
     public AuditEventType getEventType() {
         return eventType;
     }
 
-    public Date getEventTimestamp() {
-        return eventTimestamp;
+    public String getEntity() {
+        return entity;
     }
 
-    public String getUserLoginId() {
-        return userLoginId;
+    public List<EntityFieldAudit> getFieldAudits() {
+        return fieldAudits;
     }
 
-    public String getUserIpAddress() {
-        return userIpAddress;
-    }
-
-    public EntityAudit getRootEntityAudit() {
-        return rootEntityAudit;
+    @Override
+    public String toString() {
+        return StringUtils.toXmlString(this);
     }
 
 }

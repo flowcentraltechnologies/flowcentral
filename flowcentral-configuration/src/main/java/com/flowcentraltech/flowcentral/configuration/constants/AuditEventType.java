@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.common.constants;
+package com.flowcentraltech.flowcentral.configuration.constants;
 
 import com.tcdng.unify.common.annotation.StaticList;
 import com.tcdng.unify.common.constants.EnumConst;
@@ -31,25 +31,27 @@ import com.tcdng.unify.core.util.EnumUtils;
 public enum AuditEventType implements EnumConst {
 
     VIEW(
-            "VEW"),
-    SAVE(
-            "SVE"),
-    SAVE_NEXT(
-            "SVN"),
-    SAVE_CLOSE(
-            "SVC"),
+            "VIW"),
+    CREATE(
+            "CRE"),
+    CREATE_NEXT(
+            "CRN"),
+    CREATE_CLOSE(
+            "CRC"),
+    CREATE_SUBMIT(
+            "CRS"),
     UPDATE(
             "UPD"),
+    UPDATE_NEXT(
+            "UPN"),
     UPDATE_CLOSE(
             "UPC"),
+    UPDATE_SUBMIT(
+            "UPS"),
     DELETE(
             "DEL"),
-    SUBMIT(
-            "SBM"),
-    SUBMIT_NEXT(
-            "SBN"),
-    CLOSE(
-            "CLS");
+    DELETE_SUBMIT(
+            "DES");
 
     private final String code;
 
@@ -65,6 +67,24 @@ public enum AuditEventType implements EnumConst {
     @Override
     public String defaultCode() {
         return VIEW.code;
+    }
+
+    public boolean isView() {
+        return VIEW.equals(this);
+    }
+
+    public boolean isCreate() {
+        return CREATE.equals(this) || CREATE_NEXT.equals(this) || CREATE_CLOSE.equals(this)
+                || CREATE_SUBMIT.equals(this);
+    }
+
+    public boolean isUpdate() {
+        return UPDATE.equals(this) || UPDATE_NEXT.equals(this) || UPDATE_CLOSE.equals(this)
+                || UPDATE_SUBMIT.equals(this);
+    }
+
+    public boolean isDelete() {
+        return DELETE.equals(this) || DELETE_SUBMIT.equals(this);
     }
 
     public static AuditEventType fromCode(String code) {

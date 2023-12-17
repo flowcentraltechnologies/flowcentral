@@ -16,6 +16,8 @@
 
 package com.flowcentraltech.flowcentral.common.data;
 
+import com.tcdng.unify.core.util.StringUtils;
+
 /**
  * Entity field audit information object.
  * 
@@ -26,29 +28,31 @@ public class EntityFieldAudit {
 
     private String fieldName;
 
-    private String oldValue;
+    private Object oldValue;
 
-    private String newValue;
+    private Object newValue;
 
-    public EntityFieldAudit(String fieldName, String oldValue) {
+    public EntityFieldAudit(String fieldName, Object oldValue, Object newValue) {
         this.fieldName = fieldName;
         this.oldValue = oldValue;
+        this.newValue = newValue;
     }
 
     public String getFieldName() {
         return fieldName;
     }
 
-    public String getOldValue() {
+    public Object getOldValue() {
         return oldValue;
     }
 
-    public String getNewValue() {
+    public Object getNewValue() {
         return newValue;
     }
 
-    public void setNewValue(String newValue) {
-        this.newValue = newValue;
+    @Override
+    public String toString() {
+        return StringUtils.toXmlString(this);
     }
 
 }

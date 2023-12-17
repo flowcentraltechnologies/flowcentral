@@ -51,7 +51,7 @@ public final class EntityUtils {
                         new ListData(valueStore.retrieve(String.class, key), valueStore.retrieve(String.class, label)));
             }
             
-            DataUtils.sortAscending(resultList, ListData.class, "listDescription");;
+            DataUtils.sortAscending(resultList, ListData.class, "listDescription");
             return resultList;
         }
 

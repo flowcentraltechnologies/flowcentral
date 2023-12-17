@@ -27,29 +27,19 @@ import java.util.List;
  */
 public class EntityAuditInfo {
 
-    private final String entity;
+    private String entity;
 
     private List<String> inclusions;
 
-    private boolean auditable;
-
-    public EntityAuditInfo(String entity, List<String> inclusions, boolean auditable) {
+    public EntityAuditInfo(String entity, List<String> inclusions) {
         this.entity = entity;
         this.inclusions = inclusions;
-        this.auditable = auditable;
-    }
-
-    public EntityAuditInfo(String entity, boolean auditable) {
-        this.entity = entity;
-        this.auditable = auditable;
-        this.inclusions = Collections.emptyList();
     }
 
     public EntityAuditInfo(String entity) {
         this.entity = entity;
-        this.auditable = false;
         this.inclusions = Collections.emptyList();
-    }
+   }
 
     public String getEntity() {
         return entity;
@@ -59,12 +49,12 @@ public class EntityAuditInfo {
         return inclusions;
     }
 
-    public boolean inclusions() {
+    public boolean isWithInclusions() {
         return !inclusions.isEmpty();
     }
 
     public boolean auditable() {
-        return auditable;
+        return !inclusions.isEmpty();
     }
 
 }

@@ -48,9 +48,9 @@ import com.flowcentraltech.flowcentral.application.data.FormStatePolicyDef;
 import com.flowcentraltech.flowcentral.application.data.FormTabDef;
 import com.flowcentraltech.flowcentral.application.data.PropertyListItem;
 import com.flowcentraltech.flowcentral.application.data.PropertyRuleDef;
+import com.flowcentraltech.flowcentral.application.data.PropertySequenceDef;
 import com.flowcentraltech.flowcentral.application.data.RefDef;
 import com.flowcentraltech.flowcentral.application.data.SearchInputsDef;
-import com.flowcentraltech.flowcentral.application.data.PropertySequenceDef;
 import com.flowcentraltech.flowcentral.application.data.SetValuesDef;
 import com.flowcentraltech.flowcentral.application.data.TabSheetDef;
 import com.flowcentraltech.flowcentral.application.data.TableDef;
@@ -123,6 +123,7 @@ import com.flowcentraltech.flowcentral.common.constants.CollaborationType;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralApplicationAttributeConstants;
 import com.flowcentraltech.flowcentral.common.constants.OwnershipType;
 import com.flowcentraltech.flowcentral.common.constants.WfItemVersionType;
+import com.flowcentraltech.flowcentral.common.data.EntityAuditInfo;
 import com.flowcentraltech.flowcentral.common.data.FormListingOptions;
 import com.flowcentraltech.flowcentral.common.data.ParamValuesDef;
 import com.flowcentraltech.flowcentral.common.entities.BaseVersionEntity;
@@ -431,6 +432,16 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
     @Override
     public void hintUser(MODE mode, String messageKey, Object... params) throws UnifyException {
         pageRequestContextUtil.hintUser(mode, messageKey, params);
+    }
+
+    @Override
+    public EntityAuditInfo getEntityAuditInfo(String entityName) throws UnifyException {
+        EntityDef entityDef = applicationModuleService.getEntityDef(entityName);
+        if (entityDef.isAuditable()) {
+            return new EntityAuditInfo(entityName, entityDef.getAuditFieldNames());
+        }
+
+        return new EntityAuditInfo(entityName);
     }
 
     @Override
@@ -1057,8 +1068,8 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
                         logDebug("Constructing child list tab [{0}] using applet [{1}]...", formTabDef.getName(),
                                 formTabDef.getApplet());
                         AppletDef _appletDef = getAppletDef(formTabDef.getApplet());
-                        final boolean newButtonVisible = applet == null || !hideAddActionButton(form, applet.getFormAppletDef(),
-                                formTabDef.getApplet());
+                        final boolean newButtonVisible = applet == null
+                                || !hideAddActionButton(form, applet.getFormAppletDef(), formTabDef.getApplet());
                         final String editAction = formTabDef.getEditAction() == null ? "/assignToChildItem"
                                 : formTabDef.getEditAction();
                         int mode = formTabDef.isShowSearch() ? EntitySearch.ENABLE_ALL
@@ -1174,8 +1185,8 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
                     }
                         break;
                     case PROPERTY_SEQUENCE: {
-                        logDebug("Constructing property sequence tab [{0}] using reference [{1}]...", formTabDef.getName(),
-                                formTabDef.getReference());
+                        logDebug("Constructing property sequence tab [{0}] using reference [{1}]...",
+                                formTabDef.getName(), formTabDef.getReference());
                         EntityChildCategoryType categoryType = EntityChildCategoryType
                                 .fromName(formTabDef.getReference());
                         EntityDef _entityDef = getEntityDef(appletContext.getReference(categoryType));
@@ -1516,7 +1527,8 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
                         EntityChildCategoryType categoryType = EntityChildCategoryType
                                 .fromName(formTabDef.getReference());
                         EntityDef _entityDef = getEntityDef(formContext.getAppletContext().getReference(categoryType));
-                        EntityPropertySequence _entityPropertySequence = (EntityPropertySequence) tabSheetItem.getValObject();
+                        EntityPropertySequence _entityPropertySequence = (EntityPropertySequence) tabSheetItem
+                                .getValObject();
                         _entityPropertySequence.setCategory(categoryType.category());
                         _entityPropertySequence.setOwnerInstId((Long) inst.getId());
                         _entityPropertySequence.load(_entityDef);
@@ -1860,13 +1872,13 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
     }
 
     @Override
-    public EntityPropertySequence constructEntityPropertySequence(FormContext ctx, SweepingCommitPolicy sweepingCommitPolicy,
-            String tabName, EntityDef ownerEntityDef, int entityPropertySequenceMode, boolean isIgnoreParentCondition)
-            throws UnifyException {
+    public EntityPropertySequence constructEntityPropertySequence(FormContext ctx,
+            SweepingCommitPolicy sweepingCommitPolicy, String tabName, EntityDef ownerEntityDef,
+            int entityPropertySequenceMode, boolean isIgnoreParentCondition) throws UnifyException {
         logDebug("Constructing entity property sequence for [{0}] using entity definition [{1}]...", tabName,
                 ownerEntityDef.getLongName());
-        return new EntityPropertySequence(ctx, sweepingCommitPolicy, tabName, ownerEntityDef, entityPropertySequenceMode,
-                isIgnoreParentCondition);
+        return new EntityPropertySequence(ctx, sweepingCommitPolicy, tabName, ownerEntityDef,
+                entityPropertySequenceMode, isIgnoreParentCondition);
     }
 
     @Override
@@ -2281,7 +2293,7 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
 
         return updateLean(formContext, eCtx);
     }
-    
+
     @Override
     public EntityActionResult deleteEntityInstByFormContext(AppletDef formAppletDef, FormContext formContext,
             SweepingCommitPolicy scp) throws UnifyException {
@@ -2589,14 +2601,14 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
         } catch (UnifyException e) {
             // Revert to skeleton values
             revertAutoFormatFields(eCtx.getEntityDef(EntityDef.class), eCtx.getInst());
-            
+
             if (!eCtx.isWithFormMessages()) {
                 throw e;
             }
         }
 
         formContext.addValidationErrors(eCtx.getFormMessages());
-        return entityActionResult == null ?  new EntityActionResult(eCtx) : entityActionResult;
+        return entityActionResult == null ? new EntityActionResult(eCtx) : entityActionResult;
     }
 
     private EntityActionResult updateLean(FormContext formContext, EntityActionContext eCtx) throws UnifyException {
@@ -2610,7 +2622,7 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
         }
 
         formContext.addValidationErrors(eCtx.getFormMessages());
-        return entityActionResult == null ?  new EntityActionResult(eCtx) : entityActionResult;
+        return entityActionResult == null ? new EntityActionResult(eCtx) : entityActionResult;
     }
 
     private EntityActionResult delete(FormContext formContext, EntityActionContext eCtx) throws UnifyException {
@@ -2624,7 +2636,7 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
         }
 
         formContext.addValidationErrors(eCtx.getFormMessages());
-        return entityActionResult == null ?  new EntityActionResult(eCtx) : entityActionResult;
+        return entityActionResult == null ? new EntityActionResult(eCtx) : entityActionResult;
     }
 
     private SingleFormBean createSingleFormBeanForPanel(String panelName) throws UnifyException {

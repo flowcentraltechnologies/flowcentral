@@ -113,5 +113,8 @@
 		<sysParameter code="APP-0022" defaultVal="true"
 			description="$m{application.sysparam.enableclassiclinkdecoration}"
 			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
+		<sysParameter code="APP-0023" defaultVal="false"
+			description="$m{application.sysparam.enableappletsourceauditing}"
+			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
 	</sysParameters>
 </module>

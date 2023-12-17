@@ -83,6 +83,7 @@ import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResu
 import com.flowcentraltech.flowcentral.common.business.policies.SweepingCommitPolicy;
 import com.flowcentraltech.flowcentral.common.business.policies.TableSummaryLine;
 import com.flowcentraltech.flowcentral.common.constants.OwnershipType;
+import com.flowcentraltech.flowcentral.common.data.EntityAuditInfo;
 import com.flowcentraltech.flowcentral.common.data.FormListingOptions;
 import com.flowcentraltech.flowcentral.common.data.ParamValuesDef;
 import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
@@ -115,6 +116,17 @@ import com.tcdng.unify.web.ui.widget.data.Hint.MODE;
  * @since 1.0
  */
 public interface AppletUtilities extends FlowCentralComponent {
+    
+    /**
+     * Get entity audit information.
+     * 
+     * @param entityName
+     *                   the entity name
+     * @return the entity audit information
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    EntityAuditInfo getEntityAuditInfo(String entityName) throws UnifyException;
     
     /**
      * Gets application entities based on supplied query.
