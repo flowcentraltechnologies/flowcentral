@@ -27,4 +27,6 @@ public interface CodeGenerationModuleSysParamConstants {
 
     String MESSAGE_REPLACEMENT_LIST = "CDN-0002";
 
+    String CODEGEN_SKIP_PASSWORD_FIELDS = "CDN-0003";
+
 }
