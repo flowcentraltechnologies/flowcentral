@@ -673,7 +673,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         _inst = reloadEntity(_inst, true);
         if (form == null) {
             form = constructForm(_inst, FormMode.MAINTAIN, null, false);
-            takeAuditSnapshot(AuditEventType.VIEW);
+            takeAuditSnapshot(form.isUpdateDraft() ?AuditEventType.VIEW_DRAFT : AuditEventType.VIEW);
         } else {
             updateForm(HeaderWithTabsForm.UpdateType.MAINTAIN_INST, form, _inst);
         }
