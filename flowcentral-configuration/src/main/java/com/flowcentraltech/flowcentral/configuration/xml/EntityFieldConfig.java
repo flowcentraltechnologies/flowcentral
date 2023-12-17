@@ -101,7 +101,7 @@ public class EntityFieldConfig {
         this.allowNegative = Boolean.FALSE;
         this.readOnly = Boolean.FALSE;
         this.nullable = Boolean.FALSE;
-        this.auditable = Boolean.TRUE;
+        this.auditable = Boolean.FALSE;
         this.reportable = Boolean.TRUE;
         this.descriptive = Boolean.FALSE;
         this.maintainLink = Boolean.FALSE;
@@ -360,7 +360,7 @@ public class EntityFieldConfig {
         return auditable;
     }
 
-    @XmlJavaTypeAdapter(MarshalTrueToNullXmlAdapter.class)
+    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
     @XmlAttribute
     public void setAuditable(Boolean auditable) {
         this.auditable = auditable;
