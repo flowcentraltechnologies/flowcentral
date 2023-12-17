@@ -165,6 +165,12 @@ public class AuditSnapshot {
             return this;
         }
 
+        public Builder addSnapshot(EntityAssignmentAudit entityAssignmentAudit, AuditEventType eventType)
+                throws UnifyException {
+            snapshots.add(entityAssignmentAudit.takeSnapshot(eventType));
+            return this;
+        }
+
         public AuditSnapshot build() {
             return new AuditSnapshot(sourceType, sourceDesc, eventType, eventTimestamp, userLoginId, userName,
                     userIpAddress, roleCode, Collections.unmodifiableList(snapshots));

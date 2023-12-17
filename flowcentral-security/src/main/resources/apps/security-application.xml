@@ -268,7 +268,7 @@
 			<field name="roleId" label="$m{security.usergrouprole.roleid}"
 				type="ref" references="organization.roleRef"
 				inputLabel="$m{security.usergrouprole.role}"
-				inputWidget="application.entitysearch" auditable="true"/>
+				inputWidget="application.entitysearch" />
 			<field name="userGroupName"
 				label="$m{security.usergrouprole.usergroupname}" type="list_only"
 				key="userGroupId" property="name" />
@@ -283,7 +283,7 @@
 				key="roleId" property="code" />
 			<field name="roleDesc"
 				label="$m{security.usergrouprole.roledesc}" type="list_only"
-				key="roleId" property="description" />
+				key="roleId" property="description" auditable="true"/>
 			<field name="activeBefore"
 				label="$m{security.usergrouprole.roleactivebefore}" type="list_only"
 				key="roleId" property="activeBefore" />
@@ -309,7 +309,7 @@
 			<field name="userId"
 				label="$m{security.usergroupmember.userid}" type="ref"
 				references="userRef" inputLabel="$m{security.usergroupmember.user}"
-				inputWidget="application.entitysearch" auditable="true"/>
+				inputWidget="application.entitysearch" />
 			<field name="userGroupName"
 				label="$m{security.usergroupmember.usergroupname}" type="list_only"
 				key="userGroupId" property="name" />
@@ -321,7 +321,7 @@
 				key="userGroupId" property="email" />
 			<field name="userFullName"
 				label="$m{security.usergroupmember.username}" type="list_only"
-				key="userId" property="fullName" />
+				key="userId" property="fullName" auditable="true"/>
 			<field name="userEmail"
 				label="$m{security.usergroupmember.useremail}" type="list_only"
 				key="userId" property="email" />
@@ -410,7 +410,7 @@
 			<field name="roleId" label="$m{security.userrole.roleid}"
 				type="ref" references="organization.roleRef"
 				inputLabel="$m{security.userrole.role}"
-				inputWidget="application.entitysearch" auditable="true"/>
+				inputWidget="application.entitysearch"/>
 			<field name="userName" label="$m{security.userrole.username}"
 				type="list_only" key="userId" property="fullName" />
 			<field name="userEmail" label="$m{security.userrole.useremail}"
@@ -426,7 +426,7 @@
 			<field name="roleCode" label="$m{security.userrole.rolecode}"
 				type="list_only" key="roleId" property="code" />
 			<field name="roleDesc" label="$m{security.userrole.roledesc}"
-				type="list_only" key="roleId" property="description" />
+				type="list_only" key="roleId" property="description" auditable="true"/>
 			<field name="departmentId"
 				label="$m{security.userrole.departmentid}" type="list_only"
 				key="roleId" property="departmentId" />

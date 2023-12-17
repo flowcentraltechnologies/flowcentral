@@ -50,7 +50,7 @@ public class AppletContext extends AbstractContext {
     private Map<EntityChildCategoryType, String> entityReferences;
 
     private EntityActionResult originalEntityActionResult;
-    
+
     private int tabReadOnlyCounter;
 
     private boolean auditingEnabled;
@@ -73,6 +73,8 @@ public class AppletContext extends AbstractContext {
 
     private boolean attachments;
 
+    private boolean rootFormUpdateDraft;
+
     public AppletContext(AbstractApplet applet, AppletUtilities au) throws UnifyException {
         this.applet = applet;
         this.au = au;
@@ -80,8 +82,9 @@ public class AppletContext extends AbstractContext {
         for (EntityChildCategoryType type : EntityChildCategoryType.values()) {
             this.entityReferences.put(type, null);
         }
-        
-        this.auditingEnabled = au.system().getSysParameterValue(boolean.class, ApplicationModuleSysParamConstants.ENABLE_APPLET_SOURCE_AUDITING);
+
+        this.auditingEnabled = au.audit() != null && au.system().getSysParameterValue(boolean.class,
+                ApplicationModuleSysParamConstants.ENABLE_APPLET_SOURCE_AUDITING);
     }
 
     public AbstractApplet applet() {
@@ -157,6 +160,14 @@ public class AppletContext extends AbstractContext {
 
     public void setAuditingEnabled(boolean auditingEnabled) {
         this.auditingEnabled = auditingEnabled;
+    }
+
+    public boolean isRootFormUpdateDraft() {
+        return rootFormUpdateDraft;
+    }
+
+    public void setRootFormUpdateDraft(boolean rootFormUpdateDraft) {
+        this.rootFormUpdateDraft = rootFormUpdateDraft;
     }
 
     public void setReadOnly(boolean readOnly) {

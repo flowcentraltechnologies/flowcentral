@@ -649,10 +649,16 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
     }
 
     @Action
+    public void saveAssign() throws UnifyException {
+        AbstractEntityFormApplet applet = getEntityFormApplet();
+        AssignmentPage assignmentPage = applet.saveAssign();
+        hintUser("$m{entityformapplet.assignment.success.hint}", assignmentPage.getSubTitle());
+    }
+
+    @Action
     public void saveAssignAndClose() throws UnifyException {
         AbstractEntityFormApplet applet = getEntityFormApplet();
-        AssignmentPage assignmentPage = applet.getAssignmentPage();
-        assignmentPage.commitAssignedList(false);
+        AssignmentPage assignmentPage = applet.saveAssignOnClose();
         applet.navBackToPrevious();
         hintUser("$m{entityformapplet.assignment.success.hint}", assignmentPage.getSubTitle());
     }

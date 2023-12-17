@@ -105,6 +105,7 @@ import com.flowcentraltech.flowcentral.application.web.widgets.TabSheet.TabSheet
 import com.flowcentraltech.flowcentral.common.AbstractFlowCentralComponent;
 import com.flowcentraltech.flowcentral.common.annotation.BeanBinding;
 import com.flowcentraltech.flowcentral.common.business.ApplicationPrivilegeManager;
+import com.flowcentraltech.flowcentral.common.business.AuditLogger;
 import com.flowcentraltech.flowcentral.common.business.CollaborationProvider;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentDelegateRegistrar;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentDelegateUtilities;
@@ -202,6 +203,9 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
     private EnvironmentService environmentService;
 
     @Configurable
+    private AuditLogger auditLogger;
+
+    @Configurable
     private ApplicationModuleService applicationModuleService;
 
     @Configurable
@@ -283,6 +287,10 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
 
     public final void setEnvironmentService(EnvironmentService environmentService) {
         this.environmentService = environmentService;
+    }
+
+    public final void setAuditLogger(AuditLogger auditLogger) {
+        this.auditLogger = auditLogger;
     }
 
     public final void setApplicationModuleService(ApplicationModuleService applicationModuleService) {
@@ -616,6 +624,11 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
     @Override
     public Listable getListItemByKey(String listName, String itemKey) throws UnifyException {
         return getListItemByKey(LocaleType.SESSION, listName, itemKey);
+    }
+
+    @Override
+    public AuditLogger audit() {
+        return auditLogger;
     }
 
     @Override

@@ -72,6 +72,7 @@ import com.flowcentraltech.flowcentral.application.web.widgets.MiniForm;
 import com.flowcentraltech.flowcentral.application.web.widgets.SectorIcon;
 import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
 import com.flowcentraltech.flowcentral.common.business.ApplicationPrivilegeManager;
+import com.flowcentraltech.flowcentral.common.business.AuditLogger;
 import com.flowcentraltech.flowcentral.common.business.CollaborationProvider;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentDelegateRegistrar;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentDelegateUtilities;
@@ -486,6 +487,13 @@ public interface AppletUtilities extends FlowCentralComponent {
      */
     EnvironmentDelegateRegistrar delegateRegistrar();
 
+    /**
+     * Gets audit logger.
+     * 
+     * @return the audit logger
+     */
+    AuditLogger audit();
+    
     /**
      * Gets the application service.
      * 

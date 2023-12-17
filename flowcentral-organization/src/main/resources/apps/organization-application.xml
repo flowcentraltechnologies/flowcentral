@@ -423,7 +423,7 @@
 		<entity name="rolePrivilege"
 			description="$m{organization.roleprivilege}"
 			label="$m{organization.roleprivilege.label}"
-			type="com.flowcentraltech.flowcentral.organization.entities.RolePrivilege">
+			type="com.flowcentraltech.flowcentral.organization.entities.RolePrivilege" auditable="true">
 			<field name="roleId"
 				label="$m{organization.roleprivilege.roleid}"
 				inputLabel="$m{organization.roleprivilege.role}" type="ref"
@@ -445,7 +445,7 @@
 				type="list_only" key="privilegeId" property="code" />
 			<field name="privilegeDesc"
 				label="$m{organization.roleprivilege.privilegedesc}"
-				type="list_only" key="privilegeId" property="description" />
+				type="list_only" key="privilegeId" property="description" auditable="true"/>
 			<field name="privilegeCategoryId"
 				label="$m{organization.roleprivilege.privilegecatid}"
 				type="list_only" key="privilegeId" property="privilegeCategoryId"

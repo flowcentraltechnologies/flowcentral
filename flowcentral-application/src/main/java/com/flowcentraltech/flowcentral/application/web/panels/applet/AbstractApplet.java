@@ -158,6 +158,10 @@ public abstract class AbstractApplet {
         return ctx.isContextEditable();
     }
 
+    public boolean isRootFormUpdateDraft() {
+        return ctx.isRootFormUpdateDraft();
+    }
+
     public WorkflowDraftInfo getWorkflowDraftInfo() {
         return workflowDraftInfo;
     }

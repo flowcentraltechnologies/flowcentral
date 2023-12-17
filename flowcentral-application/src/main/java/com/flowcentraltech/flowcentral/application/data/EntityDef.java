@@ -873,8 +873,7 @@ public class EntityDef extends BaseApplicationEntityDef {
                 if (auditFieldNames == null) {
                     auditFieldNames = new ArrayList<String>();
                     for (EntityFieldDef entityFieldDef : fieldDefList) {
-                        if (entityFieldDef.isAuditable() && !entityFieldDef.isChildRef()
-                                && !entityFieldDef.isListOnly()) {
+                        if (entityFieldDef.isAuditable() && !entityFieldDef.isChildRef()) {
                             auditFieldNames.add(entityFieldDef.getFieldName());
                         }
                     }
