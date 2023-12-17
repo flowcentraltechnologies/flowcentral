@@ -202,19 +202,19 @@
 				basicSearch="true" />
 			<field name="code" label="$m{organization.branch.code}"
 				type="string" inputWidget="application.name" maxLen="16"
-				basicSearch="true" />
+				basicSearch="true" auditable="true"/>
 			<field name="description"
 				label="$m{organization.branch.description}" type="string"
-				inputWidget="application.text" maxLen="64" basicSearch="true" />
+				inputWidget="application.text" maxLen="64" basicSearch="true" auditable="true"/>
 			<field name="sortCode" label="$m{organization.branch.sortcode}"
 				type="string" inputWidget="application.text" maxLen="32"
-				nullable="true" basicSearch="true" />
+				nullable="true" basicSearch="true" auditable="true"/>
 			<field name="address" label="$m{organization.branch.address}"
 				type="string" inputWidget="application.textarea" maxLen="512"
-				nullable="true" />
+				nullable="true" auditable="true"/>
 			<field name="headOffice"
 				label="$m{organization.branch.headoffice}" type="boolean"
-				inputWidget="application.checkbox" />
+				inputWidget="application.checkbox" auditable="true"/>
 			<field name="zoneCode"
 				label="$m{organization.branch.zone.code}" type="list_only"
 				key="zoneId" property="code" />
@@ -297,10 +297,10 @@
 			auditable="true" reportable="true">
 			<field name="code" label="$m{organization.department.code}"
 				type="string" inputWidget="application.name" maxLen="16"
-				basicSearch="true" />
+				basicSearch="true" auditable="true"/>
 			<field name="description"
 				label="$m{organization.department.description}" type="string"
-				inputWidget="application.text" maxLen="64" basicSearch="true" />
+				inputWidget="application.text" maxLen="64" basicSearch="true" auditable="true"/>
 			<uniqueConstraint name="codeUc"
 				description="$m{organization.department.uc.code}" fieldList="code" />
 			<uniqueConstraint name="descUc"
@@ -393,18 +393,18 @@
 				inputWidget="organization.departmentlist" basicSearch="true" />
 			<field name="code" label="$m{organization.role.code}"
 				type="string" inputWidget="application.name" maxLen="16"
-				basicSearch="true" />
+				basicSearch="true" auditable="true"/>
 			<field name="description"
 				label="$m{organization.role.description}" type="string"
-				inputWidget="application.text" maxLen="64" basicSearch="true" />
+				inputWidget="application.text" maxLen="64" basicSearch="true" auditable="true"/>
 			<field name="activeAfter"
 				label="$m{organization.role.activeafter}" type="timestamp_utc"
-				inputWidget="application.time" />
+				inputWidget="application.time" auditable="true"/>
 			<field name="activeBefore"
 				label="$m{organization.role.activebefore}" type="timestamp_utc"
-				inputWidget="application.time" />
+				inputWidget="application.time" auditable="true"/>
 			<field name="email" label="$m{organization.role.email}"
-				type="string" maxLen="64" />
+				type="string" maxLen="64" auditable="true"/>
 			<field name="dashboardCode"
 				label="$m{organization.role.dashboard}" type="string" maxLen="64"
 				nullable="true" />
@@ -423,7 +423,7 @@
 		<entity name="rolePrivilege"
 			description="$m{organization.roleprivilege}"
 			label="$m{organization.roleprivilege.label}"
-			type="com.flowcentraltech.flowcentral.organization.entities.RolePrivilege">
+			type="com.flowcentraltech.flowcentral.organization.entities.RolePrivilege" auditable="true">
 			<field name="roleId"
 				label="$m{organization.roleprivilege.roleid}"
 				inputLabel="$m{organization.roleprivilege.role}" type="ref"
@@ -445,7 +445,7 @@
 				type="list_only" key="privilegeId" property="code" />
 			<field name="privilegeDesc"
 				label="$m{organization.roleprivilege.privilegedesc}"
-				type="list_only" key="privilegeId" property="description" />
+				type="list_only" key="privilegeId" property="description" auditable="true"/>
 			<field name="privilegeCategoryId"
 				label="$m{organization.roleprivilege.privilegecatid}"
 				type="list_only" key="privilegeId" property="privilegeCategoryId"
@@ -532,16 +532,16 @@
 			auditable="true" reportable="true">
 			<field name="code" label="$m{organization.zone.code}"
 				type="string" inputWidget="application.name" maxLen="16"
-				basicSearch="true" />
+				basicSearch="true" auditable="true"/>
 			<field name="description"
 				label="$m{organization.zone.description}" type="string"
-				inputWidget="application.text" maxLen="64" basicSearch="true" />
+				inputWidget="application.text" maxLen="64" basicSearch="true" auditable="true"/>
 			<field name="languageTag"
 				label="$m{organization.zone.languagetag}" type="string"
-				inputWidget="application.languagetag" maxLen="64" nullable="true" />
+				inputWidget="application.languagetag" maxLen="64" nullable="true" auditable="true"/>
 			<field name="timeZone" label="$m{organization.zone.timezone}"
 				type="string" inputWidget="application.timezone" maxLen="64"
-				nullable="true" />
+				nullable="true" auditable="true"/>
 			<uniqueConstraint name="codeUc"
 				description="$m{organization.zone.uc.code}" fieldList="code" />
 			<uniqueConstraint name="descUc"

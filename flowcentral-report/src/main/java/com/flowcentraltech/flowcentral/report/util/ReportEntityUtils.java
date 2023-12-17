@@ -58,6 +58,20 @@ public final class ReportEntityUtils {
         return resultList;
     }
 
+    public static List<ReportableField> getReportableFieldList(MessageResolver msgResolver,
+            List<AppEntityField> fieldList) throws UnifyException {
+        List<ReportableField> resultList = new ArrayList<ReportableField>();
+        for (AppEntityField appEntityField : fieldList) {
+            if (appEntityField.isReportable()) {
+                ReportableField reportableField = new ReportableField();
+                ReportEntityUtils.populateReportableField(reportableField, appEntityField);
+                resultList.add(reportableField);
+            }
+        }
+
+        return resultList;
+    }
+
     public static void populateReportableField(ReportableField reportableField, AppEntityField appEntityField)
             throws UnifyException {
         String description = NameUtils.describeName(appEntityField.getName());

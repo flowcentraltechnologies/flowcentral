@@ -171,7 +171,8 @@ public class StudioEntitySchemaManagerImpl extends AbstractEntitySchemaManager {
                 }
             }
 
-            // TODO Delete old fields?
+            // Update default components
+            updateDefaultComponents(ENTITY_SCHEMA_OPERATION, appEntity);
 
             // Update entity
             if (!StringUtils.isBlank(entitySchema.getTableName())) {
@@ -222,9 +223,11 @@ public class StudioEntitySchemaManagerImpl extends AbstractEntitySchemaManager {
                 reportableDefinition.setTitle(description);
                 reportableDefinition.setName(appEntity.getName());
                 reportableDefinition.setDescription(description);
-                List<ReportableField> baseReportableFieldList = ReportEntityUtils
+                List<ReportableField> reportableFieldList = ReportEntityUtils
                         .getEntityBaseTypeReportableFieldList(messageResolver, appEntity.getBaseType());
-                reportableDefinition.setFieldList(baseReportableFieldList);
+                reportableFieldList
+                        .addAll(ReportEntityUtils.getReportableFieldList(messageResolver, appEntity.getFieldList()));
+                reportableDefinition.setFieldList(reportableFieldList);
                 reportModuleService.createReportableDefinition(reportableDefinition);
 
                 final String privilegeCode = PrivilegeNameUtils.getReportablePrivilegeName(
@@ -241,6 +244,59 @@ public class StudioEntitySchemaManagerImpl extends AbstractEntitySchemaManager {
                         ApplicationModuleSysParamConstants.ASSIGN_APPLICATIONENTITY_ONCREATE)) {
                     au.applicationPrivilegeManager().assignPrivilegeToRole(userToken.getRoleCode(), privilegeCode);
                 }
+            }
+        }
+    }
+
+    @Override
+    public void updateDefaultComponents(String entity, AppEntity appEntity) throws UnifyException {
+        final ApplicationEntityNameParts np = ApplicationNameUtils.getApplicationEntityNameParts(entity);
+        final Long applicationId = appEntity.getApplicationId();
+        final String nameDesc = appEntity.getDescription();
+
+        // Create reportable if necessary
+        if (appEntity.isReportable()) {
+            ReportableDefinition reportableDefinition = reportModuleService
+                    .findReportDefinition((ReportableDefinitionQuery) new ReportableDefinitionQuery()
+                            .applicationId(applicationId).name(appEntity.getName()));
+            if (reportableDefinition == null) {
+                String description = resolveApplicationMessage("$m{report.managedreport.description}", nameDesc);
+                reportableDefinition = new ReportableDefinition();
+                reportableDefinition.setApplicationId(applicationId);
+                reportableDefinition.setEntity(entity);
+                reportableDefinition.setTitle(description);
+                reportableDefinition.setName(appEntity.getName());
+                reportableDefinition.setDescription(description);
+                List<ReportableField> reportableFieldList = ReportEntityUtils
+                        .getEntityBaseTypeReportableFieldList(messageResolver, appEntity.getBaseType());
+                reportableFieldList
+                        .addAll(ReportEntityUtils.getReportableFieldList(messageResolver, appEntity.getFieldList()));
+                reportableDefinition.setFieldList(reportableFieldList);
+                reportModuleService.createReportableDefinition(reportableDefinition);
+
+                final String privilegeCode = PrivilegeNameUtils.getReportablePrivilegeName(
+                        ApplicationNameUtils.ensureLongNameReference(np.getApplicationName(), appEntity.getName()));
+                if (!au.applicationPrivilegeManager().isRegisteredPrivilege(
+                        ApplicationPrivilegeConstants.APPLICATION_REPORTABLE_CATEGORY_CODE, privilegeCode)) {
+                    au.applicationPrivilegeManager().registerPrivilege(applicationId,
+                            ApplicationPrivilegeConstants.APPLICATION_REPORTABLE_CATEGORY_CODE, privilegeCode,
+                            description);
+                }
+
+                UserToken userToken = getUserToken();
+                if (!userToken.isReservedUser() && au.system().getSysParameterValue(boolean.class,
+                        ApplicationModuleSysParamConstants.ASSIGN_APPLICATIONENTITY_ONCREATE)) {
+                    au.applicationPrivilegeManager().assignPrivilegeToRole(userToken.getRoleCode(), privilegeCode);
+                }
+            } else {
+                final List<AppEntityField> appEntityFieldList = au.environment()
+                        .findAll(new AppEntityFieldQuery().appEntityId(appEntity.getId()));
+                List<ReportableField> reportableFieldList = ReportEntityUtils
+                        .getEntityBaseTypeReportableFieldList(messageResolver, appEntity.getBaseType());
+                reportableFieldList
+                        .addAll(ReportEntityUtils.getReportableFieldList(messageResolver, appEntityFieldList));
+                reportableDefinition.setFieldList(reportableFieldList);
+                reportModuleService.updateReportableDefinition(reportableDefinition);
             }
         }
     }

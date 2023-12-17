@@ -72,6 +72,7 @@ import com.flowcentraltech.flowcentral.application.web.widgets.MiniForm;
 import com.flowcentraltech.flowcentral.application.web.widgets.SectorIcon;
 import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
 import com.flowcentraltech.flowcentral.common.business.ApplicationPrivilegeManager;
+import com.flowcentraltech.flowcentral.common.business.AuditLogger;
 import com.flowcentraltech.flowcentral.common.business.CollaborationProvider;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentDelegateRegistrar;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentDelegateUtilities;
@@ -83,6 +84,7 @@ import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResu
 import com.flowcentraltech.flowcentral.common.business.policies.SweepingCommitPolicy;
 import com.flowcentraltech.flowcentral.common.business.policies.TableSummaryLine;
 import com.flowcentraltech.flowcentral.common.constants.OwnershipType;
+import com.flowcentraltech.flowcentral.common.data.EntityAuditInfo;
 import com.flowcentraltech.flowcentral.common.data.FormListingOptions;
 import com.flowcentraltech.flowcentral.common.data.ParamValuesDef;
 import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
@@ -90,6 +92,7 @@ import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
 import com.tcdng.unify.common.util.StringToken;
 import com.tcdng.unify.core.UnifyComponent;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.UserToken;
 import com.tcdng.unify.core.criterion.Restriction;
 import com.tcdng.unify.core.data.Formats;
 import com.tcdng.unify.core.data.Listable;
@@ -115,6 +118,17 @@ import com.tcdng.unify.web.ui.widget.data.Hint.MODE;
  * @since 1.0
  */
 public interface AppletUtilities extends FlowCentralComponent {
+    
+    /**
+     * Get entity audit information.
+     * 
+     * @param entityName
+     *                   the entity name
+     * @return the entity audit information
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    EntityAuditInfo getEntityAuditInfo(String entityName) throws UnifyException;
     
     /**
      * Gets application entities based on supplied query.
@@ -315,6 +329,15 @@ public interface AppletUtilities extends FlowCentralComponent {
     boolean isApplicationDevelopable(Long applicationId) throws UnifyException;
 
     /**
+     * Gets a session user token.
+     * 
+     * @return the session user token
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    UserToken getSessionUserToken() throws UnifyException;
+    
+    /**
      * Gets a session user ID.
      * 
      * @return the session user ID
@@ -464,6 +487,13 @@ public interface AppletUtilities extends FlowCentralComponent {
      */
     EnvironmentDelegateRegistrar delegateRegistrar();
 
+    /**
+     * Gets audit logger.
+     * 
+     * @return the audit logger
+     */
+    AuditLogger audit();
+    
     /**
      * Gets the application service.
      * 

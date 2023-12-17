@@ -85,15 +85,19 @@ import com.flowcentraltech.flowcentral.common.business.policies.SweepingCommitPo
 import com.flowcentraltech.flowcentral.common.business.policies.TableActionResult;
 import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
 import com.flowcentraltech.flowcentral.common.constants.WfItemVersionType;
+import com.flowcentraltech.flowcentral.common.data.AuditSnapshot;
 import com.flowcentraltech.flowcentral.common.data.FormListingOptions;
 import com.flowcentraltech.flowcentral.common.data.RowChangeInfo;
 import com.flowcentraltech.flowcentral.common.entities.BaseEntity;
 import com.flowcentraltech.flowcentral.common.entities.BaseWorkEntity;
 import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
 import com.flowcentraltech.flowcentral.configuration.constants.AppletType;
+import com.flowcentraltech.flowcentral.configuration.constants.AuditEventType;
+import com.flowcentraltech.flowcentral.configuration.constants.AuditSourceType;
 import com.flowcentraltech.flowcentral.configuration.constants.FormReviewType;
 import com.flowcentraltech.flowcentral.configuration.constants.RecordActionType;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.UserToken;
 import com.tcdng.unify.core.criterion.Restriction;
 import com.tcdng.unify.core.data.BeanValueStore;
 import com.tcdng.unify.core.data.ValueStoreReader;
@@ -180,6 +184,10 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
 
         public boolean isInForm() {
             return isCreateForm() || isMaintainForm();
+        }
+
+        public boolean isInAssignment() {
+            return ASSIGNMENT_PAGE.equals(this);
         }
 
         public boolean isSingleForm() {
@@ -537,6 +545,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
                     filterGroupDef, fixedAssignment, id, subTitle);
             assignmentPage.loadAssignedList();
             viewMode = ViewMode.ASSIGNMENT_PAGE;
+            takeAuditSnapshot(isRootFormUpdateDraft() ? AuditEventType.VIEW_DRAFT : AuditEventType.VIEW);
         }
     }
 
@@ -673,7 +682,12 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
             updateForm(HeaderWithTabsForm.UpdateType.MAINTAIN_INST, form, _inst);
         }
 
+        if (isRootForm()) {
+            ctx.setRootFormUpdateDraft(form.isUpdateDraft());
+        }
+
         viewMode = ViewMode.MAINTAIN_FORM_SCROLL;
+        takeAuditSnapshot(form.isUpdateDraft() ? AuditEventType.VIEW_DRAFT : AuditEventType.VIEW);
         return null;
     }
 
@@ -712,6 +726,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         final AppletDef _currFormAppletDef = getFormAppletDef();
         EntityActionResult entityActionResult = au.createEntityInstWorkflowDraftByFormContext(_currFormAppletDef,
                 form.getCtx(), this);
+        takeAuditSnapshot(AuditEventType.CREATE_DRAFT);
         updateForm(HeaderWithTabsForm.UpdateType.UPDATE_INST, form, reloadEntity(entityActionResult.getInst(), false));
     }
 
@@ -783,6 +798,18 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
 
     public EntityActionResult saveNewInstAndClose() throws UnifyException {
         return saveNewInst(ActionMode.ACTION_AND_CLOSE, FormReviewType.ON_SAVE_CLOSE);
+    }
+
+    public AssignmentPage saveAssign() throws UnifyException {
+        assignmentPage.commitAssignedList(true);
+        takeAuditSnapshot(isRootFormUpdateDraft() ? AuditEventType.UPDATE_DRAFT : AuditEventType.UPDATE);
+        return assignmentPage;
+    }
+
+    public AssignmentPage saveAssignOnClose() throws UnifyException {
+        assignmentPage.commitAssignedList(false);
+        takeAuditSnapshot(isRootFormUpdateDraft() ? AuditEventType.UPDATE_DRAFT : AuditEventType.UPDATE_CLOSE);
+        return assignmentPage;
     }
 
     public void applyUserAction(String actionName) throws UnifyException {
@@ -867,6 +894,8 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         }
 
         EntityActionResult entityActionResult = au.deleteEntityInstByFormContext(formAppletDef, form.getCtx(), this);
+        takeAuditSnapshot(
+                isWorkflowCopy() || form.isUpdateDraft() ? AuditEventType.DELETE_DRAFT : AuditEventType.DELETE);
         final boolean closePage = !navBackToPrevious();
         entityActionResult.setClosePage(closePage);
         entityActionResult.setRefreshMenu(closePage);
@@ -1338,6 +1367,42 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         return false;
     }
 
+    protected void takeAuditSnapshot(AuditEventType auditEventType) throws UnifyException {
+        if (isAuditingEnabled()) {
+            AuditSnapshot.Builder asb = AuditSnapshot.newBuilder(AuditSourceType.APPLET, "", auditEventType,
+                    au.getNow());
+            UserToken userToken = au.getSessionUserToken();
+            asb.userLoginId(userToken.getUserLoginId());
+            asb.userName(userToken.getUserName());
+            asb.userIpAddress(userToken.getIpAddress());
+            asb.roleCode(userToken.getRoleCode());
+
+            if (formStack != null && !formStack.isEmpty()) {
+                final int len = formStack.size();
+                for (int i = 0; i < len; i++) {
+                    FormContext fCtx = formStack.get(i).getForm().getCtx();
+                    if (fCtx.isSupportAudit()) {
+                        asb.addSnapshot(fCtx.getEntityAudit(), AuditEventType.VIEW);
+                    }
+                }
+            }
+
+            if (viewMode.isInForm()) {
+                FormContext fCtx = form.getCtx();
+                if (fCtx.isSupportAudit()) {
+                    asb.addSnapshot(fCtx.getEntityAudit(), auditEventType);
+                }
+            } else if (viewMode.isInAssignment()) {
+                if (assignmentPage.isSupportAudit()) {
+                    asb.addSnapshot(assignmentPage.getEntityAssignmentAudit(), auditEventType);
+                }
+            }
+
+            AuditSnapshot auditSnapshot = asb.build();
+            au.audit().log(auditSnapshot);
+        }
+    }
+
     protected AppletDef getAppletDef(String appletName) throws UnifyException {
         return au.getAppletDef(appletName);
     }
@@ -1555,6 +1620,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         final FormContext formContext = form.getCtx();
         EntityActionResult entityActionResult = createInst();
         Long entityInstId = (Long) entityActionResult.getResult();
+        takeAuditSnapshot(reviewType.auditEventType());
 
         // Review form
         ReviewResult reviewResult = reviewFormContext(formContext, EvaluationMode.CREATE, reviewType);
@@ -1587,6 +1653,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         Long entityInstId = (Long) inst.getId();
         if (viewMode.isCreateForm()) {
             entityActionResult = createInst();
+            takeAuditSnapshot(reviewType.auditEventType());
             entityInstId = (Long) entityActionResult.getResult();
             if (_entityDef.delegated()) {
                 ((AbstractSequencedEntity) inst).setId(entityInstId);
@@ -1619,6 +1686,8 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         final AppletDef _currFormAppletDef = getFormAppletDef();
         EntityActionResult entityActionResult = au.updateEntityInstByFormContext(_currFormAppletDef, form.getCtx(),
                 this);
+        takeAuditSnapshot(
+                isWorkflowCopy() || form.isUpdateDraft() ? AuditEventType.UPDATE_DRAFT : reviewType.auditEventType());
         updateForm(HeaderWithTabsForm.UpdateType.UPDATE_INST, form, reloadEntity((Entity) form.getFormBean(), false));
 
         // Review form

@@ -84,6 +84,7 @@
 !fc-assignmentpagepanel:assignmentPanel binding:assignmentPage
 	moreActionButtons:$c{saveAssignCloseBtn closeAssignBtn}
 	switchOnChangeEventHandler:$d{!ui-event event:onchange action:$c{assnSwitchOnChangeAct}}
+	saveEventHandler:$d{!ui-event event:onclick action:$c{saveAssignExtAct}}
 !ui-button:saveAssignCloseBtn caption:$m{button.saveclose}
 	eventHandler:$d{!ui-event event:onclick action:$c{saveAssignCloseAct}}
 !ui-button:closeAssignBtn caption:$m{button.close}
@@ -151,6 +152,7 @@
 !ui-postcommand:maintainAct command:maintain pushComponents:$r{mainform.push.components} debounce:true
 !ui-postcommand:listingAct command:listing debounce:true
 !ui-postcommand:columnAct command:columns debounce:true
+!ui-postcommand:saveAssignExtAct command:saveAssign components:$c{assignmentPanel}
 !ui-postcommand:saveAssignCloseAct command:saveAssignAndClose components:$c{assignmentPanel}
 !ui-postcommand:saveEntryCloseAct command:saveEntryAndClose components:$c{entryTablePanel}
 !ui-postcommand:savePropListCloseAct command:savePropListAndClose components:$c{editPropertyListPanel}

@@ -20,5 +20,8 @@
 		<sysParameter code="CDN-0002"
 			description="$m{codegeneration.sysparam.messagereplacementlist}"
 			editor="!ui-textarea" type="string" editable="true" />
+		<sysParameter code="CDN-0003" defaultVal="false"
+			description="$m{codegeneration.sysparam.codegenskippasswordfields}"
+			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
 	</sysParameters>
 </module>

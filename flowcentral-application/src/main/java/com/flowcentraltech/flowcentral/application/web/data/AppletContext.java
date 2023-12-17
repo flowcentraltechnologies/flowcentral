@@ -20,6 +20,7 @@ import java.util.EnumMap;
 import java.util.Map;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
+import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.entities.BaseApplicationEntity;
@@ -52,6 +53,8 @@ public class AppletContext extends AbstractContext {
 
     private int tabReadOnlyCounter;
 
+    private boolean auditingEnabled;
+
     private boolean readOnly;
 
     private boolean inWorkflowPromptViewMode;
@@ -70,13 +73,18 @@ public class AppletContext extends AbstractContext {
 
     private boolean attachments;
 
-    public AppletContext(AbstractApplet applet, AppletUtilities au) {
+    private boolean rootFormUpdateDraft;
+
+    public AppletContext(AbstractApplet applet, AppletUtilities au) throws UnifyException {
         this.applet = applet;
         this.au = au;
         this.entityReferences = new EnumMap<EntityChildCategoryType, String>(EntityChildCategoryType.class);
         for (EntityChildCategoryType type : EntityChildCategoryType.values()) {
             this.entityReferences.put(type, null);
         }
+
+        this.auditingEnabled = au.audit() != null && au.system().getSysParameterValue(boolean.class,
+                ApplicationModuleSysParamConstants.ENABLE_APPLET_SOURCE_AUDITING);
     }
 
     public AbstractApplet applet() {
@@ -144,6 +152,22 @@ public class AppletContext extends AbstractContext {
 
     public void setOriginalEntityActionResult(EntityActionResult originalEntityActionResult) {
         this.originalEntityActionResult = originalEntityActionResult;
+    }
+
+    public boolean isAuditingEnabled() {
+        return auditingEnabled;
+    }
+
+    public void setAuditingEnabled(boolean auditingEnabled) {
+        this.auditingEnabled = auditingEnabled;
+    }
+
+    public boolean isRootFormUpdateDraft() {
+        return rootFormUpdateDraft;
+    }
+
+    public void setRootFormUpdateDraft(boolean rootFormUpdateDraft) {
+        this.rootFormUpdateDraft = rootFormUpdateDraft;
     }
 
     public void setReadOnly(boolean readOnly) {

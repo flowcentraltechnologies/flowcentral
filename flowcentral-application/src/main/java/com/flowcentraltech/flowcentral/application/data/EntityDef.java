@@ -108,7 +108,7 @@ public class EntityDef extends BaseApplicationEntityDef {
     private List<EntitySeriesDef> seriesDefList;
 
     private List<EntityCategoryDef> categoryDefList;
-    
+
     private List<EntityAttachmentDef> attachmentList;
 
     private List<UniqueConstraintDef> uniqueConstraintList;
@@ -129,7 +129,7 @@ public class EntityDef extends BaseApplicationEntityDef {
 
     private Set<String> fieldNames;
 
-    private Set<String> auditFieldNames;
+    private List<String> auditFieldNames;
 
     private List<String> childrenFieldNames;
 
@@ -441,7 +441,7 @@ public class EntityDef extends BaseApplicationEntityDef {
 
     public List<EntitySeriesDef> getSeriesDefList() throws UnifyException {
         if (seriesDefList == null) {
-            synchronized(this) {
+            synchronized (this) {
                 if (seriesDefList == null) {
                     seriesDefList = new ArrayList<EntitySeriesDef>(seriesDefs.values());
                     DataUtils.sortAscending(seriesDefList, EntitySeriesDef.class, "description");
@@ -449,13 +449,13 @@ public class EntityDef extends BaseApplicationEntityDef {
                 }
             }
         }
-        
+
         return seriesDefList;
     }
 
     public List<EntityCategoryDef> getCategoryDefList() throws UnifyException {
         if (categoryDefList == null) {
-            synchronized(this) {
+            synchronized (this) {
                 if (categoryDefList == null) {
                     categoryDefList = new ArrayList<EntityCategoryDef>(categoryDefs.values());
                     DataUtils.sortAscending(categoryDefList, EntityCategoryDef.class, "description");
@@ -867,18 +867,18 @@ public class EntityDef extends BaseApplicationEntityDef {
         return fieldNames;
     }
 
-    public Set<String> getAuditFieldNames() {
+    public List<String> getAuditFieldNames() {
         if (auditFieldNames == null) {
             synchronized (EntityDef.class) {
                 if (auditFieldNames == null) {
-                    auditFieldNames = new HashSet<String>();
+                    auditFieldNames = new ArrayList<String>();
                     for (EntityFieldDef entityFieldDef : fieldDefList) {
-                        if (entityFieldDef.isAuditable()) {
+                        if (entityFieldDef.isAuditable() && !entityFieldDef.isChildRef()) {
                             auditFieldNames.add(entityFieldDef.getFieldName());
                         }
                     }
 
-                    auditFieldNames = Collections.unmodifiableSet(auditFieldNames);
+                    auditFieldNames = Collections.unmodifiableList(auditFieldNames);
                 }
             }
         }

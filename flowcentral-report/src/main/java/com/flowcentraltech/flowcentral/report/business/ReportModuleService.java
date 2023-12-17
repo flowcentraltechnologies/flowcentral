@@ -105,6 +105,16 @@ public interface ReportModuleService extends FlowCentralService, ReportProvider 
     Long createReportableDefinition(ReportableDefinition reportableDefinition) throws UnifyException;
 
     /**
+     * Updates a reportable definition.
+     * 
+     * @param reportableDefinition
+     *                update cout
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    int updateReportableDefinition(ReportableDefinition reportableDefinition) throws UnifyException;
+
+    /**
      * Finds reportable definitions by criteria.
      * 
      * @param query
@@ -114,6 +124,17 @@ public interface ReportModuleService extends FlowCentralService, ReportProvider 
      *                        if an error occurs
      */
     List<ReportableDefinition> findReportDefinitions(ReportableDefinitionQuery query) throws UnifyException;
+
+    /**
+     * Finds report definition by criteria.
+     * 
+     * @param query
+     *              the search query
+     * @return the report definition otherwise null
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    ReportableDefinition findReportDefinition(ReportableDefinitionQuery query) throws UnifyException;
 
     /**
      * Counts reportable definitions by criteria.

@@ -42,6 +42,8 @@ import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
 import com.flowcentraltech.flowcentral.common.business.policies.ConsolidatedFormStatePolicy;
 import com.flowcentraltech.flowcentral.common.business.policies.ReviewResult;
 import com.flowcentraltech.flowcentral.common.data.AbstractContext;
+import com.flowcentraltech.flowcentral.common.data.EntityAudit;
+import com.flowcentraltech.flowcentral.common.data.EntityAuditInfo;
 import com.flowcentraltech.flowcentral.common.data.FormMessage;
 import com.flowcentraltech.flowcentral.common.data.FormStateRule;
 import com.flowcentraltech.flowcentral.common.data.FormValidationErrors;
@@ -111,6 +113,8 @@ public class FormContext extends AbstractContext {
 
     private Set<String> visibleAnnotations;
 
+    private EntityAudit entityAudit;
+
     private String altFormTitle;
 
     private String fixedReference;
@@ -134,7 +138,7 @@ public class FormContext extends AbstractContext {
     private boolean formFocused;
 
     private boolean updateEnabled;
-    
+
     private Mode mode;
 
     public FormContext(AppletContext appletContext) throws UnifyException {
@@ -187,6 +191,23 @@ public class FormContext extends AbstractContext {
 
     public AppletUtilities au() {
         return appletContext.au();
+    }
+
+    public EntityAudit getEntityAudit() throws UnifyException {
+        if (isSupportAudit()) {
+            if (entityAudit == null) {
+                EntityAuditInfo entityAuditInfo = au().getEntityAuditInfo(entityDef.getLongName());
+                entityAudit = new EntityAudit(entityAuditInfo, (Entity) inst);
+            } else {
+                entityAudit.setEntity((Entity) inst);
+            }
+        }
+
+        return entityAudit;
+    }
+
+    public boolean isSupportAudit() {
+        return appletContext.isAuditingEnabled() && entityDef.isAuditable();
     }
 
     public void setTriggerEvaluator(FormTriggerEvaluator triggerEvaluator) {
@@ -351,7 +372,7 @@ public class FormContext extends AbstractContext {
 
     public void addValidationErrorMessages(List<String> messages) {
         if (messages != null && !messages.isEmpty()) {
-            for(String _message: messages) {
+            for (String _message : messages) {
                 formValidationErrors.addValidationError(_message);
             }
         }

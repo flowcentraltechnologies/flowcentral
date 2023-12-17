@@ -14,7 +14,8 @@
 // the License.
 
 !fc-assignmentpagepanel layout:$d{!ui-vertical style:$s{width:100%;}} components:$c{headerBar assignmentBodyPanel}
-
+	saveEventHandler:$d{!ui-event event:onclick action:$c{saveAssignAct}}
+	
 // Header Bar
 !ui-panel:headerBar styleClass:$s{hdbar} layout:$d{!ui-horizontal style:$s{width:100%;} widths:$l{42% none 42%}}
 	components:$c{headerLeftPanel headerCenterPanel headerRightPanel}
@@ -37,7 +38,7 @@
 	components:$f{moreActionButtons}
 
 !ui-button:saveBtn caption:$m{button.save}
-	eventHandler:$d{!ui-event event:onclick action:$c{saveAssignAct}}
+	eventHandler:$f{saveEventHandler}
 
 // Assignment box panel
 !ui-panel:assignmentBodyPanel components:$c{assignmentPage assignmentEntryTbl}

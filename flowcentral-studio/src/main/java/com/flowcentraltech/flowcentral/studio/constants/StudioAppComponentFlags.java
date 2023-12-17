@@ -29,4 +29,6 @@ public interface StudioAppComponentFlags {
     int SUPPORTS_NEW = 0x00000002;
 
     int SUPPORTS_SAVEAS = 0x00000004;
+
+    int SHOW_CLASSIFIED = 0x00000008;
 }

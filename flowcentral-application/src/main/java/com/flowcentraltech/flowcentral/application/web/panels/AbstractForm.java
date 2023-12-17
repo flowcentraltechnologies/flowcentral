@@ -32,7 +32,9 @@ import com.flowcentraltech.flowcentral.application.web.data.FormContext;
 import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs;
 import com.flowcentraltech.flowcentral.application.web.widgets.InputArrayEntries;
 import com.flowcentraltech.flowcentral.application.web.widgets.SectorIcon;
+import com.flowcentraltech.flowcentral.common.constants.WfItemVersionType;
 import com.flowcentraltech.flowcentral.common.data.FormMessage;
+import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.data.ValueStoreReader;
@@ -140,7 +142,17 @@ public abstract class AbstractForm {
     public boolean isSingleFormType() {
         return false;
     }
-    
+
+    public boolean isInWorkflow() {
+        Object inst = ctx.getInst();
+        return inst instanceof WorkEntity && ((WorkEntity) inst).isInWorkflow();
+    }
+
+    public boolean isUpdateDraft() {
+        Object inst = ctx.getInst();
+        return inst instanceof WorkEntity && WfItemVersionType.DRAFT.equals(((WorkEntity) inst).getWfItemVersionType());
+    }
+
     public ValueStore getFormValueStore() {
         return ctx.getFormValueStore();
     }
@@ -235,7 +247,7 @@ public abstract class AbstractForm {
 
     public List<FormActionDef> getFormActionDefList() {
         if (formActionDefList != null) {
-           return formActionDefList;
+            return formActionDefList;
         }
 
         return ctx.getFormActionDefList();

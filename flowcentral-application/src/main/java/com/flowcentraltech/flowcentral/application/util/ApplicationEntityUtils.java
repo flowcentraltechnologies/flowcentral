@@ -397,79 +397,79 @@ public final class ApplicationEntityUtils {
                         msgResolver.resolveApplicationMessage("$m{baseapplicationentity.field.label.applicationid}"),
                         "application.applicationRef", null, null, null,
                         msgResolver.resolveApplicationMessage("$m{baseapplicationentity.field.label.application}"),
-                        "application.entitylist", null, null, configType));
+                        "application.entitylist", null, null, configType, false));
                 list.add(ApplicationEntityUtils.createBaseAppEntityField(EntityFieldDataType.LIST_ONLY,
                         "applicationName",
                         msgResolver.resolveApplicationMessage("$m{baseapplicationentity.field.label.applicationname}"),
-                        null, "applicationId", "name", null, null, null, null, null, configType));
+                        null, "applicationId", "name", null, null, null, null, null, configType, false));
                 list.add(ApplicationEntityUtils.createBaseAppEntityField(EntityFieldDataType.LIST_ONLY,
                         "applicationDesc",
                         msgResolver.resolveApplicationMessage("$m{baseapplicationentity.field.label.applicationdesc}"),
-                        null, "applicationId", "description", null, null, null, null, null, configType));
+                        null, "applicationId", "description", null, null, null, null, null, configType, false));
                 list.add(ApplicationEntityUtils.createBaseAppEntityField(EntityFieldDataType.ENUM, "devVersionType",
                         msgResolver.resolveApplicationMessage("$m{baseapplicationentity.field.label.devversiontype}"),
                         "developmentversiontypelist", null, null, null, null, "application.enumlist", null, null,
-                        configType));
+                        configType, false));
                 list.add(
                         ApplicationEntityUtils.createBaseAppEntityField(EntityFieldDataType.STRING, "devMergeVersionNo",
                                 msgResolver.resolveApplicationMessage(
                                         "$m{baseapplicationentity.field.label.devmergeversionno}"),
-                                null, null, null, null, null, "application.text", null, 32, configType));
+                                null, null, null, null, null, "application.text", null, 32, configType, false));
                 list.add(ApplicationEntityUtils.createBaseAppEntityField(EntityFieldDataType.BOOLEAN, "classified",
                         msgResolver.resolveApplicationMessage("$m{baseapplicationentity.field.label.classified}"), null,
-                        null, null, null, null, "application.checkbox", null, null, configType));
+                        null, null, null, null, "application.checkbox", null, null, configType, false));
                 break;
             case BASE_AUDIT_ENTITY:
                 list.add(ApplicationEntityUtils.createBaseAppEntityField(EntityFieldDataType.TIMESTAMP_UTC, "createDt",
                         msgResolver.resolveApplicationMessage("$m{baseauditentity.field.label.createdt}"), null, null,
-                        null, null, null, "application.datetime", null, null, configType));
+                        null, null, null, "application.datetime", null, null, configType, false));
                 list.add(ApplicationEntityUtils.createBaseAppEntityField(EntityFieldDataType.STRING, "createdBy",
                         msgResolver.resolveApplicationMessage("$m{baseauditentity.field.label.createdby}"), null, null,
-                        null, null, null, "application.name", null, 64, configType));
+                        null, null, null, "application.name", null, 64, configType, false));
                 list.add(ApplicationEntityUtils.createBaseAppEntityField(EntityFieldDataType.TIMESTAMP_UTC, "updateDt",
                         msgResolver.resolveApplicationMessage("$m{baseauditentity.field.label.updatedt}"), null, null,
-                        null, null, null, "application.datetime", null, null, configType));
+                        null, null, null, "application.datetime", null, null, configType, false));
                 list.add(ApplicationEntityUtils.createBaseAppEntityField(EntityFieldDataType.STRING, "updatedBy",
                         msgResolver.resolveApplicationMessage("$m{baseauditentity.field.label.updatedby}"), null, null,
-                        null, null, null, "application.name", null, 64, configType));
+                        null, null, null, "application.name", null, 64, configType, false));
                 break;
             case BASE_ENTITY:
                 list.add(ApplicationEntityUtils.createBaseAppEntityField(EntityFieldDataType.LONG, "id",
                         msgResolver.resolveApplicationMessage("$m{baseentity.field.label.id}"), null, null, null, null,
-                        null, null, null, null, configType));
+                        null, null, null, null, configType, false));
                 break;
             case BASE_VERSION_ENTITY:
                 list.add(ApplicationEntityUtils.createBaseAppEntityField(EntityFieldDataType.LONG, "versionNo",
                         msgResolver.resolveApplicationMessage("$m{baseentity.field.label.versionno}"), null, null, null,
-                        null, null, null, null, null, configType));
+                        null, null, null, null, null, configType, false));
                 break;
             case BASE_NAMED_ENTITY:
                 list.add(ApplicationEntityUtils.createBaseAppEntityField(EntityFieldDataType.STRING, "name",
                         msgResolver.resolveApplicationMessage("$m{basesystementity.field.label.name}"), null, null,
-                        null, null, null, "application.name", null, 64, configType));
+                        null, null, null, "application.name", null, 64, configType, true));
                 list.add(ApplicationEntityUtils.createBaseAppEntityField(EntityFieldDataType.STRING, "description",
                         msgResolver.resolveApplicationMessage("$m{basesystementity.field.label.description}"), null,
-                        null, null, null, null, "application.text", null, 128, configType));
+                        null, null, null, null, "application.text", null, 128, configType, true));
                 break;
             case BASE_STATUS_ENTITY:
             case BASE_STATUS_WORK_ENTITY:
                 list.add(ApplicationEntityUtils.createBaseAppEntityField(EntityFieldDataType.ENUM_REF, "status",
                         msgResolver.resolveApplicationMessage("$m{basestatusworkentity.field.label.status}"),
-                        "statuslist", null, null, null, null, "application.enumlist", null, null, configType));
+                        "statuslist", null, null, null, null, "application.enumlist", null, null, configType, true));
                 list.add(ApplicationEntityUtils.createBaseAppEntityField(EntityFieldDataType.LIST_ONLY, "statusDesc",
                         msgResolver.resolveApplicationMessage("$m{basestatusworkentity.field.label.statusdesc}"), null,
-                        "status", "description", null, null, null, null, null, configType));
+                        "status", "description", null, null, null, null, null, configType, false));
                 break;
             case BASE_CONFIG_ENTITY:
             case BASE_CONFIG_NAMED_ENTITY:
                 list.add(ApplicationEntityUtils.createBaseAppEntityField(EntityFieldDataType.ENUM_REF, "configType",
                         msgResolver.resolveApplicationMessage("$m{baseconfigentity.field.label.configtype}"),
-                        "configtypelist", null, null, null, null, "application.enumlist", null, null, configType));
+                        "configtypelist", null, null, null, null, "application.enumlist", null, null, configType, false));
                 list.add(
                         ApplicationEntityUtils.createBaseAppEntityField(EntityFieldDataType.LIST_ONLY, "configTypeDesc",
                                 msgResolver
                                         .resolveApplicationMessage("$m{baseconfigentity.field.label.configtypedesc}"),
-                                null, "configType", "description", null, null, null, null, null, configType));
+                                null, "configType", "description", null, null, null, null, null, configType, false));
                 break;
             case BASE_WORK_ENTITY:
                 list.add(ApplicationEntityUtils
@@ -477,28 +477,28 @@ public final class ApplicationEntityUtils {
                                 msgResolver.resolveApplicationMessage(
                                         "$m{baseworkentity.field.label.processingstatus}"),
                                 "processingstatuslist", null, null, null, null, "application.enumlist", null, null,
-                                configType));
+                                configType, false));
                 list.add(ApplicationEntityUtils.createBaseAppEntityField(EntityFieldDataType.LIST_ONLY,
                         "processingStatusDesc",
                         msgResolver.resolveApplicationMessage("$m{baseworkentity.field.label.processingstatusdesc}"),
-                        null, "processingStatus", "description", null, null, null, null, null, configType));
+                        null, "processingStatus", "description", null, null, null, null, null, configType, false));
                 list.add(ApplicationEntityUtils.createBaseAppEntityField(EntityFieldDataType.STRING, "workBranchCode",
                         msgResolver.resolveApplicationMessage("$m{baseworkentity.field.label.workbranchcode}"), null,
-                        null, null, null, null, null, null, null, configType));
+                        null, null, null, null, null, null, null, configType, false));
                 list.add(ApplicationEntityUtils.createBaseAppEntityField(EntityFieldDataType.STRING,
                         "workDepartmentCode",
                         msgResolver.resolveApplicationMessage("$m{baseworkentity.field.label.workdepartmentcode}"),
-                        null, null, null, null, null, null, null, null, configType));
+                        null, null, null, null, null, null, null, null, configType, false));
                 list.add(ApplicationEntityUtils.createBaseAppEntityField(EntityFieldDataType.BOOLEAN, "inWorkflow",
                         msgResolver.resolveApplicationMessage("$m{baseworkentity.field.label.inworkflow}"), null, null,
-                        null, null, null, "application.checkbox", null, null, configType));
+                        null, null, null, "application.checkbox", null, null, configType, false));
                 list.add(ApplicationEntityUtils.createBaseAppEntityField(EntityFieldDataType.LONG, "originalCopyId",
                         msgResolver.resolveApplicationMessage("$m{baseworkentity.field.label.originalcopyid}"), null,
-                        null, null, null, null, "application.integer", null, null, configType));
+                        null, null, null, null, "application.integer", null, null, configType, false));
                 list.add(ApplicationEntityUtils.createBaseAppEntityField(EntityFieldDataType.ENUM, "wfItemVersionType",
                         msgResolver.resolveApplicationMessage("$m{baseworkentity.field.label.wfversiontype}"),
                         "wfitemversiontypelist", null, null, null, null, "application.enumlist", null, null,
-                        configType));
+                        configType, true));
                 break;
             default:
                 break;
@@ -507,19 +507,18 @@ public final class ApplicationEntityUtils {
         if (type.isTenantType()) {
             list.add(ApplicationEntityUtils.createBaseAppEntityField(EntityFieldDataType.TENANT_ID, "tenantId",
                     msgResolver.resolveApplicationMessage("$m{baseentity.field.label.tenantid}"), null, null, null,
-                    null, null, "application.integer", null, null, configType));
+                    null, null, "application.integer", null, null, configType, false));
         }
     }
 
     private static AppEntityField createBaseAppEntityField(EntityFieldDataType type, String name, String label,
             String references, String key, String property, String category, String inputLabel, String inputWidget,
-            String inputListKey, Integer length, ConfigType configType) {
+            String inputListKey, Integer length, ConfigType configType,  boolean auditable) {
         boolean nullable = nullables.contains(name);
         boolean reportable = !nonReportables.contains(name);
         boolean maintainLink = maintainLinks.contains(name);
         boolean allowNegative = false;
         boolean readOnly = false;
-        boolean auditable = false;
         String suggestionType = null;
         AppEntityField field = new AppEntityField(type, name, label, references, key, property, category, inputLabel,
                 inputWidget, suggestionType, inputListKey, length, allowNegative, readOnly, nullable, auditable,

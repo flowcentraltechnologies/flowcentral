@@ -276,17 +276,17 @@
 			type="com.flowcentraltech.flowcentral.system.entities.Sector"
 			auditable="true" reportable="true">
 			<field name="name" label="$m{system.sector.name}" type="string"
-				inputWidget="application.name" maxLen="32" basicSearch="true" />
+				inputWidget="application.name" maxLen="32" basicSearch="true" auditable="true"/>
 			<field name="description" label="$m{system.sector.description}"
 				type="string" inputWidget="application.text" maxLen="64"
-				basicSearch="true" />
+				basicSearch="true" auditable="true"/>
 			<field name="shortCode" label="$m{system.sector.shortcode}"
-				type="string" inputWidget="application.name" minLen="3" maxLen="3" />
+				type="string" inputWidget="application.name" minLen="3" maxLen="3" auditable="true"/>
 			<field name="color" label="$m{system.sector.color}"
-				type="string" inputWidget="system.colorlist" maxLen="16" />
+				type="string" inputWidget="system.colorlist" maxLen="16" auditable="true"/>
 			<field name="status" label="$m{system.sector.status}"
 				type="enum_ref" references="sectorstatuslist"
-				inputWidget="application.enumlist" basicSearch="true" />
+				inputWidget="application.enumlist" basicSearch="true" auditable="true"/>
 			<field name="statusDesc" label="$m{system.sector.statusdesc}"
 				type="list_only" inputWidget="application.text" key="status"
 				property="description" />
@@ -304,16 +304,16 @@
 			auditable="true" reportable="true">
 			<field name="sectorId" label="$m{system.module.sector}"
 				type="ref" basicSearch="true" references="sectorRef"
-				inputWidget="application.entitylist" />
+				inputWidget="application.entitylist" auditable="true"/>
 			<field name="name" label="$m{system.module.name}" type="string"
-				basicSearch="true" inputWidget="application.name" maxLen="32" />
+				basicSearch="true" inputWidget="application.name" maxLen="32" auditable="true"/>
 			<field name="description" label="$m{system.module.description}"
 				basicSearch="true" type="string" inputWidget="application.text"
-				maxLen="196" />
+				maxLen="196" auditable="true"/>
 			<field name="label" label="$m{system.module.label.field}"
-				type="string" inputWidget="application.text" maxLen="64" />
+				type="string" inputWidget="application.text" maxLen="64" auditable="true"/>
 			<field name="shortCode" label="$m{system.module.shortcode}"
-				type="string" inputWidget="application.name" maxLen="16" />
+				type="string" inputWidget="application.name" maxLen="16" auditable="true"/>
 			<field name="sectorName" label="$m{system.module.sectorname}"
 				type="list_only" inputWidget="application.text" key="sectorId"
 				property="name" />
@@ -340,25 +340,25 @@
 		</entity>
 		<entity name="moduleApp" description="$m{system.moduleapp}"
 			label="$m{system.moduleapp.label}"
-			type="com.flowcentraltech.flowcentral.system.entities.ModuleApp">
+			type="com.flowcentraltech.flowcentral.system.entities.ModuleApp" auditable="true">
 			<field name="moduleId" label="$m{system.moduleapp.module}"
 				type="ref" references="moduleRef"
-				inputWidget="application.entitylist" basicSearch="true" />
+				inputWidget="application.entitylist" basicSearch="true" auditable="true"/>
 			<field name="name" label="$m{system.moduleapp.name}"
 				type="string" inputWidget="application.name" maxLen="64"
-				basicSearch="true" />
+				basicSearch="true" auditable="true"/>
 			<field name="shortDescription"
 				label="$m{system.moduleapp.shortdescription}" type="string"
-				inputWidget="application.text" maxLen="96" basicSearch="true" />
+				inputWidget="application.text" maxLen="96" basicSearch="true" auditable="true" />
 			<field name="longDescription"
 				label="$m{system.moduleapp.longdescription}" type="string"
-				inputWidget="application.text" maxLen="256" />
+				inputWidget="application.text" maxLen="256" auditable="true"/>
 			<field name="configFile"
 				label="$m{system.moduleapp.configfile}" type="string"
-				inputWidget="application.text" maxLen="128" />
+				inputWidget="application.text" maxLen="128" auditable="true"/>
 			<field name="autoInstall"
 				label="$m{system.moduleapp.autoinstall}" type="boolean"
-				inputWidget="application.checkbox" />
+				inputWidget="application.checkbox" auditable="true"/>
 			<field name="moduleName"
 				label="$m{system.moduleapp.modulename}" type="list_only"
 				key="moduleId" property="name" />
@@ -392,16 +392,16 @@
 				inputWidget="application.enumlist" basicSearch="true" />
 			<field name="code" label="$m{system.systemparameter.code}"
 				type="string" inputWidget="application.name" maxLen="32"
-				basicSearch="true" />
+				basicSearch="true" auditable="true"/>
 			<field name="description"
 				label="$m{system.systemparameter.description}" type="string"
-				inputWidget="application.text" maxLen="196" basicSearch="true" />
+				inputWidget="application.text" maxLen="196" basicSearch="true" auditable="true"/>
 			<field name="value" label="$m{system.systemparameter.value}"
 				type="string" inputWidget="sysparamvalue" maxLen="256"
-				nullable="true" />
+				nullable="true" auditable="true"/>
 			<field name="defaultValue"
 				label="$m{system.systemparameter.defaultvalue}" type="string"
-				maxLen="256" nullable="true" />
+				maxLen="256" nullable="true" auditable="true"/>
 			<field name="editor" label="$m{system.systemparameter.editor}"
 				type="string" maxLen="256" />
 			<field name="control"
@@ -438,35 +438,35 @@
 			auditable="true" reportable="true">
 			<field name="description"
 				label="$m{system.scheduledtask.description}" type="string"
-				inputWidget="application.text" maxLen="64" basicSearch="true" />
+				inputWidget="application.text" maxLen="64" basicSearch="true" auditable="true"/>
 			<field name="taskName"
 				label="$m{system.scheduledtask.taskname}" type="string"
-				inputWidget="schedulabletasklist" maxLen="64" basicSearch="true" />
+				inputWidget="schedulabletasklist" maxLen="64" basicSearch="true" auditable="true"/>
 			<field name="startTime"
 				label="$m{system.scheduledtask.starttime}" type="timestamp_utc"
-				inputWidget="application.time" />
+				inputWidget="application.time" auditable="true"/>
 			<field name="endTime" label="$m{system.scheduledtask.endtime}"
 				type="timestamp_utc" inputWidget="application.timeclearable"
-				nullable="true" />
+				nullable="true" auditable="true"/>
 			<field name="nextExecutionOn"
 				label="$m{system.scheduledtask.nextexecutionon}"
-				type="timestamp_utc" inputWidget="application.datetime" />
+				type="timestamp_utc" inputWidget="application.datetime" auditable="true"/>
 			<field name="lastExecutionOn"
 				label="$m{system.scheduledtask.lastexecutionon}"
 				type="timestamp_utc" inputWidget="application.datetime"
-				nullable="true" />
+				nullable="true" auditable="true"/>
 			<field name="frequency"
 				label="$m{system.scheduledtask.frequency}" type="string"
-				inputWidget="application.period" maxLen="32" nullable="true" />
+				inputWidget="application.period" maxLen="32" nullable="true" auditable="true"/>
 			<field name="weekdays"
 				label="$m{system.scheduledtask.weekdays}" type="string"
-				inputWidget="weekdayschecklist" maxLen="256" nullable="true" />
+				inputWidget="weekdayschecklist" maxLen="256" nullable="true" auditable="true"/>
 			<field name="days" label="$m{system.scheduledtask.days}"
 				type="string" inputWidget="dayschecklist" maxLen="256"
-				nullable="true" />
+				nullable="true" auditable="true"/>
 			<field name="months" label="$m{system.scheduledtask.months}"
 				type="string" inputWidget="monthschecklist" maxLen="256"
-				nullable="true" />
+				nullable="true" auditable="true"/>
 			<uniqueConstraint name="descUc"
 				description="$m{system.scheduledtask.uc.description}"
 				fieldList="description" />
@@ -513,14 +513,14 @@
 			auditable="true" reportable="true">
 			<field name="name" label="$m{system.credential.name}"
 				type="string" inputWidget="application.name" maxLen="64"
-				basicSearch="true" />
+				basicSearch="true" auditable="true"/>
 			<field name="description"
 				label="$m{system.credential.description}" type="string"
-				inputWidget="application.text" maxLen="128" basicSearch="true" />
+				inputWidget="application.text" maxLen="128" basicSearch="true" auditable="true"/>
 			<field name="userName" label="$m{system.credential.username}"
-				type="string" maxLen="64" />
+				type="string" maxLen="64" auditable="true"/>
 			<field name="password" label="$m{system.credential.password}"
-				type="string" maxLen="512" />
+				type="string" maxLen="512" auditable="true"/>
 			<uniqueConstraint name="nameUc"
 				description="$m{system.credential.uc.name}" fieldList="name" />
 			<uniqueConstraint name="descUc"
@@ -548,13 +548,13 @@
 			auditable="true" reportable="true">
 			<field name="name" label="$m{system.environmentvariable.name}"
 				type="string" inputWidget="application.name" maxLen="64"
-				basicSearch="true" />
+				basicSearch="true" auditable="true"/>
 			<field name="description"
 				label="$m{system.environmentvariable.description}" type="string"
-				inputWidget="application.text" maxLen="128" basicSearch="true" />
+				inputWidget="application.text" maxLen="128" basicSearch="true" auditable="true"/>
 			<field name="variable"
 				label="$m{system.environmentvariable.variable}" type="string"
-				maxLen="1024" />
+				maxLen="1024" auditable="true"/>
 			<uniqueConstraint name="nameUc"
 				description="$m{system.environmentvariable.uc.name}"
 				fieldList="name" />
@@ -568,11 +568,11 @@
 			delegate="mappedentity-environmentdelegate" table="FC_MAPPEDTENANT"
 			mapped="true" auditable="true" reportable="true">
 			<field name="name" label="$m{system.tenant.name}" type="string"
-				inputWidget="application.text" maxLen="64" />
+				inputWidget="application.text" maxLen="64" auditable="true"/>
 			<field name="dateFormat" label="$m{system.tenant.dateformat}" type="string"
-				inputWidget="application.text" maxLen="32" />
+				inputWidget="application.text" maxLen="32" auditable="true"/>
 			<field name="primary" label="$m{system.tenant.primary}"
-				type="boolean" inputWidget="application.booleanlist" />
+				type="boolean" inputWidget="application.booleanlist" auditable="true"/>
 			<uniqueConstraint name="nameUc"
 				description="$m{system.tenant.uc.name}" fieldList="name" />
 		</entity>

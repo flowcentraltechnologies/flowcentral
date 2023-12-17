@@ -21,8 +21,9 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.zip.ZipOutputStream;
 
-import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
+import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.util.ApplicationCodeGenUtils;
+import com.flowcentraltech.flowcentral.codegeneration.constants.CodeGenerationModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.codegeneration.util.CodeGenerationUtils;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
@@ -40,21 +41,24 @@ import com.tcdng.unify.core.util.TypeInfo;
 public class ExtensionModuleEntityWrappersJavaGenerator extends AbstractStaticArtifactGenerator {
 
     @Configurable
-    private ApplicationModuleService applicationModuleService;
+    private AppletUtilities au;
 
     public ExtensionModuleEntityWrappersJavaGenerator() {
         super("src/main/java/{0}/utilities/{1}/entitywrappers/");
     }
 
-    public final void setApplicationModuleService(ApplicationModuleService applicationModuleService) {
-        this.applicationModuleService = applicationModuleService;
+    public final void setAu(AppletUtilities au) {
+        this.au = au;
     }
 
     @Override
     protected void doGenerate(ExtensionModuleStaticFileBuilderContext ctx, String moduleName, ZipOutputStream zos)
             throws UnifyException {
-        for (DynamicEntityInfo dynamicEntityInfo : applicationModuleService
-                .generateDynamicEntityInfos(ctx.getEntityList(), ctx.getBasePackage(), false)) {
+        final boolean skipPasswordFields = au.system().getSysParameterValue(boolean.class,
+                CodeGenerationModuleSysParamConstants.CODEGEN_SKIP_PASSWORD_FIELDS);
+        for (DynamicEntityInfo dynamicEntityInfo : au.application().generateDynamicEntityInfos(ctx.getEntityList(),
+                ctx.getBasePackage(), false)) {
+            dynamicEntityInfo.setSkipPasswordFields(skipPasswordFields);
             TypeInfo typeInfo = new TypeInfo(dynamicEntityInfo.getClassName());
             final String filename = typeInfo.getSimpleName() + "Wrapper.java";
             openEntry(filename, zos);

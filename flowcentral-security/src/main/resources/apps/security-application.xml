@@ -237,13 +237,13 @@
 			reportable="true" auditable="true">
 			<field name="name" label="$m{security.usergroup.name}"
 				type="string" inputWidget="application.name" maxLen="64"
-				basicSearch="true" />
+				basicSearch="true" auditable="true"/>
 			<field name="description"
 				label="$m{security.usergroup.description}" type="string"
-				inputWidget="application.text" maxLen="96" basicSearch="true" />
+				inputWidget="application.text" maxLen="96" basicSearch="true" auditable="true"/>
 			<field name="email" label="$m{security.usergroup.email}"
 				type="string" inputWidget="application.text" maxLen="64"
-				nullable="true" />
+				nullable="true" auditable="true"/>
 			<field name="userGroupRoleList"
 				label="$m{security.usergroup.usergrouprolelist}" type="child_list"
 				references="userGroupRoleRef" />
@@ -259,7 +259,7 @@
 		<entity name="userGroupRole"
 			description="$m{security.usergrouprole}"
 			label="$m{security.usergrouprole.label}"
-			type="com.flowcentraltech.flowcentral.security.entities.UserGroupRole">
+			type="com.flowcentraltech.flowcentral.security.entities.UserGroupRole" auditable="true">
 			<field name="userGroupId"
 				label="$m{security.usergrouprole.usergroupid}" type="ref"
 				references="userGroupRef"
@@ -283,7 +283,7 @@
 				key="roleId" property="code" />
 			<field name="roleDesc"
 				label="$m{security.usergrouprole.roledesc}" type="list_only"
-				key="roleId" property="description" />
+				key="roleId" property="description" auditable="true"/>
 			<field name="activeBefore"
 				label="$m{security.usergrouprole.roleactivebefore}" type="list_only"
 				key="roleId" property="activeBefore" />
@@ -300,7 +300,7 @@
 		<entity name="userGroupMember"
 			description="$m{security.usergroupmember}"
 			label="$m{security.usergroupmember.label}"
-			type="com.flowcentraltech.flowcentral.security.entities.UserGroupMember">
+			type="com.flowcentraltech.flowcentral.security.entities.UserGroupMember" auditable="true">
 			<field name="userGroupId"
 				label="$m{security.usergroupmember.usergroupid}" type="ref"
 				references="userGroupRef"
@@ -321,7 +321,7 @@
 				key="userGroupId" property="email" />
 			<field name="userFullName"
 				label="$m{security.usergroupmember.username}" type="list_only"
-				key="userId" property="fullName" />
+				key="userId" property="fullName" auditable="true"/>
 			<field name="userEmail"
 				label="$m{security.usergroupmember.useremail}" type="list_only"
 				key="userId" property="email" />
@@ -346,21 +346,21 @@
 				property="description" />
 			<field name="branchId" label="$m{security.user.branch}"
 				type="mapped" inputWidget="organization.branchlist"
-				mapped="organization.mappedBranch" basicSearch="true" />
+				mapped="organization.mappedBranch" basicSearch="true" auditable="true"/>
 			<field name="fullName" label="$m{security.user.fullname}"
 				type="string" inputWidget="application.fullname" maxLen="96"
-				basicSearch="true" />
+				basicSearch="true" auditable="true"/>
 			<field name="loginId" label="$m{security.user.loginid}"
 				type="string" inputWidget="application.name" maxLen="64"
-				case="upper" />
+				case="upper" auditable="true"/>
 			<field name="password" label="$m{security.user.password}"
 				type="string" inputWidget="application.password" auditable="false"
 				reportable="false" maxLen="512" nullable="true" />
 			<field name="email" label="$m{security.user.email}"
-				type="string" inputWidget="application.text" maxLen="64" />
+				type="string" inputWidget="application.text" maxLen="64" auditable="true"/>
 			<field name="mobileNo" label="$m{security.user.mobileno}"
 				type="string" inputWidget="application.text" maxLen="64"
-				nullable="true" />
+				nullable="true" auditable="true"/>
 			<field name="loginAttempts"
 				label="$m{security.user.loginattempts}" type="integer"
 				inputWidget="application.integer" />
@@ -374,15 +374,15 @@
 				inputWidget="application.checkbox" />
 			<field name="allowMultipleLogin"
 				label="$m{security.user.allowmultiplelogin}" type="boolean"
-				inputWidget="application.checkbox" />
+				inputWidget="application.checkbox" auditable="true"/>
 			<field name="localPasswordOnly"
 				label="$m{security.user.localpasswordonly}" type="boolean"
-				inputWidget="application.checkbox" />
+				inputWidget="application.checkbox" auditable="true"/>
 			<field name="allowLoginWithoutOtp"
 				label="$m{security.user.allowloginwithoutotp}" type="boolean"
-				inputWidget="application.checkbox" />
+				inputWidget="application.checkbox" auditable="true"/>
 			<field name="supervisor" label="$m{security.user.supervisor}"
-				type="boolean" inputWidget="application.checkbox" />
+				type="boolean" inputWidget="application.checkbox" auditable="true"/>
 			<field name="passwordExpiryDt"
 				label="$m{security.user.passwordexpirydt}" type="date"
 				inputWidget="application.date" />
@@ -402,7 +402,7 @@
 		</entity>
 		<entity name="userRole" description="$m{security.userrole}"
 			label="$m{security.userrole.label}"
-			type="com.flowcentraltech.flowcentral.security.entities.UserRole">
+			type="com.flowcentraltech.flowcentral.security.entities.UserRole" auditable="true">
 			<field name="userId" label="$m{security.userrole.userid}"
 				type="ref" references="userRef"
 				inputLabel="$m{security.userrole.user}"
@@ -410,7 +410,7 @@
 			<field name="roleId" label="$m{security.userrole.roleid}"
 				type="ref" references="organization.roleRef"
 				inputLabel="$m{security.userrole.role}"
-				inputWidget="application.entitysearch" />
+				inputWidget="application.entitysearch"/>
 			<field name="userName" label="$m{security.userrole.username}"
 				type="list_only" key="userId" property="fullName" />
 			<field name="userEmail" label="$m{security.userrole.useremail}"
@@ -426,7 +426,7 @@
 			<field name="roleCode" label="$m{security.userrole.rolecode}"
 				type="list_only" key="roleId" property="code" />
 			<field name="roleDesc" label="$m{security.userrole.roledesc}"
-				type="list_only" key="roleId" property="description" />
+				type="list_only" key="roleId" property="description" auditable="true"/>
 			<field name="departmentId"
 				label="$m{security.userrole.departmentid}" type="list_only"
 				key="roleId" property="departmentId" />

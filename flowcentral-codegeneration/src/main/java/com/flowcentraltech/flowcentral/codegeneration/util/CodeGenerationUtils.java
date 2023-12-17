@@ -98,6 +98,8 @@ public final class CodeGenerationUtils {
         return basePackage + ".utilities." + moduleName.toLowerCase() + ".constants";
     }
 
+    private static final String PASSWORD = "password";
+    
     public static String generateEntityWrapperJavaClassSource(String packageName, DynamicEntityInfo dynamicEntityInfo)
             throws UnifyException {
         StringBuilder esb = new StringBuilder();
@@ -120,6 +122,10 @@ public final class CodeGenerationUtils {
         Set<String> fieldNames = new HashSet<String>();
         for (DynamicFieldInfo dynamicFieldInfo : dynamicEntityInfo.getFieldInfos()) {
             final String fieldName = dynamicFieldInfo.getFieldName();
+            if (dynamicEntityInfo.isSkipPasswordFields() && fieldName.toLowerCase().contains(PASSWORD)) {
+                continue;
+            }
+            
             final String capField = StringUtils.capitalizeFirstLetter(fieldName);
             fieldNames.add(fieldName);
 

@@ -33,6 +33,8 @@ import com.flowcentraltech.flowcentral.application.data.RefDef;
 import com.flowcentraltech.flowcentral.application.web.data.AppletContext;
 import com.flowcentraltech.flowcentral.common.business.policies.ChildListEditPolicy;
 import com.flowcentraltech.flowcentral.common.business.policies.SweepingCommitPolicy;
+import com.flowcentraltech.flowcentral.common.data.EntityAssignmentAudit;
+import com.flowcentraltech.flowcentral.common.data.EntityAuditInfo;
 import com.flowcentraltech.flowcentral.common.data.RowChangeInfo;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.criterion.Restriction;
@@ -84,19 +86,24 @@ public class AssignmentPage {
     private String displayItemCounterClass;
 
     private List<Long> assignedIdList;
-    
+
     private Set<Integer> selectedOnLoad;
 
     private BeanListTable entryBeanTable;
 
+    private EntityAssignmentAudit entityAssignmentAudit;
+
     private boolean disabled;
-    
+
+    private boolean auditingEnabled;
+
     public AssignmentPage(AppletContext ctx, List<EventHandler> assnSwitchOnChangeHandlers,
             SweepingCommitPolicy sweepingCommitPolicy, AssignmentPageDef assignmentPageDef,
             EntityClassDef entityClassDef, Object baseId, SectorIcon sectorIcon, BreadCrumbs breadCrumbs,
             String entryTable, String assnEditPolicy, String pseudoDeleteField, FilterGroupDef filterGroupDef,
             boolean fixedAssignment) {
         this.ctx = ctx;
+        this.auditingEnabled = ctx.isAuditingEnabled();
         this.assnSwitchOnChangeHandlers = assnSwitchOnChangeHandlers;
         this.sweepingCommitPolicy = sweepingCommitPolicy;
         this.assignmentPageDef = assignmentPageDef;
@@ -216,6 +223,34 @@ public class AssignmentPage {
         this.disabled = disabled;
     }
 
+    public boolean isAuditingEnabled() {
+        return auditingEnabled;
+    }
+
+    public void setAuditingEnabled(boolean auditingEnabled) {
+        this.auditingEnabled = auditingEnabled;
+    }
+
+    @SuppressWarnings("unchecked")
+    public EntityAssignmentAudit getEntityAssignmentAudit() throws UnifyException {
+        if (isSupportAudit()) {
+            if (entityAssignmentAudit == null) {
+                EntityAuditInfo entityAuditInfo = ctx.au().getEntityAuditInfo(entityClassDef.getLongName());
+                entityAssignmentAudit = new EntityAssignmentAudit(ctx.environment(), entityAuditInfo,
+                        (Class<? extends Entity>) entityClassDef.getEntityClass(), assignmentPageDef.getBaseField(),
+                        baseId);
+            } else {
+                entityAssignmentAudit.setBaseId(baseId);
+            }
+        }
+
+        return entityAssignmentAudit;
+    }
+
+    public boolean isSupportAudit() {
+        return auditingEnabled && entityClassDef.getEntityDef().isAuditable();
+    }
+
     @SuppressWarnings("unchecked")
     public void loadAssignedList() throws UnifyException {
         if (isEntryTableMode()) {
@@ -315,9 +350,9 @@ public class AssignmentPage {
                             resultValueStore.setDataIndex(i);
                             resultValueStore.store(pseudoDeleteField, deleted);
                             tempResultList.add(resultList.get(i));
-                        }                        
+                        }
                     }
-                    
+
                     resultList = tempResultList;
                 } else {
                     resultList = (List<? extends Entity>) getEntryBeanTable().getSelectedItems();

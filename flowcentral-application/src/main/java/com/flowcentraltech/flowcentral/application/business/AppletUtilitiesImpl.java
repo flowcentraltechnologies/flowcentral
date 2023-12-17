@@ -48,9 +48,9 @@ import com.flowcentraltech.flowcentral.application.data.FormStatePolicyDef;
 import com.flowcentraltech.flowcentral.application.data.FormTabDef;
 import com.flowcentraltech.flowcentral.application.data.PropertyListItem;
 import com.flowcentraltech.flowcentral.application.data.PropertyRuleDef;
+import com.flowcentraltech.flowcentral.application.data.PropertySequenceDef;
 import com.flowcentraltech.flowcentral.application.data.RefDef;
 import com.flowcentraltech.flowcentral.application.data.SearchInputsDef;
-import com.flowcentraltech.flowcentral.application.data.PropertySequenceDef;
 import com.flowcentraltech.flowcentral.application.data.SetValuesDef;
 import com.flowcentraltech.flowcentral.application.data.TabSheetDef;
 import com.flowcentraltech.flowcentral.application.data.TableDef;
@@ -105,6 +105,7 @@ import com.flowcentraltech.flowcentral.application.web.widgets.TabSheet.TabSheet
 import com.flowcentraltech.flowcentral.common.AbstractFlowCentralComponent;
 import com.flowcentraltech.flowcentral.common.annotation.BeanBinding;
 import com.flowcentraltech.flowcentral.common.business.ApplicationPrivilegeManager;
+import com.flowcentraltech.flowcentral.common.business.AuditLogger;
 import com.flowcentraltech.flowcentral.common.business.CollaborationProvider;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentDelegateRegistrar;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentDelegateUtilities;
@@ -123,6 +124,7 @@ import com.flowcentraltech.flowcentral.common.constants.CollaborationType;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralApplicationAttributeConstants;
 import com.flowcentraltech.flowcentral.common.constants.OwnershipType;
 import com.flowcentraltech.flowcentral.common.constants.WfItemVersionType;
+import com.flowcentraltech.flowcentral.common.data.EntityAuditInfo;
 import com.flowcentraltech.flowcentral.common.data.FormListingOptions;
 import com.flowcentraltech.flowcentral.common.data.ParamValuesDef;
 import com.flowcentraltech.flowcentral.common.entities.BaseVersionEntity;
@@ -139,6 +141,7 @@ import com.tcdng.unify.core.UnifyComponent;
 import com.tcdng.unify.core.UnifyComponentConfig;
 import com.tcdng.unify.core.UnifyCoreErrorConstants;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.UserToken;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.Preferred;
@@ -198,6 +201,9 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
 
     @Configurable
     private EnvironmentService environmentService;
+
+    @Configurable
+    private AuditLogger auditLogger;
 
     @Configurable
     private ApplicationModuleService applicationModuleService;
@@ -281,6 +287,10 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
 
     public final void setEnvironmentService(EnvironmentService environmentService) {
         this.environmentService = environmentService;
+    }
+
+    public final void setAuditLogger(AuditLogger auditLogger) {
+        this.auditLogger = auditLogger;
     }
 
     public final void setApplicationModuleService(ApplicationModuleService applicationModuleService) {
@@ -434,6 +444,16 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
     }
 
     @Override
+    public EntityAuditInfo getEntityAuditInfo(String entityName) throws UnifyException {
+        EntityDef entityDef = applicationModuleService.getEntityDef(entityName);
+        if (entityDef.isAuditable()) {
+            return new EntityAuditInfo(entityName, entityDef.getAuditFieldNames());
+        }
+
+        return new EntityAuditInfo(entityName);
+    }
+
+    @Override
     public List<String> getApplicationEntitiesLongNames(Query<? extends BaseApplicationEntity> query)
             throws UnifyException {
         if (!query.isEmptyCriteria() || query.isIgnoreEmptyCriteria()) {
@@ -553,6 +573,11 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
     }
 
     @Override
+    public UserToken getSessionUserToken() throws UnifyException {
+        return getSessionContext().getUserToken();
+    }
+
+    @Override
     public String getSessionUserLoginId() throws UnifyException {
         return getSessionContext().getUserToken().getUserLoginId();
     }
@@ -599,6 +624,11 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
     @Override
     public Listable getListItemByKey(String listName, String itemKey) throws UnifyException {
         return getListItemByKey(LocaleType.SESSION, listName, itemKey);
+    }
+
+    @Override
+    public AuditLogger audit() {
+        return auditLogger;
     }
 
     @Override
@@ -1057,8 +1087,8 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
                         logDebug("Constructing child list tab [{0}] using applet [{1}]...", formTabDef.getName(),
                                 formTabDef.getApplet());
                         AppletDef _appletDef = getAppletDef(formTabDef.getApplet());
-                        final boolean newButtonVisible = applet == null || !hideAddActionButton(form, applet.getFormAppletDef(),
-                                formTabDef.getApplet());
+                        final boolean newButtonVisible = applet == null
+                                || !hideAddActionButton(form, applet.getFormAppletDef(), formTabDef.getApplet());
                         final String editAction = formTabDef.getEditAction() == null ? "/assignToChildItem"
                                 : formTabDef.getEditAction();
                         int mode = formTabDef.isShowSearch() ? EntitySearch.ENABLE_ALL
@@ -1174,8 +1204,8 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
                     }
                         break;
                     case PROPERTY_SEQUENCE: {
-                        logDebug("Constructing property sequence tab [{0}] using reference [{1}]...", formTabDef.getName(),
-                                formTabDef.getReference());
+                        logDebug("Constructing property sequence tab [{0}] using reference [{1}]...",
+                                formTabDef.getName(), formTabDef.getReference());
                         EntityChildCategoryType categoryType = EntityChildCategoryType
                                 .fromName(formTabDef.getReference());
                         EntityDef _entityDef = getEntityDef(appletContext.getReference(categoryType));
@@ -1516,7 +1546,8 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
                         EntityChildCategoryType categoryType = EntityChildCategoryType
                                 .fromName(formTabDef.getReference());
                         EntityDef _entityDef = getEntityDef(formContext.getAppletContext().getReference(categoryType));
-                        EntityPropertySequence _entityPropertySequence = (EntityPropertySequence) tabSheetItem.getValObject();
+                        EntityPropertySequence _entityPropertySequence = (EntityPropertySequence) tabSheetItem
+                                .getValObject();
                         _entityPropertySequence.setCategory(categoryType.category());
                         _entityPropertySequence.setOwnerInstId((Long) inst.getId());
                         _entityPropertySequence.load(_entityDef);
@@ -1860,13 +1891,13 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
     }
 
     @Override
-    public EntityPropertySequence constructEntityPropertySequence(FormContext ctx, SweepingCommitPolicy sweepingCommitPolicy,
-            String tabName, EntityDef ownerEntityDef, int entityPropertySequenceMode, boolean isIgnoreParentCondition)
-            throws UnifyException {
+    public EntityPropertySequence constructEntityPropertySequence(FormContext ctx,
+            SweepingCommitPolicy sweepingCommitPolicy, String tabName, EntityDef ownerEntityDef,
+            int entityPropertySequenceMode, boolean isIgnoreParentCondition) throws UnifyException {
         logDebug("Constructing entity property sequence for [{0}] using entity definition [{1}]...", tabName,
                 ownerEntityDef.getLongName());
-        return new EntityPropertySequence(ctx, sweepingCommitPolicy, tabName, ownerEntityDef, entityPropertySequenceMode,
-                isIgnoreParentCondition);
+        return new EntityPropertySequence(ctx, sweepingCommitPolicy, tabName, ownerEntityDef,
+                entityPropertySequenceMode, isIgnoreParentCondition);
     }
 
     @Override
@@ -2281,7 +2312,7 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
 
         return updateLean(formContext, eCtx);
     }
-    
+
     @Override
     public EntityActionResult deleteEntityInstByFormContext(AppletDef formAppletDef, FormContext formContext,
             SweepingCommitPolicy scp) throws UnifyException {
@@ -2589,14 +2620,14 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
         } catch (UnifyException e) {
             // Revert to skeleton values
             revertAutoFormatFields(eCtx.getEntityDef(EntityDef.class), eCtx.getInst());
-            
+
             if (!eCtx.isWithFormMessages()) {
                 throw e;
             }
         }
 
         formContext.addValidationErrors(eCtx.getFormMessages());
-        return entityActionResult == null ?  new EntityActionResult(eCtx) : entityActionResult;
+        return entityActionResult == null ? new EntityActionResult(eCtx) : entityActionResult;
     }
 
     private EntityActionResult updateLean(FormContext formContext, EntityActionContext eCtx) throws UnifyException {
@@ -2610,7 +2641,7 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
         }
 
         formContext.addValidationErrors(eCtx.getFormMessages());
-        return entityActionResult == null ?  new EntityActionResult(eCtx) : entityActionResult;
+        return entityActionResult == null ? new EntityActionResult(eCtx) : entityActionResult;
     }
 
     private EntityActionResult delete(FormContext formContext, EntityActionContext eCtx) throws UnifyException {
@@ -2624,7 +2655,7 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
         }
 
         formContext.addValidationErrors(eCtx.getFormMessages());
-        return entityActionResult == null ?  new EntityActionResult(eCtx) : entityActionResult;
+        return entityActionResult == null ? new EntityActionResult(eCtx) : entityActionResult;
     }
 
     private SingleFormBean createSingleFormBeanForPanel(String panelName) throws UnifyException {
