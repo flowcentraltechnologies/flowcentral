@@ -38,7 +38,7 @@ import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.util.InputWidgetUtils;
 import com.flowcentraltech.flowcentral.application.util.PrivilegeNameUtils;
 import com.flowcentraltech.flowcentral.common.constants.ConfigType;
-import com.flowcentraltech.flowcentral.common.constants.FormatterOptions;
+import com.flowcentraltech.flowcentral.common.data.FormatterOptions;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldType;
 import com.flowcentraltech.flowcentral.report.business.ReportModuleService;
 import com.flowcentraltech.flowcentral.report.entities.ReportableDefinition;

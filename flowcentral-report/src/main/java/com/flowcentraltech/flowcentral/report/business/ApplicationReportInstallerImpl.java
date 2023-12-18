@@ -31,7 +31,7 @@ import com.flowcentraltech.flowcentral.application.util.InputWidgetUtils;
 import com.flowcentraltech.flowcentral.application.util.PrivilegeNameUtils;
 import com.flowcentraltech.flowcentral.common.annotation.Format;
 import com.flowcentraltech.flowcentral.common.constants.ConfigType;
-import com.flowcentraltech.flowcentral.common.constants.FormatterOptions;
+import com.flowcentraltech.flowcentral.common.data.FormatterOptions;
 import com.flowcentraltech.flowcentral.common.entities.BaseEntity;
 import com.flowcentraltech.flowcentral.common.util.ConfigUtils;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldDataType;

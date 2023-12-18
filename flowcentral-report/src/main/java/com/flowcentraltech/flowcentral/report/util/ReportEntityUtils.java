@@ -22,7 +22,7 @@ import java.util.List;
 import com.flowcentraltech.flowcentral.application.entities.AppEntityField;
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityUtils;
 import com.flowcentraltech.flowcentral.common.constants.ConfigType;
-import com.flowcentraltech.flowcentral.common.constants.FormatterOptions;
+import com.flowcentraltech.flowcentral.common.data.FormatterOptions;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityBaseType;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldDataType;
 import com.flowcentraltech.flowcentral.report.entities.ReportableField;
@@ -31,6 +31,7 @@ import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.constant.HAlignType;
 import com.tcdng.unify.core.message.MessageResolver;
 import com.tcdng.unify.core.util.NameUtils;
+import com.tcdng.unify.core.util.StringUtils;
 
 /**
  * Report entity utilities.
@@ -87,7 +88,9 @@ public final class ReportEntityUtils {
                 reportableField.setHorizontalAlign(HAlignType.RIGHT.name());
             }
 
-            reportableField.setFormatter(formatOptions.getFormatter(entityFieldDataType));
+            if (StringUtils.isBlank(reportableField.getFormatter())) {
+                reportableField.setFormatter(ReportEntityUtils.resolveFormatter(entityFieldDataType, formatOptions));
+            }
         }
 
         reportableField.setWidth(-1);
@@ -97,4 +100,17 @@ public final class ReportEntityUtils {
         reportableField.setType(ConverterUtils.getWrapperClassName(dataClazz));
     }
 
+    public static String resolveFormatter(EntityFieldDataType entityFieldDataType, FormatterOptions formatOptions) {
+        if (entityFieldDataType.isDecimal()) {
+            return formatOptions.getDecimalFormatter();
+        } else if (entityFieldDataType.isInteger()) {
+            return formatOptions.getIntegerFormatter();
+        } else if (entityFieldDataType.isDate()) {
+            return formatOptions.getDateFormatter();
+        } else if (entityFieldDataType.isTimestamp()) {
+            return formatOptions.getTimestampFormatter();
+        }
+        
+        return null;
+    }
 }

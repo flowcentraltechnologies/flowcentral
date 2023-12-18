@@ -13,9 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.common.constants;
-
-import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldDataType;
+package com.flowcentraltech.flowcentral.common.data;
 
 /**
  * Formatter options.
@@ -25,17 +23,17 @@ import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldDataTy
  */
 public class FormatterOptions {
 
-    public static final FormatterOptions DEFAULT = new FormatterOptions("!integerformat useGrouping:true",
+    public static final FormatterOptions DEFAULT = new FormatterOptions("!integerformat precision:20 useGrouping:true",
             "!decimalformat precision:20 scale:2 useGrouping:true", "!fixeddatetimeformat pattern:$s{yyyy-MM-dd}",
             "!fixeddatetimeformat pattern:$s{yyyy-MM-dd HH:mm:ss}");
 
-    private final String integerFormatter;
+    private String integerFormatter;
 
-    private final String decimalFormatter;
+    private String decimalFormatter;
 
-    private final String dateFormatter;
+    private String dateFormatter;
 
-    private final String timestampFormatter;
+    private String timestampFormatter;
 
     public FormatterOptions(String integerFormatter, String decimalFormatter, String dateFormatter,
             String timestampFormatter) {
@@ -61,17 +59,4 @@ public class FormatterOptions {
         return timestampFormatter;
     }
 
-    public String getFormatter(EntityFieldDataType dataType) {
-        if (dataType.isDecimal()) {
-            return decimalFormatter;
-        } else if (dataType.isInteger()) {
-            return integerFormatter;
-        } else if (dataType.isTimestamp()) {
-            return timestampFormatter;
-        } else if (dataType.isDate()) {
-            return dateFormatter;
-        }
-
-        return null;
-    }
 }

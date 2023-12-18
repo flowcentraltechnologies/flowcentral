@@ -27,6 +27,7 @@ import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationPrivilegeConstants;
 import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
+import com.flowcentraltech.flowcentral.application.data.EntityFieldDef;
 import com.flowcentraltech.flowcentral.application.data.FilterDef;
 import com.flowcentraltech.flowcentral.application.data.FilterRestrictionDef;
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityNameParts;
@@ -36,12 +37,14 @@ import com.flowcentraltech.flowcentral.application.util.PrivilegeNameUtils;
 import com.flowcentraltech.flowcentral.application.util.ResolvedCondition;
 import com.flowcentraltech.flowcentral.common.business.AbstractFlowCentralService;
 import com.flowcentraltech.flowcentral.common.data.DefaultReportColumn;
+import com.flowcentraltech.flowcentral.common.data.FormatterOptions;
 import com.flowcentraltech.flowcentral.common.data.ReportColumnOptions;
 import com.flowcentraltech.flowcentral.common.data.ReportFilterOptions;
 import com.flowcentraltech.flowcentral.common.data.ReportJoinOptions;
 import com.flowcentraltech.flowcentral.common.data.ReportListing;
 import com.flowcentraltech.flowcentral.common.data.ReportOptions;
 import com.flowcentraltech.flowcentral.common.data.ReportPlacementOptions;
+import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldDataType;
 import com.flowcentraltech.flowcentral.configuration.constants.ReportConfigType;
 import com.flowcentraltech.flowcentral.configuration.data.ModuleInstall;
 import com.flowcentraltech.flowcentral.report.constants.ReportModuleNameConstants;
@@ -59,6 +62,7 @@ import com.flowcentraltech.flowcentral.report.entities.ReportableDefinition;
 import com.flowcentraltech.flowcentral.report.entities.ReportableDefinitionQuery;
 import com.flowcentraltech.flowcentral.report.entities.ReportableField;
 import com.flowcentraltech.flowcentral.report.entities.ReportableFieldQuery;
+import com.flowcentraltech.flowcentral.report.util.ReportEntityUtils;
 import com.flowcentraltech.flowcentral.system.constants.SystemModuleSysParamConstants;
 import com.tcdng.unify.convert.util.ConverterUtils;
 import com.tcdng.unify.core.ThemeManager;
@@ -299,8 +303,9 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
                 ReportableField reportableField = fieldMap.remove(defaultColumn.getFieldName());
                 if (reportableField != null) {
                     if (entityDef.isNotDelegateListOnly(reportableField.getName())) {
+                        final String formatter = resolveFormatter(entityClassDef, reportableField);
                         ReportColumnOptions remoteColumnOptions = new ReportColumnOptions(reportableField.getName(),
-                                defaultColumn.getCaption(), reportableField.getType(), reportableField.getFormatter(),
+                                defaultColumn.getCaption(), reportableField.getType(), formatter,
                                 HAlignType.fromName(reportableField.getHorizontalAlign()), reportableField.getWidth(),
                                 true);
                         reportOptions.addColumnOptions(remoteColumnOptions);
@@ -312,8 +317,9 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
         // Add what's left
         for (ReportableField reportableField : fieldMap.values()) {
             if (entityDef.isNotDelegateListOnly(reportableField.getName())) {
+                final String formatter = resolveFormatter(entityClassDef, reportableField);
                 ReportColumnOptions remoteColumnOptions = new ReportColumnOptions(reportableField.getName(),
-                        reportableField.getDescription(), reportableField.getType(), reportableField.getFormatter(),
+                        reportableField.getDescription(), reportableField.getType(), formatter,
                         HAlignType.fromName(reportableField.getHorizontalAlign()), reportableField.getWidth(),
                         isSelectAll);
                 reportOptions.addColumnOptions(remoteColumnOptions);
@@ -321,6 +327,19 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
         }
 
         return reportOptions;
+    }
+
+
+    private String resolveFormatter(EntityClassDef entityClassDef, ReportableField reportableField) {
+        String formatter = reportableField.getFormatter();
+        if (StringUtils.isBlank(formatter)) {
+            EntityFieldDef entityFieldDef = entityClassDef.getEntityDef().getFieldDef(reportableField.getName());
+            EntityFieldDataType entityFieldDataType = entityFieldDef.isListOnly() ? entityFieldDef.getResolvedDataType()
+                    : entityFieldDef.getDataType();
+            formatter = ReportEntityUtils.resolveFormatter(entityFieldDataType, FormatterOptions.DEFAULT);
+        }
+
+        return formatter;
     }
 
     @Override
@@ -661,8 +680,7 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
         }
 
         // Column options
-        if (reportOptions.isTabular() && !reportOptions.isWithColumnOptions()) { // Populate column options only on
-                                                                                 // first run
+        if (reportOptions.isTabular() && !reportOptions.isWithColumnOptions()) {
             for (com.flowcentraltech.flowcentral.report.entities.ReportColumn reportColumn : reportConfiguration
                     .getColumnList()) {
                 ReportColumnOptions reportColumnOptions = new ReportColumnOptions();
@@ -692,7 +710,7 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
                                 type = reportableField.getType();
                             }
 
-                            if (formatter == null) {
+                            if (StringUtils.isBlank(formatter)) {
                                 formatter = reportableField.getFormatter();
                             }
 
