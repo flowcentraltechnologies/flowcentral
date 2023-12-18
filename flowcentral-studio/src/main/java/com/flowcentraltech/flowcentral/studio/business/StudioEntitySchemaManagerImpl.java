@@ -44,6 +44,7 @@ import com.flowcentraltech.flowcentral.report.entities.ReportableDefinition;
 import com.flowcentraltech.flowcentral.report.entities.ReportableDefinitionQuery;
 import com.flowcentraltech.flowcentral.report.entities.ReportableField;
 import com.flowcentraltech.flowcentral.report.util.ReportEntityUtils;
+import com.flowcentraltech.flowcentral.report.util.ReportEntityUtils.ReportFormatOptions;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.UserToken;
 import com.tcdng.unify.core.annotation.Component;
@@ -223,10 +224,10 @@ public class StudioEntitySchemaManagerImpl extends AbstractEntitySchemaManager {
                 reportableDefinition.setTitle(description);
                 reportableDefinition.setName(appEntity.getName());
                 reportableDefinition.setDescription(description);
-                List<ReportableField> reportableFieldList = ReportEntityUtils
-                        .getEntityBaseTypeReportableFieldList(messageResolver, appEntity.getBaseType());
-                reportableFieldList
-                        .addAll(ReportEntityUtils.getReportableFieldList(messageResolver, appEntity.getFieldList()));
+                List<ReportableField> reportableFieldList = ReportEntityUtils.getEntityBaseTypeReportableFieldList(
+                        messageResolver, appEntity.getBaseType(), ReportFormatOptions.DEFAULT);
+                reportableFieldList.addAll(ReportEntityUtils.getReportableFieldList(messageResolver,
+                        appEntity.getFieldList(), ReportFormatOptions.DEFAULT));
                 reportableDefinition.setFieldList(reportableFieldList);
                 reportModuleService.createReportableDefinition(reportableDefinition);
 
@@ -267,10 +268,10 @@ public class StudioEntitySchemaManagerImpl extends AbstractEntitySchemaManager {
                 reportableDefinition.setTitle(description);
                 reportableDefinition.setName(appEntity.getName());
                 reportableDefinition.setDescription(description);
-                List<ReportableField> reportableFieldList = ReportEntityUtils
-                        .getEntityBaseTypeReportableFieldList(messageResolver, appEntity.getBaseType());
-                reportableFieldList
-                        .addAll(ReportEntityUtils.getReportableFieldList(messageResolver, appEntity.getFieldList()));
+                List<ReportableField> reportableFieldList = ReportEntityUtils.getEntityBaseTypeReportableFieldList(
+                        messageResolver, appEntity.getBaseType(), ReportFormatOptions.DEFAULT);
+                reportableFieldList.addAll(ReportEntityUtils.getReportableFieldList(messageResolver,
+                        appEntity.getFieldList(), ReportFormatOptions.DEFAULT));
                 reportableDefinition.setFieldList(reportableFieldList);
                 reportModuleService.createReportableDefinition(reportableDefinition);
 
@@ -291,10 +292,10 @@ public class StudioEntitySchemaManagerImpl extends AbstractEntitySchemaManager {
             } else {
                 final List<AppEntityField> appEntityFieldList = au.environment()
                         .findAll(new AppEntityFieldQuery().appEntityId(appEntity.getId()));
-                List<ReportableField> reportableFieldList = ReportEntityUtils
-                        .getEntityBaseTypeReportableFieldList(messageResolver, appEntity.getBaseType());
-                reportableFieldList
-                        .addAll(ReportEntityUtils.getReportableFieldList(messageResolver, appEntityFieldList));
+                List<ReportableField> reportableFieldList = ReportEntityUtils.getEntityBaseTypeReportableFieldList(
+                        messageResolver, appEntity.getBaseType(), ReportFormatOptions.DEFAULT);
+                reportableFieldList.addAll(ReportEntityUtils.getReportableFieldList(messageResolver, appEntityFieldList,
+                        ReportFormatOptions.DEFAULT));
                 reportableDefinition.setFieldList(reportableFieldList);
                 reportModuleService.updateReportableDefinition(reportableDefinition);
             }

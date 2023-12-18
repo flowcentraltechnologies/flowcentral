@@ -260,7 +260,7 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
 
         final String sysDateFormatCode = systemModuleService.getSysParameterValue(String.class,
                 SystemModuleSysParamConstants.SYSTEM_DATE_FORMAT);
-        if (!StringUtils.isBlank(sysDateFormatCode)) {
+        if (!StringUtils.isBlank(sysDateFormatCode)) { 
             setSessionStickyAttribute(FormatOverrideConstants.SYSTEM_DATE_OVERRIDE,
                     "!fixeddatetimeformat pattern:$s{" + SysDateFormatType.fromCode(sysDateFormatCode).format() + "}");
         }

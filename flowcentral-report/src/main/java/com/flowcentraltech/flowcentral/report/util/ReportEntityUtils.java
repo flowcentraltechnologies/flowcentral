@@ -44,13 +44,13 @@ public final class ReportEntityUtils {
     }
 
     public static List<ReportableField> getEntityBaseTypeReportableFieldList(MessageResolver msgResolver,
-            EntityBaseType type) throws UnifyException {
+            EntityBaseType type, ReportFormatOptions formatOptions) throws UnifyException {
         List<ReportableField> resultList = new ArrayList<ReportableField>();
         for (AppEntityField appEntityField : ApplicationEntityUtils.getEntityBaseTypeFieldList(msgResolver, type,
                 ConfigType.STATIC_INSTALL)) {
             if (appEntityField.isReportable()) {
                 ReportableField reportableField = new ReportableField();
-                ReportEntityUtils.populateReportableField(reportableField, appEntityField);
+                ReportEntityUtils.populateReportableField(reportableField, appEntityField, formatOptions);
                 resultList.add(reportableField);
             }
         }
@@ -59,12 +59,12 @@ public final class ReportEntityUtils {
     }
 
     public static List<ReportableField> getReportableFieldList(MessageResolver msgResolver,
-            List<AppEntityField> fieldList) throws UnifyException {
+            List<AppEntityField> fieldList, ReportFormatOptions formatOptions) throws UnifyException {
         List<ReportableField> resultList = new ArrayList<ReportableField>();
         for (AppEntityField appEntityField : fieldList) {
             if (appEntityField.isReportable()) {
                 ReportableField reportableField = new ReportableField();
-                ReportEntityUtils.populateReportableField(reportableField, appEntityField);
+                ReportEntityUtils.populateReportableField(reportableField, appEntityField, formatOptions);
                 resultList.add(reportableField);
             }
         }
@@ -72,8 +72,8 @@ public final class ReportEntityUtils {
         return resultList;
     }
 
-    public static void populateReportableField(ReportableField reportableField, AppEntityField appEntityField)
-            throws UnifyException {
+    public static void populateReportableField(ReportableField reportableField, AppEntityField appEntityField,
+            ReportFormatOptions formatOptions) throws UnifyException {
         String description = NameUtils.describeName(appEntityField.getName());
         EntityFieldDataType entityFieldDataType = appEntityField.getDataType();
         Class<?> dataClazz = null;
@@ -86,11 +86,7 @@ public final class ReportEntityUtils {
                 reportableField.setHorizontalAlign(HAlignType.RIGHT.name());
             }
 
-            if (appEntityField.getDataType().isTimestamp()) {
-                reportableField.setFormatter("!fixeddatetimeformat pattern:$s{yyyy-MM-dd HH:mm:ss}");
-            } else if (appEntityField.getDataType().isDate()) {
-                reportableField.setFormatter("!fixeddatetimeformat pattern:$s{yyyy-MM-dd}");
-            }
+            reportableField.setFormatter(formatOptions.getFormatter(entityFieldDataType));
         }
 
         reportableField.setWidth(-1);
@@ -98,6 +94,59 @@ public final class ReportEntityUtils {
         reportableField.setName(appEntityField.getName());
         reportableField.setParameterOnly(false);
         reportableField.setType(ConverterUtils.getWrapperClassName(dataClazz));
+    }
+
+    public static class ReportFormatOptions {
+
+        public static final ReportFormatOptions DEFAULT = new ReportFormatOptions("!integerformat useGrouping:true",
+                "!decimalformat precision:20 scale:2 useGrouping:true", "!fixeddatetimeformat pattern:$s{yyyy-MM-dd}",
+                "!fixeddatetimeformat pattern:$s{yyyy-MM-dd HH:mm:ss}");
+
+        private final String integerFormatter;
+
+        private final String decimalFormatter;
+
+        private final String dateFormatter;
+
+        private final String timestampFormatter;
+
+        public ReportFormatOptions(String integerFormatter, String decimalFormatter, String dateFormatter,
+                String timestampFormatter) {
+            this.integerFormatter = integerFormatter;
+            this.decimalFormatter = decimalFormatter;
+            this.dateFormatter = dateFormatter;
+            this.timestampFormatter = timestampFormatter;
+        }
+
+        public String getIntegerFormatter() {
+            return integerFormatter;
+        }
+
+        public String getDecimalFormatter() {
+            return decimalFormatter;
+        }
+
+        public String getDateFormatter() {
+            return dateFormatter;
+        }
+
+        public String getTimestampFormatter() {
+            return timestampFormatter;
+        }
+
+        public String getFormatter(EntityFieldDataType dataType) {
+            if (dataType.isDecimal()) {
+                return decimalFormatter;
+            } else if (dataType.isInteger()) {
+                return integerFormatter;
+            } else if (dataType.isTimestamp()) {
+                return timestampFormatter;
+            } else if (dataType.isDate()) {
+                return dateFormatter;
+            }
+
+            return null;
+        }
     }
 
 }

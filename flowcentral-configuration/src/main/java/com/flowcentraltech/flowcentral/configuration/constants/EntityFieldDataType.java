@@ -355,6 +355,10 @@ public enum EntityFieldDataType implements EnumConst {
         return DECIMAL.equals(this) || DOUBLE.equals(this) || FLOAT.equals(this);
     }
 
+    public boolean isInteger() {
+        return LONG.equals(this) || INTEGER.equals(this) || SHORT.equals(this);
+    }
+
     public boolean isString() {
         return STRING.equals(this);
     }
