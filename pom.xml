@@ -57,6 +57,7 @@
 		<module>flowcentral-tomcat</module>
 		<module>flowcentral-undertow</module>
 		<module>flowcentral-gateway</module>
+		<module>flowcentral-audit</module>
 	</modules>
 
 	<properties>
