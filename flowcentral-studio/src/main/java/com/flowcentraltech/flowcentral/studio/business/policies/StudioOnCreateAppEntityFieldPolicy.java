@@ -20,9 +20,9 @@ import com.flowcentraltech.flowcentral.application.entities.AppEntityField;
 import com.flowcentraltech.flowcentral.common.annotation.EntityReferences;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionContext;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
+import com.flowcentraltech.flowcentral.common.constants.FormatterOptions;
 import com.flowcentraltech.flowcentral.report.entities.ReportableField;
 import com.flowcentraltech.flowcentral.report.util.ReportEntityUtils;
-import com.flowcentraltech.flowcentral.report.util.ReportEntityUtils.ReportFormatOptions;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.util.QueryUtils;
@@ -45,7 +45,7 @@ public class StudioOnCreateAppEntityFieldPolicy extends AbstractStudioAppEntityF
             if (QueryUtils.isValidLongCriteria(reportableDefinitionId)) {
                 ReportableField reportableField = new ReportableField();
                 reportableField.setReportableId(reportableDefinitionId);
-                ReportEntityUtils.populateReportableField(reportableField, appEntityField, ReportFormatOptions.DEFAULT);
+                ReportEntityUtils.populateReportableField(reportableField, appEntityField, FormatterOptions.DEFAULT);
                 getRds().createReportableField(reportableField);
             }
         }

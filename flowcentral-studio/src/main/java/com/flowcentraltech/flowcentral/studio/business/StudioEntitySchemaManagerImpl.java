@@ -38,13 +38,13 @@ import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.util.InputWidgetUtils;
 import com.flowcentraltech.flowcentral.application.util.PrivilegeNameUtils;
 import com.flowcentraltech.flowcentral.common.constants.ConfigType;
+import com.flowcentraltech.flowcentral.common.constants.FormatterOptions;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldType;
 import com.flowcentraltech.flowcentral.report.business.ReportModuleService;
 import com.flowcentraltech.flowcentral.report.entities.ReportableDefinition;
 import com.flowcentraltech.flowcentral.report.entities.ReportableDefinitionQuery;
 import com.flowcentraltech.flowcentral.report.entities.ReportableField;
 import com.flowcentraltech.flowcentral.report.util.ReportEntityUtils;
-import com.flowcentraltech.flowcentral.report.util.ReportEntityUtils.ReportFormatOptions;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.UserToken;
 import com.tcdng.unify.core.annotation.Component;
@@ -225,9 +225,9 @@ public class StudioEntitySchemaManagerImpl extends AbstractEntitySchemaManager {
                 reportableDefinition.setName(appEntity.getName());
                 reportableDefinition.setDescription(description);
                 List<ReportableField> reportableFieldList = ReportEntityUtils.getEntityBaseTypeReportableFieldList(
-                        messageResolver, appEntity.getBaseType(), ReportFormatOptions.DEFAULT);
+                        messageResolver, appEntity.getBaseType(), FormatterOptions.DEFAULT);
                 reportableFieldList.addAll(ReportEntityUtils.getReportableFieldList(messageResolver,
-                        appEntity.getFieldList(), ReportFormatOptions.DEFAULT));
+                        appEntity.getFieldList(), FormatterOptions.DEFAULT));
                 reportableDefinition.setFieldList(reportableFieldList);
                 reportModuleService.createReportableDefinition(reportableDefinition);
 
@@ -269,9 +269,9 @@ public class StudioEntitySchemaManagerImpl extends AbstractEntitySchemaManager {
                 reportableDefinition.setName(appEntity.getName());
                 reportableDefinition.setDescription(description);
                 List<ReportableField> reportableFieldList = ReportEntityUtils.getEntityBaseTypeReportableFieldList(
-                        messageResolver, appEntity.getBaseType(), ReportFormatOptions.DEFAULT);
+                        messageResolver, appEntity.getBaseType(), FormatterOptions.DEFAULT);
                 reportableFieldList.addAll(ReportEntityUtils.getReportableFieldList(messageResolver,
-                        appEntity.getFieldList(), ReportFormatOptions.DEFAULT));
+                        appEntity.getFieldList(), FormatterOptions.DEFAULT));
                 reportableDefinition.setFieldList(reportableFieldList);
                 reportModuleService.createReportableDefinition(reportableDefinition);
 
@@ -293,9 +293,9 @@ public class StudioEntitySchemaManagerImpl extends AbstractEntitySchemaManager {
                 final List<AppEntityField> appEntityFieldList = au.environment()
                         .findAll(new AppEntityFieldQuery().appEntityId(appEntity.getId()));
                 List<ReportableField> reportableFieldList = ReportEntityUtils.getEntityBaseTypeReportableFieldList(
-                        messageResolver, appEntity.getBaseType(), ReportFormatOptions.DEFAULT);
+                        messageResolver, appEntity.getBaseType(), FormatterOptions.DEFAULT);
                 reportableFieldList.addAll(ReportEntityUtils.getReportableFieldList(messageResolver, appEntityFieldList,
-                        ReportFormatOptions.DEFAULT));
+                        FormatterOptions.DEFAULT));
                 reportableDefinition.setFieldList(reportableFieldList);
                 reportModuleService.updateReportableDefinition(reportableDefinition);
             }
