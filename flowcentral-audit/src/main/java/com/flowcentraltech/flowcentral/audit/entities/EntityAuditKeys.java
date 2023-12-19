@@ -16,7 +16,10 @@
 
 package com.flowcentraltech.flowcentral.audit.entities;
 
+import java.util.Date;
+
 import com.flowcentraltech.flowcentral.common.entities.BaseAuditEntity;
+import com.flowcentraltech.flowcentral.configuration.constants.AuditEventType;
 import com.tcdng.unify.core.annotation.Column;
 import com.tcdng.unify.core.annotation.ForeignKey;
 import com.tcdng.unify.core.annotation.Index;
@@ -35,21 +38,45 @@ public class EntityAuditKeys extends BaseAuditEntity {
 
     @ForeignKey(EntityAuditDetails.class)
     private Long entityAuditDetailsId;
-
-    @Column(length = 64)
+    
+    @Column(name = "KEY_A", length = 64)
     private String keyA;
-
-    @Column(length = 64)
+    
+    @Column(name = "KEY_B", length = 64)
     private String keyB;
-
-    @Column(length = 64)
+    
+    @Column(name = "KEY_C", length = 64)
     private String keyC;
-
-    @Column(length = 64)
+    
+    @Column(name = "KEY_D", length = 64)
     private String keyD;
 
     @ListOnly(key = "entityAuditDetailsId", property = "entityAuditConfigId")
     private Long entityAuditConfigId;
+
+    @ListOnly(key = "entityAuditDetailsId", property = "eventType")
+    private AuditEventType eventType;
+
+    @ListOnly(key = "entityAuditDetailsId", property = "eventTimestamp")
+    private Date eventTimestamp;
+
+    @ListOnly(key = "entityAuditDetailsId", property = "sourceName")
+    private String sourceName;
+
+    @ListOnly(key = "entityAuditDetailsId", property = "userLoginId")
+    private String userLoginId;
+
+    @ListOnly(key = "entityAuditDetailsId", property = "userName")
+    private String userName;
+
+    @ListOnly(key = "entityAuditDetailsId", property = "userIpAddress")
+    private String userIpAddress;
+
+    @ListOnly(key = "entityAuditDetailsId", property = "roleCode")
+    private String roleCode;
+
+    @ListOnly(key = "entityAuditDetailsId", property = "eventTypeDesc")
+    private String eventTypeDesc;
 
     @Override
     public String getDescription() {

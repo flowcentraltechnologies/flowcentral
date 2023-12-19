@@ -16,6 +16,7 @@
 package com.flowcentraltech.flowcentral.audit.entities;
 
 import com.flowcentraltech.flowcentral.common.entities.BaseAuditEntityQuery;
+import com.flowcentraltech.flowcentral.configuration.constants.AuditEventType;
 
 /**
  * Entity audit details query.
@@ -31,6 +32,14 @@ public class EntityAuditDetailsQuery extends BaseAuditEntityQuery<EntityAuditDet
 
     public EntityAuditDetailsQuery entityAuditConfigId(Long entityAuditConfigId) {
         return (EntityAuditDetailsQuery) addEquals("entityAuditConfigId", entityAuditConfigId);
+    }
+
+    public EntityAuditDetailsQuery eventType(AuditEventType eventType) {
+        return (EntityAuditDetailsQuery) addEquals("eventType", eventType);
+    }
+
+    public EntityAuditDetailsQuery userLoginId(String userLoginId) {
+        return (EntityAuditDetailsQuery) addEquals("userLoginId", userLoginId);
     }
 
 }

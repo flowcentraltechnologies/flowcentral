@@ -16,10 +16,15 @@
 
 package com.flowcentraltech.flowcentral.audit.entities;
 
+import java.util.Date;
+
 import com.flowcentraltech.flowcentral.common.entities.BaseAuditEntity;
-import com.flowcentraltech.flowcentral.common.entities.BaseStatusEntity;
+import com.flowcentraltech.flowcentral.configuration.constants.AuditEventType;
 import com.tcdng.unify.core.annotation.Column;
+import com.tcdng.unify.core.annotation.ColumnType;
 import com.tcdng.unify.core.annotation.ForeignKey;
+import com.tcdng.unify.core.annotation.Index;
+import com.tcdng.unify.core.annotation.ListOnly;
 import com.tcdng.unify.core.annotation.Table;
 
 /**
@@ -28,96 +33,111 @@ import com.tcdng.unify.core.annotation.Table;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@Table(name = "FC_ENTITYAUDITDETAILS")
+@Table(name = "FC_ENTITYAUDITDETAILS", indexes = { @Index({ "eventType" }), @Index({ "userLoginId" }) })
 public class EntityAuditDetails extends BaseAuditEntity {
 
     @ForeignKey(EntityAuditConfig.class)
     private Long entityAuditConfigId;
-    
-    @Column(length = 64)
-    private String keyA;
-    
-    @Column(length = 64)
-    private String keyB;
-    
-    @Column(length = 64)
-    private String keyC;
-    
-    @Column(length = 64)
-    private String keyD;
 
-    @Column(length = 128)
-    private String description;
-    
-    @Column(length = 64)
-    private String entity;
+    @ForeignKey(name = "event_type")
+    private AuditEventType eventType;
 
-    @Column(length = 32, nullable = true)
-    private String searchFieldA;
+    @Column(name = "EVENT_TIMESTAMP", type = ColumnType.TIMESTAMP_UTC)
+    private Date eventTimestamp;
 
-    @Column(length = 32, nullable = true)
-    private String searchFieldB;
+    @Column(name = "SOURCE_NM", length = 128)
+    private String sourceName;
 
-    @Column(length = 32, nullable = true)
-    private String searchFieldC;
+    @Column(name = "USER_LOGIN_ID", length = 64)
+    private String userLoginId;
 
-    @Column(length = 32, nullable = true)
-    private String searchFieldD;
+    @Column(name = "USER_NM", length = 128)
+    private String userName;
 
-    public String getName() {
-        return name;
-    }
+    @Column(name = "USER_IP_ADDRESS", length = 64)
+    private String userIpAddress;
 
-    public void setName(String name) {
-        this.name = name;
-    }
+    @Column(name = "ROLE_CD", length = 32)
+    private String roleCode;
 
+    @ListOnly(key = "eventType", property = "description")
+    private String eventTypeDesc;
+
+    @Override
     public String getDescription() {
-        return description;
+        return null;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public Long getEntityAuditConfigId() {
+        return entityAuditConfigId;
     }
 
-    public String getEntity() {
-        return entity;
+    public void setEntityAuditConfigId(Long entityAuditConfigId) {
+        this.entityAuditConfigId = entityAuditConfigId;
     }
 
-    public void setEntity(String entity) {
-        this.entity = entity;
+    public AuditEventType getEventType() {
+        return eventType;
     }
 
-    public String getSearchFieldA() {
-        return searchFieldA;
+    public void setEventType(AuditEventType eventType) {
+        this.eventType = eventType;
     }
 
-    public void setSearchFieldA(String searchFieldA) {
-        this.searchFieldA = searchFieldA;
+    public Date getEventTimestamp() {
+        return eventTimestamp;
     }
 
-    public String getSearchFieldB() {
-        return searchFieldB;
+    public void setEventTimestamp(Date eventTimestamp) {
+        this.eventTimestamp = eventTimestamp;
     }
 
-    public void setSearchFieldB(String searchFieldB) {
-        this.searchFieldB = searchFieldB;
+    public String getSourceName() {
+        return sourceName;
     }
 
-    public String getSearchFieldC() {
-        return searchFieldC;
+    public void setSourceName(String sourceName) {
+        this.sourceName = sourceName;
     }
 
-    public void setSearchFieldC(String searchFieldC) {
-        this.searchFieldC = searchFieldC;
+    public String getUserLoginId() {
+        return userLoginId;
     }
 
-    public String getSearchFieldD() {
-        return searchFieldD;
+    public void setUserLoginId(String userLoginId) {
+        this.userLoginId = userLoginId;
     }
 
-    public void setSearchFieldD(String searchFieldD) {
-        this.searchFieldD = searchFieldD;
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getUserIpAddress() {
+        return userIpAddress;
+    }
+
+    public void setUserIpAddress(String userIpAddress) {
+        this.userIpAddress = userIpAddress;
+    }
+
+    public String getRoleCode() {
+        return roleCode;
+    }
+
+    public void setRoleCode(String roleCode) {
+        this.roleCode = roleCode;
+    }
+
+    public String getEventTypeDesc() {
+        return eventTypeDesc;
+    }
+
+    public void setEventTypeDesc(String eventTypeDesc) {
+        this.eventTypeDesc = eventTypeDesc;
     }
 
 }

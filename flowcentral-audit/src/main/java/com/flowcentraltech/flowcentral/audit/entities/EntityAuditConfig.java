@@ -17,7 +17,10 @@
 package com.flowcentraltech.flowcentral.audit.entities;
 
 import com.flowcentraltech.flowcentral.common.entities.BaseStatusEntity;
+import com.flowcentraltech.flowcentral.configuration.constants.AuditSourceType;
 import com.tcdng.unify.core.annotation.Column;
+import com.tcdng.unify.core.annotation.ForeignKey;
+import com.tcdng.unify.core.annotation.ListOnly;
 import com.tcdng.unify.core.annotation.Table;
 
 /**
@@ -29,26 +32,40 @@ import com.tcdng.unify.core.annotation.Table;
 @Table(name = "FC_ENTITYAUDITCONFIG")
 public class EntityAuditConfig extends BaseStatusEntity {
 
-    @Column(length = 64)
+    @ForeignKey(name = "SOURCE_TYPE")
+    private AuditSourceType sourceType;
+
+    @Column(name = "ENTITYAUDITCONFIG_NM", length = 64)
     private String name;
 
-    @Column(length = 128)
+    @Column(name = "ENTITYAUDITCONFIG_DESC", length = 128)
     private String description;
     
-    @Column(length = 64)
+    @Column(name = "ENTITY", length = 64)
     private String entity;
 
-    @Column(length = 32, nullable = true)
+    @Column(name = "SEARCH_FIELDA", length = 32, nullable = true)
     private String searchFieldA;
 
-    @Column(length = 32, nullable = true)
+    @Column(name = "SEARCH_FIELDB", length = 32, nullable = true)
     private String searchFieldB;
 
-    @Column(length = 32, nullable = true)
+    @Column(name = "SEARCH_FIELDC", length = 32, nullable = true)
     private String searchFieldC;
 
-    @Column(length = 32, nullable = true)
+    @Column(name = "SEARCH_FIELDD", length = 32, nullable = true)
     private String searchFieldD;
+
+    @ListOnly(key = "sourceType", property = "description")
+    private String sourceTypeDesc;
+    
+    public AuditSourceType getSourceType() {
+        return sourceType;
+    }
+
+    public void setSourceType(AuditSourceType sourceType) {
+        this.sourceType = sourceType;
+    }
 
     public String getName() {
         return name;
@@ -58,6 +75,7 @@ public class EntityAuditConfig extends BaseStatusEntity {
         this.name = name;
     }
 
+    @Override
     public String getDescription() {
         return description;
     }
@@ -104,6 +122,14 @@ public class EntityAuditConfig extends BaseStatusEntity {
 
     public void setSearchFieldD(String searchFieldD) {
         this.searchFieldD = searchFieldD;
+    }
+
+    public String getSourceTypeDesc() {
+        return sourceTypeDesc;
+    }
+
+    public void setSourceTypeDesc(String sourceTypeDesc) {
+        this.sourceTypeDesc = sourceTypeDesc;
     }
 
 }
