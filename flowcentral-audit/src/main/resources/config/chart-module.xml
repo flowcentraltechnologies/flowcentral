@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<!-- Master chart module configuration -->
+<module name="chart" description="$m{chart.module}" shortCode="CHT"
+	label="$m{chart.label}">
+	<!-- Applications -->
+	<applications>
+		<application name="chart"
+			shortDescription="$m{chart.short.description}"
+			longDescription="$m{chart.long.description}" autoInstall="true"
+			configFile="apps/chart-application.xml" />
+	</applications>
+
+	<!-- System Parameters -->
+</module>

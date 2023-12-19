@@ -1369,8 +1369,8 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
 
     protected void takeAuditSnapshot(AuditEventType auditEventType) throws UnifyException {
         if (isAuditingEnabled()) {
-            AuditSnapshot.Builder asb = AuditSnapshot.newBuilder(AuditSourceType.APPLET, "", auditEventType,
-                    au.getNow());
+            AuditSnapshot.Builder asb = AuditSnapshot.newBuilder(AuditSourceType.APPLET, auditEventType,
+                    au.getNow(), getAppletName());
             UserToken userToken = au.getSessionUserToken();
             asb.userLoginId(userToken.getUserLoginId());
             asb.userName(userToken.getUserName());

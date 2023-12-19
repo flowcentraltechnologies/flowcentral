@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!-- Audit application -->
+<application name="audit" description="$m{audit.short.description}"
+	label="$m{audit.label}" module="audit">
+	<!-- Widget Types -->
+	<!-- Applets -->
+	<!-- References -->
+	<references>
+		<reference name="auditConfigRef" description="$m{audit.auditconfig.reference}"
+			entity="auditConfig" searchField="description" />
+	</references>
+	<!-- Entities -->
+	<entities>
+		<entity name="auditConfig" description="$m{audit.auditconfig}"
+			label="$m{audit.auditconfig.label}"
+			type="com.flowcentraltech.flowcentral.audit.entities.AuditConfig"
+			reportable="true">
+			<uniqueConstraint name="nameUc"
+				description="$m{audit.auditconfig.uc.name}"
+				fieldList="applicationId,name">
+				<condition field="devVersionType" value="CRN"/>
+			</uniqueConstraint>
+			<uniqueConstraint name="descUc"
+				description="$m{chart.chart.uc.description}"
+				fieldList="applicationId,description">
+				<condition field="devVersionType" value="CRN"/>
+			</uniqueConstraint>
+		</entity>
+	</entities>
+</application>

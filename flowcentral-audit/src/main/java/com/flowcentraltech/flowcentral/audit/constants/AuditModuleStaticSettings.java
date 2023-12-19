@@ -13,35 +13,24 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
+package com.flowcentraltech.flowcentral.audit.constants;
 
-package com.flowcentraltech.flowcentral.common.business;
-
-import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
-import com.flowcentraltech.flowcentral.common.data.AuditSnapshot;
+import com.flowcentraltech.flowcentral.configuration.constants.AbstractFlowCentralStaticSettings;
+import com.flowcentraltech.flowcentral.configuration.constants.ModuleInstallLevelConstants;
+import com.tcdng.unify.core.annotation.AutoDetect;
 
 /**
- * Audit logger.
+ * Audit module static settings.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface AuditLogger extends FlowCentralComponent {
+@AutoDetect
+public class AuditModuleStaticSettings extends AbstractFlowCentralStaticSettings {
 
-    /**
-     * Checks if audit logger supports entity logging
-     * 
-     * @param entity
-     *               the entity name
-     * @return true if entity supported otherwise false
-     */
-    boolean supports(String entity);
-
-    /**
-     * Logs an audit snapshot.
-     * 
-     * @param auditSnapshot
-     *                      the audit snapshot to log
-     */
-    void log(AuditSnapshot auditSnapshot);
+    public AuditModuleStaticSettings() {
+        super(AuditModuleNameConstants.AUDIT_MODULE_SERVICE, "config/audit-module.xml",
+                "com.flowcentraltech.flowcentral.resources.audit-messages", ModuleInstallLevelConstants.AUDIT_MODULE_LEVEL);
+    }
 
 }

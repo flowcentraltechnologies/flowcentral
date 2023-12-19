@@ -83,8 +83,9 @@ public class AppletContext extends AbstractContext {
             this.entityReferences.put(type, null);
         }
 
-        this.auditingEnabled = au.audit() != null && au.system().getSysParameterValue(boolean.class,
-                ApplicationModuleSysParamConstants.ENABLE_APPLET_SOURCE_AUDITING);
+        this.auditingEnabled = au.audit() != null && au.audit().supports(applet.getRootAppletDef().getEntity())
+                && au.system().getSysParameterValue(boolean.class,
+                        ApplicationModuleSysParamConstants.ENABLE_APPLET_SOURCE_AUDITING);
     }
 
     public AbstractApplet applet() {

@@ -33,6 +33,8 @@ public interface ModuleInstallLevelConstants {
 
     int APPLICATION_MODULE_LEVEL = 8;
 
+    int AUDIT_MODULE_LEVEL = 12;
+
     int NOTIFICATION_MODULE_LEVEL = 16;
 
     int REPORT_MODULE_LEVEL = 16;

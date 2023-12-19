@@ -13,35 +13,18 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-
-package com.flowcentraltech.flowcentral.common.business;
-
-import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
-import com.flowcentraltech.flowcentral.common.data.AuditSnapshot;
+package com.flowcentraltech.flowcentral.audit.constants;
 
 /**
- * Audit logger.
+ * Audit module name constants.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface AuditLogger extends FlowCentralComponent {
+public interface AuditModuleNameConstants {
 
-    /**
-     * Checks if audit logger supports entity logging
-     * 
-     * @param entity
-     *               the entity name
-     * @return true if entity supported otherwise false
-     */
-    boolean supports(String entity);
+    String AUDIT_MODULE_NAME = "audit";
 
-    /**
-     * Logs an audit snapshot.
-     * 
-     * @param auditSnapshot
-     *                      the audit snapshot to log
-     */
-    void log(AuditSnapshot auditSnapshot);
+    String AUDIT_MODULE_SERVICE = "audit-moduleservice";
 
 }
