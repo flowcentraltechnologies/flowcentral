@@ -22,11 +22,11 @@ import java.util.List;
 import java.util.Locale;
 
 import com.flowcentraltech.flowcentral.application.constants.LinkActConstants;
+import com.flowcentraltech.flowcentral.common.web.lists.AbstractFlowCentralListCommand;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.data.ListData;
 import com.tcdng.unify.core.data.Listable;
-import com.tcdng.unify.core.list.AbstractListCommand;
 import com.tcdng.unify.core.list.ZeroParams;
 
 /**
@@ -36,7 +36,7 @@ import com.tcdng.unify.core.list.ZeroParams;
  * @since 1.0
  */
 @Component("linkacttypelist")
-public class LinkActTypeListCommand extends AbstractListCommand<ZeroParams> {
+public class LinkActTypeListCommand extends AbstractFlowCentralListCommand<ZeroParams> {
 
     private static List<ListData> list;
 

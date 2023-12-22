@@ -84,8 +84,11 @@ import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResu
 import com.flowcentraltech.flowcentral.common.business.policies.SweepingCommitPolicy;
 import com.flowcentraltech.flowcentral.common.business.policies.TableSummaryLine;
 import com.flowcentraltech.flowcentral.common.constants.OwnershipType;
+import com.flowcentraltech.flowcentral.common.data.AuditSnapshot;
 import com.flowcentraltech.flowcentral.common.data.EntityAuditInfo;
 import com.flowcentraltech.flowcentral.common.data.FormListingOptions;
+import com.flowcentraltech.flowcentral.common.data.FormattedAudit;
+import com.flowcentraltech.flowcentral.common.data.FormatterOptions;
 import com.flowcentraltech.flowcentral.common.data.ParamValuesDef;
 import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
 import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
@@ -118,7 +121,31 @@ import com.tcdng.unify.web.ui.widget.data.Hint.MODE;
  * @since 1.0
  */
 public interface AppletUtilities extends FlowCentralComponent {
-    
+
+    /**
+     * Gets formatted audit. Uses default formatter options.
+     * 
+     * @param auditSnapshot
+     *                      the audit snapshot.
+     * @return the formatted audit
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    FormattedAudit formatAudit(AuditSnapshot auditSnapshot) throws UnifyException;
+
+    /**
+     * Gets formatted audit using supplied formatter options.
+     * 
+     * @param auditSnapshot
+     *                      the audit snapshot.
+     * @param options
+     *                      the formatter options
+     * @return the formatted audit
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    FormattedAudit formatAudit(AuditSnapshot auditSnapshot, FormatterOptions options) throws UnifyException;
+
     /**
      * Get entity audit information.
      * 
@@ -129,7 +156,7 @@ public interface AppletUtilities extends FlowCentralComponent {
      *                        if an error occurs
      */
     EntityAuditInfo getEntityAuditInfo(String entityName) throws UnifyException;
-    
+
     /**
      * Gets application entities based on supplied query.
      * 
@@ -140,7 +167,7 @@ public interface AppletUtilities extends FlowCentralComponent {
      *                        if an error occurs
      */
     List<String> getApplicationEntitiesLongNames(Query<? extends BaseApplicationEntity> query) throws UnifyException;
-    
+
     /**
      * Gets application entities based on supplied query.
      * 
@@ -150,7 +177,8 @@ public interface AppletUtilities extends FlowCentralComponent {
      * @throws UnifyException
      *                        if an error occurs
      */
-    List<? extends Listable> getApplicationEntitiesListables(Query<? extends BaseApplicationEntity> query) throws UnifyException;
+    List<? extends Listable> getApplicationEntitiesListables(Query<? extends BaseApplicationEntity> query)
+            throws UnifyException;
 
     /**
      * Gets entity components list
@@ -336,7 +364,7 @@ public interface AppletUtilities extends FlowCentralComponent {
      *                        if an error occurs
      */
     UserToken getSessionUserToken() throws UnifyException;
-    
+
     /**
      * Gets a session user ID.
      * 
@@ -493,7 +521,7 @@ public interface AppletUtilities extends FlowCentralComponent {
      * @return the audit logger
      */
     AuditLogger audit();
-    
+
     /**
      * Gets the application service.
      * 
@@ -616,12 +644,13 @@ public interface AppletUtilities extends FlowCentralComponent {
     EntityClassDef getAppletEntityClassDef(String appletName) throws UnifyException;
 
     /**
-     * Ensures workflows are defined for applet if applet has its
-     * workflow copy flag set.
+     * Ensures workflows are defined for applet if applet has its workflow copy flag
+     * set.
      * 
      * @param appletName
-     *                   the applet name
-     * @param forceUpdate force workflow update
+     *                    the applet name
+     * @param forceUpdate
+     *                    force workflow update
      * @throws UnifyException
      *                        if an error occurs.
      */
@@ -636,7 +665,7 @@ public interface AppletUtilities extends FlowCentralComponent {
      *                        if an error occurs.
      */
     void ensureWorkflowUserInteractionLoadingApplets(boolean forceUpdate) throws UnifyException;
-    
+
     /**
      * Ensures workflow user interaction loading applet.
      * 
@@ -648,7 +677,7 @@ public interface AppletUtilities extends FlowCentralComponent {
      *                        if an error occurs.
      */
     void ensureWorkflowUserInteractionLoadingApplet(String loadingTableName, boolean forceUpdate) throws UnifyException;
-    
+
     /**
      * Checks if an applet is with workflow copy.
      * 
@@ -1775,7 +1804,7 @@ public interface AppletUtilities extends FlowCentralComponent {
      * Gets all entities by data source name.
      * 
      * @param dataSourceName
-     *                 the data source name
+     *                       the data source name
      * @return the entity long names
      * @throws UnifyException
      *                        if an error occurs
@@ -1976,8 +2005,8 @@ public interface AppletUtilities extends FlowCentralComponent {
      * @throws UnifyException
      *                        if an error occurs
      */
-    <T extends BaseMappedEntityProviderContext> MappedEntityProvider<T> getMappingProvider(Query<? extends Entity> query)
-            throws UnifyException;
+    <T extends BaseMappedEntityProviderContext> MappedEntityProvider<T> getMappingProvider(
+            Query<? extends Entity> query) throws UnifyException;
 
     /**
      * Gets mapping provider for entity type.
@@ -1988,8 +2017,8 @@ public interface AppletUtilities extends FlowCentralComponent {
      * @throws UnifyException
      *                        if an error occurs
      */
-    MappedEntityProvider<? extends BaseMappedEntityProviderContext> getMappingProvider(Class<? extends Entity> entityClass)
-            throws UnifyException;
+    MappedEntityProvider<? extends BaseMappedEntityProviderContext> getMappingProvider(
+            Class<? extends Entity> entityClass) throws UnifyException;
 
     /**
      * Gets mapping provider source entity.

@@ -49,7 +49,8 @@ public class SequenceCodeGeneratorImpl extends AbstractSequenceCodeGenerator {
     private static final List<SequencePartType> varTypes = Collections.unmodifiableList(Arrays.asList(
             SequencePartType.VALUESTORE_GENERATOR, SequencePartType.SYSTEM_PARAMETER, SequencePartType.SEQUENCE_NUMBER,
             SequencePartType.SEQUENCE_NUMBER_BY_DATE, SequencePartType.LONG_YEAR, SequencePartType.SHORT_YEAR,
-            SequencePartType.DAY_OF_MONTH, SequencePartType.DAY_OF_YEAR));
+            SequencePartType.MONTH, SequencePartType.MONTH_FIXED, SequencePartType.DAY_OF_MONTH,
+            SequencePartType.DAY_OF_YEAR, SequencePartType.DAY_OF_MONTH_FIXED, SequencePartType.DAY_OF_YEAR_FIXED));
 
     @Configurable
     private SequenceNumberService seqNumberService;
@@ -120,8 +121,20 @@ public class SequenceCodeGeneratorImpl extends AbstractSequenceCodeGenerator {
                 case DAY_OF_MONTH:
                     sb.append(cal.get(Calendar.DAY_OF_MONTH));
                     break;
+                case DAY_OF_MONTH_FIXED:
+                    sb.append(StringUtils.padLeft("" + cal.get(Calendar.DAY_OF_MONTH), '0', 2));
+                    break;
                 case DAY_OF_YEAR:
                     sb.append(cal.get(Calendar.DAY_OF_YEAR));
+                    break;
+                case DAY_OF_YEAR_FIXED:
+                    sb.append(StringUtils.padLeft("" + cal.get(Calendar.DAY_OF_YEAR), '0', 3));
+                    break;
+                case MONTH:
+                    sb.append(cal.get(Calendar.MONTH) + 1);
+                    break;
+                case MONTH_FIXED:
+                    sb.append(StringUtils.padLeft("" + (cal.get(Calendar.MONTH) + 1), '0', 2));
                     break;
                 case LONG_YEAR:
                     sb.append(cal.get(Calendar.YEAR));
@@ -246,7 +259,11 @@ public class SequenceCodeGeneratorImpl extends AbstractSequenceCodeGenerator {
         for (SequencePartDef part : partList) {
             switch (part.getType()) {
                 case DAY_OF_MONTH:
+                case DAY_OF_MONTH_FIXED:
                 case DAY_OF_YEAR:
+                case DAY_OF_YEAR_FIXED:
+                case MONTH:
+                case MONTH_FIXED:
                 case LONG_YEAR:
                 case SHORT_YEAR:
                 case VALUESTORE_GENERATOR:

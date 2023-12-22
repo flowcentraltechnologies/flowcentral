@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<!--Audit module configuration -->
+<module name="audit" description="$m{audit.module}"
+	shortCode="AUD" label="$m{audit.label}">
+	<!-- Applications -->
+	<applications>
+		<application name="audit"
+			shortDescription="$m{audit.short.description}"
+			longDescription="$m{audit.long.description}" autoInstall="true"
+			configFile="apps/audit-application.xml" />
+	</applications>
+
+	<!-- System Parameters -->
+</module>

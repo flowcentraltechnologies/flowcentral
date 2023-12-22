@@ -19,37 +19,38 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
+import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
 import com.flowcentraltech.flowcentral.common.web.lists.AbstractFlowCentralListCommand;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
+import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.data.Listable;
+import com.tcdng.unify.core.list.StringParam;
 
 /**
- * Entity definition property list command.
+ * Entity auditable field definition list command.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@Component("entitydefpropertylist")
-public class EntityDefPropertyListCommand extends AbstractFlowCentralListCommand<EntityDefPropertyListParams> {
+@Component("entityauditablefielddeflist")
+public class EntityAuditableFieldDefListCommand extends AbstractFlowCentralListCommand<StringParam> {
 
-    public EntityDefPropertyListCommand() {
-        super(EntityDefPropertyListParams.class);
+    @Configurable
+    private ApplicationModuleService applicationModuleService;
+    
+    public EntityAuditableFieldDefListCommand() {
+        super(StringParam.class);
+    }
+
+    public final void setApplicationModuleService(ApplicationModuleService applicationModuleService) {
+        this.applicationModuleService = applicationModuleService;
     }
 
     @Override
-    public List<? extends Listable> execute(Locale locale, EntityDefPropertyListParams params) throws UnifyException {
-        if (params.isPresent()) {
-            switch(params.getType()) {
-                case CATEGORY:
-                    return params.getEntityDef().getCategoryDefList();
-                case FIELD:
-                    return params.getEntityDef().getSortedFieldDefList();
-                 case SERIES:
-                     return params.getEntityDef().getSeriesDefList();
-                default:
-                    break;               
-            }
+    public List<? extends Listable> execute(Locale locale, StringParam param) throws UnifyException {
+        if (param.isPresent()) {
+             return applicationModuleService.getEntityDef(param.getValue()).getAuditableFieldDefList();
         }
 
         return Collections.emptyList();

@@ -15,6 +15,15 @@
  */
 package com.flowcentraltech.flowcentral.common.data;
 
+import java.lang.reflect.Array;
+import java.util.List;
+
+import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldDataType;
+import com.tcdng.unify.core.UnifyComponentContext;
+import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.format.Formatter;
+import com.tcdng.unify.core.util.DataUtils;
+
 /**
  * Formatter options.
  * 
@@ -59,4 +68,77 @@ public class FormatterOptions {
         return timestampFormatter;
     }
 
+    public Instance createInstance(UnifyComponentContext ctx) throws UnifyException {
+        return new Instance(ctx.createFormatter(integerFormatter), ctx.createFormatter(decimalFormatter),
+                ctx.createFormatter(dateFormatter), ctx.createFormatter(timestampFormatter));
+    }
+
+    public static class Instance {
+
+        private Formatter<Object> integerFmt;
+
+        private Formatter<Object> decimalFmt;
+
+        private Formatter<Object> dateFmt;
+
+        private Formatter<Object> timestampFmt;
+
+        private Instance(Formatter<Object> integerFmt, Formatter<Object> decimalFmt, Formatter<Object> dateFmt,
+                Formatter<Object> timestampFmt) {
+            this.integerFmt = integerFmt;
+            this.decimalFmt = decimalFmt;
+            this.dateFmt = dateFmt;
+            this.timestampFmt = timestampFmt;
+        }
+
+        @SuppressWarnings({ "unchecked", "rawtypes" })
+        public String[] format(EntityFieldDataType entityFieldDataType, Object val) throws UnifyException {            
+            if (val != null) {
+                Object[] _oval = null;
+                if (val instanceof List) {
+                    _oval = DataUtils.toArray(Object.class, (List) val);
+                } else if (val.getClass().isArray()) {
+                    final int len = Array.getLength(val);
+                    _oval = new Object[len];
+                    for (int i = 0; i < len; i++) {
+                        _oval[i] = Array.get(val, i);
+                    }
+                } else {
+                    _oval = new Object[] {val};
+                }
+                
+                String[] result = new String[_oval.length];
+                Formatter<Object> fmt = null;
+                if (entityFieldDataType.isDecimal()) {
+                    fmt = decimalFmt;
+                } else if (entityFieldDataType.isInteger()) {
+                    fmt = integerFmt;
+                } else if (entityFieldDataType.isDate()) {
+                    fmt = dateFmt;
+                } else if (entityFieldDataType.isTimestamp()) {
+                    fmt = timestampFmt;
+                }
+
+                if (fmt == null) {
+                    for (int i = 0; i < _oval.length; i++) {
+                        Object _val = _oval[i];
+                        if (_val != null) {
+                            result[i] = String.valueOf(_val);
+                        }
+                    }
+                } else {
+                    for (int i = 0; i < _oval.length; i++) {
+                        Object _val = _oval[i];
+                        if (_val != null) {
+                            result[i] = fmt.format(_val);
+                        }
+                    }
+                }
+
+                return result;
+            }
+
+            return null;
+        }
+    }
 }

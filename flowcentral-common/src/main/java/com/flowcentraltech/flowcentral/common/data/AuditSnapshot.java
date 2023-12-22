@@ -24,7 +24,6 @@ import java.util.List;
 import com.flowcentraltech.flowcentral.configuration.constants.AuditEventType;
 import com.flowcentraltech.flowcentral.configuration.constants.AuditSourceType;
 import com.tcdng.unify.core.UnifyException;
-import com.tcdng.unify.core.util.StringUtils;
 
 /**
  * Audit information object.
@@ -107,11 +106,6 @@ public class AuditSnapshot {
 
     public List<EntityAuditSnapshot> getSnapshots() {
         return snapshots;
-    }
-
-    @Override
-    public String toString() {
-        return StringUtils.toXmlString(this);
     }
 
     public static Builder newBuilder(AuditSourceType sourceType, AuditEventType eventType, Date eventTimestamp,

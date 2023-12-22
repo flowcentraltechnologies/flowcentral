@@ -3,28 +3,225 @@
 <application name="audit" description="$m{audit.short.description}"
 	label="$m{audit.label}" module="audit">
 	<!-- Widget Types -->
+	<widgetTypes>
+		<widgetType name="auditableentitysearch"
+			description="$m{audit.widgettype.auditableentitysearch}"
+			dataType="string" inputType="string"
+			editor="!fc-entitysearch ref:$s{application.appEntityRef} listKey:$s{longName}"
+			renderer="!ui-label" />
+		<widgetType name="entityauditablefielddeflist"
+			description="$m{audit.widgettype.entityauditablefielddeflist}"
+			dataType="string" inputType="string"
+			editor="!ui-select list:entityauditablefielddeflist listParams:$l{entity} blankOption:$m{blank.none}"
+			renderer="!ui-label" />
+	</widgetTypes>
 	<!-- Applets -->
+	<applets>
+		<applet name="manageEntityAuditConfig"
+			description="$m{audit.entityauditconfig.manage}"
+			label="$m{audit.entityauditconfig.manage.label}" icon="site-map"
+			type="manage_entitylist" entity="entityAuditConfig" menuAccess="true"
+			allowSecondaryTenants="true">
+			<property name="searchTable" value="entityAuditConfigTable" />
+			<property name="searchTable.new" value="true" />
+			<property name="searchTable.report" value="true" />
+			<property name="searchTable.quickFilter" value="true" />
+			<property name="searchTable.basicSearchOnly" value="true" />
+			<property name="createForm" value="entityAuditConfigForm" />
+			<property name="createForm.save" value="true" />
+			<property name="createForm.save.next" value="true" />
+			<property name="createForm.save.close" value="true" />
+			<property name="maintainForm" value="entityAuditConfigForm" />
+			<property name="maintainForm.update" value="true" />
+			<property name="maintainForm.delete" value="true" />
+		</applet>
+	</applets>
 	<!-- References -->
 	<references>
-		<reference name="auditConfigRef" description="$m{audit.auditconfig.reference}"
-			entity="auditConfig" searchField="description" />
+		<reference name="entityAuditConfigRef" description="$m{audit.entityauditconfig.reference}"
+			entity="entityAuditConfig" searchField="description" />
+		<reference name="entityAuditDetailsRef" description="$m{audit.entityauditdetails.reference}"
+			entity="entityAuditDetails"/>
+		<reference name="entityAuditKeysRef" description="$m{audit.entityauditkeys.reference}"
+			entity="entityAuditKeys"/>
+		<reference name="entityAuditSnapshotRef" description="$m{audit.entityauditsnapshot.reference}"
+			entity="entityAuditSnapshot"/>
 	</references>
 	<!-- Entities -->
 	<entities>
-		<entity name="auditConfig" description="$m{audit.auditconfig}"
-			label="$m{audit.auditconfig.label}"
-			type="com.flowcentraltech.flowcentral.audit.entities.AuditConfig"
+		<entity name="entityAuditConfig" description="$m{audit.entityauditconfig}"
+			label="$m{audit.entityauditconfig.label}"
+			type="com.flowcentraltech.flowcentral.audit.entities.EntityAuditConfig"
 			reportable="true">
+			<field name="sourceType" label="$m{audit.entityauditconfig.sourcetype}" type="enum_ref"
+				references="auditsourcetypelist" inputWidget="application.enumlist" />
+			<field name="name" label="$m{audit.entityauditconfig.name}" type="string"
+				inputWidget="application.name" basicSearch="true"/>
+			<field name="description" label="$m{audit.entityauditconfig.description}" type="string"
+				inputWidget="application.text" basicSearch="true"/>
+			<field name="entity" label="$m{audit.entityauditconfig.entity}" type="string"
+				inputWidget="auditableentitysearch" basicSearch="true"/>
+			<field name="searchFieldA" label="$m{audit.entityauditconfig.searchfielda}" type="string"
+				inputWidget="entityauditablefielddeflist" nullable="true" />
+			<field name="searchFieldB" label="$m{audit.entityauditconfig.searchfieldb}" type="string"
+				inputWidget="entityauditablefielddeflist" nullable="true" />
+			<field name="searchFieldC" label="$m{audit.entityauditconfig.searchfieldc}" type="string"
+				inputWidget="entityauditablefielddeflist" nullable="true" />
+			<field name="searchFieldD" label="$m{audit.entityauditconfig.searchfieldd}" type="string"
+				inputWidget="entityauditablefielddeflist" nullable="true" />
+			<field name="sourceTypeDesc" label="$m{audit.entityauditconfig.sourcetypedesc}" type="list_only"
+				key="sourceType" property="description" />
 			<uniqueConstraint name="nameUc"
-				description="$m{audit.auditconfig.uc.name}"
-				fieldList="applicationId,name">
-				<condition field="devVersionType" value="CRN"/>
+				description="$m{audit.entityauditconfig.uc.name}"
+				fieldList="name">
 			</uniqueConstraint>
 			<uniqueConstraint name="descUc"
-				description="$m{chart.chart.uc.description}"
-				fieldList="applicationId,description">
-				<condition field="devVersionType" value="CRN"/>
+				description="$m{audit.entityauditconfig.uc.description}"
+				fieldList="description">
 			</uniqueConstraint>
 		</entity>
+		<entity name="entityAuditDetails" description="$m{audit.entityauditdetails}"
+			label="$m{audit.entityauditdetails.label}"
+			type="com.flowcentraltech.flowcentral.audit.entities.EntityAuditDetails"
+			reportable="true">
+			<field name="entityAuditConfigId" label="$m{audit.entityauditdetails.entityauditconfigid}"
+				type="ref" inputLabel="$m{audit.entityauditdetails.entityauditconfig}"
+				inputWidget="application.entitylist" references="entityAuditConfigRef"
+				basicSearch="true" />
+			<field name="eventType" label="$m{audit.entityauditdetails.eventtype}" type="enum_ref"
+				references="auditeventtypelist" inputWidget="application.enumlist" />
+			<field name="eventTimestamp" label="$m{audit.entityauditdetails.eventtimestamp}" type="timestamp_utc"
+				inputWidget="application.datetime" />
+			<field name="auditNo" label="$m{audit.entityauditdetails.auditno}" type="string"
+				inputWidget="application.text" />
+			<field name="sourceName" label="$m{audit.entityauditdetails.sourcename}" type="string"
+				inputWidget="application.text" />
+			<field name="userLoginId" label="$m{audit.entityauditdetails.userloginid}" type="string"
+				inputWidget="application.text" />
+			<field name="userName" label="$m{audit.entityauditdetails.username}" type="string"
+				inputWidget="application.text" />
+			<field name="userIpAddress" label="$m{audit.entityauditdetails.useripaddress}" type="string"
+				inputWidget="application.text" />
+			<field name="roleCode" label="$m{audit.entityauditdetails.rolecode}" type="string"
+				inputWidget="application.text" />
+			<field name="eventTypeDesc" label="$m{audit.entityauditdetails.eventtypedesc}" type="list_only"
+				key="eventType" property="description" />
+		</entity>
+		<entity name="entityAuditKeys" description="$m{audit.entityauditkeys}"
+			label="$m{audit.entityauditkeys.label}"
+			type="com.flowcentraltech.flowcentral.audit.entities.EntityAuditKeys"
+			reportable="true">
+			<field name="entityAuditDetailsId" label="$m{audit.entityauditkeys.entityauditdetailsid}"
+				type="ref" inputLabel="$m{audit.entityauditkeys.entityauditdetails}"
+				inputWidget="application.entitylist" references="entityAuditDetailsRef"
+				basicSearch="true" />
+			<field name="keyA" label="$m{audit.entityauditkeys.keya}" type="string"
+				inputWidget="application.text" />
+			<field name="keyB" label="$m{audit.entityauditkeys.keyb}" type="string"
+				inputWidget="application.text" />
+			<field name="keyC" label="$m{audit.entityauditkeys.keyc}" type="string"
+				inputWidget="application.text" />
+			<field name="keyD" label="$m{audit.entityauditkeys.keyd}" type="string"
+				inputWidget="application.text" />
+			<field name="entityAuditConfigId" label="$m{audit.entityauditkeys.entityauditconfigid}" type="list_only"
+				key="entityAuditDetailsId" property="entityAuditConfigId" />
+			<field name="eventType" label="$m{audit.entityauditkeys.eventtype}" type="list_only"
+				key="entityAuditDetailsId" property="eventType" />
+			<field name="eventTimestamp" label="$m{audit.entityauditkeys.eventtimestamp}" type="list_only"
+				key="entityAuditDetailsId" property="eventTimestamp" />
+			<field name="auditNo" label="$m{audit.entityauditkeys.auditno}" type="list_only"
+				key="entityAuditDetailsId" property="auditNo" />
+			<field name="sourceName" label="$m{audit.entityauditkeys.sourcename}" type="list_only"
+				key="entityAuditDetailsId" property="sourceName" />
+			<field name="userLoginId" label="$m{audit.entityauditkeys.userloginid}" type="list_only"
+				key="entityAuditDetailsId" property="userLoginId" />
+			<field name="userName" label="$m{audit.entityauditkeys.username}" type="list_only"
+				key="entityAuditDetailsId" property="userName" />
+			<field name="userIpAddress" label="$m{audit.entityauditkeys.useripaddress}" type="list_only"
+				key="entityAuditDetailsId" property="userIpAddress" />
+			<field name="roleCode" label="$m{audit.entityauditkeys.rolecode}" type="list_only"
+				key="entityAuditDetailsId" property="roleCode" />
+			<field name="eventTypeDesc" label="$m{audit.entityauditkeys.eventtypedesc}" type="list_only"
+				key="entityAuditDetailsId" property="eventTypeDesc" />
+		</entity>
+		<entity name="entityAuditSnapshot" description="$m{audit.entityauditsnapshot}"
+			label="$m{audit.entityauditsnapshot.label}"
+			type="com.flowcentraltech.flowcentral.audit.entities.EntityAuditSnapshot"
+			reportable="true">
+			<field name="entityAuditDetailsId" label="$m{audit.entityauditsnapshot.entityauditdetailsid}"
+				type="ref" inputLabel="$m{audit.entityauditsnapshot.entityauditdetails}"
+				inputWidget="application.entitylist" references="entityAuditDetailsRef"
+				basicSearch="true" />
+			<field name="snapshot" label="$m{audit.entityauditsnapshot.snapshot}" type="clob"
+				inputWidget="application.textarea" />
+		</entity>
 	</entities>
+	<!-- Tables -->
+	<tables>
+		<table name="entityAuditConfigTable"
+			description="$m{audit.entityauditconfig.table}"
+			label="$m{audit.entityauditconfig.table.label}" entity="entityAuditConfig"
+			itemsPerPage="20" serialNo="true" basicSearch="true">
+			<column field="name" renderWidget="application.name"
+				widthRatio="1" linkAct="maintainAct" />
+			<column field="description" renderWidget="application.text"
+				widthRatio="1" />
+			<column field="entity" renderWidget="application.text"
+				widthRatio="1" />
+			<column field="sourceTypeDesc" renderWidget="application.text"
+				label="$m{audit.entityauditconfig.sourcetype}" widthRatio="1" />
+			<column field="statusDesc" renderWidget="application.text"
+				label="$m{basestatusentity.field.label.status}" widthRatio="1" />
+			<column field="createDt" renderWidget="application.datetime"
+				widthRatio="1" />
+			<column field="updateDt" renderWidget="application.datetime"
+				widthRatio="1" />
+		</table>
+		<table name="entityAuditKeysTable"
+			description="$m{audit.entityauditkeys.table}"
+			label="$m{audit.entityauditkeys.table.label}" entity="entityAuditKeys"
+			itemsPerPage="20" serialNo="true" basicSearch="true">
+			<column field="auditNo" renderWidget="application.name"
+				widthRatio="1" linkAct="maintainAct" />
+			<column field="userLoginId" renderWidget="application.text"
+				widthRatio="1" />
+			<column field="keyA" renderWidget="application.text"
+				widthRatio="1" />
+			<column field="keyB" renderWidget="application.text"
+				widthRatio="1" />
+			<column field="keyC" renderWidget="application.text"
+				widthRatio="1" />
+			<column field="keyD" renderWidget="application.text"
+				widthRatio="1" />
+			<column field="eventTypeDesc" renderWidget="application.text"
+				widthRatio="1" />
+			<column field="eventTimestamp" renderWidget="application.datetime"
+				widthRatio="1" />
+		</table>
+	</tables>
+	<!-- Forms -->
+	<forms>
+		<form name="entityAuditConfigForm"
+			description="$m{audit.entityauditconfig.form}" entity="entityAuditConfig">
+			<tab name="basicDetails"
+				label="$m{audit.entityauditconfig.form.basicdetails}"
+				contentType="miniform">
+				<section name="entityAuditConfigDetails" columns="type_2">
+					<field name="name" inputWidget="application.name" column="0"
+						required="true" />
+					<field name="description" inputWidget="application.text"
+						column="0" required="true" />
+					<field name="sourceType" column="0" required="true" />
+					<field name="status" column="1" required="true" />
+					<field name="entity" column="1" switchOnChange="true" required="true"/>
+					<field name="searchFieldA" column="1" />
+					<field name="searchFieldB" column="1" />
+					<field name="searchFieldC" column="1" />
+					<field name="searchFieldD" column="1" />
+				</section>
+			</tab>
+			<tab name="changeLog" label="$m{application.form.audit}"
+				contentType="miniform_changelog" />
+		</form>
+	</forms>
 </application>

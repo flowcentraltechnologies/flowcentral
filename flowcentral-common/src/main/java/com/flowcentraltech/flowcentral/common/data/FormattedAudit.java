@@ -16,40 +16,30 @@
 
 package com.flowcentraltech.flowcentral.common.data;
 
-import java.util.List;
-
-import com.flowcentraltech.flowcentral.configuration.constants.AuditEventType;
-
 /**
- * Entity audit snapshot information object.
+ * Formatted entity audit information object.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class EntityAuditSnapshot {
+public class FormattedAudit {
 
-    private AuditEventType eventType;
+    private FormattedEntityAudit[] snapshots;
 
-    private String entity;
-
-    private List<EntityFieldAudit> fieldAudits;
-
-    public EntityAuditSnapshot(AuditEventType eventType, String entity, List<EntityFieldAudit> fieldAudits) {
-        this.eventType = eventType;
-        this.entity = entity;
-        this.fieldAudits = fieldAudits;
+    public FormattedAudit(FormattedEntityAudit[] snapshots) {
+        this.snapshots = snapshots;
     }
 
-    public AuditEventType getEventType() {
-        return eventType;
+    public FormattedAudit() {
+
     }
 
-    public String getEntity() {
-        return entity;
+    public FormattedEntityAudit[] getSnapshots() {
+        return snapshots;
     }
 
-    public List<EntityFieldAudit> getFieldAudits() {
-        return fieldAudits;
+    public void setSnapshots(FormattedEntityAudit[] snapshots) {
+        this.snapshots = snapshots;
     }
 
 }

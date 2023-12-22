@@ -15,9 +15,9 @@
  */
 package com.flowcentraltech.flowcentral.integration.lists;
 
+import com.flowcentraltech.flowcentral.common.web.lists.AbstractFlowCentralListCommand;
 import com.flowcentraltech.flowcentral.integration.business.IntegrationModuleService;
 import com.tcdng.unify.core.annotation.Configurable;
-import com.tcdng.unify.core.list.AbstractListCommand;
 import com.tcdng.unify.core.list.ListParam;
 
 /**
@@ -26,7 +26,7 @@ import com.tcdng.unify.core.list.ListParam;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class AbstractIntegrationListCommand<T extends ListParam> extends AbstractListCommand<T> {
+public abstract class AbstractIntegrationListCommand<T extends ListParam> extends AbstractFlowCentralListCommand<T> {
 
     @Configurable
     private IntegrationModuleService integrationModuleService;

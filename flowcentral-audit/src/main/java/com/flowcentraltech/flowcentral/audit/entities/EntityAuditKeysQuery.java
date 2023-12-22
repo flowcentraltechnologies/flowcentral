@@ -42,6 +42,10 @@ public class EntityAuditKeysQuery extends BaseAuditEntityQuery<EntityAuditKeys> 
         return (EntityAuditKeysQuery) addEquals("eventType", eventType);
     }
 
+    public EntityAuditKeysQuery auditNo(String auditNo) {
+        return (EntityAuditKeysQuery) addEquals("auditNo", auditNo);
+    }
+
     public EntityAuditKeysQuery userLoginId(String userLoginId) {
         return (EntityAuditKeysQuery) addEquals("userLoginId", userLoginId);
     }

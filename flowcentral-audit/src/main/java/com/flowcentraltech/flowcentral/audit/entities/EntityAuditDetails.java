@@ -33,7 +33,8 @@ import com.tcdng.unify.core.annotation.Table;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@Table(name = "FC_ENTITYAUDITDETAILS", indexes = { @Index({ "eventType" }), @Index({ "userLoginId" }) })
+@Table(name = "FC_ENTITYAUDITDETAILS",
+        indexes = { @Index({ "auditNo" }), @Index({ "eventType" }), @Index({ "userLoginId" }) })
 public class EntityAuditDetails extends BaseAuditEntity {
 
     @ForeignKey(EntityAuditConfig.class)
@@ -44,6 +45,9 @@ public class EntityAuditDetails extends BaseAuditEntity {
 
     @Column(name = "EVENT_TIMESTAMP", type = ColumnType.TIMESTAMP_UTC)
     private Date eventTimestamp;
+
+    @Column(name = "AUDIT_NO", length = 24)
+    private String auditNo;
 
     @Column(name = "SOURCE_NM", length = 128)
     private String sourceName;
@@ -65,7 +69,7 @@ public class EntityAuditDetails extends BaseAuditEntity {
 
     @Override
     public String getDescription() {
-        return null;
+        return auditNo;
     }
 
     public Long getEntityAuditConfigId() {
@@ -90,6 +94,14 @@ public class EntityAuditDetails extends BaseAuditEntity {
 
     public void setEventTimestamp(Date eventTimestamp) {
         this.eventTimestamp = eventTimestamp;
+    }
+
+    public String getAuditNo() {
+        return auditNo;
+    }
+
+    public void setAuditNo(String auditNo) {
+        this.auditNo = auditNo;
     }
 
     public String getSourceName() {

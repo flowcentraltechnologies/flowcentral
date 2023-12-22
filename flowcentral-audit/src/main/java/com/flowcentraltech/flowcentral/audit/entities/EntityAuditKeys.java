@@ -39,20 +39,23 @@ public class EntityAuditKeys extends BaseAuditEntity {
     @ForeignKey(EntityAuditDetails.class)
     private Long entityAuditDetailsId;
     
-    @Column(name = "KEY_A", length = 64)
+    @Column(name = "KEY_A", length = 64, nullable = true)
     private String keyA;
     
-    @Column(name = "KEY_B", length = 64)
+    @Column(name = "KEY_B", length = 64, nullable = true)
     private String keyB;
     
-    @Column(name = "KEY_C", length = 64)
+    @Column(name = "KEY_C", length = 64, nullable = true)
     private String keyC;
     
-    @Column(name = "KEY_D", length = 64)
+    @Column(name = "KEY_D", length = 64, nullable = true)
     private String keyD;
 
     @ListOnly(key = "entityAuditDetailsId", property = "entityAuditConfigId")
     private Long entityAuditConfigId;
+    
+    @ListOnly(key = "entityAuditDetailsId", property = "auditNo")
+    private String auditNo;
 
     @ListOnly(key = "entityAuditDetailsId", property = "eventType")
     private AuditEventType eventType;
@@ -121,6 +124,86 @@ public class EntityAuditKeys extends BaseAuditEntity {
 
     public void setKeyD(String keyD) {
         this.keyD = keyD;
+    }
+
+    public Long getEntityAuditConfigId() {
+        return entityAuditConfigId;
+    }
+
+    public void setEntityAuditConfigId(Long entityAuditConfigId) {
+        this.entityAuditConfigId = entityAuditConfigId;
+    }
+
+    public String getAuditNo() {
+        return auditNo;
+    }
+
+    public void setAuditNo(String auditNo) {
+        this.auditNo = auditNo;
+    }
+
+    public AuditEventType getEventType() {
+        return eventType;
+    }
+
+    public void setEventType(AuditEventType eventType) {
+        this.eventType = eventType;
+    }
+
+    public Date getEventTimestamp() {
+        return eventTimestamp;
+    }
+
+    public void setEventTimestamp(Date eventTimestamp) {
+        this.eventTimestamp = eventTimestamp;
+    }
+
+    public String getSourceName() {
+        return sourceName;
+    }
+
+    public void setSourceName(String sourceName) {
+        this.sourceName = sourceName;
+    }
+
+    public String getUserLoginId() {
+        return userLoginId;
+    }
+
+    public void setUserLoginId(String userLoginId) {
+        this.userLoginId = userLoginId;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getUserIpAddress() {
+        return userIpAddress;
+    }
+
+    public void setUserIpAddress(String userIpAddress) {
+        this.userIpAddress = userIpAddress;
+    }
+
+    public String getRoleCode() {
+        return roleCode;
+    }
+
+    public void setRoleCode(String roleCode) {
+        this.roleCode = roleCode;
+    }
+
+    public String getEventTypeDesc() {
+        return eventTypeDesc;
+    }
+
+    public void setEventTypeDesc(String eventTypeDesc) {
+        this.eventTypeDesc = eventTypeDesc;
     }
 
 }
