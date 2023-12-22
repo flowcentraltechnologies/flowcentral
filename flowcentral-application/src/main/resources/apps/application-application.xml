@@ -530,6 +530,14 @@
 		<reference name="appEntityRef"
 			description="$m{application.appentity.reference}" entity="appEntity"
 			searchField="description" />
+		<reference name="appEntityAuditableRef"
+			description="$m{application.appentity.auditable.reference}" entity="appEntity"
+			searchField="description">
+			<filter>
+				<restriction type="equals" field="auditable"
+					paramA="true" />
+			</filter>
+		</reference>
 		<reference name="appEntityLoadingRef"
 			description="$m{application.appentity.loading.reference}"
 			entity="appEntity" searchField="description"

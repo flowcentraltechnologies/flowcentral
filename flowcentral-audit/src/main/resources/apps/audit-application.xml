@@ -7,7 +7,7 @@
 		<widgetType name="auditableentitysearch"
 			description="$m{audit.widgettype.auditableentitysearch}"
 			dataType="string" inputType="string"
-			editor="!fc-entitysearch ref:$s{application.appEntityRef} listKey:$s{longName}"
+			editor="!fc-entitysearch ref:$s{application.appEntityAuditableRef} listKey:$s{longName}"
 			renderer="!ui-label" />
 		<widgetType name="entityauditablefielddeflist"
 			description="$m{audit.widgettype.entityauditablefielddeflist}"
@@ -19,7 +19,7 @@
 	<applets>
 		<applet name="manageEntityAuditConfig"
 			description="$m{audit.entityauditconfig.manage}"
-			label="$m{audit.entityauditconfig.manage.label}" icon="site-map"
+			label="$m{audit.entityauditconfig.manage.label}" icon="cogs"
 			type="manage_entitylist" entity="entityAuditConfig" menuAccess="true"
 			allowSecondaryTenants="true">
 			<property name="searchTable" value="entityAuditConfigTable" />
@@ -212,12 +212,12 @@
 					<field name="description" inputWidget="application.text"
 						column="0" required="true" />
 					<field name="sourceType" column="0" required="true" />
-					<field name="status" column="1" required="true" />
 					<field name="entity" column="1" switchOnChange="true" required="true"/>
 					<field name="searchFieldA" column="1" />
 					<field name="searchFieldB" column="1" />
 					<field name="searchFieldC" column="1" />
 					<field name="searchFieldD" column="1" />
+					<field name="status" column="1" required="true" />
 				</section>
 			</tab>
 			<tab name="changeLog" label="$m{application.form.audit}"
