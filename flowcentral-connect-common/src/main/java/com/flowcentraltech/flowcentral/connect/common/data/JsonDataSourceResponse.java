@@ -23,15 +23,17 @@ package com.flowcentraltech.flowcentral.connect.common.data;
  */
 public class JsonDataSourceResponse extends BaseResponse {
     
+    private static final String[] EMPTY_PAYLOAN = new String[0];
+    
     private String[] payload;
 
     public JsonDataSourceResponse(String errorCode, String errorMsg) {
         super(errorCode, errorMsg);
-        this.payload = new String[0];
+        this.payload = EMPTY_PAYLOAN;
     }
 
     public JsonDataSourceResponse() {
-
+        this.payload = EMPTY_PAYLOAN;
     }
 
     public String[] getPayload() {
