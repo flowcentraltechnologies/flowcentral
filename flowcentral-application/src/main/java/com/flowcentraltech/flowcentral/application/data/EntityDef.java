@@ -382,7 +382,13 @@ public class EntityDef extends BaseApplicationEntityDef {
         if (auditableFieldDefList == null) {
             synchronized (this) {
                 if (auditableFieldDefList == null) {
-                    auditableFieldDefList = new ArrayList<EntityFieldDef>(auditableFieldDefList);
+                    auditableFieldDefList = new ArrayList<EntityFieldDef>();
+                    for (EntityFieldDef entityFieldDef : fieldDefList) {
+                        if (entityFieldDef.isAuditable() && !entityFieldDef.isChildRef()) {
+                            auditableFieldDefList.add(entityFieldDef);
+                        }
+                    }
+
                     DataUtils.sortAscending(auditableFieldDefList, EntityFieldDef.class, "fieldLabel");
                     auditableFieldDefList = DataUtils.unmodifiableList(auditableFieldDefList);
                 }
