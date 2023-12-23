@@ -50,6 +50,8 @@ import com.tcdng.unify.core.util.DataUtils;
 @Component(AuditModuleNameConstants.AUDIT_MODULE_SERVICE)
 public class AuditModuleServiceImpl extends AbstractFlowCentralService implements AuditModuleService {
 
+    private static final String AUDITTRAIL_AUDITNO_FORMAT = "AT{yyyy}{MM}{DD}{N:10}";
+
     @Configurable
     private AppletUtilities appletUtilities;
 
@@ -101,7 +103,8 @@ public class AuditModuleServiceImpl extends AbstractFlowCentralService implement
                                 .entity(auditSnapshot.getEntity()).status(RecordStatus.ACTIVE));
                 if (!DataUtils.isBlank(configNames)) {
                     EntityAuditDetails entityAuditDetails = new EntityAuditDetails();
-                    entityAuditDetails.setAuditNo(null);
+                    entityAuditDetails.setAuditNo(appletUtilities.sequenceCodeGenerator().getNextSequenceCode(
+                            AuditModuleNameConstants.AUDIT_MODULE_SERVICE, AUDITTRAIL_AUDITNO_FORMAT, getNow(), null));
                     entityAuditDetails.setEventTimestamp(auditSnapshot.getEventTimestamp());
                     entityAuditDetails.setEventType(auditSnapshot.getEventType());
                     entityAuditDetails.setRoleCode(auditSnapshot.getRoleCode());
@@ -111,7 +114,8 @@ public class AuditModuleServiceImpl extends AbstractFlowCentralService implement
                     entityAuditDetails.setUserName(auditSnapshot.getUserName());
                     Long entityAuditDetailId = (Long) environment().create(entityAuditDetails);
 
-                    com.flowcentraltech.flowcentral.common.data.EntityAuditSnapshot rootSnapshot = auditSnapshot.getSnapshots().get(0);
+                    com.flowcentraltech.flowcentral.common.data.EntityAuditSnapshot rootSnapshot = auditSnapshot
+                            .getSnapshots().get(0);
                     for (String configName : configNames) {
                         EntityAuditKeys entityAuditKeys = new EntityAuditKeys();
                         EntityAuditConfigDef entityAuditConfigDef = entityAuditConfigDefFactoryMap.get(configName);
@@ -121,30 +125,29 @@ public class AuditModuleServiceImpl extends AbstractFlowCentralService implement
                             String keyA = resolveKey(rootSnapshot, entityAuditConfigDef.getSearchFieldA());
                             entityAuditKeys.setKeyA(keyA);
                         }
-                        
+
                         if (entityAuditConfigDef.isWithSearchFieldB()) {
                             String keyB = resolveKey(rootSnapshot, entityAuditConfigDef.getSearchFieldB());
                             entityAuditKeys.setKeyB(keyB);
                         }
-                        
+
                         if (entityAuditConfigDef.isWithSearchFieldC()) {
                             String keyC = resolveKey(rootSnapshot, entityAuditConfigDef.getSearchFieldC());
                             entityAuditKeys.setKeyC(keyC);
                         }
-                        
+
                         if (entityAuditConfigDef.isWithSearchFieldD()) {
                             String keyD = resolveKey(rootSnapshot, entityAuditConfigDef.getSearchFieldD());
                             entityAuditKeys.setKeyD(keyD);
                         }
-                        
+
                         environment().create(entityAuditKeys);
                     }
 
                     FormattedAudit formattedAudit = appletUtilities.formatAudit(auditSnapshot);
                     EntityAuditSnapshot entityAuditSnapshot = new EntityAuditSnapshot();
                     entityAuditSnapshot.setEntityAuditDetailsId(entityAuditDetailId);
-                    String snapshot = DataUtils.asJsonString(formattedAudit, PrintFormat.PRETTY);
-                    entityAuditSnapshot.setSnapshot(snapshot);
+                    entityAuditSnapshot.setSnapshot( DataUtils.asJsonString(formattedAudit, PrintFormat.NONE));
                     environment().create(entityAuditSnapshot);
                 }
             }
@@ -157,14 +160,14 @@ public class AuditModuleServiceImpl extends AbstractFlowCentralService implement
     protected void doInstallModuleFeatures(ModuleInstall moduleInstall) throws UnifyException {
 
     }
-    
+
     private String resolveKey(com.flowcentraltech.flowcentral.common.data.EntityAuditSnapshot rootSnapshot,
             String searchFieldName) throws UnifyException {
         EntityFieldAudit entityFieldAudit = rootSnapshot.getEntityFieldAudit(searchFieldName);
         if (rootSnapshot.getEventType().isCreate()) {
             return (String) entityFieldAudit.getNewValue();
         }
-        
+
         return (String) entityFieldAudit.getOldValue();
     }
 

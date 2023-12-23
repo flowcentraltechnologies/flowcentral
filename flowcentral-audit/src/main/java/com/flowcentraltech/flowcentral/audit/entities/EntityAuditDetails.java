@@ -58,7 +58,7 @@ public class EntityAuditDetails extends BaseAuditEntity {
     @Column(name = "USER_IP_ADDRESS", length = 64)
     private String userIpAddress;
 
-    @Column(name = "ROLE_CD", length = 32)
+    @Column(name = "ROLE_CD", length = 32, nullable = true)
     private String roleCode;
 
     @ListOnly(key = "eventType", property = "description")
