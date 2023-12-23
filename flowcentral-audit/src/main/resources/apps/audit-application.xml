@@ -84,10 +84,6 @@
 			label="$m{audit.entityauditdetails.label}"
 			type="com.flowcentraltech.flowcentral.audit.entities.EntityAuditDetails"
 			reportable="true">
-			<field name="entityAuditConfigId" label="$m{audit.entityauditdetails.entityauditconfigid}"
-				type="ref" inputLabel="$m{audit.entityauditdetails.entityauditconfig}"
-				inputWidget="application.entitylist" references="entityAuditConfigRef"
-				basicSearch="true" />
 			<field name="eventType" label="$m{audit.entityauditdetails.eventtype}" type="enum_ref"
 				references="auditeventtypelist" inputWidget="application.enumlist" />
 			<field name="eventTimestamp" label="$m{audit.entityauditdetails.eventtimestamp}" type="timestamp_utc"
@@ -111,6 +107,10 @@
 			label="$m{audit.entityauditkeys.label}"
 			type="com.flowcentraltech.flowcentral.audit.entities.EntityAuditKeys"
 			reportable="true">
+			<field name="entityAuditConfigId" label="$m{audit.entityauditdetails.entityauditconfigid}"
+				type="ref" inputLabel="$m{audit.entityauditdetails.entityauditconfig}"
+				inputWidget="application.entitylist" references="entityAuditConfigRef"
+				basicSearch="true" />
 			<field name="entityAuditDetailsId" label="$m{audit.entityauditkeys.entityauditdetailsid}"
 				type="ref" inputLabel="$m{audit.entityauditkeys.entityauditdetails}"
 				inputWidget="application.entitylist" references="entityAuditDetailsRef"
@@ -123,8 +123,6 @@
 				inputWidget="application.text" />
 			<field name="keyD" label="$m{audit.entityauditkeys.keyd}" type="string"
 				inputWidget="application.text" />
-			<field name="entityAuditConfigId" label="$m{audit.entityauditkeys.entityauditconfigid}" type="list_only"
-				key="entityAuditDetailsId" property="entityAuditConfigId" />
 			<field name="eventType" label="$m{audit.entityauditkeys.eventtype}" type="list_only"
 				key="entityAuditDetailsId" property="eventType" />
 			<field name="eventTimestamp" label="$m{audit.entityauditkeys.eventtimestamp}" type="list_only"

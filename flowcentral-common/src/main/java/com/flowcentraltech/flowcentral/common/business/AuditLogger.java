@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.common.business;
 
 import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
 import com.flowcentraltech.flowcentral.common.data.AuditSnapshot;
+import com.flowcentraltech.flowcentral.configuration.constants.AuditSourceType;
 
 /**
  * Audit logger.
@@ -30,11 +31,13 @@ public interface AuditLogger extends FlowCentralComponent {
     /**
      * Checks if audit logger supports entity logging
      * 
+     * @param sourceType
+     *                   the source type
      * @param entity
-     *               the entity name
+     *                   the entity name
      * @return true if entity supported otherwise false
      */
-    boolean supports(String entity);
+    boolean supportsAuditLog(AuditSourceType sourceType, String entity);
 
     /**
      * Logs an audit snapshot.

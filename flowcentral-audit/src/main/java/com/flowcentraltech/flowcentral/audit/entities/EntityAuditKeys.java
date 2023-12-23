@@ -36,6 +36,9 @@ import com.tcdng.unify.core.annotation.Table;
         indexes = { @Index({ "keyA" }), @Index({ "keyB" }), @Index({ "keyC" }), @Index({ "keyD" }) })
 public class EntityAuditKeys extends BaseAuditEntity {
 
+    @ForeignKey(EntityAuditConfig.class)
+    private Long entityAuditConfigId;
+
     @ForeignKey(EntityAuditDetails.class)
     private Long entityAuditDetailsId;
     
@@ -50,9 +53,6 @@ public class EntityAuditKeys extends BaseAuditEntity {
     
     @Column(name = "KEY_D", length = 64, nullable = true)
     private String keyD;
-
-    @ListOnly(key = "entityAuditDetailsId", property = "entityAuditConfigId")
-    private Long entityAuditConfigId;
     
     @ListOnly(key = "entityAuditDetailsId", property = "auditNo")
     private String auditNo;
@@ -84,6 +84,14 @@ public class EntityAuditKeys extends BaseAuditEntity {
     @Override
     public String getDescription() {
         return keyA;
+    }
+
+    public Long getEntityAuditConfigId() {
+        return entityAuditConfigId;
+    }
+
+    public void setEntityAuditConfigId(Long entityAuditConfigId) {
+        this.entityAuditConfigId = entityAuditConfigId;
     }
 
     public Long getEntityAuditDetailsId() {
@@ -124,14 +132,6 @@ public class EntityAuditKeys extends BaseAuditEntity {
 
     public void setKeyD(String keyD) {
         this.keyD = keyD;
-    }
-
-    public Long getEntityAuditConfigId() {
-        return entityAuditConfigId;
-    }
-
-    public void setEntityAuditConfigId(Long entityAuditConfigId) {
-        this.entityAuditConfigId = entityAuditConfigId;
     }
 
     public String getAuditNo() {

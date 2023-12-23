@@ -37,9 +37,6 @@ import com.tcdng.unify.core.annotation.Table;
         indexes = { @Index({ "auditNo" }), @Index({ "eventType" }), @Index({ "userLoginId" }) })
 public class EntityAuditDetails extends BaseAuditEntity {
 
-    @ForeignKey(EntityAuditConfig.class)
-    private Long entityAuditConfigId;
-
     @ForeignKey(name = "event_type")
     private AuditEventType eventType;
 
@@ -70,14 +67,6 @@ public class EntityAuditDetails extends BaseAuditEntity {
     @Override
     public String getDescription() {
         return auditNo;
-    }
-
-    public Long getEntityAuditConfigId() {
-        return entityAuditConfigId;
-    }
-
-    public void setEntityAuditConfigId(Long entityAuditConfigId) {
-        this.entityAuditConfigId = entityAuditConfigId;
     }
 
     public AuditEventType getEventType() {

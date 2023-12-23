@@ -16,7 +16,9 @@
 
 package com.flowcentraltech.flowcentral.common.data;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.flowcentraltech.flowcentral.configuration.constants.AuditEventType;
 
@@ -34,10 +36,16 @@ public class EntityAuditSnapshot {
 
     private List<EntityFieldAudit> fieldAudits;
 
+    private Map<String, EntityFieldAudit> fieldAuditsByName;
+    
     public EntityAuditSnapshot(AuditEventType eventType, String entity, List<EntityFieldAudit> fieldAudits) {
         this.eventType = eventType;
         this.entity = entity;
         this.fieldAudits = fieldAudits;
+        this.fieldAuditsByName = new HashMap<String, EntityFieldAudit>();
+        for (EntityFieldAudit entityFieldAudit: fieldAudits) {
+            fieldAuditsByName.put(entityFieldAudit.getFieldName(), entityFieldAudit);
+        }
     }
 
     public AuditEventType getEventType() {
@@ -52,4 +60,7 @@ public class EntityAuditSnapshot {
         return fieldAudits;
     }
 
+    public EntityFieldAudit getEntityFieldAudit(String fieldName) {
+        return fieldAuditsByName.get(fieldName);
+    }
 }

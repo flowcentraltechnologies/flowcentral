@@ -16,6 +16,7 @@
 package com.flowcentraltech.flowcentral.audit.entities;
 
 import com.flowcentraltech.flowcentral.common.entities.BaseStatusEntityQuery;
+import com.flowcentraltech.flowcentral.configuration.constants.AuditSourceType;
 
 /**
  * Entity audit configuration query.
@@ -27,6 +28,18 @@ public class EntityAuditConfigQuery extends BaseStatusEntityQuery<EntityAuditCon
 
     public EntityAuditConfigQuery() {
         super(EntityAuditConfig.class);
+    }
+    
+    public EntityAuditConfigQuery sourceType(AuditSourceType sourceType) {
+        return (EntityAuditConfigQuery) addEquals("sourceType", sourceType);
+    }
+
+    public EntityAuditConfigQuery name(String name) {
+        return (EntityAuditConfigQuery) addEquals("name", name);
+    }
+
+    public EntityAuditConfigQuery entity(String entity) {
+        return (EntityAuditConfigQuery) addEquals("entity", entity);
     }
 
 }

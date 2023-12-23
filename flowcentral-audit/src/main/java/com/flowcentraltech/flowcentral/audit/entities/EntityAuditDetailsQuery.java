@@ -30,10 +30,6 @@ public class EntityAuditDetailsQuery extends BaseAuditEntityQuery<EntityAuditDet
         super(EntityAuditDetails.class);
     }
 
-    public EntityAuditDetailsQuery entityAuditConfigId(Long entityAuditConfigId) {
-        return (EntityAuditDetailsQuery) addEquals("entityAuditConfigId", entityAuditConfigId);
-    }
-
     public EntityAuditDetailsQuery eventType(AuditEventType eventType) {
         return (EntityAuditDetailsQuery) addEquals("eventType", eventType);
     }

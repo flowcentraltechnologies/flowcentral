@@ -20,8 +20,10 @@ import com.flowcentraltech.flowcentral.common.entities.BaseStatusEntity;
 import com.flowcentraltech.flowcentral.configuration.constants.AuditSourceType;
 import com.tcdng.unify.core.annotation.Column;
 import com.tcdng.unify.core.annotation.ForeignKey;
+import com.tcdng.unify.core.annotation.Index;
 import com.tcdng.unify.core.annotation.ListOnly;
 import com.tcdng.unify.core.annotation.Table;
+import com.tcdng.unify.core.annotation.UniqueConstraint;
 
 /**
  * Entity audit configuration entity.
@@ -29,7 +31,8 @@ import com.tcdng.unify.core.annotation.Table;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@Table(name = "FC_ENTITYAUDITCONFIG")
+@Table(name = "FC_ENTITYAUDITCONFIG", indexes = { @Index({ "sourceType" }), @Index({ "entity" }) },
+        uniqueConstraints = { @UniqueConstraint({ "name" }), @UniqueConstraint({ "description" }) })
 public class EntityAuditConfig extends BaseStatusEntity {
 
     @ForeignKey(name = "SOURCE_TYPE")
@@ -40,7 +43,7 @@ public class EntityAuditConfig extends BaseStatusEntity {
 
     @Column(name = "ENTITYAUDITCONFIG_DESC", length = 128)
     private String description;
-    
+
     @Column(name = "ENTITY", length = 64)
     private String entity;
 
@@ -58,7 +61,7 @@ public class EntityAuditConfig extends BaseStatusEntity {
 
     @ListOnly(key = "sourceType", property = "description")
     private String sourceTypeDesc;
-    
+
     public AuditSourceType getSourceType() {
         return sourceType;
     }

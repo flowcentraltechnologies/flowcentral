@@ -15,6 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.audit.business;
 
+import com.flowcentraltech.flowcentral.common.business.AuditLogger;
 import com.flowcentraltech.flowcentral.common.business.FlowCentralService;
 
 /**
@@ -23,6 +24,6 @@ import com.flowcentraltech.flowcentral.common.business.FlowCentralService;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface AuditModuleService extends FlowCentralService {
+public interface AuditModuleService extends FlowCentralService, AuditLogger {
 
 }
