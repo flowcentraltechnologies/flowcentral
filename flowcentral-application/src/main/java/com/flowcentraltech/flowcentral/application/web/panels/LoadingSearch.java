@@ -219,12 +219,10 @@ public class LoadingSearch {
                         emails, listing)
                 : false;
     }
-    
+
     public boolean isNewCommentRequired(String userAction, int index) throws UnifyException {
-         LoadingTableProvider loadingTableProvider = getLoadingTableProvider(index);
-        return loadingTableProvider != null
-                ? loadingTableProvider.isNewCommentRequired(userAction)
-                : false;
+        LoadingTableProvider loadingTableProvider = getLoadingTableProvider(index);
+        return loadingTableProvider != null ? loadingTableProvider.isNewCommentRequired(userAction) : false;
     }
 
     public void setOrder(Order order) {
@@ -280,25 +278,20 @@ public class LoadingSearch {
     }
 
     public void applySearchEntriesToSearch() throws UnifyException {
-        EntityDef entityDef = searchEntries.getEntityDef();
-        Restriction restriction = searchEntries.getRestriction();
-        applyRestrictionToSearch(entityDef, restriction);
-    }
-
-    private void applyRestrictionToSearch(EntityDef entityDef, Restriction restriction) throws UnifyException {
+        SearchEntries.Entries entries = searchEntries.getEntries();
         Restriction searchRestriction = null;
         if (isWithBaseFilter()) {
-            if (restriction != null) {
-                searchRestriction = new And().add(baseRestriction).add(restriction);
+            if (entries.isWithRestriction()) {
+                searchRestriction = new And().add(baseRestriction).add(entries.getRestriction());
             } else {
                 searchRestriction = baseRestriction;
             }
         } else {
-            searchRestriction = restriction;
+            searchRestriction = entries.getRestriction();
         }
 
-        loadingTable.setSourceObjectClearSelected(new LoadingParams(searchRestriction));
-     }
+        loadingTable.setSourceObjectClearSelected(new LoadingParams(searchRestriction, entries.getInputs()));
+    }
 
     public boolean isShowActionFooter() {
         return (mode & SHOW_ACTIONFOOTER) > 0;

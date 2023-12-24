@@ -171,6 +171,7 @@ fux.clearCharts = function() {
 fux.rigEntitySearch = function(rgp) {
 	const id = rgp.pId;
 	const sel = _id(rgp.pFilId);
+	console.log("@prime: rgp = " + JSON.stringify(rgp));
 	if (sel) {
 		const evp = ux.newEvPrm(rgp);
 		evp.facId = rgp.pFacId;
@@ -196,6 +197,7 @@ fux.rigEntitySearch = function(rgp) {
 fux.rigEntitySearchResult = function(rgp) {
 	const id = rgp.pId;
 	const sel = _id(id);
+	console.log("@grime: rgp = " + JSON.stringify(rgp));
 	if (rgp.pKeys && rgp.pKeys.length > 0) {	
 		for (var i = 0; i < rgp.pKeys.length; i++) {
 			const evp = {};

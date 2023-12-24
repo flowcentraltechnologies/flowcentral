@@ -16,8 +16,11 @@
 package com.flowcentraltech.flowcentral.application.web.widgets;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -129,11 +132,13 @@ public class SearchEntries {
         return showConditions;
     }
 
-    public Restriction getRestriction() throws UnifyException {
+    public Entries getEntries() throws UnifyException {
         if (entryList != null) {
+            Map<String, Object> inputs = new HashMap<String, Object>();
             And and = new And();
             for (SearchEntry searchEntry : entryList) {
                 Object val = searchEntry.getParamInput().getValue();
+                inputs.put(searchEntry.getFieldName(), val);
                 if (val != null) {
                     if (searchEntry.isFieldEntry()) {
                         final EntityFieldDef entityFieldDef = searchEntry.getEntityFieldDef();
@@ -212,7 +217,6 @@ public class SearchEntries {
                             default:
                                 break;
                         }
-
                     } else if (searchEntry.isGeneratorEntry()) {
                         SearchInputRestrictionGenerator generator = au
                                 .getComponent(SearchInputRestrictionGenerator.class, searchEntry.getGenerator());
@@ -224,12 +228,10 @@ public class SearchEntries {
                 }
             }
 
-            if (!and.isEmpty()) {
-                return and;
-            }
+            return new Entries(inputs, !and.isEmpty() ? and : null);
         }
 
-        return null;
+        return new Entries();
     }
 
     public void normalize() throws UnifyException {
@@ -273,4 +275,32 @@ public class SearchEntries {
         return labelSuggestion != null ? labelSuggestion.getSuggestedLabel(fieldName) : null;
     }
 
+    public static class Entries {
+        
+        private final Map<String, Object> inputs;
+        
+        private final Restriction restriction;
+
+        private Entries(Map<String, Object> inputs, Restriction restriction) {
+            this.inputs = inputs;
+            this.restriction = restriction;
+        }
+
+        private Entries() {
+            this.inputs = Collections.emptyMap();
+            this.restriction = null;
+        }
+
+        public Map<String, Object> getInputs() {
+            return inputs;
+        }
+
+        public Restriction getRestriction() {
+            return restriction;
+        }
+
+        public boolean isWithRestriction() {
+            return restriction != null;
+        }
+    }
 }

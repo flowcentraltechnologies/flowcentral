@@ -40,6 +40,9 @@ public class EntityAuditDetails extends BaseAuditEntity {
     @ForeignKey(name = "event_type")
     private AuditEventType eventType;
 
+    @Column(name = "ENTITY_ID")
+    private Long entityId;
+    
     @Column(name = "EVENT_TIMESTAMP", type = ColumnType.TIMESTAMP_UTC)
     private Date eventTimestamp;
 
@@ -75,6 +78,14 @@ public class EntityAuditDetails extends BaseAuditEntity {
 
     public void setEventType(AuditEventType eventType) {
         this.eventType = eventType;
+    }
+
+    public Long getEntityId() {
+        return entityId;
+    }
+
+    public void setEntityId(Long entityId) {
+        this.entityId = entityId;
     }
 
     public Date getEventTimestamp() {

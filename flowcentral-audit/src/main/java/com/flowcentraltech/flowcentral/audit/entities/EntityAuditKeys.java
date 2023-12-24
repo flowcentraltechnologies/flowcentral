@@ -54,6 +54,15 @@ public class EntityAuditKeys extends BaseAuditEntity {
     @Column(name = "KEY_D", length = 64, nullable = true)
     private String keyD;
     
+    @ListOnly(key = "entityAuditConfigId", property = "name")
+    private String auditConfigName;
+   
+    @ListOnly(key = "entityAuditConfigId", property = "entity")
+    private String entity;
+    
+    @ListOnly(key = "entityAuditDetailsId", property = "entityId")
+    private Long entityId;
+   
     @ListOnly(key = "entityAuditDetailsId", property = "auditNo")
     private String auditNo;
 
@@ -132,6 +141,30 @@ public class EntityAuditKeys extends BaseAuditEntity {
 
     public void setKeyD(String keyD) {
         this.keyD = keyD;
+    }
+
+    public String getAuditConfigName() {
+        return auditConfigName;
+    }
+
+    public void setAuditConfigName(String auditConfigName) {
+        this.auditConfigName = auditConfigName;
+    }
+
+    public String getEntity() {
+        return entity;
+    }
+
+    public void setEntity(String entity) {
+        this.entity = entity;
+    }
+
+    public Long getEntityId() {
+        return entityId;
+    }
+
+    public void setEntityId(Long entityId) {
+        this.entityId = entityId;
     }
 
     public String getAuditNo() {

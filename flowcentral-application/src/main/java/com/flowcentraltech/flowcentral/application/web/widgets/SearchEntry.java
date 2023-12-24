@@ -47,8 +47,6 @@ public class SearchEntry implements EntityFieldAttributes {
 
     private String generator;
 
-    private String paramField;
-
     private AbstractInput<?> paramInput;
 
     public SearchEntry(AppletUtilities au, EntityDef entityDef, String label, String fieldName,
@@ -142,10 +140,6 @@ public class SearchEntry implements EntityFieldAttributes {
         return entityDef.getFieldDef(fieldName);
     }
 
-    public String getParamField() {
-        return paramField;
-    }
-
     public AbstractInput<?> getParamInput() {
         return paramInput;
     }
@@ -154,8 +148,12 @@ public class SearchEntry implements EntityFieldAttributes {
         return paramInput != null;
     }
 
-    public boolean isFieldEntry() {
-        return !StringUtils.isBlank(fieldName);
+    public boolean isPseudoFieldEntry() throws UnifyException {
+        return !StringUtils.isBlank(fieldName)  && !entityDef.isField(fieldName);
+    }
+
+    public boolean isFieldEntry() throws UnifyException {
+        return !StringUtils.isBlank(fieldName)  && entityDef.isField(fieldName);
     }
 
     public boolean isGeneratorEntry() {

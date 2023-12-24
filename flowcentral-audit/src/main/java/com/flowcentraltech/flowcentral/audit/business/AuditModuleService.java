@@ -15,8 +15,10 @@
  */
 package com.flowcentraltech.flowcentral.audit.business;
 
+import com.flowcentraltech.flowcentral.audit.data.EntityAuditConfigDef;
 import com.flowcentraltech.flowcentral.common.business.AuditLogger;
 import com.flowcentraltech.flowcentral.common.business.FlowCentralService;
+import com.tcdng.unify.core.UnifyException;
 
 /**
  * Audit business service.
@@ -26,4 +28,14 @@ import com.flowcentraltech.flowcentral.common.business.FlowCentralService;
  */
 public interface AuditModuleService extends FlowCentralService, AuditLogger {
 
+    /**
+     * Gets entity audit configuration.
+     * 
+     * @param name
+     *             the configuration name
+     * @return the configuration definition
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    EntityAuditConfigDef getEntityAuditConfigDef(String name) throws UnifyException;
 }

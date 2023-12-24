@@ -1829,7 +1829,7 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
     }
 
     @Override
-    public LoadingSearch constructLoadingSearch(AppletContext ctx, int loadingSearchMode) throws UnifyException {
+    public LoadingSearch constructLoadingSearch(AppletContext ctx, int loadingSearchMode) throws UnifyException { 
         logDebug("Constructing loading search using applet definition [{0}]...", ctx.getRootAppletName());
         final AppletDef _rootAppletDef = ctx.getRootAppletDef();
         TableDef _tableDef = getTableDef(
@@ -1853,7 +1853,6 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
         SectorIcon sectorIcon = getPageSectorIconByApplication(_rootAppletDef.getApplicationName());
         LoadingSearch loadingSearch = new LoadingSearch(ctx, sectorIcon, _tableDef, _rootAppletDef.getId(),
                 searchConfigName, searchColumns, loadingSearchMode, showConditions);
-
         loadingSearch.setEntitySubTitle(_rootAppletDef.getLabel());
         return loadingSearch;
     }

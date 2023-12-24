@@ -38,6 +38,10 @@ public class EntityAuditKeysQuery extends BaseAuditEntityQuery<EntityAuditKeys> 
         return (EntityAuditKeysQuery) addEquals("entityAuditConfigId", entityAuditConfigId);
     }
 
+    public EntityAuditKeysQuery auditConfigName(String auditConfigName) {
+        return (EntityAuditKeysQuery) addEquals("auditConfigName", auditConfigName);
+    }
+
     public EntityAuditKeysQuery eventType(AuditEventType eventType) {
         return (EntityAuditKeysQuery) addEquals("eventType", eventType);
     }
@@ -48,22 +52,6 @@ public class EntityAuditKeysQuery extends BaseAuditEntityQuery<EntityAuditKeys> 
 
     public EntityAuditKeysQuery userLoginId(String userLoginId) {
         return (EntityAuditKeysQuery) addEquals("userLoginId", userLoginId);
-    }
-    
-    public EntityAuditKeysQuery keyALike(String keyA) {
-        return (EntityAuditKeysQuery) addIBeginsWith("keyA", keyA);
-    }
-
-    public EntityAuditKeysQuery keyBLike(String keyB) {
-        return (EntityAuditKeysQuery) addIBeginsWith("keyB", keyB);
-    }
-
-    public EntityAuditKeysQuery keyCLike(String keyC) {
-        return (EntityAuditKeysQuery) addIBeginsWith("keyC", keyC);
-    }
-
-    public EntityAuditKeysQuery keyDLike(String keyD) {
-        return (EntityAuditKeysQuery) addIBeginsWith("keyD", keyD);
     }
 
 }

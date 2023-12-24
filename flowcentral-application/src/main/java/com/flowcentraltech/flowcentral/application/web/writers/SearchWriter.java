@@ -59,6 +59,7 @@ public class SearchWriter extends AbstractControlWriter {
             writer.write("<div class=\"sftable\">");
 
             int i = 0;
+            paramCtrl.initValueStoreMemory(len);
             while (i < len) {
                 writer.write("<div class=\"sfrow\">");
 
