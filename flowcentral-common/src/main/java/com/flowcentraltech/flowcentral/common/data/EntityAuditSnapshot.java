@@ -32,24 +32,32 @@ public class EntityAuditSnapshot {
 
     private AuditEventType eventType;
 
+    private Long entityId;
+
     private String entity;
 
     private List<EntityFieldAudit> fieldAudits;
 
     private Map<String, EntityFieldAudit> fieldAuditsByName;
-    
-    public EntityAuditSnapshot(AuditEventType eventType, String entity, List<EntityFieldAudit> fieldAudits) {
+
+    public EntityAuditSnapshot(AuditEventType eventType, Long entityId, String entity,
+            List<EntityFieldAudit> fieldAudits) {
         this.eventType = eventType;
+        this.entityId = entityId;
         this.entity = entity;
         this.fieldAudits = fieldAudits;
         this.fieldAuditsByName = new HashMap<String, EntityFieldAudit>();
-        for (EntityFieldAudit entityFieldAudit: fieldAudits) {
+        for (EntityFieldAudit entityFieldAudit : fieldAudits) {
             fieldAuditsByName.put(entityFieldAudit.getFieldName(), entityFieldAudit);
         }
     }
 
     public AuditEventType getEventType() {
         return eventType;
+    }
+
+    public Long getEntityId() {
+        return entityId;
     }
 
     public String getEntity() {

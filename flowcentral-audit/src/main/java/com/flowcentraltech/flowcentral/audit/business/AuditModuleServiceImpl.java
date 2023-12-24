@@ -111,6 +111,7 @@ public class AuditModuleServiceImpl extends AbstractFlowCentralService implement
                     entityAuditDetails.setAuditNo(appletUtilities.sequenceCodeGenerator().getNextSequenceCode(
                             AuditModuleNameConstants.AUDIT_MODULE_SERVICE, AUDITTRAIL_AUDITNO_FORMAT, getNow(), null));
                     entityAuditDetails.setEventTimestamp(auditSnapshot.getEventTimestamp());
+                    entityAuditDetails.setEntityId(auditSnapshot.getEntityId());
                     entityAuditDetails.setEventType(auditSnapshot.getEventType());
                     entityAuditDetails.setRoleCode(auditSnapshot.getRoleCode());
                     entityAuditDetails.setSourceName(auditSnapshot.getSourceName());

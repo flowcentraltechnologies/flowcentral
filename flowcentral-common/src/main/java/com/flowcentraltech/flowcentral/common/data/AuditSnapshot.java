@@ -42,6 +42,8 @@ public class AuditSnapshot {
 
     private String sourceName;
 
+    private Long entityId;
+
     private String entity;
 
     private String userLoginId;
@@ -55,12 +57,13 @@ public class AuditSnapshot {
     private List<EntityAuditSnapshot> snapshots;
 
     private AuditSnapshot(AuditSourceType sourceType, AuditEventType eventType, Date eventTimestamp, String sourceName,
-            String entity, String userLoginId, String userName, String userIpAddress, String roleCode,
+            Long entityId, String entity, String userLoginId, String userName, String userIpAddress, String roleCode,
             List<EntityAuditSnapshot> snapshots) {
         this.sourceType = sourceType;
         this.eventType = eventType;
         this.eventTimestamp = eventTimestamp;
         this.sourceName = sourceName;
+        this.entityId = entityId;
         this.entity = entity;
         this.userLoginId = userLoginId;
         this.userName = userName;
@@ -83,6 +86,10 @@ public class AuditSnapshot {
 
     public String getSourceName() {
         return sourceName;
+    }
+
+    public Long getEntityId() {
+        return entityId;
     }
 
     public String getEntity() {
@@ -112,7 +119,7 @@ public class AuditSnapshot {
     public boolean isWithSnapshots() {
         return !DataUtils.isBlank(snapshots);
     }
-    
+
     public static Builder newBuilder(AuditSourceType sourceType, AuditEventType eventType, Date eventTimestamp,
             String sourceName) {
         return new Builder(sourceType, eventType, eventTimestamp, sourceName);
@@ -179,12 +186,13 @@ public class AuditSnapshot {
 
         public AuditSnapshot build() {
             if (snapshots.size() == 0) {
-                 throw new IllegalArgumentException("No snapshot added to this builder.");
+                throw new IllegalArgumentException("No snapshot added to this builder.");
             }
-            
-            final String entity = snapshots.get(0).getEntity();
-            return new AuditSnapshot(sourceType, eventType, eventTimestamp, sourceName, entity, userLoginId, userName,
-                    userIpAddress, roleCode, Collections.unmodifiableList(snapshots));
+
+            EntityAuditSnapshot root = snapshots.get(0);
+            return new AuditSnapshot(sourceType, eventType, eventTimestamp, sourceName, root.getEntityId(),
+                    root.getEntity(), userLoginId, userName, userIpAddress, roleCode,
+                    Collections.unmodifiableList(snapshots));
         }
     }
 }

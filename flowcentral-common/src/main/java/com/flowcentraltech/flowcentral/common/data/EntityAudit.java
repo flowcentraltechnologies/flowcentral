@@ -92,7 +92,8 @@ public class EntityAudit {
             }
         }
 
-        lastSnapshot = new EntityAuditSnapshot(eventType, entityAuditInfo.getEntity(), fieldAudits);
+        lastSnapshot = new EntityAuditSnapshot(eventType, (Long) entity.getId(), entityAuditInfo.getEntity(),
+                fieldAudits);
         return lastSnapshot;
     }
 }
