@@ -31,10 +31,18 @@
 		<applet name="entityAuditSearch"
 			description="$m{audit.entityaudit.entityauditsearch}"
 			label="$m{audit.entityaudit.entityauditsearch.label}" icon="search"
-			type="manage_loadinglist" entity="entityAuditKeys" menuAccess="true" allowSecondaryTenants="true">
-			<property name="loadingTable" value="entityAuditKeysTable" />
+			type="manage_entitylist" entity="entityAuditKeys" menuAccess="true"
+			allowSecondaryTenants="true">
+			<property name="searchTable" value="entityAuditKeysTable" />
+			<property name="searchTable.new" value="false" />
+			<property name="searchTable.report" value="true" />
+			<property name="searchTable.quickFilter" value="true" />
+			<property name="searchTable.basicSearchOnly" value="true" />
 			<property name="searchTable.searchInput"
 				value="entityKeysSearchInput" />
+			<property name="maintainForm" value="entityAuditKeysForm" />
+			<property name="maintainForm.update" value="false" />
+			<property name="maintainForm.delete" value="false" />
 		</applet>
 		<applet name="manageEntityAuditConfig"
 			description="$m{audit.entityauditconfig.manage}"
@@ -119,7 +127,7 @@
 				label="$m{audit.entityauditdetails.eventtype}" type="enum_ref"
 				references="auditeventtypelist" inputWidget="application.enumlist" />
 			<field name="entityId"
-				label="$m{audit.entityauditdetails.entityid}" type="long"/>
+				label="$m{audit.entityauditdetails.entityid}" type="long" />
 			<field name="eventTimestamp"
 				label="$m{audit.entityauditdetails.eventtimestamp}"
 				type="timestamp_utc" inputWidget="application.datetime" />
@@ -168,12 +176,14 @@
 				type="string" inputWidget="application.text" />
 			<field name="keyD" label="$m{audit.entityauditkeys.keyd}"
 				type="string" inputWidget="application.text" />
-			<field name="entity"
-				label="$m{audit.entityauditkeys.entity}" type="list_only"
-				key="entityAuditConfigId" property="entity" />
+			<field name="entity" label="$m{audit.entityauditkeys.entity}"
+				type="list_only" key="entityAuditConfigId" property="entity" />
 			<field name="auditConfigName"
 				label="$m{audit.entityauditkeys.auditconfigname}" type="list_only"
 				key="entityAuditConfigId" property="name" />
+			<field name="auditConfigDesc"
+				label="$m{audit.entityauditkeys.auditconfigdesc}" type="list_only"
+				key="entityAuditConfigId" property="description" />
 			<field name="entityId"
 				label="$m{audit.entityauditkeys.entityid}" type="list_only"
 				key="entityAuditDetailsId" property="entityId" />
@@ -203,11 +213,16 @@
 			<field name="eventTypeDesc"
 				label="$m{audit.entityauditkeys.eventtypedesc}" type="list_only"
 				key="entityAuditDetailsId" property="eventTypeDesc" />
-            <searchInput description="Entity Audit Search Input" name="entityKeysSearchInput">
-                <input field="f:auditConfigName" label="Audit Configuration" type="EQUALS" widget="audit.entityauditconfigsearch"/>
-                <input field="f:eventType" label="Event Type" type="EQUALS" widget="audit.auditeventtypelist"/>
-                <input field="f:key" label="Key" type="LIKE" widget="application.text"/>
-            </searchInput>
+			<searchInput description="Entity Audit Search Input"
+				name="entityKeysSearchInput"
+				restrictionResolver="entityaudit-searchrestrictionresolver">
+				<input field="f:auditConfigName" label="Audit Configuration"
+					type="EQUALS" widget="audit.entityauditconfigsearch" />
+				<input field="f:eventType" label="Event Type" type="EQUALS"
+					widget="audit.auditeventtypelist" />
+				<input field="f:key" label="Key" type="LIKE"
+					widget="application.text" />
+			</searchInput>
 		</entity>
 		<entity name="entityAuditSnapshot"
 			description="$m{audit.entityauditsnapshot}"
@@ -266,14 +281,13 @@
 				widthRatio="1" />
 			<column field="keyD" renderWidget="application.text"
 				widthRatio="1" />
+			<column field="auditConfigDesc"
+				renderWidget="application.text"
+				label="$m{audit.entityauditkeys.auditconfig}" widthRatio="1" />
 			<column field="eventTypeDesc" renderWidget="application.text"
-				widthRatio="1" />
+				label="$m{audit.entityauditkeys.eventtype}" widthRatio="1" />
 			<column field="eventTimestamp"
-				renderWidget="application.datetime" widthRatio="1" />
-			<loading name="entityAuditLoading"
-				description="$m{audit.entityauditkeys.table.loading}"
-				label="$m{audit.entityauditkeys.table.loading.label}"
-				provider="entityaudit-loadingprovider" />
+				renderWidget="application.datetime" widthRatio="1" order="DESC" />
 		</table>
 	</tables>
 	<!-- Forms -->
@@ -301,6 +315,38 @@
 			</tab>
 			<tab name="changeLog" label="$m{application.form.audit}"
 				contentType="miniform_changelog" />
+		</form>
+		<form name="entityAuditKeysForm"
+			description="$m{audit.entityauditkeys.form}" entity="entityAuditKeys">
+			<tab name="basicDetails"
+				label="$m{audit.entityauditkeys.form.basicdetails}"
+				contentType="miniform">
+				<section name="configDetails" columns="type_2"
+					label="$m{audit.entityauditkeys.form.section.configdetails}">
+					<field name="auditConfigDesc" column="0" required="true"
+						label="$m{audit.entityauditkeys.auditconfig}" />
+					<field name="entity" column="1" required="true" />
+				</section>
+				<section name="keyDetails" columns="type_4"
+					label="$m{audit.entityauditkeys.form.section.keydetails}">
+					<field name="keyA" column="0" required="true" />
+					<field name="keyB" column="1" required="true" />
+					<field name="keyC" column="2" required="true" />
+					<field name="keyD" column="3" required="true" />
+				</section>
+				<section name="eventDetails" columns="type_4"
+					label="$m{audit.entityauditkeys.form.section.eventdetails}">
+					<field name="auditNo" column="0" required="true" />
+					<field name="sourceName" column="0" required="true" />
+					<field name="eventTypeDesc" column="1" required="true"
+						label="$m{audit.entityauditkeys.eventtype}" />
+					<field name="eventTimestamp" column="1" required="true" />
+					<field name="userLoginId" column="2" required="true" />
+					<field name="userName" column="2" required="true" />
+					<field name="userIpAddress" column="3" required="true" />
+					<field name="roleCode" column="3" required="true" />
+				</section>
+			</tab>
 		</form>
 	</forms>
 </application>

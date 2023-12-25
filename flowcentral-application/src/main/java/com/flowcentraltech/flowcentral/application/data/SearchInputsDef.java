@@ -37,10 +37,14 @@ public class SearchInputsDef implements Listable {
 
     private String description;
 
-    private SearchInputsDef(List<SearchInputDef> searchInputDefList, String name, String description) {
+    private String restrictionResolverName;
+
+    private SearchInputsDef(List<SearchInputDef> searchInputDefList, String name, String description,
+            String restrictionResolverName) {
         this.searchInputDefList = searchInputDefList;
         this.name = name;
         this.description = description;
+        this.restrictionResolverName = restrictionResolverName;
     }
 
     @Override
@@ -61,6 +65,10 @@ public class SearchInputsDef implements Listable {
         return description;
     }
 
+    public String getRestrictionResolverName() {
+        return restrictionResolverName;
+    }
+
     public List<SearchInputDef> getSearchInputDefList() {
         return searchInputDefList;
     }
@@ -79,6 +87,8 @@ public class SearchInputsDef implements Listable {
 
         private String description;
 
+        private String restrictionResolverName;
+
         private List<SearchInputDef> searchInputDefList;
 
         public Builder() {
@@ -95,13 +105,19 @@ public class SearchInputsDef implements Listable {
             return this;
         }
 
+        public Builder restrictionResolverName(String restrictionResolverName) {
+            this.restrictionResolverName = restrictionResolverName;
+            return this;
+        }
+
         public Builder addSearchInputDef(SearchConditionType type, String fieldName, String widget, String label) {
             searchInputDefList.add(new SearchInputDef(type, fieldName, widget, label));
             return this;
         }
 
         public SearchInputsDef build() throws UnifyException {
-            return new SearchInputsDef(DataUtils.unmodifiableList(searchInputDefList), name, description);
+            return new SearchInputsDef(DataUtils.unmodifiableList(searchInputDefList), name, description,
+                    restrictionResolverName);
         }
     }
 

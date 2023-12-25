@@ -15,48 +15,44 @@
  */
 package com.flowcentraltech.flowcentral.audit.web.widgets;
 
-import java.util.Collections;
-import java.util.List;
+import java.util.Map;
 
-import com.flowcentraltech.flowcentral.application.policies.LoadingParams;
 import com.flowcentraltech.flowcentral.audit.data.EntityAuditConfigDef;
-import com.flowcentraltech.flowcentral.audit.entities.EntityAuditKeysQuery;
+import com.flowcentraltech.flowcentral.common.annotation.EntityReferences;
 import com.flowcentraltech.flowcentral.configuration.constants.AuditEventType;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
-import com.tcdng.unify.core.constant.OrderType;
+import com.tcdng.unify.core.criterion.And;
+import com.tcdng.unify.core.criterion.Equals;
 import com.tcdng.unify.core.criterion.IBeginsWith;
 import com.tcdng.unify.core.criterion.Or;
-import com.tcdng.unify.core.database.Entity;
+import com.tcdng.unify.core.criterion.Restriction;
+import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.StringUtils;
 
 /**
- * Entity audit loading table provider.
+ * Entity audit search entries resolver.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@Component("entityaudit-loadingprovider")
-public class EntityAuditLoadingTableProvider extends AbstractAuditLoadingTableProvider {
+@EntityReferences({ "audit.entityAuditKeys" })
+@Component(name = "entityaudit-searchrestrictionresolver", description = "Entity Audit Search Restriction Resolver")
+public class EntityAuditSearchEntriesRestrictionResolver extends AbstractAuditSearchEntriesRestrictionResolver {
 
     @Override
-    public String getLoadingLabel() throws UnifyException {
-        return null;
-    }
+    public Restriction resolveRestriction(Map<String, Object> entries) throws UnifyException {
+        And and = new And();
+        final AuditEventType eventType = DataUtils.convert(AuditEventType.class, "eventType");
+        if (eventType != null) {
+            and.add(new Equals("eventType", eventType));
+        }
 
-    @Override
-    public List<? extends Entity> getLoadingItems(LoadingParams params) throws UnifyException {
-        final String auditConfigName = params.getParam(String.class, "auditConfigName");
+        final String auditConfigName = DataUtils.convert(String.class, entries.get("auditConfigName"));
         if (!StringUtils.isBlank(auditConfigName)) {
-            EntityAuditKeysQuery query = new EntityAuditKeysQuery();
-            query.auditConfigName(auditConfigName);
+            and.add(new Equals("auditConfigName", auditConfigName));
 
-            final AuditEventType eventType = params.getParam(AuditEventType.class, "eventType");
-            if (eventType != null) {
-                query.eventType(eventType);
-            }
-
-            final String key = params.getParam(String.class, "key");
+            final String key = DataUtils.convert(String.class, entries.get("key"));
             if (!StringUtils.isBlank(key)) {
                 EntityAuditConfigDef entityAuditConfigDef = audit().getEntityAuditConfigDef(auditConfigName);
                 Or or = new Or();
@@ -77,15 +73,12 @@ public class EntityAuditLoadingTableProvider extends AbstractAuditLoadingTablePr
                 }
 
                 if (!or.isEmpty()) {
-                    query.addRestriction(or);
+                    and.add(or);
                 }
             }
-
-            query.addOrder(OrderType.DESCENDING, "eventTimestamp");
-            return environment().listAll(query);
         }
 
-        return Collections.emptyList();
+        return !and.isEmpty() ? and : null;
     }
 
 }

@@ -15,41 +15,24 @@
  */
 package com.flowcentraltech.flowcentral.audit.web.widgets;
 
-import com.flowcentraltech.flowcentral.application.policies.AbstractApplicationLoadingTableProvider;
+import com.flowcentraltech.flowcentral.application.web.widgets.AbstractSearchEntriesRestrictionResolver;
 import com.flowcentraltech.flowcentral.audit.business.AuditModuleService;
-import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
-import com.tcdng.unify.core.data.ValueStore;
-import com.tcdng.unify.core.database.Entity;
 
 /**
- * Convenient abstract base class for audit loading table providers.
+ * Convenient abstract base class for audit search entries restriction
+ * resolvers.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class AbstractAuditLoadingTableProvider extends AbstractApplicationLoadingTableProvider {
+public abstract class AbstractAuditSearchEntriesRestrictionResolver extends AbstractSearchEntriesRestrictionResolver {
 
     @Configurable
     private AuditModuleService auditModuleService;
-    
+
     public final void setAuditModuleService(AuditModuleService auditModuleService) {
         this.auditModuleService = auditModuleService;
-    }
-
-    @Override
-    public int getSourceItemOptions(Entity loadingEntity) throws UnifyException {
-        return 0;
-    }
-
-    @Override
-    public String getSourceItemFormApplet() throws UnifyException {
-        return null;
-    }
-
-    @Override
-    public void commitChange(ValueStore itemValueStore, boolean listing) throws UnifyException {
-
     }
 
     protected AuditModuleService audit() {

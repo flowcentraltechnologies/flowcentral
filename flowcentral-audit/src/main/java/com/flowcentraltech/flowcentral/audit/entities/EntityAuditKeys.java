@@ -56,6 +56,9 @@ public class EntityAuditKeys extends BaseAuditEntity {
     
     @ListOnly(key = "entityAuditConfigId", property = "name")
     private String auditConfigName;
+    
+    @ListOnly(key = "entityAuditConfigId", property = "description")
+    private String auditConfigDesc;
    
     @ListOnly(key = "entityAuditConfigId", property = "entity")
     private String entity;
@@ -149,6 +152,14 @@ public class EntityAuditKeys extends BaseAuditEntity {
 
     public void setAuditConfigName(String auditConfigName) {
         this.auditConfigName = auditConfigName;
+    }
+
+    public String getAuditConfigDesc() {
+        return auditConfigDesc;
+    }
+
+    public void setAuditConfigDesc(String auditConfigDesc) {
+        this.auditConfigDesc = auditConfigDesc;
     }
 
     public String getEntity() {

@@ -22,8 +22,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
-
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.EntityFieldDef;
@@ -53,6 +51,7 @@ import com.tcdng.unify.core.criterion.NotEquals;
 import com.tcdng.unify.core.criterion.NotLike;
 import com.tcdng.unify.core.criterion.Restriction;
 import com.tcdng.unify.core.util.CalendarUtils;
+import com.tcdng.unify.core.util.StringUtils;
 
 /**
  * Search entries object.
@@ -73,7 +72,9 @@ public class SearchEntries {
     private final int columns;
 
     private final boolean showConditions;
-    
+
+    private String restrictionResolverName;
+
     private List<SearchEntry> entryList;
 
     public SearchEntries(AppletUtilities au, EntityDef entityDef, LabelSuggestionDef labelSuggestion,
@@ -86,8 +87,8 @@ public class SearchEntries {
         this.showConditions = showConditions;
     }
 
-    public SearchEntries(AppletUtilities au, EntityDef entityDef, String searchConfigName, int columns,
-            boolean showConditions) {
+    public SearchEntries(AppletUtilities au, EntityDef entityDef, String searchConfigName,
+            int columns, boolean showConditions) {
         this.au = au;
         this.entityDef = entityDef;
         this.labelSuggestion = null;
@@ -117,7 +118,7 @@ public class SearchEntries {
     }
 
     public boolean isEmpty() {
-        return entryList ==  null || entryList.isEmpty();
+        return entryList == null || entryList.isEmpty();
     }
 
     public int size() {
@@ -135,100 +136,112 @@ public class SearchEntries {
     public Entries getEntries() throws UnifyException {
         if (entryList != null) {
             Map<String, Object> inputs = new HashMap<String, Object>();
-            And and = new And();
-            for (SearchEntry searchEntry : entryList) {
-                Object val = searchEntry.getParamInput().getValue();
-                inputs.put(searchEntry.getFieldName(), val);
-                if (val != null) {
-                    if (searchEntry.isFieldEntry()) {
-                        final EntityFieldDef entityFieldDef = searchEntry.getEntityFieldDef();
-                        final EntityFieldDataType dataType = entityFieldDef.isWithResolvedTypeFieldDef()
-                                ? entityFieldDef.getResolvedTypeFieldDef().getDataType()
-                                : entityFieldDef.getDataType();
-                        final String fieldName = entityFieldDef.getFieldName();
-                        switch (searchEntry.getConditionType()) {
-                            case BEGINS_WITH:
-                                and.add(new BeginsWith(fieldName, val));
-                                break;
-                            case ENDS_WITH:
-                                and.add(new EndsWith(fieldName, val));
-                                break;
-                            case EQUALS:
-                                if (dataType.isTimestamp()) {
-                                    Date lower = CalendarUtils.getMidnightDate((Date) val);
-                                    Date upper = CalendarUtils.getLastSecondDate((Date) val);
-                                    and.add(new Between(fieldName, lower, upper));
-                                } else {
-                                    and.add(new Equals(fieldName, val));
-                                }
-                                break;
-                            case GREATER_OR_EQUAL:
-                                if (dataType.isTimestamp()) {
-                                    val = CalendarUtils.getMidnightDate((Date) val);
-                                }
+            if (!StringUtils.isBlank(restrictionResolverName)) {
+                for (SearchEntry searchEntry : entryList) {
+                    Object val = searchEntry.getParamInput().getValue();
+                    inputs.put(searchEntry.getFieldName(), val);
+                }
 
-                                and.add(new GreaterOrEqual(fieldName, val));
-                                break;
-                            case GREATER_THAN:
-                                if (dataType.isTimestamp()) {
-                                    val = CalendarUtils.getMidnightDate((Date) val);
-                                }
+                SearchEntriesRestrictionResolver resolver = au.getComponent(SearchEntriesRestrictionResolver.class,
+                        restrictionResolverName);
+                Restriction restriction = resolver.resolveRestriction(inputs);
+                return new Entries(inputs, restriction);
+            } else {
+                And and = new And();
+                for (SearchEntry searchEntry : entryList) {
+                    Object val = searchEntry.getParamInput().getValue();
+                    inputs.put(searchEntry.getFieldName(), val);
+                    if (val != null) {
+                        if (searchEntry.isFieldEntry()) {
+                            final EntityFieldDef entityFieldDef = searchEntry.getEntityFieldDef();
+                            final EntityFieldDataType dataType = entityFieldDef.isWithResolvedTypeFieldDef()
+                                    ? entityFieldDef.getResolvedTypeFieldDef().getDataType()
+                                    : entityFieldDef.getDataType();
+                            final String fieldName = entityFieldDef.getFieldName();
+                            switch (searchEntry.getConditionType()) {
+                                case BEGINS_WITH:
+                                    and.add(new BeginsWith(fieldName, val));
+                                    break;
+                                case ENDS_WITH:
+                                    and.add(new EndsWith(fieldName, val));
+                                    break;
+                                case EQUALS:
+                                    if (dataType.isTimestamp()) {
+                                        Date lower = CalendarUtils.getMidnightDate((Date) val);
+                                        Date upper = CalendarUtils.getLastSecondDate((Date) val);
+                                        and.add(new Between(fieldName, lower, upper));
+                                    } else {
+                                        and.add(new Equals(fieldName, val));
+                                    }
+                                    break;
+                                case GREATER_OR_EQUAL:
+                                    if (dataType.isTimestamp()) {
+                                        val = CalendarUtils.getMidnightDate((Date) val);
+                                    }
 
-                                and.add(new Greater(fieldName, val));
-                                break;
-                            case ILIKE:
-                                and.add(new ILike(fieldName, val));
-                                break;
-                            case LESS_OR_EQUAL:
-                                if (dataType.isTimestamp()) {
-                                    val = CalendarUtils.getLastSecondDate((Date) val);
-                                }
+                                    and.add(new GreaterOrEqual(fieldName, val));
+                                    break;
+                                case GREATER_THAN:
+                                    if (dataType.isTimestamp()) {
+                                        val = CalendarUtils.getMidnightDate((Date) val);
+                                    }
 
-                                and.add(new LessOrEqual(fieldName, val));
-                                break;
-                            case LESS_THAN:
-                                if (dataType.isTimestamp()) {
-                                    val = CalendarUtils.getLastSecondDate((Date) val);
-                                }
-                                
-                                and.add(new Less(fieldName, val));
-                                break;
-                            case LIKE:
-                                and.add(new Like(fieldName, val));
-                                break;
-                            case NOT_BEGIN_WITH:
-                                and.add(new NotBeginWith(fieldName, val));
-                                break;
-                            case NOT_END_WITH:
-                                and.add(new NotEndWith(fieldName, val));
-                                break;
-                            case NOT_EQUALS:
-                                if (dataType.isTimestamp()) {
-                                    Date lower = CalendarUtils.getMidnightDate((Date) val);
-                                    Date upper = CalendarUtils.getLastSecondDate((Date) val);
-                                    and.add(new NotBetween(fieldName, lower, upper));
-                                } else {
-                                    and.add(new NotEquals(fieldName, val));
-                                }
-                                break;
-                            case NOT_LIKE:
-                                and.add(new NotLike(fieldName, val));
-                                break;
-                            default:
-                                break;
-                        }
-                    } else if (searchEntry.isGeneratorEntry()) {
-                        SearchInputRestrictionGenerator generator = au
-                                .getComponent(SearchInputRestrictionGenerator.class, searchEntry.getGenerator());
-                        Restriction restriction = generator.generate(val);
-                        if (restriction != null) {
-                            and.add(restriction);
+                                    and.add(new Greater(fieldName, val));
+                                    break;
+                                case ILIKE:
+                                    and.add(new ILike(fieldName, val));
+                                    break;
+                                case LESS_OR_EQUAL:
+                                    if (dataType.isTimestamp()) {
+                                        val = CalendarUtils.getLastSecondDate((Date) val);
+                                    }
+
+                                    and.add(new LessOrEqual(fieldName, val));
+                                    break;
+                                case LESS_THAN:
+                                    if (dataType.isTimestamp()) {
+                                        val = CalendarUtils.getLastSecondDate((Date) val);
+                                    }
+
+                                    and.add(new Less(fieldName, val));
+                                    break;
+                                case LIKE:
+                                    and.add(new Like(fieldName, val));
+                                    break;
+                                case NOT_BEGIN_WITH:
+                                    and.add(new NotBeginWith(fieldName, val));
+                                    break;
+                                case NOT_END_WITH:
+                                    and.add(new NotEndWith(fieldName, val));
+                                    break;
+                                case NOT_EQUALS:
+                                    if (dataType.isTimestamp()) {
+                                        Date lower = CalendarUtils.getMidnightDate((Date) val);
+                                        Date upper = CalendarUtils.getLastSecondDate((Date) val);
+                                        and.add(new NotBetween(fieldName, lower, upper));
+                                    } else {
+                                        and.add(new NotEquals(fieldName, val));
+                                    }
+                                    break;
+                                case NOT_LIKE:
+                                    and.add(new NotLike(fieldName, val));
+                                    break;
+                                default:
+                                    break;
+                            }
+                        } else if (searchEntry.isGeneratorEntry()) {
+                            SearchInputRestrictionGenerator generator = au
+                                    .getComponent(SearchInputRestrictionGenerator.class, searchEntry.getGenerator());
+                            Restriction restriction = generator.generate(val);
+                            if (restriction != null) {
+                                and.add(restriction);
+                            }
                         }
                     }
                 }
-            }
 
-            return new Entries(inputs, !and.isEmpty() ? and : null);
+                return new Entries(inputs, !and.isEmpty() ? and : null);
+            }
         }
 
         return new Entries();
@@ -239,6 +252,7 @@ public class SearchEntries {
             entryList = new ArrayList<SearchEntry>();
             if (!StringUtils.isBlank(searchConfigName)) {
                 EntitySearchInputDef entitySearchInputDef = entityDef.getEntitySearchInputDef(searchConfigName);
+                restrictionResolverName = entitySearchInputDef.getRestrictionResolverName();
                 for (SearchInputDef searchInputDef : entitySearchInputDef.getSearchInputsDef()
                         .getSearchInputDefList()) {
                     final SearchEntry searchEntry = searchInputDef.getFieldName().startsWith("f:")
@@ -276,9 +290,9 @@ public class SearchEntries {
     }
 
     public static class Entries {
-        
+
         private final Map<String, Object> inputs;
-        
+
         private final Restriction restriction;
 
         private Entries(Map<String, Object> inputs, Restriction restriction) {
