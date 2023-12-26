@@ -5,6 +5,10 @@
 	module="audit">
 	<!-- Widget Types -->
 	<widgetTypes>
+		<widgetType name="entityauditsnapshotviewer"
+			description="$m{audit.widgettype.entityauditsnapshotviewer}"
+			dataType="long" inputType="long" editor="!fc-entityauditsnapshotview"
+			renderer="!ui-label" />
 		<widgetType name="entityauditconfigsearch"
 			description="$m{audit.widgettype.entityauditconfigsearch}"
 			dataType="string" inputType="string"
@@ -345,6 +349,12 @@
 					<field name="userName" column="2" required="true" />
 					<field name="userIpAddress" column="3" required="true" />
 					<field name="roleCode" column="3" required="true" />
+				</section>
+				<section name="snapshotDetails" columns="type_1"
+					label="$m{audit.entityauditkeys.form.section.snapshotdetails}">
+					<field name="id" column="0" required="true"
+						label="$m{audit.entityauditkeys.form.snapshot}"
+						inputWidget="entityauditsnapshotviewer" />
 				</section>
 			</tab>
 		</form>

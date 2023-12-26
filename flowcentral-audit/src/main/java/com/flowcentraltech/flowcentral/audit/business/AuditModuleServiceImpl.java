@@ -24,7 +24,9 @@ import com.flowcentraltech.flowcentral.audit.entities.EntityAuditConfig;
 import com.flowcentraltech.flowcentral.audit.entities.EntityAuditConfigQuery;
 import com.flowcentraltech.flowcentral.audit.entities.EntityAuditDetails;
 import com.flowcentraltech.flowcentral.audit.entities.EntityAuditKeys;
+import com.flowcentraltech.flowcentral.audit.entities.EntityAuditKeysQuery;
 import com.flowcentraltech.flowcentral.audit.entities.EntityAuditSnapshot;
+import com.flowcentraltech.flowcentral.audit.entities.EntityAuditSnapshotQuery;
 import com.flowcentraltech.flowcentral.common.business.AbstractFlowCentralService;
 import com.flowcentraltech.flowcentral.common.constants.RecordStatus;
 import com.flowcentraltech.flowcentral.common.data.AuditSnapshot;
@@ -85,6 +87,17 @@ public class AuditModuleServiceImpl extends AbstractFlowCentralService implement
     @Override
     public EntityAuditConfigDef getEntityAuditConfigDef(String name) throws UnifyException {
         return entityAuditConfigDefFactoryMap.get(name);
+    }
+
+    @Override
+    public FormattedAudit getSnapshotFormattedAuditByEntityAuditKeys(Long entityAuditKeysId) throws UnifyException {
+        final Long entityAuditDetailsId = environment().value(Long.class, "entityAuditDetailsId",
+                new EntityAuditKeysQuery().id(entityAuditKeysId));
+        EntityAuditSnapshot entityAuditSnapshot = environment()
+                .find(new EntityAuditSnapshotQuery().entityAuditDetailsId(entityAuditDetailsId));
+        FormattedAudit formattedAudit = DataUtils.fromJsonString(FormattedAudit.class,
+                entityAuditSnapshot.getSnapshot());
+        return formattedAudit;
     }
 
     @Override
@@ -153,7 +166,7 @@ public class AuditModuleServiceImpl extends AbstractFlowCentralService implement
                     FormattedAudit formattedAudit = appletUtilities.formatAudit(auditSnapshot);
                     EntityAuditSnapshot entityAuditSnapshot = new EntityAuditSnapshot();
                     entityAuditSnapshot.setEntityAuditDetailsId(entityAuditDetailId);
-                    entityAuditSnapshot.setSnapshot( DataUtils.asJsonString(formattedAudit, PrintFormat.NONE));
+                    entityAuditSnapshot.setSnapshot(DataUtils.asJsonString(formattedAudit, PrintFormat.NONE));
                     environment().create(entityAuditSnapshot);
                 }
             }

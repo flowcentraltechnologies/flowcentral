@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.audit.business;
 import com.flowcentraltech.flowcentral.audit.data.EntityAuditConfigDef;
 import com.flowcentraltech.flowcentral.common.business.AuditLogger;
 import com.flowcentraltech.flowcentral.common.business.FlowCentralService;
+import com.flowcentraltech.flowcentral.common.data.FormattedAudit;
 import com.tcdng.unify.core.UnifyException;
 
 /**
@@ -38,4 +39,15 @@ public interface AuditModuleService extends FlowCentralService, AuditLogger {
      *                        if an error occurs
      */
     EntityAuditConfigDef getEntityAuditConfigDef(String name) throws UnifyException;
+
+    /**
+     * Gets snapshot formatted audit by entity audit keys.
+     * 
+     * @param entityAuditKeysId
+     *                          the entity audit keys ID
+     * @return the formatted audit
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    FormattedAudit getSnapshotFormattedAuditByEntityAuditKeys(Long entityAuditKeysId) throws UnifyException;
 }
