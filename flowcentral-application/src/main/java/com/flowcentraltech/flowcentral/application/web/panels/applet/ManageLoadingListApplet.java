@@ -27,6 +27,7 @@ import com.flowcentraltech.flowcentral.application.data.FormDef;
 import com.flowcentraltech.flowcentral.application.data.LoadingWorkItemInfo;
 import com.flowcentraltech.flowcentral.application.listing.FormListingGenerator;
 import com.flowcentraltech.flowcentral.application.web.controllers.AppletWidgetReferences;
+import com.flowcentraltech.flowcentral.application.web.data.FormContext;
 import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm;
 import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm.FormMode;
 import com.flowcentraltech.flowcentral.application.web.panels.EntitySingleForm;
@@ -36,9 +37,13 @@ import com.flowcentraltech.flowcentral.application.web.widgets.AbstractTable;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionContext;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
 import com.flowcentraltech.flowcentral.common.business.policies.TableActionResult;
+import com.flowcentraltech.flowcentral.common.data.AuditSnapshot;
 import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
+import com.flowcentraltech.flowcentral.configuration.constants.AuditEventType;
+import com.flowcentraltech.flowcentral.configuration.constants.AuditSourceType;
 import com.flowcentraltech.flowcentral.configuration.constants.RecordActionType;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.UserToken;
 import com.tcdng.unify.core.data.BeanValueStore;
 import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.report.Report;
@@ -144,6 +149,7 @@ public class ManageLoadingListApplet extends AbstractEntityFormApplet {
 
             setAltSubCaption(form.getFormTitle());
             viewMode = ViewMode.MAINTAIN_FORM;
+            takeAuditSnapshot(AuditEventType.VIEW);
         } else if (item.isReport()) {
             if (item.isWithListingParams()) {
                 FormListingGenerator generator = au().getComponent(FormListingGenerator.class,
@@ -182,6 +188,7 @@ public class ManageLoadingListApplet extends AbstractEntityFormApplet {
                 getCtx().setReadOnly(loadingWorkItemInfo.isReadOnly());
                 setAltSubCaption(form.getFormTitle());
                 viewMode = ViewMode.MAINTAIN_FORM;
+                takeAuditSnapshot(AuditEventType.VIEW);
             } else { // Listing
                 listingForm = constructListingForm(formDef, currEntityInst);
                 listingForm.setFormTitle(getRootAppletDef().getLabel());
@@ -216,6 +223,7 @@ public class ManageLoadingListApplet extends AbstractEntityFormApplet {
             getCtx().setReadOnly(loadingWorkItemInfo.isReadOnly());
             setAltSubCaption(singleForm.getFormTitle());
             viewMode = ViewMode.SINGLE_FORM;
+            takeSingleFormAuditSnapshot(AuditEventType.VIEW);
         }
 
         TableActionResult result = new TableActionResult();
@@ -259,6 +267,42 @@ public class ManageLoadingListApplet extends AbstractEntityFormApplet {
         }
 
         return au().getEntityDef(getRootAppletDef().getEntity());
+    }
+
+    protected void takeSingleFormAuditSnapshot(AuditEventType auditEventType) throws UnifyException {
+        if (isAuditingEnabled()) {
+            AuditSnapshot.Builder asb = AuditSnapshot.newBuilder(AuditSourceType.APPLET, auditEventType,
+                    au.getNow(), getAppletName());
+            UserToken userToken = au.getSessionUserToken();
+            asb.userLoginId(userToken.getUserLoginId());
+            asb.userName(userToken.getUserName());
+            asb.userIpAddress(userToken.getIpAddress());
+            asb.roleCode(userToken.getRoleCode());
+
+            if (formStack != null && !formStack.isEmpty()) {
+                final int len = formStack.size();
+                for (int i = 0; i < len; i++) {
+                    FormContext fCtx = formStack.get(i).getForm().getCtx();
+                    if (fCtx.isSupportAudit()) {
+                        asb.addSnapshot(fCtx.getEntityAudit(), AuditEventType.VIEW);
+                    }
+                }
+            }
+
+            if (viewMode.isInForm()) {
+                FormContext fCtx = singleForm.getCtx();
+                if (fCtx.isSupportAudit()) {
+                    asb.addSnapshot(fCtx.getEntityAudit(), auditEventType);
+                }
+            } else if (viewMode.isInAssignment()) {
+                if (assignmentPage.isSupportAudit()) {
+                    asb.addSnapshot(assignmentPage.getEntityAssignmentAudit(), auditEventType);
+                }
+            }
+
+            AuditSnapshot auditSnapshot = asb.build();
+            au.audit().log(auditSnapshot);
+        }
     }
 
 }

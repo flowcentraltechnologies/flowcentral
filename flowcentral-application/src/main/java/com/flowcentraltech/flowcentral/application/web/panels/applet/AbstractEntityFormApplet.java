@@ -719,6 +719,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
             EntitySearch _entitySearch = (EntitySearch) form.getTabSheet().getCurrentItem().getValObject();
             Entity _inst = getEntitySearchItem(_entitySearch, mIndex).getEntity();
             maintainChildInst(_inst, _entitySearch.getChildTabIndex());
+            takeAuditSnapshot(form.isUpdateDraft() ? AuditEventType.VIEW_DRAFT : AuditEventType.VIEW);
         }
     }
 
@@ -764,6 +765,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
             _inst = reloadEntity(_inst, true);
             form = constructForm(_inst, FormMode.MAINTAIN, childFkFieldName, false);
             viewMode = ViewMode.MAINTAIN_RELATEDLIST_FORM_NO_SCROLL;
+            takeAuditSnapshot(form.isUpdateDraft() ? AuditEventType.VIEW_DRAFT : AuditEventType.VIEW);
         }
     }
 
@@ -777,6 +779,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         _inst = reloadEntity(_inst, true);
         form = constructForm(_inst, FormMode.MAINTAIN, null, false);
         viewMode = ViewMode.MAINTAIN_HEADLESSLIST_FORM_NO_SCROLL;
+        takeAuditSnapshot(form.isUpdateDraft() ? AuditEventType.VIEW_DRAFT : AuditEventType.VIEW);
     }
 
     public FormContext reviewOnClose() throws UnifyException {

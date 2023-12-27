@@ -70,7 +70,7 @@ public class EntityAudit {
                 Object newVal = DataUtils.getBeanProperty(Object.class, entity, fieldName);
                 fieldAudits.add(new EntityFieldAudit(fieldName, null, newVal));
             }
-        } else if (eventType.isUpdate() && isWithLastSnapshot()) {
+        } else if (eventType.isUpdate()) {
             final boolean newAsOldSource = lastSnapshot.getEventType().isCreate()
                     || lastSnapshot.getEventType().isUpdate();
             for (EntityFieldAudit oldFieldAudit : lastSnapshot.getFieldAudits()) {
@@ -78,11 +78,9 @@ public class EntityAudit {
                 Object oldVal = newAsOldSource ? oldFieldAudit.getNewValue() : oldFieldAudit.getOldValue();
                 fieldAudits.add(new EntityFieldAudit(oldFieldAudit.getFieldName(), oldVal, newVal));
             }
-        } else if (eventType.isDelete() && isWithLastSnapshot()) {
+        } else if (eventType.isDelete()) {
             for (EntityFieldAudit oldFieldAudit : lastSnapshot.getFieldAudits()) {
-                final boolean newAsOldSource = lastSnapshot.getEventType().isCreate()
-                        || lastSnapshot.getEventType().isUpdate();
-                Object oldVal = newAsOldSource ? oldFieldAudit.getNewValue() : oldFieldAudit.getOldValue();
+                Object oldVal = oldFieldAudit.getOldValue();
                 fieldAudits.add(new EntityFieldAudit(oldFieldAudit.getFieldName(), oldVal, null));
             }
         } else {

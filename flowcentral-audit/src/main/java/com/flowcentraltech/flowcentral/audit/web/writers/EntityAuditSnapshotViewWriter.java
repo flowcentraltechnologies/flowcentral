@@ -85,12 +85,12 @@ public class EntityAuditSnapshotViewWriter extends AbstractWidgetWriter {
             final AuditEventType eventType = AuditEventType.fromName(snapshot.getEventType());
             final boolean showHighlight = !eventType.isView();
             final String highlight = showHighlight
-                    ? (eventType.isCreate() ? "green" : (eventType.isUpdate() ? "orange" : "red"))
-                    : null;
+                    ? (eventType.isCreate() ? "eagreen" : (eventType.isUpdate() ? "eaorange" : "eared"))
+                    : "eawhite";
             final String eventDesc = getListItemByKey(LocaleType.SESSION, "auditeventtypelist", eventType.code())
                     .getListDescription();
-            writeHeader(writer, "$m{entityauditsnapshotview.entity}", entityDef.getLabel());
-            writeHeader(writer, "$m{entityauditsnapshotview.event}", eventDesc);
+            writeHeader(writer, "$m{entityauditsnapshotview.entity}", entityDef.getLabel(), null);
+            writeHeader(writer, "$m{entityauditsnapshotview.event}", eventDesc, highlight);
             writer.write("<div class=\"eabdy\">");
 
             // Details
@@ -139,13 +139,21 @@ public class EntityAuditSnapshotViewWriter extends AbstractWidgetWriter {
 
     }
 
-    private void writeHeader(ResponseWriter writer, String labelKey, String headerText) throws UnifyException {
+    private void writeHeader(ResponseWriter writer, String labelKey, String headerText, String textClass)
+            throws UnifyException {
         writer.write("<div class=\"eaheader\">");
         writer.write("<span class=\"eaheaderlbl\">");
         writer.writeWithHtmlEscape(resolveSessionMessage(labelKey));
         writer.write(":");
         writer.write("</span>");
-        writer.write("<span class=\"eaheadertxt\">");
+        if (textClass != null) {
+            writer.write("<span class=\"eaheadertxtc");
+            writer.write(" ").write(textClass);
+        } else {
+            writer.write("<span class=\"eaheadertxt");            
+        }
+
+        writer.write("\">");
         writer.writeWithHtmlEscape(headerText);
         writer.write("</span>");
         writer.write("</div>");
