@@ -67,6 +67,8 @@ public class EntityDef extends BaseApplicationEntityDef {
     
     private List<EntityFieldDef> auditableFieldDefList;
 
+    private List<EntityFieldDef> auditSearchFieldDefList;
+    
     private List<EntityFieldDef> sortedFieldDefList;
 
     private List<EntityFieldDef> filterFieldDefList;
@@ -396,6 +398,29 @@ public class EntityDef extends BaseApplicationEntityDef {
         }
 
         return auditableFieldDefList;
+    }
+
+    public List<EntityFieldDef> getAuditSearchFieldDefList() throws UnifyException {
+        if (auditSearchFieldDefList == null) {
+            synchronized (this) {
+                if (auditSearchFieldDefList == null) {
+                    auditSearchFieldDefList = new ArrayList<EntityFieldDef>();
+                    for (EntityFieldDef entityFieldDef : fieldDefList) {
+                        if (entityFieldDef.isAuditable() && !entityFieldDef.isChildRef()) {
+                            EntityFieldDataType dataType = entityFieldDef.isWithResolvedTypeFieldDef() ? entityFieldDef.getResolvedDataType() :entityFieldDef.getDataType();
+                            if (dataType.isString()) {
+                                auditSearchFieldDefList.add(entityFieldDef);
+                            }
+                        }
+                    }
+
+                    DataUtils.sortAscending(auditSearchFieldDefList, EntityFieldDef.class, "fieldLabel");
+                    auditSearchFieldDefList = DataUtils.unmodifiableList(auditSearchFieldDefList);
+                }
+            }
+        }
+
+        return auditSearchFieldDefList;
     }
 
     public List<? extends Listable> getSearchInputFieldDefList(AppletUtilities au) throws UnifyException {

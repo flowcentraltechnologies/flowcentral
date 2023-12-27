@@ -16,6 +16,8 @@
 
 package com.flowcentraltech.flowcentral.common.data;
 
+import java.util.Arrays;
+
 /**
  * Formatted field audit information object.
  * 
@@ -62,6 +64,10 @@ public class FormattedFieldAudit {
 
     public void setNewValue(String[] newValue) {
         this.newValue = newValue;
+    }
+    
+    public boolean changed() {
+        return !Arrays.equals(oldValue, newValue);
     }
 
 }

@@ -29,6 +29,11 @@
 			dataType="string" inputType="string"
 			editor="!ui-select list:entityauditablefielddeflist listParams:$l{entity} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
+		<widgetType name="entityauditsearchfielddeflist"
+			description="$m{audit.widgettype.entityauditsearchfielddeflist}"
+			dataType="string" inputType="string"
+			editor="!ui-select list:entityauditsearchfielddeflist listParams:$l{entity} blankOption:$m{blank.none}"
+			renderer="!ui-label" />
 	</widgetTypes>
 	<!-- Applets -->
 	<applets>
@@ -101,16 +106,16 @@
 				type="string" inputWidget="auditableentitysearch" basicSearch="true" />
 			<field name="searchFieldA"
 				label="$m{audit.entityauditconfig.searchfielda}" type="string"
-				inputWidget="entityauditablefielddeflist" nullable="true" />
+				inputWidget="entityauditsearchfielddeflist" nullable="true" />
 			<field name="searchFieldB"
 				label="$m{audit.entityauditconfig.searchfieldb}" type="string"
-				inputWidget="entityauditablefielddeflist" nullable="true" />
+				inputWidget="entityauditsearchfielddeflist" nullable="true" />
 			<field name="searchFieldC"
 				label="$m{audit.entityauditconfig.searchfieldc}" type="string"
-				inputWidget="entityauditablefielddeflist" nullable="true" />
+				inputWidget="entityauditsearchfielddeflist" nullable="true" />
 			<field name="searchFieldD"
 				label="$m{audit.entityauditconfig.searchfieldd}" type="string"
-				inputWidget="entityauditablefielddeflist" nullable="true" />
+				inputWidget="entityauditsearchfielddeflist" nullable="true" />
 			<field name="sourceTypeDesc"
 				label="$m{audit.entityauditconfig.sourcetypedesc}" type="list_only"
 				key="sourceType" property="description" />
@@ -224,7 +229,7 @@
 					type="EQUALS" widget="audit.entityauditconfigsearch" />
 				<input field="f:eventType" label="Event Type" type="EQUALS"
 					widget="audit.auditeventtypelist" />
-				<input field="f:key" label="Key" type="LIKE"
+				<input field="f:key" label="Data" type="LIKE"
 					widget="application.text" />
 			</searchInput>
 		</entity>
@@ -273,6 +278,9 @@
 			basicSearch="true">
 			<column field="auditNo" renderWidget="application.name"
 				widthRatio="1" linkAct="maintainAct" />
+			<column field="auditConfigDesc"
+				renderWidget="application.text"
+				label="$m{audit.entityauditkeys.auditconfig}" widthRatio="1" />
 			<column field="userLoginId" renderWidget="application.text"
 				widthRatio="1" />
 			<column field="userName" renderWidget="application.text"
@@ -285,9 +293,6 @@
 				widthRatio="1" />
 			<column field="keyD" renderWidget="application.text"
 				widthRatio="1" />
-			<column field="auditConfigDesc"
-				renderWidget="application.text"
-				label="$m{audit.entityauditkeys.auditconfig}" widthRatio="1" />
 			<column field="eventTypeDesc" renderWidget="application.text"
 				label="$m{audit.entityauditkeys.eventtype}" widthRatio="1" />
 			<column field="eventTimestamp"
@@ -333,10 +338,10 @@
 				</section>
 				<section name="keyDetails" columns="type_4"
 					label="$m{audit.entityauditkeys.form.section.keydetails}">
-					<field name="keyA" column="0" required="true" />
-					<field name="keyB" column="1" required="true" />
-					<field name="keyC" column="2" required="true" />
-					<field name="keyD" column="3" required="true" />
+					<field name="keyA" column="0" />
+					<field name="keyB" column="1" />
+					<field name="keyC" column="2" />
+					<field name="keyD" column="3" />
 				</section>
 				<section name="eventDetails" columns="type_4"
 					label="$m{audit.entityauditkeys.form.section.eventdetails}">
@@ -348,7 +353,7 @@
 					<field name="userLoginId" column="2" required="true" />
 					<field name="userName" column="2" required="true" />
 					<field name="userIpAddress" column="3" required="true" />
-					<field name="roleCode" column="3" required="true" />
+					<field name="roleCode" column="3"/>
 				</section>
 				<section name="snapshotDetails" columns="type_1"
 					label="$m{audit.entityauditkeys.form.section.snapshotdetails}">

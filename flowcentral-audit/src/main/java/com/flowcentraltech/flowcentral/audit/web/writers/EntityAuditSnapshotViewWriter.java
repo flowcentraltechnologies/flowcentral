@@ -22,10 +22,12 @@ import com.flowcentraltech.flowcentral.audit.web.widgets.EntityAuditSnapshotView
 import com.flowcentraltech.flowcentral.common.data.FormattedAudit;
 import com.flowcentraltech.flowcentral.common.data.FormattedEntityAudit;
 import com.flowcentraltech.flowcentral.common.data.FormattedFieldAudit;
+import com.flowcentraltech.flowcentral.configuration.constants.AuditEventType;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.Writes;
+import com.tcdng.unify.core.constant.LocaleType;
 import com.tcdng.unify.web.ui.widget.ResponseWriter;
 import com.tcdng.unify.web.ui.widget.Widget;
 import com.tcdng.unify.web.ui.widget.writer.AbstractWidgetWriter;
@@ -74,37 +76,50 @@ public class EntityAuditSnapshotViewWriter extends AbstractWidgetWriter {
             writer.write("<div style=\"display:table-row;\">");
             for (int j = 0; j < i; j++) {
                 // Child depth padding
-                writer.write("<div class=\"depth\" style=\"display:table-cell;\">");
+                writer.write("<div class=\"eadepth\" style=\"display:table-cell;\">");
                 writer.write("</div>");
             }
 
             // Snapshot
             writer.write("<div class=\"snapshot\" style=\"display:table-cell;\">");
-            writer.write("<div class=\"header\"><span class=\"headertxt\">");
-            writer.writeWithHtmlEscape(snapshot.getEventType());
-            writer.write("</span></div>");
-            writer.write("<div class=\"header\"><span class=\"headertxt\">");
-            writer.writeWithHtmlEscape(entityDef.getLabel());
-            writer.write("</span></div>");
-            writer.write("<div class=\"body\">");
+            final AuditEventType eventType = AuditEventType.fromName(snapshot.getEventType());
+            final boolean showHighlight = !eventType.isView();
+            final String highlight = showHighlight
+                    ? (eventType.isCreate() ? "green" : (eventType.isUpdate() ? "orange" : "red"))
+                    : null;
+            final String eventDesc = getListItemByKey(LocaleType.SESSION, "auditeventtypelist", eventType.code())
+                    .getListDescription();
+            writeHeader(writer, "$m{entityauditsnapshotview.entity}", entityDef.getLabel());
+            writeHeader(writer, "$m{entityauditsnapshotview.event}", eventDesc);
+            writer.write("<div class=\"eabdy\">");
 
             // Details
-            writer.write("<table class=\"details\">");
+            writer.write("<table class=\"eadetails\">");
             writer.write("<tr>");
-            writer.write("<th>").writeWithHtmlEscape(fieldHeader).write("</th>");
-            writer.write("<th>").writeWithHtmlEscape(oldValueHeader).write("</th>");
-            writer.write("<th>").writeWithHtmlEscape(newValueHeader).write("</th>");
+            writer.write("<th style=\"width:20%;\">").writeWithHtmlEscape(fieldHeader).write("</th>");
+            writer.write("<th style=\"width:40%;\">").writeWithHtmlEscape(oldValueHeader).write("</th>");
+            writer.write("<th style=\"width:40%;\">").writeWithHtmlEscape(newValueHeader).write("</th>");
             writer.write("</tr>");
             for (FormattedFieldAudit fieldSnapshot : snapshot.getFields()) {
                 if (entityDef.isField(fieldSnapshot.getFieldName())) {
+                    final boolean highlightChange = showHighlight && fieldSnapshot.changed();
+                    final boolean delete = eventType.isDelete();
                     writer.write("<tr>");
                     writer.write("<td>")
                             .writeWithHtmlEscape(entityDef.getFieldDef(fieldSnapshot.getFieldName()).getFieldLabel())
                             .write("</td>");
-                    writer.write("<td>");
+                    writer.write("<td");
+                    if (highlightChange && delete) {
+                        writer.write(" class=\"").write(highlight).write("\"");
+                    }
+                    writer.write(">");
                     writeValue(writer, fieldSnapshot.getOldValue());
                     writer.write("</td>");
-                    writer.write("<td>");
+                    writer.write("<td");
+                    if (highlightChange && !delete) {
+                        writer.write(" class=\"").write(highlight).write("\"");
+                    }
+                    writer.write(">");
                     writeValue(writer, fieldSnapshot.getNewValue());
                     writer.write("</td>");
                     writer.write("</tr>");
@@ -122,6 +137,18 @@ public class EntityAuditSnapshotViewWriter extends AbstractWidgetWriter {
 
         writer.write("</div>");
 
+    }
+
+    private void writeHeader(ResponseWriter writer, String labelKey, String headerText) throws UnifyException {
+        writer.write("<div class=\"eaheader\">");
+        writer.write("<span class=\"eaheaderlbl\">");
+        writer.writeWithHtmlEscape(resolveSessionMessage(labelKey));
+        writer.write(":");
+        writer.write("</span>");
+        writer.write("<span class=\"eaheadertxt\">");
+        writer.writeWithHtmlEscape(headerText);
+        writer.write("</span>");
+        writer.write("</div>");
     }
 
     private void writeValue(ResponseWriter writer, String[] val) throws UnifyException {

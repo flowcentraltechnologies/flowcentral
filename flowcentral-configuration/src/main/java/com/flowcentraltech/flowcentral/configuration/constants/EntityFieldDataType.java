@@ -40,6 +40,7 @@ public enum EntityFieldDataType implements EnumConst {
             true,
             true,
             true,
+            true,
             true),
     BOOLEAN(
             "BL",
@@ -48,10 +49,12 @@ public enum EntityFieldDataType implements EnumConst {
             true,
             true,
             true,
+            true,
             true),
     SHORT(
             "SH",
             DataType.SHORT,
+            true,
             true,
             true,
             true,
@@ -64,10 +67,12 @@ public enum EntityFieldDataType implements EnumConst {
             true,
             true,
             true,
+            true,
             true),
     LONG(
             "LN",
             DataType.LONG,
+            true,
             true,
             true,
             true,
@@ -80,7 +85,8 @@ public enum EntityFieldDataType implements EnumConst {
             false,
             false,
             true,
-            true),
+            true,
+            false),
     MAPPED(
             "MD",
             DataType.LONG,
@@ -88,10 +94,12 @@ public enum EntityFieldDataType implements EnumConst {
             false,
             false,
             true,
+            false,
             false),
     FLOAT(
             "FL",
             DataType.FLOAT,
+            true,
             true,
             true,
             true,
@@ -104,10 +112,12 @@ public enum EntityFieldDataType implements EnumConst {
             true,
             true,
             true,
+            true,
             true),
     DECIMAL(
             "DC",
             DataType.DECIMAL,
+            true,
             true,
             true,
             true,
@@ -120,11 +130,13 @@ public enum EntityFieldDataType implements EnumConst {
             true,
             true,
             true,
+            true,
             true),
     TIMESTAMP_UTC(
             "TU",
             DataType.TIMESTAMP_UTC,
             false,
+            true,
             true,
             true,
             true,
@@ -136,12 +148,14 @@ public enum EntityFieldDataType implements EnumConst {
             true,
             true,
             true,
+            true,
             true),
     CLOB(
             "CT",
             DataType.CLOB,
             false,
             false,
+            true,
             true,
             true,
             true),
@@ -152,11 +166,13 @@ public enum EntityFieldDataType implements EnumConst {
             false,
             true,
             false,
+            false,
             false),
     STRING(
             "ST",
             DataType.STRING,
             false,
+            true,
             true,
             true,
             true,
@@ -168,11 +184,13 @@ public enum EntityFieldDataType implements EnumConst {
             true,
             true,
             true,
+            true,
             true),
     ENUM_REF(
             "ER",
             DataType.STRING,
             false,
+            true,
             true,
             true,
             true,
@@ -184,7 +202,8 @@ public enum EntityFieldDataType implements EnumConst {
             true,
             true,
             true,
-            true),
+            true,
+            false),
     REF_UNLINKABLE(
             "UR",
             DataType.LONG,
@@ -192,7 +211,8 @@ public enum EntityFieldDataType implements EnumConst {
             false,
             true,
             true,
-            true),
+            true,
+            false),
     REF_FILEUPLOAD(
             "CU",
             null,
@@ -200,10 +220,12 @@ public enum EntityFieldDataType implements EnumConst {
             false,
             true,
             true,
+            false,
             false),
     FOSTER_PARENT_ID(
             "FI",
             DataType.LONG,
+            false,
             false,
             false,
             false,
@@ -216,10 +238,12 @@ public enum EntityFieldDataType implements EnumConst {
             false,
             false,
             false,
+            false,
             false),
     CATEGORY_COLUMN(
             "CC",
             DataType.STRING,
+            false,
             false,
             false,
             false,
@@ -232,7 +256,8 @@ public enum EntityFieldDataType implements EnumConst {
             false,
             false,
             false,
-            true),
+            true,
+            false),
     LIST_ONLY(
             "LO",
             null,
@@ -240,10 +265,12 @@ public enum EntityFieldDataType implements EnumConst {
             true,
             true,
             true,
-            false),
+            false,
+            true),
     CHILD(
             "CD",
             null,
+            false,
             false,
             false,
             false,
@@ -252,6 +279,7 @@ public enum EntityFieldDataType implements EnumConst {
     CHILD_LIST(
             "CL",
             null,
+            false,
             false,
             false,
             false,
@@ -272,8 +300,10 @@ public enum EntityFieldDataType implements EnumConst {
 
     private final boolean supportSetValue;
 
+    private final boolean reportable;
+
     private EntityFieldDataType(String code, DataType dataType, boolean number, boolean tableView, boolean formView,
-            boolean supportFilter, boolean supportSetValue) {
+            boolean supportFilter, boolean supportSetValue, boolean reportable) {
         this.code = code;
         this.dataType = dataType;
         this.number = number;
@@ -281,6 +311,7 @@ public enum EntityFieldDataType implements EnumConst {
         this.formView = formView;
         this.supportFilter = supportFilter;
         this.supportSetValue = supportSetValue;
+        this.reportable = reportable;
     }
 
     @Override
@@ -315,6 +346,10 @@ public enum EntityFieldDataType implements EnumConst {
 
     public boolean isSupportSetValue() {
         return supportSetValue;
+    }
+
+    public boolean isReportable() {
+        return reportable;
     }
 
     public boolean isSupportLingual() {

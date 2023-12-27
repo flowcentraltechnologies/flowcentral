@@ -4899,7 +4899,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                     appEntityField.setReadOnly(entityFieldConfig.getReadOnly());
                     appEntityField.setNullable(entityFieldConfig.getNullable());
                     appEntityField.setAuditable(entityFieldConfig.getAuditable());
-                    appEntityField.setReportable(entityFieldConfig.getReportable());
+                    appEntityField.setReportable(
+                            entityFieldConfig.getType().isReportable() ? entityFieldConfig.getReportable() : false);
                     appEntityField.setDescriptive(entityFieldConfig.getDescriptive());
                     appEntityField.setMaintainLink(entityFieldConfig.getMaintainLink());
                     appEntityField.setBasicSearch(entityFieldConfig.getBasicSearch());
@@ -4946,7 +4947,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                         oldAppEntityField.setReadOnly(entityFieldConfig.getReadOnly());
                         oldAppEntityField.setNullable(entityFieldConfig.getNullable());
                         oldAppEntityField.setAuditable(entityFieldConfig.getAuditable());
-                        oldAppEntityField.setReportable(entityFieldConfig.getReportable());
+                        oldAppEntityField.setReportable(
+                                entityFieldConfig.getType().isReportable() ? entityFieldConfig.getReportable() : false);
                         oldAppEntityField.setDescriptive(entityFieldConfig.getDescriptive());
                         oldAppEntityField.setMaintainLink(entityFieldConfig.getMaintainLink());
                         oldAppEntityField.setBasicSearch(entityFieldConfig.getBasicSearch());

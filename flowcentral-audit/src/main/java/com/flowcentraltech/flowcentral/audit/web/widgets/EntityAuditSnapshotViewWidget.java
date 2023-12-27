@@ -41,4 +41,9 @@ public class EntityAuditSnapshotViewWidget extends AbstractWidget {
     public Long getEntityAuditKeysId() throws UnifyException {
         return (Long) getValue(Long.class);
     }
+
+    @Override
+    public boolean isSupportStretch() {
+        return false;
+    }
 }

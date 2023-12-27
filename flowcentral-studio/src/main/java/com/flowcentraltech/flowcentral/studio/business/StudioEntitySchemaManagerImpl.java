@@ -163,6 +163,10 @@ public class StudioEntitySchemaManagerImpl extends AbstractEntitySchemaManager {
                     }
 
                     update.add("nullable", entityFieldSchema.isNullable());
+                    if (!entityFieldSchema.getDataType().isReportable()) {
+                        update.add("reportable", false);
+                    }
+                    
                     au.environment().updateAll(
                             new AppEntityFieldQuery().appEntityId(appEntityId).name(entityFieldSchema.getName()),
                             update);
@@ -173,7 +177,7 @@ public class StudioEntitySchemaManagerImpl extends AbstractEntitySchemaManager {
             }
 
             // Update default components
-            updateDefaultComponents(ENTITY_SCHEMA_OPERATION, appEntity);
+            updateDefaultComponents(entitySchema.getEntity(), appEntity);
 
             // Update entity
             if (!StringUtils.isBlank(entitySchema.getTableName())) {
@@ -325,8 +329,9 @@ public class StudioEntitySchemaManagerImpl extends AbstractEntitySchemaManager {
                 : null);
         appEntityField.setPrecision(entityFieldSchema.getPrecision() > 0 ? entityFieldSchema.getPrecision() : null);
         appEntityField.setScale(entityFieldSchema.getScale() > 0 ? entityFieldSchema.getScale() : null);
-        appEntityField.setAuditable(true);
-        appEntityField.setReportable(true);
+        appEntityField.setAuditable(!ApplicationEntityUtils.isReservedFieldName(entityFieldSchema.getName())
+                || ApplicationEntityUtils.isAuditableReservedFieldName(entityFieldSchema.getName()));
+        appEntityField.setReportable(entityFieldSchema.getDataType().isReportable());
         appEntityField.setNullable(entityFieldSchema.isNullable());
         return appEntityField;
     }

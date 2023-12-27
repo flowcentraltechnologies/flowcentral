@@ -69,10 +69,13 @@ import com.tcdng.unify.core.util.StringUtils;
  */
 public final class ApplicationEntityUtils {
 
-    public static final Set<String> RESERVED_BASE_FIELDS = Collections.unmodifiableSet(
+    public static final Set<String> RESERVED_BASE_FIELDS = Collections.unmodifiableSet( 
             new HashSet<String>(Arrays.asList("id", "versionNo", "createDt", "createdBy", "updateDt", "updatedBy",
                     "originWorkRecId", "originalCopyId", "wfItemVersionType", "inWorkflow", "workBranchCode",
                     "workDepartmentCode", "processingStatus", "devVersionType", "devMergeVersionNo", "classified")));
+
+    public static final Set<String> AUDITABLE_BASE_FIELDS = Collections.unmodifiableSet( 
+            new HashSet<String>(Arrays.asList("createDt", "createdBy", "updateDt", "updatedBy")));
 
     public static final List<EntityBaseType> BASE_WORK_TYPES = Collections
             .unmodifiableList(Arrays.asList(EntityBaseType.BASE_WORK_ENTITY, EntityBaseType.BASE_STATUS_WORK_ENTITY,
@@ -132,6 +135,10 @@ public final class ApplicationEntityUtils {
 
     public static boolean isReservedFieldName(String fieldName) {
         return RESERVED_BASE_FIELDS.contains(fieldName);
+    }
+
+    public static boolean isAuditableReservedFieldName(String fieldName) {
+        return AUDITABLE_BASE_FIELDS.contains(fieldName);
     }
 
     public static String getBaseFieldColumnName(String fieldName) {
@@ -422,16 +429,16 @@ public final class ApplicationEntityUtils {
             case BASE_AUDIT_ENTITY:
                 list.add(ApplicationEntityUtils.createBaseAppEntityField(EntityFieldDataType.TIMESTAMP_UTC, "createDt",
                         msgResolver.resolveApplicationMessage("$m{baseauditentity.field.label.createdt}"), null, null,
-                        null, null, null, "application.datetime", null, null, configType, false));
+                        null, null, null, "application.datetime", null, null, configType, true));
                 list.add(ApplicationEntityUtils.createBaseAppEntityField(EntityFieldDataType.STRING, "createdBy",
                         msgResolver.resolveApplicationMessage("$m{baseauditentity.field.label.createdby}"), null, null,
-                        null, null, null, "application.name", null, 64, configType, false));
+                        null, null, null, "application.name", null, 64, configType, true));
                 list.add(ApplicationEntityUtils.createBaseAppEntityField(EntityFieldDataType.TIMESTAMP_UTC, "updateDt",
                         msgResolver.resolveApplicationMessage("$m{baseauditentity.field.label.updatedt}"), null, null,
-                        null, null, null, "application.datetime", null, null, configType, false));
+                        null, null, null, "application.datetime", null, null, configType, true));
                 list.add(ApplicationEntityUtils.createBaseAppEntityField(EntityFieldDataType.STRING, "updatedBy",
                         msgResolver.resolveApplicationMessage("$m{baseauditentity.field.label.updatedby}"), null, null,
-                        null, null, null, "application.name", null, 64, configType, false));
+                        null, null, null, "application.name", null, 64, configType, true));
                 break;
             case BASE_ENTITY:
                 list.add(ApplicationEntityUtils.createBaseAppEntityField(EntityFieldDataType.LONG, "id",
@@ -498,7 +505,7 @@ public final class ApplicationEntityUtils {
                 list.add(ApplicationEntityUtils.createBaseAppEntityField(EntityFieldDataType.ENUM, "wfItemVersionType",
                         msgResolver.resolveApplicationMessage("$m{baseworkentity.field.label.wfversiontype}"),
                         "wfitemversiontypelist", null, null, null, null, "application.enumlist", null, null,
-                        configType, true));
+                        configType, false));
                 break;
             default:
                 break;
