@@ -52,7 +52,7 @@ import com.tcdng.unify.core.util.DataUtils;
 @Component(AuditModuleNameConstants.AUDIT_MODULE_SERVICE)
 public class AuditModuleServiceImpl extends AbstractFlowCentralService implements AuditModuleService {
 
-    private static final String AUDITTRAIL_AUDITNO_FORMAT = "AT{yyyy}{MM}{DD}{N:10}";
+    private static final String AUDITTRAIL_AUDITNO_FORMAT = "AUD{yy}{MM}{DD}{N:10}";
 
     @Configurable
     private AppletUtilities appletUtilities;
