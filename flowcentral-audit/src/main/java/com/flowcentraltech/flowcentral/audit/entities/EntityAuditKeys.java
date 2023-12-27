@@ -62,6 +62,9 @@ public class EntityAuditKeys extends BaseAuditEntity {
    
     @ListOnly(key = "entityAuditConfigId", property = "entity")
     private String entity;
+
+    @ListOnly(key = "entityAuditConfigId", property = "sourceTypeDesc")
+    private String sourceTypeDesc;
     
     @ListOnly(key = "entityAuditDetailsId", property = "entityId")
     private Long entityId;
@@ -168,6 +171,14 @@ public class EntityAuditKeys extends BaseAuditEntity {
 
     public void setEntity(String entity) {
         this.entity = entity;
+    }
+
+    public String getSourceTypeDesc() {
+        return sourceTypeDesc;
+    }
+
+    public void setSourceTypeDesc(String sourceTypeDesc) {
+        this.sourceTypeDesc = sourceTypeDesc;
     }
 
     public Long getEntityId() {

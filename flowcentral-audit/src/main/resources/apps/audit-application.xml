@@ -193,6 +193,9 @@
 			<field name="auditConfigDesc"
 				label="$m{audit.entityauditkeys.auditconfigdesc}" type="list_only"
 				key="entityAuditConfigId" property="description" />
+			<field name="sourceTypeDesc"
+				label="$m{audit.entityauditkeys.sourcetypedesc}" type="list_only"
+				key="entityAuditConfigId" property="sourceTypeDesc" />
 			<field name="entityId"
 				label="$m{audit.entityauditkeys.entityid}" type="list_only"
 				key="entityAuditDetailsId" property="entityId" />
@@ -281,17 +284,15 @@
 			<column field="auditConfigDesc"
 				renderWidget="application.text"
 				label="$m{audit.entityauditkeys.auditconfig}" widthRatio="1" />
+			<column field="sourceTypeDesc"
+				renderWidget="application.text" widthRatio="1" />
 			<column field="userLoginId" renderWidget="application.text"
 				widthRatio="1" />
 			<column field="userName" renderWidget="application.text"
 				widthRatio="1" />
+			<column field="userIpAddress" renderWidget="application.text"
+				widthRatio="1" />
 			<column field="keyA" renderWidget="application.text"
-				widthRatio="1" />
-			<column field="keyB" renderWidget="application.text"
-				widthRatio="1" />
-			<column field="keyC" renderWidget="application.text"
-				widthRatio="1" />
-			<column field="keyD" renderWidget="application.text"
 				widthRatio="1" />
 			<column field="eventTypeDesc" renderWidget="application.text"
 				label="$m{audit.entityauditkeys.eventtype}" widthRatio="1" />
@@ -315,7 +316,7 @@
 					<field name="sourceType" column="0" required="true" />
 					<field name="entity" column="1" switchOnChange="true"
 						required="true" />
-					<field name="searchFieldA" column="1" />
+					<field name="searchFieldA" column="1" required="true" />
 					<field name="searchFieldB" column="1" />
 					<field name="searchFieldC" column="1" />
 					<field name="searchFieldD" column="1" />
