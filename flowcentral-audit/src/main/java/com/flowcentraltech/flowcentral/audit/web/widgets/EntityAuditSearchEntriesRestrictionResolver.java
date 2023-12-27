@@ -15,6 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.audit.web.widgets;
 
+import java.util.Date;
 import java.util.Map;
 
 import com.flowcentraltech.flowcentral.audit.data.EntityAuditConfigDef;
@@ -23,10 +24,14 @@ import com.flowcentraltech.flowcentral.configuration.constants.AuditEventType;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.criterion.And;
+import com.tcdng.unify.core.criterion.Between;
 import com.tcdng.unify.core.criterion.Equals;
+import com.tcdng.unify.core.criterion.GreaterOrEqual;
 import com.tcdng.unify.core.criterion.IBeginsWith;
+import com.tcdng.unify.core.criterion.LessOrEqual;
 import com.tcdng.unify.core.criterion.Or;
 import com.tcdng.unify.core.criterion.Restriction;
+import com.tcdng.unify.core.util.CalendarUtils;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.StringUtils;
 
@@ -75,6 +80,21 @@ public class EntityAuditSearchEntriesRestrictionResolver extends AbstractAuditSe
                 if (!or.isEmpty()) {
                     and.add(or);
                 }
+            }
+        }
+
+        final Date eventOnAfter = DataUtils.convert(Date.class, entries.get("eventOnAfter"));
+        final Date eventOnBefore = DataUtils.convert(Date.class, entries.get("eventOnBefore"));
+        if (eventOnAfter != null && eventOnBefore != null) {
+            and.add(new Between("eventTimestamp", CalendarUtils.getMidnightDate(eventOnAfter),
+                    CalendarUtils.getLastSecondDate(eventOnBefore)));
+        } else {
+            if (eventOnAfter != null) {
+                and.add(new GreaterOrEqual("eventTimestamp", CalendarUtils.getMidnightDate(eventOnAfter)));
+            }
+
+            if (eventOnBefore != null) {
+                and.add(new LessOrEqual("eventTimestamp", CalendarUtils.getLastSecondDate(eventOnBefore)));
             }
         }
 

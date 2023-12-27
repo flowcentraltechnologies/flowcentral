@@ -15,6 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.application.web.panels;
 
+import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.SearchInputsDef;
 import com.flowcentraltech.flowcentral.application.web.data.FormContext;
@@ -38,6 +39,8 @@ public class EntitySearchInput extends AbstractPanelFormBinding {
 
     private final int mode;
 
+    private final AppletUtilities au;
+
     private final EntityDef ownerEntityDef;
 
     private SearchInputs searchInputs;
@@ -46,9 +49,10 @@ public class EntitySearchInput extends AbstractPanelFormBinding {
 
     private Long ownerInstId;
 
-    public EntitySearchInput(FormContext ctx, SweepingCommitPolicy sweepingCommitPolicy, String tabName,
-            EntityDef ownerEntityDef, int mode, boolean ignoreConditionalDisabled) {
+    public EntitySearchInput(AppletUtilities au, FormContext ctx, SweepingCommitPolicy sweepingCommitPolicy,
+            String tabName, EntityDef ownerEntityDef, int mode, boolean ignoreConditionalDisabled) {
         super(ctx, sweepingCommitPolicy, tabName, ignoreConditionalDisabled);
+        this.au = au;
         this.ownerEntityDef = ownerEntityDef;
         this.mode = mode;
     }
@@ -68,7 +72,7 @@ public class EntitySearchInput extends AbstractPanelFormBinding {
     public void load(EntityDef entityDef) throws UnifyException {
         SearchInputsDef searchInputsDef = getAppletCtx().au().retrieveSearchInputsDef(category,
                 ownerEntityDef.getLongName(), ownerInstId);
-        searchInputs = new SearchInputs(entityDef, searchInputsDef, Editable.fromBoolean(isApplyButtonVisible()));
+        searchInputs = new SearchInputs(au, entityDef, searchInputsDef, Editable.fromBoolean(isApplyButtonVisible()));
     }
 
     public void save() throws UnifyException {

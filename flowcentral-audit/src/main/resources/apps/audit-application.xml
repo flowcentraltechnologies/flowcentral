@@ -47,6 +47,7 @@
 			<property name="searchTable.report" value="true" />
 			<property name="searchTable.quickFilter" value="true" />
 			<property name="searchTable.basicSearchOnly" value="true" />
+			<property name="searchTable.searchColumns" value="5" />
 			<property name="searchTable.searchInput"
 				value="entityKeysSearchInput" />
 			<property name="maintainForm" value="entityAuditKeysForm" />
@@ -228,11 +229,15 @@
 			<searchInput description="Entity Audit Search Input"
 				name="entityKeysSearchInput"
 				restrictionResolver="entityaudit-searchrestrictionresolver">
-				<input field="f:auditConfigName" label="Audit Configuration"
+				<input field="f:auditConfigName" label="$m{audit.entityauditkeys.input.auditconfig}"
 					type="EQUALS" widget="audit.entityauditconfigsearch" />
-				<input field="f:eventType" label="Event Type" type="EQUALS"
+				<input field="f:eventType" label="$m{audit.entityauditkeys.input.eventtype}" type="EQUALS"
 					widget="audit.auditeventtypelist" />
-				<input field="f:key" label="Data" type="LIKE"
+				<input field="f:eventOnAfter" label="$m{audit.entityauditkeys.input.eventonafter}" type="EQUALS"
+					widget="application.date" />
+				<input field="f:eventOnBefore" label="$m{audit.entityauditkeys.input.eventonbefore}" type="EQUALS"
+					widget="application.date" />
+				<input field="f:key" label="$m{audit.entityauditkeys.input.data}" type="LIKE"
 					widget="application.text" />
 			</searchInput>
 		</entity>

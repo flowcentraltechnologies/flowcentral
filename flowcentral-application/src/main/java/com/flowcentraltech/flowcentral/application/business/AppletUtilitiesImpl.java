@@ -1917,7 +1917,7 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
             throws UnifyException {
         logDebug("Constructing entity search input for [{0}] using entity definition [{1}]...", tabName,
                 ownerEntityDef.getLongName());
-        return new EntitySearchInput(ctx, sweepingCommitPolicy, tabName, ownerEntityDef, entitySearchInputMode,
+        return new EntitySearchInput(this, ctx, sweepingCommitPolicy, tabName, ownerEntityDef, entitySearchInputMode,
                 isIgnoreParentCondition);
     }
 

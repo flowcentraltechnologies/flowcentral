@@ -87,8 +87,8 @@ public class SearchEntries {
         this.showConditions = showConditions;
     }
 
-    public SearchEntries(AppletUtilities au, EntityDef entityDef, String searchConfigName,
-            int columns, boolean showConditions) {
+    public SearchEntries(AppletUtilities au, EntityDef entityDef, String searchConfigName, int columns,
+            boolean showConditions) {
         this.au = au;
         this.entityDef = entityDef;
         this.labelSuggestion = null;
@@ -255,11 +255,11 @@ public class SearchEntries {
                 restrictionResolverName = entitySearchInputDef.getRestrictionResolverName();
                 for (SearchInputDef searchInputDef : entitySearchInputDef.getSearchInputsDef()
                         .getSearchInputDefList()) {
+                    final String label = au.resolveSessionMessage(searchInputDef.getLabel());
                     final SearchEntry searchEntry = searchInputDef.getFieldName().startsWith("f:")
-                            ? new SearchEntry(au, entityDef, searchInputDef.getLabel(),
-                                    searchInputDef.getFieldName().substring(2), searchInputDef.getType())
-                            : new SearchEntry(au, entityDef, searchInputDef.getLabel(),
-                                    searchInputDef.getFieldName().substring(2));
+                            ? new SearchEntry(au, entityDef, label, searchInputDef.getFieldName().substring(2),
+                                    searchInputDef.getType())
+                            : new SearchEntry(au, entityDef, label, searchInputDef.getFieldName().substring(2));
                     WidgetTypeDef widgetTypeDef = au.getWidgetTypeDef(searchInputDef.getWidget());
                     searchEntry.normalize(widgetTypeDef);
                     entryList.add(searchEntry);
