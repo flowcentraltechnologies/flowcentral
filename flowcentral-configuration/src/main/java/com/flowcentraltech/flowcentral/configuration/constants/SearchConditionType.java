@@ -31,6 +31,12 @@ import com.tcdng.unify.core.util.EnumUtils;
 @StaticList(name = "searchconditiontypelist", description = "$m{staticlist.searchconditiontypelist}")
 public enum SearchConditionType implements EnumConst {
 
+    SESSION_ATTRIBUTE(
+            FilterConditionType.EQUALS.code(),
+            false,
+            false,
+            false,
+            false),
     EQUALS(
             FilterConditionType.EQUALS.code(),
             true,
@@ -141,6 +147,10 @@ public enum SearchConditionType implements EnumConst {
     @Override
     public String defaultCode() {
         return EQUALS.code;
+    }
+
+    public boolean isSession() {
+        return SESSION_ATTRIBUTE.equals(this);
     }
 
     public boolean supportsBoolean() {

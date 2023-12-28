@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.application.policies;
 import java.util.Collections;
 import java.util.Map;
 
+import com.flowcentraltech.flowcentral.application.web.widgets.SearchEntries;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.criterion.Restriction;
 import com.tcdng.unify.core.util.DataUtils;
@@ -33,6 +34,11 @@ public class LoadingParams {
     private Restriction restriction;
     
     private Map<String, Object> values;
+
+    public LoadingParams(SearchEntries.Entries entries) {
+        this.restriction = entries.getRestriction();
+        this.values = entries.getInputs();
+    }
 
     public LoadingParams(Restriction restriction) {
         this.restriction = restriction;
@@ -55,6 +61,10 @@ public class LoadingParams {
 
     public boolean isWithRestriction() {
         return restriction != null;
+    }
+
+    public Map<String, Object> getValues() {
+        return values;
     }
 
     public <T> T getParam(Class<T> dataType, String name) throws UnifyException {

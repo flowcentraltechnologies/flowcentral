@@ -719,6 +719,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
             EntitySearch _entitySearch = (EntitySearch) form.getTabSheet().getCurrentItem().getValObject();
             Entity _inst = getEntitySearchItem(_entitySearch, mIndex).getEntity();
             maintainChildInst(_inst, _entitySearch.getChildTabIndex());
+            takeAuditSnapshot(form.isUpdateDraft() ? AuditEventType.VIEW_DRAFT : AuditEventType.VIEW);
         }
     }
 
@@ -764,6 +765,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
             _inst = reloadEntity(_inst, true);
             form = constructForm(_inst, FormMode.MAINTAIN, childFkFieldName, false);
             viewMode = ViewMode.MAINTAIN_RELATEDLIST_FORM_NO_SCROLL;
+            takeAuditSnapshot(form.isUpdateDraft() ? AuditEventType.VIEW_DRAFT : AuditEventType.VIEW);
         }
     }
 
@@ -777,6 +779,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         _inst = reloadEntity(_inst, true);
         form = constructForm(_inst, FormMode.MAINTAIN, null, false);
         viewMode = ViewMode.MAINTAIN_HEADLESSLIST_FORM_NO_SCROLL;
+        takeAuditSnapshot(form.isUpdateDraft() ? AuditEventType.VIEW_DRAFT : AuditEventType.VIEW);
     }
 
     public FormContext reviewOnClose() throws UnifyException {
@@ -1369,8 +1372,8 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
 
     protected void takeAuditSnapshot(AuditEventType auditEventType) throws UnifyException {
         if (isAuditingEnabled()) {
-            AuditSnapshot.Builder asb = AuditSnapshot.newBuilder(AuditSourceType.APPLET, "", auditEventType,
-                    au.getNow());
+            AuditSnapshot.Builder asb = AuditSnapshot.newBuilder(AuditSourceType.APPLET, auditEventType,
+                    au.getNow(), getAppletName());
             UserToken userToken = au.getSessionUserToken();
             asb.userLoginId(userToken.getUserLoginId());
             asb.userName(userToken.getUserName());

@@ -85,7 +85,7 @@ public class StudioAppComponentApplet extends AbstractEntityFormApplet {
 
     @Override
     public AppletDef getRootAppletDef() throws UnifyException {
-        return sms.getAppletDef(getAppletName());
+        return sms != null ? sms.getAppletDef(getAppletName()) : null;
     }
 
     @Override

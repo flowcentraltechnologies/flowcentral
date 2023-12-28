@@ -185,6 +185,11 @@
 			dataType="string" inputType="string"
 			editor="!ui-dropdownchecklist list:studioentityfieldlist listKey:$s{name} listParams:$l{appEntityId} columns:3"
 			renderer="!ui-label" />
+		<widgetType name="searchentriesrestrictionresolverlist"
+			description="$m{studio.widgettype.searchentriesrestrictionresolverlist}"
+			dataType="string" inputType="string"
+			editor="!ui-select list:searchentriesrestrictionresolverlist listParams:$l{appEntityId} blankOption:$m{blank.none}"
+			renderer="!ui-label" />
 		<widgetType name="seriesentityfieldlist"
 			description="$m{studio.widgettype.seriesentityfieldlist}"
 			dataType="string" inputType="string"
@@ -3045,10 +3050,13 @@
 						required="true" />
 					<field name="name" inputWidget="application.name" column="0"
 						required="true" />
+					<field name="description" inputWidget="application.text"
+						column="0" required="true" />
 					<field name="configType" inputWidget="application.enumlist"
 						column="1" disabled="true" required="true" />
-					<field name="description" inputWidget="application.text"
-						column="1" required="true" />
+					<field name="restrictionResolver"
+						inputWidget="searchentriesrestrictionresolverlist" column="1"
+						required="true" />
 				</section>
 			</tab>
 			<tab name="inputs"
@@ -3264,7 +3272,7 @@
 						inputWidget="studio.entitycategoryfieldlist" column="1"
 						switchOnChange="true" />
 					<field name="timeSeriesType"
-						inputWidget="application.enumlist" column="1"/>
+						inputWidget="application.enumlist" column="1" />
 				</section>
 			</tab>
 			<tab name="series" label="$m{studio.chartdatasource.form.series}"

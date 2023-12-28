@@ -28,14 +28,20 @@ import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.EntityItem;
 import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm.FormMode;
+import com.flowcentraltech.flowcentral.application.web.data.FormContext;
 import com.flowcentraltech.flowcentral.application.web.panels.EntitySearch;
 import com.flowcentraltech.flowcentral.application.web.panels.EntitySingleForm;
 import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs.BreadCrumb;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionContext;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
+import com.flowcentraltech.flowcentral.common.data.AuditSnapshot;
 import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
+import com.flowcentraltech.flowcentral.configuration.constants.AuditEventType;
+import com.flowcentraltech.flowcentral.configuration.constants.AuditSourceType;
+import com.flowcentraltech.flowcentral.configuration.constants.FormReviewType;
 import com.flowcentraltech.flowcentral.configuration.constants.RecordActionType;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.UserToken;
 import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.util.ReflectUtils;
 import com.tcdng.unify.core.util.StringUtils;
@@ -100,7 +106,7 @@ public abstract class AbstractEntitySingleFormApplet extends AbstractApplet {
     };
 
     protected EntitySearch entitySearch;
-    
+
     protected EntitySingleForm form;
 
     protected AppletDef singleFormAppletDef;
@@ -145,7 +151,7 @@ public abstract class AbstractEntitySingleFormApplet extends AbstractApplet {
     }
 
     public void newEntityInst() throws UnifyException {
-        form = constructNewForm(FormMode.CREATE);
+        form = constructNewForm(FormMode.CREATE); 
         viewMode = ViewMode.NEW_FORM;
     }
 
@@ -161,24 +167,16 @@ public abstract class AbstractEntitySingleFormApplet extends AbstractApplet {
         }
 
         viewMode = ViewMode.MAINTAIN_FORM_SCROLL;
+        takeAuditSnapshot(form.isUpdateDraft() ? AuditEventType.VIEW_DRAFT : AuditEventType.VIEW);
         return;
     }
 
     public EntityActionResult updateInst() throws UnifyException {
-        form.unloadSingleFormBean();
-        Entity inst = (Entity) form.getFormBean();
-        final String updatePolicy = getRootAppletProp(String.class, AppletPropertyConstants.MAINTAIN_FORM_UPDATE_POLICY);
-        EntityActionContext eCtx = new EntityActionContext(getEntityDef(), inst,
-                RecordActionType.UPDATE, null, updatePolicy);
-        eCtx.setAll(form.getCtx());
-
-        EntityActionResult entityActionResult = au().environment().updateByIdVersion(eCtx);
-        updateSingleForm(EntitySingleForm.UpdateType.UPDATE_INST, form, reloadEntity(inst));
-        return entityActionResult;
+        return updateInst(FormReviewType.ON_UPDATE);
     }
 
     public EntityActionResult updateInstAndClose() throws UnifyException {
-        EntityActionResult entityActionResult = updateInst();
+        EntityActionResult entityActionResult = updateInst(FormReviewType.ON_UPDATE_CLOSE);
         if (getRootAppletDef().getType().isFormInitial()) {
             entityActionResult.setClosePage(true);
         } else {
@@ -190,9 +188,10 @@ public abstract class AbstractEntitySingleFormApplet extends AbstractApplet {
 
     public EntityActionResult deleteInst() throws UnifyException {
         Entity inst = (Entity) form.getFormBean();
-        final String deletePolicy = getRootAppletProp(String.class, AppletPropertyConstants.MAINTAIN_FORM_DELETE_POLICY);
-        EntityActionContext eCtx = new EntityActionContext(getEntityDef(), inst,
-                RecordActionType.DELETE, null, deletePolicy);
+        final String deletePolicy = getRootAppletProp(String.class,
+                AppletPropertyConstants.MAINTAIN_FORM_DELETE_POLICY);
+        EntityActionContext eCtx = new EntityActionContext(getEntityDef(), inst, RecordActionType.DELETE, null,
+                deletePolicy);
         eCtx.setAll(form.getCtx());
         EntityActionResult entityActionResult = au().environment().delete(eCtx);
         if (viewMode == ViewMode.MAINTAIN_FORM_SCROLL) {
@@ -209,6 +208,8 @@ public abstract class AbstractEntitySingleFormApplet extends AbstractApplet {
             }
         }
 
+        takeAuditSnapshot(
+                isWorkflowCopy() || form.isUpdateDraft() ? AuditEventType.DELETE_DRAFT : AuditEventType.DELETE);
         final boolean closePage = !navBackToPrevious();
         entityActionResult.setClosePage(closePage);
         entityActionResult.setRefreshMenu(closePage);
@@ -229,23 +230,23 @@ public abstract class AbstractEntitySingleFormApplet extends AbstractApplet {
     }
 
     public EntityActionResult saveNewInst() throws UnifyException {
-        return saveNewInst(ActionMode.ACTION_ONLY);
+        return saveNewInst(ActionMode.ACTION_ONLY, FormReviewType.ON_SAVE);
     }
 
     public EntityActionResult saveNewInstAndNext() throws UnifyException {
-        return saveNewInst(ActionMode.ACTION_AND_NEXT);
+        return saveNewInst(ActionMode.ACTION_AND_NEXT, FormReviewType.ON_SAVE_NEXT);
     }
 
     public EntityActionResult saveNewInstAndClose() throws UnifyException {
-        return saveNewInst(ActionMode.ACTION_AND_CLOSE);
+        return saveNewInst(ActionMode.ACTION_AND_CLOSE, FormReviewType.ON_SAVE_CLOSE);
     }
 
     public EntityActionResult submitInst() throws UnifyException {
-        return submitInst(ActionMode.ACTION_AND_CLOSE);
+        return submitInst(ActionMode.ACTION_AND_CLOSE, FormReviewType.ON_SUBMIT);
     }
 
     public EntityActionResult submitInstAndNext() throws UnifyException {
-        return submitInst(ActionMode.ACTION_AND_NEXT);
+        return submitInst(ActionMode.ACTION_AND_NEXT, FormReviewType.ON_SUBMIT_NEXT);
     }
 
     public boolean isPrevNav() {
@@ -286,13 +287,34 @@ public abstract class AbstractEntitySingleFormApplet extends AbstractApplet {
         if (entitySearch != null) {
             return entitySearch.getEntityTable().getEntityDef();
         }
-        
+
         return au().getEntityDef(getRootAppletDef().getEntity());
     }
 
+    protected void takeAuditSnapshot(AuditEventType auditEventType) throws UnifyException {
+        if (isAuditingEnabled()) {
+            AuditSnapshot.Builder asb = AuditSnapshot.newBuilder(AuditSourceType.APPLET, auditEventType, au.getNow(),
+                    getAppletName());
+            UserToken userToken = au.getSessionUserToken();
+            asb.userLoginId(userToken.getUserLoginId());
+            asb.userName(userToken.getUserName());
+            asb.userIpAddress(userToken.getIpAddress());
+            asb.roleCode(userToken.getRoleCode());
+
+            if (viewMode.isInForm()) {
+                FormContext fCtx = form.getCtx();
+                if (fCtx.isSupportAudit()) {
+                    asb.addSnapshot(fCtx.getEntityAudit(), auditEventType);
+                }
+            }
+
+            AuditSnapshot auditSnapshot = asb.build();
+            au.audit().log(auditSnapshot);
+        }
+    }
+
     protected EntitySingleForm constructNewForm(FormMode formMode) throws UnifyException {
-        final EntityClassDef entityClassDef = au()
-                .getEntityClassDef(getEntityDef().getLongName());
+        final EntityClassDef entityClassDef = au().getEntityClassDef(getEntityDef().getLongName());
         final Object inst = ReflectUtils.newInstance(entityClassDef.getEntityClass());
         final String createNewCaption = getRootAppletProp(String.class,
                 AppletPropertyConstants.CREATE_FORM_NEW_CAPTION);
@@ -318,8 +340,7 @@ public abstract class AbstractEntitySingleFormApplet extends AbstractApplet {
     private Entity loadEntity(Object entityInstId) throws UnifyException {
         final EntityClassDef entityClassDef = au().getEntityClassDef(getEntityDef().getLongName());
         // For single form we list with child/ children information
-        return au().environment().list((Class<? extends Entity>) entityClassDef.getEntityClass(),
-                entityInstId);
+        return au().environment().list((Class<? extends Entity>) entityClassDef.getEntityClass(), entityInstId);
     }
 
     private Entity reloadEntity(Entity _inst) throws UnifyException {
@@ -327,7 +348,7 @@ public abstract class AbstractEntitySingleFormApplet extends AbstractApplet {
         return au().environment().list((Class<? extends Entity>) _inst.getClass(), _inst.getId());
     }
 
-    private EntityActionResult saveNewInst(ActionMode actionMode) throws UnifyException {
+    private EntityActionResult saveNewInst(ActionMode actionMode, FormReviewType reviewType) throws UnifyException {
         form.unloadSingleFormBean();
         Entity inst = (Entity) form.getFormBean();
         final EntityDef _entityDef = getEntityDef();
@@ -349,6 +370,7 @@ public abstract class AbstractEntitySingleFormApplet extends AbstractApplet {
         }
 
         Long entityInstId = (Long) entityActionResult.getResult();
+        takeAuditSnapshot(reviewType.auditEventType());
 
         if (actionMode.isWithClose()) {
             if (viewMode == ViewMode.NEW_PRIMARY_FORM) {
@@ -385,34 +407,34 @@ public abstract class AbstractEntitySingleFormApplet extends AbstractApplet {
         return entityActionResult;
     }
 
-    private EntityActionResult submitInst(ActionMode actionMode) throws UnifyException {
+    private EntityActionResult submitInst(ActionMode actionMode, FormReviewType reviewType) throws UnifyException {
         form.unloadSingleFormBean();
         Entity inst = (Entity) form.getFormBean();
         final EntityDef _entityDef = getEntityDef();
-        EntityActionResult entityActionResult = null;;
+        EntityActionResult entityActionResult = null;
+        ;
         try {
             if (viewMode.isMaintainForm()) {
                 entityActionResult = au().workItemUtilities().submitToWorkflowChannel(form.getEntityDef(),
-                        getRootAppletProp(
-                                String.class, AppletPropertyConstants.MAINTAIN_FORM_SUBMIT_WORKFLOW_CHANNEL),
+                        getRootAppletProp(String.class, AppletPropertyConstants.MAINTAIN_FORM_SUBMIT_WORKFLOW_CHANNEL),
                         (WorkEntity) inst,
-                        getRootAppletProp(String.class,
-                                AppletPropertyConstants.MAINTAIN_FORM_SUBMIT_POLICY));
+                        getRootAppletProp(String.class, AppletPropertyConstants.MAINTAIN_FORM_SUBMIT_POLICY));
             } else {
                 au.populateAutoFormatFields(_entityDef, inst);
                 entityActionResult = au().workItemUtilities().submitToWorkflowChannel(form.getEntityDef(),
-                        getRootAppletProp(String.class,
-                                AppletPropertyConstants.CREATE_FORM_SUBMIT_WORKFLOW_CHANNEL),
-                        (WorkEntity) inst, getRootAppletProp(String.class,
-                                AppletPropertyConstants.CREATE_FORM_SUBMIT_POLICY));
+                        getRootAppletProp(String.class, AppletPropertyConstants.CREATE_FORM_SUBMIT_WORKFLOW_CHANNEL),
+                        (WorkEntity) inst,
+                        getRootAppletProp(String.class, AppletPropertyConstants.CREATE_FORM_SUBMIT_POLICY));
             }
+            
+            takeAuditSnapshot(reviewType.auditEventType());
         } catch (UnifyException e) {
             if (!viewMode.isMaintainForm()) {
                 au.revertAutoFormatFields(_entityDef, inst);
             }
             throw e;
         }
-        
+
         if (actionMode.isWithNext()) {
             if (viewMode == ViewMode.NEW_FORM || viewMode == ViewMode.NEW_PRIMARY_FORM) {
                 form = constructNewForm(FormMode.CREATE);
@@ -427,4 +449,21 @@ public abstract class AbstractEntitySingleFormApplet extends AbstractApplet {
 
         return entityActionResult;
     }
+
+    private EntityActionResult updateInst(FormReviewType formReviewType) throws UnifyException {
+        form.unloadSingleFormBean();
+        Entity inst = (Entity) form.getFormBean();
+        final String updatePolicy = getRootAppletProp(String.class,
+                AppletPropertyConstants.MAINTAIN_FORM_UPDATE_POLICY);
+        EntityActionContext eCtx = new EntityActionContext(getEntityDef(), inst, RecordActionType.UPDATE, null,
+                updatePolicy);
+        eCtx.setAll(form.getCtx());
+
+        EntityActionResult entityActionResult = au().environment().updateByIdVersion(eCtx);
+        takeAuditSnapshot(
+                isWorkflowCopy() || form.isUpdateDraft() ? AuditEventType.UPDATE_DRAFT : formReviewType.auditEventType());
+        updateSingleForm(EntitySingleForm.UpdateType.UPDATE_INST, form, reloadEntity(inst));
+        return entityActionResult;
+    }
+    
 }

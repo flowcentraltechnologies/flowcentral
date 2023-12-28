@@ -22,6 +22,7 @@ import java.util.List;
 import com.flowcentraltech.flowcentral.application.entities.AppEntityField;
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityUtils;
 import com.flowcentraltech.flowcentral.common.constants.ConfigType;
+import com.flowcentraltech.flowcentral.common.data.FormatterOptions;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityBaseType;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldDataType;
 import com.flowcentraltech.flowcentral.report.entities.ReportableField;
@@ -30,6 +31,7 @@ import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.constant.HAlignType;
 import com.tcdng.unify.core.message.MessageResolver;
 import com.tcdng.unify.core.util.NameUtils;
+import com.tcdng.unify.core.util.StringUtils;
 
 /**
  * Report entity utilities.
@@ -44,13 +46,13 @@ public final class ReportEntityUtils {
     }
 
     public static List<ReportableField> getEntityBaseTypeReportableFieldList(MessageResolver msgResolver,
-            EntityBaseType type) throws UnifyException {
+            EntityBaseType type, FormatterOptions formatOptions) throws UnifyException {
         List<ReportableField> resultList = new ArrayList<ReportableField>();
         for (AppEntityField appEntityField : ApplicationEntityUtils.getEntityBaseTypeFieldList(msgResolver, type,
                 ConfigType.STATIC_INSTALL)) {
             if (appEntityField.isReportable()) {
                 ReportableField reportableField = new ReportableField();
-                ReportEntityUtils.populateReportableField(reportableField, appEntityField);
+                ReportEntityUtils.populateReportableField(reportableField, appEntityField, formatOptions);
                 resultList.add(reportableField);
             }
         }
@@ -59,12 +61,12 @@ public final class ReportEntityUtils {
     }
 
     public static List<ReportableField> getReportableFieldList(MessageResolver msgResolver,
-            List<AppEntityField> fieldList) throws UnifyException {
+            List<AppEntityField> fieldList, FormatterOptions formatOptions) throws UnifyException {
         List<ReportableField> resultList = new ArrayList<ReportableField>();
         for (AppEntityField appEntityField : fieldList) {
             if (appEntityField.isReportable()) {
                 ReportableField reportableField = new ReportableField();
-                ReportEntityUtils.populateReportableField(reportableField, appEntityField);
+                ReportEntityUtils.populateReportableField(reportableField, appEntityField, formatOptions);
                 resultList.add(reportableField);
             }
         }
@@ -72,8 +74,8 @@ public final class ReportEntityUtils {
         return resultList;
     }
 
-    public static void populateReportableField(ReportableField reportableField, AppEntityField appEntityField)
-            throws UnifyException {
+    public static void populateReportableField(ReportableField reportableField, AppEntityField appEntityField,
+            FormatterOptions formatOptions) throws UnifyException {
         String description = NameUtils.describeName(appEntityField.getName());
         EntityFieldDataType entityFieldDataType = appEntityField.getDataType();
         Class<?> dataClazz = null;
@@ -86,10 +88,8 @@ public final class ReportEntityUtils {
                 reportableField.setHorizontalAlign(HAlignType.RIGHT.name());
             }
 
-            if (appEntityField.getDataType().isTimestamp()) {
-                reportableField.setFormatter("!fixeddatetimeformat pattern:$s{yyyy-MM-dd HH:mm:ss}");
-            } else if (appEntityField.getDataType().isDate()) {
-                reportableField.setFormatter("!fixeddatetimeformat pattern:$s{yyyy-MM-dd}");
+            if (StringUtils.isBlank(reportableField.getFormatter())) {
+                reportableField.setFormatter(ReportEntityUtils.resolveFormatter(entityFieldDataType, formatOptions));
             }
         }
 
@@ -100,4 +100,17 @@ public final class ReportEntityUtils {
         reportableField.setType(ConverterUtils.getWrapperClassName(dataClazz));
     }
 
+    public static String resolveFormatter(EntityFieldDataType entityFieldDataType, FormatterOptions formatOptions) {
+        if (entityFieldDataType.isDecimal()) {
+            return formatOptions.getDecimalFormatter();
+        } else if (entityFieldDataType.isInteger()) {
+            return formatOptions.getIntegerFormatter();
+        } else if (entityFieldDataType.isDate()) {
+            return formatOptions.getDateFormatter();
+        } else if (entityFieldDataType.isTimestamp()) {
+            return formatOptions.getTimestampFormatter();
+        }
+        
+        return null;
+    }
 }

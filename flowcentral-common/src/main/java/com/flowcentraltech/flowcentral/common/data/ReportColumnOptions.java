@@ -19,6 +19,7 @@ package com.flowcentraltech.flowcentral.common.data;
 import com.tcdng.unify.core.constant.HAlignType;
 import com.tcdng.unify.core.constant.OrderType;
 import com.tcdng.unify.core.constant.VAlignType;
+import com.tcdng.unify.core.util.StringUtils;
 
 /**
  * Report column options.
@@ -196,6 +197,11 @@ public class ReportColumnOptions {
 
     public void setIncluded(boolean included) {
         this.included = included;
+    }
+
+    @Override
+    public String toString() {
+        return StringUtils.toXmlString(this);
     }
 
 }

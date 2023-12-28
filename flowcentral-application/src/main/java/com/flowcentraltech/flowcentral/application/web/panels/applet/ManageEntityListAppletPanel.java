@@ -15,10 +15,12 @@
  */
 package com.flowcentraltech.flowcentral.application.web.panels.applet;
 
+import com.flowcentraltech.flowcentral.application.web.panels.EntitySearch;
 import com.flowcentraltech.flowcentral.application.web.widgets.EntityTable;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.UplBinding;
+import com.tcdng.unify.core.data.IndexedTarget;
 import com.tcdng.unify.web.annotation.Action;
 
 /**
@@ -70,6 +72,16 @@ public class ManageEntityListAppletPanel extends AbstractEntityFormAppletPanel {
                 switchContent("entitySearchPanel"); 
             default:
                 break;
+        }
+    }
+
+    @Action
+    public final void details() throws UnifyException {
+        IndexedTarget target = getRequestTarget(IndexedTarget.class);
+        if (target.isValidIndex()) {
+            final ManageEntityListApplet applet = getManageEntityListApplet();
+            EntitySearch entitySearch = applet.getEntitySearch();
+            entitySearch.getEntityTable().setDetailsIndex(target.getIndex());
         }
     }
 

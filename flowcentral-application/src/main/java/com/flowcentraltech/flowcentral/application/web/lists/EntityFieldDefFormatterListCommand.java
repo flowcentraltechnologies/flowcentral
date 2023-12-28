@@ -20,6 +20,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
+import com.flowcentraltech.flowcentral.common.web.lists.AbstractFlowCentralListCommand;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldDataType;
 import com.tcdng.unify.common.constants.StandardFormatType;
 import com.tcdng.unify.core.UnifyException;
@@ -27,7 +28,6 @@ import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.data.ListData;
 import com.tcdng.unify.core.data.Listable;
 import com.tcdng.unify.core.data.LocaleFactoryMaps;
-import com.tcdng.unify.core.list.AbstractListCommand;
 
 /**
  * Entity field definition formatter list command.
@@ -36,7 +36,7 @@ import com.tcdng.unify.core.list.AbstractListCommand;
  * @since 1.0
  */
 @Component("entityfielddefformatterlist")
-public class EntityFieldDefFormatterListCommand extends AbstractListCommand<EntityFieldDefListParams> {
+public class EntityFieldDefFormatterListCommand extends AbstractFlowCentralListCommand<EntityFieldDefListParams> {
 
     private final LocaleFactoryMaps<EntityFieldDataType, List<? extends Listable>> listMap;
 

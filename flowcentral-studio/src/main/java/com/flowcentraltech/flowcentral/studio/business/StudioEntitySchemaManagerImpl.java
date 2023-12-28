@@ -38,6 +38,7 @@ import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.util.InputWidgetUtils;
 import com.flowcentraltech.flowcentral.application.util.PrivilegeNameUtils;
 import com.flowcentraltech.flowcentral.common.constants.ConfigType;
+import com.flowcentraltech.flowcentral.common.data.FormatterOptions;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldType;
 import com.flowcentraltech.flowcentral.report.business.ReportModuleService;
 import com.flowcentraltech.flowcentral.report.entities.ReportableDefinition;
@@ -162,6 +163,10 @@ public class StudioEntitySchemaManagerImpl extends AbstractEntitySchemaManager {
                     }
 
                     update.add("nullable", entityFieldSchema.isNullable());
+                    if (!entityFieldSchema.getDataType().isReportable()) {
+                        update.add("reportable", false);
+                    }
+                    
                     au.environment().updateAll(
                             new AppEntityFieldQuery().appEntityId(appEntityId).name(entityFieldSchema.getName()),
                             update);
@@ -172,7 +177,7 @@ public class StudioEntitySchemaManagerImpl extends AbstractEntitySchemaManager {
             }
 
             // Update default components
-            updateDefaultComponents(ENTITY_SCHEMA_OPERATION, appEntity);
+            updateDefaultComponents(entitySchema.getEntity(), appEntity);
 
             // Update entity
             if (!StringUtils.isBlank(entitySchema.getTableName())) {
@@ -223,10 +228,10 @@ public class StudioEntitySchemaManagerImpl extends AbstractEntitySchemaManager {
                 reportableDefinition.setTitle(description);
                 reportableDefinition.setName(appEntity.getName());
                 reportableDefinition.setDescription(description);
-                List<ReportableField> reportableFieldList = ReportEntityUtils
-                        .getEntityBaseTypeReportableFieldList(messageResolver, appEntity.getBaseType());
-                reportableFieldList
-                        .addAll(ReportEntityUtils.getReportableFieldList(messageResolver, appEntity.getFieldList()));
+                List<ReportableField> reportableFieldList = ReportEntityUtils.getEntityBaseTypeReportableFieldList(
+                        messageResolver, appEntity.getBaseType(), FormatterOptions.DEFAULT);
+                reportableFieldList.addAll(ReportEntityUtils.getReportableFieldList(messageResolver,
+                        appEntity.getFieldList(), FormatterOptions.DEFAULT));
                 reportableDefinition.setFieldList(reportableFieldList);
                 reportModuleService.createReportableDefinition(reportableDefinition);
 
@@ -267,10 +272,10 @@ public class StudioEntitySchemaManagerImpl extends AbstractEntitySchemaManager {
                 reportableDefinition.setTitle(description);
                 reportableDefinition.setName(appEntity.getName());
                 reportableDefinition.setDescription(description);
-                List<ReportableField> reportableFieldList = ReportEntityUtils
-                        .getEntityBaseTypeReportableFieldList(messageResolver, appEntity.getBaseType());
-                reportableFieldList
-                        .addAll(ReportEntityUtils.getReportableFieldList(messageResolver, appEntity.getFieldList()));
+                List<ReportableField> reportableFieldList = ReportEntityUtils.getEntityBaseTypeReportableFieldList(
+                        messageResolver, appEntity.getBaseType(), FormatterOptions.DEFAULT);
+                reportableFieldList.addAll(ReportEntityUtils.getReportableFieldList(messageResolver,
+                        appEntity.getFieldList(), FormatterOptions.DEFAULT));
                 reportableDefinition.setFieldList(reportableFieldList);
                 reportModuleService.createReportableDefinition(reportableDefinition);
 
@@ -291,10 +296,10 @@ public class StudioEntitySchemaManagerImpl extends AbstractEntitySchemaManager {
             } else {
                 final List<AppEntityField> appEntityFieldList = au.environment()
                         .findAll(new AppEntityFieldQuery().appEntityId(appEntity.getId()));
-                List<ReportableField> reportableFieldList = ReportEntityUtils
-                        .getEntityBaseTypeReportableFieldList(messageResolver, appEntity.getBaseType());
-                reportableFieldList
-                        .addAll(ReportEntityUtils.getReportableFieldList(messageResolver, appEntityFieldList));
+                List<ReportableField> reportableFieldList = ReportEntityUtils.getEntityBaseTypeReportableFieldList(
+                        messageResolver, appEntity.getBaseType(), FormatterOptions.DEFAULT);
+                reportableFieldList.addAll(ReportEntityUtils.getReportableFieldList(messageResolver, appEntityFieldList,
+                        FormatterOptions.DEFAULT));
                 reportableDefinition.setFieldList(reportableFieldList);
                 reportModuleService.updateReportableDefinition(reportableDefinition);
             }
@@ -324,8 +329,9 @@ public class StudioEntitySchemaManagerImpl extends AbstractEntitySchemaManager {
                 : null);
         appEntityField.setPrecision(entityFieldSchema.getPrecision() > 0 ? entityFieldSchema.getPrecision() : null);
         appEntityField.setScale(entityFieldSchema.getScale() > 0 ? entityFieldSchema.getScale() : null);
-        appEntityField.setAuditable(true);
-        appEntityField.setReportable(true);
+        appEntityField.setAuditable(!ApplicationEntityUtils.isReservedFieldName(entityFieldSchema.getName())
+                || ApplicationEntityUtils.isAuditableReservedFieldName(entityFieldSchema.getName()));
+        appEntityField.setReportable(entityFieldSchema.getDataType().isReportable());
         appEntityField.setNullable(entityFieldSchema.isNullable());
         return appEntityField;
     }

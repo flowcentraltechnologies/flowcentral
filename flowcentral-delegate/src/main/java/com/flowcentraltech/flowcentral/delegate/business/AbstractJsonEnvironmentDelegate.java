@@ -31,6 +31,7 @@ import com.flowcentraltech.flowcentral.delegate.data.DelegateEntityListingDTO;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.constant.PrintFormat;
 import com.tcdng.unify.core.util.DataUtils;
+import com.tcdng.unify.core.util.StringUtils;
 
 /**
  * Convenient abstract base class for JSON based protocol environment delegates.
@@ -70,7 +71,8 @@ public abstract class AbstractJsonEnvironmentDelegate extends AbstractSynchroniz
     protected BaseResponse sendToDelegateDatasourceService(DataSourceRequest req) throws UnifyException {
         String reqJSON = DataUtils.asJsonString(req, PrintFormat.NONE);
         String respJSON = sendToDelegateDatasourceService(reqJSON);
-        JsonDataSourceResponse resp = DataUtils.fromJsonString(JsonDataSourceResponse.class, respJSON);
+        JsonDataSourceResponse resp = StringUtils.isBlank(respJSON) ? new JsonDataSourceResponse()
+                : DataUtils.fromJsonString(JsonDataSourceResponse.class, respJSON);
         if (resp.error()) {
             throw new UnifyException(DelegateErrorCodeConstants.DELEGATION_ERROR, resp.getErrorMsg());
         }

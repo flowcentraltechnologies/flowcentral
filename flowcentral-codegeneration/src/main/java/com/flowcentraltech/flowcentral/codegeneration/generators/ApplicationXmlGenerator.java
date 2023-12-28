@@ -580,6 +580,7 @@ public class ApplicationXmlGenerator extends AbstractStaticArtifactGenerator {
                                 appEntitySearchInput.getDescription());
                         entitySearchInputConfig.setName(appEntitySearchInput.getName());
                         entitySearchInputConfig.setDescription("$m{" + searchInputKey + "}");
+                        entitySearchInputConfig.setRestrictionResolver(appEntitySearchInput.getRestrictionResolver());
                         searchInputList.add(entitySearchInputConfig);
                     }
 

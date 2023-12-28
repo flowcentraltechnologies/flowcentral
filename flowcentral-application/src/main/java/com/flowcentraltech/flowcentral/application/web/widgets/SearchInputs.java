@@ -20,6 +20,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.ListIterator;
 
+import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.SearchInputDef;
 import com.flowcentraltech.flowcentral.application.data.SearchInputsDef;
@@ -35,17 +36,22 @@ import com.tcdng.unify.core.constant.Editable;
  */
 public class SearchInputs {
 
+    private final AppletUtilities au;
+
     private EntityDef entityDef;
 
     private List<SearchInputEntry> entryList;
 
     private List<SearchInputEntry> viewEntryList;
 
-    public SearchInputs(EntityDef entityDef, SearchInputsDef searchInputsDef) throws UnifyException {
-        this(entityDef, searchInputsDef, Editable.TRUE);
+    public SearchInputs(AppletUtilities au, EntityDef entityDef, SearchInputsDef searchInputsDef)
+            throws UnifyException {
+        this(au, entityDef, searchInputsDef, Editable.TRUE);
     }
 
-    public SearchInputs(EntityDef entityDef, SearchInputsDef searchInputsDef, Editable editable) throws UnifyException {
+    public SearchInputs(AppletUtilities au, EntityDef entityDef, SearchInputsDef searchInputsDef, Editable editable)
+            throws UnifyException {
+        this.au = au;
         this.entityDef = entityDef;
         this.entryList = new ArrayList<SearchInputEntry>();
         this.viewEntryList = Collections.unmodifiableList(entryList);
@@ -138,9 +144,10 @@ public class SearchInputs {
     private void loadEntryList(SearchInputsDef searchInputsDef, Editable editable) throws UnifyException {
         if (searchInputsDef != null) {
             for (SearchInputDef searchInputDef : searchInputsDef.getSearchInputDefList()) {
+                final String label = au.resolveSessionMessage(searchInputDef.getLabel());
                 SearchInputEntry sie = new SearchInputEntry(entityDef, editable.isTrue());
                 setFieldAndInputParams(sie, searchInputDef.getType(), searchInputDef.getFieldName(),
-                        searchInputDef.getWidget(), searchInputDef.getLabel());
+                        searchInputDef.getWidget(), label);
                 entryList.add(sie);
             }
         }

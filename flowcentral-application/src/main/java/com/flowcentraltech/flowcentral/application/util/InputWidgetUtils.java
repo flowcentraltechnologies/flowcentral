@@ -708,7 +708,8 @@ public final class InputWidgetUtils {
         return result;
     }
 
-    public static PropertySequenceDef getPropertySequenceDef(AppPropertySequence appPropertySequence) throws UnifyException {
+    public static PropertySequenceDef getPropertySequenceDef(AppPropertySequence appPropertySequence)
+            throws UnifyException {
         return InputWidgetUtils.getPropertySequenceDef(null, null, appPropertySequence);
     }
 
@@ -941,7 +942,8 @@ public final class InputWidgetUtils {
         if (appEntitySearchInput != null) {
             EntitySearchInputConfig entitySearchInputConfig = new EntitySearchInputConfig();
             InputWidgetUtils.getSearchInputsConfig(entitySearchInputConfig, appEntitySearchInput.getName(),
-                    appEntitySearchInput.getDescription(), appEntitySearchInput.getSearchInput());
+                    appEntitySearchInput.getDescription(), appEntitySearchInput.getRestrictionResolver(),
+                    appEntitySearchInput.getSearchInput());
             return entitySearchInputConfig;
         }
 
@@ -953,7 +955,8 @@ public final class InputWidgetUtils {
         if (appEntitySearchInput != null && appEntitySearchInput.getSearchInput() != null) {
             SearchInputsConfig searchInputConfig = new SearchInputsConfig();
             InputWidgetUtils.getSearchInputsConfig(searchInputConfig, appEntitySearchInput.getName(),
-                    appEntitySearchInput.getDescription(), appEntitySearchInput.getSearchInput());
+                    appEntitySearchInput.getDescription(), appEntitySearchInput.getRestrictionResolver(),
+                    appEntitySearchInput.getSearchInput());
             return searchInputConfig;
         }
 
@@ -961,9 +964,10 @@ public final class InputWidgetUtils {
     }
 
     public static void getSearchInputsConfig(SearchInputsConfig searchInputsConfig, String name, String description,
-            AppSearchInput appSearchInput) throws UnifyException {
+            String restrictionResolver, AppSearchInput appSearchInput) throws UnifyException {
         if (appSearchInput != null) {
-            SearchInputsDef searchInputsDef = InputWidgetUtils.getSearchInputsDef(name, description, appSearchInput);
+            SearchInputsDef searchInputsDef = InputWidgetUtils.getSearchInputsDef(name, description,
+                    restrictionResolver, appSearchInput);
             searchInputsConfig.setName(name);
             searchInputsConfig.setDescription(description);
             List<SearchInputConfig> inputList = new ArrayList<SearchInputConfig>();
@@ -980,11 +984,11 @@ public final class InputWidgetUtils {
         }
     }
 
-    public static SearchInputsDef getSearchInputsDef(String name, String description, AppSearchInput appSearchInput)
-            throws UnifyException {
+    public static SearchInputsDef getSearchInputsDef(String name, String description, String restrictionResolver,
+            AppSearchInput appSearchInput) throws UnifyException {
         if (appSearchInput != null) {
             SearchInputsDef.Builder sidb = SearchInputsDef.newBuilder();
-            sidb.name(name).description(description);
+            sidb.name(name).description(description).restrictionResolverName(restrictionResolver);
             if (appSearchInput.getDefinition() != null) {
                 try (BufferedReader reader = new BufferedReader(new StringReader(appSearchInput.getDefinition()));) {
                     String line = null;

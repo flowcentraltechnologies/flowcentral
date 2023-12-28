@@ -17,6 +17,7 @@ package com.flowcentraltech.flowcentral.application.entities;
 
 import com.flowcentraltech.flowcentral.common.entities.BaseConfigNamedEntity;
 import com.tcdng.unify.core.annotation.Child;
+import com.tcdng.unify.core.annotation.Column;
 import com.tcdng.unify.core.annotation.ForeignKey;
 import com.tcdng.unify.core.annotation.ListOnly;
 import com.tcdng.unify.core.annotation.Table;
@@ -35,6 +36,9 @@ public class AppEntitySearchInput extends BaseConfigNamedEntity {
     @ForeignKey(AppEntity.class)
     private Long appEntityId;
 
+    @Column(name = "RESTRICTION_RESOLVER", length = 64, nullable = true)
+    private String restrictionResolver;
+    
     @ListOnly(key = "appEntityId", property = "applicationId")
     private Long applicationId;
 
@@ -63,6 +67,14 @@ public class AppEntitySearchInput extends BaseConfigNamedEntity {
 
     public void setAppEntityId(Long appEntityId) {
         this.appEntityId = appEntityId;
+    }
+
+    public String getRestrictionResolver() {
+        return restrictionResolver;
+    }
+
+    public void setRestrictionResolver(String restrictionResolver) {
+        this.restrictionResolver = restrictionResolver;
     }
 
     public Long getApplicationId() {

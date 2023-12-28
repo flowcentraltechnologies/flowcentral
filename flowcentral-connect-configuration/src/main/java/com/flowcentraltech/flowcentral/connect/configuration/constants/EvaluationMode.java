@@ -29,8 +29,12 @@ public enum EvaluationMode {
     CREATE_SUBMIT,
     UPDATE,
     UPDATE_SUBMIT,
-    DELETE;
-    
+    UPDATE_TABACTION,
+    DELETE,
+    REQUIRED,
+    SWITCH_ONCHANGE,
+    NOP;
+
     public boolean submit() {
         return this.equals(CREATE_SUBMIT) || this.equals(UPDATE_SUBMIT);
     }
@@ -40,7 +44,7 @@ public enum EvaluationMode {
     }
     
     public boolean update() {
-        return this.equals(UPDATE) || this.equals(UPDATE_SUBMIT);
+        return this.equals(UPDATE) || this.equals(UPDATE_SUBMIT) || this.equals(UPDATE_TABACTION);
     }
     
     public boolean delete() {

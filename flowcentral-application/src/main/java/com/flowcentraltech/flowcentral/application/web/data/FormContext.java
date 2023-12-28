@@ -301,7 +301,9 @@ public class FormContext extends AbstractContext {
                         .getStringGenerator(getFormValueStore().getReader(), getFormValueStore().getReader(),
                                 formDef.getTitleFormat())
                         .generate()
-                : au().resolveSessionMessage("$m{form.newrecord}");
+                : (inst instanceof Entity && ((Entity) inst).getId() == null
+                        ? au().resolveSessionMessage("$m{form.newrecord}")
+                        : au().resolveSessionMessage("$m{form.editrecord}"));
     }
 
     public Object getInst() {

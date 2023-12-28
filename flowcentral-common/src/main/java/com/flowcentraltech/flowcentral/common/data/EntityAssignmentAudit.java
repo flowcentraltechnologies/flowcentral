@@ -128,7 +128,7 @@ public class EntityAssignmentAudit {
                     fieldAudits.add(new EntityFieldAudit(fieldName, oldVal, null));
                 }
             }
-            lastSnapshot = new EntityAuditSnapshot(eventType, entityAuditInfo.getEntity(), fieldAudits);
+            lastSnapshot = new EntityAuditSnapshot(eventType, null,  entityAuditInfo.getEntity(), fieldAudits);
         }
 
         return lastSnapshot;

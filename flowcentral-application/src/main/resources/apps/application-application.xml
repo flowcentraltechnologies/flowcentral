@@ -530,6 +530,14 @@
 		<reference name="appEntityRef"
 			description="$m{application.appentity.reference}" entity="appEntity"
 			searchField="description" />
+		<reference name="appEntityAuditableRef"
+			description="$m{application.appentity.auditable.reference}"
+			entity="appEntity" searchField="description">
+			<filter>
+				<restriction type="equals" field="auditable"
+					paramA="true" />
+			</filter>
+		</reference>
 		<reference name="appEntityLoadingRef"
 			description="$m{application.appentity.loading.reference}"
 			entity="appEntity" searchField="description"
@@ -1050,16 +1058,17 @@
 			<field name="appEntityId"
 				label="$m{application.appentityseries.appentityid}" type="ref"
 				references="appEntityRef" inputWidget="application.entitylist" />
-			<field name="type"
-				label="$m{application.appentityseries.type}" type="enum_ref"
-				references="seriestypelist"
+			<field name="type" label="$m{application.appentityseries.type}"
+				type="enum_ref" references="seriestypelist"
 				inputWidget="application.enumlist" />
 			<field name="name" label="$m{application.appentityseries.name}"
 				type="string" inputWidget="application.name" />
-			<field name="description" label="$m{application.appentityseries.description}"
-				type="string" inputWidget="application.text" />
-			<field name="label" label="$m{application.appentityseries.label}"
-				type="string" inputWidget="application.text" />
+			<field name="description"
+				label="$m{application.appentityseries.description}" type="string"
+				inputWidget="application.text" />
+			<field name="label"
+				label="$m{application.appentityseries.label}" type="string"
+				inputWidget="application.text" />
 			<field name="fieldName"
 				label="$m{application.appentityseries.fieldname}" type="string"
 				inputWidget="application.name" nullable="true" />
@@ -1073,10 +1082,12 @@
 				label="$m{application.appentityseries.typedesc}" type="list_only"
 				key="type" property="description" />
 			<uniqueConstraint name="nameUc"
-				description="$m{application.appentityseries.uc.name}" fieldList="appEntityId,name">
+				description="$m{application.appentityseries.uc.name}"
+				fieldList="appEntityId,name">
 			</uniqueConstraint>
 			<uniqueConstraint name="descUc"
-				description="$m{application.appentityseries.uc.description}" fieldList="appEntityId,description">
+				description="$m{application.appentityseries.uc.description}"
+				fieldList="appEntityId,description">
 			</uniqueConstraint>
 		</entity>
 		<entity name="appEntityCategory"
@@ -1086,12 +1097,15 @@
 			<field name="appEntityId"
 				label="$m{application.appentitycategory.appentityid}" type="ref"
 				references="appEntityRef" inputWidget="application.entitylist" />
-			<field name="name" label="$m{application.appentitycategory.name}"
-				type="string" inputWidget="application.name" />
-			<field name="description" label="$m{application.appentitycategory.description}"
-				type="string" inputWidget="application.text" />
-			<field name="label" label="$m{application.appentitycategory.label}"
-				type="string" inputWidget="application.text" />
+			<field name="name"
+				label="$m{application.appentitycategory.name}" type="string"
+				inputWidget="application.name" />
+			<field name="description"
+				label="$m{application.appentitycategory.description}" type="string"
+				inputWidget="application.text" />
+			<field name="label"
+				label="$m{application.appentitycategory.label}" type="string"
+				inputWidget="application.text" />
 			<field name="filter"
 				label="$m{application.appentitycategory.filter}" type="child"
 				category="entitycat" references="appFilterRef" />
@@ -1102,10 +1116,12 @@
 				label="$m{application.appentitycategory.applicationname}"
 				type="list_only" key="appEntityId" property="applicationName" />
 			<uniqueConstraint name="nameUc"
-				description="$m{application.appentitycategory.uc.name}" fieldList="appEntityId,name">
+				description="$m{application.appentitycategory.uc.name}"
+				fieldList="appEntityId,name">
 			</uniqueConstraint>
 			<uniqueConstraint name="descUc"
-				description="$m{application.appentitycategory.uc.description}" fieldList="appEntityId,description">
+				description="$m{application.appentitycategory.uc.description}"
+				fieldList="appEntityId,description">
 			</uniqueConstraint>
 		</entity>
 		<entity name="appEntityAttachment"
@@ -1181,6 +1197,9 @@
 			<field name="appEntityId"
 				label="$m{application.appentitysearchinput.appentityid}" type="ref"
 				references="appEntityRef" inputWidget="application.entitylist" />
+			<field name="restrictionResolver"
+				label="$m{application.appentitysearchinput.restrictionresolver}"
+				type="string" />
 			<field name="searchInput"
 				label="$m{application.appentitysearchinput.searchinput}"
 				type="child" category="table" references="appSearchInputRef" />

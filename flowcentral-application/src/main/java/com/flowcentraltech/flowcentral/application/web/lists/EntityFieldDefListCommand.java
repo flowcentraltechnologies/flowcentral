@@ -19,10 +19,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
+import com.flowcentraltech.flowcentral.common.web.lists.AbstractFlowCentralListCommand;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.data.Listable;
-import com.tcdng.unify.core.list.AbstractListCommand;
 
 /**
  * Entity field definition list command.
@@ -31,7 +31,7 @@ import com.tcdng.unify.core.list.AbstractListCommand;
  * @since 1.0
  */
 @Component("entityfielddeflist")
-public class EntityFieldDefListCommand extends AbstractListCommand<EntityDefListParams> {
+public class EntityFieldDefListCommand extends AbstractFlowCentralListCommand<EntityDefListParams> {
 
     public EntityFieldDefListCommand() {
         super(EntityDefListParams.class);

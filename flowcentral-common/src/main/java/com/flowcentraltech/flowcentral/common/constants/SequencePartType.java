@@ -26,39 +26,83 @@ public enum SequencePartType {
 
     TEXT(
             "",
-            ""),
+            "",
+            false,
+            false),
     VALUESTORE_GENERATOR(
             "{v:",
-            ""),
+            "",
+            false,
+            false),
     SYSTEM_PARAMETER(
             "{p:",
-            ""),
+            "",
+            false,
+            false),
     SEQUENCE_NUMBER(
             "{n:",
-            ""),
+            "",
+            false,
+            false),
     SEQUENCE_NUMBER_BY_DATE(
             "{N:",
-            ""),
+            "",
+            false,
+            false),
     LONG_YEAR(
             "{yyyy}",
-            "____"),
+            "____",
+            true,
+            false),
     SHORT_YEAR(
             "{yy}",
-            "__"),
+            "__",
+            true,
+            false),
+    MONTH(
+            "{mm}",
+            "_",
+            true,
+            false),
+    MONTH_FIXED(
+            "{MM}",
+            "_",
+            true,
+            false),
     DAY_OF_MONTH(
             "{dd}",
-            "_"),
+            "_",
+            true,
+            true),
     DAY_OF_YEAR(
             "{ddd}",
-            "_");
+            "_",
+            true,
+            true),
+    DAY_OF_MONTH_FIXED(
+            "{DD}",
+            "_",
+            true,
+            true),
+    DAY_OF_YEAR_FIXED(
+            "{DDD}",
+            "_",
+            true,
+            true);
 
     private final String track;
 
     private final String skeleton;
 
-    private SequencePartType(String track, String skeleton) {
+    private final boolean datePart;
+
+    private final boolean dayPart;
+
+    private SequencePartType(String track, String skeleton, boolean datePart, boolean dayPart) {
         this.track = track;
         this.skeleton = skeleton;
+        this.datePart = datePart;
+        this.dayPart = dayPart;
     }
 
     public String track() {
@@ -82,12 +126,15 @@ public enum SequencePartType {
     }
 
     public boolean isDatePart() {
-        return LONG_YEAR.equals(this) || SHORT_YEAR.equals(this) || DAY_OF_MONTH.equals(this)
-                || DAY_OF_YEAR.equals(this);
+        return datePart;
     }
 
     public boolean isDayPart() {
-        return DAY_OF_MONTH.equals(this) || DAY_OF_YEAR.equals(this);
+        return dayPart;
+    }
+
+    public boolean isFixed() {
+        return MONTH_FIXED.equals(this) || DAY_OF_MONTH_FIXED.equals(this) || DAY_OF_YEAR_FIXED.equals(this);
     }
 
 }

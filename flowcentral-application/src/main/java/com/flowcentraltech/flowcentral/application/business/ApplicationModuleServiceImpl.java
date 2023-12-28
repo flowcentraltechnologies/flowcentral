@@ -342,9 +342,8 @@ import com.tcdng.unify.core.util.StringUtils;
  */
 @Transactional
 @Component(ApplicationModuleNameConstants.APPLICATION_MODULE_SERVICE)
-public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
-        implements ApplicationModuleService, FileAttachmentProvider, SuggestionProvider,
-        PostBootSetup, EnvironmentDelegateRegistrar {
+public class ApplicationModuleServiceImpl extends AbstractFlowCentralService implements ApplicationModuleService,
+        FileAttachmentProvider, SuggestionProvider, PostBootSetup, EnvironmentDelegateRegistrar {
 
     private final Set<String> refProperties = Collections
             .unmodifiableSet(new HashSet<String>(Arrays.asList(AppletPropertyConstants.SEARCH_TABLE,
@@ -880,7 +879,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     for (AppEntitySearchInput appEntitySearchInput : appEntity.getSearchInputList()) {
                         SearchInputsDef searchInputsDef = InputWidgetUtils.getSearchInputsDef(
                                 appEntitySearchInput.getName(), appEntitySearchInput.getDescription(),
-                                appEntitySearchInput.getSearchInput());
+                                appEntitySearchInput.getRestrictionResolver(), appEntitySearchInput.getSearchInput());
                         if (searchInputsDef != null) {
                             edb.addEntitySearchInputDef(new EntitySearchInputDef(searchInputsDef));
                         }
@@ -2869,7 +2868,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     public SearchInputsDef retrieveSearchInputsDef(String category, String ownerEntityName, Long ownerInstId)
             throws UnifyException {
         final EntityDef entityDef = getEntityDef(ownerEntityName);
-        return InputWidgetUtils.getSearchInputsDef(null, null, environment().find(new AppSearchInputQuery()
+        return InputWidgetUtils.getSearchInputsDef(null, null, null, environment().find(new AppSearchInputQuery()
                 .category(category).entity(entityDef.getTableName()).entityInstId(ownerInstId)));
     }
 
@@ -4900,7 +4899,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appEntityField.setReadOnly(entityFieldConfig.getReadOnly());
                     appEntityField.setNullable(entityFieldConfig.getNullable());
                     appEntityField.setAuditable(entityFieldConfig.getAuditable());
-                    appEntityField.setReportable(entityFieldConfig.getReportable());
+                    appEntityField.setReportable(
+                            entityFieldConfig.getType().isReportable() ? entityFieldConfig.getReportable() : false);
                     appEntityField.setDescriptive(entityFieldConfig.getDescriptive());
                     appEntityField.setMaintainLink(entityFieldConfig.getMaintainLink());
                     appEntityField.setBasicSearch(entityFieldConfig.getBasicSearch());
@@ -4947,7 +4947,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                         oldAppEntityField.setReadOnly(entityFieldConfig.getReadOnly());
                         oldAppEntityField.setNullable(entityFieldConfig.getNullable());
                         oldAppEntityField.setAuditable(entityFieldConfig.getAuditable());
-                        oldAppEntityField.setReportable(entityFieldConfig.getReportable());
+                        oldAppEntityField.setReportable(
+                                entityFieldConfig.getType().isReportable() ? entityFieldConfig.getReportable() : false);
                         oldAppEntityField.setDescriptive(entityFieldConfig.getDescriptive());
                         oldAppEntityField.setMaintainLink(entityFieldConfig.getMaintainLink());
                         oldAppEntityField.setBasicSearch(entityFieldConfig.getBasicSearch());
@@ -5199,6 +5200,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                         appEntitySearchInput.setName(searchInputConfig.getName());
                         appEntitySearchInput
                                 .setDescription(resolveApplicationMessage(searchInputConfig.getDescription()));
+                        appEntitySearchInput.setRestrictionResolver(searchInputConfig.getRestrictionResolver());
                         appEntitySearchInput.setSearchInput(InputWidgetUtils.newAppSearchInput(searchInputConfig));
                         appEntitySearchInput.setConfigType(ConfigType.MUTABLE_INSTALL);
                         searchInputList.add(appEntitySearchInput);
@@ -5206,6 +5208,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                         if (ConfigUtils.isSetInstall(oldAppTableSearchInput)) {
                             oldAppTableSearchInput
                                     .setDescription(resolveApplicationMessage(searchInputConfig.getDescription()));
+                            oldAppTableSearchInput.setRestrictionResolver(searchInputConfig.getRestrictionResolver());
                             oldAppTableSearchInput
                                     .setSearchInput(InputWidgetUtils.newAppSearchInput(searchInputConfig));
                         } else {

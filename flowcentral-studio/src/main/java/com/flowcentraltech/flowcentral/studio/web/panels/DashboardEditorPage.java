@@ -157,7 +157,7 @@ public class DashboardEditorPage extends AbstractStudioEditorPage implements Tab
                 "!fc-dashboardeditor", RendererType.SIMPLE_WIDGET);
         tsdb.addTabDef("preview", getAu().resolveSessionMessage("$m{studio.dashboard.form.preview}"),
                 "fc-dashboardpreviewpanel", RendererType.STANDALONE_PANEL);
-        dashboardPreview = new DashboardPreview(getAu(), dashboardEditor);
+        dashboardPreview = new DashboardPreview(dashboardEditor);
 
         final String appletName = null;
         tabSheet = new TabSheet(tsdb.build(),

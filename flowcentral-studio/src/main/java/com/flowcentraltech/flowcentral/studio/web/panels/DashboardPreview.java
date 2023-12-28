@@ -16,7 +16,6 @@
 
 package com.flowcentraltech.flowcentral.studio.web.panels;
 
-import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.configuration.constants.DashboardColumnsType;
 import com.flowcentraltech.flowcentral.configuration.constants.DashboardTileType;
 import com.flowcentraltech.flowcentral.dashboard.data.DashboardDef;
@@ -35,16 +34,13 @@ import com.tcdng.unify.core.UnifyException;
  */
 public class DashboardPreview {
 
-    private final AppletUtilities au;
-
     private final DashboardEditor dashboardEditor;
 
     private DashboardSlate dashboardSlate;
     
     private Design oldDesign;
 
-    public DashboardPreview(AppletUtilities au, DashboardEditor dashboardEditor) {
-        this.au = au;
+    public DashboardPreview(DashboardEditor dashboardEditor) {
         this.dashboardEditor = dashboardEditor;
     }
 

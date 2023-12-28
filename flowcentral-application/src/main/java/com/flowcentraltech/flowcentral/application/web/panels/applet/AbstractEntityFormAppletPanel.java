@@ -843,7 +843,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
             setCommandResultMapping(ResultMappingConstants.NONE);
         }
     }
-    
+   
     @Action
     public void columns() throws UnifyException {
         // TODO

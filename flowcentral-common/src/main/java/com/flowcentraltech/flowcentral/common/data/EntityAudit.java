@@ -80,9 +80,7 @@ public class EntityAudit {
             }
         } else if (eventType.isDelete()) {
             for (EntityFieldAudit oldFieldAudit : lastSnapshot.getFieldAudits()) {
-                final boolean newAsOldSource = lastSnapshot.getEventType().isCreate()
-                        || lastSnapshot.getEventType().isUpdate();
-                Object oldVal = newAsOldSource ? oldFieldAudit.getNewValue() : oldFieldAudit.getOldValue();
+                Object oldVal = oldFieldAudit.getOldValue();
                 fieldAudits.add(new EntityFieldAudit(oldFieldAudit.getFieldName(), oldVal, null));
             }
         } else {
@@ -92,7 +90,8 @@ public class EntityAudit {
             }
         }
 
-        lastSnapshot = new EntityAuditSnapshot(eventType, entityAuditInfo.getEntity(), fieldAudits);
+        lastSnapshot = new EntityAuditSnapshot(eventType, (Long) entity.getId(), entityAuditInfo.getEntity(),
+                fieldAudits);
         return lastSnapshot;
     }
 }

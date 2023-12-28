@@ -16,7 +16,7 @@
 package com.flowcentraltech.flowcentral.chart.constants;
 
 /**
- * Workflow module system parameter constants.
+ * Chart module system parameter constants.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0

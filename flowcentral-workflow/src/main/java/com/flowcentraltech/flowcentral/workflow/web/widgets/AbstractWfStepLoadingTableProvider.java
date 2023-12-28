@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.workflow.business.policies;
+package com.flowcentraltech.flowcentral.workflow.web.widgets;
 
 import java.util.Map;
 

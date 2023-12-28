@@ -21,6 +21,7 @@ import java.util.List;
 import com.flowcentraltech.flowcentral.application.web.widgets.SearchEntries;
 import com.flowcentraltech.flowcentral.application.web.widgets.SearchEntry;
 import com.flowcentraltech.flowcentral.application.web.widgets.SearchWidget;
+import com.flowcentraltech.flowcentral.common.input.AbstractInput;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Writes;
@@ -59,6 +60,7 @@ public class SearchWriter extends AbstractControlWriter {
             writer.write("<div class=\"sftable\">");
 
             int i = 0;
+            paramCtrl.initValueStoreMemory(len);
             while (i < len) {
                 writer.write("<div class=\"sfrow\">");
 
@@ -100,6 +102,7 @@ public class SearchWriter extends AbstractControlWriter {
         }
     }
 
+    @SuppressWarnings("unchecked")
     private void writeFieldCell(ResponseWriter writer, SearchEntries searchEntries, ValueStore lineValueStore,
             Control ctrl, String captionSuffix) throws UnifyException {
         SearchEntry searchEntry = (SearchEntry) lineValueStore.getValueObject();
@@ -118,20 +121,29 @@ public class SearchWriter extends AbstractControlWriter {
         writer.write("</span>");
         if (searchEntries.isShowConditions()) {
             writer.write("<span class=\"sfcondtxt\">");
-            String symbol = searchEntry.isFieldEntry()
-                    ? getSessionMessage(searchEntry.getConditionType().filterType().labelKey())
-                    : getSessionMessage("searchwriter.generated");
+            String symbol = searchEntry.isSessionEntry() ? getSessionMessage("searchwriter.session")
+                    : (searchEntry.isFieldEntry()
+                            ? getSessionMessage(searchEntry.getConditionType().filterType().labelKey())
+                            : getSessionMessage("searchwriter.generated"));
             writer.writeWithHtmlEscape(symbol);
             writer.write("</span>");
         }
         writer.write("</div>");
         writer.write("</div>");
 
+        if (searchEntry.isSessionEntry() && searchEntry.isWithParamInput()) {
+            final Object val = getSessionAttribute(searchEntry.getSessionAttributeName());
+            if (val != null) {
+                ((AbstractInput<Object>) searchEntry.getParamInput()).setValue(val);
+            }
+        }
+
         // Search field
         writer.write("<div class=\"sfmid\">");
         writer.write("<div class=\"sfcon\">");
         writer.write("<div class=\"sfcontent\">");
         ctrl.setValueStore(lineValueStore);
+        ctrl.setDisabled(searchEntry.isSessionEntry());
         writer.writeStructureAndContent(ctrl);
         writer.write("</div>");
         writer.write("</div>");

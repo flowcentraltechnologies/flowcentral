@@ -23,11 +23,11 @@ import java.util.Locale;
 import com.flowcentraltech.flowcentral.common.business.policies.WfBinaryPolicy;
 import com.flowcentraltech.flowcentral.common.business.policies.WfEnrichmentPolicy;
 import com.flowcentraltech.flowcentral.common.business.policies.WfProcessPolicy;
+import com.flowcentraltech.flowcentral.common.web.lists.AbstractFlowCentralListCommand;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.data.Listable;
-import com.tcdng.unify.core.list.AbstractListCommand;
 import com.tcdng.unify.core.list.TypeListFactory;
 
 /**
@@ -37,7 +37,7 @@ import com.tcdng.unify.core.list.TypeListFactory;
  * @since 1.0
  */
 @Component("wfsteppolicylist")
-public class WfStepPolicyListCommand extends AbstractListCommand<WfStepPolicyParams> {
+public class WfStepPolicyListCommand extends AbstractFlowCentralListCommand<WfStepPolicyParams> {
 
     @Configurable
     private TypeListFactory typeListFactory;

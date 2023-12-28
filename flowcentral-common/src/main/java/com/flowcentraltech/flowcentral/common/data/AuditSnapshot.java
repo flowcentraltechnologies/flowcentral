@@ -24,7 +24,7 @@ import java.util.List;
 import com.flowcentraltech.flowcentral.configuration.constants.AuditEventType;
 import com.flowcentraltech.flowcentral.configuration.constants.AuditSourceType;
 import com.tcdng.unify.core.UnifyException;
-import com.tcdng.unify.core.util.StringUtils;
+import com.tcdng.unify.core.util.DataUtils;
 
 /**
  * Audit information object.
@@ -36,11 +36,15 @@ public class AuditSnapshot {
 
     private AuditSourceType sourceType;
 
-    private String sourceDesc;
-
     private AuditEventType eventType;
 
     private Date eventTimestamp;
+
+    private String sourceName;
+
+    private Long entityId;
+
+    private String entity;
 
     private String userLoginId;
 
@@ -52,13 +56,15 @@ public class AuditSnapshot {
 
     private List<EntityAuditSnapshot> snapshots;
 
-    private AuditSnapshot(AuditSourceType sourceType, String sourceDesc, AuditEventType eventType, Date eventTimestamp,
-            String userLoginId, String userName, String userIpAddress, String roleCode,
+    private AuditSnapshot(AuditSourceType sourceType, AuditEventType eventType, Date eventTimestamp, String sourceName,
+            Long entityId, String entity, String userLoginId, String userName, String userIpAddress, String roleCode,
             List<EntityAuditSnapshot> snapshots) {
         this.sourceType = sourceType;
-        this.sourceDesc = sourceDesc;
         this.eventType = eventType;
         this.eventTimestamp = eventTimestamp;
+        this.sourceName = sourceName;
+        this.entityId = entityId;
+        this.entity = entity;
         this.userLoginId = userLoginId;
         this.userName = userName;
         this.userIpAddress = userIpAddress;
@@ -70,16 +76,24 @@ public class AuditSnapshot {
         return sourceType;
     }
 
-    public String getSourceDesc() {
-        return sourceDesc;
-    }
-
     public AuditEventType getEventType() {
         return eventType;
     }
 
     public Date getEventTimestamp() {
         return eventTimestamp;
+    }
+
+    public String getSourceName() {
+        return sourceName;
+    }
+
+    public Long getEntityId() {
+        return entityId;
+    }
+
+    public String getEntity() {
+        return entity;
     }
 
     public String getUserLoginId() {
@@ -102,25 +116,24 @@ public class AuditSnapshot {
         return snapshots;
     }
 
-    @Override
-    public String toString() {
-        return StringUtils.toXmlString(this);
+    public boolean isWithSnapshots() {
+        return !DataUtils.isBlank(snapshots);
     }
 
-    public static Builder newBuilder(AuditSourceType sourceType, String sourceDesc, AuditEventType eventType,
-            Date eventTimestamp) {
-        return new Builder(sourceType, sourceDesc, eventType, eventTimestamp);
+    public static Builder newBuilder(AuditSourceType sourceType, AuditEventType eventType, Date eventTimestamp,
+            String sourceName) {
+        return new Builder(sourceType, eventType, eventTimestamp, sourceName);
     }
 
     public static class Builder {
 
         private AuditSourceType sourceType;
 
-        private String sourceDesc;
-
         private AuditEventType eventType;
 
         private Date eventTimestamp;
+
+        private String sourceName;
 
         private String userLoginId;
 
@@ -132,9 +145,9 @@ public class AuditSnapshot {
 
         private List<EntityAuditSnapshot> snapshots;
 
-        private Builder(AuditSourceType sourceType, String sourceDesc, AuditEventType eventType, Date eventTimestamp) {
+        private Builder(AuditSourceType sourceType, AuditEventType eventType, Date eventTimestamp, String sourceName) {
             this.sourceType = sourceType;
-            this.sourceDesc = sourceDesc;
+            this.sourceName = sourceName;
             this.eventType = eventType;
             this.eventTimestamp = eventTimestamp;
             this.snapshots = new ArrayList<EntityAuditSnapshot>();
@@ -172,8 +185,14 @@ public class AuditSnapshot {
         }
 
         public AuditSnapshot build() {
-            return new AuditSnapshot(sourceType, sourceDesc, eventType, eventTimestamp, userLoginId, userName,
-                    userIpAddress, roleCode, Collections.unmodifiableList(snapshots));
+            if (snapshots.size() == 0) {
+                throw new IllegalArgumentException("No snapshot added to this builder.");
+            }
+
+            EntityAuditSnapshot root = snapshots.get(0);
+            return new AuditSnapshot(sourceType, eventType, eventTimestamp, sourceName, root.getEntityId(),
+                    root.getEntity(), userLoginId, userName, userIpAddress, roleCode,
+                    Collections.unmodifiableList(snapshots));
         }
     }
 }

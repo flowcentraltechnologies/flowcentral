@@ -16,10 +16,11 @@
 
 package com.flowcentraltech.flowcentral.common.data;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.flowcentraltech.flowcentral.configuration.constants.AuditEventType;
-import com.tcdng.unify.core.util.StringUtils;
 
 /**
  * Entity audit snapshot information object.
@@ -31,18 +32,32 @@ public class EntityAuditSnapshot {
 
     private AuditEventType eventType;
 
+    private Long entityId;
+
     private String entity;
 
     private List<EntityFieldAudit> fieldAudits;
 
-    public EntityAuditSnapshot(AuditEventType eventType, String entity, List<EntityFieldAudit> fieldAudits) {
+    private Map<String, EntityFieldAudit> fieldAuditsByName;
+
+    public EntityAuditSnapshot(AuditEventType eventType, Long entityId, String entity,
+            List<EntityFieldAudit> fieldAudits) {
         this.eventType = eventType;
+        this.entityId = entityId;
         this.entity = entity;
         this.fieldAudits = fieldAudits;
+        this.fieldAuditsByName = new HashMap<String, EntityFieldAudit>();
+        for (EntityFieldAudit entityFieldAudit : fieldAudits) {
+            fieldAuditsByName.put(entityFieldAudit.getFieldName(), entityFieldAudit);
+        }
     }
 
     public AuditEventType getEventType() {
         return eventType;
+    }
+
+    public Long getEntityId() {
+        return entityId;
     }
 
     public String getEntity() {
@@ -53,9 +68,7 @@ public class EntityAuditSnapshot {
         return fieldAudits;
     }
 
-    @Override
-    public String toString() {
-        return StringUtils.toXmlString(this);
+    public EntityFieldAudit getEntityFieldAudit(String fieldName) {
+        return fieldAuditsByName.get(fieldName);
     }
-
 }

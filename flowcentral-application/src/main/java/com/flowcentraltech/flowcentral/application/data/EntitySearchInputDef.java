@@ -49,4 +49,8 @@ public class EntitySearchInputDef implements Listable {
         return searchInputsDef.getName();
     }
 
+    public String getRestrictionResolverName() {
+        return searchInputsDef.getRestrictionResolverName();
+    }
+
 }

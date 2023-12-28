@@ -30,6 +30,7 @@ import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
 import com.flowcentraltech.flowcentral.common.business.SpecialParamProvider;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
 import com.flowcentraltech.flowcentral.common.data.AbstractContext;
+import com.flowcentraltech.flowcentral.configuration.constants.AuditSourceType;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityChildCategoryType;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.database.Entity;
@@ -83,8 +84,10 @@ public class AppletContext extends AbstractContext {
             this.entityReferences.put(type, null);
         }
 
-        this.auditingEnabled = au.audit() != null && au.system().getSysParameterValue(boolean.class,
-                ApplicationModuleSysParamConstants.ENABLE_APPLET_SOURCE_AUDITING);
+        this.auditingEnabled = au.audit() != null && applet != null && applet.getRootAppletDef() != null
+                && au.audit().supportsAuditLog(AuditSourceType.APPLET, applet.getRootAppletDef().getEntity())
+                && au.system().getSysParameterValue(boolean.class,
+                        ApplicationModuleSysParamConstants.ENABLE_APPLET_SOURCE_AUDITING);
     }
 
     public AbstractApplet applet() {

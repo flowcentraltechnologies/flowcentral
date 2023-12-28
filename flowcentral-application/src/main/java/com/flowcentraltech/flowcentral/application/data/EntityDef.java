@@ -64,7 +64,11 @@ public class EntityDef extends BaseApplicationEntityDef {
     private ConfigType type;
 
     private List<EntityFieldDef> fieldDefList;
+    
+    private List<EntityFieldDef> auditableFieldDefList;
 
+    private List<EntityFieldDef> auditSearchFieldDefList;
+    
     private List<EntityFieldDef> sortedFieldDefList;
 
     private List<EntityFieldDef> filterFieldDefList;
@@ -374,6 +378,49 @@ public class EntityDef extends BaseApplicationEntityDef {
         }
 
         return sortedFieldDefList;
+    }
+
+    public List<EntityFieldDef> getAuditableFieldDefList() throws UnifyException {
+        if (auditableFieldDefList == null) {
+            synchronized (this) {
+                if (auditableFieldDefList == null) {
+                    auditableFieldDefList = new ArrayList<EntityFieldDef>();
+                    for (EntityFieldDef entityFieldDef : fieldDefList) {
+                        if (entityFieldDef.isAuditable() && !entityFieldDef.isChildRef()) {
+                            auditableFieldDefList.add(entityFieldDef);
+                        }
+                    }
+
+                    DataUtils.sortAscending(auditableFieldDefList, EntityFieldDef.class, "fieldLabel");
+                    auditableFieldDefList = DataUtils.unmodifiableList(auditableFieldDefList);
+                }
+            }
+        }
+
+        return auditableFieldDefList;
+    }
+
+    public List<EntityFieldDef> getAuditSearchFieldDefList() throws UnifyException {
+        if (auditSearchFieldDefList == null) {
+            synchronized (this) {
+                if (auditSearchFieldDefList == null) {
+                    auditSearchFieldDefList = new ArrayList<EntityFieldDef>();
+                    for (EntityFieldDef entityFieldDef : fieldDefList) {
+                        if (entityFieldDef.isAuditable() && !entityFieldDef.isChildRef()) {
+                            EntityFieldDataType dataType = entityFieldDef.isWithResolvedTypeFieldDef() ? entityFieldDef.getResolvedDataType() :entityFieldDef.getDataType();
+                            if (dataType.isString()) {
+                                auditSearchFieldDefList.add(entityFieldDef);
+                            }
+                        }
+                    }
+
+                    DataUtils.sortAscending(auditSearchFieldDefList, EntityFieldDef.class, "fieldLabel");
+                    auditSearchFieldDefList = DataUtils.unmodifiableList(auditSearchFieldDefList);
+                }
+            }
+        }
+
+        return auditSearchFieldDefList;
     }
 
     public List<? extends Listable> getSearchInputFieldDefList(AppletUtilities au) throws UnifyException {

@@ -31,6 +31,7 @@ import com.flowcentraltech.flowcentral.application.util.InputWidgetUtils;
 import com.flowcentraltech.flowcentral.application.util.PrivilegeNameUtils;
 import com.flowcentraltech.flowcentral.common.annotation.Format;
 import com.flowcentraltech.flowcentral.common.constants.ConfigType;
+import com.flowcentraltech.flowcentral.common.data.FormatterOptions;
 import com.flowcentraltech.flowcentral.common.entities.BaseEntity;
 import com.flowcentraltech.flowcentral.common.util.ConfigUtils;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldDataType;
@@ -336,7 +337,8 @@ public class ApplicationReportInstallerImpl extends AbstractApplicationArtifactI
         }
 
         List<ReportableField> baseReportableFieldList = ReportEntityUtils.getEntityBaseTypeReportableFieldList(
-                messageResolver, ApplicationEntityUtils.getEntityBaseType((Class<? extends BaseEntity>) entityClass));
+                messageResolver, ApplicationEntityUtils.getEntityBaseType((Class<? extends BaseEntity>) entityClass),
+                FormatterOptions.DEFAULT);
         reportableFieldList.addAll(baseReportableFieldList);
         reportableDefinition.setFieldList(reportableFieldList);
     }

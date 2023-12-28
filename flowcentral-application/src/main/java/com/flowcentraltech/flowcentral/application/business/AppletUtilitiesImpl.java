@@ -124,14 +124,22 @@ import com.flowcentraltech.flowcentral.common.constants.CollaborationType;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralApplicationAttributeConstants;
 import com.flowcentraltech.flowcentral.common.constants.OwnershipType;
 import com.flowcentraltech.flowcentral.common.constants.WfItemVersionType;
+import com.flowcentraltech.flowcentral.common.data.AuditSnapshot;
 import com.flowcentraltech.flowcentral.common.data.EntityAuditInfo;
+import com.flowcentraltech.flowcentral.common.data.EntityAuditSnapshot;
+import com.flowcentraltech.flowcentral.common.data.EntityFieldAudit;
 import com.flowcentraltech.flowcentral.common.data.FormListingOptions;
+import com.flowcentraltech.flowcentral.common.data.FormattedAudit;
+import com.flowcentraltech.flowcentral.common.data.FormattedEntityAudit;
+import com.flowcentraltech.flowcentral.common.data.FormattedFieldAudit;
+import com.flowcentraltech.flowcentral.common.data.FormatterOptions;
 import com.flowcentraltech.flowcentral.common.data.ParamValuesDef;
 import com.flowcentraltech.flowcentral.common.entities.BaseVersionEntity;
 import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
 import com.flowcentraltech.flowcentral.common.util.RestrictionUtils;
 import com.flowcentraltech.flowcentral.common.web.util.EntityConfigurationUtils;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityChildCategoryType;
+import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldDataType;
 import com.flowcentraltech.flowcentral.configuration.constants.RecordActionType;
 import com.flowcentraltech.flowcentral.configuration.constants.RendererType;
 import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
@@ -441,6 +449,40 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
     @Override
     public void hintUser(MODE mode, String messageKey, Object... params) throws UnifyException {
         pageRequestContextUtil.hintUser(mode, messageKey, params);
+    }
+
+    @Override
+    public FormattedAudit formatAudit(AuditSnapshot auditSnapshot) throws UnifyException {
+        return formatAudit(auditSnapshot, FormatterOptions.DEFAULT);
+    }
+
+    @Override
+    public FormattedAudit formatAudit(AuditSnapshot auditSnapshot, FormatterOptions options) throws UnifyException {
+        final FormatterOptions.Instance foi = options.createInstance(getUnifyComponentContext());
+        final List<EntityAuditSnapshot> snapshots = auditSnapshot.getSnapshots();
+        final FormattedEntityAudit[] _formattedSnapshots = new FormattedEntityAudit[snapshots.size()];
+        for (int i = 0; i < _formattedSnapshots.length; i++) {
+            EntityAuditSnapshot snapshot = snapshots.get(i);
+            List<EntityFieldAudit> fieldAudits = snapshot.getFieldAudits();
+            EntityDef entityDef = applicationModuleService.getEntityDef(snapshot.getEntity());
+            FormattedFieldAudit[] fields = new FormattedFieldAudit[fieldAudits.size()];
+            for (int j = 0; j < fields.length; j++) {
+                EntityFieldAudit fieldAudit = fieldAudits.get(j);
+                EntityFieldDef entityFieldDef = entityDef.getFieldDef(fieldAudit.getFieldName());
+                EntityFieldDataType dataType = entityFieldDef.isWithResolvedTypeFieldDef()
+                        ? entityFieldDef.getResolvedDataType()
+                        : entityFieldDef.getDataType();
+                String[] fmtOldValue = foi.format(dataType, fieldAudit.getOldValue());
+                String[] fmtNewValue = foi.format(dataType, fieldAudit.getNewValue());
+                fields[j] = new FormattedFieldAudit(fieldAudit.getFieldName(), fmtOldValue, fmtNewValue);
+            }
+
+            FormattedEntityAudit _formattedSnapshot = new FormattedEntityAudit(snapshot.getEventType().name(),
+                    snapshot.getEntity(), fields);
+            _formattedSnapshots[i] = _formattedSnapshot;
+        }
+
+        return new FormattedAudit(_formattedSnapshots);
     }
 
     @Override
@@ -1787,7 +1829,7 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
     }
 
     @Override
-    public LoadingSearch constructLoadingSearch(AppletContext ctx, int loadingSearchMode) throws UnifyException {
+    public LoadingSearch constructLoadingSearch(AppletContext ctx, int loadingSearchMode) throws UnifyException { 
         logDebug("Constructing loading search using applet definition [{0}]...", ctx.getRootAppletName());
         final AppletDef _rootAppletDef = ctx.getRootAppletDef();
         TableDef _tableDef = getTableDef(
@@ -1811,7 +1853,6 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
         SectorIcon sectorIcon = getPageSectorIconByApplication(_rootAppletDef.getApplicationName());
         LoadingSearch loadingSearch = new LoadingSearch(ctx, sectorIcon, _tableDef, _rootAppletDef.getId(),
                 searchConfigName, searchColumns, loadingSearchMode, showConditions);
-
         loadingSearch.setEntitySubTitle(_rootAppletDef.getLabel());
         return loadingSearch;
     }
@@ -1876,7 +1917,7 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
             throws UnifyException {
         logDebug("Constructing entity search input for [{0}] using entity definition [{1}]...", tabName,
                 ownerEntityDef.getLongName());
-        return new EntitySearchInput(ctx, sweepingCommitPolicy, tabName, ownerEntityDef, entitySearchInputMode,
+        return new EntitySearchInput(this, ctx, sweepingCommitPolicy, tabName, ownerEntityDef, entitySearchInputMode,
                 isIgnoreParentCondition);
     }
 

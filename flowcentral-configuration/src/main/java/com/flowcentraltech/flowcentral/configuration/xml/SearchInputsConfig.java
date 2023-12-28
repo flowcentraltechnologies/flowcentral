@@ -32,6 +32,8 @@ public class SearchInputsConfig {
     private String name;
 
     private String description;
+    
+    private String restrictionResolver;
 
     private List<SearchInputConfig> inputList;
 
@@ -51,6 +53,15 @@ public class SearchInputsConfig {
     @XmlAttribute(required = true)
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getRestrictionResolver() {
+        return restrictionResolver;
+    }
+
+    @XmlAttribute
+    public void setRestrictionResolver(String restrictionResolver) {
+        this.restrictionResolver = restrictionResolver;
     }
 
     public List<SearchInputConfig> getInputList() {
