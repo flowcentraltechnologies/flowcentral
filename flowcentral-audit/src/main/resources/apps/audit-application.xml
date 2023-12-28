@@ -14,6 +14,11 @@
 			dataType="string" inputType="string"
 			editor="!fc-entitysearch ref:$s{audit.entityAuditConfigRef} listKey:$s{name}"
 			renderer="!ui-label" />
+		<widgetType name="auditeventcattypelist"
+			description="$m{audit.widgettype.auditeventcattypelist}"
+			dataType="string" inputType="string"
+			editor="!ui-select list:auditeventcattypelist listParams:$l{entity} blankOption:$m{blank.none}"
+			renderer="!ui-label" />
 		<widgetType name="auditeventtypelist"
 			description="$m{audit.widgettype.auditeventtypelist}"
 			dataType="string" inputType="string"
@@ -248,7 +253,7 @@
 					widget="audit.entityauditconfigsearch" />
 				<input field="f:eventType"
 					label="$m{audit.entityauditkeys.input.eventtype}" type="EQUALS"
-					widget="audit.auditeventtypelist" />
+					widget="audit.auditeventcattypelist" />
 				<input field="f:eventOnAfter"
 					label="$m{audit.entityauditkeys.input.eventonafter}" type="EQUALS"
 					widget="application.date" />
@@ -267,7 +272,7 @@
 					widget="application.text" />
 				<input field="f:eventType"
 					label="$m{audit.entityauditkeys.input.eventtype}" type="EQUALS"
-					widget="audit.auditeventtypelist" />
+					widget="audit.auditeventcattypelist" />
 				<input field="f:eventOnAfter"
 					label="$m{audit.entityauditkeys.input.eventonafter}" type="EQUALS"
 					widget="application.date" />

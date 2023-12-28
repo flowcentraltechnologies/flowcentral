@@ -23,9 +23,10 @@ import com.flowcentraltech.flowcentral.audit.data.EntityAuditConfigDef;
 import com.flowcentraltech.flowcentral.audit.entities.EntityAuditKeys;
 import com.flowcentraltech.flowcentral.audit.entities.EntityAuditKeysQuery;
 import com.flowcentraltech.flowcentral.common.annotation.EntityReferences;
-import com.flowcentraltech.flowcentral.configuration.constants.AuditEventType;
+import com.flowcentraltech.flowcentral.configuration.constants.AuditEventCategoryType;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
+import com.tcdng.unify.core.criterion.Amongst;
 import com.tcdng.unify.core.criterion.And;
 import com.tcdng.unify.core.criterion.Between;
 import com.tcdng.unify.core.criterion.Equals;
@@ -62,9 +63,10 @@ public class EntityAuditTrailEntriesRestrictionResolver extends AbstractAuditSea
                 and.add(new Equals("auditConfigName", entityAuditKeys.getAuditConfigName()));
                 and.add(new Equals("entityId", entityAuditKeys.getEntityId()));
 
-                final AuditEventType eventType = DataUtils.convert(AuditEventType.class, "eventType");
-                if (eventType != null) {
-                    and.add(new Equals("eventType", eventType));
+                final AuditEventCategoryType eventCatType = DataUtils.convert(AuditEventCategoryType.class,
+                        entries.get("eventType"));
+                if (eventCatType != null) {
+                    and.add(new Amongst("eventType", eventCatType.eventTypes()));
                 }
 
                 final Date eventOnAfter = DataUtils.convert(Date.class, entries.get("eventOnAfter"));
