@@ -38,6 +38,10 @@ public class EntityAuditKeysQuery extends BaseAuditEntityQuery<EntityAuditKeys> 
         return (EntityAuditKeysQuery) addEquals("entityAuditConfigId", entityAuditConfigId);
     }
 
+    public EntityAuditKeysQuery entityId(Long entityId) {
+        return (EntityAuditKeysQuery) addEquals("entityId", entityId);
+    }
+
     public EntityAuditKeysQuery auditConfigName(String auditConfigName) {
         return (EntityAuditKeysQuery) addEquals("auditConfigName", auditConfigName);
     }

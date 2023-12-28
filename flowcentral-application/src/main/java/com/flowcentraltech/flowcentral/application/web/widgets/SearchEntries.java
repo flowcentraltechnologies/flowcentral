@@ -256,10 +256,14 @@ public class SearchEntries {
                 for (SearchInputDef searchInputDef : entitySearchInputDef.getSearchInputsDef()
                         .getSearchInputDefList()) {
                     final String label = au.resolveSessionMessage(searchInputDef.getLabel());
-                    final SearchEntry searchEntry = searchInputDef.getFieldName().startsWith("f:")
+                    final SearchEntry searchEntry = searchInputDef.getFieldName().startsWith("s:")
                             ? new SearchEntry(au, entityDef, label, searchInputDef.getFieldName().substring(2),
-                                    searchInputDef.getType())
-                            : new SearchEntry(au, entityDef, label, searchInputDef.getFieldName().substring(2));
+                                    SearchConditionType.SESSION_ATTRIBUTE)
+                            : (searchInputDef.getFieldName().startsWith("f:")
+                                    ? new SearchEntry(au, entityDef, label, searchInputDef.getFieldName().substring(2),
+                                            searchInputDef.getType())
+                                    : new SearchEntry(au, entityDef, label,
+                                            searchInputDef.getFieldName().substring(2)));
                     WidgetTypeDef widgetTypeDef = au.getWidgetTypeDef(searchInputDef.getWidget());
                     searchEntry.normalize(widgetTypeDef);
                     entryList.add(searchEntry);

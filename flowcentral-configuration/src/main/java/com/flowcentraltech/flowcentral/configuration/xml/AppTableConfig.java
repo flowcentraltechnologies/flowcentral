@@ -109,7 +109,7 @@ public class AppTableConfig extends BaseNameConfig {
         return detailsPanelName;
     }
 
-    @XmlAttribute(required = true, name = "detailsPanel")
+    @XmlAttribute(name = "detailsPanel")
     public void setDetailsPanelName(String detailsPanelName) {
         this.detailsPanelName = detailsPanelName;
     }

@@ -37,23 +37,6 @@
 	</widgetTypes>
 	<!-- Applets -->
 	<applets>
-		<applet name="entityAuditSearch"
-			description="$m{audit.entityaudit.entityauditsearch}"
-			label="$m{audit.entityaudit.entityauditsearch.label}" icon="search"
-			type="manage_entitylist" entity="entityAuditKeys" menuAccess="true"
-			allowSecondaryTenants="true">
-			<property name="searchTable" value="entityAuditKeysTable" />
-			<property name="searchTable.new" value="false" />
-			<property name="searchTable.report" value="true" />
-			<property name="searchTable.quickFilter" value="true" />
-			<property name="searchTable.basicSearchOnly" value="true" />
-			<property name="searchTable.searchColumns" value="5" />
-			<property name="searchTable.searchInput"
-				value="entityKeysSearchInput" />
-			<property name="maintainForm" value="entityAuditKeysForm" />
-			<property name="maintainForm.update" value="false" />
-			<property name="maintainForm.delete" value="false" />
-		</applet>
 		<applet name="manageEntityAuditConfig"
 			description="$m{audit.entityauditconfig.manage}"
 			label="$m{audit.entityauditconfig.manage.label}" icon="cogs"
@@ -71,6 +54,37 @@
 			<property name="maintainForm" value="entityAuditConfigForm" />
 			<property name="maintainForm.update" value="true" />
 			<property name="maintainForm.delete" value="true" />
+		</applet>
+		<applet name="entityAuditSearch"
+			description="$m{audit.entityaudit.entityauditsearch}"
+			label="$m{audit.entityaudit.entityauditsearch.label}" icon="search"
+			type="manage_entitylist" entity="entityAuditKeys" menuAccess="true"
+			allowSecondaryTenants="true">
+			<property name="searchTable" value="entityAuditKeysTable" />
+			<property name="searchTable.new" value="false" />
+			<property name="searchTable.report" value="true" />
+			<property name="searchTable.quickFilter" value="true" />
+			<property name="searchTable.basicSearchOnly" value="true" />
+			<property name="searchTable.searchColumns" value="5" />
+			<property name="searchTable.searchInput"
+				value="entityKeysSearchInput" />
+			<property name="maintainForm" value="entityAuditKeysForm" />
+			<property name="maintainForm.update" value="false" />
+			<property name="maintainForm.delete" value="false" />
+		</applet>
+		<applet name="entityAuditTrail"
+			description="$m{audit.entityaudit.entityaudittrail}"
+			label="$m{audit.entityaudit.entityaudittrail.label}" icon="search"
+			type="manage_entitylist" entity="entityAuditKeys" menuAccess="false"
+			allowSecondaryTenants="true">
+			<property name="searchTable" value="entityAuditTrailTable" />
+			<property name="searchTable.new" value="false" />
+			<property name="searchTable.report" value="true" />
+			<property name="searchTable.quickFilter" value="true" />
+			<property name="searchTable.basicSearchOnly" value="true" />
+			<property name="searchTable.searchColumns" value="5" />
+			<property name="searchTable.searchInput"
+				value="entityKeysTrialInput" />
 		</applet>
 	</applets>
 	<!-- References -->
@@ -229,15 +243,39 @@
 			<searchInput description="Entity Audit Search Input"
 				name="entityKeysSearchInput"
 				restrictionResolver="entityaudit-searchrestrictionresolver">
-				<input field="f:auditConfigName" label="$m{audit.entityauditkeys.input.auditconfig}"
-					type="EQUALS" widget="audit.entityauditconfigsearch" />
-				<input field="f:eventType" label="$m{audit.entityauditkeys.input.eventtype}" type="EQUALS"
+				<input field="f:auditConfigName"
+					label="$m{audit.entityauditkeys.input.auditconfig}" type="EQUALS"
+					widget="audit.entityauditconfigsearch" />
+				<input field="f:eventType"
+					label="$m{audit.entityauditkeys.input.eventtype}" type="EQUALS"
 					widget="audit.auditeventtypelist" />
-				<input field="f:eventOnAfter" label="$m{audit.entityauditkeys.input.eventonafter}" type="EQUALS"
+				<input field="f:eventOnAfter"
+					label="$m{audit.entityauditkeys.input.eventonafter}" type="EQUALS"
 					widget="application.date" />
-				<input field="f:eventOnBefore" label="$m{audit.entityauditkeys.input.eventonbefore}" type="EQUALS"
+				<input field="f:eventOnBefore"
+					label="$m{audit.entityauditkeys.input.eventonbefore}" type="EQUALS"
 					widget="application.date" />
-				<input field="f:key" label="$m{audit.entityauditkeys.input.data}" type="LIKE"
+				<input field="f:key"
+					label="$m{audit.entityauditkeys.input.data}" type="LIKE"
+					widget="application.text" />
+			</searchInput>
+			<searchInput description="Entity Audit Trail Input"
+				name="entityKeysTrialInput"
+				restrictionResolver="entityaudit-trailrestrictionresolver">
+				<input field="s:audit.baseAuditNo"
+					label="$m{audit.entityauditkeys.input.baseauditno}" type="EQUALS"
+					widget="application.text" />
+				<input field="f:eventType"
+					label="$m{audit.entityauditkeys.input.eventtype}" type="EQUALS"
+					widget="audit.auditeventtypelist" />
+				<input field="f:eventOnAfter"
+					label="$m{audit.entityauditkeys.input.eventonafter}" type="EQUALS"
+					widget="application.date" />
+				<input field="f:eventOnBefore"
+					label="$m{audit.entityauditkeys.input.eventonbefore}" type="EQUALS"
+					widget="application.date" />
+				<input field="f:key"
+					label="$m{audit.entityauditkeys.input.data}" type="LIKE"
 					widget="application.text" />
 			</searchInput>
 		</entity>
@@ -289,8 +327,33 @@
 			<column field="auditConfigDesc"
 				renderWidget="application.text"
 				label="$m{audit.entityauditkeys.auditconfig}" widthRatio="1" />
-			<column field="sourceTypeDesc"
-				renderWidget="application.text" widthRatio="1" />
+			<column field="sourceTypeDesc" renderWidget="application.text"
+				widthRatio="1" />
+			<column field="userLoginId" renderWidget="application.text"
+				widthRatio="1" />
+			<column field="userName" renderWidget="application.text"
+				widthRatio="1" />
+			<column field="userIpAddress" renderWidget="application.text"
+				widthRatio="1" />
+			<column field="keyA" renderWidget="application.text"
+				widthRatio="1" />
+			<column field="eventTypeDesc" renderWidget="application.text"
+				label="$m{audit.entityauditkeys.eventtype}" widthRatio="1" />
+			<column field="eventTimestamp"
+				renderWidget="application.datetime" widthRatio="1" order="DESC" />
+		</table>
+		<table name="entityAuditTrailTable"
+			description="$m{audit.entityaudittrail.table}"
+			label="$m{audit.entityaudittrail.table.label}"
+			entity="entityAuditKeys" itemsPerPage="20" serialNo="true"
+			basicSearch="true" detailsPanel="fc-entityaudittraildetailspanel">
+			<column field="auditNo" renderWidget="application.name"
+				widthRatio="1" linkAct="detailsAct" />
+			<column field="auditConfigDesc"
+				renderWidget="application.text"
+				label="$m{audit.entityauditkeys.auditconfig}" widthRatio="1" />
+			<column field="sourceTypeDesc" renderWidget="application.text"
+				widthRatio="1" />
 			<column field="userLoginId" renderWidget="application.text"
 				widthRatio="1" />
 			<column field="userName" renderWidget="application.text"
@@ -359,7 +422,7 @@
 					<field name="userLoginId" column="2" required="true" />
 					<field name="userName" column="2" required="true" />
 					<field name="userIpAddress" column="3" required="true" />
-					<field name="roleCode" column="3"/>
+					<field name="roleCode" column="3" />
 				</section>
 				<section name="snapshotDetails" columns="type_1"
 					label="$m{audit.entityauditkeys.form.section.snapshotdetails}">
@@ -368,6 +431,13 @@
 						inputWidget="entityauditsnapshotviewer" />
 				</section>
 			</tab>
+			<action highlight="ORANGE" orderIndex="0"
+				policy="launchaudittrail-actionpolicy" showOnCreate="false"
+				showOnMaintain="true" type="BUTTON" validateForm="false"
+				description="$m{audit.entityauditkeys.form.formaction.audittrail}"
+				label="$m{audit.entityauditkeys.form.formaction.audittrail.label}"
+				name="launchAuditTrail">
+			</action>
 		</form>
 	</forms>
 </application>

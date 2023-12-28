@@ -45,6 +45,8 @@ public class SearchEntry implements EntityFieldAttributes {
 
     private String fieldName;
 
+    private String sessionAttributeName;
+
     private String generator;
 
     private AbstractInput<?> paramInput;
@@ -54,7 +56,12 @@ public class SearchEntry implements EntityFieldAttributes {
         this.au = au;
         this.entityDef = entityDef;
         this.label = label;
-        this.fieldName = fieldName;
+        if (conditionType.isSession()) {
+            this.sessionAttributeName = fieldName;
+        } else {
+            this.fieldName = fieldName;
+        }
+
         this.conditionType = conditionType;
     }
 
@@ -124,6 +131,10 @@ public class SearchEntry implements EntityFieldAttributes {
         return fieldName;
     }
 
+    public String getSessionAttributeName() {
+        return sessionAttributeName;
+    }
+
     public String getGenerator() {
         return generator;
     }
@@ -149,11 +160,15 @@ public class SearchEntry implements EntityFieldAttributes {
     }
 
     public boolean isPseudoFieldEntry() throws UnifyException {
-        return !StringUtils.isBlank(fieldName)  && !entityDef.isField(fieldName);
+        return !StringUtils.isBlank(fieldName) && !entityDef.isField(fieldName);
     }
 
     public boolean isFieldEntry() throws UnifyException {
-        return !StringUtils.isBlank(fieldName)  && entityDef.isField(fieldName);
+        return !StringUtils.isBlank(fieldName) && entityDef.isField(fieldName);
+    }
+
+    public boolean isSessionEntry() throws UnifyException {
+        return !StringUtils.isBlank(sessionAttributeName);
     }
 
     public boolean isGeneratorEntry() {
