@@ -11,4 +11,9 @@
 	</applications>
 
 	<!-- System Parameters -->
+	<sysParameters>
+		<sysParameter code="AUD-0001" defaultVal="false"
+			description="$m{audit.sysparam.disableviewonlyauditlogging}"
+			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
+	</sysParameters>
 </module>
