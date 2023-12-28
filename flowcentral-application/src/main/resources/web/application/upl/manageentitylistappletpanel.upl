@@ -22,6 +22,7 @@
 	searchResultMarker:$j{com.flowcentraltech.flowcentral.application.web.panels.EntitySearchValueMarkerConstants.DEFAULT_LIST}
 
 // Actions
+!ui-postcommand:detailsAct command:details
 !ui-postcommand:newAct command:newInst
 !ui-postcommand:reportAct command:prepareGenerateReport
 	

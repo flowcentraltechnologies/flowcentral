@@ -13,8 +13,8 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-!fc-entityaudittraildetailspanel  detailsComponents:$c{reportOptionsPanel}
+!fc-entityaudittraildetailspanel detailsComponents:$c{snapshotView}
 
 // Snapshot viewer
-fc-entityauditsnapshotview:snapshotView binding:id
+!fc-entityauditsnapshotview:snapshotView binding:id
     
