@@ -19,6 +19,7 @@ import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.audit.constants.AuditModuleNameConstants;
+import com.flowcentraltech.flowcentral.audit.constants.AuditModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.audit.data.EntityAuditConfigDef;
 import com.flowcentraltech.flowcentral.audit.entities.EntityAuditConfig;
 import com.flowcentraltech.flowcentral.audit.entities.EntityAuditConfigQuery;
@@ -115,6 +116,11 @@ public class AuditModuleServiceImpl extends AbstractFlowCentralService implement
     @Override
     public void log(AuditSnapshot auditSnapshot) {
         try {
+            if (auditSnapshot.getEventType().isView() && appletUtilities.system().getSysParameterValue(boolean.class,
+                    AuditModuleSysParamConstants.DISABLE_VIEW_ONLY_AUDIT_LOGGING)) {
+                return;
+            }
+
             if (auditSnapshot.isWithSnapshots()) {
                 List<String> configNames = environment().valueList(String.class, "name",
                         new EntityAuditConfigQuery().sourceType(auditSnapshot.getSourceType())
