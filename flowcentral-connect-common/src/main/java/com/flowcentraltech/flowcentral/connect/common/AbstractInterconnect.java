@@ -275,8 +275,8 @@ public abstract class AbstractInterconnect {
 
             EntityInfo _refEntityInfo = _entitiesbyclassname.get(field.getType().getName());
             if (_refEntityInfo == null) {
-                throw new IllegalArgumentException("Can not to refer to an interconnect undefined type ["
-                        + field.getType().getName() + "], field = [" + field.getName() + "]");
+                throw new IllegalArgumentException("Can not to refer to an interconnect undefined field type. Class [" +
+                        field.getDeclaringClass()    + "], fieldType = [" + field.getType().getName() + "], field = [" + field.getName() + "]");
             }
 
             return new FieldTypeInfo(ConnectFieldDataType.REF, _refEntityInfo.getName());

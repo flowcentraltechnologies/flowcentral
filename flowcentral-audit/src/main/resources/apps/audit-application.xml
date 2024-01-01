@@ -436,7 +436,7 @@
 						inputWidget="entityauditsnapshotviewer" />
 				</section>
 			</tab>
-			<action highlight="ORANGE" orderIndex="0"
+			<action highlight="BLUE" orderIndex="0"
 				policy="launchaudittrail-actionpolicy" showOnCreate="false"
 				showOnMaintain="true" type="BUTTON" validateForm="false"
 				description="$m{audit.entityauditkeys.form.formaction.audittrail}"
