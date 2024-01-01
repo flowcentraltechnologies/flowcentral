@@ -34,6 +34,11 @@ import com.flowcentraltech.flowcentral.connect.common.data.ProcedureRequest;
  * @since 1.0
  */
 public interface SpringBootInterconnectRedirect {
+    
+    /**
+     * Reloads redirects.
+     */
+    void reload();
 
     /**
      * Lists all entities.

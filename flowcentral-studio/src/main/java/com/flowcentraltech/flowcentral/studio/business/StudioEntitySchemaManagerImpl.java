@@ -264,6 +264,8 @@ public class StudioEntitySchemaManagerImpl extends AbstractEntitySchemaManager {
             ReportableDefinition reportableDefinition = reportModuleService
                     .findReportDefinition((ReportableDefinitionQuery) new ReportableDefinitionQuery()
                             .applicationId(applicationId).name(appEntity.getName()));
+            final List<AppEntityField> appEntityFieldList = au.environment()
+                    .findAll(new AppEntityFieldQuery().appEntityId(appEntity.getId()));
             if (reportableDefinition == null) {
                 String description = resolveApplicationMessage("$m{report.managedreport.description}", nameDesc);
                 reportableDefinition = new ReportableDefinition();
@@ -275,7 +277,7 @@ public class StudioEntitySchemaManagerImpl extends AbstractEntitySchemaManager {
                 List<ReportableField> reportableFieldList = ReportEntityUtils.getEntityBaseTypeReportableFieldList(
                         messageResolver, appEntity.getBaseType(), FormatterOptions.DEFAULT);
                 reportableFieldList.addAll(ReportEntityUtils.getReportableFieldList(messageResolver,
-                        appEntity.getFieldList(), FormatterOptions.DEFAULT));
+                        appEntityFieldList, FormatterOptions.DEFAULT));
                 reportableDefinition.setFieldList(reportableFieldList);
                 reportModuleService.createReportableDefinition(reportableDefinition);
 
@@ -294,8 +296,6 @@ public class StudioEntitySchemaManagerImpl extends AbstractEntitySchemaManager {
                     au.applicationPrivilegeManager().assignPrivilegeToRole(userToken.getRoleCode(), privilegeCode);
                 }
             } else {
-                final List<AppEntityField> appEntityFieldList = au.environment()
-                        .findAll(new AppEntityFieldQuery().appEntityId(appEntity.getId()));
                 List<ReportableField> reportableFieldList = ReportEntityUtils.getEntityBaseTypeReportableFieldList(
                         messageResolver, appEntity.getBaseType(), FormatterOptions.DEFAULT);
                 reportableFieldList.addAll(ReportEntityUtils.getReportableFieldList(messageResolver, appEntityFieldList,
