@@ -70,6 +70,19 @@ public abstract class AbstractSpringBootInterconnectRedirect implements SpringBo
     }
 
     @Override
+    public void reload() {
+        redirectUrls.clear();
+        entityRedirects.clear();
+        procedureRequestRedirects.clear();
+        List<String> _redirectNodes = setupRedirects();
+        if (_redirectNodes != null && !_redirectNodes.isEmpty()) {
+            for (String redirectNode : _redirectNodes) {
+                redirectUrls.add(redirectNode + FlowCentralInterconnectConstants.INTERCONNECT_CONTROLLER);
+            }
+        }
+    }
+
+    @Override
     public EntityListingResponse listEntities(EntityListingRequest req) {
         List<EntityListingDTO> listings = new ArrayList<EntityListingDTO>();
         List<RedirectErrorDTO> redirectErrors = new ArrayList<RedirectErrorDTO>();
@@ -134,12 +147,7 @@ public abstract class AbstractSpringBootInterconnectRedirect implements SpringBo
 
     @PostConstruct
     public void init() throws Exception {
-        List<String> _redirectNodes = setupRedirects();
-        if (_redirectNodes != null && !_redirectNodes.isEmpty()) {
-            for (String redirectNode : _redirectNodes) {
-                redirectUrls.add(redirectNode + FlowCentralInterconnectConstants.INTERCONNECT_CONTROLLER);
-            }
-        }
+        reload();
     }
 
     protected abstract List<String> setupRedirects();
