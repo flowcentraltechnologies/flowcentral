@@ -118,7 +118,7 @@
 		<widgetType name="workentitybynamelist"
 			description="$m{studio.widgettype.workentitybynamelist}"
 			dataType="string" inputType="string"
-			editor="!ui-select list:studioworkentitybynamelist blankOption:$m{blank.none}"
+			editor="!ui-select list:studioworkentitybynamelist listParams:$l{applicationId} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="reportablebynamelist"
 			description="$m{studio.widgettype.reportablebynamelist}"
@@ -4787,7 +4787,7 @@
 						reference="studio.applicationDevelopableRef"
 						inputWidget="application.entitysearch" column="0"
 						label="$m{studio.application}" disabled="true" required="true"
-						saveAs="true" />
+						saveAs="true" switchOnChange="true"/>
 					<field name="name" inputWidget="application.name" column="0"
 						required="true" saveAs="true" />
 					<field name="description" inputWidget="application.text"
