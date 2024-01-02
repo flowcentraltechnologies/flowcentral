@@ -30,7 +30,7 @@ import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.data.ListData;
 import com.tcdng.unify.core.data.Listable;
-import com.tcdng.unify.core.list.ZeroParams;
+import com.tcdng.unify.core.list.LongParam;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.QueryUtils;
 
@@ -41,15 +41,16 @@ import com.tcdng.unify.core.util.QueryUtils;
  * @since 1.0
  */
 @Component("studioworkentitybynamelist")
-public class StudioWorkEntityByNameListCommand extends AbstractApplicationListCommand<ZeroParams> {
+public class StudioWorkEntityByNameListCommand extends AbstractApplicationListCommand<LongParam> {
 
     public StudioWorkEntityByNameListCommand() {
-        super(ZeroParams.class);
+        super(LongParam.class);
     }
 
     @Override
-    public List<? extends Listable> execute(Locale locale, ZeroParams zeroParams) throws UnifyException {
-        final Long applicationId = (Long) getSessionAttribute(StudioSessionAttributeConstants.CURRENT_APPLICATION_ID);
+    public List<? extends Listable> execute(Locale locale, LongParam params) throws UnifyException {
+        final Long applicationId = params.isPresent() ? params.getValue()
+                : (Long) getSessionAttribute(StudioSessionAttributeConstants.CURRENT_APPLICATION_ID);
         if (QueryUtils.isValidLongCriteria(applicationId)) {
             AppEntityQuery query = new AppEntityQuery();
             query.applicationId(applicationId);
