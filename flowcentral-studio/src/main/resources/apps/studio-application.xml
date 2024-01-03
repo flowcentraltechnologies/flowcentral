@@ -3055,8 +3055,7 @@
 					<field name="configType" inputWidget="application.enumlist"
 						column="1" disabled="true" required="true" />
 					<field name="restrictionResolver"
-						inputWidget="searchentriesrestrictionresolverlist" column="1"
-						required="true" />
+						inputWidget="searchentriesrestrictionresolverlist" column="1"/>
 				</section>
 			</tab>
 			<tab name="inputs"
