@@ -1,4 +1,8 @@
 /*
+
+    public boolean isChangeOnlyAuditingEnabled() {
+        return changeOnlyAuditingEnabled;
+    }
  * Copyright 2021-2023 FlowCentral Technologies Limited.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
@@ -35,7 +39,6 @@ import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm;
 import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm.FormMode;
 import com.flowcentraltech.flowcentral.application.web.panels.EntitySingleForm;
 import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs;
-import com.flowcentraltech.flowcentral.configuration.constants.AuditEventType;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.BeanValueStore;
 import com.tcdng.unify.core.data.ValueStoreReader;
@@ -117,8 +120,12 @@ public abstract class AbstractApplet {
         return rootAppletDef;
     }
 
-    public boolean isAuditingEnabled(AuditEventType auditEventType) {
-        return ctx.isAuditingEnabled(auditEventType);
+    public boolean isAuditingEnabled() {
+        return ctx.isAuditingEnabled();
+    }
+
+    public boolean isParentStateAuditingEnabled() {
+        return ctx.isParentStateAuditingEnabled();
     }
 
     public boolean isWorkflowCopy() throws UnifyException {

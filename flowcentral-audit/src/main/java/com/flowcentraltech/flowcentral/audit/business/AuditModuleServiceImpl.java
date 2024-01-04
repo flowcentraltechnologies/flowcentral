@@ -116,8 +116,8 @@ public class AuditModuleServiceImpl extends AbstractFlowCentralService implement
     @Override
     public void log(AuditSnapshot auditSnapshot) {
         try {
-            if (auditSnapshot.getEventType().isView() && appletUtilities.system().getSysParameterValue(boolean.class,
-                    AuditModuleSysParamConstants.DISABLE_VIEW_ONLY_AUDIT_LOGGING)) {
+            if (auditSnapshot.getEventType().isView() && !appletUtilities.system().getSysParameterValue(boolean.class,
+                    AuditModuleSysParamConstants.ENABLE_VIEW_ONLY_AUDIT_LOGGING)) {
                 return;
             }
 

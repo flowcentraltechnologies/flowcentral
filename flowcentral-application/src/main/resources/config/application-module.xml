@@ -116,8 +116,8 @@
 		<sysParameter code="APP-0023" defaultVal="false"
 			description="$m{application.sysparam.enableappletsourceauditing}"
 			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
-		<sysParameter code="APP-0024" defaultVal="false"
-			description="$m{application.sysparam.enablechangeonlyauditing}"
+		<sysParameter code="APP-0024" defaultVal="true"
+			description="$m{application.sysparam.enableparentstateauditing}"
 			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
 	</sysParameters>
 </module>

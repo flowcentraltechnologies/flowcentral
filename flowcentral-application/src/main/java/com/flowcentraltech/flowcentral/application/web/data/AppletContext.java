@@ -30,7 +30,6 @@ import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
 import com.flowcentraltech.flowcentral.common.business.SpecialParamProvider;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
 import com.flowcentraltech.flowcentral.common.data.AbstractContext;
-import com.flowcentraltech.flowcentral.configuration.constants.AuditEventType;
 import com.flowcentraltech.flowcentral.configuration.constants.AuditSourceType;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityChildCategoryType;
 import com.tcdng.unify.core.UnifyException;
@@ -57,7 +56,7 @@ public class AppletContext extends AbstractContext {
 
     private boolean auditingEnabled;
 
-    private final boolean changeOnlyAuditingEnabled;
+    private final boolean parentStateAuditingEnabled;
 
     private boolean readOnly;
 
@@ -91,8 +90,8 @@ public class AppletContext extends AbstractContext {
                 && au.audit().supportsAuditLog(AuditSourceType.APPLET, applet.getRootAppletDef().getEntity())
                 && au.system().getSysParameterValue(boolean.class,
                         ApplicationModuleSysParamConstants.ENABLE_APPLET_SOURCE_AUDITING);
-        this.changeOnlyAuditingEnabled = auditingEnabled && au.system().getSysParameterValue(boolean.class,
-                ApplicationModuleSysParamConstants.ENABLE_CHANGE_ONLY_AUDITING);
+        this.parentStateAuditingEnabled = auditingEnabled && au.system().getSysParameterValue(boolean.class,
+                ApplicationModuleSysParamConstants.ENABLE_PARENT_STATE_AUDITING);
     }
 
     public AbstractApplet applet() {
@@ -166,8 +165,8 @@ public class AppletContext extends AbstractContext {
         return auditingEnabled;
     }
 
-    public boolean isAuditingEnabled(AuditEventType auditEventType) {
-        return auditingEnabled && (!changeOnlyAuditingEnabled || !auditEventType.isView());
+    public boolean isParentStateAuditingEnabled() {
+        return parentStateAuditingEnabled;
     }
 
     public void setAuditingEnabled(boolean auditingEnabled) {
