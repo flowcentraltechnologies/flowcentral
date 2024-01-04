@@ -56,6 +56,8 @@ public class AppletContext extends AbstractContext {
 
     private boolean auditingEnabled;
 
+    private final boolean parentStateAuditingEnabled;
+
     private boolean readOnly;
 
     private boolean inWorkflowPromptViewMode;
@@ -88,6 +90,8 @@ public class AppletContext extends AbstractContext {
                 && au.audit().supportsAuditLog(AuditSourceType.APPLET, applet.getRootAppletDef().getEntity())
                 && au.system().getSysParameterValue(boolean.class,
                         ApplicationModuleSysParamConstants.ENABLE_APPLET_SOURCE_AUDITING);
+        this.parentStateAuditingEnabled = auditingEnabled && au.system().getSysParameterValue(boolean.class,
+                ApplicationModuleSysParamConstants.ENABLE_PARENT_STATE_AUDITING);
     }
 
     public AbstractApplet applet() {
@@ -159,6 +163,10 @@ public class AppletContext extends AbstractContext {
 
     public boolean isAuditingEnabled() {
         return auditingEnabled;
+    }
+
+    public boolean isParentStateAuditingEnabled() {
+        return parentStateAuditingEnabled;
     }
 
     public void setAuditingEnabled(boolean auditingEnabled) {

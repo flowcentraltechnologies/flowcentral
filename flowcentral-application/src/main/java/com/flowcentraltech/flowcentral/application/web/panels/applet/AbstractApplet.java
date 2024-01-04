@@ -1,4 +1,8 @@
 /*
+
+    public boolean isChangeOnlyAuditingEnabled() {
+        return changeOnlyAuditingEnabled;
+    }
  * Copyright 2021-2023 FlowCentral Technologies Limited.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
@@ -118,6 +122,10 @@ public abstract class AbstractApplet {
 
     public boolean isAuditingEnabled() {
         return ctx.isAuditingEnabled();
+    }
+
+    public boolean isParentStateAuditingEnabled() {
+        return ctx.isParentStateAuditingEnabled();
     }
 
     public boolean isWorkflowCopy() throws UnifyException {

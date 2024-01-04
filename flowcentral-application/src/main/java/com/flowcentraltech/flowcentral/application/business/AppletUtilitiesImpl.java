@@ -465,7 +465,8 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
             EntityAuditSnapshot snapshot = snapshots.get(i);
             List<EntityFieldAudit> fieldAudits = snapshot.getFieldAudits();
             EntityDef entityDef = applicationModuleService.getEntityDef(snapshot.getEntity());
-            FormattedFieldAudit[] fields = new FormattedFieldAudit[fieldAudits.size()];
+            FormattedFieldAudit[] fields = snapshot.getEventType().isPhantom() ? new FormattedFieldAudit[0]
+                    : new FormattedFieldAudit[fieldAudits.size()];
             for (int j = 0; j < fields.length; j++) {
                 EntityFieldAudit fieldAudit = fieldAudits.get(j);
                 EntityFieldDef entityFieldDef = entityDef.getFieldDef(fieldAudit.getFieldName());
@@ -1829,7 +1830,7 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
     }
 
     @Override
-    public LoadingSearch constructLoadingSearch(AppletContext ctx, int loadingSearchMode) throws UnifyException { 
+    public LoadingSearch constructLoadingSearch(AppletContext ctx, int loadingSearchMode) throws UnifyException {
         logDebug("Constructing loading search using applet definition [{0}]...", ctx.getRootAppletName());
         final AppletDef _rootAppletDef = ctx.getRootAppletDef();
         TableDef _tableDef = getTableDef(

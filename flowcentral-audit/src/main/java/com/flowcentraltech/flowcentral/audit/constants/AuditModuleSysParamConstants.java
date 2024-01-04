@@ -23,6 +23,6 @@ package com.flowcentraltech.flowcentral.audit.constants;
  */
 public interface AuditModuleSysParamConstants {
 
-    String DISABLE_VIEW_ONLY_AUDIT_LOGGING = "AUD-0001";
+    String ENABLE_VIEW_ONLY_AUDIT_LOGGING = "AUD-0001";
 
 }
