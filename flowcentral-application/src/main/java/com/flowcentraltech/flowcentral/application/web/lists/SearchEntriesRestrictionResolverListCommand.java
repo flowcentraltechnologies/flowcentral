@@ -47,7 +47,7 @@ public class SearchEntriesRestrictionResolverListCommand extends AbstractEntityT
     @Override
     protected String getEntityName(LongParam param) throws UnifyException {
         if (param.isPresent()) {
-            return applicationModuleService.getAppAppletEntity(param.getValue());
+            return applicationModuleService.getAppEntity(param.getValue());
         }
 
         return null;
