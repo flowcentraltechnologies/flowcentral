@@ -34,6 +34,8 @@ public enum AuditEventType implements EnumConst {
             "VIW"),
     VIEW_DRAFT(
             "VID"),
+    VIEW_PHANTOM(
+            "VIP"),
     CREATE(
             "CRE"),
     CREATE_NEXT(
@@ -77,8 +79,12 @@ public enum AuditEventType implements EnumConst {
         return VIEW.code;
     }
 
+    public boolean isPhantom() {
+        return VIEW_PHANTOM.equals(this);
+    }
+
     public boolean isView() {
-        return VIEW.equals(this) || VIEW_DRAFT.equals(this);
+        return VIEW.equals(this) || VIEW_DRAFT.equals(this) || VIEW_PHANTOM.equals(this);
     }
 
     public boolean isCreate() {

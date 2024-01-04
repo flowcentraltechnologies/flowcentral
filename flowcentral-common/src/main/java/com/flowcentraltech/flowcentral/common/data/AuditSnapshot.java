@@ -190,9 +190,16 @@ public class AuditSnapshot {
             }
 
             EntityAuditSnapshot root = snapshots.get(0);
+            List<EntityAuditSnapshot> _snapshots = new ArrayList<EntityAuditSnapshot>();
+            for (EntityAuditSnapshot _snapshot : snapshots) {
+                if (!_snapshot.getEventType().isPhantom()) {
+                    _snapshots.add(_snapshot);
+                }
+            }
+
             return new AuditSnapshot(sourceType, eventType, eventTimestamp, sourceName, root.getEntityId(),
                     root.getEntity(), userLoginId, userName, userIpAddress, roleCode,
-                    Collections.unmodifiableList(snapshots));
+                    Collections.unmodifiableList(_snapshots));
         }
     }
 }

@@ -279,14 +279,14 @@ public class ManageLoadingListApplet extends AbstractEntityFormApplet {
             asb.userIpAddress(userToken.getIpAddress());
             asb.roleCode(userToken.getRoleCode());
 
-            if (isParentStateAuditingEnabled()) {
-                if (formStack != null && !formStack.isEmpty()) {
-                    final int len = formStack.size();
-                    for (int i = 0; i < len; i++) {
-                        FormContext fCtx = formStack.get(i).getForm().getCtx();
-                        if (fCtx.isSupportAudit()) {
-                            asb.addSnapshot(fCtx.getEntityAudit(), AuditEventType.VIEW);
-                        }
+            if (formStack != null && !formStack.isEmpty()) {
+                final AuditEventType parentType = isParentStateAuditingEnabled() ? AuditEventType.VIEW
+                        : AuditEventType.VIEW_PHANTOM;
+                final int len = formStack.size();
+                for (int i = 0; i < len; i++) {
+                    FormContext fCtx = formStack.get(i).getForm().getCtx();
+                    if (fCtx.isSupportAudit()) {
+                        asb.addSnapshot(fCtx.getEntityAudit(), parentType);
                     }
                 }
             }
