@@ -116,9 +116,10 @@ public class Attachments {
         }
 
         public Builder addAttachment(Long ownerId, String ownerEntity, Long id, String name, String description,
-                String format, Date createdOn, boolean mandatory, boolean enableUpload, boolean present) {
-            attachments.add(new Attachment(ownerId, ownerEntity, id, name, description, format, createdOn, enableUpload,
-                    mandatory, present));
+                String fileName, String format, Date createdOn, boolean mandatory, boolean enableUpload,
+                boolean present) {
+            attachments.add(new Attachment(ownerId, ownerEntity, id, name, description, fileName, format, createdOn,
+                    enableUpload, mandatory, present));
             return this;
         }
 

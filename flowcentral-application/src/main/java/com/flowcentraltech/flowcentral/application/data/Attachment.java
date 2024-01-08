@@ -18,6 +18,8 @@ package com.flowcentraltech.flowcentral.application.data;
 
 import java.util.Date;
 
+import com.tcdng.unify.core.util.StringUtils;
+
 /**
  * Attachment.
  * 
@@ -36,6 +38,8 @@ public class Attachment {
 
     private String description;
 
+    private String fileName;
+
     private String format;
 
     private Date createdOn;
@@ -46,12 +50,13 @@ public class Attachment {
 
     private boolean present;
 
-    public Attachment(Object ownerId, String ownerEntity, Long id, String name, String description, String format,
-            Date createdOn, boolean enableUpload, boolean mandatory, boolean present) {
+    public Attachment(Object ownerId, String ownerEntity, Long id, String name, String description, String fileName,
+            String format, Date createdOn, boolean enableUpload, boolean mandatory, boolean present) {
         this.ownerId = ownerId;
         this.id = id;
         this.name = name;
         this.description = description;
+        this.fileName = fileName;
         this.format = format;
         this.createdOn = createdOn;
         this.enableUpload = enableUpload;
@@ -81,6 +86,14 @@ public class Attachment {
 
     public String getDescription() {
         return description;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public boolean isWithFileName() {
+        return !StringUtils.isBlank(fileName);
     }
 
     public String getFormat() {
@@ -119,6 +132,8 @@ public class Attachment {
 
         private String description;
 
+        private String fileName;
+
         private String format;
 
         private Date createdOn;
@@ -135,6 +150,11 @@ public class Attachment {
             this.id = id;
             this.name = name;
             this.description = description;
+        }
+
+        public Builder fileName(String fileName) {
+            this.fileName = fileName;
+            return this;
         }
 
         public Builder format(String format) {
@@ -163,8 +183,8 @@ public class Attachment {
         }
 
         public Attachment build() {
-            return new Attachment(ownerId, ownerEntity, id, name, description, format, createdOn, enableUpload,
-                    mandatory, present);
+            return new Attachment(ownerId, ownerEntity, id, name, description, fileName, format, createdOn,
+                    enableUpload, mandatory, present);
         }
     }
 }

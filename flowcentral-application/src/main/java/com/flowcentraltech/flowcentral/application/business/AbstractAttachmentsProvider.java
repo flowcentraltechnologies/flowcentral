@@ -58,7 +58,8 @@ public abstract class AbstractAttachmentsProvider extends AbstractFlowCentralCom
     public final FileAttachmentInfo getFileAttachmentInfo(Attachment attachment) throws UnifyException {
         final FileAttachmentType type = FileAttachmentType.fromName(attachment.getFormat());
         FileAttachmentInfo fileAttachmentInfo = new FileAttachmentInfo(type);
-        fileAttachmentInfo.setFilename(type.appendDefaultExtension(attachment.getName()));
+        fileAttachmentInfo.setFilename(attachment.isWithFileName() ? attachment.getFileName()
+                : type.appendDefaultExtension(attachment.getName()));
         fileAttachmentInfo.setAttachment(getData(type, attachment));
         return fileAttachmentInfo;
     }
