@@ -85,9 +85,8 @@ public abstract class AbstractAttachmentsProvider extends AbstractFlowCentralCom
         return appletUtilities.system();
     }
 
-    protected boolean isUploadEnabled(ValueStoreReader reader, AttachmentsOptions options) throws UnifyException {
-        return !options.isReview();
-    }
+    protected abstract boolean isUploadEnabled(ValueStoreReader reader, AttachmentsOptions options)
+            throws UnifyException;
 
     protected abstract String getCaption(ValueStoreReader reader, AttachmentsOptions options) throws UnifyException;
 

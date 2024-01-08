@@ -20,7 +20,7 @@
 
 !ui-panel:attachmentsPanel style:$s{width:75%;} components:$c{attachmentsTable}
 !fc-beanlisttable:attachmentsTable binding:$s{page.attachments.viewer.table}
-	viewButtonClass:$s{mbtn mblue}
+	viewButtonClass:$s{mbtn mblue} uploadFlag:$s{enableUpload}
 
 !ui-hidden:viewActHolder eventHandler:$d{!ui-event event:onclick action:$c{viewAct}}
 !ui-hidden:uploadActHolder eventHandler:$d{!ui-event event:onclick action:$c{viewAct}}
