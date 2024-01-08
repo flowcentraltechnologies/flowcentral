@@ -36,13 +36,16 @@ public class Attachments {
 
     private List<Attachment> attachments;
 
+    private boolean editable;
+
     private boolean enableUpload;
 
-    public Attachments(String provider, String caption, List<Attachment> attachments, boolean enableUpload) {
+    private Attachments(String provider, String caption, List<Attachment> attachments, boolean enableUpload) {
         this.provider = provider;
         this.caption = caption;
         this.attachments = attachments;
         this.enableUpload = enableUpload;
+        this.editable = true;
     }
 
     public String getProvider() {
@@ -62,7 +65,15 @@ public class Attachments {
     }
 
     public boolean isEnableUpload() {
-        return enableUpload;
+        return enableUpload && editable;
+    }
+
+    public boolean isEditable() {
+        return editable;
+    }
+
+    public void setEditable(boolean editable) {
+        this.editable = editable;
     }
 
     public static Builder newBuilder(String provider) {

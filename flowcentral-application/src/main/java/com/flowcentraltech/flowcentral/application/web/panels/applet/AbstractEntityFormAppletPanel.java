@@ -144,7 +144,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         boolean enableUpdateSubmit = false;
         boolean capture = false;
         if (viewMode.isCreateForm()) {
-            EntityDef formEntityDef = form.getFormDef().getEntityDef();
+            EntityDef formEntityDef = form.getFormDef().getEntityDef(); 
             enableCreate = isContextEditable
                     && applicationPrivilegeManager.isRoleWithPrivilege(roleCode, formEntityDef.getAddPrivilege());
             enableCreateSubmit = isRootForm && applet
@@ -251,6 +251,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         boolean showReviewFormCaption = false;
         if (form != null) {
             form.getCtx().setUpdateEnabled(enableUpdate);
+
             final String displayCounter = form.getDisplayItemCounter();
             form.clearDisplayItem();
 
@@ -396,6 +397,10 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                     form.setSubmitStyleClass("fc-greenbutton");
                 }
 
+                if (form.isWithAttachments()) {
+                    form.getAttachments().setEditable(enableUpdate);
+                }
+                
                 setEditable("formPanel", enableUpdate);
                 addPanelToPushComponents("formPanel", enableUpdate);
                 break;
@@ -417,7 +422,10 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                 setVisible("updateBtn", enableUpdate);
                 setVisible("updateCloseBtn", enableUpdate);
                 setVisible("deleteBtn", enableDelete);
-
+                if (form.isWithAttachments()) {
+                    form.getAttachments().setEditable(enableUpdate);
+                }
+                
                 setEditable("formPanel", enableUpdate);
                 addPanelToPushComponents("formPanel", enableUpdate);
                 break;
@@ -451,6 +459,10 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                     form.setSubmitStyleClass("fc-greenbutton");
                 }
 
+                if (form.isWithAttachments()) {
+                    form.getAttachments().setEditable(enableUpdate);
+                }
+                
                 setEditable("formPanel", enableUpdate);
                 addPanelToPushComponents("formPanel", enableUpdate);
                 break;
@@ -497,6 +509,10 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                     form.setSubmitStyleClass("fc-greenbutton");
                 }
 
+                if (form.isWithAttachments()) {
+                    form.getAttachments().setEditable(true);
+                }
+                
                 setEditable("formPanel", true);
                 addPanelToPushComponents("formPanel", true);
                 break;
@@ -843,7 +859,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
             setCommandResultMapping(ResultMappingConstants.NONE);
         }
     }
-   
+
     @Action
     public void columns() throws UnifyException {
         // TODO
