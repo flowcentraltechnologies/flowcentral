@@ -18,6 +18,8 @@ package com.flowcentraltech.flowcentral.application.data;
 
 import java.util.Date;
 
+import com.tcdng.unify.core.util.StringUtils;
+
 /**
  * Attachment.
  * 
@@ -28,34 +30,50 @@ public class Attachment {
 
     private Object ownerId;
 
+    private String ownerEntity;
+
     private Long id;
 
     private String name;
 
     private String description;
 
+    private String fileName;
+
     private String format;
 
     private Date createdOn;
+
+    private boolean enableUpload;
 
     private boolean mandatory;
 
     private boolean present;
 
-    public Attachment(Object ownerId, Long id, String name, String description, String format, Date createdOn,
-            boolean mandatory, boolean present) {
+    public Attachment(Object ownerId, String ownerEntity, Long id, String name, String description, String fileName,
+            String format, Date createdOn, boolean enableUpload, boolean mandatory, boolean present) {
         this.ownerId = ownerId;
         this.id = id;
         this.name = name;
         this.description = description;
+        this.fileName = fileName;
         this.format = format;
         this.createdOn = createdOn;
+        this.enableUpload = enableUpload;
         this.mandatory = mandatory;
         this.present = present;
     }
 
     public Object getOwnerId() {
         return ownerId;
+    }
+
+    public String getOwnerEntity() {
+        return ownerEntity;
+    }
+
+    public boolean isEnableUpload() {
+        return enableUpload;
     }
 
     public Long getId() {
@@ -68,6 +86,14 @@ public class Attachment {
 
     public String getDescription() {
         return description;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public boolean isWithFileName() {
+        return !StringUtils.isBlank(fileName);
     }
 
     public String getFormat() {
@@ -90,4 +116,75 @@ public class Attachment {
         return present;
     }
 
+    public static Builder newBuilder(Object ownerId, String ownerEntity, Long id, String name, String description) {
+        return new Builder(ownerId, ownerEntity, id, name, description);
+    }
+
+    public static class Builder {
+
+        private Object ownerId;
+
+        private String ownerEntity;
+
+        private Long id;
+
+        private String name;
+
+        private String description;
+
+        private String fileName;
+
+        private String format;
+
+        private Date createdOn;
+
+        private boolean enableUpload;
+
+        private boolean mandatory;
+
+        private boolean present;
+
+        public Builder(Object ownerId, String ownerEntity, Long id, String name, String description) {
+            this.ownerId = ownerId;
+            this.ownerEntity = ownerEntity;
+            this.id = id;
+            this.name = name;
+            this.description = description;
+        }
+
+        public Builder fileName(String fileName) {
+            this.fileName = fileName;
+            return this;
+        }
+
+        public Builder format(String format) {
+            this.format = format;
+            return this;
+        }
+
+        public Builder createdOn(Date createdOn) {
+            this.createdOn = createdOn;
+            return this;
+        }
+
+        public Builder enableUpload(boolean enableUpload) {
+            this.enableUpload = enableUpload;
+            return this;
+        }
+
+        public Builder mandatory(boolean mandatory) {
+            this.mandatory = mandatory;
+            return this;
+        }
+
+        public Builder present(boolean present) {
+            this.present = present;
+            return this;
+        }
+
+        public Attachment build() {
+            return new Attachment(ownerId, ownerEntity, id, name, description, fileName, format, createdOn,
+                    enableUpload, mandatory, present);
+        }
+    }
 }

@@ -153,6 +153,10 @@ public abstract class AbstractForm {
         return inst instanceof WorkEntity && WfItemVersionType.DRAFT.equals(((WorkEntity) inst).getWfItemVersionType());
     }
 
+    public boolean isWithAttachments() {
+        return getAttachments() != null;
+    }
+    
     public ValueStore getFormValueStore() {
         return ctx.getFormValueStore();
     }

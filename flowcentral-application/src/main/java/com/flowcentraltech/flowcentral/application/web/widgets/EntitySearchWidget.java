@@ -38,6 +38,7 @@ import com.tcdng.unify.core.data.ParameterizedStringGenerator;
 import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.database.Query;
+import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.annotation.Action;
 import com.tcdng.unify.web.constant.ExtensionType;
@@ -105,6 +106,7 @@ public class EntitySearchWidget extends AbstractEntityListWidget {
             List<Listable> fullResult = new ArrayList<Listable>();
             final boolean encode = refDefs.length > 1;
             final ValueStore _valueStore = getValueStore();
+            final String listKey = getListkey();
             for (int i = 0; i < refDefs.length; i++) {
                 RefDef refDef = refDefs[i];
                 final boolean listFormat = refDef.isWithListFormat();
@@ -148,7 +150,8 @@ public class EntitySearchWidget extends AbstractEntityListWidget {
                         // TODO Concatenate reference prefix to description
                         String key = encode
                                 ? RefEncodingUtils.encodeRefValue(i, refDef.getLongName(), result.get(j).getListKey())
-                                : result.get(j).getListKey();
+                                : (listKey != null ? DataUtils.getBeanProperty(String.class, result.get(j), listKey)
+                                        : result.get(j).getListKey());
                         fullResult.add(new ListData(key, formatDesc));
                     }
                 } else {

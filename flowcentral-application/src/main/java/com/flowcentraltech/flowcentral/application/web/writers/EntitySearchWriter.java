@@ -23,6 +23,7 @@ import com.flowcentraltech.flowcentral.application.web.widgets.EntitySearchWidge
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Writes;
+import com.tcdng.unify.core.data.ListData;
 import com.tcdng.unify.core.data.Listable;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.ReflectUtils;
@@ -121,7 +122,8 @@ public class EntitySearchWriter extends AbstractPopupTextFieldWriter {
                                             ReflectUtils.getBeanProperty(listable, "applicationName")),
                                     DataUtils.convert(String.class, ReflectUtils.getBeanProperty(listable, "name")));
                         } else {
-                            keys[i] = DataUtils.convert(String.class, ReflectUtils.getBeanProperty(listable, listKey));
+                            keys[i] = listable instanceof ListData ? ((ListData) listable).getListKey()
+                                    : DataUtils.convert(String.class, ReflectUtils.getBeanProperty(listable, listKey));
                         }
 
                     } else {

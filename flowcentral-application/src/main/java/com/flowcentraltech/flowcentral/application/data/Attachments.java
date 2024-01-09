@@ -36,13 +36,16 @@ public class Attachments {
 
     private List<Attachment> attachments;
 
+    private boolean editable;
+
     private boolean enableUpload;
 
-    public Attachments(String provider, String caption, List<Attachment> attachments, boolean enableUpload) {
+    private Attachments(String provider, String caption, List<Attachment> attachments, boolean enableUpload) {
         this.provider = provider;
         this.caption = caption;
         this.attachments = attachments;
         this.enableUpload = enableUpload;
+        this.editable = true;
     }
 
     public String getProvider() {
@@ -62,7 +65,15 @@ public class Attachments {
     }
 
     public boolean isEnableUpload() {
-        return enableUpload;
+        return enableUpload && editable;
+    }
+
+    public boolean isEditable() {
+        return editable;
+    }
+
+    public void setEditable(boolean editable) {
+        this.editable = editable;
     }
 
     public static Builder newBuilder(String provider) {
@@ -99,9 +110,16 @@ public class Attachments {
             return this;
         }
 
-        public Builder addAttachment(Long ownerId, Long id, String name, String description, String format,
-                Date createdOn, boolean mandatory, boolean present) {
-            attachments.add(new Attachment(ownerId, id, name, description, format, createdOn, mandatory, present));
+        public Builder addAttachments(Attachment attachment) {
+            this.attachments.add(attachment);
+            return this;
+        }
+
+        public Builder addAttachment(Long ownerId, String ownerEntity, Long id, String name, String description,
+                String fileName, String format, Date createdOn, boolean mandatory, boolean enableUpload,
+                boolean present) {
+            attachments.add(new Attachment(ownerId, ownerEntity, id, name, description, fileName, format, createdOn,
+                    enableUpload, mandatory, present));
             return this;
         }
 

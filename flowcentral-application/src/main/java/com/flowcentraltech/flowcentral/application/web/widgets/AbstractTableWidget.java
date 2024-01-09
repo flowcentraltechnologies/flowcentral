@@ -63,14 +63,17 @@ import com.tcdng.unify.web.ui.widget.panel.StandalonePanel;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@UplAttributes({ @UplAttribute(name = "contentDependentList", type = UplElementReferences.class),
+@UplAttributes({
+        @UplAttribute(name = "contentDependentList", type = UplElementReferences.class),
         @UplAttribute(name = "multiSelDependentList", type = UplElementReferences.class),
         @UplAttribute(name = "multiSelect", type = boolean.class),
         @UplAttribute(name = "detached", type = boolean.class),
         @UplAttribute(name = "actionSymbol", type = String[].class),
         @UplAttribute(name = "actionHandler", type = EventHandler[].class),
         @UplAttribute(name = "switchOnChangeHandler", type = EventHandler.class),
-        @UplAttribute(name = "summary", type = String.class), @UplAttribute(name = "details", type = String.class),
+        @UplAttribute(name = "summary", type = String.class),
+        @UplAttribute(name = "details", type = String.class),
+        @UplAttribute(name = "uploadFlag", type = String.class),
         @UplAttribute(name = "viewButtonClass", type = String.class, defaultVal = "mbtn"),
         @UplAttribute(name = "viewButtonCaptionBinding", type = String.class, defaultVal = "viewButtonCaption"),
         @UplAttribute(name = "editButtonClass", type = String.class, defaultVal = "mbtn"),
@@ -325,6 +328,10 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
 
     public boolean isFocusManagement() throws UnifyException {
         return getUplAttribute(boolean.class, "focusManagement");
+    }
+
+    public String getUploadFlag() throws UnifyException {
+        return getUplAttribute(String.class, "uploadFlag");
     }
 
     public String getViewButtonCaptionBinding() throws UnifyException {

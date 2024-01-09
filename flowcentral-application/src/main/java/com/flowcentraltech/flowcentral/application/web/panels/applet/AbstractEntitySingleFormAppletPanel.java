@@ -112,7 +112,7 @@ public abstract class AbstractEntitySingleFormAppletPanel extends AbstractApplet
                     .formBeanMatchAppletPropertyCondition(AppletPropertyConstants.MAINTAIN_FORM_SUBMIT_CONDITION);
         }
 
-        appCtx.setCapture(capture);
+        appCtx.setCapture(capture); 
         if (viewMode.isInForm()) {
             boolean showAlternateFormActions = systemModuleService.getSysParameterValue(boolean.class,
                     ApplicationModuleSysParamConstants.SHOW_FORM_ALTERNATE_ACTIONS);
@@ -164,6 +164,11 @@ public abstract class AbstractEntitySingleFormAppletPanel extends AbstractApplet
                 if (!form.isWithDisplayItemCounter()) {
                     form.setDisplayItemCounter(applet.getDisplayItemCounter());
                 }
+
+                if (form.isWithAttachments()) {
+                    form.getAttachments().setEditable(enableUpdate);
+                }
+                
                 setEditable("formPanel", enableUpdate);
                 addPanelToPushComponents("formPanel", enableUpdate);
                 break;
@@ -181,6 +186,10 @@ public abstract class AbstractEntitySingleFormAppletPanel extends AbstractApplet
                 setVisible("updateBtn", enableUpdate);
                 setVisible("updateCloseBtn", enableUpdate);
                 setVisible("deleteBtn", enableDelete);
+                if (form.isWithAttachments()) {
+                    form.getAttachments().setEditable(enableUpdate);
+                }
+                
                 setEditable("formPanel", enableUpdate);
                 addPanelToPushComponents("formPanel", enableUpdate);
                 break;
@@ -200,6 +209,10 @@ public abstract class AbstractEntitySingleFormAppletPanel extends AbstractApplet
                 setVisible("updateBtn", enableUpdate);
                 setVisible("updateCloseBtn", enableUpdate);
                 setVisible("deleteBtn", enableDelete);
+                if (form.isWithAttachments()) {
+                    form.getAttachments().setEditable(enableUpdate);
+                }
+                
                 setEditable("formPanel", enableUpdate);
                 addPanelToPushComponents("formPanel", enableUpdate);
                 break;
@@ -234,6 +247,10 @@ public abstract class AbstractEntitySingleFormAppletPanel extends AbstractApplet
                 setVisible("updateBtn", false);
                 setVisible("updateCloseBtn", false);
                 setVisible("deleteBtn", false);
+                if (form.isWithAttachments()) {
+                    form.getAttachments().setEditable(true);
+                }
+                
                 setEditable("formPanel", true);
                 addPanelToPushComponents("formPanel", true);
                 break;

@@ -186,6 +186,7 @@ public class TableWriter extends AbstractControlWriter {
         final AbstractTable<?, ?> table = tableWidget.getTable();
         if (table != null) {
             final TableDef tableDef = table.getTableDef();
+            final String uploadFlag = tableWidget.getUploadFlag();
             final boolean entryMode = table.isEntryMode();
             final int detailsIndex = table.getDetailsIndex();
             final boolean details = tableWidget.isDetails() && detailsIndex >= 0;
@@ -311,6 +312,7 @@ public class TableWriter extends AbstractControlWriter {
 
                 if (isUploadEnabled) {
                     Control _uploadCtrl = tableWidget.getUploadCtrl();
+                    _uploadCtrl.setDisabled(uploadFlag != null && !valueStore.retrieve(boolean.class, uploadFlag));
                     _uploadCtrl.setValueStore(valueStore);
                     writer.writeBehavior(_uploadCtrl);
                 }
@@ -620,12 +622,12 @@ public class TableWriter extends AbstractControlWriter {
             final boolean isFixedRows = tableWidget.isContainerEditable() && tableWidget.isFixedRows();
             final boolean isActionColumn = isContainerEditable && tableWidget.isActionColumn();
             final boolean isMultiSelect = tableDef.isMultiSelect() || tableWidget.isMultiSelect();
-
             List<ValueStore> valueList = tableWidget.getValueList();
             final int len = valueList.size();
             if (len == 0) {
                 writeNoRecordsFoundRow(writer, tableWidget, entryMode, isMultiSelect, isSerialNo);
             } else {
+                final String uploadFlag = tableWidget.getUploadFlag();
                 final Control[] fixedCtrl = isFixedRows ? tableWidget.getFixedCtrl() : null;
                 final Control[] actionCtrl = tableWidget.getActionCtrl();
                 final int detailsIndex = table.getDetailsIndex();
@@ -678,8 +680,8 @@ public class TableWriter extends AbstractControlWriter {
                     }
 
                     // Normal row
-                    final String rowClass = resolveRowStyleClass(i, highlightRow, entryMessage, alternatingRows,
-                            even, odd, isRowAction, isDisableLinks);
+                    final String rowClass = resolveRowStyleClass(i, highlightRow, entryMessage, alternatingRows, even,
+                            odd, isRowAction, isDisableLinks);
                     String summaryColor = null;
                     Long id = valueStore.retrieve(Long.class, "id");
                     writer.write("<tr");
@@ -797,6 +799,7 @@ public class TableWriter extends AbstractControlWriter {
                     if (isUploadEnabled) {
                         writer.write("<td class=\"celld\">");
                         UploadControl _uploadCtrl = tableWidget.getUploadCtrl();
+                        _uploadCtrl.setDisabled(uploadFlag != null && !valueStore.retrieve(boolean.class, uploadFlag));
                         _uploadCtrl.setValueStore(valueStore);
                         writer.writeStructureAndContent(_uploadCtrl);
                         writer.write("</td>");
