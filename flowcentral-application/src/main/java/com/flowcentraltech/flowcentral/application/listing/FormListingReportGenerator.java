@@ -31,12 +31,28 @@ import com.tcdng.unify.core.report.Report;
 public interface FormListingReportGenerator extends FlowCentralComponent {
 
     /**
+     * Generates form HTML report into builder.
+     * 
+     * @param rb
+     *                       the report builder
+     * @param reader
+     *                       the form bean value store reader
+     * @param listingOptions
+     *                       form listing options
+     * @return report
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    void generateHtmlReport(Report.Builder rb, ValueStoreReader reader, FormListingOptions listingOptions)
+            throws UnifyException;
+
+    /**
      * Generates form HTML report.
      * 
      * @param reader
-     *                           the form bean value store reader
+     *                       the form bean value store reader
      * @param listingOptions
-     *                           form listing options
+     *                       form listing options
      * @return report
      * @throws UnifyException
      *                        if an error occurs
@@ -47,9 +63,9 @@ public interface FormListingReportGenerator extends FlowCentralComponent {
      * Generates form Excel report.
      * 
      * @param reader
-     *                           the form bean value store reader
+     *                       the form bean value store reader
      * @param listingOptions
-     *                           form listing options
+     *                       form listing options
      * @return report
      * @throws UnifyException
      *                        if an error occurs

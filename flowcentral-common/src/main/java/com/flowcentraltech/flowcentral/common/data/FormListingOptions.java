@@ -15,6 +15,8 @@
  */
 package com.flowcentraltech.flowcentral.common.data;
 
+import com.tcdng.unify.core.util.StringUtils;
+
 /**
  * Form listing options
  * 
@@ -24,20 +26,22 @@ package com.flowcentraltech.flowcentral.common.data;
 public class FormListingOptions {
 
     private final String formActionName;
-    
+
     private final int optionFlags;
 
     private final boolean important;
-    
+
     private final FormListing formListing;
-    
+
+    private String optionsName;
+
     public FormListingOptions() {
         this.formActionName = null;
         this.optionFlags = ~0;
         this.important = false;
         this.formListing = null;
     }
-    
+
     public FormListingOptions(FormListing formListing) {
         this.formActionName = null;
         this.optionFlags = ~0;
@@ -73,17 +77,35 @@ public class FormListingOptions {
     public int getOptionFlags() {
         return optionFlags;
     }
-    
+
     public boolean isOption(int option) {
-        return (optionFlags & option) ==  option; 
+        return (optionFlags & option) == option;
     }
 
     public boolean isImportant() {
         return important;
     }
 
+    public String getOptionsName() {
+        return optionsName;
+    }
+
+    public void setOptionsName(String optionsName) {
+        this.optionsName = optionsName;
+    }
+
+    public boolean isWithOptionsName() {
+        return !StringUtils.isBlank(optionsName);
+    }
+
     public FormListing getFormListing() {
         return formListing;
+    }
+
+    @Override
+    public String toString() {
+        return "FormListingOptions [formActionName=" + formActionName + ", optionFlags=" + optionFlags + ", important="
+                + important + ", formListing=" + formListing + ", optionsName=" + optionsName + "]";
     }
 
 }
