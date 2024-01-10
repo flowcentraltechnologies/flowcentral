@@ -107,6 +107,7 @@ public class EntitySearchWidget extends AbstractEntityListWidget {
             final boolean encode = refDefs.length > 1;
             final ValueStore _valueStore = getValueStore();
             final String listKey = getListkey();
+            final boolean isListKey = !StringUtils.isBlank(listKey);
             for (int i = 0; i < refDefs.length; i++) {
                 RefDef refDef = refDefs[i];
                 final boolean listFormat = refDef.isWithListFormat();
@@ -150,7 +151,7 @@ public class EntitySearchWidget extends AbstractEntityListWidget {
                         // TODO Concatenate reference prefix to description
                         String key = encode
                                 ? RefEncodingUtils.encodeRefValue(i, refDef.getLongName(), result.get(j).getListKey())
-                                : (listKey != null ? DataUtils.getBeanProperty(String.class, result.get(j), listKey)
+                                : (isListKey ? DataUtils.getBeanProperty(String.class, result.get(j), listKey)
                                         : result.get(j).getListKey());
                         fullResult.add(new ListData(key, formatDesc));
                     }
