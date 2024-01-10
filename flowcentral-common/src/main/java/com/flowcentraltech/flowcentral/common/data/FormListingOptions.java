@@ -102,4 +102,10 @@ public class FormListingOptions {
         return formListing;
     }
 
+    @Override
+    public String toString() {
+        return "FormListingOptions [formActionName=" + formActionName + ", optionFlags=" + optionFlags + ", important="
+                + important + ", formListing=" + formListing + ", optionsName=" + optionsName + "]";
+    }
+
 }

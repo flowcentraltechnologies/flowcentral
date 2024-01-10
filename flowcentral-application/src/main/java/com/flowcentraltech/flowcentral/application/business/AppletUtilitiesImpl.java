@@ -2564,7 +2564,7 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
             final int optionFlags = options.isImportant() ? 0 : _generator.getOptionFlagsOverride(reader);
             FormListingOptions _options = optionFlags == 0 ? options
                     : new FormListingOptions(options.getFormActionName(), optionFlags);
-            _options.setOptionsName(options.getOptionsName());
+            _options.setOptionsName(_goptions.getOptionsName());
             logDebug("Using resolved option [{0}]...", _options);
             reader.setFormats(_generator.getFormats());
             _generator.generateHtmlReport(rb, reader, _options);
@@ -2581,7 +2581,6 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
         final int optionFlags = options.isImportant() ? 0 : _generator.getOptionFlagsOverride(reader);
         FormListingOptions _options = optionFlags == 0 ? options
                 : new FormListingOptions(options.getFormActionName(), optionFlags);
-        _options.setOptionsName(options.getOptionsName());
         logDebug("Using resolved option [{0}]...", _options);
         reader.setFormats(_generator.getFormats());
         return _generator.generateHtmlReport(reader, _options);

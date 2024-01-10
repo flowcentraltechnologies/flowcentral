@@ -40,7 +40,7 @@ public abstract class AbstractFormListingReportGenerator extends AbstractFlowCen
         return new ListingReportGeneratorProperties(
                 ReportPageProperties.newBuilder().resourceBaseUri(getSessionContext().getUriBase()).build(),
                 Arrays.asList(new ListingReportProperties(
-                        listingOptions.isWithOptionsName() ? listingOptions.getFormActionName() : "default_prop")));
+                        listingOptions.isWithOptionsName() ? listingOptions.getOptionsName() : "default_prop")));
     }
 
     protected abstract void writeReportHeader(ValueStoreReader reader, ListingReportProperties properties,
