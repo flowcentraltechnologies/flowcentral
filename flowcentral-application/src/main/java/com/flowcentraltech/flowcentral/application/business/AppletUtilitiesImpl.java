@@ -2457,8 +2457,8 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
     }
 
     @Override
-    public byte[] generateViewListingReportAsByteArray(ValueStoreReader reader, GenerateListingReportOptions... options)
-            throws UnifyException {
+    public byte[] generateViewListingReportAsByteArray(ValueStoreReader reader,
+            List<GenerateListingReportOptions> options) throws UnifyException {
         final Report report = generateViewListingReport(reader, options);
         return reportProvider.generateReportAsByteArray(report);
     }
@@ -2506,7 +2506,7 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
 
     @Override
     public void generateViewListingReportToOutputStream(OutputStream outputStream, ValueStoreReader reader,
-            GenerateListingReportOptions... options) throws UnifyException {
+            List<GenerateListingReportOptions> options) throws UnifyException {
         final Report report = generateViewListingReport(reader, options);
         reportProvider.generateReport(report, outputStream);
     }
@@ -2553,7 +2553,7 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
     }
 
     @Override
-    public Report generateViewListingReport(ValueStoreReader reader, GenerateListingReportOptions... goptions)
+    public Report generateViewListingReport(ValueStoreReader reader, List<GenerateListingReportOptions> goptions)
             throws UnifyException {
         Report.Builder rb = Report.newBuilder(ReportLayoutType.MULTIDOCHTML_PDF).title("listingReport");
         for (GenerateListingReportOptions _goptions : goptions) {
@@ -2564,6 +2564,7 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
             final int optionFlags = options.isImportant() ? 0 : _generator.getOptionFlagsOverride(reader);
             FormListingOptions _options = optionFlags == 0 ? options
                     : new FormListingOptions(options.getFormActionName(), optionFlags);
+            _options.setOptionsName(options.getOptionsName());
             logDebug("Using resolved option [{0}]...", _options);
             reader.setFormats(_generator.getFormats());
             _generator.generateHtmlReport(rb, reader, _options);
@@ -2580,6 +2581,7 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
         final int optionFlags = options.isImportant() ? 0 : _generator.getOptionFlagsOverride(reader);
         FormListingOptions _options = optionFlags == 0 ? options
                 : new FormListingOptions(options.getFormActionName(), optionFlags);
+        _options.setOptionsName(options.getOptionsName());
         logDebug("Using resolved option [{0}]...", _options);
         reader.setFormats(_generator.getFormats());
         return _generator.generateHtmlReport(reader, _options);

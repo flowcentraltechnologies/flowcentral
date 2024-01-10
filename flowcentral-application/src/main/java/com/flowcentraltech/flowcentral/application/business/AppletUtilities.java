@@ -2090,7 +2090,7 @@ public interface AppletUtilities extends FlowCentralComponent {
      * @throws UnifyException
      *                        if an error occurs
      */
-    byte[] generateViewListingReportAsByteArray(ValueStoreReader reader, GenerateListingReportOptions... options)
+    byte[] generateViewListingReportAsByteArray(ValueStoreReader reader, List<GenerateListingReportOptions> options)
             throws UnifyException;
 
     /**
@@ -2212,7 +2212,7 @@ public interface AppletUtilities extends FlowCentralComponent {
      * @throws UnifyException
      *                        if an error occurs
      */
-    Report generateViewListingReport(ValueStoreReader reader, GenerateListingReportOptions... options)
+    Report generateViewListingReport(ValueStoreReader reader, List<GenerateListingReportOptions> options)
             throws UnifyException;
 
     /**
@@ -2336,7 +2336,7 @@ public interface AppletUtilities extends FlowCentralComponent {
      *                        if an error occurs
      */
     void generateViewListingReportToOutputStream(OutputStream outputStream, ValueStoreReader reader,
-            GenerateListingReportOptions... options) throws UnifyException;
+            List<GenerateListingReportOptions> options) throws UnifyException;
 
     /**
      * Generates a listing report.

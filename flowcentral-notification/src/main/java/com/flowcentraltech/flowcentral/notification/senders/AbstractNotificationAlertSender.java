@@ -115,7 +115,7 @@ public abstract class AbstractNotificationAlertSender extends AbstractFlowCentra
     }
 
     protected Attachment createPdfAttachmentFromListing(String fileName, ValueStoreReader reader,
-            GenerateListingReportOptions options) throws UnifyException {
+            List<GenerateListingReportOptions> options) throws UnifyException {
         final byte[] report = appletUtilities.generateViewListingReportAsByteArray(reader, options);
         return Attachment.newBuilder(FileAttachmentType.PDF).fileName(fileName).title(fileName).name(fileName)
                 .data(report).build();

@@ -39,7 +39,8 @@ public abstract class AbstractFormListingReportGenerator extends AbstractFlowCen
             FormListingOptions listingOptions) throws UnifyException {
         return new ListingReportGeneratorProperties(
                 ReportPageProperties.newBuilder().resourceBaseUri(getSessionContext().getUriBase()).build(),
-                Arrays.asList(new ListingReportProperties("default_prop")));
+                Arrays.asList(new ListingReportProperties(
+                        listingOptions.isWithOptionsName() ? listingOptions.getFormActionName() : "default_prop")));
     }
 
     protected abstract void writeReportHeader(ValueStoreReader reader, ListingReportProperties properties,

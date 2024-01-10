@@ -10,11 +10,15 @@ public class GenerateListingReportOptions {
 
     private FormListingOptions formListingOptions;
 
+    private String optionsName;
+    
     private String generator;
 
-    public GenerateListingReportOptions(String generator, FormListingOptions formListingOptions) {
-        this.formListingOptions = formListingOptions;
+    public GenerateListingReportOptions(String optionsName, String generator, FormListingOptions formListingOptions) {
+        this.optionsName = optionsName;
         this.generator = generator;
+        this.formListingOptions = formListingOptions;
+        formListingOptions.setOptionsName(optionsName);
     }
 
     public FormListingOptions getFormListingOptions() {
@@ -23,5 +27,9 @@ public class GenerateListingReportOptions {
 
     public String getGenerator() {
         return generator;
+    }
+
+    public String getOptionsName() {
+        return optionsName;
     }
 }
