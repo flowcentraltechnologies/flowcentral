@@ -133,6 +133,7 @@ import com.flowcentraltech.flowcentral.common.data.FormattedAudit;
 import com.flowcentraltech.flowcentral.common.data.FormattedEntityAudit;
 import com.flowcentraltech.flowcentral.common.data.FormattedFieldAudit;
 import com.flowcentraltech.flowcentral.common.data.FormatterOptions;
+import com.flowcentraltech.flowcentral.common.data.GenerateListingReportOptions;
 import com.flowcentraltech.flowcentral.common.data.ParamValuesDef;
 import com.flowcentraltech.flowcentral.common.entities.BaseVersionEntity;
 import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
@@ -175,6 +176,7 @@ import com.tcdng.unify.core.filter.ObjectFilter;
 import com.tcdng.unify.core.format.FormatHelper;
 import com.tcdng.unify.core.message.MessageResolver;
 import com.tcdng.unify.core.report.Report;
+import com.tcdng.unify.core.report.ReportLayoutType;
 import com.tcdng.unify.core.task.TaskLauncher;
 import com.tcdng.unify.core.upl.UplComponent;
 import com.tcdng.unify.core.util.DataUtils;
@@ -2455,6 +2457,13 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
     }
 
     @Override
+    public byte[] generateViewListingReportAsByteArray(ValueStoreReader reader, GenerateListingReportOptions... options)
+            throws UnifyException {
+        final Report report = generateViewListingReport(reader, options);
+        return reportProvider.generateReportAsByteArray(report);
+    }
+
+    @Override
     public byte[] generateViewListingReportAsByteArray(ValueStoreReader reader, String generator,
             FormListingOptions options) throws UnifyException {
         final Report report = generateViewListingReport(reader, generator, options);
@@ -2497,6 +2506,13 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
 
     @Override
     public void generateViewListingReportToOutputStream(OutputStream outputStream, ValueStoreReader reader,
+            GenerateListingReportOptions... options) throws UnifyException {
+        final Report report = generateViewListingReport(reader, options);
+        reportProvider.generateReport(report, outputStream);
+    }
+
+    @Override
+    public void generateViewListingReportToOutputStream(OutputStream outputStream, ValueStoreReader reader,
             String generator, FormListingOptions options) throws UnifyException {
         final Report report = generateViewListingReport(reader, generator, options);
         reportProvider.generateReport(report, outputStream);
@@ -2534,6 +2550,26 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
             String letterGenerator) throws UnifyException {
         final Report report = generateLetterListingReport(reader, letterGenerator);
         reportProvider.generateReport(report, outputStream);
+    }
+
+    @Override
+    public Report generateViewListingReport(ValueStoreReader reader, GenerateListingReportOptions... goptions)
+            throws UnifyException {
+        Report.Builder rb = Report.newBuilder(ReportLayoutType.MULTIDOCHTML_PDF).title("listingReport");
+        for (GenerateListingReportOptions _goptions : goptions) {
+            final FormListingOptions options = _goptions.getFormListingOptions();
+            logDebug("Generating view listing report using generator [{0}] and options [{1}]...",
+                    _goptions.getGenerator(), options);
+            final FormListingGenerator _generator = (FormListingGenerator) getComponent(_goptions.getGenerator());
+            final int optionFlags = options.isImportant() ? 0 : _generator.getOptionFlagsOverride(reader);
+            FormListingOptions _options = optionFlags == 0 ? options
+                    : new FormListingOptions(options.getFormActionName(), optionFlags);
+            logDebug("Using resolved option [{0}]...", _options);
+            reader.setFormats(_generator.getFormats());
+            _generator.generateHtmlReport(rb, reader, _options);
+        }
+
+        return rb.build();
     }
 
     @Override

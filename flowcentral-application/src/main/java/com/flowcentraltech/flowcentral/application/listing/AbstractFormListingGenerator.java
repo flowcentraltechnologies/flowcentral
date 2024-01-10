@@ -144,11 +144,18 @@ public abstract class AbstractFormListingGenerator extends AbstractFormListingRe
     @Override
     public final Report generateHtmlReport(ValueStoreReader reader, FormListingOptions listingOptions)
             throws UnifyException {
+        Report.Builder rb = Report.newBuilder(ReportLayoutType.MULTIDOCHTML_PDF).title("listingReport");
+        generateHtmlReport(rb, reader, listingOptions);
+        return rb.build();
+    }
+
+    @Override
+    public void generateHtmlReport(Report.Builder rb, ValueStoreReader reader, FormListingOptions listingOptions)
+            throws UnifyException {
         ResponseWriter writer = getComponent(ResponseWriter.class,
                 WebUIApplicationComponents.APPLICATION_RESPONSEWRITER);
         ListingReportGeneratorProperties properties = getReportProperties(reader, listingOptions);
-        Report.Builder rb = Report.newBuilder(ReportLayoutType.MULTIDOCHTML_PDF, properties.getReportPageProperties())
-                .title("listingReport");
+        rb.pageProperties(properties.getReportPageProperties());
         Set<ListingColorType> pausePrintColors = getPausePrintColors();
         final String additional = additionalStyleClass() != null ? " " + additionalStyleClass() : "";
         final FontSetting fontSetting = getFontSetting(reader);
@@ -196,8 +203,6 @@ public abstract class AbstractFormListingGenerator extends AbstractFormListingRe
                 formListing.nextIndex();
             }
         }
-
-        return rb.build();
     }
 
     @Override

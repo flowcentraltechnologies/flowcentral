@@ -89,6 +89,7 @@ import com.flowcentraltech.flowcentral.common.data.EntityAuditInfo;
 import com.flowcentraltech.flowcentral.common.data.FormListingOptions;
 import com.flowcentraltech.flowcentral.common.data.FormattedAudit;
 import com.flowcentraltech.flowcentral.common.data.FormatterOptions;
+import com.flowcentraltech.flowcentral.common.data.GenerateListingReportOptions;
 import com.flowcentraltech.flowcentral.common.data.ParamValuesDef;
 import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
 import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
@@ -2082,6 +2083,20 @@ public interface AppletUtilities extends FlowCentralComponent {
      * Generates a listing report as byte array.
      * 
      * @param reader
+     *                the source reader
+     * @param options
+     *                the listing options
+     * @return the generated report object
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    byte[] generateViewListingReportAsByteArray(ValueStoreReader reader, GenerateListingReportOptions... options)
+            throws UnifyException;
+
+    /**
+     * Generates a listing report as byte array.
+     * 
+     * @param reader
      *                  the source reader
      * @param generator
      *                  the listing generator
@@ -2190,6 +2205,20 @@ public interface AppletUtilities extends FlowCentralComponent {
      * Generates a listing report.
      * 
      * @param reader
+     *                the source reader
+     * @param options
+     *                the report options
+     * @return the generated report object
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    Report generateViewListingReport(ValueStoreReader reader, GenerateListingReportOptions... options)
+            throws UnifyException;
+
+    /**
+     * Generates a listing report.
+     * 
+     * @param reader
      *                  the source reader
      * @param generator
      *                  the listing generator
@@ -2292,6 +2321,22 @@ public interface AppletUtilities extends FlowCentralComponent {
      *                        if an error occurs
      */
     Report generateLetterListingReport(ValueStoreReader reader, String letterGenerator) throws UnifyException;
+
+    /**
+     * Generates a listing report.
+     * 
+     * @param outputStream
+     *                     the output stream
+     * @param reader
+     *                     the source reader
+     * @param options
+     *                     the listing options
+     * @return the generated report object
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    void generateViewListingReportToOutputStream(OutputStream outputStream, ValueStoreReader reader,
+            GenerateListingReportOptions... options) throws UnifyException;
 
     /**
      * Generates a listing report.

@@ -26,6 +26,7 @@ import com.flowcentraltech.flowcentral.application.web.data.DetailsCase;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
 import com.flowcentraltech.flowcentral.common.data.Attachment;
 import com.flowcentraltech.flowcentral.common.data.FormListingOptions;
+import com.flowcentraltech.flowcentral.common.data.GenerateListingReportOptions;
 import com.flowcentraltech.flowcentral.notification.business.NotificationModuleService;
 import com.flowcentraltech.flowcentral.notification.data.NotifLargeTextWrapper;
 import com.tcdng.unify.core.UnifyException;
@@ -82,6 +83,13 @@ public abstract class AbstractNotificationTask extends AbstractTask {
     protected Attachment createPdfAttachmentFromListing(String fileName, ValueStoreReader reader, String generator,
             FormListingOptions options) throws UnifyException {
         final byte[] report = appletUtilities.generateViewListingReportAsByteArray(reader, generator, options);
+        return Attachment.newBuilder(FileAttachmentType.PDF).fileName(fileName).title(fileName).name(fileName)
+                .data(report).build();
+    }
+
+    protected Attachment createPdfAttachmentFromListing(String fileName, ValueStoreReader reader,
+            GenerateListingReportOptions options) throws UnifyException {
+        final byte[] report = appletUtilities.generateViewListingReportAsByteArray(reader, options);
         return Attachment.newBuilder(FileAttachmentType.PDF).fileName(fileName).title(fileName).name(fileName)
                 .data(report).build();
     }
