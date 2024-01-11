@@ -15,17 +15,23 @@
  */
 package com.flowcentraltech.flowcentral.application.web.panels;
 
+import java.util.List;
+
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
 import com.flowcentraltech.flowcentral.common.business.ApplicationPrivilegeManager;
 import com.flowcentraltech.flowcentral.common.business.CollaborationProvider;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
+import com.flowcentraltech.flowcentral.common.constants.FlowCentralRequestAttributeConstants;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralResultMappingConstants;
+import com.flowcentraltech.flowcentral.common.data.GenerateListingReportOptions;
 import com.flowcentraltech.flowcentral.common.data.ReportOptions;
 import com.flowcentraltech.flowcentral.common.web.panels.AbstractFlowCentralPanel;
 import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
+import com.tcdng.unify.core.data.ValueStoreReader;
+import com.tcdng.unify.core.report.Report;
 import com.tcdng.unify.core.task.TaskLauncher;
 import com.tcdng.unify.core.task.TaskMonitor;
 import com.tcdng.unify.core.task.TaskSetup;
@@ -100,6 +106,13 @@ public abstract class AbstractApplicationPanel extends AbstractFlowCentralPanel 
         commandShowPopup(new Popup(FlowCentralResultMappingConstants.SHOW_APPLICATION_REPORT_OPTIONS, reportOptions));
     }
 
+    protected final void generateAndShowReport(ValueStoreReader reader, List<GenerateListingReportOptions> options)
+            throws UnifyException {
+        Report report = appletUtilities.generateViewListingReport(reader, options);
+        setRequestAttribute(FlowCentralRequestAttributeConstants.REPORT, report);
+        setCommandResultMapping(FlowCentralResultMappingConstants.VIEW_LISTING_REPORT);
+    }
+
     protected final void setReloadOnSwitch() throws UnifyException {
         appletUtilities.setReloadOnSwitch();
     }
@@ -111,8 +124,7 @@ public abstract class AbstractApplicationPanel extends AbstractFlowCentralPanel 
     }
 
     protected final boolean isReloadOnSwitch() throws UnifyException {
-        return appletUtilities.isReloadOnSwitch()
-                || isOtherPageClosedDetected();
+        return appletUtilities.isReloadOnSwitch() || isOtherPageClosedDetected();
     }
 
 }

@@ -1027,7 +1027,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         setCommandResultMapping(entityActionResult, true);
     }
 
-    private void performEditModeWorkflowDraft() throws UnifyException {
+    private void performEditModeWorkflowDraft() throws UnifyException { 
         AbstractEntityFormApplet applet = getEntityFormApplet();
         WorkflowDraftInfo workflowDraftInfo = applet.getWorkflowDraftInfo();
         applet.enterWorkflowDraft(workflowDraftInfo.getType());
