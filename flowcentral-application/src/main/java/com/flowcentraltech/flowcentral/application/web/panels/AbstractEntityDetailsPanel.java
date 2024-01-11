@@ -22,13 +22,17 @@ import com.flowcentraltech.flowcentral.application.business.ApplicationModuleSer
 import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
 import com.flowcentraltech.flowcentral.common.constants.CommonModuleNameConstants;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralRequestAttributeConstants;
+import com.flowcentraltech.flowcentral.common.constants.FlowCentralResultMappingConstants;
+import com.flowcentraltech.flowcentral.common.data.GenerateListingReportOptions;
 import com.flowcentraltech.flowcentral.common.data.ReportOptions;
 import com.flowcentraltech.flowcentral.common.web.panels.AbstractDetailsPanel;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.UplBinding;
 import com.tcdng.unify.core.data.ValueStore;
+import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.database.Entity;
+import com.tcdng.unify.core.report.Report;
 
 /**
  * Convenient abstract base class for entity details panels.
@@ -86,6 +90,13 @@ public abstract class AbstractEntityDetailsPanel extends AbstractDetailsPanel<En
         reportOptions.setContent(entityList);
         reportOptions.setReportResourcePath(CommonModuleNameConstants.CONFIGURED_REPORT_RESOURCE);
         setRequestAttribute(FlowCentralRequestAttributeConstants.REPORTOPTIONS, reportOptions);
+    }
+
+    protected final void generateAndShowReport(ValueStoreReader reader, List<GenerateListingReportOptions> options)
+            throws UnifyException {
+        Report report = au.generateViewListingReport(reader, options);
+        setRequestAttribute(FlowCentralRequestAttributeConstants.REPORT, report);
+        setCommandResultMapping(FlowCentralResultMappingConstants.VIEW_LISTING_REPORT);
     }
 
     protected void setError(String message, Object... params) throws UnifyException {
