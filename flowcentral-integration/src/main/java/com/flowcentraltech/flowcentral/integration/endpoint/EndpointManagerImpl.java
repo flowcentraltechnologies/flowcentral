@@ -59,14 +59,13 @@ public class EndpointManagerImpl extends AbstractEndpointManager {
                 @Override
                 protected void onRemove(EndpointInst endpointInst) throws Exception {
                     endpointInst.getEndpoint().terminate();
-                    ;
                 }
 
             };
 
     }
 
-    public void setIntegrationModuleService(IntegrationModuleService integrationModuleService) {
+    public final void setIntegrationModuleService(IntegrationModuleService integrationModuleService) {
         this.integrationModuleService = integrationModuleService;
     }
 

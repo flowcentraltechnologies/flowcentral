@@ -67,7 +67,7 @@ import com.tcdng.unify.core.util.ReflectUtils;
  */
 public final class CommonInputUtils {
 
-    private static final Class<?>[] NEW_INPUT_PARAMS = new Class<?>[] { String.class };
+    private static final Class<?>[] NEW_INPUT_PARAMS = new Class<?>[] { String.class, String.class };
 
     private static final Map<InputType, Class<? extends AbstractInput<?>>> classToInputMap;
 
@@ -182,7 +182,7 @@ public final class CommonInputUtils {
         Class<? extends AbstractInput<?>> inputClass = classToInputMap
                 .get(classToInputTypeMap.get(paramConfig.getType()));
         return (AbstractInput<?>) ReflectUtils.newInstance(inputClass, NEW_INPUT_PARAMS,
-                paramConfig.getEditor() + " style:$s{width:100%;}");
+                paramConfig.getEditor() + " style:$s{width:100%;}", "!ui-label");
     }
 
     public static ParamValuesDef getParamValuesDef(List<ParamConfig> paramConfigList) throws UnifyException {

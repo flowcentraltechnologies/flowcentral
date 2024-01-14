@@ -307,6 +307,7 @@ import com.tcdng.unify.core.constant.OrderType;
 import com.tcdng.unify.core.criterion.And;
 import com.tcdng.unify.core.criterion.Equals;
 import com.tcdng.unify.core.criterion.Restriction;
+import com.tcdng.unify.core.criterion.Update;
 import com.tcdng.unify.core.data.BeanValueStore;
 import com.tcdng.unify.core.data.FactoryMap;
 import com.tcdng.unify.core.data.ListData;
@@ -4086,6 +4087,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                 && !DataUtils.isBlank(applicationConfig.getAppletsConfig().getAppletList())) {
             AppApplet appApplet = new AppApplet();
             appApplet.setApplicationId(applicationId);
+            environment().updateAll(new AppAppletQuery().applicationId(applicationId).configType(ConfigType.STATIC),
+                    new Update().add("menuAccess", Boolean.FALSE));
             for (AppletConfig appletConfig : applicationConfig.getAppletsConfig().getAppletList()) {
                 AppApplet oldAppApplet = environment()
                         .findLean(new AppAppletQuery().applicationId(applicationId).name(appletConfig.getName()));

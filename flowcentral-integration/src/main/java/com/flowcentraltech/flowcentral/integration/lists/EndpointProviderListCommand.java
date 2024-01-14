@@ -15,37 +15,40 @@
  */
 package com.flowcentraltech.flowcentral.integration.lists;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Locale;
-
-import com.flowcentraltech.flowcentral.common.constants.RecordStatus;
-import com.flowcentraltech.flowcentral.integration.entities.EndpointConfigQuery;
+import com.flowcentraltech.flowcentral.integration.endpoint.FileEndpoint;
+import com.flowcentraltech.flowcentral.integration.endpoint.JmsEndpoint;
+import com.tcdng.unify.core.UnifyComponent;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
-import com.tcdng.unify.core.data.Listable;
+import com.tcdng.unify.core.list.AbstractParamTypeListCommand;
 
 /**
- * List command for integration configuration list command.
+ * End-point provider list command.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@Component("endpointconfiglist")
-public class EndpointConfigListCommand extends AbstractIntegrationListCommand<EndpointTypeParam> {
+@Component("endpointproviderlist")
+public class EndpointProviderListCommand extends AbstractParamTypeListCommand<EndpointTypeParam> {
 
-    public EndpointConfigListCommand() {
+    public EndpointProviderListCommand() {
         super(EndpointTypeParam.class);
     }
 
     @Override
-    public List<? extends Listable> execute(Locale locale, EndpointTypeParam params) throws UnifyException {
+    protected Class<? extends UnifyComponent> getTypeFromParam(EndpointTypeParam params) throws UnifyException {
         if (params.isPresent()) {
-            EndpointConfigQuery query = new EndpointConfigQuery();
-            query.endpointType(params.getValue()).status(RecordStatus.ACTIVE).addOrder("description");
-            return getIntegrationModuleService().findEndpointConfigs(query);
+            switch (params.getValue()) {
+                case FILE:
+                    return FileEndpoint.class;
+                case JMS:
+                    return JmsEndpoint.class;
+                default:
+                    break;
+            }
         }
 
-        return Collections.emptyList();
+        return null;
     }
+
 }

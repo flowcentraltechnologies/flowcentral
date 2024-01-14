@@ -30,7 +30,4 @@ public interface RabbitMQEndpointConstants {
 
     String VIRTUAL_HOST = "rabbitMQVirtualHost";
 
-    String USERNAME = "rabbitMQUserName";
-
-    String PASSWORD = "rabbitMQPassword";
 }
