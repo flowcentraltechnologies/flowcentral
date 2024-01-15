@@ -60,4 +60,16 @@ public abstract class AbstractFlowCentralTest extends AbstractUnifyComponentTest
         }
     }
 
+    protected void deleteAll(Query<? extends Entity> query) throws Exception {
+        Database db = (Database) getComponent(ApplicationComponents.APPLICATION_DATABASE);
+        DatabaseTransactionManager tm = (DatabaseTransactionManager) getComponent(
+                ApplicationComponents.APPLICATION_DATABASETRANSACTIONMANAGER);
+        tm.beginTransaction();
+        try {
+            db.deleteAll(query);
+        } finally {
+            tm.endTransaction();
+        }
+    }
+
 }

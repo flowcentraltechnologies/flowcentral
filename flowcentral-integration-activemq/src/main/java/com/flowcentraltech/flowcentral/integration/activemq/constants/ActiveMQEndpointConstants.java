@@ -24,6 +24,8 @@ package com.flowcentraltech.flowcentral.integration.activemq.constants;
  */
 public interface ActiveMQEndpointConstants {
 
+    String  COMPONENT_NAME = "activemq-endpoint";
+
     String PROVIDER_URL = "activeMQProviderUrl";
 
     String USE_SSL = "activeMQUseSsl";

@@ -17,28 +17,18 @@ package com.flowcentraltech.flowcentral.integration.business;
 
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
 import com.flowcentraltech.flowcentral.common.business.AbstractFlowCentralService;
-import com.flowcentraltech.flowcentral.common.data.ParamValuesDef;
-import com.flowcentraltech.flowcentral.common.util.CommonInputUtils;
 import com.flowcentraltech.flowcentral.configuration.data.ModuleInstall;
-import com.flowcentraltech.flowcentral.integration.constants.IntegrationModuleErrorConstants;
 import com.flowcentraltech.flowcentral.integration.constants.IntegrationModuleNameConstants;
-import com.flowcentraltech.flowcentral.integration.data.EndpointDef;
 import com.flowcentraltech.flowcentral.integration.endpoint.Endpoint;
-import com.flowcentraltech.flowcentral.integration.entities.EndpointConfig;
-import com.flowcentraltech.flowcentral.integration.entities.EndpointConfigQuery;
-import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
+import com.flowcentraltech.flowcentral.integration.endpoint.EndpointManager;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.Transactional;
-import com.tcdng.unify.core.data.FactoryMap;
-import com.tcdng.unify.core.data.ParamConfig;
 import com.tcdng.unify.core.task.TaskMonitor;
-import com.tcdng.unify.core.util.DataUtils;
 
 /**
  * Implementation of integration module service.
@@ -51,61 +41,28 @@ import com.tcdng.unify.core.util.DataUtils;
 public class IntegrationModuleServiceImpl extends AbstractFlowCentralService implements IntegrationModuleService {
 
     @Configurable
-    private SystemModuleService systemModuleService;
+    private EndpointManager endpointManager;
 
     private final Map<String, TaskMonitor> endpointReaderMonitors;
 
-    private final FactoryMap<String, EndpointDef> endpointDefFactoryMap;
-
-    private final FactoryMap<String, List<ParamConfig>> endpointParamConfigByTypeMap;
-
     public IntegrationModuleServiceImpl() {
         this.endpointReaderMonitors = new HashMap<String, TaskMonitor>();
-
-        this.endpointDefFactoryMap = new FactoryMap<String, EndpointDef>(true)
-            {
-                @Override
-                protected boolean stale(String endpointConfigName, EndpointDef endpointDef) throws Exception {
-                    return (environment().value(long.class, "versionNo",
-                            new EndpointConfigQuery().id(endpointDef.getId())) > endpointDef.getVersion());
-                }
-
-                @Override
-                protected EndpointDef create(String endpointConfigName, Object... arg1) throws Exception {
-                    EndpointConfig endpointConfig = environment()
-                            .list(new EndpointConfigQuery().name(endpointConfigName));
-                    if (endpointConfig == null) {
-                        throw new UnifyException(IntegrationModuleErrorConstants.CANNOT_FIND_ENDPOINT_CONFIG,
-                                endpointConfigName);
-                    }
-
-                    ParamValuesDef pvd = CommonInputUtils.getParamValuesDef(
-                            endpointParamConfigByTypeMap.get(endpointConfig.getEndpoint()),
-                            endpointConfig.getEndpointParams());
-                    return new EndpointDef(endpointConfigName, endpointConfig.getEndpoint(), endpointConfig.getId(),
-                            endpointConfig.getVersionNo(), pvd);
-                }
-
-            };
-
-        endpointParamConfigByTypeMap = new FactoryMap<String, List<ParamConfig>>()
-            {
-
-                @Override
-                protected List<ParamConfig> create(String endpointName, Object... arg1) throws Exception {
-                    return DataUtils.unmodifiableList(getComponentParamConfigs(Endpoint.class, endpointName));
-                }
-
-            };
     }
 
-    public final void setSystemModuleService(SystemModuleService systemModuleService) {
-        this.systemModuleService = systemModuleService;
+    public final void setEndpointManager(EndpointManager endpointManager) {
+        this.endpointManager = endpointManager;
     }
 
     @Override
-    public EndpointDef getEndpointDef(String endpointConfigName) throws UnifyException {
-        return endpointDefFactoryMap.get(endpointConfigName);
+    public void sendMessage(String endpointConfigName, String destination, String text) throws UnifyException {
+        Endpoint endpoint = endpointManager.getEndpoint(endpointConfigName);
+        endpoint.sendMessage(destination, text);
+    }
+
+    @Override
+    public String receiveMessage(String endpointConfigName, String source) throws UnifyException {
+        Endpoint endpoint = endpointManager.getEndpoint(endpointConfigName);
+        return endpoint.receiveMessage(source);
     }
 
     @Override

@@ -16,7 +16,6 @@
 package com.flowcentraltech.flowcentral.integration.business;
 
 import com.flowcentraltech.flowcentral.common.business.FlowCentralService;
-import com.flowcentraltech.flowcentral.integration.data.EndpointDef;
 import com.tcdng.unify.core.UnifyException;
 
 /**
@@ -28,14 +27,29 @@ import com.tcdng.unify.core.UnifyException;
 public interface IntegrationModuleService extends FlowCentralService {
 
     /**
-     * Get an end-point using supplied name.
+     * Sends a message to an endpoint destination.
      * 
      * @param endpointConfigName
-     *                           the end-point configuration name
-     * @return the end-point
+     *                           the endpoint configuration
+     * @param destination
+     *                           the destination
+     * @param text
+     *                           the message
      * @throws UnifyException
      *                        if an error occurs
      */
-    EndpointDef getEndpointDef(String endpointConfigName) throws UnifyException;
+    void sendMessage(String endpointConfigName, String destination, String text) throws UnifyException;
 
+    /**
+     * Receives a message from an endpoint source.
+     * 
+     * @param endpointConfigName
+     *                           the endpoint configuration
+     * @param source
+     *                           the source
+     * @return the message if available otherwise null
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    String receiveMessage(String endpointConfigName, String source) throws UnifyException;
 }

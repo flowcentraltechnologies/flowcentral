@@ -24,6 +24,8 @@ package com.flowcentraltech.flowcentral.integration.rabbitmq.constants;
  */
 public interface RabbitMQEndpointConstants {
 
+    String COMPONENT_NAME = "rabbitmq-endpoint";
+    
     String HOSTNAME = "rabbitMQHostName";
 
     String PORT = "rabbitMQPort";

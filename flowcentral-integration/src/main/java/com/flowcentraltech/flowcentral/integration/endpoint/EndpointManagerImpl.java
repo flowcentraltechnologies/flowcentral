@@ -16,14 +16,22 @@
 package com.flowcentraltech.flowcentral.integration.endpoint;
 
 import java.util.ArrayList;
+import java.util.List;
 
-import com.flowcentraltech.flowcentral.integration.business.IntegrationModuleService;
+import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
+import com.flowcentraltech.flowcentral.common.data.ParamValuesDef;
+import com.flowcentraltech.flowcentral.common.util.CommonInputUtils;
+import com.flowcentraltech.flowcentral.integration.constants.IntegrationModuleErrorConstants;
 import com.flowcentraltech.flowcentral.integration.constants.IntegrationModuleNameConstants;
 import com.flowcentraltech.flowcentral.integration.data.EndpointDef;
+import com.flowcentraltech.flowcentral.integration.entities.EndpointConfig;
+import com.flowcentraltech.flowcentral.integration.entities.EndpointConfigQuery;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.data.FactoryMap;
+import com.tcdng.unify.core.data.ParamConfig;
+import com.tcdng.unify.core.util.DataUtils;
 
 /**
  * Default end-point manager implementation.
@@ -34,23 +42,70 @@ import com.tcdng.unify.core.data.FactoryMap;
 @Component(IntegrationModuleNameConstants.ENDPOINT_MANAGER)
 public class EndpointManagerImpl extends AbstractEndpointManager {
 
-    @Configurable
-    private IntegrationModuleService integrationModuleService;
+    private final FactoryMap<String, EndpointDef> endpointDefFactoryMap;
 
-    private final FactoryMap<String, EndpointInst> endpointDefFactoryMap;
+    private final FactoryMap<String, List<ParamConfig>> endpointParamConfigByTypeMap;
+
+    private final FactoryMap<String, EndpointInst> endpointInstFactoryMap;
+
+    @Configurable
+    private EnvironmentService environmentService;
 
     public EndpointManagerImpl() {
-        this.endpointDefFactoryMap = new FactoryMap<String, EndpointInst>(true)
+
+        this.endpointDefFactoryMap = new FactoryMap<String, EndpointDef>(true)
+            {
+                @Override
+                protected boolean stale(String endpointConfigName, EndpointDef endpointDef) throws Exception {
+                    try {
+                        return (environmentService.value(long.class, "versionNo",
+                                new EndpointConfigQuery().id(endpointDef.getId())) > endpointDef.getVersion());
+                    } catch (UnifyException e) {
+                        logError(e);
+                    }
+                    
+                    return true;
+                }
+
+                @Override
+                protected EndpointDef create(String endpointConfigName, Object... arg1) throws Exception {
+                    EndpointConfig endpointConfig = environmentService
+                            .list(new EndpointConfigQuery().name(endpointConfigName));
+                    if (endpointConfig == null) {
+                        throw new UnifyException(IntegrationModuleErrorConstants.CANNOT_FIND_ENDPOINT_CONFIG,
+                                endpointConfigName);
+                    }
+
+                    ParamValuesDef pvd = CommonInputUtils.getParamValuesDef(
+                            endpointParamConfigByTypeMap.get(endpointConfig.getEndpoint()),
+                            endpointConfig.getEndpointParams());
+                    return new EndpointDef(endpointConfigName, endpointConfig.getEndpoint(), endpointConfig.getId(),
+                            endpointConfig.getVersionNo(), pvd);
+                }
+
+            };
+
+        endpointParamConfigByTypeMap = new FactoryMap<String, List<ParamConfig>>()
+            {
+
+                @Override
+                protected List<ParamConfig> create(String endpointName, Object... arg1) throws Exception {
+                    return DataUtils.unmodifiableList(getComponentParamConfigs(Endpoint.class, endpointName));
+                }
+
+            };
+            
+        endpointInstFactoryMap = new FactoryMap<String, EndpointInst>(true)
             {
                 @Override
                 protected boolean stale(String endpointName, EndpointInst endpointInst) throws Exception {
-                    return integrationModuleService.getEndpointDef(endpointName).getVersion() > endpointInst
+                    return getEndpointDef(endpointName).getVersion() > endpointInst
                             .getEndpointDef().getVersion();
                 }
 
                 @Override
                 protected EndpointInst create(String endpointName, Object... arg1) throws Exception {
-                    EndpointDef endpointDef = integrationModuleService.getEndpointDef(endpointName);
+                    EndpointDef endpointDef = getEndpointDef(endpointName);
                     Endpoint endpoint = (Endpoint) getComponent(endpointDef.getEndpointName());
                     endpoint.setup(endpointDef);
                     return new EndpointInst(endpointDef, endpoint);
@@ -65,20 +120,25 @@ public class EndpointManagerImpl extends AbstractEndpointManager {
 
     }
 
-    public final void setIntegrationModuleService(IntegrationModuleService integrationModuleService) {
-        this.integrationModuleService = integrationModuleService;
+    public final void setEnvironmentService(EnvironmentService environmentService) {
+        this.environmentService = environmentService;
+    }
+
+    @Override
+    public EndpointDef getEndpointDef(String endpointConfigName) throws UnifyException {
+        return endpointDefFactoryMap.get(endpointConfigName);
     }
 
     @Override
     public Endpoint getEndpoint(String endpointName) throws UnifyException {
-        return endpointDefFactoryMap.get(endpointName).getEndpoint();
+        return endpointInstFactoryMap.get(endpointName).getEndpoint();
     }
 
     @Override
     protected void onTerminate() throws UnifyException {
-        for (String endpointName : new ArrayList<String>(endpointDefFactoryMap.keySet())) {
+        for (String endpointName : new ArrayList<String>(endpointInstFactoryMap.keySet())) {
             try {
-                endpointDefFactoryMap.remove(endpointName);
+                endpointInstFactoryMap.remove(endpointName);
             } catch (Exception e) {
                 logError(e);
             }

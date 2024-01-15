@@ -36,7 +36,7 @@ import com.tcdng.unify.core.util.StringUtils;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@Component(name = "rabbitmq-endpoint", description = "$m{endpoint.rabbitmq}")
+@Component(name = RabbitMQEndpointConstants.COMPONENT_NAME, description = "$m{endpoint.rabbitmq}")
 @Parameters({
         @Parameter(name = RabbitMQEndpointConstants.HOSTNAME, description = "$m{rabbitmqendpoint.hostname}",
                 editor = "!ui-text size:32", mandatory = true),

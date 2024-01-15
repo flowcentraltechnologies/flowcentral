@@ -58,7 +58,7 @@ public abstract class AbstractJmsEndpoint extends AbstractEndpoint implements Jm
     @Configurable("1")
     private int minSessionPool;
 
-    @Configurable("5000")
+    @Configurable("2000")
     private int receiveTimeout;
 
     private ConnectionFactory connectionFactory;
