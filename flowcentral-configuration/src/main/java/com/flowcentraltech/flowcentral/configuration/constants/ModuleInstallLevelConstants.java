@@ -27,6 +27,8 @@ public interface ModuleInstallLevelConstants {
 
     int COMMON_MODULE_LEVEL = -4;
 
+    int MESSAGING_MODULE_LEVEL = -2;
+
     int SYSTEM_MODULE_LEVEL = 0;
 
     int ORGANIZATION_MODULE_LEVEL = 4;
