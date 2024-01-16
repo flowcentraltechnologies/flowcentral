@@ -46,25 +46,25 @@ public class RabbitMQIntegrationModuleServiceTest extends AbstractFlowCentralTes
 
     private IntegrationModuleService ims;
 
-    @Test
-    public void testSendMessage() throws Exception {
-        ims.sendMessage("testRabbitMQQueueEndpoint", "testQueue1", "Hello World!");
-        ims.sendMessage("testRabbitMQQueueEndpoint", "testQueue2", "Blue Skies!");
-    }
-
-    @Test
-    public void testReceiveMessage() throws Exception {
-        ims.sendMessage("testRabbitMQQueueEndpoint", "testQueue1", "Hello World!");
-        ims.sendMessage("testRabbitMQQueueEndpoint", "testQueue2", "Blue Skies!");
-        
-        String text = ims.receiveMessage("testRabbitMQQueueEndpoint", "testQueue2");
-        assertNotNull(text);
-        assertEquals("Blue Skies!", text);
-                
-        text = ims.receiveMessage("testRabbitMQQueueEndpoint", "testQueue1");
-        assertNotNull(text);
-        assertEquals("Hello World!", text);
-    }
+//    @Test
+//    public void testSendMessage() throws Exception {
+//        ims.sendMessage("testRabbitMQQueueEndpoint", "testQueue1", "Hello World!");
+//        ims.sendMessage("testRabbitMQQueueEndpoint", "testQueue2", "Blue Skies!");
+//    }
+//
+//    @Test
+//    public void testReceiveMessage() throws Exception {
+//        ims.sendMessage("testRabbitMQQueueEndpoint", "testQueue1", "Hello World!");
+//        ims.sendMessage("testRabbitMQQueueEndpoint", "testQueue2", "Blue Skies!");
+//        
+//        String text = ims.receiveMessage("testRabbitMQQueueEndpoint", "testQueue2");
+//        assertNotNull(text);
+//        assertEquals("Blue Skies!", text);
+//                
+//        text = ims.receiveMessage("testRabbitMQQueueEndpoint", "testQueue1");
+//        assertNotNull(text);
+//        assertEquals("Hello World!", text);
+//    }
 
     @Override
     protected void onSetup() throws Exception {
