@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<!-- Messaging application -->
+<application name="messaging"
+	description="$m{messaging.short.description}"
+	label="$m{messaging.label}" module="messaging">
+	<!-- Applets -->
+	<!-- References -->
+	<!-- Entities -->
+	<!-- Tables -->
+	<!-- Forms -->
+</application>

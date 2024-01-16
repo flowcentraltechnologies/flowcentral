@@ -58,8 +58,8 @@
 		<module>flowcentral-undertow</module>
 		<module>flowcentral-gateway</module>
 		<module>flowcentral-audit</module>
-    <module>flowcentral-messaging</module>
-  </modules>
+		<module>flowcentral-messaging</module>
+	</modules>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
