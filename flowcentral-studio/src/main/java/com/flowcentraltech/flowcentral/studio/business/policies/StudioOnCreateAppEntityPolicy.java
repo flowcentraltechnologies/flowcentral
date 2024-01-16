@@ -41,10 +41,6 @@ public class StudioOnCreateAppEntityPolicy extends StudioOnCreateComponentPolicy
     @Configurable
     private EntitySchemaManager entitySchemaManager;
 
-    public final void setEntitySchemaManager(EntitySchemaManager entitySchemaManager) {
-        this.entitySchemaManager = entitySchemaManager;
-    }
-
     @Override
     protected EntityActionResult doExecutePreAction(EntityActionContext ctx) throws UnifyException {
         super.doExecutePreAction(ctx);

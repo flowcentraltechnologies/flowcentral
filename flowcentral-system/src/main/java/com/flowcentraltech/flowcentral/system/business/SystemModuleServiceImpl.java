@@ -233,30 +233,6 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
             };
     }
 
-    public final void setConfigurationLoader(ConfigurationLoader configurationLoader) {
-        this.configurationLoader = configurationLoader;
-    }
-
-    public final void setDataSourceManager(DynamicSqlDataSourceManager dataSourceManager) {
-        this.dataSourceManager = dataSourceManager;
-    }
-
-    public final void setTaskManager(TaskManager taskManager) {
-        this.taskManager = taskManager;
-    }
-
-    public final void setTaskStatusLogger(TaskStatusLogger taskStatusLogger) {
-        this.taskStatusLogger = taskStatusLogger;
-    }
-
-    public final void setFileAttachmentProvider(FileAttachmentProvider fileAttachmentProvider) {
-        this.fileAttachmentProvider = fileAttachmentProvider;
-    }
-
-    public final void setParamGeneratorManager(ParamGeneratorManager paramGeneratorManager) {
-        this.paramGeneratorManager = paramGeneratorManager;
-    }
-
     @Override
     public Long createDownloadLog(DownloadLog downloadLog) throws UnifyException {
         return (Long) environment().create(downloadLog);

@@ -445,26 +445,6 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
 
     }
 
-    public final void setOrganizationModuleService(OrganizationModuleService organizationModuleService) {
-        this.organizationModuleService = organizationModuleService;
-    }
-
-    public final void setAppletUtil(AppletUtilities appletUtil) {
-        this.appletUtil = appletUtil;
-    }
-
-    public final void setNotifRecipientProvider(NotificationRecipientProvider notifRecipientProvider) {
-        this.notifRecipientProvider = notifRecipientProvider;
-    }
-
-    public final void setFileAttachmentProvider(FileAttachmentProvider fileAttachmentProvider) {
-        this.fileAttachmentProvider = fileAttachmentProvider;
-    }
-
-    public final void setSecurityModuleService(SecurityModuleService securityModuleService) {
-        this.securityModuleService = securityModuleService;
-    }
-
     @Override
     public EntityActionResult submitToWorkflow(EntityDef entityDef, String workflowName, WorkEntity inst,
             String policyName) throws UnifyException {

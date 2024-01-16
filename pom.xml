@@ -58,6 +58,7 @@
 		<module>flowcentral-undertow</module>
 		<module>flowcentral-gateway</module>
 		<module>flowcentral-audit</module>
+		<module>flowcentral-messaging</module>
 	</modules>
 
 	<properties>

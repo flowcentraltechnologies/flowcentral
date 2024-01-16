@@ -40,10 +40,6 @@ public class StudioAttachmentProviderListCommand extends AbstractEntityTypeListC
         super(AttachmentsProvider.class, LongParam.class);
     }
 
-    public final void setApplicationModuleService(ApplicationModuleService applicationModuleService) {
-        this.applicationModuleService = applicationModuleService;
-    }
-
     protected ApplicationModuleService application() {
         return applicationModuleService;
     }

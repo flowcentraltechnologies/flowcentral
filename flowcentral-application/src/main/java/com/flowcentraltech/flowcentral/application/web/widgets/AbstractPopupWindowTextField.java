@@ -34,10 +34,6 @@ public abstract class AbstractPopupWindowTextField extends AbstractFlowCentralPo
     @Configurable
     private AppletUtilities au;
 
-    public final void setAu(AppletUtilities au) {
-        this.au = au;
-    }
-
     @Action
     public final void popup() throws UnifyException {
         Popup popup = preparePopup();

@@ -39,10 +39,6 @@ public class SysParamWfRecipientPolicy extends AbstractWfRecipientPolicy {
     @Configurable
     private SystemModuleService systemModuleService;
 
-    public void setSystemModuleService(SystemModuleService systemModuleService) {
-        this.systemModuleService = systemModuleService;
-    }
-
     @Override
     public List<Recipient> getRecipients(ValueStoreReader wfItemReader, String recipientNameRule,
             String recipientContactRule) throws UnifyException {

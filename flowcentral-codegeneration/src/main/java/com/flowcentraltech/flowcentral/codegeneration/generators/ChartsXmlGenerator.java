@@ -45,10 +45,6 @@ public class ChartsXmlGenerator extends AbstractStaticArtifactGenerator {
     @Configurable
     private ChartModuleService chartModuleService;
 
-    public void setChartModuleService(ChartModuleService chartModuleService) {
-        this.chartModuleService = chartModuleService;
-    }
-
     @Override
     protected void doGenerate(ExtensionModuleStaticFileBuilderContext ctx, String applicationName, ZipOutputStream out)
             throws UnifyException {

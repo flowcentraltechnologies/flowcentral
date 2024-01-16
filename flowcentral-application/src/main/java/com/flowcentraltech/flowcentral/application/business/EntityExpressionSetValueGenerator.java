@@ -37,10 +37,6 @@ public class EntityExpressionSetValueGenerator extends AbstractFieldSetValueGene
     @Configurable
     private ScriptingEngine scriptingEngine;
 
-    public void setScriptingEngine(ScriptingEngine scriptingEngine) {
-        this.scriptingEngine = scriptingEngine;
-    }
-
     @Override
     public Object generate(EntityDef entityDef, ValueStore valueStore, String rule) throws UnifyException {
         EntityExpressionDef entityExpressionDef = entityDef.getExpressionDef(rule);

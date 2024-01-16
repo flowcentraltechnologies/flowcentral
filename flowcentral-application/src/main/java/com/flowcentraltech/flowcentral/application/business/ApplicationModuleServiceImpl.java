@@ -307,6 +307,7 @@ import com.tcdng.unify.core.constant.OrderType;
 import com.tcdng.unify.core.criterion.And;
 import com.tcdng.unify.core.criterion.Equals;
 import com.tcdng.unify.core.criterion.Restriction;
+import com.tcdng.unify.core.criterion.Update;
 import com.tcdng.unify.core.data.BeanValueStore;
 import com.tcdng.unify.core.data.FactoryMap;
 import com.tcdng.unify.core.data.ListData;
@@ -1362,46 +1363,6 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                     return prdb.build();
                 }
             };
-    }
-
-    public final void setApplicationPrivilegeManager(ApplicationPrivilegeManager applicationPrivilegeManager) {
-        this.applicationPrivilegeManager = applicationPrivilegeManager;
-    }
-
-    public final void setMessageResolver(MessageResolver messageResolver) {
-        this.messageResolver = messageResolver;
-    }
-
-    public final void setConfigurationLoader(ConfigurationLoader configurationLoader) {
-        this.configurationLoader = configurationLoader;
-    }
-
-    public final void setDynamicSqlEntityLoader(DynamicSqlEntityLoader dynamicSqlEntityLoader) {
-        this.dynamicSqlEntityLoader = dynamicSqlEntityLoader;
-    }
-
-    public final void setListManager(ListManager listManager) {
-        this.listManager = listManager;
-    }
-
-    public final void setAppletUtilities(AppletUtilities appletUtilities) {
-        this.appletUtilities = appletUtilities;
-    }
-
-    public final void setTwoWayStringCryptograph(TwoWayStringCryptograph twoWayStringCryptograph) {
-        this.twoWayStringCryptograph = twoWayStringCryptograph;
-    }
-
-    public final void setUsageListProvider(UsageListProvider usageListProvider) {
-        this.usageListProvider = usageListProvider;
-    }
-
-    public final void setSequenceNumberService(SequenceNumberService sequenceNumberService) {
-        this.sequenceNumberService = sequenceNumberService;
-    }
-
-    public final void setEnvironmentDelegateUtilities(EnvironmentDelegateUtilities environmentDelegateUtilities) {
-        this.environmentDelegateUtilities = environmentDelegateUtilities;
     }
 
     @Override
@@ -4086,6 +4047,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                 && !DataUtils.isBlank(applicationConfig.getAppletsConfig().getAppletList())) {
             AppApplet appApplet = new AppApplet();
             appApplet.setApplicationId(applicationId);
+            environment().updateAll(new AppAppletQuery().applicationId(applicationId).configType(ConfigType.STATIC),
+                    new Update().add("menuAccess", Boolean.FALSE));
             for (AppletConfig appletConfig : applicationConfig.getAppletsConfig().getAppletList()) {
                 AppApplet oldAppApplet = environment()
                         .findLean(new AppAppletQuery().applicationId(applicationId).name(appletConfig.getName()));

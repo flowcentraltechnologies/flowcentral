@@ -124,18 +124,6 @@ public abstract class AbstractFormListingGenerator extends AbstractFormListingRe
             };
     }
 
-    public final void setAu(AppletUtilities au) {
-        this.au = au;
-    }
-
-    public final void setThemeManager(ThemeManager themeManager) {
-        this.themeManager = themeManager;
-    }
-
-    public final void setEntityImageProvider(ImageProvider entityImageProvider) {
-        this.entityImageProvider = entityImageProvider;
-    }
-
     @Override
     public Formats getFormats() {
         return Formats.DEFAULT;

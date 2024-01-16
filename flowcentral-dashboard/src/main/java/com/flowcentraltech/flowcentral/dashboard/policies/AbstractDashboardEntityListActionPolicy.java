@@ -38,10 +38,6 @@ public abstract class AbstractDashboardEntityListActionPolicy extends AbstractEn
 	@Configurable
 	private DashboardModuleService dashboardModuleService;
 
-	public final void setDashboardModuleService(DashboardModuleService dashboardModuleService) {
-		this.dashboardModuleService = dashboardModuleService;
-	}
-
 	@Override
 	public EntityListActionResult executeAction(EntityListActionContext ctx) throws UnifyException {
 		List<Long> idList = new ArrayList<Long>();

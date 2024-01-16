@@ -15,10 +15,6 @@
  */
 package com.flowcentraltech.flowcentral.integration.endpoint;
 
-import javax.jms.Session;
-
-import com.tcdng.unify.core.UnifyException;
-
 /**
  * JMS end-point.
  * 
@@ -27,21 +23,4 @@ import com.tcdng.unify.core.UnifyException;
  */
 public interface JmsEndpoint extends Endpoint {
 
-    /**
-     * Returns a JMS session.
-     * 
-     * @throws UnifyException
-     *                        if an error occurs
-     */
-    Session getSession() throws UnifyException;
-
-    /**
-     * Restores JMS session to end-point
-     * 
-     * @param session
-     *                the session to restore
-     * @throws UnifyException
-     *                        if an error occurs
-     */
-    void restoreSession(Session session) throws UnifyException;
 }

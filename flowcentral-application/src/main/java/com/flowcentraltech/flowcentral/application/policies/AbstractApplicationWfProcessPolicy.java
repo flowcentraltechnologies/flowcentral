@@ -41,14 +41,6 @@ public abstract class AbstractApplicationWfProcessPolicy extends AbstractWfProce
     @Configurable
     private EnvironmentService environmentService;
 
-    public final void setEnvironmentService(EnvironmentService environmentService) {
-        this.environmentService = environmentService;
-    }
-
-    public final void setApplicationModuleService(ApplicationModuleService applicationModuleService) {
-        this.applicationModuleService = applicationModuleService;
-    }
-
     protected ApplicationModuleService application() {
         return applicationModuleService;
     }

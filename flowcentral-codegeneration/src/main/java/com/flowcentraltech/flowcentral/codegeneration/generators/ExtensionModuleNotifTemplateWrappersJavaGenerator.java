@@ -46,10 +46,6 @@ public class ExtensionModuleNotifTemplateWrappersJavaGenerator extends AbstractS
         super("src/main/java/{0}/utilities/{1}/templatewrappers/");
     }
 
-    public final void setNotificationModuleService(NotificationModuleService notificationModuleService) {
-        this.notificationModuleService = notificationModuleService;
-    }
-
     protected final boolean checkGeneration(ExtensionModuleStaticFileBuilderContext ctx, String entityName)
             throws UnifyException {
         return notificationModuleService.countNotifTemplatesByModule(entityName) > 0;

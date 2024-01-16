@@ -52,10 +52,6 @@ public class StudioReportableByNameListCommand extends AbstractApplicationListCo
         super(ZeroParams.class);
     }
 
-    public void setReportModuleService(ReportModuleService reportModuleService) {
-        this.reportModuleService = reportModuleService;
-    }
-
     @Override
     public List<? extends Listable> execute(Locale locale, ZeroParams zeroParams) throws UnifyException {
         final Long applicationId = (Long) getSessionAttribute(StudioSessionAttributeConstants.CURRENT_APPLICATION_ID);

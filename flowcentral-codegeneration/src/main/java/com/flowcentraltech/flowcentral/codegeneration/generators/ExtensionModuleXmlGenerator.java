@@ -42,10 +42,6 @@ public class ExtensionModuleXmlGenerator extends AbstractStaticArtifactGenerator
         super("src/main/resources/config/");
     }
 
-    public final void setSystemModuleService(SystemModuleService systemModuleService) {
-        this.systemModuleService = systemModuleService;
-    }
-
     @Override
     protected void doGenerate(ExtensionModuleStaticFileBuilderContext ctx, String moduleName, ZipOutputStream zos)
             throws UnifyException {

@@ -5,10 +5,10 @@
 	module="integration">
 	<!-- Widget Types -->
 	<widgetTypes>
-		<widgetType name="configendpointlist"
-			description="$m{integration.widgettype.configendpointlist}" dataType="string"
+		<widgetType name="endpointproviderlist"
+			description="$m{integration.widgettype.endpointproviderlist}" dataType="string"
 			inputType="string"
-			editor="!ui-select list:endpointlist listParams:$l{endpointType} blankOption:$m{blank.none}"
+			editor="!ui-select list:endpointproviderlist listParams:$l{endpointType} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="endpointreaderlist"
 			description="$m{integration.widgettype.endpointreaderlist}" dataType="string"
@@ -45,31 +45,11 @@
 			<property name="maintainForm.update" value="true" />
 			<property name="maintainForm.delete" value="true" />
 		</applet>
-		<applet name="manageReadConfig"
-			description="$m{integration.readconfig.manage}"
-			label="$m{integration.readconfig.manage.label}" icon="vector-square"
-			type="manage_entitylist" entity="readConfig" menuAccess="true">
-			<property name="searchTable" value="readConfigTable" />
-			<property name="searchTable.new" value="true" />
-			<property name="searchTable.report" value="true" />
-			<property name="searchTable.quickFilter" value="true" />
-			<property name="searchTable.basicSearchOnly" value="true" />
-			<property name="createForm" value="readConfigForm" />
-			<property name="createForm.save" value="true" />
-			<property name="createForm.save.next" value="true" />
-			<property name="createForm.save.close" value="true" />
-			<property name="maintainForm" value="readConfigForm" />
-			<property name="maintainForm.update" value="true" />
-			<property name="maintainForm.delete" value="true" />
-		</applet>
 	</applets>
 	<!-- References -->
 	<references>
 		<reference name="endpointConfigRef"
 			description="$m{integration.endpointconfig.reference}" entity="endpointConfig"
-			searchField="description" />
-		<reference name="readConfigRef"
-			description="$m{integration.readconfig.reference}" entity="readConfig"
 			searchField="description" />
 	</references>
 	<!-- Entities -->
@@ -85,8 +65,8 @@
 				inputWidget="application.name" maxLen="64" basicSearch="true"/>
 			<field name="description" label="$m{integration.endpointconfig.description}"
 				type="string" inputWidget="application.text" maxLen="96" />
-			<field name="endpoint" label="$m{integration.endpointconfig.endpoint}"
-				type="string" inputWidget="configendpointlist" maxLen="64"/>
+			<field name="endpoint" label="$m{integration.endpointconfig.endpointprovider}"
+				type="string" inputWidget="endpointproviderlist" maxLen="64"/>
 			<field name="endpointTypeDesc" label="$m{integration.endpointconfig.endpointtypedesc}"
 				type="list_only" key="endpointType" property="description" />
 			<uniqueConstraint name="nameUc"
@@ -94,31 +74,6 @@
 				fieldList="name" />
 			<uniqueConstraint name="descUc"
 				description="$m{integration.endpointconfig.uc.description}"
-				fieldList="description" />
-		</entity>
-		<entity name="readConfig" description="$m{integration.readconfig}"
-			label="$m{integration.readconfig.label}"
-			type="com.flowcentraltech.flowcentral.integration.entities.ReadConfig" auditable="true"
-			reportable="true">
-			<field name="name" label="$m{integration.readconfig.name}" type="string"
-				inputWidget="application.name"  maxLen="32" basicSearch="true"/>
-			<field name="description" label="$m{integration.readconfig.description}"
-				type="string" inputWidget="application.text" maxLen="64" />
-			<field name="endpointReader" label="$m{integration.readconfig.endpointreader}"
-				type="string" inputWidget="endpointreaderlist" maxLen="64" />
-			<field name="endpointReaderPeriod" label="$m{integration.readconfig.endpointreaderperiod}"
-				type="integer" inputWidget="application.integer" precision="3" />
-			<field name="endpointMaxLoadingSize" label="$m{integration.readconfig.endpointmaxloadingsize}"
-				type="integer" inputWidget="application.integer" precision="4"/>
-			<field name="eventProcessor" label="$m{integration.readconfig.eventprocessor}"
-				type="string" inputWidget="readeventprocessorlist" maxLen="64"/>
-			<field name="processorRule" label="$m{integration.readconfig.processorrule}"
-				type="string" inputWidget="readconfigprocessorrulelist" maxLen="64" nullable = "true"/>
-			<uniqueConstraint name="nameUc"
-				description="$m{integration.readconfig.uc.name}"
-				fieldList="name" />
-			<uniqueConstraint name="descUc"
-				description="$m{integration.readconfig.uc.description}"
 				fieldList="description" />
 		</entity>
 	</entities>
@@ -136,25 +91,6 @@
 				widthRatio="1" />
 			<column field="endpointTypeDesc" renderWidget="application.text"
 				label="$m{integration.endpointconfig.endpointtype}" widthRatio="1" />
-		</table>
-		<table name="readConfigTable"
-			description="$m{integration.readconfig.table}"
-			label="$m{integration.readconfig.table.label}" entity="readConfig"
-			itemsPerPage="20" serialNo="true" basicSearch="true">
-			<column field="name" renderWidget="application.name"
-				widthRatio="1" linkAct="maintainAct" />
-			<column field="description" renderWidget="application.text"
-				widthRatio="1" />
-			<column field="endpointReader" renderWidget="application.text"
-				widthRatio="1" />
-			<column field="endpointReaderPeriod" renderWidget="application.text"
-				widthRatio="1" />
-			<column field="endpointMaxLoadingSize" renderWidget="application.text"
-				widthRatio="1" />
-			<column field="eventProcessor" renderWidget="application.text"
-				widthRatio="1" />
-			<column field="statusDesc" renderWidget="application.text"
-				label="$m{integration.readconfig.status}" widthRatio="1" />
 		</table>
 	</tables>
 	<!-- Forms -->
@@ -174,26 +110,6 @@
 			</tab>
 			<tab name="endpointParams" label="$m{integration.endpointconfig.form.parameters}"
 				reference="endpoint-paramconfigprovider" contentType="param_values" />
-			<tab name="changeLog" label="$m{application.form.audit}"
-				contentType="miniform_changelog" />
-		</form>
-		<form name="readConfigForm"
-			description="$m{integration.readconfig.form}" entity="readConfig">
-			<tab name="basicDetails"
-				label="$m{integration.readconfig.form.basicdetails}" contentType="miniform">
-				<section name="readConfigDetails" columns="type_2">
-					<field name="name" column="0" required="true" />
-					<field name="description" column="0" required="true" />
-					<field name="endpointReaderPeriod" column="0" required="true" />
-					<field name="endpointMaxLoadingSize" column="0" required="true" />
-					<field name="endpointReader" column="1" required="true" switchOnChange="true"/>
-					<field name="eventProcessor" column="1" required="true" switchOnChange="true"/>
-					<field name="processorRule" column="1" />
-					<field name="status" column="1" required="true" />
-				</section>
-			</tab>
-			<tab name="readerParams" label="$m{integration.readconfig.form.parameters}"
-				reference="endpointreader-paramconfigprovider" contentType="param_values" />
 			<tab name="changeLog" label="$m{application.form.audit}"
 				contentType="miniform_changelog" />
 		</form>

@@ -31,10 +31,6 @@ public abstract class AbstractCollaborationFormActionPolicy extends AbstractForm
     @Configurable
     private CollaborationProvider collaborationProvider;
 
-    public void setCollaborationProvider(CollaborationProvider collaborationProvider) {
-        this.collaborationProvider = collaborationProvider;
-    }
-
     protected CollaborationProvider getCollaborationProvider() {
         return collaborationProvider;
     }

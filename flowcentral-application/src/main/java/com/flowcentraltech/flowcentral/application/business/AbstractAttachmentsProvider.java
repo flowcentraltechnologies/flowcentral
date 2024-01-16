@@ -41,10 +41,6 @@ public abstract class AbstractAttachmentsProvider extends AbstractFlowCentralCom
     @Configurable
     private AppletUtilities appletUtilities;
 
-    public final void setAppletUtilities(AppletUtilities appletUtilities) {
-        this.appletUtilities = appletUtilities;
-    }
-
     @Override
     public final Attachments provide(ValueStoreReader reader, AttachmentsOptions options) throws UnifyException {
         Attachments.Builder ab = Attachments.newBuilder(getName());

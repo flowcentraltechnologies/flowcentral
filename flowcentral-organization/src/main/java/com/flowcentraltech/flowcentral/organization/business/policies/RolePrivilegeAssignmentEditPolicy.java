@@ -51,10 +51,6 @@ public class RolePrivilegeAssignmentEditPolicy extends AbstractChildListEditPoli
     @Configurable
     private OrganizationModuleService organizationModuleService;
 
-    public void setOrganizationModuleService(OrganizationModuleService organizationModuleService) {
-        this.organizationModuleService = organizationModuleService;
-    }
-
     @Override
     public void postAssignmentUpdate(Class<? extends Entity> entityClass, String baseFieldName, Object baseId)
             throws UnifyException {

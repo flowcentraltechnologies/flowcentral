@@ -51,10 +51,6 @@ public class EntityTreeTableWriter extends AbstractControlWriter {
     @Configurable
     private AppletUtilities au;
 
-    public final void setAu(AppletUtilities au) {
-        this.au = au;
-    }
-
     @Override
     protected void doWriteStructureAndContent(ResponseWriter writer, Widget widget) throws UnifyException {
         EntityTreeTableWidget tableWidget = (EntityTreeTableWidget) widget;

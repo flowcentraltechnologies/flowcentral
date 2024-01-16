@@ -71,10 +71,6 @@ public class StudioAppletTypeListCommand extends AbstractApplicationListCommand<
             };
     }
 
-    public void setListManager(ListManager listManager) {
-        this.listManager = listManager;
-    }
-
     @Override
     public List<? extends Listable> execute(Locale locale, ConfigTypeParams params) throws UnifyException {
         if (params.isPresent()) {

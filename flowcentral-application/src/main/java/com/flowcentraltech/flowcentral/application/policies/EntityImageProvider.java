@@ -39,10 +39,6 @@ public class EntityImageProvider extends AbstractImageProvider {
 
     @Configurable
     private AppletUtilities appletUtilities;
-    
-    public final void setAppletUtilities(AppletUtilities appletUtilities) {
-        this.appletUtilities = appletUtilities;
-    }
 
     @SuppressWarnings("unchecked")
     @Override

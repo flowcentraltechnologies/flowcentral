@@ -51,10 +51,6 @@ public abstract class AbstractStaticArtifactGenerator extends AbstractFlowCentra
 
     }
 
-    public final void setAppletUtilities(AppletUtilities appletUtilities) {
-        this.appletUtilities = appletUtilities;
-    }
-
     @Override
     public final void generate(ExtensionModuleStaticFileBuilderContext ctx, String entityName, ZipOutputStream zos)
             throws UnifyException {

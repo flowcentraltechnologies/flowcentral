@@ -35,10 +35,6 @@ public abstract class AbstractDashboardListCommand<T extends ListParam> extends 
         super(paramType);
     }
 
-    public void setDashboardModuleService(DashboardModuleService dashboardModuleService) {
-        this.dashboardModuleService = dashboardModuleService;
-    }
-
     protected DashboardModuleService getDashboardModuleService() {
         return dashboardModuleService;
     }

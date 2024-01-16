@@ -51,10 +51,6 @@ public class ChangePasswordController extends AbstractSecurityPageController<Cha
         super(ChangePasswordPageBean.class, Secured.TRUE, ReadOnly.FALSE, ResetOnWrite.FALSE);
     }
 
-    public void setSecurityModuleService(SecurityModuleService securityModuleService) {
-        this.securityModuleService = securityModuleService;
-    }
-
     @Override
     protected void onInitPage() throws UnifyException {
         super.onInitPage();

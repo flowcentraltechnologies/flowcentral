@@ -23,22 +23,12 @@
         </dependency>
         <dependency>
             <groupId>com.flowcentraltech.flowcentral</groupId>
-            <artifactId>flowcentral-configuration</artifactId>
+            <artifactId>flowcentral-messaging</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>com.flowcentraltech.flowcentral</groupId>
             <artifactId>flowcentral-system</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.flowcentraltech.flowcentral</groupId>
-            <artifactId>flowcentral-organization</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.flowcentraltech.flowcentral</groupId>
-            <artifactId>flowcentral-workflow</artifactId>
             <version>${project.version}</version>
         </dependency>
 		<dependency>

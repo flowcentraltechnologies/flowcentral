@@ -42,10 +42,6 @@ public class CommonReportResourceController extends AbstractPageResourceControll
         super(Secured.FALSE);
     }
 
-    public void setReportProvider(ReportProvider reportProvider) {
-        this.reportProvider = reportProvider;
-    }
-
     @Override
     public void prepareExecution() throws UnifyException {
         setContentDisposition(getResourceName());

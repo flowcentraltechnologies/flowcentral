@@ -86,18 +86,6 @@ public class StudioMenuWriter extends AbstractPanelWriter {
                     StudioAppComponentType.REPORT_CONFIGURATION, StudioAppComponentType.TABLE,
                     StudioAppComponentType.FORM, StudioAppComponentType.WORKFLOW));
 
-    public final void setStudioModuleService(StudioModuleService studioModuleService) {
-        this.studioModuleService = studioModuleService;
-    }
-
-    public final void setAppletUtilities(AppletUtilities appletUtilities) {
-        this.appletUtilities = appletUtilities;
-    }
-
-    public final void setCodeGenerationProvider(CodeGenerationProvider codeGenerationProvider) {
-        this.codeGenerationProvider = codeGenerationProvider;
-    }
-
     @Override
     protected void doWriteBehavior(ResponseWriter writer, Widget widget, EventHandler[] handlers)
             throws UnifyException {

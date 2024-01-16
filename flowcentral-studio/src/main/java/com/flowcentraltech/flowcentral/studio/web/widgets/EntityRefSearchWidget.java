@@ -45,10 +45,6 @@ public class EntityRefSearchWidget extends EntitySearchWidget {
     @Configurable
     private ListManager listManager;
 
-    public void setListManager(ListManager listManager) {
-        this.listManager = listManager;
-    }
-
     public String getListkey() throws UnifyException {
         return "longName";
     }

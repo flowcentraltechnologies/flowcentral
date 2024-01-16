@@ -51,14 +51,6 @@ public class StudioLockResourceActionPolicy extends AbstractCollaborationFormAct
     @Configurable
     private RequestUserPhotoGenerator requestUserPhotoGenerator;
 
-    public void setSecurityModuleService(SecurityModuleService securityModuleService) {
-        this.securityModuleService = securityModuleService;
-    }
-
-    public void setRequestUserPhotoGenerator(RequestUserPhotoGenerator requestUserPhotoGenerator) {
-        this.requestUserPhotoGenerator = requestUserPhotoGenerator;
-    }
-
     @Override
     public boolean checkAppliesTo(Entity inst) throws UnifyException {
         final BaseApplicationEntity _appInst = (BaseApplicationEntity) inst;

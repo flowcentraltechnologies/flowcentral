@@ -62,10 +62,6 @@ public abstract class AbstractEntityListWidget extends AbstractFlowCentralPopupT
     @Configurable
     private AppletUtilities au;
 
-    public final void setAu(AppletUtilities au) {
-        this.au = au;
-    }
-
     @Override
     public ExtensionType getExtensionType() {
         return ExtensionType.FACADE_HIDDEN;

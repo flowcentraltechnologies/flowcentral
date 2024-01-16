@@ -47,10 +47,6 @@ public class EntityCSVTextWidget extends AbstractFlowCentralControl {
     @Configurable
     private AppletUtilities au;
 
-    public final void setAu(AppletUtilities au) {
-        this.au = au;
-    }
-
     @SuppressWarnings("unchecked")
     public final String getCommaSeparatedText() throws UnifyException {
         Object val = getValue();

@@ -72,14 +72,6 @@ public class SequenceCodeGeneratorImpl extends AbstractSequenceCodeGenerator {
             };
     }
 
-    public final void setSeqNumberService(SequenceNumberService seqNumberService) {
-        this.seqNumberService = seqNumberService;
-    }
-
-    public final void setSystemParameterProvider(SystemParameterProvider systemParameterProvider) {
-        this.systemParameterProvider = systemParameterProvider;
-    }
-
     @Override
     public String getCodeSkeleton(String sequenceDefintion) throws UnifyException {
         return resolveSessionMessage("$m{placeholder.generated}");

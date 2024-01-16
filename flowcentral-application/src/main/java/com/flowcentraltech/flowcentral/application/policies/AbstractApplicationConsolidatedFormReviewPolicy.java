@@ -47,14 +47,6 @@ public abstract class AbstractApplicationConsolidatedFormReviewPolicy extends Ab
     @Configurable
     private EnvironmentService environmentService;
 
-    public final void setEnvironmentService(EnvironmentService environmentService) {
-        this.environmentService = environmentService;
-    }
-
-    public final void setApplicationModuleService(ApplicationModuleService applicationModuleService) {
-        this.applicationModuleService = applicationModuleService;
-    }
-
     @Override
     public final List<TargetFormMessage> review(ValueStore instValueStore, FormReviewType reviewType) throws UnifyException {
         TargetFormMessages messages = new TargetFormMessages();

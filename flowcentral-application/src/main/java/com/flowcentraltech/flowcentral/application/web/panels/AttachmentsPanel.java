@@ -57,10 +57,6 @@ public class AttachmentsPanel extends AbstractFlowCentralPanel implements FormPa
     @Configurable
     private AppletUtilities appletUtilities;
 
-    public final void setAppletUtilities(AppletUtilities appletUtilities) {
-        this.appletUtilities = appletUtilities;
-    }
-
     @Action
     public void view() throws UnifyException {
         final int targetIndex = getRequestTarget(int.class);

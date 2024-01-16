@@ -41,10 +41,6 @@ public class StudioReportableLetterGeneratorListCommand
         super(LetterFormListingGenerator.class, StringParam.class);
     }
 
-    public final void setReportModuleService(ReportModuleService reportModuleService) {
-        this.reportModuleService = reportModuleService;
-    }
-
     @Override
     protected String getEntityName(StringParam param) throws UnifyException {
         if (param.isPresent()) {

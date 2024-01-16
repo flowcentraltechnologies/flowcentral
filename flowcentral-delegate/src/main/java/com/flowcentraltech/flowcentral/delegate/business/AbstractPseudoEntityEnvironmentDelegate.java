@@ -41,10 +41,6 @@ public abstract class AbstractPseudoEntityEnvironmentDelegate<T extends Entity> 
 
     @Configurable
     private EnvironmentService environmentService;
-    
-    public final void setEnvironmentService(EnvironmentService environmentService) {
-        this.environmentService = environmentService;
-    }
 
     @Override
     public String getDataSourceByEntityAlias(String entityLongName) throws UnifyException {

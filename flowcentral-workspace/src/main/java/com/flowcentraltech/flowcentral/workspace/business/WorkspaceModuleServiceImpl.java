@@ -78,14 +78,6 @@ public class WorkspaceModuleServiceImpl extends AbstractFlowCentralService
             };
     }
 
-    public void setApplicationModuleService(ApplicationModuleService applicationModuleService) {
-        this.applicationModuleService = applicationModuleService;
-    }
-
-    public void setAppPrivilegeManager(ApplicationPrivilegeManager appPrivilegeManager) {
-        this.appPrivilegeManager = appPrivilegeManager;
-    }
-
     @Override
     public List<String> findRoleWorkspaceCodes(String roleCode) throws UnifyException {
         List<String> privilegeCodes = appPrivilegeManager

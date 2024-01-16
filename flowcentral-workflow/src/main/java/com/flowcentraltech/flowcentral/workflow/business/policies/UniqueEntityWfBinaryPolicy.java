@@ -49,14 +49,6 @@ public class UniqueEntityWfBinaryPolicy extends AbstractWfBinaryPolicy {
     
     @Configurable
     private EnvironmentService environmentService;
-    
-    public void setApplicationModuleService(ApplicationModuleService applicationModuleService) {
-        this.applicationModuleService = applicationModuleService;
-    }
-
-    public void setEnvironmentService(EnvironmentService environmentService) {
-        this.environmentService = environmentService;
-    }
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override

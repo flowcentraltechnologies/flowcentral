@@ -35,10 +35,6 @@ public abstract class AbstractSecurityListCommand<T extends ListParam> extends A
         super(paramType);
     }
 
-    public void setSecurityModuleService(SecurityModuleService securityModuleService) {
-        this.securityModuleService = securityModuleService;
-    }
-
     protected SecurityModuleService getSecurityModuleService() {
         return securityModuleService;
     }

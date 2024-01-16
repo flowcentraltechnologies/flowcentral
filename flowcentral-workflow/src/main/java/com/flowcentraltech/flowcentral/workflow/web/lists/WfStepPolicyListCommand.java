@@ -46,10 +46,6 @@ public class WfStepPolicyListCommand extends AbstractFlowCentralListCommand<WfSt
         super(WfStepPolicyParams.class);
     }
 
-    public void setTypeListFactory(TypeListFactory typeListFactory) {
-        this.typeListFactory = typeListFactory;
-    }
-
     @Override
     public List<? extends Listable> execute(Locale locale, WfStepPolicyParams params) throws UnifyException {
         if (params.isPresent()) {

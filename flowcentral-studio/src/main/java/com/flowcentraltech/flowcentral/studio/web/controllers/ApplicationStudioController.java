@@ -73,18 +73,6 @@ public class ApplicationStudioController extends AbstractFlowCentralPageControll
         super(ApplicationStudioPageBean.class, Secured.TRUE, ReadOnly.FALSE, ResetOnWrite.FALSE);
     }
 
-    public final void setUserPhotoGenerator(LoginUserPhotoGenerator userPhotoGenerator) {
-        this.userPhotoGenerator = userPhotoGenerator;
-    }
-
-    public final void setUserLoginActivityProvider(UserLoginActivityProvider userLoginActivityProvider) {
-        this.userLoginActivityProvider = userLoginActivityProvider;
-    }
-
-    public final void setAppletUtilities(AppletUtilities appletUtilities) {
-        this.appletUtilities = appletUtilities;
-    }
-
     @Action
     @Override
     public String content() throws UnifyException {

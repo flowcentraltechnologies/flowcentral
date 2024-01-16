@@ -48,10 +48,6 @@ public class StudioAppTableAppletController
         super(StudioAppTableAppletPageBean.class, Secured.TRUE, ReadOnly.FALSE, ResetOnWrite.FALSE);
     }
 
-    public void setStudioModuleService(StudioModuleService studioModuleService) {
-        this.studioModuleService = studioModuleService;
-    }
-
     @Action
     public String designChildItem() throws UnifyException {
         StudioAppTableAppletPageBean pageBean = getPageBean();

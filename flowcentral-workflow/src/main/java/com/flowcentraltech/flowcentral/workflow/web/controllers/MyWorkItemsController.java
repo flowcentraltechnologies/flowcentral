@@ -61,10 +61,6 @@ public class MyWorkItemsController extends AbstractEntityFormAppletController<My
         super(MyWorkItemsPageBean.class, Secured.TRUE, ReadOnly.FALSE, ResetOnWrite.FALSE);
     }
 
-    public final void setWorkflowModuleService(WorkflowModuleService workflowModuleService) {
-        this.workflowModuleService = workflowModuleService;
-    }
-
     @Action
     public String refreshSlate() throws UnifyException {
         MyWorkItemsPageBean pageBean = getPageBean();

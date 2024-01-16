@@ -48,10 +48,6 @@ public class StudioWorkflowAppletController
         super(StudioWorkflowAppletPageBean.class, Secured.TRUE, ReadOnly.FALSE, ResetOnWrite.FALSE);
     }
 
-    public void setStudioModuleService(StudioModuleService studioModuleService) {
-        this.studioModuleService = studioModuleService;
-    }
-
     @Action
     public String designChildItem() throws UnifyException {
         StudioWorkflowAppletPageBean pageBean = getPageBean();

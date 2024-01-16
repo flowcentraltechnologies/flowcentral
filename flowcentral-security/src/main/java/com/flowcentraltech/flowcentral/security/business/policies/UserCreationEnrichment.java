@@ -49,14 +49,6 @@ public class UserCreationEnrichment extends AbstractWfEnrichmentPolicy {
     @Configurable("oneway-stringcryptograph")
     private OneWayStringCryptograph passwordCryptograph;
 
-    public void setSystemModuleService(SystemModuleService systemModuleService) {
-        this.systemModuleService = systemModuleService;
-    }
-
-    public void setPasswordCryptograph(OneWayStringCryptograph passwordCryptograph) {
-        this.passwordCryptograph = passwordCryptograph;
-    }
-
     @Override
     public void enrich(ValueStoreWriter wfItemWriter, ValueStoreReader wfItemReader, String rule)
             throws UnifyException {

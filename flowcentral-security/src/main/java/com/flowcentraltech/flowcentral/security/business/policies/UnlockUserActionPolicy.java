@@ -40,10 +40,6 @@ public class UnlockUserActionPolicy extends AbstractFormActionPolicy {
     @Configurable
     private SecurityModuleService securityModuleService;
 
-    public void setSecurityModuleService(SecurityModuleService securityModuleService) {
-        this.securityModuleService = securityModuleService;
-    }
-
     @Override
     public boolean checkAppliesTo(Entity inst) throws UnifyException {
         return true;

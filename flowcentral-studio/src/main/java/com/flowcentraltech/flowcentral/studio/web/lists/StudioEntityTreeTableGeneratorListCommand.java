@@ -41,10 +41,6 @@ public class StudioEntityTreeTableGeneratorListCommand
         super(EntityTreeSelectGenerator.class, LongParam.class);
     }
 
-    public final void setApplicationModuleService(ApplicationModuleService applicationModuleService) {
-        this.applicationModuleService = applicationModuleService;
-    }
-
     @Override
     protected String getEntityName(LongParam param) throws UnifyException {
         if (param.isPresent()) {

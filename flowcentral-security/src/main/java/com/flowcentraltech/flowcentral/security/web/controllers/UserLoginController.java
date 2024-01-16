@@ -80,18 +80,6 @@ public class UserLoginController extends AbstractApplicationForwarderController<
         super(UserLoginPageBean.class, Secured.FALSE, ReadOnly.FALSE, ResetOnWrite.FALSE);
     }
 
-    public void setSecurityModuleService(SecurityModuleService securityModuleService) {
-        this.securityModuleService = securityModuleService;
-    }
-
-    public void setLicenseProvider(LicenseProvider licenseProvider) {
-        this.licenseProvider = licenseProvider;
-    }
-
-    public void setWorkspacePrivilegeManager(WorkspacePrivilegeManager workspacePrivilegeManager) {
-        this.workspacePrivilegeManager = workspacePrivilegeManager;
-    }
-
     @Action
     public String login() throws UnifyException {
         UserLoginPageBean pageBean = getPageBean();

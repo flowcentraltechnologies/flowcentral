@@ -57,8 +57,4 @@ public class ParamValueDef {
         return DataUtils.convert(clazz, paramVal);
     }
 
-    @Override
-    public String toString() {
-        return "ParamValueDef [paramConfig=" + paramConfig + ", paramVal=" + paramVal + "]";
-    }
 }

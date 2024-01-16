@@ -51,10 +51,6 @@ public class FileAttachmentImageGeneratorImpl extends AbstractImageGenerator imp
 
     private byte[] photo;
 
-    public void setFileAttachmentProvider(FileAttachmentProvider fileAttachmentProvider) {
-        this.fileAttachmentProvider = fileAttachmentProvider;
-    }
-
     @Override
     public ImageFormat generate(OutputStream outputStream) throws UnifyException {
         try {

@@ -35,10 +35,6 @@ public abstract class AbstractStudioAppEntityFieldPolicy extends AbstractStudioA
     @Configurable
     private ReportModuleService reportModuleService;
 
-    public void setReportModuleService(ReportModuleService reportModuleService) {
-        this.reportModuleService = reportModuleService;
-    }
-
     @Override
     public boolean checkAppliesTo(Entity inst) throws UnifyException {
         return true;

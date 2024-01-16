@@ -71,14 +71,6 @@ public class EnvironmentServiceImpl extends AbstractBusinessService implements E
     @Configurable
     private EnvironmentDelegateRegistrar environmentDelegateRegistrar;
 
-    public final void setSuggestionProvider(SuggestionProvider suggestionProvider) {
-        this.suggestionProvider = suggestionProvider;
-    }
-
-    public final void setEnvironmentDelegateRegistrar(EnvironmentDelegateRegistrar environmentDelegateRegistrar) {
-        this.environmentDelegateRegistrar = environmentDelegateRegistrar;
-    }
-
     @Override
     public Database getDatabase() throws UnifyException {
         return db();

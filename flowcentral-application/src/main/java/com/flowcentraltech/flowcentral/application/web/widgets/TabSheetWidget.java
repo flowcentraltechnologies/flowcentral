@@ -47,10 +47,6 @@ public class TabSheetWidget extends AbstractFlowCentralValueListMultiControl<Val
 
     private Widget[] tabWidgets;
 
-    public final void setAppletUtilities(AppletUtilities appletUtilities) {
-        this.appletUtilities = appletUtilities;
-    }
-
     @Action
     public void choose() throws UnifyException {
         TabSheet tabSheet = getTabSheet();

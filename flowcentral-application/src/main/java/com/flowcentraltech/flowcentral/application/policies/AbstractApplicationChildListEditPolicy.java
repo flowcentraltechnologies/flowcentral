@@ -31,10 +31,6 @@ public abstract class AbstractApplicationChildListEditPolicy extends AbstractChi
     @Configurable
     private ApplicationModuleService applicationModuleService;
 
-    public final void setApplicationModuleService(ApplicationModuleService applicationModuleService) {
-        this.applicationModuleService = applicationModuleService;
-    }
-
     protected ApplicationModuleService application() {
         return applicationModuleService;
     }

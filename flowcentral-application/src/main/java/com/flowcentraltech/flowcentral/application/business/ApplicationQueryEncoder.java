@@ -52,18 +52,6 @@ public class ApplicationQueryEncoder extends AbstractFlowCentralComponent implem
     @Configurable
     private AppletUtilities appletUtilities;
 
-    public final void setApplicationModuleService(ApplicationModuleService applicationModuleService) {
-        this.applicationModuleService = applicationModuleService;
-    }
-
-    public final void setSpecialParamProvider(SpecialParamProvider specialParamProvider) {
-        this.specialParamProvider = specialParamProvider;
-    }
-
-    public final void setAppletUtilities(AppletUtilities appletUtilities) {
-        this.appletUtilities = appletUtilities;
-    }
-
     @Override
     public String encodeQueryFilter(Restriction restriction) throws UnifyException {
         return restriction != null && !restriction.isEmpty()

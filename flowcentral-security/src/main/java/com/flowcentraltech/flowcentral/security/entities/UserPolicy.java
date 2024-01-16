@@ -40,10 +40,6 @@ public class UserPolicy extends BaseStatusWorkEntityPolicy {
     @Configurable
     private SystemModuleService systemModuleService;
 
-    public void setSystemModuleService(SystemModuleService systemModuleService) {
-        this.systemModuleService = systemModuleService;
-    }
-
     @Override
     public Object preCreate(Entity record, Date now) throws UnifyException {
         User user = (User) record;

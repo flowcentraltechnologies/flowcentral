@@ -44,10 +44,6 @@ public abstract class AbstractApplicationListCommand<T extends ListParam> extend
         super(paramType);
     }
 
-    public final void setAu(AppletUtilities au) {
-        this.au = au;
-    }
-
     protected AppletUtilities au() {
         return au;
     }

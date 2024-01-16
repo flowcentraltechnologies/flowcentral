@@ -35,10 +35,6 @@ public abstract class AbstractIntegrationListCommand<T extends ListParam> extend
         super(paramType);
     }
 
-    public void setIntegrationModuleService(IntegrationModuleService integrationModuleService) {
-        this.integrationModuleService = integrationModuleService;
-    }
-
     protected IntegrationModuleService getIntegrationModuleService() {
         return integrationModuleService;
     }

@@ -26,5 +26,13 @@
 			<artifactId>activemq-client</artifactId>
 			<version>5.11.1</version>
 		</dependency>
+		<!-- Test dependencies -->
+		<dependency>
+			<groupId>com.flowcentraltech.flowcentral</groupId>
+			<artifactId>flowcentral-common</artifactId>
+			<version>${project.version}</version>
+			<type>test-jar</type>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 </project>

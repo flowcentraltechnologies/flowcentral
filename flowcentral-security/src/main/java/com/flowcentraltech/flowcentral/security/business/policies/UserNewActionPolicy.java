@@ -48,14 +48,6 @@ public class UserNewActionPolicy extends AbstractAppletActionPolicy {
     @Configurable("oneway-stringcryptograph")
     private OneWayStringCryptograph passwordCryptograph;
 
-    public void setSystemModuleService(SystemModuleService systemModuleService) {
-        this.systemModuleService = systemModuleService;
-    }
-
-    public void setPasswordCryptograph(OneWayStringCryptograph passwordCryptograph) {
-        this.passwordCryptograph = passwordCryptograph;
-    }
-
     @Override
     public boolean checkAppliesTo(Entity inst) throws UnifyException {
         return true;

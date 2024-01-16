@@ -58,14 +58,6 @@ public class ReportListingController extends AbstractPageController<ReportListin
         super(ReportListingPageBean.class, Secured.TRUE, ReadOnly.FALSE, ResetOnWrite.FALSE);
     }
 
-    public void setReportResourcePath(String reportResourcePath) {
-        this.reportResourcePath = reportResourcePath;
-    }
-
-    public void setReportModuleService(ReportModuleService reportModuleService) {
-        this.reportModuleService = reportModuleService;
-    }
-
     @Action
     public String prepareGenerateReport() throws UnifyException {
         String reportConfigName = getPageRequestContextUtil().getRequestTargetValue(String.class);

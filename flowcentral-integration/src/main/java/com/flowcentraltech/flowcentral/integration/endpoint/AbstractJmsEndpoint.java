@@ -17,8 +17,12 @@ package com.flowcentraltech.flowcentral.integration.endpoint;
 
 import javax.jms.Connection;
 import javax.jms.ConnectionFactory;
+import javax.jms.Destination;
 import javax.jms.JMSException;
+import javax.jms.MessageConsumer;
+import javax.jms.MessageProducer;
 import javax.jms.Session;
+import javax.jms.TextMessage;
 
 import com.flowcentraltech.flowcentral.integration.data.EndpointDef;
 import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
@@ -28,6 +32,7 @@ import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.Parameter;
 import com.tcdng.unify.core.annotation.Parameters;
 import com.tcdng.unify.core.data.AbstractPool;
+import com.tcdng.unify.core.data.FactoryMap;
 import com.tcdng.unify.core.util.StringUtils;
 
 /**
@@ -37,7 +42,8 @@ import com.tcdng.unify.core.util.StringUtils;
  * @since 1.0
  */
 @Parameters({ @Parameter(name = JmsEndpointConstants.CREDENTIAL_NAME, description = "$m{jmsendpoint.credential}",
-        editor = "!ui-select list:$s{credentiallist} listKey:$s{name} blankOption:$s{}", type = String.class) })
+        editor = "!ui-select list:$s{credentiallist} listKey:$s{name} blankOption:$s{}", type = String.class,
+        order = 32) })
 public abstract class AbstractJmsEndpoint extends AbstractEndpoint implements JmsEndpoint {
 
     @Configurable
@@ -46,35 +52,24 @@ public abstract class AbstractJmsEndpoint extends AbstractEndpoint implements Jm
     @Configurable("4000")
     private long getSessionTimeout;
 
-    @Configurable("8")
+    @Configurable("16")
     private int maxSessionPool;
 
     @Configurable("1")
     private int minSessionPool;
 
+    @Configurable("2000")
+    private int receiveTimeout;
+
     private ConnectionFactory connectionFactory;
 
     private Connection connection;
 
-    private SessionPool sessionPool;
+    private SessionPool producerSessionPool;
+
+    private SessionPool consumerSessionPool;
 
     private String credentialName;
-
-    public void setSystemModuleService(SystemModuleService systemModuleService) {
-        this.systemModuleService = systemModuleService;
-    }
-
-    public void setGetSessionTimeout(long getSessionTimeout) {
-        this.getSessionTimeout = getSessionTimeout;
-    }
-
-    public void setMaxSessionPool(int maxSessionPool) {
-        this.maxSessionPool = maxSessionPool;
-    }
-
-    public void setMinSessionPool(int minSessionPool) {
-        this.minSessionPool = minSessionPool;
-    }
 
     @Override
     public void setup(EndpointDef endpointDef) throws UnifyException {
@@ -84,25 +79,52 @@ public abstract class AbstractJmsEndpoint extends AbstractEndpoint implements Jm
     }
 
     @Override
-    public Session getSession() throws UnifyException {
-        return sessionPool.borrowObject();
+    public void sendMessage(String destination, String text) throws UnifyException {
+        SessionInst sessionInst = producerSessionPool.borrowObject();
+        try {
+            MessageProducer producer = sessionInst.getSession().createProducer(sessionInst.getDestination(destination));
+            TextMessage msg = sessionInst.getSession().createTextMessage(text);
+            producer.send(msg);
+        } catch (JMSException e) {
+            throwOperationErrorException(e);
+        } finally {
+            producerSessionPool.returnObject(sessionInst);
+        }
     }
 
     @Override
-    public void restoreSession(Session session) throws UnifyException {
-        sessionPool.returnObject(session);
+    public String receiveMessage(String source) throws UnifyException {
+        String text = null;
+        SessionInst sessionInst = consumerSessionPool.borrowObject();
+        try {
+            MessageConsumer consumer = sessionInst.getSession().createConsumer(sessionInst.getDestination(source));
+            TextMessage msg = (TextMessage) consumer.receive(receiveTimeout);
+            if (msg != null) {
+                text = msg.getText();
+            }
+        } catch (JMSException e) {
+            throwOperationErrorException(e);
+        } finally {
+            consumerSessionPool.returnObject(sessionInst);
+        }
+
+        return text;
     }
 
     @Override
     protected void onInitialize() throws UnifyException {
         super.onInitialize();
-        sessionPool = new SessionPool();
+        producerSessionPool = new SessionPool();
+        consumerSessionPool = new SessionPool();
     }
 
     @Override
     protected void onTerminate() throws UnifyException {
-        sessionPool.terminate();
-        sessionPool = null;
+        producerSessionPool.terminate();
+        producerSessionPool = null;
+
+        consumerSessionPool.terminate();
+        consumerSessionPool = null;
 
         if (connection != null) {
             try {
@@ -148,29 +170,58 @@ public abstract class AbstractJmsEndpoint extends AbstractEndpoint implements Jm
         return connectionFactory;
     }
 
-    private class SessionPool extends AbstractPool<Session> {
+    private class SessionPool extends AbstractPool<SessionInst> {
 
         public SessionPool() {
             super(getSessionTimeout, minSessionPool, maxSessionPool, false);
         }
 
         @Override
-        protected Session createObject(Object... params) throws Exception {
-            return getConnection().createSession(Session.AUTO_ACKNOWLEDGE);
+        protected SessionInst createObject(Object... params) throws Exception {
+            Session session = getConnection().createSession(Session.AUTO_ACKNOWLEDGE);
+            return new SessionInst(session);
         }
 
         @Override
-        protected void destroyObject(Session session) {
+        protected void destroyObject(SessionInst sessionInst) {
             try {
-                session.close();
+                sessionInst.getSession().close();
             } catch (JMSException e) {
                 logError(e);
             }
         }
 
         @Override
-        protected void onGetObject(Session session, Object... params) throws Exception {
+        protected void onGetObject(SessionInst sessionInst, Object... params) throws Exception {
 
+        }
+    }
+
+    private class SessionInst {
+
+        private final Session session;
+
+        private final FactoryMap<String, Destination> destinations;
+
+        public SessionInst(Session session) {
+            this.session = session;
+            this.destinations = new FactoryMap<String, Destination>()
+                {
+
+                    @Override
+                    protected Destination create(String queueName, Object... params) throws Exception {
+                        return session.createQueue(queueName);
+                    }
+
+                };
+        }
+
+        public Session getSession() {
+            return session;
+        }
+
+        public Destination getDestination(String queueName) throws UnifyException {
+            return destinations.get(queueName);
         }
     }
 }

@@ -36,4 +36,28 @@ public interface Endpoint extends FlowCentralComponent {
      *                        if end-point is already setup. if an error occurs
      */
     void setup(EndpointDef endpointDef) throws UnifyException;
+
+    /**
+     * Sends a message to a destination through endpoint.
+     * 
+     * @param destination
+     *                    the destination
+     * @param text
+     *                    the message
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    void sendMessage(String destination, String text) throws UnifyException;
+
+    /**
+     * Receives a message from a source through endpoint
+     * 
+     * @param source
+     *               the source
+     * @return the message if present otherwise null
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    String receiveMessage(String source) throws UnifyException;
+
 }

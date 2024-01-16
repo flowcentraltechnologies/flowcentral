@@ -49,14 +49,6 @@ public class WfChannelSubmissionController extends AbstractJsonObjectController 
     @Configurable
     private WorkflowModuleService workflowModuleService;
 
-    public final void setApplicationModuleService(ApplicationModuleService applicationModuleService) {
-        this.applicationModuleService = applicationModuleService;
-    }
-
-    public final void setWorkflowModuleService(WorkflowModuleService workflowModuleService) {
-        this.workflowModuleService = workflowModuleService;
-    }
-
     @Action
     public WfChannelSubmissionResult submit(WfChannelSubmission wfChannelSubmission) throws UnifyException {
         int errorCode = WfChannelErrorConstants.NO_ERROR;

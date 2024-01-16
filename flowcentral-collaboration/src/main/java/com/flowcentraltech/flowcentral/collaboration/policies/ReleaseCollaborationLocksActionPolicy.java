@@ -40,10 +40,6 @@ public class ReleaseCollaborationLocksActionPolicy extends AbstractEntityListAct
     @Configurable
     private CollaborationModuleService collaborationModuleService;
 
-    public void setCollaborationModuleService(CollaborationModuleService collaborationModuleService) {
-        this.collaborationModuleService = collaborationModuleService;
-    }
-
     @Override
     public EntityListActionResult executeAction(EntityListActionContext ctx) throws UnifyException {
         List<Long> idList = new ArrayList<Long>();

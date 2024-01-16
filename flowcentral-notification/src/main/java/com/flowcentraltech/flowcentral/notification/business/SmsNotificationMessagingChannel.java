@@ -44,10 +44,6 @@ public class SmsNotificationMessagingChannel extends AbstractNotificationMessagi
     @Configurable
     private SmsServer smsServer;
 
-    public void setSmsServer(SmsServer smsServer) {
-        this.smsServer = smsServer;
-    }
-
     @Override
     public boolean sendMessage(NotifChannelDef notifChannelDef, ChannelMessage channelMessage) {
         try {

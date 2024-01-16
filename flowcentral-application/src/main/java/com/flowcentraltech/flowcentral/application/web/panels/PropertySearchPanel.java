@@ -36,10 +36,6 @@ public class PropertySearchPanel extends AbstractFlowCentralPanel {
     @Configurable
     private ApplicationPrivilegeManager applicationPrivilegeManager;
 
-    public void setApplicationPrivilegeManager(ApplicationPrivilegeManager applicationPrivilegeManager) {
-        this.applicationPrivilegeManager = applicationPrivilegeManager;
-    }
-
     @Override
     public void switchState() throws UnifyException {
         super.switchState();

@@ -75,10 +75,6 @@ public class StudioEntityFieldDataTypeListCommand extends AbstractApplicationLis
             };
     }
 
-    public void setListManager(ListManager listManager) {
-        this.listManager = listManager;
-    }
-
     @Override
     public List<? extends Listable> execute(Locale locale, EntityFieldTypeParams params) throws UnifyException {
         if (params.isPresent()) {

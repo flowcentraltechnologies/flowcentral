@@ -49,10 +49,6 @@ public class StudioWfStepReceiveFromListCommand extends AbstractApplicationListC
         super(LongParam.class);
     }
 
-    public void setWorkflowModuleService(WorkflowModuleService workflowModuleService) {
-        this.workflowModuleService = workflowModuleService;
-    }
-
     @Override
     public List<? extends Listable> execute(Locale locale, LongParam longParam) throws UnifyException {
         if (longParam.isPresent()) {

@@ -36,10 +36,6 @@ public abstract class AbstractConsolidatedFormStatePolicy extends AbstractFlowCe
     @Configurable
     private EnvironmentService environmentService;
 
-    public final void setEnvironmentService(EnvironmentService environmentService) {
-        this.environmentService = environmentService;
-    }
-
     @Override
     public final TargetFormTabStates evaluateTabStates(ValueStoreReader reader, String trigger)
             throws UnifyException {

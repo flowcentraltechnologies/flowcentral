@@ -51,10 +51,6 @@ public class ExtensionModuleStaticFilesGenerationPageController
         super(ExtensionModuleStaticFilesGenerationPageBean.class, Secured.TRUE, ReadOnly.FALSE, ResetOnWrite.FALSE);
     }
 
-    public final void setSystemModuleService(SystemModuleService systemModuleService) {
-        this.systemModuleService = systemModuleService;
-    }
-
     @Action
     public String generateStaticFiles() throws UnifyException {
         ExtensionModuleStaticFilesGenerationPageBean pageBean = getPageBean();

@@ -42,10 +42,6 @@ public class TaskExecutionAppletController extends AbstractAppletController<Task
         super(TaskExecutionPageBean.class, Secured.TRUE, ReadOnly.FALSE, ResetOnWrite.FALSE);
     }
 
-    public void setTaskManager(TaskManager taskManager) {
-        this.taskManager = taskManager;
-    }
-
     @Override
     protected void onOpenPage() throws UnifyException {
         super.onOpenPage();

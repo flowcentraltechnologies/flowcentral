@@ -35,10 +35,6 @@ public abstract class AbstractWorkspaceListCommand<T extends ListParam> extends 
         super(paramType);
     }
 
-    public void setWorkspaceModuleService(WorkspaceModuleService workspaceModuleService) {
-        this.workspaceModuleService = workspaceModuleService;
-    }
-
     protected WorkspaceModuleService getWorkspaceModuleService() {
         return workspaceModuleService;
     }

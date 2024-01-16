@@ -45,10 +45,6 @@ public class EnvironmentDelegateUtilitiesImpl extends AbstractEnvironmentDelegat
     @Configurable
     private QueryEncoder queryEncoder;
 
-    public final void setQueryEncoder(QueryEncoder queryEncoder) {
-        this.queryEncoder = queryEncoder;
-    }
-
     @Override
     public Long encodeDelegateObjectId(Object id) throws UnifyException {
         return (Long) id;

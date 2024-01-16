@@ -56,18 +56,6 @@ public class StudioDashboardAppletController
         super(StudioDashboardAppletPageBean.class, Secured.TRUE, ReadOnly.FALSE, ResetOnWrite.FALSE);
     }
 
-    public final void setStudioModuleService(StudioModuleService studioModuleService) {
-        this.studioModuleService = studioModuleService;
-    }
-
-    public final void setDashboardModuleService(DashboardModuleService dashboardModuleService) {
-        this.dashboardModuleService = dashboardModuleService;
-    }
-
-    public final void setChartModuleService(ChartModuleService chartModuleService) {
-        this.chartModuleService = chartModuleService;
-    }
-
     @Action
     public String designChildItem() throws UnifyException {
         StudioDashboardAppletPageBean pageBean = getPageBean();

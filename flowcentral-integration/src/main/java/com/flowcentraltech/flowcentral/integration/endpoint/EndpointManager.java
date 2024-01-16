@@ -16,6 +16,7 @@
 package com.flowcentraltech.flowcentral.integration.endpoint;
 
 import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
+import com.flowcentraltech.flowcentral.integration.data.EndpointDef;
 import com.tcdng.unify.core.UnifyException;
 
 /**
@@ -25,6 +26,17 @@ import com.tcdng.unify.core.UnifyException;
  * @since 1.0
  */
 public interface EndpointManager extends FlowCentralComponent {
+
+    /**
+     * Get an end-point using supplied name.
+     * 
+     * @param endpointConfigName
+     *                           the end-point configuration name
+     * @return the end-point
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    EndpointDef getEndpointDef(String endpointConfigName) throws UnifyException;
 
     /**
      * Gets managed instance of an end-point.

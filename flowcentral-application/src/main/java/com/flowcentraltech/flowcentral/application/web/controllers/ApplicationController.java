@@ -90,18 +90,6 @@ public class ApplicationController extends AbstractApplicationForwarderControlle
         super(ApplicationPageBean.class, Secured.TRUE, ReadOnly.FALSE, ResetOnWrite.FALSE);
     }
 
-    public void setWkspPrivilegeManager(WorkspacePrivilegeManager wkspPrivilegeManager) {
-        this.wkspPrivilegeManager = wkspPrivilegeManager;
-    }
-
-    public void setUserLoginActivityProvider(UserLoginActivityProvider userLoginActivityProvider) {
-        this.userLoginActivityProvider = userLoginActivityProvider;
-    }
-
-    public void setLicenseProvider(LicenseProvider licenseProvider) {
-        this.licenseProvider = licenseProvider;
-    }
-
     @Action
     @Override
     public String content() throws UnifyException {

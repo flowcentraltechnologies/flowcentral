@@ -67,10 +67,6 @@ public class StudioTabContentTypeListCommand extends AbstractApplicationListComm
             };
     }
 
-    public void setListManager(ListManager listManager) {
-        this.listManager = listManager;
-    }
-
     @Override
     public List<? extends Listable> execute(Locale locale, ZeroParams zeroParams) throws UnifyException {
         return listFactory.get(locale);

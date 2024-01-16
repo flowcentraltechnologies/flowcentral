@@ -48,10 +48,6 @@ public class StudioReportConfigurationAppletController extends
         super(StudioReportConfigurationAppletPageBean.class, Secured.TRUE, ReadOnly.FALSE, ResetOnWrite.FALSE);
     }
 
-    public void setStudioModuleService(StudioModuleService studioModuleService) {
-        this.studioModuleService = studioModuleService;
-    }
-
     @Action
     public String designChildItem() throws UnifyException {
         StudioReportConfigurationAppletPageBean pageBean = getPageBean();

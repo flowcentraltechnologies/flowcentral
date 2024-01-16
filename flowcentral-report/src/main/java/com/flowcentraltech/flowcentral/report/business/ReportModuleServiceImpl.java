@@ -127,18 +127,6 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
     @Configurable
     private ReportServer reportServer;
 
-    public void setThemeManager(ThemeManager themeManager) {
-        this.themeManager = themeManager;
-    }
-
-    public final void setReportServer(ReportServer reportServer) {
-        this.reportServer = reportServer;
-    }
-
-    public final void setAppletUtilities(AppletUtilities appletUtilities) {
-        this.appletUtilities = appletUtilities;
-    }
-
     @Override
     public List<ReportGroup> findReportGroupsByRole(String roleCode) throws UnifyException {
         if (StringUtils.isBlank(roleCode)) {

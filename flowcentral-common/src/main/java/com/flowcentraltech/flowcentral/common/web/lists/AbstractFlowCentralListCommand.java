@@ -38,10 +38,6 @@ public abstract class AbstractFlowCentralListCommand<T extends ListParam> extend
         super(paramType);
     }
 
-    public final void setEnvironmentService(EnvironmentService environmentService) {
-        this.environmentService = environmentService;
-    }
-
     protected final boolean isEnterprise() throws UnifyException {
         return FlowCentralEditionConstants.ENTERPRISE.equalsIgnoreCase(getContainerSetting(String.class,
                 FlowCentralContainerPropertyConstants.FLOWCENTRAL_INSTALLATION_TYPE));

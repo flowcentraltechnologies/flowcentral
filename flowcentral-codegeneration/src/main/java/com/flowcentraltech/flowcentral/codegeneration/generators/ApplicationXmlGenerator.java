@@ -151,10 +151,6 @@ public class ApplicationXmlGenerator extends AbstractStaticArtifactGenerator {
         super("src/main/resources/apps/");
     }
 
-    public final void setApplicationModuleService(ApplicationModuleService applicationModuleService) {
-        this.applicationModuleService = applicationModuleService;
-    }
-
     @Override
     protected void doGenerate(ExtensionModuleStaticFileBuilderContext ctx, String applicationName, ZipOutputStream zos)
             throws UnifyException {

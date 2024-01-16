@@ -51,10 +51,6 @@ public abstract class AbstractApplicationForwarderController<T extends AbstractF
         super(pageBeanClass, secured, readOnly, resetOnWrite);
     }
 
-    public final void setAppletUtilities(AppletUtilities appletUtilities) {
-        this.appletUtilities = appletUtilities;
-    }
-
     protected final String forwardToApplication(UserRoleInfo userRoleInfo) throws UnifyException {
         UserToken userToken = getUserToken();
         if (userRoleInfo != null) {

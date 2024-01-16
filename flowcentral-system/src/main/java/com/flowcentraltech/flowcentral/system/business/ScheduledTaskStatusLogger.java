@@ -36,10 +36,6 @@ public class ScheduledTaskStatusLogger extends AbstractTaskStatusLogger {
     @Configurable
     private SystemModuleService systemService;
 
-    public void setSystemService(SystemModuleService systemService) {
-        this.systemService = systemService;
-    }
-
     @Override
     public void logTaskStatus(TaskMonitor taskMonitor, Map<String, Object> parameters) {
         if (taskMonitor.isDone()) {

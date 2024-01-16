@@ -57,10 +57,6 @@ public abstract class AbstractAppletController<T extends AbstractAppletPageBean<
         super(pageBeanClass, secured, readOnly, resetOnWrite);
     }
 
-    public final void setAppletUtilities(AppletUtilities appletUtilities) {
-        this.appletUtilities = appletUtilities;
-    }
-
     protected final AppletUtilities au() {
         return appletUtilities;
     }

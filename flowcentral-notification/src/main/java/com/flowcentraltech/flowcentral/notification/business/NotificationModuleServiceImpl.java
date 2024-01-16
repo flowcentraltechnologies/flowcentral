@@ -208,18 +208,6 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
             };
     }
 
-    public final void setAu(AppletUtilities au) {
-        this.au = au;
-    }
-
-    public final void setFileAttachmentProvider(FileAttachmentProvider fileAttachmentProvider) {
-        this.fileAttachmentProvider = fileAttachmentProvider;
-    }
-
-    public final void setTwoWayStringCryptograph(TwoWayStringCryptograph twoWayStringCryptograph) {
-        this.twoWayStringCryptograph = twoWayStringCryptograph;
-    }
-
     private static final Class<?>[] NOTIF_TEMPLATE_WRAPPER_PARAMS_0 = { NotifTemplateDef.class };
 
     private static final Class<?>[] NOTIF_LARGETEXT_WRAPPER_PARAMS_0 = { NotifLargeTextDef.class };

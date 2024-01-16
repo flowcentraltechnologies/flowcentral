@@ -44,10 +44,6 @@ public class WorkEntityFileAttachmentsHandler extends AbstractFileAttachmentHand
     @Configurable
     private FileAttachmentProvider fileAttachmentProvider;
 
-    public void setFileAttachmentProvider(FileAttachmentProvider fileAttachmentProvider) {
-        this.fileAttachmentProvider = fileAttachmentProvider;
-    }
-
     @Override
     public void fillAttachFileNames(Object parentId, List<FileAttachmentInfo> attachmentInfoList)
             throws UnifyException {

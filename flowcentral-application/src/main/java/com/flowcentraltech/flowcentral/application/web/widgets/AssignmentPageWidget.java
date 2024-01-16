@@ -37,10 +37,6 @@ public class AssignmentPageWidget extends AbstractFlowCentralMultiControl {
     @Configurable
     private ApplicationModuleService applicationModuleService;
 
-    public void setApplicationModuleService(ApplicationModuleService applicationModuleService) {
-        this.applicationModuleService = applicationModuleService;
-    }
-
     private AssignmentPageDef oldAssignmentPageDef;
 
     private Control assignmentBoxCtrl;

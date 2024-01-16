@@ -36,14 +36,6 @@ public abstract class AbstractEntityActionPolicy extends AbstractFlowCentralComp
     @Configurable
     private EnvironmentService environment;
 
-    public final void setApplicationPrivilegeManager(ApplicationPrivilegeManager applicationPrivilegeManager) {
-        this.applicationPrivilegeManager = applicationPrivilegeManager;
-    }
-
-    public final void setEnvironment(EnvironmentService environment) {
-        this.environment = environment;
-    }
-
     @Override
     public final EntityActionResult executePreAction(EntityActionContext ctx) throws UnifyException {
         if (checkAppliesTo(ctx.getInst())) {

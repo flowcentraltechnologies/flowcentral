@@ -40,10 +40,6 @@ public abstract class AbstractStudioEditorPagePanel extends AbstractFlowCentralP
     @Configurable
     private CollaborationProvider collaborationProvider;
 
-    public void setCollaborationProvider(CollaborationProvider collaborationProvider) {
-        this.collaborationProvider = collaborationProvider;
-    }
-
     @Override
     public void switchState() throws UnifyException {
         super.switchState();

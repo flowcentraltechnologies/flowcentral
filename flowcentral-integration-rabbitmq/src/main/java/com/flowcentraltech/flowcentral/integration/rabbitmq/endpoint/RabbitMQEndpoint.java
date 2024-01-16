@@ -36,17 +36,13 @@ import com.tcdng.unify.core.util.StringUtils;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@Component(name = "rabbitmq-endpoint", description = "$m{endpoint.rabbitmq}")
+@Component(name = RabbitMQEndpointConstants.COMPONENT_NAME, description = "$m{endpoint.rabbitmq}")
 @Parameters({
         @Parameter(name = RabbitMQEndpointConstants.HOSTNAME, description = "$m{rabbitmqendpoint.hostname}",
                 editor = "!ui-text size:32", mandatory = true),
         @Parameter(name = RabbitMQEndpointConstants.PORT, description = "$m{rabbitmqendpoint.port}",
                 editor = "!ui-integer precision:5", type = Integer.class, mandatory = true),
         @Parameter(name = RabbitMQEndpointConstants.VIRTUAL_HOST, description = "$m{rabbitmqendpoint.virtualhost}",
-                editor = "!ui-text size:32"),
-        @Parameter(name = RabbitMQEndpointConstants.USERNAME, description = "$m{rabbitmqendpoint.username}",
-                editor = "!ui-text size:32"),
-        @Parameter(name = RabbitMQEndpointConstants.PASSWORD, description = "$m{rabbitmqendpoint.password}",
                 editor = "!ui-text size:32") })
 public class RabbitMQEndpoint extends AbstractJmsEndpoint {
 
@@ -56,31 +52,17 @@ public class RabbitMQEndpoint extends AbstractJmsEndpoint {
 
     private String virtualHost;
 
-    private String userName;
-
-    private String password;
-
     @Override
     protected void doSetup(EndpointDef endpointDef) throws UnifyException {
         Map<String, Object> parameters = endpointDef.getEndpointParamsDef().getValueMap();
         port = (Integer) parameters.get(RabbitMQEndpointConstants.PORT);
         hostName = (String) parameters.get(RabbitMQEndpointConstants.HOSTNAME);
         virtualHost = (String) parameters.get(RabbitMQEndpointConstants.VIRTUAL_HOST);
-        userName = (String) parameters.get(RabbitMQEndpointConstants.USERNAME);
-        password = (String) parameters.get(RabbitMQEndpointConstants.PASSWORD);
     }
 
     @Override
     protected ConnectionFactory doGetConnectionFactory() throws UnifyException {
         RMQConnectionFactory factory = new RMQConnectionFactory();
-        if (!StringUtils.isBlank(userName)) {
-            factory.setUsername(userName);
-        }
-
-        if (!StringUtils.isBlank(password)) {
-            factory.setPassword(password);
-        }
-
         if (!StringUtils.isBlank(virtualHost)) {
             factory.setVirtualHost(virtualHost);
         }

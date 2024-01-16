@@ -62,10 +62,6 @@ public class ReportsXmlGenerator extends AbstractStaticArtifactGenerator {
         super("src/main/resources/apps/report/");
     }
 
-    public void setReportModuleService(ReportModuleService reportModuleService) {
-        this.reportModuleService = reportModuleService;
-    }
-
     @Override
     protected void doGenerate(ExtensionModuleStaticFileBuilderContext ctx, String applicationName, ZipOutputStream zos)
             throws UnifyException {

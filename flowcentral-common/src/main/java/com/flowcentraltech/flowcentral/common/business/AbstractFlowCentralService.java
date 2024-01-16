@@ -39,10 +39,6 @@ public abstract class AbstractFlowCentralService extends AbstractBusinessService
     @Configurable
     private EnvironmentService environmentService;
 
-    public void setEnvironmentService(EnvironmentService environmentService) {
-        this.environmentService = environmentService;
-    }
-
     @Override
     public final void installFeatures(List<ModuleInstall> moduleInstallList) throws UnifyException {
         for (ModuleInstall moduleInstall : moduleInstallList) {

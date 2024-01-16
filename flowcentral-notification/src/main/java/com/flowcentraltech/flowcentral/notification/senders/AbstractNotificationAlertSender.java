@@ -56,14 +56,6 @@ public abstract class AbstractNotificationAlertSender extends AbstractFlowCentra
     @Configurable
     private AppletUtilities appletUtilities;
 
-    public final void setNotificationModuleService(NotificationModuleService notificationModuleService) {
-        this.notificationModuleService = notificationModuleService;
-    }
-
-    public final void setAppletUtilities(AppletUtilities appletUtilities) {
-        this.appletUtilities = appletUtilities;
-    }
-
     @Override
     protected void onInitialize() throws UnifyException {
 
