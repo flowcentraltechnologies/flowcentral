@@ -36,10 +36,6 @@ public class SystemDownloadPathLogger extends AbstractDownloadPathLogger {
     @Configurable
     private SystemModuleService systemService;
 
-    public void setSystemService(SystemModuleService systemService) {
-        this.systemService = systemService;
-    }
-
     @Override
     public void logDownloadAttempt(String resourceName) throws UnifyException {
         if (systemService.getSysParameterValue(boolean.class,

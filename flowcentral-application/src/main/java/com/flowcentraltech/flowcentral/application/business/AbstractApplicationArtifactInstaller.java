@@ -45,18 +45,6 @@ public abstract class AbstractApplicationArtifactInstaller extends AbstractFlowC
     @Configurable
     private EnvironmentService environmentService;
 
-    public void setApplicationPrivilegeManager(ApplicationPrivilegeManager applicationPrivilegeManager) {
-        this.applicationPrivilegeManager = applicationPrivilegeManager;
-    }
-
-    public void setConfigurationLoader(ConfigurationLoader configurationLoader) {
-        this.configurationLoader = configurationLoader;
-    }
-
-    public void setEnvironmentService(EnvironmentService environmentService) {
-        this.environmentService = environmentService;
-    }
-
     @Override
     public int deleteApplicationArtifacts(TaskMonitor taskMonitor, Long applicationId) throws UnifyException {
         int deletion = 0;

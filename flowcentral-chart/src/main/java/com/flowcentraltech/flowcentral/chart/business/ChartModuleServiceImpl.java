@@ -167,10 +167,6 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
 
     }
 
-    public final void setAppletUtilities(AppletUtilities appletUtilities) {
-        this.appletUtilities = appletUtilities;
-    }
-
     @Override
     public List<Chart> findCharts(ChartQuery query) throws UnifyException {
         return environment().listAll(query);

@@ -60,10 +60,6 @@ public class EntityTextSelectWidget extends AbstractFlowCentralPopupTextField {
     @Configurable
     private AppletUtilities appletUtilities;
 
-    public void setAppletUtilities(AppletUtilities appletUtilities) {
-        this.appletUtilities = appletUtilities;
-    }
-
     @Action
     public final void search() throws UnifyException {
         RefDef refDef = getRefDef();

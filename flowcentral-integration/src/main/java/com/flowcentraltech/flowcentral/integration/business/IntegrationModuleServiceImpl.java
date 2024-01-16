@@ -49,10 +49,6 @@ public class IntegrationModuleServiceImpl extends AbstractFlowCentralService imp
         this.endpointReaderMonitors = new HashMap<String, TaskMonitor>();
     }
 
-    public final void setEndpointManager(EndpointManager endpointManager) {
-        this.endpointManager = endpointManager;
-    }
-
     @Override
     public void sendMessage(String endpointConfigName, String destination, String text) throws UnifyException {
         Endpoint endpoint = endpointManager.getEndpoint(endpointConfigName);

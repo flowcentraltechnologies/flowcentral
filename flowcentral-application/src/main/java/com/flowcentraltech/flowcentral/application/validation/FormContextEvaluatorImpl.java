@@ -80,10 +80,6 @@ public class FormContextEvaluatorImpl extends AbstractFlowCentralComponent imple
         widgetValidatorMap = Collections.unmodifiableMap(map);
     }
 
-    public void setEnvironmentService(EnvironmentService environmentService) {
-        this.environmentService = environmentService;
-    }
-
     @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
     public void evaluateFormContext(final FormContext ctx, final EvaluationMode evaluationMode) throws UnifyException {

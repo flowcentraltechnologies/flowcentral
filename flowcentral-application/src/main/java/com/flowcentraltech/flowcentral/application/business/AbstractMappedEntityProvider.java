@@ -64,10 +64,6 @@ public abstract class AbstractMappedEntityProvider<U extends BaseMappedEntityPro
         this.queryFieldMap = Collections.unmodifiableMap(new HashMap<String, String>(queryFieldMap));
     }
 
-    public final void setAu(AppletUtilities au) {
-        this.au = au;
-    }
-
     @Override
     public String destEntity() {
         return destEntityName;

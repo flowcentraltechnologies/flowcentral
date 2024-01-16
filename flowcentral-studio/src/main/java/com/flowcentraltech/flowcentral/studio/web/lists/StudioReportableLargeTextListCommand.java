@@ -48,14 +48,6 @@ public class StudioReportableLargeTextListCommand extends AbstractFlowCentralLis
         super(StringParam.class);
     }
 
-    public final void setNotificationModuleService(NotificationModuleService notificationModuleService) {
-        this.notificationModuleService = notificationModuleService;
-    }
-
-    public final void setReportModuleService(ReportModuleService reportModuleService) {
-        this.reportModuleService = reportModuleService;
-    }
-
     @Override
     public List<? extends Listable> execute(Locale locale, StringParam params) throws UnifyException {
         if (params.isPresent()) {

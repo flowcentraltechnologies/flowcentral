@@ -47,10 +47,6 @@ public class StudioAppComponentAppletController
         super(StudioAppComponentAppletPageBean.class, Secured.TRUE, ReadOnly.FALSE, ResetOnWrite.FALSE);
     }
 
-    public void setStudioModuleService(StudioModuleService studioModuleService) {
-        this.studioModuleService = studioModuleService;
-    }
-
     @Override
     protected void onOpenPage() throws UnifyException {
         super.onOpenPage();

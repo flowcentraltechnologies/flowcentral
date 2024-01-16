@@ -50,10 +50,6 @@ public abstract class AbstractApplicationPanel extends AbstractFlowCentralPanel 
     @Configurable
     private AppletUtilities appletUtilities;
 
-    public final void setAppletUtilities(AppletUtilities appletUtilities) {
-        this.appletUtilities = appletUtilities;
-    }
-
     protected final TaskLauncher taskLauncher() {
         return appletUtilities.taskLauncher();
     }

@@ -62,10 +62,6 @@ public class FlowCentralCommonUtilitiesController
         super(FlowCentralCommonUtilitiesPageBean.class);
     }
 
-    public void setCollaborationProvider(CollaborationProvider collaborationProvider) {
-        this.collaborationProvider = collaborationProvider;
-    }
-
     @Action
     public String showLockedResource() throws UnifyException {
         CollaborationLockedResourceInfo collaborationLockedResourceInfo = (CollaborationLockedResourceInfo) removeSessionAttribute(

@@ -57,18 +57,6 @@ public class RoleDashboardsListCommand extends AbstractDashboardListCommand<Zero
         super(ZeroParams.class);
     }
 
-    public void setAppPrivilegeManager(ApplicationPrivilegeManager appPrivilegeManager) {
-        this.appPrivilegeManager = appPrivilegeManager;
-    }
-
-    public void setWkspPrivilegeManager(WorkspacePrivilegeManager wkspPrivilegeManager) {
-        this.wkspPrivilegeManager = wkspPrivilegeManager;
-    }
-
-    public void setLicenseProvider(LicenseProvider licenseProvider) {
-        this.licenseProvider = licenseProvider;
-    }
-
     @Override
     public List<? extends Listable> execute(Locale locale, ZeroParams params) throws UnifyException {
         final String workspaceCode = (String) getSessionAttribute(FlowCentralSessionAttributeConstants.WORKSPACE_CODE);

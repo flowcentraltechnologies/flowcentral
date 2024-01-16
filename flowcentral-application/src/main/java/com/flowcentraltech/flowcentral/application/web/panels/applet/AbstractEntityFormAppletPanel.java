@@ -93,14 +93,6 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
 
     private String tabMemoryId;
 
-    public final void setApplicationPrivilegeManager(ApplicationPrivilegeManager applicationPrivilegeManager) {
-        this.applicationPrivilegeManager = applicationPrivilegeManager;
-    }
-
-    public final void setFileAttachmentProvider(FileAttachmentProvider fileAttachmentProvider) {
-        this.fileAttachmentProvider = fileAttachmentProvider;
-    }
-
     @Override
     public void onPageConstruct() throws UnifyException {
         super.onPageConstruct();

@@ -81,10 +81,6 @@ public class AuditModuleServiceImpl extends AbstractFlowCentralService implement
             };
     }
 
-    public final void setAppletUtilities(AppletUtilities appletUtilities) {
-        this.appletUtilities = appletUtilities;
-    }
-
     @Override
     public EntityAuditConfigDef getEntityAuditConfigDef(String name) throws UnifyException {
         return entityAuditConfigDefFactoryMap.get(name);

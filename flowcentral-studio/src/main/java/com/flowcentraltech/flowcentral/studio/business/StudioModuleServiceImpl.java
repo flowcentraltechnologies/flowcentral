@@ -195,10 +195,6 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
             };
     }
 
-    public final void setAppletUtilities(AppletUtilities appletUtilities) {
-        this.appletUtilities = appletUtilities;
-    }
-
     @Override
     public boolean isInstallDefaultDeveloperRoles() throws UnifyException {
         return getContainerSetting(boolean.class,

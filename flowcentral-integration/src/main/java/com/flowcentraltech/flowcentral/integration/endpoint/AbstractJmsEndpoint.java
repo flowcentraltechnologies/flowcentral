@@ -71,26 +71,6 @@ public abstract class AbstractJmsEndpoint extends AbstractEndpoint implements Jm
 
     private String credentialName;
 
-    public final void setSystemModuleService(SystemModuleService systemModuleService) {
-        this.systemModuleService = systemModuleService;
-    }
-
-    public final void setGetSessionTimeout(long getSessionTimeout) {
-        this.getSessionTimeout = getSessionTimeout;
-    }
-
-    public final void setMaxSessionPool(int maxSessionPool) {
-        this.maxSessionPool = maxSessionPool;
-    }
-
-    public final void setMinSessionPool(int minSessionPool) {
-        this.minSessionPool = minSessionPool;
-    }
-
-    public final void setReceiveTimeout(int receiveTimeout) {
-        this.receiveTimeout = receiveTimeout;
-    }
-
     @Override
     public void setup(EndpointDef endpointDef) throws UnifyException {
         credentialName = (String) endpointDef.getEndpointParamsDef().getValueMap()

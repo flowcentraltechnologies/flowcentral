@@ -43,10 +43,6 @@ public class ConfiguredReportResourceController extends AbstractPageResourceCont
         super(Secured.TRUE);
     }
 
-    public void setReportModuleService(ReportModuleService reportModuleService) {
-        this.reportModuleService = reportModuleService;
-    }
-
     @Override
     public void prepareExecution() throws UnifyException {
         setContentDisposition(getResourceName());

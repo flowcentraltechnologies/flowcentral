@@ -85,14 +85,6 @@ public abstract class AbstractEnvironmentDelegate extends AbstractFlowCentralCom
         return false;
     }
 
-    public final void setAu(AppletUtilities au) {
-        this.au = au;
-    }
-
-    public final void setDataSourceEntityListProvider(DataSourceEntityListProvider dataSourceEntityListProvider) {
-        this.dataSourceEntityListProvider = dataSourceEntityListProvider;
-    }
-
     protected abstract DelegateEntityListingDTO getDelegatedEntityList() throws UnifyException;
 
     protected abstract EntityDTO getDelegatedEntitySchema(String entity) throws UnifyException;

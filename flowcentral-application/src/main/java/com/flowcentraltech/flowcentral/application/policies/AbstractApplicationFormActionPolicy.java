@@ -34,10 +34,6 @@ public abstract class AbstractApplicationFormActionPolicy extends AbstractFormAc
     @Configurable
     private AppletUtilities appletUtilities;
 
-    public final void setAppletUtilities(AppletUtilities appletUtilities) {
-        this.appletUtilities = appletUtilities;
-    }
-
     @Override
     public boolean checkAppliesTo(Entity inst) throws UnifyException {
         return true;

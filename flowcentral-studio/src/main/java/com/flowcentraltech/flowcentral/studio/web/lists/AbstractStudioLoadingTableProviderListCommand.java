@@ -42,10 +42,6 @@ public abstract class AbstractStudioLoadingTableProviderListCommand
         this.componentEntityName = componentEntityName;
     }
 
-    public final void setApplicationModuleService(ApplicationModuleService applicationModuleService) {
-        this.applicationModuleService = applicationModuleService;
-    }
-
     @Override
     protected String getEntityName(LongParam param) throws UnifyException {
         return applicationModuleService.getAppComponentEntity(componentEntityName, param.getValue());

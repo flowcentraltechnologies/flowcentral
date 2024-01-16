@@ -50,10 +50,6 @@ public class ReportEditorWidget extends AbstractFlowCentralMultiControl {
 
     private String design;
 
-    public void setJsonObjectStreamer(JsonObjectStreamer jsonObjectStreamer) {
-        this.jsonObjectStreamer = jsonObjectStreamer;
-    }
-
     @Override
     protected void doOnPageConstruct() throws UnifyException {
         valueCtrl = (Control) addInternalChildWidget("!ui-hidden binding:design");

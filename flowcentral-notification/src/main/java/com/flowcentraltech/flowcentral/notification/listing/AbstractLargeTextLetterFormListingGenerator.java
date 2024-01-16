@@ -43,10 +43,6 @@ public abstract class AbstractLargeTextLetterFormListingGenerator extends Abstra
 
     private static final int DEFAULT_FONTSIZE_IN_PIXELS = 12;
 
-    public final void setNotificationModuleService(NotificationModuleService notificationModuleService) {
-        this.notificationModuleService = notificationModuleService;
-    }
-
     protected final <T extends NotifLargeTextWrapper> T getLargeTextWrapper(Class<T> wrapperType)
             throws UnifyException {
         return notificationModuleService.wrapperOfNotifLargeText(wrapperType);

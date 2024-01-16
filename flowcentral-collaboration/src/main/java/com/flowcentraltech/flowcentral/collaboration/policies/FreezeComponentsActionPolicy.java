@@ -39,10 +39,6 @@ public class FreezeComponentsActionPolicy extends AbstractEntityListActionPolicy
     @Configurable
     private CollaborationModuleService collaborationModuleService;
 
-    public void setCollaborationModuleService(CollaborationModuleService collaborationModuleService) {
-        this.collaborationModuleService = collaborationModuleService;
-    }
-
     @SuppressWarnings("unchecked")
 	@Override
     public EntityListActionResult executeAction(EntityListActionContext ctx) throws UnifyException {

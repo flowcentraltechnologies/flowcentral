@@ -33,10 +33,6 @@ public abstract class AbstractApplicationAppletActionPolicy extends AbstractAppl
     @Configurable
     private ApplicationModuleService applicationModuleService;
 
-    public final void setApplicationModuleService(ApplicationModuleService applicationModuleService) {
-        this.applicationModuleService = applicationModuleService;
-    }
-
     @Override
     public boolean checkAppliesTo(Entity inst) throws UnifyException {
         return true;

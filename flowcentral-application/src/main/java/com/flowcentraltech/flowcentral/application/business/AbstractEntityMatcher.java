@@ -32,10 +32,6 @@ public abstract class AbstractEntityMatcher extends AbstractFlowCentralComponent
     
     @Configurable
     private AppletUtilities appletUtilities;
-    
-    public final void setAppletUtilities(AppletUtilities appletUtilities) {
-        this.appletUtilities = appletUtilities;
-    }
 
     @Override
     protected void onInitialize() throws UnifyException {

@@ -45,10 +45,6 @@ public class StudioWfRecipientContactRuleListCommand extends AbstractApplication
         super(WfRecipientPolicyParams.class);
     }
 
-    public void setSystemModuleService(SystemModuleService systemModuleService) {
-        this.systemModuleService = systemModuleService;
-    }
-
     @Override
     public List<? extends Listable> execute(Locale locale, WfRecipientPolicyParams params) throws UnifyException {
         if (params.isPresent()) {

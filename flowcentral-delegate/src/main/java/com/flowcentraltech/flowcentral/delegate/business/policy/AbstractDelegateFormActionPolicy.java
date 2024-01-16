@@ -64,14 +64,6 @@ public abstract class AbstractDelegateFormActionPolicy extends AbstractFormActio
         this.copyExclusions = copyExclusions;
     }
 
-    public final void setUtilities(EnvironmentDelegateUtilities utilities) {
-        this.utilities = utilities;
-    }
-
-    public final void setRegistrar(EnvironmentDelegateRegistrar registrar) {
-        this.registrar = registrar;
-    }
-
     @Override
     protected final EntityActionResult doExecutePreAction(EntityActionContext ctx) throws UnifyException {
         Entity inst = ctx.getInst();

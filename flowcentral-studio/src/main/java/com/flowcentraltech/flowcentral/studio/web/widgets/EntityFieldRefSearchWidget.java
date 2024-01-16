@@ -54,10 +54,6 @@ public class EntityFieldRefSearchWidget extends EntitySearchWidget {
     @Configurable
     private ListManager listManager;
 
-    public void setListManager(ListManager listManager) {
-        this.listManager = listManager;
-    }
-
     public String getListkey() throws UnifyException {
         EntityFieldDataType type = getEntityFieldDataType();
         if (type.isEntityRef()) {

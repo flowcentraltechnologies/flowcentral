@@ -31,10 +31,6 @@ public abstract class AbstractAuditSearchEntriesRestrictionResolver extends Abst
     @Configurable
     private AuditModuleService auditModuleService;
 
-    public final void setAuditModuleService(AuditModuleService auditModuleService) {
-        this.auditModuleService = auditModuleService;
-    }
-
     protected AuditModuleService audit() {
         return auditModuleService;
     }

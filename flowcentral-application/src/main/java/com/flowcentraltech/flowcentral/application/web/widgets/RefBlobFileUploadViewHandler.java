@@ -47,10 +47,6 @@ public class RefBlobFileUploadViewHandler extends AbstractFileUploadViewHandler 
     @Configurable
     private AppletUtilities au;
 
-    public final void setAu(AppletUtilities au) {
-        this.au = au;
-    }
-
     @SuppressWarnings("unchecked")
     @Override
     public Object save(Object id, String category, FileAttachmentType type, String filename, byte[] attachment)

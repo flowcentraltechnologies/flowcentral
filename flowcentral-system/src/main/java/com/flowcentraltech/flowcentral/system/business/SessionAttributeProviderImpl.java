@@ -35,10 +35,6 @@ public class SessionAttributeProviderImpl extends AbstractSessionAttributeProvid
     @Configurable
     private SystemModuleService systemModuleService;
 
-    public final void setSystemModuleService(SystemModuleService systemModuleService) {
-        this.systemModuleService = systemModuleService;
-    }
-
     @Override
     protected void load(Map<String, Object> attributes) throws UnifyException {
 

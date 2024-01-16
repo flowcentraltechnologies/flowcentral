@@ -60,14 +60,6 @@ public class ApplicationDashboardController extends AbstractPageController<Appli
         super(ApplicationDashboardPageBean.class, Secured.TRUE, ReadOnly.FALSE, ResetOnWrite.FALSE);
     }
 
-    public void setApplicationPrivilegeManager(ApplicationPrivilegeManager applicationPrivilegeManager) {
-        this.applicationPrivilegeManager = applicationPrivilegeManager;
-    }
-
-    public void setDashboardModuleService(DashboardModuleService dashboardModuleService) {
-        this.dashboardModuleService = dashboardModuleService;
-    }
-
     @Action
     public String refreshSlate() throws UnifyException {
         return "refreshSlate";

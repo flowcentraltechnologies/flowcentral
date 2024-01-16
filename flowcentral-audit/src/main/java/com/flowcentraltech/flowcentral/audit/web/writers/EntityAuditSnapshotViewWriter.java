@@ -48,14 +48,6 @@ public class EntityAuditSnapshotViewWriter extends AbstractWidgetWriter {
     @Configurable
     private AuditModuleService auditModuleService;
 
-    public final void setApplicationModuleService(ApplicationModuleService applicationModuleService) {
-        this.applicationModuleService = applicationModuleService;
-    }
-
-    public final void setAuditModuleService(AuditModuleService auditModuleService) {
-        this.auditModuleService = auditModuleService;
-    }
-
     @Override
     protected void doWriteStructureAndContent(ResponseWriter writer, Widget widget) throws UnifyException {
         EntityAuditSnapshotViewWidget entityAuditSnapshotViewWidget = (EntityAuditSnapshotViewWidget) widget;

@@ -42,10 +42,6 @@ public class BootServiceImpl extends AbstractBootService<ModuleInstall> {
     @Configurable
     private ConfigurationLoader configurationLoader;
 
-    public void setConfigurationLoader(ConfigurationLoader configurationLoader) {
-        this.configurationLoader = configurationLoader;
-    }
-
     @Override
     protected BootInstallationInfo<ModuleInstall> prepareBootInstallation() throws UnifyException {
         FlowCentralInstall flowCentralInstall = configurationLoader.loadMasterModuleInstallation();

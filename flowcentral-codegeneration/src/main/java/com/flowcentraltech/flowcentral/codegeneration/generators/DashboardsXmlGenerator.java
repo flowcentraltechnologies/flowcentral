@@ -45,10 +45,6 @@ public class DashboardsXmlGenerator extends AbstractStaticArtifactGenerator {
     @Configurable
     private DashboardModuleService dashboardModuleService;
 
-    public void setDashboardModuleService(DashboardModuleService dashboardModuleService) {
-        this.dashboardModuleService = dashboardModuleService;
-    }
-
     @Override
     protected void doGenerate(ExtensionModuleStaticFileBuilderContext ctx, String applicationName, ZipOutputStream out)
             throws UnifyException {

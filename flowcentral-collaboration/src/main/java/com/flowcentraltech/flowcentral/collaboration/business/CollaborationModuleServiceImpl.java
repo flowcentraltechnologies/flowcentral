@@ -55,10 +55,6 @@ public class CollaborationModuleServiceImpl extends AbstractFlowCentralService
     @Configurable
     private SystemModuleService systemModuleService;
 
-    public final void setSystemModuleService(SystemModuleService systemModuleService) {
-        this.systemModuleService = systemModuleService;
-    }
-
     @Override
     public int releaseAllLocks(CollaborationLockQuery query) throws UnifyException {
         return environment().deleteAll(query);

@@ -57,14 +57,6 @@ public abstract class AbstractEntitySingleFormAppletPanel extends AbstractApplet
     @Configurable
     private SystemModuleService systemModuleService;
 
-    public final void setApplicationPrivilegeManager(ApplicationPrivilegeManager applicationPrivilegeManager) {
-        this.applicationPrivilegeManager = applicationPrivilegeManager;
-    }
-
-    public final void setSystemModuleService(SystemModuleService systemModuleService) {
-        this.systemModuleService = systemModuleService;
-    }
-
     @Override
     public void switchState() throws UnifyException {
         super.switchState();

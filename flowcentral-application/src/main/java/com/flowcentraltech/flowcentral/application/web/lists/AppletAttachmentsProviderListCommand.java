@@ -40,10 +40,6 @@ public class AppletAttachmentsProviderListCommand extends AbstractEntityTypeList
         super(AttachmentsProvider.class, LongParam.class);
     }
 
-    public void setApplicationModuleService(ApplicationModuleService applicationModuleService) {
-        this.applicationModuleService = applicationModuleService;
-    }
-
     @Override
     protected String getEntityName(LongParam param) throws UnifyException {
         if (param.isPresent()) {

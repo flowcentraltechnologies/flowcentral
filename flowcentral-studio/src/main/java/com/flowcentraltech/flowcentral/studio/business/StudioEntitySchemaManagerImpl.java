@@ -69,18 +69,6 @@ public class StudioEntitySchemaManagerImpl extends AbstractEntitySchemaManager {
     @Configurable
     private MessageResolver messageResolver;
 
-    public final void setAu(AppletUtilities au) {
-        this.au = au;
-    }
-
-    public final void setReportModuleService(ReportModuleService reportModuleService) {
-        this.reportModuleService = reportModuleService;
-    }
-
-    public final void setMessageResolver(MessageResolver messageResolver) {
-        this.messageResolver = messageResolver;
-    }
-
     @Override
     @Synchronized(ENTITY_SCHEMA_OPERATION)
     public boolean createEntitySchema(EntitySchema entitySchema) throws UnifyException {

@@ -45,10 +45,6 @@ public class WfEditNotifTemplateListCommand extends AbstractApplicationListComma
         super(StringParam.class);
     }
 
-    public void setNotificationModuleService(NotificationModuleService notificationModuleService) {
-        this.notificationModuleService = notificationModuleService;
-    }
-
     @Override
     public List<? extends Listable> execute(Locale locale, StringParam param) throws UnifyException {
         if (param.isPresent()) {

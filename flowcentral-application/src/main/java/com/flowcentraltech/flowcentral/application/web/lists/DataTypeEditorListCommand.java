@@ -51,10 +51,6 @@ public class DataTypeEditorListCommand extends AbstractApplicationListCommand<St
         this.editors = new HashMap<DataType, List<Listable>>();
     }
 
-    public final void setAdditionalProvider(AdditionalDataTypeEditorProvider additionalProvider) {
-        this.additionalProvider = additionalProvider;
-    }
-
     @Override
     public List<? extends Listable> execute(Locale locale, StringParam stringParam) throws UnifyException {
         if (stringParam.isPresent()) {

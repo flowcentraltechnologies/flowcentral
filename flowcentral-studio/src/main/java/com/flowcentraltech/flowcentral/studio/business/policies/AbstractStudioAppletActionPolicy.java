@@ -47,14 +47,6 @@ public abstract class AbstractStudioAppletActionPolicy extends AbstractAppletAct
     @Configurable
     private SystemModuleService systemModuleService;
 
-    public final void setApplicationModuleService(ApplicationModuleService applicationModuleService) {
-        this.applicationModuleService = applicationModuleService;
-    }
-
-    public final void setSystemModuleService(SystemModuleService systemModuleService) {
-        this.systemModuleService = systemModuleService;
-    }
-
     protected ApplicationModuleService application() {
         return applicationModuleService;
     }

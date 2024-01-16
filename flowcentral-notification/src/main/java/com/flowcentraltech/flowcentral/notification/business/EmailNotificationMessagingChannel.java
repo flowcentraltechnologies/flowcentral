@@ -53,10 +53,6 @@ public class EmailNotificationMessagingChannel extends AbstractNotificationMessa
     @Configurable(ApplicationComponents.APPLICATION_DEFAULTEMAILSERVER)
     private EmailServer emailServer;
 
-    public final void setEmailServer(EmailServer emailServer) {
-        this.emailServer = emailServer;
-    }
-
     @Override
     public boolean sendMessage(NotifChannelDef notifChannelDef, ChannelMessage channelMessage) {
         try {

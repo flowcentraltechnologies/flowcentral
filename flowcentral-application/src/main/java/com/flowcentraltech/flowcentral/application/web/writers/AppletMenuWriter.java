@@ -71,22 +71,6 @@ public class AppletMenuWriter extends AbstractMenuWriter {
 
     private List<ApplicationAppletDefProvider> applicationAppletDefProviderList;
 
-    public final void setAu(AppletUtilities au) {
-        this.au = au;
-    }
-
-    public final void setAppPrivilegeManager(ApplicationPrivilegeManager appPrivilegeManager) {
-        this.appPrivilegeManager = appPrivilegeManager;
-    }
-
-    public final void setWkspPrivilegeManager(WorkspacePrivilegeManager wkspPrivilegeManager) {
-        this.wkspPrivilegeManager = wkspPrivilegeManager;
-    }
-
-    public final void setLicenseProvider(LicenseProvider licenseProvider) {
-        this.licenseProvider = licenseProvider;
-    }
-
     @Override
     protected void onInitialize() throws UnifyException {
         super.onInitialize();

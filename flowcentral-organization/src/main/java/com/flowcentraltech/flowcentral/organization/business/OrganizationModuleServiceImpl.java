@@ -83,10 +83,6 @@ public class OrganizationModuleServiceImpl extends AbstractFlowCentralService
             };
     }
 
-    public final void setStudioProvider(StudioProvider studioProvider) {
-        this.studioProvider = studioProvider;
-    }
-
     @Override
     public FactoryMap<Long, String> getMappedBranchCodeFactoryMap() throws UnifyException {
         return new FactoryMap<Long, String>()

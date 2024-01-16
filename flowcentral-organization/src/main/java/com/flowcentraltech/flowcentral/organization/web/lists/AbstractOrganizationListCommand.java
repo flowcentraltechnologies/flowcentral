@@ -35,10 +35,6 @@ public abstract class AbstractOrganizationListCommand<T extends ListParam> exten
         super(paramType);
     }
 
-    public void setOrganizationModuleService(OrganizationModuleService organizationModuleService) {
-        this.organizationModuleService = organizationModuleService;
-    }
-
     protected OrganizationModuleService getOrganizationModuleService() {
         return organizationModuleService;
     }

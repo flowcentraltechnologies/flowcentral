@@ -41,10 +41,6 @@ public class StudioWfStepNotifSenderListCommand extends AbstractEntityTypeListCo
         super(NotificationAlertSender.class, LongParam.class);
     }
 
-    public void setWorkflowModuleService(WorkflowModuleService workflowModuleService) {
-        this.workflowModuleService = workflowModuleService;
-    }
-
     @Override
     protected String getEntityName(LongParam param) throws UnifyException {
         if (param.isPresent()) {

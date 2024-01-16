@@ -68,14 +68,6 @@ public abstract class AbstractWfStepLoadingTableProvider extends AbstractApplica
         this.loadingLabel = loadingLabel;
     }
 
-    public final void setWorkflowModuleService(WorkflowModuleService workflowModuleService) {
-        this.workflowModuleService = workflowModuleService;
-    }
-
-    public final void setAppletUtilities(AppletUtilities appletUtilities) {
-        this.appletUtilities = appletUtilities;
-    }
-
     @Override
     public String getLoadingLabel() throws UnifyException {
         return loadingLabel;

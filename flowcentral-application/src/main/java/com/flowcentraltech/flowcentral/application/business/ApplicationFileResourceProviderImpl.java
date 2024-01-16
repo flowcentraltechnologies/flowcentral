@@ -40,10 +40,6 @@ public class ApplicationFileResourceProviderImpl extends AbstractFileResourcePro
     @Configurable
     private FileAttachmentProvider fileAttachmentProvider;
 
-    public void setFileAttachmentProvider(FileAttachmentProvider fileAttachmentProvider) {
-        this.fileAttachmentProvider = fileAttachmentProvider;
-    }
-
     @Override
     public InputStream openFileResourceInputStream(String category, String resourceName) throws UnifyException {
         byte[] resource = readFileResource(category, resourceName);

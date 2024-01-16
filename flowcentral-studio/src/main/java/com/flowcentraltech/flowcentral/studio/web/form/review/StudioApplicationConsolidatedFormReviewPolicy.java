@@ -36,10 +36,7 @@ public class StudioApplicationConsolidatedFormReviewPolicy extends AbstractStudi
 
     @Configurable("application-usagelistprovider")
     private UsageListProvider usageListProvider;
-    
-    public final void setUsageListProvider(UsageListProvider usageListProvider) {
-        this.usageListProvider = usageListProvider;
-    }
+
     @Override
     protected void review(ValueStore instValueStore, FormReviewType reviewType, TargetFormMessages messages)
             throws UnifyException {

@@ -49,10 +49,6 @@ public abstract class AbstractFlowCentralTypeListCommand<T extends UnifyComponen
         this.typeClass = typeClazz;
     }
 
-    public final void setMessageResolver(MessageResolver messageResolver) {
-        this.messageResolver = messageResolver;
-    }
-
     @Override
     public List<? extends Listable> execute(Locale locale, U params) throws UnifyException {
         return  filterList(getConfigList(), params);

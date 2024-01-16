@@ -49,10 +49,6 @@ public class ReviewSingleFormWorkItemsAppletController extends
         super(ReviewSingleFormWorkItemsAppletPageBean.class, Secured.TRUE, ReadOnly.FALSE, ResetOnWrite.FALSE);
     }
 
-    public void setWorkflowModuleService(WorkflowModuleService workflowModuleService) {
-        this.workflowModuleService = workflowModuleService;
-    }
-
     @Action
     public String closeFileAttachments() throws UnifyException {
         return "refreshapplet";

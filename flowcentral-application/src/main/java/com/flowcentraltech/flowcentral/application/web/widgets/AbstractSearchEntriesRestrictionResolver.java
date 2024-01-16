@@ -34,10 +34,6 @@ public abstract class AbstractSearchEntriesRestrictionResolver extends AbstractF
     @Configurable
     private AppletUtilities au;
 
-    public final void setAu(AppletUtilities au) {
-        this.au = au;
-    }
-
     protected EnvironmentService environment() {
         return au.environment();
     }

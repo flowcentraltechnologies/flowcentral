@@ -37,10 +37,6 @@ public abstract class AbstractUserPhotoGenerator extends AbstractImageGenerator 
 
     private byte[] photo;
 
-    public void setSecurityModuleService(SecurityModuleService securityModuleService) {
-        this.securityModuleService = securityModuleService;
-    }
-
     @Override
     public ImageFormat generate(OutputStream outputStream) throws UnifyException {
         try {

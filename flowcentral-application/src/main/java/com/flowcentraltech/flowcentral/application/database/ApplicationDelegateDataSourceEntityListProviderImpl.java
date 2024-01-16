@@ -39,10 +39,6 @@ public class ApplicationDelegateDataSourceEntityListProviderImpl extends Abstrac
     @Configurable
     private ApplicationModuleService applicationModuleService;
 
-    public final void setApplicationModuleService(ApplicationModuleService applicationModuleService) {
-        this.applicationModuleService = applicationModuleService;
-    }
-
     @Override
     public String getDataSourceByEntityAlias(String entityName) throws UnifyException {
         DelegateEntityInfo delegateEntityInfo = applicationModuleService.getDelegateEntity(entityName);

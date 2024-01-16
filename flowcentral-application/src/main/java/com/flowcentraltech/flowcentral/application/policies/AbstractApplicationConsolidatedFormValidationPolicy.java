@@ -44,14 +44,6 @@ public abstract class AbstractApplicationConsolidatedFormValidationPolicy extend
     @Configurable
     private EnvironmentService environmentService;
 
-    public final void setEnvironmentService(EnvironmentService environmentService) {
-        this.environmentService = environmentService;
-    }
-
-    public final void setApplicationModuleService(ApplicationModuleService applicationModuleService) {
-        this.applicationModuleService = applicationModuleService;
-    }
-
     @Override
     public final List<TargetFormMessage> validate(EvaluationMode evaluationMode, ValueStore instValueStore)
             throws UnifyException {

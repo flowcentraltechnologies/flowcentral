@@ -44,10 +44,6 @@ public class ChartWriter extends AbstractWidgetWriter {
     @Configurable
     private ChartModuleService chartModuleService;
 
-    public final void setChartModuleService(ChartModuleService chartModuleService) {
-        this.chartModuleService = chartModuleService;
-    }
-
     @Override
     protected void doWriteStructureAndContent(ResponseWriter writer, Widget widget) throws UnifyException {
         ChartWidget chartWidget = (ChartWidget) widget;

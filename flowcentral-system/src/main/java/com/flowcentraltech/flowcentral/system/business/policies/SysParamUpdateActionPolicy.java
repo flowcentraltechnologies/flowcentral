@@ -49,10 +49,6 @@ public class SysParamUpdateActionPolicy extends AbstractAppletActionPolicy {
     @Configurable
     private SessionAttributeProvider sessionAttributeProvider;
 
-    public final void setSessionAttributeProvider(SessionAttributeProvider sessionAttributeProvider) {
-        this.sessionAttributeProvider = sessionAttributeProvider;
-    }
-
     @Override
     public boolean checkAppliesTo(Entity inst) throws UnifyException {
         return true;

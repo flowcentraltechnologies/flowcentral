@@ -79,10 +79,6 @@ public class WorkflowsXmlGenerator extends AbstractStaticArtifactGenerator {
         super("src/main/resources/apps/workflow/");
     }
 
-    public void setWorkflowModuleService(WorkflowModuleService workflowModuleService) {
-        this.workflowModuleService = workflowModuleService;
-    }
-
     @Override
     protected void doGenerate(ExtensionModuleStaticFileBuilderContext ctx, String applicationName, ZipOutputStream zos)
             throws UnifyException {

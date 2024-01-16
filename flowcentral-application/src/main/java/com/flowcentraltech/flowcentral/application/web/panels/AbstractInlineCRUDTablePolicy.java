@@ -38,10 +38,6 @@ public abstract class AbstractInlineCRUDTablePolicy<T extends InlineCRUDEntry> e
     @Configurable
     private AppletUtilities appletUtilities;
 
-    public final void setAppletUtilities(AppletUtilities appletUtilities) {
-        this.appletUtilities = appletUtilities;
-    }
-
     @Override
     public FixedRowActionType resolveFixedIndex(ValueStoreReader parentReader, ValueStore valueStore, int index,
             int size) throws UnifyException {

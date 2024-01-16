@@ -47,10 +47,6 @@ public class DashboardEditorWriter extends AbstractControlWriter {
     @Configurable
     private ChartModuleService chartModuleService;
 
-    public final void setChartModuleService(ChartModuleService chartModuleService) {
-        this.chartModuleService = chartModuleService;
-    }
-
     @Override
     protected void doWriteStructureAndContent(ResponseWriter writer, Widget widget) throws UnifyException {
         final DashboardEditorWidget dashboardEditorWidget = (DashboardEditorWidget) widget;

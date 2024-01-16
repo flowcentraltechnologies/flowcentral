@@ -43,10 +43,6 @@ public abstract class AbstractApplicationSwitchPanel extends SwitchPanel {
     @Configurable
     private AppletUtilities appletUtilities;
 
-    public final void setAppletUtilities(AppletUtilities appletUtilities) {
-        this.appletUtilities = appletUtilities;
-    }
-
     protected final TaskLauncher taskLauncher() {
         return appletUtilities.taskLauncher();
     }

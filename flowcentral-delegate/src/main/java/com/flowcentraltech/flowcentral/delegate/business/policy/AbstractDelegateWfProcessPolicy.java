@@ -54,14 +54,6 @@ public abstract class AbstractDelegateWfProcessPolicy extends AbstractWfProcessP
         this.operation = operation;
     }
 
-    public final void setUtilities(EnvironmentDelegateUtilities utilities) {
-        this.utilities = utilities;
-    }
-
-    public final void setRegistrar(EnvironmentDelegateRegistrar registrar) {
-        this.registrar = registrar;
-    }
-
     @Override
     public void execute(ValueStoreReader wfItemReader, String rule) throws UnifyException {
         Entity inst = (Entity) wfItemReader.getValueObject();

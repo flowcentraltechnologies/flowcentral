@@ -51,18 +51,6 @@ public abstract class AbstractChartDetailsProvider extends AbstractFlowCentralCo
     @Configurable
     private EnvironmentService environmentService;
 
-    public final void setEnvironmentService(EnvironmentService environmentService) {
-        this.environmentService = environmentService;
-    }
-
-    public final void setChartModuleService(ChartModuleService chartModuleService) {
-        this.chartModuleService = chartModuleService;
-    }
-
-    public final void setAppletUtilities(AppletUtilities appletUtilities) {
-        this.appletUtilities = appletUtilities;
-    }
-
     @Override
     protected void onInitialize() throws UnifyException {
 

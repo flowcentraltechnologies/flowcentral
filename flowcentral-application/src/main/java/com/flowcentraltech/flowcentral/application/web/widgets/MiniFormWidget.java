@@ -79,10 +79,6 @@ public class MiniFormWidget extends AbstractFlowCentralMultiControl implements F
 
     private Map<String, FormWidget> formWidgets;
 
-    public final void setAppletUtilities(AppletUtilities appletUtilities) {
-        this.appletUtilities = appletUtilities;
-    }
-
     @SuppressWarnings("unchecked")
     public MiniForm getMiniForm() throws UnifyException {
         MiniForm miniForm = getValue(MiniForm.class);

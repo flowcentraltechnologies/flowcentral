@@ -55,14 +55,6 @@ public abstract class AbstractDelegateWfEnrichmentPolicy extends AbstractWfEnric
         this.operation = operation;
     }
 
-    public final void setUtilities(EnvironmentDelegateUtilities utilities) {
-        this.utilities = utilities;
-    }
-
-    public final void setRegistrar(EnvironmentDelegateRegistrar registrar) {
-        this.registrar = registrar;
-    }
-
     @Override
     public void enrich(ValueStoreWriter wfItemWriter, ValueStoreReader wfItemReader, String rule)
             throws UnifyException {

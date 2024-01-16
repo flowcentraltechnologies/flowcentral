@@ -1365,46 +1365,6 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
             };
     }
 
-    public final void setApplicationPrivilegeManager(ApplicationPrivilegeManager applicationPrivilegeManager) {
-        this.applicationPrivilegeManager = applicationPrivilegeManager;
-    }
-
-    public final void setMessageResolver(MessageResolver messageResolver) {
-        this.messageResolver = messageResolver;
-    }
-
-    public final void setConfigurationLoader(ConfigurationLoader configurationLoader) {
-        this.configurationLoader = configurationLoader;
-    }
-
-    public final void setDynamicSqlEntityLoader(DynamicSqlEntityLoader dynamicSqlEntityLoader) {
-        this.dynamicSqlEntityLoader = dynamicSqlEntityLoader;
-    }
-
-    public final void setListManager(ListManager listManager) {
-        this.listManager = listManager;
-    }
-
-    public final void setAppletUtilities(AppletUtilities appletUtilities) {
-        this.appletUtilities = appletUtilities;
-    }
-
-    public final void setTwoWayStringCryptograph(TwoWayStringCryptograph twoWayStringCryptograph) {
-        this.twoWayStringCryptograph = twoWayStringCryptograph;
-    }
-
-    public final void setUsageListProvider(UsageListProvider usageListProvider) {
-        this.usageListProvider = usageListProvider;
-    }
-
-    public final void setSequenceNumberService(SequenceNumberService sequenceNumberService) {
-        this.sequenceNumberService = sequenceNumberService;
-    }
-
-    public final void setEnvironmentDelegateUtilities(EnvironmentDelegateUtilities environmentDelegateUtilities) {
-        this.environmentDelegateUtilities = environmentDelegateUtilities;
-    }
-
     @Override
     public EnvironmentDelegateHolder getEnvironmentDelegateInfo(String entityLongName) throws UnifyException {
         return delegateHolderByLongName.get(entityLongName);

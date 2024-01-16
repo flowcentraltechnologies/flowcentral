@@ -77,10 +77,6 @@ public class EntityTextSearchWidget extends AbstractFlowCentralPopupTextField {
     @Configurable
     private AppletUtilities au;
 
-    public final void setAu(AppletUtilities au) {
-        this.au = au;
-    }
-
     @Action
     public final void search() throws UnifyException {
         String input = getRequestTarget(String.class);

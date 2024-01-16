@@ -44,10 +44,6 @@ public class ChartListCommand extends AbstractZeroParamsListCommand {
     @Configurable
     private ChartModuleService chartModuleService;
 
-    public void setChartModuleService(ChartModuleService chartModuleService) {
-        this.chartModuleService = chartModuleService;
-    }
-
     @Override
     public List<? extends Listable> execute(Locale locale, ZeroParams param) throws UnifyException {
         List<ListData> resultList = new ArrayList<ListData>();

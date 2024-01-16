@@ -53,10 +53,6 @@ public class NotificationLargeTextsXmlGenerator extends AbstractStaticArtifactGe
         super("src/main/resources/apps/notification/largetext/");
     }
 
-    public void setNotificationModuleService(NotificationModuleService notificationModuleService) {
-        this.notificationModuleService = notificationModuleService;
-    }
-
     @Override
     protected void doGenerate(ExtensionModuleStaticFileBuilderContext ctx, String applicationName, ZipOutputStream zos)
             throws UnifyException {

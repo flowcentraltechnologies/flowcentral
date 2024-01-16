@@ -47,10 +47,6 @@ public class StudioOnCreateWorkflowPolicy extends StudioOnCreateComponentPolicy 
     @Configurable
     private WorkflowModuleService workflowModuleService;
 
-    public void setWorkflowModuleService(WorkflowModuleService workflowModuleService) {
-        this.workflowModuleService = workflowModuleService;
-    }
-
     @Override
     protected EntityActionResult doExecutePreAction(EntityActionContext ctx) throws UnifyException {
         super.doExecutePreAction(ctx);

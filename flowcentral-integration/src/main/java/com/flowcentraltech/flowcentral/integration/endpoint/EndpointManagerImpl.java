@@ -120,10 +120,6 @@ public class EndpointManagerImpl extends AbstractEndpointManager {
 
     }
 
-    public final void setEnvironmentService(EnvironmentService environmentService) {
-        this.environmentService = environmentService;
-    }
-
     @Override
     public EndpointDef getEndpointDef(String endpointConfigName) throws UnifyException {
         return endpointDefFactoryMap.get(endpointConfigName);

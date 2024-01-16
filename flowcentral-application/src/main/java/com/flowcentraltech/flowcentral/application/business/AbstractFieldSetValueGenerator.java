@@ -43,10 +43,6 @@ public abstract class AbstractFieldSetValueGenerator extends AbstractFlowCentral
     @Configurable
     private AppletUtilities appletUtilities;
 
-    public final void setAppletUtilities(AppletUtilities appletUtilities) {
-        this.appletUtilities = appletUtilities;
-    }
-
     @Override
     protected void onInitialize() throws UnifyException {
 

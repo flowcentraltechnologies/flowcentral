@@ -61,14 +61,6 @@ public class MyWorkItemsLoadingTableProvider extends AbstractApplicationLoadingT
     @Configurable
     private AppletUtilities appletUtilities;
 
-    public final void setWorkflowModuleService(WorkflowModuleService workflowModuleService) {
-        this.workflowModuleService = workflowModuleService;
-    }
-
-    public final void setAppletUtilities(AppletUtilities appletUtilities) {
-        this.appletUtilities = appletUtilities;
-    }
-
     @Override
     public void setWorkingParameter(Object parameter) throws UnifyException {
         super.setWorkingParameter(parameter);

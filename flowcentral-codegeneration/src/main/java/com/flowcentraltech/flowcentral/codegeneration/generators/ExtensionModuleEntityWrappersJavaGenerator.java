@@ -47,10 +47,6 @@ public class ExtensionModuleEntityWrappersJavaGenerator extends AbstractStaticAr
         super("src/main/java/{0}/utilities/{1}/entitywrappers/");
     }
 
-    public final void setAu(AppletUtilities au) {
-        this.au = au;
-    }
-
     @Override
     protected void doGenerate(ExtensionModuleStaticFileBuilderContext ctx, String moduleName, ZipOutputStream zos)
             throws UnifyException {

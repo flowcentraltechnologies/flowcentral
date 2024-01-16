@@ -40,14 +40,6 @@ public class FlowCentralParamGeneratorManager extends AbstractParamGeneratorMana
     @Configurable(CommonModuleNameConstants.PROCESS_VARIABLE_GENERATOR)
     private ParamGenerator processVariableGenerator;
 
-    public final void setSysParamGenerator(ParamGenerator sysParamGenerator) {
-        this.sysParamGenerator = sysParamGenerator;
-    }
-
-    public final void setProcessVariableGenerator(ParamGenerator processVariableGenerator) {
-        this.processVariableGenerator = processVariableGenerator;
-    }
-
     @Override
     protected ParamGenerator resolveParamGenerator(ParamToken token) throws UnifyException {
         if (CommonGeneratorComponentConstants.SYSTEM_PARAMETER.equals(token.getComponent())) {

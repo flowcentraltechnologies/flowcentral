@@ -109,14 +109,6 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
     @Configurable
     private ApplicationModuleService applicationModuleService;
 
-    public final void setSystemModuleService(SystemModuleService systemModuleService) {
-        this.systemModuleService = systemModuleService;
-    }
-
-    public final void setApplicationModuleService(ApplicationModuleService applicationModuleService) {
-        this.applicationModuleService = applicationModuleService;
-    }
-
     @Override
     public List<String> getCodeGenerationApplets() throws UnifyException {
         return codegenerationAppletList;

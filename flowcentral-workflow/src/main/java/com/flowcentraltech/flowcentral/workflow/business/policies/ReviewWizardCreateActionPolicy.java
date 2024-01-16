@@ -43,10 +43,6 @@ public class ReviewWizardCreateActionPolicy extends AbstractEntityActionPolicy {
     @Configurable
     private AppletUtilities appletUtil;
 
-    public void setAppletUtil(AppletUtilities appletUtil) {
-        this.appletUtil = appletUtil;
-    }
-
     @Override
     public boolean checkAppliesTo(Entity inst) throws UnifyException {
         return true;

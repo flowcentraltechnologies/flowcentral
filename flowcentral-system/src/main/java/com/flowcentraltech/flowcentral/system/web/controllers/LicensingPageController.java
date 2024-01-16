@@ -56,10 +56,6 @@ public class LicensingPageController extends AbstractSystemPageController<Licens
         super(LicensingPageBean.class, Secured.TRUE, ReadOnly.FALSE, ResetOnWrite.FALSE);
     }
 
-    public void setLicenseProvider(LicenseProvider licenseProvider) {
-        this.licenseProvider = licenseProvider;
-    }
-
     @Action
     public String prepareGenerateLicenseRequest() throws UnifyException {
         LicensingPageBean pageBean = getPageBean();

@@ -69,10 +69,6 @@ public class ApplicationDashboardController extends AbstractPageController<Appli
         super(ApplicationDashboardPageBean.class, Secured.TRUE, ReadOnly.FALSE, ResetOnWrite.FALSE);
     }
 
-    public final void setAppletUtils(AppletUtilities appletUtils) {
-        this.appletUtils = appletUtils;
-    }
-
     @Action
     public String showSwitchApplication() throws UnifyException {
         ApplicationDashboardPageBean pageBean = getPageBean();

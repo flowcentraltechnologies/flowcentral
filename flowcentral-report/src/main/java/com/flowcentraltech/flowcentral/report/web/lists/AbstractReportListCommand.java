@@ -35,10 +35,6 @@ public abstract class AbstractReportListCommand<T extends ListParam> extends Abs
         super(paramType);
     }
 
-    public void setReportModuleService(ReportModuleService reportModuleService) {
-        this.reportModuleService = reportModuleService;
-    }
-
     protected ReportModuleService getReportModuleService() {
         return reportModuleService;
     }

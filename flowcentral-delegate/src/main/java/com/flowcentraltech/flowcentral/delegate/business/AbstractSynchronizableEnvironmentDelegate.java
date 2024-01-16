@@ -50,10 +50,6 @@ public abstract class AbstractSynchronizableEnvironmentDelegate extends Abstract
     @Configurable
     private EntitySchemaManager entitySchemaManager;
 
-    public final void setEntitySchemaManager(EntitySchemaManager entitySchemaManager) {
-        this.entitySchemaManager = entitySchemaManager;
-    }
-
     @Override
     public void delegateCreateSynchronization(TaskMonitor taskMonitor) throws UnifyException {
         logInfo(taskMonitor, "Performing create synchronization of entities for delegate [0]...", getName());

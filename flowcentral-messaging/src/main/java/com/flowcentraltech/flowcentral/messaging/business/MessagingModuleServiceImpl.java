@@ -36,10 +36,6 @@ public class MessagingModuleServiceImpl extends AbstractFlowCentralService imple
 
     @Configurable
     private MessagingProvider messagingProvider;
-    
-    public final void setMessagingProvider(MessagingProvider messagingProvider) {
-        this.messagingProvider = messagingProvider;
-    }
 
     @Override
     public <T extends BaseMessage> void sendMessage(T message) throws UnifyException {

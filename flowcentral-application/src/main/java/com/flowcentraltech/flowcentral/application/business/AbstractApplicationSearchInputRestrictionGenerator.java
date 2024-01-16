@@ -43,10 +43,6 @@ public abstract class AbstractApplicationSearchInputRestrictionGenerator
         return EntryAttributes.BLANK;
     }
 
-    public final void setAu(AppletUtilities au) {
-        this.au = au;
-    }
-
     protected ApplicationModuleService application() {
         return au.application();
     }

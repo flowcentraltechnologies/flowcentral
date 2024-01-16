@@ -45,10 +45,6 @@ public class ExtensionModuleEntitiesJavaGenerator extends AbstractStaticArtifact
         super("src/main/java/{0}/extension/{1}/entities/");
     }
 
-    public final void setApplicationModuleService(ApplicationModuleService applicationModuleService) {
-        this.applicationModuleService = applicationModuleService;
-    }
-
     @Override
     protected void doGenerate(ExtensionModuleStaticFileBuilderContext ctx, String moduleName, ZipOutputStream zos)
             throws UnifyException {

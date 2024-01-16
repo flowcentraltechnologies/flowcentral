@@ -41,10 +41,6 @@ public abstract class AbstractCodeGenerationPageController<T extends AbstractPag
         super(pageBeanClass, secured, readOnly, resetOnWrite);
     }
 
-    public final void setCodeGenerationModuleService(CodeGenerationModuleService codeGenerationModuleService) {
-        this.codeGenerationModuleService = codeGenerationModuleService;
-    }
-
     protected final CodeGenerationModuleService getCodeGenerationModuleService() {
         return codeGenerationModuleService;
     }

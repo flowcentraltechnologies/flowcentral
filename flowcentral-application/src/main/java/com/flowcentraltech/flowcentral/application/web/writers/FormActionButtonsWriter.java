@@ -53,10 +53,6 @@ public class FormActionButtonsWriter extends AbstractControlWriter {
     @Configurable
     private ApplicationPrivilegeManager applicationPrivilegeManager;
 
-    public void setApplicationPrivilegeManager(ApplicationPrivilegeManager applicationPrivilegeManager) {
-        this.applicationPrivilegeManager = applicationPrivilegeManager;
-    }
-
     @SuppressWarnings("unchecked")
     @Override
     protected void doWriteStructureAndContent(ResponseWriter writer, Widget component) throws UnifyException {

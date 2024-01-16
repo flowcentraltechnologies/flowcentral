@@ -48,10 +48,6 @@ public abstract class AbstractEntityDetailsPanel extends AbstractDetailsPanel<En
     @Configurable
     private AppletUtilities au;
 
-    public final void setAu(AppletUtilities au) {
-        this.au = au;
-    }
-
     @Override
     public final void switchState() throws UnifyException {
         super.switchState();

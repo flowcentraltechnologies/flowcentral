@@ -115,30 +115,6 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
     @Configurable("oneway-stringcryptograph")
     private OneWayStringCryptograph passwordCryptograph;
 
-    public final void setUserSessionManager(UserSessionManager userSessionManager) {
-        this.userSessionManager = userSessionManager;
-    }
-
-    public final void setSystemModuleService(SystemModuleService systemModuleService) {
-        this.systemModuleService = systemModuleService;
-    }
-
-    public final void setOrganizationModuleService(OrganizationModuleService organizationModuleService) {
-        this.organizationModuleService = organizationModuleService;
-    }
-
-    public final void setFileAttachmentProvider(FileAttachmentProvider fileAttachmentProvider) {
-        this.fileAttachmentProvider = fileAttachmentProvider;
-    }
-
-    public final void setNotificationModuleService(NotificationModuleService notificationModuleService) {
-        this.notificationModuleService = notificationModuleService;
-    }
-
-    public final void setPasswordCryptograph(OneWayStringCryptograph passwordCryptograph) {
-        this.passwordCryptograph = passwordCryptograph;
-    }
-
     @Override
     public List<User> findUsers(UserQuery query) throws UnifyException {
         return environment().listAll(query);

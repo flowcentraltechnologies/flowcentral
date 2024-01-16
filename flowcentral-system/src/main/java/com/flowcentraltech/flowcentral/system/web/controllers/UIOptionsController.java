@@ -51,10 +51,6 @@ public class UIOptionsController extends AbstractSystemPageController<UIOptionsP
         super(UIOptionsPageBean.class, Secured.TRUE, ReadOnly.FALSE, ResetOnWrite.FALSE);
     }
 
-    public void setFileAttachmentProvider(FileAttachmentProvider fileAttachmentProvider) {
-        this.fileAttachmentProvider = fileAttachmentProvider;
-    }
-
     @Action
     public String saveUIOptions() throws UnifyException {
         UIOptionsPageBean pageBean = getPageBean();

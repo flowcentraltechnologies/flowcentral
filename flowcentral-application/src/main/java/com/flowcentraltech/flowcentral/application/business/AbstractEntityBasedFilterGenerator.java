@@ -40,10 +40,6 @@ public abstract class AbstractEntityBasedFilterGenerator extends AbstractFlowCen
     
     @Configurable
     private AppletUtilities appletUtilities;
-    
-    public final void setAppletUtilities(AppletUtilities appletUtilities) {
-        this.appletUtilities = appletUtilities;
-    }
 
     @Override
     protected void onInitialize() throws UnifyException {

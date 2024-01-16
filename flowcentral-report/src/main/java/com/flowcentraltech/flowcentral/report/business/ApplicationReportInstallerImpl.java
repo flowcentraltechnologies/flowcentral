@@ -81,10 +81,6 @@ public class ApplicationReportInstallerImpl extends AbstractApplicationArtifactI
     @Configurable
     private MessageResolver messageResolver;
 
-    public void setMessageResolver(MessageResolver messageResolver) {
-        this.messageResolver = messageResolver;
-    }
-
     @Override
     public void installApplicationArtifacts(final TaskMonitor taskMonitor, final ApplicationInstall applicationInstall)
             throws UnifyException {

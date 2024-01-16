@@ -42,10 +42,6 @@ public class ScheduledTaskParamConfigListProvider extends AbstractParamConfigLis
     @Configurable
     private TaskManager taskManager;
 
-    public void setTaskManager(TaskManager taskManager) {
-        this.taskManager = taskManager;
-    }
-
     @Override
     public String getCategory(Entity entityInst) throws UnifyException {
         return "scheduledtask";

@@ -52,10 +52,6 @@ public abstract class AbstractEntityTypeSearchWidget<T extends UnifyComponent> e
         this.typeClass = typeClass;
     }
 
-    public final void setMessageResolver(MessageResolver messageResolver) {
-        this.messageResolver = messageResolver;
-    }
-
     @Override
     protected Listable doCurrentSelect(Object keyVal) throws UnifyException {
         if (keyVal != null) {

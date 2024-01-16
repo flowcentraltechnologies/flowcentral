@@ -75,10 +75,6 @@ public class FormEditorWidget extends AbstractFlowCentralMultiControl {
 
     private DialogFormMode editMode;
 
-    public void setJsonObjectStreamer(JsonObjectStreamer jsonObjectStreamer) {
-        this.jsonObjectStreamer = jsonObjectStreamer;
-    }
-
     @Override
     protected void doOnPageConstruct() throws UnifyException {
         valueCtrl = (Control) addInternalChildWidget("!ui-hidden binding:design");

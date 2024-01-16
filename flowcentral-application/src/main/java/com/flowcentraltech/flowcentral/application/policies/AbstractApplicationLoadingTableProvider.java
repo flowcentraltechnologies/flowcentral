@@ -54,10 +54,6 @@ public abstract class AbstractApplicationLoadingTableProvider extends AbstractFl
 
     }
 
-    public final void setAu(AppletUtilities au) {
-        this.au = au;
-    }
-
     @Override
     public int countLoadingItems(LoadingParams params) throws UnifyException {
         return 0;

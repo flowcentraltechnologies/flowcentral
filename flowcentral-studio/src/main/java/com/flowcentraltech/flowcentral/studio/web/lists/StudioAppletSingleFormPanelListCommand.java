@@ -41,10 +41,6 @@ public class StudioAppletSingleFormPanelListCommand extends AbstractEntityTypeLi
         super(SingleFormPanel.class, LongParam.class);
     }
 
-    public final void setApplicationModuleService(ApplicationModuleService applicationModuleService) {
-        this.applicationModuleService = applicationModuleService;
-    }
-
     @Override
     protected String getEntityName(LongParam param) throws UnifyException {
         if (param.isPresent()) {

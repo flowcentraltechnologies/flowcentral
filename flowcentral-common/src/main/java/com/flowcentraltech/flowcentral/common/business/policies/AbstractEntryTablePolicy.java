@@ -38,10 +38,6 @@ public abstract class AbstractEntryTablePolicy extends AbstractFlowCentralCompon
     @Configurable
     private EnvironmentService environmentService;
 
-    public final void setEnvironmentService(EnvironmentService environmentService) {
-        this.environmentService = environmentService;
-    }
-
     @Override
     public void applyFixedAction(ValueStoreReader parentReader, ValueStore valueStore, int index,
             FixedRowActionType fixedActionType) throws UnifyException {

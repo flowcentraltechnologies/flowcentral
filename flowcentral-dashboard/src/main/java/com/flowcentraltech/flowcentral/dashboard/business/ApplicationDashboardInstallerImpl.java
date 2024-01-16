@@ -59,10 +59,6 @@ public class ApplicationDashboardInstallerImpl extends AbstractApplicationArtifa
     @Configurable
     private ApplicationPrivilegeManager applicationPrivilegeManager;
 
-    public void setApplicationPrivilegeManager(ApplicationPrivilegeManager applicationPrivilegeManager) {
-        this.applicationPrivilegeManager = applicationPrivilegeManager;
-    }
-
     @Override
     public void installApplicationArtifacts(final TaskMonitor taskMonitor, final ApplicationInstall applicationInstall)
             throws UnifyException {

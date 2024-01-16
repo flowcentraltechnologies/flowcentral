@@ -38,10 +38,6 @@ public abstract class AbstractApplicationEntitySetValuesGenListCommand
         super(EntitySetValuesGenerator.class, LongParam.class);
     }
 
-    public final void setApplicationModuleService(ApplicationModuleService applicationModuleService) {
-        this.applicationModuleService = applicationModuleService;
-    }
-
     protected ApplicationModuleService application() {
         return applicationModuleService;
     }

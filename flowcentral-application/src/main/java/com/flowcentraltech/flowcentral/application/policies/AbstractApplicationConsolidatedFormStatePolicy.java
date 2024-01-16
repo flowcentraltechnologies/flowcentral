@@ -32,10 +32,6 @@ public abstract class AbstractApplicationConsolidatedFormStatePolicy extends Abs
     @Configurable
     private ApplicationModuleService applicationModuleService;
 
-    public final void setApplicationModuleService(ApplicationModuleService applicationModuleService) {
-        this.applicationModuleService = applicationModuleService;
-    }
-
     protected final ApplicationModuleService application() {
         return applicationModuleService;
     }

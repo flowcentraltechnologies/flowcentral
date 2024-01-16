@@ -53,10 +53,6 @@ public class NotificationTemplatesXmlGenerator extends AbstractStaticArtifactGen
         super("src/main/resources/apps/notification/template/");
     }
 
-    public void setNotificationModuleService(NotificationModuleService notificationModuleService) {
-        this.notificationModuleService = notificationModuleService;
-    }
-
     @Override
     protected void doGenerate(ExtensionModuleStaticFileBuilderContext ctx, String applicationName, ZipOutputStream zos)
             throws UnifyException {

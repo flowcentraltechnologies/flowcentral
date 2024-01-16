@@ -43,10 +43,6 @@ public class EntityAuditSearchFieldDefListCommand extends AbstractFlowCentralLis
         super(StringParam.class);
     }
 
-    public final void setApplicationModuleService(ApplicationModuleService applicationModuleService) {
-        this.applicationModuleService = applicationModuleService;
-    }
-
     @Override
     public List<? extends Listable> execute(Locale locale, StringParam param) throws UnifyException {
         if (param.isPresent()) {

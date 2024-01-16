@@ -41,10 +41,6 @@ public class FileAttachmentImageWidget extends AbstractFlowCentralMultiControl {
 
     private Control imageControl;
 
-    public void setImageGenerator(FileAttachmentImageGenerator imageGenerator) {
-        this.imageGenerator = imageGenerator;
-    }
-
     public Control getImageControl() {
         return imageControl;
     }

@@ -48,10 +48,6 @@ public class UnifyInterconnectController extends AbstractJsonObjectController {
 
     private UnifyInterconnectRedirect unifyInterconnectRedirect;
 
-    public final void setSpringBootInterconnectService(UnifyInterconnectService unifyInterconnectService) {
-        this.unifyInterconnectService = unifyInterconnectService;
-    }
-
     @Action
     public EntityListingResponse listEntities(EntityListingRequest req) throws Exception {
         EntityListingResponse result = unifyInterconnectService.listEntities(req);
