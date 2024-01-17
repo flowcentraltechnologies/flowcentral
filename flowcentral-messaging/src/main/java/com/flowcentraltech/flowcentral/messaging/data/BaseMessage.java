@@ -51,6 +51,5 @@ public abstract class BaseMessage {
     public void setTarget(String target) {
         this.target = target;
     }
-
-    
+   
 }

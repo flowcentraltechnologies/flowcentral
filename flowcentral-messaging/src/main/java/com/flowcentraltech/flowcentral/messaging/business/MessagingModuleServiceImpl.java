@@ -17,6 +17,7 @@ package com.flowcentraltech.flowcentral.messaging.business;
 
 import com.flowcentraltech.flowcentral.common.business.AbstractFlowCentralService;
 import com.flowcentraltech.flowcentral.configuration.data.ModuleInstall;
+import com.flowcentraltech.flowcentral.messaging.constants.MessagingModuleErrorConstants;
 import com.flowcentraltech.flowcentral.messaging.constants.MessagingModuleNameConstants;
 import com.flowcentraltech.flowcentral.messaging.data.BaseMessage;
 import com.tcdng.unify.core.UnifyException;
@@ -39,15 +40,15 @@ public class MessagingModuleServiceImpl extends AbstractFlowCentralService imple
 
     @Override
     public <T extends BaseMessage> void sendMessage(T message) throws UnifyException {
-        // TODO Auto-generated method stub
-
+        String json = asJson(message);
+        provider().sendMessage(message.getConfig(), message.getTarget(), json);
     }
 
     @Override
     public <T extends BaseMessage> T receiveMessage(Class<T> messageType, String config, String target)
             throws UnifyException {
-        // TODO Auto-generated method stub
-        return null;
+        String json = provider().receiveMessage(config, target);
+        return fromJson(messageType, json);
     }
 
     @Override
@@ -55,4 +56,11 @@ public class MessagingModuleServiceImpl extends AbstractFlowCentralService imple
 
     }
 
+    private MessagingProvider provider() throws UnifyException {
+        if (messagingProvider == null) {
+            throw new UnifyException(MessagingModuleErrorConstants.NO_MESSAGING_PROVIDER_FOUND);
+        }
+
+        return messagingProvider;
+    }
 }

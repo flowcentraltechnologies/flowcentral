@@ -43,7 +43,7 @@ public interface MessagingModuleService extends FlowCentralService {
      * @param messageType
      *                    the message type
      * @param config
-     *                    the source configuration
+     *                    the configuration name
      * @param target
      *                    the source target
      * @return message is available otherwise null
