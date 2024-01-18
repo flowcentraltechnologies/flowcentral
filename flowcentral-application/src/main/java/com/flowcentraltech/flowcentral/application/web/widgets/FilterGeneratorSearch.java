@@ -17,8 +17,6 @@ package com.flowcentraltech.flowcentral.application.web.widgets;
 
 import com.flowcentraltech.flowcentral.application.business.EntityBasedFilterGenerator;
 import com.tcdng.unify.core.annotation.Component;
-import com.tcdng.unify.core.annotation.UplAttribute;
-import com.tcdng.unify.core.annotation.UplAttributes;
 
 /**
  * Filter generator search.
@@ -27,9 +25,6 @@ import com.tcdng.unify.core.annotation.UplAttributes;
  * @since 1.0
  */
 @Component("fc-filtergeneratorsearch")
-@UplAttributes({ @UplAttribute(name = "ref", type = String[].class, defaultVal = "$l{}"),
-        @UplAttribute(name = "direct", type = boolean.class, defaultVal = "true"),
-        @UplAttribute(name = "listKey", type = String.class) })
 public class FilterGeneratorSearch extends AbstractEntityTypeSearchWidget<EntityBasedFilterGenerator> {
 
     public FilterGeneratorSearch() {

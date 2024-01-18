@@ -15,8 +15,12 @@
  */
 package com.flowcentraltech.flowcentral.messaging.business;
 
+import java.util.List;
+
 import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
+import com.flowcentraltech.flowcentral.common.data.SearchInput;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.data.Listable;
 
 /**
  * Messaging provider.
@@ -25,6 +29,28 @@ import com.tcdng.unify.core.UnifyException;
  * @since 1.0
  */
 public interface MessagingProvider extends FlowCentralComponent {
+
+    /**
+     * Gets messaging configuration by name.
+     * 
+     * @param configName
+     *                   the configuration name to use
+     * @return the configuration if found otherwise null
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    Listable getConfig(String configName) throws UnifyException;
+
+    /**
+     * Get messaging configuration list based on supplied search input.
+     * 
+     * @param searchInput
+     *                    the search input
+     * @return the configuration list
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    List<? extends Listable> getConfigList(SearchInput searchInput) throws UnifyException;
 
     /**
      * Sends a message to an configuration destination.

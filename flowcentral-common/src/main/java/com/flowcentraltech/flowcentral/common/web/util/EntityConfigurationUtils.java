@@ -81,7 +81,7 @@ public final class EntityConfigurationUtils {
         return EntityConfigurationUtils.getConfigListable(configList, messageResolver, null);
     }
 
-    private static List<? extends Listable> getConfigListable(List<UnifyComponentConfig> configList,
+    public static List<? extends Listable> getConfigListable(List<UnifyComponentConfig> configList,
             MessageResolver messageResolver, SearchInput search) throws UnifyException {
         if (!DataUtils.isBlank(configList)) {
             List<Listable> list = new ArrayList<Listable>();

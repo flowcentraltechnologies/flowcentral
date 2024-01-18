@@ -3,6 +3,21 @@
 <application name="messaging"
 	description="$m{messaging.short.description}"
 	label="$m{messaging.label}" module="messaging">
+	<!-- Widgets -->
+	<widgets>
+		<widgetType name="messagingconfigsearch"
+			description="$m{messaging.widgettype.messagingconfigsearch}"
+			dataType="string" inputType="string"
+			editor="!fc-messagingconfigsearch" renderer="!ui-label" />
+		<widgetType name="messagingconsumersearch"
+			description="$m{messaging.widgettype.messagingconsumersearch}"
+			dataType="string" inputType="string"
+			editor="!fc-messagingconsumersearch" renderer="!ui-label" />
+		<widgetType name="messagingproducersearch"
+			description="$m{messaging.widgettype.messagingproducersearch}"
+			dataType="string" inputType="string"
+			editor="!fc-messagingproducersearch" renderer="!ui-label" />
+	</widgets>
 	<!-- Applets -->
 	<!-- References -->
 	<!-- Entities -->

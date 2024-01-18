@@ -15,20 +15,26 @@
  */
 package com.flowcentraltech.flowcentral.integration.business;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import com.flowcentraltech.flowcentral.common.business.AbstractFlowCentralService;
+import com.flowcentraltech.flowcentral.common.data.SearchInput;
 import com.flowcentraltech.flowcentral.configuration.data.ModuleInstall;
 import com.flowcentraltech.flowcentral.integration.constants.IntegrationModuleNameConstants;
 import com.flowcentraltech.flowcentral.integration.endpoint.Endpoint;
 import com.flowcentraltech.flowcentral.integration.endpoint.EndpointManager;
+import com.flowcentraltech.flowcentral.integration.entities.EndpointConfig;
+import com.flowcentraltech.flowcentral.integration.entities.EndpointConfigQuery;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.Transactional;
-import com.tcdng.unify.core.task.TaskMonitor;
+import com.tcdng.unify.core.data.ListData;
+import com.tcdng.unify.core.data.Listable;
+import com.tcdng.unify.core.util.DataUtils;
+import com.tcdng.unify.core.util.StringUtils;
 
 /**
  * Implementation of integration module service.
@@ -40,13 +46,43 @@ import com.tcdng.unify.core.task.TaskMonitor;
 @Component(IntegrationModuleNameConstants.INTEGRATION_MODULE_SERVICE)
 public class IntegrationModuleServiceImpl extends AbstractFlowCentralService implements IntegrationModuleService {
 
+    private static final int MAX_SEARCH_LIMIT = 50;
+
     @Configurable
     private EndpointManager endpointManager;
 
-    private final Map<String, TaskMonitor> endpointReaderMonitors;
+    @Override
+    public Listable getConfig(String configName) throws UnifyException {
+        EndpointConfig config = environment()
+                .find(new EndpointConfigQuery().name(configName).addSelect("name", "description"));
+        return config != null ? new ListData(config.getName(), config.getDescription()) : null;
+    }
 
-    public IntegrationModuleServiceImpl() {
-        this.endpointReaderMonitors = new HashMap<String, TaskMonitor>();
+    @Override
+    public List<? extends Listable> getConfigList(SearchInput searchInput) throws UnifyException {
+        final String input = searchInput != null && !StringUtils.isBlank(searchInput.getInput())
+                ? searchInput.getInput()
+                : null;
+        final int limit = StringUtils.isBlank(input) ? MAX_SEARCH_LIMIT
+                : (searchInput != null ? searchInput.getLimit() : 0);
+        EndpointConfigQuery query = new EndpointConfigQuery();
+        if (!StringUtils.isBlank(input)) {
+            query.nameStartsWith(input);
+        }
+
+        query.setLimit(limit);
+        List<EndpointConfig> configs = environment()
+                .findAll(query.addSelect("name", "description").addOrder("description"));
+        if (!DataUtils.isBlank(configs)) {
+            List<ListData> result = new ArrayList<ListData>();
+            for (EndpointConfig config : configs) {
+                result.add(new ListData(config.getName(), config.getDescription()));
+            }
+
+            return result;
+        }
+
+        return Collections.emptyList();
     }
 
     @Override
@@ -64,19 +100,6 @@ public class IntegrationModuleServiceImpl extends AbstractFlowCentralService imp
     @Override
     protected void doInstallModuleFeatures(ModuleInstall moduleInstall) throws UnifyException {
 
-    }
-
-    @Override
-    protected void onTerminate() throws UnifyException {
-        // Kill all transport readers
-        Iterator<Map.Entry<String, TaskMonitor>> it = endpointReaderMonitors.entrySet().iterator();
-        while (it.hasNext()) {
-            Map.Entry<String, TaskMonitor> entry = it.next();
-            entry.getValue().cancel();
-            it.remove();
-        }
-
-        super.onTerminate();
     }
 
 }
