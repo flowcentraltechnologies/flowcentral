@@ -16,7 +16,7 @@
 package com.flowcentraltech.flowcentral.messaging.business;
 
 import com.flowcentraltech.flowcentral.common.business.FlowCentralService;
-import com.flowcentraltech.flowcentral.messaging.data.BaseMessage;
+import com.flowcentraltech.flowcentral.messaging.data.Message;
 import com.tcdng.unify.core.UnifyException;
 
 /**
@@ -35,21 +35,19 @@ public interface MessagingModuleService extends FlowCentralService {
      * @throws UnifyException
      *                        if an error occurs
      */
-    <T extends BaseMessage> void sendMessage(T message) throws UnifyException;
+    void sendMessage(Message message) throws UnifyException;
 
     /**
      * Receives a message.
      * 
-     * @param messageType
-     *                    the message type
      * @param config
-     *                    the configuration name
-     * @param target
-     *                    the source target
+     *               the channel configuration
+     * @param source
+     *               the message source
      * @return message is available otherwise null
      * @throws UnifyException
      *                        if an error occurs
      */
-    <T extends BaseMessage> T receiveMessage(Class<T> messageType, String config, String target) throws UnifyException;
+    Message receiveMessage(String config, String source) throws UnifyException;
 
 }

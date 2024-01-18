@@ -13,43 +13,27 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.messaging.data;
+package com.flowcentraltech.flowcentral.messaging.readers;
+
+import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
+import com.flowcentraltech.flowcentral.messaging.data.Message;
+import com.tcdng.unify.core.UnifyException;
 
 /**
- * Base class for all messages.
+ * Messaging consumer.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class BaseMessage {
+public interface MessagingConsumer extends FlowCentralComponent {
 
-    private String config;
-
-    private String target;
-
-    public BaseMessage(String config, String target) {
-        this.config = config;
-        this.target = target;
-    }
-
-    public BaseMessage() {
-
-    }
-
-    public String getConfig() {
-        return config;
-    }
-
-    public void setConfig(String config) {
-        this.config = config;
-    }
-
-    public String getTarget() {
-        return target;
-    }
-
-    public void setTarget(String target) {
-        this.target = target;
-    }
-   
+    /**
+     * Consumes a message.
+     * 
+     * @param message
+     *                        the message to consume
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    void consume(Message message) throws UnifyException;
 }

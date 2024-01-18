@@ -19,11 +19,14 @@ import com.flowcentraltech.flowcentral.common.business.AbstractFlowCentralServic
 import com.flowcentraltech.flowcentral.configuration.data.ModuleInstall;
 import com.flowcentraltech.flowcentral.messaging.constants.MessagingModuleErrorConstants;
 import com.flowcentraltech.flowcentral.messaging.constants.MessagingModuleNameConstants;
-import com.flowcentraltech.flowcentral.messaging.data.BaseMessage;
+import com.flowcentraltech.flowcentral.messaging.data.Message;
+import com.flowcentraltech.flowcentral.messaging.data.MessageHeader;
+import com.flowcentraltech.flowcentral.messaging.utils.MessagingUtils;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.Transactional;
+import com.tcdng.unify.core.util.StringUtils;
 
 /**
  * Implementation of messaging module service.
@@ -39,16 +42,20 @@ public class MessagingModuleServiceImpl extends AbstractFlowCentralService imple
     private MessagingProvider messagingProvider;
 
     @Override
-    public <T extends BaseMessage> void sendMessage(T message) throws UnifyException {
-        String json = asJson(message);
-        provider().sendMessage(message.getConfig(), message.getTarget(), json);
+    public void sendMessage(Message message) throws UnifyException {
+        MessageHeader header = message.getHeader();
+        String text = MessagingUtils.marshal(message);
+        provider().sendMessage(header.getConfig(), header.getDestination(), text);
     }
 
     @Override
-    public <T extends BaseMessage> T receiveMessage(Class<T> messageType, String config, String target)
-            throws UnifyException {
-        String json = provider().receiveMessage(config, target);
-        return fromJson(messageType, json);
+    public Message receiveMessage(String config, String source) throws UnifyException {
+        String text = provider().receiveMessage(config, source);
+        if (!StringUtils.isBlank(text)) {
+            return MessagingUtils.unmarshal(config, source, text);
+        }
+
+        return null;
     }
 
     @Override
