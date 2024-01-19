@@ -10,21 +10,6 @@
 			inputType="string"
 			editor="!ui-select list:endpointproviderlist listParams:$l{endpointType} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
-		<widgetType name="endpointreaderlist"
-			description="$m{integration.widgettype.endpointreaderlist}" dataType="string"
-			inputType="string"
-			editor="!ui-select list:endpointreaderlist blankOption:$m{blank.none}"
-			renderer="!ui-label" />
-		<widgetType name="readeventprocessorlist"
-			description="$m{integration.widgettype.readeventprocessorlist}" dataType="string"
-			inputType="string"
-			editor="!ui-select list:readeventprocessorlist blankOption:$m{blank.none}"
-			renderer="!ui-label" />
-		<widgetType name="readconfigprocessorrulelist"
-			description="$m{integration.widgettype.readconfigprocessorrulelist}" dataType="string"
-			inputType="string"
-			editor="!ui-select list:rulelist listParams:$l{eventProcessor} blankOption:$m{blank.none}"
-			renderer="!ui-label" />
 	</widgetTypes>
 	<!-- Applets -->
 	<applets>
