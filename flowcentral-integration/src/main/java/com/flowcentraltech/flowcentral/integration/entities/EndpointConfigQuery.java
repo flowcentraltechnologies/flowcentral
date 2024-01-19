@@ -34,6 +34,10 @@ public class EndpointConfigQuery extends BaseStatusEntityQuery<EndpointConfig> {
         return (EndpointConfigQuery) addEquals("name", name);
     }
 
+    public EndpointConfigQuery nameStartsWith(String name) {
+        return (EndpointConfigQuery) addIBeginsWith("name", name);
+    }
+
     public EndpointConfigQuery descriptionLike(String description) {
         return (EndpointConfigQuery) addLike("description", description);
     }

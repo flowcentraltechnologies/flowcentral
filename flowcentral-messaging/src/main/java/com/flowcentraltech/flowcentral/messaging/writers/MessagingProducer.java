@@ -13,41 +13,32 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.messaging.business;
+package com.flowcentraltech.flowcentral.messaging.writers;
 
-import com.flowcentraltech.flowcentral.common.business.FlowCentralService;
+import java.util.List;
+
+import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
 import com.flowcentraltech.flowcentral.messaging.data.Message;
 import com.tcdng.unify.core.UnifyException;
 
 /**
- * Messaging module service.
+ * Messaging producer.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface MessagingModuleService extends FlowCentralService {
+public interface MessagingProducer extends FlowCentralComponent {
 
     /**
-     * Sends a message.
-     * 
-     * @param message
-     *                the message to send
-     * @throws UnifyException
-     *                        if an error occurs
-     */
-    void sendMessage(Message message) throws UnifyException;
-
-    /**
-     * Receives a message.
+     * Produces messages for supplied configuration and destination.
      * 
      * @param config
-     *               the channel configuration
-     * @param source
-     *               the message source
-     * @return message is available otherwise null
+     *                    configuration
+     * @param destination
+     *                    destination
+     * @return produced messages
      * @throws UnifyException
      *                        if an error occurs
      */
-    Message receiveMessage(String config, String source) throws UnifyException;
-
+    List<Message> produce(String config, String destination) throws UnifyException;
 }

@@ -17,12 +17,26 @@ package com.flowcentraltech.flowcentral.messaging.business;
 
 import com.flowcentraltech.flowcentral.common.business.AbstractFlowCentralService;
 import com.flowcentraltech.flowcentral.configuration.data.ModuleInstall;
+import com.flowcentraltech.flowcentral.messaging.constants.MessagingModuleErrorConstants;
 import com.flowcentraltech.flowcentral.messaging.constants.MessagingModuleNameConstants;
-import com.flowcentraltech.flowcentral.messaging.data.BaseMessage;
+import com.flowcentraltech.flowcentral.messaging.data.Message;
+import com.flowcentraltech.flowcentral.messaging.data.MessageHeader;
+import com.flowcentraltech.flowcentral.messaging.data.MessagingReadConfigDef;
+import com.flowcentraltech.flowcentral.messaging.data.MessagingWriteConfigDef;
+import com.flowcentraltech.flowcentral.messaging.entities.MessagingReadConfig;
+import com.flowcentraltech.flowcentral.messaging.entities.MessagingReadConfigQuery;
+import com.flowcentraltech.flowcentral.messaging.entities.MessagingWriteConfig;
+import com.flowcentraltech.flowcentral.messaging.entities.MessagingWriteConfigQuery;
+import com.flowcentraltech.flowcentral.messaging.utils.MessagingUtils;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
+import com.tcdng.unify.core.annotation.Periodic;
+import com.tcdng.unify.core.annotation.PeriodicType;
 import com.tcdng.unify.core.annotation.Transactional;
+import com.tcdng.unify.core.data.FactoryMap;
+import com.tcdng.unify.core.task.TaskMonitor;
+import com.tcdng.unify.core.util.StringUtils;
 
 /**
  * Implementation of messaging module service.
@@ -37,22 +51,85 @@ public class MessagingModuleServiceImpl extends AbstractFlowCentralService imple
     @Configurable
     private MessagingProvider messagingProvider;
 
-    @Override
-    public <T extends BaseMessage> void sendMessage(T message) throws UnifyException {
-        // TODO Auto-generated method stub
+    private final FactoryMap<String, MessagingReadConfigDef> messagingReadConfigDefFactoryMap;
+
+    private final FactoryMap<String, MessagingWriteConfigDef> messagingWriteConfigDefFactoryMap;
+
+    public MessagingModuleServiceImpl() {
+        this.messagingReadConfigDefFactoryMap = new FactoryMap<String, MessagingReadConfigDef>(true)
+            {
+
+                @Override
+                protected boolean stale(String key, MessagingReadConfigDef messagingReadConfigDef) throws Exception {
+                    return environment().value(long.class, "versionNo", new MessagingReadConfigQuery()
+                            .id(messagingReadConfigDef.getId())) > messagingReadConfigDef.getVersion();
+                }
+
+                @Override
+                protected MessagingReadConfigDef create(String configName, Object... params) throws Exception {
+                    MessagingReadConfig messagingReadConfig = environment()
+                            .find(new MessagingReadConfigQuery().name(configName));
+                    return new MessagingReadConfigDef(messagingReadConfig.getId(), messagingReadConfig.getVersionNo(),
+                            messagingReadConfig.getName(), messagingReadConfig.getDescription(),
+                            messagingReadConfig.getEndpointConfig(), messagingReadConfig.getConsumer(),
+                            messagingReadConfig.getConcurrent(), messagingReadConfig.getStatus());
+                }
+            };
+
+        this.messagingWriteConfigDefFactoryMap = new FactoryMap<String, MessagingWriteConfigDef>(true)
+            {
+
+                @Override
+                protected boolean stale(String key, MessagingWriteConfigDef messagingWriteConfigDef) throws Exception {
+                    return environment().value(long.class, "versionNo", new MessagingWriteConfigQuery()
+                            .id(messagingWriteConfigDef.getId())) > messagingWriteConfigDef.getVersion();
+                }
+
+                @Override
+                protected MessagingWriteConfigDef create(String configName, Object... params) throws Exception {
+                    MessagingWriteConfig messagingWriteConfig = environment()
+                            .find(new MessagingWriteConfigQuery().name(configName));
+                    return new MessagingWriteConfigDef(messagingWriteConfig.getId(),
+                            messagingWriteConfig.getVersionNo(), messagingWriteConfig.getName(),
+                            messagingWriteConfig.getDescription(), messagingWriteConfig.getEndpointConfig(),
+                            messagingWriteConfig.getProducer(), messagingWriteConfig.getStatus());
+                }
+            };
 
     }
 
     @Override
-    public <T extends BaseMessage> T receiveMessage(Class<T> messageType, String config, String target)
-            throws UnifyException {
-        // TODO Auto-generated method stub
+    public void sendMessage(Message message) throws UnifyException {
+        MessageHeader header = message.getHeader();
+        String text = MessagingUtils.marshal(message);
+        provider().sendMessage(header.getConfig(), header.getDestination(), text);
+    }
+
+    @Override
+    public Message receiveMessage(String config, String source) throws UnifyException {
+        String text = provider().receiveMessage(config, source);
+        if (!StringUtils.isBlank(text)) {
+            return MessagingUtils.unmarshal(config, source, text);
+        }
+
         return null;
     }
 
+    @Periodic(PeriodicType.FASTER)
+    public void triggerMessagingForExecution(TaskMonitor taskMonitor) throws UnifyException {
+        
+    }
+    
     @Override
     protected void doInstallModuleFeatures(ModuleInstall moduleInstall) throws UnifyException {
 
     }
 
+    private MessagingProvider provider() throws UnifyException {
+        if (messagingProvider == null) {
+            throw new UnifyException(MessagingModuleErrorConstants.NO_MESSAGING_PROVIDER_FOUND);
+        }
+
+        return messagingProvider;
+    }
 }

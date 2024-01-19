@@ -31,6 +31,7 @@ import com.tcdng.unify.core.data.ListData;
 import com.tcdng.unify.core.data.Listable;
 import com.tcdng.unify.core.message.MessageResolver;
 import com.tcdng.unify.core.util.DataUtils;
+import com.tcdng.unify.core.util.StringUtils;
 
 /**
  * Convenient abstract base class for entity type search widget.
@@ -39,13 +40,16 @@ import com.tcdng.unify.core.util.DataUtils;
  * @since 1.0
  */
 @UplAttributes({
-        @UplAttribute(name = "entityName", type = String.class, mandatory = true),
-        @UplAttribute(name = "styleClass", type = String.class, defaultVal = "$e{fc-entitysearch}")})
+        @UplAttribute(name = "ref", type = String[].class, defaultVal = "$l{}"),
+        @UplAttribute(name = "direct", type = boolean.class, defaultVal = "true"),
+        @UplAttribute(name = "listKey", type = String.class),
+        @UplAttribute(name = "entityName", type = String.class),
+        @UplAttribute(name = "styleClass", type = String.class, defaultVal = "$e{fc-entitysearch}") })
 public abstract class AbstractEntityTypeSearchWidget<T extends UnifyComponent> extends EntitySearchWidget {
 
     @Configurable
     private MessageResolver messageResolver;
-    
+
     private Class<T> typeClass;
 
     public AbstractEntityTypeSearchWidget(Class<T> typeClass) {
@@ -72,8 +76,11 @@ public abstract class AbstractEntityTypeSearchWidget<T extends UnifyComponent> e
         List<UnifyComponentConfig> configList = getComponentConfigs(typeClass);
         if (!DataUtils.isBlank(configList)) {
             final String entityName = getUplAttribute(String.class, "entityName");
-            return EntityConfigurationUtils.getConfigListableByEntity(configList, entityName, messageResolver,
-                    new SearchInput(input, limit));
+            return StringUtils.isBlank(entityName)
+                    ? EntityConfigurationUtils.getConfigListable(configList, messageResolver,
+                            new SearchInput(input, limit))
+                    : EntityConfigurationUtils.getConfigListableByEntity(configList, entityName, messageResolver,
+                            new SearchInput(input, limit));
         }
 
         return Collections.emptyList();

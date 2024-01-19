@@ -13,41 +13,33 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.messaging.business;
+package com.flowcentraltech.flowcentral.messaging.readers;
 
-import com.flowcentraltech.flowcentral.common.business.FlowCentralService;
-import com.flowcentraltech.flowcentral.messaging.data.Message;
+import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
 import com.tcdng.unify.core.UnifyException;
 
 /**
- * Messaging module service.
+ * Messaging processor.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface MessagingModuleService extends FlowCentralService {
+public interface MessagingHandler extends FlowCentralComponent {
 
     /**
-     * Sends a message.
+     * Gets the processor message type.
+     * 
+     * @return the message type
+     */
+    Class<?> getMessageType();
+
+    /**
+     * Processes a message.
      * 
      * @param message
-     *                the message to send
+     *                the message to process
      * @throws UnifyException
      *                        if an error occurs
      */
-    void sendMessage(Message message) throws UnifyException;
-
-    /**
-     * Receives a message.
-     * 
-     * @param config
-     *               the channel configuration
-     * @param source
-     *               the message source
-     * @return message is available otherwise null
-     * @throws UnifyException
-     *                        if an error occurs
-     */
-    Message receiveMessage(String config, String source) throws UnifyException;
-
+    void process(Object msg) throws UnifyException;
 }
