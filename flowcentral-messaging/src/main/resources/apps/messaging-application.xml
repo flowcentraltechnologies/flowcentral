@@ -4,7 +4,7 @@
 	description="$m{messaging.short.description}"
 	label="$m{messaging.label}" module="messaging">
 	<!-- Widgets -->
-	<widgets>
+	<widgetTypes>
 		<widgetType name="messagingconfigsearch"
 			description="$m{messaging.widgettype.messagingconfigsearch}"
 			dataType="string" inputType="string"
@@ -17,7 +17,7 @@
 			description="$m{messaging.widgettype.messagingproducersearch}"
 			dataType="string" inputType="string"
 			editor="!fc-messagingproducersearch" renderer="!ui-label" />
-	</widgets>
+	</widgetTypes>
 	<!-- Applets -->
 	<!-- References -->
 	<!-- Entities -->
