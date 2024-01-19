@@ -86,7 +86,7 @@ public class IntegrationModuleServiceImpl extends AbstractFlowCentralService imp
             query.nameStartsWith(input);
         }
 
-        query.setLimit(limit);
+        query.setLimit(limit).ignoreEmptyCriteria(true);
         List<EndpointConfig> configs = environment()
                 .findAll(query.addSelect("name", "description").addOrder("description"));
         if (!DataUtils.isBlank(configs)) {
