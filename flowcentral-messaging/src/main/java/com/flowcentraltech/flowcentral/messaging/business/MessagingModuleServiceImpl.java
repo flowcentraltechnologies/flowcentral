@@ -15,19 +15,26 @@
  */
 package com.flowcentraltech.flowcentral.messaging.business;
 
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.TimeUnit;
+
 import com.flowcentraltech.flowcentral.common.business.AbstractFlowCentralService;
+import com.flowcentraltech.flowcentral.common.constants.RecordStatus;
 import com.flowcentraltech.flowcentral.configuration.data.ModuleInstall;
 import com.flowcentraltech.flowcentral.messaging.constants.MessagingModuleErrorConstants;
 import com.flowcentraltech.flowcentral.messaging.constants.MessagingModuleNameConstants;
 import com.flowcentraltech.flowcentral.messaging.data.Message;
 import com.flowcentraltech.flowcentral.messaging.data.MessageHeader;
-import com.flowcentraltech.flowcentral.messaging.data.MessagingReadConfigDef;
-import com.flowcentraltech.flowcentral.messaging.data.MessagingWriteConfigDef;
+import com.flowcentraltech.flowcentral.messaging.data.MessagingConfigDef;
+import com.flowcentraltech.flowcentral.messaging.data.MessagingExecContext;
 import com.flowcentraltech.flowcentral.messaging.entities.MessagingReadConfig;
 import com.flowcentraltech.flowcentral.messaging.entities.MessagingReadConfigQuery;
 import com.flowcentraltech.flowcentral.messaging.entities.MessagingWriteConfig;
 import com.flowcentraltech.flowcentral.messaging.entities.MessagingWriteConfigQuery;
+import com.flowcentraltech.flowcentral.messaging.readers.MessagingConsumer;
 import com.flowcentraltech.flowcentral.messaging.utils.MessagingUtils;
+import com.flowcentraltech.flowcentral.messaging.writers.MessagingProducer;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -36,6 +43,7 @@ import com.tcdng.unify.core.annotation.PeriodicType;
 import com.tcdng.unify.core.annotation.Transactional;
 import com.tcdng.unify.core.data.FactoryMap;
 import com.tcdng.unify.core.task.TaskMonitor;
+import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.StringUtils;
 
 /**
@@ -51,48 +59,60 @@ public class MessagingModuleServiceImpl extends AbstractFlowCentralService imple
     @Configurable
     private MessagingProvider messagingProvider;
 
-    private final FactoryMap<String, MessagingReadConfigDef> messagingReadConfigDefFactoryMap;
+    private final FactoryMap<String, MessagingConfigDef> readMessagingConfigDefFactoryMap;
 
-    private final FactoryMap<String, MessagingWriteConfigDef> messagingWriteConfigDefFactoryMap;
+    private final FactoryMap<String, MessagingConfigDef> writeMessagingConfigDefFactoryMap;
 
     public MessagingModuleServiceImpl() {
-        this.messagingReadConfigDefFactoryMap = new FactoryMap<String, MessagingReadConfigDef>(true)
+        this.readMessagingConfigDefFactoryMap = new FactoryMap<String, MessagingConfigDef>(true)
             {
 
                 @Override
-                protected boolean stale(String key, MessagingReadConfigDef messagingReadConfigDef) throws Exception {
-                    return environment().value(long.class, "versionNo", new MessagingReadConfigQuery()
-                            .id(messagingReadConfigDef.getId())) > messagingReadConfigDef.getVersion();
+                protected boolean stale(String key, MessagingConfigDef messagingConfigDef) throws Exception {
+                    if (environment().value(long.class, "versionNo", new MessagingReadConfigQuery()
+                            .id(messagingConfigDef.getId())) > messagingConfigDef.getVersion()) {
+                        shutdownExecutorPool(messagingConfigDef.getCtx().getPool());
+                        return true;
+                    }
+
+                    return false;
                 }
 
                 @Override
-                protected MessagingReadConfigDef create(String configName, Object... params) throws Exception {
+                protected MessagingConfigDef create(String configName, Object... params) throws Exception {
                     MessagingReadConfig messagingReadConfig = environment()
                             .find(new MessagingReadConfigQuery().name(configName));
-                    return new MessagingReadConfigDef(messagingReadConfig.getId(), messagingReadConfig.getVersionNo(),
+                    return new MessagingConfigDef(messagingReadConfig.getId(), messagingReadConfig.getVersionNo(),
                             messagingReadConfig.getName(), messagingReadConfig.getDescription(),
-                            messagingReadConfig.getEndpointConfig(), messagingReadConfig.getConsumer(),
-                            messagingReadConfig.getConcurrent(), messagingReadConfig.getStatus());
+                            messagingReadConfig.getEndpointConfig(), messagingReadConfig.getSource(),
+                            messagingReadConfig.getConsumer(), messagingReadConfig.getMaxConcurrent(),
+                            messagingReadConfig.getStatus());
                 }
             };
 
-        this.messagingWriteConfigDefFactoryMap = new FactoryMap<String, MessagingWriteConfigDef>(true)
+        this.writeMessagingConfigDefFactoryMap = new FactoryMap<String, MessagingConfigDef>(true)
             {
 
                 @Override
-                protected boolean stale(String key, MessagingWriteConfigDef messagingWriteConfigDef) throws Exception {
-                    return environment().value(long.class, "versionNo", new MessagingWriteConfigQuery()
-                            .id(messagingWriteConfigDef.getId())) > messagingWriteConfigDef.getVersion();
+                protected boolean stale(String key, MessagingConfigDef messagingConfigDef) throws Exception {
+                    if (environment().value(long.class, "versionNo", new MessagingWriteConfigQuery()
+                            .id(messagingConfigDef.getId())) > messagingConfigDef.getVersion()) {
+                        shutdownExecutorPool(messagingConfigDef.getCtx().getPool());
+                        return true;
+                    }
+
+                    return false;
                 }
 
                 @Override
-                protected MessagingWriteConfigDef create(String configName, Object... params) throws Exception {
+                protected MessagingConfigDef create(String configName, Object... params) throws Exception {
                     MessagingWriteConfig messagingWriteConfig = environment()
                             .find(new MessagingWriteConfigQuery().name(configName));
-                    return new MessagingWriteConfigDef(messagingWriteConfig.getId(),
-                            messagingWriteConfig.getVersionNo(), messagingWriteConfig.getName(),
-                            messagingWriteConfig.getDescription(), messagingWriteConfig.getEndpointConfig(),
-                            messagingWriteConfig.getProducer(), messagingWriteConfig.getStatus());
+                    return new MessagingConfigDef(messagingWriteConfig.getId(), messagingWriteConfig.getVersionNo(),
+                            messagingWriteConfig.getName(), messagingWriteConfig.getDescription(),
+                            messagingWriteConfig.getEndpointConfig(), messagingWriteConfig.getDestination(),
+                            messagingWriteConfig.getProducer(), messagingWriteConfig.getMaxConcurrent(),
+                            messagingWriteConfig.getStatus());
                 }
             };
 
@@ -117,12 +137,44 @@ public class MessagingModuleServiceImpl extends AbstractFlowCentralService imple
 
     @Periodic(PeriodicType.FASTER)
     public void triggerMessagingForExecution(TaskMonitor taskMonitor) throws UnifyException {
+        logDebug("Triggering messaging for execution...");
         
+        // Reads
+        List<String> readConfigList = environment().valueList(String.class, "name",
+                new MessagingReadConfigQuery().status(RecordStatus.ACTIVE));
+        logDebug("[{0}] active read configurations detected...", readConfigList.size());
+        for (String readConfigName : readConfigList) {
+            MessagingConfigDef messagingConfigDef = readMessagingConfigDefFactoryMap.get(readConfigName);
+            MessagingExecContext ctx = messagingConfigDef.getCtx();
+            int len = ctx.getLoadingAvailable();
+            logDebug("Loading [{0}] threads for [{1}]...", len, readConfigName);
+            for (int i = 0; i < len; i++) {
+                ctx.getPool().execute(new ReadExec(ctx));
+            }
+        }
+        
+        // Writes
+        List<String> writeConfigList = environment().valueList(String.class, "name",
+                new MessagingWriteConfigQuery().status(RecordStatus.ACTIVE));
+        logDebug("[{0}] active write configurations detected...", writeConfigList.size());
+        for (String writeConfigName : writeConfigList) {
+            MessagingConfigDef messagingConfigDef = writeMessagingConfigDefFactoryMap.get(writeConfigName);
+            MessagingExecContext ctx = messagingConfigDef.getCtx();
+            int len = ctx.getLoadingAvailable();
+            logDebug("Loading [{0}] threads for [{1}]...", len, writeConfigName);
+            for (int i = 0; i < len; i++) {
+                ctx.getPool().execute(new WriteExec(ctx));
+            }
+        }
     }
-    
+
     @Override
     protected void doInstallModuleFeatures(ModuleInstall moduleInstall) throws UnifyException {
 
+    }
+
+    private void logProcessFailure(Message message) throws UnifyException {
+        // TODO
     }
 
     private MessagingProvider provider() throws UnifyException {
@@ -132,4 +184,89 @@ public class MessagingModuleServiceImpl extends AbstractFlowCentralService imple
 
         return messagingProvider;
     }
+
+    private void shutdownExecutorPool(ExecutorService pool) {
+        pool.shutdown();
+        try {
+            if (!pool.awaitTermination(60, TimeUnit.SECONDS)) {
+                pool.shutdownNow();
+                pool.awaitTermination(60, TimeUnit.SECONDS);
+            }
+        } catch (InterruptedException ie) {
+            pool.shutdownNow();
+            Thread.currentThread().interrupt();
+        }
+    }
+
+    private class ReadExec extends AbstractExec {
+
+        public ReadExec(MessagingExecContext ctx) {
+            super(ctx);
+        }
+
+        @Override
+        protected void doRun() throws Exception {
+            Message message = receiveMessage(ctx.getConfig(), ctx.getTarget());
+            if (message != null) {
+                try {
+                    MessagingConsumer consumer = getComponent(MessagingConsumer.class, ctx.getComponent());
+                    consumer.consume(message);
+                } catch (Exception e) {
+                    logProcessFailure(message);
+                    throw e;
+                }
+            }
+        }
+
+    }
+
+    private class WriteExec extends AbstractExec {
+
+        public WriteExec(MessagingExecContext ctx) {
+            super(ctx);
+        }
+
+        @Override
+        protected void doRun() throws Exception {
+            MessagingProducer producer = getComponent(MessagingProducer.class, ctx.getComponent());
+            List<Message> messages = producer.produce(ctx.getConfig(), ctx.getTarget());
+            if (DataUtils.isBlank(messages)) {
+                for (Message message : messages) {
+                    try {
+                        sendMessage(message);
+                    } catch (UnifyException e) {
+                        logProcessFailure(message);
+                        logError(e);
+                    }
+                }
+            }
+        }
+
+    }
+
+    private abstract class AbstractExec implements Runnable {
+
+        protected final MessagingExecContext ctx;
+
+        public AbstractExec(MessagingExecContext ctx) {
+            this.ctx = ctx;
+        }
+
+        @Override
+        public void run() {
+            if (ctx.incLoading()) {
+                try {
+                    doRun();
+                } catch (Exception e) {
+                    logError(e);
+                } finally {
+                    ctx.decLoading();
+                }
+            }
+        }
+
+        protected abstract void doRun() throws Exception;
+
+    }
+
 }

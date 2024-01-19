@@ -27,18 +27,25 @@ public class Message {
 
     private MessageHeader header;
 
+    private String id;
+
     private String body;
 
     private boolean sendHeaderless;
 
-    private Message(MessageHeader header, String body, boolean sendHeaderless) {
+    private Message(MessageHeader header, String id, String body, boolean sendHeaderless) {
         this.header = header;
+        this.id = id;
         this.body = body;
         this.sendHeaderless = sendHeaderless;
     }
 
     public MessageHeader getHeader() {
         return header;
+    }
+
+    public String getId() {
+        return id;
     }
 
     public String getBody() {
@@ -54,6 +61,8 @@ public class Message {
     }
 
     public static class Builder {
+
+        private String id;
 
         private String config;
 
@@ -72,6 +81,11 @@ public class Message {
 
         public Builder() {
 
+        }
+
+        public Builder id(String id) {
+            this.id = id;
+            return this;
         }
 
         public Builder config(String config) {
@@ -112,7 +126,7 @@ public class Message {
                 throw new IllegalArgumentException("Message body is required.");
             }
 
-            return new Message(new MessageHeader(config, destination, handler), body, sendHeaderless);
+            return new Message(new MessageHeader(config, destination, handler), id, body, sendHeaderless);
         }
     }
 }

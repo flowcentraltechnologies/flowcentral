@@ -18,12 +18,14 @@ package com.flowcentraltech.flowcentral.messaging.data;
 import com.flowcentraltech.flowcentral.common.constants.RecordStatus;
 
 /**
- * Messaging write configuration definition.
+ * Messaging configuration definition.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class MessagingWriteConfigDef {
+public class MessagingConfigDef {
+
+    private MessagingExecContext ctx;
 
     private Long id;
 
@@ -35,18 +37,25 @@ public class MessagingWriteConfigDef {
 
     private String endpointConfig;
 
-    private String producer;
+    private String target;
+
+    private String component;
+
+    private int maxConcurrency;
 
     private RecordStatus status;
 
-    public MessagingWriteConfigDef(Long id, long version, String name, String description, String endpointConfig,
-            String producer, RecordStatus status) {
+    public MessagingConfigDef(Long id, long version, String name, String description, String endpointConfig,
+            String target, String component, int maxConcurrency, RecordStatus status) {
+        this.ctx = new MessagingExecContext(endpointConfig, target, component, maxConcurrency);
         this.id = id;
         this.version = version;
         this.name = name;
         this.description = description;
         this.endpointConfig = endpointConfig;
-        this.producer = producer;
+        this.target = target;
+        this.component = component;
+        this.maxConcurrency = maxConcurrency;
         this.status = status;
     }
 
@@ -70,12 +79,24 @@ public class MessagingWriteConfigDef {
         return endpointConfig;
     }
 
-    public String getProducer() {
-        return producer;
+    public String getComponent() {
+        return component;
+    }
+
+    public String getTarget() {
+        return target;
+    }
+
+    public int getMaxConcurrency() {
+        return maxConcurrency;
     }
 
     public RecordStatus getStatus() {
         return status;
+    }
+
+    public MessagingExecContext getCtx() {
+        return ctx;
     }
 
 }

@@ -41,11 +41,14 @@ public class MessagingReadConfig extends BaseStatusEntity {
     @Column(length = 64)
     private String endpointConfig;
 
+    @Column(length = 128)
+    private String source;
+
     @Column(length = 64)
     private String consumer;
 
     @Column
-    private int concurrent;
+    private int maxConcurrent;
 
     @Override
     public String getDescription() {
@@ -80,12 +83,20 @@ public class MessagingReadConfig extends BaseStatusEntity {
         this.consumer = consumer;
     }
 
-    public int getConcurrent() {
-        return concurrent;
+    public String getSource() {
+        return source;
     }
 
-    public void setConcurrent(int concurrent) {
-        this.concurrent = concurrent;
+    public void setSource(String source) {
+        this.source = source;
+    }
+
+    public int getMaxConcurrent() {
+        return maxConcurrent;
+    }
+
+    public void setMaxConcurrent(int maxConcurrent) {
+        this.maxConcurrent = maxConcurrent;
     }
 
 }
