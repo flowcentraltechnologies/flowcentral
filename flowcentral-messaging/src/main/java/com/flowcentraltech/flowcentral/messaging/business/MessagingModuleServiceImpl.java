@@ -21,11 +21,21 @@ import com.flowcentraltech.flowcentral.messaging.constants.MessagingModuleErrorC
 import com.flowcentraltech.flowcentral.messaging.constants.MessagingModuleNameConstants;
 import com.flowcentraltech.flowcentral.messaging.data.Message;
 import com.flowcentraltech.flowcentral.messaging.data.MessageHeader;
+import com.flowcentraltech.flowcentral.messaging.data.MessagingReadConfigDef;
+import com.flowcentraltech.flowcentral.messaging.data.MessagingWriteConfigDef;
+import com.flowcentraltech.flowcentral.messaging.entities.MessagingReadConfig;
+import com.flowcentraltech.flowcentral.messaging.entities.MessagingReadConfigQuery;
+import com.flowcentraltech.flowcentral.messaging.entities.MessagingWriteConfig;
+import com.flowcentraltech.flowcentral.messaging.entities.MessagingWriteConfigQuery;
 import com.flowcentraltech.flowcentral.messaging.utils.MessagingUtils;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
+import com.tcdng.unify.core.annotation.Periodic;
+import com.tcdng.unify.core.annotation.PeriodicType;
 import com.tcdng.unify.core.annotation.Transactional;
+import com.tcdng.unify.core.data.FactoryMap;
+import com.tcdng.unify.core.task.TaskMonitor;
 import com.tcdng.unify.core.util.StringUtils;
 
 /**
@@ -40,6 +50,53 @@ public class MessagingModuleServiceImpl extends AbstractFlowCentralService imple
 
     @Configurable
     private MessagingProvider messagingProvider;
+
+    private final FactoryMap<String, MessagingReadConfigDef> messagingReadConfigDefFactoryMap;
+
+    private final FactoryMap<String, MessagingWriteConfigDef> messagingWriteConfigDefFactoryMap;
+
+    public MessagingModuleServiceImpl() {
+        this.messagingReadConfigDefFactoryMap = new FactoryMap<String, MessagingReadConfigDef>(true)
+            {
+
+                @Override
+                protected boolean stale(String key, MessagingReadConfigDef messagingReadConfigDef) throws Exception {
+                    return environment().value(long.class, "versionNo", new MessagingReadConfigQuery()
+                            .id(messagingReadConfigDef.getId())) > messagingReadConfigDef.getVersion();
+                }
+
+                @Override
+                protected MessagingReadConfigDef create(String configName, Object... params) throws Exception {
+                    MessagingReadConfig messagingReadConfig = environment()
+                            .find(new MessagingReadConfigQuery().name(configName));
+                    return new MessagingReadConfigDef(messagingReadConfig.getId(), messagingReadConfig.getVersionNo(),
+                            messagingReadConfig.getName(), messagingReadConfig.getDescription(),
+                            messagingReadConfig.getEndpointConfig(), messagingReadConfig.getConsumer(),
+                            messagingReadConfig.getConcurrent(), messagingReadConfig.getStatus());
+                }
+            };
+
+        this.messagingWriteConfigDefFactoryMap = new FactoryMap<String, MessagingWriteConfigDef>(true)
+            {
+
+                @Override
+                protected boolean stale(String key, MessagingWriteConfigDef messagingWriteConfigDef) throws Exception {
+                    return environment().value(long.class, "versionNo", new MessagingWriteConfigQuery()
+                            .id(messagingWriteConfigDef.getId())) > messagingWriteConfigDef.getVersion();
+                }
+
+                @Override
+                protected MessagingWriteConfigDef create(String configName, Object... params) throws Exception {
+                    MessagingWriteConfig messagingWriteConfig = environment()
+                            .find(new MessagingWriteConfigQuery().name(configName));
+                    return new MessagingWriteConfigDef(messagingWriteConfig.getId(),
+                            messagingWriteConfig.getVersionNo(), messagingWriteConfig.getName(),
+                            messagingWriteConfig.getDescription(), messagingWriteConfig.getEndpointConfig(),
+                            messagingWriteConfig.getProducer(), messagingWriteConfig.getStatus());
+                }
+            };
+
+    }
 
     @Override
     public void sendMessage(Message message) throws UnifyException {
@@ -58,6 +115,11 @@ public class MessagingModuleServiceImpl extends AbstractFlowCentralService imple
         return null;
     }
 
+    @Periodic(PeriodicType.FASTER)
+    public void triggerMessagingForExecution(TaskMonitor taskMonitor) throws UnifyException {
+        
+    }
+    
     @Override
     protected void doInstallModuleFeatures(ModuleInstall moduleInstall) throws UnifyException {
 

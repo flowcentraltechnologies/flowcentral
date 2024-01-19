@@ -36,17 +36,20 @@ public class MessagingReadConfigDef {
     private String endpointConfig;
 
     private String consumer;
+    
+    private int concurrent;
 
     private RecordStatus status;
 
     public MessagingReadConfigDef(Long id, long version, String name, String description, String endpointConfig,
-            String consumer, RecordStatus status) {
+            String consumer, int concurrent, RecordStatus status) {
         this.id = id;
         this.version = version;
         this.name = name;
         this.description = description;
         this.endpointConfig = endpointConfig;
         this.consumer = consumer;
+        this.concurrent = concurrent;
         this.status = status;
     }
 
@@ -72,6 +75,10 @@ public class MessagingReadConfigDef {
 
     public String getConsumer() {
         return consumer;
+    }
+
+    public int getConcurrent() {
+        return concurrent;
     }
 
     public RecordStatus getStatus() {

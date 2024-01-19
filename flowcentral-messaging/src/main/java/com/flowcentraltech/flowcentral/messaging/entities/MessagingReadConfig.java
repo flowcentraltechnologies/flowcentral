@@ -44,6 +44,9 @@ public class MessagingReadConfig extends BaseStatusEntity {
     @Column(length = 64)
     private String consumer;
 
+    @Column
+    private int concurrent;
+
     @Override
     public String getDescription() {
         return this.description;
@@ -75,6 +78,14 @@ public class MessagingReadConfig extends BaseStatusEntity {
 
     public void setConsumer(String consumer) {
         this.consumer = consumer;
+    }
+
+    public int getConcurrent() {
+        return concurrent;
+    }
+
+    public void setConcurrent(int concurrent) {
+        this.concurrent = concurrent;
     }
 
 }
