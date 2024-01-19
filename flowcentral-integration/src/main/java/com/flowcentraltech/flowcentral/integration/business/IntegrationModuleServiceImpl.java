@@ -31,8 +31,10 @@ import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.Transactional;
+import com.tcdng.unify.core.data.FactoryMap;
 import com.tcdng.unify.core.data.ListData;
 import com.tcdng.unify.core.data.Listable;
+import com.tcdng.unify.core.data.ParamConfig;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.StringUtils;
 
@@ -51,6 +53,20 @@ public class IntegrationModuleServiceImpl extends AbstractFlowCentralService imp
     @Configurable
     private EndpointManager endpointManager;
 
+    private final FactoryMap<String, List<ParamConfig>> endpointParamConfigByTypeMap;
+
+    public IntegrationModuleServiceImpl() {
+        endpointParamConfigByTypeMap = new FactoryMap<String, List<ParamConfig>>()
+        {
+
+            @Override
+            protected List<ParamConfig> create(String endpointName, Object... arg1) throws Exception {
+                return DataUtils.unmodifiableList(getComponentParamConfigs(Endpoint.class, endpointName));
+            }
+
+        };
+    }
+    
     @Override
     public Listable getConfig(String configName) throws UnifyException {
         EndpointConfig config = environment()
@@ -95,6 +111,11 @@ public class IntegrationModuleServiceImpl extends AbstractFlowCentralService imp
     public String receiveMessage(String endpointConfigName, String source) throws UnifyException {
         Endpoint endpoint = endpointManager.getEndpoint(endpointConfigName);
         return endpoint.receiveMessage(source);
+    }
+    
+    @Override
+    public List<ParamConfig> getEndpointParamConfigs(String endpointComponentName) throws UnifyException {
+        return endpointParamConfigByTypeMap.get(endpointComponentName);
     }
 
     @Override
