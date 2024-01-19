@@ -24,6 +24,7 @@ import com.flowcentraltech.flowcentral.common.constants.RecordStatus;
 import com.flowcentraltech.flowcentral.configuration.data.ModuleInstall;
 import com.flowcentraltech.flowcentral.messaging.constants.MessagingModuleErrorConstants;
 import com.flowcentraltech.flowcentral.messaging.constants.MessagingModuleNameConstants;
+import com.flowcentraltech.flowcentral.messaging.constants.MessagingModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.messaging.data.Message;
 import com.flowcentraltech.flowcentral.messaging.data.MessageHeader;
 import com.flowcentraltech.flowcentral.messaging.data.MessagingConfigDef;
@@ -35,6 +36,7 @@ import com.flowcentraltech.flowcentral.messaging.entities.MessagingWriteConfigQu
 import com.flowcentraltech.flowcentral.messaging.readers.MessagingConsumer;
 import com.flowcentraltech.flowcentral.messaging.utils.MessagingUtils;
 import com.flowcentraltech.flowcentral.messaging.writers.MessagingProducer;
+import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -58,6 +60,9 @@ public class MessagingModuleServiceImpl extends AbstractFlowCentralService imple
 
     @Configurable
     private MessagingProvider messagingProvider;
+
+    @Configurable
+    private SystemModuleService systemModuleService;
 
     private final FactoryMap<String, MessagingConfigDef> readMessagingConfigDefFactoryMap;
 
@@ -138,33 +143,43 @@ public class MessagingModuleServiceImpl extends AbstractFlowCentralService imple
     @Periodic(PeriodicType.FASTER)
     public void triggerMessagingForExecution(TaskMonitor taskMonitor) throws UnifyException {
         logDebug("Triggering messaging for execution...");
-        
+
         // Reads
-        List<String> readConfigList = environment().valueList(String.class, "name",
-                new MessagingReadConfigQuery().status(RecordStatus.ACTIVE));
-        logDebug("[{0}] active read configurations detected...", readConfigList.size());
-        for (String readConfigName : readConfigList) {
-            MessagingConfigDef messagingConfigDef = readMessagingConfigDefFactoryMap.get(readConfigName);
-            MessagingExecContext ctx = messagingConfigDef.getCtx();
-            int len = ctx.getLoadingAvailable();
-            logDebug("Loading [{0}] threads for [{1}]...", len, readConfigName);
-            for (int i = 0; i < len; i++) {
-                ctx.getPool().execute(new ReadExec(ctx));
+        if (systemModuleService.getSysParameterValue(boolean.class,
+                MessagingModuleSysParamConstants.MESSAGING_READ_ENABLED)) {
+            List<String> readConfigList = environment().valueList(String.class, "name",
+                    new MessagingReadConfigQuery().status(RecordStatus.ACTIVE));
+            logDebug("[{0}] active read configurations detected...", readConfigList.size());
+            for (String readConfigName : readConfigList) {
+                MessagingConfigDef messagingConfigDef = readMessagingConfigDefFactoryMap.get(readConfigName);
+                MessagingExecContext ctx = messagingConfigDef.getCtx();
+                int len = ctx.getLoadingAvailable();
+                logDebug("Loading [{0}] threads for [{1}]...", len, readConfigName);
+                for (int i = 0; i < len; i++) {
+                    ctx.getPool().execute(new ReadExec(ctx));
+                }
             }
+        } else {
+            logDebug("Read messaging is currently disabled.");
         }
-        
+
         // Writes
-        List<String> writeConfigList = environment().valueList(String.class, "name",
-                new MessagingWriteConfigQuery().status(RecordStatus.ACTIVE));
-        logDebug("[{0}] active write configurations detected...", writeConfigList.size());
-        for (String writeConfigName : writeConfigList) {
-            MessagingConfigDef messagingConfigDef = writeMessagingConfigDefFactoryMap.get(writeConfigName);
-            MessagingExecContext ctx = messagingConfigDef.getCtx();
-            int len = ctx.getLoadingAvailable();
-            logDebug("Loading [{0}] threads for [{1}]...", len, writeConfigName);
-            for (int i = 0; i < len; i++) {
-                ctx.getPool().execute(new WriteExec(ctx));
+        if (systemModuleService.getSysParameterValue(boolean.class,
+                MessagingModuleSysParamConstants.MESSAGING_WRITE_ENABLED)) {
+            List<String> writeConfigList = environment().valueList(String.class, "name",
+                    new MessagingWriteConfigQuery().status(RecordStatus.ACTIVE));
+            logDebug("[{0}] active write configurations detected...", writeConfigList.size());
+            for (String writeConfigName : writeConfigList) {
+                MessagingConfigDef messagingConfigDef = writeMessagingConfigDefFactoryMap.get(writeConfigName);
+                MessagingExecContext ctx = messagingConfigDef.getCtx();
+                int len = ctx.getLoadingAvailable();
+                logDebug("Loading [{0}] threads for [{1}]...", len, writeConfigName);
+                for (int i = 0; i < len; i++) {
+                    ctx.getPool().execute(new WriteExec(ctx));
+                }
             }
+        } else {
+            logDebug("Write messaging is currently disabled.");
         }
     }
 

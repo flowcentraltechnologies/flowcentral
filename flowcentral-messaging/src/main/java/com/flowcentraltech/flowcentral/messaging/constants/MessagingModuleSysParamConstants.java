@@ -23,4 +23,7 @@ package com.flowcentraltech.flowcentral.messaging.constants;
  */
 public interface MessagingModuleSysParamConstants {
 
+    String MESSAGING_READ_ENABLED = "MSG-0001";
+
+    String MESSAGING_WRITE_ENABLED = "MSG-0002";
 }
