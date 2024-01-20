@@ -128,6 +128,10 @@
 			<column field="source" renderWidget="application.text" widthRatio="1" />
 			<column field="statusDesc" renderWidget="application.text"
 				label="$m{messaging.messagingreadconfig.status}" widthRatio="1" />
+			<column field="createDt" renderWidget="application.datetime"
+				widthRatio="1" />
+			<column field="updateDt" renderWidget="application.datetime"
+				widthRatio="1" />
 		</table>
 		<table name="messagingWriteConfigTable"
 			description="$m{messaging.messagingwriteconfig.table}"
@@ -142,6 +146,10 @@
 			<column field="destination" renderWidget="application.text" widthRatio="1" />
 			<column field="statusDesc" renderWidget="application.text"
 				label="$m{messaging.messagingwriteconfig.status}" widthRatio="1" />
+			<column field="createDt" renderWidget="application.datetime"
+				widthRatio="1" />
+			<column field="updateDt" renderWidget="application.datetime"
+				widthRatio="1" />
 		</table>
 	</tables>
 	<!-- Forms -->

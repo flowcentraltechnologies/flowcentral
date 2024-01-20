@@ -15,10 +15,13 @@
  */
 package com.flowcentraltech.flowcentral.integration.entities;
 
+import java.util.List;
+
 import com.flowcentraltech.flowcentral.common.entities.BaseStatusEntity;
 import com.flowcentraltech.flowcentral.common.entities.ParamValues;
 import com.flowcentraltech.flowcentral.integration.endpoint.EndpointType;
 import com.tcdng.unify.core.annotation.Child;
+import com.tcdng.unify.core.annotation.ChildList;
 import com.tcdng.unify.core.annotation.Column;
 import com.tcdng.unify.core.annotation.ForeignKey;
 import com.tcdng.unify.core.annotation.ListOnly;
@@ -55,6 +58,9 @@ public class EndpointConfig extends BaseStatusEntity {
     @Child(category = "endpointconfig")
     private ParamValues endpointParams;
 
+    @ChildList
+    private List<EndpointPath> pathList;
+    
     @Override
     public String getDescription() {
         return this.description;
@@ -102,6 +108,14 @@ public class EndpointConfig extends BaseStatusEntity {
 
     public void setEndpointParams(ParamValues endpointParams) {
         this.endpointParams = endpointParams;
+    }
+
+    public List<EndpointPath> getPathList() {
+        return pathList;
+    }
+
+    public void setPathList(List<EndpointPath> pathList) {
+        this.pathList = pathList;
     }
 
 }
