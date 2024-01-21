@@ -245,7 +245,7 @@ public class MessagingModuleServiceImpl extends AbstractFlowCentralService imple
         protected void doRun() throws Exception {
             MessagingProducer producer = getComponent(MessagingProducer.class, ctx.getComponent());
             List<Message> messages = producer.produce(ctx.getConfig(), ctx.getTarget());
-            if (DataUtils.isBlank(messages)) {
+            if (!DataUtils.isBlank(messages)) {
                 for (Message message : messages) {
                     try {
                         sendMessage(message);
