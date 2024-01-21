@@ -15,7 +15,15 @@
  */
 package com.flowcentraltech.flowcentral.integration.data;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+
 import com.flowcentraltech.flowcentral.common.data.ParamValuesDef;
+import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.data.Listable;
+import com.tcdng.unify.core.util.DataUtils;
 
 /**
  * End-point definition
@@ -35,12 +43,20 @@ public class EndpointDef {
 
     private ParamValuesDef endpointParamsDef;
 
-    public EndpointDef(String name, String endpointName, Long id, long version, ParamValuesDef endpointParamsDef) {
+    private Map<String, EndpointPathDef> paths;
+
+    private List<EndpointPathDef> sources;
+
+    private List<EndpointPathDef> destinations;
+
+    public EndpointDef(String name, String endpointName, Long id, long version, ParamValuesDef endpointParamsDef,
+            Map<String, EndpointPathDef> paths) {
         this.name = name;
         this.endpointName = endpointName;
         this.id = id;
         this.version = version;
         this.endpointParamsDef = endpointParamsDef;
+        this.paths = paths;
     }
 
     public String getName() {
@@ -61,5 +77,53 @@ public class EndpointDef {
 
     public ParamValuesDef getEndpointParamsDef() {
         return endpointParamsDef;
+    }
+
+    public EndpointPathDef getPathDef(String name) {
+        return paths.get(name);
+    }
+
+    public boolean isPathDef(String name) {
+        return paths.containsKey(name);
+    }
+
+    public List<EndpointPathDef> getSources() throws UnifyException {
+        if (sources == null) {
+            synchronized (this) {
+                if (sources == null) {
+                    sources = new ArrayList<EndpointPathDef>();
+                    for (EndpointPathDef pathDef : paths.values()) {
+                        if (pathDef.getDirection().isIncoming()) {
+                            sources.add(pathDef);
+                        }
+                    }
+
+                    DataUtils.sortAscending(sources, Listable.class, "listDescription");
+                    sources = Collections.unmodifiableList(sources);
+                }
+            }
+        }
+
+        return sources;
+    }
+
+    public List<EndpointPathDef> getDestinations() throws UnifyException {
+        if (destinations == null) {
+            synchronized (this) {
+                if (destinations == null) {
+                    destinations = new ArrayList<EndpointPathDef>();
+                    for (EndpointPathDef pathDef : paths.values()) {
+                        if (pathDef.getDirection().isOutgoing()) {
+                            destinations.add(pathDef);
+                        }
+                    }
+
+                    DataUtils.sortAscending(destinations, Listable.class, "listDescription");
+                    destinations = Collections.unmodifiableList(destinations);
+                }
+            }
+        }
+
+        return destinations;
     }
 }

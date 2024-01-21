@@ -13,17 +13,24 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.messaging.constants;
+package com.flowcentraltech.flowcentral.messaging.web.lists;
+
+import com.flowcentraltech.flowcentral.common.web.lists.AbstractFlowCentralTypeListCommand;
+import com.flowcentraltech.flowcentral.messaging.readers.MessagingConsumer;
+import com.tcdng.unify.core.annotation.Component;
+import com.tcdng.unify.core.list.ZeroParams;
 
 /**
- * Messaging module system parameter constants.
+ * Messaging consumer list commands.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface MessagingModuleSysParamConstants {
+@Component("messagingconsumerlist")
+public class MessagingConsumerListCommand extends AbstractFlowCentralTypeListCommand<MessagingConsumer, ZeroParams> {
 
-    String MESSAGING_READ_ENABLED = "MSG-0001";
+    public MessagingConsumerListCommand() {
+        super(MessagingConsumer.class, ZeroParams.class);
+    }
 
-    String MESSAGING_WRITE_ENABLED = "MSG-0002";
 }

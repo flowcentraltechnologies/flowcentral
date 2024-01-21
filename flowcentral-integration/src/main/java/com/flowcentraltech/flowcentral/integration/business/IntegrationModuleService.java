@@ -15,8 +15,12 @@
  */
 package com.flowcentraltech.flowcentral.integration.business;
 
+import java.util.List;
+
 import com.flowcentraltech.flowcentral.common.business.FlowCentralService;
 import com.flowcentraltech.flowcentral.messaging.business.MessagingProvider;
+import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.data.ParamConfig;
 
 
 /**
@@ -26,5 +30,16 @@ import com.flowcentraltech.flowcentral.messaging.business.MessagingProvider;
  * @since 1.0
  */
 public interface IntegrationModuleService extends FlowCentralService, MessagingProvider {
+
+    /**
+     * Gets end-point parameter configurations.
+     * 
+     * @param endpointName
+     *                              the end-point name
+     * @return list of parameter configurations
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    List<ParamConfig> getEndpointParamConfigs(String endpointName) throws UnifyException;
 
 }

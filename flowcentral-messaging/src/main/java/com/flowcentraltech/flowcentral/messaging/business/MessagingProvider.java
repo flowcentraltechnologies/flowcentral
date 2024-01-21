@@ -53,6 +53,28 @@ public interface MessagingProvider extends FlowCentralComponent {
     List<? extends Listable> getConfigList(SearchInput searchInput) throws UnifyException;
 
     /**
+     * Get messaging configuration sources list.
+     * 
+     * @param configName
+     *                    the configuration name
+     * @return the sources list
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    List<? extends Listable> getSources(String configName) throws UnifyException;
+
+    /**
+     * Get messaging configuration destinations list.
+     * 
+     * @param configName
+     *                    the configuration name
+     * @return the destinations list
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    List<? extends Listable> getDestinations(String configName) throws UnifyException;
+
+    /**
      * Sends a message to an configuration destination.
      * 
      * @param configName

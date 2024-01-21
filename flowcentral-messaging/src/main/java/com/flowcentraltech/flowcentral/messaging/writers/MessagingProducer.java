@@ -41,4 +41,5 @@ public interface MessagingProducer extends FlowCentralComponent {
      *                        if an error occurs
      */
     List<Message> produce(String config, String destination) throws UnifyException;
+
 }

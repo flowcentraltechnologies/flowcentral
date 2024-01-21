@@ -18,6 +18,9 @@ package com.flowcentraltech.flowcentral.integration.rabbitmq;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.Test;
 
 import com.flowcentraltech.flowcentral.common.AbstractFlowCentralTest;
@@ -25,12 +28,14 @@ import com.flowcentraltech.flowcentral.common.constants.RecordStatus;
 import com.flowcentraltech.flowcentral.common.data.ParamValuesDef;
 import com.flowcentraltech.flowcentral.common.entities.ParamValues;
 import com.flowcentraltech.flowcentral.common.util.CommonInputUtils;
+import com.flowcentraltech.flowcentral.configuration.constants.DirectionType;
 import com.flowcentraltech.flowcentral.integration.business.IntegrationModuleService;
 import com.flowcentraltech.flowcentral.integration.constants.IntegrationModuleNameConstants;
 import com.flowcentraltech.flowcentral.integration.endpoint.EndpointType;
 import com.flowcentraltech.flowcentral.integration.endpoint.JmsEndpointConstants;
 import com.flowcentraltech.flowcentral.integration.entities.EndpointConfig;
 import com.flowcentraltech.flowcentral.integration.entities.EndpointConfigQuery;
+import com.flowcentraltech.flowcentral.integration.entities.EndpointPath;
 import com.flowcentraltech.flowcentral.integration.rabbitmq.constants.RabbitMQEndpointConstants;
 import com.flowcentraltech.flowcentral.system.entities.Credential;
 import com.flowcentraltech.flowcentral.system.entities.CredentialQuery;
@@ -48,20 +53,20 @@ public class RabbitMQIntegrationModuleServiceTest extends AbstractFlowCentralTes
 
 //    @Test
 //    public void testSendMessage() throws Exception {
-//        ims.sendMessage("testRabbitMQQueueEndpoint", "testQueue1", "Hello World!");
-//        ims.sendMessage("testRabbitMQQueueEndpoint", "testQueue2", "Blue Skies!");
+//        ims.sendMessage("testRabbitMQQueueEndpoint", "testDest1", "Hello World!");
+//        ims.sendMessage("testRabbitMQQueueEndpoint", "testDest2", "Blue Skies!");
 //    }
 //
 //    @Test
 //    public void testReceiveMessage() throws Exception {
-//        ims.sendMessage("testRabbitMQQueueEndpoint", "testQueue1", "Hello World!");
-//        ims.sendMessage("testRabbitMQQueueEndpoint", "testQueue2", "Blue Skies!");
-//        
-//        String text = ims.receiveMessage("testRabbitMQQueueEndpoint", "testQueue2");
+//        ims.sendMessage("testRabbitMQQueueEndpoint", "testDest1", "Hello World!");
+//        ims.sendMessage("testRabbitMQQueueEndpoint", "testDest2", "Blue Skies!");
+//
+//        String text = ims.receiveMessage("testRabbitMQQueueEndpoint", "testSource2");
 //        assertNotNull(text);
 //        assertEquals("Blue Skies!", text);
-//                
-//        text = ims.receiveMessage("testRabbitMQQueueEndpoint", "testQueue1");
+//
+//        text = ims.receiveMessage("testRabbitMQQueueEndpoint", "testSource1");
 //        assertNotNull(text);
 //        assertEquals("Hello World!", text);
 //    }
@@ -77,7 +82,7 @@ public class RabbitMQIntegrationModuleServiceTest extends AbstractFlowCentralTes
         credential.setPassword("guest");
         credential.setStatus(RecordStatus.ACTIVE);
         createRecord(credential);
-        
+
         // Create test configuration
         EndpointConfig endpointConfig = new EndpointConfig();
         endpointConfig.setEndpointType(EndpointType.JMS);
@@ -85,7 +90,7 @@ public class RabbitMQIntegrationModuleServiceTest extends AbstractFlowCentralTes
         endpointConfig.setDescription("Test Rabbit MQ Queue Endpoint");
         endpointConfig.setEndpoint(RabbitMQEndpointConstants.COMPONENT_NAME);
         endpointConfig.setStatus(RecordStatus.ACTIVE);
-        
+
         ParamValues paramValues = new ParamValues();
         ParamValuesDef.Builder pvdb = ParamValuesDef.newBuilder();
         pvdb.addParamValueDef(new ParamConfig(String.class, RabbitMQEndpointConstants.HOSTNAME), "localhost");
@@ -93,14 +98,49 @@ public class RabbitMQIntegrationModuleServiceTest extends AbstractFlowCentralTes
         pvdb.addParamValueDef(new ParamConfig(String.class, JmsEndpointConstants.CREDENTIAL_NAME), "testRabbitMQCred");
         paramValues.setDefinition(CommonInputUtils.getParamValuesDefinition(pvdb.build()));
         endpointConfig.setEndpointParams(paramValues);
-        
+
+        List<EndpointPath> pathList = new ArrayList<EndpointPath>();
+        EndpointPath path = new EndpointPath();
+        path.setDirection(DirectionType.INCOMING);
+        path.setName("testSource1");
+        path.setDescription("Test Source 1");
+        path.setPath("testQueue1");
+        pathList.add(path);
+
+        path = new EndpointPath();
+        path.setDirection(DirectionType.INCOMING);
+        path.setName("testSource2");
+        path.setDescription("Test Source 2");
+        path.setPath("testQueue2");
+        pathList.add(path);
+
+        path = new EndpointPath();
+        path.setDirection(DirectionType.OUTGOING);
+        path.setName("testDest1");
+        path.setDescription("Test Dest 1");
+        path.setPath("testQueue1");
+        pathList.add(path);
+
+        path = new EndpointPath();
+        path.setDirection(DirectionType.OUTGOING);
+        path.setName("testDest2");
+        path.setDescription("Test Dest 2");
+        path.setPath("testQueue2");
+        pathList.add(path);
+
+        endpointConfig.setPathList(pathList);
         createRecord(endpointConfig);
     }
 
     @Override
     protected void onTearDown() throws Exception {
-        while(ims.receiveMessage("testRabbitMQQueueEndpoint", "testQueue1") != null);
-        while(ims.receiveMessage("testRabbitMQQueueEndpoint", "testQueue2") != null);
+        if (ims != null) {
+            while (ims.receiveMessage("testRabbitMQQueueEndpoint", "testSource1") != null)
+                ;
+            while (ims.receiveMessage("testRabbitMQQueueEndpoint", "testSource2") != null)
+                ;
+        }
+
         deleteAll(new CredentialQuery().name("testRabbitMQCred"));
         deleteAll(new EndpointConfigQuery().name("testRabbitMQQueueEndpoint"));
     }

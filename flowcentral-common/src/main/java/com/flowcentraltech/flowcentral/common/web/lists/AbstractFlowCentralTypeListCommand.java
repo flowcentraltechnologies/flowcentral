@@ -58,8 +58,10 @@ public abstract class AbstractFlowCentralTypeListCommand<T extends UnifyComponen
         return messageResolver;
     }
 
-    protected abstract List<? extends Listable> filterList(List<UnifyComponentConfig> baseConfigList, U params)
-            throws UnifyException;
+    protected List<? extends Listable> filterList(List<UnifyComponentConfig> baseConfigList, U params)
+            throws UnifyException {
+        return baseConfigList;
+    }
 
     private List<UnifyComponentConfig> getConfigList() throws UnifyException {
         if (configList == null) {

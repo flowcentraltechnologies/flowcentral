@@ -26,4 +26,10 @@ public interface IntegrationModuleErrorConstants {
     /** Can not find end-point configuration with name {0} */
     String CANNOT_FIND_ENDPOINT_CONFIG = "INTEGRATION_0001";
 
+    /** Can not find destination {0} for end-point configuration with name {1} */
+    String CANNOT_FIND_DESTINATION_FOR_ENDPOINT_CONFIG = "INTEGRATION_0002";
+
+    /** Can not find source {0} for end-point configuration with name {1} */
+    String CANNOT_FIND_SOURCE_FOR_ENDPOINT_CONFIG = "INTEGRATION_0003";
+
 }

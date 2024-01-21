@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.integration.lists;
+package com.flowcentraltech.flowcentral.integration.web.lists;
 
 import com.flowcentraltech.flowcentral.common.web.lists.AbstractFlowCentralListCommand;
 import com.flowcentraltech.flowcentral.integration.business.IntegrationModuleService;

@@ -41,8 +41,14 @@ public class MessagingWriteConfig extends BaseStatusEntity {
     @Column(length = 64)
     private String endpointConfig;
 
+    @Column(length = 128)
+    private String destination;
+
     @Column(length = 64)
     private String producer;
+
+    @Column
+    private Integer maxConcurrent;
 
     @Override
     public String getDescription() {
@@ -75,6 +81,22 @@ public class MessagingWriteConfig extends BaseStatusEntity {
 
     public void setProducer(String producer) {
         this.producer = producer;
+    }
+
+    public String getDestination() {
+        return destination;
+    }
+
+    public void setDestination(String destination) {
+        this.destination = destination;
+    }
+
+    public Integer getMaxConcurrent() {
+        return maxConcurrent;
+    }
+
+    public void setMaxConcurrent(Integer maxConcurrent) {
+        this.maxConcurrent = maxConcurrent;
     }
 
 }
