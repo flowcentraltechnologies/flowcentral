@@ -48,7 +48,7 @@ public class MessagingReadConfig extends BaseStatusEntity {
     private String consumer;
 
     @Column
-    private int maxConcurrent;
+    private Integer maxConcurrent;
 
     @Override
     public String getDescription() {
@@ -91,11 +91,11 @@ public class MessagingReadConfig extends BaseStatusEntity {
         this.source = source;
     }
 
-    public int getMaxConcurrent() {
+    public Integer getMaxConcurrent() {
         return maxConcurrent;
     }
 
-    public void setMaxConcurrent(int maxConcurrent) {
+    public void setMaxConcurrent(Integer maxConcurrent) {
         this.maxConcurrent = maxConcurrent;
     }
 

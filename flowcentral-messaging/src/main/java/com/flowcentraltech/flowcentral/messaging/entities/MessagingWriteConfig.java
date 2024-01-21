@@ -48,7 +48,7 @@ public class MessagingWriteConfig extends BaseStatusEntity {
     private String producer;
 
     @Column
-    private int maxConcurrent;
+    private Integer maxConcurrent;
 
     @Override
     public String getDescription() {
@@ -91,11 +91,11 @@ public class MessagingWriteConfig extends BaseStatusEntity {
         this.destination = destination;
     }
 
-    public int getMaxConcurrent() {
+    public Integer getMaxConcurrent() {
         return maxConcurrent;
     }
 
-    public void setMaxConcurrent(int maxConcurrent) {
+    public void setMaxConcurrent(Integer maxConcurrent) {
         this.maxConcurrent = maxConcurrent;
     }
 

@@ -27,6 +27,18 @@
 		    <version>2.9.0</version>
 		</dependency>
 		<!-- Test dependencies -->
+        <dependency>
+            <groupId>com.flowcentraltech.flowcentral</groupId>
+            <artifactId>flowcentral-security</artifactId>
+            <version>${project.version}</version>
+			<scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.flowcentraltech.flowcentral</groupId>
+            <artifactId>flowcentral-organization</artifactId>
+            <version>${project.version}</version>
+			<scope>test</scope>
+        </dependency>
 		<dependency>
 			<groupId>com.flowcentraltech.flowcentral</groupId>
 			<artifactId>flowcentral-common</artifactId>
