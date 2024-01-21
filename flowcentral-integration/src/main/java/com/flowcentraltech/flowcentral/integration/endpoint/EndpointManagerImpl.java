@@ -16,7 +16,9 @@
 package com.flowcentraltech.flowcentral.integration.endpoint;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
 import com.flowcentraltech.flowcentral.common.data.ParamValuesDef;
@@ -24,8 +26,10 @@ import com.flowcentraltech.flowcentral.common.util.CommonInputUtils;
 import com.flowcentraltech.flowcentral.integration.constants.IntegrationModuleErrorConstants;
 import com.flowcentraltech.flowcentral.integration.constants.IntegrationModuleNameConstants;
 import com.flowcentraltech.flowcentral.integration.data.EndpointDef;
+import com.flowcentraltech.flowcentral.integration.data.EndpointPathDef;
 import com.flowcentraltech.flowcentral.integration.entities.EndpointConfig;
 import com.flowcentraltech.flowcentral.integration.entities.EndpointConfigQuery;
+import com.flowcentraltech.flowcentral.integration.entities.EndpointPath;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -63,7 +67,7 @@ public class EndpointManagerImpl extends AbstractEndpointManager {
                     } catch (UnifyException e) {
                         logError(e);
                     }
-                    
+
                     return true;
                 }
 
@@ -79,8 +83,15 @@ public class EndpointManagerImpl extends AbstractEndpointManager {
                     ParamValuesDef pvd = CommonInputUtils.getParamValuesDef(
                             endpointParamConfigByTypeMap.get(endpointConfig.getEndpoint()),
                             endpointConfig.getEndpointParams());
+
+                    Map<String, EndpointPathDef> paths = new LinkedHashMap<String, EndpointPathDef>();
+                    for (EndpointPath endpointPath : endpointConfig.getPathList()) {
+                        paths.put(endpointPath.getName(), new EndpointPathDef(endpointPath.getDirection(),
+                                endpointPath.getName(), endpointPath.getDescription(), endpointPath.getPath()));
+                    }
+
                     return new EndpointDef(endpointConfigName, endpointConfig.getEndpoint(), endpointConfig.getId(),
-                            endpointConfig.getVersionNo(), pvd);
+                            endpointConfig.getVersionNo(), pvd, paths);
                 }
 
             };
@@ -94,13 +105,12 @@ public class EndpointManagerImpl extends AbstractEndpointManager {
                 }
 
             };
-            
+
         endpointInstFactoryMap = new FactoryMap<String, EndpointInst>(true)
             {
                 @Override
                 protected boolean stale(String endpointName, EndpointInst endpointInst) throws Exception {
-                    return getEndpointDef(endpointName).getVersion() > endpointInst
-                            .getEndpointDef().getVersion();
+                    return getEndpointDef(endpointName).getVersion() > endpointInst.getEndpointDef().getVersion();
                 }
 
                 @Override

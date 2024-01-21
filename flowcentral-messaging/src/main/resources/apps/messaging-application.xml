@@ -17,6 +17,26 @@
 			description="$m{messaging.widgettype.messagingproducersearch}"
 			dataType="string" inputType="string"
 			editor="!fc-messagingproducersearch" renderer="!ui-label" />
+		<widgetType name="messagingconfiglist"
+			description="$m{messaging.widgettype.messagingconfiglist}"
+			dataType="string" inputType="string"
+			editor="!ui-select blankOption:$s{} list:messagingconfiglist" renderer="!ui-label" />
+		<widgetType name="messagingconsumerlist"
+			description="$m{messaging.widgettype.messagingconsumerlist}"
+			dataType="string" inputType="string"
+			editor="!ui-select blankOption:$s{} list:messagingconsumerlist" renderer="!ui-label" />
+		<widgetType name="messagingproducerlist"
+			description="$m{messaging.widgettype.messagingproducerlist}"
+			dataType="string" inputType="string"
+			editor="!ui-select blankOption:$s{} list:messagingproducerlist" renderer="!ui-label" />
+		<widgetType name="messagingsourcelist"
+			description="$m{messaging.widgettype.messagingsourcelist}"
+			dataType="string" inputType="string"
+			editor="!ui-select blankOption:$s{} list:messagingsourcelist listParam:$l{endpointConfig}" renderer="!ui-label" />
+		<widgetType name="messagingdestinationlist"
+			description="$m{messaging.widgettype.messagingdestinationlist}"
+			dataType="string" inputType="string"
+			editor="!ui-select blankOption:$s{} list:messagingdestinationlist listParam:$l{endpointConfig}" renderer="!ui-label" />
 	</widgetTypes>
 	<!-- Applets -->
 	<applets>
@@ -75,11 +95,11 @@
 			<field name="description" label="$m{messaging.messagingreadconfig.description}"
 				type="string" inputWidget="application.text" maxLen="96" />
 			<field name="endpointConfig" label="$m{messaging.messagingreadconfig.endpointconfig}"
-				type="string" inputWidget="messagingconfigsearch" maxLen="64"/>
+				type="string" inputWidget="messagingconfiglist" maxLen="64"/>
 			<field name="source" label="$m{messaging.messagingreadconfig.source}"
-				type="string" inputWidget="application.text" maxLen="128"/>
+				type="string" inputWidget="messagingsourcelist" maxLen="128"/>
 			<field name="consumer" label="$m{messaging.messagingreadconfig.consumer}"
-				type="string" inputWidget="messagingconsumersearch" maxLen="64"/>
+				type="string" inputWidget="messagingconsumerlist" maxLen="64"/>
 			<field name="maxConcurrent" label="$m{messaging.messagingreadconfig.maxconcurrent}"
 				type="integer" precision="2"/>
 			<uniqueConstraint name="nameUc"
@@ -98,11 +118,11 @@
 			<field name="description" label="$m{messaging.messagingwriteconfig.description}"
 				type="string" inputWidget="application.text" maxLen="96" />
 			<field name="endpointConfig" label="$m{messaging.messagingwriteconfig.endpointconfig}"
-				type="string" inputWidget="messagingconfigsearch" maxLen="64"/>
+				type="string" inputWidget="messagingconfiglist" maxLen="64"/>
 			<field name="destination" label="$m{messaging.messagingwriteconfig.destination}"
-				type="string" inputWidget="application.text" maxLen="128"/>
+				type="string" inputWidget="messagingdestinationlist" maxLen="128"/>
 			<field name="producer" label="$m{messaging.messagingwriteconfig.producer}"
-				type="string" inputWidget="messagingproducersearch" maxLen="64"/>
+				type="string" inputWidget="messagingproducerlist" maxLen="64"/>
 			<field name="maxConcurrent" label="$m{messaging.messagingwriteconfig.maxconcurrent}"
 				type="integer" precision="2"/>
 			<uniqueConstraint name="nameUc"
@@ -161,7 +181,7 @@
 				<section name="messagingReadConfigDetails" columns="type_2">
 					<field name="name" column="0" required="true" />
 					<field name="description" column="0" required="true" />
-					<field name="endpointConfig" column="0" required="true"/>
+					<field name="endpointConfig" column="0" switchOnChange="true" required="true"/>
 					<field name="source" column="0" required="true"/>
 					<field name="consumer" column="1" required="true"/>
 					<field name="maxConcurrent" column="1" required="true"/>
@@ -178,7 +198,7 @@
 				<section name="messagingWriteConfigDetails" columns="type_2">
 					<field name="name" column="0" required="true" />
 					<field name="description" column="0" required="true" />
-					<field name="endpointConfig" column="0" required="true"/>
+					<field name="endpointConfig" column="0" switchOnChange="true" required="true"/>
 					<field name="destination" column="0" required="true"/>
 					<field name="producer" column="1" required="true"/>
 					<field name="maxConcurrent" column="1" required="true"/>
