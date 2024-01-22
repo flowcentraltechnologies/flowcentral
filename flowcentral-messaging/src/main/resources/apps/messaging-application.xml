@@ -147,9 +147,6 @@
 			<field name="producer"
 				label="$m{messaging.messagingwriteconfig.producer}" type="string"
 				inputWidget="messagingproducerlist" maxLen="64" />
-			<field name="maxConcurrent"
-				label="$m{messaging.messagingwriteconfig.maxconcurrent}"
-				type="integer" inputWidget="application.integer" precision="2" />
 			<uniqueConstraint name="nameUc"
 				description="$m{messaging.messagingwriteconfig.uc.name}"
 				fieldList="name" />
@@ -251,7 +248,6 @@
 				<section name="producerDetails" columns="type_2"
 					label="$m{messaging.messagingwriteconfig.form.section.producer}">
 					<field name="producer" column="0" required="true" />
-					<field name="maxConcurrent" column="1" required="true" />
 				</section>
 			</tab>
 			<tab name="changeLog" label="$m{application.form.audit}"
