@@ -116,7 +116,7 @@ public class MessagingModuleServiceImpl extends AbstractFlowCentralService imple
                     return new MessagingConfigDef(messagingWriteConfig.getId(), messagingWriteConfig.getVersionNo(),
                             messagingWriteConfig.getName(), messagingWriteConfig.getDescription(),
                             messagingWriteConfig.getEndpointConfig(), messagingWriteConfig.getDestination(),
-                            messagingWriteConfig.getProducer(), messagingWriteConfig.getMaxConcurrent(),
+                            messagingWriteConfig.getProducer(), 1,
                             messagingWriteConfig.getStatus());
                 }
             };
@@ -224,6 +224,7 @@ public class MessagingModuleServiceImpl extends AbstractFlowCentralService imple
             Message message = receiveMessage(ctx.getConfig(), ctx.getTarget());
             if (message != null) {
                 try {
+                    logDebug("Messaging read execution [{0}]...", execId);
                     MessagingConsumer consumer = getComponent(MessagingConsumer.class, ctx.getComponent());
                     consumer.consume(message);
                 } catch (Exception e) {
@@ -245,7 +246,8 @@ public class MessagingModuleServiceImpl extends AbstractFlowCentralService imple
         protected void doRun() throws Exception {
             MessagingProducer producer = getComponent(MessagingProducer.class, ctx.getComponent());
             List<Message> messages = producer.produce(ctx.getConfig(), ctx.getTarget());
-            if (DataUtils.isBlank(messages)) {
+            if (!DataUtils.isBlank(messages)) {
+                logDebug("Messaging write execution [{0}]...", execId);
                 for (Message message : messages) {
                     try {
                         sendMessage(message);
@@ -263,8 +265,11 @@ public class MessagingModuleServiceImpl extends AbstractFlowCentralService imple
 
         protected final MessagingExecContext ctx;
 
+        protected final String execId;
+        
         public AbstractExec(MessagingExecContext ctx) {
             this.ctx = ctx;
+            this.execId = generateRandomUUID();
         }
 
         @Override

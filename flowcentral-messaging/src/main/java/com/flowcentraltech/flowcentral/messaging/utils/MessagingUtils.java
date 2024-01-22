@@ -57,7 +57,7 @@ public final class MessagingUtils {
     public static Message unmarshal(String config, String source, String text) {
         if (text != null) {
             if (text.startsWith(HEADER_START)) {
-                int index = text.indexOf(HEADER_END);
+                int index = text.indexOf(HEADER_END, HEADER_START.length());
                 if (index > 0) {
                     String headerTxt = text.substring(HEADER_START.length(), index);
                     String[] parts = headerTxt.split(":");
