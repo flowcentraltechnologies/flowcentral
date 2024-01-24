@@ -3696,8 +3696,9 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                     for (RecLoadInfo recLoadInfo : recMap.values()) {
                         DataUtils.setBeanProperty(inst, recLoadInfo.getFieldName(), recLoadInfo.getVal(),
                                 recLoadInfo.getFormatter());
-                    }
+                    } 
 
+                    appletUtilities.populateAutoFormatFields(entityDef, inst);
                     environment().create(inst);
                 } else {
                     switch (entityUploadDef.getConstraintAction()) {
