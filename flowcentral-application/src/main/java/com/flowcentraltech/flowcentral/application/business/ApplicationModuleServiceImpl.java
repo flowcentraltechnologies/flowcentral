@@ -3670,22 +3670,24 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                 boolean createRecord = true;
                 if (entityDef.isWithUniqueConstraints()) {
                     for (UniqueConstraintDef constDef : entityDef.getUniqueConstraintList()) {
-                        Query<?> query = Query.of((Class<? extends Entity>) entityClassDef.getEntityClass());
-                        for (String fieldName : constDef.getFieldList()) {
-                            query.addEquals(fieldName, recMap.get(fieldName).getVal());
-                        }
-
-                        if (constDef.isWithConditionList()) {
-                            for (UniqueConditionDef ucd : constDef.getConditionList()) {
-                                query.addRestriction(ucd.getRestriction());
+                        if (recMap.keySet().containsAll(constDef.getFieldList())) {
+                            Query<?> query = Query.of((Class<? extends Entity>) entityClassDef.getEntityClass());
+                            for (String fieldName : constDef.getFieldList()) {
+                                query.addEquals(fieldName, recMap.get(fieldName).getVal());
                             }
-                        }
 
-                        _inst = environment().findLean(query);
-                        if (_inst != null) {
-                            uniqueConstriantDef = constDef;
-                            createRecord = false;
-                            break;
+                            if (constDef.isWithConditionList()) {
+                                for (UniqueConditionDef ucd : constDef.getConditionList()) {
+                                    query.addRestriction(ucd.getRestriction());
+                                }
+                            }
+
+                            _inst = environment().findLean(query);
+                            if (_inst != null) {
+                                uniqueConstriantDef = constDef;
+                                createRecord = false;
+                                break;
+                            }
                         }
                     }
                 }
