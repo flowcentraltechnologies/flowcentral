@@ -2207,7 +2207,8 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
             for (EntityFieldDef entityFieldDef : _entityDef.getAutoFormatFieldDefList()) {
                 if (entityFieldDef.isStringAutoFormat()) {
                     String skeleton = gen.getCodeSkeleton(entityFieldDef.getAutoFormat());
-                    if (skeleton.equals(DataUtils.getBeanProperty(String.class, inst, entityFieldDef.getFieldName()))) {
+                    final String _val = DataUtils.getBeanProperty(String.class, inst, entityFieldDef.getFieldName());
+                    if (_val == null || skeleton.equals(_val)) {
                         DataUtils.setBeanProperty(inst, entityFieldDef.getFieldName(), gen
                                 .getNextSequenceCode(_entityDef.getLongName(), entityFieldDef.getAutoFormat(), reader));
                     }
