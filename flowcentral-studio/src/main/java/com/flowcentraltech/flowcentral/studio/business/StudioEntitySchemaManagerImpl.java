@@ -284,10 +284,8 @@ public class StudioEntitySchemaManagerImpl extends AbstractEntitySchemaManager {
                     au.applicationPrivilegeManager().assignPrivilegeToRole(userToken.getRoleCode(), privilegeCode);
                 }
             } else {
-                List<ReportableField> reportableFieldList = ReportEntityUtils.getEntityBaseTypeReportableFieldList(
-                        messageResolver, appEntity.getBaseType(), FormatterOptions.DEFAULT);
-                reportableFieldList.addAll(ReportEntityUtils.getReportableFieldList(messageResolver, appEntityFieldList,
-                        FormatterOptions.DEFAULT));
+                List<ReportableField> reportableFieldList = ReportEntityUtils.getReportableFieldList(messageResolver, appEntityFieldList,
+                        FormatterOptions.DEFAULT);
                 reportableDefinition.setFieldList(reportableFieldList);
                 reportModuleService.updateReportableDefinition(reportableDefinition);
             }
