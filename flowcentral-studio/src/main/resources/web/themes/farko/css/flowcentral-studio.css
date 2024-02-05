@@ -90,6 +90,15 @@
 .fc-tableeditorpagepanel .hdsubtitle {display: block;font-size:8pt;}
 .fc-tableeditorpagepanel .editcollabel {width: 100px; white-space: nowrap;overflow: hidden;text-overflow: ellipsis;}				
 
+/** Form field editor panel */
+.fc-formfieldeditorpanel {width:720px;}
+
+/** Form tab editor panel */
+.fc-formtabeditorpanel {width:720px;}
+
+/** Form section editor panel */
+.fc-formsectioneditorpanel {width:720px;}
+
 /** Form Editor */
 .fc-formeditor {height:100%;}
 .fc-formeditor .fields {height:100%;}
