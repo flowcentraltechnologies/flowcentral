@@ -20,7 +20,7 @@
 	
 //Form   
 !ui-formpanel:formPanel
-	layout:$d{!ui-vertical style:$s{table-layout:fixed;}}
+	layout:$d{!ui-vertical style:$s{table-layout:fixed;width:100%;}}
     formCaptionSuffix:$s{:} formBinding:$g{dialogFormBinding} formColumns:2
 	formSection:$d{!ui-section components:$c{frmName frmLabel frmColumns frmVisible
 		frmEditable frmDisabled}}
