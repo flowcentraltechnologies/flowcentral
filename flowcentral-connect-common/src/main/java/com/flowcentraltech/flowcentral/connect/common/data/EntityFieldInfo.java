@@ -37,6 +37,8 @@ public class EntityFieldInfo {
 
     private Class<? extends Enum<?>> enumImplClass;
 
+    private Class<?> fieldClass;
+
     private int precision;
 
     private int scale;
@@ -45,9 +47,10 @@ public class EntityFieldInfo {
     
     private boolean nullable;
 
-    public EntityFieldInfo(ConnectFieldDataType type, String name, String description, String column, String references,
+    public EntityFieldInfo(ConnectFieldDataType type, Class<?> fieldClass, String name, String description, String column, String references,
             Class<? extends Enum<?>> enumImplClass, int precision, int scale, int length, boolean nullable) {
         this.type = type;
+        this.fieldClass = fieldClass;
         this.name = name;
         this.description = description;
         this.column = column;
@@ -71,6 +74,10 @@ public class EntityFieldInfo {
     
     public Class<?> getJavaClass() {
         return type.javaClass();
+    }
+
+    public Class<?> getFieldClass() {
+        return fieldClass;
     }
 
     public String getName() {
@@ -163,6 +170,10 @@ public class EntityFieldInfo {
     
     public boolean isDecimal() {
         return type.isDecimal();
+    }
+    
+    public boolean isPrimitive() {
+        return fieldClass.isPrimitive();
     }
 
 }
