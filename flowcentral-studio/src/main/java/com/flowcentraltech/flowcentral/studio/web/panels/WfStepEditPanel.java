@@ -62,6 +62,7 @@ public class WfStepEditPanel extends AbstractDialogPanel {
         setVisible("frmExpiryMinutes", isUserAct);
         setVisible("frmAudit", isUserAct);
         setVisible("frmBranchOnly", isUserAct);
+        setVisible("frmDepartmentOnly", isUserAct);
         setVisible("frmIncludeForwarder", isUserAct);
         setVisible("frmReadOnlyConditionName", isUserAct);
         setVisible("frmAutoLoadingCondition", isStart);
