@@ -82,7 +82,7 @@ public class UnifyInterconnect extends AbstractInterconnect {
             nullable = ca.nullable();
         }
 
-        return new EntityFieldInfo(type, field.getType(), name, description, column, fieldTypeInfo.getReferences(),
+        return new EntityFieldInfo(type, name, description, column, fieldTypeInfo.getReferences(),
                 fieldTypeInfo.getEnumImplClass(), precision, scale, length, nullable);
     }
 }

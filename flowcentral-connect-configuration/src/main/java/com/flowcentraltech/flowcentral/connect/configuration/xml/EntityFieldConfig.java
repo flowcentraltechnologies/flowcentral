@@ -39,8 +39,6 @@ public class EntityFieldConfig {
 
     private String references;
 
-    private String fieldClass;
-
     private String enumImplClass;
 
     private int scale;
@@ -99,15 +97,6 @@ public class EntityFieldConfig {
     @XmlAttribute
     public void setReferences(String references) {
         this.references = references;
-    }
-
-    public String getFieldClass() {
-        return fieldClass;
-    }
-
-    @XmlAttribute(name = "field-class")
-    public void setFieldClass(String fieldClass) {
-        this.fieldClass = fieldClass;
     }
 
     public String getEnumImplClass() {
