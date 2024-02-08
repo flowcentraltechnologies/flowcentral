@@ -72,6 +72,12 @@ public class WfStepRole extends BaseAuditEntity {
     @ListOnly(key = "wfStepId", property = "applicationDesc")
     private String applicationDesc;
 
+    @ListOnly(key = "wfStepId", property = "branchOnly")
+    private boolean branchOnly;
+
+    @ListOnly(key = "wfStepId", property = "departmentOnly")
+    private boolean departmentOnly;
+
     @ListOnly(key = "roleId", property = "code")
     private String roleCode;
 
@@ -185,6 +191,22 @@ public class WfStepRole extends BaseAuditEntity {
 
     public void setApplicationDesc(String applicationDesc) {
         this.applicationDesc = applicationDesc;
+    }
+
+    public boolean isBranchOnly() {
+        return branchOnly;
+    }
+
+    public void setBranchOnly(boolean branchOnly) {
+        this.branchOnly = branchOnly;
+    }
+
+    public boolean isDepartmentOnly() {
+        return departmentOnly;
+    }
+
+    public void setDepartmentOnly(boolean departmentOnly) {
+        this.departmentOnly = departmentOnly;
     }
 
     public String getRoleCode() {

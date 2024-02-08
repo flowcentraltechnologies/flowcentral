@@ -42,8 +42,13 @@ public class WorkflowStepInfo implements Listable {
 
     private String stepLabel;
 
+    private String branchCode;
+
+    private String departmentCode;
+
     public WorkflowStepInfo(String workflowLongName, String applicationName, String workflowName,
-            String workItemFilterGenName, String entity, String stepName, String stepDesc, String stepLabel) {
+            String workItemFilterGenName, String entity, String stepName, String stepDesc, String stepLabel,
+            String branchCode, String departmentCode) {
         this.workflowLongName = workflowLongName;
         this.applicationName = applicationName;
         this.workflowName = workflowName;
@@ -52,6 +57,8 @@ public class WorkflowStepInfo implements Listable {
         this.stepName = stepName;
         this.stepDesc = stepDesc;
         this.stepLabel = stepLabel;
+        this.branchCode = branchCode;
+        this.departmentCode = departmentCode;
     }
 
     @Override
@@ -100,4 +107,19 @@ public class WorkflowStepInfo implements Listable {
         return stepLabel;
     }
 
+    public String getBranchCode() {
+        return branchCode;
+    }
+
+    public String getDepartmentCode() {
+        return departmentCode;
+    }
+
+    public boolean isWithBranchCode() {
+        return !StringUtils.isBlank(branchCode);
+    }
+
+    public boolean isWithDepartmentCode() {
+        return !StringUtils.isBlank(departmentCode);
+    }
 }

@@ -73,6 +73,8 @@ public class WfStepConfig extends BaseNameConfig {
 
     private boolean branchOnly;
 
+    private boolean departmentOnly;
+
     private boolean includeForwarder;
 
     private boolean forwarderPreffered;
@@ -265,6 +267,15 @@ public class WfStepConfig extends BaseNameConfig {
     @XmlAttribute
     public void setBranchOnly(boolean branchOnly) {
         this.branchOnly = branchOnly;
+    }
+
+    public boolean isDepartmentOnly() {
+        return departmentOnly;
+    }
+
+    @XmlAttribute
+    public void setDepartmentOnly(boolean departmentOnly) {
+        this.departmentOnly = departmentOnly;
     }
 
     public boolean isIncludeForwarder() {

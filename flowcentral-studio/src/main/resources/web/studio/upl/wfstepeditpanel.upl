@@ -23,7 +23,7 @@
 	layout:$d{!ui-vertical style:$s{table-layout:fixed;}}
     formCaptionSuffix:$s{:} formBinding:$g{dialogFormBinding} formColumns:2
 	formSection:$d{!ui-section components:$c{frmType frmName frmDesc frmLabel frmAppletName frmAppletSetValuesName frmBinaryConditionName frmReadOnlyConditionName frmValueGenerator frmEmails frmComments frmNewCommentCaption
-		frmAutoLoadingCondition frmAttachmentProviderName frmPolicy frmRule frmActionType frmNextStepName frmAltNextStepName frmPriority frmCriticalMinutes frmExpiryMinutes frmAudit frmBranchOnly frmIncludeForwarder frmForwarderPreferred}}
+		frmAutoLoadingCondition frmAttachmentProviderName frmPolicy frmRule frmActionType frmNextStepName frmAltNextStepName frmPriority frmCriticalMinutes frmExpiryMinutes frmAudit frmBranchOnly frmDepartmentOnly frmIncludeForwarder frmForwarderPreferred}}
 
 !ui-name:frmName styleClass:$e{fc-formfield} caption:$m{wfstepeditpanel.name} size:32 binding:name required:true
 !ui-text:frmDesc styleClass:$e{fc-formfield} caption:$m{wfstepeditpanel.description} size:32 binding:description required:true focus:true
@@ -40,6 +40,7 @@
 !ui-integer:frmExpiryMinutes styleClass:$e{fc-formfield} caption:$m{wfstepeditpanel.expiryminutes} precision:5 binding:expiryMinutes
 !ui-checkbox:frmAudit caption:$m{wfstepeditpanel.audit} binding:audit
 !ui-checkbox:frmBranchOnly caption:$m{wfstepeditpanel.branchonly} binding:branchOnly
+!ui-checkbox:frmDepartmentOnly caption:$m{wfstepeditpanel.departmentonly} binding:departmentOnly
 !ui-checkbox:frmIncludeForwarder caption:$m{wfstepeditpanel.includeforwarder} binding:includeForwarder
 !ui-checkbox:frmForwarderPreferred caption:$m{wfstepeditpanel.forwarderpreferred} binding:forwarderPreffered
 !ui-select:frmValueGenerator styleClass:$e{fc-formfield} caption:$m{wfstepeditpanel.valuegenerator}

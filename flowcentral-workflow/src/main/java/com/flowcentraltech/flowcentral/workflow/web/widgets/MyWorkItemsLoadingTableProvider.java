@@ -91,14 +91,23 @@ public class MyWorkItemsLoadingTableProvider extends AbstractApplicationLoadingT
     @Override
     public List<? extends Entity> getLoadingItems(LoadingParams params) throws UnifyException {
         WorkflowStepInfo workflowStepInfo = getParameter(WorkflowStepInfo.class);
-        List<Long> workItemIdList = environment().valueList(Long.class, "workRecId", new WfItemQuery()
-                .workflowName(workflowStepInfo.getWorkflowLongName()).wfStepName(workflowStepInfo.getStepName()));
+        WfItemQuery _query = new WfItemQuery().workflowName(workflowStepInfo.getWorkflowLongName())
+                .wfStepName(workflowStepInfo.getStepName());
+        if (workflowStepInfo.isWithBranchCode()) {
+            _query.branchCode(workflowStepInfo.getBranchCode());
+        }
+
+        if (workflowStepInfo.isWithDepartmentCode()) {
+            _query.departmentCode(workflowStepInfo.getDepartmentCode());
+        }
+
+        List<Long> workItemIdList = environment().valueList(Long.class, "workRecId", _query);
         if (!DataUtils.isBlank(workItemIdList)) {
             Query<? extends Entity> query = application().queryOf(getSourceEntity());
             if (params.isWithRestriction()) {
                 query.addRestriction(params.getRestriction());
             }
-            
+
             if (workflowStepInfo.isWithWorkItemFilterGen()) {
                 WorkItemLoadingFilterGenerator loadingFilterGenerator = getComponent(
                         WorkItemLoadingFilterGenerator.class, workflowStepInfo.getWorkItemFilterGenName());
