@@ -1109,7 +1109,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         return Collections.emptyList();
     }
 
-    @Periodic(PeriodicType.NORMAL)
+    @Periodic(PeriodicType.FASTER)
     public void processWfTransitionQueueItems(TaskMonitor taskMonitor) throws UnifyException {
         logDebug("Processing transition queue items...");
         List<WfTransitionQueue> pendingList = null;
@@ -1206,12 +1206,11 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         final EntityClassDef entityClassDef = appletUtil.getEntityClassDef(wfDef.getEntity());
         WorkEntity wfEntityInst = (WorkEntity) environment()
                 .list((Class<? extends WorkEntity>) entityClassDef.getEntityClass(), wfItem.getWorkRecId());
-        if (entityClassDef.isWithTenantId()) {
-            Long tenantId = DataUtils.getBeanProperty(Long.class, wfEntityInst,
-                    entityClassDef.getTenantIdDef().getFieldName());
-            getSessionContext().setUserTokenTenantId(tenantId);
-        }
-
+        final UserToken userToken = UserToken.newBuilder().userLoginId(wfItem.getForwardedBy())
+                .userName(wfItem.getForwardedByName()).tenantId(wfItem.getTenantId())
+                .branchCode(wfEntityInst.getWorkBranchCode())
+                .reservedUser(DefaultApplicationConstants.SYSTEM_LOGINID.equals(wfItem.getForwardedBy())).build();
+        getSessionContext().setUserToken(userToken);
         return doWfTransition(new TransitionItem(wfItem, wfDef, wfEntityInst));
     }
 
@@ -1244,12 +1243,14 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         instValueStore.save("processingStatus");
 
         final UserToken userToken = getUserToken();
-        if (workInst.getWorkBranchCode() == null) {
-            workInst.setWorkBranchCode(userToken.getBranchCode());
-        }
+        if (userToken != null) {
+            if (workInst.getWorkBranchCode() == null) {
+                workInst.setWorkBranchCode(userToken.getBranchCode());
+            }
 
-        if (workInst.getWorkDepartmentCode() == null) {
-            workInst.setWorkDepartmentCode(userToken.getDepartmentCode());
+            if (workInst.getWorkDepartmentCode() == null) {
+                workInst.setWorkDepartmentCode(userToken.getDepartmentCode());
+            }
         }
 
         try {
@@ -1289,7 +1290,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                 }
             }
 
-            final String userLoginId = getUserToken() == null ? DefaultApplicationConstants.SYSTEM_LOGINID
+            final String userLoginId = userToken == null ? DefaultApplicationConstants.SYSTEM_LOGINID
                     : getUserToken().getUserLoginId();
             String itemDesc = workInst.getWorkflowItemDesc();
             if (wfDef.isWithDescFormat()) {
