@@ -167,6 +167,7 @@ public class WorkflowsXmlGenerator extends AbstractStaticArtifactGenerator {
                         wfStepConfig.setExpiryMinutes(wfStep.getExpiryMinutes());
                         wfStepConfig.setAudit(wfStep.isAudit());
                         wfStepConfig.setBranchOnly(wfStep.isBranchOnly());
+                        wfStepConfig.setDepartmentOnly(wfStep.isDepartmentOnly());
                         wfStepConfig.setIncludeForwarder(wfStep.isIncludeForwarder());
                         wfStepConfig.setForwarderPreffered(wfStep.isForwarderPreffered());
                         wfStepConfig.setEmails(wfStep.getEmails());

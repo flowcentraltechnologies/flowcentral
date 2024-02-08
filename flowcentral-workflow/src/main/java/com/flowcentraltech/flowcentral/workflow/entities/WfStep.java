@@ -110,6 +110,9 @@ public class WfStep extends BaseConfigNamedEntity {
     private boolean branchOnly;
 
     @Column
+    private boolean departmentOnly;
+
+    @Column
     private boolean includeForwarder;
 
     @Column
@@ -351,6 +354,14 @@ public class WfStep extends BaseConfigNamedEntity {
 
     public void setBranchOnly(boolean branchOnly) {
         this.branchOnly = branchOnly;
+    }
+
+    public boolean isDepartmentOnly() {
+        return departmentOnly;
+    }
+
+    public void setDepartmentOnly(boolean departmentOnly) {
+        this.departmentOnly = departmentOnly;
     }
 
     public boolean isIncludeForwarder() {

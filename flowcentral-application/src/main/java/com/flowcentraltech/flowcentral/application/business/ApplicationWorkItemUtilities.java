@@ -99,12 +99,16 @@ public interface ApplicationWorkItemUtilities extends FlowCentralComponent {
      *                         the loading table name
      * @param roleCode
      *                         the role code
+     * @param branchCode
+     *                         optional branch code
+     * @param departmentCode
+     *                         optional department code
      * @return list of workflow steps
      * @throws UnifyException
      *                        if an error occurs
      */
-    List<WorkflowStepInfo> findWorkflowLoadingStepInfoByRole(String loadingTableName, String roleCode)
-            throws UnifyException;
+    List<WorkflowStepInfo> findWorkflowLoadingStepInfoByRole(String loadingTableName, String roleCode,
+            String branchCode, String departmentCode) throws UnifyException;
 
     /**
      * Finds loading workflow exception steps by role.
@@ -113,12 +117,16 @@ public interface ApplicationWorkItemUtilities extends FlowCentralComponent {
      *                         the loading table name
      * @param roleCode
      *                         the role code
+     * @param branchCode
+     *                         optional branch code
+     * @param departmentCode
+     *                         optional department code
      * @return list of workflow steps
      * @throws UnifyException
      *                        if an error occurs
      */
-    List<WorkflowStepInfo> findWorkflowLoadingExceptionStepInfoByRole(String loadingTableName, String roleCode)
-            throws UnifyException;
+    List<WorkflowStepInfo> findWorkflowLoadingExceptionStepInfoByRole(String loadingTableName, String roleCode,
+            String branchCode, String departmentCode) throws UnifyException;
 
     /**
      * Ensures workflows are defined for applet if applet has its workflow copy flag

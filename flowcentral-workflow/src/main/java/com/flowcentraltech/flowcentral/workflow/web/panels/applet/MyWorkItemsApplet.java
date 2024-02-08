@@ -28,6 +28,7 @@ import com.flowcentraltech.flowcentral.application.web.panels.applet.ManageLoadi
 import com.flowcentraltech.flowcentral.workflow.business.WorkflowModuleService;
 import com.flowcentraltech.flowcentral.workflow.constants.WorkflowModuleNameConstants;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.UserToken;
 
 /**
  * My work items applet.
@@ -42,8 +43,9 @@ public class MyWorkItemsApplet extends ManageLoadingListApplet {
             EntityFormEventHandlers formEventHandlers) throws UnifyException {
         super(au, pathVariable, appletWidgetReferences, formEventHandlers);
         List<TableLoadingDef> altTableLoadingDefs = new ArrayList<TableLoadingDef>();
-        List<WorkflowStepInfo> workflowStepList = workflowModuleService
-                .findWorkflowLoadingStepInfoByRole(loadingTableName, roleCode);
+        UserToken userToken = au.getSessionUserToken();
+        List<WorkflowStepInfo> workflowStepList = workflowModuleService.findWorkflowLoadingStepInfoByRole(
+                loadingTableName, roleCode, userToken.getBranchCode(), userToken.getDepartmentCode());
         int orderIndex = 0;
         for (WorkflowStepInfo workflowStepInfo : workflowStepList) {
             altTableLoadingDefs.add(new TableLoadingDef(workflowStepInfo.getStepName(), workflowStepInfo.getStepDesc(),
