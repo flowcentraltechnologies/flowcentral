@@ -49,7 +49,7 @@ public class SpringBootInterconnect extends AbstractInterconnect {
     @Override
     protected String getTableName(Class<?> entityClass) throws Exception {
         Table ta = entityClass.getAnnotation(Table.class);
-        return  ta != null ? ta.name() : null;
+        return ta != null ? ta.name() : null;
     }
 
     @Override
@@ -86,7 +86,7 @@ public class SpringBootInterconnect extends AbstractInterconnect {
             nullable = ca.nullable();
         }
 
-        return new EntityFieldInfo(type, name, description, column, fieldTypeInfo.getReferences(),
+        return new EntityFieldInfo(type, field.getType(), name, description, column, fieldTypeInfo.getReferences(),
                 fieldTypeInfo.getEnumImplClass(), precision, scale, length, nullable);
     }
 }

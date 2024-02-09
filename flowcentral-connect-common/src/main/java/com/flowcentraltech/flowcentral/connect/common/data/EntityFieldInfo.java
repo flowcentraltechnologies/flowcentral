@@ -27,6 +27,8 @@ public class EntityFieldInfo {
 
     private ConnectFieldDataType type;
 
+    private Class<?> fieldClass;
+
     private String name;
 
     private String description;
@@ -42,12 +44,14 @@ public class EntityFieldInfo {
     private int scale;
 
     private int length;
-    
+
     private boolean nullable;
 
-    public EntityFieldInfo(ConnectFieldDataType type, String name, String description, String column, String references,
-            Class<? extends Enum<?>> enumImplClass, int precision, int scale, int length, boolean nullable) {
+    public EntityFieldInfo(ConnectFieldDataType type, Class<?> fieldClass, String name, String description,
+            String column, String references, Class<? extends Enum<?>> enumImplClass, int precision, int scale,
+            int length, boolean nullable) {
         this.type = type;
+        this.fieldClass = fieldClass;
         this.name = name;
         this.description = description;
         this.column = column;
@@ -64,11 +68,19 @@ public class EntityFieldInfo {
             column = _entityFieldInfo.column;
         }
     }
-    
+
     public ConnectFieldDataType getType() {
         return type;
     }
-    
+
+    public Class<?> getConvertClass() {
+        return fieldClass != null && fieldClass.isPrimitive() ? fieldClass : type.javaClass();
+    }
+
+    public Class<?> getFieldClass() {
+        return fieldClass;
+    }
+
     public Class<?> getJavaClass() {
         return type.javaClass();
     }
@@ -112,27 +124,27 @@ public class EntityFieldInfo {
     public boolean references() {
         return type.references();
     }
-    
+
     public boolean isRef() {
         return type.isRef();
     }
-    
+
     public boolean isEnum() {
         return type.isEnum();
     }
-    
+
     public boolean isLob() {
         return type.isLob();
     }
-    
+
     public boolean isListOnly() {
         return type.isListOnly();
     }
-    
+
     public boolean isChild() {
         return type.isChild();
     }
-    
+
     public boolean isChildList() {
         return type.isChildList();
     }
@@ -152,15 +164,15 @@ public class EntityFieldInfo {
     public boolean isString() {
         return type.isString();
     }
-    
+
     public boolean isInteger() {
         return type.isInteger();
     }
-    
+
     public boolean isDouble() {
         return type.isDouble();
     }
-    
+
     public boolean isDecimal() {
         return type.isDecimal();
     }
