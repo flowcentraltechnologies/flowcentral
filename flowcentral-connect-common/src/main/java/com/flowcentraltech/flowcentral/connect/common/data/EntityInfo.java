@@ -244,7 +244,7 @@ public class EntityInfo {
     public Set<String> getFieldNames() {
         return fieldsByName.keySet();
     }
-    
+
     public EntityFieldInfo getEntityFieldInfo(String fieldName) throws Exception {
         String local = getLocalFieldName(fieldName);
         EntityFieldInfo entityFieldInfo = fieldsByName.get(local);
@@ -346,16 +346,16 @@ public class EntityInfo {
             this.implementation = implementation;
             return this;
         }
-        
-        public Builder addField(ConnectFieldDataType type, String fieldName, String description, String column)
-                throws Exception {
-            return addField(type, fieldName, description, column, null, null, 0, 0, 0, true);
+
+        public Builder addField(ConnectFieldDataType type, Class<?> fieldClass, String fieldName, String description,
+                String column) throws Exception {
+            return addField(type, fieldClass, fieldName, description, column, null, null, 0, 0, 0, true);
         }
-        
+
         @SuppressWarnings("unchecked")
-        public Builder addField(ConnectFieldDataType type, String fieldName, String description, String column, String references,
-                String enumImpl, int precision, int scale, int length, boolean nullable)
-                throws Exception {
+        public Builder addField(ConnectFieldDataType type, Class<?>  fieldClass, String fieldName, String description,
+                String column, String references, String enumImpl, int precision, int scale, int length,
+                boolean nullable) throws Exception {
             if (type == null) {
                 throw new RuntimeException("Entity information field type is required");
             }
@@ -373,11 +373,11 @@ public class EntityInfo {
             Class<? extends Enum<?>> enumImplClass = enumImpl != null
                     ? (Class<? extends Enum<?>>) Class.forName(enumImpl)
                     : null;
-            fieldsByName.put(fieldName, new EntityFieldInfo(type, fieldName, description, column, references,
-                     enumImplClass, precision, scale, length, nullable));
+            fieldsByName.put(fieldName, new EntityFieldInfo(type, fieldClass, fieldName, description,
+                    column, references, enumImplClass, precision, scale, length, nullable));
             return this;
         }
-        
+
         public EntityInfo build() throws Exception {
             if (baseType == null) {
                 throw new RuntimeException("Entity base type is required. Entity name [" + name + "]");
