@@ -107,6 +107,7 @@ import com.tcdng.unify.core.security.TwoWayStringCryptograph;
 import com.tcdng.unify.core.task.TaskExecLimit;
 import com.tcdng.unify.core.task.TaskManager;
 import com.tcdng.unify.core.task.TaskMonitor;
+import com.tcdng.unify.core.task.TaskParameterConstants;
 import com.tcdng.unify.core.task.TaskStatus;
 import com.tcdng.unify.core.task.TaskStatusLogger;
 import com.tcdng.unify.core.util.CalendarUtils;
@@ -209,7 +210,8 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
                     String[] weekDays = DataUtils.convert(String[].class, scheduledTask.getWeekdays());
                     String[] days = DataUtils.convert(String[].class, scheduledTask.getDays());
                     String[] months = DataUtils.convert(String[].class, scheduledTask.getMonths());
-                    return new ScheduledTaskDef(scheduledTaskId, lock, scheduledTask.getDescription(),
+                    return new ScheduledTaskDef(scheduledTaskId, scheduledTask.getTenantId(),
+                            scheduledTask.getUpdatedBy(), lock, scheduledTask.getDescription(),
                             scheduledTask.getTaskName(), startTimeOffset, endTimeOffset, repeatMillSecs, weekDays, days,
                             months, pvd, scheduledTask.getVersionNo());
                 }
@@ -590,6 +592,8 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
                     logDebug("Grabbed scheduled task lock [{0}] ...", taskLock);
                     logDebug("Setting up scheduled task [{0}] ...", scheduledTaskDef.getDescription());
                     Map<String, Object> taskParameters = new HashMap<String, Object>();
+                    taskParameters.put(TaskParameterConstants.USER_LOGIN_ID, scheduledTaskDef.getUserLoginId());
+                    taskParameters.put(TaskParameterConstants.TENANT_ID, scheduledTaskDef.getTenantId());
                     taskParameters.put(SystemSchedTaskConstants.SCHEDULEDTASK_ID, scheduledTaskId);
 
                     Date nextExecutionOn = environment().value(Date.class, "nextExecutionOn",

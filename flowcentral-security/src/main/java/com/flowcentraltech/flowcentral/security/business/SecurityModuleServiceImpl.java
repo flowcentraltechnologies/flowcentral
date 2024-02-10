@@ -70,6 +70,7 @@ import com.tcdng.unify.core.UnifyCorePropertyConstants;
 import com.tcdng.unify.core.UnifyCoreSessionAttributeConstants;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.UserToken;
+import com.tcdng.unify.core.UserTokenProvider;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.TransactionAttribute;
@@ -95,7 +96,7 @@ import com.tcdng.unify.web.UnifyWebSessionAttributeConstants;
 @Transactional
 @Component(SecurityModuleNameConstants.SECURITY_MODULE_SERVICE)
 public class SecurityModuleServiceImpl extends AbstractFlowCentralService
-        implements SecurityModuleService, NotificationRecipientProvider {
+        implements SecurityModuleService, NotificationRecipientProvider, UserTokenProvider {
 
     @Configurable
     private UserSessionManager userSessionManager;
@@ -449,6 +450,15 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
         }
 
         return null;
+    }
+
+    @Override
+    public UserToken getUserToken(String userLoginId, Long tenantId) throws UnifyException {
+        final User user = environment().list(new UserQuery().loginId(userLoginId));
+        final MappedBranch userBranch = user.getBranchId() != null
+                ? environment().find(MappedBranch.class, user.getBranchId())
+                : null;
+        return createUserToken(user, userBranch, tenantId);
     }
 
     @Override
