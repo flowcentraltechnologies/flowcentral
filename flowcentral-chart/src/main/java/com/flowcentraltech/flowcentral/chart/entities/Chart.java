@@ -57,6 +57,9 @@ public class Chart extends BaseApplicationEntity {
     @Column(length = 64, nullable = true)
     private String series;
 
+    @Column(length = 64, nullable = true)
+    private String color;
+
     @Column(nullable = true)
     private Integer width;
 
@@ -149,6 +152,14 @@ public class Chart extends BaseApplicationEntity {
 
     public void setSeries(String series) {
         this.series = series;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
     }
 
     public Integer getWidth() {

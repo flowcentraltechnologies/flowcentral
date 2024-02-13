@@ -30,6 +30,9 @@ import com.tcdng.unify.core.util.EnumUtils;
 @StaticList(name = "chartpalettetypelist", description = "$m{staticlist.chartpalettetypelist}")
 public enum ChartPaletteType implements EnumConst {
 
+    PALETTE0(
+            "PL0",
+            "monochrome"),
     PALETTE1(
             "PL1",
             "palette1"),
@@ -82,6 +85,10 @@ public enum ChartPaletteType implements EnumConst {
 
     public String optionsType() {
         return optionsType;
+    }
+
+    public boolean monochrome() {
+        return PALETTE0.equals(this);
     }
 
     public static ChartPaletteType fromCode(String code) {

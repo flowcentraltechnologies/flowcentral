@@ -40,7 +40,7 @@ public final class ChartUtils {
     private ChartUtils() {
 
     }
-    
+
     public static JsonWriter getOptionsJsonWriter(ChartDef chartDef, ChartDetails chartDetails, boolean sparkLine,
             int preferredHeight) throws UnifyException {
         JsonWriter jw = new JsonWriter();
@@ -133,7 +133,16 @@ public final class ChartUtils {
         // Theme
         jw.beginObject("theme");
         jw.write("mode", "light");
-        jw.write("palette", chartDef.getPaletteType().optionsType());
+        if (chartDef.getPaletteType().monochrome()) {
+            jw.beginObject("monochrome");
+            jw.write("enabled", true);
+            jw.write("color", chartDef.isWithColor() ? chartDef.getColor() : "#606060");
+            jw.write("shadeTo", "light");
+            jw.write("shadeIntensity", 0.75);
+            jw.endObject();
+        } else {
+            jw.write("palette", chartDef.getPaletteType().optionsType());
+        }
         jw.endObject();
 
         // Options
@@ -203,8 +212,8 @@ public final class ChartUtils {
         return jw;
     }
 
-    public static String getOptionsJson(ChartDef chartDef, ChartDetails chartDetails, boolean sparkLine, int preferredHeight)
-            throws UnifyException {
+    public static String getOptionsJson(ChartDef chartDef, ChartDetails chartDetails, boolean sparkLine,
+            int preferredHeight) throws UnifyException {
         return ChartUtils.getOptionsJsonWriter(chartDef, chartDetails, sparkLine, preferredHeight).toString();
     }
 }

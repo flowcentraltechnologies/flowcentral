@@ -89,7 +89,8 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
                             chart.getProvider(), chart.getRule(), longName, chart.getDescription(), chart.getId(),
                             chart.getVersionNo());
                     cdb.title(chart.getTitle()).subTitle(chart.getSubTitle()).category(chart.getCategory())
-                            .series(chart.getSeries()).width(DataUtils.convert(int.class, chart.getWidth()))
+                            .series(chart.getSeries()).color(chart.getColor())
+                            .width(DataUtils.convert(int.class, chart.getWidth()))
                             .height(DataUtils.convert(int.class, chart.getHeight())).showGrid(chart.isShowGrid())
                             .showDataLabels(chart.isShowDataLabels()).formatDataLabels(chart.isFormatDataLabels())
                             .formatYLabels(chart.isFormatYLabels()).stacked(chart.isStacked()).smooth(chart.isSmooth());

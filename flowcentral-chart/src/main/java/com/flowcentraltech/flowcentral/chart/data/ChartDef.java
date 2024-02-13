@@ -48,6 +48,8 @@ public class ChartDef extends BaseApplicationEntityDef {
 
     private String series;
 
+    private String color;
+
     private int width;
 
     private int height;
@@ -65,8 +67,8 @@ public class ChartDef extends BaseApplicationEntityDef {
     private boolean formatYLabels;
 
     private ChartDef(ChartType type, ChartPaletteType paletteType, String title, String subTitle, String provider,
-            String rule, String category, String series, int width, int height, boolean stacked, boolean showGrid,
-            boolean showDataLabels, boolean formatDataLabels, boolean formatYLabels, boolean smooth,
+            String rule, String category, String series, String color, int width, int height, boolean stacked,
+            boolean showGrid, boolean showDataLabels, boolean formatDataLabels, boolean formatYLabels, boolean smooth,
             ApplicationEntityNameParts nameParts, String description, Long id, long version) {
         super(nameParts, description, id, version);
         this.type = type;
@@ -77,6 +79,7 @@ public class ChartDef extends BaseApplicationEntityDef {
         this.rule = rule;
         this.category = category;
         this.series = series;
+        this.color = color;
         this.width = width;
         this.height = height;
         this.stacked = stacked;
@@ -125,6 +128,14 @@ public class ChartDef extends BaseApplicationEntityDef {
 
     public String getSeries() {
         return series;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public boolean isWithColor() {
+        return !StringUtils.isBlank(color);
     }
 
     public int getWidth() {
@@ -182,6 +193,8 @@ public class ChartDef extends BaseApplicationEntityDef {
 
         private String series;
 
+        private String color;
+
         private int width;
 
         private int height;
@@ -238,6 +251,11 @@ public class ChartDef extends BaseApplicationEntityDef {
             return this;
         }
 
+        public Builder color(String color) {
+            this.color = color;
+            return this;
+        }
+
         public Builder width(int width) {
             this.width = width;
             return this;
@@ -279,8 +297,8 @@ public class ChartDef extends BaseApplicationEntityDef {
         }
 
         public ChartDef build() throws UnifyException {
-            return new ChartDef(type, paletteType, title, subTitle, provider, rule, category, series, width, height,
-                    stacked, showGrid, showDataLabels, formatDataLabels, formatYLabels, smooth,
+            return new ChartDef(type, paletteType, title, subTitle, provider, rule, category, series, color, width,
+                    height, stacked, showGrid, showDataLabels, formatDataLabels, formatYLabels, smooth,
                     ApplicationNameUtils.getApplicationEntityNameParts(longName), description, id, version);
         }
     }

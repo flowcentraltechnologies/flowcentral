@@ -3172,7 +3172,9 @@
 						column="1" disabled="true" required="true" />
 					<field name="type" column="1" required="true"
 						switchOnChange="true" />
-					<field name="paletteType" column="1" required="true" />
+					<field name="paletteType" column="1" required="true" switchOnChange="true"/>
+					<field name="color" inputWidget="studio.tablerowcolorlist"
+						column="1" required="true" />
 					<field name="provider" column="1" required="true"
 						switchOnChange="true" />
 					<field name="rule" column="1" switchOnChange="true" />
@@ -3239,6 +3241,18 @@
 				<setStates>
 					<setState type="field" target="category,series"
 						visible="true" />
+					<setState type="field" target="paletteType"
+						visible="false" />
+				</setStates>
+			</formStatePolicy>
+			<formStatePolicy type="on_switch"
+				name="chartPaletteTypeFormPolicy"
+				description="$m{studio.chart.form.chartpalettetype.policy}">
+				<onCondition>
+					<restriction type="not_equals" field="paletteType" paramA="PL0" />
+				</onCondition>
+				<setStates>
+					<setState type="field" target="color" required="false" />
 				</setStates>
 			</formStatePolicy>
 		</form>

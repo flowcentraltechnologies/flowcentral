@@ -71,6 +71,8 @@
 			<field name="series" label="$m{chart.chart.series}"
 				type="string" inputWidget="chartdatasourceruleserieslist"
 				nullable="true" />
+			<field name="color" label="$m{chart.chart.color}"
+				type="string"  nullable="true" />
 			<field name="width" label="$m{chart.chart.width}"
 				type="integer" inputWidget="application.integer" />
 			<field name="height" label="$m{chart.chart.height}"

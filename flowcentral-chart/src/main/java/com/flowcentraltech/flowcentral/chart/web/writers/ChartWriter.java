@@ -74,7 +74,9 @@ public class ChartWriter extends AbstractWidgetWriter {
             }
             writer.write("</span>");
 
-            writer.write("<span class=\"content\">");
+            writer.write("<span class=\"content\" style=\"color:");
+            writer.write(chartDef.isWithColor() ? chartDef.getColor() : "#606060");
+            writer.write(";\">");
             Number num = chartDetails.getSeries().get(chartDef.getSeries()).getData(chartDef.getCategory());
             String fmt = num != null ? new DecimalFormat("###,###").format(num) : "";
             writer.writeWithHtmlEscape(fmt);
