@@ -51,6 +51,12 @@ public class Chart extends BaseApplicationEntity {
     @Column(length = 64, nullable = true)
     private String rule;
 
+    @Column(length = 64, nullable = true)
+    private String category;
+
+    @Column(length = 64, nullable = true)
+    private String series;
+
     @Column(nullable = true)
     private Integer width;
 
@@ -127,6 +133,22 @@ public class Chart extends BaseApplicationEntity {
 
     public void setRule(String rule) {
         this.rule = rule;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public String getSeries() {
+        return series;
+    }
+
+    public void setSeries(String series) {
+        this.series = series;
     }
 
     public Integer getWidth() {

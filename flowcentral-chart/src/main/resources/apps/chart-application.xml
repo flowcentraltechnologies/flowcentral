@@ -1,43 +1,57 @@
 <?xml version="1.0"?>
 <!-- Chart application -->
-<application name="chart" description="$m{chart.short.description}"
-	label="$m{chart.label}" module="chart">
+<application name="chart"
+	description="$m{chart.short.description}" label="$m{chart.label}"
+	module="chart">
 	<!-- Widget Types -->
 	<widgetTypes>
-		<widgetType name="chart" description="$m{chart.widgettype.chart}"
-			dataType="string" inputType="string" editor="!fc-chart sparkLine:false"
+		<widgetType name="chart"
+			description="$m{chart.widgettype.chart}" dataType="string"
+			inputType="string" editor="!fc-chart sparkLine:false"
 			renderer="!ui-label" />
 		<widgetType name="sparklinechart"
 			description="$m{chart.widgettype.sparklinechart}" dataType="string"
-			inputType="string" editor="!fc-chart sparkLine:true" renderer="!ui-label" />
+			inputType="string" editor="!fc-chart sparkLine:true"
+			renderer="!ui-label" />
 		<widgetType name="chartlist"
 			description="$m{chart.widgettype.chartlist}" dataType="string"
 			inputType="string"
 			editor="!ui-select list:chartlist blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="chartproviderlist"
-			description="$m{chart.widgettype.chartproviderlist}" dataType="string"
-			inputType="string"
+			description="$m{chart.widgettype.chartproviderlist}"
+			dataType="string" inputType="string"
 			editor="!ui-select list:chartproviderlist blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="chartproviderrulelist"
-			description="$m{chart.widgettype.chartproviderrulelist}" dataType="string"
-			inputType="string"
+			description="$m{chart.widgettype.chartproviderrulelist}"
+			dataType="string" inputType="string"
 			editor="!ui-select list:rulelist listParams:$l{provider} blankOption:$m{blank.none}"
+			renderer="!ui-label" />
+		<widgetType name="chartdatasourcerulecategorylist"
+			description="$m{chart.widgettype.chartdatasourcerulecategorylist}"
+			dataType="string" inputType="string"
+			editor="!ui-select list:chartdatasourcerulecategorylist listParams:$l{rule} blankOption:$m{blank.none}"
+			renderer="!ui-label" />
+		<widgetType name="chartdatasourceruleserieslist"
+			description="$m{chart.widgettype.chartdatasourceruleserieslist}"
+			dataType="string" inputType="string"
+			editor="!ui-select list:chartdatasourceruleserieslist listParams:$l{rule} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 	</widgetTypes>
 	<!-- Applets -->
 	<!-- References -->
 	<references>
-		<reference name="chartRef" description="$m{chart.chart.reference}"
-			entity="chart" searchField="description" />
+		<reference name="chartRef"
+			description="$m{chart.chart.reference}" entity="chart"
+			searchField="description" />
 	</references>
 	<!-- Entities -->
 	<entities>
 		<entity name="chart" description="$m{chart.chart}"
 			label="$m{chart.chart.label}"
-			type="com.flowcentraltech.flowcentral.chart.entities.Chart" auditable="true"
-			reportable="true">
+			type="com.flowcentraltech.flowcentral.chart.entities.Chart"
+			auditable="true" reportable="true">
 			<field name="type" label="$m{chart.chart.type}" type="enum_ref"
 				references="charttypelist" inputWidget="application.enumlist" />
 			<field name="paletteType" label="$m{chart.chart.palettetype}"
@@ -45,77 +59,92 @@
 				inputWidget="application.enumlist" />
 			<field name="title" label="$m{chart.chart.title}" type="string"
 				inputWidget="application.text" nullable="true" />
-			<field name="subTitle" label="$m{chart.chart.subtitle}" type="string"
-				inputWidget="application.text" nullable="true" />
-			<field name="provider" label="$m{chart.chart.provider}" type="string"
-				inputWidget="chartproviderlist" />
+			<field name="subTitle" label="$m{chart.chart.subtitle}"
+				type="string" inputWidget="application.text" nullable="true" />
+			<field name="provider" label="$m{chart.chart.provider}"
+				type="string" inputWidget="chartproviderlist" />
 			<field name="rule" label="$m{chart.chart.rule}" type="string"
 				inputWidget="chartproviderrulelist" nullable="true" />
-			<field name="width" label="$m{chart.chart.width}" type="integer"
-				inputWidget="application.integer" />
-			<field name="height" label="$m{chart.chart.height}" type="integer"
-				inputWidget="application.integer" />
-			<field name="stacked" label="$m{chart.chart.stacked}" type="boolean"
-				inputWidget="application.checkbox" />
-			<field name="smooth" label="$m{chart.chart.smooth}" type="boolean"
-				inputWidget="application.checkbox" />
-			<field name="showGrid" label="$m{chart.chart.showgrid}" type="boolean"
-				inputWidget="application.checkbox" />
-			<field name="showDataLabels" label="$m{chart.chart.showdatalabels}"
+			<field name="category" label="$m{chart.chart.category}"
+				type="string" inputWidget="chartdatasourcerulecategorylist"
+				nullable="true" />
+			<field name="series" label="$m{chart.chart.series}"
+				type="string" inputWidget="chartdatasourceruleserieslist"
+				nullable="true" />
+			<field name="width" label="$m{chart.chart.width}"
+				type="integer" inputWidget="application.integer" />
+			<field name="height" label="$m{chart.chart.height}"
+				type="integer" inputWidget="application.integer" />
+			<field name="stacked" label="$m{chart.chart.stacked}"
 				type="boolean" inputWidget="application.checkbox" />
-			<field name="formatDataLabels" label="$m{chart.chart.formatdatalabels}"
+			<field name="smooth" label="$m{chart.chart.smooth}"
 				type="boolean" inputWidget="application.checkbox" />
-			<field name="formatYLabels" label="$m{chart.chart.formatylabels}"
+			<field name="showGrid" label="$m{chart.chart.showgrid}"
 				type="boolean" inputWidget="application.checkbox" />
-			<field name="typeDesc" label="$m{chart.chart.typedesc}" type="list_only"
-				key="type" property="description" />
-			<field name="paletteTypeDesc" label="$m{chart.chart.palettetypedesc}"
-				type="list_only" key="paletteType" property="description" />
+			<field name="showDataLabels"
+				label="$m{chart.chart.showdatalabels}" type="boolean"
+				inputWidget="application.checkbox" />
+			<field name="formatDataLabels"
+				label="$m{chart.chart.formatdatalabels}" type="boolean"
+				inputWidget="application.checkbox" />
+			<field name="formatYLabels"
+				label="$m{chart.chart.formatylabels}" type="boolean"
+				inputWidget="application.checkbox" />
+			<field name="typeDesc" label="$m{chart.chart.typedesc}"
+				type="list_only" key="type" property="description" />
+			<field name="paletteTypeDesc"
+				label="$m{chart.chart.palettetypedesc}" type="list_only"
+				key="paletteType" property="description" />
 			<uniqueConstraint name="nameUc"
-				description="$m{chart.chart.uc.name}"
-				fieldList="applicationId,name">
-				<condition field="devVersionType" value="CRN"/>
+				description="$m{chart.chart.uc.name}" fieldList="applicationId,name">
+				<condition field="devVersionType" value="CRN" />
 			</uniqueConstraint>
 			<uniqueConstraint name="descUc"
 				description="$m{chart.chart.uc.description}"
 				fieldList="applicationId,description">
-				<condition field="devVersionType" value="CRN"/>
+				<condition field="devVersionType" value="CRN" />
 			</uniqueConstraint>
 		</entity>
-		<entity name="chartDataSource" description="$m{chart.chartdatasource}"
-			label="$m{chart.chart.label}"
-			type="com.flowcentraltech.flowcentral.chart.entities.ChartDataSource" auditable="true"
-			reportable="true">
-			<field name="type" label="$m{chart.chartdatasource.type}" type="enum_ref"
-				references="chartdatasourcetypelist" inputWidget="application.enumlist" />
-			<field name="timeSeriesType" label="$m{chart.chartdatasource.timeseriestype}" type="enum_ref"
-				references="charttimeseriestypelist" inputWidget="application.enumlist" />
+		<entity name="chartDataSource"
+			description="$m{chart.chartdatasource}" label="$m{chart.chart.label}"
+			type="com.flowcentraltech.flowcentral.chart.entities.ChartDataSource"
+			auditable="true" reportable="true">
+			<field name="type" label="$m{chart.chartdatasource.type}"
+				type="enum_ref" references="chartdatasourcetypelist"
+				inputWidget="application.enumlist" />
+			<field name="timeSeriesType"
+				label="$m{chart.chartdatasource.timeseriestype}" type="enum_ref"
+				references="charttimeseriestypelist"
+				inputWidget="application.enumlist" />
 			<field name="entity" label="$m{chart.chartdatasource.entity}"
 				type="string" />
-			<field name="categoryField" label="$m{chart.chartdatasource.categoryfield}"
-				type="string" />
+			<field name="categoryField"
+				label="$m{chart.chartdatasource.categoryfield}" type="string" />
 			<field name="categoryBase"
 				label="$m{chart.chartdatasource.categorybase}" type="child"
 				category="chart-datasource" references="application.appFilterRef" />
-			<field name="series"
-				label="$m{chart.chartdatasource.series}" type="child"
-				category="entity-series" references="application.appPropertySequenceRef" />
+			<field name="series" label="$m{chart.chartdatasource.series}"
+				type="child" category="entity-series"
+				references="application.appPropertySequenceRef" />
 			<field name="categories"
 				label="$m{chart.chartdatasource.categories}" type="child"
-				category="entity-category" references="application.appPropertySequenceRef" />
-			<field name="typeDesc" label="$m{chart.chartdatasource.typedesc}" type="list_only"
+				category="entity-category"
+				references="application.appPropertySequenceRef" />
+			<field name="typeDesc"
+				label="$m{chart.chartdatasource.typedesc}" type="list_only"
 				key="type" property="description" />
-			<field name="timeSeriesTypeDesc" label="$m{chart.chartdatasource.timeseriestypedesc}" type="list_only"
-				key="timeSeriesType" property="description" />
+			<field name="timeSeriesTypeDesc"
+				label="$m{chart.chartdatasource.timeseriestypedesc}"
+				type="list_only" key="timeSeriesType" property="description" />
 			<uniqueConstraint name="nameUc"
 				description="$m{chart.chartdatasource.uc.name}"
 				fieldList="applicationId,name">
-				<condition field="devVersionType" value="CRN"/>
+				<condition field="devVersionType" value="CRN" />
 			</uniqueConstraint>
 			<uniqueConstraint name="descUc"
 				description="$m{chart.chartdatasource.uc.description}"
 				fieldList="applicationId,description">
-				<condition field="devVersionType" value="CRN"/>
+				<condition field="devVersionType" value="CRN" />
 			</uniqueConstraint>
 		</entity>
 	</entities>

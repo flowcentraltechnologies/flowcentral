@@ -20,7 +20,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.data.Listable;
 import com.tcdng.unify.core.util.DataUtils;
+import com.tcdng.unify.core.util.StringUtils;
 
 /**
  * Application property sequence definition.
@@ -28,7 +30,7 @@ import com.tcdng.unify.core.util.DataUtils;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class PropertySequenceDef {
+public class PropertySequenceDef implements Listable {
 
     private List<PropertySequenceEntryDef> sequenceList;
 
@@ -40,6 +42,16 @@ public class PropertySequenceDef {
         this.sequenceList = sequenceList;
         this.name = name;
         this.description = description;
+    }
+
+    @Override
+    public String getListKey() {
+        return name;
+    }
+
+    @Override
+    public String getListDescription() {
+        return description;
     }
 
     public String getName() {
@@ -85,7 +97,7 @@ public class PropertySequenceDef {
         }
 
         public Builder addSequenceEntryDef(String property, String label) {
-            sequenceList.add(new PropertySequenceEntryDef(property, label));
+            sequenceList.add(new PropertySequenceEntryDef(property, StringUtils.isBlank(label) ? property : label));
             return this;
         }
 

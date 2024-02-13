@@ -30,6 +30,9 @@ import com.tcdng.unify.core.util.EnumUtils;
 @StaticList(name = "charttypelist", description = "$m{staticlist.charttypelist}")
 public enum ChartType implements EnumConst {
 
+    CARD(
+            "CRD",
+            "card"),
     LINE(
             "LNE",
             "line"),
@@ -53,7 +56,10 @@ public enum ChartType implements EnumConst {
             "donut"),
     POLAR_AREA(
             "POL",
-            "polarArea");
+            "polarArea"),
+    TABLE(
+            "TBL",
+            "table");
 
     private final String code;
 
