@@ -92,6 +92,18 @@ public enum ChartType implements EnumConst {
         return !PIE.equals(this) && !DONUT.equals(this) && !POLAR_AREA.equals(this);
     }
 
+    public boolean custom() {
+        return CARD.equals(this) || TABLE.equals(this);
+    }
+
+    public boolean card() {
+        return CARD.equals(this);
+    }
+
+    public boolean table() {
+        return TABLE.equals(this);
+    }
+    
     public static ChartType fromCode(String code) {
         return EnumUtils.fromCode(ChartType.class, code);
     }

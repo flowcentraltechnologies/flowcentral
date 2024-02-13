@@ -46,6 +46,10 @@ public class AppEntityFieldQuery extends BaseConfigEntityQuery<AppEntityField> {
         return (AppEntityFieldQuery) addEquals("name", name);
     }
 
+    public AppEntityFieldQuery nameNotIn(String... name) {
+        return (AppEntityFieldQuery) addNotAmongst("name", Arrays.asList(name));
+    }
+
     public AppEntityFieldQuery applicationName(String applicationName) {
         return (AppEntityFieldQuery) addEquals("applicationName", applicationName);
     }

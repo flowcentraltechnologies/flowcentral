@@ -16,7 +16,9 @@
 package com.flowcentraltech.flowcentral.chart.data;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.flowcentraltech.flowcentral.configuration.constants.ChartCategoryDataType;
 import com.flowcentraltech.flowcentral.configuration.constants.ChartSeriesDataType;
@@ -36,13 +38,15 @@ public abstract class AbstractSeries<T, U extends Number> {
 
     private final String name;
 
-    private final List<AbstractSeriesData> data;
+    private final Map<T, AbstractSeriesData> data;
+
+    private List<AbstractSeriesData> dataList;
 
     protected AbstractSeries(ChartCategoryDataType categoryType, ChartSeriesDataType dataType, String name) {
         this.categoryType = categoryType;
         this.dataType = dataType;
         this.name = name;
-        this.data = new ArrayList<AbstractSeriesData>();
+        this.data = new LinkedHashMap<T, AbstractSeriesData>();
     }
 
     public ChartCategoryDataType getCategoryType() {
@@ -59,9 +63,18 @@ public abstract class AbstractSeries<T, U extends Number> {
 
     @SuppressWarnings("unchecked")
     public void addData(Object x, Number y) {
-        data.add(createData((T) x, (U) y));
+        data.put((T)x,  createData((T) x, (U) y));
     }
 
+    public U getData(Object x) {
+        AbstractSeriesData seriesData = data.get(x);
+        if (seriesData != null) {
+            return seriesData.getY();
+        }
+        
+        return null;
+    }
+    
     public int size() {
         return data.size();
     }
@@ -72,27 +85,27 @@ public abstract class AbstractSeries<T, U extends Number> {
 
     public List<Object> getXList() {
         List<Object> list = new ArrayList<Object>();
-        for (AbstractSeriesData _data: data) {
+        for (AbstractSeriesData _data : data.values()) {
             list.add(_data.getX());
         }
-        
+
         return list;
     }
 
     public List<Number> getYList() {
         List<Number> list = new ArrayList<Number>();
-        for (AbstractSeriesData _data: data) {
+        for (AbstractSeriesData _data : data.values()) {
             list.add(_data.getY());
         }
-        
+
         return list;
     }
-    
+
     public void writeAsObject(JsonWriter jw) {
         jw.beginObject();
         jw.write("name", name);
         jw.beginArray("data");
-        for (AbstractSeriesData _data: data) {
+        for (AbstractSeriesData _data : data.values()) {
             _data.writeAsObject(jw);
         }
 
@@ -103,21 +116,33 @@ public abstract class AbstractSeries<T, U extends Number> {
     public void writeXValuesArray(String field, JsonWriter jw) {
         String[] x = new String[data.size()];
         for (int i = 0; i < x.length; i++) {
-            x[i] = String.valueOf(data.get(i).getX());
+            x[i] = String.valueOf(getDataList().get(i).getX());
         }
-        
+
         jw.write(field, x);
     }
 
     public void writeYValuesArray(String field, JsonWriter jw) {
         Number[] y = new Number[data.size()];
         for (int i = 0; i < y.length; i++) {
-            y[i] = data.get(i).getY();
+            y[i] = getDataList().get(i).getY();
         }
-        
+
         jw.write(field, y);
     }
 
+    private List<AbstractSeriesData> getDataList() {
+        if (dataList == null) {
+            synchronized(this) {
+                if (dataList == null) {
+                    dataList = new ArrayList<AbstractSeriesData>(data.values());
+                }                
+            }
+        }
+        
+        return dataList;
+    }
+    
     protected abstract AbstractSeriesData createData(T x, U y);
 
     protected abstract class AbstractSeriesData {
@@ -140,7 +165,7 @@ public abstract class AbstractSeries<T, U extends Number> {
         }
 
         public abstract void writeAsObject(JsonWriter jw);
-        
+
     }
 
 }

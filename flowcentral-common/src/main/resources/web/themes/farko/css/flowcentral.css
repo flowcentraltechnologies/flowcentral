@@ -240,7 +240,11 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-tinybutton {font-size: 7pt; min-height: 24px;}
 
 /** Chart */
-.fc-chart {}
+.fc-chart {width:100%;height:100%;}
+.fc-chart .card {width:100%;height:100%;}
+.fc-chart .card .title{display:block;padding: 4px 4px;text-align:center;font-size:2em;font-weight:bold;}
+.fc-chart .card .subtitle{display:block;padding: 2px 2px;text-align:center;font-size:1em;}
+.fc-chart .card .content{display:block;text-align:center;margin-top: 0.2em;font-size:5.4em;}
 
 /** Comment Listing */
 .fc-commentlisting {overflow-y:scroll;padding:2px;height:196px;border:solid 1px #b0b0b0;}
@@ -257,10 +261,10 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 
 /** Dashboard slate*/
 .fc-dashboardslate {width:100%;}
-.fc-dashboardslate .section {display:table;width:100%;table-layout:fixed;}
+.fc-dashboardslate .section {display:table;width:calc(100% - 8px);table-layout:fixed;}
 .fc-dashboardslate .sectionrow {display:table-row;}
 .fc-dashboardslate .sectioncell {display:table-cell;padding: 8px 4px; vertical-align: top;}
-.fc-dashboardslate .tile {box-shadow: 0px 1px 22px -12px #607D8b; padding: 4px;}
+.fc-dashboardslate .tile {height:100%;border:solid 1px #a0a0a0; box-shadow: 0px 1px 22px -12px #607D8b; padding: 4px;}
 
 /** Entity CSV Text */
 .fc-entitycsvtext {word-wrap:break-word;}

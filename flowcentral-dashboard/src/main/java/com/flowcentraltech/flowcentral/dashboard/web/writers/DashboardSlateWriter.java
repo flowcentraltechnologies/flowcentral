@@ -45,10 +45,15 @@ public class DashboardSlateWriter extends AbstractControlWriter {
 
         final int sections = dashboardSlateWidget.getSections();
         for (int sectionIndex = 0; sectionIndex < sections; sectionIndex++) {
+            final int preferredSectionHeight = dashboardSlateWidget.getSectionPreferredHeight(sectionIndex);
             writer.write("<div class=\"section\"><div class=\"sectionrow\">");
-            for (DashboardSlot slot : dashboardSlateWidget.getSection(sectionIndex)) {
-                writer.write("<div class=\"sectioncell\" style=\"width:").write(slot.getWidth())
-                        .write(";\"><div class=\"tile\">");
+            for (DashboardSlot slot : dashboardSlateWidget.getSectionSlots(sectionIndex)) {
+                writer.write("<div class=\"sectioncell\" style=\"width:").write(slot.getWidth());
+                writer.write(";");
+                if (preferredSectionHeight > 0) {
+                    writer.write("height:").write(preferredSectionHeight).write("px;");
+                }
+                writer.write("\"><div class=\"tile\">");
                 if (!slot.isEmpty()) {
                     writer.writeStructureAndContent(slot.getWidget());
                 }
@@ -68,7 +73,7 @@ public class DashboardSlateWriter extends AbstractControlWriter {
         DashboardSlateWidget dashboardSlateWidget = (DashboardSlateWidget) widget;
         final int sections = dashboardSlateWidget.getSections();
         for (int sectionIndex = 0; sectionIndex < sections; sectionIndex++) {
-            for (DashboardSlot slot : dashboardSlateWidget.getSection(sectionIndex)) {
+            for (DashboardSlot slot : dashboardSlateWidget.getSectionSlots(sectionIndex)) {
                 if (!slot.isEmpty()) {
                     writer.writeBehavior(slot.getWidget());
                 }
