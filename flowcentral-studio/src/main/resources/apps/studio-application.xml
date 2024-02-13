@@ -16,6 +16,11 @@
 			dataType="string" inputType="string"
 			editor="!ui-select list:studiotablerowcolorlist blankOption:$m{blank.none} colors:true"
 			renderer="!ui-label" />
+		<widgetType name="chartcolorlist"
+			description="$m{studio.widgettype.chartcolorlist}"
+			dataType="string" inputType="string"
+			editor="!ui-select list:studiochartcolorlist blankOption:$m{blank.none} colors:true"
+			renderer="!ui-label" />
 		<widgetType name="yesnolist"
 			description="$m{studio.widgettype.yesnolist}" dataType="string"
 			inputType="string"
@@ -3173,7 +3178,7 @@
 					<field name="type" column="1" required="true"
 						switchOnChange="true" />
 					<field name="paletteType" column="1" required="true" switchOnChange="true"/>
-					<field name="color" inputWidget="studio.tablerowcolorlist"
+					<field name="color" inputWidget="studio.chartcolorlist"
 						column="1" required="true" />
 					<field name="provider" column="1" required="true"
 						switchOnChange="true" />

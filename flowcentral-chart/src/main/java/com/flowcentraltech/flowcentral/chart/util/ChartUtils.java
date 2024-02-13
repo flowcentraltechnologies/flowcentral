@@ -138,7 +138,7 @@ public final class ChartUtils {
             jw.write("enabled", true);
             jw.write("color", chartDef.isWithColor() ? chartDef.getColor() : "#606060");
             jw.write("shadeTo", "light");
-            jw.write("shadeIntensity", 0.75);
+            jw.write("shadeIntensity", 0.65);
             jw.endObject();
         } else {
             jw.write("palette", chartDef.getPaletteType().optionsType());
