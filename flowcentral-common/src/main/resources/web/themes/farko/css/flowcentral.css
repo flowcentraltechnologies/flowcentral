@@ -243,8 +243,8 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-chart {width:100%;height:100%;}
 .fc-chart .card {width:100%;height:100%;}
 .fc-chart .card .title{display:block;padding: 4px 4px;text-align:center;font-size:2em;font-weight:bold;}
-.fc-chart .card .subtitle{display:block;padding: 2px 2px;text-align:center;font-size:1em;color: #808080;}
-.fc-chart .card .content{display:block;text-align:center;margin-top: 0.2em;font-size:5.4em;}
+.fc-chart .card .subtitle{display:block;padding: 2px 2px;text-align:center;font-size:0.8em;color: #808080;}
+.fc-chart .card .content{display:block;text-align:center;margin-top: 0.2em;font-size:4.2em;}
 
 /** Comment Listing */
 .fc-commentlisting {overflow-y:scroll;padding:2px;height:196px;border:solid 1px #b0b0b0;}

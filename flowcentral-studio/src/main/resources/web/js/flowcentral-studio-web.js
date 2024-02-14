@@ -1406,7 +1406,9 @@ const dashColumnsType = new Map([["1", {columns:1, dim:"100%"}],
 								["1_2_1", {columns:3, dim:"25% 50% 25%"}],
 								["2_1_1", {columns:3, dim:"50% 25% 25%"}],
 								["3_1", {columns:2, dim:"75% 25%"}],
-								["1_1_1_1", {columns:4, dim:"25% 25% 25% 25%"}]]);
+								["1_1_1_1", {columns:4, dim:"25% 25% 25% 25%"}],
+								["1_1_1_1_1", {columns:5, dim:"20% 20% 20% 20% 20%"}],
+								["1_1_1_1_1_1", {columns:6, dim:"16% 17% 17% 17% 17% 16%"}]]);
 
 fuxstudio.rigDashboardEditor = function(rgp) {
 	const id = rgp.pId;
