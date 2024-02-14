@@ -97,9 +97,15 @@ public class DashboardSlateWidget extends AbstractFlowCentralMultiControl {
         return slate;
     }
 
-    public List<DashboardSlot> getSection(int sectionIndex) throws UnifyException {
+    public List<DashboardSlot> getSectionSlots(int sectionIndex) throws UnifyException {
         getDashboardSlate();
         return sectionList.get(sectionIndex);
+    }
+
+    public int getSectionPreferredHeight(int sectionIndex) throws UnifyException {
+        getDashboardSlate();
+        DashboardDef dashboardDef = oldSlate != null ? oldSlate.getDashboardDef() : null;
+        return dashboardDef != null ? dashboardDef.getSection(sectionIndex).getHeight() : 0;
     }
 
     public int getSections() throws UnifyException {

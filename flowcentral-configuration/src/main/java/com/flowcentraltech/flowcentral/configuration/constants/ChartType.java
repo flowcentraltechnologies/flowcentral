@@ -30,6 +30,9 @@ import com.tcdng.unify.core.util.EnumUtils;
 @StaticList(name = "charttypelist", description = "$m{staticlist.charttypelist}")
 public enum ChartType implements EnumConst {
 
+    CARD(
+            "CRD",
+            "card"),
     LINE(
             "LNE",
             "line"),
@@ -53,7 +56,10 @@ public enum ChartType implements EnumConst {
             "donut"),
     POLAR_AREA(
             "POL",
-            "polarArea");
+            "polarArea"),
+    TABLE(
+            "TBL",
+            "table");
 
     private final String code;
 
@@ -86,6 +92,18 @@ public enum ChartType implements EnumConst {
         return !PIE.equals(this) && !DONUT.equals(this) && !POLAR_AREA.equals(this);
     }
 
+    public boolean custom() {
+        return CARD.equals(this) || TABLE.equals(this);
+    }
+
+    public boolean card() {
+        return CARD.equals(this);
+    }
+
+    public boolean table() {
+        return TABLE.equals(this);
+    }
+    
     public static ChartType fromCode(String code) {
         return EnumUtils.fromCode(ChartType.class, code);
     }

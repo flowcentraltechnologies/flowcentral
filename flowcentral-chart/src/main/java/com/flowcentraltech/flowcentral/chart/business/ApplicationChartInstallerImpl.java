@@ -78,6 +78,9 @@ public class ApplicationChartInstallerImpl extends AbstractApplicationArtifactIn
                     chart.setHeight(appChartConfig.getHeight());
                     chart.setProvider(appChartConfig.getProvider());
                     chart.setRule(appChartConfig.getRule());
+                    chart.setCategory(appChartConfig.getCategory());
+                    chart.setColor(appChartConfig.getColor());
+                    chart.setSeries(appChartConfig.getSeries());
                     chart.setShowGrid(appChartConfig.isShowGrid());
                     chart.setShowDataLabels(appChartConfig.isShowDataLabels());
                     chart.setFormatDataLabels(appChartConfig.isFormatDataLabels());
@@ -97,6 +100,9 @@ public class ApplicationChartInstallerImpl extends AbstractApplicationArtifactIn
                         oldChart.setHeight(appChartConfig.getHeight());
                         oldChart.setProvider(appChartConfig.getProvider());
                         oldChart.setRule(appChartConfig.getRule());
+                        oldChart.setCategory(appChartConfig.getCategory());
+                        oldChart.setColor(appChartConfig.getColor());
+                        oldChart.setSeries(appChartConfig.getSeries());
                         oldChart.setShowGrid(appChartConfig.isShowGrid());
                         oldChart.setShowDataLabels(appChartConfig.isShowDataLabels());
                         oldChart.setFormatDataLabels(appChartConfig.isFormatDataLabels());

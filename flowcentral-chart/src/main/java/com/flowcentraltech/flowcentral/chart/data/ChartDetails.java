@@ -22,6 +22,7 @@ import java.util.Map;
 import com.flowcentraltech.flowcentral.configuration.constants.ChartCategoryDataType;
 import com.flowcentraltech.flowcentral.configuration.constants.ChartSeriesDataType;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.util.StringUtils;
 
 /**
  * Chart details.
@@ -67,6 +68,14 @@ public class ChartDetails {
         return subTitle;
     }
 
+    public boolean isWithTitle() {
+        return !StringUtils.isBlank(title);
+    }
+
+    public boolean isWithSubtitle() {
+        return !StringUtils.isBlank(subTitle);
+    }
+    
     public int getTitleOffsetX() {
         return titleOffsetX;
     }

@@ -71,17 +71,21 @@ public class EntityAudit {
                 fieldAudits.add(new EntityFieldAudit(fieldName, null, newVal));
             }
         } else if (eventType.isUpdate()) {
-            final boolean newAsOldSource = lastSnapshot.getEventType().isCreate()
-                    || lastSnapshot.getEventType().isUpdate();
-            for (EntityFieldAudit oldFieldAudit : lastSnapshot.getFieldAudits()) {
-                Object newVal = DataUtils.getBeanProperty(Object.class, entity, oldFieldAudit.getFieldName());
-                Object oldVal = newAsOldSource ? oldFieldAudit.getNewValue() : oldFieldAudit.getOldValue();
-                fieldAudits.add(new EntityFieldAudit(oldFieldAudit.getFieldName(), oldVal, newVal));
+            if (lastSnapshot != null) {
+                final boolean newAsOldSource = lastSnapshot.getEventType().isCreate()
+                        || lastSnapshot.getEventType().isUpdate();
+                for (EntityFieldAudit oldFieldAudit : lastSnapshot.getFieldAudits()) {
+                    Object newVal = DataUtils.getBeanProperty(Object.class, entity, oldFieldAudit.getFieldName());
+                    Object oldVal = newAsOldSource ? oldFieldAudit.getNewValue() : oldFieldAudit.getOldValue();
+                    fieldAudits.add(new EntityFieldAudit(oldFieldAudit.getFieldName(), oldVal, newVal));
+                }
             }
         } else if (eventType.isDelete()) {
-            for (EntityFieldAudit oldFieldAudit : lastSnapshot.getFieldAudits()) {
-                Object oldVal = oldFieldAudit.getOldValue();
-                fieldAudits.add(new EntityFieldAudit(oldFieldAudit.getFieldName(), oldVal, null));
+            if (lastSnapshot != null) {
+                for (EntityFieldAudit oldFieldAudit : lastSnapshot.getFieldAudits()) {
+                    Object oldVal = oldFieldAudit.getOldValue();
+                    fieldAudits.add(new EntityFieldAudit(oldFieldAudit.getFieldName(), oldVal, null));
+                }
             }
         } else {
             for (String fieldName : entityAuditInfo.getInclusions()) {

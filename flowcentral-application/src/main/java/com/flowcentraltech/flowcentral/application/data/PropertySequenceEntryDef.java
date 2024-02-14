@@ -16,13 +16,15 @@
 
 package com.flowcentraltech.flowcentral.application.data;
 
+import com.tcdng.unify.core.data.Listable;
+
 /**
  * Application property sequence entry definition.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class PropertySequenceEntryDef {
+public class PropertySequenceEntryDef implements Listable {
 
     private String property;
 
@@ -31,6 +33,16 @@ public class PropertySequenceEntryDef {
     public PropertySequenceEntryDef(String property, String label) {
         this.property = property;
         this.label = label;
+    }
+
+    @Override
+    public String getListKey() {
+        return property;
+    }
+
+    @Override
+    public String getListDescription() {
+        return label;
     }
 
     public String getProperty() {

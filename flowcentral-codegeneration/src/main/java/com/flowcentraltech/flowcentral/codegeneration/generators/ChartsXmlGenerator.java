@@ -74,6 +74,9 @@ public class ChartsXmlGenerator extends AbstractStaticArtifactGenerator {
                 appChartConfig.setHeight(chart.getHeight());
                 appChartConfig.setProvider(chart.getProvider());
                 appChartConfig.setRule(chart.getRule());
+                appChartConfig.setCategory(chart.getCategory());
+                appChartConfig.setSeries(chart.getSeries());
+                appChartConfig.setColor(chart.getColor());
                 appChartConfig.setShowGrid(chart.isShowGrid());
                 appChartConfig.setShowDataLabels(chart.isShowDataLabels());
                 appChartConfig.setFormatDataLabels(chart.isFormatDataLabels());

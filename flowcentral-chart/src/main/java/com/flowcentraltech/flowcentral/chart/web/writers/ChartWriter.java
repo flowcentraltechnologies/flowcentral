@@ -16,10 +16,13 @@
 
 package com.flowcentraltech.flowcentral.chart.web.writers;
 
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
+
 import com.flowcentraltech.flowcentral.chart.business.ChartModuleService;
+import com.flowcentraltech.flowcentral.chart.data.ChartDef;
 import com.flowcentraltech.flowcentral.chart.data.ChartDetails;
 import com.flowcentraltech.flowcentral.chart.data.ChartDetailsProvider;
-import com.flowcentraltech.flowcentral.chart.data.ChartDef;
 import com.flowcentraltech.flowcentral.chart.util.ChartUtils;
 import com.flowcentraltech.flowcentral.chart.web.widgets.ChartWidget;
 import com.tcdng.unify.core.UnifyException;
@@ -29,6 +32,7 @@ import com.tcdng.unify.core.annotation.Writes;
 import com.tcdng.unify.web.ui.widget.EventHandler;
 import com.tcdng.unify.web.ui.widget.ResponseWriter;
 import com.tcdng.unify.web.ui.widget.Widget;
+import com.tcdng.unify.web.ui.widget.WriteWork;
 import com.tcdng.unify.web.ui.widget.writer.AbstractWidgetWriter;
 
 /**
@@ -41,16 +45,53 @@ import com.tcdng.unify.web.ui.widget.writer.AbstractWidgetWriter;
 @Component("fc-chart-writer")
 public class ChartWriter extends AbstractWidgetWriter {
 
+    private final String CHART_DETAILS = "CHART_DETAILS";
+
     @Configurable
     private ChartModuleService chartModuleService;
 
     @Override
     protected void doWriteStructureAndContent(ResponseWriter writer, Widget widget) throws UnifyException {
         ChartWidget chartWidget = (ChartWidget) widget;
+        final String chartLongName = chartWidget.getValue(String.class);
+        ChartDef chartDef = chartModuleService.getChartDef(chartLongName);
+        ChartDetails chartDetails = ((ChartDetailsProvider) getComponent(chartDef.getProvider()))
+                .provide(chartDef.getRule());
         writer.write("<div");
         writeTagAttributes(writer, chartWidget);
         writer.write(">");
+        if (chartDef.getType().card()) {
+            writer.write("<div class=\"card\">");
+
+            writer.write("<span class=\"title\">");
+            if (chartDef.isWithTitle()) {
+                writer.writeWithHtmlEscape(chartDef.getTitle());
+            }
+            writer.write("</span>");
+
+            writer.write("<span class=\"subtitle\">");
+            if (chartDef.isWithSubtitle()) {
+                writer.writeWithHtmlEscape(chartDef.getSubTitle());
+            }
+            writer.write("</span>");
+
+            writer.write("<span class=\"content\" style=\"color:");
+            writer.write(chartDef.isWithColor() ? chartDef.getColor() : "#606060");
+            writer.write(";\">");
+            Number num = chartDetails.getSeries().get(chartDef.getSeries()).getData(chartDef.getCategory());
+            String fmt = getCardValue(num);
+            writer.writeWithHtmlEscape(fmt);
+            writer.write("</span>");
+
+            writer.write("</div>");
+        } else if (chartDef.getType().table()) {
+
+        }
+
         writer.write("</div>");
+
+        WriteWork work = chartWidget.getWriteWork();
+        work.set(CHART_DETAILS, chartDetails);
     }
 
     @Override
@@ -59,13 +100,52 @@ public class ChartWriter extends AbstractWidgetWriter {
         super.doWriteBehavior(writer, widget, handlers);
 
         ChartWidget chartWidget = (ChartWidget) widget;
+        WriteWork work = chartWidget.getWriteWork();
+        ChartDetails chartDetails = work.get(ChartDetails.class, CHART_DETAILS);
+
         final String chartLongName = chartWidget.getValue(String.class);
         ChartDef chartDef = chartModuleService.getChartDef(chartLongName);
-        ChartDetails chartDetails = ((ChartDetailsProvider) getComponent(chartDef.getProvider())).provide(chartDef.getRule());
-        writer.beginFunction("fux.rigChart");
-        writer.writeParam("pId", chartWidget.getId());
-        writer.writeParam("pOptions", ChartUtils.getOptionsJsonWriter(chartDef, chartDetails, chartWidget.isSparkLine(),
-                chartWidget.getPreferredHeight()));
-        writer.endFunction();
+        if (chartDef.getType().custom()) {
+
+        } else {
+            writer.beginFunction("fux.rigChart");
+            writer.writeParam("pId", chartWidget.getId());
+            writer.writeParam("pOptions", ChartUtils.getOptionsJsonWriter(chartDef, chartDetails,
+                    chartWidget.isSparkLine(), chartWidget.getPreferredHeight()));
+            writer.endFunction();
+        }
+    }
+
+    private static final BigDecimal QUINTILION = BigDecimal.valueOf(1000000000000000L);
+
+    private static final BigDecimal TRILLION = BigDecimal.valueOf(1000000000000L);
+
+    private static final BigDecimal BILLION = BigDecimal.valueOf(1000000000L);
+
+    private static final BigDecimal MILLION = BigDecimal.valueOf(1000000);
+
+    private String getCardValue(Number num) {
+        if (num != null) {
+            BigDecimal _num = BigDecimal.valueOf(num.longValue());
+            if (_num.compareTo(MILLION) < 0) {
+                return new DecimalFormat("###,###").format(_num);
+            }
+            
+            if (_num.compareTo(BILLION) < 0) {
+                return new DecimalFormat("###,###.0").format(_num.divide(MILLION)) + "M";
+            }
+            
+            if (_num.compareTo(TRILLION) < 0) {
+                return new DecimalFormat("###,###.0").format(_num.divide(BILLION)) + "B";
+            }
+            
+            if (_num.compareTo(QUINTILION) < 0) {
+                return new DecimalFormat("###,###.0").format(_num.divide(TRILLION)) + "T";
+            }
+            
+            return new DecimalFormat("###,###.0").format(_num.divide(QUINTILION)) + "Q";
+        }
+
+        return "";
     }
 }

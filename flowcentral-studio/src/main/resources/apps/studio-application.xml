@@ -16,6 +16,11 @@
 			dataType="string" inputType="string"
 			editor="!ui-select list:studiotablerowcolorlist blankOption:$m{blank.none} colors:true"
 			renderer="!ui-label" />
+		<widgetType name="chartcolorlist"
+			description="$m{studio.widgettype.chartcolorlist}"
+			dataType="string" inputType="string"
+			editor="!ui-select list:studiochartcolorlist blankOption:$m{blank.none} colors:true"
+			renderer="!ui-label" />
 		<widgetType name="yesnolist"
 			description="$m{studio.widgettype.yesnolist}" dataType="string"
 			inputType="string"
@@ -2797,24 +2802,13 @@
 						column="0" required="true" />
 					<field name="label" inputWidget="application.text" column="0"
 						required="true" />
-					<field name="type" column="1" required="true"
-						switchOnChange="true" />
+					<field name="type" column="1" required="true"/>
 					<field name="fieldName" inputWidget="seriesentityfieldlist"
 						column="1" required="true" />
 				</section>
 			</tab>
 			<tab name="changeLog" label="$m{application.form.audit}"
 				contentType="miniform_changelog" />
-			<formStatePolicy type="on_switch"
-				name="fieldNamePolicy"
-				description="$m{studio.appentityseries.form.formstatepolicy.fieldname}">
-				<onCondition>
-					<restriction type="equals" field="type" paramA="COUNT" />
-				</onCondition>
-				<setStates>
-					<setState type="field" target="fieldName" required="false" />
-				</setStates>
-			</formStatePolicy>
 		</form>
 		<form name="appEntityCategoryForm"
 			description="$m{studio.appentitycategory.form}"
@@ -3055,7 +3049,7 @@
 					<field name="configType" inputWidget="application.enumlist"
 						column="1" disabled="true" required="true" />
 					<field name="restrictionResolver"
-						inputWidget="searchentriesrestrictionresolverlist" column="1"/>
+						inputWidget="searchentriesrestrictionresolverlist" column="1" />
 				</section>
 			</tab>
 			<tab name="inputs"
@@ -3181,12 +3175,18 @@
 					<field name="subTitle" column="0" />
 					<field name="configType" inputWidget="application.enumlist"
 						column="1" disabled="true" required="true" />
-					<field name="type" column="1" required="true" />
-					<field name="paletteType" column="1" required="true" />
+					<field name="type" column="1" required="true"
+						switchOnChange="true" />
+					<field name="paletteType" column="1" required="true" switchOnChange="true"/>
+					<field name="color" inputWidget="studio.chartcolorlist"
+						column="1" required="true" />
 					<field name="provider" column="1" required="true"
 						switchOnChange="true" />
-					<field name="rule" column="1" />
-					<field name="width" column="1" />
+					<field name="rule" column="1" switchOnChange="true" />
+					<field name="category" column="1" required="true"
+						visible="false" />
+					<field name="series" column="1" required="true"
+						visible="false" />
 					<field name="height" column="1" />
 				</section>
 				<section name="chartFlags" columns="type_1_2">
@@ -3230,6 +3230,34 @@
 				<setStates>
 					<setState type="field" target="name,description,entity"
 						disabled="true" />
+				</setStates>
+			</formStatePolicy>
+			<formStatePolicy type="on_switch"
+				name="chartDataSourceFormPolicy"
+				description="$m{studio.chart.form.chartdatasource.policy}">
+				<onCondition>
+					<restriction type="and">
+						<restriction type="equals" field="type" paramA="CRD" />
+						<restriction type="equals" field="provider"
+							paramA="chartdatasource-provider" />
+						<restriction type="is_not_null" field="rule" />
+					</restriction>
+				</onCondition>
+				<setStates>
+					<setState type="field" target="category,series"
+						visible="true" />
+					<setState type="field" target="paletteType"
+						visible="false" />
+				</setStates>
+			</formStatePolicy>
+			<formStatePolicy type="on_switch"
+				name="chartPaletteTypeFormPolicy"
+				description="$m{studio.chart.form.chartpalettetype.policy}">
+				<onCondition>
+					<restriction type="not_equals" field="paletteType" paramA="PL0" />
+				</onCondition>
+				<setStates>
+					<setState type="field" target="color" required="false" />
 				</setStates>
 			</formStatePolicy>
 		</form>
@@ -4786,7 +4814,7 @@
 						reference="studio.applicationDevelopableRef"
 						inputWidget="application.entitysearch" column="0"
 						label="$m{studio.application}" disabled="true" required="true"
-						saveAs="true" switchOnChange="true"/>
+						saveAs="true" switchOnChange="true" />
 					<field name="name" inputWidget="application.name" column="0"
 						required="true" saveAs="true" />
 					<field name="description" inputWidget="application.text"

@@ -44,6 +44,12 @@ public class AppChartConfig extends BaseNameConfig {
 
     private String provider;
 
+    private String category;
+
+    private String series;
+
+    private String color;
+
     private String rule;
 
     private Integer width;
@@ -120,6 +126,33 @@ public class AppChartConfig extends BaseNameConfig {
     @XmlAttribute
     public void setRule(String rule) {
         this.rule = rule;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    @XmlAttribute
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public String getSeries() {
+        return series;
+    }
+
+    @XmlAttribute
+    public void setSeries(String series) {
+        this.series = series;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    @XmlAttribute
+    public void setColor(String color) {
+        this.color = color;
     }
 
     public Integer getWidth() {
