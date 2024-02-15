@@ -645,13 +645,17 @@ public final class InputWidgetUtils {
     }
 
     public static FieldSequenceConfig getFieldSequenceConfig(FieldSequenceDef fieldSequenceDef) throws UnifyException {
-        List<FieldSequenceEntryConfig> entryList = new ArrayList<FieldSequenceEntryConfig>();
-        for (FieldSequenceEntryDef fieldSequenceEntryDef : fieldSequenceDef.getFieldSequenceList()) {
-            entryList.add(new FieldSequenceEntryConfig(fieldSequenceEntryDef.getFieldName(),
-                    fieldSequenceEntryDef.getStandardFormatCode()));
+        if (fieldSequenceDef != null) {
+            List<FieldSequenceEntryConfig> entryList = new ArrayList<FieldSequenceEntryConfig>();
+            for (FieldSequenceEntryDef fieldSequenceEntryDef : fieldSequenceDef.getFieldSequenceList()) {
+                entryList.add(new FieldSequenceEntryConfig(fieldSequenceEntryDef.getFieldName(),
+                        fieldSequenceEntryDef.getStandardFormatCode()));
+            }
+
+            return new FieldSequenceConfig(entryList);
         }
 
-        return new FieldSequenceConfig(entryList);
+        return null;
     }
 
     public static String getFieldSequenceDefinition(FieldSequenceDef fieldSequenceDef) throws UnifyException {
