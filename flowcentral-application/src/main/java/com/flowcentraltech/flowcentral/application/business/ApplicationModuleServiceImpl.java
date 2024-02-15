@@ -3696,7 +3696,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                     for (RecLoadInfo recLoadInfo : recMap.values()) {
                         DataUtils.setBeanProperty(inst, recLoadInfo.getFieldName(), recLoadInfo.getVal(),
                                 recLoadInfo.getFormatter());
-                    } 
+                    }
 
                     appletUtilities.populateAutoFormatFields(entityDef, inst);
                     environment().create(inst);
@@ -4059,7 +4059,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                 String label = resolveApplicationMessage(appletConfig.getLabel());
                 String entity = ApplicationNameUtils.ensureLongNameReference(applicationName, appletConfig.getEntity());
                 if (oldAppApplet == null) {
-                    logDebug("Installing new application applet [{0}]...", appletConfig.getName());
+                    logDebug("Installing new application applet [{0}]. Access = [{1}]...", appletConfig.getName(),
+                            appletConfig.getMenuAccess());
                     appApplet.setId(null);
                     appApplet.setName(appletConfig.getName());
                     appApplet.setDescription(description);
@@ -4080,7 +4081,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                     populateChildList(appApplet, applicationName, appletConfig);
                     environment().create(appApplet);
                 } else {
-                    logDebug("Upgrading application applet [{0}]...", appletConfig.getName());
+                    logDebug("Upgrading application applet [{0}]. Access = [{1}]...", appletConfig.getName(),
+                            appletConfig.getMenuAccess());
                     if (ConfigUtils.isSetInstall(oldAppApplet)) {
                         oldAppApplet.setDescription(description);
                         oldAppApplet.setType(appletConfig.getType());
