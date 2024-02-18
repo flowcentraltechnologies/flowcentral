@@ -95,11 +95,13 @@ public final class ReportEntityUtils {
             }
         }
 
-        reportableField.setWidth(-1);
-        reportableField.setDescription(description);
-        reportableField.setName(appEntityField.getName());
-        reportableField.setParameterOnly(false);
-        reportableField.setType(ConverterUtils.getWrapperClassName(dataClazz));
+        if (dataClazz != null) {
+            reportableField.setWidth(-1);
+            reportableField.setDescription(description);
+            reportableField.setName(appEntityField.getName());
+            reportableField.setParameterOnly(false);
+            reportableField.setType(ConverterUtils.getWrapperClassName(dataClazz));
+        }
     }
 
     public static String resolveFormatter(EntityFieldDataType entityFieldDataType, FormatterOptions formatOptions) {
