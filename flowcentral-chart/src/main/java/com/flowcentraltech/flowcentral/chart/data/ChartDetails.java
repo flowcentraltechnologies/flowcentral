@@ -16,7 +16,9 @@
 
 package com.flowcentraltech.flowcentral.chart.data;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.flowcentraltech.flowcentral.configuration.constants.ChartCategoryDataType;
@@ -48,8 +50,13 @@ public class ChartDetails {
 
     private Map<String, AbstractSeries<?, ?>> series;
 
+    private ChartTableColumn[] headers;
+
+    private List<Object[]> tableSeries;
+
     private ChartDetails(String title, String subTitle, int titleOffsetX, int titleFontSize, int subTitleOffsetX,
-            int subTitleFontSize, ChartCategoryDataType categoryType, Map<String, AbstractSeries<?, ?>> series) {
+            int subTitleFontSize, ChartCategoryDataType categoryType, Map<String, AbstractSeries<?, ?>> series,
+            ChartTableColumn[] headers, List<Object[]> tableSeries) {
         this.title = title;
         this.subTitle = subTitle;
         this.titleOffsetX = titleOffsetX;
@@ -58,6 +65,8 @@ public class ChartDetails {
         this.subTitleFontSize = subTitleFontSize;
         this.categoryType = categoryType;
         this.series = series;
+        this.headers = headers;
+        this.tableSeries = tableSeries;
     }
 
     public String getTitle() {
@@ -75,7 +84,7 @@ public class ChartDetails {
     public boolean isWithSubtitle() {
         return !StringUtils.isBlank(subTitle);
     }
-    
+
     public int getTitleOffsetX() {
         return titleOffsetX;
     }
@@ -100,6 +109,18 @@ public class ChartDetails {
         return series;
     }
 
+    public ChartTableColumn[] getTableHeaders() {
+        return headers;
+    }
+
+    public List<Object[]> getTableSeries() {
+        return tableSeries;
+    }
+
+    public boolean isWithTableSeries() {
+        return headers != null;
+    }
+
     public static Builder newBuilder(ChartCategoryDataType categoryType) {
         return new Builder(categoryType);
     }
@@ -121,6 +142,10 @@ public class ChartDetails {
         private ChartCategoryDataType categoryType;
 
         private Map<String, AbstractSeries<?, ?>> series;
+
+        private ChartTableColumn[] headers;
+
+        private List<Object[]> tableSeries;
 
         public Builder(ChartCategoryDataType categoryType) {
             this.categoryType = categoryType;
@@ -168,11 +193,34 @@ public class ChartDetails {
         public AbstractSeries<?, ?> getSeries(String seriesName) {
             return series.get(seriesName);
         }
-        
+
         public boolean isWithSeries(String seriesName) {
             return series.containsKey(seriesName);
         }
-        
+
+        public Builder createTableSeries(ChartTableColumn[] headers) {
+            if (headers != null) {
+                throw new RuntimeException("Table series alreay defined for this builder.");
+            }
+
+            this.headers = headers;
+            this.tableSeries = new ArrayList<Object[]>();
+            return this;
+        }
+
+        public Builder addTableSeries(Object[] tableRow) {
+            if (tableSeries == null) {
+                throw new RuntimeException("No table series defined for this builder.");
+            }
+
+            if (tableRow.length != headers.length) {
+                throw new RuntimeException("Series length does not match table header length.");
+            }
+            
+            tableSeries.add(tableRow);
+            return this;
+        }
+
         public Builder createSeries(ChartSeriesDataType dataType, String seriesName) throws UnifyException {
             if (series.containsKey(seriesName)) {
                 throw new RuntimeException("Series with name [" + seriesName + "] already exists with this builder.");
@@ -188,14 +236,14 @@ public class ChartDetails {
             if (_series == null) {
                 throw new RuntimeException("Series with name [" + seriesName + "] is unknown.");
             }
-            
+
             _series.addData(x, y);
             return this;
         }
 
         public ChartDetails build() throws UnifyException {
             return new ChartDetails(title, subTitle, titleOffsetX, titleFontSize, subTitleOffsetX, subTitleFontSize,
-                    categoryType, series);
+                    categoryType, series, headers, tableSeries);
         }
 
         private AbstractSeries<?, ?> createSeries(ChartCategoryDataType categoryType, ChartSeriesDataType dataType,
