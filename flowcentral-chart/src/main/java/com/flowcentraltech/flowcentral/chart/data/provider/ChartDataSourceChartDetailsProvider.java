@@ -171,14 +171,16 @@ public class ChartDataSourceChartDetailsProvider extends AbstractChartDetailsPro
                     : new GroupingFunction(fieldName, timeSeriesType.type());
             groupingFunction.add(_groupingFunction);
 
-            headers.add(new ChartTableColumn(fieldName, entityFieldDef.getFieldLabel()));
+            headers.add(new ChartTableColumn(entityFieldDef.getDataType(), fieldName, entityFieldDef.getFieldLabel()));
         }
 
-        for (PropertySequenceEntryDef sequenceDef: series.getSequenceList()) {
+        for (PropertySequenceEntryDef sequenceDef : series.getSequenceList()) {
             final EntitySeriesDef entitySeriesDef = entityDef.getEntitySeriesDef(sequenceDef.getProperty());
-            headers.add(new ChartTableColumn(entitySeriesDef.getFieldName(), entitySeriesDef.getLabel()));
+            final EntityFieldDef entityFieldDef = entityDef.getFieldDef(entitySeriesDef.getFieldName());
+            headers.add(new ChartTableColumn(entityFieldDef.getDataType(), entitySeriesDef.getFieldName(),
+                    entitySeriesDef.getLabel()));
         }
-        
+
         cdb.createTableSeries(DataUtils.toArray(ChartTableColumn.class, headers));
 
         final List<GroupingAggregation> gaggregations = environment().aggregate(aggregateFunction,

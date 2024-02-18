@@ -19,12 +19,15 @@ package com.flowcentraltech.flowcentral.chart.web.writers;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.chart.business.ChartModuleService;
 import com.flowcentraltech.flowcentral.chart.data.ChartDef;
 import com.flowcentraltech.flowcentral.chart.data.ChartDetails;
 import com.flowcentraltech.flowcentral.chart.data.ChartDetailsProvider;
+import com.flowcentraltech.flowcentral.chart.data.ChartTableColumn;
 import com.flowcentraltech.flowcentral.chart.util.ChartUtils;
 import com.flowcentraltech.flowcentral.chart.web.widgets.ChartWidget;
+import com.flowcentraltech.flowcentral.common.data.FormatterOptions;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -88,7 +91,43 @@ public class ChartWriter extends AbstractWidgetWriter {
 
             writer.write("</div>");
         } else if (chartDef.getType().table()) {
+            if (chartDetails.isWithTableSeries()) {
+                FormatterOptions.Instance options = FormatterOptions.DEFAULT.createInstance(getUnifyComponentContext());
+                writer.write("<div class=\"tbl\">");
+                // Header
+                final int cols = chartDetails.getTableHeaders().length;
+                final ChartTableColumn[] headers = chartDetails.getTableHeaders();
+                writer.write(
+                        "<div class=\"bdy\" style=\"width:100%;height:100%;overflow-y:auto;overflow-x: hidden;\">");
+                writer.write("<table class=\"cont\" style=\"width:100%;\">");
+                writer.write("<tr style=\"background-color:");
+                writer.write(chartDef.getColor());
+                writer.write(";\">");
+                for (ChartTableColumn header : headers) {
+                    writer.write("<th>");
+                    writer.writeWithHtmlEscape(header.getLabel());
+                    writer.write("</th>");
+                }
+                writer.write("</tr>");
 
+                for (Object[] row : chartDetails.getTableSeries()) {
+                    writer.write("<tr>");
+                    for (int i = 0; i < cols; i++) {
+                        ChartTableColumn header = headers[i];
+                        String[] sval = options.format(header.getType(), row[i]);
+                        writer.write("<td><span class=\"");
+                        writer.write(header.getType().alignType().styleClass());
+                        writer.write("\">");
+                        writer.writeWithHtmlEscape(sval[0]);
+                        writer.write("</span></td>");
+                    }
+                    writer.write("</tr>");
+                }
+                writer.write("</table>");
+                writer.write("</div>");
+
+                writer.write("</div>");
+            }
         }
 
         writer.write("</div>");

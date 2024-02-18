@@ -245,6 +245,16 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-chart .card .title{display:block;padding: 4px 4px;text-align:center;font-size:0.8vw;font-weight:bold;}
 .fc-chart .card .subtitle{display:block;padding: 2px 2px;text-align:center;font-size:0.5vw;color: #808080;}
 .fc-chart .card .content{display:block;text-align:center;margin-top: 0.2em;font-size:2.8vw;}
+.fc-chart .tbl {width:100%;height:100%;}
+.fc-chart .tbl .bdy{}
+.fc-chart .tbl .cont{table-layout: fixed;border-collapse:collapse; }
+.fc-chart .tbl .cont th{text-align:left;color:#ffffff;padding: 6px 4px;border: 1px solid #e8e8e8;}
+.fc-chart .tbl .cont td{padding: 4px 6px;border: 1px solid #e8e8e8;}
+.fc-chart .tbl .cont span{display: block;word-wrap:break-word;}
+.fc-chart .tbl .haleft {text-align:left;}
+.fc-chart .tbl .hacenter {text-align:center;}
+.fc-chart .tbl .haright {text-align:right;}
+.fc-chart .tbl .hajustified {text-align:justify;}
 
 /** Comment Listing */
 .fc-commentlisting {overflow-y:scroll;padding:2px;height:196px;border:solid 1px #b0b0b0;}

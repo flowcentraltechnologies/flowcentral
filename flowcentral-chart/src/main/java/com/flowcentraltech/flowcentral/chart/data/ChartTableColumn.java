@@ -15,6 +15,8 @@
  */
 package com.flowcentraltech.flowcentral.chart.data;
 
+import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldDataType;
+
 /**
  * Chart table column.
  * 
@@ -23,13 +25,20 @@ package com.flowcentraltech.flowcentral.chart.data;
  */
 public class ChartTableColumn {
 
+    private EntityFieldDataType type;
+    
     private String fieldName;
 
     private String label;
 
-    public ChartTableColumn(String fieldName, String label) {
+    public ChartTableColumn(EntityFieldDataType type, String fieldName, String label) {
+        this.type = type;
         this.fieldName = fieldName;
         this.label = label;
+    }
+
+    public EntityFieldDataType getType() {
+        return type;
     }
 
     public String getFieldName() {
@@ -38,11 +47,6 @@ public class ChartTableColumn {
 
     public String getLabel() {
         return label;
-    }
-
-    @Override
-    public String toString() {
-        return "ChartTableColumn [fieldName=" + fieldName + ", label=" + label + "]";
     }
 
 }
