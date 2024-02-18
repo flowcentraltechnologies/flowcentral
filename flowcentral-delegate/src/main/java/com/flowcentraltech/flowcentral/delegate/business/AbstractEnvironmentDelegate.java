@@ -429,8 +429,7 @@ public abstract class AbstractEnvironmentDelegate extends AbstractFlowCentralCom
     @Override
     public List<String> validate(Entity record, EvaluationMode mode) throws UnifyException {
         DataSourceRequest req = new DataSourceRequest(DataSourceOperation.VALIDATE);
-        com.flowcentraltech.flowcentral.connect.configuration.constants.EvaluationMode _mode =
-                com.flowcentraltech.flowcentral.connect.configuration.constants.EvaluationMode
+        com.flowcentraltech.flowcentral.connect.configuration.constants.EvaluationMode _mode = com.flowcentraltech.flowcentral.connect.configuration.constants.EvaluationMode
                 .valueOf(mode.name());
         req.setEvalMode(_mode);
         req.setPayload(au.delegateUtilities().encodeDelegateEntity(record));
@@ -599,14 +598,28 @@ public abstract class AbstractEnvironmentDelegate extends AbstractFlowCentralCom
     @Override
     public List<GroupingAggregation> aggregate(AggregateFunction aggregateFunction, Query<? extends Entity> query,
             GroupingFunction groupingFunction) throws UnifyException {
-        // TODO  Implement direct reporting
+        // TODO Implement direct reporting
         return null;
     }
 
     @Override
     public List<GroupingAggregation> aggregate(List<AggregateFunction> aggregateFunction, Query<? extends Entity> query,
             GroupingFunction groupingFunction) throws UnifyException {
-        // TODO  Implement direct reporting
+        // TODO Implement direct reporting
+        return null;
+    }
+
+    @Override
+    public List<GroupingAggregation> aggregate(AggregateFunction aggregateFunction, Query<? extends Entity> query,
+            List<GroupingFunction> groupingFunction) throws UnifyException {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public List<GroupingAggregation> aggregate(List<AggregateFunction> aggregateFunction, Query<? extends Entity> query,
+            List<GroupingFunction> groupingFunction) throws UnifyException {
+        // TODO Auto-generated method stub
         return null;
     }
 

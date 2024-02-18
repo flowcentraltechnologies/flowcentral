@@ -1115,6 +1115,9 @@
 			<field name="applicationName"
 				label="$m{application.appentitycategory.applicationname}"
 				type="list_only" key="appEntityId" property="applicationName" />
+			<field name="fieldSequence"
+				label="$m{application.appentitycategory.fieldsequence}" type="child"
+				category="table" references="appFieldSequenceRef" />
 			<uniqueConstraint name="nameUc"
 				description="$m{application.appentitycategory.uc.name}"
 				fieldList="appEntityId,name">

@@ -54,6 +54,9 @@ public class AppEntityCategory extends BaseConfigEntity {
     @Child(category = "entity-category")
     private AppFilter filter;
 
+    @Child(category = "entity-category")
+    private AppFieldSequence fieldSequence;
+
     @Override
     public String getDescription() {
         return description;
@@ -109,6 +112,14 @@ public class AppEntityCategory extends BaseConfigEntity {
 
     public void setFilter(AppFilter filter) {
         this.filter = filter;
+    }
+
+    public AppFieldSequence getFieldSequence() {
+        return fieldSequence;
+    }
+
+    public void setFieldSequence(AppFieldSequence fieldSequence) {
+        this.fieldSequence = fieldSequence;
     }
 
 }

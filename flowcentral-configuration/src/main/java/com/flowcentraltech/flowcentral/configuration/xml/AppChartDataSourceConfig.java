@@ -42,6 +42,8 @@ public class AppChartDataSourceConfig extends BaseNameConfig {
     private String entity;
     
     private String categoryField;
+    
+    private Integer limit;
 
     private FilterConfig categoryBase;
     
@@ -66,6 +68,15 @@ public class AppChartDataSourceConfig extends BaseNameConfig {
     @XmlAttribute(required = true)
     public void setType(ChartDataSourceType type) {
         this.type = type;
+    }
+
+    public Integer getLimit() {
+        return limit;
+    }
+
+    @XmlAttribute
+    public void setLimit(Integer limit) {
+        this.limit = limit;
     }
 
     public FilterConfig getCategoryBase() {

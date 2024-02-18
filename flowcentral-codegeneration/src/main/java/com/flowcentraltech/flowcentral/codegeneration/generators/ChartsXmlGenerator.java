@@ -105,6 +105,7 @@ public class ChartsXmlGenerator extends AbstractStaticArtifactGenerator {
                 ctx.addMessage(StaticMessageCategoryType.CHART, descKey, chartDataSource.getDescription());
 
                 appChartDataSourceConfig.setType(chartDataSource.getType());
+                appChartDataSourceConfig.setLimit(chartDataSource.getLimit());
                 appChartDataSourceConfig.setTimeSeriesType(chartDataSource.getTimeSeriesType());
                 appChartDataSourceConfig.setCategoryField(chartDataSource.getCategoryField());
                 appChartDataSourceConfig.setName(chartDataSource.getName());

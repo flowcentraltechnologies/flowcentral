@@ -122,6 +122,8 @@
 				type="string" />
 			<field name="categoryField"
 				label="$m{chart.chartdatasource.categoryfield}" type="string" />
+			<field name="limit"
+				label="$m{chart.chartdatasource.limit}" type="integer" />
 			<field name="categoryBase"
 				label="$m{chart.chartdatasource.categorybase}" type="child"
 				category="chart-datasource" references="application.appFilterRef" />

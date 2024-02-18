@@ -51,13 +51,15 @@ public class ChartDataSourceDef {
 
     private final PropertySequenceDef categories;
 
+    private final Integer limit;
+
     private final Long id;
 
     private final long version;
 
     public ChartDataSourceDef(ChartDataSourceType type, ChartTimeSeriesType timeSeriesType, String name,
             String description, String categoryField, EntityDef entityDef, FilterDef categoryBase,
-            PropertySequenceDef series, PropertySequenceDef categories, Long id, long version) {
+            PropertySequenceDef series, PropertySequenceDef categories, Integer limit, Long id, long version) {
         this.type = type;
         this.timeSeriesType = timeSeriesType;
         this.name = name;
@@ -67,6 +69,7 @@ public class ChartDataSourceDef {
         this.categoryBase = categoryBase;
         this.series = series;
         this.categories = categories;
+        this.limit = limit;
         this.id = id;
         this.version = version;
     }
@@ -109,6 +112,10 @@ public class ChartDataSourceDef {
 
     public PropertySequenceDef getCategories() {
         return categories;
+    }
+
+    public Integer getLimit() {
+        return limit;
     }
 
     public Long getId() {

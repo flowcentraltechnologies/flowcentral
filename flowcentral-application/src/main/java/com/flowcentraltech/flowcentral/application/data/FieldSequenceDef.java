@@ -17,6 +17,7 @@
 package com.flowcentraltech.flowcentral.application.data;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -40,6 +41,8 @@ public class FieldSequenceDef {
 
     private String description;
 
+    private List<String> fieldNames;
+
     private FieldSequenceDef(List<FieldSequenceEntryDef> fieldSequenceList, String name, String description) {
         this.fieldSequenceList = fieldSequenceList;
         this.name = name;
@@ -56,6 +59,25 @@ public class FieldSequenceDef {
 
     public List<FieldSequenceEntryDef> getFieldSequenceList() {
         return fieldSequenceList;
+    }
+
+    public List<String> getFieldNames() {
+        if (fieldNames == null) {
+            synchronized (this) {
+                if (fieldNames == null) {
+                    fieldNames = new ArrayList<String>();
+                    if (!isBlank()) {
+                        for (FieldSequenceEntryDef fieldSequenceEntryDef : fieldSequenceList) {
+                            fieldNames.add(fieldSequenceEntryDef.getFieldName());
+                        }
+                    }
+
+                    fieldNames = Collections.unmodifiableList(fieldNames);
+                }
+            }
+        }
+
+        return fieldNames;
     }
 
     public boolean isBlank() {

@@ -13,39 +13,40 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.configuration.xml;
+package com.flowcentraltech.flowcentral.chart.data;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
+import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldDataType;
 
 /**
- * Entity category configuration.
+ * Chart table column.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class EntityCategoryConfig extends FilterConfig {
+public class ChartTableColumn {
+
+    private EntityFieldDataType type;
+    
+    private String fieldName;
 
     private String label;
 
-    private FieldSequenceConfig fieldSequence;
-
-    public String getLabel() {
-        return label;
-    }
-
-    @XmlAttribute(required = true)
-    public void setLabel(String label) {
+    public ChartTableColumn(EntityFieldDataType type, String fieldName, String label) {
+        this.type = type;
+        this.fieldName = fieldName;
         this.label = label;
     }
 
-    public FieldSequenceConfig getFieldSequence() {
-        return fieldSequence;
+    public EntityFieldDataType getType() {
+        return type;
     }
 
-    @XmlElement
-    public void setFieldSequence(FieldSequenceConfig fieldSequence) {
-        this.fieldSequence = fieldSequence;
+    public String getFieldName() {
+        return fieldName;
+    }
+
+    public String getLabel() {
+        return label;
     }
 
 }

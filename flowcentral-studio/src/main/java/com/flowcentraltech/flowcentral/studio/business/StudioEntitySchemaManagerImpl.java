@@ -284,10 +284,11 @@ public class StudioEntitySchemaManagerImpl extends AbstractEntitySchemaManager {
                     au.applicationPrivilegeManager().assignPrivilegeToRole(userToken.getRoleCode(), privilegeCode);
                 }
             } else {
-                List<ReportableField> reportableFieldList = ReportEntityUtils.getReportableFieldList(messageResolver, appEntityFieldList,
-                        FormatterOptions.DEFAULT);
-                reportableDefinition.setFieldList(reportableFieldList);
-                reportModuleService.updateReportableDefinition(reportableDefinition);
+                // TODO Fix bug
+//                List<ReportableField> reportableFieldList = ReportEntityUtils.getReportableFieldList(messageResolver, appEntityFieldList,
+//                        FormatterOptions.DEFAULT);
+//                reportableDefinition.setFieldList(reportableFieldList);
+//                reportModuleService.updateReportableDefinition(reportableDefinition);
             }
         }
     }
