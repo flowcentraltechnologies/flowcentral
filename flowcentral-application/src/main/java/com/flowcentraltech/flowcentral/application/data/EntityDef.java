@@ -64,11 +64,11 @@ public class EntityDef extends BaseApplicationEntityDef {
     private ConfigType type;
 
     private List<EntityFieldDef> fieldDefList;
-    
+
     private List<EntityFieldDef> auditableFieldDefList;
 
     private List<EntityFieldDef> auditSearchFieldDefList;
-    
+
     private List<EntityFieldDef> sortedFieldDefList;
 
     private List<EntityFieldDef> filterFieldDefList;
@@ -407,7 +407,9 @@ public class EntityDef extends BaseApplicationEntityDef {
                     auditSearchFieldDefList = new ArrayList<EntityFieldDef>();
                     for (EntityFieldDef entityFieldDef : fieldDefList) {
                         if (entityFieldDef.isAuditable() && !entityFieldDef.isChildRef()) {
-                            EntityFieldDataType dataType = entityFieldDef.isWithResolvedTypeFieldDef() ? entityFieldDef.getResolvedDataType() :entityFieldDef.getDataType();
+                            EntityFieldDataType dataType = entityFieldDef.isWithResolvedTypeFieldDef()
+                                    ? entityFieldDef.getResolvedDataType()
+                                    : entityFieldDef.getDataType();
                             if (dataType.isString()) {
                                 auditSearchFieldDefList.add(entityFieldDef);
                             }
@@ -1332,7 +1334,8 @@ public class EntityDef extends BaseApplicationEntityDef {
             return this;
         }
 
-        public Builder addCategoryDef(String name, String description, String label, FilterDef filterDef) {
+        public Builder addCategoryDef(String name, String description, String label, FilterDef filterDef,
+                FieldSequenceDef groupingFieldSequenceDef) {
             if (categoryDefMap == null) {
                 categoryDefMap = new LinkedHashMap<String, EntityCategoryDef>();
             }
@@ -1341,7 +1344,8 @@ public class EntityDef extends BaseApplicationEntityDef {
                 throw new RuntimeException("Category with name [" + name + "] already exists in this definition.");
             }
 
-            categoryDefMap.put(name, new EntityCategoryDef(name, description, label, filterDef));
+            categoryDefMap.put(name,
+                    new EntityCategoryDef(name, description, label, filterDef, groupingFieldSequenceDef));
             return this;
         }
 

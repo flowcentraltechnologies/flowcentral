@@ -118,16 +118,21 @@ public class ChartDataSourceChartDetailsProvider extends AbstractChartDetailsPro
                         restriction = baseRestriction;
                     }
 
-                    final List<Aggregation> aggregations = environment().aggregate(aggregateFunction,
-                            restriction != null
-                                    ? application().queryOf(entityDef.getLongName()).addRestriction(restriction)
-                                    : application().queryOf(entityDef.getLongName()).ignoreEmptyCriteria(true));
-                    for (int i = 0; i < slen; i++) {
-                        final PropertySequenceEntryDef sequenceDef = series.getSequenceList().get(i);
-                        final String seriesName = !StringUtils.isBlank(sequenceDef.getLabel()) ? sequenceDef.getLabel()
-                                : entityDef.getEntitySeriesDef(sequenceDef.getProperty()).getLabel();
-                        final Number y = aggregations.get(i).getValue(Number.class);
-                        cdb.addSeriesData(seriesName, x, y);
+                    if (entityCategoryDef.isWithGroupingFields()) {
+                        // TODO
+                    } else {
+                        final List<Aggregation> aggregations = environment().aggregate(aggregateFunction,
+                                restriction != null
+                                        ? application().queryOf(entityDef.getLongName()).addRestriction(restriction)
+                                        : application().queryOf(entityDef.getLongName()).ignoreEmptyCriteria(true));
+                        for (int i = 0; i < slen; i++) {
+                            final PropertySequenceEntryDef sequenceDef = series.getSequenceList().get(i);
+                            final String seriesName = !StringUtils.isBlank(sequenceDef.getLabel())
+                                    ? sequenceDef.getLabel()
+                                    : entityDef.getEntitySeriesDef(sequenceDef.getProperty()).getLabel();
+                            final Number y = aggregations.get(i).getValue(Number.class);
+                            cdb.addSeriesData(seriesName, x, y);
+                        }
                     }
                 }
             }
@@ -144,8 +149,8 @@ public class ChartDataSourceChartDetailsProvider extends AbstractChartDetailsPro
                             : application().queryOf(entityDef.getLongName()).ignoreEmptyCriteria(true),
                     groupingFunction);
             for (GroupingAggregation gaggregation : gaggregations) {
-                final Object x = chartCategoryType.isString() ? gaggregation.getGrouping()
-                        : gaggregation.getGroupingDate();
+                final Object x = null; //  chartCategoryType.isString() ? gaggregation.getGrouping()
+                       // : gaggregation.getGroupingDate(); TODO
                 final List<Aggregation> aggregations = gaggregation.getAggregation();
                 for (int i = 0; i < slen; i++) {
                     final PropertySequenceEntryDef sequenceDef = series.getSequenceList().get(i);

@@ -836,8 +836,9 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                         FilterDef filterDef = InputWidgetUtils.getFilterDef(appletUtilities,
                                 appEntityCategory.getName(), appEntityCategory.getDescription(), null,
                                 appEntityCategory.getFilter());
+                        FieldSequenceDef groupingFieldSequenceDef = null; // TODO
                         edb.addCategoryDef(appEntityCategory.getName(), appEntityCategory.getDescription(),
-                                appEntityCategory.getLabel(), filterDef);
+                                appEntityCategory.getLabel(), filterDef, groupingFieldSequenceDef);
                     }
 
                     for (AppEntityExpression appEntityExpression : appEntity.getExpressionList()) {

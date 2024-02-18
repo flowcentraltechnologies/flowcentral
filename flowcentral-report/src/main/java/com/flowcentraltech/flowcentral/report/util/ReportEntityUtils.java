@@ -83,9 +83,11 @@ public final class ReportEntityUtils {
             // TODO Get parent data type
             dataClazz = String.class;
         } else {
-            dataClazz = entityFieldDataType.dataType().javaClass(); // TODO Enumerations?
-            if (Number.class.isAssignableFrom(dataClazz)) {
-                reportableField.setHorizontalAlign(HAlignType.RIGHT.name());
+            if (entityFieldDataType.dataType() != null) {
+                dataClazz = entityFieldDataType.dataType().javaClass(); // TODO Enumerations?
+                if (Number.class.isAssignableFrom(dataClazz)) {
+                    reportableField.setHorizontalAlign(HAlignType.RIGHT.name());
+                }
             }
 
             if (StringUtils.isBlank(reportableField.getFormatter())) {
@@ -110,7 +112,7 @@ public final class ReportEntityUtils {
         } else if (entityFieldDataType.isTimestamp()) {
             return formatOptions.getTimestampFormatter();
         }
-        
+
         return null;
     }
 }

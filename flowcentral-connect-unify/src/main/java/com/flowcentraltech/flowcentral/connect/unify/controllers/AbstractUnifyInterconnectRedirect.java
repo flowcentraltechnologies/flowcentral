@@ -74,7 +74,7 @@ public abstract class AbstractUnifyInterconnectRedirect extends AbstractUnifyCom
             String endpoint = redirectUrl + "/listEntities";
             EntityListingResponse resp = redirect(EntityListingResponse.class, endpoint, req);
             if (resp == null) {
-                redirectErrors.add(new RedirectErrorDTO(redirectUrl, null, "Redirection error"));
+                redirectErrors.add(new RedirectErrorDTO(redirectUrl, null, "Redirection error: " + redirectUrl));
             } else if (resp.error()) {
                 redirectErrors.add(new RedirectErrorDTO(redirectUrl, resp.getErrorCode(), resp.getErrorMsg()));
             } else {
@@ -120,7 +120,7 @@ public abstract class AbstractUnifyInterconnectRedirect extends AbstractUnifyCom
             JsonProcedureResponse resp = redirect(JsonProcedureResponse.class, endpoint, req);
             if (resp == null) {
                 resp = new JsonProcedureResponse();
-                resp.setErrorMsg("Redirection error");
+                resp.setErrorMsg("Redirection error: " + redirectUrl);
             }
 
             return resp;
@@ -157,7 +157,7 @@ public abstract class AbstractUnifyInterconnectRedirect extends AbstractUnifyCom
             if (resp == null) {
                 try {
                     resp = respClass.newInstance();
-                    resp.setErrorMsg("Redirection error");
+                    resp.setErrorMsg("Redirection error: " + endpoint);
                 } catch (Exception e) {
                 }
             }

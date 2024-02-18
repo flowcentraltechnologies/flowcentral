@@ -90,7 +90,7 @@ public abstract class AbstractSpringBootInterconnectRedirect implements SpringBo
             String endpoint = redirectUrl + "/listEntities";
             EntityListingResponse resp = redirect(EntityListingResponse.class, endpoint, req);
             if (resp == null) {
-                redirectErrors.add(new RedirectErrorDTO(redirectUrl, null, "Redirection error"));
+                redirectErrors.add(new RedirectErrorDTO(redirectUrl, null, "Redirection error: " + endpoint));
             } else if (resp.error()) {
                 redirectErrors.add(new RedirectErrorDTO(redirectUrl, resp.getErrorCode(), resp.getErrorMsg()));
             } else {
@@ -136,7 +136,7 @@ public abstract class AbstractSpringBootInterconnectRedirect implements SpringBo
             JsonProcedureResponse resp = redirect(JsonProcedureResponse.class, endpoint, req);
             if (resp == null) {
                 resp = new JsonProcedureResponse();
-                resp.setErrorMsg("Redirection error");
+                resp.setErrorMsg("Redirection error: " + endpoint);
             }
 
             return resp;
@@ -168,7 +168,7 @@ public abstract class AbstractSpringBootInterconnectRedirect implements SpringBo
             if (resp == null) {
                 try {
                     resp = respClass.newInstance();
-                    resp.setErrorMsg("Redirection error");
+                    resp.setErrorMsg("Redirection error: " + endpoint);
                 } catch (Exception e) {
                 }
             }
@@ -251,7 +251,7 @@ public abstract class AbstractSpringBootInterconnectRedirect implements SpringBo
                 resp = objectMapper.readValue(response.toString(), responseClass);
             }
         } catch (Exception e) {
-            LOGGER.log(Level.SEVERE, "Redirection error", e);
+            LOGGER.log(Level.SEVERE, "Redirection error: " + endpoint, e);
         }
 
         return resp;
