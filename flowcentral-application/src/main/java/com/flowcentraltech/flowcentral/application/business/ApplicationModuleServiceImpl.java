@@ -836,7 +836,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                         FilterDef filterDef = InputWidgetUtils.getFilterDef(appletUtilities,
                                 appEntityCategory.getName(), appEntityCategory.getDescription(), null,
                                 appEntityCategory.getFilter());
-                        FieldSequenceDef groupingFieldSequenceDef = null; // TODO
+                        FieldSequenceDef groupingFieldSequenceDef = InputWidgetUtils
+                                .getFieldSequenceDef(appEntityCategory.getFieldSequence());
                         edb.addCategoryDef(appEntityCategory.getName(), appEntityCategory.getDescription(),
                                 appEntityCategory.getLabel(), filterDef, groupingFieldSequenceDef);
                     }
@@ -4985,6 +4986,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                     appEntityCategory.setDescription(resolveApplicationMessage(entityCategoryConfig.getDescription()));
                     appEntityCategory.setLabel(resolveApplicationMessage(entityCategoryConfig.getLabel()));
                     appEntityCategory.setFilter(InputWidgetUtils.newAppFilter(entityCategoryConfig));
+                    appEntityCategory.setFieldSequence(newAppFieldSequence(entityCategoryConfig.getFieldSequence()));
                     appEntityCategory.setConfigType(ConfigType.STATIC_INSTALL);
                     categoryList.add(appEntityCategory);
                 } else {
@@ -4993,6 +4995,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                                 .setDescription(resolveApplicationMessage(entityCategoryConfig.getDescription()));
                         oldAppEntityCategory.setLabel(resolveApplicationMessage(entityCategoryConfig.getLabel()));
                         oldAppEntityCategory.setFilter(InputWidgetUtils.newAppFilter(entityCategoryConfig));
+                        oldAppEntityCategory
+                                .setFieldSequence(newAppFieldSequence(entityCategoryConfig.getFieldSequence()));
                     }
 
                     categoryList.add(oldAppEntityCategory);

@@ -2835,6 +2835,9 @@
 			<tab name="condition"
 				label="$m{studio.appentitycategory.form.condition}"
 				reference="app_entitycategory" contentType="filter_condition" />
+			<tab name="fieldSequence"
+				label="$m{studio.appentitycategory.form.fieldsequence}"
+				reference="app_entitycategory" contentType="field_sequence" />
 			<tab name="changeLog" label="$m{application.form.audit}"
 				contentType="miniform_changelog" />
 		</form>

@@ -174,6 +174,11 @@ public class ChartDataSourceChartDetailsProvider extends AbstractChartDetailsPro
             headers.add(new ChartTableColumn(fieldName, entityFieldDef.getFieldLabel()));
         }
 
+        for (PropertySequenceEntryDef sequenceDef: series.getSequenceList()) {
+            final EntitySeriesDef entitySeriesDef = entityDef.getEntitySeriesDef(sequenceDef.getProperty());
+            headers.add(new ChartTableColumn(entitySeriesDef.getFieldName(), entitySeriesDef.getLabel()));
+        }
+        
         cdb.createTableSeries(DataUtils.toArray(ChartTableColumn.class, headers));
 
         final List<GroupingAggregation> gaggregations = environment().aggregate(aggregateFunction,
@@ -183,13 +188,13 @@ public class ChartDataSourceChartDetailsProvider extends AbstractChartDetailsPro
         final int slen = series.getSequenceList().size();
         final int columns = glen + slen;
         for (GroupingAggregation gaggregation : gaggregations) {
-            final Object x = gaggregation.isDateGrouping(0) ? gaggregation.getGroupingAsString(0)
-                    : gaggregation.getGroupingAsDate(0);
+            final Object x = gaggregation.isDateGrouping(0) ? gaggregation.getGroupingAsDate(0)
+                    : gaggregation.getGroupingAsString(0);
             Object[] tableRow = new Object[columns];
             int c = 0;
             for (; c < glen; c++) {
-                final Object _x = gaggregation.isDateGrouping(c) ? gaggregation.getGroupingAsString(c)
-                        : gaggregation.getGroupingAsDate(c);
+                final Object _x = gaggregation.isDateGrouping(c) ? gaggregation.getGroupingAsDate(c)
+                        : gaggregation.getGroupingAsString(c);
                 tableRow[c] = _x;
             }
 

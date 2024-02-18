@@ -48,6 +48,9 @@ public class ChartDataSource extends BaseApplicationEntity {
     @Column(length = 32, nullable = true)
     private String categoryField;
 
+    @Column(name = "RECORD_LIMIT", nullable = true)
+    private Integer limit;
+
     @ListOnly(key = "type", property = "description")
     private String typeDesc;
 
@@ -77,6 +80,14 @@ public class ChartDataSource extends BaseApplicationEntity {
 
     public void setEntity(String entity) {
         this.entity = entity;
+    }
+
+    public Integer getLimit() {
+        return limit;
+    }
+
+    public void setLimit(Integer limit) {
+        this.limit = limit;
     }
 
     public String getTypeDesc() {

@@ -16,6 +16,7 @@
 package com.flowcentraltech.flowcentral.configuration.xml;
 
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
 
 /**
  * Entity category configuration.
@@ -27,6 +28,8 @@ public class EntityCategoryConfig extends FilterConfig {
 
     private String label;
 
+    private FieldSequenceConfig fieldSequence;
+
     public String getLabel() {
         return label;
     }
@@ -34,6 +37,15 @@ public class EntityCategoryConfig extends FilterConfig {
     @XmlAttribute(required = true)
     public void setLabel(String label) {
         this.label = label;
+    }
+
+    public FieldSequenceConfig getFieldSequence() {
+        return fieldSequence;
+    }
+
+    @XmlElement
+    public void setFieldSequence(FieldSequenceConfig fieldSequence) {
+        this.fieldSequence = fieldSequence;
     }
 
 }

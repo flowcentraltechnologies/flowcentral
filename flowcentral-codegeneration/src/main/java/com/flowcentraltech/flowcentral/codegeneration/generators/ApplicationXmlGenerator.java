@@ -92,6 +92,7 @@ import com.flowcentraltech.flowcentral.configuration.xml.EntityFieldConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.EntityIndexConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.EntityUniqueConstraintConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.EntityUploadConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.FieldSequenceConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.FieldValidationPolicyConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.FilterConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.FormActionConfig;
@@ -461,6 +462,8 @@ public class ApplicationXmlGenerator extends AbstractStaticArtifactGenerator {
                                 appEntityCategory.getFilter());
                         entityCategoryConfig
                                 .setRestrictionList(filterConfig != null ? filterConfig.getRestrictionList() : null);
+                        entityCategoryConfig.setFieldSequence(
+                                InputWidgetUtils.getFieldSequenceConfig(appEntityCategory.getFieldSequence()));
                         categoryList.add(entityCategoryConfig);
                     }
 
@@ -556,7 +559,7 @@ public class ApplicationXmlGenerator extends AbstractStaticArtifactGenerator {
                         entityUploadConfig.setName(appEntityUpload.getName());
                         entityUploadConfig.setDescription("$m{" + descKey + "}");
                         entityUploadConfig.setConstraintAction(appEntityUpload.getConstraintAction());
-                        entityUploadConfig.setFieldSequence(
+                        entityUploadConfig.setFieldSequence( 
                                 InputWidgetUtils.getFieldSequenceConfig(appEntityUpload.getFieldSequence()));
                         uploadList.add(entityUploadConfig);
                     }

@@ -123,7 +123,7 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
                             InputWidgetUtils.getFilterDef(appletUtilities, null, chartDataSource.getCategoryBase()),
                             InputWidgetUtils.getPropertySequenceDef(chartDataSource.getSeries()),
                             InputWidgetUtils.getPropertySequenceDef(chartDataSource.getCategories()),
-                            chartDataSource.getId(), chartDataSource.getVersionNo());
+                            chartDataSource.getLimit(), chartDataSource.getId(), chartDataSource.getVersionNo());
                     return chartDataSourceDef;
                 }
 

@@ -199,8 +199,8 @@ public class ChartDetails {
         }
 
         public Builder createTableSeries(ChartTableColumn[] headers) {
-            if (headers != null) {
-                throw new RuntimeException("Table series alreay defined for this builder.");
+            if (this.headers != null) {
+                throw new RuntimeException("Table series already defined for this builder.");
             }
 
             this.headers = headers;
