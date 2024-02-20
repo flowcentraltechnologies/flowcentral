@@ -16,6 +16,7 @@
 
 package com.flowcentraltech.flowcentral.chart.entities;
 
+import com.flowcentraltech.flowcentral.application.entities.AppFieldSequence;
 import com.flowcentraltech.flowcentral.application.entities.AppFilter;
 import com.flowcentraltech.flowcentral.application.entities.AppPropertySequence;
 import com.flowcentraltech.flowcentral.application.entities.BaseApplicationEntity;
@@ -65,6 +66,9 @@ public class ChartDataSource extends BaseApplicationEntity {
     
     @Child(category = "entity-category")
     private AppPropertySequence categories;
+
+    @Child(category = "entity-grouping")
+    private AppFieldSequence fieldSequence;
 
     public ChartDataSourceType getType() {
         return type;
@@ -144,6 +148,14 @@ public class ChartDataSource extends BaseApplicationEntity {
 
     public void setTimeSeriesTypeDesc(String timeSeriesTypeDesc) {
         this.timeSeriesTypeDesc = timeSeriesTypeDesc;
+    }
+
+    public AppFieldSequence getFieldSequence() {
+        return fieldSequence;
+    }
+
+    public void setFieldSequence(AppFieldSequence fieldSequence) {
+        this.fieldSequence = fieldSequence;
     }
 
 }

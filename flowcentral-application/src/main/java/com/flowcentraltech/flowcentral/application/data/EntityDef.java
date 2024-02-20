@@ -1334,8 +1334,7 @@ public class EntityDef extends BaseApplicationEntityDef {
             return this;
         }
 
-        public Builder addCategoryDef(String name, String description, String label, FilterDef filterDef,
-                FieldSequenceDef groupingFieldSequenceDef) {
+        public Builder addCategoryDef(String name, String description, String label, FilterDef filterDef) {
             if (categoryDefMap == null) {
                 categoryDefMap = new LinkedHashMap<String, EntityCategoryDef>();
             }
@@ -1345,7 +1344,7 @@ public class EntityDef extends BaseApplicationEntityDef {
             }
 
             categoryDefMap.put(name,
-                    new EntityCategoryDef(name, description, label, filterDef, groupingFieldSequenceDef));
+                    new EntityCategoryDef(name, description, label, filterDef));
             return this;
         }
 

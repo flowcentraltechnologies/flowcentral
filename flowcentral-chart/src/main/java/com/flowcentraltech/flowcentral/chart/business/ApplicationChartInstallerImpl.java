@@ -20,6 +20,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.business.AbstractApplicationArtifactInstaller;
+import com.flowcentraltech.flowcentral.application.entities.AppFieldSequence;
 import com.flowcentraltech.flowcentral.application.util.ApplicationReplicationContext;
 import com.flowcentraltech.flowcentral.application.util.InputWidgetUtils;
 import com.flowcentraltech.flowcentral.chart.constants.ChartModuleNameConstants;
@@ -33,6 +34,7 @@ import com.flowcentraltech.flowcentral.configuration.data.ApplicationInstall;
 import com.flowcentraltech.flowcentral.configuration.xml.AppChartConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppChartDataSourceConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.FieldSequenceConfig;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.task.TaskMonitor;
@@ -141,6 +143,7 @@ public class ApplicationChartInstallerImpl extends AbstractApplicationArtifactIn
                             .setSeries(InputWidgetUtils.newAppPropertySequence(appChartDataSourceConfig.getSeries()));
                     chartDataSource.setCategories(
                             InputWidgetUtils.newAppPropertySequence(appChartDataSourceConfig.getCategories()));
+                    chartDataSource.setFieldSequence(newAppFieldSequence(appChartDataSourceConfig.getFieldSequence()));
                     chartDataSource.setConfigType(ConfigType.MUTABLE_INSTALL);
                     environment().create(chartDataSource);
                 } else {
@@ -157,6 +160,7 @@ public class ApplicationChartInstallerImpl extends AbstractApplicationArtifactIn
                                 InputWidgetUtils.newAppPropertySequence(appChartDataSourceConfig.getSeries()));
                         oldChartDataSource.setCategories(
                                 InputWidgetUtils.newAppPropertySequence(appChartDataSourceConfig.getCategories()));
+                        oldChartDataSource.setFieldSequence(newAppFieldSequence(appChartDataSourceConfig.getFieldSequence()));
                         environment().updateByIdVersion(oldChartDataSource);
                     }
                 }
@@ -190,6 +194,14 @@ public class ApplicationChartInstallerImpl extends AbstractApplicationArtifactIn
     @Override
     protected List<DeletionParams> getDeletionParams() throws UnifyException {
         return Arrays.asList(new DeletionParams("charts", new ChartQuery()));
+    }
+
+    private AppFieldSequence newAppFieldSequence(FieldSequenceConfig fieldSequenceConfig) throws UnifyException {
+        if (fieldSequenceConfig != null) {
+            return new AppFieldSequence(InputWidgetUtils.getFieldSequenceDefinition(fieldSequenceConfig));
+        }
+
+        return null;
     }
 
 }

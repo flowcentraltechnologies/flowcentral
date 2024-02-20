@@ -21,6 +21,7 @@ import java.util.Collections;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
+import com.flowcentraltech.flowcentral.application.data.FieldSequenceDef;
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityNameParts;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.util.InputWidgetUtils;
@@ -116,6 +117,9 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
                         throw new UnifyException(ChartModuleErrorConstants.CANNOT_FIND_APPLICATION_CHART, longName);
                     }
 
+                    FieldSequenceDef groupingFieldSequenceDef = InputWidgetUtils
+                            .getFieldSequenceDef(chartDataSource.getFieldSequence());
+
                     ChartDataSourceDef chartDataSourceDef = new ChartDataSourceDef(chartDataSource.getType(),
                             chartDataSource.getTimeSeriesType(), longName, chartDataSource.getDescription(),
                             chartDataSource.getCategoryField(),
@@ -123,7 +127,8 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
                             InputWidgetUtils.getFilterDef(appletUtilities, null, chartDataSource.getCategoryBase()),
                             InputWidgetUtils.getPropertySequenceDef(chartDataSource.getSeries()),
                             InputWidgetUtils.getPropertySequenceDef(chartDataSource.getCategories()),
-                            chartDataSource.getLimit(), chartDataSource.getId(), chartDataSource.getVersionNo());
+                            groupingFieldSequenceDef, chartDataSource.getLimit(), chartDataSource.getId(),
+                            chartDataSource.getVersionNo());
                     return chartDataSourceDef;
                 }
 

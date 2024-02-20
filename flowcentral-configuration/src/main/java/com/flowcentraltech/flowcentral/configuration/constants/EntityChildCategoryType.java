@@ -119,6 +119,13 @@ public enum EntityChildCategoryType implements EnumConst {
             "chart-datasource",
             FilterConditionListType.IMMEDIATE_PARAM,
             null),
+    CHART_GROUPING(
+            "CHARTGROUPING",
+            "chart.chartDataSource",
+            "entity",
+            "entity-grouping",
+            FilterConditionListType.IMMEDIATE_FIELD,
+            null),
     CHART_SERIES(
             "CHARTSERIES",
             "chart.chartDataSource",

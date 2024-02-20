@@ -220,10 +220,6 @@ public class ChartDetails {
             tableSeries.add(tableRow);
             return this;
         }
-
-        public boolean isSeries(String seriesName) {
-            return series.containsKey(seriesName);
-        }
         
         public Builder createSeries(ChartSeriesDataType dataType, String seriesName) throws UnifyException {
             if (series.containsKey(seriesName)) {

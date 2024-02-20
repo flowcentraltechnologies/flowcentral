@@ -17,7 +17,6 @@
 package com.flowcentraltech.flowcentral.chart.data.provider;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -32,9 +31,9 @@ import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.util.InputWidgetUtils;
 import com.flowcentraltech.flowcentral.chart.constants.ChartModuleNameConstants;
 import com.flowcentraltech.flowcentral.chart.data.AbstractChartDetailsProvider;
+import com.flowcentraltech.flowcentral.chart.data.ChartDataSourceDef;
 import com.flowcentraltech.flowcentral.chart.data.ChartDetails;
 import com.flowcentraltech.flowcentral.chart.data.ChartTableColumn;
-import com.flowcentraltech.flowcentral.chart.data.ChartDataSourceDef;
 import com.flowcentraltech.flowcentral.chart.entities.ChartDataSource;
 import com.flowcentraltech.flowcentral.chart.entities.ChartDataSourceQuery;
 import com.flowcentraltech.flowcentral.configuration.constants.ChartCategoryDataType;
@@ -93,7 +92,6 @@ public class ChartDataSourceChartDetailsProvider extends AbstractChartDetailsPro
             aggregateFunction.add(entitySeriesDef.getType().function(entitySeriesDef.getFieldName()));
         }
 
-        final int slen = series.getSequenceList().size();
         final Restriction baseRestriction = InputWidgetUtils.getRestriction(entityDef,
                 chartDataSourceDef.getCategoryBase(), au().specialParamProvider(), now);
         if (chartDataSourceDef.isWithCategories()) {
@@ -116,32 +114,91 @@ public class ChartDataSourceChartDetailsProvider extends AbstractChartDetailsPro
                         restriction = baseRestriction;
                     }
 
-                    if (entityCategoryDef.isWithGroupingFields()) {
-                        List<String> grouingFieldNames = entityCategoryDef.getGroupingFieldSequenceDef()
-                                .getFieldNames();
-                        provideGroupAggregation(cdb, chartDataSourceDef, grouingFieldNames, aggregateFunction, now,
-                                baseRestriction, cat);
-                    } else {
-                        final List<Aggregation> aggregations = environment().aggregate(aggregateFunction,
-                                restriction != null
-                                        ? application().queryOf(entityDef.getLongName()).addRestriction(restriction)
-                                        : application().queryOf(entityDef.getLongName()).ignoreEmptyCriteria(true));
-                        for (int i = 0; i < slen; i++) {
-                            final PropertySequenceEntryDef sequenceDef = series.getSequenceList().get(i);
-                            final String seriesName = ensureSeries(cdb, entityDef, sequenceDef, null);
-                            final Number y = aggregations.get(i).getValue(Number.class);
-                            cdb.addSeriesData(seriesName, cat, y);
-                        }
-                    }
+                    performAggregation(cdb, chartDataSourceDef, aggregateFunction, now, restriction, cat);
                 }
             }
         } else if (categoryEntityFieldDef != null) {
             final Object cat = categoryEntityFieldDef.getFieldName();
-            provideGroupAggregation(cdb, chartDataSourceDef, Arrays.asList(categoryEntityFieldDef.getFieldName()),
-                    aggregateFunction, now, baseRestriction, cat);
+            performAggregation(cdb, chartDataSourceDef, aggregateFunction, now, baseRestriction, cat);
         }
 
         return cdb.build();
+    }
+
+    private void performAggregation(ChartDetails.Builder cdb, ChartDataSourceDef chartDataSourceDef,
+            List<AggregateFunction> aggregateFunction, Date now, Restriction restriction, Object cat)
+            throws UnifyException {
+        final EntityDef entityDef = chartDataSourceDef.getEntityDef();
+        final PropertySequenceDef series = chartDataSourceDef.getSeries();
+        final int slen = series.getSequenceList().size();
+        if (chartDataSourceDef.isWithGroupingFields()) {
+            final List<String> groupingFieldNames = chartDataSourceDef.getGroupingFieldSequenceDef().getFieldNames();
+            final ChartTimeSeriesType timeSeriesType = chartDataSourceDef.getTimeSeriesType() != null
+                    ? chartDataSourceDef.getTimeSeriesType()
+                    : ChartTimeSeriesType.DAY_OVER_WEEK;
+
+            List<GroupingFunction> groupingFunction = new ArrayList<GroupingFunction>();
+            List<ChartTableColumn> headers = new ArrayList<ChartTableColumn>();
+            final int glen = groupingFieldNames.size();
+            for (String fieldName : groupingFieldNames) {
+                final EntityFieldDef entityFieldDef = entityDef.getFieldDef(fieldName);
+                ChartCategoryDataType chartCategoryType = entityFieldDef.isDate() || entityFieldDef.isTimestamp()
+                        ? ChartCategoryDataType.DATE
+                        : ChartCategoryDataType.STRING;
+                final GroupingFunction _groupingFunction = chartCategoryType.isString()
+                        ? new GroupingFunction(fieldName)
+                        : new GroupingFunction(fieldName, timeSeriesType.type());
+                groupingFunction.add(_groupingFunction);
+
+                headers.add(
+                        new ChartTableColumn(entityFieldDef.getDataType(), fieldName, entityFieldDef.getFieldLabel()));
+            }
+
+            for (PropertySequenceEntryDef sequenceDef : series.getSequenceList()) {
+                final EntitySeriesDef entitySeriesDef = entityDef.getEntitySeriesDef(sequenceDef.getProperty());
+                final EntityFieldDef entityFieldDef = entityDef.getFieldDef(entitySeriesDef.getFieldName());
+                headers.add(new ChartTableColumn(entityFieldDef.getDataType(), entitySeriesDef.getFieldName(),
+                        entitySeriesDef.getLabel()));
+            }
+
+            cdb.createTableSeries(DataUtils.toArray(ChartTableColumn.class, headers));
+
+            final List<GroupingAggregation> gaggregations = environment().aggregate(aggregateFunction,
+                    restriction != null ? application().queryOf(entityDef.getLongName()).addRestriction(restriction)
+                            : application().queryOf(entityDef.getLongName()).ignoreEmptyCriteria(true),
+                    groupingFunction);
+            final int columns = glen + slen;
+            for (GroupingAggregation gaggregation : gaggregations) {
+                Object[] tableRow = new Object[columns];
+                int c = 0;
+                for (; c < glen; c++) {
+                    final Object _x = gaggregation.isDateGrouping(c) ? gaggregation.getGroupingAsDate(c)
+                            : gaggregation.getGroupingAsString(c);
+                    tableRow[c] = _x;
+                }
+
+                final List<Aggregation> aggregations = gaggregation.getAggregation();
+                for (int i = 0; i < slen; i++, c++) {
+                    final PropertySequenceEntryDef sequenceDef = series.getSequenceList().get(i);
+                    final String seriesName = ensureSeries(cdb, entityDef, sequenceDef, gaggregation.getGroupings());
+                    final Number y = aggregations.get(i).getValue(Number.class);
+                    tableRow[c] = y;
+                    cdb.addSeriesData(seriesName, cat, y);
+                }
+
+                cdb.addTableSeries(tableRow);
+            }
+        } else {
+            final List<Aggregation> aggregations = environment().aggregate(aggregateFunction,
+                    restriction != null ? application().queryOf(entityDef.getLongName()).addRestriction(restriction)
+                            : application().queryOf(entityDef.getLongName()).ignoreEmptyCriteria(true));
+            for (int i = 0; i < slen; i++) {
+                final PropertySequenceEntryDef sequenceDef = series.getSequenceList().get(i);
+                final String seriesName = ensureSeries(cdb, entityDef, sequenceDef, null);
+                final Number y = aggregations.get(i).getValue(Number.class);
+                cdb.addSeriesData(seriesName, cat, y);
+            }
+        }
     }
 
     private String ensureSeries(ChartDetails.Builder cdb, EntityDef entityDef, PropertySequenceEntryDef sequenceDef,
@@ -158,7 +215,7 @@ public class ChartDataSourceChartDetailsProvider extends AbstractChartDetailsPro
             seriesName = sb.toString();
         }
 
-        if (!cdb.isSeries(seriesName)) {
+        if (!cdb.isWithSeries(seriesName)) {
             EntityFieldDef entityFieldDef = entityDef
                     .getFieldDef(entityDef.getEntitySeriesDef(sequenceDef.getProperty()).getFieldName());
             cdb.createSeries(entityFieldDef.isDecimal() ? ChartSeriesDataType.DOUBLE : ChartSeriesDataType.INTEGER,
@@ -166,66 +223,5 @@ public class ChartDataSourceChartDetailsProvider extends AbstractChartDetailsPro
         }
 
         return seriesName;
-    }
-
-    private void provideGroupAggregation(ChartDetails.Builder cdb, ChartDataSourceDef chartDataSourceDef,
-            List<String> grouingFieldNames, List<AggregateFunction> aggregateFunction, Date now,
-            Restriction baseRestriction, Object cat) throws UnifyException {
-        final ChartTimeSeriesType timeSeriesType = chartDataSourceDef.getTimeSeriesType() != null
-                ? chartDataSourceDef.getTimeSeriesType()
-                : ChartTimeSeriesType.DAY_OVER_WEEK;
-        final EntityDef entityDef = chartDataSourceDef.getEntityDef();
-        final PropertySequenceDef series = chartDataSourceDef.getSeries();
-
-        List<GroupingFunction> groupingFunction = new ArrayList<GroupingFunction>();
-        List<ChartTableColumn> headers = new ArrayList<ChartTableColumn>();
-        final int glen = grouingFieldNames.size();
-        for (String fieldName : grouingFieldNames) {
-            final EntityFieldDef entityFieldDef = entityDef.getFieldDef(fieldName);
-            ChartCategoryDataType chartCategoryType = entityFieldDef.isDate() || entityFieldDef.isTimestamp()
-                    ? ChartCategoryDataType.DATE
-                    : ChartCategoryDataType.STRING;
-            final GroupingFunction _groupingFunction = chartCategoryType.isString() ? new GroupingFunction(fieldName)
-                    : new GroupingFunction(fieldName, timeSeriesType.type());
-            groupingFunction.add(_groupingFunction);
-
-            headers.add(new ChartTableColumn(entityFieldDef.getDataType(), fieldName, entityFieldDef.getFieldLabel()));
-        }
-
-        for (PropertySequenceEntryDef sequenceDef : series.getSequenceList()) {
-            final EntitySeriesDef entitySeriesDef = entityDef.getEntitySeriesDef(sequenceDef.getProperty());
-            final EntityFieldDef entityFieldDef = entityDef.getFieldDef(entitySeriesDef.getFieldName());
-            headers.add(new ChartTableColumn(entityFieldDef.getDataType(), entitySeriesDef.getFieldName(),
-                    entitySeriesDef.getLabel()));
-        }
-
-        cdb.createTableSeries(DataUtils.toArray(ChartTableColumn.class, headers));
-
-        final List<GroupingAggregation> gaggregations = environment().aggregate(aggregateFunction,
-                baseRestriction != null ? application().queryOf(entityDef.getLongName()).addRestriction(baseRestriction)
-                        : application().queryOf(entityDef.getLongName()).ignoreEmptyCriteria(true),
-                groupingFunction);
-        final int slen = series.getSequenceList().size();
-        final int columns = glen + slen;
-        for (GroupingAggregation gaggregation : gaggregations) {
-            Object[] tableRow = new Object[columns];
-            int c = 0;
-            for (; c < glen; c++) {
-                final Object _x = gaggregation.isDateGrouping(c) ? gaggregation.getGroupingAsDate(c)
-                        : gaggregation.getGroupingAsString(c);
-                tableRow[c] = _x;
-            }
-
-            final List<Aggregation> aggregations = gaggregation.getAggregation();
-            for (int i = 0; i < slen; i++, c++) {
-                final PropertySequenceEntryDef sequenceDef = series.getSequenceList().get(i);
-                final String seriesName = ensureSeries(cdb, entityDef, sequenceDef, gaggregation.getGroupings());
-                final Number y = aggregations.get(i).getValue(Number.class);
-                tableRow[c] = y;
-                cdb.addSeriesData(seriesName, cat, y);
-            }
-
-            cdb.addTableSeries(tableRow);
-        }
     }
 }
