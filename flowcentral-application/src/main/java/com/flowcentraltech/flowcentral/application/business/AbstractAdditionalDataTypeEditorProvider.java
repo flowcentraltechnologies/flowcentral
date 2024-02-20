@@ -25,7 +25,7 @@ import com.tcdng.unify.core.constant.DataType;
 import com.tcdng.unify.core.data.Listable;
 
 /**
- * Convenient abstract base class for additional data type editor provider.
+ * Convenient abstract base class for additional data type editor provider. 
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
