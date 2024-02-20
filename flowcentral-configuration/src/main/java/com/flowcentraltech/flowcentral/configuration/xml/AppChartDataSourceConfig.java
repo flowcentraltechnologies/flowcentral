@@ -50,7 +50,9 @@ public class AppChartDataSourceConfig extends BaseNameConfig {
     private PropertySequenceConfig series;
     
     private PropertySequenceConfig categories;
-    
+
+    private FieldSequenceConfig fieldSequence;
+   
     public String getEntity() {
         return entity;
     }
@@ -123,6 +125,15 @@ public class AppChartDataSourceConfig extends BaseNameConfig {
     @XmlAttribute(name = "preferred-category-field")
     public void setCategoryField(String categoryField) {
         this.categoryField = categoryField;
+    }
+
+    public FieldSequenceConfig getFieldSequence() {
+        return fieldSequence;
+    }
+
+    @XmlElement
+    public void setFieldSequence(FieldSequenceConfig fieldSequence) {
+        this.fieldSequence = fieldSequence;
     }
 
 }

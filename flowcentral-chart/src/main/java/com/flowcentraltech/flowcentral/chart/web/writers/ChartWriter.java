@@ -19,7 +19,6 @@ package com.flowcentraltech.flowcentral.chart.web.writers;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.chart.business.ChartModuleService;
 import com.flowcentraltech.flowcentral.chart.data.ChartDef;
 import com.flowcentraltech.flowcentral.chart.data.ChartDetails;
@@ -62,7 +61,7 @@ public class ChartWriter extends AbstractWidgetWriter {
         final String chartLongName = chartWidget.getValue(String.class);
         ChartDef chartDef = chartModuleService.getChartDef(chartLongName);
         ChartDetails chartDetails = getChartDetailsCache().getChartDetails(chartDef.getProvider(), chartDef.getRule());
-
+        
         writer.write("<div");
         writeTagAttributes(writer, chartWidget);
         writer.write(">");
@@ -94,11 +93,23 @@ public class ChartWriter extends AbstractWidgetWriter {
             if (chartDetails.isWithTableSeries()) {
                 FormatterOptions.Instance options = FormatterOptions.DEFAULT.createInstance(getUnifyComponentContext());
                 writer.write("<div class=\"tbl\">");
+                writer.write("<span class=\"title\">");
+                if (chartDef.isWithTitle()) {
+                    writer.writeWithHtmlEscape(chartDef.getTitle());
+                }
+                writer.write("</span>");
+
+                writer.write("<span class=\"subtitle\">");
+                if (chartDef.isWithSubtitle()) {
+                    writer.writeWithHtmlEscape(chartDef.getSubTitle());
+                }
+                writer.write("</span>");
+                
                 // Header
                 final int cols = chartDetails.getTableHeaders().length;
                 final ChartTableColumn[] headers = chartDetails.getTableHeaders();
                 writer.write(
-                        "<div class=\"bdy\" style=\"width:100%;height:100%;overflow-y:auto;overflow-x: hidden;\">");
+                        "<div class=\"bdy\" style=\"width:100%;overflow-y:auto;overflow-x: hidden;\">");
                 writer.write("<table class=\"cont\" style=\"width:100%;\">");
                 writer.write("<tr style=\"background-color:");
                 writer.write(chartDef.getColor());

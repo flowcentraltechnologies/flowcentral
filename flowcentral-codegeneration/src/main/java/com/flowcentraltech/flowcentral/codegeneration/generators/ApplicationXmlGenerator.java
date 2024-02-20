@@ -33,6 +33,9 @@ import com.flowcentraltech.flowcentral.application.entities.AppEntityCategory;
 import com.flowcentraltech.flowcentral.application.entities.AppEntityExpression;
 import com.flowcentraltech.flowcentral.application.entities.AppEntityField;
 import com.flowcentraltech.flowcentral.application.entities.AppEntityIndex;
+import com.flowcentraltech.flowcentral.application.entities.AppEntitySearchInput;
+import com.flowcentraltech.flowcentral.application.entities.AppEntitySeries;
+import com.flowcentraltech.flowcentral.application.entities.AppEntityUniqueCondition;
 import com.flowcentraltech.flowcentral.application.entities.AppEntityUniqueConstraint;
 import com.flowcentraltech.flowcentral.application.entities.AppEntityUpload;
 import com.flowcentraltech.flowcentral.application.entities.AppForm;
@@ -59,9 +62,6 @@ import com.flowcentraltech.flowcentral.application.entities.AppTableAction;
 import com.flowcentraltech.flowcentral.application.entities.AppTableColumn;
 import com.flowcentraltech.flowcentral.application.entities.AppTableFilter;
 import com.flowcentraltech.flowcentral.application.entities.AppTableLoading;
-import com.flowcentraltech.flowcentral.application.entities.AppEntitySearchInput;
-import com.flowcentraltech.flowcentral.application.entities.AppEntitySeries;
-import com.flowcentraltech.flowcentral.application.entities.AppEntityUniqueCondition;
 import com.flowcentraltech.flowcentral.application.entities.AppWidgetType;
 import com.flowcentraltech.flowcentral.application.entities.Application;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
@@ -90,9 +90,11 @@ import com.flowcentraltech.flowcentral.configuration.xml.EntityCategoryConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.EntityExpressionConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.EntityFieldConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.EntityIndexConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.EntitySearchInputConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.EntitySeriesConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.EntityUniqueConditionConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.EntityUniqueConstraintConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.EntityUploadConfig;
-import com.flowcentraltech.flowcentral.configuration.xml.FieldSequenceConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.FieldValidationPolicyConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.FilterConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.FormActionConfig;
@@ -123,9 +125,6 @@ import com.flowcentraltech.flowcentral.configuration.xml.TableActionConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.TableColumnConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.TableFilterConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.TableLoadingConfig;
-import com.flowcentraltech.flowcentral.configuration.xml.EntitySearchInputConfig;
-import com.flowcentraltech.flowcentral.configuration.xml.EntitySeriesConfig;
-import com.flowcentraltech.flowcentral.configuration.xml.EntityUniqueConditionConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.WidgetTypeConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.WidgetTypesConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.util.ConfigurationUtils;
@@ -185,6 +184,7 @@ public class ApplicationXmlGenerator extends AbstractStaticArtifactGenerator {
 
         // Ancillary
         appConfig.setChartsConfig(ctx.getChartsConfig());
+        appConfig.setChartDataSourcesConfig(ctx.getChartDataSourcesConfig());
         appConfig.setDashboardsConfig(ctx.getDashboardsConfig());
         appConfig.setNotifTemplatesConfig(ctx.getNotifTemplatesConfig());
         appConfig.setNotifLargeTextsConfig(ctx.getNotifLargeTextsConfig());
@@ -462,8 +462,6 @@ public class ApplicationXmlGenerator extends AbstractStaticArtifactGenerator {
                                 appEntityCategory.getFilter());
                         entityCategoryConfig
                                 .setRestrictionList(filterConfig != null ? filterConfig.getRestrictionList() : null);
-                        entityCategoryConfig.setFieldSequence(
-                                InputWidgetUtils.getFieldSequenceConfig(appEntityCategory.getFieldSequence()));
                         categoryList.add(entityCategoryConfig);
                     }
 

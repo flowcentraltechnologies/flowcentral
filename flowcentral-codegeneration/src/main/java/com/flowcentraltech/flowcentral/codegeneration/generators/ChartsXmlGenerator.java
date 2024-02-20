@@ -114,10 +114,11 @@ public class ChartsXmlGenerator extends AbstractStaticArtifactGenerator {
                 appChartDataSourceConfig
                         .setCategoryBase(InputWidgetUtils.getFilterConfig(au(), chartDataSource.getCategoryBase()));
                 appChartDataSourceConfig
-                        .setSeries(InputWidgetUtils.getPropertySequenceConfig(chartDataSource.getCategories()));
+                        .setSeries(InputWidgetUtils.getPropertySequenceConfig(chartDataSource.getSeries()));
                 appChartDataSourceConfig
                         .setCategories(InputWidgetUtils.getPropertySequenceConfig(chartDataSource.getCategories()));
-
+                appChartDataSourceConfig.setFieldSequence(
+                        InputWidgetUtils.getFieldSequenceConfig(chartDataSource.getFieldSequence()));
                 chartDataSourceConfigList.add(appChartDataSourceConfig);
             }
 

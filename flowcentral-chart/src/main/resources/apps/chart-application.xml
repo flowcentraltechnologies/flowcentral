@@ -134,6 +134,9 @@
 				label="$m{chart.chartdatasource.categories}" type="child"
 				category="entity-category"
 				references="application.appPropertySequenceRef" />
+			<field name="fieldSequence"
+				label="$m{chart.chartdatasource.fieldsequence}" type="child"
+				category="entity-grouping" references="application.appFieldSequenceRef" />
 			<field name="typeDesc"
 				label="$m{chart.chartdatasource.typedesc}" type="list_only"
 				key="type" property="description" />

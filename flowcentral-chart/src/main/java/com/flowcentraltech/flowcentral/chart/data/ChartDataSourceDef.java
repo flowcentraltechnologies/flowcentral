@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.chart.data;
 
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.EntityFieldDef;
+import com.flowcentraltech.flowcentral.application.data.FieldSequenceDef;
 import com.flowcentraltech.flowcentral.application.data.FilterDef;
 import com.flowcentraltech.flowcentral.application.data.PropertySequenceDef;
 import com.flowcentraltech.flowcentral.configuration.constants.ChartDataSourceType;
@@ -57,9 +58,12 @@ public class ChartDataSourceDef {
 
     private final long version;
 
+    private FieldSequenceDef groupingFieldSequenceDef;
+
     public ChartDataSourceDef(ChartDataSourceType type, ChartTimeSeriesType timeSeriesType, String name,
             String description, String categoryField, EntityDef entityDef, FilterDef categoryBase,
-            PropertySequenceDef series, PropertySequenceDef categories, Integer limit, Long id, long version) {
+            PropertySequenceDef series, PropertySequenceDef categories,
+            FieldSequenceDef groupingFieldSequenceDef, Integer limit, Long id, long version) {
         this.type = type;
         this.timeSeriesType = timeSeriesType;
         this.name = name;
@@ -69,6 +73,7 @@ public class ChartDataSourceDef {
         this.categoryBase = categoryBase;
         this.series = series;
         this.categories = categories;
+        this.groupingFieldSequenceDef = groupingFieldSequenceDef;
         this.limit = limit;
         this.id = id;
         this.version = version;
@@ -132,5 +137,13 @@ public class ChartDataSourceDef {
 
     public boolean isWithCategories() {
         return categories != null;
+    }
+
+    public FieldSequenceDef getGroupingFieldSequenceDef() {
+        return groupingFieldSequenceDef;
+    }
+
+    public boolean isWithGroupingFields() {
+        return groupingFieldSequenceDef != null && !groupingFieldSequenceDef.isBlank();
     }
 }

@@ -33,15 +33,11 @@ public class EntityCategoryDef implements Listable {
 
     private FilterDef filterDef;
 
-    private FieldSequenceDef groupingFieldSequenceDef;
-
-    public EntityCategoryDef(String name, String description, String label, FilterDef filterDef,
-            FieldSequenceDef groupingFieldSequenceDef) {
+    public EntityCategoryDef(String name, String description, String label, FilterDef filterDef) {
         this.name = name;
         this.description = description;
         this.label = label;
         this.filterDef = filterDef;
-        this.groupingFieldSequenceDef = groupingFieldSequenceDef;
     }
 
     @Override
@@ -68,13 +64,5 @@ public class EntityCategoryDef implements Listable {
 
     public FilterDef getFilterDef() {
         return filterDef;
-    }
-
-    public FieldSequenceDef getGroupingFieldSequenceDef() {
-        return groupingFieldSequenceDef;
-    }
-
-    public boolean isWithGroupingFields() {
-        return groupingFieldSequenceDef != null && !groupingFieldSequenceDef.isBlank();
     }
 }
