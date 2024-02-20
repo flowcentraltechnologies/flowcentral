@@ -62,6 +62,9 @@ public class ChartWriter extends AbstractWidgetWriter {
         ChartDef chartDef = chartModuleService.getChartDef(chartLongName);
         ChartDetails chartDetails = getChartDetailsCache().getChartDetails(chartDef.getProvider(), chartDef.getRule());
 
+        System.out.println("@prime: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+        System.out.println("@prime: chartDetails = " + chartDetails);
+        
         writer.write("<div");
         writeTagAttributes(writer, chartWidget);
         writer.write(">");
@@ -109,7 +112,7 @@ public class ChartWriter extends AbstractWidgetWriter {
                 final int cols = chartDetails.getTableHeaders().length;
                 final ChartTableColumn[] headers = chartDetails.getTableHeaders();
                 writer.write(
-                        "<div class=\"bdy\" style=\"width:100%;height:100%;overflow-y:auto;overflow-x: hidden;\">");
+                        "<div class=\"bdy\" style=\"width:100%;overflow-y:auto;overflow-x: hidden;\">");
                 writer.write("<table class=\"cont\" style=\"width:100%;\">");
                 writer.write("<tr style=\"background-color:");
                 writer.write(chartDef.getColor());

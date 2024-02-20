@@ -17,6 +17,7 @@
 package com.flowcentraltech.flowcentral.chart.data;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -121,6 +122,14 @@ public class ChartDetails {
         return headers != null;
     }
 
+    @Override
+    public String toString() {
+        return "ChartDetails [title=" + title + ", subTitle=" + subTitle + ", titleOffsetX=" + titleOffsetX
+                + ", titleFontSize=" + titleFontSize + ", subTitleOffsetX=" + subTitleOffsetX + ", subTitleFontSize="
+                + subTitleFontSize + ", categoryType=" + categoryType + ", series=" + series + ", headers="
+                + Arrays.toString(headers) + ", tableSeries=" + tableSeries + "]";
+    }
+
     public static Builder newBuilder(ChartCategoryDataType categoryType) {
         return new Builder(categoryType);
     }
@@ -198,8 +207,12 @@ public class ChartDetails {
             return series.containsKey(seriesName);
         }
 
+        public boolean isWithTableSeries() {
+            return this.headers != null;
+        }
+
         public Builder createTableSeries(ChartTableColumn[] headers) {
-            if (this.headers != null) {
+            if (isWithTableSeries()) {
                 throw new RuntimeException("Table series already defined for this builder.");
             }
 
