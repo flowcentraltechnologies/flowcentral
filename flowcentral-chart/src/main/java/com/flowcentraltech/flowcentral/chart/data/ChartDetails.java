@@ -221,6 +221,10 @@ public class ChartDetails {
             return this;
         }
 
+        public boolean isSeries(String seriesName) {
+            return series.containsKey(seriesName);
+        }
+        
         public Builder createSeries(ChartSeriesDataType dataType, String seriesName) throws UnifyException {
             if (series.containsKey(seriesName)) {
                 throw new RuntimeException("Series with name [" + seriesName + "] already exists with this builder.");

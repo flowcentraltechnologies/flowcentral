@@ -19,7 +19,6 @@ package com.flowcentraltech.flowcentral.chart.web.writers;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.chart.business.ChartModuleService;
 import com.flowcentraltech.flowcentral.chart.data.ChartDef;
 import com.flowcentraltech.flowcentral.chart.data.ChartDetails;
@@ -94,6 +93,18 @@ public class ChartWriter extends AbstractWidgetWriter {
             if (chartDetails.isWithTableSeries()) {
                 FormatterOptions.Instance options = FormatterOptions.DEFAULT.createInstance(getUnifyComponentContext());
                 writer.write("<div class=\"tbl\">");
+                writer.write("<span class=\"title\">");
+                if (chartDef.isWithTitle()) {
+                    writer.writeWithHtmlEscape(chartDef.getTitle());
+                }
+                writer.write("</span>");
+
+                writer.write("<span class=\"subtitle\">");
+                if (chartDef.isWithSubtitle()) {
+                    writer.writeWithHtmlEscape(chartDef.getSubTitle());
+                }
+                writer.write("</span>");
+                
                 // Header
                 final int cols = chartDetails.getTableHeaders().length;
                 final ChartTableColumn[] headers = chartDetails.getTableHeaders();
