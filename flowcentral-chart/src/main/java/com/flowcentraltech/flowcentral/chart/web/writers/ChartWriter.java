@@ -110,17 +110,18 @@ public class ChartWriter extends AbstractWidgetWriter {
                 final ChartTableColumn[] headers = chartDetails.getTableHeaders();
                 writer.write(
                         "<div class=\"bdy\" style=\"width:100%;overflow-y:auto;overflow-x: hidden;\">");
-                writer.write("<table class=\"cont\" style=\"width:100%;\">");
+                writer.write("<table class=\"cont\" style=\"width:100%;\"><thead>");
                 writer.write("<tr style=\"background-color:");
                 writer.write(chartDef.getColor());
-                writer.write(";\">");
+                writer.write(";position: sticky;top: 0px;\">");
                 for (ChartTableColumn header : headers) {
                     writer.write("<th>");
                     writer.writeWithHtmlEscape(header.getLabel());
                     writer.write("</th>");
                 }
-                writer.write("</tr>");
+                writer.write("</tr></thead>");
 
+                writer.write("<tbody>");
                 for (Object[] row : chartDetails.getTableSeries()) {
                     writer.write("<tr>");
                     for (int i = 0; i < cols; i++) {
@@ -134,6 +135,7 @@ public class ChartWriter extends AbstractWidgetWriter {
                     }
                     writer.write("</tr>");
                 }
+                writer.write("</tbody>");
                 writer.write("</table>");
                 writer.write("</div>");
 
