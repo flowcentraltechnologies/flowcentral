@@ -184,6 +184,7 @@ public class ApplicationXmlGenerator extends AbstractStaticArtifactGenerator {
 
         // Ancillary
         appConfig.setChartsConfig(ctx.getChartsConfig());
+        appConfig.setChartDataSourcesConfig(ctx.getChartDataSourcesConfig());
         appConfig.setDashboardsConfig(ctx.getDashboardsConfig());
         appConfig.setNotifTemplatesConfig(ctx.getNotifTemplatesConfig());
         appConfig.setNotifLargeTextsConfig(ctx.getNotifLargeTextsConfig());

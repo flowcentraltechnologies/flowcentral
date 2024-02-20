@@ -159,6 +159,10 @@ public class ExtensionModuleStaticFileBuilderContext {
         return nextStaticApplicationConfig.getChartsConfig();
     }
 
+    public AppChartDataSourcesConfig getChartDataSourcesConfig() {
+        return nextStaticApplicationConfig.getChartDataSourcesConfig();
+    }
+
     public AppDashboardsConfig getDashboardsConfig() {
         return nextStaticApplicationConfig.getDashboardsConfig();
     }
