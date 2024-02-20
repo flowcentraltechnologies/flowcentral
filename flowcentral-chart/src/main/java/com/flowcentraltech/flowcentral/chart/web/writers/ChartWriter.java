@@ -92,7 +92,12 @@ public class ChartWriter extends AbstractWidgetWriter {
         } else if (chartDef.getType().table()) {
             if (chartDetails.isWithTableSeries()) {
                 FormatterOptions.Instance options = FormatterOptions.DEFAULT.createInstance(getUnifyComponentContext());
-                writer.write("<div class=\"tbl\">");
+                writer.write("<div class=\"tbl\"");
+                if (chartDef.getHeight() > 0) {
+                    writer.write(" style=\"height:").write(chartDef.getHeight() ).write("px;\"");
+                }
+                
+                writer.write(">");
                 writer.write("<span class=\"title\">");
                 if (chartDef.isWithTitle()) {
                     writer.writeWithHtmlEscape(chartDef.getTitle());
