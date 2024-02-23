@@ -24,6 +24,8 @@ package com.flowcentraltech.flowcentral.common.business.policies;
 public class TableActionResult {
 
     private Object result;
+
+    private String tabName;
     
     private boolean refreshContent;
     
@@ -43,6 +45,14 @@ public class TableActionResult {
 
     public Object getResult() {
         return result;
+    }
+
+    public String getTabName() {
+        return tabName;
+    }
+
+    public void setTabName(String tabName) {
+        this.tabName = tabName;
     }
 
     public boolean isRefreshContent() {

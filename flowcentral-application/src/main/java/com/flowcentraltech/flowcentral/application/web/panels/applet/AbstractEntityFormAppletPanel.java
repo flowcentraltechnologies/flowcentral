@@ -1030,6 +1030,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         if (result != null) {
             if (result.isOpenTab()) {
                 setRequestAttribute(AppletRequestAttributeConstants.OPEN_TAB_PATH, (String) result.getResult());
+                setRequestAttribute(AppletRequestAttributeConstants.OPEN_TAB_NAME, result.getTabName());
                 setCommandResultMapping(ApplicationResultMappingConstants.OPEN_MANAGE_ENTITY_IN_NEW_TAB);
             } else if (result.isOpenPath()) {
                 setCommandOpenPath((String) result.getResult());

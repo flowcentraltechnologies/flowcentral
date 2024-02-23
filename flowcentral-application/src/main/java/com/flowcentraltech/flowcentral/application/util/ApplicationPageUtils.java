@@ -54,6 +54,10 @@ public final class ApplicationPageUtils {
         return new StringBuilder().append(controllerName).append(':').append(appletName).append("/openPage").toString();
     }
 
+    public static String constructAppletPath(String controllerName, String appletName) {
+        return new StringBuilder().append(controllerName).append(':').append(appletName).toString();
+    }
+
     public static String constructAppletReplacePagePath(String controllerName, String appletName) {
         return new StringBuilder().append(controllerName).append(':').append(appletName).append("/replacePage")
                 .toString();

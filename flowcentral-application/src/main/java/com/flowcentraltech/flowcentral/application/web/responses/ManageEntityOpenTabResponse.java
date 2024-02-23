@@ -17,6 +17,8 @@
 package com.flowcentraltech.flowcentral.application.web.responses;
 
 import com.flowcentraltech.flowcentral.application.constants.AppletRequestAttributeConstants;
+import com.flowcentraltech.flowcentral.application.constants.AppletSessionAttributeConstants;
+import com.flowcentraltech.flowcentral.application.util.ApplicationPageUtils;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.constant.MimeType;
@@ -34,12 +36,17 @@ public class ManageEntityOpenTabResponse extends AbstractOpenWindowPageControlle
 
     @Override
     protected WindowResourceInfo prepareWindowResource() throws UnifyException {
-        final String openTabPath = (String) getRequestAttribute(
-                AppletRequestAttributeConstants.OPEN_TAB_PATH);
+        final String openTabPath = (String) getRequestAttribute(AppletRequestAttributeConstants.OPEN_TAB_PATH);
         if (!StringUtils.isBlank(openTabPath)) {
-            logDebug("Preparing open tab for path [{0}]...", openTabPath);
-            return new WindowResourceInfo(openTabPath, "/application/manageentity", openTabPath,
+            logDebug("Preparing open tab for path [{0}] ...", openTabPath);
+            final String openTabName = (String) getRequestAttribute(AppletRequestAttributeConstants.OPEN_TAB_NAME);
+            final String apath = ApplicationPageUtils.constructAppletPath("/application/manageentity", openTabName);
+            setSessionAttribute(AppletSessionAttributeConstants.OPEN_DOC_PATH, apath);
+            setSessionAttribute(AppletSessionAttributeConstants.OPEN_TAB_PATH, openTabPath);
+            WindowResourceInfo info = new WindowResourceInfo(openTabPath, apath, openTabName,
                     MimeType.TEXT_HTML.template(), false);
+            info.setOpenInTab(true);
+            return info;
         }
 
         return new WindowResourceInfo();

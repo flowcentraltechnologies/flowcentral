@@ -17,5 +17,5 @@
     favicon:$s{web/images/favicon_enduser.png}
 
 !ui-contentpanel:content styleClass:$e{fc-login-contentpanel}
-	documentPath:$s{/application/manageentity} titleUppercase:false
-//	paths:$s{/application/manageentityitem/openPage}
+	documentPathBinding:documentPath pathsBinding:contentPaths
+	titleUppercase:false

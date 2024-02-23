@@ -14,35 +14,17 @@
  * the License.
  */
 
-package com.flowcentraltech.flowcentral.application.web.controllers;
-
-import com.tcdng.unify.web.ui.AbstractPageBean;
+package com.flowcentraltech.flowcentral.application.constants;
 
 /**
- * Application manage entity page bean.
+ * Applet session attribute constants
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class ApplicationManageEntityPageBean extends AbstractPageBean {
-
-    private String documentPath;
-
-    private String[] contentPaths;
-
-    public String getDocumentPath() {
-        return documentPath;
-    }
-
-    public void setDocumentPath(String documentPath) {
-        this.documentPath = documentPath;
-    }
-
-    public String[] getContentPaths() {
-        return contentPaths;
-    }
-
-    public void setContentPaths(String[] contentPaths) {
-        this.contentPaths = contentPaths;
-    }
+public interface AppletSessionAttributeConstants {
+    
+    String OPEN_DOC_PATH = "app:session:opendocpath";
+    
+    String OPEN_TAB_PATH = "app:session:opentabpath";
 }

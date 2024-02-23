@@ -668,12 +668,15 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         this.mIndex = mIndex;
         Entity _inst = getEntitySearchItem(entitySearch, mIndex).getEntity();
         if (entitySearch.isViewItemsInSeparateTabs()) {
+            final String appletName = getAppletName();
             final String openPath = ApplicationPageUtils.constructAppletOpenPagePath(AppletType.CREATE_ENTITY,
-                    getAppletName(), _inst.getId());
+                    appletName, _inst.getId());
             TableActionResult result = new TableActionResult(openPath);
             result.setOpenPath(true);
-            
+
             // TODO Condition
+            final String tabName = ApplicationNameUtils.addVestigialNamePart(appletName, String.valueOf(_inst.getId()));
+            result.setTabName(tabName);
             result.setOpenTab(true);
             return result;
         }

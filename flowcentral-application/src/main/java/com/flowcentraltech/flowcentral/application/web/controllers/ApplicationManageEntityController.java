@@ -16,7 +16,10 @@
 
 package com.flowcentraltech.flowcentral.application.web.controllers;
 
+import com.flowcentraltech.flowcentral.application.constants.AppletSessionAttributeConstants;
+import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
+import com.tcdng.unify.core.annotation.Singleton;
 import com.tcdng.unify.core.annotation.UplBinding;
 import com.tcdng.unify.web.constant.ReadOnly;
 import com.tcdng.unify.web.constant.ResetOnWrite;
@@ -29,12 +32,25 @@ import com.tcdng.unify.web.ui.AbstractPageController;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
+@Singleton(false)
 @Component("/application/manageentity")
 @UplBinding("web/application/upl/applicationmanageentity.upl")
 public class ApplicationManageEntityController extends AbstractPageController<ApplicationManageEntityPageBean> {
 
     public ApplicationManageEntityController() {
         super(ApplicationManageEntityPageBean.class, Secured.TRUE, ReadOnly.FALSE, ResetOnWrite.FALSE);
+    }
+
+    @Override
+    protected void onInitPage() throws UnifyException {
+        super.onInitPage();
+        ApplicationManageEntityPageBean pageBean = getPageBean();
+        if (pageBean.getDocumentPath() == null) {
+            final String documentPath = (String) removeSessionAttribute(AppletSessionAttributeConstants.OPEN_DOC_PATH);
+            final String contentPath = (String) removeSessionAttribute(AppletSessionAttributeConstants.OPEN_TAB_PATH);
+            pageBean.setDocumentPath(documentPath);
+            pageBean.setContentPaths(new String[] { contentPath });
+        }
     }
 
 }
