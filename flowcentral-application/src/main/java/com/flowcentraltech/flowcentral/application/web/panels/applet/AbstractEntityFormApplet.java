@@ -672,6 +672,9 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
                     getAppletName(), _inst.getId());
             TableActionResult result = new TableActionResult(openPath);
             result.setOpenPath(true);
+            
+            // TODO Condition
+            result.setOpenTab(true);
             return result;
         }
 

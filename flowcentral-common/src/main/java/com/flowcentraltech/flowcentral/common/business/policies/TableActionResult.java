@@ -27,6 +27,8 @@ public class TableActionResult {
     
     private boolean refreshContent;
     
+    private boolean openTab;
+    
     private boolean openPath;
     
     private boolean displayListingReport;
@@ -49,6 +51,18 @@ public class TableActionResult {
 
     public void setRefreshContent(boolean refreshContent) {
         this.refreshContent = refreshContent;
+    }
+
+    public boolean isOpenTab() {
+        return openTab;
+    }
+
+    public void setOpenTab(boolean openTab) {
+        this.openTab = openTab;
+    }
+
+    public void setResult(Object result) {
+        this.result = result;
     }
 
     public boolean isOpenPath() {

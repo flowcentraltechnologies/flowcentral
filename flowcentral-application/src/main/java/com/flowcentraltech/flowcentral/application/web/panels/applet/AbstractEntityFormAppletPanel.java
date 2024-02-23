@@ -19,6 +19,7 @@ package com.flowcentraltech.flowcentral.application.web.panels.applet;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.constants.AppletPropertyConstants;
+import com.flowcentraltech.flowcentral.application.constants.AppletRequestAttributeConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationResultMappingConstants;
 import com.flowcentraltech.flowcentral.application.constants.WorkflowDraftType;
@@ -136,7 +137,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         boolean enableUpdateSubmit = false;
         boolean capture = false;
         if (viewMode.isCreateForm()) {
-            EntityDef formEntityDef = form.getFormDef().getEntityDef(); 
+            EntityDef formEntityDef = form.getFormDef().getEntityDef();
             enableCreate = isContextEditable
                     && applicationPrivilegeManager.isRoleWithPrivilege(roleCode, formEntityDef.getAddPrivilege());
             enableCreateSubmit = isRootForm && applet
@@ -392,7 +393,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                 if (form.isWithAttachments()) {
                     form.getAttachments().setEditable(enableUpdate);
                 }
-                
+
                 setEditable("formPanel", enableUpdate);
                 addPanelToPushComponents("formPanel", enableUpdate);
                 break;
@@ -417,7 +418,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                 if (form.isWithAttachments()) {
                     form.getAttachments().setEditable(enableUpdate);
                 }
-                
+
                 setEditable("formPanel", enableUpdate);
                 addPanelToPushComponents("formPanel", enableUpdate);
                 break;
@@ -454,7 +455,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                 if (form.isWithAttachments()) {
                     form.getAttachments().setEditable(enableUpdate);
                 }
-                
+
                 setEditable("formPanel", enableUpdate);
                 addPanelToPushComponents("formPanel", enableUpdate);
                 break;
@@ -504,7 +505,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                 if (form.isWithAttachments()) {
                     form.getAttachments().setEditable(true);
                 }
-                
+
                 setEditable("formPanel", true);
                 addPanelToPushComponents("formPanel", true);
                 break;
@@ -1019,7 +1020,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         setCommandResultMapping(entityActionResult, true);
     }
 
-    private void performEditModeWorkflowDraft() throws UnifyException { 
+    private void performEditModeWorkflowDraft() throws UnifyException {
         AbstractEntityFormApplet applet = getEntityFormApplet();
         WorkflowDraftInfo workflowDraftInfo = applet.getWorkflowDraftInfo();
         applet.enterWorkflowDraft(workflowDraftInfo.getType());
@@ -1027,7 +1028,10 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
 
     private void processTableActionResult(TableActionResult result) throws UnifyException {
         if (result != null) {
-            if (result.isOpenPath()) {
+            if (result.isOpenTab()) {
+                setRequestAttribute(AppletRequestAttributeConstants.OPEN_TAB_PATH, (String) result.getResult());
+                setCommandResultMapping(ApplicationResultMappingConstants.OPEN_MANAGE_ENTITY_IN_NEW_TAB);
+            } else if (result.isOpenPath()) {
                 setCommandOpenPath((String) result.getResult());
             } else if (result.isDisplayListingReport()) {
                 setRequestAttribute(FlowCentralRequestAttributeConstants.REPORT, result.getResult());

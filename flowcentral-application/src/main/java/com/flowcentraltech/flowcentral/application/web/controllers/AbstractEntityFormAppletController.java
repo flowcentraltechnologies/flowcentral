@@ -52,8 +52,11 @@ import com.tcdng.unify.web.ui.widget.data.Popup;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@ResultMappings({ @ResultMapping(name = "refreshapplet",
-        response = { "!hidepopupresponse", "!refreshpanelresponse panels:$l{appletPanel}" }) })
+@ResultMappings({
+    @ResultMapping(name = "refreshapplet",
+        response = { "!hidepopupresponse", "!refreshpanelresponse panels:$l{appletPanel}" }),
+    @ResultMapping(name = ApplicationResultMappingConstants.OPEN_MANAGE_ENTITY_IN_NEW_TAB,
+    response = { "!manageentityopentabresponse" }) })
 public abstract class AbstractEntityFormAppletController<T extends AbstractEntityFormApplet, U extends AbstractEntityFormAppletPageBean<T>>
         extends AbstractAppletController<U> {
 

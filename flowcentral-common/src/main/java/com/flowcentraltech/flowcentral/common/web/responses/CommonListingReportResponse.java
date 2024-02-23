@@ -14,7 +14,7 @@
  * the License.
  */
 
-package com.flowcentraltech.flowcentral.common.web.controllers;
+package com.flowcentraltech.flowcentral.common.web.responses;
 
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralRequestAttributeConstants;
 import com.tcdng.unify.core.UnifyException;

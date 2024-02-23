@@ -57,7 +57,7 @@ fux.menuWire = function(rgp) {
 	
 	// Menu items
 	if (rgp.pMenuItems) {
-		for (var mItem of rgp.pMenuItems) {
+		for (var mItem of rgp.pMenuItems) { 
 			var evp = {};
 			if (mItem.isOpenWin) {
 				evp.uMain = false;
