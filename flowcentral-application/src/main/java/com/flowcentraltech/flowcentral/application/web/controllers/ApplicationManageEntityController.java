@@ -17,10 +17,14 @@
 package com.flowcentraltech.flowcentral.application.web.controllers;
 
 import com.flowcentraltech.flowcentral.application.constants.AppletSessionAttributeConstants;
+import com.flowcentraltech.flowcentral.application.constants.ApplicationResultMappingConstants;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Singleton;
 import com.tcdng.unify.core.annotation.UplBinding;
+import com.tcdng.unify.web.annotation.Action;
+import com.tcdng.unify.web.annotation.ResultMapping;
+import com.tcdng.unify.web.annotation.ResultMappings;
 import com.tcdng.unify.web.constant.ReadOnly;
 import com.tcdng.unify.web.constant.ResetOnWrite;
 import com.tcdng.unify.web.constant.Secured;
@@ -35,10 +39,19 @@ import com.tcdng.unify.web.ui.AbstractPageController;
 @Singleton(false)
 @Component("/application/manageentity")
 @UplBinding("web/application/upl/applicationmanageentity.upl")
+@ResultMappings({
+    @ResultMapping(name = ApplicationResultMappingConstants.REFRESH_CONTENT,
+            response = { "!hidepopupresponse", "!refreshpanelresponse panels:$l{content}" }) })
 public class ApplicationManageEntityController extends AbstractPageController<ApplicationManageEntityPageBean> {
 
     public ApplicationManageEntityController() {
         super(ApplicationManageEntityPageBean.class, Secured.TRUE, ReadOnly.FALSE, ResetOnWrite.FALSE);
+    }
+
+    @Action
+    @Override
+    public String content() throws UnifyException {
+        return ApplicationResultMappingConstants.REFRESH_CONTENT;
     }
 
     @Override
