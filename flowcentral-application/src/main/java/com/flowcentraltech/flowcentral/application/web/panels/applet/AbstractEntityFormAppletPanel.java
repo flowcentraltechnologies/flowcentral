@@ -373,8 +373,8 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                                         AppletPropertyConstants.MAINTAIN_FORM_SUBMIT, false)));
                 setVisible("submitNextBtn", !isWorkflowCopyForm && enableUpdateSubmit && formAppletDef
                         .getPropValue(boolean.class, AppletPropertyConstants.MAINTAIN_FORM_SUBMIT_NEXT, false));
-                setDisabled("prevBtn", viewMode.isScroll() && !applet.isPrevNav());
-                setDisabled("nextBtn", viewMode.isScroll() && !applet.isNextNav());
+                setDisabled("prevBtn", closable && viewMode.isScroll() && !applet.isPrevNav());
+                setDisabled("nextBtn", closable && viewMode.isScroll() && !applet.isNextNav());
                 setVisible("formAttachmentBtn", enableAttachment);
                 setVisible("saveAsBtn", enableSaveAs && !isWorkflowCopyForm);
                 setVisible("updateBtn", enableUpdate);
