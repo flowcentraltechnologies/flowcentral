@@ -66,6 +66,7 @@ import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.web.annotation.Action;
 import com.tcdng.unify.web.constant.ResultMappingConstants;
+import com.tcdng.unify.web.ui.PageAttributeConstants;
 import com.tcdng.unify.web.ui.constant.MessageType;
 import com.tcdng.unify.web.ui.widget.Panel;
 import com.tcdng.unify.web.ui.widget.data.Hint.MODE;
@@ -129,7 +130,8 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
             appCtx.setInWorkflow(isInWorkflow);
         }
 
-        final boolean closable = !(isRootForm && appCtx.isTabInBrowserMode());
+        final boolean closable = !(isRootForm
+                && getPageAttribute(boolean.class, PageAttributeConstants.IN_DETACHED_WINDOW));
         final boolean isContextEditable = appCtx.isContextEditable();
         applet.getFormFileAttachments().setDisabled(!isContextEditable);
         boolean enableSaveAs = false;
@@ -340,7 +342,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                 break;
             case SINGLE_FORM:
                 switchContent("singleFormPanel");
-                setVisible("scancelBtn", true);
+                setVisible("scancelBtn", closable);
                 setVisible("sdisplayCounterLabel", isCollaboration);
                 setVisible("supdateBtn", enableUpdate);
                 setVisible("supdateCloseBtn", closable && enableUpdate);
@@ -361,7 +363,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
             case MAINTAIN_FORM_SCROLL:
             case MAINTAIN_PRIMARY_FORM_NO_SCROLL:
                 switchContent("formPanel");
-                setVisible("cancelBtn", true);
+                setVisible("cancelBtn", closable);
                 setVisible("saveBtn", false);
                 setVisible("saveNextBtn", false);
                 setVisible("saveCloseBtn", false);
@@ -405,7 +407,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
             case MAINTAIN_RELATEDLIST_FORM_NO_SCROLL:
             case MAINTAIN_HEADLESSLIST_FORM_NO_SCROLL:
                 switchContent("formPanel");
-                setVisible("cancelBtn", true);
+                setVisible("cancelBtn", closable);
                 setVisible("saveBtn", false);
                 setVisible("saveNextBtn", false);
                 setVisible("saveCloseBtn", false);
@@ -431,7 +433,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
             case MAINTAIN_RELATEDLIST_FORM:
             case MAINTAIN_HEADLESSLIST_FORM:
                 switchContent("formPanel");
-                setVisible("cancelBtn", true);
+                setVisible("cancelBtn", closable);
                 setVisible("saveBtn", false);
                 setVisible("saveNextBtn", false);
                 setVisible("saveCloseBtn", false);
@@ -471,7 +473,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
             case NEW_RELATEDLIST_FORM:
             case NEW_HEADLESSLIST_FORM:
                 switchContent("formPanel");
-                setVisible("cancelBtn", true);
+                setVisible("cancelBtn", closable);
                 final boolean allowSaveAndNext = viewMode != AbstractEntityFormApplet.ViewMode.NEW_CHILD_FORM;
                 if (enableCreate && !isWorkflowCopyForm && formAppletDef != null) {
                     setVisible("saveBtn",

@@ -18,4 +18,4 @@
 
 !ui-contentpanel:content styleClass:$e{fc-login-contentpanel}
 	documentPathBinding:documentPath pathsBinding:contentPaths
-	titleUppercase:false
+	titleUppercase:false detachedWindow:true

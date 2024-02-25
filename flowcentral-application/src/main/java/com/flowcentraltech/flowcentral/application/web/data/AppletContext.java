@@ -54,8 +54,6 @@ public class AppletContext extends AbstractContext {
 
     private int tabReadOnlyCounter;
 
-    private boolean tabInBrowserMode;
-
     private boolean auditingEnabled;
 
     private final boolean parentStateAuditingEnabled;
@@ -161,14 +159,6 @@ public class AppletContext extends AbstractContext {
 
     public void setOriginalEntityActionResult(EntityActionResult originalEntityActionResult) {
         this.originalEntityActionResult = originalEntityActionResult;
-    }
-
-    public boolean isTabInBrowserMode() {
-        return tabInBrowserMode;
-    }
-
-    public void setTabInBrowserMode(boolean tabInBrowserMode) {
-        this.tabInBrowserMode = tabInBrowserMode;
     }
 
     public boolean isAuditingEnabled() {
