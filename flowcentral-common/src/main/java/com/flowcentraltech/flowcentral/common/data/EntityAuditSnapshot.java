@@ -69,6 +69,11 @@ public class EntityAuditSnapshot {
     }
 
     public EntityFieldAudit getEntityFieldAudit(String fieldName) {
-        return fieldAuditsByName.get(fieldName);
+        EntityFieldAudit entityFieldAudit = fieldAuditsByName.get(fieldName);
+        if (entityFieldAudit == null) {
+            throw new IllegalArgumentException("Can't find entity field audit for \"" + fieldName + "\"");
+        }
+
+        return entityFieldAudit;
     }
 }

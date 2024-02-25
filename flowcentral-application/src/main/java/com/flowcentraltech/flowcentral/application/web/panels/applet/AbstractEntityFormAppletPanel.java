@@ -28,6 +28,7 @@ import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.FormActionDef;
 import com.flowcentraltech.flowcentral.application.data.FormDef;
 import com.flowcentraltech.flowcentral.application.data.FormTabDef;
+import com.flowcentraltech.flowcentral.application.data.RequestOpenTabInfo;
 import com.flowcentraltech.flowcentral.application.data.TabDef;
 import com.flowcentraltech.flowcentral.application.data.WorkflowDraftInfo;
 import com.flowcentraltech.flowcentral.application.entities.BaseApplicationEntity;
@@ -58,7 +59,9 @@ import com.flowcentraltech.flowcentral.configuration.constants.TabContentType;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.UplBinding;
+import com.tcdng.unify.core.data.BeanValueStore;
 import com.tcdng.unify.core.data.IndexedTarget;
+import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.web.annotation.Action;
@@ -1029,8 +1032,16 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
     private void processTableActionResult(TableActionResult result) throws UnifyException {
         if (result != null) {
             if (result.isOpenTab()) {
-                setRequestAttribute(AppletRequestAttributeConstants.OPEN_TAB_PATH, (String) result.getResult());
-                setRequestAttribute(AppletRequestAttributeConstants.OPEN_TAB_NAME, result.getTabName());
+                final FormDef formDef = au().getFormDef(getEntityFormApplet().getFormAppletDef()
+                        .getPropValue(String.class, AppletPropertyConstants.MAINTAIN_FORM));
+                final ValueStoreReader reader = new BeanValueStore(result.getInst()).getReader();
+                final String title = formDef.isWithTitleFormat()
+                        ? getEntityFormApplet().au().specialParamProvider()
+                                .getStringGenerator(reader, reader, formDef.getTitleFormat()).generate()
+                        : null;
+                RequestOpenTabInfo requestOpenTabInfo = new RequestOpenTabInfo(title, result.getTabName(),
+                        (String) result.getResult());
+                setRequestAttribute(AppletRequestAttributeConstants.OPEN_TAB_INFO, requestOpenTabInfo);
                 setCommandResultMapping(ApplicationResultMappingConstants.OPEN_MANAGE_ENTITY_IN_NEW_TAB);
             } else if (result.isOpenPath()) {
                 setCommandOpenPath((String) result.getResult());

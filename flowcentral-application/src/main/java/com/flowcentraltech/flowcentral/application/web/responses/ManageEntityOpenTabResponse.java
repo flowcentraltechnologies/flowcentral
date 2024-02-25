@@ -18,11 +18,12 @@ package com.flowcentraltech.flowcentral.application.web.responses;
 
 import com.flowcentraltech.flowcentral.application.constants.AppletRequestAttributeConstants;
 import com.flowcentraltech.flowcentral.application.constants.AppletSessionAttributeConstants;
+import com.flowcentraltech.flowcentral.application.data.RequestOpenTabInfo;
+import com.flowcentraltech.flowcentral.application.data.SessionOpenTabInfo;
 import com.flowcentraltech.flowcentral.application.util.ApplicationPageUtils;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.constant.MimeType;
-import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.ui.AbstractOpenWindowPageControllerResponse;
 
 /**
@@ -36,15 +37,16 @@ public class ManageEntityOpenTabResponse extends AbstractOpenWindowPageControlle
 
     @Override
     protected WindowResourceInfo prepareWindowResource() throws UnifyException {
-        final String openTabPath = (String) getRequestAttribute(AppletRequestAttributeConstants.OPEN_TAB_PATH);
-        if (!StringUtils.isBlank(openTabPath)) {
-            logDebug("Preparing open tab for path [{0}] ...", openTabPath);
-            final String openTabName = (String) getRequestAttribute(AppletRequestAttributeConstants.OPEN_TAB_NAME);
-            final String apath = ApplicationPageUtils.constructAppletPath("/application/manageentity", openTabName);
-            setSessionAttribute(AppletSessionAttributeConstants.OPEN_DOC_PATH, apath);
-            setSessionAttribute(AppletSessionAttributeConstants.OPEN_TAB_PATH, openTabPath);
-            WindowResourceInfo info = new WindowResourceInfo(openTabPath, apath, openTabName,
-                    MimeType.TEXT_HTML.template(), false);
+        final RequestOpenTabInfo requestOpenTabInfo = (RequestOpenTabInfo) getRequestAttribute(
+                AppletRequestAttributeConstants.OPEN_TAB_INFO);
+        if (requestOpenTabInfo != null) {
+            logDebug("Preparing open tab for path [{0}] ...", requestOpenTabInfo.getContentPath());
+            final String docpath = ApplicationPageUtils.constructAppletPath("/application/manageentity",
+                    requestOpenTabInfo.getTabName());
+            setSessionAttribute(AppletSessionAttributeConstants.OPEN_TAB_INFO, new SessionOpenTabInfo(
+                    requestOpenTabInfo.getTitle(), docpath, requestOpenTabInfo.getContentPath()));
+            WindowResourceInfo info = new WindowResourceInfo(requestOpenTabInfo.getContentPath(), docpath,
+                    requestOpenTabInfo.getTabName(), MimeType.TEXT_HTML.template(), false);
             info.setOpenInTab(true);
             return info;
         }

@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.application.web.controllers;
 
 import com.flowcentraltech.flowcentral.application.constants.AppletSessionAttributeConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationResultMappingConstants;
+import com.flowcentraltech.flowcentral.application.data.SessionOpenTabInfo;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Singleton;
@@ -41,7 +42,7 @@ import com.tcdng.unify.web.ui.AbstractPageController;
 @UplBinding("web/application/upl/applicationmanageentity.upl")
 @ResultMappings({
     @ResultMapping(name = ApplicationResultMappingConstants.REFRESH_CONTENT,
-            response = { "!hidepopupresponse", "!refreshpanelresponse panels:$l{content}" }) })
+        response = { "!hidepopupresponse", "!refreshpanelresponse panels:$l{content}" }) })
 public class ApplicationManageEntityController extends AbstractPageController<ApplicationManageEntityPageBean> {
 
     public ApplicationManageEntityController() {
@@ -59,10 +60,11 @@ public class ApplicationManageEntityController extends AbstractPageController<Ap
         super.onInitPage();
         ApplicationManageEntityPageBean pageBean = getPageBean();
         if (pageBean.getDocumentPath() == null) {
-            final String documentPath = (String) removeSessionAttribute(AppletSessionAttributeConstants.OPEN_DOC_PATH);
-            final String contentPath = (String) removeSessionAttribute(AppletSessionAttributeConstants.OPEN_TAB_PATH);
-            pageBean.setDocumentPath(documentPath);
-            pageBean.setContentPaths(new String[] { contentPath });
+            final SessionOpenTabInfo sessionOpenTabInfo = (SessionOpenTabInfo) removeSessionAttribute(
+                    AppletSessionAttributeConstants.OPEN_TAB_INFO);
+            pageBean.setEntityTitle(sessionOpenTabInfo.getTitle());
+            pageBean.setDocumentPath(sessionOpenTabInfo.getDocumentPath());
+            pageBean.setContentPaths(new String[] { sessionOpenTabInfo.getContentPath() });
         }
     }
 

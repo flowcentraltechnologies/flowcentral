@@ -383,14 +383,14 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         if (entitySearch.isViewItemsInSeparateTabs()) {
             final String openPath = ApplicationPageUtils.constructAppletOpenPagePath(AppletType.CREATE_ENTITY,
                     getAppletName());
-            TableActionResult result = new TableActionResult(openPath);
+            TableActionResult result = new TableActionResult(null, openPath);
             result.setOpenPath(true);
             return result;
         }
 
         form = constructNewForm(FormMode.CREATE, null, false);
         viewMode = ViewMode.NEW_FORM;
-        return new TableActionResult();
+        return new TableActionResult(null);
     }
 
     public void newChildItem(int childTabIndex) throws UnifyException {
@@ -671,7 +671,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
             final String appletName = getAppletName();
             final String openPath = ApplicationPageUtils.constructAppletOpenPagePath(AppletType.CREATE_ENTITY,
                     appletName, _inst.getId());
-            TableActionResult result = new TableActionResult(openPath);
+            TableActionResult result = new TableActionResult(_inst, openPath);
             result.setOpenPath(true);
 
             // TODO Condition
@@ -708,7 +708,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
                     : new ListingRedirect(getAppletName(), (Long) _inst.getId());
             final String openPath = ApplicationPageUtils.constructAppletOpenPagePath(AppletType.LISTING,
                     listingRedirect.getTargetAppletName(), listingRedirect.getTargetInstId());
-            TableActionResult result = new TableActionResult(openPath);
+            TableActionResult result = new TableActionResult(_inst, openPath);
             result.setOpenPath(true);
             return result;
         }

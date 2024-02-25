@@ -156,7 +156,7 @@ public class ManageLoadingListApplet extends AbstractEntityFormApplet {
                         item.getListingGenerator());
                 Report report = generator.generateHtmlReport(new BeanValueStore(item.getEntity()).getReader(),
                         item.getListingOptions());
-                TableActionResult result = new TableActionResult(report);
+                TableActionResult result = new TableActionResult(item.getEntity(), report);
                 result.setDisplayListingReport(true);
                 return result;
             }
@@ -226,7 +226,7 @@ public class ManageLoadingListApplet extends AbstractEntityFormApplet {
             takeSingleFormAuditSnapshot(AuditEventType.VIEW);
         }
 
-        TableActionResult result = new TableActionResult();
+        TableActionResult result = new TableActionResult(item.getEntity());
         result.setRefreshContent(true);
         return result;
     }

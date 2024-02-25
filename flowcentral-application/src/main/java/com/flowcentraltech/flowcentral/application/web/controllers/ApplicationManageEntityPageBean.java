@@ -26,9 +26,19 @@ import com.tcdng.unify.web.ui.AbstractPageBean;
  */
 public class ApplicationManageEntityPageBean extends AbstractPageBean {
 
+    private String entityTitle;
+
     private String documentPath;
 
     private String[] contentPaths;
+
+    public String getEntityTitle() {
+        return entityTitle;
+    }
+
+    public void setEntityTitle(String entityTitle) {
+        this.entityTitle = entityTitle;
+    }
 
     public String getDocumentPath() {
         return documentPath;

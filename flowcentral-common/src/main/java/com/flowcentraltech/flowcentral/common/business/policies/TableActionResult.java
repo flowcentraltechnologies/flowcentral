@@ -15,6 +15,8 @@
  */
 package com.flowcentraltech.flowcentral.common.business.policies;
 
+import com.tcdng.unify.core.database.Entity;
+
 /**
  * Table action result
  * 
@@ -23,6 +25,8 @@ package com.flowcentraltech.flowcentral.common.business.policies;
  */
 public class TableActionResult {
 
+    private Entity inst;
+    
     private Object result;
 
     private String tabName;
@@ -35,12 +39,17 @@ public class TableActionResult {
     
     private boolean displayListingReport;
 
-    public TableActionResult(Object result) {
+    public TableActionResult(Entity inst, Object result) {
+        this.inst = inst;
         this.result = result;
     }
 
-    public TableActionResult() {
-        
+    public TableActionResult(Entity inst) {
+        this.inst = inst;
+    }
+
+    public Entity getInst() {
+        return inst;
     }
 
     public Object getResult() {

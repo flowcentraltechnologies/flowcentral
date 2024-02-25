@@ -13,16 +13,38 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-
-package com.flowcentraltech.flowcentral.application.constants;
+package com.flowcentraltech.flowcentral.application.data;
 
 /**
- * Applet session attribute constants
+ * Session open tab information.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface AppletSessionAttributeConstants {
-    
-    String OPEN_TAB_INFO = "app:session:opentabinfo";
+public class SessionOpenTabInfo {
+
+    private String title;
+
+    private String documentPath;
+
+    private String contentPath;
+
+    public SessionOpenTabInfo(String title, String documentPath, String contentPath) {
+        this.title = title;
+        this.documentPath = documentPath;
+        this.contentPath = contentPath;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getDocumentPath() {
+        return documentPath;
+    }
+
+    public String getContentPath() {
+        return contentPath;
+    }
+        
 }
