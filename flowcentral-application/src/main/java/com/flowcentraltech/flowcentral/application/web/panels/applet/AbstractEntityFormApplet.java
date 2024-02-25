@@ -27,6 +27,7 @@ import com.flowcentraltech.flowcentral.application.business.AttachmentsProvider;
 import com.flowcentraltech.flowcentral.application.constants.AppletPropertyConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleErrorConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleNameConstants;
+import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.application.constants.WorkflowDraftType;
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.data.AppletFilterDef;
@@ -674,10 +675,14 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
             TableActionResult result = new TableActionResult(_inst, openPath);
             result.setOpenPath(true);
 
-            // TODO Condition
-            final String tabName = ApplicationNameUtils.addVestigialNamePart(appletName, String.valueOf(_inst.getId()));
-            result.setTabName(tabName);
-            result.setOpenTab(true);
+            if (au().system().getSysParameterValue(boolean.class,
+                    ApplicationModuleSysParamConstants.ENABLE_OPEN_TAB_IN_BROWSER)) {
+                final String tabName = ApplicationNameUtils.addVestigialNamePart(appletName,
+                        String.valueOf(_inst.getId()));
+                result.setTabName(tabName);
+                result.setOpenTab(true);
+            }
+
             return result;
         }
 
