@@ -15,6 +15,8 @@
  */
 package com.flowcentraltech.flowcentral.common.business.policies;
 
+import com.tcdng.unify.core.database.Entity;
+
 /**
  * Table action result
  * 
@@ -23,24 +25,43 @@ package com.flowcentraltech.flowcentral.common.business.policies;
  */
 public class TableActionResult {
 
+    private Entity inst;
+    
     private Object result;
+
+    private String tabName;
     
     private boolean refreshContent;
+    
+    private boolean openTab;
     
     private boolean openPath;
     
     private boolean displayListingReport;
 
-    public TableActionResult(Object result) {
+    public TableActionResult(Entity inst, Object result) {
+        this.inst = inst;
         this.result = result;
     }
 
-    public TableActionResult() {
-        
+    public TableActionResult(Entity inst) {
+        this.inst = inst;
+    }
+
+    public Entity getInst() {
+        return inst;
     }
 
     public Object getResult() {
         return result;
+    }
+
+    public String getTabName() {
+        return tabName;
+    }
+
+    public void setTabName(String tabName) {
+        this.tabName = tabName;
     }
 
     public boolean isRefreshContent() {
@@ -49,6 +70,18 @@ public class TableActionResult {
 
     public void setRefreshContent(boolean refreshContent) {
         this.refreshContent = refreshContent;
+    }
+
+    public boolean isOpenTab() {
+        return openTab;
+    }
+
+    public void setOpenTab(boolean openTab) {
+        this.openTab = openTab;
+    }
+
+    public void setResult(Object result) {
+        this.result = result;
     }
 
     public boolean isOpenPath() {

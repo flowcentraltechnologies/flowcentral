@@ -91,6 +91,7 @@ public class MyWorkItemsLoadingTableProvider extends AbstractApplicationLoadingT
     @Override
     public List<? extends Entity> getLoadingItems(LoadingParams params) throws UnifyException {
         WorkflowStepInfo workflowStepInfo = getParameter(WorkflowStepInfo.class);
+        logDebug("Loading items with workflow step info [{0}]...", workflowStepInfo);
         WfItemQuery _query = new WfItemQuery().workflowName(workflowStepInfo.getWorkflowLongName())
                 .wfStepName(workflowStepInfo.getStepName());
         if (workflowStepInfo.isWithBranchCode()) {
@@ -102,6 +103,7 @@ public class MyWorkItemsLoadingTableProvider extends AbstractApplicationLoadingT
         }
 
         List<Long> workItemIdList = environment().valueList(Long.class, "workRecId", _query);
+        logDebug("Including work items with ID in [{0}]...", workItemIdList);
         if (!DataUtils.isBlank(workItemIdList)) {
             Query<? extends Entity> query = application().queryOf(getSourceEntity());
             if (params.isWithRestriction()) {

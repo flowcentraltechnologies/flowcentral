@@ -33,4 +33,7 @@ public interface AppletRequestAttributeConstants {
     String CHILDLIST_EDIT_ACTIONPATH = "childlist.edit.actionpath";
     
     String MAINFORM_PUSH_COMPONENTS = "mainform.push.components";
+    
+    String OPEN_TAB_INFO= "app:opentabinfo";
+
 }

@@ -15,6 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.application.web.controllers;
 
+import com.flowcentraltech.flowcentral.application.constants.ApplicationResultMappingConstants;
 import com.flowcentraltech.flowcentral.application.data.EntityFormEventHandlers;
 import com.flowcentraltech.flowcentral.application.web.panels.applet.ManageEntityListApplet;
 import com.tcdng.unify.core.UnifyException;
@@ -35,7 +36,7 @@ import com.tcdng.unify.web.constant.Secured;
  */
 @Component("/manageentitylistapplet")
 @UplBinding("web/application/upl/manageentitylistappletpage.upl")
-@ResultMappings({ @ResultMapping(name = "showfileattachments",
+@ResultMappings({ @ResultMapping(name = ApplicationResultMappingConstants.SHOW_FILE_ATTACHMENTS,
         response = { "!validationerrorresponse", "!showpopupresponse popup:$s{fileAttachmentsPopup}" }) })
 public class ManageEntityListAppletController
         extends AbstractEntityFormAppletController<ManageEntityListApplet, ManageEntityListAppletPageBean> {
@@ -57,8 +58,8 @@ public class ManageEntityListAppletController
         if (pageBean.getApplet() == null) {
             AppletWidgetReferences appletWidgetReferences = getAppletWidgetReferences();
             EntityFormEventHandlers formEventHandlers = getEntityFormEventHandlers();
-            ManageEntityListApplet applet = new ManageEntityListApplet(au(), getPathVariable(),
-                    appletWidgetReferences, formEventHandlers);
+            ManageEntityListApplet applet = new ManageEntityListApplet(au(), getPathVariable(), appletWidgetReferences,
+                    formEventHandlers);
             pageBean.setApplet(applet);
             if (pageBean.getAltCaption() == null) {
                 setPageTitle(applet);

@@ -119,5 +119,8 @@
 		<sysParameter code="APP-0024" defaultVal="true"
 			description="$m{application.sysparam.enableparentstateauditing}"
 			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
+		<sysParameter code="APP-0025" defaultVal="false"
+			description="$m{application.sysparam.enableopentabinbrowser}"
+			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
 	</sysParameters>
 </module>

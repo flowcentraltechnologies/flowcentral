@@ -19,6 +19,7 @@ package com.flowcentraltech.flowcentral.application.web.panels.applet;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.constants.AppletPropertyConstants;
+import com.flowcentraltech.flowcentral.application.constants.AppletRequestAttributeConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationResultMappingConstants;
 import com.flowcentraltech.flowcentral.application.constants.WorkflowDraftType;
@@ -27,6 +28,7 @@ import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.FormActionDef;
 import com.flowcentraltech.flowcentral.application.data.FormDef;
 import com.flowcentraltech.flowcentral.application.data.FormTabDef;
+import com.flowcentraltech.flowcentral.application.data.RequestOpenTabInfo;
 import com.flowcentraltech.flowcentral.application.data.TabDef;
 import com.flowcentraltech.flowcentral.application.data.WorkflowDraftInfo;
 import com.flowcentraltech.flowcentral.application.entities.BaseApplicationEntity;
@@ -57,11 +59,14 @@ import com.flowcentraltech.flowcentral.configuration.constants.TabContentType;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.UplBinding;
+import com.tcdng.unify.core.data.BeanValueStore;
 import com.tcdng.unify.core.data.IndexedTarget;
+import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.web.annotation.Action;
 import com.tcdng.unify.web.constant.ResultMappingConstants;
+import com.tcdng.unify.web.ui.PageAttributeConstants;
 import com.tcdng.unify.web.ui.constant.MessageType;
 import com.tcdng.unify.web.ui.widget.Panel;
 import com.tcdng.unify.web.ui.widget.data.Hint.MODE;
@@ -125,6 +130,8 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
             appCtx.setInWorkflow(isInWorkflow);
         }
 
+        final boolean closable = !(isRootForm
+                && getPageAttribute(boolean.class, PageAttributeConstants.IN_DETACHED_WINDOW));
         final boolean isContextEditable = appCtx.isContextEditable();
         applet.getFormFileAttachments().setDisabled(!isContextEditable);
         boolean enableSaveAs = false;
@@ -136,7 +143,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         boolean enableUpdateSubmit = false;
         boolean capture = false;
         if (viewMode.isCreateForm()) {
-            EntityDef formEntityDef = form.getFormDef().getEntityDef(); 
+            EntityDef formEntityDef = form.getFormDef().getEntityDef();
             enableCreate = isContextEditable
                     && applicationPrivilegeManager.isRoleWithPrivilege(roleCode, formEntityDef.getAddPrivilege());
             enableCreateSubmit = isRootForm && applet
@@ -314,14 +321,14 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                 switchContent("entryTablePanel");
                 setEditable("entryTablePanel", enableNonFormEdit);
                 setVisible("entryTablePanel.saveBtn", enableNonFormEdit);
-                setVisible("saveEntryCloseBtn", enableNonFormEdit);
+                setVisible("saveEntryCloseBtn", closable && enableNonFormEdit);
                 applet.getEntryTablePage().setDisabled(parentDisabled);
                 break;
             case ASSIGNMENT_PAGE:
                 switchContent("assignmentPanel");
                 setEditable("assignmentPanel", enableNonFormEdit);
                 setVisible("assignmentPanel.saveBtn", enableNonFormEdit);
-                setVisible("saveAssignCloseBtn", enableNonFormEdit);
+                setVisible("saveAssignCloseBtn", closable && enableNonFormEdit);
                 final boolean isEntryMode = applet.getAssignmentPage().isEntryTableMode();
                 setVisible("assignmentPanel.assignmentPage", !isEntryMode);
                 setVisible("assignmentPanel.assignmentEntryTbl", isEntryMode);
@@ -331,15 +338,15 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                 switchContent("editPropertyListPanel");
                 setEditable("editPropertyListPanel", isContextEditable);
                 setVisible("editPropertyListPanel.saveBtn", isContextEditable);
-                setVisible("savePropListCloseBtn", isContextEditable);
+                setVisible("savePropListCloseBtn", closable && isContextEditable);
                 break;
             case SINGLE_FORM:
                 switchContent("singleFormPanel");
-                setVisible("scancelBtn", true);
+                setVisible("scancelBtn", closable);
                 setVisible("sdisplayCounterLabel", isCollaboration);
                 setVisible("supdateBtn", enableUpdate);
-                setVisible("supdateCloseBtn", enableUpdate);
-                setVisible("sdeleteBtn", enableDelete);
+                setVisible("supdateCloseBtn", closable && enableUpdate);
+                setVisible("sdeleteBtn", closable && enableDelete);
                 setEditable("singleFormPanel", enableUpdate);
                 addPanelToPushComponents("singleFormPanel", enableUpdate);
                 break;
@@ -356,24 +363,26 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
             case MAINTAIN_FORM_SCROLL:
             case MAINTAIN_PRIMARY_FORM_NO_SCROLL:
                 switchContent("formPanel");
-                setVisible("cancelBtn", true);
+                setVisible("cancelBtn", closable);
                 setVisible("saveBtn", false);
                 setVisible("saveNextBtn", false);
                 setVisible("saveCloseBtn", false);
                 setVisible("submitCloseBtn",
-                        (enableUpdate && isWorkflowCopyForm && isUpdateDraft && !isInWorkflow)
+                        closable && (enableUpdate && isWorkflowCopyForm && isUpdateDraft && !isInWorkflow)
                                 || (enableUpdateSubmit && formAppletDef.getPropValue(boolean.class,
                                         AppletPropertyConstants.MAINTAIN_FORM_SUBMIT, false)));
                 setVisible("submitNextBtn", !isWorkflowCopyForm && enableUpdateSubmit && formAppletDef
                         .getPropValue(boolean.class, AppletPropertyConstants.MAINTAIN_FORM_SUBMIT_NEXT, false));
                 setDisabled("prevBtn", viewMode.isScroll() && !applet.isPrevNav());
                 setDisabled("nextBtn", viewMode.isScroll() && !applet.isNextNav());
+                setVisible("prevBtn", closable);  
+                setVisible("nextBtn", closable);                  
                 setVisible("formAttachmentBtn", enableAttachment);
                 setVisible("saveAsBtn", enableSaveAs && !isWorkflowCopyForm);
                 setVisible("updateBtn", enableUpdate);
-                setVisible("updateCloseBtn", enableUpdate);
-                setVisible("deleteBtn",
-                        enableDelete || (enableUpdate && isWorkflowCopyForm && isUpdateDraft && !isInWorkflow));
+                setVisible("updateCloseBtn", closable && enableUpdate);
+                setVisible("deleteBtn", closable && enableDelete
+                        || (enableUpdate && isWorkflowCopyForm && isUpdateDraft && !isInWorkflow));
 
                 if (viewMode.isScroll()) {
                     setVisible("displayCounterLabel", true);
@@ -392,7 +401,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                 if (form.isWithAttachments()) {
                     form.getAttachments().setEditable(enableUpdate);
                 }
-                
+
                 setEditable("formPanel", enableUpdate);
                 addPanelToPushComponents("formPanel", enableUpdate);
                 break;
@@ -400,7 +409,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
             case MAINTAIN_RELATEDLIST_FORM_NO_SCROLL:
             case MAINTAIN_HEADLESSLIST_FORM_NO_SCROLL:
                 switchContent("formPanel");
-                setVisible("cancelBtn", true);
+                setVisible("cancelBtn", closable);
                 setVisible("saveBtn", false);
                 setVisible("saveNextBtn", false);
                 setVisible("saveCloseBtn", false);
@@ -412,12 +421,12 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                 setVisible("formAttachmentBtn", enableAttachment);
                 setVisible("saveAsBtn", enableSaveAs);
                 setVisible("updateBtn", enableUpdate);
-                setVisible("updateCloseBtn", enableUpdate);
-                setVisible("deleteBtn", enableDelete);
+                setVisible("updateCloseBtn", closable && enableUpdate);
+                setVisible("deleteBtn", closable && enableDelete);
                 if (form.isWithAttachments()) {
                     form.getAttachments().setEditable(enableUpdate);
                 }
-                
+
                 setEditable("formPanel", enableUpdate);
                 addPanelToPushComponents("formPanel", enableUpdate);
                 break;
@@ -426,12 +435,12 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
             case MAINTAIN_RELATEDLIST_FORM:
             case MAINTAIN_HEADLESSLIST_FORM:
                 switchContent("formPanel");
-                setVisible("cancelBtn", true);
+                setVisible("cancelBtn", closable);
                 setVisible("saveBtn", false);
                 setVisible("saveNextBtn", false);
                 setVisible("saveCloseBtn", false);
                 setVisible("submitCloseBtn",
-                        (enableUpdate && isWorkflowCopyForm && isUpdateDraft && !isInWorkflow)
+                        closable && (enableUpdate && isWorkflowCopyForm && isUpdateDraft && !isInWorkflow)
                                 || (enableUpdateSubmit && formAppletDef.getPropValue(boolean.class,
                                         AppletPropertyConstants.MAINTAIN_FORM_SUBMIT, false)));
                 setVisible("submitNextBtn", !isWorkflowCopyForm && enableUpdateSubmit && formAppletDef
@@ -442,9 +451,9 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                 setVisible("formAttachmentBtn", enableAttachment);
                 setVisible("saveAsBtn", enableSaveAs && !isWorkflowCopyForm);
                 setVisible("updateBtn", enableUpdate);
-                setVisible("updateCloseBtn", enableUpdate);
-                setVisible("deleteBtn",
-                        enableDelete || (enableUpdate && isWorkflowCopyForm && isUpdateDraft && !isInWorkflow));
+                setVisible("updateCloseBtn", closable && enableUpdate);
+                setVisible("deleteBtn", closable && enableDelete
+                        || (enableUpdate && isWorkflowCopyForm && isUpdateDraft && !isInWorkflow));
 
                 if (isWorkflowCopyForm) {
                     form.setSubmitCaption(resolveSessionMessage("$m{button.submitforapproval}"));
@@ -454,7 +463,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                 if (form.isWithAttachments()) {
                     form.getAttachments().setEditable(enableUpdate);
                 }
-                
+
                 setEditable("formPanel", enableUpdate);
                 addPanelToPushComponents("formPanel", enableUpdate);
                 break;
@@ -466,24 +475,24 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
             case NEW_RELATEDLIST_FORM:
             case NEW_HEADLESSLIST_FORM:
                 switchContent("formPanel");
-                setVisible("cancelBtn", true);
+                setVisible("cancelBtn", closable);
                 final boolean allowSaveAndNext = viewMode != AbstractEntityFormApplet.ViewMode.NEW_CHILD_FORM;
                 if (enableCreate && !isWorkflowCopyForm && formAppletDef != null) {
                     setVisible("saveBtn",
                             formAppletDef.getPropValue(boolean.class, AppletPropertyConstants.CREATE_FORM_SAVE, false));
-                    setVisible("saveNextBtn", allowSaveAndNext && formAppletDef.getPropValue(boolean.class,
+                    setVisible("saveNextBtn", closable && allowSaveAndNext && formAppletDef.getPropValue(boolean.class,
                             AppletPropertyConstants.CREATE_FORM_SAVE_NEXT, false));
-                    setVisible("saveCloseBtn", formAppletDef.getPropValue(boolean.class,
+                    setVisible("saveCloseBtn", closable && formAppletDef.getPropValue(boolean.class,
                             AppletPropertyConstants.CREATE_FORM_SAVE_CLOSE, false));
-                    setVisible("submitCloseBtn", enableCreateSubmit && formAppletDef.getPropValue(boolean.class,
-                            AppletPropertyConstants.CREATE_FORM_SUBMIT, false));
-                    setVisible("submitNextBtn", enableCreateSubmit && formAppletDef.getPropValue(boolean.class,
-                            AppletPropertyConstants.CREATE_FORM_SUBMIT_NEXT, false));
+                    setVisible("submitCloseBtn", closable && enableCreateSubmit && formAppletDef
+                            .getPropValue(boolean.class, AppletPropertyConstants.CREATE_FORM_SUBMIT, false));
+                    setVisible("submitNextBtn", closable && enableCreateSubmit && formAppletDef
+                            .getPropValue(boolean.class, AppletPropertyConstants.CREATE_FORM_SUBMIT_NEXT, false));
                 } else {
                     setVisible("saveBtn", enableCreate && (isWorkflowCopyForm || formAppletDef == null));
                     setVisible("saveNextBtn", false);
                     setVisible("saveCloseBtn", false);
-                    setVisible("submitCloseBtn", enableCreate && isWorkflowCopyForm);
+                    setVisible("submitCloseBtn", closable && enableCreate && isWorkflowCopyForm);
                     setVisible("submitNextBtn", false);
                 }
 
@@ -504,7 +513,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                 if (form.isWithAttachments()) {
                     form.getAttachments().setEditable(true);
                 }
-                
+
                 setEditable("formPanel", true);
                 addPanelToPushComponents("formPanel", true);
                 break;
@@ -1019,7 +1028,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         setCommandResultMapping(entityActionResult, true);
     }
 
-    private void performEditModeWorkflowDraft() throws UnifyException { 
+    private void performEditModeWorkflowDraft() throws UnifyException {
         AbstractEntityFormApplet applet = getEntityFormApplet();
         WorkflowDraftInfo workflowDraftInfo = applet.getWorkflowDraftInfo();
         applet.enterWorkflowDraft(workflowDraftInfo.getType());
@@ -1027,7 +1036,19 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
 
     private void processTableActionResult(TableActionResult result) throws UnifyException {
         if (result != null) {
-            if (result.isOpenPath()) {
+            if (result.isOpenTab()) {
+                final FormDef formDef = au().getFormDef(getEntityFormApplet().getFormAppletDef()
+                        .getPropValue(String.class, AppletPropertyConstants.MAINTAIN_FORM));
+                final ValueStoreReader reader = new BeanValueStore(result.getInst()).getReader();
+                final String title = formDef.isWithTitleFormat()
+                        ? getEntityFormApplet().au().specialParamProvider()
+                                .getStringGenerator(reader, reader, formDef.getTitleFormat()).generate()
+                        : null;
+                RequestOpenTabInfo requestOpenTabInfo = new RequestOpenTabInfo(title, result.getTabName(),
+                        (String) result.getResult());
+                setRequestAttribute(AppletRequestAttributeConstants.OPEN_TAB_INFO, requestOpenTabInfo);
+                setCommandResultMapping(ApplicationResultMappingConstants.OPEN_MANAGE_ENTITY_IN_NEW_TAB);
+            } else if (result.isOpenPath()) {
                 setCommandOpenPath((String) result.getResult());
             } else if (result.isDisplayListingReport()) {
                 setRequestAttribute(FlowCentralRequestAttributeConstants.REPORT, result.getResult());

@@ -214,7 +214,7 @@ public abstract class AbstractApplet {
         }
     }
 
-    protected FormDef getPreferredForm(PreferredFormType type, AppletDef appletDef, Entity inst, String formProperty)
+    public FormDef getPreferredForm(PreferredFormType type, AppletDef appletDef, Entity inst, String formProperty)
             throws UnifyException {
         if (appletDef.isWithPreferredFormFilters()) {
             final Date now = au.getNow();

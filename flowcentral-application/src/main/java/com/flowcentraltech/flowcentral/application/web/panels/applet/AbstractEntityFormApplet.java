@@ -27,6 +27,7 @@ import com.flowcentraltech.flowcentral.application.business.AttachmentsProvider;
 import com.flowcentraltech.flowcentral.application.constants.AppletPropertyConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleErrorConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleNameConstants;
+import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.application.constants.WorkflowDraftType;
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.data.AppletFilterDef;
@@ -383,14 +384,14 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         if (entitySearch.isViewItemsInSeparateTabs()) {
             final String openPath = ApplicationPageUtils.constructAppletOpenPagePath(AppletType.CREATE_ENTITY,
                     getAppletName());
-            TableActionResult result = new TableActionResult(openPath);
+            TableActionResult result = new TableActionResult(null, openPath);
             result.setOpenPath(true);
             return result;
         }
 
         form = constructNewForm(FormMode.CREATE, null, false);
         viewMode = ViewMode.NEW_FORM;
-        return new TableActionResult();
+        return new TableActionResult(null);
     }
 
     public void newChildItem(int childTabIndex) throws UnifyException {
@@ -668,10 +669,20 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         this.mIndex = mIndex;
         Entity _inst = getEntitySearchItem(entitySearch, mIndex).getEntity();
         if (entitySearch.isViewItemsInSeparateTabs()) {
+            final String appletName = getAppletName();
             final String openPath = ApplicationPageUtils.constructAppletOpenPagePath(AppletType.CREATE_ENTITY,
-                    getAppletName(), _inst.getId());
-            TableActionResult result = new TableActionResult(openPath);
+                    appletName, _inst.getId());
+            TableActionResult result = new TableActionResult(_inst, openPath);
             result.setOpenPath(true);
+
+            if (au().system().getSysParameterValue(boolean.class,
+                    ApplicationModuleSysParamConstants.ENABLE_OPEN_TAB_IN_BROWSER)) {
+                final String tabName = ApplicationNameUtils.addVestigialNamePart(appletName,
+                        String.valueOf(_inst.getId()));
+                result.setTabName(tabName);
+                result.setOpenTab(true);
+            }
+
             return result;
         }
 
@@ -702,7 +713,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
                     : new ListingRedirect(getAppletName(), (Long) _inst.getId());
             final String openPath = ApplicationPageUtils.constructAppletOpenPagePath(AppletType.LISTING,
                     listingRedirect.getTargetAppletName(), listingRedirect.getTargetInstId());
-            TableActionResult result = new TableActionResult(openPath);
+            TableActionResult result = new TableActionResult(_inst, openPath);
             result.setOpenPath(true);
             return result;
         }
