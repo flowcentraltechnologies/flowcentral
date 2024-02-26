@@ -1206,12 +1206,16 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         final EntityClassDef entityClassDef = appletUtil.getEntityClassDef(wfDef.getEntity());
         WorkEntity wfEntityInst = (WorkEntity) environment()
                 .list((Class<? extends WorkEntity>) entityClassDef.getEntityClass(), wfItem.getWorkRecId());
-        final UserToken userToken = UserToken.newBuilder().userLoginId(wfItem.getForwardedBy())
-                .userName(wfItem.getForwardedByName()).tenantId(wfItem.getTenantId())
-                .branchCode(wfEntityInst.getWorkBranchCode())
-                .reservedUser(DefaultApplicationConstants.SYSTEM_LOGINID.equals(wfItem.getForwardedBy())).build();
-        getSessionContext().setUserToken(userToken);
-        return doWfTransition(new TransitionItem(wfItem, wfDef, wfEntityInst));
+        if (wfEntityInst != null) {
+            final UserToken userToken = UserToken.newBuilder().userLoginId(wfItem.getForwardedBy())
+                    .userName(wfItem.getForwardedByName()).tenantId(wfItem.getTenantId())
+                    .branchCode(wfEntityInst.getWorkBranchCode())
+                    .reservedUser(DefaultApplicationConstants.SYSTEM_LOGINID.equals(wfItem.getForwardedBy())).build();
+            getSessionContext().setUserToken(userToken);
+            return doWfTransition(new TransitionItem(wfItem, wfDef, wfEntityInst));
+        }
+
+        return true;
     }
 
     @Override
