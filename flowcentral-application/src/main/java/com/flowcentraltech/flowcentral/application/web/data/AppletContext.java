@@ -56,6 +56,8 @@ public class AppletContext extends AbstractContext {
 
     private boolean auditingEnabled;
 
+    private boolean inDetachedWindow;
+
     private final boolean parentStateAuditingEnabled;
 
     private boolean readOnly;
@@ -171,6 +173,14 @@ public class AppletContext extends AbstractContext {
 
     public void setAuditingEnabled(boolean auditingEnabled) {
         this.auditingEnabled = auditingEnabled;
+    }
+
+    public boolean isInDetachedWindow() {
+        return inDetachedWindow;
+    }
+
+    public void setInDetachedWindow(boolean inDetachedWindow) {
+        this.inDetachedWindow = inDetachedWindow;
     }
 
     public boolean isRootFormUpdateDraft() {
