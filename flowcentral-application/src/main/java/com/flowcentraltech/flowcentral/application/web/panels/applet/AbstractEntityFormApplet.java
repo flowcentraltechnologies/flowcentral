@@ -382,10 +382,18 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
 
     public TableActionResult newEntityInst() throws UnifyException {
         if (entitySearch.isViewItemsInSeparateTabs()) {
+            final String appletName = getAppletName();
             final String openPath = ApplicationPageUtils.constructAppletOpenPagePath(AppletType.CREATE_ENTITY,
-                    getAppletName());
+                    appletName);
             TableActionResult result = new TableActionResult(null, openPath);
             result.setOpenPath(true);
+
+            if (au().system().getSysParameterValue(boolean.class,
+                    ApplicationModuleSysParamConstants.ENABLE_OPEN_TAB_IN_BROWSER)) {
+                result.setTabName(appletName);
+                result.setOpenTab(true);
+            }
+
             return result;
         }
 
@@ -831,6 +839,10 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
     }
 
     public EntityActionResult submitInst() throws UnifyException {
+        if (getCtx().isInDetachedWindow()) {
+            return submitInstAndNext();
+        }
+        
         return submitInst(ActionMode.ACTION_AND_CLOSE, FormReviewType.ON_SUBMIT);
     }
 

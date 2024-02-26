@@ -35,6 +35,7 @@ import com.flowcentraltech.flowcentral.application.entities.BaseApplicationEntit
 import com.flowcentraltech.flowcentral.application.web.data.AppletContext;
 import com.flowcentraltech.flowcentral.application.web.data.FormContext;
 import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm;
+import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm.FormMode;
 import com.flowcentraltech.flowcentral.application.web.panels.EditPropertyList;
 import com.flowcentraltech.flowcentral.application.web.panels.EntitySaveAs;
 import com.flowcentraltech.flowcentral.application.web.panels.EntitySearchValueMarkerConstants;
@@ -130,8 +131,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
             appCtx.setInWorkflow(isInWorkflow);
         }
 
-        final boolean closable = !(isRootForm
-                && getPageAttribute(boolean.class, PageAttributeConstants.IN_DETACHED_WINDOW));
+        final boolean closable = !(isRootForm && appCtx.isInDetachedWindow());
         final boolean isContextEditable = appCtx.isContextEditable();
         applet.getFormFileAttachments().setDisabled(!isContextEditable);
         boolean enableSaveAs = false;
@@ -368,15 +368,15 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                 setVisible("saveNextBtn", false);
                 setVisible("saveCloseBtn", false);
                 setVisible("submitCloseBtn",
-                        closable && (enableUpdate && isWorkflowCopyForm && isUpdateDraft && !isInWorkflow)
+                        (enableUpdate && isWorkflowCopyForm && isUpdateDraft && !isInWorkflow)
                                 || (enableUpdateSubmit && formAppletDef.getPropValue(boolean.class,
                                         AppletPropertyConstants.MAINTAIN_FORM_SUBMIT, false)));
                 setVisible("submitNextBtn", !isWorkflowCopyForm && enableUpdateSubmit && formAppletDef
                         .getPropValue(boolean.class, AppletPropertyConstants.MAINTAIN_FORM_SUBMIT_NEXT, false));
                 setDisabled("prevBtn", viewMode.isScroll() && !applet.isPrevNav());
                 setDisabled("nextBtn", viewMode.isScroll() && !applet.isNextNav());
-                setVisible("prevBtn", closable);  
-                setVisible("nextBtn", closable);                  
+                setVisible("prevBtn", closable);
+                setVisible("nextBtn", closable);
                 setVisible("formAttachmentBtn", enableAttachment);
                 setVisible("saveAsBtn", enableSaveAs && !isWorkflowCopyForm);
                 setVisible("updateBtn", enableUpdate);
@@ -440,7 +440,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                 setVisible("saveNextBtn", false);
                 setVisible("saveCloseBtn", false);
                 setVisible("submitCloseBtn",
-                        closable && (enableUpdate && isWorkflowCopyForm && isUpdateDraft && !isInWorkflow)
+                        (enableUpdate && isWorkflowCopyForm && isUpdateDraft && !isInWorkflow)
                                 || (enableUpdateSubmit && formAppletDef.getPropValue(boolean.class,
                                         AppletPropertyConstants.MAINTAIN_FORM_SUBMIT, false)));
                 setVisible("submitNextBtn", !isWorkflowCopyForm && enableUpdateSubmit && formAppletDef
@@ -484,10 +484,10 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                             AppletPropertyConstants.CREATE_FORM_SAVE_NEXT, false));
                     setVisible("saveCloseBtn", closable && formAppletDef.getPropValue(boolean.class,
                             AppletPropertyConstants.CREATE_FORM_SAVE_CLOSE, false));
-                    setVisible("submitCloseBtn", closable && enableCreateSubmit && formAppletDef
-                            .getPropValue(boolean.class, AppletPropertyConstants.CREATE_FORM_SUBMIT, false));
-                    setVisible("submitNextBtn", closable && enableCreateSubmit && formAppletDef
-                            .getPropValue(boolean.class, AppletPropertyConstants.CREATE_FORM_SUBMIT_NEXT, false));
+                    setVisible("submitCloseBtn", enableCreateSubmit && formAppletDef.getPropValue(boolean.class,
+                            AppletPropertyConstants.CREATE_FORM_SUBMIT, false));
+                    setVisible("submitNextBtn", enableCreateSubmit && formAppletDef.getPropValue(boolean.class,
+                            AppletPropertyConstants.CREATE_FORM_SUBMIT_NEXT, false));
                 } else {
                     setVisible("saveBtn", enableCreate && (isWorkflowCopyForm || formAppletDef == null));
                     setVisible("saveNextBtn", false);
@@ -532,8 +532,12 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
     @Action
     public void newInst() throws UnifyException {
         TableActionResult result = getEntityFormApplet().newEntityInst();
-        if (result != null && result.isOpenPath()) {
-            setCommandOpenPath((String) result.getResult());
+        if (result != null) {
+            if (result.isOpenTab()) {
+                openInBrowserTab(result, FormMode.MAINTAIN);
+            } else if (result.isOpenPath()) {
+                setCommandOpenPath((String) result.getResult());
+            }
         } else {
             getRequestContextUtil().setContentScrollReset();
         }
@@ -1037,17 +1041,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
     private void processTableActionResult(TableActionResult result) throws UnifyException {
         if (result != null) {
             if (result.isOpenTab()) {
-                final FormDef formDef = au().getFormDef(getEntityFormApplet().getFormAppletDef()
-                        .getPropValue(String.class, AppletPropertyConstants.MAINTAIN_FORM));
-                final ValueStoreReader reader = new BeanValueStore(result.getInst()).getReader();
-                final String title = formDef.isWithTitleFormat()
-                        ? getEntityFormApplet().au().specialParamProvider()
-                                .getStringGenerator(reader, reader, formDef.getTitleFormat()).generate()
-                        : null;
-                RequestOpenTabInfo requestOpenTabInfo = new RequestOpenTabInfo(title, result.getTabName(),
-                        (String) result.getResult());
-                setRequestAttribute(AppletRequestAttributeConstants.OPEN_TAB_INFO, requestOpenTabInfo);
-                setCommandResultMapping(ApplicationResultMappingConstants.OPEN_MANAGE_ENTITY_IN_NEW_TAB);
+                openInBrowserTab(result, FormMode.MAINTAIN);
             } else if (result.isOpenPath()) {
                 setCommandOpenPath((String) result.getResult());
             } else if (result.isDisplayListingReport()) {
@@ -1057,6 +1051,20 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                 setCommandResultMapping(ApplicationResultMappingConstants.REFRESH_CONTENT);
             }
         }
+    }
+
+    private void openInBrowserTab(TableActionResult result, FormMode formMode) throws UnifyException {
+        final FormDef formDef = au().getFormDef(getEntityFormApplet().getFormAppletDef().getPropValue(String.class,
+                formMode.isCreate() ? AppletPropertyConstants.CREATE_FORM : AppletPropertyConstants.MAINTAIN_FORM));
+        final ValueStoreReader reader = new BeanValueStore(result.getInst()).getReader();
+        final String title = formDef.isWithTitleFormat()
+                ? getEntityFormApplet().au().specialParamProvider()
+                        .getStringGenerator(reader, reader, formDef.getTitleFormat()).generate()
+                : null;
+        RequestOpenTabInfo requestOpenTabInfo = new RequestOpenTabInfo(title, result.getTabName(),
+                (String) result.getResult());
+        setRequestAttribute(AppletRequestAttributeConstants.OPEN_TAB_INFO, requestOpenTabInfo);
+        setCommandResultMapping(ApplicationResultMappingConstants.OPEN_MANAGE_ENTITY_IN_NEW_TAB);
     }
 
     private String concatenateMessages(String base, List<String> messages) throws UnifyException {
@@ -1077,7 +1085,9 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
     }
 
     protected AbstractEntityFormApplet getEntityFormApplet() throws UnifyException {
-        return getValue(AbstractEntityFormApplet.class);
+        AbstractEntityFormApplet applet = getValue(AbstractEntityFormApplet.class);
+        applet.getCtx().setInDetachedWindow(getPageAttribute(boolean.class, PageAttributeConstants.IN_DETACHED_WINDOW));
+        return applet;
     }
 
     protected FormContext evaluateCurrentFormContext(EvaluationMode evaluationMode) throws UnifyException {
