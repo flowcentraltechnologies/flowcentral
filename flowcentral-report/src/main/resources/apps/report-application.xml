@@ -147,6 +147,9 @@
 			<field name="title"
 				label="$m{report.reportconfiguration.title}" type="string"
 				maxLen="96" />
+			<field name="summaryDatasource"
+				label="$m{report.reportconfiguration.summarydatasource}" type="string"
+				maxLen="64" nullable="true" />
 			<field name="template"
 				label="$m{report.reportconfiguration.template}" type="string"
 				maxLen="64" nullable="true" />
@@ -505,7 +508,7 @@
 						required="true" />
 					<field name="description" inputWidget="application.text"
 						column="0" required="true" />
-					<field name="label" inputWidget="application.text" column="1"
+					<field name="label" inputWidget="application.text" column="0"
 						required="true" />
 					<field name="status" inputWidget="application.enumlist"
 						column="1" required="true" />

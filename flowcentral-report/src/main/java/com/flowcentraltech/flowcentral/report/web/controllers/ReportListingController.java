@@ -53,7 +53,7 @@ public class ReportListingController extends AbstractPageController<ReportListin
 
     @Configurable
     private ReportModuleService reportModuleService;
-
+    
     public ReportListingController() {
         super(ReportListingPageBean.class, Secured.TRUE, ReadOnly.FALSE, ResetOnWrite.FALSE);
     }
@@ -63,7 +63,7 @@ public class ReportListingController extends AbstractPageController<ReportListin
         String reportConfigName = getPageRequestContextUtil().getRequestTargetValue(String.class);
         ReportOptions reportOptions = reportModuleService.getReportOptionsForConfiguration(reportConfigName);
         reportOptions.setReportResourcePath(reportResourcePath);
-        reportOptions.setUserInputOnly(true);
+        reportOptions.setUserInputOnly(true);      
         return showPopup(new Popup(FlowCentralResultMappingConstants.SHOW_APPLICATION_REPORT_OPTIONS, reportOptions));
     }
 

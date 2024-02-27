@@ -28,6 +28,7 @@ import com.flowcentraltech.flowcentral.chart.entities.ChartSnapshot;
 import com.flowcentraltech.flowcentral.chart.entities.ChartSnapshotQuery;
 import com.flowcentraltech.flowcentral.common.business.FlowCentralService;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.data.Listable;
 
 /**
  * Chart business service.
@@ -179,4 +180,15 @@ public interface ChartModuleService extends FlowCentralService {
      *                        if an error occurs
      */
     void saveChartSnapshot(ChartSnapshot chartSnapshot) throws UnifyException;
+
+    /**
+     * Fetch entity chart data sources.
+     * 
+     * @param entity
+     *               the entity to search with
+     * @return list of chart data sources
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    List<? extends Listable> getEntityChartDataSources(String entity) throws UnifyException;
 }
