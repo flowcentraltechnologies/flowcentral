@@ -325,7 +325,6 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
         return reportOptions;
     }
 
-
     private String resolveFormatter(EntityClassDef entityClassDef, ReportableField reportableField) {
         String formatter = reportableField.getFormatter();
         if (StringUtils.isBlank(formatter)) {
@@ -395,7 +394,7 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
 
         List<ReportColumnOptions> reportColumnOptionsList = new ArrayList<ReportColumnOptions>(
                 reportOptions.getColumnOptionsList());
-        if(!reportOptions.isChartSummary()) {
+        if (!reportOptions.isChartSummary()) {
             DataUtils.sortDescending(reportColumnOptionsList, ReportColumnOptions.class, "group");
         }
 
@@ -673,8 +672,8 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
 
         Long reportableDefinitionId = environment().value(Long.class, "id",
                 new ReportableDefinitionQuery().applicationName(rnp.getApplicationName()).name(rnp.getEntityName()));
-        Map<String, ReportableField> fieldMap = environment().listAllMap(String.class, "name",
-                new ReportableFieldQuery().reportableId(reportableDefinitionId));
+        Map<String, ReportableField> fieldMap = !reportOptions.isChartSummary() ? environment().listAllMap(String.class,
+                "name", new ReportableFieldQuery().reportableId(reportableDefinitionId)) : Collections.emptyMap();
         if (sqlEntityInfo != null) {
             reportOptions.setTableName(sqlEntityInfo.getPreferredViewName());
         }
@@ -802,7 +801,7 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
             Inputs.getTypeValuesByNameIntoMap(reportOptions.getUserInputList(), parameters);
             FilterDef filterDef = InputWidgetUtils.getFilterDef(appletUtilities, null, reportConfiguration.getFilter());
             if (reportOptions.isLetter() || reportOptions.isChartSummary()) {
-                EntityDef entityDef = appletUtilities.application().getEntityDef(entity);
+                final EntityDef entityDef = entityClassDef.getEntityDef();
                 Restriction restriction = filterDef.getRestriction(entityDef, null, getNow(), parameters);
                 reportOptions.setRestriction(restriction);
             } else {
@@ -817,7 +816,7 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
             // TODO Apply restriction to char details provider
             ChartDetails chartDetails = chartDetailsProvider.provide(reportOptions.getSummaryDataSource());
             ChartTableColumn[] tableColumn = chartDetails.getTableHeaders();
-            for (ChartTableColumn _tableColumn: tableColumn) {
+            for (ChartTableColumn _tableColumn : tableColumn) {
                 ReportColumnOptions reportColumnOptions = new ReportColumnOptions();
                 reportColumnOptions.setDescription(_tableColumn.getLabel());
                 reportColumnOptions.setGroup(false);
@@ -835,20 +834,21 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
                 reportColumnOptions.setBold(false);
                 reportOptions.addColumnOptions(reportColumnOptions);
             }
-            
+
             List<Map<String, ?>> content = new ArrayList<Map<String, ?>>();
-            for (Object[] row: chartDetails.getTableSeries()) {
+            for (Object[] row : chartDetails.getTableSeries()) {
                 Map<String, Object> mrow = new HashMap<String, Object>();
                 for (int i = 0; i < row.length; i++) {
-                    mrow.put(tableColumn[i].getFieldName(), row[i]);
+                    Object val = DataUtils.convert(tableColumn[i].getType().dataType().javaClass(), row[i]);
+                    mrow.put(tableColumn[i].getFieldName(), val);
                 }
-                
+
                 content.add(mrow);
             }
-            
+
             reportOptions.setContent(content);
         }
-        
+
     }
 
     @Override
