@@ -58,6 +58,9 @@ public class ReportConfiguration extends BaseApplicationEntity {
     @Column(length = 64, nullable = true)
     private String letterGenerator;
 
+    @Column(length = 64, nullable = true)
+    private String summaryDatasource;
+
     @Column
     private int width;
 
@@ -166,6 +169,14 @@ public class ReportConfiguration extends BaseApplicationEntity {
 
     public void setLetterGenerator(String letterGenerator) {
         this.letterGenerator = letterGenerator;
+    }
+
+    public String getSummaryDatasource() {
+        return summaryDatasource;
+    }
+
+    public void setSummaryDatasource(String summaryDatasource) {
+        this.summaryDatasource = summaryDatasource;
     }
 
     public boolean isShowGrandFooter() {

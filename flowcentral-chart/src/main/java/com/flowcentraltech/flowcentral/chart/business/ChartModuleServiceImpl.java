@@ -47,6 +47,7 @@ import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.Transactional;
 import com.tcdng.unify.core.data.FactoryMap;
+import com.tcdng.unify.core.data.Listable;
 import com.tcdng.unify.core.util.DataUtils;
 
 /**
@@ -238,6 +239,13 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
     @Override
     public ChartSnapshotDef getChartSnapshotDef(String snapshotName) throws UnifyException {
         return chartSnapshotDefFactoryMap.get(snapshotName);
+    }
+
+    @Override
+    public List<? extends Listable> getEntityChartDataSources(String entity) throws UnifyException {
+        List<ChartDataSource> list = environment().listAll(new ChartDataSourceQuery().entity(entity)
+                .addSelect("name", "description", "applicationName").addOrder("description"));
+        return ApplicationNameUtils.getListableList(list);
     }
 
     @Override

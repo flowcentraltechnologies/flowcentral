@@ -34,6 +34,9 @@ public enum ReportConfigType implements EnumConst {
     TABULAR(
             "TBL",
             ReportLayoutType.TABULAR),
+    CHART_SUMMARY(
+            "CSM",
+            ReportLayoutType.TABULAR),
     PLACEMENT(
             "PLC",
             ReportLayoutType.PLACEMENT_PDF),

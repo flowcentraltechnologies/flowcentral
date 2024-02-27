@@ -29,4 +29,8 @@ public class ChartDataSourceQuery extends BaseApplicationEntityQuery<ChartDataSo
         super(ChartDataSource.class);
     }
 
+    public ChartDataSourceQuery entity(String entity) {
+        return (ChartDataSourceQuery) addEquals("entity", entity);
+    }
+
 }
