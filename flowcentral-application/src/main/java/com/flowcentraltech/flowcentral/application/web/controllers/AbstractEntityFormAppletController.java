@@ -420,11 +420,15 @@ public abstract class AbstractEntityFormAppletController<T extends AbstractEntit
         final String openWorkflowDraftPath = getVariableActionPath("/openWorkflowDraft");
         MessageBoxCaptions captions = new MessageBoxCaptions(caption);
         if (type.isNew() || type.isUpdate()) {
+            captions.setOkStyleClass("fc-orangebutton");
             captions.setOkCaption(editMessage);
             captions.setCancelCaption(cancelMessage);
             return showMessageBox(MessageIcon.QUESTION, MessageMode.OK_CANCEL, captions, prompt, openWorkflowDraftPath);
         }
 
+        captions.setYesStyleClass("fc-orangebutton");
+        captions.setNoStyleClass("fc-bluebutton");
+               
         captions.setYesCaption(editMessage);
         captions.setNoCaption(viewMessage);
         return showMessageBox(MessageIcon.QUESTION, MessageMode.YES_NO_CANCEL, captions, prompt, openWorkflowDraftPath);

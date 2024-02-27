@@ -1148,11 +1148,15 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                 : getCommandFullPath("openWorkflowDraft");
         MessageBoxCaptions captions = new MessageBoxCaptions(caption);
         if (type.isNew() || type.isUpdate() || type.isDelete()) {
+            captions.setOkStyleClass("fc-orangebutton");
             captions.setOkCaption(okMessage);
             captions.setCancelCaption(cancelMessage);
             showMessageBox(MessageIcon.QUESTION, MessageMode.OK_CANCEL, captions, prompt, commandPath);
             return;
         }
+
+        captions.setYesStyleClass("fc-orangebutton");
+        captions.setNoStyleClass("fc-bluebutton");
 
         captions.setYesCaption(okMessage);
         captions.setNoCaption(viewMessage);
