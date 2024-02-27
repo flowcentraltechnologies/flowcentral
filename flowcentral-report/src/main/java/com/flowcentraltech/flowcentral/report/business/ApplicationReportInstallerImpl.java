@@ -157,6 +157,7 @@ public class ApplicationReportInstallerImpl extends AbstractApplicationArtifactI
                     ReportConfiguration reportConfiguration = new ReportConfiguration();
                     reportConfiguration.setApplicationId(applicationId);
                     reportConfiguration.setType(reportConfig.getType());
+                    reportConfiguration.setSummaryDatasource(reportConfig.getSummaryDatasource());
                     reportConfiguration.setSizeType(reportConfig.getSizeType());
                     reportConfiguration.setName(reportConfig.getName());
                     reportConfiguration.setDescription(description);
@@ -184,6 +185,7 @@ public class ApplicationReportInstallerImpl extends AbstractApplicationArtifactI
                 } else {
                     if (ConfigUtils.isSetInstall(oldReportConfiguration)) {
                         oldReportConfiguration.setType(reportConfig.getType());
+                        oldReportConfiguration.setSummaryDatasource(reportConfig.getSummaryDatasource());
                         oldReportConfiguration.setSizeType(reportConfig.getSizeType());
                         oldReportConfiguration.setDescription(description);
                         oldReportConfiguration.setReportable(reportable);

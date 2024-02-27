@@ -20,6 +20,7 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -35,6 +36,10 @@ import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.util.InputWidgetUtils;
 import com.flowcentraltech.flowcentral.application.util.PrivilegeNameUtils;
 import com.flowcentraltech.flowcentral.application.util.ResolvedCondition;
+import com.flowcentraltech.flowcentral.chart.constants.ChartModuleNameConstants;
+import com.flowcentraltech.flowcentral.chart.data.ChartDetails;
+import com.flowcentraltech.flowcentral.chart.data.ChartDetailsProvider;
+import com.flowcentraltech.flowcentral.chart.data.ChartTableColumn;
 import com.flowcentraltech.flowcentral.common.business.AbstractFlowCentralService;
 import com.flowcentraltech.flowcentral.common.data.DefaultReportColumn;
 import com.flowcentraltech.flowcentral.common.data.FormatterOptions;
@@ -126,6 +131,9 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
 
     @Configurable
     private ReportServer reportServer;
+
+    @Configurable(ChartModuleNameConstants.CHARTDATASOURCE_PROVIDER)
+    private ChartDetailsProvider chartDetailsProvider;
 
     @Override
     public List<ReportGroup> findReportGroupsByRole(String roleCode) throws UnifyException {
@@ -387,7 +395,9 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
 
         List<ReportColumnOptions> reportColumnOptionsList = new ArrayList<ReportColumnOptions>(
                 reportOptions.getColumnOptionsList());
-        DataUtils.sortDescending(reportColumnOptionsList, ReportColumnOptions.class, "group");
+        if(!reportOptions.isChartSummary()) {
+            DataUtils.sortDescending(reportColumnOptionsList, ReportColumnOptions.class, "group");
+        }
 
         List<ReportColumnOptions> sortReportColumnOptionsList = null;
         final Database db = db(reportOptions.getDataSource());
@@ -399,7 +409,7 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
         final SqlEntityInfo sqlEntityInfo = !reportOptions.isBeanCollection() ? sqlDialect.findSqlEntityInfo(dataClass)
                 : null;
         String sqlBlobTypeName = sqlDialect.getSqlBlobType();
-        if (reportOptions.isTabular()) {
+        if (reportOptions.isTabular() || reportOptions.isChartSummary()) {
             sortReportColumnOptionsList = new ArrayList<ReportColumnOptions>();
             for (ReportColumnOptions reportColumnOptions : reportColumnOptionsList) {
                 if (reportColumnOptions.isIncluded()) {
@@ -472,6 +482,7 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
                 }
             }
 
+            rb.mapCollection(reportOptions.isChartSummary());
             rb.beanCollection(content);
         } else if (reportOptions.isReportEntityList()) {
             rb.table(sqlEntityInfo.getPreferredViewName());
@@ -594,6 +605,7 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
         EntityClassDef entityClassDef = appletUtilities.application().getEntityClassDef(entity);
         ReportOptions reportOptions = new ReportOptions(reportConfiguration.getType());
         reportOptions.setEntity(entity);
+        reportOptions.setSummaryDataSource(reportConfiguration.getSummaryDatasource());
         reportOptions.setReportName(reportConfigName);
         reportOptions.setReportDescription(reportConfiguration.getDescription().toUpperCase());
         reportOptions.setTitle(resolveSessionMessage(reportConfiguration.getTitle()));
@@ -789,7 +801,7 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
             Map<String, Object> parameters = Inputs.getTypeValuesByName(reportOptions.getSystemInputList());
             Inputs.getTypeValuesByNameIntoMap(reportOptions.getUserInputList(), parameters);
             FilterDef filterDef = InputWidgetUtils.getFilterDef(appletUtilities, null, reportConfiguration.getFilter());
-            if (reportOptions.isLetter()) {
+            if (reportOptions.isLetter() || reportOptions.isChartSummary()) {
                 EntityDef entityDef = appletUtilities.application().getEntityDef(entity);
                 Restriction restriction = filterDef.getRestriction(entityDef, null, getNow(), parameters);
                 reportOptions.setRestriction(restriction);
@@ -800,6 +812,43 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
             }
         }
 
+        // Chart summary
+        if (reportOptions.isChartSummary()) {
+            // TODO Apply restriction to char details provider
+            ChartDetails chartDetails = chartDetailsProvider.provide(reportOptions.getSummaryDataSource());
+            ChartTableColumn[] tableColumn = chartDetails.getTableHeaders();
+            for (ChartTableColumn _tableColumn: tableColumn) {
+                ReportColumnOptions reportColumnOptions = new ReportColumnOptions();
+                reportColumnOptions.setDescription(_tableColumn.getLabel());
+                reportColumnOptions.setGroup(false);
+                reportColumnOptions.setGroupOnNewPage(false);
+                reportColumnOptions.setSum(false);
+                reportColumnOptions.setIncluded(true);
+
+                final String type = _tableColumn.getType().dataType().javaClass().getName();
+                final HAlignType hAlignType = _tableColumn.getType().dataType().alignType();
+                reportColumnOptions.setColumnName(_tableColumn.getFieldName());
+                reportColumnOptions.setType(type);
+                reportColumnOptions.setFormatter(null);
+                reportColumnOptions.setHAlignType(hAlignType);
+                reportColumnOptions.setWidth(1);
+                reportColumnOptions.setBold(false);
+                reportOptions.addColumnOptions(reportColumnOptions);
+            }
+            
+            List<Map<String, ?>> content = new ArrayList<Map<String, ?>>();
+            for (Object[] row: chartDetails.getTableSeries()) {
+                Map<String, Object> mrow = new HashMap<String, Object>();
+                for (int i = 0; i < row.length; i++) {
+                    mrow.put(tableColumn[i].getFieldName(), row[i]);
+                }
+                
+                content.add(mrow);
+            }
+            
+            reportOptions.setContent(content);
+        }
+        
     }
 
     @Override

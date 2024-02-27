@@ -46,7 +46,9 @@ public class ReportConfig extends BaseNameConfig {
     private String template;
 
     private String letterGenerator;
-
+    
+    private String summaryDatasource;
+    
     private ReportColumnsConfig columns;
 
     private ReportPlacementsConfig placements;
@@ -191,6 +193,15 @@ public class ReportConfig extends BaseNameConfig {
     @XmlAttribute
     public void setLetterGenerator(String letterGenerator) {
         this.letterGenerator = letterGenerator;
+    }
+
+    public String getSummaryDatasource() {
+        return summaryDatasource;
+    }
+
+    @XmlAttribute
+    public void setSummaryDatasource(String summaryDatasource) {
+        this.summaryDatasource = summaryDatasource;
     }
 
     public String getReportable() {

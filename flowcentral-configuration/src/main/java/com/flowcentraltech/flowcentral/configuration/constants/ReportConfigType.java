@@ -79,6 +79,10 @@ public enum ReportConfigType implements EnumConst {
         return LETTER.equals(this);
     }
 
+    public boolean isChartSummary() {
+        return CHART_SUMMARY.equals(this);
+    }
+    
     public static ReportConfigType fromCode(String code) {
         return EnumUtils.fromCode(ReportConfigType.class, code);
     }

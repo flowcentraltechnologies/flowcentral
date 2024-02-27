@@ -63,6 +63,8 @@ public class ReportOptions {
 
     private String entity;
 
+    private String summaryDataSource;
+
     private List<ReportColumnOptions> columnOptionsList;
 
     private List<ReportPlacementOptions> placementOptionsList;
@@ -148,6 +150,10 @@ public class ReportOptions {
         return type.isLetter();
     }
 
+    public boolean isChartSummary() {
+        return type.isChartSummary();
+    }
+
     public String getReportName() {
         return reportName;
     }
@@ -178,6 +184,14 @@ public class ReportOptions {
 
     public final void setEntity(String entity) {
         this.entity = entity;
+    }
+
+    public String getSummaryDataSource() {
+        return summaryDataSource;
+    }
+
+    public void setSummaryDataSource(String summaryDataSource) {
+        this.summaryDataSource = summaryDataSource;
     }
 
     public String getReportFormat() {

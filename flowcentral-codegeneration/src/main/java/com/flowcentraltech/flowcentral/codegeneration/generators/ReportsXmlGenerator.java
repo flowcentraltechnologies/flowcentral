@@ -85,6 +85,7 @@ public class ReportsXmlGenerator extends AbstractStaticArtifactGenerator {
                 ctx.addMessage(StaticMessageCategoryType.REPORT, titleKey, reportConfiguration.getTitle());
 
                 reportConfig.setType(reportConfiguration.getType());
+                reportConfig.setSummaryDatasource(reportConfiguration.getSummaryDatasource());
                 reportConfig.setSizeType(reportConfiguration.getSizeType());
                 reportConfig.setName(reportConfiguration.getName());
                 reportConfig.setDescription("$m{" + descKey + "}");
