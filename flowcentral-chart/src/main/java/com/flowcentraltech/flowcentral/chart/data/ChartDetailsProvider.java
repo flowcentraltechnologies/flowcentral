@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.chart.data;
 
 import com.flowcentraltech.flowcentral.common.business.RuleListComponent;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.criterion.Restriction;
 
 /**
  * Chart details provider.
@@ -37,4 +38,16 @@ public interface ChartDetailsProvider extends RuleListComponent {
      *                        if an error occurs
      */
     ChartDetails provide(String rule) throws UnifyException;
+
+    /**
+     * Provides data.
+     * 
+     * @param rule
+     *             optional rule
+     * @param restriction optional restriction
+     * @return the chart data
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    ChartDetails provide(String rule, Restriction restriction) throws UnifyException;
 }

@@ -62,9 +62,9 @@ import com.tcdng.unify.core.util.StringUtils;
 public class ChartDataSourceChartDetailsProvider extends AbstractChartDetailsProvider {
 
     @Override
-    public ChartDetails provide(String rule) throws UnifyException {
+    public ChartDetails provide(String rule, Restriction restriction) throws UnifyException {
         ChartDataSourceDef chartDataSourceDef = chart().getChartDataSourceDef(rule);
-        return getChartData(chartDataSourceDef);
+        return getChartData(chartDataSourceDef, restriction);
     }
 
     @Override
@@ -75,7 +75,8 @@ public class ChartDataSourceChartDetailsProvider extends AbstractChartDetailsPro
         return ApplicationNameUtils.getListableList(sourceList);
     }
 
-    protected ChartDetails getChartData(ChartDataSourceDef chartDataSourceDef) throws UnifyException {
+    private ChartDetails getChartData(ChartDataSourceDef chartDataSourceDef, Restriction erestriction)
+            throws UnifyException {
         final EntityDef entityDef = chartDataSourceDef.getEntityDef();
         final EntityFieldDef categoryEntityFieldDef = chartDataSourceDef.getCategoryEntityFieldDef();
         final ChartCategoryDataType chartCategoryType = categoryEntityFieldDef != null
@@ -92,7 +93,7 @@ public class ChartDataSourceChartDetailsProvider extends AbstractChartDetailsPro
             aggregateFunction.add(entitySeriesDef.getType().function(entitySeriesDef.getFieldName()));
         }
 
-        final Restriction baseRestriction = InputWidgetUtils.getRestriction(entityDef,
+        Restriction baseRestriction = InputWidgetUtils.getRestriction(entityDef,
                 chartDataSourceDef.getCategoryBase(), au().specialParamProvider(), now);
         if (chartDataSourceDef.isWithCategories()) {
             final PropertySequenceDef categories = chartDataSourceDef.getCategories();
@@ -103,7 +104,6 @@ public class ChartDataSourceChartDetailsProvider extends AbstractChartDetailsPro
                     final String cat = !StringUtils.isBlank(propertySequenceEntryDef.getLabel())
                             ? propertySequenceEntryDef.getLabel()
                             : entityCategoryDef.getLabel();
-
                     Restriction restriction = InputWidgetUtils.getRestriction(entityDef,
                             entityCategoryDef.getFilterDef(), au().specialParamProvider(), now);
                     if (restriction != null) {
@@ -114,11 +114,27 @@ public class ChartDataSourceChartDetailsProvider extends AbstractChartDetailsPro
                         restriction = baseRestriction;
                     }
 
+                    if (erestriction != null) {
+                        if (restriction != null) {
+                            restriction = new And().add(restriction).add(erestriction);
+                        } else {
+                            restriction = erestriction;
+                        }
+                    }
+
                     performAggregation(cdb, chartDataSourceDef, aggregateFunction, now, restriction, cat);
                 }
             }
         } else if (categoryEntityFieldDef != null) {
             final Object cat = categoryEntityFieldDef.getFieldName();
+            if (erestriction != null) {
+                if (baseRestriction != null) {
+                    baseRestriction = new And().add(baseRestriction).add(erestriction);
+                } else {
+                    baseRestriction = erestriction;
+                }
+            }
+
             performAggregation(cdb, chartDataSourceDef, aggregateFunction, now, baseRestriction, cat);
         }
 

@@ -52,6 +52,11 @@ public abstract class AbstractChartDetailsProvider extends AbstractFlowCentralCo
     private EnvironmentService environmentService;
 
     @Override
+    public final ChartDetails provide(String rule) throws UnifyException {
+        return provide(rule, null);
+    }
+
+    @Override
     protected void onInitialize() throws UnifyException {
 
     }

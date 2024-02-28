@@ -796,7 +796,8 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
         }
 
         // Filter options
-        if (!reportOptions.isBeanCollection() && reportConfiguration.getFilter() != null) {
+        if ((!reportOptions.isBeanCollection() || reportOptions.isChartSummary())
+                && reportConfiguration.getFilter() != null) {
             Map<String, Object> parameters = Inputs.getTypeValuesByName(reportOptions.getSystemInputList());
             Inputs.getTypeValuesByNameIntoMap(reportOptions.getUserInputList(), parameters);
             FilterDef filterDef = InputWidgetUtils.getFilterDef(appletUtilities, null, reportConfiguration.getFilter());
@@ -814,7 +815,8 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
         // Chart summary
         if (reportOptions.isChartSummary()) {
             // TODO Apply restriction to char details provider
-            ChartDetails chartDetails = chartDetailsProvider.provide(reportOptions.getSummaryDataSource());
+            ChartDetails chartDetails = chartDetailsProvider.provide(reportOptions.getSummaryDataSource(),
+                    reportOptions.getRestriction());
             ChartTableColumn[] tableColumn = chartDetails.getTableHeaders();
             for (ChartTableColumn _tableColumn : tableColumn) {
                 ReportColumnOptions reportColumnOptions = new ReportColumnOptions();
