@@ -134,6 +134,12 @@ public class ReportOptions {
         download = false;
     }
 
+    public void clearOptions() {
+        columnOptionsList.clear();
+        placementOptionsList.clear();
+        joinOptionsList.clear();
+    }
+
     public ReportConfigType getType() {
         return type;
     }
@@ -277,7 +283,7 @@ public class ReportOptions {
     public List<ReportJoinOptions> getJoinOptionsList() {
         return joinOptionsList;
     }
-
+    
     public ReportFilterOptions getFilterOptions() {
         return filterOptions;
     }

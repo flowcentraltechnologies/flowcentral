@@ -77,6 +77,7 @@ import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.Transactional;
 import com.tcdng.unify.core.constant.Bold;
+import com.tcdng.unify.core.constant.DataType;
 import com.tcdng.unify.core.constant.HAlignType;
 import com.tcdng.unify.core.constant.OrderType;
 import com.tcdng.unify.core.criterion.And;
@@ -412,7 +413,6 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
             sortReportColumnOptionsList = new ArrayList<ReportColumnOptions>();
             for (ReportColumnOptions reportColumnOptions : reportColumnOptionsList) {
                 if (reportColumnOptions.isIncluded()) {
-                    logDebug("Using report column[{0}]...", reportColumnOptions);
                     if (reportColumnOptions.isGroup() || reportColumnOptions.getOrderType() != null) {
                         sortReportColumnOptionsList.add(reportColumnOptions);
                     }
@@ -653,6 +653,8 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
 
     @Override
     public void populateExtraConfigurationReportOptions(ReportOptions reportOptions) throws UnifyException {
+        reportOptions.clearOptions();
+
         ApplicationEntityNameParts np = ApplicationNameUtils
                 .getApplicationEntityNameParts(reportOptions.getReportName());
         final ReportConfiguration reportConfiguration = environment()
@@ -796,7 +798,8 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
         }
 
         // Filter options
-        if (!reportOptions.isBeanCollection() && reportConfiguration.getFilter() != null) {
+        if ((!reportOptions.isBeanCollection() || reportOptions.isChartSummary())
+                && reportConfiguration.getFilter() != null) {
             Map<String, Object> parameters = Inputs.getTypeValuesByName(reportOptions.getSystemInputList());
             Inputs.getTypeValuesByNameIntoMap(reportOptions.getUserInputList(), parameters);
             FilterDef filterDef = InputWidgetUtils.getFilterDef(appletUtilities, null, reportConfiguration.getFilter());
@@ -813,23 +816,22 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
 
         // Chart summary
         if (reportOptions.isChartSummary()) {
-            // TODO Apply restriction to char details provider
-            ChartDetails chartDetails = chartDetailsProvider.provide(reportOptions.getSummaryDataSource());
+            ChartDetails chartDetails = chartDetailsProvider.provide(reportOptions.getSummaryDataSource(),
+                    reportOptions.getRestriction());
             ChartTableColumn[] tableColumn = chartDetails.getTableHeaders();
             for (ChartTableColumn _tableColumn : tableColumn) {
+                final DataType dataType = _tableColumn.getType().dataType();
                 ReportColumnOptions reportColumnOptions = new ReportColumnOptions();
                 reportColumnOptions.setDescription(_tableColumn.getLabel());
                 reportColumnOptions.setGroup(false);
                 reportColumnOptions.setGroupOnNewPage(false);
-                reportColumnOptions.setSum(false);
+                reportColumnOptions.setSum(dataType.isInteger() || dataType.isDecimal());
                 reportColumnOptions.setIncluded(true);
 
-                final String type = _tableColumn.getType().dataType().javaClass().getName();
-                final HAlignType hAlignType = _tableColumn.getType().dataType().alignType();
                 reportColumnOptions.setColumnName(_tableColumn.getFieldName());
-                reportColumnOptions.setType(type);
-                reportColumnOptions.setFormatter(null);
-                reportColumnOptions.setHAlignType(hAlignType);
+                reportColumnOptions.setType(dataType.javaClass().getName());
+                reportColumnOptions.setFormatter(FormatterOptions.DEFAULT.getFormatter(dataType)); 
+                reportColumnOptions.setHAlignType(dataType.alignType());
                 reportColumnOptions.setWidth(1);
                 reportColumnOptions.setBold(false);
                 reportOptions.addColumnOptions(reportColumnOptions);

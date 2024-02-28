@@ -25,6 +25,7 @@ import java.util.Map;
 import com.flowcentraltech.flowcentral.configuration.constants.ChartCategoryDataType;
 import com.flowcentraltech.flowcentral.configuration.constants.ChartSeriesDataType;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.criterion.Restriction;
 import com.tcdng.unify.core.data.BeanValueListStore;
 import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.database.Entity;
@@ -60,7 +61,7 @@ public abstract class AbstractCategoryMappedSeriesChartDataProvider extends Abst
     }
 
     @Override
-    public final ChartDetails provide(String rule) throws UnifyException {
+    public final ChartDetails provide(String rule, Restriction restriction) throws UnifyException {
         SimpleDateFormat format = getDateFormat();
         List<Object> categories = new ArrayList<Object>();
         ChartDetails.Builder cdb = ChartDetails.newBuilder(categoryType);

@@ -21,6 +21,7 @@ import java.util.List;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldDataType;
 import com.tcdng.unify.core.UnifyComponentContext;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.constant.DataType;
 import com.tcdng.unify.core.format.Formatter;
 import com.tcdng.unify.core.util.DataUtils;
 
@@ -68,6 +69,41 @@ public class FormatterOptions {
         return timestampFormatter;
     }
 
+    public String getFormatter(DataType dataType) {
+        if (dataType != null) {
+            switch(dataType) {
+                case BLOB:
+                    break;
+                case BOOLEAN:
+                    break;
+                case CHAR:
+                    break;
+                case CLOB:
+                    break;
+                case DATE:
+                    return dateFormatter;
+                case DECIMAL:
+                case DOUBLE:
+                case FLOAT:
+                    return decimalFormatter;
+                case INTEGER:
+                case LONG:
+                case SHORT:
+                    return integerFormatter;
+                case STRING:
+                    break;
+                case TIMESTAMP:
+                case TIMESTAMP_UTC:
+                    return timestampFormatter;
+                default:
+                    break;
+                
+            }
+        }
+        
+        return null;
+    }
+    
     public Instance createInstance(UnifyComponentContext ctx) throws UnifyException {
         return new Instance(ctx.createFormatter(integerFormatter), ctx.createFormatter(decimalFormatter),
                 ctx.createFormatter(dateFormatter), ctx.createFormatter(timestampFormatter));
