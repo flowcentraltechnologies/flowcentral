@@ -26,7 +26,6 @@ import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.UplBinding;
 import com.tcdng.unify.web.annotation.Action;
-import com.tcdng.unify.web.constant.ResultMappingConstants;
 import com.tcdng.unify.web.ui.widget.data.Hint.MODE;
 
 /**
@@ -69,7 +68,7 @@ public class ListingAppletPanel extends AbstractAppletPanel {
 
     @Action
     public void close() throws UnifyException {
-        setCommandResultMapping(ResultMappingConstants.CLOSE);
+        setCloseResultMapping();
         return;
     }
 

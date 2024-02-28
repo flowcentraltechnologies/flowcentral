@@ -557,7 +557,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         }
 
         if (applet.getMode().isPrimary()) {
-            setCommandResultMapping(ResultMappingConstants.CLOSE);
+            setCloseResultMapping();
             return;
         }
 
