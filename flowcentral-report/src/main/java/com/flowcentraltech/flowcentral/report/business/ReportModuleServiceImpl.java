@@ -814,7 +814,6 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
 
         // Chart summary
         if (reportOptions.isChartSummary()) {
-            // TODO Apply restriction to char details provider
             ChartDetails chartDetails = chartDetailsProvider.provide(reportOptions.getSummaryDataSource(),
                     reportOptions.getRestriction());
             ChartTableColumn[] tableColumn = chartDetails.getTableHeaders();
