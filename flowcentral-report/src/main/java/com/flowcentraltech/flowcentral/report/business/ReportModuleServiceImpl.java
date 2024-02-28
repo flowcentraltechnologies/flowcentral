@@ -77,6 +77,7 @@ import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.Transactional;
 import com.tcdng.unify.core.constant.Bold;
+import com.tcdng.unify.core.constant.DataType;
 import com.tcdng.unify.core.constant.HAlignType;
 import com.tcdng.unify.core.constant.OrderType;
 import com.tcdng.unify.core.criterion.And;
@@ -653,6 +654,8 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
 
     @Override
     public void populateExtraConfigurationReportOptions(ReportOptions reportOptions) throws UnifyException {
+        reportOptions.clearOptions();
+
         ApplicationEntityNameParts np = ApplicationNameUtils
                 .getApplicationEntityNameParts(reportOptions.getReportName());
         final ReportConfiguration reportConfiguration = environment()
@@ -825,12 +828,11 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
                 reportColumnOptions.setSum(false);
                 reportColumnOptions.setIncluded(true);
 
-                final String type = _tableColumn.getType().dataType().javaClass().getName();
-                final HAlignType hAlignType = _tableColumn.getType().dataType().alignType();
+                final DataType dataType = _tableColumn.getType().dataType();
                 reportColumnOptions.setColumnName(_tableColumn.getFieldName());
-                reportColumnOptions.setType(type);
-                reportColumnOptions.setFormatter(null);
-                reportColumnOptions.setHAlignType(hAlignType);
+                reportColumnOptions.setType(dataType.javaClass().getName());
+                reportColumnOptions.setFormatter(FormatterOptions.DEFAULT.getFormatter(dataType)); 
+                reportColumnOptions.setHAlignType(dataType.alignType());
                 reportColumnOptions.setWidth(1);
                 reportColumnOptions.setBold(false);
                 reportOptions.addColumnOptions(reportColumnOptions);
