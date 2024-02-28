@@ -4050,8 +4050,15 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                 && !DataUtils.isBlank(applicationConfig.getAppletsConfig().getAppletList())) {
             AppApplet appApplet = new AppApplet();
             appApplet.setApplicationId(applicationId);
-            environment().updateAll(new AppAppletQuery().applicationId(applicationId).configType(ConfigType.STATIC),
+            List<String> appletNames = new ArrayList<String>();
+            for (AppletConfig appletConfig : applicationConfig.getAppletsConfig().getAppletList()) {
+                appletNames.add(appletConfig.getName());
+            }
+
+            environment().updateAll(
+                    new AppAppletQuery().applicationId(applicationId).configType(ConfigType.STATIC).nameIn(appletNames),
                     new Update().add("menuAccess", Boolean.FALSE));
+
             for (AppletConfig appletConfig : applicationConfig.getAppletsConfig().getAppletList()) {
                 AppApplet oldAppApplet = environment()
                         .findLean(new AppAppletQuery().applicationId(applicationId).name(appletConfig.getName()));
@@ -4081,9 +4088,10 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                     populateChildList(appApplet, applicationName, appletConfig);
                     environment().create(appApplet);
                 } else {
-                    logDebug("Upgrading application applet [{0}]. Access = [{1}]...", appletConfig.getName(),
-                            appletConfig.getMenuAccess());
-                    if (ConfigUtils.isSetInstall(oldAppApplet)) {
+                    final boolean setInstall = ConfigUtils.isSetInstall(oldAppApplet);
+                    logDebug("Upgrading application applet [{0}]. Access = [{1}] and set install [{2}]...",
+                            appletConfig.getName(), appletConfig.getMenuAccess(), setInstall);
+                    if (setInstall) {
                         oldAppApplet.setDescription(description);
                         oldAppApplet.setType(appletConfig.getType());
                         oldAppApplet.setEntity(entity);
