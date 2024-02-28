@@ -413,7 +413,6 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
             sortReportColumnOptionsList = new ArrayList<ReportColumnOptions>();
             for (ReportColumnOptions reportColumnOptions : reportColumnOptionsList) {
                 if (reportColumnOptions.isIncluded()) {
-                    logDebug("Using report column[{0}]...", reportColumnOptions);
                     if (reportColumnOptions.isGroup() || reportColumnOptions.getOrderType() != null) {
                         sortReportColumnOptionsList.add(reportColumnOptions);
                     }
@@ -821,14 +820,14 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
                     reportOptions.getRestriction());
             ChartTableColumn[] tableColumn = chartDetails.getTableHeaders();
             for (ChartTableColumn _tableColumn : tableColumn) {
+                final DataType dataType = _tableColumn.getType().dataType();
                 ReportColumnOptions reportColumnOptions = new ReportColumnOptions();
                 reportColumnOptions.setDescription(_tableColumn.getLabel());
                 reportColumnOptions.setGroup(false);
                 reportColumnOptions.setGroupOnNewPage(false);
-                reportColumnOptions.setSum(false);
+                reportColumnOptions.setSum(dataType.isInteger() || dataType.isDecimal());
                 reportColumnOptions.setIncluded(true);
 
-                final DataType dataType = _tableColumn.getType().dataType();
                 reportColumnOptions.setColumnName(_tableColumn.getFieldName());
                 reportColumnOptions.setType(dataType.javaClass().getName());
                 reportColumnOptions.setFormatter(FormatterOptions.DEFAULT.getFormatter(dataType)); 
