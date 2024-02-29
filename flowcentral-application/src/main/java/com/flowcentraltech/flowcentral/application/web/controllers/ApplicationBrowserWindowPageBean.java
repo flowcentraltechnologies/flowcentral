@@ -19,25 +19,25 @@ package com.flowcentraltech.flowcentral.application.web.controllers;
 import com.tcdng.unify.web.ui.AbstractPageBean;
 
 /**
- * Application manage entity page bean.
+ * Application browser window page bean.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class ApplicationManageEntityPageBean extends AbstractPageBean {
+public class ApplicationBrowserWindowPageBean extends AbstractPageBean {
 
-    private String entityTitle;
+    private String windowTitle;
 
     private String documentPath;
 
     private String[] contentPaths;
 
-    public String getEntityTitle() {
-        return entityTitle;
+    public String getWindowTitle() {
+        return windowTitle;
     }
 
-    public void setEntityTitle(String entityTitle) {
-        this.entityTitle = entityTitle;
+    public void setWindowTitle(String windowTitle) {
+        this.windowTitle = windowTitle;
     }
 
     public String getDocumentPath() {

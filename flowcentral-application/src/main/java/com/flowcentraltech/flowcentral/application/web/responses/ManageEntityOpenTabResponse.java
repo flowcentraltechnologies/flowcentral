@@ -41,7 +41,7 @@ public class ManageEntityOpenTabResponse extends AbstractOpenWindowPageControlle
                 AppletRequestAttributeConstants.OPEN_TAB_INFO);
         if (requestOpenTabInfo != null) {
             logDebug("Preparing open tab for path [{0}] ...", requestOpenTabInfo.getContentPath());
-            final String docpath = ApplicationPageUtils.constructAppletPath("/application/manageentity",
+            final String docpath = ApplicationPageUtils.constructAppletPath("/application/browserwindow",
                     requestOpenTabInfo.getTabName());
             setSessionAttribute(AppletSessionAttributeConstants.OPEN_TAB_INFO, new SessionOpenTabInfo(
                     requestOpenTabInfo.getTitle(), docpath, requestOpenTabInfo.getContentPath()));
