@@ -67,6 +67,9 @@ public class AppApplet extends BaseApplicationEntity {
     private boolean menuAccess;
 
     @Column
+    private boolean supportOpenInNewWindow;
+
+    @Column
     private boolean allowSecondaryTenants;
 
     @Column
@@ -176,6 +179,14 @@ public class AppApplet extends BaseApplicationEntity {
 
     public void setMenuAccess(boolean menuAccess) {
         this.menuAccess = menuAccess;
+    }
+
+    public boolean isSupportOpenInNewWindow() {
+        return supportOpenInNewWindow;
+    }
+
+    public void setSupportOpenInNewWindow(boolean supportOpenInNewWindow) {
+        this.supportOpenInNewWindow = supportOpenInNewWindow;
     }
 
     public boolean isAllowSecondaryTenants() {

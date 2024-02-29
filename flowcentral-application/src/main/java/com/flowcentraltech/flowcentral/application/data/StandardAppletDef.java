@@ -80,6 +80,8 @@ public class StandardAppletDef extends BaseApplicationEntityDef implements Apple
 
     private boolean menuAccess;
 
+    private boolean supportOpenInNewWindow;
+
     private boolean allowSecondaryTenants;
 
     private boolean descriptiveButtons;
@@ -105,8 +107,9 @@ public class StandardAppletDef extends BaseApplicationEntityDef implements Apple
             String label, String icon, String assignDescField, String pseudoDeleteField, String routeToApplet,
             String openPath, String openDraftPath, String openDraftWorkflow, String maintainOpenPath,
             String listingOpenPath, String originApplicationName, String originName, int displayIndex,
-            boolean openWindow, boolean menuAccess, boolean allowSecondaryTenants, boolean descriptiveButtons,
-            ApplicationEntityNameParts nameParts, String description, Long id, long version) {
+            boolean openWindow, boolean menuAccess, boolean supportOpenInNewWindow, boolean allowSecondaryTenants,
+            boolean descriptiveButtons, ApplicationEntityNameParts nameParts, String description, Long id,
+            long version) {
         super(nameParts, description, id, version);
         this.type = type;
         this.entity = entity;
@@ -126,6 +129,7 @@ public class StandardAppletDef extends BaseApplicationEntityDef implements Apple
         this.displayIndex = displayIndex;
         this.openWindow = openWindow;
         this.menuAccess = menuAccess;
+        this.supportOpenInNewWindow = supportOpenInNewWindow;
         this.allowSecondaryTenants = allowSecondaryTenants;
         this.descriptiveButtons = descriptiveButtons;
         this.propDefList = propDefList;
@@ -342,6 +346,11 @@ public class StandardAppletDef extends BaseApplicationEntityDef implements Apple
     }
 
     @Override
+    public boolean isSupportOpenInNewWindow() {
+        return supportOpenInNewWindow;
+    }
+
+    @Override
     public boolean isAllowSecondaryTenants() {
         return allowSecondaryTenants;
     }
@@ -442,17 +451,18 @@ public class StandardAppletDef extends BaseApplicationEntityDef implements Apple
     }
 
     public static Builder newBuilder(AppletType type, String entity, String label, String icon, String assignDescField,
-            String pseudoDeleteField, int displayIndex, boolean menuAccess, boolean allowSecondaryTenants,
-            boolean descriptiveButtons, String longName, String description) {
+            String pseudoDeleteField, int displayIndex, boolean menuAccess, boolean supportOpenInNewWindow,
+            boolean allowSecondaryTenants, boolean descriptiveButtons, String longName, String description) {
         return new Builder(type, entity, label, icon, assignDescField, pseudoDeleteField, displayIndex, menuAccess,
-                allowSecondaryTenants, descriptiveButtons, longName, description, null, 0L);
+                supportOpenInNewWindow, allowSecondaryTenants, descriptiveButtons, longName, description, null, 0L);
     }
 
     public static Builder newBuilder(AppletType type, String entity, String label, String icon, String assignDescField,
-            String pseudoDeleteField, int displayIndex, boolean menuAccess, boolean allowSecondaryTenants,
-            boolean descriptiveButtons, String longName, String description, Long id, long version) {
+            String pseudoDeleteField, int displayIndex, boolean menuAccess, boolean supportOpenInNewWindow,
+            boolean allowSecondaryTenants, boolean descriptiveButtons, String longName, String description, Long id,
+            long version) {
         return new Builder(type, entity, label, icon, assignDescField, pseudoDeleteField, displayIndex, menuAccess,
-                allowSecondaryTenants, descriptiveButtons, longName, description, id, version);
+                supportOpenInNewWindow, allowSecondaryTenants, descriptiveButtons, longName, description, id, version);
     }
 
     public static class Builder {
@@ -497,6 +507,8 @@ public class StandardAppletDef extends BaseApplicationEntityDef implements Apple
 
         private boolean menuAccess;
 
+        private boolean supportOpenInNewWindow;
+
         private boolean allowSecondaryTenants;
 
         private boolean descriptiveButtons;
@@ -510,8 +522,9 @@ public class StandardAppletDef extends BaseApplicationEntityDef implements Apple
         private long version;
 
         public Builder(AppletType type, String entity, String label, String icon, String assignDescField,
-                String pseudoDeleteField, int displayIndex, boolean menuAccess, boolean allowSecondaryTenants,
-                boolean descriptiveButtons, String longName, String description, Long id, long version) {
+                String pseudoDeleteField, int displayIndex, boolean menuAccess, boolean supportOpenInNewWindow,
+                boolean allowSecondaryTenants, boolean descriptiveButtons, String longName, String description, Long id,
+                long version) {
             this.type = type;
             this.propDefMap = new HashMap<String, AppletPropDef>();
             this.setValuesDefMap = new HashMap<String, AppletSetValuesDef>();
@@ -523,6 +536,7 @@ public class StandardAppletDef extends BaseApplicationEntityDef implements Apple
             this.pseudoDeleteField = pseudoDeleteField;
             this.displayIndex = displayIndex;
             this.menuAccess = menuAccess;
+            this.supportOpenInNewWindow = supportOpenInNewWindow;
             this.allowSecondaryTenants = allowSecondaryTenants;
             this.descriptiveButtons = descriptiveButtons;
             this.longName = longName;
@@ -627,8 +641,8 @@ public class StandardAppletDef extends BaseApplicationEntityDef implements Apple
                     DataUtils.unmodifiableMap(propDefMap), DataUtils.unmodifiableMap(setValuesDefMap),
                     DataUtils.unmodifiableMap(filterDefMap), entity, label, icon, assignDescField, pseudoDeleteField,
                     routeToApplet, openPath, openDraftPath, openDraftWorkflow, maintainOpenPath, listingOpenPath,
-                    originApplicationName, originName, displayIndex, openWindow, menuAccess, allowSecondaryTenants,
-                    descriptiveButtons, nameParts, description, id, version);
+                    originApplicationName, originName, displayIndex, openWindow, menuAccess, supportOpenInNewWindow,
+                    allowSecondaryTenants, descriptiveButtons, nameParts, description, id, version);
         }
     }
 

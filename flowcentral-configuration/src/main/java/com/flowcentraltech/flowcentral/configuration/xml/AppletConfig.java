@@ -54,6 +54,8 @@ public class AppletConfig extends BaseNameConfig {
     private int displayIndex;
 
     private Boolean menuAccess;
+    
+    private Boolean supportOpenInNewWindow;
 
     private Boolean allowSecondaryTenants;
 
@@ -67,6 +69,7 @@ public class AppletConfig extends BaseNameConfig {
     
     public AppletConfig() {
         this.menuAccess = Boolean.FALSE;
+        this.supportOpenInNewWindow = Boolean.FALSE;
         this.allowSecondaryTenants = Boolean.FALSE;;
     }
     
@@ -160,6 +163,16 @@ public class AppletConfig extends BaseNameConfig {
     @XmlAttribute
     public void setMenuAccess(Boolean menuAccess) {
         this.menuAccess = menuAccess;
+    }
+
+    public Boolean getSupportOpenInNewWindow() {
+        return supportOpenInNewWindow;
+    }
+
+    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
+    @XmlAttribute
+    public void setSupportOpenInNewWindow(Boolean supportOpenInNewWindow) {
+        this.supportOpenInNewWindow = supportOpenInNewWindow;
     }
 
     public Boolean getAllowSecondaryTenants() {
