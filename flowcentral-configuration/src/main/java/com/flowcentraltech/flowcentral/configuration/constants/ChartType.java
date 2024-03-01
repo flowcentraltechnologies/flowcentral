@@ -96,12 +96,20 @@ public enum ChartType implements EnumConst {
         return CARD.equals(this) || TABLE.equals(this);
     }
 
-    public boolean card() {
+    public boolean isCard() {
         return CARD.equals(this);
     }
 
-    public boolean table() {
+    public boolean isTable() {
         return TABLE.equals(this);
+    }
+
+    public boolean isBar() {
+        return BAR.equals(this);
+    }
+
+    public boolean isColumn() {
+        return COLUMN.equals(this);
     }
     
     public static ChartType fromCode(String code) {

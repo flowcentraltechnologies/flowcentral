@@ -57,19 +57,19 @@ public final class ChartUtils {
             if (_num.compareTo(MILLION) < 0) {
                 return new DecimalFormat("###,###").format(_num);
             }
-            
+
             if (_num.compareTo(BILLION) < 0) {
                 return new DecimalFormat("###,###.0").format(_num.divide(MILLION)) + "M";
             }
-            
+
             if (_num.compareTo(TRILLION) < 0) {
                 return new DecimalFormat("###,###.0").format(_num.divide(BILLION)) + "B";
             }
-            
+
             if (_num.compareTo(QUINTILION) < 0) {
                 return new DecimalFormat("###,###.0").format(_num.divide(TRILLION)) + "T";
             }
-            
+
             return new DecimalFormat("###,###.0").format(_num.divide(QUINTILION)) + "Q";
         }
 
@@ -185,12 +185,11 @@ public final class ChartUtils {
             jw.beginObject("plotOptions");
             if (chartType.axisChart()) {
                 jw.beginObject("bar");
-                jw.write("horizontal", ChartType.BAR.equals(chartType));
+                jw.write("horizontal", chartType.isBar());
                 jw.endObject();
             } else {
                 jw.beginObject("pie");
                 jw.write("customScale", 0.8);
-                // jw.write("offsetY", -20);
                 if (ChartType.DONUT.equals(chartType)) {
                     jw.beginObject("donut");
                     jw.write("size", "75%");
@@ -213,20 +212,20 @@ public final class ChartUtils {
             }
             jw.endArray();
 
-            // Y-axis
-            jw.write("_yintegers", integers);
-            jw.write("_yformatter", chartDef.isFormatYLabels());
-            jw.beginObject("yaxis");
-            jw.beginObject("labels");
-            jw.endObject();
-            jw.endObject();
+            if (chartType.isColumn()) {
+                // Y-axis
+                jw.write("_yintegers", integers);
+                jw.write("_yformatter", chartDef.isFormatYLabels());
+                jw.beginObject("yaxis");
+                jw.beginObject("labels");
+                jw.endObject();
+                jw.endObject();
 
-            // X-axis
-            jw.beginObject("xaxis");
-            jw.write("type", categoryType.optionsType());
-            jw.endObject();
-
-            // Legend
+                // X-axis
+                jw.beginObject("xaxis");
+                jw.write("type", categoryType.optionsType());
+                jw.endObject();
+            }
         } else {
             AbstractSeries<?, ?> pseries = actseries.get(0);
 
