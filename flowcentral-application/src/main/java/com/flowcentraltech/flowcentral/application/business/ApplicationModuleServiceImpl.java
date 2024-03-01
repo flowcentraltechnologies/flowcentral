@@ -2879,8 +2879,11 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
 
         fieldName = entityDef.isWithDescriptionField() ? "description" : fieldName;
         if (fieldName != null) {
-            return environment().value(String.class, fieldName,
+            List<String> descList = environment().valueList(String.class, fieldName,
                     Query.of((Class<? extends Entity>) entityClassDef.getEntityClass()).addEquals("id", entityId));
+            if (descList.size() ==  1) {
+                return descList.get(0);
+            }
         }
 
         return null;
