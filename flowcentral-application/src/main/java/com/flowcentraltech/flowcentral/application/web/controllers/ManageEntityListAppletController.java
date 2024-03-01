@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.application.web.controllers;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationResultMappingConstants;
 import com.flowcentraltech.flowcentral.application.data.EntityFormEventHandlers;
 import com.flowcentraltech.flowcentral.application.web.panels.applet.ManageEntityListApplet;
+import com.flowcentraltech.flowcentral.configuration.constants.FlowCentralAppletPathConstants;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.UplBinding;
@@ -34,7 +35,7 @@ import com.tcdng.unify.web.constant.Secured;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@Component("/manageentitylistapplet")
+@Component(FlowCentralAppletPathConstants.MANAGE_ENTITYLIST)
 @UplBinding("web/application/upl/manageentitylistappletpage.upl")
 @ResultMappings({ @ResultMapping(name = ApplicationResultMappingConstants.SHOW_FILE_ATTACHMENTS,
         response = { "!validationerrorresponse", "!showpopupresponse popup:$s{fileAttachmentsPopup}" }) })

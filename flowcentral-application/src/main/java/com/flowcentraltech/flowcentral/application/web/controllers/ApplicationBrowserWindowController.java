@@ -17,6 +17,7 @@
 package com.flowcentraltech.flowcentral.application.web.controllers;
 
 import com.flowcentraltech.flowcentral.application.constants.AppletSessionAttributeConstants;
+import com.flowcentraltech.flowcentral.application.constants.ApplicationModulePathConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationResultMappingConstants;
 import com.flowcentraltech.flowcentral.application.data.SessionOpenTabInfo;
 import com.tcdng.unify.core.UnifyException;
@@ -38,7 +39,7 @@ import com.tcdng.unify.web.ui.AbstractPageController;
  * @since 1.0
  */
 @Singleton(false)
-@Component("/application/browserwindow")
+@Component(ApplicationModulePathConstants.APPLICATION_BROWSER_WINDOW)
 @UplBinding("web/application/upl/applicationbrowserwindow.upl")
 @ResultMappings({
     @ResultMapping(name = ApplicationResultMappingConstants.REFRESH_CONTENT,

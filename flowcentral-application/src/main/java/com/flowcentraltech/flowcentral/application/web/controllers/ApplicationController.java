@@ -19,6 +19,7 @@ import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleAuditConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleNameConstants;
+import com.flowcentraltech.flowcentral.application.constants.ApplicationModulePathConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationResultMappingConstants;
 import com.flowcentraltech.flowcentral.common.business.LicenseProvider;
@@ -50,7 +51,7 @@ import com.tcdng.unify.web.ui.widget.data.Popup;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@Component("/application")
+@Component(ApplicationModulePathConstants.APPLICATION)
 @UplBinding("web/application/upl/application.upl")
 @ResultMappings({
         @ResultMapping(name = ApplicationResultMappingConstants.SHOW_USERROLE_OPTIONS,

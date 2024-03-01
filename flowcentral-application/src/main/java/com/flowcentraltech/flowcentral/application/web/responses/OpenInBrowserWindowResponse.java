@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.application.web.responses;
 
 import com.flowcentraltech.flowcentral.application.constants.AppletRequestAttributeConstants;
 import com.flowcentraltech.flowcentral.application.constants.AppletSessionAttributeConstants;
+import com.flowcentraltech.flowcentral.application.constants.ApplicationModulePathConstants;
 import com.flowcentraltech.flowcentral.application.data.RequestOpenTabInfo;
 import com.flowcentraltech.flowcentral.application.data.SessionOpenTabInfo;
 import com.flowcentraltech.flowcentral.application.util.ApplicationPageUtils;
@@ -41,8 +42,8 @@ public class OpenInBrowserWindowResponse extends AbstractOpenWindowPageControlle
                 AppletRequestAttributeConstants.OPEN_TAB_INFO);
         if (requestOpenTabInfo != null) {
             logDebug("Preparing open tab for path [{0}] ...", requestOpenTabInfo.getContentPath());
-            final String docpath = ApplicationPageUtils.constructAppletPath("/application/browserwindow",
-                    requestOpenTabInfo.getTabName());
+            final String docpath = ApplicationPageUtils.constructAppletPath(
+                    ApplicationModulePathConstants.APPLICATION_BROWSER_WINDOW, requestOpenTabInfo.getTabName());
             setSessionAttribute(AppletSessionAttributeConstants.OPEN_TAB_INFO, new SessionOpenTabInfo(
                     requestOpenTabInfo.getTitle(), docpath, requestOpenTabInfo.getContentPath()));
             WindowResourceInfo info = new WindowResourceInfo(requestOpenTabInfo.getContentPath(), docpath,

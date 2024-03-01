@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.workflow.web.controllers;
 import com.flowcentraltech.flowcentral.application.data.EntityFormEventHandlers;
 import com.flowcentraltech.flowcentral.application.web.controllers.AbstractEntityFormAppletController;
 import com.flowcentraltech.flowcentral.application.web.controllers.AppletWidgetReferences;
+import com.flowcentraltech.flowcentral.configuration.constants.FlowCentralAppletPathConstants;
 import com.flowcentraltech.flowcentral.workflow.business.WorkflowModuleService;
 import com.flowcentraltech.flowcentral.workflow.web.panels.applet.ReviewWorkItemsApplet;
 import com.tcdng.unify.core.UnifyException;
@@ -37,7 +38,7 @@ import com.tcdng.unify.web.constant.Secured;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@Component("/reviewworkitemsapplet")
+@Component(FlowCentralAppletPathConstants.REVIEW_WORKITEMS)
 @UplBinding("web/workflow/upl/reviewworkitemsappletpage.upl")
 @ResultMappings({ @ResultMapping(name = "showfileattachments",
         response = { "!validationerrorresponse", "!showpopupresponse popup:$s{fileAttachmentsPopup}" }) })

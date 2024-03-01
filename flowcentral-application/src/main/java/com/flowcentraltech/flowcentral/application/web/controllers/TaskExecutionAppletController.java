@@ -16,6 +16,7 @@
 package com.flowcentraltech.flowcentral.application.web.controllers;
 
 import com.flowcentraltech.flowcentral.application.web.panels.applet.TaskExecutionApplet;
+import com.flowcentraltech.flowcentral.configuration.constants.FlowCentralAppletPathConstants;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -31,7 +32,7 @@ import com.tcdng.unify.web.constant.Secured;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@Component("/taskexecutionapplet")
+@Component(FlowCentralAppletPathConstants.TASK_EXECUTION)
 @UplBinding("web/application/upl/taskexecutionappletpage.upl")
 public class TaskExecutionAppletController extends AbstractAppletController<TaskExecutionPageBean> {
 
