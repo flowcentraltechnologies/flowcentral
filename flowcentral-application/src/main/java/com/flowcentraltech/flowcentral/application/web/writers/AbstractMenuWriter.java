@@ -105,10 +105,8 @@ public abstract class AbstractMenuWriter extends AbstractPanelWriter {
                         isUpdateDraft ? appletDef.getOpenDraftPath() : appletDef.getOpenPath())
                 : (isUpdateDraft ? appletDef.getOpenDraftPath() : appletDef.getOpenPath());
         final String tabName = appletDef.getLongName();
-        final String path = innewwindow
-                ? ApplicationPageUtils.constructAppletOpenPagePath(
-                        ApplicationModulePathConstants.APPLICATION_MENU_TO_WINDOW + "/openInBrowserWindow", tabName)
-                : cpath;
+        final String path = innewwindow ? ApplicationPageUtils.constructAppletOpenInBrowserWindowPath(
+                ApplicationModulePathConstants.APPLICATION_MENU_TO_WINDOW, tabName) : cpath;
         if (innewwindow) {
             RequestOpenTabInfo requestOpenTabInfo = new RequestOpenTabInfo(appletDef.getLabel(), tabName, cpath,
                     multipage);

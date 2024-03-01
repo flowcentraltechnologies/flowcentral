@@ -25,6 +25,7 @@ import com.flowcentraltech.flowcentral.application.constants.ApplicationResultMa
 import com.flowcentraltech.flowcentral.application.data.RequestOpenTabInfo;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
+import com.tcdng.unify.core.annotation.UplBinding;
 import com.tcdng.unify.web.annotation.Action;
 import com.tcdng.unify.web.annotation.ResultMapping;
 import com.tcdng.unify.web.annotation.ResultMappings;
@@ -40,6 +41,7 @@ import com.tcdng.unify.web.ui.AbstractPageController;
  * @since 1.0
  */
 @Component(ApplicationModulePathConstants.APPLICATION_MENU_TO_WINDOW)
+@UplBinding("web/application/upl/applicationmenutowindow.upl")
 @ResultMappings({ @ResultMapping(name = ApplicationResultMappingConstants.OPEN_IN_NEW_BROWSER_WINDOW,
         response = { "!openinbrowserwindowresponse" }) })
 public class ApplicationMenuToWindowController extends AbstractPageController<ApplicationMenuToWindowPageBean> {
