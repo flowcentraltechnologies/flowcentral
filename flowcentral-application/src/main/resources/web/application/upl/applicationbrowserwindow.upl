@@ -1,4 +1,4 @@
-// UPL template for application manage entity page
+// UPL template for application browser window page
 // Copyright 2021-2024 FlowCentral Technologies Limited.
 // 
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
@@ -14,7 +14,8 @@
 // the License.
 
 !ui-document layout:$d{!ui-desktoptype1} contentPanel:$c{content}
-    favicon:$s{web/images/favicon_enduser.png} captionBinding:entityTitle
+	excludeScript:$s{web/js/apexcharts.min.js}
+    favicon:$s{web/images/favicon_enduser.png} captionBinding:windowTitle
 
 !ui-contentpanel:content styleClass:$e{fc-login-contentpanel}
 	documentPathBinding:documentPath pathsBinding:contentPaths

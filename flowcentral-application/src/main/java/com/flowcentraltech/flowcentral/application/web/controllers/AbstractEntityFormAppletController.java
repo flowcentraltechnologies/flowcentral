@@ -53,15 +53,15 @@ import com.tcdng.unify.web.ui.widget.data.Popup;
  * @since 1.0
  */
 @ResultMappings({
-    @ResultMapping(name = "refreshapplet",
-        response = { "!hidepopupresponse", "!refreshpanelresponse panels:$l{appletPanel}" }),
-    @ResultMapping(name = ApplicationResultMappingConstants.OPEN_MANAGE_ENTITY_IN_NEW_TAB,
-    response = { "!manageentityopentabresponse" }) })
+        @ResultMapping(name = "refreshapplet",
+                response = { "!hidepopupresponse", "!refreshpanelresponse panels:$l{appletPanel}" }),
+        @ResultMapping(name = ApplicationResultMappingConstants.OPEN_IN_NEW_BROWSER_WINDOW,
+                response = { "!openinbrowserwindowresponse" }) })
 public abstract class AbstractEntityFormAppletController<T extends AbstractEntityFormApplet, U extends AbstractEntityFormAppletPageBean<T>>
         extends AbstractAppletController<U> {
 
     private static final String IN_WORKFLOW_DRAFT_LOOP_FLAG = "IN_WORKFLOW_DRAFT_LOOP_FLAG";
-    
+
     public AbstractEntityFormAppletController(Class<U> pageBeanClass, Secured secured, ReadOnly readOnly,
             ResetOnWrite resetOnWrite) {
         super(pageBeanClass, secured, readOnly, resetOnWrite);
@@ -281,7 +281,7 @@ public abstract class AbstractEntityFormAppletController<T extends AbstractEntit
     @Action
     public String openWorkflowDraft() throws UnifyException {
         MessageResult result = getMessageResult();
-        switch (result == null ? MessageResult.CANCEL: result) {
+        switch (result == null ? MessageResult.CANCEL : result) {
             case NO:
                 performNormalViewMode();
                 break;
@@ -290,7 +290,7 @@ public abstract class AbstractEntityFormAppletController<T extends AbstractEntit
                 performEditModeWorkflowDraft();
                 break;
             case CANCEL:
-             case RETRY:
+            case RETRY:
             default:
                 break;
         }
@@ -428,7 +428,7 @@ public abstract class AbstractEntityFormAppletController<T extends AbstractEntit
 
         captions.setYesStyleClass("fc-orangebutton");
         captions.setNoStyleClass("fc-bluebutton");
-               
+
         captions.setYesCaption(editMessage);
         captions.setNoCaption(viewMessage);
         return showMessageBox(MessageIcon.QUESTION, MessageMode.YES_NO_CANCEL, captions, prompt, openWorkflowDraftPath);

@@ -213,6 +213,7 @@ public class ApplicationXmlGenerator extends AbstractStaticArtifactGenerator {
                 appletConfig.setEntity(appApplet.getEntity());
                 appletConfig.setIcon(appApplet.getIcon());
                 appletConfig.setMenuAccess(appApplet.isMenuAccess());
+                appletConfig.setSupportOpenInNewWindow(appApplet.isSupportOpenInNewWindow());
                 appletConfig.setAllowSecondaryTenants(appApplet.isAllowSecondaryTenants());
                 appletConfig.setDisplayIndex(appApplet.getDisplayIndex());
                 appletConfig.setRouteToApplet(appApplet.getRouteToApplet());

@@ -41,6 +41,7 @@ import com.flowcentraltech.flowcentral.chart.data.ChartDetails;
 import com.flowcentraltech.flowcentral.chart.data.ChartDetailsProvider;
 import com.flowcentraltech.flowcentral.chart.data.ChartTableColumn;
 import com.flowcentraltech.flowcentral.common.business.AbstractFlowCentralService;
+import com.flowcentraltech.flowcentral.common.constants.RecordStatus;
 import com.flowcentraltech.flowcentral.common.data.DefaultReportColumn;
 import com.flowcentraltech.flowcentral.common.data.FormatterOptions;
 import com.flowcentraltech.flowcentral.common.data.ReportColumnOptions;
@@ -139,13 +140,14 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
     @Override
     public List<ReportGroup> findReportGroupsByRole(String roleCode) throws UnifyException {
         if (StringUtils.isBlank(roleCode)) {
-            return environment().findAll(new ReportGroupQuery().ignoreEmptyCriteria(true).addOrder("label"));
+            return environment().findAll(new ReportGroupQuery().status(RecordStatus.ACTIVE).addOrder("label"));
         }
 
         List<Long> reportGroupIdList = environment().valueList(Long.class, "reportGroupId",
                 new ReportGroupRoleQuery().roleCode(roleCode));
         if (!DataUtils.isBlank(reportGroupIdList)) {
-            return environment().findAll(new ReportGroupQuery().idIn(reportGroupIdList).addOrder("label"));
+            return environment().findAll(
+                    new ReportGroupQuery().status(RecordStatus.ACTIVE).idIn(reportGroupIdList).addOrder("label"));
         }
 
         return Collections.emptyList();
@@ -830,7 +832,7 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
 
                 reportColumnOptions.setColumnName(_tableColumn.getFieldName());
                 reportColumnOptions.setType(dataType.javaClass().getName());
-                reportColumnOptions.setFormatter(FormatterOptions.DEFAULT.getFormatter(dataType)); 
+                reportColumnOptions.setFormatter(FormatterOptions.DEFAULT.getFormatter(dataType));
                 reportColumnOptions.setHAlignType(dataType.alignType());
                 reportColumnOptions.setWidth(1);
                 reportColumnOptions.setBold(false);

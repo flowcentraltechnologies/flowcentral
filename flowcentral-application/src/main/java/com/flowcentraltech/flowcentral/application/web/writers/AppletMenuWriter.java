@@ -24,6 +24,7 @@ import java.util.Set;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.business.ApplicationAppletDefProvider;
+import com.flowcentraltech.flowcentral.application.constants.AppletSessionAttributeConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.data.ApplicationMenuDef;
@@ -81,6 +82,7 @@ public class AppletMenuWriter extends AbstractMenuWriter {
     protected void doWriteStructureAndContent(ResponseWriter writer, Widget widget) throws UnifyException {
         final AppletMenuWidget appletMenuWidget = (AppletMenuWidget) widget;
         final boolean searchable = appletMenuWidget.isSearchable();
+        removeSessionAttribute(AppletSessionAttributeConstants.MENU_OPEN_TAB_INFO);
         appletMenuWidget.setCollapsedInitial(true);
         writer.write("<div");
         writeTagAttributesWithTrailingExtraStyleClass(writer, appletMenuWidget, "g_fsm");
@@ -155,14 +157,16 @@ public class AppletMenuWriter extends AbstractMenuWriter {
             final boolean enterprise = au.collaborationProvider() != null;
             final boolean multiPage = au.system().getSysParameterValue(boolean.class,
                     ApplicationModuleSysParamConstants.ENABLE_VIEW_ENTITY_IN_SEPARATE_TAB);
-
+            final boolean openInWindow = au.system().getSysParameterValue(boolean.class,
+                    ApplicationModuleSysParamConstants.ENABLE_OPEN_TAB_IN_BROWSER);
+            final WriteParam wparam = new WriteParam(multiPage, openInWindow);
+            
             final StringBuilder msb = new StringBuilder();
             final StringBuilder misb = new StringBuilder();
             msb.append('[');
             misb.append('[');
             final String submenuStyle = appletMenuWidget.isCollapsedInitial() ? "none" : "block";
             boolean appendSym = false;
-            boolean appendISym = false;
             final String searchInput = appletMenuWidget.isSearchable() ? appletMenuWidget.getSearchInput() : null;
             List<ApplicationMenuDef> applicationDefList = au.application().getApplicationMenuDefs(searchInput);
             List<AppletDef> draftAppletList = new ArrayList<AppletDef>();
@@ -228,9 +232,9 @@ public class AppletMenuWriter extends AbstractMenuWriter {
                                 if (appPrivilegeManager.isRoleWithPrivilege(roleCode, appletPrivilegeCode)
                                         && (wkspPrivilegeManager == null || wkspPrivilegeManager
                                                 .isWorkspaceWithPrivilege(workspaceCode, appletPrivilegeCode))) {
-                                    writeOpenDraftSubMenuAppletDef(writer, misb, appletDef, appendISym, multiPage);
+                                    writeOpenDraftSubMenuAppletDef(writer, misb, appletDef, wparam);
                                     isWithSubMenus = true;
-                                    appendISym = true;
+                                    wparam.setAppendISym(true);
                                 }
                             }
                         } else {
@@ -243,9 +247,9 @@ public class AppletMenuWriter extends AbstractMenuWriter {
                                 if (appPrivilegeManager.isRoleWithPrivilege(roleCode, appletPrivilegeCode)
                                         && (wkspPrivilegeManager == null || wkspPrivilegeManager
                                                 .isWorkspaceWithPrivilege(workspaceCode, appletPrivilegeCode))) {
-                                    writeSubMenuAppletDef(writer, misb, appletDef, appendISym, multiPage);
+                                    writeSubMenuAppletDef(writer, misb, appletDef, wparam);
                                     isWithSubMenus = true;
-                                    appendISym = true;
+                                    wparam.setAppendISym(true);
                                 }
                             }
 
@@ -253,9 +257,9 @@ public class AppletMenuWriter extends AbstractMenuWriter {
                                 for (AppletDef appletDef : appletDefProvider
                                         .getAppletDefsByRole(applicationMenuDef.getName(), roleCode, searchInput)) {
                                     if (appletDef.isMenuAccess()) {
-                                        writeSubMenuAppletDef(writer, misb, appletDef, appendISym, multiPage);
+                                        writeSubMenuAppletDef(writer, misb, appletDef, wparam);
                                         isWithSubMenus = true;
-                                        appendISym = true;
+                                        wparam.setAppendISym(true);
                                     }
                                 }
                             }

@@ -390,7 +390,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
 
             if (au().system().getSysParameterValue(boolean.class,
                     ApplicationModuleSysParamConstants.ENABLE_OPEN_TAB_IN_BROWSER)) {
-                result.setTabName(appletName);
+                result.setTabName(appletName + "_new");
                 result.setOpenTab(true);
             }
 

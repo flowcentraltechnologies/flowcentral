@@ -731,6 +731,8 @@
 				nullable="true" />
 			<field name="menuAccess"
 				label="$m{application.appapplet.menuaccess}" type="boolean" />
+			<field name="supportOpenInNewWindow"
+				label="$m{application.appapplet.supportopeninnewwindow}" type="boolean" />
 			<field name="allowSecondaryTenants"
 				label="$m{application.appapplet.allowsecondarytenants}"
 				type="boolean" />

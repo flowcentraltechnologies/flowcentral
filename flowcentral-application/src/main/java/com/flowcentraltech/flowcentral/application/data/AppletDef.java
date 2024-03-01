@@ -107,6 +107,8 @@ public interface AppletDef {
 
     boolean isMenuAccess() ;
 
+    boolean isSupportOpenInNewWindow();
+    
     boolean isAllowSecondaryTenants();
 
     List<AppletFilterDef> getPreferredFormFilterList();

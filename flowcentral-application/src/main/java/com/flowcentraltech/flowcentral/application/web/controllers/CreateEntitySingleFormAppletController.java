@@ -16,6 +16,7 @@
 package com.flowcentraltech.flowcentral.application.web.controllers;
 
 import com.flowcentraltech.flowcentral.application.web.panels.applet.CreateEntitySingleFormApplet;
+import com.flowcentraltech.flowcentral.configuration.constants.FlowCentralAppletPathConstants;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.UplBinding;
@@ -29,7 +30,7 @@ import com.tcdng.unify.web.constant.Secured;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@Component("/createentitysingleformapplet")
+@Component(FlowCentralAppletPathConstants.CREATE_ENTITY_SINGLEFORM)
 @UplBinding("web/application/upl/createentitysingleformappletpage.upl")
 public class CreateEntitySingleFormAppletController extends
         AbstractEntitySingleFormAppletController<CreateEntitySingleFormApplet, CreateEntitySingleFormAppletPageBean> {

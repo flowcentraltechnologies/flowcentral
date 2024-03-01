@@ -14,17 +14,16 @@
  * the License.
  */
 
-package com.flowcentraltech.flowcentral.application.constants;
+package com.flowcentraltech.flowcentral.application.web.controllers;
+
+import com.tcdng.unify.web.ui.AbstractPageBean;
 
 /**
- * Applet session attribute constants
+ * Application menu-to-window page bean.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface AppletSessionAttributeConstants {
-    
-    String OPEN_TAB_INFO = "applet:session:opentabinfo";
-    
-    String MENU_OPEN_TAB_INFO = "applet:session:menuopentabinfo";
+public class ApplicationMenuToWindowPageBean extends AbstractPageBean {
+
 }

@@ -17,6 +17,7 @@ package com.flowcentraltech.flowcentral.application.web.controllers;
 
 import com.flowcentraltech.flowcentral.application.data.EntityFormEventHandlers;
 import com.flowcentraltech.flowcentral.application.web.panels.applet.CreateEntityApplet;
+import com.flowcentraltech.flowcentral.configuration.constants.FlowCentralAppletPathConstants;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.UplBinding;
@@ -33,7 +34,7 @@ import com.tcdng.unify.web.constant.Secured;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@Component("/createentityapplet")
+@Component(FlowCentralAppletPathConstants.CREATE_ENTITY)
 @UplBinding("web/application/upl/createentityappletpage.upl")
 @ResultMappings({ @ResultMapping(name = "showfileattachments",
         response = { "!validationerrorresponse", "!showpopupresponse popup:$s{fileAttachmentsPopup}" }) })

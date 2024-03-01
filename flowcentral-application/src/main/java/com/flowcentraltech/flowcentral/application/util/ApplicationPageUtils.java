@@ -54,6 +54,10 @@ public final class ApplicationPageUtils {
         return new StringBuilder().append(controllerName).append(':').append(appletName).append("/openPage").toString();
     }
 
+    public static String constructAppletOpenInBrowserWindowPath(String controllerName, String tabName) {
+        return new StringBuilder().append(controllerName).append(':').append(tabName).append("/openInBrowserWindow").toString();
+    }
+
     public static String constructAppletPath(String controllerName, String appletName) {
         return new StringBuilder().append(controllerName).append(':').append(appletName).toString();
     }

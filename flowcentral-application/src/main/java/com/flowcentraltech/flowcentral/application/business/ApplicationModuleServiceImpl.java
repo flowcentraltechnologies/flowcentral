@@ -475,6 +475,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                     StandardAppletDef.Builder adb = StandardAppletDef.newBuilder(type, appApplet.getEntity(),
                             appApplet.getLabel(), appApplet.getIcon(), appApplet.getAssignDescField(),
                             appApplet.getPseudoDeleteField(), appApplet.getDisplayIndex(), appApplet.isMenuAccess(),
+                            appApplet.isSupportOpenInNewWindow(),
                             appApplet.isAllowSecondaryTenants(), descriptiveButtons, _actLongName,
                             appApplet.getDescription(), appApplet.getId(), appApplet.getVersionNo());
 
@@ -4078,6 +4079,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                     appApplet.setRouteToApplet(appletConfig.getRouteToApplet());
                     appApplet.setPath(appletConfig.getPath());
                     appApplet.setMenuAccess(appletConfig.getMenuAccess());
+                    appApplet.setSupportOpenInNewWindow(appletConfig.getSupportOpenInNewWindow());
                     appApplet.setAllowSecondaryTenants(appletConfig.getAllowSecondaryTenants());
                     appApplet.setDisplayIndex(appletConfig.getDisplayIndex());
                     appApplet.setBaseField(appletConfig.getBaseField());
@@ -4100,6 +4102,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                         oldAppApplet.setRouteToApplet(appletConfig.getRouteToApplet());
                         oldAppApplet.setPath(appletConfig.getPath());
                         oldAppApplet.setMenuAccess(appletConfig.getMenuAccess());
+                        oldAppApplet.setSupportOpenInNewWindow(appletConfig.getSupportOpenInNewWindow());
                         oldAppApplet.setAllowSecondaryTenants(appletConfig.getAllowSecondaryTenants());
                         oldAppApplet.setDisplayIndex(appletConfig.getDisplayIndex());
                         oldAppApplet.setBaseField(appletConfig.getBaseField());

@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.application.web.responses;
 
 import com.flowcentraltech.flowcentral.application.constants.AppletRequestAttributeConstants;
 import com.flowcentraltech.flowcentral.application.constants.AppletSessionAttributeConstants;
+import com.flowcentraltech.flowcentral.application.constants.ApplicationModulePathConstants;
 import com.flowcentraltech.flowcentral.application.data.RequestOpenTabInfo;
 import com.flowcentraltech.flowcentral.application.data.SessionOpenTabInfo;
 import com.flowcentraltech.flowcentral.application.util.ApplicationPageUtils;
@@ -27,13 +28,13 @@ import com.tcdng.unify.core.constant.MimeType;
 import com.tcdng.unify.web.ui.AbstractOpenWindowPageControllerResponse;
 
 /**
- * Manage entity open tab response.
+ * Open in browser window response.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@Component("manageentityopentabresponse")
-public class ManageEntityOpenTabResponse extends AbstractOpenWindowPageControllerResponse {
+@Component("openinbrowserwindowresponse")
+public class OpenInBrowserWindowResponse extends AbstractOpenWindowPageControllerResponse {
 
     @Override
     protected WindowResourceInfo prepareWindowResource() throws UnifyException {
@@ -41,8 +42,8 @@ public class ManageEntityOpenTabResponse extends AbstractOpenWindowPageControlle
                 AppletRequestAttributeConstants.OPEN_TAB_INFO);
         if (requestOpenTabInfo != null) {
             logDebug("Preparing open tab for path [{0}] ...", requestOpenTabInfo.getContentPath());
-            final String docpath = ApplicationPageUtils.constructAppletPath("/application/manageentity",
-                    requestOpenTabInfo.getTabName());
+            final String docpath = ApplicationPageUtils.constructAppletPath(
+                    ApplicationModulePathConstants.APPLICATION_BROWSER_WINDOW, requestOpenTabInfo.getTabName());
             setSessionAttribute(AppletSessionAttributeConstants.OPEN_TAB_INFO, new SessionOpenTabInfo(
                     requestOpenTabInfo.getTitle(), docpath, requestOpenTabInfo.getContentPath()));
             WindowResourceInfo info = new WindowResourceInfo(requestOpenTabInfo.getContentPath(), docpath,

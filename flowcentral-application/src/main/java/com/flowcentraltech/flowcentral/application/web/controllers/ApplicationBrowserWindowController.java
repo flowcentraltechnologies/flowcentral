@@ -17,6 +17,7 @@
 package com.flowcentraltech.flowcentral.application.web.controllers;
 
 import com.flowcentraltech.flowcentral.application.constants.AppletSessionAttributeConstants;
+import com.flowcentraltech.flowcentral.application.constants.ApplicationModulePathConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationResultMappingConstants;
 import com.flowcentraltech.flowcentral.application.data.SessionOpenTabInfo;
 import com.tcdng.unify.core.UnifyException;
@@ -32,21 +33,21 @@ import com.tcdng.unify.web.constant.Secured;
 import com.tcdng.unify.web.ui.AbstractPageController;
 
 /**
- * Application manage entity controller.
+ * Application browser window controller.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
 @Singleton(false)
-@Component("/application/manageentity")
-@UplBinding("web/application/upl/applicationmanageentity.upl")
+@Component(ApplicationModulePathConstants.APPLICATION_BROWSER_WINDOW)
+@UplBinding("web/application/upl/applicationbrowserwindow.upl")
 @ResultMappings({
     @ResultMapping(name = ApplicationResultMappingConstants.REFRESH_CONTENT,
         response = { "!hidepopupresponse", "!refreshpanelresponse panels:$l{content}" }) })
-public class ApplicationManageEntityController extends AbstractPageController<ApplicationManageEntityPageBean> {
+public class ApplicationBrowserWindowController extends AbstractPageController<ApplicationBrowserWindowPageBean> {
 
-    public ApplicationManageEntityController() {
-        super(ApplicationManageEntityPageBean.class, Secured.TRUE, ReadOnly.FALSE, ResetOnWrite.FALSE);
+    public ApplicationBrowserWindowController() {
+        super(ApplicationBrowserWindowPageBean.class, Secured.TRUE, ReadOnly.FALSE, ResetOnWrite.FALSE);
     }
 
     @Action
@@ -58,11 +59,11 @@ public class ApplicationManageEntityController extends AbstractPageController<Ap
     @Override
     protected void onInitPage() throws UnifyException {
         super.onInitPage();
-        ApplicationManageEntityPageBean pageBean = getPageBean();
+        ApplicationBrowserWindowPageBean pageBean = getPageBean();
         if (pageBean.getDocumentPath() == null) {
             final SessionOpenTabInfo sessionOpenTabInfo = (SessionOpenTabInfo) removeSessionAttribute(
                     AppletSessionAttributeConstants.OPEN_TAB_INFO);
-            pageBean.setEntityTitle(sessionOpenTabInfo.getTitle());
+            pageBean.setWindowTitle(sessionOpenTabInfo.getTitle());
             pageBean.setDocumentPath(sessionOpenTabInfo.getDocumentPath());
             pageBean.setContentPaths(new String[] { sessionOpenTabInfo.getContentPath() });
         }

@@ -44,7 +44,7 @@ public interface ApplicationResultMappingConstants {
     
     String SHOW_QUICK_FORM_EDIT = "showquickformedit";
     
-    String OPEN_MANAGE_ENTITY_IN_NEW_TAB = "openmanageentityinnewtab";
+    String OPEN_IN_NEW_BROWSER_WINDOW = "openinnewbrowserwindow";
     
     String FORWARD_TO_HOME = "forwardtohome";
     

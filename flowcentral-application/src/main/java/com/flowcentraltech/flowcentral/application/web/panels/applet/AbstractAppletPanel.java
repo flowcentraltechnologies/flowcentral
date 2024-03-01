@@ -113,10 +113,10 @@ public abstract class AbstractAppletPanel extends AbstractApplicationSwitchPanel
                     getApplet().au().commandRefreshPanelsAndHidePopup(this);
                 }
             } else {
-                setCommandResultMapping(ResultMappingConstants.CLOSE);
+                setCloseResultMapping();
             }
         } else if (entityActionResult.isClosePage()) {
-            setCommandResultMapping(ResultMappingConstants.CLOSE);
+            setCloseResultMapping();
         } else if (entityActionResult.isDisplayListingReport()) {
             setRequestAttribute(FlowCentralRequestAttributeConstants.REPORT, entityActionResult.getResult());
             setCommandResultMapping(FlowCentralResultMappingConstants.VIEW_LISTING_REPORT);
@@ -136,6 +136,14 @@ public abstract class AbstractAppletPanel extends AbstractApplicationSwitchPanel
         }
     }
 
+    protected void setCloseResultMapping() throws UnifyException {
+        if (getApplet().getCtx().isInDetachedWindow()) {
+            setCommandResultMapping(ResultMappingConstants.CLOSE_WINDOW);
+        } else {
+            setCommandResultMapping(ResultMappingConstants.CLOSE);
+        }
+    }
+    
     protected abstract void onReviewErrors(EntityActionResult entityActionResult) throws UnifyException;
     
     private void formHintSuccess(String messageKey, String entityName) throws UnifyException {

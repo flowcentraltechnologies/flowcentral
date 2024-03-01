@@ -13,18 +13,19 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-
 package com.flowcentraltech.flowcentral.application.constants;
 
 /**
- * Applet session attribute constants
+ * Application module path constants.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface AppletSessionAttributeConstants {
+public interface ApplicationModulePathConstants {
+
+    String APPLICATION = "/application";
+
+    String APPLICATION_BROWSER_WINDOW = "/application/browserwindow";
     
-    String OPEN_TAB_INFO = "applet:session:opentabinfo";
-    
-    String MENU_OPEN_TAB_INFO = "applet:session:menuopentabinfo";
+    String APPLICATION_MENU_TO_WINDOW = "/application/menutowindow";
 }

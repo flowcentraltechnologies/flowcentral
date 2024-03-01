@@ -36,42 +36,42 @@ public enum AppletType implements EnumConst {
 
     MANAGE_ENTITYLIST(
             "MEL",
-            "/manageentitylistapplet",
+            FlowCentralAppletPathConstants.MANAGE_ENTITYLIST,
             false,
             true),
     MANAGE_ENTITYLIST_ASSIGN(
             "MEA",
-            "/manageentitylistapplet",
+            FlowCentralAppletPathConstants.MANAGE_ENTITYLIST,
             false,
             true),
     MANAGE_ENTITYLIST_SINGLEFORM(
             "MLS",
-            "/manageentitylistsingleformapplet",
+            FlowCentralAppletPathConstants.MANAGE_ENTITYLIST_SINGLEFORM,
             false,
             true),
     MANAGE_LOADINGLIST(
             "MLL",
-            "/manageloadinglistapplet",
+            FlowCentralAppletPathConstants.MANAGE_LOADINGLIST,
             false,
             true),
     HEADLESS_TABS(
             "HDL",
-            "/headlesstabsformapplet",
+            FlowCentralAppletPathConstants.HEADLESS_TABS,
             false,
             true),
     CREATE_ENTITY(
             "CEN",
-            "/createentityapplet",
+            FlowCentralAppletPathConstants.CREATE_ENTITY,
             true,
             true),
     CREATE_ENTITY_SINGLEFORM(
             "CNS",
-            "/createentitysingleformapplet",
+            FlowCentralAppletPathConstants.CREATE_ENTITY_SINGLEFORM,
             true,
             true),
     LISTING(
             "LST",
-            "/listingapplet",
+            FlowCentralAppletPathConstants.LISTING,
             true,
             false),
     MANAGE_PROPERTYLIST(
@@ -81,12 +81,12 @@ public enum AppletType implements EnumConst {
             true),
     TASK_EXECUTION(
             "TEX",
-            "/taskexecutionapplet",
+            FlowCentralAppletPathConstants.TASK_EXECUTION,
             true,
             true),
     DATA_IMPORT(
             "DIM",
-            "/dataimportapplet",
+            FlowCentralAppletPathConstants.DATA_IMPORT,
             true,
             true),
     FACADE(
@@ -106,17 +106,17 @@ public enum AppletType implements EnumConst {
             true),
     REVIEW_WORKITEMS(
             "RWK",
-            "/reviewworkitemsapplet",
+            FlowCentralAppletPathConstants.REVIEW_WORKITEMS,
             false,
             true),
     REVIEW_SINGLEFORMWORKITEMS(
             "RWS",
-            "/reviewsingleformworkitemsapplet",
+            FlowCentralAppletPathConstants.REVIEW_SINGLEFORMWORKITEMS,
             false,
             true),
     REVIEW_WIZARDWORKITEMS(
             "RWZ",
-            "/reviewwizardworkitemsapplet",
+            FlowCentralAppletPathConstants.REVIEW_WIZARDWORKITEMS,
             false,
             true),
     STUDIO_FC_COMPONENT(

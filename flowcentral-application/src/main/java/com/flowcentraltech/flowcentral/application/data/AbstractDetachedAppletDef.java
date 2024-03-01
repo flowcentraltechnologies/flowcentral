@@ -199,6 +199,11 @@ public abstract class AbstractDetachedAppletDef implements AppletDef {
     }
 
     @Override
+    public boolean isSupportOpenInNewWindow() {
+        return parentAppletDef.isSupportOpenInNewWindow();
+    }
+
+    @Override
     public boolean isAllowSecondaryTenants() {
         return parentAppletDef.isAllowSecondaryTenants();
     }

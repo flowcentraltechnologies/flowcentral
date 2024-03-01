@@ -38,7 +38,6 @@ import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.annotation.Action;
-import com.tcdng.unify.web.constant.ResultMappingConstants;
 import com.tcdng.unify.web.ui.widget.Panel;
 import com.tcdng.unify.web.ui.widget.data.Hint.MODE;
 
@@ -261,7 +260,7 @@ public abstract class AbstractEntitySingleFormAppletPanel extends AbstractApplet
     public void navBackToPrevious() throws UnifyException {
         AbstractEntitySingleFormApplet applet = getEntityFormApplet();
         if (applet.getMode().isPrimary()) {
-            setCommandResultMapping(ResultMappingConstants.CLOSE);
+            setCloseResultMapping();
             return;
         }
 
@@ -418,7 +417,7 @@ public abstract class AbstractEntitySingleFormAppletPanel extends AbstractApplet
         } else if (entityActionResult.isCloseView()) {
             getEntityFormApplet().navBackToPrevious();
         } else if (entityActionResult.isClosePage()) {
-            setCommandResultMapping(ResultMappingConstants.CLOSE);
+            setCloseResultMapping();
         }
 
         String successHint = entityActionResult.getSuccessHint();
