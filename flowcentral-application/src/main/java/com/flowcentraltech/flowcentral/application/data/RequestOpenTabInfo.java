@@ -29,10 +29,19 @@ public class RequestOpenTabInfo {
 
     private String contentPath;
 
+    private boolean multiPage;
+    
     public RequestOpenTabInfo(String title, String tabName, String contentPath) {
         this.title = title;
         this.tabName = tabName;
         this.contentPath = contentPath;
+    }
+    
+    public RequestOpenTabInfo(String title, String tabName, String contentPath, boolean multiPage) {
+        this.title = title;
+        this.tabName = tabName;
+        this.contentPath = contentPath;
+        this.multiPage = multiPage;
     }
 
     public String getTitle() {
@@ -45,6 +54,10 @@ public class RequestOpenTabInfo {
 
     public String getContentPath() {
         return contentPath;
+    }
+
+    public boolean isMultiPage() {
+        return multiPage;
     }
 
 }

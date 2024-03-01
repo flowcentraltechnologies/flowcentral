@@ -1064,7 +1064,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         RequestOpenTabInfo requestOpenTabInfo = new RequestOpenTabInfo(title, result.getTabName(),
                 (String) result.getResult());
         setRequestAttribute(AppletRequestAttributeConstants.OPEN_TAB_INFO, requestOpenTabInfo);
-        setCommandResultMapping(ApplicationResultMappingConstants.OPEN_MANAGE_ENTITY_IN_NEW_TAB);
+        setCommandResultMapping(ApplicationResultMappingConstants.OPEN_IN_NEW_BROWSER_WINDOW);
     }
 
     private String concatenateMessages(String base, List<String> messages) throws UnifyException {

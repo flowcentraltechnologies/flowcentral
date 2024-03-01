@@ -55,8 +55,8 @@ import com.tcdng.unify.web.ui.widget.data.Popup;
 @ResultMappings({
     @ResultMapping(name = "refreshapplet",
         response = { "!hidepopupresponse", "!refreshpanelresponse panels:$l{appletPanel}" }),
-    @ResultMapping(name = ApplicationResultMappingConstants.OPEN_MANAGE_ENTITY_IN_NEW_TAB,
-    response = { "!manageentityopentabresponse" }) })
+    @ResultMapping(name = ApplicationResultMappingConstants.OPEN_IN_NEW_BROWSER_WINDOW,
+    response = { "!openinbrowserwindowresponse" }) })
 public abstract class AbstractEntityFormAppletController<T extends AbstractEntityFormApplet, U extends AbstractEntityFormAppletPageBean<T>>
         extends AbstractAppletController<U> {
 

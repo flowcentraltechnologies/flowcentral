@@ -27,13 +27,13 @@ import com.tcdng.unify.core.constant.MimeType;
 import com.tcdng.unify.web.ui.AbstractOpenWindowPageControllerResponse;
 
 /**
- * Manage entity open tab response.
+ * Open in browser window response.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@Component("manageentityopentabresponse")
-public class ManageEntityOpenTabResponse extends AbstractOpenWindowPageControllerResponse {
+@Component("openinbrowserwindowresponse")
+public class OpenInBrowserWindowResponse extends AbstractOpenWindowPageControllerResponse {
 
     @Override
     protected WindowResourceInfo prepareWindowResource() throws UnifyException {

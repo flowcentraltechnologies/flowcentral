@@ -24,5 +24,7 @@ package com.flowcentraltech.flowcentral.application.constants;
  */
 public interface AppletSessionAttributeConstants {
     
-    String OPEN_TAB_INFO = "app:session:opentabinfo";
+    String OPEN_TAB_INFO = "applet:session:opentabinfo";
+    
+    String MENU_OPEN_TAB_INFO = "applet:session:menuopentabinfo";
 }
