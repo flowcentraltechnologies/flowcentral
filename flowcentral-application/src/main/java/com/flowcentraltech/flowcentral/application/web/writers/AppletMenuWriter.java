@@ -24,6 +24,7 @@ import java.util.Set;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.business.ApplicationAppletDefProvider;
+import com.flowcentraltech.flowcentral.application.constants.AppletSessionAttributeConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.data.ApplicationMenuDef;
@@ -81,6 +82,7 @@ public class AppletMenuWriter extends AbstractMenuWriter {
     protected void doWriteStructureAndContent(ResponseWriter writer, Widget widget) throws UnifyException {
         final AppletMenuWidget appletMenuWidget = (AppletMenuWidget) widget;
         final boolean searchable = appletMenuWidget.isSearchable();
+        removeSessionAttribute(AppletSessionAttributeConstants.MENU_OPEN_TAB_INFO);
         appletMenuWidget.setCollapsedInitial(true);
         writer.write("<div");
         writeTagAttributesWithTrailingExtraStyleClass(writer, appletMenuWidget, "g_fsm");

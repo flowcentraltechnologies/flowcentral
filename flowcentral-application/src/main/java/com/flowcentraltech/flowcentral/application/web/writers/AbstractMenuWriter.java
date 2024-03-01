@@ -20,6 +20,7 @@ import java.util.Map;
 
 import com.flowcentraltech.flowcentral.application.constants.AppletPropertyConstants;
 import com.flowcentraltech.flowcentral.application.constants.AppletSessionAttributeConstants;
+import com.flowcentraltech.flowcentral.application.constants.ApplicationModulePathConstants;
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.data.RequestOpenTabInfo;
 import com.flowcentraltech.flowcentral.application.util.ApplicationPageUtils;
@@ -104,11 +105,13 @@ public abstract class AbstractMenuWriter extends AbstractPanelWriter {
                         isUpdateDraft ? appletDef.getOpenDraftPath() : appletDef.getOpenPath())
                 : (isUpdateDraft ? appletDef.getOpenDraftPath() : appletDef.getOpenPath());
         final String tabName = appletDef.getLongName();
-        final String path = innewwindow ? ApplicationPageUtils.constructAppletOpenPagePath("", tabName)
+        final String path = innewwindow
+                ? ApplicationPageUtils.constructAppletOpenPagePath(
+                        ApplicationModulePathConstants.APPLICATION_MENU_TO_WINDOW + "/openInBrowserWindow", tabName)
                 : cpath;
         if (innewwindow) {
-            RequestOpenTabInfo requestOpenTabInfo = new RequestOpenTabInfo(appletDef.getLabel(),
-                    tabName, cpath, multipage);
+            RequestOpenTabInfo requestOpenTabInfo = new RequestOpenTabInfo(appletDef.getLabel(), tabName, cpath,
+                    multipage);
             setMenuRequestOpenTabInfo(requestOpenTabInfo);
         }
 
@@ -126,20 +129,22 @@ public abstract class AbstractMenuWriter extends AbstractPanelWriter {
 
     @SuppressWarnings("unchecked")
     protected void setMenuRequestOpenTabInfo(RequestOpenTabInfo requestOpenTabInfo) throws UnifyException {
-        Map<String, RequestOpenTabInfo> map = (Map<String, RequestOpenTabInfo>) getSessionAttribute(AppletSessionAttributeConstants.MENU_OPEN_TAB_INFO);
+        Map<String, RequestOpenTabInfo> map = (Map<String, RequestOpenTabInfo>) getSessionAttribute(
+                AppletSessionAttributeConstants.MENU_OPEN_TAB_INFO);
         if (map == null) {
-            synchronized(this) {
-                map = (Map<String, RequestOpenTabInfo>) getSessionAttribute(AppletSessionAttributeConstants.MENU_OPEN_TAB_INFO);
+            synchronized (this) {
+                map = (Map<String, RequestOpenTabInfo>) getSessionAttribute(
+                        AppletSessionAttributeConstants.MENU_OPEN_TAB_INFO);
                 if (map == null) {
                     map = new HashMap<String, RequestOpenTabInfo>();
                     setSessionAttribute(AppletSessionAttributeConstants.MENU_OPEN_TAB_INFO, map);
-                }                
+                }
             }
         }
-        
+
         map.put(requestOpenTabInfo.getTabName(), requestOpenTabInfo);
     }
-    
+
     protected class WriteParam {
 
         private final boolean multiPage;

@@ -13,19 +13,17 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.application.constants;
+
+package com.flowcentraltech.flowcentral.application.web.controllers;
+
+import com.tcdng.unify.web.ui.AbstractPageBean;
 
 /**
- * Application module path constants.
+ * Application menu-to-window page bean.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface ApplicationModulePathConstants {
+public class ApplicationMenuToWindowPageBean extends AbstractPageBean {
 
-    String APPLICATION = "/application";
-
-    String APPLICATION_BROWSER_WINDOW = "/application/browserwindow";
-    
-    String APPLICATION_MENU_TO_WINDOW = "/application/menutowindow";
 }
