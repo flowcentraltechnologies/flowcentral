@@ -25,11 +25,11 @@ import com.flowcentraltech.flowcentral.application.data.TableLoadingDef;
 import com.flowcentraltech.flowcentral.application.data.WorkflowStepInfo;
 import com.flowcentraltech.flowcentral.application.web.controllers.AppletWidgetReferences;
 import com.flowcentraltech.flowcentral.application.web.panels.LoadingSearch;
-import com.flowcentraltech.flowcentral.application.web.panels.applet.ManageLoadingListApplet;
 import com.flowcentraltech.flowcentral.workflow.business.WorkflowModuleService;
 import com.flowcentraltech.flowcentral.workflow.constants.WorkflowModuleNameConstants;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.UserToken;
+import com.tcdng.unify.web.ui.widget.data.ButtonInfo;
 
 /**
  * Exception work items applet.
@@ -37,7 +37,7 @@ import com.tcdng.unify.core.UserToken;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class ExceptionWorkItemsApplet extends ManageLoadingListApplet {
+public class ExceptionWorkItemsApplet extends AbstractWorkItemsApplet {
 
     public ExceptionWorkItemsApplet(WorkflowModuleService workflowModuleService, String loadingTableName,
             String roleCode, AppletUtilities au, String pathVariable, AppletWidgetReferences appletWidgetReferences,
@@ -51,10 +51,11 @@ public class ExceptionWorkItemsApplet extends ManageLoadingListApplet {
                 : Collections.emptyList();
         int orderIndex = 0;
         for (WorkflowStepInfo workflowStepInfo : workflowStepList) {
+            List<ButtonInfo> actionBtnInfos = getActionButtons(workflowModuleService, workflowStepInfo);
             altTableLoadingDefs.add(new TableLoadingDef(workflowStepInfo.getStepName(), workflowStepInfo.getStepDesc(),
                     workflowStepInfo.getStepLabel(),
                     WorkflowModuleNameConstants.WORKFLOW_MY_WORKITEMS_LOADING_TABLE_PROVIDER, workflowStepInfo,
-                    orderIndex++));
+                    orderIndex++, actionBtnInfos));
         }
 
         final LoadingSearch loadingSearch = getLoadingSearch();

@@ -241,8 +241,9 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                     List<StringToken> descFormat = !StringUtils.isBlank(workflow.getDescFormat())
                             ? StringUtils.breakdownParameterizedString(workflow.getDescFormat())
                             : Collections.emptyList();
-                    WfDef.Builder wdb = WfDef.newBuilder(workflow.getEntity(), descFormat, longName,
-                            workflow.getDescription(), workflow.getId(), workflow.getVersionNo());
+                    WfDef.Builder wdb = WfDef.newBuilder(workflow.getEntity(), descFormat,
+                            workflow.isSupportMultiItemAction(), longName, workflow.getDescription(), workflow.getId(),
+                            workflow.getVersionNo());
 
                     Set<String> filterNames = new HashSet<String>();
                     for (WorkflowFilter workflowFilter : workflow.getFilterList()) {
@@ -281,8 +282,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                             final String assignDescField = null;
                             final String pseudoDeleteField = null;
                             StandardAppletDef.Builder adb = StandardAppletDef.newBuilder(_reviewAppletType, null, label,
-                                    "tasks", assignDescField, pseudoDeleteField, 0, true, false, true, descriptiveButtons,
-                                    appletName, label);
+                                    "tasks", assignDescField, pseudoDeleteField, 0, true, false, true,
+                                    descriptiveButtons, appletName, label);
                             final String table = useraction ? "workflow.wfItemReviewTable"
                                     : "workflow.wfItemRecoveryTable";
                             final String update = useraction ? "true" : "false";
@@ -396,8 +397,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                     final String assignDescField = null;
                     final String pseudoDeleteField = null;
                     StandardAppletDef.Builder adb = StandardAppletDef.newBuilder(AppletType.REVIEW_WIZARDWORKITEMS,
-                            null, label, "magic", assignDescField, pseudoDeleteField, 0, true, false, true, descriptiveButtons,
-                            appletName, label);
+                            null, label, "magic", assignDescField, pseudoDeleteField, 0, true, false, true,
+                            descriptiveButtons, appletName, label);
                     adb.addPropDef(AppletPropertyConstants.SEARCH_TABLE, "workflow.wfWizardItemReviewTable");
                     adb.addPropDef(AppletPropertyConstants.SEARCH_TABLE_NEW, "true");
                     adb.addPropDef(WfWizardAppletPropertyConstants.WORKFLOW_WIZARD, longName);
