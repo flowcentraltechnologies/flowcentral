@@ -118,6 +118,7 @@ public class ApplicationWorkflowInstallerImpl extends AbstractApplicationArtifac
                         workflow.setDescFormat(wfConfig.getDescFormat());
                         workflow.setLabel(label);
                         workflow.setLoadingTable(wfConfig.getLoadingTable());
+                        workflow.setSupportMultiItemAction(wfConfig.getSupportMultiItemAction());
                         workflow.setEntity(
                                 ApplicationNameUtils.ensureLongNameReference(applicationName, wfConfig.getEntity()));
                         workflow.setConfigType(ConfigType.MUTABLE_INSTALL);
@@ -129,6 +130,7 @@ public class ApplicationWorkflowInstallerImpl extends AbstractApplicationArtifac
                             oldWorkflow.setDescFormat(wfConfig.getDescFormat());
                             oldWorkflow.setLabel(label);
                             oldWorkflow.setLoadingTable(wfConfig.getLoadingTable());
+                            oldWorkflow.setSupportMultiItemAction(wfConfig.getSupportMultiItemAction());
                             oldWorkflow.setEntity(ApplicationNameUtils.ensureLongNameReference(applicationName,
                                     wfConfig.getEntity()));
                         }

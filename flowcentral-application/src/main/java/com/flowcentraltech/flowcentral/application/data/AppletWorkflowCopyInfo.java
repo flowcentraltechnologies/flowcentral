@@ -89,16 +89,20 @@ public class AppletWorkflowCopyInfo {
 
     private long appletVersionNo;
 
+    private boolean supportMultiItemAction;
+
     private Map<WorkflowCopyType, WorkflowCopyInfo> workflowCopyInfos;
 
     private Map<String, AppletAlertDef> alerts;
 
-    public AppletWorkflowCopyInfo(String appletName, String appletSearchTable, String attachmentProvider, long appletVersionNo,
+    public AppletWorkflowCopyInfo(String appletName, String appletSearchTable, String attachmentProvider,
+            long appletVersionNo, boolean supportMultiItemAction,
             Map<WorkflowCopyType, WorkflowCopyInfo> workflowCopyInfos, Map<String, AppletAlertDef> alerts) {
         this.appletName = appletName;
         this.appletSearchTable = appletSearchTable;
         this.attachmentProvider = attachmentProvider;
         this.appletVersionNo = appletVersionNo;
+        this.supportMultiItemAction = supportMultiItemAction;
         this.workflowCopyInfos = DataUtils.unmodifiableMap(workflowCopyInfos);
         this.alerts = DataUtils.unmodifiableMap(alerts);
     }
@@ -125,6 +129,10 @@ public class AppletWorkflowCopyInfo {
 
     public long getAppletVersionNo() {
         return appletVersionNo;
+    }
+
+    public boolean isSupportMultiItemAction() {
+        return supportMultiItemAction;
     }
 
     public WorkflowCopyInfo getWorkflowCopyInfo(WorkflowCopyType type) {
@@ -194,7 +202,7 @@ public class AppletWorkflowCopyInfo {
         public EventType getType() {
             return type;
         }
- 
+
         public String getAlertName() {
             return alertName;
         }
@@ -212,8 +220,9 @@ public class AppletWorkflowCopyInfo {
         }
     }
 
-    public static Builder newBuilder(String appletName, String appletSearchTable, String attachmentProvider, long appletVersionNo) {
-        return new Builder(appletName, appletSearchTable, attachmentProvider, appletVersionNo);
+    public static Builder newBuilder(String appletName, String appletSearchTable, String attachmentProvider,
+            long appletVersionNo, boolean supportMultiItemAction) {
+        return new Builder(appletName, appletSearchTable, attachmentProvider, appletVersionNo, supportMultiItemAction);
     }
 
     public static class Builder {
@@ -226,20 +235,25 @@ public class AppletWorkflowCopyInfo {
 
         private long appletVersionNo;
 
+        private boolean supportMultiItemAction;
+
         private Map<WorkflowCopyType, WorkflowCopyInfo> workflowCopyInfos;
 
         private Map<String, AppletAlertDef> alerts;
 
-        public Builder(String appletName, String appletSearchTable, String attachmentProvider, long appletVersionNo) {
+        public Builder(String appletName, String appletSearchTable, String attachmentProvider, long appletVersionNo,
+                boolean supportMultiItemAction) {
             this.appletName = appletName;
             this.appletSearchTable = appletSearchTable;
             this.attachmentProvider = attachmentProvider;
             this.appletVersionNo = appletVersionNo;
+            this.supportMultiItemAction = supportMultiItemAction;
             this.workflowCopyInfos = new HashMap<WorkflowCopyType, WorkflowCopyInfo>();
             this.alerts = new HashMap<String, AppletAlertDef>();
         }
 
-        public Builder withEvent(WorkflowCopyType copyType, EventType eventType, String alertName, String setValuesName) {
+        public Builder withEvent(WorkflowCopyType copyType, EventType eventType, String alertName,
+                String setValuesName) {
             getWorkflowCopyInfo(copyType).getEventInfos().put(eventType,
                     new EventInfo(eventType, alertName, setValuesName));
             return this;
@@ -270,7 +284,8 @@ public class AppletWorkflowCopyInfo {
             }
 
             return new AppletWorkflowCopyInfo(appletName, appletSearchTable, attachmentProvider, appletVersionNo,
-                    Collections.unmodifiableMap(_workflowCopyInfos), Collections.unmodifiableMap(alerts));
+                    supportMultiItemAction, Collections.unmodifiableMap(_workflowCopyInfos),
+                    Collections.unmodifiableMap(alerts));
         }
     }
 }

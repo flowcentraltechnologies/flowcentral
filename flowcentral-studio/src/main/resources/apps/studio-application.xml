@@ -4857,6 +4857,8 @@
 					<field name="filterGenerator"
 						inputWidget="studio.workflowfiltergeneratorlist"
 						switchOnChange="true" column="1" />
+					<field name="supportMultiItemAction"
+						inputWidget="application.checkbox" column="1" />
 				</section>
 			</tab>
 			<tab name="design" label="$m{studio.workflow.form.design}"

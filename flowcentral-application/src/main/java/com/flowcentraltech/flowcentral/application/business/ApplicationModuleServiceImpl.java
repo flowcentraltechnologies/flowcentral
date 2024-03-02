@@ -475,9 +475,9 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                     StandardAppletDef.Builder adb = StandardAppletDef.newBuilder(type, appApplet.getEntity(),
                             appApplet.getLabel(), appApplet.getIcon(), appApplet.getAssignDescField(),
                             appApplet.getPseudoDeleteField(), appApplet.getDisplayIndex(), appApplet.isMenuAccess(),
-                            appApplet.isSupportOpenInNewWindow(),
-                            appApplet.isAllowSecondaryTenants(), descriptiveButtons, _actLongName,
-                            appApplet.getDescription(), appApplet.getId(), appApplet.getVersionNo());
+                            appApplet.isSupportOpenInNewWindow(), appApplet.isAllowSecondaryTenants(),
+                            descriptiveButtons, _actLongName, appApplet.getDescription(), appApplet.getId(),
+                            appApplet.getVersionNo());
 
                     for (AppAppletProp appAppletProp : appApplet.getPropList()) {
                         adb.addPropDef(appAppletProp.getName(), appAppletProp.getValue());
@@ -1713,9 +1713,12 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
         final ApplicationEntityNameParts np = ApplicationNameUtils.getApplicationEntityNameParts(appletName);
         final long appletVersionNo = environment().value(long.class, "versionNo",
                 new AppAppletQuery().applicationName(np.getApplicationName()).name(np.getEntityName()));
+        final boolean supportMultiItemAction = appletUtilities.system().getSysParameterValue(boolean.class,
+                ApplicationModuleSysParamConstants.ENABLE_DRAFT_WORKFLOW_MULTIITEM_ACTION);
         final AppletWorkflowCopyInfo.Builder awcb = AppletWorkflowCopyInfo.newBuilder(appletName,
                 getAppletProperty(np, AppletPropertyConstants.SEARCH_TABLE),
-                getAppletProperty(np, AppletPropertyConstants.WORKFLOWCOPY_ATTACHMENT_PROVIDER), appletVersionNo);
+                getAppletProperty(np, AppletPropertyConstants.WORKFLOWCOPY_ATTACHMENT_PROVIDER), appletVersionNo,
+                supportMultiItemAction);
         // Creation workflow
         awcb.withEvent(WorkflowCopyType.CREATION, EventType.ON_SUBMIT,
                 getAppletProperty(np, AppletPropertyConstants.WORKFLOWCOPY_CREATE_SUBMIT_ALERT),
@@ -2881,7 +2884,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
         if (fieldName != null) {
             List<String> descList = environment().valueList(String.class, fieldName,
                     Query.of((Class<? extends Entity>) entityClassDef.getEntityClass()).addEquals("id", entityId));
-            if (descList.size() ==  1) {
+            if (descList.size() == 1) {
                 return descList.get(0);
             }
         }

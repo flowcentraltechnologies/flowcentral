@@ -21,6 +21,9 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
+import com.tcdng.unify.core.util.xml.MarshalFalseToNullXmlAdapter;
 
 /**
  * Workflow configuration.
@@ -38,10 +41,16 @@ public class WfConfig extends BaseNameConfig {
     private String loadingTable;
     
     private String descFormat;
+    
+    private Boolean supportMultiItemAction;
 
     private List<WfFilterConfig> filterList;
 
     private List<WfSetValuesConfig> setValuesList;
+    
+    public WfConfig() {
+        this.supportMultiItemAction = Boolean.FALSE;
+    }
 
     public WfStepsConfig getStepsConfig() {
         return stepsConfig;
@@ -77,6 +86,16 @@ public class WfConfig extends BaseNameConfig {
     @XmlAttribute
     public void setDescFormat(String descFormat) {
         this.descFormat = descFormat;
+    }
+
+    public Boolean getSupportMultiItemAction() {
+        return supportMultiItemAction;
+    }
+
+    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
+    @XmlAttribute
+    public void setSupportMultiItemAction(Boolean supportMultiItemAction) {
+        this.supportMultiItemAction = supportMultiItemAction;
     }
 
     public List<WfFilterConfig> getFilterList() {

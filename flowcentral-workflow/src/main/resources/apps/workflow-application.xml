@@ -156,6 +156,8 @@
 				type="string" maxLen="128" nullable = "true"/>
 			<field name="appletVersionNo"
 				label="$m{workflow.workflow.appletversionno}" type="long" />
+			<field name="supportMultiItemAction"
+				label="$m{workflow.workflow.supportmultiitemaction}" type="boolean" />
 			<field name="descFormat"
 				label="$m{workflow.workflow.itemdescformat}" type="string"
 				nullable="true" />
