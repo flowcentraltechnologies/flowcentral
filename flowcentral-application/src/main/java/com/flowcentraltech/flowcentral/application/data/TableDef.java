@@ -16,6 +16,7 @@
 package com.flowcentraltech.flowcentral.application.data;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -141,6 +142,23 @@ public class TableDef extends BaseApplicationEntityDef {
         this.fixedRows = fixedRows;
         this.limitSelectToColumns = limitSelectToColumns;
         this.summaryFields = new HashSet<String>();
+
+        if (actionBtnInfos.isEmpty() && !DataUtils.isBlank(loadingDefList)) {
+            List<ButtonInfo> _actionBtnInfos = new ArrayList<ButtonInfo>();
+            Set<String> used = new HashSet<String>();
+            for (TableLoadingDef tableLoadingDef : loadingDefList) {
+                if (tableLoadingDef.isWithActionBtnInfos()) {
+                    for (ButtonInfo buttonInfo : tableLoadingDef.getActionBtnInfos()) {
+                        if (!used.contains(buttonInfo.getValue())) {
+                            _actionBtnInfos.add(buttonInfo);
+                        }
+                    }
+                }
+            }
+
+            this.actionBtnInfos = Collections.unmodifiableList(_actionBtnInfos);
+        }
+
         List<TableFilterDef> rowColorFilterList = new ArrayList<TableFilterDef>();
         for (TableFilterDef filterDef : filterDefMap.values()) {
             if (filterDef.isWithRowColor()) {

@@ -1049,7 +1049,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                     for (AppTableLoading appTableLoading : appTable.getLoadingList()) {
                         tdb.addTableLoadingDef(new TableLoadingDef(appTableLoading.getName(),
                                 appTableLoading.getDescription(), appTableLoading.getLabel(),
-                                appTableLoading.getProvider(), appTableLoading.getOrderIndex()));
+                                appTableLoading.getProvider(), appTableLoading.getOrderIndex(), Collections.emptyList()));
                     }
 
                     tdb.detailsPanelName(appTable.getDetailsPanelName());

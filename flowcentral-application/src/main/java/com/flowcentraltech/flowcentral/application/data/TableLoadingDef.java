@@ -15,7 +15,11 @@
  */
 package com.flowcentraltech.flowcentral.application.data;
 
+import java.util.List;
+
 import com.tcdng.unify.core.data.Listable;
+import com.tcdng.unify.core.util.DataUtils;
+import com.tcdng.unify.web.ui.widget.data.ButtonInfo;
 
 /**
  * Table loading definition.
@@ -37,22 +41,26 @@ public class TableLoadingDef implements Listable {
 
     private int orderIndex;
     
-    public TableLoadingDef(String name, String description, String label, String provider, int orderIndex) {
+    private List<ButtonInfo> actionBtnInfos;
+    
+    public TableLoadingDef(String name, String description, String label, String provider, int orderIndex, List<ButtonInfo> actionBtnInfos) {
         this.name = name;
         this.description = description;
         this.label = label;
         this.provider = provider;
         this.orderIndex = orderIndex;
+        this.actionBtnInfos = actionBtnInfos;
     }
 
     public TableLoadingDef(String name, String description, String label, String provider, Object parameter,
-            int orderIndex) {
+            int orderIndex, List<ButtonInfo> actionBtnInfos) {
          this.name = name;
         this.description = description;
         this.label = label;
         this.provider = provider;
         this.parameter = parameter;
         this.orderIndex = orderIndex;
+        this.actionBtnInfos = actionBtnInfos;
     }
 
     @Override
@@ -87,6 +95,14 @@ public class TableLoadingDef implements Listable {
 
     public int getOrderIndex() {
         return orderIndex;
+    }
+
+    public List<ButtonInfo> getActionBtnInfos() {
+        return actionBtnInfos;
+    }
+
+    public boolean isWithActionBtnInfos() {
+        return !DataUtils.isBlank(actionBtnInfos);
     }
 
 }
