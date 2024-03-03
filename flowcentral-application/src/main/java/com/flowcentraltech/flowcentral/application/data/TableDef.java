@@ -26,6 +26,7 @@ import java.util.Set;
 import com.flowcentraltech.flowcentral.application.constants.LinkActConstants;
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityNameParts;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
+import com.flowcentraltech.flowcentral.application.util.InputWidgetUtils;
 import com.flowcentraltech.flowcentral.application.util.WidgetCalculationUtils;
 import com.flowcentraltech.flowcentral.common.data.DefaultReportColumn;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityBaseType;
@@ -141,6 +142,11 @@ public class TableDef extends BaseApplicationEntityDef {
         this.fixedRows = fixedRows;
         this.limitSelectToColumns = limitSelectToColumns;
         this.summaryFields = new HashSet<String>();
+
+        if (!DataUtils.isBlank(loadingDefList)) {
+            this.actionBtnInfos = InputWidgetUtils.getButtonInfos(loadingDefList);
+        }
+
         List<TableFilterDef> rowColorFilterList = new ArrayList<TableFilterDef>();
         for (TableFilterDef filterDef : filterDefMap.values()) {
             if (filterDef.isWithRowColor()) {

@@ -15,12 +15,11 @@
  */
 package com.flowcentraltech.flowcentral.application.policies;
 
-import java.util.List;
-
 import com.flowcentraltech.flowcentral.application.data.EntityItem;
 import com.flowcentraltech.flowcentral.application.data.LoadingWorkItemInfo;
 import com.flowcentraltech.flowcentral.application.web.widgets.InputArrayEntries;
 import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
+import com.flowcentraltech.flowcentral.common.data.LoadingItems;
 import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.ValueStore;
@@ -69,11 +68,11 @@ public interface LoadingTableProvider extends FlowCentralComponent {
      * 
      * @param params
      *                    loading parameters
-     * @return list of entities
+     * @return the loading items
      * @throws UnifyException
      *                        if an error occurs
      */
-    List<? extends Entity> getLoadingItems(LoadingParams params) throws UnifyException;
+    LoadingItems getLoadingItems(LoadingParams params) throws UnifyException;
     
     /**
      * Get source item options.

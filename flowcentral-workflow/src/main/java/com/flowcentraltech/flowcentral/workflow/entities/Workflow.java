@@ -46,6 +46,9 @@ public class Workflow extends BaseApplicationEntity {
     
     @Column
     private long appletVersionNo;
+    
+    @Column
+    private boolean supportMultiItemAction;
    
     @ChildList
     private List<WorkflowFilter> filterList;
@@ -94,6 +97,14 @@ public class Workflow extends BaseApplicationEntity {
 
     public void setAppletVersionNo(long appletVersionNo) {
         this.appletVersionNo = appletVersionNo;
+    }
+
+    public boolean isSupportMultiItemAction() {
+        return supportMultiItemAction;
+    }
+
+    public void setSupportMultiItemAction(boolean supportMultiItemAction) {
+        this.supportMultiItemAction = supportMultiItemAction;
     }
 
     public List<WorkflowFilter> getFilterList() {

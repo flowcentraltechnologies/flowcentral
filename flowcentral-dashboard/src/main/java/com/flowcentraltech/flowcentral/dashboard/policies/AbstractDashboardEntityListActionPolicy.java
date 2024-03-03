@@ -38,8 +38,8 @@ public abstract class AbstractDashboardEntityListActionPolicy extends AbstractEn
 	@Configurable
 	private DashboardModuleService dashboardModuleService;
 
-	@Override
-	public EntityListActionResult executeAction(EntityListActionContext ctx) throws UnifyException {
+    @Override
+	public EntityListActionResult executeAction(EntityListActionContext ctx, String rule) throws UnifyException {
 		List<Long> idList = new ArrayList<Long>();
 		for (Entity entity : ctx.getInstList()) {
 			idList.add((Long) entity.getId());

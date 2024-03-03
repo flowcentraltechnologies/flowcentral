@@ -142,7 +142,7 @@
 !ui-panel:selFooterActionPanel layout:$d{!ui-horizontal} components:$c{tblActionSel applyTblActionBtn}
 !ui-select:tblActionSel styleClass:$e{footersel} list:$s{tableactionlist} listKey:$s{policy} blankOption:$m{select.apply.toselected}
 	listParams:$l{appTableId} binding:appTableActionPolicy
-!ui-button:applyTblActionBtn caption:$m{button.applyaction}
+!ui-button:applyTblActionBtn styleClass:$e{fc-bluebutton} caption:$m{button.applyaction}
     eventHandler:$d{!ui-event event:onclick action:$c{applyTableAct}}
 !ui-buttongroup:tblActionBtns styleClass:$e{footerbtns} binding:appTableActionButtonInfo
     eventHandler:$d{!ui-event event:onclick action:$c{applyTableBtnAct}}

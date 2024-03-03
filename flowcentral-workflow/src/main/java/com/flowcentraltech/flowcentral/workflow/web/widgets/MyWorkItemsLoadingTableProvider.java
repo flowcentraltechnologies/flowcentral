@@ -25,6 +25,7 @@ import com.flowcentraltech.flowcentral.application.data.WorkflowStepInfo;
 import com.flowcentraltech.flowcentral.application.policies.AbstractApplicationLoadingTableProvider;
 import com.flowcentraltech.flowcentral.application.policies.LoadingParams;
 import com.flowcentraltech.flowcentral.application.web.widgets.InputArrayEntries;
+import com.flowcentraltech.flowcentral.common.data.LoadingItems;
 import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
 import com.flowcentraltech.flowcentral.workflow.business.WorkItemLoadingFilterGenerator;
 import com.flowcentraltech.flowcentral.workflow.business.WorkflowModuleService;
@@ -89,7 +90,7 @@ public class MyWorkItemsLoadingTableProvider extends AbstractApplicationLoadingT
     }
 
     @Override
-    public List<? extends Entity> getLoadingItems(LoadingParams params) throws UnifyException {
+    public LoadingItems getLoadingItems(LoadingParams params) throws UnifyException {
         WorkflowStepInfo workflowStepInfo = getParameter(WorkflowStepInfo.class);
         logDebug("Loading items with workflow step [{0}]...", workflowStepInfo.getStepName());
         WfItemQuery _query = new WfItemQuery().workflowName(workflowStepInfo.getWorkflowLongName())
@@ -121,10 +122,10 @@ public class MyWorkItemsLoadingTableProvider extends AbstractApplicationLoadingT
             }
 
             query.addAmongst("id", workItemIdList);
-            return environment().listAll(query);
+            return new LoadingItems(environment().listAll(query));
         }
 
-        return Collections.emptyList();
+        return new LoadingItems(Collections.emptyList());
     }
 
     @Override
@@ -150,7 +151,7 @@ public class MyWorkItemsLoadingTableProvider extends AbstractApplicationLoadingT
 
     @Override
     public boolean applyUserAction(WorkEntity wfEntityInst, Long sourceItemId, String userAction, String comment,
-            InputArrayEntries emails, boolean listing) throws UnifyException {
+            InputArrayEntries emails, boolean listing) throws UnifyException { 
         final WorkflowStepInfo workflowStepInfo = getParameter(WorkflowStepInfo.class);
         final Long workItemId = environment().value(Long.class, "id", new WfItemQuery().workRecId(sourceItemId)
                 .workflowName(workflowStepInfo.getWorkflowLongName()).wfStepName(workflowStepInfo.getStepName()));

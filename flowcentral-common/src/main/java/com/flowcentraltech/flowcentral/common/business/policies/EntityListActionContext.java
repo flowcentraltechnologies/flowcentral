@@ -16,9 +16,11 @@
 
 package com.flowcentraltech.flowcentral.common.business.policies;
 
+import java.util.Collections;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.common.data.AbstractContext;
+import com.flowcentraltech.flowcentral.common.data.LoadingItems;
 import com.tcdng.unify.core.database.Entity;
 
 /**
@@ -29,13 +31,22 @@ import com.tcdng.unify.core.database.Entity;
  */
 public class EntityListActionContext extends AbstractContext {
 
+    private List<LoadingItems> loadingItems;
+
     private List<? extends Entity> instList;
 
     private String policyName;
 
     private Object result;
 
+    public EntityListActionContext(List<LoadingItems> loadingItems, List<? extends Entity> instList, String policyName) {
+        this.loadingItems = loadingItems;
+        this.instList = instList;
+        this.policyName = policyName;
+    }
+
     public EntityListActionContext(List<? extends Entity> instList, String policyName) {
+        this.loadingItems = Collections.emptyList();
         this.instList = instList;
         this.policyName = policyName;
     }
@@ -44,6 +55,16 @@ public class EntityListActionContext extends AbstractContext {
         return instList;
     }
 
+    public String getLoadingSource(Entity inst) {
+        for (LoadingItems _loadingItems: loadingItems) {
+           if (_loadingItems.isItem(inst)) {
+               return _loadingItems.getSource();
+           }
+        }
+        
+        return null;
+    }
+    
     public String getPolicyName() {
         return policyName;
     }

@@ -41,7 +41,7 @@ public class FreezeComponentsActionPolicy extends AbstractEntityListActionPolicy
 
     @SuppressWarnings("unchecked")
 	@Override
-    public EntityListActionResult executeAction(EntityListActionContext ctx) throws UnifyException {
+    public EntityListActionResult executeAction(EntityListActionContext ctx, String rule) throws UnifyException {
     	List<FreezeUnfreeze> freezeList = (List<FreezeUnfreeze>) ctx.getInstList();
     	if (!DataUtils.isBlank(freezeList)) {
     		collaborationModuleService.freezeComponents(freezeList);

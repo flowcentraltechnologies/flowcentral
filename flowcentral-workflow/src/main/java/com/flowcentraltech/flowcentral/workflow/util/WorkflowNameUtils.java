@@ -35,9 +35,23 @@ public final class WorkflowNameUtils {
 
     private static final FactoryMap<String, WfAppletNameParts> wfAppletNameParts;
 
+    private static final FactoryMap<String, WfStepLongNameParts> wfStepLongNameParts;
+
     private static final FactoryMap<String, WfWizardAppletNameParts> wfWizardAppletNameParts;
 
     static {
+        wfStepLongNameParts = new FactoryMap<String, WfStepLongNameParts>()
+            {
+
+                @Override
+                protected WfStepLongNameParts create(String stepLongName, Object... arg1) throws Exception {
+                    int lastIndex = stepLongName.lastIndexOf('.');
+                    return new WfStepLongNameParts(stepLongName.substring(0, lastIndex),
+                            stepLongName.substring(lastIndex + 1));
+                }
+
+            };
+
         wfAppletNameParts = new FactoryMap<String, WfAppletNameParts>()
             {
 
@@ -66,6 +80,14 @@ public final class WorkflowNameUtils {
 
     }
 
+    public static String getWfStepLongName(String workflowLongName, String stepName) {
+        return StringUtils.dotify(workflowLongName, stepName);
+    }
+
+    public static WfStepLongNameParts getWfStepLongNameParts(String stepLongName) throws UnifyException {
+        return wfStepLongNameParts.get(stepLongName);
+    }
+
     public static WfAppletNameParts getWfAppletNameParts(String wfAppletName) throws UnifyException {
         return wfAppletNameParts.get(wfAppletName);
     }
@@ -88,6 +110,27 @@ public final class WorkflowNameUtils {
 
     public static boolean isWfWizardAppletName(String wfWizardAppletName) {
         return wfWizardAppletName.startsWith(RESERVED_WORKFLOW_WIZARD_PREFIX);
+    }
+
+    public static class WfStepLongNameParts {
+
+        private String workflow;
+
+        private String stepName;
+
+        public WfStepLongNameParts(String workflow, String stepName) {
+            this.workflow = workflow;
+            this.stepName = stepName;
+        }
+
+        public String getWorkflow() {
+            return workflow;
+        }
+
+        public String getStepName() {
+            return stepName;
+        }
+
     }
 
     public static class WfAppletNameParts {

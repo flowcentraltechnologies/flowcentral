@@ -241,8 +241,9 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                     List<StringToken> descFormat = !StringUtils.isBlank(workflow.getDescFormat())
                             ? StringUtils.breakdownParameterizedString(workflow.getDescFormat())
                             : Collections.emptyList();
-                    WfDef.Builder wdb = WfDef.newBuilder(workflow.getEntity(), descFormat, longName,
-                            workflow.getDescription(), workflow.getId(), workflow.getVersionNo());
+                    WfDef.Builder wdb = WfDef.newBuilder(workflow.getEntity(), descFormat,
+                            workflow.isSupportMultiItemAction(), longName, workflow.getDescription(), workflow.getId(),
+                            workflow.getVersionNo());
 
                     Set<String> filterNames = new HashSet<String>();
                     for (WorkflowFilter workflowFilter : workflow.getFilterList()) {
@@ -281,8 +282,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                             final String assignDescField = null;
                             final String pseudoDeleteField = null;
                             StandardAppletDef.Builder adb = StandardAppletDef.newBuilder(_reviewAppletType, null, label,
-                                    "tasks", assignDescField, pseudoDeleteField, 0, true, false, true, descriptiveButtons,
-                                    appletName, label);
+                                    "tasks", assignDescField, pseudoDeleteField, 0, true, false, true,
+                                    descriptiveButtons, appletName, label);
                             final String table = useraction ? "workflow.wfItemReviewTable"
                                     : "workflow.wfItemRecoveryTable";
                             final String update = useraction ? "true" : "false";
@@ -396,8 +397,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                     final String assignDescField = null;
                     final String pseudoDeleteField = null;
                     StandardAppletDef.Builder adb = StandardAppletDef.newBuilder(AppletType.REVIEW_WIZARDWORKITEMS,
-                            null, label, "magic", assignDescField, pseudoDeleteField, 0, true, false, true, descriptiveButtons,
-                            appletName, label);
+                            null, label, "magic", assignDescField, pseudoDeleteField, 0, true, false, true,
+                            descriptiveButtons, appletName, label);
                     adb.addPropDef(AppletPropertyConstants.SEARCH_TABLE, "workflow.wfWizardItemReviewTable");
                     adb.addPropDef(AppletPropertyConstants.SEARCH_TABLE_NEW, "true");
                     adb.addPropDef(WfWizardAppletPropertyConstants.WORKFLOW_WIZARD, longName);
@@ -504,6 +505,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             workflow.setLabel(workflowLabel);
             workflow.setEntity(entityDef.getLongName());
             workflow.setLoadingTable(appletWorkflowCopyInfo.getAppletSearchTable());
+            workflow.setSupportMultiItemAction(true);
             workflow.setDescFormat(null); // TODO
             workflow.setAppletVersionNo(appletWorkflowCopyInfo.getAppletVersionNo());
             workflow.setClassified(true);
@@ -518,6 +520,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                 workflow.setDescription(workflowDesc);
                 workflow.setLabel(workflowLabel);
                 workflow.setLoadingTable(appletWorkflowCopyInfo.getAppletSearchTable());
+                workflow.setSupportMultiItemAction(true);
                 workflow.setClassified(true);
                 final List<WfStep> stepList = WorkflowDesignUtils.generateWorkflowSteps(designType, stepLabel,
                         appletWorkflowCopyInfo);
@@ -905,25 +908,39 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
+    public boolean applyUserAction(WorkEntity wfEntityInst, Long wfItemId, String stepName, String userAction,
+            WfReviewMode wfReviewMode) {
+        return applyUserAction(wfEntityInst, wfItemId, stepName, userAction, null, null, wfReviewMode, false);
+    }
+
+    @Override
     public boolean applyUserAction(final WorkEntity wfEntityInst, final Long wfItemId, final String stepName,
             final String userAction, final String comment, InputArrayEntries emails, WfReviewMode wfReviewMode,
-            final boolean listing) throws UnifyException {
-        final WfItem wfItem = environment().list(WfItem.class, wfItemId);
-        if (wfItem.getWfStepName().equals(stepName)) {
+            final boolean listing) {
+        try {
+            final WfItem wfItem = environment().list(WfItem.class, wfItemId);
+            if (!wfItem.getWfStepName().equals(stepName)) {
+                return false;
+            }
+
             final WfDef wfDef = getWfDef(wfItem.getWorkflowName());
             final String userLoginId = getUserToken().getUserLoginId();
-            WfStepDef currentWfStepDef = wfDef.getWfStepDef(stepName);
-            WfUserActionDef userActionDef = currentWfStepDef.getUserActionDef(userAction);
+            final WfStepDef currentWfStepDef = wfDef.getWfStepDef(stepName);
+            if (!currentWfStepDef.isUserAction(userAction)) {
+                return false;
+            }
+
+            final WfUserActionDef userActionDef = currentWfStepDef.getUserActionDef(userAction);
             // Update current event
             environment().updateAll(new WfItemEventQuery().id(wfItem.getWfItemEventId()),
-                    new Update().add("actor", userLoginId).add("actionDt", getNow()).add("comment", comment)
-                            .add("wfAction", userActionDef.getLabel()));
+                    new Update().add("actor", userLoginId).add("actionDt", getNow()).add("comment", comment).add("wfAction",
+                            userActionDef.getLabel()));
 
             // Prepare event for next step. If error step and next step is not specified
             // jump to the work item previous step
-            final String nextStepName = currentWfStepDef.isError()
-                    && StringUtils.isBlank(userActionDef.getNextStepName()) ? wfItem.getPrevWfStepName()
-                            : userActionDef.getNextStepName();
+            final String nextStepName = currentWfStepDef.isError() && StringUtils.isBlank(userActionDef.getNextStepName())
+                    ? wfItem.getPrevWfStepName()
+                    : userActionDef.getNextStepName();
             WfStepDef nextWfStepDef = wfDef.getWfStepDef(nextStepName);
             final Long wfItemEventId = createWfItemEvent(nextWfStepDef, wfItem.getWfItemHistId(), stepName, null, null,
                     null, null);
@@ -984,8 +1001,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                 final AppletDef stepAppletDef = appletUtil.getAppletDef(currentWfStepDef.getStepAppletName());
                 final String updatePolicy = stepAppletDef.getPropValue(String.class,
                         AppletPropertyConstants.MAINTAIN_FORM_UPDATE_POLICY);
-                EntityActionContext eCtx = new EntityActionContext(entityDef, wfEntityInst, RecordActionType.UPDATE,
-                        null, updatePolicy);
+                EntityActionContext eCtx = new EntityActionContext(entityDef, wfEntityInst, RecordActionType.UPDATE, null,
+                        updatePolicy);
                 if (wfReviewMode.lean()) {
                     if (emails != null) {
                         environment().updateByIdVersion(eCtx);
@@ -1005,9 +1022,12 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             sendUserActionAlertsByAction(currentWfStepDef, currentTransitionItem, userAction);
 
             pushToWfTransitionQueue(wfDef, wfItemId);
+            commitTransactions();
             return true;
+        } catch (UnifyException e) {
+            logSevere(e);
         }
-
+        
         return false;
     }
 

@@ -27,7 +27,7 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 /** Button */ 
 .ui-button {padding: 0px 8px; min-height:32px; background-color: #f2f2f2; border: 1px solid #c8c8c8; cursor: pointer;/*border-radius: 4px;*/}
 .ui-button:hover:enabled {color:#000000; background-color: #fafafa;}
-.ui-button:disabled {cursor:default; color: #aeaeae;}
+.ui-button:disabled {cursor:default; color: #e0e0e0;}
 .ui-button-alert {padding: 0px 8px; min-height:32px; background-color: #f2f2f2; border: 1px solid #c8c8c8; cursor: pointer;/*border-radius: 4px;*/}
 
 /** Checkbox */ 
@@ -244,7 +244,7 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-chart .card {width:100%;height:100%;}
 .fc-chart .card .title{display:block;padding: 4px 4px;text-align:center;font-size:0.8vw;font-weight:bold;}
 .fc-chart .card .subtitle{display:block;padding: 2px 2px;text-align:center;font-size:0.5vw;color: #808080;}
-.fc-chart .card .content{display:block;text-align:center;margin-top: 0.2em;font-size:2.8vw;}
+.fc-chart .card .content{display:block;text-align:center;margin-top: 0.2em;font-size:3.2vw;}
 .fc-chart .tbl {width:100%;height:100%;}
 .fc-chart .tbl .title{display:block;padding: 4px 4px;text-align:center;font-size:0.8vw;font-weight:bold;}
 .fc-chart .tbl .subtitle{display:block;padding: 2px 2px;text-align:center;font-size:0.5vw;color: #808080;}
@@ -906,9 +906,10 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-entitysearchpanel .filswitch {display:block; color:#0366d6;font-size: 8pt;cursor: pointer;min-width: 128px;text-align: right}
 .fc-entitysearchpanel .savebar {width:784px;}
 .fc-entitysearchpanel .footer {display: inline-block;padding-left:40px;padding-bottom:20px;padding-top:8px;box-sizing: border-box;}
-.fc-entitysearchpanel .footersel {width:200px}
 .fc-entitysearchpanel .ewarn {display: inline-block;border: 1px solid #ff823b;font-size: 7pt;color:#b35b29;font-weight: bold;
 	background-color: #ffe6d7;padding: 2px 4px;}
+
+.footersel {width:200px}
 
 /* Entity select panel */
 .fc-entityselectpanel {width:896px; background-color:#ffffff;border: 1px solid #b8b8b8;}

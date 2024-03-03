@@ -44,4 +44,6 @@ public interface WorkflowModuleNameConstants {
     String WORKFLOW_COPY_DELETION_APPROVAL_PENDING_EMAIL_SENDER = "workflowcopydeletionapproval-emailsender";
     
     String WORKFLOW_MY_WORKITEMS_LOADING_TABLE_PROVIDER = "workflowmyworkitems-loadingtableprovider";
+    
+    String WORKFLOW_WORKITEMS_TABLE_ACTION_POLICY = "workflowmyworkitems-tableactionpolicy";
 }

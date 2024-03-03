@@ -20,6 +20,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
+import com.flowcentraltech.flowcentral.application.constants.AppletPageAttributeConstants;
 import com.flowcentraltech.flowcentral.application.entities.AppTableActionQuery;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
@@ -39,11 +40,14 @@ public class TableActionListCommand extends AbstractApplicationListCommand<LongP
         super(LongParam.class);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public List<? extends Listable> execute(Locale locale, LongParam longParams) throws UnifyException {
         if (longParams.isPresent()) {
-            return application()
-                    .findTableActions(new AppTableActionQuery().appTableId(longParams.getValue()));
+            List<? extends Listable> list = (List<? extends Listable>) getSessionAttribute(
+                    AppletPageAttributeConstants.TABLE_ACTIONS + ":" + longParams.getValue());
+            return list != null ? list
+                    : application().findTableActions(new AppTableActionQuery().appTableId(longParams.getValue()));
         }
 
         return Collections.emptyList();

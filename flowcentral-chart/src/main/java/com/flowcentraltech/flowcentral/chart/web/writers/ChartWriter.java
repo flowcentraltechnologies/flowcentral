@@ -65,7 +65,7 @@ public class ChartWriter extends AbstractWidgetWriter {
         writer.write("<div");
         writeTagAttributes(writer, chartWidget);
         writer.write(">");
-        if (chartDef.getType().card()) {
+        if (chartDef.getType().isCard()) {
             writer.write("<div class=\"card\">");
 
             writer.write("<span class=\"title\">");
@@ -89,7 +89,7 @@ public class ChartWriter extends AbstractWidgetWriter {
             writer.write("</span>");
 
             writer.write("</div>");
-        } else if (chartDef.getType().table()) {
+        } else if (chartDef.getType().isTable()) {
             if (chartDetails.isWithTableSeries()) {
                 FormatterOptions.Instance options = FormatterOptions.DEFAULT.createInstance(getUnifyComponentContext());
                 writer.write("<div class=\"tbl\"");

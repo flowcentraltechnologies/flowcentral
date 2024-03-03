@@ -59,11 +59,13 @@ public class WfDef extends BaseApplicationEntityDef {
     private List<StringToken> descFormat;
 
     private Set<String> onEntrySetValuesFields;
-    
-    private WfDef(String entity, WfStepDef startStepDef, WfStepDef errorStepDef,
-            Map<String, WfStepDef> steps, Map<String, WfFilterDef> filterDefMap,
-            Map<String, WfSetValuesDef> setValuesDefMap, List<StringToken> descFormat,
-            ApplicationEntityNameParts nameParts, String description, Long id, long version) {
+
+    private boolean supportMultiItemAction;
+
+    private WfDef(String entity, WfStepDef startStepDef, WfStepDef errorStepDef, Map<String, WfStepDef> steps,
+            Map<String, WfFilterDef> filterDefMap, Map<String, WfSetValuesDef> setValuesDefMap,
+            List<StringToken> descFormat, boolean supportMultiItemAction, ApplicationEntityNameParts nameParts,
+            String description, Long id, long version) {
         super(nameParts, description, id, version);
         this.entity = entity;
         this.startStepDef = startStepDef;
@@ -72,6 +74,7 @@ public class WfDef extends BaseApplicationEntityDef {
         this.filterDefMap = filterDefMap;
         this.setValuesDefMap = setValuesDefMap;
         this.descFormat = descFormat;
+        this.supportMultiItemAction = supportMultiItemAction;
     }
 
     public WfStepDef getStartStepDef() {
@@ -90,19 +93,24 @@ public class WfDef extends BaseApplicationEntityDef {
         return !descFormat.isEmpty();
     }
 
+    public boolean isSupportMultiItemAction() {
+        return supportMultiItemAction;
+    }
+
     public WfSetValuesDef getSetValuesDef(String name) {
         WfSetValuesDef wfSetValuesDef = setValuesDefMap.get(name);
         if (wfSetValuesDef == null) {
-            throw new RuntimeException("Workflow [" + getLongName() + "] does not have a setvalues definition [" + name + "].");
+            throw new RuntimeException(
+                    "Workflow [" + getLongName() + "] does not have a setvalues definition [" + name + "].");
         }
-        
+
         return wfSetValuesDef;
     }
-    
+
     public boolean isWithOnEntrySetValuesList() {
         return !DataUtils.isBlank(getOnEntrySetValuesList());
     }
-    
+
     public List<WfSetValuesDef> getOnEntrySetValuesList() {
         if (onEntrySetValuesList == null) {
             synchronized (this) {
@@ -127,7 +135,7 @@ public class WfDef extends BaseApplicationEntityDef {
             synchronized (this) {
                 if (onEntrySetValuesFields == null) {
                     onEntrySetValuesFields = new HashSet<String>();
-                    for (WfSetValuesDef wfSetValuesDef: getOnEntrySetValuesList()) {
+                    for (WfSetValuesDef wfSetValuesDef : getOnEntrySetValuesList()) {
                         if (wfSetValuesDef.getSetValues() != null) {
                             onEntrySetValuesFields.addAll(wfSetValuesDef.getSetValues().getFields());
                         }
@@ -135,7 +143,7 @@ public class WfDef extends BaseApplicationEntityDef {
 
                     onEntrySetValuesFields = DataUtils.unmodifiableSet(onEntrySetValuesFields);
                 }
-            }            
+            }
         }
 
         return onEntrySetValuesFields;
@@ -189,9 +197,9 @@ public class WfDef extends BaseApplicationEntityDef {
         return filterDef;
     }
 
-    public static Builder newBuilder(String entity, List<StringToken> descFormat, String longName,
-            String description, Long id, long version) {
-        return new Builder(entity, descFormat, longName, description, id, version);
+    public static Builder newBuilder(String entity, List<StringToken> descFormat, boolean supportMultiItemAction,
+            String longName, String description, Long id, long version) {
+        return new Builder(entity, descFormat, supportMultiItemAction, longName, description, id, version);
     }
 
     public static class Builder {
@@ -210,6 +218,8 @@ public class WfDef extends BaseApplicationEntityDef {
 
         private List<StringToken> descFormat;
 
+        private boolean supportMultiItemAction;
+
         private String longName;
 
         private String description;
@@ -218,12 +228,13 @@ public class WfDef extends BaseApplicationEntityDef {
 
         private long version;
 
-        public Builder(String entity, List<StringToken> descFormat, String longName, String description,
-                Long id, long version) {
+        public Builder(String entity, List<StringToken> descFormat, boolean supportMultiItemAction, String longName,
+                String description, Long id, long version) {
             this.entity = entity;
             this.descFormat = descFormat;
             this.longName = longName;
             this.description = description;
+            this.supportMultiItemAction = supportMultiItemAction;
             this.id = id;
             this.version = version;
             this.steps = new HashMap<String, WfStepDef>();
@@ -291,8 +302,8 @@ public class WfDef extends BaseApplicationEntityDef {
             }
 
             return new WfDef(entity, startStepDef, errorStepDef, DataUtils.unmodifiableMap(steps), filterDefMap,
-                    setValuesDefMap, descFormat, ApplicationNameUtils.getApplicationEntityNameParts(longName),
-                    description, id, version);
+                    setValuesDefMap, descFormat, supportMultiItemAction,
+                    ApplicationNameUtils.getApplicationEntityNameParts(longName), description, id, version);
         }
     }
 }

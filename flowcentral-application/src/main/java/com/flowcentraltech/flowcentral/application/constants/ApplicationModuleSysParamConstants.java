@@ -96,4 +96,6 @@ public interface ApplicationModuleSysParamConstants {
     String ENABLE_PARENT_STATE_AUDITING = "APP-0024";
     
     String ENABLE_OPEN_TAB_IN_BROWSER = "APP-0025";
+    
+    String ENABLE_DRAFT_WORKFLOW_MULTIITEM_ACTION = "APP-0026";
 }

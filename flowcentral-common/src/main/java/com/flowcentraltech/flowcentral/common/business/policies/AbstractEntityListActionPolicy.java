@@ -29,6 +29,11 @@ import com.tcdng.unify.core.data.ValueStoreReader;
 public abstract class AbstractEntityListActionPolicy extends AbstractFlowCentralComponent implements EntityListActionPolicy {
 
     @Override
+    public final EntityListActionResult executeAction(EntityListActionContext ctx) throws UnifyException {
+        return executeAction(ctx, null);
+    }
+
+    @Override
     public boolean isWidgetDisabled(ValueStoreReader parentReader) throws UnifyException {
         return false;
     }

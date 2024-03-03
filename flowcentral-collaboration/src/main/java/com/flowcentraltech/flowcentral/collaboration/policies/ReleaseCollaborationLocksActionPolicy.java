@@ -41,14 +41,15 @@ public class ReleaseCollaborationLocksActionPolicy extends AbstractEntityListAct
     private CollaborationModuleService collaborationModuleService;
 
     @Override
-    public EntityListActionResult executeAction(EntityListActionContext ctx) throws UnifyException {
+    public EntityListActionResult executeAction(EntityListActionContext ctx, String rule) throws UnifyException {
         List<Long> idList = new ArrayList<Long>();
         for (Entity entity : ctx.getInstList()) {
             idList.add((Long) entity.getId());
         }
 
         if (!idList.isEmpty()) {
-            collaborationModuleService.releaseAllLocks((CollaborationLockQuery) new CollaborationLockQuery().idIn(idList));
+            collaborationModuleService
+                    .releaseAllLocks((CollaborationLockQuery) new CollaborationLockQuery().idIn(idList));
         }
 
         return null;
