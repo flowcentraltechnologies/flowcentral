@@ -557,6 +557,11 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
     }
 
     @Override
+    public void setSessionAttribute(String name, Object value) throws UnifyException {
+        super.setSessionAttribute(name, value);
+    }
+
+    @Override
     public Date getNow() throws UnifyException {
         return applicationModuleService.getNow();
     }

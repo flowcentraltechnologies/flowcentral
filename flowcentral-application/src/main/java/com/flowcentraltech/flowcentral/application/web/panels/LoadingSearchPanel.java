@@ -63,6 +63,7 @@ public class LoadingSearchPanel extends AbstractApplicationPanel {
        if (loadingSearch.isShowActionFooter()) {
             boolean buttonsForFooterAction = loadingSearch.au().system().getSysParameterValue(boolean.class,
                     ApplicationModuleSysParamConstants.SHOW_BUTTONS_FOR_FOOTER_ACTION);
+            setVisible("commitActionBtn", false);
             if (buttonsForFooterAction) {
                 ButtonGroupInfo.Builder bgib = ButtonGroupInfo.newBuilder();
                 bgib.addItems(tableDef.getActionBtnInfos());

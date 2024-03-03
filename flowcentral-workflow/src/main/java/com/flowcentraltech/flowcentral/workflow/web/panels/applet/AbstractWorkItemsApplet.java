@@ -25,10 +25,13 @@ import com.flowcentraltech.flowcentral.application.data.WorkflowStepInfo;
 import com.flowcentraltech.flowcentral.application.web.controllers.AppletWidgetReferences;
 import com.flowcentraltech.flowcentral.application.web.panels.applet.ManageLoadingListApplet;
 import com.flowcentraltech.flowcentral.workflow.business.WorkflowModuleService;
+import com.flowcentraltech.flowcentral.workflow.constants.WorkflowModuleNameConstants;
 import com.flowcentraltech.flowcentral.workflow.data.WfDef;
 import com.flowcentraltech.flowcentral.workflow.data.WfStepDef;
 import com.flowcentraltech.flowcentral.workflow.data.WfUserActionDef;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.data.Listable;
+import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.web.ui.widget.data.ButtonInfo;
 
 /**
@@ -57,5 +60,49 @@ public class AbstractWorkItemsApplet extends ManageLoadingListApplet {
         }
 
         return actionBtnInfos;
+    }
+    
+    protected List<TableAction> getTableActions(List<ButtonInfo> actionBtnInfos) throws UnifyException {
+        if (!DataUtils.isBlank(actionBtnInfos)) {
+            List<TableAction> actions = new ArrayList<TableAction>();
+            for (ButtonInfo buttonInfo : actionBtnInfos) {
+                actions.add(new TableAction(WorkflowModuleNameConstants.WORKFLOW_WORKITEMS_TABLE_ACTION_POLICY + ":"
+                        + buttonInfo.getValue(), buttonInfo.getLabel()));
+            }
+
+            return actions;
+        }
+
+        return Collections.emptyList();
+    }
+    
+    public class TableAction implements Listable {
+        
+        private String policy;
+        
+        private String label;
+
+        public TableAction(String policy, String label) {
+            this.policy = policy;
+            this.label = label;
+        }
+
+        @Override
+        public String getListKey() {
+            return policy;
+        }
+
+        @Override
+        public String getListDescription() {
+            return label;
+        }
+
+        public String getPolicy() {
+            return policy;
+        }
+
+        public String getLabel() {
+            return label;
+        }        
     }
 }

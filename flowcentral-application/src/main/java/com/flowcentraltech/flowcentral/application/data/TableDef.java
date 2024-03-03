@@ -143,13 +143,13 @@ public class TableDef extends BaseApplicationEntityDef {
         this.limitSelectToColumns = limitSelectToColumns;
         this.summaryFields = new HashSet<String>();
 
-        if (actionBtnInfos.isEmpty() && !DataUtils.isBlank(loadingDefList)) {
-            List<ButtonInfo> _actionBtnInfos = new ArrayList<ButtonInfo>();
+        if (!DataUtils.isBlank(loadingDefList)) {
             Set<String> used = new HashSet<String>();
+            List<ButtonInfo> _actionBtnInfos = new ArrayList<ButtonInfo>();
             for (TableLoadingDef tableLoadingDef : loadingDefList) {
                 if (tableLoadingDef.isWithActionBtnInfos()) {
                     for (ButtonInfo buttonInfo : tableLoadingDef.getActionBtnInfos()) {
-                        if (!used.contains(buttonInfo.getValue())) {
+                        if (used.add(buttonInfo.getValue())) {
                             _actionBtnInfos.add(buttonInfo);
                         }
                     }

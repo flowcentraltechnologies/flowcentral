@@ -505,7 +505,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             workflow.setLabel(workflowLabel);
             workflow.setEntity(entityDef.getLongName());
             workflow.setLoadingTable(appletWorkflowCopyInfo.getAppletSearchTable());
-            workflow.setSupportMultiItemAction(appletWorkflowCopyInfo.isSupportMultiItemAction());
+            workflow.setSupportMultiItemAction(true);
             workflow.setDescFormat(null); // TODO
             workflow.setAppletVersionNo(appletWorkflowCopyInfo.getAppletVersionNo());
             workflow.setClassified(true);
@@ -520,7 +520,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                 workflow.setDescription(workflowDesc);
                 workflow.setLabel(workflowLabel);
                 workflow.setLoadingTable(appletWorkflowCopyInfo.getAppletSearchTable());
-                workflow.setSupportMultiItemAction(appletWorkflowCopyInfo.isSupportMultiItemAction());
+                workflow.setSupportMultiItemAction(true);
                 workflow.setClassified(true);
                 final List<WfStep> stepList = WorkflowDesignUtils.generateWorkflowSteps(designType, stepLabel,
                         appletWorkflowCopyInfo);

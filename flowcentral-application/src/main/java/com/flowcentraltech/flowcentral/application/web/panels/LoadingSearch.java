@@ -80,6 +80,8 @@ public class LoadingSearch {
 
     private int mode;
 
+    private boolean showActionFooter;
+    
     public LoadingSearch(AppletContext appletContext, SectorIcon sectorIcon, TableDef tableDef, Long appAppletId,
             String searchInputConfigName, int columns, int mode,
             boolean showConditions) throws UnifyException {
@@ -296,7 +298,11 @@ public class LoadingSearch {
     }
 
     public boolean isShowActionFooter() {
-        return (mode & SHOW_ACTIONFOOTER) > 0;
+        return showActionFooter || (mode & SHOW_ACTIONFOOTER) > 0;
+    }
+
+    public void setShowActionFooter(boolean showActionFooter) {
+        this.showActionFooter = showActionFooter;
     }
 
     public boolean isShowSearch() {

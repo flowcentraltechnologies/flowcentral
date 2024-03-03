@@ -380,14 +380,26 @@ public interface AppletUtilities extends FlowCentralComponent {
      * 
      * @param clazz
      *                             the attribute class
-     * @param currentApplicationId
-     *                             the current application ID
+     * @param name
+     *                             the attribute name
      * @return the session attribute
      * @throws UnifyException
      *                        if an error occurs
      */
-    <T> T getSessionAttribute(Class<T> clazz, String currentApplicationId) throws UnifyException;
+    <T> T getSessionAttribute(Class<T> clazz, String name) throws UnifyException;
 
+    /**
+     * Sets session attribute.
+     * 
+     * @param name
+     *             the session name
+     * @param val
+     *             the session value
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    void setSessionAttribute(String name, Object val) throws UnifyException;
+    
     /**
      * Gets current system timestamp.
      * 
