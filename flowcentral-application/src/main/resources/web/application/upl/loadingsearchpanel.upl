@@ -63,6 +63,7 @@
 !ui-postcommand:searchAct command:search components:$c{searchEntries}
 !ui-postcommand:clearAct command:clear
 !ui-postcommand:applyTableAct command:applyTableAction refresh:$c{searchResultPanel} components:$c{searchResultTbl tblActionSel}
+	confirm:$m{apply.action.multiple.confirm}
 !ui-postcommand:applyTableBtnAct command:applyTableBtnAction refresh:$c{searchResultPanel} components:$c{searchResultTbl}
 !ui-postcommand:detailsAct command:details refresh:$c{searchResultPanel} components:$c{searchResultTbl}
 !ui-postcommand:columnAct  command:columns

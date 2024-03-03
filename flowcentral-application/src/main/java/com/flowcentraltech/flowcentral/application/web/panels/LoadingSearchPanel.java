@@ -15,6 +15,8 @@
  */
 package com.flowcentraltech.flowcentral.application.web.panels;
 
+import java.util.List;
+
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.application.web.widgets.LoadingTable;
 import com.flowcentraltech.flowcentral.application.web.widgets.LoadingTableWidget;
@@ -30,6 +32,7 @@ import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.UnifyWebSessionAttributeConstants;
 import com.tcdng.unify.web.annotation.Action;
 import com.tcdng.unify.web.ui.widget.data.ButtonGroupInfo;
+import com.tcdng.unify.web.ui.widget.data.Hint.MODE;
 import com.tcdng.unify.web.ui.widget.data.TaskMonitorInfo;
 
 /**
@@ -156,19 +159,28 @@ public class LoadingSearchPanel extends AbstractApplicationPanel {
         LoadingTableWidget tableWidget = getWidgetByShortName(LoadingTableWidget.class, "searchResultTbl");
         if (!StringUtils.isBlank(appTableActionPolicy)) {
             LoadingSearch loadingSearch = getLoadingSearch();
+            List<Entity> list = tableWidget.getSelectedItems();
             EntityListActionContext eCtx = new EntityListActionContext(
-                    loadingSearch.getLoadingTable().getLoadingItems(), tableWidget.getSelectedItems(),
-                    appTableActionPolicy);
+                    loadingSearch.getLoadingTable().getLoadingItems(), list, appTableActionPolicy);
             EntityListActionResult entityActionResult = loadingSearch.environment().performEntityAction(eCtx);
-            handleEntityActionResult(entityActionResult);
+            handleEntityActionResult(entityActionResult, list.size());
+            loadingSearch.applySearchEntriesToSearch();
+            commandRefreshPanelsAndHidePopup(this);
+        } else {
+            hintUser(MODE.WARNING, "$m{entitysearch.actionappliedto.choose.hint}");
         }
 
         tableWidget.clearSelected();
     }
 
-    private void handleEntityActionResult(EntityListActionResult entityActionResult) throws UnifyException {
-        if (entityActionResult != null && entityActionResult.isWithTaskResult()) {
-            fireEntityActionResultTask(entityActionResult);
+    private void handleEntityActionResult(EntityListActionResult entityActionResult, int total) throws UnifyException {
+        if (entityActionResult != null) {
+            if (entityActionResult.isWithTaskResult()) {
+                fireEntityActionResultTask(entityActionResult);
+            } else {
+                hintUser("$m{entitysearch.actionappliedto.items.count.hint}", entityActionResult.getResult(), total);
+                return;
+            }
         }
 
         hintUser("$m{entitysearch.actionappliedto.items.hint}");

@@ -41,19 +41,25 @@ public class WorkItemEntityListActionPolicy extends AbstractWfEntityListActionPo
     @Override
     protected Object doExecuteAction(EntityListActionContext ctx, List<? extends Entity> items, String userAction)
             throws UnifyException {
+        logDebug("Applying user action [{0}] to multiple [{1}] work items...", userAction, items.size());
+        int applied = 0;
         for (Entity inst : items) {
             final String source = ctx.getLoadingSource(inst);
             if (!StringUtils.isBlank(source)) {
+                logDebug("Using source [{0}] on item with id [{1}]...", source, inst.getId());
                 WfStepLongNameParts parts = WorkflowNameUtils.getWfStepLongNameParts(source);
                 final Long workItemId = environment().value(Long.class, "id", new WfItemQuery().workRecId((Long) inst.getId())
                         .workflowName(parts.getWorkflow()).wfStepName(parts.getStepName()));
-                return workflow().applyUserAction((WorkEntity) inst, workItemId, parts.getStepName(),
-                        userAction, WfReviewMode.NORMAL);
-                
+                if (workflow().applyUserAction((WorkEntity) inst, workItemId, parts.getStepName(),
+                        userAction, WfReviewMode.NORMAL)) {
+                    applied++;
+                }                
             }
         }
 
-        return null;
+        
+        logDebug("Successfully applied user action [{0}] to [{1}] work items...", userAction, applied);
+        return applied;
     }
 
 }
