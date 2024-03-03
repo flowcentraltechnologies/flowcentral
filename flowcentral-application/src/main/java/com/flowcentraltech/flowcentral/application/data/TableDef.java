@@ -16,7 +16,6 @@
 package com.flowcentraltech.flowcentral.application.data;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -27,6 +26,7 @@ import java.util.Set;
 import com.flowcentraltech.flowcentral.application.constants.LinkActConstants;
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityNameParts;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
+import com.flowcentraltech.flowcentral.application.util.InputWidgetUtils;
 import com.flowcentraltech.flowcentral.application.util.WidgetCalculationUtils;
 import com.flowcentraltech.flowcentral.common.data.DefaultReportColumn;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityBaseType;
@@ -144,19 +144,7 @@ public class TableDef extends BaseApplicationEntityDef {
         this.summaryFields = new HashSet<String>();
 
         if (!DataUtils.isBlank(loadingDefList)) {
-            Set<String> used = new HashSet<String>();
-            List<ButtonInfo> _actionBtnInfos = new ArrayList<ButtonInfo>();
-            for (TableLoadingDef tableLoadingDef : loadingDefList) {
-                if (tableLoadingDef.isWithActionBtnInfos()) {
-                    for (ButtonInfo buttonInfo : tableLoadingDef.getActionBtnInfos()) {
-                        if (used.add(buttonInfo.getValue())) {
-                            _actionBtnInfos.add(buttonInfo);
-                        }
-                    }
-                }
-            }
-
-            this.actionBtnInfos = Collections.unmodifiableList(_actionBtnInfos);
+            this.actionBtnInfos = InputWidgetUtils.getButtonInfos(loadingDefList);
         }
 
         List<TableFilterDef> rowColorFilterList = new ArrayList<TableFilterDef>();

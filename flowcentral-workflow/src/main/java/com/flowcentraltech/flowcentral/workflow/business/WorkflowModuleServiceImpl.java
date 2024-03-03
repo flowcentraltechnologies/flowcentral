@@ -908,25 +908,39 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
+    public boolean applyUserAction(WorkEntity wfEntityInst, Long wfItemId, String stepName, String userAction,
+            WfReviewMode wfReviewMode) {
+        return applyUserAction(wfEntityInst, wfItemId, stepName, userAction, null, null, wfReviewMode, false);
+    }
+
+    @Override
     public boolean applyUserAction(final WorkEntity wfEntityInst, final Long wfItemId, final String stepName,
             final String userAction, final String comment, InputArrayEntries emails, WfReviewMode wfReviewMode,
-            final boolean listing) throws UnifyException {
-        final WfItem wfItem = environment().list(WfItem.class, wfItemId);
-        if (wfItem.getWfStepName().equals(stepName)) {
+            final boolean listing) {
+        try {
+            final WfItem wfItem = environment().list(WfItem.class, wfItemId);
+            if (!wfItem.getWfStepName().equals(stepName)) {
+                return false;
+            }
+
             final WfDef wfDef = getWfDef(wfItem.getWorkflowName());
             final String userLoginId = getUserToken().getUserLoginId();
-            WfStepDef currentWfStepDef = wfDef.getWfStepDef(stepName);
-            WfUserActionDef userActionDef = currentWfStepDef.getUserActionDef(userAction);
+            final WfStepDef currentWfStepDef = wfDef.getWfStepDef(stepName);
+            if (!currentWfStepDef.isUserAction(userAction)) {
+                return false;
+            }
+
+            final WfUserActionDef userActionDef = currentWfStepDef.getUserActionDef(userAction);
             // Update current event
             environment().updateAll(new WfItemEventQuery().id(wfItem.getWfItemEventId()),
-                    new Update().add("actor", userLoginId).add("actionDt", getNow()).add("comment", comment)
-                            .add("wfAction", userActionDef.getLabel()));
+                    new Update().add("actor", userLoginId).add("actionDt", getNow()).add("comment", comment).add("wfAction",
+                            userActionDef.getLabel()));
 
             // Prepare event for next step. If error step and next step is not specified
             // jump to the work item previous step
-            final String nextStepName = currentWfStepDef.isError()
-                    && StringUtils.isBlank(userActionDef.getNextStepName()) ? wfItem.getPrevWfStepName()
-                            : userActionDef.getNextStepName();
+            final String nextStepName = currentWfStepDef.isError() && StringUtils.isBlank(userActionDef.getNextStepName())
+                    ? wfItem.getPrevWfStepName()
+                    : userActionDef.getNextStepName();
             WfStepDef nextWfStepDef = wfDef.getWfStepDef(nextStepName);
             final Long wfItemEventId = createWfItemEvent(nextWfStepDef, wfItem.getWfItemHistId(), stepName, null, null,
                     null, null);
@@ -987,8 +1001,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                 final AppletDef stepAppletDef = appletUtil.getAppletDef(currentWfStepDef.getStepAppletName());
                 final String updatePolicy = stepAppletDef.getPropValue(String.class,
                         AppletPropertyConstants.MAINTAIN_FORM_UPDATE_POLICY);
-                EntityActionContext eCtx = new EntityActionContext(entityDef, wfEntityInst, RecordActionType.UPDATE,
-                        null, updatePolicy);
+                EntityActionContext eCtx = new EntityActionContext(entityDef, wfEntityInst, RecordActionType.UPDATE, null,
+                        updatePolicy);
                 if (wfReviewMode.lean()) {
                     if (emails != null) {
                         environment().updateByIdVersion(eCtx);
@@ -1008,9 +1022,12 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             sendUserActionAlertsByAction(currentWfStepDef, currentTransitionItem, userAction);
 
             pushToWfTransitionQueue(wfDef, wfItemId);
+            commitTransactions();
             return true;
+        } catch (UnifyException e) {
+            logSevere(e);
         }
-
+        
         return false;
     }
 

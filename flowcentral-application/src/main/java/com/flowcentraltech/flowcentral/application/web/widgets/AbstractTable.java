@@ -50,6 +50,7 @@ import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.web.ui.widget.EventHandler;
 import com.tcdng.unify.web.ui.widget.Widget;
+import com.tcdng.unify.web.ui.widget.data.ButtonInfo;
 
 /**
  * Convenient abstract base class for table object.
@@ -269,6 +270,10 @@ public abstract class AbstractTable<T, U> {
 
     public TableDef getTableDef() {
         return tableDef;
+    }
+
+    public List<ButtonInfo> getActionBtnInfos() {
+        return tableDef.getActionBtnInfos();
     }
 
     public List<TableColumnDef> getColumnDefList() {

@@ -267,7 +267,7 @@ public class EntitySearch extends AbstractPanelFormBinding {
             synchronized (this) {
                 if (appTableActionButtonInfo == null) {
                     ButtonGroupInfo.Builder bgib = ButtonGroupInfo.newBuilder();
-                    bgib.addItems(entityTable.getTableDef().getActionBtnInfos());
+                    bgib.addItems(entityTable.getActionBtnInfos());
                     appTableActionButtonInfo = bgib.build();
                 }
             }

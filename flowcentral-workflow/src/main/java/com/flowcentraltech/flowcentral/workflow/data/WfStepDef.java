@@ -415,6 +415,10 @@ public class WfStepDef {
         return !roleSet.isEmpty();
     }
 
+    public boolean isUserAction(String action) {
+        return type.isUserAction() && userActions.containsKey(action);
+    }   
+    
     public static Builder newBuilder(AppletDef appletDef, AppletDef stepAppletDef, WorkflowStepType type,
             WorkflowStepPriority priority, RecordActionType recordActionType, String stepAppletName,
             String nextStepName, String altNextStepName, String binaryConditionName, String readOnlyConditionName,

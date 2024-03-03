@@ -40,13 +40,13 @@ public class UnfreezeComponentsActionPolicy extends AbstractEntityListActionPoli
     private CollaborationModuleService collaborationModuleService;
 
     @SuppressWarnings("unchecked")
-	@Override
-    public EntityListActionResult executeAction(EntityListActionContext ctx) throws UnifyException {
-    	List<FreezeUnfreeze> unfreezeList = (List<FreezeUnfreeze>) ctx.getInstList();
-    	if (!DataUtils.isBlank(unfreezeList)) {
-    		collaborationModuleService.unfreezeComponents(unfreezeList);
-    	}
-    	
+    @Override
+    public EntityListActionResult executeAction(EntityListActionContext ctx, String rule) throws UnifyException {
+        List<FreezeUnfreeze> unfreezeList = (List<FreezeUnfreeze>) ctx.getInstList();
+        if (!DataUtils.isBlank(unfreezeList)) {
+            collaborationModuleService.unfreezeComponents(unfreezeList);
+        }
+
         return null;
     }
 

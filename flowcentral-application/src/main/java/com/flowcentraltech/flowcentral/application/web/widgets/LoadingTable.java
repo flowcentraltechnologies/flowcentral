@@ -16,6 +16,7 @@
 package com.flowcentraltech.flowcentral.application.web.widgets;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -26,10 +27,12 @@ import com.flowcentraltech.flowcentral.application.data.TableDef;
 import com.flowcentraltech.flowcentral.application.data.TableLoadingDef;
 import com.flowcentraltech.flowcentral.application.policies.LoadingParams;
 import com.flowcentraltech.flowcentral.application.policies.LoadingTableProvider;
+import com.flowcentraltech.flowcentral.application.util.InputWidgetUtils;
 import com.flowcentraltech.flowcentral.common.constants.EntryActionType;
 import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
 import com.flowcentraltech.flowcentral.common.constants.TableChangeType;
 import com.flowcentraltech.flowcentral.common.data.FormValidationErrors;
+import com.flowcentraltech.flowcentral.common.data.LoadingItems;
 import com.flowcentraltech.flowcentral.common.data.RowChangeInfo;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.criterion.Order;
@@ -37,6 +40,7 @@ import com.tcdng.unify.core.data.BeanValueListStore;
 import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.util.DataUtils;
+import com.tcdng.unify.web.ui.widget.data.ButtonInfo;
 import com.tcdng.unify.web.ui.widget.data.ColorLegendInfo;
 
 /**
@@ -50,7 +54,11 @@ public class LoadingTable extends AbstractTable<LoadingParams, Entity> {
     private static final Order DEFAULT_TABLE_ORDER = new Order().add("id");
 
     private List<TableLoadingDef> altTableLoadingDefs;
-
+    
+    private List<ButtonInfo> altButtonInfos;
+    
+    private List<LoadingItems> loadingItems;
+    
     public LoadingTable(AppletUtilities au, TableDef tableDef) {
         this(au, tableDef, null);
     }
@@ -107,6 +115,24 @@ public class LoadingTable extends AbstractTable<LoadingParams, Entity> {
     }
 
     @Override
+    public List<ButtonInfo> getActionBtnInfos() {
+        if (!DataUtils.isBlank(altTableLoadingDefs)) {
+            if (altButtonInfos == null) {
+                altButtonInfos = InputWidgetUtils.getButtonInfos(altTableLoadingDefs);
+            }
+            
+            return altButtonInfos;
+        }
+        
+        return super.getActionBtnInfos();
+    }
+
+    
+    public List<LoadingItems> getLoadingItems() {
+        return loadingItems;
+    }
+
+    @Override
     protected void validate(EvaluationMode evaluationMode, LoadingParams sourceObject, FormValidationErrors errors)
             throws UnifyException {
 
@@ -150,6 +176,7 @@ public class LoadingTable extends AbstractTable<LoadingParams, Entity> {
     @Override
     protected List<Entity> getDisplayItems(LoadingParams restriction, int dispStartIndex, int dispEndIndex)
             throws UnifyException {
+        loadingItems = new ArrayList<LoadingItems>();
         final EntityClassDef entityClassDef = au().getEntityClassDef(getTableDef().getEntityDef().getLongName());
         final int len = getLoadingDefCount();
         List<Entity> items = new ArrayList<Entity>();
@@ -160,7 +187,11 @@ public class LoadingTable extends AbstractTable<LoadingParams, Entity> {
             TableLoadingDef tableLoadingDef = getTableLoadingDef(i);
             LoadingTableProvider loadingTableProvider = getLoadingTableProvider(tableLoadingDef);
             final String label = loadingTableProvider.getLoadingLabel();
-            List<? extends Entity> _items = loadingTableProvider.getLoadingItems(restriction);
+            
+            LoadingItems _loadingItems = loadingTableProvider.getLoadingItems(restriction);
+            _loadingItems.setSource(tableLoadingDef.getName());
+            
+            List<? extends Entity> _items = _loadingItems.getItems();
             Order order = getOrder();
             if (order == null) {
                 DataUtils.sortAscending(_items, Entity.class, "id");
@@ -177,8 +208,10 @@ public class LoadingTable extends AbstractTable<LoadingParams, Entity> {
                 sectionList.add(new Section(label));
             }
 
+            loadingItems.add(_loadingItems);
         }
 
+        loadingItems = Collections.unmodifiableList(loadingItems);
         setSections(sectionList);
         restriction.restore();
         return items;

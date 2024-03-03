@@ -16,7 +16,6 @@
 package com.flowcentraltech.flowcentral.application.web.panels;
 
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleSysParamConstants;
-import com.flowcentraltech.flowcentral.application.data.TableDef;
 import com.flowcentraltech.flowcentral.application.web.widgets.LoadingTable;
 import com.flowcentraltech.flowcentral.application.web.widgets.LoadingTableWidget;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityListActionContext;
@@ -56,17 +55,16 @@ public class LoadingSearchPanel extends AbstractApplicationPanel {
         }
 
         final LoadingTable loadingTable = loadingSearch.getLoadingTable();
-        final TableDef tableDef = loadingTable.getTableDef();
         setVisible("colorLegend", loadingTable.isWithColorLegendInfo());
         setVisible("footerActionPanel", loadingSearch.isShowActionFooter());
         setVisible("searchEntriesPanel", loadingSearch.isShowSearch() && loadingSearch.isWithSearchInput());
-       if (loadingSearch.isShowActionFooter()) {
+        if (loadingSearch.isShowActionFooter()) {
             boolean buttonsForFooterAction = loadingSearch.au().system().getSysParameterValue(boolean.class,
                     ApplicationModuleSysParamConstants.SHOW_BUTTONS_FOR_FOOTER_ACTION);
             setVisible("commitActionBtn", false);
             if (buttonsForFooterAction) {
                 ButtonGroupInfo.Builder bgib = ButtonGroupInfo.newBuilder();
-                bgib.addItems(tableDef.getActionBtnInfos());
+                bgib.addItems(loadingTable.getActionBtnInfos());
                 loadingSearch.setAppTableActionButtonInfo(bgib.build());
                 setVisible("tblActionBtns", true);
                 setVisible("selFooterActionPanel", false);
@@ -99,7 +97,8 @@ public class LoadingSearchPanel extends AbstractApplicationPanel {
         IndexedTarget target = getRequestTarget(IndexedTarget.class);
         if (target.isValidIndex()) {
             LoadingSearch loadingSearch = getLoadingSearch();
-            onColumnSelect(loadingSearch.getLoadingTable().getDispItemList().get(target.getIndex()), target.getBinding());
+            onColumnSelect(loadingSearch.getLoadingTable().getDispItemList().get(target.getIndex()),
+                    target.getBinding());
         }
     }
 
@@ -152,12 +151,13 @@ public class LoadingSearchPanel extends AbstractApplicationPanel {
             // TODO
         }
     }
-    
+
     private void applyTableBtnAction(String appTableActionPolicy) throws UnifyException {
         LoadingTableWidget tableWidget = getWidgetByShortName(LoadingTableWidget.class, "searchResultTbl");
         if (!StringUtils.isBlank(appTableActionPolicy)) {
             LoadingSearch loadingSearch = getLoadingSearch();
-            EntityListActionContext eCtx = new EntityListActionContext(tableWidget.getSelectedItems(),
+            EntityListActionContext eCtx = new EntityListActionContext(
+                    loadingSearch.getLoadingTable().getLoadingItems(), tableWidget.getSelectedItems(),
                     appTableActionPolicy);
             EntityListActionResult entityActionResult = loadingSearch.environment().performEntityAction(eCtx);
             handleEntityActionResult(entityActionResult);

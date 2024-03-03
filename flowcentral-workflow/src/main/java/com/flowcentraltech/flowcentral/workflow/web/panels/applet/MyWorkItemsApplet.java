@@ -28,6 +28,7 @@ import com.flowcentraltech.flowcentral.application.web.panels.LoadingSearch;
 import com.flowcentraltech.flowcentral.application.web.widgets.LoadingTable;
 import com.flowcentraltech.flowcentral.workflow.business.WorkflowModuleService;
 import com.flowcentraltech.flowcentral.workflow.constants.WorkflowModuleNameConstants;
+import com.flowcentraltech.flowcentral.workflow.util.WorkflowNameUtils;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.UserToken;
 import com.tcdng.unify.web.ui.widget.data.ButtonInfo;
@@ -52,8 +53,10 @@ public class MyWorkItemsApplet extends AbstractWorkItemsApplet {
         boolean withTableActions = false;
         for (WorkflowStepInfo workflowStepInfo : workflowStepList) {
             List<ButtonInfo> actionBtnInfos = getActionButtons(workflowModuleService, workflowStepInfo);
-            altTableLoadingDefs.add(new TableLoadingDef(workflowStepInfo.getStepName(), workflowStepInfo.getStepDesc(),
-                    workflowStepInfo.getStepLabel(),
+            altTableLoadingDefs.add(new TableLoadingDef(
+                    WorkflowNameUtils.getWfStepLongName(workflowStepInfo.getWorkflowLongName(),
+                            workflowStepInfo.getStepName()),
+                    workflowStepInfo.getStepDesc(), workflowStepInfo.getStepLabel(),
                     WorkflowModuleNameConstants.WORKFLOW_MY_WORKITEMS_LOADING_TABLE_PROVIDER, workflowStepInfo,
                     orderIndex++, actionBtnInfos));
             withTableActions |= (!actionBtnInfos.isEmpty());
@@ -61,15 +64,14 @@ public class MyWorkItemsApplet extends AbstractWorkItemsApplet {
 
         final LoadingSearch loadingSearch = getLoadingSearch();
         final LoadingTable loadingTable = loadingSearch.getLoadingTable();
-        if (withTableActions) {
-            loadingSearch.setShowActionFooter(withTableActions);            
-            List<TableAction> actions = getTableActions(loadingTable.getTableDef().getActionBtnInfos());
-            au.setSessionAttribute(AppletPageAttributeConstants.TABLE_ACTIONS + ":"
-                    + loadingTable.getTableDef().getId(), actions);
-        }
-
         loadingTable.setAltTableLoadingDefs(altTableLoadingDefs);
         loadingTable.setDisableLinks(true);
+        if (withTableActions) {
+            loadingSearch.setShowActionFooter(withTableActions);
+            List<TableAction> actions = getTableActions(loadingTable.getActionBtnInfos());
+            au.setSessionAttribute(
+                    AppletPageAttributeConstants.TABLE_ACTIONS + ":" + loadingTable.getTableDef().getId(), actions);
+        }
     }
 
     public void applySearch() throws UnifyException {

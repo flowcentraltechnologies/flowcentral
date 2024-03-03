@@ -38,4 +38,17 @@ public interface EntityListActionPolicy extends WidgetStatePolicy {
      */
     EntityListActionResult executeAction(EntityListActionContext ctx) throws UnifyException;
 
+    /**
+     * Executes action operation on list.
+     * 
+     * @param ctx
+     *             the entity list action context
+     * @param rule
+     *             the execution rule
+     * @return the result object
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    EntityListActionResult executeAction(EntityListActionContext ctx, String rule) throws UnifyException;
+
 }

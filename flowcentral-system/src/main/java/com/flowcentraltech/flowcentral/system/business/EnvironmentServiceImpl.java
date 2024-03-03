@@ -119,7 +119,15 @@ public class EnvironmentServiceImpl extends AbstractBusinessService implements E
     @Override
     public EntityListActionResult performEntityAction(EntityListActionContext ctx) throws UnifyException {
         if (ctx.isWithPolicy()) {
-            return ((EntityListActionPolicy) getComponent(ctx.getPolicyName())).executeAction(ctx);
+            String policy = ctx.getPolicyName();
+            String rule = null;
+            int index = policy.lastIndexOf(':');
+            if (index > 0) {
+                rule = policy.substring(index + 1);
+                policy = policy.substring(0, index);
+            }
+            
+            return ((EntityListActionPolicy) getComponent(policy)).executeAction(ctx, rule);
         }
 
         return new EntityListActionResult(ctx);

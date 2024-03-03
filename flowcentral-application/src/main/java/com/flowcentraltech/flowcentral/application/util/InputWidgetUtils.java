@@ -44,6 +44,7 @@ import com.flowcentraltech.flowcentral.application.data.PropertySequenceDef;
 import com.flowcentraltech.flowcentral.application.data.PropertySequenceEntryDef;
 import com.flowcentraltech.flowcentral.application.data.SetValueDef;
 import com.flowcentraltech.flowcentral.application.data.SetValuesDef;
+import com.flowcentraltech.flowcentral.application.data.TableLoadingDef;
 import com.flowcentraltech.flowcentral.application.data.WidgetRuleEntryDef;
 import com.flowcentraltech.flowcentral.application.data.WidgetRulesDef;
 import com.flowcentraltech.flowcentral.application.data.WidgetTypeDef;
@@ -107,6 +108,7 @@ import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.FilterUtils;
 import com.tcdng.unify.core.util.ReflectUtils;
 import com.tcdng.unify.core.util.StringUtils;
+import com.tcdng.unify.web.ui.widget.data.ButtonInfo;
 
 /**
  * Input widget utilities.
@@ -173,6 +175,26 @@ public final class InputWidgetUtils {
 
     }
 
+    public static List<ButtonInfo> getButtonInfos(List<TableLoadingDef> loadingDefList) {
+        if (!DataUtils.isBlank(loadingDefList)) {
+            Set<String> used = new HashSet<String>();
+            List<ButtonInfo> _actionBtnInfos = new ArrayList<ButtonInfo>();
+            for (TableLoadingDef tableLoadingDef : loadingDefList) {
+                if (tableLoadingDef.isWithActionBtnInfos()) {
+                    for (ButtonInfo buttonInfo : tableLoadingDef.getActionBtnInfos()) {
+                        if (used.add(buttonInfo.getValue())) {
+                            _actionBtnInfos.add(buttonInfo);
+                        }
+                    }
+                }
+            }
+
+            return Collections.unmodifiableList(_actionBtnInfos);
+        }
+        
+        return Collections.emptyList();
+    }
+    
     public static boolean isEnumerationWidget(String widgetName) {
         return ENUMERATION_WIDGETS.contains(widgetName);
     }

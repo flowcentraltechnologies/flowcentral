@@ -103,6 +103,11 @@ public class AbstractWorkItemsApplet extends ManageLoadingListApplet {
 
         public String getLabel() {
             return label;
+        }
+
+        @Override
+        public String toString() {
+            return "TableAction [policy=" + policy + ", label=" + label + "]";
         }        
     }
 }
