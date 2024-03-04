@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.report.business;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -695,7 +696,9 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
                 reportColumnOptions.setIncluded(true);
 
                 final String fieldName = reportColumn.getFieldName();
-                String type = reportColumn.getType();
+                String type = entityClassDef.getEntityDef().getFieldDef(fieldName).isEnumDataType()
+                        ? String.class.getName()
+                        : reportColumn.getType();
                 String formatter = reportColumn.getFormatter();
                 HAlignType hAlignType = reportColumn.getHorizAlignType();
                 int width = reportColumn.getWidth();
@@ -914,6 +917,10 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
                         type = condition.getType();
                         param1 = condition.getParamA();
                         param2 = condition.getParamB();
+                    } else if (type.isAmongst()) {
+                        if (param1 != null) {                            
+                            param1 = Arrays.asList(StringUtils.charSplit((String) param1, '|'));
+                        }
                     }
 
                     reportFilterOptions = new ReportFilterOptions(type.restrictionType(),
