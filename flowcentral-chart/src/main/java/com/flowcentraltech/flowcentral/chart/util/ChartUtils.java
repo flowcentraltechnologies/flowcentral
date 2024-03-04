@@ -192,7 +192,7 @@ public final class ChartUtils {
                 jw.write("customScale", 0.8);
                 if (ChartType.DONUT.equals(chartType)) {
                     jw.beginObject("donut");
-                    jw.write("size", "75%");
+                    jw.write("size", "65%");
                     jw.endObject();
                 }
                 jw.endObject();
