@@ -26,7 +26,7 @@
     
 // Report parameters
 !ui-panel:rptParamsPanel layout:$d{!ui-vertical} components:$c{inputParameters}
-!ui-multidynamic:inputParameters binding:userInputList
+!ui-multidynamic:inputParameters inputStyle:$s{width:220px;} binding:userInputList
 
 // Report options
 !ui-panel:rptColumnOptionsPanel layout:$d{!ui-vertical} components:$c{reportColumnRack}
