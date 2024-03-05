@@ -26,7 +26,17 @@ import com.tcdng.unify.web.ui.widget.data.LinkGridInfo;
  */
 public class ReportListingPageBean extends AbstractPageBean {
 
+    private int linkGridColumns;
+    
     private LinkGridInfo linkGridInfo;
+
+    public int getLinkGridColumns() {
+        return linkGridColumns;
+    }
+
+    public void setLinkGridColumns(int linkGridColumns) {
+        this.linkGridColumns = linkGridColumns;
+    }
 
     public LinkGridInfo getLinkGridInfo() {
         return linkGridInfo;

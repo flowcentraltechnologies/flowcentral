@@ -30,4 +30,6 @@ public interface ReportModuleSysParamConstants {
     String DYNAMIC_REPORT_PORTRAIT_TEMPLATE = "RPT-0003";
 
     String DYNAMIC_REPORT_LANDSCAPE_TEMPLATE = "RPT-0004";
+
+    String REPORT_LISTING_COLUMNS= "RPT-0005";
 }

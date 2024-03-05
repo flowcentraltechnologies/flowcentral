@@ -23,5 +23,8 @@
 		<sysParameter code="RPT-0004" defaultVal="dynamicreportlandscape.jrxml"
 			description="$m{report.sysparam.dynamicreportlandscapetemplate}"
 			editor="!ui-text size:40" type="string" editable="true"/>
+		<sysParameter code="RPT-0005" defaultVal="2"
+			description="$m{report.sysparam.reportlistingcolumns}"
+			editor="!ui-select list:onetotenlist" type="number" editable="true"/>
 	</sysParameters>
 </module>
