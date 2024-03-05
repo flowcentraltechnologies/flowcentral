@@ -15,6 +15,9 @@
  */
 package com.flowcentraltech.flowcentral.chart.data;
 
+import java.util.Collections;
+import java.util.Map;
+
 import com.flowcentraltech.flowcentral.configuration.constants.ChartCategoryDataType;
 import com.flowcentraltech.flowcentral.configuration.constants.ChartSeriesDataType;
 
@@ -24,10 +27,14 @@ import com.flowcentraltech.flowcentral.configuration.constants.ChartSeriesDataTy
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class CategoryDoubleSeries extends AbstractCategorySeries<Double>{
+public class CategoryDoubleSeries extends AbstractCategorySeries<Double> {
+
+    public CategoryDoubleSeries(Map<Object, String> categoryLabels, String name) {
+        super(ChartCategoryDataType.STRING, ChartSeriesDataType.DOUBLE, categoryLabels, name);
+    }
 
     public CategoryDoubleSeries(String name) {
-        super(ChartCategoryDataType.STRING, ChartSeriesDataType.DOUBLE, name);
+        super(ChartCategoryDataType.STRING, ChartSeriesDataType.DOUBLE, Collections.emptyMap(), name);
     }
 
 }

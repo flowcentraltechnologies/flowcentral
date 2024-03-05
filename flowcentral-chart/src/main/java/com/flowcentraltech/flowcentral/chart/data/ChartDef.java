@@ -170,6 +170,15 @@ public class ChartDef extends BaseApplicationEntityDef {
         return smooth;
     }
 
+    @Override
+    public String toString() {
+        return "ChartDef [type=" + type + ", paletteType=" + paletteType + ", title=" + title + ", subTitle=" + subTitle
+                + ", provider=" + provider + ", rule=" + rule + ", category=" + category + ", series=" + series
+                + ", color=" + color + ", width=" + width + ", height=" + height + ", stacked=" + stacked
+                + ", showGrid=" + showGrid + ", smooth=" + smooth + ", showDataLabels=" + showDataLabels
+                + ", formatDataLabels=" + formatDataLabels + ", formatYLabels=" + formatYLabels + "]";
+    }
+
     public static Builder newBuilder(ChartType type, ChartPaletteType paletteType, String provider, String rule,
             String longName, String description, Long id, long version) {
         return new Builder(type, paletteType, provider, rule, longName, description, id, version);

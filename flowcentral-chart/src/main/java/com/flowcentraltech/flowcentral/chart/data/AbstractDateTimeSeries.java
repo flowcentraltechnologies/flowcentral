@@ -16,6 +16,7 @@
 package com.flowcentraltech.flowcentral.chart.data;
 
 import java.util.Date;
+import java.util.Map;
 
 import com.flowcentraltech.flowcentral.configuration.constants.ChartCategoryDataType;
 import com.flowcentraltech.flowcentral.configuration.constants.ChartSeriesDataType;
@@ -29,8 +30,9 @@ import com.tcdng.unify.core.util.json.JsonWriter;
  */
 public abstract class AbstractDateTimeSeries<U extends Number> extends AbstractSeries<Date, U> {
 
-    public AbstractDateTimeSeries(ChartCategoryDataType categoryType, ChartSeriesDataType dataType, String name) {
-        super(categoryType, dataType, name);
+    public AbstractDateTimeSeries(ChartCategoryDataType categoryType, ChartSeriesDataType dataType,
+            Map<Object, String> categoryLabels, String name) {
+        super(categoryType, dataType, categoryLabels, name);
     }
 
     @Override

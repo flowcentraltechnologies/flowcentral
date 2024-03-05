@@ -61,7 +61,6 @@ public class ChartWriter extends AbstractWidgetWriter {
         final String chartLongName = chartWidget.getValue(String.class);
         ChartDef chartDef = chartModuleService.getChartDef(chartLongName);
         ChartDetails chartDetails = getChartDetailsCache().getChartDetails(chartDef.getProvider(), chartDef.getRule());
-        
         writer.write("<div");
         writeTagAttributes(writer, chartWidget);
         writer.write(">");

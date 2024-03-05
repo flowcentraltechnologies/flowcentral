@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.chart.data;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,6 +26,7 @@ import java.util.Map;
 import com.flowcentraltech.flowcentral.configuration.constants.ChartCategoryDataType;
 import com.flowcentraltech.flowcentral.configuration.constants.ChartSeriesDataType;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.StringUtils;
 
 /**
@@ -49,6 +51,8 @@ public class ChartDetails {
 
     private ChartCategoryDataType categoryType;
 
+    private Map<Object, String> categoryLabels;
+
     private Map<String, AbstractSeries<?, ?>> series;
 
     private ChartTableColumn[] headers;
@@ -56,8 +60,8 @@ public class ChartDetails {
     private List<Object[]> tableSeries;
 
     private ChartDetails(String title, String subTitle, int titleOffsetX, int titleFontSize, int subTitleOffsetX,
-            int subTitleFontSize, ChartCategoryDataType categoryType, Map<String, AbstractSeries<?, ?>> series,
-            ChartTableColumn[] headers, List<Object[]> tableSeries) {
+            int subTitleFontSize, ChartCategoryDataType categoryType, Map<Object, String> categoryLabels,
+            Map<String, AbstractSeries<?, ?>> series, ChartTableColumn[] headers, List<Object[]> tableSeries) {
         this.title = title;
         this.subTitle = subTitle;
         this.titleOffsetX = titleOffsetX;
@@ -65,6 +69,7 @@ public class ChartDetails {
         this.subTitleOffsetX = subTitleOffsetX;
         this.subTitleFontSize = subTitleFontSize;
         this.categoryType = categoryType;
+        this.categoryLabels = categoryLabels;
         this.series = series;
         this.headers = headers;
         this.tableSeries = tableSeries;
@@ -104,6 +109,10 @@ public class ChartDetails {
 
     public ChartCategoryDataType getCategoryType() {
         return categoryType;
+    }
+
+    public String getCategoryLabel(String name) {
+        return categoryLabels.get(name);
     }
 
     public Map<String, AbstractSeries<?, ?>> getSeries() {
@@ -150,6 +159,8 @@ public class ChartDetails {
 
         private ChartCategoryDataType categoryType;
 
+        private Map<Object, String> categoryLabels;
+
         private Map<String, AbstractSeries<?, ?>> series;
 
         private ChartTableColumn[] headers;
@@ -159,6 +170,7 @@ public class ChartDetails {
         public Builder(ChartCategoryDataType categoryType) {
             this.categoryType = categoryType;
             this.series = new LinkedHashMap<String, AbstractSeries<?, ?>>();
+            this.categoryLabels = new HashMap<Object, String>();
         }
 
         public Builder title(String title) {
@@ -211,6 +223,11 @@ public class ChartDetails {
             return this.headers != null;
         }
 
+        public Builder setCategoryLabel(Object name, String label) {
+            categoryLabels.put(name, label);
+            return this;
+        }
+        
         public Builder createTableSeries(ChartTableColumn[] headers) {
             if (isWithTableSeries()) {
                 throw new RuntimeException("Table series already defined for this builder.");
@@ -229,11 +246,11 @@ public class ChartDetails {
             if (tableRow.length != headers.length) {
                 throw new RuntimeException("Series length does not match table header length.");
             }
-            
+
             tableSeries.add(tableRow);
             return this;
         }
-        
+
         public Builder createSeries(ChartSeriesDataType dataType, String seriesName) throws UnifyException {
             if (series.containsKey(seriesName)) {
                 throw new RuntimeException("Series with name [" + seriesName + "] already exists with this builder.");
@@ -256,7 +273,7 @@ public class ChartDetails {
 
         public ChartDetails build() throws UnifyException {
             return new ChartDetails(title, subTitle, titleOffsetX, titleFontSize, subTitleOffsetX, subTitleFontSize,
-                    categoryType, series, headers, tableSeries);
+                    categoryType, DataUtils.unmodifiableMap(categoryLabels), series, headers, tableSeries);
         }
 
         private AbstractSeries<?, ?> createSeries(ChartCategoryDataType categoryType, ChartSeriesDataType dataType,
@@ -265,10 +282,10 @@ public class ChartDetails {
                 case DATE:
                     switch (dataType) {
                         case DOUBLE:
-                            return new DateTimeDoubleSeries(name);
+                            return new DateTimeDoubleSeries(categoryLabels, name);
                         case INTEGER:
                         case LONG:
-                            return new DateTimeIntegerSeries(name);
+                            return new DateTimeIntegerSeries(categoryLabels, name);
                         default:
                             break;
                     }
@@ -277,10 +294,10 @@ public class ChartDetails {
                 case LONG:
                     switch (dataType) {
                         case DOUBLE:
-                            return new NumericDoubleSeries(name);
+                            return new NumericDoubleSeries(categoryLabels, name);
                         case INTEGER:
                         case LONG:
-                            return new NumericIntegerSeries(name);
+                            return new NumericIntegerSeries(categoryLabels, name);
                         default:
                             break;
                     }
@@ -288,10 +305,10 @@ public class ChartDetails {
                 case STRING:
                     switch (dataType) {
                         case DOUBLE:
-                            return new CategoryDoubleSeries(name);
+                            return new CategoryDoubleSeries(categoryLabels, name);
                         case INTEGER:
                         case LONG:
-                            return new CategoryIntegerSeries(name);
+                            return new CategoryIntegerSeries(categoryLabels, name);
                         default:
                             break;
                     }

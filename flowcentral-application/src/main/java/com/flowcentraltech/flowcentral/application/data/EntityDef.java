@@ -478,6 +478,10 @@ public class EntityDef extends BaseApplicationEntityDef {
         return entitySeriesDef;
     }
 
+    public boolean isEntityCategorysDef(String name) {
+        return categoryDefs.containsKey(name);
+    }
+    
     public EntityCategoryDef getEntityCategorysDef(String name) {
         EntityCategoryDef entityCategoryDef = categoryDefs.get(name);
         if (entityCategoryDef == null) {

@@ -36,15 +36,19 @@ public abstract class AbstractSeries<T, U extends Number> {
 
     private final ChartSeriesDataType dataType;
 
+    private final Map<Object, String> categoryLabels;
+
     private final String name;
 
     private final Map<T, AbstractSeriesData> data;
 
     private List<AbstractSeriesData> dataList;
 
-    protected AbstractSeries(ChartCategoryDataType categoryType, ChartSeriesDataType dataType, String name) {
+    protected AbstractSeries(ChartCategoryDataType categoryType, ChartSeriesDataType dataType,
+            Map<Object, String> categoryLabels, String name) {
         this.categoryType = categoryType;
         this.dataType = dataType;
+        this.categoryLabels = categoryLabels;
         this.name = name;
         this.data = new LinkedHashMap<T, AbstractSeriesData>();
     }
@@ -63,7 +67,7 @@ public abstract class AbstractSeries<T, U extends Number> {
 
     @SuppressWarnings("unchecked")
     public void addData(Object x, Number y) {
-        data.put((T)x,  createData((T) x, (U) y));
+        data.put((T) x, createData((T) x, (U) y));
     }
 
     public U getData(Object x) {
@@ -71,10 +75,10 @@ public abstract class AbstractSeries<T, U extends Number> {
         if (seriesData != null) {
             return seriesData.getY();
         }
-        
+
         return null;
     }
-    
+
     public int size() {
         return data.size();
     }
@@ -86,7 +90,7 @@ public abstract class AbstractSeries<T, U extends Number> {
     public List<Object> getXList() {
         List<Object> list = new ArrayList<Object>();
         for (AbstractSeriesData _data : data.values()) {
-            list.add(_data.getX());
+            list.add(resolveX(_data.getX()));
         }
 
         return list;
@@ -116,7 +120,7 @@ public abstract class AbstractSeries<T, U extends Number> {
     public void writeXValuesArray(String field, JsonWriter jw) {
         String[] x = new String[data.size()];
         for (int i = 0; i < x.length; i++) {
-            x[i] = String.valueOf(getDataList().get(i).getX());
+            x[i] = resolveX(getDataList().get(i).getX());
         }
 
         jw.write(field, x);
@@ -131,18 +135,28 @@ public abstract class AbstractSeries<T, U extends Number> {
         jw.write(field, y);
     }
 
+    @Override
+    public String toString() {
+        return "AbstractSeries [categoryType=" + categoryType + ", dataType=" + dataType + ", name=" + name + ", data="
+                + data + ", dataList=" + dataList + "]";
+    }
+
+    private String resolveX(Object xobj) {
+        return categoryLabels.containsKey(xobj) ? categoryLabels.get(xobj) : String.valueOf(xobj);
+    }
+
     private List<AbstractSeriesData> getDataList() {
         if (dataList == null) {
-            synchronized(this) {
+            synchronized (this) {
                 if (dataList == null) {
                     dataList = new ArrayList<AbstractSeriesData>(data.values());
-                }                
+                }
             }
         }
-        
+
         return dataList;
     }
-    
+
     protected abstract AbstractSeriesData createData(T x, U y);
 
     protected abstract class AbstractSeriesData {
@@ -164,6 +178,15 @@ public abstract class AbstractSeries<T, U extends Number> {
             return y;
         }
 
+        @Override
+        public String toString() {
+            return "AbstractSeriesData [x=" + x + ", y=" + y + "]";
+        }
+
+        protected String resolveX(Object xobj) {         
+            return AbstractSeries.this.resolveX(xobj);
+        }
+        
         public abstract void writeAsObject(JsonWriter jw);
 
     }

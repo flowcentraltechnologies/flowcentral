@@ -15,6 +15,9 @@
  */
 package com.flowcentraltech.flowcentral.chart.data;
 
+import java.util.Collections;
+import java.util.Map;
+
 import com.flowcentraltech.flowcentral.configuration.constants.ChartCategoryDataType;
 import com.flowcentraltech.flowcentral.configuration.constants.ChartSeriesDataType;
 
@@ -26,8 +29,12 @@ import com.flowcentraltech.flowcentral.configuration.constants.ChartSeriesDataTy
  */
 public class DateTimeIntegerSeries extends AbstractDateTimeSeries<Integer>{
 
+    public DateTimeIntegerSeries(Map<Object, String> categoryLabels, String name) {
+        super(ChartCategoryDataType.DATE, ChartSeriesDataType.INTEGER, categoryLabels, name);
+    }
+
     public DateTimeIntegerSeries(String name) {
-        super(ChartCategoryDataType.DATE, ChartSeriesDataType.INTEGER, name);
+        super(ChartCategoryDataType.DATE, ChartSeriesDataType.INTEGER, Collections.emptyMap(), name);
     }
 
 }

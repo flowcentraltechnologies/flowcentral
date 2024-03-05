@@ -15,6 +15,8 @@
  */
 package com.flowcentraltech.flowcentral.chart.data;
 
+import java.util.Map;
+
 import com.flowcentraltech.flowcentral.configuration.constants.ChartCategoryDataType;
 import com.flowcentraltech.flowcentral.configuration.constants.ChartSeriesDataType;
 import com.tcdng.unify.core.util.json.JsonWriter;
@@ -27,15 +29,16 @@ import com.tcdng.unify.core.util.json.JsonWriter;
  */
 public abstract class AbstractCategorySeries<U extends Number> extends AbstractSeries<String, U> {
 
-    public AbstractCategorySeries(ChartCategoryDataType categoryType, ChartSeriesDataType dataType, String name) {
-        super(categoryType, dataType, name);
+    public AbstractCategorySeries(ChartCategoryDataType categoryType, ChartSeriesDataType dataType,
+            Map<Object, String> categoryLabels, String name) {
+        super(categoryType, dataType, categoryLabels, name);
     }
 
     @Override
     protected AbstractSeriesData createData(String x, U y) {
         return new CategorySeriesData(x, y);
     }
-    
+
     private class CategorySeriesData extends AbstractSeriesData {
 
         public CategorySeriesData(String x, U y) {
@@ -45,7 +48,7 @@ public abstract class AbstractCategorySeries<U extends Number> extends AbstractS
         @Override
         public void writeAsObject(JsonWriter jw) {
             jw.beginObject();
-            jw.write("x", getX());
+            jw.write("x", resolveX(getX()));
             jw.write("y", getY());
             jw.endObject();
         }
