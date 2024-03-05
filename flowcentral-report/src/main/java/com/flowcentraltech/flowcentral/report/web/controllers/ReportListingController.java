@@ -22,8 +22,10 @@ import com.flowcentraltech.flowcentral.common.constants.CommonModuleNameConstant
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralResultMappingConstants;
 import com.flowcentraltech.flowcentral.common.data.ReportOptions;
 import com.flowcentraltech.flowcentral.report.business.ReportModuleService;
+import com.flowcentraltech.flowcentral.report.constants.ReportModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.report.entities.ReportConfiguration;
 import com.flowcentraltech.flowcentral.report.entities.ReportGroup;
+import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.UserToken;
 import com.tcdng.unify.core.annotation.Component;
@@ -53,7 +55,10 @@ public class ReportListingController extends AbstractPageController<ReportListin
 
     @Configurable
     private ReportModuleService reportModuleService;
-    
+
+    @Configurable
+    private SystemModuleService systemModuleService;
+
     public ReportListingController() {
         super(ReportListingPageBean.class, Secured.TRUE, ReadOnly.FALSE, ResetOnWrite.FALSE);
     }
@@ -63,7 +68,7 @@ public class ReportListingController extends AbstractPageController<ReportListin
         String reportConfigName = getPageRequestContextUtil().getRequestTargetValue(String.class);
         ReportOptions reportOptions = reportModuleService.getReportOptionsForConfiguration(reportConfigName);
         reportOptions.setReportResourcePath(reportResourcePath);
-        reportOptions.setUserInputOnly(true);      
+        reportOptions.setUserInputOnly(true);
         return showPopup(new Popup(FlowCentralResultMappingConstants.SHOW_APPLICATION_REPORT_OPTIONS, reportOptions));
     }
 
@@ -75,6 +80,8 @@ public class ReportListingController extends AbstractPageController<ReportListin
     @Override
     protected void onOpenPage() throws UnifyException {
         ReportListingPageBean pageBean = getPageBean();
+        final int linkGridColumns = systemModuleService.getSysParameterValue(int.class,
+                ReportModuleSysParamConstants.REPORT_LISTING_COLUMNS);
         final UserToken userToken = getUserToken();
         final String roleCode = !userToken.isReservedUser() ? userToken.getRoleCode() : null;
         LinkGridInfo.Builder lb = LinkGridInfo.newBuilder();
@@ -92,6 +99,7 @@ public class ReportListingController extends AbstractPageController<ReportListin
             }
         }
 
+        pageBean.setLinkGridColumns(linkGridColumns);
         pageBean.setLinkGridInfo(lb.build());
     }
 

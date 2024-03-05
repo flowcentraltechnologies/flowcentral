@@ -26,4 +26,4 @@
 !ui-label:subTitle styleClass:$s{hdsubtitle} caption:$m{report.reportlisting.subtitle}
 
 !ui-panel:listingPanel style:$s{width:480px;} components:$c{listGrid}
-!ui-linkgrid:listGrid styleClass:$e{fc-reportlist} columns:1 binding:linkGridInfo	
+!ui-linkgrid:listGrid styleClass:$e{fc-reportlist} columnsBinding:linkGridColumns binding:linkGridInfo	
