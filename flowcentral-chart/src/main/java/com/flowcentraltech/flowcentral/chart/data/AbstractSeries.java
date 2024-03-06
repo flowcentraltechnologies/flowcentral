@@ -137,18 +137,20 @@ public abstract class AbstractSeries<T, U extends Number> {
     }
 
     public void writeXValuesArray(String field, JsonWriter jw) {
-        String[] x = new String[data.size()];
+        List<AbstractSeriesData> _data = getDataList();
+        String[] x = new String[_data.size()];
         for (int i = 0; i < x.length; i++) {
-            x[i] = resolveX(getDataList().get(i).getX());
+            x[i] = resolveX(_data.get(i).getX());
         }
 
         jw.write(field, x);
     }
 
     public void writeYValuesArray(String field, JsonWriter jw) {
-        Number[] y = new Number[data.size()];
+        List<AbstractSeriesData> _data = getDataList();
+        Number[] y = new Number[_data.size()];
         for (int i = 0; i < y.length; i++) {
-            y[i] = getDataList().get(i).getY();
+            y[i] = _data.get(i).getY();
         }
 
         jw.write(field, y);
