@@ -3255,8 +3255,11 @@
 				name="chartPaletteTypeFormPolicy"
 				description="$m{studio.chart.form.chartpalettetype.policy}">
 				<onCondition>
-					<restriction type="not_equals" field="paletteType"
-						paramA="PL0" />
+					<restriction type="and">
+						<restriction type="not_equals" field="paletteType" paramA="PL0" />
+						<restriction type="not_equals" field="type" paramA="CRD" />
+						<restriction type="not_equals" field="type" paramA="TBL" />
+					</restriction>
 				</onCondition>
 				<setStates>
 					<setState type="field" target="color" visible="false" />
