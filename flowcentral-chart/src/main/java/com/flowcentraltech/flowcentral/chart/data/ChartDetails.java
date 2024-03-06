@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.flowcentraltech.flowcentral.configuration.constants.ChartCategoryDataType;
 import com.flowcentraltech.flowcentral.configuration.constants.ChartSeriesDataType;
@@ -116,6 +117,21 @@ public class ChartDetails {
     }
 
     public Map<String, AbstractSeries<?, ?>> getSeries() {
+        return series;
+    }
+
+    public Map<String, AbstractSeries<?, ?>> getSeries(Set<String> inclusion) {
+        if (!inclusion.isEmpty()) {
+            Map<String, AbstractSeries<?, ?>> _series = new HashMap<String, AbstractSeries<?, ?>>();
+            for (Map.Entry<String, AbstractSeries<?, ?>> entry : series.entrySet()) {
+                if (inclusion.contains(entry.getKey())) {
+                    _series.put(entry.getKey(), entry.getValue());
+                }
+            }
+            
+            return _series;
+        }
+        
         return series;
     }
 

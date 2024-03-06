@@ -16,9 +16,11 @@
 package com.flowcentraltech.flowcentral.chart.data;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.flowcentraltech.flowcentral.configuration.constants.ChartCategoryDataType;
 import com.flowcentraltech.flowcentral.configuration.constants.ChartSeriesDataType;
@@ -44,6 +46,8 @@ public abstract class AbstractSeries<T, U extends Number> {
 
     private List<AbstractSeriesData> dataList;
 
+    private Set<String> categoryInclusion;
+
     protected AbstractSeries(ChartCategoryDataType categoryType, ChartSeriesDataType dataType,
             Map<Object, String> categoryLabels, String name) {
         this.categoryType = categoryType;
@@ -51,6 +55,7 @@ public abstract class AbstractSeries<T, U extends Number> {
         this.categoryLabels = categoryLabels;
         this.name = name;
         this.data = new LinkedHashMap<T, AbstractSeriesData>();
+        this.categoryInclusion = Collections.emptySet();
     }
 
     public ChartCategoryDataType getCategoryType() {
@@ -63,6 +68,15 @@ public abstract class AbstractSeries<T, U extends Number> {
 
     public String getName() {
         return name;
+    }
+
+    public void setCategoryInclusion(Set<String> categoryInclusion) {
+        if (categoryInclusion == null) {
+            throw new IllegalArgumentException("Argument can not be null.");
+        }
+
+        this.categoryInclusion = categoryInclusion;
+        dataList = null;
     }
 
     @SuppressWarnings("unchecked")
@@ -106,10 +120,15 @@ public abstract class AbstractSeries<T, U extends Number> {
     }
 
     public void writeAsObject(JsonWriter jw) {
+        final boolean inclusion = !categoryInclusion.isEmpty();
         jw.beginObject();
         jw.write("name", name);
         jw.beginArray("data");
         for (AbstractSeriesData _data : data.values()) {
+            if (inclusion && !categoryInclusion.contains(_data.getX())) {
+                continue;
+            }
+
             _data.writeAsObject(jw);
         }
 
@@ -149,7 +168,18 @@ public abstract class AbstractSeries<T, U extends Number> {
         if (dataList == null) {
             synchronized (this) {
                 if (dataList == null) {
-                    dataList = new ArrayList<AbstractSeriesData>(data.values());
+                    if (!categoryInclusion.isEmpty()) {
+                        dataList = new ArrayList<AbstractSeriesData>();
+                        for (AbstractSeriesData _data : data.values()) {
+                            if (!categoryInclusion.contains(_data.getX())) {
+                                continue;
+                            }
+
+                            dataList.add(_data);
+                        }
+                    } else {
+                        dataList = new ArrayList<AbstractSeriesData>(data.values());
+                    }
                 }
             }
         }
@@ -183,10 +213,10 @@ public abstract class AbstractSeries<T, U extends Number> {
             return "AbstractSeriesData [x=" + x + ", y=" + y + "]";
         }
 
-        protected String resolveX(Object xobj) {         
+        protected String resolveX(Object xobj) {
             return AbstractSeries.this.resolveX(xobj);
         }
-        
+
         public abstract void writeAsObject(JsonWriter jw);
 
     }

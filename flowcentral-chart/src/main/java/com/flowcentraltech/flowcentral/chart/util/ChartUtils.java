@@ -21,6 +21,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.flowcentraltech.flowcentral.chart.data.AbstractSeries;
 import com.flowcentraltech.flowcentral.chart.data.ChartDef;
@@ -81,7 +82,7 @@ public final class ChartUtils {
         JsonWriter jw = new JsonWriter();
         jw.beginObject();
         final ChartType chartType = chartDef.getType();
-        final Map<String, AbstractSeries<?, ?>> series = chartDetails.getSeries();
+        final Map<String, AbstractSeries<?, ?>> series = chartDetails.getSeries(chartDef.getSeriesInclusion());
         final ChartCategoryDataType categoryType = chartDetails.getCategoryType();
 
         // Title
@@ -201,12 +202,14 @@ public final class ChartUtils {
             jw.endObject();
         }
 
+        Set<String> categoryInclusion = chartDef.getCategoryInclusion();
         List<AbstractSeries<?, ?>> actseries = new ArrayList<AbstractSeries<?, ?>>(series.values());
         if (chartType.axisChart()) {
             // Series
             boolean integers = true;
             jw.beginArray("series");
             for (AbstractSeries<?, ?> _series : actseries) {
+                _series.setCategoryInclusion(categoryInclusion);
                 _series.writeAsObject(jw);
                 integers &= _series.getDataType().isInteger();
             }
@@ -228,7 +231,8 @@ public final class ChartUtils {
             }
         } else {
             AbstractSeries<?, ?> pseries = actseries.get(0);
-
+            pseries.setCategoryInclusion(categoryInclusion);
+            
             // Series
             pseries.writeYValuesArray("series", jw);
 
