@@ -135,8 +135,8 @@ public class ChartDetails {
     public String toString() {
         return "ChartDetails [title=" + title + ", subTitle=" + subTitle + ", titleOffsetX=" + titleOffsetX
                 + ", titleFontSize=" + titleFontSize + ", subTitleOffsetX=" + subTitleOffsetX + ", subTitleFontSize="
-                + subTitleFontSize + ", categoryType=" + categoryType + ", series=" + series + ", headers="
-                + Arrays.toString(headers) + ", tableSeries=" + tableSeries + "]";
+                + subTitleFontSize + ", categoryType=" + categoryType + ", categoryLabels=" + categoryLabels
+                + ", series=" + series + ", headers=" + Arrays.toString(headers) + ", tableSeries=" + tableSeries + "]";
     }
 
     public static Builder newBuilder(ChartCategoryDataType categoryType) {
@@ -227,7 +227,7 @@ public class ChartDetails {
             categoryLabels.put(name, label);
             return this;
         }
-        
+
         public Builder createTableSeries(ChartTableColumn[] headers) {
             if (isWithTableSeries()) {
                 throw new RuntimeException("Table series already defined for this builder.");

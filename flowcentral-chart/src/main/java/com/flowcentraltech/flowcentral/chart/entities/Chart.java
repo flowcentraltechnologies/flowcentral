@@ -51,10 +51,10 @@ public class Chart extends BaseApplicationEntity {
     @Column(length = 64, nullable = true)
     private String rule;
 
-    @Column(length = 64, nullable = true)
+    @Column(length = 2048, nullable = true)
     private String category;
 
-    @Column(length = 64, nullable = true)
+    @Column(length = 2048, nullable = true)
     private String series;
 
     @Column(length = 64, nullable = true)
