@@ -61,7 +61,6 @@ public class ChartWriter extends AbstractWidgetWriter {
         final String chartLongName = chartWidget.getValue(String.class);
         ChartDef chartDef = chartModuleService.getChartDef(chartLongName);
         ChartDetails chartDetails = getChartDetailsCache().getChartDetails(chartDef.getProvider(), chartDef.getRule());
-        
         writer.write("<div");
         writeTagAttributes(writer, chartWidget);
         writer.write(">");
@@ -94,9 +93,9 @@ public class ChartWriter extends AbstractWidgetWriter {
                 FormatterOptions.Instance options = FormatterOptions.DEFAULT.createInstance(getUnifyComponentContext());
                 writer.write("<div class=\"tbl\"");
                 if (chartDef.getHeight() > 0) {
-                    writer.write(" style=\"height:").write(chartDef.getHeight() ).write("px;\"");
+                    writer.write(" style=\"height:").write(chartDef.getHeight()).write("px;\"");
                 }
-                
+
                 writer.write(">");
                 writer.write("<span class=\"title\">");
                 if (chartDef.isWithTitle()) {
@@ -109,12 +108,11 @@ public class ChartWriter extends AbstractWidgetWriter {
                     writer.writeWithHtmlEscape(chartDef.getSubTitle());
                 }
                 writer.write("</span>");
-                
+
                 // Header
                 final int cols = chartDetails.getTableHeaders().length;
                 final ChartTableColumn[] headers = chartDetails.getTableHeaders();
-                writer.write(
-                        "<div class=\"bdy\" style=\"width:100%;overflow-y:auto;overflow-x: hidden;\">");
+                writer.write("<div class=\"bdy\" style=\"width:100%;overflow-y:auto;overflow-x: hidden;\">");
                 writer.write("<table class=\"cont\" style=\"width:100%;\"><thead>");
                 writer.write("<tr style=\"background-color:");
                 writer.write(chartDef.getColor());
@@ -179,8 +177,7 @@ public class ChartWriter extends AbstractWidgetWriter {
     private ChartDetailsCache getChartDetailsCache() throws UnifyException {
         ChartDetailsCache cache = getRequestAttribute(ChartDetailsCache.class, CHART_DETAILS_CACHE);
         if (cache == null) {
-            cache = new ChartDetailsCache();
-            setRequestAttribute(CHART_DETAILS_CACHE, cache);
+            setRequestAttribute(CHART_DETAILS_CACHE, cache = new ChartDetailsCache());
         }
 
         return cache;
@@ -203,8 +200,7 @@ public class ChartWriter extends AbstractWidgetWriter {
             final String key = providerName + (!StringUtils.isBlank(rule) ? "." + rule : "");
             ChartDetails chartDetails = cache.get(key);
             if (chartDetails == null) {
-                chartDetails = ((ChartDetailsProvider) getComponent(providerName)).provide(rule);
-                cache.put(key, chartDetails);
+                cache.put(key, chartDetails = ((ChartDetailsProvider) getComponent(providerName)).provide(rule));
             }
 
             return chartDetails;

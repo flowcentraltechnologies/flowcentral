@@ -17,6 +17,7 @@
 package com.flowcentraltech.flowcentral.application.data;
 
 import com.tcdng.unify.core.data.Listable;
+import com.tcdng.unify.core.util.StringUtils;
 
 /**
  * Application property sequence entry definition.
@@ -42,7 +43,7 @@ public class PropertySequenceEntryDef implements Listable {
 
     @Override
     public String getListDescription() {
-        return label;
+        return StringUtils.isBlank(label) ? property : label;
     }
 
     public String getProperty() {

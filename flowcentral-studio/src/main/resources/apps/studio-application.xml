@@ -17,8 +17,8 @@
 			editor="!ui-select list:studiotablerowcolorlist blankOption:$m{blank.none} colors:true"
 			renderer="!ui-label" />
 		<widgetType name="chartcolorlist"
-			description="$m{studio.widgettype.chartcolorlist}"
-			dataType="string" inputType="string"
+			description="$m{studio.widgettype.chartcolorlist}" dataType="string"
+			inputType="string"
 			editor="!ui-select list:studiochartcolorlist blankOption:$m{blank.none} colors:true"
 			renderer="!ui-label" />
 		<widgetType name="yesnolist"
@@ -2099,8 +2099,8 @@
 						column="1" />
 					<field name="menuAccess" inputWidget="application.checkbox"
 						column="1" />
-					<field name="supportOpenInNewWindow" inputWidget="application.checkbox"
-						column="1" />
+					<field name="supportOpenInNewWindow"
+						inputWidget="application.checkbox" column="1" />
 					<field name="allowSecondaryTenants"
 						inputWidget="application.checkbox" column="1" />
 				</section>
@@ -2809,7 +2809,7 @@
 						column="0" required="true" />
 					<field name="label" inputWidget="application.text" column="0"
 						required="true" />
-					<field name="type" column="1" required="true"/>
+					<field name="type" column="1" required="true" />
 					<field name="fieldName" inputWidget="seriesentityfieldlist"
 						column="1" required="true" />
 				</section>
@@ -3184,16 +3184,15 @@
 						column="1" disabled="true" required="true" />
 					<field name="type" column="1" required="true"
 						switchOnChange="true" />
-					<field name="paletteType" column="1" required="true" switchOnChange="true"/>
+					<field name="paletteType" column="1" required="true"
+						switchOnChange="true" />
 					<field name="color" inputWidget="studio.chartcolorlist"
 						column="1" required="true" />
 					<field name="provider" column="1" required="true"
 						switchOnChange="true" />
 					<field name="rule" column="1" switchOnChange="true" />
-					<field name="category" column="1" required="true"
-						visible="false" />
-					<field name="series" column="1" required="true"
-						visible="false" />
+					<field name="category" column="1" required="true" />
+					<field name="series" column="1" required="true" />
 					<field name="height" column="1" />
 				</section>
 				<section name="chartFlags" columns="type_1_2">
@@ -3243,30 +3242,38 @@
 				name="chartDataSourceFormPolicy"
 				description="$m{studio.chart.form.chartdatasource.policy}">
 				<onCondition>
-					<restriction type="and">
+					<restriction type="or">
 						<restriction type="equals" field="type" paramA="CRD" />
-						<restriction type="equals" field="provider"
-							paramA="chartdatasource-provider" />
-						<restriction type="is_not_null" field="rule" />
+						<restriction type="equals" field="type" paramA="TBL" />
 					</restriction>
 				</onCondition>
 				<setStates>
-					<setState type="field" target="category,series"
-						visible="true" />
-					<setState type="field" target="paletteType"
-						visible="false" />
+					<setState type="field" target="paletteType" visible="false" />
 				</setStates>
 			</formStatePolicy>
 			<formStatePolicy type="on_switch"
 				name="chartPaletteTypeFormPolicy"
 				description="$m{studio.chart.form.chartpalettetype.policy}">
 				<onCondition>
-					<restriction type="not_equals" field="paletteType" paramA="PL0" />
+					<restriction type="not_equals" field="paletteType"
+						paramA="PL0" />
 				</onCondition>
 				<setStates>
-					<setState type="field" target="color" required="false" />
+					<setState type="field" target="color" visible="false" />
 				</setStates>
 			</formStatePolicy>
+			<formWidgetRulesPolicy
+				name="multiCategorySeries"
+				description="$m{studio.chart.form.multicategoryseries.policy}">
+				<onCondition>
+					<restriction type="not_equals" field="type" paramA="CRD" />
+				</onCondition>
+				<widgetRules name="multiCategorySeries"
+					description="$m{studio.chart.form.multicategoryseries}">
+					<entry field="category" widget="chart.chartdatasourcerulecategorymlist"/>
+					<entry field="series" widget="chart.chartdatasourceruleseriesmlist"/>
+				</widgetRules>
+			</formWidgetRulesPolicy>
 		</form>
 		<form name="chartDataSourceForm"
 			description="$m{studio.chartdatasource.form}"
@@ -3696,8 +3703,9 @@
 						required="true" switchOnChange="true" />
 					<field name="type" inputWidget="application.enumlist"
 						column="1" required="true" switchOnChange="true" />
-					<field name="summaryDatasource" inputWidget="studio.summarydatasourcelist"
-						column="1" visible="false" />
+					<field name="summaryDatasource"
+						inputWidget="studio.summarydatasourcelist" column="1"
+						visible="false" />
 					<field name="template" inputWidget="application.text"
 						column="1" visible="false" />
 					<field name="processor" inputWidget="application.text"
@@ -3793,7 +3801,7 @@
 				<setStates>
 					<setState type="field" target="sizeType,width,height"
 						visible="false" />
-					<!--setState type="field" target="template" visible="true" /-->
+					<!--setState type="field" target="template" visible="true" / -->
 					<setState type="tab" target="placements" visible="false" />
 				</setStates>
 			</formStatePolicy>
@@ -3804,7 +3812,8 @@
 					<restriction type="equals" field="type" paramA="CSM" />
 				</onCondition>
 				<setStates>
-					<setState type="field" target="summaryDatasource" visible="true" />
+					<setState type="field" target="summaryDatasource"
+						visible="true" />
 					<setState type="tab" target="design" visible="false" />
 					<setState type="tab" target="placements" visible="false" />
 				</setStates>

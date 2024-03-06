@@ -22,7 +22,6 @@ import java.util.List;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.Listable;
 import com.tcdng.unify.core.util.DataUtils;
-import com.tcdng.unify.core.util.StringUtils;
 
 /**
  * Application property sequence definition.
@@ -97,7 +96,7 @@ public class PropertySequenceDef implements Listable {
         }
 
         public Builder addSequenceEntryDef(String property, String label) {
-            sequenceList.add(new PropertySequenceEntryDef(property, StringUtils.isBlank(label) ? property : label));
+            sequenceList.add(new PropertySequenceEntryDef(property, label));
             return this;
         }
 

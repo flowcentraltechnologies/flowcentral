@@ -38,6 +38,16 @@
 			dataType="string" inputType="string"
 			editor="!ui-select list:chartdatasourceruleserieslist listParams:$l{rule} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
+		<widgetType name="chartdatasourcerulecategorymlist"
+			description="$m{chart.widgettype.chartdatasourcerulecategorymlist}"
+			dataType="string" inputType="string"
+			editor="!ui-dropdownchecklist list:chartdatasourcerulecategorylist listParams:$l{rule} columns:3"
+			renderer="!ui-label" />
+		<widgetType name="chartdatasourceruleseriesmlist"
+			description="$m{chart.widgettype.chartdatasourceruleseriesmlist}"
+			dataType="string" inputType="string"
+			editor="!ui-dropdownchecklist list:chartdatasourceruleserieslist listParams:$l{rule} columns:3"
+			renderer="!ui-label" />
 	</widgetTypes>
 	<!-- Applets -->
 	<!-- References -->

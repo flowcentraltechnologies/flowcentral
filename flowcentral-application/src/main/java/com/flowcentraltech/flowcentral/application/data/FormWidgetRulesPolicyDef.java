@@ -21,6 +21,7 @@ import java.util.Map;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.BeanValueStore;
 import com.tcdng.unify.core.data.Listable;
+import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.filter.ObjectFilter;
 import com.tcdng.unify.core.util.DataUtils;
@@ -63,11 +64,11 @@ public class FormWidgetRulesPolicyDef implements Listable {
     }
 
     public boolean match(FormDef formDef, Object inst, Date now) throws UnifyException {
-        ValueStoreReader reader = new BeanValueStore(inst).getReader();
-        ObjectFilter objectFilter = onCondition != null
-                ? onCondition.getObjectFilter(formDef.getEntityDef(), reader, now)
-                : null;
-        return objectFilter == null || objectFilter.matchReader(reader);
+        return match(formDef, new BeanValueStore(inst).getReader(), now);
+    }
+
+    public boolean match(FormDef formDef, ValueStore valueStore, Date now) throws UnifyException {
+        return match(formDef, valueStore.getReader(), now);
     }
 
     public boolean match(FormDef formDef, ValueStoreReader reader, Date now) throws UnifyException {

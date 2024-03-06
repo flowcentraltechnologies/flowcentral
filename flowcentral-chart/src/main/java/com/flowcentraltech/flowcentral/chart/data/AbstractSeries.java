@@ -16,9 +16,11 @@
 package com.flowcentraltech.flowcentral.chart.data;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.flowcentraltech.flowcentral.configuration.constants.ChartCategoryDataType;
 import com.flowcentraltech.flowcentral.configuration.constants.ChartSeriesDataType;
@@ -36,17 +38,24 @@ public abstract class AbstractSeries<T, U extends Number> {
 
     private final ChartSeriesDataType dataType;
 
+    private final Map<Object, String> categoryLabels;
+
     private final String name;
 
     private final Map<T, AbstractSeriesData> data;
 
     private List<AbstractSeriesData> dataList;
 
-    protected AbstractSeries(ChartCategoryDataType categoryType, ChartSeriesDataType dataType, String name) {
+    private Set<String> categoryInclusion;
+
+    protected AbstractSeries(ChartCategoryDataType categoryType, ChartSeriesDataType dataType,
+            Map<Object, String> categoryLabels, String name) {
         this.categoryType = categoryType;
         this.dataType = dataType;
+        this.categoryLabels = categoryLabels;
         this.name = name;
         this.data = new LinkedHashMap<T, AbstractSeriesData>();
+        this.categoryInclusion = Collections.emptySet();
     }
 
     public ChartCategoryDataType getCategoryType() {
@@ -61,9 +70,18 @@ public abstract class AbstractSeries<T, U extends Number> {
         return name;
     }
 
+    public void setCategoryInclusion(Set<String> categoryInclusion) {
+        if (categoryInclusion == null) {
+            throw new IllegalArgumentException("Argument can not be null.");
+        }
+
+        this.categoryInclusion = categoryInclusion;
+        dataList = null;
+    }
+
     @SuppressWarnings("unchecked")
     public void addData(Object x, Number y) {
-        data.put((T)x,  createData((T) x, (U) y));
+        data.put((T) x, createData((T) x, (U) y));
     }
 
     public U getData(Object x) {
@@ -71,10 +89,10 @@ public abstract class AbstractSeries<T, U extends Number> {
         if (seriesData != null) {
             return seriesData.getY();
         }
-        
+
         return null;
     }
-    
+
     public int size() {
         return data.size();
     }
@@ -86,7 +104,7 @@ public abstract class AbstractSeries<T, U extends Number> {
     public List<Object> getXList() {
         List<Object> list = new ArrayList<Object>();
         for (AbstractSeriesData _data : data.values()) {
-            list.add(_data.getX());
+            list.add(resolveX(_data.getX()));
         }
 
         return list;
@@ -102,10 +120,15 @@ public abstract class AbstractSeries<T, U extends Number> {
     }
 
     public void writeAsObject(JsonWriter jw) {
+        final boolean inclusion = !categoryInclusion.isEmpty();
         jw.beginObject();
         jw.write("name", name);
         jw.beginArray("data");
         for (AbstractSeriesData _data : data.values()) {
+            if (inclusion && !categoryInclusion.contains(_data.getX())) {
+                continue;
+            }
+
             _data.writeAsObject(jw);
         }
 
@@ -114,35 +137,58 @@ public abstract class AbstractSeries<T, U extends Number> {
     }
 
     public void writeXValuesArray(String field, JsonWriter jw) {
-        String[] x = new String[data.size()];
+        List<AbstractSeriesData> _data = getDataList();
+        String[] x = new String[_data.size()];
         for (int i = 0; i < x.length; i++) {
-            x[i] = String.valueOf(getDataList().get(i).getX());
+            x[i] = resolveX(_data.get(i).getX());
         }
 
         jw.write(field, x);
     }
 
     public void writeYValuesArray(String field, JsonWriter jw) {
-        Number[] y = new Number[data.size()];
+        List<AbstractSeriesData> _data = getDataList();
+        Number[] y = new Number[_data.size()];
         for (int i = 0; i < y.length; i++) {
-            y[i] = getDataList().get(i).getY();
+            y[i] = _data.get(i).getY();
         }
 
         jw.write(field, y);
     }
 
+    @Override
+    public String toString() {
+        return "AbstractSeries [categoryType=" + categoryType + ", dataType=" + dataType + ", name=" + name + ", data="
+                + data + ", dataList=" + dataList + "]";
+    }
+
+    private String resolveX(Object xobj) {
+        return categoryLabels.containsKey(xobj) ? categoryLabels.get(xobj) : String.valueOf(xobj);
+    }
+
     private List<AbstractSeriesData> getDataList() {
         if (dataList == null) {
-            synchronized(this) {
+            synchronized (this) {
                 if (dataList == null) {
-                    dataList = new ArrayList<AbstractSeriesData>(data.values());
-                }                
+                    if (!categoryInclusion.isEmpty()) {
+                        dataList = new ArrayList<AbstractSeriesData>();
+                        for (AbstractSeriesData _data : data.values()) {
+                            if (!categoryInclusion.contains(_data.getX())) {
+                                continue;
+                            }
+
+                            dataList.add(_data);
+                        }
+                    } else {
+                        dataList = new ArrayList<AbstractSeriesData>(data.values());
+                    }
+                }
             }
         }
-        
+
         return dataList;
     }
-    
+
     protected abstract AbstractSeriesData createData(T x, U y);
 
     protected abstract class AbstractSeriesData {
@@ -162,6 +208,15 @@ public abstract class AbstractSeries<T, U extends Number> {
 
         public U getY() {
             return y;
+        }
+
+        @Override
+        public String toString() {
+            return "AbstractSeriesData [x=" + x + ", y=" + y + "]";
+        }
+
+        protected String resolveX(Object xobj) {
+            return AbstractSeries.this.resolveX(xobj);
         }
 
         public abstract void writeAsObject(JsonWriter jw);

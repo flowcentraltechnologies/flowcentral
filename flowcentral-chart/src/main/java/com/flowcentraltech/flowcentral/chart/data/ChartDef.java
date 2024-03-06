@@ -16,6 +16,11 @@
 
 package com.flowcentraltech.flowcentral.chart.data;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+
 import com.flowcentraltech.flowcentral.application.data.BaseApplicationEntityDef;
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityNameParts;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
@@ -35,6 +40,10 @@ public class ChartDef extends BaseApplicationEntityDef {
     private ChartType type;
 
     private ChartPaletteType paletteType;
+
+    private Set<String> categoryInclusion;
+
+    private Set<String> seriesInclusion;
 
     private String title;
 
@@ -88,6 +97,8 @@ public class ChartDef extends BaseApplicationEntityDef {
         this.formatDataLabels = formatDataLabels;
         this.formatYLabels = formatYLabels;
         this.smooth = smooth;
+        this.categoryInclusion = Collections.unmodifiableSet(new HashSet<String>(Arrays.asList(StringUtils.commaSplit(category))));
+        this.seriesInclusion = Collections.unmodifiableSet(new HashSet<String>(Arrays.asList(StringUtils.commaSplit(series))));
     }
 
     public ChartType getType() {
@@ -130,6 +141,14 @@ public class ChartDef extends BaseApplicationEntityDef {
         return series;
     }
 
+    public Set<String> getCategoryInclusion() {
+        return categoryInclusion;
+    }
+
+    public Set<String> getSeriesInclusion() {
+        return seriesInclusion;
+    }
+
     public String getColor() {
         return color;
     }
@@ -168,6 +187,15 @@ public class ChartDef extends BaseApplicationEntityDef {
 
     public boolean isSmooth() {
         return smooth;
+    }
+
+    @Override
+    public String toString() {
+        return "ChartDef [type=" + type + ", paletteType=" + paletteType + ", title=" + title + ", subTitle=" + subTitle
+                + ", provider=" + provider + ", rule=" + rule + ", category=" + category + ", series=" + series
+                + ", color=" + color + ", width=" + width + ", height=" + height + ", stacked=" + stacked
+                + ", showGrid=" + showGrid + ", smooth=" + smooth + ", showDataLabels=" + showDataLabels
+                + ", formatDataLabels=" + formatDataLabels + ", formatYLabels=" + formatYLabels + "]";
     }
 
     public static Builder newBuilder(ChartType type, ChartPaletteType paletteType, String provider, String rule,

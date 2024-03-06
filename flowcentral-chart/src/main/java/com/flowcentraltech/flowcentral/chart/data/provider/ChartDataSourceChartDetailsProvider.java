@@ -101,10 +101,11 @@ public class ChartDataSourceChartDetailsProvider extends AbstractChartDetailsPro
                 for (PropertySequenceEntryDef propertySequenceEntryDef : categories.getSequenceList()) {
                     final EntityCategoryDef entityCategoryDef = entityDef
                             .getEntityCategorysDef(propertySequenceEntryDef.getProperty());
-                    final String cat = !StringUtils.isBlank(propertySequenceEntryDef.getLabel())
+                    final String cat = entityCategoryDef.getName();
+                    final String catlabel = !StringUtils.isBlank(propertySequenceEntryDef.getLabel())
                             ? propertySequenceEntryDef.getLabel()
                             : entityCategoryDef.getLabel();
-                    Restriction restriction = InputWidgetUtils.getRestriction(entityDef,
+                   Restriction restriction = InputWidgetUtils.getRestriction(entityDef,
                             entityCategoryDef.getFilterDef(), au().specialParamProvider(), now);
                     if (restriction != null) {
                         if (baseRestriction != null) {
@@ -122,6 +123,7 @@ public class ChartDataSourceChartDetailsProvider extends AbstractChartDetailsPro
                         }
                     }
 
+                    cdb.setCategoryLabel(cat, catlabel);
                     performAggregation(cdb, chartDataSourceDef, aggregateFunction, now, restriction, cat);
                 }
             }
@@ -147,7 +149,7 @@ public class ChartDataSourceChartDetailsProvider extends AbstractChartDetailsPro
         final EntityDef entityDef = chartDataSourceDef.getEntityDef();
         final PropertySequenceDef series = chartDataSourceDef.getSeries();
         final int slen = series.getSequenceList().size();
-
+        
         ensureTableSeries(cdb, chartDataSourceDef);
         if (chartDataSourceDef.isWithGroupingFields()) {
             final List<String> groupingFieldNames = chartDataSourceDef.getGroupingFieldSequenceDef().getFieldNames();
@@ -238,8 +240,7 @@ public class ChartDataSourceChartDetailsProvider extends AbstractChartDetailsPro
 
     private String ensureSeries(ChartDetails.Builder cdb, EntityDef entityDef, PropertySequenceEntryDef sequenceDef,
             List<Grouping> groupings) throws UnifyException {
-        String seriesName = !StringUtils.isBlank(sequenceDef.getLabel()) ? sequenceDef.getLabel()
-                : entityDef.getEntitySeriesDef(sequenceDef.getProperty()).getLabel();
+        String seriesName = sequenceDef.getProperty();
         if (!DataUtils.isBlank(groupings)) {
             StringBuilder sb = new StringBuilder();
             for (Grouping grouping : groupings) {
