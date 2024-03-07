@@ -3561,12 +3561,12 @@
 				<section name="basicDetails" columns="type_2">
 					<field name="dashboardOptionId"
 						inputWidget="application.entitysearch" column="0" required="true" />
-					<field name="chartDataSource" column="1" required="true" />
+					<field name="chartDataSource" column="1" required="true" switchOnChange="true"/>
 				</section>
 			</tab>
 			<tab name="categoryBase"
 				label="$m{studio.dashboardoptioncatbase.form.categorybase}"
-				reference="dashboard-option" contentType="filter_condition"/>
+				reference="dashboardoption_categorybase" contentType="filter_condition"/>
 			<tab name="changeLog" label="$m{application.form.audit}"
 				contentType="miniform_changelog" />
 		</form>

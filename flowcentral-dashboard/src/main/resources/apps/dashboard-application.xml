@@ -3,6 +3,14 @@
 <application name="dashboard"
 	description="$m{dashboard.short.description}"
 	label="$m{dashboard.label}" module="dashboard" displayIndex="-10">
+	<!-- Widgets -->
+	<widgetTypes>
+		<widgetType name="chartdatasourcelist"
+			description="$m{dashboard.widgettype.chartdatasourcelist}"
+			dataType="string" inputType="string"
+			editor="!ui-select list:dashboardchartdatasourcelist listParams:$l{dashboardOptionId} blankOption:$m{blank.none}"
+			renderer="!ui-label" />
+	</widgetTypes>
 	<!-- Applets -->
 	<applets>
 		<applet name="appDashboard"
@@ -152,7 +160,7 @@
 			<field name="description"
 				label="$m{dashboard.dashboardoption.description}" type="string"
 				inputWidget="application.text" maxLen="128" />
-			<field name="label" label="$m{dashboard.dashboardoption.label}"
+			<field name="label" label="$m{dashboard.dashboardoption.label1}"
 				type="string" inputWidget="application.text" maxLen="96" />
 			<field name="baseList"
 				label="$m{dashboard.dashboardoption.categorybases}"
@@ -171,6 +179,9 @@
 			<field name="chartDataSource"
 				label="$m{dashboard.dashboardoptioncatbase.chartdatasource}"
 				type="string" inputWidget="dashboard.chartdatasourcelist" />
+			<field name="entity"
+				label="$m{dashboard.dashboardoptioncatbase.entity}"
+				type="string" inputWidget="application.text" />
 			<field name="categoryBase"
 				label="$m{dashboard.dashboardoptioncatbase.categorybase}"
 				type="child" category="dashboard-option"

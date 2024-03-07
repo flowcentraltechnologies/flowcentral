@@ -40,6 +40,11 @@
             <artifactId>flowcentral-organization</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.flowcentraltech.flowcentral</groupId>
+            <artifactId>flowcentral-chart</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 		<!-- Test dependencies -->
 	</dependencies>
 </project>

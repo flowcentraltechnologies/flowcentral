@@ -23,6 +23,7 @@ import com.flowcentraltech.flowcentral.common.business.FlowCentralService;
 import com.flowcentraltech.flowcentral.common.constants.RecordStatus;
 import com.flowcentraltech.flowcentral.dashboard.data.DashboardDef;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.data.Listable;
 
 /**
  * Dashboard business service.
@@ -67,5 +68,15 @@ public interface DashboardModuleService extends FlowCentralService {
 	 * @throws UnifyException if an error occurs
 	 */
 	void updateDashboardStatus(DashboardQuery query, RecordStatus status) throws UnifyException;
+
+    /**
+     * Get dashboard option chart data source list.
+     * 
+     * @param dashboardOptionId
+     *                          the dashboard option ID
+     * @return the chart datasource list
+     * @throws UnifyException if an error occurs
+     */
+    List<? extends Listable> getDashboardOptionChartDataSourceList(Long dashboardOptionId) throws UnifyException;
 
 }

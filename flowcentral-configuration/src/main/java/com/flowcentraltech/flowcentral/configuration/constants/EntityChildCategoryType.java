@@ -140,6 +140,13 @@ public enum EntityChildCategoryType implements EnumConst {
             "entity-category",
             FilterConditionListType.IMMEDIATE_FIELD,
             null),
+    DASHBOARDOPTION_CATEGORYBASE(
+            "DASHBOARDOPTIONCATEGORYBASE",
+            "dashboard.dashboardOptionCatBase",
+            "entity",
+            "dashboard-option",
+            FilterConditionListType.IMMEDIATE_PARAM,
+            null),
     REPORT_CONFIG(
             "REPORTCONFIG",
             "report.reportConfig",
