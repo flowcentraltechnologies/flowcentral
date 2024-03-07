@@ -53,6 +53,9 @@ public class Dashboard extends BaseApplicationEntity {
     @ChildList
     private List<DashboardTile> tileList;
 
+    @ChildList
+    private List<DashboardOption> optionsList;
+    
     public Dashboard() {
 		this.status = RecordStatus.ACTIVE;
 	}
@@ -103,6 +106,14 @@ public class Dashboard extends BaseApplicationEntity {
 
     public void setTileList(List<DashboardTile> tileList) {
         this.tileList = tileList;
+    }
+
+    public List<DashboardOption> getOptionsList() {
+        return optionsList;
+    }
+
+    public void setOptionsList(List<DashboardOption> optionsList) {
+        this.optionsList = optionsList;
     }
 
 }

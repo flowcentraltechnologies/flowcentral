@@ -26,6 +26,7 @@ import com.flowcentraltech.flowcentral.application.business.AbstractApplicationA
 import com.flowcentraltech.flowcentral.application.constants.ApplicationPrivilegeConstants;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.util.ApplicationReplicationContext;
+import com.flowcentraltech.flowcentral.application.util.InputWidgetUtils;
 import com.flowcentraltech.flowcentral.application.util.PrivilegeNameUtils;
 import com.flowcentraltech.flowcentral.common.business.ApplicationPrivilegeManager;
 import com.flowcentraltech.flowcentral.common.constants.ConfigType;
@@ -33,10 +34,15 @@ import com.flowcentraltech.flowcentral.common.util.ConfigUtils;
 import com.flowcentraltech.flowcentral.configuration.data.ApplicationInstall;
 import com.flowcentraltech.flowcentral.configuration.xml.AppConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppDashboardConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.DashboardOptionCategoryBaseConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.DashboardOptionConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.DashboardSectionConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.DashboardTileConfig;
 import com.flowcentraltech.flowcentral.dashboard.constants.DashboardModuleNameConstants;
 import com.flowcentraltech.flowcentral.dashboard.entities.Dashboard;
+import com.flowcentraltech.flowcentral.dashboard.entities.DashboardOption;
+import com.flowcentraltech.flowcentral.dashboard.entities.DashboardOptionCategoryBase;
+import com.flowcentraltech.flowcentral.dashboard.entities.DashboardOptionQuery;
 import com.flowcentraltech.flowcentral.dashboard.entities.DashboardQuery;
 import com.flowcentraltech.flowcentral.dashboard.entities.DashboardSection;
 import com.flowcentraltech.flowcentral.dashboard.entities.DashboardTile;
@@ -93,7 +99,7 @@ public class ApplicationDashboardInstallerImpl extends AbstractApplicationArtifa
                     }
 
                     populateChildList(dashboardConfig, oldDashboard, applicationName);
-                    environment().updateByIdVersion(oldDashboard); 
+                    environment().updateByIdVersion(oldDashboard);
                 }
 
                 applicationPrivilegeManager.registerPrivilege(applicationId,
@@ -189,6 +195,50 @@ public class ApplicationDashboardInstallerImpl extends AbstractApplicationArtifa
         }
 
         dashboard.setTileList(tileList);
+
+        List<DashboardOption> optionList = null;
+        if (!DataUtils.isBlank(dashboardConfig.getOptionsList())) {
+            optionList = new ArrayList<DashboardOption>();
+            Map<String, DashboardOption> map = dashboard.isIdBlank() ? Collections.emptyMap()
+                    : environment().findAllMap(String.class, "name",
+                            new DashboardOptionQuery().dashboardId(dashboard.getId()));
+            for (DashboardOptionConfig dashboardOptionConfig : dashboardConfig.getOptionsList()) {
+                DashboardOption oldDashboardOption = map.get(dashboardOptionConfig.getName());
+                if (oldDashboardOption == null) {
+                    DashboardOption dashboardOption = new DashboardOption();
+                    dashboardOption.setName(dashboardOptionConfig.getName());
+                    dashboardOption.setDescription(resolveApplicationMessage(dashboardOptionConfig.getDescription()));
+                    dashboardOption.setLabel(resolveApplicationMessage(dashboardOptionConfig.getLabel()));
+                    populateChildList(dashboardOptionConfig, dashboardOption);
+                    optionList.add(dashboardOption);
+                } else {
+                    oldDashboardOption
+                            .setDescription(resolveApplicationMessage(dashboardOptionConfig.getDescription()));
+                    oldDashboardOption.setLabel(resolveApplicationMessage(dashboardOptionConfig.getLabel()));
+                    populateChildList(dashboardOptionConfig, oldDashboardOption);
+                    optionList.add(oldDashboardOption);
+                }
+
+            }
+        }
+
+        dashboard.setOptionsList(optionList);
+    }
+
+    private void populateChildList(DashboardOptionConfig dashboardOptionConfig, DashboardOption dashboardOption)
+            throws UnifyException {
+        List<DashboardOptionCategoryBase> baseList = null;
+        if (!DataUtils.isBlank(dashboardOptionConfig.getBaseList())) {
+            baseList = new ArrayList<DashboardOptionCategoryBase>();
+            for (DashboardOptionCategoryBaseConfig baseConfig : dashboardOptionConfig.getBaseList()) {
+                DashboardOptionCategoryBase base = new DashboardOptionCategoryBase();
+                base.setChartDataSource(baseConfig.getChartDataSource());
+                base.setCategoryBase(InputWidgetUtils.newAppFilter(baseConfig.getCategoryBase()));
+                baseList.add(base);
+            }
+        }
+
+        dashboardOption.setBaseList(baseList);
     }
 
 }

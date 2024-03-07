@@ -38,6 +38,8 @@ public class AppDashboardConfig extends BaseNameConfig {
     private List<DashboardSectionConfig> sectionList;
     
     private List<DashboardTileConfig> tileList;
+    
+    private List<DashboardOptionConfig> optionsList;
 
     public AppDashboardConfig() {
         this.allowSecondaryTenants = Boolean.FALSE;
@@ -78,6 +80,15 @@ public class AppDashboardConfig extends BaseNameConfig {
     @XmlElement(name = "dashboard-tile", required = true)
     public void setTileList(List<DashboardTileConfig> tileList) {
         this.tileList = tileList;
+    }
+
+    public List<DashboardOptionConfig> getOptionsList() {
+        return optionsList;
+    }
+
+    @XmlElement(name = "dashboard-option", required = true)
+    public void setOptionsList(List<DashboardOptionConfig> optionsList) {
+        this.optionsList = optionsList;
     }
 
 }

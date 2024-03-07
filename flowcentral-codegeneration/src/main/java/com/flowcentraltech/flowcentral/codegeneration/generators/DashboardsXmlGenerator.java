@@ -20,12 +20,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.ZipOutputStream;
 
+import com.flowcentraltech.flowcentral.application.util.InputWidgetUtils;
 import com.flowcentraltech.flowcentral.configuration.xml.AppDashboardConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppDashboardsConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.DashboardOptionCategoryBaseConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.DashboardOptionConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.DashboardSectionConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.DashboardTileConfig;
 import com.flowcentraltech.flowcentral.dashboard.business.DashboardModuleService;
 import com.flowcentraltech.flowcentral.dashboard.entities.Dashboard;
+import com.flowcentraltech.flowcentral.dashboard.entities.DashboardOption;
+import com.flowcentraltech.flowcentral.dashboard.entities.DashboardOptionCategoryBase;
 import com.flowcentraltech.flowcentral.dashboard.entities.DashboardSection;
 import com.flowcentraltech.flowcentral.dashboard.entities.DashboardTile;
 import com.tcdng.unify.core.UnifyException;
@@ -75,18 +80,19 @@ public class DashboardsXmlGenerator extends AbstractStaticArtifactGenerator {
                         dashboardSectionConfig.setHeight(dashboardSection.getHeight());
                         sectionList.add(dashboardSectionConfig);
                     }
-                    
+
                     appDashboardConfig.setSectionList(sectionList);
                 }
-                
+
                 // Tiles
                 if (!DataUtils.isBlank(dashboard.getTileList())) {
                     List<DashboardTileConfig> tileList = new ArrayList<DashboardTileConfig>();
                     for (DashboardTile dashboardTile : dashboard.getTileList()) {
                         DashboardTileConfig dashboardTileConfig = new DashboardTileConfig();
-                        descKey = getDescriptionKey(lowerCaseApplicationName, "dashboardtile", dashboardTile.getName());
+                        descKey = getDescriptionKey(lowerCaseApplicationName, "dashboardtile",
+                                dashboardTile.getDescription());
                         ctx.addMessage(StaticMessageCategoryType.DASHBOARD, descKey, dashboardTile.getDescription());
-                        
+
                         dashboardTileConfig.setType(dashboardTile.getType());
                         dashboardTileConfig.setChart(dashboardTile.getChart());
                         dashboardTileConfig.setName(dashboardTile.getName());
@@ -95,8 +101,43 @@ public class DashboardsXmlGenerator extends AbstractStaticArtifactGenerator {
                         dashboardTileConfig.setIndex(dashboardTile.getIndex());
                         tileList.add(dashboardTileConfig);
                     }
-                    
+
                     appDashboardConfig.setTileList(tileList);
+                }
+
+                // Options
+                if (!DataUtils.isBlank(dashboard.getOptionsList())) {
+                    List<DashboardOptionConfig> optionsList = new ArrayList<DashboardOptionConfig>();
+                    for (DashboardOption dashboardOption : dashboard.getOptionsList()) {
+                        DashboardOptionConfig dashboardOptionConfig = new DashboardOptionConfig();
+                        descKey = getDescriptionKey(lowerCaseApplicationName, "dashboardoption",
+                                dashboardOption.getDescription());
+                        String labelKey = getDescriptionKey(lowerCaseApplicationName, "dashboardoption",
+                                dashboardOption.getLabel());
+                        ctx.addMessage(StaticMessageCategoryType.DASHBOARD, descKey, dashboardOption.getDescription());
+                        ctx.addMessage(StaticMessageCategoryType.DASHBOARD, labelKey, dashboardOption.getLabel());
+
+                        dashboardOptionConfig.setName(dashboardOption.getName());
+                        dashboardOptionConfig.setDescription("$m{" + descKey + "}");
+                        dashboardOptionConfig.setLabel("$m{" + labelKey + "}");
+
+                        if (!DataUtils.isBlank(dashboardOption.getBaseList())) {
+                            List<DashboardOptionCategoryBaseConfig> baseList = new ArrayList<DashboardOptionCategoryBaseConfig>();
+                            for (DashboardOptionCategoryBase base : dashboardOption.getBaseList()) {
+                                DashboardOptionCategoryBaseConfig dashboardOptionCategoryBaseConfig = new DashboardOptionCategoryBaseConfig();
+                                dashboardOptionCategoryBaseConfig.setChartDataSource(base.getChartDataSource());
+                                dashboardOptionCategoryBaseConfig.setCategoryBase(
+                                        InputWidgetUtils.getFilterConfig(au(), base.getCategoryBase()));
+                                baseList.add(dashboardOptionCategoryBaseConfig);
+                            }
+
+                            dashboardOptionConfig.setBaseList(baseList);
+                        }
+
+                        optionsList.add(dashboardOptionConfig);
+                    }
+
+                    appDashboardConfig.setOptionsList(optionsList);
                 }
 
                 dashboardConfigList.add(appDashboardConfig);
