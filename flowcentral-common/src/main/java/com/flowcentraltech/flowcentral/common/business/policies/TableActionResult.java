@@ -39,6 +39,8 @@ public class TableActionResult {
     
     private boolean displayListingReport;
 
+    private boolean multiPage;
+
     public TableActionResult(Entity inst, Object result) {
         this.inst = inst;
         this.result = result;
@@ -98,6 +100,14 @@ public class TableActionResult {
 
     public void setDisplayListingReport(boolean displayListingReport) {
         this.displayListingReport = displayListingReport;
+    }
+
+    public boolean isMultiPage() {
+        return multiPage;
+    }
+
+    public void setMultiPage(boolean multiPage) {
+        this.multiPage = multiPage;
     }
 
 }

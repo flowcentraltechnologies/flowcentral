@@ -534,6 +534,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         TableActionResult result = getEntityFormApplet().newEntityInst();
         if (result != null) {
             if (result.isOpenTab()) {
+                result.setMultiPage(true);
                 openInBrowserTab(result, FormMode.MAINTAIN);
             } else if (result.isOpenPath()) {
                 setCommandOpenPath((String) result.getResult());
@@ -1062,7 +1063,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                         .getStringGenerator(reader, reader, formDef.getTitleFormat()).generate()
                 : null;
         RequestOpenTabInfo requestOpenTabInfo = new RequestOpenTabInfo(title, result.getTabName(),
-                (String) result.getResult());
+                (String) result.getResult(), result.isMultiPage());
         setRequestAttribute(AppletRequestAttributeConstants.OPEN_TAB_INFO, requestOpenTabInfo);
         setCommandResultMapping(ApplicationResultMappingConstants.OPEN_IN_NEW_BROWSER_WINDOW);
     }
