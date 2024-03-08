@@ -72,13 +72,19 @@ public class ApplicationDashboardController extends AbstractPageController<Appli
         if (!StringUtils.isBlank(pageBean.getSelDashboard())) {
             DashboardDef dashboardDef = dashboardModuleService.getDashboardDef(pageBean.getSelDashboard());
             if (dashboardDef.isActive()) {
-                pageBean.setDashboardSlate(new DashboardSlate(dashboardDef));
+                pageBean.setDashboardSlate(new DashboardSlate(dashboardDef, pageBean.getSelOption()));
             } else {
                 pageBean.setSelDashboard(null);
             }
         }
 
         return refreshSlate();
+    }
+
+    @Action
+    public String loadOption() throws UnifyException {
+
+        return loadDashboardSlate();
     }
 
     @Override

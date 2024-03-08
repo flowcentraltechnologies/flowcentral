@@ -24,10 +24,14 @@
 !ui-label:dashboardLabel styleClass:$e{fc-largelabel} caption:$m{applicationdashboard.dashboard}
 !ui-panel:actionPanel 
 	layout:$d{!ui-horizontal style:$s{float:right;} showCaption:true inlineCaption:true captionSuffix:$s{:} cellType:middle}
-	components:$c{dashboardSelect refreshBtn}
+	components:$c{dashboardSelect optionSelect refreshBtn}
 
 !ui-select:dashboardSelect style:$s{width:264px;} list:roledashboardslist binding:selDashboard
+	caption:$m{applicationdashboard.dashboard.select}
     eventHandler:$d{!ui-event event:onchange action:$c{switchDashboardAct}}
+!ui-select:optionSelect style:$s{width:220px;} list:dashboardoptionlist listParams:$l{selDashboard} binding:selOption
+	caption:$m{applicationdashboard.dashboard.option.select}
+    eventHandler:$d{!ui-event event:onchange action:$c{switchOptionAct}}
 !ui-button:refreshBtn styleClass:$e{fc-bluebutton}
 	caption:$m{button.refresh}
     eventHandler:$d{!ui-event event:onclick action:$c{refreshDashboardAct}}
@@ -40,3 +44,4 @@
 // Actions
 !ui-post:refreshDashboardAct  path:$n{/refreshSlate} 
 !ui-post:switchDashboardAct  path:$n{/loadDashboardSlate} components:$c{dashboardSelect}
+!ui-post:switchOptionAct  path:$n{/loadOption} components:$c{dashboardSelect optionSelect}

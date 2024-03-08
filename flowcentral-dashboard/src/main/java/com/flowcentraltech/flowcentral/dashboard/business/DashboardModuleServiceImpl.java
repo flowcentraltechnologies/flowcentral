@@ -26,7 +26,9 @@ import com.flowcentraltech.flowcentral.configuration.data.ModuleInstall;
 import com.flowcentraltech.flowcentral.dashboard.constants.DashboardModuleErrorConstants;
 import com.flowcentraltech.flowcentral.dashboard.constants.DashboardModuleNameConstants;
 import com.flowcentraltech.flowcentral.dashboard.data.DashboardDef;
+import com.flowcentraltech.flowcentral.dashboard.data.DashboardOptionDef;
 import com.flowcentraltech.flowcentral.dashboard.entities.Dashboard;
+import com.flowcentraltech.flowcentral.dashboard.entities.DashboardOption;
 import com.flowcentraltech.flowcentral.dashboard.entities.DashboardOptionQuery;
 import com.flowcentraltech.flowcentral.dashboard.entities.DashboardQuery;
 import com.flowcentraltech.flowcentral.dashboard.entities.DashboardSection;
@@ -53,7 +55,7 @@ public class DashboardModuleServiceImpl extends AbstractFlowCentralService imple
 
     @Configurable
     private ChartModuleService chartModuleService;
-    
+
     private FactoryMap<String, DashboardDef> dashboardDefFactoryMap;
 
     public DashboardModuleServiceImpl() {
@@ -78,6 +80,13 @@ public class DashboardModuleServiceImpl extends AbstractFlowCentralService imple
 
                     DashboardDef.Builder ddb = DashboardDef.newBuilder(dashboard.getStatus(), longName,
                             dashboard.getDescription(), dashboard.getId(), dashboard.getVersionNo());
+
+                    DataUtils.sortAscending(dashboard.getOptionsList(), DashboardOption.class, "label");
+                    for (DashboardOption dashboardOption : dashboard.getOptionsList()) {
+                        DashboardOptionDef dashboardOptionDef = new DashboardOptionDef(dashboardOption.getName(),
+                                dashboardOption.getDescription(), dashboardOption.getLabel());
+                        ddb.addOption(dashboardOptionDef);
+                    }
 
                     DataUtils.sortAscending(dashboard.getSectionList(), DashboardSection.class, "index");
                     for (DashboardSection dashboardSection : dashboard.getSectionList()) {
@@ -119,12 +128,17 @@ public class DashboardModuleServiceImpl extends AbstractFlowCentralService imple
     }
 
     @Override
+    public List<? extends Listable> getDashboardOptionList(String dashboard) throws UnifyException {
+        return getDashboardDef(dashboard).getOptionList();
+    }
+
+    @Override
     public List<? extends Listable> getDashboardOptionChartDataSourceList(Long dashboardOptionId)
             throws UnifyException {
         final Long dashboardId = environment().value(Long.class, "dashboardId",
                 new DashboardOptionQuery().addEquals("id", dashboardOptionId));
         final List<String> charts = environment().valueList(String.class, "chart",
-                new DashboardTileQuery().dashboardId(dashboardId));       
+                new DashboardTileQuery().dashboardId(dashboardId));
         return chartModuleService.getChartDataSourceListForCharts(charts);
     }
 

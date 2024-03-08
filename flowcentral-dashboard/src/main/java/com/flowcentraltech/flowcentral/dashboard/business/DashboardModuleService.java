@@ -70,6 +70,16 @@ public interface DashboardModuleService extends FlowCentralService {
 	void updateDashboardStatus(DashboardQuery query, RecordStatus status) throws UnifyException;
 
     /**
+     * Get dashboard option list.
+     * 
+     * @param dashboard
+     *                          the dashboard long name
+     * @return the options list
+     * @throws UnifyException if an error occurs
+     */
+    List<? extends Listable> getDashboardOptionList(String dashboard) throws UnifyException;
+
+    /**
      * Get dashboard option chart data source list.
      * 
      * @param dashboardOptionId

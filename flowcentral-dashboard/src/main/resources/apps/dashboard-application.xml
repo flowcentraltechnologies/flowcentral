@@ -162,6 +162,12 @@
 				inputWidget="application.text" maxLen="128" />
 			<field name="label" label="$m{dashboard.dashboardoption.label1}"
 				type="string" inputWidget="application.text" maxLen="96" />
+			<field name="applicationName"
+				label="$m{dashboard.dashboardoption.applicationname}" type="list_only"
+				key="dashboardId" property="applicationName" />
+			<field name="dashboardName"
+				label="$m{dashboard.dashboardoption.dashboardname}" type="list_only"
+				key="dashboardId" property="name" />
 			<field name="baseList"
 				label="$m{dashboard.dashboardoption.categorybases}"
 				type="child_list" references="dashboardOptionCatBaseRef" />
