@@ -21,6 +21,7 @@ import com.flowcentraltech.flowcentral.application.constants.AppletSessionAttrib
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModulePathConstants;
 import com.flowcentraltech.flowcentral.application.data.RequestOpenTabInfo;
 import com.flowcentraltech.flowcentral.application.data.SessionOpenTabInfo;
+import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.util.ApplicationPageUtils;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
@@ -47,7 +48,10 @@ public class OpenInBrowserWindowResponse extends AbstractOpenWindowPageControlle
             setSessionAttribute(AppletSessionAttributeConstants.OPEN_TAB_INFO, new SessionOpenTabInfo(
                     requestOpenTabInfo.getTitle(), docpath, requestOpenTabInfo.getContentPath()));
             WindowResourceInfo info = new WindowResourceInfo(requestOpenTabInfo.getContentPath(), docpath,
-                    requestOpenTabInfo.getTabName(), MimeType.TEXT_HTML.template(), false);
+                    requestOpenTabInfo.isMultiPage()
+                            ? ApplicationNameUtils.getNextSequencedTabName(requestOpenTabInfo.getTabName())
+                            : requestOpenTabInfo.getTabName(),
+                    MimeType.TEXT_HTML.template(), false);
             info.setOpenInTab(true);
             return info;
         }

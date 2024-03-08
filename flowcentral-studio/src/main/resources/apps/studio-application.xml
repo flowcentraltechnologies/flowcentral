@@ -895,6 +895,38 @@
 			<property name="maintainForm.update" value="false" />
 			<property name="maintainForm.delete" value="false" />
 		</applet>
+		<applet name="manageDashboardOption"
+			description="$m{studio.dashboardoption.manage}"
+			label="$m{studio.dashboardoption.manage.label}"
+			type="manage_entitylist" entity="dashboard.dashboardOption"
+			menuAccess="false">
+			<property name="searchTable" value="dashboardOptionTable" />
+			<property name="searchTable.new" value="true" />
+			<property name="searchTable.report" value="false" />
+			<property name="createForm" value="dashboardOptionForm" />
+			<property name="createForm.save" value="true" />
+			<property name="createForm.save.next" value="true" />
+			<property name="createForm.save.close" value="true" />
+			<property name="maintainForm" value="dashboardOptionForm" />
+			<property name="maintainForm.update" value="true" />
+			<property name="maintainForm.delete" value="true" />
+		</applet>
+		<applet name="manageDashboardOptionCatBase"
+			description="$m{studio.dashboardoptioncatbase.manage}"
+			label="$m{studio.dashboardoptioncatbase.manage.label}"
+			type="manage_entitylist" entity="dashboard.dashboardOptionCatBase"
+			menuAccess="false">
+			<property name="searchTable" value="dashboardOptionCatBaseTable" />
+			<property name="searchTable.new" value="true" />
+			<property name="searchTable.report" value="false" />
+			<property name="createForm" value="dashboardOptionCatBaseForm" />
+			<property name="createForm.save" value="true" />
+			<property name="createForm.save.next" value="true" />
+			<property name="createForm.save.close" value="true" />
+			<property name="maintainForm" value="dashboardOptionCatBaseForm" />
+			<property name="maintainForm.update" value="true" />
+			<property name="maintainForm.delete" value="true" />
+		</applet>
 		<applet name="manageAppTableColumn"
 			description="$m{studio.apptablecolumn.manage}"
 			label="$m{studio.apptablecolumn.manage.label}"
@@ -1890,6 +1922,32 @@
 				widthRatio="1" />
 			<column field="index" renderWidget="application.integer"
 				widthRatio="1" />
+			<column field="createDt" renderWidget="application.datetime"
+				widthRatio="1" />
+			<column field="updateDt" renderWidget="application.datetime"
+				widthRatio="1" />
+		</table>
+		<table name="dashboardOptionTable"
+			description="$m{studio.dashboardoption.table}"
+			label="$m{studio.dashboardoption.table.label}"
+			entity="dashboard.dashboardOption">
+			<column field="name" renderWidget="application.name"
+				widthRatio="1" linkAct="maintainAct" />
+			<column field="description" renderWidget="application.text"
+				widthRatio="1" />
+			<column field="label" renderWidget="application.text"
+				widthRatio="1" />
+			<column field="createDt" renderWidget="application.datetime"
+				widthRatio="1" />
+			<column field="updateDt" renderWidget="application.datetime"
+				widthRatio="1" />
+		</table>
+		<table name="dashboardOptionCatBaseTable"
+			description="$m{studio.dashboardoptioncatbase.table}"
+			label="$m{studio.dashboardoptioncatbase.table.label}"
+			entity="dashboard.dashboardOptionCatBase">
+			<column field="chartDataSource" renderWidget="application.text"
+				widthRatio="1" linkAct="maintainAct" />
 			<column field="createDt" renderWidget="application.datetime"
 				widthRatio="1" />
 			<column field="updateDt" renderWidget="application.datetime"
@@ -3414,6 +3472,9 @@
 			<tab name="design" label="$m{studio.dashboard.form.design}"
 				contentType="child_list" applet="manageDashboardTile"
 				reference="tileList" editAction="/designChildItem" />
+			<tab name="options" label="$m{studio.dashboard.form.options}"
+				contentType="child_list" applet="manageDashboardOption"
+				reference="optionsList"/>
 			<tab name="changeLog" label="$m{application.form.audit}"
 				contentType="miniform_changelog" />
 			<formStatePolicy type="on_switch"
@@ -3469,6 +3530,56 @@
 			</tab>
 			<tab name="changeLog" label="$m{application.form.audit}"
 				contentType="miniform_changelog" />
+		</form>
+		<form name="dashboardOptionForm"
+			description="$m{studio.dashboardoption.form}"
+			entity="dashboard.dashboardOption">
+			<tab name="basicDetails"
+				label="$m{studio.dashboardoption.form.basicdetails}"
+				contentType="miniform">
+				<section name="basicDetails" columns="type_2">
+					<field name="dashboardId"
+						inputWidget="application.entitysearch" column="0"
+						label="$m{dashboard.dashboardoption.dashboard}" required="true" />
+					<field name="name" column="0" required="true" />
+					<field name="description" column="0" required="true" />
+					<field name="label" column="1" required="true" />
+				</section>
+			</tab>
+			<tab name="bases" label="$m{studio.dashboardoption.form.bases}"
+				contentType="child_list" applet="manageDashboardOptionCatBase"
+				reference="baseList"/>
+			<tab name="changeLog" label="$m{application.form.audit}"
+				contentType="miniform_changelog" />
+		</form>
+		<form name="dashboardOptionCatBaseForm"
+			description="$m{studio.dashboardoptioncatbase.form}"
+			entity="dashboard.dashboardOptionCatBase">
+			<tab name="basicDetails"
+				label="$m{studio.dashboardoptioncatbase.form.basicdetails}"
+				contentType="miniform">
+				<section name="basicDetails" columns="type_2">
+					<field name="dashboardOptionId"
+						inputWidget="application.entitysearch" column="0" required="true" />
+					<field name="chartDataSource" column="1" required="true" switchOnChange="true"/>
+				</section>
+			</tab>
+			<tab name="categoryBase"
+				label="$m{studio.dashboardoptioncatbase.form.categorybase}"
+				reference="dashboardoption_categorybase" contentType="filter_condition"/>
+			<tab name="changeLog" label="$m{application.form.audit}"
+				contentType="miniform_changelog" />
+			<formStatePolicy type="on_switch"
+				name="onDataSourceSwitch"
+				description="$m{studio.dashboardoptioncatbase.form.formstatepolicy.ondatasourceswitch}">
+				<onCondition>
+					<restriction type="is_not_null" field="chartDataSource" />
+				</onCondition>
+				<setValues>
+					<setValue type="generator" field="entity"
+						value="chartdatasource-entitygenerator" />
+				</setValues>
+			</formStatePolicy>
 		</form>
 		<form name="notifTemplateForm"
 			description="$m{studio.notificationtemplate.form}"

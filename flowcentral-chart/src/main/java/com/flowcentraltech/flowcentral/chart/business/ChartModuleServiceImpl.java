@@ -18,7 +18,9 @@ package com.flowcentraltech.flowcentral.chart.business;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.data.FieldSequenceDef;
@@ -47,6 +49,7 @@ import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.Transactional;
 import com.tcdng.unify.core.data.FactoryMap;
+import com.tcdng.unify.core.data.ListData;
 import com.tcdng.unify.core.data.Listable;
 import com.tcdng.unify.core.util.DataUtils;
 
@@ -246,6 +249,36 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
         List<ChartDataSource> list = environment().listAll(new ChartDataSourceQuery().entity(entity)
                 .addSelect("name", "description", "applicationName").addOrder("description"));
         return ApplicationNameUtils.getListableList(list);
+    }
+
+    @Override
+    public List<? extends Listable> getChartDataSourceListForCharts(List<String> charts) throws UnifyException {
+        if (!DataUtils.isBlank(charts)) {
+            Set<String> chartDataSources = new HashSet<String>();
+            for (String chart : charts) {
+                ApplicationEntityNameParts parts = ApplicationNameUtils.getApplicationEntityNameParts(chart);
+                final String chartDataSource = environment().value(String.class, "rule",
+                        new ChartQuery().provider(ChartModuleNameConstants.CHARTDATASOURCE_PROVIDER)
+                                .applicationName(parts.getApplicationName()).name(parts.getEntityName()));
+                chartDataSources.add(chartDataSource);
+            }
+
+            if (!chartDataSources.isEmpty()) {
+                List<ListData> resultList = new ArrayList<ListData>();
+                for (String chartDataSource : chartDataSources) {
+                    ApplicationEntityNameParts parts = ApplicationNameUtils
+                            .getApplicationEntityNameParts(chartDataSource);
+                    final String description = environment().value(String.class, "description",
+                            new ChartDataSourceQuery().applicationName(parts.getApplicationName())
+                                    .name(parts.getEntityName()));
+                    resultList.add(new ListData(chartDataSource, description));
+                }
+
+                return resultList;
+            }
+        }
+
+        return Collections.emptyList();
     }
 
     @Override

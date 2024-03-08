@@ -3,6 +3,14 @@
 <application name="dashboard"
 	description="$m{dashboard.short.description}"
 	label="$m{dashboard.label}" module="dashboard" displayIndex="-10">
+	<!-- Widgets -->
+	<widgetTypes>
+		<widgetType name="chartdatasourcelist"
+			description="$m{dashboard.widgettype.chartdatasourcelist}"
+			dataType="string" inputType="string"
+			editor="!ui-select list:dashboardchartdatasourcelist listParams:$l{dashboardOptionId} blankOption:$m{blank.none}"
+			renderer="!ui-label" />
+	</widgetTypes>
 	<!-- Applets -->
 	<applets>
 		<applet name="appDashboard"
@@ -85,7 +93,8 @@
 			subTitle="$m{dashboard.samplechart5.subtitle}"
 			provider="chartsnapshot-provider"
 			rule="sampleSalesAndCostsChartSnapshot" showGrid="true" smooth="true"
-			stacked="true" showDataLabels="true" formatDataLabels="true" formatYLabels="true" />
+			stacked="true" showDataLabels="true" formatDataLabels="true"
+			formatYLabels="true" />
 		<chart name="sampleChart6"
 			description="$m{dashboard.samplechart6.description}" type="donut"
 			title="$m{dashboard.samplechart6.title}"
@@ -98,6 +107,12 @@
 		<reference name="dashboardRef"
 			description="$m{dashboard.dashboard.reference}" entity="dashboard"
 			searchField="description" />
+		<reference name="dashboardOptionRef"
+			description="$m{dashboard.dashboardoption.reference}"
+			entity="dashboardOption" />
+		<reference name="dashboardOptionCatBaseRef"
+			description="$m{dashboard.dashboardoptioncatbase.reference}"
+			entity="dashboardOptionCatBase" />
 		<reference name="dashboardSectionRef"
 			description="$m{dashboard.dashboardsection.reference}"
 			entity="dashboardSection" />
@@ -121,10 +136,56 @@
 			<field name="statusDesc"
 				label="$m{dashboard.dashboard.statusdesc}" type="list_only"
 				key="status" property="description" />
-			<field name="sectionList" label="$m{dashboard.dashboard.sections}"
-				type="child_list" references="dashboardSectionRef" />
+			<field name="sectionList"
+				label="$m{dashboard.dashboard.sections}" type="child_list"
+				references="dashboardSectionRef" />
 			<field name="tileList" label="$m{dashboard.dashboard.tiles}"
 				type="child_list" references="dashboardTileRef" />
+			<field name="optionsList"
+				label="$m{dashboard.dashboard.options}" type="child_list"
+				references="dashboardOptionRef" />
+		</entity>
+		<entity name="dashboardOption"
+			description="$m{dashboard.dashboardoption}"
+			label="$m{dashboard.dashboardoption.label}"
+			type="com.flowcentraltech.flowcentral.dashboard.entities.DashboardOption"
+			auditable="true" reportable="true">
+			<field name="dashboardId"
+				label="$m{dashboard.dashboardoption.dashboardid}" type="ref"
+				references="dashboardRef"
+				inputLabel="$m{dashboard.dashboardoption.dashboard}"
+				inputWidget="application.entitysearch" />
+			<field name="name" label="$m{dashboard.dashboardoption.name}"
+				type="string" inputWidget="application.name" maxLen="64" />
+			<field name="description"
+				label="$m{dashboard.dashboardoption.description}" type="string"
+				inputWidget="application.text" maxLen="128" />
+			<field name="label" label="$m{dashboard.dashboardoption.label1}"
+				type="string" inputWidget="application.text" maxLen="96" />
+			<field name="baseList"
+				label="$m{dashboard.dashboardoption.categorybases}"
+				type="child_list" references="dashboardOptionCatBaseRef" />
+		</entity>
+		<entity name="dashboardOptionCatBase"
+			description="$m{dashboard.dashboardoptioncatbase}"
+			label="$m{dashboard.dashboardoptioncatbase.label}"
+			type="com.flowcentraltech.flowcentral.dashboard.entities.DashboardOptionCategoryBase"
+			auditable="true" reportable="true">
+			<field name="dashboardOptionId"
+				label="$m{dashboard.dashboardoptioncatbase.dashboardoptionid}"
+				type="ref" references="dashboardOptionRef"
+				inputLabel="$m{dashboard.dashboardoptioncatbase.dashboardoption}"
+				inputWidget="application.entitysearch" />
+			<field name="chartDataSource"
+				label="$m{dashboard.dashboardoptioncatbase.chartdatasource}"
+				type="string" inputWidget="dashboard.chartdatasourcelist" />
+			<field name="entity"
+				label="$m{dashboard.dashboardoptioncatbase.entity}"
+				type="string" inputWidget="application.text" />
+			<field name="categoryBase"
+				label="$m{dashboard.dashboardoptioncatbase.categorybase}"
+				type="child" category="dashboard-option"
+				references="application.appFilterRef" />
 		</entity>
 		<entity name="dashboardSection"
 			description="$m{dashboard.dashboardsection}"
@@ -136,8 +197,9 @@
 				references="dashboardRef"
 				inputLabel="$m{dashboard.dashboardsection.dashboard}"
 				inputWidget="application.entitysearch" />
-			<field name="index" label="$m{dashboard.dashboardsection.index}"
-				type="integer" inputWidget="application.integer" />
+			<field name="index"
+				label="$m{dashboard.dashboardsection.index}" type="integer"
+				inputWidget="application.integer" />
 			<field name="type" label="$m{dashboard.dashboardsection.type}"
 				type="enum_ref" references="dashboardcolumnstypelist"
 				inputWidget="application.enumlist" />
@@ -174,8 +236,8 @@
 	<tables>
 		<table name="dashboardTable"
 			description="$m{dashboard.dashboard.table}"
-			label="$m{dashboard.dashboard.table.label}"
-			entity="dashboard" itemsPerPage="20" multiSelect="true" serialNo="false">
+			label="$m{dashboard.dashboard.table.label}" entity="dashboard"
+			itemsPerPage="20" multiSelect="true" serialNo="false">
 			<column field="applicationName"
 				renderWidget="application.text" widthRatio="1" />
 			<column field="name" renderWidget="application.text"

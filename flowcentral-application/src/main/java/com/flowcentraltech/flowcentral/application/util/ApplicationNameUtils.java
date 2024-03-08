@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.application.util;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import com.flowcentraltech.flowcentral.application.entities.BaseApplicationEntity;
 import com.tcdng.unify.core.UnifyException;
@@ -48,11 +49,22 @@ public final class ApplicationNameUtils {
 
     private static final String WORKFLOW_LOADING_APPLET_NAME_SUFFIX = "wla";
 
+    private static final FactoryMap<String, AtomicInteger> tabSequences;
+
     private static final FactoryMap<String, ApplicationEntityNameParts> applicationNameParts;
 
     private static final FactoryMap<String, EntityAssignRuleNameParts> assignRuleNameParts;
 
     static {
+        tabSequences = new FactoryMap<String, AtomicInteger>() {
+
+            @Override
+            protected AtomicInteger create(String tabName, Object... params) throws Exception {
+                return new AtomicInteger();
+            }
+            
+        };
+        
         applicationNameParts = new FactoryMap<String, ApplicationEntityNameParts>()
             {
 
@@ -93,6 +105,10 @@ public final class ApplicationNameUtils {
 
     }
 
+    public static String getNextSequencedTabName(String tabName) throws UnifyException {
+        return tabName + "_" + tabSequences.get(tabName).incrementAndGet();
+    }
+    
     public static EntityAssignRuleNameParts getEntityAssignRuleNameParts(String assignRule) throws UnifyException {
         return assignRuleNameParts.get(assignRule);
     }
