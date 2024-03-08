@@ -28,6 +28,8 @@ public class DashboardOptionCategoryBaseConfig  {
 
     private String chartDataSource;
 
+    private String entity;
+
     private FilterConfig categoryBase;
 
     public String getChartDataSource() {
@@ -37,6 +39,15 @@ public class DashboardOptionCategoryBaseConfig  {
     @XmlAttribute
     public void setChartDataSource(String chartDataSource) {
         this.chartDataSource = chartDataSource;
+    }
+
+    public String getEntity() {
+        return entity;
+    }
+
+    @XmlAttribute
+    public void setEntity(String entity) {
+        this.entity = entity;
     }
 
     public FilterConfig getCategoryBase() {

@@ -169,7 +169,7 @@
 		<entity name="dashboardOptionCatBase"
 			description="$m{dashboard.dashboardoptioncatbase}"
 			label="$m{dashboard.dashboardoptioncatbase.label}"
-			type="com.flowcentraltech.flowcentral.dashboard.entities.DashboardOptionCatBase"
+			type="com.flowcentraltech.flowcentral.dashboard.entities.DashboardOptionCategoryBase"
 			auditable="true" reportable="true">
 			<field name="dashboardOptionId"
 				label="$m{dashboard.dashboardoptioncatbase.dashboardoptionid}"

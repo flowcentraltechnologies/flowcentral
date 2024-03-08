@@ -37,6 +37,9 @@ public class DashboardOptionCategoryBase extends BaseAuditEntity {
 
     @Column(name = "CHART_DATASOURCE", length = 64)
     private String chartDataSource;
+
+    @Column(length = 64)
+    private String entity;
     
     @Child(category = "dashboard-option")
     private AppFilter categoryBase;
@@ -60,6 +63,14 @@ public class DashboardOptionCategoryBase extends BaseAuditEntity {
 
     public void setChartDataSource(String chartDataSource) {
         this.chartDataSource = chartDataSource;
+    }
+
+    public String getEntity() {
+        return entity;
+    }
+
+    public void setEntity(String entity) {
+        this.entity = entity;
     }
 
     public AppFilter getCategoryBase() {

@@ -3569,6 +3569,17 @@
 				reference="dashboardoption_categorybase" contentType="filter_condition"/>
 			<tab name="changeLog" label="$m{application.form.audit}"
 				contentType="miniform_changelog" />
+			<formStatePolicy type="on_switch"
+				name="onDataSourceSwitch"
+				description="$m{studio.dashboardoptioncatbase.form.formstatepolicy.ondatasourceswitch}">
+				<onCondition>
+					<restriction type="is_not_null" field="chartDataSource" />
+				</onCondition>
+				<setValues>
+					<setValue type="generator" field="entity"
+						value="chartdatasource-entitygenerator" />
+				</setValues>
+			</formStatePolicy>
 		</form>
 		<form name="notifTemplateForm"
 			description="$m{studio.notificationtemplate.form}"

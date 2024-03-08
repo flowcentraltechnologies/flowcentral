@@ -126,6 +126,7 @@ public class DashboardsXmlGenerator extends AbstractStaticArtifactGenerator {
                             for (DashboardOptionCategoryBase base : dashboardOption.getBaseList()) {
                                 DashboardOptionCategoryBaseConfig dashboardOptionCategoryBaseConfig = new DashboardOptionCategoryBaseConfig();
                                 dashboardOptionCategoryBaseConfig.setChartDataSource(base.getChartDataSource());
+                                dashboardOptionCategoryBaseConfig.setEntity(base.getEntity());
                                 dashboardOptionCategoryBaseConfig.setCategoryBase(
                                         InputWidgetUtils.getFilterConfig(au(), base.getCategoryBase()));
                                 baseList.add(dashboardOptionCategoryBaseConfig);

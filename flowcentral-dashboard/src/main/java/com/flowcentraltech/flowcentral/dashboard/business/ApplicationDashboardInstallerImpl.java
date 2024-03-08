@@ -233,6 +233,7 @@ public class ApplicationDashboardInstallerImpl extends AbstractApplicationArtifa
             for (DashboardOptionCategoryBaseConfig baseConfig : dashboardOptionConfig.getBaseList()) {
                 DashboardOptionCategoryBase base = new DashboardOptionCategoryBase();
                 base.setChartDataSource(baseConfig.getChartDataSource());
+                base.setEntity(baseConfig.getEntity());
                 base.setCategoryBase(InputWidgetUtils.newAppFilter(baseConfig.getCategoryBase()));
                 baseList.add(base);
             }
