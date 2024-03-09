@@ -75,6 +75,11 @@ public class ChartDataSourceChartDetailsProvider extends AbstractChartDetailsPro
         return ApplicationNameUtils.getListableList(sourceList);
     }
 
+    @Override
+    public boolean isUsesChartDataSource() {
+        return true;
+    }
+
     private ChartDetails getChartData(ChartDataSourceDef chartDataSourceDef, Restriction erestriction)
             throws UnifyException {
         final EntityDef entityDef = chartDataSourceDef.getEntityDef();

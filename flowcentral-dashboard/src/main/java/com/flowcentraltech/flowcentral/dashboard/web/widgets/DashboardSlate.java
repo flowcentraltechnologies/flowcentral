@@ -17,6 +17,7 @@
 package com.flowcentraltech.flowcentral.dashboard.web.widgets;
 
 import com.flowcentraltech.flowcentral.dashboard.data.DashboardDef;
+import com.flowcentraltech.flowcentral.dashboard.data.DashboardOptionDef;
 import com.tcdng.unify.core.util.StringUtils;
 
 /**
@@ -44,8 +45,8 @@ public class DashboardSlate {
         return dashboardDef;
     }
 
-    public String getOption() {
-        return option;
+    public DashboardOptionDef getOption() {
+        return dashboardDef.getOption(option);
     }
 
     public boolean isWithOption() {

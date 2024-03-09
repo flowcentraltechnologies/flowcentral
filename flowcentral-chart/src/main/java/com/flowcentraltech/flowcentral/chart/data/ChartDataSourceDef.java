@@ -38,7 +38,7 @@ public class ChartDataSourceDef {
 
     private final ChartTimeSeriesType timeSeriesType;
 
-    private final String name;
+    private final String longName;
 
     private final String description;
 
@@ -60,13 +60,13 @@ public class ChartDataSourceDef {
 
     private FieldSequenceDef groupingFieldSequenceDef;
 
-    public ChartDataSourceDef(ChartDataSourceType type, ChartTimeSeriesType timeSeriesType, String name,
+    public ChartDataSourceDef(ChartDataSourceType type, ChartTimeSeriesType timeSeriesType, String longName,
             String description, String categoryField, EntityDef entityDef, FilterDef categoryBase,
-            PropertySequenceDef series, PropertySequenceDef categories,
-            FieldSequenceDef groupingFieldSequenceDef, Integer limit, Long id, long version) {
+            PropertySequenceDef series, PropertySequenceDef categories, FieldSequenceDef groupingFieldSequenceDef,
+            Integer limit, Long id, long version) {
         this.type = type;
         this.timeSeriesType = timeSeriesType;
-        this.name = name;
+        this.longName = longName;
         this.description = description;
         this.categoryField = categoryField;
         this.entityDef = entityDef;
@@ -95,8 +95,8 @@ public class ChartDataSourceDef {
         return !StringUtils.isBlank(categoryField) ? entityDef.getFieldDef(categoryField) : null;
     }
 
-    public String getName() {
-        return name;
+    public String getLongName() {
+        return longName;
     }
 
     public String getDescription() {

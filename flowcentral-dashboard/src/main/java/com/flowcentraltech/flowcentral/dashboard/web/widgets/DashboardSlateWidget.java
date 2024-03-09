@@ -22,7 +22,9 @@ import java.util.List;
 import com.flowcentraltech.flowcentral.common.web.widgets.AbstractFlowCentralMultiControl;
 import com.flowcentraltech.flowcentral.configuration.constants.DashboardColumnsType;
 import com.flowcentraltech.flowcentral.dashboard.data.DashboardDef;
+import com.flowcentraltech.flowcentral.dashboard.data.DashboardOptionDef;
 import com.flowcentraltech.flowcentral.dashboard.data.DashboardSectionDef;
+import com.flowcentraltech.flowcentral.dashboard.data.DashboardSlotDef;
 import com.flowcentraltech.flowcentral.dashboard.data.DashboardTileDef;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
@@ -55,6 +57,7 @@ public class DashboardSlateWidget extends AbstractFlowCentralMultiControl {
                 sectionList.clear();
 
                 if (dashboardDef != null) {
+                    final DashboardOptionDef optionDef = slate.isWithOption() ? slate.getOption() : null;
                     final int sections = dashboardDef.getSections();
                     for (int sectionIndex = 0; sectionIndex < sections; sectionIndex++) {
                         final DashboardSectionDef dashboardSectionDef = dashboardDef.getSection(sectionIndex);
@@ -79,7 +82,8 @@ public class DashboardSlateWidget extends AbstractFlowCentralMultiControl {
                                 }
 
                                 widget = addExternalChildWidget(renderer);
-                                widget.setValueStore(createValueStore(dashboardTileDef));
+                                widget.setValueStore(
+                                        createValueStore(new DashboardSlotDef(dashboardTileDef, optionDef)));
                             }
 
                             slotList.add(new DashboardSlot(type.dimension().get(tileIndex), widget));
@@ -120,9 +124,9 @@ public class DashboardSlateWidget extends AbstractFlowCentralMultiControl {
 
     public static class DashboardSlot {
 
-        private String width;
+        private final String width;
 
-        private Widget widget;
+        private final Widget widget;
 
         public DashboardSlot(String width, Widget widget) {
             this.width = width;

@@ -158,6 +158,9 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 
 .fc-graypanel {border: 1px solid #e8e8e8;
     padding: 8px 2px 0px 2px; background-color: #e3e7ea; box-sizing: border-box;}
+
+.fc-dashboard-header {}
+.fc-dashboard-header .llabelinl{width:78px;}
     
 /*** LOGIN ***/
 .fc-login-contentpanel {display:block;position:relative;left:0px;top:0px;width:100%;height:100%;}

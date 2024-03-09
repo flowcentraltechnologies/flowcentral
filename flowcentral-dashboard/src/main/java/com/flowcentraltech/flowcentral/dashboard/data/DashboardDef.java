@@ -31,6 +31,7 @@ import com.flowcentraltech.flowcentral.configuration.constants.DashboardColumnsT
 import com.flowcentraltech.flowcentral.configuration.constants.DashboardTileType;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.util.DataUtils;
+import com.tcdng.unify.core.util.StringUtils;
 
 /**
  * Dashboard definition object.
@@ -57,8 +58,16 @@ public class DashboardDef extends BaseApplicationEntityDef {
         this.sectionList = sectionList;
     }
 
-    public boolean isOptions(String name) {
-        return options.containsKey(name);
+    public boolean isOption(String name) {
+        return !StringUtils.isBlank(name) && options.containsKey(name);
+    }
+
+    public DashboardOptionDef getFirstOption() {
+        return !options.isEmpty() ? getOptionList().get(0) : null;
+    }
+
+    public boolean isWithOptions() {
+        return !options.isEmpty();
     }
 
     public DashboardOptionDef getOption(String name) {

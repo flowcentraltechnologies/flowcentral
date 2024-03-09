@@ -15,10 +15,13 @@
  */
 package com.flowcentraltech.flowcentral.dashboard.business;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityNameParts;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
+import com.flowcentraltech.flowcentral.application.util.InputWidgetUtils;
 import com.flowcentraltech.flowcentral.chart.business.ChartModuleService;
 import com.flowcentraltech.flowcentral.common.business.AbstractFlowCentralService;
 import com.flowcentraltech.flowcentral.common.constants.RecordStatus;
@@ -26,9 +29,11 @@ import com.flowcentraltech.flowcentral.configuration.data.ModuleInstall;
 import com.flowcentraltech.flowcentral.dashboard.constants.DashboardModuleErrorConstants;
 import com.flowcentraltech.flowcentral.dashboard.constants.DashboardModuleNameConstants;
 import com.flowcentraltech.flowcentral.dashboard.data.DashboardDef;
+import com.flowcentraltech.flowcentral.dashboard.data.DashboardOptionCatBaseDef;
 import com.flowcentraltech.flowcentral.dashboard.data.DashboardOptionDef;
 import com.flowcentraltech.flowcentral.dashboard.entities.Dashboard;
 import com.flowcentraltech.flowcentral.dashboard.entities.DashboardOption;
+import com.flowcentraltech.flowcentral.dashboard.entities.DashboardOptionCategoryBase;
 import com.flowcentraltech.flowcentral.dashboard.entities.DashboardOptionQuery;
 import com.flowcentraltech.flowcentral.dashboard.entities.DashboardQuery;
 import com.flowcentraltech.flowcentral.dashboard.entities.DashboardSection;
@@ -55,6 +60,9 @@ public class DashboardModuleServiceImpl extends AbstractFlowCentralService imple
 
     @Configurable
     private ChartModuleService chartModuleService;
+
+    @Configurable
+    private AppletUtilities appletUtilities;
 
     private FactoryMap<String, DashboardDef> dashboardDefFactoryMap;
 
@@ -83,8 +91,14 @@ public class DashboardModuleServiceImpl extends AbstractFlowCentralService imple
 
                     DataUtils.sortAscending(dashboard.getOptionsList(), DashboardOption.class, "label");
                     for (DashboardOption dashboardOption : dashboard.getOptionsList()) {
+                        List<DashboardOptionCatBaseDef> catBaseList = new ArrayList<DashboardOptionCatBaseDef>();
+                        for (DashboardOptionCategoryBase catBase : dashboardOption.getBaseList()) {
+                            catBaseList.add(new DashboardOptionCatBaseDef(catBase.getChartDataSource(),
+                                    InputWidgetUtils.getFilterDef(appletUtilities, null, catBase.getCategoryBase())));
+                        }
+
                         DashboardOptionDef dashboardOptionDef = new DashboardOptionDef(dashboardOption.getName(),
-                                dashboardOption.getDescription(), dashboardOption.getLabel());
+                                dashboardOption.getDescription(), dashboardOption.getLabel(), catBaseList);
                         ddb.addOption(dashboardOptionDef);
                     }
 

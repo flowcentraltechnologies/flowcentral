@@ -22,7 +22,7 @@
 !ui-panel:dashboardHeaderPanel layout:$d{!ui-horizontal style:$s{width:100%;} cellType:bottom} components:$c{dashboardLabel actionPanel} 
 	
 !ui-label:dashboardLabel styleClass:$e{fc-largelabel} caption:$m{applicationdashboard.dashboard}
-!ui-panel:actionPanel 
+!ui-panel:actionPanel styleClass:$e{fc-dashboard-header}
 	layout:$d{!ui-horizontal style:$s{float:right;} showCaption:true inlineCaption:true captionSuffix:$s{:} cellType:middle}
 	components:$c{dashboardSelect optionSelect refreshBtn}
 
@@ -43,5 +43,5 @@
 
 // Actions
 !ui-post:refreshDashboardAct  path:$n{/refreshSlate} 
-!ui-post:switchDashboardAct  path:$n{/loadDashboardSlate} components:$c{dashboardSelect}
+!ui-post:switchDashboardAct  path:$n{/loadDashboardSlate} components:$c{dashboardSelect optionSelect}
 !ui-post:switchOptionAct  path:$n{/loadOption} components:$c{dashboardSelect optionSelect}

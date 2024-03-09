@@ -16,6 +16,7 @@
 
 package com.flowcentraltech.flowcentral.chart.web.widgets;
 
+import com.flowcentraltech.flowcentral.chart.data.ChartConfiguration;
 import com.flowcentraltech.flowcentral.common.web.widgets.AbstractFlowCentralControl;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
@@ -31,8 +32,12 @@ import com.tcdng.unify.core.annotation.UplAttributes;
 @Component("fc-chart")
 @UplAttributes({
     @UplAttribute(name = "sparkLine", type = boolean.class, defaultVal = "false"),
-    @UplAttribute(name = "preferredHeight", type = int.class)})
+    @UplAttribute(name = "preferredHeight", type = int.class) })
 public class ChartWidget extends AbstractFlowCentralControl {
+
+    public ChartConfiguration getChartConfiguration() throws UnifyException {
+        return (ChartConfiguration) getValueStore().getValueObject();
+    }
 
     public boolean isSparkLine() throws UnifyException {
         return getUplAttribute(boolean.class, "sparkLine");

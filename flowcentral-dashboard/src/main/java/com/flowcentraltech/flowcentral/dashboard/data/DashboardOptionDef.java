@@ -16,6 +16,11 @@
 
 package com.flowcentraltech.flowcentral.dashboard.data;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import com.flowcentraltech.flowcentral.application.data.FilterDef;
 import com.tcdng.unify.core.data.Listable;
 
 /**
@@ -32,10 +37,17 @@ public class DashboardOptionDef implements Listable {
 
     private String label;
 
-    public DashboardOptionDef(String name, String description, String label) {
+    private Map<String, DashboardOptionCatBaseDef> catBases;
+
+    public DashboardOptionDef(String name, String description, String label,
+            List<DashboardOptionCatBaseDef> catBaseList) {
         this.name = name;
         this.description = description;
         this.label = label;
+        this.catBases = new HashMap<String, DashboardOptionCatBaseDef>();
+        for (DashboardOptionCatBaseDef dashboardOptionCatBaseDef : catBaseList) {
+            catBases.put(dashboardOptionCatBaseDef.getDataSourceName(), dashboardOptionCatBaseDef);
+        }
     }
 
     @Override
@@ -58,6 +70,14 @@ public class DashboardOptionDef implements Listable {
 
     public String getLabel() {
         return label;
+    }
+
+    public FilterDef getCatBase(String dataSourceName) {
+        return catBases.get(dataSourceName).getCatBaseDef();
+    }
+
+    public boolean isWithCatBase(String dataSourceName) {
+        return catBases.containsKey(dataSourceName);
     }
 
 }
