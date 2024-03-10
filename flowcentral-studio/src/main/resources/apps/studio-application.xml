@@ -916,14 +916,17 @@
 			label="$m{studio.dashboardoptioncatbase.manage.label}"
 			type="manage_entitylist" entity="dashboard.dashboardOptionCatBase"
 			menuAccess="false">
-			<property name="searchTable" value="dashboardOptionCatBaseTable" />
+			<property name="searchTable"
+				value="dashboardOptionCatBaseTable" />
 			<property name="searchTable.new" value="true" />
 			<property name="searchTable.report" value="false" />
-			<property name="createForm" value="dashboardOptionCatBaseForm" />
+			<property name="createForm"
+				value="dashboardOptionCatBaseForm" />
 			<property name="createForm.save" value="true" />
 			<property name="createForm.save.next" value="true" />
 			<property name="createForm.save.close" value="true" />
-			<property name="maintainForm" value="dashboardOptionCatBaseForm" />
+			<property name="maintainForm"
+				value="dashboardOptionCatBaseForm" />
 			<property name="maintainForm.update" value="true" />
 			<property name="maintainForm.delete" value="true" />
 		</applet>
@@ -1946,8 +1949,8 @@
 			description="$m{studio.dashboardoptioncatbase.table}"
 			label="$m{studio.dashboardoptioncatbase.table.label}"
 			entity="dashboard.dashboardOptionCatBase">
-			<column field="chartDataSource" renderWidget="application.text"
-				widthRatio="1" linkAct="maintainAct" />
+			<column field="chartDataSource"
+				renderWidget="application.text" widthRatio="1" linkAct="maintainAct" />
 			<column field="createDt" renderWidget="application.datetime"
 				widthRatio="1" />
 			<column field="updateDt" renderWidget="application.datetime"
@@ -3306,7 +3309,8 @@
 					</restriction>
 				</onCondition>
 				<setStates>
-					<setState type="field" target="paletteType" visible="false" />
+					<setState type="field" target="paletteType"
+						visible="false" />
 				</setStates>
 			</formStatePolicy>
 			<formStatePolicy type="on_switch"
@@ -3314,9 +3318,12 @@
 				description="$m{studio.chart.form.chartpalettetype.policy}">
 				<onCondition>
 					<restriction type="and">
-						<restriction type="not_equals" field="paletteType" paramA="PL0" />
-						<restriction type="not_equals" field="type" paramA="CRD" />
-						<restriction type="not_equals" field="type" paramA="TBL" />
+						<restriction type="not_equals" field="paletteType"
+							paramA="PL0" />
+						<restriction type="not_equals" field="type"
+							paramA="CRD" />
+						<restriction type="not_equals" field="type"
+							paramA="TBL" />
 					</restriction>
 				</onCondition>
 				<setStates>
@@ -3327,12 +3334,15 @@
 				name="multiCategorySeries"
 				description="$m{studio.chart.form.multicategoryseries.policy}">
 				<onCondition>
-					<restriction type="not_equals" field="type" paramA="CRD" />
+					<restriction type="not_equals" field="type"
+						paramA="CRD" />
 				</onCondition>
 				<widgetRules name="multiCategorySeries"
 					description="$m{studio.chart.form.multicategoryseries}">
-					<entry field="category" widget="chart.chartdatasourcerulecategorymlist"/>
-					<entry field="series" widget="chart.chartdatasourceruleseriesmlist"/>
+					<entry field="category"
+						widget="chart.chartdatasourcerulecategorymlist" />
+					<entry field="series"
+						widget="chart.chartdatasourceruleseriesmlist" />
 				</widgetRules>
 			</formWidgetRulesPolicy>
 		</form>
@@ -3374,7 +3384,7 @@
 						inputWidget="studio.entitycategoryfieldlist" column="1"
 						switchOnChange="true" />
 					<field name="timeSeriesType"
-						inputWidget="application.enumlist" column="1" />
+						inputWidget="application.enumlist" column="1" visible="false"/>
 				</section>
 			</tab>
 			<tab name="series" label="$m{studio.chartdatasource.form.series}"
@@ -3431,6 +3441,8 @@
 				</onCondition>
 				<setStates>
 					<setState type="tab" target="categories" visible="false" />
+					<setState type="field" target="timeSeriesType"
+						visible="true" />
 				</setStates>
 			</formStatePolicy>
 		</form>
@@ -3474,7 +3486,7 @@
 				reference="tileList" editAction="/designChildItem" />
 			<tab name="options" label="$m{studio.dashboard.form.options}"
 				contentType="child_list" applet="manageDashboardOption"
-				reference="optionsList"/>
+				reference="optionsList" />
 			<tab name="changeLog" label="$m{application.form.audit}"
 				contentType="miniform_changelog" />
 			<formStatePolicy type="on_switch"
@@ -3548,7 +3560,7 @@
 			</tab>
 			<tab name="bases" label="$m{studio.dashboardoption.form.bases}"
 				contentType="child_list" applet="manageDashboardOptionCatBase"
-				reference="baseList"/>
+				reference="baseList" />
 			<tab name="changeLog" label="$m{application.form.audit}"
 				contentType="miniform_changelog" />
 		</form>
@@ -3561,12 +3573,14 @@
 				<section name="basicDetails" columns="type_2">
 					<field name="dashboardOptionId"
 						inputWidget="application.entitysearch" column="0" required="true" />
-					<field name="chartDataSource" column="1" required="true" switchOnChange="true"/>
+					<field name="chartDataSource" column="1" required="true"
+						switchOnChange="true" />
 				</section>
 			</tab>
 			<tab name="categoryBase"
 				label="$m{studio.dashboardoptioncatbase.form.categorybase}"
-				reference="dashboardoption_categorybase" contentType="filter_condition"/>
+				reference="dashboardoption_categorybase"
+				contentType="filter_condition" />
 			<tab name="changeLog" label="$m{application.form.audit}"
 				contentType="miniform_changelog" />
 			<formStatePolicy type="on_switch"
