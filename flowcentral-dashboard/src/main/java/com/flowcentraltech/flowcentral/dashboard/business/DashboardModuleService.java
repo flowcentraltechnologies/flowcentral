@@ -82,11 +82,11 @@ public interface DashboardModuleService extends FlowCentralService {
     /**
      * Get dashboard option chart data source list.
      * 
-     * @param dashboardOptionId
-     *                          the dashboard option ID
+     * @param entity
+     *                          the entity
      * @return the chart datasource list
      * @throws UnifyException if an error occurs
      */
-    List<? extends Listable> getDashboardOptionChartDataSourceList(Long dashboardOptionId) throws UnifyException;
+    List<? extends Listable> getDashboardOptionChartDataSourceList(String entity) throws UnifyException;
 
 }

@@ -202,4 +202,15 @@ public interface ChartModuleService extends FlowCentralService {
      *                        if an error occurs
      */
     List<? extends Listable> getChartDataSourceListForCharts(List<String> charts) throws UnifyException;
+
+    /**
+     * Fetch chart data sources by entity.
+     * 
+     * @param entity
+     *               the entity
+     * @return list of chart data sources
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    List<? extends Listable> getChartDataSourceListByEntity(String entity) throws UnifyException;
 }

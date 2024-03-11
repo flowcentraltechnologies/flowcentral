@@ -25,7 +25,7 @@ import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.data.Listable;
-import com.tcdng.unify.core.list.LongParam;
+import com.tcdng.unify.core.list.StringParam;
 
 /**
  * Dashboard chart data source list command.
@@ -34,17 +34,17 @@ import com.tcdng.unify.core.list.LongParam;
  * @since 1.0
  */
 @Component("dashboardchartdatasourcelist")
-public class DashboardChartDatasourceListCommand extends AbstractDashboardListCommand<LongParam> {
+public class DashboardChartDatasourceListCommand extends AbstractDashboardListCommand<StringParam> {
 
     @Configurable
     private DashboardModuleService dashboardModuleService;
 
     public DashboardChartDatasourceListCommand() {
-        super(LongParam.class);
+        super(StringParam.class);
     }
 
     @Override
-    public List<? extends Listable> execute(Locale locale, LongParam param) throws UnifyException {
+    public List<? extends Listable> execute(Locale locale, StringParam param) throws UnifyException {
         if (param.isPresent()) {
             return dashboardModuleService.getDashboardOptionChartDataSourceList(param.getValue());
         }

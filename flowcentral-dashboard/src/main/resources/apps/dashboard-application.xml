@@ -8,7 +8,7 @@
 		<widgetType name="chartdatasourcelist" 
 			description="$m{dashboard.widgettype.chartdatasourcelist}"
 			dataType="string" inputType="string"
-			editor="!ui-dropdownchecklist list:dashboardchartdatasourcelist listParams:$l{dashboardOptionId} columns:3"
+			editor="!ui-dropdownchecklist list:dashboardchartdatasourcelist listParams:$l{entity} columns:3"
 			renderer="!ui-label" />
 	</widgetTypes>
 	<!-- Applets -->
@@ -187,7 +187,7 @@
 				type="string" inputWidget="dashboard.chartdatasourcelist" />
 			<field name="entity"
 				label="$m{dashboard.dashboardoptioncatbase.entity}"
-				type="string" inputWidget="application.text" />
+				type="string" />
 			<field name="categoryBase"
 				label="$m{dashboard.dashboardoptioncatbase.categorybase}"
 				type="child" category="dashboard-option"

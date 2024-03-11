@@ -35,11 +35,9 @@ import com.flowcentraltech.flowcentral.dashboard.data.DashboardOptionDef;
 import com.flowcentraltech.flowcentral.dashboard.entities.Dashboard;
 import com.flowcentraltech.flowcentral.dashboard.entities.DashboardOption;
 import com.flowcentraltech.flowcentral.dashboard.entities.DashboardOptionCategoryBase;
-import com.flowcentraltech.flowcentral.dashboard.entities.DashboardOptionQuery;
 import com.flowcentraltech.flowcentral.dashboard.entities.DashboardQuery;
 import com.flowcentraltech.flowcentral.dashboard.entities.DashboardSection;
 import com.flowcentraltech.flowcentral.dashboard.entities.DashboardTile;
-import com.flowcentraltech.flowcentral.dashboard.entities.DashboardTileQuery;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -150,13 +148,9 @@ public class DashboardModuleServiceImpl extends AbstractFlowCentralService imple
     }
 
     @Override
-    public List<? extends Listable> getDashboardOptionChartDataSourceList(Long dashboardOptionId)
+    public List<? extends Listable> getDashboardOptionChartDataSourceList(String entity)
             throws UnifyException {
-        final Long dashboardId = environment().value(Long.class, "dashboardId",
-                new DashboardOptionQuery().addEquals("id", dashboardOptionId));
-        final List<String> charts = environment().valueList(String.class, "chart",
-                new DashboardTileQuery().dashboardId(dashboardId));
-        return chartModuleService.getChartDataSourceListForCharts(charts);
+        return chartModuleService.getChartDataSourceListByEntity(entity);
     }
 
     @Override

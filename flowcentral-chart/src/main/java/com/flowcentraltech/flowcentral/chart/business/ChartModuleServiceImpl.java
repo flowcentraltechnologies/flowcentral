@@ -282,6 +282,13 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
     }
 
     @Override
+    public List<? extends Listable> getChartDataSourceListByEntity(String entity) throws UnifyException {
+        List<ChartDataSource> sources = environment()
+                .listAll(new ChartDataSourceQuery().entity(entity).addSelect("applicationName", "name", "description"));
+        return ApplicationNameUtils.getListableList(sources);
+    }
+
+    @Override
     public boolean isChartSnapshotExist(String snapshotName) throws UnifyException {
         return environment().countAll(new ChartSnapshotQuery().name(snapshotName)) > 0;
     }

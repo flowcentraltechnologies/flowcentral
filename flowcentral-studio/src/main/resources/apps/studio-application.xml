@@ -3573,6 +3573,8 @@
 				<section name="basicDetails" columns="type_2">
 					<field name="dashboardOptionId"
 						inputWidget="application.entitysearch" column="0" required="true" />
+					<field name="entity" inputWidget="studio.entitybynamelist"
+						column="1" switchOnChange="true" required="true" />
 					<field name="chartDataSource" column="1" required="true"
 						switchOnChange="true" />
 				</section>
@@ -3589,10 +3591,6 @@
 				<onCondition>
 					<restriction type="is_not_null" field="chartDataSource" />
 				</onCondition>
-				<setValues>
-					<setValue type="generator" field="entity"
-						value="chartdatasource-entitygenerator" />
-				</setValues>
 			</formStatePolicy>
 		</form>
 		<form name="notifTemplateForm"
