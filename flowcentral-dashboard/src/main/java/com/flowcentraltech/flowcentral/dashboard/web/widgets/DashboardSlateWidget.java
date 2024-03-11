@@ -50,49 +50,45 @@ public class DashboardSlateWidget extends AbstractFlowCentralMultiControl {
     public DashboardSlate getDashboardSlate() throws UnifyException {
         DashboardSlate slate = getValue(DashboardSlate.class);
         if (slate != oldSlate) {
-            DashboardDef oldDashboardDef = oldSlate != null ? oldSlate.getDashboardDef() : null;
             DashboardDef dashboardDef = slate != null ? slate.getDashboardDef() : null;
-            if (dashboardDef != oldDashboardDef) {
-                removeAllExternalChildWidgets();
-                sectionList.clear();
-
-                if (dashboardDef != null) {
-                    final DashboardOptionDef optionDef = slate.isWithOption() ? slate.getOption() : null;
-                    final int sections = dashboardDef.getSections();
-                    for (int sectionIndex = 0; sectionIndex < sections; sectionIndex++) {
-                        final DashboardSectionDef dashboardSectionDef = dashboardDef.getSection(sectionIndex);
-                        final DashboardColumnsType type = dashboardSectionDef.getType();
-                        final List<DashboardSlot> slotList = new ArrayList<DashboardSlot>();
-                        final int preferredHeight = dashboardSectionDef.getHeight();
-                        for (int tileIndex = 0; tileIndex < type.columns(); tileIndex++) {
-                            Widget widget = null;
-                            DashboardTileDef dashboardTileDef = dashboardSectionDef.getTile(tileIndex);
-                            if (dashboardTileDef != null) {
-                                String renderer = null;
-                                switch (dashboardTileDef.getType()) {
-                                    case SPARKLINE:
-                                        renderer = "!fc-chart sparkLine:true binding:chart preferredHeight:"
-                                                + preferredHeight;
-                                        break;
-                                    case SIMPLE:
-                                    default:
-                                        renderer = "!fc-chart sparkLine:false binding:chart preferredHeight:"
-                                                + preferredHeight;
-                                        break;
-                                }
-
-                                widget = addExternalChildWidget(renderer);
-                                widget.setValueStore(
-                                        createValueStore(new DashboardSlotDef(dashboardTileDef, optionDef)));
+            removeAllExternalChildWidgets();
+            sectionList.clear();
+            if (dashboardDef != null) {
+                final DashboardOptionDef optionDef = slate.isWithOption() ? slate.getOption() : null;
+                final int sections = dashboardDef.getSections();
+                for (int sectionIndex = 0; sectionIndex < sections; sectionIndex++) {
+                    final DashboardSectionDef dashboardSectionDef = dashboardDef.getSection(sectionIndex);
+                    final DashboardColumnsType type = dashboardSectionDef.getType();
+                    final List<DashboardSlot> slotList = new ArrayList<DashboardSlot>();
+                    final int preferredHeight = dashboardSectionDef.getHeight();
+                    for (int tileIndex = 0; tileIndex < type.columns(); tileIndex++) {
+                        Widget widget = null;
+                        DashboardTileDef dashboardTileDef = dashboardSectionDef.getTile(tileIndex);
+                        if (dashboardTileDef != null) {
+                            String renderer = null;
+                            switch (dashboardTileDef.getType()) {
+                                case SPARKLINE:
+                                    renderer = "!fc-chart sparkLine:true binding:chart preferredHeight:"
+                                            + preferredHeight;
+                                    break;
+                                case SIMPLE:
+                                default:
+                                    renderer = "!fc-chart sparkLine:false binding:chart preferredHeight:"
+                                            + preferredHeight;
+                                    break;
                             }
 
-                            slotList.add(new DashboardSlot(type.dimension().get(tileIndex), widget));
+                            widget = addExternalChildWidget(renderer);
+                            widget.setValueStore(
+                                    createValueStore(new DashboardSlotDef(dashboardTileDef, optionDef)));
                         }
 
-                        sectionList.add(slotList);
+                        slotList.add(new DashboardSlot(type.dimension().get(tileIndex), widget));
                     }
 
+                    sectionList.add(slotList);
                 }
+
             }
 
             oldSlate = slate;

@@ -80,4 +80,10 @@ public class DashboardOptionDef implements Listable {
         return catBases.containsKey(dataSourceName);
     }
 
+    @Override
+    public String toString() {
+        return "DashboardOptionDef [name=" + name + ", description=" + description + ", label=" + label + ", catBases="
+                + catBases + "]";
+    }
+
 }
