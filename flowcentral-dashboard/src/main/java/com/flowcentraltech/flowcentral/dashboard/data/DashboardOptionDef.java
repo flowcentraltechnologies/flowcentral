@@ -46,7 +46,9 @@ public class DashboardOptionDef implements Listable {
         this.label = label;
         this.catBases = new HashMap<String, DashboardOptionCatBaseDef>();
         for (DashboardOptionCatBaseDef dashboardOptionCatBaseDef : catBaseList) {
-            catBases.put(dashboardOptionCatBaseDef.getDataSourceName(), dashboardOptionCatBaseDef);
+            for (String dataSourceName : dashboardOptionCatBaseDef.getDataSourceNames()) {
+                catBases.put(dataSourceName, dashboardOptionCatBaseDef);
+            }
         }
     }
 

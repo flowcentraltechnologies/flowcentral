@@ -5,10 +5,10 @@
 	label="$m{dashboard.label}" module="dashboard" displayIndex="-10">
 	<!-- Widgets -->
 	<widgetTypes>
-		<widgetType name="chartdatasourcelist"
+		<widgetType name="chartdatasourcelist" 
 			description="$m{dashboard.widgettype.chartdatasourcelist}"
 			dataType="string" inputType="string"
-			editor="!ui-select list:dashboardchartdatasourcelist listParams:$l{dashboardOptionId} blankOption:$m{blank.none}"
+			editor="!ui-dropdownchecklist list:dashboardchartdatasourcelist listParams:$l{dashboardOptionId} columns:3"
 			renderer="!ui-label" />
 	</widgetTypes>
 	<!-- Applets -->

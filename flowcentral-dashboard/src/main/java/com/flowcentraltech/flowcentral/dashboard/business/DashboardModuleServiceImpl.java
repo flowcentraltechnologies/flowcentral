@@ -16,6 +16,7 @@
 package com.flowcentraltech.flowcentral.dashboard.business;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
@@ -47,6 +48,7 @@ import com.tcdng.unify.core.criterion.Update;
 import com.tcdng.unify.core.data.FactoryMap;
 import com.tcdng.unify.core.data.Listable;
 import com.tcdng.unify.core.util.DataUtils;
+import com.tcdng.unify.core.util.StringUtils;
 
 /**
  * Default dashboard business service implementation.
@@ -93,7 +95,8 @@ public class DashboardModuleServiceImpl extends AbstractFlowCentralService imple
                     for (DashboardOption dashboardOption : dashboard.getOptionsList()) {
                         List<DashboardOptionCatBaseDef> catBaseList = new ArrayList<DashboardOptionCatBaseDef>();
                         for (DashboardOptionCategoryBase catBase : dashboardOption.getBaseList()) {
-                            catBaseList.add(new DashboardOptionCatBaseDef(catBase.getChartDataSource(),
+                            List<String> dataSourceNames = Arrays.asList(StringUtils.commaSplit(catBase.getChartDataSource()));
+                            catBaseList.add(new DashboardOptionCatBaseDef(dataSourceNames,
                                     InputWidgetUtils.getFilterDef(appletUtilities, null, catBase.getCategoryBase())));
                         }
 

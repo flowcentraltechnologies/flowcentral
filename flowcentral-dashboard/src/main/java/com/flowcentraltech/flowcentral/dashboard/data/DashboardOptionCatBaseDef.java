@@ -16,6 +16,8 @@
 
 package com.flowcentraltech.flowcentral.dashboard.data;
 
+import java.util.List;
+
 import com.flowcentraltech.flowcentral.application.data.FilterDef;
 
 /**
@@ -26,17 +28,17 @@ import com.flowcentraltech.flowcentral.application.data.FilterDef;
  */
 public class DashboardOptionCatBaseDef {
 
-    private String dataSourceName;
+    private List<String> dataSourceNames;
 
     private FilterDef catBaseDef;
 
-    public DashboardOptionCatBaseDef(String dataSourceName, FilterDef catBaseDef) {
-        this.dataSourceName = dataSourceName;
+    public DashboardOptionCatBaseDef(List<String> dataSourceNames, FilterDef catBaseDef) {
+        this.dataSourceNames = dataSourceNames;
         this.catBaseDef = catBaseDef;
     }
 
-    public String getDataSourceName() {
-        return dataSourceName;
+    public List<String> getDataSourceNames() {
+        return dataSourceNames;
     }
 
     public FilterDef getCatBaseDef() {
@@ -45,7 +47,7 @@ public class DashboardOptionCatBaseDef {
 
     @Override
     public String toString() {
-        return "DashboardOptionCatBaseDef [dataSourceName=" + dataSourceName + ", catBaseDef=" + catBaseDef + "]";
+        return "DashboardOptionCatBaseDef [dataSourceName=" + dataSourceNames + ", catBaseDef=" + catBaseDef + "]";
     }
 
 }

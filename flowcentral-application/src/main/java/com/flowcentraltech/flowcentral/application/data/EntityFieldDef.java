@@ -433,6 +433,10 @@ public class EntityFieldDef implements Listable, EntityFieldAttributes {
         return dataType.isTimestamp();
     }
 
+    public boolean isTime() {
+        return dataType.isDate() || dataType.isTimestamp();
+    }
+
     public boolean isBoolean() {
         return dataType.isBoolean();
     }

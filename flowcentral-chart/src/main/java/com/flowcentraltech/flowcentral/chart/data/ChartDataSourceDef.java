@@ -16,6 +16,10 @@
 
 package com.flowcentraltech.flowcentral.chart.data;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.EntityFieldDef;
 import com.flowcentraltech.flowcentral.application.data.FieldSequenceDef;
@@ -60,6 +64,8 @@ public class ChartDataSourceDef {
 
     private FieldSequenceDef groupingFieldSequenceDef;
 
+    private List<String> groupingFieldNames;
+    
     public ChartDataSourceDef(ChartDataSourceType type, ChartTimeSeriesType timeSeriesType, String longName,
             String description, String categoryField, EntityDef entityDef, FilterDef categoryBase,
             PropertySequenceDef series, PropertySequenceDef categories, FieldSequenceDef groupingFieldSequenceDef,
@@ -139,11 +145,36 @@ public class ChartDataSourceDef {
         return categories != null;
     }
 
-    public FieldSequenceDef getGroupingFieldSequenceDef() {
-        return groupingFieldSequenceDef;
+    public List<String> getGroupingFieldNames() {
+        if (groupingFieldNames == null) {
+            synchronized(this) {
+                if (groupingFieldNames == null) {
+                    groupingFieldNames = new ArrayList<String>();
+                    if (isTimeSeries()) {
+                        groupingFieldNames.add(categoryField);
+                    }
+                    
+                    if (isWithGroupingFields()) {
+                        groupingFieldNames.addAll(groupingFieldSequenceDef.getFieldNames());
+                    }
+                    
+                    groupingFieldNames = Collections.unmodifiableList(groupingFieldNames);
+                }
+            }
+        }
+        
+        return groupingFieldNames;
+    }
+
+    public boolean isTimeSeries() {
+        return timeSeriesType != null && categoryField != null && entityDef.getFieldDef(categoryField).isTime();
     }
 
     public boolean isWithGroupingFields() {
         return groupingFieldSequenceDef != null && !groupingFieldSequenceDef.isBlank();
+    }
+    
+    public boolean isWithGroupingFieldsAndOrTimeSeries() {
+        return isWithGroupingFields() || isTimeSeries();
     }
 }
