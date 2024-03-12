@@ -86,7 +86,7 @@ public class User extends BaseStatusWorkTenantEntity {
     @Column(nullable = true)
     private Date passwordExpiryDt;
 
-    @Column(type = ColumnType.TIMESTAMP_UTC, nullable = true)
+    @Column(type = ColumnType.TIMESTAMP, nullable = true)
     private Date lastLoginDt;
 
     @Column(name = "SUPERVISOR_FG")

@@ -31,13 +31,13 @@ import com.tcdng.unify.core.annotation.Policy;
 @Policy("baseaudit-entitypolicy")
 public abstract class BaseAuditEntity extends BaseVersionEntity {
 
-    @Column(type = ColumnType.TIMESTAMP_UTC)
+    @Column(type = ColumnType.TIMESTAMP)
     private Date createDt;
 
     @Column(length = 64, defaultVal = DefaultApplicationConstants.SYSTEM_LOGINID)
     private String createdBy;
 
-    @Column(type = ColumnType.TIMESTAMP_UTC)
+    @Column(type = ColumnType.TIMESTAMP)
     private Date updateDt;
 
     @Column(length = 64, defaultVal = DefaultApplicationConstants.SYSTEM_LOGINID)

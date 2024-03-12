@@ -43,7 +43,7 @@ public class EntityAuditDetails extends BaseAuditEntity {
     @Column(name = "ENTITY_ID")
     private Long entityId;
     
-    @Column(name = "EVENT_TIMESTAMP", type = ColumnType.TIMESTAMP_UTC)
+    @Column(name = "EVENT_TIMESTAMP", type = ColumnType.TIMESTAMP)
     private Date eventTimestamp;
 
     @Column(name = "AUDIT_NO", length = 24)

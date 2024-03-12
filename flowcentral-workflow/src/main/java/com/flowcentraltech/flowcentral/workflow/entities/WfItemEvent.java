@@ -44,16 +44,16 @@ public class WfItemEvent extends BaseEntity {
     @Column(length = 64)
     private String wfStepName;
 
-    @Column(type = ColumnType.TIMESTAMP_UTC)
+    @Column(type = ColumnType.TIMESTAMP)
     private Date stepDt;
 
-    @Column(type = ColumnType.TIMESTAMP_UTC, nullable = true)
+    @Column(type = ColumnType.TIMESTAMP, nullable = true)
     private Date expectedDt;
 
-    @Column(type = ColumnType.TIMESTAMP_UTC, nullable = true)
+    @Column(type = ColumnType.TIMESTAMP, nullable = true)
     private Date criticalDt;
 
-    @Column(type = ColumnType.TIMESTAMP_UTC, nullable = true)
+    @Column(type = ColumnType.TIMESTAMP, nullable = true)
     private Date actionDt;
 
     @Column(length = 64, nullable = true)

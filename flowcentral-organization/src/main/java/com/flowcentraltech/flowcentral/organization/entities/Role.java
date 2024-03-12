@@ -47,10 +47,10 @@ public class Role extends BaseStatusWorkTenantEntity {
     @Column(name = "ROLE_DESC", length = 64)
     private String description;
 
-    @Column(type = ColumnType.TIMESTAMP_UTC, transformer = "timeofday-transformer", nullable = true)
+    @Column(type = ColumnType.TIMESTAMP, transformer = "timeofday-transformer", nullable = true)
     private Date activeAfter;
 
-    @Column(type = ColumnType.TIMESTAMP_UTC, transformer = "timeofday-transformer", nullable = true)
+    @Column(type = ColumnType.TIMESTAMP, transformer = "timeofday-transformer", nullable = true)
     private Date activeBefore;
 
     @Column(length = 64, nullable = true)

@@ -42,16 +42,16 @@ public class ScheduledTask extends BaseStatusTenantEntity {
     @Column(name = "TASK_NM", length = 64)
     private String taskName;
 
-    @Column(type = ColumnType.TIMESTAMP_UTC)
+    @Column(type = ColumnType.TIMESTAMP)
     private Date startTime;
 
-    @Column(type = ColumnType.TIMESTAMP_UTC, nullable = true)
+    @Column(type = ColumnType.TIMESTAMP, nullable = true)
     private Date endTime;
 
-    @Column(type = ColumnType.TIMESTAMP_UTC)
+    @Column(type = ColumnType.TIMESTAMP)
     private Date nextExecutionOn;
 
-    @Column(type = ColumnType.TIMESTAMP_UTC, nullable = true)
+    @Column(type = ColumnType.TIMESTAMP, nullable = true)
     private Date lastExecutionOn;
 
     @Column(nullable = true)

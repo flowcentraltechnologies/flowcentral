@@ -40,6 +40,7 @@ import com.flowcentraltech.flowcentral.chart.util.ChartUtils;
 import com.flowcentraltech.flowcentral.configuration.constants.ChartCategoryDataType;
 import com.flowcentraltech.flowcentral.configuration.constants.ChartSeriesDataType;
 import com.flowcentraltech.flowcentral.configuration.constants.ChartTimeSeriesType;
+import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldDataType;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.criterion.AggregateFunction;
@@ -86,7 +87,9 @@ public class ChartDataSourceChartDetailsProvider extends AbstractChartDetailsPro
         final EntityDef entityDef = chartDataSourceDef.getEntityDef();
         final EntityFieldDef preferredCategoryEntityFieldDef = chartDataSourceDef.getCategoryEntityFieldDef();
         final ChartCategoryDataType chartCategoryType = preferredCategoryEntityFieldDef != null
-                && preferredCategoryEntityFieldDef.isTime() ? ChartCategoryDataType.DATE : ChartCategoryDataType.STRING;
+                && preferredCategoryEntityFieldDef.isTime() && !chartDataSourceDef.isMerged()
+                        ? ChartCategoryDataType.DATE
+                        : ChartCategoryDataType.STRING;
         ChartDetails.Builder cdb = ChartDetails.newBuilder(chartCategoryType);
 
         final Date now = au().getNow();
@@ -233,10 +236,13 @@ public class ChartDataSourceChartDetailsProvider extends AbstractChartDetailsPro
             final PropertySequenceDef series = chartDataSourceDef.getSeries();
             if (chartDataSourceDef.isWithGroupingFieldsAndOrTimeSeries()) {
                 final List<String> groupingFieldNames = chartDataSourceDef.getGroupingFieldNames();
-                for (String fieldName : groupingFieldNames) {
+                final int len = groupingFieldNames.size();
+                for (int i = 0; i < len; i++) {
+                    String fieldName = groupingFieldNames.get(i);
                     final EntityFieldDef entityFieldDef = entityDef.getFieldDef(fieldName);
-                    headers.add(new ChartTableColumn(entityFieldDef.getDataType(), fieldName,
-                            entityFieldDef.getFieldLabel()));
+                    headers.add(
+                            new ChartTableColumn(i == 0 && chartDataSourceDef.isMerged() ? EntityFieldDataType.STRING
+                                    : entityFieldDef.getDataType(), fieldName, entityFieldDef.getFieldLabel()));
                 }
             }
 

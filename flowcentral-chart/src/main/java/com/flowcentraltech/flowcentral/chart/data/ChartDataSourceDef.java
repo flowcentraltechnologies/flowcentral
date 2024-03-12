@@ -137,6 +137,10 @@ public class ChartDataSourceDef {
         return version;
     }
 
+    public boolean isMerged() {
+        return timeSeriesType != null && timeSeriesType.merged();
+    }
+
     public boolean isWithSeries() {
         return series != null;
     }

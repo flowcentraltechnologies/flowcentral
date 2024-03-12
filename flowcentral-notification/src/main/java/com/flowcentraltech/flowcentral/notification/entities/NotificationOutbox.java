@@ -60,13 +60,13 @@ public class NotificationOutbox extends BaseAuditTenantEntity {
     @Column
     private int attempts;
 
-    @Column(type = ColumnType.TIMESTAMP_UTC, nullable = true)
+    @Column(type = ColumnType.TIMESTAMP, nullable = true)
     private Date expiryDt;
 
-    @Column(type = ColumnType.TIMESTAMP_UTC)
+    @Column(type = ColumnType.TIMESTAMP)
     private Date nextAttemptDt;
 
-    @Column(type = ColumnType.TIMESTAMP_UTC, nullable = true)
+    @Column(type = ColumnType.TIMESTAMP, nullable = true)
     private Date sentDt;
 
     @Column(type = ColumnType.CLOB, nullable = true)
