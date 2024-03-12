@@ -31,26 +31,36 @@ import com.tcdng.unify.core.util.EnumUtils;
 @StaticList(name = "charttimeseriestypelist", description = "$m{staticlist.charttimeseriestypelist}")
 public enum ChartTimeSeriesType implements EnumConst {
 
-    HOUR("HRD", TimeSeriesType.HOUR),
-    HOUR_OVER_DAY("HRY", TimeSeriesType.HOUR),
-    DAY("DYD", TimeSeriesType.DAY),
-    DAY_OVER_WEEK("DYW", TimeSeriesType.DAY),
-    DAY_OVER_MONTH("DYM", TimeSeriesType.DAY),
-    DAY_OVER_YEAR("DYY", TimeSeriesType.DAY),
-    WEEK("WKD", TimeSeriesType.WEEK),
-    WEEK_OVER_MONTH("WKM", TimeSeriesType.WEEK),
-    WEEK_OVER_YEAR("WKY", TimeSeriesType.WEEK),
-    MONTH("MND", TimeSeriesType.MONTH),
-    MONTH_OVER_YEAR("MNY", TimeSeriesType.MONTH),
-    YEAR("YRD", TimeSeriesType.YEAR);
+    HOUR("HRD", TimeSeriesType.HOUR, false, false),
+    HOUR_OVER_DAY("HRY", TimeSeriesType.HOUR, false, true),
+    HOUR_OVER_DAY_MERGED("HRYG", TimeSeriesType.HOUR, true, true),
+    DAY("DYD", TimeSeriesType.DAY, false, false),
+    DAY_OVER_WEEK("DYW", TimeSeriesType.DAY_OF_WEEK, false, true),
+    DAY_OVER_MONTH("DYM", TimeSeriesType.DAY_OF_MONTH, false, true),
+    DAY_OVER_YEAR("DYY", TimeSeriesType.DAY_OF_YEAR, false, true),
+    DAY_OVER_WEEK_MERGED("DYWG", TimeSeriesType.DAY_OF_WEEK, true, true),
+    DAY_OVER_MONTH_MERGED("DYMG", TimeSeriesType.DAY_OF_MONTH, true, true),
+    DAY_OVER_YEAR_MERGED("DYYG", TimeSeriesType.DAY_OF_YEAR, true, true),
+    WEEK("WKD", TimeSeriesType.WEEK, false, false),
+    WEEK_MERGED("WKDG", TimeSeriesType.WEEK, true, true),
+    MONTH("MND", TimeSeriesType.MONTH, false, false),
+    MONTH_MERGED("MNDG", TimeSeriesType.MONTH, true, true),
+    YEAR("YRD", TimeSeriesType.YEAR, false, false),
+    YEAR_MERGED("YRDG", TimeSeriesType.YEAR, true, false);
 
     private final String code;
 
     private final TimeSeriesType type;
+
+    private final boolean merged;
+
+    private final boolean fill;
     
-    private ChartTimeSeriesType(String code, TimeSeriesType type) {
+    private ChartTimeSeriesType(String code, TimeSeriesType type, boolean merged, boolean fill) {
         this.code = code;
         this.type = type;
+        this.merged = merged;
+        this.fill = fill;
     }
 
     @Override
@@ -65,6 +75,14 @@ public enum ChartTimeSeriesType implements EnumConst {
 
     public TimeSeriesType type() {
         return type;
+    }
+
+    public boolean merged() {
+        return merged;
+    }
+
+    public boolean fill() {
+        return fill;
     }
     
     public static ChartTimeSeriesType fromCode(String code) {

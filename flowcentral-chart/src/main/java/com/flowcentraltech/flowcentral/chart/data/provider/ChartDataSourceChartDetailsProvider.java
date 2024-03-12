@@ -36,6 +36,7 @@ import com.flowcentraltech.flowcentral.chart.data.ChartDetails;
 import com.flowcentraltech.flowcentral.chart.data.ChartTableColumn;
 import com.flowcentraltech.flowcentral.chart.entities.ChartDataSource;
 import com.flowcentraltech.flowcentral.chart.entities.ChartDataSourceQuery;
+import com.flowcentraltech.flowcentral.chart.util.ChartUtils;
 import com.flowcentraltech.flowcentral.configuration.constants.ChartCategoryDataType;
 import com.flowcentraltech.flowcentral.configuration.constants.ChartSeriesDataType;
 import com.flowcentraltech.flowcentral.configuration.constants.ChartTimeSeriesType;
@@ -164,20 +165,25 @@ public class ChartDataSourceChartDetailsProvider extends AbstractChartDetailsPro
             final int glen = groupingFieldNames.size();
             for (String fieldName : groupingFieldNames) {
                 final EntityFieldDef entityFieldDef = entityDef.getFieldDef(fieldName);
-                ChartCategoryDataType chartCategoryType = entityFieldDef.isTime() ? ChartCategoryDataType.DATE
-                        : ChartCategoryDataType.STRING;
-                final GroupingFunction _groupingFunction = chartCategoryType.isString()
-                        ? new GroupingFunction(fieldName)
-                        : new GroupingFunction(fieldName, timeSeriesType.type());
+                final GroupingFunction _groupingFunction = entityFieldDef.isTime()
+                        ? new GroupingFunction(fieldName, timeSeriesType.type())
+                        : new GroupingFunction(fieldName);
                 groupingFunction.add(_groupingFunction);
             }
 
-            final List<GroupingAggregation> gaggregations = environment().aggregate(aggregateFunction,
-                    restriction != null ? application().queryOf(entityDef.getLongName()).addRestriction(restriction)
-                            : application().queryOf(entityDef.getLongName()).ignoreEmptyCriteria(true),
-                    groupingFunction);
-            final int columns = glen + slen;
             final boolean isTimeSeries = chartDataSourceDef.isTimeSeries();
+            List<GroupingAggregation> gaggregations = environment().aggregate(aggregateFunction,
+                    restriction != null
+                            ? application().queryOf(entityDef.getLongName()).addRestriction(restriction)
+                                    .setMerge(timeSeriesType.merged())
+                            : application().queryOf(entityDef.getLongName()).setMerge(timeSeriesType.merged())
+                                    .ignoreEmptyCriteria(true),
+                    groupingFunction);
+            if (isTimeSeries && timeSeriesType.fill()) {
+                gaggregations = ChartUtils.fill(entityDef, gaggregations, timeSeriesType);
+            }
+
+            final int columns = glen + slen;
             for (GroupingAggregation gaggregation : gaggregations) {
                 Object _cat = cat;
                 Object[] tableRow = new Object[columns];
