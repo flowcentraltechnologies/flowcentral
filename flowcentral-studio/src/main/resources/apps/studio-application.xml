@@ -3440,7 +3440,7 @@
 					<restriction type="is_not_null" field="categoryField" />
 				</onCondition>
 				<setStates>
-					<setState type="tab" target="categories" visible="false" />
+					<!--setState type="tab" target="categories" visible="false" /-->
 					<setState type="field" target="timeSeriesType"
 						visible="true" />
 				</setStates>

@@ -89,7 +89,7 @@ public class DashboardModuleServiceImpl extends AbstractFlowCentralService imple
                     DashboardDef.Builder ddb = DashboardDef.newBuilder(dashboard.getStatus(), longName,
                             dashboard.getDescription(), dashboard.getId(), dashboard.getVersionNo());
 
-                    DataUtils.sortAscending(dashboard.getOptionsList(), DashboardOption.class, "label");
+                    DataUtils.sortAscending(dashboard.getOptionsList(), DashboardOption.class, "id");
                     for (DashboardOption dashboardOption : dashboard.getOptionsList()) {
                         List<DashboardOptionCatBaseDef> catBaseList = new ArrayList<DashboardOptionCatBaseDef>();
                         for (DashboardOptionCategoryBase catBase : dashboardOption.getBaseList()) {

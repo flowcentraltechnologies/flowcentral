@@ -49,4 +49,9 @@ public class ChartTableColumn {
         return label;
     }
 
+    @Override
+    public String toString() {
+        return "ChartTableColumn [type=" + type + ", fieldName=" + fieldName + ", label=" + label + "]";
+    }
+
 }
