@@ -1022,7 +1022,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             sendUserActionAlertsByAction(currentWfStepDef, currentTransitionItem, userAction);
 
             pushToWfTransitionQueue(wfDef, wfItemId);
-            commitTransactions();
+//            commitTransactions();
             return true;
         } catch (UnifyException e) {
             logSevere(e);
