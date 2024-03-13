@@ -204,11 +204,17 @@ public class ChartDataSourceChartDetailsProvider extends AbstractChartDetailsPro
                 final List<Aggregation> aggregations = gaggregation.getAggregation();
                 for (int i = 0; i < slen; i++, c++) {
                     final PropertySequenceEntryDef sequenceDef = series.getSequenceList().get(i);
-                    final String seriesName = ensureSeries(cdb, entityDef, sequenceDef, gaggregation.getGroupings());
+                    final String seriesName = ensureSeries(cdb, entityDef, sequenceDef, gaggregation.getGroupings(),
+                            isTimeSeries ? cat : null);
                     final Number y = aggregations.get(i).getValue(Number.class);
                     tableRow[c] = y;
                     cdb.addSeriesData(seriesName, _cat, y);
-                }
+                    if (isTimeSeries) {
+                        String __cat = String.valueOf(_cat);
+                        cdb.setCategoryLabel(__cat, __cat);
+                        cdb.addCategoryInclusion(__cat);
+                    }
+               }
 
                 cdb.addTableSeries(tableRow);
             }
@@ -219,7 +225,7 @@ public class ChartDataSourceChartDetailsProvider extends AbstractChartDetailsPro
                             : application().queryOf(entityDef.getLongName()).ignoreEmptyCriteria(true));
             for (int i = 0; i < slen; i++) {
                 final PropertySequenceEntryDef sequenceDef = series.getSequenceList().get(i);
-                final String seriesName = ensureSeries(cdb, entityDef, sequenceDef, null);
+                final String seriesName = ensureSeries(cdb, entityDef, sequenceDef, null, null);
                 final Number y = aggregations.get(i).getValue(Number.class);
                 tableRow[i] = y;
                 cdb.addSeriesData(seriesName, cat, y);
@@ -258,16 +264,25 @@ public class ChartDataSourceChartDetailsProvider extends AbstractChartDetailsPro
     }
 
     private String ensureSeries(ChartDetails.Builder cdb, EntityDef entityDef, PropertySequenceEntryDef sequenceDef,
-            List<Grouping> groupings) throws UnifyException {
+            List<Grouping> groupings, Object cat) throws UnifyException {
         String seriesName = sequenceDef.getProperty();
         if (!DataUtils.isBlank(groupings)) {
-            StringBuilder sb = new StringBuilder();
-            for (Grouping grouping : groupings) {
+            StringBuilder sb = new StringBuilder(seriesName);
+            final int len = groupings.size();
+            int i = 0;
+            if (cat != null) {
                 sb.append(" ");
-                sb.append(grouping.getAsString());
+                sb.append(cat);
+                i++;
+            }
+
+            for (; i < len; i++) {
+                sb.append(" ");
+                sb.append(groupings.get(i).getAsString());
             }
 
             seriesName = sb.toString();
+            cdb.addSeriesInclusion(seriesName);
         }
 
         if (!cdb.isWithSeries(seriesName)) {

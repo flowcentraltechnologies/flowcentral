@@ -221,8 +221,10 @@ public class ChartWriter extends AbstractWidgetWriter {
                             configuration.getCatBase(chartDataSourceDef.getLongName()),
                             appletUtilities.specialParamProvider(), chartModuleService.getNow());
                 }
-
-                cache.put(key, chartDetails = provider.provide(rule, restriction));
+                
+                // TODO
+                chartDetails = provider.provide(rule, restriction);
+                //cache.put(key, chartDetails = provider.provide(rule, restriction));
             }
 
             return chartDetails;
