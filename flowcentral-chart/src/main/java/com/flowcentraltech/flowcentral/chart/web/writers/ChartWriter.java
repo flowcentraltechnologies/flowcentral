@@ -222,9 +222,7 @@ public class ChartWriter extends AbstractWidgetWriter {
                             appletUtilities.specialParamProvider(), chartModuleService.getNow());
                 }
                 
-                // TODO
-                chartDetails = provider.provide(rule, restriction);
-                //cache.put(key, chartDetails = provider.provide(rule, restriction));
+                cache.put(key, chartDetails = provider.provide(rule, restriction));
             }
 
             return chartDetails;
