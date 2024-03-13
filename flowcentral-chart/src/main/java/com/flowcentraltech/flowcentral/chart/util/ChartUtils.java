@@ -19,7 +19,9 @@ package com.flowcentraltech.flowcentral.chart.util;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -278,16 +280,21 @@ public final class ChartUtils {
                 case DAY:
                     break;
                 case DAY_OVER_MONTH:
+                    filler = new DayOverMonthFiller();
                     break;
                 case DAY_OVER_MONTH_MERGED:
+                    filler = DayOverMonthMergeFiller.DAY_OVER_MONTH_MERGE_FILLER;
                     break;
                 case DAY_OVER_WEEK:
+                    filler = new DayOverWeekFiller();
                     break;
                 case DAY_OVER_WEEK_MERGED:
+                    filler = DayOverWeekMergeFiller.DAY_OVER_WEEK_MERGE_FILLER;
                     break;
                 case DAY_OVER_YEAR:
                     break;
                 case DAY_OVER_YEAR_MERGED:
+                    filler = DayOverYearMergeFiller.DAY_OVER_YEAR_MERGE_FILLER;
                     break;
                 case HOUR:
                     break;
@@ -295,14 +302,17 @@ public final class ChartUtils {
                     filler = new HourOverDayFiller();
                     break;
                 case HOUR_OVER_DAY_MERGED:
+                    filler = HourOverDayMergeFiller.HOUR_OVER_DAY_MERGE_FILLER;
                     break;
                 case MONTH:
                     break;
                 case MONTH_MERGED:
+                    filler = MonthMergeFiller.MONTH_MERGE_FILLER;
                     break;
                 case WEEK:
                     break;
                 case WEEK_MERGED:
+                    filler = WeekMergeFiller.WEEK_MERGE_FILLER;
                     break;
                 case YEAR:
                     break;
@@ -320,7 +330,145 @@ public final class ChartUtils {
         return gaggregations;
     }
 
-    private static abstract class Filler {
+    private static interface Filler {
+
+        List<GroupingAggregation> fill(EntityDef entityDef, List<GroupingAggregation> gaggregations)
+                throws UnifyException;
+    }
+
+    private static class WeekMergeFiller extends AbstractMergeFiller {
+
+        public static WeekMergeFiller WEEK_MERGE_FILLER = new WeekMergeFiller();
+
+        private WeekMergeFiller() {
+            super(1, 54, 53, 2);
+        }
+    }
+
+    private static class MonthMergeFiller extends AbstractMergeFiller {
+
+        public static MonthMergeFiller MONTH_MERGE_FILLER = new MonthMergeFiller();
+
+        private MonthMergeFiller() {
+            super(1, 12, 12, 2);
+        }
+    }
+
+    private static class DayOverYearMergeFiller extends AbstractMergeFiller {
+
+        public static DayOverYearMergeFiller DAY_OVER_YEAR_MERGE_FILLER = new DayOverYearMergeFiller();
+
+        private DayOverYearMergeFiller() {
+            super(1, 366, 365, 3);
+        }
+    }
+
+    private static class DayOverWeekMergeFiller extends AbstractMergeFiller {
+
+        public static DayOverWeekMergeFiller DAY_OVER_WEEK_MERGE_FILLER = new DayOverWeekMergeFiller();
+
+        private DayOverWeekMergeFiller() {
+            super(1, 7, 7, 1);
+        }
+    }
+
+    private static class DayOverMonthMergeFiller extends AbstractMergeFiller {
+
+        public static DayOverMonthMergeFiller DAY_OVER_MONTH_MERGE_FILLER = new DayOverMonthMergeFiller();
+
+        private DayOverMonthMergeFiller() {
+            super(1, 31, 28, 2);
+        }
+    }
+
+    private static class HourOverDayMergeFiller extends AbstractMergeFiller {
+
+        public static HourOverDayMergeFiller HOUR_OVER_DAY_MERGE_FILLER = new HourOverDayMergeFiller();
+
+        private HourOverDayMergeFiller() {
+            super(0, 23, 23, 2);
+        }
+    }
+
+    private static class HourOverDayFiller extends AbstractSpanFiller {
+
+        public HourOverDayFiller() {
+            super(new int[] { Calendar.HOUR_OF_DAY }, new int[] { 0 }, Calendar.DAY_OF_YEAR, Calendar.HOUR_OF_DAY, 0,
+                    23);
+        }
+    }
+
+    private static class DayOverWeekFiller extends AbstractSpanFiller {
+
+        public DayOverWeekFiller() {
+            super(new int[] { Calendar.DAY_OF_WEEK, Calendar.HOUR_OF_DAY }, new int[] { 1, 0 }, Calendar.WEEK_OF_YEAR,
+                    Calendar.DAY_OF_WEEK, 1, 7);
+        }
+    }
+
+    private static class DayOverMonthFiller extends AbstractSpanFiller {
+
+        public DayOverMonthFiller() {
+            super(new int[] { Calendar.DAY_OF_MONTH, Calendar.HOUR_OF_DAY }, new int[] { 1, 0 }, Calendar.MONTH,
+                    Calendar.DAY_OF_MONTH, 1, 31);
+        }
+    }
+
+    private static abstract class AbstractMergeFiller implements Filler {
+
+        private final List<String> range;
+
+        private final int minend;
+
+        private final int padding;
+
+        public AbstractMergeFiller(int start, int end, int minend, int padding) {
+            List<String> _range = new ArrayList<String>();
+            for (int i = start; i <= end; i++) {
+                _range.add(String.format("%0" + padding + "d", i));
+            }
+
+            this.minend = minend;
+            this.padding = padding;
+            this.range = Collections.unmodifiableList(_range);
+        }
+
+        @Override
+        public List<GroupingAggregation> fill(EntityDef entityDef, List<GroupingAggregation> gaggregations)
+                throws UnifyException {
+            List<GroupingAggregation> _gaggregations = new ArrayList<GroupingAggregation>();
+            Map<String, GroupingAggregation> inputs = new HashMap<String, GroupingAggregation>();
+            int _minend = minend;
+            for (GroupingAggregation gaggregation : gaggregations) {
+                String cat = gaggregation.getGroupingAsString(0);
+                inputs.put(cat, gaggregation);
+
+                int _cat = Integer.parseInt(cat);
+                if (_minend < _cat) {
+                    _minend = _cat;
+                }
+            }
+
+            String _mcat = String.format("%0" + padding + "d", _minend);
+            List<Aggregation> fillerAggregation = ChartUtils.getFillerAggregation(entityDef, gaggregations);
+            for (String cat : range) {
+                GroupingAggregation gaggregation = inputs.get(cat);
+                if (gaggregation == null) {
+                    gaggregation = new GroupingAggregation(Arrays.asList(new Grouping(cat)), fillerAggregation);
+                }
+
+                _gaggregations.add(gaggregation);
+                if (_mcat.equals(cat)) {
+                    break;
+                }
+            }
+
+            return _gaggregations;
+        }
+
+    }
+
+    private static abstract class AbstractSpanFiller implements Filler {
 
         private final Calendar cal = Calendar.getInstance();
 
@@ -336,7 +484,8 @@ public final class ChartUtils {
 
         private final int endVal;
 
-        public Filler(int[] clearFields, int[] clearVals, int nextField, int valueField, int initialVal, int endVal) {
+        public AbstractSpanFiller(int[] clearFields, int[] clearVals, int nextField, int valueField, int initialVal,
+                int endVal) {
             this.clearFields = clearFields;
             this.clearVals = clearVals;
             this.nextField = nextField;
@@ -345,6 +494,7 @@ public final class ChartUtils {
             this.endVal = endVal;
         }
 
+        @Override
         public List<GroupingAggregation> fill(EntityDef entityDef, List<GroupingAggregation> gaggregations)
                 throws UnifyException {
             List<GroupingAggregation> _gaggregations = new ArrayList<GroupingAggregation>();
@@ -356,13 +506,7 @@ public final class ChartUtils {
                 inputs.put(grouping.getActual(), gaggregation);
             }
 
-            List<Aggregation> fillerAggregation = new ArrayList<Aggregation>();
-            for (Aggregation aggregation : gaggregations.get(0).getAggregation()) {
-                EntityFieldDef entityFieldDef = entityDef.getFieldDef(aggregation.getFieldName());
-                fillerAggregation.add(new Aggregation(aggregation.getType(), aggregation.getFieldName(),
-                        DataUtils.convert(entityFieldDef.getDataType().dataType().javaClass(), 0)));
-            }
-
+            List<Aggregation> fillerAggregation = ChartUtils.getFillerAggregation(entityDef, gaggregations);
             Date workingDate = clear(gaggregations.get(0).getGroupingAsDate(0));
             Date endDate = clear(gaggregations.get(gaggregations.size() - 1).getGroupingAsDate(0));
             while (workingDate.compareTo(endDate) <= 0) {
@@ -454,12 +598,15 @@ public final class ChartUtils {
         }
     }
 
-    private static class HourOverDayFiller extends Filler {
-
-        public HourOverDayFiller() {
-            super(new int[] { Calendar.HOUR_OF_DAY }, new int[] { 0 }, Calendar.DAY_OF_YEAR, Calendar.HOUR_OF_DAY, 0,
-                    23);
+    private static List<Aggregation> getFillerAggregation(EntityDef entityDef, List<GroupingAggregation> gaggregations)
+            throws UnifyException {
+        List<Aggregation> fillerAggregation = new ArrayList<Aggregation>();
+        for (Aggregation aggregation : gaggregations.get(0).getAggregation()) {
+            EntityFieldDef entityFieldDef = entityDef.getFieldDef(aggregation.getFieldName());
+            fillerAggregation.add(new Aggregation(aggregation.getType(), aggregation.getFieldName(),
+                    DataUtils.convert(entityFieldDef.getDataType().dataType().javaClass(), 0)));
         }
 
+        return fillerAggregation;
     }
 }
