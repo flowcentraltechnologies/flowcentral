@@ -18,7 +18,9 @@ package com.flowcentraltech.flowcentral.chart.data;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -60,9 +62,14 @@ public class ChartDetails {
 
     private List<Object[]> tableSeries;
 
+    private Set<String> seriesInclusion;
+
+    private Set<String> categoryInclusion;
+
     private ChartDetails(String title, String subTitle, int titleOffsetX, int titleFontSize, int subTitleOffsetX,
             int subTitleFontSize, ChartCategoryDataType categoryType, Map<Object, String> categoryLabels,
-            Map<String, AbstractSeries<?, ?>> series, ChartTableColumn[] headers, List<Object[]> tableSeries) {
+            Map<String, AbstractSeries<?, ?>> series, ChartTableColumn[] headers, List<Object[]> tableSeries,
+            Set<String> seriesInclusion, Set<String> categoryInclusion) {
         this.title = title;
         this.subTitle = subTitle;
         this.titleOffsetX = titleOffsetX;
@@ -74,6 +81,8 @@ public class ChartDetails {
         this.series = series;
         this.headers = headers;
         this.tableSeries = tableSeries;
+        this.seriesInclusion = seriesInclusion;
+        this.categoryInclusion = categoryInclusion;
     }
 
     public String getTitle() {
@@ -120,6 +129,22 @@ public class ChartDetails {
         return series;
     }
 
+    public Set<String> getSeriesInclusion() {
+        return seriesInclusion;
+    }
+
+    public boolean isWithSeriesInclusion() {
+        return !DataUtils.isBlank(seriesInclusion);
+    }
+
+    public Set<String> getCategoryInclusion() {
+        return categoryInclusion;
+    }
+
+    public boolean isWithCategoryInclusion() {
+        return !DataUtils.isBlank(categoryInclusion);
+    }
+
     public Map<String, AbstractSeries<?, ?>> getSeries(Set<String> inclusion) {
         if (!inclusion.isEmpty()) {
             Map<String, AbstractSeries<?, ?>> _series = new HashMap<String, AbstractSeries<?, ?>>();
@@ -128,10 +153,10 @@ public class ChartDetails {
                     _series.put(entry.getKey(), entry.getValue());
                 }
             }
-            
+
             return _series;
         }
-        
+
         return series;
     }
 
@@ -183,10 +208,16 @@ public class ChartDetails {
 
         private List<Object[]> tableSeries;
 
+        private Set<String> seriesInclusion;
+
+        private Set<String> categoryInclusion;
+
         public Builder(ChartCategoryDataType categoryType) {
             this.categoryType = categoryType;
             this.series = new LinkedHashMap<String, AbstractSeries<?, ?>>();
             this.categoryLabels = new HashMap<Object, String>();
+            this.seriesInclusion = new HashSet<String>();
+            this.categoryInclusion = new HashSet<String>();
         }
 
         public Builder title(String title) {
@@ -239,6 +270,16 @@ public class ChartDetails {
             return this.headers != null;
         }
 
+        public Builder addSeriesInclusion(String series) {
+            seriesInclusion.add(series);
+            return this;
+        }
+
+        public Builder addCategoryInclusion(String category) {
+            categoryInclusion.add(category);
+            return this;
+        }
+
         public Builder setCategoryLabel(Object name, String label) {
             categoryLabels.put(name, label);
             return this;
@@ -289,7 +330,8 @@ public class ChartDetails {
 
         public ChartDetails build() throws UnifyException {
             return new ChartDetails(title, subTitle, titleOffsetX, titleFontSize, subTitleOffsetX, subTitleFontSize,
-                    categoryType, DataUtils.unmodifiableMap(categoryLabels), series, headers, tableSeries);
+                    categoryType, DataUtils.unmodifiableMap(categoryLabels), series, headers, tableSeries,
+                    Collections.unmodifiableSet(seriesInclusion), Collections.unmodifiableSet(categoryInclusion));
         }
 
         private AbstractSeries<?, ?> createSeries(ChartCategoryDataType categoryType, ChartSeriesDataType dataType,

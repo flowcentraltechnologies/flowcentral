@@ -18,7 +18,9 @@ package com.flowcentraltech.flowcentral.dashboard.data;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import com.flowcentraltech.flowcentral.application.data.BaseApplicationEntityDef;
@@ -29,6 +31,7 @@ import com.flowcentraltech.flowcentral.configuration.constants.DashboardColumnsT
 import com.flowcentraltech.flowcentral.configuration.constants.DashboardTileType;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.util.DataUtils;
+import com.tcdng.unify.core.util.StringUtils;
 
 /**
  * Dashboard definition object.
@@ -40,13 +43,52 @@ public class DashboardDef extends BaseApplicationEntityDef {
 
     private RecordStatus status;
 
+    private Map<String, DashboardOptionDef> options;
+
+    private List<DashboardOptionDef> optionList;
+
     private List<DashboardSectionDef> sectionList;
 
-    private DashboardDef(RecordStatus status, List<DashboardSectionDef> sectionList,
-            ApplicationEntityNameParts nameParts, String description, Long id, long version) {
+    private DashboardDef(RecordStatus status, Map<String, DashboardOptionDef> options,
+            List<DashboardSectionDef> sectionList, ApplicationEntityNameParts nameParts, String description, Long id,
+            long version) {
         super(nameParts, description, id, version);
         this.status = status;
+        this.options = options;
         this.sectionList = sectionList;
+    }
+
+    public boolean isOption(String name) {
+        return !StringUtils.isBlank(name) && options.containsKey(name);
+    }
+
+    public DashboardOptionDef getFirstOption() {
+        return !options.isEmpty() ? getOptionList().get(0) : null;
+    }
+
+    public boolean isWithOptions() {
+        return !options.isEmpty();
+    }
+
+    public DashboardOptionDef getOption(String name) {
+        DashboardOptionDef option = options.get(name);
+        if (option == null) {
+            throw new IllegalArgumentException("Option with name [" + name + "] is unknown.");
+        }
+
+        return option;
+    }
+
+    public List<DashboardOptionDef> getOptionList() {
+        if (optionList == null) {
+            synchronized (this) {
+                if (optionList == null) {
+                    optionList = new ArrayList<DashboardOptionDef>(options.values());
+                }
+            }
+        }
+
+        return optionList;
     }
 
     public int getSections() {
@@ -73,6 +115,8 @@ public class DashboardDef extends BaseApplicationEntityDef {
 
         private RecordStatus status;
 
+        private Map<String, DashboardOptionDef> options;
+
         private List<Section> sections;
 
         private String longName;
@@ -89,7 +133,13 @@ public class DashboardDef extends BaseApplicationEntityDef {
             this.description = description;
             this.id = id;
             this.version = version;
+            this.options = new LinkedHashMap<String, DashboardOptionDef>();
             this.sections = new ArrayList<Section>();
+        }
+
+        public Builder addOption(DashboardOptionDef optionDef) {
+            options.put(optionDef.getName(), optionDef);
+            return this;
         }
 
         public Builder addSection(DashboardColumnsType type, Integer height) {
@@ -167,7 +217,7 @@ public class DashboardDef extends BaseApplicationEntityDef {
                         DataUtils.unmodifiableList(section.getTileList())));
             }
 
-            return new DashboardDef(status, DataUtils.unmodifiableList(sections),
+            return new DashboardDef(status, options, DataUtils.unmodifiableList(sections),
                     ApplicationNameUtils.getApplicationEntityNameParts(longName), description, id, version);
         }
     }

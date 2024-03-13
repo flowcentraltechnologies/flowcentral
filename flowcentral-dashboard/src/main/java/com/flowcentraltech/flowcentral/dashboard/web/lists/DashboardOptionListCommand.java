@@ -28,25 +28,25 @@ import com.tcdng.unify.core.data.Listable;
 import com.tcdng.unify.core.list.StringParam;
 
 /**
- * Dashboard chart data source list command.
+ * Dashboard option list command.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@Component("dashboardchartdatasourcelist")
-public class DashboardChartDatasourceListCommand extends AbstractDashboardListCommand<StringParam> {
+@Component("dashboardoptionlist")
+public class DashboardOptionListCommand extends AbstractDashboardListCommand<StringParam> {
 
     @Configurable
     private DashboardModuleService dashboardModuleService;
 
-    public DashboardChartDatasourceListCommand() {
+    public DashboardOptionListCommand() {
         super(StringParam.class);
     }
 
     @Override
     public List<? extends Listable> execute(Locale locale, StringParam param) throws UnifyException {
         if (param.isPresent()) {
-            return dashboardModuleService.getDashboardOptionChartDataSourceList(param.getValue());
+            return dashboardModuleService.getDashboardOptionList(param.getValue());
         }
 
         return Collections.emptyList();

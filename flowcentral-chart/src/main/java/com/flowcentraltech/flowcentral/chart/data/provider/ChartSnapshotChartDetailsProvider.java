@@ -48,4 +48,9 @@ public class ChartSnapshotChartDetailsProvider extends AbstractChartDetailsProvi
                 .addSelect("name", "description").ignoreEmptyCriteria(true));
     }
 
+    @Override
+    public boolean isUsesChartDataSource() {
+        return false;
+    }
+
 }

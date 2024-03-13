@@ -19,7 +19,12 @@ package com.flowcentraltech.flowcentral.chart.web.writers;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
+import com.flowcentraltech.flowcentral.application.data.EntityDef;
+import com.flowcentraltech.flowcentral.application.util.InputWidgetUtils;
 import com.flowcentraltech.flowcentral.chart.business.ChartModuleService;
+import com.flowcentraltech.flowcentral.chart.data.ChartConfiguration;
+import com.flowcentraltech.flowcentral.chart.data.ChartDataSourceDef;
 import com.flowcentraltech.flowcentral.chart.data.ChartDef;
 import com.flowcentraltech.flowcentral.chart.data.ChartDetails;
 import com.flowcentraltech.flowcentral.chart.data.ChartDetailsProvider;
@@ -31,6 +36,7 @@ import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.Writes;
+import com.tcdng.unify.core.criterion.Restriction;
 import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.ui.widget.EventHandler;
 import com.tcdng.unify.web.ui.widget.ResponseWriter;
@@ -55,12 +61,17 @@ public class ChartWriter extends AbstractWidgetWriter {
     @Configurable
     private ChartModuleService chartModuleService;
 
+    @Configurable
+    private AppletUtilities appletUtilities;
+
     @Override
     protected void doWriteStructureAndContent(ResponseWriter writer, Widget widget) throws UnifyException {
         ChartWidget chartWidget = (ChartWidget) widget;
+        final ChartConfiguration configuration = chartWidget.getChartConfiguration();
         final String chartLongName = chartWidget.getValue(String.class);
         ChartDef chartDef = chartModuleService.getChartDef(chartLongName);
-        ChartDetails chartDetails = getChartDetailsCache().getChartDetails(chartDef.getProvider(), chartDef.getRule());
+        ChartDetails chartDetails = getChartDetailsCache().getChartDetails(configuration, chartDef.getProvider(),
+                chartDef.getRule());
         writer.write("<div");
         writeTagAttributes(writer, chartWidget);
         writer.write(">");
@@ -163,7 +174,7 @@ public class ChartWriter extends AbstractWidgetWriter {
 
         final String chartLongName = chartWidget.getValue(String.class);
         ChartDef chartDef = chartModuleService.getChartDef(chartLongName);
-        if (chartDef.getType().custom()) {
+        if (chartDef.getType().isFlowCentralType()) {
 
         } else {
             writer.beginFunction("fux.rigChart");
@@ -196,11 +207,22 @@ public class ChartWriter extends AbstractWidgetWriter {
             this.cache = new HashMap<String, ChartDetails>();
         }
 
-        public ChartDetails getChartDetails(String providerName, String rule) throws UnifyException {
+        public ChartDetails getChartDetails(ChartConfiguration configuration, String providerName, String rule)
+                throws UnifyException {
             final String key = providerName + (!StringUtils.isBlank(rule) ? "." + rule : "");
             ChartDetails chartDetails = cache.get(key);
             if (chartDetails == null) {
-                cache.put(key, chartDetails = ((ChartDetailsProvider) getComponent(providerName)).provide(rule));
+                Restriction restriction = null;
+                ChartDetailsProvider provider = (ChartDetailsProvider) getComponent(providerName);
+                if (provider.isUsesChartDataSource()) {
+                    final ChartDataSourceDef chartDataSourceDef = chartModuleService.getChartDataSourceDef(rule);
+                    final EntityDef entityDef = chartDataSourceDef.getEntityDef();
+                    restriction = InputWidgetUtils.getRestriction(entityDef,
+                            configuration.getCatBase(chartDataSourceDef.getLongName()),
+                            appletUtilities.specialParamProvider(), chartModuleService.getNow());
+                }
+                
+                cache.put(key, chartDetails = provider.provide(rule, restriction));
             }
 
             return chartDetails;

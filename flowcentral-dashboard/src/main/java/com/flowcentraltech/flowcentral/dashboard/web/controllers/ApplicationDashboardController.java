@@ -47,7 +47,7 @@ import com.tcdng.unify.web.ui.AbstractPageController;
 @Component("/application/dashboard")
 @UplBinding("web/dashboard/upl/applicationdashboard.upl")
 @ResultMappings({ @ResultMapping(name = "refreshSlate",
-        response = { "!hidepopupresponse", "!refreshpanelresponse panels:$l{dashboardSlatePanel}" }) })
+        response = { "!hidepopupresponse", "!refreshpanelresponse panels:$l{basePanel}" }) })
 public class ApplicationDashboardController extends AbstractPageController<ApplicationDashboardPageBean> {
 
     @Configurable
@@ -72,13 +72,28 @@ public class ApplicationDashboardController extends AbstractPageController<Appli
         if (!StringUtils.isBlank(pageBean.getSelDashboard())) {
             DashboardDef dashboardDef = dashboardModuleService.getDashboardDef(pageBean.getSelDashboard());
             if (dashboardDef.isActive()) {
-                pageBean.setDashboardSlate(new DashboardSlate(dashboardDef));
+                if (!dashboardDef.isOption(pageBean.getSelOption())) {
+                    pageBean.setSelOption(null);
+                }
+
+                if (StringUtils.isBlank(pageBean.getSelOption()) && dashboardDef.isWithOptions()) {
+                    pageBean.setSelOption(dashboardDef.getFirstOption().getName());
+                }
+
+                pageBean.setDashboardSlate(new DashboardSlate(dashboardDef, pageBean.getSelOption()));
             } else {
                 pageBean.setSelDashboard(null);
+                pageBean.setSelOption(null);
             }
         }
 
+        setPageWidgetDisabled("optionSelect", StringUtils.isBlank(pageBean.getSelOption()));
         return refreshSlate();
+    }
+
+    @Action
+    public String loadOption() throws UnifyException {
+        return loadDashboardSlate();
     }
 
     @Override

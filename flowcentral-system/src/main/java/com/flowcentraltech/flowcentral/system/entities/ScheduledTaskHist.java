@@ -42,10 +42,10 @@ public class ScheduledTaskHist extends BaseEntity {
     @ForeignKey
     private TaskStatus taskStatus;
 
-    @Column(type = ColumnType.TIMESTAMP_UTC)
+    @Column(type = ColumnType.TIMESTAMP)
     private Date startedOn;
 
-    @Column(type = ColumnType.TIMESTAMP_UTC, nullable = true)
+    @Column(type = ColumnType.TIMESTAMP, nullable = true)
     private Date finishedOn;
 
     @Column(type = ColumnType.CLOB, nullable = true)

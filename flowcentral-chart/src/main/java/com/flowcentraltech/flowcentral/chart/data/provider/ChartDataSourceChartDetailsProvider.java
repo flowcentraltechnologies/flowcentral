@@ -36,9 +36,11 @@ import com.flowcentraltech.flowcentral.chart.data.ChartDetails;
 import com.flowcentraltech.flowcentral.chart.data.ChartTableColumn;
 import com.flowcentraltech.flowcentral.chart.entities.ChartDataSource;
 import com.flowcentraltech.flowcentral.chart.entities.ChartDataSourceQuery;
+import com.flowcentraltech.flowcentral.chart.util.ChartUtils;
 import com.flowcentraltech.flowcentral.configuration.constants.ChartCategoryDataType;
 import com.flowcentraltech.flowcentral.configuration.constants.ChartSeriesDataType;
 import com.flowcentraltech.flowcentral.configuration.constants.ChartTimeSeriesType;
+import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldDataType;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.criterion.AggregateFunction;
@@ -75,12 +77,17 @@ public class ChartDataSourceChartDetailsProvider extends AbstractChartDetailsPro
         return ApplicationNameUtils.getListableList(sourceList);
     }
 
+    @Override
+    public boolean isUsesChartDataSource() {
+        return true;
+    }
+
     private ChartDetails getChartData(ChartDataSourceDef chartDataSourceDef, Restriction erestriction)
             throws UnifyException {
         final EntityDef entityDef = chartDataSourceDef.getEntityDef();
-        final EntityFieldDef categoryEntityFieldDef = chartDataSourceDef.getCategoryEntityFieldDef();
-        final ChartCategoryDataType chartCategoryType = categoryEntityFieldDef != null
-                && (categoryEntityFieldDef.isDate() || categoryEntityFieldDef.isTimestamp())
+        final EntityFieldDef preferredCategoryEntityFieldDef = chartDataSourceDef.getCategoryEntityFieldDef();
+        final ChartCategoryDataType chartCategoryType = preferredCategoryEntityFieldDef != null
+                && preferredCategoryEntityFieldDef.isTime() && !chartDataSourceDef.isMerged()
                         ? ChartCategoryDataType.DATE
                         : ChartCategoryDataType.STRING;
         ChartDetails.Builder cdb = ChartDetails.newBuilder(chartCategoryType);
@@ -93,9 +100,20 @@ public class ChartDataSourceChartDetailsProvider extends AbstractChartDetailsPro
             aggregateFunction.add(entitySeriesDef.getType().function(entitySeriesDef.getFieldName()));
         }
 
-        Restriction baseRestriction = InputWidgetUtils.getRestriction(entityDef,
-                chartDataSourceDef.getCategoryBase(), au().specialParamProvider(), now);
-        if (chartDataSourceDef.isWithCategories()) {
+        Restriction baseRestriction = InputWidgetUtils.getRestriction(entityDef, chartDataSourceDef.getCategoryBase(),
+                au().specialParamProvider(), now);
+        if (preferredCategoryEntityFieldDef != null) {
+            final Object cat = preferredCategoryEntityFieldDef.getFieldName();
+            if (erestriction != null) {
+                if (baseRestriction != null) {
+                    baseRestriction = new And().add(baseRestriction).add(erestriction);
+                } else {
+                    baseRestriction = erestriction;
+                }
+            }
+
+            performAggregation(cdb, chartDataSourceDef, aggregateFunction, now, baseRestriction, cat);
+        } else if (chartDataSourceDef.isWithCategories()) {
             final PropertySequenceDef categories = chartDataSourceDef.getCategories();
             if (!categories.isBlank()) {
                 for (PropertySequenceEntryDef propertySequenceEntryDef : categories.getSequenceList()) {
@@ -105,7 +123,7 @@ public class ChartDataSourceChartDetailsProvider extends AbstractChartDetailsPro
                     final String catlabel = !StringUtils.isBlank(propertySequenceEntryDef.getLabel())
                             ? propertySequenceEntryDef.getLabel()
                             : entityCategoryDef.getLabel();
-                   Restriction restriction = InputWidgetUtils.getRestriction(entityDef,
+                    Restriction restriction = InputWidgetUtils.getRestriction(entityDef,
                             entityCategoryDef.getFilterDef(), au().specialParamProvider(), now);
                     if (restriction != null) {
                         if (baseRestriction != null) {
@@ -127,17 +145,6 @@ public class ChartDataSourceChartDetailsProvider extends AbstractChartDetailsPro
                     performAggregation(cdb, chartDataSourceDef, aggregateFunction, now, restriction, cat);
                 }
             }
-        } else if (categoryEntityFieldDef != null) {
-            final Object cat = categoryEntityFieldDef.getFieldName();
-            if (erestriction != null) {
-                if (baseRestriction != null) {
-                    baseRestriction = new And().add(baseRestriction).add(erestriction);
-                } else {
-                    baseRestriction = erestriction;
-                }
-            }
-
-            performAggregation(cdb, chartDataSourceDef, aggregateFunction, now, baseRestriction, cat);
         }
 
         return cdb.build();
@@ -149,10 +156,10 @@ public class ChartDataSourceChartDetailsProvider extends AbstractChartDetailsPro
         final EntityDef entityDef = chartDataSourceDef.getEntityDef();
         final PropertySequenceDef series = chartDataSourceDef.getSeries();
         final int slen = series.getSequenceList().size();
-        
+
         ensureTableSeries(cdb, chartDataSourceDef);
-        if (chartDataSourceDef.isWithGroupingFields()) {
-            final List<String> groupingFieldNames = chartDataSourceDef.getGroupingFieldSequenceDef().getFieldNames();
+        if (chartDataSourceDef.isWithGroupingFieldsAndOrTimeSeries()) {
+            final List<String> groupingFieldNames = chartDataSourceDef.getGroupingFieldNames();
             final ChartTimeSeriesType timeSeriesType = chartDataSourceDef.getTimeSeriesType() != null
                     ? chartDataSourceDef.getTimeSeriesType()
                     : ChartTimeSeriesType.DAY_OVER_WEEK;
@@ -161,37 +168,53 @@ public class ChartDataSourceChartDetailsProvider extends AbstractChartDetailsPro
             final int glen = groupingFieldNames.size();
             for (String fieldName : groupingFieldNames) {
                 final EntityFieldDef entityFieldDef = entityDef.getFieldDef(fieldName);
-                ChartCategoryDataType chartCategoryType = entityFieldDef.isDate() || entityFieldDef.isTimestamp()
-                        ? ChartCategoryDataType.DATE
-                        : ChartCategoryDataType.STRING;
-                final GroupingFunction _groupingFunction = chartCategoryType.isString()
-                        ? new GroupingFunction(fieldName)
-                        : new GroupingFunction(fieldName, timeSeriesType.type());
+                final GroupingFunction _groupingFunction = entityFieldDef.isTime()
+                        ? new GroupingFunction(fieldName, timeSeriesType.type())
+                        : new GroupingFunction(fieldName);
                 groupingFunction.add(_groupingFunction);
             }
 
-            final List<GroupingAggregation> gaggregations = environment().aggregate(aggregateFunction,
-                    restriction != null ? application().queryOf(entityDef.getLongName()).addRestriction(restriction)
-                            : application().queryOf(entityDef.getLongName()).ignoreEmptyCriteria(true),
+            final boolean isTimeSeries = chartDataSourceDef.isTimeSeries();
+            List<GroupingAggregation> gaggregations = environment().aggregate(aggregateFunction,
+                    restriction != null
+                            ? application().queryOf(entityDef.getLongName()).addRestriction(restriction)
+                                    .setMerge(timeSeriesType.merged())
+                            : application().queryOf(entityDef.getLongName()).setMerge(timeSeriesType.merged())
+                                    .ignoreEmptyCriteria(true),
                     groupingFunction);
+            if (isTimeSeries && timeSeriesType.fill()) {
+                gaggregations = ChartUtils.fill(entityDef, gaggregations, timeSeriesType);
+            }
+
             final int columns = glen + slen;
             for (GroupingAggregation gaggregation : gaggregations) {
+                Object _cat = cat;
                 Object[] tableRow = new Object[columns];
                 int c = 0;
                 for (; c < glen; c++) {
                     final Object _x = gaggregation.isDateGrouping(c) ? gaggregation.getGroupingAsDate(c)
                             : gaggregation.getGroupingAsString(c);
                     tableRow[c] = _x;
+
+                    if (isTimeSeries && c == 0) {
+                        _cat = _x;
+                    }
                 }
 
                 final List<Aggregation> aggregations = gaggregation.getAggregation();
                 for (int i = 0; i < slen; i++, c++) {
                     final PropertySequenceEntryDef sequenceDef = series.getSequenceList().get(i);
-                    final String seriesName = ensureSeries(cdb, entityDef, sequenceDef, gaggregation.getGroupings());
+                    final String seriesName = ensureSeries(cdb, entityDef, sequenceDef, gaggregation.getGroupings(),
+                            isTimeSeries ? cat : null);
                     final Number y = aggregations.get(i).getValue(Number.class);
                     tableRow[c] = y;
-                    cdb.addSeriesData(seriesName, cat, y);
-                }
+                    cdb.addSeriesData(seriesName, _cat, y);
+                    if (isTimeSeries) {
+                        String __cat = String.valueOf(_cat);
+                        cdb.setCategoryLabel(__cat, __cat);
+                        cdb.addCategoryInclusion(__cat);
+                    }
+               }
 
                 cdb.addTableSeries(tableRow);
             }
@@ -202,7 +225,7 @@ public class ChartDataSourceChartDetailsProvider extends AbstractChartDetailsPro
                             : application().queryOf(entityDef.getLongName()).ignoreEmptyCriteria(true));
             for (int i = 0; i < slen; i++) {
                 final PropertySequenceEntryDef sequenceDef = series.getSequenceList().get(i);
-                final String seriesName = ensureSeries(cdb, entityDef, sequenceDef, null);
+                final String seriesName = ensureSeries(cdb, entityDef, sequenceDef, null, null);
                 final Number y = aggregations.get(i).getValue(Number.class);
                 tableRow[i] = y;
                 cdb.addSeriesData(seriesName, cat, y);
@@ -217,13 +240,15 @@ public class ChartDataSourceChartDetailsProvider extends AbstractChartDetailsPro
             List<ChartTableColumn> headers = new ArrayList<ChartTableColumn>();
             final EntityDef entityDef = chartDataSourceDef.getEntityDef();
             final PropertySequenceDef series = chartDataSourceDef.getSeries();
-            if (chartDataSourceDef.isWithGroupingFields()) {
-                final List<String> groupingFieldNames = chartDataSourceDef.getGroupingFieldSequenceDef()
-                        .getFieldNames();
-                for (String fieldName : groupingFieldNames) {
+            if (chartDataSourceDef.isWithGroupingFieldsAndOrTimeSeries()) {
+                final List<String> groupingFieldNames = chartDataSourceDef.getGroupingFieldNames();
+                final int len = groupingFieldNames.size();
+                for (int i = 0; i < len; i++) {
+                    String fieldName = groupingFieldNames.get(i);
                     final EntityFieldDef entityFieldDef = entityDef.getFieldDef(fieldName);
-                    headers.add(new ChartTableColumn(entityFieldDef.getDataType(), fieldName,
-                            entityFieldDef.getFieldLabel()));
+                    headers.add(
+                            new ChartTableColumn(i == 0 && chartDataSourceDef.isMerged() ? EntityFieldDataType.STRING
+                                    : entityFieldDef.getDataType(), fieldName, entityFieldDef.getFieldLabel()));
                 }
             }
 
@@ -239,16 +264,25 @@ public class ChartDataSourceChartDetailsProvider extends AbstractChartDetailsPro
     }
 
     private String ensureSeries(ChartDetails.Builder cdb, EntityDef entityDef, PropertySequenceEntryDef sequenceDef,
-            List<Grouping> groupings) throws UnifyException {
+            List<Grouping> groupings, Object cat) throws UnifyException {
         String seriesName = sequenceDef.getProperty();
         if (!DataUtils.isBlank(groupings)) {
-            StringBuilder sb = new StringBuilder();
-            for (Grouping grouping : groupings) {
+            StringBuilder sb = new StringBuilder(seriesName);
+            final int len = groupings.size();
+            int i = 0;
+            if (cat != null) {
                 sb.append(" ");
-                sb.append(grouping.getAsString());
+                sb.append(cat);
+                i++;
+            }
+
+            for (; i < len; i++) {
+                sb.append(" ");
+                sb.append(groupings.get(i).getAsString());
             }
 
             seriesName = sb.toString();
+            cdb.addSeriesInclusion(seriesName);
         }
 
         if (!cdb.isWithSeries(seriesName)) {

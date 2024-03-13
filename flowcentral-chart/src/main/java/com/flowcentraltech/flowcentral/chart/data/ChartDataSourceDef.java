@@ -16,6 +16,10 @@
 
 package com.flowcentraltech.flowcentral.chart.data;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.EntityFieldDef;
 import com.flowcentraltech.flowcentral.application.data.FieldSequenceDef;
@@ -38,7 +42,7 @@ public class ChartDataSourceDef {
 
     private final ChartTimeSeriesType timeSeriesType;
 
-    private final String name;
+    private final String longName;
 
     private final String description;
 
@@ -60,13 +64,15 @@ public class ChartDataSourceDef {
 
     private FieldSequenceDef groupingFieldSequenceDef;
 
-    public ChartDataSourceDef(ChartDataSourceType type, ChartTimeSeriesType timeSeriesType, String name,
+    private List<String> groupingFieldNames;
+    
+    public ChartDataSourceDef(ChartDataSourceType type, ChartTimeSeriesType timeSeriesType, String longName,
             String description, String categoryField, EntityDef entityDef, FilterDef categoryBase,
-            PropertySequenceDef series, PropertySequenceDef categories,
-            FieldSequenceDef groupingFieldSequenceDef, Integer limit, Long id, long version) {
+            PropertySequenceDef series, PropertySequenceDef categories, FieldSequenceDef groupingFieldSequenceDef,
+            Integer limit, Long id, long version) {
         this.type = type;
         this.timeSeriesType = timeSeriesType;
-        this.name = name;
+        this.longName = longName;
         this.description = description;
         this.categoryField = categoryField;
         this.entityDef = entityDef;
@@ -95,8 +101,8 @@ public class ChartDataSourceDef {
         return !StringUtils.isBlank(categoryField) ? entityDef.getFieldDef(categoryField) : null;
     }
 
-    public String getName() {
-        return name;
+    public String getLongName() {
+        return longName;
     }
 
     public String getDescription() {
@@ -131,6 +137,10 @@ public class ChartDataSourceDef {
         return version;
     }
 
+    public boolean isMerged() {
+        return timeSeriesType != null && timeSeriesType.merged();
+    }
+
     public boolean isWithSeries() {
         return series != null;
     }
@@ -139,11 +149,36 @@ public class ChartDataSourceDef {
         return categories != null;
     }
 
-    public FieldSequenceDef getGroupingFieldSequenceDef() {
-        return groupingFieldSequenceDef;
+    public List<String> getGroupingFieldNames() {
+        if (groupingFieldNames == null) {
+            synchronized(this) {
+                if (groupingFieldNames == null) {
+                    groupingFieldNames = new ArrayList<String>();
+                    if (isTimeSeries()) {
+                        groupingFieldNames.add(categoryField);
+                    }
+                    
+                    if (isWithGroupingFields()) {
+                        groupingFieldNames.addAll(groupingFieldSequenceDef.getFieldNames());
+                    }
+                    
+                    groupingFieldNames = Collections.unmodifiableList(groupingFieldNames);
+                }
+            }
+        }
+        
+        return groupingFieldNames;
+    }
+
+    public boolean isTimeSeries() {
+        return timeSeriesType != null && categoryField != null && entityDef.getFieldDef(categoryField).isTime();
     }
 
     public boolean isWithGroupingFields() {
         return groupingFieldSequenceDef != null && !groupingFieldSequenceDef.isBlank();
+    }
+    
+    public boolean isWithGroupingFieldsAndOrTimeSeries() {
+        return isWithGroupingFields() || isTimeSeries();
     }
 }

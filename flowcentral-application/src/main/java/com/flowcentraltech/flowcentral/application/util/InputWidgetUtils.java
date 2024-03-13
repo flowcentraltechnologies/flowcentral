@@ -1734,7 +1734,7 @@ public final class InputWidgetUtils {
             if (type.isLingual() && _entityFieldDef.isString()) {
                 return InputWidgetUtils.resolveLingualStringCondition(fo.getFieldName(), _entityFieldDef, now, type,
                         paramA, paramB);
-            } else if (_entityFieldDef.isDate() || _entityFieldDef.isTimestamp()) {
+            } else if (_entityFieldDef.isTime()) {
                 return InputWidgetUtils.resolveDateCondition(fo.getFieldName(), _entityFieldDef, now, type, paramA,
                         paramB);
             } else {

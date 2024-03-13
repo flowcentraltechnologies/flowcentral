@@ -5,10 +5,10 @@
 	label="$m{dashboard.label}" module="dashboard" displayIndex="-10">
 	<!-- Widgets -->
 	<widgetTypes>
-		<widgetType name="chartdatasourcelist"
+		<widgetType name="chartdatasourcelist" 
 			description="$m{dashboard.widgettype.chartdatasourcelist}"
 			dataType="string" inputType="string"
-			editor="!ui-select list:dashboardchartdatasourcelist listParams:$l{dashboardOptionId} blankOption:$m{blank.none}"
+			editor="!ui-dropdownchecklist list:dashboardchartdatasourcelist listParams:$l{entity} columns:3"
 			renderer="!ui-label" />
 	</widgetTypes>
 	<!-- Applets -->
@@ -162,6 +162,12 @@
 				inputWidget="application.text" maxLen="128" />
 			<field name="label" label="$m{dashboard.dashboardoption.label1}"
 				type="string" inputWidget="application.text" maxLen="96" />
+			<field name="applicationName"
+				label="$m{dashboard.dashboardoption.applicationname}" type="list_only"
+				key="dashboardId" property="applicationName" />
+			<field name="dashboardName"
+				label="$m{dashboard.dashboardoption.dashboardname}" type="list_only"
+				key="dashboardId" property="name" />
 			<field name="baseList"
 				label="$m{dashboard.dashboardoption.categorybases}"
 				type="child_list" references="dashboardOptionCatBaseRef" />
@@ -181,7 +187,7 @@
 				type="string" inputWidget="dashboard.chartdatasourcelist" />
 			<field name="entity"
 				label="$m{dashboard.dashboardoptioncatbase.entity}"
-				type="string" inputWidget="application.text" />
+				type="string" />
 			<field name="categoryBase"
 				label="$m{dashboard.dashboardoptioncatbase.categorybase}"
 				type="child" category="dashboard-option"

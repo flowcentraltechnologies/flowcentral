@@ -22,6 +22,7 @@ import com.flowcentraltech.flowcentral.common.entities.BaseAuditEntity;
 import com.tcdng.unify.core.annotation.ChildList;
 import com.tcdng.unify.core.annotation.Column;
 import com.tcdng.unify.core.annotation.ForeignKey;
+import com.tcdng.unify.core.annotation.ListOnly;
 import com.tcdng.unify.core.annotation.Table;
 
 /**
@@ -45,6 +46,12 @@ public class DashboardOption extends BaseAuditEntity {
     @Column(name = "OPTION_LABEL", length = 96)
     private String label;
     
+    @ListOnly(key = "dashboardId", property = "applicationName")
+    private String applicationName;
+    
+    @ListOnly(key = "dashboardId", property = "name")
+    private String dashboardName;
+        
     @ChildList
     private List<DashboardOptionCategoryBase> baseList;
 
@@ -78,6 +85,22 @@ public class DashboardOption extends BaseAuditEntity {
 
     public void setLabel(String label) {
         this.label = label;
+    }
+
+    public String getApplicationName() {
+        return applicationName;
+    }
+
+    public void setApplicationName(String applicationName) {
+        this.applicationName = applicationName;
+    }
+
+    public String getDashboardName() {
+        return dashboardName;
+    }
+
+    public void setDashboardName(String dashboardName) {
+        this.dashboardName = dashboardName;
     }
 
     public List<DashboardOptionCategoryBase> getBaseList() {

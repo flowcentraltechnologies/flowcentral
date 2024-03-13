@@ -17,6 +17,8 @@
 package com.flowcentraltech.flowcentral.dashboard.web.widgets;
 
 import com.flowcentraltech.flowcentral.dashboard.data.DashboardDef;
+import com.flowcentraltech.flowcentral.dashboard.data.DashboardOptionDef;
+import com.tcdng.unify.core.util.StringUtils;
 
 /**
  * Dashboard slate.
@@ -28,16 +30,26 @@ public class DashboardSlate {
 
     private DashboardDef dashboardDef;
 
+    private String option;
+    
     public DashboardSlate(DashboardDef dashboardDef) {
+        this(dashboardDef, null);
+    }
+   
+    public DashboardSlate(DashboardDef dashboardDef, String option) {
         this.dashboardDef = dashboardDef;
+        this.option = option;
     }
 
     public DashboardDef getDashboardDef() {
         return dashboardDef;
     }
 
-    @Override
-    public String toString() {
-        return "DashboardSlate [dashboardDef=" + dashboardDef + "]";
+    public DashboardOptionDef getOption() {
+        return dashboardDef.getOption(option);
+    }
+
+    public boolean isWithOption() {
+        return !StringUtils.isBlank(option);
     }
 }

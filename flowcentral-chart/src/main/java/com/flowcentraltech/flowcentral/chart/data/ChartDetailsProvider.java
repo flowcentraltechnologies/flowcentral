@@ -43,11 +43,19 @@ public interface ChartDetailsProvider extends RuleListComponent {
      * Provides data.
      * 
      * @param rule
-     *             optional rule
-     * @param restriction optional restriction
+     *                    optional rule
+     * @param restriction
+     *                    optional restriction
      * @return the chart data
      * @throws UnifyException
      *                        if an error occurs
      */
     ChartDetails provide(String rule, Restriction restriction) throws UnifyException;
+
+    /**
+     * Indicates if provider utilizes a chart data source
+     * 
+     * @return true otherwise false
+     */
+    boolean isUsesChartDataSource();
 }

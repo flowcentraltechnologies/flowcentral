@@ -32,4 +32,12 @@ public class DashboardOptionQuery extends BaseAuditEntityQuery<DashboardOption> 
     public DashboardOptionQuery dashboardId(Long dashboardId) {
         return (DashboardOptionQuery) addEquals("dashboardId", dashboardId);
     }
+
+    public DashboardOptionQuery applicationName(String applicationName) {
+        return (DashboardOptionQuery) addEquals("applicationName", applicationName);
+    }
+
+    public DashboardOptionQuery dashboardName(String dashboardName) {
+        return (DashboardOptionQuery) addEquals("dashboardName", dashboardName);
+    }
 }

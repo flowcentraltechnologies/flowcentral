@@ -15,10 +15,14 @@
  */
 package com.flowcentraltech.flowcentral.dashboard.business;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityNameParts;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
+import com.flowcentraltech.flowcentral.application.util.InputWidgetUtils;
 import com.flowcentraltech.flowcentral.chart.business.ChartModuleService;
 import com.flowcentraltech.flowcentral.common.business.AbstractFlowCentralService;
 import com.flowcentraltech.flowcentral.common.constants.RecordStatus;
@@ -26,12 +30,14 @@ import com.flowcentraltech.flowcentral.configuration.data.ModuleInstall;
 import com.flowcentraltech.flowcentral.dashboard.constants.DashboardModuleErrorConstants;
 import com.flowcentraltech.flowcentral.dashboard.constants.DashboardModuleNameConstants;
 import com.flowcentraltech.flowcentral.dashboard.data.DashboardDef;
+import com.flowcentraltech.flowcentral.dashboard.data.DashboardOptionCatBaseDef;
+import com.flowcentraltech.flowcentral.dashboard.data.DashboardOptionDef;
 import com.flowcentraltech.flowcentral.dashboard.entities.Dashboard;
-import com.flowcentraltech.flowcentral.dashboard.entities.DashboardOptionQuery;
+import com.flowcentraltech.flowcentral.dashboard.entities.DashboardOption;
+import com.flowcentraltech.flowcentral.dashboard.entities.DashboardOptionCategoryBase;
 import com.flowcentraltech.flowcentral.dashboard.entities.DashboardQuery;
 import com.flowcentraltech.flowcentral.dashboard.entities.DashboardSection;
 import com.flowcentraltech.flowcentral.dashboard.entities.DashboardTile;
-import com.flowcentraltech.flowcentral.dashboard.entities.DashboardTileQuery;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -40,6 +46,7 @@ import com.tcdng.unify.core.criterion.Update;
 import com.tcdng.unify.core.data.FactoryMap;
 import com.tcdng.unify.core.data.Listable;
 import com.tcdng.unify.core.util.DataUtils;
+import com.tcdng.unify.core.util.StringUtils;
 
 /**
  * Default dashboard business service implementation.
@@ -53,7 +60,10 @@ public class DashboardModuleServiceImpl extends AbstractFlowCentralService imple
 
     @Configurable
     private ChartModuleService chartModuleService;
-    
+
+    @Configurable
+    private AppletUtilities appletUtilities;
+
     private FactoryMap<String, DashboardDef> dashboardDefFactoryMap;
 
     public DashboardModuleServiceImpl() {
@@ -78,6 +88,20 @@ public class DashboardModuleServiceImpl extends AbstractFlowCentralService imple
 
                     DashboardDef.Builder ddb = DashboardDef.newBuilder(dashboard.getStatus(), longName,
                             dashboard.getDescription(), dashboard.getId(), dashboard.getVersionNo());
+
+                    DataUtils.sortAscending(dashboard.getOptionsList(), DashboardOption.class, "label");
+                    for (DashboardOption dashboardOption : dashboard.getOptionsList()) {
+                        List<DashboardOptionCatBaseDef> catBaseList = new ArrayList<DashboardOptionCatBaseDef>();
+                        for (DashboardOptionCategoryBase catBase : dashboardOption.getBaseList()) {
+                            List<String> dataSourceNames = Arrays.asList(StringUtils.commaSplit(catBase.getChartDataSource()));
+                            catBaseList.add(new DashboardOptionCatBaseDef(dataSourceNames,
+                                    InputWidgetUtils.getFilterDef(appletUtilities, null, catBase.getCategoryBase())));
+                        }
+
+                        DashboardOptionDef dashboardOptionDef = new DashboardOptionDef(dashboardOption.getName(),
+                                dashboardOption.getDescription(), dashboardOption.getLabel(), catBaseList);
+                        ddb.addOption(dashboardOptionDef);
+                    }
 
                     DataUtils.sortAscending(dashboard.getSectionList(), DashboardSection.class, "index");
                     for (DashboardSection dashboardSection : dashboard.getSectionList()) {
@@ -119,13 +143,14 @@ public class DashboardModuleServiceImpl extends AbstractFlowCentralService imple
     }
 
     @Override
-    public List<? extends Listable> getDashboardOptionChartDataSourceList(Long dashboardOptionId)
+    public List<? extends Listable> getDashboardOptionList(String dashboard) throws UnifyException {
+        return getDashboardDef(dashboard).getOptionList();
+    }
+
+    @Override
+    public List<? extends Listable> getDashboardOptionChartDataSourceList(String entity)
             throws UnifyException {
-        final Long dashboardId = environment().value(Long.class, "dashboardId",
-                new DashboardOptionQuery().addEquals("id", dashboardOptionId));
-        final List<String> charts = environment().valueList(String.class, "chart",
-                new DashboardTileQuery().dashboardId(dashboardId));       
-        return chartModuleService.getChartDataSourceListForCharts(charts);
+        return chartModuleService.getChartDataSourceListByEntity(entity);
     }
 
     @Override

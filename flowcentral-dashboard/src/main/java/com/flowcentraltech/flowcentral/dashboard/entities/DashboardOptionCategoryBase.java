@@ -35,7 +35,7 @@ public class DashboardOptionCategoryBase extends BaseAuditEntity {
     @ForeignKey(DashboardOption.class)
     private Long dashboardOptionId;
 
-    @Column(name = "CHART_DATASOURCE", length = 64)
+    @Column(name = "CHART_DATASOURCE", length = 2048)
     private String chartDataSource;
 
     @Column(length = 64)

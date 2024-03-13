@@ -30,6 +30,8 @@ public class ApplicationDashboardPageBean extends AbstractPageBean {
 
     private String selDashboard;
 
+    private String selOption;
+    
     public DashboardSlate getDashboardSlate() {
         return dashboardSlate;
     }
@@ -44,5 +46,13 @@ public class ApplicationDashboardPageBean extends AbstractPageBean {
 
     public void setSelDashboard(String selDashboard) {
         this.selDashboard = selDashboard;
+    }
+
+    public String getSelOption() {
+        return selOption;
+    }
+
+    public void setSelOption(String selOption) {
+        this.selOption = selOption;
     }
 }

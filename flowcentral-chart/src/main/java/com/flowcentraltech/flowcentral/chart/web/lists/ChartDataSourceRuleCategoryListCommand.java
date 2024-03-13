@@ -49,7 +49,8 @@ public class ChartDataSourceRuleCategoryListCommand extends AbstractListCommand<
     public List<? extends Listable> execute(Locale locale, StringParam param) throws UnifyException {
         if (param.isPresent()) {
             ChartDataSourceDef chartDataSourceDef = chartModuleService.getChartDataSourceDef(param.getValue());
-            return chartDataSourceDef.getCategories().getSequenceList();
+            return chartDataSourceDef.isWithCategories() ? chartDataSourceDef.getCategories().getSequenceList()
+                    : Collections.emptyList();
         }
 
         return Collections.emptyList();

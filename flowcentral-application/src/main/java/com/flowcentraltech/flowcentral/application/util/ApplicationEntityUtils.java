@@ -427,13 +427,13 @@ public final class ApplicationEntityUtils {
                         null, null, null, null, "application.checkbox", null, null, configType, false));
                 break;
             case BASE_AUDIT_ENTITY:
-                list.add(ApplicationEntityUtils.createBaseAppEntityField(EntityFieldDataType.TIMESTAMP_UTC, "createDt",
+                list.add(ApplicationEntityUtils.createBaseAppEntityField(EntityFieldDataType.TIMESTAMP, "createDt",
                         msgResolver.resolveApplicationMessage("$m{baseauditentity.field.label.createdt}"), null, null,
                         null, null, null, "application.datetime", null, null, configType, true));
                 list.add(ApplicationEntityUtils.createBaseAppEntityField(EntityFieldDataType.STRING, "createdBy",
                         msgResolver.resolveApplicationMessage("$m{baseauditentity.field.label.createdby}"), null, null,
                         null, null, null, "application.name", null, 64, configType, true));
-                list.add(ApplicationEntityUtils.createBaseAppEntityField(EntityFieldDataType.TIMESTAMP_UTC, "updateDt",
+                list.add(ApplicationEntityUtils.createBaseAppEntityField(EntityFieldDataType.TIMESTAMP, "updateDt",
                         msgResolver.resolveApplicationMessage("$m{baseauditentity.field.label.updatedt}"), null, null,
                         null, null, null, "application.datetime", null, null, configType, true));
                 list.add(ApplicationEntityUtils.createBaseAppEntityField(EntityFieldDataType.STRING, "updatedBy",
