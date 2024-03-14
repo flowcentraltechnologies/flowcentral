@@ -39,7 +39,7 @@ public abstract class AbstractEntityActionPolicy<T> implements EntityActionPolic
     @Value("${flowcentral.interconnect.logging.enabled:false}")
     private boolean logging;
     
-    private static final long DEFAULT_SPINOFF_DELAY_MILLISECS = 10000;
+    private static final long DEFAULT_SPINOFF_DELAY_MILLISECS = 8000;
     
     @Override
     public String[] validate(EvaluationMode evaluationMode, T entityBean) throws Exception {
