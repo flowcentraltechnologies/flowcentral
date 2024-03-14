@@ -21,6 +21,7 @@ import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Value;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.flowcentraltech.flowcentral.connect.common.util.ExecutorUtils;
 import com.flowcentraltech.flowcentral.connect.configuration.constants.EvaluationMode;
 
 /**
@@ -37,6 +38,8 @@ public abstract class AbstractEntityActionPolicy<T> implements EntityActionPolic
     
     @Value("${flowcentral.interconnect.logging.enabled:false}")
     private boolean logging;
+    
+    private static final long DEFAULT_SPINOFF_DELAY_MILLISECS = 8000;
     
     @Override
     public String[] validate(EvaluationMode evaluationMode, T entityBean) throws Exception {
@@ -68,4 +71,11 @@ public abstract class AbstractEntityActionPolicy<T> implements EntityActionPolic
         return null;
     }
 
+    protected void runDelayed(Runnable runnable) {
+        runDelayed(DEFAULT_SPINOFF_DELAY_MILLISECS, runnable);
+    }
+
+    protected void runDelayed(long delayInMillisecs, Runnable runnable) {
+        ExecutorUtils.getInstance().executeDelayed(delayInMillisecs, runnable);
+    }
 }
