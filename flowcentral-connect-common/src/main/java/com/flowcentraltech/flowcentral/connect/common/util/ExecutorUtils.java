@@ -15,22 +15,9 @@
  */
 package com.flowcentraltech.flowcentral.connect.common.util;
 
-import java.text.DecimalFormat;
-import java.text.Format;
-import java.text.SimpleDateFormat;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-
-import org.apache.commons.beanutils.PropertyUtils;
-
-import com.tcdng.unify.common.constants.StandardFormatType;
-import com.tcdng.unify.common.util.ParamToken;
-import com.tcdng.unify.common.util.StringToken;
-import com.tcdng.unify.common.util.StringTokenUtils;
 
 /**
  * Executor utilities.
@@ -65,70 +52,4 @@ public final class ExecutorUtils {
     public void executeDelayed(long delayInMillisec, Runnable runnable) {
         executor.schedule(runnable, delayInMillisec, TimeUnit.MILLISECONDS);
     }
-    
-    public static String applyBeanToTemplate(String template, Object bean) throws Exception {
-        List<StringToken> _template = StringTokenUtils.breakdownParameterizedString(template);
-        return ConnectStringUtil.applyBeanToTemplate(_template, bean);
-    }
-    
-    public static String applyBeanToTemplate(List<StringToken> template, Object bean) throws Exception {
-        StringBuilder sb = new StringBuilder();
-        if (template != null && !template.isEmpty()) {
-            TemplateContext ctx = new TemplateContext();
-            for (StringToken token : template) {
-                Object val = null;
-                switch(token.getType()) {
-                    case FORMATTED_PARAM:
-                        val = PropertyUtils.getProperty(bean, ((ParamToken) token).getParam());
-                        if (val != null) {
-                            Format format = ctx.getFormat(((ParamToken) token).getFormatType());
-                            val = format.format(val);
-                        }
-                        break;
-                    case GENERATOR_PARAM:
-                        break;
-                    case NEWLINE:
-                        val = "\n";
-                        break;
-                    case PARAM:
-                        val = PropertyUtils.getProperty(bean, ((ParamToken) token).getParam());
-                        break;
-                    case TEXT:
-                        val = token.getToken();
-                        break;
-                    default:
-                        break;                  
-                }
-                
-                if (val != null) {
-                    sb.append(val);
-                }
-            }
-        }
-
-        return sb.toString();
-    }
-    
-    private static class TemplateContext {
-        
-        private Map<StandardFormatType, Format> formats;
-        
-        public TemplateContext() {
-            this.formats = new HashMap<StandardFormatType, Format>();
-        }
-        
-        public Format getFormat(StandardFormatType type) {
-            Format format = formats.get(type);
-            if (format == null) {
-                if (type.isDateType()) {
-                    format = new SimpleDateFormat(type.format());
-                } else {
-                    format = new DecimalFormat(type.format());
-                }
-                formats.put(type, format);
-            }
-
-            return format;
-        }
-    }
-}
+ }
