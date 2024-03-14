@@ -71,11 +71,11 @@ public abstract class AbstractEntityActionPolicy<T> implements EntityActionPolic
         return null;
     }
 
-    protected void spinOff(Runnable runnable) {
-        spinOff(DEFAULT_SPINOFF_DELAY_MILLISECS, runnable);
+    protected void runDelayed(Runnable runnable) {
+        runDelayed(DEFAULT_SPINOFF_DELAY_MILLISECS, runnable);
     }
 
-    protected void spinOff(long delayInMillisecs, Runnable runnable) {
+    protected void runDelayed(long delayInMillisecs, Runnable runnable) {
         ExecutorUtils.getInstance().executeDelayed(delayInMillisecs, runnable);
     }
 }
