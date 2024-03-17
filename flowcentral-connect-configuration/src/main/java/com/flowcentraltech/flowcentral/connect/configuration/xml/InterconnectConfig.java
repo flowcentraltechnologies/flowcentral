@@ -34,6 +34,12 @@ public class InterconnectConfig {
 
     private String redirect;
 
+    private String dataSourceAlias;
+
+    private String entityManagerFactory;
+
+    private EntitiesConfig entitiesConfig;
+
     private InterconnectAppConfigs interconnectAppConfigs;
 
     public String getName() {
@@ -70,6 +76,33 @@ public class InterconnectConfig {
     @XmlElement(name = "interconnect-applications")
     public void setInterconnectAppConfigs(InterconnectAppConfigs interconnectAppConfigs) {
         this.interconnectAppConfigs = interconnectAppConfigs;
+    }
+
+    public String getDataSourceAlias() {
+        return dataSourceAlias;
+    }
+
+    @XmlAttribute(required = true)
+    public void setDataSourceAlias(String dataSourceAlias) {
+        this.dataSourceAlias = dataSourceAlias;
+    }
+
+    public String getEntityManagerFactory() {
+        return entityManagerFactory;
+    }
+
+    @XmlAttribute
+    public void setEntityManagerFactory(String entityManagerFactory) {
+        this.entityManagerFactory = entityManagerFactory;
+    }
+
+    public EntitiesConfig getEntitiesConfig() {
+        return entitiesConfig;
+    }
+
+    @XmlElement(name = "entities")
+    public void setEntitiesConfig(EntitiesConfig entitiesConfig) {
+        this.entitiesConfig = entitiesConfig;
     }
 
 }
