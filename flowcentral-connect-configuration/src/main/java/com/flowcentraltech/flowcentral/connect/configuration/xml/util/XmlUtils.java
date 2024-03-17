@@ -19,7 +19,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import javax.xml.bind.JAXBContext;
@@ -53,13 +52,27 @@ public final class XmlUtils {
 
     public static List<ApplicationConfig> readInterconnectConfig(String resourceName) throws Exception {
 //        LOGGER.log(Level.INFO, "Reading interconnect configuration...");
+        List<ApplicationConfig> resultList = new ArrayList<ApplicationConfig>();
         InterconnectConfig interconnectConfig = XmlUtils.readConfig(InterconnectConfig.class, resourceName);
+        
+        // Root application
+        if (interconnectConfig.getEntitiesConfig() != null) {
+            ApplicationConfig applicationConfig = new ApplicationConfig();
+            applicationConfig.setName(interconnectConfig.getName());
+            applicationConfig.setDescription(interconnectConfig.getDescription());
+            applicationConfig.setDataSourceAlias(interconnectConfig.getDataSourceAlias());
+            applicationConfig.setEntitiesConfig(interconnectConfig.getEntitiesConfig());
+            applicationConfig.setEntityManagerFactory(interconnectConfig.getEntityManagerFactory());
+            applicationConfig.setRedirect(interconnectConfig.getRedirect());
+            resultList.add(applicationConfig);
+        }
+        
+        // Applications in external files
         if (interconnectConfig.getInterconnectAppConfigs() != null) {
             final String applicationName = interconnectConfig.getInterconnectAppConfigs().getApplication();
             final List<InterconnectAppConfig> appConfigList = interconnectConfig.getInterconnectAppConfigs()
                     .getAppConfigList();
             if (appConfigList != null && !appConfigList.isEmpty()) {
-                List<ApplicationConfig> resultList = new ArrayList<ApplicationConfig>();
                 for (InterconnectAppConfig interconnectAppConfig : appConfigList) {
                     ApplicationConfig applicationConfig = XmlUtils.readConfig(ApplicationConfig.class,
                             interconnectAppConfig.getConfigFile());
@@ -72,11 +85,10 @@ public final class XmlUtils {
                 }
 
 //                LOGGER.log(Level.INFO, "[{0}] application interconnect configuration read.", resultList.size());
-                return resultList;
             }
         }
 
-        return Collections.emptyList();
+        return resultList;
     }
 
     @SuppressWarnings("unchecked")

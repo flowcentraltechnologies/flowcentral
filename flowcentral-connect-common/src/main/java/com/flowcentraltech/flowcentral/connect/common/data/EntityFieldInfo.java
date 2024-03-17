@@ -15,6 +15,9 @@
  */
 package com.flowcentraltech.flowcentral.connect.common.data;
 
+import java.util.List;
+import java.util.Set;
+
 import com.flowcentraltech.flowcentral.connect.configuration.constants.ConnectFieldDataType;
 
 /**
@@ -117,6 +120,14 @@ public class EntityFieldInfo {
         return length;
     }
 
+    public boolean isSet() {
+        return Set.class.isAssignableFrom(fieldClass);
+    }
+
+    public boolean isList() {
+        return List.class.isAssignableFrom(fieldClass);
+    }
+    
     public boolean isNullable() {
         return nullable;
     }

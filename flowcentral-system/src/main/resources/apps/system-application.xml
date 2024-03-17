@@ -186,6 +186,38 @@
 			<property name="maintainForm.update" value="true" />
 			<property name="maintainForm.delete" value="true" />
 		</applet>
+		<applet name="manageDelegate"
+			description="$m{system.delegate.manage}"
+			label="$m{system.delegate.manage.label}" icon="network-wired"
+			type="manage_entitylist" entity="delegate" menuAccess="true">
+			<property name="searchTable" value="delegateTable" />
+			<property name="searchTable.new" value="true" />
+			<property name="searchTable.report" value="true" />
+			<property name="searchTable.basicSearchOnly" value="true" />
+			<property name="createForm" value="delegateForm" />
+			<property name="createForm.save" value="true" />
+			<property name="createForm.save.next" value="true" />
+			<property name="createForm.save.close" value="true" />
+			<property name="maintainForm" value="delegateForm" />
+			<property name="maintainForm.update" value="true" />
+			<property name="maintainForm.delete" value="true" />
+		</applet>
+		<applet name="manageDelegateRedirect"
+			description="$m{system.delegateredirect.manage}"
+			label="$m{system.delegateredirect.manage.label}"
+			type="manage_entitylist" entity="delegateRedirect" menuAccess="false">
+			<property name="searchTable" value="delegateRedirectTable" />
+			<property name="searchTable.new" value="true" />
+			<property name="searchTable.report" value="true" />
+			<property name="searchTable.basicSearchOnly" value="true" />
+			<property name="createForm" value="delegateRedirectForm" />
+			<property name="createForm.save" value="true" />
+			<property name="createForm.save.next" value="true" />
+			<property name="createForm.save.close" value="true" />
+			<property name="maintainForm" value="delegateRedirectForm" />
+			<property name="maintainForm.update" value="true" />
+			<property name="maintainForm.delete" value="true" />
+		</applet>
 		<applet name="manageDownloadLog"
 			description="$m{system.downloadlog.manage}"
 			label="$m{system.downloadlog.manage.label}" icon="logs"
@@ -258,6 +290,12 @@
 			entity="scheduledTaskHist" searchField="scheduledTaskDesc" />
 		<reference name="credentialRef"
 			description="$m{system.credential.reference}" entity="credential"
+			searchField="description" />
+		<reference name="delegateRef"
+			description="$m{system.delegate.reference}" entity="delegate"
+			searchField="description" />
+		<reference name="delegateRedirectRef"
+			description="$m{system.delegateredirect.reference}" entity="delegateRedirect"
 			searchField="description" />
 		<reference name="downloadLogRef"
 			description="$m{system.downloadlog.reference}" entity="downloadLog"
@@ -527,6 +565,58 @@
 				description="$m{system.credential.uc.description}"
 				fieldList="description" />
 		</entity>
+		<entity name="delegate" description="$m{system.delegate}"
+			label="$m{system.delegate.label}"
+			type="com.flowcentraltech.flowcentral.system.entities.Delegate"
+			auditable="true" reportable="true">
+			<field name="name" label="$m{system.delegate.name}"
+				type="string" inputWidget="application.name" maxLen="64"
+				basicSearch="true" auditable="true"/>
+			<field name="description"
+				label="$m{system.delegate.description}" type="string"
+				inputWidget="application.text" maxLen="128" basicSearch="true" />
+			<field name="nodeUrl" label="$m{system.delegate.nodeurl}"
+				type="string" inputWidget="application.textarea" maxLen="1024" />
+			<field name="redirects" label="$m{system.delegate.redirects}"
+				type="child_list" references="delegateRedirectRef"  />
+			<uniqueConstraint name="nameUc"
+				description="$m{system.delegate.uc.name}" fieldList="name" />
+			<uniqueConstraint name="descUc"
+				description="$m{system.delegate.uc.description}"
+				fieldList="description" />
+		</entity>
+		<entity name="delegateRedirect" description="$m{system.delegateredirect}"
+			label="$m{system.delegateredirect.label}"
+			type="com.flowcentraltech.flowcentral.system.entities.DelegateRedirect"
+			auditable="true" reportable="true">
+			<field name="delegateId"
+				label="$m{system.delegateredirect.delegateid}" type="ref"
+				references="delegateRef" inputWidget="application.entitylist" />
+			<field name="type" label="$m{system.delegateredirect.type}"
+				type="enum_ref" references="delegateredirecttypelist"
+				inputWidget="application.enumlist" />
+			<field name="name" label="$m{system.delegateredirect.name}"
+				type="string" inputWidget="application.name" maxLen="64"
+				basicSearch="true" auditable="true"/>
+			<field name="description"
+				label="$m{system.delegateredirect.description}" type="string"
+				inputWidget="application.text" maxLen="128" basicSearch="true" />
+			<field name="redirectUrl" label="$m{system.delegateredirect.redirecturl}"
+				type="string" inputWidget="application.textarea" maxLen="1024" />
+			<field name="supportedOperations" label="$m{system.delegateredirect.supportedoperations}"
+				type="string" inputWidget="application.textarea" maxLen="2048" nullable="true"/>
+			<field name="typeDesc" label="$m{system.delegateredirect.typedesc}"
+				type="list_only" key="type" property="description" />
+			<field name="delegateName" label="$m{system.delegateredirect.delegatename}"
+				type="list_only" key="delegateId" property="name" />
+			<field name="delegateDesc" label="$m{system.delegateredirect.delegatedesc}"
+				type="list_only" key="delegateId" property="description" />
+			<uniqueConstraint name="nameUc"
+				description="$m{system.delegateredirect.uc.name}" fieldList="delegateId,name" />
+			<uniqueConstraint name="descUc"
+				description="$m{system.delegateredirect.uc.description}"
+				fieldList="delegateId,description" />
+		</entity>
 		<entity name="downloadLog" description="$m{system.downloadlog}"
 			label="$m{system.downloadlog.label}"
 			type="com.flowcentraltech.flowcentral.system.entities.DownloadLog"
@@ -700,6 +790,38 @@
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="description" renderWidget="application.text"
 				widthRatio="1" />
+			<column field="createDt" renderWidget="application.datetime"
+				widthRatio="1" />
+			<column field="updateDt" renderWidget="application.datetime"
+				widthRatio="1" />
+		</table>
+		<table name="delegateTable"
+			description="$m{system.delegate.table}"
+			label="$m{system.delegate.table.label}" entity="delegate"
+			itemsPerPage="20" serialNo="true" basicSearch="true">
+			<column field="name" renderWidget="application.text"
+				widthRatio="1" linkAct="maintainAct" />
+			<column field="description" renderWidget="application.text"
+				widthRatio="1" />
+			<column field="nodeUrl" renderWidget="application.text"
+				widthRatio="1" />
+			<column field="createDt" renderWidget="application.datetime"
+				widthRatio="1" />
+			<column field="updateDt" renderWidget="application.datetime"
+				widthRatio="1" />
+		</table>
+		<table name="delegateRedirectTable"
+			description="$m{system.delegateredirect.table}"
+			label="$m{system.delegateredirect.table.label}" entity="delegateRedirect"
+			itemsPerPage="20" serialNo="true" basicSearch="true">
+			<column field="name" renderWidget="application.text"
+				widthRatio="1" linkAct="maintainAct" />
+			<column field="description" renderWidget="application.text"
+				widthRatio="1" />
+			<column field="redirectUrl" renderWidget="application.text"
+				widthRatio="1" />
+			<column field="typeDesc" renderWidget="application.text"
+				widthRatio="1" label="$m{system.delegateredirect.type}"/>
 			<column field="createDt" renderWidget="application.datetime"
 				widthRatio="1" />
 			<column field="updateDt" renderWidget="application.datetime"
@@ -943,6 +1065,44 @@
 						column="1" required="true" />
 					<field name="password" inputWidget="application.password"
 						column="1" />
+				</section>
+			</tab>
+			<tab name="changeLog" label="$m{application.form.audit}"
+				contentType="miniform_changelog" />
+		</form>
+		<form name="delegateForm"
+			description="$m{system.delegate.form}" entity="delegate">
+			<tab name="basicDetails"
+				label="$m{system.delegate.form.basicdetails}"
+				contentType="miniform">
+				<section name="delegateDetails" columns="type_2">
+					<field name="name" inputWidget="application.name" column="0"
+						required="true" />
+					<field name="description" inputWidget="application.text"
+						column="0" required="true" />
+					<field name="status" column="1" required="true" />
+					<field name="nodeUrl" inputWidget="application.textarea"
+						column="1" required="true" />
+				</section>
+			</tab>
+			<tab name="redirects" label="$m{system.delegate.form.redirects}"
+				contentType="child_list" applet="manageDelegateRedirect"
+				reference="redirects" />
+			<tab name="changeLog" label="$m{application.form.audit}"
+				contentType="miniform_changelog" />
+		</form>
+		<form name="delegateRedirectForm"
+			description="$m{system.delegateredirect.form}" entity="delegateRedirect">
+			<tab name="basicDetails"
+				label="$m{system.delegateredirect.form.basicdetails}"
+				contentType="miniform">
+				<section name="delegateRedirectDetails" columns="type_2">
+					<field name="delegateId" column="0" required="true" />
+					<field name="name" column="0" required="true" />
+					<field name="description" column="0" required="true" />
+					<field name="type" column="1" required="true" />
+					<field name="redirectUrl" column="1" required="true" />
+					<field name="supportedOperations" column="1" required="false" />
 				</section>
 			</tab>
 			<tab name="changeLog" label="$m{application.form.audit}"

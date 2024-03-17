@@ -24,12 +24,15 @@ import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -95,8 +98,13 @@ public abstract class AbstractInterconnect {
         map.put(Double.class, ConnectFieldDataType.DOUBLE);
         map.put(BigDecimal.class, ConnectFieldDataType.DECIMAL);
         map.put(Date.class, ConnectFieldDataType.DATE);
+        map.put(org.joda.time.LocalDate.class, ConnectFieldDataType.DATE);
+        map.put(org.joda.time.LocalDateTime.class, ConnectFieldDataType.DATE);
+        map.put(java.time.LocalDate.class, ConnectFieldDataType.DATE);
+        map.put(java.time.LocalDateTime.class, ConnectFieldDataType.DATE);
         map.put(String.class, ConnectFieldDataType.STRING);
         map.put(List.class, ConnectFieldDataType.CHILD_LIST);
+        map.put(Set.class, ConnectFieldDataType.CHILD_LIST);
         classToConnectDataTypeMap = Collections.unmodifiableMap(map);
     }
 
@@ -359,9 +367,12 @@ public abstract class AbstractInterconnect {
     private void populateBaseFields(EntityInfo.Builder eib, ConnectEntityBaseType base) throws Exception {
         switch (base) {
             case BASE_WORK_ENTITY:
-                eib.addField(ConnectFieldDataType.STRING, String.class, "workBranchCode", "Work Branch Code", "work_branch_cd");
-                eib.addField(ConnectFieldDataType.BOOLEAN, Boolean.class, "inWorkflow", "In Workflow", "in_workflow_fg");
-                eib.addField(ConnectFieldDataType.LONG, Long.class, "originalCopyId", "Original Copy ID", "original_copy_id");
+                eib.addField(ConnectFieldDataType.STRING, String.class, "workBranchCode", "Work Branch Code",
+                        "work_branch_cd");
+                eib.addField(ConnectFieldDataType.BOOLEAN, Boolean.class, "inWorkflow", "In Workflow",
+                        "in_workflow_fg");
+                eib.addField(ConnectFieldDataType.LONG, Long.class, "originalCopyId", "Original Copy ID",
+                        "original_copy_id");
                 eib.addField(ConnectFieldDataType.STRING, String.class, "wfItemVersionType", "Work Item Version Type",
                         "wf_item_version_type");
             case BASE_AUDIT_ENTITY:
@@ -860,18 +871,19 @@ public abstract class AbstractInterconnect {
         for (EntityFieldInfo entityFieldInfo : fieldInfoList) {
             Object srcChildListBean = PropertyUtils.getProperty(srcBean, entityFieldInfo.getName());
             Object destChildListBean = PropertyUtils.getProperty(destBean, entityFieldInfo.getName());
-            List<Object> destList = (List<Object>) destChildListBean;
+            Collection<Object> destList = (Collection<Object>) destChildListBean;
             if (destList == null) {
-                destList = new ArrayList<>();
+                destList = entityFieldInfo.isSet() ? new HashSet<>() : new ArrayList<>();
                 PropertyUtils.setProperty(destBean, entityFieldInfo.getName(), destList);
             } else {
-                for (Object destChildBean : new ArrayList<>(destList)) {
+                for (Object destChildBean : entityFieldInfo.isSet() ? new HashSet<>(destList)
+                        : new ArrayList<>(destList)) {
                     destList.remove(destChildBean);
                 }
             }
 
             if (srcChildListBean != null) {
-                List<Object> srcList = (List<Object>) srcChildListBean;
+                Collection<Object> srcList = (Collection<Object>) srcChildListBean;
                 for (Object srcChildBean : srcList) {
                     Object destChildBean = copyChild(destBean, parentEntity, entityFieldInfo, srcChildBean);
                     destList.add(destChildBean);
@@ -964,7 +976,7 @@ public abstract class AbstractInterconnect {
             Object val = map.get(childListFieldName);
             if (val != null) {
                 Object[] chs = ConverterUtils.convert(Object[].class, val);
-                List<Object> list = new ArrayList<>();
+                Collection<Object> list = entityFieldInfo.isSet() ? new HashSet<>() : new ArrayList<>();
                 for (int i = 0; i < chs.length; i++) {
                     Object ch = chs[i];
                     Object chbean = null;
@@ -1082,11 +1094,10 @@ public abstract class AbstractInterconnect {
 
             // Child list
             for (EntityFieldInfo entityFieldInfo : entityInfo.getChildListFieldList()) {
-                List<?> chlist = (List<?>) PropertyUtils.getProperty(bean, entityFieldInfo.getName());
+                Collection<?> chlist = (Collection<?>) PropertyUtils.getProperty(bean, entityFieldInfo.getName());
                 if (chlist != null) {
-                    List<Object> rchlist = new ArrayList<>();
-                    for (int i = 0; i < chlist.size(); i++) {
-                        Object chbean = chlist.get(i);
+                    Collection<Object> rchlist = entityFieldInfo.isSet() ? new HashSet<>() : new ArrayList<>();
+                    for (Object chbean : chlist) {
                         chbean = toObjectMap(chbean, entityFieldInfo.getReferences(), list, lean);
                         rchlist.add(chbean);
                     }
