@@ -24,7 +24,6 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.flowcentraltech.flowcentral.connect.common.AbstractInterconnect;
@@ -41,7 +40,7 @@ import com.flowcentraltech.flowcentral.connect.configuration.constants.ConnectFi
 @Component
 public class SpringBootInterconnect extends AbstractInterconnect {
 
-    @Autowired
+    //@Autowired
     public SpringBootInterconnect() {
         super(RefType.OBJECT);
     }

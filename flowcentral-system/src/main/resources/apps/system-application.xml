@@ -1081,7 +1081,7 @@
 					<field name="description" inputWidget="application.text"
 						column="0" required="true" />
 					<field name="status" column="1" required="true" />
-					<field name="nodeUrl" inputWidget="application.area"
+					<field name="nodeUrl" inputWidget="application.textarea"
 						column="1" required="true" />
 				</section>
 			</tab>
