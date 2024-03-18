@@ -56,15 +56,18 @@ public class UserNewActionPolicy extends AbstractAppletActionPolicy {
     @Override
     protected EntityActionResult doExecutePreAction(EntityActionContext ctx) throws UnifyException {
         User user = (User) ctx.getInst();
-        logDebug("Executing new user pre-action policy for user [{0}] ...", user.getFullName());
-        PasswordGenerator passwordGenerator = (PasswordGenerator) getComponent(systemModuleService
-                .getSysParameterValue(String.class, SecurityModuleSysParamConstants.USER_PASSWORD_GENERATOR));
-        int passwordLength = systemModuleService.getSysParameterValue(int.class,
-                SecurityModuleSysParamConstants.USER_PASSWORD_LENGTH);
+        if (user.getOriginalCopyId() == null) {
+            logDebug("Executing new user pre-action policy for user [{0}] ...", user.getFullName());
+            PasswordGenerator passwordGenerator = (PasswordGenerator) getComponent(systemModuleService
+                    .getSysParameterValue(String.class, SecurityModuleSysParamConstants.USER_PASSWORD_GENERATOR));
+            int passwordLength = systemModuleService.getSysParameterValue(int.class,
+                    SecurityModuleSysParamConstants.USER_PASSWORD_LENGTH);
 
-        String password = passwordGenerator.generatePassword(user.getLoginId(), passwordLength);
-        user.setPassword(passwordCryptograph.encrypt(password));
+            String password = passwordGenerator.generatePassword(user.getLoginId(), passwordLength);
+            user.setPassword(passwordCryptograph.encrypt(password));
 //        ctx.setAttribute(USER_PASSWORD, password);
+        }
+
         return null;
     }
 

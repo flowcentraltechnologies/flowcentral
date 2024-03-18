@@ -52,16 +52,18 @@ public class UserCreationEnrichment extends AbstractWfEnrichmentPolicy {
     @Override
     public void enrich(ValueStoreWriter wfItemWriter, ValueStoreReader wfItemReader, String rule)
             throws UnifyException {
-        PasswordGenerator passwordGenerator = (PasswordGenerator) getComponent(systemModuleService
-                .getSysParameterValue(String.class, SecurityModuleSysParamConstants.USER_PASSWORD_GENERATOR));
-        int passwordLength = systemModuleService.getSysParameterValue(int.class,
-                SecurityModuleSysParamConstants.USER_PASSWORD_LENGTH);
+        if (wfItemReader.read(Long.class, "originalCopyId") == null) {
+            PasswordGenerator passwordGenerator = (PasswordGenerator) getComponent(systemModuleService
+                    .getSysParameterValue(String.class, SecurityModuleSysParamConstants.USER_PASSWORD_GENERATOR));
+            int passwordLength = systemModuleService.getSysParameterValue(int.class,
+                    SecurityModuleSysParamConstants.USER_PASSWORD_LENGTH);
 
-        String plainPassword = passwordGenerator.generatePassword(wfItemReader.read(String.class, "loginId"),
-                passwordLength);
-        String encryptedPassword = passwordCryptograph.encrypt(plainPassword);
-        wfItemWriter.writeScratch("plainPassword", plainPassword);
-        wfItemWriter.write("password", encryptedPassword);
+            String plainPassword = passwordGenerator.generatePassword(wfItemReader.read(String.class, "loginId"),
+                    passwordLength);
+            String encryptedPassword = passwordCryptograph.encrypt(plainPassword);
+            wfItemWriter.writeScratch("plainPassword", plainPassword);
+            wfItemWriter.write("password", encryptedPassword);
+        }
     }
 
     @Override
