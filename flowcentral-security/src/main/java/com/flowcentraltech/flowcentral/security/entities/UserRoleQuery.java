@@ -106,7 +106,8 @@ public class UserRoleQuery extends BaseAuditTenantEntityQuery<UserRole> {
 
     public UserRoleQuery roleActiveTime(Date date) throws UnifyException {
         date = CalendarUtils.getTimeOfDay(date);
-        return (UserRoleQuery) addRestriction(new OrBuilder().less("activeBefore", date).isNull("activeBefore").build())
-                .addRestriction(new OrBuilder().greater("activeAfter", date).isNull("activeAfter").build());
+        return (UserRoleQuery) addRestriction(
+                new OrBuilder().greaterEqual("activeBefore", date).isNull("activeBefore").build())
+                        .addRestriction(new OrBuilder().lessEqual("activeAfter", date).isNull("activeAfter").build());
     }
 }
