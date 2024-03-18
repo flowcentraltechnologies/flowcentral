@@ -56,6 +56,10 @@ public class UserRoleQuery extends BaseAuditTenantEntityQuery<UserRole> {
         return (UserRoleQuery) addEquals("userStatus", userStatus);
     }
 
+    public UserRoleQuery userIsOriginal() {
+        return (UserRoleQuery) addIsNull("userOriginalCopyId");
+    }
+
     public UserRoleQuery isSupervisor() {
         return (UserRoleQuery) addEquals("supervisor", Boolean.TRUE);
     }
@@ -90,6 +94,10 @@ public class UserRoleQuery extends BaseAuditTenantEntityQuery<UserRole> {
 
     public UserRoleQuery roleStatus(RecordStatus roleStatus) {
         return (UserRoleQuery) addEquals("roleStatus", roleStatus);
+    }
+
+    public UserRoleQuery roleIsOriginal() {
+        return (UserRoleQuery) addIsNull("roleOriginalCopyId");
     }
 
     public UserRoleQuery departmentId(Long departmentId) {
