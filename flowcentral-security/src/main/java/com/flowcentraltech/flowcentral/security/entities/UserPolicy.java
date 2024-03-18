@@ -43,34 +43,41 @@ public class UserPolicy extends BaseStatusWorkEntityPolicy {
     @Override
     public Object preCreate(Entity record, Date now) throws UnifyException {
         User user = (User) record;
-        user.setChangePassword(Boolean.TRUE);
+        if (user.getOriginalCopyId() == null) {
+            user.setChangePassword(Boolean.TRUE);
 
-        if (user.getPasswordExpires() == null) {
-            user.setPasswordExpires(Boolean.TRUE);
+            if (user.getPasswordExpires() == null) {
+                user.setPasswordExpires(Boolean.TRUE);
+            }
+
+            if (user.getLoginLocked() == null) {
+                user.setLoginLocked(Boolean.FALSE);
+            }
+
+            if (user.getAllowMultipleLogin() == null) {
+                user.setAllowMultipleLogin(Boolean.FALSE);
+            }
+
+            if (user.getWorkflowStatus() == null) {
+                user.setWorkflowStatus(UserWorkflowStatus.NEW);
+            }
+
+            calcPasswordExpiryDate(user, now);
+
+            user.setLoginAttempts(Integer.valueOf(0));
+            user.setLastLoginDt(null);
         }
 
-        if (user.getLoginLocked() == null) {
-            user.setLoginLocked(Boolean.FALSE);
-        }
-
-        if (user.getAllowMultipleLogin() == null) {
-            user.setAllowMultipleLogin(Boolean.FALSE);
-        }
-
-        if (user.getWorkflowStatus() == null) {
-            user.setWorkflowStatus(UserWorkflowStatus.NEW);
-        }
-        
-        calcPasswordExpiryDate(user, now);
-
-        user.setLoginAttempts(Integer.valueOf(0));
-        user.setLastLoginDt(null);
         return super.preCreate(record, now);
     }
 
     @Override
     public void preUpdate(Entity record, Date now) throws UnifyException {
-        calcPasswordExpiryDate((User) record, now);
+        User user = (User) record;
+        if (user.getOriginalCopyId() == null) {
+            calcPasswordExpiryDate(user, now);
+        }
+
         super.preUpdate(record, now);
     }
 
