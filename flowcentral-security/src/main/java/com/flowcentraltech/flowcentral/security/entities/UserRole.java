@@ -59,6 +59,9 @@ public class UserRole extends BaseAuditTenantEntity implements Describable {
 
     @ListOnly(key = "userId", property = "branchId")
     private Long branchId;
+    
+    @ListOnly(key = "userId", property = "originalCopyId")
+    private Long userOriginalCopyId;
 
     @ListOnly(name = "SUPERVISOR_FG", key = "userId", property = "supervisor")
     private Boolean supervisor;
@@ -80,6 +83,9 @@ public class UserRole extends BaseAuditTenantEntity implements Describable {
 
     @ListOnly(key = "roleId", property = "departmentId")
     private Long departmentId;
+    
+    @ListOnly(key = "roleId", property = "originalCopyId")
+    private Long roleOriginalCopyId;
 
     @Override
     public String getDescription() {
@@ -204,5 +210,21 @@ public class UserRole extends BaseAuditTenantEntity implements Describable {
 
     public void setRoleCode(String roleCode) {
         this.roleCode = roleCode;
+    }
+
+    public Long getUserOriginalCopyId() {
+        return userOriginalCopyId;
+    }
+
+    public void setUserOriginalCopyId(Long userOriginalCopyId) {
+        this.userOriginalCopyId = userOriginalCopyId;
+    }
+
+    public Long getRoleOriginalCopyId() {
+        return roleOriginalCopyId;
+    }
+
+    public void setRoleOriginalCopyId(Long roleOriginalCopyId) {
+        this.roleOriginalCopyId = roleOriginalCopyId;
     }
 }

@@ -237,7 +237,7 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
 
         final String sysDateFormatCode = systemModuleService.getSysParameterValue(String.class,
                 SystemModuleSysParamConstants.SYSTEM_DATE_FORMAT);
-        if (!StringUtils.isBlank(sysDateFormatCode)) { 
+        if (!StringUtils.isBlank(sysDateFormatCode)) {
             setSessionStickyAttribute(FormatOverrideConstants.SYSTEM_DATE_OVERRIDE,
                     "!fixeddatetimeformat pattern:$s{" + SysDateFormatType.fromCode(sysDateFormatCode).format() + "}");
         }
@@ -491,7 +491,7 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
         Set<Long> userIds = new HashSet<Long>();
         if (!DataUtils.isBlank(roleCodes)) {
             userIds.addAll(environment().valueSet(Long.class, "userId",
-                    new UserRoleQuery().roleCodeIn(roleCodes).tenantId(tenantId)));
+                    new UserRoleQuery().roleCodeIn(roleCodes).roleIsOriginal().userIsOriginal().tenantId(tenantId)));
 
             Set<Long> userGroupIds = environment().valueSet(Long.class, "userGroupId",
                     new UserGroupRoleQuery().roleCodeIn(roleCodes).tenantId(tenantId));
@@ -519,6 +519,8 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
         if (activeAt != null) {
             userRoleQuery.roleActiveTime(activeAt);
         }
+
+        userRoleQuery.userIsOriginal().roleIsOriginal();
 
         final FactoryMap<Long, String> departmentCodes = organizationModuleService.getMappedDepartmentCodeFactoryMap();
         for (UserRole userRole : environment().listAll(userRoleQuery)) {

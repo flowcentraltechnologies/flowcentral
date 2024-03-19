@@ -56,6 +56,10 @@ public class UserRoleQuery extends BaseAuditTenantEntityQuery<UserRole> {
         return (UserRoleQuery) addEquals("userStatus", userStatus);
     }
 
+    public UserRoleQuery userIsOriginal() {
+        return (UserRoleQuery) addIsNull("userOriginalCopyId");
+    }
+
     public UserRoleQuery isSupervisor() {
         return (UserRoleQuery) addEquals("supervisor", Boolean.TRUE);
     }
@@ -92,13 +96,18 @@ public class UserRoleQuery extends BaseAuditTenantEntityQuery<UserRole> {
         return (UserRoleQuery) addEquals("roleStatus", roleStatus);
     }
 
+    public UserRoleQuery roleIsOriginal() {
+        return (UserRoleQuery) addIsNull("roleOriginalCopyId");
+    }
+
     public UserRoleQuery departmentId(Long departmentId) {
         return (UserRoleQuery) addEquals("departmentId", departmentId);
     }
 
     public UserRoleQuery roleActiveTime(Date date) throws UnifyException {
         date = CalendarUtils.getTimeOfDay(date);
-        return (UserRoleQuery) addRestriction(new OrBuilder().less("activeBefore", date).isNull("activeBefore").build())
-                .addRestriction(new OrBuilder().greater("activeAfter", date).isNull("activeAfter").build());
+        return (UserRoleQuery) addRestriction(
+                new OrBuilder().greaterEqual("activeBefore", date).isNull("activeBefore").build())
+                        .addRestriction(new OrBuilder().lessEqual("activeAfter", date).isNull("activeAfter").build());
     }
 }
