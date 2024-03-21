@@ -77,7 +77,7 @@ import com.tcdng.unify.web.ui.widget.data.Popup;
         @ResultMapping(name = ApplicationResultMappingConstants.REFRESH_CONTENT,
                 response = { "!hidepopupresponse", "!refreshpanelresponse panels:$l{content}" }) })
 public class ApplicationController extends AbstractApplicationForwarderController<ApplicationPageBean> {
-
+ 
     @Configurable
     private WorkspacePrivilegeManager wkspPrivilegeManager;
 
