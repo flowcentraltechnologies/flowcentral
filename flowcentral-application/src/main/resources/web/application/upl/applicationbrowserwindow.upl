@@ -20,3 +20,15 @@
 !ui-contentpanel:content styleClass:$e{fc-login-contentpanel}
 	documentPathBinding:documentPath pathsBinding:contentPaths
 	titleUppercase:false detachedWindow:true
+	
+// Entity select pop up
+!fc-entityselectpanel:entitySelectPopup binding:$w{}
+
+// Entity multiselect pop up
+!fc-entitymultiselectpanel:entityMultiselectPopup binding:$w{}
+
+// Entity tree multiselect pop up
+!fc-entitytreemultiselectpanel:entityTreeMultiselectPopup binding:$w{}
+
+// Text template pop up
+!fc-texttemplatepanel:textTemplatePopup binding:$w{}
