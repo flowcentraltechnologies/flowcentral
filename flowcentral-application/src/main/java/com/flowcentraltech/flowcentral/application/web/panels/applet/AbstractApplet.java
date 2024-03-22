@@ -64,10 +64,12 @@ public abstract class AbstractApplet {
         }
     }
 
+    protected static final int APPLET_NAME_INDEX = 0;
+
     protected final AppletUtilities au;
 
     protected final AppletContext ctx;
-
+    
     private final String appletName;
 
     private AppletDef rootAppletDef;

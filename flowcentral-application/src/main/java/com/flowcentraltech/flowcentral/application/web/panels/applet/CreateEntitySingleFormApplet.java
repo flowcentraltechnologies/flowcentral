@@ -15,6 +15,8 @@
  */
 package com.flowcentraltech.flowcentral.application.web.panels.applet;
 
+import java.util.List;
+
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm.FormMode;
 import com.tcdng.unify.core.UnifyException;
@@ -27,9 +29,9 @@ import com.tcdng.unify.core.UnifyException;
  */
 public class CreateEntitySingleFormApplet extends AbstractEntitySingleFormApplet {
 
-    public CreateEntitySingleFormApplet(AppletUtilities au, String pathVariable)
+    public CreateEntitySingleFormApplet(AppletUtilities au, List<String> pathVariables)
             throws UnifyException {
-        super(au, pathVariable);
+        super(au, pathVariables);
         form = constructNewForm(FormMode.CREATE);
         viewMode = ViewMode.NEW_PRIMARY_FORM;
         setAltSubCaption(form.getFormTitle());

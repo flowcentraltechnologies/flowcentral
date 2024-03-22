@@ -16,6 +16,8 @@
 
 package com.flowcentraltech.flowcentral.studio.web.panels.applet;
 
+import java.util.List;
+
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.EntityFormEventHandlers;
@@ -36,10 +38,10 @@ public class StudioReportConfigurationApplet extends StudioAppComponentApplet {
 
     private ReportEditorPage reportEditorPage;
 
-    public StudioReportConfigurationApplet(StudioModuleService sms, AppletUtilities au, String pathVariable,
+    public StudioReportConfigurationApplet(StudioModuleService sms, AppletUtilities au, List<String> pathVariables,
             String applicationName, AppletWidgetReferences appletWidgetReferences,
             EntityFormEventHandlers formEventHandlers) throws UnifyException {
-        super(sms, au, pathVariable, applicationName, appletWidgetReferences, formEventHandlers);
+        super(sms, au, pathVariables, applicationName, appletWidgetReferences, formEventHandlers);
     }
 
     public ReportEditorPage getReportEditorPage() {

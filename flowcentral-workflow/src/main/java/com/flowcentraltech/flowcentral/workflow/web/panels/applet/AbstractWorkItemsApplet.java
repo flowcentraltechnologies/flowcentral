@@ -42,9 +42,9 @@ import com.tcdng.unify.web.ui.widget.data.ButtonInfo;
  */
 public class AbstractWorkItemsApplet extends ManageLoadingListApplet {
 
-    public AbstractWorkItemsApplet(AppletUtilities au, String pathVariable, AppletWidgetReferences appletWidgetReferences,
+    public AbstractWorkItemsApplet(AppletUtilities au, List<String> pathVariables, AppletWidgetReferences appletWidgetReferences,
             EntityFormEventHandlers formEventHandlers) throws UnifyException {
-        super(au, pathVariable, appletWidgetReferences, formEventHandlers);
+        super(au, pathVariables, appletWidgetReferences, formEventHandlers);
     }
 
     protected List<ButtonInfo> getActionButtons(WorkflowModuleService workflowModuleService,

@@ -16,6 +16,8 @@
 
 package com.flowcentraltech.flowcentral.studio.web.panels.applet;
 
+import java.util.List;
+
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.data.EntityFormEventHandlers;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
@@ -44,10 +46,10 @@ public class StudioDashboardApplet extends StudioAppComponentApplet {
     private final DashboardModuleService dms;
 
     public StudioDashboardApplet(StudioModuleService sms, ChartModuleService cms, DashboardModuleService dms,
-            AppletUtilities au, String pathVariable, String applicationName,
+            AppletUtilities au, List<String> pathVariables, String applicationName,
             AppletWidgetReferences appletWidgetReferences, EntityFormEventHandlers formEventHandlers)
             throws UnifyException {
-        super(sms, au, pathVariable, applicationName, appletWidgetReferences, formEventHandlers);
+        super(sms, au, pathVariables, applicationName, appletWidgetReferences, formEventHandlers);
         this.cms = cms;
         this.dms = dms;
     }

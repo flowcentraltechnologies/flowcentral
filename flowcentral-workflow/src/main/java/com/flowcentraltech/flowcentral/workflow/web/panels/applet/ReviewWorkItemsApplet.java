@@ -15,6 +15,8 @@
  */
 package com.flowcentraltech.flowcentral.workflow.web.panels.applet;
 
+import java.util.List;
+
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.data.Comments;
@@ -65,10 +67,10 @@ public class ReviewWorkItemsApplet extends AbstractReviewWorkItemsApplet {
 
     private boolean userActionRight;
 
-    public ReviewWorkItemsApplet(AppletUtilities au, WorkflowModuleService wms, String pathVariable, String userLoginId,
+    public ReviewWorkItemsApplet(AppletUtilities au, WorkflowModuleService wms, List<String> pathVariables, String userLoginId,
             AppletWidgetReferences appletWidgetReferences, EntityFormEventHandlers formEventHandlers)
             throws UnifyException {
-        super(au, pathVariable, appletWidgetReferences, formEventHandlers);
+        super(au, pathVariables, appletWidgetReferences, formEventHandlers);
         this.wms = wms;
         AppletDef _appletDef = getRootAppletDef();
         entitySearch = au.constructEntitySearch(new FormContext(getCtx()), this, null,

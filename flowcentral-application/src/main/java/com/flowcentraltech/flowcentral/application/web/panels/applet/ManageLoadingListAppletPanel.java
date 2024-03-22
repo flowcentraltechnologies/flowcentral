@@ -106,6 +106,7 @@ public class ManageLoadingListAppletPanel extends AbstractEntityFormAppletPanel 
     }
 
     private ManageLoadingListApplet getManageLoadingListApplet() throws UnifyException {
+        ensureDetachedWindowChecked();
         return getValue(ManageLoadingListApplet.class);
     }
 }

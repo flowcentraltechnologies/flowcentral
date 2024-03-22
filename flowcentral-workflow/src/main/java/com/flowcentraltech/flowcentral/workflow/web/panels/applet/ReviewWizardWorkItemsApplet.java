@@ -72,10 +72,10 @@ public class ReviewWizardWorkItemsApplet extends AbstractEntityFormApplet {
 
     private int wfWizardStepIndex;
 
-    public ReviewWizardWorkItemsApplet(AppletUtilities au, WorkflowModuleService wms, String pathVariable,
+    public ReviewWizardWorkItemsApplet(AppletUtilities au, WorkflowModuleService wms, List<String> pathVariables,
             String userLoginId, AppletWidgetReferences appletWidgetReferences,
             EntityFormEventHandlers formEventHandlers) throws UnifyException {
-        super(au, pathVariable, appletWidgetReferences, formEventHandlers);
+        super(au, pathVariables, appletWidgetReferences, formEventHandlers);
         AppletDef _appletDef = getRootAppletDef();
         this.entitySearch = au.constructEntitySearch(new FormContext(getCtx()), this, null,
                 getRootAppletDef().getDescription(), _appletDef, null,

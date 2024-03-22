@@ -74,7 +74,7 @@ public class StudioDashboardAppletController
             AppletWidgetReferences appletWidgetReferences = getAppletWidgetReferences();
             EntityFormEventHandlers formEventHandlers = getEntityFormEventHandlers();
             StudioDashboardApplet applet = new StudioDashboardApplet(studioModuleService, chartModuleService,
-                    dashboardModuleService, au(), getPathVariable(),
+                    dashboardModuleService, au(), getPathVariables(),
                     (String) getSessionAttribute(StudioSessionAttributeConstants.CURRENT_APPLICATION_NAME),
                     appletWidgetReferences, formEventHandlers);
             pageBean.setApplet(applet);

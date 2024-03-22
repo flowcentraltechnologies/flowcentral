@@ -15,6 +15,8 @@
  */
 package com.flowcentraltech.flowcentral.application.web.panels.applet;
 
+import java.util.List;
+
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.data.EntityFormEventHandlers;
@@ -29,10 +31,10 @@ import com.tcdng.unify.core.UnifyException;
  */
 public class HeadlessTabsFormApplet extends AbstractEntityFormApplet {
 
-    public HeadlessTabsFormApplet(AppletUtilities au, String pathVariable,
+    public HeadlessTabsFormApplet(AppletUtilities au, List<String> pathVariables,
             AppletWidgetReferences appletWidgetReferences, EntityFormEventHandlers formEventHandlers)
             throws UnifyException {
-        super(au, pathVariable, appletWidgetReferences, formEventHandlers);
+        super(au, pathVariables, appletWidgetReferences, formEventHandlers);
         setCurrFormAppletDef(getRootAppletDef());
         headlessForm = au.constructHeadlessTabsForm(getCtx(), this, getRootAppletDef().getDescription(),
                 getCurrFormAppletDef());

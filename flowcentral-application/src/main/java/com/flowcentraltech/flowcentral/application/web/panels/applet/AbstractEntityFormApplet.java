@@ -242,16 +242,16 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
 
     private final boolean collaboration;
 
-    public AbstractEntityFormApplet(AppletUtilities au, String pathVariable,
+    public AbstractEntityFormApplet(AppletUtilities au, List<String> pathVariables,
             AppletWidgetReferences appletWidgetReferences, EntityFormEventHandlers formEventHandlers)
             throws UnifyException {
-        this(au, pathVariable, appletWidgetReferences, formEventHandlers, false);
+        this(au, pathVariables, appletWidgetReferences, formEventHandlers, false);
     }
 
-    public AbstractEntityFormApplet(AppletUtilities au, String pathVariable,
+    public AbstractEntityFormApplet(AppletUtilities au, List<String> pathVariables,
             AppletWidgetReferences appletWidgetReferences, EntityFormEventHandlers formEventHandlers,
             boolean collaboration) throws UnifyException {
-        super(au, pathVariable);
+        super(au, pathVariables.get(APPLET_NAME_INDEX));
         this.appletWidgetReferences = appletWidgetReferences;
         this.formEventHandlers = formEventHandlers;
         this.formFileAttachments = new EntityFileAttachments();
@@ -842,7 +842,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         if (getCtx().isInDetachedWindow()) {
             return submitInstAndNext();
         }
-        
+
         return submitInst(ActionMode.ACTION_AND_CLOSE, FormReviewType.ON_SUBMIT);
     }
 
