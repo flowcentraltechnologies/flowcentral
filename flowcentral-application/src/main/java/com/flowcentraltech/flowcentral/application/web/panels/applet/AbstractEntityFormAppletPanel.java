@@ -67,7 +67,6 @@ import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.web.annotation.Action;
 import com.tcdng.unify.web.constant.ResultMappingConstants;
-import com.tcdng.unify.web.ui.PageAttributeConstants;
 import com.tcdng.unify.web.ui.constant.MessageType;
 import com.tcdng.unify.web.ui.widget.Panel;
 import com.tcdng.unify.web.ui.widget.data.Hint.MODE;
@@ -1086,9 +1085,8 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
     }
 
     protected AbstractEntityFormApplet getEntityFormApplet() throws UnifyException {
-        AbstractEntityFormApplet applet = getValue(AbstractEntityFormApplet.class);
-        applet.getCtx().setInDetachedWindow(getPageAttribute(boolean.class, PageAttributeConstants.IN_DETACHED_WINDOW));
-        return applet;
+        ensureDetachedWindowChecked();
+        return getValue(AbstractEntityFormApplet.class);
     }
 
     protected FormContext evaluateCurrentFormContext(EvaluationMode evaluationMode) throws UnifyException {

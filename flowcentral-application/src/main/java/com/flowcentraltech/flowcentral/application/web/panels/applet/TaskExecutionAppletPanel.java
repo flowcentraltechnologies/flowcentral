@@ -51,10 +51,11 @@ public class TaskExecutionAppletPanel extends AbstractAppletPanel {
 
     @Override
     protected void onReviewErrors(EntityActionResult entityActionResult) throws UnifyException {
-        
+
     }
 
     protected TaskExecutionApplet getTaskExecutionApplet() throws UnifyException {
+        ensureDetachedWindowChecked();
         return getValue(TaskExecutionApplet.class);
     }
 }

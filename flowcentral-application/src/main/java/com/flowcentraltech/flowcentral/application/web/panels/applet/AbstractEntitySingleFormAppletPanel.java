@@ -274,14 +274,7 @@ public abstract class AbstractEntitySingleFormAppletPanel extends AbstractApplet
 
     @Action
     public void performFormAction() throws UnifyException {
-//        String actionName = getRequestTarget(String.class);
-//        AbstractEntitySingleFormApplet applet = getEntityFormApplet();
-//        FormActionDef formActionDef = applet.getCurrentFormDef().getFormActionDef(actionName);
-//        FormContext ctx = evaluateCurrentFormContext(EvaluationMode.getRequiredMode(formActionDef.isValidateForm()));
-//        if (!ctx.isWithFormErrors()) {
-//            EntityActionResult entityActionResult = applet.formActionOnInst(formActionDef.getPolicy());
-//            handleEntityActionResult(entityActionResult);
-//        }
+
     }
 
     @Action
@@ -427,6 +420,7 @@ public abstract class AbstractEntitySingleFormAppletPanel extends AbstractApplet
     }
 
     protected AbstractEntitySingleFormApplet getEntityFormApplet() throws UnifyException {
+        ensureDetachedWindowChecked();
         return getValue(AbstractEntitySingleFormApplet.class);
     }
 

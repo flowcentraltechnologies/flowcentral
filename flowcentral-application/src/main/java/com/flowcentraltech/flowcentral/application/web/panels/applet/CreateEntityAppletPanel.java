@@ -68,6 +68,7 @@ public class CreateEntityAppletPanel extends AbstractEntityFormAppletPanel {
     }
 
     protected CreateEntityApplet getCreateEntityApplet() throws UnifyException {
+        ensureDetachedWindowChecked();
         return getValue(CreateEntityApplet.class);
     }
 }
