@@ -5310,6 +5310,9 @@
 				<property name="assignmentPage"
 					description="$m{studio.appappletprop.createentity.assignmentpage}"
 					inputWidget="studio.propertyappletassignpagelist" />
+				<property name="page.multiple"
+					description="$m{studio.appappletprop.pathpage.property.pagemultiple}"
+					inputWidget="application.checkbox" />
 			</propertySet>
 			<propertySet
 				label="$m{studio.appappletprop.createentity.formproperties}">
@@ -5432,6 +5435,9 @@
 				<property name="assignmentPage"
 					description="$m{studio.appappletprop.createentitysingleform.assignmentpage}"
 					inputWidget="studio.propertyappletassignpagelist" />
+				<property name="page.multiple"
+					description="$m{studio.appappletprop.pathpage.property.pagemultiple}"
+					inputWidget="application.checkbox" />
 			</propertySet>
 			<propertySet
 				label="$m{studio.appappletprop.createentitysingleform.formproperties}">
