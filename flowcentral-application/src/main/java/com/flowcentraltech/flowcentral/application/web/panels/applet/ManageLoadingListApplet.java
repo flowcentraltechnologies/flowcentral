@@ -15,6 +15,8 @@
  */
 package com.flowcentraltech.flowcentral.application.web.panels.applet;
 
+import java.util.List;
+
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.constants.AppletPropertyConstants;
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
@@ -61,10 +63,10 @@ public class ManageLoadingListApplet extends AbstractEntityFormApplet {
 
     private EntitySingleForm singleForm;
 
-    public ManageLoadingListApplet(AppletUtilities au, String pathVariable,
+    public ManageLoadingListApplet(AppletUtilities au, List<String> pathVariables,
             AppletWidgetReferences appletWidgetReferences, EntityFormEventHandlers formEventHandlers)
             throws UnifyException {
-        super(au, pathVariable, appletWidgetReferences, formEventHandlers);
+        super(au, pathVariables, appletWidgetReferences, formEventHandlers);
         loadingSearch = au.constructLoadingSearch(ctx, LoadingSearch.ENABLE_ALL);
         if (isRootAppletPropWithValue(AppletPropertyConstants.BASE_RESTRICTION)) {
             AppletFilterDef appletFilterDef = getRootAppletFilterDef(AppletPropertyConstants.BASE_RESTRICTION);

@@ -44,7 +44,7 @@ public class ManageEntityListSingleFormAppletController extends
         super.onOpenPage();
         ManageEntityListSingleFormAppletPageBean pageBean = getPageBean();
         if (pageBean.getApplet() == null) {
-            ManageEntityListSingleFormApplet applet = new ManageEntityListSingleFormApplet(au(), getPathVariable());
+            ManageEntityListSingleFormApplet applet = new ManageEntityListSingleFormApplet(au(), getPathVariables());
             pageBean.setApplet(applet);
             if (pageBean.getAltCaption() == null) {
                 setPageTitle(applet);

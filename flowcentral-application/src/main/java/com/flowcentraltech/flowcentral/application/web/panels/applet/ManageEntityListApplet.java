@@ -15,6 +15,8 @@
  */
 package com.flowcentraltech.flowcentral.application.web.panels.applet;
 
+import java.util.List;
+
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.constants.AppletPropertyConstants;
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
@@ -46,13 +48,13 @@ public class ManageEntityListApplet extends AbstractEntityFormApplet {
     private static final Restriction ORIGINAL_BASE_RESTRICTION = new Equals("wfItemVersionType",
             WfItemVersionType.ORIGINAL);
 
-    public ManageEntityListApplet(AppletUtilities au, String pathVariable,
+    public ManageEntityListApplet(AppletUtilities au, List<String> pathVariables,
             AppletWidgetReferences appletWidgetReferences, EntityFormEventHandlers formEventHandlers)
             throws UnifyException {
-        super(au, pathVariable, appletWidgetReferences, formEventHandlers);
+        super(au, pathVariables, appletWidgetReferences, formEventHandlers);
         final AppletDef _rootAppletDef = getRootAppletDef();
         setCurrFormAppletDef(_rootAppletDef);
-        final String vestigial = ApplicationNameUtils.getVestigialNamePart(pathVariable);
+        final String vestigial = ApplicationNameUtils.getVestigialNamePart(pathVariables.get(APPLET_NAME_INDEX));
         final boolean isUpdateDraft = ApplicationNameUtils.WORKFLOW_COPY_UPDATE_DRAFT_PATH_SUFFIX.equals(vestigial);
         entitySearch = au.constructEntitySearch(new FormContext(getCtx()), this, null, _rootAppletDef.getDescription(),
                 getCurrFormAppletDef(), null,

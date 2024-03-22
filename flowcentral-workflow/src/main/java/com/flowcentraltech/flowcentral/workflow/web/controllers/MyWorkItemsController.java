@@ -15,6 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.workflow.web.controllers;
 
+import java.util.Arrays;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.data.EntityFormEventHandlers;
@@ -82,7 +83,7 @@ public class MyWorkItemsController extends AbstractEntityFormAppletController<My
                     tnp.getEntityName());
             UserToken userToken = getUserToken();
             MyWorkItemsApplet applet = new MyWorkItemsApplet(workflowModuleService, pageBean.getSelLoadingTableName(),
-                    userToken.getRoleCode(), au(), loadinAppletName, appletWidgetReferences, formEventHandlers);
+                    userToken.getRoleCode(), au(), Arrays.asList( loadinAppletName), appletWidgetReferences, formEventHandlers);
             pageBean.setApplet(applet);
             setPageWidgetVisible("appletPanel", true);
         } else {

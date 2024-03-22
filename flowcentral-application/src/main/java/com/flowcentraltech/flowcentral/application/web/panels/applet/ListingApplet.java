@@ -58,10 +58,10 @@ public class ListingApplet extends AbstractApplet implements SweepingCommitPolic
 
     protected EntityFileAttachments formFileAttachments;
 
-    public ListingApplet(AppletUtilities au, String pathVariable) throws UnifyException {
-        super(au, pathVariable);
+    public ListingApplet(AppletUtilities au, List<String> pathVariables) throws UnifyException {
+        super(au, pathVariables.get(APPLET_NAME_INDEX));
         this.formFileAttachments = new EntityFileAttachments();
-        final String vestigial = ApplicationNameUtils.getVestigialNamePart(pathVariable);
+        final String vestigial = ApplicationNameUtils.getVestigialNamePart(pathVariables.get(APPLET_NAME_INDEX));
         final Long entityInstId = Long.valueOf(vestigial);
         Entity _inst = loadEntity(entityInstId);
         listingForm = constructListingForm(_inst);

@@ -56,7 +56,7 @@ public class StudioAppComponentAppletController
             AppletWidgetReferences appletWidgetReferences = getAppletWidgetReferences();
             EntityFormEventHandlers formEventHandlers = getEntityFormEventHandlers();
             StudioAppComponentApplet applet = new StudioAppComponentApplet(studioModuleService, au(),
-                    getPathVariable(),
+                    getPathVariables(),
                     (String) getSessionAttribute(StudioSessionAttributeConstants.CURRENT_APPLICATION_NAME),
                     appletWidgetReferences, formEventHandlers);
             pageBean.setApplet(applet);

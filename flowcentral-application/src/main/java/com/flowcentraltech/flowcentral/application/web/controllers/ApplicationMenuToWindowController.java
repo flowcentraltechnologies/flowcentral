@@ -23,6 +23,7 @@ import com.flowcentraltech.flowcentral.application.constants.AppletSessionAttrib
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModulePathConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationResultMappingConstants;
 import com.flowcentraltech.flowcentral.application.data.RequestOpenTabInfo;
+import com.flowcentraltech.flowcentral.application.util.ApplicationPageUtils;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.UplBinding;
@@ -53,7 +54,7 @@ public class ApplicationMenuToWindowController extends AbstractPageController<Ap
     @SuppressWarnings("unchecked")
     @Action
     public String openInBrowserWindow() throws UnifyException {
-        final String pathVariable = getPathVariable();
+        final String pathVariable = ApplicationPageUtils.mergePathVariables(getPathVariables());
         RequestOpenTabInfo requestOpenTabInfo = ((Map<String, RequestOpenTabInfo>) getSessionAttribute(
                 AppletSessionAttributeConstants.MENU_OPEN_TAB_INFO)).get(pathVariable);
         setRequestAttribute(AppletRequestAttributeConstants.OPEN_TAB_INFO, requestOpenTabInfo);

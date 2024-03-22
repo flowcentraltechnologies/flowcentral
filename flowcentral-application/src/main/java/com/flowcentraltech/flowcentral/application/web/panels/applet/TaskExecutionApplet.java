@@ -39,8 +39,8 @@ public class TaskExecutionApplet extends AbstractApplet {
 
     private final ParamValueEntries paramValueEntries;
 
-    public TaskExecutionApplet(AppletUtilities au, TaskManager tm, String appletName) throws UnifyException {
-        super(au, appletName);
+    public TaskExecutionApplet(AppletUtilities au, TaskManager tm, List<String> pathVariables) throws UnifyException {
+        super(au, pathVariables.get(APPLET_NAME_INDEX));
         List<ParamConfig> paramConfigList = tm
                 .getTaskParameters(getRootAppletProp(String.class, AppletPropertyConstants.TASKEXECUTION_TASKNAME));
         ParamValuesDef paramValuesDef = CommonInputUtils.getParamValuesDef(paramConfigList);

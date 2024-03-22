@@ -188,8 +188,7 @@ public interface AppletPropertyConstants {
 
     String SINGLE_FORM_PANEL = "singleForm.panel";
 
-    String PAGE_MULTIPLE = "page.multiple";
-    
+    String PAGE_MULTIPLE = "page.multiple";    
     
     String WORKFLOWCOPY = "workflowCopy";
 

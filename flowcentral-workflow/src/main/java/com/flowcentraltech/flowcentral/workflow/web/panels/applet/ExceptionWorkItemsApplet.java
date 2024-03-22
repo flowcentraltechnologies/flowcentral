@@ -43,9 +43,9 @@ import com.tcdng.unify.web.ui.widget.data.ButtonInfo;
 public class ExceptionWorkItemsApplet extends AbstractWorkItemsApplet {
 
     public ExceptionWorkItemsApplet(WorkflowModuleService workflowModuleService, String loadingTableName,
-            String roleCode, AppletUtilities au, String pathVariable, AppletWidgetReferences appletWidgetReferences,
+            String roleCode, AppletUtilities au, List<String> pathVariables, AppletWidgetReferences appletWidgetReferences,
             EntityFormEventHandlers formEventHandlers) throws UnifyException {
-        super(au, pathVariable, appletWidgetReferences, formEventHandlers);
+        super(au, pathVariables, appletWidgetReferences, formEventHandlers);
         List<TableLoadingDef> altTableLoadingDefs = new ArrayList<TableLoadingDef>();
         UserToken userToken = au.getSessionUserToken();
         List<WorkflowStepInfo> workflowStepList = loadingTableName != null

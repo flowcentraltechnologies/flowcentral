@@ -16,6 +16,8 @@
 
 package com.flowcentraltech.flowcentral.workflow.web.panels.applet;
 
+import java.util.List;
+
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.data.EntityFormEventHandlers;
 import com.flowcentraltech.flowcentral.application.web.controllers.AppletWidgetReferences;
@@ -30,10 +32,10 @@ import com.tcdng.unify.core.UnifyException;
  */
 public abstract class AbstractReviewWorkItemsApplet extends AbstractEntityFormApplet {
 
-    public AbstractReviewWorkItemsApplet(AppletUtilities au, String pathVariable,
+    public AbstractReviewWorkItemsApplet(AppletUtilities au, List<String> pathVariables,
             AppletWidgetReferences appletWidgetReferences, EntityFormEventHandlers formEventHandlers)
             throws UnifyException {
-        super(au, pathVariable, appletWidgetReferences, formEventHandlers);
+        super(au, pathVariables, appletWidgetReferences, formEventHandlers);
     }
 
 }

@@ -115,8 +115,8 @@ public abstract class AbstractEntitySingleFormApplet extends AbstractApplet {
 
     protected int mIndex;
 
-    public AbstractEntitySingleFormApplet(AppletUtilities au, String pathVariable) throws UnifyException {
-        super(au, pathVariable);
+    public AbstractEntitySingleFormApplet(AppletUtilities au, List<String> pathVariables) throws UnifyException {
+        super(au, pathVariables.get(APPLET_NAME_INDEX));
     }
 
     @Override

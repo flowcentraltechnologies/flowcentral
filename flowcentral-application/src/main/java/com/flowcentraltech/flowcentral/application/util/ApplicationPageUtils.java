@@ -15,6 +15,8 @@
  */
 package com.flowcentraltech.flowcentral.application.util;
 
+import java.util.List;
+
 import com.flowcentraltech.flowcentral.configuration.constants.AppletType;
 import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.constant.UnifyWebRequestAttributeConstants;
@@ -33,6 +35,10 @@ public final class ApplicationPageUtils {
 
     }
 
+    public static String mergePathVariables(List<String> pathVariables) {
+        return StringUtils.concatenateUsingSeparator(':', pathVariables);
+    }
+    
     public static String constructMultiPageAppletOpenPagePath(String path) {
         return StringUtils.replaceLast(path, "/", MULTIPAGE_PART);
     }

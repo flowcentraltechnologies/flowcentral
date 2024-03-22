@@ -66,7 +66,7 @@ public class StudioReportConfigurationAppletController extends
             AppletWidgetReferences appletWidgetReferences = getAppletWidgetReferences();
             EntityFormEventHandlers formEventHandlers = getEntityFormEventHandlers();
             StudioReportConfigurationApplet applet = new StudioReportConfigurationApplet(studioModuleService, au(),
-                    getPathVariable(),
+                    getPathVariables(),
                     (String) getSessionAttribute(StudioSessionAttributeConstants.CURRENT_APPLICATION_NAME),
                     appletWidgetReferences, formEventHandlers);
             pageBean.setApplet(applet);

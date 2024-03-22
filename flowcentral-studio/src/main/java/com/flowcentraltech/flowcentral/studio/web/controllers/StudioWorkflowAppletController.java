@@ -65,7 +65,7 @@ public class StudioWorkflowAppletController
         if (pageBean.getApplet() == null) {
             AppletWidgetReferences appletWidgetReferences = getAppletWidgetReferences();
             EntityFormEventHandlers formEventHandlers = getEntityFormEventHandlers();
-            StudioWorkflowApplet applet = new StudioWorkflowApplet(studioModuleService, au(), getPathVariable(),
+            StudioWorkflowApplet applet = new StudioWorkflowApplet(studioModuleService, au(), getPathVariables(),
                     (String) getSessionAttribute(StudioSessionAttributeConstants.CURRENT_APPLICATION_NAME),
                     appletWidgetReferences, formEventHandlers);
             pageBean.setApplet(applet);
