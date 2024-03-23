@@ -27,7 +27,6 @@ import com.flowcentraltech.flowcentral.application.business.AttachmentsProvider;
 import com.flowcentraltech.flowcentral.application.constants.AppletPropertyConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleErrorConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleNameConstants;
-import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.application.constants.WorkflowDraftType;
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.data.AppletFilterDef;
@@ -382,19 +381,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
 
     public TableActionResult newEntityInst() throws UnifyException {
         if (entitySearch.isViewItemsInSeparateTabs()) {
-            final String appletName = getAppletName();
-            final String openPath = ApplicationPageUtils.constructAppletOpenPagePath(AppletType.CREATE_ENTITY,
-                    appletName);
-            TableActionResult result = new TableActionResult(null, openPath);
-            result.setOpenPath(true);
-
-            if (au().system().getSysParameterValue(boolean.class,
-                    ApplicationModuleSysParamConstants.ENABLE_OPEN_TAB_IN_BROWSER)) {
-                result.setTabName(appletName + "_new");
-                result.setOpenTab(true);
-            }
-
-            return result;
+            return openInTab();
         }
 
         form = constructNewForm(FormMode.CREATE, null, false);
@@ -676,22 +663,8 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
     public TableActionResult maintainInst(int mIndex) throws UnifyException {
         this.mIndex = mIndex;
         Entity _inst = getEntitySearchItem(entitySearch, mIndex).getEntity();
-        if (entitySearch.isViewItemsInSeparateTabs()) {
-            final String appletName = getAppletName();
-            final String openPath = ApplicationPageUtils.constructAppletOpenPagePath(AppletType.CREATE_ENTITY,
-                    appletName, _inst.getId());
-            TableActionResult result = new TableActionResult(_inst, openPath);
-            result.setOpenPath(true);
-
-            if (au().system().getSysParameterValue(boolean.class,
-                    ApplicationModuleSysParamConstants.ENABLE_OPEN_TAB_IN_BROWSER)) {
-                final String tabName = ApplicationNameUtils.addVestigialNamePart(appletName,
-                        String.valueOf(_inst.getId()));
-                result.setTabName(tabName);
-                result.setOpenTab(true);
-            }
-
-            return result;
+        if (entitySearch.isViewItemsInSeparateTabs()) { 
+            return openInTab(_inst);
         }
 
         _inst = reloadEntity(_inst, true);

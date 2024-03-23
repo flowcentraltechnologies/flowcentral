@@ -34,11 +34,14 @@ import com.flowcentraltech.flowcentral.application.data.PropertyRuleDef;
 import com.flowcentraltech.flowcentral.application.data.TableDef;
 import com.flowcentraltech.flowcentral.application.data.WorkflowDraftInfo;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
+import com.flowcentraltech.flowcentral.application.util.ApplicationPageUtils;
 import com.flowcentraltech.flowcentral.application.web.data.AppletContext;
 import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm;
 import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm.FormMode;
 import com.flowcentraltech.flowcentral.application.web.panels.EntitySingleForm;
 import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs;
+import com.flowcentraltech.flowcentral.common.business.policies.TableActionResult;
+import com.flowcentraltech.flowcentral.configuration.constants.AppletType;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.BeanValueStore;
 import com.tcdng.unify.core.data.ValueStoreReader;
@@ -335,6 +338,40 @@ public abstract class AbstractApplet {
         form.loadSingleFormBean();
     }
 
+    protected TableActionResult openInTab(Entity _inst) throws UnifyException {
+        final String appletName = getAppletName();
+        final String openPath = ApplicationPageUtils.constructAppletOpenPagePath(AppletType.CREATE_ENTITY,
+                appletName, _inst.getId());
+        TableActionResult result = new TableActionResult(_inst, openPath);
+        result.setOpenPath(true);
+
+        if (au().system().getSysParameterValue(boolean.class,
+                ApplicationModuleSysParamConstants.ENABLE_OPEN_TAB_IN_BROWSER)) {
+            final String tabName = ApplicationNameUtils.addVestigialNamePart(appletName,
+                    String.valueOf(_inst.getId()));
+            result.setTabName(tabName);
+            result.setOpenTab(true);
+        }
+
+        return result;
+    }
+    
+    protected TableActionResult openInTab() throws UnifyException {
+        final String appletName = getAppletName();
+        final String openPath = ApplicationPageUtils.constructAppletOpenPagePath(AppletType.CREATE_ENTITY,
+                appletName);
+        TableActionResult result = new TableActionResult(null, openPath);
+        result.setOpenPath(true);
+
+        if (au().system().getSysParameterValue(boolean.class,
+                ApplicationModuleSysParamConstants.ENABLE_OPEN_TAB_IN_BROWSER)) {
+            result.setTabName(appletName + "_new");
+            result.setOpenTab(true);
+        }
+
+        return result;
+    }
+    
     private BreadCrumbs makeSingleFormBreadCrumbs() {
         BreadCrumbs.Builder bcb = BreadCrumbs.newBuilder();
         // bcb.addHistoryCrumb(form.getFormTitle(), form.getBeanTitle(),

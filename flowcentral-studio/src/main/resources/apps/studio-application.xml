@@ -5924,6 +5924,9 @@
 				<property name="searchTable.searchColumns"
 					description="$m{studio.appappletprop.manageentity.searchtable.searchcolumns}"
 					inputWidget="studio.propertyappletsingledigit" />
+				<property name="searchTable.viewItemInSeparateTab"
+					description="$m{studio.appappletprop.manageentity.searchtable.viewiteminseparatetab}"
+					inputWidget="application.checkbox" />
 			</propertySet>
 			<propertySet
 				label="$m{studio.appappletprop.manageentitysingleform.formproperties}">

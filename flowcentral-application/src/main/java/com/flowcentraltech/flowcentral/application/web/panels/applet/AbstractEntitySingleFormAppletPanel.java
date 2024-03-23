@@ -18,14 +18,17 @@ package com.flowcentraltech.flowcentral.application.web.panels.applet;
 
 import com.flowcentraltech.flowcentral.application.constants.AppletPropertyConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleSysParamConstants;
+import com.flowcentraltech.flowcentral.application.constants.ApplicationResultMappingConstants;
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.web.data.AppletContext;
 import com.flowcentraltech.flowcentral.application.web.data.FormContext;
+import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm.FormMode;
 import com.flowcentraltech.flowcentral.application.web.panels.EntitySingleForm;
 import com.flowcentraltech.flowcentral.application.web.panels.FormPanel;
 import com.flowcentraltech.flowcentral.common.business.ApplicationPrivilegeManager;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
+import com.flowcentraltech.flowcentral.common.business.policies.TableActionResult;
 import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
 import com.flowcentraltech.flowcentral.common.constants.WfItemVersionType;
 import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
@@ -103,7 +106,7 @@ public abstract class AbstractEntitySingleFormAppletPanel extends AbstractApplet
                     .formBeanMatchAppletPropertyCondition(AppletPropertyConstants.MAINTAIN_FORM_SUBMIT_CONDITION);
         }
 
-        appCtx.setCapture(capture); 
+        appCtx.setCapture(capture);
         if (viewMode.isInForm()) {
             boolean showAlternateFormActions = systemModuleService.getSysParameterValue(boolean.class,
                     ApplicationModuleSysParamConstants.SHOW_FORM_ALTERNATE_ACTIONS);
@@ -134,6 +137,7 @@ public abstract class AbstractEntitySingleFormAppletPanel extends AbstractApplet
 
         switch (viewMode) {
             case MAINTAIN_FORM_SCROLL:
+                final boolean closable = !appCtx.isInDetachedWindow();
                 switchContent("formPanel");
                 setVisible("cancelBtn", true);
                 setVisible("saveBtn", false);
@@ -143,8 +147,8 @@ public abstract class AbstractEntitySingleFormAppletPanel extends AbstractApplet
                         && _appletDef.getPropValue(boolean.class, AppletPropertyConstants.MAINTAIN_FORM_SUBMIT, false));
                 setVisible("submitNextBtn", enableUpdateSubmit && _appletDef.getPropValue(boolean.class,
                         AppletPropertyConstants.MAINTAIN_FORM_SUBMIT_NEXT, false));
-                setVisible("prevBtn", true);
-                setVisible("nextBtn", true);
+                setVisible("prevBtn", closable);
+                setVisible("nextBtn", closable);
                 setDisabled("prevBtn", !applet.isPrevNav());
                 setDisabled("nextBtn", !applet.isNextNav());
                 setVisible("updateBtn", enableUpdate);
@@ -159,7 +163,7 @@ public abstract class AbstractEntitySingleFormAppletPanel extends AbstractApplet
                 if (form.isWithAttachments()) {
                     form.getAttachments().setEditable(enableUpdate);
                 }
-                
+
                 setEditable("formPanel", enableUpdate);
                 addPanelToPushComponents("formPanel", enableUpdate);
                 break;
@@ -180,7 +184,7 @@ public abstract class AbstractEntitySingleFormAppletPanel extends AbstractApplet
                 if (form.isWithAttachments()) {
                     form.getAttachments().setEditable(enableUpdate);
                 }
-                
+
                 setEditable("formPanel", enableUpdate);
                 addPanelToPushComponents("formPanel", enableUpdate);
                 break;
@@ -203,7 +207,7 @@ public abstract class AbstractEntitySingleFormAppletPanel extends AbstractApplet
                 if (form.isWithAttachments()) {
                     form.getAttachments().setEditable(enableUpdate);
                 }
-                
+
                 setEditable("formPanel", enableUpdate);
                 addPanelToPushComponents("formPanel", enableUpdate);
                 break;
@@ -241,7 +245,7 @@ public abstract class AbstractEntitySingleFormAppletPanel extends AbstractApplet
                 if (form.isWithAttachments()) {
                     form.getAttachments().setEditable(true);
                 }
-                
+
                 setEditable("formPanel", true);
                 addPanelToPushComponents("formPanel", true);
                 break;
@@ -253,7 +257,15 @@ public abstract class AbstractEntitySingleFormAppletPanel extends AbstractApplet
 
     @Action
     public void newInst() throws UnifyException {
-        getEntityFormApplet().newEntityInst();
+        TableActionResult result = getEntityFormApplet().newEntityInst();
+        if (result != null) {
+            if (result.isOpenTab()) {
+                result.setMultiPage(true);
+                openInBrowserTab(result, getEntityFormApplet().getSingleFormAppletDef(), FormMode.CREATE);
+            } else if (result.isOpenPath()) {
+                setCommandOpenPath((String) result.getResult());
+            }
+        }
     }
 
     @Action
@@ -371,22 +383,25 @@ public abstract class AbstractEntitySingleFormAppletPanel extends AbstractApplet
 
     @Action
     public void previous() throws UnifyException {
-        getEntityFormApplet().previousInst();
+        TableActionResult result = getEntityFormApplet().previousInst();
+        processTableActionResult(result);
     }
 
     @Action
     public void next() throws UnifyException {
-        getEntityFormApplet().nextInst();
+        TableActionResult result = getEntityFormApplet().nextInst();
+        processTableActionResult(result);
     }
 
     @Action
     public void maintain() throws UnifyException {
         IndexedTarget target = getRequestTarget(IndexedTarget.class);
         if (target.isValidIndex()) {
-            getEntityFormApplet().maintainInst(target.getIndex());
+            TableActionResult result = getEntityFormApplet().maintainInst(target.getIndex());
+            processTableActionResult(result);
         }
     }
-    
+
     @Action
     public void columns() throws UnifyException {
         // TODO
@@ -395,6 +410,18 @@ public abstract class AbstractEntitySingleFormAppletPanel extends AbstractApplet
     @Override
     protected void onReviewErrors(EntityActionResult entityActionResult) throws UnifyException {
 
+    }
+
+    private void processTableActionResult(TableActionResult result) throws UnifyException {
+        if (result != null) {
+            if (result.isOpenTab()) {
+                openInBrowserTab(result, getEntityFormApplet().getSingleFormAppletDef(), FormMode.MAINTAIN);
+            } else if (result.isOpenPath()) {
+                setCommandOpenPath((String) result.getResult());
+            } else if (result.isRefreshContent()) {
+                setCommandResultMapping(ApplicationResultMappingConstants.REFRESH_CONTENT);
+            }
+        }
     }
 
     private void handleEntityActionResult(EntityActionResult entityActionResult, String entityName)

@@ -34,6 +34,7 @@ import com.flowcentraltech.flowcentral.application.web.panels.EntitySingleForm;
 import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs.BreadCrumb;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionContext;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
+import com.flowcentraltech.flowcentral.common.business.policies.TableActionResult;
 import com.flowcentraltech.flowcentral.common.data.AuditSnapshot;
 import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
 import com.flowcentraltech.flowcentral.configuration.constants.AuditEventType;
@@ -136,28 +137,41 @@ public abstract class AbstractEntitySingleFormApplet extends AbstractApplet {
         entitySearch.applySearchEntriesToSearch();
     }
 
-    public void previousInst() throws UnifyException {
+    public TableActionResult previousInst() throws UnifyException {
         if (isPrevNav()) {
             mIndex--;
-            maintainInst(mIndex);
+            return maintainInst(mIndex);
         }
+
+        return null;
     }
 
-    public void nextInst() throws UnifyException {
+    public TableActionResult nextInst() throws UnifyException {
         if (isNextNav()) {
             mIndex++;
-            maintainInst(mIndex);
+            return maintainInst(mIndex);
         }
+
+        return null;
     }
 
-    public void newEntityInst() throws UnifyException {
+    public TableActionResult newEntityInst() throws UnifyException {
+        if (entitySearch.isViewItemsInSeparateTabs()) {
+            return openInTab();
+        }
+
         form = constructNewForm(FormMode.CREATE); 
         viewMode = ViewMode.NEW_FORM;
+        return new TableActionResult(null);
     }
 
-    public void maintainInst(int mIndex) throws UnifyException {
+    public TableActionResult maintainInst(int mIndex) throws UnifyException {
         this.mIndex = mIndex;
         Entity _inst = getEntitySearchItem(entitySearch, mIndex).getEntity();
+        if (entitySearch.isViewItemsInSeparateTabs()) { 
+            return openInTab(_inst);
+        }
+
         // Reload
         _inst = reloadEntity(_inst);
         if (form == null) {
@@ -168,7 +182,7 @@ public abstract class AbstractEntitySingleFormApplet extends AbstractApplet {
 
         viewMode = ViewMode.MAINTAIN_FORM_SCROLL;
         takeAuditSnapshot(form.isUpdateDraft() ? AuditEventType.VIEW_DRAFT : AuditEventType.VIEW);
-        return;
+        return null;
     }
 
     public EntityActionResult updateInst() throws UnifyException {
