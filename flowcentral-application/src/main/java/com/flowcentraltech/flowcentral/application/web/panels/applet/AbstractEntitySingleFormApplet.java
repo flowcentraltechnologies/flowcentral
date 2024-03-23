@@ -161,7 +161,7 @@ public abstract class AbstractEntitySingleFormApplet extends AbstractApplet {
             return openInTab(AppletType.CREATE_ENTITY_SINGLEFORM);
         }
 
-        form = constructNewForm(FormMode.CREATE); 
+        form = constructNewForm(FormMode.CREATE);
         viewMode = ViewMode.NEW_FORM;
         return new TableActionResult(null);
     }
@@ -169,7 +169,7 @@ public abstract class AbstractEntitySingleFormApplet extends AbstractApplet {
     public TableActionResult maintainInst(int mIndex) throws UnifyException {
         this.mIndex = mIndex;
         Entity _inst = getEntitySearchItem(entitySearch, mIndex).getEntity();
-        if (entitySearch.isViewItemsInSeparateTabs()) { 
+        if (entitySearch.isViewItemsInSeparateTabs()) {
             return openInTab(AppletType.CREATE_ENTITY_SINGLEFORM, _inst);
         }
 
@@ -257,10 +257,6 @@ public abstract class AbstractEntitySingleFormApplet extends AbstractApplet {
     }
 
     public EntityActionResult submitInst() throws UnifyException {
-        if (getCtx().isInDetachedWindow()) {
-            return submitInstAndNext();
-        }
-
         return submitInst(ActionMode.ACTION_AND_CLOSE, FormReviewType.ON_SUBMIT);
     }
 
@@ -445,7 +441,7 @@ public abstract class AbstractEntitySingleFormApplet extends AbstractApplet {
                         (WorkEntity) inst,
                         getRootAppletProp(String.class, AppletPropertyConstants.CREATE_FORM_SUBMIT_POLICY));
             }
-            
+
             takeAuditSnapshot(reviewType.auditEventType());
         } catch (UnifyException e) {
             if (!viewMode.isMaintainForm()) {
@@ -462,7 +458,11 @@ public abstract class AbstractEntitySingleFormApplet extends AbstractApplet {
             if (viewMode == ViewMode.NEW_PRIMARY_FORM) {
                 entityActionResult.setClosePage(true);
             } else {
-                navBackToPrevious();
+                if (getCtx().isInDetachedWindow()) {
+                    entityActionResult.setClosePage(true);
+                } else {
+                    navBackToPrevious();
+                }
             }
         }
 
@@ -479,10 +479,10 @@ public abstract class AbstractEntitySingleFormApplet extends AbstractApplet {
         eCtx.setAll(form.getCtx());
 
         EntityActionResult entityActionResult = au().environment().updateByIdVersion(eCtx);
-        takeAuditSnapshot(
-                isWorkflowCopy() || form.isUpdateDraft() ? AuditEventType.UPDATE_DRAFT : formReviewType.auditEventType());
+        takeAuditSnapshot(isWorkflowCopy() || form.isUpdateDraft() ? AuditEventType.UPDATE_DRAFT
+                : formReviewType.auditEventType());
         updateSingleForm(EntitySingleForm.UpdateType.UPDATE_INST, form, reloadEntity(inst));
         return entityActionResult;
     }
-    
+
 }
