@@ -16,8 +16,6 @@
 package com.flowcentraltech.flowcentral.application.web.controllers;
 
 import com.flowcentraltech.flowcentral.application.web.panels.applet.AbstractEntitySingleFormApplet;
-import com.tcdng.unify.web.annotation.ResultMapping;
-import com.tcdng.unify.web.annotation.ResultMappings;
 import com.tcdng.unify.web.constant.ReadOnly;
 import com.tcdng.unify.web.constant.ResetOnWrite;
 import com.tcdng.unify.web.constant.Secured;
@@ -28,8 +26,6 @@ import com.tcdng.unify.web.constant.Secured;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@ResultMappings({ @ResultMapping(name = "refreshapplet",
-        response = { "!hidepopupresponse", "!refreshpanelresponse panels:$l{appletPanel}" }) })
 public abstract class AbstractEntitySingleFormAppletController<T extends AbstractEntitySingleFormApplet, U extends AbstractEntitySingleFormAppletPageBean<T>>
         extends AbstractAppletController<U> {
 
