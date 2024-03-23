@@ -37,6 +37,7 @@ import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResu
 import com.flowcentraltech.flowcentral.common.business.policies.TableActionResult;
 import com.flowcentraltech.flowcentral.common.data.AuditSnapshot;
 import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
+import com.flowcentraltech.flowcentral.configuration.constants.AppletType;
 import com.flowcentraltech.flowcentral.configuration.constants.AuditEventType;
 import com.flowcentraltech.flowcentral.configuration.constants.AuditSourceType;
 import com.flowcentraltech.flowcentral.configuration.constants.FormReviewType;
@@ -157,7 +158,7 @@ public abstract class AbstractEntitySingleFormApplet extends AbstractApplet {
 
     public TableActionResult newEntityInst() throws UnifyException {
         if (entitySearch.isViewItemsInSeparateTabs()) {
-            return openInTab();
+            return openInTab(AppletType.CREATE_ENTITY_SINGLEFORM);
         }
 
         form = constructNewForm(FormMode.CREATE); 
@@ -169,7 +170,7 @@ public abstract class AbstractEntitySingleFormApplet extends AbstractApplet {
         this.mIndex = mIndex;
         Entity _inst = getEntitySearchItem(entitySearch, mIndex).getEntity();
         if (entitySearch.isViewItemsInSeparateTabs()) { 
-            return openInTab(_inst);
+            return openInTab(AppletType.CREATE_ENTITY_SINGLEFORM, _inst);
         }
 
         // Reload

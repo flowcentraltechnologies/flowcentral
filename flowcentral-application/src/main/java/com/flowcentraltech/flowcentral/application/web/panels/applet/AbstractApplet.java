@@ -72,7 +72,7 @@ public abstract class AbstractApplet {
     protected final AppletUtilities au;
 
     protected final AppletContext ctx;
-    
+
     private final String appletName;
 
     private AppletDef rootAppletDef;
@@ -338,28 +338,25 @@ public abstract class AbstractApplet {
         form.loadSingleFormBean();
     }
 
-    protected TableActionResult openInTab(Entity _inst) throws UnifyException {
+    protected TableActionResult openInTab(AppletType appletType, Entity _inst) throws UnifyException {
         final String appletName = getAppletName();
-        final String openPath = ApplicationPageUtils.constructAppletOpenPagePath(AppletType.CREATE_ENTITY,
-                appletName, _inst.getId());
+        final String openPath = ApplicationPageUtils.constructAppletOpenPagePath(appletType, appletName, _inst.getId());
         TableActionResult result = new TableActionResult(_inst, openPath);
         result.setOpenPath(true);
 
         if (au().system().getSysParameterValue(boolean.class,
                 ApplicationModuleSysParamConstants.ENABLE_OPEN_TAB_IN_BROWSER)) {
-            final String tabName = ApplicationNameUtils.addVestigialNamePart(appletName,
-                    String.valueOf(_inst.getId()));
+            final String tabName = ApplicationNameUtils.addVestigialNamePart(appletName, String.valueOf(_inst.getId()));
             result.setTabName(tabName);
             result.setOpenTab(true);
         }
 
         return result;
     }
-    
-    protected TableActionResult openInTab() throws UnifyException {
+
+    protected TableActionResult openInTab(AppletType appletType) throws UnifyException {
         final String appletName = getAppletName();
-        final String openPath = ApplicationPageUtils.constructAppletOpenPagePath(AppletType.CREATE_ENTITY,
-                appletName);
+        final String openPath = ApplicationPageUtils.constructAppletOpenPagePath(appletType, appletName);
         TableActionResult result = new TableActionResult(null, openPath);
         result.setOpenPath(true);
 
@@ -371,7 +368,7 @@ public abstract class AbstractApplet {
 
         return result;
     }
-    
+
     private BreadCrumbs makeSingleFormBreadCrumbs() {
         BreadCrumbs.Builder bcb = BreadCrumbs.newBuilder();
         // bcb.addHistoryCrumb(form.getFormTitle(), form.getBeanTitle(),

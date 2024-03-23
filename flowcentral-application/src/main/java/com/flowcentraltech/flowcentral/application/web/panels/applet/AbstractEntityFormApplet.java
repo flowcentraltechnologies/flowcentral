@@ -381,7 +381,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
 
     public TableActionResult newEntityInst() throws UnifyException {
         if (entitySearch.isViewItemsInSeparateTabs()) {
-            return openInTab();
+            return openInTab(AppletType.CREATE_ENTITY);
         }
 
         form = constructNewForm(FormMode.CREATE, null, false);
@@ -664,7 +664,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         this.mIndex = mIndex;
         Entity _inst = getEntitySearchItem(entitySearch, mIndex).getEntity();
         if (entitySearch.isViewItemsInSeparateTabs()) { 
-            return openInTab(_inst);
+            return openInTab(AppletType.CREATE_ENTITY, _inst);
         }
 
         _inst = reloadEntity(_inst, true);
