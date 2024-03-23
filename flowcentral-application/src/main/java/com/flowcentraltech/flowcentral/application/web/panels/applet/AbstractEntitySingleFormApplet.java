@@ -257,6 +257,10 @@ public abstract class AbstractEntitySingleFormApplet extends AbstractApplet {
     }
 
     public EntityActionResult submitInst() throws UnifyException {
+        if (getCtx().isInDetachedWindow()) {
+            return submitInstAndNext();
+        }
+
         return submitInst(ActionMode.ACTION_AND_CLOSE, FormReviewType.ON_SUBMIT);
     }
 
@@ -352,7 +356,7 @@ public abstract class AbstractEntitySingleFormApplet extends AbstractApplet {
     }
 
     @SuppressWarnings("unchecked")
-    private Entity loadEntity(Object entityInstId) throws UnifyException {
+    protected Entity loadEntity(Object entityInstId) throws UnifyException {
         final EntityClassDef entityClassDef = au().getEntityClassDef(getEntityDef().getLongName());
         // For single form we list with child/ children information
         return au().environment().list((Class<? extends Entity>) entityClassDef.getEntityClass(), entityInstId);

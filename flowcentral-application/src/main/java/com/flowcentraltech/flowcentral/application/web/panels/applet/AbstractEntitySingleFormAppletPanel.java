@@ -173,8 +173,10 @@ public abstract class AbstractEntitySingleFormAppletPanel extends AbstractApplet
                 setVisible("saveBtn", false);
                 setVisible("saveNextBtn", false);
                 setVisible("saveCloseBtn", false);
-                setVisible("submitCloseBtn", false);
-                setVisible("submitNextBtn", false);
+                setVisible("submitCloseBtn", enableUpdateSubmit
+                        && _appletDef.getPropValue(boolean.class, AppletPropertyConstants.MAINTAIN_FORM_SUBMIT, false));
+                setVisible("submitNextBtn", enableUpdateSubmit && _appletDef.getPropValue(boolean.class,
+                        AppletPropertyConstants.MAINTAIN_FORM_SUBMIT_NEXT, false));
                 setVisible("prevBtn", false);
                 setVisible("nextBtn", false);
                 setVisible("displayCounterLabel", false);

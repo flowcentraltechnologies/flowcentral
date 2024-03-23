@@ -18,8 +18,10 @@ package com.flowcentraltech.flowcentral.application.web.panels.applet;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
+import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm.FormMode;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.database.Entity;
 
 /**
  * Create entity single form applet object.
@@ -29,11 +31,19 @@ import com.tcdng.unify.core.UnifyException;
  */
 public class CreateEntitySingleFormApplet extends AbstractEntitySingleFormApplet {
 
-    public CreateEntitySingleFormApplet(AppletUtilities au, List<String> pathVariables)
-            throws UnifyException {
+    public CreateEntitySingleFormApplet(AppletUtilities au, List<String> pathVariables) throws UnifyException {
         super(au, pathVariables);
-        form = constructNewForm(FormMode.CREATE);
-        viewMode = ViewMode.NEW_PRIMARY_FORM;
+        final String vestigial = ApplicationNameUtils.getVestigialNamePart(pathVariables.get(APPLET_NAME_INDEX));
+        if (vestigial == null) {
+            form = constructNewForm(FormMode.CREATE);
+            viewMode = ViewMode.NEW_PRIMARY_FORM;
+        } else {
+            final Long entityInstId = Long.valueOf(vestigial);
+            Entity inst = loadEntity(entityInstId);
+            form = constructSingleForm(inst, FormMode.MAINTAIN);
+            viewMode = ViewMode.MAINTAIN_PRIMARY_FORM_NO_SCROLL;
+        }
+
         setAltSubCaption(form.getFormTitle());
     }
 }
