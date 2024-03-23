@@ -102,6 +102,10 @@ public abstract class AbstractEntitySingleFormApplet extends AbstractApplet {
             return NEW_PRIMARY_FORM.equals(this) || MAINTAIN_PRIMARY_FORM_NO_SCROLL.equals(this);
         }
 
+        public boolean isNoScroll() {
+            return MAINTAIN_PRIMARY_FORM_NO_SCROLL.equals(this);
+        }
+
         public boolean isInForm() {
             return isCreateForm() || isMaintainForm();
         }
@@ -257,6 +261,10 @@ public abstract class AbstractEntitySingleFormApplet extends AbstractApplet {
     }
 
     public EntityActionResult submitInst() throws UnifyException {
+        if (getCtx().isInDetachedWindow()) {
+            return submitInstAndNext();
+        }
+
         return submitInst(ActionMode.ACTION_AND_CLOSE, FormReviewType.ON_SUBMIT);
     }
 
@@ -427,7 +435,7 @@ public abstract class AbstractEntitySingleFormApplet extends AbstractApplet {
         Entity inst = (Entity) form.getFormBean();
         final EntityDef _entityDef = getEntityDef();
         EntityActionResult entityActionResult = null;
-        ;
+
         try {
             if (viewMode.isMaintainForm()) {
                 entityActionResult = au().workItemUtilities().submitToWorkflowChannel(form.getEntityDef(),
@@ -451,6 +459,10 @@ public abstract class AbstractEntitySingleFormApplet extends AbstractApplet {
         }
 
         if (actionMode.isWithNext()) {
+            if (getCtx().isInDetachedWindow() && viewMode.isMaintainForm()) {
+                viewMode = viewMode.isPrimary() ? ViewMode.NEW_PRIMARY_FORM : ViewMode.NEW_FORM;
+            }
+
             if (viewMode == ViewMode.NEW_FORM || viewMode == ViewMode.NEW_PRIMARY_FORM) {
                 form = constructNewForm(FormMode.CREATE);
             }
@@ -458,11 +470,7 @@ public abstract class AbstractEntitySingleFormApplet extends AbstractApplet {
             if (viewMode == ViewMode.NEW_PRIMARY_FORM) {
                 entityActionResult.setClosePage(true);
             } else {
-                if (getCtx().isInDetachedWindow()) {
-                    entityActionResult.setClosePage(true);
-                } else {
-                    navBackToPrevious();
-                }
+                navBackToPrevious();
             }
         }
 
