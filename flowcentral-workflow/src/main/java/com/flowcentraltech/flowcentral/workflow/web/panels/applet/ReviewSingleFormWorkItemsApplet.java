@@ -26,6 +26,7 @@ import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm;
 import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm.FormMode;
 import com.flowcentraltech.flowcentral.application.web.panels.EntitySearch;
 import com.flowcentraltech.flowcentral.application.web.panels.EntitySingleForm;
+import com.flowcentraltech.flowcentral.common.business.policies.TableActionResult;
 import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
 import com.flowcentraltech.flowcentral.workflow.business.WorkflowModuleService;
 import com.flowcentraltech.flowcentral.workflow.constants.WfAppletPropertyConstants;
@@ -84,7 +85,7 @@ public class ReviewSingleFormWorkItemsApplet extends AbstractReviewSingleFormWor
     }
 
     @Override
-    public void maintainInst(int mIndex) throws UnifyException {
+    public TableActionResult maintainInst(int mIndex) throws UnifyException {
         this.mIndex = mIndex;
         EntityItem entityItem = getEntitySearchItem(entitySearch, mIndex);
         ValueStoreReader reader = new BeanValueStore(currEntityInst).getReader();
@@ -115,7 +116,7 @@ public class ReviewSingleFormWorkItemsApplet extends AbstractReviewSingleFormWor
 
         setDisplayModeMessage(form);
         viewMode = ViewMode.MAINTAIN_FORM_SCROLL;
-        return;
+        return null;
     }
 
     @Override

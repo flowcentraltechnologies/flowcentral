@@ -15,16 +15,28 @@
  */
 package com.flowcentraltech.flowcentral.application.web.panels.applet;
 
+import java.util.List;
+
+import com.flowcentraltech.flowcentral.application.constants.AppletPropertyConstants;
 import com.flowcentraltech.flowcentral.application.constants.AppletRequestAttributeConstants;
+import com.flowcentraltech.flowcentral.application.constants.ApplicationResultMappingConstants;
+import com.flowcentraltech.flowcentral.application.data.AppletDef;
+import com.flowcentraltech.flowcentral.application.data.RequestOpenTabInfo;
 import com.flowcentraltech.flowcentral.application.web.data.FormContext;
 import com.flowcentraltech.flowcentral.application.web.panels.AbstractApplicationSwitchPanel;
+import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm.FormMode;
 import com.flowcentraltech.flowcentral.application.web.widgets.EntityTable;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
+import com.flowcentraltech.flowcentral.common.business.policies.TableActionResult;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralContainerPropertyConstants;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralRequestAttributeConstants;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralResultMappingConstants;
 import com.flowcentraltech.flowcentral.common.data.ReportOptions;
+import com.tcdng.unify.common.util.StringToken;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.data.BeanValueStore;
+import com.tcdng.unify.core.data.ValueStoreReader;
+import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.constant.ResultMappingConstants;
 import com.tcdng.unify.web.ui.PageAttributeConstants;
@@ -51,6 +63,23 @@ public abstract class AbstractAppletPanel extends AbstractApplicationSwitchPanel
             getRequestContextUtil().addListItem(AppletRequestAttributeConstants.MAINFORM_PUSH_COMPONENTS,
                     formPanel.getId());
         }
+    }
+
+    protected void openInBrowserTab(TableActionResult result, AppletDef formAppletDef, FormMode formMode)
+            throws UnifyException {
+        final String formName = formAppletDef.getPropValue(String.class,
+                formMode.isCreate() ? AppletPropertyConstants.CREATE_FORM : AppletPropertyConstants.MAINTAIN_FORM);
+        final List<StringToken> titleFormat = !StringUtils.isBlank(formName)
+                ? au().getFormDef(formName).getTitleFormat()
+                : null;
+        final ValueStoreReader reader = new BeanValueStore(result.getInst()).getReader();
+        final String title = !DataUtils.isBlank(titleFormat)
+                ? au().specialParamProvider().getStringGenerator(reader, reader, titleFormat).generate()
+                : null;
+        RequestOpenTabInfo requestOpenTabInfo = new RequestOpenTabInfo(title, result.getTabName(),
+                (String) result.getResult(), result.isMultiPage());
+        setRequestAttribute(AppletRequestAttributeConstants.OPEN_TAB_INFO, requestOpenTabInfo);
+        setCommandResultMapping(ApplicationResultMappingConstants.OPEN_IN_NEW_BROWSER_WINDOW);
     }
 
     protected AbstractApplet getApplet() throws UnifyException {

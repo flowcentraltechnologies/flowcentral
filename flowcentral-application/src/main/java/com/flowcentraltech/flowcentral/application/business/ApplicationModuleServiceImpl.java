@@ -346,6 +346,8 @@ import com.tcdng.unify.core.util.StringUtils;
 public class ApplicationModuleServiceImpl extends AbstractFlowCentralService implements ApplicationModuleService,
         FileAttachmentProvider, SuggestionProvider, PostBootSetup, EnvironmentDelegateRegistrar {
 
+    private static final String POST_BOOT_SETUP_LOCK = "app::postbootsetup";
+
     private final Set<String> refProperties = Collections
             .unmodifiableSet(new HashSet<String>(Arrays.asList(AppletPropertyConstants.SEARCH_TABLE,
                     AppletPropertyConstants.CREATE_FORM, AppletPropertyConstants.LOADING_TABLE,
@@ -3751,7 +3753,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
         return 0;
     }
 
-    @Synchronized("app:postbootsetup")
+    @Synchronized(POST_BOOT_SETUP_LOCK)
     @Override
     public void performPostBootSetup(final boolean isInstallationPerformed) throws UnifyException {
         if (isTenancyEnabled()) {

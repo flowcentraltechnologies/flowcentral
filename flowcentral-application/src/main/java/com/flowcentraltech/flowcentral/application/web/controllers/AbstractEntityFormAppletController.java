@@ -33,8 +33,6 @@ import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.web.annotation.Action;
-import com.tcdng.unify.web.annotation.ResultMapping;
-import com.tcdng.unify.web.annotation.ResultMappings;
 import com.tcdng.unify.web.constant.ReadOnly;
 import com.tcdng.unify.web.constant.ResetOnWrite;
 import com.tcdng.unify.web.constant.Secured;
@@ -52,11 +50,6 @@ import com.tcdng.unify.web.ui.widget.data.Popup;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@ResultMappings({
-        @ResultMapping(name = "refreshapplet",
-                response = { "!hidepopupresponse", "!refreshpanelresponse panels:$l{appletPanel}" }),
-        @ResultMapping(name = ApplicationResultMappingConstants.OPEN_IN_NEW_BROWSER_WINDOW,
-                response = { "!openinbrowserwindowresponse" }) })
 public abstract class AbstractEntityFormAppletController<T extends AbstractEntityFormApplet, U extends AbstractEntityFormAppletPageBean<T>>
         extends AbstractAppletController<U> {
 

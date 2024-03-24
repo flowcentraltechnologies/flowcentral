@@ -1152,8 +1152,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                             new Update().add("processingDt", getNow()));
                 }
             } finally {
-                logDebug("Releasing transition queue processing lock...");
                 releaseClusterLock(WFTRANSITION_QUEUE_LOCK);
+                logDebug("Released transition queue processing lock...");
             }
         }
 
@@ -1207,8 +1207,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                         logDebug("Workflow auto loading completed for [{0}].", workflowName);
                     }
                 } finally {
-                    logDebug("Releasing workflow auto-loading lock...");
                     releaseClusterLock(WFAUTOLOADING_LOCK);
+                    logDebug("Released workflow auto-loading lock.");
                 }
             }
         }

@@ -58,7 +58,7 @@ import com.tcdng.unify.core.util.StringUtils;
 @Component("studio-entityschemamanger")
 public class StudioEntitySchemaManagerImpl extends AbstractEntitySchemaManager {
 
-    private static final String ENTITY_SCHEMA_OPERATION = "app:entityschemaoperation";
+    private static final String ENTITY_SCHEMA_OPERATION = "stu::entityschemaoperation";
 
     @Configurable
     private AppletUtilities au;

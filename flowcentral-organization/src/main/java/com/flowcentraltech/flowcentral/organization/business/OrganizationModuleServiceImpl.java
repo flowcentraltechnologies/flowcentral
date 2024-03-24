@@ -62,6 +62,8 @@ import com.tcdng.unify.core.data.FactoryMap;
 public class OrganizationModuleServiceImpl extends AbstractFlowCentralService
         implements OrganizationModuleService, ApplicationPrivilegeManager, PostBootSetup {
 
+    private static final String ASSIGN_PRIVILEGE_LOCK = "org::assignprivtorole";
+
     private static final String DEVOPS_DEPARTMENT_CODE = "DEVOPS";
 
     private static final String DEVOPS_DEVELOPER_CODE = "DEVELOPER";
@@ -210,7 +212,7 @@ public class OrganizationModuleServiceImpl extends AbstractFlowCentralService
                         .privilegeCatCode(privilegeCategoryCode).roleCode(roleCode));
     }
 
-    @Synchronized("org:assignprivtorole")
+    @Synchronized(ASSIGN_PRIVILEGE_LOCK)
     @Override
     public boolean assignPrivilegeToRole(String roleCode, String privilegeCode) throws UnifyException {
         if (!isRoleWithPrivilege(roleCode, privilegeCode)) {
