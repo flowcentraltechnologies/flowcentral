@@ -484,8 +484,8 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
                     }
                 }
             } finally {
-                logDebug("Lock required to send notifications successfully released...");
                 releaseClusterLock(SEND_NOTIFICATION_LOCK);
+                logDebug("Lock required to send notifications successfully released...");
             }
         }
     }

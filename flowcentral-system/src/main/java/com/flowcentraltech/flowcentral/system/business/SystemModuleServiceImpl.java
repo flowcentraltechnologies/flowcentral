@@ -189,7 +189,7 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
                 protected ScheduledTaskDef create(Long scheduledTaskId, Object... params) throws Exception {
                     ScheduledTask scheduledTask = environment().find(ScheduledTask.class, scheduledTaskId);
 
-                    final String lock = "scheduledtask-lock" + scheduledTaskId;
+                    final String lock = "sys::scheduledtask-lock" + scheduledTaskId;
                     long startTimeOffset = CalendarUtils.getTimeOfDayOffset(scheduledTask.getStartTime());
                     long endTimeOffset = 0;
                     if (scheduledTask.getEndTime() != null) {
@@ -449,7 +449,7 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
         licenseDefFactoryMap.clear();
     }
 
-    @Synchronized("sys:ensurelicense")
+    @Synchronized("sys::ensurelicense")
     public Attachment ensureLicense() throws UnifyException {
         Attachment attachment = fileAttachmentProvider.retrieveFileAttachment(LICENSE, "system.credential", 0L,
                 LICENSE);
@@ -564,7 +564,6 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
 
         // Expiration allowance
         final int expirationAllowanceMins = internalGetSysParameterValue(int.class,
-
                 SystemModuleSysParamConstants.SYSTEM_SCHEDULER_TRIGGER_EXPIRATION);
         final long expirationAllowanceMilliSec = CalendarUtils.getMilliSecondsByFrequency(FrequencyUnit.MINUTE,
                 expirationAllowanceMins);
@@ -584,16 +583,17 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
         for (Long scheduledTaskId : readyScheduledTaskIdList) {
             ScheduledTaskDef scheduledTaskDef = scheduledTaskDefs.get(scheduledTaskId);
             final String taskLock = scheduledTaskDef.getLock();
+            final String taskRelayLock = scheduledTaskDef.getRelayLock();
             logDebug("Attempting to grab scheduled task lock [{0}] ...", taskLock);
-
             if (!isWithClusterLock(taskLock) && grabClusterLock(taskLock)) {
-                boolean lockHeldForTask = false;
                 try {
                     logDebug("Grabbed scheduled task lock [{0}] ...", taskLock);
-                    logDebug("Setting up scheduled task [{0}] ...", scheduledTaskDef.getDescription());
+                    logDebug("Setting up scheduled task [{0}] using relay lock [{1}] ...",
+                            scheduledTaskDef.getDescription(), taskRelayLock);
                     Map<String, Object> taskParameters = new HashMap<String, Object>();
                     taskParameters.put(TaskParameterConstants.USER_LOGIN_ID, scheduledTaskDef.getUserLoginId());
                     taskParameters.put(TaskParameterConstants.TENANT_ID, scheduledTaskDef.getTenantId());
+                    taskParameters.put(TaskParameterConstants.LOCK_TO_RELEASE, taskRelayLock);
                     taskParameters.put(SystemSchedTaskConstants.SCHEDULEDTASK_ID, scheduledTaskId);
 
                     Date nextExecutionOn = environment().value(Date.class, "nextExecutionOn",
@@ -619,8 +619,6 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
                         taskManager.startTask(scheduledTaskDef.getTaskName(), taskParameters, true,
                                 taskStatusLogger.getName());
                         logDebug("Task [{0}] is setup to run...", scheduledTaskDef.getDescription());
-
-                        lockHeldForTask = true;
                         triggered++;
                     }
 
@@ -656,15 +654,8 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
                     logDebug("Task [{0}] is scheduled to run next on [{1,date,dd/MM/yy HH:mm:ss}]...",
                             scheduledTaskDef.getDescription(), calcNextExecutionOn);
 
-                } catch (UnifyException e) {
-                    try {
-                        releaseClusterLock(taskLock);
-                    } catch (Exception e1) {
-                    }
                 } finally {
-                    if (!lockHeldForTask) {
-                        releaseClusterLock(taskLock);
-                    }
+                    releaseClusterLock(taskLock);
                 }
             }
 
