@@ -57,7 +57,7 @@ public class ScheduledTaskStatusLogger extends AbstractTaskStatusLogger {
             }
 
             try {
-                systemService.releaseScheduledTask(scheduledTaskId, scheduledTaskHistId, taskMonitor.getTaskStatus(0),
+                systemService.logScheduledTaskCompletion(scheduledTaskId, scheduledTaskHistId, taskMonitor.getTaskStatus(0),
                         errorMsgs);
             } catch (UnifyException e) {
                 logError(e);

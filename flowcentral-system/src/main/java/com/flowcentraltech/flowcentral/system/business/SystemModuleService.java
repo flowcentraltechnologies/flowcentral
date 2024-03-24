@@ -235,7 +235,7 @@ public interface SystemModuleService extends FlowCentralService {
     int setSysParameterValue(String code, Object value) throws UnifyException;
 
     /**
-     * Release a scheduled task.
+     * Log scheduled task completion.
      * 
      * @param scheduledTaskId
      *                             the scheduled task ID
@@ -249,7 +249,7 @@ public interface SystemModuleService extends FlowCentralService {
      *                        if scheduled task history does not exist. if an error
      *                        occurs
      */
-    void releaseScheduledTask(Long scheduledTaskId, Long scheduledTaskHistId, TaskStatus completionTaskStatus,
+    void logScheduledTaskCompletion(Long scheduledTaskId, Long scheduledTaskHistId, TaskStatus completionTaskStatus,
             String errorMsg) throws UnifyException;
 
     /**
