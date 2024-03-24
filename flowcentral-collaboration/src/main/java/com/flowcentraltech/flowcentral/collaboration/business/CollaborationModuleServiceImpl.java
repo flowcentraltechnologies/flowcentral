@@ -49,6 +49,10 @@ import com.tcdng.unify.core.annotation.Transactional;
 public class CollaborationModuleServiceImpl extends AbstractFlowCentralService
         implements CollaborationModuleService, CollaborationProvider {
 
+    private static final String RESOURCE_LOCK = "clb::resourcelock";
+
+    private static final String FREEZE_COMPONENTS_LOCK = "clb::freezeunfreezecomponents";
+
     private static final List<String> collaborationAppletList = Collections.unmodifiableList(
             Arrays.asList("collaboration.manageHeldCollaborationLock", "collaboration.manageFreezeUnfreeze"));
 
@@ -60,7 +64,7 @@ public class CollaborationModuleServiceImpl extends AbstractFlowCentralService
         return environment().deleteAll(query);
     }
 
-	@Synchronized("clb:freezeunfreezecomponents")
+	@Synchronized(FREEZE_COMPONENTS_LOCK)
 	@Override
 	public int freezeComponents(List<FreezeUnfreeze> freezeUnfreezeList) throws UnifyException {
 		int result = 0;
@@ -80,7 +84,7 @@ public class CollaborationModuleServiceImpl extends AbstractFlowCentralService
 		return result;
 	}
 
-	@Synchronized("clb:freezeunfreezecomponents")
+	@Synchronized(FREEZE_COMPONENTS_LOCK)
 	@Override
 	public int unfreezeComponents(List<FreezeUnfreeze> freezeUnfreezeList) throws UnifyException {
 		int result = 0;
@@ -129,8 +133,8 @@ public class CollaborationModuleServiceImpl extends AbstractFlowCentralService
 
         return false;
     }
-
-    @Synchronized("clb:resourcelock")
+	
+    @Synchronized(RESOURCE_LOCK)
     @Override
     public boolean lock(CollaborationType type, String resourceName, String userLoginId) throws UnifyException {
         CollaborationLock collaborationLock = environment()
@@ -150,20 +154,20 @@ public class CollaborationModuleServiceImpl extends AbstractFlowCentralService
         return true;
     }
 
-    @Synchronized("clb:resourcelock")
+    @Synchronized(RESOURCE_LOCK)
     @Override
     public boolean unlock(CollaborationType type, String resourceName, String userLoginId) throws UnifyException {
         return environment().deleteAll(
                 new CollaborationLockQuery().type(type).resourceName(resourceName).createdBy(userLoginId)) > 0;
     }
 
-    @Synchronized("clb:resourcelock")
+    @Synchronized(RESOURCE_LOCK)
     @Override
     public boolean unlock(CollaborationType type, String resourceName) throws UnifyException {
         return environment().deleteAll(new CollaborationLockQuery().type(type).resourceName(resourceName)) > 0;
     }
 
-    @Synchronized("clb:resourcelock")
+    @Synchronized(RESOURCE_LOCK)
     @Override
     public boolean grabLock(CollaborationType type, String resourceName, String userLoginId) throws UnifyException {
         unlock(type, resourceName);
