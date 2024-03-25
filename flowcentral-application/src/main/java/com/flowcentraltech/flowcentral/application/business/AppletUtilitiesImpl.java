@@ -57,6 +57,7 @@ import com.flowcentraltech.flowcentral.application.data.TableDef;
 import com.flowcentraltech.flowcentral.application.data.UsageType;
 import com.flowcentraltech.flowcentral.application.data.WidgetRulesDef;
 import com.flowcentraltech.flowcentral.application.data.WidgetTypeDef;
+import com.flowcentraltech.flowcentral.application.entities.AppEntity;
 import com.flowcentraltech.flowcentral.application.entities.BaseApplicationEntity;
 import com.flowcentraltech.flowcentral.application.listing.DetailsFormListingGenerator;
 import com.flowcentraltech.flowcentral.application.listing.FormListingGenerator;
@@ -1997,10 +1998,17 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
                         && !isEnterprise();
                 Query<?> query = Query.of((Class<? extends Entity>) entityClass).addEquals("id", inst.getId());
                 long bumpedVersionNo = db.value(long.class, "versionNo", query) + 1L;
-                db.updateAll(query,
-                        isClearMergeVersion
-                                ? new Update().add("versionNo", bumpedVersionNo).add("devMergeVersionNo", null)
-                                : new Update().add("versionNo", bumpedVersionNo));
+                Update update = isClearMergeVersion
+                        ? new Update().add("versionNo", bumpedVersionNo).add("devMergeVersionNo", null)
+                        : new Update().add("versionNo", bumpedVersionNo);
+                
+                if (AppEntity.class.equals(entityClass)) {
+                    ((AppEntity) inst).setSchemaUpdateRequired(true);
+                    update.add("schemaUpdateRequired", true);
+                }
+                
+                db.updateAll(query, update);
+                
                 ((BaseVersionEntity) inst).setVersionNo(bumpedVersionNo);
                 if (isClearMergeVersion) {
                     ((BaseApplicationEntity) inst).setDevMergeVersionNo(null);

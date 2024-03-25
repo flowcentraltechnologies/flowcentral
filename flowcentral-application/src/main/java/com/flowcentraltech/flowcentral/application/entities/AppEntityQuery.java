@@ -48,4 +48,8 @@ public class AppEntityQuery extends BaseApplicationEntityQuery<AppEntity> {
     public AppEntityQuery isMapped() {
         return (AppEntityQuery) addEquals("mapped", Boolean.TRUE);
     }
+
+    public AppEntityQuery isSchemaUpdateRequired() {
+        return (AppEntityQuery) addEquals("schemaUpdateRequired", Boolean.TRUE);
+    }
 }

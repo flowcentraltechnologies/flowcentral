@@ -67,6 +67,9 @@ public class AppEntity extends BaseApplicationEntity {
     @Column(name = "ACTION_POLICY_FG")
     private boolean actionPolicy;
 
+    @Column(name = "SCHEMA_UPDATE_REQUIRED_FG")
+    private boolean schemaUpdateRequired;
+
     @ListOnly(key = "baseType", property = "description")
     private String baseTypeDesc;
 
@@ -175,6 +178,14 @@ public class AppEntity extends BaseApplicationEntity {
 
     public void setActionPolicy(boolean actionPolicy) {
         this.actionPolicy = actionPolicy;
+    }
+
+    public boolean isSchemaUpdateRequired() {
+        return schemaUpdateRequired;
+    }
+
+    public void setSchemaUpdateRequired(boolean schemaUpdateRequired) {
+        this.schemaUpdateRequired = schemaUpdateRequired;
     }
 
     public boolean isMapped() {
