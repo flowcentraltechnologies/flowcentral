@@ -60,6 +60,7 @@ import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.constant.HAlignType;
+import com.tcdng.unify.core.criterion.Update;
 import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.message.MessageResolver;
 import com.tcdng.unify.core.task.TaskMonitor;
@@ -91,6 +92,8 @@ public class ApplicationReportInstallerImpl extends AbstractApplicationArtifactI
         logDebug(taskMonitor, "Executing report installer...");
         // Install reports for configurable entities
         logDebug(taskMonitor, "Installing reportable entities...");
+        environment().updateAll(new ReportableDefinitionQuery().applicationId(applicationId).isNotActualCustom(),
+                new Update().add("deprecated", Boolean.TRUE));
         if (applicationConfig.getEntitiesConfig() != null
                 && !DataUtils.isBlank(applicationConfig.getEntitiesConfig().getEntityList())) {
             for (AppEntityConfig appEntityConfig : applicationConfig.getEntitiesConfig().getEntityList()) {
@@ -110,6 +113,7 @@ public class ApplicationReportInstallerImpl extends AbstractApplicationArtifactI
                         reportableDefinition.setEntity(entity);
                         reportableDefinition.setTitle(description);
                         reportableDefinition.setDescription(description);
+                        reportableDefinition.setDeprecated(false);
                         reportableDefinition.setConfigType(ConfigType.STATIC_INSTALL);
                         populateChildList(appEntityConfig, reportableDefinition);
                         environment().create(reportableDefinition);
@@ -121,6 +125,7 @@ public class ApplicationReportInstallerImpl extends AbstractApplicationArtifactI
                             oldReportableDefinition.setDescription(description);
                         }
 
+                        oldReportableDefinition.setDeprecated(false);
                         populateChildList(appEntityConfig, oldReportableDefinition);
                         environment().updateByIdVersion(oldReportableDefinition);
                         oldReportableDefinition.getId();
@@ -135,6 +140,8 @@ public class ApplicationReportInstallerImpl extends AbstractApplicationArtifactI
         }
 
         // Install configured reports
+        environment().updateAll(new ReportConfigurationQuery().applicationId(applicationId).isNotActualCustom(),
+                new Update().add("deprecated", Boolean.TRUE));
         if (applicationConfig.getReportsConfig() != null
                 && !DataUtils.isBlank(applicationConfig.getReportsConfig().getReportList())) {
             for (AppReportConfig applicationReportConfig : applicationConfig.getReportsConfig().getReportList()) {
@@ -179,6 +186,7 @@ public class ApplicationReportInstallerImpl extends AbstractApplicationArtifactI
                     reportConfiguration.setUnderlineRows(reportConfig.getUnderlineRows());
                     reportConfiguration.setAllowSecondaryTenants(reportConfig.getAllowSecondaryTenants());
                     reportConfiguration.setFilter(InputWidgetUtils.newAppFilter(reportConfig.getFilter()));
+                    reportConfiguration.setDeprecated(false);
                     reportConfiguration.setConfigType(ConfigType.MUTABLE_INSTALL);
                     populateChildList(reportConfig, reportConfiguration);
                     environment().create(reportConfiguration);
@@ -208,6 +216,7 @@ public class ApplicationReportInstallerImpl extends AbstractApplicationArtifactI
                         oldReportConfiguration.setFilter(InputWidgetUtils.newAppFilter(reportConfig.getFilter()));
                     }
 
+                    oldReportConfiguration.setDeprecated(false);
                     populateChildList(reportConfig, oldReportConfiguration);
                     environment().updateByIdVersion(oldReportConfiguration);
                 }

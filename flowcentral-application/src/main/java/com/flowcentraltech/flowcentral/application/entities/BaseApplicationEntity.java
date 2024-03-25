@@ -53,6 +53,9 @@ public abstract class BaseApplicationEntity extends BaseConfigNamedEntity {
     @Column
     private boolean classified;
 
+    @Column(name = "DEPRECATED_FG")
+    private boolean deprecated;
+
     @ListOnly(key = "applicationId", property = "name")
     private String applicationName;
 
@@ -92,6 +95,14 @@ public abstract class BaseApplicationEntity extends BaseConfigNamedEntity {
 
     public void setClassified(boolean classified) {
         this.classified = classified;
+    }
+
+    public boolean isDeprecated() {
+        return deprecated;
+    }
+
+    public void setDeprecated(boolean deprecated) {
+        this.deprecated = deprecated;
     }
 
     public final String getApplicationName() {
