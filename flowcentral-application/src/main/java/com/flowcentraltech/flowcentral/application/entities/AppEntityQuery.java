@@ -45,6 +45,10 @@ public class AppEntityQuery extends BaseApplicationEntityQuery<AppEntity> {
         return (AppEntityQuery) addIsNotNull("delegate");
     }
 
+    public AppEntityQuery isNotDelegated() {
+        return (AppEntityQuery) addIsNull("delegate");
+    }
+
     public AppEntityQuery isMapped() {
         return (AppEntityQuery) addEquals("mapped", Boolean.TRUE);
     }

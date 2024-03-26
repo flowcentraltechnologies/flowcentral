@@ -27,7 +27,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -207,6 +206,7 @@ import com.flowcentraltech.flowcentral.common.business.EnvironmentDelegateRegist
 import com.flowcentraltech.flowcentral.common.business.EnvironmentDelegateUtilities;
 import com.flowcentraltech.flowcentral.common.business.FileAttachmentProvider;
 import com.flowcentraltech.flowcentral.common.business.PostBootSetup;
+import com.flowcentraltech.flowcentral.common.business.PreInstallationSetup;
 import com.flowcentraltech.flowcentral.common.business.SuggestionProvider;
 import com.flowcentraltech.flowcentral.common.business.policies.SweepingCommitPolicy;
 import com.flowcentraltech.flowcentral.common.constants.ConfigType;
@@ -319,11 +319,11 @@ import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.data.ValueStoreWriter;
 import com.tcdng.unify.core.database.Entity;
+import com.tcdng.unify.core.database.NativeUpdate;
 import com.tcdng.unify.core.database.Query;
 import com.tcdng.unify.core.database.dynamic.DynamicEntityInfo;
 import com.tcdng.unify.core.database.dynamic.sql.DynamicSqlEntityLoader;
 import com.tcdng.unify.core.database.sql.SqlDataSourceDialect;
-import com.tcdng.unify.core.database.sql.SqlDatabase;
 import com.tcdng.unify.core.format.Formatter;
 import com.tcdng.unify.core.list.ListManager;
 import com.tcdng.unify.core.message.MessageResolver;
@@ -345,11 +345,13 @@ import com.tcdng.unify.core.util.StringUtils;
 @Transactional
 @Component(ApplicationModuleNameConstants.APPLICATION_MODULE_SERVICE)
 public class ApplicationModuleServiceImpl extends AbstractFlowCentralService implements ApplicationModuleService,
-        FileAttachmentProvider, SuggestionProvider, PostBootSetup, EnvironmentDelegateRegistrar {
+        FileAttachmentProvider, SuggestionProvider, PreInstallationSetup, PostBootSetup, EnvironmentDelegateRegistrar {
+
+    private static final String PRE_INSTALLATION_SETUP_LOCK = "app::preinstallationsetup";
 
     private static final String POST_BOOT_SETUP_LOCK = "app::postbootsetup";
 
-    private static final String DYNAMIC_BUILD_LOCK = "app::dynamicbuild";
+    private static final String DYNAMIC_ENTITY_BUILD_LOCK = "app:dynamicentitybuild";
 
     private final Set<String> refProperties = Collections
             .unmodifiableSet(new HashSet<String>(Arrays.asList(AppletPropertyConstants.SEARCH_TABLE,
@@ -418,7 +420,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
 
     private FactoryMap<String, SuggestionTypeDef> suggestionDefFactoryMap;
 
-    private FactoryMap<String, EntityClassDef> entityClassDefFactoryMap;
+    private EntityClassDefFactoryMap entityClassDefFactoryMap;
 
     private FactoryMap<String, EntityDef> entityDefFactoryMap;
 
@@ -437,8 +439,6 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
     private FactoryMap<String, PropertyRuleDef> propertyRuleDefMap;
 
     private Set<String> entitySearchTypes;
-
-    private boolean initialEntityLoadingPerformed;
 
     public ApplicationModuleServiceImpl() {
         this.entitySearchTypes = new HashSet<String>();
@@ -582,8 +582,9 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                 }
             };
 
-        this.entityClassDefFactoryMap = new FactoryMap<String, EntityClassDef>(true)
+        this.entityClassDefFactoryMap = new EntityClassDefFactoryMap()
             {
+
                 @Override
                 protected boolean stale(String longName, EntityClassDef entityClassDef) throws Exception {
                     if (!RESERVED_ENTITIES.contains(longName)) {
@@ -611,24 +612,14 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                                 com.flowcentraltech.flowcentral.application.data.Attachment.class);
                     }
 
-                    Map<String, DynamicEntityInfo> dynamicEntityInfoMap = globalBuildDynamicEntityInfo(longName);
-                    // Load related entity class definitions
-                    for (Map.Entry<String, DynamicEntityInfo> entry : dynamicEntityInfoMap.entrySet()) {
-                        final String _longName = entry.getKey();
-                        if (!_longName.equals(longName)) {
-                            EntityDef _entityDef = getEntityDef(_longName);
-                            Class<? extends Entity> _entityClass = (Class<? extends Entity>) ReflectUtils
-                                    .classForName(entry.getValue().getClassName());
-                            registerDelegate(_entityDef, _entityClass);
-                            put(_longName, new EntityClassDef(_entityDef, _entityClass));
-                        }
+                    if (!entityDef.isCustom()) {
+                        Class<? extends Entity> entityClass = (Class<? extends Entity>) ReflectUtils
+                                .classForName(entityDef.getOriginClassName());
+                        registerDelegate(entityDef, entityClass);
+                        return new EntityClassDef(entityDef, entityClass);
                     }
 
-                    DynamicEntityInfo _originDynamicEntityInfo = dynamicEntityInfoMap.get(longName);
-                    Class<? extends Entity> entityClass = (Class<? extends Entity>) ReflectUtils
-                            .classForName(_originDynamicEntityInfo.getClassName());
-                    registerDelegate(entityDef, entityClass);
-                    return new EntityClassDef(entityDef, entityClass);
+                    return performDynamicEntityBuild(longName);
                 }
 
                 @Override
@@ -1344,41 +1335,6 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                     return prdb.build();
                 }
             };
-    }
-
-    @Synchronized(DYNAMIC_BUILD_LOCK)
-    public Map<String, DynamicEntityInfo> globalBuildDynamicEntityInfo(String longName) throws UnifyException {
-        logDebug("Building dynamic entity information...");
-        Map<String, DynamicEntityInfo> dynamicEntityInfoMap = new HashMap<String, DynamicEntityInfo>();
-        Set<String> entityNames = initialEntityLoadingPerformed ? getEntitiesWithSchemaUpdateRequired(longName)
-                : getAllEntities();
-        for (String entity : entityNames) {
-            buildDynamicEntityInfo(getEntityDef(entity), dynamicEntityInfoMap, null, true);
-        }
-
-        // Get entity definitions for type that need to be generated
-        List<DynamicEntityInfo> _dynamicEntityInfos = new ArrayList<DynamicEntityInfo>();
-        for (Map.Entry<String, DynamicEntityInfo> entry : dynamicEntityInfoMap.entrySet()) {
-            DynamicEntityInfo info = entry.getValue();
-            info.finalizeResolution();
-            if (info.isGeneration()) {
-                _dynamicEntityInfos.add(entry.getValue());
-            }
-        }
-
-        logDebug("Dynamic entity information successfully built. [{0}] entities resolved for generation.",
-                _dynamicEntityInfos.size());
-
-        // Compile and load class if necessary
-        if (!_dynamicEntityInfos.isEmpty()) {
-            dynamicSqlEntityLoader.loadDynamicSqlEntities((SqlDatabase) environment().getDatabase(),
-                    _dynamicEntityInfos);
-        }
-
-        environment().updateAll(new AppEntityQuery().isSchemaUpdateRequired(),
-                new Update().add("schemaUpdateRequired", false));
-        initialEntityLoadingPerformed = true;
-        return dynamicEntityInfoMap;
     }
 
     @Override
@@ -3766,6 +3722,15 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
         return 0;
     }
 
+    @Synchronized(PRE_INSTALLATION_SETUP_LOCK)
+    @Override
+    public void performPreInstallationSetup() throws UnifyException {
+        // Force schema change for custom entities (studio)
+        db().update(new NativeUpdate(
+                "UPDATE fc_entity SET schema_update_required_fg = ? WHERE config_type = ? AND delegate IS NULL")
+                        .setParam(0, true).setParam(1, "C"));
+    }
+
     @Synchronized(POST_BOOT_SETUP_LOCK)
     @Override
     public void performPostBootSetup(final boolean isInstallationPerformed) throws UnifyException {
@@ -3815,6 +3780,112 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
         }
 
         appletUtilities.ensureWorkflowUserInteractionLoadingApplets(isInstallationPerformed);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Synchronized(DYNAMIC_ENTITY_BUILD_LOCK)
+    public EntityClassDef performDynamicEntityBuild(final String longName) throws UnifyException {
+        logDebug("Building dynamic entity information...");
+        Map<String, DynamicEntityInfo> dynamicEntityInfoMap = new HashMap<String, DynamicEntityInfo>();
+        Set<Long> ids = buildDynamicEntityInfos(longName, dynamicEntityInfoMap);
+
+        // If any schema has changed, pull other entities that have schema changed
+        final int schemaUpdatedCount = db().countAll(
+                new AppEntityQuery().isNotDelegated().isSchemaUpdateRequired().isCustom().addAmongst("id", ids));
+        List<String> otherSchemaUpdateEntities = schemaUpdatedCount > 0
+                ? appletUtilities.getApplicationEntitiesLongNames((AppEntityQuery) new AppEntityQuery().isNotDelegated()
+                        .isSchemaUpdateRequired().isCustom().addNotAmongst("id", ids))
+                : Collections.emptyList();
+        for (String entity : otherSchemaUpdateEntities) {
+            buildDynamicEntityInfos(entity, dynamicEntityInfoMap);
+        }
+
+        // Get entity definitions for type that need to be generated
+        List<DynamicEntityInfo> _dynamicEntityInfos = new ArrayList<DynamicEntityInfo>();
+        for (Map.Entry<String, DynamicEntityInfo> entry : dynamicEntityInfoMap.entrySet()) {
+            DynamicEntityInfo info = entry.getValue();
+            info.finalizeResolution();
+            if (info.isGeneration()) {
+                _dynamicEntityInfos.add(entry.getValue());
+            }
+        }
+
+        logDebug("Dynamic entity information successfully built. [{0}] entities resolved for generation.",
+                _dynamicEntityInfos.size());
+
+        // Compile and load class if necessary
+        if (!_dynamicEntityInfos.isEmpty()) {
+            dynamicSqlEntityLoader.loadDynamicSqlEntities(_dynamicEntityInfos);
+        }
+
+        // Load related entity class definitions
+        for (Map.Entry<String, DynamicEntityInfo> entry : dynamicEntityInfoMap.entrySet()) {
+            final String _longName = entry.getKey();
+            if (!_longName.equals(longName)) {
+                EntityDef _entityDef = getEntityDef(_longName);
+                Class<? extends Entity> _entityClass = (Class<? extends Entity>) ReflectUtils
+                        .classForName(entry.getValue().getClassName());
+                registerDelegate(_entityDef, _entityClass);
+                try {
+                    entityClassDefFactoryMap.putEntityClassDef(_longName, new EntityClassDef(_entityDef, _entityClass));
+                } catch (Exception e) {
+                    throwOperationErrorException(e);
+                }
+            }
+        }
+
+        final EntityDef entityDef = getEntityDef(longName);
+        Class<? extends Entity> entityClass = (Class<? extends Entity>) ReflectUtils
+                .classForName(entityDef.getOriginClassName());
+        registerDelegate(entityDef, entityClass);
+        return new EntityClassDef(entityDef, entityClass);
+    }
+
+    private Set<Long> buildDynamicEntityInfos(final String longName,
+            Map<String, DynamicEntityInfo> dynamicEntityInfoMap) throws UnifyException {
+        Set<Long> _set = new HashSet<Long>();
+        EntityDef _entityDef = getEntityDef(longName);
+        _set.add(_entityDef.getId());
+        buildDynamicEntityInfo(_entityDef, dynamicEntityInfoMap, null, true);
+
+        // Consider all dependents
+        List<String> entityNameList = getDependentEntities(longName);
+        for (String _entity : entityNameList) {
+            _entityDef = getEntityDef(_entity);
+            _set.add(_entityDef.getId());
+            buildDynamicEntityInfo(_entityDef, dynamicEntityInfoMap, null, true);
+        }
+
+        return _set;
+    }
+
+    private abstract class EntityClassDefFactoryMap extends FactoryMap<String, EntityClassDef> {
+
+        public EntityClassDefFactoryMap() {
+            super(true);
+        }
+
+        public void putEntityClassDef(String longName, EntityClassDef entityClassDef) throws Exception {
+            put(longName, entityClassDef);
+        }
+
+    }
+
+    private List<String> getDependentEntities(String entity) throws UnifyException {
+        List<AppRef> refList = environment()
+                .listAll(new AppRefQuery().entity(entity).addSelect("applicationName", "name"));
+        if (!DataUtils.isBlank(refList)) {
+            List<String> refNameList = ApplicationNameUtils.getApplicationEntityLongNames(refList);
+            Set<Long> appEntityList = environment().valueSet(Long.class, "appEntityId", new AppEntityFieldQuery()
+                    .addEquals("dataType", EntityFieldDataType.REF).addAmongst("references", refNameList));
+            if (!DataUtils.isBlank(appEntityList)) {
+                List<AppEntity> entityList = environment()
+                        .listAll(new AppEntityQuery().idIn(appEntityList).addSelect("applicationName", "name"));
+                return ApplicationNameUtils.getApplicationEntityLongNames(entityList);
+            }
+        }
+
+        return Collections.emptyList();
     }
 
     @SuppressWarnings("unchecked")
@@ -3953,44 +4024,6 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
         }
 
         return Collections.emptyList();
-    }
-
-    private Set<String> getAllEntities() throws UnifyException {
-        AppEntityQuery query = (AppEntityQuery) new AppEntityQuery().ignoreEmptyCriteria(true)
-                .addSelect("applicationName", "name");
-        List<AppEntity> entityList = environment().listAll(query);
-        Set<String> entities = new LinkedHashSet<String>();
-        entities.addAll(ApplicationNameUtils.getApplicationEntityLongNames(entityList));
-        return entities;
-    }
-
-    private Set<String> getEntitiesWithSchemaUpdateRequired(String entity) throws UnifyException {
-        Set<String> _entities = new LinkedHashSet<String>();
-        _entities.add(entity);
-        AppEntityQuery query = (AppEntityQuery) new AppEntityQuery().isSchemaUpdateRequired()
-                .addSelect("applicationName", "name");
-        List<AppEntity> entityList = environment().listAll(query);
-        _entities.addAll(ApplicationNameUtils.getApplicationEntityLongNames(entityList));
-
-        Set<String> entities = new LinkedHashSet<String>();
-        for (String _entity : _entities) {
-            entities.add(_entity);
-            // Add dependents
-            List<AppRef> refList = environment()
-                    .listAll(new AppRefQuery().entity(entity).addSelect("applicationName", "name"));
-            if (!DataUtils.isBlank(refList)) {
-                List<String> refNameList = ApplicationNameUtils.getApplicationEntityLongNames(refList);
-                Set<Long> appEntityIds = environment().valueSet(Long.class, "appEntityId", new AppEntityFieldQuery()
-                        .addEquals("dataType", EntityFieldDataType.REF).addAmongst("references", refNameList));
-                if (!DataUtils.isBlank(appEntityIds)) {
-                    List<AppEntity> _entityList = environment()
-                            .listAll(new AppEntityQuery().idIn(appEntityIds).addSelect("applicationName", "name"));
-                    entities.addAll(ApplicationNameUtils.getApplicationEntityLongNames(_entityList));
-                }
-            }
-        }
-
-        return entities;
     }
 
     private void resolveListOnlyFieldTypes(final EntityDef entityDef) throws UnifyException {
@@ -4276,7 +4309,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
         logDebug(taskMonitor, "Installing application entities...");
         Map<String, Long> entityIdByNameMap = new HashMap<String, Long>();
         environment().updateAll(new AppEntityQuery().applicationId(applicationId).isNotActualCustom(),
-                new Update().add("schemaUpdateRequired", Boolean.TRUE).add("deprecated", Boolean.TRUE));
+                new Update().add("deprecated", Boolean.TRUE));
         if (applicationConfig.getEntitiesConfig() != null
                 && !DataUtils.isBlank(applicationConfig.getEntitiesConfig().getEntityList())) {
             AppEntity appEntity = new AppEntity();
@@ -6059,10 +6092,13 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
             }
 
             // Construct dynamic entity information and load dynamic class
-            DynamicEntityInfo.ManagedType managedType = entityDef.delegated()
+            final DynamicEntityInfo.ManagedType managedType = entityDef.delegated()
                     ? DynamicEntityInfo.ManagedType.NOT_MANAGED
                     : DynamicEntityInfo.ManagedType.MANAGED;
-            DynamicEntityInfo.Builder deib = DynamicEntityInfo.newBuilder(dynamicEntityType, className, managedType)
+            final boolean schemaUpdateRequired = managedType.managed() && db().value(boolean.class,
+                    "schemaUpdateRequired", new AppEntityQuery().addEquals("id", entityDef.getId()));
+            DynamicEntityInfo.Builder deib = DynamicEntityInfo
+                    .newBuilder(dynamicEntityType, className, managedType, schemaUpdateRequired)
                     .baseClassName(baseClassName).tableName(entityDef.getTableName()).version(1L);
             _dynamicEntityInfo = deib.prefetch();
             dynamicEntityInfoMap.put(entityDef.getLongName(), _dynamicEntityInfo);

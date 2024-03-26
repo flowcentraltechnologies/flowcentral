@@ -2001,14 +2001,17 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
                 Update update = isClearMergeVersion
                         ? new Update().add("versionNo", bumpedVersionNo).add("devMergeVersionNo", null)
                         : new Update().add("versionNo", bumpedVersionNo);
-                
+
                 if (AppEntity.class.equals(entityClass)) {
-                    ((AppEntity) inst).setSchemaUpdateRequired(true);
-                    update.add("schemaUpdateRequired", true);
+                    AppEntity appEntity = (AppEntity) inst;
+                    if (appEntity.getConfigType().isCustom() && StringUtils.isBlank(appEntity.getDelegate())) {
+                        appEntity.setSchemaUpdateRequired(true);
+                        update.add("schemaUpdateRequired", true);
+                    }
                 }
-                
+
                 db.updateAll(query, update);
-                
+
                 ((BaseVersionEntity) inst).setVersionNo(bumpedVersionNo);
                 if (isClearMergeVersion) {
                     ((BaseApplicationEntity) inst).setDevMergeVersionNo(null);
@@ -2020,7 +2023,8 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
     @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
     protected void onInitialize() throws UnifyException {
-        Map<String, MappedEntityProvider<? extends BaseMappedEntityProviderContext>> providers = new HashMap<String, MappedEntityProvider<? extends BaseMappedEntityProviderContext>>();
+        Map<String, MappedEntityProvider<? extends BaseMappedEntityProviderContext>> providers =
+                new HashMap<String, MappedEntityProvider<? extends BaseMappedEntityProviderContext>>();
         List<MappedEntityProvider> _providers = getComponents(MappedEntityProvider.class);
         for (MappedEntityProvider _provider : _providers) {
             if (providers.containsKey(_provider.destEntity())) {

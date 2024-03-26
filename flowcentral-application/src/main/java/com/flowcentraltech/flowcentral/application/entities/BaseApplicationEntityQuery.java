@@ -77,4 +77,8 @@ public abstract class BaseApplicationEntityQuery<T extends BaseApplicationEntity
         return (BaseApplicationEntityQuery<T>) addEquals("deprecated", deprecated);
     }
 
+    public final BaseApplicationEntityQuery<T> isNotDeprecated() {
+        return (BaseApplicationEntityQuery<T>) addEquals("deprecated", false);
+    }
+
 }
