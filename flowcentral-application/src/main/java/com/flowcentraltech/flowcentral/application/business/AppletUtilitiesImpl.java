@@ -922,7 +922,7 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
             Entity inst, BreadCrumbs breadCrumbs) throws UnifyException {
         logDebug("Constructing listing form for bean [{0}] using form definition [{1}]...", beanTitle,
                 formDef.getLongName());
-        final AppletContext appletContext = applet != null ? applet.getCtx() : new AppletContext(applet, this);
+        final AppletContext appletContext = applet != null ? applet.getCtx() : new AppletContext(null, applet, this);
         final FormContext formContext = new FormContext(appletContext, formDef, null, inst);
         final SectorIcon sectorIcon = applet != null
                 ? getPageSectorIconByApplication(applet.getRootAppletDef().getApplicationName())
@@ -940,7 +940,7 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
             EntityFormEventHandlers formEventHandlers) throws UnifyException {
         logDebug("Constructing header with tabs form for bean [{0}] using form definition [{1}]...", beanTitle,
                 formDef.getLongName());
-        final AppletContext appletContext = applet != null ? applet.getCtx() : new AppletContext(applet, this);
+        final AppletContext appletContext = applet != null ? applet.getCtx() : new AppletContext(null, applet, this);
         final SweepingCommitPolicy sweepingCommitPolicy = applet;
         final FormContext formContext = new FormContext(appletContext, formDef, formEventHandlers, inst);
         final SectorIcon sectorIcon = applet != null
@@ -1084,17 +1084,11 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
                                     specialParamProvider);
                         }
 
-                        System.out.println("@prime: pachimu:");
-                        System.out.println("@prime: formTabDef.getReference() = " + formTabDef.getReference());
-                        System.out.println("@prime: inst= " + inst);
                         Restriction childRestriction = getChildRestriction(entityDef, formTabDef.getReference(), inst);
                         Restriction tabRestriction = formTabDef.getRestriction(FilterType.TAB,
                                 form.getFormValueStoreReader(), now);
                         childRestriction = RestrictionUtils.and(childRestriction, tabRestriction);
 
-                        System.out.println("@prime: tabIndex = " + tabIndex);
-                        System.out.println("@prime: formTabDef.getApplet() = " + formTabDef.getApplet());
-                        System.out.println("@prime: childRestriction = " + childRestriction);
                         _entitySearch.setChildTabIndex(tabIndex);
                         _entitySearch.setRelatedList(formTabDef.getApplet());
                         _entitySearch.setBaseRestriction(childRestriction, specialParamProvider);
@@ -1330,7 +1324,7 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
     @Override
     public EntitySingleForm constructEntitySingleForm(AbstractApplet applet, String rootTitle, String beanTitle,
             Entity inst, FormMode formMode, BreadCrumbs breadCrumbs) throws UnifyException {
-        final AppletContext appletContext = applet != null ? applet.getCtx() : new AppletContext(applet, this);
+        final AppletContext appletContext = applet != null ? applet.getCtx() : new AppletContext(null, applet, this);
         final FormContext formContext = new FormContext(appletContext, applet.getEntityDef(), inst);
         final SectorIcon sectorIcon = applet != null
                 ? getPageSectorIconByApplication(applet.getRootAppletDef().getApplicationName())

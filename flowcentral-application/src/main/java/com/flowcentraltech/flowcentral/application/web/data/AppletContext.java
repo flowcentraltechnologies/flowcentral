@@ -35,6 +35,8 @@ import com.flowcentraltech.flowcentral.configuration.constants.EntityChildCatego
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.util.DataUtils;
+import com.tcdng.unify.web.ui.PageAttributeConstants;
+import com.tcdng.unify.web.ui.widget.Page;
 
 /**
  * Applet context.
@@ -48,6 +50,8 @@ public class AppletContext extends AbstractContext {
 
     private final AbstractApplet applet;
 
+    private final Page page;
+
     private Map<EntityChildCategoryType, String> entityReferences;
 
     private EntityActionResult originalEntityActionResult;
@@ -55,8 +59,6 @@ public class AppletContext extends AbstractContext {
     private int tabReadOnlyCounter;
 
     private boolean auditingEnabled;
-
-    private boolean inDetachedWindow;
 
     private final boolean parentStateAuditingEnabled;
 
@@ -80,8 +82,9 @@ public class AppletContext extends AbstractContext {
 
     private boolean rootFormUpdateDraft;
 
-    public AppletContext(AbstractApplet applet, AppletUtilities au) throws UnifyException {
+    public AppletContext(Page page, AbstractApplet applet, AppletUtilities au) throws UnifyException {
         this.applet = applet;
+        this.page = page;
         this.au = au;
         this.entityReferences = new EnumMap<EntityChildCategoryType, String>(EntityChildCategoryType.class);
         for (EntityChildCategoryType type : EntityChildCategoryType.values()) {
@@ -175,12 +178,8 @@ public class AppletContext extends AbstractContext {
         this.auditingEnabled = auditingEnabled;
     }
 
-    public boolean isInDetachedWindow() {
-        return inDetachedWindow;
-    }
-
-    public void setInDetachedWindow(boolean inDetachedWindow) {
-        this.inDetachedWindow = inDetachedWindow;
+    public boolean isInDetachedWindow() throws UnifyException {
+        return page != null && page.getAttribute(boolean.class, PageAttributeConstants.IN_DETACHED_WINDOW);
     }
 
     public boolean isRootFormUpdateDraft() {

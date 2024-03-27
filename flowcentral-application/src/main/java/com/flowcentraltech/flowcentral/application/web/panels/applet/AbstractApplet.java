@@ -47,7 +47,6 @@ import com.tcdng.unify.core.data.BeanValueStore;
 import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.util.StringUtils;
-import com.tcdng.unify.web.ui.PageAttributeConstants;
 import com.tcdng.unify.web.ui.widget.Page;
 
 /**
@@ -88,8 +87,7 @@ public abstract class AbstractApplet {
     public AbstractApplet(Page page, AppletUtilities au, String appletName) throws UnifyException {
         this.appletName = ApplicationNameUtils.removeVestigialNamePart(appletName);
         this.au = au;
-        this.ctx = new AppletContext(this, au);
-        this.ctx.setInDetachedWindow(page.getAttribute(boolean.class, PageAttributeConstants.IN_DETACHED_WINDOW));
+        this.ctx = new AppletContext(page, this, au);
     }
 
     public String getAppletName() {

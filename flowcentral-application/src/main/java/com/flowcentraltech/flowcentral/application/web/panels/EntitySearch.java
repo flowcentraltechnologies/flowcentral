@@ -483,9 +483,6 @@ public class EntitySearch extends AbstractPanelFormBinding {
 
     public void applyFilterToSearch() throws UnifyException {
         AppletContext ctx = getAppletCtx();
-        System.out.println("@prime: ctx.isInDetachedWindow() = " + ctx.isInDetachedWindow());
-        System.out.println("@prime: ctx.isLowLatencyRequest() = " + ctx.au().isLowLatencyRequest());
-
         if (ctx.isInDetachedWindow() || !ctx.au().isLowLatencyRequest()) {
             EntityDef entityDef = entityFilter.getEntityDef();
             Restriction restriction = entityFilter.getRestriction(ctx.au().getNow());
