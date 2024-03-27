@@ -37,6 +37,7 @@ import com.flowcentraltech.flowcentral.configuration.xml.AppConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.FieldSequenceConfig;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
+import com.tcdng.unify.core.criterion.Update;
 import com.tcdng.unify.core.task.TaskMonitor;
 import com.tcdng.unify.core.util.DataUtils;
 
@@ -57,6 +58,8 @@ public class ApplicationChartInstallerImpl extends AbstractApplicationArtifactIn
 
         logDebug(taskMonitor, "Executing chart installer...");
         // Install configured charts
+        environment().updateAll(new ChartQuery().applicationId(applicationId).isNotActualCustom(),
+                new Update().add("deprecated", Boolean.TRUE));
         if (applicationConfig.getChartsConfig() != null
                 && !DataUtils.isBlank(applicationConfig.getChartsConfig().getChartList())) {
             for (AppChartConfig appChartConfig : applicationConfig.getChartsConfig().getChartList()) {
@@ -89,6 +92,7 @@ public class ApplicationChartInstallerImpl extends AbstractApplicationArtifactIn
                     chart.setFormatYLabels(appChartConfig.isFormatYLabels());
                     chart.setStacked(appChartConfig.isStacked());
                     chart.setSmooth(appChartConfig.isSmooth());
+                    chart.setDeprecated(false);
                     chart.setConfigType(ConfigType.MUTABLE_INSTALL);
                     environment().create(chart);
                 } else {
@@ -111,6 +115,7 @@ public class ApplicationChartInstallerImpl extends AbstractApplicationArtifactIn
                         oldChart.setFormatYLabels(appChartConfig.isFormatYLabels());
                         oldChart.setStacked(appChartConfig.isStacked());
                         oldChart.setSmooth(appChartConfig.isSmooth());
+                        oldChart.setDeprecated(false);
                         environment().updateByIdVersion(oldChart);
                     }
                 }
@@ -118,6 +123,8 @@ public class ApplicationChartInstallerImpl extends AbstractApplicationArtifactIn
         }
 
         // Install configured chart data sources
+        environment().updateAll(new ChartDataSourceQuery().applicationId(applicationId).isNotActualCustom(),
+                new Update().add("deprecated", Boolean.TRUE));
         if (applicationConfig.getChartDataSourcesConfig() != null
                 && !DataUtils.isBlank(applicationConfig.getChartDataSourcesConfig().getChartDataSourceList())) {
             for (AppChartDataSourceConfig appChartDataSourceConfig : applicationConfig.getChartDataSourcesConfig()
@@ -144,6 +151,7 @@ public class ApplicationChartInstallerImpl extends AbstractApplicationArtifactIn
                     chartDataSource.setCategories(
                             InputWidgetUtils.newAppPropertySequence(appChartDataSourceConfig.getCategories()));
                     chartDataSource.setFieldSequence(newAppFieldSequence(appChartDataSourceConfig.getFieldSequence()));
+                    chartDataSource.setDeprecated(false);
                     chartDataSource.setConfigType(ConfigType.MUTABLE_INSTALL);
                     environment().create(chartDataSource);
                 } else {
@@ -161,6 +169,7 @@ public class ApplicationChartInstallerImpl extends AbstractApplicationArtifactIn
                         oldChartDataSource.setCategories(
                                 InputWidgetUtils.newAppPropertySequence(appChartDataSourceConfig.getCategories()));
                         oldChartDataSource.setFieldSequence(newAppFieldSequence(appChartDataSourceConfig.getFieldSequence()));
+                        oldChartDataSource.setDeprecated(false);
                         environment().updateByIdVersion(oldChartDataSource);
                     }
                 }

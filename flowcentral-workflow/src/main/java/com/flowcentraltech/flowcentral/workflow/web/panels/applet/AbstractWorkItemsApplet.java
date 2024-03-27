@@ -32,6 +32,7 @@ import com.flowcentraltech.flowcentral.workflow.data.WfUserActionDef;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.Listable;
 import com.tcdng.unify.core.util.DataUtils;
+import com.tcdng.unify.web.ui.widget.Page;
 import com.tcdng.unify.web.ui.widget.data.ButtonInfo;
 
 /**
@@ -42,9 +43,9 @@ import com.tcdng.unify.web.ui.widget.data.ButtonInfo;
  */
 public class AbstractWorkItemsApplet extends ManageLoadingListApplet {
 
-    public AbstractWorkItemsApplet(AppletUtilities au, List<String> pathVariables, AppletWidgetReferences appletWidgetReferences,
+    public AbstractWorkItemsApplet(Page page, AppletUtilities au, List<String> pathVariables, AppletWidgetReferences appletWidgetReferences,
             EntityFormEventHandlers formEventHandlers) throws UnifyException {
-        super(au, pathVariables, appletWidgetReferences, formEventHandlers);
+        super(page, au, pathVariables, appletWidgetReferences, formEventHandlers);
     }
 
     protected List<ButtonInfo> getActionButtons(WorkflowModuleService workflowModuleService,

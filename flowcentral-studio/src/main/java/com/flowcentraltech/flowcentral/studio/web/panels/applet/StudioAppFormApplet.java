@@ -28,6 +28,7 @@ import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs;
 import com.flowcentraltech.flowcentral.studio.business.StudioModuleService;
 import com.flowcentraltech.flowcentral.studio.web.panels.FormEditorPage;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.web.ui.widget.Page;
 
 /**
  * Studio application form applet object.
@@ -39,10 +40,10 @@ public class StudioAppFormApplet extends StudioAppComponentApplet {
 
     private FormEditorPage formEditorPage;
 
-    public StudioAppFormApplet(StudioModuleService sms, AppletUtilities au, List<String> pathVariables,
+    public StudioAppFormApplet(Page page, StudioModuleService sms, AppletUtilities au, List<String> pathVariables,
             String applicationName, AppletWidgetReferences appletWidgetReferences,
             EntityFormEventHandlers formEventHandlers) throws UnifyException {
-        super(sms, au, pathVariables, applicationName, appletWidgetReferences, formEventHandlers);
+        super(page, sms, au, pathVariables, applicationName, appletWidgetReferences, formEventHandlers);
     }
 
     public FormEditorPage getFormEditorPage() {

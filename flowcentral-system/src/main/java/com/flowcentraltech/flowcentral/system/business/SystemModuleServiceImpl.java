@@ -534,12 +534,8 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
-    public void releaseScheduledTask(Long scheduledTaskId, Long scheduledTaskHistId, TaskStatus completionTaskStatus,
+    public void logScheduledTaskCompletion(Long scheduledTaskId, Long scheduledTaskHistId, TaskStatus completionTaskStatus,
             String errorMsg) throws UnifyException {
-        // Release lock on scheduled task
-        ScheduledTaskDef scheduledTaskDef = scheduledTaskDefs.get(scheduledTaskId);
-        releaseClusterLock(scheduledTaskDef.getLock());
-
         // Update history
         ScheduledTaskHist scheduledTaskHist = environment().find(ScheduledTaskHist.class, scheduledTaskHistId);
         scheduledTaskHist.setFinishedOn(getNow());

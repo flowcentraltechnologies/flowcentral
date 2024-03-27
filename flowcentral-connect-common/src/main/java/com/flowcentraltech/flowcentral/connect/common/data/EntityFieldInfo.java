@@ -121,11 +121,11 @@ public class EntityFieldInfo {
     }
 
     public boolean isSet() {
-        return Set.class.isAssignableFrom(fieldClass);
+        return fieldClass != null && Set.class.isAssignableFrom(fieldClass);
     }
 
     public boolean isList() {
-        return List.class.isAssignableFrom(fieldClass);
+        return fieldClass != null && List.class.isAssignableFrom(fieldClass);
     }
     
     public boolean isNullable() {

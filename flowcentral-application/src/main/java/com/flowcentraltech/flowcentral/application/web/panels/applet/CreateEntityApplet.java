@@ -26,6 +26,7 @@ import com.flowcentraltech.flowcentral.application.web.controllers.AppletWidgetR
 import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm.FormMode;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.database.Entity;
+import com.tcdng.unify.web.ui.widget.Page;
 
 /**
  * Create entity applet object.
@@ -35,9 +36,9 @@ import com.tcdng.unify.core.database.Entity;
  */
 public class CreateEntityApplet extends AbstractEntityFormApplet {
 
-    public CreateEntityApplet(AppletUtilities au, List<String> pathVariables, AppletWidgetReferences appletWidgetReferences,
+    public CreateEntityApplet(Page page, AppletUtilities au, List<String> pathVariables, AppletWidgetReferences appletWidgetReferences,
             EntityFormEventHandlers formEventHandlers) throws UnifyException {
-        super(au, pathVariables, appletWidgetReferences, formEventHandlers);
+        super(page, au, pathVariables, appletWidgetReferences, formEventHandlers);
         setCurrFormAppletDef(getRootAppletDef());
         final String vestigial = ApplicationNameUtils.getVestigialNamePart(pathVariables.get(APPLET_NAME_INDEX));
         if (vestigial == null) {

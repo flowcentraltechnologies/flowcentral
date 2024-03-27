@@ -26,6 +26,7 @@ import com.flowcentraltech.flowcentral.common.util.CommonInputUtils;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.ParamConfig;
 import com.tcdng.unify.core.task.TaskManager;
+import com.tcdng.unify.web.ui.widget.Page;
 
 /**
  * Task execution applet.
@@ -39,8 +40,8 @@ public class TaskExecutionApplet extends AbstractApplet {
 
     private final ParamValueEntries paramValueEntries;
 
-    public TaskExecutionApplet(AppletUtilities au, TaskManager tm, List<String> pathVariables) throws UnifyException {
-        super(au, pathVariables.get(APPLET_NAME_INDEX));
+    public TaskExecutionApplet(Page page, AppletUtilities au, TaskManager tm, List<String> pathVariables) throws UnifyException {
+        super(page, au, pathVariables.get(APPLET_NAME_INDEX));
         List<ParamConfig> paramConfigList = tm
                 .getTaskParameters(getRootAppletProp(String.class, AppletPropertyConstants.TASKEXECUTION_TASKNAME));
         ParamValuesDef paramValuesDef = CommonInputUtils.getParamValuesDef(paramConfigList);

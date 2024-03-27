@@ -111,7 +111,6 @@ public class ListingAppletPanel extends AbstractAppletPanel {
     }
 
     private ListingApplet getListEntityApplet() throws UnifyException {
-        ensureDetachedWindowChecked();
         return getValue(ListingApplet.class);
     }
 

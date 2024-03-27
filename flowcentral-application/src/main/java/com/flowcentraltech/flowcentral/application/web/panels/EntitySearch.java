@@ -22,6 +22,7 @@ import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.FilterDef;
 import com.flowcentraltech.flowcentral.application.data.TableDef;
+import com.flowcentraltech.flowcentral.application.web.data.AppletContext;
 import com.flowcentraltech.flowcentral.application.web.data.FormContext;
 import com.flowcentraltech.flowcentral.application.web.widgets.EntityTable;
 import com.flowcentraltech.flowcentral.application.web.widgets.Filter;
@@ -481,11 +482,12 @@ public class EntitySearch extends AbstractPanelFormBinding {
     }
 
     public void applyFilterToSearch() throws UnifyException {
-        if (!getAppletCtx().au().isLowLatencyRequest()) {
+        AppletContext ctx = getAppletCtx();
+        if (ctx.isInDetachedWindow() || !ctx.au().isLowLatencyRequest()) {
             EntityDef entityDef = entityFilter.getEntityDef();
-            Restriction restriction = entityFilter.getRestriction(getAppletCtx().au().getNow());
+            Restriction restriction = entityFilter.getRestriction(ctx.au().getNow());
             applyRestrictionToSearch(entityDef, restriction);
-            entityFilterTranslation = getAppletCtx().au().translate(restriction, entityDef);
+            entityFilterTranslation = ctx.au().translate(restriction, entityDef);
         }
     }
 

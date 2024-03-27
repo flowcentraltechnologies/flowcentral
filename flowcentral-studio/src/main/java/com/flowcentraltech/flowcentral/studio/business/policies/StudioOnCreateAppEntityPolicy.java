@@ -45,6 +45,7 @@ public class StudioOnCreateAppEntityPolicy extends StudioOnCreateComponentPolicy
     protected EntityActionResult doExecutePreAction(EntityActionContext ctx) throws UnifyException {
         super.doExecutePreAction(ctx);
         AppEntity appEntity = (AppEntity) ctx.getInst();
+        appEntity.setSchemaUpdateRequired(true);
         if (DataUtils.isBlank(appEntity.getFieldList())) {
             appEntity.setFieldList(application().getEntityBaseTypeFieldList(appEntity.getBaseType(), ConfigType.CUSTOM));
         } else {

@@ -25,6 +25,7 @@ import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.criterion.And;
 import com.tcdng.unify.core.criterion.Equals;
 import com.tcdng.unify.core.criterion.Restriction;
+import com.tcdng.unify.web.ui.widget.Page;
 
 /**
  * Manage entity details applet object.
@@ -44,16 +45,16 @@ public class ManageEntityDetailsApplet extends AbstractApplet {
 
     private EntityCRUD childEntityCrud;
 
-    public ManageEntityDetailsApplet(AppletUtilities au, String pathVariable) throws UnifyException {
-        super(au, pathVariable);
+    public ManageEntityDetailsApplet(Page page, AppletUtilities au, String pathVariable) throws UnifyException {
+        super(page, au, pathVariable);
         this.childAppletName = null;
         this.childBaseFieldName = null;
         this.formEventHandlers = null;
     }
 
-    public ManageEntityDetailsApplet(AppletUtilities au, String pathVariable, String childAppletName,
+    public ManageEntityDetailsApplet(Page page, AppletUtilities au, String pathVariable, String childAppletName,
             String childBaseFieldName, EntityFormEventHandlers formEventHandlers) throws UnifyException {
-        super(au, pathVariable);
+        super(page, au, pathVariable);
         this.childAppletName = childAppletName;
         this.childBaseFieldName = childBaseFieldName;
         this.formEventHandlers = formEventHandlers;

@@ -57,6 +57,7 @@ import com.flowcentraltech.flowcentral.application.data.TableDef;
 import com.flowcentraltech.flowcentral.application.data.UsageType;
 import com.flowcentraltech.flowcentral.application.data.WidgetRulesDef;
 import com.flowcentraltech.flowcentral.application.data.WidgetTypeDef;
+import com.flowcentraltech.flowcentral.application.entities.AppEntity;
 import com.flowcentraltech.flowcentral.application.entities.BaseApplicationEntity;
 import com.flowcentraltech.flowcentral.application.listing.DetailsFormListingGenerator;
 import com.flowcentraltech.flowcentral.application.listing.FormListingGenerator;
@@ -921,7 +922,7 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
             Entity inst, BreadCrumbs breadCrumbs) throws UnifyException {
         logDebug("Constructing listing form for bean [{0}] using form definition [{1}]...", beanTitle,
                 formDef.getLongName());
-        final AppletContext appletContext = applet != null ? applet.getCtx() : new AppletContext(applet, this);
+        final AppletContext appletContext = applet != null ? applet.getCtx() : new AppletContext(null, applet, this);
         final FormContext formContext = new FormContext(appletContext, formDef, null, inst);
         final SectorIcon sectorIcon = applet != null
                 ? getPageSectorIconByApplication(applet.getRootAppletDef().getApplicationName())
@@ -939,7 +940,7 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
             EntityFormEventHandlers formEventHandlers) throws UnifyException {
         logDebug("Constructing header with tabs form for bean [{0}] using form definition [{1}]...", beanTitle,
                 formDef.getLongName());
-        final AppletContext appletContext = applet != null ? applet.getCtx() : new AppletContext(applet, this);
+        final AppletContext appletContext = applet != null ? applet.getCtx() : new AppletContext(null, applet, this);
         final SweepingCommitPolicy sweepingCommitPolicy = applet;
         final FormContext formContext = new FormContext(appletContext, formDef, formEventHandlers, inst);
         final SectorIcon sectorIcon = applet != null
@@ -1323,7 +1324,7 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
     @Override
     public EntitySingleForm constructEntitySingleForm(AbstractApplet applet, String rootTitle, String beanTitle,
             Entity inst, FormMode formMode, BreadCrumbs breadCrumbs) throws UnifyException {
-        final AppletContext appletContext = applet != null ? applet.getCtx() : new AppletContext(applet, this);
+        final AppletContext appletContext = applet != null ? applet.getCtx() : new AppletContext(null, applet, this);
         final FormContext formContext = new FormContext(appletContext, applet.getEntityDef(), inst);
         final SectorIcon sectorIcon = applet != null
                 ? getPageSectorIconByApplication(applet.getRootAppletDef().getApplicationName())
@@ -1997,10 +1998,20 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
                         && !isEnterprise();
                 Query<?> query = Query.of((Class<? extends Entity>) entityClass).addEquals("id", inst.getId());
                 long bumpedVersionNo = db.value(long.class, "versionNo", query) + 1L;
-                db.updateAll(query,
-                        isClearMergeVersion
-                                ? new Update().add("versionNo", bumpedVersionNo).add("devMergeVersionNo", null)
-                                : new Update().add("versionNo", bumpedVersionNo));
+                Update update = isClearMergeVersion
+                        ? new Update().add("versionNo", bumpedVersionNo).add("devMergeVersionNo", null)
+                        : new Update().add("versionNo", bumpedVersionNo);
+
+                if (AppEntity.class.equals(entityClass)) {
+                    AppEntity appEntity = (AppEntity) inst;
+                    if (appEntity.getConfigType().isCustom() && StringUtils.isBlank(appEntity.getDelegate())) {
+                        appEntity.setSchemaUpdateRequired(true);
+                        update.add("schemaUpdateRequired", true);
+                    }
+                }
+
+                db.updateAll(query, update);
+
                 ((BaseVersionEntity) inst).setVersionNo(bumpedVersionNo);
                 if (isClearMergeVersion) {
                     ((BaseApplicationEntity) inst).setDevMergeVersionNo(null);
@@ -2012,7 +2023,8 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
     @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
     protected void onInitialize() throws UnifyException {
-        Map<String, MappedEntityProvider<? extends BaseMappedEntityProviderContext>> providers = new HashMap<String, MappedEntityProvider<? extends BaseMappedEntityProviderContext>>();
+        Map<String, MappedEntityProvider<? extends BaseMappedEntityProviderContext>> providers =
+                new HashMap<String, MappedEntityProvider<? extends BaseMappedEntityProviderContext>>();
         List<MappedEntityProvider> _providers = getComponents(MappedEntityProvider.class);
         for (MappedEntityProvider _provider : _providers) {
             if (providers.containsKey(_provider.destEntity())) {

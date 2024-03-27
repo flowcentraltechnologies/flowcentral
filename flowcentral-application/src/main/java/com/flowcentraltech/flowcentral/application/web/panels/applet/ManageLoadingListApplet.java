@@ -50,6 +50,7 @@ import com.tcdng.unify.core.data.BeanValueStore;
 import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.report.Report;
 import com.tcdng.unify.core.util.StringUtils;
+import com.tcdng.unify.web.ui.widget.Page;
 
 /**
  * Manage loading list applet object.
@@ -63,10 +64,10 @@ public class ManageLoadingListApplet extends AbstractEntityFormApplet {
 
     private EntitySingleForm singleForm;
 
-    public ManageLoadingListApplet(AppletUtilities au, List<String> pathVariables,
+    public ManageLoadingListApplet(Page page, AppletUtilities au, List<String> pathVariables,
             AppletWidgetReferences appletWidgetReferences, EntityFormEventHandlers formEventHandlers)
             throws UnifyException {
-        super(au, pathVariables, appletWidgetReferences, formEventHandlers);
+        super(page, au, pathVariables, appletWidgetReferences, formEventHandlers);
         loadingSearch = au.constructLoadingSearch(ctx, LoadingSearch.ENABLE_ALL);
         if (isRootAppletPropWithValue(AppletPropertyConstants.BASE_RESTRICTION)) {
             AppletFilterDef appletFilterDef = getRootAppletFilterDef(AppletPropertyConstants.BASE_RESTRICTION);

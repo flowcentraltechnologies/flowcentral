@@ -914,6 +914,8 @@
 				label="$m{application.appentity.auditable}" type="boolean" />
 			<field name="reportable"
 				label="$m{application.appentity.reportable}" type="boolean" />
+			<field name="schemaUpdateRequired"
+				label="$m{application.appentity.schemaupdaterequired}" type="boolean" />
 			<field name="actionPolicy"
 				label="$m{application.appentity.actionpolicy}" type="boolean" />
 			<field name="baseTypeDesc"

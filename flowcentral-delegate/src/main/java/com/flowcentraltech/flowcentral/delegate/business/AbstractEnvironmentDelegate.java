@@ -63,6 +63,7 @@ import com.tcdng.unify.core.database.DataSourceEntityListProvider;
 import com.tcdng.unify.core.database.DatabaseSession;
 import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.database.GroupingAggregation;
+import com.tcdng.unify.core.database.NativeUpdate;
 import com.tcdng.unify.core.database.Query;
 import com.tcdng.unify.core.util.DataUtils;
 
@@ -444,6 +445,11 @@ public abstract class AbstractEnvironmentDelegate extends AbstractFlowCentralCom
         Long id = singleValueResultOperation(Long.class, record.getClass(), req);
         record.setPreferredId(id);
         return id;
+    }
+
+    @Override
+    public int update(NativeUpdate update) throws UnifyException {
+        throw new UnsupportedOperationException();
     }
 
     @Override

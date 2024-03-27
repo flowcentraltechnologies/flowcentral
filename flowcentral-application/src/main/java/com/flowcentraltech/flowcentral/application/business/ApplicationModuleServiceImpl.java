@@ -206,6 +206,7 @@ import com.flowcentraltech.flowcentral.common.business.EnvironmentDelegateRegist
 import com.flowcentraltech.flowcentral.common.business.EnvironmentDelegateUtilities;
 import com.flowcentraltech.flowcentral.common.business.FileAttachmentProvider;
 import com.flowcentraltech.flowcentral.common.business.PostBootSetup;
+import com.flowcentraltech.flowcentral.common.business.PreInstallationSetup;
 import com.flowcentraltech.flowcentral.common.business.SuggestionProvider;
 import com.flowcentraltech.flowcentral.common.business.policies.SweepingCommitPolicy;
 import com.flowcentraltech.flowcentral.common.constants.ConfigType;
@@ -318,11 +319,11 @@ import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.data.ValueStoreWriter;
 import com.tcdng.unify.core.database.Entity;
+import com.tcdng.unify.core.database.NativeUpdate;
 import com.tcdng.unify.core.database.Query;
 import com.tcdng.unify.core.database.dynamic.DynamicEntityInfo;
 import com.tcdng.unify.core.database.dynamic.sql.DynamicSqlEntityLoader;
 import com.tcdng.unify.core.database.sql.SqlDataSourceDialect;
-import com.tcdng.unify.core.database.sql.SqlDatabase;
 import com.tcdng.unify.core.format.Formatter;
 import com.tcdng.unify.core.list.ListManager;
 import com.tcdng.unify.core.message.MessageResolver;
@@ -344,9 +345,13 @@ import com.tcdng.unify.core.util.StringUtils;
 @Transactional
 @Component(ApplicationModuleNameConstants.APPLICATION_MODULE_SERVICE)
 public class ApplicationModuleServiceImpl extends AbstractFlowCentralService implements ApplicationModuleService,
-        FileAttachmentProvider, SuggestionProvider, PostBootSetup, EnvironmentDelegateRegistrar {
+        FileAttachmentProvider, SuggestionProvider, PreInstallationSetup, PostBootSetup, EnvironmentDelegateRegistrar {
+
+    private static final String PRE_INSTALLATION_SETUP_LOCK = "app::preinstallationsetup";
 
     private static final String POST_BOOT_SETUP_LOCK = "app::postbootsetup";
+
+    private static final String DYNAMIC_ENTITY_BUILD_LOCK = "app:dynamicentitybuild";
 
     private final Set<String> refProperties = Collections
             .unmodifiableSet(new HashSet<String>(Arrays.asList(AppletPropertyConstants.SEARCH_TABLE,
@@ -415,7 +420,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
 
     private FactoryMap<String, SuggestionTypeDef> suggestionDefFactoryMap;
 
-    private FactoryMap<String, EntityClassDef> entityClassDefFactoryMap;
+    private EntityClassDefFactoryMap entityClassDefFactoryMap;
 
     private FactoryMap<String, EntityDef> entityDefFactoryMap;
 
@@ -577,8 +582,9 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                 }
             };
 
-        this.entityClassDefFactoryMap = new FactoryMap<String, EntityClassDef>(true)
+        this.entityClassDefFactoryMap = new EntityClassDefFactoryMap()
             {
+
                 @Override
                 protected boolean stale(String longName, EntityClassDef entityClassDef) throws Exception {
                     if (!RESERVED_ENTITIES.contains(longName)) {
@@ -606,52 +612,14 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                                 com.flowcentraltech.flowcentral.application.data.Attachment.class);
                     }
 
-                    logDebug("Building dynamic entity information...");
-                    Map<String, DynamicEntityInfo> dynamicEntityInfoMap = new HashMap<String, DynamicEntityInfo>();
-                    DynamicEntityInfo _originDynamicEntityInfo = buildDynamicEntityInfo(entityDef, dynamicEntityInfoMap,
-                            null, true);
-
-                    // Consider all dependants
-                    List<String> entityNameList = getAllDependantEntities(longName);
-                    for (String entity : entityNameList) {
-                        buildDynamicEntityInfo(getEntityDef(entity), dynamicEntityInfoMap, null, true);
+                    if (!entityDef.isCustom()) {
+                        Class<? extends Entity> entityClass = (Class<? extends Entity>) ReflectUtils
+                                .classForName(entityDef.getOriginClassName());
+                        registerDelegate(entityDef, entityClass);
+                        return new EntityClassDef(entityDef, entityClass);
                     }
 
-                    // Get entity definitions for type that need to be generated
-                    List<DynamicEntityInfo> _dynamicEntityInfos = new ArrayList<DynamicEntityInfo>();
-                    for (Map.Entry<String, DynamicEntityInfo> entry : dynamicEntityInfoMap.entrySet()) {
-                        DynamicEntityInfo info = entry.getValue();
-                        info.finalizeResolution();
-                        if (info.isGeneration()) {
-                            _dynamicEntityInfos.add(entry.getValue());
-                        }
-                    }
-
-                    logDebug("Dynamic entity information successfully built. [{0}] entities resolved for generation.",
-                            _dynamicEntityInfos.size());
-
-                    // Compile and load class if necessary
-                    if (!_dynamicEntityInfos.isEmpty()) {
-                        dynamicSqlEntityLoader.loadDynamicSqlEntities((SqlDatabase) environment().getDatabase(),
-                                _dynamicEntityInfos);
-                    }
-
-                    // Load related entity class definitions
-                    for (Map.Entry<String, DynamicEntityInfo> entry : dynamicEntityInfoMap.entrySet()) {
-                        final String _longName = entry.getKey();
-                        if (!_longName.equals(longName)) {
-                            EntityDef _entityDef = getEntityDef(_longName);
-                            Class<? extends Entity> _entityClass = (Class<? extends Entity>) ReflectUtils
-                                    .classForName(entry.getValue().getClassName());
-                            registerDelegate(_entityDef, _entityClass);
-                            put(_longName, new EntityClassDef(_entityDef, _entityClass));
-                        }
-                    }
-
-                    Class<? extends Entity> entityClass = (Class<? extends Entity>) ReflectUtils
-                            .classForName(_originDynamicEntityInfo.getClassName());
-                    registerDelegate(entityDef, entityClass);
-                    return new EntityClassDef(entityDef, entityClass);
+                    return performDynamicEntityBuild(longName);
                 }
 
                 @Override
@@ -1049,9 +1017,10 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                     }
 
                     for (AppTableLoading appTableLoading : appTable.getLoadingList()) {
-                        tdb.addTableLoadingDef(new TableLoadingDef(appTableLoading.getName(),
-                                appTableLoading.getDescription(), appTableLoading.getLabel(),
-                                appTableLoading.getProvider(), appTableLoading.getOrderIndex(), Collections.emptyList()));
+                        tdb.addTableLoadingDef(
+                                new TableLoadingDef(appTableLoading.getName(), appTableLoading.getDescription(),
+                                        appTableLoading.getLabel(), appTableLoading.getProvider(),
+                                        appTableLoading.getOrderIndex(), Collections.emptyList()));
                     }
 
                     tdb.detailsPanelName(appTable.getDetailsPanelName());
@@ -3753,6 +3722,15 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
         return 0;
     }
 
+    @Synchronized(PRE_INSTALLATION_SETUP_LOCK)
+    @Override
+    public void performPreInstallationSetup() throws UnifyException {
+        // Force schema change for custom entities (studio)
+        db().update(new NativeUpdate(
+                "UPDATE fc_entity SET schema_update_required_fg = ? WHERE config_type = ? AND delegate IS NULL")
+                        .setParam(0, true).setParam(1, "C"));
+    }
+
     @Synchronized(POST_BOOT_SETUP_LOCK)
     @Override
     public void performPostBootSetup(final boolean isInstallationPerformed) throws UnifyException {
@@ -3802,6 +3780,116 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
         }
 
         appletUtilities.ensureWorkflowUserInteractionLoadingApplets(isInstallationPerformed);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Synchronized(DYNAMIC_ENTITY_BUILD_LOCK)
+    public EntityClassDef performDynamicEntityBuild(final String longName) throws UnifyException {
+        logDebug("Building dynamic entity information...");
+        Map<String, DynamicEntityInfo> dynamicEntityInfoMap = new HashMap<String, DynamicEntityInfo>();
+        Set<Long> ids = buildDynamicEntityInfos(longName, dynamicEntityInfoMap);
+
+        // If any schema has changed, pull other entities that have schema changed
+        final boolean schemaUpdated = db()
+                .countAll(new AppEntityQuery().isSchemaUpdateRequired().isCustom().addAmongst("id", ids)) > 0;
+        List<String> otherSchemaUpdateEntities = schemaUpdated ? appletUtilities.getApplicationEntitiesLongNames(
+                (AppEntityQuery) new AppEntityQuery().isSchemaUpdateRequired().isCustom().addNotAmongst("id", ids))
+                : Collections.emptyList();
+        for (String entity : otherSchemaUpdateEntities) {
+            buildDynamicEntityInfos(entity, dynamicEntityInfoMap);
+        }
+
+        // Get entity definitions for type that need to be generated
+        List<DynamicEntityInfo> _dynamicEntityInfos = new ArrayList<DynamicEntityInfo>();
+        for (Map.Entry<String, DynamicEntityInfo> entry : dynamicEntityInfoMap.entrySet()) {
+            DynamicEntityInfo info = entry.getValue();
+            info.finalizeResolution();
+            if (info.isGeneration()) {
+                _dynamicEntityInfos.add(entry.getValue());
+            }
+        }
+
+        logDebug("Dynamic entity information successfully built. [{0}] entities resolved for generation.",
+                _dynamicEntityInfos.size());
+
+        // Compile and load class if necessary
+        if (!_dynamicEntityInfos.isEmpty()) {
+            dynamicSqlEntityLoader.loadDynamicSqlEntities(_dynamicEntityInfos);
+        }
+
+        if (schemaUpdated) {
+            db().updateAll(new AppEntityQuery().isSchemaUpdateRequired().isCustom(),
+                    new Update().add("schemaUpdateRequired", false));
+        }
+
+        // Load related entity class definitions
+        for (Map.Entry<String, DynamicEntityInfo> entry : dynamicEntityInfoMap.entrySet()) {
+            final String _longName = entry.getKey();
+            if (!_longName.equals(longName)) {
+                EntityDef _entityDef = getEntityDef(_longName);
+                Class<? extends Entity> _entityClass = (Class<? extends Entity>) ReflectUtils
+                        .classForName(entry.getValue().getClassName());
+                registerDelegate(_entityDef, _entityClass);
+                try {
+                    entityClassDefFactoryMap.putEntityClassDef(_longName, new EntityClassDef(_entityDef, _entityClass));
+                } catch (Exception e) {
+                    throwOperationErrorException(e);
+                }
+            }
+        }
+
+        final EntityDef entityDef = getEntityDef(longName);
+        Class<? extends Entity> entityClass = (Class<? extends Entity>) ReflectUtils
+                .classForName(entityDef.getOriginClassName());
+        registerDelegate(entityDef, entityClass);
+        return new EntityClassDef(entityDef, entityClass);
+    }
+
+    private Set<Long> buildDynamicEntityInfos(final String longName,
+            Map<String, DynamicEntityInfo> dynamicEntityInfoMap) throws UnifyException {
+        Set<Long> _set = new HashSet<Long>();
+        EntityDef _entityDef = getEntityDef(longName);
+        _set.add(_entityDef.getId());
+        buildDynamicEntityInfo(_entityDef, dynamicEntityInfoMap, null, true);
+
+        // Consider all dependents
+        List<String> entityNameList = getDependentEntities(longName);
+        for (String _entity : entityNameList) {
+            _entityDef = getEntityDef(_entity);
+            _set.add(_entityDef.getId());
+            buildDynamicEntityInfo(_entityDef, dynamicEntityInfoMap, null, true);
+        }
+
+        return _set;
+    }
+
+    private abstract class EntityClassDefFactoryMap extends FactoryMap<String, EntityClassDef> {
+
+        public EntityClassDefFactoryMap() {
+            super(true);
+        }
+
+        public void putEntityClassDef(String longName, EntityClassDef entityClassDef) throws Exception {
+            put(longName, entityClassDef);
+        }
+
+    }
+
+    private List<String> getDependentEntities(String entity) throws UnifyException {
+        List<AppRef> refList = environment()
+                .listAll(new AppRefQuery().entity(entity).addSelect("applicationName", "name"));
+        if (!DataUtils.isBlank(refList)) {
+            List<String> refNameList = ApplicationNameUtils.getApplicationEntityLongNames(refList);
+            Set<Long> appEntityList = environment().valueSet(Long.class, "appEntityId", new AppEntityFieldQuery()
+                    .addEquals("dataType", EntityFieldDataType.REF).addAmongst("references", refNameList));
+            if (!DataUtils.isBlank(appEntityList)) {
+                List<AppEntity> entityList = environment()
+                        .listAll(new AppEntityQuery().idIn(appEntityList).addSelect("applicationName", "name"));
+                return ApplicationNameUtils.getApplicationEntityLongNames(entityList);
+            }
+        }
+
+        return Collections.emptyList();
     }
 
     @SuppressWarnings("unchecked")
@@ -3942,24 +4030,6 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
         return Collections.emptyList();
     }
 
-    private List<String> getAllDependantEntities(String entity) throws Exception {
-        List<AppRef> refList = environment()
-                .listAll(new AppRefQuery().entity(entity).addSelect("applicationName", "name"));
-        if (!DataUtils.isBlank(refList)) {
-            List<String> refNameList = ApplicationNameUtils.getApplicationEntityLongNames(refList);
-
-            Set<Long> appEntityList = environment().valueSet(Long.class, "appEntityId", new AppEntityFieldQuery()
-                    .addEquals("dataType", EntityFieldDataType.REF).addAmongst("references", refNameList));
-            if (!DataUtils.isBlank(appEntityList)) {
-                List<AppEntity> entityList = environment()
-                        .listAll(new AppEntityQuery().idIn(appEntityList).addSelect("applicationName", "name"));
-                return ApplicationNameUtils.getApplicationEntityLongNames(entityList);
-            }
-        }
-
-        return Collections.emptyList();
-    }
-
     private void resolveListOnlyFieldTypes(final EntityDef entityDef) throws UnifyException {
         for (EntityFieldDef listOnlyFieldDef : entityDef.getListOnlyFieldDefList()) {
             EntityDef _entityDef = entityDef;
@@ -4055,6 +4125,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
 
         // Applets
         logDebug(taskMonitor, "Installing application applets...");
+        environment().updateAll(new AppAppletQuery().applicationId(applicationId).isNotActualCustom(),
+                new Update().add("deprecated", Boolean.TRUE));
         if (applicationConfig.getAppletsConfig() != null
                 && !DataUtils.isBlank(applicationConfig.getAppletsConfig().getAppletList())) {
             AppApplet appApplet = new AppApplet();
@@ -4094,6 +4166,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                     appApplet.setAssignField(appletConfig.getAssignField());
                     appApplet.setAssignDescField(appletConfig.getAssignDescField());
                     appApplet.setPseudoDeleteField(appletConfig.getPseudoDeleteField());
+                    appApplet.setDeprecated(false);
                     appApplet.setConfigType(ConfigType.STATIC_INSTALL);
                     populateChildList(appApplet, applicationName, appletConfig);
                     environment().create(appApplet);
@@ -4119,6 +4192,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                         oldAppApplet.setPseudoDeleteField(appletConfig.getPseudoDeleteField());
                     }
 
+                    oldAppApplet.setDeprecated(false);
                     populateChildList(oldAppApplet, applicationName, appletConfig);
                     environment().updateByIdVersion(oldAppApplet);
                 }
@@ -4137,6 +4211,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
 
         // Widgets
         logDebug(taskMonitor, "Installing application widget types...");
+        environment().updateAll(new AppWidgetTypeQuery().applicationId(applicationId).isNotActualCustom(),
+                new Update().add("deprecated", Boolean.TRUE));
         if (applicationConfig.getWidgetTypesConfig() != null
                 && !DataUtils.isBlank(applicationConfig.getWidgetTypesConfig().getWidgetTypeList())) {
             AppWidgetType appWidgetType = new AppWidgetType();
@@ -4157,6 +4233,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                     appWidgetType.setStretch(widgetTypeConfig.isStretch());
                     appWidgetType.setListOption(widgetTypeConfig.isListOption());
                     appWidgetType.setEnumOption(widgetTypeConfig.isEnumOption());
+                    appWidgetType.setDeprecated(false);
                     appWidgetType.setConfigType(ConfigType.STATIC_INSTALL);
                     environment().create(appWidgetType);
                 } else {
@@ -4170,6 +4247,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                         oldWidgetType.setStretch(widgetTypeConfig.isStretch());
                         oldWidgetType.setListOption(widgetTypeConfig.isListOption());
                         oldWidgetType.setEnumOption(widgetTypeConfig.isEnumOption());
+                        oldWidgetType.setDeprecated(false);
                         environment().updateByIdVersion(oldWidgetType);
                     }
                 }
@@ -4178,6 +4256,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
 
         // References
         logDebug(taskMonitor, "Installing application references...");
+        environment().updateAll(new AppRefQuery().applicationId(applicationId).isNotActualCustom(),
+                new Update().add("deprecated", Boolean.TRUE));
         if (applicationConfig.getRefsConfig() != null
                 && !DataUtils.isBlank(applicationConfig.getRefsConfig().getRefList())) {
             AppRef appRef = new AppRef();
@@ -4200,6 +4280,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                     appRef.setFilterGenerator(refConfig.getFilterGenerator());
                     appRef.setFilterGeneratorRule(refConfig.getFilterGeneratorRule());
                     appRef.setFilter(InputWidgetUtils.newAppFilter(refConfig.getFilter()));
+                    appRef.setDeprecated(false);
                     appRef.setConfigType(ConfigType.STATIC_INSTALL);
                     environment().create(appRef);
                 } else {
@@ -4219,6 +4300,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                         environment().findChildren(oldAppRef);
                     }
 
+                    oldAppRef.setDeprecated(false);
                     environment().updateByIdVersion(oldAppRef);
                 }
             }
@@ -4230,6 +4312,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
         // Entities
         logDebug(taskMonitor, "Installing application entities...");
         Map<String, Long> entityIdByNameMap = new HashMap<String, Long>();
+        environment().updateAll(new AppEntityQuery().applicationId(applicationId).isNotActualCustom(),
+                new Update().add("deprecated", Boolean.TRUE));
         if (applicationConfig.getEntitiesConfig() != null
                 && !DataUtils.isBlank(applicationConfig.getEntitiesConfig().getEntityList())) {
             AppEntity appEntity = new AppEntity();
@@ -4262,6 +4346,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                     appEntity.setAuditable(appEntityConfig.getAuditable());
                     appEntity.setReportable(appEntityConfig.getReportable());
                     appEntity.setActionPolicy(appEntityConfig.getActionPolicy());
+                    appEntity.setDeprecated(false);
                     appEntity.setConfigType(ConfigType.STATIC_INSTALL);
                     populateChildList(appEntity, applicationName, appEntityConfig);
                     entityId = (Long) environment().create(appEntity);
@@ -4286,6 +4371,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                         oldAppEntity.setActionPolicy(appEntityConfig.getActionPolicy());
                     }
 
+                    oldAppEntity.setDeprecated(false);
                     populateChildList(oldAppEntity, applicationName, appEntityConfig);
                     environment().updateByIdVersion(oldAppEntity);
                     entityId = oldAppEntity.getId();
@@ -4322,6 +4408,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
 
         // Tables
         logDebug(taskMonitor, "Installing application tables...");
+        environment().updateAll(new AppTableQuery().applicationId(applicationId).isNotActualCustom(),
+                new Update().add("deprecated", Boolean.TRUE));
         if (applicationConfig.getTablesConfig() != null
                 && !DataUtils.isBlank(applicationConfig.getTablesConfig().getTableList())) {
             AppTable appTable = new AppTable();
@@ -4357,6 +4445,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                     appTable.setNonConforming(appTableConfig.getNonConforming());
                     appTable.setFixedRows(appTableConfig.getFixedRows());
                     appTable.setLimitSelectToColumns(appTableConfig.getLimitSelectToColumns());
+                    appTable.setDeprecated(false);
                     appTable.setConfigType(ConfigType.MUTABLE_INSTALL);
                     populateChildList(appTable, applicationName, appTableConfig);
                     environment().create(appTable);
@@ -4387,6 +4476,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                         oldAppTable.setLimitSelectToColumns(appTableConfig.getLimitSelectToColumns());
                     }
 
+                    oldAppTable.setDeprecated(false);
                     populateChildList(oldAppTable, applicationName, appTableConfig);
                     environment().updateByIdVersion(oldAppTable);
                 }
@@ -4398,6 +4488,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
 
         // Forms
         logDebug(taskMonitor, "Installing application forms...");
+        environment().updateAll(new AppFormQuery().applicationId(applicationId).isNotActualCustom(),
+                new Update().add("deprecated", Boolean.TRUE));
         if (applicationConfig.getFormsConfig() != null
                 && !DataUtils.isBlank(applicationConfig.getFormsConfig().getFormList())) {
             AppForm appForm = new AppForm();
@@ -4419,6 +4511,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                     appForm.setTitleFormat(appFormConfig.getTitleFormat());
                     appForm.setName(appFormConfig.getName());
                     appForm.setDescription(description);
+                    appForm.setDeprecated(false);
                     appForm.setConfigType(ConfigType.MUTABLE_INSTALL);
                     populateChildList(appForm, appFormConfig, applicationId, applicationName);
                     environment().create(appForm);
@@ -4436,6 +4529,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                         oldAppForm.setDescription(description);
                     }
 
+                    oldAppForm.setDeprecated(false);
                     populateChildList(oldAppForm, appFormConfig, applicationId, applicationName);
                     environment().updateByIdVersion(oldAppForm);
                 }
@@ -4447,6 +4541,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
 
         // Property lists
         logDebug(taskMonitor, "Installing application property lists...");
+        environment().updateAll(new AppPropertyListQuery().applicationId(applicationId).isNotActualCustom(),
+                new Update().add("deprecated", Boolean.TRUE));
         if (applicationConfig.getPropertyListsConfig() != null
                 && !DataUtils.isBlank(applicationConfig.getPropertyListsConfig().getPropertyConfigList())) {
             AppPropertyList appPropertyList = new AppPropertyList();
@@ -4461,6 +4557,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                     appPropertyList.setId(null);
                     appPropertyList.setName(propertyListConfig.getName());
                     appPropertyList.setDescription(description);
+                    appPropertyList.setDeprecated(false);
                     appPropertyList.setConfigType(ConfigType.STATIC_INSTALL);
                     populateChildList(appPropertyList, applicationName, propertyListConfig);
                     environment().create(appPropertyList);
@@ -4470,6 +4567,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                         oldAppPropertyList.setDescription(description);
                     }
 
+                    oldAppPropertyList.setDeprecated(false);
                     populateChildList(oldAppPropertyList, applicationName, propertyListConfig);
                     environment().updateByIdVersion(oldAppPropertyList);
                 }
@@ -4481,6 +4579,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
 
         // Property rules
         logDebug(taskMonitor, "Installing application property rules...");
+        environment().updateAll(new AppPropertyRuleQuery().applicationId(applicationId).isNotActualCustom(),
+                new Update().add("deprecated", Boolean.TRUE));
         if (applicationConfig.getPropertyRulesConfig() != null
                 && !DataUtils.isBlank(applicationConfig.getPropertyRulesConfig().getPropertyRuleConfigList())) {
             AppPropertyRule appPropertyRule = new AppPropertyRule();
@@ -4504,6 +4604,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                     appPropertyRule.setDefaultList(ApplicationNameUtils.ensureLongNameReference(applicationName,
                             propertyRuleConfig.getDefaultList()));
                     appPropertyRule.setIgnoreCase(propertyRuleConfig.isIgnoreCase());
+                    appPropertyRule.setDeprecated(false);
                     appPropertyRule.setConfigType(ConfigType.STATIC_INSTALL);
                     populateChildList(appPropertyRule, applicationName, propertyRuleConfig);
                     environment().create(appPropertyRule);
@@ -4522,6 +4623,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                         oldAppPropertyRule.setIgnoreCase(propertyRuleConfig.isIgnoreCase());
                     }
 
+                    oldAppPropertyRule.setDeprecated(false);
                     populateChildList(oldAppPropertyRule, applicationName, propertyRuleConfig);
                     environment().updateByIdVersion(oldAppPropertyRule);
                 }
@@ -4533,6 +4635,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
 
         // Assignment pages
         logDebug(taskMonitor, "Installing application assignment pages...");
+        environment().updateAll(new AppAssignmentPageQuery().applicationId(applicationId).isNotActualCustom(),
+                new Update().add("deprecated", Boolean.TRUE));
         if (applicationConfig.getAssignmentPagesConfig() != null
                 && !DataUtils.isBlank(applicationConfig.getAssignmentPagesConfig().getAssignmentPageList())) {
             AppAssignmentPage appAssignmentPage = new AppAssignmentPage();
@@ -4574,6 +4678,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                     appAssignmentPage.setAssignField(appAssignmentPageConfig.getAssignField());
                     appAssignmentPage.setBaseField(appAssignmentPageConfig.getBaseField());
                     appAssignmentPage.setRuleDescField(appAssignmentPageConfig.getRuleDescField());
+                    appAssignmentPage.setDeprecated(false);
                     appAssignmentPage.setConfigType(ConfigType.STATIC_INSTALL);
                     environment().create(appAssignmentPage);
                 } else {
@@ -4607,6 +4712,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                         oldAppAssignmentPage.setRuleDescField(appAssignmentPageConfig.getRuleDescField());
                     }
 
+                    oldAppAssignmentPage.setDeprecated(false);
                     environment().updateByIdVersion(oldAppAssignmentPage);
                 }
             }
@@ -4617,6 +4723,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
 
         // Suggestions
         logDebug(taskMonitor, "Installing application suggestion types...");
+        environment().updateAll(new AppSuggestionTypeQuery().applicationId(applicationId).isNotActualCustom(),
+                new Update().add("deprecated", Boolean.TRUE));
         if (applicationConfig.getSuggestionTypesConfig() != null
                 && !DataUtils.isBlank(applicationConfig.getSuggestionTypesConfig().getSuggestionTypeList())) {
             AppSuggestionType appSuggestionType = new AppSuggestionType();
@@ -4633,6 +4741,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                     appSuggestionType.setDescription(description);
                     appSuggestionType.setParent(ApplicationNameUtils.ensureLongNameReference(applicationName,
                             suggestionTypeConfig.getParent()));
+                    appSuggestionType.setDeprecated(false);
                     appSuggestionType.setConfigType(ConfigType.STATIC_INSTALL);
                     environment().create(appSuggestionType);
                 } else {
@@ -4641,6 +4750,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                         oldSuggestionType.setDescription(description);
                         oldSuggestionType.setParent(ApplicationNameUtils.ensureLongNameReference(applicationName,
                                 suggestionTypeConfig.getParent()));
+                        oldSuggestionType.setDeprecated(false);
                         environment().updateByIdVersion(oldSuggestionType);
                     }
                 }
@@ -5986,10 +6096,13 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
             }
 
             // Construct dynamic entity information and load dynamic class
-            DynamicEntityInfo.ManagedType managedType = entityDef.delegated()
+            final DynamicEntityInfo.ManagedType managedType = entityDef.delegated()
                     ? DynamicEntityInfo.ManagedType.NOT_MANAGED
                     : DynamicEntityInfo.ManagedType.MANAGED;
-            DynamicEntityInfo.Builder deib = DynamicEntityInfo.newBuilder(dynamicEntityType, className, managedType)
+            final boolean schemaUpdateRequired = db().value(boolean.class,
+                    "schemaUpdateRequired", new AppEntityQuery().addEquals("id", entityDef.getId()));
+            DynamicEntityInfo.Builder deib = DynamicEntityInfo
+                    .newBuilder(dynamicEntityType, className, managedType, schemaUpdateRequired)
                     .baseClassName(baseClassName).tableName(entityDef.getTableName()).version(1L);
             _dynamicEntityInfo = deib.prefetch();
             dynamicEntityInfoMap.put(entityDef.getLongName(), _dynamicEntityInfo);

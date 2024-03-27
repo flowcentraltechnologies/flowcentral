@@ -68,7 +68,6 @@ public class HeadlessTabsFormAppletPanel extends AbstractEntityFormAppletPanel {
     }
 
     protected HeadlessTabsFormApplet getHeadlessTabsFormApplet() throws UnifyException {
-        ensureDetachedWindowChecked();
         return getValue(HeadlessTabsFormApplet.class);
     }
 }

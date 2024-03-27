@@ -74,7 +74,7 @@ public abstract class AbstractEntityDetailsPopupChildListPageController<T extend
     }
 
     protected final ManageEntityDetailsApplet createManageEntityDetailsApplet() throws UnifyException {
-        return new ManageEntityDetailsApplet(au(), getDetailsAppletName(), childAppletName, childBaseFieldName,
+        return new ManageEntityDetailsApplet(getPage(), au(), getDetailsAppletName(), childAppletName, childBaseFieldName,
                 getEntityFormEventHandlers());
     }
 

@@ -50,6 +50,7 @@ import com.flowcentraltech.flowcentral.dashboard.entities.DashboardTileQuery;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
+import com.tcdng.unify.core.criterion.Update;
 import com.tcdng.unify.core.task.TaskMonitor;
 import com.tcdng.unify.core.util.DataUtils;
 
@@ -74,6 +75,8 @@ public class ApplicationDashboardInstallerImpl extends AbstractApplicationArtifa
 
         logDebug(taskMonitor, "Executing dashboard installer...");
         // Install configured dashboards
+        environment().updateAll(new DashboardQuery().applicationId(applicationId).isNotActualCustom(),
+                new Update().add("deprecated", Boolean.TRUE));
         if (applicationConfig.getDashboardsConfig() != null
                 && !DataUtils.isBlank(applicationConfig.getDashboardsConfig().getDashboardList())) {
             for (AppDashboardConfig dashboardConfig : applicationConfig.getDashboardsConfig().getDashboardList()) {
@@ -88,6 +91,7 @@ public class ApplicationDashboardInstallerImpl extends AbstractApplicationArtifa
                     dashboard.setDescription(description);
                     dashboard.setSections(dashboardConfig.getSections());
                     dashboard.setAllowSecondaryTenants(dashboardConfig.getAllowSecondaryTenants());
+                    dashboard.setDeprecated(false);
                     dashboard.setConfigType(ConfigType.MUTABLE_INSTALL);
                     populateChildList(dashboardConfig, dashboard, applicationName);
                     environment().create(dashboard);
@@ -98,6 +102,7 @@ public class ApplicationDashboardInstallerImpl extends AbstractApplicationArtifa
                         oldDashboard.setAllowSecondaryTenants(dashboardConfig.getAllowSecondaryTenants());
                     }
 
+                    oldDashboard.setDeprecated(false);
                     populateChildList(dashboardConfig, oldDashboard, applicationName);
                     environment().updateByIdVersion(oldDashboard);
                 }

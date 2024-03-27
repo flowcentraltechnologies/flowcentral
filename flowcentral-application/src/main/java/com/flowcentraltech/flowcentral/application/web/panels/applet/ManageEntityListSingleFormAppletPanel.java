@@ -64,7 +64,6 @@ public class ManageEntityListSingleFormAppletPanel extends AbstractEntitySingleF
      }
 
     protected ManageEntityListSingleFormApplet getManageEntityListApplet() throws UnifyException {
-        ensureDetachedWindowChecked();
         return getValue(ManageEntityListSingleFormApplet.class);
     }
 }

@@ -23,6 +23,7 @@ import com.flowcentraltech.flowcentral.application.data.EntityFormEventHandlers;
 import com.flowcentraltech.flowcentral.application.web.controllers.AppletWidgetReferences;
 import com.flowcentraltech.flowcentral.application.web.panels.applet.AbstractEntityFormApplet;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.web.ui.widget.Page;
 
 /**
  * Convenient abstract base class for review single form applets.
@@ -32,10 +33,10 @@ import com.tcdng.unify.core.UnifyException;
  */
 public abstract class AbstractReviewWorkItemsApplet extends AbstractEntityFormApplet {
 
-    public AbstractReviewWorkItemsApplet(AppletUtilities au, List<String> pathVariables,
+    public AbstractReviewWorkItemsApplet(Page page, AppletUtilities au, List<String> pathVariables,
             AppletWidgetReferences appletWidgetReferences, EntityFormEventHandlers formEventHandlers)
             throws UnifyException {
-        super(au, pathVariables, appletWidgetReferences, formEventHandlers);
+        super(page, au, pathVariables, appletWidgetReferences, formEventHandlers);
     }
 
 }
