@@ -3790,11 +3790,10 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
         Set<Long> ids = buildDynamicEntityInfos(longName, dynamicEntityInfoMap);
 
         // If any schema has changed, pull other entities that have schema changed
-        final int schemaUpdatedCount = db().countAll(
-                new AppEntityQuery().isNotDelegated().isSchemaUpdateRequired().isCustom().addAmongst("id", ids));
-        List<String> otherSchemaUpdateEntities = schemaUpdatedCount > 0
-                ? appletUtilities.getApplicationEntitiesLongNames((AppEntityQuery) new AppEntityQuery().isNotDelegated()
-                        .isSchemaUpdateRequired().isCustom().addNotAmongst("id", ids))
+        final boolean schemaUpdated = db()
+                .countAll(new AppEntityQuery().isSchemaUpdateRequired().isCustom().addAmongst("id", ids)) > 0;
+        List<String> otherSchemaUpdateEntities = schemaUpdated ? appletUtilities.getApplicationEntitiesLongNames(
+                (AppEntityQuery) new AppEntityQuery().isSchemaUpdateRequired().isCustom().addNotAmongst("id", ids))
                 : Collections.emptyList();
         for (String entity : otherSchemaUpdateEntities) {
             buildDynamicEntityInfos(entity, dynamicEntityInfoMap);
@@ -3816,6 +3815,11 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
         // Compile and load class if necessary
         if (!_dynamicEntityInfos.isEmpty()) {
             dynamicSqlEntityLoader.loadDynamicSqlEntities(_dynamicEntityInfos);
+        }
+
+        if (schemaUpdated) {
+            db().updateAll(new AppEntityQuery().isSchemaUpdateRequired().isCustom(),
+                    new Update().add("schemaUpdateRequired", false));
         }
 
         // Load related entity class definitions
@@ -6095,7 +6099,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
             final DynamicEntityInfo.ManagedType managedType = entityDef.delegated()
                     ? DynamicEntityInfo.ManagedType.NOT_MANAGED
                     : DynamicEntityInfo.ManagedType.MANAGED;
-            final boolean schemaUpdateRequired = managedType.managed() && db().value(boolean.class,
+            final boolean schemaUpdateRequired = db().value(boolean.class,
                     "schemaUpdateRequired", new AppEntityQuery().addEquals("id", entityDef.getId()));
             DynamicEntityInfo.Builder deib = DynamicEntityInfo
                     .newBuilder(dynamicEntityType, className, managedType, schemaUpdateRequired)

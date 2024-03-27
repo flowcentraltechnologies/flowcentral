@@ -49,7 +49,9 @@ public class BootServiceImpl extends AbstractBootService<ModuleInstall> {
     
     @Override
     protected BootInstallationInfo<ModuleInstall> prepareBootInstallation() throws UnifyException {
-        preInstallationSetup.performPreInstallationSetup();
+       if (preInstallationSetup != null) {
+           preInstallationSetup.performPreInstallationSetup();
+       }
 
         FlowCentralInstall flowCentralInstall = configurationLoader.loadMasterModuleInstallation();
         return new BootInstallationInfo<ModuleInstall>(flowCentralInstall.getInstallerList(),

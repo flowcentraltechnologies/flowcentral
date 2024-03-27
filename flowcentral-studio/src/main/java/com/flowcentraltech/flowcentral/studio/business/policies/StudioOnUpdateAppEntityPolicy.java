@@ -42,6 +42,8 @@ public class StudioOnUpdateAppEntityPolicy extends StudioOnCreateComponentPolicy
     protected EntityActionResult doExecutePreAction(EntityActionContext ctx) throws UnifyException {
         super.doExecutePreAction(ctx);
         AppEntity appEntity = (AppEntity) ctx.getInst();
+        appEntity.setSchemaUpdateRequired(true);
+
         // Update base fields if necessary
         EntityBaseType currentBaseType = environment().value(EntityBaseType.class, "baseType",
                 Query.of(AppEntity.class).addEquals("id", appEntity.getId()));
