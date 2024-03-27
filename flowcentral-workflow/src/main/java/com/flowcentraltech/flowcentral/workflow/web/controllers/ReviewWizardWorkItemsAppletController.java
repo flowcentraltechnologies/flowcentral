@@ -65,7 +65,7 @@ public class ReviewWizardWorkItemsAppletController
         if (pageBean.getApplet() == null) {
             AppletWidgetReferences appletWidgetReferences = getAppletWidgetReferences();
             EntityFormEventHandlers formEventHandlers = getEntityFormEventHandlers();
-            ReviewWizardWorkItemsApplet applet = new ReviewWizardWorkItemsApplet(au(), workflowModuleService,
+            ReviewWizardWorkItemsApplet applet = new ReviewWizardWorkItemsApplet(getPage(), au(), workflowModuleService,
                     getPathVariables(), getUserToken().getUserLoginId(), appletWidgetReferences, formEventHandlers);
             pageBean.setApplet(applet);
         }

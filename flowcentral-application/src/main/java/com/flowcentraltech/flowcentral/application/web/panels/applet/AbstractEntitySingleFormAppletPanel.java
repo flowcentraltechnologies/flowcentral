@@ -449,7 +449,6 @@ public abstract class AbstractEntitySingleFormAppletPanel extends AbstractApplet
     }
 
     protected AbstractEntitySingleFormApplet getEntityFormApplet() throws UnifyException {
-        ensureDetachedWindowChecked();
         return getValue(AbstractEntitySingleFormApplet.class);
     }
 

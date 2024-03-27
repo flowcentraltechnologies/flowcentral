@@ -23,6 +23,7 @@ import com.flowcentraltech.flowcentral.application.data.FilterDef;
 import com.flowcentraltech.flowcentral.application.web.data.FormContext;
 import com.flowcentraltech.flowcentral.application.web.panels.EntitySearch;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.web.ui.widget.Page;
 
 /**
  * Manage entity list single form applet object.
@@ -32,8 +33,8 @@ import com.tcdng.unify.core.UnifyException;
  */
 public class ManageEntityListSingleFormApplet extends AbstractEntitySingleFormApplet {
 
-    public ManageEntityListSingleFormApplet(AppletUtilities au, List<String> pathVariables) throws UnifyException {
-        super(au, pathVariables);
+    public ManageEntityListSingleFormApplet(Page page, AppletUtilities au, List<String> pathVariables) throws UnifyException {
+        super(page, au, pathVariables);
         entitySearch = au.constructEntitySearch(new FormContext(getCtx()), null, null,
                 getRootAppletDef().getDescription(), getRootAppletDef(), null, EntitySearch.ENABLE_ALL, false, false);
         if (isRootAppletPropWithValue(AppletPropertyConstants.BASE_RESTRICTION)) {

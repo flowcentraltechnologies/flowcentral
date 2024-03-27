@@ -27,6 +27,7 @@ import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs;
 import com.flowcentraltech.flowcentral.studio.business.StudioModuleService;
 import com.flowcentraltech.flowcentral.studio.web.panels.TableEditorPage;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.web.ui.widget.Page;
 
 /**
  * Studio application table applet object.
@@ -38,10 +39,10 @@ public class StudioAppTableApplet extends StudioAppComponentApplet {
 
     private TableEditorPage tableEditorPage;
 
-    public StudioAppTableApplet(StudioModuleService sms, AppletUtilities au, List<String> pathVariables,
+    public StudioAppTableApplet(Page page, StudioModuleService sms, AppletUtilities au, List<String> pathVariables,
             String applicationName, AppletWidgetReferences appletWidgetReferences,
             EntityFormEventHandlers formEventHandlers) throws UnifyException {
-        super(sms, au, pathVariables, applicationName, appletWidgetReferences, formEventHandlers);
+        super(page, sms, au, pathVariables, applicationName, appletWidgetReferences, formEventHandlers);
     }
 
     public TableEditorPage getTableEditorPage() {

@@ -21,6 +21,7 @@ import java.util.List;
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.web.panels.applet.AbstractEntitySingleFormApplet;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.web.ui.widget.Page;
 
 /**
  * Convenient abstract base class for review single form applets.
@@ -30,9 +31,9 @@ import com.tcdng.unify.core.UnifyException;
  */
 public abstract class AbstractReviewSingleFormWorkItemsApplet extends AbstractEntitySingleFormApplet {
 
-    public AbstractReviewSingleFormWorkItemsApplet(AppletUtilities au, List<String> pathVariables)
+    public AbstractReviewSingleFormWorkItemsApplet(Page page, AppletUtilities au, List<String> pathVariables)
             throws UnifyException {
-        super(au, pathVariables);
+        super(page, au, pathVariables);
     }
 
 }

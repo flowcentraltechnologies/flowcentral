@@ -30,6 +30,7 @@ import com.flowcentraltech.flowcentral.studio.constants.StudioAppletPropertyCons
 import com.flowcentraltech.flowcentral.studio.constants.StudioSessionAttributeConstants;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.database.Entity;
+import com.tcdng.unify.web.ui.widget.Page;
 
 /**
  * Studio application component applet object.
@@ -47,10 +48,10 @@ public class StudioAppComponentApplet extends AbstractEntityFormApplet {
 
     final private String applicationName;
 
-    public StudioAppComponentApplet(StudioModuleService sms, AppletUtilities au, List<String> pathVariables,
+    public StudioAppComponentApplet(Page page, StudioModuleService sms, AppletUtilities au, List<String> pathVariables,
             String applicationName, AppletWidgetReferences appletWidgetReferences,
             EntityFormEventHandlers formEventHandlers) throws UnifyException {
-        super(au, pathVariables, appletWidgetReferences, formEventHandlers, true);
+        super(page, au, pathVariables, appletWidgetReferences, formEventHandlers, true);
         this.sms = sms;
         this.applicationName = applicationName;
 

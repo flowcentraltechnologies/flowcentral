@@ -76,7 +76,7 @@ public class ExceptionWorkItemsController extends AbstractEntityFormAppletContro
             final String loadinAppletName = ApplicationNameUtils.getWorkflowLoadingAppletName(tnp.getApplicationName(),
                     tnp.getEntityName());
             UserToken userToken = getUserToken();
-            ExceptionWorkItemsApplet applet = new ExceptionWorkItemsApplet(workflowModuleService, pageBean.getSelLoadingTableName(),
+            ExceptionWorkItemsApplet applet = new ExceptionWorkItemsApplet(getPage(), workflowModuleService, pageBean.getSelLoadingTableName(),
                     userToken.getRoleCode(), au(), Arrays.asList(loadinAppletName), appletWidgetReferences, formEventHandlers);
             pageBean.setApplet(applet);
             setPageWidgetVisible("appletPanel", true);

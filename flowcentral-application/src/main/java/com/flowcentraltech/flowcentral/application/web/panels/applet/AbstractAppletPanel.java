@@ -39,7 +39,6 @@ import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.constant.ResultMappingConstants;
-import com.tcdng.unify.web.ui.PageAttributeConstants;
 import com.tcdng.unify.web.ui.widget.Panel;
 import com.tcdng.unify.web.ui.widget.data.Hint.MODE;
 
@@ -55,7 +54,11 @@ public abstract class AbstractAppletPanel extends AbstractApplicationSwitchPanel
 
     private static final int ULTIMATE_MAX_TABLE_REPORT_ROWS = 800000;
 
-    private boolean detachedWindowChecked;
+    @Override
+    public void onPageConstruct() throws UnifyException {
+        // TODO Auto-generated method stub
+        super.onPageConstruct();
+    }
 
     protected void addPanelToPushComponents(String panelName, boolean editable) throws UnifyException {
         if (editable && getApplet().isSaveHeaderFormOnTabAction()) {
@@ -84,14 +87,6 @@ public abstract class AbstractAppletPanel extends AbstractApplicationSwitchPanel
 
     protected AbstractApplet getApplet() throws UnifyException {
         return getValue(AbstractApplet.class);
-    }
-
-    protected void ensureDetachedWindowChecked() throws UnifyException {
-        if (!detachedWindowChecked) {
-            getApplet().getCtx()
-                    .setInDetachedWindow(getPageAttribute(boolean.class, PageAttributeConstants.IN_DETACHED_WINDOW));
-            detachedWindowChecked = true;
-        }
     }
 
     protected void prepareGenerateReport(EntityTable entityTable) throws UnifyException {

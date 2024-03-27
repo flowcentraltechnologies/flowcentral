@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.application.web.panels.applet;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.web.ui.widget.Page;
 
 /**
  * Data import applet.
@@ -33,8 +34,8 @@ public class DataImportApplet extends AbstractApplet {
 
     private boolean hasHeader;
 
-    public DataImportApplet(AppletUtilities au, String appletName) throws UnifyException {
-        super(au, appletName);
+    public DataImportApplet(Page page, AppletUtilities au, String appletName) throws UnifyException {
+        super(page, au, appletName);
         importTitle = getRootAppletDef().getLabel();
         setAltSubCaption(importTitle);
     }

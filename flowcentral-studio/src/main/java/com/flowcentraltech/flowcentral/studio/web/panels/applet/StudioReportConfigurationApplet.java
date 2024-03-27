@@ -27,6 +27,7 @@ import com.flowcentraltech.flowcentral.report.entities.ReportConfiguration;
 import com.flowcentraltech.flowcentral.studio.business.StudioModuleService;
 import com.flowcentraltech.flowcentral.studio.web.panels.ReportEditorPage;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.web.ui.widget.Page;
 
 /**
  * Studio application report configuration applet object.
@@ -38,10 +39,10 @@ public class StudioReportConfigurationApplet extends StudioAppComponentApplet {
 
     private ReportEditorPage reportEditorPage;
 
-    public StudioReportConfigurationApplet(StudioModuleService sms, AppletUtilities au, List<String> pathVariables,
+    public StudioReportConfigurationApplet(Page page, StudioModuleService sms, AppletUtilities au, List<String> pathVariables,
             String applicationName, AppletWidgetReferences appletWidgetReferences,
             EntityFormEventHandlers formEventHandlers) throws UnifyException {
-        super(sms, au, pathVariables, applicationName, appletWidgetReferences, formEventHandlers);
+        super(page, sms, au, pathVariables, applicationName, appletWidgetReferences, formEventHandlers);
     }
 
     public ReportEditorPage getReportEditorPage() {

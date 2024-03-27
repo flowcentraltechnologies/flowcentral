@@ -47,6 +47,7 @@ import com.tcdng.unify.core.criterion.Restriction;
 import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.database.Query;
 import com.tcdng.unify.core.util.ReflectUtils;
+import com.tcdng.unify.web.ui.widget.Page;
 
 /**
  * Review wizard work items applet object.
@@ -72,10 +73,10 @@ public class ReviewWizardWorkItemsApplet extends AbstractEntityFormApplet {
 
     private int wfWizardStepIndex;
 
-    public ReviewWizardWorkItemsApplet(AppletUtilities au, WorkflowModuleService wms, List<String> pathVariables,
+    public ReviewWizardWorkItemsApplet(Page page, AppletUtilities au, WorkflowModuleService wms, List<String> pathVariables,
             String userLoginId, AppletWidgetReferences appletWidgetReferences,
             EntityFormEventHandlers formEventHandlers) throws UnifyException {
-        super(au, pathVariables, appletWidgetReferences, formEventHandlers);
+        super(page, au, pathVariables, appletWidgetReferences, formEventHandlers);
         AppletDef _appletDef = getRootAppletDef();
         this.entitySearch = au.constructEntitySearch(new FormContext(getCtx()), this, null,
                 getRootAppletDef().getDescription(), _appletDef, null,

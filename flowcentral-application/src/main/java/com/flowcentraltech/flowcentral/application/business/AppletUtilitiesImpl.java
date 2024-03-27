@@ -1084,11 +1084,17 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
                                     specialParamProvider);
                         }
 
+                        System.out.println("@prime: pachimu:");
+                        System.out.println("@prime: formTabDef.getReference() = " + formTabDef.getReference());
+                        System.out.println("@prime: inst= " + inst);
                         Restriction childRestriction = getChildRestriction(entityDef, formTabDef.getReference(), inst);
                         Restriction tabRestriction = formTabDef.getRestriction(FilterType.TAB,
                                 form.getFormValueStoreReader(), now);
                         childRestriction = RestrictionUtils.and(childRestriction, tabRestriction);
 
+                        System.out.println("@prime: tabIndex = " + tabIndex);
+                        System.out.println("@prime: formTabDef.getApplet() = " + formTabDef.getApplet());
+                        System.out.println("@prime: childRestriction = " + childRestriction);
                         _entitySearch.setChildTabIndex(tabIndex);
                         _entitySearch.setRelatedList(formTabDef.getApplet());
                         _entitySearch.setBaseRestriction(childRestriction, specialParamProvider);

@@ -82,7 +82,7 @@ public class MyWorkItemsController extends AbstractEntityFormAppletController<My
             final String loadinAppletName = ApplicationNameUtils.getWorkflowLoadingAppletName(tnp.getApplicationName(),
                     tnp.getEntityName());
             UserToken userToken = getUserToken();
-            MyWorkItemsApplet applet = new MyWorkItemsApplet(workflowModuleService, pageBean.getSelLoadingTableName(),
+            MyWorkItemsApplet applet = new MyWorkItemsApplet(getPage(), workflowModuleService, pageBean.getSelLoadingTableName(),
                     userToken.getRoleCode(), au(), Arrays.asList( loadinAppletName), appletWidgetReferences, formEventHandlers);
             pageBean.setApplet(applet);
             setPageWidgetVisible("appletPanel", true);

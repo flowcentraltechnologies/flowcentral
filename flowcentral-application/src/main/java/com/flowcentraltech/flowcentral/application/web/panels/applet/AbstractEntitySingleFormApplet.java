@@ -47,6 +47,7 @@ import com.tcdng.unify.core.UserToken;
 import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.util.ReflectUtils;
 import com.tcdng.unify.core.util.StringUtils;
+import com.tcdng.unify.web.ui.widget.Page;
 
 /**
  * Abstract entity single form applet object.
@@ -121,8 +122,8 @@ public abstract class AbstractEntitySingleFormApplet extends AbstractApplet {
 
     protected int mIndex;
 
-    public AbstractEntitySingleFormApplet(AppletUtilities au, List<String> pathVariables) throws UnifyException {
-        super(au, pathVariables.get(APPLET_NAME_INDEX));
+    public AbstractEntitySingleFormApplet(Page page, AppletUtilities au, List<String> pathVariables) throws UnifyException {
+        super(page, au, pathVariables.get(APPLET_NAME_INDEX));
     }
 
     @Override

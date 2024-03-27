@@ -31,6 +31,7 @@ import com.flowcentraltech.flowcentral.workflow.constants.WorkflowModuleNameCons
 import com.flowcentraltech.flowcentral.workflow.util.WorkflowNameUtils;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.UserToken;
+import com.tcdng.unify.web.ui.widget.Page;
 import com.tcdng.unify.web.ui.widget.data.ButtonInfo;
 
 /**
@@ -41,10 +42,10 @@ import com.tcdng.unify.web.ui.widget.data.ButtonInfo;
  */
 public class MyWorkItemsApplet extends AbstractWorkItemsApplet {
 
-    public MyWorkItemsApplet(WorkflowModuleService workflowModuleService, String loadingTableName, String roleCode,
+    public MyWorkItemsApplet(Page page, WorkflowModuleService workflowModuleService, String loadingTableName, String roleCode,
             AppletUtilities au, List<String> pathVariables, AppletWidgetReferences appletWidgetReferences,
             EntityFormEventHandlers formEventHandlers) throws UnifyException {
-        super(au, pathVariables, appletWidgetReferences, formEventHandlers);
+        super(page, au, pathVariables, appletWidgetReferences, formEventHandlers);
         List<TableLoadingDef> altTableLoadingDefs = new ArrayList<TableLoadingDef>();
         UserToken userToken = au.getSessionUserToken();
         List<WorkflowStepInfo> workflowStepList = workflowModuleService.findWorkflowLoadingStepInfoByRole(

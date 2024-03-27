@@ -55,7 +55,6 @@ public class TaskExecutionAppletPanel extends AbstractAppletPanel {
     }
 
     protected TaskExecutionApplet getTaskExecutionApplet() throws UnifyException {
-        ensureDetachedWindowChecked();
         return getValue(TaskExecutionApplet.class);
     }
 }

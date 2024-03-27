@@ -30,6 +30,7 @@ import com.flowcentraltech.flowcentral.dashboard.entities.Dashboard;
 import com.flowcentraltech.flowcentral.studio.business.StudioModuleService;
 import com.flowcentraltech.flowcentral.studio.web.panels.DashboardEditorPage;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.web.ui.widget.Page;
 
 /**
  * Studio application dashboard applet object.
@@ -45,11 +46,11 @@ public class StudioDashboardApplet extends StudioAppComponentApplet {
 
     private final DashboardModuleService dms;
 
-    public StudioDashboardApplet(StudioModuleService sms, ChartModuleService cms, DashboardModuleService dms,
+    public StudioDashboardApplet(Page page, StudioModuleService sms, ChartModuleService cms, DashboardModuleService dms,
             AppletUtilities au, List<String> pathVariables, String applicationName,
             AppletWidgetReferences appletWidgetReferences, EntityFormEventHandlers formEventHandlers)
             throws UnifyException {
-        super(sms, au, pathVariables, applicationName, appletWidgetReferences, formEventHandlers);
+        super(page, sms, au, pathVariables, applicationName, appletWidgetReferences, formEventHandlers);
         this.cms = cms;
         this.dms = dms;
     }
