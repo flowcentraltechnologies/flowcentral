@@ -110,6 +110,7 @@ import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.ReflectUtils;
 import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.ui.constant.WidgetTempValueConstants;
+import com.tcdng.unify.web.ui.widget.Page;
 import com.tcdng.unify.web.ui.widget.data.FileAttachmentsInfo;
 import com.tcdng.unify.web.ui.widget.data.Hint.MODE;
 
@@ -241,16 +242,16 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
 
     private final boolean collaboration;
 
-    public AbstractEntityFormApplet(AppletUtilities au, List<String> pathVariables,
+    public AbstractEntityFormApplet(Page page, AppletUtilities au, List<String> pathVariables,
             AppletWidgetReferences appletWidgetReferences, EntityFormEventHandlers formEventHandlers)
             throws UnifyException {
-        this(au, pathVariables, appletWidgetReferences, formEventHandlers, false);
+        this(page, au, pathVariables, appletWidgetReferences, formEventHandlers, false);
     }
 
-    public AbstractEntityFormApplet(AppletUtilities au, List<String> pathVariables,
+    public AbstractEntityFormApplet(Page page, AppletUtilities au, List<String> pathVariables,
             AppletWidgetReferences appletWidgetReferences, EntityFormEventHandlers formEventHandlers,
             boolean collaboration) throws UnifyException {
-        super(au, pathVariables.get(APPLET_NAME_INDEX));
+        super(page, au, pathVariables.get(APPLET_NAME_INDEX));
         this.appletWidgetReferences = appletWidgetReferences;
         this.formEventHandlers = formEventHandlers;
         this.formFileAttachments = new EntityFileAttachments();

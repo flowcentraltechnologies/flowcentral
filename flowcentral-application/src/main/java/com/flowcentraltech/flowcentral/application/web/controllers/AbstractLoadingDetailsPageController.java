@@ -128,7 +128,7 @@ public abstract class AbstractLoadingDetailsPageController<T extends AbstractLoa
 
         AbstractLoadingDetailsPageBean pageBean = getPageBean();
         if (pageBean.getApplet() == null) {
-            ManageLoadingDetailsApplet applet = new ManageLoadingDetailsApplet(au(), detailsAppletName);
+            ManageLoadingDetailsApplet applet = new ManageLoadingDetailsApplet(getPage(), au(), detailsAppletName);
             LoadingTable resultTable = new LoadingTable(au(), getTableDef());
             resultTable.setPolicy(entryTablePolicy);
             if (pageBean.isViewActionMode()) {

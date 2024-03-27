@@ -22,6 +22,7 @@ import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm.FormMode;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.database.Entity;
+import com.tcdng.unify.web.ui.widget.Page;
 
 /**
  * Create entity single form applet object.
@@ -31,8 +32,8 @@ import com.tcdng.unify.core.database.Entity;
  */
 public class CreateEntitySingleFormApplet extends AbstractEntitySingleFormApplet {
 
-    public CreateEntitySingleFormApplet(AppletUtilities au, List<String> pathVariables) throws UnifyException {
-        super(au, pathVariables);
+    public CreateEntitySingleFormApplet(Page page, AppletUtilities au, List<String> pathVariables) throws UnifyException {
+        super(page, au, pathVariables);
         final String vestigial = ApplicationNameUtils.getVestigialNamePart(pathVariables.get(APPLET_NAME_INDEX));
         if (vestigial == null) {
             form = constructNewForm(FormMode.CREATE);

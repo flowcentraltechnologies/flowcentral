@@ -31,6 +31,7 @@ import com.flowcentraltech.flowcentral.common.constants.WfItemVersionType;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.criterion.Equals;
 import com.tcdng.unify.core.criterion.Restriction;
+import com.tcdng.unify.web.ui.widget.Page;
 
 /**
  * Manage entity list applet object.
@@ -48,10 +49,10 @@ public class ManageEntityListApplet extends AbstractEntityFormApplet {
     private static final Restriction ORIGINAL_BASE_RESTRICTION = new Equals("wfItemVersionType",
             WfItemVersionType.ORIGINAL);
 
-    public ManageEntityListApplet(AppletUtilities au, List<String> pathVariables,
+    public ManageEntityListApplet(Page page, AppletUtilities au, List<String> pathVariables,
             AppletWidgetReferences appletWidgetReferences, EntityFormEventHandlers formEventHandlers)
             throws UnifyException {
-        super(au, pathVariables, appletWidgetReferences, formEventHandlers);
+        super(page, au, pathVariables, appletWidgetReferences, formEventHandlers);
         final AppletDef _rootAppletDef = getRootAppletDef();
         setCurrFormAppletDef(_rootAppletDef);
         final String vestigial = ApplicationNameUtils.getVestigialNamePart(pathVariables.get(APPLET_NAME_INDEX));

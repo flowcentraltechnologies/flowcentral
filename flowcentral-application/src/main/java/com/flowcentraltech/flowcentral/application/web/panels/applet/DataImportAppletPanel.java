@@ -68,7 +68,6 @@ public class DataImportAppletPanel extends AbstractAppletPanel {
     }
 
     protected DataImportApplet getDataImportApplet() throws UnifyException {
-        ensureDetachedWindowChecked();
         return getValue(DataImportApplet.class);
     }
 }

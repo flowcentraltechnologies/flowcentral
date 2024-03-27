@@ -58,7 +58,7 @@ public class CreateEntityAppletController
         if (pageBean.getApplet() == null) {
             AppletWidgetReferences appletWidgetReferences = getAppletWidgetReferences();
             EntityFormEventHandlers entityFormEventHandlers = getEntityFormEventHandlers();
-            CreateEntityApplet applet = new CreateEntityApplet(au(), getPathVariables(), appletWidgetReferences,
+            CreateEntityApplet applet = new CreateEntityApplet(getPage(), au(), getPathVariables(), appletWidgetReferences,
                     entityFormEventHandlers);
             pageBean.setApplet(applet);
             if (pageBean.getAltCaption() == null) {

@@ -139,7 +139,7 @@ public class ApplicationDashboardController extends AbstractPageController<Appli
             TableDef _tableDef = appletUtils.getTableDef(StudioApplicationConstants.APPLICATION_SEARCH_TABLE);
 
             EntitySearch _switchApplicationSearch = new EntitySearch(
-                    new FormContext(new AppletContext(null, appletUtils)), null, null, null, _tableDef, null, null,
+                    new FormContext(new AppletContext(null, null, appletUtils)), null, null, null, _tableDef, null, null,
                     null, null, 4, EntitySearch.ENABLE_ALL & ~(EntitySearch.SHOW_EDIT_BUTTON), false, false, false);
             _switchApplicationSearch
                     .setPaginationLabel(appletUtils.resolveSessionMessage("$m{entitysearch.display.label}"));

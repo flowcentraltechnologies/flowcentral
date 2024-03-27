@@ -44,6 +44,7 @@ import com.flowcentraltech.flowcentral.notification.entities.NotificationTemplat
 import com.flowcentraltech.flowcentral.notification.entities.NotificationTemplateQuery;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
+import com.tcdng.unify.core.criterion.Update;
 import com.tcdng.unify.core.task.TaskMonitor;
 import com.tcdng.unify.core.util.DataUtils;
 
@@ -64,6 +65,8 @@ public class ApplicationNotificationInstallerImpl extends AbstractApplicationArt
 
         logDebug(taskMonitor, "Executing notification installer...");
         // Install configured notification templates
+        environment().updateAll(new NotificationTemplateQuery().applicationId(applicationId).isNotActualCustom(),
+                new Update().add("deprecated", Boolean.TRUE));
         if (applicationConfig.getNotifTemplatesConfig() != null
                 && !DataUtils.isBlank(applicationConfig.getNotifTemplatesConfig().getNotifTemplateList())) {
             for (AppNotifTemplateConfig applicationNotifTemplateConfig : applicationConfig.getNotifTemplatesConfig()
@@ -90,6 +93,7 @@ public class ApplicationNotificationInstallerImpl extends AbstractApplicationArt
                     notificationTemplate.setEntity(entity);
                     notificationTemplate.setSubject(notifTemplateConfig.getSubject());
                     notificationTemplate.setTemplate(notifTemplateConfig.getBody());
+                    notificationTemplate.setDeprecated(false);
                     notificationTemplate.setConfigType(ConfigType.MUTABLE_INSTALL);
                     populateChildList(notificationTemplate, notifTemplateConfig);
                     environment().create(notificationTemplate);
@@ -101,6 +105,7 @@ public class ApplicationNotificationInstallerImpl extends AbstractApplicationArt
                         oldNotificationTemplate.setEntity(entity);
                         oldNotificationTemplate.setSubject(notifTemplateConfig.getSubject());
                         oldNotificationTemplate.setTemplate(notifTemplateConfig.getBody());
+                        oldNotificationTemplate.setDeprecated(false);
                         populateChildList(oldNotificationTemplate, notifTemplateConfig);
                         environment().updateByIdVersion(oldNotificationTemplate);
                     }
@@ -109,6 +114,8 @@ public class ApplicationNotificationInstallerImpl extends AbstractApplicationArt
         }
 
         // Install configured notification large texts
+        environment().updateAll(new NotificationLargeTextQuery().applicationId(applicationId).isNotActualCustom(),
+                new Update().add("deprecated", Boolean.TRUE));
         if (applicationConfig.getNotifLargeTextsConfig() != null
                 && !DataUtils.isBlank(applicationConfig.getNotifLargeTextsConfig().getNotifLargeTextList())) {
             for (AppNotifLargeTextConfig applicationNotifLargeTextConfig : applicationConfig.getNotifLargeTextsConfig()
@@ -135,6 +142,7 @@ public class ApplicationNotificationInstallerImpl extends AbstractApplicationArt
                     notificationLargeText.setFontFamily(notifLargeTextConfig.getFontFamily());
                     notificationLargeText.setFontSizeInPixels(notifLargeTextConfig.getFontSizeInPixels());
                     notificationLargeText.setBody(notifLargeTextConfig.getBody());
+                    notificationLargeText.setDeprecated(false);
                     notificationLargeText.setConfigType(ConfigType.MUTABLE_INSTALL);
                     populateChildList(notificationLargeText, notifLargeTextConfig);
                     environment().create(notificationLargeText);
@@ -145,6 +153,7 @@ public class ApplicationNotificationInstallerImpl extends AbstractApplicationArt
                         oldNotificationLargeText.setFontFamily(notifLargeTextConfig.getFontFamily());
                         oldNotificationLargeText.setFontSizeInPixels(notifLargeTextConfig.getFontSizeInPixels());
                         oldNotificationLargeText.setBody(notifLargeTextConfig.getBody());
+                        oldNotificationLargeText.setDeprecated(false);
                         populateChildList(oldNotificationLargeText, notifLargeTextConfig);
                         environment().updateByIdVersion(oldNotificationLargeText);
                     }

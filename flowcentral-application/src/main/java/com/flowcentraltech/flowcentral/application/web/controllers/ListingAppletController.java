@@ -54,7 +54,7 @@ public class ListingAppletController extends AbstractAppletController<ListingApp
 
         ListingAppletPageBean pageBean = getPageBean();
         if (pageBean.getApplet() == null) {
-            ListingApplet applet = new ListingApplet(au(), getPathVariables());
+            ListingApplet applet = new ListingApplet(getPage(), au(), getPathVariables());
             pageBean.setApplet(applet);
             if (pageBean.getAltCaption() == null) {
                 setPageTitle(applet);

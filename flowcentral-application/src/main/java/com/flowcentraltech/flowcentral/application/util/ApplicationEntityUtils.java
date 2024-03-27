@@ -72,7 +72,7 @@ public final class ApplicationEntityUtils {
     public static final Set<String> RESERVED_BASE_FIELDS = Collections.unmodifiableSet( 
             new HashSet<String>(Arrays.asList("id", "versionNo", "createDt", "createdBy", "updateDt", "updatedBy",
                     "originWorkRecId", "originalCopyId", "wfItemVersionType", "inWorkflow", "workBranchCode",
-                    "workDepartmentCode", "processingStatus", "devVersionType", "devMergeVersionNo", "classified")));
+                    "workDepartmentCode", "processingStatus", "devVersionType", "devMergeVersionNo", "classified", "deprecated")));
 
     public static final Set<String> AUDITABLE_BASE_FIELDS = Collections.unmodifiableSet( 
             new HashSet<String>(Arrays.asList("createDt", "createdBy", "updateDt", "updatedBy")));
@@ -424,6 +424,9 @@ public final class ApplicationEntityUtils {
                                 null, null, null, null, null, "application.text", null, 32, configType, false));
                 list.add(ApplicationEntityUtils.createBaseAppEntityField(EntityFieldDataType.BOOLEAN, "classified",
                         msgResolver.resolveApplicationMessage("$m{baseapplicationentity.field.label.classified}"), null,
+                        null, null, null, null, "application.checkbox", null, null, configType, false));
+                list.add(ApplicationEntityUtils.createBaseAppEntityField(EntityFieldDataType.BOOLEAN, "deprecated",
+                        msgResolver.resolveApplicationMessage("$m{baseapplicationentity.field.label.deprecated}"), null,
                         null, null, null, null, "application.checkbox", null, null, configType, false));
                 break;
             case BASE_AUDIT_ENTITY:

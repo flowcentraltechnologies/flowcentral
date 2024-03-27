@@ -100,7 +100,7 @@ public abstract class AbstractEntityDetailsInlineChildListPageController<T exten
     }
 
     protected final ManageEntityDetailsApplet createManageEntityDetailsApplet() throws UnifyException {
-        return new ManageEntityDetailsApplet(au(), getDetailsAppletName(), childAppletName, childBaseFieldName,
+        return new ManageEntityDetailsApplet(getPage(), au(), getDetailsAppletName(), childAppletName, childBaseFieldName,
                 getEntityFormEventHandlers());
     }
 

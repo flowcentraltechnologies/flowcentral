@@ -342,6 +342,10 @@ public class EntityDef extends BaseApplicationEntityDef {
         return dataSourceName;
     }
 
+    public boolean isDelegate() {
+        return !StringUtils.isBlank(delegate);
+    }
+
     public boolean isStatic() {
         return type.isStatic();
     }

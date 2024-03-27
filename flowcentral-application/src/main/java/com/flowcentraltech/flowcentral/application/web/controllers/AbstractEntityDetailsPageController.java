@@ -150,7 +150,7 @@ public abstract class AbstractEntityDetailsPageController<T extends AbstractEnti
     }
 
     protected ManageEntityDetailsApplet createManageEntityDetailsApplet() throws UnifyException {
-        return new ManageEntityDetailsApplet(au(), detailsAppletName);
+        return new ManageEntityDetailsApplet(getPage(), au(), detailsAppletName);
     }
 
     protected final EntityListTable getResultTable() throws UnifyException {

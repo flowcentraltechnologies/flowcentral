@@ -39,6 +39,7 @@ import com.flowcentraltech.flowcentral.configuration.constants.RecordActionType;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.database.Database;
 import com.tcdng.unify.core.database.Entity;
+import com.tcdng.unify.web.ui.widget.Page;
 
 /**
  * Listing applet object.
@@ -58,8 +59,8 @@ public class ListingApplet extends AbstractApplet implements SweepingCommitPolic
 
     protected EntityFileAttachments formFileAttachments;
 
-    public ListingApplet(AppletUtilities au, List<String> pathVariables) throws UnifyException {
-        super(au, pathVariables.get(APPLET_NAME_INDEX));
+    public ListingApplet(Page page, AppletUtilities au, List<String> pathVariables) throws UnifyException {
+        super(page, au, pathVariables.get(APPLET_NAME_INDEX));
         this.formFileAttachments = new EntityFileAttachments();
         final String vestigial = ApplicationNameUtils.getVestigialNamePart(pathVariables.get(APPLET_NAME_INDEX));
         final Long entityInstId = Long.valueOf(vestigial);

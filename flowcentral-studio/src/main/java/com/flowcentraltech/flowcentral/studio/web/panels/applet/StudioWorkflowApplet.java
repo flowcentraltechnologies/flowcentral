@@ -27,6 +27,7 @@ import com.flowcentraltech.flowcentral.studio.business.StudioModuleService;
 import com.flowcentraltech.flowcentral.studio.web.panels.WorkflowEditorPage;
 import com.flowcentraltech.flowcentral.workflow.entities.Workflow;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.web.ui.widget.Page;
 
 /**
  * Studio workflow applet object.
@@ -38,10 +39,10 @@ public class StudioWorkflowApplet extends StudioAppComponentApplet {
 
     private WorkflowEditorPage workflowEditorPage;
 
-    public StudioWorkflowApplet(StudioModuleService sms, AppletUtilities au, List<String> pathVariables,
+    public StudioWorkflowApplet(Page page, StudioModuleService sms, AppletUtilities au, List<String> pathVariables,
             String applicationName, AppletWidgetReferences appletWidgetReferences,
             EntityFormEventHandlers formEventHandlers) throws UnifyException {
-        super(sms, au, pathVariables, applicationName, appletWidgetReferences, formEventHandlers);
+        super(page, sms, au, pathVariables, applicationName, appletWidgetReferences, formEventHandlers);
     }
 
     public WorkflowEditorPage getWorkflowEditorPage() {

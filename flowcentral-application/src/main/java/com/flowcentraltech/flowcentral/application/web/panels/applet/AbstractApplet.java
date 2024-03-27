@@ -47,6 +47,7 @@ import com.tcdng.unify.core.data.BeanValueStore;
 import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.util.StringUtils;
+import com.tcdng.unify.web.ui.widget.Page;
 
 /**
  * Convenient abstract base class for applet objects.
@@ -83,10 +84,10 @@ public abstract class AbstractApplet {
 
     private WorkflowDraftInfo workflowDraftInfo;
 
-    public AbstractApplet(AppletUtilities au, String appletName) throws UnifyException {
+    public AbstractApplet(Page page, AppletUtilities au, String appletName) throws UnifyException {
         this.appletName = ApplicationNameUtils.removeVestigialNamePart(appletName);
         this.au = au;
-        this.ctx = new AppletContext(this, au);
+        this.ctx = new AppletContext(page, this, au);
     }
 
     public String getAppletName() {

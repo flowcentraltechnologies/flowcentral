@@ -73,6 +73,7 @@ import com.flowcentraltech.flowcentral.workflow.entities.WorkflowSetValuesQuery;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
+import com.tcdng.unify.core.criterion.Update;
 import com.tcdng.unify.core.task.TaskMonitor;
 import com.tcdng.unify.core.util.DataUtils;
 
@@ -97,6 +98,8 @@ public class ApplicationWorkflowInstallerImpl extends AbstractApplicationArtifac
 
         logDebug(taskMonitor, "Executing workflow installer...");
         // Install configured workflows
+        environment().updateAll(new WorkflowQuery().applicationId(applicationId).isNotActualCustom(),
+                new Update().add("deprecated", Boolean.TRUE));
         if (applicationConfig.getWorkflowsConfig() != null) {
             if (!DataUtils.isBlank(applicationConfig.getWorkflowsConfig().getWorkflowList())) {
                 for (AppWorkflowConfig applicationWorkflowConfig : applicationConfig.getWorkflowsConfig()
@@ -121,6 +124,7 @@ public class ApplicationWorkflowInstallerImpl extends AbstractApplicationArtifac
                         workflow.setSupportMultiItemAction(wfConfig.getSupportMultiItemAction());
                         workflow.setEntity(
                                 ApplicationNameUtils.ensureLongNameReference(applicationName, wfConfig.getEntity()));
+                        workflow.setDeprecated(false);
                         workflow.setConfigType(ConfigType.MUTABLE_INSTALL);
                         populateChildList(wfConfig, workflow, applicationName);
                         environment().create(workflow);
@@ -135,6 +139,7 @@ public class ApplicationWorkflowInstallerImpl extends AbstractApplicationArtifac
                                     wfConfig.getEntity()));
                         }
 
+                        oldWorkflow.setDeprecated(false);
                         populateChildList(wfConfig, oldWorkflow, applicationName);
                         environment().updateByIdVersion(oldWorkflow);
                     }
@@ -145,6 +150,8 @@ public class ApplicationWorkflowInstallerImpl extends AbstractApplicationArtifac
 
         // Install workflow channels
         logDebug(taskMonitor, "Installing application workflow channels...");
+        environment().updateAll(new WfChannelQuery().applicationId(applicationId).isNotActualCustom(),
+                new Update().add("deprecated", Boolean.TRUE));
         if (applicationConfig.getWfChannelsConfig() != null
                 && !DataUtils.isBlank(applicationConfig.getWfChannelsConfig().getChannelList())) {
             WfChannel wfChannel = new WfChannel();
@@ -165,6 +172,7 @@ public class ApplicationWorkflowInstallerImpl extends AbstractApplicationArtifac
                             wfChannelConfig.getDestination()));
                     wfChannel.setRule(wfChannelConfig.getRule());
                     wfChannel.setDirection(wfChannelConfig.getDirection());
+                    wfChannel.setDeprecated(false);
                     wfChannel.setConfigType(ConfigType.MUTABLE_INSTALL);
                     wfChannel.setStatus(WfChannelStatus.OPEN);
                     environment().create(wfChannel);
@@ -181,6 +189,7 @@ public class ApplicationWorkflowInstallerImpl extends AbstractApplicationArtifac
                         oldWfChannel.setDirection(wfChannelConfig.getDirection());
                     }
 
+                    oldWfChannel.setDeprecated(false);
                     environment().updateByIdVersion(oldWfChannel);
                 }
             }
@@ -191,7 +200,9 @@ public class ApplicationWorkflowInstallerImpl extends AbstractApplicationArtifac
 
         // Install workflow wizards
         logDebug(taskMonitor, "Installing application workflow form wizards...");
-        if (applicationConfig.getWorkflowWizardsConfig() != null) {
+        environment().updateAll(new WfWizardQuery().applicationId(applicationId).isNotActualCustom(),
+                new Update().add("deprecated", Boolean.TRUE));
+       if (applicationConfig.getWorkflowWizardsConfig() != null) {
             if (!DataUtils.isBlank(applicationConfig.getWorkflowWizardsConfig().getWorkflowWizardList())) {
                 WfWizard wfWizard = new WfWizard();
                 wfWizard.setApplicationId(applicationId);
@@ -212,6 +223,7 @@ public class ApplicationWorkflowInstallerImpl extends AbstractApplicationArtifac
                         wfWizard.setEntity(ApplicationNameUtils.ensureLongNameReference(applicationName,
                                 wfWizardConfig.getEntity()));
                         wfWizard.setSubmitWorkflow(wfWizardConfig.getSubmitWorkflow());
+                        wfWizard.setDeprecated(false);
                         wfWizard.setConfigType(ConfigType.MUTABLE_INSTALL);
                         populateChildList(wfWizard, wfWizardConfig, applicationId, applicationConfig.getName());
                         environment().create(wfWizard);
@@ -225,6 +237,7 @@ public class ApplicationWorkflowInstallerImpl extends AbstractApplicationArtifac
                             oldAppFormWizard.setSubmitWorkflow(wfWizardConfig.getSubmitWorkflow());
                         }
 
+                        oldAppFormWizard.setDeprecated(false);
                         populateChildList(wfWizard, wfWizardConfig, applicationId, applicationConfig.getName());
                         environment().updateByIdVersion(oldAppFormWizard);
                     }

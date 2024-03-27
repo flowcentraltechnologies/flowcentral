@@ -46,6 +46,7 @@ import com.tcdng.unify.core.criterion.AndBuilder;
 import com.tcdng.unify.core.data.BeanValueStore;
 import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.util.StringUtils;
+import com.tcdng.unify.web.ui.widget.Page;
 
 /**
  * Review work items applet object.
@@ -67,10 +68,10 @@ public class ReviewWorkItemsApplet extends AbstractReviewWorkItemsApplet {
 
     private boolean userActionRight;
 
-    public ReviewWorkItemsApplet(AppletUtilities au, WorkflowModuleService wms, List<String> pathVariables, String userLoginId,
+    public ReviewWorkItemsApplet(Page page, AppletUtilities au, WorkflowModuleService wms, List<String> pathVariables, String userLoginId,
             AppletWidgetReferences appletWidgetReferences, EntityFormEventHandlers formEventHandlers)
             throws UnifyException {
-        super(au, pathVariables, appletWidgetReferences, formEventHandlers);
+        super(page, au, pathVariables, appletWidgetReferences, formEventHandlers);
         this.wms = wms;
         AppletDef _appletDef = getRootAppletDef();
         entitySearch = au.constructEntitySearch(new FormContext(getCtx()), this, null,
