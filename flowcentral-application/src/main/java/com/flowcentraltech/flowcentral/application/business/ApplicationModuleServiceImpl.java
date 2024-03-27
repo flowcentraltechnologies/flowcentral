@@ -3731,6 +3731,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                         .setParam(0, true).setParam(1, "C"));
     }
 
+    @SuppressWarnings("unchecked")
     @Synchronized(POST_BOOT_SETUP_LOCK)
     @Override
     public void performPostBootSetup(final boolean isInstallationPerformed) throws UnifyException {
@@ -3739,7 +3740,10 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
             final Long actualPrimaryTenantId = appletUtilities.system().getSysParameterValue(Long.class,
                     SystemModuleSysParamConstants.SYSTEM_ACTUAL_PRIMARY_TENANT_ID);
             boolean primaryTenantResolved = false;
-            getEntityClassDef("system.tenant");
+            EntityClassDef tenantEntityClassDef = getEntityClassDef("system.tenant");
+            MappedEntityProvider<? extends BaseMappedEntityProviderContext> provider = appletUtilities
+                    .getMappingProvider((Class<? extends Entity>) tenantEntityClassDef.getEntityClass());
+            getEntityClassDef(provider.srcEntity());
             List<MappedTenant> tenantList = appletUtilities.system()
                     .findTenants((MappedTenantQuery) new MappedTenantQuery().ignoreEmptyCriteria(true));
             for (MappedTenant mappedTenant : tenantList) {
@@ -3785,7 +3789,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
     @SuppressWarnings("unchecked")
     @Synchronized(DYNAMIC_ENTITY_BUILD_LOCK)
     public EntityClassDef performDynamicEntityBuild(final String longName) throws UnifyException {
-        logDebug("Building dynamic entity information...");
+        logInfo("Building dynamic entity information...");
         Map<String, DynamicEntityInfo> dynamicEntityInfoMap = new HashMap<String, DynamicEntityInfo>();
         Set<Long> ids = buildDynamicEntityInfos(longName, dynamicEntityInfoMap);
 
@@ -3809,7 +3813,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
             }
         }
 
-        logDebug("Dynamic entity information successfully built. [{0}] entities resolved for generation.",
+        logInfo("Dynamic entity information successfully built. [{0}] entities resolved for generation.",
                 _dynamicEntityInfos.size());
 
         // Compile and load class if necessary
@@ -6099,8 +6103,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
             final DynamicEntityInfo.ManagedType managedType = entityDef.delegated()
                     ? DynamicEntityInfo.ManagedType.NOT_MANAGED
                     : DynamicEntityInfo.ManagedType.MANAGED;
-            final boolean schemaUpdateRequired = db().value(boolean.class,
-                    "schemaUpdateRequired", new AppEntityQuery().addEquals("id", entityDef.getId()));
+            final boolean schemaUpdateRequired = db().value(boolean.class, "schemaUpdateRequired",
+                    new AppEntityQuery().addEquals("id", entityDef.getId()));
             DynamicEntityInfo.Builder deib = DynamicEntityInfo
                     .newBuilder(dynamicEntityType, className, managedType, schemaUpdateRequired)
                     .baseClassName(baseClassName).tableName(entityDef.getTableName()).version(1L);
