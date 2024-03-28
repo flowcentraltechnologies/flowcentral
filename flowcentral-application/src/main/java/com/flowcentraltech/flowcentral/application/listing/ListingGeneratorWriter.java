@@ -49,13 +49,25 @@ public interface ListingGeneratorWriter {
 
     void setRowColor(ListingColorType rowColor);
 
-    boolean isPausePrint(ValueStoreReader reader) throws UnifyException;
-
-    boolean isPausePrint(Object bean) throws UnifyException;
-
     boolean isWithRowColor();
 
     void clearRowColor();
+
+    void setRowTextColor(ListingColorType rowTextColor);
+
+    boolean isWithRowTextColor();
+
+    void clearRowTextColor();
+
+    void setCellTextColor(ListingColorType[] cellTextColor);
+
+    boolean isWithCellTextColor();
+
+    void clearCellTextColor();
+
+    boolean isPausePrint(ValueStoreReader reader) throws UnifyException;
+
+    boolean isPausePrint(Object bean) throws UnifyException;
 
     void beginSection(int sectionColumns, int widthPercent, HAlignType horizontalAlign,
             boolean alternatingColumn, int borders) throws UnifyException;

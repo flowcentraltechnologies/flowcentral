@@ -50,8 +50,12 @@ public abstract class AbstractListingGeneratorWriter implements ListingGenerator
     protected final boolean highlighting;
 
     protected final FormListing formListing;
-    
+
     protected ListingColorType rowColor;
+
+    protected ListingColorType rowTextColor;
+
+    protected ListingColorType[] cellTextColor;
 
     protected int[] sectionColumnWidth;
 
@@ -69,8 +73,9 @@ public abstract class AbstractListingGeneratorWriter implements ListingGenerator
 
     private Set<ListingColorType> pauseRowPrintColors;
 
-    public AbstractListingGeneratorWriter(FormListing formListing, ThemeManager themeManager, ImageProvider entityImageProvider,
-            String listingType, Set<ListingColorType> pausePrintColors, boolean highlighting) {
+    public AbstractListingGeneratorWriter(FormListing formListing, ThemeManager themeManager,
+            ImageProvider entityImageProvider, String listingType, Set<ListingColorType> pausePrintColors,
+            boolean highlighting) {
         this.formListing = formListing;
         this.themeManager = themeManager;
         this.entityImageProvider = entityImageProvider;
@@ -138,6 +143,47 @@ public abstract class AbstractListingGeneratorWriter implements ListingGenerator
     }
 
     @Override
+    public boolean isWithRowColor() {
+        return rowColor != null;
+    }
+
+    @Override
+    public void clearRowColor() {
+        pauseRowPrinting = false;
+        rowColor = null;
+    }
+
+    @Override
+    public void setRowTextColor(ListingColorType rowTextColor) {
+        this.rowTextColor = rowTextColor;
+    }
+
+    @Override
+    public boolean isWithRowTextColor() {
+        return rowTextColor != null;
+    }
+
+    @Override
+    public void clearRowTextColor() {
+        rowTextColor = null;
+    }
+
+    @Override
+    public void setCellTextColor(ListingColorType[] cellTextColor) {
+        this.cellTextColor = cellTextColor;
+    }
+
+    @Override
+    public boolean isWithCellTextColor() {
+        return cellTextColor != null;
+    }
+
+    @Override
+    public void clearCellTextColor() {
+        cellTextColor = null;
+    }
+
+    @Override
     public boolean isPausePrint(ValueStoreReader reader) throws UnifyException {
         ListingColorType color = getItemColor(reader);
         return color != null && pauseRowPrintColors.contains(color);
@@ -147,17 +193,6 @@ public abstract class AbstractListingGeneratorWriter implements ListingGenerator
     public boolean isPausePrint(Object bean) throws UnifyException {
         ListingColorType color = getItemColor(bean);
         return color != null && pauseRowPrintColors.contains(color);
-    }
-
-    @Override
-    public boolean isWithRowColor() {
-        return rowColor != null;
-    }
-
-    @Override
-    public void clearRowColor() {
-        pauseRowPrinting = false;
-        rowColor = null;
     }
 
     @Override
@@ -261,6 +296,11 @@ public abstract class AbstractListingGeneratorWriter implements ListingGenerator
         if (cells.length != columns.length) {
             throw new IllegalArgumentException(
                     "Length of supplied cells does not match current section number of columns.");
+        }
+
+        if (cellTextColor != null && (cells.length != cellTextColor.length)) {
+            throw new IllegalArgumentException(
+                    "Length of supplied cells does not match current number of cell text color.");
         }
 
         if (!pauseRowPrinting) {

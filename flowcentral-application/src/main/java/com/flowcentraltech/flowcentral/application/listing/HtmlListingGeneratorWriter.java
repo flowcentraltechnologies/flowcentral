@@ -112,6 +112,7 @@ public class HtmlListingGeneratorWriter extends AbstractListingGeneratorWriter {
         }
         writer.write(">");
 
+        final String rowContentStyle = rowTextColor != null ? " style=\"color:" + rowTextColor.textColor() + ";\"" : "";
         for (int cellIndex = 0; cellIndex < cells.length; cellIndex++) {
             ListingColumn column = columns[cellIndex];
             ListingCell cell = cells[cellIndex];
@@ -140,8 +141,12 @@ public class HtmlListingGeneratorWriter extends AbstractListingGeneratorWriter {
                 writer.write(";");
             }
             writer.write("\">");
+
+            final String cellContentStyle = cellTextColor != null
+                    ? " style=\"color:" + cellTextColor[cellIndex].textColor() + ";\""
+                    : rowContentStyle;
             writer.write("<span class=\"flcontent ").write(cell.getType().styleClass()).write(" ")
-                    .write(column.getAlign().styleClass()).write("\">");
+                    .write(column.getAlign().styleClass()).write(cellContentStyle).write("\">");
             if (cell.isWithContent()) {
                 if (cell.isFileImage() || cell.isEntityProviderImage()) {
                     writer.write("<img src=\"");
