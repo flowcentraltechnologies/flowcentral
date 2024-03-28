@@ -385,7 +385,7 @@ public abstract class AbstractApplet {
 
         if (au().system().getSysParameterValue(boolean.class,
                 ApplicationModuleSysParamConstants.ENABLE_OPEN_TAB_IN_BROWSER)) {
-            final String tabName = ApplicationNameUtils.addVestigialNamePart(listingRedirect.getTargetAppletName(),
+            final String tabName = ApplicationNameUtils.addVestigialNamePart(listingRedirect.getTargetAppletName() + "_list",
                     String.valueOf(listingRedirect.getTargetInstId()));
             result.setTabName(tabName);
             result.setOpenTab(true);
