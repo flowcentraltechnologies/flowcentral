@@ -25,11 +25,11 @@ package com.flowcentraltech.flowcentral.application.constants;
 public enum ListingColorType {
 
     BLACK("#d3d3d3", "#000000"),
-    RED("#ffbeb2", "#7b241c"),
-    YELLOW("#fff5b0", "#b7950b"),
+    RED("#ffbeb2", "#641e16"),
+    YELLOW("#fff5b0", "#7d6608"),
     GREEN("#b7ffdd", "#0e6251"),
-    BLUE("#c3e9ff", "#1b4f72"),
-    VIOLET("#e5baff", "#5b2c6f");
+    BLUE("#c3e9ff", "#154360"),
+    VIOLET("#e5baff", "#4a235a");
 
     private final String backgroundColor;
 

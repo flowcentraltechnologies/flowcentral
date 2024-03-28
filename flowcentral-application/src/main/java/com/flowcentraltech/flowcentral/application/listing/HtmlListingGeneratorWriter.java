@@ -146,7 +146,7 @@ public class HtmlListingGeneratorWriter extends AbstractListingGeneratorWriter {
                     ? " style=\"color:" + cellTextColor[cellIndex].textColor() + ";\""
                     : rowContentStyle;
             writer.write("<span class=\"flcontent ").write(cell.getType().styleClass()).write(" ")
-                    .write(column.getAlign().styleClass()).write(cellContentStyle).write("\">");
+                    .write(column.getAlign().styleClass()).write("\"").write(cellContentStyle).write(">");
             if (cell.isWithContent()) {
                 if (cell.isFileImage() || cell.isEntityProviderImage()) {
                     writer.write("<img src=\"");
