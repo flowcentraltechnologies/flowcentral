@@ -24,6 +24,7 @@ package com.flowcentraltech.flowcentral.application.constants;
  */
 public enum ListingColorType {
 
+    BLACK("#d3d3d3", "#000000"),
     RED("#ffbeb2", "#7b241c"),
     YELLOW("#fff5b0", "#b7950b"),
     GREEN("#b7ffdd", "#0e6251"),
