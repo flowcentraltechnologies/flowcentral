@@ -29,7 +29,12 @@ public enum ListingColorType {
     YELLOW("#fff5b0", "#7d6608"),
     GREEN("#b7ffdd", "#0e6251"),
     BLUE("#c3e9ff", "#154360"),
-    VIOLET("#e5baff", "#4a235a");
+    VIOLET("#e5baff", "#4a235a"),
+    RED_NEON("#ff3131", "#ff3131"),
+    YELLOW_NEON("#ffff33", "#ffff33"),
+    GREEN_NEON("#39ff14", "#39ff14"),
+    BLUE_NEON("#1b03ff", "#1b03ff"),
+    VIOLET_NEON("#b026ff", "#b026ff");
 
     private final String backgroundColor;
 
