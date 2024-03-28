@@ -46,11 +46,8 @@ import com.flowcentraltech.flowcentral.application.data.FormTabDef;
 import com.flowcentraltech.flowcentral.application.data.PropertyRuleDef;
 import com.flowcentraltech.flowcentral.application.data.UniqueConditionDef;
 import com.flowcentraltech.flowcentral.application.data.UniqueConstraintDef;
-import com.flowcentraltech.flowcentral.application.policies.ListingRedirect;
-import com.flowcentraltech.flowcentral.application.policies.ListingRedirectionPolicy;
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityUtils;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
-import com.flowcentraltech.flowcentral.application.util.ApplicationPageUtils;
 import com.flowcentraltech.flowcentral.application.validation.FormContextEvaluator;
 import com.flowcentraltech.flowcentral.application.web.controllers.AppletWidgetReferences;
 import com.flowcentraltech.flowcentral.application.web.data.FormContext;
@@ -688,16 +685,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         this.mIndex = mIndex;
         Entity _inst = getEntitySearchItem(entitySearch, mIndex).getEntity();
         if (entitySearch.isViewItemsInSeparateTabs()) {
-            ListingRedirect listingRedirect = isRootAppletPropWithValue(AppletPropertyConstants.LISTING_REDIRECT_POLICY)
-                    ? au().getComponent(ListingRedirectionPolicy.class,
-                            getRootAppletProp(String.class, AppletPropertyConstants.LISTING_REDIRECT_POLICY))
-                            .evaluateRedirection(getAppletName(), (Long) _inst.getId())
-                    : new ListingRedirect(getAppletName(), (Long) _inst.getId());
-            final String openPath = ApplicationPageUtils.constructAppletOpenPagePath(AppletType.LISTING,
-                    listingRedirect.getTargetAppletName(), listingRedirect.getTargetInstId());
-            TableActionResult result = new TableActionResult(_inst, openPath);
-            result.setOpenPath(true);
-            return result;
+            return openListingInTab(_inst);
         }
 
         _inst = reloadEntity(_inst, true);

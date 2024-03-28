@@ -42,16 +42,16 @@ import com.tcdng.unify.web.ui.AbstractPageController;
 @Component(ApplicationModulePathConstants.APPLICATION_BROWSER_WINDOW)
 @UplBinding("web/application/upl/applicationbrowserwindow.upl")
 @ResultMappings({
-    @ResultMapping(name = ApplicationResultMappingConstants.SHOW_ENTITY_SELECT,
-            response = { "!showpopupresponse popup:$s{entitySelectPopup}" }),
-    @ResultMapping(name = ApplicationResultMappingConstants.SHOW_ENTITY_MULTISELECT,
-            response = { "!showpopupresponse popup:$s{entityMultiselectPopup}" }),
-    @ResultMapping(name = ApplicationResultMappingConstants.SHOW_ENTITY_TREEMULTISELECT,
-            response = { "!showpopupresponse popup:$s{entityTreeMultiselectPopup}" }),
-    @ResultMapping(name = ApplicationResultMappingConstants.SHOW_TEXT_TEMPLATE_EDITOR,
-            response = { "!showpopupresponse popup:$s{textTemplatePopup}" }),
-    @ResultMapping(name = ApplicationResultMappingConstants.REFRESH_CONTENT,
-        response = { "!hidepopupresponse", "!refreshpanelresponse panels:$l{content}" }) })
+        @ResultMapping(name = ApplicationResultMappingConstants.SHOW_ENTITY_SELECT,
+                response = { "!showpopupresponse popup:$s{entitySelectPopup}" }),
+        @ResultMapping(name = ApplicationResultMappingConstants.SHOW_ENTITY_MULTISELECT,
+                response = { "!showpopupresponse popup:$s{entityMultiselectPopup}" }),
+        @ResultMapping(name = ApplicationResultMappingConstants.SHOW_ENTITY_TREEMULTISELECT,
+                response = { "!showpopupresponse popup:$s{entityTreeMultiselectPopup}" }),
+        @ResultMapping(name = ApplicationResultMappingConstants.SHOW_TEXT_TEMPLATE_EDITOR,
+                response = { "!showpopupresponse popup:$s{textTemplatePopup}" }),
+        @ResultMapping(name = ApplicationResultMappingConstants.REFRESH_CONTENT,
+                response = { "!hidepopupresponse", "!refreshpanelresponse panels:$l{content}" }) })
 public class ApplicationBrowserWindowController extends AbstractPageController<ApplicationBrowserWindowPageBean> {
 
     public ApplicationBrowserWindowController() {
@@ -71,9 +71,11 @@ public class ApplicationBrowserWindowController extends AbstractPageController<A
         if (pageBean.getDocumentPath() == null) {
             final SessionOpenTabInfo sessionOpenTabInfo = (SessionOpenTabInfo) removeSessionAttribute(
                     AppletSessionAttributeConstants.OPEN_TAB_INFO);
-            pageBean.setWindowTitle(sessionOpenTabInfo.getTitle());
-            pageBean.setDocumentPath(sessionOpenTabInfo.getDocumentPath());
-            pageBean.setContentPaths(new String[] { sessionOpenTabInfo.getContentPath() });
+            if (sessionOpenTabInfo != null) {
+                pageBean.setWindowTitle(sessionOpenTabInfo.getTitle());
+                pageBean.setDocumentPath(sessionOpenTabInfo.getDocumentPath());
+                pageBean.setContentPaths(new String[] { sessionOpenTabInfo.getContentPath() });
+            }
         }
     }
 

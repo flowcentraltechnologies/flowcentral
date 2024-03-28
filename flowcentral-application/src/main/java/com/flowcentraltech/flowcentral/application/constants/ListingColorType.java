@@ -24,20 +24,28 @@ package com.flowcentraltech.flowcentral.application.constants;
  */
 public enum ListingColorType {
 
-    RED("#ffbeb2"),
-    YELLOW("#fff5b0"),
-    GREEN("#b7ffdd"),
-    BLUE("#c3e9ff"),
-    VIOLET("#e5baff");
+    BLACK("#d3d3d3", "#000000"),
+    RED("#ffbeb2", "#641e16"),
+    YELLOW("#fff5b0", "#7d6608"),
+    GREEN("#b7ffdd", "#0e6251"),
+    BLUE("#c3e9ff", "#154360"),
+    VIOLET("#e5baff", "#4a235a");
 
     private final String backgroundColor;
+
+    private final String textColor;
     
-    private ListingColorType(String backgroundColor) {
+    private ListingColorType(String backgroundColor, String textColor) {
         this.backgroundColor = backgroundColor;
+        this.textColor = textColor;
     }
 
     public String backgroundColor() {
         return this.backgroundColor;
+    }
+
+    public String textColor() {
+        return this.textColor;
     }
 
 }

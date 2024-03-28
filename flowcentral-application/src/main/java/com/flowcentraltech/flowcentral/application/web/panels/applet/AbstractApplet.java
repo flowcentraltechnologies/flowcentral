@@ -33,6 +33,8 @@ import com.flowcentraltech.flowcentral.application.data.FormDef;
 import com.flowcentraltech.flowcentral.application.data.PropertyRuleDef;
 import com.flowcentraltech.flowcentral.application.data.TableDef;
 import com.flowcentraltech.flowcentral.application.data.WorkflowDraftInfo;
+import com.flowcentraltech.flowcentral.application.policies.ListingRedirect;
+import com.flowcentraltech.flowcentral.application.policies.ListingRedirectionPolicy;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.util.ApplicationPageUtils;
 import com.flowcentraltech.flowcentral.application.web.data.AppletContext;
@@ -364,6 +366,28 @@ public abstract class AbstractApplet {
         if (au().system().getSysParameterValue(boolean.class,
                 ApplicationModuleSysParamConstants.ENABLE_OPEN_TAB_IN_BROWSER)) {
             result.setTabName(appletName + "_new");
+            result.setOpenTab(true);
+        }
+
+        return result;
+    }
+
+    protected TableActionResult openListingInTab(Entity _inst) throws UnifyException {
+        ListingRedirect listingRedirect = isRootAppletPropWithValue(AppletPropertyConstants.LISTING_REDIRECT_POLICY)
+                ? au().getComponent(ListingRedirectionPolicy.class,
+                        getRootAppletProp(String.class, AppletPropertyConstants.LISTING_REDIRECT_POLICY))
+                        .evaluateRedirection(getAppletName(), (Long) _inst.getId())
+                : new ListingRedirect(getAppletName(), (Long) _inst.getId());
+        final String openPath = ApplicationPageUtils.constructAppletOpenPagePath(AppletType.LISTING,
+                listingRedirect.getTargetAppletName(), listingRedirect.getTargetInstId());
+        TableActionResult result = new TableActionResult(_inst, openPath);
+        result.setOpenPath(true);
+
+        if (au().system().getSysParameterValue(boolean.class,
+                ApplicationModuleSysParamConstants.ENABLE_OPEN_TAB_IN_BROWSER)) {
+            final String tabName = ApplicationNameUtils.addVestigialNamePart(listingRedirect.getTargetAppletName(),
+                    String.valueOf(listingRedirect.getTargetInstId()));
+            result.setTabName(tabName);
             result.setOpenTab(true);
         }
 
