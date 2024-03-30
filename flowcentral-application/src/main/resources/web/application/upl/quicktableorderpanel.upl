@@ -17,7 +17,7 @@
 	components:$c{titleBar orderyBodyPanel footerActionPanel}
 
 // Header
-!ui-titlebar:titleBar caption:$m{quicktableorderpanel.title} captionBinding:entryCaption
+!ui-titlebar:titleBar caption:$m{quicktableorderpanel.title} captionBinding:orderCaption
 	components:$c{closeBtn} draggable:true
 !ui-image:closeBtn src:$t{images/cross_white.png} styleClass:$e{tbbutton}
      eventHandler:$d{!ui-event event:onclick action:$c{closeAct}}

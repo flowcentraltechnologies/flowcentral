@@ -26,6 +26,7 @@ import com.flowcentraltech.flowcentral.application.web.panels.EntitySelect;
 import com.flowcentraltech.flowcentral.application.web.panels.EntityTreeSelect;
 import com.flowcentraltech.flowcentral.application.web.panels.QuickFormEdit;
 import com.flowcentraltech.flowcentral.application.web.panels.QuickTableEdit;
+import com.flowcentraltech.flowcentral.application.web.panels.QuickTableOrder;
 import com.flowcentraltech.flowcentral.application.web.panels.applet.AbstractEntityFormApplet;
 import com.flowcentraltech.flowcentral.application.web.panels.applet.AbstractEntityFormApplet.ShowPopupInfo;
 import com.flowcentraltech.flowcentral.application.web.widgets.BeanListTableWidget;
@@ -91,6 +92,25 @@ public abstract class AbstractEntityFormAppletController<T extends AbstractEntit
             if (quickTableEdit != null) {
                 return showPopup(new Popup(ApplicationResultMappingConstants.SHOW_QUICK_TABLE_EDIT, quickTableEdit,
                         quickTableEdit.getWidth(), quickTableEdit.getHeight()));
+            }
+        }
+
+        return "refreshapplet";
+    }
+
+    @Action
+    public String quickTableOrder() throws UnifyException {
+        AbstractEntityFormAppletPageBean<T> pageBean = getPageBean();
+        AbstractEntityFormApplet applet = pageBean.getApplet();
+        final int childTabIndex = getChildTabIndex();
+        if (applet.isPromptEnterWorkflowDraft()) {
+            return showPromptWorkflowDraft(WorkflowDraftType.QUICK_TABLE_ORDER, childTabIndex);
+        }
+
+        if (saveFormState(applet)) {
+            QuickTableOrder quickTableOrder = applet.quickTableOrder(childTabIndex);
+            if (quickTableOrder != null) {
+                return showPopup(new Popup(ApplicationResultMappingConstants.SHOW_QUICK_TABLE_ORDER, quickTableOrder));
             }
         }
 

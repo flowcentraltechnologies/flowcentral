@@ -30,6 +30,7 @@ public enum WorkflowDraftType {
     NEW_CHILD_ITEM,
     NEW_CHILDLIST_ITEM,
     QUICK_TABLE_EDIT,
+    QUICK_TABLE_ORDER,
     QUICK_FORM_EDIT,
     MAINTAIN,
     UPDATE,

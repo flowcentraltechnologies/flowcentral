@@ -52,6 +52,8 @@ public class QuickTableOrder {
 
     private final String orderField;
 
+    private String orderCaption;
+
     private List<OrderItem> orderItems;
 
     public QuickTableOrder(AppletContext ctx, AppletDef appletDef, EntityClassDef entityClassDef, String baseField,
@@ -63,6 +65,18 @@ public class QuickTableOrder {
         this.baseId = baseId;
         this.orderField = orderField;
         this.orderItems = Collections.emptyList();
+    }
+
+    public String getOrderCaption() {
+        return orderCaption;
+    }
+
+    public void setOrderCaption(String orderCaption) {
+        this.orderCaption = orderCaption;
+    }
+
+    public List<OrderItem> getOrderItems() {
+        return orderItems;
     }
 
     @SuppressWarnings("unchecked")
@@ -82,7 +96,7 @@ public class QuickTableOrder {
     }
 
     @SuppressWarnings("unchecked")
-    public void commitOrderItems() throws UnifyException {
+    public boolean commitOrderItems() throws UnifyException {
         if (!DataUtils.isBlank(orderItems)) {
             int orderIndex = 0;
             for (OrderItem item : orderItems) {
@@ -94,6 +108,8 @@ public class QuickTableOrder {
             EntityDef parentEntityDef = ctx.au().getEntityDef(baseFieldDef.getRefDef().getEntity());
             ctx.au().bumpVersion(ctx.au().environment().getDatabase(), parentEntityDef, (Long) baseId);
         }
+        
+        return true;
     }
 
     public static class OrderItem {
