@@ -19,6 +19,7 @@ import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityNameParts;
 import com.flowcentraltech.flowcentral.configuration.constants.AppletType;
+import com.tcdng.unify.common.util.StringToken;
 import com.tcdng.unify.core.UnifyException;
 
 /**
@@ -176,6 +177,16 @@ public abstract class AbstractDetachedAppletDef implements AppletDef {
     @Override
     public boolean isDescriptiveButtons() {
         return parentAppletDef.isDescriptiveButtons();
+    }
+
+    @Override
+    public List<StringToken> getTitleFormat() {
+        return parentAppletDef.getTitleFormat();
+    }
+
+    @Override
+    public boolean isWithTitleFormat() {
+        return parentAppletDef.isWithTitleFormat();
     }
 
     @Override

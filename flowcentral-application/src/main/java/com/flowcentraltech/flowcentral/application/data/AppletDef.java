@@ -19,6 +19,7 @@ import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityNameParts;
 import com.flowcentraltech.flowcentral.configuration.constants.AppletType;
+import com.tcdng.unify.common.util.StringToken;
 import com.tcdng.unify.core.UnifyException;
 
 /**
@@ -94,6 +95,10 @@ public interface AppletDef {
     String getListingOpenPath();
 
     boolean isDescriptiveButtons();
+
+    List<StringToken> getTitleFormat();
+
+    boolean isWithTitleFormat();
 
     String getViewId();
 

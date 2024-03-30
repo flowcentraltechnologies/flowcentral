@@ -2140,6 +2140,8 @@
 						column="1" disabled="true" required="true" />
 					<field name="entity" inputWidget="studio.entitysearch"
 						column="1" required="true" switchOnChange="true" visible="false" />
+					<field name="titleFormat"
+						inputWidget="application.texttemplate" column="1" />
 					<field name="baseField"
 						inputWidget="studio.entityreffieldlist" column="1" required="true"
 						visible="false" />

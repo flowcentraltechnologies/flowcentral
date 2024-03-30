@@ -1692,6 +1692,20 @@ public interface AppletUtilities extends FlowCentralComponent {
     void bumpVersion(Database db, EntityDef entityDef, Entity inst) throws UnifyException;
 
     /**
+     * Bumps entity version
+     * 
+     * @param db
+     *                  the database
+     * @param entityDef
+     *                  the entity definition
+     * @param id
+     *                  the entity ID
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    void bumpVersion(Database db, EntityDef entityDef, Long id) throws UnifyException;
+
+    /**
      * Gets child entity foreign key field name
      * 
      * @param entity

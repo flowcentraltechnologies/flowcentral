@@ -486,6 +486,11 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                             descriptiveButtons, _actLongName, appApplet.getDescription(), appApplet.getId(),
                             appApplet.getVersionNo());
 
+                    List<StringToken> titleFormat = !StringUtils.isBlank(appApplet.getTitleFormat())
+                            ? StringUtils.breakdownParameterizedString(appApplet.getTitleFormat())
+                            : null;
+                    adb.titleFormat(titleFormat);
+
                     for (AppAppletProp appAppletProp : appApplet.getPropList()) {
                         adb.addPropDef(appAppletProp.getName(), appAppletProp.getValue());
                     }
@@ -4170,6 +4175,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                     appApplet.setAssignField(appletConfig.getAssignField());
                     appApplet.setAssignDescField(appletConfig.getAssignDescField());
                     appApplet.setPseudoDeleteField(appletConfig.getPseudoDeleteField());
+                    appApplet.setTitleFormat(appletConfig.getTitleFormat());
                     appApplet.setDeprecated(false);
                     appApplet.setConfigType(ConfigType.STATIC_INSTALL);
                     populateChildList(appApplet, applicationName, appletConfig);
@@ -4194,6 +4200,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                         oldAppApplet.setAssignField(appletConfig.getAssignField());
                         oldAppApplet.setAssignDescField(appletConfig.getAssignDescField());
                         oldAppApplet.setPseudoDeleteField(appletConfig.getPseudoDeleteField());
+                        oldAppApplet.setTitleFormat(appletConfig.getTitleFormat());
                     }
 
                     oldAppApplet.setDeprecated(false);

@@ -51,7 +51,7 @@ public class AppForm extends BaseApplicationEntity {
     @Column(length = 64, nullable = true)
     private String listingGenerator;
 
-    @Column(length = 512, nullable = true)
+    @Column(length = 1024, nullable = true)
     private String titleFormat;
 
     @ListOnly(name = "form_type_desc", key = "type", property="description")
