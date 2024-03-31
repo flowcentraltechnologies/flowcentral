@@ -759,6 +759,7 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-appletmenu .submenu {}
 .fc-appletmenu .submenu ul {}
 .fc-appletmenu .submenu li {padding:8px 20px;cursor:pointer;}
+.fc-appletmenu .submenu li:hover {background-color:#394452;}
 .fc-appletmenu .submenu .icon {display:inline-block;width:20px;font-size:12px;vertical-align:top;}
 .fc-appletmenu .submenu .acl {display:inline-block;width: calc(100% - 20px);}
 .fc-appletmenu .msection {margin-top:30px;}
