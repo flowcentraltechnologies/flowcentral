@@ -45,7 +45,7 @@
 	eventHandler:$f{reportEventHandler}
 !ui-button:quickEditBtn styleClass:$e{fc-orangebutton} caption:$m{button.quickedit}
 	eventHandler:$f{quickEditEventHandler} binding:$f{quickEditBtnBinding}
-!ui-button:quickOrderBtn styleClass:$e{fc-purplebutton} caption:$m{button.quickorder}
+!ui-button:quickOrderBtn styleClass:$e{fc-bluebutton} caption:$m{button.quickorder}
 	eventHandler:$f{quickOrderEventHandler} binding:$f{quickOrderBtnBinding}
 !ui-button:refreshBtn caption:$m{button.refresh}
 	eventHandler:$d{!ui-event event:onclick action:$c{refreshAct}}

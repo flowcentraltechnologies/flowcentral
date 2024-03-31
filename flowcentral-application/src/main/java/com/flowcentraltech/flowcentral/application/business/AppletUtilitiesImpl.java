@@ -122,7 +122,6 @@ import com.flowcentraltech.flowcentral.common.business.policies.ParamConfigListP
 import com.flowcentraltech.flowcentral.common.business.policies.SweepingCommitPolicy;
 import com.flowcentraltech.flowcentral.common.business.policies.TableSummaryLine;
 import com.flowcentraltech.flowcentral.common.constants.CollaborationType;
-import com.flowcentraltech.flowcentral.common.constants.ConfigType;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralApplicationAttributeConstants;
 import com.flowcentraltech.flowcentral.common.constants.OwnershipType;
 import com.flowcentraltech.flowcentral.common.constants.WfItemVersionType;
@@ -2026,26 +2025,9 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
         }
     }
 
-    @SuppressWarnings("unchecked")
     @Override
-    public void bumpVersion(Database db, EntityDef entityDef, Long id) throws UnifyException {
-        final Class<?> entityClass = getEntityClassDef(entityDef.getLongName()).getEntityClass();
-        if (BaseVersionEntity.class.isAssignableFrom(entityClass)) {
-            final boolean isClearMergeVersion = BaseApplicationEntity.class.isAssignableFrom(entityClass)
-                    && !isEnterprise();
-            Query<?> query = Query.of((Class<? extends Entity>) entityClass).addEquals("id", id);
-            long bumpedVersionNo = db.value(long.class, "versionNo", query) + 1L;
-            Update update = isClearMergeVersion
-                    ? new Update().add("versionNo", bumpedVersionNo).add("devMergeVersionNo", null)
-                    : new Update().add("versionNo", bumpedVersionNo);
-
-            if (AppEntity.class.equals(entityClass)) {
-                query.addEquals("configType", ConfigType.CUSTOM).addIsNull("delegate");
-                update.add("schemaUpdateRequired", true);
-            }
-
-            db.updateAll(query, update);
-        }
+    public void bumpVersion(EntityDef entityDef, Long id) throws UnifyException {
+        applicationModuleService.bumpVersion(entityDef, id);
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })

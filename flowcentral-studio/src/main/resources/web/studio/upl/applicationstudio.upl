@@ -76,6 +76,9 @@
 // Quick table edit
 !fc-quicktableeditpanel:quickTableEditPopup binding:$w{}
 
+// Quick table order
+!fc-quicktableorderpanel:quickTableOrderPopup binding:$w{}
+
 // Quick form edit
 !fc-quickformeditpanel:quickFormEditPopup binding:$w{}
 

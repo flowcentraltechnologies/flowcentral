@@ -215,6 +215,7 @@ import com.flowcentraltech.flowcentral.common.constants.WfItemVersionType;
 import com.flowcentraltech.flowcentral.common.data.Attachment;
 import com.flowcentraltech.flowcentral.common.data.ParamValuesDef;
 import com.flowcentraltech.flowcentral.common.entities.BaseEntity;
+import com.flowcentraltech.flowcentral.common.entities.BaseVersionEntity;
 import com.flowcentraltech.flowcentral.common.entities.EntityWrapper;
 import com.flowcentraltech.flowcentral.common.entities.FileAttachment;
 import com.flowcentraltech.flowcentral.common.entities.FileAttachmentDoc;
@@ -1538,6 +1539,28 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
     @Override
     public boolean isApplicationDevelopable(String applicationName) throws UnifyException {
         return environment().value(boolean.class, "developable", new ApplicationQuery().name(applicationName));
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public void bumpVersion(EntityDef entityDef, Long id) throws UnifyException {
+        final Class<?> entityClass = getEntityClassDef(entityDef.getLongName()).getEntityClass();
+        if (BaseVersionEntity.class.isAssignableFrom(entityClass)) {
+            final boolean isClearMergeVersion = BaseApplicationEntity.class.isAssignableFrom(entityClass)
+                    && !isEnterprise();
+            Query<?> query = Query.of((Class<? extends Entity>) entityClass).addEquals("id", id);
+            long bumpedVersionNo = environment().value(long.class, "versionNo", query) + 1L;
+            Update update = isClearMergeVersion
+                    ? new Update().add("versionNo", bumpedVersionNo).add("devMergeVersionNo", null)
+                    : new Update().add("versionNo", bumpedVersionNo);
+
+            if (AppEntity.class.equals(entityClass)) {
+                query.addEquals("configType", ConfigType.CUSTOM).addIsNull("delegate");
+                update.add("schemaUpdateRequired", true);
+            }
+
+            environment().updateAll(query, update);
+        }
     }
 
     @Override

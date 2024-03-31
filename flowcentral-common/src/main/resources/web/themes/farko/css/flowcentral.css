@@ -983,7 +983,7 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 
 /* Quick table order panel */
 .fc-quicktableorderpanel {width:100%;min-width:480px;background-color:#ffffff;border: 1px solid #b8b8b8;}
-.fc-quicktableorderpanel .orders {width:100%;height:360px;}
+.fc-quicktableorderpanel .orders {width:100%;height:280px;}
 .fc-quicktableorderpanel .footer {display:block;padding-left:4px;box-sizing: border-box;}
 
 /* Entity CRUD popup panel */
