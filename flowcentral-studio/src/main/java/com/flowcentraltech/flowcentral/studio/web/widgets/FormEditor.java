@@ -239,10 +239,10 @@ public class FormEditor {
         public Builder addTab(String contentType, String name, String label, String applet, String reference,
                 String filter, String mappedFieldName, String mappedForm, String editAction, String editViewOnly,
                 String editAllowAddition, String editFixedRows, boolean ignoreParentCondition, boolean showSearch,
-                boolean quickEdit, boolean visible, boolean editable, boolean disabled) {
+                boolean quickEdit, boolean quickOrder, boolean visible, boolean editable, boolean disabled) {
             currentTab = new FormTab(contentType, name, label, applet, reference, filter, mappedFieldName, mappedForm,
                     editAction, editViewOnly, editAllowAddition, editFixedRows, ignoreParentCondition, showSearch,
-                    quickEdit, visible, editable, disabled);
+                    quickEdit, quickOrder, visible, editable, disabled);
             tabs.add(currentTab);
             return this;
         }
@@ -395,6 +395,8 @@ public class FormEditor {
 
         private boolean quickEdit;
 
+        private boolean quickOrder;
+
         private boolean visible;
 
         private boolean editable;
@@ -406,7 +408,7 @@ public class FormEditor {
         public FormTab(String contentType, String name, String label, String applet, String reference, String filter,
                 String mappedFieldName, String mappedForm, String editAction, String editViewOnly,
                 String editAllowAddition, String editFixedRows, boolean ignoreParentCondition, boolean showSearch,
-                boolean quickEdit, boolean visible, boolean editable, boolean disabled) {
+                boolean quickEdit, boolean quickOrder, boolean visible, boolean editable, boolean disabled) {
             this();
             this.contentType = contentType;
             this.name = name;
@@ -423,6 +425,7 @@ public class FormEditor {
             this.ignoreParentCondition = ignoreParentCondition;
             this.showSearch = showSearch;
             this.quickEdit = quickEdit;
+            this.quickOrder = quickOrder;
             this.visible = visible;
             this.editable = editable;
             this.disabled = disabled;
@@ -582,6 +585,14 @@ public class FormEditor {
 
         public void setQuickEdit(boolean quickEdit) {
             this.quickEdit = quickEdit;
+        }
+
+        public boolean isQuickOrder() {
+            return quickOrder;
+        }
+
+        public void setQuickOrder(boolean quickOrder) {
+            this.quickOrder = quickOrder;
         }
 
         public boolean isVisible() {

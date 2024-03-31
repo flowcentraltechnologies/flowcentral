@@ -1013,6 +1013,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
             case NEW_CHILD_ITEM:
             case QUICK_FORM_EDIT:
             case QUICK_TABLE_EDIT:
+            case QUICK_TABLE_ORDER:
             case UPDATE:
             case UPDATE_CLOSE:
             default:

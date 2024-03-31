@@ -24,7 +24,7 @@
     formCaptionSuffix:$s{:} formBinding:$g{dialogFormBinding} formColumns:2
 	formSection:$d{!ui-section components:$c{frmContType frmName frmLabel
 		frmReference frmApplet frmFilter frmMappedField frmMappedForm frmEditAction frmEditFixedRows frmEditViewOnly frmEditAllowAddition
-		frmIgnoreParentCondition frmShowSearch frmQuickEdit frmVisible frmEditable frmDisabled}}
+		frmIgnoreParentCondition frmShowSearch frmQuickEdit frmQuickOrder frmVisible frmEditable frmDisabled}}
 
 !ui-select:frmContType styleClass:$e{fc-formfield} caption:$m{formeditor.tab.contenttype}
 	list:studiotabcontenttypelist blankOption:$s{} binding:contentType required:true
@@ -56,6 +56,7 @@
 	binding:ignoreParentCondition layoutCaption:true
 !ui-checkbox:frmShowSearch caption:$m{formeditor.tab.showsearch} binding:showSearch layoutCaption:true
 !ui-checkbox:frmQuickEdit caption:$m{formeditor.tab.quickedit} binding:quickEdit layoutCaption:true
+!ui-checkbox:frmQuickOrder caption:$m{formeditor.tab.quickorder} binding:quickOrder layoutCaption:true
 !ui-checkbox:frmVisible caption:$m{formeditor.tab.visible} binding:visible layoutCaption:true
 !ui-checkbox:frmEditable caption:$m{formeditor.tab.editable} binding:editable layoutCaption:true
 !ui-checkbox:frmDisabled caption:$m{formeditor.tab.disabled} binding:disabled layoutCaption:true

@@ -33,9 +33,9 @@ import com.flowcentraltech.flowcentral.application.data.FormDef;
 import com.flowcentraltech.flowcentral.application.data.PropertyListDef;
 import com.flowcentraltech.flowcentral.application.data.PropertyListItem;
 import com.flowcentraltech.flowcentral.application.data.PropertyRuleDef;
+import com.flowcentraltech.flowcentral.application.data.PropertySequenceDef;
 import com.flowcentraltech.flowcentral.application.data.RefDef;
 import com.flowcentraltech.flowcentral.application.data.SearchInputsDef;
-import com.flowcentraltech.flowcentral.application.data.PropertySequenceDef;
 import com.flowcentraltech.flowcentral.application.data.SetValuesDef;
 import com.flowcentraltech.flowcentral.application.data.SuggestionTypeDef;
 import com.flowcentraltech.flowcentral.application.data.TableDef;
@@ -281,6 +281,18 @@ public interface ApplicationModuleService extends FlowCentralService {
      *                        if an error occurs
      */
     boolean isApplicationDevelopable(String applicationName) throws UnifyException;
+
+    /**
+     * Bumps entity version
+     * 
+     * @param entityDef
+     *                  the entity definition
+     * @param id
+     *                  the entity ID
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    void bumpVersion(EntityDef entityDef, Long id) throws UnifyException;
 
     /**
      * Gets an application entity entity.

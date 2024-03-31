@@ -74,7 +74,7 @@ public abstract class AbstractAppletPanel extends AbstractApplicationSwitchPanel
                 formMode.isCreate() ? AppletPropertyConstants.CREATE_FORM : AppletPropertyConstants.MAINTAIN_FORM);
         final List<StringToken> titleFormat = !StringUtils.isBlank(formName)
                 ? au().getFormDef(formName).getTitleFormat()
-                : null;
+                : formAppletDef.getTitleFormat();
         final ValueStoreReader reader = new BeanValueStore(result.getInst()).getReader();
         final String title = !DataUtils.isBlank(titleFormat)
                 ? au().specialParamProvider().getStringGenerator(reader, reader, titleFormat).generate()

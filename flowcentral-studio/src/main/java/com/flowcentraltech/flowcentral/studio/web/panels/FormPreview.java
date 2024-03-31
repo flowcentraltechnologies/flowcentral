@@ -91,7 +91,7 @@ public class FormPreview {
                             formTab.getMappedFieldName(), formTab.getMappedForm(), formTab.getEditAction(),
                             formTab.getEditViewOnly(), formTab.getEditAllowAddition(), formTab.getEditFixedRows(),
                             formTab.isIgnoreParentCondition(), formTab.isShowSearch(), formTab.isQuickEdit(),
-                            formTab.isVisible(), formTab.isEditable(), formTab.isDisabled());
+                            formTab.isQuickOrder(), formTab.isVisible(), formTab.isEditable(), formTab.isDisabled());
                     int sectionIndex = -1;
                     for (FormSection formSection : formTab.getSections()) {
                         sectionIndex++;

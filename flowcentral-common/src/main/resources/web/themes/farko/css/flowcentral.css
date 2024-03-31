@@ -981,6 +981,11 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-quicktableeditpanel .entries {width:100%;height:420px;}
 .fc-quicktableeditpanel .footer {display:block;padding-left:4px;box-sizing: border-box;}
 
+/* Quick table order panel */
+.fc-quicktableorderpanel {width:100%;min-width:480px;background-color:#ffffff;border: 1px solid #b8b8b8;}
+.fc-quicktableorderpanel .orders {width:100%;height:280px;}
+.fc-quicktableorderpanel .footer {display:block;padding-left:4px;box-sizing: border-box;}
+
 /* Entity CRUD popup panel */
 .fc-entitycrudpopuppanel {width:100%;min-width:840px;background-color:#ffffff;border: 1px solid #b8b8b8;}
 .fc-entitycrudpopuppanel .footer {display:block;padding-left:4px;box-sizing: border-box;}

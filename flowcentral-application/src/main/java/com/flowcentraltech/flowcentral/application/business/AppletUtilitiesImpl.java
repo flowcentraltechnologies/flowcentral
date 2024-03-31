@@ -1072,6 +1072,10 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
                             mode |= EntitySearch.SHOW_QUICK_EDIT;
                         }
 
+                        if (formTabDef.isQuickOrder()) {
+                            mode |= EntitySearch.SHOW_QUICK_ORDER;
+                        }
+                        
                         final boolean isIgnoreReport = true;
                         EntitySearch _entitySearch = constructEntitySearch(formContext, sweepingCommitPolicy,
                                 formTabDef.getName(), rootTitle, _appletDef, editAction, mode, isIgnoreReport,
@@ -1990,6 +1994,7 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
     }
 
     @SuppressWarnings("unchecked")
+    @Override
     public void bumpVersion(Database db, EntityDef entityDef, Entity inst) throws UnifyException {
         if (inst != null) {
             final Class<?> entityClass = getEntityClassDef(entityDef.getLongName()).getEntityClass();
@@ -2018,6 +2023,11 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
                 }
             }
         }
+    }
+
+    @Override
+    public void bumpVersion(EntityDef entityDef, Long id) throws UnifyException {
+        applicationModuleService.bumpVersion(entityDef, id);
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })

@@ -69,4 +69,9 @@ public interface ApplicationModuleErrorConstants {
      */
     String NO_FORM_CONFIGURED_FOR_APPLET_QUICK_EDIT = "APPLICATION_000A";
 
+    /**
+     * No order field configured for applet [{0}] quick order.
+     */
+    String NO_ORDER_FIELD_CONFIGURED_FOR_APPLET_QUICK_ORDER = "APPLICATION_000B";
+
 }

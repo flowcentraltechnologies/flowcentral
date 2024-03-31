@@ -17,7 +17,7 @@
     dialogActionComponents:$c{saveOrderBtn cancelOrderBtn}
      
 !ui-rack:recordRack style:$s{width:520px;} binding:$g{recordList}
-    bodyStyle:$s{height:200px;}    components:$g{recordColumnList} windowed:true
+    bodyStyle:$s{height:280px;} components:$g{recordColumnList} windowed:true
 
 !ui-button:saveOrderBtn caption:$m{button.save} eventHandler:$d{!ui-event event:onclick action:$c{saveOrderAct}}
 !ui-button:cancelOrderBtn styleClass:$e{ui-button-alert} caption:$m{button.cancel}

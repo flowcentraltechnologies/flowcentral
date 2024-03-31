@@ -157,7 +157,7 @@ public class FormDef extends BaseApplicationEntityDef {
             this.onSwitchFormStatePolicyDefList = new ArrayList<FormStatePolicyDef>();
             this.onDelayedSetValuesFormStatePolicyDefList = new ArrayList<FormStatePolicyDef>();
             this.onFormConstructSetValuesFormStatePolicyDefList = new ArrayList<FormStatePolicyDef>();
-            this.onCreateFormStatePolicyDefMap = new HashMap<String, FormStatePolicyDef>();
+            this.onCreateFormStatePolicyDefMap = new LinkedHashMap<String, FormStatePolicyDef>();
             for (FormStatePolicyDef formStatePolicyDef : formStatePolicyDefList) {
                 switch (formStatePolicyDef.getType()) {
                     case ON_CREATE:
@@ -598,24 +598,24 @@ public class FormDef extends BaseApplicationEntityDef {
         }
 
         public Builder addFormTab(TabContentType contentType, String name, String tabLabel,
-                boolean isIgnoreParentCondition, boolean showSearch, boolean quickEdit, boolean visible,
-                boolean editable, boolean disabled) {
+                boolean isIgnoreParentCondition, boolean showSearch, boolean quickEdit, boolean quickOrder,
+                boolean visible, boolean editable, boolean disabled) {
             return addFormTab(contentType, null, name, tabLabel, null, null, null, null, null, null, null, null,
-                    isIgnoreParentCondition, showSearch, quickEdit, visible, editable, disabled);
+                    isIgnoreParentCondition, showSearch, quickEdit, quickOrder, visible, editable, disabled);
         }
 
         public Builder addFormTab(TabContentType contentType, FilterGroupDef filterGroupDef, String name,
                 String tabLabel, String tabApplet, String tabReference, String mappedFieldName, String tabMappedForm,
                 String editAction, String editViewOnly, String editAllowAddition, String editFixedRows,
-                boolean isIgnoreParentCondition, boolean showSearch, boolean quickEdit, boolean visible,
-                boolean editable, boolean disabled) {
+                boolean isIgnoreParentCondition, boolean showSearch, boolean quickEdit, boolean quickOrder,
+                boolean visible, boolean editable, boolean disabled) {
             if (tabLabels.contains(name)) {
                 throw new RuntimeException("Tab with name [" + name + "] already exists on this form.");
             }
 
             formTabDefList.add(new TempFormTabDef(contentType, filterGroupDef, name, tabLabel, tabApplet, tabReference,
                     mappedFieldName, tabMappedForm, editAction, editViewOnly, editAllowAddition, editFixedRows,
-                    isIgnoreParentCondition, showSearch, quickEdit, visible, editable, disabled));
+                    isIgnoreParentCondition, showSearch, quickEdit, quickOrder, visible, editable, disabled));
             tabLabels.add(tabLabel);
             return this;
         }
@@ -838,8 +838,8 @@ public class FormDef extends BaseApplicationEntityDef {
                         tempFormTabDef.getEditViewOnly(), tempFormTabDef.getEditAllowAddition(),
                         tempFormTabDef.getEditFixedRows(), DataUtils.unmodifiableList(formSectionDefList),
                         tempFormTabDef.isIgnoreParentCondition(), tempFormTabDef.isShowSearch(),
-                        tempFormTabDef.isQuickEdit(), tempFormTabDef.isVisible(), tempFormTabDef.isEditable(),
-                        tempFormTabDef.isDisabled()));
+                        tempFormTabDef.isQuickEdit(), tempFormTabDef.isQuickOrder(), tempFormTabDef.isVisible(),
+                        tempFormTabDef.isEditable(), tempFormTabDef.isDisabled()));
             }
 
             if (formActionList != null) {
@@ -897,6 +897,8 @@ public class FormDef extends BaseApplicationEntityDef {
 
             private boolean quickEdit;
 
+            private boolean quickOrder;
+
             private boolean visible;
 
             private boolean editable;
@@ -909,7 +911,7 @@ public class FormDef extends BaseApplicationEntityDef {
                     String tabLabel, String tabApplet, String tabReference, String mappedFieldName,
                     String tabMappedForm, String editAction, String editViewOnly, String editAllowAddition,
                     String editFixedRows, boolean ignoreParentCondition, boolean showSearch, boolean quickEdit,
-                    boolean visible, boolean editable, boolean disabled) {
+                    boolean quickOrder, boolean visible, boolean editable, boolean disabled) {
                 this.contentType = contentType;
                 this.filterGroupDef = filterGroupDef;
                 this.name = name;
@@ -925,6 +927,7 @@ public class FormDef extends BaseApplicationEntityDef {
                 this.ignoreParentCondition = ignoreParentCondition;
                 this.showSearch = showSearch;
                 this.quickEdit = quickEdit;
+                this.quickOrder = quickOrder;
                 this.visible = visible;
                 this.editable = editable;
                 this.disabled = disabled;
@@ -999,6 +1002,10 @@ public class FormDef extends BaseApplicationEntityDef {
 
             public boolean isQuickEdit() {
                 return quickEdit;
+            }
+
+            public boolean isQuickOrder() {
+                return quickOrder;
             }
 
             public boolean isVisible() {

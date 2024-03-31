@@ -215,6 +215,7 @@ import com.flowcentraltech.flowcentral.common.constants.WfItemVersionType;
 import com.flowcentraltech.flowcentral.common.data.Attachment;
 import com.flowcentraltech.flowcentral.common.data.ParamValuesDef;
 import com.flowcentraltech.flowcentral.common.entities.BaseEntity;
+import com.flowcentraltech.flowcentral.common.entities.BaseVersionEntity;
 import com.flowcentraltech.flowcentral.common.entities.EntityWrapper;
 import com.flowcentraltech.flowcentral.common.entities.FileAttachment;
 import com.flowcentraltech.flowcentral.common.entities.FileAttachmentDoc;
@@ -485,6 +486,11 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                             appApplet.isSupportOpenInNewWindow(), appApplet.isAllowSecondaryTenants(),
                             descriptiveButtons, _actLongName, appApplet.getDescription(), appApplet.getId(),
                             appApplet.getVersionNo());
+
+                    List<StringToken> titleFormat = !StringUtils.isBlank(appApplet.getTitleFormat())
+                            ? StringUtils.breakdownParameterizedString(appApplet.getTitleFormat())
+                            : null;
+                    adb.titleFormat(titleFormat);
 
                     for (AppAppletProp appAppletProp : appApplet.getPropList()) {
                         adb.addPropDef(appAppletProp.getName(), appAppletProp.getValue());
@@ -1084,8 +1090,9 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                                     appFormElement.getEditAction(), appFormElement.getEditFormless(),
                                     appFormElement.getEditAllowAddition(), appFormElement.getEditFixedRows(),
                                     appFormElement.isIgnoreParentCondition(), appFormElement.isShowSearch(),
-                                    appFormElement.isQuickEdit(), appFormElement.isVisible(),
-                                    appFormElement.isEditable(), appFormElement.isDisabled());
+                                    appFormElement.isQuickEdit(), appFormElement.isQuickOrder(),
+                                    appFormElement.isVisible(), appFormElement.isEditable(),
+                                    appFormElement.isDisabled());
                         } else if (FormElementType.SECTION.equals(appFormElement.getType())) {
                             sectionIndex++;
                             fdb.addFormSection(tabIndex, appFormElement.getElementName(), appFormElement.getLabel(),
@@ -1167,6 +1174,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                                 appFormRelatedList.getApplet(), appFormRelatedList.getEditAction());
                     }
 
+                    DataUtils.sortAscending(appForm.getFieldStateList(), AppFormStatePolicy.class, "executionIndex");
                     for (AppFormStatePolicy appFormStatePolicy : appForm.getFieldStateList()) {
                         SetStatesDef.Builder ssdb = SetStatesDef.newBuilder();
                         for (AppFormSetState appFormSetState : appFormStatePolicy.getSetStateList()) {
@@ -1186,6 +1194,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                                 DataUtils.convert(List.class, String.class, appFormStatePolicy.getTrigger(), null));
                     }
 
+                    DataUtils.sortAscending(appForm.getWidgetRulesList(), AppFormWidgetRulesPolicy.class, "executionIndex");
                     for (AppFormWidgetRulesPolicy appFormWidgetRulesPolicy : appForm.getWidgetRulesList()) {
                         WidgetRulesDef widgetRulesDef = InputWidgetUtils
                                 .getWidgetRulesDef(appFormWidgetRulesPolicy.getWidgetRules());
@@ -1208,6 +1217,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                                 widgetRulesDef, ruleEditors);
                     }
 
+                    DataUtils.sortAscending(appForm.getFieldValidationList(), AppFormFieldValidationPolicy.class, "executionIndex");
                     for (AppFormFieldValidationPolicy appFormFieldValidationPolicy : appForm.getFieldValidationList()) {
                         fdb.addFieldValidationPolicy(appFormFieldValidationPolicy.getName(),
                                 appFormFieldValidationPolicy.getDescription(),
@@ -1215,6 +1225,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                                 appFormFieldValidationPolicy.getValidation(), appFormFieldValidationPolicy.getRule());
                     }
 
+                    DataUtils.sortAscending(appForm.getFormValidationList(), AppFormValidationPolicy.class, "executionIndex");
                     for (AppFormValidationPolicy appFormValidationPolicy : appForm.getFormValidationList()) {
                         fdb.addFormValidationPolicy(
                                 InputWidgetUtils.getFilterDef(appletUtilities, null,
@@ -1224,6 +1235,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                                 DataUtils.convert(List.class, String.class, appFormValidationPolicy.getTarget(), null));
                     }
 
+                    DataUtils.sortAscending(appForm.getFormReviewList(), AppFormReviewPolicy.class, "executionIndex");
                     for (AppFormReviewPolicy appFormReviewPolicy : appForm.getFormReviewList()) {
                         fdb.addFormReviewPolicy(
                                 DataUtils.convert(List.class, FormReviewType.class, appFormReviewPolicy.getFormEvents(),
@@ -1532,6 +1544,28 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
     @Override
     public boolean isApplicationDevelopable(String applicationName) throws UnifyException {
         return environment().value(boolean.class, "developable", new ApplicationQuery().name(applicationName));
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public void bumpVersion(EntityDef entityDef, Long id) throws UnifyException {
+        final Class<?> entityClass = getEntityClassDef(entityDef.getLongName()).getEntityClass();
+        if (BaseVersionEntity.class.isAssignableFrom(entityClass)) {
+            final boolean isClearMergeVersion = BaseApplicationEntity.class.isAssignableFrom(entityClass)
+                    && !isEnterprise();
+            Query<?> query = Query.of((Class<? extends Entity>) entityClass).addEquals("id", id);
+            long bumpedVersionNo = environment().value(long.class, "versionNo", query) + 1L;
+            Update update = isClearMergeVersion
+                    ? new Update().add("versionNo", bumpedVersionNo).add("devMergeVersionNo", null)
+                    : new Update().add("versionNo", bumpedVersionNo);
+
+            if (AppEntity.class.equals(entityClass)) {
+                query.addEquals("configType", ConfigType.CUSTOM).addIsNull("delegate");
+                update.add("schemaUpdateRequired", true);
+            }
+
+            environment().updateAll(query, update);
+        }
     }
 
     @Override
@@ -4170,6 +4204,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                     appApplet.setAssignField(appletConfig.getAssignField());
                     appApplet.setAssignDescField(appletConfig.getAssignDescField());
                     appApplet.setPseudoDeleteField(appletConfig.getPseudoDeleteField());
+                    appApplet.setTitleFormat(appletConfig.getTitleFormat());
                     appApplet.setDeprecated(false);
                     appApplet.setConfigType(ConfigType.STATIC_INSTALL);
                     populateChildList(appApplet, applicationName, appletConfig);
@@ -4194,6 +4229,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                         oldAppApplet.setAssignField(appletConfig.getAssignField());
                         oldAppApplet.setAssignDescField(appletConfig.getAssignDescField());
                         oldAppApplet.setPseudoDeleteField(appletConfig.getPseudoDeleteField());
+                        oldAppApplet.setTitleFormat(appletConfig.getTitleFormat());
                     }
 
                     oldAppApplet.setDeprecated(false);
@@ -5627,6 +5663,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
             appFormElement.setIgnoreParentCondition(formTabConfig.getIgnoreParentCondition());
             appFormElement.setShowSearch(formTabConfig.getShowSearch());
             appFormElement.setQuickEdit(formTabConfig.getQuickEdit());
+            appFormElement.setQuickOrder(formTabConfig.getQuickOrder());
             appFormElement.setVisible(formTabConfig.getVisible());
             appFormElement.setEditable(formTabConfig.getEditable());
             appFormElement.setDisabled(formTabConfig.getDisabled());
@@ -5734,6 +5771,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                             .setDescription(resolveApplicationMessage(formStatePolicyConfig.getDescription()));
                     appFormStatePolicy.setValueGenerator(formStatePolicyConfig.getValueGenerator());
                     appFormStatePolicy.setTrigger(formStatePolicyConfig.getTrigger());
+                    appFormStatePolicy.setExecutionIndex(formStatePolicyConfig.getExecutionIndex());
                     appFormStatePolicy
                             .setOnCondition(InputWidgetUtils.newAppFilter(formStatePolicyConfig.getOnCondition()));
                     appFormStatePolicy.setSetValues(newAppSetValues(formStatePolicyConfig.getSetValues()));
@@ -5747,6 +5785,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                                 .setDescription(resolveApplicationMessage(formStatePolicyConfig.getDescription()));
                         oldAppFormStatePolicy.setValueGenerator(formStatePolicyConfig.getValueGenerator());
                         oldAppFormStatePolicy.setTrigger(formStatePolicyConfig.getTrigger());
+                        oldAppFormStatePolicy.setExecutionIndex(formStatePolicyConfig.getExecutionIndex());
                         oldAppFormStatePolicy
                                 .setOnCondition(InputWidgetUtils.newAppFilter(formStatePolicyConfig.getOnCondition()));
                         oldAppFormStatePolicy.setSetValues(newAppSetValues(formStatePolicyConfig.getSetValues()));
@@ -5774,6 +5813,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                 if (oldAppFormWidgetRulesPolicy == null) {
                     AppFormWidgetRulesPolicy appFormWidgetRulesPolicy = new AppFormWidgetRulesPolicy();
                     appFormWidgetRulesPolicy.setName(formWidgetRulesPolicyConfig.getName());
+                    appFormWidgetRulesPolicy.setExecutionIndex(formWidgetRulesPolicyConfig.getExecutionIndex());
                     appFormWidgetRulesPolicy
                             .setDescription(resolveApplicationMessage(formWidgetRulesPolicyConfig.getDescription()));
                     appFormWidgetRulesPolicy.setOnCondition(
@@ -5784,6 +5824,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                     widgetRulesList.add(appFormWidgetRulesPolicy);
                 } else {
                     if (ConfigUtils.isSetInstall(oldAppFormWidgetRulesPolicy)) {
+                        oldAppFormWidgetRulesPolicy.setExecutionIndex(formWidgetRulesPolicyConfig.getExecutionIndex());
                         oldAppFormWidgetRulesPolicy.setDescription(
                                 resolveApplicationMessage(formWidgetRulesPolicyConfig.getDescription()));
                         oldAppFormWidgetRulesPolicy.setOnCondition(
@@ -5820,6 +5861,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                     appFormFieldValidationPolicy.setFieldName(fieldValidationPolicyConfig.getFieldName());
                     appFormFieldValidationPolicy.setValidation(fieldValidationPolicyConfig.getValidator());
                     appFormFieldValidationPolicy.setRule(fieldValidationPolicyConfig.getRule());
+                    appFormFieldValidationPolicy.setExecutionIndex(fieldValidationPolicyConfig.getExecutionIndex());
                     appFormFieldValidationPolicy.setConfigType(ConfigType.MUTABLE_INSTALL);
                     fieldValidationList.add(appFormFieldValidationPolicy);
                 } else {
@@ -5828,6 +5870,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                                 resolveApplicationMessage(fieldValidationPolicyConfig.getDescription()));
                         oldAppFormFieldValidationPolicy.setFieldName(fieldValidationPolicyConfig.getFieldName());
                         oldAppFormFieldValidationPolicy.setValidation(fieldValidationPolicyConfig.getValidator());
+                        oldAppFormFieldValidationPolicy.setExecutionIndex(fieldValidationPolicyConfig.getExecutionIndex());
                         oldAppFormFieldValidationPolicy.setRule(fieldValidationPolicyConfig.getRule());
                     }
 
@@ -5858,6 +5901,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                     appFormValidationPolicy
                             .setMessage(resolveApplicationMessage(formValidationPolicyConfig.getMessage()));
                     appFormValidationPolicy.setTarget(formValidationPolicyConfig.getTarget());
+                    appFormValidationPolicy.setExecutionIndex(formValidationPolicyConfig.getExecutionIndex());
                     appFormValidationPolicy.setConfigType(ConfigType.MUTABLE_INSTALL);
                     formValidationList.add(appFormValidationPolicy);
                 } else {
@@ -5870,6 +5914,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                         oldAppFormValidationPolicy
                                 .setMessage(resolveApplicationMessage(formValidationPolicyConfig.getMessage()));
                         oldAppFormValidationPolicy.setTarget(formValidationPolicyConfig.getTarget());
+                        oldAppFormValidationPolicy.setExecutionIndex(formValidationPolicyConfig.getExecutionIndex());
                     } else {
                         environment().findChildren(oldAppFormValidationPolicy);
                     }
@@ -5903,6 +5948,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                     appFormReviewPolicy.setFormEvents(formReviewPolicyConfig.getEvents());
                     appFormReviewPolicy.setTarget(formReviewPolicyConfig.getTarget());
                     appFormReviewPolicy.setSkippable(formReviewPolicyConfig.isSkippable());
+                    appFormReviewPolicy.setExecutionIndex(formReviewPolicyConfig.getExecutionIndex());
                     appFormReviewPolicy.setConfigType(ConfigType.MUTABLE_INSTALL);
                     formReviewList.add(appFormReviewPolicy);
                 } else {
@@ -5918,6 +5964,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                         oldAppFormReviewPolicy.setFormEvents(formReviewPolicyConfig.getEvents());
                         oldAppFormReviewPolicy.setTarget(formReviewPolicyConfig.getTarget());
                         oldAppFormReviewPolicy.setSkippable(formReviewPolicyConfig.isSkippable());
+                        oldAppFormReviewPolicy.setExecutionIndex(formReviewPolicyConfig.getExecutionIndex());
                     } else {
                         environment().findChildren(oldAppFormReviewPolicy);
                     }

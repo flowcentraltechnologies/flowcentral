@@ -30,6 +30,8 @@ public class FieldValidationPolicyConfig extends BaseNameConfig {
     private String validator;
 
     private String rule;
+    
+    private Integer executionIndex;
 
     public String getFieldName() {
         return fieldName;
@@ -56,6 +58,15 @@ public class FieldValidationPolicyConfig extends BaseNameConfig {
     @XmlAttribute
     public void setRule(String rule) {
         this.rule = rule;
+    }
+
+    public Integer getExecutionIndex() {
+        return executionIndex;
+    }
+
+    @XmlAttribute
+    public void setExecutionIndex(Integer executionIndex) {
+        this.executionIndex = executionIndex;
     }
 
 }

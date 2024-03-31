@@ -110,6 +110,9 @@ public class AppFormElement extends BaseConfigEntity {
     private boolean quickEdit;
 
     @Column
+    private boolean quickOrder;
+
+    @Column
     private boolean visible;
 
     @Column
@@ -336,6 +339,14 @@ public class AppFormElement extends BaseConfigEntity {
 
     public void setQuickEdit(boolean quickEdit) {
         this.quickEdit = quickEdit;
+    }
+
+    public boolean isQuickOrder() {
+        return quickOrder;
+    }
+
+    public void setQuickOrder(boolean quickOrder) {
+        this.quickOrder = quickOrder;
     }
 
     public boolean isVisible() {

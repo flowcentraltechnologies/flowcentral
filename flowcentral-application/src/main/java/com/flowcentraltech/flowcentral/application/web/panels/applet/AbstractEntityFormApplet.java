@@ -64,6 +64,7 @@ import com.flowcentraltech.flowcentral.application.web.panels.HeadlessTabsForm;
 import com.flowcentraltech.flowcentral.application.web.panels.ListingForm;
 import com.flowcentraltech.flowcentral.application.web.panels.QuickFormEdit;
 import com.flowcentraltech.flowcentral.application.web.panels.QuickTableEdit;
+import com.flowcentraltech.flowcentral.application.web.panels.QuickTableOrder;
 import com.flowcentraltech.flowcentral.application.web.widgets.AbstractTable;
 import com.flowcentraltech.flowcentral.application.web.widgets.AssignmentPage;
 import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs;
@@ -429,6 +430,34 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         return null;
     }
 
+    public QuickTableOrder quickTableOrder(int childTabIndex) throws UnifyException {
+        if (ensureSaveOnTabAction()) {
+            FormTabDef quickEditFormTabDef = form.getFormDef().getFormTabDef(childTabIndex);
+            final AppletDef _appletDef = getAppletDef(quickEditFormTabDef.getApplet());
+            final String quickOrderField = _appletDef.getPropValue(String.class,
+                    AppletPropertyConstants.QUICK_ORDER_FIELD);
+            if (StringUtils.isBlank(quickOrderField)) {
+                throw new UnifyException(
+                        ApplicationModuleErrorConstants.NO_ORDER_FIELD_CONFIGURED_FOR_APPLET_QUICK_ORDER,
+                        _appletDef.getLongName());
+            }
+
+            final String baseField = au().getChildFkFieldName(form.getFormDef().getEntityDef(),
+                    quickEditFormTabDef.getReference());
+            final Object id = ((Entity) form.getFormBean()).getId();
+            QuickTableOrder quickTableOrder = constructQuickTableOrder(_appletDef.getEntity(), _appletDef, baseField,
+                    id, quickOrderField);
+            String caption = _appletDef.getLabel() != null
+                    ? au.resolveSessionMessage("$m{quickorder.caption.param}", _appletDef.getLabel())
+                    : au.resolveSessionMessage("$m{quickorder.caption}");
+            quickTableOrder.setOrderCaption(caption);
+            quickTableOrder.loadOrderItems();
+            return quickTableOrder;
+        }
+
+        return null;
+    }
+
     public QuickFormEdit quickFormEdit(int childTabIndex) throws UnifyException {
         if (ensureSaveOnTabAction()) {
             FormTabDef quickEditFormTabDef = form.getFormDef().getFormTabDef(childTabIndex);
@@ -661,7 +690,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
     public TableActionResult maintainInst(int mIndex) throws UnifyException {
         this.mIndex = mIndex;
         Entity _inst = getEntitySearchItem(entitySearch, mIndex).getEntity();
-        if (entitySearch.isViewItemsInSeparateTabs()) { 
+        if (entitySearch.isViewItemsInSeparateTabs()) {
             return openInTab(AppletType.CREATE_ENTITY, _inst);
         }
 
@@ -1114,6 +1143,12 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
             FilterGroupDef filterGroupDef, String baseField, Object baseId) throws UnifyException {
         EntityClassDef entityClassDef = getEntityClassDef(entity);
         return new QuickTableEdit(getCtx(), this, entityClassDef, baseField, baseId, entryTable, entryTablePolicy);
+    }
+
+    protected QuickTableOrder constructQuickTableOrder(String entity, AppletDef appletDef, String baseField,
+            Object baseId, String orderField) throws UnifyException {
+        EntityClassDef entityClassDef = getEntityClassDef(entity);
+        return new QuickTableOrder(getCtx(), appletDef, entityClassDef, baseField, baseId, orderField);
     }
 
     @SuppressWarnings("unchecked")

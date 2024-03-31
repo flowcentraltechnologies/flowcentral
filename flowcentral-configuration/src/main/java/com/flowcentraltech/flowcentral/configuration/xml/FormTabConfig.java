@@ -64,6 +64,8 @@ public class FormTabConfig {
 
     private Boolean quickEdit;
 
+    private Boolean quickOrder;
+
     private Boolean visible;
 
     private Boolean editable;
@@ -76,6 +78,7 @@ public class FormTabConfig {
         this.ignoreParentCondition = Boolean.FALSE;
         this.showSearch = Boolean.FALSE;
         this.quickEdit = Boolean.FALSE;
+        this.quickOrder = Boolean.FALSE;
         this.visible = Boolean.TRUE;
         this.editable = Boolean.TRUE;
         this.disabled = Boolean.FALSE;
@@ -218,6 +221,16 @@ public class FormTabConfig {
     @XmlAttribute
     public void setQuickEdit(Boolean quickEdit) {
         this.quickEdit = quickEdit;
+    }
+
+    public Boolean getQuickOrder() {
+        return quickOrder;
+    }
+
+    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
+    @XmlAttribute
+    public void setQuickOrder(Boolean quickOrder) {
+        this.quickOrder = quickOrder;
     }
 
     public Boolean getVisible() {

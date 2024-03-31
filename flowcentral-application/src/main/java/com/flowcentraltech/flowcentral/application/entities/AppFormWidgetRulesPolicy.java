@@ -17,6 +17,7 @@ package com.flowcentraltech.flowcentral.application.entities;
 
 import com.flowcentraltech.flowcentral.common.entities.BaseConfigNamedEntity;
 import com.tcdng.unify.core.annotation.Child;
+import com.tcdng.unify.core.annotation.Column;
 import com.tcdng.unify.core.annotation.ForeignKey;
 import com.tcdng.unify.core.annotation.Table;
 
@@ -31,6 +32,9 @@ public class AppFormWidgetRulesPolicy extends BaseConfigNamedEntity {
 
     @ForeignKey(AppForm.class)
     private Long appFormId;
+
+    @Column(length = 64, nullable = true)
+    private Integer executionIndex;
     
     @Child(category = "formwidgetrulespolicy")
     private AppFilter onCondition;
@@ -60,6 +64,14 @@ public class AppFormWidgetRulesPolicy extends BaseConfigNamedEntity {
 
     public void setWidgetRules(AppWidgetRules widgetRules) {
         this.widgetRules = widgetRules;
+    }
+
+    public Integer getExecutionIndex() {
+        return executionIndex;
+    }
+
+    public void setExecutionIndex(Integer executionIndex) {
+        this.executionIndex = executionIndex;
     }
 
 }

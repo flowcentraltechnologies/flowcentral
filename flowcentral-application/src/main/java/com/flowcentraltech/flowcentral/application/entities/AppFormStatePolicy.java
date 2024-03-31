@@ -47,6 +47,9 @@ public class AppFormStatePolicy extends BaseConfigNamedEntity {
     @Column(name = "POLICY_TRIGGER", length = 256, nullable = true)
     private String trigger;
 
+    @Column(length = 64, nullable = true)
+    private Integer executionIndex;
+
     @ListOnly(key = "type", property = "description")
     private String typeDesc;
     
@@ -121,6 +124,14 @@ public class AppFormStatePolicy extends BaseConfigNamedEntity {
 
     public void setSetStateList(List<AppFormSetState> setStateList) {
         this.setStateList = setStateList;
+    }
+
+    public Integer getExecutionIndex() {
+        return executionIndex;
+    }
+
+    public void setExecutionIndex(Integer executionIndex) {
+        this.executionIndex = executionIndex;
     }
 
 }

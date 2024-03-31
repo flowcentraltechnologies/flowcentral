@@ -70,6 +70,8 @@ import com.tcdng.unify.web.ui.widget.data.Popup;
                 response = { "!showpopupresponse popup:$s{quickFormEditPopup}" }),
         @ResultMapping(name = ApplicationResultMappingConstants.SHOW_QUICK_TABLE_EDIT,
                 response = { "!showpopupresponse popup:$s{quickTableEditPopup}" }),
+        @ResultMapping(name = ApplicationResultMappingConstants.SHOW_QUICK_TABLE_ORDER,
+                response = { "!showpopupresponse popup:$s{quickTableOrderPopup}" }),
         @ResultMapping(name = ApplicationResultMappingConstants.FORWARD_TO_HOME,
                 response = { "!forwardresponse path:$x{application.web.home}" }),
         @ResultMapping(name = ApplicationResultMappingConstants.REFRESH_WORKSPACE,

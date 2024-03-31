@@ -38,6 +38,8 @@ public interface ApplicationResultMappingConstants {
     
     String SHOW_QUICK_TABLE_EDIT = "showquicktableedit";
     
+    String SHOW_QUICK_TABLE_ORDER = "showquicktableorder";
+    
     String SHOW_FILE_ATTACHMENTS= "showfileattachments";
     
     String SHOW_CHILD_CRUD = "showchildcrud";

@@ -50,6 +50,8 @@ public class AppletConfig extends BaseNameConfig {
     private String assignDescField;
 
     private String pseudoDeleteField;
+
+    private String titleFormat;
     
     private int displayIndex;
 
@@ -163,6 +165,15 @@ public class AppletConfig extends BaseNameConfig {
     @XmlAttribute
     public void setMenuAccess(Boolean menuAccess) {
         this.menuAccess = menuAccess;
+    }
+
+    public String getTitleFormat() {
+        return titleFormat;
+    }
+
+    @XmlAttribute
+    public void setTitleFormat(String titleFormat) {
+        this.titleFormat = titleFormat;
     }
 
     public Boolean getSupportOpenInNewWindow() {
