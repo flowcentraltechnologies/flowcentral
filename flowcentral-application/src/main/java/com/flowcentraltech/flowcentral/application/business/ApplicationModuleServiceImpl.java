@@ -5635,6 +5635,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
             appFormElement.setIgnoreParentCondition(formTabConfig.getIgnoreParentCondition());
             appFormElement.setShowSearch(formTabConfig.getShowSearch());
             appFormElement.setQuickEdit(formTabConfig.getQuickEdit());
+            appFormElement.setQuickOrder(formTabConfig.getQuickOrder());
             appFormElement.setVisible(formTabConfig.getVisible());
             appFormElement.setEditable(formTabConfig.getEditable());
             appFormElement.setDisabled(formTabConfig.getDisabled());

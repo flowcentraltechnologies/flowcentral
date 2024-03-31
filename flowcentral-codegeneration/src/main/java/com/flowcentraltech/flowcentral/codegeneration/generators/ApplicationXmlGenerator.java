@@ -835,6 +835,7 @@ public class ApplicationXmlGenerator extends AbstractStaticArtifactGenerator {
                         formTabConfig.setIgnoreParentCondition(appFormElement.isIgnoreParentCondition());
                         formTabConfig.setShowSearch(appFormElement.isShowSearch());
                         formTabConfig.setQuickEdit(appFormElement.isQuickEdit());
+                        formTabConfig.setQuickOrder(appFormElement.isQuickOrder());
                         formTabConfig.setVisible(appFormElement.isVisible());
                         formTabConfig.setEditable(appFormElement.isEditable());
                         formTabConfig.setDisabled(appFormElement.isDisabled());

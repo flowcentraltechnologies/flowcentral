@@ -1764,7 +1764,7 @@
 			<column field="typeDesc" renderWidget="application.text"
 				widthRatio="1" />
 			<column field="executionIndex" renderWidget="application.text"
-				widthRatio="1" />
+				widthRatio="1" order="ASC"/>
 		</table>
 		<table name="appFormWidgetRulesPolicyTable"
 			description="$m{studio.appformwidgetrulespolicy.table}"
@@ -1775,7 +1775,7 @@
 			<column field="description" renderWidget="application.text"
 				widthRatio="1" />
 			<column field="executionIndex" renderWidget="application.text"
-				widthRatio="1" />
+				widthRatio="1" order="ASC" />
 		</table>
 		<table name="appFormSetStateTable"
 			description="$m{studio.appformsetstate.table}"
@@ -1809,7 +1809,7 @@
 			<column field="rule" renderWidget="application.text"
 				widthRatio="1" />
 			<column field="executionIndex" renderWidget="application.text"
-				widthRatio="1" />
+				widthRatio="1" order="ASC" />
 		</table>
 		<table name="appFormValidationPolicyTable"
 			description="$m{studio.appformvalidationpolicy.table}"
@@ -1822,7 +1822,7 @@
 			<column field="message" renderWidget="application.text"
 				widthRatio="1" />
 			<column field="executionIndex" renderWidget="application.text"
-				widthRatio="1" />
+				widthRatio="1" order="ASC" />
 		</table>
 		<table name="appFormReviewPolicyTable"
 			description="$m{studio.appformreviewpolicy.table}"
@@ -1837,7 +1837,7 @@
 			<column field="message" renderWidget="application.text"
 				widthRatio="1" />
 			<column field="executionIndex" renderWidget="application.text"
-				widthRatio="1" />
+				widthRatio="1" order="ASC" />
 		</table>
 		<table name="workflowFilterTable"
 			description="$m{studio.workflowfilter.table}"
