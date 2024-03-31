@@ -320,6 +320,11 @@
 			dataType="string" inputType="string"
 			editor="!ui-select list:studioapplettablelist listParams:$l{propertyOwnerId} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
+		<widgetType name="propertyappletintegerfieldlist"
+			description="$m{studio.widgettype.propertyappletintegerfieldlist}"
+			dataType="string" inputType="string"
+			editor="!ui-select list:studioappletintegerfieldlist listKey:$s{name} listParams:$l{propertyOwnerId} blankOption:$m{blank.none}"
+			renderer="!ui-label" />
 		<widgetType name="propertyappletuniqueconstraintlist"
 			description="$m{studio.widgettype.propertyappletuniqueconstraintlist}"
 			dataType="string" inputType="string"
@@ -5717,6 +5722,12 @@
 				<property name="quickEdit.height"
 					description="$m{studio.appappletprop.manageentity.quickeditheight}"
 					inputWidget="studio.propertyappletintegerdimension" />
+			</propertySet>
+			<propertySet
+				label="$m{studio.appappletprop.manageentity.quickordersettings}">
+				<property name="quickOrder.field"
+					description="$m{studio.appappletprop.manageentity.quickorderfield}"
+					inputWidget="studio.propertyappletintegerfieldlist" />
 			</propertySet>
 			<propertySet
 				label="$m{studio.appappletprop.manageentity.workflowcopyproperties}">

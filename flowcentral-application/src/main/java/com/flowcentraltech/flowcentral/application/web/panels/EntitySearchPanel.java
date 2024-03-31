@@ -82,10 +82,10 @@ public class EntitySearchPanel extends AbstractApplicationPanel {
                 && applicationPrivilegeManager().isRoleWithPrivilege(roleCode, entityDef.getAddPrivilege()));
         setVisible("editBtn", entitySearch.isEditButtonVisible()
                 && applicationPrivilegeManager().isRoleWithPrivilege(roleCode, entityDef.getEditPrivilege()));
-        setVisible("quickEditBtn",
-                entitySearch.isShowQuickEdit()
-                        && (entitySearch.isNewButtonVisible() || entitySearch.isEditButtonVisible())
-                        && applicationPrivilegeManager().isRoleWithPrivilege(roleCode, entityDef.getEditPrivilege()));
+        final boolean quickEnabled = (entitySearch.isNewButtonVisible() || entitySearch.isEditButtonVisible())
+                && applicationPrivilegeManager().isRoleWithPrivilege(roleCode, entityDef.getEditPrivilege());
+        setVisible("quickEditBtn", quickEnabled && entitySearch.isShowQuickEdit());
+        setVisible("quickOrderBtn", quickEnabled && entitySearch.isShowQuickOrder());
         setVisible("viewBtn", entitySearch.isViewButtonVisible()
                 && applicationPrivilegeManager().isRoleWithPrivilege(roleCode, entityDef.getEditPrivilege()));
         setVisible("switchToBasic", entityTable.isSupportsBasicSearch());

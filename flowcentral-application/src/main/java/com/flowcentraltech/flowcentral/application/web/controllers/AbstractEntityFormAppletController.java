@@ -406,6 +406,9 @@ public abstract class AbstractEntityFormAppletController<T extends AbstractEntit
             case QUICK_TABLE_EDIT:
                 quickTableEdit();
                 break;
+            case QUICK_TABLE_ORDER:
+                quickTableOrder();
+                break;
             case MAINTAIN:
             case UPDATE:
             case UPDATE_CLOSE:

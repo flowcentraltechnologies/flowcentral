@@ -24,13 +24,16 @@
 	newInstEventHandler:$d{!ui-event event:onclick action:$c{newAct}}
 	editInstEventHandler:$d{!ui-event event:onclick action:$c{assignAct}}
 	quickEditEventHandler:$d{!ui-event event:onclick action:$c{quickEditAct}}
+	quickOrderEventHandler:$d{!ui-event event:onclick action:$c{quickOrderAct}}
 	newBtnBinding:$s{childTabIndex}
 	editBtnBinding:$s{childTabIndex}
 	quickEditBtnBinding:$s{childTabIndex}
+	quickOrderBtnBinding:$s{childTabIndex}
 	searchResultMarker:$j{com.flowcentraltech.flowcentral.application.web.panels.EntitySearchValueMarkerConstants.CHILD_LIST}
 
 // Actions
 !ui-post:newAct path:$p{/newChildListItem} pushComponents:$r{mainform.push.components}
 !ui-post:assignAct path:$r{childlist.edit.actionpath} pushComponents:$r{mainform.push.components}
 !ui-post:quickEditAct path:$p{/quickTableEdit} pushComponents:$r{mainform.push.components}
+!ui-post:quickOrderAct path:$p{/quickTableOrder} pushComponents:$r{mainform.push.components}
 	

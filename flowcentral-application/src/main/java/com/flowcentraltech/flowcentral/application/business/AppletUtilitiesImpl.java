@@ -1073,6 +1073,10 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
                             mode |= EntitySearch.SHOW_QUICK_EDIT;
                         }
 
+                        if (formTabDef.isQuickOrder()) {
+                            mode |= EntitySearch.SHOW_QUICK_ORDER;
+                        }
+                        
                         final boolean isIgnoreReport = true;
                         EntitySearch _entitySearch = constructEntitySearch(formContext, sweepingCommitPolicy,
                                 formTabDef.getName(), rootTitle, _appletDef, editAction, mode, isIgnoreReport,

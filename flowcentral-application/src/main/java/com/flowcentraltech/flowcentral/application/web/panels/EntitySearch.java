@@ -61,9 +61,11 @@ public class EntitySearch extends AbstractPanelFormBinding {
     public static final int SHOW_REPORT = 0x00000400;
     public static final int SEARCH_ON_CRITERIA_ONLY = 0x00000800;
     public static final int SHOW_EXPAND_DETAILS = 0x00001000;
+    public static final int SHOW_QUICK_ORDER = 0x00002000;
 
     public static final int ENABLE_ALL = EDIT_FILTER_ENABLED | SHOW_FILTER_SAVE | SHOW_FILTER_THUMBTACK
-            | SHOW_NEW_BUTTON | SHOW_EDIT_BUTTON | SHOW_QUICKFILTER | SHOW_ACTIONFOOTER | SHOW_SEARCH;
+            | SHOW_NEW_BUTTON | SHOW_EDIT_BUTTON | SHOW_QUICKFILTER | SHOW_ACTIONFOOTER | SHOW_SEARCH
+            | SHOW_QUICK_ORDER;
 
     private final Long appAppletId;
 
@@ -572,6 +574,10 @@ public class EntitySearch extends AbstractPanelFormBinding {
 
     public boolean isShowQuickEdit() {
         return (mode & SHOW_QUICK_EDIT) > 0;
+    }
+
+    public boolean isShowQuickOrder() {
+        return (mode & SHOW_QUICK_ORDER) > 0;
     }
 
     public boolean isShowReport() {

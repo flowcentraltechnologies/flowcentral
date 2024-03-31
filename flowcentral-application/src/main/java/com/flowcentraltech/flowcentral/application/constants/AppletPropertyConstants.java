@@ -172,8 +172,6 @@ public interface AppletPropertyConstants {
 
     String QUICK_EDIT_HEIGHT = "quickEdit.height";
 
-    String QUICK_ORDER = "quickOrder";
-
     String QUICK_ORDER_FIELD = "quickOrder.field";
 
     String BASE_RESTRICTION = "baseRestriction";

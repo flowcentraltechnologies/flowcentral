@@ -1089,8 +1089,9 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                                     appFormElement.getEditAction(), appFormElement.getEditFormless(),
                                     appFormElement.getEditAllowAddition(), appFormElement.getEditFixedRows(),
                                     appFormElement.isIgnoreParentCondition(), appFormElement.isShowSearch(),
-                                    appFormElement.isQuickEdit(), appFormElement.isVisible(),
-                                    appFormElement.isEditable(), appFormElement.isDisabled());
+                                    appFormElement.isQuickEdit(), appFormElement.isQuickOrder(),
+                                    appFormElement.isVisible(), appFormElement.isEditable(),
+                                    appFormElement.isDisabled());
                         } else if (FormElementType.SECTION.equals(appFormElement.getType())) {
                             sectionIndex++;
                             fdb.addFormSection(tabIndex, appFormElement.getElementName(), appFormElement.getLabel(),

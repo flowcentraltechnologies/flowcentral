@@ -71,6 +71,8 @@ public class FormTabDef {
 
     private boolean quickEdit;
 
+    private boolean quickOrder;
+
     private boolean visible;
 
     private boolean editable;
@@ -81,9 +83,9 @@ public class FormTabDef {
 
     public FormTabDef(TabContentType contentType, FilterGroupDef filterGroupDef, String name, String label,
             String applet, String reference, String mappedFieldName, String mappedForm, String editAction,
-            String editViewOnly, String editAllowAddition, String editFixedRows, List<FormSectionDef> formSectionDefList,
-            boolean ignoreParentCondition, boolean showSearch, boolean quickEdit, boolean visible, boolean editable,
-            boolean disabled) {
+            String editViewOnly, String editAllowAddition, String editFixedRows,
+            List<FormSectionDef> formSectionDefList, boolean ignoreParentCondition, boolean showSearch,
+            boolean quickEdit, boolean quickOrder, boolean visible, boolean editable, boolean disabled) {
         this.contentType = contentType;
         this.filterGroupDef = filterGroupDef;
         this.name = name;
@@ -100,6 +102,7 @@ public class FormTabDef {
         this.ignoreParentCondition = ignoreParentCondition;
         this.showSearch = showSearch;
         this.quickEdit = quickEdit;
+        this.quickOrder = quickOrder;
         this.visible = visible;
         this.editable = editable;
         this.disabled = disabled;
@@ -123,6 +126,7 @@ public class FormTabDef {
         this.ignoreParentCondition = srcFormTabDef.ignoreParentCondition;
         this.showSearch = srcFormTabDef.showSearch;
         this.quickEdit = srcFormTabDef.quickEdit;
+        this.quickOrder = srcFormTabDef.quickOrder;
         this.visible = srcFormTabDef.visible;
         this.editable = srcFormTabDef.editable;
         this.disabled = srcFormTabDef.disabled;
@@ -271,6 +275,10 @@ public class FormTabDef {
 
     public boolean isQuickEdit() {
         return quickEdit;
+    }
+
+    public boolean isQuickOrder() {
+        return quickOrder;
     }
 
     public boolean isVisible() {
