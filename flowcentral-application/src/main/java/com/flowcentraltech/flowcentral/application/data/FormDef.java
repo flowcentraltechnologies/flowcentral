@@ -157,7 +157,7 @@ public class FormDef extends BaseApplicationEntityDef {
             this.onSwitchFormStatePolicyDefList = new ArrayList<FormStatePolicyDef>();
             this.onDelayedSetValuesFormStatePolicyDefList = new ArrayList<FormStatePolicyDef>();
             this.onFormConstructSetValuesFormStatePolicyDefList = new ArrayList<FormStatePolicyDef>();
-            this.onCreateFormStatePolicyDefMap = new HashMap<String, FormStatePolicyDef>();
+            this.onCreateFormStatePolicyDefMap = new LinkedHashMap<String, FormStatePolicyDef>();
             for (FormStatePolicyDef formStatePolicyDef : formStatePolicyDefList) {
                 switch (formStatePolicyDef.getType()) {
                     case ON_CREATE:

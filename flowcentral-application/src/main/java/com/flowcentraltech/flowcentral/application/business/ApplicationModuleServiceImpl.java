@@ -1174,6 +1174,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                                 appFormRelatedList.getApplet(), appFormRelatedList.getEditAction());
                     }
 
+                    DataUtils.sortAscending(appForm.getFieldStateList(), AppFormStatePolicy.class, "executionIndex");
                     for (AppFormStatePolicy appFormStatePolicy : appForm.getFieldStateList()) {
                         SetStatesDef.Builder ssdb = SetStatesDef.newBuilder();
                         for (AppFormSetState appFormSetState : appFormStatePolicy.getSetStateList()) {
@@ -1193,6 +1194,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                                 DataUtils.convert(List.class, String.class, appFormStatePolicy.getTrigger(), null));
                     }
 
+                    DataUtils.sortAscending(appForm.getWidgetRulesList(), AppFormWidgetRulesPolicy.class, "executionIndex");
                     for (AppFormWidgetRulesPolicy appFormWidgetRulesPolicy : appForm.getWidgetRulesList()) {
                         WidgetRulesDef widgetRulesDef = InputWidgetUtils
                                 .getWidgetRulesDef(appFormWidgetRulesPolicy.getWidgetRules());
@@ -1215,6 +1217,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                                 widgetRulesDef, ruleEditors);
                     }
 
+                    DataUtils.sortAscending(appForm.getFieldValidationList(), AppFormFieldValidationPolicy.class, "executionIndex");
                     for (AppFormFieldValidationPolicy appFormFieldValidationPolicy : appForm.getFieldValidationList()) {
                         fdb.addFieldValidationPolicy(appFormFieldValidationPolicy.getName(),
                                 appFormFieldValidationPolicy.getDescription(),
@@ -1222,6 +1225,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                                 appFormFieldValidationPolicy.getValidation(), appFormFieldValidationPolicy.getRule());
                     }
 
+                    DataUtils.sortAscending(appForm.getFormValidationList(), AppFormValidationPolicy.class, "executionIndex");
                     for (AppFormValidationPolicy appFormValidationPolicy : appForm.getFormValidationList()) {
                         fdb.addFormValidationPolicy(
                                 InputWidgetUtils.getFilterDef(appletUtilities, null,
@@ -1231,6 +1235,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                                 DataUtils.convert(List.class, String.class, appFormValidationPolicy.getTarget(), null));
                     }
 
+                    DataUtils.sortAscending(appForm.getFormReviewList(), AppFormReviewPolicy.class, "executionIndex");
                     for (AppFormReviewPolicy appFormReviewPolicy : appForm.getFormReviewList()) {
                         fdb.addFormReviewPolicy(
                                 DataUtils.convert(List.class, FormReviewType.class, appFormReviewPolicy.getFormEvents(),
