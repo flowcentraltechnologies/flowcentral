@@ -1787,6 +1787,8 @@
 				type="string" nullable="true" />
 			<field name="trigger"
 				label="$m{application.appformstatepolicy.trigger}" type="string" />
+			<field name="executionIndex"
+				label="$m{application.appformstatepolicy.executionindex}" type="integer" />
 			<field name="onCondition"
 				label="$m{application.appformstatepolicy.oncondition}" type="child"
 				category="formstatepolicy" references="appFilterRef" />
@@ -1808,6 +1810,8 @@
 				label="$m{application.appformwidgetrulespolicy.appformid}"
 				type="ref" references="appFormRef"
 				inputWidget="application.entitylist" />
+			<field name="executionIndex"
+				label="$m{application.appformsetstate.executionindex}" type="integer" />
 			<field name="onCondition"
 				label="$m{application.appformwidgetrulespolicy.oncondition}"
 				type="child" category="formwidgetrulespolicy"
@@ -1866,6 +1870,8 @@
 			<field name="rule"
 				label="$m{application.appformfieldvalidationpolicy.rule}"
 				type="string" nullable="true" />
+			<field name="executionIndex"
+				label="$m{application.appformfieldvalidationpolicy.executionindex}" type="integer" />
 		</entity>
 		<entity name="appFormValidationPolicy"
 			description="$m{application.appformvalidationpolicy}"
@@ -1879,6 +1885,8 @@
 				type="string" />
 			<field name="target"
 				label="$m{application.appformvalidationpolicy.target}" type="string" />
+			<field name="executionIndex"
+				label="$m{application.appformvalidationpolicy.executionindex}" type="integer" />
 			<field name="entityName"
 				label="$m{application.appformvalidationpolicy.entityname}"
 				type="list_only" key="appFormId" property="entity" />
@@ -1915,6 +1923,8 @@
 			<field name="errorMatcher"
 				label="$m{application.appformreviewpolicy.errormatcher}"
 				type="string" nullable="true" />
+			<field name="executionIndex"
+				label="$m{application.appformreviewpolicy.executionindex}" type="integer" />
 			<field name="errorCondition"
 				label="$m{application.appformreviewpolicy.errorcondition}"
 				type="child" category="formreviewpolicy" references="appFilterRef" />

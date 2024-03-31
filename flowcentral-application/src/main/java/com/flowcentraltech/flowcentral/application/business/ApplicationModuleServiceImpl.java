@@ -5742,6 +5742,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                             .setDescription(resolveApplicationMessage(formStatePolicyConfig.getDescription()));
                     appFormStatePolicy.setValueGenerator(formStatePolicyConfig.getValueGenerator());
                     appFormStatePolicy.setTrigger(formStatePolicyConfig.getTrigger());
+                    appFormStatePolicy.setExecutionIndex(formStatePolicyConfig.getExecutionIndex());
                     appFormStatePolicy
                             .setOnCondition(InputWidgetUtils.newAppFilter(formStatePolicyConfig.getOnCondition()));
                     appFormStatePolicy.setSetValues(newAppSetValues(formStatePolicyConfig.getSetValues()));
@@ -5755,6 +5756,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                                 .setDescription(resolveApplicationMessage(formStatePolicyConfig.getDescription()));
                         oldAppFormStatePolicy.setValueGenerator(formStatePolicyConfig.getValueGenerator());
                         oldAppFormStatePolicy.setTrigger(formStatePolicyConfig.getTrigger());
+                        oldAppFormStatePolicy.setExecutionIndex(formStatePolicyConfig.getExecutionIndex());
                         oldAppFormStatePolicy
                                 .setOnCondition(InputWidgetUtils.newAppFilter(formStatePolicyConfig.getOnCondition()));
                         oldAppFormStatePolicy.setSetValues(newAppSetValues(formStatePolicyConfig.getSetValues()));
@@ -5782,6 +5784,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                 if (oldAppFormWidgetRulesPolicy == null) {
                     AppFormWidgetRulesPolicy appFormWidgetRulesPolicy = new AppFormWidgetRulesPolicy();
                     appFormWidgetRulesPolicy.setName(formWidgetRulesPolicyConfig.getName());
+                    appFormWidgetRulesPolicy.setExecutionIndex(formWidgetRulesPolicyConfig.getExecutionIndex());
                     appFormWidgetRulesPolicy
                             .setDescription(resolveApplicationMessage(formWidgetRulesPolicyConfig.getDescription()));
                     appFormWidgetRulesPolicy.setOnCondition(
@@ -5792,6 +5795,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                     widgetRulesList.add(appFormWidgetRulesPolicy);
                 } else {
                     if (ConfigUtils.isSetInstall(oldAppFormWidgetRulesPolicy)) {
+                        oldAppFormWidgetRulesPolicy.setExecutionIndex(formWidgetRulesPolicyConfig.getExecutionIndex());
                         oldAppFormWidgetRulesPolicy.setDescription(
                                 resolveApplicationMessage(formWidgetRulesPolicyConfig.getDescription()));
                         oldAppFormWidgetRulesPolicy.setOnCondition(
@@ -5828,6 +5832,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                     appFormFieldValidationPolicy.setFieldName(fieldValidationPolicyConfig.getFieldName());
                     appFormFieldValidationPolicy.setValidation(fieldValidationPolicyConfig.getValidator());
                     appFormFieldValidationPolicy.setRule(fieldValidationPolicyConfig.getRule());
+                    appFormFieldValidationPolicy.setExecutionIndex(fieldValidationPolicyConfig.getExecutionIndex());
                     appFormFieldValidationPolicy.setConfigType(ConfigType.MUTABLE_INSTALL);
                     fieldValidationList.add(appFormFieldValidationPolicy);
                 } else {
@@ -5836,6 +5841,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                                 resolveApplicationMessage(fieldValidationPolicyConfig.getDescription()));
                         oldAppFormFieldValidationPolicy.setFieldName(fieldValidationPolicyConfig.getFieldName());
                         oldAppFormFieldValidationPolicy.setValidation(fieldValidationPolicyConfig.getValidator());
+                        oldAppFormFieldValidationPolicy.setExecutionIndex(fieldValidationPolicyConfig.getExecutionIndex());
                         oldAppFormFieldValidationPolicy.setRule(fieldValidationPolicyConfig.getRule());
                     }
 
@@ -5866,6 +5872,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                     appFormValidationPolicy
                             .setMessage(resolveApplicationMessage(formValidationPolicyConfig.getMessage()));
                     appFormValidationPolicy.setTarget(formValidationPolicyConfig.getTarget());
+                    appFormValidationPolicy.setExecutionIndex(formValidationPolicyConfig.getExecutionIndex());
                     appFormValidationPolicy.setConfigType(ConfigType.MUTABLE_INSTALL);
                     formValidationList.add(appFormValidationPolicy);
                 } else {
@@ -5878,6 +5885,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                         oldAppFormValidationPolicy
                                 .setMessage(resolveApplicationMessage(formValidationPolicyConfig.getMessage()));
                         oldAppFormValidationPolicy.setTarget(formValidationPolicyConfig.getTarget());
+                        oldAppFormValidationPolicy.setExecutionIndex(formValidationPolicyConfig.getExecutionIndex());
                     } else {
                         environment().findChildren(oldAppFormValidationPolicy);
                     }
@@ -5911,6 +5919,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                     appFormReviewPolicy.setFormEvents(formReviewPolicyConfig.getEvents());
                     appFormReviewPolicy.setTarget(formReviewPolicyConfig.getTarget());
                     appFormReviewPolicy.setSkippable(formReviewPolicyConfig.isSkippable());
+                    appFormReviewPolicy.setExecutionIndex(formReviewPolicyConfig.getExecutionIndex());
                     appFormReviewPolicy.setConfigType(ConfigType.MUTABLE_INSTALL);
                     formReviewList.add(appFormReviewPolicy);
                 } else {
@@ -5926,6 +5935,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                         oldAppFormReviewPolicy.setFormEvents(formReviewPolicyConfig.getEvents());
                         oldAppFormReviewPolicy.setTarget(formReviewPolicyConfig.getTarget());
                         oldAppFormReviewPolicy.setSkippable(formReviewPolicyConfig.isSkippable());
+                        oldAppFormReviewPolicy.setExecutionIndex(formReviewPolicyConfig.getExecutionIndex());
                     } else {
                         environment().findChildren(oldAppFormReviewPolicy);
                     }

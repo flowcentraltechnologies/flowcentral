@@ -64,8 +64,7 @@ public class EntitySearch extends AbstractPanelFormBinding {
     public static final int SHOW_QUICK_ORDER = 0x00002000;
 
     public static final int ENABLE_ALL = EDIT_FILTER_ENABLED | SHOW_FILTER_SAVE | SHOW_FILTER_THUMBTACK
-            | SHOW_NEW_BUTTON | SHOW_EDIT_BUTTON | SHOW_QUICKFILTER | SHOW_ACTIONFOOTER | SHOW_SEARCH
-            | SHOW_QUICK_ORDER;
+            | SHOW_NEW_BUTTON | SHOW_EDIT_BUTTON | SHOW_QUICKFILTER | SHOW_ACTIONFOOTER | SHOW_SEARCH;
 
     private final Long appAppletId;
 

@@ -42,6 +42,8 @@ public class FormStatePolicyConfig extends BaseNameConfig {
 
     private String trigger;
 
+    private Integer executionIndex;
+
     public FormStatePolicyType getType() {
         return type;
     }
@@ -95,6 +97,15 @@ public class FormStatePolicyConfig extends BaseNameConfig {
     @XmlAttribute
     public void setTrigger(String trigger) {
         this.trigger = trigger;
+    }
+
+    public Integer getExecutionIndex() {
+        return executionIndex;
+    }
+
+    @XmlAttribute
+    public void setExecutionIndex(Integer executionIndex) {
+        this.executionIndex = executionIndex;
     }
 
 }

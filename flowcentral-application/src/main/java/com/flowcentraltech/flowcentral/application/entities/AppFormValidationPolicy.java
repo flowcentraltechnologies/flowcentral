@@ -43,6 +43,9 @@ public class AppFormValidationPolicy extends BaseConfigNamedEntity {
     @Column(name = "POLICY_TARGET", length = 256, nullable = true)
     private String target;
 
+    @Column(length = 64, nullable = true)
+    private Integer executionIndex;
+
     @Child(category = "formvalidationpolicy")
     private AppFilter errorCondition;
 
@@ -95,5 +98,13 @@ public class AppFormValidationPolicy extends BaseConfigNamedEntity {
 
     public void setEntityName(String entityName) {
         this.entityName = entityName;
+    }
+
+    public Integer getExecutionIndex() {
+        return executionIndex;
+    }
+
+    public void setExecutionIndex(Integer executionIndex) {
+        this.executionIndex = executionIndex;
     }
 }

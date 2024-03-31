@@ -36,6 +36,8 @@ public class FormValidationPolicyConfig extends BaseNameConfig {
 
     private FilterConfig errorCondition;
 
+    private Integer executionIndex;
+    
     public String getMessage() {
         return message;
     }
@@ -79,6 +81,15 @@ public class FormValidationPolicyConfig extends BaseNameConfig {
     @XmlElement(required = true)
     public void setErrorCondition(FilterConfig errorCondition) {
         this.errorCondition = errorCondition;
+    }
+
+    public Integer getExecutionIndex() {
+        return executionIndex;
+    }
+
+    @XmlAttribute
+    public void setExecutionIndex(Integer executionIndex) {
+        this.executionIndex = executionIndex;
     }
 
 }

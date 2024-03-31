@@ -41,6 +41,9 @@ public class AppFormFieldValidationPolicy extends BaseConfigNamedEntity {
     @Column(length = 64, nullable = true)
     private String rule;
 
+    @Column(length = 64, nullable = true)
+    private Integer executionIndex;
+    
     public Long getAppFormId() {
         return appFormId;
     }
@@ -71,6 +74,14 @@ public class AppFormFieldValidationPolicy extends BaseConfigNamedEntity {
 
     public void setRule(String rule) {
         this.rule = rule;
+    }
+
+    public Integer getExecutionIndex() {
+        return executionIndex;
+    }
+
+    public void setExecutionIndex(Integer executionIndex) {
+        this.executionIndex = executionIndex;
     }
 
 }

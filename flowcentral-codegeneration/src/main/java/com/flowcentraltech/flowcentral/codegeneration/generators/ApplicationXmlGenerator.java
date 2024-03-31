@@ -940,6 +940,7 @@ public class ApplicationXmlGenerator extends AbstractStaticArtifactGenerator {
                         formStatePolicyConfig.setDescription("$m{" + descKey + "}");
                         formStatePolicyConfig.setValueGenerator(appFormStatePolicy.getValueGenerator());
                         formStatePolicyConfig.setTrigger(appFormStatePolicy.getTrigger());
+                        formStatePolicyConfig.setExecutionIndex(appFormStatePolicy.getExecutionIndex());
                         formStatePolicyConfig.setType(appFormStatePolicy.getType());
                         formStatePolicyConfig.setOnCondition(
                                 InputWidgetUtils.getFilterConfig(au(), appFormStatePolicy.getOnCondition()));
@@ -974,18 +975,19 @@ public class ApplicationXmlGenerator extends AbstractStaticArtifactGenerator {
                 if (!DataUtils.isBlank(appForm.getFieldStateList())) {
                     List<FormWidgetRulesPolicyConfig> widgetRulesPolicyList = new ArrayList<FormWidgetRulesPolicyConfig>();
                     for (AppFormWidgetRulesPolicy appFormWidgetRulesPolicy : appForm.getWidgetRulesList()) {
-                        FormWidgetRulesPolicyConfig formStatePolicyConfig = new FormWidgetRulesPolicyConfig();
-                        formStatePolicyConfig.setName(appFormWidgetRulesPolicy.getName());
+                        FormWidgetRulesPolicyConfig formWidgetRulesPolicyConfig = new FormWidgetRulesPolicyConfig();
+                        formWidgetRulesPolicyConfig.setName(appFormWidgetRulesPolicy.getName());
                         descKey = getDescriptionKey(formDescKey, "widgetrulespolicy",
                                 appFormWidgetRulesPolicy.getDescription());
                         ctx.addMessage(StaticMessageCategoryType.FORM, descKey,
                                 appFormWidgetRulesPolicy.getDescription());
-                        formStatePolicyConfig.setDescription("$m{" + descKey + "}");
-                        formStatePolicyConfig.setOnCondition(
+                        formWidgetRulesPolicyConfig.setDescription("$m{" + descKey + "}");
+                        formWidgetRulesPolicyConfig.setExecutionIndex(appFormWidgetRulesPolicy.getExecutionIndex());
+                        formWidgetRulesPolicyConfig.setOnCondition(
                                 InputWidgetUtils.getFilterConfig(au(), appFormWidgetRulesPolicy.getOnCondition()));
-                        formStatePolicyConfig.setWidgetRules(
+                        formWidgetRulesPolicyConfig.setWidgetRules(
                                 InputWidgetUtils.getWidgetRulesConfig(appFormWidgetRulesPolicy.getWidgetRules()));
-                        widgetRulesPolicyList.add(formStatePolicyConfig);
+                        widgetRulesPolicyList.add(formWidgetRulesPolicyConfig);
                     }
 
                     appFormConfig.setWidgetRulesPolicyList(widgetRulesPolicyList);
@@ -1005,6 +1007,7 @@ public class ApplicationXmlGenerator extends AbstractStaticArtifactGenerator {
                         fieldValidationPolicyConfig.setFieldName(appFormFieldValidationPolicy.getFieldName());
                         fieldValidationPolicyConfig.setValidator(appFormFieldValidationPolicy.getValidation());
                         fieldValidationPolicyConfig.setRule(appFormFieldValidationPolicy.getRule());
+                        fieldValidationPolicyConfig.setExecutionIndex(appFormFieldValidationPolicy.getExecutionIndex());
                         fieldValidationPolicyConfigList.add(fieldValidationPolicyConfig);
                     }
 
@@ -1025,6 +1028,7 @@ public class ApplicationXmlGenerator extends AbstractStaticArtifactGenerator {
                         formValidationPolicyConfig.setDescription("$m{" + descKey + "}");
                         formValidationPolicyConfig.setMessage("$m{" + msgKey + "}");
                         formValidationPolicyConfig.setTarget(appFormValidationPolicy.getTarget());
+                        formValidationPolicyConfig.setExecutionIndex(appFormValidationPolicy.getExecutionIndex());
                         formValidationPolicyConfig.setErrorMatcher(appFormValidationPolicy.getErrorMatcher());
                         formValidationPolicyConfig.setErrorCondition(
                                 InputWidgetUtils.getFilterConfig(au(), appFormValidationPolicy.getErrorCondition()));
@@ -1050,6 +1054,7 @@ public class ApplicationXmlGenerator extends AbstractStaticArtifactGenerator {
                         formReviewPolicyConfig.setEvents(appFormReviewPolicy.getFormEvents());
                         formReviewPolicyConfig.setTarget(appFormReviewPolicy.getTarget());
                         formReviewPolicyConfig.setSkippable(appFormReviewPolicy.isSkippable());
+                        formReviewPolicyConfig.setExecutionIndex(appFormReviewPolicy.getExecutionIndex());
                         formReviewPolicyConfig.setErrorMatcher(appFormReviewPolicy.getErrorMatcher());
                         formReviewPolicyConfig.setErrorCondition(
                                 InputWidgetUtils.getFilterConfig(au(), appFormReviewPolicy.getErrorCondition()));

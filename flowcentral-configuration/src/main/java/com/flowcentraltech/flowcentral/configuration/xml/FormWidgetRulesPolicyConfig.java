@@ -15,6 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.configuration.xml;
 
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 
 /**
@@ -25,9 +26,20 @@ import javax.xml.bind.annotation.XmlElement;
  */
 public class FormWidgetRulesPolicyConfig extends BaseNameConfig {
     
+    private Integer executionIndex;
+    
     private FilterConfig onCondition;
 
     private WidgetRulesConfig widgetRules;
+
+    public Integer getExecutionIndex() {
+        return executionIndex;
+    }
+
+    @XmlAttribute
+    public void setExecutionIndex(Integer executionIndex) {
+        this.executionIndex = executionIndex;
+    }
 
     public FilterConfig getOnCondition() {
         return onCondition;

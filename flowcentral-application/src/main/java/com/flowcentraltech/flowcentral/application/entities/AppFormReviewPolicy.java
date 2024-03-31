@@ -50,6 +50,9 @@ public class AppFormReviewPolicy extends BaseConfigNamedEntity {
     @Column(name = "POLICY_TARGET", length = 256, nullable = true)
     private String target;
 
+    @Column(length = 64, nullable = true)
+    private Integer executionIndex;
+
     @Column
     private boolean skippable;
     
@@ -140,5 +143,13 @@ public class AppFormReviewPolicy extends BaseConfigNamedEntity {
 
     public void setMessageTypeDesc(String messageTypeDesc) {
         this.messageTypeDesc = messageTypeDesc;
+    }
+
+    public Integer getExecutionIndex() {
+        return executionIndex;
+    }
+
+    public void setExecutionIndex(Integer executionIndex) {
+        this.executionIndex = executionIndex;
     }
 }
