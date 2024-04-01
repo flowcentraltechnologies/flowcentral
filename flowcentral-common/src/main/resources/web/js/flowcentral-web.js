@@ -99,22 +99,35 @@ fux.menuShowPopup = function(uEv) {
 		const uMenuItems = evp.uMenuItems;
 		var cnt = [];
 		for (var i = 0; i < uMenuItems.length;i++) {
-			cnt.push("<a id=&quot;");
+			cnt.push("<div class=\"base\" id=\"");
 			cnt.push(_baseId + i);
-			cnt.push("&quot;>");
+			cnt.push("\">");
+            cnt.push("<span class=\"icon\">");
+            cnt.push(uMenuItems[i].icon);
+            cnt.push("</span>");
+			cnt.push("<a>");
 			cnt.push(uMenuItems[i].label);
 			cnt.push("</a>");
+            cnt.push("</div>");
 		}
 		
-		pelem.innerHTML = cnt.join();		
-		pelem.style.top = rect.top + "px";
+		pelem.innerHTML = cnt.join("");	
+		
+		var viewRect = ux.getWindowRect();
+		var y = rect.top;
+		var diff = (y + 32 * uMenuItems.length + 20) - viewRect.bottom;
+		if (diff > 0) {
+			y -= diff;
+		}
+		 	
+		pelem.style.top = y + "px";
 		pelem.style.left = rect.right  + "px";
 		pelem.style.display = "block";
 		
 		for (var i = 0; i < uMenuItems.length;i++) { 
 			const _evp = {};
 			const melem = _id(_baseId + i);
-			_evp.uMenuPopId = menuPopId;
+			_evp.uMenuPopId = evp.uMenuPopId ;
 			if (uMenuItems[i].isOpenWin) {
 				_evp.uMain = false;
 				_evp.uURL = uMenuItems[i].path;

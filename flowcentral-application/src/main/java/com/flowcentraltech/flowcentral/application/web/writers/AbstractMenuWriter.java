@@ -127,7 +127,7 @@ public abstract class AbstractMenuWriter extends AbstractPanelWriter {
         misb.append(",\"path\":\"");
         writer.writeContextURL(misb, path);
         misb.append('"');
-        
+
         if (appletDef.isWithSubApplets()) {
             misb.append(",\"pSubMenuItems\":[");
             final UserToken userToken = getUserToken();
@@ -147,12 +147,16 @@ public abstract class AbstractMenuWriter extends AbstractPanelWriter {
                     writer.writeContextURL(misb, _path);
                     misb.append('"');
 
+                    misb.append(",\"label\":\"").append(_appletDef.getLabel()).append('"');
+
                     if (_appletDef.isOpenWindow()) {
                         misb.append(",\"isOpenWin\":").append(_appletDef.isOpenWindow());
                         misb.append(",\"winName\":\"").append(_appletDef.getName()).append('"');
                     }
-                    
-                    misb.append('}');                    
+
+                    final String icon = _appletDef.isWithIcon() ? _appletDef.getIcon() : "window-maximize";
+                    misb.append(",\"icon\":\"").append(resolveSymbolHtmlHexCode(icon)).append('"');
+                    misb.append('}');
                 }
             }
             misb.append("]");
