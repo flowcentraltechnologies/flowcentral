@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.application.web.writers;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.constants.AppletPropertyConstants;
 import com.flowcentraltech.flowcentral.application.constants.AppletSessionAttributeConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModulePathConstants;
@@ -25,7 +26,12 @@ import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.data.RequestOpenTabInfo;
 import com.flowcentraltech.flowcentral.application.util.ApplicationPageUtils;
 import com.flowcentraltech.flowcentral.application.web.widgets.AbstractMenuWidget;
+import com.flowcentraltech.flowcentral.common.business.ApplicationPrivilegeManager;
+import com.flowcentraltech.flowcentral.common.business.LicenseProvider;
+import com.flowcentraltech.flowcentral.common.business.WorkspacePrivilegeManager;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.UserToken;
+import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.web.ui.widget.EventHandler;
 import com.tcdng.unify.web.ui.widget.ResponseWriter;
 import com.tcdng.unify.web.ui.widget.Widget;
@@ -39,6 +45,18 @@ import com.tcdng.unify.web.ui.widget.writer.AbstractPanelWriter;
  * @since 1.0
  */
 public abstract class AbstractMenuWriter extends AbstractPanelWriter {
+
+    @Configurable
+    protected AppletUtilities au;
+
+    @Configurable
+    protected ApplicationPrivilegeManager appPrivilegeManager;
+
+    @Configurable
+    protected WorkspacePrivilegeManager wkspPrivilegeManager;
+
+    @Configurable
+    protected LicenseProvider licenseProvider;
 
     @Override
     protected void doWriteBehavior(ResponseWriter writer, Widget widget, EventHandler[] handlers)
@@ -86,9 +104,15 @@ public abstract class AbstractMenuWriter extends AbstractPanelWriter {
         final String icon = appletDef.isWithIcon() ? appletDef.getIcon() : "window-maximize";
         writer.write(resolveSymbolHtmlHexCode(icon));
         writer.write("</span>");
-        writer.write("<span class=\"acl\">").writeWithHtmlEscape(
-                draft ? resolveSessionMessage("$m{label.draft.applet}", appletDef.getLabel()) : appletDef.getLabel())
+        writer.write(appletDef.isWithSubApplets() ? "<span class=\"aclm\">" : "<span class=\"acl\">")
+                .writeWithHtmlEscape(draft ? resolveSessionMessage("$m{label.draft.applet}", appletDef.getLabel())
+                        : appletDef.getLabel())
                 .write("</span>");
+        if (appletDef.isWithSubApplets()) {
+            writer.write("<span class=\"icon\">");
+            writer.write(resolveSymbolHtmlHexCode("angle-right"));
+            writer.write("</span>");
+        }
     }
 
     private void writeAppletDefJs(ResponseWriter writer, StringBuilder misb, AppletDef appletDef, WriteParam wparam,
@@ -97,6 +121,51 @@ public abstract class AbstractMenuWriter extends AbstractPanelWriter {
             misb.append(",");
         }
 
+        final String path = resolvePath(appletDef, wparam, isUpdateDraft);
+        misb.append("{\"id\":\"item_").append(isUpdateDraft ? appletDef.getDraftViewId() : appletDef.getViewId())
+                .append('"');
+        misb.append(",\"path\":\"");
+        writer.writeContextURL(misb, path);
+        misb.append('"');
+        
+        if (appletDef.isWithSubApplets()) {
+            misb.append(",\"pSubMenuItems\":[");
+            final UserToken userToken = getUserToken();
+            final String roleCode = userToken.getRoleCode();
+            boolean appendSym = false;
+            for (String appletName : appletDef.getSubAppletList()) {
+                final AppletDef _appletDef = au.getAppletDef(appletName);
+                if (appPrivilegeManager.isRoleWithPrivilege(roleCode, _appletDef.getPrivilege())) {
+                    if (appendSym) {
+                        misb.append(',');
+                    } else {
+                        appendSym = true;
+                    }
+
+                    final String _path = resolvePath(_appletDef, wparam, isUpdateDraft);
+                    misb.append("{\"path\":\"");
+                    writer.writeContextURL(misb, _path);
+                    misb.append('"');
+
+                    if (_appletDef.isOpenWindow()) {
+                        misb.append(",\"isOpenWin\":").append(_appletDef.isOpenWindow());
+                        misb.append(",\"winName\":\"").append(_appletDef.getName()).append('"');
+                    }
+                    
+                    misb.append('}');                    
+                }
+            }
+            misb.append("]");
+        }
+
+        if (appletDef.isOpenWindow()) {
+            misb.append(",\"isOpenWin\":").append(appletDef.isOpenWindow());
+            misb.append(",\"winName\":\"").append(appletDef.getName()).append('"');
+        }
+        misb.append('}');
+    }
+
+    private String resolvePath(AppletDef appletDef, WriteParam wparam, boolean isUpdateDraft) throws UnifyException {
         final boolean multipage = wparam.isMultiPage()
                 && appletDef.getPropValue(boolean.class, AppletPropertyConstants.PAGE_MULTIPLE);
         final boolean innewwindow = wparam.isOpenInWindow() && appletDef.isSupportOpenInNewWindow();
@@ -113,16 +182,7 @@ public abstract class AbstractMenuWriter extends AbstractPanelWriter {
             setMenuRequestOpenTabInfo(requestOpenTabInfo);
         }
 
-        misb.append("{\"id\":\"item_").append(isUpdateDraft ? appletDef.getDraftViewId() : appletDef.getViewId())
-                .append('"');
-        misb.append(",\"path\":\"");
-        writer.writeContextURL(misb, path);
-        misb.append('"');
-        if (appletDef.isOpenWindow()) {
-            misb.append(",\"isOpenWin\":").append(appletDef.isOpenWindow());
-            misb.append(",\"winName\":\"").append(appletDef.getName()).append('"');
-        }
-        misb.append('}');
+        return path;
     }
 
     @SuppressWarnings("unchecked")

@@ -35,9 +35,12 @@ fux.rigMenu = function(rgp) {
 
 fux.menuWire = function(rgp) {
 	const id = rgp.pId;
+	const menuPopId = "mpop_" + id
 	const _menu = _id(id);
 	const initVisible = !rgp.pCollInit;
 
+	ux.registerOtherPopup(menuPopId);
+	 
 	// Menus
 	if (rgp.pMenuIds) {
 		var mevps = [];
@@ -45,12 +48,15 @@ fux.menuWire = function(rgp) {
 			var baseId = rgp.pMenuIds[i];
 			var menuId = "menu_" + baseId;
 			var submenuId = "submenu_" + baseId;
+			var melem = _id(menuId);
 			var evp = {};
+			evp.uMenuPopId = menuPopId;
 			evp.visible = initVisible;
 			evp.submenuId = submenuId;
 			evp.mevps = mevps;
 			mevps.push(evp);
-			ux.addHdl(_id(menuId), "click", fux.menuToggle, evp);
+			ux.addHdl(melem, "mouseover", fux.menuHidePopup, evp);
+			ux.addHdl(melem, "click", fux.menuToggle, evp);
 		}
 		_menu.mevps = mevps;
 	}
@@ -58,20 +64,85 @@ fux.menuWire = function(rgp) {
 	// Menu items
 	if (rgp.pMenuItems) {
 		for (var mItem of rgp.pMenuItems) { 
-			var evp = {};
-			if (mItem.isOpenWin) {
-				evp.uMain = false;
-				evp.uURL = mItem.path;
-				evp.uWinName = mItem.winName;
-				ux.addHdl(_id(mItem.id), "click", ux.openWindow, evp);
-			} else {
-				evp.uMain = false;
-				evp.uOpenPath = mItem.path;
-				evp.uIsDebounce = true;
-				ux.addHdl(_id(mItem.id), "click", ux.menuOpenPath, evp);
+			const evp = {};
+			const melem = _id(mItem.id);
+			evp.uMenuPopId = menuPopId;
+			if (mItem.pSubMenuItems) {
+				evp.uMenuItems = mItem.pSubMenuItems;
+				ux.addHdl(melem, "mouseover", fux.menuShowPopup, evp);
+			} else { 
+				ux.addHdl(melem, "mouseover", fux.menuHidePopup, evp);
+				if (mItem.isOpenWin) {
+					evp.uMain = false;
+					evp.uURL = mItem.path;
+					evp.uWinName = mItem.winName;
+					ux.addHdl(melem, "click", ux.openWindow, evp);
+				} else {
+					evp.uMain = false;
+					evp.uOpenPath = mItem.path;
+					evp.uIsDebounce = true;
+					ux.addHdl(melem, "click", ux.menuOpenPath, evp);
+				}
 			}
 		}
 	}
+}
+
+fux.menuShowPopup = function(uEv) {
+	const id = uEv.uTrg.id;
+	if (id) {
+		const melem = _id(id);
+		const evp = uEv.evp;
+		const rect = ux.boundingRect(melem);
+		const pelem = _id(evp.uMenuPopId);
+		const _baseId = id + "_sb";
+		const uMenuItems = evp.uMenuItems;
+		var cnt = [];
+		for (var i = 0; i < uMenuItems.length;i++) {
+			cnt.push("<a id=&quot;");
+			cnt.push(_baseId + i);
+			cnt.push("&quot;>");
+			cnt.push(uMenuItems[i].label);
+			cnt.push("</a>");
+		}
+		
+		pelem.innerHTML = cnt.join();		
+		pelem.style.top = rect.top + "px";
+		pelem.style.left = rect.right  + "px";
+		pelem.style.display = "block";
+		
+		for (var i = 0; i < uMenuItems.length;i++) { 
+			const _evp = {};
+			const melem = _id(_baseId + i);
+			_evp.uMenuPopId = menuPopId;
+			if (uMenuItems[i].isOpenWin) {
+				_evp.uMain = false;
+				_evp.uURL = uMenuItems[i].path;
+				_evp.uWinName = uMenuItems[i].winName;
+				ux.addHdl(melem, "click", fux.openWindow, _evp);
+			} else {
+				_evp.uMain = false;
+				_evp.uOpenPath = uMenuItems[i].path;
+				_evp.uIsDebounce = true;
+				ux.addHdl(melem, "click", fux.menuOpenPath, _evp);
+			}
+		}
+	}
+}
+
+fux.openWindow = function(uEv) {
+	fux.menuHidePopup(uEv);
+	ux.openWindow(uEv);
+}
+
+fux.menuOpenPath = function(uEv) {
+	fux.menuHidePopup(uEv);
+	ux.menuOpenPath(uEv);
+}
+
+fux.menuHidePopup = function(uEv) {
+	const evp = uEv.evp;
+	_id(evp.uMenuPopId).style.display = "none";
 }
 
 fux.menuToggle = function(uEv) {

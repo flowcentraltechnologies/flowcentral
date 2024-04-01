@@ -491,7 +491,11 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                             ? StringUtils.breakdownParameterizedString(appApplet.getTitleFormat())
                             : null;
                     adb.titleFormat(titleFormat);
-
+                    
+                    if ("Branches".equals(appApplet.getLabel())) {
+                        adb.subAppletList(Arrays.asList("security.manageUserGroup", "security.manageUser"));
+                    }
+                    
                     for (AppAppletProp appAppletProp : appApplet.getPropList()) {
                         adb.addPropDef(appAppletProp.getName(), appAppletProp.getValue());
                     }
