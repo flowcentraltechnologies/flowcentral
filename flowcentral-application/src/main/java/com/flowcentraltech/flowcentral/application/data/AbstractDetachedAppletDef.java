@@ -90,6 +90,16 @@ public abstract class AbstractDetachedAppletDef implements AppletDef {
     }
 
     @Override
+    public List<String> getSubAppletList() {
+        return parentAppletDef.getSubAppletList();
+    }
+
+    @Override
+    public boolean isWithSubApplets() {
+        return parentAppletDef.isWithSubApplets();
+    }
+
+    @Override
     public AppletDef getMaintainAppletDef() {
         return null;
     }
@@ -142,6 +152,11 @@ public abstract class AbstractDetachedAppletDef implements AppletDef {
     @Override
     public boolean isFacade() {
         return parentAppletDef.isFacade();
+    }
+
+    @Override
+    public boolean isMultiFacade() {
+        return parentAppletDef.isMultiFacade();
     }
 
     @Override

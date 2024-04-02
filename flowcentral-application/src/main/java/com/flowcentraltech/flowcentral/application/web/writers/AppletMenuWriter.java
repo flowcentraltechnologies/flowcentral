@@ -22,7 +22,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.business.ApplicationAppletDefProvider;
 import com.flowcentraltech.flowcentral.application.constants.AppletSessionAttributeConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleSysParamConstants;
@@ -30,15 +29,11 @@ import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.data.ApplicationMenuDef;
 import com.flowcentraltech.flowcentral.application.web.widgets.AbstractMenuWidget;
 import com.flowcentraltech.flowcentral.application.web.widgets.AppletMenuWidget;
-import com.flowcentraltech.flowcentral.common.business.ApplicationPrivilegeManager;
-import com.flowcentraltech.flowcentral.common.business.LicenseProvider;
-import com.flowcentraltech.flowcentral.common.business.WorkspacePrivilegeManager;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants;
 import com.flowcentraltech.flowcentral.system.constants.SystemColorType;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.UserToken;
 import com.tcdng.unify.core.annotation.Component;
-import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.Writes;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.web.ui.widget.EventHandler;
@@ -57,18 +52,6 @@ import com.tcdng.unify.web.ui.widget.WriteWork;
 public class AppletMenuWriter extends AbstractMenuWriter {
 
     private static final String WORKFLOW_DRAFT_APPLICATION = "workflowDraft";
-
-    @Configurable
-    private AppletUtilities au;
-
-    @Configurable
-    private ApplicationPrivilegeManager appPrivilegeManager;
-
-    @Configurable
-    private WorkspacePrivilegeManager wkspPrivilegeManager;
-
-    @Configurable
-    private LicenseProvider licenseProvider;
 
     private List<ApplicationAppletDefProvider> applicationAppletDefProviderList;
 
@@ -101,6 +84,11 @@ public class AppletMenuWriter extends AbstractMenuWriter {
         writer.write("</span>");
         writer.write("</div></div>");
         // End header
+
+        // pop-up menu
+        writer.write("<div id=\"mpop_").write(appletMenuWidget.getId())
+                .write("\" class=\"mpop\" style=\"display:none;\">");
+        writer.write("</div>");
 
         // Body
         writer.write("<div class=\"mbody\">");
@@ -160,7 +148,7 @@ public class AppletMenuWriter extends AbstractMenuWriter {
             final boolean openInWindow = au.system().getSysParameterValue(boolean.class,
                     ApplicationModuleSysParamConstants.ENABLE_OPEN_TAB_IN_BROWSER);
             final WriteParam wparam = new WriteParam(multiPage, openInWindow);
-            
+
             final StringBuilder msb = new StringBuilder();
             final StringBuilder misb = new StringBuilder();
             msb.append('[');

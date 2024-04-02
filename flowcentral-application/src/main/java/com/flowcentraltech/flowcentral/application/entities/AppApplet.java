@@ -88,6 +88,9 @@ public class AppApplet extends BaseApplicationEntity {
     private List<AppAppletProp> propList;
 
     @ChildList
+    private List<AppAppletRouteToApplet> routeToAppletList;
+    
+    @ChildList
     private List<AppAppletFilter> filterList;
 
     @ChildList
@@ -238,6 +241,14 @@ public class AppApplet extends BaseApplicationEntity {
 
     public void setPropList(List<AppAppletProp> propList) {
         this.propList = propList;
+    }
+
+    public List<AppAppletRouteToApplet> getRouteToAppletList() {
+        return routeToAppletList;
+    }
+
+    public void setRouteToAppletList(List<AppAppletRouteToApplet> routeToAppletList) {
+        this.routeToAppletList = routeToAppletList;
     }
 
     public List<AppAppletFilter> getFilterList() {

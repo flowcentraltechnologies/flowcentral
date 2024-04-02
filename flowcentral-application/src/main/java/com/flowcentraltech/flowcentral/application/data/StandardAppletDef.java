@@ -101,18 +101,21 @@ public class StandardAppletDef extends BaseApplicationEntityDef implements Apple
 
     private Map<String, List<AppletFilterDef>> childListAppletFilterDefMap;
 
+    private List<String> subAppletList;
+
     private AppletDef maintainAppletDef;
 
     private AppletDef listingAppletDef;
 
     private StandardAppletDef(AppletType type, List<StringToken> titleFormat, List<AppletPropDef> propDefList,
-            Map<String, AppletPropDef> propDefMap, Map<String, AppletSetValuesDef> setValuesDefMap,
-            Map<String, AppletFilterDef> filterDefMap, String entity, String label, String icon, String assignDescField,
-            String pseudoDeleteField, String routeToApplet, String openPath, String openDraftPath,
-            String openDraftWorkflow, String maintainOpenPath, String listingOpenPath, String originApplicationName,
-            String originName, int displayIndex, boolean openWindow, boolean menuAccess, boolean supportOpenInNewWindow,
-            boolean allowSecondaryTenants, boolean descriptiveButtons, ApplicationEntityNameParts nameParts,
-            String description, Long id, long version) {
+            List<String> subAppletList, Map<String, AppletPropDef> propDefMap,
+            Map<String, AppletSetValuesDef> setValuesDefMap, Map<String, AppletFilterDef> filterDefMap, String entity,
+            String label, String icon, String assignDescField, String pseudoDeleteField, String routeToApplet,
+            String openPath, String openDraftPath, String openDraftWorkflow, String maintainOpenPath,
+            String listingOpenPath, String originApplicationName, String originName, int displayIndex,
+            boolean openWindow, boolean menuAccess, boolean supportOpenInNewWindow, boolean allowSecondaryTenants,
+            boolean descriptiveButtons, ApplicationEntityNameParts nameParts, String description, Long id,
+            long version) {
         super(nameParts, description, id, version);
         this.type = type;
         this.entity = entity;
@@ -137,6 +140,7 @@ public class StandardAppletDef extends BaseApplicationEntityDef implements Apple
         this.descriptiveButtons = descriptiveButtons;
         this.titleFormat = titleFormat;
         this.propDefList = propDefList;
+        this.subAppletList = subAppletList;
         this.propDefMap = propDefMap;
         this.setValuesDefMap = setValuesDefMap;
         this.filterDefMap = filterDefMap;
@@ -252,6 +256,11 @@ public class StandardAppletDef extends BaseApplicationEntityDef implements Apple
     }
 
     @Override
+    public boolean isMultiFacade() {
+        return type.isMultiFacade();
+    }
+
+    @Override
     public boolean isWithEntity() {
         return entity != null;
     }
@@ -319,6 +328,16 @@ public class StandardAppletDef extends BaseApplicationEntityDef implements Apple
     @Override
     public boolean isWithTitleFormat() {
         return titleFormat != null;
+    }
+
+    @Override
+    public List<String> getSubAppletList() {
+        return subAppletList;
+    }
+
+    @Override
+    public boolean isWithSubApplets() {
+        return !DataUtils.isBlank(subAppletList);
     }
 
     @Override
@@ -489,6 +508,8 @@ public class StandardAppletDef extends BaseApplicationEntityDef implements Apple
 
         private List<StringToken> titleFormat;
 
+        private List<String> subAppletList;
+
         private AppletType type;
 
         private String entity;
@@ -611,6 +632,11 @@ public class StandardAppletDef extends BaseApplicationEntityDef implements Apple
             return this;
         }
 
+        public Builder subAppletList(List<String> subAppletList) {
+            this.subAppletList = subAppletList;
+            return this;
+        }
+
         public Builder addPropDef(String name, String value) {
             if (propDefMap.containsKey(name)) {
                 throw new RuntimeException("Property with name [" + name + "] already exists in this definition.");
@@ -658,7 +684,7 @@ public class StandardAppletDef extends BaseApplicationEntityDef implements Apple
                 originApplicationName = nameParts.getApplicationName();
             }
             return new StandardAppletDef(type, titleFormat,
-                    DataUtils.unmodifiableList(new ArrayList<AppletPropDef>(propDefMap.values())),
+                    DataUtils.unmodifiableList(new ArrayList<AppletPropDef>(propDefMap.values())), subAppletList,
                     DataUtils.unmodifiableMap(propDefMap), DataUtils.unmodifiableMap(setValuesDefMap),
                     DataUtils.unmodifiableMap(filterDefMap), entity, label, icon, assignDescField, pseudoDeleteField,
                     routeToApplet, openPath, openDraftPath, openDraftWorkflow, maintainOpenPath, listingOpenPath,

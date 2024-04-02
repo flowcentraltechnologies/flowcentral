@@ -118,6 +118,7 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
                         case REVIEW_SINGLEFORMWORKITEMS:
                         case REVIEW_WIZARDWORKITEMS:
                         case FACADE:
+                        case FACADE_MULTIPLE:
                             break;
                         case STUDIO_FC_COMPONENT: {
                             String name = null;

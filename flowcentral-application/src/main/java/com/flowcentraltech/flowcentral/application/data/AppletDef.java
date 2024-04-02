@@ -54,6 +54,8 @@ public interface AppletDef {
 
     AppletDef getListingAppletDef();
 
+    List<String> getSubAppletList();
+    
     boolean isStudioComponent();
 
     String getOriginApplicationName();
@@ -71,6 +73,10 @@ public interface AppletDef {
     String getIcon();
 
     boolean isFacade();
+
+    boolean isMultiFacade();
+
+    boolean isWithSubApplets();
 
     boolean isWithEntity();
 

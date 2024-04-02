@@ -98,6 +98,7 @@ import com.flowcentraltech.flowcentral.application.entities.AppAppletFilterQuery
 import com.flowcentraltech.flowcentral.application.entities.AppAppletProp;
 import com.flowcentraltech.flowcentral.application.entities.AppAppletPropQuery;
 import com.flowcentraltech.flowcentral.application.entities.AppAppletQuery;
+import com.flowcentraltech.flowcentral.application.entities.AppAppletRouteToApplet;
 import com.flowcentraltech.flowcentral.application.entities.AppAppletSetValues;
 import com.flowcentraltech.flowcentral.application.entities.AppAppletSetValuesQuery;
 import com.flowcentraltech.flowcentral.application.entities.AppAssignmentPage;
@@ -247,6 +248,7 @@ import com.flowcentraltech.flowcentral.configuration.xml.AppletAlertConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppletConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppletFilterConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppletPropConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.AppletRouteToAppletConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppletSetValuesConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.ChoiceConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.EntityAttachmentConfig;
@@ -494,6 +496,15 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
 
                     for (AppAppletProp appAppletProp : appApplet.getPropList()) {
                         adb.addPropDef(appAppletProp.getName(), appAppletProp.getValue());
+                    }
+
+                    if (type.isMultiFacade()) {
+                        List<String> subAppletList = new ArrayList<String>();
+                        for (AppAppletRouteToApplet appAppletRouteToApplet : appApplet.getRouteToAppletList()) {
+                            subAppletList.add(appAppletRouteToApplet.getRouteToApplet());
+                        }
+
+                        adb.subAppletList(subAppletList);
                     }
 
                     for (AppAppletFilter appAppletFilter : appApplet.getFilterList()) {
@@ -1194,7 +1205,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                                 DataUtils.convert(List.class, String.class, appFormStatePolicy.getTrigger(), null));
                     }
 
-                    DataUtils.sortAscending(appForm.getWidgetRulesList(), AppFormWidgetRulesPolicy.class, "executionIndex");
+                    DataUtils.sortAscending(appForm.getWidgetRulesList(), AppFormWidgetRulesPolicy.class,
+                            "executionIndex");
                     for (AppFormWidgetRulesPolicy appFormWidgetRulesPolicy : appForm.getWidgetRulesList()) {
                         WidgetRulesDef widgetRulesDef = InputWidgetUtils
                                 .getWidgetRulesDef(appFormWidgetRulesPolicy.getWidgetRules());
@@ -1217,7 +1229,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                                 widgetRulesDef, ruleEditors);
                     }
 
-                    DataUtils.sortAscending(appForm.getFieldValidationList(), AppFormFieldValidationPolicy.class, "executionIndex");
+                    DataUtils.sortAscending(appForm.getFieldValidationList(), AppFormFieldValidationPolicy.class,
+                            "executionIndex");
                     for (AppFormFieldValidationPolicy appFormFieldValidationPolicy : appForm.getFieldValidationList()) {
                         fdb.addFieldValidationPolicy(appFormFieldValidationPolicy.getName(),
                                 appFormFieldValidationPolicy.getDescription(),
@@ -1225,7 +1238,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                                 appFormFieldValidationPolicy.getValidation(), appFormFieldValidationPolicy.getRule());
                     }
 
-                    DataUtils.sortAscending(appForm.getFormValidationList(), AppFormValidationPolicy.class, "executionIndex");
+                    DataUtils.sortAscending(appForm.getFormValidationList(), AppFormValidationPolicy.class,
+                            "executionIndex");
                     for (AppFormValidationPolicy appFormValidationPolicy : appForm.getFormValidationList()) {
                         fdb.addFormValidationPolicy(
                                 InputWidgetUtils.getFilterDef(appletUtilities, null,
@@ -4914,6 +4928,18 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
 
         appApplet.setAlertList(alertList);
 
+        List<AppAppletRouteToApplet> routeToAppletList = null;
+        if (!DataUtils.isBlank(appletConfig.getRouteToAppletList())) {
+            routeToAppletList = new ArrayList<AppAppletRouteToApplet>();
+            for (AppletRouteToAppletConfig appletRouteToAppletConfig: appletConfig.getRouteToAppletList()) {
+                AppAppletRouteToApplet appAppletRouteToApplet = new AppAppletRouteToApplet();
+                appAppletRouteToApplet.setRouteToApplet(appletRouteToAppletConfig.getRouteToApplet());
+                routeToAppletList.add(appAppletRouteToApplet);
+            }
+        }
+
+        appApplet.setRouteToAppletList(routeToAppletList);
+        
         List<AppAppletFilter> filterList = null;
         if (!DataUtils.isBlank(appletConfig.getFilterList())) {
             filterList = new ArrayList<AppAppletFilter>();
@@ -5870,7 +5896,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                                 resolveApplicationMessage(fieldValidationPolicyConfig.getDescription()));
                         oldAppFormFieldValidationPolicy.setFieldName(fieldValidationPolicyConfig.getFieldName());
                         oldAppFormFieldValidationPolicy.setValidation(fieldValidationPolicyConfig.getValidator());
-                        oldAppFormFieldValidationPolicy.setExecutionIndex(fieldValidationPolicyConfig.getExecutionIndex());
+                        oldAppFormFieldValidationPolicy
+                                .setExecutionIndex(fieldValidationPolicyConfig.getExecutionIndex());
                         oldAppFormFieldValidationPolicy.setRule(fieldValidationPolicyConfig.getRule());
                     }
 

@@ -836,6 +836,26 @@
 			<property name="propertyList.rule" value="appAppletPropRule" />
 			<property name="propertyList.update" value="true" />
 		</applet>
+		<applet name="manageAppAppletRouteToApplet"
+			description="$m{studio.appappletroutetoapplet.manage}"
+			label="$m{studio.appappletroutetoapplet.manage.label}"
+			type="manage_entitylist" entity="application.appAppletRouteToApplet"
+			menuAccess="false">
+			<property name="searchTable"
+				value="appAppletRouteToAppletTable" />
+			<property name="searchTable.new" value="true" />
+			<property name="searchTable.edit" value="false" />
+			<property name="searchTable.report" value="false" />
+			<property name="createForm"
+				value="appAppletRouteToAppletForm" />
+			<property name="createForm.save" value="true" />
+			<property name="createForm.save.next" value="true" />
+			<property name="createForm.save.close" value="true" />
+			<property name="maintainForm"
+				value="appAppletRouteToAppletForm" />
+			<property name="maintainForm.update" value="true" />
+			<property name="maintainForm.delete" value="true" />
+		</applet>
 		<applet name="manageAppAppletFilter"
 			description="$m{studio.appappletfilter.manage}"
 			label="$m{studio.appappletfilter.manage.label}"
@@ -1577,6 +1597,17 @@
 			<column field="updateDt" renderWidget="application.datetime"
 				widthRatio="1" />
 		</table>
+		<table name="appAppletRouteToAppletTable"
+			description="$m{studio.appappletroutetoapplet.table}"
+			label="$m{studio.appappletroutetoapplet.table.label}"
+			entity="application.appAppletRouteToApplet">
+			<column field="routeToApplet" renderWidget="application.text"
+				widthRatio="1" linkAct="maintainAct" />
+			<column field="createDt" renderWidget="application.datetime"
+				widthRatio="1" />
+			<column field="updateDt" renderWidget="application.datetime"
+				widthRatio="1" />
+		</table>
 		<table name="appAppletFilterTable"
 			description="$m{studio.appappletfilter.table}"
 			label="$m{studio.appappletfilter.table.label}"
@@ -1764,7 +1795,7 @@
 			<column field="typeDesc" renderWidget="application.text"
 				widthRatio="1" />
 			<column field="executionIndex" renderWidget="application.text"
-				widthRatio="1" order="ASC"/>
+				widthRatio="1" order="ASC" />
 		</table>
 		<table name="appFormWidgetRulesPolicyTable"
 			description="$m{studio.appformwidgetrulespolicy.table}"
@@ -2192,6 +2223,10 @@
 				label="$m{studio.appapplet.form.properties}"
 				contentType="property_list" applet="manageAppAppletProp"
 				reference="propList" />
+			<tab name="routeToApplets"
+				label="$m{studio.appapplet.form.routetoapplets}"
+				contentType="child_list" applet="manageAppAppletRouteToApplet"
+				reference="routeToAppletList" visible="false" />
 			<tab name="filters" label="$m{studio.appapplet.form.filters}"
 				contentType="child_list" applet="manageAppAppletFilter"
 				reference="filterList" />
@@ -2318,6 +2353,17 @@
 						visible="true" />
 				</setStates>
 			</formStatePolicy>
+			<formStatePolicy type="on_switch"
+				name="multiFacadePolicy"
+				description="$m{studio.appapplet.form.formstatepolicy.multifacade}">
+				<onCondition>
+					<restriction type="equals" field="type" paramA="FCM" />
+				</onCondition>
+				<setStates>
+					<setState type="tab" target="routeToApplets"
+						visible="true" />
+				</setStates>
+			</formStatePolicy>
 			<formStatePolicy type="on_switch" name="pathPolicy"
 				description="$m{studio.appapplet.form.formstatepolicy.path}">
 				<onCondition>
@@ -2328,6 +2374,22 @@
 					<setState type="field" target="path" visible="true" />
 				</setStates>
 			</formStatePolicy>
+		</form>
+		<form name="appAppletRouteToAppletForm"
+			description="$m{studio.appappletroutetoapplet.form}"
+			entity="application.appAppletRouteToApplet">
+			<tab name="basicDetails"
+				label="$m{studio.appappletroutetoapplet.form.basicdetails}"
+				contentType="miniform">
+				<section name="routeToAppletDetails" columns="type_2">
+					<field name="appAppletId" column="0" required="true" />
+					<field name="routeToApplet"
+						inputWidget="studio.facadeappletroutetoappletlist" column="1"
+						required="true" />
+				</section>
+			</tab>
+			<tab name="changeLog" label="$m{application.form.audit}"
+				contentType="miniform_changelog" />
 		</form>
 		<form name="appAppletFilterForm"
 			description="$m{studio.appappletfilter.form}"
@@ -3406,7 +3468,7 @@
 						inputWidget="studio.entitycategoryfieldlist" column="1"
 						switchOnChange="true" />
 					<field name="timeSeriesType"
-						inputWidget="application.enumlist" column="1" visible="false"/>
+						inputWidget="application.enumlist" column="1" visible="false" />
 				</section>
 			</tab>
 			<tab name="series" label="$m{studio.chartdatasource.form.series}"
@@ -3462,7 +3524,7 @@
 					<restriction type="is_not_null" field="categoryField" />
 				</onCondition>
 				<setStates>
-					<!--setState type="tab" target="categories" visible="false" /-->
+					<!--setState type="tab" target="categories" visible="false" / -->
 					<setState type="field" target="timeSeriesType"
 						visible="true" />
 				</setStates>
