@@ -74,6 +74,8 @@ public interface AppletDef {
 
     boolean isFacade();
 
+    boolean isMultiFacade();
+
     boolean isWithSubApplets();
 
     boolean isWithEntity();

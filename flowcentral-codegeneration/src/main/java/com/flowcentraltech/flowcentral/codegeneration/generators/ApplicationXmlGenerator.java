@@ -25,6 +25,7 @@ import com.flowcentraltech.flowcentral.application.entities.AppApplet;
 import com.flowcentraltech.flowcentral.application.entities.AppAppletAlert;
 import com.flowcentraltech.flowcentral.application.entities.AppAppletFilter;
 import com.flowcentraltech.flowcentral.application.entities.AppAppletProp;
+import com.flowcentraltech.flowcentral.application.entities.AppAppletRouteToApplet;
 import com.flowcentraltech.flowcentral.application.entities.AppAppletSetValues;
 import com.flowcentraltech.flowcentral.application.entities.AppAssignmentPage;
 import com.flowcentraltech.flowcentral.application.entities.AppEntity;
@@ -82,6 +83,7 @@ import com.flowcentraltech.flowcentral.configuration.xml.AppletAlertConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppletConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppletFilterConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppletPropConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.AppletRouteToAppletConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppletSetValuesConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppletsConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.ChoiceConfig;
@@ -237,6 +239,18 @@ public class ApplicationXmlGenerator extends AbstractStaticArtifactGenerator {
                     appletConfig.setPropList(propList);
                 }
 
+                // Route to applets
+                if (!DataUtils.isBlank(appApplet.getRouteToAppletList())) {
+                    List<AppletRouteToAppletConfig> routeToAppletList = new ArrayList<AppletRouteToAppletConfig>();
+                    for (AppAppletRouteToApplet appAppletRouteToApplet: appApplet.getRouteToAppletList()) {
+                        AppletRouteToAppletConfig appletRouteToAppletConfig = new AppletRouteToAppletConfig();
+                        appletRouteToAppletConfig.setRouteToApplet(appAppletRouteToApplet.getRouteToApplet());
+                        routeToAppletList.add(appletRouteToAppletConfig);
+                    }
+                    
+                    appletConfig.setRouteToAppletList(routeToAppletList);
+                }
+                
                 // Filters
                 if (!DataUtils.isBlank(appApplet.getFilterList())) {
                     List<AppletFilterConfig> filterList = new ArrayList<AppletFilterConfig>();

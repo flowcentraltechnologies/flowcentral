@@ -63,6 +63,8 @@ public class AppletConfig extends BaseNameConfig {
 
     private List<AppletPropConfig> propList;
 
+    private List<AppletRouteToAppletConfig> routeToAppletList;
+    
     private List<AppletFilterConfig> filterList;
 
     private List<AppletSetValuesConfig> valuesList;
@@ -212,6 +214,15 @@ public class AppletConfig extends BaseNameConfig {
     @XmlElement(name = "property", required = true)
     public void setPropList(List<AppletPropConfig> propList) {
         this.propList = propList;
+    }
+
+    public List<AppletRouteToAppletConfig> getRouteToAppletList() {
+        return routeToAppletList;
+    }
+
+    @XmlElement(name = "routeToApplet")
+    public void setRouteToAppletList(List<AppletRouteToAppletConfig> routeToAppletList) {
+        this.routeToAppletList = routeToAppletList;
     }
 
     public List<AppletFilterConfig> getFilterList() {

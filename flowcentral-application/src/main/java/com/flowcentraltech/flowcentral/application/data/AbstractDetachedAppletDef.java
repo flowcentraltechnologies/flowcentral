@@ -155,6 +155,11 @@ public abstract class AbstractDetachedAppletDef implements AppletDef {
     }
 
     @Override
+    public boolean isMultiFacade() {
+        return parentAppletDef.isMultiFacade();
+    }
+
+    @Override
     public boolean isWithEntity() {
         return parentAppletDef.isWithEntity();
     }

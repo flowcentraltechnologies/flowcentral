@@ -512,7 +512,7 @@
 			entity="appApplet" searchField="description">
 			<filter>
 				<restriction type="not_amongst" field="type"
-					paramA="FAC|SAC" />
+					paramA="FAC|FCM|SAC" />
 			</filter>
 		</reference>
 		<reference name="appAppletPropRef"
@@ -527,6 +527,9 @@
 		<reference name="appAppletFilterRef"
 			description="$m{application.appappletfilter.reference}"
 			entity="appAppletFilter" searchField="description" />
+		<reference name="appAppletRouteToAppletRef"
+			description="$m{application.appappletroutetoapplet.reference}"
+			entity="appAppletRouteToApplet" />
 		<reference name="appEntityRef"
 			description="$m{application.appentity.reference}" entity="appEntity"
 			searchField="description" />
@@ -735,7 +738,8 @@
 				label="$m{application.appapplet.titleformat}" type="string"
 				nullable="true" />
 			<field name="supportOpenInNewWindow"
-				label="$m{application.appapplet.supportopeninnewwindow}" type="boolean" />
+				label="$m{application.appapplet.supportopeninnewwindow}"
+				type="boolean" />
 			<field name="allowSecondaryTenants"
 				label="$m{application.appapplet.allowsecondarytenants}"
 				type="boolean" />
@@ -749,6 +753,9 @@
 			<field name="propList"
 				label="$m{application.appapplet.properties}" type="child_list"
 				references="appAppletPropRef" />
+			<field name="routeToAppletList"
+				label="$m{application.appapplet.routetoapplets}" type="child_list"
+				references="appAppletRouteToAppletRef" />
 			<field name="filterList"
 				label="$m{application.appapplet.filters}" type="child_list"
 				references="appAppletFilterRef" />
@@ -792,6 +799,21 @@
 			<uniqueConstraint name="nameUc"
 				description="$m{application.appappletprop.uc.name}"
 				fieldList="appAppletId,name" />
+		</entity>
+		<entity name="appAppletRouteToApplet"
+			description="$m{application.appappletroutetoapplet}"
+			label="$m{application.appappletroutetoapplet.label}"
+			type="com.flowcentraltech.flowcentral.application.entities.AppAppletRouteToApplet">
+			<field name="appAppletId"
+				label="$m{application.appappletroutetoapplet.appappletid}"
+				type="ref" references="appAppletRef"
+				inputWidget="application.entitylist" />
+			<field name="routeToApplet"
+				label="$m{application.appappletroutetoapplet.routetoapplet}"
+				type="string" />
+			<uniqueConstraint name="routeToAppletUc"
+				description="$m{application.appappletroutetoapplet.uc.routetoapplet}"
+				fieldList="appAppletId,routeToApplet" />
 		</entity>
 		<entity name="appAppletFilter"
 			description="$m{application.appappletfilter}"
@@ -918,7 +940,8 @@
 			<field name="reportable"
 				label="$m{application.appentity.reportable}" type="boolean" />
 			<field name="schemaUpdateRequired"
-				label="$m{application.appentity.schemaupdaterequired}" type="boolean" />
+				label="$m{application.appentity.schemaupdaterequired}"
+				type="boolean" />
 			<field name="actionPolicy"
 				label="$m{application.appentity.actionpolicy}" type="boolean" />
 			<field name="baseTypeDesc"
@@ -1788,7 +1811,8 @@
 			<field name="trigger"
 				label="$m{application.appformstatepolicy.trigger}" type="string" />
 			<field name="executionIndex"
-				label="$m{application.appformstatepolicy.executionindex}" type="integer" />
+				label="$m{application.appformstatepolicy.executionindex}"
+				type="integer" />
 			<field name="onCondition"
 				label="$m{application.appformstatepolicy.oncondition}" type="child"
 				category="formstatepolicy" references="appFilterRef" />
@@ -1811,7 +1835,8 @@
 				type="ref" references="appFormRef"
 				inputWidget="application.entitylist" />
 			<field name="executionIndex"
-				label="$m{application.appformsetstate.executionindex}" type="integer" />
+				label="$m{application.appformsetstate.executionindex}"
+				type="integer" />
 			<field name="onCondition"
 				label="$m{application.appformwidgetrulespolicy.oncondition}"
 				type="child" category="formwidgetrulespolicy"
@@ -1871,7 +1896,8 @@
 				label="$m{application.appformfieldvalidationpolicy.rule}"
 				type="string" nullable="true" />
 			<field name="executionIndex"
-				label="$m{application.appformfieldvalidationpolicy.executionindex}" type="integer" />
+				label="$m{application.appformfieldvalidationpolicy.executionindex}"
+				type="integer" />
 		</entity>
 		<entity name="appFormValidationPolicy"
 			description="$m{application.appformvalidationpolicy}"
@@ -1886,7 +1912,8 @@
 			<field name="target"
 				label="$m{application.appformvalidationpolicy.target}" type="string" />
 			<field name="executionIndex"
-				label="$m{application.appformvalidationpolicy.executionindex}" type="integer" />
+				label="$m{application.appformvalidationpolicy.executionindex}"
+				type="integer" />
 			<field name="entityName"
 				label="$m{application.appformvalidationpolicy.entityname}"
 				type="list_only" key="appFormId" property="entity" />
@@ -1924,7 +1951,8 @@
 				label="$m{application.appformreviewpolicy.errormatcher}"
 				type="string" nullable="true" />
 			<field name="executionIndex"
-				label="$m{application.appformreviewpolicy.executionindex}" type="integer" />
+				label="$m{application.appformreviewpolicy.executionindex}"
+				type="integer" />
 			<field name="errorCondition"
 				label="$m{application.appformreviewpolicy.errorcondition}"
 				type="child" category="formreviewpolicy" references="appFilterRef" />

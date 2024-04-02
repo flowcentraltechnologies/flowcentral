@@ -256,6 +256,11 @@ public class StandardAppletDef extends BaseApplicationEntityDef implements Apple
     }
 
     @Override
+    public boolean isMultiFacade() {
+        return type.isMultiFacade();
+    }
+
+    @Override
     public boolean isWithEntity() {
         return entity != null;
     }
