@@ -38,7 +38,7 @@ public final class HtmlUtils {
 
     public static String formatEmailHTML(String html) {
         if (html != null) {
-            return html.replaceAll("\n", "<br/>").replaceAll("\t", "&nbsp;&nbsp;&nbsp;&nbsp;").replaceAll(" ",
+            return html/*.replaceAll("\n", "<br/>")*/.replaceAll("\t", "&nbsp;&nbsp;&nbsp;&nbsp;").replaceAll(" ",
                     "&nbsp;");
         }
 

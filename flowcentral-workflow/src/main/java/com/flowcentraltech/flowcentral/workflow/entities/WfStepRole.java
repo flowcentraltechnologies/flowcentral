@@ -16,9 +16,11 @@
 
 package com.flowcentraltech.flowcentral.workflow.entities;
 
+import com.flowcentraltech.flowcentral.common.constants.WfItemVersionType;
 import com.flowcentraltech.flowcentral.common.entities.BaseAuditEntity;
 import com.flowcentraltech.flowcentral.configuration.constants.WorkflowStepType;
 import com.flowcentraltech.flowcentral.organization.entities.Role;
+import com.tcdng.unify.core.annotation.Column;
 import com.tcdng.unify.core.annotation.ForeignKey;
 import com.tcdng.unify.core.annotation.ListOnly;
 import com.tcdng.unify.core.annotation.Table;
@@ -83,6 +85,9 @@ public class WfStepRole extends BaseAuditEntity {
 
     @ListOnly(key = "roleId", property = "description")
     private String roleDesc;
+
+    @ListOnly(key = "roleId", property = "wfItemVersionType")
+    private WfItemVersionType wfItemVersionType;
 
     @Override
     public String getDescription() {
@@ -223,6 +228,14 @@ public class WfStepRole extends BaseAuditEntity {
 
     public void setRoleDesc(String roleDesc) {
         this.roleDesc = roleDesc;
+    }
+
+    public WfItemVersionType getWfItemVersionType() {
+        return wfItemVersionType;
+    }
+
+    public void setWfItemVersionType(WfItemVersionType wfItemVersionType) {
+        this.wfItemVersionType = wfItemVersionType;
     }
 
 }

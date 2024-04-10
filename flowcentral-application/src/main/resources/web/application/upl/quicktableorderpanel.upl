@@ -24,7 +24,9 @@
 
 // Order table panel
 !ui-panel:orderyBodyPanel styleClass:$s{orders} components:$c{orderRack}
-!ui-rack:orderRack style:$s{width:100%;} binding:orderItems components:$c{description}
+!ui-rack:orderRack style:$s{width:720px;}  binding:orderItems components:$c{description}
+    windowed:true serialNumbers:true
+
 !ui-label:description caption:$m{quicktableorderpanel.description} binding:description
 
 

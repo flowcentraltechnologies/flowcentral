@@ -804,9 +804,9 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                 return workflowStepInfoList;
             }
         } else {
-            List<WfStepRole> wfStepRoleList = environment()
-                    .listAll(new WfStepRoleQuery().roleCode(roleCode).workflowLoadingTable(loadingTableName)
-                            .wfStepType(type).isWithLoadingTable().addSelect("wfStepName", "wfStepDesc", "wfStepLabel",
+            List<WfStepRole> wfStepRoleList = environment().listAll(
+                    new WfStepRoleQuery().roleCode(roleCode).workflowLoadingTable(loadingTableName).wfStepType(type)
+                            .isWithLoadingTable().isOriginal().addSelect("wfStepName", "wfStepDesc", "wfStepLabel",
                                     "entityName", "applicationName", "workflowName", "branchOnly", "departmentOnly"));
             if (!DataUtils.isBlank(wfStepRoleList)) {
                 List<WorkflowStepInfo> workflowStepInfoList = new ArrayList<WorkflowStepInfo>();
@@ -933,14 +933,14 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             final WfUserActionDef userActionDef = currentWfStepDef.getUserActionDef(userAction);
             // Update current event
             environment().updateAll(new WfItemEventQuery().id(wfItem.getWfItemEventId()),
-                    new Update().add("actor", userLoginId).add("actionDt", getNow()).add("comment", comment).add("wfAction",
-                            userActionDef.getLabel()));
+                    new Update().add("actor", userLoginId).add("actionDt", getNow()).add("comment", comment)
+                            .add("wfAction", userActionDef.getLabel()));
 
             // Prepare event for next step. If error step and next step is not specified
             // jump to the work item previous step
-            final String nextStepName = currentWfStepDef.isError() && StringUtils.isBlank(userActionDef.getNextStepName())
-                    ? wfItem.getPrevWfStepName()
-                    : userActionDef.getNextStepName();
+            final String nextStepName = currentWfStepDef.isError()
+                    && StringUtils.isBlank(userActionDef.getNextStepName()) ? wfItem.getPrevWfStepName()
+                            : userActionDef.getNextStepName();
             WfStepDef nextWfStepDef = wfDef.getWfStepDef(nextStepName);
             final Long wfItemEventId = createWfItemEvent(nextWfStepDef, wfItem.getWfItemHistId(), stepName, null, null,
                     null, null);
@@ -1001,8 +1001,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                 final AppletDef stepAppletDef = appletUtil.getAppletDef(currentWfStepDef.getStepAppletName());
                 final String updatePolicy = stepAppletDef.getPropValue(String.class,
                         AppletPropertyConstants.MAINTAIN_FORM_UPDATE_POLICY);
-                EntityActionContext eCtx = new EntityActionContext(entityDef, wfEntityInst, RecordActionType.UPDATE, null,
-                        updatePolicy);
+                EntityActionContext eCtx = new EntityActionContext(entityDef, wfEntityInst, RecordActionType.UPDATE,
+                        null, updatePolicy);
                 if (wfReviewMode.lean()) {
                     if (emails != null) {
                         environment().updateByIdVersion(eCtx);
@@ -1027,7 +1027,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         } catch (UnifyException e) {
             logSevere(e);
         }
-        
+
         return false;
     }
 

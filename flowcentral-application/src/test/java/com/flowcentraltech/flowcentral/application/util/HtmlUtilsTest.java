@@ -51,7 +51,7 @@ public class HtmlUtilsTest {
         assertEquals("&nbsp;", HtmlUtils.formatEmailHTML("&nbsp;"));
         assertEquals("&nbsp;", HtmlUtils.formatEmailHTML(" "));
         assertEquals("&nbsp;&nbsp;&nbsp;", HtmlUtils.formatEmailHTML("   "));
-        assertEquals("<br/>", HtmlUtils.formatEmailHTML("\n"));
+        assertEquals("\n", HtmlUtils.formatEmailHTML("\n"));
         assertEquals("&nbsp;&nbsp;&nbsp;&nbsp;", HtmlUtils.formatEmailHTML("\t"));
     }
 
