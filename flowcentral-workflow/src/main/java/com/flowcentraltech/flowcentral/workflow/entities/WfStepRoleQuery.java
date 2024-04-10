@@ -17,6 +17,7 @@ package com.flowcentraltech.flowcentral.workflow.entities;
 
 import java.util.List;
 
+import com.flowcentraltech.flowcentral.common.constants.WfItemVersionType;
 import com.flowcentraltech.flowcentral.common.entities.BaseEntityQuery;
 import com.flowcentraltech.flowcentral.configuration.constants.WorkflowStepType;
 
@@ -62,5 +63,9 @@ public class WfStepRoleQuery extends BaseEntityQuery<WfStepRole> {
     
     public WfStepRoleQuery isWithLoadingTable() {
         return (WfStepRoleQuery) addIsNotNull("workflowLoadingTable");
+    }
+    
+    public WfStepRoleQuery isOriginal() {
+        return (WfStepRoleQuery) addEquals("wfItemVersionType", WfItemVersionType.ORIGINAL);
     }
 }
