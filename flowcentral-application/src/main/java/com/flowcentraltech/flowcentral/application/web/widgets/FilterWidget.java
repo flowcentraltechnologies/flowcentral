@@ -60,13 +60,13 @@ public class FilterWidget extends AbstractValueListWidget<FilterCondition> {
     @Override
     protected void doOnPageConstruct() throws UnifyException {
         fieldSelectCtrl = (Control) addInternalChildWidget(
-                "!ui-select blankOption:$s{} list:entityfilterfielddeflist listParams:$l{entityDef labelSuggestionDef} binding:fieldName");
+                "!ui-select style:$s{width:100%;} blankOption:$s{} list:entityfilterfielddeflist listParams:$l{entityDef labelSuggestionDef} binding:fieldName");
         conditionTypeCtrl = (DynamicField) addInternalChildWidget(
-                "!ui-dynamic binding:type descriptorBinding:typeSelector");
+                "!ui-dynamic style:$s{width:100%;} binding:type descriptorBinding:typeSelector");
         paramCtrlA = (DynamicField) addInternalChildWidget(
-                "!ui-dynamic binding:paramInputA.value descriptorBinding:paramInputA.editor");
+                "!ui-dynamic style:$s{width:100%;} binding:paramInputA.value descriptorBinding:paramInputA.editor");
         paramCtrlB = (DynamicField) addInternalChildWidget(
-                "!ui-dynamic binding:paramInputB.value descriptorBinding:paramInputB.editor");
+                "!ui-dynamic style:$s{width:100%;} binding:paramInputB.value descriptorBinding:paramInputB.editor");
         swapCtrl = (Control) addInternalChildWidget(
                 "!ui-button alwaysValueIndex:true styleClass:$e{abutton} symbol:$s{swap} hint:$m{button.swap.hint} debounce:false");
         andCtrl = (Control) addInternalChildWidget(
@@ -184,14 +184,14 @@ public class FilterWidget extends AbstractValueListWidget<FilterCondition> {
                 switch (filter.getListType()) {
                     case IMMEDIATE_FIELD:
                         fieldParamCtrlA = (Control) addInternalChildWidget(
-                                "!ui-select blankOption:$s{} list:entityfielddeflist listParams:$s{entityDef} binding:paramFieldA");
+                                "!ui-select style:$s{width:100%;} blankOption:$s{} list:entityfielddeflist listParams:$s{entityDef} binding:paramFieldA");
                         fieldParamCtrlB = (Control) addInternalChildWidget(
-                                "!ui-select blankOption:$s{} list:entityfielddeflist listParams:$s{entityDef} binding:paramFieldB");
+                                "!ui-select style:$s{width:100%;} blankOption:$s{} list:entityfielddeflist listParams:$s{entityDef} binding:paramFieldB");
                         break;
                     case IMMEDIATE_PARAM:
-                        fieldParamCtrlA = (Control) addInternalChildWidget("!ui-select blankOption:$s{} list:"
+                        fieldParamCtrlA = (Control) addInternalChildWidget("!ui-select style:$s{width:100%;} blankOption:$s{} list:"
                                 + filter.getParamList() + " listParams:$s{ownerInstId} binding:paramFieldA");
-                        fieldParamCtrlB = (Control) addInternalChildWidget("!ui-select blankOption:$s{} list:"
+                        fieldParamCtrlB = (Control) addInternalChildWidget("!ui-select style:$s{width:100%;} blankOption:$s{} list:"
                                 + filter.getParamList() + " listParams:$s{ownerInstId} binding:paramFieldB");
                         break;
                     case IMMEDIATE_ONLY:

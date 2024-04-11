@@ -45,11 +45,11 @@ public class SetValuesWidget extends AbstractValueListWidget<SetValueEntry> {
     @Override
     protected void doOnPageConstruct() throws UnifyException {
         fieldSelectCtrl = (Control) addInternalChildWidget(
-                "!ui-select blankOption:$s{} list:entitysetvaluefielddeflist listParams:$l{entityDef} binding:fieldName");
+                "!ui-select style:$s{width:100%;} blankOption:$s{} list:entitysetvaluefielddeflist listParams:$l{entityDef} binding:fieldName");
         typeSelectCtrl = (Control) addInternalChildWidget(
-                "!ui-select blankOption:$s{} list:entitysetvalueoptionlist listParams:$l{entityDef fieldName} binding:type");
+                "!ui-select style:$s{width:100%;} blankOption:$s{} list:entitysetvalueoptionlist listParams:$l{entityDef fieldName} binding:type");
         paramCtrl = (DynamicField) addInternalChildWidget(
-                "!ui-dynamic binding:paramInput.value descriptorBinding:paramInput.editor");
+                "!ui-dynamic style:$s{width:100%;} binding:paramInput.value descriptorBinding:paramInput.editor");
         deleteCtrl = (Control) addInternalChildWidget(
                 "!ui-button alwaysValueIndex:true styleClass:$e{abutton} symbol:$s{cross} hint:$m{button.delete.hint} debounce:false");
     }

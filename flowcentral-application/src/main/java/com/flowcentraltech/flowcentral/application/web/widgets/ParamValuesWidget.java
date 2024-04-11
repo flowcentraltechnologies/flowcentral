@@ -37,7 +37,7 @@ public class ParamValuesWidget extends AbstractValueListWidget<ParamValueEntry> 
     @Override
     protected void doOnPageConstruct() throws UnifyException {
         paramCtrl = (DynamicField) addInternalChildWidget(
-                "!ui-dynamic binding:paramInput.value descriptorBinding:paramInput.editor");
+                "!ui-dynamic style:$s{width:100%;} binding:paramInput.value descriptorBinding:paramInput.editor");
     }
 
     public DynamicField getParamCtrl() {

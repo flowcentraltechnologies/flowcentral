@@ -46,9 +46,9 @@ public class FieldSequenceWidget extends AbstractValueListWidget<FieldSequenceEn
     @Override
     protected void doOnPageConstruct() throws UnifyException {
         fieldSelectCtrl = (Control) addInternalChildWidget(
-                "!ui-select blankOption:$s{} list:entityfielddeflist listParams:$l{entityDef} binding:fieldName");
+                "!ui-select style:$s{width:100%;} blankOption:$s{} list:entityfielddeflist listParams:$l{entityDef} binding:fieldName");
         paramCtrl = (Control) addInternalChildWidget(
-                "!ui-select blankOption:$s{} list:entityfielddefformatterlist listParams:$l{entityDef fieldName} binding:param");
+                "!ui-select style:$s{width:100%;} blankOption:$s{} list:entityfielddefformatterlist listParams:$l{entityDef fieldName} binding:param");
         moveUpCtrl = (Control) addInternalChildWidget(
                 "!ui-button alwaysValueIndex:true styleClass:$e{abutton} symbol:$s{arrow-up} hint:$m{button.moveup.hint} debounce:false");
         moveDownCtrl = (Control) addInternalChildWidget(
