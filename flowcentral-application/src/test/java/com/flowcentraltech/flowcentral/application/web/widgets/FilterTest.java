@@ -63,7 +63,8 @@ public class FilterTest extends AbstractFlowCentralTest {
 
     @Test
     public void testBlankFilter() throws Exception {
-        Filter fo = new Filter(null, null, getEntityDef(), labelSuggestionDef, FilterConditionListType.IMMEDIATE_ONLY);
+        Filter fo = new Filter(null, null, getEntityDef(), labelSuggestionDef,
+                au.getWidgetTypeDef("application.sessionparamtypelist"), FilterConditionListType.IMMEDIATE_ONLY);
         List<FilterCondition> conditionList = fo.getConditionList();
         assertNotNull(conditionList);
         assertEquals(1, conditionList.size());
@@ -80,7 +81,8 @@ public class FilterTest extends AbstractFlowCentralTest {
 
     @Test
     public void testAddCompoundAndToRoot() throws Exception {
-        Filter fo = new Filter(null, null, getEntityDef(), labelSuggestionDef, FilterConditionListType.IMMEDIATE_ONLY);
+        Filter fo = new Filter(null, null, getEntityDef(), labelSuggestionDef,
+                au.getWidgetTypeDef("application.sessionparamtypelist"), FilterConditionListType.IMMEDIATE_ONLY);
         int addIndex = fo.addCompoundCondition(0, CompoundType.AND, Editable.TRUE);
         assertEquals(1, addIndex);
 
@@ -109,7 +111,8 @@ public class FilterTest extends AbstractFlowCentralTest {
 
     @Test
     public void testAddCompoundOrToRoot() throws Exception {
-        Filter fo = new Filter(null, null, getEntityDef(), labelSuggestionDef, FilterConditionListType.IMMEDIATE_ONLY);
+        Filter fo = new Filter(null, null, getEntityDef(), labelSuggestionDef,
+                au.getWidgetTypeDef("application.sessionparamtypelist"), FilterConditionListType.IMMEDIATE_ONLY);
         int addIndex = fo.addCompoundCondition(0, CompoundType.OR, Editable.TRUE);
         assertEquals(1, addIndex);
 
@@ -138,7 +141,8 @@ public class FilterTest extends AbstractFlowCentralTest {
 
     @Test
     public void testAddBlankSimpleCondition() throws Exception {
-        Filter fo = new Filter(null, null, getEntityDef(), labelSuggestionDef, FilterConditionListType.IMMEDIATE_ONLY);
+        Filter fo = new Filter(null, null, getEntityDef(), labelSuggestionDef,
+                au.getWidgetTypeDef("application.sessionparamtypelist"), FilterConditionListType.IMMEDIATE_ONLY);
         int addIndex = fo.addSimpleCondition(0, Editable.TRUE);
         assertEquals(1, addIndex);
 
@@ -167,7 +171,8 @@ public class FilterTest extends AbstractFlowCentralTest {
 
     @Test
     public void testAddSimpleConditionZeroParam() throws Exception {
-        Filter fo = new Filter(null, null, getEntityDef(), labelSuggestionDef, FilterConditionListType.IMMEDIATE_ONLY);
+        Filter fo = new Filter(null, null, getEntityDef(), labelSuggestionDef,
+                au.getWidgetTypeDef("application.sessionparamtypelist"), FilterConditionListType.IMMEDIATE_ONLY);
         int addIndex = fo.addSimpleCondition(0, FilterConditionType.IS_NULL, "costPrice", Editable.TRUE);
         assertEquals(1, addIndex);
 
@@ -197,7 +202,8 @@ public class FilterTest extends AbstractFlowCentralTest {
 
     @Test
     public void testAddSimpleConditionSingleParam() throws Exception {
-        Filter fo = new Filter(null, null, getEntityDef(), labelSuggestionDef, FilterConditionListType.IMMEDIATE_ONLY);
+        Filter fo = new Filter(null, null, getEntityDef(), labelSuggestionDef,
+                au.getWidgetTypeDef("application.sessionparamtypelist"), FilterConditionListType.IMMEDIATE_ONLY);
         int addIndex = fo.addSimpleCondition(0, FilterConditionType.GREATER_OR_EQUAL, "costPrice", "20.45",
                 Editable.TRUE);
         assertEquals(1, addIndex);
@@ -232,7 +238,8 @@ public class FilterTest extends AbstractFlowCentralTest {
 
     @Test
     public void testAddSimpleConditionDoubleParam() throws Exception {
-        Filter fo = new Filter(null, null, getEntityDef(), labelSuggestionDef, FilterConditionListType.IMMEDIATE_ONLY);
+        Filter fo = new Filter(null, null, getEntityDef(), labelSuggestionDef,
+                au.getWidgetTypeDef("application.sessionparamtypelist"), FilterConditionListType.IMMEDIATE_ONLY);
         int addIndex = fo.addSimpleCondition(0, FilterConditionType.BETWEEN, "costPrice", "20.45", "42.10",
                 Editable.TRUE);
         assertEquals(1, addIndex);
@@ -271,7 +278,8 @@ public class FilterTest extends AbstractFlowCentralTest {
 
     @Test
     public void testAddMultipleSimpleCondition() throws Exception {
-        Filter fo = new Filter(null, null, getEntityDef(), labelSuggestionDef, FilterConditionListType.IMMEDIATE_ONLY);
+        Filter fo = new Filter(null, null, getEntityDef(), labelSuggestionDef,
+                au.getWidgetTypeDef("application.sessionparamtypelist"), FilterConditionListType.IMMEDIATE_ONLY);
         int addIndex = fo.addSimpleCondition(0, FilterConditionType.LIKE, "name", "plane", Editable.TRUE);
         assertEquals(1, addIndex);
         addIndex = fo.addSimpleCondition(0, FilterConditionType.BETWEEN, "costPrice", "20.45", "42.10", Editable.TRUE);
@@ -325,7 +333,8 @@ public class FilterTest extends AbstractFlowCentralTest {
 
     @Test
     public void testAddDeepConditionsSequential() throws Exception {
-        Filter fo = new Filter(null, null, getEntityDef(), labelSuggestionDef, FilterConditionListType.IMMEDIATE_ONLY);
+        Filter fo = new Filter(null, null, getEntityDef(), labelSuggestionDef,
+                au.getWidgetTypeDef("application.sessionparamtypelist"), FilterConditionListType.IMMEDIATE_ONLY);
         int addIndex = fo.addSimpleCondition(0, FilterConditionType.LIKE, "name", "plane", Editable.TRUE);
         assertEquals(1, addIndex);
         addIndex = fo.addCompoundCondition(0, CompoundType.OR, Editable.TRUE);
@@ -402,7 +411,8 @@ public class FilterTest extends AbstractFlowCentralTest {
 
     @Test
     public void testAddDeepConditionsRandom() throws Exception {
-        Filter fo = new Filter(null, null, getEntityDef(), labelSuggestionDef, FilterConditionListType.IMMEDIATE_ONLY);
+        Filter fo = new Filter(null, null, getEntityDef(), labelSuggestionDef,
+                au.getWidgetTypeDef("application.sessionparamtypelist"), FilterConditionListType.IMMEDIATE_ONLY);
         int addIndex = fo.addCompoundCondition(0, CompoundType.OR, Editable.TRUE);
         assertEquals(1, addIndex);
         addIndex = fo.addSimpleCondition(1, FilterConditionType.GREATER_OR_EQUAL, "costPrice", "20.45", Editable.TRUE);
@@ -479,7 +489,8 @@ public class FilterTest extends AbstractFlowCentralTest {
 
     @Test
     public void testRemoveBlank() throws Exception {
-        Filter fo = new Filter(null, null, getEntityDef(), labelSuggestionDef, FilterConditionListType.IMMEDIATE_ONLY);
+        Filter fo = new Filter(null, null, getEntityDef(), labelSuggestionDef,
+                au.getWidgetTypeDef("application.sessionparamtypelist"), FilterConditionListType.IMMEDIATE_ONLY);
 
         fo.removeCondition(0);
 
@@ -499,7 +510,8 @@ public class FilterTest extends AbstractFlowCentralTest {
 
     @Test
     public void testRemoveFromMultipleSimpleCondition() throws Exception {
-        Filter fo = new Filter(null, null, getEntityDef(), labelSuggestionDef, FilterConditionListType.IMMEDIATE_ONLY);
+        Filter fo = new Filter(null, null, getEntityDef(), labelSuggestionDef,
+                au.getWidgetTypeDef("application.sessionparamtypelist"), FilterConditionListType.IMMEDIATE_ONLY);
         fo.addSimpleCondition(0, FilterConditionType.LIKE, "name", "plane", Editable.FALSE);
         fo.addSimpleCondition(0, FilterConditionType.BETWEEN, "costPrice", "20.45", "42.10", Editable.FALSE);
 
@@ -539,7 +551,8 @@ public class FilterTest extends AbstractFlowCentralTest {
 
     @Test
     public void testRemoveCompoundCondition() throws Exception {
-        Filter fo = new Filter(null, null, getEntityDef(), labelSuggestionDef, FilterConditionListType.IMMEDIATE_ONLY);
+        Filter fo = new Filter(null, null, getEntityDef(), labelSuggestionDef,
+                au.getWidgetTypeDef("application.sessionparamtypelist"), FilterConditionListType.IMMEDIATE_ONLY);
         fo.addCompoundCondition(0, CompoundType.OR, Editable.FALSE);
         fo.addSimpleCondition(1, FilterConditionType.GREATER_OR_EQUAL, "costPrice", "20.45", Editable.FALSE);
         fo.addSimpleCondition(1, FilterConditionType.LESS_OR_EQUAL, "costPrice", "42.10", Editable.FALSE);
@@ -577,14 +590,16 @@ public class FilterTest extends AbstractFlowCentralTest {
 
     @Test
     public void testGetRestrictionBlankFilter() throws Exception {
-        Filter fo = new Filter(null, null, getEntityDef(), labelSuggestionDef, FilterConditionListType.IMMEDIATE_ONLY);
+        Filter fo = new Filter(null, null, getEntityDef(), labelSuggestionDef,
+                au.getWidgetTypeDef("application.sessionparamtypelist"), FilterConditionListType.IMMEDIATE_ONLY);
         CompoundRestriction restriction = fo.getRestriction(new Date());
         assertNull(restriction);
     }
 
     @Test
     public void testGetRestrictionSimpleConditionZeroParam() throws Exception {
-        Filter fo = new Filter(null, null, getEntityDef(), labelSuggestionDef, FilterConditionListType.IMMEDIATE_ONLY);
+        Filter fo = new Filter(null, null, getEntityDef(), labelSuggestionDef,
+                au.getWidgetTypeDef("application.sessionparamtypelist"), FilterConditionListType.IMMEDIATE_ONLY);
         fo.addSimpleCondition(0, FilterConditionType.IS_NULL, "costPrice", Editable.TRUE);
         CompoundRestriction restriction = fo.getRestriction(new Date());
         assertNotNull(restriction);
@@ -594,7 +609,8 @@ public class FilterTest extends AbstractFlowCentralTest {
 
     @Test
     public void testGetRestrictionSimpleConditionSingleParam() throws Exception {
-        Filter fo = new Filter(null, null, getEntityDef(), labelSuggestionDef, FilterConditionListType.IMMEDIATE_ONLY);
+        Filter fo = new Filter(null, null, getEntityDef(), labelSuggestionDef,
+                au.getWidgetTypeDef("application.sessionparamtypelist"), FilterConditionListType.IMMEDIATE_ONLY);
         fo.addSimpleCondition(0, FilterConditionType.GREATER_OR_EQUAL, "costPrice", "20.45", Editable.TRUE);
         CompoundRestriction restriction = fo.getRestriction(new Date());
         assertNotNull(restriction);
@@ -604,7 +620,8 @@ public class FilterTest extends AbstractFlowCentralTest {
 
     @Test
     public void testGetRestrictionSimpleConditionDoubleParam() throws Exception {
-        Filter fo = new Filter(null, null, getEntityDef(), labelSuggestionDef, FilterConditionListType.IMMEDIATE_ONLY);
+        Filter fo = new Filter(null, null, getEntityDef(), labelSuggestionDef,
+                au.getWidgetTypeDef("application.sessionparamtypelist"), FilterConditionListType.IMMEDIATE_ONLY);
         fo.addSimpleCondition(0, FilterConditionType.BETWEEN, "costPrice", "20.45", "42.10", Editable.TRUE);
         CompoundRestriction restriction = fo.getRestriction(new Date());
         assertNotNull(restriction);
@@ -614,7 +631,8 @@ public class FilterTest extends AbstractFlowCentralTest {
 
     @Test
     public void testGetRestrictionMultipleSimpleCondition() throws Exception {
-        Filter fo = new Filter(null, null, getEntityDef(), labelSuggestionDef, FilterConditionListType.IMMEDIATE_ONLY);
+        Filter fo = new Filter(null, null, getEntityDef(), labelSuggestionDef,
+                au.getWidgetTypeDef("application.sessionparamtypelist"), FilterConditionListType.IMMEDIATE_ONLY);
         fo.addSimpleCondition(0, FilterConditionType.LIKE, "name", "plane", Editable.TRUE);
         fo.addSimpleCondition(0, FilterConditionType.BETWEEN, "costPrice", "20.45", "42.10", Editable.TRUE);
         CompoundRestriction restriction = fo.getRestriction(new Date());
@@ -625,7 +643,8 @@ public class FilterTest extends AbstractFlowCentralTest {
 
     @Test
     public void testGetRestrictionDeepConditionsSequential() throws Exception {
-        Filter fo = new Filter(null, null, getEntityDef(), labelSuggestionDef, FilterConditionListType.IMMEDIATE_ONLY);
+        Filter fo = new Filter(null, null, getEntityDef(), labelSuggestionDef,
+                au.getWidgetTypeDef("application.sessionparamtypelist"), FilterConditionListType.IMMEDIATE_ONLY);
         fo.addSimpleCondition(0, FilterConditionType.LIKE, "name", "plane", Editable.TRUE);
         fo.addCompoundCondition(0, CompoundType.OR, Editable.TRUE);
         fo.addSimpleCondition(2, FilterConditionType.GREATER_OR_EQUAL, "costPrice", "20.45", Editable.TRUE);
@@ -640,7 +659,8 @@ public class FilterTest extends AbstractFlowCentralTest {
 
     @Test
     public void testGetRestrictionDeepConditionsRandom() throws Exception {
-        Filter fo = new Filter(null, null, getEntityDef(), labelSuggestionDef, FilterConditionListType.IMMEDIATE_ONLY);
+        Filter fo = new Filter(null, null, getEntityDef(), labelSuggestionDef,
+                au.getWidgetTypeDef("application.sessionparamtypelist"), FilterConditionListType.IMMEDIATE_ONLY);
         fo.addCompoundCondition(0, CompoundType.OR, Editable.TRUE);
         fo.addSimpleCondition(1, FilterConditionType.GREATER_OR_EQUAL, "costPrice", "20.45", Editable.TRUE);
         fo.addSimpleCondition(1, FilterConditionType.LESS_OR_EQUAL, "costPrice", "42.10", Editable.TRUE);
@@ -668,24 +688,25 @@ public class FilterTest extends AbstractFlowCentralTest {
         if (ed == null) {
             WidgetTypeDef amtWidgetTypeDef = new WidgetTypeDef(DataType.DOUBLE, InputType.DOUBLE, "application.amount",
                     "Amount", 1L, 1L, "!ui-decimal precision:14 scale:2", "!ui-label");
-            WidgetTypeDef textWidgetTypeDef = new WidgetTypeDef(DataType.STRING, InputType.STRING, "application.text", "Text", 1L,
-                    1L, "!ui-text", "!ui-label");
+            WidgetTypeDef textWidgetTypeDef = new WidgetTypeDef(DataType.STRING, InputType.STRING, "application.text",
+                    "Text", 1L, 1L, "!ui-text", "!ui-label");
             ed = EntityDef
                     .newBuilder(ConfigType.STATIC, "com.flowcentraltech.flowcentral.application.web.widgets.Product",
-                            "Product", null, null, null, false, false, false, false, "application.product", "Products", 1L, 1L)
-                    .addFieldDef(textWidgetTypeDef, 
+                            "Product", null, null, null, false, false, false, false, "application.product", "Products",
+                            1L, 1L)
+                    .addFieldDef(textWidgetTypeDef,
                             new WidgetTypeDef(DataType.STRING, InputType.STRING, "application.name", "Short Name", 1L,
                                     1L, "!ui-name", "!ui-label"),
-                            
+
                             EntityFieldDataType.STRING, EntityFieldType.STATIC, "name", "Name")
                     .addFieldDef(textWidgetTypeDef,
                             new WidgetTypeDef(DataType.STRING, InputType.STRING, "application.text", "Text", 1L, 1L,
                                     "!ui-text", "!ui-label"),
                             EntityFieldDataType.STRING, EntityFieldType.STATIC, "description", "Description")
-                    .addFieldDef(textWidgetTypeDef, amtWidgetTypeDef, EntityFieldDataType.DOUBLE, EntityFieldType.STATIC, "costPrice",
-                            "Cost Price")
-                    .addFieldDef(textWidgetTypeDef, amtWidgetTypeDef, EntityFieldDataType.DOUBLE, EntityFieldType.STATIC, "salesPrice",
-                            "Sales Price")
+                    .addFieldDef(textWidgetTypeDef, amtWidgetTypeDef, EntityFieldDataType.DOUBLE,
+                            EntityFieldType.STATIC, "costPrice", "Cost Price")
+                    .addFieldDef(textWidgetTypeDef, amtWidgetTypeDef, EntityFieldDataType.DOUBLE,
+                            EntityFieldType.STATIC, "salesPrice", "Sales Price")
                     .build();
         }
 

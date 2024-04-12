@@ -217,9 +217,9 @@ public class ChartWriter extends AbstractWidgetWriter {
                 if (provider.isUsesChartDataSource()) {
                     final ChartDataSourceDef chartDataSourceDef = chartModuleService.getChartDataSourceDef(rule);
                     final EntityDef entityDef = chartDataSourceDef.getEntityDef();
-                    restriction = InputWidgetUtils.getRestriction(entityDef,
+                    restriction = InputWidgetUtils.getRestriction(appletUtilities, entityDef,
                             configuration.getCatBase(chartDataSourceDef.getLongName()),
-                            appletUtilities.specialParamProvider(), chartModuleService.getNow());
+                            chartModuleService.getNow());
                 }
                 
                 cache.put(key, chartDetails = provider.provide(rule, restriction));

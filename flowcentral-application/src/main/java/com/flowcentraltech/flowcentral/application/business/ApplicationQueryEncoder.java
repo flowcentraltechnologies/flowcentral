@@ -21,7 +21,6 @@ import com.flowcentraltech.flowcentral.application.data.FilterDef;
 import com.flowcentraltech.flowcentral.application.util.InputWidgetUtils;
 import com.flowcentraltech.flowcentral.common.AbstractFlowCentralComponent;
 import com.flowcentraltech.flowcentral.common.business.QueryEncoder;
-import com.flowcentraltech.flowcentral.common.business.SpecialParamProvider;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -45,9 +44,6 @@ public class ApplicationQueryEncoder extends AbstractFlowCentralComponent implem
 
     @Configurable
     private ApplicationModuleService applicationModuleService;
-
-    @Configurable
-    private SpecialParamProvider specialParamProvider;
 
     @Configurable
     private AppletUtilities appletUtilities;
@@ -76,8 +72,8 @@ public class ApplicationQueryEncoder extends AbstractFlowCentralComponent implem
         Restriction restriction = null;
         if (!StringUtils.isBlank(queryStr)) {
             FilterDef filterDef = InputWidgetUtils.getFilterDef(appletUtilities, queryStr);
-            restriction = InputWidgetUtils.getRestriction(entityClassDef.getEntityDef(), filterDef,
-                    specialParamProvider, applicationModuleService.getNow());
+            restriction = InputWidgetUtils.getRestriction(appletUtilities, entityClassDef.getEntityDef(), filterDef,
+                    applicationModuleService.getNow());
         }
 
         Query<? extends Entity> query = restriction != null ? (restriction.isSimple()

@@ -82,12 +82,15 @@ public class EntityFilter extends AbstractPanelFormBinding {
         try {
             FilterDef filterDef = getAppletCtx().au().retrieveFilterDef(category, ownerEntityDef.getLongName(),
                     ownerInstId, null);
-            filter = new Filter(ownerInstId, paramList, entityDef, filterDef, listType,
+            filter = new Filter(ownerInstId, paramList, entityDef, filterDef,
+                    getAppletCtx().au().getWidgetTypeDef("application.sessionparamtypelist"), listType,
                     Editable.fromBoolean(isApplyButtonVisible()));
         } catch (RuntimeException e) {
-            getAppletCtx().au().saveFilterDef(getSweepingCommitPolicy(), category, ownerEntityDef.getLongName(), ownerInstId, null);
+            getAppletCtx().au().saveFilterDef(getSweepingCommitPolicy(), category, ownerEntityDef.getLongName(),
+                    ownerInstId, null);
             FilterDef filterDef = null;
-            filter = new Filter(ownerInstId, paramList, entityDef, filterDef, listType,
+            filter = new Filter(ownerInstId, paramList, entityDef, filterDef,
+                    getAppletCtx().au().getWidgetTypeDef("application.sessionparamtypelist"), listType,
                     Editable.fromBoolean(isApplyButtonVisible()));
         }
     }

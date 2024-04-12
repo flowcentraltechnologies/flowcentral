@@ -45,6 +45,9 @@ public enum SetValueType implements EnumConst {
     PROCESS_VARIABLE(
             "PVR",
             "$m{setvaluetype.issettoprocessvariable}", false),
+    SESSION_PARAMETER(
+            "SPM",
+            "$m{setvaluetype.issettosessionparameter}", false),
     GENERATOR(
             "GEN",
             "$m{setvaluetype.isgeneratedfrom}", true);
@@ -85,6 +88,10 @@ public enum SetValueType implements EnumConst {
 
     public boolean isProcessVariable() {
         return PROCESS_VARIABLE.equals(this);
+    }
+
+    public boolean isSessionParameter() {
+        return SESSION_PARAMETER.equals(this);
     }
 
     public String label() {

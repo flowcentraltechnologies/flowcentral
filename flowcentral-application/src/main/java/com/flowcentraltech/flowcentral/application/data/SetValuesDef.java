@@ -30,6 +30,7 @@ import com.flowcentraltech.flowcentral.application.business.FieldSetValueGenerat
 import com.flowcentraltech.flowcentral.application.constants.ProcessVariable;
 import com.flowcentraltech.flowcentral.application.util.GeneratorNameParts;
 import com.flowcentraltech.flowcentral.application.util.GeneratorNameUtils;
+import com.flowcentraltech.flowcentral.common.constants.SessionParamType;
 import com.flowcentraltech.flowcentral.common.util.LingualDateUtils;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldDataType;
 import com.flowcentraltech.flowcentral.configuration.constants.LingualDateType;
@@ -126,6 +127,12 @@ public class SetValuesDef {
                 final EntityFieldDataType fieldType = entityFieldDef.getDataType();
                 Object val = null;
                 switch (setValueDef.getType()) {
+                    case SESSION_PARAMETER:
+                        SessionParamType sessionParamtype = SessionParamType.fromCode(setValueDef.getParam());
+                        if (sessionParamtype != null) {
+                            val = au.getSessionAttribute(Object.class, sessionParamtype.attribute());
+                        }
+                        break;
                     case PROCESS_VARIABLE:
                         ProcessVariable variable = DataUtils.convert(ProcessVariable.class, setValueDef.getParam());
                         if (variable != null) {

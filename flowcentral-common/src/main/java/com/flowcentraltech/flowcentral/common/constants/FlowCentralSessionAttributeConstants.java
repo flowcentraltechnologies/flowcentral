@@ -25,15 +25,27 @@ public interface FlowCentralSessionAttributeConstants {
 
     /** Shortcut deck */
     String SHORTCUTDECK = "fc.shortcutdeck";
-   
+    
     /** User name */
     String USERNAME = "fc.username";
+    
+    /** User login ID */
+    String USERLOGINID = "fc.userloginid";
+
+    /** Branch Code */
+    String BRANCHCODE = "fc.branchcode";
 
     /** Branch Description */
     String BRANCHDESC = "fc.branchdesc";
 
     /** Business Unit Description */
     String BUSINESSUNITDESC = "fc.businessunitdesc";
+
+    /** Department code */
+    String DEPARTMENTCODE = "fc.departmentcode";
+
+    /** Role code */
+    String ROLECODE = "fc.rolecode";
 
     /** Role description */
     String ROLEDESCRIPTION = "fc.roledescription";
@@ -50,5 +62,6 @@ public interface FlowCentralSessionAttributeConstants {
     /** Locked resource options */
     String LOCKED_RESOURCEOPTIONS = "fc.lockedresourceoptions";
 
+    /** Current application IDe */
     String CURRENT_APPLICATION_ID = "fc.CURRENT_APPLICATION_ID";
 }
