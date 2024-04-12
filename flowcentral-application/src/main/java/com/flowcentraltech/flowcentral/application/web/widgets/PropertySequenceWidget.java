@@ -46,7 +46,7 @@ public class PropertySequenceWidget extends AbstractValueListWidget<PropertySequ
     @Override
     protected void doOnPageConstruct() throws UnifyException {
         propertySelectCtrl = (Control) addInternalChildWidget(
-                "!ui-select blankOption:$s{} list:entitydefpropertylist listParams:$l{entityDef type} binding:property");
+                "!ui-select style:$s{width:100%;} blankOption:$s{} list:entitydefpropertylist listParams:$l{entityDef type} binding:property");
         labelCtrl = (Control) addInternalChildWidget(
                 "!ui-text binding:label");
         moveUpCtrl = (Control) addInternalChildWidget(

@@ -225,7 +225,10 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
 
         // Login to session and set session attributes
         userSessionManager.login(createUserToken(user, userBranch, loginTenantId));
+        setSessionStickyAttribute(FlowCentralSessionAttributeConstants.USERLOGINID, loginId);
         setSessionStickyAttribute(FlowCentralSessionAttributeConstants.USERNAME, user.getFullName());
+        
+        final String branchCode = userBranch != null ? userBranch.getCode() : null;
         String branchDesc = userBranch != null ? userBranch.getDescription() : null;
         if (StringUtils.isBlank(branchDesc)) {
             branchDesc = getApplicationMessage("application.no.branch");
@@ -261,6 +264,7 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
         setSessionStickyAttribute(UnifyCoreSessionAttributeConstants.OVERRIDE_WIDGET_DATEFORMAT_FLAG,
                 useTenantDateFormat);
         setSessionStickyAttribute(UnifyCoreSessionAttributeConstants.WIDGET_DATEFORMAT_OVERRIDE, dateFormatUpl);
+        setSessionStickyAttribute(FlowCentralSessionAttributeConstants.BRANCHCODE, branchCode);
         setSessionStickyAttribute(FlowCentralSessionAttributeConstants.BRANCHDESC, branchDesc);
         setSessionStickyAttribute(FlowCentralSessionAttributeConstants.BUSINESSUNITDESC, businessUnitDesc);
         setSessionStickyAttribute(FlowCentralSessionAttributeConstants.RESERVEDFLAG, user.isReserved());

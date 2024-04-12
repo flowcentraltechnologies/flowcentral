@@ -42,9 +42,9 @@ public class WidgetRulesWidget extends AbstractValueListWidget<WidgetRuleEntry> 
     @Override
     protected void doOnPageConstruct() throws UnifyException {
         fieldSelectCtrl = (Control) addInternalChildWidget(
-                "!ui-select blankOption:$s{} list:entityfielddeflist listParams:$l{entityDef} binding:fieldName");
+                "!ui-select style:$s{width:100%;} blankOption:$s{} list:entityfielddeflist listParams:$l{entityDef} binding:fieldName");
         widgetCtrl = (Control) addInternalChildWidget(
-                "!ui-select blankOption:$s{} list:entityfielddefinputwidgetlist listParams:$l{entityDef fieldName} binding:widget");
+                "!ui-select style:$s{width:100%;} blankOption:$s{} list:entityfielddefinputwidgetlist listParams:$l{entityDef fieldName} binding:widget");
         deleteCtrl = (Control) addInternalChildWidget(
                 "!ui-button alwaysValueIndex:true styleClass:$e{abutton} symbol:$s{cross} hint:$m{button.delete.hint} debounce:false");
     }

@@ -51,11 +51,11 @@ public class SearchInputsWidget extends AbstractValueListWidget<SearchInputEntry
     protected void doOnPageConstruct() throws UnifyException {
         labelCtrl = (Control) addInternalChildWidget("!ui-alphanumeric maxLen:64 space:true special:true binding:label");
         fieldSelectCtrl = (Control) addInternalChildWidget(
-                "!ui-select blankOption:$s{} list:searchinputfieldlist listParams:$l{entityDef} binding:fieldName");
+                "!ui-select style:$s{width:100%;} blankOption:$s{} list:searchinputfieldlist listParams:$l{entityDef} binding:fieldName");
         widgetCtrl = (Control) addInternalChildWidget(
-                "!ui-select blankOption:$s{} list:searchinputfieldwidgetlist listParams:$l{entityDef fieldName} binding:widget");
+                "!ui-select style:$s{width:100%;} blankOption:$s{} list:searchinputfieldwidgetlist listParams:$l{entityDef fieldName} binding:widget");
         conditionTypeCtrl = (Control) addInternalChildWidget(
-                "!ui-select blankOption:$s{} list:searchinputconditionlist listParams:$l{entityDef fieldName} binding:condition");
+                "!ui-select style:$s{width:100%;} blankOption:$s{} list:searchinputconditionlist listParams:$l{entityDef fieldName} binding:condition");
         moveUpCtrl = (Control) addInternalChildWidget(
                 "!ui-button alwaysValueIndex:true styleClass:$e{abutton} symbol:$s{arrow-up} hint:$m{button.moveup.hint} debounce:false");
         moveDownCtrl = (Control) addInternalChildWidget(

@@ -127,6 +127,9 @@ public class SetValueEntry {
             throws UnifyException {
         if (currentIn == null) {
             switch (type) {
+                case SESSION_PARAMETER:
+                    return new StringInput("!ui-select blankOption:$s{} list:sessionparamtypelist",
+                            "!ui-listlabel list:sessionparamtypelist");
                 case PROCESS_VARIABLE:
                     return new StringInput("!ui-select blankOption:$s{} list:processvariablelist",
                             "!ui-listlabel list:processvariablelist");
@@ -147,6 +150,9 @@ public class SetValueEntry {
 
         if (fieldChange || typeChange) {
             switch (type) {
+                case SESSION_PARAMETER:
+                    return new StringInput("!ui-select blankOption:$s{} list:sessionparamtypelist",
+                            "!ui-listlabel list:sessionparamtypelist");
                 case PROCESS_VARIABLE:
                     return new StringInput("!ui-select blankOption:$s{} list:processvariablelist",
                             "!ui-listlabel list:processvariablelist");

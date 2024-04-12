@@ -56,6 +56,8 @@ public abstract class AbstractApplicationForwarderController<T extends AbstractF
         if (userRoleInfo != null) {
             userToken.setRoleCode(userRoleInfo.getRoleCode());
             userToken.setDepartmentCode(userRoleInfo.getDepartmentCode());
+            setSessionAttribute(FlowCentralSessionAttributeConstants.DEPARTMENTCODE, userRoleInfo.getDepartmentCode());
+            setSessionAttribute(FlowCentralSessionAttributeConstants.ROLECODE, userRoleInfo.getRoleCode());
             setSessionAttribute(FlowCentralSessionAttributeConstants.ROLEDESCRIPTION, userRoleInfo.getRoleDesc());
         } else {
             setSessionAttribute(FlowCentralSessionAttributeConstants.ROLEDESCRIPTION, getUserToken().getUserName());

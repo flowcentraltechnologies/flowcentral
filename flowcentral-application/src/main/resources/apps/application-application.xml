@@ -20,6 +20,11 @@
 			inputType="string"
 			editor="!ui-select list:fontfamilylist blankOption:$m{blank.none}"
 			renderer="!ui-label" />
+		<widgetType name="sessionparamtypelist" listOption="true"
+			description="$m{application.widgettype.sessionparamtypelist}" dataType="string"
+			inputType="string"
+			editor="!ui-select list:sessionparamtypelist blankOption:$m{blank.none}"
+			renderer="!ui-label" />
 		<widgetType name="emailproducerconsumerlist"
 			description="$m{application.widgettype.emailproducerconsumerlist}"
 			dataType="string" inputType="string"

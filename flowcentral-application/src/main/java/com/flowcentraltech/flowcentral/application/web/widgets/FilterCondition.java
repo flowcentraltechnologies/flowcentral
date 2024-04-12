@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.application.web.widgets;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.EntityFieldDef;
 import com.flowcentraltech.flowcentral.application.data.LabelSuggestionDef;
+import com.flowcentraltech.flowcentral.application.data.WidgetTypeDef;
 import com.flowcentraltech.flowcentral.application.util.InputWidgetUtils;
 import com.flowcentraltech.flowcentral.common.input.AbstractInput;
 import com.tcdng.unify.core.UnifyException;
@@ -32,6 +33,8 @@ import com.tcdng.unify.core.util.DataUtils;
  * @since 1.0
  */
 public class FilterCondition {
+
+    private final WidgetTypeDef sessionParamWidgetTypeDef;
 
     private EntityDef entityDef;
 
@@ -63,22 +66,14 @@ public class FilterCondition {
 
     private boolean editable;
 
-    public FilterCondition(EntityDef entityDef, LabelSuggestionDef labelSuggestionDef, Long ownerInstId,
-            FilterConditionType type, FilterConditionListType listType, int depth, boolean editable) {
-        this.entityDef = entityDef;
-        this.labelSuggestionDef = labelSuggestionDef;
-        this.ownerInstId = ownerInstId;
-        this.type = type;
-        this.listType = listType;
-        this.depth = depth;
-        this.editable = editable;
-    }
-
-    public FilterCondition(EntityDef entityDef, LabelSuggestionDef labelSuggestionDef, Long ownerInstId,
+    public FilterCondition(EntityDef entityDef, LabelSuggestionDef labelSuggestionDef,
+            WidgetTypeDef sessionParamWidgetTypeDef, Long ownerInstId, FilterConditionType type,
             FilterConditionListType listType, int depth, boolean editable) {
         this.entityDef = entityDef;
         this.labelSuggestionDef = labelSuggestionDef;
+        this.sessionParamWidgetTypeDef = sessionParamWidgetTypeDef;
         this.ownerInstId = ownerInstId;
+        this.type = type;
         this.listType = listType;
         this.depth = depth;
         this.editable = editable;
@@ -199,6 +194,8 @@ public class FilterCondition {
                 if (type.isFieldVal() || type.isParameterVal()) {
                     paramInputA = null;
                     paramInputB = null;
+                } else if (type.isSessionParameterVal()) {
+                    paramInputA = evalInput(sessionParamWidgetTypeDef, entityFieldDef, paramInputA);
                 } else {
                     if (type.isSingleParam()) {
                         paramInputA = evalInput(entityFieldDef, paramInputA);
@@ -222,6 +219,22 @@ public class FilterCondition {
 
         typeChange = false;
         fieldChange = false;
+    }
+
+    private AbstractInput<?> evalInput(WidgetTypeDef widgetTypeDef, EntityFieldDef entityFieldDef,
+            AbstractInput<?> currentIn) throws UnifyException {
+        if (currentIn == null) {
+            return InputWidgetUtils.newInput(widgetTypeDef, entityFieldDef);
+        }
+
+        if (fieldChange || typeChange) {
+            AbstractInput<?> newIn = InputWidgetUtils.newInput(widgetTypeDef, entityFieldDef);
+            if (!newIn.compatible(currentIn)) {
+                return newIn;
+            }
+        }
+
+        return currentIn;
     }
 
     private AbstractInput<?> evalInput(EntityFieldDef entityFieldDef, AbstractInput<?> currentIn)
@@ -257,12 +270,4 @@ public class FilterCondition {
         return currentIn;
     }
 
-    @Override
-    public String toString() {
-        return "FilterCondition [entityDef=" + entityDef + ", labelSuggestionDef=" + labelSuggestionDef + ", type="
-                + type + ", listType=" + listType + ", typeSelector=" + typeSelector + ", fieldName=" + fieldName
-                + ", paramFieldA=" + paramFieldA + ", paramFieldB=" + paramFieldB + ", paramInputA=" + paramInputA
-                + ", paramInputB=" + paramInputB + ", ownerInstId=" + ownerInstId + ", depth=" + depth + ", typeChange="
-                + typeChange + ", fieldChange=" + fieldChange + ", editable=" + editable + "]";
-    }
 }

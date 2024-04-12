@@ -140,7 +140,7 @@ public class EntitySearch extends AbstractPanelFormBinding {
         this.viewItemsInSeparateTabs = viewItemsInSeparateTabs;
         this.sectorIcon = sectorIcon;
         this.entityFilter = new Filter(null, null, tableDef.getEntityDef(), tableDef.getLabelSuggestionDef(),
-                FilterConditionListType.IMMEDIATE_FIELD);
+                au().getWidgetTypeDef("application.sessionparamtypelist"), FilterConditionListType.IMMEDIATE_FIELD);
         this.searchEntries = new SearchEntries(ctx.au(), tableDef.getEntityDef(), tableDef.getLabelSuggestionDef(),
                 appAppletSearchConfigName, columns, showConditions);
         this.entityTable = new EntityTable(ctx.au(), tableDef, null);
@@ -596,8 +596,10 @@ public class EntitySearch extends AbstractPanelFormBinding {
                 ? getAppletCtx().au().getAppletDef(appAppletId).getFilterDef(appAppletFilterName).getFilterDef()
                 : null;
         entityFilter = quickFilterDef != null ? new Filter(null, null, entityFilter.getEntityDef(),
-                quickFilterDef.explodeGenerator(getEntityDef(), au().getNow()), FilterConditionListType.IMMEDIATE_FIELD)
+                quickFilterDef.explodeGenerator(getEntityDef(), au().getNow()),
+                au().getWidgetTypeDef("application.sessionparamtypelist"), FilterConditionListType.IMMEDIATE_FIELD)
                 : new Filter(null, null, entityFilter.getEntityDef(), entityFilter.getLabelSuggestionDef(),
+                        au().getWidgetTypeDef("application.sessionparamtypelist"),
                         FilterConditionListType.IMMEDIATE_FIELD);
     }
 

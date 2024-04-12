@@ -59,6 +59,7 @@ import com.flowcentraltech.flowcentral.application.entities.AppSetValues;
 import com.flowcentraltech.flowcentral.application.entities.AppTableFilter;
 import com.flowcentraltech.flowcentral.application.entities.AppWidgetRules;
 import com.flowcentraltech.flowcentral.common.business.SpecialParamProvider;
+import com.flowcentraltech.flowcentral.common.constants.SessionParamType;
 import com.flowcentraltech.flowcentral.common.data.DateRange;
 import com.flowcentraltech.flowcentral.common.data.EntityFieldAttributes;
 import com.flowcentraltech.flowcentral.common.input.AbstractInput;
@@ -191,10 +192,10 @@ public final class InputWidgetUtils {
 
             return Collections.unmodifiableList(_actionBtnInfos);
         }
-        
+
         return Collections.emptyList();
     }
-    
+
     public static boolean isEnumerationWidget(String widgetName) {
         return ENUMERATION_WIDGETS.contains(widgetName);
     }
@@ -353,7 +354,6 @@ public final class InputWidgetUtils {
             case "application.textarealarge":
             case "application.textareaxlarge":
             case "application.textareaxxlarge":
-                // Deprecated? entityFieldDef.getRows()
                 editor = String.format(editor, efa.getMinLen(), efa.getMaxLen());
                 break;
             case "application.password":
@@ -1215,20 +1215,19 @@ public final class InputWidgetUtils {
     }
 
     public static FilterDef getFilterDef(AppletUtilities au, AppletDef appletDef, FilterDef filterDef,
-            Restriction restriction, SpecialParamProvider specialParamProvider, Date now) throws UnifyException {
+            Restriction restriction, Date now) throws UnifyException {
         EntityDef entityDef = au.getEntityDef(appletDef.getEntity());
-        return InputWidgetUtils.getFilterDef(au, entityDef, filterDef, restriction, specialParamProvider, now);
+        return InputWidgetUtils.getFilterDef(au, entityDef, filterDef, restriction, now);
     }
 
     public static FilterDef getFilterDef(AppletUtilities au, EntityDef entityDef, FilterDef filterDef,
-            Restriction restriction, SpecialParamProvider specialParamProvider, Date now) throws UnifyException {
+            Restriction restriction, Date now) throws UnifyException {
         if (restriction == null) {
             return new FilterDef(filterDef);
         }
 
         return InputWidgetUtils.getFilterDef(au, null, null,
-                new And().add(InputWidgetUtils.getRestriction(entityDef, filterDef, specialParamProvider, now))
-                        .add(restriction));
+                new And().add(InputWidgetUtils.getRestriction(au, entityDef, filterDef, now)).add(restriction));
     }
 
     public static FilterDef getFilterDef(AppletUtilities au, String name, String description, Restriction restriction)
@@ -1448,25 +1447,25 @@ public final class InputWidgetUtils {
         return result;
     }
 
-    public static Restriction getRestriction(EntityDef entityDef, FilterDef filterDef,
-            SpecialParamProvider specialParamProvider, Date now) throws UnifyException {
-        return InputWidgetUtils.getRestriction(entityDef, filterDef, specialParamProvider, now, null);
+    public static Restriction getRestriction(AppletUtilities au, EntityDef entityDef, FilterDef filterDef, Date now)
+            throws UnifyException {
+        return InputWidgetUtils.getRestriction(au, entityDef, filterDef, now, null);
     }
 
-    public static Restriction getRestriction(EntityDef entityDef, FilterDef filterDef,
-            SpecialParamProvider specialParamProvider, Date now, Map<String, Object> parameters) throws UnifyException {
+    public static Restriction getRestriction(AppletUtilities au, EntityDef entityDef, FilterDef filterDef, Date now,
+            Map<String, Object> parameters) throws UnifyException {
         if (filterDef != null) {
             List<FilterRestrictionDef> conditionList = filterDef.getFilterRestrictionDefList();
             if (!conditionList.isEmpty()) {
                 FilterRestrictionDef fo = conditionList.get(0);
                 if (conditionList.size() == 1 && !fo.getType().isCompound()) {
-                    ResolvedCondition resolved = InputWidgetUtils.resolveFieldParam(entityDef, fo, specialParamProvider,
-                            now, parameters);
+                    ResolvedCondition resolved = InputWidgetUtils.resolveFieldParam(au, entityDef, fo,
+                            au.specialParamProvider(), now, parameters);
                     return resolved.createSimpleCriteria();
                 }
 
                 CriteriaBuilder cb = new CriteriaBuilder();
-                addCompoundCriteria(cb, entityDef, filterDef, fo, 1, specialParamProvider, now, parameters);
+                addCompoundCriteria(au, cb, entityDef, filterDef, fo, 1, au.specialParamProvider(), now, parameters);
                 return cb.build();
             }
         }
@@ -1680,9 +1679,9 @@ public final class InputWidgetUtils {
         return new ResolvedCondition(fieldName, type, paramA, paramB);
     }
 
-    private static int addCompoundCriteria(CriteriaBuilder cb, EntityDef entityDef, FilterDef filterDef,
-            FilterRestrictionDef fo, int nIndex, SpecialParamProvider specialParamProvider, Date now,
-            Map<String, Object> parameters) throws UnifyException {
+    private static int addCompoundCriteria(AppletUtilities au, CriteriaBuilder cb, EntityDef entityDef,
+            FilterDef filterDef, FilterRestrictionDef fo, int nIndex, SpecialParamProvider specialParamProvider,
+            Date now, Map<String, Object> parameters) throws UnifyException {
         if (FilterConditionType.AND.equals(fo.getType())) {
             cb.beginAnd();
         } else {
@@ -1697,10 +1696,10 @@ public final class InputWidgetUtils {
             FilterRestrictionDef sfo = conditionList.get(i);
             if (sfo.getDepth() > depth) {
                 if (sfo.getType().isCompound()) {
-                    i = addCompoundCriteria(cb, entityDef, filterDef, sfo, i + 1, specialParamProvider, now, parameters)
-                            - 1;
+                    i = addCompoundCriteria(au, cb, entityDef, filterDef, sfo, i + 1, specialParamProvider, now,
+                            parameters) - 1;
                 } else {
-                    addSimpleCriteria(cb, entityDef, filterDef, sfo, specialParamProvider, now, parameters);
+                    addSimpleCriteria(au, cb, entityDef, filterDef, sfo, specialParamProvider, now, parameters);
                 }
             } else {
                 break;
@@ -1711,20 +1710,29 @@ public final class InputWidgetUtils {
         return i;
     }
 
-    private static void addSimpleCriteria(CriteriaBuilder cb, EntityDef entityDef, FilterDef filterDef,
-            FilterRestrictionDef fo, SpecialParamProvider specialParamProvider, Date now,
+    private static void addSimpleCriteria(AppletUtilities au, CriteriaBuilder cb, EntityDef entityDef,
+            FilterDef filterDef, FilterRestrictionDef fo, SpecialParamProvider specialParamProvider, Date now,
             Map<String, Object> parameters) throws UnifyException {
-        ResolvedCondition condition = InputWidgetUtils.resolveFieldParam(entityDef, fo, specialParamProvider, now,
+        ResolvedCondition condition = InputWidgetUtils.resolveFieldParam(au, entityDef, fo, specialParamProvider, now,
                 parameters);
         condition.addSimpleCriteria(cb);
     }
 
     @SuppressWarnings("unchecked")
-    private static ResolvedCondition resolveFieldParam(EntityDef entityDef, FilterRestrictionDef fo,
+    private static ResolvedCondition resolveFieldParam(AppletUtilities au, EntityDef entityDef, FilterRestrictionDef fo,
             SpecialParamProvider specialParamProvider, Date now, Map<String, Object> parameters) throws UnifyException {
         FilterConditionType type = fo.getType();
         Object paramA = specialParamProvider.resolveSpecialParameter(fo.getParamA());
         Object paramB = specialParamProvider.resolveSpecialParameter(fo.getParamB());
+        if (type.isSessionParameterVal()) {
+            if (paramA != null) {
+                SessionParamType sessionParamtype = SessionParamType.fromCode((String) paramA);
+                if (sessionParamtype != null) {
+                    paramA = au.getSessionAttribute(String.class, sessionParamtype.attribute());
+                }
+            }
+        } 
+        
         if (!type.isFieldVal() && !type.isParameterVal()) {
             EntityFieldDef _entityFieldDef = entityDef.getFieldDef(fo.getFieldName());
             if (_entityFieldDef.isWithResolvedTypeFieldDef()) {

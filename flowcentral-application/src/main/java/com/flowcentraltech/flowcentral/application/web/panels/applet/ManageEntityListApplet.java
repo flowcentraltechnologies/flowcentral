@@ -74,7 +74,7 @@ public class ManageEntityListApplet extends AbstractEntityFormApplet {
             entitySearch.setBaseFilter(InputWidgetUtils.getFilterDef(au, _rootAppletDef, appletFilterDef.getFilterDef(),
                     isWorkflowCopy() ? (isUpdateDraft ? UPDATE_DRAFT_BASE_RESTRICTION : ORIGINAL_BASE_RESTRICTION)
                             : null,
-                    au.specialParamProvider(), au.getNow()), au.specialParamProvider());
+                    au.getNow()), au.specialParamProvider());
         } else {
             if (isWorkflowCopy()) {
                 entitySearch.setBaseFilter(

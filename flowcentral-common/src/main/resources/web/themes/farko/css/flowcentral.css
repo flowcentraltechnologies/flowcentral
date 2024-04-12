@@ -346,14 +346,14 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-filter .line {padding-bottom: 2px;}
 .fc-filter .tab {display:inline-block; width:32px !important; text-align:right;padding-right:2px; border-right:4px solid #f0f0f0;
 	font-weight:bold; vertical-align: middle;}
-.fc-filter .item {display:inline-block; margin-right:6px;}
+.fc-filter .item {display:inline-block; margin-right:6px;width:200px;}
 .fc-filter .atab1 {display:inline-block;vertical-align: middle;height:24px;width:140px;}
 .fc-filter .atab1:hover {}
 .fc-filter .atab2 {display:inline-block;vertical-align: middle;height:24px;width:40px;}
 .fc-filter .atab2:hover {}
 .fc-filter .abutton {padding:0px 4px; min-height:22px; min-width:22px; margin-left:2px; font-size:10px; background-color: #ffffff !important;color:#4c4c4c;
-								border: 1px solid #c8c8c8; /*border-radius: 6px;*/ cursor: pointer;}
-.fc-filter .abutton:hover:enabled {color: #4c4c4c;background-color: #6080f0;}
+								border: 1px solid #c8c8c8; cursor: pointer;}
+.fc-filter .abutton:hover:enabled {color: #4c4c4c;background-color:#6080f0;}
 
 /* Filter generator search */
 .fc-filtergeneratorsearch {}
@@ -496,7 +496,7 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-fieldsequence .tab {display:inline-block; width:32px !important; text-align:right;padding-right:2px; border-right:4px solid #f0f0f0;
 	font-weight:bold; vertical-align: middle;}
 .fc-fieldsequence .label {display:inline-block; margin-right:6px;color:#808080;font-style: italic;font-size: 7pt;}
-.fc-fieldsequence .item {display:inline-block; margin-right:6px;}
+.fc-fieldsequence .item {display:inline-block; margin-right:6px;width:200px;}
 .fc-fieldsequence .atab {display:inline-block;vertical-align: middle;height:24px;width:140px;}
 .fc-fieldsequence .abutton {padding:0px 4px; min-height:22px; min-width:22px; margin-left:2px; font-size:10px; background-color: #ffffff !important;color:#4c4c4c;
 								border: 1px solid #c8c8c8; cursor: pointer;}
@@ -509,7 +509,7 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-propertysequence .tab {display:inline-block; width:32px !important; text-align:right;padding-right:2px; border-right:4px solid #f0f0f0;
 	font-weight:bold; vertical-align: middle;}
 .fc-propertysequence .label {display:inline-block; margin-right:6px;color:#808080;font-style: italic;font-size: 7pt;}
-.fc-propertysequence .item {display:inline-block; margin-right:6px;}
+.fc-propertysequence .item {display:inline-block; margin-right:6px;width:200px;}
 .fc-propertysequence .atab {display:inline-block;vertical-align: middle;height:24px;width:140px;}
 .fc-propertysequence .abutton {padding:0px 4px; min-height:22px; min-width:22px; margin-left:2px; font-size:10px; background-color: #ffffff !important;color:#4c4c4c;
 								border: 1px solid #c8c8c8; cursor: pointer;}
@@ -522,7 +522,7 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-searchinputs .tab {display:inline-block; width:32px !important; text-align:right;padding-right:2px; border-right:4px solid #f0f0f0;
 	font-weight:bold; vertical-align: middle;}
 .fc-searchinputs .label {display:inline-block; margin-right:6px;color:#808080;font-style: italic;font-size: 7pt;}
-.fc-searchinputs .item {display:inline-block; margin-right:6px;}
+.fc-searchinputs .item {display:inline-block; margin-right:6px;width:200px;}
 .fc-searchinputs .atab {display:inline-block;vertical-align: middle;height:24px;width:140px;}
 .fc-searchinputs .abutton {padding:0px 4px; min-height:22px; min-width:22px; margin-left:2px; font-size:10px; background-color: #ffffff !important;color:#4c4c4c;
 								border: 1px solid #c8c8c8; cursor: pointer;}
@@ -578,7 +578,7 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-setvalues .line {padding-bottom: 2px;}
 .fc-setvalues .tab {display:inline-block; width:32px !important; text-align:right;padding-right:2px; border-right:4px solid #f0f0f0;
 	font-weight:bold; vertical-align: middle;}
-.fc-setvalues .item {display:inline-block; margin-right:6px;}
+.fc-setvalues .item {display:inline-block; margin-right:6px;width:200px;}
 .fc-setvalues .atab {display:inline-block;vertical-align: middle;height:24px;width:40px;}
 .fc-setvalues .abutton {padding:0px 4px; min-height:22px; min-width:22px; margin-left:2px; font-size:10px; background-color: #ffffff !important;color:#4c4c4c;
 								border: 1px solid #c8c8c8; /*border-radius: 6px;*/ cursor: pointer;}
@@ -787,7 +787,7 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-widgetrules .tab {display:inline-block; width:32px !important; text-align:right;padding-right:2px; border-right:4px solid #f0f0f0;
 	font-weight:bold; vertical-align: middle;}
 .fc-widgetrules .label {display:inline-block; margin-right:6px;color:#808080;font-style: italic;font-size: 7pt;}
-.fc-widgetrules .item {display:inline-block; margin-right:6px;}
+.fc-widgetrules .item {display:inline-block; margin-right:6px;width:200px;}
 .fc-widgetrules .atab {display:inline-block;vertical-align: middle;height:24px;width:140px;}
 .fc-widgetrules .abutton {padding:0px 4px; min-height:22px; min-width:22px; margin-left:2px; font-size:10px; background-color: #ffffff !important;color:#4c4c4c;
 								border: 1px solid #c8c8c8; /*border-radius: 6px;*/ cursor: pointer;}
