@@ -1724,41 +1724,41 @@ public final class InputWidgetUtils {
         FilterConditionType type = fo.getType();
         Object paramA = specialParamProvider.resolveSpecialParameter(fo.getParamA());
         Object paramB = specialParamProvider.resolveSpecialParameter(fo.getParamB());
+        if (type.isSessionParameterVal()) {
+            if (paramA != null) {
+                SessionParamType sessionParamtype = SessionParamType.fromCode((String) paramA);
+                if (sessionParamtype != null) {
+                    paramA = au.getSessionAttribute(String.class, sessionParamtype.attribute());
+                }
+            }
+        } 
+        
         if (!type.isFieldVal() && !type.isParameterVal()) {
-            if (type.isSessionParameterVal()) {
-                if (paramA != null) {
-                    SessionParamType sessionParamtype = SessionParamType.fromCode((String) paramA);
-                    if (sessionParamtype != null) {
-                        paramA = au.getSessionAttribute(Object.class, sessionParamtype.attribute());
-                    }
-                }
+            EntityFieldDef _entityFieldDef = entityDef.getFieldDef(fo.getFieldName());
+            if (_entityFieldDef.isWithResolvedTypeFieldDef()) {
+                _entityFieldDef = _entityFieldDef.getResolvedTypeFieldDef();
+            }
+
+            if (type.isLingual() && _entityFieldDef.isString()) {
+                return InputWidgetUtils.resolveLingualStringCondition(fo.getFieldName(), _entityFieldDef, now, type,
+                        paramA, paramB);
+            } else if (_entityFieldDef.isTime()) {
+                return InputWidgetUtils.resolveDateCondition(fo.getFieldName(), _entityFieldDef, now, type, paramA,
+                        paramB);
             } else {
-                EntityFieldDef _entityFieldDef = entityDef.getFieldDef(fo.getFieldName());
-                if (_entityFieldDef.isWithResolvedTypeFieldDef()) {
-                    _entityFieldDef = _entityFieldDef.getResolvedTypeFieldDef();
+                EntityFieldDataType fieldDataType = _entityFieldDef.getDataType();
+                Class<?> dataType = fieldDataType.dataType().javaClass();
+                if (paramA != null) {
+                    if (type.isAmongst()) {
+                        paramA = DataUtils.convert(List.class, dataType,
+                                Arrays.asList(CommonInputUtils.breakdownCollectionString((String) paramA)));
+                    } else {
+                        paramA = DataUtils.convert(dataType, paramA);
+                    }
                 }
 
-                if (type.isLingual() && _entityFieldDef.isString()) {
-                    return InputWidgetUtils.resolveLingualStringCondition(fo.getFieldName(), _entityFieldDef, now, type,
-                            paramA, paramB);
-                } else if (_entityFieldDef.isTime()) {
-                    return InputWidgetUtils.resolveDateCondition(fo.getFieldName(), _entityFieldDef, now, type, paramA,
-                            paramB);
-                } else {
-                    EntityFieldDataType fieldDataType = _entityFieldDef.getDataType();
-                    Class<?> dataType = fieldDataType.dataType().javaClass();
-                    if (paramA != null) {
-                        if (type.isAmongst()) {
-                            paramA = DataUtils.convert(List.class, dataType,
-                                    Arrays.asList(CommonInputUtils.breakdownCollectionString((String) paramA)));
-                        } else {
-                            paramA = DataUtils.convert(dataType, paramA);
-                        }
-                    }
-
-                    if (paramB != null) {
-                        paramB = DataUtils.convert(dataType, paramB);
-                    }
+                if (paramB != null) {
+                    paramB = DataUtils.convert(dataType, paramB);
                 }
             }
         }
