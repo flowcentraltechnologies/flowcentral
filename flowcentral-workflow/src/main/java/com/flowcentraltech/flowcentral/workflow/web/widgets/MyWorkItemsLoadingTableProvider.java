@@ -19,7 +19,9 @@ import java.util.Collections;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
+import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.EntityItem;
+import com.flowcentraltech.flowcentral.application.data.FilterDef;
 import com.flowcentraltech.flowcentral.application.data.LoadingWorkItemInfo;
 import com.flowcentraltech.flowcentral.application.data.WorkflowStepInfo;
 import com.flowcentraltech.flowcentral.application.policies.AbstractApplicationLoadingTableProvider;
@@ -107,6 +109,7 @@ public class MyWorkItemsLoadingTableProvider extends AbstractApplicationLoadingT
         logDebug("Including work items with ID in [{0}]...", workItemIdList);
         if (!DataUtils.isBlank(workItemIdList)) {
             Query<? extends Entity> query = application().queryOf(getSourceEntity());
+            query.addAmongst("id", workItemIdList);
             if (params.isWithRestriction()) {
                 query.addRestriction(params.getRestriction());
             }
@@ -120,8 +123,18 @@ public class MyWorkItemsLoadingTableProvider extends AbstractApplicationLoadingT
                     query.addRestriction(restriction);
                 }
             }
+            
+            WfDef wfDef = workflowModuleService.getWfDef(workflowStepInfo.getWorkflowLongName());
+            WfStepDef wfStepDef = wfDef.getWfStepDef(workflowStepInfo.getStepName());
+            if (wfStepDef.isWithWorkItemLoadingRestriction()) {
+                EntityDef entityDef = appletUtilities.getEntityDef(wfDef.getEntity());
+                Restriction restriction = wfDef.getFilterDef(wfStepDef.getWorkItemLoadingRestriction()).getFilterDef()
+                        .getRestriction(entityDef, null, appletUtilities.getNow());
+                if (restriction != null) {
+                    query.addRestriction(restriction);
+                }
+            }
 
-            query.addAmongst("id", workItemIdList);
             return new LoadingItems(environment().listAll(query));
         }
 

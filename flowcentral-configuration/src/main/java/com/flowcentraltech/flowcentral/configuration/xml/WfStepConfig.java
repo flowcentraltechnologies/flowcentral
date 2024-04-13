@@ -53,6 +53,8 @@ public class WfStepConfig extends BaseNameConfig {
 
     private String autoLoadCondition;
     
+    private String workItemLoadingRestriction;
+   
     private String attachmentProvider;
 
     private String newCommentCaption;
@@ -177,6 +179,15 @@ public class WfStepConfig extends BaseNameConfig {
     @XmlAttribute
     public void setAutoLoadCondition(String autoLoadCondition) {
         this.autoLoadCondition = autoLoadCondition;
+    }
+
+    public String getWorkItemLoadingRestriction() {
+        return workItemLoadingRestriction;
+    }
+
+    @XmlAttribute
+    public void setWorkItemLoadingRestriction(String workItemLoadingRestriction) {
+        this.workItemLoadingRestriction = workItemLoadingRestriction;
     }
 
     public String getAttachmentProvider() {
