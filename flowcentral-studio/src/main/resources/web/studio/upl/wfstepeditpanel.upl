@@ -23,7 +23,8 @@
 	layout:$d{!ui-vertical style:$s{table-layout:fixed;}}
     formCaptionSuffix:$s{:} formBinding:$g{dialogFormBinding} formColumns:2
 	formSection:$d{!ui-section components:$c{frmType frmName frmDesc frmLabel frmAppletName frmAppletSetValuesName frmBinaryConditionName frmReadOnlyConditionName frmValueGenerator frmEmails frmComments frmNewCommentCaption
-		frmAutoLoadingCondition frmAttachmentProviderName frmPolicy frmRule frmActionType frmNextStepName frmAltNextStepName frmPriority frmCriticalMinutes frmExpiryMinutes frmAudit frmBranchOnly frmDepartmentOnly frmIncludeForwarder frmForwarderPreferred}}
+		frmAutoLoadingCondition frmWorkItemLoadingRestriction frmAttachmentProviderName frmPolicy frmRule frmActionType frmNextStepName frmAltNextStepName frmPriority frmCriticalMinutes frmExpiryMinutes
+		frmAudit frmBranchOnly frmDepartmentOnly frmIncludeForwarder frmForwarderPreferred}}
 
 !ui-name:frmName styleClass:$e{fc-formfield} caption:$m{wfstepeditpanel.name} size:32 binding:name required:true
 !ui-text:frmDesc styleClass:$e{fc-formfield} caption:$m{wfstepeditpanel.description} size:32 binding:description required:true focus:true
@@ -66,6 +67,9 @@
 !ui-select:frmAutoLoadingCondition styleClass:$e{fc-formfield} caption:$m{wfstepeditpanel.autoloadingcondition}
 	list:$s{studioworkflowfilterlist} listParams:$l{workflowId} blankOption:$s{}
 	binding:autoLoadConditionName
+!ui-select:frmWorkItemLoadingRestriction styleClass:$e{fc-formfield} caption:$m{wfstepeditpanel.workitemloadingrestriction}
+	list:$s{studioworkflowfilterlist} listParams:$l{workflowId} blankOption:$s{}
+	binding:workItemLoadingRestriction
 !ui-select:frmAttachmentProviderName styleClass:$e{fc-formfield} caption:$m{wfstepeditpanel.attachmentprovidername}
 	list:$s{studioattachmentproviderlist} listParams:$l{workflowId} blankOption:$s{}
 	binding:attachmentProviderName

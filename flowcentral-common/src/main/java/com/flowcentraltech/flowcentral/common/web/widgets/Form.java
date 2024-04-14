@@ -21,6 +21,7 @@ import java.util.List;
 
 import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
 import com.flowcentraltech.flowcentral.common.data.FormValidationErrors;
+import com.flowcentraltech.flowcentral.common.data.TargetFormMessage;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.UplAttribute;
@@ -225,7 +226,7 @@ public class Form extends AbstractContainer {
     }
 
     public void addValidationError(String fieldName, String message) throws UnifyException {
-        formValidationErrors.addValidationError(fieldName, message);
+        formValidationErrors.addValidationError(new TargetFormMessage.FieldTarget(fieldName), message);
     }
 
     public void reset() throws UnifyException {

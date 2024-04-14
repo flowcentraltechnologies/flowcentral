@@ -76,9 +76,11 @@
 				value="onCreateFormStatePolicy" />
 			<property name="createForm.new.policy"
 				value="user-newactionpolicy" />
+			<property name="createForm.submit.validate" value="true" />
 			<property name="createForm.save" value="true" />
 			<property name="createForm.save.close" value="true" />
 			<property name="maintainForm" value="userForm" />
+			<property name="maintainFormsubmit.validate" value="true" />
 			<property name="maintainForm.update" value="true" />
 			<property name="maintainForm.delete" value="true" />
 			<property name="maintainForm.attachments" value="true" />

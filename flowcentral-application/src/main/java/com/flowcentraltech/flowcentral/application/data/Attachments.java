@@ -34,6 +34,8 @@ public class Attachments {
 
     private String caption;
 
+    private String errorMsg;
+
     private List<Attachment> attachments;
 
     private boolean editable;
@@ -62,6 +64,14 @@ public class Attachments {
 
     public Attachment getAttachment(int index) {
         return attachments.get(index);
+    }
+
+    public String getErrorMsg() {
+        return errorMsg;
+    }
+
+    public void setErrorMsg(String errorMsg) {
+        this.errorMsg = errorMsg;
     }
 
     public boolean isEnableUpload() {

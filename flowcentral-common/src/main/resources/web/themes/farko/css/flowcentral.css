@@ -477,11 +477,11 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-miniform .mflabel span {display:inline-block; padding-right:6px;font-size: 11px;font-weight: bold;color: #262c33;}
 .fc-miniform .mflabel .mfreq {width:9px; padding-right:4px;}
 .fc-miniform .mfcontent {}
-.fc-miniform .mfcontent .errmsg {font-size: 10px; font-weight:bold; padding: 0px 4px; background-color: #feefef; border: 1px solid #ffcccc; color: #b02121;}
 .fc-miniform .mfpost {display:table-cell;width:12px;}
 .fc-miniform .mfannot {display:table-caption;}
 .fc-miniform .mfannot span {display:block; padding:8px 6px; margin: 0px 20px;}
 .fc-miniform .mwarn {border: 1px solid #ff823b;font-size: 8pt;color:#b35b29;font-weight: bold;background-color: #ffe6d7;padding: 6px 0px;}
+.fc-miniform .errmsg {font-size: 10px; font-weight:bold; padding: 0px 4px; background-color: #feefef; border: 1px solid #ffcccc; color: #b02121;}
 
 /* Parameter values */
 .fc-paramvalues {padding:4px;}
@@ -849,6 +849,7 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-attachmentspanel {}
 .fc-attachmentspanel .cap {display: block; padding: 5px 4px; margin-bottom: 8px; font-size: 11px;font-weight: bold;
 	background-color:#6e819d; color: #ffffff;}
+.fc-attachmentspanel .errmsg {font-size: 10px; font-weight:bold; padding: 4px; background-color: #feefef; border: 1px solid #ffcccc; color: #b02121;}
 	
 /** Comments panel */
 .fc-commentspanel {}

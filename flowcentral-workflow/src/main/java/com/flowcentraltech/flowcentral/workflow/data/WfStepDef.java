@@ -66,6 +66,8 @@ public class WfStepDef {
 
     private String autoLoadingConditionName;
 
+    private String workItemLoadingRestriction;
+
     private String attachmentProviderName;
 
     private String newCommentCaption;
@@ -115,12 +117,12 @@ public class WfStepDef {
     private WfStepDef(AppletDef appletDef, AppletDef stepAppletDef, WorkflowStepType type,
             WorkflowStepPriority priority, RecordActionType recordActionType, String stepAppletName,
             String nextStepName, String altNextStepName, String binaryConditionName, String readOnlyConditionName,
-            String autoLoadingConditionName, String attachmentProviderName, String newCommentCaption,
-            String appletSetValuesName, String policy, String rule, String name, String description, String label,
-            int criticalMinutes, int expiryMinutes, boolean audit, boolean branchOnly, boolean departmentOnly,
-            boolean includeForwarder, boolean forwarderPreferred, String emails, String comments,
-            WfStepSetValuesDef wfSetValuesDef, Map<String, WfUserActionDef> userActions, List<WfRoutingDef> routingList,
-            List<WfAlertDef> alertList, Set<String> roleSet) {
+            String autoLoadingConditionName, String workItemLoadingRestriction, String attachmentProviderName,
+            String newCommentCaption, String appletSetValuesName, String policy, String rule, String name,
+            String description, String label, int criticalMinutes, int expiryMinutes, boolean audit, boolean branchOnly,
+            boolean departmentOnly, boolean includeForwarder, boolean forwarderPreferred, String emails,
+            String comments, WfStepSetValuesDef wfSetValuesDef, Map<String, WfUserActionDef> userActions,
+            List<WfRoutingDef> routingList, List<WfAlertDef> alertList, Set<String> roleSet) {
         this.appletDef = appletDef;
         this.type = type;
         this.priority = priority;
@@ -131,6 +133,7 @@ public class WfStepDef {
         this.binaryConditionName = binaryConditionName;
         this.readOnlyConditionName = readOnlyConditionName;
         this.autoLoadingConditionName = autoLoadingConditionName;
+        this.workItemLoadingRestriction = workItemLoadingRestriction;
         this.attachmentProviderName = attachmentProviderName;
         this.newCommentCaption = newCommentCaption;
         this.appletSetValuesName = appletSetValuesName;
@@ -267,6 +270,14 @@ public class WfStepDef {
 
     public boolean isWithAutoLoadingCondition() {
         return !StringUtils.isBlank(autoLoadingConditionName);
+    }
+
+    public String getWorkItemLoadingRestriction() {
+        return workItemLoadingRestriction;
+    }
+
+    public boolean isWithWorkItemLoadingRestriction() {
+        return !StringUtils.isBlank(workItemLoadingRestriction);
     }
 
     public String getAttachmentProviderName() {
@@ -417,20 +428,21 @@ public class WfStepDef {
 
     public boolean isUserAction(String action) {
         return type.isUserAction() && userActions.containsKey(action);
-    }   
-    
+    }
+
     public static Builder newBuilder(AppletDef appletDef, AppletDef stepAppletDef, WorkflowStepType type,
             WorkflowStepPriority priority, RecordActionType recordActionType, String stepAppletName,
             String nextStepName, String altNextStepName, String binaryConditionName, String readOnlyConditionName,
-            String autoLoadingConditionName, String attachmentProviderName, String newCommentCaption,
-            String appletSetValuesName, String policy, String rule, String name, String description, String label,
-            int criticalMinutes, int expiryMinutes, boolean audit, boolean branchOnly, boolean departmentOnly,
-            boolean includeForwarder, boolean forwarderPreferred, String emails, String comments) {
+            String autoLoadingConditionName, String workItemLoadingRestriction, String attachmentProviderName,
+            String newCommentCaption, String appletSetValuesName, String policy, String rule, String name,
+            String description, String label, int criticalMinutes, int expiryMinutes, boolean audit, boolean branchOnly,
+            boolean departmentOnly, boolean includeForwarder, boolean forwarderPreferred, String emails,
+            String comments) {
         return new Builder(appletDef, stepAppletDef, type, priority, recordActionType, stepAppletName, nextStepName,
                 altNextStepName, binaryConditionName, readOnlyConditionName, autoLoadingConditionName,
-                attachmentProviderName, newCommentCaption, appletSetValuesName, policy, rule, name, description, label,
-                criticalMinutes, expiryMinutes, audit, branchOnly, departmentOnly, includeForwarder, forwarderPreferred,
-                emails, comments);
+                workItemLoadingRestriction, attachmentProviderName, newCommentCaption, appletSetValuesName, policy,
+                rule, name, description, label, criticalMinutes, expiryMinutes, audit, branchOnly, departmentOnly,
+                includeForwarder, forwarderPreferred, emails, comments);
     }
 
     public static class Builder {
@@ -456,6 +468,8 @@ public class WfStepDef {
         private String readOnlyConditionName;
 
         private String autoLoadingConditionName;
+
+        private String workItemLoadingRestriction;
 
         private String attachmentProviderName;
 
@@ -504,10 +518,11 @@ public class WfStepDef {
         public Builder(AppletDef appletDef, AppletDef stepAppletDef, WorkflowStepType type,
                 WorkflowStepPriority priority, RecordActionType recordActionType, String stepAppletName,
                 String nextStepName, String altNextStepName, String binaryConditionName, String readOnlyConditionName,
-                String autoLoadingConditionName, String attachmentProviderName, String newCommentCaption,
-                String appletSetValuesName, String policy, String rule, String name, String description, String label,
-                int criticalMinutes, int expiryMinutes, boolean audit, boolean branchOnly, boolean departmentOnly,
-                boolean includeForwarder, boolean forwarderPreferred, String emails, String comments) {
+                String autoLoadingConditionName, String workItemLoadingRestriction, String attachmentProviderName,
+                String newCommentCaption, String appletSetValuesName, String policy, String rule, String name,
+                String description, String label, int criticalMinutes, int expiryMinutes, boolean audit,
+                boolean branchOnly, boolean departmentOnly, boolean includeForwarder, boolean forwarderPreferred,
+                String emails, String comments) {
             this.appletDef = appletDef;
             this.stepAppletDef = stepAppletDef;
             this.type = type;
@@ -521,6 +536,7 @@ public class WfStepDef {
             this.binaryConditionName = binaryConditionName;
             this.readOnlyConditionName = readOnlyConditionName;
             this.autoLoadingConditionName = autoLoadingConditionName;
+            this.workItemLoadingRestriction = workItemLoadingRestriction;
             this.attachmentProviderName = attachmentProviderName;
             this.newCommentCaption = newCommentCaption;
             this.appletSetValuesName = appletSetValuesName;
@@ -618,11 +634,11 @@ public class WfStepDef {
         public WfStepDef build() {
             return new WfStepDef(appletDef, stepAppletDef, type, priority, recordActionType, stepAppletName,
                     nextStepName, altNextStepName, binaryConditionName, readOnlyConditionName, autoLoadingConditionName,
-                    attachmentProviderName, newCommentCaption, appletSetValuesName, policy, rule, name, description,
-                    label, criticalMinutes, expiryMinutes, audit, branchOnly, departmentOnly, includeForwarder,
-                    forwarderPreferred, emails, comments, wfSetValuesDef, DataUtils.unmodifiableMap(userActionList),
-                    DataUtils.unmodifiableValuesList(routingList), DataUtils.unmodifiableValuesList(alertList),
-                    DataUtils.unmodifiableSet(roleSet));
+                    workItemLoadingRestriction, attachmentProviderName, newCommentCaption, appletSetValuesName, policy,
+                    rule, name, description, label, criticalMinutes, expiryMinutes, audit, branchOnly, departmentOnly,
+                    includeForwarder, forwarderPreferred, emails, comments, wfSetValuesDef,
+                    DataUtils.unmodifiableMap(userActionList), DataUtils.unmodifiableValuesList(routingList),
+                    DataUtils.unmodifiableValuesList(alertList), DataUtils.unmodifiableSet(roleSet));
         }
     }
 

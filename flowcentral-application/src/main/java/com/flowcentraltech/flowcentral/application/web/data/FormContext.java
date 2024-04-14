@@ -392,8 +392,8 @@ public class FormContext extends AbstractContext {
         formValidationErrors.addValidationError(message);
     }
 
-    public void addValidationError(String fieldName, String message) {
-        formValidationErrors.addValidationError(fieldName, message);
+    public void addValidationError(TargetFormMessage.Target target, String message) {
+        formValidationErrors.addValidationError(target, message);
     }
 
     public void clearValidationErrors() {
@@ -418,6 +418,22 @@ public class FormContext extends AbstractContext {
 
     public String getFieldError(String fieldName) {
         return formValidationErrors.getFieldError(fieldName);
+    }
+
+    public boolean isWithSectionErrors() {
+        return formValidationErrors.isWithSectionErrors();
+    }
+
+    public boolean isWithSectionError(String sectionName) {
+        return formValidationErrors.isWithSectionError(sectionName);
+    }
+
+    public boolean isWithSectionError(Collection<String> sectionNames) {
+        return formValidationErrors.isWithSectionError(sectionNames);
+    }
+
+    public String getSectionError(String sectionName) {
+        return formValidationErrors.getSectionError(sectionName);
     }
 
     public boolean isWithValidationErrors() {
@@ -464,7 +480,7 @@ public class FormContext extends AbstractContext {
             rrb.addRequired(formMessage.getMessage());
 
             String mainTabName = formDef.getFormTabDef(0).getName();
-            if (message.isTarget(mainTabName)) {
+            if (message.isFieldTarget(mainTabName)) {
                 addValidationError(formMessage);
             }
         }
@@ -590,7 +606,7 @@ public class FormContext extends AbstractContext {
         if (messageList == null && !DataUtils.isBlank(reviewErrors)) {
             messageList = new ArrayList<FormMessage>();
             for (TargetFormMessage targetMessage : reviewErrors) {
-                if (targetMessage.isTarget(tabName)) {
+                if (targetMessage.isFieldTarget(tabName)) {
                     messageList.add(targetMessage.getFormMessage());
                 }
             }
