@@ -35,6 +35,7 @@ import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.UplBinding;
 import com.tcdng.unify.core.constant.FileAttachmentType;
+import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.annotation.Action;
 import com.tcdng.unify.web.ui.widget.EventHandler;
 import com.tcdng.unify.web.ui.widget.UploadControl;
@@ -75,6 +76,8 @@ public class AttachmentsPanel extends AbstractFlowCentralPanel implements FormPa
             BeanListTable attachmentsTable = getAttachmentsTable(attachments.isEnableUpload());
             attachmentsTable.setSourceObjectClearSelected(attachments.getAttachments());
         }
+
+        setVisible("attachmentsErrorMsg", attachments != null && !StringUtils.isBlank(attachments.getErrorMsg()));
     }
 
     @Override
@@ -107,8 +110,7 @@ public class AttachmentsPanel extends AbstractFlowCentralPanel implements FormPa
     }
 
     private BeanListTable getAttachmentsTable(boolean enableUpload) throws UnifyException {
-        AbstractTableWidget<?, ?, ?> tableWidget = getWidgetByShortName(AbstractTableWidget.class,
-                "attachmentsTable");
+        AbstractTableWidget<?, ?, ?> tableWidget = getWidgetByShortName(AbstractTableWidget.class, "attachmentsTable");
         UploadControl uploadControl = tableWidget.getUploadCtrl();
         uploadControl.setUploadHandler(this);
 

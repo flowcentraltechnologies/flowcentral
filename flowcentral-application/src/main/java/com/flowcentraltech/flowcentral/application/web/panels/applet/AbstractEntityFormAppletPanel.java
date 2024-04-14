@@ -53,6 +53,7 @@ import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralRequestAttributeConstants;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralResultMappingConstants;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants;
+import com.flowcentraltech.flowcentral.common.data.TargetFormMessage.FieldTarget;
 import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
 import com.flowcentraltech.flowcentral.configuration.constants.TabContentType;
 import com.tcdng.unify.core.UnifyException;
@@ -244,6 +245,11 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         boolean showReviewFormCaption = false;
         if (form != null) {
             form.getCtx().setUpdateEnabled(enableUpdate);
+            if (form.isWithAttachments()) {
+                form.getAttachments().setErrorMsg(
+                        form.getCtx().isWithSectionError("documents") ? form.getCtx().getSectionError("documents")
+                                : null);
+            }
 
             final String displayCounter = form.getDisplayItemCounter();
             form.clearDisplayItem();
@@ -623,7 +629,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
             BaseApplicationEntity entity = (BaseApplicationEntity) inst;
             saveApplicatIonId = entity.getApplicationId();
             if (!applet.au().isApplicationDevelopable(saveApplicatIonId)) {
-                ctx.addValidationError("applicationId",
+                ctx.addValidationError(new FieldTarget("applicationId"),
                         getApplicationMessage("application.validation.application.nondevelopable"));
             }
         }

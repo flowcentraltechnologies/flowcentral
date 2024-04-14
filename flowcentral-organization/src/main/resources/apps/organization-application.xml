@@ -76,10 +76,12 @@
 			<property name="searchTable.basicSearchOnly" value="true" />
 			<property name="searchTable.searchInput" />
 			<property name="createForm" value="roleForm" />
+			<property name="createForm.submit.validate" value="true" />
 			<property name="createForm.save" value="true" />
 			<property name="createForm.save.next" value="true" />
 			<property name="createForm.save.close" value="true" />
 			<property name="maintainForm" value="roleForm" />
+			<property name="maintainForm.submit.validate" value="true" />
 			<property name="maintainForm.update" value="true" />
 			<property name="maintainForm.delete" value="true" />
 			<property name="workflowCopy" value="true" />

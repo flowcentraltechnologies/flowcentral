@@ -17,6 +17,7 @@
 package com.flowcentraltech.flowcentral.common.data;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -28,25 +29,46 @@ import java.util.Set;
  */
 public class TargetFormMessage {
 
-    private Set<String> targets;
+    public enum TargetType {
+        FIELD,
+        SECTION
+    }
+    
+    private Set<Target> targets;
 
     private FormMessage formMessage;
 
     private boolean skippable;
     
     public TargetFormMessage(Set<String> targets, FormMessage formMessage, boolean skippable) {
-        this.targets = targets;
+        this.targets = new HashSet<Target>();
+        for (String target: targets) {
+            this.targets.add(new FieldTarget(target));
+        }
+        
+        this.targets = Collections.unmodifiableSet(this.targets);
         this.formMessage = formMessage;
         this.skippable = skippable;
     }
 
     public TargetFormMessage(FormMessage formMessage, boolean skippable, String... targets) {
-        this.targets = new HashSet<String>(Arrays.asList(targets));
+        this.targets = new HashSet<Target>();
+        for (String target: new HashSet<String>(Arrays.asList(targets))) {
+            this.targets.add(new FieldTarget(target));
+        }
+        
+        this.targets = Collections.unmodifiableSet(this.targets);
         this.formMessage = formMessage;
         this.skippable = skippable;
     }
 
-    public Set<String> getTargets() {
+    public TargetFormMessage(FormMessage formMessage, boolean skippable, Target... targets) {
+        this.targets = Collections.unmodifiableSet(new HashSet<Target>(Arrays.asList(targets)));
+        this.formMessage = formMessage;
+        this.skippable = skippable;
+    }
+
+    public Set<Target> getTargets() {
         return targets;
     }
 
@@ -54,8 +76,22 @@ public class TargetFormMessage {
         return targets != null && !targets.isEmpty();
     }
 
-    public boolean isTarget(String target) {
-        return targets.contains(target);
+    public boolean isFieldTarget(String target) {
+        for (Target _target: targets) {
+            if (_target.isFieldTarget() && _target.getName().equals(target)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean isSectionTarget(String target) {
+        for (Target _target: targets) {
+            if (_target.isSectionTarget() && _target.getName().equals(target)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public boolean isSkippable() {
@@ -66,8 +102,47 @@ public class TargetFormMessage {
         return formMessage;
     }
 
-    @Override
-    public String toString() {
-        return "TargetFormMessage [targets=" + targets + ", formMessage=" + formMessage + "]";
+    public static class FieldTarget extends Target {
+
+        public FieldTarget(String name) {
+            super(TargetType.FIELD, name);
+        }
+        
+    }
+
+    public static class SectionTarget extends Target {
+
+        public SectionTarget(String name) {
+            super(TargetType.SECTION, name);
+        }
+        
+    }
+    
+    public static abstract class Target {
+        
+        private final TargetType type;
+        
+        private final String name;
+
+        public Target(TargetType type, String name) {
+            this.type = type;
+            this.name = name;
+        }
+
+        public TargetType getType() {
+            return type;
+        }
+
+        public String getName() {
+            return name;
+        } 
+        
+        public boolean isFieldTarget() {
+            return TargetType.FIELD.equals(type);
+        }
+        
+        public boolean isSectionTarget() {
+            return TargetType.SECTION.equals(type);
+        }
     }
 }

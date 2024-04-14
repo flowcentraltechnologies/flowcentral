@@ -36,6 +36,8 @@ public class FormValidationErrors {
 
     private Map<String, String> invalidFields;
 
+    private Map<String, String> invalidSections;
+
     private List<FormMessage> validationErrors;
 
     private int hiddenErrors;
@@ -58,12 +60,20 @@ public class FormValidationErrors {
         validationErrors.add(message);
     }
 
-    public void addValidationError(String fieldName, String message) {
-        if (invalidFields == null) {
-            invalidFields = new HashMap<String, String>();
-        }
+    public void addValidationError(TargetFormMessage.Target target, String message) {
+        if (target.isFieldTarget()) {
+            if (invalidFields == null) {
+                invalidFields = new HashMap<String, String>();
+            }
 
-        invalidFields.put(fieldName, message);
+            invalidFields.put(target.getName(), message);
+        } else if (target.isSectionTarget()) {
+            if (invalidSections == null) {
+                invalidSections = new HashMap<String, String>();
+            }
+
+            invalidSections.put(target.getName(), message);
+        }
     }
 
     public void merge(List<FormValidationErrors> errors) {
@@ -77,6 +87,7 @@ public class FormValidationErrors {
     public FormValidationErrors hide() {
         FormValidationErrors errors = new FormValidationErrors();
         errors.invalidFields = invalidFields;
+        errors.invalidSections = invalidSections;
         errors.validationErrors = validationErrors;
         errors.hidden = true;
         return errors;
@@ -88,20 +99,28 @@ public class FormValidationErrors {
 
     public void merge(FormValidationErrors errors) {
         if (errors.isHidden()) {
-            if (errors.invalidFields != null || errors.validationErrors != null) {
+            if (errors.invalidFields != null || errors.invalidSections != null || errors.validationErrors != null) {
                 hiddenErrors++;
             }
             return;
         }
 
         hiddenErrors += errors.hiddenErrors;
-        
+
         if (errors.invalidFields != null) {
             if (invalidFields == null) {
                 invalidFields = new HashMap<String, String>();
             }
 
             invalidFields.putAll(errors.invalidFields);
+        }
+
+        if (errors.invalidSections != null) {
+            if (invalidSections == null) {
+                invalidSections = new HashMap<String, String>();
+            }
+
+            invalidSections.putAll(errors.invalidSections);
         }
 
         if (errors.validationErrors != null) {
@@ -120,11 +139,12 @@ public class FormValidationErrors {
     public void clearValidationErrors() {
         hiddenErrors = 0;
         invalidFields = null;
+        invalidSections = null;
         validationErrors = null;
     }
 
     public boolean isWithFormErrors() {
-        return isWithHiddenErrors() || isWithFieldErrors() || isWithValidationErrors();
+        return isWithHiddenErrors() || isWithFieldErrors() || isWithSectionErrors() || isWithValidationErrors();
     }
 
     public boolean isWithHiddenErrors() {
@@ -155,12 +175,40 @@ public class FormValidationErrors {
         return invalidFields.get(fieldName);
     }
 
+    public boolean isWithSectionErrors() {
+        return !DataUtils.isBlank(invalidSections);
+    }
+
+    public boolean isWithSectionError(String sectionName) {
+        return invalidSections != null && invalidSections.containsKey(sectionName);
+    }
+
+    public boolean isWithSectionError(Collection<String> sectionNames) {
+        if (invalidSections != null) {
+            for (String sectionName : sectionNames) {
+                if (invalidSections.containsKey(sectionName)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    public String getSectionError(String sectionName) {
+        return invalidSections.get(sectionName);
+    }
+
     public boolean isWithValidationErrors() {
         return !DataUtils.isBlank(validationErrors);
     }
 
     public Map<String, String> getInvalidFields() {
         return invalidFields;
+    }
+
+    public Map<String, String> getInvalidSections() {
+        return invalidSections;
     }
 
     public int getHiddenErrors() {

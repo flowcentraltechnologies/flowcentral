@@ -73,7 +73,7 @@ public class MiniFormWriter extends AbstractControlWriter {
         if (miniFormWidget.isStrictRows()) {
             for (FormSection formSection : miniFormWidget.getFormSectionList()) {
                 if (formSection.isVisible()) {
-                    writeSectionLabel(writer, formSection, isPreGap, isClassicFormSection);
+                    writeSectionLabel(writer, ctx, formSection, isPreGap, isClassicFormSection);
                     writer.write("<div class=\"mftable\">");
                     RowRegulator rowRegulator = formSection.getRowRegulator();
                     rowRegulator.resetRows();
@@ -97,7 +97,7 @@ public class MiniFormWriter extends AbstractControlWriter {
         } else {
             for (FormSection formSection : miniFormWidget.getFormSectionList()) {
                 if (formSection.isVisible()) {
-                    writeSectionLabel(writer, formSection, isPreGap, isClassicFormSection);
+                    writeSectionLabel(writer, ctx, formSection, isPreGap, isClassicFormSection);
                     writer.write("<div class=\"mftable\">");
                     writer.write("<div class=\"mfrow\">");
                     final int columns = formSection.getColumns();
@@ -176,8 +176,8 @@ public class MiniFormWriter extends AbstractControlWriter {
 
     }
 
-    private boolean writeSectionLabel(ResponseWriter writer, FormSection formSection, boolean isPreGap,
-            boolean isClassicFormSection) {
+    private boolean writeSectionLabel(ResponseWriter writer, FormContext ctx, FormSection formSection, boolean isPreGap,
+            boolean isClassicFormSection) throws UnifyException  {
         if (formSection.isWithLabel()) {
             if (isPreGap) {
                 writer.write("<div class=\"mfgap\"></div>");
@@ -185,6 +185,10 @@ public class MiniFormWriter extends AbstractControlWriter {
 
             writer.write(isClassicFormSection ? "<div class=\"mfsectionl\"><span>" : "<div class=\"mfsection\"><span>")
                     .writeWithHtmlEscape(formSection.getLabel()).write("</span></div>");
+            if (ctx.isWithSectionError(formSection.getName())) {
+                writer.write("<div><span class=\"errmsg\">")
+                        .write(resolveSessionMessage(ctx.getSectionError(formSection.getName()))).write("</span></div>");
+            }
             return true;
         }
 

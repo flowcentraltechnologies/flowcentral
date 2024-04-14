@@ -133,6 +133,13 @@ public abstract class AbstractEntitySingleFormAppletPanel extends AbstractApplet
                 form.setDisplayItemCounterClass("fc-dispcounterorange");
                 form.setDisplayItemCounter(resolveSessionMessage("$m{entityformapplet.form.inworkflow.viewonly}"));
             }
+            
+
+            if (form.isWithAttachments()) {
+                form.getAttachments().setErrorMsg(
+                        form.getCtx().isWithSectionError("documents") ? form.getCtx().getSectionError("documents")
+                                : null);
+            }
         }
 
         switch (viewMode) {

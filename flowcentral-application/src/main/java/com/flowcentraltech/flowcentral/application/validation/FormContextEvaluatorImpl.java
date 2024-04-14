@@ -42,6 +42,7 @@ import com.flowcentraltech.flowcentral.common.business.policies.ConsolidatedForm
 import com.flowcentraltech.flowcentral.common.business.policies.ReviewResult;
 import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
 import com.flowcentraltech.flowcentral.common.data.TargetFormMessage;
+import com.flowcentraltech.flowcentral.common.data.TargetFormMessage.FieldTarget;
 import com.flowcentraltech.flowcentral.common.util.ValidationUtils;
 import com.flowcentraltech.flowcentral.configuration.constants.FormReviewType;
 import com.tcdng.unify.core.UnifyException;
@@ -101,19 +102,19 @@ public class FormContextEvaluatorImpl extends AbstractFlowCentralComponent imple
                     Object val = DataUtils.getBeanProperty(Object.class, inst, fieldName);
                     fieldsInScope.put(fieldName, val);
                     if (formWidgetState.isRequired() && ValidationUtils.isBlank(val)) {
-                        ctx.addValidationError(fieldName, getApplicationMessage(
+                        ctx.addValidationError(new FieldTarget(fieldName), getApplicationMessage(
                                 "application.validation.formfield.required", formWidgetState.getFieldLabel()));
                     } else if (val instanceof String) {
                         String valString = (String) val;
                         if (ValidationUtils.isLessThanMinLen(valString,
                                 DataUtils.convert(int.class, formWidgetState.getMinLen()))) {
-                            ctx.addValidationError(fieldName,
+                            ctx.addValidationError(new FieldTarget(fieldName),
                                     getApplicationMessage("application.validation.formfield.lessthanminlen",
                                             formWidgetState.getFieldLabel(),
                                             DataUtils.convert(int.class, formWidgetState.getMinLen())));
                         } else if (ValidationUtils.isGreaterThanMaxLen(valString,
                                 DataUtils.convert(int.class, formWidgetState.getMaxLen()))) {
-                            ctx.addValidationError(fieldName,
+                            ctx.addValidationError(new FieldTarget(fieldName),
                                     getApplicationMessage("application.validation.formfield.greaterthanmaxlen",
                                             formWidgetState.getFieldLabel(),
                                             DataUtils.convert(int.class, formWidgetState.getMaxLen())));
@@ -126,14 +127,14 @@ public class FormContextEvaluatorImpl extends AbstractFlowCentralComponent imple
                                     String[] contacts = ((String) val).split(";|,");
                                     for (String contact : contacts) {
                                         if (!validator.validate(null, contact.trim())) {
-                                            ctx.addValidationError(fieldName, validator.getFailureMessage(null,
+                                            ctx.addValidationError(new FieldTarget(fieldName), validator.getFailureMessage(null,
                                                     entityDef.getFieldDef(fieldName).getFieldLabel()));
                                             break;
                                         }
                                     }
                                 } else {
                                     if (!validator.validate(null, val)) {
-                                        ctx.addValidationError(fieldName, validator.getFailureMessage(null,
+                                        ctx.addValidationError(new FieldTarget(fieldName), validator.getFailureMessage(null,
                                                 entityDef.getFieldDef(fieldName).getFieldLabel()));
                                     }
                                 }
@@ -151,7 +152,7 @@ public class FormContextEvaluatorImpl extends AbstractFlowCentralComponent imple
                         Validator validator = (Validator) getComponent(policyDef.getValidator());
                         Object val = fieldsInScope.get(fieldName);
                         if (val != null && !validator.validate(policyDef.getRule(), val)) {
-                            ctx.addValidationError(fieldName, validator.getFailureMessage(policyDef.getRule(),
+                            ctx.addValidationError(new FieldTarget(fieldName), validator.getFailureMessage(policyDef.getRule(),
                                     entityDef.getFieldDef(fieldName).getFieldLabel()));
                         }
                     }
@@ -217,7 +218,7 @@ public class FormContextEvaluatorImpl extends AbstractFlowCentralComponent imple
                                     String msg = getApplicationMessage("application.validation.uniqueconstraint",
                                             sb.toString());
                                     for (String fieldName : fieldList) {
-                                        ctx.addValidationError(fieldName, msg);
+                                        ctx.addValidationError(new FieldTarget(fieldName), msg);
                                     }
                                 }
                             }
@@ -316,7 +317,7 @@ public class FormContextEvaluatorImpl extends AbstractFlowCentralComponent imple
     private void addValidationMessage(FormContext ctx, TargetFormMessage message) {
         if (message.isWithTargets()) {
             String msg = message.getFormMessage().getMessage();
-            for (String target : message.getTargets()) {
+            for (TargetFormMessage.Target target : message.getTargets()) {
                 ctx.addValidationError(target, msg);
             }
         } else {
@@ -328,7 +329,7 @@ public class FormContextEvaluatorImpl extends AbstractFlowCentralComponent imple
         if (policyDef.isWithTarget()) {
             String msg = policyDef.getMessage();
             for (String target : policyDef.getTarget()) {
-                ctx.addValidationError(target, msg);
+                ctx.addValidationError(new FieldTarget(target), msg);
             }
         } else {
             ctx.addValidationError(policyDef.getMessage());
