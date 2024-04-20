@@ -477,7 +477,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
 
                 @Override
                 protected AppletDef create(String longName, Object... params) throws Exception {
-                    String _actLongName = ApplicationNameUtils.removeVestigialNamePart(longName);
+                    String _actLongName = ApplicationNameUtils.getAppletNameParts(longName).getAppletName();
                     AppApplet appApplet = getApplicationEntity(AppApplet.class, _actLongName);
                     final boolean descriptiveButtons = appletUtilities.system().getSysParameterValue(boolean.class,
                             SystemModuleSysParamConstants.SYSTEM_DESCRIPTIVE_BUTTONS_ENABLED);
@@ -530,16 +530,19 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                     if (!StringUtils.isBlank(appApplet.getPath())) {
                         adb.openPath(appApplet.getPath());
                     } else {
-                        adb.openPath(ApplicationPageUtils.constructAppletOpenPagePath(appApplet.getType(), longName));
+                        adb.openPath(ApplicationPageUtils.constructAppletOpenPagePath(appApplet.getType(), longName)
+                                .getOpenPath());
                         if (type.isEntityList()) {
                             adb.maintainOpenPath(ApplicationPageUtils
-                                    .constructAppletOpenPagePath(AppletType.CREATE_ENTITY, longName));
-                            adb.listingOpenPath(
-                                    ApplicationPageUtils.constructAppletOpenPagePath(AppletType.LISTING, longName));
+                                    .constructAppletOpenPagePath(AppletType.CREATE_ENTITY, longName).getOpenPath());
+                            adb.listingOpenPath(ApplicationPageUtils
+                                    .constructAppletOpenPagePath(AppletType.LISTING, longName).getOpenPath());
 
                             if (adb.getPropValue(boolean.class, AppletPropertyConstants.WORKFLOWCOPY)) {
-                                adb.openDraftPath(ApplicationPageUtils.constructAppletOpenPagePath(type, longName,
-                                        ApplicationNameUtils.WORKFLOW_COPY_UPDATE_DRAFT_PATH_SUFFIX));
+                                adb.openDraftPath(ApplicationPageUtils
+                                        .constructAppletOpenPagePath(type, longName,
+                                                ApplicationNameUtils.WORKFLOW_COPY_UPDATE_DRAFT_PATH_SUFFIX)
+                                        .getOpenPath());
                                 adb.openDraftWorkflow(ApplicationNameUtils.getWorkflowCopyUpdateWorkflowName(longName));
                                 appletUtilities.ensureWorkflowCopyWorkflows(longName, false);
                             }
@@ -4931,7 +4934,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
         List<AppAppletRouteToApplet> routeToAppletList = null;
         if (!DataUtils.isBlank(appletConfig.getRouteToAppletList())) {
             routeToAppletList = new ArrayList<AppAppletRouteToApplet>();
-            for (AppletRouteToAppletConfig appletRouteToAppletConfig: appletConfig.getRouteToAppletList()) {
+            for (AppletRouteToAppletConfig appletRouteToAppletConfig : appletConfig.getRouteToAppletList()) {
                 AppAppletRouteToApplet appAppletRouteToApplet = new AppAppletRouteToApplet();
                 appAppletRouteToApplet.setRouteToApplet(appletRouteToAppletConfig.getRouteToApplet());
                 routeToAppletList.add(appAppletRouteToApplet);
@@ -4939,7 +4942,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
         }
 
         appApplet.setRouteToAppletList(routeToAppletList);
-        
+
         List<AppAppletFilter> filterList = null;
         if (!DataUtils.isBlank(appletConfig.getFilterList())) {
             filterList = new ArrayList<AppAppletFilter>();

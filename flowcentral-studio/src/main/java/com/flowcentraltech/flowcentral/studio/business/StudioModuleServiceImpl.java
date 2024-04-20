@@ -179,7 +179,7 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
                             adb.addFilterDef(new AppletFilterDef(filterDef, null, null, null));
 
                             adb.openPath(
-                                    ApplicationPageUtils.constructAppletOpenPagePath(type.appletPath(), appletName));
+                                    ApplicationPageUtils.constructAppletOpenPagePath(type.appletPath(), appletName).getOpenPath());
                             adb.originApplicationName(np.getApplicationName());
                             adb.originName(name);
                             appletDef = adb.build();

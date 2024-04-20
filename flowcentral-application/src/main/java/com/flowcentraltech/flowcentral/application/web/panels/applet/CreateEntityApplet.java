@@ -21,6 +21,7 @@ import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.constants.AppletPropertyConstants;
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.data.EntityFormEventHandlers;
+import com.flowcentraltech.flowcentral.application.util.AppletNameParts;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.web.controllers.AppletWidgetReferences;
 import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm.FormMode;
@@ -40,15 +41,15 @@ public class CreateEntityApplet extends AbstractEntityFormApplet {
             EntityFormEventHandlers formEventHandlers) throws UnifyException {
         super(page, au, pathVariables, appletWidgetReferences, formEventHandlers);
         setCurrFormAppletDef(getRootAppletDef());
-        final String vestigial = ApplicationNameUtils.getVestigialNamePart(pathVariables.get(APPLET_NAME_INDEX));
-        if (vestigial == null) {
-            form = constructNewForm(FormMode.CREATE, null, false);
-            viewMode = ViewMode.NEW_PRIMARY_FORM;
-        } else {
-            final Long entityInstId = Long.valueOf(vestigial);
+        final AppletNameParts parts = ApplicationNameUtils.getAppletNameParts(pathVariables.get(APPLET_NAME_INDEX));
+        if (parts.isWithVestigial()) {
+            final Long entityInstId = Long.valueOf(parts.getVestigial());
             Entity inst = loadEntity(entityInstId);
             form = constructForm(inst, FormMode.MAINTAIN, null, false);
             viewMode = ViewMode.MAINTAIN_PRIMARY_FORM_NO_SCROLL;
+        } else {
+            form = constructNewForm(FormMode.CREATE, null, false);
+            viewMode = ViewMode.NEW_PRIMARY_FORM;
         }
 
         setAltSubCaption(form.getFormTitle());

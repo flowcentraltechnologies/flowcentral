@@ -22,6 +22,7 @@ import com.flowcentraltech.flowcentral.application.constants.AppletPropertyConst
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.data.AppletFilterDef;
 import com.flowcentraltech.flowcentral.application.data.EntityFormEventHandlers;
+import com.flowcentraltech.flowcentral.application.util.AppletNameParts;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.util.InputWidgetUtils;
 import com.flowcentraltech.flowcentral.application.web.controllers.AppletWidgetReferences;
@@ -55,8 +56,8 @@ public class ManageEntityListApplet extends AbstractEntityFormApplet {
         super(page, au, pathVariables, appletWidgetReferences, formEventHandlers);
         final AppletDef _rootAppletDef = getRootAppletDef();
         setCurrFormAppletDef(_rootAppletDef);
-        final String vestigial = ApplicationNameUtils.getVestigialNamePart(pathVariables.get(APPLET_NAME_INDEX));
-        final boolean isUpdateDraft = ApplicationNameUtils.WORKFLOW_COPY_UPDATE_DRAFT_PATH_SUFFIX.equals(vestigial);
+        final AppletNameParts parts = ApplicationNameUtils.getAppletNameParts(pathVariables.get(APPLET_NAME_INDEX));
+        final boolean isUpdateDraft = ApplicationNameUtils.WORKFLOW_COPY_UPDATE_DRAFT_PATH_SUFFIX.equals(parts.getVestigial());
         entitySearch = au.constructEntitySearch(new FormContext(getCtx()), this, null, _rootAppletDef.getDescription(),
                 getCurrFormAppletDef(), null,
                 isUpdateDraft ? EntitySearch.ENABLE_ALL & ~EntitySearch.SHOW_NEW_BUTTON : EntitySearch.ENABLE_ALL,
