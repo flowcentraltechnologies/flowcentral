@@ -731,7 +731,7 @@ public class TableDef extends BaseApplicationEntityDef {
                     if (LinkActConstants.BUTTON_ACTION.equals(linkAct)) {
                         final String symbolAttr = tempColumnDef.isWithSymbol() ? " symbol:$s{" + symbol + "}" : "";
                         renderer = "!ui-button" + symbolAttr + "  binding:" + fieldName
-                                + " alwaysValueIndex:true eventHandler:$d{!ui-event event:onclick action:$c{" + linkAct
+                                + " alwaysValueIndex:true copyEventHandlers:true eventHandler:$d{!ui-event event:onclick action:$c{" + linkAct
                                 + "}}";
                     } else {
                         String styleClass = classLink
@@ -741,7 +741,7 @@ public class TableDef extends BaseApplicationEntityDef {
                                 : (entityFieldDef.getDataType().isNumber() ? " styleClass:$e{link-right}" : "");
                         renderer = "!ui-link debounce:true preferredCaptionBinding:" + fieldName + formatter
                                 + " binding:" + fieldName + styleClass
-                                + " alwaysValueIndex:true eventHandler:$d{!ui-event event:onclick action:$c{" + linkAct
+                                + " alwaysValueIndex:true copyEventHandlers:true eventHandler:$d{!ui-event event:onclick action:$c{" + linkAct
                                 + "}}";
                     }
                 } else {

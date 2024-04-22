@@ -581,14 +581,7 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
                             inputs.add(widget);
                         }
 
-                        EventHandler[] handlers = widget.getEventHandlers();
-                        if (handlers != null) {
-                            for (EventHandler handler : handlers) {
-                                handler.setPageAction(null);
-                            }
-                        }
-
-                        standalonePanel.resolvePageActions(handlers);
+                        standalonePanel.resolvePageActions(widget);
                     }
 
                 }
