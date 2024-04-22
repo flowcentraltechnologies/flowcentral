@@ -294,8 +294,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                             adb.addPropDef(WfAppletPropertyConstants.WORKFLOW_STEP, wfStep.getName());
                             adb.addPropDef(WfAppletPropertyConstants.WORKFLOW_STEP_APPLET, wfStep.getAppletName());
 
-                            adb.openPath(
-                                    ApplicationPageUtils.constructAppletOpenPagePath(_reviewAppletType, appletName));
+                            adb.openPath(ApplicationPageUtils.constructAppletOpenPagePath(_reviewAppletType, appletName)
+                                    .getOpenPath());
                             adb.originApplicationName(nameParts.getApplicationName());
                             appletDef = adb.build();
                         }
@@ -403,8 +403,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                     adb.addPropDef(AppletPropertyConstants.SEARCH_TABLE_NEW, "true");
                     adb.addPropDef(WfWizardAppletPropertyConstants.WORKFLOW_WIZARD, longName);
 
-                    adb.openPath(ApplicationPageUtils.constructAppletOpenPagePath(AppletType.REVIEW_WIZARDWORKITEMS,
-                            appletName));
+                    adb.openPath(ApplicationPageUtils
+                            .constructAppletOpenPagePath(AppletType.REVIEW_WIZARDWORKITEMS, appletName).getOpenPath());
                     adb.originApplicationName(nameParts.getApplicationName());
                     AppletDef appletDef = adb.build();
                     wwdb.applet(appletDef);

@@ -17,6 +17,7 @@ package com.flowcentraltech.flowcentral.application.util;
 
 import java.util.List;
 
+
 import com.flowcentraltech.flowcentral.configuration.constants.AppletType;
 import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.constant.UnifyWebRequestAttributeConstants;
@@ -28,7 +29,7 @@ import com.tcdng.unify.web.constant.UnifyWebRequestAttributeConstants;
  * @since 1.0
  */
 public final class ApplicationPageUtils {
-
+    
     private static final String MULTIPAGE_PART = UnifyWebRequestAttributeConstants.TIMESTAMP_VARIABLE + "/";
     
     private ApplicationPageUtils() {
@@ -43,21 +44,25 @@ public final class ApplicationPageUtils {
         return StringUtils.replaceLast(path, "/", MULTIPAGE_PART);
     }
 
-    public static String constructAppletOpenPagePath(AppletType type, String appletName) {
+    public static OpenPagePathParts constructAppletOpenPagePath(AppletType type, String appletName) {
         return ApplicationPageUtils.constructAppletOpenPagePath(type.path(), appletName);
     }
 
-    public static String constructAppletOpenPagePath(AppletType type, String appletName, Object instId) {
+    public static OpenPagePathParts constructAppletNewInstOpenPagePath(AppletType type, String appletName) {
+        return ApplicationPageUtils.constructAppletOpenPagePath(type.path(), ApplicationNameUtils.addPseudoNamePart(appletName));
+    }
+
+    public static OpenPagePathParts constructAppletOpenPagePath(AppletType type, String appletName, Object instId) {
         return ApplicationPageUtils.constructAppletOpenPagePath(type.path(), appletName, instId);
     }
 
-    public static String constructAppletOpenPagePath(String controllerName, String appletName, Object instId) {
-        return ApplicationPageUtils.constructAppletOpenPagePath(controllerName,
-                ApplicationNameUtils.addVestigialNamePart(appletName, String.valueOf(instId)));
+    public static OpenPagePathParts constructAppletOpenPagePath(String controllerName, String appletName, Object instId) {
+        return ApplicationPageUtils.constructAppletOpenPagePath(controllerName, ApplicationNameUtils.addVestigialNamePart(appletName, String.valueOf(instId)));
     }
 
-    public static String constructAppletOpenPagePath(String controllerName, String appletName) {
-        return new StringBuilder().append(controllerName).append(':').append(appletName).append("/openPage").toString();
+    public static OpenPagePathParts constructAppletOpenPagePath(String controllerName, String appletName) {
+        final String path = new StringBuilder().append(controllerName).append(':').append(appletName).append("/openPage").toString();
+        return new OpenPagePathParts(path, ApplicationNameUtils.getAppletNameParts(appletName));
     }
 
     public static String constructAppletOpenInBrowserWindowPath(String controllerName, String tabName) {

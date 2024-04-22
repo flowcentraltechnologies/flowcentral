@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.audit.policies;
 
 import com.flowcentraltech.flowcentral.application.policies.AbstractApplicationFormActionPolicy;
 import com.flowcentraltech.flowcentral.application.util.ApplicationPageUtils;
+import com.flowcentraltech.flowcentral.application.util.OpenPagePathParts;
 import com.flowcentraltech.flowcentral.audit.constants.AuditModuleSessionAttributes;
 import com.flowcentraltech.flowcentral.common.annotation.EntityReferences;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionContext;
@@ -45,9 +46,9 @@ public class LaunchAuditTrailFormActionPolicy extends AbstractApplicationFormAct
 
     @Override
     protected EntityActionResult doExecutePostAction(EntityActionContext ctx) throws UnifyException {
-        final String resultPath = ApplicationPageUtils.constructAppletOpenPagePath(AppletType.MANAGE_ENTITYLIST,
+        final OpenPagePathParts parts= ApplicationPageUtils.constructAppletOpenPagePath(AppletType.MANAGE_ENTITYLIST,
                 "audit.entityAuditTrail");
-        EntityActionResult result = new EntityActionResult(ctx, resultPath);
+        EntityActionResult result = new EntityActionResult(ctx, parts.getOpenPath());
         final ValueStoreReader reader = new BeanValueStore(ctx.getInst()).getReader();
         setSessionAttribute(AuditModuleSessionAttributes.AUDIT_BASE_AUDIT_NO, reader.read(String.class, "auditNo"));
         return result;

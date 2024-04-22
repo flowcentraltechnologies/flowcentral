@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 
 import com.flowcentraltech.flowcentral.application.entities.BaseApplicationEntity;
 import com.tcdng.unify.core.UnifyException;
@@ -39,6 +40,8 @@ public final class ApplicationNameUtils {
 
     public static final String VESTIGIAL_INFIX = "_0_";
 
+    public static final String PSEUDO_INFIX = "_1_";
+
     public static final String WORKFLOW_COPY_UPDATE_DRAFT_PATH_SUFFIX = "wcuds";
 
     private static final String WORKFLOW_COPY_CREATE_WORKFLOW_NAME_SUFFIX = "wccw";
@@ -55,16 +58,19 @@ public final class ApplicationNameUtils {
 
     private static final FactoryMap<String, EntityAssignRuleNameParts> assignRuleNameParts;
 
-    static {
-        tabSequences = new FactoryMap<String, AtomicInteger>() {
+    private static final AtomicLong newPseudoIdCounter = new AtomicLong();
 
-            @Override
-            protected AtomicInteger create(String tabName, Object... params) throws Exception {
-                return new AtomicInteger();
-            }
-            
-        };
-        
+    static {
+        tabSequences = new FactoryMap<String, AtomicInteger>()
+            {
+
+                @Override
+                protected AtomicInteger create(String tabName, Object... params) throws Exception {
+                    return new AtomicInteger();
+                }
+
+            };
+
         applicationNameParts = new FactoryMap<String, ApplicationEntityNameParts>()
             {
 
@@ -108,7 +114,7 @@ public final class ApplicationNameUtils {
     public static String getNextSequencedTabName(String tabName) throws UnifyException {
         return tabName + "_" + tabSequences.get(tabName).incrementAndGet();
     }
-    
+
     public static EntityAssignRuleNameParts getEntityAssignRuleNameParts(String assignRule) throws UnifyException {
         return assignRuleNameParts.get(assignRule);
     }
@@ -187,27 +193,27 @@ public final class ApplicationNameUtils {
         return appletName + WORKFLOW_COPY_DELETE_WORKFLOW_NAME_SUFFIX;
     }
 
+    public static String addPseudoNamePart(String longName) {
+        return longName + PSEUDO_INFIX + newPseudoIdCounter.incrementAndGet();
+    }
+
     public static String addVestigialNamePart(String longName, String vestigial) {
         return longName + VESTIGIAL_INFIX + vestigial;
     }
 
-    public static String removeVestigialNamePart(String longName) {
-        if (longName != null) {
-            int index = longName.indexOf(VESTIGIAL_INFIX);
-            if (index > 0) {
-                return longName.substring(0, index);
-            }
-        }
-
-        return longName;
-    }
-
-    public static String getVestigialNamePart(String longName) {
-        int index = longName.indexOf(VESTIGIAL_INFIX);
+    public static AppletNameParts getAppletNameParts(String extAppletName) {
+        int index = extAppletName.indexOf(VESTIGIAL_INFIX);
         if (index > 0) {
-            return longName.substring(index + VESTIGIAL_INFIX.length());
+            return new AppletNameParts(extAppletName, extAppletName.substring(0, index),
+                    extAppletName.substring(index + VESTIGIAL_INFIX.length()), null);
         }
 
-        return null;
+        index = extAppletName.indexOf(PSEUDO_INFIX);
+        if (index > 0) {
+            return new AppletNameParts(extAppletName, extAppletName.substring(0, index), null,
+                    extAppletName.substring(index + PSEUDO_INFIX.length()));
+        }
+
+        return new AppletNameParts(extAppletName);
     }
 }

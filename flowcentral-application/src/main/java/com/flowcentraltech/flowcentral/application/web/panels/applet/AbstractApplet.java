@@ -37,6 +37,7 @@ import com.flowcentraltech.flowcentral.application.policies.ListingRedirect;
 import com.flowcentraltech.flowcentral.application.policies.ListingRedirectionPolicy;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.util.ApplicationPageUtils;
+import com.flowcentraltech.flowcentral.application.util.OpenPagePathParts;
 import com.flowcentraltech.flowcentral.application.web.data.AppletContext;
 import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm;
 import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm.FormMode;
@@ -87,7 +88,7 @@ public abstract class AbstractApplet {
     private WorkflowDraftInfo workflowDraftInfo;
 
     public AbstractApplet(Page page, AppletUtilities au, String appletName) throws UnifyException {
-        this.appletName = ApplicationNameUtils.removeVestigialNamePart(appletName);
+        this.appletName = ApplicationNameUtils.getAppletNameParts(appletName).getAppletName();
         this.au = au;
         this.ctx = new AppletContext(page, this, au);
     }
@@ -343,14 +344,13 @@ public abstract class AbstractApplet {
 
     protected TableActionResult openInTab(AppletType appletType, Entity _inst) throws UnifyException {
         final String appletName = getAppletName();
-        final String openPath = ApplicationPageUtils.constructAppletOpenPagePath(appletType, appletName, _inst.getId());
-        TableActionResult result = new TableActionResult(_inst, openPath);
+        final OpenPagePathParts parts = ApplicationPageUtils.constructAppletOpenPagePath(appletType, appletName, _inst.getId());
+        TableActionResult result = new TableActionResult(_inst, parts.getOpenPath());
         result.setOpenPath(true);
 
         if (au().system().getSysParameterValue(boolean.class,
                 ApplicationModuleSysParamConstants.ENABLE_OPEN_TAB_IN_BROWSER)) {
-            final String tabName = ApplicationNameUtils.addVestigialNamePart(appletName, String.valueOf(_inst.getId()));
-            result.setTabName(tabName);
+            result.setTabName(parts.getExtAppletName());
             result.setOpenTab(true);
         }
 
@@ -359,13 +359,13 @@ public abstract class AbstractApplet {
 
     protected TableActionResult openInTab(AppletType appletType) throws UnifyException {
         final String appletName = getAppletName();
-        final String openPath = ApplicationPageUtils.constructAppletOpenPagePath(appletType, appletName);
-        TableActionResult result = new TableActionResult(null, openPath);
+        final OpenPagePathParts parts = ApplicationPageUtils.constructAppletNewInstOpenPagePath(appletType, appletName);
+        TableActionResult result = new TableActionResult(null, parts.getOpenPath());
         result.setOpenPath(true);
 
         if (au().system().getSysParameterValue(boolean.class,
                 ApplicationModuleSysParamConstants.ENABLE_OPEN_TAB_IN_BROWSER)) {
-            result.setTabName(appletName + "_new");
+            result.setTabName(parts.getExtAppletName());
             result.setOpenTab(true);
         }
 
@@ -378,9 +378,9 @@ public abstract class AbstractApplet {
                         getRootAppletProp(String.class, AppletPropertyConstants.LISTING_REDIRECT_POLICY))
                         .evaluateRedirection(getAppletName(), (Long) _inst.getId())
                 : new ListingRedirect(getAppletName(), (Long) _inst.getId());
-        final String openPath = ApplicationPageUtils.constructAppletOpenPagePath(AppletType.LISTING,
+        final OpenPagePathParts parts = ApplicationPageUtils.constructAppletOpenPagePath(AppletType.LISTING,
                 listingRedirect.getTargetAppletName(), listingRedirect.getTargetInstId());
-        TableActionResult result = new TableActionResult(_inst, openPath);
+        TableActionResult result = new TableActionResult(_inst, parts.getOpenPath());
         result.setOpenPath(true);
 
         if (au().system().getSysParameterValue(boolean.class,

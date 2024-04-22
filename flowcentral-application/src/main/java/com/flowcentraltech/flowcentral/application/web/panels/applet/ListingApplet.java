@@ -23,6 +23,7 @@ import com.flowcentraltech.flowcentral.application.constants.AppletPropertyConst
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.application.data.FormDef;
+import com.flowcentraltech.flowcentral.application.util.AppletNameParts;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.web.data.FormContext;
 import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm;
@@ -62,8 +63,8 @@ public class ListingApplet extends AbstractApplet implements SweepingCommitPolic
     public ListingApplet(Page page, AppletUtilities au, List<String> pathVariables) throws UnifyException {
         super(page, au, pathVariables.get(APPLET_NAME_INDEX));
         this.formFileAttachments = new EntityFileAttachments();
-        final String vestigial = ApplicationNameUtils.getVestigialNamePart(pathVariables.get(APPLET_NAME_INDEX));
-        final Long entityInstId = Long.valueOf(vestigial);
+        final AppletNameParts parts = ApplicationNameUtils.getAppletNameParts(pathVariables.get(APPLET_NAME_INDEX));
+        final Long entityInstId = Long.valueOf(parts.getVestigial());
         Entity _inst = loadEntity(entityInstId);
         listingForm = constructListingForm(_inst);
         this.viewMode = ViewMode.LISTING_FORM;
