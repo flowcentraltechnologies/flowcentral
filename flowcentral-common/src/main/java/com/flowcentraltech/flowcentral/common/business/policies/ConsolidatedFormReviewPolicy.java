@@ -20,7 +20,6 @@ import java.util.List;
 
 import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
 import com.flowcentraltech.flowcentral.common.data.TargetFormMessage;
-import com.flowcentraltech.flowcentral.configuration.constants.FormReviewType;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.ValueStore;
 
@@ -35,13 +34,13 @@ public interface ConsolidatedFormReviewPolicy extends FlowCentralComponent {
     /**
      * Perform the review of a form's entity object.
      * 
+     * @param ctx
+     *                       the form review context
      * @param instValueStore
      *                       the object value store
-     * @param reviewType
-     *                       the review type
      * @return the review result
      * @throws UnifyException
      *                        if an error occurs
      */
-    List<TargetFormMessage> review(ValueStore instValueStore, FormReviewType reviewType) throws UnifyException;
+    List<TargetFormMessage> review(FormReviewContext ctx, ValueStore instValueStore) throws UnifyException;
 }

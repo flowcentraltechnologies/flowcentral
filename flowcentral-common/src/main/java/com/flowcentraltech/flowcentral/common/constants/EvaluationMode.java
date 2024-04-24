@@ -84,15 +84,51 @@ public enum EvaluationMode {
         return NOP;
     }
     
-    public boolean submit() {
+    public boolean isCreate() {
+        return this.equals(CREATE);
+    }
+    
+    public boolean isCreateSubmit() {
+        return this.equals(CREATE_SUBMIT);
+    }
+    
+    public boolean isUpdate() {
+        return this.equals(UPDATE);
+    }
+    
+    public boolean isUpdateSubmit() {
+        return this.equals(UPDATE_SUBMIT);
+    }
+    
+    public boolean isUpdateTabAction() {
+        return this.equals(UPDATE_TABACTION);
+    }
+    
+    public boolean isDelete() {
+        return this.equals(DELETE);
+    }
+    
+    public boolean isRequired() {
+        return this.equals(REQUIRED);
+    }
+    
+    public boolean isSwitchOnChange() {
+        return this.equals(SWITCH_ONCHANGE);
+    }
+    
+    public boolean isNop() {
+        return this.equals(NOP);
+    }
+    
+    public boolean isOfSubmit() {
         return this.equals(CREATE_SUBMIT) || this.equals(UPDATE_SUBMIT);
     }
     
-    public boolean create() {
+    public boolean isOfCreate() {
         return this.equals(CREATE) || this.equals(CREATE_SUBMIT);
     }
     
-    public boolean update() {
+    public boolean isOfUpdate() {
         return this.equals(UPDATE) || this.equals(UPDATE_SUBMIT);
     }
     

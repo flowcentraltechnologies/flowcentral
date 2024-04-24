@@ -70,7 +70,7 @@ public enum FormReviewType implements EnumConst {
     private final String code;
 
     private final AuditEventType auditEventType;
-    
+
     private final boolean formClosedOrReplaced;
 
     private FormReviewType(String code, AuditEventType auditEventType, boolean formClosedOrReplaced) {
@@ -92,21 +92,61 @@ public enum FormReviewType implements EnumConst {
     public AuditEventType auditEventType() {
         return auditEventType;
     }
-    
+
     public boolean formClosedOrReplaced() {
         return formClosedOrReplaced;
     }
 
-    public boolean isSave() {
-        return ON_SAVE.equals(this) || ON_SAVE_NEXT.equals(this) ||ON_SAVE_CLOSE.equals(this);
-    }
-
-    public boolean isSubmit() {
-        return ON_SUBMIT.equals(this) || ON_SUBMIT_NEXT.equals(this);
-    }
-    
     public boolean formClosedOrReplacedAndNotDeleted() {
         return formClosedOrReplaced && !FormReviewType.ON_DELETE.equals(this);
+    }
+
+    public boolean isOnSave() {
+        return ON_SAVE.equals(this);
+    }
+
+    public boolean isOnSaveNextSave() {
+        return ON_SAVE_NEXT.equals(this);
+    }
+
+    public boolean isOnSaveClose() {
+        return ON_SAVE_CLOSE.equals(this);
+    }
+
+    public boolean isOfSave() {
+        return ON_SAVE.equals(this) || ON_SAVE_NEXT.equals(this) || ON_SAVE_CLOSE.equals(this);
+    }
+
+    public boolean isOnUpdate() {
+        return ON_UPDATE.equals(this);
+    }
+
+    public boolean isOnUpdateClose() {
+        return ON_UPDATE_CLOSE.equals(this);
+    }
+
+    public boolean isOfUpdate() {
+        return ON_UPDATE.equals(this) || ON_UPDATE_CLOSE.equals(this);
+    }
+
+    public boolean isOnSubmit() {
+        return ON_SUBMIT.equals(this);
+    }
+
+    public boolean isOnSubmitNext() {
+        return ON_SUBMIT_NEXT.equals(this);
+    }
+
+    public boolean isOfSubmit() {
+        return ON_SUBMIT.equals(this) || ON_SUBMIT_NEXT.equals(this);
+    }
+
+    public boolean isOnClose() {
+        return ON_CLOSE.equals(this);
+    }
+
+    public boolean isOnDelete() {
+        return ON_DELETE.equals(this);
     }
 
     public static FormReviewType fromCode(String code) {

@@ -39,6 +39,8 @@ import com.flowcentraltech.flowcentral.common.AbstractFlowCentralComponent;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
 import com.flowcentraltech.flowcentral.common.business.policies.ConsolidatedFormReviewPolicy;
 import com.flowcentraltech.flowcentral.common.business.policies.ConsolidatedFormValidationPolicy;
+import com.flowcentraltech.flowcentral.common.business.policies.FormReviewContext;
+import com.flowcentraltech.flowcentral.common.business.policies.FormValidationContext;
 import com.flowcentraltech.flowcentral.common.business.policies.ReviewResult;
 import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
 import com.flowcentraltech.flowcentral.common.data.TargetFormMessage;
@@ -127,15 +129,16 @@ public class FormContextEvaluatorImpl extends AbstractFlowCentralComponent imple
                                     String[] contacts = ((String) val).split(";|,");
                                     for (String contact : contacts) {
                                         if (!validator.validate(null, contact.trim())) {
-                                            ctx.addValidationError(new FieldTarget(fieldName), validator.getFailureMessage(null,
-                                                    entityDef.getFieldDef(fieldName).getFieldLabel()));
+                                            ctx.addValidationError(new FieldTarget(fieldName),
+                                                    validator.getFailureMessage(null,
+                                                            entityDef.getFieldDef(fieldName).getFieldLabel()));
                                             break;
                                         }
                                     }
                                 } else {
                                     if (!validator.validate(null, val)) {
-                                        ctx.addValidationError(new FieldTarget(fieldName), validator.getFailureMessage(null,
-                                                entityDef.getFieldDef(fieldName).getFieldLabel()));
+                                        ctx.addValidationError(new FieldTarget(fieldName), validator.getFailureMessage(
+                                                null, entityDef.getFieldDef(fieldName).getFieldLabel()));
                                     }
                                 }
                             }
@@ -152,8 +155,8 @@ public class FormContextEvaluatorImpl extends AbstractFlowCentralComponent imple
                         Validator validator = (Validator) getComponent(policyDef.getValidator());
                         Object val = fieldsInScope.get(fieldName);
                         if (val != null && !validator.validate(policyDef.getRule(), val)) {
-                            ctx.addValidationError(new FieldTarget(fieldName), validator.getFailureMessage(policyDef.getRule(),
-                                    entityDef.getFieldDef(fieldName).getFieldLabel()));
+                            ctx.addValidationError(new FieldTarget(fieldName), validator.getFailureMessage(
+                                    policyDef.getRule(), entityDef.getFieldDef(fieldName).getFieldLabel()));
                         }
                     }
                 }
@@ -161,8 +164,8 @@ public class FormContextEvaluatorImpl extends AbstractFlowCentralComponent imple
                 // Check unique constraints
                 final Object id = DataUtils.getBeanProperty(Object.class, inst, "id");
                 if (entityDef.isWithUniqueConstraints()) {
-                    boolean isUpdate = evaluationMode.update();
-                    if (isUpdate || evaluationMode.create()) {
+                    boolean isUpdate = evaluationMode.isOfUpdate();
+                    if (isUpdate || evaluationMode.isOfCreate()) {
                         final EntityClassDef entityClassDef = au.getEntityClassDef(entityDef.getLongName());
                         final Long originalCopyId = entityClassDef.isWorkType()
                                 ? DataUtils.getBeanProperty(Long.class, inst, "originalCopyId")
@@ -231,7 +234,8 @@ public class FormContextEvaluatorImpl extends AbstractFlowCentralComponent imple
                     if (formDef.isWithConsolidatedFormValidation()) {
                         ConsolidatedFormValidationPolicy policy = au.getComponent(
                                 ConsolidatedFormValidationPolicy.class, formDef.getConsolidatedFormValidation());
-                        for (TargetFormMessage message : policy.validate(evaluationMode, instValueStore)) {
+                        FormValidationContext _ctx = new FormValidationContext(evaluationMode);
+                        for (TargetFormMessage message : policy.validate(_ctx, instValueStore)) {
                             addValidationMessage(ctx, message);
                         }
                     }
@@ -253,9 +257,9 @@ public class FormContextEvaluatorImpl extends AbstractFlowCentralComponent imple
                                 addValidationMessage(ctx, policyDef);
                             }
                         }
-                    }                    
+                    }
                 }
-                
+
                 if (!ctx.isWithFormErrors() && entityDef.delegated() && entityDef.isActionPolicy()) {
                     List<String> errors = environmentService.validate((Entity) inst, evaluationMode);
                     ctx.addValidationErrorMessages(errors);
@@ -280,7 +284,8 @@ public class FormContextEvaluatorImpl extends AbstractFlowCentralComponent imple
             if (formDef.isWithConsolidatedFormReview()) {
                 ConsolidatedFormReviewPolicy policy = au.getComponent(ConsolidatedFormReviewPolicy.class,
                         formDef.getConsolidatedFormReview());
-                for (TargetFormMessage message : policy.review(instValueStore, reviewType)) {
+                FormReviewContext _ctx = new FormReviewContext(reviewType);
+                for (TargetFormMessage message : policy.review(_ctx, instValueStore)) {
                     ctx.addReviewError(rrb, message);
                 }
             }

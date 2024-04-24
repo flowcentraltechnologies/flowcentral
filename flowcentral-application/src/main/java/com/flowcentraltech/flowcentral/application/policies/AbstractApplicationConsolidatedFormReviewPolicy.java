@@ -23,9 +23,9 @@ import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.common.AbstractFlowCentralComponent;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
 import com.flowcentraltech.flowcentral.common.business.policies.ConsolidatedFormReviewPolicy;
+import com.flowcentraltech.flowcentral.common.business.policies.FormReviewContext;
 import com.flowcentraltech.flowcentral.common.data.TargetFormMessage;
 import com.flowcentraltech.flowcentral.common.data.TargetFormMessages;
-import com.flowcentraltech.flowcentral.configuration.constants.FormReviewType;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.data.ValueStore;
@@ -48,13 +48,13 @@ public abstract class AbstractApplicationConsolidatedFormReviewPolicy extends Ab
     private EnvironmentService environmentService;
 
     @Override
-    public final List<TargetFormMessage> review(ValueStore instValueStore, FormReviewType reviewType) throws UnifyException {
+    public final List<TargetFormMessage> review(FormReviewContext ctx, ValueStore instValueStore) throws UnifyException {
         TargetFormMessages messages = new TargetFormMessages();
-        review(instValueStore, reviewType, messages);
+        review(ctx, instValueStore, messages);
         return messages.getMessages();
     }
 
-    protected abstract void review(ValueStore instValueStore, FormReviewType reviewType, TargetFormMessages messages)
+    protected abstract void review(FormReviewContext ctx, ValueStore instValueStore, TargetFormMessages messages)
             throws UnifyException;
 
     protected EnvironmentService environment() {
