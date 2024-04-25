@@ -17,8 +17,8 @@ package com.flowcentraltech.flowcentral.studio.web.form.review;
 
 import com.flowcentraltech.flowcentral.application.business.UsageListProvider;
 import com.flowcentraltech.flowcentral.common.annotation.EntityReferences;
+import com.flowcentraltech.flowcentral.common.business.policies.FormReviewContext;
 import com.flowcentraltech.flowcentral.common.data.TargetFormMessages;
-import com.flowcentraltech.flowcentral.configuration.constants.FormReviewType;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -38,9 +38,9 @@ public class StudioApplicationConsolidatedFormReviewPolicy extends AbstractStudi
     private UsageListProvider usageListProvider;
 
     @Override
-    protected void review(ValueStore instValueStore, FormReviewType reviewType, TargetFormMessages messages)
+    protected void review(FormReviewContext ctx, ValueStore instValueStore, TargetFormMessages messages)
             throws UnifyException {
-        if (FormReviewType.ON_DELETE.equals(reviewType)) {
+        if (ctx.isOnDelete()) {
             if (usageListProvider.countUsages(instValueStore.getReader(), null) > 0) {
                 messages.addError("$m{studio.application.has.usages}", "usages");
             }

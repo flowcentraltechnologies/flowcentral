@@ -39,12 +39,12 @@ import com.flowcentraltech.flowcentral.common.AbstractFlowCentralComponent;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
 import com.flowcentraltech.flowcentral.common.business.policies.ConsolidatedFormReviewPolicy;
 import com.flowcentraltech.flowcentral.common.business.policies.ConsolidatedFormValidationPolicy;
+import com.flowcentraltech.flowcentral.common.business.policies.FormReviewContext;
+import com.flowcentraltech.flowcentral.common.business.policies.FormValidationContext;
 import com.flowcentraltech.flowcentral.common.business.policies.ReviewResult;
-import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
 import com.flowcentraltech.flowcentral.common.data.TargetFormMessage;
 import com.flowcentraltech.flowcentral.common.data.TargetFormMessage.FieldTarget;
 import com.flowcentraltech.flowcentral.common.util.ValidationUtils;
-import com.flowcentraltech.flowcentral.configuration.constants.FormReviewType;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -83,10 +83,10 @@ public class FormContextEvaluatorImpl extends AbstractFlowCentralComponent imple
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
-    public void evaluateFormContext(final FormContext ctx, final EvaluationMode evaluationMode) throws UnifyException {
+    public void evaluateFormContext(final FormContext ctx, FormValidationContext vCtx) throws UnifyException {
         ctx.clearValidationErrors();
         ctx.clearReviewErrors();
-        if (evaluationMode.evaluation()) {
+        if (vCtx.isEvaluation()) {
             final FormDef formDef = ctx.getFormDef();
             final EntityDef entityDef = formDef.getEntityDef();
             final Object inst = ctx.getInst();
@@ -127,15 +127,16 @@ public class FormContextEvaluatorImpl extends AbstractFlowCentralComponent imple
                                     String[] contacts = ((String) val).split(";|,");
                                     for (String contact : contacts) {
                                         if (!validator.validate(null, contact.trim())) {
-                                            ctx.addValidationError(new FieldTarget(fieldName), validator.getFailureMessage(null,
-                                                    entityDef.getFieldDef(fieldName).getFieldLabel()));
+                                            ctx.addValidationError(new FieldTarget(fieldName),
+                                                    validator.getFailureMessage(null,
+                                                            entityDef.getFieldDef(fieldName).getFieldLabel()));
                                             break;
                                         }
                                     }
                                 } else {
                                     if (!validator.validate(null, val)) {
-                                        ctx.addValidationError(new FieldTarget(fieldName), validator.getFailureMessage(null,
-                                                entityDef.getFieldDef(fieldName).getFieldLabel()));
+                                        ctx.addValidationError(new FieldTarget(fieldName), validator.getFailureMessage(
+                                                null, entityDef.getFieldDef(fieldName).getFieldLabel()));
                                     }
                                 }
                             }
@@ -152,8 +153,8 @@ public class FormContextEvaluatorImpl extends AbstractFlowCentralComponent imple
                         Validator validator = (Validator) getComponent(policyDef.getValidator());
                         Object val = fieldsInScope.get(fieldName);
                         if (val != null && !validator.validate(policyDef.getRule(), val)) {
-                            ctx.addValidationError(new FieldTarget(fieldName), validator.getFailureMessage(policyDef.getRule(),
-                                    entityDef.getFieldDef(fieldName).getFieldLabel()));
+                            ctx.addValidationError(new FieldTarget(fieldName), validator.getFailureMessage(
+                                    policyDef.getRule(), entityDef.getFieldDef(fieldName).getFieldLabel()));
                         }
                     }
                 }
@@ -161,8 +162,8 @@ public class FormContextEvaluatorImpl extends AbstractFlowCentralComponent imple
                 // Check unique constraints
                 final Object id = DataUtils.getBeanProperty(Object.class, inst, "id");
                 if (entityDef.isWithUniqueConstraints()) {
-                    boolean isUpdate = evaluationMode.update();
-                    if (isUpdate || evaluationMode.create()) {
+                    boolean isUpdate = vCtx.isOfUpdate();
+                    if (isUpdate || vCtx.isOfCreate()) {
                         final EntityClassDef entityClassDef = au.getEntityClassDef(entityDef.getLongName());
                         final Long originalCopyId = entityClassDef.isWorkType()
                                 ? DataUtils.getBeanProperty(Long.class, inst, "originalCopyId")
@@ -231,7 +232,7 @@ public class FormContextEvaluatorImpl extends AbstractFlowCentralComponent imple
                     if (formDef.isWithConsolidatedFormValidation()) {
                         ConsolidatedFormValidationPolicy policy = au.getComponent(
                                 ConsolidatedFormValidationPolicy.class, formDef.getConsolidatedFormValidation());
-                        for (TargetFormMessage message : policy.validate(evaluationMode, instValueStore)) {
+                        for (TargetFormMessage message : policy.validate(vCtx, instValueStore)) {
                             addValidationMessage(ctx, message);
                         }
                     }
@@ -242,7 +243,7 @@ public class FormContextEvaluatorImpl extends AbstractFlowCentralComponent imple
                             if (policyDef.isErrorMatcher()) {
                                 EntityMatcher matcher = au.getComponent(EntityMatcher.class,
                                         policyDef.getErrorMatcher());
-                                if (matcher.match(entityDef, evaluationMode, instValueStore)) {
+                                if (matcher.match(entityDef, vCtx.getEvaluationMode(), instValueStore)) {
                                     addValidationMessage(ctx, policyDef);
                                     continue;
                                 }
@@ -253,11 +254,11 @@ public class FormContextEvaluatorImpl extends AbstractFlowCentralComponent imple
                                 addValidationMessage(ctx, policyDef);
                             }
                         }
-                    }                    
+                    }
                 }
-                
+
                 if (!ctx.isWithFormErrors() && entityDef.delegated() && entityDef.isActionPolicy()) {
-                    List<String> errors = environmentService.validate((Entity) inst, evaluationMode);
+                    List<String> errors = environmentService.validate((Entity) inst, vCtx.getEvaluationMode());
                     ctx.addValidationErrorMessages(errors);
                 }
             }
@@ -265,11 +266,11 @@ public class FormContextEvaluatorImpl extends AbstractFlowCentralComponent imple
     }
 
     @Override
-    public ReviewResult reviewFormContext(FormContext ctx, EvaluationMode evaluationMode, FormReviewType reviewType)
+    public ReviewResult reviewFormContext(FormContext ctx, FormValidationContext vCtx, FormReviewContext rCtx)
             throws UnifyException {
         ReviewResult.Builder rrb = ReviewResult.newBuilder();
         ctx.clearReviewErrors();
-        if (ctx.isWithReviewPolicies(reviewType)) {
+        if (ctx.isWithReviewPolicies(rCtx.getReviewType())) {
             final FormDef formDef = ctx.getFormDef();
             final EntityDef entityDef = formDef.getEntityDef();
             final AppletUtilities au = ctx.au();
@@ -280,15 +281,15 @@ public class FormContextEvaluatorImpl extends AbstractFlowCentralComponent imple
             if (formDef.isWithConsolidatedFormReview()) {
                 ConsolidatedFormReviewPolicy policy = au.getComponent(ConsolidatedFormReviewPolicy.class,
                         formDef.getConsolidatedFormReview());
-                for (TargetFormMessage message : policy.review(instValueStore, reviewType)) {
+                for (TargetFormMessage message : policy.review(rCtx, instValueStore)) {
                     ctx.addReviewError(rrb, message);
                 }
             }
 
-            for (FormReviewPolicyDef policyDef : ctx.getReviewPolicies(reviewType)) {
+            for (FormReviewPolicyDef policyDef : ctx.getReviewPolicies(rCtx.getReviewType())) {
                 if (policyDef.isErrorMatcher()) {
                     EntityMatcher matcher = au.getComponent(EntityMatcher.class, policyDef.getErrorMatcher());
-                    if (matcher.match(entityDef, evaluationMode, instValueStore)) {
+                    if (matcher.match(entityDef, vCtx.getEvaluationMode(), instValueStore)) {
                         ctx.addReviewError(rrb, policyDef);
                         continue;
                     }

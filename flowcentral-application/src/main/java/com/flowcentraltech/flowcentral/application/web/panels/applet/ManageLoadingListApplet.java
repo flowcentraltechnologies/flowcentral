@@ -243,6 +243,12 @@ public class ManageLoadingListApplet extends AbstractEntityFormApplet {
         navBackToSearch();
     }
 
+    public LoadingWorkItemInfo getCurrentLoadingWorkItemInfo() throws UnifyException{
+        final AbstractForm _form = getResolvedForm();
+        WorkEntity currEntityInst = (WorkEntity) _form.getFormBean();
+        return loadingSearch.getLoadingWorkItemInfo(currEntityInst, mIndex);
+    }
+
     public boolean isNewCommentRequired(String actionName) throws UnifyException {
         return loadingSearch.isNewCommentRequired(actionName, mIndex);
     }

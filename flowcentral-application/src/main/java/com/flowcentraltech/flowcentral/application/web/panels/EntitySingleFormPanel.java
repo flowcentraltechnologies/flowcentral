@@ -18,7 +18,7 @@ package com.flowcentraltech.flowcentral.application.web.panels;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.web.widgets.SingleFormWidget;
-import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
+import com.flowcentraltech.flowcentral.common.business.policies.FormValidationContext;
 import com.flowcentraltech.flowcentral.common.data.FormValidationErrors;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
@@ -35,10 +35,10 @@ import com.tcdng.unify.core.annotation.UplBinding;
 public class EntitySingleFormPanel extends AbstractFormPanel {
 
     @Override
-    public List<FormValidationErrors> validate(EvaluationMode evaluationMode) throws UnifyException {
+    public List<FormValidationErrors> validate(FormValidationContext ctx) throws UnifyException {
         SingleFormWidget singleFormWidget = getWidgetByShortName(SingleFormWidget.class, "singleForm");
         SingleFormPanel<?> singleFormPanel = singleFormWidget.getSingleFormPanel();
-        return singleFormPanel.validate(evaluationMode);
+        return singleFormPanel.validate(ctx);
     }
 
 }

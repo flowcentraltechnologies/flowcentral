@@ -22,7 +22,7 @@ import com.flowcentraltech.flowcentral.application.business.ApplicationModuleSer
 import com.flowcentraltech.flowcentral.common.AbstractFlowCentralComponent;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
 import com.flowcentraltech.flowcentral.common.business.policies.ConsolidatedFormValidationPolicy;
-import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
+import com.flowcentraltech.flowcentral.common.business.policies.FormValidationContext;
 import com.flowcentraltech.flowcentral.common.data.TargetFormMessage;
 import com.flowcentraltech.flowcentral.common.data.TargetFormMessages;
 import com.tcdng.unify.core.UnifyException;
@@ -45,15 +45,15 @@ public abstract class AbstractApplicationConsolidatedFormValidationPolicy extend
     private EnvironmentService environmentService;
 
     @Override
-    public final List<TargetFormMessage> validate(EvaluationMode evaluationMode, ValueStore instValueStore)
+    public final List<TargetFormMessage> validate(FormValidationContext ctx, ValueStore instValueStore)
             throws UnifyException {
         TargetFormMessages messages = new TargetFormMessages();
-        validate(evaluationMode, instValueStore, messages);
+        validate(ctx, instValueStore, messages);
         return messages.getMessages();
     }
 
-    protected abstract void validate(EvaluationMode evaluationMode, ValueStore instValueStore,
-            TargetFormMessages messages) throws UnifyException;
+    protected abstract void validate(FormValidationContext ctx, ValueStore instValueStore, TargetFormMessages messages)
+            throws UnifyException;
 
     protected EnvironmentService environment() {
         return environmentService;

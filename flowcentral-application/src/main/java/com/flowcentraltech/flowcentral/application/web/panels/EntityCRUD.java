@@ -25,8 +25,8 @@ import com.flowcentraltech.flowcentral.application.web.data.FormContext;
 import com.flowcentraltech.flowcentral.application.web.widgets.EntityTable;
 import com.flowcentraltech.flowcentral.application.web.widgets.MiniForm;
 import com.flowcentraltech.flowcentral.common.business.policies.ConsolidatedFormStatePolicy;
+import com.flowcentraltech.flowcentral.common.business.policies.FormValidationContext;
 import com.flowcentraltech.flowcentral.common.business.policies.SweepingCommitPolicy;
-import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.BeanValueStore;
 import com.tcdng.unify.core.database.Entity;
@@ -58,8 +58,8 @@ public class EntityCRUD extends AbstractCRUD<EntityTable> {
     }
 
     @Override
-    protected void evaluateFormContext(FormContext formContext, EvaluationMode evaluationMode) throws UnifyException {
-        au().formContextEvaluator().evaluateFormContext(formContext, evaluationMode);
+    protected void evaluateFormContext(FormContext formContext, FormValidationContext vCtx) throws UnifyException {
+        au().formContextEvaluator().evaluateFormContext(formContext, vCtx);
     }
 
     @Override

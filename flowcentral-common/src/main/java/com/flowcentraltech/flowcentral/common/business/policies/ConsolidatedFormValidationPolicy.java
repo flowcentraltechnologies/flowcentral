@@ -19,7 +19,6 @@ package com.flowcentraltech.flowcentral.common.business.policies;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
-import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
 import com.flowcentraltech.flowcentral.common.data.TargetFormMessage;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.ValueStore;
@@ -35,12 +34,13 @@ public interface ConsolidatedFormValidationPolicy extends FlowCentralComponent {
     /**
      * Perform the validation of a form's entity object.
      * 
-     * @param evaluationMode the evaluation mode
+     * @param ctx
+     *                       the form validation context
      * @param instValueStore
      *                       the object value store
      * @return the validation result
      * @throws UnifyException
      *                        if an error occurs
      */
-    List<TargetFormMessage> validate(EvaluationMode evaluationMode, ValueStore instValueStore) throws UnifyException;
+    List<TargetFormMessage> validate(FormValidationContext ctx, ValueStore instValueStore) throws UnifyException;
 }

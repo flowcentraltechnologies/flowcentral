@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.workflow.web.panels.applet;
 import com.flowcentraltech.flowcentral.application.web.data.FormContext;
 import com.flowcentraltech.flowcentral.application.web.panels.applet.AbstractEntityFormAppletPanel;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
+import com.flowcentraltech.flowcentral.common.business.policies.FormValidationContext;
 import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
 import com.flowcentraltech.flowcentral.workflow.constants.WorkflowModuleSysParamConstants;
 import com.tcdng.unify.core.UnifyException;
@@ -89,7 +90,7 @@ public class ReviewWorkItemsAppletPanel extends AbstractEntityFormAppletPanel {
     public void performUserAction() throws UnifyException {
         final String actionName = getRequestTarget(String.class);
         final ReviewWorkItemsApplet applet = getReviewWorkItemsApplet();
-        final FormContext ctx = evaluateCurrentFormContext(EvaluationMode.UPDATE,
+        final FormContext ctx = evaluateCurrentFormContext(new FormValidationContext(EvaluationMode.UPDATE, actionName),
                 applet.isNewCommentRequired(actionName));
         if (!ctx.isWithFormErrors()) {
             if (ctx.getFormDef().isInputForm()) {

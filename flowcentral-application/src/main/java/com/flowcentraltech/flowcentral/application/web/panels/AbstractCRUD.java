@@ -27,6 +27,7 @@ import com.flowcentraltech.flowcentral.application.data.FormTabDef;
 import com.flowcentraltech.flowcentral.application.web.data.FormContext;
 import com.flowcentraltech.flowcentral.application.web.widgets.AbstractTable;
 import com.flowcentraltech.flowcentral.application.web.widgets.MiniForm;
+import com.flowcentraltech.flowcentral.common.business.policies.FormValidationContext;
 import com.flowcentraltech.flowcentral.common.business.policies.SweepingCommitPolicy;
 import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
 import com.flowcentraltech.flowcentral.common.data.FormMessage;
@@ -175,7 +176,7 @@ public abstract class AbstractCRUD<T extends AbstractTable<?, ?>> {
 	public void save() throws UnifyException {
 		EvaluationMode evaluationMode = create ? EvaluationMode.CREATE : EvaluationMode.UPDATE;
 		FormContext formContext = getForm().getCtx();
-		evaluateFormContext(formContext, evaluationMode);
+		evaluateFormContext(formContext, new FormValidationContext(evaluationMode));
 		if (!isWithFormErrors()) {
 			if (create) {
 				create(formContext, scp);
@@ -220,7 +221,7 @@ public abstract class AbstractCRUD<T extends AbstractTable<?, ?>> {
 		return maintainForm != null ? maintainForm.getCtx().getFormDef() : null;
 	}
 
-	protected abstract void evaluateFormContext(FormContext formContext, EvaluationMode evaluationMode)
+	protected abstract void evaluateFormContext(FormContext formContext, FormValidationContext ctx)
 			throws UnifyException;
 
 	protected abstract Object createObject() throws UnifyException;

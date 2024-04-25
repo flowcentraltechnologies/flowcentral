@@ -28,6 +28,7 @@ import com.flowcentraltech.flowcentral.application.web.panels.EntitySingleForm;
 import com.flowcentraltech.flowcentral.application.web.panels.FormPanel;
 import com.flowcentraltech.flowcentral.common.business.ApplicationPrivilegeManager;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
+import com.flowcentraltech.flowcentral.common.business.policies.FormValidationContext;
 import com.flowcentraltech.flowcentral.common.business.policies.TableActionResult;
 import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
 import com.flowcentraltech.flowcentral.common.constants.WfItemVersionType;
@@ -133,11 +134,11 @@ public abstract class AbstractEntitySingleFormAppletPanel extends AbstractApplet
                 form.setDisplayItemCounterClass("fc-dispcounterorange");
                 form.setDisplayItemCounter(resolveSessionMessage("$m{entityformapplet.form.inworkflow.viewonly}"));
             }
-            
 
             if (form.isWithAttachments()) {
-                form.getAttachments().setErrorMsg(
-                        form.getCtx().isWithSectionError("documents") ? form.getCtx().getSectionError("documents")
+                form.getAttachments()
+                        .setErrorMsg(form.getCtx().isWithSectionError("documents")
+                                ? form.getCtx().getSectionError("documents")
                                 : null);
             }
         }
@@ -300,7 +301,7 @@ public abstract class AbstractEntitySingleFormAppletPanel extends AbstractApplet
 
     @Action
     public void save() throws UnifyException {
-        FormContext ctx = evaluateCurrentFormContext(EvaluationMode.CREATE);
+        FormContext ctx = evaluateCurrentFormContext(new FormValidationContext(EvaluationMode.CREATE));
         if (!ctx.isWithFormErrors()) {
             EntityActionResult entityActionResult = getEntityFormApplet().saveNewInst();
             entityActionResult.setSuccessHint("$m{entityformapplet.new.success.hint}");
@@ -310,7 +311,7 @@ public abstract class AbstractEntitySingleFormAppletPanel extends AbstractApplet
 
     @Action
     public void saveAndNext() throws UnifyException {
-        FormContext ctx = evaluateCurrentFormContext(EvaluationMode.CREATE);
+        FormContext ctx = evaluateCurrentFormContext(new FormValidationContext(EvaluationMode.CREATE));
         if (!ctx.isWithFormErrors()) {
             EntityActionResult entityActionResult = getEntityFormApplet().saveNewInstAndNext();
             entityActionResult.setSuccessHint("$m{entityformapplet.new.success.hint}");
@@ -320,7 +321,7 @@ public abstract class AbstractEntitySingleFormAppletPanel extends AbstractApplet
 
     @Action
     public void saveAndClose() throws UnifyException {
-        FormContext ctx = evaluateCurrentFormContext(EvaluationMode.CREATE);
+        FormContext ctx = evaluateCurrentFormContext(new FormValidationContext(EvaluationMode.CREATE));
         if (!ctx.isWithFormErrors()) {
             EntityActionResult entityActionResult = getEntityFormApplet().saveNewInstAndClose();
             entityActionResult.setSuccessHint("$m{entityformapplet.new.success.hint}");
@@ -336,7 +337,7 @@ public abstract class AbstractEntitySingleFormAppletPanel extends AbstractApplet
                         AppletPropertyConstants.MAINTAIN_FORM_SUBMIT_VALIDATE, false))
                 : EvaluationMode.getCreateSubmitMode(applet.getRootAppletProp(boolean.class,
                         AppletPropertyConstants.CREATE_FORM_SUBMIT_VALIDATE, false));
-        FormContext ctx = evaluateCurrentFormContext(evalMode);
+        FormContext ctx = evaluateCurrentFormContext(new FormValidationContext(evalMode));
         if (!ctx.isWithFormErrors()) {
             EntityActionResult entityActionResult = applet.submitInst();
             entityActionResult.setSuccessHint("$m{entityformapplet.submit.success.hint}");
@@ -352,7 +353,7 @@ public abstract class AbstractEntitySingleFormAppletPanel extends AbstractApplet
                         AppletPropertyConstants.MAINTAIN_FORM_SUBMIT_VALIDATE, false))
                 : EvaluationMode.getCreateSubmitMode(applet.getRootAppletProp(boolean.class,
                         AppletPropertyConstants.CREATE_FORM_SUBMIT_VALIDATE, false));
-        FormContext ctx = evaluateCurrentFormContext(evalMode);
+        FormContext ctx = evaluateCurrentFormContext(new FormValidationContext(evalMode));
         if (!ctx.isWithFormErrors()) {
             EntityActionResult entityActionResult = getEntityFormApplet().submitInstAndNext();
             entityActionResult.setSuccessHint("$m{entityformapplet.submit.success.hint}");
@@ -362,7 +363,7 @@ public abstract class AbstractEntitySingleFormAppletPanel extends AbstractApplet
 
     @Action
     public void update() throws UnifyException {
-        FormContext ctx = evaluateCurrentFormContext(EvaluationMode.UPDATE);
+        FormContext ctx = evaluateCurrentFormContext(new FormValidationContext(EvaluationMode.UPDATE));
         if (!ctx.isWithFormErrors()) {
             EntityActionResult entityActionResult = getEntityFormApplet().updateInst();
             entityActionResult.setSuccessHint("$m{entityformapplet.update.success.hint}");
@@ -372,7 +373,7 @@ public abstract class AbstractEntitySingleFormAppletPanel extends AbstractApplet
 
     @Action
     public void updateAndClose() throws UnifyException {
-        FormContext ctx = evaluateCurrentFormContext(EvaluationMode.UPDATE);
+        FormContext ctx = evaluateCurrentFormContext(new FormValidationContext(EvaluationMode.UPDATE));
         if (!ctx.isWithFormErrors()) {
             EntityActionResult entityActionResult = getEntityFormApplet().updateInstAndClose();
             entityActionResult.setSuccessHint("$m{entityformapplet.update.success.hint}");
@@ -382,7 +383,7 @@ public abstract class AbstractEntitySingleFormAppletPanel extends AbstractApplet
 
     @Action
     public void delete() throws UnifyException {
-        FormContext ctx = evaluateCurrentFormContext(EvaluationMode.DELETE);
+        FormContext ctx = evaluateCurrentFormContext(new FormValidationContext(EvaluationMode.DELETE));
         if (!ctx.isWithFormErrors()) {
             EntityActionResult entityActionResult = getEntityFormApplet().deleteInst();
             entityActionResult.setSuccessHint("$m{entityformapplet.delete.success.hint}");
@@ -459,28 +460,28 @@ public abstract class AbstractEntitySingleFormAppletPanel extends AbstractApplet
         return getValue(AbstractEntitySingleFormApplet.class);
     }
 
-    protected FormContext evaluateCurrentFormContext(EvaluationMode evaluationMode) throws UnifyException {
-        return evaluateCurrentFormContext(evaluationMode, false);
+    protected FormContext evaluateCurrentFormContext(FormValidationContext vCtx) throws UnifyException {
+        return evaluateCurrentFormContext(vCtx, false);
     }
 
-    protected FormContext evaluateCurrentFormContext(EvaluationMode evaluationMode, boolean commentRequired)
+    protected FormContext evaluateCurrentFormContext(FormValidationContext vCtx, boolean commentRequired)
             throws UnifyException {
         FormContext ctx = getEntityFormApplet().getForm().getCtx();
         ctx.clearReviewErrors();
         ctx.clearValidationErrors();
-        if (evaluationMode.evaluation()) {
+        if (vCtx.isEvaluation()) {
             FormPanel formPanel = getWidgetByShortName(FormPanel.class, "formPanel");
-            ctx.mergeValidationErrors(formPanel.validate(evaluationMode));
+            ctx.mergeValidationErrors(formPanel.validate(vCtx));
 
-            if (evaluationMode.review() && ctx.getAppletContext().isReview()) {
+            if (vCtx.isReview() && ctx.getAppletContext().isReview()) {
                 if (commentRequired) {
                     FormPanel commentsFormPanel = getWidgetByShortName(FormPanel.class, "formPanel.commentsPanel");
-                    ctx.mergeValidationErrors(commentsFormPanel.validate(evaluationMode));
+                    ctx.mergeValidationErrors(commentsFormPanel.validate(vCtx));
                 }
 
                 if (ctx.getAppletContext().isEmails()) {
                     FormPanel emailsFormPanel = getWidgetByShortName(FormPanel.class, "formPanel.emailsPanel");
-                    ctx.mergeValidationErrors(emailsFormPanel.validate(evaluationMode));
+                    ctx.mergeValidationErrors(emailsFormPanel.validate(vCtx));
                 }
             }
 
