@@ -18,7 +18,7 @@ package com.flowcentraltech.flowcentral.application.business;
 
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
-import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
+import com.flowcentraltech.flowcentral.common.business.policies.FormValidationContext;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.ValueStore;
 
@@ -35,12 +35,12 @@ public interface EntityMatcher extends FlowCentralComponent {
      * 
      * @param entityDef
      *                   the entity definition.
-     * @param evaluationMode the evaluation mode
+     * @param vCtx the validation context
      * @param valueStore
      *                   the entity value store
      * @return true if matched, otherwise false
      * @throws UnifyException
      *                        if an error occurs
      */
-    boolean match(EntityDef entityDef, EvaluationMode evaluationMode, ValueStore valueStore) throws UnifyException;
+    boolean match(EntityDef entityDef, FormValidationContext vCtx, ValueStore valueStore) throws UnifyException;
 }

@@ -243,7 +243,7 @@ public class FormContextEvaluatorImpl extends AbstractFlowCentralComponent imple
                             if (policyDef.isErrorMatcher()) {
                                 EntityMatcher matcher = au.getComponent(EntityMatcher.class,
                                         policyDef.getErrorMatcher());
-                                if (matcher.match(entityDef, vCtx.getEvaluationMode(), instValueStore)) {
+                                if (matcher.match(entityDef, vCtx, instValueStore)) {
                                     addValidationMessage(ctx, policyDef);
                                     continue;
                                 }
@@ -289,7 +289,7 @@ public class FormContextEvaluatorImpl extends AbstractFlowCentralComponent imple
             for (FormReviewPolicyDef policyDef : ctx.getReviewPolicies(rCtx.getReviewType())) {
                 if (policyDef.isErrorMatcher()) {
                     EntityMatcher matcher = au.getComponent(EntityMatcher.class, policyDef.getErrorMatcher());
-                    if (matcher.match(entityDef, vCtx.getEvaluationMode(), instValueStore)) {
+                    if (matcher.match(entityDef, vCtx, instValueStore)) {
                         ctx.addReviewError(rrb, policyDef);
                         continue;
                     }
