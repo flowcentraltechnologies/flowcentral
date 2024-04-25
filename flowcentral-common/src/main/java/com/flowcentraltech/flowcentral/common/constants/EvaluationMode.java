@@ -132,11 +132,11 @@ public enum EvaluationMode {
         return this.equals(UPDATE) || this.equals(UPDATE_SUBMIT);
     }
     
-    public boolean evaluation() {
+    public boolean isEvaluation() {
         return evaluation;
     }
     
-    public boolean review() {
+    public boolean isReview() {
         return review;
     }
 }

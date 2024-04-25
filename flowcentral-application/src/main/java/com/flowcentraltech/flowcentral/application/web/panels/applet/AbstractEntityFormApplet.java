@@ -78,6 +78,8 @@ import com.flowcentraltech.flowcentral.common.business.policies.ActionMode;
 import com.flowcentraltech.flowcentral.common.business.policies.ConsolidatedFormStatePolicy;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionContext;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
+import com.flowcentraltech.flowcentral.common.business.policies.FormReviewContext;
+import com.flowcentraltech.flowcentral.common.business.policies.FormValidationContext;
 import com.flowcentraltech.flowcentral.common.business.policies.ReviewResult;
 import com.flowcentraltech.flowcentral.common.business.policies.SweepingCommitPolicy;
 import com.flowcentraltech.flowcentral.common.business.policies.TableActionResult;
@@ -269,7 +271,8 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
             if (_inst != null) {
                 form.getCtx().clearValidationErrors();
                 updateForm(HeaderWithTabsForm.UpdateType.NAV_BACK_TO_PREVIOUS, form, _inst);
-                reviewFormContext(form.getCtx(), EvaluationMode.REQUIRED, FormReviewType.ON_UPDATE);
+                reviewFormContext(form.getCtx(), new FormValidationContext(EvaluationMode.REQUIRED),
+                        new FormReviewContext(FormReviewType.ON_UPDATE));
             } else {
                 success = false;
             }
@@ -794,7 +797,8 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
 
     public FormContext reviewOnClose() throws UnifyException {
         if (form != null && viewMode.isMaintainForm()) {
-            reviewFormContext(form.getCtx(), EvaluationMode.REQUIRED, FormReviewType.ON_CLOSE);
+            reviewFormContext(form.getCtx(), new FormValidationContext(EvaluationMode.REQUIRED),
+                    new FormReviewContext(FormReviewType.ON_CLOSE));
             return form.getCtx();
         }
 
@@ -802,15 +806,15 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
     }
 
     public EntityActionResult saveNewInst() throws UnifyException {
-        return saveNewInst(ActionMode.ACTION_ONLY, FormReviewType.ON_SAVE);
+        return saveNewInst(ActionMode.ACTION_ONLY, new FormReviewContext(FormReviewType.ON_SAVE));
     }
 
     public EntityActionResult saveNewInstAndNext() throws UnifyException {
-        return saveNewInst(ActionMode.ACTION_AND_NEXT, FormReviewType.ON_SAVE_NEXT);
+        return saveNewInst(ActionMode.ACTION_AND_NEXT, new FormReviewContext(FormReviewType.ON_SAVE_NEXT));
     }
 
     public EntityActionResult saveNewInstAndClose() throws UnifyException {
-        return saveNewInst(ActionMode.ACTION_AND_CLOSE, FormReviewType.ON_SAVE_CLOSE);
+        return saveNewInst(ActionMode.ACTION_AND_CLOSE, new FormReviewContext(FormReviewType.ON_SAVE_CLOSE));
     }
 
     public AssignmentPage saveAssign() throws UnifyException {
@@ -834,11 +838,11 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
             return submitInstAndNext();
         }
 
-        return submitInst(ActionMode.ACTION_AND_CLOSE, FormReviewType.ON_SUBMIT);
+        return submitInst(ActionMode.ACTION_AND_CLOSE, new FormReviewContext(FormReviewType.ON_SUBMIT));
     }
 
     public EntityActionResult submitInstAndNext() throws UnifyException {
-        return submitInst(ActionMode.ACTION_AND_NEXT, FormReviewType.ON_SUBMIT_NEXT);
+        return submitInst(ActionMode.ACTION_AND_NEXT, new FormReviewContext(FormReviewType.ON_SUBMIT_NEXT));
     }
 
     public EntityActionResult submitCurrentInst(ActionMode actionMode) throws UnifyException {
@@ -891,11 +895,11 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
     }
 
     public EntityActionResult updateInst() throws UnifyException {
-        return updateInst(FormReviewType.ON_UPDATE);
+        return updateInst(new FormReviewContext(FormReviewType.ON_UPDATE));
     }
 
     public EntityActionResult updateInstAndClose() throws UnifyException {
-        EntityActionResult entityActionResult = updateInst(FormReviewType.ON_UPDATE_CLOSE);
+        EntityActionResult entityActionResult = updateInst(new FormReviewContext(FormReviewType.ON_UPDATE_CLOSE));
         setClosePage(entityActionResult);
         return entityActionResult;
     }
@@ -903,7 +907,8 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
     public EntityActionResult deleteInst() throws UnifyException {
         final AppletDef formAppletDef = getFormAppletDef();
         // Review form
-        ReviewResult reviewResult = reviewFormContext(form.getCtx(), EvaluationMode.DELETE, FormReviewType.ON_DELETE);
+        ReviewResult reviewResult = reviewFormContext(form.getCtx(), new FormValidationContext(EvaluationMode.DELETE),
+                new FormReviewContext(FormReviewType.ON_DELETE));
         if (reviewResult.isWithMessages()) {
             EntityActionResult entityActionResult = new EntityActionResult();
             entityActionResult.setReviewResult(reviewResult);
@@ -1595,7 +1600,8 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         if (!ctx.isStudioComponent() && isSaveHeaderFormOnTabAction()) {
             FormContext ctx = getResolvedForm().getCtx();
             if (ctx.isUpdateEnabled() && ctx.getFormDef().isInputForm()) {
-                au().formContextEvaluator().evaluateFormContext(ctx, EvaluationMode.UPDATE_TABACTION);
+                au().formContextEvaluator().evaluateFormContext(ctx,
+                        new FormValidationContext(EvaluationMode.UPDATE_TABACTION));
             } else {
                 ctx.clearValidationErrors();
             }
@@ -1641,18 +1647,19 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         return bcb.build();
     }
 
-    private EntityActionResult saveNewInst(ActionMode actionMode, FormReviewType reviewType) throws UnifyException {
+    private EntityActionResult saveNewInst(ActionMode actionMode, FormReviewContext rCtx) throws UnifyException {
         final FormContext formContext = form.getCtx();
         EntityActionResult entityActionResult = createInst();
         Long entityInstId = (Long) entityActionResult.getResult();
-        takeAuditSnapshot(reviewType.auditEventType());
+        takeAuditSnapshot(rCtx.auditEventType());
 
         // Review form
-        ReviewResult reviewResult = reviewFormContext(formContext, EvaluationMode.CREATE, reviewType);
-        if (FormReviewType.ON_SAVE.equals(reviewType) || formContext.isWithReviewErrors()) {
+        ReviewResult reviewResult = reviewFormContext(formContext, new FormValidationContext(EvaluationMode.CREATE),
+                rCtx);
+        if (rCtx.isOnSave() || formContext.isWithReviewErrors()) {
             enterMaintainForm(formContext, entityInstId);
             entityActionResult.setReviewResult(reviewResult);
-            if (reviewType.formClosedOrReplaced()) {
+            if (rCtx.formClosedOrReplaced()) {
                 setClosePage(entityActionResult);
             }
         } else {
@@ -1670,7 +1677,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         return entityActionResult;
     }
 
-    private EntityActionResult submitInst(ActionMode actionMode, FormReviewType reviewType) throws UnifyException {
+    private EntityActionResult submitInst(ActionMode actionMode, FormReviewContext rCtx) throws UnifyException {
         final FormContext formContext = form.getCtx();
         final Entity inst = (Entity) form.getFormBean();
         final EntityDef _entityDef = form.getFormDef().getEntityDef();
@@ -1678,14 +1685,15 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         Long entityInstId = (Long) inst.getId();
         if (viewMode.isCreateForm()) {
             entityActionResult = createInst();
-            takeAuditSnapshot(reviewType.auditEventType());
+            takeAuditSnapshot(rCtx.auditEventType());
             entityInstId = (Long) entityActionResult.getResult();
             if (_entityDef.delegated()) {
                 ((AbstractSequencedEntity) inst).setId(entityInstId);
             }
         }
 
-        ReviewResult reviewResult = reviewFormContext(formContext, EvaluationMode.CREATE_SUBMIT, reviewType);
+        ReviewResult reviewResult = reviewFormContext(formContext,
+                new FormValidationContext(EvaluationMode.CREATE_SUBMIT), rCtx);
         if (formContext.isWithReviewErrors()) {
             enterMaintainForm(formContext, entityInstId);
             entityActionResult = new EntityActionResult(new EntityActionContext(_entityDef, inst, null));
@@ -1707,25 +1715,26 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         }
     }
 
-    private EntityActionResult updateInst(FormReviewType reviewType) throws UnifyException {
+    private EntityActionResult updateInst(FormReviewContext rCtx) throws UnifyException {
         final AppletDef _currFormAppletDef = getFormAppletDef();
         EntityActionResult entityActionResult = au.updateEntityInstByFormContext(_currFormAppletDef, form.getCtx(),
                 this);
         takeAuditSnapshot(
-                isWorkflowCopy() || form.isUpdateDraft() ? AuditEventType.UPDATE_DRAFT : reviewType.auditEventType());
+                isWorkflowCopy() || form.isUpdateDraft() ? AuditEventType.UPDATE_DRAFT : rCtx.auditEventType());
         updateForm(HeaderWithTabsForm.UpdateType.UPDATE_INST, form, reloadEntity((Entity) form.getFormBean(), false));
 
         // Review form
-        ReviewResult reviewResult = reviewFormContext(form.getCtx(), EvaluationMode.UPDATE, reviewType);
+        ReviewResult reviewResult = reviewFormContext(form.getCtx(), new FormValidationContext(EvaluationMode.UPDATE),
+                rCtx);
         entityActionResult.setReviewResult(reviewResult);
         return entityActionResult;
     }
 
-    private ReviewResult reviewFormContext(FormContext formContext, EvaluationMode evaluationMode,
-            FormReviewType reviewType) throws UnifyException {
+    private ReviewResult reviewFormContext(FormContext formContext, FormValidationContext vCtx, FormReviewContext rCtx)
+            throws UnifyException {
         FormContextEvaluator formContextEvaluator = au().getComponent(FormContextEvaluator.class,
                 ApplicationModuleNameConstants.FORMCONTEXT_EVALUATOR);
-        return formContextEvaluator.reviewFormContext(formContext, evaluationMode, reviewType);
+        return formContextEvaluator.reviewFormContext(formContext, vCtx, rCtx);
     }
 
     private EntityActionResult createInst() throws UnifyException {

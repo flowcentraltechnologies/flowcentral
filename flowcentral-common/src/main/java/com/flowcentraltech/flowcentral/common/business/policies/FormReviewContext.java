@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.common.business.policies;
 
 import com.flowcentraltech.flowcentral.configuration.constants.AuditEventType;
 import com.flowcentraltech.flowcentral.configuration.constants.FormReviewType;
+import com.tcdng.unify.core.util.StringUtils;
 
 /**
  * Form review context.
@@ -28,6 +29,13 @@ import com.flowcentraltech.flowcentral.configuration.constants.FormReviewType;
 public class FormReviewContext {
 
     private FormReviewType reviewType;
+
+    private String action;
+
+    public FormReviewContext(FormReviewType reviewType, String action) {
+        this.reviewType = reviewType;
+        this.action = action;
+    }
 
     public FormReviewContext(FormReviewType reviewType) {
         this.reviewType = reviewType;
@@ -95,6 +103,14 @@ public class FormReviewContext {
 
     public boolean isOnDelete() {
         return reviewType.isOnDelete();
+    }
+
+    public String getAction() {
+        return action;
+    }
+
+    public boolean isWithAction() {
+        return !StringUtils.isBlank(action);
     }
 
 }

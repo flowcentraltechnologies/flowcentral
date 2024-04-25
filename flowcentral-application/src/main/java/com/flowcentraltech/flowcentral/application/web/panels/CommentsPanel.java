@@ -21,7 +21,7 @@ import java.util.Collections;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.data.Comments;
-import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
+import com.flowcentraltech.flowcentral.common.business.policies.FormValidationContext;
 import com.flowcentraltech.flowcentral.common.data.FormValidationErrors;
 import com.flowcentraltech.flowcentral.common.web.panels.AbstractFlowCentralPanel;
 import com.flowcentraltech.flowcentral.common.web.widgets.Form;
@@ -41,11 +41,11 @@ import com.tcdng.unify.core.util.StringUtils;
 public class CommentsPanel extends AbstractFlowCentralPanel implements FormPanel {
 
     @Override
-    public List<FormValidationErrors> validate(EvaluationMode evaluationMode) throws UnifyException {
+    public List<FormValidationErrors> validate(FormValidationContext ctx) throws UnifyException {
         Comments comments = getValue(Comments.class);
         if (comments != null) {
             Form commentsForm = getWidgetByShortName(Form.class, "commentsForm");
-            commentsForm.validate(evaluationMode);
+            commentsForm.validate(ctx);
             if (StringUtils.isBlank(comments.getNewComment())) {
                 commentsForm.addFieldRequiredError("newComment",
                         resolveSessionMessage("$m{commentspanel.comment.add}"));

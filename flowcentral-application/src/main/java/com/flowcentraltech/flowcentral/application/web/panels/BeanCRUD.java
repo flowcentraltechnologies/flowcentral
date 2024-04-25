@@ -23,8 +23,8 @@ import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.web.data.FormContext;
 import com.flowcentraltech.flowcentral.application.web.widgets.BeanListTable;
 import com.flowcentraltech.flowcentral.application.web.widgets.MiniForm;
+import com.flowcentraltech.flowcentral.common.business.policies.FormValidationContext;
 import com.flowcentraltech.flowcentral.common.business.policies.SweepingCommitPolicy;
-import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.util.ReflectUtils;
 
@@ -45,7 +45,7 @@ public class BeanCRUD extends AbstractCRUD<BeanListTable> {
     }
 
     @Override
-    protected void evaluateFormContext(FormContext formContext, EvaluationMode evaluationMode) throws UnifyException {
+    protected void evaluateFormContext(FormContext formContext, FormValidationContext vCtx) throws UnifyException {
 
     }
 

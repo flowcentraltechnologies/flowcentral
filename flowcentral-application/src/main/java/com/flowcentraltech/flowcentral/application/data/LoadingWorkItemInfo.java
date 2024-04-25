@@ -60,6 +60,16 @@ public class LoadingWorkItemInfo {
         this.attachments = false;
     }
 
+    public boolean isValidateFormOnAction(String actionName) {
+        for (FormActionDef formActionDef: formActionDefList) {
+            if (formActionDef.getName().equals(actionName)) {
+                return formActionDef.isValidateForm();
+            }
+        }
+        
+        return false;
+    }
+    
     public List<FormActionDef> getFormActionDefList() {
         return formActionDefList;
     }

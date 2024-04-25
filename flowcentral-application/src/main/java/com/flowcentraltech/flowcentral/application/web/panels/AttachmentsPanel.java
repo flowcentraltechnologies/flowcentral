@@ -27,7 +27,7 @@ import com.flowcentraltech.flowcentral.application.data.Attachment;
 import com.flowcentraltech.flowcentral.application.data.Attachments;
 import com.flowcentraltech.flowcentral.application.web.widgets.AbstractTableWidget;
 import com.flowcentraltech.flowcentral.application.web.widgets.BeanListTable;
-import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
+import com.flowcentraltech.flowcentral.common.business.policies.FormValidationContext;
 import com.flowcentraltech.flowcentral.common.data.FormValidationErrors;
 import com.flowcentraltech.flowcentral.common.web.panels.AbstractFlowCentralPanel;
 import com.tcdng.unify.core.UnifyException;
@@ -81,7 +81,7 @@ public class AttachmentsPanel extends AbstractFlowCentralPanel implements FormPa
     }
 
     @Override
-    public List<FormValidationErrors> validate(EvaluationMode evaluationMode) throws UnifyException {
+    public List<FormValidationErrors> validate(FormValidationContext ctx) throws UnifyException {
         return Collections.emptyList();
     }
 

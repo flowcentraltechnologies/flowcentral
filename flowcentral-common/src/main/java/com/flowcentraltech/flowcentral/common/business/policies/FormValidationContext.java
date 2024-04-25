@@ -29,11 +29,11 @@ public class FormValidationContext {
 
     private EvaluationMode evaluationMode;
 
-    private String userAction;
+    private String action;
 
-    public FormValidationContext(EvaluationMode evaluationMode, String userAction) {
+    public FormValidationContext(EvaluationMode evaluationMode, String action) {
         this.evaluationMode = evaluationMode;
-        this.userAction = userAction;
+        this.action = action;
     }
 
     public FormValidationContext(EvaluationMode evaluationMode) {
@@ -92,11 +92,19 @@ public class FormValidationContext {
         return evaluationMode.isOfUpdate();
     }
 
-    public String getUserAction() {
-        return userAction;
+    public String getAction() {
+        return action;
     }
 
-    public boolean isWithUserAction() {
-        return !StringUtils.isBlank(userAction);
+    public boolean isWithAction() {
+        return !StringUtils.isBlank(action);
+    }
+    
+    public boolean isEvaluation() {
+        return evaluationMode.isEvaluation();
+    }
+    
+    public boolean isReview() {
+        return evaluationMode.isReview();
     }
 }

@@ -18,7 +18,7 @@ package com.flowcentraltech.flowcentral.application.web.panels;
 
 import java.util.List;
 
-import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
+import com.flowcentraltech.flowcentral.common.business.policies.FormValidationContext;
 import com.flowcentraltech.flowcentral.common.data.FormValidationErrors;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.web.ui.widget.panel.StandalonePanel;
@@ -44,10 +44,10 @@ public interface SingleFormPanel<T extends SingleFormBean> extends StandalonePan
     /**
      * Validates form panel.
      * 
-     * @param evaluationMode evaluation mode
+     * @param ctx the validation context
      * @return the validation errors
      * @throws UnifyException
      *                        if an error occurs
      */
-    List<FormValidationErrors> validate(EvaluationMode evaluationMode) throws UnifyException;
+    List<FormValidationErrors> validate(FormValidationContext ctx) throws UnifyException;
 }

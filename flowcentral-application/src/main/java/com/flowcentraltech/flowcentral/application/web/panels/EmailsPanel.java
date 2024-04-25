@@ -21,7 +21,7 @@ import java.util.Collections;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.web.widgets.InputArrayEntries;
-import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
+import com.flowcentraltech.flowcentral.common.business.policies.FormValidationContext;
 import com.flowcentraltech.flowcentral.common.data.FormValidationErrors;
 import com.flowcentraltech.flowcentral.common.web.panels.AbstractFlowCentralPanel;
 import com.tcdng.unify.core.UnifyException;
@@ -39,7 +39,7 @@ import com.tcdng.unify.core.annotation.UplBinding;
 public class EmailsPanel extends AbstractFlowCentralPanel implements FormPanel {
 
     @Override
-    public List<FormValidationErrors> validate(EvaluationMode evaluationMode) throws UnifyException {
+    public List<FormValidationErrors> validate(FormValidationContext ctx) throws UnifyException {
         InputArrayEntries entries = getValue(InputArrayEntries.class);
         if (entries != null) {
             if (!entries.validate()) {

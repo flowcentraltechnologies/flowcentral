@@ -21,6 +21,7 @@ import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.web.data.AppletContext;
 import com.flowcentraltech.flowcentral.application.web.data.FormContext;
 import com.flowcentraltech.flowcentral.application.web.widgets.MiniForm;
+import com.flowcentraltech.flowcentral.common.business.policies.FormValidationContext;
 import com.flowcentraltech.flowcentral.common.business.policies.SweepingCommitPolicy;
 import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
 import com.flowcentraltech.flowcentral.common.data.FormMessage;
@@ -97,7 +98,7 @@ public class QuickFormEdit {
 
     public boolean commit() throws UnifyException {
         FormContext formContext = getForm().getCtx();
-        ctx.au().formContextEvaluator().evaluateFormContext(formContext, EvaluationMode.UPDATE);
+        ctx.au().formContextEvaluator().evaluateFormContext(formContext, new FormValidationContext(EvaluationMode.UPDATE));
         if (!form.getCtx().isWithFormErrors()) {
             ctx.au().updateEntityInstByFormContext(formAppletDef, formContext, scp);
             return true;

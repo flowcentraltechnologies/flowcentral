@@ -15,8 +15,10 @@
  */
 package com.flowcentraltech.flowcentral.application.web.panels.applet;
 
+import com.flowcentraltech.flowcentral.application.data.FormActionDef;
 import com.flowcentraltech.flowcentral.application.web.data.FormContext;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
+import com.flowcentraltech.flowcentral.common.business.policies.FormValidationContext;
 import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
@@ -39,7 +41,9 @@ public class ManageLoadingListAppletPanel extends AbstractEntityFormAppletPanel 
         final ManageLoadingListApplet applet = getManageLoadingListApplet();
         if (applet.getCtx().isReview()) {
             final String actionName = getRequestTarget(String.class);
-            final FormContext ctx = evaluateCurrentFormContext(EvaluationMode.UPDATE,
+            final FormActionDef formActionDef = applet.getCurrentFormDef().getFormActionDef(actionName);
+            final FormContext ctx = evaluateCurrentFormContext(
+                    new FormValidationContext(EvaluationMode.getUpdateMode(formActionDef.isValidateForm())),
                     applet.isNewCommentRequired(actionName));
             if (!ctx.isWithFormErrors()) {
                 if (ctx.getFormDef() == null) {
@@ -57,12 +61,12 @@ public class ManageLoadingListAppletPanel extends AbstractEntityFormAppletPanel 
                             return;
                         }
                     }
-                    
+
                     applet.applyUserAction(actionName);
                     hintUser("$m{reviewworkitemsapplet.apply.success.hint}");
                 }
             }
-            
+
             return;
         }
 

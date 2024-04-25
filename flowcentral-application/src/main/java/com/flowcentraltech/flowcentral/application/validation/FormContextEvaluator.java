@@ -18,9 +18,9 @@ package com.flowcentraltech.flowcentral.application.validation;
 
 import com.flowcentraltech.flowcentral.application.web.data.FormContext;
 import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
+import com.flowcentraltech.flowcentral.common.business.policies.FormReviewContext;
+import com.flowcentraltech.flowcentral.common.business.policies.FormValidationContext;
 import com.flowcentraltech.flowcentral.common.business.policies.ReviewResult;
-import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
-import com.flowcentraltech.flowcentral.configuration.constants.FormReviewType;
 import com.tcdng.unify.core.UnifyException;
 
 /**
@@ -35,27 +35,27 @@ public interface FormContextEvaluator extends FlowCentralComponent {
      * Evaluates a form context.
      * 
      * @param ctx
-     *                       the form context
-     * @param evaluationMode
-     *                       the evaluation mode
+     *             the form context
+     * @param vCtx
+     *             the validation context
      * @throws UnifyException
      *                        if an error occurs
      */
-    void evaluateFormContext(FormContext ctx, EvaluationMode evaluationMode) throws UnifyException;
+    void evaluateFormContext(FormContext ctx, FormValidationContext vCtx) throws UnifyException;
 
     /**
      * Evaluates a form context.
      * 
      * @param ctx
-     *                   the form context
-     * @param evaluationMode
-     *                       the evaluation mode
-     * @param reviewType
-     *                   the review type
+     *             the form context
+     * @param vCtx
+     *             the validation context
+     * @param rCtx
+     *             the review context
      * @return the review result
      * @throws UnifyException
      *                        if an error occurs
      */
-    ReviewResult reviewFormContext(FormContext ctx, EvaluationMode evaluationMode, FormReviewType reviewType)
+    ReviewResult reviewFormContext(FormContext ctx, FormValidationContext vCtx, FormReviewContext rCtx)
             throws UnifyException;
 }

@@ -21,6 +21,7 @@ import com.flowcentraltech.flowcentral.application.web.data.AppletContext;
 import com.flowcentraltech.flowcentral.application.web.data.FormContext;
 import com.flowcentraltech.flowcentral.application.web.panels.FormPanel;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
+import com.flowcentraltech.flowcentral.common.business.policies.FormValidationContext;
 import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
@@ -59,7 +60,8 @@ public class ListingAppletPanel extends AbstractAppletPanel {
         String actionName = getRequestTarget(String.class);
         final ListingApplet applet = getListEntityApplet();
         FormActionDef formActionDef = applet.getCurrentFormDef().getFormActionDef(actionName);
-        FormContext ctx = evaluateCurrentFormContext(EvaluationMode.getRequiredMode(formActionDef.isValidateForm()));
+        FormContext ctx = evaluateCurrentFormContext(
+                new FormValidationContext(EvaluationMode.getRequiredMode(formActionDef.isValidateForm())));
         if (!ctx.isWithFormErrors()) {
             EntityActionResult entityActionResult = applet.formActionOnInst(formActionDef.getPolicy(), actionName);
             handleEntityActionResult(entityActionResult);
@@ -77,28 +79,28 @@ public class ListingAppletPanel extends AbstractAppletPanel {
 
     }
 
-    private FormContext evaluateCurrentFormContext(EvaluationMode evaluationMode) throws UnifyException {
-        return evaluateCurrentFormContext(evaluationMode, false);
+    private FormContext evaluateCurrentFormContext(FormValidationContext vCtx) throws UnifyException {
+        return evaluateCurrentFormContext(vCtx, false);
     }
 
-    private FormContext evaluateCurrentFormContext(EvaluationMode evaluationMode, boolean commentRequired)
+    private FormContext evaluateCurrentFormContext(FormValidationContext vCtx, boolean commentRequired)
             throws UnifyException {
         FormContext ctx = getListEntityApplet().getResolvedForm().getCtx();
         ctx.clearReviewErrors();
         ctx.clearValidationErrors();
 
-        if (evaluationMode.evaluation()) {
-            if (evaluationMode.review() && ctx.getAppletContext().isReview()) {
+        if (vCtx.isEvaluation()) {
+            if (vCtx.isReview() && ctx.getAppletContext().isReview()) {
                 if (commentRequired) {
                     FormPanel commentsFormPanel = getWidgetByShortName(FormPanel.class, "listingPanel.commentsPanel");
                     ;
-                    ctx.mergeValidationErrors(commentsFormPanel.validate(evaluationMode));
+                    ctx.mergeValidationErrors(commentsFormPanel.validate(vCtx));
                 }
 
                 if (ctx.getAppletContext().isEmails()) {
                     FormPanel emailsFormPanel = getWidgetByShortName(FormPanel.class, "listingPanel.emailsPanel");
                     ;
-                    ctx.mergeValidationErrors(emailsFormPanel.validate(evaluationMode));
+                    ctx.mergeValidationErrors(emailsFormPanel.validate(vCtx));
                 }
             }
 

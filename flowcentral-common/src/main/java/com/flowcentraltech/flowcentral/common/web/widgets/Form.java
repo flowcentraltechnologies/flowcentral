@@ -19,7 +19,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
+import com.flowcentraltech.flowcentral.common.business.policies.FormValidationContext;
 import com.flowcentraltech.flowcentral.common.data.FormValidationErrors;
 import com.flowcentraltech.flowcentral.common.data.TargetFormMessage;
 import com.tcdng.unify.core.UnifyException;
@@ -197,7 +197,7 @@ public class Form extends AbstractContainer {
         return formValidationErrors;
     }
 
-    public FormValidationErrors validate(EvaluationMode evaluationMode) throws UnifyException {
+    public FormValidationErrors validate(FormValidationContext ctx) throws UnifyException {
         formValidationErrors.clearValidationErrors();
 
         final int columns = getColumns();
