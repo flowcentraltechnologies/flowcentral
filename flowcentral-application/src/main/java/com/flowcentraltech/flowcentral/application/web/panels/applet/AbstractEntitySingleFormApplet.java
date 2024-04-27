@@ -122,7 +122,8 @@ public abstract class AbstractEntitySingleFormApplet extends AbstractApplet {
 
     protected int mIndex;
 
-    public AbstractEntitySingleFormApplet(Page page, AppletUtilities au, List<String> pathVariables) throws UnifyException {
+    public AbstractEntitySingleFormApplet(Page page, AppletUtilities au, List<String> pathVariables)
+            throws UnifyException {
         super(page, au, pathVariables.get(APPLET_NAME_INDEX));
     }
 
@@ -343,7 +344,8 @@ public abstract class AbstractEntitySingleFormApplet extends AbstractApplet {
         final String createNewCaption = getRootAppletProp(String.class,
                 AppletPropertyConstants.CREATE_FORM_NEW_CAPTION);
         final String beanTitle = !StringUtils.isBlank(createNewCaption) ? createNewCaption
-                : au.resolveSessionMessage("$m{form.newentity}", entityClassDef.getEntityDef().getDescription());
+                : au.resolveSessionMessage(formMode.isCreate() ? "$m{form.newentity}" : "$m{form.maintainentity}",
+                        entityClassDef.getEntityDef().getDescription());
         return constructSingleForm((Entity) inst, formMode, beanTitle);
     }
 
