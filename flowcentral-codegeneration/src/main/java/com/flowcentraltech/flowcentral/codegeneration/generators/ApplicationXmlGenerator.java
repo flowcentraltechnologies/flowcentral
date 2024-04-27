@@ -784,10 +784,14 @@ public class ApplicationXmlGenerator extends AbstractStaticArtifactGenerator {
                         ctx.addMessage(StaticMessageCategoryType.FORM, descKey, appFormAnnotation.getDescription());
                         ctx.addMessage(StaticMessageCategoryType.FORM, msgKey, appFormAnnotation.getMessage());
                         formAnnotationConfig.setType(appFormAnnotation.getType());
+                        formAnnotationConfig.setVisibility(appFormAnnotation.getVisibility());
                         formAnnotationConfig.setName(appFormAnnotation.getName());
                         formAnnotationConfig.setDescription("$m{" + descKey + "}");
                         formAnnotationConfig.setMessage("$m{" + msgKey + "}");
                         formAnnotationConfig.setHtml(appFormAnnotation.isHtml());
+                        formAnnotationConfig.setDirectPlacement(appFormAnnotation.isDirectPlacement());
+                        formAnnotationConfig.setOnCondition(
+                                InputWidgetUtils.getFilterConfig(au(), appFormAnnotation.getOnCondition()));
                         annotationConfigList.add(formAnnotationConfig);
                     }
 

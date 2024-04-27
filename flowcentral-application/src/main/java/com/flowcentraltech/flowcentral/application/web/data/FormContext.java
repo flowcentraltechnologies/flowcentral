@@ -22,6 +22,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -180,7 +181,7 @@ public class FormContext extends AbstractContext {
             this.formWidgetStateList = Collections.emptyList();
         }
 
-        this.visibleAnnotations = new HashSet<String>();
+        this.visibleAnnotations = new LinkedHashSet<String>();
         this.formValidationErrors = new FormValidationErrors();
         this.mode = Mode.NORMAL;
     }
@@ -639,6 +640,15 @@ public class FormContext extends AbstractContext {
                             tb.applyStatePolicy(state);
                         }
                     }
+                }
+            }
+
+            for (FormAnnotationDef formAnnotationDef : formDef.getDirectFormAnnotationDefList()) {
+                ObjectFilter objectFilter = formAnnotationDef.isWithCondition()
+                        ? formAnnotationDef.getOnCondition().getObjectFilter(entityDef, formValueStoreReader, now)
+                        : null;
+                if (objectFilter == null || objectFilter.matchReader(formValueStoreReader)) {
+                    visibleAnnotations.add(formAnnotationDef.getName());
                 }
             }
 

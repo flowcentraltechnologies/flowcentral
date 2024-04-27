@@ -414,8 +414,12 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-formactionbuttons .fabcell {display:table-cell; padding-left: 8px; vertical-align: middle;}
 
 /* Form annotation */
-.fc-formannotation {}
-.fc-formannotation span {display:block; padding:8px 6px; margin: 0px 20px 4px 20px;}
+.fc-formannotation {padding:0px 20px;}
+.fc-formannotation .frm {margin:4px 0px;border-radius:4px;}
+.fc-formannotation .msg {display:block; padding:8px 12px;}
+.fc-formannotation .cls {width:40px; text-align:center;}
+.fc-formannotation .icon {display:inline-block;padding:4px 2px;width:16px;font-size:12px;cursor:pointer;}
+ 
 
 /* Form bread crumbs */
 .fc-formbreadcrumbs {}

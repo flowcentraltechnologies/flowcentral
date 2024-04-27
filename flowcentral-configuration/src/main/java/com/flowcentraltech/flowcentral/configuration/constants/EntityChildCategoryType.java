@@ -77,6 +77,13 @@ public enum EntityChildCategoryType implements EnumConst {
             "form",
             FilterConditionListType.IMMEDIATE_FIELD,
             null),
+    APP_FORMANNOTATION(
+            "FORMANNOTATION",
+            "application.appForm",
+            "entity",
+            "formannotation",
+            FilterConditionListType.IMMEDIATE_FIELD,
+            null),
     APP_FORMSTATEPOLICY(
             "FORMSTATEPOLICY",
             "application.appForm",

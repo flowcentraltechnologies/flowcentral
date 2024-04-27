@@ -317,7 +317,9 @@ public abstract class AbstractApplet {
                 AppletPropertyConstants.CREATE_FORM_NEW_CAPTION);
         final String beanTitle = inst.getDescription() != null ? inst.getDescription()
                 : !StringUtils.isBlank(createNewCaption) ? createNewCaption
-                        : au.resolveSessionMessage("$m{form.newentity}", entityDef.getDescription());
+                        : au.resolveSessionMessage(
+                                formMode.isCreate() ? "$m{form.newentity}" : "$m{form.maintainentity}",
+                                entityDef.getDescription());
         return constructSingleForm(inst, formMode, beanTitle);
     }
 
@@ -344,7 +346,8 @@ public abstract class AbstractApplet {
 
     protected TableActionResult openInTab(AppletType appletType, Entity _inst) throws UnifyException {
         final String appletName = getAppletName();
-        final OpenPagePathParts parts = ApplicationPageUtils.constructAppletOpenPagePath(appletType, appletName, _inst.getId());
+        final OpenPagePathParts parts = ApplicationPageUtils.constructAppletOpenPagePath(appletType, appletName,
+                _inst.getId());
         TableActionResult result = new TableActionResult(_inst, parts.getOpenPath());
         result.setOpenPath(true);
 
@@ -385,8 +388,8 @@ public abstract class AbstractApplet {
 
         if (au().system().getSysParameterValue(boolean.class,
                 ApplicationModuleSysParamConstants.ENABLE_OPEN_TAB_IN_BROWSER)) {
-            final String tabName = ApplicationNameUtils.addVestigialNamePart(listingRedirect.getTargetAppletName() + "_list",
-                    String.valueOf(listingRedirect.getTargetInstId()));
+            final String tabName = ApplicationNameUtils.addVestigialNamePart(
+                    listingRedirect.getTargetAppletName() + "_list", String.valueOf(listingRedirect.getTargetInstId()));
             result.setTabName(tabName);
             result.setOpenTab(true);
         }

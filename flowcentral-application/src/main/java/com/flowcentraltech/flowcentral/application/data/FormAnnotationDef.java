@@ -17,6 +17,7 @@
 package com.flowcentraltech.flowcentral.application.data;
 
 import com.flowcentraltech.flowcentral.configuration.constants.FormAnnotationType;
+import com.flowcentraltech.flowcentral.configuration.constants.VisibilityType;
 
 /**
  * Form annotation definition.
@@ -28,6 +29,10 @@ public class FormAnnotationDef {
 
     private FormAnnotationType type;
 
+    private VisibilityType visibility;
+
+    private FilterDef onCondition;
+
     private String name;
 
     private String description;
@@ -36,16 +41,38 @@ public class FormAnnotationDef {
 
     private boolean html;
 
-    public FormAnnotationDef(FormAnnotationType type, String name, String description, String message, boolean html) {
+    private boolean directPlacement;
+
+    public FormAnnotationDef(FormAnnotationType type, VisibilityType visibility, String name, String description,
+            String message, boolean html, boolean directPlacement, FilterDef onCondition) {
         this.type = type;
+        this.visibility = visibility == null ? VisibilityType.FIXED : visibility;
         this.name = name;
         this.description = description;
         this.message = message;
         this.html = html;
+        this.directPlacement = directPlacement;
+        this.onCondition = onCondition;
     }
 
     public FormAnnotationType getType() {
         return type;
+    }
+
+    public VisibilityType getVisibility() {
+        return visibility;
+    }
+
+    public boolean isFixed() {
+        return visibility.isFixed();
+    }
+
+    public boolean isDisappearing() {
+        return visibility.isDisappearing();
+    }
+
+    public boolean isClosable() {
+        return visibility.isClosable();
     }
 
     public String getName() {
@@ -64,9 +91,16 @@ public class FormAnnotationDef {
         return html;
     }
 
-    @Override
-    public String toString() {
-        return "FormAnnotationDef [type=" + type + ", name=" + name + ", description=" + description + ", message="
-                + message + ", html=" + html + "]";
+    public boolean isDirectPlacement() {
+        return directPlacement;
     }
+
+    public FilterDef getOnCondition() {
+        return onCondition;
+    }
+
+    public boolean isWithCondition() {
+        return onCondition != null;
+    }
+
 }

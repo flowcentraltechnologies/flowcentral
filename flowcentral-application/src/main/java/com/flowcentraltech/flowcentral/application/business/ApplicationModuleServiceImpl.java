@@ -1165,9 +1165,11 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                     }
 
                     for (AppFormAnnotation appFormAnnotation : appForm.getAnnotationList()) {
-                        fdb.addFormAnnotation(appFormAnnotation.getType(), appFormAnnotation.getName(),
-                                appFormAnnotation.getDescription(), appFormAnnotation.getMessage(),
-                                appFormAnnotation.isHtml());
+                        fdb.addFormAnnotation(appFormAnnotation.getType(), appFormAnnotation.getVisibility(),
+                                appFormAnnotation.getName(), appFormAnnotation.getDescription(),
+                                appFormAnnotation.getMessage(), appFormAnnotation.isHtml(),
+                                appFormAnnotation.isDirectPlacement(), InputWidgetUtils.getFilterDef(appletUtilities,
+                                        null, appFormAnnotation.getOnCondition()));
                     }
 
                     for (AppFormAction appFormAction : appForm.getActionList()) {
@@ -3431,6 +3433,11 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                 appFormRelatedList.setApplet(ctx.entitySwap(appFormRelatedList.getApplet()));
             }
 
+            // Annotation Policies
+            for (AppFormAnnotation appFormAnnotation : srcAppForm.getAnnotationList()) {
+                ApplicationReplicationUtils.applyReplicationRules(ctx, appFormAnnotation.getOnCondition());
+            }
+
             // State Policies
             for (AppFormStatePolicy appFormStatePolicy : srcAppForm.getFieldStateList()) {
                 appFormStatePolicy.setValueGenerator(ctx.componentSwap(appFormStatePolicy.getValueGenerator()));
@@ -5589,18 +5596,26 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                 if (oldAppFormAnnotation == null) {
                     AppFormAnnotation appFormAnnotation = new AppFormAnnotation();
                     appFormAnnotation.setType(formAnnotationConfig.getType());
+                    appFormAnnotation.setVisibility(formAnnotationConfig.getVisibility());
                     appFormAnnotation.setName(formAnnotationConfig.getName());
                     appFormAnnotation.setDescription(description);
                     appFormAnnotation.setMessage(message);
                     appFormAnnotation.setHtml(formAnnotationConfig.isHtml());
+                    appFormAnnotation.setDirectPlacement(formAnnotationConfig.isDirectPlacement());
+                    appFormAnnotation
+                            .setOnCondition(InputWidgetUtils.newAppFilter(formAnnotationConfig.getOnCondition()));
                     appFormAnnotation.setConfigType(ConfigType.MUTABLE_INSTALL);
                     annotationList.add(appFormAnnotation);
                 } else {
                     if (ConfigUtils.isSetInstall(oldAppFormAnnotation)) {
                         oldAppFormAnnotation.setType(formAnnotationConfig.getType());
+                        oldAppFormAnnotation.setVisibility(formAnnotationConfig.getVisibility());
                         oldAppFormAnnotation.setDescription(description);
                         oldAppFormAnnotation.setMessage(message);
                         oldAppFormAnnotation.setHtml(formAnnotationConfig.isHtml());
+                        oldAppFormAnnotation.setDirectPlacement(formAnnotationConfig.isDirectPlacement());
+                        oldAppFormAnnotation
+                                .setOnCondition(InputWidgetUtils.newAppFilter(formAnnotationConfig.getOnCondition()));
                     }
 
                     annotationList.add(oldAppFormAnnotation);

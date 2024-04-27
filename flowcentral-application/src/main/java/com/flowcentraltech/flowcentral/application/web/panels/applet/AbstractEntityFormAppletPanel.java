@@ -663,7 +663,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
     }
 
     @Action
-    public void performFormAction() throws UnifyException {
+    public void performFormAction() throws UnifyException { 
         String actionName = getRequestTarget(String.class);
         AbstractEntityFormApplet applet = getEntityFormApplet();
         FormActionDef formActionDef = applet.getCurrentFormDef().getFormActionDef(actionName);

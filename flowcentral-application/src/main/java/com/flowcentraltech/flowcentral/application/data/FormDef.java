@@ -34,6 +34,7 @@ import com.flowcentraltech.flowcentral.configuration.constants.FormType;
 import com.flowcentraltech.flowcentral.configuration.constants.HighlightType;
 import com.flowcentraltech.flowcentral.configuration.constants.TabContentType;
 import com.flowcentraltech.flowcentral.configuration.constants.UIActionType;
+import com.flowcentraltech.flowcentral.configuration.constants.VisibilityType;
 import com.tcdng.unify.common.util.StringToken;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.util.DataUtils;
@@ -55,6 +56,8 @@ public class FormDef extends BaseApplicationEntityDef {
     private FormTabDef saveAsFormTabDef;
 
     private List<FormAnnotationDef> formAnnotationDefList;
+
+    private List<FormAnnotationDef> directFormAnnotationDefList;
 
     private List<FormActionDef> formActionDefList;
 
@@ -313,11 +316,33 @@ public class FormDef extends BaseApplicationEntityDef {
 
     public List<FormAnnotationDef> getFormAnnotationDefList() {
         if (formAnnotationDefList == null) {
-            formAnnotationDefList = Collections
-                    .unmodifiableList(new ArrayList<FormAnnotationDef>(formAnnotationDefMap.values()));
+            synchronized (this) {
+                if (formAnnotationDefList == null) {
+                    formAnnotationDefList = Collections
+                            .unmodifiableList(new ArrayList<FormAnnotationDef>(formAnnotationDefMap.values()));
+                }
+            }
         }
 
         return formAnnotationDefList;
+    }
+
+    public List<FormAnnotationDef> getDirectFormAnnotationDefList() {
+        if (directFormAnnotationDefList == null) {
+            synchronized (this) {
+                if (directFormAnnotationDefList == null) {
+                    directFormAnnotationDefList = new ArrayList<FormAnnotationDef>();
+                    for (FormAnnotationDef formAnnotationDef : getFormAnnotationDefList()) {
+                        if (formAnnotationDef.isDirectPlacement()) {
+                            directFormAnnotationDefList.add(formAnnotationDef);
+                        }
+                    }
+                    directFormAnnotationDefList = Collections.unmodifiableList(directFormAnnotationDefList);
+                }
+            }
+        }
+
+        return directFormAnnotationDefList;
     }
 
     public Map<String, FormAnnotationDef> getFormAnnotationDefs() {
@@ -537,10 +562,10 @@ public class FormDef extends BaseApplicationEntityDef {
             return this;
         }
 
-        public Builder addFormAnnotation(FormAnnotationType type, String name, String description, String message,
-                boolean html) {
+        public Builder addFormAnnotation(FormAnnotationType type, VisibilityType visibility, String name,
+                String description, String message, boolean html, boolean directPlacement, FilterDef onCondition) {
             if (formAnnotationDefMap == null) {
-                formAnnotationDefMap = new HashMap<String, FormAnnotationDef>();
+                formAnnotationDefMap = new LinkedHashMap<String, FormAnnotationDef>();
             }
 
             if (formAnnotationDefMap.containsKey(name)) {
@@ -548,7 +573,8 @@ public class FormDef extends BaseApplicationEntityDef {
                         "Annotation with name [" + name + "] already exists on this form[" + longName + "].");
             }
 
-            formAnnotationDefMap.put(name, new FormAnnotationDef(type, name, description, message, html));
+            formAnnotationDefMap.put(name, new FormAnnotationDef(type, visibility, name, description, message, html,
+                    directPlacement, onCondition));
             return this;
         }
 

@@ -1734,10 +1734,14 @@
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="description" renderWidget="application.text"
 				widthRatio="1" />
-			<column field="html" renderWidget="application.checkbox"
-				widthRatio="1" />
 			<column field="typeDesc" renderWidget="application.text"
 				label="$m{application.appformannotation.type}" widthRatio="1" />
+			<column field="visibilityDesc" renderWidget="application.text"
+				label="$m{application.appformannotation.visibility}" widthRatio="1" />
+			<column field="html" renderWidget="application.checkbox"
+				widthRatio="1" />
+			<column field="directPlacement" renderWidget="application.checkbox"
+				widthRatio="1" />
 		</table>
 		<table name="appFormFilterTable"
 			description="$m{studio.appformfilter.table}"
@@ -4672,7 +4676,11 @@
 						column="0" required="true" />
 					<field name="type" inputWidget="application.enumlist"
 						column="1" required="true" />
+					<field name="visibility" inputWidget="application.enumlist"
+						column="1" required="true" />
 					<field name="html" inputWidget="application.checkbox"
+						column="1" />
+					<field name="directPlacement" inputWidget="application.checkbox"
 						column="1" />
 				</section>
 				<section name="messageDetails" columns="type_1">
@@ -4680,6 +4688,9 @@
 						required="true" column="0" />
 				</section>
 			</tab>
+			<tab name="onCondition"
+				label="$m{studio.appformannotation.form.oncondition}"
+				reference="app_formannotation" contentType="filter_condition" />
 		</form>
 		<form name="appFormActionForm"
 			description="$m{studio.appformaction.form}"

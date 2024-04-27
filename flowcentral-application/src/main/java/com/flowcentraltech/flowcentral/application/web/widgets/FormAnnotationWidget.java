@@ -32,6 +32,8 @@ import com.tcdng.unify.core.annotation.Component;
 @Component("fc-formannotation")
 public class FormAnnotationWidget extends AbstractFlowCentralControl {
 
+    public static final String WORK_ANNOTATION_FLAGS = "annotation_flags";
+
     @SuppressWarnings("unchecked")
     public List<FormAnnotationDef> getFormAnnotationDef() throws UnifyException {
         return (List<FormAnnotationDef>) getValue(List.class);

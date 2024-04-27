@@ -15,7 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.application.web.panels.applet;
 
-import com.flowcentraltech.flowcentral.application.data.FormActionDef;
+import com.flowcentraltech.flowcentral.application.data.LoadingWorkItemInfo;
 import com.flowcentraltech.flowcentral.application.web.data.FormContext;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
 import com.flowcentraltech.flowcentral.common.business.policies.FormValidationContext;
@@ -41,9 +41,9 @@ public class ManageLoadingListAppletPanel extends AbstractEntityFormAppletPanel 
         final ManageLoadingListApplet applet = getManageLoadingListApplet();
         if (applet.getCtx().isReview()) {
             final String actionName = getRequestTarget(String.class);
-            final FormActionDef formActionDef = applet.getCurrentFormDef().getFormActionDef(actionName);
-            final FormContext ctx = evaluateCurrentFormContext(
-                    new FormValidationContext(EvaluationMode.getUpdateMode(formActionDef.isValidateForm())),
+            final LoadingWorkItemInfo loadingWorkItemInfo = applet.getCurrentLoadingWorkItemInfo();
+            final FormContext ctx = evaluateCurrentFormContext(new FormValidationContext(
+                    EvaluationMode.getUpdateMode(loadingWorkItemInfo.isValidateFormOnAction(actionName)), actionName),
                     applet.isNewCommentRequired(actionName));
             if (!ctx.isWithFormErrors()) {
                 if (ctx.getFormDef() == null) {
@@ -52,7 +52,7 @@ public class ManageLoadingListAppletPanel extends AbstractEntityFormAppletPanel 
                     hintUser("$m{reviewsingleformworkitemsapplet.apply.success.hint}");
                 } else {
                     if (ctx.getFormDef().isInputForm()) {
-                        EntityActionResult entityActionResult = applet.updateInstAndClose();
+                        EntityActionResult entityActionResult = applet.updateInstAndClose(actionName);
                         if (ctx.isWithReviewErrors()) {
                             entityActionResult.setApplyUserAction(true);
                             entityActionResult.setUserAction(actionName);

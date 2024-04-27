@@ -17,6 +17,8 @@ package com.flowcentraltech.flowcentral.application.entities;
 
 import com.flowcentraltech.flowcentral.common.entities.BaseConfigNamedEntity;
 import com.flowcentraltech.flowcentral.configuration.constants.FormAnnotationType;
+import com.flowcentraltech.flowcentral.configuration.constants.VisibilityType;
+import com.tcdng.unify.core.annotation.Child;
 import com.tcdng.unify.core.annotation.Column;
 import com.tcdng.unify.core.annotation.ForeignKey;
 import com.tcdng.unify.core.annotation.ListOnly;
@@ -38,6 +40,9 @@ public class AppFormAnnotation extends BaseConfigNamedEntity {
 
     @ForeignKey(name = "FORMANNOTATION_TY")
     private FormAnnotationType type;
+    
+    @ForeignKey(name = "VISIBILITY", nullable = true)
+    private VisibilityType visibility;
 
     @Column(length = 512)
     private String message;
@@ -45,8 +50,17 @@ public class AppFormAnnotation extends BaseConfigNamedEntity {
     @Column
     private boolean html;
 
+    @Column
+    private boolean directPlacement;
+
     @ListOnly(key = "type", property = "description")
     private String typeDesc;
+
+    @ListOnly(key = "visibility", property = "description")
+    private String visibilityDesc;
+    
+    @Child(category = "formannotation")
+    private AppFilter onCondition;
 
     public Long getAppFormId() {
         return appFormId;
@@ -62,6 +76,14 @@ public class AppFormAnnotation extends BaseConfigNamedEntity {
 
     public void setType(FormAnnotationType type) {
         this.type = type;
+    }
+
+    public VisibilityType getVisibility() {
+        return visibility;
+    }
+
+    public void setVisibility(VisibilityType visibility) {
+        this.visibility = visibility;
     }
 
     public String getMessage() {
@@ -80,12 +102,36 @@ public class AppFormAnnotation extends BaseConfigNamedEntity {
         this.html = html;
     }
 
+    public boolean isDirectPlacement() {
+        return directPlacement;
+    }
+
+    public void setDirectPlacement(boolean directPlacement) {
+        this.directPlacement = directPlacement;
+    }
+
     public String getTypeDesc() {
         return typeDesc;
     }
 
     public void setTypeDesc(String typeDesc) {
         this.typeDesc = typeDesc;
+    }
+
+    public String getVisibilityDesc() {
+        return visibilityDesc;
+    }
+
+    public void setVisibilityDesc(String visibilityDesc) {
+        this.visibilityDesc = visibilityDesc;
+    }
+
+    public AppFilter getOnCondition() {
+        return onCondition;
+    }
+
+    public void setOnCondition(AppFilter onCondition) {
+        this.onCondition = onCondition;
     }
 
 }
