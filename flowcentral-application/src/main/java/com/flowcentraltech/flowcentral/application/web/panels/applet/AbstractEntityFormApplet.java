@@ -899,7 +899,12 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
     }
 
     public EntityActionResult updateInstAndClose() throws UnifyException {
-        EntityActionResult entityActionResult = updateInst(new FormReviewContext(FormReviewType.ON_UPDATE_CLOSE));
+        return updateInstAndClose(null);
+    }
+
+    public EntityActionResult updateInstAndClose(String actionName) throws UnifyException {
+        EntityActionResult entityActionResult = updateInst(
+                new FormReviewContext(FormReviewType.ON_UPDATE_CLOSE, actionName));
         setClosePage(entityActionResult);
         return entityActionResult;
     }

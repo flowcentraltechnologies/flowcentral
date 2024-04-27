@@ -61,7 +61,7 @@ public class ListingAppletPanel extends AbstractAppletPanel {
         final ListingApplet applet = getListEntityApplet();
         FormActionDef formActionDef = applet.getCurrentFormDef().getFormActionDef(actionName);
         FormContext ctx = evaluateCurrentFormContext(
-                new FormValidationContext(EvaluationMode.getRequiredMode(formActionDef.isValidateForm())));
+                new FormValidationContext(EvaluationMode.getRequiredMode(formActionDef.isValidateForm()), actionName));
         if (!ctx.isWithFormErrors()) {
             EntityActionResult entityActionResult = applet.formActionOnInst(formActionDef.getPolicy(), actionName);
             handleEntityActionResult(entityActionResult);
