@@ -564,7 +564,7 @@ public class FormDef extends BaseApplicationEntityDef {
         public Builder addFormAnnotation(FormAnnotationType type, String name, String description, String message,
                 boolean html, boolean directPlacement, FilterDef onCondition) {
             if (formAnnotationDefMap == null) {
-                formAnnotationDefMap = new HashMap<String, FormAnnotationDef>();
+                formAnnotationDefMap = new LinkedHashMap<String, FormAnnotationDef>();
             }
 
             if (formAnnotationDefMap.containsKey(name)) {
