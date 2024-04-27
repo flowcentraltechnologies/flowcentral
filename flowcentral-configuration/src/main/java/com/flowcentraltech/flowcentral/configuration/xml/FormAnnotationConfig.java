@@ -17,6 +17,7 @@
 package com.flowcentraltech.flowcentral.configuration.xml;
 
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import com.flowcentraltech.flowcentral.configuration.constants.FormAnnotationType;
@@ -32,6 +33,8 @@ import com.tcdng.unify.core.util.xml.adapter.CDataXmlAdapter;
 public class FormAnnotationConfig {
 
     private FormAnnotationType type;
+    
+    private FilterConfig onCondition;
 
     private String name;
 
@@ -40,6 +43,8 @@ public class FormAnnotationConfig {
     private String message;
 
     private boolean html;
+    
+    private boolean directPlacement;
 
     public FormAnnotationConfig() {
         type = FormAnnotationType.INFO;
@@ -53,6 +58,15 @@ public class FormAnnotationConfig {
     @XmlAttribute
     public void setType(FormAnnotationType type) {
         this.type = type;
+    }
+
+    public FilterConfig getOnCondition() {
+        return onCondition;
+    }
+
+    @XmlElement(required = true)
+    public void setOnCondition(FilterConfig onCondition) {
+        this.onCondition = onCondition;
     }
 
     public String getName() {
@@ -90,6 +104,15 @@ public class FormAnnotationConfig {
     @XmlAttribute
     public void setHtml(boolean html) {
         this.html = html;
+    }
+
+    public boolean isDirectPlacement() {
+        return directPlacement;
+    }
+
+    @XmlAttribute
+    public void setDirectPlacement(boolean directPlacement) {
+        this.directPlacement = directPlacement;
     }
 
 }

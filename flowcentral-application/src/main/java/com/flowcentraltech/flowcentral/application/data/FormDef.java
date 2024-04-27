@@ -56,6 +56,8 @@ public class FormDef extends BaseApplicationEntityDef {
 
     private List<FormAnnotationDef> formAnnotationDefList;
 
+    private List<FormAnnotationDef> directFormAnnotationDefList;
+
     private List<FormActionDef> formActionDefList;
 
     private List<FormTabDef> formTabDefList;
@@ -313,11 +315,33 @@ public class FormDef extends BaseApplicationEntityDef {
 
     public List<FormAnnotationDef> getFormAnnotationDefList() {
         if (formAnnotationDefList == null) {
-            formAnnotationDefList = Collections
-                    .unmodifiableList(new ArrayList<FormAnnotationDef>(formAnnotationDefMap.values()));
+            synchronized (this) {
+                if (formAnnotationDefList == null) {
+                    formAnnotationDefList = Collections
+                            .unmodifiableList(new ArrayList<FormAnnotationDef>(formAnnotationDefMap.values()));
+                }
+            }
         }
 
         return formAnnotationDefList;
+    }
+
+    public List<FormAnnotationDef> getDirectFormAnnotationDefList() {
+        if (directFormAnnotationDefList == null) {
+            synchronized (this) {
+                if (directFormAnnotationDefList == null) {
+                    directFormAnnotationDefList = new ArrayList<FormAnnotationDef>();
+                    for (FormAnnotationDef formAnnotationDef : getFormAnnotationDefList()) {
+                        if (formAnnotationDef.isDirectPlacement()) {
+                            directFormAnnotationDefList.add(formAnnotationDef);
+                        }
+                    }
+                    directFormAnnotationDefList = Collections.unmodifiableList(directFormAnnotationDefList);
+                }
+            }
+        }
+
+        return directFormAnnotationDefList;
     }
 
     public Map<String, FormAnnotationDef> getFormAnnotationDefs() {
@@ -538,7 +562,7 @@ public class FormDef extends BaseApplicationEntityDef {
         }
 
         public Builder addFormAnnotation(FormAnnotationType type, String name, String description, String message,
-                boolean html) {
+                boolean html, boolean directPlacement, FilterDef onCondition) {
             if (formAnnotationDefMap == null) {
                 formAnnotationDefMap = new HashMap<String, FormAnnotationDef>();
             }
@@ -548,7 +572,8 @@ public class FormDef extends BaseApplicationEntityDef {
                         "Annotation with name [" + name + "] already exists on this form[" + longName + "].");
             }
 
-            formAnnotationDefMap.put(name, new FormAnnotationDef(type, name, description, message, html));
+            formAnnotationDefMap.put(name,
+                    new FormAnnotationDef(type, name, description, message, html, directPlacement, onCondition));
             return this;
         }
 

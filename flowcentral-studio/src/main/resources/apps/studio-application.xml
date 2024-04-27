@@ -1736,6 +1736,8 @@
 				widthRatio="1" />
 			<column field="html" renderWidget="application.checkbox"
 				widthRatio="1" />
+			<column field="directPlacement" renderWidget="application.checkbox"
+				widthRatio="1" />
 			<column field="typeDesc" renderWidget="application.text"
 				label="$m{application.appformannotation.type}" widthRatio="1" />
 		</table>
@@ -4674,12 +4676,17 @@
 						column="1" required="true" />
 					<field name="html" inputWidget="application.checkbox"
 						column="1" />
+					<field name="directPlacement" inputWidget="application.checkbox"
+						column="1" />
 				</section>
 				<section name="messageDetails" columns="type_1">
 					<field name="message" inputWidget="application.textarea"
 						required="true" column="0" />
 				</section>
 			</tab>
+			<tab name="onCondition"
+				label="$m{studio.appformannotation.form.oncondition}"
+				reference="app_formannotation" contentType="filter_condition" />
 		</form>
 		<form name="appFormActionForm"
 			description="$m{studio.appformaction.form}"

@@ -1726,6 +1726,11 @@
 				label="$m{application.appformannotation.message}" type="string" />
 			<field name="html"
 				label="$m{application.appformannotation.html}" type="boolean" />
+			<field name="directPlacement"
+				label="$m{application.appformannotation.directplacement}" type="boolean" />
+			<field name="onCondition"
+				label="$m{application.appformannotation.oncondition}" type="child"
+				category="formannotation" references="appFilterRef" />
 			<field name="typeDesc"
 				label="$m{application.appformannotation.typedesc}" type="list_only"
 				key="type" property="description" />

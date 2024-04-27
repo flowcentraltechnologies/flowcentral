@@ -17,6 +17,7 @@ package com.flowcentraltech.flowcentral.application.entities;
 
 import com.flowcentraltech.flowcentral.common.entities.BaseConfigNamedEntity;
 import com.flowcentraltech.flowcentral.configuration.constants.FormAnnotationType;
+import com.tcdng.unify.core.annotation.Child;
 import com.tcdng.unify.core.annotation.Column;
 import com.tcdng.unify.core.annotation.ForeignKey;
 import com.tcdng.unify.core.annotation.ListOnly;
@@ -45,8 +46,14 @@ public class AppFormAnnotation extends BaseConfigNamedEntity {
     @Column
     private boolean html;
 
+    @Column
+    private boolean directPlacement;
+
     @ListOnly(key = "type", property = "description")
     private String typeDesc;
+    
+    @Child(category = "formannotation")
+    private AppFilter onCondition;
 
     public Long getAppFormId() {
         return appFormId;
@@ -80,12 +87,28 @@ public class AppFormAnnotation extends BaseConfigNamedEntity {
         this.html = html;
     }
 
+    public boolean isDirectPlacement() {
+        return directPlacement;
+    }
+
+    public void setDirectPlacement(boolean directPlacement) {
+        this.directPlacement = directPlacement;
+    }
+
     public String getTypeDesc() {
         return typeDesc;
     }
 
     public void setTypeDesc(String typeDesc) {
         this.typeDesc = typeDesc;
+    }
+
+    public AppFilter getOnCondition() {
+        return onCondition;
+    }
+
+    public void setOnCondition(AppFilter onCondition) {
+        this.onCondition = onCondition;
     }
 
 }

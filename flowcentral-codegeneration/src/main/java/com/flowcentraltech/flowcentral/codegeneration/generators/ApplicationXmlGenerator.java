@@ -788,6 +788,9 @@ public class ApplicationXmlGenerator extends AbstractStaticArtifactGenerator {
                         formAnnotationConfig.setDescription("$m{" + descKey + "}");
                         formAnnotationConfig.setMessage("$m{" + msgKey + "}");
                         formAnnotationConfig.setHtml(appFormAnnotation.isHtml());
+                        formAnnotationConfig.setDirectPlacement(appFormAnnotation.isDirectPlacement());
+                        formAnnotationConfig.setOnCondition(
+                                InputWidgetUtils.getFilterConfig(au(), appFormAnnotation.getOnCondition()));
                         annotationConfigList.add(formAnnotationConfig);
                     }
 

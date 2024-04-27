@@ -642,6 +642,15 @@ public class FormContext extends AbstractContext {
                 }
             }
 
+            for (FormAnnotationDef formAnnotationDef : formDef.getDirectFormAnnotationDefList()) {
+                ObjectFilter objectFilter = formAnnotationDef.isWithCondition()
+                        ? formAnnotationDef.getOnCondition().getObjectFilter(entityDef, formValueStoreReader, now)
+                        : null;
+                if (objectFilter == null || objectFilter.matchReader(formValueStoreReader)) {
+                    visibleAnnotations.add(formAnnotationDef.getName());
+                }
+            }
+
             for (FormStatePolicyDef formStatePolicyDef : formDef.getOnSwitchFormStatePolicyDefList()) {
                 if (formStatePolicyDef.isTriggered("")) {
                     ObjectFilter objectFilter = formStatePolicyDef.isWithCondition()
