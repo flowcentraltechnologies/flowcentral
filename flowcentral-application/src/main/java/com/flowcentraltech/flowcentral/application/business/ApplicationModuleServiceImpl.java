@@ -1165,10 +1165,11 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                     }
 
                     for (AppFormAnnotation appFormAnnotation : appForm.getAnnotationList()) {
-                        fdb.addFormAnnotation(appFormAnnotation.getType(), appFormAnnotation.getName(),
-                                appFormAnnotation.getDescription(), appFormAnnotation.getMessage(),
-                                appFormAnnotation.isHtml(), appFormAnnotation.isDirectPlacement(), InputWidgetUtils
-                                        .getFilterDef(appletUtilities, null, appFormAnnotation.getOnCondition()));
+                        fdb.addFormAnnotation(appFormAnnotation.getType(), appFormAnnotation.getVisibility(),
+                                appFormAnnotation.getName(), appFormAnnotation.getDescription(),
+                                appFormAnnotation.getMessage(), appFormAnnotation.isHtml(),
+                                appFormAnnotation.isDirectPlacement(), InputWidgetUtils.getFilterDef(appletUtilities,
+                                        null, appFormAnnotation.getOnCondition()));
                     }
 
                     for (AppFormAction appFormAction : appForm.getActionList()) {
@@ -5595,6 +5596,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                 if (oldAppFormAnnotation == null) {
                     AppFormAnnotation appFormAnnotation = new AppFormAnnotation();
                     appFormAnnotation.setType(formAnnotationConfig.getType());
+                    appFormAnnotation.setVisibility(formAnnotationConfig.getVisibility());
                     appFormAnnotation.setName(formAnnotationConfig.getName());
                     appFormAnnotation.setDescription(description);
                     appFormAnnotation.setMessage(message);
@@ -5607,6 +5609,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                 } else {
                     if (ConfigUtils.isSetInstall(oldAppFormAnnotation)) {
                         oldAppFormAnnotation.setType(formAnnotationConfig.getType());
+                        oldAppFormAnnotation.setVisibility(formAnnotationConfig.getVisibility());
                         oldAppFormAnnotation.setDescription(description);
                         oldAppFormAnnotation.setMessage(message);
                         oldAppFormAnnotation.setHtml(formAnnotationConfig.isHtml());

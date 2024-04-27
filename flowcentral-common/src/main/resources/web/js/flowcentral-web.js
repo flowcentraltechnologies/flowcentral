@@ -601,6 +601,41 @@ fux.rigTokenClick = function(uEv) {
 	pinput.focus();
 }
 
+/** Form Annotation */
+fux.rigFormAnnotation = function(rgp) {
+	if (rgp.pAnnot) {
+		const nid = rgp.pId + "_an";
+		const cid = rgp.pId + "_cl";
+		var hideMilliSec = rgp.pHideSec * 1000;
+
+		for (var i = 0; i < rgp.pAnnot.length; i++) {
+			var evp = ux.newEvPrm(rgp);
+			evp.nId = nid + i;
+			if (rgp.pAnnot[i].disp) {
+				window.setTimeout("fux.closeAnnotationById(\""+ evp.nId + "\");"
+					, hideMilliSec);
+			
+				hideMilliSec += 1000;
+			}
+			
+			if (rgp.pAnnot[i].closable) {
+				ux.addHdl(_id(cid + i), "click", fux.closeAnnotation, evp);			
+			}
+		}
+	}	
+}
+
+fux.closeAnnotation = function(uEv) {
+	fux.closeAnnotationById(uEv.evp.nId);
+}
+
+fux.closeAnnotationById = function(id) {
+	const annot = _id(id);
+	if (annot) {
+		annot.style.display = "none";
+	}	
+}
+	
 /** Mini Form */
 fux.rigMiniForm = function(rgp) {
 	const tabWidgetIds = rgp.pTabWidId;
@@ -1047,8 +1082,9 @@ fux.init = function() {
 	ux.setfn(fux.rigChart,"fux10");
 	ux.setfn(fux.rigWidgetRules,"fux11");
 	ux.setfn(fux.rigInputArray,"fux12");  
-	ux.setfn(fux.rigPopupWinText,"fux13");  
+	ux.setfn(fux.rigPopupWinText,"fux13"); 
 	ux.setfn(fux.rigTokenEntries,"fux14");  
+	ux.setfn(fux.rigFormAnnotation,"fux15");  
 }
 
 fux.init();

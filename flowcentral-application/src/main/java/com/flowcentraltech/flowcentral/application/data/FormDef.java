@@ -34,6 +34,7 @@ import com.flowcentraltech.flowcentral.configuration.constants.FormType;
 import com.flowcentraltech.flowcentral.configuration.constants.HighlightType;
 import com.flowcentraltech.flowcentral.configuration.constants.TabContentType;
 import com.flowcentraltech.flowcentral.configuration.constants.UIActionType;
+import com.flowcentraltech.flowcentral.configuration.constants.VisibilityType;
 import com.tcdng.unify.common.util.StringToken;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.util.DataUtils;
@@ -561,8 +562,8 @@ public class FormDef extends BaseApplicationEntityDef {
             return this;
         }
 
-        public Builder addFormAnnotation(FormAnnotationType type, String name, String description, String message,
-                boolean html, boolean directPlacement, FilterDef onCondition) {
+        public Builder addFormAnnotation(FormAnnotationType type, VisibilityType visibility, String name,
+                String description, String message, boolean html, boolean directPlacement, FilterDef onCondition) {
             if (formAnnotationDefMap == null) {
                 formAnnotationDefMap = new LinkedHashMap<String, FormAnnotationDef>();
             }
@@ -572,8 +573,8 @@ public class FormDef extends BaseApplicationEntityDef {
                         "Annotation with name [" + name + "] already exists on this form[" + longName + "].");
             }
 
-            formAnnotationDefMap.put(name,
-                    new FormAnnotationDef(type, name, description, message, html, directPlacement, onCondition));
+            formAnnotationDefMap.put(name, new FormAnnotationDef(type, visibility, name, description, message, html,
+                    directPlacement, onCondition));
             return this;
         }
 

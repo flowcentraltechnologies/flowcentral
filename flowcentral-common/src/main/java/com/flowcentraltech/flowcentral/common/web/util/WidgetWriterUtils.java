@@ -80,8 +80,8 @@ public final class WidgetWriterUtils {
         WriterUtils.registerJSAlias("fux.rigEntitySearch","fux07");     
         WriterUtils.registerJSAlias("fux.rigEntityTreeTable","fux08");  
         WriterUtils.registerJSAlias("fux.rigLineEntries","fux09");  
-        WriterUtils.registerJSAlias("fux.rigFilter","fux0a");  
-        WriterUtils.registerJSAlias("fux.rigMiniForm","fux0b");  
+        WriterUtils.registerJSAlias("fux.rigFilter","fux0a");
+        WriterUtils.registerJSAlias("fux.rigMiniForm","fux0b");
         WriterUtils.registerJSAlias("fux.rigSearch","fux0c");  
         WriterUtils.registerJSAlias("fux.rigSetValues","fux0d");  
         WriterUtils.registerJSAlias("fux.rigTable","fux0e");  
@@ -91,6 +91,7 @@ public final class WidgetWriterUtils {
         WriterUtils.registerJSAlias("fux.rigInputArray","fux12");
         WriterUtils.registerJSAlias("fux.rigPopupWinText","fux13");
         WriterUtils.registerJSAlias("fux.rigTokenEntries","fux14");  
+        WriterUtils.registerJSAlias("fux.rigFormAnnotation","fux15");
    }
     
     public static String getTabClass(int index, int tabIndex) {

@@ -1722,6 +1722,10 @@
 				label="$m{application.appformannotation.type}" type="enum_ref"
 				references="formannotationtypelist"
 				inputWidget="application.enumlist" />
+			<field name="visibility"
+				label="$m{application.appformannotation.visibility}" type="enum_ref"
+				references="visibilitytypelist"
+				inputWidget="application.enumlist" />
 			<field name="message"
 				label="$m{application.appformannotation.message}" type="string" />
 			<field name="html"
@@ -1734,6 +1738,9 @@
 			<field name="typeDesc"
 				label="$m{application.appformannotation.typedesc}" type="list_only"
 				key="type" property="description" />
+			<field name="visibilityDesc"
+				label="$m{application.appformannotation.visibilitydesc}" type="list_only"
+				key="visibility" property="description" />
 			<uniqueConstraint name="nameUc"
 				description="$m{application.appformannotation.uc.name}"
 				fieldList="appFormId,name" />

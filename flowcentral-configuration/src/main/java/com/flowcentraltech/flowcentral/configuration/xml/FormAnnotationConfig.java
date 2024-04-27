@@ -21,7 +21,9 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import com.flowcentraltech.flowcentral.configuration.constants.FormAnnotationType;
+import com.flowcentraltech.flowcentral.configuration.constants.VisibilityType;
 import com.flowcentraltech.flowcentral.configuration.xml.adapter.FormAnnotationTypeXmlAdapter;
+import com.flowcentraltech.flowcentral.configuration.xml.adapter.VisibilityTypeXmlAdapter;
 import com.tcdng.unify.core.util.xml.adapter.CDataXmlAdapter;
 
 /**
@@ -33,6 +35,8 @@ import com.tcdng.unify.core.util.xml.adapter.CDataXmlAdapter;
 public class FormAnnotationConfig {
 
     private FormAnnotationType type;
+    
+    private VisibilityType visibility;
     
     private FilterConfig onCondition;
 
@@ -58,6 +62,16 @@ public class FormAnnotationConfig {
     @XmlAttribute
     public void setType(FormAnnotationType type) {
         this.type = type;
+    }
+
+    public VisibilityType getVisibility() {
+        return visibility;
+    }
+
+    @XmlJavaTypeAdapter(VisibilityTypeXmlAdapter.class)
+    @XmlAttribute
+    public void setVisibility(VisibilityType visibility) {
+        this.visibility = visibility;
     }
 
     public FilterConfig getOnCondition() {

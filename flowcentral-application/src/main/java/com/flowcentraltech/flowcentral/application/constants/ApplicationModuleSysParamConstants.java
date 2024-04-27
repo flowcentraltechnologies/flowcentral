@@ -98,4 +98,6 @@ public interface ApplicationModuleSysParamConstants {
     String ENABLE_OPEN_TAB_IN_BROWSER = "APP-0025";
     
     String ENABLE_DRAFT_WORKFLOW_MULTIITEM_ACTION = "APP-0026";
+    
+    String MESSAGE_VISIBILITY_TIMEOUT = "APP-0027";
 }

@@ -1734,12 +1734,14 @@
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="description" renderWidget="application.text"
 				widthRatio="1" />
+			<column field="typeDesc" renderWidget="application.text"
+				label="$m{application.appformannotation.type}" widthRatio="1" />
+			<column field="visibilityDesc" renderWidget="application.text"
+				label="$m{application.appformannotation.visibility}" widthRatio="1" />
 			<column field="html" renderWidget="application.checkbox"
 				widthRatio="1" />
 			<column field="directPlacement" renderWidget="application.checkbox"
 				widthRatio="1" />
-			<column field="typeDesc" renderWidget="application.text"
-				label="$m{application.appformannotation.type}" widthRatio="1" />
 		</table>
 		<table name="appFormFilterTable"
 			description="$m{studio.appformfilter.table}"
@@ -4673,6 +4675,8 @@
 					<field name="description" inputWidget="application.text"
 						column="0" required="true" />
 					<field name="type" inputWidget="application.enumlist"
+						column="1" required="true" />
+					<field name="visibility" inputWidget="application.enumlist"
 						column="1" required="true" />
 					<field name="html" inputWidget="application.checkbox"
 						column="1" />

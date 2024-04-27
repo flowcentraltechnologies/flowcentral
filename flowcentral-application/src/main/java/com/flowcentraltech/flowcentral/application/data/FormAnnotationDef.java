@@ -17,6 +17,7 @@
 package com.flowcentraltech.flowcentral.application.data;
 
 import com.flowcentraltech.flowcentral.configuration.constants.FormAnnotationType;
+import com.flowcentraltech.flowcentral.configuration.constants.VisibilityType;
 
 /**
  * Form annotation definition.
@@ -27,6 +28,8 @@ import com.flowcentraltech.flowcentral.configuration.constants.FormAnnotationTyp
 public class FormAnnotationDef {
 
     private FormAnnotationType type;
+
+    private VisibilityType visibility;
 
     private FilterDef onCondition;
 
@@ -40,9 +43,10 @@ public class FormAnnotationDef {
 
     private boolean directPlacement;
 
-    public FormAnnotationDef(FormAnnotationType type, String name, String description, String message, boolean html,
-            boolean directPlacement, FilterDef onCondition) {
+    public FormAnnotationDef(FormAnnotationType type, VisibilityType visibility, String name, String description,
+            String message, boolean html, boolean directPlacement, FilterDef onCondition) {
         this.type = type;
+        this.visibility = visibility == null ? VisibilityType.FIXED : visibility;
         this.name = name;
         this.description = description;
         this.message = message;
@@ -53,6 +57,22 @@ public class FormAnnotationDef {
 
     public FormAnnotationType getType() {
         return type;
+    }
+
+    public VisibilityType getVisibility() {
+        return visibility;
+    }
+
+    public boolean isFixed() {
+        return visibility.isFixed();
+    }
+
+    public boolean isDisappearing() {
+        return visibility.isDisappearing();
+    }
+
+    public boolean isClosable() {
+        return visibility.isClosable();
     }
 
     public String getName() {
