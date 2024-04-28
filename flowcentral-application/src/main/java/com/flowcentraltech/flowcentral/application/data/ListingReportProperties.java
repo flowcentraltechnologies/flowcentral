@@ -29,6 +29,8 @@ public class ListingReportProperties extends ListingProperties {
     
     private String name;
 
+    private boolean bodyBorderless;
+    
     public ListingReportProperties(String name, Map<String, Object> properties) {
         super(properties);
         this.name = name;
@@ -40,6 +42,14 @@ public class ListingReportProperties extends ListingProperties {
 
     public String getName() {
         return name;
+    }
+
+    public boolean isBodyBorderless() {
+        return bodyBorderless;
+    }
+
+    public void setBodyBorderless(boolean bodyBorderless) {
+        this.bodyBorderless = bodyBorderless;
     }
     
 }
