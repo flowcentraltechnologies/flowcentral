@@ -22,8 +22,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.flowcentraltech.flowcentral.common.data.TargetFormMessage.FieldTarget;
+import com.flowcentraltech.flowcentral.common.data.TargetFormMessage.SectionTarget;
 import com.tcdng.unify.core.util.DataUtils;
-import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.ui.constant.MessageType;
 
 /**
@@ -34,9 +35,9 @@ import com.tcdng.unify.web.ui.constant.MessageType;
  */
 public class FormValidationErrors {
 
-    private Map<String, String> invalidFields;
+    private Map<String, List<String>> invalidFields;
 
-    private Map<String, String> invalidSections;
+    private Map<String, List<String>> invalidSections;
 
     private List<FormMessage> validationErrors;
 
@@ -63,16 +64,28 @@ public class FormValidationErrors {
     public void addValidationError(TargetFormMessage.Target target, String message) {
         if (target.isFieldTarget()) {
             if (invalidFields == null) {
-                invalidFields = new HashMap<String, String>();
+                invalidFields = new HashMap<String, List<String>>();
             }
 
-            invalidFields.put(target.getName(), message);
+            List<String> _message = invalidFields.get(target.getName());
+            if (_message == null) {
+                _message = new ArrayList<String>();
+                invalidFields.put(target.getName(), _message);
+            }
+            
+            _message.add(message);
         } else if (target.isSectionTarget()) {
             if (invalidSections == null) {
-                invalidSections = new HashMap<String, String>();
+                invalidSections = new HashMap<String, List<String>>();
             }
 
-            invalidSections.put(target.getName(), message);
+            List<String> _message = invalidSections.get(target.getName());
+            if (_message == null) {
+                _message = new ArrayList<String>();
+                invalidSections.put(target.getName(), _message);
+            }
+            
+            _message.add(message);
         }
     }
 
@@ -108,19 +121,21 @@ public class FormValidationErrors {
         hiddenErrors += errors.hiddenErrors;
 
         if (errors.invalidFields != null) {
-            if (invalidFields == null) {
-                invalidFields = new HashMap<String, String>();
+            for (Map.Entry<String, List<String>> entry: errors.invalidFields.entrySet()) {
+                FieldTarget target = new FieldTarget(entry.getKey());
+                for (String _message: entry.getValue()) {
+                    addValidationError(target, _message);
+                }
             }
-
-            invalidFields.putAll(errors.invalidFields);
         }
 
         if (errors.invalidSections != null) {
-            if (invalidSections == null) {
-                invalidSections = new HashMap<String, String>();
+            for (Map.Entry<String, List<String>> entry: errors.invalidSections.entrySet()) {
+                SectionTarget target = new SectionTarget(entry.getKey());
+                for (String _message: entry.getValue()) {
+                    addValidationError(target, _message);
+                }
             }
-
-            invalidSections.putAll(errors.invalidSections);
         }
 
         if (errors.validationErrors != null) {
@@ -171,7 +186,7 @@ public class FormValidationErrors {
         return false;
     }
 
-    public String getFieldError(String fieldName) {
+    public List<String> getFieldError(String fieldName) {
         return invalidFields.get(fieldName);
     }
 
@@ -195,20 +210,12 @@ public class FormValidationErrors {
         return false;
     }
 
-    public String getSectionError(String sectionName) {
+    public List<String> getSectionError(String sectionName) {
         return invalidSections.get(sectionName);
     }
 
     public boolean isWithValidationErrors() {
         return !DataUtils.isBlank(validationErrors);
-    }
-
-    public Map<String, String> getInvalidFields() {
-        return invalidFields;
-    }
-
-    public Map<String, String> getInvalidSections() {
-        return invalidSections;
     }
 
     public int getHiddenErrors() {
@@ -217,11 +224,6 @@ public class FormValidationErrors {
 
     public List<FormMessage> getValidationErrors() {
         return validationErrors;
-    }
-
-    @Override
-    public String toString() {
-        return StringUtils.toXmlString(this);
     }
 
 }

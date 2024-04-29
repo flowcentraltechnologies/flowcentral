@@ -37,10 +37,10 @@ public final class ValidationUtils {
     }
 
     public static boolean isLessThanMinLen(String val, int minLen) {
-        return minLen > 0 && val.trim().length() < minLen;
+        return minLen > 0 && (val == null || (val.trim().length() < minLen));
     }
 
     public static boolean isGreaterThanMaxLen(String val, int maxLen) {
-        return maxLen > 0 && val.trim().length() > maxLen;
+        return val != null && maxLen > 0 && val.trim().length() > maxLen;
     }
 }

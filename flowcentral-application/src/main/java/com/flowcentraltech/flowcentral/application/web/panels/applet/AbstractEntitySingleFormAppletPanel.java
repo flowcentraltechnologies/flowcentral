@@ -138,7 +138,7 @@ public abstract class AbstractEntitySingleFormAppletPanel extends AbstractApplet
             if (form.isWithAttachments()) {
                 form.getAttachments()
                         .setErrorMsg(form.getCtx().isWithSectionError("documents")
-                                ? form.getCtx().getSectionError("documents")
+                                ? form.getCtx().getSectionError("documents").get(0)
                                 : null);
             }
         }

@@ -18,10 +18,13 @@ package com.flowcentraltech.flowcentral.application.web.writers;
 
 import java.util.List;
 
+import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.application.data.FormAnnotationDef;
 import com.flowcentraltech.flowcentral.application.web.widgets.FormAnnotationWidget;
+import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
+import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.Writes;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.web.ui.widget.EventHandler;
@@ -38,6 +41,9 @@ import com.tcdng.unify.web.ui.widget.writer.AbstractControlWriter;
 @Writes(FormAnnotationWidget.class)
 @Component("formannotation-writer")
 public class FormAnnotationWriter extends AbstractControlWriter {
+
+    @Configurable
+    private SystemModuleService systemModuleService;
 
     @Override
     protected void doWriteStructureAndContent(ResponseWriter writer, Widget widget) throws UnifyException {
@@ -92,10 +98,12 @@ public class FormAnnotationWriter extends AbstractControlWriter {
     protected void doWriteBehavior(ResponseWriter writer, Widget widget, EventHandler[] handlers)
             throws UnifyException {
         FormAnnotationWidget frmAnnotationWidget = (FormAnnotationWidget) widget;
+        final int hideMessageInSeconds = systemModuleService.getSysParameterValue(int.class,
+                ApplicationModuleSysParamConstants.MESSAGE_VISIBILITY_TIMEOUT);
 
         writer.beginFunction("fux.rigFormAnnotation");
         writer.writeParam("pId", frmAnnotationWidget.getId());
-        writer.writeParam("pHideSec", 5);
+        writer.writeParam("pHideSec", hideMessageInSeconds);
 
         List<FormAnnotationDef> formAnnotationDefList = frmAnnotationWidget.getFormAnnotationDef();
         if (!DataUtils.isBlank(formAnnotationDefList)) {
@@ -108,7 +116,7 @@ public class FormAnnotationWriter extends AbstractControlWriter {
 
             writer.writeObjectParam("pAnnot", flags);
         }
-        
+
         writer.endFunction();
     }
 

@@ -417,7 +417,7 @@ public class FormContext extends AbstractContext {
         return formValidationErrors.isWithFieldError(fieldNames);
     }
 
-    public String getFieldError(String fieldName) {
+    public List<String> getFieldError(String fieldName) {
         return formValidationErrors.getFieldError(fieldName);
     }
 
@@ -433,7 +433,7 @@ public class FormContext extends AbstractContext {
         return formValidationErrors.isWithSectionError(sectionNames);
     }
 
-    public String getSectionError(String sectionName) {
+    public List<String> getSectionError(String sectionName) {
         return formValidationErrors.getSectionError(sectionName);
     }
 

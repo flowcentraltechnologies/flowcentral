@@ -25,6 +25,7 @@ import java.util.Map;
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.business.EntityMatcher;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleNameConstants;
+import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.FieldValidationPolicyDef;
@@ -45,6 +46,7 @@ import com.flowcentraltech.flowcentral.common.business.policies.ReviewResult;
 import com.flowcentraltech.flowcentral.common.data.TargetFormMessage;
 import com.flowcentraltech.flowcentral.common.data.TargetFormMessage.FieldTarget;
 import com.flowcentraltech.flowcentral.common.util.ValidationUtils;
+import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -63,6 +65,9 @@ import com.tcdng.unify.core.util.StringUtils;
  */
 @Component(ApplicationModuleNameConstants.FORMCONTEXT_EVALUATOR)
 public class FormContextEvaluatorImpl extends AbstractFlowCentralComponent implements FormContextEvaluator {
+
+    @Configurable
+    private SystemModuleService systemModuleService;
 
     @Configurable
     private EnvironmentService environmentService;
@@ -87,6 +92,8 @@ public class FormContextEvaluatorImpl extends AbstractFlowCentralComponent imple
         ctx.clearValidationErrors();
         ctx.clearReviewErrors();
         if (vCtx.isEvaluation()) {
+            final boolean multiErrorMessages = systemModuleService.getSysParameterValue(boolean.class,
+                    ApplicationModuleSysParamConstants.MULTI_ERROR_MESSAGES_ENABLED);
             final FormDef formDef = ctx.getFormDef();
             final EntityDef entityDef = formDef.getEntityDef();
             final Object inst = ctx.getInst();
@@ -101,10 +108,13 @@ public class FormContextEvaluatorImpl extends AbstractFlowCentralComponent imple
                     String fieldName = formWidgetState.getFieldName();
                     Object val = DataUtils.getBeanProperty(Object.class, inst, fieldName);
                     fieldsInScope.put(fieldName, val);
-                    if (formWidgetState.isRequired() && ValidationUtils.isBlank(val)) {
+                    final boolean required = formWidgetState.isRequired() && ValidationUtils.isBlank(val);
+                    if (required) {
                         ctx.addValidationError(new FieldTarget(fieldName), getApplicationMessage(
                                 "application.validation.formfield.required", formWidgetState.getFieldLabel()));
-                    } else if (val instanceof String) {
+                    }
+                        
+                    if ((multiErrorMessages || !required) && entityDef.getFieldDef(fieldName).isString()) {
                         String valString = (String) val;
                         if (ValidationUtils.isLessThanMinLen(valString,
                                 DataUtils.convert(int.class, formWidgetState.getMinLen()))) {
@@ -170,7 +180,7 @@ public class FormContextEvaluatorImpl extends AbstractFlowCentralComponent imple
                                 : null;
                         for (UniqueConstraintDef constDef : entityDef.getUniqueConstraintList()) {
                             List<String> fieldList = constDef.getFieldList();
-                            if (!ctx.isWithFieldError(fieldList)) {
+                            if (multiErrorMessages || !ctx.isWithFieldError(fieldList)) {
                                 Query query = Query.of((Class<? extends Entity>) entityClassDef.getEntityClass());
                                 if (isUpdate) {
                                     query.addNotEquals("id", id);
@@ -227,7 +237,7 @@ public class FormContextEvaluatorImpl extends AbstractFlowCentralComponent imple
                     }
                 }
 
-                if (!ctx.isWithFormErrors()) {
+                if (multiErrorMessages || !ctx.isWithFormErrors()) {
                     // Check form validations
                     if (formDef.isWithConsolidatedFormValidation()) {
                         ConsolidatedFormValidationPolicy policy = au.getComponent(
@@ -257,7 +267,8 @@ public class FormContextEvaluatorImpl extends AbstractFlowCentralComponent imple
                     }
                 }
 
-                if (!ctx.isWithFormErrors() && entityDef.delegated() && entityDef.isActionPolicy()) {
+                if ((multiErrorMessages || !ctx.isWithFormErrors()) && entityDef.delegated()
+                        && entityDef.isActionPolicy()) {
                     List<String> errors = environmentService.validate((Entity) inst, vCtx.getEvaluationMode());
                     ctx.addValidationErrorMessages(errors);
                 }

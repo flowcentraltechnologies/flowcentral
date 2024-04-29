@@ -128,5 +128,11 @@
 		<sysParameter code="APP-0027" defaultVal="5"
 			description="$m{application.sysparam.messagevisibilitytimeout}"
 			editor="!ui-integer precision:2" type="number" editable="true" />
+		<sysParameter code="APP-0028" defaultVal="false"
+			description="$m{application.sysparam.enablemultierrormessages}"
+			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
+		<sysParameter code="APP-0029" defaultVal="false"
+			description="$m{application.sysparam.enablehideerrormessagesoninput}"
+			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
 	</sysParameters>
 </module>

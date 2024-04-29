@@ -170,7 +170,12 @@ public abstract class AbstractFormListingGenerator extends AbstractFormListingRe
             writer.write(">");
             writeReportHeader(reader, listingReportProperties, new HtmlListingGeneratorWriter(formListing, themeManager,
                     entityImageProvider, listingReportProperties.getName(), writer, pausePrintColors, false));
-            writer.write("<div class=\"flbody\">");
+            if (listingReportProperties.isBodyBorderless()) {
+                writer.write("<div>");
+            } else {
+                writer.write("<div class=\"flbody\">");
+            }
+            
             generateHtmlListing(formListing, listingReportProperties.getName(), reader, listingReportProperties, writer,
                     pausePrintColors, false);
             writeReportAddendum(reader, listingReportProperties,
