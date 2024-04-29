@@ -188,7 +188,8 @@ public class MiniFormWriter extends AbstractControlWriter {
             if (ctx.isWithSectionError(formSection.getName())) {
                 writer.write("<div>");
                 for (String msg : ctx.getSectionError(formSection.getName())) {
-                    writer.write("<div><span class=\"errmsg\">").write(resolveSessionMessage(msg)).write("</span></div>");
+                    writer.write("<div><span class=\"errmsg\">").write(resolveSessionMessage(msg))
+                            .write("</span></div>");
                 }
                 writer.write("</div>");
             }
@@ -226,7 +227,8 @@ public class MiniFormWriter extends AbstractControlWriter {
             writer.writeStructureAndContent(formWidget.getResolvedWidget());
             if (ctx.isWithFieldError(formWidget.getFieldName())) {
                 for (String msg : ctx.getFieldError(formWidget.getFieldName())) {
-                    writer.write("<div><span class=\"errmsg\">").write(msg).write("</span></div>");
+                    writer.write("<div><span class=\"errmsg\">").write(resolveSessionMessage(msg))
+                            .write("</span></div>");
                 }
             }
 
