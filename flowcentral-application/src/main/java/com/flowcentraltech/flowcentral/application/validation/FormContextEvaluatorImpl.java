@@ -113,7 +113,7 @@ public class FormContextEvaluatorImpl extends AbstractFlowCentralComponent imple
                         ctx.addValidationError(new FieldTarget(fieldName), getApplicationMessage(
                                 "application.validation.formfield.required", formWidgetState.getFieldLabel()));
                     }
-                        
+
                     if ((multiErrorMessages || !required) && entityDef.getFieldDef(fieldName).isString()) {
                         String valString = (String) val;
                         if (ValidationUtils.isLessThanMinLen(valString,
