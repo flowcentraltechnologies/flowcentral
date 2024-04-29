@@ -177,7 +177,7 @@ public class MiniFormWriter extends AbstractControlWriter {
     }
 
     private boolean writeSectionLabel(ResponseWriter writer, FormContext ctx, FormSection formSection, boolean isPreGap,
-            boolean isClassicFormSection) throws UnifyException  {
+            boolean isClassicFormSection) throws UnifyException {
         if (formSection.isWithLabel()) {
             if (isPreGap) {
                 writer.write("<div class=\"mfgap\"></div>");
@@ -186,8 +186,11 @@ public class MiniFormWriter extends AbstractControlWriter {
             writer.write(isClassicFormSection ? "<div class=\"mfsectionl\"><span>" : "<div class=\"mfsection\"><span>")
                     .writeWithHtmlEscape(formSection.getLabel()).write("</span></div>");
             if (ctx.isWithSectionError(formSection.getName())) {
-                writer.write("<div><span class=\"errmsg\">")
-                        .write(resolveSessionMessage(ctx.getSectionError(formSection.getName()))).write("</span></div>");
+                writer.write("<div>");
+                for (String msg : ctx.getSectionError(formSection.getName())) {
+                    writer.write("<div><span class=\"errmsg\">").write(resolveSessionMessage(msg)).write("</span></div>");
+                }
+                writer.write("</div>");
             }
             return true;
         }
@@ -222,8 +225,9 @@ public class MiniFormWriter extends AbstractControlWriter {
             writer.write("<div class=\"mfcontent\">");
             writer.writeStructureAndContent(formWidget.getResolvedWidget());
             if (ctx.isWithFieldError(formWidget.getFieldName())) {
-                writer.write("<span class=\"errmsg\">")
-                        .write(resolveSessionMessage(ctx.getFieldError(formWidget.getFieldName()))).write("</span>");
+                for (String msg : ctx.getFieldError(formWidget.getFieldName())) {
+                    writer.write("<div><span class=\"errmsg\">").write(msg).write("</span></div>");
+                }
             }
 
             writer.write("</div>");

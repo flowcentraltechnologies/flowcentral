@@ -100,4 +100,8 @@ public interface ApplicationModuleSysParamConstants {
     String ENABLE_DRAFT_WORKFLOW_MULTIITEM_ACTION = "APP-0026";
     
     String MESSAGE_VISIBILITY_TIMEOUT = "APP-0027";
+    
+    String MULTI_ERROR_MESSAGES_ENABLED = "APP-0028";
+    
+    String HIDE_ERROR_MESSAGES_ON_INPUT = "APP-0029";
 }

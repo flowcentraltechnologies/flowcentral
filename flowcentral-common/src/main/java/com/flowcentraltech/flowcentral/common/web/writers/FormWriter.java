@@ -140,7 +140,8 @@ public class FormWriter extends AbstractContainerWriter {
         writer.write("</div>");
     }
 
-    private void writeFieldCell(ResponseWriter writer, FormValidationErrors errors, Widget widget) throws UnifyException {
+    private void writeFieldCell(ResponseWriter writer, FormValidationErrors errors, Widget widget)
+            throws UnifyException {
         if (widget.isVisible()) {
             writer.write("<div class=\"ffield\">");
             writer.write("<div class=\"ffieldrow\">");
@@ -157,11 +158,11 @@ public class FormWriter extends AbstractContainerWriter {
                 }
                 writer.write("\"/>");
             }
-            
+
             if (widget.isLayoutCaption()) {
                 writer.writeWithHtmlEscape(widget.getCaption());
             }
-            
+
             writer.write("</span>");
             writer.write("</div>");
             writer.write("</div>");
@@ -171,8 +172,9 @@ public class FormWriter extends AbstractContainerWriter {
             writer.write("<div class=\"fcontent\">");
             writer.writeStructureAndContent(widget);
             if (errors != null && errors.isWithFieldError(widget.getBinding())) {
-                writer.write("<span class=\"errmsg\">")
-                        .write(resolveSessionMessage(errors.getFieldError(widget.getBinding()))).write("</span>");
+                for (String msg : errors.getFieldError(widget.getBinding())) {
+                    writer.write("<div><span class=\"errmsg\">").write(resolveSessionMessage(msg)).write("</span></div>");
+                }
             }
 
             writer.write("</div>");
