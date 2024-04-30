@@ -131,22 +131,25 @@ public class FormContextEvaluatorImpl extends AbstractFlowCentralComponent imple
                         } else {
                             String validatorName = widgetValidatorMap.get(formWidgetState.getWidgetName());
                             if (!StringUtils.isBlank(validatorName)) {
-                                Validator validator = (Validator) getComponent(validatorName);
-                                if ("application.emailset".equals(formWidgetState.getWidgetName())
-                                        || "application.mobileset".equals(formWidgetState.getWidgetName())) {
-                                    String[] contacts = ((String) val).split(";|,");
-                                    for (String contact : contacts) {
-                                        if (!validator.validate(null, contact.trim())) {
+                                if (valString != null) {
+                                    Validator validator = (Validator) getComponent(validatorName);
+                                    if ("application.emailset".equals(formWidgetState.getWidgetName())
+                                            || "application.mobileset".equals(formWidgetState.getWidgetName())) {
+                                        String[] contacts = valString.split(";|,");
+                                        for (String contact : contacts) {
+                                            if (!validator.validate(null, contact.trim())) {
+                                                ctx.addValidationError(new FieldTarget(fieldName),
+                                                        validator.getFailureMessage(null,
+                                                                entityDef.getFieldDef(fieldName).getFieldLabel()));
+                                                break;
+                                            }
+                                        }
+                                    } else {
+                                        if (!validator.validate(null, valString)) {
                                             ctx.addValidationError(new FieldTarget(fieldName),
                                                     validator.getFailureMessage(null,
                                                             entityDef.getFieldDef(fieldName).getFieldLabel()));
-                                            break;
                                         }
-                                    }
-                                } else {
-                                    if (!validator.validate(null, val)) {
-                                        ctx.addValidationError(new FieldTarget(fieldName), validator.getFailureMessage(
-                                                null, entityDef.getFieldDef(fieldName).getFieldLabel()));
                                     }
                                 }
                             }
