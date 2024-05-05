@@ -426,8 +426,17 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
                             TenantChannelInfo tenantChannelInfo = tenantChannelInfos.get(tenantId);
                             final NotifChannelDef notifChannelDef = tenantChannelInfo
                                     .getNotificationChannelDef(notifType);
-                            if (notifChannelDef.isThrottledAndIsNotDue(now)) {
-                                continue;
+                            if (notifChannelDef.isThrottled()) {
+                                logDebug("Throttling detected for [{0}] and tenant with id [{1}]...",
+                                        notifChannelDef.getName(), tenantId);
+                                if (notifChannelDef.isThrottledAndIsNotDue(now)) {
+                                    logDebug("Throttling not due an skipped for [{0}] and tenant with id [{1}].",
+                                            notifChannelDef.getName(), tenantId);
+                                    continue;
+                                }
+
+                                logDebug("Applying throttle at the rate of [{0}] messages per minute...",
+                                        notifChannelDef.getMessagesPerMinute());
                             }
 
                             try {
