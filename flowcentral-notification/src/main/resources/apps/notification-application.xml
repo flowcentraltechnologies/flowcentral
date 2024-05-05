@@ -164,8 +164,8 @@
 				label="$m{notification.notificationoutbox.attachments}"
 				type="child_list" references="notifOutboxAttachmentRef" />
 			<field name="errorList"
-				label="$m{notification.notificationoutbox.errors}"
-				type="child_list" references="notifOutboxErrorRef" />
+				label="$m{notification.notificationoutbox.errors}" type="child_list"
+				references="notifOutboxErrorRef" />
 		</entity>
 		<entity name="notifRecipient"
 			description="$m{notification.notificationrecipient}"
@@ -196,8 +196,7 @@
 				label="$m{notification.notificationoutboxerror.notificationid}"
 				type="ref" references="notifOutboxRef" basicSearch="true" />
 			<field name="error"
-				label="$m{notification.notificationoutboxerror.error}"
-				type="string" />
+				label="$m{notification.notificationoutboxerror.error}" type="string" />
 		</entity>
 		<entity name="notifOutboxAttachment"
 			description="$m{notification.notificationoutboxattachment}"
@@ -249,6 +248,13 @@
 			<field name="senderContact"
 				label="$m{notification.notificationchannel.sendercontact}"
 				type="string" inputWidget="application.text" maxLen="96" />
+			<field name="nextTransmissionOn"
+				label="$m{notification.notificationchannel.nexttransmissionon}"
+				type="timestamp" inputWidget="application.datetime" nullable="true" />
+			<field name="messagesPerMinute"
+				label="$m{notification.notificationchannel.messagesperminute}"
+				type="integer" inputWidget="application.integer" nullable="true"
+				precision="6" />
 			<field name="notificationTypeDesc"
 				label="$m{notification.notificationchannel.typedesc}"
 				type="list_only" key="notificationType" property="description" />
@@ -318,12 +324,12 @@
 			<uniqueConstraint name="nameUc"
 				description="$m{notification.notificationtemplate.uc.name}"
 				fieldList="applicationId,name">
-				<condition field="devVersionType" value="CRN"/>
+				<condition field="devVersionType" value="CRN" />
 			</uniqueConstraint>
 			<uniqueConstraint name="descUc"
 				description="$m{notification.notificationtemplate.uc.description}"
 				fieldList="applicationId,description">
-				<condition field="devVersionType" value="CRN"/>
+				<condition field="devVersionType" value="CRN" />
 			</uniqueConstraint>
 		</entity>
 		<entity name="notifTemplateParam"
@@ -352,11 +358,12 @@
 				label="$m{notification.notificationlargetext.entity}" type="string"
 				maxLen="128" />
 			<field name="fontFamily"
-				label="$m{notification.notificationlargetext.fontfamily}" type="enum"
-				references="fontfamilylist"  inputWidget="application.enumlist" nullable="true"/>
+				label="$m{notification.notificationlargetext.fontfamily}"
+				type="enum" references="fontfamilylist"
+				inputWidget="application.enumlist" nullable="true" />
 			<field name="fontSizeInPixels"
-				label="$m{notification.notificationlargetext.fontsizeinpixels}" type="integer"
-				precision="2" nullable="true"/>
+				label="$m{notification.notificationlargetext.fontsizeinpixels}"
+				type="integer" precision="2" nullable="true" />
 			<field name="body"
 				label="$m{notification.notificationlargetext.body}" type="clob" />
 			<field name="paramList"
@@ -365,12 +372,12 @@
 			<uniqueConstraint name="nameUc"
 				description="$m{notification.notificationlargetext.uc.name}"
 				fieldList="applicationId,name">
-				<condition field="devVersionType" value="CRN"/>
+				<condition field="devVersionType" value="CRN" />
 			</uniqueConstraint>
 			<uniqueConstraint name="descUc"
 				description="$m{notification.notificationlargetext.uc.description}"
 				fieldList="applicationId,description">
-				<condition field="devVersionType" value="CRN"/>
+				<condition field="devVersionType" value="CRN" />
 			</uniqueConstraint>
 		</entity>
 		<entity name="notifLargeTextParam"
@@ -406,11 +413,12 @@
 			<column field="formatDesc" renderWidget="application.text"
 				label="$m{notification.notificationoutbox.format}" widthRatio="2" />
 			<column field="importanceDesc" renderWidget="application.text"
-				label="$m{notification.notificationoutbox.importance}" widthRatio="2" />
+				label="$m{notification.notificationoutbox.importance}"
+				widthRatio="2" />
 			<column field="attempts" renderWidget="application.integer"
 				widthRatio="2" />
 			<column field="createDt" renderWidget="application.datetime"
-				widthRatio="2" order="DESC"/>
+				widthRatio="2" order="DESC" />
 			<column field="nextAttemptDt"
 				renderWidget="application.datetime" widthRatio="2" />
 			<column field="sentDt" renderWidget="application.datetime"
@@ -435,10 +443,10 @@
 			label="$m{notification.notificationoutboxerror.table.label}"
 			entity="notifOutboxError" itemsPerPage="20" serialNo="true"
 			basicSearch="true">
-			<column field="error"
-				renderWidget="application.text" widthRatio="4" />
-			<column field="createDt"
-				renderWidget="application.text" widthRatio="1" />
+			<column field="error" renderWidget="application.text"
+				widthRatio="4" />
+			<column field="createDt" renderWidget="application.text"
+				widthRatio="1" />
 		</table>
 		<table name="notifOutboxAttachmentTable"
 			description="$m{notification.notificationoutboxattachment.table}"
@@ -469,6 +477,10 @@
 				widthRatio="1" />
 			<column field="senderContact" renderWidget="application.text"
 				widthRatio="1" />
+			<column field="messagesPerMinute"
+				renderWidget="application.integer" widthRatio="1" />
+			<column field="nextTransmissionOn"
+				renderWidget="application.datetime" widthRatio="1" />
 			<column field="createDt" renderWidget="application.datetime"
 				widthRatio="1" />
 			<column field="updateDt" renderWidget="application.datetime"
@@ -537,7 +549,8 @@
 			<tab name="basicDetails"
 				label="$m{notification.notificationchannel.form.basicdetails}"
 				contentType="miniform">
-				<section name="channelDetails" columns="type_2">
+				<section name="channelDetails" columns="type_2"
+					label="$m{notification.notificationchannel.form.basicdetails}">
 					<field name="notificationType"
 						inputWidget="application.enumlist" column="0" required="true"
 						switchOnChange="true" />
@@ -551,6 +564,13 @@
 						column="1" required="true" />
 					<field name="status" inputWidget="application.enumlist"
 						column="1" required="true" />
+				</section>
+				<section name="throttlingDetails" columns="type_2"
+					label="$m{notification.notificationchannel.form.throttlingdetails}">
+					<field name="messagesPerMinute" column="0"
+						required="false" />
+					<field name="nextTransmissionOn"
+						column="1" required="false" editable="false" />
 				</section>
 			</tab>
 			<tab name="settings"

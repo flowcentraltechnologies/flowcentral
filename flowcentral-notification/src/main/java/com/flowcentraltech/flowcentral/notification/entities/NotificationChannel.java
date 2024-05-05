@@ -15,14 +15,17 @@
  */
 package com.flowcentraltech.flowcentral.notification.entities;
 
+import java.util.Date;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.common.entities.BaseStatusTenantEntity;
 import com.flowcentraltech.flowcentral.configuration.constants.NotifType;
 import com.tcdng.unify.core.annotation.ChildList;
 import com.tcdng.unify.core.annotation.Column;
+import com.tcdng.unify.core.annotation.ColumnType;
 import com.tcdng.unify.core.annotation.ForeignKey;
 import com.tcdng.unify.core.annotation.ListOnly;
+import com.tcdng.unify.core.annotation.Policy;
 import com.tcdng.unify.core.annotation.Table;
 import com.tcdng.unify.core.annotation.UniqueConstraint;
 
@@ -32,6 +35,7 @@ import com.tcdng.unify.core.annotation.UniqueConstraint;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
+@Policy("notificationchannel-entitypolicy")
 @Table(name = "FC_NOTIFCHANNEL", uniqueConstraints = { @UniqueConstraint({ "notificationType" }),
         @UniqueConstraint({ "name" }), @UniqueConstraint({ "description" }) })
 public class NotificationChannel extends BaseStatusTenantEntity {
@@ -51,6 +55,12 @@ public class NotificationChannel extends BaseStatusTenantEntity {
     @Column(length = 96)
     private String senderContact;
 
+    @Column(type = ColumnType.TIMESTAMP, nullable = true)
+    private Date nextTransmissionOn;
+
+    @Column(nullable = true)
+    private Integer messagesPerMinute;
+    
     @ListOnly(key = "notificationType", property = "description")
     private String notificationTypeDesc;
 
@@ -101,6 +111,23 @@ public class NotificationChannel extends BaseStatusTenantEntity {
     public void setSenderContact(String senderContact) {
         this.senderContact = senderContact;
     }
+    
+    public Date getNextTransmissionOn() {
+        return nextTransmissionOn;
+    }
+
+    public void setNextTransmissionOn(Date nextTransmissionOn) {
+        this.nextTransmissionOn = nextTransmissionOn;
+    }
+
+    public Integer getMessagesPerMinute() {
+        return messagesPerMinute;
+    }
+
+    public void setMessagesPerMinute(Integer messagesPerMinute) {
+        this.messagesPerMinute = messagesPerMinute;
+    }
+
     public void setDescription(String description) {
         this.description = description;
     }
