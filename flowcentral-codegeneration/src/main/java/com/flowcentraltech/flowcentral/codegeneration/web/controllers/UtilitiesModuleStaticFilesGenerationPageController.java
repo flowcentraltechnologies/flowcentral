@@ -55,8 +55,8 @@ public class UtilitiesModuleStaticFilesGenerationPageController
     public String generateStaticFiles() throws UnifyException {
         UtilitiesModuleStaticFilesGenerationPageBean pageBean = getPageBean();
         pageBean.setCodeGenerationItem(new CodeGenerationItem(pageBean.getBasePackage()));
-        TaskSetup taskSetup = TaskSetup.newBuilder()
-                .addTask(CodeGenerationTaskConstants.GENERATE_UTILITIES_MODULE_FILES_TASK_NAME)
+        TaskSetup taskSetup = TaskSetup
+                .newBuilder(CodeGenerationTaskConstants.GENERATE_UTILITIES_MODULE_FILES_TASK_NAME)
                 .setParam(CodeGenerationTaskConstants.CODEGENERATION_ITEM, pageBean.getCodeGenerationItem())
                 .logMessages().build();
         return launchTaskWithMonitorBox(taskSetup, "Generate Static Application Files (Utilities)",

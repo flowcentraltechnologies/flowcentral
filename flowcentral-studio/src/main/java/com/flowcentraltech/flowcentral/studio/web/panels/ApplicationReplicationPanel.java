@@ -57,8 +57,7 @@ public class ApplicationReplicationPanel extends AbstractApplicationPanel {
             return;
         }
 
-        TaskSetup taskSetup = TaskSetup.newBuilder()
-                .addTask(ApplicationReplicationTaskConstants.APPLICATION_REPLICATION_TASK_NAME)
+        TaskSetup taskSetup = TaskSetup.newBuilder(ApplicationReplicationTaskConstants.APPLICATION_REPLICATION_TASK_NAME)
                 .setParam(ApplicationReplicationTaskConstants.SOURCE_APPLICATION_NAME,
                         replication.getSourceApplication())
                 .setParam(ApplicationReplicationTaskConstants.DESTINATION_MODULE_NAME, replication.getTargetModule())

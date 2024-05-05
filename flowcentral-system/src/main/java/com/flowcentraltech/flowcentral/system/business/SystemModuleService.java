@@ -29,7 +29,6 @@ import com.flowcentraltech.flowcentral.system.entities.MappedTenant;
 import com.flowcentraltech.flowcentral.system.entities.MappedTenantQuery;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.Listable;
-import com.tcdng.unify.core.task.TaskStatus;
 
 /**
  * System module service.
@@ -233,24 +232,6 @@ public interface SystemModuleService extends FlowCentralService {
      *                        if an error occurs
      */
     int setSysParameterValue(String code, Object value) throws UnifyException;
-
-    /**
-     * Log scheduled task completion.
-     * 
-     * @param scheduledTaskId
-     *                             the scheduled task ID
-     * @param scheduledTaskHistId
-     *                             the scheduled task history
-     * @param completionTaskStatus
-     *                             the task completion status
-     * @param errorMsg
-     *                             optional error messages
-     * @throws UnifyException
-     *                        if scheduled task history does not exist. if an error
-     *                        occurs
-     */
-    void logScheduledTaskCompletion(Long scheduledTaskId, Long scheduledTaskHistId, TaskStatus completionTaskStatus,
-            String errorMsg) throws UnifyException;
 
     /**
      * Get names system parameters.

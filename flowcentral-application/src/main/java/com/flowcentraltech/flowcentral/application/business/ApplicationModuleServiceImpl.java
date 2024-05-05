@@ -3122,7 +3122,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
         logDebug(taskMonitor,
                 "Executing application replication from source application [{0}] to destination application [{1}] and module [{2}]...",
                 srcApplicationName, destApplicationName, destModuleName);
-        taskMonitor.getCurrentTaskOutput().setResult(ApplicationReplicationTaskConstants.TASK_SUCCESS, Boolean.FALSE);
+        taskMonitor.getTaskOutput().setResult(ApplicationReplicationTaskConstants.TASK_SUCCESS, Boolean.FALSE);
         logDebug(taskMonitor, "Checking if source application exists...");
         final Application srcApplication = environment().list(new ApplicationQuery().name(srcApplicationName));
         if (srcApplication == null) {
@@ -3577,7 +3577,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
 
         logDebug(taskMonitor, "Application successfully replicated.");
 
-        taskMonitor.getCurrentTaskOutput().setResult(ApplicationReplicationTaskConstants.TASK_SUCCESS, Boolean.TRUE);
+        taskMonitor.getTaskOutput().setResult(ApplicationReplicationTaskConstants.TASK_SUCCESS, Boolean.TRUE);
         return 0;
     }
 
@@ -3590,7 +3590,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
     public int executeApplicationDeletionTask(TaskMonitor taskMonitor, String applicationName) throws UnifyException {
         logDebug(taskMonitor, "Executing deletion on application [{0}] ...", applicationName);
         logDebug(taskMonitor, "Checking if application developable...");
-        taskMonitor.getCurrentTaskOutput().setResult(ApplicationDeletionTaskConstants.TASK_SUCCESS, Boolean.FALSE);
+        taskMonitor.getTaskOutput().setResult(ApplicationDeletionTaskConstants.TASK_SUCCESS, Boolean.FALSE);
         int deletionCount = 0;
         final Application application = environment().list(new ApplicationQuery().name(applicationName));
         if (!application.isDevelopable()) {
@@ -3633,7 +3633,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
 
         environment().delete(application);
         logDebug(taskMonitor, "Application successfully deleted.");
-        taskMonitor.getCurrentTaskOutput().setResult(ApplicationDeletionTaskConstants.TASK_SUCCESS, Boolean.TRUE);
+        taskMonitor.getTaskOutput().setResult(ApplicationDeletionTaskConstants.TASK_SUCCESS, Boolean.TRUE);
         return deletionCount;
     }
 

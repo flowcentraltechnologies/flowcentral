@@ -25,7 +25,6 @@ import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.database.Query;
 import com.tcdng.unify.core.task.TaskInput;
 import com.tcdng.unify.core.task.TaskMonitor;
-import com.tcdng.unify.core.task.TaskOutput;
 
 /**
  * Convenient abstract base class for notification template tasks.
@@ -43,7 +42,7 @@ public abstract class AbstractNotificationTemplateTask<T extends NotifTemplateWr
     }
 
     @Override
-    public void execute(TaskMonitor monitor, TaskInput input, TaskOutput output) throws UnifyException {
+    public void execute(TaskMonitor monitor, TaskInput input) throws UnifyException {
         composeAndSend();
     }
 
