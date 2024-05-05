@@ -38,8 +38,8 @@ public class TaskExecutionAppletPanel extends AbstractAppletPanel {
     @Action
     public void executeTask() throws UnifyException {
         TaskExecutionApplet applet = getTaskExecutionApplet();
-        TaskSetup.Builder tsb = TaskSetup.newBuilder()
-                .addTask(applet.getRootAppletProp(String.class, AppletPropertyConstants.TASKEXECUTION_TASKNAME));
+        TaskSetup.Builder tsb = TaskSetup
+                .newBuilder(applet.getRootAppletProp(String.class, AppletPropertyConstants.TASKEXECUTION_TASKNAME));
         ParamValueEntries paramValueEntries = applet.getParamValueEntries();
         for (ParamValueEntry entry : paramValueEntries.getEntryList()) {
             tsb.setParam(entry.getParamConfig().getParamName(), entry.getParamInput().getValue());

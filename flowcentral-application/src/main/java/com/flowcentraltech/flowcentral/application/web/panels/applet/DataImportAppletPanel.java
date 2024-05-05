@@ -45,7 +45,7 @@ public class DataImportAppletPanel extends AbstractAppletPanel {
         }
 
         AppletDef appletDef = application().getAppletDef(applet.getAppletName());
-        TaskSetup taskSetup = TaskSetup.newBuilder().addTask(ApplicationImportDataTaskConstants.IMPORTDATA_TASK_NAME)
+        TaskSetup taskSetup = TaskSetup.newBuilder(ApplicationImportDataTaskConstants.IMPORTDATA_TASK_NAME)
                 .setParam(ApplicationImportDataTaskConstants.IMPORTDATA_ENTITY, appletDef.getEntity())
                 .setParam(ApplicationImportDataTaskConstants.IMPORTDATA_UPLOADCONFIG,
                         appletDef.getPropDef(AppletPropertyConstants.IMPORTDATA_CONFIGNAME).getValue(String.class))

@@ -25,7 +25,6 @@ import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.database.Query;
 import com.tcdng.unify.core.task.TaskInput;
 import com.tcdng.unify.core.task.TaskMonitor;
-import com.tcdng.unify.core.task.TaskOutput;
 
 /**
  * Convenient abstract base class for notification multi-template tasks.
@@ -36,7 +35,7 @@ import com.tcdng.unify.core.task.TaskOutput;
 public abstract class AbstractNotificationMultiTemplateTask extends AbstractNotificationTask {
 
     @Override
-    public void execute(TaskMonitor monitor, TaskInput input, TaskOutput output) throws UnifyException {
+    public void execute(TaskMonitor monitor, TaskInput input) throws UnifyException {
         composeAndSend();
     }
 

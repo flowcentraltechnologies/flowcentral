@@ -48,8 +48,8 @@ public class DelegateUpdateSynchronizationPageController
         DelegateUpdateSynchronizationPageBean pageBean = getPageBean();
         DelegateSynchronizationItem delegateSynchronizationItem = new DelegateSynchronizationItem();
         delegateSynchronizationItem.setDelegate(pageBean.getDelegate());
-        TaskSetup taskSetup = TaskSetup.newBuilder()
-                .addTask(StudioDelegateSynchronizationTaskConstants.DELEGATE_UPDATE_SYNCHRONIZATION_TASK_NAME)
+        TaskSetup taskSetup = TaskSetup
+                .newBuilder(StudioDelegateSynchronizationTaskConstants.DELEGATE_UPDATE_SYNCHRONIZATION_TASK_NAME)
                 .setParam(StudioDelegateSynchronizationTaskConstants.DELEGATE_SYNCHRONIZATION_ITEM,
                         delegateSynchronizationItem)
                 .logMessages().build();

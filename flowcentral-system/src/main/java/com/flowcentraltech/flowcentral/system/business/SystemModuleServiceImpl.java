@@ -124,7 +124,7 @@ import com.tcdng.unify.core.util.StringUtils;
 @Transactional
 @Component(SystemModuleNameConstants.SYSTEM_MODULE_SERVICE)
 public class SystemModuleServiceImpl extends AbstractFlowCentralService
-        implements SystemModuleService, LicenseProvider, SpecialParamProvider, SystemParameterProvider {
+        implements SystemModuleService, LicenseProvider, SpecialParamProvider, SystemParameterProvider, TaskStatusLogger {
 
     private static final String LICENSE = "license";
 
@@ -136,9 +136,6 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
 
     @Configurable
     private TaskManager taskManager;
-
-    @Configurable("scheduledtaskstatuslogger")
-    private TaskStatusLogger taskStatusLogger;
 
     @Configurable
     private FileAttachmentProvider fileAttachmentProvider;
@@ -534,22 +531,28 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
-    public void logScheduledTaskCompletion(Long scheduledTaskId, Long scheduledTaskHistId, TaskStatus completionTaskStatus,
-            String errorMsg) throws UnifyException {
-        // Update history
-        ScheduledTaskHist scheduledTaskHist = environment().find(ScheduledTaskHist.class, scheduledTaskHistId);
-        scheduledTaskHist.setFinishedOn(getNow());
-        scheduledTaskHist.setTaskStatus(completionTaskStatus);
-        scheduledTaskHist.setErrorMsg(errorMsg);
-        environment().updateByIdVersion(scheduledTaskHist);
+    public void logStatus(TaskMonitor tm, Map<String, Object> parameters) throws UnifyException {
+        final Long scheduledTaskHistId = (Long) parameters.get(SystemSchedTaskConstants.SCHEDULEDTASKHIST_ID);
+        if (scheduledTaskHistId != null) {
+            // Update history
+            ScheduledTaskHist scheduledTaskHist = environment().find(ScheduledTaskHist.class, scheduledTaskHistId);
+            scheduledTaskHist.setFinishedOn(getNow());
+            scheduledTaskHist.setTaskStatus(tm.getTaskStatus());
+            if (tm.isExceptions()) {
+                String msg = getPrintableStackTrace(tm.getExceptions()[0]);
+                scheduledTaskHist.setErrorMsg(msg);
+            }
+            
+            environment().updateByIdVersion(scheduledTaskHist);
+        }
     }
 
     @Periodic(PeriodicType.NORMAL)
     @Transactional(TransactionAttribute.REQUIRES_NEW)
     public void triggerScheduledTasksForExecution(TaskMonitor taskMonitor) throws UnifyException {
-        // If periodic task is canceled or scheduler is disabled cancel all
-        // scheduled tasks
-        if (taskMonitor.isCanceled() || !internalGetSysParameterValue(boolean.class,
+        // If periodic task is canceled or scheduler is disabled cancel all scheduled
+        // tasks
+        if (taskMonitor.isCancelled() || !internalGetSysParameterValue(boolean.class,
                 SystemModuleSysParamConstants.SYSTEM_SCHEDULER_ENABLED)) {
             return;
         }
@@ -565,7 +568,6 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
                 expirationAllowanceMins);
 
         final int maxScheduledTaskTrigger = internalGetSysParameterValue(int.class,
-
                 SystemModuleSysParamConstants.SYSTEM_SCHEDULER_MAX_TRIGGER);
 
         // Fetch tasks ready to run
@@ -590,6 +592,8 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
                     taskParameters.put(TaskParameterConstants.USER_LOGIN_ID, scheduledTaskDef.getUserLoginId());
                     taskParameters.put(TaskParameterConstants.TENANT_ID, scheduledTaskDef.getTenantId());
                     taskParameters.put(TaskParameterConstants.LOCK_TO_RELEASE, taskRelayLock);
+                    taskParameters.put(TaskParameterConstants.TASK_STATUS_LOGGER,
+                            SystemModuleNameConstants.SYSTEM_MODULE_SERVICE);
                     taskParameters.put(SystemSchedTaskConstants.SCHEDULEDTASK_ID, scheduledTaskId);
 
                     Date nextExecutionOn = environment().value(Date.class, "nextExecutionOn",
@@ -612,8 +616,7 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
                         taskParameters.put(SystemSchedTaskConstants.SCHEDULEDTASKHIST_ID, scheduledTaskHistId);
 
                         // Fire task
-                        taskManager.startTask(scheduledTaskDef.getTaskName(), taskParameters, true,
-                                taskStatusLogger.getName());
+                        taskManager.scheduleTaskToRunAfter(scheduledTaskDef.getTaskName(), taskParameters, true, 0);
                         logDebug("Task [{0}] is setup to run...", scheduledTaskDef.getDescription());
                         triggered++;
                     }

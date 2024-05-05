@@ -91,8 +91,7 @@ public class LicensingPageController extends AbstractSystemPageController<Licens
             return noResult();
         }
 
-        TaskSetup taskSetup = TaskSetup.newBuilder()
-                .addTask(SystemLoadLicenseTaskConstants.LOADLICENSE_TASK_NAME)
+        TaskSetup taskSetup = TaskSetup.newBuilder(SystemLoadLicenseTaskConstants.LOADLICENSE_TASK_NAME)
                 .setParam(SystemLoadLicenseTaskConstants.LOADLICENSE_UPLOAD_FILE, pageBean.getLicenseFile())
                 .logMessages()
                 .build();

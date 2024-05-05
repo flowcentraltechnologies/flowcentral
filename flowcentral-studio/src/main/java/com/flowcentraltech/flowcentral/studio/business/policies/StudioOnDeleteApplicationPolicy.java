@@ -44,10 +44,9 @@ public class StudioOnDeleteApplicationPolicy extends AbstractStudioAppletActionP
     @Override
     protected EntityActionResult doExecutePreAction(EntityActionContext ctx) throws UnifyException {
         Application application = (Application) ctx.getInst();
-        TaskSetup resultTaskSetup = TaskSetup.newBuilder()
-                .addTask(ApplicationDeletionTaskConstants.APPLICATION_DELETION_TASK_NAME)
-                .setParam(ApplicationDeletionTaskConstants.APPLICATION_NAME, application.getName())
-                .logMessages()
+        TaskSetup resultTaskSetup = TaskSetup
+                .newBuilder(ApplicationDeletionTaskConstants.APPLICATION_DELETION_TASK_NAME)
+                .setParam(ApplicationDeletionTaskConstants.APPLICATION_NAME, application.getName()).logMessages()
                 .build();
         EntityActionResult entityActionResult = new EntityActionResult(ctx, resultTaskSetup,
                 "Application Deletion Task");

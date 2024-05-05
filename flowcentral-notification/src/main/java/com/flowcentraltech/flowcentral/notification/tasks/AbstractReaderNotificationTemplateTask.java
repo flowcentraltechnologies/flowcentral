@@ -24,7 +24,6 @@ import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.task.TaskInput;
 import com.tcdng.unify.core.task.TaskMonitor;
-import com.tcdng.unify.core.task.TaskOutput;
 import com.tcdng.unify.core.util.DataUtils;
 
 /**
@@ -43,7 +42,7 @@ public abstract class AbstractReaderNotificationTemplateTask<T extends NotifTemp
     }
 
     @Override
-    public final void execute(TaskMonitor monitor, TaskInput input, TaskOutput output) throws UnifyException {
+    public final void execute(TaskMonitor monitor, TaskInput input) throws UnifyException {
         final T notifWrapper = notification().wrapperOfNotifTemplate(notifWrapperType);      
         final ValueStoreReader reader = getReader(input);
         

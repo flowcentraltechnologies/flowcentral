@@ -23,7 +23,6 @@ import com.tcdng.unify.core.annotation.Schedulable;
 import com.tcdng.unify.core.task.AbstractTask;
 import com.tcdng.unify.core.task.TaskInput;
 import com.tcdng.unify.core.task.TaskMonitor;
-import com.tcdng.unify.core.task.TaskOutput;
 
 /**
  * Print to console task.
@@ -40,7 +39,7 @@ import com.tcdng.unify.core.task.TaskOutput;
 public class PrintToConsoleTask extends AbstractTask {
 
     @Override
-    public void execute(TaskMonitor taskMonitor, TaskInput input, TaskOutput output) throws UnifyException {
+    public void execute(TaskMonitor taskMonitor, TaskInput input) throws UnifyException {
         String lineText = input.getParam(String.class, "lineText");
         int lineCount = input.getParam(int.class, "lineCount");
         if (lineText != null) {
