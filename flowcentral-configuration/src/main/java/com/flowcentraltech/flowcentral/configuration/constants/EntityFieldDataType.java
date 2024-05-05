@@ -195,6 +195,15 @@ public enum EntityFieldDataType implements EnumConst {
             true,
             true,
             true),
+    ENUM_DYN(
+            "ED",
+            DataType.STRING,
+            false,
+            true,
+            true,
+            true,
+            true,
+            true),
     REF(
             "RF",
             DataType.LONG,
@@ -357,13 +366,12 @@ public enum EntityFieldDataType implements EnumConst {
     }
 
     public boolean isEnumDataType() {
-        return EntityFieldDataType.ENUM.equals(this) || EntityFieldDataType.ENUM_REF.equals(this);
+        return ENUM.equals(this) || ENUM_REF.equals(this);
     }
 
     public boolean isRefDataType() {
-        return EntityFieldDataType.REF.equals(this) || EntityFieldDataType.REF_UNLINKABLE.equals(this)
-                || EntityFieldDataType.ENUM_REF.equals(this) || EntityFieldDataType.CHILD.equals(this)
-                || EntityFieldDataType.CHILD_LIST.equals(this) || EntityFieldDataType.REF_FILEUPLOAD.equals(this);
+        return REF.equals(this) || REF_UNLINKABLE.equals(this) || ENUM_REF.equals(this) || CHILD.equals(this)
+                || CHILD_LIST.equals(this) || REF_FILEUPLOAD.equals(this);
     }
 
     public boolean isPrimitive() {
@@ -411,30 +419,28 @@ public enum EntityFieldDataType implements EnumConst {
     }
 
     public boolean isEntityRef() {
-        return EntityFieldDataType.REF.equals(this) || EntityFieldDataType.REF_UNLINKABLE.equals(this)
-                || EntityFieldDataType.REF_FILEUPLOAD.equals(this) || EntityFieldDataType.CHILD.equals(this)
-                || EntityFieldDataType.CHILD_LIST.equals(this);
+        return REF.equals(this) || REF_UNLINKABLE.equals(this) || REF_FILEUPLOAD.equals(this) || CHILD.equals(this)
+                || CHILD_LIST.equals(this);
     }
 
     public boolean isForeignKey() {
-        return EntityFieldDataType.REF.equals(this) || EntityFieldDataType.REF_UNLINKABLE.equals(this)
-                || EntityFieldDataType.ENUM_REF.equals(this);
+        return REF.equals(this) || REF_UNLINKABLE.equals(this) || ENUM_REF.equals(this);
     }
 
     public boolean isListOnly() {
-        return EntityFieldDataType.LIST_ONLY.equals(this);
+        return LIST_ONLY.equals(this);
     }
 
     public boolean isChild() {
-        return EntityFieldDataType.CHILD.equals(this);
+        return CHILD.equals(this);
     }
 
     public boolean isChildList() {
-        return EntityFieldDataType.CHILD_LIST.equals(this);
+        return CHILD_LIST.equals(this);
     }
 
     public boolean isRefFileUpload() {
-        return EntityFieldDataType.REF_FILEUPLOAD.equals(this);
+        return REF_FILEUPLOAD.equals(this);
     }
 
     public static EntityFieldDataType fromCode(String code) {
@@ -446,7 +452,7 @@ public enum EntityFieldDataType implements EnumConst {
     }
 
     public static EntityFieldDataType fromInterconnect(ConnectFieldDataType dataType) {
-        return dataType != null ? (dataType.isEnum() ? EntityFieldDataType.STRING : fromName(dataType.name())) : null;
+        return dataType != null ? (dataType.isEnum() ? STRING : fromName(dataType.name())) : null;
     }
 
 }
