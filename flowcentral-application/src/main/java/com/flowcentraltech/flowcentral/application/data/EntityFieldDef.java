@@ -453,6 +453,10 @@ public class EntityFieldDef implements Listable, EntityFieldAttributes {
         return dataType.isEnumDataType();
     }
 
+    public boolean isEnumGroup() {
+        return dataType.isEnumGroup();
+    }
+
     public boolean isRefDataType() {
         return dataType.isRefDataType();
     }
@@ -551,6 +555,11 @@ public class EntityFieldDef implements Listable, EntityFieldAttributes {
         return EntityFieldDef.newBuilderForEnumRef(au, fieldName, fieldLabel, list).nullable(nullable).build();
     }
 
+    public static EntityFieldDef createForEnumDynamic(AppletUtilities au, String fieldName, String fieldLabel, String list,
+            boolean nullable) throws UnifyException {
+        return EntityFieldDef.newBuilderForEnumDynamic(au, fieldName, fieldLabel, list).nullable(nullable).build();
+    }
+
     public static Builder newBuilderForString(AppletUtilities au, String fieldName, String fieldLabel)
             throws UnifyException {
         return EntityFieldDef.newBuilder(au, EntityFieldDataType.STRING, EntityFieldType.STATIC, fieldName, fieldLabel)
@@ -594,6 +603,12 @@ public class EntityFieldDef implements Listable, EntityFieldAttributes {
         return EntityFieldDef
                 .newBuilder(au, EntityFieldDataType.ENUM_REF, EntityFieldType.STATIC, fieldName, fieldLabel)
                 .inputWidget("application.enumlist").references(list);
+    }
+
+    public static Builder newBuilderForEnumDynamic(AppletUtilities au, String fieldName, String fieldLabel, String list)
+            throws UnifyException {
+        return EntityFieldDef.newBuilder(au, EntityFieldDataType.ENUM_DYN, EntityFieldType.STATIC, fieldName, fieldLabel)
+                .inputWidget("application.dynamicenumlist").references(list);
     }
 
     public static Builder newBuilder(AppletUtilities au, EntityFieldDataType dataType, EntityFieldType type,

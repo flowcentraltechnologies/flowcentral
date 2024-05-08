@@ -62,7 +62,7 @@ public class SearchInputConditionListCommand extends AbstractApplicationListComm
                     return _dataTypeConditions.getNumberConditions();
                 }
 
-                if (type.isEnumDataType()) {
+                if (type.isEnumGroup()) {
                     return _dataTypeConditions.getEnumConditions();
                 }
 

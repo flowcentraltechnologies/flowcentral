@@ -48,7 +48,7 @@ public class FormFieldEditorPanel extends AbstractDialogPanel {
 
         FormField formField = getValue(FormEditor.class).getEditField();
         EntityFieldDataType dataType = EntityFieldDataType.fromCode(formField.getDataType());
-        boolean isRef = dataType.isForeignKey() && ! dataType.isEnumDataType();
+        boolean isRef = dataType.isForeignKey() && ! dataType.isEnumGroup();
         setVisible("frmInputReference", isRef);
         
         boolean isCreate = DialogFormMode.CREATE.equals(DialogFormMode.fromName(formField.getMode()));

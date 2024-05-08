@@ -775,8 +775,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                         }
 
                         String references = appEntityField.getReferences();
-                        if (type.isEntityRef() || (!appEntityField.getDataType().isEnumDataType()
-                                && !StringUtils.isBlank(references))) {
+                        if (type.isEntityRef()
+                                || (!appEntityField.getDataType().isEnumGroup() && !StringUtils.isBlank(references))) {
                             edb.addFieldDef(textWidgetTypeDef, inputWidgetTypeDef, lingualWidgetTypeDef,
                                     getRefDef(references), appEntityField.getDataType(), appEntityField.getType(),
                                     appEntityField.getTextCase(), appEntityField.getName(), appEntityField.getMapped(),
@@ -5038,7 +5038,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                     appEntityField.setLabel(resolveApplicationMessage(entityFieldConfig.getLabel()));
                     String references = entityFieldConfig.getReferences();
                     if (entityFieldConfig.getType().isEntityRef()
-                            || (!entityFieldConfig.getType().isEnumDataType() && !StringUtils.isBlank(references))) {
+                            || (!entityFieldConfig.getType().isEnumGroup() && !StringUtils.isBlank(references))) {
                         references = ApplicationNameUtils.ensureLongNameReference(applicationName, references);
                     }
 
@@ -5085,8 +5085,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                         oldAppEntityField.setType(EntityFieldType.STATIC);
                         oldAppEntityField.setLabel(resolveApplicationMessage(entityFieldConfig.getLabel()));
                         String references = entityFieldConfig.getReferences();
-                        if (entityFieldConfig.getType().isEntityRef() || (!entityFieldConfig.getType().isEnumDataType()
-                                && !StringUtils.isBlank(references))) {
+                        if (entityFieldConfig.getType().isEntityRef()
+                                || (!entityFieldConfig.getType().isEnumGroup() && !StringUtils.isBlank(references))) {
                             references = ApplicationNameUtils.ensureLongNameReference(applicationName, references);
                         }
 

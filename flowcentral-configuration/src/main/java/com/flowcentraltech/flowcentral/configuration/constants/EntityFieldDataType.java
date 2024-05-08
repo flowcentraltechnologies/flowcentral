@@ -369,6 +369,14 @@ public enum EntityFieldDataType implements EnumConst {
         return ENUM.equals(this) || ENUM_REF.equals(this);
     }
 
+    public boolean isEnumDynamic() {
+        return ENUM_DYN.equals(this);
+    }
+
+    public boolean isEnumGroup() {
+        return ENUM.equals(this) || ENUM_REF.equals(this) || ENUM_DYN.equals(this);
+    }
+
     public boolean isRefDataType() {
         return REF.equals(this) || REF_UNLINKABLE.equals(this) || ENUM_REF.equals(this) || CHILD.equals(this)
                 || CHILD_LIST.equals(this) || REF_FILEUPLOAD.equals(this);

@@ -2807,6 +2807,8 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
                                 .getListDescription();
                     }
                     break;
+                case ENUM_DYN:
+                    break;
                 case REF:
                 case REF_UNLINKABLE:
                     RefDef refDef = applicationModuleService.getRefDef(entityFieldDef.getReferences());
