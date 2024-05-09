@@ -110,7 +110,7 @@ public enum StudioAppComponentType implements EnumConst {
             "$m{studio.application.component.type.enumeration}",
             "$m{studio.application.component.type.enumerations}",
             "studio.menu.label.enumeration",
-            "grid",
+            "list",
             "/studioappcomponentapplet",
             "studiooncreatecomponent-policy",
             null,

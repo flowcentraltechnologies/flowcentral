@@ -54,6 +54,8 @@ public class AppConfig extends BaseNameConfig {
     
     private AppletsConfig appletsConfig;
     
+    private EnumerationsConfig enumerationsConfig;
+    
     private WidgetTypesConfig widgetTypesConfig;
 
     private RefsConfig refsConfig;
@@ -186,6 +188,15 @@ public class AppConfig extends BaseNameConfig {
     @XmlElement(name = "applets")
     public void setAppletsConfig(AppletsConfig appletsConfig) {
         this.appletsConfig = appletsConfig;
+    }
+
+    public EnumerationsConfig getEnumerationsConfig() {
+        return enumerationsConfig;
+    }
+
+    @XmlElement(name = "enumerations")
+    public void setEnumerationsConfig(EnumerationsConfig enumerationsConfig) {
+        this.enumerationsConfig = enumerationsConfig;
     }
 
     public WidgetTypesConfig getWidgetTypesConfig() {

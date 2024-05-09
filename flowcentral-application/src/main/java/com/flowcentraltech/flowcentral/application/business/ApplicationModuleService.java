@@ -55,6 +55,7 @@ import com.flowcentraltech.flowcentral.application.entities.AppEntityFieldQuery;
 import com.flowcentraltech.flowcentral.application.entities.AppEntityQuery;
 import com.flowcentraltech.flowcentral.application.entities.AppEntityUpload;
 import com.flowcentraltech.flowcentral.application.entities.AppEntityUploadQuery;
+import com.flowcentraltech.flowcentral.application.entities.AppEnumeration;
 import com.flowcentraltech.flowcentral.application.entities.AppForm;
 import com.flowcentraltech.flowcentral.application.entities.AppFormAnnotation;
 import com.flowcentraltech.flowcentral.application.entities.AppFormAnnotationQuery;
@@ -1090,6 +1091,18 @@ public interface ApplicationModuleService extends FlowCentralService {
      *                        if an error occurs
      */
     WidgetTypeDef getWidgetTypeDef(String widgetName) throws UnifyException;
+
+    /**
+     * Finds a enumeration by ID.
+     * 
+     * @param enumerationId
+     *                     the enumeration ID
+     * @return the application enumeration record
+     * @throws UnifyException
+     *                        if enumeration with ID is not found. If an error
+     *                        occurs
+     */
+    AppEnumeration findAppEnumeration(Long enumerationId) throws UnifyException;
 
     /**
      * Finds a widget type by ID.

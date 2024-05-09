@@ -164,6 +164,8 @@ import com.flowcentraltech.flowcentral.configuration.xml.EntitySeriesConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.EntityUniqueConditionConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.EntityUniqueConstraintConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.EntityUploadConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.EnumerationConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.EnumerationItemConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.FieldSequenceConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.FieldValidationPolicyConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.FormActionConfig;
@@ -2234,6 +2236,11 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
     }
 
     @Override
+    public AppEnumeration findAppEnumeration(Long enumerationId) throws UnifyException {
+        return environment().find(AppEnumeration.class, enumerationId);
+    }
+
+    @Override
     public AppWidgetType findAppWidgetType(Long widgetTypeId) throws UnifyException {
         return environment().find(AppWidgetType.class, widgetTypeId);
     }
@@ -4205,6 +4212,40 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                     applicationConfig.getAppletsConfig().getAppletList().size());
         }
 
+        // Enumerations
+        logDebug(taskMonitor, "Installing application enumerations...");
+        environment().updateAll(new AppEnumerationQuery().applicationId(applicationId).isNotActualCustom(),
+                new Update().add("deprecated", Boolean.TRUE));
+        if (applicationConfig.getEnumerationsConfig() != null
+                && !DataUtils.isBlank(applicationConfig.getEnumerationsConfig().getEnumList())) {
+            AppEnumeration appEnumeration = new AppEnumeration();
+            appEnumeration.setApplicationId(applicationId);
+            for (EnumerationConfig enumerationConfig : applicationConfig.getEnumerationsConfig().getEnumList()) {
+                AppEnumeration oldAppEnumeration = environment().findLean(
+                        new AppEnumerationQuery().applicationId(applicationId).name(enumerationConfig.getName()));
+                description = resolveApplicationMessage(enumerationConfig.getDescription());
+                if (oldAppEnumeration == null) {
+                    logDebug("Installing new application enumeration [{0}]...", enumerationConfig.getName());
+                    appEnumeration.setId(null);
+                    appEnumeration.setName(enumerationConfig.getName());
+                    appEnumeration.setDescription(resolveApplicationMessage(enumerationConfig.getDescription()));
+                    appEnumeration.setLabel(resolveApplicationMessage(enumerationConfig.getLabel()));
+                    appEnumeration.setConfigType(ConfigType.STATIC_INSTALL);
+                    populateChildList(appEnumeration, enumerationConfig);
+                    environment().create(appEnumeration);
+                } else {
+                    logDebug("Upgrading application enumeration [{0}]...", enumerationConfig.getName());
+                    if (ConfigUtils.isSetInstall(oldAppEnumeration)) {
+                        oldAppEnumeration.setDescription(resolveApplicationMessage(enumerationConfig.getDescription()));
+                        oldAppEnumeration.setLabel(resolveApplicationMessage(enumerationConfig.getLabel()));
+                        oldAppEnumeration.setDeprecated(false);
+                        populateChildList(oldAppEnumeration, enumerationConfig);
+                        environment().updateByIdVersion(oldAppEnumeration);
+                    }
+                }
+            }
+        }
+
         // Widgets
         logDebug(taskMonitor, "Installing application widget types...");
         environment().updateAll(new AppWidgetTypeQuery().applicationId(applicationId).isNotActualCustom(),
@@ -4761,6 +4802,22 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
         }
 
         return true;
+    }
+
+    private void populateChildList(AppEnumeration appEnumeration, EnumerationConfig enumerationConfig)
+            throws UnifyException {
+        List<AppEnumerationItem> itemList = null;
+        if (!DataUtils.isBlank(enumerationConfig.getItemList())) {
+            itemList = new ArrayList<AppEnumerationItem>();
+            for (EnumerationItemConfig itemConfig : enumerationConfig.getItemList()) {
+                AppEnumerationItem appEnumerationItem = new AppEnumerationItem();
+                appEnumerationItem.setCode(itemConfig.getCode());
+                appEnumerationItem.setLabel(itemConfig.getLabel());
+                itemList.add(appEnumerationItem);
+            }
+        }
+
+        appEnumeration.setItemList(itemList);
     }
 
     private void populateChildList(AppApplet appApplet, String applicationName, AppletConfig appletConfig)

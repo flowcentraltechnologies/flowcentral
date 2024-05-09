@@ -2798,7 +2798,7 @@
 				<errorCondition>
 					<restriction type="and">
 						<restriction type="amongst" field="dataType"
-							paramA="RF|UR|ER|EN|CD|CL|CU" />
+							paramA="RF|UR|ER|EN|ED|CD|CL|CU" />
 						<restriction type="is_null" field="references" />
 					</restriction>
 				</errorCondition>
@@ -2848,11 +2848,23 @@
 				description="$m{studio.appentityfield.form.formstatepolicy.reffield}">
 				<onCondition>
 					<restriction type="amongst" field="dataType"
-						paramA="RF|UR|ER|EN|CU" />
+						paramA="RF|UR|CU" />
 				</onCondition>
 				<setStates>
 					<setState type="field"
 						target="references,defaultVal,nullable,basicSearch" visible="true" />
+				</setStates>
+			</formStatePolicy>
+			<formStatePolicy type="on_switch"
+				name="enumFieldPolicy"
+				description="$m{studio.appentityfield.form.formstatepolicy.enumfield}">
+				<onCondition>
+					<restriction type="amongst" field="dataType"
+						paramA="ER|EN|ED" />
+				</onCondition>
+				<setStates>
+					<setState type="field"
+						target="references,defaultVal,nullable,auditable,reportable,basicSearch" visible="true" />
 				</setStates>
 			</formStatePolicy>
 			<formStatePolicy type="on_switch"
@@ -3258,7 +3270,7 @@
 				description="$m{studio.common.form.annotation.static}"
 				message="$m{studio.common.form.annotation.static.message}" />
 			<tab name="basicDetails"
-				label="$m{studio.appapplet.form.basicdetails}" editable="false"
+				label="$m{studio.appapplet.form.basicdetails}"
 				contentType="miniform">
 				<section name="appletDetails" columns="type_2">
 					<field name="applicationId"
@@ -3269,7 +3281,7 @@
 					<field name="name" inputWidget="application.name" column="0"
 						required="true" saveAs="true" />
 					<field name="description" inputWidget="application.text"
-						column="0" required="true" saveAs="true" />
+						column="1" required="true" saveAs="true" />
 					<field name="label" inputWidget="application.text" column="1"
 						required="true" />
 				</section>
