@@ -2070,11 +2070,11 @@
 			label="$m{application.appenumerationitem.label}"
 			type="com.flowcentraltech.flowcentral.application.entities.AppEnumerationItem">
 			<field name="appEnumerationId"
-				label="$m{application.appappletprop.appenumerationid}" type="ref"
+				label="$m{application.appenumerationitem.appenumerationid}" type="ref"
 				references="appEnumerationRef" inputWidget="application.entitylist" />
 			<field name="code" label="$m{application.appenumerationitem.code}"
 				type="string" inputWidget="application.alphanumeric"/>
-			<field name="label" label="$m{{application.appenumerationitem.field.label}"
+			<field name="label" label="$m{application.appenumerationitem.field.label}"
 				type="string" inputWidget="application.text"/>
 			<uniqueConstraint name="codeUc"
 				description="$m{application.appenumerationitem.uc.code}"

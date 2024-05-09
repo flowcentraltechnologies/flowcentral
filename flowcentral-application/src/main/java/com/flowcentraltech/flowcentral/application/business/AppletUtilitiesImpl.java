@@ -379,16 +379,6 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
     }
 
     @Override
-    public Listable getDynamicEnumeration(String longName) throws UnifyException {
-        return applicationModuleService.getDynamicEnumeration(longName);
-    }
-
-    @Override
-    public List<? extends Listable> getDynamicEnumerations(String label, int limit) throws UnifyException {
-        return applicationModuleService.getDynamicEnumerations(label, limit);
-    }
-
-    @Override
     public FormattedAudit formatAudit(AuditSnapshot auditSnapshot) throws UnifyException {
         return formatAudit(auditSnapshot, FormatterOptions.DEFAULT);
     }

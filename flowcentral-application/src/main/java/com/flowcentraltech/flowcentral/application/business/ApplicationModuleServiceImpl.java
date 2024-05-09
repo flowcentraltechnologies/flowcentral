@@ -28,7 +28,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -63,8 +62,6 @@ import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.EntityFieldDef;
 import com.flowcentraltech.flowcentral.application.data.EntitySearchInputDef;
 import com.flowcentraltech.flowcentral.application.data.EntityUploadDef;
-import com.flowcentraltech.flowcentral.application.data.EnumerationDef;
-import com.flowcentraltech.flowcentral.application.data.EnumerationItemDef;
 import com.flowcentraltech.flowcentral.application.data.FieldSequenceDef;
 import com.flowcentraltech.flowcentral.application.data.FieldSequenceEntryDef;
 import com.flowcentraltech.flowcentral.application.data.FilterDef;
@@ -234,7 +231,6 @@ import com.tcdng.unify.core.database.dynamic.DynamicEntityInfo;
 import com.tcdng.unify.core.database.dynamic.sql.DynamicSqlEntityLoader;
 import com.tcdng.unify.core.database.sql.SqlDataSourceDialect;
 import com.tcdng.unify.core.format.Formatter;
-import com.tcdng.unify.core.list.DynamicListManager;
 import com.tcdng.unify.core.list.ListManager;
 import com.tcdng.unify.core.message.MessageResolver;
 import com.tcdng.unify.core.security.TwoWayStringCryptograph;
@@ -255,7 +251,7 @@ import com.tcdng.unify.core.util.StringUtils;
 @Transactional
 @Component(ApplicationModuleNameConstants.APPLICATION_MODULE_SERVICE)
 public class ApplicationModuleServiceImpl extends AbstractFlowCentralService implements ApplicationModuleService,
-        FileAttachmentProvider, SuggestionProvider, PreInstallationSetup, PostBootSetup, EnvironmentDelegateRegistrar, DynamicListManager {
+        FileAttachmentProvider, SuggestionProvider, PreInstallationSetup, PostBootSetup, EnvironmentDelegateRegistrar {
 
     private static final String PRE_INSTALLATION_SETUP_LOCK = "app::preinstallationsetup";
 
@@ -329,8 +325,6 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
     private FactoryMap<String, WidgetTypeDef> widgetDefFactoryMap;
 
     private FactoryMap<String, SuggestionTypeDef> suggestionDefFactoryMap;
-
-    private FactoryMap<String, EnumerationDef> enumDefFactoryMap;
 
     private EntityClassDefFactoryMap entityClassDefFactoryMap;
 
@@ -478,28 +472,6 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                     return new WidgetTypeDef(appWidgetType.getDataType(), appWidgetType.getInputType(), longName,
                             appWidgetType.getDescription(), appWidgetType.getId(), appWidgetType.getVersionNo(),
                             appWidgetType.getEditor(), appWidgetType.getRenderer(), appWidgetType.isStretch());
-                }
-            };
-
-        this.enumDefFactoryMap = new FactoryMap<String, EnumerationDef>(true)
-            {
-                @Override
-                protected boolean stale(String longName, EnumerationDef enumerationDef) throws Exception {
-                    return environment().value(long.class, "versionNo",
-                            new AppEnumerationQuery().id(enumerationDef.getId())) > enumerationDef.getVersion();
-                }
-
-                @Override
-                protected EnumerationDef create(String longName, Object... arg1) throws Exception {
-                    ApplicationEntityNameParts nameParts = ApplicationNameUtils.getApplicationEntityNameParts(longName);
-                    AppEnumeration appEnumeration = getApplicationEntity(AppEnumeration.class, longName);
-                    List<EnumerationItemDef> itemsList = new ArrayList<EnumerationItemDef>();
-                    for (AppEnumerationItem item : appEnumeration.getItemList()) {
-                        itemsList.add(new EnumerationItemDef(item.getCode(), item.getLabel()));
-                    }
-
-                    return new EnumerationDef(nameParts, appEnumeration.getDescription(), appEnumeration.getId(),
-                            appEnumeration.getVersionNo(), appEnumeration.getLabel(), itemsList);
                 }
             };
 
@@ -2277,20 +2249,23 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
     }
 
     @Override
-    public Listable getDynamicEnumeration(String longName) throws UnifyException {
-        return enumDefFactoryMap.get(longName);
+    public Listable getDynamicEnumList(String longName) throws UnifyException {
+        ApplicationEntityNameParts nameParts = ApplicationNameUtils.getApplicationEntityNameParts(longName);
+        String label = environment().value(String.class, "label", new AppEnumerationQuery()
+                .applicationName(nameParts.getApplicationName()).name(nameParts.getEntityName()));
+        return new ListData(longName, label);
     }
 
     @Override
-    public List<? extends Listable> getDynamicEnumerations(String label, int limit) throws UnifyException {
+    public List<? extends Listable> getDynamicEnumLists(String label, int limit) throws UnifyException {
         AppEnumerationQuery query = (AppEnumerationQuery) new AppEnumerationQuery()
                 .addSelect("applicationName", "name", "label").addOrder("label");
         if (!StringUtils.isBlank(label)) {
             query.labelLike(label);
         }
-        
+
         query.setLimit(limit);
-        
+
         List<AppEnumeration> enumerations = environment().listAll(query);
         List<ListData> list = new ArrayList<ListData>();
         for (AppEnumeration enumeration : enumerations) {
@@ -2300,11 +2275,6 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
         }
 
         return list;
-    }
-
-    @Override
-    public List<? extends Listable> getList(Locale locale, String listName, Object... params) throws UnifyException {
-        return enumDefFactoryMap.get(listName).getItemsList();
     }
 
     @Override

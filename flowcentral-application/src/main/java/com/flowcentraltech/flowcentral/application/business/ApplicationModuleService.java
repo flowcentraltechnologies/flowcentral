@@ -1168,7 +1168,7 @@ public interface ApplicationModuleService extends FlowCentralService {
      * @throws UnifyException
      *                        if an error occurs
      */
-    Listable getDynamicEnumeration(String longName) throws UnifyException;
+    Listable getDynamicEnumList(String longName) throws UnifyException;
 
     /**
      * Gets application enumerations with label like.
@@ -1180,8 +1180,9 @@ public interface ApplicationModuleService extends FlowCentralService {
      * @throws UnifyException
      *                        if an error occurs
      */
-    List <? extends Listable> getDynamicEnumerations(String label, int limit) throws UnifyException;
-
+    List <? extends Listable> getDynamicEnumLists(String label, int limit) throws UnifyException;
+    
+    
     /**
      * Gets a application related widget types.
      * 
