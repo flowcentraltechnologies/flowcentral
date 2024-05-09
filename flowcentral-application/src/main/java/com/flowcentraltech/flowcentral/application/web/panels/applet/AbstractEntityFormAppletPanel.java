@@ -30,6 +30,7 @@ import com.flowcentraltech.flowcentral.application.data.FormTabDef;
 import com.flowcentraltech.flowcentral.application.data.TabDef;
 import com.flowcentraltech.flowcentral.application.data.WorkflowDraftInfo;
 import com.flowcentraltech.flowcentral.application.entities.BaseApplicationEntity;
+import com.flowcentraltech.flowcentral.application.util.HtmlUtils;
 import com.flowcentraltech.flowcentral.application.web.data.AppletContext;
 import com.flowcentraltech.flowcentral.application.web.data.FormContext;
 import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm;
@@ -63,6 +64,7 @@ import com.tcdng.unify.core.annotation.UplBinding;
 import com.tcdng.unify.core.data.IndexedTarget;
 import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.util.DataUtils;
+import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.annotation.Action;
 import com.tcdng.unify.web.constant.ResultMappingConstants;
 import com.tcdng.unify.web.ui.constant.MessageType;
@@ -989,7 +991,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                         commandPath);
             } else {
                 final String message = concatenateMessages("$m{entityformapplet.formreview.nonskippable}",
-                        reviewResult.getRequiredMessages());
+                        reviewResult.getAllMessages());
                 showMessageBox(MessageIcon.WARNING, MessageMode.OK, "$m{entityformapplet.formreview}", message,
                         "/application/refreshContent");
             }
@@ -1065,7 +1067,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         boolean appendSym = false;
         for (String msg : messages) {
             if (appendSym) {
-                sb.append(' ');
+                sb.append('\n');
             } else {
                 appendSym = true;
             }
@@ -1074,7 +1076,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         }
 
         String msg = sb.toString();
-        return resolveSessionMessage(base, msg);
+        return HtmlUtils.formatHTML(resolveSessionMessage(base, msg));
     }
 
     protected AbstractEntityFormApplet getEntityFormApplet() throws UnifyException {

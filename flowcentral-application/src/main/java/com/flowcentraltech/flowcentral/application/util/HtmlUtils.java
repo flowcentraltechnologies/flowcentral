@@ -27,6 +27,10 @@ public final class HtmlUtils {
 
     }
 
+    public static String formatHTML(final String html) {
+        return HtmlUtils.formatReportHTML(html);
+    }
+    
     public static String formatReportHTML(final String html) {
         if (html != null) {
             return html.replaceAll("&nbsp;", "&#160;").replaceAll(" ", "&#160;")

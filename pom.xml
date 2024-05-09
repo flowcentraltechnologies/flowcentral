@@ -8,7 +8,7 @@
 	<packaging>pom</packaging>
 
 	<name>flowcentral</name>
-	<description>Flow Central</description>
+	<description>FlowCentral</description>
 	<url>http://www.flowcentralplatform.com</url>
 
 	<licenses>
