@@ -440,7 +440,7 @@ public class EntityDef extends BaseApplicationEntityDef {
                                 ? entityFieldDef.getResolvedTypeFieldDef().getDataType()
                                 : entityFieldDef.getDataType();
                         if (dataType.isBoolean() || dataType.isNumber() || dataType.isDate() || dataType.isTimestamp()
-                                || dataType.isString() || dataType.isEnumDataType() || dataType.isForeignKey()) {
+                                || dataType.isString() || dataType.isEnumGroup() || dataType.isForeignKey()) {
                             searchInputFields.add(new ListData("f:" + entityFieldDef.getListKey(),
                                     "[F] " + entityFieldDef.getListDescription()));
                         }

@@ -90,104 +90,7 @@ import com.flowcentraltech.flowcentral.application.data.Usage;
 import com.flowcentraltech.flowcentral.application.data.WidgetRuleEntryDef;
 import com.flowcentraltech.flowcentral.application.data.WidgetRulesDef;
 import com.flowcentraltech.flowcentral.application.data.WidgetTypeDef;
-import com.flowcentraltech.flowcentral.application.entities.AppApplet;
-import com.flowcentraltech.flowcentral.application.entities.AppAppletAlert;
-import com.flowcentraltech.flowcentral.application.entities.AppAppletAlertQuery;
-import com.flowcentraltech.flowcentral.application.entities.AppAppletFilter;
-import com.flowcentraltech.flowcentral.application.entities.AppAppletFilterQuery;
-import com.flowcentraltech.flowcentral.application.entities.AppAppletProp;
-import com.flowcentraltech.flowcentral.application.entities.AppAppletPropQuery;
-import com.flowcentraltech.flowcentral.application.entities.AppAppletQuery;
-import com.flowcentraltech.flowcentral.application.entities.AppAppletRouteToApplet;
-import com.flowcentraltech.flowcentral.application.entities.AppAppletSetValues;
-import com.flowcentraltech.flowcentral.application.entities.AppAppletSetValuesQuery;
-import com.flowcentraltech.flowcentral.application.entities.AppAssignmentPage;
-import com.flowcentraltech.flowcentral.application.entities.AppAssignmentPageQuery;
-import com.flowcentraltech.flowcentral.application.entities.AppEntity;
-import com.flowcentraltech.flowcentral.application.entities.AppEntityAttachment;
-import com.flowcentraltech.flowcentral.application.entities.AppEntityAttachmentQuery;
-import com.flowcentraltech.flowcentral.application.entities.AppEntityCategory;
-import com.flowcentraltech.flowcentral.application.entities.AppEntityCategoryQuery;
-import com.flowcentraltech.flowcentral.application.entities.AppEntityExpression;
-import com.flowcentraltech.flowcentral.application.entities.AppEntityExpressionQuery;
-import com.flowcentraltech.flowcentral.application.entities.AppEntityField;
-import com.flowcentraltech.flowcentral.application.entities.AppEntityFieldQuery;
-import com.flowcentraltech.flowcentral.application.entities.AppEntityIndex;
-import com.flowcentraltech.flowcentral.application.entities.AppEntityIndexQuery;
-import com.flowcentraltech.flowcentral.application.entities.AppEntityQuery;
-import com.flowcentraltech.flowcentral.application.entities.AppEntitySearchInput;
-import com.flowcentraltech.flowcentral.application.entities.AppEntitySearchInputQuery;
-import com.flowcentraltech.flowcentral.application.entities.AppEntitySeries;
-import com.flowcentraltech.flowcentral.application.entities.AppEntitySeriesQuery;
-import com.flowcentraltech.flowcentral.application.entities.AppEntityUniqueCondition;
-import com.flowcentraltech.flowcentral.application.entities.AppEntityUniqueConstraint;
-import com.flowcentraltech.flowcentral.application.entities.AppEntityUniqueConstraintQuery;
-import com.flowcentraltech.flowcentral.application.entities.AppEntityUpload;
-import com.flowcentraltech.flowcentral.application.entities.AppEntityUploadQuery;
-import com.flowcentraltech.flowcentral.application.entities.AppFieldSequence;
-import com.flowcentraltech.flowcentral.application.entities.AppFieldSequenceQuery;
-import com.flowcentraltech.flowcentral.application.entities.AppFilter;
-import com.flowcentraltech.flowcentral.application.entities.AppFilterQuery;
-import com.flowcentraltech.flowcentral.application.entities.AppForm;
-import com.flowcentraltech.flowcentral.application.entities.AppFormAction;
-import com.flowcentraltech.flowcentral.application.entities.AppFormActionQuery;
-import com.flowcentraltech.flowcentral.application.entities.AppFormAnnotation;
-import com.flowcentraltech.flowcentral.application.entities.AppFormAnnotationQuery;
-import com.flowcentraltech.flowcentral.application.entities.AppFormElement;
-import com.flowcentraltech.flowcentral.application.entities.AppFormElementQuery;
-import com.flowcentraltech.flowcentral.application.entities.AppFormFieldValidationPolicy;
-import com.flowcentraltech.flowcentral.application.entities.AppFormFieldValidationPolicyQuery;
-import com.flowcentraltech.flowcentral.application.entities.AppFormFilter;
-import com.flowcentraltech.flowcentral.application.entities.AppFormFilterQuery;
-import com.flowcentraltech.flowcentral.application.entities.AppFormQuery;
-import com.flowcentraltech.flowcentral.application.entities.AppFormRelatedList;
-import com.flowcentraltech.flowcentral.application.entities.AppFormRelatedListQuery;
-import com.flowcentraltech.flowcentral.application.entities.AppFormReviewPolicy;
-import com.flowcentraltech.flowcentral.application.entities.AppFormReviewPolicyQuery;
-import com.flowcentraltech.flowcentral.application.entities.AppFormSetState;
-import com.flowcentraltech.flowcentral.application.entities.AppFormStatePolicy;
-import com.flowcentraltech.flowcentral.application.entities.AppFormStatePolicyQuery;
-import com.flowcentraltech.flowcentral.application.entities.AppFormValidationPolicy;
-import com.flowcentraltech.flowcentral.application.entities.AppFormValidationPolicyQuery;
-import com.flowcentraltech.flowcentral.application.entities.AppFormWidgetRulesPolicy;
-import com.flowcentraltech.flowcentral.application.entities.AppFormWidgetRulesPolicyQuery;
-import com.flowcentraltech.flowcentral.application.entities.AppPropertyList;
-import com.flowcentraltech.flowcentral.application.entities.AppPropertyListItem;
-import com.flowcentraltech.flowcentral.application.entities.AppPropertyListQuery;
-import com.flowcentraltech.flowcentral.application.entities.AppPropertyRule;
-import com.flowcentraltech.flowcentral.application.entities.AppPropertyRuleChoice;
-import com.flowcentraltech.flowcentral.application.entities.AppPropertyRuleChoiceQuery;
-import com.flowcentraltech.flowcentral.application.entities.AppPropertyRuleQuery;
-import com.flowcentraltech.flowcentral.application.entities.AppPropertySequence;
-import com.flowcentraltech.flowcentral.application.entities.AppPropertySequenceQuery;
-import com.flowcentraltech.flowcentral.application.entities.AppPropertySet;
-import com.flowcentraltech.flowcentral.application.entities.AppRef;
-import com.flowcentraltech.flowcentral.application.entities.AppRefQuery;
-import com.flowcentraltech.flowcentral.application.entities.AppSearchInput;
-import com.flowcentraltech.flowcentral.application.entities.AppSearchInputQuery;
-import com.flowcentraltech.flowcentral.application.entities.AppSetValues;
-import com.flowcentraltech.flowcentral.application.entities.AppSetValuesQuery;
-import com.flowcentraltech.flowcentral.application.entities.AppSuggestion;
-import com.flowcentraltech.flowcentral.application.entities.AppSuggestionQuery;
-import com.flowcentraltech.flowcentral.application.entities.AppSuggestionType;
-import com.flowcentraltech.flowcentral.application.entities.AppSuggestionTypeQuery;
-import com.flowcentraltech.flowcentral.application.entities.AppTable;
-import com.flowcentraltech.flowcentral.application.entities.AppTableAction;
-import com.flowcentraltech.flowcentral.application.entities.AppTableActionQuery;
-import com.flowcentraltech.flowcentral.application.entities.AppTableColumn;
-import com.flowcentraltech.flowcentral.application.entities.AppTableFilter;
-import com.flowcentraltech.flowcentral.application.entities.AppTableFilterQuery;
-import com.flowcentraltech.flowcentral.application.entities.AppTableLoading;
-import com.flowcentraltech.flowcentral.application.entities.AppTableLoadingQuery;
-import com.flowcentraltech.flowcentral.application.entities.AppTableQuery;
-import com.flowcentraltech.flowcentral.application.entities.AppWidgetRules;
-import com.flowcentraltech.flowcentral.application.entities.AppWidgetRulesQuery;
-import com.flowcentraltech.flowcentral.application.entities.AppWidgetType;
-import com.flowcentraltech.flowcentral.application.entities.AppWidgetTypeQuery;
-import com.flowcentraltech.flowcentral.application.entities.Application;
-import com.flowcentraltech.flowcentral.application.entities.ApplicationQuery;
-import com.flowcentraltech.flowcentral.application.entities.BaseApplicationEntity;
-import com.flowcentraltech.flowcentral.application.entities.BaseApplicationEntityQuery;
+import com.flowcentraltech.flowcentral.application.entities.*;
 import com.flowcentraltech.flowcentral.application.util.ApplicationCodeGenUtils;
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityNameParts;
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityUtils;
@@ -261,6 +164,8 @@ import com.flowcentraltech.flowcentral.configuration.xml.EntitySeriesConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.EntityUniqueConditionConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.EntityUniqueConstraintConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.EntityUploadConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.EnumerationConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.EnumerationItemConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.FieldSequenceConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.FieldValidationPolicyConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.FormActionConfig;
@@ -775,8 +680,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                         }
 
                         String references = appEntityField.getReferences();
-                        if (type.isEntityRef() || (!appEntityField.getDataType().isEnumDataType()
-                                && !StringUtils.isBlank(references))) {
+                        if (type.isEntityRef()
+                                || (!appEntityField.getDataType().isEnumGroup() && !StringUtils.isBlank(references))) {
                             edb.addFieldDef(textWidgetTypeDef, inputWidgetTypeDef, lingualWidgetTypeDef,
                                     getRefDef(references), appEntityField.getDataType(), appEntityField.getType(),
                                     appEntityField.getTextCase(), appEntityField.getName(), appEntityField.getMapped(),
@@ -2331,6 +2236,11 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
     }
 
     @Override
+    public AppEnumeration findAppEnumeration(Long enumerationId) throws UnifyException {
+        return environment().find(AppEnumeration.class, enumerationId);
+    }
+
+    @Override
     public AppWidgetType findAppWidgetType(Long widgetTypeId) throws UnifyException {
         return environment().find(AppWidgetType.class, widgetTypeId);
     }
@@ -2343,6 +2253,35 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
     @Override
     public AppSuggestionType findAppSuggestionType(Long suggestionTypeId) throws UnifyException {
         return environment().find(AppSuggestionType.class, suggestionTypeId);
+    }
+
+    @Override
+    public Listable getDynamicEnumList(String longName) throws UnifyException {
+        ApplicationEntityNameParts nameParts = ApplicationNameUtils.getApplicationEntityNameParts(longName);
+        String label = environment().value(String.class, "label", new AppEnumerationQuery()
+                .applicationName(nameParts.getApplicationName()).name(nameParts.getEntityName()));
+        return new ListData(longName, label);
+    }
+
+    @Override
+    public List<? extends Listable> getDynamicEnumLists(String label, int limit) throws UnifyException {
+        AppEnumerationQuery query = (AppEnumerationQuery) new AppEnumerationQuery()
+                .addSelect("applicationName", "name", "label").addOrder("label");
+        if (!StringUtils.isBlank(label)) {
+            query.labelLike(label);
+        }
+
+        query.setLimit(limit);
+
+        List<AppEnumeration> enumerations = environment().listAll(query);
+        List<ListData> list = new ArrayList<ListData>();
+        for (AppEnumeration enumeration : enumerations) {
+            String longName = ApplicationNameUtils.getApplicationEntityLongName(enumeration.getApplicationName(),
+                    enumeration.getName());
+            list.add(new ListData(longName, enumeration.getLabel()));
+        }
+
+        return list;
     }
 
     @Override
@@ -3993,7 +3932,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
         EntityFieldDef propEntityFieldDef = refEntityDef.getFieldDef(property);
         if (propEntityFieldDef.getDataType().isListOnly()) {
             EntityFieldDef _refEntityFieldDef = refEntityDef.getFieldDef(propEntityFieldDef.getKey());
-            if (_refEntityFieldDef.isEnumDataType()) {
+            if (_refEntityFieldDef.isEnumGroup()) {
                 return EntityFieldDataType.STRING;
             }
 
@@ -4271,6 +4210,40 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
 
             logDebug(taskMonitor, "Installed [{0}] application applets...",
                     applicationConfig.getAppletsConfig().getAppletList().size());
+        }
+
+        // Enumerations
+        logDebug(taskMonitor, "Installing application enumerations...");
+        environment().updateAll(new AppEnumerationQuery().applicationId(applicationId).isNotActualCustom(),
+                new Update().add("deprecated", Boolean.TRUE));
+        if (applicationConfig.getEnumerationsConfig() != null
+                && !DataUtils.isBlank(applicationConfig.getEnumerationsConfig().getEnumList())) {
+            AppEnumeration appEnumeration = new AppEnumeration();
+            appEnumeration.setApplicationId(applicationId);
+            for (EnumerationConfig enumerationConfig : applicationConfig.getEnumerationsConfig().getEnumList()) {
+                AppEnumeration oldAppEnumeration = environment().findLean(
+                        new AppEnumerationQuery().applicationId(applicationId).name(enumerationConfig.getName()));
+                description = resolveApplicationMessage(enumerationConfig.getDescription());
+                if (oldAppEnumeration == null) {
+                    logDebug("Installing new application enumeration [{0}]...", enumerationConfig.getName());
+                    appEnumeration.setId(null);
+                    appEnumeration.setName(enumerationConfig.getName());
+                    appEnumeration.setDescription(resolveApplicationMessage(enumerationConfig.getDescription()));
+                    appEnumeration.setLabel(resolveApplicationMessage(enumerationConfig.getLabel()));
+                    appEnumeration.setConfigType(ConfigType.STATIC_INSTALL);
+                    populateChildList(appEnumeration, enumerationConfig);
+                    environment().create(appEnumeration);
+                } else {
+                    logDebug("Upgrading application enumeration [{0}]...", enumerationConfig.getName());
+                    if (ConfigUtils.isSetInstall(oldAppEnumeration)) {
+                        oldAppEnumeration.setDescription(resolveApplicationMessage(enumerationConfig.getDescription()));
+                        oldAppEnumeration.setLabel(resolveApplicationMessage(enumerationConfig.getLabel()));
+                        oldAppEnumeration.setDeprecated(false);
+                        populateChildList(oldAppEnumeration, enumerationConfig);
+                        environment().updateByIdVersion(oldAppEnumeration);
+                    }
+                }
+            }
         }
 
         // Widgets
@@ -4831,6 +4804,22 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
         return true;
     }
 
+    private void populateChildList(AppEnumeration appEnumeration, EnumerationConfig enumerationConfig)
+            throws UnifyException {
+        List<AppEnumerationItem> itemList = null;
+        if (!DataUtils.isBlank(enumerationConfig.getItemList())) {
+            itemList = new ArrayList<AppEnumerationItem>();
+            for (EnumerationItemConfig itemConfig : enumerationConfig.getItemList()) {
+                AppEnumerationItem appEnumerationItem = new AppEnumerationItem();
+                appEnumerationItem.setCode(itemConfig.getCode());
+                appEnumerationItem.setLabel(itemConfig.getLabel());
+                itemList.add(appEnumerationItem);
+            }
+        }
+
+        appEnumeration.setItemList(itemList);
+    }
+
     private void populateChildList(AppApplet appApplet, String applicationName, AppletConfig appletConfig)
             throws UnifyException {
         List<AppAppletProp> propList = null;
@@ -5038,7 +5027,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                     appEntityField.setLabel(resolveApplicationMessage(entityFieldConfig.getLabel()));
                     String references = entityFieldConfig.getReferences();
                     if (entityFieldConfig.getType().isEntityRef()
-                            || (!entityFieldConfig.getType().isEnumDataType() && !StringUtils.isBlank(references))) {
+                            || (!entityFieldConfig.getType().isEnumGroup() && !StringUtils.isBlank(references))) {
                         references = ApplicationNameUtils.ensureLongNameReference(applicationName, references);
                     }
 
@@ -5085,8 +5074,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                         oldAppEntityField.setType(EntityFieldType.STATIC);
                         oldAppEntityField.setLabel(resolveApplicationMessage(entityFieldConfig.getLabel()));
                         String references = entityFieldConfig.getReferences();
-                        if (entityFieldConfig.getType().isEntityRef() || (!entityFieldConfig.getType().isEnumDataType()
-                                && !StringUtils.isBlank(references))) {
+                        if (entityFieldConfig.getType().isEntityRef()
+                                || (!entityFieldConfig.getType().isEnumGroup() && !StringUtils.isBlank(references))) {
                             references = ApplicationNameUtils.ensureLongNameReference(applicationName, references);
                         }
 

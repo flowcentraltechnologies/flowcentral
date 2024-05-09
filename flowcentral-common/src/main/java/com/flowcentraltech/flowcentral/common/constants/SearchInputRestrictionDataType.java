@@ -41,6 +41,8 @@ public enum SearchInputRestrictionDataType {
             EntityFieldDataType.ENUM),
     ENUM_REF(
             EntityFieldDataType.ENUM_REF),
+    ENUM_DYN(
+            EntityFieldDataType.ENUM_DYN),
     REF(
             EntityFieldDataType.REF);
 

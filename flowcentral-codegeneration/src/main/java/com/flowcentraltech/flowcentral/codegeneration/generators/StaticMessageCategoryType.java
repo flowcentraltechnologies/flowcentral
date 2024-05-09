@@ -30,6 +30,7 @@ public enum StaticMessageCategoryType {
     NOTIFICATION("Notification"),
     REPORT("Report"),
     WORKFLOW("Workflow"),
+    ENUMERATION("Enumeration"),
     WIDGET("Widget"),
     SUGGESTION("Suggestion"),
     REF("Reference"),

@@ -39,6 +39,8 @@ import com.flowcentraltech.flowcentral.application.entities.AppEntitySeries;
 import com.flowcentraltech.flowcentral.application.entities.AppEntityUniqueCondition;
 import com.flowcentraltech.flowcentral.application.entities.AppEntityUniqueConstraint;
 import com.flowcentraltech.flowcentral.application.entities.AppEntityUpload;
+import com.flowcentraltech.flowcentral.application.entities.AppEnumeration;
+import com.flowcentraltech.flowcentral.application.entities.AppEnumerationItem;
 import com.flowcentraltech.flowcentral.application.entities.AppForm;
 import com.flowcentraltech.flowcentral.application.entities.AppFormAction;
 import com.flowcentraltech.flowcentral.application.entities.AppFormAnnotation;
@@ -97,6 +99,9 @@ import com.flowcentraltech.flowcentral.configuration.xml.EntitySeriesConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.EntityUniqueConditionConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.EntityUniqueConstraintConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.EntityUploadConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.EnumerationConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.EnumerationItemConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.EnumerationsConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.FieldValidationPolicyConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.FilterConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.FormActionConfig;
@@ -304,6 +309,39 @@ public class ApplicationXmlGenerator extends AbstractStaticArtifactGenerator {
 
             appletsConfig.setAppletList(appletList);
             appConfig.setAppletsConfig(appletsConfig);
+        }
+
+        // Enumerations
+        List<Long> enumIdList = applicationModuleService.findCustomAppComponentIdList(applicationName,
+                AppEnumeration.class);
+        if (!DataUtils.isBlank(enumIdList)) {
+            EnumerationsConfig enumerationsConfig = new EnumerationsConfig();
+            List<EnumerationConfig> enumerationList = new ArrayList<EnumerationConfig>();
+            for (Long enumId : enumIdList) {
+                EnumerationConfig enumerationConfig = new EnumerationConfig();
+                AppEnumeration appEnumeration = applicationModuleService.findAppEnumeration(enumId);
+                descKey = getDescriptionKey(lowerCaseApplicationName, "enumeration", appEnumeration.getName());
+                labelKey = descKey + ".label";
+                ctx.addMessage(StaticMessageCategoryType.ENUMERATION, descKey, appEnumeration.getDescription());
+                ctx.addMessage(StaticMessageCategoryType.ENUMERATION, labelKey, appEnumeration.getLabel());
+                enumerationConfig.setName(appEnumeration.getName());
+                enumerationConfig.setDescription("$m{" + descKey + "}");
+                enumerationConfig.setLabel("$m{" + labelKey + "}");
+                
+                List<EnumerationItemConfig> itemList = new ArrayList<EnumerationItemConfig>();
+                for (AppEnumerationItem appEnumerationItem: appEnumeration.getItemList()) {
+                    EnumerationItemConfig enumerationItemConfig = new EnumerationItemConfig();
+                    enumerationItemConfig.setCode(appEnumerationItem.getCode());
+                    enumerationItemConfig.setLabel(appEnumerationItem.getLabel());
+                    itemList.add(enumerationItemConfig);
+                }
+                
+                enumerationConfig.setItemList(itemList);
+                enumerationList.add(enumerationConfig);
+            }
+
+            enumerationsConfig.setEnumList(enumerationList);
+            appConfig.setEnumerationsConfig(enumerationsConfig);
         }
 
         // Widgets

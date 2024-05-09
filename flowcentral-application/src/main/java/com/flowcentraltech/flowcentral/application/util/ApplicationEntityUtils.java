@@ -325,7 +325,7 @@ public final class ApplicationEntityUtils {
         String references = appEntityField.getReferences();
         RefDef refDef = null;
         if (type.isEntityRef()
-                || (!appEntityField.getDataType().isEnumDataType() && !StringUtils.isBlank(references))) {
+                || (!appEntityField.getDataType().isEnumGroup() && !StringUtils.isBlank(references))) {
             refDef = au.getRefDef(references);
         }
 

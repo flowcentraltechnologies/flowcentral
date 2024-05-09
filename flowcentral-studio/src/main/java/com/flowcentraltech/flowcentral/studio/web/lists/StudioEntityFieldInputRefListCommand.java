@@ -50,7 +50,7 @@ public class StudioEntityFieldInputRefListCommand extends AbstractApplicationLis
     public List<? extends Listable> execute(Locale locale, StudioEntityFieldFormParams params) throws UnifyException {
         if (params.isPresent()) {
             EntityFieldDataType type = DataUtils.convert(EntityFieldDataType.class, params.getDataType());
-            if (type.isForeignKey() && !type.isEnumDataType()) {
+            if (type.isForeignKey() && !type.isEnumGroup()) {
                 ApplicationEntityNameParts np = ApplicationNameUtils.getApplicationEntityNameParts(params.getEntity());
                 AppEntityField appEntityField = application().findAppEntityField(
                         (AppEntityFieldQuery) new AppEntityFieldQuery().applicationName(np.getApplicationName())

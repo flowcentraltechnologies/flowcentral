@@ -68,8 +68,10 @@ public class EntityFieldDefFormatterListCommand extends AbstractFlowCentralListC
                             break;
                         case ENUM:
                         case ENUM_REF:
+                        case ENUM_DYN:
                         case FOSTER_PARENT_ID:
                         case FOSTER_PARENT_TYPE:
+                            break;
                         case INTEGER:
                         case LONG:
                         case SHORT:

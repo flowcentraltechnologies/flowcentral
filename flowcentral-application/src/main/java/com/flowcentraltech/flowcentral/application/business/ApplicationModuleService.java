@@ -55,6 +55,7 @@ import com.flowcentraltech.flowcentral.application.entities.AppEntityFieldQuery;
 import com.flowcentraltech.flowcentral.application.entities.AppEntityQuery;
 import com.flowcentraltech.flowcentral.application.entities.AppEntityUpload;
 import com.flowcentraltech.flowcentral.application.entities.AppEntityUploadQuery;
+import com.flowcentraltech.flowcentral.application.entities.AppEnumeration;
 import com.flowcentraltech.flowcentral.application.entities.AppForm;
 import com.flowcentraltech.flowcentral.application.entities.AppFormAnnotation;
 import com.flowcentraltech.flowcentral.application.entities.AppFormAnnotationQuery;
@@ -1092,6 +1093,18 @@ public interface ApplicationModuleService extends FlowCentralService {
     WidgetTypeDef getWidgetTypeDef(String widgetName) throws UnifyException;
 
     /**
+     * Finds a enumeration by ID.
+     * 
+     * @param enumerationId
+     *                     the enumeration ID
+     * @return the application enumeration record
+     * @throws UnifyException
+     *                        if enumeration with ID is not found. If an error
+     *                        occurs
+     */
+    AppEnumeration findAppEnumeration(Long enumerationId) throws UnifyException;
+
+    /**
      * Finds a widget type by ID.
      * 
      * @param widgetTypeId
@@ -1159,6 +1172,30 @@ public interface ApplicationModuleService extends FlowCentralService {
      */
     AppAssignmentPage findAppAssignmentPage(Long appAssignmentPageId) throws UnifyException;
 
+    /**
+     * Gets a application enumeration.
+     * 
+     * @param longName
+     *                 the enumeration long name
+     * @return the enumeration
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    Listable getDynamicEnumList(String longName) throws UnifyException;
+
+    /**
+     * Gets application enumerations with label like.
+     * 
+     * @param label
+     *                 the label
+     * @param limit    the limit
+     * @return the enumeration
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    List <? extends Listable> getDynamicEnumLists(String label, int limit) throws UnifyException;
+    
+    
     /**
      * Gets a application related widget types.
      * 

@@ -841,7 +841,7 @@ public abstract class AbstractEnvironmentDelegate extends AbstractFlowCentralCom
                 Object resolvedKeyObject = null;
                 if (keyVal != null) {
                     EntityFieldDef _refEntityFieldDef = entityDef.getFieldDef(keyFieldName);
-                    if (_refEntityFieldDef.isEnumDataType()) {
+                    if (_refEntityFieldDef.isEnumGroup()) {
                         resolvedKeyObject = getListItemByKey(LocaleType.SESSION, _refEntityFieldDef.getReferences(),
                                 ((EnumConst) keyVal).code());
                         resolvedKeyObject = resolvedKeyObject != null ? new ListOption((Listable) resolvedKeyObject)

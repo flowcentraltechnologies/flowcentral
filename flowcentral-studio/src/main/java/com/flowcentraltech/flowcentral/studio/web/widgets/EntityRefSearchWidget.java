@@ -22,13 +22,11 @@ import java.util.Set;
 import com.flowcentraltech.flowcentral.application.web.widgets.EntitySearchWidget;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
-import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.UplAttribute;
 import com.tcdng.unify.core.annotation.UplAttributes;
 import com.tcdng.unify.core.data.Listable;
 import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.database.Query;
-import com.tcdng.unify.core.list.ListManager;
 
 /**
  * Entity reference search widget.
@@ -41,9 +39,6 @@ import com.tcdng.unify.core.list.ListManager;
         @UplAttribute(name = "styleClass", type = String.class, defaultVal = "$e{fc-entitysearch}"),
         @UplAttribute(name = "ref", type = String[].class, defaultVal = "application.appRefRef") })
 public class EntityRefSearchWidget extends EntitySearchWidget {
-
-    @Configurable
-    private ListManager listManager;
 
     public String getListkey() throws UnifyException {
         return "longName";

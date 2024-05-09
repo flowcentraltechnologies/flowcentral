@@ -1075,7 +1075,7 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
                         if (formTabDef.isQuickOrder()) {
                             mode |= EntitySearch.SHOW_QUICK_ORDER;
                         }
-                        
+
                         final boolean isIgnoreReport = true;
                         EntitySearch _entitySearch = constructEntitySearch(formContext, sweepingCommitPolicy,
                                 formTabDef.getName(), rootTitle, _appletDef, editAction, mode, isIgnoreReport,
@@ -2033,8 +2033,7 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
     @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
     protected void onInitialize() throws UnifyException {
-        Map<String, MappedEntityProvider<? extends BaseMappedEntityProviderContext>> providers =
-                new HashMap<String, MappedEntityProvider<? extends BaseMappedEntityProviderContext>>();
+        Map<String, MappedEntityProvider<? extends BaseMappedEntityProviderContext>> providers = new HashMap<String, MappedEntityProvider<? extends BaseMappedEntityProviderContext>>();
         List<MappedEntityProvider> _providers = getComponents(MappedEntityProvider.class);
         for (MappedEntityProvider _provider : _providers) {
             if (providers.containsKey(_provider.destEntity())) {
@@ -2137,12 +2136,12 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
     public void populateListOnlyFields(EntityDef entityDef, Entity inst) throws UnifyException {
         for (EntityFieldDef entityFieldDef : entityDef.getFkFieldDefList()) {
             final String fkFieldName = entityFieldDef.getFieldName();
-            if (entityFieldDef.isEnumDataType()) {
+            if (entityFieldDef.isEnumGroup()) {
                 String key = DataUtils.getBeanProperty(String.class, inst, fkFieldName);
                 if (key == null) {
                     clearListOnlyFields(entityDef, fkFieldName, inst);
                 } else {
-                    Listable listable = getListItemByKey(entityFieldDef.getReferences(), key);
+                    Listable listable =  getListItemByKey(entityFieldDef.getReferences(), key);
                     for (EntityFieldDef _entityFieldDef : entityDef.getListOnlyFieldDefList()) {
                         if (_entityFieldDef.getKey().equals(fkFieldName)) {
                             String val = "description".equals(_entityFieldDef.getProperty())
@@ -2806,6 +2805,8 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
                         return getListItemByKey(LocaleType.SESSION, entityFieldDef.getReferences(), key)
                                 .getListDescription();
                     }
+                    break;
+                case ENUM_DYN:
                     break;
                 case REF:
                 case REF_UNLINKABLE:
