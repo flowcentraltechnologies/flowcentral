@@ -453,6 +453,10 @@ public class EntityFieldDef implements Listable, EntityFieldAttributes {
         return dataType.isEnumDataType();
     }
 
+    public boolean isEnumDynamic() {
+        return dataType.isEnumDynamic();
+    }
+
     public boolean isEnumGroup() {
         return dataType.isEnumGroup();
     }

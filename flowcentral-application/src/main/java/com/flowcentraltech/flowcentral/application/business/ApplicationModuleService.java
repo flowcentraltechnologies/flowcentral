@@ -1160,6 +1160,29 @@ public interface ApplicationModuleService extends FlowCentralService {
     AppAssignmentPage findAppAssignmentPage(Long appAssignmentPageId) throws UnifyException;
 
     /**
+     * Gets a application enumeration.
+     * 
+     * @param longName
+     *                 the enumeration long name
+     * @return the enumeration
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    Listable getDynamicEnumeration(String longName) throws UnifyException;
+
+    /**
+     * Gets application enumerations with label like.
+     * 
+     * @param label
+     *                 the label
+     * @param limit    the limit
+     * @return the enumeration
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    List <? extends Listable> getDynamicEnumerations(String label, int limit) throws UnifyException;
+
+    /**
      * Gets a application related widget types.
      * 
      * @param applicationName

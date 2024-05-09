@@ -124,6 +124,29 @@ import com.tcdng.unify.web.ui.widget.data.Hint.MODE;
 public interface AppletUtilities extends FlowCentralComponent {
 
     /**
+     * Gets an application enumeration.
+     * 
+     * @param longName
+     *                 the enumeration long name
+     * @return the enumeration
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    Listable getDynamicEnumeration(String longName) throws UnifyException;
+
+    /**
+     * Gets application enumerations with label like.
+     * 
+     * @param label
+     *                 the label
+     * @param limit    the search limit
+     * @return the enumeration
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    List<? extends Listable> getDynamicEnumerations(String label, int limit) throws UnifyException;
+
+    /**
      * Gets formatted audit. Uses default formatter options.
      * 
      * @param auditSnapshot

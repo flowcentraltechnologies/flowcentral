@@ -509,6 +509,12 @@
 		<reference name="applicationRef"
 			description="$m{application.application.reference}"
 			entity="application" searchField="description" />
+		<reference name="appEnumerationRef"
+			description="$m{application.appenumeration.reference}" entity="appEnumeration"
+			searchField="label" />
+		<reference name="appEnumerationItemRef"
+			description="$m{application.appenumerationitem.reference}" entity="appEnumerationItem"
+			searchField="label" />
 		<reference name="appAppletRef"
 			description="$m{application.appapplet.reference}" entity="appApplet"
 			searchField="description" />
@@ -2038,6 +2044,44 @@
 			<field name="suggestionTypeDesc"
 				label="$m{application.appsuggestion.suggestiontypedesc}"
 				type="list_only" key="suggestionTypeId" property="description" />
+		</entity>
+		<entity name="appEnumeration"
+			description="$m{application.appenumeration}"
+			label="$m{application.appenumeration.label}"
+			type="com.flowcentraltech.flowcentral.application.entities.AppEnumeration">
+			<field name="label" label="$m{application.appenumeration.field.label}"
+				type="string" />
+			<field name="itemList"
+				label="$m{application.appenumeration.items}" type="child_list"
+				references="appEnumerationItemRef" />
+			<uniqueConstraint name="nameUc"
+				description="$m{application.appapplet.uc.name}"
+				fieldList="applicationId,name">
+				<condition field="devVersionType" value="CRN" />
+			</uniqueConstraint>
+			<uniqueConstraint name="descUc"
+				description="$m{application.appapplet.uc.description}"
+				fieldList="applicationId,description">
+				<condition field="devVersionType" value="CRN" />
+			</uniqueConstraint>
+		</entity>
+		<entity name="appEnumerationItem"
+			description="$m{application.appenumerationitem}"
+			label="$m{application.appenumerationitem.label}"
+			type="com.flowcentraltech.flowcentral.application.entities.AppEnumerationItem">
+			<field name="appEnumerationId"
+				label="$m{application.appappletprop.appenumerationid}" type="ref"
+				references="appEnumerationRef" inputWidget="application.entitylist" />
+			<field name="code" label="$m{application.appenumerationitem.code}"
+				type="string" inputWidget="application.alphanumeric"/>
+			<field name="label" label="$m{{application.appenumerationitem.field.label}"
+				type="string" inputWidget="application.text"/>
+			<uniqueConstraint name="codeUc"
+				description="$m{application.appenumerationitem.uc.code}"
+				fieldList="appEnumerationId,code" />
+			<uniqueConstraint name="labelUc"
+				description="$m{application.appenumerationitem.uc.label}"
+				fieldList="appEnumerationId,label" />
 		</entity>
 	</entities>
 	<!-- Tables -->

@@ -696,7 +696,7 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
                 reportColumnOptions.setIncluded(true);
 
                 final String fieldName = reportColumn.getFieldName();
-                String type = entityClassDef.getEntityDef().getFieldDef(fieldName).isEnumDataType()
+                String type = entityClassDef.getEntityDef().getFieldDef(fieldName).isEnumGroup()
                         ? String.class.getName()
                         : reportColumn.getType();
                 String formatter = reportColumn.getFormatter();

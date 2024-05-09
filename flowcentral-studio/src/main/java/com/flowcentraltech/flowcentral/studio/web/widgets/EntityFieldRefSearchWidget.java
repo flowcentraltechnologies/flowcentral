@@ -71,7 +71,9 @@ public class EntityFieldRefSearchWidget extends EntitySearchWidget {
                 case ENUM:
                 case ENUM_REF:
                     return listManager.getListItemByKey(getSessionLocale(), "staticlistlist", (String) keyVal);
-                case CHILD:
+                case ENUM_DYN:
+                    return au().getDynamicEnumeration((String) keyVal);
+                case CHILD: 
                 case CHILD_LIST:
                 case REF_FILEUPLOAD:
                 case REF:
@@ -113,6 +115,8 @@ public class EntityFieldRefSearchWidget extends EntitySearchWidget {
                 case ENUM_REF:
                     return listManager.getCaseInsensitiveSubList(getApplicationLocale(), "staticlistlist", input,
                             limit);
+                case ENUM_DYN:
+                    return au().getDynamicEnumerations(input, limit);
                 case CHILD:
                 case CHILD_LIST:
                 case REF_FILEUPLOAD: {

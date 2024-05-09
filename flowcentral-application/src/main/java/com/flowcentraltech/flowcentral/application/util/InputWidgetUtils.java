@@ -227,7 +227,7 @@ public final class InputWidgetUtils {
         final EntityFieldDef _entityFieldDef = entityFieldDef.isWithResolvedTypeFieldDef()
                 ? entityFieldDef.getResolvedTypeFieldDef()
                 : entityFieldDef;
-        if (_entityFieldDef.isEnumDataType()) {
+        if (_entityFieldDef.isEnumGroup()) {
             String editor = String.format("!ui-dropdownchecklist list:%s columns:3 formatter:$d{!pipearrayformat}",
                     _entityFieldDef.getReferences());
             return (AbstractInput<?>) ReflectUtils.newInstance(StringInput.class, NEW_INPUT_PARAMS, editor,
