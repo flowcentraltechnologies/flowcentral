@@ -46,6 +46,12 @@ public class ReviewResult {
         return requiredMessages;
     }
 
+    public List<String> getAllMessages() {
+        List<String> allMessages = new ArrayList<String>(requiredMessages);
+        allMessages.addAll(skippableMessages);
+        return allMessages;
+    }
+
     public boolean isWithSkippableMessages() {
         return !skippableMessages.isEmpty();
     }
