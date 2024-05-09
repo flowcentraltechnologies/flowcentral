@@ -142,7 +142,7 @@ public final class InputWidgetUtils {
         map.put(EntityFieldDataType.STRING, "application.text");
         map.put(EntityFieldDataType.ENUM, "application.enumlist");
         map.put(EntityFieldDataType.ENUM_REF, "application.enumlist");
-        map.put(EntityFieldDataType.ENUM_DYN, "application.dynamicenumlist");
+        map.put(EntityFieldDataType.ENUM_DYN, "application.enumlist");
         map.put(EntityFieldDataType.REF, "application.entitylist");
         map.put(EntityFieldDataType.REF_UNLINKABLE, "application.entitylist");
         map.put(EntityFieldDataType.REF_FILEUPLOAD, "application.fileupload");
@@ -442,7 +442,6 @@ public final class InputWidgetUtils {
             case "application.postingcreditonlyneg":
                 editor = String.format(editor, efa.getPrecision(), efa.getScale());
                 break;
-            case "application.dynamicenumlist":
             case "application.enumlist":
             case "application.enumreadonlytext":
             case "application.enumlistlabel":

@@ -64,7 +64,7 @@ public final class ApplicationQueryUtils {
                         .add(new And().add(new Equals("dataType", DataType.STRING))
                                 .add(new Equals("enumOption", Boolean.TRUE)).add(new Equals("listOption", true))));
             } else if (entityFieldDataType.isEnumDynamic()) {
-                query.addEquals("applicationName", "application").addEquals("name", "dynamicenumlist");
+                query.addEquals("applicationName", "application").addEquals("name", "enumlist");
             } else if (entityFieldDataType.isMapped()) {
                 query.addRestriction(new Equals("inputType", InputType.MAPPED));
             } else {

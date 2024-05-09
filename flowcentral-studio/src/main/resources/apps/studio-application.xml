@@ -589,6 +589,23 @@
 			type="path_page" path="/studio/applicationreplication/openPage"
 			menuAccess="false" allowSecondaryTenants="false">
 		</applet>
+		<applet name="manageAppEnumerationItem"
+			description="$m{studio.appenumerationitem.manage}"
+			label="$m{studio.appenumerationitem.manage.label}"
+			type="manage_entitylist" entity="application.appEnumerationItem"
+			menuAccess="false">
+			<property name="searchTable" value="appEnumerationItemTable" />
+			<property name="searchTable.new" value="true" />
+			<property name="searchTable.edit" value="false" />
+			<property name="searchTable.report" value="false" />
+			<property name="createForm" value="appEnumerationItemForm" />
+			<property name="createForm.save" value="true" />
+			<property name="createForm.save.next" value="true" />
+			<property name="createForm.save.close" value="true" />
+			<property name="maintainForm" value="appEnumerationItemForm" />
+			<property name="maintainForm.update" value="true" />
+			<property name="maintainForm.delete" value="true" />
+		</applet>
 		<applet name="manageAppEntityField"
 			description="$m{studio.appentityfield.manage}"
 			label="$m{studio.appentityfield.manage.label}"
@@ -1442,6 +1459,16 @@
 				widthRatio="1" />
 			<column field="allowSecondaryTenants"
 				renderWidget="application.text" widthRatio="1" />
+		</table>
+		<table name="appEnumerationItemTable"
+			description="$m{studio.appenumerationitem.table}"
+			label="$m{studio.appenumerationitem.table.label}"
+			entity="application.appEnumerationItem" itemsPerPage="20"
+			serialNo="true">
+			<column field="code" renderWidget="application.text"
+				widthRatio="1" linkAct="maintainAct" />
+			<column field="label" renderWidget="application.text"
+				widthRatio="1" />
 		</table>
 		<table name="appEntityFieldTable"
 			description="$m{studio.appentityfield.table}"
@@ -3214,6 +3241,59 @@
 			<tab name="changeLog" label="$m{application.form.audit}"
 				contentType="miniform_changelog" />
 		</form>
+		<form name="appEnumerationForm"
+			description="$m{studio.appenumeration.form}"
+			entity="application.appEnumeration">
+			<action type="button" name="lockResource" symbol="lock"
+				styleClass="fc-bluebutton"
+				description="$m{studio.common.form.action.lockresource}"
+				label="$m{studio.common.form.action.lockresource.label}"
+				policy="lockresource-actionpolicy" showOnMaintain="true" />
+			<action type="button" name="unlockResource" symbol="unlock"
+				styleClass="fc-bluebutton"
+				description="$m{studio.common.form.action.unlockresource}"
+				label="$m{studio.common.form.action.unlockresource.label}"
+				policy="unlockresource-actionpolicy" showOnMaintain="true" />
+			<annotation name="staticAnnotation"
+				description="$m{studio.common.form.annotation.static}"
+				message="$m{studio.common.form.annotation.static.message}" />
+			<tab name="basicDetails"
+				label="$m{studio.appapplet.form.basicdetails}" editable="false"
+				contentType="miniform">
+				<section name="appletDetails" columns="type_2">
+					<field name="applicationId"
+						reference="studio.applicationDevelopableRef"
+						inputWidget="application.entitysearch" column="0"
+						label="$m{studio.application}" disabled="true" required="true"
+						saveAs="true" />
+					<field name="name" inputWidget="application.name" column="0"
+						required="true" saveAs="true" />
+					<field name="description" inputWidget="application.text"
+						column="0" required="true" saveAs="true" />
+					<field name="label" inputWidget="application.text" column="1"
+						required="true" />
+				</section>
+			</tab>
+			<tab name="items" label="$m{studio.appenumeration.form.items}"
+				contentType="child_list" applet="manageAppEnumerationItem"
+				reference="itemList" />
+		</form>
+		<form name="appEnumerationItemForm"
+			description="$m{studio.appenumerationitem.form}"
+			entity="application.appEnumerationItem">
+			<tab name="basicDetails"
+				label="$m{studio.appenumerationitem.form.basicdetails}"
+				contentType="miniform">
+				<section name="filterDetails" columns="type_2">
+					<field name="code" inputWidget="application.name" column="0"
+						required="true" />
+					<field name="label" inputWidget="application.text"
+						column="1" required="true" />
+				</section>
+			</tab>
+			<tab name="changeLog" label="$m{application.form.audit}"
+				contentType="miniform_changelog" />
+		</form>		
 		<form name="appRefForm" description="$m{studio.appref.form}"
 			entity="application.appRef">
 			<action type="button" name="lockResource" symbol="lock"

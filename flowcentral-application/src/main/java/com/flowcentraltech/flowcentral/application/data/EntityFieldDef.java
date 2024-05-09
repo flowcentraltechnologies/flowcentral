@@ -612,7 +612,7 @@ public class EntityFieldDef implements Listable, EntityFieldAttributes {
     public static Builder newBuilderForEnumDynamic(AppletUtilities au, String fieldName, String fieldLabel, String list)
             throws UnifyException {
         return EntityFieldDef.newBuilder(au, EntityFieldDataType.ENUM_DYN, EntityFieldType.STATIC, fieldName, fieldLabel)
-                .inputWidget("application.dynamicenumlist").references(list);
+                .inputWidget("application.enumlist").references(list);
     }
 
     public static Builder newBuilder(AppletUtilities au, EntityFieldDataType dataType, EntityFieldType type,

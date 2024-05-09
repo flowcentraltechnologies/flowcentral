@@ -61,6 +61,8 @@ public abstract class AbstractStudioAppletActionPolicy extends AbstractAppletAct
         String privilegeCode = null;
         boolean assignToRole = false;
         switch (type) {
+            case ENUMERATION:
+                break;
             case WIDGET:
                 break;
             case APPLET:

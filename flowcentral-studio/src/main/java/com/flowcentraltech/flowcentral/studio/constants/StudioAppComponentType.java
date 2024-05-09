@@ -22,6 +22,7 @@ import java.util.Map;
 
 import com.flowcentraltech.flowcentral.application.entities.AppApplet;
 import com.flowcentraltech.flowcentral.application.entities.AppEntity;
+import com.flowcentraltech.flowcentral.application.entities.AppEnumeration;
 import com.flowcentraltech.flowcentral.application.entities.AppForm;
 import com.flowcentraltech.flowcentral.application.entities.AppRef;
 import com.flowcentraltech.flowcentral.application.entities.AppTable;
@@ -89,7 +90,7 @@ public enum StudioAppComponentType implements EnumConst {
             0,
             AppletType.MANAGE_ENTITYLIST,
             null),
-    SYNCHRONIZATION(
+    SYNCHRONIZATION( 
             "syn_",
             null,
             "$m{studio.application.component.type.synchronization}",
@@ -103,6 +104,21 @@ public enum StudioAppComponentType implements EnumConst {
             0,
             AppletType.MANAGE_ENTITYLIST,
             null),
+    ENUMERATION(
+            "enm_",
+            "appEnumerationForm",
+            "$m{studio.application.component.type.enumeration}",
+            "$m{studio.application.component.type.enumerations}",
+            "studio.menu.label.enumeration",
+            "grid",
+            "/studioappcomponentapplet",
+            "studiooncreatecomponent-policy",
+            null,
+            null,
+            StudioAppComponentFlags.ENTITY_COMPONENT | StudioAppComponentFlags.SUPPORTS_NEW
+                    | StudioAppComponentFlags.SUPPORTS_SAVEAS,
+            AppletType.STUDIO_FC_COMPONENT,
+            AppEnumeration.class),
     WIDGET(
             "wdg_",
             "appWidgetTypeForm",
