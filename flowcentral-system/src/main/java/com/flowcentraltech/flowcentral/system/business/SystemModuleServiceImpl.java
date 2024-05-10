@@ -123,8 +123,8 @@ import com.tcdng.unify.core.util.StringUtils;
  */
 @Transactional
 @Component(SystemModuleNameConstants.SYSTEM_MODULE_SERVICE)
-public class SystemModuleServiceImpl extends AbstractFlowCentralService
-        implements SystemModuleService, LicenseProvider, SpecialParamProvider, SystemParameterProvider, TaskStatusLogger {
+public class SystemModuleServiceImpl extends AbstractFlowCentralService implements SystemModuleService, LicenseProvider,
+        SpecialParamProvider, SystemParameterProvider, TaskStatusLogger {
 
     private static final String LICENSE = "license";
 
@@ -536,14 +536,16 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
         if (scheduledTaskHistId != null) {
             // Update history
             ScheduledTaskHist scheduledTaskHist = environment().find(ScheduledTaskHist.class, scheduledTaskHistId);
-            scheduledTaskHist.setFinishedOn(getNow());
-            scheduledTaskHist.setTaskStatus(tm.getTaskStatus());
-            if (tm.isExceptions()) {
-                String msg = getPrintableStackTrace(tm.getExceptions()[0]);
-                scheduledTaskHist.setErrorMsg(msg);
+            if (scheduledTaskHist != null) {
+                scheduledTaskHist.setFinishedOn(getNow());
+                scheduledTaskHist.setTaskStatus(tm.getTaskStatus());
+                if (tm.isExceptions()) {
+                    String msg = getPrintableStackTrace(tm.getExceptions()[0]);
+                    scheduledTaskHist.setErrorMsg(msg);
+                }
+
+                environment().updateByIdVersion(scheduledTaskHist);
             }
-            
-            environment().updateByIdVersion(scheduledTaskHist);
         }
     }
 
