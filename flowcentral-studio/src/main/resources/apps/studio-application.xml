@@ -5569,6 +5569,9 @@
 				<property name="createForm.submit.buttonhighlight"
 					description="$m{studio.appappletprop.manageentitysingleform.createform.submitbuttonhighlight}"
 					inputWidget="application.checkbox" />
+				<property name="entityForm.submit.close"
+					description="$m{studio.appappletprop.manageentitysingleform.entityform.submitclose}"
+					inputWidget="application.checkbox" />
 				<property name="createForm.submit.policy"
 					description="$m{studio.appappletprop.createentity.createform.submitpolicy}"
 					inputWidget="studio.propertyentityactionpolicylist" />
@@ -5681,6 +5684,9 @@
 					inputWidget="application.text" />
 				<property name="createForm.submit.buttonhighlight"
 					description="$m{studio.appappletprop.manageentitysingleform.createform.submitbuttonhighlight}"
+					inputWidget="application.checkbox" />
+				<property name="entityForm.submit.close"
+					description="$m{studio.appappletprop.manageentitysingleform.entityform.submitclose}"
 					inputWidget="application.checkbox" />
 				<property name="createForm.submit.policy"
 					description="$m{studio.appappletprop.createentitysingleform.createform.submitpolicy}"
@@ -6031,6 +6037,9 @@
 				<property name="createForm.submit.buttonhighlight"
 					description="$m{studio.appappletprop.manageentity.createform.submitbuttonhighlight}"
 					inputWidget="application.checkbox" />
+				<property name="entityForm.submit.close"
+					description="$m{studio.appappletprop.manageentity.entityform.submitclose}"
+					inputWidget="application.checkbox" />
 				<property name="createForm.submit.policy"
 					description="$m{studio.appappletprop.manageentity.createform.submitpolicy}"
 					inputWidget="studio.propertyentityactionpolicylist" />
@@ -6290,6 +6299,9 @@
 					inputWidget="application.text" />
 				<property name="createForm.submit.buttonhighlight"
 					description="$m{studio.appappletprop.manageentitysingleform.createform.submitbuttonhighlight}"
+					inputWidget="application.checkbox" />
+				<property name="entityForm.submit.close"
+					description="$m{studio.appappletprop.manageentitysingleform.entityform.submitclose}"
 					inputWidget="application.checkbox" />
 				<property name="createForm.submit.policy"
 					description="$m{studio.appappletprop.manageentitysingleform.createform.submitpolicy}"

@@ -263,7 +263,8 @@ public abstract class AbstractEntitySingleFormApplet extends AbstractApplet {
     }
 
     public EntityActionResult submitInst() throws UnifyException {
-        if (getCtx().isInDetachedWindow()) {
+        if (getCtx().isInDetachedWindow() && !getSingleFormAppletDef().getPropValue(boolean.class,
+                AppletPropertyConstants.ENTITY_FORM_CLOSE_DETACHED_ONSUBMIT, false)) { 
             return submitInstAndNext();
         }
 
