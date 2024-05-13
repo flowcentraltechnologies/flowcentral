@@ -64,7 +64,6 @@ import com.tcdng.unify.core.annotation.UplBinding;
 import com.tcdng.unify.core.data.IndexedTarget;
 import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.util.DataUtils;
-import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.annotation.Action;
 import com.tcdng.unify.web.constant.ResultMappingConstants;
 import com.tcdng.unify.web.ui.constant.MessageType;
