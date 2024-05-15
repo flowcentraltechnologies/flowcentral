@@ -36,14 +36,16 @@ public class CollapsibleTable {
 
     private int numberOfLevels;
 
-    private int levelWidth;
+    private int labelWidth;
 
-    private int fieldWidth;
+    private int columnWidth;
     
     private CollapsibleTable(List<Column> columns, List<Row> rows, int numberOfLevels) {
         this.columns = columns;
         this.rows = rows;
-        this.numberOfLevels = numberOfLevels;
+        this.numberOfLevels = numberOfLevels;        
+        this.labelWidth = 40; // TODO
+        this.columnWidth = 60 / columns.size();
     }
 
     public List<Column> getColumns() {
@@ -54,8 +56,20 @@ public class CollapsibleTable {
         return rows;
     }
 
+    public int getNumberOfColumns() {
+        return columns.size();
+    }
+
     public int getNumberOfLevels() {
         return numberOfLevels;
+    }
+
+    public int getLabelWidth() {
+        return labelWidth;
+    }
+
+    public int getColumnWidth() {
+        return columnWidth;
     }
 
     public static Builder newBuilder() {
@@ -87,8 +101,8 @@ public class CollapsibleTable {
             return this;
         }
 
-        public Builder addRow(String label, Object data) {
-            rows.add(new Row(data, label, currentDepth));
+        public Builder addRow(String label, boolean expandable, Object data) {
+            rows.add(new Row(data, label, currentDepth, expandable));
             return this;
         }
 
@@ -143,12 +157,15 @@ public class CollapsibleTable {
 
         private final int depth;
 
+        private final boolean expandable;
+
         private boolean expanded;
 
-        public Row(Object data, String label, int depth) {
+        public Row(Object data, String label, int depth, boolean expandable) {
             this.data = data;
             this.label = label;
             this.depth = depth;
+            this.expandable = expandable;
         }
 
         public Object getData() {
@@ -159,8 +176,16 @@ public class CollapsibleTable {
             return depth;
         }
 
+        public boolean isVisible(int depth) {
+            return this.depth == depth;
+        }
+        
         public String getLabel() {
             return label;
+        }
+
+        public boolean isExpandable() {
+            return expandable;
         }
 
         public boolean isExpanded() {
