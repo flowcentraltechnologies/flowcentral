@@ -114,8 +114,10 @@ public class CollapsibleTableWidgetWriter extends AbstractControlWriter {
                     for (int j = 0; j < numberOfColumns; j++) {
                         Column column = columns.get(j);
                         String val = formatsInstance
-                                .format(DataUtils.getNestedBeanProperty(Object.class, column.getFieldName()));
-                        writer.write("<td>");
+                                .format(DataUtils.getNestedBeanProperty(Object.class, column.getFieldName()));                       
+                        writer.write("<td class=\"");
+                        writer.write(column.getAlign().styleClass());
+                        writer.write("\">");
                         writer.write(val);
                         writer.write("</td>");
                     }
