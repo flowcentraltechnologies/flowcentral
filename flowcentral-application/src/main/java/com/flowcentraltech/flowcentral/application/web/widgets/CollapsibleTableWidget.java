@@ -35,6 +35,22 @@ public class CollapsibleTableWidget extends AbstractFlowCentralControl {
     }
 
     @Action
+    public void expandAll() throws UnifyException {
+        CollapsibleTable table = getCollapsibleTable();
+        if (table != null) {
+            table.expandAll();
+        }
+    }
+
+    @Action
+    public void collapseAll() throws UnifyException {
+        CollapsibleTable table = getCollapsibleTable();
+        if (table != null) {
+            table.collapseAll();
+        }
+    }
+
+    @Action
     public void toggle() throws UnifyException {
         CollapsibleTable table = getCollapsibleTable();
         if (table != null) {

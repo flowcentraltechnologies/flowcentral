@@ -62,6 +62,22 @@ public class CollapsibleTable {
         return numberOfLevels;
     }
 
+    public void expandAll() {
+        for (Row row: rows) {
+            if (row.isExpandable()) {
+                row.setExpanded(true);
+            }
+        }
+    }
+
+    public void collapseAll() {
+        for (Row row: rows) {
+            if (row.isExpandable()) {
+                row.setExpanded(false);
+            }
+        }
+    }
+    
     public boolean toggle(int rowIndex) {
         if (rowIndex >= 0 && rowIndex < rows.size()) {
             Row row = rows.get(rowIndex);

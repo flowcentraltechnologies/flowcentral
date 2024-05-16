@@ -541,15 +541,25 @@ fux.rigFilter = function(rgp) {
 fux.rigCollapsibleTable = function(rgp) {
 	const id = rgp.pId;
 	const rows = rgp.pRows;
+	
+	const evpe = ux.newEvPrm(rgp);
+	evpe.uCmd = id + "->expandAll";
+	evpe.uSendTrg = i;
+	evpe.uPanels = [ rgp.pContId ];			
+	ux.addHdl(_id(id + "_exp"), "click", ux.post, evpe);
+	
+	const evpc = ux.newEvPrm(rgp);
+	evpc.uCmd = id + "->collapseAll";
+	evpc.uSendTrg = i;
+	evpc.uPanels = [ rgp.pContId ];			
+	ux.addHdl(_id(id + "_col"), "click", ux.post, evpc);
+	
 	for (var i = 0; i < rows; i++) {
 		const evp = ux.newEvPrm(rgp);
 		evp.uCmd = id + "->toggle";
 		evp.uSendTrg = i;
-		//evp.uRef = [ id ];
-		evp.uPanels = [ rgp.pContId ];
-				
-		const idx = id + "_cl" + i;
-		ux.addHdl(_id(idx), "click", ux.post, evp);
+		evp.uPanels = [ rgp.pContId ];				
+		ux.addHdl(_id(id + "_cl" + i), "click", ux.post, evp);
 	}
 }
 

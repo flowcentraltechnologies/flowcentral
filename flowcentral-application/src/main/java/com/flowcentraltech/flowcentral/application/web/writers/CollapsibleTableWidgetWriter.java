@@ -51,10 +51,27 @@ public class CollapsibleTableWidgetWriter extends AbstractControlWriter {
 
         CollapsibleTable table = collapsibleTableWidget.getCollapsibleTable();
         if (table != null) {
+            final String id = collapsibleTableWidget.getId();
+            // Action
+            writer.write("<div class=\"actb\" style=\"width:100%;\">");
+            writer.write("<span id=\"");
+            writer.write(id);
+            writer.write("_exp\" class=\"act\">");
+            writer.write(resolveSessionMessage("$m{button.expandall}"));
+            writer.write("</span>");
+            writer.write("<span id=\"");
+            writer.write(id);
+            writer.write("_col\" class=\"act\">");
+            writer.write(resolveSessionMessage("$m{button.collapseall}"));
+            writer.write("</span>");
+            writer.write("</div>");
+            
+            // Body
+            writer.write("<div style=\"width:100%;\">");
+
             final Formats.Instance formatsInstance = Formats.DEFAULT.createInstance();
             final List<Column> columns = table.getColumns();
 
-            final String id = collapsibleTableWidget.getId();
             final int numberOfLevels = table.getNumberOfLevels();
             final int numberOfColumns = table.getNumberOfColumns();
 
@@ -84,7 +101,9 @@ public class CollapsibleTableWidgetWriter extends AbstractControlWriter {
 
                 if (row.isVisible(currVisibleDepth)) {
                     final boolean expanded = row.isExpanded();
-                    writer.write("<tr>");
+                    writer.write("<tr class=\"");
+                    writer.write(expandable && currVisibleDepth == 0 ? "odd" : "even");
+                    writer.write("\">");
                     // Controls
                     for (int j = 0; j <= currVisibleDepth; j++) {
                         if (j == 0) {
@@ -135,6 +154,8 @@ public class CollapsibleTableWidgetWriter extends AbstractControlWriter {
             }
 
             writer.write("</table>");
+            
+            writer.write("</div>");
         }
 
         writer.write("</div>");
