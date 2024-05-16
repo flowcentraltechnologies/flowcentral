@@ -49,23 +49,23 @@ public class CollapsibleTableWidgetWriter extends AbstractControlWriter {
         writeTagAttributes(writer, collapsibleTableWidget);
         writer.write(">");
 
+        final String id = collapsibleTableWidget.getId();
+        // Action
+        writer.write("<div class=\"actb\" style=\"width:100%;\">");
+        writer.write("<span id=\"");
+        writer.write(id);
+        writer.write("_exp\" class=\"act\">");
+        writer.write(resolveSessionMessage("$m{button.expandall}"));
+        writer.write("</span>");
+        writer.write("<span id=\"");
+        writer.write(id);
+        writer.write("_col\" class=\"act\">");
+        writer.write(resolveSessionMessage("$m{button.collapseall}"));
+        writer.write("</span>");
+        writer.write("</div>");
+        
         CollapsibleTable table = collapsibleTableWidget.getCollapsibleTable();
-        if (table != null) {
-            final String id = collapsibleTableWidget.getId();
-            // Action
-            writer.write("<div class=\"actb\" style=\"width:100%;\">");
-            writer.write("<span id=\"");
-            writer.write(id);
-            writer.write("_exp\" class=\"act\">");
-            writer.write(resolveSessionMessage("$m{button.expandall}"));
-            writer.write("</span>");
-            writer.write("<span id=\"");
-            writer.write(id);
-            writer.write("_col\" class=\"act\">");
-            writer.write(resolveSessionMessage("$m{button.collapseall}"));
-            writer.write("</span>");
-            writer.write("</div>");
-            
+        if (table != null) {            
             // Body
             writer.write("<div style=\"width:100%;\">");
 
