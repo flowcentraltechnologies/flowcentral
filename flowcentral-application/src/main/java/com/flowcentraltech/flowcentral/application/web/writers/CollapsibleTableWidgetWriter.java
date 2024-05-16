@@ -48,7 +48,7 @@ public class CollapsibleTableWidgetWriter extends AbstractControlWriter {
         writer.write("<div");
         writeTagAttributes(writer, collapsibleTableWidget);
         writer.write(">");
-        // TODO
+
         CollapsibleTable table = collapsibleTableWidget.getCollapsibleTable();
         if (table != null) {
             final Formats.Instance formatsInstance = Formats.DEFAULT.createInstance();
@@ -92,7 +92,7 @@ public class CollapsibleTableWidgetWriter extends AbstractControlWriter {
                         } else {
                             writer.write("<td class=\"ctrlb\">");
                         }
-                        
+
                         if (expandable && (currVisibleDepth == j)) {
                             writer.write("<span id=\"").write(cid).write("\" class=\"icon g_fsm\">");
                             if (expanded) {
@@ -143,7 +143,16 @@ public class CollapsibleTableWidgetWriter extends AbstractControlWriter {
     @Override
     protected void doWriteBehavior(ResponseWriter writer, Widget widget, EventHandler[] handlers)
             throws UnifyException {
-        // TODO
+        CollapsibleTableWidget collapsibleTableWidget = (CollapsibleTableWidget) widget;
+        CollapsibleTable table = collapsibleTableWidget.getCollapsibleTable();
+        if (table != null) {
+            writer.beginFunction("fux.rigCollapsibleTable");
+            writer.writeParam("pId", collapsibleTableWidget.getId());
+            writer.writeCommandURLParam("pCmdURL");
+            writer.writeParam("pContId", collapsibleTableWidget.getContainerId());
+            writer.writeParam("pRows", table.getNumberOfRows());
+            writer.endFunction();
+        }
     }
 
 }

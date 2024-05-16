@@ -16,9 +16,10 @@
 
 package com.flowcentraltech.flowcentral.application.web.widgets;
 
-import com.flowcentraltech.flowcentral.common.web.widgets.AbstractFlowCentralMultiControl;
+import com.flowcentraltech.flowcentral.common.web.widgets.AbstractFlowCentralControl;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
+import com.tcdng.unify.web.annotation.Action;
 
 /**
  * Collapsible table widget.
@@ -27,15 +28,18 @@ import com.tcdng.unify.core.annotation.Component;
  * @since 1.0
  */
 @Component("fc-collapsibletable")
-public class CollapsibleTableWidget extends AbstractFlowCentralMultiControl {
+public class CollapsibleTableWidget extends AbstractFlowCentralControl {
 
     public CollapsibleTable getCollapsibleTable() throws UnifyException {
         return getValue(CollapsibleTable.class);
     }
 
-    @Override
-    protected void doOnPageConstruct() throws UnifyException {
-        // TODO Auto-generated method stub
-        
+    @Action
+    public void toggle() throws UnifyException {
+        CollapsibleTable table = getCollapsibleTable();
+        if (table != null) {
+            final int rowIndex = getRequestTarget(int.class);
+            table.toggle(rowIndex);
+        }
     }
 }

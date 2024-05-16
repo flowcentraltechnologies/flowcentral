@@ -54,10 +54,26 @@ public class CollapsibleTable {
         return columns.size();
     }
 
+    public int getNumberOfRows() {
+        return rows.size();
+    }
+
     public int getNumberOfLevels() {
         return numberOfLevels;
     }
 
+    public boolean toggle(int rowIndex) {
+        if (rowIndex >= 0 && rowIndex < rows.size()) {
+            Row row = rows.get(rowIndex);
+            if (row.isExpandable()) {
+                row.setExpanded(!row.isExpanded());
+                return true;
+            }
+        }
+        
+        return false;
+    }
+    
     public static Builder newBuilder() {
         return new Builder();
     }

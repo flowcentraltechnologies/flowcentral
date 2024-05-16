@@ -537,6 +537,22 @@ fux.rigFilter = function(rgp) {
 	}
 }
 
+/** Collapsible Table */
+fux.rigCollapsibleTable = function(rgp) {
+	const id = rgp.pId;
+	const rows = rgp.pRows;
+	for (var i = 0; i < rows; i++) {
+		const evp = ux.newEvPrm(rgp);
+		evp.uCmd = id + "->toggle";
+		evp.uSendTrg = i;
+		//evp.uRef = [ id ];
+		evp.uPanels = [ rgp.pContId ];
+				
+		const idx = id + "_cl" + i;
+		ux.addHdl(_id(idx), "click", ux.post, evp);
+	}
+}
+
 /** Line entries*/
 fux.rigLineEntries = function(rgp) {
 	var id = rgp.pId;
@@ -1085,6 +1101,7 @@ fux.init = function() {
 	ux.setfn(fux.rigPopupWinText,"fux13"); 
 	ux.setfn(fux.rigTokenEntries,"fux14");  
 	ux.setfn(fux.rigFormAnnotation,"fux15");  
+	ux.setfn(fux.rigCollapsibleTable,"fux16");  
 }
 
 fux.init();
