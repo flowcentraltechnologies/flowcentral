@@ -263,6 +263,27 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-chart .tbl .haright {text-align:right;}
 .fc-chart .tbl .hajustified {text-align:justify;}
 
+/** Collapsible Table */
+.fc-collapsibletable {}
+.fc-collapsibletable .actb {text-align:right;}
+.fc-collapsibletable .act {display:inline-block;font-size:7pt;cursor:pointer;margin:2px;padding:2px;border:1px solid #a0a0a0;background-color:#f4f4f4;}
+.fc-collapsibletable .bdy {border-collapse: collapse;}
+.fc-collapsibletable .odd {background-color:#f1f4f5;}
+.fc-collapsibletable .odd:hover {background-color:#d5e7fb;}
+.fc-collapsibletable .even {}
+.fc-collapsibletable .even:hover {background-color:#d5e7fb;}
+.fc-collapsibletable .bdy td {border: 1px solid #a0a0a0;}
+.fc-collapsibletable .ctrl {width:20px;}
+.fc-collapsibletable .ctrlr {border-right:none !important;}
+.fc-collapsibletable .ctrlb {border-left:none !important;border-right:none !important;}
+.fc-collapsibletable .dat {padding:2px;border-left:none !important;}
+.fc-collapsibletable .icon {display:inline-block;padding:2px;width:16px;font-size:11pt;cursor:pointer;text-align:center;}
+.fc-collapsibletable .haleft {text-align:left;}
+.fc-collapsibletable .hacenter {text-align:center;}
+.fc-collapsibletable .haright {text-align:right;}
+.fc-collapsibletable .hajustified {text-align:justify;}
+
+
 /** Comment Listing */
 .fc-commentlisting {overflow-y:scroll;padding:2px;height:196px;border:solid 1px #b0b0b0;}
 .fc-commentlisting .ctable {display:table;border-collapse:collapse;width:100%;}
