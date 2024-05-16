@@ -36,16 +36,10 @@ public class CollapsibleTable {
 
     private int numberOfLevels;
 
-    private int labelWidth;
-
-    private int columnWidth;
-    
     private CollapsibleTable(List<Column> columns, List<Row> rows, int numberOfLevels) {
         this.columns = columns;
         this.rows = rows;
-        this.numberOfLevels = numberOfLevels;        
-        this.labelWidth = 40; // TODO
-        this.columnWidth = 60 / columns.size();
+        this.numberOfLevels = numberOfLevels;
     }
 
     public List<Column> getColumns() {
@@ -62,14 +56,6 @@ public class CollapsibleTable {
 
     public int getNumberOfLevels() {
         return numberOfLevels;
-    }
-
-    public int getLabelWidth() {
-        return labelWidth;
-    }
-
-    public int getColumnWidth() {
-        return columnWidth;
     }
 
     public static Builder newBuilder() {
@@ -91,18 +77,18 @@ public class CollapsibleTable {
             this.rows = new ArrayList<Row>();
         }
 
-        public Builder addColumn(String fieldName, HAlignType align) {
-            columns.add(new Column(fieldName, align));
+        public Builder addColumn(String fieldName, HAlignType align, int widthInPercent) {
+            columns.add(new Column(fieldName, align, widthInPercent));
             return this;
         }
 
-        public Builder addColumn(String fieldName) {
-            columns.add(new Column(fieldName, HAlignType.LEFT));
+        public Builder addColumn(String fieldName, int widthInPercent) {
+            columns.add(new Column(fieldName, HAlignType.LEFT, widthInPercent));
             return this;
         }
 
-        public Builder addRow(String label, boolean expandable, Object data) {
-            rows.add(new Row(data, label, currentDepth, expandable));
+        public Builder addRow(boolean expandable, Object data) {
+            rows.add(new Row(data, currentDepth, expandable));
             return this;
         }
 
@@ -125,7 +111,7 @@ public class CollapsibleTable {
 
         public CollapsibleTable build() {
             return new CollapsibleTable(DataUtils.unmodifiableList(columns), DataUtils.unmodifiableList(rows),
-                    currentDepth + 1);
+                    maxDepth + 1);
         }
     }
 
@@ -135,9 +121,12 @@ public class CollapsibleTable {
 
         private final HAlignType align;
 
-        public Column(String fieldName, HAlignType align) {
+        private final int widthInPercent;
+
+        public Column(String fieldName, HAlignType align, int widthInPercent) {
             this.fieldName = fieldName;
             this.align = align;
+            this.widthInPercent = widthInPercent;
         }
 
         public String getFieldName() {
@@ -147,13 +136,15 @@ public class CollapsibleTable {
         public HAlignType getAlign() {
             return align;
         }
+
+        public int getWidthInPercent() {
+            return widthInPercent;
+        }
     }
 
     public static class Row {
 
         private final Object data;
-
-        private final String label;
 
         private final int depth;
 
@@ -161,9 +152,8 @@ public class CollapsibleTable {
 
         private boolean expanded;
 
-        public Row(Object data, String label, int depth, boolean expandable) {
+        public Row(Object data, int depth, boolean expandable) {
             this.data = data;
-            this.label = label;
             this.depth = depth;
             this.expandable = expandable;
         }
@@ -176,12 +166,12 @@ public class CollapsibleTable {
             return depth;
         }
 
+        public boolean isRise(int depth) {
+            return this.depth < depth;
+        }
+
         public boolean isVisible(int depth) {
             return this.depth == depth;
-        }
-        
-        public String getLabel() {
-            return label;
         }
 
         public boolean isExpandable() {

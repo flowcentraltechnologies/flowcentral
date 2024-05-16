@@ -47,52 +47,54 @@ public class CollapsibleTableWidgetWriter extends AbstractControlWriter {
         CollapsibleTableWidget collapsibleTableWidget = (CollapsibleTableWidget) widget;
         writer.write("<div");
         writeTagAttributes(writer, collapsibleTableWidget);
-        writeTagAttributesWithTrailingExtraStyleClass(writer, collapsibleTableWidget, "g_fsm");
         writer.write(">");
         // TODO
         CollapsibleTable table = collapsibleTableWidget.getCollapsibleTable();
         if (table != null) {
             final Formats.Instance formatsInstance = Formats.DEFAULT.createInstance();
+            final List<Column> columns = table.getColumns();
+
             final String id = collapsibleTableWidget.getId();
             final int numberOfLevels = table.getNumberOfLevels();
             final int numberOfColumns = table.getNumberOfColumns();
-            writer.write("<table style=\"table-layout:fixed;width:100%;\">");
+
+            writer.write("<table class=\"bdy\" style=\"table-layout:fixed;width:100%;\">");
             writer.write("<colgroup>");
             // Controls
             for (int i = 0; i < numberOfLevels; i++) {
                 writer.write("<col class=\"ctrl\"/>");
             }
 
-            // Label
-            writer.write("<col class=\"lbl\" style=\"width:");
-            writer.write(table.getLabelWidth()).write("%;\"/>");
-
             // Columns
             for (int i = 0; i < numberOfColumns; i++) {
-                writer.write("<col class=\"dat\" style=\"width:");
-                writer.write(table.getColumnWidth()).write("%;\"/>");
+                writer.write("<col style=\"width:");
+                writer.write(columns.get(i).getWidthInPercent()).write("%;\"/>");
             }
 
             writer.write("</colgroup>");
 
-            final List<Column> columns = table.getColumns();
             int i = 0;
             int currVisibleDepth = 0;
             for (Row row : table.getRows()) {
                 final String cid = id + "_cl" + i;
                 final boolean expandable = row.isExpandable();
-                if (expandable && !row.isVisible(currVisibleDepth)) {
+                if (row.isRise(currVisibleDepth)) {
                     currVisibleDepth = row.getDepth();
                 }
-                
+
                 if (row.isVisible(currVisibleDepth)) {
                     final boolean expanded = row.isExpanded();
                     writer.write("<tr>");
                     // Controls
-                    for (int j = 0; j < numberOfLevels; j++) {
-                        writer.write("<td>");
+                    for (int j = 0; j <= currVisibleDepth; j++) {
+                        if (j == 0) {
+                            writer.write("<td class=\"ctrlr\">");
+                        } else {
+                            writer.write("<td class=\"ctrlb\">");
+                        }
+                        
                         if (expandable && (currVisibleDepth == j)) {
-                            writer.write("<span id=\"").write(cid).write("\" class=\"icon\">");
+                            writer.write("<span id=\"").write(cid).write("\" class=\"icon g_fsm\">");
                             if (expanded) {
                                 writer.write(resolveSymbolHtmlHexCode("caret-down"));
                             } else {
@@ -105,25 +107,25 @@ public class CollapsibleTableWidgetWriter extends AbstractControlWriter {
                         writer.write("</td>");
                     }
 
-                    // Label
-                    writer.write("<td>");
-                    writer.writeWithHtmlEscape(row.getLabel());
-                    writer.write("</td>");
-
+                    final int colspan = numberOfLevels - currVisibleDepth;
                     // Columns
                     for (int j = 0; j < numberOfColumns; j++) {
                         Column column = columns.get(j);
                         String val = formatsInstance
-                                .format(DataUtils.getNestedBeanProperty(Object.class, column.getFieldName()));                       
-                        writer.write("<td class=\"");
+                                .format(DataUtils.getNestedBeanProperty(row.getData(), column.getFieldName()));
+                        writer.write("<td class=\"dat ");
                         writer.write(column.getAlign().styleClass());
-                        writer.write("\">");
-                        writer.write(val);
+                        writer.write("\"");
+                        if (j == 0) {
+                            writer.write(" colspan=\"").write(colspan).write("\"");
+                        }
+                        writer.write(">");
+                        writer.writeWithHtmlEscape(val);
                         writer.write("</td>");
                     }
 
                     writer.write("</tr>");
-                    
+
                     if (expandable && expanded) {
                         currVisibleDepth++;
                     }

@@ -265,9 +265,13 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 
 /** Collapsible Table */
 .fc-collapsibletable {}
-.fc-collapsibletable .ctrl {}
-.fc-collapsibletable .lbl {}
-.fc-collapsibletable .dat {}
+.fc-collapsibletable .bdy {border-collapse: collapse;}
+.fc-collapsibletable .bdy td {border: 1px solid #a0a0a0;}
+.fc-collapsibletable .ctrl {width:20px;}
+.fc-collapsibletable .ctrlr {border-right:none !important;}
+.fc-collapsibletable .ctrlb {border-left:none !important;border-right:none !important;}
+.fc-collapsibletable .dat {padding:2px;border-left:none !important;}
+.fc-collapsibletable .icon {display:inline-block;padding:2px;width:16px;font-size:11pt;cursor:pointer;text-align:center;}
 .fc-collapsibletable .haleft {text-align:left;}
 .fc-collapsibletable .hacenter {text-align:center;}
 .fc-collapsibletable .haright {text-align:right;}
