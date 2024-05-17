@@ -23,12 +23,12 @@ import com.tcdng.unify.core.constant.HAlignType;
 import com.tcdng.unify.core.util.DataUtils;
 
 /**
- * Collapsible table.
+ * Collapsible information.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class CollapsibleTable {
+public class CollapsibleInfo {
 
     private List<Column> columns;
 
@@ -36,7 +36,7 @@ public class CollapsibleTable {
 
     private int numberOfLevels;
 
-    private CollapsibleTable(List<Column> columns, List<Row> rows, int numberOfLevels) {
+    private CollapsibleInfo(List<Column> columns, List<Row> rows, int numberOfLevels) {
         this.columns = columns;
         this.rows = rows;
         this.numberOfLevels = numberOfLevels;
@@ -141,8 +141,8 @@ public class CollapsibleTable {
             return this;
         }
 
-        public CollapsibleTable build() {
-            return new CollapsibleTable(DataUtils.unmodifiableList(columns), DataUtils.unmodifiableList(rows),
+        public CollapsibleInfo build() {
+            return new CollapsibleInfo(DataUtils.unmodifiableList(columns), DataUtils.unmodifiableList(rows),
                     maxDepth + 1);
         }
     }

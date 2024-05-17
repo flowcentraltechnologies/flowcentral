@@ -2943,22 +2943,26 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
     }
 
     private String buildEntityDescription(EntityDef entityDef, Entity inst) throws UnifyException {
-        StringBuilder sb = new StringBuilder();
-        boolean appendSym = false;
-        for (EntityFieldDef entityFieldDef : entityDef.getDescriptiveFieldDefList()) {
-            if (appendSym) {
-                sb.append(" ");
-            } else {
-                appendSym = true;
+        if (inst != null) {
+            StringBuilder sb = new StringBuilder();
+            boolean appendSym = false;
+            for (EntityFieldDef entityFieldDef : entityDef.getDescriptiveFieldDefList()) {
+                if (appendSym) {
+                    sb.append(" ");
+                } else {
+                    appendSym = true;
+                }
+
+                Object val = ReflectUtils.getBeanProperty(inst, entityFieldDef.getFieldName());
+                if (val != null) {
+                    sb.append(val);
+                }
             }
 
-            Object val = ReflectUtils.getBeanProperty(inst, entityFieldDef.getFieldName());
-            if (val != null) {
-                sb.append(val);
-            }
+            return sb.toString();
         }
 
-        return sb.toString();
+        return "";
     }
 
     @Override
