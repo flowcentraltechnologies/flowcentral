@@ -139,7 +139,10 @@ public class CollapsibleTableWidgetWriter extends AbstractControlWriter {
                             writer.write(" colspan=\"").write(colspan).write("\"");
                         }
                         writer.write(">");
-                        writer.writeWithHtmlEscape(val);
+                        if (val != null) {
+                            writer.writeWithHtmlEscape(val);
+                        }
+                        
                         writer.write("</td>");
                     }
 
