@@ -265,7 +265,7 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 
 /** Collapsible Table */
 .fc-collapsibletable {}
-.fc-collapsibletable .actb {text-align:right;}
+.fc-collapsibletable .actb {text-align:right;border:1px solid #a0a0a0;margin-bottom:2px;}
 .fc-collapsibletable .act {display:inline-block;font-size:7pt;cursor:pointer;margin:2px;padding:2px;border:1px solid #a0a0a0;background-color:#f4f4f4;}
 .fc-collapsibletable .bdy {border-collapse: collapse;}
 .fc-collapsibletable .odd {background-color:#f1f4f5;}
