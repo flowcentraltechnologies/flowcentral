@@ -30,13 +30,13 @@ import com.tcdng.unify.web.annotation.Action;
 @Component("fc-collapsibletable")
 public class CollapsibleTableWidget extends AbstractFlowCentralControl {
 
-    public CollapsibleTable getCollapsibleTable() throws UnifyException {
-        return getValue(CollapsibleTable.class);
+    public CollapsibleInfo getCollapsibleInfo() throws UnifyException {
+        return getValue(CollapsibleInfo.class);
     }
 
     @Action
     public void expandAll() throws UnifyException {
-        CollapsibleTable table = getCollapsibleTable();
+        CollapsibleInfo table = getCollapsibleInfo();
         if (table != null) {
             table.expandAll();
         }
@@ -44,7 +44,7 @@ public class CollapsibleTableWidget extends AbstractFlowCentralControl {
 
     @Action
     public void collapseAll() throws UnifyException {
-        CollapsibleTable table = getCollapsibleTable();
+        CollapsibleInfo table = getCollapsibleInfo();
         if (table != null) {
             table.collapseAll();
         }
@@ -52,7 +52,7 @@ public class CollapsibleTableWidget extends AbstractFlowCentralControl {
 
     @Action
     public void toggle() throws UnifyException {
-        CollapsibleTable table = getCollapsibleTable();
+        CollapsibleInfo table = getCollapsibleInfo();
         if (table != null) {
             final int rowIndex = getRequestTarget(int.class);
             table.toggle(rowIndex);

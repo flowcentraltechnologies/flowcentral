@@ -18,10 +18,10 @@ package com.flowcentraltech.flowcentral.application.web.writers;
 
 import java.util.List;
 
-import com.flowcentraltech.flowcentral.application.web.widgets.CollapsibleTable;
+import com.flowcentraltech.flowcentral.application.web.widgets.CollapsibleInfo;
 import com.flowcentraltech.flowcentral.application.web.widgets.CollapsibleTableWidget;
-import com.flowcentraltech.flowcentral.application.web.widgets.CollapsibleTable.Column;
-import com.flowcentraltech.flowcentral.application.web.widgets.CollapsibleTable.Row;
+import com.flowcentraltech.flowcentral.application.web.widgets.CollapsibleInfo.Column;
+import com.flowcentraltech.flowcentral.application.web.widgets.CollapsibleInfo.Row;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Writes;
@@ -64,16 +64,16 @@ public class CollapsibleTableWidgetWriter extends AbstractControlWriter {
         writer.write("</span>");
         writer.write("</div>");
         
-        CollapsibleTable table = collapsibleTableWidget.getCollapsibleTable();
-        if (table != null) {            
+        CollapsibleInfo info = collapsibleTableWidget.getCollapsibleInfo();
+        if (info != null) {            
             // Body
             writer.write("<div style=\"width:100%;\">");
 
             final Formats.Instance formatsInstance = Formats.DEFAULT.createInstance();
-            final List<Column> columns = table.getColumns();
+            final List<Column> columns = info.getColumns();
 
-            final int numberOfLevels = table.getNumberOfLevels();
-            final int numberOfColumns = table.getNumberOfColumns();
+            final int numberOfLevels = info.getNumberOfLevels();
+            final int numberOfColumns = info.getNumberOfColumns();
 
             writer.write("<table class=\"bdy\" style=\"table-layout:fixed;width:100%;\">");
             writer.write("<colgroup>");
@@ -92,7 +92,7 @@ public class CollapsibleTableWidgetWriter extends AbstractControlWriter {
 
             int i = 0;
             int currVisibleDepth = 0;
-            for (Row row : table.getRows()) {
+            for (Row row : info.getRows()) {
                 final String cid = id + "_cl" + i;
                 final boolean expandable = row.isExpandable();
                 if (row.isRise(currVisibleDepth)) {
@@ -165,13 +165,13 @@ public class CollapsibleTableWidgetWriter extends AbstractControlWriter {
     protected void doWriteBehavior(ResponseWriter writer, Widget widget, EventHandler[] handlers)
             throws UnifyException {
         CollapsibleTableWidget collapsibleTableWidget = (CollapsibleTableWidget) widget;
-        CollapsibleTable table = collapsibleTableWidget.getCollapsibleTable();
-        if (table != null) {
+        CollapsibleInfo info = collapsibleTableWidget.getCollapsibleInfo();
+        if (info != null) {
             writer.beginFunction("fux.rigCollapsibleTable");
             writer.writeParam("pId", collapsibleTableWidget.getId());
             writer.writeCommandURLParam("pCmdURL");
             writer.writeParam("pContId", collapsibleTableWidget.getContainerId());
-            writer.writeParam("pRows", table.getNumberOfRows());
+            writer.writeParam("pRows", info.getNumberOfRows());
             writer.endFunction();
         }
     }
