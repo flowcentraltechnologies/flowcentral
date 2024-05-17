@@ -265,7 +265,8 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 
 /** Collapsible Table */
 .fc-collapsibletable {}
-.fc-collapsibletable .actb {text-align:right;border-bottom:1px solid #a0a0a0;margin-bottom:2px;}
+.fc-collapsibletable .actb {text-align:right;border-top:1px solid #a0a0a0;
+	border-bottom:1px solid #a0a0a0;margin-bottom:2px;}
 .fc-collapsibletable .act {display:inline-block;font-size:7pt;cursor:pointer;margin:2px;padding:2px;border:1px solid #a0a0a0;background-color:#f4f4f4;}
 .fc-collapsibletable .bdy {border-collapse: collapse;}
 .fc-collapsibletable .odd {background-color:#f1f4f5;}
@@ -276,7 +277,7 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-collapsibletable .ctrl {width:20px;}
 .fc-collapsibletable .ctrlr {border-right:none !important;}
 .fc-collapsibletable .ctrlb {border-left:none !important;border-right:none !important;}
-.fc-collapsibletable .dat {padding:2px;border-left:none !important;}
+.fc-collapsibletable .dat {padding:2px;border-left:none !important;word-wrap:break-word;}
 .fc-collapsibletable .icon {display:inline-block;padding:2px;width:16px;font-size:11pt;cursor:pointer;text-align:center;}
 .fc-collapsibletable .haleft {text-align:left;}
 .fc-collapsibletable .hacenter {text-align:center;}
