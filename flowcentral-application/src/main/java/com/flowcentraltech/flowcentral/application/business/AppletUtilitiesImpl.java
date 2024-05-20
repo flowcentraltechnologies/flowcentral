@@ -2141,7 +2141,7 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
                 if (key == null) {
                     clearListOnlyFields(entityDef, fkFieldName, inst);
                 } else {
-                    Listable listable =  getListItemByKey(entityFieldDef.getReferences(), key);
+                    Listable listable = getListItemByKey(entityFieldDef.getReferences(), key);
                     for (EntityFieldDef _entityFieldDef : entityDef.getListOnlyFieldDefList()) {
                         if (_entityFieldDef.getKey().equals(fkFieldName)) {
                             String val = "description".equals(_entityFieldDef.getProperty())
@@ -2517,7 +2517,10 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
                     : new FormListingOptions(options.getFormActionName(), optionFlags);
             _options.setOptionsName(_goptions.getOptionsName());
             logDebug("Using resolved option [{0}]...", _options);
-            reader.setFormats(_generator.getFormats());
+            if (reader != null) {
+                reader.setFormats(_generator.getFormats());
+            }
+
             _generator.generateHtmlReport(rb, reader, _options);
         }
 
@@ -2533,7 +2536,10 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
         FormListingOptions _options = optionFlags == 0 ? options
                 : new FormListingOptions(options.getFormActionName(), optionFlags);
         logDebug("Using resolved option [{0}]...", _options);
-        reader.setFormats(_generator.getFormats());
+        if (reader != null) {
+            reader.setFormats(_generator.getFormats());
+        }
+
         return _generator.generateHtmlReport(reader, _options);
     }
 
@@ -2574,7 +2580,10 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
         final DetailsFormListing listing = lb.build();
         final DetailsFormListingGenerator _generator = (DetailsFormListingGenerator) getComponent(
                 listing.getGenerator());
-        reader.setFormats(_generator.getFormats());
+        if (reader != null) {
+            reader.setFormats(_generator.getFormats());
+        }
+
         final FormListingOptions options = new FormListingOptions(listing);
         return listing.isSpreadSheet() ? _generator.generateExcelReport(reader, options)
                 : _generator.generateHtmlReport(reader, options);
@@ -2588,7 +2597,10 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
         final DetailsFormListing listing = lb.build();
         final DetailsFormListingGenerator _generator = (DetailsFormListingGenerator) getComponent(
                 listing.getGenerator());
-        reader.setFormats(_generator.getFormats());
+        if (reader != null) {
+            reader.setFormats(_generator.getFormats());
+        }
+
         final FormListingOptions options = new FormListingOptions(listing);
         return listing.isSpreadSheet() ? _generator.generateExcelReport(reader, options)
                 : _generator.generateHtmlReport(reader, options);
@@ -2598,7 +2610,10 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
     public Report generateLetterListingReport(ValueStoreReader reader, String letterGenerator) throws UnifyException {
         final LetterFormListingGenerator _generator = (LetterFormListingGenerator) getComponent(letterGenerator);
         final LetterFormListing letterFormListing = new LetterFormListing(letterGenerator);
-        reader.setFormats(_generator.getFormats());
+        if (reader != null) {
+            reader.setFormats(_generator.getFormats());
+        }
+
         return _generator.generateHtmlReport(reader, new FormListingOptions(letterFormListing));
     }
 
