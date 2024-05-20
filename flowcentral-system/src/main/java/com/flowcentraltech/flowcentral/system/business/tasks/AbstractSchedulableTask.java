@@ -61,7 +61,7 @@ public abstract class AbstractSchedulableTask extends AbstractTask implements Sc
                 scheduledTaskHist.setTaskStatus(TaskStatus.CANCELED);
             } else if (tm.isNotPermitted()) {
                 scheduledTaskHist.setTaskStatus(TaskStatus.ABORTED);
-            } else if (tm.isDone()) {
+            } else {
                 scheduledTaskHist.setTaskStatus(TaskStatus.SUCCESSFUL);
             }
 
