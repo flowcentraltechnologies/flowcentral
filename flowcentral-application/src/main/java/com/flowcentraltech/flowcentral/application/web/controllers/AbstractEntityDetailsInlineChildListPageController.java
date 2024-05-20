@@ -141,6 +141,11 @@ public abstract class AbstractEntityDetailsInlineChildListPageController<T exten
     protected class InlineDetailsEntryTablePolicy implements EntryTablePolicy {
 
         @Override
+        public String getNodeId() {
+            return null;
+        }
+
+        @Override
         public String getName() {
             return null;
         }

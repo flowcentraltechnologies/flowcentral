@@ -3723,8 +3723,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
         return 0;
     }
 
-    @Synchronized(PRE_INSTALLATION_SETUP_LOCK)
     @Override
+    @Synchronized(PRE_INSTALLATION_SETUP_LOCK)
     public void performPreInstallationSetup() throws UnifyException {
         // Force schema change for custom entities (studio)
         db().update(new NativeUpdate(
@@ -3733,8 +3733,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
     }
 
     @SuppressWarnings("unchecked")
-    @Synchronized(POST_BOOT_SETUP_LOCK)
     @Override
+    @Synchronized(POST_BOOT_SETUP_LOCK)
     public void performPostBootSetup(final boolean isInstallationPerformed) throws UnifyException {
         if (isTenancyEnabled()) {
             // Detect primary tenant and also possible improper primary tenant change

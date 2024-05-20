@@ -29,13 +29,13 @@ import com.flowcentraltech.flowcentral.common.data.FormListingOptions;
 import com.flowcentraltech.flowcentral.common.data.GenerateListingReportOptions;
 import com.flowcentraltech.flowcentral.notification.business.NotificationModuleService;
 import com.flowcentraltech.flowcentral.notification.data.NotifLargeTextWrapper;
+import com.flowcentraltech.flowcentral.system.business.tasks.AbstractSchedulableTask;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.constant.FileAttachmentType;
 import com.tcdng.unify.core.data.Formats;
 import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.database.Entity;
-import com.tcdng.unify.core.task.AbstractTask;
 import com.tcdng.unify.core.util.IOUtils;
 
 /**
@@ -44,7 +44,7 @@ import com.tcdng.unify.core.util.IOUtils;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class AbstractNotificationTask extends AbstractTask {
+public abstract class AbstractNotificationTask extends AbstractSchedulableTask {
 
     private final Formats DEFAULT_REPORT_FORMATS = new Formats("###,##0;(###,##0)", "###,##0.00;(###,##0.00)",
             "dd-MM-yyyy", "dd-MM-yyyy");

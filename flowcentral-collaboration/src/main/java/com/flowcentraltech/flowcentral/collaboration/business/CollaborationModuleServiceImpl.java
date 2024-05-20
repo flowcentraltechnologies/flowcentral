@@ -64,8 +64,8 @@ public class CollaborationModuleServiceImpl extends AbstractFlowCentralService
         return environment().deleteAll(query);
     }
 
+    @Override
 	@Synchronized(FREEZE_COMPONENTS_LOCK)
-	@Override
 	public int freezeComponents(List<FreezeUnfreeze> freezeUnfreezeList) throws UnifyException {
 		int result = 0;
 		CollaborationFreeze collaborationFreeze = new CollaborationFreeze();
@@ -84,8 +84,8 @@ public class CollaborationModuleServiceImpl extends AbstractFlowCentralService
 		return result;
 	}
 
+    @Override
 	@Synchronized(FREEZE_COMPONENTS_LOCK)
-	@Override
 	public int unfreezeComponents(List<FreezeUnfreeze> freezeUnfreezeList) throws UnifyException {
 		int result = 0;
 		for (FreezeUnfreeze freeze : freezeUnfreezeList) {
@@ -134,8 +134,8 @@ public class CollaborationModuleServiceImpl extends AbstractFlowCentralService
         return false;
     }
 	
-    @Synchronized(RESOURCE_LOCK)
     @Override
+    @Synchronized(RESOURCE_LOCK)
     public boolean lock(CollaborationType type, String resourceName, String userLoginId) throws UnifyException {
         CollaborationLock collaborationLock = environment()
                 .find(new CollaborationLockQuery().type(type).resourceName(resourceName));
@@ -154,21 +154,21 @@ public class CollaborationModuleServiceImpl extends AbstractFlowCentralService
         return true;
     }
 
-    @Synchronized(RESOURCE_LOCK)
     @Override
+    @Synchronized(RESOURCE_LOCK)
     public boolean unlock(CollaborationType type, String resourceName, String userLoginId) throws UnifyException {
         return environment().deleteAll(
                 new CollaborationLockQuery().type(type).resourceName(resourceName).createdBy(userLoginId)) > 0;
     }
 
-    @Synchronized(RESOURCE_LOCK)
     @Override
+    @Synchronized(RESOURCE_LOCK)
     public boolean unlock(CollaborationType type, String resourceName) throws UnifyException {
         return environment().deleteAll(new CollaborationLockQuery().type(type).resourceName(resourceName)) > 0;
     }
 
-    @Synchronized(RESOURCE_LOCK)
     @Override
+    @Synchronized(RESOURCE_LOCK)
     public boolean grabLock(CollaborationType type, String resourceName, String userLoginId) throws UnifyException {
         unlock(type, resourceName);
         return lock(type, resourceName, userLoginId);

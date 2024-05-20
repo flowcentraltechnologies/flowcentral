@@ -42,7 +42,7 @@ public abstract class AbstractNotificationTemplateTask<T extends NotifTemplateWr
     }
 
     @Override
-    public void execute(TaskMonitor monitor, TaskInput input) throws UnifyException {
+    public void doExecute(TaskMonitor monitor, TaskInput input) throws UnifyException {
         composeAndSend();
     }
 

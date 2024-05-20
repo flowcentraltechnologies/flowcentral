@@ -469,8 +469,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         return executeEntityPostActionPolicy(ctx);
     }
 
-    @Synchronized(WFWORKFLOWCOPY_LOCK)
     @Override
+    @Synchronized(WFWORKFLOWCOPY_LOCK)
     public void ensureWorkflowCopyWorkflows(String appletName, boolean forceUpdate) throws UnifyException {
         if (appletUtil.isAppletWithWorkflowCopy(appletName)) {
             updateWorkflowCopyWorkflow(WorkflowDesignUtils.DesignType.WORKFLOW_COPY_CREATE, appletName, forceUpdate);
@@ -1133,7 +1133,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
     public void processWfTransitionQueueItems(TaskMonitor taskMonitor) throws UnifyException {
         logDebug("Processing transition queue items...");
         List<WfTransitionQueue> pendingList = null;
-        if (grabClusterLock(WFTRANSITION_QUEUE_LOCK)) {
+        if (tryGrabLock(WFTRANSITION_QUEUE_LOCK)) {
             try {
                 logDebug("Lock acquired for transition queue processing...");
                 int batchSize = appletUtil.system().getSysParameterValue(int.class,
@@ -1152,7 +1152,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                             new Update().add("processingDt", getNow()));
                 }
             } finally {
-                releaseClusterLock(WFTRANSITION_QUEUE_LOCK);
+                releaseLock(WFTRANSITION_QUEUE_LOCK);
                 logDebug("Released transition queue processing lock...");
             }
         }
@@ -1177,7 +1177,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         if (appletUtil.system().getSysParameterValue(boolean.class,
                 WorkflowModuleSysParamConstants.WF_ENABLE_AUTOLOADING)) {
             logDebug("Processing workflow auto-loading...");
-            if (grabClusterLock(WFAUTOLOADING_LOCK)) {
+            if (tryGrabLock(WFAUTOLOADING_LOCK)) {
                 try {
                     logDebug("Lock acquired for workflow auto loading...");
                     final Date now = getNow();
@@ -1207,7 +1207,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                         logDebug("Workflow auto loading completed for [{0}].", workflowName);
                     }
                 } finally {
-                    releaseClusterLock(WFAUTOLOADING_LOCK);
+                    releaseLock(WFAUTOLOADING_LOCK);
                     logDebug("Released workflow auto-loading lock.");
                 }
             }

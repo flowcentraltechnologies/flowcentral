@@ -35,7 +35,7 @@ import com.tcdng.unify.core.task.TaskMonitor;
 public abstract class AbstractNotificationMultiTemplateTask extends AbstractNotificationTask {
 
     @Override
-    public void execute(TaskMonitor monitor, TaskInput input) throws UnifyException {
+    public void doExecute(TaskMonitor monitor, TaskInput input) throws UnifyException {
         composeAndSend();
     }
 
