@@ -25,6 +25,4 @@ public interface SystemSchedTaskConstants {
 
     String SCHEDULEDTASK_ID = "sys.scheduledtaskid";
 
-    String SCHEDULEDTASKHIST_ID = "sys.scheduledtaskhistid";
-
 }

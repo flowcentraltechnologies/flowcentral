@@ -42,7 +42,7 @@ public abstract class AbstractReaderNotificationTemplateTask<T extends NotifTemp
     }
 
     @Override
-    public final void execute(TaskMonitor monitor, TaskInput input) throws UnifyException {
+    public final void doExecute(TaskMonitor monitor, TaskInput input) throws UnifyException {
         final T notifWrapper = notification().wrapperOfNotifTemplate(notifWrapperType);      
         final ValueStoreReader reader = getReader(input);
         

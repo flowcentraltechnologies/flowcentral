@@ -20,7 +20,6 @@ import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Parameter;
 import com.tcdng.unify.core.annotation.Schedulable;
-import com.tcdng.unify.core.task.AbstractTask;
 import com.tcdng.unify.core.task.TaskInput;
 import com.tcdng.unify.core.task.TaskMonitor;
 
@@ -36,10 +35,10 @@ import com.tcdng.unify.core.task.TaskMonitor;
                 mandatory = true),
         @Parameter(name = "lineCount", description = "Line Count", editor = "!ui-integer precision:3 size:16",
                 type = Integer.class, mandatory = true) })
-public class PrintToConsoleTask extends AbstractTask {
+public class PrintToConsoleTask extends AbstractSchedulableTask {
 
     @Override
-    public void execute(TaskMonitor taskMonitor, TaskInput input) throws UnifyException {
+    public void doExecute(TaskMonitor taskMonitor, TaskInput input) throws UnifyException {
         String lineText = input.getParam(String.class, "lineText");
         int lineCount = input.getParam(int.class, "lineCount");
         if (lineText != null) {

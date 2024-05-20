@@ -191,6 +191,11 @@ public abstract class AbstractLoadingDetailsPageController<T extends AbstractLoa
     protected final class DetailsEntryTablePolicy implements EntryTablePolicy {
 
         @Override
+        public String getNodeId() {
+            return null;
+        }
+
+        @Override
         public String getName() {
             return null;
         }

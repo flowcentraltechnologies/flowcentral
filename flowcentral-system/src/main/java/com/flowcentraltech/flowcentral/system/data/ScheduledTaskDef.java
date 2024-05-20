@@ -25,8 +25,6 @@ import com.flowcentraltech.flowcentral.common.data.ParamValuesDef;
  * @since 1.0
  */
 public class ScheduledTaskDef {
-
-    private static final String RELAY_BASE = "relay::";
     
     private Long id;
 
@@ -35,8 +33,6 @@ public class ScheduledTaskDef {
     private String userLoginId;
 
     private String lock;
-
-    private String relayLock;
 
     private String description;
 
@@ -65,7 +61,6 @@ public class ScheduledTaskDef {
         this.tenantId = tenantId;
         this.userLoginId = userLoginId;
         this.lock = lock;
-        this.relayLock = RELAY_BASE + lock;
         this.description = description;
         this.taskName = taskName;
         this.startOffset = startOffset;
@@ -92,10 +87,6 @@ public class ScheduledTaskDef {
 
     public String getLock() {
         return lock;
-    }
-
-    public String getRelayLock() {
-        return relayLock;
     }
 
     public String getDescription() {

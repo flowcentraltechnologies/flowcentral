@@ -71,7 +71,6 @@ import com.flowcentraltech.flowcentral.system.entities.ModuleApp;
 import com.flowcentraltech.flowcentral.system.entities.ModuleAppQuery;
 import com.flowcentraltech.flowcentral.system.entities.ModuleQuery;
 import com.flowcentraltech.flowcentral.system.entities.ScheduledTask;
-import com.flowcentraltech.flowcentral.system.entities.ScheduledTaskHist;
 import com.flowcentraltech.flowcentral.system.entities.ScheduledTaskQuery;
 import com.flowcentraltech.flowcentral.system.entities.Sector;
 import com.flowcentraltech.flowcentral.system.entities.SectorQuery;
@@ -88,7 +87,6 @@ import com.tcdng.unify.core.annotation.Periodic;
 import com.tcdng.unify.core.annotation.PeriodicType;
 import com.tcdng.unify.core.annotation.Synchronized;
 import com.tcdng.unify.core.annotation.Taskable;
-import com.tcdng.unify.core.annotation.TransactionAttribute;
 import com.tcdng.unify.core.annotation.Transactional;
 import com.tcdng.unify.core.application.Feature;
 import com.tcdng.unify.core.application.FeatureQuery;
@@ -108,8 +106,6 @@ import com.tcdng.unify.core.task.TaskExecLimit;
 import com.tcdng.unify.core.task.TaskManager;
 import com.tcdng.unify.core.task.TaskMonitor;
 import com.tcdng.unify.core.task.TaskParameterConstants;
-import com.tcdng.unify.core.task.TaskStatus;
-import com.tcdng.unify.core.task.TaskStatusLogger;
 import com.tcdng.unify.core.util.CalendarUtils;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.IOUtils;
@@ -124,7 +120,11 @@ import com.tcdng.unify.core.util.StringUtils;
 @Transactional
 @Component(SystemModuleNameConstants.SYSTEM_MODULE_SERVICE)
 public class SystemModuleServiceImpl extends AbstractFlowCentralService implements SystemModuleService, LicenseProvider,
-        SpecialParamProvider, SystemParameterProvider, TaskStatusLogger {
+        SpecialParamProvider, SystemParameterProvider {
+
+    private static final String SCHEDULED_TASK_EXECUTION_LOCK = "sys:scheduledtaskexecution-lock";
+
+    private static final String ENSURE_LICENSE_LOCK = "sys:ensurelicense-lock";
 
     private static final String LICENSE = "license";
 
@@ -175,7 +175,6 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService implemen
 
         this.scheduledTaskDefs = new FactoryMap<Long, ScheduledTaskDef>(true)
             {
-
                 @Override
                 protected boolean stale(Long scheduledTaskId, ScheduledTaskDef scheduledTaskDef) throws Exception {
                     return environment().value(long.class, "versionNo",
@@ -446,7 +445,7 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService implemen
         licenseDefFactoryMap.clear();
     }
 
-    @Synchronized("sys::ensurelicense")
+    @Synchronized(ENSURE_LICENSE_LOCK)
     public Attachment ensureLicense() throws UnifyException {
         Attachment attachment = fileAttachmentProvider.retrieveFileAttachment(LICENSE, "system.credential", 0L,
                 LICENSE);
@@ -488,7 +487,7 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService implemen
     @Taskable(name = SystemLoadLicenseTaskConstants.LOADLICENSE_TASK_NAME, description = "Load License Task",
             parameters = { @Parameter(name = SystemLoadLicenseTaskConstants.LOADLICENSE_UPLOAD_FILE,
                     description = "$m{system.loadlicense.form.selectfile}", type = byte[].class, mandatory = true) },
-            limit = TaskExecLimit.ALLOW_MULTIPLE, schedulable = false)
+            limit = TaskExecLimit.ALLOW_SINGLE, schedulable = false)
     public int executeLoadLicenseTask(TaskMonitor taskMonitor, byte[] licenseFile) throws UnifyException {
         logDebug(taskMonitor, "Loading license file...");
         try {
@@ -530,27 +529,8 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService implemen
         return 0;
     }
 
-    @Override
-    public void logStatus(TaskMonitor tm, Map<String, Object> parameters) throws UnifyException {
-        final Long scheduledTaskHistId = (Long) parameters.get(SystemSchedTaskConstants.SCHEDULEDTASKHIST_ID);
-        if (scheduledTaskHistId != null) {
-            // Update history
-            ScheduledTaskHist scheduledTaskHist = environment().find(ScheduledTaskHist.class, scheduledTaskHistId);
-            if (scheduledTaskHist != null) {
-                scheduledTaskHist.setFinishedOn(getNow());
-                scheduledTaskHist.setTaskStatus(tm.getTaskStatus());
-                if (tm.isExceptions()) {
-                    String msg = getPrintableStackTrace(tm.getExceptions()[0]);
-                    scheduledTaskHist.setErrorMsg(msg);
-                }
-
-                environment().updateByIdVersion(scheduledTaskHist);
-            }
-        }
-    }
-
     @Periodic(PeriodicType.NORMAL)
-    @Transactional(TransactionAttribute.REQUIRES_NEW)
+    @Synchronized(SCHEDULED_TASK_EXECUTION_LOCK)
     public void triggerScheduledTasksForExecution(TaskMonitor taskMonitor) throws UnifyException {
         // If periodic task is canceled or scheduler is disabled cancel all scheduled
         // tasks
@@ -583,82 +563,64 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService implemen
         for (Long scheduledTaskId : readyScheduledTaskIdList) {
             ScheduledTaskDef scheduledTaskDef = scheduledTaskDefs.get(scheduledTaskId);
             final String taskLock = scheduledTaskDef.getLock();
-            final String taskRelayLock = scheduledTaskDef.getRelayLock();
-            logDebug("Attempting to grab scheduled task lock [{0}] ...", taskLock);
-            if (!isWithClusterLock(taskLock) && grabClusterLock(taskLock)) {
-                try {
-                    logDebug("Grabbed scheduled task lock [{0}] ...", taskLock);
-                    logDebug("Setting up scheduled task [{0}] using relay lock [{1}] ...",
-                            scheduledTaskDef.getDescription(), taskRelayLock);
-                    Map<String, Object> taskParameters = new HashMap<String, Object>();
-                    taskParameters.put(TaskParameterConstants.USER_LOGIN_ID, scheduledTaskDef.getUserLoginId());
-                    taskParameters.put(TaskParameterConstants.TENANT_ID, scheduledTaskDef.getTenantId());
-                    taskParameters.put(TaskParameterConstants.LOCK_TO_RELEASE, taskRelayLock);
-                    taskParameters.put(TaskParameterConstants.TASK_STATUS_LOGGER,
-                            SystemModuleNameConstants.SYSTEM_MODULE_SERVICE);
-                    taskParameters.put(SystemSchedTaskConstants.SCHEDULEDTASK_ID, scheduledTaskId);
+            logDebug("Setting up scheduled task [{0}] using lock [{1}] ...", scheduledTaskDef.getDescription(),
+                    taskLock);
+            Map<String, Object> taskParameters = new HashMap<String, Object>();
+            taskParameters.put(TaskParameterConstants.USER_LOGIN_ID, scheduledTaskDef.getUserLoginId());
+            taskParameters.put(TaskParameterConstants.TENANT_ID, scheduledTaskDef.getTenantId());
+            taskParameters.put(TaskParameterConstants.LOCK_TO_TRY, taskLock);
+            taskParameters.put(TaskParameterConstants.TASK_STATUS_LOGGER,
+                    SystemModuleNameConstants.SYSTEM_MODULE_SERVICE);
+            taskParameters.put(SystemSchedTaskConstants.SCHEDULEDTASK_ID, scheduledTaskId);
 
-                    Date nextExecutionOn = environment().value(Date.class, "nextExecutionOn",
-                            new ScheduledTaskQuery().id(scheduledTaskId));
-                    final Date startOn = CalendarUtils.getDateWithOffset(workingDt, scheduledTaskDef.getStartOffset());
-                    Date expiryOn = CalendarUtils.getDateWithOffset(nextExecutionOn, expirationAllowanceMilliSec);
-                    if (!now.before(startOn) && now.before(expiryOn)) {
-                        // Task execution has not expired. Start task
-                        // Load settings
-                        for (ParamValueDef pvd : scheduledTaskDef.getParamValuesDef().getParamValueList()) {
-                            taskParameters.put(pvd.getParamName(), pvd.getConvertedParamVal());
-                        }
+            Date nextExecutionOn = environment().value(Date.class, "nextExecutionOn",
+                    new ScheduledTaskQuery().id(scheduledTaskId));
+            final Date startOn = CalendarUtils.getDateWithOffset(workingDt, scheduledTaskDef.getStartOffset());
+            Date expiryOn = CalendarUtils.getDateWithOffset(nextExecutionOn, expirationAllowanceMilliSec);
+            if (!now.before(startOn) && now.before(expiryOn)) {
+                // Task execution has not expired. Start task
+                // Load settings
+                for (ParamValueDef pvd : scheduledTaskDef.getParamValuesDef().getParamValueList()) {
+                    taskParameters.put(pvd.getParamName(), pvd.getConvertedParamVal());
+                }
 
-                        // Create history
-                        ScheduledTaskHist scheduledTaskHist = new ScheduledTaskHist();
-                        scheduledTaskHist.setScheduledTaskId(scheduledTaskId);
-                        scheduledTaskHist.setStartedOn(now);
-                        scheduledTaskHist.setTaskStatus(TaskStatus.INITIALIZED);
-                        Long scheduledTaskHistId = (Long) environment().create(scheduledTaskHist);
-                        taskParameters.put(SystemSchedTaskConstants.SCHEDULEDTASKHIST_ID, scheduledTaskHistId);
+                // Fire task
+                taskManager.scheduleTaskToRunAfter(scheduledTaskDef.getTaskName(), taskParameters, true, 0);
+                logDebug("Task [{0}] is setup to run...", scheduledTaskDef.getDescription());
+                triggered++;
+            }
 
-                        // Fire task
-                        taskManager.scheduleTaskToRunAfter(scheduledTaskDef.getTaskName(), taskParameters, true, 0);
-                        logDebug("Task [{0}] is setup to run...", scheduledTaskDef.getDescription());
-                        triggered++;
-                    }
-
-                    // Calculate and set next execution
-                    Date calcNextExecutionOn = null;
-                    long repeatMillSecs = scheduledTaskDef.getRepeatMillSecs();
-                    if (repeatMillSecs > 0) {
-                        Date limit = CalendarUtils.getDateWithOffset(workingDt, scheduledTaskDef.getEndOffset());
-                        long factor = ((now.getTime() - nextExecutionOn.getTime()) / repeatMillSecs) + 1;
-                        long actNextOffsetMillSecs = factor * repeatMillSecs;
-                        calcNextExecutionOn = CalendarUtils.getDateWithOffset(nextExecutionOn, actNextOffsetMillSecs);
-                        if (calcNextExecutionOn.before(startOn) || calcNextExecutionOn.after(limit)) {
-                            calcNextExecutionOn = null;
-                        }
-                    }
-
-                    if (calcNextExecutionOn == null) {
-                        if (now.before(startOn) && CalendarUtils.isWithinCalendar(scheduledTaskDef.getWeekdays(),
-                                scheduledTaskDef.getDays(), scheduledTaskDef.getMonths(), startOn)) {
-                            // Today start time
-                            calcNextExecutionOn = startOn;
-                        } else {
-                            // Use next eligible date start time
-                            calcNextExecutionOn = CalendarUtils.getDateWithOffset(
-                                    CalendarUtils.getNextEligibleDate(scheduledTaskDef.getWeekdays(),
-                                            scheduledTaskDef.getDays(), scheduledTaskDef.getMonths(), workingDt),
-                                    scheduledTaskDef.getStartOffset());
-                        }
-                    }
-
-                    environment().updateById(ScheduledTask.class, scheduledTaskId,
-                            new Update().add("nextExecutionOn", calcNextExecutionOn).add("lastExecutionOn", now));
-                    logDebug("Task [{0}] is scheduled to run next on [{1,date,dd/MM/yy HH:mm:ss}]...",
-                            scheduledTaskDef.getDescription(), calcNextExecutionOn);
-
-                } finally {
-                    releaseClusterLock(taskLock);
+            // Calculate and set next execution
+            Date calcNextExecutionOn = null;
+            long repeatMillSecs = scheduledTaskDef.getRepeatMillSecs();
+            if (repeatMillSecs > 0) {
+                Date limit = CalendarUtils.getDateWithOffset(workingDt, scheduledTaskDef.getEndOffset());
+                long factor = ((now.getTime() - nextExecutionOn.getTime()) / repeatMillSecs) + 1;
+                long actNextOffsetMillSecs = factor * repeatMillSecs;
+                calcNextExecutionOn = CalendarUtils.getDateWithOffset(nextExecutionOn, actNextOffsetMillSecs);
+                if (calcNextExecutionOn.before(startOn) || calcNextExecutionOn.after(limit)) {
+                    calcNextExecutionOn = null;
                 }
             }
+
+            if (calcNextExecutionOn == null) {
+                if (now.before(startOn) && CalendarUtils.isWithinCalendar(scheduledTaskDef.getWeekdays(),
+                        scheduledTaskDef.getDays(), scheduledTaskDef.getMonths(), startOn)) {
+                    // Today start time
+                    calcNextExecutionOn = startOn;
+                } else {
+                    // Use next eligible date start time
+                    calcNextExecutionOn = CalendarUtils.getDateWithOffset(
+                            CalendarUtils.getNextEligibleDate(scheduledTaskDef.getWeekdays(),
+                                    scheduledTaskDef.getDays(), scheduledTaskDef.getMonths(), workingDt),
+                            scheduledTaskDef.getStartOffset());
+                }
+            }
+
+            environment().updateById(ScheduledTask.class, scheduledTaskId,
+                    new Update().add("nextExecutionOn", calcNextExecutionOn).add("lastExecutionOn", now));
+            logDebug("Task [{0}] is scheduled to run next on [{1,date,dd/MM/yy HH:mm:ss}]...",
+                    scheduledTaskDef.getDescription(), calcNextExecutionOn);
 
             if (triggered >= maxScheduledTaskTrigger) {
                 break;
