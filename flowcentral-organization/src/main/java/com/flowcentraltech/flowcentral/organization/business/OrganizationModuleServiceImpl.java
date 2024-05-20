@@ -212,8 +212,8 @@ public class OrganizationModuleServiceImpl extends AbstractFlowCentralService
                         .privilegeCatCode(privilegeCategoryCode).roleCode(roleCode));
     }
 
-    @Synchronized(ASSIGN_PRIVILEGE_LOCK)
     @Override
+    @Synchronized(ASSIGN_PRIVILEGE_LOCK)
     public boolean assignPrivilegeToRole(String roleCode, String privilegeCode) throws UnifyException {
         if (!isRoleWithPrivilege(roleCode, privilegeCode)) {
             Long roleId = environment().value(Long.class, "id", new RoleQuery().code(roleCode));

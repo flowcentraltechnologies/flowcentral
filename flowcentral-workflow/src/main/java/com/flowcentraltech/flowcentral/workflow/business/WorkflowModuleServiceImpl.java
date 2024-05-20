@@ -469,8 +469,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         return executeEntityPostActionPolicy(ctx);
     }
 
-    @Synchronized(WFWORKFLOWCOPY_LOCK)
     @Override
+    @Synchronized(WFWORKFLOWCOPY_LOCK)
     public void ensureWorkflowCopyWorkflows(String appletName, boolean forceUpdate) throws UnifyException {
         if (appletUtil.isAppletWithWorkflowCopy(appletName)) {
             updateWorkflowCopyWorkflow(WorkflowDesignUtils.DesignType.WORKFLOW_COPY_CREATE, appletName, forceUpdate);

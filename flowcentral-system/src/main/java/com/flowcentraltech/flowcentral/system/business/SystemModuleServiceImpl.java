@@ -530,7 +530,7 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService implemen
     }
 
     @Periodic(PeriodicType.NORMAL)
-    @Synchronized(SCHEDULED_TASK_EXECUTION_LOCK)
+    @Synchronized(lock = SCHEDULED_TASK_EXECUTION_LOCK, waitForLock = false)
     public void triggerScheduledTasksForExecution(TaskMonitor taskMonitor) throws UnifyException {
         // If periodic task is canceled or scheduler is disabled cancel all scheduled
         // tasks
@@ -569,8 +569,6 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService implemen
             taskParameters.put(TaskParameterConstants.USER_LOGIN_ID, scheduledTaskDef.getUserLoginId());
             taskParameters.put(TaskParameterConstants.TENANT_ID, scheduledTaskDef.getTenantId());
             taskParameters.put(TaskParameterConstants.LOCK_TO_TRY, taskLock);
-            taskParameters.put(TaskParameterConstants.TASK_STATUS_LOGGER,
-                    SystemModuleNameConstants.SYSTEM_MODULE_SERVICE);
             taskParameters.put(SystemSchedTaskConstants.SCHEDULEDTASK_ID, scheduledTaskId);
 
             Date nextExecutionOn = environment().value(Date.class, "nextExecutionOn",
