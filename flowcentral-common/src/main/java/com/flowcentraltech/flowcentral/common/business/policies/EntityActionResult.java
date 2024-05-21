@@ -242,4 +242,9 @@ public class EntityActionResult {
         this.successHint = successHint;
     }
 
+    @Override
+    public String toString() {
+        return StringUtils.toXmlString(this);
+    }
+
 }

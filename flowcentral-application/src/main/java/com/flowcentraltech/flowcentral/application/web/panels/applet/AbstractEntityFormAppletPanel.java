@@ -41,7 +41,6 @@ import com.flowcentraltech.flowcentral.application.web.panels.EntitySearchValueM
 import com.flowcentraltech.flowcentral.application.web.panels.EntryTablePage;
 import com.flowcentraltech.flowcentral.application.web.panels.FormPanel;
 import com.flowcentraltech.flowcentral.application.web.panels.HeaderWithTabsForm;
-import com.flowcentraltech.flowcentral.application.web.widgets.AssignmentPage;
 import com.flowcentraltech.flowcentral.application.web.widgets.TabSheet;
 import com.flowcentraltech.flowcentral.application.web.widgets.TabSheet.TabSheetItem;
 import com.flowcentraltech.flowcentral.application.web.widgets.TabSheetWidget;
@@ -678,17 +677,16 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
 
     @Action
     public void saveAssign() throws UnifyException {
-        AbstractEntityFormApplet applet = getEntityFormApplet();
-        AssignmentPage assignmentPage = applet.saveAssign();
-        hintUser("$m{entityformapplet.assignment.success.hint}", assignmentPage.getSubTitle());
+        getEntityFormApplet().saveAssign();
+        hintUser("$m{entityformapplet.assignment.success.hint}");
     }
 
     @Action
     public void saveAssignAndClose() throws UnifyException {
         AbstractEntityFormApplet applet = getEntityFormApplet();
-        AssignmentPage assignmentPage = applet.saveAssignOnClose();
+        applet.saveAssignOnClose();
         applet.navBackToPrevious();
-        hintUser("$m{entityformapplet.assignment.success.hint}", assignmentPage.getSubTitle());
+        hintUser("$m{entityformapplet.assignment.success.hint}");
     }
 
     @Action
@@ -697,10 +695,10 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         EntryTablePage entryTablePage = applet.getEntryTablePage();
         entryTablePage.commitEntryList(false);
         if (entryTablePage.isWithValidationErrors()) {
-            hintUser(MODE.ERROR, "$m{entityformapplet.entrytable.errors.hint}", entryTablePage.getSubTitle());
+            hintUser(MODE.ERROR, "$m{entityformapplet.entrytable.errors.hint}");
         } else {
             applet.navBackToPrevious();
-            hintUser("$m{entityformapplet.entrytable.success.hint}", entryTablePage.getSubTitle());
+            hintUser("$m{entityformapplet.entrytable.success.hint}");
         }
     }
 
@@ -710,7 +708,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         EditPropertyList editPropertyList = applet.getEditPropertyList();
         editPropertyList.commitPropertyList();
         applet.navBackToPrevious();
-        hintUser("$m{entityformapplet.editpropertylist.success.hint}", editPropertyList.getSubTitle());
+        hintUser("$m{entityformapplet.editpropertylist.success.hint}");
     }
 
     @Action

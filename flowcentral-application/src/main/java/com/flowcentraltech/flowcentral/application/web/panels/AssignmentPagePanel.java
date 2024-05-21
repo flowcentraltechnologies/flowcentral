@@ -57,6 +57,6 @@ public class AssignmentPagePanel extends AbstractFlowCentralPanel {
     public void saveAssignment() throws UnifyException {
         AssignmentPage assignmentPage = getValue(AssignmentPage.class);
         assignmentPage.commitAssignedList(true);
-        hintUser("$m{entityformapplet.assignment.success.hint}", assignmentPage.getSubTitle());
+        hintUser("$m{entityformapplet.assignment.success.hint}");
     }
 }

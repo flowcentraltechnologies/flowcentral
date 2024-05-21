@@ -54,11 +54,11 @@ public class LoadingTable extends AbstractTable<LoadingParams, Entity> {
     private static final Order DEFAULT_TABLE_ORDER = new Order().add("id");
 
     private List<TableLoadingDef> altTableLoadingDefs;
-    
+
     private List<ButtonInfo> altButtonInfos;
-    
+
     private List<LoadingItems> loadingItems;
-    
+
     public LoadingTable(AppletUtilities au, TableDef tableDef) {
         this(au, tableDef, null);
     }
@@ -120,14 +120,13 @@ public class LoadingTable extends AbstractTable<LoadingParams, Entity> {
             if (altButtonInfos == null) {
                 altButtonInfos = InputWidgetUtils.getButtonInfos(altTableLoadingDefs);
             }
-            
+
             return altButtonInfos;
         }
-        
+
         return super.getActionBtnInfos();
     }
 
-    
     public List<LoadingItems> getLoadingItems() {
         return loadingItems;
     }
@@ -174,7 +173,7 @@ public class LoadingTable extends AbstractTable<LoadingParams, Entity> {
     }
 
     @Override
-    protected List<Entity> getDisplayItems(LoadingParams restriction, int dispStartIndex, int dispEndIndex)
+    protected synchronized List<Entity> getDisplayItems(LoadingParams restriction, int dispStartIndex, int dispEndIndex)
             throws UnifyException {
         loadingItems = new ArrayList<LoadingItems>();
         final EntityClassDef entityClassDef = au().getEntityClassDef(getTableDef().getEntityDef().getLongName());
@@ -187,10 +186,10 @@ public class LoadingTable extends AbstractTable<LoadingParams, Entity> {
             TableLoadingDef tableLoadingDef = getTableLoadingDef(i);
             LoadingTableProvider loadingTableProvider = getLoadingTableProvider(tableLoadingDef);
             final String label = loadingTableProvider.getLoadingLabel();
-            
+
             LoadingItems _loadingItems = loadingTableProvider.getLoadingItems(restriction);
             _loadingItems.setSource(tableLoadingDef.getName());
-            
+
             List<? extends Entity> _items = _loadingItems.getItems();
             Order order = getOrder();
             if (order == null) {

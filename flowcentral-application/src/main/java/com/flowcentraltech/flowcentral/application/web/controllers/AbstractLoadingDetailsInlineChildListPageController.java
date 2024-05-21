@@ -15,6 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.application.web.controllers;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
@@ -139,6 +140,11 @@ public abstract class AbstractLoadingDetailsInlineChildListPageController<T exte
     }
 
     protected final class InlineDetailsEntryTablePolicy implements EntryTablePolicy {
+
+        @Override
+        public Comparator<?> getLoadingSortComparator() {
+            return null;
+        }
 
         @Override
         public String getNodeId() {

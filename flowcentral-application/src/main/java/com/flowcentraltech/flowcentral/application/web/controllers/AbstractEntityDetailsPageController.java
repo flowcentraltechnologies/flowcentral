@@ -17,6 +17,7 @@ package com.flowcentraltech.flowcentral.application.web.controllers;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -283,6 +284,11 @@ public abstract class AbstractEntityDetailsPageController<T extends AbstractEnti
     }
 
     protected final class DetailsEntryTablePolicy implements EntryTablePolicy {
+
+        @Override
+        public Comparator<?> getLoadingSortComparator() {
+            return null;
+        }
 
         @Override
         public String getNodeId() {

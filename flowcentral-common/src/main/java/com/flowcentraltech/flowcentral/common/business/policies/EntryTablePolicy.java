@@ -16,6 +16,7 @@
 
 package com.flowcentraltech.flowcentral.common.business.policies;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
@@ -197,4 +198,11 @@ public interface EntryTablePolicy extends FlowCentralComponent {
      */
     int resolveActionIndex(ValueStoreReader parentReader, ValueStore valueStore, int index, int size)
             throws UnifyException;
+    
+    /**
+     * Gets loading sort comparator.
+     * 
+     * @return the loading comparator if supported otherwise null
+     */
+    Comparator<?> getLoadingSortComparator();
 }

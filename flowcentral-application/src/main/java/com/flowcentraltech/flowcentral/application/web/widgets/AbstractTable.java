@@ -17,6 +17,7 @@ package com.flowcentraltech.flowcentral.application.web.widgets;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -68,19 +69,19 @@ public abstract class AbstractTable<T, U> {
         SIMPLE,
         ENABLED_UPLOAD,
         DISABLED_UPLOAD;
-        
+
         public boolean isSimple() {
             return SIMPLE.equals(this);
         }
-        
+
         public boolean isEnabledUpload() {
             return ENABLED_UPLOAD.equals(this);
         }
-        
+
         public boolean isDisabledUpload() {
             return DISABLED_UPLOAD.equals(this);
         }
-        
+
         public boolean isUpload() {
             return ENABLED_UPLOAD.equals(this) || DISABLED_UPLOAD.equals(this);
         }
@@ -310,6 +311,10 @@ public abstract class AbstractTable<T, U> {
         return selected;
     }
 
+    public void clearSelectedRows() {
+        setSelectedRows(null);
+    }
+
     public void setSelectedRows(Collection<Integer> selected) {
         this.selected.clear();
         if (selected != null) {
@@ -489,7 +494,7 @@ public abstract class AbstractTable<T, U> {
             postTableSummaryLines = entryPolicy != null && dispItemList != null
                     ? entryPolicy.getPostTableSummaryLines(parentReader, new BeanValueListStore(dispItemList))
                     : null;
-         }
+        }
     }
 
     public boolean isTotalLabelColumn(String fieldName) {
@@ -641,6 +646,7 @@ public abstract class AbstractTable<T, U> {
             orderOnReset();
         }
 
+        clearSelectedRows();
         clearTableSummaryLines();
         getDispItems();
     }
@@ -822,6 +828,7 @@ public abstract class AbstractTable<T, U> {
         }
     }
 
+    @SuppressWarnings("unchecked")
     private void getDispItems() {
         try {
             if (tableDef.isPagination()) {
@@ -837,6 +844,14 @@ public abstract class AbstractTable<T, U> {
             }
 
             dispItemList = getDisplayItems(sourceObject, dispStartIndex, dispEndIndex);
+
+            if (isWithEntryPolicy()) {
+                Comparator<U> comparator = (Comparator<U>) getEntryPolicy().getLoadingSortComparator();
+                if (comparator != null) {
+                    Collections.sort(dispItemList, comparator);
+                }
+            }
+
         } catch (UnifyException e) {
             au.consumeExceptionAndGenerateSilentError(e, true);
         }

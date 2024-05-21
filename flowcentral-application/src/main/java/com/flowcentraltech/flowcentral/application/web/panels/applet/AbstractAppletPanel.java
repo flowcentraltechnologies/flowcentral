@@ -156,7 +156,11 @@ public abstract class AbstractAppletPanel extends AbstractApplicationSwitchPanel
             setRequestAttribute(FlowCentralRequestAttributeConstants.REPORT, entityActionResult.getResult());
             setCommandResultMapping(FlowCentralResultMappingConstants.VIEW_LISTING_REPORT);
         } else {
-            setCommandResultMapping(ResultMappingConstants.REFRESH_HIDE_POPUP);
+            if (refereshPanel) {
+                getApplet().au().commandRefreshPanelsAndHidePopup(this);
+            } else {
+                setCommandResultMapping(ResultMappingConstants.REFRESH_HIDE_POPUP);
+            }
         }
     }
 
