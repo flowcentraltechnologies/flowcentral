@@ -310,6 +310,10 @@ public abstract class AbstractTable<T, U> {
         return selected;
     }
 
+    public void clearSelectedRows() {
+        setSelectedRows(null);
+    }
+    
     public void setSelectedRows(Collection<Integer> selected) {
         this.selected.clear();
         if (selected != null) {
@@ -641,6 +645,7 @@ public abstract class AbstractTable<T, U> {
             orderOnReset();
         }
 
+        clearSelectedRows();
         clearTableSummaryLines();
         getDispItems();
     }
