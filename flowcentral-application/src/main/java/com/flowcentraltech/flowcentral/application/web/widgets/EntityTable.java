@@ -16,7 +16,6 @@
 package com.flowcentraltech.flowcentral.application.web.widgets;
 
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
@@ -26,7 +25,6 @@ import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.application.data.FilterGroupDef;
 import com.flowcentraltech.flowcentral.application.data.TableDef;
 import com.flowcentraltech.flowcentral.application.util.PrivilegeNameUtils;
-import com.flowcentraltech.flowcentral.common.business.policies.EntryTablePolicy;
 import com.flowcentraltech.flowcentral.common.constants.EntryActionType;
 import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
 import com.flowcentraltech.flowcentral.common.constants.TableChangeType;
@@ -178,15 +176,9 @@ public class EntityTable extends AbstractTable<Restriction, Entity> {
         List<Entity> entitylist = (List<Entity>) au.environment().listAll(query);
         // Delayed on-table load
         if (isWithEntryPolicy()) {
-            EntryTablePolicy policy = getEntryPolicy();
-            Comparator<Entity> comparator = (Comparator<Entity>) policy.getLoadingSortComparator();
-            if (comparator != null) {
-                Collections.sort(entitylist, comparator);
-            }
-            
-            policy.onEntryTableLoad(getParentReader(), new BeanValueListStore(entitylist), Collections.emptySet());
+            getEntryPolicy().onEntryTableLoad(getParentReader(), new BeanValueListStore(entitylist), Collections.emptySet());
             // TODO Check if reload is required
-            // entitylist = (List<Entity>) au.environment().listAll(query); // Why reload?
+            entitylist = (List<Entity>) au.environment().listAll(query);
         }
 
         return entitylist;
