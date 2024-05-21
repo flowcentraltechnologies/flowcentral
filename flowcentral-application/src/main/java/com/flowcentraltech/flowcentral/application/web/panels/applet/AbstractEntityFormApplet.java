@@ -263,6 +263,10 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         return collaboration;
     }
 
+    public ViewMode getViewMode() {
+        return viewMode;
+    }
+
     @Override
     public boolean navBackToPrevious() throws UnifyException {
         boolean success = true;
@@ -1752,6 +1756,16 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
     }
 
     private void enterNextForm() throws UnifyException {
+        switch (viewMode) {
+            case MAINTAIN_FORM:
+                viewMode = ViewMode.NEW_FORM;
+                break;
+            case MAINTAIN_PRIMARY_FORM_NO_SCROLL:
+                viewMode = ViewMode.NEW_PRIMARY_FORM;
+                break;
+            default:
+        }
+        
         if (viewMode == ViewMode.NEW_FORM || viewMode == ViewMode.NEW_HEADLESSLIST_FORM
                 || viewMode == ViewMode.NEW_PRIMARY_FORM) {
             form = constructNewForm(FormMode.CREATE, null, false);

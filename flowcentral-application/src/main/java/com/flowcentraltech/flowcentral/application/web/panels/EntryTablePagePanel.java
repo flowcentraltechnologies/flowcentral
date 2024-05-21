@@ -60,9 +60,9 @@ public class EntryTablePagePanel extends AbstractFlowCentralPanel {
         EntryTablePage entryTablePage = getValue(EntryTablePage.class);
         entryTablePage.commitEntryList(true);
         if (entryTablePage.isWithValidationErrors()) {
-            hintUser(MODE.ERROR, "$m{entityformapplet.entrytable.errors.hint}", entryTablePage.getSubTitle());
+            hintUser(MODE.ERROR, "$m{entityformapplet.entrytable.errors.hint}");
         } else {
-            hintUser("$m{entityformapplet.entrytable.success.hint}", entryTablePage.getSubTitle());
+            hintUser("$m{entityformapplet.entrytable.success.hint}");
         }
     }
 }

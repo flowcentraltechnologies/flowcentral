@@ -54,6 +54,6 @@ public class EditPropertyListPanel extends AbstractFlowCentralPanel {
     public void saveProperties() throws UnifyException {
         EditPropertyList editPropertyList = getValue(EditPropertyList.class);
         editPropertyList.commitPropertyList();
-        hintUser("$m{entityformapplet.editpropertylist.success.hint}", editPropertyList.getSubTitle());
+        hintUser("$m{entityformapplet.editpropertylist.success.hint}");
     }
 }
