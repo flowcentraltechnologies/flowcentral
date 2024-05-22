@@ -531,10 +531,10 @@ public abstract class AbstractTable<T, U> {
     }
 
     public void setSourceObject(T sourceObject, Set<Integer> selected) throws UnifyException {
+        reset();
         this.sourceObject = sourceObject;
         setSelectedRows(selected);
         onLoadSourceObject(sourceObject, selected);
-        reset();
         clearTableSummaryLines();
         setDetailsIndex(-1);
     }
