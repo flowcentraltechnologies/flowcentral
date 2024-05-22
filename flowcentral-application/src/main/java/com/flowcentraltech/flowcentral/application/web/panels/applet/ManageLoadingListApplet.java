@@ -102,6 +102,7 @@ public class ManageLoadingListApplet extends AbstractEntityFormApplet {
         setAltSubCaption(loadingSearch.getEntityDef().getDescription());
         if (!super.navBackToSearch()) {
             if (loadingSearch != null) {
+                loadingSearch.clearSearchEntries(); // TODO Configurable? System parameter?
                 loadingSearch.applySearchEntriesToSearch();
                 singleForm = null;
                 return true;
@@ -243,6 +244,10 @@ public class ManageLoadingListApplet extends AbstractEntityFormApplet {
         navBackToSearch();
     }
 
+    public void clearSearchEntries() throws UnifyException {
+        loadingSearch.clearSearchEntries();
+    }
+    
     public LoadingWorkItemInfo getCurrentLoadingWorkItemInfo() throws UnifyException{
         final AbstractForm _form = getResolvedForm();
         WorkEntity currEntityInst = (WorkEntity) _form.getFormBean();
