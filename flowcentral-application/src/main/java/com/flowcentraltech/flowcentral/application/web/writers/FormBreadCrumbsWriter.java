@@ -74,8 +74,9 @@ public class FormBreadCrumbsWriter extends AbstractControlWriter {
         }
         writer.write("\"");
         
-        writer.write(" title=\"").writeWithHtmlEscape(breadCrumb.getTitle()).write("\"");
-        writer.write(">").writeWithHtmlEscape(breadCrumb.getTitle()).write("</span>");
+        final String title = breadCrumb.isWithTitle() ? breadCrumb.getTitle() : "";
+        writer.write(" title=\"").writeWithHtmlEscape(title).write("\"");
+        writer.write(">").writeWithHtmlEscape(title).write("</span>");
 
         writer.write("<span class=\"hdsubtitle");
         if (history) {
@@ -83,8 +84,9 @@ public class FormBreadCrumbsWriter extends AbstractControlWriter {
         }
         writer.write("\"");
         
-        writer.write(" title=\"").writeWithHtmlEscape(breadCrumb.getSubTitle()).write("\"");
-        writer.write(">").writeWithHtmlEscape(breadCrumb.getSubTitle()).write("</span>");
+        final String subtitle = breadCrumb.isWithSubTitle() ? breadCrumb.getSubTitle() : "";
+        writer.write(" title=\"").writeWithHtmlEscape(subtitle).write("\"");
+        writer.write(">").writeWithHtmlEscape(subtitle).write("</span>");
 
         writer.write("</div>");
         if (history) {

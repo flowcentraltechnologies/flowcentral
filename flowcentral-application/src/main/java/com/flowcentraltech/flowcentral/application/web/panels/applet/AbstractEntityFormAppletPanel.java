@@ -678,7 +678,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
     @Action
     public void saveAssign() throws UnifyException {
         getEntityFormApplet().saveAssign();
-        hintUser("$m{entityformapplet.assignment.success.hint}");
+        hintUser("$m{entityformapplet.assignment.success.hint}", getAssignmentTitle());
     }
 
     @Action
@@ -686,7 +686,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         AbstractEntityFormApplet applet = getEntityFormApplet();
         applet.saveAssignOnClose();
         applet.navBackToPrevious();
-        hintUser("$m{entityformapplet.assignment.success.hint}");
+        hintUser("$m{entityformapplet.assignment.success.hint}", getAssignmentTitle());
     }
 
     @Action
@@ -695,10 +695,10 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         EntryTablePage entryTablePage = applet.getEntryTablePage();
         entryTablePage.commitEntryList(false);
         if (entryTablePage.isWithValidationErrors()) {
-            hintUser(MODE.ERROR, "$m{entityformapplet.entrytable.errors.hint}");
+            hintUser(MODE.ERROR, "$m{entityformapplet.entrytable.errors.hint}", getEntryTitle());
         } else {
             applet.navBackToPrevious();
-            hintUser("$m{entityformapplet.entrytable.success.hint}");
+            hintUser("$m{entityformapplet.entrytable.success.hint}", getEntryTitle());
         }
     }
 
@@ -708,7 +708,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         EditPropertyList editPropertyList = applet.getEditPropertyList();
         editPropertyList.commitPropertyList();
         applet.navBackToPrevious();
-        hintUser("$m{entityformapplet.editpropertylist.success.hint}");
+        hintUser("$m{entityformapplet.editpropertylist.success.hint}", getPropertiesTitle());
     }
 
     @Action
@@ -1078,6 +1078,30 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
 
     protected AbstractEntityFormApplet getEntityFormApplet() throws UnifyException {
         return getValue(AbstractEntityFormApplet.class);
+    }
+
+    protected String getFormTitle() throws UnifyException {
+        return getEntityFormApplet().getFormTitle();
+    }
+
+    protected String getBeanTitle() throws UnifyException {
+        return getEntityFormApplet().getBeanTitle();
+    }
+
+    protected String getAssignmentTitle() throws UnifyException {
+        return getEntityFormApplet().getAssignmentTitle();
+    }
+
+    protected String getAssignmentSubTitle() throws UnifyException {
+        return getEntityFormApplet().getAssignmentSubTitle();
+    }
+
+    protected String getEntryTitle() throws UnifyException {
+        return getEntityFormApplet().getEntryTitle();
+    }
+
+    protected String getPropertiesTitle() throws UnifyException {
+        return getEntityFormApplet().getPropertiesTitle();
     }
 
     protected FormContext evaluateCurrentFormContext(FormValidationContext vCtx) throws UnifyException {

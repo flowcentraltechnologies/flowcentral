@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.tcdng.unify.core.util.DataUtils;
+import com.tcdng.unify.core.util.StringUtils;
 
 /**
  * Bread crumbs.
@@ -119,6 +120,14 @@ public class BreadCrumbs {
             return subTitle;
         }
 
+        public boolean isWithTitle() {
+            return !StringUtils.isBlank(title);
+        }
+
+        public boolean isWithSubTitle() {
+            return !StringUtils.isBlank(subTitle);
+        }
+        
         public int getStepIndex() {
             return stepIndex;
         }

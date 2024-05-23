@@ -300,6 +300,14 @@ public abstract class AbstractEntitySingleFormApplet extends AbstractApplet {
         return form;
     }
 
+    public String getFormTitle() {
+        return form.getFormTitle();
+    }
+
+    public String getBeanTitle() {
+        return form.getBeanTitle();
+    }
+
     public ViewMode getMode() {
         return viewMode;
     }
