@@ -670,7 +670,7 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
     }
 
     public void clearSelected() throws UnifyException {
-        getTable().clearSelectedRows();
+        getTable().setSelectedRows(Collections.emptyList());
     }
 
     public String getTabMemoryId() {

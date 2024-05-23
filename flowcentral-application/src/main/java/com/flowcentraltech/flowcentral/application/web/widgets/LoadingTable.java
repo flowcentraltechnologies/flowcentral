@@ -173,47 +173,51 @@ public class LoadingTable extends AbstractTable<LoadingParams, Entity> {
     }
 
     @Override
-    protected synchronized List<Entity> getDisplayItems(LoadingParams restriction, int dispStartIndex, int dispEndIndex)
-            throws UnifyException {
-        loadingItems = new ArrayList<LoadingItems>();
-        final EntityClassDef entityClassDef = au().getEntityClassDef(getTableDef().getEntityDef().getLongName());
-        final int len = getLoadingDefCount();
-        List<Entity> items = new ArrayList<Entity>();
-        List<Section> sectionList = new ArrayList<Section>(len);
-        int startItemIndex = 0;
-        for (int i = 0; i < len; i++) {
-            restriction.restore();
-            TableLoadingDef tableLoadingDef = getTableLoadingDef(i);
-            LoadingTableProvider loadingTableProvider = getLoadingTableProvider(tableLoadingDef);
-            final String label = loadingTableProvider.getLoadingLabel();
+    protected synchronized List<Entity> getDisplayItems(LoadingParams loadingParams, int dispStartIndex,
+            int dispEndIndex) throws UnifyException {
+        if (loadingParams != null) {
+            loadingItems = new ArrayList<LoadingItems>();
+            final EntityClassDef entityClassDef = au().getEntityClassDef(getTableDef().getEntityDef().getLongName());
+            final int len = getLoadingDefCount();
+            List<Entity> items = new ArrayList<Entity>();
+            List<Section> sectionList = new ArrayList<Section>(len);
+            int startItemIndex = 0;
+            for (int i = 0; i < len; i++) {
+                loadingParams.restore();
+                TableLoadingDef tableLoadingDef = getTableLoadingDef(i);
+                LoadingTableProvider loadingTableProvider = getLoadingTableProvider(tableLoadingDef);
+                final String label = loadingTableProvider.getLoadingLabel();
 
-            LoadingItems _loadingItems = loadingTableProvider.getLoadingItems(restriction);
-            _loadingItems.setSource(tableLoadingDef.getName());
+                LoadingItems _loadingItems = loadingTableProvider.getLoadingItems(loadingParams);
+                _loadingItems.setSource(tableLoadingDef.getName());
 
-            List<? extends Entity> _items = _loadingItems.getItems();
-            Order order = getOrder();
-            if (order == null) {
-                DataUtils.sortAscending(_items, Entity.class, "id");
-            } else {
-                DataUtils.sort(_items, entityClassDef.getEntityClass(), order);
+                List<? extends Entity> _items = _loadingItems.getItems();
+                Order order = getOrder();
+                if (order == null) {
+                    DataUtils.sortAscending(_items, Entity.class, "id");
+                } else {
+                    DataUtils.sort(_items, entityClassDef.getEntityClass(), order);
+                }
+
+                if (!DataUtils.isBlank(_items)) {
+                    int endItemIndex = startItemIndex + _items.size() - 1;
+                    sectionList.add(new Section(startItemIndex, endItemIndex, label));
+                    items.addAll(_items);
+                    startItemIndex = endItemIndex + 1;
+                } else {
+                    sectionList.add(new Section(label));
+                }
+
+                loadingItems.add(_loadingItems);
             }
 
-            if (!DataUtils.isBlank(_items)) {
-                int endItemIndex = startItemIndex + _items.size() - 1;
-                sectionList.add(new Section(startItemIndex, endItemIndex, label));
-                items.addAll(_items);
-                startItemIndex = endItemIndex + 1;
-            } else {
-                sectionList.add(new Section(label));
-            }
-
-            loadingItems.add(_loadingItems);
+            loadingItems = Collections.unmodifiableList(loadingItems);
+            setSections(sectionList);
+            loadingParams.restore();
+            return items;
         }
 
-        loadingItems = Collections.unmodifiableList(loadingItems);
-        setSections(sectionList);
-        restriction.restore();
-        return items;
+        return Collections.emptyList();
     }
 
     private LoadingTableProvider getLoadingTableProvider(TableLoadingDef tableLoadingDef) throws UnifyException {

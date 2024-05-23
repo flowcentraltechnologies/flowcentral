@@ -16,7 +16,6 @@
 package com.flowcentraltech.flowcentral.application.web.controllers;
 
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
@@ -190,11 +189,6 @@ public abstract class AbstractLoadingDetailsPageController<T extends AbstractLoa
     protected abstract String onAction(int rowIndex, ValueStoreReader instReader, String action) throws UnifyException;
 
     protected final class DetailsEntryTablePolicy implements EntryTablePolicy {
-
-        @Override
-        public Comparator<?> getLoadingSortComparator() {
-            return null;
-        }
 
         @Override
         public String getNodeId() {
