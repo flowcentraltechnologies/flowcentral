@@ -1041,6 +1041,30 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         return ViewMode.LISTING_FORM.equals(viewMode) ? listingForm : form;
     }
 
+    public String getFormTitle() {
+        return getResolvedForm().getFormTitle();
+    }
+
+    public String getBeanTitle() {
+        return getResolvedForm().getBeanTitle();
+    }
+
+    public String getAssignmentTitle() {
+        return assignmentPage.getMainTitle();
+    }
+
+    public String getAssignmentSubTitle() {
+        return assignmentPage.getSubTitle();
+    }
+
+    public String getEntryTitle() {
+        return entryTablePage.getMainTitle();
+    }
+
+    public String getPropertiesTitle() {
+        return editPropertyList.getMainTitle();
+    }
+
     public void setFileAttachmentsDisabled(boolean fileAttachmentsDisabled) {
         this.fileAttachmentsDisabled = fileAttachmentsDisabled;
     }

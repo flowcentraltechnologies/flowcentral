@@ -460,6 +460,14 @@ public abstract class AbstractEntitySingleFormAppletPanel extends AbstractApplet
         return getValue(AbstractEntitySingleFormApplet.class);
     }
 
+    protected String getFormTitle() throws UnifyException {
+        return getEntityFormApplet().getFormTitle();
+    }
+
+    protected String getBeanTitle() throws UnifyException {
+        return getEntityFormApplet().getBeanTitle();
+    }
+
     protected FormContext evaluateCurrentFormContext(FormValidationContext vCtx) throws UnifyException {
         return evaluateCurrentFormContext(vCtx, false);
     }
