@@ -102,6 +102,7 @@ public class ManageLoadingListApplet extends AbstractEntityFormApplet {
         setAltSubCaption(loadingSearch.getEntityDef().getDescription());
         if (!super.navBackToSearch()) {
             if (loadingSearch != null) {
+                loadingSearch.clearSearchEntries(); // TODO Configurable? System parameter?
                 loadingSearch.applySearchEntriesToSearch();
                 singleForm = null;
                 return true;
