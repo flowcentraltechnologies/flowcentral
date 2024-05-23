@@ -17,7 +17,6 @@
 package com.flowcentraltech.flowcentral.common.business.policies;
 
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.common.AbstractFlowCentralComponent;
@@ -64,11 +63,6 @@ public abstract class AbstractEntryTablePolicy extends AbstractFlowCentralCompon
     public List<TableSummaryLine> getPostTableSummaryLines(ValueStoreReader parentReader, ValueStore tableValueStore)
             throws UnifyException {
         return Collections.emptyList();
-    }
-
-    @Override
-    public Comparator<?> getLoadingSortComparator() {
-        return null;
     }
 
     @Override
