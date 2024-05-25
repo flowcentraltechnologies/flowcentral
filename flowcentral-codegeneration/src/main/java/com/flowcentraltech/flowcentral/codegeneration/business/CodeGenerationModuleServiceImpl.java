@@ -44,6 +44,7 @@ import com.flowcentraltech.flowcentral.codegeneration.constants.CodeGenerationTa
 import com.flowcentraltech.flowcentral.codegeneration.data.CodeGenerationItem;
 import com.flowcentraltech.flowcentral.codegeneration.data.DynamicModuleInfo;
 import com.flowcentraltech.flowcentral.codegeneration.data.DynamicModuleInfo.ApplicationInfo;
+import com.flowcentraltech.flowcentral.codegeneration.data.Snapshot;
 import com.flowcentraltech.flowcentral.codegeneration.generators.ExtensionModuleStaticFileBuilderContext;
 import com.flowcentraltech.flowcentral.codegeneration.generators.ExtensionStaticFileBuilderContext;
 import com.flowcentraltech.flowcentral.codegeneration.generators.StaticArtifactGenerator;
@@ -204,6 +205,86 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
         }
 
         return 0;
+    }
+
+    @Taskable(name = CodeGenerationTaskConstants.GENERATE_STUDIO_SNAPSHOT_TASK_NAME,
+            description = "Generate Studio Snapshot Task",
+            parameters = { @Parameter(name = CodeGenerationTaskConstants.CODEGENERATION_ITEM,
+                    description = "Code Generation Item", type = CodeGenerationItem.class, mandatory = true) },
+            limit = TaskExecLimit.ALLOW_MULTIPLE, schedulable = false)
+    public int generateStudioSnapshotTask(TaskMonitor taskMonitor, CodeGenerationItem codeGenerationItem)
+            throws UnifyException {
+        Snapshot snapshot = generateSnapshot(taskMonitor, codeGenerationItem.getBasePackage());
+        codeGenerationItem.setFilename(snapshot.getFilename());
+        codeGenerationItem.setData(snapshot.getData());
+        return 0;
+    }
+
+    @Override
+    public Snapshot generateSnapshot(String basePackage) throws UnifyException {
+        return generateSnapshot(null, basePackage);
+    }
+
+    @Override
+    public Snapshot generateSnapshot(TaskMonitor taskMonitor, String basePackage) throws UnifyException {
+        Date now = environment().getNow();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ZipOutputStream zos = new ZipOutputStream(baos);
+        try {
+            ExtensionStaticFileBuilderContext mainCtx = new ExtensionStaticFileBuilderContext(basePackage);
+            List<String> moduleList = systemModuleService.getAllModuleNames();
+            for (final String moduleName : moduleList) {
+                addTaskMessage(taskMonitor, "Generating code for extension module [{0}]", moduleName);
+                final String replacements = systemModuleService.getSysParameterValue(String.class,
+                        CodeGenerationModuleSysParamConstants.MESSAGE_REPLACEMENT_LIST);
+                Map<String, String> messageReplacements = CodeGenerationUtils.splitMessageReplacements(replacements);
+                addTaskMessage(taskMonitor, "Using message replacement list [{0}]...", replacements);
+
+                ExtensionModuleStaticFileBuilderContext moduleCtx = new ExtensionModuleStaticFileBuilderContext(mainCtx,
+                        moduleName, messageReplacements);
+
+                // Generate applications
+                List<Application> applicationList = environment()
+                        .listAll(new ApplicationQuery().moduleName(moduleName).configType(ConfigType.CUSTOM));
+                if (!applicationList.isEmpty()) {
+                    for (Application application : applicationList) {
+                        moduleCtx.nextApplication(application.getName(), application.getDescription());
+                        addTaskMessage(taskMonitor, "Generating artifacts for application [{0}]...",
+                                application.getDescription());
+                        for (String generatorName : APPLICATION_ARTIFACT_GENERATORS) {
+                            addTaskMessage(taskMonitor, "Executing artifact generator [{0}]...", generatorName);
+                            StaticArtifactGenerator generator = (StaticArtifactGenerator) getComponent(generatorName);
+                            generator.generate(moduleCtx, application.getName(), zos);
+                        }
+                    }
+
+                    // Generate module configuration XML
+                    addTaskMessage(taskMonitor, "Generating module configuration for module [{0}]...", moduleName);
+                    addTaskMessage(taskMonitor, "Executing artifact generator [{0}]...",
+                            "extension-module-xml-generator");
+                    StaticArtifactGenerator generator = (StaticArtifactGenerator) getComponent(
+                            "extension-module-xml-generator");
+                    generator.generate(moduleCtx, moduleName, zos);
+
+                    // Generate messages
+                    addTaskMessage(taskMonitor, "Generating messages for module [{0}]...", moduleName);
+                    addTaskMessage(taskMonitor, "Executing artifact generator [{0}]...",
+                            "extension-module-messages-generator");
+                    generator = (StaticArtifactGenerator) getComponent("extension-module-messages-generator");
+                    generator.generate(moduleCtx, moduleName, zos);
+                }
+            }
+
+            SimpleDateFormat smf = new SimpleDateFormat("yyyyMMdd_HHmmss");
+            final String filenamePrefix = StringUtils.flatten(getApplicationCode().toLowerCase());
+            final String fileName = String.format("%s_snapshot_%s", filenamePrefix, smf.format(now));
+            String zipFilename = String.format("%s_snapshot_%s%s", filenamePrefix, smf.format(now), ".zip");
+
+            IOUtils.close(zos);
+            return new Snapshot(fileName, zipFilename, baos.toByteArray());
+        } finally {
+            IOUtils.close(zos);
+        }
     }
 
     private static final List<String> EXCLUDED_UTILITIES_MODULES = Collections
