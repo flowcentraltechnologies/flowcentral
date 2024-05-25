@@ -16,7 +16,7 @@
 package com.flowcentraltech.flowcentral.studio.entities;
 
 import com.flowcentraltech.flowcentral.common.entities.BaseAuditEntityQuery;
-import com.flowcentraltech.flowcentral.studio.constants.InitiationType;
+import com.flowcentraltech.flowcentral.studio.constants.StudioSnapshotType;
 
 /**
  * Studio snapshot details query.
@@ -30,8 +30,8 @@ public class StudioSnapshotDetailsQuery extends BaseAuditEntityQuery<StudioSnaps
         super(StudioSnapshotDetails.class);
     }
 
-    public StudioSnapshotDetailsQuery initiationType(InitiationType initiationType) {
-        return (StudioSnapshotDetailsQuery) addEquals("initiationType", initiationType);
+    public StudioSnapshotDetailsQuery studioSnapshotType(StudioSnapshotType studioSnapshotType) {
+        return (StudioSnapshotDetailsQuery) addEquals("studioSnapshotType", studioSnapshotType);
     }
 
 }

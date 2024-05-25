@@ -17,11 +17,11 @@
 package com.flowcentraltech.flowcentral.studio.entities;
 
 import com.flowcentraltech.flowcentral.common.entities.BaseAuditEntity;
-import com.flowcentraltech.flowcentral.studio.constants.InitiationType;
 import com.tcdng.unify.core.annotation.Column;
 import com.tcdng.unify.core.annotation.ForeignKey;
 import com.tcdng.unify.core.annotation.ListOnly;
 import com.tcdng.unify.core.annotation.Table;
+import com.tcdng.unify.core.task.TaskStatus;
 
 /**
  * Studio restore details entity.
@@ -32,29 +32,43 @@ import com.tcdng.unify.core.annotation.Table;
 @Table("FC_STUDIORESTOREDTLS")
 public class StudioRestoreDetails extends BaseAuditEntity {
 
-    @ForeignKey(name = "initiation_type")
-    private InitiationType initiationType;
+    @ForeignKey(StudioSnapshotDetails.class)
+    private Long snapshotDetailsId;
+
+    @ForeignKey
+    private TaskStatus taskStatus;
 
     @Column(name = "RESTORE_NM", length = 128)
     private String restoreName;
 
-    @Column(name = "FILE_NM", length = 128, nullable = true)
+    @ListOnly(key = "snapshotDetailsId", property = "snapshotName")
+    private String snapshotName;
+
+    @ListOnly(key = "snapshotDetailsId", property = "fileName")
     private String fileName;
 
-    @ListOnly(key = "initiationType", property = "description")
-    private String initiationTypeDesc;
+    @ListOnly(key = "taskStatus", property = "description")
+    private String taskStatusDesc;
 
     @Override
     public String getDescription() {
         return restoreName;
     }
 
-    public InitiationType getInitiationType() {
-        return initiationType;
+    public Long getSnapshotDetailsId() {
+        return snapshotDetailsId;
     }
 
-    public void setInitiationType(InitiationType initiationType) {
-        this.initiationType = initiationType;
+    public void setSnapshotDetailsId(Long snapshotDetailsId) {
+        this.snapshotDetailsId = snapshotDetailsId;
+    }
+
+    public TaskStatus getTaskStatus() {
+        return taskStatus;
+    }
+
+    public void setTaskStatus(TaskStatus taskStatus) {
+        this.taskStatus = taskStatus;
     }
 
     public String getRestoreName() {
@@ -65,6 +79,14 @@ public class StudioRestoreDetails extends BaseAuditEntity {
         this.restoreName = restoreName;
     }
 
+    public String getSnapshotName() {
+        return snapshotName;
+    }
+
+    public void setSnapshotName(String snapshotName) {
+        this.snapshotName = snapshotName;
+    }
+
     public String getFileName() {
         return fileName;
     }
@@ -73,12 +95,12 @@ public class StudioRestoreDetails extends BaseAuditEntity {
         this.fileName = fileName;
     }
 
-    public String getInitiationTypeDesc() {
-        return initiationTypeDesc;
+    public String getTaskStatusDesc() {
+        return taskStatusDesc;
     }
 
-    public void setInitiationTypeDesc(String initiationTypeDesc) {
-        this.initiationTypeDesc = initiationTypeDesc;
+    public void setTaskStatusDesc(String taskStatusDesc) {
+        this.taskStatusDesc = taskStatusDesc;
     }
 
 }

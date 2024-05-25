@@ -21,23 +21,25 @@ import com.tcdng.unify.core.annotation.Table;
 import com.tcdng.unify.core.util.EnumUtils;
 
 /**
- * Initiation type constants.
+ * Studio snapshot type constants.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@Table("FC_INITIATIONTYPE")
-@StaticList(name = "initiationtypelist", description = "$m{staticlist.initiationtypelist}")
-public enum InitiationType implements EnumConst {
+@Table("FC_STUDIOSNAPSHOTTYPE")
+@StaticList(name = "studiosnapshottypelist", description = "$m{staticlist.studiosnapshottypelist}")
+public enum StudioSnapshotType implements EnumConst {
 
-    MANUAL(
-            "MNL"),
-    AUTOMATIC(
-            "AUT");
+    AUTOMATIC_SYSTEM(
+            "AUS"),
+    MANUAL_SYSTEM(
+            "MNS"),
+    MANUAL_UPLOAD(
+            "MNU");
 
     private final String code;
 
-    private InitiationType(String code) {
+    private StudioSnapshotType(String code) {
         this.code = code;
     }
 
@@ -48,22 +50,30 @@ public enum InitiationType implements EnumConst {
 
     @Override
     public String defaultCode() {
-        return MANUAL.code;
-    }
-
-    public boolean isManual() {
-        return MANUAL.equals(this);
+        return MANUAL_SYSTEM.code;
     }
 
     public boolean isAutomatic() {
-        return AUTOMATIC.equals(this);
+        return AUTOMATIC_SYSTEM.equals(this);
     }
 
-    public static InitiationType fromCode(String code) {
-        return EnumUtils.fromCode(InitiationType.class, code);
+    public boolean isManual() {
+        return MANUAL_SYSTEM.equals(this) || MANUAL_UPLOAD.equals(this);
     }
 
-    public static InitiationType fromName(String name) {
-        return EnumUtils.fromName(InitiationType.class, name);
+    public boolean isSystem() {
+        return MANUAL_SYSTEM.equals(this) || AUTOMATIC_SYSTEM.equals(this);
+    }
+
+    public boolean isUpload() {
+        return MANUAL_UPLOAD.equals(this);
+    }
+
+    public static StudioSnapshotType fromCode(String code) {
+        return EnumUtils.fromCode(StudioSnapshotType.class, code);
+    }
+
+    public static StudioSnapshotType fromName(String name) {
+        return EnumUtils.fromName(StudioSnapshotType.class, name);
     }
 }

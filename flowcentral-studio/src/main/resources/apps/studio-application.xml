@@ -1425,7 +1425,71 @@
 				</restriction>
 			</filter>
 		</reference>
+		<reference name="studioSnapshotDetailsRef"
+			description="$m{studio.snapshotdetails.reference}"
+			entity="studioSnapshotDetails" searchField="snapshotName" />
+		<reference name="studioRestoreDetailsRef"
+			description="$m{audit.restoredetails.reference}"
+			entity="studioRestoreDetails" />
 	</references>
+	<!-- Entities -->
+	<entities>
+		<entity name="studioSnapshotDetails"
+			description="$m{studio.snapshotdetails}"
+			label="$m{studio.snapshotdetails.label}"
+			type="com.flowcentraltech.flowcentral.studio.entities.StudioSnapshotDetails"
+			reportable="true">
+			<field name="snapshotType"
+				label="$m{studio.snapshotdetails.snapshottype}" type="enum_ref"
+				references="studiosnapshottypelist"
+				inputWidget="application.enumlist" />
+			<field name="snapshotName"
+				label="$m{studio.snapshotdetails.snapshotname}" type="string" />
+			<field name="fileName"
+				label="$m{studio.snapshotdetails.filename}" type="string"
+				nullable="true" />
+			<field name="snapshotTypeDesc"
+				label="$m{studio.snapshotdetails.snapshottypedesc}" type="list_only"
+				key="snapshotType" property="description" />
+		</entity>
+		<entity name="studioSnapshot" description="$m{studio.snapshot}"
+			label="$m{studio.snapshot.label}"
+			type="com.flowcentraltech.flowcentral.studio.entities.StudioSnapshot"
+			reportable="true">
+			<field name="snapshotDetailsId"
+				label="$m{studio.snapshot.snapshotdetailsid}" type="ref"
+				inputLabel="$m{studio.snapshot.snapshotdetails}"
+				inputWidget="application.entitylist"
+				references="studioSnapshotDetailsRef" basicSearch="true" />
+			<field name="snapshot" label="$m{studio.snapshot.snapshot}"
+				type="blob" />
+		</entity>
+		<entity name="studioRestoreDetails"
+			description="$m{studio.restoredetails}"
+			label="$m{studio.restoreDetails.label}"
+			type="com.flowcentraltech.flowcentral.studio.entities.StudioRestoreDetails"
+			reportable="true">
+			<field name="snapshotDetailsId"
+				label="$m{studio.restoredetails.snapshotdetailsid}" type="ref"
+				inputLabel="$m{studio.restoredetails.snapshotdetails}"
+				inputWidget="application.entitylist"
+				references="studioSnapshotDetailsRef" basicSearch="true" />
+			<field name="taskStatus"
+				label="$m{studio.restoredetails.taskstatus}" type="enum_ref"
+				references="taskstatuslist" inputWidget="application.enumlist" />
+			<field name="restoreName"
+				label="$m{studio.restoredetails.restorename}" type="string" />
+			<field name="snapshotName"
+				label="$m{studio.restoredetails.snapshotname}" type="list_only"
+				key="snapshotDetailsId" property="snapshotName" />
+			<field name="fileName"
+				label="$m{studio.restoredetails.filename}" type="list_only"
+				key="snapshotDetailsId" property="fileName" />
+			<field name="taskStatusDesc"
+				label="$m{studio.restoredetails.taskstatusdesc}" type="list_only"
+				key="taskStatus" property="description" />
+		</entity>
+	</entities>
 	<!-- Tables -->
 	<tables>
 		<table name="switchApplicationTable"
@@ -1767,8 +1831,8 @@
 				label="$m{application.appformannotation.visibility}" widthRatio="1" />
 			<column field="html" renderWidget="application.checkbox"
 				widthRatio="1" />
-			<column field="directPlacement" renderWidget="application.checkbox"
-				widthRatio="1" />
+			<column field="directPlacement"
+				renderWidget="application.checkbox" widthRatio="1" />
 		</table>
 		<table name="appFormFilterTable"
 			description="$m{studio.appformfilter.table}"
@@ -2864,7 +2928,8 @@
 				</onCondition>
 				<setStates>
 					<setState type="field"
-						target="references,defaultVal,nullable,auditable,reportable,basicSearch" visible="true" />
+						target="references,defaultVal,nullable,auditable,reportable,basicSearch"
+						visible="true" />
 				</setStates>
 			</formStatePolicy>
 			<formStatePolicy type="on_switch"
@@ -3299,13 +3364,13 @@
 				<section name="filterDetails" columns="type_2">
 					<field name="code" inputWidget="application.name" column="0"
 						required="true" />
-					<field name="label" inputWidget="application.text"
-						column="1" required="true" />
+					<field name="label" inputWidget="application.text" column="1"
+						required="true" />
 				</section>
 			</tab>
 			<tab name="changeLog" label="$m{application.form.audit}"
 				contentType="miniform_changelog" />
-		</form>		
+		</form>
 		<form name="appRefForm" description="$m{studio.appref.form}"
 			entity="application.appRef">
 			<action type="button" name="lockResource" symbol="lock"
@@ -4772,8 +4837,8 @@
 						column="1" required="true" />
 					<field name="html" inputWidget="application.checkbox"
 						column="1" />
-					<field name="directPlacement" inputWidget="application.checkbox"
-						column="1" />
+					<field name="directPlacement"
+						inputWidget="application.checkbox" column="1" />
 				</section>
 				<section name="messageDetails" columns="type_1">
 					<field name="message" inputWidget="application.textarea"

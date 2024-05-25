@@ -16,7 +16,8 @@
 package com.flowcentraltech.flowcentral.studio.entities;
 
 import com.flowcentraltech.flowcentral.common.entities.BaseAuditEntityQuery;
-import com.flowcentraltech.flowcentral.studio.constants.InitiationType;
+import com.flowcentraltech.flowcentral.studio.constants.StudioSnapshotType;
+import com.tcdng.unify.core.task.TaskStatus;
 
 /**
  * Studio restore details query.
@@ -30,8 +31,16 @@ public class StudioRestoreDetailsQuery extends BaseAuditEntityQuery<StudioRestor
         super(StudioRestoreDetails.class);
     }
 
-    public StudioRestoreDetailsQuery initiationType(InitiationType initiationType) {
-        return (StudioRestoreDetailsQuery) addEquals("initiationType", initiationType);
+    public StudioRestoreDetailsQuery snapshotDetailsId(Long snapshotDetailsId) {
+        return (StudioRestoreDetailsQuery) addEquals("snapshotDetailsId", snapshotDetailsId);
+    }
+
+    public StudioRestoreDetailsQuery studioSnapshotType(StudioSnapshotType studioSnapshotType) {
+        return (StudioRestoreDetailsQuery) addEquals("studioSnapshotType", studioSnapshotType);
+    }
+
+    public StudioRestoreDetailsQuery taskStatus(TaskStatus taskStatus) {
+        return (StudioRestoreDetailsQuery) addEquals("taskStatus", taskStatus);
     }
 
 }

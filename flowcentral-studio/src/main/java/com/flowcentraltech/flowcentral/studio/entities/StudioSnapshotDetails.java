@@ -17,7 +17,7 @@
 package com.flowcentraltech.flowcentral.studio.entities;
 
 import com.flowcentraltech.flowcentral.common.entities.BaseAuditEntity;
-import com.flowcentraltech.flowcentral.studio.constants.InitiationType;
+import com.flowcentraltech.flowcentral.studio.constants.StudioSnapshotType;
 import com.tcdng.unify.core.annotation.Column;
 import com.tcdng.unify.core.annotation.ForeignKey;
 import com.tcdng.unify.core.annotation.ListOnly;
@@ -32,26 +32,21 @@ import com.tcdng.unify.core.annotation.Table;
 @Table("FC_STUDIOSNAPSHOTDTLS")
 public class StudioSnapshotDetails extends BaseAuditEntity {
 
-    @ForeignKey(name = "initiation_type")
-    private InitiationType initiationType;
+    @ForeignKey(name = "snapshot_type")
+    private StudioSnapshotType snapshotType;
 
     @Column(name = "SNAPSHOT_NM", length = 128)
     private String snapshotName;
 
-    @ListOnly(key = "initiationType", property = "description")
-    private String initiationTypeDesc;
+    @Column(name = "FILE_NM", length = 128, nullable = true)
+    private String fileName;
+
+    @ListOnly(key = "snapshotType", property = "description")
+    private String snapshotTypeDesc;
 
     @Override
     public String getDescription() {
         return snapshotName;
-    }
-
-    public InitiationType getInitiationType() {
-        return initiationType;
-    }
-
-    public void setInitiationType(InitiationType initiationType) {
-        this.initiationType = initiationType;
     }
 
     public String getSnapshotName() {
@@ -62,12 +57,28 @@ public class StudioSnapshotDetails extends BaseAuditEntity {
         this.snapshotName = snapshotName;
     }
 
-    public String getInitiationTypeDesc() {
-        return initiationTypeDesc;
+    public String getFileName() {
+        return fileName;
     }
 
-    public void setInitiationTypeDesc(String initiationTypeDesc) {
-        this.initiationTypeDesc = initiationTypeDesc;
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
+
+    public StudioSnapshotType getSnapshotType() {
+        return snapshotType;
+    }
+
+    public void setSnapshotType(StudioSnapshotType snapshotType) {
+        this.snapshotType = snapshotType;
+    }
+
+    public String getSnapshotTypeDesc() {
+        return snapshotTypeDesc;
+    }
+
+    public void setSnapshotTypeDesc(String snapshotTypeDesc) {
+        this.snapshotTypeDesc = snapshotTypeDesc;
     }
 
 }
