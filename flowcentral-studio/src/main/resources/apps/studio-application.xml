@@ -530,6 +530,11 @@
 			path="/studio/delegateupdatesynchronization/openPage"
 			menuAccess="false">
 		</applet>
+		<applet name="takeSnapshot"
+			description="$m{studio.takesnapshotpage.manage}"
+			label="$m{studio.takesnapshotpage.manage.label}" icon="lock" type="path_page"
+			path="/studio/takesnapshot/openPage" menuAccess="false">
+		</applet>
 		<applet name="stuManageModule"
 			description="$m{studio.module.manage}"
 			label="$m{studio.module.manage.label}" icon="cubes"
@@ -1429,7 +1434,7 @@
 			description="$m{studio.snapshotdetails.reference}"
 			entity="studioSnapshotDetails" searchField="snapshotName" />
 		<reference name="studioRestoreDetailsRef"
-			description="$m{audit.restoredetails.reference}"
+			description="$m{studio.restoredetails.reference}"
 			entity="studioRestoreDetails" />
 	</references>
 	<!-- Entities -->
@@ -1466,7 +1471,7 @@
 		</entity>
 		<entity name="studioRestoreDetails"
 			description="$m{studio.restoredetails}"
-			label="$m{studio.restoreDetails.label}"
+			label="$m{studio.restoredetails.label}"
 			type="com.flowcentraltech.flowcentral.studio.entities.StudioRestoreDetails"
 			reportable="true">
 			<field name="snapshotDetailsId"

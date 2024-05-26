@@ -1,0 +1,41 @@
+// UPL template for take snapshot page.
+// Copyright 2021-2024 FlowCentral Technologies Limited.
+// 
+// Licensed under the Apache License, Version 2.0 (the "License"); you may not
+// use this file except in compliance with the License. You may obtain a copy of
+// the License at
+// 
+// http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+// WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+// License for the specific language governing permissions and limitations under
+// the License.
+
+!ui-page caption:$m{studio.takesnapshotpage.title} components:$c{basePanel}
+
+// Base panel
+!ui-panel:basePanel layout:$d{!ui-vertical style:$s{width:100%;}}
+	components:$c{headerBar taskSnapshotPanel}
+
+// Header
+!ui-panel:headerBar layout:$d{!ui-horizontal style:$s{width:100%;} cellType:bottom}
+	components:$c{takeSnapshotLabel} 
+	
+!ui-label:takeSnapshotLabel styleClass:$e{fc-largelabel}
+	caption:$m{studio.takesnapshotpage.header.title}
+
+// Take snapshot panel
+!ui-panel:taskSnapshotPanel styleClass:$e{fc-licenseoptions}
+	components:$c{taskSnapshotCaption taskSnapshotBodyPanel}
+!ui-label:taskSnapshotCaption styleClass:$e{label} caption:$m{studio.takesnapshotpage.caption}
+!ui-panel:taskSnapshotBodyPanel
+	layout:$d{!ui-vertical style:$s{width:100%;} showCaption:true cellStyle:$s{padding:5px 2px;}}
+	components:$c{takeSnapshotBtn}	
+!ui-button:takeSnapshotBtn styleClass:$e{fc-bluebutton} caption:$m{button.takesnapshot}
+	eventHandler:$d{!ui-event event:onclick action:$c{takeSnapshotAct}}
+	
+// Actions
+!ui-post:takeSnapshotAct path:$n{/takeSnapshot}
+	

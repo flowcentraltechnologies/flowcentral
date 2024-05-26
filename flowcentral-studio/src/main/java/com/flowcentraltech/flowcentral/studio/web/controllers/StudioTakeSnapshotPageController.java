@@ -34,7 +34,7 @@ import com.tcdng.unify.web.constant.Secured;
  * @since 1.0
  */
 @Component("/studio/takesnapshot")
-@UplBinding("web/studio/upl/takesnapshot.upl")
+@UplBinding("web/studio/upl/takesnapshotpage.upl")
 public class StudioTakeSnapshotPageController extends AbstractStudioPageController<StudioTakeSnapshotPageBean> {
 
     public StudioTakeSnapshotPageController() {
