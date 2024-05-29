@@ -136,31 +136,50 @@ public abstract class AbstractAppletPanel extends AbstractApplicationSwitchPanel
 
     protected void setCommandResultMapping(EntityActionResult entityActionResult, boolean refereshPanel)
             throws UnifyException {
-        if (entityActionResult.isHidePopupOnly()) {
-            setCommandResultMapping(ResultMappingConstants.REFRESH_HIDE_POPUP);
-        } else if (entityActionResult.isWithResultPath()) {
-            commandPost(entityActionResult.getResultPath());
-        } else if (entityActionResult.isWithTaskResult()) {
-            fireEntityActionResultTask(entityActionResult);
-        } else if (entityActionResult.isCloseView()) {
-            if (getApplet().navBackToPrevious()) {
-                if (refereshPanel) {
-                    getApplet().au().commandRefreshPanelsAndHidePopup(this);
-                }
-            } else {
-                setCloseResultMapping();
-            }
-        } else if (entityActionResult.isClosePage()) {
-            setCloseResultMapping();
-        } else if (entityActionResult.isDisplayListingReport()) {
-            setRequestAttribute(FlowCentralRequestAttributeConstants.REPORT, entityActionResult.getResult());
-            setCommandResultMapping(FlowCentralResultMappingConstants.VIEW_LISTING_REPORT);
-        } else {
-            if (refereshPanel) {
-                getApplet().au().commandRefreshPanelsAndHidePopup(this);
-            } else {
+        if (entityActionResult != null) {
+            if (entityActionResult.isHidePopupOnly()) {
                 setCommandResultMapping(ResultMappingConstants.REFRESH_HIDE_POPUP);
+                return;
             }
+
+            if (entityActionResult.isWithResultPath()) {
+                commandPost(entityActionResult.getResultPath());
+                return;
+            }
+
+            if (entityActionResult.isWithTaskResult()) {
+                fireEntityActionResultTask(entityActionResult);
+                return;
+            }
+            
+            if (entityActionResult.isCloseView()) {
+                if (getApplet().navBackToPrevious()) {
+                    if (refereshPanel) {
+                        getApplet().au().commandRefreshPanelsAndHidePopup(this);
+                    }
+                } else {
+                    setCloseResultMapping();
+                }
+                
+                return;
+            }
+            
+            if (entityActionResult.isClosePage()) {
+                setCloseResultMapping();
+                return;
+            }
+
+            if (entityActionResult.isDisplayListingReport()) {
+                setRequestAttribute(FlowCentralRequestAttributeConstants.REPORT, entityActionResult.getResult());
+                setCommandResultMapping(FlowCentralResultMappingConstants.VIEW_LISTING_REPORT);
+                return;
+            }
+        }     
+
+        if (refereshPanel) {
+            getApplet().au().commandRefreshPanelsAndHidePopup(this);
+        } else {
+            setCommandResultMapping(ResultMappingConstants.REFRESH_HIDE_POPUP);
         }
     }
 
