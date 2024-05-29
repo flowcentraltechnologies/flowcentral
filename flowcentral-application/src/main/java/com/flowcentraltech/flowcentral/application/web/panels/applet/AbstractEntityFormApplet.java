@@ -242,6 +242,14 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
 
     private final boolean collaboration;
 
+    private String assignmentTitle;
+
+    private String assignmentSubTitle;
+
+    private String entryTitle;
+
+    private String propertiesTitle;
+
     public AbstractEntityFormApplet(Page page, AppletUtilities au, List<String> pathVariables,
             AppletWidgetReferences appletWidgetReferences, EntityFormEventHandlers formEventHandlers)
             throws UnifyException {
@@ -1048,21 +1056,21 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
     public String getBeanTitle() {
         return getResolvedForm().getBeanTitle();
     }
-
+    
     public String getAssignmentTitle() {
-        return assignmentPage.getMainTitle();
+        return assignmentPage != null ? assignmentTitle = assignmentPage.getMainTitle(): assignmentTitle;
     }
 
     public String getAssignmentSubTitle() {
-        return assignmentPage.getSubTitle();
+        return assignmentPage != null ? assignmentSubTitle = assignmentPage.getSubTitle() : assignmentSubTitle;
     }
 
     public String getEntryTitle() {
-        return entryTablePage.getMainTitle();
+        return entryTablePage != null ? entryTitle = entryTablePage.getMainTitle() : entryTitle;
     }
 
     public String getPropertiesTitle() {
-        return editPropertyList.getMainTitle();
+        return editPropertyList != null ? propertiesTitle = editPropertyList.getMainTitle() : propertiesTitle;
     }
 
     public void setFileAttachmentsDisabled(boolean fileAttachmentsDisabled) {
