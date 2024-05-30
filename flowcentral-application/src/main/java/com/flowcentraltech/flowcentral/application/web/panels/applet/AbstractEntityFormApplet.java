@@ -394,7 +394,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
     }
 
     public TableActionResult newEntityInst() throws UnifyException {
-        if (entitySearch.isViewItemsInSeparateTabs()) {
+        if (isViewItemsInSeparateTabs()) {
             return openInTab(AppletType.CREATE_ENTITY);
         }
 
@@ -709,7 +709,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
     public TableActionResult maintainInst(int mIndex) throws UnifyException {
         this.mIndex = mIndex;
         Entity _inst = getEntitySearchItem(entitySearch, mIndex).getEntity();
-        if (entitySearch.isViewItemsInSeparateTabs()) {
+        if (isViewItemsInSeparateTabs()) {
             return openInTab(AppletType.CREATE_ENTITY, _inst);
         }
 
@@ -732,7 +732,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
     public TableActionResult listingInst(int mIndex) throws UnifyException {
         this.mIndex = mIndex;
         Entity _inst = getEntitySearchItem(entitySearch, mIndex).getEntity();
-        if (entitySearch.isViewItemsInSeparateTabs()) {
+        if (isViewItemsInSeparateTabs()) {
             return openListingInTab(_inst);
         }
 
@@ -752,6 +752,10 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         }
     }
 
+    public boolean isViewItemsInSeparateTabs() {
+        return entitySearch.isViewItemsInSeparateTabs();
+    }
+    
     public void enterWorkflowDraft(WorkflowDraftType type) throws UnifyException {
         final AppletDef _currFormAppletDef = getFormAppletDef();
         EntityActionResult entityActionResult = au.createEntityInstWorkflowDraftByFormContext(_currFormAppletDef,

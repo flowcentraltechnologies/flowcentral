@@ -163,7 +163,7 @@ public abstract class AbstractEntitySingleFormApplet extends AbstractApplet {
     }
 
     public TableActionResult newEntityInst() throws UnifyException {
-        if (entitySearch.isViewItemsInSeparateTabs()) {
+        if (isViewItemsInSeparateTabs()) {
             return openInTab(AppletType.CREATE_ENTITY_SINGLEFORM);
         }
 
@@ -175,7 +175,7 @@ public abstract class AbstractEntitySingleFormApplet extends AbstractApplet {
     public TableActionResult maintainInst(int mIndex) throws UnifyException {
         this.mIndex = mIndex;
         Entity _inst = getEntitySearchItem(entitySearch, mIndex).getEntity();
-        if (entitySearch.isViewItemsInSeparateTabs()) {
+        if (isViewItemsInSeparateTabs()) {
             return openInTab(AppletType.CREATE_ENTITY_SINGLEFORM, _inst);
         }
 
@@ -190,6 +190,10 @@ public abstract class AbstractEntitySingleFormApplet extends AbstractApplet {
         viewMode = ViewMode.MAINTAIN_FORM_SCROLL;
         takeAuditSnapshot(form.isUpdateDraft() ? AuditEventType.VIEW_DRAFT : AuditEventType.VIEW);
         return null;
+    }
+
+    public boolean isViewItemsInSeparateTabs() {
+        return entitySearch.isViewItemsInSeparateTabs();
     }
 
     public EntityActionResult updateInst() throws UnifyException {
