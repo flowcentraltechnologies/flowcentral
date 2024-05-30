@@ -157,7 +157,7 @@
 !ui-postcommand:forwardAct command:forward
 !ui-postcommand:fastForwardAct command:fastForward
 !ui-postcommand:toggleFilterAct command:toggleFilter refresh:$c{searchFilterPanel}
-!ui-postcommand:refreshAct command:refresh
+!ui-postcommand:refreshAct command:refresh onWinFocus:true
 !ui-postcommand:searchAct command:search components:$c{searchEntries}
 !ui-postcommand:clearAct command:clear
 !ui-postcommand:toggleDetailsAct command:toggleDetails components:$c{searchEntries}

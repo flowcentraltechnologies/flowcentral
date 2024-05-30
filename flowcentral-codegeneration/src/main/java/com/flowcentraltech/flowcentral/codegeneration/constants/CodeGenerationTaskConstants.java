@@ -28,6 +28,8 @@ public interface CodeGenerationTaskConstants {
 
     String GENERATE_UTILITIES_MODULE_FILES_TASK_NAME = "codegeneration.generateutilitiesmodulefiles.task";
 
+    String GENERATE_STUDIO_SNAPSHOT_TASK_NAME = "codegeneration.generatestudiosnapshot.task";
+
     String CODEGENERATION_ITEM = "codeGenerationItem";
 
 }

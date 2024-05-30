@@ -242,6 +242,14 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
 
     private final boolean collaboration;
 
+    private String assignmentTitle;
+
+    private String assignmentSubTitle;
+
+    private String entryTitle;
+
+    private String propertiesTitle;
+
     public AbstractEntityFormApplet(Page page, AppletUtilities au, List<String> pathVariables,
             AppletWidgetReferences appletWidgetReferences, EntityFormEventHandlers formEventHandlers)
             throws UnifyException {
@@ -574,6 +582,8 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
             assignmentPage = constructNewAssignmentPage(_appletDef, assignPageDef, entryTable, assnEditPolicy,
                     filterGroupDef, fixedAssignment, id, subTitle);
             assignmentPage.loadAssignedList();
+            getAssignmentTitle();
+            getAssignmentSubTitle();
             viewMode = ViewMode.ASSIGNMENT_PAGE;
             takeAuditSnapshot(isRootFormUpdateDraft() ? AuditEventType.VIEW_DRAFT : AuditEventType.VIEW);
         }
@@ -597,6 +607,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
             String caption = _appletDef.getLabel() != null ? _appletDef.getLabel().toUpperCase() : null;
             entryTablePage.setEntryCaption(caption);
             entryTablePage.loadEntryList();
+            getEntryTitle();
             viewMode = ViewMode.ENTRY_TABLE_PAGE;
         }
     }
@@ -672,6 +683,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
             editPropertyList = constructNewEditPropertyList(_propertyRuleDef, inst, inst.getDescription(),
                     childFkFieldName);
             editPropertyList.loadPropertyList(form.getCtx());
+            getPropertiesTitle();
             viewMode = ViewMode.PROPERTYLIST_PAGE;
         }
     }
@@ -1048,21 +1060,21 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
     public String getBeanTitle() {
         return getResolvedForm().getBeanTitle();
     }
-
+    
     public String getAssignmentTitle() {
-        return assignmentPage.getMainTitle();
+        return assignmentPage != null ? assignmentTitle = assignmentPage.getMainTitle(): assignmentTitle;
     }
 
     public String getAssignmentSubTitle() {
-        return assignmentPage.getSubTitle();
+        return assignmentPage != null ? assignmentSubTitle = assignmentPage.getSubTitle() : assignmentSubTitle;
     }
 
     public String getEntryTitle() {
-        return entryTablePage.getMainTitle();
+        return entryTablePage != null ? entryTitle = entryTablePage.getMainTitle() : entryTitle;
     }
 
     public String getPropertiesTitle() {
-        return editPropertyList.getMainTitle();
+        return editPropertyList != null ? propertiesTitle = editPropertyList.getMainTitle() : propertiesTitle;
     }
 
     public void setFileAttachmentsDisabled(boolean fileAttachmentsDisabled) {

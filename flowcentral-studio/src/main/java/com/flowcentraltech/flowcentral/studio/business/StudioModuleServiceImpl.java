@@ -31,6 +31,9 @@ import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.util.ApplicationPageUtils;
 import com.flowcentraltech.flowcentral.application.util.InputWidgetUtils;
 import com.flowcentraltech.flowcentral.chart.entities.Chart;
+import com.flowcentraltech.flowcentral.codegeneration.business.CodeGenerationModuleService;
+import com.flowcentraltech.flowcentral.codegeneration.constants.CodeGenerationModuleSysParamConstants;
+import com.flowcentraltech.flowcentral.codegeneration.data.Snapshot;
 import com.flowcentraltech.flowcentral.common.business.AbstractFlowCentralService;
 import com.flowcentraltech.flowcentral.common.business.StudioProvider;
 import com.flowcentraltech.flowcentral.common.business.SynchronizableEnvironmentDelegate;
@@ -45,6 +48,10 @@ import com.flowcentraltech.flowcentral.studio.constants.StudioAppComponentType;
 import com.flowcentraltech.flowcentral.studio.constants.StudioAppletPropertyConstants;
 import com.flowcentraltech.flowcentral.studio.constants.StudioDelegateSynchronizationTaskConstants;
 import com.flowcentraltech.flowcentral.studio.constants.StudioModuleNameConstants;
+import com.flowcentraltech.flowcentral.studio.constants.StudioSnapshotTaskConstants;
+import com.flowcentraltech.flowcentral.studio.constants.StudioSnapshotType;
+import com.flowcentraltech.flowcentral.studio.entities.StudioSnapshot;
+import com.flowcentraltech.flowcentral.studio.entities.StudioSnapshotDetails;
 import com.flowcentraltech.flowcentral.studio.util.StudioNameUtils;
 import com.flowcentraltech.flowcentral.studio.util.StudioNameUtils.StudioAppletNameParts;
 import com.flowcentraltech.flowcentral.studio.web.util.StudioWidgetWriterUtils;
@@ -88,6 +95,9 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
 
     @Configurable
     private AppletUtilities appletUtilities;
+
+    @Configurable
+    private CodeGenerationModuleService codeGenerationModuleService;
 
     private final FactoryMap<String, AppletDef> appletDefMap;
 
@@ -178,8 +188,8 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
                                     "", null, entityFormDeleteCondition);
                             adb.addFilterDef(new AppletFilterDef(filterDef, null, null, null));
 
-                            adb.openPath(
-                                    ApplicationPageUtils.constructAppletOpenPagePath(type.appletPath(), appletName).getOpenPath());
+                            adb.openPath(ApplicationPageUtils.constructAppletOpenPagePath(type.appletPath(), appletName)
+                                    .getOpenPath());
                             adb.originApplicationName(np.getApplicationName());
                             adb.originName(name);
                             appletDef = adb.build();
@@ -263,6 +273,27 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
         return 0;
     }
 
+    @Taskable(name = StudioSnapshotTaskConstants.STUDIO_TAKE_SNAPSHOT_TASK_NAME,
+            description = "Studio Take Snapshot Task",
+            parameters = { @Parameter(name = StudioSnapshotTaskConstants.STUDIO_SNAPSHOT_TYPE,
+                    description = "Snapshot Type", type = StudioSnapshotType.class, mandatory = true) },
+            limit = TaskExecLimit.ALLOW_MULTIPLE, schedulable = true)
+    public int takeStudioSnapshotTask(TaskMonitor taskMonitor, StudioSnapshotType snapshotType) throws UnifyException {
+        final String basePackage = appletUtilities.getSysParameterValue(String.class,
+                CodeGenerationModuleSysParamConstants.DEFAULT_CODEGEN_PACKAGE_BASE);
+        Snapshot snapshot = codeGenerationModuleService.generateSnapshot(taskMonitor, basePackage);
+        StudioSnapshotDetails studioSnapshotDetails = new StudioSnapshotDetails();
+        studioSnapshotDetails.setSnapshotType(snapshotType);
+        studioSnapshotDetails.setSnapshotName(snapshot.getName());
+        Long studioSnapshotDetailsId = (Long) environment().create(studioSnapshotDetails);
+
+        StudioSnapshot studioSnapshot = new StudioSnapshot();
+        studioSnapshot.setSnapshotDetailsId(studioSnapshotDetailsId);
+        studioSnapshot.setSnapshot(snapshot.getData());
+        environment().create(studioSnapshot);
+        return 0;
+    }
+
     @Override
     protected void doInstallModuleFeatures(ModuleInstall moduleInstall) throws UnifyException {
         installStudioFeatures(moduleInstall);
@@ -270,7 +301,7 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
 
     private void installStudioFeatures(final ModuleInstall moduleInstall) throws UnifyException {
         if (StudioModuleNameConstants.STUDIO_MODULE_NAME.equals(moduleInstall.getModuleConfig().getName())) {
-
+            // TODO
         }
     }
 

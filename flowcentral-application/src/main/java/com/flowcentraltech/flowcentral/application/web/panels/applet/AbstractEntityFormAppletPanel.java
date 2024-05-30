@@ -896,6 +896,12 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
     }
 
     @Action
+    public void reviewAcknowledged() throws UnifyException {
+        EntityActionResult entityActionResult = getEntityFormApplet().getCtx().getOriginalEntityActionResult();
+        setCommandResultMapping(entityActionResult, true);
+    }
+    
+    @Action
     public void reviewConfirm() throws UnifyException {
         MessageResult messageResult = getMessageResult();
         if (MessageResult.YES.equals(messageResult)) {
@@ -989,12 +995,14 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
             } else {
                 final String message = concatenateMessages("$m{entityformapplet.formreview.nonskippable}",
                         reviewResult.getAllMessages());
+                final String commandPath = getCommandFullPath("reviewAcknowledged");
                 showMessageBox(MessageIcon.WARNING, MessageMode.OK, "$m{entityformapplet.formreview}", message,
-                        "/application/refreshContent");
+                        commandPath);
             }
         } else {
+            final String commandPath = getCommandFullPath("reviewAcknowledged");
             showMessageBox(MessageIcon.WARNING, MessageMode.OK, "$m{entityformapplet.formreview}",
-                    "$m{entityformapplet.formreview.failure}", "/application/refreshContent");
+                    "$m{entityformapplet.formreview.failure}", commandPath);
         }
     }
 

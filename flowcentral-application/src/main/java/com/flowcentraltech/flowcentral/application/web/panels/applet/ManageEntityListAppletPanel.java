@@ -37,6 +37,8 @@ public class ManageEntityListAppletPanel extends AbstractEntityFormAppletPanel {
     public void switchState() throws UnifyException {
         super.switchState();
 
+        getRequestContextUtil().setOnFocusOneshot(); // TODO
+        
         final ManageEntityListApplet applet = getManageEntityListApplet();
         applet.ensureCurrentAppletStruct();
         if (isWidgetVisible("entitySearchPanel.newBtn")) {

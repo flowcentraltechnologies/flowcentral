@@ -45,6 +45,11 @@
             <artifactId>flowcentral-security</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.flowcentraltech.flowcentral</groupId>
+            <artifactId>flowcentral-codegeneration</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 		<!-- Test dependencies -->
 		<dependency>
             <groupId>com.flowcentraltech.flowcentral</groupId>
