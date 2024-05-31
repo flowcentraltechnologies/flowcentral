@@ -142,7 +142,7 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
                 addTaskMessage(taskMonitor, "Using message replacement list [{0}]...", replacements);
 
                 ExtensionModuleStaticFileBuilderContext moduleCtx = new ExtensionModuleStaticFileBuilderContext(mainCtx,
-                        moduleName, messageReplacements);
+                        moduleName, messageReplacements, false);
 
                 // Generate applications
                 List<Application> applicationList = environment()
@@ -241,7 +241,7 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
                 addTaskMessage(taskMonitor, "Using message replacement list [{0}]...", replacements);
 
                 ExtensionModuleStaticFileBuilderContext moduleCtx = new ExtensionModuleStaticFileBuilderContext(mainCtx,
-                        moduleName, messageReplacements);
+                        moduleName, messageReplacements, true);
 
                 // Generate applications
                 List<Application> applicationList = environment()
@@ -281,7 +281,8 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
             String zipFilename = String.format("%s_snapshot_%s%s", filenamePrefix, smf.format(now), ".zip");
 
             IOUtils.close(zos);
-            return new Snapshot(fileName, zipFilename, baos.toByteArray());
+            return new Snapshot(getApplicationName(), getDeploymentVersion(), getAuxiliaryVersion(), fileName,
+                    zipFilename, baos.toByteArray());
         } finally {
             IOUtils.close(zos);
         }
@@ -309,7 +310,7 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
             for (final String moduleName : moduleList) {
                 addTaskMessage(taskMonitor, "Generating code for utilities module [{0}]", moduleName);
                 ExtensionModuleStaticFileBuilderContext moduleCtx = new ExtensionModuleStaticFileBuilderContext(mainCtx,
-                        moduleName, Collections.emptyMap());
+                        moduleName, Collections.emptyMap(), false);
 
                 // Generate applications
                 List<Application> applicationList = environment()

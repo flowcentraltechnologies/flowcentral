@@ -43,11 +43,18 @@ public abstract class AbstractStaticArtifactGenerator extends AbstractFlowCentra
 
     private String zipDir;
 
-    public AbstractStaticArtifactGenerator(String zipDir) {
+    private String snapshotZipDir;
+
+    protected AbstractStaticArtifactGenerator(String zipDir, String snapshotZipDir) {
+        this.zipDir = zipDir;
+        this.snapshotZipDir = snapshotZipDir;
+    }
+
+    protected AbstractStaticArtifactGenerator(String zipDir) {
         this.zipDir = zipDir;
     }
 
-    public AbstractStaticArtifactGenerator() {
+    protected AbstractStaticArtifactGenerator() {
 
     }
 
@@ -55,18 +62,36 @@ public abstract class AbstractStaticArtifactGenerator extends AbstractFlowCentra
     public final void generate(ExtensionModuleStaticFileBuilderContext ctx, String entityName, ZipOutputStream zos)
             throws UnifyException {
         if (checkGeneration(ctx, entityName)) {
-            if (!StringUtils.isBlank(zipDir)) {
-                if (zipDir.indexOf('{') >= 0) {
-                    String packageFolder = ctx.getBasePackage().replaceAll("\\.", "/");
-                    String lowerEntityName = entityName.toLowerCase();
-                    zipDir = MessageFormat.format(zipDir, packageFolder, lowerEntityName);
-                }
+            if (ctx.isSnapshotMode()) {
+                if (!StringUtils.isBlank(snapshotZipDir)) {
+                    if (snapshotZipDir.indexOf('{') >= 0) {
+                        String packageFolder = ctx.getBasePackage().replaceAll("\\.", "/");
+                        String lowerEntityName = entityName.toLowerCase();
+                        snapshotZipDir = MessageFormat.format(snapshotZipDir, packageFolder, lowerEntityName);
+                    }
 
-                if (ctx.addZipDir(zipDir)) {
-                    try {
-                        zos.putNextEntry(new ZipEntry(zipDir));
-                    } catch (IOException e) {
-                        throwOperationErrorException(e);
+                    if (ctx.addZipDir(snapshotZipDir)) {
+                        try {
+                            zos.putNextEntry(new ZipEntry(snapshotZipDir));
+                        } catch (IOException e) {
+                            throwOperationErrorException(e);
+                        }
+                    }
+                }
+            } else {
+                if (!StringUtils.isBlank(zipDir)) {
+                    if (zipDir.indexOf('{') >= 0) {
+                        String packageFolder = ctx.getBasePackage().replaceAll("\\.", "/");
+                        String lowerEntityName = entityName.toLowerCase();
+                        zipDir = MessageFormat.format(zipDir, packageFolder, lowerEntityName);
+                    }
+
+                    if (ctx.addZipDir(zipDir)) {
+                        try {
+                            zos.putNextEntry(new ZipEntry(zipDir));
+                        } catch (IOException e) {
+                            throwOperationErrorException(e);
+                        }
                     }
                 }
             }
@@ -96,15 +121,16 @@ public abstract class AbstractStaticArtifactGenerator extends AbstractFlowCentra
             throws UnifyException {
         return true;
     }
-    
-    protected void openEntry(String filename, ZipOutputStream zos) throws UnifyException {
+
+    protected void openEntry(ExtensionModuleStaticFileBuilderContext ctx, String filename, ZipOutputStream zos)
+            throws UnifyException {
         try {
-            zos.putNextEntry(new ZipEntry(zipDir + filename));
+            zos.putNextEntry(new ZipEntry((ctx.isSnapshotMode() ? snapshotZipDir : zipDir) + filename));
         } catch (IOException e) {
             throwOperationErrorException(e);
         }
     }
-    
+
     protected void closeEntry(ZipOutputStream zos) throws UnifyException {
         try {
             zos.flush();
@@ -113,8 +139,9 @@ public abstract class AbstractStaticArtifactGenerator extends AbstractFlowCentra
             throwOperationErrorException(e);
         }
     }
-    
+
     protected String getDescriptionKey(String applicationName, String category, String description) {
-        return (applicationName + "." + category + "." + description.replaceAll("[^a-zA-Z0-9]+", "").trim()).toLowerCase();
+        return (applicationName + "." + category + "." + description.replaceAll("[^a-zA-Z0-9]+", "").trim())
+                .toLowerCase();
     }
 }

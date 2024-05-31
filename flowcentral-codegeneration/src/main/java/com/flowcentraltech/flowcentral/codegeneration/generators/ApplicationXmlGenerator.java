@@ -147,7 +147,7 @@ import com.tcdng.unify.core.util.DataUtils;
  * @since 1.0
  */
 @Component("application-xml-generator")
-public class ApplicationXmlGenerator extends AbstractStaticArtifactGenerator {
+public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator {
 
     private static final String APPS_FOLDER = "apps/";
 
@@ -155,14 +155,14 @@ public class ApplicationXmlGenerator extends AbstractStaticArtifactGenerator {
     private ApplicationModuleService applicationModuleService;
 
     public ApplicationXmlGenerator() {
-        super("src/main/resources/apps/");
+        super(APPS_FOLDER);
     }
 
     @Override
     protected void doGenerate(ExtensionModuleStaticFileBuilderContext ctx, String applicationName, ZipOutputStream zos)
             throws UnifyException {
         final String filename = "extension-" + applicationName.toLowerCase() + "-application.xml";
-        openEntry(filename, zos);
+        openEntry(ctx, filename, zos);
 
         final AppConfig appConfig = new AppConfig();
         Application application = applicationModuleService.findApplication(applicationName);
@@ -247,15 +247,15 @@ public class ApplicationXmlGenerator extends AbstractStaticArtifactGenerator {
                 // Route to applets
                 if (!DataUtils.isBlank(appApplet.getRouteToAppletList())) {
                     List<AppletRouteToAppletConfig> routeToAppletList = new ArrayList<AppletRouteToAppletConfig>();
-                    for (AppAppletRouteToApplet appAppletRouteToApplet: appApplet.getRouteToAppletList()) {
+                    for (AppAppletRouteToApplet appAppletRouteToApplet : appApplet.getRouteToAppletList()) {
                         AppletRouteToAppletConfig appletRouteToAppletConfig = new AppletRouteToAppletConfig();
                         appletRouteToAppletConfig.setRouteToApplet(appAppletRouteToApplet.getRouteToApplet());
                         routeToAppletList.add(appletRouteToAppletConfig);
                     }
-                    
+
                     appletConfig.setRouteToAppletList(routeToAppletList);
                 }
-                
+
                 // Filters
                 if (!DataUtils.isBlank(appApplet.getFilterList())) {
                     List<AppletFilterConfig> filterList = new ArrayList<AppletFilterConfig>();
@@ -327,15 +327,15 @@ public class ApplicationXmlGenerator extends AbstractStaticArtifactGenerator {
                 enumerationConfig.setName(appEnumeration.getName());
                 enumerationConfig.setDescription("$m{" + descKey + "}");
                 enumerationConfig.setLabel("$m{" + labelKey + "}");
-                
+
                 List<EnumerationItemConfig> itemList = new ArrayList<EnumerationItemConfig>();
-                for (AppEnumerationItem appEnumerationItem: appEnumeration.getItemList()) {
+                for (AppEnumerationItem appEnumerationItem : appEnumeration.getItemList()) {
                     EnumerationItemConfig enumerationItemConfig = new EnumerationItemConfig();
                     enumerationItemConfig.setCode(appEnumerationItem.getCode());
                     enumerationItemConfig.setLabel(appEnumerationItem.getLabel());
                     itemList.add(enumerationItemConfig);
                 }
-                
+
                 enumerationConfig.setItemList(itemList);
                 enumerationList.add(enumerationConfig);
             }
@@ -611,7 +611,7 @@ public class ApplicationXmlGenerator extends AbstractStaticArtifactGenerator {
                         entityUploadConfig.setName(appEntityUpload.getName());
                         entityUploadConfig.setDescription("$m{" + descKey + "}");
                         entityUploadConfig.setConstraintAction(appEntityUpload.getConstraintAction());
-                        entityUploadConfig.setFieldSequence( 
+                        entityUploadConfig.setFieldSequence(
                                 InputWidgetUtils.getFieldSequenceConfig(appEntityUpload.getFieldSequence()));
                         uploadList.add(entityUploadConfig);
                     }

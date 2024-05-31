@@ -22,17 +22,39 @@ package com.flowcentraltech.flowcentral.codegeneration.data;
  * @since 1.0
  */
 public class Snapshot {
-    
+
+    private String applicationName;
+
+    private String applicationVersion;
+
+    private String applicationAuxVersion;
+
     private String name;
-    
+
     private String filename;
-    
+
     private byte[] data;
 
-    public Snapshot(String name, String filename, byte[] data) {
+    public Snapshot(String applicationName, String applicationVersion, String applicationAuxVersion, String name,
+            String filename, byte[] data) {
+        this.applicationName = applicationName;
+        this.applicationVersion = applicationVersion;
+        this.applicationAuxVersion = applicationAuxVersion;
         this.name = name;
         this.filename = filename;
         this.data = data;
+    }
+
+    public String getApplicationName() {
+        return applicationName;
+    }
+
+    public String getApplicationVersion() {
+        return applicationVersion;
+    }
+
+    public String getApplicationAuxVersion() {
+        return applicationAuxVersion;
     }
 
     public String getName() {

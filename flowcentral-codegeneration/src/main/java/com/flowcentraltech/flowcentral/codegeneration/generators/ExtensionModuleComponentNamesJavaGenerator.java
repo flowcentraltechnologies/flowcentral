@@ -34,10 +34,10 @@ import com.tcdng.unify.core.util.TypeInfo;
  * @since 1.0
  */
 @Component("extension-module-componentnames-java-generator")
-public class ExtensionModuleComponentNamesJavaGenerator extends AbstractStaticArtifactGenerator {
+public class ExtensionModuleComponentNamesJavaGenerator extends AbstractJavaArtifactGenerator {
 
     public ExtensionModuleComponentNamesJavaGenerator() {
-        super("src/main/java/{0}/utilities/{1}/constants/");
+        super("{0}/utilities/{1}/constants/");
     }
 
     @Override
@@ -49,7 +49,7 @@ public class ExtensionModuleComponentNamesJavaGenerator extends AbstractStaticAr
         final TypeInfo typeInfo = new TypeInfo(className);
 
         final String filename = typeInfo.getSimpleName() + ".java";
-        openEntry(filename, zos);
+        openEntry(ctx, filename, zos);
         try {
             BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(zos));
             String src = CodeGenerationUtils.generateModuleNameConstantsJavaClassSource(typeInfo, CodeGenerationUtils

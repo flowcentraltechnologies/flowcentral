@@ -33,13 +33,15 @@ import com.tcdng.unify.core.annotation.Configurable;
  * @since 1.0
  */
 @Component("extension-module-xml-generator")
-public class ExtensionModuleXmlGenerator extends AbstractStaticArtifactGenerator {
+public class ExtensionModuleXmlGenerator extends AbstractResourcesArtifactGenerator {
+
+    private static final String CONFIG_FOLDER = "config/";
 
     @Configurable
     private SystemModuleService systemModuleService;
 
     public ExtensionModuleXmlGenerator() {
-        super("src/main/resources/config/");
+        super(CONFIG_FOLDER); 
     }
 
     @Override
@@ -47,7 +49,7 @@ public class ExtensionModuleXmlGenerator extends AbstractStaticArtifactGenerator
             throws UnifyException {
         final String lowerCaseModuleName = moduleName.toLowerCase();
         final String filename =  "extension-" + lowerCaseModuleName + "-module.xml";
-        openEntry(filename, zos);
+        openEntry(ctx, filename, zos);
         
         final ModuleConfig moduleConfig = new ModuleConfig();
         Module module = systemModuleService.findModule(moduleName);

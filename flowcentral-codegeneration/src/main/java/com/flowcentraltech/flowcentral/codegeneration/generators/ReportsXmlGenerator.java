@@ -51,7 +51,7 @@ import com.tcdng.unify.core.util.StringUtils;
  * @since 1.0
  */
 @Component("reports-xml-generator")
-public class ReportsXmlGenerator extends AbstractStaticArtifactGenerator {
+public class ReportsXmlGenerator extends AbstractResourcesArtifactGenerator {
 
     private static final String REPORT_FOLDER = "apps/report/";
 
@@ -59,7 +59,7 @@ public class ReportsXmlGenerator extends AbstractStaticArtifactGenerator {
     private ReportModuleService reportModuleService;
 
     public ReportsXmlGenerator() {
-        super("src/main/resources/apps/report/");
+        super(REPORT_FOLDER); 
     }
 
     @Override
@@ -76,7 +76,7 @@ public class ReportsXmlGenerator extends AbstractStaticArtifactGenerator {
                 ReportConfiguration reportConfiguration = reportModuleService.findReportConfiguration(reportConfigId);
                 final String filename = StringUtils.dashen(NameUtils.describeName(reportConfiguration.getName()))
                         + ".xml";
-                openEntry(filename, zos);
+                openEntry(ctx, filename, zos);
 
                 ReportConfig reportConfig = new ReportConfig();
                 String descKey = getDescriptionKey(lowerCaseApplicationName, "report", reportConfiguration.getName());

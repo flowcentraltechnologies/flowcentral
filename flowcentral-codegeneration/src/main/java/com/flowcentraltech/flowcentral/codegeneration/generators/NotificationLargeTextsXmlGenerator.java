@@ -42,15 +42,15 @@ import com.tcdng.unify.core.util.StringUtils;
  * @since 1.0
  */
 @Component("notification-largetexts-xml-generator")
-public class NotificationLargeTextsXmlGenerator extends AbstractStaticArtifactGenerator {
+public class NotificationLargeTextsXmlGenerator extends AbstractResourcesArtifactGenerator {
 
     private static final String NOTIFICATION_LARGETEXT_FOLDER = "apps/notification/largetext/";
 
     @Configurable
     private NotificationModuleService notificationModuleService;
 
-    public NotificationLargeTextsXmlGenerator() {
-        super("src/main/resources/apps/notification/largetext/");
+    public NotificationLargeTextsXmlGenerator() { 
+        super(NOTIFICATION_LARGETEXT_FOLDER);
     }
 
     @Override
@@ -68,7 +68,7 @@ public class NotificationLargeTextsXmlGenerator extends AbstractStaticArtifactGe
                 NotificationLargeText notifLargeText = notificationModuleService
                         .findNotificationLargeText(notifLargeTextId);
                 final String filename = StringUtils.dashen(NameUtils.describeName(notifLargeText.getName())) + ".xml";
-                openEntry(filename, zos);
+                openEntry(ctx, filename, zos);
 
                 NotifLargeTextConfig notifLargeTextConfig = new NotifLargeTextConfig();
                 String descKey = getDescriptionKey(lowerCaseApplicationName, "notification", notifLargeText.getName());
