@@ -28,4 +28,6 @@ public interface ApplicationPredefinedEntityConstants {
     String USAGE_ENTITY = "application.usage";
     
     String ATTACHMENT_ENTITY = "application.attachment";
+    
+    String SNAPSHOT_ENTITY = "application.snapshot";
 }

@@ -15,9 +15,11 @@
  */
 package com.flowcentraltech.flowcentral.studio.business;
 
+import java.util.Date;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
+import com.flowcentraltech.flowcentral.application.data.SnapshotDetails;
 import com.flowcentraltech.flowcentral.common.business.FlowCentralService;
 import com.flowcentraltech.flowcentral.studio.constants.StudioAppComponentType;
 import com.tcdng.unify.core.UnifyException;
@@ -30,6 +32,19 @@ import com.tcdng.unify.core.UnifyException;
  */
 public interface StudioModuleService extends FlowCentralService {
 
+    /**
+     * Find snapshot details.
+     * 
+     * @param fromDate
+     *                 the snapshot from date
+     * @param toDate
+     *                 the snapshot to date
+     * @return the snapshot details
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    List<SnapshotDetails> findSnapshotDetails(Date fromDate, Date toDate) throws UnifyException;
+    
     /**
      * Gets a studio applet definition.
      * 

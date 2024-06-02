@@ -68,8 +68,11 @@ import com.tcdng.unify.web.ui.widget.panel.StandalonePanel;
         @UplAttribute(name = "multiSelDependentList", type = UplElementReferences.class),
         @UplAttribute(name = "multiSelect", type = boolean.class),
         @UplAttribute(name = "detached", type = boolean.class),
+        @UplAttribute(name = "actionLabel", type = String[].class),
         @UplAttribute(name = "actionSymbol", type = String[].class),
         @UplAttribute(name = "actionHandler", type = EventHandler[].class),
+        @UplAttribute(name = "actionButtonClass", type = String.class, defaultVal = "mbtn"),
+        @UplAttribute(name = "multiAction", type = boolean.class, defaultVal = "false"),
         @UplAttribute(name = "switchOnChangeHandler", type = EventHandler.class),
         @UplAttribute(name = "summary", type = String.class),
         @UplAttribute(name = "details", type = String.class),
@@ -318,6 +321,10 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
         return getUplAttribute(boolean.class, "multiSelect");
     }
 
+    public boolean isMultiAction() throws UnifyException {
+        return getUplAttribute(boolean.class, "multiAction");
+    }
+    
     public boolean isDetached() throws UnifyException {
         return getUplAttribute(boolean.class, "detached");
     }
@@ -366,8 +373,17 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
         return !StringUtils.isBlank(getDetails());
     }
 
+    public boolean isButtonActionColumn() throws UnifyException {
+        String[] actionLabel = getUplAttribute(String[].class, "actionLabel");
+        return actionLabel != null && actionLabel.length > 0;
+    }
+
     public boolean isActionColumn() throws UnifyException {
         return actionCtrl != null && !isFixedRows();
+    }
+
+    public int getActionColumns() throws UnifyException {
+        return actionCtrl != null ? actionCtrl.length : 0;
     }
 
     public String getSelectAllId() throws UnifyException {
@@ -781,21 +797,40 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
             tabMemCtrl = createInternalHiddenControl("tabMemoryId");
         }
 
-        String[] actionSymbol = getUplAttribute(String[].class, "actionSymbol");
-        if (actionSymbol != null && actionSymbol.length > 0) {
+        String[] actionLabel = getUplAttribute(String[].class, "actionLabel");
+        if (actionLabel != null && actionLabel.length > 0) {
             EventHandler[] actionHandler = getActionEventHandler();
-            if (actionHandler == null || actionHandler.length != actionSymbol.length) {
+            if (actionHandler == null || actionHandler.length != actionLabel.length) {
                 throwOperationErrorException(new IllegalArgumentException(
-                        "Number of action handlers must match number of action symbols. Widget [" + getLongName()
+                        "Number of action handlers must match number of action labels. Widget [" + getLongName()
                                 + "]."));
             }
 
-            actionCtrl = new Control[actionSymbol.length];
-            for (int i = 0; i < actionSymbol.length; i++) {
-                String symbol = actionSymbol[i];
+            actionCtrl = new Control[actionLabel.length];
+            for (int i = 0; i < actionLabel.length; i++) {
+                String label = actionLabel[i];
                 actionCtrl[i] = (Control) addInternalChildWidget(
-                        "!ui-symbol alwaysValueIndex:true styleClass:$e{mact} symbol:$s{" + symbol
-                                + "} ignoreParentState:true");
+                        "!ui-button symbol:$s{file} alwaysValueIndex:true styleClass:$e{"
+                                + getUplAttribute(String.class, "actionButtonClass") + " g_fsm} caption:"
+                                + "$s{" + resolveSessionMessage(label) + "}");
+            }
+        } else {
+            String[] actionSymbol = getUplAttribute(String[].class, "actionSymbol");
+            if (actionSymbol != null && actionSymbol.length > 0) {
+                EventHandler[] actionHandler = getActionEventHandler();
+                if (actionHandler == null || actionHandler.length != actionSymbol.length) {
+                    throwOperationErrorException(new IllegalArgumentException(
+                            "Number of action handlers must match number of action symbols. Widget [" + getLongName()
+                                    + "]."));
+                }
+
+                actionCtrl = new Control[actionSymbol.length];
+                for (int i = 0; i < actionSymbol.length; i++) {
+                    String symbol = actionSymbol[i];
+                    actionCtrl[i] = (Control) addInternalChildWidget(
+                            "!ui-symbol alwaysValueIndex:true styleClass:$e{mact} symbol:$s{" + symbol
+                                    + "} ignoreParentState:true");
+                }
             }
         }
 

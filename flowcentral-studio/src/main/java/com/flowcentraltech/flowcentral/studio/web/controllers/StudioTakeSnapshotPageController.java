@@ -47,7 +47,7 @@ public class StudioTakeSnapshotPageController extends AbstractStudioPageControll
                 .setParam(StudioSnapshotTaskConstants.STUDIO_SNAPSHOT_TYPE, StudioSnapshotType.MANUAL_SYSTEM)
                 .logMessages()
                 .build();
-        return launchTaskWithMonitorBox(taskSetup, "Take Studio Snapshot", "/studio/snapshots/openPage", null);
+        return launchTaskWithMonitorBox(taskSetup, "Take Studio SnapshotDetails", "/studio/snapshots/openPage", null);
     }
 
 }

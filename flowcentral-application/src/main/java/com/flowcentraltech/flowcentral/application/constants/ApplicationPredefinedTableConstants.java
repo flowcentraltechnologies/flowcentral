@@ -28,4 +28,6 @@ public interface ApplicationPredefinedTableConstants {
     String USAGE_TABLE = "application.usageTable";
     
     String ATTACHMENT_TABLE = "application.attachmentTable";
+    
+    String SNAPSHOT_TABLE = "application.snapshotTable";
 }

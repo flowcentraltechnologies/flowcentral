@@ -660,6 +660,7 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-table .table .cselh {width: 32px;}
 .fc-table .table .cserialh {width: 32px;}
 .fc-table .table .cactionh {width: 32px;}
+.fc-table .table .cactionha {width: 92px;}
 .fc-table .table .cfixedh {width: 48px;}
 .fc-table .table .ccrudh {width: 74px;}
 .fc-table .table .celld {text-align:center;}
