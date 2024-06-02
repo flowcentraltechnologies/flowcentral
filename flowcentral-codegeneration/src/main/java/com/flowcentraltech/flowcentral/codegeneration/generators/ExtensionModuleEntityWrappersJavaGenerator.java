@@ -38,13 +38,13 @@ import com.tcdng.unify.core.util.TypeInfo;
  * @since 1.0
  */
 @Component("extension-module-entitywrappers-java-generator")
-public class ExtensionModuleEntityWrappersJavaGenerator extends AbstractStaticArtifactGenerator {
+public class ExtensionModuleEntityWrappersJavaGenerator extends AbstractJavaArtifactGenerator {
 
     @Configurable
     private AppletUtilities au;
 
     public ExtensionModuleEntityWrappersJavaGenerator() {
-        super("src/main/java/{0}/utilities/{1}/entitywrappers/");
+        super("{0}/utilities/{1}/entitywrappers/");
     }
 
     @Override
@@ -57,7 +57,7 @@ public class ExtensionModuleEntityWrappersJavaGenerator extends AbstractStaticAr
             dynamicEntityInfo.setSkipPasswordFields(skipPasswordFields);
             TypeInfo typeInfo = new TypeInfo(dynamicEntityInfo.getClassName());
             final String filename = typeInfo.getSimpleName() + "Wrapper.java";
-            openEntry(filename, zos);
+            openEntry(ctx, filename, zos);
             try {
                 BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(zos));
                 String src = CodeGenerationUtils.generateEntityWrapperJavaClassSource(ApplicationCodeGenUtils

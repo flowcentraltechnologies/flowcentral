@@ -37,13 +37,13 @@ import com.tcdng.unify.core.util.TypeInfo;
  * @since 1.0
  */
 @Component("extension-module-largetextwrappers-java-generator")
-public class ExtensionModuleNotifLargeTextWrappersJavaGenerator extends AbstractStaticArtifactGenerator {
+public class ExtensionModuleNotifLargeTextWrappersJavaGenerator extends AbstractJavaArtifactGenerator {
 
     @Configurable
     private NotificationModuleService notificationModuleService;
 
     public ExtensionModuleNotifLargeTextWrappersJavaGenerator() {
-        super("src/main/java/{0}/utilities/{1}/largetextwrappers/");
+        super("{0}/utilities/{1}/largetextwrappers/");
     }
 
     protected final boolean checkGeneration(ExtensionModuleStaticFileBuilderContext ctx, String entityName)
@@ -58,7 +58,7 @@ public class ExtensionModuleNotifLargeTextWrappersJavaGenerator extends Abstract
                 .generateNotifLargeTextInfos(ctx.getBasePackage(), moduleName)) {
             TypeInfo typeInfo = new TypeInfo(dynamicLargeTextInfo.getLargeTextClassName());
             final String filename = typeInfo.getSimpleName() + "Wrapper.java";
-            openEntry(filename, zos);
+            openEntry(ctx, filename, zos);
             try {
                 BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(zos));
                 String src = CodeGenerationUtils.generateLargeTextWrapperJavaClassSource(NotificationCodeGenUtils

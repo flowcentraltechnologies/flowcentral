@@ -31,10 +31,10 @@ import com.tcdng.unify.core.util.StringUtils;
  * @since 1.0
  */
 @Component("extension-module-static-settings-java-generator")
-public class ExtensionModuleStaticSettingsJavaGenerator extends AbstractStaticArtifactGenerator {
+public class ExtensionModuleStaticSettingsJavaGenerator extends AbstractJavaArtifactGenerator {
 
     public ExtensionModuleStaticSettingsJavaGenerator() {
-        super("src/main/java/{0}/extension/{1}/constants/");
+        super("{0}/extension/{1}/constants/");
     }
 
     @Override
@@ -46,7 +46,7 @@ public class ExtensionModuleStaticSettingsJavaGenerator extends AbstractStaticAr
         final String filename = className + ".java";
         final String packageName = ctx.getBasePackage() + ".extension." + lowerModuleName + ".constants";
 
-        openEntry(filename, zos);
+        openEntry(ctx, filename, zos);
 
         PrintWriter pw = new PrintWriter(new OutputStreamWriter(zos));
         pw.print("package ");

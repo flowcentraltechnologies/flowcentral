@@ -352,7 +352,7 @@ public abstract class AbstractApplet {
         result.setOpenPath(true);
 
         if (au().system().getSysParameterValue(boolean.class,
-                ApplicationModuleSysParamConstants.ENABLE_OPEN_TAB_IN_BROWSER)) {
+                ApplicationModuleSysParamConstants.ENABLE_OPEN_TAB_IN_BROWSER)) { 
             result.setTabName(parts.getExtAppletName());
             result.setOpenTab(true);
         }

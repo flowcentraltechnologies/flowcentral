@@ -68,7 +68,7 @@ import com.tcdng.unify.core.util.StringUtils;
  * @since 1.0
  */
 @Component("workflows-xml-generator")
-public class WorkflowsXmlGenerator extends AbstractStaticArtifactGenerator {
+public class WorkflowsXmlGenerator extends AbstractResourcesArtifactGenerator {
 
     private static final String WORKFLOW_FOLDER = "apps/workflow/";
 
@@ -76,7 +76,7 @@ public class WorkflowsXmlGenerator extends AbstractStaticArtifactGenerator {
     private WorkflowModuleService workflowModuleService;
     
     public WorkflowsXmlGenerator() {
-        super("src/main/resources/apps/workflow/");
+        super(WORKFLOW_FOLDER); 
     }
 
     @Override
@@ -92,7 +92,7 @@ public class WorkflowsXmlGenerator extends AbstractStaticArtifactGenerator {
                 AppWorkflowConfig appWorkflowConfig = new AppWorkflowConfig();
                 Workflow workflow = workflowModuleService.findWorkflow(workflowId);
                 final String filename = StringUtils.dashen(NameUtils.describeName(workflow.getName())) + ".xml";
-                openEntry(filename, zos);
+                openEntry(ctx, filename, zos);
 
                 WfConfig workflowConfig = new WfConfig();
                 String descKey = getDescriptionKey(lowerCaseApplicationName, "workflow", workflow.getName());
@@ -336,7 +336,7 @@ public class WorkflowsXmlGenerator extends AbstractStaticArtifactGenerator {
                 AppWorkflowWizardConfig appWorkflowWizardConfig = new AppWorkflowWizardConfig();
                 WfWizard wfWizard = workflowModuleService.findWfWizard(wfWizardId);
                 final String filename = StringUtils.dashen(NameUtils.describeName(wfWizard.getName())) + "-wizard.xml";
-                openEntry(filename, zos);
+                openEntry(ctx, filename, zos);
 
                 WfWizardConfig wfWizardConfig = new WfWizardConfig();
                 String descKey = getDescriptionKey(lowerCaseApplicationName, "workflowwizard", wfWizard.getName());

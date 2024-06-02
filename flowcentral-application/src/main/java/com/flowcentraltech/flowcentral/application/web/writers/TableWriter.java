@@ -193,7 +193,7 @@ public class TableWriter extends AbstractControlWriter {
             final List<EventHandler> crudActionHandlers = table.getCrudActionHandlers();
             final EventHandler[] actionHandler = tableWidget.getActionEventHandler();
             final boolean isFixedRows = tableWidget.isContainerEditable() && tableWidget.isFixedRows();
-            final boolean isActionColumn = isTableEditable && tableWidget.isActionColumn();
+            final boolean isActionColumn = /* isTableEditable && */ tableWidget.isActionColumn();
             final boolean focusManagement = tableWidget.isFocusManagement();
             final boolean isCrudMode = tableWidget.isInCrudMode();
             final boolean isUploadMode = tableWidget.isUploadMode();
@@ -280,10 +280,19 @@ public class TableWriter extends AbstractControlWriter {
                 }
 
                 if (isActionColumn) {
-                    int _index = table.resolveActionIndex(valueStore, i, len);
-                    Control _actionCtrl = actionCtrl[_index];
-                    _actionCtrl.setValueStore(valueStore);
-                    writer.writeBehavior(actionHandler[_index], _actionCtrl.getId(), null);
+                    if (tableWidget.isMultiAction()) {
+                        final int klen = tableWidget.getActionColumns();
+                        for (int k = 0; k < klen; k++) {
+                            Control _actionCtrl = actionCtrl[k];
+                            _actionCtrl.setValueStore(valueStore);
+                            writer.writeBehavior(actionHandler[k], _actionCtrl.getId(), null);
+                        }
+                    } else {
+                        int _index = table.resolveActionIndex(valueStore, i, len);
+                        Control _actionCtrl = actionCtrl[_index];
+                        _actionCtrl.setValueStore(valueStore);
+                        writer.writeBehavior(actionHandler[_index], _actionCtrl.getId(), null);
+                    }
                 }
 
                 if (isCrudMode) {
@@ -426,9 +435,12 @@ public class TableWriter extends AbstractControlWriter {
     private int writeColumnGroup(ResponseWriter writer, AbstractTableWidget<?, ?, ?> tableWidget)
             throws UnifyException {
         int columnCount = 0;
-        final boolean isContainerEditable = tableWidget.isNotViewOnlyAndIsContainerEditable();
+        /*
+         * final boolean isContainerEditable =
+         * tableWidget.isNotViewOnlyAndIsContainerEditable();
+         */
         final boolean isFixedRows = tableWidget.isContainerEditable() && tableWidget.isFixedRows();
-        final boolean isActionColumn = isContainerEditable && tableWidget.isActionColumn();
+        final boolean isActionColumn = /* isContainerEditable && */tableWidget.isActionColumn();
         final AbstractTable<?, ?> table = tableWidget.getTable(); // Must call this here to initialize table
         final TableDef tableDef = table.getTableDef();
         final boolean multiSelect = tableDef.isMultiSelect() || tableWidget.isMultiSelect();
@@ -470,8 +482,18 @@ public class TableWriter extends AbstractControlWriter {
             writer.write("<col class=\"cfixedh\">");
             columnCount++;
         } else if (isActionColumn) {
-            writer.write("<col class=\"cactionh\">");
-            columnCount++;
+            final boolean mactions = tableWidget.isButtonActionColumn();
+            if (tableWidget.isMultiAction()) {
+                final int klen = tableWidget.getActionColumns();
+                for (int k = 0; k < klen; k++) {
+                    writer.write(mactions ? "<col class=\"cactionha\">": "<col class=\"cactionh\">");
+                }
+
+                columnCount += klen;
+            } else {
+                writer.write(mactions ? "<col class=\"cactionha\">": "<col class=\"cactionh\">");
+                columnCount++;
+            }
         }
 
         if (isCrudMode) {
@@ -493,7 +515,7 @@ public class TableWriter extends AbstractControlWriter {
         writer.write("<tr>");
         final AbstractTable<?, ?> table = tableWidget.getTable();
         if (table != null) {
-            final boolean isContainerEditable = tableWidget.isNotViewOnlyAndIsContainerEditable();
+            /*final boolean isContainerEditable = tableWidget.isNotViewOnlyAndIsContainerEditable();*/
             final boolean isFixedRows = tableWidget.isContainerEditable() && tableWidget.isFixedRows();
             final TableDef tableDef = table.getTableDef();
             final boolean entryMode = table.isEntryMode();
@@ -572,8 +594,15 @@ public class TableWriter extends AbstractControlWriter {
 
             if (isFixedRows) {
                 writer.write("<th class=\"mfixedh\"></th>");
-            } else if (isContainerEditable && tableWidget.isActionColumn()) {
-                writer.write("<th class=\"mactionh\"></th>");
+            } else if (/* isContainerEditable && */tableWidget.isActionColumn()) {
+                if (tableWidget.isMultiAction()) {
+                    final int klen = tableWidget.getActionColumns();
+                    for (int k = 0; k < klen; k++) {
+                        writer.write("<th class=\"mactionh\"></th>");
+                    }
+                } else {
+                    writer.write("<th class=\"mactionh\"></th>");
+                }
             }
 
             if (tableWidget.isInCrudMode()) {
@@ -608,7 +637,10 @@ public class TableWriter extends AbstractControlWriter {
     private void writeBodyRows(ResponseWriter writer, AbstractTableWidget<?, ?, ?> tableWidget) throws UnifyException {
         final AbstractTable<?, ?> table = tableWidget.getTable();
         if (table != null) {
-            final boolean isContainerEditable = tableWidget.isNotViewOnlyAndIsContainerEditable();
+            /*
+             * final boolean isContainerEditable =
+             * tableWidget.isNotViewOnlyAndIsContainerEditable();
+             */
             final boolean entryMode = table.isEntryMode();
             final boolean supportSelect = !table.isFixedAssignment();
             final int pageIndex = table.getDispStartIndex() + 1;
@@ -616,7 +648,7 @@ public class TableWriter extends AbstractControlWriter {
             final TableDef tableDef = table.getTableDef();
             final boolean isSerialNo = tableDef.isSerialNo();
             final boolean isFixedRows = tableWidget.isContainerEditable() && tableWidget.isFixedRows();
-            final boolean isActionColumn = isContainerEditable && tableWidget.isActionColumn();
+            final boolean isActionColumn = /* isContainerEditable && */tableWidget.isActionColumn();
             final boolean isMultiSelect = tableDef.isMultiSelect() || tableWidget.isMultiSelect();
             List<ValueStore> valueList = tableWidget.getValueList();
             final int len = valueList.size();
@@ -767,12 +799,23 @@ public class TableWriter extends AbstractControlWriter {
                         writer.writeStructureAndContent(_fixedCtrl);
                         writer.write("</td>");
                     } else if (isActionColumn) {
-                        writer.write("<td>");
-                        int _index = table.resolveActionIndex(valueStore, i, len);
-                        Control _actionCtrl = actionCtrl[_index];
-                        _actionCtrl.setValueStore(valueStore);
-                        writer.writeStructureAndContent(_actionCtrl);
-                        writer.write("</td>");
+                        if (tableWidget.isMultiAction()) {
+                            final int klen = tableWidget.getActionColumns();
+                            for (int k = 0; k < klen; k++) {
+                                writer.write("<td>");
+                                Control _actionCtrl = actionCtrl[k];
+                                _actionCtrl.setValueStore(valueStore);
+                                writer.writeStructureAndContent(_actionCtrl);
+                                writer.write("</td>");
+                            }
+                        } else {
+                            writer.write("<td>");
+                            int _index = table.resolveActionIndex(valueStore, i, len);
+                            Control _actionCtrl = actionCtrl[_index];
+                            _actionCtrl.setValueStore(valueStore);
+                            writer.writeStructureAndContent(_actionCtrl);
+                            writer.write("</td>");
+                        }
                     }
 
                     if (isCrudMode) {

@@ -59,8 +59,10 @@ public class ExtensionModuleStaticFileBuilderContext {
 
     private DynamicModuleInfo dynamicModuleInfo;
 
+    private boolean snapshotMode;
+    
     public ExtensionModuleStaticFileBuilderContext(ExtensionStaticFileBuilderContext mainCtx, String moduleName,
-            Map<String, String> messageReplacements) {
+            Map<String, String> messageReplacements, boolean snapshotMode) {
         this.staticApplicationConfigs = new ArrayList<StaticApplicationConfig>();
         this.moduleAppsConfig = new ModuleAppsConfig();
         this.moduleAppsConfig.setModuleAppList(new ArrayList<ModuleAppConfig>());
@@ -68,6 +70,7 @@ public class ExtensionModuleStaticFileBuilderContext {
         this.mainCtx = mainCtx;
         this.moduleName = moduleName;
         this.messageReplacements = messageReplacements;
+        this.snapshotMode = snapshotMode;
     }
 
     public String getBasePackage() {
@@ -92,6 +95,10 @@ public class ExtensionModuleStaticFileBuilderContext {
 
     public List<String> getEntityList() {
         return entityList;
+    }
+
+    public boolean isSnapshotMode() {
+        return snapshotMode;
     }
 
     public DynamicModuleInfo getDynamicModuleInfo() {

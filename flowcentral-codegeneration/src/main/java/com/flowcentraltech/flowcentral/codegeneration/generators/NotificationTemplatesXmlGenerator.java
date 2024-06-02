@@ -42,7 +42,7 @@ import com.tcdng.unify.core.util.StringUtils;
  * @since 1.0
  */
 @Component("notification-templates-xml-generator")
-public class NotificationTemplatesXmlGenerator extends AbstractStaticArtifactGenerator {
+public class NotificationTemplatesXmlGenerator extends AbstractResourcesArtifactGenerator {
 
     private static final String NOTIFICATION_TEMPLATE_FOLDER = "apps/notification/template/";
 
@@ -50,7 +50,7 @@ public class NotificationTemplatesXmlGenerator extends AbstractStaticArtifactGen
     private NotificationModuleService notificationModuleService;
 
     public NotificationTemplatesXmlGenerator() {
-        super("src/main/resources/apps/notification/template/");
+        super(NOTIFICATION_TEMPLATE_FOLDER); 
     }
 
     @Override
@@ -60,14 +60,13 @@ public class NotificationTemplatesXmlGenerator extends AbstractStaticArtifactGen
         List<Long> notifTemplateIdList = notificationModuleService.findNotificationTemplateIdList(applicationName);
         if (!DataUtils.isBlank(notifTemplateIdList)) {
             final String lowerCaseApplicationName = applicationName.toLowerCase();
-
             AppNotifTemplatesConfig notifTemplatesConfig = new AppNotifTemplatesConfig();
             List<AppNotifTemplateConfig> notifTemplateList = new ArrayList<AppNotifTemplateConfig>();
             for (Long notifTemplateId : notifTemplateIdList) {
                 AppNotifTemplateConfig appNotifTemplateConfig = new AppNotifTemplateConfig();
                 NotificationTemplate notifTemplate = notificationModuleService.findNotificationTemplate(notifTemplateId);
                 final String filename = StringUtils.dashen(NameUtils.describeName(notifTemplate.getName())) + ".xml";
-                openEntry(filename, zos);
+                openEntry(ctx, filename, zos);
                 
                 NotifTemplateConfig notifTemplateConfig = new NotifTemplateConfig();
                 String descKey = getDescriptionKey(lowerCaseApplicationName, "notification", notifTemplate.getName());

@@ -41,6 +41,9 @@ public class StudioSnapshotDetails extends BaseAuditEntity {
     @Column(name = "FILE_NM", length = 128, nullable = true)
     private String fileName;
 
+    @Column(name = "MESSAGE", length = 512, nullable = true)
+    private String message;
+
     @ListOnly(key = "snapshotType", property = "description")
     private String snapshotTypeDesc;
 
@@ -63,6 +66,14 @@ public class StudioSnapshotDetails extends BaseAuditEntity {
 
     public void setFileName(String fileName) {
         this.fileName = fileName;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     public StudioSnapshotType getSnapshotType() {

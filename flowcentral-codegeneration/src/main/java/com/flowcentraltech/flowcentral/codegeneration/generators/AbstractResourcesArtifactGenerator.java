@@ -13,21 +13,21 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.application.constants;
+
+package com.flowcentraltech.flowcentral.codegeneration.generators;
 
 /**
- * Application predefined entity constants.
+ * Convenient abstract base class for resources artifact generator.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface ApplicationPredefinedEntityConstants {
+public abstract class AbstractResourcesArtifactGenerator extends AbstractStaticArtifactGenerator {
 
-    String PROPERTYITEM_ENTITY = "application.propertyItem";
-    
-    String USAGE_ENTITY = "application.usage";
-    
-    String ATTACHMENT_ENTITY = "application.attachment";
-    
-    String SNAPSHOT_ENTITY = "application.snapshot";
+    private static final String RESOURCES_FOLDER = "src/main/resources/";
+
+    protected AbstractResourcesArtifactGenerator(String artDir) {
+        super(RESOURCES_FOLDER + artDir, artDir);
+    }
+
 }

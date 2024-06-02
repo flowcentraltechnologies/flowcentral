@@ -36,13 +36,13 @@ import com.tcdng.unify.core.util.TypeInfo;
  * @since 1.0
  */
 @Component("extension-module-entities-java-generator")
-public class ExtensionModuleEntitiesJavaGenerator extends AbstractStaticArtifactGenerator {
+public class ExtensionModuleEntitiesJavaGenerator extends AbstractJavaArtifactGenerator {
 
     @Configurable
     private ApplicationModuleService applicationModuleService;
 
     public ExtensionModuleEntitiesJavaGenerator() {
-        super("src/main/java/{0}/extension/{1}/entities/");
+        super("{0}/extension/{1}/entities/");
     }
 
     @Override
@@ -52,7 +52,7 @@ public class ExtensionModuleEntitiesJavaGenerator extends AbstractStaticArtifact
                 .generateDynamicEntityInfos(ctx.getEntityList(), ctx.getBasePackage(), true)) {
             TypeInfo typeInfo = new TypeInfo(dynamicEntityInfo.getClassName());
             final String filename = typeInfo.getSimpleName() + ".java";
-            openEntry(filename, zos);
+            openEntry(ctx, filename, zos);
             try {
                 BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(zos));
                 String src = DynamicEntityUtils.generateEntityJavaClassSource(dynamicEntityInfo);

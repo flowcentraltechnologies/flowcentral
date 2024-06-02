@@ -79,6 +79,7 @@ import com.flowcentraltech.flowcentral.application.data.RefDef;
 import com.flowcentraltech.flowcentral.application.data.SearchInputsDef;
 import com.flowcentraltech.flowcentral.application.data.SetStatesDef;
 import com.flowcentraltech.flowcentral.application.data.SetValuesDef;
+import com.flowcentraltech.flowcentral.application.data.SnapshotDetails;
 import com.flowcentraltech.flowcentral.application.data.StandardAppletDef;
 import com.flowcentraltech.flowcentral.application.data.SuggestionTypeDef;
 import com.flowcentraltech.flowcentral.application.data.TableDef;
@@ -270,15 +271,15 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                     AppletPropertyConstants.IMPORTDATA_ROUTETO_APPLETNAME, AppletPropertyConstants.QUICK_EDIT_TABLE,
                     AppletPropertyConstants.QUICK_EDIT_FORM)));
 
-    private final Set<String> RESERVED_TABLES = Collections
-            .unmodifiableSet(new HashSet<String>(Arrays.asList(ApplicationPredefinedTableConstants.PROPERTYITEM_TABLE,
-                    ApplicationPredefinedTableConstants.USAGE_TABLE,
-                    ApplicationPredefinedTableConstants.ATTACHMENT_TABLE)));
+    private final Set<String> RESERVED_TABLES = Collections.unmodifiableSet(new HashSet<String>(Arrays.asList(
+            ApplicationPredefinedTableConstants.PROPERTYITEM_TABLE, ApplicationPredefinedTableConstants.USAGE_TABLE,
+            ApplicationPredefinedTableConstants.ATTACHMENT_TABLE, ApplicationPredefinedTableConstants.SNAPSHOT_TABLE)));
 
     private final Set<String> RESERVED_ENTITIES = Collections
             .unmodifiableSet(new HashSet<String>(Arrays.asList(ApplicationPredefinedEntityConstants.PROPERTYITEM_ENTITY,
                     ApplicationPredefinedEntityConstants.USAGE_ENTITY,
-                    ApplicationPredefinedEntityConstants.ATTACHMENT_ENTITY)));
+                    ApplicationPredefinedEntityConstants.ATTACHMENT_ENTITY,
+                    ApplicationPredefinedEntityConstants.SNAPSHOT_ENTITY)));
 
     private static final int MAX_LIST_DEPTH = 8;
 
@@ -537,6 +538,10 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                                 com.flowcentraltech.flowcentral.application.data.Attachment.class);
                     }
 
+                    if (ApplicationPredefinedEntityConstants.SNAPSHOT_ENTITY.equals(longName)) {
+                        return new EntityClassDef(entityDef, SnapshotDetails.class);
+                    }
+
                     if (!entityDef.isCustom()) {
                         Class<? extends Entity> entityClass = (Class<? extends Entity>) ReflectUtils
                                 .classForName(entityDef.getOriginClassName());
@@ -590,6 +595,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                 @Override
                 protected EntityDef create(String longName, Object... arg1) throws Exception {
                     final WidgetTypeDef textWidgetTypeDef = widgetDefFactoryMap.get("application.text");
+                    final WidgetTypeDef intWidgetTypeDef = widgetDefFactoryMap.get("application.integer");
                     final WidgetTypeDef manLabelWidgetTypeDef = widgetDefFactoryMap.get("application.mandatorylabel");
                     if (ApplicationPredefinedEntityConstants.PROPERTYITEM_ENTITY.equals(longName)) {
                         EntityDef.Builder edb = EntityDef.newBuilder(ConfigType.STATIC,
@@ -650,6 +656,32 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                         edb.addFieldDef(textWidgetTypeDef, textWidgetTypeDef, EntityFieldDataType.TIMESTAMP,
                                 EntityFieldType.STATIC, "createdOn",
                                 getApplicationMessage("application.attachment.createdon"));
+                        return edb.build();
+                    }
+
+                    if (ApplicationPredefinedEntityConstants.SNAPSHOT_ENTITY.equals(longName)) {
+                        EntityDef.Builder edb = EntityDef.newBuilder(ConfigType.STATIC, SnapshotDetails.class.getName(),
+                                getApplicationMessage("application.snapshotdetails.label"), null, null, null, false,
+                                false, false, false, ApplicationPredefinedEntityConstants.SNAPSHOT_ENTITY,
+                                getApplicationMessage("application.snapshotdetails"), 0L, 1L);
+                        edb.addFieldDef(intWidgetTypeDef, intWidgetTypeDef, EntityFieldDataType.LONG,
+                                EntityFieldType.STATIC, "snapshotId",
+                                getApplicationMessage("application.snapshotdetails.snapshotid"));
+                        edb.addFieldDef(textWidgetTypeDef, textWidgetTypeDef, EntityFieldDataType.STRING,
+                                EntityFieldType.STATIC, "name",
+                                getApplicationMessage("application.snapshotdetails.name"));
+                        edb.addFieldDef(textWidgetTypeDef, textWidgetTypeDef, EntityFieldDataType.STRING,
+                                EntityFieldType.STATIC, "filename",
+                                getApplicationMessage("application.snapshotdetails.filename"));
+                        edb.addFieldDef(textWidgetTypeDef, textWidgetTypeDef, EntityFieldDataType.STRING,
+                                EntityFieldType.STATIC, "message",
+                                getApplicationMessage("application.snapshotdetails.message"));
+                        edb.addFieldDef(textWidgetTypeDef, textWidgetTypeDef, EntityFieldDataType.TIMESTAMP,
+                                EntityFieldType.STATIC, "snapshotDate",
+                                getApplicationMessage("application.snapshotdetails.snapshotdate"));
+                        edb.addFieldDef(textWidgetTypeDef, textWidgetTypeDef, EntityFieldDataType.STRING,
+                                EntityFieldType.STATIC, "snapshotBy",
+                                getApplicationMessage("application.snapshotdetails.snapshotby"));
                         return edb.build();
                     }
 
@@ -900,6 +932,26 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                         tdb.addColumnDef("mandatory",
                                 "!ui-booleanlabel onTrue:$m{label.mandatory} onFalse:$m{label.optional}", 2, false);
                         tdb.addColumnDef("createdOn", "!ui-label", 2, false);
+                        tdb.itemsPerPage(-1);
+                        return tdb.build();
+                    }
+
+                    if (ApplicationPredefinedTableConstants.SNAPSHOT_TABLE.equals(longName)) {
+                        TableDef.Builder tdb = TableDef
+                                .newBuilder(getEntityDef(ApplicationPredefinedEntityConstants.SNAPSHOT_ENTITY),
+                                        getApplicationMessage("application.snapshotdetails.table.label"), false, false,
+                                        ApplicationPredefinedTableConstants.SNAPSHOT_TABLE,
+                                        getApplicationMessage("application.snapshotdetails.table.description"), 0L, 1L)
+                                .serialNo(true);
+                        tdb.classicLink(classicLink);
+                        tdb.addColumnDef("name", "!ui-label", 2, false);
+                        tdb.addColumnDef("message", "!ui-label", 3, false);
+                        tdb.addColumnDef("filename", "!ui-label", 2, false);
+                        tdb.addColumnDef("snapshotDate", "!ui-label", 2, false);
+                        tdb.addColumnDef("snapshotBy", "!ui-label", 2, false);
+                        tdb.serialNo(false);
+                        tdb.headerToUpperCase(true);
+                        tdb.headerCenterAlign(true);
                         tdb.itemsPerPage(-1);
                         return tdb.build();
                     }

@@ -32,17 +32,19 @@ import com.tcdng.unify.core.annotation.Component;
  * @since 1.0
  */
 @Component("extension-module-messages-generator")
-public class ExtensionModuleMessagesGenerator extends AbstractStaticArtifactGenerator {
+public class ExtensionModuleMessagesGenerator extends AbstractResourcesArtifactGenerator {
+
+    private static final String MESSAGES_FOLDER = "{0}/resources/";
 
     public ExtensionModuleMessagesGenerator() {
-        super("src/main/resources/{0}/resources/");
+        super(MESSAGES_FOLDER); 
     }
 
     @Override
     protected void doGenerate(ExtensionModuleStaticFileBuilderContext ctx, String moduleName, ZipOutputStream zos)
             throws UnifyException {
         final String filename = "extension-" + moduleName.toLowerCase() + "-messages.properties";
-        openEntry(filename, zos);
+        openEntry(ctx, filename, zos);
         try {
             BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(zos));
             for (StaticApplicationConfig staticApplicationConfig: ctx.getStaticApplicationConfigs()) {

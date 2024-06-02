@@ -15,6 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.application.web.panels.applet;
 
+import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.application.web.panels.EntitySearch;
 import com.flowcentraltech.flowcentral.application.web.widgets.EntityTable;
 import com.tcdng.unify.core.UnifyException;
@@ -37,8 +38,8 @@ public class ManageEntityListAppletPanel extends AbstractEntityFormAppletPanel {
     public void switchState() throws UnifyException {
         super.switchState();
 
-        getRequestContextUtil().setOnFocusOneshot(); // TODO
-        
+        getRequestContextUtil().clearOnFocusOneshot();
+
         final ManageEntityListApplet applet = getManageEntityListApplet();
         applet.ensureCurrentAppletStruct();
         if (isWidgetVisible("entitySearchPanel.newBtn")) {
@@ -46,7 +47,6 @@ public class ManageEntityListAppletPanel extends AbstractEntityFormAppletPanel {
         }
 
         final AbstractEntityFormApplet.ViewMode viewMode = applet.getMode();
-
         switch (viewMode) {
             case ENTITY_CRUD_PAGE:
             case ENTRY_TABLE_PAGE:
@@ -71,7 +71,11 @@ public class ManageEntityListAppletPanel extends AbstractEntityFormAppletPanel {
             case HEADLESS_TAB:
                 break;
             case SEARCH:
-                switchContent("entitySearchPanel"); 
+                switchContent("entitySearchPanel");
+                if (applet.isViewItemsInSeparateTabs() && au().system().getSysParameterValue(boolean.class,
+                        ApplicationModuleSysParamConstants.ENABLE_OPEN_TAB_IN_BROWSER)) {
+                    getRequestContextUtil().setOnFocusOneshot();
+                }
             default:
                 break;
         }

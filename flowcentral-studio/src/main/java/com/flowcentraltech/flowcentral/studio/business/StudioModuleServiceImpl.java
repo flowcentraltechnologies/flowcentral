@@ -17,6 +17,7 @@ package com.flowcentraltech.flowcentral.studio.business;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
@@ -24,6 +25,7 @@ import com.flowcentraltech.flowcentral.application.constants.AppletPropertyConst
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.data.AppletFilterDef;
 import com.flowcentraltech.flowcentral.application.data.FilterDef;
+import com.flowcentraltech.flowcentral.application.data.SnapshotDetails;
 import com.flowcentraltech.flowcentral.application.data.StandardAppletDef;
 import com.flowcentraltech.flowcentral.application.entities.AppFilter;
 import com.flowcentraltech.flowcentral.application.util.ApplicationCollaborationUtils;
@@ -52,6 +54,7 @@ import com.flowcentraltech.flowcentral.studio.constants.StudioSnapshotTaskConsta
 import com.flowcentraltech.flowcentral.studio.constants.StudioSnapshotType;
 import com.flowcentraltech.flowcentral.studio.entities.StudioSnapshot;
 import com.flowcentraltech.flowcentral.studio.entities.StudioSnapshotDetails;
+import com.flowcentraltech.flowcentral.studio.entities.StudioSnapshotDetailsQuery;
 import com.flowcentraltech.flowcentral.studio.util.StudioNameUtils;
 import com.flowcentraltech.flowcentral.studio.util.StudioNameUtils.StudioAppletNameParts;
 import com.flowcentraltech.flowcentral.studio.web.util.StudioWidgetWriterUtils;
@@ -63,6 +66,7 @@ import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.Parameter;
 import com.tcdng.unify.core.annotation.Taskable;
 import com.tcdng.unify.core.annotation.Transactional;
+import com.tcdng.unify.core.constant.OrderType;
 import com.tcdng.unify.core.data.FactoryMap;
 import com.tcdng.unify.core.task.TaskExecLimit;
 import com.tcdng.unify.core.task.TaskMonitor;
@@ -213,6 +217,22 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
     }
 
     @Override
+    public List<SnapshotDetails> findSnapshotDetails(Date fromDate, Date toDate) throws UnifyException {
+        List<SnapshotDetails> details = new ArrayList<SnapshotDetails>();
+        List<StudioSnapshotDetails> studioSnapshotDetails = environment().findAll(new StudioSnapshotDetailsQuery()
+                .createdBetween(fromDate, toDate).addOrder(OrderType.DESCENDING, "createDt"));
+        for (StudioSnapshotDetails _studioSnapshotDetails : studioSnapshotDetails) {
+            SnapshotDetails snapshotDetails = new SnapshotDetails(_studioSnapshotDetails.getId(),
+                    _studioSnapshotDetails.getSnapshotName(), _studioSnapshotDetails.getFileName(),
+                    _studioSnapshotDetails.getMessage(), _studioSnapshotDetails.getCreateDt(),
+                    _studioSnapshotDetails.getCreatedBy());
+            details.add(snapshotDetails);
+        }
+        
+        return details;
+    }
+
+    @Override
     public AppletDef getAppletDef(String appletName) throws UnifyException {
         return appletDefMap.get(appletName);
     }
@@ -274,9 +294,9 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
     }
 
     @Taskable(name = StudioSnapshotTaskConstants.STUDIO_TAKE_SNAPSHOT_TASK_NAME,
-            description = "Studio Take Snapshot Task",
+            description = "Studio Take SnapshotDetails Task",
             parameters = { @Parameter(name = StudioSnapshotTaskConstants.STUDIO_SNAPSHOT_TYPE,
-                    description = "Snapshot Type", type = StudioSnapshotType.class, mandatory = true) },
+                    description = "SnapshotDetails Type", type = StudioSnapshotType.class, mandatory = true) },
             limit = TaskExecLimit.ALLOW_MULTIPLE, schedulable = true)
     public int takeStudioSnapshotTask(TaskMonitor taskMonitor, StudioSnapshotType snapshotType) throws UnifyException {
         final String basePackage = appletUtilities.getSysParameterValue(String.class,

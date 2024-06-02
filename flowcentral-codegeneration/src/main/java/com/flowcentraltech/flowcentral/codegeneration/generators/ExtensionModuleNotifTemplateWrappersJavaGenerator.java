@@ -37,13 +37,13 @@ import com.tcdng.unify.core.util.TypeInfo;
  * @since 1.0
  */
 @Component("extension-module-templatewrappers-java-generator")
-public class ExtensionModuleNotifTemplateWrappersJavaGenerator extends AbstractStaticArtifactGenerator {
+public class ExtensionModuleNotifTemplateWrappersJavaGenerator extends AbstractJavaArtifactGenerator {
 
     @Configurable
     private NotificationModuleService notificationModuleService;
 
     public ExtensionModuleNotifTemplateWrappersJavaGenerator() {
-        super("src/main/java/{0}/utilities/{1}/templatewrappers/");
+        super("{0}/utilities/{1}/templatewrappers/");
     }
 
     protected final boolean checkGeneration(ExtensionModuleStaticFileBuilderContext ctx, String entityName)
@@ -58,7 +58,7 @@ public class ExtensionModuleNotifTemplateWrappersJavaGenerator extends AbstractS
                 .generateNotifTemplateInfos(ctx.getBasePackage(), moduleName)) {
             TypeInfo typeInfo = new TypeInfo(dynamicTemplateInfo.getTemplateClassName());
             final String filename = typeInfo.getSimpleName() + "Wrapper.java";
-            openEntry(filename, zos);
+            openEntry(ctx, filename, zos);
             try {
                 BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(zos));
                 String src = CodeGenerationUtils.generateTemplateWrapperJavaClassSource(NotificationCodeGenUtils
