@@ -90,33 +90,9 @@ public class StudioMenuWriter extends AbstractPanelWriter {
                     StudioAppComponentType.TABLE, StudioAppComponentType.FORM, StudioAppComponentType.WORKFLOW));
 
     @Override
-    protected void doWriteBehavior(ResponseWriter writer, Widget widget, EventHandler[] handlers)
-            throws UnifyException {
-        StudioMenuWidget studioMenuWidget = (StudioMenuWidget) widget;
-        WriteWork work = studioMenuWidget.getWriteWork();
-        writer.beginFunction("fuxstudio.rigStudioMenu");
-        writer.writeParam("pId", studioMenuWidget.getId());
-        writer.writeParam("pContId", studioMenuWidget.getContainerId());
-        writer.writeParam("pCategoryId", studioMenuWidget.getCategoryId());
-        // Resolves out of bean context error which usually happens on menu reload
-        String originalPathId = (String) getSessionAttribute(ORIGINAL_MENU_PATHID);
-        if (!StringUtils.isBlank(originalPathId)) {
-            writer.writeCommandURLParam("pCmdURL", originalPathId);
-        } else {
-            originalPathId = getRequestContextUtil().getResponsePathParts().getControllerPathId();
-            setSessionAttribute(ORIGINAL_MENU_PATHID, originalPathId);
-            writer.writeCommandURLParam("pCmdURL");
-        }
-
-        writer.writeParam("pCurrSelCtrlId", studioMenuWidget.getCurrentSelCtrl().getId());
-        writer.writeParam("pMenuCat", (JsonWriter) work.get(StudioMenuWidget.WORK_MENU_CATEGORIES));
-        writer.writeParam("pMenuItems", (JsonWriter) work.get(StudioMenuWidget.WORK_MENU_ITEMS));
-        writer.endFunction();
-    }
-
-    @Override
     protected void doWriteStructureAndContent(ResponseWriter writer, Widget widget) throws UnifyException {
         StudioMenuWidget studioMenuWidget = (StudioMenuWidget) widget;
+        final boolean searchable = studioMenuWidget.isSearchable();
         writer.write("<div");
         writeTagAttributesWithTrailingExtraStyleClass(writer, studioMenuWidget, "g_fsm");
         writer.write("><div class=\"mheader\">");
@@ -138,19 +114,6 @@ public class StudioMenuWriter extends AbstractPanelWriter {
         final String applicationName = (String) getSessionAttribute(
                 StudioSessionAttributeConstants.CURRENT_APPLICATION_NAME);
         final boolean application = !StringUtils.isBlank(applicationName);
-        final boolean isApplications = StudioAppComponentType.APPLICATION.equals(currCategory);
-        final boolean isCollaboration = StudioAppComponentType.COLLABORATION.equals(currCategory);
-        final boolean isCodeGeneration = codeGenerationProvider != null
-                && StudioAppComponentType.CODEGENERATION.equals(currCategory);
-        final boolean isSynchronization = StudioAppComponentType.SYNCHRONIZATION.equals(currCategory);
-        final boolean isSnapshot = StudioAppComponentType.SNAPSHOT.equals(currCategory);
-        final List<AppletDef> appletDefList = isApplications ? getApplicationAppletDefs(applicationName)
-                : (isCollaboration ? getCollaborationAppletDefs(applicationName)
-                        : (isCodeGeneration ? getCodeGenerationAppletDefs(applicationName)
-                                : (isSynchronization ? getSychronizationAppletDefs(applicationName)
-                                        : (isSnapshot ? getSnapshotAppletDefs(applicationName)
-                                                : studioModuleService.findAppletDefs(applicationName, currCategory)))));
-
         writer.write("<div style=\"display:table;width:100%;height:100%;\"><div style=\"display:table-row;\">");
         // Category
         writer.write("<div class=\"menucatbar\" style=\"display:table-cell;vertical-align:top;\">");
@@ -191,10 +154,46 @@ public class StudioMenuWriter extends AbstractPanelWriter {
             writer.writeWithHtmlEscape(resolveSessionMessage(currCategory.caption2()));
             writer.write("</div>");
         }
+        
+        // Body
+        writer.write("<div class=\"mbody\">");
+        if (searchable) {
+            // Search
+            writer.write("<div class=\"msearch\"><span class=\"mfil g_fsm\">");
+            writer.write(resolveSymbolHtmlHexCode("filter"));
+            writer.write("</span>");
+            writer.writeStructureAndContent(studioMenuWidget.getSearchCtrl());
+            writer.write("<span class=\"mban g_fsm\" id=\"").write(studioMenuWidget.getClearId()).write("\">");
+            writer.write(resolveSymbolHtmlHexCode("ban"));
+            writer.write("</span>");
+            writer.write("</div>");
+        }
+
+        writer.write("<div");
+        if (searchable) {
+            writer.write(" class=\"msection\"");
+        }
+        String menuSectionId = studioMenuWidget.getMenuSectionId();
+        writeTagId(writer, menuSectionId);
+        writer.write(">");
+        
         writer.write("<ul>");
         JsonWriter mjw = new JsonWriter();
         mjw.beginArray();
         if (application) {
+            final boolean isApplications = StudioAppComponentType.APPLICATION.equals(currCategory);
+            final boolean isCollaboration = StudioAppComponentType.COLLABORATION.equals(currCategory);
+            final boolean isCodeGeneration = codeGenerationProvider != null
+                    && StudioAppComponentType.CODEGENERATION.equals(currCategory);
+            final boolean isSynchronization = StudioAppComponentType.SYNCHRONIZATION.equals(currCategory);
+            final boolean isSnapshot = StudioAppComponentType.SNAPSHOT.equals(currCategory);
+            final List<AppletDef> appletDefList = isApplications ? getApplicationAppletDefs(applicationName)
+                    : (isCollaboration ? getCollaborationAppletDefs(applicationName)
+                            : (isCodeGeneration ? getCodeGenerationAppletDefs(applicationName)
+                                    : (isSynchronization ? getSychronizationAppletDefs(applicationName)
+                                            : (isSnapshot ? getSnapshotAppletDefs(applicationName)
+                                                    : studioModuleService.findAppletDefs(applicationName, currCategory)))));
+
             for (AppletDef appletDef : appletDefList) {
                 if (isApplications || isCollaboration || isCodeGeneration || isSynchronization || isSnapshot
                         || appletDef.isMenuAccess()) {
@@ -209,17 +208,48 @@ public class StudioMenuWriter extends AbstractPanelWriter {
             }
         }
         mjw.endArray();
-        writer.write("</ul></div>");
+        writer.write("</ul>");
+        
+        writer.write("</div>");
+        writer.write("</div>");
+        // End body
+
+        writer.write("</div>");
         writer.write("</div>");
 
         writer.write("</div></div>");
 
         WriteWork work = studioMenuWidget.getWriteWork();
         work.set(StudioMenuWidget.WORK_MENU_CATEGORIES, cjw);
-        work.set(StudioMenuWidget.WORK_MENU_ITEMS, mjw);
+        work.set(StudioMenuWidget.WORK_MENUITEMS, mjw);
 
         writer.writeStructureAndContent(studioMenuWidget.getCurrentSelCtrl());
         writer.write("</div></div>");
+    }
+
+    @Override
+    protected void doWriteBehavior(ResponseWriter writer, Widget widget, EventHandler[] handlers)
+            throws UnifyException {
+        StudioMenuWidget studioMenuWidget = (StudioMenuWidget) widget;
+        WriteWork work = studioMenuWidget.getWriteWork();
+        writer.beginFunction("fuxstudio.rigStudioMenu");
+        writer.writeParam("pId", studioMenuWidget.getId());
+        writer.writeParam("pContId", studioMenuWidget.getContainerId());
+        writer.writeParam("pCategoryId", studioMenuWidget.getCategoryId());
+        // Resolves out of bean context error which usually happens on menu reload
+        String originalPathId = (String) getSessionAttribute(ORIGINAL_MENU_PATHID);
+        if (!StringUtils.isBlank(originalPathId)) {
+            writer.writeCommandURLParam("pCmdURL", originalPathId);
+        } else {
+            originalPathId = getRequestContextUtil().getResponsePathParts().getControllerPathId();
+            setSessionAttribute(ORIGINAL_MENU_PATHID, originalPathId);
+            writer.writeCommandURLParam("pCmdURL");
+        }
+
+        writer.writeParam("pCurrSelCtrlId", studioMenuWidget.getCurrentSelCtrl().getId());
+        writer.writeParam("pMenuCat", (JsonWriter) work.get(StudioMenuWidget.WORK_MENU_CATEGORIES));
+        writer.writeParam("pMenuItems", (JsonWriter) work.get(StudioMenuWidget.WORK_MENUITEMS));
+        writer.endFunction();
     }
 
     private List<AppletDef> getApplicationAppletDefs(String applicationName) throws UnifyException {
