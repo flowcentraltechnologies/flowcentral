@@ -113,7 +113,6 @@ public class StudioMenuWriter extends AbstractPanelWriter {
             writer.write("</div>");
         }
 
-
         final boolean isCollaborationEnabled = appletUtilities.collaborationProvider() != null;
         final List<StudioAppComponentType> selMenuCategoryList = isCollaborationEnabled ? collaborationMenuCategoryList
                 : menuCategoryList;
@@ -132,7 +131,7 @@ public class StudioMenuWriter extends AbstractPanelWriter {
         if (searchable) {
             writer.write(" class=\"mtop\"");
         }
-        
+
         writer.write(" style=\"display:table;width:100%;height:100%;\"><div style=\"display:table-row;\">");
         // Category
         writer.write("<div class=\"menucatbar\" style=\"display:table-cell;vertical-align:top;\">");
@@ -216,15 +215,16 @@ public class StudioMenuWriter extends AbstractPanelWriter {
                         && StudioAppComponentType.CODEGENERATION.equals(currCategory);
                 final boolean isSynchronization = StudioAppComponentType.SYNCHRONIZATION.equals(currCategory);
                 final boolean isSnapshot = StudioAppComponentType.SNAPSHOT.equals(currCategory);
-                
+
                 final String searchInput = studioMenuWidget.isSearchable() ? studioMenuWidget.getSearchInput() : null;
-                final List<AppletDef> appletDefList = isApplications ? getApplicationAppletDefs(applicationName)
-                        : (isCollaboration ? getCollaborationAppletDefs(applicationName)
-                                : (isCodeGeneration ? getCodeGenerationAppletDefs(applicationName)
-                                        : (isSynchronization ? getSychronizationAppletDefs(applicationName)
-                                                : (isSnapshot ? getSnapshotAppletDefs(applicationName)
+                final List<AppletDef> appletDefList = isApplications
+                        ? getApplicationAppletDefs(applicationName, searchInput)
+                        : (isCollaboration ? getCollaborationAppletDefs(applicationName, searchInput)
+                                : (isCodeGeneration ? getCodeGenerationAppletDefs(applicationName, searchInput)
+                                        : (isSynchronization ? getSychronizationAppletDefs(applicationName, searchInput)
+                                                : (isSnapshot ? getSnapshotAppletDefs(applicationName, searchInput)
                                                         : studioModuleService.findAppletDefs(applicationName,
-                                                                currCategory)))));
+                                                                currCategory, searchInput)))));
 
                 for (AppletDef appletDef : appletDefList) {
                     if (isApplications || isCollaboration || isCodeGeneration || isSynchronization || isSnapshot
@@ -297,35 +297,43 @@ public class StudioMenuWriter extends AbstractPanelWriter {
         }
     }
 
-    private List<AppletDef> getApplicationAppletDefs(String applicationName) throws UnifyException {
-        return getRoleAppletDefs(applicationName, applicationAppletList);
+    private List<AppletDef> getApplicationAppletDefs(String applicationName, String filter) throws UnifyException {
+        return getRoleAppletDefs(applicationName, applicationAppletList, filter);
     }
 
-    private List<AppletDef> getCollaborationAppletDefs(String applicationName) throws UnifyException {
-        return getRoleAppletDefs(applicationName, appletUtilities.collaborationProvider().getCollaborationApplets());
+    private List<AppletDef> getCollaborationAppletDefs(String applicationName, String filter) throws UnifyException {
+        return getRoleAppletDefs(applicationName, appletUtilities.collaborationProvider().getCollaborationApplets(),
+                filter);
     }
 
-    private List<AppletDef> getCodeGenerationAppletDefs(String applicationName) throws UnifyException {
-        return getRoleAppletDefs(applicationName, codeGenerationProvider.getCodeGenerationApplets());
+    private List<AppletDef> getCodeGenerationAppletDefs(String applicationName, String filter) throws UnifyException {
+        return getRoleAppletDefs(applicationName, codeGenerationProvider.getCodeGenerationApplets(), filter);
     }
 
-    private List<AppletDef> getSychronizationAppletDefs(String applicationName) throws UnifyException {
-        return getRoleAppletDefs(applicationName, synchronizationAppletList);
+    private List<AppletDef> getSychronizationAppletDefs(String applicationName, String filter) throws UnifyException {
+        return getRoleAppletDefs(applicationName, synchronizationAppletList, filter);
     }
 
-    private List<AppletDef> getSnapshotAppletDefs(String applicationName) throws UnifyException {
-        return getRoleAppletDefs(applicationName, snapshotAppletList);
+    private List<AppletDef> getSnapshotAppletDefs(String applicationName, String filter) throws UnifyException {
+        return getRoleAppletDefs(applicationName, snapshotAppletList, filter);
     }
 
-    private List<AppletDef> getRoleAppletDefs(String applicationName, List<String> applets) throws UnifyException {
+    private List<AppletDef> getRoleAppletDefs(String applicationName, List<String> applets, String filter)
+            throws UnifyException {
         final String roleCode = getUserToken().getRoleCode();
+        if (filter != null) {
+            filter = filter.toLowerCase();
+        }
+
         List<AppletDef> appletDefList = new ArrayList<AppletDef>();
         for (String appletName : applets) {
             AppletDef _appletDef = appletUtilities.application()
                     .getAppletDef(ApplicationNameUtils.addVestigialNamePart(appletName, applicationName));
             if (appletUtilities.applicationPrivilegeManager().isRoleWithPrivilege(roleCode,
                     _appletDef.getPrivilege())) {
-                appletDefList.add(_appletDef);
+                if (filter == null || _appletDef.getLowerCaseLabel().contains(filter)) {
+                    appletDefList.add(_appletDef);
+                }
             }
         }
         return appletDefList;

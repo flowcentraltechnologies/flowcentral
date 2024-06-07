@@ -966,12 +966,14 @@ public interface ApplicationModuleService extends FlowCentralService {
      *                        the application name
      * @param componentClazz
      *                        the application component type
+     * @param filter
+     *                        optional label filter
      * @return list of application component IDs
      * @throws UnifyException
      *                        if an error occurs
      */
-    <T extends BaseApplicationEntity> List<Long> findAppComponentIdList(String applicationName, Class<T> componentClazz)
-            throws UnifyException;
+    <T extends BaseApplicationEntity> List<Long> findAppComponentIdList(String applicationName, Class<T> componentClazz,
+            String filter) throws UnifyException;
 
     /**
      * Finds all non-classified application component IDs.
@@ -980,12 +982,14 @@ public interface ApplicationModuleService extends FlowCentralService {
      *                        the application name
      * @param componentClazz
      *                        the application component type
+     * @param filter
+     *                        optional label filter
      * @return list of non-classified application component IDs
      * @throws UnifyException
      *                        if an error occurs
      */
     <T extends BaseApplicationEntity> List<Long> findNonClassifiedAppComponentIdList(String applicationName,
-            Class<T> componentClazz) throws UnifyException;
+            Class<T> componentClazz, String filter) throws UnifyException;
 
     /**
      * Finds all application component names.

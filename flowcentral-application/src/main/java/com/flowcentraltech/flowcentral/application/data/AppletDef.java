@@ -70,6 +70,8 @@ public interface AppletDef {
 
     String getLabel();
 
+    String getLowerCaseLabel();
+
     String getIcon();
 
     boolean isFacade();

@@ -246,6 +246,11 @@ public class StandardAppletDef extends BaseApplicationEntityDef implements Apple
     }
 
     @Override
+    public String getLowerCaseLabel() {
+        return lowerCaseLabel;
+    }
+
+    @Override
     public String getIcon() {
         return icon;
     }
