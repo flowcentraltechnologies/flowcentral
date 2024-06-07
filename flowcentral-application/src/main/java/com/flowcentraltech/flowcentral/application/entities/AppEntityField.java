@@ -117,6 +117,9 @@ public class AppEntityField extends BaseConfigEntity {
     @Column(name = "FIELD_SCALE", nullable = true)
     private Integer scale;
 
+    @Column(name = "TRIM_FG")
+    private boolean trim;
+
     @Column(name = "ALLOW_NEGATIVE_FG")
     private boolean allowNegative;
 
@@ -155,7 +158,7 @@ public class AppEntityField extends BaseConfigEntity {
 
     public AppEntityField(EntityFieldDataType dataType, String name, String label, String references, String key,
             String property, String category, String inputLabel, String inputWidget, String suggestionType,
-            String inputListKey, Integer maxLen, boolean allowNegative, boolean readOnly, boolean nullable,
+            String inputListKey, Integer maxLen,  boolean trim, boolean allowNegative, boolean readOnly, boolean nullable,
             boolean auditable, boolean reportable, boolean maintainLink) {
         setConfigType(ConfigType.STATIC);
         this.dataType = dataType;
@@ -170,6 +173,7 @@ public class AppEntityField extends BaseConfigEntity {
         this.suggestionType = suggestionType;
         this.inputListKey = inputListKey;
         this.maxLen = maxLen;
+        this.trim = trim;
         this.allowNegative = allowNegative;
         this.readOnly = readOnly;
         this.nullable = nullable;
@@ -385,6 +389,14 @@ public class AppEntityField extends BaseConfigEntity {
 
     public void setScale(Integer scale) {
         this.scale = scale;
+    }
+
+    public boolean isTrim() {
+        return trim;
+    }
+
+    public void setTrim(boolean trim) {
+        this.trim = trim;
     }
 
     public boolean isAllowNegative() {

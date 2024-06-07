@@ -69,13 +69,13 @@ import com.tcdng.unify.core.util.StringUtils;
  */
 public final class ApplicationEntityUtils {
 
-    public static final Set<String> RESERVED_BASE_FIELDS = Collections.unmodifiableSet( 
-            new HashSet<String>(Arrays.asList("id", "versionNo", "createDt", "createdBy", "updateDt", "updatedBy",
-                    "originWorkRecId", "originalCopyId", "wfItemVersionType", "inWorkflow", "workBranchCode",
-                    "workDepartmentCode", "processingStatus", "devVersionType", "devMergeVersionNo", "classified", "deprecated")));
+    public static final Set<String> RESERVED_BASE_FIELDS = Collections.unmodifiableSet(new HashSet<String>(
+            Arrays.asList("id", "versionNo", "createDt", "createdBy", "updateDt", "updatedBy", "originWorkRecId",
+                    "originalCopyId", "wfItemVersionType", "inWorkflow", "workBranchCode", "workDepartmentCode",
+                    "processingStatus", "devVersionType", "devMergeVersionNo", "classified", "deprecated")));
 
-    public static final Set<String> AUDITABLE_BASE_FIELDS = Collections.unmodifiableSet( 
-            new HashSet<String>(Arrays.asList("createDt", "createdBy", "updateDt", "updatedBy")));
+    public static final Set<String> AUDITABLE_BASE_FIELDS = Collections
+            .unmodifiableSet(new HashSet<String>(Arrays.asList("createDt", "createdBy", "updateDt", "updatedBy")));
 
     public static final List<EntityBaseType> BASE_WORK_TYPES = Collections
             .unmodifiableList(Arrays.asList(EntityBaseType.BASE_WORK_ENTITY, EntityBaseType.BASE_STATUS_WORK_ENTITY,
@@ -324,8 +324,7 @@ public final class ApplicationEntityUtils {
 
         String references = appEntityField.getReferences();
         RefDef refDef = null;
-        if (type.isEntityRef()
-                || (!appEntityField.getDataType().isEnumGroup() && !StringUtils.isBlank(references))) {
+        if (type.isEntityRef() || (!appEntityField.getDataType().isEnumGroup() && !StringUtils.isBlank(references))) {
             refDef = au.getRefDef(references);
         }
 
@@ -341,10 +340,10 @@ public final class ApplicationEntityUtils {
                 DataUtils.convert(int.class, appEntityField.getMinLen()),
                 DataUtils.convert(int.class, appEntityField.getMaxLen()),
                 DataUtils.convert(int.class, appEntityField.getPrecision()),
-                DataUtils.convert(int.class, appEntityField.getScale()), appEntityField.isAllowNegative(),
-                !appEntityField.isReadOnly(), appEntityField.isNullable(), appEntityField.isAuditable(),
-                appEntityField.isReportable(), appEntityField.isMaintainLink(), appEntityField.isBasicSearch(),
-                appEntityField.isDescriptive());
+                DataUtils.convert(int.class, appEntityField.getScale()), appEntityField.isTrim(),
+                appEntityField.isAllowNegative(), !appEntityField.isReadOnly(), appEntityField.isNullable(),
+                appEntityField.isAuditable(), appEntityField.isReportable(), appEntityField.isMaintainLink(),
+                appEntityField.isBasicSearch(), appEntityField.isDescriptive());
     }
 
     public static void addChangeLogFormElements(List<AppFormElement> elementList) {
@@ -474,7 +473,8 @@ public final class ApplicationEntityUtils {
             case BASE_CONFIG_NAMED_ENTITY:
                 list.add(ApplicationEntityUtils.createBaseAppEntityField(EntityFieldDataType.ENUM_REF, "configType",
                         msgResolver.resolveApplicationMessage("$m{baseconfigentity.field.label.configtype}"),
-                        "configtypelist", null, null, null, null, "application.enumlist", null, null, configType, false));
+                        "configtypelist", null, null, null, null, "application.enumlist", null, null, configType,
+                        false));
                 list.add(
                         ApplicationEntityUtils.createBaseAppEntityField(EntityFieldDataType.LIST_ONLY, "configTypeDesc",
                                 msgResolver
@@ -507,8 +507,8 @@ public final class ApplicationEntityUtils {
                         null, null, null, null, "application.integer", null, null, configType, false));
                 list.add(ApplicationEntityUtils.createBaseAppEntityField(EntityFieldDataType.ENUM, "wfItemVersionType",
                         msgResolver.resolveApplicationMessage("$m{baseworkentity.field.label.wfversiontype}"),
-                        "wfitemversiontypelist", null, null, null, null, "application.enumlist", null, null,
-                        configType, false));
+                        "wfitemversiontypelist", null, null, null, null, "application.enumlist", null, null, configType,
+                        false));
                 break;
             default:
                 break;
@@ -523,15 +523,16 @@ public final class ApplicationEntityUtils {
 
     private static AppEntityField createBaseAppEntityField(EntityFieldDataType type, String name, String label,
             String references, String key, String property, String category, String inputLabel, String inputWidget,
-            String inputListKey, Integer length, ConfigType configType,  boolean auditable) {
+            String inputListKey, Integer length, ConfigType configType, boolean auditable) {
         boolean nullable = nullables.contains(name);
         boolean reportable = !nonReportables.contains(name);
         boolean maintainLink = maintainLinks.contains(name);
+        boolean trim = false;
         boolean allowNegative = false;
         boolean readOnly = false;
         String suggestionType = null;
         AppEntityField field = new AppEntityField(type, name, label, references, key, property, category, inputLabel,
-                inputWidget, suggestionType, inputListKey, length, allowNegative, readOnly, nullable, auditable,
+                inputWidget, suggestionType, inputListKey, length, trim, allowNegative, readOnly, nullable, auditable,
                 reportable, maintainLink);
         if (type.isDate() || type.isTimestamp()) {
             field.setLingualWidget("application.lingualdatetypelist");

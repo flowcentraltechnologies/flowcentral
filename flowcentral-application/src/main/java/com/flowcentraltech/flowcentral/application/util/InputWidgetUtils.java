@@ -356,14 +356,14 @@ public final class InputWidgetUtils {
             case "application.textarealarge":
             case "application.textareaxlarge":
             case "application.textareaxxlarge":
-                editor = String.format(editor, efa.getMinLen(), efa.getMaxLen());
+                editor = String.format(editor, efa.getMinLen(), efa.getMaxLen(), efa.isTrim());
                 break;
             case "application.password":
-                editor = String.format(editor, efa.getMinLen(), efa.getMaxLen());
+                editor = String.format(editor, efa.getMinLen(), efa.getMaxLen(), efa.isTrim());
                 break;
             case "application.mobile":
             case "application.integertext":
-                editor = String.format(editor, efa.getMinLen(), efa.getMaxLen());
+                editor = String.format(editor, efa.getMinLen(), efa.getMaxLen(), efa.isTrim());
                 break;
             case "application.suggestiontextsearch":
                 String type = !StringUtils.isBlank(efa.getSuggestionType()) ? efa.getSuggestionType()
@@ -383,7 +383,7 @@ public final class InputWidgetUtils {
                         ? (entityFieldDef.getTextCase() != null ? entityFieldDef.getTextCase().toString().toLowerCase()
                                 : "")
                         : "";
-                editor = String.format(editor, efa.getMinLen(), efa.getMaxLen(), textCase);
+                editor = String.format(editor, efa.getMinLen(), efa.getMaxLen(), efa.isTrim(), textCase);
             }
                 break;
             case "application.textwithupper":
@@ -393,17 +393,17 @@ public final class InputWidgetUtils {
             case "application.fullnamewithupper":
             case "application.wordwithupper":
             case "application.alphanumericwithspecialupper": {
-                editor = String.format(editor, efa.getMinLen(), efa.getMaxLen(),
+                editor = String.format(editor, efa.getMinLen(), efa.getMaxLen(), efa.isTrim(),
                         TextCase.UPPER.toString().toLowerCase());
             }
                 break;
             case "application.alphanumericwithspecialcamel": {
-                editor = String.format(editor, efa.getMinLen(), efa.getMaxLen(),
+                editor = String.format(editor, efa.getMinLen(), efa.getMaxLen(), efa.isTrim(),
                         TextCase.CAMEL.toString().toLowerCase());
             }
                 break;
             case "application.series": {
-                editor = String.format(editor, efa.getMinLen(), efa.getMaxLen(), TextCase.UPPER.toString());
+                editor = String.format(editor, efa.getMinLen(), efa.getMaxLen(), efa.isTrim(), TextCase.UPPER.toString());
             }
                 break;
             case "application.fullname":
@@ -412,13 +412,13 @@ public final class InputWidgetUtils {
                         ? (entityFieldDef.getTextCase() != null ? entityFieldDef.getTextCase().toString().toLowerCase()
                                 : TextCase.CAMEL.toString().toLowerCase())
                         : TextCase.CAMEL.toString().toLowerCase();
-                editor = String.format(editor, efa.getMinLen(), efa.getMaxLen(), textCase);
+                editor = String.format(editor, efa.getMinLen(), efa.getMaxLen(), efa.isTrim(), textCase);
             }
                 break;
             case "application.javafieldname":
             case "application.columnname":
             case "application.word":
-                editor = String.format(editor, efa.getMinLen(), efa.getMaxLen());
+                editor = String.format(editor, efa.getMinLen(), efa.getMaxLen(), efa.isTrim());
                 break;
             case "application.integer":
             case "application.integerformatless":

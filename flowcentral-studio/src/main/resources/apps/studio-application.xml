@@ -2846,6 +2846,8 @@
 						column="1" visible="false" />
 				</section>
 				<section name="optionDetails" columns="type_1_2">
+					<field name="trim"
+						inputWidget="application.checkbox" column="1" visible="false" />
 					<field name="allowNegative"
 						inputWidget="application.checkbox" column="1" visible="false" />
 					<field name="readOnly" inputWidget="application.checkbox"
@@ -2963,7 +2965,7 @@
 				</onCondition>
 				<setStates>
 					<setState type="field"
-						target="minLen,maxLen,autoFormat,defaultVal,nullable,auditable,reportable,maintainLink,descriptive,basicSearch"
+						target="minLen,maxLen,trim,autoFormat,defaultVal,nullable,auditable,reportable,maintainLink,descriptive,basicSearch"
 						visible="true" />
 				</setStates>
 			</formStatePolicy>

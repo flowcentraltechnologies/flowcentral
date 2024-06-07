@@ -38,16 +38,19 @@ public class EntryAttributes implements EntityFieldAttributes {
 
     private int scale;
 
+    private boolean trim;
+
     private boolean allowNegative;
 
     private EntryAttributes(String suggestionType, String references, int minLen, int maxLen, int precision, int scale,
-            boolean allowNegative) {
+            boolean trim, boolean allowNegative) {
         this.suggestionType = suggestionType;
         this.references = references;
         this.minLen = minLen;
         this.maxLen = maxLen;
         this.precision = precision;
         this.scale = scale;
+        this.trim = trim;
         this.allowNegative = allowNegative;
     }
 
@@ -86,6 +89,11 @@ public class EntryAttributes implements EntityFieldAttributes {
     }
 
     @Override
+    public boolean isTrim() {
+        return trim;
+    }
+
+    @Override
     public boolean isAllowNegative() {
         return allowNegative;
     }
@@ -103,6 +111,8 @@ public class EntryAttributes implements EntityFieldAttributes {
         private int precision;
 
         private int scale;
+
+        private boolean trim;
 
         private boolean allowNegative;
 
@@ -136,13 +146,19 @@ public class EntryAttributes implements EntityFieldAttributes {
             return this;
         }
 
+        public Builder trim(boolean trim) {
+            this.trim = trim;
+            return this;
+        }
+
         public Builder allowNegative(boolean allowNegative) {
             this.allowNegative = allowNegative;
             return this;
         }
 
         public EntryAttributes build() {
-            return new EntryAttributes(suggestionType, references, minLen, maxLen, precision, scale, allowNegative);
+            return new EntryAttributes(suggestionType, references, minLen, maxLen, precision, scale, trim,
+                    allowNegative);
         }
     }
 }

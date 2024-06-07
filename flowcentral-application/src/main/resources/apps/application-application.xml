@@ -125,160 +125,160 @@
 			renderer="!ui-debitcreditlabel negativeCredit:true formatter:$d{!decimalformat precision:%s scale:%s useGrouping:true} style:$s{text-align:right;}" />
 		<widgetType name="name" listOption="true"
 			description="$m{application.widgettype.name}" dataType="string"
-			inputType="string" editor="!ui-name minLen:%s maxLen:%s case:$s{%s}"
+			inputType="string" editor="!ui-name minLen:%s maxLen:%s trim:%s case:$s{%s}"
 			renderer="!ui-label" />
 		<widgetType name="namewithupper" listOption="true"
 			description="$m{application.widgettype.namewithupper}"
 			dataType="string" inputType="string"
-			editor="!ui-name minLen:%s maxLen:%s case:$s{%s}"
+			editor="!ui-name minLen:%s maxLen:%s trim:%s case:$s{%s}"
 			renderer="!ui-label" />
 		<widgetType name="series" listOption="true"
 			description="$m{application.widgettype.series}" dataType="string"
 			inputType="string"
-			editor="!ui-series minLen:%s maxLen:%s case:$s{%s}"
+			editor="!ui-series minLen:%s maxLen:%s trim:%s case:$s{%s}"
 			renderer="!ui-label" />
 		<widgetType name="word" listOption="true"
 			description="$m{application.widgettype.word}" dataType="string"
-			inputType="string" editor="!ui-word minLen:%s maxLen:%s case:$s{%s}"
+			inputType="string" editor="!ui-word minLen:%s maxLen:%s trim:%s case:$s{%s}"
 			renderer="!ui-label" />
 		<widgetType name="wordwithupper" listOption="true"
 			description="$m{application.widgettype.wordwithupper}"
 			dataType="string" inputType="string"
-			editor="!ui-word minLen:%s maxLen:%s case:$s{%s}"
+			editor="!ui-word minLen:%s maxLen:%s trim:%s case:$s{%s}"
 			renderer="!ui-label" />
 		<widgetType name="fullname" listOption="true"
 			description="$m{application.widgettype.fullname}" dataType="string"
 			inputType="string"
-			editor="!ui-fullname minLen:%s maxLen:%s case:$s{%s}"
+			editor="!ui-fullname minLen:%s maxLen:%s trim:%s case:$s{%s}"
 			renderer="!ui-label" />
 		<widgetType name="fullnamewithupper" listOption="true"
 			description="$m{application.widgettype.fullnamewithupper}"
 			dataType="string" inputType="string"
-			editor="!ui-fullname minLen:%s maxLen:%s case:$s{%s}"
+			editor="!ui-fullname minLen:%s maxLen:%s trim:%s case:$s{%s}"
 			renderer="!ui-label" />
 		<widgetType name="fullnamewithspecial" listOption="true"
 			description="$m{application.widgettype.fullnamewithspecial}"
 			dataType="string" inputType="string"
-			editor="!ui-fullname minLen:%s maxLen:%s case:$s{%s} special:true"
+			editor="!ui-fullname minLen:%s maxLen:%s trim:%s case:$s{%s} special:true"
 			renderer="!ui-label" />
 		<widgetType name="alphanumeric" listOption="true"
 			description="$m{application.widgettype.alphanumeric}"
 			dataType="string" inputType="string"
-			editor="!ui-alphanumeric minLen:%s maxLen:%s case:$s{%s}"
+			editor="!ui-alphanumeric minLen:%s maxLen:%s trim:%s case:$s{%s}"
 			renderer="!ui-label" />
 		<widgetType name="alphanumericwithupper" listOption="true"
 			description="$m{application.widgettype.alphanumericwithupper}"
 			dataType="string" inputType="string"
-			editor="!ui-alphanumeric minLen:%s maxLen:%s case:$s{%s}"
+			editor="!ui-alphanumeric minLen:%s maxLen:%s trim:%s case:$s{%s}"
 			renderer="!ui-label" />
 		<widgetType name="alphanumericwithspace" listOption="true"
 			description="$m{application.widgettype.alphanumericwithspace}"
 			dataType="string" inputType="string"
-			editor="!ui-alphanumeric minLen:%s maxLen:%s case:$s{%s} space:true"
+			editor="!ui-alphanumeric minLen:%s maxLen:%s trim:%s case:$s{%s} space:true"
 			renderer="!ui-label" />
 		<widgetType name="alphanumericwithspaceupper"
 			listOption="true"
 			description="$m{application.widgettype.alphanumericwithspaceupper}"
 			dataType="string" inputType="string"
-			editor="!ui-alphanumeric minLen:%s maxLen:%s case:$s{%s} space:true"
+			editor="!ui-alphanumeric minLen:%s maxLen:%s trim:%s case:$s{%s} space:true"
 			renderer="!ui-label" />
 		<widgetType name="alphanumericwithspecial"
 			listOption="true"
 			description="$m{application.widgettype.alphanumericwithspecial}"
 			dataType="string" inputType="string"
-			editor="!ui-alphanumeric minLen:%s maxLen:%s case:$s{%s} space:true special:true"
+			editor="!ui-alphanumeric minLen:%s maxLen:%s trim:%s case:$s{%s} space:true special:true"
 			renderer="!ui-label" />
 		<widgetType name="alphanumericwithspecialcamel"
 			listOption="true"
 			description="$m{application.widgettype.alphanumericwithspecialcamel}"
 			dataType="string" inputType="string"
-			editor="!ui-alphanumeric minLen:%s maxLen:%s case:$s{%s} space:true special:true"
+			editor="!ui-alphanumeric minLen:%s maxLen:%s trim:%s case:$s{%s} space:true special:true"
 			renderer="!ui-label" />
 		<widgetType name="alphanumericwithspecialupper"
 			listOption="true"
 			description="$m{application.widgettype.alphanumericwithspecialupper}"
 			dataType="string" inputType="string"
-			editor="!ui-alphanumeric minLen:%s maxLen:%s case:$s{%s} space:true special:true"
+			editor="!ui-alphanumeric minLen:%s maxLen:%s trim:%s case:$s{%s} space:true special:true"
 			renderer="!ui-label" />
 		<widgetType name="integertext" listOption="true"
 			description="$m{application.widgettype.integertext}"
 			dataType="string" inputType="string"
-			editor="!ui-integertext minLen:%s maxLen:%s" renderer="!ui-label" />
+			editor="!ui-integertext minLen:%s maxLen:%s trim:%s" renderer="!ui-label" />
 		<widgetType name="text" listOption="true"
 			description="$m{application.widgettype.text}" dataType="string"
-			inputType="string" editor="!ui-text minLen:%s maxLen:%s case:$s{%s}"
+			inputType="string" editor="!ui-text minLen:%s maxLen:%s trim:%s case:$s{%s}"
 			renderer="!ui-label" />
 		<widgetType name="textwithupper" listOption="true"
 			description="$m{application.widgettype.textwithupper}"
 			dataType="string" inputType="string"
-			editor="!ui-text minLen:%s maxLen:%s case:$s{%s}"
+			editor="!ui-text minLen:%s maxLen:%s trim:%s case:$s{%s}"
 			renderer="!ui-label" />
 		<widgetType name="textarea" listOption="true"
 			description="$m{application.widgettype.textarea}" dataType="string"
-			inputType="string" editor="!ui-textarea minLen:%s maxLen:%s rows:4"
+			inputType="string" editor="!ui-textarea minLen:%s maxLen:%s trim:%s rows:4"
 			renderer="!ui-label" />
 		<widgetType name="textareamedium" listOption="true"
 			description="$m{application.widgettype.textareamedium}"
 			dataType="string" inputType="string"
-			editor="!ui-textarea minLen:%s maxLen:%s rows:8" renderer="!ui-label" />
+			editor="!ui-textarea minLen:%s maxLen:%s trim:%s rows:8" renderer="!ui-label" />
 		<widgetType name="textarealarge" listOption="true"
 			description="$m{application.widgettype.textarealarge}"
 			dataType="string" inputType="string"
-			editor="!ui-textarea minLen:%s maxLen:%s rows:16"
+			editor="!ui-textarea minLen:%s maxLen:%s trim:%s rows:16"
 			renderer="!ui-label" />
 		<widgetType name="textareaxlarge" listOption="true"
 			description="$m{application.widgettype.textareaxlarge}"
 			dataType="string" inputType="string"
-			editor="!ui-textarea minLen:%s maxLen:%s rows:32"
+			editor="!ui-textarea minLen:%s maxLen:%s trim:%s rows:32"
 			renderer="!ui-label" />
 		<widgetType name="textareaxxlarge" listOption="true"
 			description="$m{application.widgettype.textareaxxlarge}"
 			dataType="string" inputType="string"
-			editor="!ui-textarea minLen:%s maxLen:%s rows:64"
+			editor="!ui-textarea minLen:%s maxLen:%s trim:%s rows:64"
 			renderer="!ui-label" />
 		<widgetType name="password" listOption="true"
 			description="$m{application.widgettype.password}" dataType="string"
-			inputType="string" editor="!ui-password minLen:%s maxLen:%s"
+			inputType="string" editor="!ui-password minLen:%s maxLen:%s trim:%s"
 			renderer="!ui-label" />
 		<widgetType name="wildname" listOption="true"
 			description="$m{application.widgettype.wildname}" dataType="string"
 			inputType="string"
-			editor="!ui-name minLen:%s maxLen:%s case:$s{%s} special:true"
+			editor="!ui-name minLen:%s maxLen:%s trim:%s case:$s{%s} special:true"
 			renderer="!ui-label" />
 		<widgetType name="email" listOption="true"
 			description="$m{application.widgettype.email}" dataType="string"
-			inputType="string" editor="!ui-text minLen:%s maxLen:%s case:$s{%s}"
+			inputType="string" editor="!ui-text minLen:%s maxLen:%s trim:%s case:$s{%s}"
 			renderer="!ui-label" />
 		<widgetType name="emailset" listOption="true"
 			description="$m{application.widgettype.emailset}" dataType="string"
-			inputType="string" editor="!ui-textarea minLen:%s maxLen:%s rows:2"
+			inputType="string" editor="!ui-textarea minLen:%s maxLen:%s trim:%s rows:2"
 			renderer="!ui-label" />
 		<widgetType name="mobile" listOption="true"
 			description="$m{application.widgettype.mobile}" dataType="string"
 			inputType="string"
-			editor="!ui-integertext acceptPlus:true minLen:%s maxLen:%s"
+			editor="!ui-integertext acceptPlus:true minLen:%s maxLen:%s trim:%s"
 			renderer="!ui-label" />
 		<widgetType name="mobileset" listOption="true"
 			description="$m{application.widgettype.mobileset}" dataType="string"
-			inputType="string" editor="!ui-textarea minLen:%s maxLen:%s rows:2"
+			inputType="string" editor="!ui-textarea minLen:%s maxLen:%s trim:%s rows:2"
 			renderer="!ui-label" />
 		<widgetType name="domain" listOption="true"
 			description="$m{application.widgettype.domain}" dataType="string"
-			inputType="string" editor="!ui-text minLen:%s maxLen:%s case:$s{%s}"
+			inputType="string" editor="!ui-text minLen:%s maxLen:%s trim:%s case:$s{%s}"
 			renderer="!ui-label" />
 		<widgetType name="website" listOption="true"
 			description="$m{application.widgettype.website}" dataType="string"
-			inputType="string" editor="!ui-text minLen:%s maxLen:%s case:$s{%s}"
+			inputType="string" editor="!ui-text minLen:%s maxLen:%s trim:%s case:$s{%s}"
 			renderer="!ui-label" />
 		<widgetType name="javafieldname" listOption="true"
 			description="$m{application.widgettype.javafieldname}"
 			dataType="string" inputType="string"
-			editor="!ui-name minLen:%s maxLen:%s underscore:true dollar:true"
+			editor="!ui-name minLen:%s maxLen:%s trim:%s underscore:true dollar:true"
 			renderer="!ui-label" />
 		<widgetType name="columnname" listOption="true"
 			description="$m{application.widgettype.columnname}" dataType="string"
 			inputType="string"
-			editor="!ui-name minLen:%s maxLen:%s underscore:true"
+			editor="!ui-name minLen:%s maxLen:%s trim:%s underscore:true"
 			renderer="!ui-label" />
 		<widgetType name="checkbox" listOption="true"
 			description="$m{application.widgettype.checkbox}" dataType="boolean"
@@ -1063,6 +1063,8 @@
 			<field name="scale"
 				label="$m{application.appentityfield.scale}" type="integer"
 				nullable="true" />
+			<field name="trim"
+				label="$m{application.appentityfield.trim}" type="boolean" />
 			<field name="allowNegative"
 				label="$m{application.appentityfield.allownegative}" type="boolean" />
 			<field name="readOnly"
