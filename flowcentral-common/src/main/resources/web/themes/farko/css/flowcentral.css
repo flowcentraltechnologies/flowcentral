@@ -127,9 +127,9 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .ui-contentpanel .cptab .cptitle .hd {width:156px;}
 .ui-contentpanel .cptab .cptitle .hds {width:156px;}
 
-.contentpanel-popup ul {background-color: #24303f; color:#ffffff;}
-.contentpanel-popup .mitem {padding:6px 12px;font-size:11px;color:#ffffff;}
-.contentpanel-popup .mitem:hover {background-color: #394452;}
+.contentpanel-popup ul {background-color: #ffffff;}
+.contentpanel-popup .mitem {padding:6px 12px;font-size:11px;font-weight:bold;color: #454545;}
+.contentpanel-popup .mitem:hover {background-color: #394452;color:#ffffff;}
 
 .ui-inlabel {display:inline-block !important;font-size:11px;font-weight:bold; color:#525e6d;}
 

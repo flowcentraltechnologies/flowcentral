@@ -81,6 +81,8 @@ public class EntityFieldConfig {
 
     private Integer scale;
 
+    private Boolean trim;
+
     private Boolean allowNegative;
 
     private Boolean readOnly;
@@ -98,6 +100,7 @@ public class EntityFieldConfig {
     private Boolean basicSearch;
 
     public EntityFieldConfig() {
+        this.trim = Boolean.FALSE;
         this.allowNegative = Boolean.FALSE;
         this.readOnly = Boolean.FALSE;
         this.nullable = Boolean.FALSE;
@@ -324,6 +327,16 @@ public class EntityFieldConfig {
     @XmlAttribute
     public void setScale(Integer scale) {
         this.scale = scale;
+    }
+
+    public Boolean getTrim() {
+        return trim;
+    }
+
+    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
+    @XmlAttribute
+    public void setTrim(Boolean trim) {
+        this.trim = trim;
     }
 
     public Boolean getAllowNegative() {

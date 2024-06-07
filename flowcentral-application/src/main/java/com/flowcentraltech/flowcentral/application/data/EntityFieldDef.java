@@ -91,6 +91,8 @@ public class EntityFieldDef implements Listable, EntityFieldAttributes {
 
     private int scale;
 
+    private boolean trim;
+
     private boolean allowNegative;
 
     private boolean editable;
@@ -125,7 +127,7 @@ public class EntityFieldDef implements Listable, EntityFieldAttributes {
             String columnName, String references, String category, String suggestionType, String inputLabel,
             String inputListKey, String lingualListKey, String autoFormat, String defaultVal, String key,
             String property, int rows, int columns, int minLen, int maxLen, int precision, int scale,
-            boolean allowNegative, boolean editable, boolean nullable, boolean auditable, boolean reportable,
+            boolean trim, boolean allowNegative, boolean editable, boolean nullable, boolean auditable, boolean reportable,
             boolean maintainLink, boolean basicSearch, boolean descriptive) {
         this.textWidgetTypeDef = textWidgetTypeDef;
         this.inputWidgetTypeDef = inputWidgetTypeDef;
@@ -155,6 +157,7 @@ public class EntityFieldDef implements Listable, EntityFieldAttributes {
         this.maxLen = maxLen > 0 ? maxLen : 0;
         this.precision = precision;
         this.scale = scale;
+        this.trim = trim;
         this.allowNegative = allowNegative;
         this.editable = editable;
         this.nullable = nullable;
@@ -358,6 +361,11 @@ public class EntityFieldDef implements Listable, EntityFieldAttributes {
     @Override
     public int getScale() {
         return scale;
+    }
+
+    @Override
+    public boolean isTrim() {
+        return trim;
     }
 
     @Override
@@ -680,6 +688,8 @@ public class EntityFieldDef implements Listable, EntityFieldAttributes {
 
         private int scale;
 
+        private boolean trim;
+
         private boolean allowNegative;
 
         private boolean editable;
@@ -825,6 +835,11 @@ public class EntityFieldDef implements Listable, EntityFieldAttributes {
             return this;
         }
 
+        public Builder trim(boolean trim) throws UnifyException {
+            this.trim = trim;
+            return this;
+        }
+
         public Builder allowNegative(boolean allowNegative) throws UnifyException {
             this.allowNegative = allowNegative;
             return this;
@@ -881,7 +896,7 @@ public class EntityFieldDef implements Listable, EntityFieldAttributes {
             return new EntityFieldDef(textWidgetTypeDef, inputWidgetTypeDef, ligualWidgetTypeDef, refDef, dataType,
                     type, textCase, entityLongName, fieldName, mapped, fieldLabel, columnName, references, category,
                     suggestionType, inputLabel, inputListKey, lingualListKey, autoFormat, defaultVal, key, property,
-                    rows, columns, minLen, maxLen, precision, scale, allowNegative, editable, nullable, auditable,
+                    rows, columns, minLen, maxLen, precision, scale, trim, allowNegative, editable, nullable, auditable,
                     reportable, maintainLink, basicSearch, descriptive);
         }
     }

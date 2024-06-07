@@ -724,7 +724,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                                     appEntityField.getDefaultVal(), references, appEntityField.getKey(),
                                     appEntityField.getProperty(), appEntityField.getRows(), appEntityField.getColumns(),
                                     appEntityField.getMinLen(), appEntityField.getMaxLen(),
-                                    appEntityField.getPrecision(), appEntityField.getScale(),
+                                    appEntityField.getPrecision(), appEntityField.getScale(), appEntityField.isTrim(),
                                     appEntityField.isAllowNegative(), !appEntityField.isReadOnly(),
                                     appEntityField.isNullable(), appEntityField.isAuditable(),
                                     appEntityField.isReportable(), appEntityField.isMaintainLink(),
@@ -740,7 +740,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                                     appEntityField.getDefaultVal(), references, appEntityField.getKey(),
                                     appEntityField.getProperty(), appEntityField.getRows(), appEntityField.getColumns(),
                                     appEntityField.getMinLen(), appEntityField.getMaxLen(),
-                                    appEntityField.getPrecision(), appEntityField.getScale(),
+                                    appEntityField.getPrecision(), appEntityField.getScale(), appEntityField.isTrim(),
                                     appEntityField.isAllowNegative(), !appEntityField.isReadOnly(),
                                     appEntityField.isNullable(), appEntityField.isAuditable(),
                                     appEntityField.isReportable(), appEntityField.isMaintainLink(),
@@ -5113,6 +5113,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                     appEntityField.setMaxLen(entityFieldConfig.getMaxLen());
                     appEntityField.setPrecision(entityFieldConfig.getPrecision());
                     appEntityField.setScale(entityFieldConfig.getScale());
+                    appEntityField.setTrim(entityFieldConfig.getTrim());
                     appEntityField.setAllowNegative(entityFieldConfig.getAllowNegative());
                     appEntityField.setReadOnly(entityFieldConfig.getReadOnly());
                     appEntityField.setNullable(entityFieldConfig.getNullable());
@@ -5161,6 +5162,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                         oldAppEntityField.setMaxLen(entityFieldConfig.getMaxLen());
                         oldAppEntityField.setPrecision(entityFieldConfig.getPrecision());
                         oldAppEntityField.setScale(entityFieldConfig.getScale());
+                        oldAppEntityField.setTrim(entityFieldConfig.getTrim());
                         oldAppEntityField.setAllowNegative(entityFieldConfig.getAllowNegative());
                         oldAppEntityField.setReadOnly(entityFieldConfig.getReadOnly());
                         oldAppEntityField.setNullable(entityFieldConfig.getNullable());

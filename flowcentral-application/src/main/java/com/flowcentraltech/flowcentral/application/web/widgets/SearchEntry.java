@@ -116,6 +116,14 @@ public class SearchEntry implements EntityFieldAttributes {
     }
 
     @Override
+    public boolean isTrim() throws UnifyException {
+        return isGeneratorEntry()
+                ? au.getComponent(SearchInputRestrictionGenerator.class, generator).getEntryAttributes()
+                        .isTrim()
+                : false;
+    }
+
+    @Override
     public boolean isAllowNegative() throws UnifyException {
         return isGeneratorEntry()
                 ? au.getComponent(SearchInputRestrictionGenerator.class, generator).getEntryAttributes()

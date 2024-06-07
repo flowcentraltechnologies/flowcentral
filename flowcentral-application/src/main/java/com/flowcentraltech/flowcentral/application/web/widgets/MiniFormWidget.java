@@ -199,123 +199,125 @@ public class MiniFormWidget extends AbstractFlowCentralMultiControl implements F
     public void evaluateWidgetStates() throws UnifyException {
         final MiniForm form = getMiniForm();
         final FormContext ctx = form.getCtx();
-        final Date now = appletUtilities.getNow();
 
         final ValueStore formValueStore = ctx.getFormValueStore();
-        final ValueStoreReader formValueStoreReader = formValueStore.getReader();
-        for (FormSection formSection : formSections.values()) {
-            formSection.revertState();
-        }
-
-        Set<String> activatedAltRules = Collections.emptySet();
-        List<FormStateRule> fieldRules = new ArrayList<FormStateRule>();
-        String trigger = getTrigger();
-        if (form.getScope().isMainForm() || ctx.isQuickEditMode()) {
-            final FormDef formDef = ctx.getFormDef();
-            boolean setValuesExecuted = false;
-
-            if (formDef.isWithFormWidgetRulesPolicy()) {
-                activatedAltRules = new HashSet<String>();
-                for (FormWidgetRulesPolicyDef formWidgetRulesPolicyDef : formDef.getFormWidgetRulesPolicyDefList()) {
-                    if (formWidgetRulesPolicyDef.match(formDef, formValueStore, now)) {
-                        activatedAltRules.add(formWidgetRulesPolicyDef.getName());
-                    }
-                }
+        if (formValueStore != null) {
+            final ValueStoreReader formValueStoreReader = formValueStore.getReader();
+            final Date now = appletUtilities.getNow();
+            for (FormSection formSection : formSections.values()) {
+                formSection.revertState();
             }
 
-            // Set values first
-            if (formDef.isWithConsolidatedFormState()) {
-                ConsolidatedFormStatePolicy policy = ctx.au().getComponent(ConsolidatedFormStatePolicy.class,
-                        formDef.getConsolidatedFormState());
-                TargetFormWidgetStates _states = policy.evaluateWidgetStates(formValueStore.getReader(), trigger);
-                if (_states.isWithValueList()) {
-                    _states.applyValues(formValueStore);
-                    setValuesExecuted = true;
-                }
-            }
+            Set<String> activatedAltRules = Collections.emptySet();
+            List<FormStateRule> fieldRules = new ArrayList<FormStateRule>();
+            String trigger = getTrigger();
+            if (form.getScope().isMainForm() || ctx.isQuickEditMode()) {
+                final FormDef formDef = ctx.getFormDef();
+                boolean setValuesExecuted = false;
 
-            final Map<String, Object> variables = Collections.emptyMap();
-            for (FormStatePolicyDef formStatePolicyDef : formDef.getOnSwitchFormStatePolicyDefList()) {
-                if (formStatePolicyDef.isTriggered(trigger)) {
-                    ObjectFilter objectFilter = formStatePolicyDef.isWithCondition()
-                            ? formStatePolicyDef.getOnCondition().getObjectFilter(formDef.getEntityDef(),
-                                    formValueStoreReader, now)
-                            : null;
-                    if (objectFilter == null || objectFilter.matchReader(formValueStoreReader)) {
-                        if (formStatePolicyDef.isSetValues()) {
-                            formStatePolicyDef.getSetValuesDef().apply(appletUtilities, formDef.getEntityDef(), now,
-                                    formValueStore, variables, trigger);
-                            setValuesExecuted = true;
+                if (formDef.isWithFormWidgetRulesPolicy()) {
+                    activatedAltRules = new HashSet<String>();
+                    for (FormWidgetRulesPolicyDef formWidgetRulesPolicyDef : formDef.getFormWidgetRulesPolicyDefList()) {
+                        if (formWidgetRulesPolicyDef.match(formDef, formValueStore, now)) {
+                            activatedAltRules.add(formWidgetRulesPolicyDef.getName());
                         }
                     }
                 }
-            }
 
-            if (setValuesExecuted) {
-                ctx.au().populateListOnlyFields(formDef.getEntityDef(), (Entity) formValueStore.getValueObject());
-            }
+                // Set values first
+                if (formDef.isWithConsolidatedFormState()) {
+                    ConsolidatedFormStatePolicy policy = ctx.au().getComponent(ConsolidatedFormStatePolicy.class,
+                            formDef.getConsolidatedFormState());
+                    TargetFormWidgetStates _states = policy.evaluateWidgetStates(formValueStore.getReader(), trigger);
+                    if (_states.isWithValueList()) {
+                        _states.applyValues(formValueStore);
+                        setValuesExecuted = true;
+                    }
+                }
 
-            // Then switch states
-            if (formDef.isWithConsolidatedFormState()) {
-                ConsolidatedFormStatePolicy policy = ctx.au().getComponent(ConsolidatedFormStatePolicy.class,
-                        formDef.getConsolidatedFormState());
-                TargetFormWidgetStates _states = policy.evaluateWidgetStates(formValueStoreReader, trigger);
-                for (TargetFormState state : _states.getTargetStateList()) {
-                    if (state.isSectionRule()) {
-                        for (String target : state.getTarget()) {
-                            FormSection fs = formSections.get(target);
-                            if (fs != null) {
-                                fs.applyStatePolicy(state);
+                final Map<String, Object> variables = Collections.emptyMap();
+                for (FormStatePolicyDef formStatePolicyDef : formDef.getOnSwitchFormStatePolicyDefList()) {
+                    if (formStatePolicyDef.isTriggered(trigger)) {
+                        ObjectFilter objectFilter = formStatePolicyDef.isWithCondition()
+                                ? formStatePolicyDef.getOnCondition().getObjectFilter(formDef.getEntityDef(),
+                                        formValueStoreReader, now)
+                                : null;
+                        if (objectFilter == null || objectFilter.matchReader(formValueStoreReader)) {
+                            if (formStatePolicyDef.isSetValues()) {
+                                formStatePolicyDef.getSetValuesDef().apply(appletUtilities, formDef.getEntityDef(), now,
+                                        formValueStore, variables, trigger);
+                                setValuesExecuted = true;
                             }
                         }
-                    } else if (state.isFieldRule()) {
-                        fieldRules.add(state);
                     }
                 }
 
-                policy.onFormSwitch(formValueStore, trigger);
-            }
+                if (setValuesExecuted) {
+                    ctx.au().populateListOnlyFields(formDef.getEntityDef(), (Entity) formValueStore.getValueObject());
+                }
 
-            for (FormStatePolicyDef formStatePolicyDef : formDef.getOnSwitchFormStatePolicyDefList()) {
-                if (formStatePolicyDef.isTriggered(trigger)) {
-                    ObjectFilter objectFilter = formStatePolicyDef.isWithCondition()
-                            ? formStatePolicyDef.getOnCondition().getObjectFilter(formDef.getEntityDef(),
-                                    formValueStoreReader, now)
-                            : null;
-                    if (objectFilter == null || objectFilter.matchReader(formValueStoreReader)) {
-                        for (SetStateDef setStateDef : formStatePolicyDef.getSetStatesDef().getSetStateList()) {
-                            if (setStateDef.isSectionRule()) {
-                                for (String target : setStateDef.getTarget()) {
-                                    FormSection fs = formSections.get(target);
-                                    if (fs != null) {
-                                        fs.applyStatePolicy(setStateDef);
-                                    }
+                // Then switch states
+                if (formDef.isWithConsolidatedFormState()) {
+                    ConsolidatedFormStatePolicy policy = ctx.au().getComponent(ConsolidatedFormStatePolicy.class,
+                            formDef.getConsolidatedFormState());
+                    TargetFormWidgetStates _states = policy.evaluateWidgetStates(formValueStoreReader, trigger);
+                    for (TargetFormState state : _states.getTargetStateList()) {
+                        if (state.isSectionRule()) {
+                            for (String target : state.getTarget()) {
+                                FormSection fs = formSections.get(target);
+                                if (fs != null) {
+                                    fs.applyStatePolicy(state);
                                 }
-                            } else if (setStateDef.isFieldRule()) {
-                                fieldRules.add(setStateDef);
+                            }
+                        } else if (state.isFieldRule()) {
+                            fieldRules.add(state);
+                        }
+                    }
+
+                    policy.onFormSwitch(formValueStore, trigger);
+                }
+
+                for (FormStatePolicyDef formStatePolicyDef : formDef.getOnSwitchFormStatePolicyDefList()) {
+                    if (formStatePolicyDef.isTriggered(trigger)) {
+                        ObjectFilter objectFilter = formStatePolicyDef.isWithCondition()
+                                ? formStatePolicyDef.getOnCondition().getObjectFilter(formDef.getEntityDef(),
+                                        formValueStoreReader, now)
+                                : null;
+                        if (objectFilter == null || objectFilter.matchReader(formValueStoreReader)) {
+                            for (SetStateDef setStateDef : formStatePolicyDef.getSetStatesDef().getSetStateList()) {
+                                if (setStateDef.isSectionRule()) {
+                                    for (String target : setStateDef.getTarget()) {
+                                        FormSection fs = formSections.get(target);
+                                        if (fs != null) {
+                                            fs.applyStatePolicy(setStateDef);
+                                        }
+                                    }
+                                } else if (setStateDef.isFieldRule()) {
+                                    fieldRules.add(setStateDef);
+                                }
                             }
                         }
                     }
                 }
             }
-        }
 
-        // Apply widget rules
-        for (FormWidget formWidget : formWidgets.values()) {
-            formWidget.revertState(activatedAltRules);
-        }
+            // Apply widget rules
+            for (FormWidget formWidget : formWidgets.values()) {
+                formWidget.revertState(activatedAltRules);
+            }
 
-        for (FormStateRule rule : fieldRules) {
-            for (String target : rule.getTarget()) {
-                FormWidget formWidget = formWidgets.get(target);
-                if (formWidget != null) {
-                    formWidget.applyStatePolicy(rule);
+            for (FormStateRule rule : fieldRules) {
+                for (String target : rule.getTarget()) {
+                    FormWidget formWidget = formWidgets.get(target);
+                    if (formWidget != null) {
+                        formWidget.applyStatePolicy(rule);
+                    }
                 }
             }
-        }
 
-        if (form.isAllocateTabIndex()) {
-            allocateTabIndex(ctx);
+            if (form.isAllocateTabIndex()) {
+                allocateTabIndex(ctx);
+            }
         }
     }
 
