@@ -45,6 +45,12 @@
 .fc-studiomenu .menu li {padding:8px; cursor:pointer;}
 .fc-studiomenu .menu li:hover {background-color: #3e4a59;}
 .fc-studiomenu .menu span {}
+.fc-studiomenu .mtop {margin-top:30px;}
+.fc-studiomenu .mfil {display:inline-block;color:#ffffff;font-size: 10px;padding: 4px;}
+.fc-studiomenu .mban {display:inline-block;color:#a34523;font-size: 12px !important;cursor:pointer;padding: 4px;}
+.fc-studiomenu .msearch {background-color:#24303f;padding:4px;position: fixed;min-width: 232px;}
+.fc-studiomenu .msearch span {display: inline-block; padding: 4px; font-size: 10px; width: 14px;}
+.fc-studiomenu .search {display: inline-block;padding-left: 4px;font-size: 8pt;height: 22px;width: calc(100% - 48px);}
 
 /** Table Editor */
 .fc-tableeditor {height:100%;}
