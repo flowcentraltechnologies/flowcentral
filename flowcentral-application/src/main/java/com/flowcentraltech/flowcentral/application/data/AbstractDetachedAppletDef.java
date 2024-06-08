@@ -145,6 +145,11 @@ public abstract class AbstractDetachedAppletDef implements AppletDef {
     }
 
     @Override
+    public String getLowerCaseLabel() {
+        return parentAppletDef.getLowerCaseLabel();
+    }
+
+    @Override
     public String getIcon() {
         return parentAppletDef.getIcon();
     }

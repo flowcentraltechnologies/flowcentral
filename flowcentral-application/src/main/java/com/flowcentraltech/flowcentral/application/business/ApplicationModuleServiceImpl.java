@@ -2155,16 +2155,24 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
 
     @Override
     public <T extends BaseApplicationEntity> List<Long> findAppComponentIdList(String applicationName,
-            Class<T> componentClazz) throws UnifyException {
-        return environment().valueList(Long.class, "id",
-                Query.of(componentClazz).addEquals("applicationName", applicationName).addOrder("id"));
+            Class<T> componentClazz, String filter) throws UnifyException {
+        return StringUtils.isBlank(filter)
+                ? environment().valueList(Long.class, "id",
+                        Query.of(componentClazz).addEquals("applicationName", applicationName).addOrder("id"))
+                : environment().valueList(Long.class, "id", Query.of(componentClazz)
+                        .addEquals("applicationName", applicationName).addILike("label", filter).addOrder("id"));
     }
 
     @Override
     public <T extends BaseApplicationEntity> List<Long> findNonClassifiedAppComponentIdList(String applicationName,
-            Class<T> componentClazz) throws UnifyException {
-        return environment().valueList(Long.class, "id", Query.of(componentClazz)
-                .addEquals("applicationName", applicationName).addNotEquals("classified", true).addOrder("id"));
+            Class<T> componentClazz, String filter) throws UnifyException {
+        return StringUtils.isBlank(filter)
+                ? environment().valueList(Long.class, "id",
+                        Query.of(componentClazz).addEquals("applicationName", applicationName)
+                                .addNotEquals("classified", true).addOrder("id"))
+                : environment().valueList(Long.class, "id",
+                        Query.of(componentClazz).addEquals("applicationName", applicationName).addILike("label", filter)
+                                .addNotEquals("classified", true).addOrder("id"));
     }
 
     @Override

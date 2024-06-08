@@ -44,7 +44,7 @@ public interface StudioModuleService extends FlowCentralService {
      *                        if an error occurs
      */
     List<SnapshotDetails> findSnapshotDetails(Date fromDate, Date toDate) throws UnifyException;
-    
+
     /**
      * Gets a studio applet definition.
      * 
@@ -64,9 +64,11 @@ public interface StudioModuleService extends FlowCentralService {
      *                        the application name
      * @param type
      *                        the component type
+     * @param filter
      * @return list of applet definitions
      * @throws UnifyException
      *                        if an error occurs
      */
-    List<AppletDef> findAppletDefs(String applicationName, StudioAppComponentType type) throws UnifyException;
+    List<AppletDef> findAppletDefs(String applicationName, StudioAppComponentType type, String filter)
+            throws UnifyException;
 }

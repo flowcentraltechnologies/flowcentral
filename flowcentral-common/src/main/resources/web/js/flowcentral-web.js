@@ -39,7 +39,9 @@ fux.menuWire = function(rgp) {
 	const _menu = _id(id);
 	const initVisible = !rgp.pCollInit;
 
-	ux.registerOtherPopup(menuPopId);
+	if (rgp.pReg) {
+		ux.registerOtherPopup(menuPopId);
+	}
 	 
 	// Menus
 	if (rgp.pMenuIds) {
@@ -68,10 +70,15 @@ fux.menuWire = function(rgp) {
 			const melem = _id(mItem.id);
 			evp.uMenuPopId = menuPopId;
 			if (mItem.pSubMenuItems) {
-				evp.uMenuItems = mItem.pSubMenuItems;
-				ux.addHdl(melem, "mouseover", fux.menuShowPopup, evp);
+				if (rgp.pReg) {
+					evp.uMenuItems = mItem.pSubMenuItems;
+					ux.addHdl(melem, "mouseover", fux.menuShowPopup, evp);
+				}
 			} else { 
-				ux.addHdl(melem, "mouseover", fux.menuHidePopup, evp);
+				if (rgp.pReg) {
+					ux.addHdl(melem, "mouseover", fux.menuHidePopup, evp);
+				}
+				
 				if (mItem.isOpenWin) {
 					evp.uMain = false;
 					evp.uURL = mItem.path;

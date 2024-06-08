@@ -58,6 +58,10 @@ fuxstudio.rigStudioMenu = function(rgp) {
 			ux.addHdl(_id(mItem.id), "click", ux.menuOpenPath, evp);
 		}
 	}
+	
+	if (rgp.pSearch) {
+		fux.rigMenuSearch(rgp);
+	}
 }
 
 fuxstudio.smClickHandler = function(uEv) {
