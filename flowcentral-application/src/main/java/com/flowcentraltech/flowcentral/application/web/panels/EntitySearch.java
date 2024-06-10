@@ -76,6 +76,8 @@ public class EntitySearch extends AbstractPanelFormBinding {
 
     private SearchEntries searchEntries;
 
+    private Restriction srcBaseRestriction;
+
     private Restriction baseRestriction;
 
     private EntityTable entityTable;
@@ -423,6 +425,9 @@ public class EntitySearch extends AbstractPanelFormBinding {
             And and = new And();
             if (baseFilterDef != null) {
                 and.add(baseFilterDef.getRestriction(entityFilter.getEntityDef(), null, getAppletCtx().au().getNow()));
+                if (baseFilterDef.isWithFilterGenerator()) {
+                    srcBaseRestriction = restriction;
+                }
             }
 
             if (restriction != null) {
@@ -446,6 +451,12 @@ public class EntitySearch extends AbstractPanelFormBinding {
 
     public boolean isWithBaseFilter() {
         return baseRestriction != null;
+    }
+
+    public void recalcBaseRestriction() throws UnifyException {
+        if (baseFilterDef != null && baseFilterDef.isWithFilterGenerator()) {
+            setBaseRestriction(srcBaseRestriction, getAppletCtx().au().specialParamProvider());
+        }
     }
 
     public boolean isShowBaseFilter() {
@@ -606,6 +617,7 @@ public class EntitySearch extends AbstractPanelFormBinding {
     private void applyRestrictionToSearch(EntityDef entityDef, Restriction restriction) throws UnifyException {
         Restriction searchRestriction = null;
         if (isWithBaseFilter()) {
+            recalcBaseRestriction();            
             if (restriction != null) {
                 searchRestriction = new And().add(baseRestriction).add(restriction);
             } else {

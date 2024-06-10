@@ -129,12 +129,6 @@ public class FilterDef implements Listable {
         return filterRestrictionDefList == null || filterRestrictionDefList.isEmpty();
     }
 
-    @Override
-    public String toString() {
-        return "FilterDef [au=" + au + ", filterRestrictionDefList=" + filterRestrictionDefList + ", name=" + name
-                + ", description=" + description + ", filterGenerator=" + filterGenerator + "]";
-    }
-
     public static Builder newBuilder(AppletUtilities au) {
         return new Builder(au);
     }
