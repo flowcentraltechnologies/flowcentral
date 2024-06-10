@@ -873,6 +873,7 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
         if (table != null) {
             table.applyFixedAction(getValueList().get(target), target, fixedActionType);
             table.reset();
+            table.clearSelected();
         }
     }
 
@@ -884,6 +885,7 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
             }
 
             table.reset();
+            table.clearSelected();
         }
     }
 
@@ -896,6 +898,7 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
             }
 
             table.reset();
+            table.clearSelected();
         }
     }
 
