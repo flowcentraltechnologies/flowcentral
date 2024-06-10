@@ -37,7 +37,6 @@ import com.tcdng.unify.core.data.BeanValueListStore;
 import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.database.Query;
-import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.web.ui.widget.data.ColorLegendInfo;
 
 /**
@@ -127,12 +126,7 @@ public class EntityTable extends AbstractTable<Restriction, Entity> {
 
     @Override
     protected void orderOnReset() throws UnifyException {
-        if (isWithEntryPolicy()) {
-            List<Entity> displayItemList = getDispItemList();
-            if (!DataUtils.isBlank(displayItemList)) {
-                getEntryPolicy().onResetOrder(getParentReader(), new BeanValueListStore(displayItemList));
-            }
-        }
+
     }
 
     @SuppressWarnings("unchecked")
@@ -183,10 +177,11 @@ public class EntityTable extends AbstractTable<Restriction, Entity> {
         List<Entity> entitylist = (List<Entity>) au.environment().listAll(query);
         // Delayed on-table load
         if (isWithEntryPolicy()) {
+            // TODO Check if reload is required
+            //entitylist = (List<Entity>) au.environment().listAll(query);
             ValueStore listValueStore = new BeanValueListStore(entitylist);
             getEntryPolicy().onEntryTableLoad(getParentReader(), listValueStore, Collections.emptySet());
-            // TODO Check if reload is required
-            entitylist = (List<Entity>) au.environment().listAll(query);
+            getEntryPolicy().onResetOrder(getParentReader(), listValueStore);
         }
 
         return entitylist;
