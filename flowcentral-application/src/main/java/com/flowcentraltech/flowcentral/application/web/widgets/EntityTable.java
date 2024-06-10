@@ -187,7 +187,6 @@ public class EntityTable extends AbstractTable<Restriction, Entity> {
             getEntryPolicy().onEntryTableLoad(getParentReader(), listValueStore, Collections.emptySet());
             // TODO Check if reload is required
             entitylist = (List<Entity>) au.environment().listAll(query);
-            getEntryPolicy().onResetOrder(getParentReader(), listValueStore);
         }
 
         return entitylist;
