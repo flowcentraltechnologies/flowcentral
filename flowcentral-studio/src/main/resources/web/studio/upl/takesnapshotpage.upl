@@ -32,10 +32,12 @@
 !ui-label:taskSnapshotCaption styleClass:$e{label} caption:$m{studio.takesnapshotpage.caption}
 !ui-panel:taskSnapshotBodyPanel
 	layout:$d{!ui-vertical style:$s{width:100%;} showCaption:true cellStyle:$s{padding:5px 2px;}}
-	components:$c{takeSnapshotBtn}	
+	components:$c{snapshotTitle message takeSnapshotBtn}
+!ui-name:snapshotTitle caption:$m{studio.takesnapshotpage.name} binding:snapshotTitle required:true
+!ui-textarea:message caption:$m{studio.takesnapshotpage.message} binding:message
 !ui-button:takeSnapshotBtn styleClass:$e{fc-bluebutton} caption:$m{button.takesnapshot}
 	eventHandler:$d{!ui-event event:onclick action:$c{takeSnapshotAct}}
 	
 // Actions
-!ui-post:takeSnapshotAct path:$n{/takeSnapshot}
+!ui-post:takeSnapshotAct path:$n{/takeSnapshot} components:$c{taskSnapshotBodyPanel}
 	

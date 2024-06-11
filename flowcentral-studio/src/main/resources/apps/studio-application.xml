@@ -1458,6 +1458,9 @@
 			<field name="fileName"
 				label="$m{studio.snapshotdetails.filename}" type="string"
 				nullable="true" />
+			<field name="message"
+				label="$m{studio.snapshotdetails.message}" type="string"
+				nullable="true" />
 			<field name="snapshotTypeDesc"
 				label="$m{studio.snapshotdetails.snapshottypedesc}" type="list_only"
 				key="snapshotType" property="description" />

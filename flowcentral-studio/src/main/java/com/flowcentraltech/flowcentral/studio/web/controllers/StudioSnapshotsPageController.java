@@ -23,6 +23,8 @@ import com.flowcentraltech.flowcentral.application.data.Snapshots;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.UplBinding;
+import com.tcdng.unify.core.constant.MimeType;
+import com.tcdng.unify.core.data.DownloadFile;
 import com.tcdng.unify.web.annotation.Action;
 import com.tcdng.unify.web.annotation.ResultMapping;
 import com.tcdng.unify.web.annotation.ResultMappings;
@@ -75,9 +77,10 @@ public class StudioSnapshotsPageController extends AbstractStudioPageController<
         StudioSnapshotsPageBean pageBean = getPageBean();
         Snapshots snapshots = pageBean.getSnapshots();
         SnapshotDetails snapshotDetails = snapshots.getDetails(targetIndex);
-        // TODO
-
-        return noResult();
+        byte[] snapshot = studio().getSnapshot(snapshotDetails.getSnapshotDetailsId());
+        DownloadFile downloadFile = new DownloadFile(MimeType.APPLICATION_OCTETSTREAM, snapshotDetails.getFilename(),
+                snapshot);
+        return fileDownloadResult(downloadFile, true);
     }
 
     @Override

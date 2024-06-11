@@ -43,8 +43,12 @@ public class StudioTakeSnapshotPageController extends AbstractStudioPageControll
 
     @Action
     public String takeSnapshot() throws UnifyException {
-        TaskSetup taskSetup = TaskSetup.newBuilder(StudioSnapshotTaskConstants.STUDIO_TAKE_SNAPSHOT_TASK_NAME)
+        StudioTakeSnapshotPageBean pageBean = getPageBean();
+        TaskSetup taskSetup = TaskSetup.newBuilder(
+                StudioSnapshotTaskConstants.STUDIO_TAKE_SNAPSHOT_TASK_NAME)
                 .setParam(StudioSnapshotTaskConstants.STUDIO_SNAPSHOT_TYPE, StudioSnapshotType.MANUAL_SYSTEM)
+                .setParam(StudioSnapshotTaskConstants.STUDIO_SNAPSHOT_NAME, pageBean.getSnapshotTitle())
+                .setParam(StudioSnapshotTaskConstants.STUDIO_SNAPSHOT_MESSAGE, pageBean.getMessage())
                 .logMessages()
                 .build();
         return launchTaskWithMonitorBox(taskSetup, "Take Studio SnapshotDetails", "/studio/snapshots/openPage", null);
