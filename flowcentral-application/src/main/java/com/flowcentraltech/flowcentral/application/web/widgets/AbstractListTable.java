@@ -110,9 +110,9 @@ public class AbstractListTable<T> extends AbstractTable<List<? extends T>, T> {
             if (resultList.size() > 1) {
                 Order order = getOrder();
                 if (order != null) {
+                    resultList = new ArrayList<>(resultList);
                     DataUtils.sort(resultList, au().getEntityClassDef(getEntityDef().getLongName()).getEntityClass(),
                             order);
-                    return new ArrayList<>(resultList);
                 }
             }
 

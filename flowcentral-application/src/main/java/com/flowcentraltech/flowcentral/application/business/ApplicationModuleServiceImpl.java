@@ -945,11 +945,12 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                                 .serialNo(true);
                         tdb.classicLink(classicLink);
                         tdb.addColumnDef("name", "!ui-label", 2, false);
-                        tdb.addColumnDef("filename", "!ui-label", 2, false);
                         tdb.addColumnDef("message", "!ui-label", 3, false);
+                        tdb.addColumnDef("filename", "!ui-label", 2, false);
                         tdb.addColumnDef("snapshotDate", "!ui-label", 2, false);
                         tdb.addColumnDef("snapshotBy", "!ui-label", 2, false);
-                        tdb.serialNo(false);
+                        tdb.serialNo(true);
+                        tdb.sortable(false);
                         tdb.headerToUpperCase(true);
                         tdb.headerCenterAlign(true);
                         tdb.itemsPerPage(-1);
