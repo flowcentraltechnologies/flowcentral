@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlElement;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class AppletsConfig {
+public class AppletsConfig extends BaseConfig {
 
     private List<AppletConfig> appletList;
 

@@ -13,27 +13,25 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
+package com.flowcentraltech.flowcentral.configuration.data;
 
-package com.flowcentraltech.flowcentral.studio.constants;
+import com.flowcentraltech.flowcentral.configuration.xml.AppConfig;
+import com.tcdng.unify.core.util.StringUtils;
 
 /**
- * Studio snapshot task constants.
+ * Application restore configuration.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface StudioSnapshotTaskConstants {
+public class ApplicationRestore extends ApplicationInstall {
 
-    String STUDIO_TAKE_SNAPSHOT_TASK_NAME = "studio.takesnapshot.task";
+    public ApplicationRestore(AppConfig applicationConfig) {
+        super(applicationConfig);
+    }
 
-    String STUDIO_SNAPSHOT_TYPE = "snapshotType";
-
-    String STUDIO_SNAPSHOT_NAME = "snapshotName";
-
-    String STUDIO_SNAPSHOT_MESSAGE = "message";
-
-    String STUDIO_RESTORE_SNAPSHOT_TASK_NAME = "studio.restoresnapshot.task";
-
-    String STUDIO_SNAPSHOT_DETAILS_ID = "snapshotDetailsId";
+    public String toString() {
+        return StringUtils.toXmlString(this);
+    }
 
 }

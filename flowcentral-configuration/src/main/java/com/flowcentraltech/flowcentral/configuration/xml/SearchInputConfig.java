@@ -27,7 +27,7 @@ import com.flowcentraltech.flowcentral.configuration.xml.adapter.SearchCondition
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class SearchInputConfig {
+public class SearchInputConfig extends BaseConfig {
 
     private SearchConditionType type;
 

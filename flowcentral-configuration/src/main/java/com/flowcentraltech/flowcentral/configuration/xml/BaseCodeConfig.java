@@ -23,7 +23,7 @@ import javax.xml.bind.annotation.XmlAttribute;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class BaseCodeConfig {
+public abstract class BaseCodeConfig extends BaseConfig {
 
     private String code;
 
@@ -46,4 +46,5 @@ public abstract class BaseCodeConfig {
     public void setDescription(String description) {
         this.description = description;
     }
+
 }

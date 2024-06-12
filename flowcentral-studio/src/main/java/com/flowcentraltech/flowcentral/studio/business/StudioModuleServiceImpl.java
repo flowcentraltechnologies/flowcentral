@@ -15,10 +15,19 @@
  */
 package com.flowcentraltech.flowcentral.studio.business;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.Enumeration;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.constants.AppletPropertyConstants;
@@ -41,7 +50,13 @@ import com.flowcentraltech.flowcentral.common.business.StudioProvider;
 import com.flowcentraltech.flowcentral.common.business.SynchronizableEnvironmentDelegate;
 import com.flowcentraltech.flowcentral.common.constants.CollaborationType;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralContainerPropertyConstants;
+import com.flowcentraltech.flowcentral.configuration.data.ApplicationRestore;
 import com.flowcentraltech.flowcentral.configuration.data.ModuleInstall;
+import com.flowcentraltech.flowcentral.configuration.data.ModuleRestore;
+import com.flowcentraltech.flowcentral.configuration.xml.AppConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.ModuleAppConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.ModuleConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.util.ConfigurationUtils;
 import com.flowcentraltech.flowcentral.dashboard.entities.Dashboard;
 import com.flowcentraltech.flowcentral.notification.entities.NotificationTemplate;
 import com.flowcentraltech.flowcentral.report.entities.ReportConfiguration;
@@ -73,6 +88,7 @@ import com.tcdng.unify.core.data.FactoryMap;
 import com.tcdng.unify.core.task.TaskExecLimit;
 import com.tcdng.unify.core.task.TaskMonitor;
 import com.tcdng.unify.core.util.DataUtils;
+import com.tcdng.unify.core.util.IOUtils;
 import com.tcdng.unify.core.util.StringUtils;
 
 /**
@@ -305,7 +321,7 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
     }
 
     @Taskable(name = StudioSnapshotTaskConstants.STUDIO_TAKE_SNAPSHOT_TASK_NAME,
-            description = "Studio Take SnapshotDetails Task",
+            description = "Studio Take Snapshot Task",
             parameters = {
                     @Parameter(name = StudioSnapshotTaskConstants.STUDIO_SNAPSHOT_TYPE,
                             description = "SnapshotDetails Type", type = StudioSnapshotType.class, mandatory = true),
@@ -333,6 +349,76 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
         return 0;
     }
 
+    private static final String CONFIG_FOLDER = "config/";
+
+    private static final String XML_SUFFIX = ".xml";
+
+    @Taskable(name = StudioSnapshotTaskConstants.STUDIO_RESTORE_SNAPSHOT_TASK_NAME,
+            description = "Studio Restore from Snapshot Task",
+            parameters = { @Parameter(name = StudioSnapshotTaskConstants.STUDIO_SNAPSHOT_DETAILS_ID,
+                    description = "Snapshot Details ID", type = Long.class, mandatory = true) },
+            limit = TaskExecLimit.ALLOW_SINGLE, schedulable = true)
+    public int restoreStudioSnapshotTask(TaskMonitor taskMonitor, Long snapshotDetailsId) throws UnifyException {
+        File tempFile = null;
+        FileOutputStream fos = null;
+        ZipFile zipFile = null;
+        try {
+            byte[] snapshot = getSnapshot(snapshotDetailsId);
+            tempFile = File.createTempFile("flowsnapshot", ".zip");
+            fos = new FileOutputStream(tempFile);
+            IOUtils.writeAll(fos, snapshot);
+            IOUtils.close(fos);
+
+            zipFile = new ZipFile(tempFile);
+            Enumeration<? extends ZipEntry> entries = zipFile.entries();
+
+            // Get entries mapped by name
+            List<String> _moduleXmlFiles = new ArrayList<String>();
+            Map<String, ZipEntry> _entries = new LinkedHashMap<String, ZipEntry>();
+            while (entries.hasMoreElements()) {
+                ZipEntry entry = entries.nextElement();
+                final String name = entry.getName();
+                if (name.length() > CONFIG_FOLDER.length() && name.startsWith(CONFIG_FOLDER)
+                        && name.endsWith(XML_SUFFIX)) {
+                    _moduleXmlFiles.add(name);
+                }
+
+                _entries.put(name, entry);
+            }
+
+            // Load module restores
+            System.out.println("@prime: XXXXXXXXXXXXXXXXXX RESTORE STUDIO SNAPSHOT TASK XXXXXXXXXXXXXXXXXX");
+            List<ModuleRestore> moduleRestoreList = new ArrayList<ModuleRestore>();
+            for (String moduleXmlFile : _moduleXmlFiles) {
+                ModuleRestore moduleRestore = loadModuleRestoreFromZip(taskMonitor, moduleXmlFile, zipFile, _entries);
+                System.out.println("@prime: moduleRestore = " + moduleRestore);
+                moduleRestoreList.add(moduleRestore);
+            }
+            System.out.println("@prime: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+        } catch (UnifyException e) {
+            throw e;
+        } catch (Exception e) {
+            throwOperationErrorException(e);
+        } finally {
+            if (zipFile != null) {
+                try {
+                    zipFile.close();
+                } catch (IOException e) {
+                    logSevere(e);
+                }
+            }
+
+            if (fos != null) {
+                IOUtils.close(fos);
+            }
+
+            if (tempFile != null) {
+                tempFile.delete();
+            }
+        }
+        return 0;
+    }
+
     @Override
     protected void doInstallModuleFeatures(ModuleInstall moduleInstall) throws UnifyException {
         installStudioFeatures(moduleInstall);
@@ -342,6 +428,55 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
         if (StudioModuleNameConstants.STUDIO_MODULE_NAME.equals(moduleInstall.getModuleConfig().getName())) {
             // TODO
         }
+    }
+
+    private ModuleRestore loadModuleRestoreFromZip(TaskMonitor tm, String moduleXmlFile, ZipFile zipFile,
+            Map<String, ZipEntry> _entries) throws UnifyException {
+        ModuleRestore moduleRestore = null;
+        InputStream inputStream = null;
+        try {
+            inputStream = zipFile.getInputStream(_entries.get(moduleXmlFile));
+            logDebug(tm, "Loading module feature definitions from [{0}]...", moduleXmlFile);
+            ModuleConfig moduleConfig = ConfigurationUtils.readConfig(ModuleConfig.class, inputStream);
+
+            List<ApplicationRestore> applicationRestoreList = new ArrayList<ApplicationRestore>();
+            if (moduleConfig.getModuleAppsConfig() != null
+                    && !DataUtils.isBlank(moduleConfig.getModuleAppsConfig().getModuleAppList())) {
+                for (ModuleAppConfig moduleAppConfig : moduleConfig.getModuleAppsConfig().getModuleAppList()) {
+                    ApplicationRestore applicationRestore = loadApplicationRestoreFromZip(tm,
+                            moduleAppConfig.getConfigFile(), zipFile, _entries);
+                    applicationRestoreList.add(applicationRestore);
+                }
+            }
+
+            moduleRestore = new ModuleRestore(tm, moduleConfig, applicationRestoreList);
+            logDebug(tm, "Loaded module feature definitions from [{0}] successfully.", moduleXmlFile);
+        } catch (IOException e) {
+            throwOperationErrorException(e);
+        } finally {
+            IOUtils.close(inputStream);
+        }
+
+        return moduleRestore;
+    }
+
+    private ApplicationRestore loadApplicationRestoreFromZip(TaskMonitor tm, String configFile, ZipFile zipFile,
+            Map<String, ZipEntry> _entries) throws UnifyException {
+        ApplicationRestore applicationRestore = null;
+        InputStream inputStream = null;
+        try {
+            inputStream = zipFile.getInputStream(_entries.get(configFile));
+            logDebug(tm, "Loading application definition from [{0}]...", configFile);
+            AppConfig appConfig = ConfigurationUtils.readConfig(AppConfig.class, inputStream);
+            applicationRestore = new ApplicationRestore(appConfig);
+            logDebug(tm, "Loaded application definition from [{0}] successfully.", configFile);
+        } catch (IOException e) {
+            throwOperationErrorException(e);
+        } finally {
+            IOUtils.close(inputStream);
+        }
+
+        return applicationRestore;
     }
 
     @Override

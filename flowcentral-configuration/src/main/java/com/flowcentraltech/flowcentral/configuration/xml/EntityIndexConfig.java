@@ -23,7 +23,7 @@ import javax.xml.bind.annotation.XmlAttribute;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class EntityIndexConfig {
+public class EntityIndexConfig extends BaseConfig {
 
     private String name;
 

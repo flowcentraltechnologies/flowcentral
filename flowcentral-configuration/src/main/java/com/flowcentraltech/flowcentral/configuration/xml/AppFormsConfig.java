@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlElement;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class AppFormsConfig {
+public class AppFormsConfig extends BaseConfig {
 
     private List<AppFormConfig> formList;
 

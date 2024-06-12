@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlElement;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class SetValuesConfig {
+public class SetValuesConfig extends BaseConfig {
 
     private String name;
 

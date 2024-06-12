@@ -27,7 +27,7 @@ import com.flowcentraltech.flowcentral.configuration.xml.adapter.SetValueTypeXml
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class SetValueConfig {
+public class SetValueConfig extends BaseConfig {
 
     private SetValueType type;
 

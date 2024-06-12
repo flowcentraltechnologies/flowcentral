@@ -27,7 +27,7 @@ import com.flowcentraltech.flowcentral.configuration.xml.adapter.DashboardColumn
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class DashboardSectionConfig {
+public class DashboardSectionConfig extends BaseConfig {
 
     private DashboardColumnsType type;
 

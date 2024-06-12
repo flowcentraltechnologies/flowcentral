@@ -27,7 +27,7 @@ import com.tcdng.unify.core.util.xml.MarshalTrueToNullXmlAdapter;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class TableColumnConfig {
+public class TableColumnConfig extends BaseConfig {
 
     private String field;
 

@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlElement;
  * @author FlowCentral Technologies Limited
  * @version 1.0
  */
-public class ReportColumnsConfig {
+public class ReportColumnsConfig extends BaseConfig {
 
     private List<ReportColumnConfig> columnList;
 

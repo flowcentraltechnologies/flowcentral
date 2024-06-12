@@ -23,7 +23,7 @@ import javax.xml.bind.annotation.XmlAttribute;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class EntityUniqueConditionConfig {
+public class EntityUniqueConditionConfig extends BaseConfig {
 
     private String field;
 

@@ -54,6 +54,15 @@ public final class ConfigurationUtils {
         }
     }
 
+    public static <T> T readConfig(Class<T> configClass, InputStream inputStream)
+            throws UnifyException {
+        try {
+            return XmlConfigUtils.readXmlConfig(configClass, inputStream);
+        } finally {
+            IOUtils.close(inputStream);
+        }
+    }
+
     public static void writeConfig(BaseNameConfig config, OutputStream outputStream) throws UnifyException {
         XmlConfigUtils.writeXmlConfig(config, outputStream);
     }

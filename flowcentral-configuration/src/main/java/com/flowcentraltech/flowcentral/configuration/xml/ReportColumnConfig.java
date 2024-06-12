@@ -31,7 +31,7 @@ import com.tcdng.unify.core.constant.VAlignType;
  * @author FlowCentral Technologies Limited
  * @version 1.0
  */
-public class ReportColumnConfig {
+public class ReportColumnConfig extends BaseConfig {
 
     private String fieldName;
 

@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlElement;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class FieldSequenceConfig {
+public class FieldSequenceConfig extends BaseConfig {
 
     private List<FieldSequenceEntryConfig> entryList;
 

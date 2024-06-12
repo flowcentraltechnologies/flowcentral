@@ -35,7 +35,7 @@ import com.tcdng.unify.core.report.ReportPlacementType;
  * @author FlowCentral Technologies Limited
  * @version 1.0
  */
-public class ReportPlacementConfig {
+public class ReportPlacementConfig extends BaseConfig {
 
     private ReportPlacementType type;
 

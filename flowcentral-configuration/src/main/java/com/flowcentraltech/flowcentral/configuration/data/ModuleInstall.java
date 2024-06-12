@@ -31,6 +31,11 @@ public class ModuleInstall implements FeatureDefinition {
 
     private TaskMonitor taskMonitor;
 
+    public ModuleInstall(TaskMonitor taskMonitor, ModuleConfig moduleConfig) {
+        this.taskMonitor = taskMonitor;
+        this.moduleConfig = moduleConfig;
+    }
+
     public ModuleInstall(ModuleConfig moduleConfig) {
         this.moduleConfig = moduleConfig;
     }

@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlElement;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class SysParamsConfig {
+public class SysParamsConfig extends BaseConfig {
 
     private List<SysParamConfig> sysParamList;
 
@@ -38,8 +38,4 @@ public class SysParamsConfig {
         this.sysParamList = sysParamList;
     }
 
-    @Override
-    public String toString() {
-        return "SysParamsConfig [sysParamList=" + sysParamList + "]";
-    }
 }
