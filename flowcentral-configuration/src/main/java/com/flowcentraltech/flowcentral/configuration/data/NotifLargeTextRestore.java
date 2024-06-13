@@ -15,32 +15,18 @@
  */
 package com.flowcentraltech.flowcentral.configuration.data;
 
-import java.util.List;
-
-import com.flowcentraltech.flowcentral.configuration.xml.ModuleConfig;
-import com.tcdng.unify.core.task.TaskMonitor;
-import com.tcdng.unify.core.util.StringUtils;
+import com.flowcentraltech.flowcentral.configuration.xml.NotifLargeTextConfig;
 
 /**
- * Module installation configuration.
+ * Notification large text restore configuration.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class ModuleRestore extends ModuleInstall {
+public class NotifLargeTextRestore extends NotifLargeTextInstall {
 
-    private List<ApplicationRestore> applicationList;
-
-    public ModuleRestore(TaskMonitor taskMonitor, ModuleConfig moduleConfig, List<ApplicationRestore> applicationList) {
-        super(taskMonitor, moduleConfig);
-        this.applicationList = applicationList;
+    public NotifLargeTextRestore(NotifLargeTextConfig notifLargeTextConfig) {
+        super(notifLargeTextConfig);
     }
 
-    public List<ApplicationRestore> getApplicationList() {
-        return applicationList;
-    }
-
-    public String toString() {
-        return StringUtils.toXmlString(this);
-    }
 }

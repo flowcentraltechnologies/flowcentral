@@ -53,9 +53,24 @@ import com.flowcentraltech.flowcentral.common.constants.FlowCentralContainerProp
 import com.flowcentraltech.flowcentral.configuration.data.ApplicationRestore;
 import com.flowcentraltech.flowcentral.configuration.data.ModuleInstall;
 import com.flowcentraltech.flowcentral.configuration.data.ModuleRestore;
+import com.flowcentraltech.flowcentral.configuration.data.NotifLargeTextRestore;
+import com.flowcentraltech.flowcentral.configuration.data.NotifTemplateRestore;
+import com.flowcentraltech.flowcentral.configuration.data.ReportRestore;
+import com.flowcentraltech.flowcentral.configuration.data.WorkflowRestore;
+import com.flowcentraltech.flowcentral.configuration.data.WorkflowWizardRestore;
 import com.flowcentraltech.flowcentral.configuration.xml.AppConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.AppNotifLargeTextConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.AppNotifTemplateConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.AppReportConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.AppWorkflowConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.AppWorkflowWizardConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.ModuleAppConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.ModuleConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.NotifLargeTextConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.NotifTemplateConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.ReportConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.WfConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.WfWizardConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.util.ConfigurationUtils;
 import com.flowcentraltech.flowcentral.dashboard.entities.Dashboard;
 import com.flowcentraltech.flowcentral.notification.entities.NotificationTemplate;
@@ -387,14 +402,13 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
             }
 
             // Load module restores
-            System.out.println("@prime: XXXXXXXXXXXXXXXXXX RESTORE STUDIO SNAPSHOT TASK XXXXXXXXXXXXXXXXXX");
             List<ModuleRestore> moduleRestoreList = new ArrayList<ModuleRestore>();
             for (String moduleXmlFile : _moduleXmlFiles) {
                 ModuleRestore moduleRestore = loadModuleRestoreFromZip(taskMonitor, moduleXmlFile, zipFile, _entries);
-                System.out.println("@prime: moduleRestore = " + moduleRestore);
                 moduleRestoreList.add(moduleRestore);
             }
-            System.out.println("@prime: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+
+            // Apply restore
         } catch (UnifyException e) {
             throw e;
         } catch (Exception e) {
@@ -439,17 +453,17 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
             logDebug(tm, "Loading module feature definitions from [{0}]...", moduleXmlFile);
             ModuleConfig moduleConfig = ConfigurationUtils.readConfig(ModuleConfig.class, inputStream);
 
-            List<ApplicationRestore> applicationRestoreList = new ArrayList<ApplicationRestore>();
+            List<ApplicationRestore> applicationList = new ArrayList<ApplicationRestore>();
             if (moduleConfig.getModuleAppsConfig() != null
                     && !DataUtils.isBlank(moduleConfig.getModuleAppsConfig().getModuleAppList())) {
                 for (ModuleAppConfig moduleAppConfig : moduleConfig.getModuleAppsConfig().getModuleAppList()) {
                     ApplicationRestore applicationRestore = loadApplicationRestoreFromZip(tm,
                             moduleAppConfig.getConfigFile(), zipFile, _entries);
-                    applicationRestoreList.add(applicationRestore);
+                    applicationList.add(applicationRestore);
                 }
             }
 
-            moduleRestore = new ModuleRestore(tm, moduleConfig, applicationRestoreList);
+            moduleRestore = new ModuleRestore(tm, moduleConfig, applicationList);
             logDebug(tm, "Loaded module feature definitions from [{0}] successfully.", moduleXmlFile);
         } catch (IOException e) {
             throwOperationErrorException(e);
@@ -468,7 +482,62 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
             inputStream = zipFile.getInputStream(_entries.get(configFile));
             logDebug(tm, "Loading application definition from [{0}]...", configFile);
             AppConfig appConfig = ConfigurationUtils.readConfig(AppConfig.class, inputStream);
-            applicationRestore = new ApplicationRestore(appConfig);
+
+            List<ReportRestore> reportList = new ArrayList<ReportRestore>();
+            if (appConfig.getReportsConfig() != null
+                    && !DataUtils.isBlank(appConfig.getReportsConfig().getReportList())) {
+                for (AppReportConfig appReportConfig : appConfig.getReportsConfig().getReportList()) {
+                    ReportRestore reportRestore = loadReportRestoreFromZip(tm, appReportConfig.getConfigFile(), zipFile,
+                            _entries);
+                    reportList.add(reportRestore);
+                }
+            }
+
+            List<NotifTemplateRestore> notifTemplateList = new ArrayList<NotifTemplateRestore>();
+            if (appConfig.getNotifTemplatesConfig() != null
+                    && !DataUtils.isBlank(appConfig.getNotifTemplatesConfig().getNotifTemplateList())) {
+                for (AppNotifTemplateConfig appNotifTemplateConfig : appConfig.getNotifTemplatesConfig()
+                        .getNotifTemplateList()) {
+                    NotifTemplateRestore notifTemplateRestore = loadNotifTemplateRestoreFromZip(tm,
+                            appNotifTemplateConfig.getConfigFile(), zipFile, _entries);
+                    notifTemplateList.add(notifTemplateRestore);
+                }
+            }
+
+            List<NotifLargeTextRestore> notifLargeTextList = new ArrayList<NotifLargeTextRestore>();
+            if (appConfig.getNotifLargeTextsConfig() != null
+                    && !DataUtils.isBlank(appConfig.getNotifLargeTextsConfig().getNotifLargeTextList())) {
+                for (AppNotifLargeTextConfig appNotifLargeTextConfig : appConfig.getNotifLargeTextsConfig()
+                        .getNotifLargeTextList()) {
+                    NotifLargeTextRestore notifLargeTextRestore = loadNotifLargeTextRestoreFromZip(tm,
+                            appNotifLargeTextConfig.getConfigFile(), zipFile, _entries);
+                    notifLargeTextList.add(notifLargeTextRestore);
+                }
+            }
+
+            List<WorkflowRestore> workflowList = new ArrayList<WorkflowRestore>();
+            if (appConfig.getWorkflowsConfig() != null
+                    && !DataUtils.isBlank(appConfig.getWorkflowsConfig().getWorkflowList())) {
+                for (AppWorkflowConfig appWorkflowConfig : appConfig.getWorkflowsConfig().getWorkflowList()) {
+                    WorkflowRestore workflowRestore = loadWorkflowRestoreFromZip(tm, appWorkflowConfig.getConfigFile(),
+                            zipFile, _entries);
+                    workflowList.add(workflowRestore);
+                }
+            }
+
+            List<WorkflowWizardRestore> workflowWizardList = new ArrayList<WorkflowWizardRestore>();
+            if (appConfig.getWorkflowWizardsConfig() != null
+                    && !DataUtils.isBlank(appConfig.getWorkflowWizardsConfig().getWorkflowWizardList())) {
+                for (AppWorkflowWizardConfig appWorkflowWizardConfig : appConfig.getWorkflowWizardsConfig()
+                        .getWorkflowWizardList()) {
+                    WorkflowWizardRestore workflowWizardRestore = loadWorkflowWizardRestoreFromZip(tm,
+                            appWorkflowWizardConfig.getConfigFile(), zipFile, _entries);
+                    workflowWizardList.add(workflowWizardRestore);
+                }
+            }
+
+            applicationRestore = new ApplicationRestore(appConfig, reportList, notifTemplateList, notifLargeTextList,
+                    workflowList, workflowWizardList);
             logDebug(tm, "Loaded application definition from [{0}] successfully.", configFile);
         } catch (IOException e) {
             throwOperationErrorException(e);
@@ -477,6 +546,103 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
         }
 
         return applicationRestore;
+    }
+
+    private ReportRestore loadReportRestoreFromZip(TaskMonitor tm, String configFile, ZipFile zipFile,
+            Map<String, ZipEntry> _entries) throws UnifyException {
+        ReportRestore reportRestore = null;
+        InputStream inputStream = null;
+        try {
+            inputStream = zipFile.getInputStream(_entries.get(configFile));
+            logDebug(tm, "Loading report definition from [{0}]...", configFile);
+            ReportConfig reportConfig = ConfigurationUtils.readConfig(ReportConfig.class, inputStream);
+            reportRestore = new ReportRestore(reportConfig);
+            logDebug(tm, "Loaded report definition from [{0}] successfully.", configFile);
+        } catch (IOException e) {
+            throwOperationErrorException(e);
+        } finally {
+            IOUtils.close(inputStream);
+        }
+
+        return reportRestore;
+    }
+
+    private NotifTemplateRestore loadNotifTemplateRestoreFromZip(TaskMonitor tm, String configFile, ZipFile zipFile,
+            Map<String, ZipEntry> _entries) throws UnifyException {
+        NotifTemplateRestore notifTemplateRestore = null;
+        InputStream inputStream = null;
+        try {
+            inputStream = zipFile.getInputStream(_entries.get(configFile));
+            logDebug(tm, "Loading notification template definition from [{0}]...", configFile);
+            NotifTemplateConfig notifTemplateConfig = ConfigurationUtils.readConfig(NotifTemplateConfig.class,
+                    inputStream);
+            notifTemplateRestore = new NotifTemplateRestore(notifTemplateConfig);
+            logDebug(tm, "Loaded notification template definition from [{0}] successfully.", configFile);
+        } catch (IOException e) {
+            throwOperationErrorException(e);
+        } finally {
+            IOUtils.close(inputStream);
+        }
+
+        return notifTemplateRestore;
+    }
+
+    private NotifLargeTextRestore loadNotifLargeTextRestoreFromZip(TaskMonitor tm, String configFile, ZipFile zipFile,
+            Map<String, ZipEntry> _entries) throws UnifyException {
+        NotifLargeTextRestore notifLargeTextRestore = null;
+        InputStream inputStream = null;
+        try {
+            inputStream = zipFile.getInputStream(_entries.get(configFile));
+            logDebug(tm, "Loading notification large text definition from [{0}]...", configFile);
+            NotifLargeTextConfig notifLargeTextConfig = ConfigurationUtils.readConfig(NotifLargeTextConfig.class,
+                    inputStream);
+            notifLargeTextRestore = new NotifLargeTextRestore(notifLargeTextConfig);
+            logDebug(tm, "Loaded notification large text definition from [{0}] successfully.", configFile);
+        } catch (IOException e) {
+            throwOperationErrorException(e);
+        } finally {
+            IOUtils.close(inputStream);
+        }
+
+        return notifLargeTextRestore;
+    }
+
+    private WorkflowRestore loadWorkflowRestoreFromZip(TaskMonitor tm, String configFile, ZipFile zipFile,
+            Map<String, ZipEntry> _entries) throws UnifyException {
+        WorkflowRestore workflowRestore = null;
+        InputStream inputStream = null;
+        try {
+            inputStream = zipFile.getInputStream(_entries.get(configFile));
+            logDebug(tm, "Loading workflow definition from [{0}]...", configFile);
+            WfConfig wfConfig = ConfigurationUtils.readConfig(WfConfig.class, inputStream);
+            workflowRestore = new WorkflowRestore(wfConfig);
+            logDebug(tm, "Loaded workflow definition from [{0}] successfully.", configFile);
+        } catch (IOException e) {
+            throwOperationErrorException(e);
+        } finally {
+            IOUtils.close(inputStream);
+        }
+
+        return workflowRestore;
+    }
+
+    private WorkflowWizardRestore loadWorkflowWizardRestoreFromZip(TaskMonitor tm, String configFile, ZipFile zipFile,
+            Map<String, ZipEntry> _entries) throws UnifyException {
+        WorkflowWizardRestore workflowWizardRestore = null;
+        InputStream inputStream = null;
+        try {
+            inputStream = zipFile.getInputStream(_entries.get(configFile));
+            logDebug(tm, "Loading workflow wizard definition from [{0}]...", configFile);
+            WfWizardConfig wfWizardConfig = ConfigurationUtils.readConfig(WfWizardConfig.class, inputStream);
+            workflowWizardRestore = new WorkflowWizardRestore(wfWizardConfig);
+            logDebug(tm, "Loaded workflow wizard definition from [{0}] successfully.", configFile);
+        } catch (IOException e) {
+            throwOperationErrorException(e);
+        } finally {
+            IOUtils.close(inputStream);
+        }
+
+        return workflowWizardRestore;
     }
 
     @Override

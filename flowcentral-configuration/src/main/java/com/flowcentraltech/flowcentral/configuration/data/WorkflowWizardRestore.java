@@ -15,32 +15,18 @@
  */
 package com.flowcentraltech.flowcentral.configuration.data;
 
-import java.util.List;
-
-import com.flowcentraltech.flowcentral.configuration.xml.ModuleConfig;
-import com.tcdng.unify.core.task.TaskMonitor;
-import com.tcdng.unify.core.util.StringUtils;
+import com.flowcentraltech.flowcentral.configuration.xml.WfWizardConfig;
 
 /**
- * Module installation configuration.
+ * Workflow wizard restore configuration.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class ModuleRestore extends ModuleInstall {
+public class WorkflowWizardRestore extends WorkflowWizardInstall{
 
-    private List<ApplicationRestore> applicationList;
-
-    public ModuleRestore(TaskMonitor taskMonitor, ModuleConfig moduleConfig, List<ApplicationRestore> applicationList) {
-        super(taskMonitor, moduleConfig);
-        this.applicationList = applicationList;
+    public WorkflowWizardRestore(WfWizardConfig wfWizardConfig) {
+        super(wfWizardConfig);
     }
 
-    public List<ApplicationRestore> getApplicationList() {
-        return applicationList;
-    }
-
-    public String toString() {
-        return StringUtils.toXmlString(this);
-    }
 }

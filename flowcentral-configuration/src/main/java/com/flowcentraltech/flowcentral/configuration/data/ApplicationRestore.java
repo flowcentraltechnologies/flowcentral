@@ -15,8 +15,9 @@
  */
 package com.flowcentraltech.flowcentral.configuration.data;
 
+import java.util.List;
+
 import com.flowcentraltech.flowcentral.configuration.xml.AppConfig;
-import com.tcdng.unify.core.util.StringUtils;
 
 /**
  * Application restore configuration.
@@ -26,12 +27,45 @@ import com.tcdng.unify.core.util.StringUtils;
  */
 public class ApplicationRestore extends ApplicationInstall {
 
-    public ApplicationRestore(AppConfig applicationConfig) {
+    private List<ReportRestore> reportList;
+
+    private List<NotifTemplateRestore> notifTemplateList;
+    
+    private List<NotifLargeTextRestore> notifLargeTextList;
+    
+    private List<WorkflowRestore> workflowList;
+    
+    private List<WorkflowWizardRestore> workflowWizardList;
+    
+    public ApplicationRestore(AppConfig applicationConfig, List<ReportRestore> reportList,
+            List<NotifTemplateRestore> notifTemplateList, List<NotifLargeTextRestore> notifLargeTextList,
+            List<WorkflowRestore> workflowList, List<WorkflowWizardRestore> workflowWizardList) {
         super(applicationConfig);
+        this.reportList = reportList;
+        this.notifTemplateList = notifTemplateList;
+        this.notifLargeTextList = notifLargeTextList;
+        this.workflowList = workflowList;
+        this.workflowWizardList = workflowWizardList;
     }
 
-    public String toString() {
-        return StringUtils.toXmlString(this);
+    public List<ReportRestore> getReportList() {
+        return reportList;
+    }
+
+    public List<NotifTemplateRestore> getNotifTemplateList() {
+        return notifTemplateList;
+    }
+
+    public List<NotifLargeTextRestore> getNotifLargeTextList() {
+        return notifLargeTextList;
+    }
+
+    public List<WorkflowRestore> getWorkflowList() {
+        return workflowList;
+    }
+
+    public List<WorkflowWizardRestore> getWorkflowWizardList() {
+        return workflowWizardList;
     }
 
 }
