@@ -26,6 +26,7 @@ import com.flowcentraltech.flowcentral.application.util.ApplicationReplicationCo
 import com.flowcentraltech.flowcentral.common.constants.ConfigType;
 import com.flowcentraltech.flowcentral.common.util.ConfigUtils;
 import com.flowcentraltech.flowcentral.configuration.data.ApplicationInstall;
+import com.flowcentraltech.flowcentral.configuration.data.ApplicationRestore;
 import com.flowcentraltech.flowcentral.configuration.data.NotifLargeTextInstall;
 import com.flowcentraltech.flowcentral.configuration.data.NotifTemplateInstall;
 import com.flowcentraltech.flowcentral.configuration.xml.AppConfig;
@@ -158,6 +159,76 @@ public class ApplicationNotificationInstallerImpl extends AbstractApplicationArt
                         environment().updateByIdVersion(oldNotificationLargeText);
                     }
                 }
+            }
+        }
+
+    }
+
+    @Override
+    public void restoreApplicationArtifacts(TaskMonitor taskMonitor, ApplicationRestore applicationRestore)
+            throws UnifyException {
+        final AppConfig applicationConfig = applicationRestore.getApplicationConfig();
+        final Long applicationId = applicationRestore.getApplicationId();
+
+        // Notification templates
+        logDebug(taskMonitor, "Executing notification restore...");
+        if (applicationConfig.getNotifTemplatesConfig() != null
+                && !DataUtils.isBlank(applicationConfig.getNotifTemplatesConfig().getNotifTemplateList())) {
+            for (AppNotifTemplateConfig applicationNotifTemplateConfig : applicationConfig.getNotifTemplatesConfig()
+                    .getNotifTemplateList()) {
+                NotifTemplateInstall notifTemplateInstall = getConfigurationLoader()
+                        .loadNotifTemplateInstallation(applicationNotifTemplateConfig.getConfigFile());
+                // Template
+                NotifTemplateConfig notifTemplateConfig = notifTemplateInstall.getNotifTemplateConfig();
+                String description = resolveApplicationMessage(notifTemplateConfig.getDescription());
+                String entity = ApplicationNameUtils.ensureLongNameReference(applicationConfig.getName(),
+                        notifTemplateConfig.getEntity());
+                logDebug(taskMonitor, "Restoring configured notification template [{0}]...", description);
+
+                NotificationTemplate notificationTemplate = new NotificationTemplate();
+                notificationTemplate.setApplicationId(applicationId);
+                notificationTemplate.setNotificationType(notifTemplateConfig.getNotifType());
+                notificationTemplate.setMessageFormat(notifTemplateConfig.getMessageFormat());
+                notificationTemplate.setName(notifTemplateConfig.getName());
+                notificationTemplate.setDescription(description);
+                notificationTemplate.setEntity(entity);
+                notificationTemplate.setSubject(notifTemplateConfig.getSubject());
+                notificationTemplate.setTemplate(notifTemplateConfig.getBody());
+                notificationTemplate.setDeprecated(false);
+                notificationTemplate.setConfigType(ConfigType.MUTABLE_INSTALL);
+                populateChildList(notificationTemplate, notifTemplateConfig);
+                environment().create(notificationTemplate);
+            }
+        }
+
+        // Notification large texts
+        if (applicationConfig.getNotifLargeTextsConfig() != null
+                && !DataUtils.isBlank(applicationConfig.getNotifLargeTextsConfig().getNotifLargeTextList())) {
+            for (AppNotifLargeTextConfig applicationNotifLargeTextConfig : applicationConfig.getNotifLargeTextsConfig()
+                    .getNotifLargeTextList()) {
+                logDebug(taskMonitor, "Reading notification configuration file [{0}]...",
+                        applicationNotifLargeTextConfig.getConfigFile());
+                NotifLargeTextInstall notifLargeTextInstall = getConfigurationLoader()
+                        .loadNotifLargeTextInstallation(applicationNotifLargeTextConfig.getConfigFile());
+                // Large Text
+                NotifLargeTextConfig notifLargeTextConfig = notifLargeTextInstall.getNotifLargeTextConfig();
+                String description = resolveApplicationMessage(notifLargeTextConfig.getDescription());
+                String entity = ApplicationNameUtils.ensureLongNameReference(applicationConfig.getName(),
+                        notifLargeTextConfig.getEntity());
+                logDebug(taskMonitor, "Restoring notification large text [{0}]...", description);
+
+                NotificationLargeText notificationLargeText = new NotificationLargeText();
+                notificationLargeText.setApplicationId(applicationId);
+                notificationLargeText.setName(notifLargeTextConfig.getName());
+                notificationLargeText.setDescription(description);
+                notificationLargeText.setEntity(entity);
+                notificationLargeText.setFontFamily(notifLargeTextConfig.getFontFamily());
+                notificationLargeText.setFontSizeInPixels(notifLargeTextConfig.getFontSizeInPixels());
+                notificationLargeText.setBody(notifLargeTextConfig.getBody());
+                notificationLargeText.setDeprecated(false);
+                notificationLargeText.setConfigType(ConfigType.MUTABLE_INSTALL);
+                populateChildList(notificationLargeText, notifLargeTextConfig);
+                environment().create(notificationLargeText);
             }
         }
 

@@ -32,6 +32,7 @@ import com.flowcentraltech.flowcentral.common.business.ApplicationPrivilegeManag
 import com.flowcentraltech.flowcentral.common.constants.ConfigType;
 import com.flowcentraltech.flowcentral.common.util.ConfigUtils;
 import com.flowcentraltech.flowcentral.configuration.data.ApplicationInstall;
+import com.flowcentraltech.flowcentral.configuration.data.ApplicationRestore;
 import com.flowcentraltech.flowcentral.configuration.xml.AppConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppDashboardConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.DashboardOptionCategoryBaseConfig;
@@ -106,6 +107,38 @@ public class ApplicationDashboardInstallerImpl extends AbstractApplicationArtifa
                     populateChildList(dashboardConfig, oldDashboard, applicationName);
                     environment().updateByIdVersion(oldDashboard);
                 }
+
+                applicationPrivilegeManager.registerPrivilege(applicationId,
+                        ApplicationPrivilegeConstants.APPLICATION_DASHBOARD_CATEGORY_CODE,
+                        PrivilegeNameUtils.getDashboardPrivilegeName(ApplicationNameUtils
+                                .getApplicationEntityLongName(applicationName, dashboardConfig.getName())),
+                        description);
+            }
+        }
+    }
+
+    @Override
+    public void restoreApplicationArtifacts(TaskMonitor taskMonitor, ApplicationRestore applicationRestore)
+            throws UnifyException {
+        final AppConfig applicationConfig = applicationRestore.getApplicationConfig();
+        final String applicationName = applicationConfig.getName();
+        final Long applicationId = applicationRestore.getApplicationId();
+
+        logDebug(taskMonitor, "Executing dashboard restore...");
+        if (applicationConfig.getDashboardsConfig() != null
+                && !DataUtils.isBlank(applicationConfig.getDashboardsConfig().getDashboardList())) {
+            for (AppDashboardConfig dashboardConfig : applicationConfig.getDashboardsConfig().getDashboardList()) {
+                String description = resolveApplicationMessage(dashboardConfig.getDescription());
+                logDebug(taskMonitor, "Restoring dashboard [{0}]...", description);
+                Dashboard dashboard = new Dashboard();
+                dashboard.setApplicationId(applicationId);
+                dashboard.setName(dashboardConfig.getName());
+                dashboard.setDescription(description);
+                dashboard.setSections(dashboardConfig.getSections());
+                dashboard.setAllowSecondaryTenants(dashboardConfig.getAllowSecondaryTenants());
+                dashboard.setDeprecated(false);
+                dashboard.setConfigType(ConfigType.MUTABLE_INSTALL);
+                populateChildList(dashboardConfig, dashboard, applicationName);
 
                 applicationPrivilegeManager.registerPrivilege(applicationId,
                         ApplicationPrivilegeConstants.APPLICATION_DASHBOARD_CATEGORY_CODE,
