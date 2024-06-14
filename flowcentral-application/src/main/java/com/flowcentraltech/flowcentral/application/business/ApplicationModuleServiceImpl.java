@@ -32,6 +32,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import javax.mail.Message;
+
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
@@ -142,6 +144,8 @@ import com.flowcentraltech.flowcentral.configuration.constants.RecordActionType;
 import com.flowcentraltech.flowcentral.configuration.constants.TabContentType;
 import com.flowcentraltech.flowcentral.configuration.constants.WidgetColor;
 import com.flowcentraltech.flowcentral.configuration.data.ApplicationInstall;
+import com.flowcentraltech.flowcentral.configuration.data.ApplicationRestore;
+import com.flowcentraltech.flowcentral.configuration.data.Messages;
 import com.flowcentraltech.flowcentral.configuration.data.ModuleInstall;
 import com.flowcentraltech.flowcentral.configuration.xml.AppAssignmentPageConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppConfig;
@@ -4863,6 +4867,448 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
         if (!DataUtils.isBlank(applicationArtifactInstallerList)) {
             for (ApplicationArtifactInstaller applicationArtifactInstaller : applicationArtifactInstallerList) {
                 applicationArtifactInstaller.installApplicationArtifacts(taskMonitor, applicationInstall);
+            }
+        }
+
+        return true;
+    }
+
+    @SuppressWarnings("unchecked")
+    private boolean restoreApplication(final TaskMonitor taskMonitor, final ApplicationRestore applicationRestore)
+            throws UnifyException {
+        final AppConfig applicationConfig = applicationRestore.getApplicationConfig();
+        final Long moduleId = appletUtilities.system().getModuleId(applicationConfig.getModule());
+        String description = resolveApplicationMessage(applicationConfig.getDescription());
+
+        // Applications
+        logDebug(taskMonitor, "Restoring application [{0}]...", description);
+        Application application = new Application();
+        application.setModuleId(moduleId);
+        application.setName(applicationConfig.getName());
+        application.setDescription(description);
+        application.setLabel(resolveApplicationMessage(applicationConfig.getLabel()));
+        application.setDisplayIndex(applicationConfig.getDisplayIndex());
+        application.setDevelopable(applicationConfig.getDevelopable());
+        application.setMenuAccess(applicationConfig.getMenuAccess());
+        application.setAllowSecondaryTenants(applicationConfig.getAllowSecondaryTenants());
+        application.setConfigType(ConfigType.STATIC_INSTALL);
+        Long applicationId = (Long) environment().create(application);
+        applicationRestore.setApplicationId(applicationId);
+
+        final String applicationName = applicationConfig.getName();
+        applicationPrivilegeManager.registerPrivilege(applicationId,
+                ApplicationPrivilegeConstants.APPLICATION_CATEGORY_CODE,
+                PrivilegeNameUtils.getApplicationPrivilegeName(applicationName), description);
+        if (ApplicationModuleNameConstants.APPLICATION_APPLICATION_NAME.equals(applicationName)) {
+            applicationPrivilegeManager.registerPrivilege(applicationId,
+                    ApplicationPrivilegeConstants.APPLICATION_FEATURE_CATEGORY_CODE,
+                    PrivilegeNameUtils
+                            .getFeaturePrivilegeName(ApplicationFeatureConstants.SAVE_GLOBAL_TABLE_QUICK_FILTER),
+                    resolveApplicationMessage("$m{application.privilege.saveglobaltablefilter}"));
+        }
+
+        // Applets
+        logDebug(taskMonitor, "Restoring application applets...");
+        if (applicationConfig.getAppletsConfig() != null
+                && !DataUtils.isBlank(applicationConfig.getAppletsConfig().getAppletList())) {
+            AppApplet appApplet = new AppApplet();
+            appApplet.setApplicationId(applicationId);
+            List<String> appletNames = new ArrayList<String>();
+            for (AppletConfig appletConfig : applicationConfig.getAppletsConfig().getAppletList()) {
+                appletNames.add(appletConfig.getName());
+            }
+
+            for (AppletConfig appletConfig : applicationConfig.getAppletsConfig().getAppletList()) {
+                description = resolveApplicationMessage(appletConfig.getDescription());
+                String label = resolveApplicationMessage(appletConfig.getLabel());
+                String entity = ApplicationNameUtils.ensureLongNameReference(applicationName, appletConfig.getEntity());
+                logDebug("Restoring application applet [{0}]. Menu access = [{1}]...", appletConfig.getName(),
+                        appletConfig.getMenuAccess());
+                appApplet.setId(null);
+                appApplet.setName(appletConfig.getName());
+                appApplet.setDescription(description);
+                appApplet.setType(appletConfig.getType());
+                appApplet.setEntity(entity);
+                appApplet.setLabel(label);
+                appApplet.setIcon(appletConfig.getIcon());
+                appApplet.setRouteToApplet(appletConfig.getRouteToApplet());
+                appApplet.setPath(appletConfig.getPath());
+                appApplet.setMenuAccess(appletConfig.getMenuAccess());
+                appApplet.setSupportOpenInNewWindow(appletConfig.getSupportOpenInNewWindow());
+                appApplet.setAllowSecondaryTenants(appletConfig.getAllowSecondaryTenants());
+                appApplet.setDisplayIndex(appletConfig.getDisplayIndex());
+                appApplet.setBaseField(appletConfig.getBaseField());
+                appApplet.setAssignField(appletConfig.getAssignField());
+                appApplet.setAssignDescField(appletConfig.getAssignDescField());
+                appApplet.setPseudoDeleteField(appletConfig.getPseudoDeleteField());
+                appApplet.setTitleFormat(appletConfig.getTitleFormat());
+                appApplet.setDeprecated(false);
+                appApplet.setConfigType(ConfigType.STATIC_INSTALL);
+                populateChildList(appApplet, applicationName, appletConfig);
+                environment().create(appApplet);
+
+                applicationPrivilegeManager
+                        .registerPrivilege(applicationId,
+                                ApplicationPrivilegeConstants.APPLICATION_APPLET_CATEGORY_CODE,
+                                PrivilegeNameUtils.getAppletPrivilegeName(ApplicationNameUtils
+                                        .getApplicationEntityLongName(applicationName, appletConfig.getName())),
+                                description);
+            }
+
+            logDebug(taskMonitor, "Restored [{0}] application applets...",
+                    applicationConfig.getAppletsConfig().getAppletList().size());
+        }
+
+        // Enumerations
+        logDebug(taskMonitor, "Restoring application enumerations...");
+        if (applicationConfig.getEnumerationsConfig() != null
+                && !DataUtils.isBlank(applicationConfig.getEnumerationsConfig().getEnumList())) {
+            AppEnumeration appEnumeration = new AppEnumeration();
+            appEnumeration.setApplicationId(applicationId);
+            for (EnumerationConfig enumerationConfig : applicationConfig.getEnumerationsConfig().getEnumList()) {
+                description = resolveApplicationMessage(enumerationConfig.getDescription());
+                logDebug("Restoring application enumeration [{0}]...", enumerationConfig.getName());
+                appEnumeration.setId(null);
+                appEnumeration.setName(enumerationConfig.getName());
+                appEnumeration.setDescription(resolveApplicationMessage(enumerationConfig.getDescription()));
+                appEnumeration.setLabel(resolveApplicationMessage(enumerationConfig.getLabel()));
+                appEnumeration.setConfigType(ConfigType.STATIC_INSTALL);
+                populateChildList(appEnumeration, enumerationConfig);
+                environment().create(appEnumeration);
+            }
+
+            logDebug(taskMonitor, "Restored [{0}] application enumerations...",
+                    applicationConfig.getEnumerationsConfig().getEnumList().size());
+        }
+
+        // Widgets
+        logDebug(taskMonitor, "Restoring application widget types...");
+        if (applicationConfig.getWidgetTypesConfig() != null
+                && !DataUtils.isBlank(applicationConfig.getWidgetTypesConfig().getWidgetTypeList())) {
+            AppWidgetType appWidgetType = new AppWidgetType();
+            appWidgetType.setApplicationId(applicationId);
+            for (WidgetTypeConfig widgetTypeConfig : applicationConfig.getWidgetTypesConfig().getWidgetTypeList()) {
+                description = resolveApplicationMessage(widgetTypeConfig.getDescription());
+                logDebug("Restoring application widget [{0}]...", widgetTypeConfig.getName());
+                appWidgetType.setId(null);
+                appWidgetType.setDataType(widgetTypeConfig.getDataType());
+                appWidgetType.setInputType(widgetTypeConfig.getInputType());
+                appWidgetType.setName(widgetTypeConfig.getName());
+                appWidgetType.setDescription(description);
+                appWidgetType.setEditor(widgetTypeConfig.getEditor());
+                appWidgetType.setRenderer(widgetTypeConfig.getRenderer());
+                appWidgetType.setStretch(widgetTypeConfig.isStretch());
+                appWidgetType.setListOption(widgetTypeConfig.isListOption());
+                appWidgetType.setEnumOption(widgetTypeConfig.isEnumOption());
+                appWidgetType.setDeprecated(false);
+                appWidgetType.setConfigType(ConfigType.STATIC_INSTALL);
+                environment().create(appWidgetType);
+            }
+
+            logDebug(taskMonitor, "Restored [{0}] application widgets...",
+                    applicationConfig.getWidgetTypesConfig().getWidgetTypeList().size());
+        }
+
+        // References
+        logDebug(taskMonitor, "Restoring application references...");
+        if (applicationConfig.getRefsConfig() != null
+                && !DataUtils.isBlank(applicationConfig.getRefsConfig().getRefList())) {
+            AppRef appRef = new AppRef();
+            appRef.setApplicationId(applicationId);
+            for (RefConfig refConfig : applicationConfig.getRefsConfig().getRefList()) {
+                description = resolveApplicationMessage(refConfig.getDescription());
+                logDebug("Restoring application reference [{0}] ...", refConfig.getName());
+                appRef.setId(null);
+                appRef.setName(refConfig.getName());
+                appRef.setDescription(description);
+                appRef.setEntity(ApplicationNameUtils.ensureLongNameReference(applicationName, refConfig.getEntity()));
+                appRef.setSearchField(refConfig.getSearchField());
+                appRef.setSearchTable(refConfig.getSearchTable());
+                appRef.setSelectHandler(refConfig.getSelectHandler());
+                appRef.setListFormat(refConfig.getListFormat());
+                appRef.setFilterGenerator(refConfig.getFilterGenerator());
+                appRef.setFilterGeneratorRule(refConfig.getFilterGeneratorRule());
+                appRef.setFilter(InputWidgetUtils.newAppFilter(refConfig.getFilter()));
+                appRef.setDeprecated(false);
+                appRef.setConfigType(ConfigType.STATIC_INSTALL);
+                environment().create(appRef);
+            }
+
+            logDebug(taskMonitor, "Restored [{0}] application references...",
+                    applicationConfig.getRefsConfig().getRefList().size());
+        }
+
+        // Entities
+        logDebug(taskMonitor, "Restoring application entities...");
+        Map<String, Long> entityIdByNameMap = new HashMap<String, Long>();
+        if (applicationConfig.getEntitiesConfig() != null
+                && !DataUtils.isBlank(applicationConfig.getEntitiesConfig().getEntityList())) {
+            AppEntity appEntity = new AppEntity();
+            appEntity.setApplicationId(applicationId);
+            for (AppEntityConfig appEntityConfig : applicationConfig.getEntitiesConfig().getEntityList()) {
+                description = resolveApplicationMessage(appEntityConfig.getDescription());
+                String label = resolveApplicationMessage(appEntityConfig.getLabel());
+                Class<? extends BaseEntity> entityClass = (Class<? extends BaseEntity>) ReflectUtils
+                        .classForName(appEntityConfig.getType());
+                String tableName = !StringUtils.isBlank(appEntityConfig.getDelegate()) ? appEntityConfig.getTable()
+                        : ((SqlDataSourceDialect) db().getDataSource().getDialect()).findSqlEntityInfo(entityClass)
+                                .getTableName();
+                EntityBaseType baseType = ApplicationEntityUtils.getEntityBaseType(entityClass);
+                logDebug("Restoring application entity [{0}]...", appEntityConfig.getName());
+                appEntity.setId(null);
+                appEntity.setBaseType(baseType);
+                appEntity.setName(appEntityConfig.getName());
+                appEntity.setDescription(description);
+                appEntity.setLabel(label);
+                appEntity.setEmailProducerConsumer(appEntityConfig.getEmailProducerConsumer());
+                appEntity.setDelegate(appEntityConfig.getDelegate());
+                appEntity.setEntityClass(appEntityConfig.getType());
+                appEntity.setTableName(tableName);
+                appEntity.setDataSourceName(appEntityConfig.getDataSourceName());
+                appEntity.setMapped(appEntityConfig.getMapped());
+                appEntity.setAuditable(appEntityConfig.getAuditable());
+                appEntity.setReportable(appEntityConfig.getReportable());
+                appEntity.setActionPolicy(appEntityConfig.getActionPolicy());
+                appEntity.setDeprecated(false);
+                appEntity.setConfigType(ConfigType.STATIC_INSTALL);
+                populateChildList(appEntity, applicationName, appEntityConfig);
+                Long entityId = (Long) environment().create(appEntity);
+
+                sequenceNumberService.ensureCachedBlockSequence(appEntityConfig.getType());
+
+                final String entityLongName = ApplicationNameUtils.getApplicationEntityLongName(applicationName,
+                        appEntityConfig.getName());
+                entityIdByNameMap.put(entityLongName, entityId);
+                applicationPrivilegeManager.registerPrivilege(applicationId,
+                        ApplicationPrivilegeConstants.APPLICATION_ENTITY_CATEGORY_CODE,
+                        PrivilegeNameUtils.getAddPrivilegeName(entityLongName),
+                        getApplicationMessage("application.entity.privilege.add", description));
+                applicationPrivilegeManager.registerPrivilege(applicationId,
+                        ApplicationPrivilegeConstants.APPLICATION_ENTITY_CATEGORY_CODE,
+                        PrivilegeNameUtils.getEditPrivilegeName(entityLongName),
+                        getApplicationMessage("application.entity.privilege.edit", description));
+                applicationPrivilegeManager.registerPrivilege(applicationId,
+                        ApplicationPrivilegeConstants.APPLICATION_ENTITY_CATEGORY_CODE,
+                        PrivilegeNameUtils.getDeletePrivilegeName(entityLongName),
+                        getApplicationMessage("application.entity.privilege.delete", description));
+                if (baseType.isWorkEntityType()) {
+                    applicationPrivilegeManager.registerPrivilege(applicationId,
+                            ApplicationPrivilegeConstants.APPLICATION_ENTITY_CATEGORY_CODE,
+                            PrivilegeNameUtils.getAttachPrivilegeName(entityLongName),
+                            getApplicationMessage("application.entity.privilege.attach", description));
+                }
+            }
+
+            logDebug(taskMonitor, "Restored [{0}] application entities...",
+                    applicationConfig.getEntitiesConfig().getEntityList().size());
+        }
+
+        // Tables
+        logDebug(taskMonitor, "Restoring application tables...");
+        if (applicationConfig.getTablesConfig() != null
+                && !DataUtils.isBlank(applicationConfig.getTablesConfig().getTableList())) {
+            AppTable appTable = new AppTable();
+            appTable.setApplicationId(applicationId);
+            for (AppTableConfig appTableConfig : applicationConfig.getTablesConfig().getTableList()) {
+                description = resolveApplicationMessage(appTableConfig.getDescription());
+                String label = resolveApplicationMessage(appTableConfig.getLabel());
+                logDebug("Restoring application table [{0}]...", appTableConfig.getName());
+                appTable.setId(null);
+                appTable.setEntity(
+                        ApplicationNameUtils.ensureLongNameReference(applicationName, appTableConfig.getEntity()));
+                appTable.setName(appTableConfig.getName());
+                appTable.setDescription(description);
+                appTable.setLabel(label);
+                appTable.setDetailsPanelName(appTableConfig.getDetailsPanelName());
+                appTable.setLoadingFilterGen(appTableConfig.getLoadingFilterGen());
+                appTable.setLoadingSearchInput(appTableConfig.getLoadingSearchInput());
+                appTable.setSortHistory(appTableConfig.getSortHistory());
+                appTable.setItemsPerPage(appTableConfig.getItemsPerPage());
+                appTable.setSummaryTitleColumns(appTableConfig.getSummaryTitleColumns());
+                appTable.setSerialNo(appTableConfig.getSerialNo());
+                appTable.setSortable(appTableConfig.getSortable());
+                appTable.setShowLabelHeader(appTableConfig.getShowLabelHeader());
+                appTable.setHeaderToUpperCase(appTableConfig.getHeaderToUpperCase());
+                appTable.setHeaderCenterAlign(appTableConfig.getHeaderCenterAlign());
+                appTable.setBasicSearch(appTableConfig.getBasicSearch());
+                appTable.setTotalSummary(appTableConfig.getTotalSummary());
+                appTable.setHeaderless(appTableConfig.getHeaderless());
+                appTable.setMultiSelect(appTableConfig.getMultiSelect());
+                appTable.setNonConforming(appTableConfig.getNonConforming());
+                appTable.setFixedRows(appTableConfig.getFixedRows());
+                appTable.setLimitSelectToColumns(appTableConfig.getLimitSelectToColumns());
+                appTable.setDeprecated(false);
+                appTable.setConfigType(ConfigType.MUTABLE_INSTALL);
+                populateChildList(appTable, applicationName, appTableConfig);
+                environment().create(appTable);
+            }
+
+            logDebug(taskMonitor, "Restored [{0}] application tables...",
+                    applicationConfig.getTablesConfig().getTableList().size());
+        }
+
+        // Forms
+        logDebug(taskMonitor, "Restoring application forms...");
+        if (applicationConfig.getFormsConfig() != null
+                && !DataUtils.isBlank(applicationConfig.getFormsConfig().getFormList())) {
+            AppForm appForm = new AppForm();
+            appForm.setApplicationId(applicationId);
+            for (AppFormConfig appFormConfig : applicationConfig.getFormsConfig().getFormList()) {
+                description = resolveApplicationMessage(appFormConfig.getDescription());
+                logDebug("Restoring application form [{0}]...", appFormConfig.getName());
+                appForm.setId(null);
+                appForm.setType(appFormConfig.getType());
+                appForm.setEntity(
+                        ApplicationNameUtils.ensureLongNameReference(applicationName, appFormConfig.getEntity()));
+                appForm.setConsolidatedReview(appFormConfig.getConsolidatedReview());
+                appForm.setConsolidatedValidation(appFormConfig.getConsolidatedValidation());
+                appForm.setConsolidatedState(appFormConfig.getConsolidatedState());
+                appForm.setListingGenerator(appFormConfig.getListingGenerator());
+                appForm.setTitleFormat(appFormConfig.getTitleFormat());
+                appForm.setName(appFormConfig.getName());
+                appForm.setDescription(description);
+                appForm.setDeprecated(false);
+                appForm.setConfigType(ConfigType.MUTABLE_INSTALL);
+                populateChildList(appForm, appFormConfig, applicationId, applicationName);
+                environment().create(appForm);
+            }
+
+            logDebug(taskMonitor, "Restored [{0}] application forms...",
+                    applicationConfig.getFormsConfig().getFormList().size());
+        }
+
+        // Property lists
+        logDebug(taskMonitor, "Restoring application property lists...");
+        if (applicationConfig.getPropertyListsConfig() != null
+                && !DataUtils.isBlank(applicationConfig.getPropertyListsConfig().getPropertyConfigList())) {
+            AppPropertyList appPropertyList = new AppPropertyList();
+            appPropertyList.setApplicationId(applicationId);
+            for (PropertyListConfig propertyListConfig : applicationConfig.getPropertyListsConfig()
+                    .getPropertyConfigList()) {
+                description = resolveApplicationMessage(propertyListConfig.getDescription());
+                logDebug("Restoring application property list [{0}]...", propertyListConfig.getName());
+                appPropertyList.setId(null);
+                appPropertyList.setName(propertyListConfig.getName());
+                appPropertyList.setDescription(description);
+                appPropertyList.setDeprecated(false);
+                appPropertyList.setConfigType(ConfigType.STATIC_INSTALL);
+                populateChildList(appPropertyList, applicationName, propertyListConfig);
+                environment().create(appPropertyList);
+            }
+
+            logDebug(taskMonitor, "Restoring [{0}] application property lists...",
+                    applicationConfig.getPropertyListsConfig().getPropertyConfigList().size());
+        }
+
+        // Property rules
+        logDebug(taskMonitor, "Restoring application property rules...");
+        if (applicationConfig.getPropertyRulesConfig() != null
+                && !DataUtils.isBlank(applicationConfig.getPropertyRulesConfig().getPropertyRuleConfigList())) {
+            AppPropertyRule appPropertyRule = new AppPropertyRule();
+            appPropertyRule.setApplicationId(applicationId);
+            for (PropertyRuleConfig propertyRuleConfig : applicationConfig.getPropertyRulesConfig()
+                    .getPropertyRuleConfigList()) {
+                description = resolveApplicationMessage(propertyRuleConfig.getDescription());
+                logDebug("Restoring new application property rule [{0}]...", propertyRuleConfig.getName());
+                appPropertyRule.setId(null);
+                appPropertyRule.setName(propertyRuleConfig.getName());
+                appPropertyRule.setDescription(description);
+                appPropertyRule.setEntity(
+                        ApplicationNameUtils.ensureLongNameReference(applicationName, propertyRuleConfig.getEntity()));
+                appPropertyRule.setChoiceField(propertyRuleConfig.getChoiceField());
+                appPropertyRule.setListField(propertyRuleConfig.getListField());
+                appPropertyRule.setPropNameField(propertyRuleConfig.getPropNameField());
+                appPropertyRule.setPropValField(propertyRuleConfig.getPropValField());
+                appPropertyRule.setDefaultList(ApplicationNameUtils.ensureLongNameReference(applicationName,
+                        propertyRuleConfig.getDefaultList()));
+                appPropertyRule.setIgnoreCase(propertyRuleConfig.isIgnoreCase());
+                appPropertyRule.setDeprecated(false);
+                appPropertyRule.setConfigType(ConfigType.STATIC_INSTALL);
+                populateChildList(appPropertyRule, applicationName, propertyRuleConfig);
+                environment().create(appPropertyRule);
+            }
+
+            logDebug(taskMonitor, "Restored [{0}] application property rules...",
+                    applicationConfig.getPropertyRulesConfig().getPropertyRuleConfigList().size());
+        }
+
+        // Assignment pages
+        logDebug(taskMonitor, "Restoring application assignment pages...");
+        if (applicationConfig.getAssignmentPagesConfig() != null
+                && !DataUtils.isBlank(applicationConfig.getAssignmentPagesConfig().getAssignmentPageList())) {
+            AppAssignmentPage appAssignmentPage = new AppAssignmentPage();
+            appAssignmentPage.setApplicationId(applicationId);
+            for (AppAssignmentPageConfig appAssignmentPageConfig : applicationConfig.getAssignmentPagesConfig()
+                    .getAssignmentPageList()) {
+                description = resolveApplicationMessage(appAssignmentPageConfig.getDescription());
+                String label = resolveApplicationMessage(appAssignmentPageConfig.getLabel());
+                logDebug("Restoring application assignment page [{0}]...", appAssignmentPageConfig.getName());
+                appAssignmentPage.setId(null);
+                appAssignmentPage.setName(appAssignmentPageConfig.getName());
+                appAssignmentPage.setDescription(description);
+                appAssignmentPage.setLabel(label);
+                if (appAssignmentPageConfig.getFilterCaption1() != null) {
+                    appAssignmentPage
+                            .setFilterCaption1(resolveApplicationMessage(appAssignmentPageConfig.getFilterCaption1()));
+                }
+
+                if (appAssignmentPageConfig.getFilterCaption2() != null) {
+                    appAssignmentPage
+                            .setFilterCaption2(resolveApplicationMessage(appAssignmentPageConfig.getFilterCaption2()));
+                }
+
+                appAssignmentPage.setFilterList1(appAssignmentPageConfig.getFilterList1());
+                appAssignmentPage.setFilterList2(appAssignmentPageConfig.getFilterList2());
+
+                appAssignmentPage
+                        .setAssignCaption(resolveApplicationMessage(appAssignmentPageConfig.getAssignCaption()));
+                appAssignmentPage.setAssignList(appAssignmentPageConfig.getAssignList());
+                appAssignmentPage
+                        .setUnassignCaption(resolveApplicationMessage(appAssignmentPageConfig.getUnassignCaption()));
+                appAssignmentPage.setUnassignList(appAssignmentPageConfig.getUnassignList());
+                appAssignmentPage.setEntity(ApplicationNameUtils.ensureLongNameReference(applicationName,
+                        appAssignmentPageConfig.getEntity()));
+                appAssignmentPage.setCommitPolicy(appAssignmentPageConfig.getCommitPolicy());
+                appAssignmentPage.setAssignField(appAssignmentPageConfig.getAssignField());
+                appAssignmentPage.setBaseField(appAssignmentPageConfig.getBaseField());
+                appAssignmentPage.setRuleDescField(appAssignmentPageConfig.getRuleDescField());
+                appAssignmentPage.setDeprecated(false);
+                appAssignmentPage.setConfigType(ConfigType.STATIC_INSTALL);
+                environment().create(appAssignmentPage);
+            }
+
+            logDebug(taskMonitor, "Restored [{0}] application assignment pages...",
+                    applicationConfig.getAssignmentPagesConfig().getAssignmentPageList().size());
+        }
+
+        // Suggestions
+        logDebug(taskMonitor, "Restoring application suggestion types...");
+        if (applicationConfig.getSuggestionTypesConfig() != null
+                && !DataUtils.isBlank(applicationConfig.getSuggestionTypesConfig().getSuggestionTypeList())) {
+            AppSuggestionType appSuggestionType = new AppSuggestionType();
+            appSuggestionType.setApplicationId(applicationId);
+            for (SuggestionTypeConfig suggestionTypeConfig : applicationConfig.getSuggestionTypesConfig()
+                    .getSuggestionTypeList()) {
+                description = resolveApplicationMessage(suggestionTypeConfig.getDescription());
+                logDebug("Restoring application suggestion [{0}]...", suggestionTypeConfig.getName());
+                appSuggestionType.setId(null);
+                appSuggestionType.setName(suggestionTypeConfig.getName());
+                appSuggestionType.setDescription(description);
+                appSuggestionType.setParent(ApplicationNameUtils.ensureLongNameReference(applicationName,
+                        suggestionTypeConfig.getParent()));
+                appSuggestionType.setDeprecated(false);
+                appSuggestionType.setConfigType(ConfigType.STATIC_INSTALL);
+                environment().create(appSuggestionType);
+            }
+
+            logDebug(taskMonitor, "Restored [{0}] application suggestions...",
+                    applicationConfig.getSuggestionTypesConfig().getSuggestionTypeList().size());
+        }
+
+        logDebug(taskMonitor, "Restoring other application artifacts...");
+        if (!DataUtils.isBlank(applicationArtifactInstallerList)) {
+            for (ApplicationArtifactInstaller applicationArtifactInstaller : applicationArtifactInstallerList) {
+                applicationArtifactInstaller.restoreApplicationArtifacts(taskMonitor, applicationRestore);
             }
         }
 

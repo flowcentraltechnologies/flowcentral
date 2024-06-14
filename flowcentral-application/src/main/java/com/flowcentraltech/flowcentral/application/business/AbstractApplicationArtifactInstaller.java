@@ -22,7 +22,9 @@ import com.flowcentraltech.flowcentral.application.entities.BaseApplicationEntit
 import com.flowcentraltech.flowcentral.common.AbstractFlowCentralComponent;
 import com.flowcentraltech.flowcentral.common.business.ApplicationPrivilegeManager;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
+import com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants;
 import com.flowcentraltech.flowcentral.configuration.business.ConfigurationLoader;
+import com.flowcentraltech.flowcentral.configuration.data.Messages;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.task.TaskMonitor;
@@ -62,6 +64,13 @@ public abstract class AbstractApplicationArtifactInstaller extends AbstractFlowC
     @Override
     protected void onTerminate() throws UnifyException {
 
+    }
+
+    @Override
+    protected String resolveApplicationMessage(String message, Object... params) throws UnifyException {
+        Messages messages = getSessionAttribute(Messages.class,
+                FlowCentralSessionAttributeConstants.ALTERNATIVE_RESOURCES_BUNDLE);
+        return messages != null ? messages.resolveMessage(message) : super.resolveApplicationMessage(message, params);
     }
 
     protected void registerPrivilege(Long applicationId, String privilegeCategoryCode, String privilegeCode,

@@ -26,6 +26,7 @@ import java.util.Enumeration;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -51,6 +52,7 @@ import com.flowcentraltech.flowcentral.common.business.SynchronizableEnvironment
 import com.flowcentraltech.flowcentral.common.constants.CollaborationType;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralContainerPropertyConstants;
 import com.flowcentraltech.flowcentral.configuration.data.ApplicationRestore;
+import com.flowcentraltech.flowcentral.configuration.data.Messages;
 import com.flowcentraltech.flowcentral.configuration.data.ModuleInstall;
 import com.flowcentraltech.flowcentral.configuration.data.ModuleRestore;
 import com.flowcentraltech.flowcentral.configuration.data.NotifLargeTextRestore;
@@ -449,8 +451,8 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
         ModuleRestore moduleRestore = null;
         InputStream inputStream = null;
         try {
-            inputStream = zipFile.getInputStream(_entries.get(moduleXmlFile));
             logDebug(tm, "Loading module feature definitions from [{0}]...", moduleXmlFile);
+            inputStream = zipFile.getInputStream(_entries.get(moduleXmlFile));
             ModuleConfig moduleConfig = ConfigurationUtils.readConfig(ModuleConfig.class, inputStream);
 
             List<ApplicationRestore> applicationList = new ArrayList<ApplicationRestore>();
@@ -463,7 +465,8 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
                 }
             }
 
-            moduleRestore = new ModuleRestore(tm, moduleConfig, applicationList);
+            Messages messages = loadModuleMessagesFromZip(tm, moduleConfig.getName(), zipFile, _entries);
+            moduleRestore = new ModuleRestore(tm, moduleConfig, applicationList, messages);
             logDebug(tm, "Loaded module feature definitions from [{0}] successfully.", moduleXmlFile);
         } catch (IOException e) {
             throwOperationErrorException(e);
@@ -474,13 +477,35 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
         return moduleRestore;
     }
 
+    private Messages loadModuleMessagesFromZip(TaskMonitor tm, String moduleName, ZipFile zipFile,
+            Map<String, ZipEntry> _entries) throws UnifyException {
+        Messages messages = Messages.emptyMessages();
+        final String propertiesFile = "com/flowcentraltech/flowcentral/resources/extension-" + moduleName.toLowerCase()
+                + "-messages.properties";
+        InputStream inputStream = null;
+        try {
+            logDebug(tm, "Loading module messages from [{0}]...", propertiesFile);
+            inputStream = zipFile.getInputStream(_entries.get(propertiesFile));
+            Properties properties = new Properties();
+            properties.load(inputStream);
+            messages = new Messages(properties);
+            logDebug(tm, "Loaded module messages from [{0}] successfully.", propertiesFile);
+        } catch (IOException e) {
+            throwOperationErrorException(e);
+        } finally {
+            IOUtils.close(inputStream);
+        }
+
+        return messages;
+    }
+
     private ApplicationRestore loadApplicationRestoreFromZip(TaskMonitor tm, String configFile, ZipFile zipFile,
             Map<String, ZipEntry> _entries) throws UnifyException {
         ApplicationRestore applicationRestore = null;
         InputStream inputStream = null;
         try {
-            inputStream = zipFile.getInputStream(_entries.get(configFile));
             logDebug(tm, "Loading application definition from [{0}]...", configFile);
+            inputStream = zipFile.getInputStream(_entries.get(configFile));
             AppConfig appConfig = ConfigurationUtils.readConfig(AppConfig.class, inputStream);
 
             List<ReportRestore> reportList = new ArrayList<ReportRestore>();
@@ -553,8 +578,8 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
         ReportRestore reportRestore = null;
         InputStream inputStream = null;
         try {
-            inputStream = zipFile.getInputStream(_entries.get(configFile));
             logDebug(tm, "Loading report definition from [{0}]...", configFile);
+            inputStream = zipFile.getInputStream(_entries.get(configFile));
             ReportConfig reportConfig = ConfigurationUtils.readConfig(ReportConfig.class, inputStream);
             reportRestore = new ReportRestore(reportConfig);
             logDebug(tm, "Loaded report definition from [{0}] successfully.", configFile);
@@ -572,8 +597,8 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
         NotifTemplateRestore notifTemplateRestore = null;
         InputStream inputStream = null;
         try {
-            inputStream = zipFile.getInputStream(_entries.get(configFile));
             logDebug(tm, "Loading notification template definition from [{0}]...", configFile);
+            inputStream = zipFile.getInputStream(_entries.get(configFile));
             NotifTemplateConfig notifTemplateConfig = ConfigurationUtils.readConfig(NotifTemplateConfig.class,
                     inputStream);
             notifTemplateRestore = new NotifTemplateRestore(notifTemplateConfig);
@@ -592,8 +617,8 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
         NotifLargeTextRestore notifLargeTextRestore = null;
         InputStream inputStream = null;
         try {
-            inputStream = zipFile.getInputStream(_entries.get(configFile));
             logDebug(tm, "Loading notification large text definition from [{0}]...", configFile);
+            inputStream = zipFile.getInputStream(_entries.get(configFile));
             NotifLargeTextConfig notifLargeTextConfig = ConfigurationUtils.readConfig(NotifLargeTextConfig.class,
                     inputStream);
             notifLargeTextRestore = new NotifLargeTextRestore(notifLargeTextConfig);
@@ -612,8 +637,8 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
         WorkflowRestore workflowRestore = null;
         InputStream inputStream = null;
         try {
-            inputStream = zipFile.getInputStream(_entries.get(configFile));
             logDebug(tm, "Loading workflow definition from [{0}]...", configFile);
+            inputStream = zipFile.getInputStream(_entries.get(configFile));
             WfConfig wfConfig = ConfigurationUtils.readConfig(WfConfig.class, inputStream);
             workflowRestore = new WorkflowRestore(wfConfig);
             logDebug(tm, "Loaded workflow definition from [{0}] successfully.", configFile);
@@ -631,8 +656,8 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
         WorkflowWizardRestore workflowWizardRestore = null;
         InputStream inputStream = null;
         try {
-            inputStream = zipFile.getInputStream(_entries.get(configFile));
             logDebug(tm, "Loading workflow wizard definition from [{0}]...", configFile);
+            inputStream = zipFile.getInputStream(_entries.get(configFile));
             WfWizardConfig wfWizardConfig = ConfigurationUtils.readConfig(WfWizardConfig.class, inputStream);
             workflowWizardRestore = new WorkflowWizardRestore(wfWizardConfig);
             logDebug(tm, "Loaded workflow wizard definition from [{0}] successfully.", configFile);

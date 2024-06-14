@@ -23,6 +23,8 @@ import com.flowcentraltech.flowcentral.common.business.policies.EntityActionPoli
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralContainerPropertyConstants;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralEditionConstants;
+import com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants;
+import com.flowcentraltech.flowcentral.configuration.data.Messages;
 import com.flowcentraltech.flowcentral.configuration.data.ModuleInstall;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -57,6 +59,13 @@ public abstract class AbstractFlowCentralService extends AbstractBusinessService
 
     protected final EnvironmentService environment() {
         return environmentService;
+    }
+
+    @Override
+    protected String resolveApplicationMessage(String message, Object... params) throws UnifyException {
+        Messages messages = getSessionAttribute(Messages.class,
+                FlowCentralSessionAttributeConstants.ALTERNATIVE_RESOURCES_BUNDLE);
+        return messages != null ? messages.resolveMessage(message) : super.resolveApplicationMessage(message, params);
     }
 
     protected void executeEntityPreActionPolicy(EntityActionContext ctx) throws UnifyException {

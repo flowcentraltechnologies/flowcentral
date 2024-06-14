@@ -31,6 +31,7 @@ import com.flowcentraltech.flowcentral.chart.entities.ChartQuery;
 import com.flowcentraltech.flowcentral.common.constants.ConfigType;
 import com.flowcentraltech.flowcentral.common.util.ConfigUtils;
 import com.flowcentraltech.flowcentral.configuration.data.ApplicationInstall;
+import com.flowcentraltech.flowcentral.configuration.data.ApplicationRestore;
 import com.flowcentraltech.flowcentral.configuration.xml.AppChartConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppChartDataSourceConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppConfig;
@@ -176,6 +177,78 @@ public class ApplicationChartInstallerImpl extends AbstractApplicationArtifactIn
             }
         }
 
+    }
+
+    @Override
+    public void restoreApplicationArtifacts(TaskMonitor taskMonitor, ApplicationRestore applicationRestore)
+            throws UnifyException {
+        final AppConfig applicationConfig = applicationRestore.getApplicationConfig();
+        final Long applicationId = applicationRestore.getApplicationId();
+
+        // Charts
+        logDebug(taskMonitor, "Executing chart restore...");
+        if (applicationConfig.getChartsConfig() != null
+                && !DataUtils.isBlank(applicationConfig.getChartsConfig().getChartList())) {
+            for (AppChartConfig appChartConfig : applicationConfig.getChartsConfig().getChartList()) {
+                String description = resolveApplicationMessage(appChartConfig.getDescription());
+                String title = resolveApplicationMessage(appChartConfig.getTitle());
+                String subTitle = resolveApplicationMessage(appChartConfig.getSubTitle());
+                logDebug(taskMonitor, "Restoring chart chart [{0}]...", description);
+                Chart chart = new Chart();
+                chart.setApplicationId(applicationId);
+                chart.setType(appChartConfig.getType());
+                chart.setPaletteType(appChartConfig.getPaletteType());
+                chart.setName(appChartConfig.getName());
+                chart.setDescription(description);
+                chart.setTitle(title);
+                chart.setSubTitle(subTitle);
+                chart.setWidth(appChartConfig.getWidth());
+                chart.setHeight(appChartConfig.getHeight());
+                chart.setProvider(appChartConfig.getProvider());
+                chart.setRule(appChartConfig.getRule());
+                chart.setCategory(appChartConfig.getCategory());
+                chart.setColor(appChartConfig.getColor());
+                chart.setSeries(appChartConfig.getSeries());
+                chart.setShowGrid(appChartConfig.isShowGrid());
+                chart.setShowDataLabels(appChartConfig.isShowDataLabels());
+                chart.setFormatDataLabels(appChartConfig.isFormatDataLabels());
+                chart.setFormatYLabels(appChartConfig.isFormatYLabels());
+                chart.setStacked(appChartConfig.isStacked());
+                chart.setSmooth(appChartConfig.isSmooth());
+                chart.setDeprecated(false);
+                chart.setConfigType(ConfigType.MUTABLE_INSTALL);
+                environment().create(chart);
+            }
+        }
+
+        // Chart data sources
+        if (applicationConfig.getChartDataSourcesConfig() != null
+                && !DataUtils.isBlank(applicationConfig.getChartDataSourcesConfig().getChartDataSourceList())) {
+            for (AppChartDataSourceConfig appChartDataSourceConfig : applicationConfig.getChartDataSourcesConfig()
+                    .getChartDataSourceList()) {
+                String description = resolveApplicationMessage(appChartDataSourceConfig.getDescription());
+                logDebug(taskMonitor, "Restoring chart chart data source [{0}]...", description);
+                ChartDataSource chartDataSource = new ChartDataSource();
+                chartDataSource.setApplicationId(applicationId);
+                chartDataSource.setType(appChartDataSourceConfig.getType());
+                chartDataSource.setTimeSeriesType(appChartDataSourceConfig.getTimeSeriesType());
+                chartDataSource.setCategoryField(appChartDataSourceConfig.getCategoryField());
+                chartDataSource.setEntity(appChartDataSourceConfig.getEntity());
+                chartDataSource.setName(appChartDataSourceConfig.getName());
+                chartDataSource.setDescription(description);
+                chartDataSource.setLimit(appChartDataSourceConfig.getLimit());
+                chartDataSource
+                        .setCategoryBase(InputWidgetUtils.newAppFilter(appChartDataSourceConfig.getCategoryBase()));
+                chartDataSource
+                        .setSeries(InputWidgetUtils.newAppPropertySequence(appChartDataSourceConfig.getSeries()));
+                chartDataSource.setCategories(
+                        InputWidgetUtils.newAppPropertySequence(appChartDataSourceConfig.getCategories()));
+                chartDataSource.setFieldSequence(newAppFieldSequence(appChartDataSourceConfig.getFieldSequence()));
+                chartDataSource.setDeprecated(false);
+                chartDataSource.setConfigType(ConfigType.MUTABLE_INSTALL);
+                environment().create(chartDataSource);
+            }
+        }
     }
 
     @Override

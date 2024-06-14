@@ -31,13 +31,21 @@ public class ModuleRestore extends ModuleInstall {
 
     private List<ApplicationRestore> applicationList;
 
-    public ModuleRestore(TaskMonitor taskMonitor, ModuleConfig moduleConfig, List<ApplicationRestore> applicationList) {
+    private Messages messages;
+
+    public ModuleRestore(TaskMonitor taskMonitor, ModuleConfig moduleConfig, List<ApplicationRestore> applicationList,
+            Messages messages) {
         super(taskMonitor, moduleConfig);
         this.applicationList = applicationList;
+        this.messages = messages;
     }
 
     public List<ApplicationRestore> getApplicationList() {
         return applicationList;
+    }
+
+    public Messages getMessages() {
+        return messages;
     }
 
     public String toString() {
