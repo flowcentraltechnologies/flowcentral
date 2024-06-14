@@ -32,8 +32,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import javax.mail.Message;
-
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
@@ -117,6 +115,7 @@ import com.flowcentraltech.flowcentral.common.business.PreInstallationSetup;
 import com.flowcentraltech.flowcentral.common.business.SuggestionProvider;
 import com.flowcentraltech.flowcentral.common.business.policies.SweepingCommitPolicy;
 import com.flowcentraltech.flowcentral.common.constants.ConfigType;
+import com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants;
 import com.flowcentraltech.flowcentral.common.constants.OwnershipType;
 import com.flowcentraltech.flowcentral.common.constants.WfItemVersionType;
 import com.flowcentraltech.flowcentral.common.data.Attachment;
@@ -145,8 +144,8 @@ import com.flowcentraltech.flowcentral.configuration.constants.TabContentType;
 import com.flowcentraltech.flowcentral.configuration.constants.WidgetColor;
 import com.flowcentraltech.flowcentral.configuration.data.ApplicationInstall;
 import com.flowcentraltech.flowcentral.configuration.data.ApplicationRestore;
-import com.flowcentraltech.flowcentral.configuration.data.Messages;
 import com.flowcentraltech.flowcentral.configuration.data.ModuleInstall;
+import com.flowcentraltech.flowcentral.configuration.data.ModuleRestore;
 import com.flowcentraltech.flowcentral.configuration.xml.AppAssignmentPageConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppEntityConfig;
@@ -3599,7 +3598,6 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
         logDebug(taskMonitor, "Executing deletion on application [{0}] ...", applicationName);
         logDebug(taskMonitor, "Checking if application developable...");
         taskMonitor.getTaskOutput().setResult(ApplicationDeletionTaskConstants.TASK_SUCCESS, Boolean.FALSE);
-        int deletionCount = 0;
         final Application application = environment().list(new ApplicationQuery().name(applicationName));
         if (!application.isDevelopable()) {
             logDebug(taskMonitor, "Application is non-developable. Deletion terminated.");
@@ -3615,7 +3613,14 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
         }
 
         logDebug(taskMonitor, "No application dependants found. Proceeding with deletion...");
-        final Long applicationId = application.getId();
+        int deletionCount = deleteApplication(taskMonitor, application.getId());
+        taskMonitor.getTaskOutput().setResult(ApplicationDeletionTaskConstants.TASK_SUCCESS, Boolean.TRUE);
+        return deletionCount;
+    }
+
+    private int deleteApplication(TaskMonitor taskMonitor, Long applicationId) throws UnifyException {
+        logDebug(taskMonitor, "Deleting application with ID [{0}]...", applicationId);
+        int deletionCount = 0;
         if (!DataUtils.isBlank(applicationArtifactInstallerList)) {
             for (ApplicationArtifactInstaller applicationArtifactInstaller : applicationArtifactInstallerList) {
                 deletionCount += applicationArtifactInstaller.deleteApplicationArtifacts(taskMonitor, applicationId);
@@ -3635,13 +3640,14 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
         deletionCount += deleteApplicationArtifacts(taskMonitor, "tables", new AppTableQuery(), applicationId);
         deletionCount += deleteApplicationArtifacts(taskMonitor, "entities", new AppEntityQuery(), applicationId);
         deletionCount += deleteApplicationArtifacts(taskMonitor, "references", new AppRefQuery(), applicationId);
+        deletionCount += deleteApplicationArtifacts(taskMonitor, "enumerations", new AppEnumerationQuery(),
+                applicationId);
         deletionCount += deleteApplicationArtifacts(taskMonitor, "widget types", new AppWidgetTypeQuery(),
                 applicationId);
         deletionCount += deleteApplicationArtifacts(taskMonitor, "applets", new AppAppletQuery(), applicationId);
 
-        environment().delete(application);
-        logDebug(taskMonitor, "Application successfully deleted.");
-        taskMonitor.getTaskOutput().setResult(ApplicationDeletionTaskConstants.TASK_SUCCESS, Boolean.TRUE);
+        environment().delete(Application.class, applicationId);
+        logDebug(taskMonitor, "Application with ID [{0}] successfully deleted.", applicationId);
         return deletionCount;
     }
 
@@ -4042,6 +4048,30 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                     installApplication(moduleInstall.getTaskMonitor(), applicationInstall);
                 }
             }
+        }
+    }
+
+    private void restoreApplications(TaskMonitor taskMonitor, final ModuleRestore moduleRestore) throws UnifyException {
+        setSessionAttribute(FlowCentralSessionAttributeConstants.ALTERNATIVE_RESOURCES_BUNDLE,
+                moduleRestore.getMessages());
+        try {
+            // TODO Backup role privileges
+
+            // Delete old applications
+            List<Long> applicationIdList = environment().valueList(Long.class, "id",
+                    new ApplicationQuery().isActualCustom());
+            for (Long applicationId : applicationIdList) {
+                deleteApplication(taskMonitor, applicationId);
+            }
+
+            // Restore applications
+            for (ApplicationRestore applicationRestore : moduleRestore.getApplicationList()) {
+                restoreApplication(taskMonitor, applicationRestore);
+            }
+
+            // TODO Restore role privileges
+        } finally {
+            removeSessionAttribute(FlowCentralSessionAttributeConstants.ALTERNATIVE_RESOURCES_BUNDLE);
         }
     }
 
@@ -4880,7 +4910,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
         final Long moduleId = appletUtilities.system().getModuleId(applicationConfig.getModule());
         String description = resolveApplicationMessage(applicationConfig.getDescription());
 
-        // Applications
+        // Application
         logDebug(taskMonitor, "Restoring application [{0}]...", description);
         Application application = new Application();
         application.setModuleId(moduleId);
