@@ -45,6 +45,10 @@ public class WfStepRoleQuery extends BaseEntityQuery<WfStepRole> {
         return (WfStepRoleQuery) addEquals("workflowName", workflowName);
     }
     
+    public WfStepRoleQuery applicationId(Long applicationId) {
+        return (WfStepRoleQuery) addEquals("applicationId", applicationId);
+    }
+    
     public WfStepRoleQuery applicationName(String applicationName) {
         return (WfStepRoleQuery) addEquals("applicationName", applicationName);
     }

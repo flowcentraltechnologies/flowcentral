@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.system.business;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import com.flowcentraltech.flowcentral.common.business.EnvironmentDelegate;
@@ -639,7 +640,7 @@ public class EnvironmentServiceImpl extends AbstractBusinessService implements E
     }
 
     @Override
-    public <T> T valueOptional(Class<T> valueType, String valueFieldName, Query<? extends Entity> query)
+    public <T> Optional<T> valueOptional(Class<T> valueType, String valueFieldName, Query<? extends Entity> query)
             throws UnifyException {
         return db(query.getEntityClass()).valueOptional(valueType, valueFieldName, query);
     }

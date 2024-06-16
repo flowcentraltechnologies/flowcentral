@@ -47,6 +47,12 @@ public class ReportGroupMember extends BaseAuditTenantEntity implements Describa
     @ListOnly(key = "reportGroupId", property = "label")
     private String reportGroupLabel;
 
+    @ListOnly(key = "reportConfigurationId", property = "applicationId")
+    private Long applicationId;
+
+    @ListOnly(key = "reportConfigurationId", property = "applicationName")
+    private String applicationName;
+
     @ListOnly(key = "reportConfigurationId", property = "name")
     private String reportConfigurationName;
 
@@ -96,6 +102,22 @@ public class ReportGroupMember extends BaseAuditTenantEntity implements Describa
 
     public void setReportGroupLabel(String reportGroupLabel) {
         this.reportGroupLabel = reportGroupLabel;
+    }
+
+    public Long getApplicationId() {
+        return applicationId;
+    }
+
+    public void setApplicationId(Long applicationId) {
+        this.applicationId = applicationId;
+    }
+
+    public String getApplicationName() {
+        return applicationName;
+    }
+
+    public void setApplicationName(String applicationName) {
+        this.applicationName = applicationName;
     }
 
     public String getReportConfigurationName() {

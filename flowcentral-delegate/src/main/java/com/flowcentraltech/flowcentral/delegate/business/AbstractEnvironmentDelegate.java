@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
@@ -339,12 +340,13 @@ public abstract class AbstractEnvironmentDelegate extends AbstractFlowCentralCom
     }
 
     @Override
-    public <T, U extends Entity> T valueOptional(Class<T> fieldClass, String fieldName, Query<U> query)
+    public <T, U extends Entity> Optional<T> valueOptional(Class<T> fieldClass, String fieldName, Query<U> query)
             throws UnifyException {
         DataSourceRequest req = new DataSourceRequest(DataSourceOperation.VALUE);
         setQueryDetails(req, query);
         req.setFieldName(fieldName);
-        return singleValueResultOperation(fieldClass, query.getEntityClass(), req);
+        T val = singleValueResultOperation(fieldClass, query.getEntityClass(), req);
+        return Optional.ofNullable(val);
     }
 
     @Override

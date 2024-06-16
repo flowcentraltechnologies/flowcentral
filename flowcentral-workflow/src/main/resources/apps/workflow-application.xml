@@ -300,6 +300,9 @@
 			<field name="workflowDesc"
 				label="$m{workflow.step.workflowdesc}" type="list_only"
 				key="workflowId" property="description" />
+			<field name="applicationId"
+				label="$m{workflow.step.applicationid}" type="list_only"
+				key="workflowId" property="applicationId" />
 			<field name="applicationName"
 				label="$m{workflow.step.applicationname}" type="list_only"
 				key="workflowId" property="applicationName" />
@@ -459,6 +462,9 @@
 			<field name="workflowDesc"
 				label="$m{workflow.steprole.workflowdesc}" type="list_only"
 				key="wfStepId" property="workflowDesc" />
+			<field name="applicationId"
+				label="$m{workflow.steprole.applicationid}" type="list_only"
+				key="wfStepId" property="applicationId" />
 			<field name="applicationName"
 				label="$m{workflow.steprole.applicationname}" type="list_only"
 				key="wfStepId" property="applicationName" />

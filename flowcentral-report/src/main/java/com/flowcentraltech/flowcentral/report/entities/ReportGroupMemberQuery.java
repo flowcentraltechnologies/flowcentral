@@ -30,13 +30,21 @@ public class ReportGroupMemberQuery extends BaseAuditTenantEntityQuery<ReportGro
     public ReportGroupMemberQuery() {
         super(ReportGroupMember.class);
     }
-
+    
     public ReportGroupMemberQuery reportGroupId(Long reportGroupId) {
         return (ReportGroupMemberQuery) addEquals("reportGroupId", reportGroupId);
     }
 
+    public ReportGroupMemberQuery reportGroupName(String reportGroupName) {
+        return (ReportGroupMemberQuery) addEquals("reportGroupName", reportGroupName);
+    }
+
     public ReportGroupMemberQuery ueportGroupIdIn(Collection<Long> reportGroupId) {
         return (ReportGroupMemberQuery) addAmongst("reportGroupId", reportGroupId);
+    }
+
+    public ReportGroupMemberQuery applicationId(Long applicationId) {
+        return (ReportGroupMemberQuery) addEquals("applicationId", applicationId);
     }
 
     public ReportGroupMemberQuery reportConfigurationId(Long reportConfigurationId) {

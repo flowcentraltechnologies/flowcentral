@@ -33,6 +33,10 @@ public class RolePrivilegeQuery extends BaseAuditTenantEntityQuery<RolePrivilege
         super(RolePrivilege.class);
     }
 
+    public RolePrivilegeQuery applicationId(Long applicationId) {
+        return (RolePrivilegeQuery) addEquals("applicationId", applicationId);
+    }
+
     public RolePrivilegeQuery roleId(Long roleId) {
         return (RolePrivilegeQuery) addEquals("roleId", roleId);
     }

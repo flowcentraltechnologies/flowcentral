@@ -29,6 +29,7 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -1771,8 +1772,9 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
     }
 
     private String getAppletProperty(ApplicationEntityNameParts np, String propertyName) throws UnifyException {
-        return environment().valueOptional(String.class, "value", new AppAppletPropQuery()
+        Optional<String> property = environment().valueOptional(String.class, "value", new AppAppletPropQuery()
                 .applicationName(np.getApplicationName()).appletName(np.getEntityName()).name(propertyName));
+        return property.get();
     }
 
     @Override
@@ -4055,12 +4057,14 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
         setSessionAttribute(FlowCentralSessionAttributeConstants.ALTERNATIVE_RESOURCES_BUNDLE,
                 moduleRestore.getMessages());
         try {
-            // TODO Backup role privileges
-
-            // Delete old applications
+            final Long moduleId = appletUtilities.system().getModuleId(moduleRestore.getModuleConfig().getName());
             List<Long> applicationIdList = environment().valueList(Long.class, "id",
-                    new ApplicationQuery().isActualCustom());
+                    new ApplicationQuery().moduleId(moduleId).isActualCustom());
             for (Long applicationId : applicationIdList) {
+                // Backup role privileges
+                applicationPrivilegeManager.backupApplicationRolePrivileges(applicationId);
+
+                // Delete old module applications
                 deleteApplication(taskMonitor, applicationId);
             }
 
@@ -4069,7 +4073,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                 restoreApplication(taskMonitor, applicationRestore);
             }
 
-            // TODO Restore role privileges
+            // Restore role privileges
+            applicationPrivilegeManager.restoreApplicationRolePrivileges();
         } finally {
             removeSessionAttribute(FlowCentralSessionAttributeConstants.ALTERNATIVE_RESOURCES_BUNDLE);
         }

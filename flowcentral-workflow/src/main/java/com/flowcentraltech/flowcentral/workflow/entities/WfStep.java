@@ -151,6 +151,9 @@ public class WfStep extends BaseConfigNamedEntity {
     @ListOnly(key = "workflowId", property = "entity")
     private String entityName;
 
+    @ListOnly(key = "workflowId", property = "applicationId")
+    private Long applicationId;
+
     @ListOnly(key = "workflowId", property = "applicationName")
     private String applicationName;
 
@@ -509,6 +512,14 @@ public class WfStep extends BaseConfigNamedEntity {
 
     public void setEntityName(String entityName) {
         this.entityName = entityName;
+    }
+
+    public Long getApplicationId() {
+        return applicationId;
+    }
+
+    public void setApplicationId(Long applicationId) {
+        this.applicationId = applicationId;
     }
 
     public String getApplicationName() {

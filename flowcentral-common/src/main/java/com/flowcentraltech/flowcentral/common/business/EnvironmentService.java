@@ -17,6 +17,7 @@ package com.flowcentraltech.flowcentral.common.business;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionContext;
@@ -1047,7 +1048,8 @@ public interface EnvironmentService extends BusinessService {
      * @throws UnifyException
      *                        if an error occurs
      */
-    <T> T valueOptional(Class<T> valueType, String valueFieldName, Query<? extends Entity> query) throws UnifyException;
+    <T> Optional<T> valueOptional(Class<T> valueType, String valueFieldName, Query<? extends Entity> query)
+            throws UnifyException;
 
     /**
      * Gets an entity value list.

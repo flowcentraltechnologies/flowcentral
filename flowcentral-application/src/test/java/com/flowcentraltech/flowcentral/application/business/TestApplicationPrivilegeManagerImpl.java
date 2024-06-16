@@ -55,6 +55,16 @@ public class TestApplicationPrivilegeManagerImpl extends AbstractFlowCentralComp
     }
 
     @Override
+    public void backupApplicationRolePrivileges(Long applicationId) throws UnifyException {
+        
+    }
+
+    @Override
+    public void restoreApplicationRolePrivileges() throws UnifyException {
+        
+    }
+
+    @Override
     public List<String> findRolePrivileges(String privilegeCategoryCode, String roleCode) throws UnifyException {
         return Collections.emptyList();
     }

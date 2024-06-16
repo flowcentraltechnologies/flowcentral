@@ -437,6 +437,9 @@
 			<field name="reportGroupLabel"
 				label="$m{report.reportgroupmember.reportgrouplabel}" type="list_only"
 				key="reportGroupId" property="label" />
+			<field name="applicationId"
+				label="$m{report.reportgroupmember.applicationid}" type="list_only"
+				key="reportConfigurationId" property="applicationId" />
 			<field name="reportConfigurationName"
 				label="$m{report.reportgroupmember.reportconfigurationname}" type="list_only"
 				key="reportConfigurationId" property="name" />

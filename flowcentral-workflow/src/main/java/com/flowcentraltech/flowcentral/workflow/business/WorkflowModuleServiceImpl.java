@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
@@ -68,6 +69,7 @@ import com.flowcentraltech.flowcentral.application.web.widgets.InputArrayEntries
 import com.flowcentraltech.flowcentral.common.business.AbstractFlowCentralService;
 import com.flowcentraltech.flowcentral.common.business.FileAttachmentProvider;
 import com.flowcentraltech.flowcentral.common.business.NotificationRecipientProvider;
+import com.flowcentraltech.flowcentral.common.business.RolePrivilegeBackupAgent;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionContext;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
 import com.flowcentraltech.flowcentral.common.business.policies.WfBinaryPolicy;
@@ -89,6 +91,7 @@ import com.flowcentraltech.flowcentral.configuration.constants.WorkflowStepType;
 import com.flowcentraltech.flowcentral.configuration.data.ModuleInstall;
 import com.flowcentraltech.flowcentral.notification.senders.NotificationAlertSender;
 import com.flowcentraltech.flowcentral.organization.business.OrganizationModuleService;
+import com.flowcentraltech.flowcentral.organization.entities.RoleQuery;
 import com.flowcentraltech.flowcentral.security.business.SecurityModuleService;
 import com.flowcentraltech.flowcentral.system.constants.SystemModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.workflow.constants.WfAppletPropertyConstants;
@@ -183,7 +186,7 @@ import com.tcdng.unify.core.util.StringUtils;
 @Transactional
 @Component(WorkflowModuleNameConstants.WORKFLOW_MODULE_SERVICE)
 public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
-        implements WorkflowModuleService, ApplicationAppletDefProvider {
+        implements WorkflowModuleService, ApplicationAppletDefProvider, RolePrivilegeBackupAgent {
 
     private static final List<WorkflowStepType> USER_INTERACTIVE_STEP_TYPES = Arrays
             .asList(WorkflowStepType.USER_ACTION, WorkflowStepType.ERROR);
@@ -219,7 +222,11 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
 
     private final FactoryMap<String, WfChannelDef> wfChannelDefFactoryMap;
 
+    private final Map<String, Set<WfStepInfo>> roleWfStepBackup;
+
     public WorkflowModuleServiceImpl() {
+        this.roleWfStepBackup = new HashMap<String, Set<WfStepInfo>>();
+
         this.wfDefFactoryMap = new FactoryMap<String, WfDef>(true)
             {
                 @Override
@@ -445,6 +452,46 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
 
             };
 
+    }
+
+    @Override
+    public void unregisterApplicationRolePrivileges(Long applicationId) throws UnifyException {
+        environment().deleteAll(new WfStepRoleQuery().applicationId(applicationId));
+    }
+
+    @Override
+    public void backupApplicationRolePrivileges(Long applicationId) throws UnifyException {
+        List<WfStepRole> wfStepRoleList = environment().listAll(new WfStepRoleQuery().applicationId(applicationId)
+                .addSelect("roleCode", "wfStepName", "workflowName", "applicationName"));
+        for (WfStepRole wfStepRole : wfStepRoleList) {
+            Set<WfStepInfo> wfStepInfos = roleWfStepBackup.get(wfStepRole.getRoleCode());
+            if (wfStepInfos == null) {
+                wfStepInfos = new HashSet<WfStepInfo>();
+                roleWfStepBackup.put(wfStepRole.getRoleCode(), wfStepInfos);
+            }
+
+            wfStepInfos.add(new WfStepInfo(wfStepRole.getApplicationName(), wfStepRole.getWorkflowName(),
+                    wfStepRole.getWfStepName()));
+        }
+    }
+
+    @Override
+    public void restoreApplicationRolePrivileges() throws UnifyException {
+        WfStepRole wfStepRole = new WfStepRole();
+        for (Map.Entry<String, Set<WfStepInfo>> entry : roleWfStepBackup.entrySet()) {
+            final Long roleId = environment().value(Long.class, "id", new RoleQuery().code(entry.getKey()));
+            for (WfStepInfo wfStepInfo : entry.getValue()) {
+                Optional<Long> stepId = environment().valueOptional(Long.class, "id",
+                        new WfStepQuery().applicationName(wfStepInfo.getApplicationName())
+                                .workflowName(wfStepInfo.getWorkflowName()).name(wfStepInfo.getStepName()));
+                if (stepId.isPresent()) {
+                    wfStepRole.setId(null);
+                    wfStepRole.setRoleId(roleId);
+                    wfStepRole.setWfStepId(roleId);
+                    environment().create(wfStepRole);
+                }
+            }
+        }
     }
 
     @Override
@@ -1765,6 +1812,34 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         }
 
         return (Long) environment().create(wfItemEvent);
+    }
+
+    private class WfStepInfo {
+
+        private final String applicationName;
+
+        private final String workflowName;
+
+        private final String stepName;
+
+        public WfStepInfo(String applicationName, String workflowName, String stepName) {
+            this.applicationName = applicationName;
+            this.workflowName = workflowName;
+            this.stepName = stepName;
+        }
+
+        public String getApplicationName() {
+            return applicationName;
+        }
+
+        public String getWorkflowName() {
+            return workflowName;
+        }
+
+        public String getStepName() {
+            return stepName;
+        }
+
     }
 
     private class TransitionItem {

@@ -75,6 +75,24 @@ public interface ApplicationPrivilegeManager extends FlowCentralComponent {
     void unregisterApplicationPrivileges(Long applicationId) throws UnifyException;
 
     /**
+     * Backs up application role privileges (Not expected to be persistent).
+     * 
+     * @param applicationId
+     *                      the application ID
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    void backupApplicationRolePrivileges(Long applicationId) throws UnifyException;
+
+    /**
+     * Restores application role privileges from prior backup which is cleared on completion.
+     * 
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    void restoreApplicationRolePrivileges() throws UnifyException;
+    
+    /**
      * Finds role privileges.
      * 
      * @param privilegeCategoryCode
