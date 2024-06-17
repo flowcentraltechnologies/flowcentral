@@ -16,38 +16,31 @@
 
 package com.flowcentraltech.flowcentral.codegeneration.generators;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.zip.ZipOutputStream;
+
+import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
+import com.tcdng.unify.core.UnifyException;
 
 /**
- * Extension static file builder context.
+ * Static module artifact generator.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class ExtensionStaticFileBuilderContext {
+public interface StaticModuleArtifactGenerator extends FlowCentralComponent {
 
-    private Set<String> zipDirs;
-
-    private String basePackage;
-
-    private final boolean snapshotMode;
-
-    public ExtensionStaticFileBuilderContext(String basePackage, boolean snapshotMode) {
-        this.zipDirs = new HashSet<String>();
-        this.basePackage = basePackage;
-        this.snapshotMode = snapshotMode;
-    }
-
-    public boolean isSnapshotMode() {
-        return snapshotMode;
-    }
-
-    public boolean addZipDir(String zipDir) {
-        return zipDirs.add(zipDir);
-    }
-
-    public String getBasePackage() {
-        return basePackage;
-    }
+    /**
+     * Generates static module artifact.
+     * 
+     * @param ctx
+     *                   the module context
+     * @param entityName
+     *                   the entity name
+     * @param zos
+     *                   the zip output stream
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    void generate(ExtensionModuleStaticFileBuilderContext ctx, String entityName, ZipOutputStream zos)
+            throws UnifyException;
 }

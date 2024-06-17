@@ -45,7 +45,7 @@ import com.tcdng.unify.core.util.DataUtils;
  * @since 1.0
  */
 @Component("dashboards-xml-generator")
-public class DashboardsXmlGenerator extends AbstractStaticArtifactGenerator {
+public class DashboardsXmlGenerator extends AbstractStaticModuleArtifactGenerator {
 
     @Configurable
     private DashboardModuleService dashboardModuleService;

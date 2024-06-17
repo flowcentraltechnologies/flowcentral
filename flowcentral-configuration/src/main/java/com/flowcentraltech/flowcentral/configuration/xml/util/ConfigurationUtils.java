@@ -20,7 +20,7 @@ import java.io.OutputStream;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.configuration.xml.AppConfig;
-import com.flowcentraltech.flowcentral.configuration.xml.BaseNameConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.BaseConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.ModuleConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.NotifTemplateConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.ReportConfig;
@@ -43,7 +43,7 @@ public final class ConfigurationUtils {
 
     }
 
-    public static <T> T readConfig(Class<T> configClass, String fileResource, String workingPath)
+    public static <T extends BaseConfig> T readConfig(Class<T> configClass, String fileResource, String workingPath)
             throws UnifyException {
         InputStream inputStream = null;
         try {
@@ -54,7 +54,7 @@ public final class ConfigurationUtils {
         }
     }
 
-    public static <T> T readConfig(Class<T> configClass, InputStream inputStream)
+    public static <T extends BaseConfig> T readConfig(Class<T> configClass, InputStream inputStream)
             throws UnifyException {
         try {
             return XmlConfigUtils.readXmlConfig(configClass, inputStream);
@@ -63,23 +63,22 @@ public final class ConfigurationUtils {
         }
     }
 
-    public static void writeConfig(BaseNameConfig config, OutputStream outputStream) throws UnifyException {
+    public static void writeConfig(BaseConfig config, OutputStream outputStream) throws UnifyException {
         XmlConfigUtils.writeXmlConfig(config, outputStream);
     }
 
-    public static void writeConfigNoEscape(BaseNameConfig config, OutputStream outputStream) throws UnifyException {
+    public static void writeConfigNoEscape(BaseConfig config, OutputStream outputStream) throws UnifyException {
         XmlConfigUtils.writeXmlConfigNoEscape(config, outputStream);
     }
-    
+
     public static String readString(String fileResource, String workingPath) throws UnifyException {
         return IOUtils.readAllLines(fileResource, workingPath);
     }
-    
-    public static List<String> readStringList(String fileResource, String workingPath)
-            throws UnifyException {
+
+    public static List<String> readStringList(String fileResource, String workingPath) throws UnifyException {
         return IOUtils.readFileResourceLines(fileResource, workingPath);
     }
-    
+
     public static List<UnifyError> validateModuleConfig(ModuleConfig moduleConfig) {
         // TODO
         return null;

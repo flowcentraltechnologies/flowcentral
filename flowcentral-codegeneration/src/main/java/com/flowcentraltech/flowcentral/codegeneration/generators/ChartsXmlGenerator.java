@@ -40,7 +40,7 @@ import com.tcdng.unify.core.util.DataUtils;
  * @since 1.0
  */
 @Component("charts-xml-generator")
-public class ChartsXmlGenerator extends AbstractStaticArtifactGenerator {
+public class ChartsXmlGenerator extends AbstractStaticModuleArtifactGenerator {
 
     @Configurable
     private ChartModuleService chartModuleService;
