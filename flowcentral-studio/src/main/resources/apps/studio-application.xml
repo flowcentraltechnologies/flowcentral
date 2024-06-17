@@ -535,6 +535,11 @@
 			label="$m{studio.takesnapshotpage.manage.label}" icon="lock" type="path_page"
 			path="/studio/takesnapshot/openPage" menuAccess="false">
 		</applet>
+		<applet name="uploadSnapshot"
+			description="$m{studio.uploadsnapshotpage.manage}"
+			label="$m{studio.uploadsnapshotpage.manage.label}" icon="lock" type="path_page"
+			path="/studio/uploadsnapshot/openPage" menuAccess="false">
+		</applet>
 		<applet name="snapshots"
 			description="$m{studio.snapshotspage.manage}"
 			label="$m{studio.snapshotspage.manage.label}" icon="lock" type="path_page"
