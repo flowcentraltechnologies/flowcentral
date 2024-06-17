@@ -125,7 +125,8 @@ public abstract class AbstractStaticModuleArtifactGenerator extends AbstractFlow
     protected void openEntry(ExtensionModuleStaticFileBuilderContext ctx, String filename, ZipOutputStream zos)
             throws UnifyException {
         try {
-            zos.putNextEntry(new ZipEntry((ctx.isSnapshotMode() ? snapshotZipDir : zipDir) + filename));
+            final String dir = ctx.isSnapshotMode() ? snapshotZipDir : zipDir;
+            zos.putNextEntry(new ZipEntry(StringUtils.isBlank(dir) ? filename : dir + filename));
         } catch (IOException e) {
             throwOperationErrorException(e);
         }

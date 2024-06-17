@@ -58,8 +58,7 @@ public abstract class AbstractStaticArtifactGenerator extends AbstractFlowCentra
     }
 
     @Override
-    public final void generate(ExtensionStaticFileBuilderContext ctx, ZipOutputStream zos)
-            throws UnifyException {
+    public final void generate(ExtensionStaticFileBuilderContext ctx, ZipOutputStream zos) throws UnifyException {
         if (ctx.isSnapshotMode()) {
             if (!StringUtils.isBlank(snapshotZipDir)) {
                 if (ctx.addZipDir(snapshotZipDir)) {
@@ -102,24 +101,15 @@ public abstract class AbstractStaticArtifactGenerator extends AbstractFlowCentra
 
     }
 
-    protected boolean checkGeneration(ExtensionStaticFileBuilderContext ctx, String entityName)
-            throws UnifyException {
+    protected boolean checkGeneration(ExtensionStaticFileBuilderContext ctx, String entityName) throws UnifyException {
         return true;
-    }
-
-    protected void openEntry(ExtensionModuleStaticFileBuilderContext ctx, String filename, ZipOutputStream zos)
-            throws UnifyException {
-        try {
-            zos.putNextEntry(new ZipEntry((ctx.isSnapshotMode() ? snapshotZipDir : zipDir) + filename));
-        } catch (IOException e) {
-            throwOperationErrorException(e);
-        }
     }
 
     protected void openEntry(ExtensionStaticFileBuilderContext ctx, String filename, ZipOutputStream zos)
             throws UnifyException {
         try {
-            zos.putNextEntry(new ZipEntry((ctx.isSnapshotMode() ? snapshotZipDir : zipDir) + filename));
+            final String dir = ctx.isSnapshotMode() ? snapshotZipDir : zipDir;
+            zos.putNextEntry(new ZipEntry(StringUtils.isBlank(dir) ? filename : dir + filename));
         } catch (IOException e) {
             throwOperationErrorException(e);
         }

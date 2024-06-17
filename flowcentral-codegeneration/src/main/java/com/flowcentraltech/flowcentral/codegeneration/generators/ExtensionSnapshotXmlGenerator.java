@@ -27,28 +27,30 @@ import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 
 /**
- * Extension snapshot meta XML generator.
+ * Extension snapshot XML generator.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@Component("extension-snapshot-meta-xml-generator")
+@Component("extension-snapshot-xml-generator")
 public class ExtensionSnapshotXmlGenerator extends AbstractStaticArtifactGenerator {
 
     @Override
     protected void doGenerate(ExtensionStaticFileBuilderContext ctx, ZipOutputStream zos)
             throws UnifyException {
-        final String filename =  "snapshot-meta.xml";
+        final String filename =  "snapshot.xml";
         openEntry(ctx, filename, zos);
         
         final SnapshotConfig snapshotConfig = new SnapshotConfig();
         snapshotConfig.setApplicationCode(getApplicationCode());
-        snapshotConfig.setApplicationVersion(getApplicationName());
+        snapshotConfig.setApplicationName(getApplicationName());
         snapshotConfig.setApplicationVersion(getDeploymentVersion());
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss z");
         sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
         snapshotConfig.setSnapshotTimestamp(sdf.format(new Date()));
         snapshotConfig.setSnapshotVersion("1.0.0");
+        snapshotConfig.setSnapshotTakenBy(getUserToken() != null ? getUserToken().getUserLoginId() : null);
+        snapshotConfig.setSnapshotType(ctx.getType());
 
         ConfigurationUtils.writeConfig(snapshotConfig, zos);
         closeEntry(zos);

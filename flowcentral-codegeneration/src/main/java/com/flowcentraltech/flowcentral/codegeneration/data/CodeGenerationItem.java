@@ -24,14 +24,25 @@ package com.flowcentraltech.flowcentral.codegeneration.data;
  */
 public class CodeGenerationItem {
 
+    private String type;
+
     private String basePackage;
     
     private String filename;
     
     private byte[] data;
 
+    public CodeGenerationItem(String type, String basePackage) {
+        this.type = type;
+        this.basePackage = basePackage;
+    }
+
     public CodeGenerationItem(String basePackage) {
         this.basePackage = basePackage;
+    }
+
+    public String getType() {
+        return type;
     }
 
     public String getBasePackage() {

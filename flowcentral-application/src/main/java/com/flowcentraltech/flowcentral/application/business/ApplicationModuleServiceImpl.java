@@ -1774,7 +1774,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
     private String getAppletProperty(ApplicationEntityNameParts np, String propertyName) throws UnifyException {
         Optional<String> property = environment().valueOptional(String.class, "value", new AppAppletPropQuery()
                 .applicationName(np.getApplicationName()).appletName(np.getEntityName()).name(propertyName));
-        return property.get();
+        return property.isPresent() ? property.get() : null;
     }
 
     @Override

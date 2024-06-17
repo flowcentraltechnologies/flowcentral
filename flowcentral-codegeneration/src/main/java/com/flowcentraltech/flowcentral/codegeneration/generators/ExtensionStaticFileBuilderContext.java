@@ -29,9 +29,18 @@ public class ExtensionStaticFileBuilderContext {
 
     private Set<String> zipDirs;
 
+    private String type;
+
     private String basePackage;
 
     private final boolean snapshotMode;
+
+    public ExtensionStaticFileBuilderContext(String type, String basePackage, boolean snapshotMode) {
+        this.zipDirs = new HashSet<String>();
+        this.type = type;
+        this.basePackage = basePackage;
+        this.snapshotMode = snapshotMode;
+    }
 
     public ExtensionStaticFileBuilderContext(String basePackage, boolean snapshotMode) {
         this.zipDirs = new HashSet<String>();
@@ -45,6 +54,10 @@ public class ExtensionStaticFileBuilderContext {
 
     public boolean addZipDir(String zipDir) {
         return zipDirs.add(zipDir);
+    }
+
+    public String getType() {
+        return type;
     }
 
     public String getBasePackage() {

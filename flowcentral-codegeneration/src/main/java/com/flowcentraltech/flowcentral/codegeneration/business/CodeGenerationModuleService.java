@@ -31,22 +31,24 @@ public interface CodeGenerationModuleService extends FlowCentralService {
     /**
      * Generates custom application snapshot.
      * 
+     * @param type snapshot type
      * @param basePackage
      *                    the base package
      * @return the snapshot
      * @throws UnifyException
      *                        if an error occurs
      */
-    Snapshot generateSnapshot(String basePackage) throws UnifyException;
+    Snapshot generateSnapshot(String type, String basePackage) throws UnifyException;
 
     /**
      * Generates custom application snapshot.
      * 
+     * @param type snapshot type
      * @param basePackage
      *                    the base package
      * @return the snapshot
      * @throws UnifyException
      *                        if an error occurs
      */
-    Snapshot generateSnapshot(TaskMonitor taskMonitor, String basePackage) throws UnifyException;
+    Snapshot generateSnapshot(TaskMonitor taskMonitor, String type, String basePackage) throws UnifyException;
 }

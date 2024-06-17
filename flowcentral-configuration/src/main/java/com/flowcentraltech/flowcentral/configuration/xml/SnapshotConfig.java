@@ -37,6 +37,10 @@ public class SnapshotConfig extends BaseConfig {
 
     private String snapshotVersion;
 
+    private String snapshotTakenBy;
+
+    private String snapshotType;
+
     public String getApplicationCode() {
         return applicationCode;
     }
@@ -80,6 +84,24 @@ public class SnapshotConfig extends BaseConfig {
     @XmlElement
     public void setSnapshotVersion(String snapshotVersion) {
         this.snapshotVersion = snapshotVersion;
+    }
+
+    public String getSnapshotTakenBy() {
+        return snapshotTakenBy;
+    }
+
+    @XmlElement
+    public void setSnapshotTakenBy(String snapshotTakenBy) {
+        this.snapshotTakenBy = snapshotTakenBy;
+    }
+
+    public String getSnapshotType() {
+        return snapshotType;
+    }
+
+    @XmlElement
+    public void setSnapshotType(String snapshotType) {
+        this.snapshotType = snapshotType;
     }
 
 }

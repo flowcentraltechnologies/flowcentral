@@ -28,13 +28,20 @@
 
 // Take snapshot panel
 !ui-panel:taskSnapshotPanel styleClass:$e{fc-licenseoptions}
-	components:$c{taskSnapshotCaption taskSnapshotBodyPanel}
-!ui-label:taskSnapshotCaption styleClass:$e{label} caption:$m{studio.takesnapshotpage.caption}
+	components:$c{taskSnapshotBodyPanel}
 !ui-panel:taskSnapshotBodyPanel
-	layout:$d{!ui-vertical style:$s{width:100%;} showCaption:true cellStyle:$s{padding:5px 2px;}}
-	components:$c{snapshotTitle message takeSnapshotBtn}
-!ui-name:snapshotTitle caption:$m{studio.takesnapshotpage.name} binding:snapshotTitle required:true
-!ui-textarea:message caption:$m{studio.takesnapshotpage.message} binding:message
+	layout:$d{!ui-vertical style:$s{width:100%;}}
+	components:$c{formPanel takeSnapshotBtn}
+	
+// Form
+!ui-formpanel:formPanel
+	layout:$d{!ui-vertical style:$s{table-layout:fixed;}}
+    formCaptionSuffix:$s{:} formColumns:1
+	formSection:$d{!ui-section components:$c{snapshotTitle message}}
+!ui-text:snapshotTitle caption:$m{studio.takesnapshotpage.name} binding:snapshotTitle required:true
+ 	size:52 focus:true
+!ui-textarea:message caption:$m{studio.takesnapshotpage.message} binding:message required:true
+	rows:16 columns:52 style:$s{background-color:#fff5b0;}
 !ui-button:takeSnapshotBtn styleClass:$e{fc-bluebutton} caption:$m{button.takesnapshot}
 	eventHandler:$d{!ui-event event:onclick action:$c{takeSnapshotAct}}
 	

@@ -217,24 +217,25 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
             limit = TaskExecLimit.ALLOW_MULTIPLE, schedulable = false)
     public int generateStudioSnapshotTask(TaskMonitor taskMonitor, CodeGenerationItem codeGenerationItem)
             throws UnifyException {
-        Snapshot snapshot = generateSnapshot(taskMonitor, codeGenerationItem.getBasePackage());
+        Snapshot snapshot = generateSnapshot(taskMonitor, codeGenerationItem.getType(),
+                codeGenerationItem.getBasePackage());
         codeGenerationItem.setFilename(snapshot.getFilename());
         codeGenerationItem.setData(snapshot.getData());
         return 0;
     }
 
     @Override
-    public Snapshot generateSnapshot(String basePackage) throws UnifyException {
-        return generateSnapshot(null, basePackage);
+    public Snapshot generateSnapshot(String type, String basePackage) throws UnifyException {
+        return generateSnapshot(null, type, basePackage);
     }
 
     @Override
-    public Snapshot generateSnapshot(TaskMonitor taskMonitor, String basePackage) throws UnifyException {
+    public Snapshot generateSnapshot(TaskMonitor taskMonitor, String type, String basePackage) throws UnifyException {
         Date now = environment().getNow();
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ZipOutputStream zos = new ZipOutputStream(baos);
         try {
-            ExtensionStaticFileBuilderContext mainCtx = new ExtensionStaticFileBuilderContext(basePackage, true);
+            ExtensionStaticFileBuilderContext mainCtx = new ExtensionStaticFileBuilderContext(type, basePackage, true);
             List<String> moduleList = systemModuleService.getAllModuleNames();
             for (final String moduleName : moduleList) {
                 addTaskMessage(taskMonitor, "Generating code for extension module [{0}]", moduleName);
@@ -281,10 +282,9 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
 
             // Generate snapshot meta
             addTaskMessage(taskMonitor, "Generating snapshot meta XML...");
-            addTaskMessage(taskMonitor, "Executing artifact generator [{0}]...",
-                    "extension-snapshot-meta-xml-generator");
+            addTaskMessage(taskMonitor, "Executing artifact generator [{0}]...", "extension-snapshot-xml-generator");
             StaticArtifactGenerator generator = (StaticArtifactGenerator) getComponent(
-                    "extension-snapshot-meta-xml-generator");
+                    "extension-snapshot-xml-generator");
             generator.generate(mainCtx, zos);
 
             SimpleDateFormat smf = new SimpleDateFormat("yyyyMMdd_HHmmss");

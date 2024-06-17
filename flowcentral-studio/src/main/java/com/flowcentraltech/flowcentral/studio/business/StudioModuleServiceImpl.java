@@ -351,7 +351,8 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
             String message) throws UnifyException {
         final String basePackage = appletUtilities.getSysParameterValue(String.class,
                 CodeGenerationModuleSysParamConstants.DEFAULT_CODEGEN_PACKAGE_BASE);
-        Snapshot snapshot = codeGenerationModuleService.generateSnapshot(taskMonitor, basePackage);
+        Snapshot snapshot = codeGenerationModuleService.generateSnapshot(taskMonitor, snapshotType.toString(),
+                basePackage);
         StudioSnapshotDetails studioSnapshotDetails = new StudioSnapshotDetails();
         studioSnapshotDetails.setSnapshotType(snapshotType);
         studioSnapshotDetails.setSnapshotName(snapshotName);
