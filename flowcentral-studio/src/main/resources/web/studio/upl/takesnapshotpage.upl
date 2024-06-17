@@ -17,7 +17,7 @@
 
 // Base panel
 !ui-panel:basePanel layout:$d{!ui-vertical style:$s{width:100%;}}
-	components:$c{headerBar taskSnapshotPanel}
+	components:$c{headerBar takeSnapshotPanel}
 
 // Header
 !ui-panel:headerBar layout:$d{!ui-horizontal style:$s{width:100%;} cellType:bottom}
@@ -27,9 +27,9 @@
 	caption:$m{studio.takesnapshotpage.header.title}
 
 // Take snapshot panel
-!ui-panel:taskSnapshotPanel styleClass:$e{fc-licenseoptions}
-	components:$c{taskSnapshotBodyPanel}
-!ui-panel:taskSnapshotBodyPanel
+!ui-panel:takeSnapshotPanel styleClass:$e{fc-licenseoptions}
+	components:$c{takeSnapshotBodyPanel}
+!ui-panel:takeSnapshotBodyPanel
 	layout:$d{!ui-vertical style:$s{width:100%;}}
 	components:$c{formPanel takeSnapshotBtn}
 	
@@ -46,5 +46,5 @@
 	eventHandler:$d{!ui-event event:onclick action:$c{takeSnapshotAct}}
 	
 // Actions
-!ui-post:takeSnapshotAct path:$n{/takeSnapshot} components:$c{taskSnapshotBodyPanel}
+!ui-post:takeSnapshotAct path:$n{/takeSnapshot} components:$c{takeSnapshotBodyPanel}
 	
