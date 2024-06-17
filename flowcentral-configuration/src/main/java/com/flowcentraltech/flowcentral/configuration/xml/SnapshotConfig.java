@@ -17,6 +17,9 @@ package com.flowcentraltech.flowcentral.configuration.xml;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
+import com.tcdng.unify.core.util.xml.adapter.CDataXmlAdapter;
 
 /**
  * Snapshot configuration.
@@ -40,6 +43,10 @@ public class SnapshotConfig extends BaseConfig {
     private String snapshotTakenBy;
 
     private String snapshotType;
+
+    private String snapshotTitle;
+
+    private String snapshotMessage;
 
     public String getApplicationCode() {
         return applicationCode;
@@ -102,6 +109,26 @@ public class SnapshotConfig extends BaseConfig {
     @XmlElement
     public void setSnapshotType(String snapshotType) {
         this.snapshotType = snapshotType;
+    }
+
+    public String getSnapshotTitle() {
+        return snapshotTitle;
+    }
+
+    @XmlElement
+    @XmlJavaTypeAdapter(CDataXmlAdapter.class)
+    public void setSnapshotTitle(String snapshotTitle) {
+        this.snapshotTitle = snapshotTitle;
+    }
+
+    public String getSnapshotMessage() {
+        return snapshotMessage;
+    }
+
+    @XmlElement
+    @XmlJavaTypeAdapter(CDataXmlAdapter.class)
+    public void setSnapshotMessage(String snapshotMessage) {
+        this.snapshotMessage = snapshotMessage;
     }
 
 }

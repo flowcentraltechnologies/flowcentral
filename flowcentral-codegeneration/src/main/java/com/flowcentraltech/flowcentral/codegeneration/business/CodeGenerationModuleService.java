@@ -16,6 +16,7 @@
 package com.flowcentraltech.flowcentral.codegeneration.business;
 
 import com.flowcentraltech.flowcentral.codegeneration.data.Snapshot;
+import com.flowcentraltech.flowcentral.codegeneration.data.SnapshotMeta;
 import com.flowcentraltech.flowcentral.common.business.FlowCentralService;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.task.TaskMonitor;
@@ -31,24 +32,24 @@ public interface CodeGenerationModuleService extends FlowCentralService {
     /**
      * Generates custom application snapshot.
      * 
-     * @param type snapshot type
+     * @param meta snapshot meta
      * @param basePackage
      *                    the base package
      * @return the snapshot
      * @throws UnifyException
      *                        if an error occurs
      */
-    Snapshot generateSnapshot(String type, String basePackage) throws UnifyException;
+    Snapshot generateSnapshot(SnapshotMeta meta, String basePackage) throws UnifyException;
 
     /**
      * Generates custom application snapshot.
      * 
-     * @param type snapshot type
+     * @param meta snapshot meta
      * @param basePackage
      *                    the base package
      * @return the snapshot
      * @throws UnifyException
      *                        if an error occurs
      */
-    Snapshot generateSnapshot(TaskMonitor taskMonitor, String type, String basePackage) throws UnifyException;
+    Snapshot generateSnapshot(TaskMonitor taskMonitor, SnapshotMeta meta, String basePackage) throws UnifyException;
 }

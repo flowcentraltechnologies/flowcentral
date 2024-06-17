@@ -65,7 +65,7 @@ public class StudioTakeSnapshotPageController extends AbstractStudioPageControll
                 .setParam(StudioSnapshotTaskConstants.STUDIO_SNAPSHOT_NAME, pageBean.getSnapshotTitle())
                 .setParam(StudioSnapshotTaskConstants.STUDIO_SNAPSHOT_MESSAGE, pageBean.getMessage()).logMessages()
                 .build();
-        return launchTaskWithMonitorBox(taskSetup, "Take Studio SnapshotDetails", "/studio/snapshots/openPage", null);
+        return launchTaskWithMonitorBox(taskSetup, "Take Studio Snapshot", "/studio/snapshots/openPage", null);
     }
 
 }

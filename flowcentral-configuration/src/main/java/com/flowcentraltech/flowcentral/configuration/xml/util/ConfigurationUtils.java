@@ -24,6 +24,7 @@ import com.flowcentraltech.flowcentral.configuration.xml.BaseConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.ModuleConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.NotifTemplateConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.ReportConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.SnapshotConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.WfConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.WfWizardConfig;
 import com.tcdng.unify.core.UnifyError;
@@ -75,6 +76,13 @@ public final class ConfigurationUtils {
         return IOUtils.readAllLines(fileResource, workingPath);
     }
 
+    public static SnapshotConfig getSnapshotConfig(byte[] file) throws UnifyException {
+        SnapshotConfig snapshotConfig = null;
+        // TODO
+        
+        return snapshotConfig;
+    }
+    
     public static List<String> readStringList(String fileResource, String workingPath) throws UnifyException {
         return IOUtils.readFileResourceLines(fileResource, workingPath);
     }

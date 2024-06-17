@@ -21,6 +21,7 @@ import java.util.Date;
 import java.util.TimeZone;
 import java.util.zip.ZipOutputStream;
 
+import com.flowcentraltech.flowcentral.codegeneration.data.SnapshotMeta;
 import com.flowcentraltech.flowcentral.configuration.xml.SnapshotConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.util.ConfigurationUtils;
 import com.tcdng.unify.core.UnifyException;
@@ -36,11 +37,10 @@ import com.tcdng.unify.core.annotation.Component;
 public class ExtensionSnapshotXmlGenerator extends AbstractStaticArtifactGenerator {
 
     @Override
-    protected void doGenerate(ExtensionStaticFileBuilderContext ctx, ZipOutputStream zos)
-            throws UnifyException {
-        final String filename =  "snapshot.xml";
+    protected void doGenerate(ExtensionStaticFileBuilderContext ctx, ZipOutputStream zos) throws UnifyException {
+        final String filename = "snapshot.xml";
         openEntry(ctx, filename, zos);
-        
+
         final SnapshotConfig snapshotConfig = new SnapshotConfig();
         snapshotConfig.setApplicationCode(getApplicationCode());
         snapshotConfig.setApplicationName(getApplicationName());
@@ -50,8 +50,10 @@ public class ExtensionSnapshotXmlGenerator extends AbstractStaticArtifactGenerat
         snapshotConfig.setSnapshotTimestamp(sdf.format(new Date()));
         snapshotConfig.setSnapshotVersion("1.0.0");
         snapshotConfig.setSnapshotTakenBy(getUserToken() != null ? getUserToken().getUserLoginId() : null);
-        snapshotConfig.setSnapshotType(ctx.getType());
-
+        SnapshotMeta meta = ctx.getSnapshotMeta();
+        snapshotConfig.setSnapshotType(meta.getType());
+        snapshotConfig.setSnapshotTitle(meta.getTitle());
+        snapshotConfig.setSnapshotMessage(meta.getMessage());
         ConfigurationUtils.writeConfig(snapshotConfig, zos);
         closeEntry(zos);
     }

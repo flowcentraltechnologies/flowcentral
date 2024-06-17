@@ -19,6 +19,8 @@ package com.flowcentraltech.flowcentral.codegeneration.generators;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.flowcentraltech.flowcentral.codegeneration.data.SnapshotMeta;
+
 /**
  * Extension static file builder context.
  * 
@@ -29,15 +31,15 @@ public class ExtensionStaticFileBuilderContext {
 
     private Set<String> zipDirs;
 
-    private String type;
+    private SnapshotMeta snapshotMeta;
 
     private String basePackage;
 
     private final boolean snapshotMode;
 
-    public ExtensionStaticFileBuilderContext(String type, String basePackage, boolean snapshotMode) {
+    public ExtensionStaticFileBuilderContext(SnapshotMeta snapshotMeta, String basePackage, boolean snapshotMode) {
         this.zipDirs = new HashSet<String>();
-        this.type = type;
+        this.snapshotMeta = snapshotMeta;
         this.basePackage = basePackage;
         this.snapshotMode = snapshotMode;
     }
@@ -56,11 +58,12 @@ public class ExtensionStaticFileBuilderContext {
         return zipDirs.add(zipDir);
     }
 
-    public String getType() {
-        return type;
+    public SnapshotMeta getSnapshotMeta() {
+        return snapshotMeta;
     }
 
     public String getBasePackage() {
         return basePackage;
     }
+
 }

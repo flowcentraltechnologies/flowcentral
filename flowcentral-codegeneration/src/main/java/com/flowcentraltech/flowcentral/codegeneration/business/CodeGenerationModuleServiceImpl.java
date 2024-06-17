@@ -45,6 +45,7 @@ import com.flowcentraltech.flowcentral.codegeneration.data.CodeGenerationItem;
 import com.flowcentraltech.flowcentral.codegeneration.data.DynamicModuleInfo;
 import com.flowcentraltech.flowcentral.codegeneration.data.DynamicModuleInfo.ApplicationInfo;
 import com.flowcentraltech.flowcentral.codegeneration.data.Snapshot;
+import com.flowcentraltech.flowcentral.codegeneration.data.SnapshotMeta;
 import com.flowcentraltech.flowcentral.codegeneration.generators.ExtensionModuleStaticFileBuilderContext;
 import com.flowcentraltech.flowcentral.codegeneration.generators.ExtensionStaticFileBuilderContext;
 import com.flowcentraltech.flowcentral.codegeneration.generators.StaticArtifactGenerator;
@@ -217,7 +218,7 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
             limit = TaskExecLimit.ALLOW_MULTIPLE, schedulable = false)
     public int generateStudioSnapshotTask(TaskMonitor taskMonitor, CodeGenerationItem codeGenerationItem)
             throws UnifyException {
-        Snapshot snapshot = generateSnapshot(taskMonitor, codeGenerationItem.getType(),
+        Snapshot snapshot = generateSnapshot(taskMonitor, codeGenerationItem.getSnapshotMeta(),
                 codeGenerationItem.getBasePackage());
         codeGenerationItem.setFilename(snapshot.getFilename());
         codeGenerationItem.setData(snapshot.getData());
@@ -225,17 +226,17 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
-    public Snapshot generateSnapshot(String type, String basePackage) throws UnifyException {
-        return generateSnapshot(null, type, basePackage);
+    public Snapshot generateSnapshot(SnapshotMeta meta, String basePackage) throws UnifyException {
+        return generateSnapshot(null, meta, basePackage);
     }
 
     @Override
-    public Snapshot generateSnapshot(TaskMonitor taskMonitor, String type, String basePackage) throws UnifyException {
+    public Snapshot generateSnapshot(TaskMonitor taskMonitor, SnapshotMeta meta, String basePackage) throws UnifyException {
         Date now = environment().getNow();
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ZipOutputStream zos = new ZipOutputStream(baos);
         try {
-            ExtensionStaticFileBuilderContext mainCtx = new ExtensionStaticFileBuilderContext(type, basePackage, true);
+            ExtensionStaticFileBuilderContext mainCtx = new ExtensionStaticFileBuilderContext(meta, basePackage, true);
             List<String> moduleList = systemModuleService.getAllModuleNames();
             for (final String moduleName : moduleList) {
                 addTaskMessage(taskMonitor, "Generating code for extension module [{0}]", moduleName);

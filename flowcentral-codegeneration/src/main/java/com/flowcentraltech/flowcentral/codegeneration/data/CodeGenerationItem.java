@@ -24,7 +24,7 @@ package com.flowcentraltech.flowcentral.codegeneration.data;
  */
 public class CodeGenerationItem {
 
-    private String type;
+    private SnapshotMeta snapshotMeta;
 
     private String basePackage;
     
@@ -32,8 +32,8 @@ public class CodeGenerationItem {
     
     private byte[] data;
 
-    public CodeGenerationItem(String type, String basePackage) {
-        this.type = type;
+    public CodeGenerationItem(SnapshotMeta snapshotMeta, String basePackage) {
+        this.snapshotMeta = snapshotMeta;
         this.basePackage = basePackage;
     }
 
@@ -41,8 +41,8 @@ public class CodeGenerationItem {
         this.basePackage = basePackage;
     }
 
-    public String getType() {
-        return type;
+    public SnapshotMeta getSnapshotMeta() {
+        return snapshotMeta;
     }
 
     public String getBasePackage() {

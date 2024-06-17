@@ -46,6 +46,7 @@ import com.flowcentraltech.flowcentral.chart.entities.Chart;
 import com.flowcentraltech.flowcentral.codegeneration.business.CodeGenerationModuleService;
 import com.flowcentraltech.flowcentral.codegeneration.constants.CodeGenerationModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.codegeneration.data.Snapshot;
+import com.flowcentraltech.flowcentral.codegeneration.data.SnapshotMeta;
 import com.flowcentraltech.flowcentral.common.business.AbstractFlowCentralService;
 import com.flowcentraltech.flowcentral.common.business.StudioProvider;
 import com.flowcentraltech.flowcentral.common.business.SynchronizableEnvironmentDelegate;
@@ -71,6 +72,7 @@ import com.flowcentraltech.flowcentral.configuration.xml.ModuleConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.NotifLargeTextConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.NotifTemplateConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.ReportConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.SnapshotConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.WfConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.WfWizardConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.util.ConfigurationUtils;
@@ -102,6 +104,7 @@ import com.tcdng.unify.core.annotation.Taskable;
 import com.tcdng.unify.core.annotation.Transactional;
 import com.tcdng.unify.core.constant.OrderType;
 import com.tcdng.unify.core.data.FactoryMap;
+import com.tcdng.unify.core.data.UploadedFile;
 import com.tcdng.unify.core.task.TaskExecLimit;
 import com.tcdng.unify.core.task.TaskMonitor;
 import com.tcdng.unify.core.util.DataUtils;
@@ -340,8 +343,8 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
     @Taskable(name = StudioSnapshotTaskConstants.STUDIO_TAKE_SNAPSHOT_TASK_NAME,
             description = "Studio Take Snapshot Task",
             parameters = {
-                    @Parameter(name = StudioSnapshotTaskConstants.STUDIO_SNAPSHOT_TYPE,
-                            description = "SnapshotDetails Type", type = StudioSnapshotType.class, mandatory = true),
+                    @Parameter(name = StudioSnapshotTaskConstants.STUDIO_SNAPSHOT_TYPE, description = "Snapshot Type",
+                            type = StudioSnapshotType.class, mandatory = true),
                     @Parameter(name = StudioSnapshotTaskConstants.STUDIO_SNAPSHOT_NAME, description = "Snapshot Name",
                             type = String.class, mandatory = true),
                     @Parameter(name = StudioSnapshotTaskConstants.STUDIO_SNAPSHOT_MESSAGE, description = "Message",
@@ -351,8 +354,8 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
             String message) throws UnifyException {
         final String basePackage = appletUtilities.getSysParameterValue(String.class,
                 CodeGenerationModuleSysParamConstants.DEFAULT_CODEGEN_PACKAGE_BASE);
-        Snapshot snapshot = codeGenerationModuleService.generateSnapshot(taskMonitor, snapshotType.toString(),
-                basePackage);
+        Snapshot snapshot = codeGenerationModuleService.generateSnapshot(taskMonitor,
+                new SnapshotMeta(snapshotType.toString(), snapshotName, message), basePackage);
         StudioSnapshotDetails studioSnapshotDetails = new StudioSnapshotDetails();
         studioSnapshotDetails.setSnapshotType(snapshotType);
         studioSnapshotDetails.setSnapshotName(snapshotName);
@@ -363,6 +366,42 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
         StudioSnapshot studioSnapshot = new StudioSnapshot();
         studioSnapshot.setSnapshotDetailsId(studioSnapshotDetailsId);
         studioSnapshot.setSnapshot(snapshot.getData());
+        environment().create(studioSnapshot);
+        return 0;
+    }
+
+    @Taskable(name = StudioSnapshotTaskConstants.STUDIO_UPLOAD_SNAPSHOT_TASK_NAME,
+            description = "Studio Upload Snapshot Task",
+            parameters = {
+                    @Parameter(name = StudioSnapshotTaskConstants.STUDIO_SNAPSHOT_CONFIG,
+                            description = "Snapshot Configuration", type = SnapshotConfig.class),
+                    @Parameter(name = StudioSnapshotTaskConstants.STUDIO_SNAPSHOT_UPLOAD_FILE,
+                            description = "Snapshot File", type = UploadedFile.class, mandatory = true) },
+            limit = TaskExecLimit.ALLOW_MULTIPLE, schedulable = true)
+    public int uploadStudioSnapshotTask(TaskMonitor taskMonitor, SnapshotConfig snapshotConfig,
+            UploadedFile snapshotUploadFile) throws UnifyException {
+        if (snapshotConfig == null) {
+            snapshotConfig = ConfigurationUtils.getSnapshotConfig(snapshotUploadFile.getData());
+            if (snapshotConfig == null) {
+                throwOperationErrorException(new IllegalArgumentException("Invalid snapshot file."));
+            }
+
+            if (!getApplicationCode().equals(snapshotConfig.getApplicationCode())) {
+                throwOperationErrorException(new IllegalArgumentException("Snapshot application is unmatching."));
+            }
+        }
+
+        StudioSnapshotDetails studioSnapshotDetails = new StudioSnapshotDetails();
+        studioSnapshotDetails.setSnapshotType(StudioSnapshotType.MANUAL_UPLOAD);
+        studioSnapshotDetails.setSnapshotName(StringUtils.isBlank(snapshotConfig.getSnapshotTitle()) ? "Untitled"
+                : snapshotConfig.getSnapshotTitle());
+        studioSnapshotDetails.setMessage(snapshotConfig.getSnapshotMessage());
+        studioSnapshotDetails.setFileName(snapshotUploadFile.getFilename());
+        Long studioSnapshotDetailsId = (Long) environment().create(studioSnapshotDetails);
+
+        StudioSnapshot studioSnapshot = new StudioSnapshot();
+        studioSnapshot.setSnapshotDetailsId(studioSnapshotDetailsId);
+        studioSnapshot.setSnapshot(snapshotUploadFile.getData());
         environment().create(studioSnapshot);
         return 0;
     }

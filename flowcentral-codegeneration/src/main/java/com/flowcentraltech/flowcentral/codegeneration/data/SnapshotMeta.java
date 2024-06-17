@@ -13,33 +13,38 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-
-package com.flowcentraltech.flowcentral.studio.constants;
+package com.flowcentraltech.flowcentral.codegeneration.data;
 
 /**
- * Studio snapshot task constants.
+ * Snapshot META.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface StudioSnapshotTaskConstants {
+public class SnapshotMeta {
 
-    String STUDIO_TAKE_SNAPSHOT_TASK_NAME = "studio.takesnapshot.task";
+    private String type;
 
-    String STUDIO_SNAPSHOT_TYPE = "snapshotType";
+    private String title;
 
-    String STUDIO_SNAPSHOT_NAME = "snapshotName";
+    private String message;
 
-    String STUDIO_SNAPSHOT_MESSAGE = "message";
+    public SnapshotMeta(String type, String title, String message) {
+        this.type = type;
+        this.title = title;
+        this.message = message;
+    }
 
-    String STUDIO_RESTORE_SNAPSHOT_TASK_NAME = "studio.restoresnapshot.task";
+    public String getType() {
+        return type;
+    }
 
-    String STUDIO_SNAPSHOT_DETAILS_ID = "snapshotDetailsId";
+    public String getTitle() {
+        return title;
+    }
 
-    String STUDIO_UPLOAD_SNAPSHOT_TASK_NAME = "studio.uploadsnapshot.task";
-
-    String STUDIO_SNAPSHOT_CONFIG = "snapshotConfig";
-
-    String STUDIO_SNAPSHOT_UPLOAD_FILE = "snapshotUploadFile";
+    public String getMessage() {
+        return message;
+    }
 
 }
