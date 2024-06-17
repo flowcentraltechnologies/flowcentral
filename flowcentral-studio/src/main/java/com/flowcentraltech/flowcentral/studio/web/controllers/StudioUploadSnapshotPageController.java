@@ -24,6 +24,7 @@ import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.UplBinding;
 import com.tcdng.unify.core.data.UploadedFile;
 import com.tcdng.unify.core.task.TaskSetup;
+import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.annotation.Action;
 import com.tcdng.unify.web.annotation.ResultMapping;
 import com.tcdng.unify.web.annotation.ResultMappings;
@@ -51,6 +52,16 @@ public class StudioUploadSnapshotPageController extends AbstractStudioPageContro
     @Action
     public String uploadSnapshot() throws UnifyException {
         StudioUploadSnapshotPageBean pageBean = getPageBean();
+        if (StringUtils.isBlank(pageBean.getSnapshotTitle())) {
+            hintUser(MODE.ERROR, "$m{studio.uploadsnapshotpage.titlerequired}");
+            return "refresh";
+        }
+
+        if (StringUtils.isBlank(pageBean.getMessage())) {
+            hintUser(MODE.ERROR, "$m{studio.uploadsnapshotpage.messagerequired}");
+            return "refresh";
+        }
+
         UploadedFile snapshotFile = pageBean.getSnapshotFile();
         if (snapshotFile == null) {
             hintUser(MODE.ERROR, "$m{studio.uploadsnapshotpage.snapshotfilerequired}");
@@ -68,6 +79,8 @@ public class StudioUploadSnapshotPageController extends AbstractStudioPageContro
             return "refresh";
         }
 
+        snapshotConfig.setSnapshotTitle(pageBean.getSnapshotTitle());
+        snapshotConfig.setSnapshotMessage(pageBean.getMessage());
         TaskSetup taskSetup = TaskSetup.newBuilder(
                 StudioSnapshotTaskConstants.STUDIO_UPLOAD_SNAPSHOT_TASK_NAME)
                 .setParam(StudioSnapshotTaskConstants.STUDIO_SNAPSHOT_CONFIG, snapshotConfig)

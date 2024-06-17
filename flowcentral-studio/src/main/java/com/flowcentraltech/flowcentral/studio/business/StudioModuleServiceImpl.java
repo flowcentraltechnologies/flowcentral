@@ -259,13 +259,13 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
         final int limit = appletUtilities.system().getSysParameterValue(int.class,
                 StudioModuleSysParamConstants.SNAPSHOT_DETAILS_LIMIT);
         List<SnapshotDetails> details = new ArrayList<SnapshotDetails>();
-        List<StudioSnapshotDetails> studioSnapshotDetails = environment().findAll(new StudioSnapshotDetailsQuery()
+        List<StudioSnapshotDetails> studioSnapshotDetails = environment().listAll(new StudioSnapshotDetailsQuery()
                 .createdBetween(fromDate, toDate).addOrder(OrderType.DESCENDING, "createDt").setLimit(limit));
         for (StudioSnapshotDetails _studioSnapshotDetails : studioSnapshotDetails) {
             SnapshotDetails snapshotDetails = new SnapshotDetails(_studioSnapshotDetails.getId(),
-                    _studioSnapshotDetails.getSnapshotName(), _studioSnapshotDetails.getFileName(),
-                    _studioSnapshotDetails.getMessage(), _studioSnapshotDetails.getCreateDt(),
-                    _studioSnapshotDetails.getCreatedBy());
+                    _studioSnapshotDetails.getSnapshotTypeDesc(), _studioSnapshotDetails.getSnapshotName(),
+                    _studioSnapshotDetails.getFileName(), _studioSnapshotDetails.getMessage(),
+                    _studioSnapshotDetails.getCreateDt(), _studioSnapshotDetails.getCreatedBy());
             details.add(snapshotDetails);
         }
 

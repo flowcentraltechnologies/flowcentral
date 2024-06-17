@@ -27,7 +27,27 @@ import com.tcdng.unify.web.ui.AbstractPageBean;
  */
 public class StudioUploadSnapshotPageBean extends AbstractPageBean {
     
+    private String snapshotTitle;
+    
+    private String message;
+    
     private UploadedFile snapshotFile;
+
+    public String getSnapshotTitle() {
+        return snapshotTitle;
+    }
+
+    public void setSnapshotTitle(String snapshotTitle) {
+        this.snapshotTitle = snapshotTitle;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
 
     public UploadedFile getSnapshotFile() {
         return snapshotFile;

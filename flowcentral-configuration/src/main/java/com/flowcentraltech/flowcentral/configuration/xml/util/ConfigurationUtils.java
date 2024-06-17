@@ -15,9 +15,14 @@
  */
 package com.flowcentraltech.flowcentral.configuration.xml.util;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 import com.flowcentraltech.flowcentral.configuration.xml.AppConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.BaseConfig;
@@ -76,9 +81,47 @@ public final class ConfigurationUtils {
         return IOUtils.readAllLines(fileResource, workingPath);
     }
 
-    public static SnapshotConfig getSnapshotConfig(byte[] file) throws UnifyException {
+    public static SnapshotConfig getSnapshotConfig(byte[] snapshot) throws UnifyException {
         SnapshotConfig snapshotConfig = null;
-        // TODO
+        File tempFile = null;
+        FileOutputStream fos = null;
+        InputStream ios = null;
+        ZipFile zipFile = null;
+        try {
+            tempFile = File.createTempFile("flowsnapshot", ".zip");
+            fos = new FileOutputStream(tempFile);
+            IOUtils.writeAll(fos, snapshot);
+            IOUtils.close(fos);
+
+            zipFile = new ZipFile(tempFile);
+            ZipEntry zipEntry = zipFile.getEntry("snapshot.xml");
+            if (zipEntry != null) {
+                ios = zipFile.getInputStream(zipEntry);
+                snapshotConfig = ConfigurationUtils.readConfig(SnapshotConfig.class, ios);
+            }
+        } catch (UnifyException e) {
+            throw e;
+        } catch (Exception e) {
+        } finally {
+            if (ios != null) {
+                IOUtils.close(ios);
+            }
+            
+            if (zipFile != null) {
+                try {
+                    zipFile.close();
+                } catch (IOException e) {
+                }
+            }
+
+            if (fos != null) {
+                IOUtils.close(fos);
+            }
+
+            if (tempFile != null) {
+                tempFile.delete();
+            }
+        }
         
         return snapshotConfig;
     }

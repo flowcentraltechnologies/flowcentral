@@ -678,6 +678,9 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                                 EntityFieldType.STATIC, "filename",
                                 getApplicationMessage("application.snapshotdetails.filename"));
                         edb.addFieldDef(textWidgetTypeDef, textWidgetTypeDef, EntityFieldDataType.STRING,
+                                EntityFieldType.STATIC, "type",
+                                getApplicationMessage("application.snapshotdetails.type"));
+                        edb.addFieldDef(textWidgetTypeDef, textWidgetTypeDef, EntityFieldDataType.STRING,
                                 EntityFieldType.STATIC, "message",
                                 getApplicationMessage("application.snapshotdetails.message"));
                         edb.addFieldDef(textWidgetTypeDef, textWidgetTypeDef, EntityFieldDataType.TIMESTAMP,
@@ -951,6 +954,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                         tdb.addColumnDef("name", "!ui-label", 2, false);
                         tdb.addColumnDef("message", "!ui-label", 3, false);
                         tdb.addColumnDef("filename", "!ui-label", 2, false);
+                        tdb.addColumnDef("type", "!ui-label", 2, false);
                         tdb.addColumnDef("snapshotDate", "!ui-label", 2, false);
                         tdb.addColumnDef("snapshotBy", "!ui-label", 2, false);
                         tdb.serialNo(true);

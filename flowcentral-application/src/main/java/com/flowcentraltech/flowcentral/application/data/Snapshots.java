@@ -72,9 +72,9 @@ public class Snapshots {
             return this;
         }
 
-        public Builder addDetails(Long snapshotId, String name, String filename, String message, Date snapshotDate,
-                String snapshotBy) {
-            details.add(new SnapshotDetails(snapshotId, name, filename, message, snapshotDate, snapshotBy));
+        public Builder addDetails(Long snapshotId, String type, String name, String filename, String message,
+                Date snapshotDate, String snapshotBy) {
+            details.add(new SnapshotDetails(snapshotId, type, name, filename, message, snapshotDate, snapshotBy));
             return this;
         }
 
