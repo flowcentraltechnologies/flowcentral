@@ -50,6 +50,7 @@ import com.flowcentraltech.flowcentral.codegeneration.data.SnapshotMeta;
 import com.flowcentraltech.flowcentral.common.business.AbstractFlowCentralService;
 import com.flowcentraltech.flowcentral.common.business.StudioProvider;
 import com.flowcentraltech.flowcentral.common.business.SynchronizableEnvironmentDelegate;
+import com.flowcentraltech.flowcentral.common.business.SystemRestoreService;
 import com.flowcentraltech.flowcentral.common.constants.CollaborationType;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralContainerPropertyConstants;
 import com.flowcentraltech.flowcentral.configuration.data.ApplicationRestore;
@@ -59,6 +60,7 @@ import com.flowcentraltech.flowcentral.configuration.data.ModuleRestore;
 import com.flowcentraltech.flowcentral.configuration.data.NotifLargeTextRestore;
 import com.flowcentraltech.flowcentral.configuration.data.NotifTemplateRestore;
 import com.flowcentraltech.flowcentral.configuration.data.ReportRestore;
+import com.flowcentraltech.flowcentral.configuration.data.SystemRestore;
 import com.flowcentraltech.flowcentral.configuration.data.WorkflowRestore;
 import com.flowcentraltech.flowcentral.configuration.data.WorkflowWizardRestore;
 import com.flowcentraltech.flowcentral.configuration.xml.AppConfig;
@@ -141,6 +143,9 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
     @Configurable
     private CodeGenerationModuleService codeGenerationModuleService;
 
+    @Configurable
+    private SystemRestoreService systemRestoreService;
+    
     private final FactoryMap<String, AppletDef> appletDefMap;
 
     public StudioModuleServiceImpl() {
@@ -352,6 +357,7 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
             limit = TaskExecLimit.ALLOW_MULTIPLE, schedulable = true)
     public int takeStudioSnapshotTask(TaskMonitor taskMonitor, StudioSnapshotType snapshotType, String snapshotName,
             String message) throws UnifyException {
+        logDebug(taskMonitor, "Taking studio snapshot [{0}]...", snapshotName);
         final String basePackage = appletUtilities.getSysParameterValue(String.class,
                 CodeGenerationModuleSysParamConstants.DEFAULT_CODEGEN_PACKAGE_BASE);
         Snapshot snapshot = codeGenerationModuleService.generateSnapshot(taskMonitor,
@@ -367,6 +373,7 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
         studioSnapshot.setSnapshotDetailsId(studioSnapshotDetailsId);
         studioSnapshot.setSnapshot(snapshot.getData());
         environment().create(studioSnapshot);
+        logDebug(taskMonitor, "Snapshot successfully taken.");
         return 0;
     }
 
@@ -380,6 +387,8 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
             limit = TaskExecLimit.ALLOW_MULTIPLE, schedulable = true)
     public int uploadStudioSnapshotTask(TaskMonitor taskMonitor, SnapshotConfig snapshotConfig,
             UploadedFile snapshotUploadFile) throws UnifyException {
+        logDebug(taskMonitor, "Uploading studio snapshot [{0}]...", snapshotUploadFile.getFilename());
+        logDebug(taskMonitor, "Validating uploaded snapshot file...");
         if (snapshotConfig == null) {
             snapshotConfig = ConfigurationUtils.getSnapshotConfig(snapshotUploadFile.getData());
             if (snapshotConfig == null) {
@@ -403,6 +412,7 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
         studioSnapshot.setSnapshotDetailsId(studioSnapshotDetailsId);
         studioSnapshot.setSnapshot(snapshotUploadFile.getData());
         environment().create(studioSnapshot);
+        logDebug(taskMonitor, "Snapshot file [{0}] upload successfully completed.", snapshotUploadFile.getFilename());
         return 0;
     }
 
@@ -416,6 +426,7 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
                     description = "Snapshot Details ID", type = Long.class, mandatory = true) },
             limit = TaskExecLimit.ALLOW_SINGLE, schedulable = true)
     public int restoreStudioSnapshotTask(TaskMonitor taskMonitor, Long snapshotDetailsId) throws UnifyException {
+        logDebug(taskMonitor, "Restoring studio from snapshot...");
         File tempFile = null;
         FileOutputStream fos = null;
         ZipFile zipFile = null;
@@ -429,6 +440,7 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
             zipFile = new ZipFile(tempFile);
             Enumeration<? extends ZipEntry> entries = zipFile.entries();
 
+            logDebug(taskMonitor, "Reading studio snapshot...");
             // Get entries mapped by name
             List<String> _moduleXmlFiles = new ArrayList<String>();
             Map<String, ZipEntry> _entries = new LinkedHashMap<String, ZipEntry>();
@@ -448,9 +460,12 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
             for (String moduleXmlFile : _moduleXmlFiles) {
                 ModuleRestore moduleRestore = loadModuleRestoreFromZip(taskMonitor, moduleXmlFile, zipFile, _entries);
                 moduleRestoreList.add(moduleRestore);
+                logDebug(taskMonitor, "Loaded module [{0}] from snapshot...", moduleXmlFile);
             }
 
-            // Apply restore
+            // Perform system restore
+            SystemRestore systemRestore = new SystemRestore(moduleRestoreList);
+            systemRestoreService.restoreSystem(taskMonitor, systemRestore);
         } catch (UnifyException e) {
             throw e;
         } catch (Exception e) {

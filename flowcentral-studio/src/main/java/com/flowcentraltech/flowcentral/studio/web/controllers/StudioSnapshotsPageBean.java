@@ -34,7 +34,7 @@ public class StudioSnapshotsPageBean extends AbstractPageBean {
     private Date toDate;
     
     private Snapshots snapshots;
-
+    
     public Date getFromDate() {
         return fromDate;
     }
@@ -58,4 +58,5 @@ public class StudioSnapshotsPageBean extends AbstractPageBean {
     public void setSnapshots(Snapshots snapshots) {
         this.snapshots = snapshots;
     }
+
 }

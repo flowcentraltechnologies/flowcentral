@@ -68,8 +68,7 @@ public class StudioSnapshotsPageController extends AbstractStudioPageController<
         StudioSnapshotsPageBean pageBean = getPageBean();
         Snapshots snapshots = pageBean.getSnapshots();
         SnapshotDetails snapshotDetails = snapshots.getDetails(targetIndex);
-        TaskSetup taskSetup = TaskSetup.newBuilder(
-                StudioSnapshotTaskConstants.STUDIO_RESTORE_SNAPSHOT_TASK_NAME)
+        TaskSetup taskSetup = TaskSetup.newBuilder(StudioSnapshotTaskConstants.STUDIO_RESTORE_SNAPSHOT_TASK_NAME)
                 .setParam(StudioSnapshotTaskConstants.STUDIO_SNAPSHOT_DETAILS_ID,
                         snapshotDetails.getSnapshotDetailsId())
                 .logMessages().build();
