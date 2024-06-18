@@ -28,6 +28,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import com.flowcentraltech.flowcentral.common.business.AbstractFlowCentralService;
@@ -285,8 +286,8 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
-    public Long getModuleId(String moduleName) throws UnifyException {
-        return environment().value(Long.class, "id", new ModuleQuery().name(moduleName));
+    public  Optional<Long> getModuleId(String moduleName) throws UnifyException {
+        return environment().valueOptional(Long.class, "id", new ModuleQuery().name(moduleName));
     }
 
     @Override

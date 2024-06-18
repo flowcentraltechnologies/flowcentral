@@ -120,6 +120,7 @@ import com.flowcentraltech.flowcentral.common.business.policies.SweepingCommitPo
 import com.flowcentraltech.flowcentral.common.constants.ConfigType;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants;
 import com.flowcentraltech.flowcentral.common.constants.OwnershipType;
+import com.flowcentraltech.flowcentral.common.constants.RecordStatus;
 import com.flowcentraltech.flowcentral.common.constants.WfItemVersionType;
 import com.flowcentraltech.flowcentral.common.data.Attachment;
 import com.flowcentraltech.flowcentral.common.data.ParamValuesDef;
@@ -3293,7 +3294,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         }
 
         logDebug(taskMonitor, "Checking if destination module exists...");
-        Long destModuleId = appletUtilities.system().getModuleId(destModuleName);
+        Optional<Long> destModuleId = appletUtilities.system().getModuleId(destModuleName);
 
         logDebug(taskMonitor, "Creating application replication context...");
         ApplicationReplicationContext ctx = ApplicationReplicationUtils.createApplicationReplicationContext(
@@ -3302,7 +3303,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         // Application
         logDebug(taskMonitor, "Replicating application...");
         final Long srcApplicationId = srcApplication.getId();
-        srcApplication.setModuleId(destModuleId);
+        srcApplication.setModuleId(destModuleId.get());
         srcApplication.setName(destApplicationName);
         srcApplication.setDescription(ctx.messageSwap(srcApplication.getDescription()));
         srcApplication.setLabel(ctx.messageSwap(srcApplication.getLabel()));
@@ -4189,7 +4190,20 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         setSessionAttribute(FlowCentralSessionAttributeConstants.ALTERNATIVE_RESOURCES_BUNDLE,
                 moduleRestore.getMessages());
         try {
-            final Long moduleId = appletUtilities.system().getModuleId(moduleRestore.getModuleConfig().getName());
+            ModuleConfig moduleConfig = moduleRestore.getModuleConfig();
+            Optional<Long> moduleIdOpt = appletUtilities.system().getModuleId(moduleConfig.getName());
+            Long moduleId = null;
+            if (moduleIdOpt.isPresent()) {
+                moduleId = moduleIdOpt.get();
+            } else {
+                Module module = new Module();
+                module.setShortCode(moduleConfig.getShortCode());
+                module.setName(moduleConfig.getName());
+                module.setDescription(moduleConfig.getDescription());
+                module.setStatus(RecordStatus.ACTIVE);
+                moduleId = (Long) environment().create(module);
+            }
+            
             List<Long> applicationIdList = environment().valueList(Long.class, "id",
                     new ApplicationQuery().moduleId(moduleId).isActualCustom());
             for (Long applicationId : applicationIdList) {
@@ -4312,7 +4326,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     private boolean installApplication(final TaskMonitor taskMonitor, final ApplicationInstall applicationInstall)
             throws UnifyException {
         final AppConfig applicationConfig = applicationInstall.getApplicationConfig();
-        final Long moduleId = appletUtilities.system().getModuleId(applicationConfig.getModule());
+        final Optional<Long> moduleId = appletUtilities.system().getModuleId(applicationConfig.getModule());
         String description = resolveApplicationMessage(applicationConfig.getDescription());
 
         // Applications
@@ -4322,7 +4336,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         if (oldApplication == null) {
             logDebug(taskMonitor, "Performing new application [{0}] installation...", description);
             Application application = new Application();
-            application.setModuleId(moduleId);
+            application.setModuleId(moduleId.get());
             application.setName(applicationConfig.getName());
             application.setDescription(description);
             application.setLabel(resolveApplicationMessage(applicationConfig.getLabel()));
@@ -4334,7 +4348,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             applicationId = (Long) environment().create(application);
         } else {
             logDebug(taskMonitor, "Upgrading application [{0}]...", description);
-            oldApplication.setModuleId(moduleId);
+            oldApplication.setModuleId(moduleId.get());
             if (ConfigUtils.isSetInstall(oldApplication)) {
                 oldApplication.setDescription(description);
                 oldApplication.setLabel(resolveApplicationMessage(applicationConfig.getLabel()));
@@ -4348,6 +4362,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             applicationId = oldApplication.getId();
         }
         applicationInstall.setApplicationId(applicationId);
+        
         final String applicationName = applicationConfig.getName();
         applicationPrivilegeManager.registerPrivilege(applicationId,
                 ApplicationPrivilegeConstants.APPLICATION_CATEGORY_CODE,
@@ -5044,13 +5059,13 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     private boolean restoreApplication(final TaskMonitor taskMonitor, final ApplicationRestore applicationRestore)
             throws UnifyException {
         final AppConfig applicationConfig = applicationRestore.getApplicationConfig();
-        final Long moduleId = appletUtilities.system().getModuleId(applicationConfig.getModule());
+        final Optional<Long> moduleId = appletUtilities.system().getModuleId(applicationConfig.getModule());
         String description = resolveApplicationMessage(applicationConfig.getDescription());
 
         // Application
         logDebug(taskMonitor, "Restoring application [{0}]...", description);
         Application application = new Application();
-        application.setModuleId(moduleId);
+        application.setModuleId(moduleId.get());
         application.setName(applicationConfig.getName());
         application.setDescription(description);
         application.setLabel(resolveApplicationMessage(applicationConfig.getLabel()));
