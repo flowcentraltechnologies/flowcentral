@@ -4199,11 +4199,12 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 Module module = new Module();
                 module.setShortCode(moduleConfig.getShortCode());
                 module.setName(moduleConfig.getName());
-                module.setDescription(moduleConfig.getDescription());
+                module.setDescription(resolveApplicationMessage(moduleConfig.getDescription()));
+                module.setLabel(resolveApplicationMessage(moduleConfig.getLabel()));
                 module.setStatus(RecordStatus.ACTIVE);
                 moduleId = (Long) environment().create(module);
             }
-            
+
             List<Long> applicationIdList = environment().valueList(Long.class, "id",
                     new ApplicationQuery().moduleId(moduleId).isActualCustom());
             for (Long applicationId : applicationIdList) {
