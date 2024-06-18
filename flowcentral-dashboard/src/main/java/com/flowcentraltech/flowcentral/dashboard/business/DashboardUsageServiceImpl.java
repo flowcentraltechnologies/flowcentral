@@ -40,6 +40,11 @@ import com.tcdng.unify.core.annotation.Transactional;
 @Transactional
 @Component(DashboardModuleNameConstants.DASHBOARD_USAGE_SERVICE)
 public class DashboardUsageServiceImpl extends AbstractFlowCentralService implements UsageProvider {
+    
+    @Override
+    public void clearDefinitionsCache() throws UnifyException {
+
+    }
 
     @Override
     public List<Usage> findApplicationUsagesByOtherApplications(String applicationName, UsageType usageType)

@@ -150,6 +150,11 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService
     public ReportModuleServiceImpl() {
         this.groupMemberBackup = new ConcurrentHashMap<String, Set<ReportInfo>>();
     }
+    
+    @Override
+    public void clearDefinitionsCache() throws UnifyException {
+
+    }
 
     @Override
     public void unregisterApplicationRolePrivileges(Long applicationId) throws UnifyException {

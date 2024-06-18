@@ -64,6 +64,11 @@ public class AuditModuleServiceImpl extends AbstractFlowCentralService implement
         this.entityAuditConfigDefFactoryMap = new FactoryMap<String, EntityAuditConfigDef>(true)
             {
                 @Override
+                protected boolean pause() throws Exception {
+                    return isInSystemRestoreMode();
+                }
+
+                @Override
                 protected boolean stale(String name, EntityAuditConfigDef entityAuditConfigDef) throws Exception {
                     return environment().value(long.class, "versionNo", new EntityAuditConfigQuery()
                             .id(entityAuditConfigDef.getId())) > entityAuditConfigDef.getVersion();
@@ -79,6 +84,13 @@ public class AuditModuleServiceImpl extends AbstractFlowCentralService implement
                             entityAuditConfig.getSearchFieldC(), entityAuditConfig.getSearchFieldD());
                 }
             };
+    }
+
+    @Override
+    public void clearDefinitionsCache() throws UnifyException {
+        logDebug("Clearing definitions cache...");
+        entityAuditConfigDefFactoryMap.clear();
+        logDebug("Definitions cache clearing successfully completed.");
     }
 
     @Override

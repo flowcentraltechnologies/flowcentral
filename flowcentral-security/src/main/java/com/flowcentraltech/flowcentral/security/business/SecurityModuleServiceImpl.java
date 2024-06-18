@@ -115,6 +115,11 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
 
     @Configurable("oneway-stringcryptograph")
     private OneWayStringCryptograph passwordCryptograph;
+    
+    @Override
+    public void clearDefinitionsCache() throws UnifyException {
+
+    }
 
     @Override
     public List<User> findUsers(UserQuery query) throws UnifyException {

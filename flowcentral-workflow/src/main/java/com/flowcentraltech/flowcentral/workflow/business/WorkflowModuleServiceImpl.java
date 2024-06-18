@@ -230,6 +230,11 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         this.wfDefFactoryMap = new FactoryMap<String, WfDef>(true)
             {
                 @Override
+                protected boolean pause() throws Exception {
+                    return isInSystemRestoreMode();
+                }
+
+                @Override
                 protected boolean stale(String wfName, WfDef wfDef) throws Exception {
                     return environment().value(long.class, "versionNo", new WorkflowQuery().id(wfDef.getId())) > wfDef
                             .getVersion();
@@ -384,6 +389,11 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             {
 
                 @Override
+                protected boolean pause() throws Exception {
+                    return isInSystemRestoreMode();
+                }
+
+                @Override
                 protected boolean stale(String longName, WfWizardDef formWizardDef) throws Exception {
                     return (environment().value(long.class, "versionNo",
                             new WfWizardQuery().id(formWizardDef.getId())) > formWizardDef.getVersion());
@@ -428,6 +438,11 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             {
 
                 @Override
+                protected boolean pause() throws Exception {
+                    return isInSystemRestoreMode();
+                }
+
+                @Override
                 protected boolean stale(String longName, WfChannelDef wfChannelDef) throws Exception {
                     return (environment().value(long.class, "versionNo",
                             new WfChannelQuery().id(wfChannelDef.getId())) > wfChannelDef.getVersion());
@@ -452,6 +467,15 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
 
             };
 
+    }
+    
+    @Override
+    public void clearDefinitionsCache() throws UnifyException {
+        logDebug("Clearing definitions cache...");
+        wfDefFactoryMap.clear();
+        wfWizardDefFactoryMap.clear();
+        wfChannelDefFactoryMap.clear();
+        logDebug("Definitions cache clearing successfully completed.");
     }
 
     @Override

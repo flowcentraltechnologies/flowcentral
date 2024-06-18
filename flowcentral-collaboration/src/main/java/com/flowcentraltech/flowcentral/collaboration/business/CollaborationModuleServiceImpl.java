@@ -58,6 +58,11 @@ public class CollaborationModuleServiceImpl extends AbstractFlowCentralService
 
     @Configurable
     private SystemModuleService systemModuleService;
+    
+    @Override
+    public void clearDefinitionsCache() throws UnifyException {
+
+    }
 
     @Override
     public int releaseAllLocks(CollaborationLockQuery query) throws UnifyException {

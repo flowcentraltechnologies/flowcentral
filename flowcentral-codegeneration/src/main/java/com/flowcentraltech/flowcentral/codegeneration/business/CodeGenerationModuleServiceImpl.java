@@ -111,6 +111,11 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
 
     @Configurable
     private ApplicationModuleService applicationModuleService;
+    
+    @Override
+    public void clearDefinitionsCache() throws UnifyException {
+
+    }
 
     @Override
     public List<String> getCodeGenerationApplets() throws UnifyException {

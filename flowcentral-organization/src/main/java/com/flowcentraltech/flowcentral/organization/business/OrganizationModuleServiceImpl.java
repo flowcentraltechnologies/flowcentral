@@ -96,6 +96,13 @@ public class OrganizationModuleServiceImpl extends AbstractFlowCentralService
 
         this.privilegeBackup = new ConcurrentHashMap<String, Set<String>>();
     }
+    
+    @Override
+    public void clearDefinitionsCache() throws UnifyException {
+        logDebug("Clearing definitions cache...");
+        tenantRolePrivileges.clear();
+        logDebug("Definitions cache clearing successfully completed.");
+    }
 
     @Override
     public FactoryMap<Long, String> getMappedBranchCodeFactoryMap() throws UnifyException {

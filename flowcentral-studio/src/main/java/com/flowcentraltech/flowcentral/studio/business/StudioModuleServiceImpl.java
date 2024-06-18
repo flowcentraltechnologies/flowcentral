@@ -252,6 +252,13 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
 
             };
     }
+    
+    @Override
+    public void clearDefinitionsCache() throws UnifyException {
+        logDebug("Clearing definitions cache...");
+        appletDefMap.clear();
+        logDebug("Definitions cache clearing successfully completed.");
+    }
 
     @Override
     public boolean isInstallDefaultDeveloperRoles() throws UnifyException {

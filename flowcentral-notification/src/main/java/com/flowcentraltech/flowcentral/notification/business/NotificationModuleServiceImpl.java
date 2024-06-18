@@ -131,6 +131,11 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
         this.templates = new FactoryMap<String, NotifTemplateDef>(true)
             {
                 @Override
+                protected boolean pause() throws Exception {
+                    return isInSystemRestoreMode();
+                }
+
+                @Override
                 protected boolean stale(String name, NotifTemplateDef notifTemplateDef) throws Exception {
                     return (environment().value(long.class, "versionNo", new NotificationTemplateQuery()
                             .id(notifTemplateDef.getId())) > notifTemplateDef.getVersion());
@@ -164,6 +169,11 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
 
         this.largeTexts = new FactoryMap<String, NotifLargeTextDef>(true)
             {
+                @Override
+                protected boolean pause() throws Exception {
+                    return isInSystemRestoreMode();
+                }
+
                 @Override
                 protected boolean stale(String name, NotifLargeTextDef notifLargeTextDef) throws Exception {
                     return (environment().value(long.class, "versionNo", new NotificationLargeTextQuery()
@@ -213,6 +223,14 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
     private static final Class<?>[] NOTIF_LARGETEXT_WRAPPER_PARAMS_0 = { NotifLargeTextDef.class };
 
     private static final Class<?>[] NOTIF_LARGETEXT_WRAPPER_PARAMS_1 = { NotifLargeTextDef.class, Map.class };
+    
+    @Override
+    public void clearDefinitionsCache() throws UnifyException {
+        logDebug("Clearing definitions cache...");
+        templates.clear();
+        largeTexts.clear();
+        logDebug("Definitions cache clearing successfully completed.");
+    }
 
     @Override
     public <T extends NotifTemplateWrapper> T wrapperOfNotifTemplate(Class<T> wrapperType) throws UnifyException {

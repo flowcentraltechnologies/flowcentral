@@ -41,6 +41,8 @@ public abstract class AbstractFlowCentralService extends AbstractBusinessService
     @Configurable
     private EnvironmentService environmentService;
 
+    private static final String SYSTEM_RESTORE_LOCK = "app:system-restore-lock";
+
     @Override
     public final void installFeatures(List<ModuleInstall> moduleInstallList) throws UnifyException {
         for (ModuleInstall moduleInstall : moduleInstallList) {
@@ -86,6 +88,18 @@ public abstract class AbstractFlowCentralService extends AbstractBusinessService
         return new EntityActionResult(ctx);
     }
 
+    protected final boolean enterSystemRestoreMode() throws UnifyException {
+        return tryGrabLock(SYSTEM_RESTORE_LOCK);
+    }
+
+    protected final void exitSystemRestoreMode() throws UnifyException {
+        releaseLock(SYSTEM_RESTORE_LOCK);
+    }
+
+    protected final boolean isInSystemRestoreMode() throws UnifyException {
+        return isLocked(SYSTEM_RESTORE_LOCK);
+    }
+    
     protected abstract void doInstallModuleFeatures(ModuleInstall moduleInstall) throws UnifyException;
 
 }

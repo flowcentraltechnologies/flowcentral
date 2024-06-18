@@ -416,6 +416,11 @@ public class ApplicationUsageServiceImpl extends AbstractFlowCentralService impl
     }
 
     @Override
+    public void clearDefinitionsCache() throws UnifyException {
+
+    }
+
+    @Override
     protected void doInstallModuleFeatures(ModuleInstall moduleInstall) throws UnifyException {
 
     }

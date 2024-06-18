@@ -114,6 +114,7 @@ import com.flowcentraltech.flowcentral.common.business.FileAttachmentProvider;
 import com.flowcentraltech.flowcentral.common.business.PostBootSetup;
 import com.flowcentraltech.flowcentral.common.business.PreInstallationSetup;
 import com.flowcentraltech.flowcentral.common.business.SuggestionProvider;
+import com.flowcentraltech.flowcentral.common.business.SystemDefinitionsCache;
 import com.flowcentraltech.flowcentral.common.business.SystemRestoreService;
 import com.flowcentraltech.flowcentral.common.business.policies.SweepingCommitPolicy;
 import com.flowcentraltech.flowcentral.common.constants.ConfigType;
@@ -210,6 +211,7 @@ import com.tcdng.unify.common.util.StringToken;
 import com.tcdng.unify.core.UnifyComponentConfig;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.UserToken;
+import com.tcdng.unify.core.annotation.Broadcast;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.DynamicEntityType;
@@ -259,8 +261,9 @@ import com.tcdng.unify.core.util.StringUtils;
  */
 @Transactional
 @Component(ApplicationModuleNameConstants.APPLICATION_MODULE_SERVICE)
-public class ApplicationModuleServiceImpl extends AbstractFlowCentralService implements ApplicationModuleService,
-    SystemRestoreService, FileAttachmentProvider, SuggestionProvider, PreInstallationSetup, PostBootSetup, EnvironmentDelegateRegistrar {
+public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
+        implements ApplicationModuleService, SystemRestoreService, FileAttachmentProvider, SuggestionProvider,
+        PreInstallationSetup, PostBootSetup, EnvironmentDelegateRegistrar {
 
     private static final String PRE_INSTALLATION_SETUP_LOCK = "app::preinstallationsetup";
 
@@ -288,6 +291,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                     ApplicationPredefinedEntityConstants.SNAPSHOT_ENTITY)));
 
     private static final int MAX_LIST_DEPTH = 8;
+
+    private static final long CLEAR_SYSTEM_CACHE_WAIT_MILLISEC = 4000;
 
     @Configurable
     private ApplicationPrivilegeManager applicationPrivilegeManager;
@@ -354,8 +359,6 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
     private FactoryMap<String, PropertyRuleDef> propertyRuleDefMap;
 
     private Set<String> entitySearchTypes;
-    
-    private boolean inSystemRestoreMode;
 
     public ApplicationModuleServiceImpl() {
         this.entitySearchTypes = new HashSet<String>();
@@ -364,8 +367,13 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
         this.applicationDefFactoryMap = new FactoryMap<String, ApplicationDef>(true)
             {
                 @Override
+                protected boolean pause() throws Exception {
+                    return isInSystemRestoreMode();
+                }
+
+                @Override
                 protected boolean stale(String name, ApplicationDef applicationDef) throws Exception {
-                    return !inSystemRestoreMode && (environment().value(long.class, "versionNo",
+                    return (environment().value(long.class, "versionNo",
                             new ApplicationQuery().id(applicationDef.getId())) > applicationDef.getVersion());
                 }
 
@@ -384,8 +392,13 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
         this.appletDefFactoryMap = new FactoryMap<String, AppletDef>(true)
             {
                 @Override
+                protected boolean pause() throws Exception {
+                    return isInSystemRestoreMode();
+                }
+
+                @Override
                 protected boolean stale(String longName, AppletDef appletDef) throws Exception {
-                    return !inSystemRestoreMode && (environment().value(long.class, "versionNo",
+                    return (environment().value(long.class, "versionNo",
                             new AppAppletQuery().id(appletDef.getId())) > appletDef.getVersion());
                 }
 
@@ -472,8 +485,13 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
         this.widgetDefFactoryMap = new FactoryMap<String, WidgetTypeDef>(true)
             {
                 @Override
+                protected boolean pause() throws Exception {
+                    return isInSystemRestoreMode();
+                }
+
+                @Override
                 protected boolean stale(String longName, WidgetTypeDef widgetTypeDef) throws Exception {
-                    return !inSystemRestoreMode && environment().value(long.class, "versionNo",
+                    return environment().value(long.class, "versionNo",
                             new AppWidgetTypeQuery().id(widgetTypeDef.getId())) > widgetTypeDef.getVersion();
                 }
 
@@ -489,8 +507,13 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
         this.suggestionDefFactoryMap = new FactoryMap<String, SuggestionTypeDef>(true)
             {
                 @Override
+                protected boolean pause() throws Exception {
+                    return isInSystemRestoreMode();
+                }
+
+                @Override
                 protected boolean stale(String longName, SuggestionTypeDef suggestionTypeDef) throws Exception {
-                    return !inSystemRestoreMode && environment().value(long.class, "versionNo", new AppSuggestionTypeQuery()
+                    return environment().value(long.class, "versionNo", new AppSuggestionTypeQuery()
                             .id(suggestionTypeDef.getId())) > suggestionTypeDef.getVersion();
                 }
 
@@ -520,9 +543,14 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
             {
 
                 @Override
+                protected boolean pause() throws Exception {
+                    return isInSystemRestoreMode();
+                }
+
+                @Override
                 protected boolean stale(String longName, EntityClassDef entityClassDef) throws Exception {
                     if (!RESERVED_ENTITIES.contains(longName)) {
-                        return !inSystemRestoreMode && environment().value(long.class, "versionNo",
+                        return environment().value(long.class, "versionNo",
                                 new AppEntityQuery().id(entityClassDef.getId())) > entityClassDef.getVersion();
                     }
 
@@ -590,9 +618,14 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
         this.entityDefFactoryMap = new FactoryMap<String, EntityDef>(true)
             {
                 @Override
+                protected boolean pause() throws Exception {
+                    return isInSystemRestoreMode();
+                }
+
+                @Override
                 protected boolean stale(String longName, EntityDef entityDef) throws Exception {
                     if (!RESERVED_ENTITIES.contains(longName)) {
-                        return !inSystemRestoreMode && environment().value(long.class, "versionNo",
+                        return environment().value(long.class, "versionNo",
                                 new AppEntityQuery().id(entityDef.getId())) > entityDef.getVersion();
                     }
 
@@ -833,9 +866,14 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
         this.entityDefByClassFactoryMap = new FactoryMap<String, EntityDef>(true)
             {
                 @Override
+                protected boolean pause() throws Exception {
+                    return isInSystemRestoreMode();
+                }
+
+                @Override
                 protected boolean stale(String entityClass, EntityDef entityDef) throws Exception {
                     if (!PropertyListItem.class.getName().equals(entityClass)) {
-                        return !inSystemRestoreMode && (environment().value(long.class, "versionNo",
+                        return (environment().value(long.class, "versionNo",
                                 new AppEntityQuery().id(entityDef.getId())) > entityDef.getVersion());
                     }
 
@@ -854,8 +892,13 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
         this.refDefFactoryMap = new FactoryMap<String, RefDef>(true)
             {
                 @Override
+                protected boolean pause() throws Exception {
+                    return isInSystemRestoreMode();
+                }
+
+                @Override
                 protected boolean stale(String longName, RefDef refDef) throws Exception {
-                    return !inSystemRestoreMode && (environment().value(long.class, "versionNo", new AppRefQuery().id(refDef.getId())) > refDef
+                    return (environment().value(long.class, "versionNo", new AppRefQuery().id(refDef.getId())) > refDef
                             .getVersion());
                 }
 
@@ -878,9 +921,14 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
             {
 
                 @Override
+                protected boolean pause() throws Exception {
+                    return isInSystemRestoreMode();
+                }
+
+                @Override
                 protected boolean stale(String longName, TableDef tableDef) throws Exception {
                     if (!RESERVED_TABLES.contains(longName)) {
-                        return !inSystemRestoreMode && (environment().value(long.class, "versionNo",
+                        return (environment().value(long.class, "versionNo",
                                 new AppTableQuery().id(tableDef.getId())) > tableDef.getVersion())
                                 || (tableDef.getEntityDef()
                                         .getVersion() != getEntityDef(tableDef.getEntityDef().getLongName())
@@ -1040,8 +1088,13 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
             {
 
                 @Override
+                protected boolean pause() throws Exception {
+                    return isInSystemRestoreMode();
+                }
+
+                @Override
                 protected boolean stale(String longName, FormDef formDef) throws Exception {
-                    return !inSystemRestoreMode && (environment().value(long.class, "versionNo",
+                    return (environment().value(long.class, "versionNo",
                             new AppFormQuery().id(formDef.getId())) > formDef.getVersion())
                             || (formDef.getEntityDef()
                                     .getVersion() != getEntityDef(formDef.getEntityDef().getLongName()).getVersion());
@@ -1247,8 +1300,13 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
             {
 
                 @Override
+                protected boolean pause() throws Exception {
+                    return isInSystemRestoreMode();
+                }
+
+                @Override
                 protected boolean stale(String longName, AssignmentPageDef assignmentPageDef) throws Exception {
-                    return !inSystemRestoreMode && (environment().value(long.class, "versionNo", new AppAssignmentPageQuery()
+                    return (environment().value(long.class, "versionNo", new AppAssignmentPageQuery()
                             .id(assignmentPageDef.getId())) > assignmentPageDef.getVersion());
                 }
 
@@ -1272,8 +1330,13 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
             {
 
                 @Override
+                protected boolean pause() throws Exception {
+                    return isInSystemRestoreMode();
+                }
+
+                @Override
                 protected boolean stale(String longName, PropertyListDef propertyListDef) throws Exception {
-                    return !inSystemRestoreMode && (environment().value(long.class, "versionNo",
+                    return (environment().value(long.class, "versionNo",
                             new AppPropertyListQuery().id(propertyListDef.getId())) > propertyListDef.getVersion());
                 }
 
@@ -1309,8 +1372,13 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
             {
 
                 @Override
+                protected boolean pause() throws Exception {
+                    return isInSystemRestoreMode();
+                }
+
+                @Override
                 protected boolean stale(String longName, PropertyRuleDef propertyRuleDef) throws Exception {
-                    return !inSystemRestoreMode && (environment().value(long.class, "versionNo",
+                    return (environment().value(long.class, "versionNo",
                             new AppPropertyRuleQuery().id(propertyRuleDef.getId())) > propertyRuleDef.getVersion());
                 }
 
@@ -1340,17 +1408,58 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
 
     @Override
     public void restoreSystem(TaskMonitor taskMonitor, SystemRestore systemRestore) throws UnifyException {
-        logDebug("Performing system restore...");
-        inSystemRestoreMode = true;
-        try {
-            for (ModuleRestore moduleRestore: systemRestore.getModuleList()) {
-                restoreModule(taskMonitor, moduleRestore);
+        logDebug(taskMonitor, "Attempting to execute system restore...");
+        if (enterSystemRestoreMode()) {
+            try {
+                logDebug(taskMonitor, "Executing system restore...");
+
+                // Restore modules
+                for (ModuleRestore moduleRestore : systemRestore.getModuleList()) {
+                    restoreModule(taskMonitor, moduleRestore);
+                }
+                 
+                // All system cache
+                clearAllSystemDefinitionsCache();
+                
+                // Wait a while for propagation
+                pause(CLEAR_SYSTEM_CACHE_WAIT_MILLISEC);
+                
+                logDebug(taskMonitor, "System restore successfully completed.");
+            } finally {
+                exitSystemRestoreMode();
             }
-            
-            logDebug("System restore successfully completed.");
-        } finally {
-            inSystemRestoreMode = false;
+        } else {
+            logDebug(taskMonitor, "Some other process is executing system restore.");
         }
+    }
+
+    @Broadcast
+    public void clearAllSystemDefinitionsCache() throws UnifyException {
+        logDebug("Clearing all system definitions cache...");
+        List<SystemDefinitionsCache> caches = getComponents(SystemDefinitionsCache.class);
+        for (SystemDefinitionsCache cache: caches) {
+            cache.clearDefinitionsCache();
+        }
+               
+        logDebug("All system definitions cache clearing successfully completed.");
+    }
+
+    @Override
+    public void clearDefinitionsCache() throws UnifyException {
+        logDebug("Clearing definitions cache...");
+        propertyRuleDefMap.clear();
+        propertyListDefMap.clear();
+        assignmentPageDefFactoryMap.clear();
+        formDefFactoryMap.clear();
+        tableDefFactoryMap.clear();
+        refDefFactoryMap.clear();
+        entityDefByClassFactoryMap.clear();
+        entityClassDefFactoryMap.clear();
+        suggestionDefFactoryMap.clear();
+        widgetDefFactoryMap.clear();
+        appletDefFactoryMap.clear();
+        applicationDefFactoryMap.clear();
+        logDebug("Definitions cache clearing successfully completed.");
     }
 
     @Override
