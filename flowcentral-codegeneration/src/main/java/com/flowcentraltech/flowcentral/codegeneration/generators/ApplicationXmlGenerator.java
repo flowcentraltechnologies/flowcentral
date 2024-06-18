@@ -413,7 +413,7 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                 ctx.addMessage(StaticMessageCategoryType.ENTITY, descKey, appEntity.getDescription());
                 ctx.addMessage(StaticMessageCategoryType.ENTITY, labelKey, appEntity.getLabel());
                 ctx.addEntity(ApplicationNameUtils.getApplicationEntityLongName(applicationName, appEntity.getName()));
-                appEntityConfig.setBaseType(appEntity.getBaseType());
+                appEntityConfig.setBaseType(ctx.isSnapshotMode() ? appEntity.getBaseType(): null);
                 appEntityConfig.setType(
                         ctx.isSnapshotMode() ? appEntity.getEntityClass() : ctx.getExtensionEntityClassName(appEntity));
                 appEntityConfig.setName(appEntity.getName());
