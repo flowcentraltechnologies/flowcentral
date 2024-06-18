@@ -71,6 +71,10 @@ public class StudioMenuWriter extends AbstractPanelWriter {
     private static final List<String> snapshotAppletList = Collections
             .unmodifiableList(Arrays.asList("studio.takeSnapshot", "studio.uploadSnapshot", "studio.snapshots"));
 
+    private static final List<StudioAppComponentType> noAppMenuCategoryList = Collections.unmodifiableList(
+            Arrays.asList(StudioAppComponentType.CODEGENERATION, StudioAppComponentType.SYNCHRONIZATION,
+                    StudioAppComponentType.SNAPSHOT, StudioAppComponentType.APPLICATION));
+
     private static final List<StudioAppComponentType> menuCategoryList = Collections.unmodifiableList(Arrays.asList(
             StudioAppComponentType.CODEGENERATION, StudioAppComponentType.SYNCHRONIZATION,
             StudioAppComponentType.SNAPSHOT, StudioAppComponentType.APPLICATION, StudioAppComponentType.ENUMERATION,
@@ -113,9 +117,14 @@ public class StudioMenuWriter extends AbstractPanelWriter {
             writer.write("</div>");
         }
 
+        final String applicationName = (String) getSessionAttribute(
+                StudioSessionAttributeConstants.CURRENT_APPLICATION_NAME);
+        final boolean application = !StringUtils.isBlank(applicationName);
+
         final boolean isCollaborationEnabled = appletUtilities.collaborationProvider() != null;
-        final List<StudioAppComponentType> selMenuCategoryList = isCollaborationEnabled ? collaborationMenuCategoryList
-                : menuCategoryList;
+        final List<StudioAppComponentType> selMenuCategoryList = application
+                ? (isCollaborationEnabled ? collaborationMenuCategoryList : menuCategoryList)
+                : noAppMenuCategoryList;
         StudioAppComponentType currCategory = studioMenuWidget.getCurrentSel();
         if (currCategory == null) {
             currCategory = isCollaborationEnabled ? StudioAppComponentType.COLLABORATION
@@ -124,9 +133,6 @@ public class StudioMenuWriter extends AbstractPanelWriter {
             studioMenuWidget.setCurrentSel(currCategory);
         }
 
-        final String applicationName = (String) getSessionAttribute(
-                StudioSessionAttributeConstants.CURRENT_APPLICATION_NAME);
-        final boolean application = !StringUtils.isBlank(applicationName);
         writer.write("<div");
         if (searchable) {
             writer.write(" class=\"mtop\"");
@@ -137,29 +143,27 @@ public class StudioMenuWriter extends AbstractPanelWriter {
         writer.write("<div class=\"menucatbar\" style=\"display:table-cell;vertical-align:top;\">");
         JsonWriter cjw = new JsonWriter();
         cjw.beginArray();
-        if (application) {
-            final String categoryId = studioMenuWidget.getCategoryId();
-            final int catLen = selMenuCategoryList.size();
-            for (int i = 0; i < catLen; i++) {
-                final StudioAppComponentType category = selMenuCategoryList.get(i);
-                writer.write("<div class=\"menucat");
-                if (category.equals(currCategory)) {
-                    writer.write(" activecat");
-                } else {
-                    writer.write("\" id=\"").write(categoryId).write(i);
-                    cjw.beginObject();
-                    cjw.write("index", i);
-                    cjw.write("type", category.code());
-                    cjw.endObject();
-                }
-
-                writer.write("\">");
-                writer.write("<span class=\"symcat\">").write(resolveSymbolHtmlHexCode(category.icon()))
-                        .write("</span>");
-                writer.write("<span class=\"labelcat\">")
-                        .writeWithHtmlEscape(resolveSessionMessage(category.caption2())).write("</span>");
-                writer.write("</div>");
+        final String categoryId = studioMenuWidget.getCategoryId();
+        final int catLen = selMenuCategoryList.size();
+        for (int i = 0; i < catLen; i++) {
+            final StudioAppComponentType category = selMenuCategoryList.get(i);
+            writer.write("<div class=\"menucat");
+            if (category.equals(currCategory)) {
+                writer.write(" activecat");
+            } else {
+                writer.write("\" id=\"").write(categoryId).write(i);
+                cjw.beginObject();
+                cjw.write("index", i);
+                cjw.write("type", category.code());
+                cjw.endObject();
             }
+
+            writer.write("\">");
+            writer.write("<span class=\"symcat\">").write(resolveSymbolHtmlHexCode(category.icon()))
+                    .write("</span>");
+            writer.write("<span class=\"labelcat\">")
+                    .writeWithHtmlEscape(resolveSessionMessage(category.caption2())).write("</span>");
+            writer.write("</div>");
         }
         cjw.endArray();
         writer.write("</div>");
@@ -203,40 +207,37 @@ public class StudioMenuWriter extends AbstractPanelWriter {
         if (studioMenuWidget.getMenuSectionId().equals(sectionId)) {
             final String applicationName = (String) getSessionAttribute(
                     StudioSessionAttributeConstants.CURRENT_APPLICATION_NAME);
-            final boolean application = !StringUtils.isBlank(applicationName);
             writer.write("<ul>");
             JsonWriter mjw = new JsonWriter();
             mjw.beginArray();
-            if (application) {
-                final StudioAppComponentType currCategory = studioMenuWidget.getCurrentSel();
-                final boolean isApplications = StudioAppComponentType.APPLICATION.equals(currCategory);
-                final boolean isCollaboration = StudioAppComponentType.COLLABORATION.equals(currCategory);
-                final boolean isCodeGeneration = codeGenerationProvider != null
-                        && StudioAppComponentType.CODEGENERATION.equals(currCategory);
-                final boolean isSynchronization = StudioAppComponentType.SYNCHRONIZATION.equals(currCategory);
-                final boolean isSnapshot = StudioAppComponentType.SNAPSHOT.equals(currCategory);
+            final StudioAppComponentType currCategory = studioMenuWidget.getCurrentSel();
+            final boolean isApplications = StudioAppComponentType.APPLICATION.equals(currCategory);
+            final boolean isCollaboration = StudioAppComponentType.COLLABORATION.equals(currCategory);
+            final boolean isCodeGeneration = codeGenerationProvider != null
+                    && StudioAppComponentType.CODEGENERATION.equals(currCategory);
+            final boolean isSynchronization = StudioAppComponentType.SYNCHRONIZATION.equals(currCategory);
+            final boolean isSnapshot = StudioAppComponentType.SNAPSHOT.equals(currCategory);
 
-                final String searchInput = studioMenuWidget.isSearchable() ? studioMenuWidget.getSearchInput() : null;
-                final List<AppletDef> appletDefList = isApplications
-                        ? getApplicationAppletDefs(applicationName, searchInput)
-                        : (isCollaboration ? getCollaborationAppletDefs(applicationName, searchInput)
-                                : (isCodeGeneration ? getCodeGenerationAppletDefs(applicationName, searchInput)
-                                        : (isSynchronization ? getSychronizationAppletDefs(applicationName, searchInput)
-                                                : (isSnapshot ? getSnapshotAppletDefs(applicationName, searchInput)
-                                                        : studioModuleService.findAppletDefs(applicationName,
-                                                                currCategory, searchInput)))));
+            final String searchInput = studioMenuWidget.isSearchable() ? studioMenuWidget.getSearchInput() : null;
+            final List<AppletDef> appletDefList = isApplications
+                    ? getApplicationAppletDefs(applicationName, searchInput)
+                    : (isCollaboration ? getCollaborationAppletDefs(applicationName, searchInput)
+                            : (isCodeGeneration ? getCodeGenerationAppletDefs(applicationName, searchInput)
+                                    : (isSynchronization ? getSychronizationAppletDefs(applicationName, searchInput)
+                                            : (isSnapshot ? getSnapshotAppletDefs(applicationName, searchInput)
+                                                    : studioModuleService.findAppletDefs(applicationName,
+                                                            currCategory, searchInput)))));
 
-                for (AppletDef appletDef : appletDefList) {
-                    if (isApplications || isCollaboration || isCodeGeneration || isSynchronization || isSnapshot
-                            || appletDef.isMenuAccess()) {
-                        writer.write("<li id=\"item_").write(appletDef.getViewId()).write("\">");
-                        writer.write("<span>").writeWithHtmlEscape(appletDef.getLabel()).write("</span>");
-                        writer.write("</li>");
-                        mjw.beginObject();
-                        mjw.write("id", "item_" + appletDef.getViewId());
-                        mjw.write("path", getContextURL(appletDef.getOpenPath()));
-                        mjw.endObject();
-                    }
+            for (AppletDef appletDef : appletDefList) {
+                if (isApplications || isCollaboration || isCodeGeneration || isSynchronization || isSnapshot
+                        || appletDef.isMenuAccess()) {
+                    writer.write("<li id=\"item_").write(appletDef.getViewId()).write("\">");
+                    writer.write("<span>").writeWithHtmlEscape(appletDef.getLabel()).write("</span>");
+                    writer.write("</li>");
+                    mjw.beginObject();
+                    mjw.write("id", "item_" + appletDef.getViewId());
+                    mjw.write("path", getContextURL(appletDef.getOpenPath()));
+                    mjw.endObject();
                 }
             }
             mjw.endArray();
