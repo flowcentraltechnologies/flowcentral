@@ -16,7 +16,6 @@
 
 package com.flowcentraltech.flowcentral.report.business;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -67,6 +66,7 @@ import com.tcdng.unify.core.message.MessageResolver;
 import com.tcdng.unify.core.task.TaskMonitor;
 import com.tcdng.unify.core.util.AnnotationUtils;
 import com.tcdng.unify.core.util.DataUtils;
+import com.tcdng.unify.core.util.EntityTypeUtils;
 import com.tcdng.unify.core.util.NameUtils;
 import com.tcdng.unify.core.util.ReflectUtils;
 import com.tcdng.unify.core.util.StringUtils;
@@ -238,7 +238,7 @@ public class ApplicationReportInstallerImpl extends AbstractApplicationArtifactI
         final String applicationName = applicationRestore.getApplicationConfig().getName();
 
         logDebug(taskMonitor, "Executing report restore...");
-        
+
         // Reportable definitions
         logDebug(taskMonitor, "Restoring reportable entities...");
         if (applicationConfig.getEntitiesConfig() != null
@@ -399,15 +399,16 @@ public class ApplicationReportInstallerImpl extends AbstractApplicationArtifactI
     private void populateChildList(AppEntityConfig appEntityConfig, ReportableDefinition reportableDefinition)
             throws UnifyException {
         List<ReportableField> reportableFieldList = new ArrayList<ReportableField>();
-        Class<? extends Entity> entityClass = (Class<? extends Entity>) ReflectUtils
-                .classForName(appEntityConfig.getType());
+        Class<? extends Entity> entityClass = EntityTypeUtils.isReservedType(appEntityConfig.getType()) ? null
+                : (Class<? extends Entity>) ReflectUtils.classForName(appEntityConfig.getType());
         if (!DataUtils.isBlank(appEntityConfig.getEntityFieldList())) {
             for (EntityFieldConfig rfd : appEntityConfig.getEntityFieldList()) {
                 if (rfd.getReportable() && !EntityFieldDataType.SCRATCH.equals(rfd.getType())) {
                     ReportableField reportableField = new ReportableField();
                     String description = null;
-                    Field field = ReflectUtils.getField(entityClass, rfd.getName());
-                    Format fa = field.getAnnotation(Format.class);
+                    Format fa = entityClass != null
+                            ? ReflectUtils.getField(entityClass, rfd.getName()).getAnnotation(Format.class)
+                            : null;
                     if (fa != null) {
                         description = AnnotationUtils.getAnnotationString(fa.description());
                         if (description != null) {
@@ -419,7 +420,7 @@ public class ApplicationReportInstallerImpl extends AbstractApplicationArtifactI
                         reportableField.setHorizontalAlign(fa.halign().name());
                         reportableField.setWidth(fa.widthRatio());
                     } else {
-                        if (Number.class.isAssignableFrom(field.getType())) {
+                        if (Number.class.isAssignableFrom(rfd.getType().dataType().javaClass())) {
                             reportableField.setHorizontalAlign(HAlignType.RIGHT.name());
                         }
                         reportableField.setWidth(-1);
@@ -432,14 +433,17 @@ public class ApplicationReportInstallerImpl extends AbstractApplicationArtifactI
                     reportableField.setDescription(description);
                     reportableField.setName(rfd.getName());
                     reportableField.setParameterOnly(false);
-                    reportableField.setType(ConverterUtils.getWrapperClassName(field.getType()));
+                    reportableField.setType(ConverterUtils.getWrapperClassName(rfd.getType().dataType().javaClass()));
                     reportableFieldList.add(reportableField);
                 }
             }
         }
 
         List<ReportableField> baseReportableFieldList = ReportEntityUtils.getEntityBaseTypeReportableFieldList(
-                messageResolver, ApplicationEntityUtils.getEntityBaseType((Class<? extends BaseEntity>) entityClass),
+                messageResolver,
+                entityClass != null
+                        ? ApplicationEntityUtils.getEntityBaseType((Class<? extends BaseEntity>) entityClass)
+                        : appEntityConfig.getBaseType(),
                 FormatterOptions.DEFAULT);
         reportableFieldList.addAll(baseReportableFieldList);
         reportableDefinition.setFieldList(reportableFieldList);
