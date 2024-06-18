@@ -137,7 +137,7 @@ public class ApplicationDashboardInstallerImpl extends AbstractApplicationArtifa
                 dashboard.setSections(dashboardConfig.getSections());
                 dashboard.setAllowSecondaryTenants(dashboardConfig.getAllowSecondaryTenants());
                 dashboard.setDeprecated(false);
-                dashboard.setConfigType(ConfigType.MUTABLE_INSTALL);
+                dashboard.setConfigType(ConfigType.CUSTOM);
                 populateChildList(dashboardConfig, dashboard, applicationName);
 
                 applicationPrivilegeManager.registerPrivilege(applicationId,

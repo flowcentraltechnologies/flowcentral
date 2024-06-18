@@ -286,7 +286,7 @@ public class ApplicationWorkflowInstallerImpl extends AbstractApplicationArtifac
                     workflow.setEntity(
                             ApplicationNameUtils.ensureLongNameReference(applicationName, wfConfig.getEntity()));
                     workflow.setDeprecated(false);
-                    workflow.setConfigType(ConfigType.MUTABLE_INSTALL);
+                    workflow.setConfigType(ConfigType.CUSTOM);
                     populateChildList(wfConfig, workflow, applicationName);
                     environment().create(workflow);
                 }
@@ -313,7 +313,7 @@ public class ApplicationWorkflowInstallerImpl extends AbstractApplicationArtifac
                 wfChannel.setRule(wfChannelConfig.getRule());
                 wfChannel.setDirection(wfChannelConfig.getDirection());
                 wfChannel.setDeprecated(false);
-                wfChannel.setConfigType(ConfigType.MUTABLE_INSTALL);
+                wfChannel.setConfigType(ConfigType.CUSTOM);
                 wfChannel.setStatus(WfChannelStatus.OPEN);
                 environment().create(wfChannel);
             }
@@ -343,7 +343,7 @@ public class ApplicationWorkflowInstallerImpl extends AbstractApplicationArtifac
                             wfWizardConfig.getEntity()));
                     wfWizard.setSubmitWorkflow(wfWizardConfig.getSubmitWorkflow());
                     wfWizard.setDeprecated(false);
-                    wfWizard.setConfigType(ConfigType.MUTABLE_INSTALL);
+                    wfWizard.setConfigType(ConfigType.CUSTOM);
                     populateChildList(wfWizard, wfWizardConfig, applicationId, applicationConfig.getName());
                     environment().create(wfWizard);
 

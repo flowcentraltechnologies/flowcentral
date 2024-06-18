@@ -216,7 +216,7 @@ public class ApplicationChartInstallerImpl extends AbstractApplicationArtifactIn
                 chart.setStacked(appChartConfig.isStacked());
                 chart.setSmooth(appChartConfig.isSmooth());
                 chart.setDeprecated(false);
-                chart.setConfigType(ConfigType.MUTABLE_INSTALL);
+                chart.setConfigType(ConfigType.CUSTOM);
                 environment().create(chart);
             }
         }
@@ -245,7 +245,7 @@ public class ApplicationChartInstallerImpl extends AbstractApplicationArtifactIn
                         InputWidgetUtils.newAppPropertySequence(appChartDataSourceConfig.getCategories()));
                 chartDataSource.setFieldSequence(newAppFieldSequence(appChartDataSourceConfig.getFieldSequence()));
                 chartDataSource.setDeprecated(false);
-                chartDataSource.setConfigType(ConfigType.MUTABLE_INSTALL);
+                chartDataSource.setConfigType(ConfigType.CUSTOM);
                 environment().create(chartDataSource);
             }
         }

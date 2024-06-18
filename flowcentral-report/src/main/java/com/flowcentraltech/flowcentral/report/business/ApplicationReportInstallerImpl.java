@@ -257,7 +257,7 @@ public class ApplicationReportInstallerImpl extends AbstractApplicationArtifactI
                     reportableDefinition.setTitle(description);
                     reportableDefinition.setDescription(description);
                     reportableDefinition.setDeprecated(false);
-                    reportableDefinition.setConfigType(ConfigType.STATIC_INSTALL);
+                    reportableDefinition.setConfigType(ConfigType.CUSTOM);
                     populateChildList(appEntityConfig, reportableDefinition);
                     environment().create(reportableDefinition);
 
@@ -312,7 +312,7 @@ public class ApplicationReportInstallerImpl extends AbstractApplicationArtifactI
                 reportConfiguration.setAllowSecondaryTenants(reportConfig.getAllowSecondaryTenants());
                 reportConfiguration.setFilter(InputWidgetUtils.newAppFilter(reportConfig.getFilter()));
                 reportConfiguration.setDeprecated(false);
-                reportConfiguration.setConfigType(ConfigType.MUTABLE_INSTALL);
+                reportConfiguration.setConfigType(ConfigType.CUSTOM);
                 populateChildList(reportConfig, reportConfiguration);
                 environment().create(reportConfiguration);
 

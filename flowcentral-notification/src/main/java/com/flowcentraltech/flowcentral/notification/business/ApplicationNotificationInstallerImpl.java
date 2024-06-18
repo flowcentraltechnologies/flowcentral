@@ -195,7 +195,7 @@ public class ApplicationNotificationInstallerImpl extends AbstractApplicationArt
                 notificationTemplate.setSubject(notifTemplateConfig.getSubject());
                 notificationTemplate.setTemplate(notifTemplateConfig.getBody());
                 notificationTemplate.setDeprecated(false);
-                notificationTemplate.setConfigType(ConfigType.MUTABLE_INSTALL);
+                notificationTemplate.setConfigType(ConfigType.CUSTOM);
                 populateChildList(notificationTemplate, notifTemplateConfig);
                 environment().create(notificationTemplate);
             }
@@ -226,7 +226,7 @@ public class ApplicationNotificationInstallerImpl extends AbstractApplicationArt
                 notificationLargeText.setFontSizeInPixels(notifLargeTextConfig.getFontSizeInPixels());
                 notificationLargeText.setBody(notifLargeTextConfig.getBody());
                 notificationLargeText.setDeprecated(false);
-                notificationLargeText.setConfigType(ConfigType.MUTABLE_INSTALL);
+                notificationLargeText.setConfigType(ConfigType.CUSTOM);
                 populateChildList(notificationLargeText, notifLargeTextConfig);
                 environment().create(notificationLargeText);
             }
