@@ -5248,6 +5248,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 appEntity.setReportable(appEntityConfig.getReportable());
                 appEntity.setActionPolicy(appEntityConfig.getActionPolicy());
                 appEntity.setDeprecated(false);
+                appEntity.setSchemaUpdateRequired(true);
                 appEntity.setConfigType(ConfigType.CUSTOM);
                 populateChildList(appEntity, applicationName, appEntityConfig, true);
                 Long entityId = (Long) environment().create(appEntity);
