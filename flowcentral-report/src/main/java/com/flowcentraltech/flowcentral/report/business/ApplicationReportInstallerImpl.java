@@ -37,6 +37,7 @@ import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldDataTy
 import com.flowcentraltech.flowcentral.configuration.data.ApplicationInstall;
 import com.flowcentraltech.flowcentral.configuration.data.ApplicationRestore;
 import com.flowcentraltech.flowcentral.configuration.data.ReportInstall;
+import com.flowcentraltech.flowcentral.configuration.data.ReportRestore;
 import com.flowcentraltech.flowcentral.configuration.xml.AppConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppEntityConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppReportConfig;
@@ -271,12 +272,9 @@ public class ApplicationReportInstallerImpl extends AbstractApplicationArtifactI
         }
 
         // Configured reports
-        if (applicationConfig.getReportsConfig() != null
-                && !DataUtils.isBlank(applicationConfig.getReportsConfig().getReportList())) {
-            for (AppReportConfig applicationReportConfig : applicationConfig.getReportsConfig().getReportList()) {
-                ReportInstall reportInstall = getConfigurationLoader()
-                        .loadReportInstallation(applicationReportConfig.getConfigFile());
-                ReportConfig reportConfig = reportInstall.getReportConfig();
+        if (!DataUtils.isBlank(applicationRestore.getReportList())) {
+            for (ReportRestore reportRestore : applicationRestore.getReportList()) {
+                ReportConfig reportConfig = reportRestore.getReportConfig();
                 String description = resolveApplicationMessage(reportConfig.getDescription());
                 logDebug(taskMonitor, "Restoring configured report [{0}]...", description);
                 String title = reportConfig.getTitle();

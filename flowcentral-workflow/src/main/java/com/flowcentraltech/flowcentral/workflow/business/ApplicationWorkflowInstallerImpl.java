@@ -36,7 +36,9 @@ import com.flowcentraltech.flowcentral.common.util.ConfigUtils;
 import com.flowcentraltech.flowcentral.configuration.data.ApplicationInstall;
 import com.flowcentraltech.flowcentral.configuration.data.ApplicationRestore;
 import com.flowcentraltech.flowcentral.configuration.data.WorkflowInstall;
+import com.flowcentraltech.flowcentral.configuration.data.WorkflowRestore;
 import com.flowcentraltech.flowcentral.configuration.data.WorkflowWizardInstall;
+import com.flowcentraltech.flowcentral.configuration.data.WorkflowWizardRestore;
 import com.flowcentraltech.flowcentral.configuration.xml.AppConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppWorkflowConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppWorkflowWizardConfig;
@@ -203,7 +205,7 @@ public class ApplicationWorkflowInstallerImpl extends AbstractApplicationArtifac
         logDebug(taskMonitor, "Installing application workflow form wizards...");
         environment().updateAll(new WfWizardQuery().applicationId(applicationId).isNotActualCustom(),
                 new Update().add("deprecated", Boolean.TRUE));
-       if (applicationConfig.getWorkflowWizardsConfig() != null) {
+        if (applicationConfig.getWorkflowWizardsConfig() != null) {
             if (!DataUtils.isBlank(applicationConfig.getWorkflowWizardsConfig().getWorkflowWizardList())) {
                 WfWizard wfWizard = new WfWizard();
                 wfWizard.setApplicationId(applicationId);
@@ -264,34 +266,27 @@ public class ApplicationWorkflowInstallerImpl extends AbstractApplicationArtifac
         final Long applicationId = applicationRestore.getApplicationId();
 
         logDebug(taskMonitor, "Executing workflow restore...");
-        if (applicationConfig.getWorkflowsConfig() != null) {
-            if (!DataUtils.isBlank(applicationConfig.getWorkflowsConfig().getWorkflowList())) {
-                for (AppWorkflowConfig applicationWorkflowConfig : applicationConfig.getWorkflowsConfig()
-                        .getWorkflowList()) {
-                    WorkflowInstall workflowInstall = getConfigurationLoader()
-                            .loadWorkflowInstallation(applicationWorkflowConfig.getConfigFile());
-                    WfConfig wfConfig = workflowInstall.getWfConfig();
-                    String description = resolveApplicationMessage(wfConfig.getDescription());
-                    String label = resolveApplicationMessage(wfConfig.getLabel());
-                    logDebug(taskMonitor, "Restoring configured workflow [{0}]...", description);
+        if (!DataUtils.isBlank(applicationRestore.getWorkflowList())) {
+            for (WorkflowRestore workflowRestore : applicationRestore.getWorkflowList()) {
+                WfConfig wfConfig = workflowRestore.getWfConfig();
+                String description = resolveApplicationMessage(wfConfig.getDescription());
+                String label = resolveApplicationMessage(wfConfig.getLabel());
+                logDebug(taskMonitor, "Restoring configured workflow [{0}]...", description);
 
-                    Workflow workflow = new Workflow();
-                    workflow.setApplicationId(applicationId);
-                    workflow.setName(wfConfig.getName());
-                    workflow.setDescription(description);
-                    workflow.setDescFormat(wfConfig.getDescFormat());
-                    workflow.setLabel(label);
-                    workflow.setLoadingTable(wfConfig.getLoadingTable());
-                    workflow.setSupportMultiItemAction(wfConfig.getSupportMultiItemAction());
-                    workflow.setEntity(
-                            ApplicationNameUtils.ensureLongNameReference(applicationName, wfConfig.getEntity()));
-                    workflow.setDeprecated(false);
-                    workflow.setConfigType(ConfigType.CUSTOM);
-                    populateChildList(wfConfig, workflow, applicationName);
-                    environment().create(workflow);
-                }
+                Workflow workflow = new Workflow();
+                workflow.setApplicationId(applicationId);
+                workflow.setName(wfConfig.getName());
+                workflow.setDescription(description);
+                workflow.setDescFormat(wfConfig.getDescFormat());
+                workflow.setLabel(label);
+                workflow.setLoadingTable(wfConfig.getLoadingTable());
+                workflow.setSupportMultiItemAction(wfConfig.getSupportMultiItemAction());
+                workflow.setEntity(ApplicationNameUtils.ensureLongNameReference(applicationName, wfConfig.getEntity()));
+                workflow.setDeprecated(false);
+                workflow.setConfigType(ConfigType.CUSTOM);
+                populateChildList(wfConfig, workflow, applicationName);
+                environment().create(workflow);
             }
-
         }
 
         logDebug(taskMonitor, "Restoring application workflow channels...");
@@ -324,39 +319,35 @@ public class ApplicationWorkflowInstallerImpl extends AbstractApplicationArtifac
 
         // Install workflow wizards
         logDebug(taskMonitor, "Restoring application workflow form wizards...");
-       if (applicationConfig.getWorkflowWizardsConfig() != null) {
-            if (!DataUtils.isBlank(applicationConfig.getWorkflowWizardsConfig().getWorkflowWizardList())) {
-                WfWizard wfWizard = new WfWizard();
-                wfWizard.setApplicationId(applicationId);
-                for (AppWorkflowWizardConfig appWorkflowWizardConfig : applicationConfig.getWorkflowWizardsConfig()
-                        .getWorkflowWizardList()) {
-                    WorkflowWizardInstall workflowWizardInstall = getConfigurationLoader()
-                            .loadWorkflowWizardInstallation(appWorkflowWizardConfig.getConfigFile());
-                    WfWizardConfig wfWizardConfig = workflowWizardInstall.getWfWizardConfig();
-                    String description = resolveApplicationMessage(wfWizardConfig.getDescription());
-                    String label = resolveApplicationMessage(wfWizardConfig.getLabel());
-                    logDebug("Restoring new application form wizard [{0}]...", wfWizardConfig.getName());
-                    wfWizard.setName(wfWizardConfig.getName());
-                    wfWizard.setDescription(description);
-                    wfWizard.setLabel(label);
-                    wfWizard.setEntity(ApplicationNameUtils.ensureLongNameReference(applicationName,
-                            wfWizardConfig.getEntity()));
-                    wfWizard.setSubmitWorkflow(wfWizardConfig.getSubmitWorkflow());
-                    wfWizard.setDeprecated(false);
-                    wfWizard.setConfigType(ConfigType.CUSTOM);
-                    populateChildList(wfWizard, wfWizardConfig, applicationId, applicationConfig.getName());
-                    environment().create(wfWizard);
+        if (!DataUtils.isBlank(applicationRestore.getWorkflowWizardList())) {
+            WfWizard wfWizard = new WfWizard();
+            wfWizard.setApplicationId(applicationId);
+            for (WorkflowWizardRestore workflowWizardRestore : applicationRestore.getWorkflowWizardList()) {
+                WfWizardConfig wfWizardConfig = workflowWizardRestore.getWfWizardConfig();
+                String description = resolveApplicationMessage(wfWizardConfig.getDescription());
+                String label = resolveApplicationMessage(wfWizardConfig.getLabel());
+                logDebug("Restoring new application form wizard [{0}]...", wfWizardConfig.getName());
+                wfWizard.setName(wfWizardConfig.getName());
+                wfWizard.setDescription(description);
+                wfWizard.setLabel(label);
+                wfWizard.setEntity(
+                        ApplicationNameUtils.ensureLongNameReference(applicationName, wfWizardConfig.getEntity()));
+                wfWizard.setSubmitWorkflow(wfWizardConfig.getSubmitWorkflow());
+                wfWizard.setDeprecated(false);
+                wfWizard.setConfigType(ConfigType.CUSTOM);
+                populateChildList(wfWizard, wfWizardConfig, applicationId, applicationConfig.getName());
+                environment().create(wfWizard);
 
-                    applicationPrivilegeManager.registerPrivilege(applicationId,
-                            ApplicationPrivilegeConstants.APPLICATION_WORKFLOW_WIZARD_CATEGORY_CODE,
-                            PrivilegeNameUtils.getWfWizardPrivilegeName(ApplicationNameUtils
-                                    .getApplicationEntityLongName(applicationName, wfWizardConfig.getName())),
-                            description);
-                }
-
-                logDebug(taskMonitor, "Restored [{0}] application workflow wizards...",
-                        applicationConfig.getWorkflowWizardsConfig().getWorkflowWizardList().size());
+                applicationPrivilegeManager
+                        .registerPrivilege(applicationId,
+                                ApplicationPrivilegeConstants.APPLICATION_WORKFLOW_WIZARD_CATEGORY_CODE,
+                                PrivilegeNameUtils.getWfWizardPrivilegeName(ApplicationNameUtils
+                                        .getApplicationEntityLongName(applicationName, wfWizardConfig.getName())),
+                                description);
             }
+
+            logDebug(taskMonitor, "Restored [{0}] application workflow wizards...",
+                    applicationConfig.getWorkflowWizardsConfig().getWorkflowWizardList().size());
         }
     }
 

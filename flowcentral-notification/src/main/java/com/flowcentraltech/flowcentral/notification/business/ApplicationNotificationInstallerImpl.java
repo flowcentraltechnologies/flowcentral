@@ -28,7 +28,9 @@ import com.flowcentraltech.flowcentral.common.util.ConfigUtils;
 import com.flowcentraltech.flowcentral.configuration.data.ApplicationInstall;
 import com.flowcentraltech.flowcentral.configuration.data.ApplicationRestore;
 import com.flowcentraltech.flowcentral.configuration.data.NotifLargeTextInstall;
+import com.flowcentraltech.flowcentral.configuration.data.NotifLargeTextRestore;
 import com.flowcentraltech.flowcentral.configuration.data.NotifTemplateInstall;
+import com.flowcentraltech.flowcentral.configuration.data.NotifTemplateRestore;
 import com.flowcentraltech.flowcentral.configuration.xml.AppConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppNotifLargeTextConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppNotifTemplateConfig;
@@ -172,14 +174,10 @@ public class ApplicationNotificationInstallerImpl extends AbstractApplicationArt
 
         // Notification templates
         logDebug(taskMonitor, "Executing notification restore...");
-        if (applicationConfig.getNotifTemplatesConfig() != null
-                && !DataUtils.isBlank(applicationConfig.getNotifTemplatesConfig().getNotifTemplateList())) {
-            for (AppNotifTemplateConfig applicationNotifTemplateConfig : applicationConfig.getNotifTemplatesConfig()
-                    .getNotifTemplateList()) {
-                NotifTemplateInstall notifTemplateInstall = getConfigurationLoader()
-                        .loadNotifTemplateInstallation(applicationNotifTemplateConfig.getConfigFile());
+        if (!DataUtils.isBlank(applicationRestore.getNotifTemplateList())) {
+            for (NotifTemplateRestore notifTemplateRestore : applicationRestore.getNotifTemplateList()) {
                 // Template
-                NotifTemplateConfig notifTemplateConfig = notifTemplateInstall.getNotifTemplateConfig();
+                NotifTemplateConfig notifTemplateConfig = notifTemplateRestore.getNotifTemplateConfig();
                 String description = resolveApplicationMessage(notifTemplateConfig.getDescription());
                 String entity = ApplicationNameUtils.ensureLongNameReference(applicationConfig.getName(),
                         notifTemplateConfig.getEntity());
@@ -202,16 +200,10 @@ public class ApplicationNotificationInstallerImpl extends AbstractApplicationArt
         }
 
         // Notification large texts
-        if (applicationConfig.getNotifLargeTextsConfig() != null
-                && !DataUtils.isBlank(applicationConfig.getNotifLargeTextsConfig().getNotifLargeTextList())) {
-            for (AppNotifLargeTextConfig applicationNotifLargeTextConfig : applicationConfig.getNotifLargeTextsConfig()
-                    .getNotifLargeTextList()) {
-                logDebug(taskMonitor, "Reading notification configuration file [{0}]...",
-                        applicationNotifLargeTextConfig.getConfigFile());
-                NotifLargeTextInstall notifLargeTextInstall = getConfigurationLoader()
-                        .loadNotifLargeTextInstallation(applicationNotifLargeTextConfig.getConfigFile());
+        if (!DataUtils.isBlank(applicationRestore.getNotifLargeTextList())) {
+            for (NotifLargeTextRestore notifLargeTextRestore : applicationRestore.getNotifLargeTextList()) {
                 // Large Text
-                NotifLargeTextConfig notifLargeTextConfig = notifLargeTextInstall.getNotifLargeTextConfig();
+                NotifLargeTextConfig notifLargeTextConfig = notifLargeTextRestore.getNotifLargeTextConfig();
                 String description = resolveApplicationMessage(notifLargeTextConfig.getDescription());
                 String entity = ApplicationNameUtils.ensureLongNameReference(applicationConfig.getName(),
                         notifLargeTextConfig.getEntity());
