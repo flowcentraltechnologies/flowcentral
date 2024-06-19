@@ -115,7 +115,7 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
 
     @Configurable("oneway-stringcryptograph")
     private OneWayStringCryptograph passwordCryptograph;
-    
+
     @Override
     public void clearDefinitionsCache() throws UnifyException {
 
@@ -131,11 +131,13 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
             throws UnifyException {
         final boolean isSystem = DefaultApplicationConstants.SYSTEM_LOGINID.equalsIgnoreCase(loginId);
         if (isTenancyEnabled()) {
-            if (loginTenantId == null && systemModuleService.getTenantCount() > 0) {
+            if (loginTenantId == null) {
                 if (isSystem) {
                     loginTenantId = Entity.PRIMARY_TENANT_ID;
                 } else {
-                    throw new UnifyException(SecurityModuleErrorConstants.TENANCY_IS_REQUIRED);
+                    if (systemModuleService.getTenantCount() > 0) {
+                        throw new UnifyException(SecurityModuleErrorConstants.TENANCY_IS_REQUIRED);
+                    }
                 }
             }
         } else {
@@ -232,7 +234,7 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
         userSessionManager.login(createUserToken(user, userBranch, loginTenantId));
         setSessionStickyAttribute(FlowCentralSessionAttributeConstants.USERLOGINID, loginId);
         setSessionStickyAttribute(FlowCentralSessionAttributeConstants.USERNAME, user.getFullName());
-        
+
         final String branchCode = userBranch != null ? userBranch.getCode() : null;
         String branchDesc = userBranch != null ? userBranch.getDescription() : null;
         if (StringUtils.isBlank(branchDesc)) {

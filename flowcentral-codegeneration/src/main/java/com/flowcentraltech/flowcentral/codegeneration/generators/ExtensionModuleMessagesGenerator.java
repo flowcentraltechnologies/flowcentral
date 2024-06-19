@@ -36,8 +36,10 @@ public class ExtensionModuleMessagesGenerator extends AbstractResourcesArtifactG
 
     private static final String MESSAGES_FOLDER = "{0}/resources/";
 
+    private static final String SNAPSHOT_MESSAGES_FOLDER = "resources/";
+
     public ExtensionModuleMessagesGenerator() {
-        super(MESSAGES_FOLDER); 
+        super(MESSAGES_FOLDER, SNAPSHOT_MESSAGES_FOLDER); 
     }
 
     @Override

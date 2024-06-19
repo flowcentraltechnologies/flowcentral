@@ -145,7 +145,7 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
 
     @Configurable
     private SystemRestoreService systemRestoreService;
-    
+
     private final FactoryMap<String, AppletDef> appletDefMap;
 
     public StudioModuleServiceImpl() {
@@ -252,7 +252,7 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
 
             };
     }
-    
+
     @Override
     public void clearDefinitionsCache() throws UnifyException {
         logDebug("Clearing definitions cache...");
@@ -542,16 +542,20 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
     private Messages loadModuleMessagesFromZip(TaskMonitor tm, String moduleName, ZipFile zipFile,
             Map<String, ZipEntry> _entries) throws UnifyException {
         Messages messages = Messages.emptyMessages();
-        final String propertiesFile = "com/flowcentraltech/flowcentral/resources/extension-" + moduleName.toLowerCase()
-                + "-messages.properties";
+        final String propertiesFile = "resources/extension-" + moduleName.toLowerCase() + "-messages.properties";
         InputStream inputStream = null;
         try {
             logDebug(tm, "Loading module messages from [{0}]...", propertiesFile);
-            inputStream = zipFile.getInputStream(_entries.get(propertiesFile));
-            Properties properties = new Properties();
-            properties.load(inputStream);
-            messages = new Messages(properties);
-            logDebug(tm, "Loaded module messages from [{0}] successfully.", propertiesFile);
+            ZipEntry entry = _entries.get(propertiesFile);
+            if (entry != null) {
+                inputStream = zipFile.getInputStream(entry);
+                Properties properties = new Properties();
+                properties.load(inputStream);
+                messages = new Messages(properties);
+                logDebug(tm, "Loaded module messages from [{0}] successfully.", propertiesFile);
+            } else {
+                logDebug(tm, "No module messages loaded from [{0}].", propertiesFile);
+            }
         } catch (IOException e) {
             throwOperationErrorException(e);
         } finally {

@@ -2523,6 +2523,13 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
+    public boolean isEntityDef(String entityName) throws UnifyException {
+        ApplicationEntityNameParts nameParts = ApplicationNameUtils.getApplicationEntityNameParts(entityName);
+        return environment().countAll(new AppEntityQuery().applicationName(nameParts.getApplicationName())
+                .name(nameParts.getEntityName())) > 0;
+    }
+
+    @Override
     public EntityClassDef getEntityClassDef(String entityName) throws UnifyException {
         return entityClassDefFactoryMap.get(entityName);
     }
@@ -3951,26 +3958,29 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             EntityClassDef tenantEntityClassDef = getEntityClassDef("system.tenant");
             MappedEntityProvider<? extends BaseMappedEntityProviderContext> provider = appletUtilities
                     .getMappingProvider((Class<? extends Entity>) tenantEntityClassDef.getEntityClass());
-            getEntityClassDef(provider.srcEntity());
-            List<MappedTenant> tenantList = appletUtilities.system()
-                    .findTenants((MappedTenantQuery) new MappedTenantQuery().ignoreEmptyCriteria(true));
-            for (MappedTenant mappedTenant : tenantList) {
-                if (Boolean.TRUE.equals(mappedTenant.getPrimary())) {
-                    if (primaryTenantResolved) {
-                        throwOperationErrorException(
-                                new IllegalArgumentException("Multiple primary tenants defined in system."));
-                    }
+            if (isEntityDef(provider.srcEntity())) {
+                getEntityClassDef(provider.srcEntity());
+                List<MappedTenant> tenantList = appletUtilities.system()
+                        .findTenants((MappedTenantQuery) new MappedTenantQuery().ignoreEmptyCriteria(true));
+                for (MappedTenant mappedTenant : tenantList) {
+                    if (Boolean.TRUE.equals(mappedTenant.getPrimary())) {
+                        if (primaryTenantResolved) {
+                            throwOperationErrorException(
+                                    new IllegalArgumentException("Multiple primary tenants defined in system."));
+                        }
 
-                    if (actualPrimaryTenantId == null) {
-                        appletUtilities.system().setSysParameterValue(
-                                SystemModuleSysParamConstants.SYSTEM_ACTUAL_PRIMARY_TENANT_ID, mappedTenant.getId());
-                    } else if (!actualPrimaryTenantId.equals(mappedTenant.getId())) {
-                        throwOperationErrorException(
-                                new IllegalArgumentException("Primary tenant has been improperly changed from ["
-                                        + actualPrimaryTenantId + "]  to [" + mappedTenant.getId() + "]"));
-                    }
+                        if (actualPrimaryTenantId == null) {
+                            appletUtilities.system().setSysParameterValue(
+                                    SystemModuleSysParamConstants.SYSTEM_ACTUAL_PRIMARY_TENANT_ID,
+                                    mappedTenant.getId());
+                        } else if (!actualPrimaryTenantId.equals(mappedTenant.getId())) {
+                            throwOperationErrorException(
+                                    new IllegalArgumentException("Primary tenant has been improperly changed from ["
+                                            + actualPrimaryTenantId + "]  to [" + mappedTenant.getId() + "]"));
+                        }
 
-                    primaryTenantResolved = true;
+                        primaryTenantResolved = true;
+                    }
                 }
             }
 
@@ -5712,7 +5722,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 if (oldAppEntityField == null) {
                     AppEntityField appEntityField = new AppEntityField();
                     appEntityField.setDataType(entityFieldConfig.getType());
-                    appEntityField.setType(restore ? EntityFieldType.CUSTOM: EntityFieldType.STATIC);
+                    appEntityField.setType(restore ? EntityFieldType.CUSTOM : EntityFieldType.STATIC);
                     appEntityField.setName(entityFieldConfig.getName());
                     appEntityField.setLabel(resolveApplicationMessage(entityFieldConfig.getLabel()));
                     String references = entityFieldConfig.getReferences();
@@ -5757,12 +5767,12 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appEntityField.setDescriptive(entityFieldConfig.getDescriptive());
                     appEntityField.setMaintainLink(entityFieldConfig.getMaintainLink());
                     appEntityField.setBasicSearch(entityFieldConfig.getBasicSearch());
-                    appEntityField.setConfigType(restore ? ConfigType.CUSTOM: ConfigType.STATIC_INSTALL);
+                    appEntityField.setConfigType(restore ? ConfigType.CUSTOM : ConfigType.STATIC_INSTALL);
                     fieldList.add(appEntityField);
                 } else {
                     if (ConfigUtils.isSetInstall(oldAppEntityField)) {
                         oldAppEntityField.setDataType(entityFieldConfig.getType());
-                        oldAppEntityField.setType(restore ? EntityFieldType.CUSTOM: EntityFieldType.STATIC);
+                        oldAppEntityField.setType(restore ? EntityFieldType.CUSTOM : EntityFieldType.STATIC);
                         oldAppEntityField.setLabel(resolveApplicationMessage(entityFieldConfig.getLabel()));
                         String references = entityFieldConfig.getReferences();
                         if (entityFieldConfig.getType().isEntityRef()
@@ -5838,7 +5848,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appEntitySeries.setDescription(resolveApplicationMessage(entitySeriesConfig.getDescription()));
                     appEntitySeries.setLabel(resolveApplicationMessage(entitySeriesConfig.getLabel()));
                     appEntitySeries.setFieldName(entitySeriesConfig.getFieldName());
-                    appEntitySeries.setConfigType(restore ? ConfigType.CUSTOM: ConfigType.STATIC_INSTALL);
+                    appEntitySeries.setConfigType(restore ? ConfigType.CUSTOM : ConfigType.STATIC_INSTALL);
                     seriesList.add(appEntitySeries);
                 } else {
                     if (ConfigUtils.isSetInstall(oldAppEntitySeries)) {

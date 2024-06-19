@@ -26,6 +26,10 @@ public abstract class AbstractResourcesArtifactGenerator extends AbstractStaticM
 
     private static final String RESOURCES_FOLDER = "src/main/resources/";
 
+    protected AbstractResourcesArtifactGenerator(String artDir, String srtDir) {
+        super(RESOURCES_FOLDER + artDir, srtDir);
+    }
+
     protected AbstractResourcesArtifactGenerator(String artDir) {
         super(RESOURCES_FOLDER + artDir, artDir);
     }
