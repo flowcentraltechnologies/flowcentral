@@ -29,7 +29,6 @@ import com.flowcentraltech.flowcentral.chart.entities.ChartDataSource;
 import com.flowcentraltech.flowcentral.chart.entities.ChartDataSourceQuery;
 import com.flowcentraltech.flowcentral.chart.entities.ChartQuery;
 import com.flowcentraltech.flowcentral.common.constants.ConfigType;
-import com.flowcentraltech.flowcentral.common.util.ConfigUtils;
 import com.flowcentraltech.flowcentral.configuration.data.ApplicationInstall;
 import com.flowcentraltech.flowcentral.configuration.data.ApplicationRestore;
 import com.flowcentraltech.flowcentral.configuration.xml.AppChartConfig;
@@ -59,7 +58,7 @@ public class ApplicationChartInstallerImpl extends AbstractApplicationArtifactIn
 
         logDebug(taskMonitor, "Executing chart installer...");
         // Install configured charts
-        environment().updateAll(new ChartQuery().applicationId(applicationId).isNotActualCustom(),
+        environment().updateAll(new ChartQuery().applicationId(applicationId).isStatic(),
                 new Update().add("deprecated", Boolean.TRUE));
         if (applicationConfig.getChartsConfig() != null
                 && !DataUtils.isBlank(applicationConfig.getChartsConfig().getChartList())) {
@@ -94,37 +93,36 @@ public class ApplicationChartInstallerImpl extends AbstractApplicationArtifactIn
                     chart.setStacked(appChartConfig.isStacked());
                     chart.setSmooth(appChartConfig.isSmooth());
                     chart.setDeprecated(false);
-                    chart.setConfigType(ConfigType.MUTABLE_INSTALL);
+                    chart.setConfigType(ConfigType.STATIC);
                     environment().create(chart);
                 } else {
-                    if (ConfigUtils.isSetInstall(oldChart)) {
-                        oldChart.setType(appChartConfig.getType());
-                        oldChart.setPaletteType(appChartConfig.getPaletteType());
-                        oldChart.setDescription(description);
-                        oldChart.setTitle(title);
-                        oldChart.setSubTitle(subTitle);
-                        oldChart.setWidth(appChartConfig.getWidth());
-                        oldChart.setHeight(appChartConfig.getHeight());
-                        oldChart.setProvider(appChartConfig.getProvider());
-                        oldChart.setRule(appChartConfig.getRule());
-                        oldChart.setCategory(appChartConfig.getCategory());
-                        oldChart.setColor(appChartConfig.getColor());
-                        oldChart.setSeries(appChartConfig.getSeries());
-                        oldChart.setShowGrid(appChartConfig.isShowGrid());
-                        oldChart.setShowDataLabels(appChartConfig.isShowDataLabels());
-                        oldChart.setFormatDataLabels(appChartConfig.isFormatDataLabels());
-                        oldChart.setFormatYLabels(appChartConfig.isFormatYLabels());
-                        oldChart.setStacked(appChartConfig.isStacked());
-                        oldChart.setSmooth(appChartConfig.isSmooth());
-                        oldChart.setDeprecated(false);
-                        environment().updateByIdVersion(oldChart);
-                    }
+                    oldChart.setType(appChartConfig.getType());
+                    oldChart.setPaletteType(appChartConfig.getPaletteType());
+                    oldChart.setDescription(description);
+                    oldChart.setTitle(title);
+                    oldChart.setSubTitle(subTitle);
+                    oldChart.setWidth(appChartConfig.getWidth());
+                    oldChart.setHeight(appChartConfig.getHeight());
+                    oldChart.setProvider(appChartConfig.getProvider());
+                    oldChart.setRule(appChartConfig.getRule());
+                    oldChart.setCategory(appChartConfig.getCategory());
+                    oldChart.setColor(appChartConfig.getColor());
+                    oldChart.setSeries(appChartConfig.getSeries());
+                    oldChart.setShowGrid(appChartConfig.isShowGrid());
+                    oldChart.setShowDataLabels(appChartConfig.isShowDataLabels());
+                    oldChart.setFormatDataLabels(appChartConfig.isFormatDataLabels());
+                    oldChart.setFormatYLabels(appChartConfig.isFormatYLabels());
+                    oldChart.setStacked(appChartConfig.isStacked());
+                    oldChart.setSmooth(appChartConfig.isSmooth());
+                    oldChart.setDeprecated(false);
+                    oldChart.setConfigType(ConfigType.STATIC);
+                    environment().updateByIdVersion(oldChart);
                 }
             }
         }
 
         // Install configured chart data sources
-        environment().updateAll(new ChartDataSourceQuery().applicationId(applicationId).isNotActualCustom(),
+        environment().updateAll(new ChartDataSourceQuery().applicationId(applicationId).isStatic(),
                 new Update().add("deprecated", Boolean.TRUE));
         if (applicationConfig.getChartDataSourcesConfig() != null
                 && !DataUtils.isBlank(applicationConfig.getChartDataSourcesConfig().getChartDataSourceList())) {
@@ -153,26 +151,25 @@ public class ApplicationChartInstallerImpl extends AbstractApplicationArtifactIn
                             InputWidgetUtils.newAppPropertySequence(appChartDataSourceConfig.getCategories()));
                     chartDataSource.setFieldSequence(newAppFieldSequence(appChartDataSourceConfig.getFieldSequence()));
                     chartDataSource.setDeprecated(false);
-                    chartDataSource.setConfigType(ConfigType.MUTABLE_INSTALL);
+                    chartDataSource.setConfigType(ConfigType.STATIC);
                     environment().create(chartDataSource);
                 } else {
-                    if (ConfigUtils.isSetInstall(oldChartDataSource)) {
-                        oldChartDataSource.setType(appChartDataSourceConfig.getType());
-                        oldChartDataSource.setTimeSeriesType(appChartDataSourceConfig.getTimeSeriesType());
-                        oldChartDataSource.setCategoryField(appChartDataSourceConfig.getCategoryField());
-                        oldChartDataSource.setEntity(appChartDataSourceConfig.getEntity());
-                        oldChartDataSource.setDescription(description);
-                        oldChartDataSource.setLimit(appChartDataSourceConfig.getLimit());
-                        oldChartDataSource.setCategoryBase(
-                                InputWidgetUtils.newAppFilter(appChartDataSourceConfig.getCategoryBase()));
-                        oldChartDataSource.setSeries(
-                                InputWidgetUtils.newAppPropertySequence(appChartDataSourceConfig.getSeries()));
-                        oldChartDataSource.setCategories(
-                                InputWidgetUtils.newAppPropertySequence(appChartDataSourceConfig.getCategories()));
-                        oldChartDataSource.setFieldSequence(newAppFieldSequence(appChartDataSourceConfig.getFieldSequence()));
-                        oldChartDataSource.setDeprecated(false);
-                        environment().updateByIdVersion(oldChartDataSource);
-                    }
+                    oldChartDataSource.setType(appChartDataSourceConfig.getType());
+                    oldChartDataSource.setTimeSeriesType(appChartDataSourceConfig.getTimeSeriesType());
+                    oldChartDataSource.setCategoryField(appChartDataSourceConfig.getCategoryField());
+                    oldChartDataSource.setEntity(appChartDataSourceConfig.getEntity());
+                    oldChartDataSource.setDescription(description);
+                    oldChartDataSource.setLimit(appChartDataSourceConfig.getLimit());
+                    oldChartDataSource.setCategoryBase(
+                            InputWidgetUtils.newAppFilter(appChartDataSourceConfig.getCategoryBase()));
+                    oldChartDataSource.setSeries(
+                            InputWidgetUtils.newAppPropertySequence(appChartDataSourceConfig.getSeries()));
+                    oldChartDataSource.setCategories(
+                            InputWidgetUtils.newAppPropertySequence(appChartDataSourceConfig.getCategories()));
+                    oldChartDataSource.setFieldSequence(newAppFieldSequence(appChartDataSourceConfig.getFieldSequence()));
+                    oldChartDataSource.setDeprecated(false);
+                    oldChartDataSource.setConfigType(ConfigType.STATIC);
+                    environment().updateByIdVersion(oldChartDataSource);
                 }
             }
         }
@@ -261,13 +258,15 @@ public class ApplicationChartInstallerImpl extends AbstractApplicationArtifactIn
         for (Long chartId : chartIdList) {
             Chart srcChart = environment().find(Chart.class, chartId);
             String oldDescription = srcChart.getDescription();
+            srcChart.setId(null);
             srcChart.setApplicationId(destApplicationId);
             srcChart.setName(ctx.nameSwap(srcChart.getName()));
             srcChart.setDescription(ctx.messageSwap(srcChart.getDescription()));
             srcChart.setTitle(ctx.messageSwap(srcChart.getTitle()));
             srcChart.setSubTitle(ctx.messageSwap(srcChart.getSubTitle()));
             srcChart.setProvider(ctx.componentSwap(srcChart.getProvider()));
-
+            srcChart.setDeprecated(false);
+            srcChart.setConfigType(ConfigType.CUSTOM);
             environment().create(srcChart);
             logDebug(taskMonitor, "Chart [{0}] -> [{1}]...", oldDescription, srcChart.getDescription());
         }

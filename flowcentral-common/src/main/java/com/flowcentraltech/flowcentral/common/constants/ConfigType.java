@@ -32,14 +32,6 @@ public enum ConfigType implements EnumConst {
 
     STATIC(
             "S"),
-    STATIC_INSTALL(
-            "SI"),
-    MUTABLE(
-            "M"),
-    MUTABLE_INSTALL(
-            "MI"),
-    CUSTOMIZED(
-            "Z"),
     CUSTOM(
             "C");
 
@@ -64,15 +56,7 @@ public enum ConfigType implements EnumConst {
     }
 
     public boolean isCustom() {
-        return CUSTOM.equals(this) || CUSTOMIZED.equals(this);
-    }
-
-    public boolean isInitial() {
-        return STATIC.equals(this) || MUTABLE.equals(this);
-    }
-
-    public boolean isInstall() {
-        return STATIC_INSTALL.equals(this) || MUTABLE_INSTALL.equals(this);
+        return CUSTOM.equals(this);
     }
 
     public static ConfigType fromCode(String code) {

@@ -30,7 +30,6 @@ import com.flowcentraltech.flowcentral.application.util.InputWidgetUtils;
 import com.flowcentraltech.flowcentral.application.util.PrivilegeNameUtils;
 import com.flowcentraltech.flowcentral.common.business.ApplicationPrivilegeManager;
 import com.flowcentraltech.flowcentral.common.constants.ConfigType;
-import com.flowcentraltech.flowcentral.common.util.ConfigUtils;
 import com.flowcentraltech.flowcentral.configuration.data.ApplicationInstall;
 import com.flowcentraltech.flowcentral.configuration.data.ApplicationRestore;
 import com.flowcentraltech.flowcentral.configuration.xml.AppConfig;
@@ -76,7 +75,7 @@ public class ApplicationDashboardInstallerImpl extends AbstractApplicationArtifa
 
         logDebug(taskMonitor, "Executing dashboard installer...");
         // Install configured dashboards
-        environment().updateAll(new DashboardQuery().applicationId(applicationId).isNotActualCustom(),
+        environment().updateAll(new DashboardQuery().applicationId(applicationId).isStatic(),
                 new Update().add("deprecated", Boolean.TRUE));
         if (applicationConfig.getDashboardsConfig() != null
                 && !DataUtils.isBlank(applicationConfig.getDashboardsConfig().getDashboardList())) {
@@ -93,16 +92,14 @@ public class ApplicationDashboardInstallerImpl extends AbstractApplicationArtifa
                     dashboard.setSections(dashboardConfig.getSections());
                     dashboard.setAllowSecondaryTenants(dashboardConfig.getAllowSecondaryTenants());
                     dashboard.setDeprecated(false);
-                    dashboard.setConfigType(ConfigType.MUTABLE_INSTALL);
+                    dashboard.setConfigType(ConfigType.STATIC);
                     populateChildList(dashboardConfig, dashboard, applicationName, false);
                     environment().create(dashboard);
                 } else {
-                    if (ConfigUtils.isSetInstall(oldDashboard)) {
-                        oldDashboard.setDescription(description);
-                        oldDashboard.setSections(dashboardConfig.getSections());
-                        oldDashboard.setAllowSecondaryTenants(dashboardConfig.getAllowSecondaryTenants());
-                    }
-
+                    oldDashboard.setDescription(description);
+                    oldDashboard.setSections(dashboardConfig.getSections());
+                    oldDashboard.setAllowSecondaryTenants(dashboardConfig.getAllowSecondaryTenants());
+                    oldDashboard.setConfigType(ConfigType.STATIC);
                     oldDashboard.setDeprecated(false);
                     populateChildList(dashboardConfig, oldDashboard, applicationName, false);
                     environment().updateByIdVersion(oldDashboard);
@@ -160,6 +157,7 @@ public class ApplicationDashboardInstallerImpl extends AbstractApplicationArtifa
         for (Long dashboardId : dashboardIdList) {
             Dashboard srcDashboard = environment().find(Dashboard.class, dashboardId);
             String oldDescription = srcDashboard.getDescription();
+            srcDashboard.setId(null);
             srcDashboard.setApplicationId(destApplicationId);
             srcDashboard.setName(ctx.nameSwap(srcDashboard.getName()));
             srcDashboard.setDescription(ctx.messageSwap(srcDashboard.getDescription()));
@@ -171,6 +169,7 @@ public class ApplicationDashboardInstallerImpl extends AbstractApplicationArtifa
                 dashboardTile.setChart(ctx.entitySwap(dashboardTile.getChart()));
             }
 
+            srcDashboard.setConfigType(ConfigType.CUSTOM);
             environment().create(srcDashboard);
             logDebug(taskMonitor, "Dashboard [{0}] -> [{1}]...", oldDescription, srcDashboard.getDescription());
         }
@@ -214,19 +213,17 @@ public class ApplicationDashboardInstallerImpl extends AbstractApplicationArtifa
                     dashboardTile.setDescription(resolveApplicationMessage(dashboardTileConfig.getDescription()));
                     dashboardTile.setSection(dashboardTileConfig.getSection());
                     dashboardTile.setIndex(dashboardTileConfig.getIndex());
-                    dashboardTile.setConfigType(restore ? ConfigType.CUSTOM: ConfigType.MUTABLE_INSTALL);
+                    dashboardTile.setConfigType(restore ? ConfigType.CUSTOM: ConfigType.STATIC);
                     tileList.add(dashboardTile);
                 } else {
-                    if (ConfigUtils.isSetInstall(oldDashboardTile)) {
-                        oldDashboardTile.setType(dashboardTileConfig.getType());
-                        oldDashboardTile.setChart(ApplicationNameUtils.ensureLongNameReference(applicationName,
-                                dashboardTileConfig.getChart()));
-                        oldDashboardTile
-                                .setDescription(resolveApplicationMessage(dashboardTileConfig.getDescription()));
-                        oldDashboardTile.setSection(dashboardTileConfig.getSection());
-                        oldDashboardTile.setIndex(dashboardTileConfig.getIndex());
-                    }
-
+                    oldDashboardTile.setType(dashboardTileConfig.getType());
+                    oldDashboardTile.setChart(ApplicationNameUtils.ensureLongNameReference(applicationName,
+                            dashboardTileConfig.getChart()));
+                    oldDashboardTile
+                            .setDescription(resolveApplicationMessage(dashboardTileConfig.getDescription()));
+                    oldDashboardTile.setSection(dashboardTileConfig.getSection());
+                    oldDashboardTile.setIndex(dashboardTileConfig.getIndex());
+                    oldDashboardTile.setConfigType(ConfigType.STATIC);
                     tileList.add(oldDashboardTile);
                 }
 

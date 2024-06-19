@@ -15,9 +15,6 @@
  */
 package com.flowcentraltech.flowcentral.common.entities;
 
-import java.util.Arrays;
-import java.util.List;
-
 import com.flowcentraltech.flowcentral.common.constants.ConfigType;
 import com.tcdng.unify.core.criterion.CompoundRestriction;
 
@@ -28,8 +25,6 @@ import com.tcdng.unify.core.criterion.CompoundRestriction;
  * @since 1.0
  */
 public abstract class BaseConfigNamedEntityQuery<T extends BaseConfigNamedEntity> extends BaseNamedEntityQuery<T> {
-
-    private static final List<ConfigType> CUSTOM_CONFIG_TYPES = Arrays.asList(ConfigType.CUSTOM, ConfigType.CUSTOMIZED);
 
     public BaseConfigNamedEntityQuery(Class<T> entityClass) {
         super(entityClass);
@@ -49,19 +44,11 @@ public abstract class BaseConfigNamedEntityQuery<T extends BaseConfigNamedEntity
     }
 
     public final BaseConfigNamedEntityQuery<T> isCustom() {
-        return (BaseConfigNamedEntityQuery<T>) addAmongst("configType", CUSTOM_CONFIG_TYPES);
-    }
-
-    public final BaseConfigNamedEntityQuery<T> isNotActualCustom() {
-        return (BaseConfigNamedEntityQuery<T>) addNotEquals("configType", ConfigType.CUSTOM);
-    }
-
-    public final BaseConfigNamedEntityQuery<T> isActualCustom() {
         return (BaseConfigNamedEntityQuery<T>) addEquals("configType", ConfigType.CUSTOM);
     }
 
-    public final BaseConfigNamedEntityQuery<T> isNotCustom() {
-        return (BaseConfigNamedEntityQuery<T>) addNotAmongst("configType", CUSTOM_CONFIG_TYPES);
+    public final BaseConfigNamedEntityQuery<T> isStatic() {
+        return (BaseConfigNamedEntityQuery<T>) addEquals("configType", ConfigType.STATIC);
     }
 
 }
