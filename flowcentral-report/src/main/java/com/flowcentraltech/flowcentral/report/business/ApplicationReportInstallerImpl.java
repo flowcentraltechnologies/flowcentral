@@ -59,6 +59,7 @@ import com.tcdng.unify.convert.util.ConverterUtils;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
+import com.tcdng.unify.core.constant.DataType;
 import com.tcdng.unify.core.constant.HAlignType;
 import com.tcdng.unify.core.criterion.Update;
 import com.tcdng.unify.core.database.Entity;
@@ -404,37 +405,40 @@ public class ApplicationReportInstallerImpl extends AbstractApplicationArtifactI
         if (!DataUtils.isBlank(appEntityConfig.getEntityFieldList())) {
             for (EntityFieldConfig rfd : appEntityConfig.getEntityFieldList()) {
                 if (rfd.getReportable() && !EntityFieldDataType.SCRATCH.equals(rfd.getType())) {
-                    ReportableField reportableField = new ReportableField();
-                    String description = null;
-                    Format fa = entityClass != null
-                            ? ReflectUtils.getField(entityClass, rfd.getName()).getAnnotation(Format.class)
-                            : null;
-                    if (fa != null) {
-                        description = AnnotationUtils.getAnnotationString(fa.description());
-                        if (description != null) {
-                            description = resolveApplicationMessage(description);
+                    DataType dataType = rfd.getType().dataType();
+                    if (dataType != null) {
+                        ReportableField reportableField = new ReportableField();
+                        String description = null;
+                        Format fa = entityClass != null
+                                ? ReflectUtils.getField(entityClass, rfd.getName()).getAnnotation(Format.class)
+                                : null;
+                        if (fa != null) {
+                            description = AnnotationUtils.getAnnotationString(fa.description());
+                            if (description != null) {
+                                description = resolveApplicationMessage(description);
+                            }
+
+                            String formatter = AnnotationUtils.getAnnotationString(fa.formatter());
+                            reportableField.setFormatter(formatter);
+                            reportableField.setHorizontalAlign(fa.halign().name());
+                            reportableField.setWidth(fa.widthRatio());
+                        } else {
+                            if (Number.class.isAssignableFrom(dataType.javaClass())) {
+                                reportableField.setHorizontalAlign(HAlignType.RIGHT.name());
+                            }
+                            reportableField.setWidth(-1);
                         }
 
-                        String formatter = AnnotationUtils.getAnnotationString(fa.formatter());
-                        reportableField.setFormatter(formatter);
-                        reportableField.setHorizontalAlign(fa.halign().name());
-                        reportableField.setWidth(fa.widthRatio());
-                    } else {
-                        if (Number.class.isAssignableFrom(rfd.getType().dataType().javaClass())) {
-                            reportableField.setHorizontalAlign(HAlignType.RIGHT.name());
+                        if (description == null) {
+                            description = NameUtils.describeName(rfd.getName());
                         }
-                        reportableField.setWidth(-1);
-                    }
 
-                    if (description == null) {
-                        description = NameUtils.describeName(rfd.getName());
+                        reportableField.setDescription(description);
+                        reportableField.setName(rfd.getName());
+                        reportableField.setParameterOnly(false);
+                        reportableField.setType(ConverterUtils.getWrapperClassName(dataType.javaClass()));
+                        reportableFieldList.add(reportableField);
                     }
-
-                    reportableField.setDescription(description);
-                    reportableField.setName(rfd.getName());
-                    reportableField.setParameterOnly(false);
-                    reportableField.setType(ConverterUtils.getWrapperClassName(rfd.getType().dataType().javaClass()));
-                    reportableFieldList.add(reportableField);
                 }
             }
         }
