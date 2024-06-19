@@ -1423,6 +1423,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 clearAllSystemDefinitionsCache();
 
                 // Wait a while for propagation
+                logDebug(taskMonitor, "Waiting for clear system definitions cache propagation...");
                 pause(CLEAR_SYSTEM_CACHE_WAIT_MILLISEC);
 
                 logDebug(taskMonitor, "System restore successfully completed.");
@@ -5710,7 +5711,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 if (oldAppEntityField == null) {
                     AppEntityField appEntityField = new AppEntityField();
                     appEntityField.setDataType(entityFieldConfig.getType());
-                    appEntityField.setType(EntityFieldType.STATIC);
+                    appEntityField.setType(restore ? EntityFieldType.CUSTOM: EntityFieldType.STATIC);
                     appEntityField.setName(entityFieldConfig.getName());
                     appEntityField.setLabel(resolveApplicationMessage(entityFieldConfig.getLabel()));
                     String references = entityFieldConfig.getReferences();
@@ -5755,12 +5756,12 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appEntityField.setDescriptive(entityFieldConfig.getDescriptive());
                     appEntityField.setMaintainLink(entityFieldConfig.getMaintainLink());
                     appEntityField.setBasicSearch(entityFieldConfig.getBasicSearch());
-                    appEntityField.setConfigType(ConfigType.STATIC_INSTALL);
+                    appEntityField.setConfigType(restore ? ConfigType.CUSTOM: ConfigType.STATIC_INSTALL);
                     fieldList.add(appEntityField);
                 } else {
                     if (ConfigUtils.isSetInstall(oldAppEntityField)) {
                         oldAppEntityField.setDataType(entityFieldConfig.getType());
-                        oldAppEntityField.setType(EntityFieldType.STATIC);
+                        oldAppEntityField.setType(restore ? EntityFieldType.CUSTOM: EntityFieldType.STATIC);
                         oldAppEntityField.setLabel(resolveApplicationMessage(entityFieldConfig.getLabel()));
                         String references = entityFieldConfig.getReferences();
                         if (entityFieldConfig.getType().isEntityRef()
@@ -5836,7 +5837,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appEntitySeries.setDescription(resolveApplicationMessage(entitySeriesConfig.getDescription()));
                     appEntitySeries.setLabel(resolveApplicationMessage(entitySeriesConfig.getLabel()));
                     appEntitySeries.setFieldName(entitySeriesConfig.getFieldName());
-                    appEntitySeries.setConfigType(ConfigType.STATIC_INSTALL);
+                    appEntitySeries.setConfigType(restore ? ConfigType.CUSTOM: ConfigType.STATIC_INSTALL);
                     seriesList.add(appEntitySeries);
                 } else {
                     if (ConfigUtils.isSetInstall(oldAppEntitySeries)) {
