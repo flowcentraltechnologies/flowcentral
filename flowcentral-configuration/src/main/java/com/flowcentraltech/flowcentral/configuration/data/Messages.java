@@ -37,18 +37,18 @@ public class Messages {
     }
 
     private Messages() {
-
+        
     }
 
     public String resolveMessage(String msg, Object... params) {
         if (msg != null) {
-            if (TokenUtils.isMessageToken(msg)) {
-                msg = properties.getProperty(TokenUtils.extractTokenValue(msg));
-                if (msg != null) {
-                    if (params != null && params.length > 0) {
+            if (properties != null && TokenUtils.isMessageToken(msg)) {
+                msg =  properties.getProperty(TokenUtils.extractTokenValue(msg));
+                if (msg != null && params != null && params.length > 0) {
                         return MessageFormat.format(msg, params);
-                    }
                 }
+                
+                return msg;
             }
         }
 

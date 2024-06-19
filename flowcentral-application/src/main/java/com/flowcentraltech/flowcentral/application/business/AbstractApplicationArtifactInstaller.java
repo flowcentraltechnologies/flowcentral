@@ -70,7 +70,7 @@ public abstract class AbstractApplicationArtifactInstaller extends AbstractFlowC
     protected String resolveApplicationMessage(String message, Object... params) throws UnifyException {
         Messages messages = getSessionAttribute(Messages.class,
                 FlowCentralSessionAttributeConstants.ALTERNATIVE_RESOURCES_BUNDLE);
-        String msg = messages != null ? messages.resolveMessage(message) : null;
+        String msg = messages != null ? messages.resolveMessage(message, params) : null;
         return msg == null ? super.resolveApplicationMessage(message, params) : msg;
     }
 

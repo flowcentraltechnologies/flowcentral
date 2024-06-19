@@ -5126,7 +5126,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 appApplet.setTitleFormat(appletConfig.getTitleFormat());
                 appApplet.setDeprecated(false);
                 appApplet.setConfigType(ConfigType.CUSTOM);
-                populateChildList(appApplet, applicationName, appletConfig);
+                populateChildListOnRestore(appApplet, applicationName, appletConfig);
                 environment().create(appApplet);
 
                 applicationPrivilegeManager
@@ -5248,7 +5248,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 appEntity.setActionPolicy(appEntityConfig.getActionPolicy());
                 appEntity.setDeprecated(false);
                 appEntity.setConfigType(ConfigType.CUSTOM);
-                populateChildList(appEntity, applicationName, appEntityConfig);
+                populateChildListOnRestore(appEntity, applicationName, appEntityConfig);
                 Long entityId = (Long) environment().create(appEntity);
 
                 sequenceNumberService.ensureCachedBlockSequence(appEntityConfig.getType());
@@ -5316,7 +5316,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 appTable.setLimitSelectToColumns(appTableConfig.getLimitSelectToColumns());
                 appTable.setDeprecated(false);
                 appTable.setConfigType(ConfigType.CUSTOM);
-                populateChildList(appTable, applicationName, appTableConfig);
+                populateChildListOnRestore(appTable, applicationName, appTableConfig);
                 environment().create(appTable);
             }
 
@@ -5667,6 +5667,96 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     filterList.add(oldAppAppletFilter);
                 }
 
+            }
+        }
+        appApplet.setFilterList(filterList);
+    }
+
+    private void populateChildListOnRestore(AppApplet appApplet, String applicationName, AppletConfig appletConfig)
+            throws UnifyException {
+        List<AppAppletProp> propList = null;
+        if (!DataUtils.isBlank(appletConfig.getPropList())) {
+            propList = new ArrayList<AppAppletProp>();
+            for (AppletPropConfig appletPropConfig : appletConfig.getPropList()) {
+                AppAppletProp appAppletProp = new AppAppletProp();
+                appAppletProp.setName(appletPropConfig.getName());
+                if (refProperties.contains(appletPropConfig.getName())) {
+                    appAppletProp.setValue(ApplicationNameUtils.ensureLongNameReference(applicationName,
+                            appletPropConfig.getValue()));
+                } else {
+                    appAppletProp.setValue(appletPropConfig.getValue());
+                }
+
+                appAppletProp.setConfigType(ConfigType.CUSTOM);
+                propList.add(appAppletProp);
+            }
+        }
+        appApplet.setPropList(propList);
+
+        List<AppAppletSetValues> valuesList = null;
+        if (!DataUtils.isBlank(appletConfig.getValuesList())) {
+            valuesList = new ArrayList<AppAppletSetValues>();
+            for (AppletSetValuesConfig appletSetValuesConfig : appletConfig.getValuesList()) {
+                String description = resolveApplicationMessage(appletSetValuesConfig.getDescription());
+                AppAppletSetValues appAppletSetValues = new AppAppletSetValues();
+                appAppletSetValues.setName(appletSetValuesConfig.getName());
+                appAppletSetValues.setDescription(description);
+                appAppletSetValues.setValueGenerator(appletSetValuesConfig.getValueGenerator());
+                appAppletSetValues.setSetValues(newAppSetValues(appletSetValuesConfig.getSetValues()));
+                appAppletSetValues.setConfigType(ConfigType.CUSTOM);
+                valuesList.add(appAppletSetValues);
+            }
+        }
+
+        appApplet.setSetValuesList(valuesList);
+
+        List<AppAppletAlert> alertList = null;
+        if (!DataUtils.isBlank(appletConfig.getAlertList())) {
+            alertList = new ArrayList<AppAppletAlert>();
+            for (AppletAlertConfig alertConfig : appletConfig.getAlertList()) {
+                AppAppletAlert appAppletAlert = new AppAppletAlert();
+                appAppletAlert.setName(alertConfig.getName());
+                appAppletAlert.setDescription(resolveApplicationMessage(alertConfig.getDescription()));
+                appAppletAlert.setSender(alertConfig.getSender());
+                appAppletAlert.setRecipientContactRule(alertConfig.getRecipientContactRule());
+                appAppletAlert.setRecipientNameRule(alertConfig.getRecipientNameRule());
+                appAppletAlert.setRecipientPolicy(alertConfig.getRecipientPolicy());
+                appAppletAlert.setConfigType(ConfigType.CUSTOM);
+                alertList.add(appAppletAlert);
+            }
+        }
+
+        appApplet.setAlertList(alertList);
+
+        List<AppAppletRouteToApplet> routeToAppletList = null;
+        if (!DataUtils.isBlank(appletConfig.getRouteToAppletList())) {
+            routeToAppletList = new ArrayList<AppAppletRouteToApplet>();
+            for (AppletRouteToAppletConfig appletRouteToAppletConfig : appletConfig.getRouteToAppletList()) {
+                AppAppletRouteToApplet appAppletRouteToApplet = new AppAppletRouteToApplet();
+                appAppletRouteToApplet.setRouteToApplet(appletRouteToAppletConfig.getRouteToApplet());
+                routeToAppletList.add(appAppletRouteToApplet);
+            }
+        }
+
+        appApplet.setRouteToAppletList(routeToAppletList);
+
+        List<AppAppletFilter> filterList = null;
+        if (!DataUtils.isBlank(appletConfig.getFilterList())) {
+            filterList = new ArrayList<AppAppletFilter>();
+            for (AppletFilterConfig filterConfig : appletConfig.getFilterList()) {
+                AppAppletFilter appAppletFilter = new AppAppletFilter();
+                appAppletFilter.setOwnershipType(OwnershipType.GLOBAL);
+                appAppletFilter.setName(filterConfig.getName());
+                appAppletFilter.setDescription(resolveApplicationMessage(filterConfig.getDescription()));
+                appAppletFilter.setFilter(InputWidgetUtils.newAppFilter(filterConfig));
+                appAppletFilter.setPreferredForm(filterConfig.getPreferredForm());
+                appAppletFilter.setPreferredChildListApplet(filterConfig.getPreferredChildListApplet());
+                appAppletFilter.setQuickFilter(filterConfig.isQuickFilter());
+                appAppletFilter.setChildListActionType(filterConfig.getChildListActionType());
+                appAppletFilter.setFilterGenerator(filterConfig.getFilterGenerator());
+                appAppletFilter.setFilterGeneratorRule(filterConfig.getFilterGeneratorRule());
+                appAppletFilter.setConfigType(ConfigType.CUSTOM);
+                filterList.add(appAppletFilter);
             }
         }
         appApplet.setFilterList(filterList);
@@ -6074,6 +6164,199 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         }
         appEntity.setSearchInputList(searchInputList);
     }
+    
+    private void populateChildListOnRestore(AppEntity appEntity, String applicationName, AppEntityConfig appEntityConfig)
+            throws UnifyException {
+        List<AppEntityField> fieldList = new ArrayList<AppEntityField>();
+        fieldList.addAll(ApplicationEntityUtils.getEntityBaseTypeFieldList(messageResolver, appEntity.getBaseType(),
+                ConfigType.CUSTOM));
+        if (!DataUtils.isBlank(appEntityConfig.getEntityFieldList())) {
+            for (EntityFieldConfig entityFieldConfig : appEntityConfig.getEntityFieldList()) {
+                AppEntityField appEntityField = new AppEntityField();
+                appEntityField.setDataType(entityFieldConfig.getType());
+                appEntityField.setType(EntityFieldType.CUSTOM);
+                appEntityField.setName(entityFieldConfig.getName());
+                appEntityField.setLabel(resolveApplicationMessage(entityFieldConfig.getLabel()));
+                String references = entityFieldConfig.getReferences();
+                if (entityFieldConfig.getType().isEntityRef()
+                        || (!entityFieldConfig.getType().isEnumGroup() && !StringUtils.isBlank(references))) {
+                    references = ApplicationNameUtils.ensureLongNameReference(applicationName, references);
+                }
+
+                appEntityField.setColumnName(entityFieldConfig.getColumnName());
+                appEntityField.setReferences(references);
+                appEntityField.setKey(entityFieldConfig.getKey());
+                appEntityField.setProperty(entityFieldConfig.getProperty());
+                appEntityField.setCategory(entityFieldConfig.getCategory());
+                String inputLabel = entityFieldConfig.getInputLabel() == null ? null
+                        : resolveApplicationMessage(entityFieldConfig.getInputLabel());
+                appEntityField.setInputLabel(inputLabel);
+                appEntityField.setInputWidget(ApplicationNameUtils.ensureLongNameReference(applicationName,
+                        entityFieldConfig.getInputWidget()));
+                appEntityField.setSuggestionType(ApplicationNameUtils.ensureLongNameReference(applicationName,
+                        entityFieldConfig.getSuggestionType()));
+                appEntityField.setInputListKey(entityFieldConfig.getInputListKey());
+                appEntityField.setLingualWidget(ApplicationNameUtils.ensureLongNameReference(applicationName,
+                        entityFieldConfig.getLingualWidget()));
+                appEntityField.setLingualListKey(entityFieldConfig.getLingualListKey());
+                appEntityField.setAutoFormat(entityFieldConfig.getAutoFormat());
+                appEntityField.setDefaultVal(entityFieldConfig.getDefaultVal());
+                appEntityField.setMapped(entityFieldConfig.getMapped());
+                appEntityField.setTextCase(entityFieldConfig.getTextCase());
+                appEntityField.setColumns(entityFieldConfig.getColumns());
+                appEntityField.setRows(entityFieldConfig.getRows());
+                appEntityField.setMinLen(entityFieldConfig.getMinLen());
+                appEntityField.setMaxLen(entityFieldConfig.getMaxLen());
+                appEntityField.setPrecision(entityFieldConfig.getPrecision());
+                appEntityField.setScale(entityFieldConfig.getScale());
+                appEntityField.setTrim(entityFieldConfig.getTrim());
+                appEntityField.setAllowNegative(entityFieldConfig.getAllowNegative());
+                appEntityField.setReadOnly(entityFieldConfig.getReadOnly());
+                appEntityField.setNullable(entityFieldConfig.getNullable());
+                appEntityField.setAuditable(entityFieldConfig.getAuditable());
+                appEntityField.setReportable(
+                        entityFieldConfig.getType().isReportable() ? entityFieldConfig.getReportable() : false);
+                appEntityField.setDescriptive(entityFieldConfig.getDescriptive());
+                appEntityField.setMaintainLink(entityFieldConfig.getMaintainLink());
+                appEntityField.setBasicSearch(entityFieldConfig.getBasicSearch());
+                appEntityField.setConfigType(ConfigType.CUSTOM);
+                fieldList.add(appEntityField);
+            }
+        }
+
+        appEntity.setFieldList(fieldList);
+
+        List<AppEntitySeries> seriesList = null;
+        if (!DataUtils.isBlank(appEntityConfig.getSeriesList())) {
+            seriesList = new ArrayList<AppEntitySeries>();
+            for (EntitySeriesConfig entitySeriesConfig : appEntityConfig.getSeriesList()) {
+                AppEntitySeries appEntitySeries = new AppEntitySeries();
+                appEntitySeries.setType(entitySeriesConfig.getType());
+                appEntitySeries.setName(entitySeriesConfig.getName());
+                appEntitySeries.setDescription(resolveApplicationMessage(entitySeriesConfig.getDescription()));
+                appEntitySeries.setLabel(resolveApplicationMessage(entitySeriesConfig.getLabel()));
+                appEntitySeries.setFieldName(entitySeriesConfig.getFieldName());
+                appEntitySeries.setConfigType(ConfigType.CUSTOM);
+                seriesList.add(appEntitySeries);
+            }
+        }
+
+        appEntity.setSeriesList(seriesList);
+
+        List<AppEntityCategory> categoryList = null;
+        if (!DataUtils.isBlank(appEntityConfig.getCategoryList())) {
+            categoryList = new ArrayList<AppEntityCategory>();
+            for (EntityCategoryConfig entityCategoryConfig : appEntityConfig.getCategoryList()) {
+                AppEntityCategory appEntityCategory = new AppEntityCategory();
+                appEntityCategory.setName(entityCategoryConfig.getName());
+                appEntityCategory.setDescription(resolveApplicationMessage(entityCategoryConfig.getDescription()));
+                appEntityCategory.setLabel(resolveApplicationMessage(entityCategoryConfig.getLabel()));
+                appEntityCategory.setFilter(InputWidgetUtils.newAppFilter(entityCategoryConfig));
+                appEntityCategory.setConfigType(ConfigType.CUSTOM);
+                categoryList.add(appEntityCategory);
+            }
+        }
+
+        appEntity.setCategoryList(categoryList);
+
+        List<AppEntityAttachment> attachmentList = null;
+        if (!DataUtils.isBlank(appEntityConfig.getAttachmentList())) {
+            attachmentList = new ArrayList<AppEntityAttachment>();
+            for (EntityAttachmentConfig entityAttachmentConfig : appEntityConfig.getAttachmentList()) {
+                AppEntityAttachment appEntityAttachment = new AppEntityAttachment();
+                appEntityAttachment.setType(entityAttachmentConfig.getType());
+                appEntityAttachment.setName(entityAttachmentConfig.getName());
+                appEntityAttachment
+                        .setDescription(resolveApplicationMessage(entityAttachmentConfig.getDescription()));
+                appEntityAttachment.setConfigType(ConfigType.CUSTOM);
+                attachmentList.add(appEntityAttachment);
+            }
+        }
+
+        appEntity.setAttachmentList(attachmentList);
+
+        List<AppEntityExpression> expressionList = null;
+        if (!DataUtils.isBlank(appEntityConfig.getExpressionList())) {
+            expressionList = new ArrayList<AppEntityExpression>();
+            for (EntityExpressionConfig entityExpressionConfig : appEntityConfig.getExpressionList()) {
+                AppEntityExpression appEntityExpression = new AppEntityExpression();
+                appEntityExpression.setName(entityExpressionConfig.getName());
+                appEntityExpression
+                        .setDescription(resolveApplicationMessage(entityExpressionConfig.getDescription()));
+                appEntityExpression.setExpression(entityExpressionConfig.getExpression());
+                appEntityExpression.setConfigType(ConfigType.CUSTOM);
+                expressionList.add(appEntityExpression);
+            }
+        }
+
+        appEntity.setExpressionList(expressionList);
+
+        List<AppEntityUniqueConstraint> uniqueConstraintList = null;
+        if (!DataUtils.isBlank(appEntityConfig.getUniqueConstraintList())) {
+            uniqueConstraintList = new ArrayList<AppEntityUniqueConstraint>();
+            for (EntityUniqueConstraintConfig uniqueConstraintConfig : appEntityConfig.getUniqueConstraintList()) {
+                AppEntityUniqueConstraint appUniqueConstraint = new AppEntityUniqueConstraint();
+                appUniqueConstraint.setName(uniqueConstraintConfig.getName());
+                appUniqueConstraint
+                        .setDescription(resolveApplicationMessage(uniqueConstraintConfig.getDescription()));
+                appUniqueConstraint.setFieldList(uniqueConstraintConfig.getFieldList());
+                populateChildList(appUniqueConstraint, applicationName, uniqueConstraintConfig);
+                appUniqueConstraint.setConfigType(ConfigType.CUSTOM);
+                uniqueConstraintList.add(appUniqueConstraint);
+            }
+        }
+
+        appEntity.setUniqueConstraintList(uniqueConstraintList);
+
+        List<AppEntityIndex> indexList = null;
+        if (!DataUtils.isBlank(appEntityConfig.getIndexList())) {
+            indexList = new ArrayList<AppEntityIndex>();
+            for (EntityIndexConfig indexConfig : appEntityConfig.getIndexList()) {
+                AppEntityIndex appIndex = new AppEntityIndex();
+                appIndex.setName(indexConfig.getName());
+                appIndex.setDescription(resolveApplicationMessage(indexConfig.getDescription()));
+                appIndex.setFieldList(indexConfig.getFieldList());
+                appIndex.setConfigType(ConfigType.CUSTOM);
+                indexList.add(appIndex);
+            }
+        }
+
+        appEntity.setIndexList(indexList);
+
+        List<AppEntityUpload> uploadList = null;
+        if (!DataUtils.isBlank(appEntityConfig.getUploadList())) {
+            uploadList = new ArrayList<AppEntityUpload>();
+            for (EntityUploadConfig uploadConfig : appEntityConfig.getUploadList()) {
+                AppEntityUpload appEntityUpload = new AppEntityUpload();
+                appEntityUpload.setName(uploadConfig.getName());
+                appEntityUpload.setDescription(resolveApplicationMessage(uploadConfig.getDescription()));
+                appEntityUpload.setConstraintAction(uploadConfig.getConstraintAction());
+                appEntityUpload.setFieldSequence(newAppFieldSequence(uploadConfig.getFieldSequence()));
+                appEntityUpload.setConfigType(ConfigType.CUSTOM);
+                uploadList.add(appEntityUpload);
+            }
+        }
+
+        appEntity.setUploadList(uploadList);
+
+        List<AppEntitySearchInput> searchInputList = null;
+        if (!DataUtils.isBlank(appEntityConfig.getSearchInputList())) {
+            searchInputList = new ArrayList<AppEntitySearchInput>();
+            for (EntitySearchInputConfig searchInputConfig : appEntityConfig.getSearchInputList()) {
+                if (!DataUtils.isBlank(searchInputConfig.getInputList())) {
+                    AppEntitySearchInput appEntitySearchInput = new AppEntitySearchInput();
+                    appEntitySearchInput.setName(searchInputConfig.getName());
+                    appEntitySearchInput
+                            .setDescription(resolveApplicationMessage(searchInputConfig.getDescription()));
+                    appEntitySearchInput.setRestrictionResolver(searchInputConfig.getRestrictionResolver());
+                    appEntitySearchInput.setSearchInput(InputWidgetUtils.newAppSearchInput(searchInputConfig));
+                    appEntitySearchInput.setConfigType(ConfigType.CUSTOM);
+                    searchInputList.add(appEntitySearchInput);
+                }
+            }
+        }
+        appEntity.setSearchInputList(searchInputList);
+    }
 
     private void populateChildList(AppEntityUniqueConstraint appUniqueConstraint, String applicationName,
             EntityUniqueConstraintConfig uniqueConstraintConfig) throws UnifyException {
@@ -6219,6 +6502,86 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
                     loadingList.add(oldAppTableLoading);
                 }
+            }
+        }
+        appTable.setLoadingList(loadingList);
+    }
+
+    private void populateChildListOnRestore(AppTable appTable, String applicationName, AppTableConfig appTableConfig)
+            throws UnifyException {
+        List<AppTableColumn> columnList = new ArrayList<AppTableColumn>();
+        for (TableColumnConfig tableColumnConfig : appTableConfig.getColumnList()) {
+            AppTableColumn appTableColumn = new AppTableColumn();
+            appTableColumn.setField(tableColumnConfig.getField());
+            appTableColumn.setLabel(resolveApplicationMessage(tableColumnConfig.getLabel()));
+            appTableColumn.setRenderWidget(
+                    ApplicationNameUtils.ensureLongNameReference(applicationName, tableColumnConfig.getRenderWidget()));
+            appTableColumn.setLinkAct(tableColumnConfig.getLinkAct());
+            appTableColumn.setSymbol(tableColumnConfig.getSymbol());
+            appTableColumn.setOrder(tableColumnConfig.getOrder());
+            appTableColumn.setWidthRatio(tableColumnConfig.getWidthRatio());
+            appTableColumn.setSwitchOnChange(tableColumnConfig.getSwitchOnChange());
+            appTableColumn.setEditable(tableColumnConfig.getEditable());
+            appTableColumn.setHiddenOnNull(tableColumnConfig.getHiddenOnNull());
+            appTableColumn.setHidden(tableColumnConfig.getHidden());
+            appTableColumn.setDisabled(tableColumnConfig.getDisabled());
+            appTableColumn.setSortable(tableColumnConfig.getSortable());
+            appTableColumn.setSummary(tableColumnConfig.getSummary());
+            appTableColumn.setConfigType(ConfigType.CUSTOM);
+            columnList.add(appTableColumn);
+        }
+
+        appTable.setColumnList(columnList);
+
+        List<AppTableFilter> filterList = null;
+        if (!DataUtils.isBlank(appTableConfig.getFilterList())) {
+            filterList = new ArrayList<AppTableFilter>();
+            for (TableFilterConfig filterConfig : appTableConfig.getFilterList()) {
+                if (!DataUtils.isBlank(filterConfig.getRestrictionList())) {
+                    AppTableFilter appTableFilter = new AppTableFilter();
+                    appTableFilter.setName(filterConfig.getName());
+                    appTableFilter.setDescription(resolveApplicationMessage(filterConfig.getDescription()));
+                    appTableFilter.setFilterGenerator(filterConfig.getFilterGenerator());
+                    appTableFilter.setFilterGeneratorRule(filterConfig.getFilterGeneratorRule());
+                    appTableFilter.setFilter(InputWidgetUtils.newAppFilter(filterConfig));
+                    appTableFilter.setRowColor(filterConfig.getRowColor());
+                    appTableFilter.setLegendLabel(filterConfig.getLegendLabel());
+                    appTableFilter.setConfigType(ConfigType.CUSTOM);
+                    filterList.add(appTableFilter);
+                }
+            }
+        }
+        appTable.setFilterList(filterList);
+
+        List<AppTableAction> actionList = null;
+        if (!DataUtils.isBlank(appTableConfig.getActionList())) {
+            actionList = new ArrayList<AppTableAction>();
+            for (TableActionConfig tableActionConfig : appTableConfig.getActionList()) {
+                AppTableAction appTableAction = new AppTableAction();
+                appTableAction.setName(tableActionConfig.getName());
+                appTableAction.setDescription(resolveApplicationMessage(tableActionConfig.getDescription()));
+                appTableAction.setLabel(resolveApplicationMessage(tableActionConfig.getLabel()));
+                appTableAction.setPolicy(tableActionConfig.getPolicy());
+                appTableAction.setOrderIndex(tableActionConfig.getOrderIndex());
+                appTableAction.setConfigType(ConfigType.CUSTOM);
+                actionList.add(appTableAction);
+            }
+        }
+
+        appTable.setActionList(actionList);
+
+        List<AppTableLoading> loadingList = null;
+        if (!DataUtils.isBlank(appTableConfig.getLoadingList())) {
+            loadingList = new ArrayList<AppTableLoading>();
+            for (TableLoadingConfig tableLoadingConfig : appTableConfig.getLoadingList()) {
+                AppTableLoading appTableLoading = new AppTableLoading();
+                appTableLoading.setName(tableLoadingConfig.getName());
+                appTableLoading.setDescription(resolveApplicationMessage(tableLoadingConfig.getDescription()));
+                appTableLoading.setLabel(resolveApplicationMessage(tableLoadingConfig.getLabel()));
+                appTableLoading.setProvider(tableLoadingConfig.getProvider());
+                appTableLoading.setOrderIndex(tableLoadingConfig.getOrderIndex());
+                appTableLoading.setConfigType(ConfigType.CUSTOM);
+                loadingList.add(appTableLoading);
             }
         }
         appTable.setLoadingList(loadingList);
