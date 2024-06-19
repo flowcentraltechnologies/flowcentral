@@ -139,6 +139,7 @@ public class ApplicationDashboardInstallerImpl extends AbstractApplicationArtifa
                 dashboard.setDeprecated(false);
                 dashboard.setConfigType(ConfigType.CUSTOM);
                 populateChildList(dashboardConfig, dashboard, applicationName);
+                environment().create(dashboard);
 
                 applicationPrivilegeManager.registerPrivilege(applicationId,
                         ApplicationPrivilegeConstants.APPLICATION_DASHBOARD_CATEGORY_CODE,

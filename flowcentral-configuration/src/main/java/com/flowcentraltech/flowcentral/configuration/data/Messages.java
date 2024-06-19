@@ -15,6 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.configuration.data;
 
+import java.text.MessageFormat;
 import java.util.Properties;
 
 import com.tcdng.unify.core.util.TokenUtils;
@@ -28,7 +29,7 @@ import com.tcdng.unify.core.util.TokenUtils;
 public class Messages {
 
     private static final Messages emptyMessages = new Messages();
-    
+
     private Properties properties;
 
     public Messages(Properties properties) {
@@ -39,12 +40,21 @@ public class Messages {
 
     }
 
-    public String resolveMessage(String msg) {
-        return properties != null && msg != null && TokenUtils.isMessageToken(msg)
-                ? properties.getProperty(TokenUtils.extractTokenValue(msg))
-                : msg;
+    public String resolveMessage(String msg, Object... params) {
+        if (msg != null) {
+            if (TokenUtils.isMessageToken(msg)) {
+                msg = properties.getProperty(TokenUtils.extractTokenValue(msg));
+                if (msg != null) {
+                    if (params != null && params.length > 0) {
+                        return MessageFormat.format(msg, params);
+                    }
+                }
+            }
+        }
+
+        return null;
     }
-    
+
     public static Messages emptyMessages() {
         return emptyMessages;
     }
