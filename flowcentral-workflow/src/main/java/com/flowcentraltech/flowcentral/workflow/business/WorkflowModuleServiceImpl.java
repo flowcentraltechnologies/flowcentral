@@ -570,7 +570,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             final Long applicationId = appletUtil.application().getApplicationId(wnp.getApplicationName());
             workflow = new Workflow();
             workflow.setApplicationId(applicationId);
-            workflow.setConfigType(ConfigType.STATIC_INSTALL);
+            workflow.setConfigType(ConfigType.STATIC);
             workflow.setName(wnp.getEntityName());
             workflow.setDescription(workflowDesc);
             workflow.setLabel(workflowLabel);
@@ -587,7 +587,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         } else {
             if (forceUpdate || workflow.getAppletVersionNo() < appletWorkflowCopyInfo.getAppletVersionNo()) {
                 workflow.setAppletVersionNo(appletWorkflowCopyInfo.getAppletVersionNo());
-                workflow.setConfigType(ConfigType.STATIC_INSTALL);
+                workflow.setConfigType(ConfigType.STATIC);
                 workflow.setDescription(workflowDesc);
                 workflow.setLabel(workflowLabel);
                 workflow.setLoadingTable(appletWorkflowCopyInfo.getAppletSearchTable());
@@ -641,7 +641,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             loadingApplet = new AppApplet();
             loadingApplet.setApplicationId(applicationId);
             loadingApplet.setWorkflowVersionNo(tableVersionNo);
-            loadingApplet.setConfigType(ConfigType.STATIC_INSTALL);
+            loadingApplet.setConfigType(ConfigType.STATIC);
             loadingApplet.setType(AppletType.MANAGE_LOADINGLIST);
             loadingApplet.setName(anp.getEntityName());
             loadingApplet.setDescription(loadingAppletDesc);
@@ -656,7 +656,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         } else {
             if (forceUpdate || loadingApplet.getWorkflowVersionNo() < tableVersionNo) {
                 loadingApplet.setWorkflowVersionNo(tableVersionNo);
-                loadingApplet.setConfigType(ConfigType.STATIC_INSTALL);
+                loadingApplet.setConfigType(ConfigType.STATIC);
                 loadingApplet.setDescription(loadingAppletDesc);
                 loadingApplet.setLabel(loadingAppletLabel);
                 loadingApplet.setClassified(true);

@@ -49,7 +49,7 @@ public final class ReportEntityUtils {
             EntityBaseType type, FormatterOptions formatOptions) throws UnifyException {
         List<ReportableField> resultList = new ArrayList<ReportableField>();
         for (AppEntityField appEntityField : ApplicationEntityUtils.getEntityBaseTypeFieldList(msgResolver, type,
-                ConfigType.STATIC_INSTALL)) {
+                ConfigType.STATIC)) {
             if (appEntityField.isReportable()) {
                 ReportableField reportableField = new ReportableField();
                 ReportEntityUtils.populateReportableField(reportableField, appEntityField, formatOptions);

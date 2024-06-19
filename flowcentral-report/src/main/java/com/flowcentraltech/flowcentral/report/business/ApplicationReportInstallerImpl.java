@@ -32,7 +32,6 @@ import com.flowcentraltech.flowcentral.common.annotation.Format;
 import com.flowcentraltech.flowcentral.common.constants.ConfigType;
 import com.flowcentraltech.flowcentral.common.data.FormatterOptions;
 import com.flowcentraltech.flowcentral.common.entities.BaseEntity;
-import com.flowcentraltech.flowcentral.common.util.ConfigUtils;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldDataType;
 import com.flowcentraltech.flowcentral.configuration.data.ApplicationInstall;
 import com.flowcentraltech.flowcentral.configuration.data.ApplicationRestore;
@@ -95,7 +94,7 @@ public class ApplicationReportInstallerImpl extends AbstractApplicationArtifactI
         logDebug(taskMonitor, "Executing report installer...");
         // Install reports for configurable entities
         logDebug(taskMonitor, "Installing reportable entities...");
-        environment().updateAll(new ReportableDefinitionQuery().applicationId(applicationId).isNotActualCustom(),
+        environment().updateAll(new ReportableDefinitionQuery().applicationId(applicationId).isStatic(),
                 new Update().add("deprecated", Boolean.TRUE));
         if (applicationConfig.getEntitiesConfig() != null
                 && !DataUtils.isBlank(applicationConfig.getEntitiesConfig().getEntityList())) {
@@ -117,18 +116,16 @@ public class ApplicationReportInstallerImpl extends AbstractApplicationArtifactI
                         reportableDefinition.setTitle(description);
                         reportableDefinition.setDescription(description);
                         reportableDefinition.setDeprecated(false);
-                        reportableDefinition.setConfigType(ConfigType.STATIC_INSTALL);
+                        reportableDefinition.setConfigType(ConfigType.STATIC);
                         populateChildList(appEntityConfig, reportableDefinition);
                         environment().create(reportableDefinition);
                     } else {
                         // Update old definition
-                        if (ConfigUtils.isSetInstall(oldReportableDefinition)) {
-                            oldReportableDefinition.setEntity(entity);
-                            oldReportableDefinition.setTitle(description);
-                            oldReportableDefinition.setDescription(description);
-                        }
-
+                        oldReportableDefinition.setEntity(entity);
+                        oldReportableDefinition.setTitle(description);
+                        oldReportableDefinition.setDescription(description);
                         oldReportableDefinition.setDeprecated(false);
+                        oldReportableDefinition.setConfigType(ConfigType.STATIC);
                         populateChildList(appEntityConfig, oldReportableDefinition);
                         environment().updateByIdVersion(oldReportableDefinition);
                         oldReportableDefinition.getId();
@@ -143,7 +140,7 @@ public class ApplicationReportInstallerImpl extends AbstractApplicationArtifactI
         }
 
         // Install configured reports
-        environment().updateAll(new ReportConfigurationQuery().applicationId(applicationId).isNotActualCustom(),
+        environment().updateAll(new ReportConfigurationQuery().applicationId(applicationId).isStatic(),
                 new Update().add("deprecated", Boolean.TRUE));
         if (applicationConfig.getReportsConfig() != null
                 && !DataUtils.isBlank(applicationConfig.getReportsConfig().getReportList())) {
@@ -190,36 +187,34 @@ public class ApplicationReportInstallerImpl extends AbstractApplicationArtifactI
                     reportConfiguration.setAllowSecondaryTenants(reportConfig.getAllowSecondaryTenants());
                     reportConfiguration.setFilter(InputWidgetUtils.newAppFilter(reportConfig.getFilter()));
                     reportConfiguration.setDeprecated(false);
-                    reportConfiguration.setConfigType(ConfigType.MUTABLE_INSTALL);
+                    reportConfiguration.setConfigType(ConfigType.STATIC);
                     populateChildList(reportConfig, reportConfiguration);
                     environment().create(reportConfiguration);
                 } else {
-                    if (ConfigUtils.isSetInstall(oldReportConfiguration)) {
-                        oldReportConfiguration.setType(reportConfig.getType());
-                        oldReportConfiguration.setSummaryDatasource(reportConfig.getSummaryDatasource());
-                        oldReportConfiguration.setSizeType(reportConfig.getSizeType());
-                        oldReportConfiguration.setDescription(description);
-                        oldReportConfiguration.setReportable(reportable);
-                        oldReportConfiguration.setTitle(title);
-                        oldReportConfiguration.setTemplate(reportConfig.getTemplate());
-                        oldReportConfiguration.setWidth(reportConfig.getWidth());
-                        oldReportConfiguration.setHeight(reportConfig.getHeight());
-                        oldReportConfiguration.setMarginBottom(reportConfig.getMarginBottom());
-                        oldReportConfiguration.setMarginLeft(reportConfig.getMarginLeft());
-                        oldReportConfiguration.setMarginRight(reportConfig.getMarginRight());
-                        oldReportConfiguration.setMarginTop(reportConfig.getMarginTop());
-                        oldReportConfiguration.setProcessor(reportConfig.getProcessor());
-                        oldReportConfiguration.setLetterGenerator(reportConfig.getLetterGenerator());
-                        oldReportConfiguration.setShowGrandFooter(reportConfig.getShowGrandFooter());
-                        oldReportConfiguration.setInvertGroupColors(reportConfig.getInvertGroupColors());
-                        oldReportConfiguration.setLandscape(reportConfig.getLandscape());
-                        oldReportConfiguration.setShadeOddRows(reportConfig.getShadeOddRows());
-                        oldReportConfiguration.setUnderlineRows(reportConfig.getUnderlineRows());
-                        oldReportConfiguration.setAllowSecondaryTenants(reportConfig.getAllowSecondaryTenants());
-                        oldReportConfiguration.setFilter(InputWidgetUtils.newAppFilter(reportConfig.getFilter()));
-                    }
-
+                    oldReportConfiguration.setType(reportConfig.getType());
+                    oldReportConfiguration.setSummaryDatasource(reportConfig.getSummaryDatasource());
+                    oldReportConfiguration.setSizeType(reportConfig.getSizeType());
+                    oldReportConfiguration.setDescription(description);
+                    oldReportConfiguration.setReportable(reportable);
+                    oldReportConfiguration.setTitle(title);
+                    oldReportConfiguration.setTemplate(reportConfig.getTemplate());
+                    oldReportConfiguration.setWidth(reportConfig.getWidth());
+                    oldReportConfiguration.setHeight(reportConfig.getHeight());
+                    oldReportConfiguration.setMarginBottom(reportConfig.getMarginBottom());
+                    oldReportConfiguration.setMarginLeft(reportConfig.getMarginLeft());
+                    oldReportConfiguration.setMarginRight(reportConfig.getMarginRight());
+                    oldReportConfiguration.setMarginTop(reportConfig.getMarginTop());
+                    oldReportConfiguration.setProcessor(reportConfig.getProcessor());
+                    oldReportConfiguration.setLetterGenerator(reportConfig.getLetterGenerator());
+                    oldReportConfiguration.setShowGrandFooter(reportConfig.getShowGrandFooter());
+                    oldReportConfiguration.setInvertGroupColors(reportConfig.getInvertGroupColors());
+                    oldReportConfiguration.setLandscape(reportConfig.getLandscape());
+                    oldReportConfiguration.setShadeOddRows(reportConfig.getShadeOddRows());
+                    oldReportConfiguration.setUnderlineRows(reportConfig.getUnderlineRows());
+                    oldReportConfiguration.setAllowSecondaryTenants(reportConfig.getAllowSecondaryTenants());
+                    oldReportConfiguration.setFilter(InputWidgetUtils.newAppFilter(reportConfig.getFilter()));
                     oldReportConfiguration.setDeprecated(false);
+                    oldReportConfiguration.setConfigType(ConfigType.STATIC);
                     populateChildList(reportConfig, oldReportConfiguration);
                     environment().updateByIdVersion(oldReportConfiguration);
                 }
@@ -333,6 +328,7 @@ public class ApplicationReportInstallerImpl extends AbstractApplicationArtifactI
         for (Long reportableId : reportableIdList) {
             ReportableDefinition srcReportableDefinition = environment().find(ReportableDefinition.class, reportableId);
             String oldDescription = srcReportableDefinition.getDescription();
+            srcReportableDefinition.setId(null);
             srcReportableDefinition.setApplicationId(destApplicationId);
             srcReportableDefinition.setName(ctx.nameSwap(srcReportableDefinition.getName()));
             srcReportableDefinition.setDescription(ctx.messageSwap(srcReportableDefinition.getDescription()));
@@ -344,6 +340,8 @@ public class ApplicationReportInstallerImpl extends AbstractApplicationArtifactI
                 reportableField.setDescription(ctx.messageSwap(reportableField.getDescription()));
             }
 
+            srcReportableDefinition.setDeprecated(false);
+            srcReportableDefinition.setConfigType(ConfigType.CUSTOM);
             environment().create(srcReportableDefinition);
             registerPrivilege(destApplicationId, ApplicationPrivilegeConstants.APPLICATION_REPORTABLE_CATEGORY_CODE,
                     PrivilegeNameUtils.getReportablePrivilegeName(ApplicationNameUtils
@@ -360,6 +358,7 @@ public class ApplicationReportInstallerImpl extends AbstractApplicationArtifactI
         for (Long reportId : reportIdList) {
             ReportConfiguration srcReportConfiguration = environment().find(ReportConfiguration.class, reportId);
             String oldDescription = srcReportConfiguration.getDescription();
+            srcReportConfiguration.setId(null);
             srcReportConfiguration.setApplicationId(destApplicationId);
             srcReportConfiguration.setName(ctx.nameSwap(srcReportConfiguration.getName()));
             srcReportConfiguration.setDescription(ctx.messageSwap(srcReportConfiguration.getDescription()));
@@ -377,6 +376,8 @@ public class ApplicationReportInstallerImpl extends AbstractApplicationArtifactI
                 reportPlacement.setFieldName(ctx.fieldSwap(reportPlacement.getFieldName()));
             }
 
+            srcReportConfiguration.setDeprecated(false);
+            srcReportConfiguration.setConfigType(ConfigType.CUSTOM);
             environment().create(srcReportConfiguration);
             registerPrivilege(destApplicationId, ApplicationPrivilegeConstants.APPLICATION_REPORTCONFIG_CATEGORY_CODE,
                     PrivilegeNameUtils.getReportConfigPrivilegeName(ApplicationNameUtils
