@@ -6800,15 +6800,15 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
     private void registerDelegate(EntityDef entityDef, Class<? extends Entity> entityClass) throws UnifyException {
         if (entityDef.delegated()) {
-            if (isComponent(entityDef.getDelegate())) {
-                final String entityClassName = entityClass.getName();
-                unregisterDelegate(entityDef.getLongName());
-                EnvironmentDelegate environmentDelegate = (EnvironmentDelegate) getComponent(entityDef.getDelegate());
-                EnvironmentDelegateHolder delegateInfo = new EnvironmentDelegateHolder(entityDef.getLongName(),
-                        entityClassName, environmentDelegate);
-                delegateHolderByEntityClass.put(entityClassName, delegateInfo);
-                delegateHolderByLongName.put(entityDef.getLongName(), delegateInfo);
-            }
+            final String entityClassName = entityClass.getName();
+            unregisterDelegate(entityDef.getLongName());
+            EnvironmentDelegate environmentDelegate = isComponent(entityDef.getDelegate())
+                    ? (EnvironmentDelegate) getComponent(entityDef.getDelegate())
+                    : (EnvironmentDelegate) getComponent(ApplicationModuleNameConstants.MISSING_ENVIRONMENT_DELEGATE);
+            EnvironmentDelegateHolder delegateInfo = new EnvironmentDelegateHolder(entityDef.getLongName(),
+                    entityClassName, environmentDelegate);
+            delegateHolderByEntityClass.put(entityClassName, delegateInfo);
+            delegateHolderByLongName.put(entityDef.getLongName(), delegateInfo);
         } else {
             unregisterDelegate(entityDef.getLongName());
         }

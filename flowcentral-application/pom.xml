@@ -19,6 +19,11 @@
 		<!-- Main dependencies -->
 		<dependency>
 			<groupId>com.flowcentraltech.flowcentral</groupId>
+			<artifactId>flowcentral-connect-common</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.flowcentraltech.flowcentral</groupId>
 			<artifactId>flowcentral-system</artifactId>
 			<version>${project.version}</version>
 		</dependency>

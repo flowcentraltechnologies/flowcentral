@@ -13,13 +13,10 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.delegate.data;
+package com.flowcentraltech.flowcentral.connect.common.data;
 
 import java.util.List;
 
-import com.flowcentraltech.flowcentral.connect.common.data.EntityListingDTO;
-import com.flowcentraltech.flowcentral.connect.common.data.RedirectErrorDTO;
-import com.tcdng.unify.core.util.StringUtils;
 
 /**
  * Delegate listing DTO
@@ -46,8 +43,4 @@ public class DelegateEntityListingDTO {
         return redirectErrors;
     }
 
-    @Override
-    public String toString() {
-        return StringUtils.toXmlString(this);
-    }
 }

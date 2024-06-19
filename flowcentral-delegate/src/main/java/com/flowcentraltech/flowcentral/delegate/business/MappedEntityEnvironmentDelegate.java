@@ -22,11 +22,12 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
+import com.flowcentraltech.flowcentral.application.business.AbstractEnvironmentDelegate;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleNameConstants;
 import com.flowcentraltech.flowcentral.connect.common.data.BaseResponse;
 import com.flowcentraltech.flowcentral.connect.common.data.DataSourceRequest;
+import com.flowcentraltech.flowcentral.connect.common.data.DelegateEntityListingDTO;
 import com.flowcentraltech.flowcentral.connect.common.data.EntityDTO;
-import com.flowcentraltech.flowcentral.delegate.data.DelegateEntityListingDTO;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.criterion.Update;

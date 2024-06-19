@@ -31,7 +31,6 @@ import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.UplBinding;
 import com.tcdng.unify.core.criterion.Equals;
 import com.tcdng.unify.core.data.IndexedTarget;
-import com.tcdng.unify.core.util.QueryUtils;
 import com.tcdng.unify.web.annotation.Action;
 import com.tcdng.unify.web.annotation.ResultMapping;
 import com.tcdng.unify.web.annotation.ResultMappings;
@@ -152,11 +151,6 @@ public class ApplicationDashboardController extends AbstractPageController<Appli
         }
 
         pageBean.getSwitchApplicationSearch().applyFilterToSearch();
-
-        Long applicationId = (Long) getSessionAttribute(StudioSessionAttributeConstants.CURRENT_APPLICATION_ID);
-        if (!QueryUtils.isValidLongCriteria(applicationId)) {
-            getPageRequestContextUtil().setRequestPopupName("switchApplicationPopup");
-        }
     }
 
     private void setApplicationSessionAttributes(Application application) throws UnifyException {
