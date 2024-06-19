@@ -4422,7 +4422,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appApplet.setTitleFormat(appletConfig.getTitleFormat());
                     appApplet.setDeprecated(false);
                     appApplet.setConfigType(ConfigType.STATIC_INSTALL);
-                    populateChildList(appApplet, applicationName, appletConfig);
+                    populateChildList(appApplet, applicationName, appletConfig, false);
                     environment().create(appApplet);
                 } else {
                     final boolean setInstall = ConfigUtils.isSetInstall(oldAppApplet);
@@ -4448,7 +4448,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     }
 
                     oldAppApplet.setDeprecated(false);
-                    populateChildList(oldAppApplet, applicationName, appletConfig);
+                    populateChildList(oldAppApplet, applicationName, appletConfig, false);
                     environment().updateByIdVersion(oldAppApplet);
                 }
 
@@ -4637,7 +4637,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appEntity.setActionPolicy(appEntityConfig.getActionPolicy());
                     appEntity.setDeprecated(false);
                     appEntity.setConfigType(ConfigType.STATIC_INSTALL);
-                    populateChildList(appEntity, applicationName, appEntityConfig);
+                    populateChildList(appEntity, applicationName, appEntityConfig, false);
                     entityId = (Long) environment().create(appEntity);
                 } else {
                     logDebug("Upgrading application entity [{0}]...", appEntityConfig.getName());
@@ -4661,7 +4661,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     }
 
                     oldAppEntity.setDeprecated(false);
-                    populateChildList(oldAppEntity, applicationName, appEntityConfig);
+                    populateChildList(oldAppEntity, applicationName, appEntityConfig, false);
                     environment().updateByIdVersion(oldAppEntity);
                     entityId = oldAppEntity.getId();
                 }
@@ -4736,7 +4736,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appTable.setLimitSelectToColumns(appTableConfig.getLimitSelectToColumns());
                     appTable.setDeprecated(false);
                     appTable.setConfigType(ConfigType.MUTABLE_INSTALL);
-                    populateChildList(appTable, applicationName, appTableConfig);
+                    populateChildList(appTable, applicationName, appTableConfig, false);
                     environment().create(appTable);
                 } else {
                     logDebug("Upgrading application table [{0}]...", appTableConfig.getName());
@@ -4766,7 +4766,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     }
 
                     oldAppTable.setDeprecated(false);
-                    populateChildList(oldAppTable, applicationName, appTableConfig);
+                    populateChildList(oldAppTable, applicationName, appTableConfig, false);
                     environment().updateByIdVersion(oldAppTable);
                 }
             }
@@ -4802,7 +4802,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appForm.setDescription(description);
                     appForm.setDeprecated(false);
                     appForm.setConfigType(ConfigType.MUTABLE_INSTALL);
-                    populateChildList(appForm, appFormConfig, applicationId, applicationName);
+                    populateChildList(appForm, appFormConfig, applicationId, applicationName, false);
                     environment().create(appForm);
                 } else {
                     logDebug("Upgrading application form [{0}]...", appFormConfig.getName());
@@ -4819,7 +4819,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     }
 
                     oldAppForm.setDeprecated(false);
-                    populateChildList(oldAppForm, appFormConfig, applicationId, applicationName);
+                    populateChildList(oldAppForm, appFormConfig, applicationId, applicationName, false);
                     environment().updateByIdVersion(oldAppForm);
                 }
             }
@@ -4895,7 +4895,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appPropertyRule.setIgnoreCase(propertyRuleConfig.isIgnoreCase());
                     appPropertyRule.setDeprecated(false);
                     appPropertyRule.setConfigType(ConfigType.STATIC_INSTALL);
-                    populateChildList(appPropertyRule, applicationName, propertyRuleConfig);
+                    populateChildList(appPropertyRule, applicationName, propertyRuleConfig, false);
                     environment().create(appPropertyRule);
                 } else {
                     logDebug("Upgrading application property rule [{0}]...", propertyRuleConfig.getName());
@@ -4913,7 +4913,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     }
 
                     oldAppPropertyRule.setDeprecated(false);
-                    populateChildList(oldAppPropertyRule, applicationName, propertyRuleConfig);
+                    populateChildList(oldAppPropertyRule, applicationName, propertyRuleConfig, false);
                     environment().updateByIdVersion(oldAppPropertyRule);
                 }
             }
@@ -5126,7 +5126,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 appApplet.setTitleFormat(appletConfig.getTitleFormat());
                 appApplet.setDeprecated(false);
                 appApplet.setConfigType(ConfigType.CUSTOM);
-                populateChildListOnRestore(appApplet, applicationName, appletConfig);
+                populateChildList(appApplet, applicationName, appletConfig, true);
                 environment().create(appApplet);
 
                 applicationPrivilegeManager
@@ -5248,7 +5248,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 appEntity.setActionPolicy(appEntityConfig.getActionPolicy());
                 appEntity.setDeprecated(false);
                 appEntity.setConfigType(ConfigType.CUSTOM);
-                populateChildListOnRestore(appEntity, applicationName, appEntityConfig);
+                populateChildList(appEntity, applicationName, appEntityConfig, true);
                 Long entityId = (Long) environment().create(appEntity);
 
                 sequenceNumberService.ensureCachedBlockSequence(appEntityConfig.getType());
@@ -5316,7 +5316,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 appTable.setLimitSelectToColumns(appTableConfig.getLimitSelectToColumns());
                 appTable.setDeprecated(false);
                 appTable.setConfigType(ConfigType.CUSTOM);
-                populateChildListOnRestore(appTable, applicationName, appTableConfig);
+                populateChildList(appTable, applicationName, appTableConfig, true);
                 environment().create(appTable);
             }
 
@@ -5346,7 +5346,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 appForm.setDescription(description);
                 appForm.setDeprecated(false);
                 appForm.setConfigType(ConfigType.CUSTOM);
-                populateChildList(appForm, appFormConfig, applicationId, applicationName);
+                populateChildList(appForm, appFormConfig, applicationId, applicationName, true);
                 environment().create(appForm);
             }
 
@@ -5401,7 +5401,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 appPropertyRule.setIgnoreCase(propertyRuleConfig.isIgnoreCase());
                 appPropertyRule.setDeprecated(false);
                 appPropertyRule.setConfigType(ConfigType.CUSTOM);
-                populateChildList(appPropertyRule, applicationName, propertyRuleConfig);
+                populateChildList(appPropertyRule, applicationName, propertyRuleConfig, true);
                 environment().create(appPropertyRule);
             }
 
@@ -5508,12 +5508,12 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         appEnumeration.setItemList(itemList);
     }
 
-    private void populateChildList(AppApplet appApplet, String applicationName, AppletConfig appletConfig)
-            throws UnifyException {
+    private void populateChildList(AppApplet appApplet, String applicationName, AppletConfig appletConfig,
+            boolean restore) throws UnifyException {
         List<AppAppletProp> propList = null;
         if (!DataUtils.isBlank(appletConfig.getPropList())) {
             propList = new ArrayList<AppAppletProp>();
-            Map<String, AppAppletProp> map = appApplet.isIdBlank() ? Collections.emptyMap()
+            Map<String, AppAppletProp> map = restore || appApplet.isIdBlank() ? Collections.emptyMap()
                     : environment().findAllMap(String.class, "name",
                             new AppAppletPropQuery().appAppletId(appApplet.getId()));
             for (AppletPropConfig appletPropConfig : appletConfig.getPropList()) {
@@ -5528,7 +5528,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                         appAppletProp.setValue(appletPropConfig.getValue());
                     }
 
-                    appAppletProp.setConfigType(ConfigType.MUTABLE_INSTALL);
+                    appAppletProp.setConfigType(restore ? ConfigType.CUSTOM : ConfigType.MUTABLE_INSTALL);
                     propList.add(appAppletProp);
                 } else {
                     if (ConfigUtils.isSetInstall(oldAppAppletProp)) {
@@ -5549,7 +5549,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         List<AppAppletSetValues> valuesList = null;
         if (!DataUtils.isBlank(appletConfig.getValuesList())) {
             valuesList = new ArrayList<AppAppletSetValues>();
-            Map<String, AppAppletSetValues> map = appApplet.isIdBlank() ? Collections.emptyMap()
+            Map<String, AppAppletSetValues> map = restore || appApplet.isIdBlank() ? Collections.emptyMap()
                     : environment().findAllMap(String.class, "name",
                             new AppAppletSetValuesQuery().appAppletId(appApplet.getId()));
             for (AppletSetValuesConfig appletSetValuesConfig : appletConfig.getValuesList()) {
@@ -5561,7 +5561,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appAppletSetValues.setDescription(description);
                     appAppletSetValues.setValueGenerator(appletSetValuesConfig.getValueGenerator());
                     appAppletSetValues.setSetValues(newAppSetValues(appletSetValuesConfig.getSetValues()));
-                    appAppletSetValues.setConfigType(ConfigType.MUTABLE_INSTALL);
+                    appAppletSetValues.setConfigType(restore ? ConfigType.CUSTOM : ConfigType.MUTABLE_INSTALL);
                     valuesList.add(appAppletSetValues);
                 } else {
                     if (ConfigUtils.isSetInstall(oldAppAppletSetValues)) {
@@ -5583,7 +5583,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         List<AppAppletAlert> alertList = null;
         if (!DataUtils.isBlank(appletConfig.getAlertList())) {
             alertList = new ArrayList<AppAppletAlert>();
-            Map<String, AppAppletAlert> map = appApplet.isIdBlank() ? Collections.emptyMap()
+            Map<String, AppAppletAlert> map = restore || appApplet.isIdBlank() ? Collections.emptyMap()
                     : environment().findAllMap(String.class, "name",
                             new AppAppletAlertQuery().appAppletId(appApplet.getId()));
             for (AppletAlertConfig alertConfig : appletConfig.getAlertList()) {
@@ -5596,7 +5596,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appAppletAlert.setRecipientContactRule(alertConfig.getRecipientContactRule());
                     appAppletAlert.setRecipientNameRule(alertConfig.getRecipientNameRule());
                     appAppletAlert.setRecipientPolicy(alertConfig.getRecipientPolicy());
-                    appAppletAlert.setConfigType(ConfigType.MUTABLE_INSTALL);
+                    appAppletAlert.setConfigType(restore ? ConfigType.CUSTOM : ConfigType.MUTABLE_INSTALL);
                     alertList.add(appAppletAlert);
                 } else {
                     if (ConfigUtils.isSetInstall(oldAppAppletAlert)) {
@@ -5630,7 +5630,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         List<AppAppletFilter> filterList = null;
         if (!DataUtils.isBlank(appletConfig.getFilterList())) {
             filterList = new ArrayList<AppAppletFilter>();
-            Map<String, AppAppletFilter> map = appApplet.isIdBlank() ? Collections.emptyMap()
+            Map<String, AppAppletFilter> map = restore || appApplet.isIdBlank() ? Collections.emptyMap()
                     : environment().findAllMap(String.class, "name",
                             new AppAppletFilterQuery().appAppletId(appApplet.getId()));
             for (AppletFilterConfig filterConfig : appletConfig.getFilterList()) {
@@ -5647,7 +5647,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appAppletFilter.setChildListActionType(filterConfig.getChildListActionType());
                     appAppletFilter.setFilterGenerator(filterConfig.getFilterGenerator());
                     appAppletFilter.setFilterGeneratorRule(filterConfig.getFilterGeneratorRule());
-                    appAppletFilter.setConfigType(ConfigType.MUTABLE_INSTALL);
+                    appAppletFilter.setConfigType(restore ? ConfigType.CUSTOM : ConfigType.MUTABLE_INSTALL);
                     filterList.add(appAppletFilter);
                 } else {
                     if (ConfigUtils.isSetInstall(oldAppAppletFilter)) {
@@ -5667,96 +5667,6 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     filterList.add(oldAppAppletFilter);
                 }
 
-            }
-        }
-        appApplet.setFilterList(filterList);
-    }
-
-    private void populateChildListOnRestore(AppApplet appApplet, String applicationName, AppletConfig appletConfig)
-            throws UnifyException {
-        List<AppAppletProp> propList = null;
-        if (!DataUtils.isBlank(appletConfig.getPropList())) {
-            propList = new ArrayList<AppAppletProp>();
-            for (AppletPropConfig appletPropConfig : appletConfig.getPropList()) {
-                AppAppletProp appAppletProp = new AppAppletProp();
-                appAppletProp.setName(appletPropConfig.getName());
-                if (refProperties.contains(appletPropConfig.getName())) {
-                    appAppletProp.setValue(ApplicationNameUtils.ensureLongNameReference(applicationName,
-                            appletPropConfig.getValue()));
-                } else {
-                    appAppletProp.setValue(appletPropConfig.getValue());
-                }
-
-                appAppletProp.setConfigType(ConfigType.CUSTOM);
-                propList.add(appAppletProp);
-            }
-        }
-        appApplet.setPropList(propList);
-
-        List<AppAppletSetValues> valuesList = null;
-        if (!DataUtils.isBlank(appletConfig.getValuesList())) {
-            valuesList = new ArrayList<AppAppletSetValues>();
-            for (AppletSetValuesConfig appletSetValuesConfig : appletConfig.getValuesList()) {
-                String description = resolveApplicationMessage(appletSetValuesConfig.getDescription());
-                AppAppletSetValues appAppletSetValues = new AppAppletSetValues();
-                appAppletSetValues.setName(appletSetValuesConfig.getName());
-                appAppletSetValues.setDescription(description);
-                appAppletSetValues.setValueGenerator(appletSetValuesConfig.getValueGenerator());
-                appAppletSetValues.setSetValues(newAppSetValues(appletSetValuesConfig.getSetValues()));
-                appAppletSetValues.setConfigType(ConfigType.CUSTOM);
-                valuesList.add(appAppletSetValues);
-            }
-        }
-
-        appApplet.setSetValuesList(valuesList);
-
-        List<AppAppletAlert> alertList = null;
-        if (!DataUtils.isBlank(appletConfig.getAlertList())) {
-            alertList = new ArrayList<AppAppletAlert>();
-            for (AppletAlertConfig alertConfig : appletConfig.getAlertList()) {
-                AppAppletAlert appAppletAlert = new AppAppletAlert();
-                appAppletAlert.setName(alertConfig.getName());
-                appAppletAlert.setDescription(resolveApplicationMessage(alertConfig.getDescription()));
-                appAppletAlert.setSender(alertConfig.getSender());
-                appAppletAlert.setRecipientContactRule(alertConfig.getRecipientContactRule());
-                appAppletAlert.setRecipientNameRule(alertConfig.getRecipientNameRule());
-                appAppletAlert.setRecipientPolicy(alertConfig.getRecipientPolicy());
-                appAppletAlert.setConfigType(ConfigType.CUSTOM);
-                alertList.add(appAppletAlert);
-            }
-        }
-
-        appApplet.setAlertList(alertList);
-
-        List<AppAppletRouteToApplet> routeToAppletList = null;
-        if (!DataUtils.isBlank(appletConfig.getRouteToAppletList())) {
-            routeToAppletList = new ArrayList<AppAppletRouteToApplet>();
-            for (AppletRouteToAppletConfig appletRouteToAppletConfig : appletConfig.getRouteToAppletList()) {
-                AppAppletRouteToApplet appAppletRouteToApplet = new AppAppletRouteToApplet();
-                appAppletRouteToApplet.setRouteToApplet(appletRouteToAppletConfig.getRouteToApplet());
-                routeToAppletList.add(appAppletRouteToApplet);
-            }
-        }
-
-        appApplet.setRouteToAppletList(routeToAppletList);
-
-        List<AppAppletFilter> filterList = null;
-        if (!DataUtils.isBlank(appletConfig.getFilterList())) {
-            filterList = new ArrayList<AppAppletFilter>();
-            for (AppletFilterConfig filterConfig : appletConfig.getFilterList()) {
-                AppAppletFilter appAppletFilter = new AppAppletFilter();
-                appAppletFilter.setOwnershipType(OwnershipType.GLOBAL);
-                appAppletFilter.setName(filterConfig.getName());
-                appAppletFilter.setDescription(resolveApplicationMessage(filterConfig.getDescription()));
-                appAppletFilter.setFilter(InputWidgetUtils.newAppFilter(filterConfig));
-                appAppletFilter.setPreferredForm(filterConfig.getPreferredForm());
-                appAppletFilter.setPreferredChildListApplet(filterConfig.getPreferredChildListApplet());
-                appAppletFilter.setQuickFilter(filterConfig.isQuickFilter());
-                appAppletFilter.setChildListActionType(filterConfig.getChildListActionType());
-                appAppletFilter.setFilterGenerator(filterConfig.getFilterGenerator());
-                appAppletFilter.setFilterGeneratorRule(filterConfig.getFilterGeneratorRule());
-                appAppletFilter.setConfigType(ConfigType.CUSTOM);
-                filterList.add(appAppletFilter);
             }
         }
         appApplet.setFilterList(filterList);
@@ -5786,12 +5696,12 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         return null;
     }
 
-    private void populateChildList(AppEntity appEntity, String applicationName, AppEntityConfig appEntityConfig)
-            throws UnifyException {
+    private void populateChildList(AppEntity appEntity, String applicationName, AppEntityConfig appEntityConfig,
+            boolean restore) throws UnifyException {
         List<AppEntityField> fieldList = new ArrayList<AppEntityField>();
         fieldList.addAll(ApplicationEntityUtils.getEntityBaseTypeFieldList(messageResolver, appEntity.getBaseType(),
                 ConfigType.STATIC));
-        Map<String, AppEntityField> map = appEntity.isIdBlank() ? Collections.emptyMap()
+        Map<String, AppEntityField> map = restore || appEntity.isIdBlank() ? Collections.emptyMap()
                 : environment().findAllMap(String.class, "name",
                         new AppEntityFieldQuery().appEntityId(appEntity.getId()));
         if (!DataUtils.isBlank(appEntityConfig.getEntityFieldList())) {
@@ -5914,7 +5824,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         List<AppEntitySeries> seriesList = null;
         if (!DataUtils.isBlank(appEntityConfig.getSeriesList())) {
             seriesList = new ArrayList<AppEntitySeries>();
-            Map<String, AppEntitySeries> map2 = appEntity.isIdBlank() ? Collections.emptyMap()
+            Map<String, AppEntitySeries> map2 = restore || appEntity.isIdBlank() ? Collections.emptyMap()
                     : environment().findAllMap(String.class, "name",
                             new AppEntitySeriesQuery().appEntityId(appEntity.getId()));
             for (EntitySeriesConfig entitySeriesConfig : appEntityConfig.getSeriesList()) {
@@ -5947,7 +5857,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         List<AppEntityCategory> categoryList = null;
         if (!DataUtils.isBlank(appEntityConfig.getCategoryList())) {
             categoryList = new ArrayList<AppEntityCategory>();
-            Map<String, AppEntityCategory> map2 = appEntity.isIdBlank() ? Collections.emptyMap()
+            Map<String, AppEntityCategory> map2 = restore || appEntity.isIdBlank() ? Collections.emptyMap()
                     : environment().findAllMap(String.class, "name",
                             new AppEntityCategoryQuery().appEntityId(appEntity.getId()));
             for (EntityCategoryConfig entityCategoryConfig : appEntityConfig.getCategoryList()) {
@@ -5958,7 +5868,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appEntityCategory.setDescription(resolveApplicationMessage(entityCategoryConfig.getDescription()));
                     appEntityCategory.setLabel(resolveApplicationMessage(entityCategoryConfig.getLabel()));
                     appEntityCategory.setFilter(InputWidgetUtils.newAppFilter(entityCategoryConfig));
-                    appEntityCategory.setConfigType(ConfigType.STATIC_INSTALL);
+                    appEntityCategory.setConfigType(restore ? ConfigType.CUSTOM : ConfigType.STATIC_INSTALL);
                     categoryList.add(appEntityCategory);
                 } else {
                     if (ConfigUtils.isSetInstall(oldAppEntityCategory)) {
@@ -5978,7 +5888,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         List<AppEntityAttachment> attachmentList = null;
         if (!DataUtils.isBlank(appEntityConfig.getAttachmentList())) {
             attachmentList = new ArrayList<AppEntityAttachment>();
-            Map<String, AppEntityAttachment> map2 = appEntity.isIdBlank() ? Collections.emptyMap()
+            Map<String, AppEntityAttachment> map2 = restore || appEntity.isIdBlank() ? Collections.emptyMap()
                     : environment().findAllMap(String.class, "name",
                             new AppEntityAttachmentQuery().appEntityId(appEntity.getId()));
             for (EntityAttachmentConfig entityAttachmentConfig : appEntityConfig.getAttachmentList()) {
@@ -5989,7 +5899,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appEntityAttachment.setName(entityAttachmentConfig.getName());
                     appEntityAttachment
                             .setDescription(resolveApplicationMessage(entityAttachmentConfig.getDescription()));
-                    appEntityAttachment.setConfigType(ConfigType.STATIC_INSTALL);
+                    appEntityAttachment.setConfigType(restore ? ConfigType.CUSTOM : ConfigType.STATIC_INSTALL);
                     attachmentList.add(appEntityAttachment);
                 } else {
                     if (ConfigUtils.isSetInstall(oldAppEntityAttachment)) {
@@ -6008,7 +5918,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         List<AppEntityExpression> expressionList = null;
         if (!DataUtils.isBlank(appEntityConfig.getExpressionList())) {
             expressionList = new ArrayList<AppEntityExpression>();
-            Map<String, AppEntityExpression> map2 = appEntity.isIdBlank() ? Collections.emptyMap()
+            Map<String, AppEntityExpression> map2 = restore || appEntity.isIdBlank() ? Collections.emptyMap()
                     : environment().findAllMap(String.class, "name",
                             new AppEntityExpressionQuery().appEntityId(appEntity.getId()));
             for (EntityExpressionConfig entityExpressionConfig : appEntityConfig.getExpressionList()) {
@@ -6019,7 +5929,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appEntityExpression
                             .setDescription(resolveApplicationMessage(entityExpressionConfig.getDescription()));
                     appEntityExpression.setExpression(entityExpressionConfig.getExpression());
-                    appEntityExpression.setConfigType(ConfigType.MUTABLE_INSTALL);
+                    appEntityExpression.setConfigType(restore ? ConfigType.CUSTOM : ConfigType.MUTABLE_INSTALL);
                     expressionList.add(appEntityExpression);
                 } else {
                     if (ConfigUtils.isSetInstall(oldAppEntityExpression)) {
@@ -6038,7 +5948,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         List<AppEntityUniqueConstraint> uniqueConstraintList = null;
         if (!DataUtils.isBlank(appEntityConfig.getUniqueConstraintList())) {
             uniqueConstraintList = new ArrayList<AppEntityUniqueConstraint>();
-            Map<String, AppEntityUniqueConstraint> map2 = appEntity.isIdBlank() ? Collections.emptyMap()
+            Map<String, AppEntityUniqueConstraint> map2 = restore || appEntity.isIdBlank() ? Collections.emptyMap()
                     : environment().findAllMap(String.class, "name",
                             new AppEntityUniqueConstraintQuery().appEntityId(appEntity.getId()));
             for (EntityUniqueConstraintConfig uniqueConstraintConfig : appEntityConfig.getUniqueConstraintList()) {
@@ -6050,7 +5960,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                             .setDescription(resolveApplicationMessage(uniqueConstraintConfig.getDescription()));
                     appUniqueConstraint.setFieldList(uniqueConstraintConfig.getFieldList());
                     populateChildList(appUniqueConstraint, applicationName, uniqueConstraintConfig);
-                    appUniqueConstraint.setConfigType(ConfigType.STATIC_INSTALL);
+                    appUniqueConstraint.setConfigType(restore ? ConfigType.CUSTOM : ConfigType.STATIC_INSTALL);
                     uniqueConstraintList.add(appUniqueConstraint);
                 } else {
                     if (ConfigUtils.isSetInstall(oldAppEntityUniqueConstraint)) {
@@ -6071,7 +5981,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         List<AppEntityIndex> indexList = null;
         if (!DataUtils.isBlank(appEntityConfig.getIndexList())) {
             indexList = new ArrayList<AppEntityIndex>();
-            Map<String, AppEntityIndex> map2 = appEntity.isIdBlank() ? Collections.emptyMap()
+            Map<String, AppEntityIndex> map2 = restore || appEntity.isIdBlank() ? Collections.emptyMap()
                     : environment().findAllMap(String.class, "name",
                             new AppEntityIndexQuery().appEntityId(appEntity.getId()));
             for (EntityIndexConfig indexConfig : appEntityConfig.getIndexList()) {
@@ -6081,7 +5991,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appIndex.setName(indexConfig.getName());
                     appIndex.setDescription(resolveApplicationMessage(indexConfig.getDescription()));
                     appIndex.setFieldList(indexConfig.getFieldList());
-                    appIndex.setConfigType(ConfigType.STATIC_INSTALL);
+                    appIndex.setConfigType(restore ? ConfigType.CUSTOM : ConfigType.STATIC_INSTALL);
                     indexList.add(appIndex);
                 } else {
                     if (ConfigUtils.isSetInstall(oldAppEntityIndex)) {
@@ -6100,7 +6010,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         List<AppEntityUpload> uploadList = null;
         if (!DataUtils.isBlank(appEntityConfig.getUploadList())) {
             uploadList = new ArrayList<AppEntityUpload>();
-            Map<String, AppEntityUpload> map2 = appEntity.isIdBlank() ? Collections.emptyMap()
+            Map<String, AppEntityUpload> map2 = restore || appEntity.isIdBlank() ? Collections.emptyMap()
                     : environment().findAllMap(String.class, "name",
                             new AppEntityUploadQuery().appEntityId(appEntity.getId()));
             for (EntityUploadConfig uploadConfig : appEntityConfig.getUploadList()) {
@@ -6111,7 +6021,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appEntityUpload.setDescription(resolveApplicationMessage(uploadConfig.getDescription()));
                     appEntityUpload.setConstraintAction(uploadConfig.getConstraintAction());
                     appEntityUpload.setFieldSequence(newAppFieldSequence(uploadConfig.getFieldSequence()));
-                    appEntityUpload.setConfigType(ConfigType.STATIC_INSTALL);
+                    appEntityUpload.setConfigType(restore ? ConfigType.CUSTOM : ConfigType.STATIC_INSTALL);
                     uploadList.add(appEntityUpload);
                 } else {
                     if (ConfigUtils.isSetInstall(oldAppEntityUpload)) {
@@ -6131,7 +6041,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         List<AppEntitySearchInput> searchInputList = null;
         if (!DataUtils.isBlank(appEntityConfig.getSearchInputList())) {
             searchInputList = new ArrayList<AppEntitySearchInput>();
-            Map<String, AppEntitySearchInput> _emap = appEntity.isIdBlank() ? Collections.emptyMap()
+            Map<String, AppEntitySearchInput> _emap = restore || appEntity.isIdBlank() ? Collections.emptyMap()
                     : environment().findAllMap(String.class, "name",
                             new AppEntitySearchInputQuery().appEntityId(appEntity.getId()));
             for (EntitySearchInputConfig searchInputConfig : appEntityConfig.getSearchInputList()) {
@@ -6144,7 +6054,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                                 .setDescription(resolveApplicationMessage(searchInputConfig.getDescription()));
                         appEntitySearchInput.setRestrictionResolver(searchInputConfig.getRestrictionResolver());
                         appEntitySearchInput.setSearchInput(InputWidgetUtils.newAppSearchInput(searchInputConfig));
-                        appEntitySearchInput.setConfigType(ConfigType.MUTABLE_INSTALL);
+                        appEntitySearchInput.setConfigType(restore ? ConfigType.CUSTOM : ConfigType.MUTABLE_INSTALL);
                         searchInputList.add(appEntitySearchInput);
                     } else {
                         if (ConfigUtils.isSetInstall(oldAppTableSearchInput)) {
@@ -6159,199 +6069,6 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
                         searchInputList.add(oldAppTableSearchInput);
                     }
-                }
-            }
-        }
-        appEntity.setSearchInputList(searchInputList);
-    }
-    
-    private void populateChildListOnRestore(AppEntity appEntity, String applicationName, AppEntityConfig appEntityConfig)
-            throws UnifyException {
-        List<AppEntityField> fieldList = new ArrayList<AppEntityField>();
-        fieldList.addAll(ApplicationEntityUtils.getEntityBaseTypeFieldList(messageResolver, appEntity.getBaseType(),
-                ConfigType.CUSTOM));
-        if (!DataUtils.isBlank(appEntityConfig.getEntityFieldList())) {
-            for (EntityFieldConfig entityFieldConfig : appEntityConfig.getEntityFieldList()) {
-                AppEntityField appEntityField = new AppEntityField();
-                appEntityField.setDataType(entityFieldConfig.getType());
-                appEntityField.setType(EntityFieldType.CUSTOM);
-                appEntityField.setName(entityFieldConfig.getName());
-                appEntityField.setLabel(resolveApplicationMessage(entityFieldConfig.getLabel()));
-                String references = entityFieldConfig.getReferences();
-                if (entityFieldConfig.getType().isEntityRef()
-                        || (!entityFieldConfig.getType().isEnumGroup() && !StringUtils.isBlank(references))) {
-                    references = ApplicationNameUtils.ensureLongNameReference(applicationName, references);
-                }
-
-                appEntityField.setColumnName(entityFieldConfig.getColumnName());
-                appEntityField.setReferences(references);
-                appEntityField.setKey(entityFieldConfig.getKey());
-                appEntityField.setProperty(entityFieldConfig.getProperty());
-                appEntityField.setCategory(entityFieldConfig.getCategory());
-                String inputLabel = entityFieldConfig.getInputLabel() == null ? null
-                        : resolveApplicationMessage(entityFieldConfig.getInputLabel());
-                appEntityField.setInputLabel(inputLabel);
-                appEntityField.setInputWidget(ApplicationNameUtils.ensureLongNameReference(applicationName,
-                        entityFieldConfig.getInputWidget()));
-                appEntityField.setSuggestionType(ApplicationNameUtils.ensureLongNameReference(applicationName,
-                        entityFieldConfig.getSuggestionType()));
-                appEntityField.setInputListKey(entityFieldConfig.getInputListKey());
-                appEntityField.setLingualWidget(ApplicationNameUtils.ensureLongNameReference(applicationName,
-                        entityFieldConfig.getLingualWidget()));
-                appEntityField.setLingualListKey(entityFieldConfig.getLingualListKey());
-                appEntityField.setAutoFormat(entityFieldConfig.getAutoFormat());
-                appEntityField.setDefaultVal(entityFieldConfig.getDefaultVal());
-                appEntityField.setMapped(entityFieldConfig.getMapped());
-                appEntityField.setTextCase(entityFieldConfig.getTextCase());
-                appEntityField.setColumns(entityFieldConfig.getColumns());
-                appEntityField.setRows(entityFieldConfig.getRows());
-                appEntityField.setMinLen(entityFieldConfig.getMinLen());
-                appEntityField.setMaxLen(entityFieldConfig.getMaxLen());
-                appEntityField.setPrecision(entityFieldConfig.getPrecision());
-                appEntityField.setScale(entityFieldConfig.getScale());
-                appEntityField.setTrim(entityFieldConfig.getTrim());
-                appEntityField.setAllowNegative(entityFieldConfig.getAllowNegative());
-                appEntityField.setReadOnly(entityFieldConfig.getReadOnly());
-                appEntityField.setNullable(entityFieldConfig.getNullable());
-                appEntityField.setAuditable(entityFieldConfig.getAuditable());
-                appEntityField.setReportable(
-                        entityFieldConfig.getType().isReportable() ? entityFieldConfig.getReportable() : false);
-                appEntityField.setDescriptive(entityFieldConfig.getDescriptive());
-                appEntityField.setMaintainLink(entityFieldConfig.getMaintainLink());
-                appEntityField.setBasicSearch(entityFieldConfig.getBasicSearch());
-                appEntityField.setConfigType(ConfigType.CUSTOM);
-                fieldList.add(appEntityField);
-            }
-        }
-
-        appEntity.setFieldList(fieldList);
-
-        List<AppEntitySeries> seriesList = null;
-        if (!DataUtils.isBlank(appEntityConfig.getSeriesList())) {
-            seriesList = new ArrayList<AppEntitySeries>();
-            for (EntitySeriesConfig entitySeriesConfig : appEntityConfig.getSeriesList()) {
-                AppEntitySeries appEntitySeries = new AppEntitySeries();
-                appEntitySeries.setType(entitySeriesConfig.getType());
-                appEntitySeries.setName(entitySeriesConfig.getName());
-                appEntitySeries.setDescription(resolveApplicationMessage(entitySeriesConfig.getDescription()));
-                appEntitySeries.setLabel(resolveApplicationMessage(entitySeriesConfig.getLabel()));
-                appEntitySeries.setFieldName(entitySeriesConfig.getFieldName());
-                appEntitySeries.setConfigType(ConfigType.CUSTOM);
-                seriesList.add(appEntitySeries);
-            }
-        }
-
-        appEntity.setSeriesList(seriesList);
-
-        List<AppEntityCategory> categoryList = null;
-        if (!DataUtils.isBlank(appEntityConfig.getCategoryList())) {
-            categoryList = new ArrayList<AppEntityCategory>();
-            for (EntityCategoryConfig entityCategoryConfig : appEntityConfig.getCategoryList()) {
-                AppEntityCategory appEntityCategory = new AppEntityCategory();
-                appEntityCategory.setName(entityCategoryConfig.getName());
-                appEntityCategory.setDescription(resolveApplicationMessage(entityCategoryConfig.getDescription()));
-                appEntityCategory.setLabel(resolveApplicationMessage(entityCategoryConfig.getLabel()));
-                appEntityCategory.setFilter(InputWidgetUtils.newAppFilter(entityCategoryConfig));
-                appEntityCategory.setConfigType(ConfigType.CUSTOM);
-                categoryList.add(appEntityCategory);
-            }
-        }
-
-        appEntity.setCategoryList(categoryList);
-
-        List<AppEntityAttachment> attachmentList = null;
-        if (!DataUtils.isBlank(appEntityConfig.getAttachmentList())) {
-            attachmentList = new ArrayList<AppEntityAttachment>();
-            for (EntityAttachmentConfig entityAttachmentConfig : appEntityConfig.getAttachmentList()) {
-                AppEntityAttachment appEntityAttachment = new AppEntityAttachment();
-                appEntityAttachment.setType(entityAttachmentConfig.getType());
-                appEntityAttachment.setName(entityAttachmentConfig.getName());
-                appEntityAttachment
-                        .setDescription(resolveApplicationMessage(entityAttachmentConfig.getDescription()));
-                appEntityAttachment.setConfigType(ConfigType.CUSTOM);
-                attachmentList.add(appEntityAttachment);
-            }
-        }
-
-        appEntity.setAttachmentList(attachmentList);
-
-        List<AppEntityExpression> expressionList = null;
-        if (!DataUtils.isBlank(appEntityConfig.getExpressionList())) {
-            expressionList = new ArrayList<AppEntityExpression>();
-            for (EntityExpressionConfig entityExpressionConfig : appEntityConfig.getExpressionList()) {
-                AppEntityExpression appEntityExpression = new AppEntityExpression();
-                appEntityExpression.setName(entityExpressionConfig.getName());
-                appEntityExpression
-                        .setDescription(resolveApplicationMessage(entityExpressionConfig.getDescription()));
-                appEntityExpression.setExpression(entityExpressionConfig.getExpression());
-                appEntityExpression.setConfigType(ConfigType.CUSTOM);
-                expressionList.add(appEntityExpression);
-            }
-        }
-
-        appEntity.setExpressionList(expressionList);
-
-        List<AppEntityUniqueConstraint> uniqueConstraintList = null;
-        if (!DataUtils.isBlank(appEntityConfig.getUniqueConstraintList())) {
-            uniqueConstraintList = new ArrayList<AppEntityUniqueConstraint>();
-            for (EntityUniqueConstraintConfig uniqueConstraintConfig : appEntityConfig.getUniqueConstraintList()) {
-                AppEntityUniqueConstraint appUniqueConstraint = new AppEntityUniqueConstraint();
-                appUniqueConstraint.setName(uniqueConstraintConfig.getName());
-                appUniqueConstraint
-                        .setDescription(resolveApplicationMessage(uniqueConstraintConfig.getDescription()));
-                appUniqueConstraint.setFieldList(uniqueConstraintConfig.getFieldList());
-                populateChildList(appUniqueConstraint, applicationName, uniqueConstraintConfig);
-                appUniqueConstraint.setConfigType(ConfigType.CUSTOM);
-                uniqueConstraintList.add(appUniqueConstraint);
-            }
-        }
-
-        appEntity.setUniqueConstraintList(uniqueConstraintList);
-
-        List<AppEntityIndex> indexList = null;
-        if (!DataUtils.isBlank(appEntityConfig.getIndexList())) {
-            indexList = new ArrayList<AppEntityIndex>();
-            for (EntityIndexConfig indexConfig : appEntityConfig.getIndexList()) {
-                AppEntityIndex appIndex = new AppEntityIndex();
-                appIndex.setName(indexConfig.getName());
-                appIndex.setDescription(resolveApplicationMessage(indexConfig.getDescription()));
-                appIndex.setFieldList(indexConfig.getFieldList());
-                appIndex.setConfigType(ConfigType.CUSTOM);
-                indexList.add(appIndex);
-            }
-        }
-
-        appEntity.setIndexList(indexList);
-
-        List<AppEntityUpload> uploadList = null;
-        if (!DataUtils.isBlank(appEntityConfig.getUploadList())) {
-            uploadList = new ArrayList<AppEntityUpload>();
-            for (EntityUploadConfig uploadConfig : appEntityConfig.getUploadList()) {
-                AppEntityUpload appEntityUpload = new AppEntityUpload();
-                appEntityUpload.setName(uploadConfig.getName());
-                appEntityUpload.setDescription(resolveApplicationMessage(uploadConfig.getDescription()));
-                appEntityUpload.setConstraintAction(uploadConfig.getConstraintAction());
-                appEntityUpload.setFieldSequence(newAppFieldSequence(uploadConfig.getFieldSequence()));
-                appEntityUpload.setConfigType(ConfigType.CUSTOM);
-                uploadList.add(appEntityUpload);
-            }
-        }
-
-        appEntity.setUploadList(uploadList);
-
-        List<AppEntitySearchInput> searchInputList = null;
-        if (!DataUtils.isBlank(appEntityConfig.getSearchInputList())) {
-            searchInputList = new ArrayList<AppEntitySearchInput>();
-            for (EntitySearchInputConfig searchInputConfig : appEntityConfig.getSearchInputList()) {
-                if (!DataUtils.isBlank(searchInputConfig.getInputList())) {
-                    AppEntitySearchInput appEntitySearchInput = new AppEntitySearchInput();
-                    appEntitySearchInput.setName(searchInputConfig.getName());
-                    appEntitySearchInput
-                            .setDescription(resolveApplicationMessage(searchInputConfig.getDescription()));
-                    appEntitySearchInput.setRestrictionResolver(searchInputConfig.getRestrictionResolver());
-                    appEntitySearchInput.setSearchInput(InputWidgetUtils.newAppSearchInput(searchInputConfig));
-                    appEntitySearchInput.setConfigType(ConfigType.CUSTOM);
-                    searchInputList.add(appEntitySearchInput);
                 }
             }
         }
@@ -6373,8 +6090,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         appUniqueConstraint.setConditionList(conditionList);
     }
 
-    private void populateChildList(AppTable appTable, String applicationName, AppTableConfig appTableConfig)
-            throws UnifyException {
+    private void populateChildList(AppTable appTable, String applicationName, AppTableConfig appTableConfig,
+            boolean restore) throws UnifyException {
         List<AppTableColumn> columnList = new ArrayList<AppTableColumn>();
         for (TableColumnConfig tableColumnConfig : appTableConfig.getColumnList()) {
             AppTableColumn appTableColumn = new AppTableColumn();
@@ -6393,7 +6110,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             appTableColumn.setDisabled(tableColumnConfig.getDisabled());
             appTableColumn.setSortable(tableColumnConfig.getSortable());
             appTableColumn.setSummary(tableColumnConfig.getSummary());
-            appTableColumn.setConfigType(ConfigType.MUTABLE_INSTALL);
+            appTableColumn.setConfigType(restore ? ConfigType.CUSTOM : ConfigType.MUTABLE_INSTALL);
             columnList.add(appTableColumn);
         }
 
@@ -6402,7 +6119,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         List<AppTableFilter> filterList = null;
         if (!DataUtils.isBlank(appTableConfig.getFilterList())) {
             filterList = new ArrayList<AppTableFilter>();
-            Map<String, AppTableFilter> map = appTable.isIdBlank() ? Collections.emptyMap()
+            Map<String, AppTableFilter> map = restore || appTable.isIdBlank() ? Collections.emptyMap()
                     : environment().findAllMap(String.class, "name",
                             new AppTableFilterQuery().appTableId(appTable.getId()));
             for (TableFilterConfig filterConfig : appTableConfig.getFilterList()) {
@@ -6417,7 +6134,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                         appTableFilter.setFilter(InputWidgetUtils.newAppFilter(filterConfig));
                         appTableFilter.setRowColor(filterConfig.getRowColor());
                         appTableFilter.setLegendLabel(filterConfig.getLegendLabel());
-                        appTableFilter.setConfigType(ConfigType.MUTABLE_INSTALL);
+                        appTableFilter.setConfigType(restore ? ConfigType.CUSTOM : ConfigType.MUTABLE_INSTALL);
                         filterList.add(appTableFilter);
                     } else {
                         if (ConfigUtils.isSetInstall(oldAppTableFilter)) {
@@ -6441,7 +6158,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         List<AppTableAction> actionList = null;
         if (!DataUtils.isBlank(appTableConfig.getActionList())) {
             actionList = new ArrayList<AppTableAction>();
-            Map<String, AppTableAction> map = appTable.isIdBlank() ? Collections.emptyMap()
+            Map<String, AppTableAction> map = restore || appTable.isIdBlank() ? Collections.emptyMap()
                     : environment().findAllMap(String.class, "name",
                             new AppTableActionQuery().appTableId(appTable.getId()));
             for (TableActionConfig tableActionConfig : appTableConfig.getActionList()) {
@@ -6453,7 +6170,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appTableAction.setLabel(resolveApplicationMessage(tableActionConfig.getLabel()));
                     appTableAction.setPolicy(tableActionConfig.getPolicy());
                     appTableAction.setOrderIndex(tableActionConfig.getOrderIndex());
-                    appTableAction.setConfigType(ConfigType.MUTABLE_INSTALL);
+                    appTableAction.setConfigType(restore ? ConfigType.CUSTOM : ConfigType.MUTABLE_INSTALL);
                     actionList.add(appTableAction);
                 } else {
                     if (ConfigUtils.isSetInstall(oldAppTableAction)) {
@@ -6475,7 +6192,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         List<AppTableLoading> loadingList = null;
         if (!DataUtils.isBlank(appTableConfig.getLoadingList())) {
             loadingList = new ArrayList<AppTableLoading>();
-            Map<String, AppTableLoading> map = appTable.isIdBlank() ? Collections.emptyMap()
+            Map<String, AppTableLoading> map = restore || appTable.isIdBlank() ? Collections.emptyMap()
                     : environment().findAllMap(String.class, "name",
                             new AppTableLoadingQuery().appTableId(appTable.getId()));
             for (TableLoadingConfig tableLoadingConfig : appTableConfig.getLoadingList()) {
@@ -6487,7 +6204,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appTableLoading.setLabel(resolveApplicationMessage(tableLoadingConfig.getLabel()));
                     appTableLoading.setProvider(tableLoadingConfig.getProvider());
                     appTableLoading.setOrderIndex(tableLoadingConfig.getOrderIndex());
-                    appTableLoading.setConfigType(ConfigType.MUTABLE_INSTALL);
+                    appTableLoading.setConfigType(restore ? ConfigType.CUSTOM : ConfigType.MUTABLE_INSTALL);
                     loadingList.add(appTableLoading);
                 } else {
                     if (ConfigUtils.isSetInstall(oldAppTableLoading)) {
@@ -6507,93 +6224,13 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         appTable.setLoadingList(loadingList);
     }
 
-    private void populateChildListOnRestore(AppTable appTable, String applicationName, AppTableConfig appTableConfig)
-            throws UnifyException {
-        List<AppTableColumn> columnList = new ArrayList<AppTableColumn>();
-        for (TableColumnConfig tableColumnConfig : appTableConfig.getColumnList()) {
-            AppTableColumn appTableColumn = new AppTableColumn();
-            appTableColumn.setField(tableColumnConfig.getField());
-            appTableColumn.setLabel(resolveApplicationMessage(tableColumnConfig.getLabel()));
-            appTableColumn.setRenderWidget(
-                    ApplicationNameUtils.ensureLongNameReference(applicationName, tableColumnConfig.getRenderWidget()));
-            appTableColumn.setLinkAct(tableColumnConfig.getLinkAct());
-            appTableColumn.setSymbol(tableColumnConfig.getSymbol());
-            appTableColumn.setOrder(tableColumnConfig.getOrder());
-            appTableColumn.setWidthRatio(tableColumnConfig.getWidthRatio());
-            appTableColumn.setSwitchOnChange(tableColumnConfig.getSwitchOnChange());
-            appTableColumn.setEditable(tableColumnConfig.getEditable());
-            appTableColumn.setHiddenOnNull(tableColumnConfig.getHiddenOnNull());
-            appTableColumn.setHidden(tableColumnConfig.getHidden());
-            appTableColumn.setDisabled(tableColumnConfig.getDisabled());
-            appTableColumn.setSortable(tableColumnConfig.getSortable());
-            appTableColumn.setSummary(tableColumnConfig.getSummary());
-            appTableColumn.setConfigType(ConfigType.CUSTOM);
-            columnList.add(appTableColumn);
-        }
-
-        appTable.setColumnList(columnList);
-
-        List<AppTableFilter> filterList = null;
-        if (!DataUtils.isBlank(appTableConfig.getFilterList())) {
-            filterList = new ArrayList<AppTableFilter>();
-            for (TableFilterConfig filterConfig : appTableConfig.getFilterList()) {
-                if (!DataUtils.isBlank(filterConfig.getRestrictionList())) {
-                    AppTableFilter appTableFilter = new AppTableFilter();
-                    appTableFilter.setName(filterConfig.getName());
-                    appTableFilter.setDescription(resolveApplicationMessage(filterConfig.getDescription()));
-                    appTableFilter.setFilterGenerator(filterConfig.getFilterGenerator());
-                    appTableFilter.setFilterGeneratorRule(filterConfig.getFilterGeneratorRule());
-                    appTableFilter.setFilter(InputWidgetUtils.newAppFilter(filterConfig));
-                    appTableFilter.setRowColor(filterConfig.getRowColor());
-                    appTableFilter.setLegendLabel(filterConfig.getLegendLabel());
-                    appTableFilter.setConfigType(ConfigType.CUSTOM);
-                    filterList.add(appTableFilter);
-                }
-            }
-        }
-        appTable.setFilterList(filterList);
-
-        List<AppTableAction> actionList = null;
-        if (!DataUtils.isBlank(appTableConfig.getActionList())) {
-            actionList = new ArrayList<AppTableAction>();
-            for (TableActionConfig tableActionConfig : appTableConfig.getActionList()) {
-                AppTableAction appTableAction = new AppTableAction();
-                appTableAction.setName(tableActionConfig.getName());
-                appTableAction.setDescription(resolveApplicationMessage(tableActionConfig.getDescription()));
-                appTableAction.setLabel(resolveApplicationMessage(tableActionConfig.getLabel()));
-                appTableAction.setPolicy(tableActionConfig.getPolicy());
-                appTableAction.setOrderIndex(tableActionConfig.getOrderIndex());
-                appTableAction.setConfigType(ConfigType.CUSTOM);
-                actionList.add(appTableAction);
-            }
-        }
-
-        appTable.setActionList(actionList);
-
-        List<AppTableLoading> loadingList = null;
-        if (!DataUtils.isBlank(appTableConfig.getLoadingList())) {
-            loadingList = new ArrayList<AppTableLoading>();
-            for (TableLoadingConfig tableLoadingConfig : appTableConfig.getLoadingList()) {
-                AppTableLoading appTableLoading = new AppTableLoading();
-                appTableLoading.setName(tableLoadingConfig.getName());
-                appTableLoading.setDescription(resolveApplicationMessage(tableLoadingConfig.getDescription()));
-                appTableLoading.setLabel(resolveApplicationMessage(tableLoadingConfig.getLabel()));
-                appTableLoading.setProvider(tableLoadingConfig.getProvider());
-                appTableLoading.setOrderIndex(tableLoadingConfig.getOrderIndex());
-                appTableLoading.setConfigType(ConfigType.CUSTOM);
-                loadingList.add(appTableLoading);
-            }
-        }
-        appTable.setLoadingList(loadingList);
-    }
-
     private void populateChildList(final AppForm appForm, AppFormConfig appFormConfig, final Long applicationId,
-            String applicationName) throws UnifyException {
+            final String applicationName, final boolean restore) throws UnifyException {
         // Filters
         List<AppFormFilter> filterList = null;
         if (!DataUtils.isBlank(appFormConfig.getFilterList())) {
             filterList = new ArrayList<AppFormFilter>();
-            Map<String, AppFormFilter> map = appForm.isIdBlank() ? Collections.emptyMap()
+            Map<String, AppFormFilter> map = restore || appForm.isIdBlank() ? Collections.emptyMap()
                     : environment().findAllMap(String.class, "name",
                             new AppFormFilterQuery().appFormId(appForm.getId()));
             for (FormFilterConfig filterConfig : appFormConfig.getFilterList()) {
@@ -6605,7 +6242,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appFormFilter.setFilterGenerator(filterConfig.getFilterGenerator());
                     appFormFilter.setFilterGeneratorRule(filterConfig.getFilterGeneratorRule());
                     appFormFilter.setFilter(InputWidgetUtils.newAppFilter(filterConfig));
-                    appFormFilter.setConfigType(ConfigType.MUTABLE_INSTALL);
+                    appFormFilter.setConfigType(restore ? ConfigType.CUSTOM : ConfigType.MUTABLE_INSTALL);
                     filterList.add(appFormFilter);
                 } else {
                     if (ConfigUtils.isSetInstall(oldAppFormFilter)) {
@@ -6628,7 +6265,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         List<AppFormAnnotation> annotationList = null;
         if (!DataUtils.isBlank(appFormConfig.getAnnotationList())) {
             annotationList = new ArrayList<AppFormAnnotation>();
-            Map<String, AppFormAnnotation> map = appForm.isIdBlank() ? Collections.emptyMap()
+            Map<String, AppFormAnnotation> map = restore || appForm.isIdBlank() ? Collections.emptyMap()
                     : environment().findAllMap(String.class, "name",
                             new AppFormAnnotationQuery().appFormId(appForm.getId()));
             for (FormAnnotationConfig formAnnotationConfig : appFormConfig.getAnnotationList()) {
@@ -6646,7 +6283,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appFormAnnotation.setDirectPlacement(formAnnotationConfig.isDirectPlacement());
                     appFormAnnotation
                             .setOnCondition(InputWidgetUtils.newAppFilter(formAnnotationConfig.getOnCondition()));
-                    appFormAnnotation.setConfigType(ConfigType.MUTABLE_INSTALL);
+                    appFormAnnotation.setConfigType(restore ? ConfigType.CUSTOM : ConfigType.MUTABLE_INSTALL);
                     annotationList.add(appFormAnnotation);
                 } else {
                     if (ConfigUtils.isSetInstall(oldAppFormAnnotation)) {
@@ -6671,7 +6308,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         List<AppFormAction> actionList = null;
         if (!DataUtils.isBlank(appFormConfig.getActionList())) {
             actionList = new ArrayList<AppFormAction>();
-            Map<String, AppFormAction> map = appForm.isIdBlank() ? Collections.emptyMap()
+            Map<String, AppFormAction> map = restore || appForm.isIdBlank() ? Collections.emptyMap()
                     : environment().findAllMap(String.class, "name",
                             new AppFormActionQuery().appFormId(appForm.getId()));
             for (FormActionConfig formActionConfig : appFormConfig.getActionList()) {
@@ -6693,7 +6330,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appFormAction.setValidateForm(formActionConfig.isValidateForm());
                     appFormAction.setOrderIndex(formActionConfig.getOrderIndex());
                     appFormAction.setOnCondition(InputWidgetUtils.newAppFilter(formActionConfig.getOnCondition()));
-                    appFormAction.setConfigType(ConfigType.MUTABLE_INSTALL);
+                    appFormAction.setConfigType(restore ? ConfigType.CUSTOM : ConfigType.MUTABLE_INSTALL);
                     actionList.add(appFormAction);
                 } else {
                     if (ConfigUtils.isSetInstall(oldAppFormAction)) {
@@ -6753,7 +6390,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             appFormElement.setVisible(formTabConfig.getVisible());
             appFormElement.setEditable(formTabConfig.getEditable());
             appFormElement.setDisabled(formTabConfig.getDisabled());
-            appFormElement.setConfigType(ConfigType.MUTABLE_INSTALL);
+            appFormElement.setConfigType(restore ? ConfigType.CUSTOM : ConfigType.MUTABLE_INSTALL);
             elementList.add(appFormElement);
 
             if (TabContentType.MINIFORM.equals(formTabConfig.getContentType())) {
@@ -6767,7 +6404,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appFormElement.setVisible(formSectionConfig.getVisible());
                     appFormElement.setEditable(formSectionConfig.getEditable());
                     appFormElement.setDisabled(formSectionConfig.getDisabled());
-                    appFormElement.setConfigType(ConfigType.MUTABLE_INSTALL);
+                    appFormElement.setConfigType(restore ? ConfigType.CUSTOM : ConfigType.MUTABLE_INSTALL);
                     elementList.add(appFormElement);
 
                     if (!DataUtils.isBlank(formSectionConfig.getFieldList())) {
@@ -6789,7 +6426,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                             appFormElement.setColor(formFieldConfig.getColor());
                             appFormElement.setEditable(formFieldConfig.getEditable());
                             appFormElement.setDisabled(formFieldConfig.getDisabled());
-                            appFormElement.setConfigType(ConfigType.MUTABLE_INSTALL);
+                            appFormElement.setConfigType(restore ? ConfigType.CUSTOM : ConfigType.MUTABLE_INSTALL);
                             elementList.add(appFormElement);
                         }
                     }
@@ -6805,7 +6442,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         List<AppFormRelatedList> relatedList = null;
         if (!DataUtils.isBlank(appFormConfig.getRelatedList())) {
             relatedList = new ArrayList<AppFormRelatedList>();
-            Map<String, AppFormRelatedList> map = appForm.isIdBlank() ? Collections.emptyMap()
+            Map<String, AppFormRelatedList> map = restore || appForm.isIdBlank() ? Collections.emptyMap()
                     : environment().findAllMap(String.class, "name",
                             new AppFormRelatedListQuery().appFormId(appForm.getId()));
             for (RelatedListConfig relatedListConfig : appFormConfig.getRelatedList()) {
@@ -6819,7 +6456,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                             relatedListConfig.getApplet()));
                     appFormRelatedList.setFilter(relatedListConfig.getFilter());
                     appFormRelatedList.setEditAction(relatedListConfig.getEditAction());
-                    appFormRelatedList.setConfigType(ConfigType.MUTABLE_INSTALL);
+                    appFormRelatedList.setConfigType(restore ? ConfigType.CUSTOM : ConfigType.MUTABLE_INSTALL);
                     relatedList.add(appFormRelatedList);
                 } else {
                     if (ConfigUtils.isSetInstall(oldAppFormRelatedList)) {
@@ -6844,7 +6481,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         List<AppFormStatePolicy> fieldStateList = null;
         if (!DataUtils.isBlank(appFormConfig.getFormStatePolicyList())) {
             fieldStateList = new ArrayList<AppFormStatePolicy>();
-            Map<String, AppFormStatePolicy> map = appForm.isIdBlank() ? Collections.emptyMap()
+            Map<String, AppFormStatePolicy> map = restore || appForm.isIdBlank() ? Collections.emptyMap()
                     : environment().findAllMap(String.class, "name",
                             new AppFormStatePolicyQuery().appFormId(appForm.getId()));
             for (FormStatePolicyConfig formStatePolicyConfig : appFormConfig.getFormStatePolicyList()) {
@@ -6861,7 +6498,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appFormStatePolicy
                             .setOnCondition(InputWidgetUtils.newAppFilter(formStatePolicyConfig.getOnCondition()));
                     appFormStatePolicy.setSetValues(newAppSetValues(formStatePolicyConfig.getSetValues()));
-                    appFormStatePolicy.setConfigType(ConfigType.MUTABLE_INSTALL);
+                    appFormStatePolicy.setConfigType(restore ? ConfigType.CUSTOM : ConfigType.MUTABLE_INSTALL);
                     populateChildList(appFormStatePolicy, formStatePolicyConfig);
                     fieldStateList.add(appFormStatePolicy);
                 } else {
@@ -6891,7 +6528,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         List<AppFormWidgetRulesPolicy> widgetRulesList = null;
         if (!DataUtils.isBlank(appFormConfig.getWidgetRulesPolicyList())) {
             widgetRulesList = new ArrayList<AppFormWidgetRulesPolicy>();
-            Map<String, AppFormWidgetRulesPolicy> map = appForm.isIdBlank() ? Collections.emptyMap()
+            Map<String, AppFormWidgetRulesPolicy> map = restore || appForm.isIdBlank() ? Collections.emptyMap()
                     : environment().findAllMap(String.class, "name",
                             new AppFormWidgetRulesPolicyQuery().appFormId(appForm.getId()));
             for (FormWidgetRulesPolicyConfig formWidgetRulesPolicyConfig : appFormConfig.getWidgetRulesPolicyList()) {
@@ -6906,7 +6543,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                             InputWidgetUtils.newAppFilter(formWidgetRulesPolicyConfig.getOnCondition()));
                     appFormWidgetRulesPolicy
                             .setWidgetRules(newAppWidgetRules(formWidgetRulesPolicyConfig.getWidgetRules()));
-                    appFormWidgetRulesPolicy.setConfigType(ConfigType.MUTABLE_INSTALL);
+                    appFormWidgetRulesPolicy.setConfigType(restore ? ConfigType.CUSTOM : ConfigType.MUTABLE_INSTALL);
                     widgetRulesList.add(appFormWidgetRulesPolicy);
                 } else {
                     if (ConfigUtils.isSetInstall(oldAppFormWidgetRulesPolicy)) {
@@ -6932,7 +6569,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         List<AppFormFieldValidationPolicy> fieldValidationList = null;
         if (!DataUtils.isBlank(appFormConfig.getFieldValidationPolicyList())) {
             fieldValidationList = new ArrayList<AppFormFieldValidationPolicy>();
-            Map<String, AppFormFieldValidationPolicy> map = appForm.isIdBlank() ? Collections.emptyMap()
+            Map<String, AppFormFieldValidationPolicy> map = restore || appForm.isIdBlank() ? Collections.emptyMap()
                     : environment().findAllMap(String.class, "name",
                             new AppFormFieldValidationPolicyQuery().appFormId(appForm.getId()));
             for (FieldValidationPolicyConfig fieldValidationPolicyConfig : appFormConfig
@@ -6948,7 +6585,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appFormFieldValidationPolicy.setValidation(fieldValidationPolicyConfig.getValidator());
                     appFormFieldValidationPolicy.setRule(fieldValidationPolicyConfig.getRule());
                     appFormFieldValidationPolicy.setExecutionIndex(fieldValidationPolicyConfig.getExecutionIndex());
-                    appFormFieldValidationPolicy.setConfigType(ConfigType.MUTABLE_INSTALL);
+                    appFormFieldValidationPolicy
+                            .setConfigType(restore ? ConfigType.CUSTOM : ConfigType.MUTABLE_INSTALL);
                     fieldValidationList.add(appFormFieldValidationPolicy);
                 } else {
                     if (ConfigUtils.isSetInstall(oldAppFormFieldValidationPolicy)) {
@@ -6972,7 +6610,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         List<AppFormValidationPolicy> formValidationList = null;
         if (!DataUtils.isBlank(appFormConfig.getFormValidationPolicyList())) {
             formValidationList = new ArrayList<AppFormValidationPolicy>();
-            Map<String, AppFormValidationPolicy> map = appForm.isIdBlank() ? Collections.emptyMap()
+            Map<String, AppFormValidationPolicy> map = restore || appForm.isIdBlank() ? Collections.emptyMap()
                     : environment().findAllMap(String.class, "name",
                             new AppFormValidationPolicyQuery().appFormId(appForm.getId()));
             for (FormValidationPolicyConfig formValidationPolicyConfig : appFormConfig.getFormValidationPolicyList()) {
@@ -6989,7 +6627,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                             .setMessage(resolveApplicationMessage(formValidationPolicyConfig.getMessage()));
                     appFormValidationPolicy.setTarget(formValidationPolicyConfig.getTarget());
                     appFormValidationPolicy.setExecutionIndex(formValidationPolicyConfig.getExecutionIndex());
-                    appFormValidationPolicy.setConfigType(ConfigType.MUTABLE_INSTALL);
+                    appFormValidationPolicy.setConfigType(restore ? ConfigType.CUSTOM : ConfigType.MUTABLE_INSTALL);
                     formValidationList.add(appFormValidationPolicy);
                 } else {
                     if (ConfigUtils.isSetInstall(oldAppFormValidationPolicy)) {
@@ -7017,7 +6655,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         List<AppFormReviewPolicy> formReviewList = null;
         if (!DataUtils.isBlank(appFormConfig.getFormReviewPolicyList())) {
             formReviewList = new ArrayList<AppFormReviewPolicy>();
-            Map<String, AppFormReviewPolicy> map = appForm.isIdBlank() ? Collections.emptyMap()
+            Map<String, AppFormReviewPolicy> map = restore || appForm.isIdBlank() ? Collections.emptyMap()
                     : environment().findAllMap(String.class, "name",
                             new AppFormReviewPolicyQuery().appFormId(appForm.getId()));
             for (FormReviewPolicyConfig formReviewPolicyConfig : appFormConfig.getFormReviewPolicyList()) {
@@ -7036,7 +6674,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appFormReviewPolicy.setTarget(formReviewPolicyConfig.getTarget());
                     appFormReviewPolicy.setSkippable(formReviewPolicyConfig.isSkippable());
                     appFormReviewPolicy.setExecutionIndex(formReviewPolicyConfig.getExecutionIndex());
-                    appFormReviewPolicy.setConfigType(ConfigType.MUTABLE_INSTALL);
+                    appFormReviewPolicy.setConfigType(restore ? ConfigType.CUSTOM : ConfigType.MUTABLE_INSTALL);
                     formReviewList.add(appFormReviewPolicy);
                 } else {
                     if (ConfigUtils.isSetInstall(oldAppFormReviewPolicy)) {
@@ -7078,7 +6716,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 appFormSetState.setVisible(setStateConfig.getVisible());
                 appFormSetState.setEditable(setStateConfig.getEditable());
                 appFormSetState.setDisabled(setStateConfig.getDisabled());
-                appFormSetState.setConfigType(ConfigType.MUTABLE_INSTALL);
+                appFormSetState.setConfigType(appFormStatePolicy.getConfigType());
                 setStateList.add(appFormSetState);
             }
         }
@@ -7087,11 +6725,11 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     }
 
     private void populateChildList(AppPropertyRule appPropertyRule, String applicationName,
-            PropertyRuleConfig propertyRuleConfig) throws UnifyException {
+            PropertyRuleConfig propertyRuleConfig, boolean restore) throws UnifyException {
         List<AppPropertyRuleChoice> choiceList = Collections.emptyList();
         if (!DataUtils.isBlank(propertyRuleConfig.getChoiceList())) {
             choiceList = new ArrayList<AppPropertyRuleChoice>();
-            Map<String, AppPropertyRuleChoice> map = appPropertyRule.isIdBlank() ? Collections.emptyMap()
+            Map<String, AppPropertyRuleChoice> map = restore || appPropertyRule.isIdBlank() ? Collections.emptyMap()
                     : environment().findAllMap(String.class, "name",
                             new AppPropertyRuleChoiceQuery().appPropertyRuleId(appPropertyRule.getId()));
             for (ChoiceConfig choiceConfig : propertyRuleConfig.getChoiceList()) {
@@ -7101,7 +6739,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appPropertyRuleChoice.setName(choiceConfig.getName());
                     appPropertyRuleChoice.setList(
                             ApplicationNameUtils.ensureLongNameReference(applicationName, choiceConfig.getVal()));
-                    appPropertyRuleChoice.setConfigType(ConfigType.STATIC_INSTALL);
+                    appPropertyRuleChoice.setConfigType(restore ? ConfigType.CUSTOM : ConfigType.STATIC_INSTALL);
                     choiceList.add(appPropertyRuleChoice);
                 } else {
                     if (ConfigUtils.isSetInstall(oldAppPropertyRuleChoice)) {

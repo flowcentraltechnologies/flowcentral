@@ -129,7 +129,7 @@ public class ApplicationWorkflowInstallerImpl extends AbstractApplicationArtifac
                                 ApplicationNameUtils.ensureLongNameReference(applicationName, wfConfig.getEntity()));
                         workflow.setDeprecated(false);
                         workflow.setConfigType(ConfigType.MUTABLE_INSTALL);
-                        populateChildList(wfConfig, workflow, applicationName);
+                        populateChildList(wfConfig, workflow, applicationName, false);
                         environment().create(workflow);
                     } else {
                         if (ConfigUtils.isSetInstall(oldWorkflow)) {
@@ -143,7 +143,7 @@ public class ApplicationWorkflowInstallerImpl extends AbstractApplicationArtifac
                         }
 
                         oldWorkflow.setDeprecated(false);
-                        populateChildList(wfConfig, oldWorkflow, applicationName);
+                        populateChildList(wfConfig, oldWorkflow, applicationName, false);
                         environment().updateByIdVersion(oldWorkflow);
                     }
                 }
@@ -284,7 +284,7 @@ public class ApplicationWorkflowInstallerImpl extends AbstractApplicationArtifac
                 workflow.setEntity(ApplicationNameUtils.ensureLongNameReference(applicationName, wfConfig.getEntity()));
                 workflow.setDeprecated(false);
                 workflow.setConfigType(ConfigType.CUSTOM);
-                populateChildList(wfConfig, workflow, applicationName);
+                populateChildList(wfConfig, workflow, applicationName, true);
                 environment().create(workflow);
             }
         }
@@ -436,13 +436,13 @@ public class ApplicationWorkflowInstallerImpl extends AbstractApplicationArtifac
         wfWizard.setStepList(stepList);
     }
 
-    private void populateChildList(final WfConfig wfConfig, Workflow workflow, String applicationName)
+    private void populateChildList(final WfConfig wfConfig, Workflow workflow, String applicationName, boolean restore)
             throws UnifyException {
         // Filters
         List<WorkflowFilter> filterList = null;
         if (!DataUtils.isBlank(wfConfig.getFilterList())) {
             filterList = new ArrayList<WorkflowFilter>();
-            Map<String, WorkflowFilter> map = workflow.isIdBlank() ? Collections.emptyMap()
+            Map<String, WorkflowFilter> map = restore || workflow.isIdBlank() ? Collections.emptyMap()
                     : environment().findAllMap(String.class, "name",
                             new WorkflowFilterQuery().workflowId(workflow.getId()));
             for (WfFilterConfig filterConfig : wfConfig.getFilterList()) {
@@ -454,7 +454,7 @@ public class ApplicationWorkflowInstallerImpl extends AbstractApplicationArtifac
                     workflowFilter.setFilterGenerator(filterConfig.getFilterGenerator());
                     workflowFilter.setFilterGeneratorRule(filterConfig.getFilterGeneratorRule());
                     workflowFilter.setFilter(InputWidgetUtils.newAppFilter(filterConfig));
-                    workflowFilter.setConfigType(ConfigType.MUTABLE_INSTALL);
+                    workflowFilter.setConfigType(restore ? ConfigType.CUSTOM : ConfigType.MUTABLE_INSTALL);
                     filterList.add(workflowFilter);
                 } else {
                     if (ConfigUtils.isSetInstall(oldWorkflowFilter)) {
@@ -477,7 +477,7 @@ public class ApplicationWorkflowInstallerImpl extends AbstractApplicationArtifac
         List<WorkflowSetValues> setValuesList = null;
         if (!DataUtils.isBlank(wfConfig.getSetValuesList())) {
             setValuesList = new ArrayList<WorkflowSetValues>();
-            Map<String, WorkflowSetValues> map = workflow.isIdBlank() ? Collections.emptyMap()
+            Map<String, WorkflowSetValues> map = restore || workflow.isIdBlank() ? Collections.emptyMap()
                     : environment().findAllMap(String.class, "name",
                             new WorkflowSetValuesQuery().workflowId(workflow.getId()));
             for (WfSetValuesConfig wfSetValuesConfig : wfConfig.getSetValuesList()) {
@@ -490,7 +490,7 @@ public class ApplicationWorkflowInstallerImpl extends AbstractApplicationArtifac
                     workflowSetValues.setOnCondition(InputWidgetUtils.newAppFilter(wfSetValuesConfig.getOnCondition()));
                     workflowSetValues.setValueGenerator(wfSetValuesConfig.getValueGenerator());
                     workflowSetValues.setSetValues(newAppSetValues(wfSetValuesConfig.getSetValues()));
-                    workflowSetValues.setConfigType(ConfigType.MUTABLE_INSTALL);
+                    workflowSetValues.setConfigType(restore ? ConfigType.CUSTOM :ConfigType.MUTABLE_INSTALL);
                     setValuesList.add(workflowSetValues);
                 } else {
                     if (ConfigUtils.isSetInstall(oldWorkflowSetValues)) {
