@@ -339,9 +339,9 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
     }
 
     @Override
-    public List<Long> findNotificationTemplateIdList(String applicationName) throws UnifyException {
+    public List<Long> findCustomNotificationTemplateIdList(String applicationName) throws UnifyException {
         return environment().valueList(Long.class, "id",
-                new NotificationTemplateQuery().applicationName(applicationName));
+                new NotificationTemplateQuery().applicationName(applicationName).isCustom());
     }
 
     @Override
@@ -350,9 +350,9 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
     }
 
     @Override
-    public List<Long> findNotificationLargeTextIdList(String applicationName) throws UnifyException {
+    public List<Long> findCustomNotificationLargeTextIdList(String applicationName) throws UnifyException {
         return environment().valueList(Long.class, "id",
-                new NotificationLargeTextQuery().applicationName(applicationName));
+                new NotificationLargeTextQuery().applicationName(applicationName).isCustom());
     }
 
     @Override

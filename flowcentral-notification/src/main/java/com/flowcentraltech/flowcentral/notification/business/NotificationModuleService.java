@@ -172,7 +172,7 @@ public interface NotificationModuleService extends FlowCentralService {
      * @throws UnifyException
      *                        if an error occurs
      */
-    List<Long> findNotificationTemplateIdList(String applicationName) throws UnifyException;
+    List<Long> findCustomNotificationTemplateIdList(String applicationName) throws UnifyException;
 
     /**
      * Finds notification large text by ID.
@@ -195,7 +195,7 @@ public interface NotificationModuleService extends FlowCentralService {
      * @throws UnifyException
      *                        if an error occurs
      */
-    List<Long> findNotificationLargeTextIdList(String applicationName) throws UnifyException;
+    List<Long> findCustomNotificationLargeTextIdList(String applicationName) throws UnifyException;
 
     /**
      * Get notification template definition.

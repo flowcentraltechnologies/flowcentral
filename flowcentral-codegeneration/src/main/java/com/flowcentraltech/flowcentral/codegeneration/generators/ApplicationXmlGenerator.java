@@ -176,9 +176,10 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
         appConfig.setDescription("$m{" + descKey + "}");
         appConfig.setLabel("$m{" + labelKey + "}");
         appConfig.setDisplayIndex(application.getDisplayIndex());
-        appConfig.setDevelopable(application.isDevelopable());
+        appConfig.setDevelopable(true);
         appConfig.setMenuAccess(application.isMenuAccess());
         appConfig.setAllowSecondaryTenants(application.isAllowSecondaryTenants());
+        appConfig.setCustom(application.getConfigType().isCustom());
 
         // Module application configuration
         ModuleAppConfig moduleAppConfig = new ModuleAppConfig();

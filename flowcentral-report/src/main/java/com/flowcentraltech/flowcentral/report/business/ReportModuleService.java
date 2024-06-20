@@ -91,7 +91,7 @@ public interface ReportModuleService extends FlowCentralService, ReportProvider 
      * @throws UnifyException
      *                        if an error occurs
      */
-    List<Long> findReportConfigurationIdList(String applicationName) throws UnifyException;
+    List<Long> findCustomReportConfigurationIdList(String applicationName) throws UnifyException;
 
     /**
      * Creates a reportable definition.

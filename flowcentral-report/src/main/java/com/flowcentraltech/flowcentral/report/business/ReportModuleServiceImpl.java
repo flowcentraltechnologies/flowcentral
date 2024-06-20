@@ -237,9 +237,9 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
-    public List<Long> findReportConfigurationIdList(String applicationName) throws UnifyException {
+    public List<Long> findCustomReportConfigurationIdList(String applicationName) throws UnifyException {
         return environment().valueList(Long.class, "id",
-                new ReportConfigurationQuery().applicationName(applicationName));
+                new ReportConfigurationQuery().applicationName(applicationName).isCustom());
     }
 
     @Override

@@ -138,8 +138,9 @@ public class DashboardModuleServiceImpl extends AbstractFlowCentralService imple
     }
 
     @Override
-    public List<Long> findDashboardIdList(String applicationName) throws UnifyException {
-        return environment().valueList(Long.class, "id", new DashboardQuery().applicationName(applicationName));
+    public List<Long> findCustomDashboardIdList(String applicationName) throws UnifyException {
+        return environment().valueList(Long.class, "id",
+                new DashboardQuery().applicationName(applicationName).isCustom());
     }
 
     @Override

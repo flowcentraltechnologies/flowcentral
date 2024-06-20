@@ -54,7 +54,6 @@ import com.flowcentraltech.flowcentral.codegeneration.util.CodeGenerationUtils;
 import com.flowcentraltech.flowcentral.common.business.AbstractFlowCentralService;
 import com.flowcentraltech.flowcentral.common.business.CodeGenerationProvider;
 import com.flowcentraltech.flowcentral.common.constants.ComponentType;
-import com.flowcentraltech.flowcentral.common.constants.ConfigType;
 import com.flowcentraltech.flowcentral.configuration.data.ModuleInstall;
 import com.flowcentraltech.flowcentral.dashboard.entities.Dashboard;
 import com.flowcentraltech.flowcentral.notification.entities.NotificationTemplate;
@@ -111,7 +110,7 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
 
     @Configurable
     private ApplicationModuleService applicationModuleService;
-    
+
     @Override
     public void clearDefinitionsCache() throws UnifyException {
 
@@ -153,12 +152,11 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
 
                 // Generate applications
                 List<Application> applicationList = environment()
-                        .listAll(new ApplicationQuery().moduleName(moduleName).configType(ConfigType.CUSTOM)); // TODO
-                                                                                                               // Include
-                                                                                                               // CUSTOMIZED
+                        .listAll(new ApplicationQuery().moduleName(moduleName).isDevelopable());
                 if (!applicationList.isEmpty()) {
                     for (Application application : applicationList) {
-                        moduleCtx.nextApplication(application.getName(), application.getDescription());
+                        moduleCtx.nextApplication(application.getName(), application.getDescription(),
+                                application.getConfigType().isCustom());
                         addTaskMessage(taskMonitor, "Generating artifacts for application [{0}]...",
                                 application.getDescription());
                         for (String generatorName : APPLICATION_ARTIFACT_GENERATORS) {
@@ -236,7 +234,8 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
-    public Snapshot generateSnapshot(TaskMonitor taskMonitor, SnapshotMeta meta, String basePackage) throws UnifyException {
+    public Snapshot generateSnapshot(TaskMonitor taskMonitor, SnapshotMeta meta, String basePackage)
+            throws UnifyException {
         Date now = environment().getNow();
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ZipOutputStream zos = new ZipOutputStream(baos);
@@ -255,10 +254,11 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
 
                 // Generate applications
                 List<Application> applicationList = environment()
-                        .listAll(new ApplicationQuery().moduleName(moduleName).configType(ConfigType.CUSTOM));
+                        .listAll(new ApplicationQuery().moduleName(moduleName).isDevelopable());
                 if (!applicationList.isEmpty()) {
                     for (Application application : applicationList) {
-                        moduleCtx.nextApplication(application.getName(), application.getDescription());
+                        moduleCtx.nextApplication(application.getName(), application.getDescription(),
+                                application.getConfigType().isCustom());
                         addTaskMessage(taskMonitor, "Generating artifacts for application [{0}]...",
                                 application.getDescription());
                         for (String generatorName : APPLICATION_ARTIFACT_GENERATORS) {

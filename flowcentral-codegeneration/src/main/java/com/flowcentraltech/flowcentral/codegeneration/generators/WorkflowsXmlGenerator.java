@@ -296,7 +296,7 @@ public class WorkflowsXmlGenerator extends AbstractResourcesArtifactGenerator {
         }
 
         // Workflow Channels
-        List<Long> wfChannelIdList = workflowModuleService.findWfChannelIdList(applicationName);
+        List<Long> wfChannelIdList = workflowModuleService.findCustomWfChannelIdList(applicationName);
         if (!DataUtils.isBlank(wfChannelIdList)) {
             final String lowerCaseApplicationName = applicationName.toLowerCase();
 

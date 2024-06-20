@@ -49,7 +49,7 @@ public interface DashboardModuleService extends FlowCentralService {
 	 * @return list of application dashboard IDs
 	 * @throws UnifyException if an error occurs
 	 */
-	List<Long> findDashboardIdList(String applicationName) throws UnifyException;
+	List<Long> findCustomDashboardIdList(String applicationName) throws UnifyException;
 
 	/**
 	 * Gets application dashboard definition.

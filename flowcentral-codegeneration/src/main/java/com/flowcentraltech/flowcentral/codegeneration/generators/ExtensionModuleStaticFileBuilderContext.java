@@ -45,9 +45,9 @@ public class ExtensionModuleStaticFileBuilderContext {
 
     private ExtensionStaticFileBuilderContext mainCtx;
 
-    private List<StaticApplicationConfig> staticApplicationConfigs;
+    private List<ApplicationConfig> applicationConfigs;
 
-    private StaticApplicationConfig nextStaticApplicationConfig;
+    private ApplicationConfig nextApplicationConfig;
 
     private ModuleAppsConfig moduleAppsConfig;
 
@@ -63,7 +63,7 @@ public class ExtensionModuleStaticFileBuilderContext {
     
     public ExtensionModuleStaticFileBuilderContext(ExtensionStaticFileBuilderContext mainCtx, String moduleName,
             Map<String, String> messageReplacements, boolean snapshotMode) {
-        this.staticApplicationConfigs = new ArrayList<StaticApplicationConfig>();
+        this.applicationConfigs = new ArrayList<ApplicationConfig>();
         this.moduleAppsConfig = new ModuleAppsConfig();
         this.moduleAppsConfig.setModuleAppList(new ArrayList<ModuleAppConfig>());
         this.entityList = new ArrayList<String>();
@@ -81,8 +81,8 @@ public class ExtensionModuleStaticFileBuilderContext {
         return moduleName;
     }
 
-    public List<StaticApplicationConfig> getStaticApplicationConfigs() {
-        return staticApplicationConfigs;
+    public List<ApplicationConfig> getApplicationConfigs() {
+        return applicationConfigs;
     }
 
     public boolean addZipDir(String zipDir) {
@@ -109,9 +109,9 @@ public class ExtensionModuleStaticFileBuilderContext {
         this.dynamicModuleInfo = dynamicModuleInfo;
     }
 
-    public void nextApplication(String applicationName, String applicationDesc) {
-        nextStaticApplicationConfig = new StaticApplicationConfig(applicationName, applicationDesc);
-        staticApplicationConfigs.add(nextStaticApplicationConfig);
+    public void nextApplication(String applicationName, String applicationDesc, boolean custom) {
+        nextApplicationConfig = new ApplicationConfig(applicationName, applicationDesc, custom);
+        applicationConfigs.add(nextApplicationConfig);
     }
 
     public void addModuleAppConfig(ModuleAppConfig moduleAppConfig) {
@@ -123,79 +123,79 @@ public class ExtensionModuleStaticFileBuilderContext {
     }
 
     public void setReportsConfig(AppReportsConfig reportsConfig) {
-        nextStaticApplicationConfig.setReportsConfig(reportsConfig);
+        nextApplicationConfig.setReportsConfig(reportsConfig);
     }
 
     public void setNotifTemplatesConfig(AppNotifTemplatesConfig notifTemplatesConfig) {
-        nextStaticApplicationConfig.setNotifTemplatesConfig(notifTemplatesConfig);
+        nextApplicationConfig.setNotifTemplatesConfig(notifTemplatesConfig);
     }
 
     public void setNotifLargeTextsConfig(AppNotifLargeTextsConfig notifLargeTextsConfig) {
-        nextStaticApplicationConfig.setNotifLargeTextsConfig(notifLargeTextsConfig);
+        nextApplicationConfig.setNotifLargeTextsConfig(notifLargeTextsConfig);
     }
 
     public void setWorkflowsConfig(AppWorkflowsConfig workflowsConfig) {
-        nextStaticApplicationConfig.setWorkflowsConfig(workflowsConfig);
+        nextApplicationConfig.setWorkflowsConfig(workflowsConfig);
     }
 
     public void setWorkflowWizardsConfig(AppWorkflowWizardsConfig workflowWizardsConfig) {
-        nextStaticApplicationConfig.setWorkflowWizardsConfig(workflowWizardsConfig);
+        nextApplicationConfig.setWorkflowWizardsConfig(workflowWizardsConfig);
     }
 
     public void setWfChannelsConfig(WfChannelsConfig wfChannelsConfig) {
-        nextStaticApplicationConfig.setWfChannelsConfig(wfChannelsConfig);
+        nextApplicationConfig.setWfChannelsConfig(wfChannelsConfig);
     }
 
     public void setChartsConfig(AppChartsConfig chartsConfig) {
-        nextStaticApplicationConfig.setChartsConfig(chartsConfig);
+        nextApplicationConfig.setChartsConfig(chartsConfig);
     }
 
     public void setChartDataSourcesConfig(AppChartDataSourcesConfig chartDataSourcesConfig) {
-        nextStaticApplicationConfig.setChartDataSourcesConfig(chartDataSourcesConfig);
+        nextApplicationConfig.setChartDataSourcesConfig(chartDataSourcesConfig);
     }
 
     public void setDashboardsConfig(AppDashboardsConfig dashboardsConfig) {
-        nextStaticApplicationConfig.setDashboardsConfig(dashboardsConfig);
+        nextApplicationConfig.setDashboardsConfig(dashboardsConfig);
     }
 
     public void addMessageGap(StaticMessageCategoryType category) {
-        nextStaticApplicationConfig.addMessageGap(category);
+        nextApplicationConfig.addMessageGap(category);
     }
 
     public AppChartsConfig getChartsConfig() {
-        return nextStaticApplicationConfig.getChartsConfig();
+        return nextApplicationConfig.getChartsConfig();
     }
 
     public AppChartDataSourcesConfig getChartDataSourcesConfig() {
-        return nextStaticApplicationConfig.getChartDataSourcesConfig();
+        return nextApplicationConfig.getChartDataSourcesConfig();
     }
 
     public AppDashboardsConfig getDashboardsConfig() {
-        return nextStaticApplicationConfig.getDashboardsConfig();
+        return nextApplicationConfig.getDashboardsConfig();
     }
 
     public AppReportsConfig getReportsConfig() {
-        return nextStaticApplicationConfig.getReportsConfig();
+        return nextApplicationConfig.getReportsConfig();
     }
 
     public AppNotifTemplatesConfig getNotifTemplatesConfig() {
-        return nextStaticApplicationConfig.getNotifTemplatesConfig();
+        return nextApplicationConfig.getNotifTemplatesConfig();
     }
 
     public AppNotifLargeTextsConfig getNotifLargeTextsConfig() {
-        return nextStaticApplicationConfig.getNotifLargeTextsConfig();
+        return nextApplicationConfig.getNotifLargeTextsConfig();
     }
 
     public AppWorkflowsConfig getWorkflowsConfig() {
-        return nextStaticApplicationConfig.getWorkflowsConfig();
+        return nextApplicationConfig.getWorkflowsConfig();
     }
 
     public AppWorkflowWizardsConfig getWorkflowWizardsConfig() {
-        return nextStaticApplicationConfig.getWorkflowWizardsConfig();
+        return nextApplicationConfig.getWorkflowWizardsConfig();
     }
 
     public WfChannelsConfig getWfChannelsConfig() {
-        return nextStaticApplicationConfig.getWfChannelsConfig();
+        return nextApplicationConfig.getWfChannelsConfig();
     }
 
     public void addMessage(StaticMessageCategoryType category, String key, String val) {
@@ -207,7 +207,7 @@ public class ExtensionModuleStaticFileBuilderContext {
             val = "";
         }
 
-        nextStaticApplicationConfig.addMessage(category, key, val);
+        nextApplicationConfig.addMessage(category, key, val);
     }
 
     public String getExtensionEntityClassName(AppEntity appEntity) {

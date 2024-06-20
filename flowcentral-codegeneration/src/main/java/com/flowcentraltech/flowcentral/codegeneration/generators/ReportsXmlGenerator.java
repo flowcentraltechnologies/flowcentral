@@ -65,7 +65,7 @@ public class ReportsXmlGenerator extends AbstractResourcesArtifactGenerator {
     @Override
     protected void doGenerate(ExtensionModuleStaticFileBuilderContext ctx, String applicationName, ZipOutputStream zos)
             throws UnifyException {
-        List<Long> reportConfigIdList = reportModuleService.findReportConfigurationIdList(applicationName);
+        List<Long> reportConfigIdList = reportModuleService.findCustomReportConfigurationIdList(applicationName);
         if (!DataUtils.isBlank(reportConfigIdList)) {
             final String lowerCaseApplicationName = applicationName.toLowerCase();
 

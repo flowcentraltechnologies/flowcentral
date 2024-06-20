@@ -69,7 +69,7 @@ public interface ChartModuleService extends FlowCentralService {
      * @throws UnifyException
      *                        if an error occurs
      */
-    List<Long> findChartIdList(String applicationName) throws UnifyException;
+    List<Long> findCustomChartIdList(String applicationName) throws UnifyException;
 
     /**
      * Finds chart data sources by criteria.
@@ -102,7 +102,7 @@ public interface ChartModuleService extends FlowCentralService {
      * @throws UnifyException
      *                        if an error occurs
      */
-    List<Long> findChartDataSourceIdList(String applicationName) throws UnifyException;
+    List<Long> findCustomChartDataSourceIdList(String applicationName) throws UnifyException;
     
     /**
      * Finds snapshots by criteria.

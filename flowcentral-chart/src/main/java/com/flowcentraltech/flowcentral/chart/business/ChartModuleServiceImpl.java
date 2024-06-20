@@ -212,8 +212,8 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
     }
 
     @Override
-    public List<Long> findChartIdList(String applicationName) throws UnifyException {
-        return environment().valueList(Long.class, "id", new ChartQuery().applicationName(applicationName));
+    public List<Long> findCustomChartIdList(String applicationName) throws UnifyException {
+        return environment().valueList(Long.class, "id", new ChartQuery().applicationName(applicationName).isCustom());
     }
 
     @Override
@@ -227,8 +227,9 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
     }
 
     @Override
-    public List<Long> findChartDataSourceIdList(String applicationName) throws UnifyException {
-        return environment().valueList(Long.class, "id", new ChartDataSourceQuery().applicationName(applicationName));
+    public List<Long> findCustomChartDataSourceIdList(String applicationName) throws UnifyException {
+        return environment().valueList(Long.class, "id",
+                new ChartDataSourceQuery().applicationName(applicationName).isCustom());
     }
 
     @Override

@@ -765,8 +765,9 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
-    public List<Long> findWfChannelIdList(String applicationName) throws UnifyException {
-        return environment().valueList(Long.class, "id", new WfChannelQuery().applicationName(applicationName));
+    public List<Long> findCustomWfChannelIdList(String applicationName) throws UnifyException {
+        return environment().valueList(Long.class, "id",
+                new WfChannelQuery().applicationName(applicationName).isCustom());
     }
 
     @Override

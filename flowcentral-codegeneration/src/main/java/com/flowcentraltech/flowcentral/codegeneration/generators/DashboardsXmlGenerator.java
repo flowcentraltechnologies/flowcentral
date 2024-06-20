@@ -53,7 +53,7 @@ public class DashboardsXmlGenerator extends AbstractStaticModuleArtifactGenerato
     @Override
     protected void doGenerate(ExtensionModuleStaticFileBuilderContext ctx, String applicationName, ZipOutputStream out)
             throws UnifyException {
-        List<Long> dashboardIdList = dashboardModuleService.findDashboardIdList(applicationName);
+        List<Long> dashboardIdList = dashboardModuleService.findCustomDashboardIdList(applicationName);
         if (!DataUtils.isBlank(dashboardIdList)) {
             final String lowerCaseApplicationName = applicationName.toLowerCase();
 

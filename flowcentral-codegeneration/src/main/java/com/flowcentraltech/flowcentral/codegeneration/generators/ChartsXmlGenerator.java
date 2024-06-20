@@ -48,7 +48,7 @@ public class ChartsXmlGenerator extends AbstractStaticModuleArtifactGenerator {
     @Override
     protected void doGenerate(ExtensionModuleStaticFileBuilderContext ctx, String applicationName, ZipOutputStream out)
             throws UnifyException {
-        List<Long> chartIdList = chartModuleService.findChartIdList(applicationName);
+        List<Long> chartIdList = chartModuleService.findCustomChartIdList(applicationName);
         if (!DataUtils.isBlank(chartIdList)) {
             final String lowerCaseApplicationName = applicationName.toLowerCase();
 
@@ -91,7 +91,7 @@ public class ChartsXmlGenerator extends AbstractStaticModuleArtifactGenerator {
             ctx.setChartsConfig(appChartsConfig);
         }
 
-        List<Long> chartDataSourceIdList = chartModuleService.findChartDataSourceIdList(applicationName);
+        List<Long> chartDataSourceIdList = chartModuleService.findCustomChartDataSourceIdList(applicationName);
         if (!DataUtils.isBlank(chartDataSourceIdList)) {
             final String lowerCaseApplicationName = applicationName.toLowerCase();
 

@@ -49,15 +49,15 @@ public class ExtensionModuleMessagesGenerator extends AbstractResourcesArtifactG
         openEntry(ctx, filename, zos);
         try {
             BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(zos));
-            for (StaticApplicationConfig staticApplicationConfig: ctx.getStaticApplicationConfigs()) {
+            for (ApplicationConfig applicationConfig: ctx.getApplicationConfigs()) {
                 bw.write("# ");
-                bw.write(staticApplicationConfig.getApplicationDesc());
+                bw.write(applicationConfig.getApplicationDesc());
                 bw.newLine();
                 for (StaticMessageCategoryType type : StaticMessageCategoryType.values()) {
                     bw.write("# ");
                     bw.write(type.comment());
                     bw.newLine();
-                    for (Map.Entry<String, String> entry : staticApplicationConfig.getMessages(type).entrySet()) {
+                    for (Map.Entry<String, String> entry : applicationConfig.getMessages(type).entrySet()) {
                         if (!entry.getKey().startsWith("_ctxGap")) {
                             bw.write(entry.getKey());
                             bw.write("=");
