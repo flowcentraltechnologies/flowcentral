@@ -3813,6 +3813,45 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         return deletionCount;
     }
 
+    private int deleteCustomApplication(TaskMonitor taskMonitor, Long applicationId) throws UnifyException {
+        logDebug(taskMonitor, "Deleting application with ID [{0}]...", applicationId);
+        int deletionCount = 0;
+        if (!DataUtils.isBlank(applicationArtifactInstallerList)) {
+            for (ApplicationArtifactInstaller applicationArtifactInstaller : applicationArtifactInstallerList) {
+                deletionCount += applicationArtifactInstaller.deleteCustomApplicationArtifacts(taskMonitor,
+                        applicationId);
+            }
+        }
+
+        applicationPrivilegeManager.unregisterApplicationPrivileges(applicationId); // TODO Unregister custom privileges
+        deletionCount += deleteApplicationArtifacts(taskMonitor, "suggestion types",
+                (BaseApplicationEntityQuery<?>) new AppSuggestionTypeQuery().isCustom(), applicationId);
+        deletionCount += deleteApplicationArtifacts(taskMonitor, "assignment pages",
+                (BaseApplicationEntityQuery<?>) new AppAssignmentPageQuery().isCustom(), applicationId);
+        deletionCount += deleteApplicationArtifacts(taskMonitor, "property rules",
+                (BaseApplicationEntityQuery<?>) new AppPropertyRuleQuery().isCustom(), applicationId);
+        deletionCount += deleteApplicationArtifacts(taskMonitor, "property lists",
+                (BaseApplicationEntityQuery<?>) new AppPropertyListQuery().isCustom(), applicationId);
+        deletionCount += deleteApplicationArtifacts(taskMonitor, "forms",
+                (BaseApplicationEntityQuery<?>) new AppFormQuery().isCustom(), applicationId);
+        deletionCount += deleteApplicationArtifacts(taskMonitor, "tables",
+                (BaseApplicationEntityQuery<?>) new AppTableQuery().isCustom(), applicationId);
+        deletionCount += deleteApplicationArtifacts(taskMonitor, "entities",
+                (BaseApplicationEntityQuery<?>) new AppEntityQuery().isCustom(), applicationId);
+        deletionCount += deleteApplicationArtifacts(taskMonitor, "references",
+                (BaseApplicationEntityQuery<?>) new AppRefQuery().isCustom(), applicationId);
+        deletionCount += deleteApplicationArtifacts(taskMonitor, "enumerations",
+                (BaseApplicationEntityQuery<?>) new AppEnumerationQuery().isCustom(), applicationId);
+        deletionCount += deleteApplicationArtifacts(taskMonitor, "widget types",
+                (BaseApplicationEntityQuery<?>) new AppWidgetTypeQuery().isCustom(), applicationId);
+        deletionCount += deleteApplicationArtifacts(taskMonitor, "applets",
+                (BaseApplicationEntityQuery<?>) new AppAppletQuery().isCustom(), applicationId);
+
+        environment().deleteAll(new ApplicationQuery().isCustom().addEquals("id", applicationId));
+        logDebug(taskMonitor, "Application with ID [{0}] successfully deleted.", applicationId);
+        return deletionCount;
+    }
+
     private int deleteApplicationArtifacts(TaskMonitor taskMonitor, String name, BaseApplicationEntityQuery<?> query,
             Long applicationId) throws UnifyException {
         logDebug(taskMonitor, "Deleting application {0}...", name);
@@ -4236,13 +4275,13 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             }
 
             List<Long> applicationIdList = environment().valueList(Long.class, "id",
-                    new ApplicationQuery().moduleId(moduleId).isCustom());
+                    new ApplicationQuery().moduleId(moduleId).isDevelopable());
             for (Long applicationId : applicationIdList) {
                 // Backup role privileges
                 applicationPrivilegeManager.backupApplicationRolePrivileges(applicationId);
 
-                // Delete old module applications
-                deleteApplication(taskMonitor, applicationId);
+                // Delete old custom applications
+                deleteCustomApplication(taskMonitor, applicationId);
             }
 
             // Restore applications

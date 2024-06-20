@@ -51,8 +51,19 @@ public abstract class AbstractApplicationArtifactInstaller extends AbstractFlowC
     public int deleteApplicationArtifacts(TaskMonitor taskMonitor, Long applicationId) throws UnifyException {
         int deletion = 0;
         for (DeletionParams params : getDeletionParams()) {
-            deletion += deleteApplicationArtifacts(taskMonitor, params, applicationId);
+            deletion += deleteApplicationArtifacts(taskMonitor, params, applicationId, false);
         }
+        
+        return deletion;
+    }
+
+    @Override
+    public int deleteCustomApplicationArtifacts(TaskMonitor taskMonitor, Long applicationId) throws UnifyException {
+        int deletion = 0;
+        for (DeletionParams params : getDeletionParams()) {
+            deletion += deleteApplicationArtifacts(taskMonitor, params, applicationId, true);
+        }
+        
         return deletion;
     }
 
@@ -109,11 +120,19 @@ public abstract class AbstractApplicationArtifactInstaller extends AbstractFlowC
 
     protected abstract List<DeletionParams> getDeletionParams() throws UnifyException;
 
-    private int deleteApplicationArtifacts(TaskMonitor taskMonitor, DeletionParams deletionParams, Long applicationId)
-            throws UnifyException {
-        logDebug(taskMonitor, "Deleting application {0}...", deletionParams.getName());
-        int deletion = environment().deleteAll(deletionParams.getQuery().applicationId(applicationId));
-        logDebug(taskMonitor, "[{1}] application {0} deleted.", deletionParams.getName(), deletion);
+    private int deleteApplicationArtifacts(TaskMonitor taskMonitor, DeletionParams deletionParams, Long applicationId,
+            boolean custom) throws UnifyException {
+        int deletion = 0;
+        if (custom) {
+            logDebug(taskMonitor, "Deleting custom application {0}...", deletionParams.getName());
+            deletion = environment().deleteAll(deletionParams.getQuery().applicationId(applicationId).isCustom());
+            logDebug(taskMonitor, "[{1}] custom application {0} deleted.", deletionParams.getName(), deletion);
+        } else {
+            logDebug(taskMonitor, "Deleting application {0}...", deletionParams.getName());
+            deletion = environment().deleteAll(deletionParams.getQuery().applicationId(applicationId));
+            logDebug(taskMonitor, "[{1}] application {0} deleted.", deletionParams.getName(), deletion);
+        }
+
         return deletion;
     }
 
