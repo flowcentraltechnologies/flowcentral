@@ -45,7 +45,7 @@ public interface ApplicationArtifactInstaller extends FlowCentralComponent {
             throws UnifyException;
 
     /**
-     * Restore application artifact.
+     * Restore custom application artifacts.
      * 
      * @param taskMonitor
      *                           the task monitor
@@ -54,7 +54,7 @@ public interface ApplicationArtifactInstaller extends FlowCentralComponent {
      * @throws UnifyException
      *                        if an error occurs
      */
-    void restoreApplicationArtifacts(TaskMonitor taskMonitor, ApplicationRestore applicationRestore)
+    void restoreCustomApplicationArtifacts(TaskMonitor taskMonitor, ApplicationRestore applicationRestore)
             throws UnifyException;
 
     /**

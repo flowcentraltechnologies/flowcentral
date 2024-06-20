@@ -354,7 +354,7 @@ public final class ApplicationEntityUtils {
         appFormElement.setSectionColumns(FormColumnsType.TYPE_2);
         appFormElement.setVisible(true);
         appFormElement.setDisabled(true);
-        appFormElement.setConfigType(ConfigType.STATIC_INSTALL);
+        appFormElement.setConfigType(ConfigType.STATIC);
         elementList.add(appFormElement);
 
         // Change log fields
@@ -364,7 +364,7 @@ public final class ApplicationEntityUtils {
         appFormElement.setInputWidget("application.name");
         appFormElement.setFieldColumn(0);
         appFormElement.setVisible(true);
-        appFormElement.setConfigType(ConfigType.STATIC_INSTALL);
+        appFormElement.setConfigType(ConfigType.STATIC);
         elementList.add(appFormElement);
 
         appFormElement = new AppFormElement();
@@ -373,7 +373,7 @@ public final class ApplicationEntityUtils {
         appFormElement.setInputWidget("application.name");
         appFormElement.setFieldColumn(0);
         appFormElement.setVisible(true);
-        appFormElement.setConfigType(ConfigType.STATIC_INSTALL);
+        appFormElement.setConfigType(ConfigType.STATIC);
         elementList.add(appFormElement);
 
         appFormElement = new AppFormElement();
@@ -382,7 +382,7 @@ public final class ApplicationEntityUtils {
         appFormElement.setInputWidget("application.datetimetext");
         appFormElement.setFieldColumn(1);
         appFormElement.setVisible(true);
-        appFormElement.setConfigType(ConfigType.STATIC_INSTALL);
+        appFormElement.setConfigType(ConfigType.STATIC);
         elementList.add(appFormElement);
 
         appFormElement = new AppFormElement();
@@ -391,7 +391,7 @@ public final class ApplicationEntityUtils {
         appFormElement.setInputWidget("application.datetimetext");
         appFormElement.setFieldColumn(1);
         appFormElement.setVisible(true);
-        appFormElement.setConfigType(ConfigType.STATIC_INSTALL);
+        appFormElement.setConfigType(ConfigType.STATIC);
         elementList.add(appFormElement);
     }
 

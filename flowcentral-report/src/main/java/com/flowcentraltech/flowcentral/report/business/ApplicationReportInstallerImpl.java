@@ -228,7 +228,7 @@ public class ApplicationReportInstallerImpl extends AbstractApplicationArtifactI
     }
 
     @Override
-    public void restoreApplicationArtifacts(TaskMonitor taskMonitor, ApplicationRestore applicationRestore)
+    public void restoreCustomApplicationArtifacts(TaskMonitor taskMonitor, ApplicationRestore applicationRestore)
             throws UnifyException {
         final AppConfig applicationConfig = applicationRestore.getApplicationConfig();
         final Long applicationId = applicationRestore.getApplicationId();

@@ -253,7 +253,7 @@ public class ApplicationWorkflowInstallerImpl extends AbstractApplicationArtifac
     }
 
     @Override
-    public void restoreApplicationArtifacts(TaskMonitor taskMonitor, ApplicationRestore applicationRestore)
+    public void restoreCustomApplicationArtifacts(TaskMonitor taskMonitor, ApplicationRestore applicationRestore)
             throws UnifyException {
         final AppConfig applicationConfig = applicationRestore.getApplicationConfig();
         final String applicationName = applicationConfig.getName();

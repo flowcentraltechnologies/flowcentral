@@ -82,9 +82,12 @@ public class AppConfig extends BaseNameConfig {
 
     private SuggestionTypesConfig suggestionTypesConfig;
 
+    private Boolean custom;
+    
     public AppConfig() {
         this.menuAccess = Boolean.TRUE;
         this.developable = Boolean.FALSE;
+        this.custom = Boolean.FALSE;
         this.allowSecondaryTenants = Boolean.FALSE;
    }
     
@@ -114,6 +117,16 @@ public class AppConfig extends BaseNameConfig {
     @XmlAttribute
     public void setDevelopable(Boolean developable) {
         this.developable = developable;
+    }
+
+    public Boolean getCustom() {
+        return custom;
+    }
+
+    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
+    @XmlAttribute
+    public void setCustom(Boolean custom) {
+        this.custom = custom;
     }
 
     public Boolean getMenuAccess() {
