@@ -471,6 +471,9 @@
 			<field name="applicationDesc"
 				label="$m{workflow.steprole.applicationdesc}" type="list_only"
 				key="wfStepId" property="applicationDesc" />
+			<field name="configType"
+				label="$m{workflow.steprole.configtype}" type="list_only"
+				key="wfStepId" property="configType" />
 			<field name="roleCode" label="$m{workflow.steprole.rolecode}"
 				type="list_only" key="roleId" property="code" />
 			<field name="roleDesc" label="$m{workflow.steprole.roledesc}"

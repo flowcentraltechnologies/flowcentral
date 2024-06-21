@@ -17,6 +17,7 @@ package com.flowcentraltech.flowcentral.workflow.entities;
 
 import java.util.List;
 
+import com.flowcentraltech.flowcentral.common.constants.ConfigType;
 import com.flowcentraltech.flowcentral.common.constants.WfItemVersionType;
 import com.flowcentraltech.flowcentral.common.entities.BaseEntityQuery;
 import com.flowcentraltech.flowcentral.configuration.constants.WorkflowStepType;
@@ -45,6 +46,14 @@ public class WfStepRoleQuery extends BaseEntityQuery<WfStepRole> {
         return (WfStepRoleQuery) addEquals("workflowName", workflowName);
     }
     
+    public WfStepRoleQuery wfStepId(Long wfStepId) {
+        return (WfStepRoleQuery) addEquals("wfStepId", wfStepId);
+    }
+    
+    public WfStepRoleQuery roleId(Long roleId) {
+        return (WfStepRoleQuery) addEquals("roleId", roleId);
+    }
+    
     public WfStepRoleQuery applicationId(Long applicationId) {
         return (WfStepRoleQuery) addEquals("applicationId", applicationId);
     }
@@ -71,5 +80,13 @@ public class WfStepRoleQuery extends BaseEntityQuery<WfStepRole> {
     
     public WfStepRoleQuery isOriginal() {
         return (WfStepRoleQuery) addEquals("wfItemVersionType", WfItemVersionType.ORIGINAL);
+    }
+
+    public WfStepRoleQuery configType(ConfigType configType) {
+        return (WfStepRoleQuery) addEquals("configType", configType);
+    }
+
+    public WfStepRoleQuery isCustom() {
+        return (WfStepRoleQuery) addEquals("configType", ConfigType.CUSTOM);
     }
 }

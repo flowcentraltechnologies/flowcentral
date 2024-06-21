@@ -26,6 +26,7 @@ import com.flowcentraltech.flowcentral.application.util.PrivilegeNameUtils;
 import com.flowcentraltech.flowcentral.common.business.AbstractFlowCentralService;
 import com.flowcentraltech.flowcentral.common.business.ApplicationPrivilegeManager;
 import com.flowcentraltech.flowcentral.common.business.WorkspacePrivilegeManager;
+import com.flowcentraltech.flowcentral.common.constants.ConfigType;
 import com.flowcentraltech.flowcentral.configuration.constants.DefaultApplicationConstants;
 import com.flowcentraltech.flowcentral.configuration.data.ModuleInstall;
 import com.flowcentraltech.flowcentral.workspace.constants.WorkspaceModuleNameConstants;
@@ -156,7 +157,7 @@ public class WorkspaceModuleServiceImpl extends AbstractFlowCentralService
                         DefaultApplicationConstants.ROOT_WORKSPACE_DESC);
                 environment().create(workspace);
                 final Long applicationId = applicationModuleService.getApplicationDef("workspace").getId();
-                appPrivilegeManager.registerPrivilege(applicationId,
+                appPrivilegeManager.registerPrivilege(ConfigType.STATIC, applicationId,
                         ApplicationPrivilegeConstants.APPLICATION_WORKSPACE_CATEGORY_CODE,
                         PrivilegeNameUtils.getWorkspacePrivilegeName(DefaultApplicationConstants.ROOT_WORKSPACE_CODE),
                         DefaultApplicationConstants.ROOT_WORKSPACE_DESC);

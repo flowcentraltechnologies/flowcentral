@@ -105,7 +105,7 @@ public class ApplicationDashboardInstallerImpl extends AbstractApplicationArtifa
                     environment().updateByIdVersion(oldDashboard);
                 }
 
-                applicationPrivilegeManager.registerPrivilege(applicationId,
+                applicationPrivilegeManager.registerPrivilege(ConfigType.STATIC, applicationId,
                         ApplicationPrivilegeConstants.APPLICATION_DASHBOARD_CATEGORY_CODE,
                         PrivilegeNameUtils.getDashboardPrivilegeName(ApplicationNameUtils
                                 .getApplicationEntityLongName(applicationName, dashboardConfig.getName())),
@@ -138,7 +138,7 @@ public class ApplicationDashboardInstallerImpl extends AbstractApplicationArtifa
                 populateChildList(dashboardConfig, dashboard, applicationName, true);
                 environment().create(dashboard);
 
-                applicationPrivilegeManager.registerPrivilege(applicationId,
+                applicationPrivilegeManager.registerPrivilege(ConfigType.CUSTOM, applicationId,
                         ApplicationPrivilegeConstants.APPLICATION_DASHBOARD_CATEGORY_CODE,
                         PrivilegeNameUtils.getDashboardPrivilegeName(ApplicationNameUtils
                                 .getApplicationEntityLongName(applicationName, dashboardConfig.getName())),

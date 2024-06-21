@@ -21,6 +21,7 @@ import com.flowcentraltech.flowcentral.application.policies.AbstractApplicationA
 import com.flowcentraltech.flowcentral.application.util.PrivilegeNameUtils;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionContext;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
+import com.flowcentraltech.flowcentral.common.constants.ConfigType;
 import com.flowcentraltech.flowcentral.workspace.entities.Workspace;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
@@ -42,7 +43,8 @@ public class WorkspaceUpdatePolicy extends AbstractApplicationAppletActionPolicy
     @Override
     protected EntityActionResult doExecutePostAction(EntityActionContext ctx) throws UnifyException {
         final Workspace workspace = (Workspace) ctx.getInst();
-        registerPrivilege("workspace", ApplicationPrivilegeConstants.APPLICATION_WORKSPACE_CATEGORY_CODE,
+        registerPrivilege(ConfigType.STATIC, "workspace",
+                ApplicationPrivilegeConstants.APPLICATION_WORKSPACE_CATEGORY_CODE,
                 PrivilegeNameUtils.getWorkspacePrivilegeName(workspace.getCode()), workspace.getDescription());
         return null;
     }

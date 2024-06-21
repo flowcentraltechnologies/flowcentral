@@ -446,6 +446,9 @@
 			<field name="reportConfigurationDesc"
 				label="$m{report.reportgroupmember.reportconfigurationdesc}" type="list_only"
 				key="reportConfigurationId" property="description" />
+			<field name="configType"
+				label="$m{report.reportgroupmember.configtype}" type="list_only"
+				key="reportConfigurationId" property="configType" />
 			<uniqueConstraint name="reportConfigurationUc"
 				description="$m{report.reportgroupmember.uc.reportconfiguration}"
 				fieldList="reportGroupId,reportConfigurationId" />

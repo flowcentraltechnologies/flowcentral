@@ -38,6 +38,16 @@ public interface RolePrivilegeBackupAgent extends FlowCentralComponent {
     void unregisterApplicationRolePrivileges(Long applicationId) throws UnifyException;
 
     /**
+     * Unregisters all privileges associated with a custom application.
+     * 
+     * @param applicationId
+     *                      the application ID
+     * @throws UnifyException
+     *                        If an error occurs
+     */
+    void unregisterCustomApplicationRolePrivileges(Long applicationId) throws UnifyException;
+
+    /**
      * Backs up application role privileges (Not expected to be persistent).
      * 
      * @param applicationId

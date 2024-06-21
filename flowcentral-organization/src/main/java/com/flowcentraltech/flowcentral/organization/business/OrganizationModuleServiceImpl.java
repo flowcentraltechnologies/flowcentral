@@ -28,6 +28,7 @@ import com.flowcentraltech.flowcentral.common.business.ApplicationPrivilegeManag
 import com.flowcentraltech.flowcentral.common.business.PostBootSetup;
 import com.flowcentraltech.flowcentral.common.business.RolePrivilegeBackupAgent;
 import com.flowcentraltech.flowcentral.common.business.StudioProvider;
+import com.flowcentraltech.flowcentral.common.constants.ConfigType;
 import com.flowcentraltech.flowcentral.common.constants.WfItemVersionType;
 import com.flowcentraltech.flowcentral.configuration.constants.DefaultApplicationConstants;
 import com.flowcentraltech.flowcentral.configuration.data.ModuleInstall;
@@ -172,7 +173,7 @@ public class OrganizationModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
-    public void registerPrivilege(Long applicationId, String privilegeCategoryCode, String privilegeCode,
+    public void registerPrivilege(ConfigType configType, Long applicationId, String privilegeCategoryCode, String privilegeCode,
             String privilegeDesc) throws UnifyException {
         Long privilegeCategoryId = environment().value(Long.class, "id",
                 new PrivilegeCategoryQuery().code(privilegeCategoryCode));
@@ -184,9 +185,11 @@ public class OrganizationModuleServiceImpl extends AbstractFlowCentralService
             privilege.setPrivilegeCategoryId(privilegeCategoryId);
             privilege.setCode(privilegeCode);
             privilege.setDescription(privilegeDesc);
+            privilege.setConfigType(configType);
             environment().create(privilege);
         } else {
             oldPrivilege.setDescription(privilegeDesc);
+            oldPrivilege.setConfigType(configType);
             environment().updateByIdVersion(oldPrivilege);
         }
     }
@@ -213,6 +216,18 @@ public class OrganizationModuleServiceImpl extends AbstractFlowCentralService
         if (!DataUtils.isBlank(roleBackupAgentList)) {
             for (RolePrivilegeBackupAgent rolePrivilegeBackupAgent : roleBackupAgentList) {
                 rolePrivilegeBackupAgent.unregisterApplicationRolePrivileges(applicationId);
+            }
+        }
+    }
+
+    @Override
+    public void unregisterCustonApplicationPrivileges(Long applicationId) throws UnifyException {
+        environment().deleteAll(new RolePrivilegeQuery().applicationId(applicationId));
+        environment().deleteAll(new PrivilegeQuery().applicationId(applicationId).isCustom());
+
+        if (!DataUtils.isBlank(roleBackupAgentList)) {
+            for (RolePrivilegeBackupAgent rolePrivilegeBackupAgent : roleBackupAgentList) {
+                rolePrivilegeBackupAgent.unregisterCustomApplicationRolePrivileges(applicationId);
             }
         }
     }

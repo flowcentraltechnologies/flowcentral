@@ -15,6 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.report.entities;
 
+import com.flowcentraltech.flowcentral.common.constants.ConfigType;
 import com.flowcentraltech.flowcentral.common.entities.BaseAuditTenantEntity;
 import com.tcdng.unify.core.annotation.ForeignKey;
 import com.tcdng.unify.core.annotation.ListOnly;
@@ -58,6 +59,9 @@ public class ReportGroupMember extends BaseAuditTenantEntity implements Describa
 
     @ListOnly(key = "reportConfigurationId", property = "description")
     private String reportConfigurationDesc;
+    
+    @ListOnly(key = "reportConfigurationId", property = "configType")
+    private ConfigType configType;
 
     @Override
     public String getDescription() {
@@ -134,6 +138,14 @@ public class ReportGroupMember extends BaseAuditTenantEntity implements Describa
 
     public void setReportConfigurationDesc(String reportConfigurationDesc) {
         this.reportConfigurationDesc = reportConfigurationDesc;
+    }
+
+    public ConfigType getConfigType() {
+        return configType;
+    }
+
+    public void setConfigType(ConfigType configType) {
+        this.configType = configType;
     }
 
 }

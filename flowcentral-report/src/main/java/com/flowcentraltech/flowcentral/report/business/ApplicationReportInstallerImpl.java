@@ -131,7 +131,8 @@ public class ApplicationReportInstallerImpl extends AbstractApplicationArtifactI
                         oldReportableDefinition.getId();
                     }
 
-                    registerPrivilege(applicationId, ApplicationPrivilegeConstants.APPLICATION_REPORTABLE_CATEGORY_CODE,
+                    registerPrivilege(ConfigType.STATIC, applicationId,
+                            ApplicationPrivilegeConstants.APPLICATION_REPORTABLE_CATEGORY_CODE,
                             PrivilegeNameUtils.getReportablePrivilegeName(ApplicationNameUtils
                                     .ensureLongNameReference(applicationName, appEntityConfig.getName())),
                             description);
@@ -219,7 +220,8 @@ public class ApplicationReportInstallerImpl extends AbstractApplicationArtifactI
                     environment().updateByIdVersion(oldReportConfiguration);
                 }
 
-                registerPrivilege(applicationId, ApplicationPrivilegeConstants.APPLICATION_REPORTCONFIG_CATEGORY_CODE,
+                registerPrivilege(ConfigType.STATIC, applicationId,
+                        ApplicationPrivilegeConstants.APPLICATION_REPORTCONFIG_CATEGORY_CODE,
                         PrivilegeNameUtils.getReportConfigPrivilegeName(
                                 ApplicationNameUtils.ensureLongNameReference(applicationName, reportConfig.getName())),
                         description);
@@ -258,7 +260,8 @@ public class ApplicationReportInstallerImpl extends AbstractApplicationArtifactI
                     populateChildList(appEntityConfig, reportableDefinition);
                     environment().create(reportableDefinition);
 
-                    registerPrivilege(applicationId, ApplicationPrivilegeConstants.APPLICATION_REPORTABLE_CATEGORY_CODE,
+                    registerPrivilege(ConfigType.CUSTOM, applicationId,
+                            ApplicationPrivilegeConstants.APPLICATION_REPORTABLE_CATEGORY_CODE,
                             PrivilegeNameUtils.getReportablePrivilegeName(ApplicationNameUtils
                                     .ensureLongNameReference(applicationName, appEntityConfig.getName())),
                             description);
@@ -310,7 +313,8 @@ public class ApplicationReportInstallerImpl extends AbstractApplicationArtifactI
                 populateChildList(reportConfig, reportConfiguration);
                 environment().create(reportConfiguration);
 
-                registerPrivilege(applicationId, ApplicationPrivilegeConstants.APPLICATION_REPORTCONFIG_CATEGORY_CODE,
+                registerPrivilege(ConfigType.CUSTOM, applicationId,
+                        ApplicationPrivilegeConstants.APPLICATION_REPORTCONFIG_CATEGORY_CODE,
                         PrivilegeNameUtils.getReportConfigPrivilegeName(
                                 ApplicationNameUtils.ensureLongNameReference(applicationName, reportConfig.getName())),
                         description);
@@ -343,7 +347,8 @@ public class ApplicationReportInstallerImpl extends AbstractApplicationArtifactI
             srcReportableDefinition.setDeprecated(false);
             srcReportableDefinition.setConfigType(ConfigType.CUSTOM);
             environment().create(srcReportableDefinition);
-            registerPrivilege(destApplicationId, ApplicationPrivilegeConstants.APPLICATION_REPORTABLE_CATEGORY_CODE,
+            registerPrivilege(ConfigType.CUSTOM, destApplicationId,
+                    ApplicationPrivilegeConstants.APPLICATION_REPORTABLE_CATEGORY_CODE,
                     PrivilegeNameUtils.getReportablePrivilegeName(ApplicationNameUtils
                             .ensureLongNameReference(ctx.getDestApplicationName(), srcReportableDefinition.getName())),
                     srcReportableDefinition.getDescription());
@@ -379,7 +384,8 @@ public class ApplicationReportInstallerImpl extends AbstractApplicationArtifactI
             srcReportConfiguration.setDeprecated(false);
             srcReportConfiguration.setConfigType(ConfigType.CUSTOM);
             environment().create(srcReportConfiguration);
-            registerPrivilege(destApplicationId, ApplicationPrivilegeConstants.APPLICATION_REPORTCONFIG_CATEGORY_CODE,
+            registerPrivilege(ConfigType.CUSTOM, destApplicationId,
+                    ApplicationPrivilegeConstants.APPLICATION_REPORTCONFIG_CATEGORY_CODE,
                     PrivilegeNameUtils.getReportConfigPrivilegeName(ApplicationNameUtils
                             .ensureLongNameReference(ctx.getDestApplicationName(), srcReportConfiguration.getName())),
                     srcReportConfiguration.getDescription());

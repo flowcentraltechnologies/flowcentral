@@ -292,7 +292,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
     private static final int MAX_LIST_DEPTH = 8;
 
-    private static final long CLEAR_SYSTEM_CACHE_WAIT_MILLISEC = 4000;
+    private static final long CLEAR_SYSTEM_CACHE_WAIT_MILLISEC = 2500;
 
     @Configurable
     private ApplicationPrivilegeManager applicationPrivilegeManager;
@@ -1725,7 +1725,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
         Long applicationId = (Long) environment().create(application);
         final String applicationPrivilegeCode = PrivilegeNameUtils.getApplicationPrivilegeName(application.getName());
-        applicationPrivilegeManager.registerPrivilege(applicationId,
+        applicationPrivilegeManager.registerPrivilege(application.getConfigType(), applicationId,
                 ApplicationPrivilegeConstants.APPLICATION_CATEGORY_CODE, applicationPrivilegeCode,
                 application.getDescription());
         UserToken userToken = getUserToken();
@@ -3314,7 +3314,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         srcApplication.setDescription(ctx.messageSwap(srcApplication.getDescription()));
         srcApplication.setLabel(ctx.messageSwap(srcApplication.getLabel()));
         final Long destApplicationId = (Long) environment().create(srcApplication);
-        applicationPrivilegeManager.registerPrivilege(destApplicationId,
+        applicationPrivilegeManager.registerPrivilege(ConfigType.CUSTOM, destApplicationId,
                 ApplicationPrivilegeConstants.APPLICATION_CATEGORY_CODE,
                 PrivilegeNameUtils.getApplicationPrivilegeName(destApplicationName), srcApplication.getDescription());
 
@@ -3368,7 +3368,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 environment().create(srcAppApplet);
                 logDebug(taskMonitor, "Applet [{0}] -> [{1}]...", oldDescription, srcAppApplet.getDescription());
 
-                applicationPrivilegeManager.registerPrivilege(destApplicationId,
+                applicationPrivilegeManager.registerPrivilege(ConfigType.CUSTOM, destApplicationId,
                         ApplicationPrivilegeConstants.APPLICATION_APPLET_CATEGORY_CODE,
                         PrivilegeNameUtils.getAppletPrivilegeName(ApplicationNameUtils
                                 .getApplicationEntityLongName(destApplicationName, srcAppApplet.getName())),
@@ -3484,15 +3484,15 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
             final String entityLongName = ApplicationNameUtils.getApplicationEntityLongName(destApplicationName,
                     srcAppEntity.getName());
-            applicationPrivilegeManager.registerPrivilege(destApplicationId,
+            applicationPrivilegeManager.registerPrivilege(ConfigType.CUSTOM, destApplicationId,
                     ApplicationPrivilegeConstants.APPLICATION_ENTITY_CATEGORY_CODE,
                     PrivilegeNameUtils.getAddPrivilegeName(entityLongName),
                     getApplicationMessage("application.entity.privilege.add", srcAppEntity.getDescription()));
-            applicationPrivilegeManager.registerPrivilege(destApplicationId,
+            applicationPrivilegeManager.registerPrivilege(ConfigType.CUSTOM, destApplicationId,
                     ApplicationPrivilegeConstants.APPLICATION_ENTITY_CATEGORY_CODE,
                     PrivilegeNameUtils.getEditPrivilegeName(entityLongName),
                     getApplicationMessage("application.entity.privilege.edit", srcAppEntity.getDescription()));
-            applicationPrivilegeManager.registerPrivilege(destApplicationId,
+            applicationPrivilegeManager.registerPrivilege(ConfigType.CUSTOM, destApplicationId,
                     ApplicationPrivilegeConstants.APPLICATION_ENTITY_CATEGORY_CODE,
                     PrivilegeNameUtils.getDeletePrivilegeName(entityLongName),
                     getApplicationMessage("application.entity.privilege.delete", srcAppEntity.getDescription()));
@@ -3569,7 +3569,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 appFormAction.setPolicy(ctx.componentSwap(appFormAction.getPolicy()));
                 ApplicationReplicationUtils.applyReplicationRules(ctx, appFormAction.getOnCondition());
 
-                applicationPrivilegeManager.registerPrivilege(destApplicationId,
+                applicationPrivilegeManager.registerPrivilege(ConfigType.CUSTOM, destApplicationId,
                         ApplicationPrivilegeConstants.APPLICATION_FORMACTION_CATEGORY_CODE,
                         PrivilegeNameUtils.getFormActionPrivilegeName(appFormAction.getName()),
                         appFormAction.getDescription());
@@ -3823,7 +3823,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             }
         }
 
-        applicationPrivilegeManager.unregisterApplicationPrivileges(applicationId); // TODO Unregister custom privileges
+        applicationPrivilegeManager.unregisterCustonApplicationPrivileges(applicationId);
         deletionCount += deleteApplicationArtifacts(taskMonitor, "suggestion types",
                 (BaseApplicationEntityQuery<?>) new AppSuggestionTypeQuery().isCustom(), applicationId);
         deletionCount += deleteApplicationArtifacts(taskMonitor, "assignment pages",
@@ -4433,11 +4433,11 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         applicationInstall.setApplicationId(applicationId);
 
         final String applicationName = applicationConfig.getName();
-        applicationPrivilegeManager.registerPrivilege(applicationId,
+        applicationPrivilegeManager.registerPrivilege(ConfigType.STATIC, applicationId,
                 ApplicationPrivilegeConstants.APPLICATION_CATEGORY_CODE,
                 PrivilegeNameUtils.getApplicationPrivilegeName(applicationName), description);
         if (ApplicationModuleNameConstants.APPLICATION_APPLICATION_NAME.equals(applicationName)) {
-            applicationPrivilegeManager.registerPrivilege(applicationId,
+            applicationPrivilegeManager.registerPrivilege(ConfigType.STATIC, applicationId,
                     ApplicationPrivilegeConstants.APPLICATION_FEATURE_CATEGORY_CODE,
                     PrivilegeNameUtils
                             .getFeaturePrivilegeName(ApplicationFeatureConstants.SAVE_GLOBAL_TABLE_QUICK_FILTER),
@@ -4518,7 +4518,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 }
 
                 applicationPrivilegeManager
-                        .registerPrivilege(applicationId,
+                        .registerPrivilege(ConfigType.STATIC, applicationId,
                                 ApplicationPrivilegeConstants.APPLICATION_APPLET_CATEGORY_CODE,
                                 PrivilegeNameUtils.getAppletPrivilegeName(ApplicationNameUtils
                                         .getApplicationEntityLongName(applicationName, appletConfig.getName())),
@@ -4725,20 +4725,20 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 final String entityLongName = ApplicationNameUtils.getApplicationEntityLongName(applicationName,
                         appEntityConfig.getName());
                 entityIdByNameMap.put(entityLongName, entityId);
-                applicationPrivilegeManager.registerPrivilege(applicationId,
+                applicationPrivilegeManager.registerPrivilege(ConfigType.STATIC, applicationId,
                         ApplicationPrivilegeConstants.APPLICATION_ENTITY_CATEGORY_CODE,
                         PrivilegeNameUtils.getAddPrivilegeName(entityLongName),
                         getApplicationMessage("application.entity.privilege.add", description));
-                applicationPrivilegeManager.registerPrivilege(applicationId,
+                applicationPrivilegeManager.registerPrivilege(ConfigType.STATIC, applicationId,
                         ApplicationPrivilegeConstants.APPLICATION_ENTITY_CATEGORY_CODE,
                         PrivilegeNameUtils.getEditPrivilegeName(entityLongName),
                         getApplicationMessage("application.entity.privilege.edit", description));
-                applicationPrivilegeManager.registerPrivilege(applicationId,
+                applicationPrivilegeManager.registerPrivilege(ConfigType.STATIC, applicationId,
                         ApplicationPrivilegeConstants.APPLICATION_ENTITY_CATEGORY_CODE,
                         PrivilegeNameUtils.getDeletePrivilegeName(entityLongName),
                         getApplicationMessage("application.entity.privilege.delete", description));
                 if (baseType.isWorkEntityType()) {
-                    applicationPrivilegeManager.registerPrivilege(applicationId,
+                    applicationPrivilegeManager.registerPrivilege(ConfigType.STATIC, applicationId,
                             ApplicationPrivilegeConstants.APPLICATION_ENTITY_CATEGORY_CODE,
                             PrivilegeNameUtils.getAttachPrivilegeName(entityLongName),
                             getApplicationMessage("application.entity.privilege.attach", description));
@@ -5107,6 +5107,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
         // Application
         Long applicationId = null;
+        ConfigType appConfigType = ConfigType.STATIC;
         if (Boolean.TRUE.equals(applicationConfig.getCustom())) {
             logDebug(taskMonitor, "Restoring application [{0}]...", description);
             Application application = new Application();
@@ -5120,6 +5121,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             application.setAllowSecondaryTenants(applicationConfig.getAllowSecondaryTenants());
             application.setConfigType(ConfigType.CUSTOM);
             applicationId = (Long) environment().create(application);
+
+            appConfigType = ConfigType.CUSTOM;
         } else {
             applicationId = getApplicationId(applicationConfig.getName());
         }
@@ -5127,11 +5130,11 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         applicationRestore.setApplicationId(applicationId);
 
         final String applicationName = applicationConfig.getName();
-        applicationPrivilegeManager.registerPrivilege(applicationId,
+        applicationPrivilegeManager.registerPrivilege(appConfigType, applicationId,
                 ApplicationPrivilegeConstants.APPLICATION_CATEGORY_CODE,
                 PrivilegeNameUtils.getApplicationPrivilegeName(applicationName), description);
         if (ApplicationModuleNameConstants.APPLICATION_APPLICATION_NAME.equals(applicationName)) {
-            applicationPrivilegeManager.registerPrivilege(applicationId,
+            applicationPrivilegeManager.registerPrivilege(appConfigType, applicationId,
                     ApplicationPrivilegeConstants.APPLICATION_FEATURE_CATEGORY_CODE,
                     PrivilegeNameUtils
                             .getFeaturePrivilegeName(ApplicationFeatureConstants.SAVE_GLOBAL_TABLE_QUICK_FILTER),
@@ -5179,7 +5182,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 environment().create(appApplet);
 
                 applicationPrivilegeManager
-                        .registerPrivilege(applicationId,
+                        .registerPrivilege(ConfigType.CUSTOM, applicationId,
                                 ApplicationPrivilegeConstants.APPLICATION_APPLET_CATEGORY_CODE,
                                 PrivilegeNameUtils.getAppletPrivilegeName(ApplicationNameUtils
                                         .getApplicationEntityLongName(applicationName, appletConfig.getName())),
@@ -5306,20 +5309,20 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 final String entityLongName = ApplicationNameUtils.getApplicationEntityLongName(applicationName,
                         appEntityConfig.getName());
                 entityIdByNameMap.put(entityLongName, entityId);
-                applicationPrivilegeManager.registerPrivilege(applicationId,
+                applicationPrivilegeManager.registerPrivilege(ConfigType.CUSTOM, applicationId,
                         ApplicationPrivilegeConstants.APPLICATION_ENTITY_CATEGORY_CODE,
                         PrivilegeNameUtils.getAddPrivilegeName(entityLongName),
                         getApplicationMessage("application.entity.privilege.add", description));
-                applicationPrivilegeManager.registerPrivilege(applicationId,
+                applicationPrivilegeManager.registerPrivilege(ConfigType.CUSTOM, applicationId,
                         ApplicationPrivilegeConstants.APPLICATION_ENTITY_CATEGORY_CODE,
                         PrivilegeNameUtils.getEditPrivilegeName(entityLongName),
                         getApplicationMessage("application.entity.privilege.edit", description));
-                applicationPrivilegeManager.registerPrivilege(applicationId,
+                applicationPrivilegeManager.registerPrivilege(ConfigType.CUSTOM, applicationId,
                         ApplicationPrivilegeConstants.APPLICATION_ENTITY_CATEGORY_CODE,
                         PrivilegeNameUtils.getDeletePrivilegeName(entityLongName),
                         getApplicationMessage("application.entity.privilege.delete", description));
                 if (baseType.isWorkEntityType()) {
-                    applicationPrivilegeManager.registerPrivilege(applicationId,
+                    applicationPrivilegeManager.registerPrivilege(ConfigType.CUSTOM, applicationId,
                             ApplicationPrivilegeConstants.APPLICATION_ENTITY_CATEGORY_CODE,
                             PrivilegeNameUtils.getAttachPrivilegeName(entityLongName),
                             getApplicationMessage("application.entity.privilege.attach", description));
@@ -6350,8 +6353,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 if (!applicationPrivilegeManager.isRegisteredPrivilege(
                         ApplicationPrivilegeConstants.APPLICATION_FORMACTION_CATEGORY_CODE,
                         PrivilegeNameUtils.getFormActionPrivilegeName(formActionConfig.getName()))) {
-                    applicationPrivilegeManager.registerPrivilege(applicationId,
-                            ApplicationPrivilegeConstants.APPLICATION_FORMACTION_CATEGORY_CODE,
+                    applicationPrivilegeManager.registerPrivilege(restore ? ConfigType.CUSTOM : ConfigType.STATIC,
+                            applicationId, ApplicationPrivilegeConstants.APPLICATION_FORMACTION_CATEGORY_CODE,
                             PrivilegeNameUtils.getFormActionPrivilegeName(formActionConfig.getName()), description);
                 }
             }

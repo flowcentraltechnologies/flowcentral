@@ -17,6 +17,7 @@ package com.flowcentraltech.flowcentral.organization.entities;
 
 import java.util.Collection;
 
+import com.flowcentraltech.flowcentral.common.constants.ConfigType;
 import com.flowcentraltech.flowcentral.common.entities.BaseAuditEntityQuery;
 
 /**
@@ -37,6 +38,14 @@ public class PrivilegeQuery extends BaseAuditEntityQuery<Privilege> {
 
     public PrivilegeQuery applicationName(String applicationName) {
         return (PrivilegeQuery) addEquals("applicationName", applicationName);
+    }
+
+    public PrivilegeQuery configType(ConfigType configType) {
+        return (PrivilegeQuery) addEquals("configType", configType);
+    }
+
+    public PrivilegeQuery isCustom() {
+        return (PrivilegeQuery) addEquals("configType", ConfigType.CUSTOM);
     }
 
     public PrivilegeQuery code(String code) {

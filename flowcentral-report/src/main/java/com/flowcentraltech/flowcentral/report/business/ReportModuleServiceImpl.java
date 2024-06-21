@@ -150,7 +150,7 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService
     public ReportModuleServiceImpl() {
         this.groupMemberBackup = new ConcurrentHashMap<String, Set<ReportInfo>>();
     }
-    
+
     @Override
     public void clearDefinitionsCache() throws UnifyException {
 
@@ -159,6 +159,11 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService
     @Override
     public void unregisterApplicationRolePrivileges(Long applicationId) throws UnifyException {
         environment().deleteAll(new ReportGroupMemberQuery().applicationId(applicationId));
+    }
+
+    @Override
+    public void unregisterCustomApplicationRolePrivileges(Long applicationId) throws UnifyException {
+        environment().deleteAll(new ReportGroupMemberQuery().applicationId(applicationId).isCustom());
     }
 
     @Override
@@ -188,7 +193,8 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService
                 Optional<Long> reportConfigurationId = environment().valueOptional(Long.class, "id",
                         new ReportConfigurationQuery().applicationName(reportInfo.getApplicationName())
                                 .name(reportInfo.getReportName()));
-                if (reportConfigurationId.isPresent()) {
+                if (reportConfigurationId.isPresent() && environment().countAll(new ReportGroupMemberQuery()
+                        .reportGroupId(reportGroupId).reportConfigurationId(reportConfigurationId.get())) == 0) {
                     reportGroupMember.setId(null);
                     reportGroupMember.setReportGroupId(reportGroupId);
                     reportGroupMember.setReportConfigurationId(reportConfigurationId.get());

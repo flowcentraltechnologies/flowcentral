@@ -484,6 +484,11 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
+    public void unregisterCustomApplicationRolePrivileges(Long applicationId) throws UnifyException {
+        environment().deleteAll(new WfStepRoleQuery().applicationId(applicationId).isCustom());
+    }
+
+    @Override
     public void backupApplicationRolePrivileges(Long applicationId) throws UnifyException {
         List<WfStepRole> wfStepRoleList = environment().listAll(new WfStepRoleQuery().applicationId(applicationId)
                 .addSelect("roleCode", "wfStepName", "workflowName", "applicationName"));
@@ -508,10 +513,11 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                 Optional<Long> stepId = environment().valueOptional(Long.class, "id",
                         new WfStepQuery().applicationName(wfStepInfo.getApplicationName())
                                 .workflowName(wfStepInfo.getWorkflowName()).name(wfStepInfo.getStepName()));
-                if (stepId.isPresent()) {
+                if (stepId.isPresent()
+                        && environment().countAll(new WfStepRoleQuery().roleId(roleId).wfStepId(stepId.get())) == 0) {
                     wfStepRole.setId(null);
                     wfStepRole.setRoleId(roleId);
-                    wfStepRole.setWfStepId(roleId);
+                    wfStepRole.setWfStepId(stepId.get());
                     environment().create(wfStepRole);
                 }
             }

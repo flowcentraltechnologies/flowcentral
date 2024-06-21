@@ -22,6 +22,7 @@ import com.flowcentraltech.flowcentral.application.entities.BaseApplicationEntit
 import com.flowcentraltech.flowcentral.common.AbstractFlowCentralComponent;
 import com.flowcentraltech.flowcentral.common.business.ApplicationPrivilegeManager;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
+import com.flowcentraltech.flowcentral.common.constants.ConfigType;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants;
 import com.flowcentraltech.flowcentral.configuration.business.ConfigurationLoader;
 import com.flowcentraltech.flowcentral.configuration.data.Messages;
@@ -53,7 +54,7 @@ public abstract class AbstractApplicationArtifactInstaller extends AbstractFlowC
         for (DeletionParams params : getDeletionParams()) {
             deletion += deleteApplicationArtifacts(taskMonitor, params, applicationId, false);
         }
-        
+
         return deletion;
     }
 
@@ -63,7 +64,7 @@ public abstract class AbstractApplicationArtifactInstaller extends AbstractFlowC
         for (DeletionParams params : getDeletionParams()) {
             deletion += deleteApplicationArtifacts(taskMonitor, params, applicationId, true);
         }
-        
+
         return deletion;
     }
 
@@ -85,9 +86,9 @@ public abstract class AbstractApplicationArtifactInstaller extends AbstractFlowC
         return msg == null ? super.resolveApplicationMessage(message, params) : msg;
     }
 
-    protected void registerPrivilege(Long applicationId, String privilegeCategoryCode, String privilegeCode,
-            String privilegeDesc) throws UnifyException {
-        applicationPrivilegeManager.registerPrivilege(applicationId, privilegeCategoryCode, privilegeCode,
+    protected void registerPrivilege(ConfigType configType, Long applicationId, String privilegeCategoryCode,
+            String privilegeCode, String privilegeDesc) throws UnifyException {
+        applicationPrivilegeManager.registerPrivilege(configType, applicationId, privilegeCategoryCode, privilegeCode,
                 privilegeDesc);
     }
 

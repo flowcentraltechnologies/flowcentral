@@ -239,7 +239,7 @@ public class ApplicationWorkflowInstallerImpl extends AbstractApplicationArtifac
                         environment().updateByIdVersion(oldAppFormWizard);
                     }
 
-                    applicationPrivilegeManager.registerPrivilege(applicationId,
+                    applicationPrivilegeManager.registerPrivilege(ConfigType.STATIC, applicationId,
                             ApplicationPrivilegeConstants.APPLICATION_WORKFLOW_WIZARD_CATEGORY_CODE,
                             PrivilegeNameUtils.getWfWizardPrivilegeName(ApplicationNameUtils
                                     .getApplicationEntityLongName(applicationName, wfWizardConfig.getName())),
@@ -333,7 +333,7 @@ public class ApplicationWorkflowInstallerImpl extends AbstractApplicationArtifac
                 environment().create(wfWizard);
 
                 applicationPrivilegeManager
-                        .registerPrivilege(applicationId,
+                        .registerPrivilege(ConfigType.CUSTOM, applicationId,
                                 ApplicationPrivilegeConstants.APPLICATION_WORKFLOW_WIZARD_CATEGORY_CODE,
                                 PrivilegeNameUtils.getWfWizardPrivilegeName(ApplicationNameUtils
                                         .getApplicationEntityLongName(applicationName, wfWizardConfig.getName())),
@@ -459,7 +459,6 @@ public class ApplicationWorkflowInstallerImpl extends AbstractApplicationArtifac
                     oldWorkflowFilter.setFilterGeneratorRule(filterConfig.getFilterGeneratorRule());
                     oldWorkflowFilter.setFilter(InputWidgetUtils.newAppFilter(filterConfig));
                     oldWorkflowFilter.setConfigType(ConfigType.STATIC);
-
                     filterList.add(oldWorkflowFilter);
                 }
 
