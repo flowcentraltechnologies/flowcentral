@@ -16,6 +16,8 @@
 
 package com.flowcentraltech.flowcentral.studio.web.controllers;
 
+import java.text.SimpleDateFormat;
+
 import com.flowcentraltech.flowcentral.studio.constants.StudioSnapshotTaskConstants;
 import com.flowcentraltech.flowcentral.studio.constants.StudioSnapshotType;
 import com.tcdng.unify.core.UnifyException;
@@ -59,13 +61,21 @@ public class StudioTakeSnapshotPageController extends AbstractStudioPageControll
             return "refresh";
         }
 
-        TaskSetup taskSetup = TaskSetup.newBuilder(
-                StudioSnapshotTaskConstants.STUDIO_TAKE_SNAPSHOT_TASK_NAME)
+        TaskSetup taskSetup = TaskSetup.newBuilder(StudioSnapshotTaskConstants.STUDIO_TAKE_SNAPSHOT_TASK_NAME)
                 .setParam(StudioSnapshotTaskConstants.STUDIO_SNAPSHOT_TYPE, StudioSnapshotType.MANUAL_SYSTEM)
                 .setParam(StudioSnapshotTaskConstants.STUDIO_SNAPSHOT_NAME, pageBean.getSnapshotTitle())
                 .setParam(StudioSnapshotTaskConstants.STUDIO_SNAPSHOT_MESSAGE, pageBean.getMessage()).logMessages()
                 .build();
         return launchTaskWithMonitorBox(taskSetup, "Take Studio Snapshot", "/studio/snapshots/openPage", null);
+    }
+
+    @Override
+    protected void onOpenPage() throws UnifyException {
+        super.onOpenPage();
+        StudioTakeSnapshotPageBean pageBean = getPageBean();
+        final String snapshotTitle = "SNAPSHOT_SYS_"
+                + new SimpleDateFormat("yyyyMMdd_HHmmss").format(studio().getNow());
+        pageBean.setSnapshotTitle(snapshotTitle);
     }
 
 }

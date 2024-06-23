@@ -39,9 +39,9 @@
     formCaptionSuffix:$s{:} formColumns:1
 	formSection:$d{!ui-section components:$c{snapshotTitle message frmFileSelect}}
 !ui-text:snapshotTitle caption:$m{studio.uploadsnapshotpage.name} binding:snapshotTitle required:true
- 	size:52 focus:true
+ 	size:52 disabled:true
 !ui-textarea:message caption:$m{studio.uploadsnapshotpage.message} binding:message required:true
-	rows:8 columns:52
+	rows:8 columns:52 focus:true
 !ui-fileupload:frmFileSelect caption:$m{studio.uploadsnapshotpage.uploadfile} required:true
 	binding:snapshotFile selectOnly:true required:true style:$s{width:380px;} focus:true
 

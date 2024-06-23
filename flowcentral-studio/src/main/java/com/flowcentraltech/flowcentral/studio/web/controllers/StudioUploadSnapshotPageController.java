@@ -16,6 +16,8 @@
 
 package com.flowcentraltech.flowcentral.studio.web.controllers;
 
+import java.text.SimpleDateFormat;
+
 import com.flowcentraltech.flowcentral.configuration.xml.SnapshotConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.util.ConfigurationUtils;
 import com.flowcentraltech.flowcentral.studio.constants.StudioSnapshotTaskConstants;
@@ -89,5 +91,13 @@ public class StudioUploadSnapshotPageController extends AbstractStudioPageContro
         return launchTaskWithMonitorBox(taskSetup, "Upload Studio Snapshot", "/studio/snapshots/openPage", null);
     }
 
+    @Override
+    protected void onOpenPage() throws UnifyException {
+        super.onOpenPage();
+        StudioUploadSnapshotPageBean pageBean = getPageBean();
+        final String snapshotTitle = "SNAPSHOT_UPD_"
+                + new SimpleDateFormat("yyyyMMdd_HHmmss").format(studio().getNow());
+        pageBean.setSnapshotTitle(snapshotTitle);
+    }
     
 }

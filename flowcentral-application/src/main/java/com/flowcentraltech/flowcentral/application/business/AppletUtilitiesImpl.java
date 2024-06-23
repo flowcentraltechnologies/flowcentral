@@ -1619,7 +1619,8 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
             return entityFieldDef.getFieldName();
         }
 
-        return entityDef.getMappedFieldDefByEntity(this, entity).getFieldName();
+        entityFieldDef = entityDef.getMappedFieldDefByEntity(this, entity);
+        return entityFieldDef != null ? entityFieldDef.getFieldName() : null;
     }
 
     @Override

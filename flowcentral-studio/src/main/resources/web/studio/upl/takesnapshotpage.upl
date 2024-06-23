@@ -39,9 +39,9 @@
     formCaptionSuffix:$s{:} formColumns:1
 	formSection:$d{!ui-section components:$c{snapshotTitle message}}
 !ui-text:snapshotTitle caption:$m{studio.takesnapshotpage.name} binding:snapshotTitle required:true
- 	size:52 focus:true
+ 	size:52 disabled:true
 !ui-textarea:message caption:$m{studio.takesnapshotpage.message} binding:message required:true
-	rows:8 columns:52
+	rows:8 columns:52 focus:true
 !ui-button:takeSnapshotBtn styleClass:$e{fc-bluebutton} caption:$m{button.takesnapshot}
 	eventHandler:$d{!ui-event event:onclick action:$c{takeSnapshotAct}}
 	
