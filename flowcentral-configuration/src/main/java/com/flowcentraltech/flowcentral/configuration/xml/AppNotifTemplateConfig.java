@@ -23,7 +23,7 @@ import javax.xml.bind.annotation.XmlAttribute;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class AppNotifTemplateConfig {
+public class AppNotifTemplateConfig extends BaseConfig {
 
     private String configFile;
 

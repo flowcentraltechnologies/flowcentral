@@ -30,7 +30,7 @@ import com.tcdng.unify.core.util.xml.adapter.FilterConditionTypeXmlAdapter;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class FilterRestrictionConfig {
+public class FilterRestrictionConfig extends BaseConfig {
 
     private FilterConditionType type;
 

@@ -69,6 +69,13 @@ public class IntegrationModuleServiceImpl extends AbstractFlowCentralService imp
 
             };
     }
+    
+    @Override
+    public void clearDefinitionsCache() throws UnifyException {
+        logDebug("Clearing definitions cache...");
+        endpointParamConfigByTypeMap.clear();
+        logDebug("Definitions cache clearing successfully completed.");
+    }
 
     @Override
     public Listable getConfig(String configName) throws UnifyException {

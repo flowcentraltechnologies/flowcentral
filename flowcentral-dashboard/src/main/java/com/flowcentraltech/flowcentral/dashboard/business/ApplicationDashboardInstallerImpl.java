@@ -30,8 +30,8 @@ import com.flowcentraltech.flowcentral.application.util.InputWidgetUtils;
 import com.flowcentraltech.flowcentral.application.util.PrivilegeNameUtils;
 import com.flowcentraltech.flowcentral.common.business.ApplicationPrivilegeManager;
 import com.flowcentraltech.flowcentral.common.constants.ConfigType;
-import com.flowcentraltech.flowcentral.common.util.ConfigUtils;
 import com.flowcentraltech.flowcentral.configuration.data.ApplicationInstall;
+import com.flowcentraltech.flowcentral.configuration.data.ApplicationRestore;
 import com.flowcentraltech.flowcentral.configuration.xml.AppConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppDashboardConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.DashboardOptionCategoryBaseConfig;
@@ -75,7 +75,7 @@ public class ApplicationDashboardInstallerImpl extends AbstractApplicationArtifa
 
         logDebug(taskMonitor, "Executing dashboard installer...");
         // Install configured dashboards
-        environment().updateAll(new DashboardQuery().applicationId(applicationId).isNotActualCustom(),
+        environment().updateAll(new DashboardQuery().applicationId(applicationId).isStatic(),
                 new Update().add("deprecated", Boolean.TRUE));
         if (applicationConfig.getDashboardsConfig() != null
                 && !DataUtils.isBlank(applicationConfig.getDashboardsConfig().getDashboardList())) {
@@ -92,22 +92,53 @@ public class ApplicationDashboardInstallerImpl extends AbstractApplicationArtifa
                     dashboard.setSections(dashboardConfig.getSections());
                     dashboard.setAllowSecondaryTenants(dashboardConfig.getAllowSecondaryTenants());
                     dashboard.setDeprecated(false);
-                    dashboard.setConfigType(ConfigType.MUTABLE_INSTALL);
-                    populateChildList(dashboardConfig, dashboard, applicationName);
+                    dashboard.setConfigType(ConfigType.STATIC);
+                    populateChildList(dashboardConfig, dashboard, applicationName, false);
                     environment().create(dashboard);
                 } else {
-                    if (ConfigUtils.isSetInstall(oldDashboard)) {
-                        oldDashboard.setDescription(description);
-                        oldDashboard.setSections(dashboardConfig.getSections());
-                        oldDashboard.setAllowSecondaryTenants(dashboardConfig.getAllowSecondaryTenants());
-                    }
-
+                    oldDashboard.setDescription(description);
+                    oldDashboard.setSections(dashboardConfig.getSections());
+                    oldDashboard.setAllowSecondaryTenants(dashboardConfig.getAllowSecondaryTenants());
+                    oldDashboard.setConfigType(ConfigType.STATIC);
                     oldDashboard.setDeprecated(false);
-                    populateChildList(dashboardConfig, oldDashboard, applicationName);
+                    populateChildList(dashboardConfig, oldDashboard, applicationName, false);
                     environment().updateByIdVersion(oldDashboard);
                 }
 
-                applicationPrivilegeManager.registerPrivilege(applicationId,
+                applicationPrivilegeManager.registerPrivilege(ConfigType.STATIC, applicationId,
+                        ApplicationPrivilegeConstants.APPLICATION_DASHBOARD_CATEGORY_CODE,
+                        PrivilegeNameUtils.getDashboardPrivilegeName(ApplicationNameUtils
+                                .getApplicationEntityLongName(applicationName, dashboardConfig.getName())),
+                        description);
+            }
+        }
+    }
+
+    @Override
+    public void restoreCustomApplicationArtifacts(TaskMonitor taskMonitor, ApplicationRestore applicationRestore)
+            throws UnifyException {
+        final AppConfig applicationConfig = applicationRestore.getApplicationConfig();
+        final String applicationName = applicationConfig.getName();
+        final Long applicationId = applicationRestore.getApplicationId();
+
+        logDebug(taskMonitor, "Executing dashboard restore...");
+        if (applicationConfig.getDashboardsConfig() != null
+                && !DataUtils.isBlank(applicationConfig.getDashboardsConfig().getDashboardList())) {
+            for (AppDashboardConfig dashboardConfig : applicationConfig.getDashboardsConfig().getDashboardList()) {
+                String description = resolveApplicationMessage(dashboardConfig.getDescription());
+                logDebug(taskMonitor, "Restoring dashboard [{0}]...", description);
+                Dashboard dashboard = new Dashboard();
+                dashboard.setApplicationId(applicationId);
+                dashboard.setName(dashboardConfig.getName());
+                dashboard.setDescription(description);
+                dashboard.setSections(dashboardConfig.getSections());
+                dashboard.setAllowSecondaryTenants(dashboardConfig.getAllowSecondaryTenants());
+                dashboard.setDeprecated(false);
+                dashboard.setConfigType(ConfigType.CUSTOM);
+                populateChildList(dashboardConfig, dashboard, applicationName, true);
+                environment().create(dashboard);
+
+                applicationPrivilegeManager.registerPrivilege(ConfigType.CUSTOM, applicationId,
                         ApplicationPrivilegeConstants.APPLICATION_DASHBOARD_CATEGORY_CODE,
                         PrivilegeNameUtils.getDashboardPrivilegeName(ApplicationNameUtils
                                 .getApplicationEntityLongName(applicationName, dashboardConfig.getName())),
@@ -126,6 +157,7 @@ public class ApplicationDashboardInstallerImpl extends AbstractApplicationArtifa
         for (Long dashboardId : dashboardIdList) {
             Dashboard srcDashboard = environment().find(Dashboard.class, dashboardId);
             String oldDescription = srcDashboard.getDescription();
+            srcDashboard.setId(null);
             srcDashboard.setApplicationId(destApplicationId);
             srcDashboard.setName(ctx.nameSwap(srcDashboard.getName()));
             srcDashboard.setDescription(ctx.messageSwap(srcDashboard.getDescription()));
@@ -137,6 +169,7 @@ public class ApplicationDashboardInstallerImpl extends AbstractApplicationArtifa
                 dashboardTile.setChart(ctx.entitySwap(dashboardTile.getChart()));
             }
 
+            srcDashboard.setConfigType(ConfigType.CUSTOM);
             environment().create(srcDashboard);
             logDebug(taskMonitor, "Dashboard [{0}] -> [{1}]...", oldDescription, srcDashboard.getDescription());
         }
@@ -147,7 +180,7 @@ public class ApplicationDashboardInstallerImpl extends AbstractApplicationArtifa
         return Arrays.asList(new DeletionParams("dashboards", new DashboardQuery()));
     }
 
-    private void populateChildList(AppDashboardConfig dashboardConfig, Dashboard dashboard, String applicationName)
+    private void populateChildList(AppDashboardConfig dashboardConfig, Dashboard dashboard, String applicationName, boolean restore)
             throws UnifyException {
         List<DashboardSection> sectionList = null;
         if (!DataUtils.isBlank(dashboardConfig.getSectionList())) {
@@ -166,7 +199,7 @@ public class ApplicationDashboardInstallerImpl extends AbstractApplicationArtifa
         List<DashboardTile> tileList = null;
         if (!DataUtils.isBlank(dashboardConfig.getTileList())) {
             tileList = new ArrayList<DashboardTile>();
-            Map<String, DashboardTile> map = dashboard.isIdBlank() ? Collections.emptyMap()
+            Map<String, DashboardTile> map = restore || dashboard.isIdBlank() ? Collections.emptyMap()
                     : environment().findAllMap(String.class, "name",
                             new DashboardTileQuery().dashboardId(dashboard.getId()));
             for (DashboardTileConfig dashboardTileConfig : dashboardConfig.getTileList()) {
@@ -180,19 +213,17 @@ public class ApplicationDashboardInstallerImpl extends AbstractApplicationArtifa
                     dashboardTile.setDescription(resolveApplicationMessage(dashboardTileConfig.getDescription()));
                     dashboardTile.setSection(dashboardTileConfig.getSection());
                     dashboardTile.setIndex(dashboardTileConfig.getIndex());
-                    dashboardTile.setConfigType(ConfigType.MUTABLE_INSTALL);
+                    dashboardTile.setConfigType(restore ? ConfigType.CUSTOM: ConfigType.STATIC);
                     tileList.add(dashboardTile);
                 } else {
-                    if (ConfigUtils.isSetInstall(oldDashboardTile)) {
-                        oldDashboardTile.setType(dashboardTileConfig.getType());
-                        oldDashboardTile.setChart(ApplicationNameUtils.ensureLongNameReference(applicationName,
-                                dashboardTileConfig.getChart()));
-                        oldDashboardTile
-                                .setDescription(resolveApplicationMessage(dashboardTileConfig.getDescription()));
-                        oldDashboardTile.setSection(dashboardTileConfig.getSection());
-                        oldDashboardTile.setIndex(dashboardTileConfig.getIndex());
-                    }
-
+                    oldDashboardTile.setType(dashboardTileConfig.getType());
+                    oldDashboardTile.setChart(ApplicationNameUtils.ensureLongNameReference(applicationName,
+                            dashboardTileConfig.getChart()));
+                    oldDashboardTile
+                            .setDescription(resolveApplicationMessage(dashboardTileConfig.getDescription()));
+                    oldDashboardTile.setSection(dashboardTileConfig.getSection());
+                    oldDashboardTile.setIndex(dashboardTileConfig.getIndex());
+                    oldDashboardTile.setConfigType(ConfigType.STATIC);
                     tileList.add(oldDashboardTile);
                 }
 
@@ -204,7 +235,7 @@ public class ApplicationDashboardInstallerImpl extends AbstractApplicationArtifa
         List<DashboardOption> optionList = null;
         if (!DataUtils.isBlank(dashboardConfig.getOptionsList())) {
             optionList = new ArrayList<DashboardOption>();
-            Map<String, DashboardOption> map = dashboard.isIdBlank() ? Collections.emptyMap()
+            Map<String, DashboardOption> map = restore || dashboard.isIdBlank() ? Collections.emptyMap()
                     : environment().findAllMap(String.class, "name",
                             new DashboardOptionQuery().dashboardId(dashboard.getId()));
             for (DashboardOptionConfig dashboardOptionConfig : dashboardConfig.getOptionsList()) {

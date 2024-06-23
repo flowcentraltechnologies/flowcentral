@@ -22,12 +22,20 @@ package com.flowcentraltech.flowcentral.codegeneration.generators;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class AbstractResourcesArtifactGenerator extends AbstractStaticArtifactGenerator {
+public abstract class AbstractResourcesArtifactGenerator extends AbstractStaticModuleArtifactGenerator {
 
     private static final String RESOURCES_FOLDER = "src/main/resources/";
 
+    protected AbstractResourcesArtifactGenerator(String artDir, String srtDir) {
+        super(RESOURCES_FOLDER + artDir, srtDir);
+    }
+
     protected AbstractResourcesArtifactGenerator(String artDir) {
         super(RESOURCES_FOLDER + artDir, artDir);
+    }
+
+    protected AbstractResourcesArtifactGenerator() {
+        super(RESOURCES_FOLDER, null);
     }
 
 }

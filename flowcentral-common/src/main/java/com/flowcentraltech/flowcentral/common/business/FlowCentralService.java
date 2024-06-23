@@ -25,6 +25,6 @@ import com.tcdng.unify.core.business.BusinessService;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface FlowCentralService extends BusinessService, FeatureInstaller<ModuleInstall> {
+public interface FlowCentralService extends BusinessService, SystemDefinitionsCache, FeatureInstaller<ModuleInstall> {
 
 }

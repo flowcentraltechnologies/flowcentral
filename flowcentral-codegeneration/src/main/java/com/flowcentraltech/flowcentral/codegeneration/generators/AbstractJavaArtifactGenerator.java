@@ -22,7 +22,7 @@ package com.flowcentraltech.flowcentral.codegeneration.generators;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class AbstractJavaArtifactGenerator extends AbstractStaticArtifactGenerator {
+public abstract class AbstractJavaArtifactGenerator extends AbstractStaticModuleArtifactGenerator {
 
     private static final String JAVA_FOLDER = "src/main/java/";
 

@@ -15,6 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.report.entities;
 
+import com.flowcentraltech.flowcentral.common.constants.ConfigType;
 import com.flowcentraltech.flowcentral.common.entities.BaseAuditTenantEntity;
 import com.tcdng.unify.core.annotation.ForeignKey;
 import com.tcdng.unify.core.annotation.ListOnly;
@@ -47,11 +48,20 @@ public class ReportGroupMember extends BaseAuditTenantEntity implements Describa
     @ListOnly(key = "reportGroupId", property = "label")
     private String reportGroupLabel;
 
+    @ListOnly(key = "reportConfigurationId", property = "applicationId")
+    private Long applicationId;
+
+    @ListOnly(key = "reportConfigurationId", property = "applicationName")
+    private String applicationName;
+
     @ListOnly(key = "reportConfigurationId", property = "name")
     private String reportConfigurationName;
 
     @ListOnly(key = "reportConfigurationId", property = "description")
     private String reportConfigurationDesc;
+    
+    @ListOnly(key = "reportConfigurationId", property = "configType")
+    private ConfigType configType;
 
     @Override
     public String getDescription() {
@@ -98,6 +108,22 @@ public class ReportGroupMember extends BaseAuditTenantEntity implements Describa
         this.reportGroupLabel = reportGroupLabel;
     }
 
+    public Long getApplicationId() {
+        return applicationId;
+    }
+
+    public void setApplicationId(Long applicationId) {
+        this.applicationId = applicationId;
+    }
+
+    public String getApplicationName() {
+        return applicationName;
+    }
+
+    public void setApplicationName(String applicationName) {
+        this.applicationName = applicationName;
+    }
+
     public String getReportConfigurationName() {
         return reportConfigurationName;
     }
@@ -112,6 +138,14 @@ public class ReportGroupMember extends BaseAuditTenantEntity implements Describa
 
     public void setReportConfigurationDesc(String reportConfigurationDesc) {
         this.reportConfigurationDesc = reportConfigurationDesc;
+    }
+
+    public ConfigType getConfigType() {
+        return configType;
+    }
+
+    public void setConfigType(ConfigType configType) {
+        this.configType = configType;
     }
 
 }

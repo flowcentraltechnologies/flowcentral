@@ -22,7 +22,10 @@ import com.flowcentraltech.flowcentral.application.entities.BaseApplicationEntit
 import com.flowcentraltech.flowcentral.common.AbstractFlowCentralComponent;
 import com.flowcentraltech.flowcentral.common.business.ApplicationPrivilegeManager;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
+import com.flowcentraltech.flowcentral.common.constants.ConfigType;
+import com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants;
 import com.flowcentraltech.flowcentral.configuration.business.ConfigurationLoader;
+import com.flowcentraltech.flowcentral.configuration.data.Messages;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.task.TaskMonitor;
@@ -49,8 +52,19 @@ public abstract class AbstractApplicationArtifactInstaller extends AbstractFlowC
     public int deleteApplicationArtifacts(TaskMonitor taskMonitor, Long applicationId) throws UnifyException {
         int deletion = 0;
         for (DeletionParams params : getDeletionParams()) {
-            deletion += deleteApplicationArtifacts(taskMonitor, params, applicationId);
+            deletion += deleteApplicationArtifacts(taskMonitor, params, applicationId, false);
         }
+
+        return deletion;
+    }
+
+    @Override
+    public int deleteCustomApplicationArtifacts(TaskMonitor taskMonitor, Long applicationId) throws UnifyException {
+        int deletion = 0;
+        for (DeletionParams params : getDeletionParams()) {
+            deletion += deleteApplicationArtifacts(taskMonitor, params, applicationId, true);
+        }
+
         return deletion;
     }
 
@@ -64,9 +78,17 @@ public abstract class AbstractApplicationArtifactInstaller extends AbstractFlowC
 
     }
 
-    protected void registerPrivilege(Long applicationId, String privilegeCategoryCode, String privilegeCode,
-            String privilegeDesc) throws UnifyException {
-        applicationPrivilegeManager.registerPrivilege(applicationId, privilegeCategoryCode, privilegeCode,
+    @Override
+    protected String resolveApplicationMessage(String message, Object... params) throws UnifyException {
+        Messages messages = getSessionAttribute(Messages.class,
+                FlowCentralSessionAttributeConstants.ALTERNATIVE_RESOURCES_BUNDLE);
+        String msg = messages != null ? messages.resolveMessage(message, params) : null;
+        return msg == null ? super.resolveApplicationMessage(message, params) : msg;
+    }
+
+    protected void registerPrivilege(ConfigType configType, Long applicationId, String privilegeCategoryCode,
+            String privilegeCode, String privilegeDesc) throws UnifyException {
+        applicationPrivilegeManager.registerPrivilege(configType, applicationId, privilegeCategoryCode, privilegeCode,
                 privilegeDesc);
     }
 
@@ -99,11 +121,19 @@ public abstract class AbstractApplicationArtifactInstaller extends AbstractFlowC
 
     protected abstract List<DeletionParams> getDeletionParams() throws UnifyException;
 
-    private int deleteApplicationArtifacts(TaskMonitor taskMonitor, DeletionParams deletionParams, Long applicationId)
-            throws UnifyException {
-        logDebug(taskMonitor, "Deleting application {0}...", deletionParams.getName());
-        int deletion = environment().deleteAll(deletionParams.getQuery().applicationId(applicationId));
-        logDebug(taskMonitor, "[{1}] application {0} deleted.", deletionParams.getName(), deletion);
+    private int deleteApplicationArtifacts(TaskMonitor taskMonitor, DeletionParams deletionParams, Long applicationId,
+            boolean custom) throws UnifyException {
+        int deletion = 0;
+        if (custom) {
+            logDebug(taskMonitor, "Deleting custom application {0}...", deletionParams.getName());
+            deletion = environment().deleteAll(deletionParams.getQuery().applicationId(applicationId).isCustom());
+            logDebug(taskMonitor, "[{1}] custom application {0} deleted.", deletionParams.getName(), deletion);
+        } else {
+            logDebug(taskMonitor, "Deleting application {0}...", deletionParams.getName());
+            deletion = environment().deleteAll(deletionParams.getQuery().applicationId(applicationId));
+            logDebug(taskMonitor, "[{1}] application {0} deleted.", deletionParams.getName(), deletion);
+        }
+
         return deletion;
     }
 

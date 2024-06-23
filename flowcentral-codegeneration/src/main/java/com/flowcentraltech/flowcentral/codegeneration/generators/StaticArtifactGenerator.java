@@ -22,12 +22,22 @@ import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
 import com.tcdng.unify.core.UnifyException;
 
 /**
- * Static artifact builder.
+ * Static artifact generator.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
 public interface StaticArtifactGenerator extends FlowCentralComponent {
 
-    void generate(ExtensionModuleStaticFileBuilderContext ctx, String entityName, ZipOutputStream zos) throws UnifyException;
+    /**
+     * Generates static artifact.
+     * 
+     * @param ctx
+     *                   the context
+     * @param zos
+     *                   the zip output stream
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    void generate(ExtensionStaticFileBuilderContext ctx, ZipOutputStream zos) throws UnifyException;
 }

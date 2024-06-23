@@ -20,6 +20,7 @@ import java.util.List;
 
 import com.flowcentraltech.flowcentral.common.AbstractFlowCentralComponent;
 import com.flowcentraltech.flowcentral.common.business.ApplicationPrivilegeManager;
+import com.flowcentraltech.flowcentral.common.constants.ConfigType;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 
@@ -30,11 +31,12 @@ import com.tcdng.unify.core.annotation.Component;
  * @since 1.0
  */
 @Component("test-applicationprivilegemanager")
-public class TestApplicationPrivilegeManagerImpl extends AbstractFlowCentralComponent implements ApplicationPrivilegeManager {
+public class TestApplicationPrivilegeManagerImpl extends AbstractFlowCentralComponent
+        implements ApplicationPrivilegeManager {
 
     @Override
-    public void registerPrivilege(Long applicationId, String privilegeCategoryCode, String privilegeCode,
-            String privilegeDesc) throws UnifyException {
+    public void registerPrivilege(ConfigType configType, Long applicationId, String privilegeCategoryCode,
+            String privilegeCode, String privilegeDesc) throws UnifyException {
 
     }
 
@@ -51,7 +53,22 @@ public class TestApplicationPrivilegeManagerImpl extends AbstractFlowCentralComp
 
     @Override
     public void unregisterApplicationPrivileges(Long applicationId) throws UnifyException {
-        
+
+    }
+
+    @Override
+    public void unregisterCustonApplicationPrivileges(Long applicationId) throws UnifyException {
+
+    }
+
+    @Override
+    public void backupApplicationRolePrivileges(Long applicationId) throws UnifyException {
+
+    }
+
+    @Override
+    public void restoreApplicationRolePrivileges() throws UnifyException {
+
     }
 
     @Override

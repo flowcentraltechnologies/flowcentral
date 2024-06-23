@@ -28,6 +28,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import com.flowcentraltech.flowcentral.common.business.AbstractFlowCentralService;
@@ -119,8 +120,8 @@ import com.tcdng.unify.core.util.StringUtils;
  */
 @Transactional
 @Component(SystemModuleNameConstants.SYSTEM_MODULE_SERVICE)
-public class SystemModuleServiceImpl extends AbstractFlowCentralService implements SystemModuleService, LicenseProvider,
-        SpecialParamProvider, SystemParameterProvider {
+public class SystemModuleServiceImpl extends AbstractFlowCentralService
+        implements SystemModuleService, LicenseProvider, SpecialParamProvider, SystemParameterProvider {
 
     private static final String SCHEDULED_TASK_EXECUTION_LOCK = "sys:scheduledtaskexecution-lock";
 
@@ -156,6 +157,11 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService implemen
         this.authDefFactoryMap = new FactoryMap<String, CredentialDef>(true)
             {
                 @Override
+                protected boolean pause() throws Exception {
+                    return isInSystemRestoreMode();
+                }
+
+                @Override
                 protected boolean stale(String authName, CredentialDef credentialDef) throws Exception {
                     return (environment().value(long.class, "versionNo",
                             new CredentialQuery().name(authName)) > credentialDef.getVersionNo());
@@ -175,6 +181,11 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService implemen
 
         this.scheduledTaskDefs = new FactoryMap<Long, ScheduledTaskDef>(true)
             {
+                @Override
+                protected boolean pause() throws Exception {
+                    return isInSystemRestoreMode();
+                }
+
                 @Override
                 protected boolean stale(Long scheduledTaskId, ScheduledTaskDef scheduledTaskDef) throws Exception {
                     return environment().value(long.class, "versionNo",
@@ -215,6 +226,10 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService implemen
 
         this.licenseDefFactoryMap = new FactoryMap<String, LicenseDef>(true)
             {
+                @Override
+                protected boolean pause() throws Exception {
+                    return isInSystemRestoreMode();
+                }
 
                 @Override
                 protected boolean stale(String name, LicenseDef licenseDef) throws Exception {
@@ -229,6 +244,15 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService implemen
                 }
 
             };
+    }
+    
+    @Override
+    public void clearDefinitionsCache() throws UnifyException {
+        logDebug("Clearing definitions cache...");
+        authDefFactoryMap.clear();
+        scheduledTaskDefs.clear();
+        licenseDefFactoryMap.clear();
+        logDebug("Definitions cache clearing successfully completed.");
     }
 
     @Override
@@ -262,8 +286,8 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService implemen
     }
 
     @Override
-    public Long getModuleId(String moduleName) throws UnifyException {
-        return environment().value(Long.class, "id", new ModuleQuery().name(moduleName));
+    public  Optional<Long> getModuleId(String moduleName) throws UnifyException {
+        return environment().valueOptional(Long.class, "id", new ModuleQuery().name(moduleName));
     }
 
     @Override

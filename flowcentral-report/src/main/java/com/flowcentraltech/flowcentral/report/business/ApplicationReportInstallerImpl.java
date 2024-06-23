@@ -16,7 +16,6 @@
 
 package com.flowcentraltech.flowcentral.report.business;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -33,10 +32,11 @@ import com.flowcentraltech.flowcentral.common.annotation.Format;
 import com.flowcentraltech.flowcentral.common.constants.ConfigType;
 import com.flowcentraltech.flowcentral.common.data.FormatterOptions;
 import com.flowcentraltech.flowcentral.common.entities.BaseEntity;
-import com.flowcentraltech.flowcentral.common.util.ConfigUtils;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldDataType;
 import com.flowcentraltech.flowcentral.configuration.data.ApplicationInstall;
+import com.flowcentraltech.flowcentral.configuration.data.ApplicationRestore;
 import com.flowcentraltech.flowcentral.configuration.data.ReportInstall;
+import com.flowcentraltech.flowcentral.configuration.data.ReportRestore;
 import com.flowcentraltech.flowcentral.configuration.xml.AppConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppEntityConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppReportConfig;
@@ -59,6 +59,7 @@ import com.tcdng.unify.convert.util.ConverterUtils;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
+import com.tcdng.unify.core.constant.DataType;
 import com.tcdng.unify.core.constant.HAlignType;
 import com.tcdng.unify.core.criterion.Update;
 import com.tcdng.unify.core.database.Entity;
@@ -66,6 +67,7 @@ import com.tcdng.unify.core.message.MessageResolver;
 import com.tcdng.unify.core.task.TaskMonitor;
 import com.tcdng.unify.core.util.AnnotationUtils;
 import com.tcdng.unify.core.util.DataUtils;
+import com.tcdng.unify.core.util.EntityTypeUtils;
 import com.tcdng.unify.core.util.NameUtils;
 import com.tcdng.unify.core.util.ReflectUtils;
 import com.tcdng.unify.core.util.StringUtils;
@@ -92,7 +94,7 @@ public class ApplicationReportInstallerImpl extends AbstractApplicationArtifactI
         logDebug(taskMonitor, "Executing report installer...");
         // Install reports for configurable entities
         logDebug(taskMonitor, "Installing reportable entities...");
-        environment().updateAll(new ReportableDefinitionQuery().applicationId(applicationId).isNotActualCustom(),
+        environment().updateAll(new ReportableDefinitionQuery().applicationId(applicationId).isStatic(),
                 new Update().add("deprecated", Boolean.TRUE));
         if (applicationConfig.getEntitiesConfig() != null
                 && !DataUtils.isBlank(applicationConfig.getEntitiesConfig().getEntityList())) {
@@ -114,24 +116,23 @@ public class ApplicationReportInstallerImpl extends AbstractApplicationArtifactI
                         reportableDefinition.setTitle(description);
                         reportableDefinition.setDescription(description);
                         reportableDefinition.setDeprecated(false);
-                        reportableDefinition.setConfigType(ConfigType.STATIC_INSTALL);
+                        reportableDefinition.setConfigType(ConfigType.STATIC);
                         populateChildList(appEntityConfig, reportableDefinition);
                         environment().create(reportableDefinition);
                     } else {
                         // Update old definition
-                        if (ConfigUtils.isSetInstall(oldReportableDefinition)) {
-                            oldReportableDefinition.setEntity(entity);
-                            oldReportableDefinition.setTitle(description);
-                            oldReportableDefinition.setDescription(description);
-                        }
-
+                        oldReportableDefinition.setEntity(entity);
+                        oldReportableDefinition.setTitle(description);
+                        oldReportableDefinition.setDescription(description);
                         oldReportableDefinition.setDeprecated(false);
+                        oldReportableDefinition.setConfigType(ConfigType.STATIC);
                         populateChildList(appEntityConfig, oldReportableDefinition);
                         environment().updateByIdVersion(oldReportableDefinition);
                         oldReportableDefinition.getId();
                     }
 
-                    registerPrivilege(applicationId, ApplicationPrivilegeConstants.APPLICATION_REPORTABLE_CATEGORY_CODE,
+                    registerPrivilege(ConfigType.STATIC, applicationId,
+                            ApplicationPrivilegeConstants.APPLICATION_REPORTABLE_CATEGORY_CODE,
                             PrivilegeNameUtils.getReportablePrivilegeName(ApplicationNameUtils
                                     .ensureLongNameReference(applicationName, appEntityConfig.getName())),
                             description);
@@ -140,7 +141,7 @@ public class ApplicationReportInstallerImpl extends AbstractApplicationArtifactI
         }
 
         // Install configured reports
-        environment().updateAll(new ReportConfigurationQuery().applicationId(applicationId).isNotActualCustom(),
+        environment().updateAll(new ReportConfigurationQuery().applicationId(applicationId).isStatic(),
                 new Update().add("deprecated", Boolean.TRUE));
         if (applicationConfig.getReportsConfig() != null
                 && !DataUtils.isBlank(applicationConfig.getReportsConfig().getReportList())) {
@@ -187,41 +188,133 @@ public class ApplicationReportInstallerImpl extends AbstractApplicationArtifactI
                     reportConfiguration.setAllowSecondaryTenants(reportConfig.getAllowSecondaryTenants());
                     reportConfiguration.setFilter(InputWidgetUtils.newAppFilter(reportConfig.getFilter()));
                     reportConfiguration.setDeprecated(false);
-                    reportConfiguration.setConfigType(ConfigType.MUTABLE_INSTALL);
+                    reportConfiguration.setConfigType(ConfigType.STATIC);
                     populateChildList(reportConfig, reportConfiguration);
                     environment().create(reportConfiguration);
                 } else {
-                    if (ConfigUtils.isSetInstall(oldReportConfiguration)) {
-                        oldReportConfiguration.setType(reportConfig.getType());
-                        oldReportConfiguration.setSummaryDatasource(reportConfig.getSummaryDatasource());
-                        oldReportConfiguration.setSizeType(reportConfig.getSizeType());
-                        oldReportConfiguration.setDescription(description);
-                        oldReportConfiguration.setReportable(reportable);
-                        oldReportConfiguration.setTitle(title);
-                        oldReportConfiguration.setTemplate(reportConfig.getTemplate());
-                        oldReportConfiguration.setWidth(reportConfig.getWidth());
-                        oldReportConfiguration.setHeight(reportConfig.getHeight());
-                        oldReportConfiguration.setMarginBottom(reportConfig.getMarginBottom());
-                        oldReportConfiguration.setMarginLeft(reportConfig.getMarginLeft());
-                        oldReportConfiguration.setMarginRight(reportConfig.getMarginRight());
-                        oldReportConfiguration.setMarginTop(reportConfig.getMarginTop());
-                        oldReportConfiguration.setProcessor(reportConfig.getProcessor());
-                        oldReportConfiguration.setLetterGenerator(reportConfig.getLetterGenerator());
-                        oldReportConfiguration.setShowGrandFooter(reportConfig.getShowGrandFooter());
-                        oldReportConfiguration.setInvertGroupColors(reportConfig.getInvertGroupColors());
-                        oldReportConfiguration.setLandscape(reportConfig.getLandscape());
-                        oldReportConfiguration.setShadeOddRows(reportConfig.getShadeOddRows());
-                        oldReportConfiguration.setUnderlineRows(reportConfig.getUnderlineRows());
-                        oldReportConfiguration.setAllowSecondaryTenants(reportConfig.getAllowSecondaryTenants());
-                        oldReportConfiguration.setFilter(InputWidgetUtils.newAppFilter(reportConfig.getFilter()));
-                    }
-
+                    oldReportConfiguration.setType(reportConfig.getType());
+                    oldReportConfiguration.setSummaryDatasource(reportConfig.getSummaryDatasource());
+                    oldReportConfiguration.setSizeType(reportConfig.getSizeType());
+                    oldReportConfiguration.setDescription(description);
+                    oldReportConfiguration.setReportable(reportable);
+                    oldReportConfiguration.setTitle(title);
+                    oldReportConfiguration.setTemplate(reportConfig.getTemplate());
+                    oldReportConfiguration.setWidth(reportConfig.getWidth());
+                    oldReportConfiguration.setHeight(reportConfig.getHeight());
+                    oldReportConfiguration.setMarginBottom(reportConfig.getMarginBottom());
+                    oldReportConfiguration.setMarginLeft(reportConfig.getMarginLeft());
+                    oldReportConfiguration.setMarginRight(reportConfig.getMarginRight());
+                    oldReportConfiguration.setMarginTop(reportConfig.getMarginTop());
+                    oldReportConfiguration.setProcessor(reportConfig.getProcessor());
+                    oldReportConfiguration.setLetterGenerator(reportConfig.getLetterGenerator());
+                    oldReportConfiguration.setShowGrandFooter(reportConfig.getShowGrandFooter());
+                    oldReportConfiguration.setInvertGroupColors(reportConfig.getInvertGroupColors());
+                    oldReportConfiguration.setLandscape(reportConfig.getLandscape());
+                    oldReportConfiguration.setShadeOddRows(reportConfig.getShadeOddRows());
+                    oldReportConfiguration.setUnderlineRows(reportConfig.getUnderlineRows());
+                    oldReportConfiguration.setAllowSecondaryTenants(reportConfig.getAllowSecondaryTenants());
+                    oldReportConfiguration.setFilter(InputWidgetUtils.newAppFilter(reportConfig.getFilter()));
                     oldReportConfiguration.setDeprecated(false);
+                    oldReportConfiguration.setConfigType(ConfigType.STATIC);
                     populateChildList(reportConfig, oldReportConfiguration);
                     environment().updateByIdVersion(oldReportConfiguration);
                 }
 
-                registerPrivilege(applicationId, ApplicationPrivilegeConstants.APPLICATION_REPORTCONFIG_CATEGORY_CODE,
+                registerPrivilege(ConfigType.STATIC, applicationId,
+                        ApplicationPrivilegeConstants.APPLICATION_REPORTCONFIG_CATEGORY_CODE,
+                        PrivilegeNameUtils.getReportConfigPrivilegeName(
+                                ApplicationNameUtils.ensureLongNameReference(applicationName, reportConfig.getName())),
+                        description);
+            }
+        }
+    }
+
+    @Override
+    public void restoreCustomApplicationArtifacts(TaskMonitor taskMonitor, ApplicationRestore applicationRestore)
+            throws UnifyException {
+        final AppConfig applicationConfig = applicationRestore.getApplicationConfig();
+        final Long applicationId = applicationRestore.getApplicationId();
+        final String applicationName = applicationRestore.getApplicationConfig().getName();
+
+        logDebug(taskMonitor, "Executing report restore...");
+
+        // Reportable definitions
+        logDebug(taskMonitor, "Restoring reportable entities...");
+        if (applicationConfig.getEntitiesConfig() != null
+                && !DataUtils.isBlank(applicationConfig.getEntitiesConfig().getEntityList())) {
+            for (AppEntityConfig appEntityConfig : applicationConfig.getEntitiesConfig().getEntityList()) {
+                if (appEntityConfig.getReportable()) {
+                    String description = resolveApplicationMessage("$m{report.managedreport.description}",
+                            resolveApplicationMessage(appEntityConfig.getDescription()));
+                    String entity = ApplicationNameUtils.ensureLongNameReference(applicationName,
+                            appEntityConfig.getName());
+                    logDebug(taskMonitor, "Restoring managed reportable [{0}]...", description);
+                    ReportableDefinition reportableDefinition = new ReportableDefinition();
+                    reportableDefinition.setApplicationId(applicationId);
+                    reportableDefinition.setName(appEntityConfig.getName());
+                    reportableDefinition.setEntity(entity);
+                    reportableDefinition.setTitle(description);
+                    reportableDefinition.setDescription(description);
+                    reportableDefinition.setDeprecated(false);
+                    reportableDefinition.setConfigType(ConfigType.CUSTOM);
+                    populateChildList(appEntityConfig, reportableDefinition);
+                    environment().create(reportableDefinition);
+
+                    registerPrivilege(ConfigType.CUSTOM, applicationId,
+                            ApplicationPrivilegeConstants.APPLICATION_REPORTABLE_CATEGORY_CODE,
+                            PrivilegeNameUtils.getReportablePrivilegeName(ApplicationNameUtils
+                                    .ensureLongNameReference(applicationName, appEntityConfig.getName())),
+                            description);
+                }
+            }
+        }
+
+        // Configured reports
+        if (!DataUtils.isBlank(applicationRestore.getReportList())) {
+            for (ReportRestore reportRestore : applicationRestore.getReportList()) {
+                ReportConfig reportConfig = reportRestore.getReportConfig();
+                String description = resolveApplicationMessage(reportConfig.getDescription());
+                logDebug(taskMonitor, "Restoring configured report [{0}]...", description);
+                String title = reportConfig.getTitle();
+                if (title == null) {
+                    title = description;
+                }
+
+                String reportable = ApplicationNameUtils.ensureLongNameReference(applicationName,
+                        reportConfig.getReportable());
+
+                ReportConfiguration reportConfiguration = new ReportConfiguration();
+                reportConfiguration.setApplicationId(applicationId);
+                reportConfiguration.setType(reportConfig.getType());
+                reportConfiguration.setSummaryDatasource(reportConfig.getSummaryDatasource());
+                reportConfiguration.setSizeType(reportConfig.getSizeType());
+                reportConfiguration.setName(reportConfig.getName());
+                reportConfiguration.setDescription(description);
+                reportConfiguration.setReportable(reportable);
+                reportConfiguration.setTitle(title);
+                reportConfiguration.setTemplate(reportConfig.getTemplate());
+                reportConfiguration.setWidth(reportConfig.getWidth());
+                reportConfiguration.setHeight(reportConfig.getHeight());
+                reportConfiguration.setMarginBottom(reportConfig.getMarginBottom());
+                reportConfiguration.setMarginLeft(reportConfig.getMarginLeft());
+                reportConfiguration.setMarginRight(reportConfig.getMarginRight());
+                reportConfiguration.setMarginTop(reportConfig.getMarginTop());
+                reportConfiguration.setProcessor(reportConfig.getProcessor());
+                reportConfiguration.setLetterGenerator(reportConfig.getLetterGenerator());
+                reportConfiguration.setShowGrandFooter(reportConfig.getShowGrandFooter());
+                reportConfiguration.setInvertGroupColors(reportConfig.getInvertGroupColors());
+                reportConfiguration.setLandscape(reportConfig.getLandscape());
+                reportConfiguration.setShadeOddRows(reportConfig.getShadeOddRows());
+                reportConfiguration.setUnderlineRows(reportConfig.getUnderlineRows());
+                reportConfiguration.setAllowSecondaryTenants(reportConfig.getAllowSecondaryTenants());
+                reportConfiguration.setFilter(InputWidgetUtils.newAppFilter(reportConfig.getFilter()));
+                reportConfiguration.setDeprecated(false);
+                reportConfiguration.setConfigType(ConfigType.CUSTOM);
+                populateChildList(reportConfig, reportConfiguration);
+                environment().create(reportConfiguration);
+
+                registerPrivilege(ConfigType.CUSTOM, applicationId,
+                        ApplicationPrivilegeConstants.APPLICATION_REPORTCONFIG_CATEGORY_CODE,
                         PrivilegeNameUtils.getReportConfigPrivilegeName(
                                 ApplicationNameUtils.ensureLongNameReference(applicationName, reportConfig.getName())),
                         description);
@@ -239,6 +332,7 @@ public class ApplicationReportInstallerImpl extends AbstractApplicationArtifactI
         for (Long reportableId : reportableIdList) {
             ReportableDefinition srcReportableDefinition = environment().find(ReportableDefinition.class, reportableId);
             String oldDescription = srcReportableDefinition.getDescription();
+            srcReportableDefinition.setId(null);
             srcReportableDefinition.setApplicationId(destApplicationId);
             srcReportableDefinition.setName(ctx.nameSwap(srcReportableDefinition.getName()));
             srcReportableDefinition.setDescription(ctx.messageSwap(srcReportableDefinition.getDescription()));
@@ -250,8 +344,11 @@ public class ApplicationReportInstallerImpl extends AbstractApplicationArtifactI
                 reportableField.setDescription(ctx.messageSwap(reportableField.getDescription()));
             }
 
+            srcReportableDefinition.setDeprecated(false);
+            srcReportableDefinition.setConfigType(ConfigType.CUSTOM);
             environment().create(srcReportableDefinition);
-            registerPrivilege(destApplicationId, ApplicationPrivilegeConstants.APPLICATION_REPORTABLE_CATEGORY_CODE,
+            registerPrivilege(ConfigType.CUSTOM, destApplicationId,
+                    ApplicationPrivilegeConstants.APPLICATION_REPORTABLE_CATEGORY_CODE,
                     PrivilegeNameUtils.getReportablePrivilegeName(ApplicationNameUtils
                             .ensureLongNameReference(ctx.getDestApplicationName(), srcReportableDefinition.getName())),
                     srcReportableDefinition.getDescription());
@@ -266,6 +363,7 @@ public class ApplicationReportInstallerImpl extends AbstractApplicationArtifactI
         for (Long reportId : reportIdList) {
             ReportConfiguration srcReportConfiguration = environment().find(ReportConfiguration.class, reportId);
             String oldDescription = srcReportConfiguration.getDescription();
+            srcReportConfiguration.setId(null);
             srcReportConfiguration.setApplicationId(destApplicationId);
             srcReportConfiguration.setName(ctx.nameSwap(srcReportConfiguration.getName()));
             srcReportConfiguration.setDescription(ctx.messageSwap(srcReportConfiguration.getDescription()));
@@ -283,8 +381,11 @@ public class ApplicationReportInstallerImpl extends AbstractApplicationArtifactI
                 reportPlacement.setFieldName(ctx.fieldSwap(reportPlacement.getFieldName()));
             }
 
+            srcReportConfiguration.setDeprecated(false);
+            srcReportConfiguration.setConfigType(ConfigType.CUSTOM);
             environment().create(srcReportConfiguration);
-            registerPrivilege(destApplicationId, ApplicationPrivilegeConstants.APPLICATION_REPORTCONFIG_CATEGORY_CODE,
+            registerPrivilege(ConfigType.CUSTOM, destApplicationId,
+                    ApplicationPrivilegeConstants.APPLICATION_REPORTCONFIG_CATEGORY_CODE,
                     PrivilegeNameUtils.getReportConfigPrivilegeName(ApplicationNameUtils
                             .ensureLongNameReference(ctx.getDestApplicationName(), srcReportConfiguration.getName())),
                     srcReportConfiguration.getDescription());
@@ -304,47 +405,54 @@ public class ApplicationReportInstallerImpl extends AbstractApplicationArtifactI
     private void populateChildList(AppEntityConfig appEntityConfig, ReportableDefinition reportableDefinition)
             throws UnifyException {
         List<ReportableField> reportableFieldList = new ArrayList<ReportableField>();
-        Class<? extends Entity> entityClass = (Class<? extends Entity>) ReflectUtils
-                .classForName(appEntityConfig.getType());
+        Class<? extends Entity> entityClass = EntityTypeUtils.isReservedType(appEntityConfig.getType()) ? null
+                : (Class<? extends Entity>) ReflectUtils.classForName(appEntityConfig.getType());
         if (!DataUtils.isBlank(appEntityConfig.getEntityFieldList())) {
             for (EntityFieldConfig rfd : appEntityConfig.getEntityFieldList()) {
                 if (rfd.getReportable() && !EntityFieldDataType.SCRATCH.equals(rfd.getType())) {
-                    ReportableField reportableField = new ReportableField();
-                    String description = null;
-                    Field field = ReflectUtils.getField(entityClass, rfd.getName());
-                    Format fa = field.getAnnotation(Format.class);
-                    if (fa != null) {
-                        description = AnnotationUtils.getAnnotationString(fa.description());
-                        if (description != null) {
-                            description = resolveApplicationMessage(description);
+                    DataType dataType = rfd.getType().dataType();
+                    if (dataType != null) {
+                        ReportableField reportableField = new ReportableField();
+                        String description = null;
+                        Format fa = entityClass != null
+                                ? ReflectUtils.getField(entityClass, rfd.getName()).getAnnotation(Format.class)
+                                : null;
+                        if (fa != null) {
+                            description = AnnotationUtils.getAnnotationString(fa.description());
+                            if (description != null) {
+                                description = resolveApplicationMessage(description);
+                            }
+
+                            String formatter = AnnotationUtils.getAnnotationString(fa.formatter());
+                            reportableField.setFormatter(formatter);
+                            reportableField.setHorizontalAlign(fa.halign().name());
+                            reportableField.setWidth(fa.widthRatio());
+                        } else {
+                            if (Number.class.isAssignableFrom(dataType.javaClass())) {
+                                reportableField.setHorizontalAlign(HAlignType.RIGHT.name());
+                            }
+                            reportableField.setWidth(-1);
                         }
 
-                        String formatter = AnnotationUtils.getAnnotationString(fa.formatter());
-                        reportableField.setFormatter(formatter);
-                        reportableField.setHorizontalAlign(fa.halign().name());
-                        reportableField.setWidth(fa.widthRatio());
-                    } else {
-                        if (Number.class.isAssignableFrom(field.getType())) {
-                            reportableField.setHorizontalAlign(HAlignType.RIGHT.name());
+                        if (description == null) {
+                            description = NameUtils.describeName(rfd.getName());
                         }
-                        reportableField.setWidth(-1);
-                    }
 
-                    if (description == null) {
-                        description = NameUtils.describeName(rfd.getName());
+                        reportableField.setDescription(description);
+                        reportableField.setName(rfd.getName());
+                        reportableField.setParameterOnly(false);
+                        reportableField.setType(ConverterUtils.getWrapperClassName(dataType.javaClass()));
+                        reportableFieldList.add(reportableField);
                     }
-
-                    reportableField.setDescription(description);
-                    reportableField.setName(rfd.getName());
-                    reportableField.setParameterOnly(false);
-                    reportableField.setType(ConverterUtils.getWrapperClassName(field.getType()));
-                    reportableFieldList.add(reportableField);
                 }
             }
         }
 
         List<ReportableField> baseReportableFieldList = ReportEntityUtils.getEntityBaseTypeReportableFieldList(
-                messageResolver, ApplicationEntityUtils.getEntityBaseType((Class<? extends BaseEntity>) entityClass),
+                messageResolver,
+                entityClass != null
+                        ? ApplicationEntityUtils.getEntityBaseType((Class<? extends BaseEntity>) entityClass)
+                        : appEntityConfig.getBaseType(),
                 FormatterOptions.DEFAULT);
         reportableFieldList.addAll(baseReportableFieldList);
         reportableDefinition.setFieldList(reportableFieldList);

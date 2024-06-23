@@ -11,4 +11,9 @@
 	</applications>
 
 	<!-- System Parameters -->
+	<sysParameters>
+		<sysParameter code="STU-0001" defaultVal="100"
+			description="$m{studio.sysparam.snapshotdetailslimit}"
+			editor="!ui-integer precision:3" type="number" editable="true" />
+	</sysParameters>
 </module>

@@ -19,6 +19,7 @@ package com.flowcentraltech.flowcentral.common.business;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
+import com.flowcentraltech.flowcentral.common.constants.ConfigType;
 import com.tcdng.unify.core.UnifyException;
 
 /**
@@ -32,6 +33,8 @@ public interface ApplicationPrivilegeManager extends FlowCentralComponent {
     /**
      * Registers a privilege.
      * 
+     * @param configType
+     *                              the configuration type
      * @param applicationId
      *                              the application ID
      * @param privilegeCategoryCode
@@ -44,8 +47,8 @@ public interface ApplicationPrivilegeManager extends FlowCentralComponent {
      *                        if privilege category code is unknown. If an error
      *                        occurs
      */
-    void registerPrivilege(Long applicationId, String privilegeCategoryCode, String privilegeCode, String privilegeDesc)
-            throws UnifyException;
+    void registerPrivilege(ConfigType configType, Long applicationId, String privilegeCategoryCode,
+            String privilegeCode, String privilegeDesc) throws UnifyException;
 
     /**
      * Unregisters a privilege.
@@ -74,6 +77,34 @@ public interface ApplicationPrivilegeManager extends FlowCentralComponent {
      */
     void unregisterApplicationPrivileges(Long applicationId) throws UnifyException;
 
+    /**
+     * Unregisters all privileges associated with a custom application.
+     * 
+     * @param applicationId
+     *                      the application ID
+     * @throws UnifyException
+     *                        If an error occurs
+     */
+    void unregisterCustonApplicationPrivileges(Long applicationId) throws UnifyException;
+
+    /**
+     * Backs up application role privileges (Not expected to be persistent).
+     * 
+     * @param applicationId
+     *                      the application ID
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    void backupApplicationRolePrivileges(Long applicationId) throws UnifyException;
+
+    /**
+     * Restores application role privileges from prior backup which is cleared on completion.
+     * 
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    void restoreApplicationRolePrivileges() throws UnifyException;
+    
     /**
      * Finds role privileges.
      * 

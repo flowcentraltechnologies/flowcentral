@@ -34,46 +34,16 @@ public final class ConfigUtils {
     }
 
     public static void preCreate(ConfigEntity configEntity) throws UnifyException {
-        final ConfigType type = configEntity.getConfigType();
-        if (ConfigType.STATIC_INSTALL.equals(type)) {
-            configEntity.setConfigType(ConfigType.STATIC);
-        } else if (ConfigType.MUTABLE_INSTALL.equals(type)) {
-            configEntity.setConfigType(ConfigType.MUTABLE);
-        } else {
-            configEntity.setConfigType(ConfigType.CUSTOM);
+        if (configEntity.getConfigType() == null) {
+             configEntity.setConfigType(ConfigType.CUSTOM);
         }
     }
 
-    public static void preUpdate(ConfigEntity configEntity) throws UnifyException {
+    public static void preDelete(ConfigEntity configEntity) throws UnifyException {
         final ConfigType type = configEntity.getConfigType();
         if (ConfigType.STATIC.equals(type)) {
-            throw new UnifyOperationException("Attempt to alter static configuration record.");
+            throw new UnifyOperationException("Attempt to delete static configuration record.");
         }
-
-        if (ConfigType.STATIC_INSTALL.equals(type)) {
-            configEntity.setConfigType(ConfigType.STATIC);
-        } else if (ConfigType.MUTABLE_INSTALL.equals(type)) {
-            configEntity.setConfigType(ConfigType.MUTABLE);
-        } else if (ConfigType.MUTABLE.equals(type)) {
-            configEntity.setConfigType(ConfigType.CUSTOMIZED);
-        }
-    }
-    
-    public static boolean isSetInstall(ConfigEntity configEntity) {
-        final ConfigType type = configEntity.getConfigType();
-        if (type != null && type.isInitial()) {
-            if (ConfigType.STATIC.equals(type)) {
-                configEntity.setConfigType(ConfigType.STATIC_INSTALL);
-                return true;
-            }
-
-            if (ConfigType.MUTABLE.equals(type)) {
-                configEntity.setConfigType(ConfigType.MUTABLE_INSTALL);
-                return true;
-            }
-        }
-
-        return false;
     }
 
 }

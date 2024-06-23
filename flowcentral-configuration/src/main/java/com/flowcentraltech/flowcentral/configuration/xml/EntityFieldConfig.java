@@ -31,7 +31,7 @@ import com.tcdng.unify.core.util.xml.adapter.TextCaseXmlAdapter;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class EntityFieldConfig {
+public class EntityFieldConfig extends BaseConfig {
 
     private EntityFieldDataType type;
 

@@ -34,6 +34,7 @@ import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.criterion.Order;
 import com.tcdng.unify.core.criterion.Restriction;
 import com.tcdng.unify.core.data.BeanValueListStore;
+import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.database.Query;
 import com.tcdng.unify.web.ui.widget.data.ColorLegendInfo;
@@ -176,9 +177,11 @@ public class EntityTable extends AbstractTable<Restriction, Entity> {
         List<Entity> entitylist = (List<Entity>) au.environment().listAll(query);
         // Delayed on-table load
         if (isWithEntryPolicy()) {
-            getEntryPolicy().onEntryTableLoad(getParentReader(), new BeanValueListStore(entitylist), Collections.emptySet());
             // TODO Check if reload is required
-            entitylist = (List<Entity>) au.environment().listAll(query);
+            //entitylist = (List<Entity>) au.environment().listAll(query);
+            ValueStore listValueStore = new BeanValueListStore(entitylist);
+            getEntryPolicy().onEntryTableLoad(getParentReader(), listValueStore, Collections.emptySet());
+            getEntryPolicy().onResetOrder(getParentReader(), listValueStore);
         }
 
         return entitylist;

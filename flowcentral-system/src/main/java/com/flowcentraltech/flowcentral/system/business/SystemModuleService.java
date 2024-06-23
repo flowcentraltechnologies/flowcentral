@@ -16,6 +16,7 @@
 package com.flowcentraltech.flowcentral.system.business;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.flowcentraltech.flowcentral.common.business.FlowCentralService;
 import com.flowcentraltech.flowcentral.system.data.CredentialDef;
@@ -184,7 +185,7 @@ public interface SystemModuleService extends FlowCentralService {
      * @throws UnifyException
      *                        if an error occurs
      */
-    Long getModuleId(String moduleName) throws UnifyException;
+    Optional<Long> getModuleId(String moduleName) throws UnifyException;
 
     /**
      * Gets the module name for supplied ID.

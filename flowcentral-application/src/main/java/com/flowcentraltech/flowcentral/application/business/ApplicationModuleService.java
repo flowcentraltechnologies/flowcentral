@@ -1223,6 +1223,17 @@ public interface ApplicationModuleService extends FlowCentralService {
     List<Class<?>> getDelegateEntities(List<String> entityLongNames) throws UnifyException;
 
     /**
+     * Checks if application entity class is defined.
+     * 
+     * @param entityName
+     *                   the entity long name
+     * @return true if define otherwise false
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    boolean isEntityDef(String entityName) throws UnifyException;
+
+    /**
      * Gets a application entity class definition.
      * 
      * @param entityName

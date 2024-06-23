@@ -16,6 +16,7 @@
 package com.flowcentraltech.flowcentral.organization.entities;
 
 import com.flowcentraltech.flowcentral.application.entities.Application;
+import com.flowcentraltech.flowcentral.common.constants.ConfigType;
 import com.flowcentraltech.flowcentral.common.entities.BaseAuditEntity;
 import com.tcdng.unify.core.annotation.Column;
 import com.tcdng.unify.core.annotation.ForeignKey;
@@ -38,6 +39,9 @@ public class Privilege extends BaseAuditEntity {
     @ForeignKey(PrivilegeCategory.class)
     private Long privilegeCategoryId;
 
+    @Column(nullable = true)
+    private ConfigType configType;
+    
     @Column(name = "PRIVILEGE_CD", length = 64)
     private String code;
 
@@ -71,6 +75,14 @@ public class Privilege extends BaseAuditEntity {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public ConfigType getConfigType() {
+        return configType;
+    }
+
+    public void setConfigType(ConfigType configType) {
+        this.configType = configType;
     }
 
     public String getCode() {

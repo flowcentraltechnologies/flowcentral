@@ -226,6 +226,11 @@ public abstract class AbstractLoadingDetailsPageController<T extends AbstractLoa
         }
 
         @Override
+        public void onResetOrder(ValueStoreReader parentReader, ValueStore tableValueStore) throws UnifyException {
+            
+        }
+
+        @Override
         public void onEntryTableLoad(ValueStoreReader parentReader, ValueStore tableValueStore, Set<Integer> selected)
                 throws UnifyException {
         }

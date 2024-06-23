@@ -73,6 +73,11 @@ public class MessagingModuleServiceImpl extends AbstractFlowCentralService imple
             {
 
                 @Override
+                protected boolean pause() throws Exception {
+                    return isInSystemRestoreMode();
+                }
+
+                @Override
                 protected boolean stale(String key, MessagingConfigDef messagingConfigDef) throws Exception {
                     if (environment().value(long.class, "versionNo", new MessagingReadConfigQuery()
                             .id(messagingConfigDef.getId())) > messagingConfigDef.getVersion()) {
@@ -99,6 +104,11 @@ public class MessagingModuleServiceImpl extends AbstractFlowCentralService imple
             {
 
                 @Override
+                protected boolean pause() throws Exception {
+                    return isInSystemRestoreMode();
+                }
+
+                @Override
                 protected boolean stale(String key, MessagingConfigDef messagingConfigDef) throws Exception {
                     if (environment().value(long.class, "versionNo", new MessagingWriteConfigQuery()
                             .id(messagingConfigDef.getId())) > messagingConfigDef.getVersion()) {
@@ -116,11 +126,18 @@ public class MessagingModuleServiceImpl extends AbstractFlowCentralService imple
                     return new MessagingConfigDef(messagingWriteConfig.getId(), messagingWriteConfig.getVersionNo(),
                             messagingWriteConfig.getName(), messagingWriteConfig.getDescription(),
                             messagingWriteConfig.getEndpointConfig(), messagingWriteConfig.getDestination(),
-                            messagingWriteConfig.getProducer(), 1,
-                            messagingWriteConfig.getStatus());
+                            messagingWriteConfig.getProducer(), 1, messagingWriteConfig.getStatus());
                 }
             };
 
+    }
+    
+    @Override
+    public void clearDefinitionsCache() throws UnifyException {
+        logDebug("Clearing definitions cache...");
+        readMessagingConfigDefFactoryMap.clear();
+        writeMessagingConfigDefFactoryMap.clear();
+        logDebug("Definitions cache clearing successfully completed.");
     }
 
     @Override
@@ -266,7 +283,7 @@ public class MessagingModuleServiceImpl extends AbstractFlowCentralService imple
         protected final MessagingExecContext ctx;
 
         protected final String execId;
-        
+
         public AbstractExec(MessagingExecContext ctx) {
             this.ctx = ctx;
             this.execId = generateRandomUUID();

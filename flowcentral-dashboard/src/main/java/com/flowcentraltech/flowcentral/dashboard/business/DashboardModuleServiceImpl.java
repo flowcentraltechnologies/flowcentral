@@ -71,6 +71,11 @@ public class DashboardModuleServiceImpl extends AbstractFlowCentralService imple
         this.dashboardDefFactoryMap = new FactoryMap<String, DashboardDef>(true)
             {
                 @Override
+                protected boolean pause() throws Exception {
+                    return isInSystemRestoreMode();
+                }
+
+                @Override
                 protected boolean stale(String dashboardName, DashboardDef dashboardDef) throws Exception {
                     return environment().value(long.class, "versionNo",
                             new DashboardQuery().id(dashboardDef.getId())) > dashboardDef.getVersion();
@@ -93,7 +98,8 @@ public class DashboardModuleServiceImpl extends AbstractFlowCentralService imple
                     for (DashboardOption dashboardOption : dashboard.getOptionsList()) {
                         List<DashboardOptionCatBaseDef> catBaseList = new ArrayList<DashboardOptionCatBaseDef>();
                         for (DashboardOptionCategoryBase catBase : dashboardOption.getBaseList()) {
-                            List<String> dataSourceNames = Arrays.asList(StringUtils.commaSplit(catBase.getChartDataSource()));
+                            List<String> dataSourceNames = Arrays
+                                    .asList(StringUtils.commaSplit(catBase.getChartDataSource()));
                             catBaseList.add(new DashboardOptionCatBaseDef(dataSourceNames,
                                     InputWidgetUtils.getFilterDef(appletUtilities, null, catBase.getCategoryBase())));
                         }
@@ -118,6 +124,13 @@ public class DashboardModuleServiceImpl extends AbstractFlowCentralService imple
             };
 
     }
+    
+    @Override
+    public void clearDefinitionsCache() throws UnifyException {
+        logDebug("Clearing definitions cache...");
+        dashboardDefFactoryMap.clear();
+        logDebug("Definitions cache clearing successfully completed.");
+    }
 
     @Override
     public Dashboard findDashboard(Long dashboardId) throws UnifyException {
@@ -125,8 +138,9 @@ public class DashboardModuleServiceImpl extends AbstractFlowCentralService imple
     }
 
     @Override
-    public List<Long> findDashboardIdList(String applicationName) throws UnifyException {
-        return environment().valueList(Long.class, "id", new DashboardQuery().applicationName(applicationName));
+    public List<Long> findCustomDashboardIdList(String applicationName) throws UnifyException {
+        return environment().valueList(Long.class, "id",
+                new DashboardQuery().applicationName(applicationName).isCustom());
     }
 
     @Override
@@ -148,8 +162,7 @@ public class DashboardModuleServiceImpl extends AbstractFlowCentralService imple
     }
 
     @Override
-    public List<? extends Listable> getDashboardOptionChartDataSourceList(String entity)
-            throws UnifyException {
+    public List<? extends Listable> getDashboardOptionChartDataSourceList(String entity) throws UnifyException {
         return chartModuleService.getChartDataSourceListByEntity(entity);
     }
 

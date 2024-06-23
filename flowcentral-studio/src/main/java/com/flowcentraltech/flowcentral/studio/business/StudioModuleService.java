@@ -46,6 +46,17 @@ public interface StudioModuleService extends FlowCentralService {
     List<SnapshotDetails> findSnapshotDetails(Date fromDate, Date toDate) throws UnifyException;
 
     /**
+     * Gets a snapshot.
+     * 
+     * @param snapshotDetailsId
+     *                          the snapshot details ID
+     * @return the snapshot
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    byte[] getSnapshot(Long snapshotDetailsId) throws UnifyException;
+    
+    /**
      * Gets a studio applet definition.
      * 
      * @param appletName

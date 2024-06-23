@@ -89,10 +89,4 @@ public class SysParamConfig extends BaseCodeConfig {
         this.editable = editable;
     }
 
-    @Override
-    public String toString() {
-        return "SysParamConfig [type=" + type + ", editor=" + editor + ", defaultVal=" + defaultVal + ", control="
-                + control + ", editable=" + editable + "]";
-    }
-
 }

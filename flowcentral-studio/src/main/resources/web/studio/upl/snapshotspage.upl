@@ -35,7 +35,7 @@
 	
 // Actions
 !ui-post:searchAct path:$n{/search} components:$c{searchForm}
-!ui-post:restoreAct path:$n{/restore}
+!ui-post:restoreAct path:$n{/restore} confirm:$m{studio.snapshotspage.confirmrestore}
 !ui-post:downloadAct path:$n{/download}
 
 	

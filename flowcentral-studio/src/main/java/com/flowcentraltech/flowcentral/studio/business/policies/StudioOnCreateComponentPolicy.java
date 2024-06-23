@@ -20,6 +20,7 @@ import com.flowcentraltech.flowcentral.application.entities.BaseApplicationEntit
 import com.flowcentraltech.flowcentral.application.util.ApplicationPageUtils;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionContext;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
+import com.flowcentraltech.flowcentral.common.constants.ConfigType;
 import com.flowcentraltech.flowcentral.studio.constants.StudioAppComponentType;
 import com.flowcentraltech.flowcentral.studio.constants.StudioSessionAttributeConstants;
 import com.flowcentraltech.flowcentral.studio.util.StudioNameUtils;
@@ -54,7 +55,7 @@ public class StudioOnCreateComponentPolicy extends AbstractStudioAppletActionPol
         StudioAppComponentType type = StudioAppComponentType
                 .fromEntityClass((Class<? extends BaseApplicationEntity>) ctx.getInst().getClass());
         // Register instance as privilege based on type
-        registerPrivilege(applicationName, applicationId, type, (BaseApplicationEntity) ctx.getInst());
+        registerPrivilege(ConfigType.CUSTOM, applicationName, applicationId, type, (BaseApplicationEntity) ctx.getInst());
 
         // Set result path
         String appletName = StudioNameUtils.getStudioAppletName(applicationName, type, (Long) ctx.getInst().getId());

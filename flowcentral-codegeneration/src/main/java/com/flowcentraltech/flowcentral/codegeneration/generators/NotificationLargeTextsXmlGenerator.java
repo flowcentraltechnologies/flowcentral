@@ -57,7 +57,7 @@ public class NotificationLargeTextsXmlGenerator extends AbstractResourcesArtifac
     protected void doGenerate(ExtensionModuleStaticFileBuilderContext ctx, String applicationName, ZipOutputStream zos)
             throws UnifyException {
         // Large texts
-        List<Long> notifLargeTextIdList = notificationModuleService.findNotificationLargeTextIdList(applicationName);
+        List<Long> notifLargeTextIdList = notificationModuleService.findCustomNotificationLargeTextIdList(applicationName);
         if (!DataUtils.isBlank(notifLargeTextIdList)) {
             final String lowerCaseApplicationName = applicationName.toLowerCase();
 

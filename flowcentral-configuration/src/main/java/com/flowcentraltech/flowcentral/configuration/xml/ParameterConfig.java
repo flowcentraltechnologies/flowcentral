@@ -27,7 +27,7 @@ import com.tcdng.unify.core.util.xml.adapter.DataTypeXmlAdapter;
  * @author FlowCentral Technologies Limited
  * @version 1.0
  */
-public class ParameterConfig {
+public class ParameterConfig extends BaseConfig {
 
     private String name;
 

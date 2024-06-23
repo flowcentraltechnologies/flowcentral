@@ -28,4 +28,18 @@ public interface StudioSnapshotTaskConstants {
 
     String STUDIO_SNAPSHOT_TYPE = "snapshotType";
 
+    String STUDIO_SNAPSHOT_NAME = "snapshotName";
+
+    String STUDIO_SNAPSHOT_MESSAGE = "message";
+
+    String STUDIO_RESTORE_SNAPSHOT_TASK_NAME = "studio.restoresnapshot.task";
+
+    String STUDIO_SNAPSHOT_DETAILS_ID = "snapshotDetailsId";
+
+    String STUDIO_UPLOAD_SNAPSHOT_TASK_NAME = "studio.uploadsnapshot.task";
+
+    String STUDIO_SNAPSHOT_CONFIG = "snapshotConfig";
+
+    String STUDIO_SNAPSHOT_UPLOAD_FILE = "snapshotUploadFile";
+
 }

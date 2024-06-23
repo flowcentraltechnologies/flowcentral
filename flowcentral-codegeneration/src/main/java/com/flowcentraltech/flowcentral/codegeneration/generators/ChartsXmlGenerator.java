@@ -40,7 +40,7 @@ import com.tcdng.unify.core.util.DataUtils;
  * @since 1.0
  */
 @Component("charts-xml-generator")
-public class ChartsXmlGenerator extends AbstractStaticArtifactGenerator {
+public class ChartsXmlGenerator extends AbstractStaticModuleArtifactGenerator {
 
     @Configurable
     private ChartModuleService chartModuleService;
@@ -48,7 +48,7 @@ public class ChartsXmlGenerator extends AbstractStaticArtifactGenerator {
     @Override
     protected void doGenerate(ExtensionModuleStaticFileBuilderContext ctx, String applicationName, ZipOutputStream out)
             throws UnifyException {
-        List<Long> chartIdList = chartModuleService.findChartIdList(applicationName);
+        List<Long> chartIdList = chartModuleService.findCustomChartIdList(applicationName);
         if (!DataUtils.isBlank(chartIdList)) {
             final String lowerCaseApplicationName = applicationName.toLowerCase();
 
@@ -91,7 +91,7 @@ public class ChartsXmlGenerator extends AbstractStaticArtifactGenerator {
             ctx.setChartsConfig(appChartsConfig);
         }
 
-        List<Long> chartDataSourceIdList = chartModuleService.findChartDataSourceIdList(applicationName);
+        List<Long> chartDataSourceIdList = chartModuleService.findCustomChartDataSourceIdList(applicationName);
         if (!DataUtils.isBlank(chartDataSourceIdList)) {
             final String lowerCaseApplicationName = applicationName.toLowerCase();
 

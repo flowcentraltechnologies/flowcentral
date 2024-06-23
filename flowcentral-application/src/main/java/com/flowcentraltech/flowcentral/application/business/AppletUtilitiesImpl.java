@@ -740,6 +740,11 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
     }
 
     @Override
+    public boolean isEntityDef(String entityName) throws UnifyException {
+        return applicationModuleService.isEntityDef(entityName);
+    }
+
+    @Override
     public EntityDef getEntityDef(String entityName) throws UnifyException {
         return applicationModuleService.getEntityDef(entityName);
     }
@@ -1614,7 +1619,8 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
             return entityFieldDef.getFieldName();
         }
 
-        return entityDef.getMappedFieldDefByEntity(this, entity).getFieldName();
+        entityFieldDef = entityDef.getMappedFieldDefByEntity(this, entity);
+        return entityFieldDef != null ? entityFieldDef.getFieldName() : null;
     }
 
     @Override
@@ -2763,7 +2769,9 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
         }
 
         public boolean isProviderPresent(Class<? extends Entity> destEntityClass) throws UnifyException {
-            return getProvidersbyType().containsKey(destEntityClass.getName());
+            MappedEntityProvider<? extends BaseMappedEntityProviderContext> provider = getProvidersbyType()
+                    .get(destEntityClass.getName());
+            return provider != null && provider.isEntitiesDef();
         }
 
         public MappedEntityProvider<? extends BaseMappedEntityProviderContext> getProvider(

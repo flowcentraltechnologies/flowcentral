@@ -17,7 +17,6 @@
 package com.flowcentraltech.flowcentral.codegeneration.generators;
 
 import java.io.IOException;
-import java.text.MessageFormat;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -59,52 +58,37 @@ public abstract class AbstractStaticArtifactGenerator extends AbstractFlowCentra
     }
 
     @Override
-    public final void generate(ExtensionModuleStaticFileBuilderContext ctx, String entityName, ZipOutputStream zos)
-            throws UnifyException {
-        if (checkGeneration(ctx, entityName)) {
-            if (ctx.isSnapshotMode()) {
-                if (!StringUtils.isBlank(snapshotZipDir)) {
-                    if (snapshotZipDir.indexOf('{') >= 0) {
-                        String packageFolder = ctx.getBasePackage().replaceAll("\\.", "/");
-                        String lowerEntityName = entityName.toLowerCase();
-                        snapshotZipDir = MessageFormat.format(snapshotZipDir, packageFolder, lowerEntityName);
-                    }
-
-                    if (ctx.addZipDir(snapshotZipDir)) {
-                        try {
-                            zos.putNextEntry(new ZipEntry(snapshotZipDir));
-                        } catch (IOException e) {
-                            throwOperationErrorException(e);
-                        }
-                    }
-                }
-            } else {
-                if (!StringUtils.isBlank(zipDir)) {
-                    if (zipDir.indexOf('{') >= 0) {
-                        String packageFolder = ctx.getBasePackage().replaceAll("\\.", "/");
-                        String lowerEntityName = entityName.toLowerCase();
-                        zipDir = MessageFormat.format(zipDir, packageFolder, lowerEntityName);
-                    }
-
-                    if (ctx.addZipDir(zipDir)) {
-                        try {
-                            zos.putNextEntry(new ZipEntry(zipDir));
-                        } catch (IOException e) {
-                            throwOperationErrorException(e);
-                        }
+    public final void generate(ExtensionStaticFileBuilderContext ctx, ZipOutputStream zos) throws UnifyException {
+        if (ctx.isSnapshotMode()) {
+            if (!StringUtils.isBlank(snapshotZipDir)) {
+                if (ctx.addZipDir(snapshotZipDir)) {
+                    try {
+                        zos.putNextEntry(new ZipEntry(snapshotZipDir));
+                    } catch (IOException e) {
+                        throwOperationErrorException(e);
                     }
                 }
             }
-
-            doGenerate(ctx, entityName, zos);
+        } else {
+            if (!StringUtils.isBlank(zipDir)) {
+                if (ctx.addZipDir(zipDir)) {
+                    try {
+                        zos.putNextEntry(new ZipEntry(zipDir));
+                    } catch (IOException e) {
+                        throwOperationErrorException(e);
+                    }
+                }
+            }
         }
+
+        doGenerate(ctx, zos);
     }
 
     protected AppletUtilities au() {
         return appletUtilities;
     }
 
-    protected abstract void doGenerate(ExtensionModuleStaticFileBuilderContext ctx, String name, ZipOutputStream zos)
+    protected abstract void doGenerate(ExtensionStaticFileBuilderContext ctx, ZipOutputStream zos)
             throws UnifyException;
 
     @Override
@@ -117,15 +101,15 @@ public abstract class AbstractStaticArtifactGenerator extends AbstractFlowCentra
 
     }
 
-    protected boolean checkGeneration(ExtensionModuleStaticFileBuilderContext ctx, String entityName)
-            throws UnifyException {
+    protected boolean checkGeneration(ExtensionStaticFileBuilderContext ctx, String entityName) throws UnifyException {
         return true;
     }
 
-    protected void openEntry(ExtensionModuleStaticFileBuilderContext ctx, String filename, ZipOutputStream zos)
+    protected void openEntry(ExtensionStaticFileBuilderContext ctx, String filename, ZipOutputStream zos)
             throws UnifyException {
         try {
-            zos.putNextEntry(new ZipEntry((ctx.isSnapshotMode() ? snapshotZipDir : zipDir) + filename));
+            final String dir = ctx.isSnapshotMode() ? snapshotZipDir : zipDir;
+            zos.putNextEntry(new ZipEntry(StringUtils.isBlank(dir) ? filename : dir + filename));
         } catch (IOException e) {
             throwOperationErrorException(e);
         }

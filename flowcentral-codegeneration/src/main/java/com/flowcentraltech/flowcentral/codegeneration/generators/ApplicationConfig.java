@@ -31,16 +31,18 @@ import com.flowcentraltech.flowcentral.configuration.xml.AppWorkflowsConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.WfChannelsConfig;
 
 /**
- * Static application configuration.
+ * Application configuration.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class StaticApplicationConfig {
+public class ApplicationConfig {
 
-    private String applicationName;
+    private final String applicationName;
     
-    private String applicationDesc;
+    private final String applicationDesc;
+    
+    private final boolean custom;
 
     private AppChartsConfig chartsConfig;
 
@@ -64,9 +66,10 @@ public class StaticApplicationConfig {
     
     private long gapCounter;
 
-    public StaticApplicationConfig(String applicationName, String applicationDesc) {
+    public ApplicationConfig(String applicationName, String applicationDesc, boolean custom) {
         this.applicationName = applicationName;
         this.applicationDesc = applicationDesc;
+        this.custom = custom;
         this.messages = new EnumMap<StaticMessageCategoryType, Map<String, String>>(StaticMessageCategoryType.class);
     }
 
@@ -76,6 +79,10 @@ public class StaticApplicationConfig {
 
     public String getApplicationDesc() {
         return applicationDesc;
+    }
+
+    public boolean isCustom() {
+        return custom;
     }
 
     public AppChartsConfig getChartsConfig() {

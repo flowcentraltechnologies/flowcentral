@@ -33,6 +33,8 @@ import com.tcdng.unify.core.database.Query;
 public interface MappedEntityProvider<T extends BaseMappedEntityProviderContext>
         extends FlowCentralComponent, MappedEntityRepository {
 
+    boolean isEntitiesDef() throws UnifyException;
+    
     String destEntity();
 
     String srcEntity();

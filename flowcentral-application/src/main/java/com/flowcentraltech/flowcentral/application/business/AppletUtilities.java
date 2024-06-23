@@ -727,6 +727,17 @@ public interface AppletUtilities extends FlowCentralComponent {
     EntityClassDef getEntityClassDef(String entityName) throws UnifyException;
 
     /**
+     * Checks if application entity class is defined.
+     * 
+     * @param entityName
+     *                   the entity long name
+     * @return true if define otherwise false
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    boolean isEntityDef(String entityName) throws UnifyException;
+
+    /**
      * Gets a application entity definition.
      * 
      * @param entityName

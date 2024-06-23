@@ -17,13 +17,15 @@ package com.flowcentraltech.flowcentral.delegate.business;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
+import com.flowcentraltech.flowcentral.application.business.AbstractEnvironmentDelegate;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleNameConstants;
 import com.flowcentraltech.flowcentral.connect.common.data.BaseResponse;
 import com.flowcentraltech.flowcentral.connect.common.data.DataSourceRequest;
+import com.flowcentraltech.flowcentral.connect.common.data.DelegateEntityListingDTO;
 import com.flowcentraltech.flowcentral.connect.common.data.EntityDTO;
-import com.flowcentraltech.flowcentral.delegate.data.DelegateEntityListingDTO;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.criterion.Update;
@@ -190,7 +192,8 @@ public class TableLoadingEnvironmentDelegate extends AbstractEnvironmentDelegate
     }
 
     @Override
-    public <T, U extends Entity> T valueOptional(Class<T> fieldClass, String fieldName, Query<U> query) throws UnifyException {
+    public <T, U extends Entity> Optional<T> valueOptional(Class<T> fieldClass, String fieldName, Query<U> query)
+            throws UnifyException {
         throw new UnsupportedOperationException();
     }
 

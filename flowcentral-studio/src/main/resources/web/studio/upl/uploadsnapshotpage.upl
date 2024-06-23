@@ -1,0 +1,53 @@
+// UPL template for upload snapshot page.
+// Copyright 2021-2024 FlowCentral Technologies Limited.
+// 
+// Licensed under the Apache License, Version 2.0 (the "License"); you may not
+// use this file except in compliance with the License. You may obtain a copy of
+// the License at
+// 
+// http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+// WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+// License for the specific language governing permissions and limitations under
+// the License.
+
+!ui-page caption:$m{studio.uploadsnapshotpage.title} components:$c{basePanel}
+
+// Base panel
+!ui-panel:basePanel layout:$d{!ui-vertical style:$s{width:100%;}}
+	components:$c{headerBar uploadSnapshotPanel}
+
+// Header
+!ui-panel:headerBar layout:$d{!ui-horizontal style:$s{width:100%;} cellType:bottom}
+	components:$c{uploadSnapshotLabel} 
+	
+!ui-label:uploadSnapshotLabel styleClass:$e{fc-largelabel}
+	caption:$m{studio.uploadsnapshotpage.header.title}
+
+// Upload snapshot panel
+!ui-panel:uploadSnapshotPanel styleClass:$e{fc-licenseoptions}
+	components:$c{uploadSnapshotBodyPanel}
+!ui-panel:uploadSnapshotBodyPanel
+	layout:$d{!ui-vertical style:$s{width:100%;}}
+	components:$c{formPanel uploadSnapshotBtn}
+	
+// Form
+!ui-formpanel:formPanel
+	layout:$d{!ui-vertical style:$s{table-layout:fixed;}}
+    formCaptionSuffix:$s{:} formColumns:1
+	formSection:$d{!ui-section components:$c{snapshotTitle message frmFileSelect}}
+!ui-text:snapshotTitle caption:$m{studio.uploadsnapshotpage.name} binding:snapshotTitle required:true
+ 	size:52 disabled:true
+!ui-textarea:message caption:$m{studio.uploadsnapshotpage.message} binding:message required:true
+	rows:8 columns:52 focus:true
+!ui-fileupload:frmFileSelect caption:$m{studio.uploadsnapshotpage.uploadfile} required:true
+	binding:snapshotFile selectOnly:true required:true style:$s{width:380px;} focus:true
+
+!ui-button:uploadSnapshotBtn styleClass:$e{fc-bluebutton} caption:$m{button.uploadsnapshot}
+	eventHandler:$d{!ui-event event:onclick action:$c{uploadSnapshotAct}}
+	
+// Actions
+!ui-post:uploadSnapshotAct path:$n{/uploadSnapshot} components:$c{uploadSnapshotBodyPanel}
+	

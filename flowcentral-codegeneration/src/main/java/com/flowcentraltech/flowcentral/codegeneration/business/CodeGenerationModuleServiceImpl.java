@@ -45,14 +45,15 @@ import com.flowcentraltech.flowcentral.codegeneration.data.CodeGenerationItem;
 import com.flowcentraltech.flowcentral.codegeneration.data.DynamicModuleInfo;
 import com.flowcentraltech.flowcentral.codegeneration.data.DynamicModuleInfo.ApplicationInfo;
 import com.flowcentraltech.flowcentral.codegeneration.data.Snapshot;
+import com.flowcentraltech.flowcentral.codegeneration.data.SnapshotMeta;
 import com.flowcentraltech.flowcentral.codegeneration.generators.ExtensionModuleStaticFileBuilderContext;
 import com.flowcentraltech.flowcentral.codegeneration.generators.ExtensionStaticFileBuilderContext;
 import com.flowcentraltech.flowcentral.codegeneration.generators.StaticArtifactGenerator;
+import com.flowcentraltech.flowcentral.codegeneration.generators.StaticModuleArtifactGenerator;
 import com.flowcentraltech.flowcentral.codegeneration.util.CodeGenerationUtils;
 import com.flowcentraltech.flowcentral.common.business.AbstractFlowCentralService;
 import com.flowcentraltech.flowcentral.common.business.CodeGenerationProvider;
 import com.flowcentraltech.flowcentral.common.constants.ComponentType;
-import com.flowcentraltech.flowcentral.common.constants.ConfigType;
 import com.flowcentraltech.flowcentral.configuration.data.ModuleInstall;
 import com.flowcentraltech.flowcentral.dashboard.entities.Dashboard;
 import com.flowcentraltech.flowcentral.notification.entities.NotificationTemplate;
@@ -111,6 +112,11 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
     private ApplicationModuleService applicationModuleService;
 
     @Override
+    public void clearDefinitionsCache() throws UnifyException {
+
+    }
+
+    @Override
     public List<String> getCodeGenerationApplets() throws UnifyException {
         return codegenerationAppletList;
     }
@@ -132,7 +138,7 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
         ZipOutputStream zos = new ZipOutputStream(baos);
         try {
             ExtensionStaticFileBuilderContext mainCtx = new ExtensionStaticFileBuilderContext(
-                    codeGenerationItem.getBasePackage());
+                    codeGenerationItem.getBasePackage(), false);
             List<String> moduleList = systemModuleService.getAllModuleNames();
             for (final String moduleName : moduleList) {
                 addTaskMessage(taskMonitor, "Generating code for extension module [{0}]", moduleName);
@@ -146,17 +152,17 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
 
                 // Generate applications
                 List<Application> applicationList = environment()
-                        .listAll(new ApplicationQuery().moduleName(moduleName).configType(ConfigType.CUSTOM)); // TODO
-                                                                                                               // Include
-                                                                                                               // CUSTOMIZED
+                        .listAll(new ApplicationQuery().moduleName(moduleName).isDevelopable());
                 if (!applicationList.isEmpty()) {
                     for (Application application : applicationList) {
-                        moduleCtx.nextApplication(application.getName(), application.getDescription());
+                        moduleCtx.nextApplication(application.getName(), application.getDescription(),
+                                application.getConfigType().isCustom());
                         addTaskMessage(taskMonitor, "Generating artifacts for application [{0}]...",
                                 application.getDescription());
                         for (String generatorName : APPLICATION_ARTIFACT_GENERATORS) {
                             addTaskMessage(taskMonitor, "Executing artifact generator [{0}]...", generatorName);
-                            StaticArtifactGenerator generator = (StaticArtifactGenerator) getComponent(generatorName);
+                            StaticModuleArtifactGenerator generator = (StaticModuleArtifactGenerator) getComponent(
+                                    generatorName);
                             generator.generate(moduleCtx, application.getName(), zos);
                         }
                     }
@@ -165,7 +171,7 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
                     addTaskMessage(taskMonitor, "Generating module configuration for module [{0}]...", moduleName);
                     addTaskMessage(taskMonitor, "Executing artifact generator [{0}]...",
                             "extension-module-xml-generator");
-                    StaticArtifactGenerator generator = (StaticArtifactGenerator) getComponent(
+                    StaticModuleArtifactGenerator generator = (StaticModuleArtifactGenerator) getComponent(
                             "extension-module-xml-generator");
                     generator.generate(moduleCtx, moduleName, zos);
 
@@ -173,7 +179,7 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
                     addTaskMessage(taskMonitor, "Generating static settings for module [{0}]...", moduleName);
                     addTaskMessage(taskMonitor, "Executing artifact generator [{0}]...",
                             "extension-module-static-settings-java-generator");
-                    generator = (StaticArtifactGenerator) getComponent(
+                    generator = (StaticModuleArtifactGenerator) getComponent(
                             "extension-module-static-settings-java-generator");
                     generator.generate(moduleCtx, moduleName, zos);
 
@@ -181,14 +187,15 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
                     addTaskMessage(taskMonitor, "Generating entity classes for module [{0}]...", moduleName);
                     addTaskMessage(taskMonitor, "Executing artifact generator [{0}]...",
                             "extension-module-entities-java-generator");
-                    generator = (StaticArtifactGenerator) getComponent("extension-module-entities-java-generator");
+                    generator = (StaticModuleArtifactGenerator) getComponent(
+                            "extension-module-entities-java-generator");
                     generator.generate(moduleCtx, moduleName, zos);
 
                     // Generate messages
                     addTaskMessage(taskMonitor, "Generating messages for module [{0}]...", moduleName);
                     addTaskMessage(taskMonitor, "Executing artifact generator [{0}]...",
                             "extension-module-messages-generator");
-                    generator = (StaticArtifactGenerator) getComponent("extension-module-messages-generator");
+                    generator = (StaticModuleArtifactGenerator) getComponent("extension-module-messages-generator");
                     generator.generate(moduleCtx, moduleName, zos);
                 }
             }
@@ -214,24 +221,26 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
             limit = TaskExecLimit.ALLOW_MULTIPLE, schedulable = false)
     public int generateStudioSnapshotTask(TaskMonitor taskMonitor, CodeGenerationItem codeGenerationItem)
             throws UnifyException {
-        Snapshot snapshot = generateSnapshot(taskMonitor, codeGenerationItem.getBasePackage());
+        Snapshot snapshot = generateSnapshot(taskMonitor, codeGenerationItem.getSnapshotMeta(),
+                codeGenerationItem.getBasePackage());
         codeGenerationItem.setFilename(snapshot.getFilename());
         codeGenerationItem.setData(snapshot.getData());
         return 0;
     }
 
     @Override
-    public Snapshot generateSnapshot(String basePackage) throws UnifyException {
-        return generateSnapshot(null, basePackage);
+    public Snapshot generateSnapshot(SnapshotMeta meta, String basePackage) throws UnifyException {
+        return generateSnapshot(null, meta, basePackage);
     }
 
     @Override
-    public Snapshot generateSnapshot(TaskMonitor taskMonitor, String basePackage) throws UnifyException {
+    public Snapshot generateSnapshot(TaskMonitor taskMonitor, SnapshotMeta meta, String basePackage)
+            throws UnifyException {
         Date now = environment().getNow();
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ZipOutputStream zos = new ZipOutputStream(baos);
         try {
-            ExtensionStaticFileBuilderContext mainCtx = new ExtensionStaticFileBuilderContext(basePackage);
+            ExtensionStaticFileBuilderContext mainCtx = new ExtensionStaticFileBuilderContext(meta, basePackage, true);
             List<String> moduleList = systemModuleService.getAllModuleNames();
             for (final String moduleName : moduleList) {
                 addTaskMessage(taskMonitor, "Generating code for extension module [{0}]", moduleName);
@@ -245,15 +254,17 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
 
                 // Generate applications
                 List<Application> applicationList = environment()
-                        .listAll(new ApplicationQuery().moduleName(moduleName).configType(ConfigType.CUSTOM));
+                        .listAll(new ApplicationQuery().moduleName(moduleName).isDevelopable());
                 if (!applicationList.isEmpty()) {
                     for (Application application : applicationList) {
-                        moduleCtx.nextApplication(application.getName(), application.getDescription());
+                        moduleCtx.nextApplication(application.getName(), application.getDescription(),
+                                application.getConfigType().isCustom());
                         addTaskMessage(taskMonitor, "Generating artifacts for application [{0}]...",
                                 application.getDescription());
                         for (String generatorName : APPLICATION_ARTIFACT_GENERATORS) {
                             addTaskMessage(taskMonitor, "Executing artifact generator [{0}]...", generatorName);
-                            StaticArtifactGenerator generator = (StaticArtifactGenerator) getComponent(generatorName);
+                            StaticModuleArtifactGenerator generator = (StaticModuleArtifactGenerator) getComponent(
+                                    generatorName);
                             generator.generate(moduleCtx, application.getName(), zos);
                         }
                     }
@@ -262,7 +273,7 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
                     addTaskMessage(taskMonitor, "Generating module configuration for module [{0}]...", moduleName);
                     addTaskMessage(taskMonitor, "Executing artifact generator [{0}]...",
                             "extension-module-xml-generator");
-                    StaticArtifactGenerator generator = (StaticArtifactGenerator) getComponent(
+                    StaticModuleArtifactGenerator generator = (StaticModuleArtifactGenerator) getComponent(
                             "extension-module-xml-generator");
                     generator.generate(moduleCtx, moduleName, zos);
 
@@ -270,10 +281,17 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
                     addTaskMessage(taskMonitor, "Generating messages for module [{0}]...", moduleName);
                     addTaskMessage(taskMonitor, "Executing artifact generator [{0}]...",
                             "extension-module-messages-generator");
-                    generator = (StaticArtifactGenerator) getComponent("extension-module-messages-generator");
+                    generator = (StaticModuleArtifactGenerator) getComponent("extension-module-messages-generator");
                     generator.generate(moduleCtx, moduleName, zos);
                 }
             }
+
+            // Generate snapshot meta
+            addTaskMessage(taskMonitor, "Generating snapshot meta XML...");
+            addTaskMessage(taskMonitor, "Executing artifact generator [{0}]...", "extension-snapshot-xml-generator");
+            StaticArtifactGenerator generator = (StaticArtifactGenerator) getComponent(
+                    "extension-snapshot-xml-generator");
+            generator.generate(mainCtx, zos);
 
             SimpleDateFormat smf = new SimpleDateFormat("yyyyMMdd_HHmmss");
             final String filenamePrefix = StringUtils.flatten(getApplicationCode().toLowerCase());
@@ -304,7 +322,7 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
         ZipOutputStream zos = new ZipOutputStream(baos);
         try {
             ExtensionStaticFileBuilderContext mainCtx = new ExtensionStaticFileBuilderContext(
-                    codeGenerationItem.getBasePackage());
+                    codeGenerationItem.getBasePackage(), false);
             List<String> moduleList = systemModuleService.getAllModuleNames();
             moduleList.removeAll(EXCLUDED_UTILITIES_MODULES);
             for (final String moduleName : moduleList) {
@@ -337,7 +355,7 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
                             moduleName);
                     addTaskMessage(taskMonitor, "Executing artifact generator [{0}]...",
                             "extension-module-componentnames-java-generator");
-                    StaticArtifactGenerator generator = (StaticArtifactGenerator) getComponent(
+                    StaticModuleArtifactGenerator generator = (StaticModuleArtifactGenerator) getComponent(
                             "extension-module-componentnames-java-generator");
                     generator.generate(moduleCtx, moduleName, zos);
 
@@ -345,7 +363,7 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
                     addTaskMessage(taskMonitor, "Generating entity wrapper classes for module [{0}]...", moduleName);
                     addTaskMessage(taskMonitor, "Executing artifact generator [{0}]...",
                             "extension-module-entitywrappers-java-generator");
-                    generator = (StaticArtifactGenerator) getComponent(
+                    generator = (StaticModuleArtifactGenerator) getComponent(
                             "extension-module-entitywrappers-java-generator");
                     generator.generate(moduleCtx, moduleName, zos);
 
@@ -353,7 +371,7 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
                     addTaskMessage(taskMonitor, "Generating template wrapper classes for module [{0}]...", moduleName);
                     addTaskMessage(taskMonitor, "Executing artifact generator [{0}]...",
                             "extension-module-templatewrappers-java-generator");
-                    generator = (StaticArtifactGenerator) getComponent(
+                    generator = (StaticModuleArtifactGenerator) getComponent(
                             "extension-module-templatewrappers-java-generator");
                     generator.generate(moduleCtx, moduleName, zos);
 
@@ -362,7 +380,7 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
                             moduleName);
                     addTaskMessage(taskMonitor, "Executing artifact generator [{0}]...",
                             "extension-module-largetextwrappers-java-generator");
-                    generator = (StaticArtifactGenerator) getComponent(
+                    generator = (StaticModuleArtifactGenerator) getComponent(
                             "extension-module-largetextwrappers-java-generator");
                     generator.generate(moduleCtx, moduleName, zos);
                 }

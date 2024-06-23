@@ -16,6 +16,7 @@
 
 package com.flowcentraltech.flowcentral.workflow.entities;
 
+import com.flowcentraltech.flowcentral.common.constants.ConfigType;
 import com.flowcentraltech.flowcentral.common.constants.WfItemVersionType;
 import com.flowcentraltech.flowcentral.common.entities.BaseAuditEntity;
 import com.flowcentraltech.flowcentral.configuration.constants.WorkflowStepType;
@@ -67,11 +68,17 @@ public class WfStepRole extends BaseAuditEntity {
     @ListOnly(key = "wfStepId", property = "workflowLoadingTable")
     private String workflowLoadingTable;
 
+    @ListOnly(key = "wfStepId", property = "applicationId")
+    private Long applicationId;
+
     @ListOnly(key = "wfStepId", property = "applicationName")
     private String applicationName;
 
     @ListOnly(key = "wfStepId", property = "applicationDesc")
     private String applicationDesc;
+
+    @ListOnly(key = "wfStepId", property = "configType")
+    private ConfigType configType;
 
     @ListOnly(key = "wfStepId", property = "branchOnly")
     private boolean branchOnly;
@@ -181,6 +188,14 @@ public class WfStepRole extends BaseAuditEntity {
         this.entityName = entityName;
     }
 
+    public Long getApplicationId() {
+        return applicationId;
+    }
+
+    public void setApplicationId(Long applicationId) {
+        this.applicationId = applicationId;
+    }
+
     public String getApplicationName() {
         return applicationName;
     }
@@ -195,6 +210,14 @@ public class WfStepRole extends BaseAuditEntity {
 
     public void setApplicationDesc(String applicationDesc) {
         this.applicationDesc = applicationDesc;
+    }
+
+    public ConfigType getConfigType() {
+        return configType;
+    }
+
+    public void setConfigType(ConfigType configType) {
+        this.configType = configType;
     }
 
     public boolean isBranchOnly() {

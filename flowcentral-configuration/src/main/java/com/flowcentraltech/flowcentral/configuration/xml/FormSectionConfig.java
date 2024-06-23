@@ -32,7 +32,7 @@ import com.tcdng.unify.core.util.xml.MarshalTrueToNullXmlAdapter;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class FormSectionConfig {
+public class FormSectionConfig extends BaseConfig {
 
     private String name;
 

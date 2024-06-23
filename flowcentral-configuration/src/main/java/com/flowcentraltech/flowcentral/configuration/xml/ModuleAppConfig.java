@@ -80,9 +80,4 @@ public class ModuleAppConfig {
         this.autoInstall = autoInstall;
     }
 
-    @Override
-    public String toString() {
-        return "ModuleAppConfig [name=" + name + ", shortDescription=" + shortDescription + ", longDescription="
-                + longDescription + ", configFile=" + configFile + ", autoInstall=" + autoInstall + "]";
-    }
 }

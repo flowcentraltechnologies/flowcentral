@@ -364,6 +364,9 @@
 				references="privilegeCategoryRef"
 				inputLabel="$m{organization.privilege.privilegecategory}"
 				inputWidget="application.entitylist" />
+			<field name="configType"
+				label="$m{organization.privilege.configtype}" type="enum"
+				references="configtypelist" inputWidget="application.enumlist" nullable="true" />
 			<field name="code" label="$m{organization.privilege.code}"
 				type="string" inputWidget="application.name" maxLen="64" />
 			<field name="description"

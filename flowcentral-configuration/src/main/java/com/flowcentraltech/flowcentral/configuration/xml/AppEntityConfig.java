@@ -21,6 +21,8 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+import com.flowcentraltech.flowcentral.configuration.constants.EntityBaseType;
+import com.flowcentraltech.flowcentral.configuration.xml.adapter.EntityBaseTypeXmlAdapter;
 import com.tcdng.unify.core.util.xml.MarshalFalseToNullXmlAdapter;
 
 /**
@@ -31,6 +33,8 @@ import com.tcdng.unify.core.util.xml.MarshalFalseToNullXmlAdapter;
  */
 public class AppEntityConfig extends BaseNameConfig {
 
+    private EntityBaseType baseType;
+    
     private String type;
 
     private String emailProducerConsumer;
@@ -74,6 +78,16 @@ public class AppEntityConfig extends BaseNameConfig {
         this.actionPolicy = Boolean.FALSE;
     }
     
+    public EntityBaseType getBaseType() {
+        return baseType;
+    }
+
+    @XmlJavaTypeAdapter(EntityBaseTypeXmlAdapter.class)
+    @XmlAttribute(required = true)
+    public void setBaseType(EntityBaseType baseType) {
+        this.baseType = baseType;
+    }
+
     public String getType() {
         return type;
     }

@@ -38,9 +38,4 @@ public class ModuleAppsConfig {
         this.moduleAppList = moduleAppList;
     }
 
-    @Override
-    public String toString() {
-        return "ModuleAppsConfig [moduleAppList=" + moduleAppList + "]";
-    }
-
 }

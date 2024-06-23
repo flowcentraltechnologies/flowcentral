@@ -19,13 +19,15 @@ package com.flowcentraltech.flowcentral.delegate.business;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
+import com.flowcentraltech.flowcentral.application.business.AbstractEnvironmentDelegate;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleNameConstants;
 import com.flowcentraltech.flowcentral.connect.common.data.BaseResponse;
 import com.flowcentraltech.flowcentral.connect.common.data.DataSourceRequest;
+import com.flowcentraltech.flowcentral.connect.common.data.DelegateEntityListingDTO;
 import com.flowcentraltech.flowcentral.connect.common.data.EntityDTO;
-import com.flowcentraltech.flowcentral.delegate.data.DelegateEntityListingDTO;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.criterion.Update;
@@ -222,9 +224,12 @@ public class MappedEntityEnvironmentDelegate extends AbstractEnvironmentDelegate
     }
 
     @Override
-    public <T, U extends Entity> T valueOptional(Class<T> fieldClass, String fieldName, Query<U> query) throws UnifyException {
-        return au().isMappingProviderPresent(query) ? (T) au().getMappingProvider(query).value(fieldClass, fieldName, query)
+    public <T, U extends Entity> Optional<T> valueOptional(Class<T> fieldClass, String fieldName, Query<U> query)
+            throws UnifyException {
+        T val = au().isMappingProviderPresent(query)
+                ? (T) au().getMappingProvider(query).value(fieldClass, fieldName, query)
                 : DataUtils.convert(fieldClass, null);
+        return Optional.ofNullable(val);
     }
 
     @Override

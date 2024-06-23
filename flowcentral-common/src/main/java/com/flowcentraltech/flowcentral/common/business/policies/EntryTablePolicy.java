@@ -38,6 +38,19 @@ import com.tcdng.unify.core.data.ValueStoreReader;
 public interface EntryTablePolicy extends FlowCentralComponent {
 
     /**
+     * Handles on reset order.
+     * 
+     * @param parentReader
+     *                        optional parent value store reader
+     * @param tableValueStore
+     *                        the list data value store object
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    void onResetOrder(ValueStoreReader parentReader, ValueStore tableValueStore)
+            throws UnifyException;
+
+    /**
      * Validate entries,
      * 
      * @param evaluationMode

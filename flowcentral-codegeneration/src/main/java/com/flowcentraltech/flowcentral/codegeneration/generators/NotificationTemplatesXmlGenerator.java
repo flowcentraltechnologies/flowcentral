@@ -57,7 +57,7 @@ public class NotificationTemplatesXmlGenerator extends AbstractResourcesArtifact
     protected void doGenerate(ExtensionModuleStaticFileBuilderContext ctx, String applicationName, ZipOutputStream zos)
             throws UnifyException {
         // Templates
-        List<Long> notifTemplateIdList = notificationModuleService.findNotificationTemplateIdList(applicationName);
+        List<Long> notifTemplateIdList = notificationModuleService.findCustomNotificationTemplateIdList(applicationName);
         if (!DataUtils.isBlank(notifTemplateIdList)) {
             final String lowerCaseApplicationName = applicationName.toLowerCase();
             AppNotifTemplatesConfig notifTemplatesConfig = new AppNotifTemplatesConfig();

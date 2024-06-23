@@ -23,4 +23,5 @@ package com.flowcentraltech.flowcentral.studio.constants;
  */
 public interface StudioModuleSysParamConstants {
 
+    String SNAPSHOT_DETAILS_LIMIT = "STU-0001";
 }

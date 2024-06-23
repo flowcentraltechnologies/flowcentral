@@ -24,10 +24,12 @@ import com.flowcentraltech.flowcentral.application.business.AbstractApplicationA
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.util.ApplicationReplicationContext;
 import com.flowcentraltech.flowcentral.common.constants.ConfigType;
-import com.flowcentraltech.flowcentral.common.util.ConfigUtils;
 import com.flowcentraltech.flowcentral.configuration.data.ApplicationInstall;
+import com.flowcentraltech.flowcentral.configuration.data.ApplicationRestore;
 import com.flowcentraltech.flowcentral.configuration.data.NotifLargeTextInstall;
+import com.flowcentraltech.flowcentral.configuration.data.NotifLargeTextRestore;
 import com.flowcentraltech.flowcentral.configuration.data.NotifTemplateInstall;
+import com.flowcentraltech.flowcentral.configuration.data.NotifTemplateRestore;
 import com.flowcentraltech.flowcentral.configuration.xml.AppConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppNotifLargeTextConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppNotifTemplateConfig;
@@ -65,7 +67,7 @@ public class ApplicationNotificationInstallerImpl extends AbstractApplicationArt
 
         logDebug(taskMonitor, "Executing notification installer...");
         // Install configured notification templates
-        environment().updateAll(new NotificationTemplateQuery().applicationId(applicationId).isNotActualCustom(),
+        environment().updateAll(new NotificationTemplateQuery().applicationId(applicationId).isStatic(),
                 new Update().add("deprecated", Boolean.TRUE));
         if (applicationConfig.getNotifTemplatesConfig() != null
                 && !DataUtils.isBlank(applicationConfig.getNotifTemplatesConfig().getNotifTemplateList())) {
@@ -94,27 +96,26 @@ public class ApplicationNotificationInstallerImpl extends AbstractApplicationArt
                     notificationTemplate.setSubject(notifTemplateConfig.getSubject());
                     notificationTemplate.setTemplate(notifTemplateConfig.getBody());
                     notificationTemplate.setDeprecated(false);
-                    notificationTemplate.setConfigType(ConfigType.MUTABLE_INSTALL);
+                    notificationTemplate.setConfigType(ConfigType.STATIC);
                     populateChildList(notificationTemplate, notifTemplateConfig);
                     environment().create(notificationTemplate);
                 } else {
-                    if (ConfigUtils.isSetInstall(oldNotificationTemplate)) {
-                        oldNotificationTemplate.setNotificationType(notifTemplateConfig.getNotifType());
-                        oldNotificationTemplate.setMessageFormat(notifTemplateConfig.getMessageFormat());
-                        oldNotificationTemplate.setDescription(description);
-                        oldNotificationTemplate.setEntity(entity);
-                        oldNotificationTemplate.setSubject(notifTemplateConfig.getSubject());
-                        oldNotificationTemplate.setTemplate(notifTemplateConfig.getBody());
-                        oldNotificationTemplate.setDeprecated(false);
-                        populateChildList(oldNotificationTemplate, notifTemplateConfig);
-                        environment().updateByIdVersion(oldNotificationTemplate);
-                    }
+                    oldNotificationTemplate.setNotificationType(notifTemplateConfig.getNotifType());
+                    oldNotificationTemplate.setMessageFormat(notifTemplateConfig.getMessageFormat());
+                    oldNotificationTemplate.setDescription(description);
+                    oldNotificationTemplate.setEntity(entity);
+                    oldNotificationTemplate.setSubject(notifTemplateConfig.getSubject());
+                    oldNotificationTemplate.setTemplate(notifTemplateConfig.getBody());
+                    oldNotificationTemplate.setDeprecated(false);
+                    oldNotificationTemplate.setConfigType(ConfigType.STATIC);
+                    populateChildList(oldNotificationTemplate, notifTemplateConfig);
+                    environment().updateByIdVersion(oldNotificationTemplate);
                 }
             }
         }
 
         // Install configured notification large texts
-        environment().updateAll(new NotificationLargeTextQuery().applicationId(applicationId).isNotActualCustom(),
+        environment().updateAll(new NotificationLargeTextQuery().applicationId(applicationId).isStatic(),
                 new Update().add("deprecated", Boolean.TRUE));
         if (applicationConfig.getNotifLargeTextsConfig() != null
                 && !DataUtils.isBlank(applicationConfig.getNotifLargeTextsConfig().getNotifLargeTextList())) {
@@ -143,21 +144,80 @@ public class ApplicationNotificationInstallerImpl extends AbstractApplicationArt
                     notificationLargeText.setFontSizeInPixels(notifLargeTextConfig.getFontSizeInPixels());
                     notificationLargeText.setBody(notifLargeTextConfig.getBody());
                     notificationLargeText.setDeprecated(false);
-                    notificationLargeText.setConfigType(ConfigType.MUTABLE_INSTALL);
+                    notificationLargeText.setConfigType(ConfigType.STATIC);
                     populateChildList(notificationLargeText, notifLargeTextConfig);
                     environment().create(notificationLargeText);
                 } else {
-                    if (ConfigUtils.isSetInstall(oldNotificationLargeText)) {
-                        oldNotificationLargeText.setDescription(description);
-                        oldNotificationLargeText.setEntity(entity);
-                        oldNotificationLargeText.setFontFamily(notifLargeTextConfig.getFontFamily());
-                        oldNotificationLargeText.setFontSizeInPixels(notifLargeTextConfig.getFontSizeInPixels());
-                        oldNotificationLargeText.setBody(notifLargeTextConfig.getBody());
-                        oldNotificationLargeText.setDeprecated(false);
-                        populateChildList(oldNotificationLargeText, notifLargeTextConfig);
-                        environment().updateByIdVersion(oldNotificationLargeText);
-                    }
+                    oldNotificationLargeText.setDescription(description);
+                    oldNotificationLargeText.setEntity(entity);
+                    oldNotificationLargeText.setFontFamily(notifLargeTextConfig.getFontFamily());
+                    oldNotificationLargeText.setFontSizeInPixels(notifLargeTextConfig.getFontSizeInPixels());
+                    oldNotificationLargeText.setBody(notifLargeTextConfig.getBody());
+                    oldNotificationLargeText.setDeprecated(false);
+                    oldNotificationLargeText.setConfigType(ConfigType.STATIC);
+                    populateChildList(oldNotificationLargeText, notifLargeTextConfig);
+                    environment().updateByIdVersion(oldNotificationLargeText);
                 }
+            }
+        }
+
+    }
+
+    @Override
+    public void restoreCustomApplicationArtifacts(TaskMonitor taskMonitor, ApplicationRestore applicationRestore)
+            throws UnifyException {
+        final AppConfig applicationConfig = applicationRestore.getApplicationConfig();
+        final Long applicationId = applicationRestore.getApplicationId();
+
+        // Notification templates
+        logDebug(taskMonitor, "Executing notification restore...");
+        if (!DataUtils.isBlank(applicationRestore.getNotifTemplateList())) {
+            for (NotifTemplateRestore notifTemplateRestore : applicationRestore.getNotifTemplateList()) {
+                // Template
+                NotifTemplateConfig notifTemplateConfig = notifTemplateRestore.getNotifTemplateConfig();
+                String description = resolveApplicationMessage(notifTemplateConfig.getDescription());
+                String entity = ApplicationNameUtils.ensureLongNameReference(applicationConfig.getName(),
+                        notifTemplateConfig.getEntity());
+                logDebug(taskMonitor, "Restoring configured notification template [{0}]...", description);
+
+                NotificationTemplate notificationTemplate = new NotificationTemplate();
+                notificationTemplate.setApplicationId(applicationId);
+                notificationTemplate.setNotificationType(notifTemplateConfig.getNotifType());
+                notificationTemplate.setMessageFormat(notifTemplateConfig.getMessageFormat());
+                notificationTemplate.setName(notifTemplateConfig.getName());
+                notificationTemplate.setDescription(description);
+                notificationTemplate.setEntity(entity);
+                notificationTemplate.setSubject(notifTemplateConfig.getSubject());
+                notificationTemplate.setTemplate(notifTemplateConfig.getBody());
+                notificationTemplate.setDeprecated(false);
+                notificationTemplate.setConfigType(ConfigType.CUSTOM);
+                populateChildList(notificationTemplate, notifTemplateConfig);
+                environment().create(notificationTemplate);
+            }
+        }
+
+        // Notification large texts
+        if (!DataUtils.isBlank(applicationRestore.getNotifLargeTextList())) {
+            for (NotifLargeTextRestore notifLargeTextRestore : applicationRestore.getNotifLargeTextList()) {
+                // Large Text
+                NotifLargeTextConfig notifLargeTextConfig = notifLargeTextRestore.getNotifLargeTextConfig();
+                String description = resolveApplicationMessage(notifLargeTextConfig.getDescription());
+                String entity = ApplicationNameUtils.ensureLongNameReference(applicationConfig.getName(),
+                        notifLargeTextConfig.getEntity());
+                logDebug(taskMonitor, "Restoring notification large text [{0}]...", description);
+
+                NotificationLargeText notificationLargeText = new NotificationLargeText();
+                notificationLargeText.setApplicationId(applicationId);
+                notificationLargeText.setName(notifLargeTextConfig.getName());
+                notificationLargeText.setDescription(description);
+                notificationLargeText.setEntity(entity);
+                notificationLargeText.setFontFamily(notifLargeTextConfig.getFontFamily());
+                notificationLargeText.setFontSizeInPixels(notifLargeTextConfig.getFontSizeInPixels());
+                notificationLargeText.setBody(notifLargeTextConfig.getBody());
+                notificationLargeText.setDeprecated(false);
+                notificationLargeText.setConfigType(ConfigType.CUSTOM);
+                populateChildList(notificationLargeText, notifLargeTextConfig);
+                environment().create(notificationLargeText);
             }
         }
 
@@ -173,11 +233,13 @@ public class ApplicationNotificationInstallerImpl extends AbstractApplicationArt
         for (Long templateId : templateIdList) {
             NotificationTemplate srcNotificationTemplate = environment().find(NotificationTemplate.class, templateId);
             String oldDescription = srcNotificationTemplate.getDescription();
+            srcNotificationTemplate.setId(null);
             srcNotificationTemplate.setApplicationId(destApplicationId);
             srcNotificationTemplate.setName(ctx.nameSwap(srcNotificationTemplate.getName()));
             srcNotificationTemplate.setDescription(ctx.messageSwap(srcNotificationTemplate.getDescription()));
             srcNotificationTemplate.setEntity(ctx.entitySwap(srcNotificationTemplate.getEntity()));
-
+            srcNotificationTemplate.setDeprecated(false);
+            srcNotificationTemplate.setConfigType(ConfigType.CUSTOM);
             environment().create(srcNotificationTemplate);
             logDebug(taskMonitor, "Notification template [{0}] -> [{1}]...", oldDescription,
                     srcNotificationTemplate.getDescription());

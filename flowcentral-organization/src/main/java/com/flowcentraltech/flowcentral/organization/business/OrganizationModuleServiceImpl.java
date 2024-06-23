@@ -15,14 +15,20 @@
  */
 package com.flowcentraltech.flowcentral.organization.business;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import com.flowcentraltech.flowcentral.application.constants.ApplicationPrivilegeConstants;
 import com.flowcentraltech.flowcentral.common.business.AbstractFlowCentralService;
 import com.flowcentraltech.flowcentral.common.business.ApplicationPrivilegeManager;
 import com.flowcentraltech.flowcentral.common.business.PostBootSetup;
+import com.flowcentraltech.flowcentral.common.business.RolePrivilegeBackupAgent;
 import com.flowcentraltech.flowcentral.common.business.StudioProvider;
+import com.flowcentraltech.flowcentral.common.constants.ConfigType;
 import com.flowcentraltech.flowcentral.common.constants.WfItemVersionType;
 import com.flowcentraltech.flowcentral.configuration.constants.DefaultApplicationConstants;
 import com.flowcentraltech.flowcentral.configuration.data.ModuleInstall;
@@ -50,6 +56,7 @@ import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.Synchronized;
 import com.tcdng.unify.core.annotation.Transactional;
 import com.tcdng.unify.core.data.FactoryMap;
+import com.tcdng.unify.core.util.DataUtils;
 
 /**
  * Implementation of organization module service.
@@ -72,17 +79,30 @@ public class OrganizationModuleServiceImpl extends AbstractFlowCentralService
 
     private final FactoryMap<Long, TenantRolePrivileges> tenantRolePrivileges;
 
+    private final Map<String, Set<String>> privilegeBackup;
+
+    private List<RolePrivilegeBackupAgent> roleBackupAgentList;
+
     @Configurable
     private StudioProvider studioProvider;
 
     public OrganizationModuleServiceImpl() {
-        tenantRolePrivileges = new FactoryMap<Long, TenantRolePrivileges>()
+        this.tenantRolePrivileges = new FactoryMap<Long, TenantRolePrivileges>()
             {
                 @Override
                 protected TenantRolePrivileges create(Long tenantId, Object... arg2) throws Exception {
                     return new TenantRolePrivileges(tenantId);
                 }
             };
+
+        this.privilegeBackup = new ConcurrentHashMap<String, Set<String>>();
+    }
+    
+    @Override
+    public void clearDefinitionsCache() throws UnifyException {
+        logDebug("Clearing definitions cache...");
+        tenantRolePrivileges.clear();
+        logDebug("Definitions cache clearing successfully completed.");
     }
 
     @Override
@@ -153,7 +173,7 @@ public class OrganizationModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
-    public void registerPrivilege(Long applicationId, String privilegeCategoryCode, String privilegeCode,
+    public void registerPrivilege(ConfigType configType, Long applicationId, String privilegeCategoryCode, String privilegeCode,
             String privilegeDesc) throws UnifyException {
         Long privilegeCategoryId = environment().value(Long.class, "id",
                 new PrivilegeCategoryQuery().code(privilegeCategoryCode));
@@ -165,9 +185,11 @@ public class OrganizationModuleServiceImpl extends AbstractFlowCentralService
             privilege.setPrivilegeCategoryId(privilegeCategoryId);
             privilege.setCode(privilegeCode);
             privilege.setDescription(privilegeDesc);
+            privilege.setConfigType(configType);
             environment().create(privilege);
         } else {
             oldPrivilege.setDescription(privilegeDesc);
+            oldPrivilege.setConfigType(configType);
             environment().updateByIdVersion(oldPrivilege);
         }
     }
@@ -188,16 +210,79 @@ public class OrganizationModuleServiceImpl extends AbstractFlowCentralService
 
     @Override
     public void unregisterApplicationPrivileges(Long applicationId) throws UnifyException {
-        List<Long> privilegeIdList = environment().valueList(Long.class, "id",
-                new PrivilegeQuery().applicationId(applicationId));
-        environment().deleteAll(new RolePrivilegeQuery().privilegeIdIn(privilegeIdList));
+        environment().deleteAll(new RolePrivilegeQuery().applicationId(applicationId));
         environment().deleteAll(new PrivilegeQuery().applicationId(applicationId));
+
+        if (!DataUtils.isBlank(roleBackupAgentList)) {
+            for (RolePrivilegeBackupAgent rolePrivilegeBackupAgent : roleBackupAgentList) {
+                rolePrivilegeBackupAgent.unregisterApplicationRolePrivileges(applicationId);
+            }
+        }
+    }
+
+    @Override
+    public void unregisterCustonApplicationPrivileges(Long applicationId) throws UnifyException {
+        environment().deleteAll(new RolePrivilegeQuery().applicationId(applicationId));
+        environment().deleteAll(new PrivilegeQuery().applicationId(applicationId).isCustom());
+
+        if (!DataUtils.isBlank(roleBackupAgentList)) {
+            for (RolePrivilegeBackupAgent rolePrivilegeBackupAgent : roleBackupAgentList) {
+                rolePrivilegeBackupAgent.unregisterCustomApplicationRolePrivileges(applicationId);
+            }
+        }
     }
 
     @Override
     public boolean isRegisteredPrivilege(String privilegeCategoryCode, String privilegeCode) throws UnifyException {
         return environment()
                 .countAll(new PrivilegeQuery().privilegeCatCode(privilegeCategoryCode).code(privilegeCode)) > 0;
+    }
+
+    @Override
+    public void backupApplicationRolePrivileges(Long applicationId) throws UnifyException {
+        List<RolePrivilege> rolePrivilegeList = environment()
+                .listAll(new RolePrivilegeQuery().applicationId(applicationId).addSelect("roleCode", "privilegeCode"));
+        for (RolePrivilege rolePrivilege : rolePrivilegeList) {
+            Set<String> privilegeCodes = privilegeBackup.get(rolePrivilege.getRoleCode());
+            if (privilegeCodes == null) {
+                privilegeCodes = new HashSet<String>();
+                privilegeBackup.put(rolePrivilege.getRoleCode(), privilegeCodes);
+            }
+
+            privilegeCodes.add(rolePrivilege.getPrivilegeCode());
+        }
+
+        if (!DataUtils.isBlank(roleBackupAgentList)) {
+            for (RolePrivilegeBackupAgent rolePrivilegeBackupAgent : roleBackupAgentList) {
+                rolePrivilegeBackupAgent.backupApplicationRolePrivileges(applicationId);
+            }
+        }
+    }
+
+    @Override
+    public void restoreApplicationRolePrivileges() throws UnifyException {
+        RolePrivilege rolePrivilege = new RolePrivilege();
+        for (Map.Entry<String, Set<String>> entry : privilegeBackup.entrySet()) {
+            final Long roleId = environment().value(Long.class, "id", new RoleQuery().code(entry.getKey()));
+            for (String privilegeCode : entry.getValue()) {
+                Optional<Long> privilegeId = environment().valueOptional(Long.class, "id",
+                        new PrivilegeQuery().code(privilegeCode));
+                if (privilegeId.isPresent()) {
+                    rolePrivilege.setId(null);
+                    rolePrivilege.setRoleId(roleId);
+                    rolePrivilege.setPrivilegeId(privilegeId.get());
+                    environment().create(rolePrivilege);
+                }
+            }
+        }
+
+        if (!DataUtils.isBlank(roleBackupAgentList)) {
+            for (RolePrivilegeBackupAgent rolePrivilegeBackupAgent : roleBackupAgentList) {
+                rolePrivilegeBackupAgent.restoreApplicationRolePrivileges();
+            }
+        }
+
+        privilegeBackup.clear();
     }
 
     @Override
@@ -325,6 +410,12 @@ public class OrganizationModuleServiceImpl extends AbstractFlowCentralService
     @Override
     protected void doInstallModuleFeatures(ModuleInstall moduleInstall) throws UnifyException {
         installPrivilegeCategories(moduleInstall);
+    }
+
+    @Override
+    protected void onInitialize() throws UnifyException {
+        super.onInitialize();
+        roleBackupAgentList = getComponents(RolePrivilegeBackupAgent.class);
     }
 
     private void installPrivilegeCategories(ModuleInstall moduleInstall) throws UnifyException {

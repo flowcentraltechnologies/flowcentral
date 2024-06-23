@@ -23,7 +23,7 @@ import javax.xml.bind.annotation.XmlAttribute;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class BaseNameConfig {
+public abstract class BaseNameConfig extends BaseConfig {
 
     private String name;
 
@@ -57,4 +57,5 @@ public abstract class BaseNameConfig {
     public void setLabel(String label) {
         this.label = label;
     }
+
 }

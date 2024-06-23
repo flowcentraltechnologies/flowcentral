@@ -26,6 +26,7 @@ import com.flowcentraltech.flowcentral.application.util.PrivilegeNameUtils;
 import com.flowcentraltech.flowcentral.common.business.AbstractFlowCentralService;
 import com.flowcentraltech.flowcentral.common.business.ApplicationPrivilegeManager;
 import com.flowcentraltech.flowcentral.common.business.WorkspacePrivilegeManager;
+import com.flowcentraltech.flowcentral.common.constants.ConfigType;
 import com.flowcentraltech.flowcentral.configuration.constants.DefaultApplicationConstants;
 import com.flowcentraltech.flowcentral.configuration.data.ModuleInstall;
 import com.flowcentraltech.flowcentral.workspace.constants.WorkspaceModuleNameConstants;
@@ -62,6 +63,11 @@ public class WorkspaceModuleServiceImpl extends AbstractFlowCentralService
         privilegesByWorkspace = new FactoryMap<String, WorkspacePrivileges>(true)
             {
                 @Override
+                protected boolean pause() throws Exception {
+                    return isInSystemRestoreMode();
+                }
+
+                @Override
                 protected boolean stale(String workspaceCode, WorkspacePrivileges workspacePrivileges)
                         throws Exception {
                     return workspacePrivileges.getVersion() < environment().value(Long.class, "versionNo",
@@ -72,10 +78,18 @@ public class WorkspaceModuleServiceImpl extends AbstractFlowCentralService
                 protected WorkspacePrivileges create(String workspaceCode, Object... arg2) throws Exception {
                     Set<String> privileges = environment().valueSet(String.class, "privilegeCode",
                             new WorkspacePrivilegeQuery().workspaceCode(workspaceCode));
-                    long version = environment().value(Long.class, "versionNo", new WorkspaceQuery().code(workspaceCode));
+                    long version = environment().value(Long.class, "versionNo",
+                            new WorkspaceQuery().code(workspaceCode));
                     return new WorkspacePrivileges(privileges, version);
                 }
             };
+    }
+    
+    @Override
+    public void clearDefinitionsCache() throws UnifyException {
+        logDebug("Clearing definitions cache...");
+        privilegesByWorkspace.clear();
+        logDebug("Definitions cache clearing successfully completed.");
     }
 
     @Override
@@ -135,14 +149,15 @@ public class WorkspaceModuleServiceImpl extends AbstractFlowCentralService
     private void installDefaultWorkspaces(final ModuleInstall moduleInstall) throws UnifyException {
         if (WorkspaceModuleNameConstants.WORKSPACE_MODULE_NAME.equals(moduleInstall.getModuleConfig().getName())) {
             logInfo("Installing default workspaces ...");
-            if (environment().countAll(new WorkspaceQuery().id(DefaultApplicationConstants.ROOT_WORKSPACE_ENTITY_ID)) == 0) {
+            if (environment()
+                    .countAll(new WorkspaceQuery().id(DefaultApplicationConstants.ROOT_WORKSPACE_ENTITY_ID)) == 0) {
                 Workspace workspace = new Workspace(DefaultApplicationConstants.ROOT_WORKSPACE_ENTITY_ID,
                         DefaultApplicationConstants.ROOT_WORKSPACE_CODE,
                         DefaultApplicationConstants.ROOT_WORKSPACE_NAME,
                         DefaultApplicationConstants.ROOT_WORKSPACE_DESC);
                 environment().create(workspace);
                 final Long applicationId = applicationModuleService.getApplicationDef("workspace").getId();
-                appPrivilegeManager.registerPrivilege(applicationId,
+                appPrivilegeManager.registerPrivilege(ConfigType.STATIC, applicationId,
                         ApplicationPrivilegeConstants.APPLICATION_WORKSPACE_CATEGORY_CODE,
                         PrivilegeNameUtils.getWorkspacePrivilegeName(DefaultApplicationConstants.ROOT_WORKSPACE_CODE),
                         DefaultApplicationConstants.ROOT_WORKSPACE_DESC);

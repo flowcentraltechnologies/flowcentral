@@ -39,6 +39,11 @@ public abstract class AbstractEntryTablePolicy extends AbstractFlowCentralCompon
     private EnvironmentService environmentService;
 
     @Override
+    public void onResetOrder(ValueStoreReader parentReader, ValueStore tableValueStore) throws UnifyException {
+        
+    }
+
+    @Override
     public void applyFixedAction(ValueStoreReader parentReader, ValueStore valueStore, int index,
             FixedRowActionType fixedActionType) throws UnifyException {
         if (!fixedActionType.fixed()) {

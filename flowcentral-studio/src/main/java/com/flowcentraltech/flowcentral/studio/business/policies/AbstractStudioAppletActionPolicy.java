@@ -27,6 +27,7 @@ import com.flowcentraltech.flowcentral.application.entities.BaseApplicationEntit
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.util.PrivilegeNameUtils;
 import com.flowcentraltech.flowcentral.common.business.policies.AbstractAppletActionPolicy;
+import com.flowcentraltech.flowcentral.common.constants.ConfigType;
 import com.flowcentraltech.flowcentral.studio.constants.StudioAppComponentType;
 import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
 import com.tcdng.unify.core.UnifyException;
@@ -55,8 +56,8 @@ public abstract class AbstractStudioAppletActionPolicy extends AbstractAppletAct
         return systemModuleService;
     }
 
-    protected void registerPrivilege(String applicationName, Long applicationId, StudioAppComponentType type,
-            BaseApplicationEntity appEntity) throws UnifyException {
+    protected void registerPrivilege(ConfigType customType, String applicationName, Long applicationId,
+            StudioAppComponentType type, BaseApplicationEntity appEntity) throws UnifyException {
         List<String> privilegeCodeList = new ArrayList<String>();
         String privilegeCode = null;
         boolean assignToRole = false;
@@ -68,8 +69,9 @@ public abstract class AbstractStudioAppletActionPolicy extends AbstractAppletAct
             case APPLET:
                 privilegeCode = PrivilegeNameUtils.getAppletPrivilegeName(
                         ApplicationNameUtils.getApplicationEntityLongName(applicationName, appEntity.getName()));
-                registerPrivilege(applicationId, ApplicationPrivilegeConstants.APPLICATION_APPLET_CATEGORY_CODE,
-                        privilegeCode, appEntity.getDescription());
+                registerPrivilege(customType, applicationId,
+                        ApplicationPrivilegeConstants.APPLICATION_APPLET_CATEGORY_CODE, privilegeCode,
+                        appEntity.getDescription());
                 privilegeCodeList.add(privilegeCode);
                 assignToRole = true;
                 break;
@@ -80,8 +82,9 @@ public abstract class AbstractStudioAppletActionPolicy extends AbstractAppletAct
             case DASHBOARD:
                 privilegeCode = PrivilegeNameUtils.getDashboardPrivilegeName(
                         ApplicationNameUtils.getApplicationEntityLongName(applicationName, appEntity.getName()));
-                registerPrivilege(applicationId, ApplicationPrivilegeConstants.APPLICATION_DASHBOARD_CATEGORY_CODE,
-                        privilegeCode, appEntity.getDescription());
+                registerPrivilege(customType, applicationId,
+                        ApplicationPrivilegeConstants.APPLICATION_DASHBOARD_CATEGORY_CODE, privilegeCode,
+                        appEntity.getDescription());
                 privilegeCodeList.add(privilegeCode);
                 assignToRole = true;
                 break;
@@ -90,27 +93,27 @@ public abstract class AbstractStudioAppletActionPolicy extends AbstractAppletAct
                         appEntity.getName());
 
                 privilegeCode = PrivilegeNameUtils.getAddPrivilegeName(entityLongName);
-                registerPrivilege(applicationId, ApplicationPrivilegeConstants.APPLICATION_ENTITY_CATEGORY_CODE,
-                        privilegeCode,
+                registerPrivilege(customType, applicationId,
+                        ApplicationPrivilegeConstants.APPLICATION_ENTITY_CATEGORY_CODE, privilegeCode,
                         getApplicationMessage("application.entity.privilege.add", appEntity.getDescription()));
                 privilegeCodeList.add(privilegeCode);
 
                 privilegeCode = PrivilegeNameUtils.getEditPrivilegeName(entityLongName);
-                registerPrivilege(applicationId, ApplicationPrivilegeConstants.APPLICATION_ENTITY_CATEGORY_CODE,
-                        privilegeCode,
+                registerPrivilege(customType, applicationId,
+                        ApplicationPrivilegeConstants.APPLICATION_ENTITY_CATEGORY_CODE, privilegeCode,
                         getApplicationMessage("application.entity.privilege.edit", appEntity.getDescription()));
                 privilegeCodeList.add(privilegeCode);
 
                 privilegeCode = PrivilegeNameUtils.getDeletePrivilegeName(entityLongName);
-                registerPrivilege(applicationId, ApplicationPrivilegeConstants.APPLICATION_ENTITY_CATEGORY_CODE,
-                        privilegeCode,
+                registerPrivilege(customType, applicationId,
+                        ApplicationPrivilegeConstants.APPLICATION_ENTITY_CATEGORY_CODE, privilegeCode,
                         getApplicationMessage("application.entity.privilege.delete", appEntity.getDescription()));
                 privilegeCodeList.add(privilegeCode);
 
                 if (((AppEntity) appEntity).getBaseType().isWorkEntityType()) {
                     privilegeCode = PrivilegeNameUtils.getAttachPrivilegeName(entityLongName);
-                    registerPrivilege(applicationId, ApplicationPrivilegeConstants.APPLICATION_ENTITY_CATEGORY_CODE,
-                            privilegeCode,
+                    registerPrivilege(customType, applicationId,
+                            ApplicationPrivilegeConstants.APPLICATION_ENTITY_CATEGORY_CODE, privilegeCode,
                             getApplicationMessage("application.entity.privilege.attach", appEntity.getDescription()));
                     privilegeCodeList.add(privilegeCode);
                 }
@@ -128,8 +131,9 @@ public abstract class AbstractStudioAppletActionPolicy extends AbstractAppletAct
             case REPORT_CONFIGURATION:
                 privilegeCode = PrivilegeNameUtils.getReportConfigPrivilegeName(
                         ApplicationNameUtils.ensureLongNameReference(applicationName, appEntity.getName()));
-                registerPrivilege(applicationId, ApplicationPrivilegeConstants.APPLICATION_REPORTCONFIG_CATEGORY_CODE,
-                        privilegeCode, appEntity.getDescription());
+                registerPrivilege(customType, applicationId,
+                        ApplicationPrivilegeConstants.APPLICATION_REPORTCONFIG_CATEGORY_CODE, privilegeCode,
+                        appEntity.getDescription());
                 privilegeCodeList.add(privilegeCode);
                 assignToRole = true;
                 break;

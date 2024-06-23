@@ -24,7 +24,7 @@ import javax.xml.bind.annotation.XmlAttribute;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class NotifTemplateParamConfig {
+public class NotifTemplateParamConfig extends BaseConfig {
 
     private String name;
 

@@ -62,6 +62,8 @@ public class LoadingSearch {
 
     private SearchEntries searchEntries;
 
+    private Restriction srcBaseRestriction;
+
     private Restriction baseRestriction;
 
     private LoadingTable loadingTable;
@@ -244,6 +246,9 @@ public class LoadingSearch {
             And and = new And();
             if (baseFilterDef != null) {
                 and.add(baseFilterDef.getRestriction(getEntityDef(), null, appletContext.au().getNow()));
+                if (baseFilterDef.isWithFilterGenerator()) {
+                    srcBaseRestriction = restriction;
+                }
             }
 
             if (restriction != null) {
@@ -269,6 +274,12 @@ public class LoadingSearch {
         return baseRestriction != null;
     }
 
+    public void recalcBaseRestriction() throws UnifyException {
+        if (baseFilterDef != null && baseFilterDef.isWithFilterGenerator()) {
+            setBaseRestriction(srcBaseRestriction, appletContext.au().specialParamProvider());
+        }
+    }
+
     public void ensureTableStruct() throws UnifyException {
         searchEntries.normalize();
         if (loadingTable != null) {
@@ -285,6 +296,7 @@ public class LoadingSearch {
         SearchEntries.Entries entries = searchEntries.getEntries();
         Restriction searchRestriction = null;
         if (isWithBaseFilter()) {
+            recalcBaseRestriction();            
             if (entries.isWithRestriction()) {
                 searchRestriction = new And().add(baseRestriction).add(entries.getRestriction());
             } else {

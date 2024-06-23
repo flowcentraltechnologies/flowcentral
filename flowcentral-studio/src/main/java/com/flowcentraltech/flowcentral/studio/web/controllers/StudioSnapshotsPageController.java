@@ -20,9 +20,13 @@ import java.util.Date;
 
 import com.flowcentraltech.flowcentral.application.data.SnapshotDetails;
 import com.flowcentraltech.flowcentral.application.data.Snapshots;
+import com.flowcentraltech.flowcentral.studio.constants.StudioSnapshotTaskConstants;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.UplBinding;
+import com.tcdng.unify.core.constant.MimeType;
+import com.tcdng.unify.core.data.DownloadFile;
+import com.tcdng.unify.core.task.TaskSetup;
 import com.tcdng.unify.web.annotation.Action;
 import com.tcdng.unify.web.annotation.ResultMapping;
 import com.tcdng.unify.web.annotation.ResultMappings;
@@ -64,9 +68,11 @@ public class StudioSnapshotsPageController extends AbstractStudioPageController<
         StudioSnapshotsPageBean pageBean = getPageBean();
         Snapshots snapshots = pageBean.getSnapshots();
         SnapshotDetails snapshotDetails = snapshots.getDetails(targetIndex);
-        // TODO
-
-        return noResult();
+        TaskSetup taskSetup = TaskSetup.newBuilder(StudioSnapshotTaskConstants.STUDIO_RESTORE_SNAPSHOT_TASK_NAME)
+                .setParam(StudioSnapshotTaskConstants.STUDIO_SNAPSHOT_DETAILS_ID,
+                        snapshotDetails.getSnapshotDetailsId())
+                .logMessages().build();
+        return launchTaskWithMonitorBox(taskSetup, "Studio Restore from Snapshot");
     }
 
     @Action
@@ -75,9 +81,10 @@ public class StudioSnapshotsPageController extends AbstractStudioPageController<
         StudioSnapshotsPageBean pageBean = getPageBean();
         Snapshots snapshots = pageBean.getSnapshots();
         SnapshotDetails snapshotDetails = snapshots.getDetails(targetIndex);
-        // TODO
-
-        return noResult();
+        byte[] snapshot = studio().getSnapshot(snapshotDetails.getSnapshotDetailsId());
+        DownloadFile downloadFile = new DownloadFile(MimeType.APPLICATION_OCTETSTREAM, snapshotDetails.getFilename(),
+                snapshot);
+        return fileDownloadResult(downloadFile, true);
     }
 
     @Override

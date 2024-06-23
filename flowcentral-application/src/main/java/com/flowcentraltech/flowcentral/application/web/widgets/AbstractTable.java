@@ -644,6 +644,10 @@ public abstract class AbstractTable<T, U> {
         clearTableSummaryLines();
         getDispItems();
     }
+    
+    public void clearSelected() throws UnifyException {
+        setSourceObjectClearSelected(sourceObject);
+    }
 
     public boolean firstPage() throws UnifyException {
         if (tableDef.isPagination()) {

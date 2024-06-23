@@ -21,6 +21,7 @@ import com.flowcentraltech.flowcentral.application.entities.AppFormAction;
 import com.flowcentraltech.flowcentral.application.util.PrivilegeNameUtils;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionContext;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
+import com.flowcentraltech.flowcentral.common.constants.ConfigType;
 import com.flowcentraltech.flowcentral.studio.constants.StudioSessionAttributeConstants;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
@@ -50,7 +51,7 @@ public class StudioOnUpdateFormActionPolicy extends AbstractStudioAppletActionPo
         final AppFormAction appFormAction = (AppFormAction) ctx.getInst();
         Long applicationId = (Long) getSessionAttribute(StudioSessionAttributeConstants.CURRENT_APPLICATION_ID);
         String privilegeCode = PrivilegeNameUtils.getFormActionPrivilegeName(appFormAction.getName());
-        registerPrivilege(applicationId, ApplicationPrivilegeConstants.APPLICATION_FORMACTION_CATEGORY_CODE,
+        registerPrivilege(ConfigType.CUSTOM, applicationId, ApplicationPrivilegeConstants.APPLICATION_FORMACTION_CATEGORY_CODE,
                 privilegeCode, appFormAction.getDescription());
         return new EntityActionResult(ctx);
     }

@@ -32,7 +32,7 @@ import com.tcdng.unify.core.util.xml.MarshalTrueToNullXmlAdapter;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class FormTabConfig {
+public class FormTabConfig extends BaseConfig {
 
     private TabContentType contentType;
 

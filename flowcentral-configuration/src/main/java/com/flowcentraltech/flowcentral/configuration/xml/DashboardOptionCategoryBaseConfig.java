@@ -24,7 +24,7 @@ import javax.xml.bind.annotation.XmlElement;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class DashboardOptionCategoryBaseConfig  {
+public class DashboardOptionCategoryBaseConfig extends BaseConfig  {
 
     private String chartDataSource;
 

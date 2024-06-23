@@ -23,6 +23,8 @@ import com.flowcentraltech.flowcentral.common.business.policies.EntityActionPoli
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralContainerPropertyConstants;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralEditionConstants;
+import com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants;
+import com.flowcentraltech.flowcentral.configuration.data.Messages;
 import com.flowcentraltech.flowcentral.configuration.data.ModuleInstall;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -38,6 +40,8 @@ public abstract class AbstractFlowCentralService extends AbstractBusinessService
 
     @Configurable
     private EnvironmentService environmentService;
+
+    private static final String SYSTEM_RESTORE_LOCK = "app:system-restore-lock";
 
     @Override
     public final void installFeatures(List<ModuleInstall> moduleInstallList) throws UnifyException {
@@ -59,6 +63,14 @@ public abstract class AbstractFlowCentralService extends AbstractBusinessService
         return environmentService;
     }
 
+    @Override
+    protected String resolveApplicationMessage(String message, Object... params) throws UnifyException {
+        Messages messages = getSessionAttribute(Messages.class,
+                FlowCentralSessionAttributeConstants.ALTERNATIVE_RESOURCES_BUNDLE);
+        String msg = messages != null ? messages.resolveMessage(message, params) : null;
+        return msg == null ? super.resolveApplicationMessage(message, params) : msg;
+    }
+
     protected void executeEntityPreActionPolicy(EntityActionContext ctx) throws UnifyException {
         if (ctx.isWithActionPolicy()) {
             ((EntityActionPolicy) getComponent(ctx.getActionPolicyName())).executePreAction(ctx);
@@ -77,6 +89,18 @@ public abstract class AbstractFlowCentralService extends AbstractBusinessService
         return new EntityActionResult(ctx);
     }
 
+    protected final boolean enterSystemRestoreMode() throws UnifyException {
+        return tryGrabLock(SYSTEM_RESTORE_LOCK);
+    }
+
+    protected final void exitSystemRestoreMode() throws UnifyException {
+        releaseLock(SYSTEM_RESTORE_LOCK);
+    }
+
+    protected final boolean isInSystemRestoreMode() throws UnifyException {
+        return isLocked(SYSTEM_RESTORE_LOCK);
+    }
+    
     protected abstract void doInstallModuleFeatures(ModuleInstall moduleInstall) throws UnifyException;
 
 }

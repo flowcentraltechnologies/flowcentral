@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.application.policies;
 
 import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
 import com.flowcentraltech.flowcentral.common.business.policies.AbstractAppletActionPolicy;
+import com.flowcentraltech.flowcentral.common.constants.ConfigType;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.database.Entity;
@@ -38,10 +39,10 @@ public abstract class AbstractApplicationAppletActionPolicy extends AbstractAppl
         return true;
     }
 
-    protected void registerPrivilege(String applicationName, String privilegeCategoryCode, String privilegeCode,
-            String privilegeDesc) throws UnifyException {
+    protected void registerPrivilege(ConfigType configType, String applicationName, String privilegeCategoryCode,
+            String privilegeCode, String privilegeDesc) throws UnifyException {
         final Long applicationId = applicationModuleService.getApplicationDef(applicationName).getId();
-        registerPrivilege(applicationId, privilegeCategoryCode, privilegeCode, privilegeDesc);
+        registerPrivilege(configType, applicationId, privilegeCategoryCode, privilegeCode, privilegeDesc);
     }
 
     protected void unregisterPrivilege(String applicationName, String privilegeCategoryCode, String privilegeCode)

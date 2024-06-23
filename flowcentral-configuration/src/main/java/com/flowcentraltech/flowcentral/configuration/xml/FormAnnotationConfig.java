@@ -32,7 +32,7 @@ import com.tcdng.unify.core.util.xml.adapter.CDataXmlAdapter;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class FormAnnotationConfig {
+public class FormAnnotationConfig extends BaseConfig {
 
     private FormAnnotationType type;
     

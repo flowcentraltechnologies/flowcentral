@@ -76,10 +76,4 @@ public class ModuleConfig extends BaseNameConfig {
         this.sysParamsConfig = sysParamsConfig;
     }
 
-    @Override
-    public String toString() {
-        return "ModuleConfig [shortCode=" + shortCode + ", principal=" + principal + ", moduleAppsConfig="
-                + moduleAppsConfig + ", sysParamsConfig=" + sysParamsConfig + "]";
-    }
-
 }

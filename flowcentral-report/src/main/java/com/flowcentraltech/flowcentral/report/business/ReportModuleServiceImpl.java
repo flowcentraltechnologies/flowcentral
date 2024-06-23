@@ -22,8 +22,12 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationPrivilegeConstants;
@@ -42,6 +46,7 @@ import com.flowcentraltech.flowcentral.chart.data.ChartDetails;
 import com.flowcentraltech.flowcentral.chart.data.ChartDetailsProvider;
 import com.flowcentraltech.flowcentral.chart.data.ChartTableColumn;
 import com.flowcentraltech.flowcentral.common.business.AbstractFlowCentralService;
+import com.flowcentraltech.flowcentral.common.business.RolePrivilegeBackupAgent;
 import com.flowcentraltech.flowcentral.common.constants.RecordStatus;
 import com.flowcentraltech.flowcentral.common.data.DefaultReportColumn;
 import com.flowcentraltech.flowcentral.common.data.FormatterOptions;
@@ -60,6 +65,7 @@ import com.flowcentraltech.flowcentral.report.constants.ReportParameterConstants
 import com.flowcentraltech.flowcentral.report.entities.ReportConfiguration;
 import com.flowcentraltech.flowcentral.report.entities.ReportConfigurationQuery;
 import com.flowcentraltech.flowcentral.report.entities.ReportGroup;
+import com.flowcentraltech.flowcentral.report.entities.ReportGroupMember;
 import com.flowcentraltech.flowcentral.report.entities.ReportGroupMemberQuery;
 import com.flowcentraltech.flowcentral.report.entities.ReportGroupQuery;
 import com.flowcentraltech.flowcentral.report.entities.ReportGroupRoleQuery;
@@ -124,7 +130,8 @@ import com.tcdng.unify.core.util.StringUtils;
  */
 @Transactional
 @Component(ReportModuleNameConstants.REPORT_MODULE_SERVICE)
-public class ReportModuleServiceImpl extends AbstractFlowCentralService implements ReportModuleService {
+public class ReportModuleServiceImpl extends AbstractFlowCentralService
+        implements ReportModuleService, RolePrivilegeBackupAgent {
 
     @Configurable
     private ThemeManager themeManager;
@@ -137,6 +144,65 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
 
     @Configurable(ChartModuleNameConstants.CHARTDATASOURCE_PROVIDER)
     private ChartDetailsProvider chartDetailsProvider;
+
+    private final Map<String, Set<ReportInfo>> groupMemberBackup;
+
+    public ReportModuleServiceImpl() {
+        this.groupMemberBackup = new ConcurrentHashMap<String, Set<ReportInfo>>();
+    }
+
+    @Override
+    public void clearDefinitionsCache() throws UnifyException {
+
+    }
+
+    @Override
+    public void unregisterApplicationRolePrivileges(Long applicationId) throws UnifyException {
+        environment().deleteAll(new ReportGroupMemberQuery().applicationId(applicationId));
+    }
+
+    @Override
+    public void unregisterCustomApplicationRolePrivileges(Long applicationId) throws UnifyException {
+        environment().deleteAll(new ReportGroupMemberQuery().applicationId(applicationId).isCustom());
+    }
+
+    @Override
+    public void backupApplicationRolePrivileges(Long applicationId) throws UnifyException {
+        List<ReportGroupMember> groupMemberList = environment()
+                .listAll(new ReportGroupMemberQuery().applicationId(applicationId).addSelect("reportGroupName",
+                        "reportConfigurationName", "applicationName"));
+        for (ReportGroupMember reportGroupMember : groupMemberList) {
+            Set<ReportInfo> reportConfigs = groupMemberBackup.get(reportGroupMember.getReportGroupName());
+            if (reportConfigs == null) {
+                reportConfigs = new HashSet<ReportInfo>();
+                groupMemberBackup.put(reportGroupMember.getReportGroupName(), reportConfigs);
+            }
+
+            reportConfigs.add(new ReportInfo(reportGroupMember.getApplicationName(),
+                    reportGroupMember.getReportConfigurationName()));
+        }
+    }
+
+    @Override
+    public void restoreApplicationRolePrivileges() throws UnifyException {
+        ReportGroupMember reportGroupMember = new ReportGroupMember();
+        for (Map.Entry<String, Set<ReportInfo>> entry : groupMemberBackup.entrySet()) {
+            final Long reportGroupId = environment().value(Long.class, "id",
+                    new ReportGroupQuery().name(entry.getKey()));
+            for (ReportInfo reportInfo : entry.getValue()) {
+                Optional<Long> reportConfigurationId = environment().valueOptional(Long.class, "id",
+                        new ReportConfigurationQuery().applicationName(reportInfo.getApplicationName())
+                                .name(reportInfo.getReportName()));
+                if (reportConfigurationId.isPresent() && environment().countAll(new ReportGroupMemberQuery()
+                        .reportGroupId(reportGroupId).reportConfigurationId(reportConfigurationId.get())) == 0) {
+                    reportGroupMember.setId(null);
+                    reportGroupMember.setReportGroupId(reportGroupId);
+                    reportGroupMember.setReportConfigurationId(reportConfigurationId.get());
+                    environment().create(reportGroupMember);
+                }
+            }
+        }
+    }
 
     @Override
     public List<ReportGroup> findReportGroupsByRole(String roleCode) throws UnifyException {
@@ -177,9 +243,9 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
     }
 
     @Override
-    public List<Long> findReportConfigurationIdList(String applicationName) throws UnifyException {
+    public List<Long> findCustomReportConfigurationIdList(String applicationName) throws UnifyException {
         return environment().valueList(Long.class, "id",
-                new ReportConfigurationQuery().applicationName(applicationName));
+                new ReportConfigurationQuery().applicationName(applicationName).isCustom());
     }
 
     @Override
@@ -863,6 +929,26 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
 
     }
 
+    private class ReportInfo {
+
+        private String applicationName;
+
+        private String reportName;
+
+        public ReportInfo(String applicationName, String reportName) {
+            this.applicationName = applicationName;
+            this.reportName = reportName;
+        }
+
+        public String getApplicationName() {
+            return applicationName;
+        }
+
+        public String getReportName() {
+            return reportName;
+        }
+    }
+
     private class IndexInfo {
 
         private int index;
@@ -918,7 +1004,7 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
                         param1 = condition.getParamA();
                         param2 = condition.getParamB();
                     } else if (type.isAmongst()) {
-                        if (param1 != null) {                            
+                        if (param1 != null) {
                             param1 = Arrays.asList(StringUtils.charSplit((String) param1, '|'));
                         }
                     }

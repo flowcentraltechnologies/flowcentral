@@ -29,7 +29,7 @@ import com.tcdng.unify.core.util.xml.adapter.TriStateXmlAdapter;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class SetStateConfig {
+public class SetStateConfig extends BaseConfig {
 
     private FormElementType type;
 

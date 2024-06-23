@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlElement;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class WfAlertsConfig {
+public class WfAlertsConfig extends BaseConfig {
 
     private List<WfAlertConfig> wfAlertConfigList;
 

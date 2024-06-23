@@ -26,7 +26,7 @@ import com.tcdng.unify.core.util.xml.adapter.CDataXmlAdapter;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class EntityExpressionConfig {
+public class EntityExpressionConfig extends BaseConfig {
 
     private String name;
 

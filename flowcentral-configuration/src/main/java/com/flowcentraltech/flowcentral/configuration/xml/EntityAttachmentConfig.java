@@ -27,7 +27,7 @@ import com.tcdng.unify.core.util.xml.adapter.FileAttachmentTypeXmlAdapter;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class EntityAttachmentConfig {
+public class EntityAttachmentConfig extends BaseConfig {
 
     private FileAttachmentType type;
 

@@ -19,6 +19,7 @@ package com.flowcentraltech.flowcentral.common.business.policies;
 import com.flowcentraltech.flowcentral.common.AbstractFlowCentralComponent;
 import com.flowcentraltech.flowcentral.common.business.ApplicationPrivilegeManager;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
+import com.flowcentraltech.flowcentral.common.constants.ConfigType;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
 
@@ -73,11 +74,11 @@ public abstract class AbstractEntityActionPolicy extends AbstractFlowCentralComp
         return environment;
     }
 
-    protected void registerPrivilege(Long applicationId, String privilegeCategoryCode, String privilegeCode,
-            String privilegeDesc) throws UnifyException {
+    protected void registerPrivilege(ConfigType configType, Long applicationId, String privilegeCategoryCode,
+            String privilegeCode, String privilegeDesc) throws UnifyException {
         if (!applicationPrivilegeManager.isRegisteredPrivilege(privilegeCategoryCode, privilegeCode)) {
-            applicationPrivilegeManager.registerPrivilege(applicationId, privilegeCategoryCode, privilegeCode,
-                    privilegeDesc);
+            applicationPrivilegeManager.registerPrivilege(configType, applicationId, privilegeCategoryCode,
+                    privilegeCode, privilegeDesc);
         }
     }
 

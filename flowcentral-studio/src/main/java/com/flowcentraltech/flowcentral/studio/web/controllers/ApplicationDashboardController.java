@@ -31,7 +31,6 @@ import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.UplBinding;
 import com.tcdng.unify.core.criterion.Equals;
 import com.tcdng.unify.core.data.IndexedTarget;
-import com.tcdng.unify.core.util.QueryUtils;
 import com.tcdng.unify.web.annotation.Action;
 import com.tcdng.unify.web.annotation.ResultMapping;
 import com.tcdng.unify.web.annotation.ResultMappings;
@@ -52,7 +51,8 @@ import com.tcdng.unify.web.ui.AbstractPageController;
         response = { "!switchpanelresponse panels:$l{switchApplicationPopup.searchBaseBodyPanel.entitySearchPanel}",
                 "!showpopupresponse popup:$s{switchApplicationPopup}" }),
         @ResultMapping(name = "reloadapplicationstudio", response = { "!forwardresponse path:$s{/applicationstudio}" }),
-        @ResultMapping(name = "cancelswitchapplication", response = { "!hidepopupresponse" }),
+        @ResultMapping(name = "cancelswitchapplication",
+                response = { "!hidepopupresponse" }),
         @ResultMapping(name = "switchsearchapplication",
                 response = {
                         "!switchpanelresponse panels:$l{switchApplicationPopup.searchBaseBodyPanel.entitySearchPanel}",
@@ -139,8 +139,9 @@ public class ApplicationDashboardController extends AbstractPageController<Appli
             TableDef _tableDef = appletUtils.getTableDef(StudioApplicationConstants.APPLICATION_SEARCH_TABLE);
 
             EntitySearch _switchApplicationSearch = new EntitySearch(
-                    new FormContext(new AppletContext(null, null, appletUtils)), null, null, null, _tableDef, null, null,
-                    null, null, 4, EntitySearch.ENABLE_ALL & ~(EntitySearch.SHOW_EDIT_BUTTON), false, false, false);
+                    new FormContext(new AppletContext(null, null, appletUtils)), null, null, null, _tableDef, null,
+                    null, null, null, 4, EntitySearch.ENABLE_ALL & ~(EntitySearch.SHOW_EDIT_BUTTON), false, false,
+                    false);
             _switchApplicationSearch
                     .setPaginationLabel(appletUtils.resolveSessionMessage("$m{entitysearch.display.label}"));
             _switchApplicationSearch.setEntitySubTitle("Application");
@@ -150,11 +151,6 @@ public class ApplicationDashboardController extends AbstractPageController<Appli
         }
 
         pageBean.getSwitchApplicationSearch().applyFilterToSearch();
-
-        Long applicationId = (Long) getSessionAttribute(StudioSessionAttributeConstants.CURRENT_APPLICATION_ID);
-        if (!QueryUtils.isValidLongCriteria(applicationId)) {
-            getPageRequestContextUtil().setRequestPopupName("switchApplicationPopup");
-        }
     }
 
     private void setApplicationSessionAttributes(Application application) throws UnifyException {

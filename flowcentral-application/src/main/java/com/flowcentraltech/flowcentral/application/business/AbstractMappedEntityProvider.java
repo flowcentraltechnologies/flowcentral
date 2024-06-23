@@ -65,6 +65,11 @@ public abstract class AbstractMappedEntityProvider<U extends BaseMappedEntityPro
     }
 
     @Override
+    public boolean isEntitiesDef() throws UnifyException {
+        return au.isEntityDef(srcEntityName) && au.isEntityDef(destEntityName);
+    }
+
+    @Override
     public String destEntity() {
         return destEntityName;
     }

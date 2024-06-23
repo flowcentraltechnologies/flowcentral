@@ -13,40 +13,41 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.delegate.data;
+package com.flowcentraltech.flowcentral.configuration.data;
 
 import java.util.List;
 
-import com.flowcentraltech.flowcentral.connect.common.data.EntityListingDTO;
-import com.flowcentraltech.flowcentral.connect.common.data.RedirectErrorDTO;
+import com.flowcentraltech.flowcentral.configuration.xml.ModuleConfig;
+import com.tcdng.unify.core.task.TaskMonitor;
 import com.tcdng.unify.core.util.StringUtils;
 
 /**
- * Delegate listing DTO
+ * Module installation configuration.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class DelegateEntityListingDTO {
+public class ModuleRestore extends ModuleInstall {
 
-    private List<EntityListingDTO> listings;
-    
-    private List<RedirectErrorDTO> redirectErrors;
+    private List<ApplicationRestore> applicationList;
 
-    public DelegateEntityListingDTO(List<EntityListingDTO> listings, List<RedirectErrorDTO> redirectErrors) {
-        this.listings = listings;
-        this.redirectErrors = redirectErrors;
+    private Messages messages;
+
+    public ModuleRestore(TaskMonitor taskMonitor, ModuleConfig moduleConfig, List<ApplicationRestore> applicationList,
+            Messages messages) {
+        super(taskMonitor, moduleConfig);
+        this.applicationList = applicationList;
+        this.messages = messages;
     }
 
-    public List<EntityListingDTO> getListings() {
-        return listings;
+    public List<ApplicationRestore> getApplicationList() {
+        return applicationList;
     }
 
-    public List<RedirectErrorDTO> getRedirectErrors() {
-        return redirectErrors;
+    public Messages getMessages() {
+        return messages;
     }
 
-    @Override
     public String toString() {
         return StringUtils.toXmlString(this);
     }

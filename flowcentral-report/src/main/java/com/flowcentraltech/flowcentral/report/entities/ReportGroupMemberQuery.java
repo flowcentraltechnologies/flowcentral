@@ -17,6 +17,7 @@ package com.flowcentraltech.flowcentral.report.entities;
 
 import java.util.Collection;
 
+import com.flowcentraltech.flowcentral.common.constants.ConfigType;
 import com.flowcentraltech.flowcentral.common.entities.BaseAuditTenantEntityQuery;
 
 /**
@@ -30,16 +31,32 @@ public class ReportGroupMemberQuery extends BaseAuditTenantEntityQuery<ReportGro
     public ReportGroupMemberQuery() {
         super(ReportGroupMember.class);
     }
-
+    
     public ReportGroupMemberQuery reportGroupId(Long reportGroupId) {
         return (ReportGroupMemberQuery) addEquals("reportGroupId", reportGroupId);
+    }
+
+    public ReportGroupMemberQuery reportGroupName(String reportGroupName) {
+        return (ReportGroupMemberQuery) addEquals("reportGroupName", reportGroupName);
     }
 
     public ReportGroupMemberQuery ueportGroupIdIn(Collection<Long> reportGroupId) {
         return (ReportGroupMemberQuery) addAmongst("reportGroupId", reportGroupId);
     }
 
+    public ReportGroupMemberQuery applicationId(Long applicationId) {
+        return (ReportGroupMemberQuery) addEquals("applicationId", applicationId);
+    }
+
     public ReportGroupMemberQuery reportConfigurationId(Long reportConfigurationId) {
         return (ReportGroupMemberQuery) addEquals("reportConfigurationId", reportConfigurationId);
+    }
+
+    public ReportGroupMemberQuery configType(ConfigType configType) {
+        return (ReportGroupMemberQuery) addEquals("configType", configType);
+    }
+
+    public ReportGroupMemberQuery isCustom() {
+        return (ReportGroupMemberQuery) addEquals("configType", ConfigType.CUSTOM);
     }
 }

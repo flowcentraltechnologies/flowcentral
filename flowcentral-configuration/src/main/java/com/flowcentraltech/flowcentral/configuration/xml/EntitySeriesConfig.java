@@ -27,7 +27,7 @@ import com.flowcentraltech.flowcentral.configuration.xml.adapter.SeriesTypeXmlAd
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class EntitySeriesConfig {
+public class EntitySeriesConfig extends BaseConfig {
 
     private SeriesType type;
 

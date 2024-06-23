@@ -51,6 +51,8 @@ public interface ApplicationModuleNameConstants {
     
     String TABLE_LOADING_ENVIRONMENT_DELEGATE = "tableloading-environmentdelegate";
     
+    String MISSING_ENVIRONMENT_DELEGATE = "missing-environmentdelegate";
+    
     String BASIC_DETAILSFORMLISTING_GENERATOR = "basic-detailsformlistinggenerator";
     
     String ENTITY_IMAGE_PROVIDER= "entity-imageprovider";

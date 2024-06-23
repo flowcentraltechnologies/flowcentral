@@ -186,7 +186,7 @@ public interface WorkflowModuleService extends FlowCentralService, ApplicationWo
      * @throws UnifyException
      *                        if an error occurs
      */
-    List<Long> findWfChannelIdList(String applicationName) throws UnifyException;
+    List<Long> findCustomWfChannelIdList(String applicationName) throws UnifyException;
 
     /**
      * Finds workflow wizard by ID.

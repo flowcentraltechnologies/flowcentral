@@ -23,7 +23,7 @@ import javax.xml.bind.annotation.XmlAttribute;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class PropertyListPropConfig {
+public class PropertyListPropConfig extends BaseConfig {
 
     private String name;
 

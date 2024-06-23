@@ -27,7 +27,9 @@ import com.tcdng.unify.core.util.StringUtils;
  */
 public class SnapshotDetails {
 
-    private Long snapshotId;
+    private Long snapshotDetailsId;
+
+    private String type;
 
     private String name;
 
@@ -39,9 +41,10 @@ public class SnapshotDetails {
 
     private String snapshotBy;
 
-    public SnapshotDetails(Long snapshotId, String name, String filename, String message, Date snapshotDate,
-            String snapshotBy) {
-        this.snapshotId = snapshotId;
+    public SnapshotDetails(Long snapshotDetailsId, String type, String name, String filename, String message,
+            Date snapshotDate, String snapshotBy) {
+        this.snapshotDetailsId = snapshotDetailsId;
+        this.type = type;
         this.name = name;
         this.filename = filename;
         this.message = message;
@@ -49,8 +52,12 @@ public class SnapshotDetails {
         this.snapshotBy = snapshotBy;
     }
 
-    public Long getSnapshotId() {
-        return snapshotId;
+    public Long getSnapshotDetailsId() {
+        return snapshotDetailsId;
+    }
+
+    public String getType() {
+        return type;
     }
 
     public String getName() {
