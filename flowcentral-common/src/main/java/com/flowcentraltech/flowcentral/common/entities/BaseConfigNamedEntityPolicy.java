@@ -38,12 +38,6 @@ public class BaseConfigNamedEntityPolicy extends BaseAuditEntityPolicy {
     }
 
     @Override
-    public void preUpdate(Entity record, Date now) throws UnifyException {
-        ConfigUtils.preUpdate((BaseConfigNamedEntity) record);
-        super.preUpdate(record, now);
-    }
-
-    @Override
     public void preDelete(Entity record, Date now) throws UnifyException {
         ConfigUtils.preDelete((BaseConfigNamedEntity) record);
         super.preDelete(record, now);

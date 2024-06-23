@@ -39,17 +39,10 @@ public final class ConfigUtils {
         }
     }
 
-    public static void preUpdate(ConfigEntity configEntity) throws UnifyException {
-        final ConfigType type = configEntity.getConfigType();
-        if (ConfigType.STATIC.equals(type)) {
-            throw new UnifyOperationException("Attempt to alter static configuration record.");
-        }
-    }
-
     public static void preDelete(ConfigEntity configEntity) throws UnifyException {
         final ConfigType type = configEntity.getConfigType();
         if (ConfigType.STATIC.equals(type)) {
-            throw new UnifyOperationException("Attempt to alter static configuration record.");
+            throw new UnifyOperationException("Attempt to delete static configuration record.");
         }
     }
 
