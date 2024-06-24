@@ -54,6 +54,6 @@ public interface ApplicationResultMappingConstants {
         
     String REFRESH_CONTENT = "refreshcontent";
 
-    String REFRESH_ON_DELETE = "refreshondelete";
+    String REFRESH_ALL = "refreshall";
 
 }
