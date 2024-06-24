@@ -119,7 +119,7 @@ public class StudioMenuWriter extends AbstractPanelWriter {
                 : (isCollaborationEnabled ? collabUtilMenuCategoryList : utilMenuCategoryList);
         StudioAppComponentType currCategory = studioMenuWidget.getCurrentSel();
         if (currCategory == null) {
-            currCategory = application ? StudioAppComponentType.ENTITY
+            currCategory = application ? StudioAppComponentType.ENUMERATION
                     : (isCollaborationEnabled ? StudioAppComponentType.COLLABORATION
                             : (codeGenerationProvider != null ? StudioAppComponentType.CODEGENERATION
                                     : StudioAppComponentType.APPLICATION));

@@ -50,9 +50,9 @@
 !ui-text:currentAppText style:$s{width:220px;} readOnly:true
     binding:$j{com.flowcentraltech.flowcentral.studio.constants.StudioSessionAttributeConstants.CURRENT_APPLICATION_DESC}
 !ui-button:switchAppBtn caption:$m{button.switch} styleClass:$e{fc-orangebutton}
-    eventHandler:$d{!ui-event event:onclick action:$c{switchAppAct}}
+    eventHandler:$d{!ui-event event:onclick action:$c{switchAppAct}} debounce:false
 !ui-button:utilitiesBtn caption:$m{button.utilities} styleClass:$e{fc-greenbutton} style:$s{margin-right: 36px;}
-    eventHandler:$d{!ui-event event:onclick action:$c{utilitiesAct}}
+    eventHandler:$d{!ui-event event:onclick action:$c{utilitiesAct}} debounce:false
     
 
 !ui-panel:navigationBand styleClass:$e{fc-topnavcontrol} components:$c{logoutLabel}
