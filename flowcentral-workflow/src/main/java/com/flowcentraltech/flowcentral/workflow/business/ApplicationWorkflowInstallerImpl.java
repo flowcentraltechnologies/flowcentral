@@ -235,7 +235,7 @@ public class ApplicationWorkflowInstallerImpl extends AbstractApplicationArtifac
                         oldAppFormWizard.setSubmitWorkflow(wfWizardConfig.getSubmitWorkflow());
                         oldAppFormWizard.setDeprecated(false);
                         oldAppFormWizard.setConfigType(ConfigType.STATIC);
-                        populateChildList(wfWizard, wfWizardConfig, applicationId, applicationConfig.getName(), false);
+                        populateChildList(oldAppFormWizard, wfWizardConfig, applicationId, applicationConfig.getName(), false);
                         environment().updateByIdVersion(oldAppFormWizard);
                     }
 

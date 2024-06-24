@@ -45,12 +45,14 @@
     eventHandler:$d{!ui-event event:onclick action:$c{userDetailsAct}}
 
 !ui-panel:topBannerSwitch layout:$d{!ui-horizontal cellType:middle style:$s{width:100%;}} styleClass:$e{fc-topbannerswitch}
-    components:$c{currentAppLabel currentAppText switchAppBtn}
+    components:$c{utilitiesBtn currentAppLabel currentAppText switchAppBtn}
 !ui-label:currentAppLabel caption:$m{studio.application.caption} styleClass:$s{fc-applicationlabel}
 !ui-text:currentAppText style:$s{width:220px;} readOnly:true
     binding:$j{com.flowcentraltech.flowcentral.studio.constants.StudioSessionAttributeConstants.CURRENT_APPLICATION_DESC}
 !ui-button:switchAppBtn caption:$m{button.switch} styleClass:$e{fc-orangebutton}
     eventHandler:$d{!ui-event event:onclick action:$c{switchAppAct}}
+!ui-button:utilitiesBtn caption:$m{button.utilities} styleClass:$e{fc-greenbutton} style:$s{margin-right: 36px;}
+    eventHandler:$d{!ui-event event:onclick action:$c{utilitiesAct}}
     
 
 !ui-panel:navigationBand styleClass:$e{fc-topnavcontrol} components:$c{logoutLabel}
@@ -84,5 +86,6 @@
 
 //Actions 
 !ui-post:userDetailsAct path:$n{/showUserDetails}
+!ui-post:utilitiesAct path:$n{/showUtilities}
 !ui-post:switchAppAct path:$s{/applicationstudio/dashboard/showSwitchApplication}
 !ui-post:logoutAct path:$n{/logOut} confirm:$m{application.logout.confirm}

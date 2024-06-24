@@ -24,6 +24,7 @@ import com.flowcentraltech.flowcentral.common.business.LoginUserPhotoGenerator;
 import com.flowcentraltech.flowcentral.common.business.UserLoginActivityProvider;
 import com.flowcentraltech.flowcentral.common.web.controllers.AbstractFlowCentralPageController;
 import com.flowcentraltech.flowcentral.studio.constants.StudioSessionAttributeConstants;
+import com.flowcentraltech.flowcentral.studio.web.widgets.StudioMenuWidget;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -58,8 +59,8 @@ import com.tcdng.unify.web.ui.widget.ContentPanel;
                 response = { "!showpopupresponse popup:$s{quickTableOrderPopup}" }),
         @ResultMapping(name = ApplicationResultMappingConstants.REFRESH_CONTENT,
                 response = { "!hidepopupresponse", "!refreshpanelresponse panels:$l{content}" }),
-        @ResultMapping(name = ApplicationResultMappingConstants.REFRESH_ON_DELETE,
-                response = { "!hidepopupresponse", "!refreshpanelresponse panels:$l{topBanner menuColPanel content}" }) })
+        @ResultMapping(name = ApplicationResultMappingConstants.REFRESH_ALL, response = { "!hidepopupresponse",
+                "!refreshpanelresponse panels:$l{topBanner menuColPanel content}" }) })
 public class ApplicationStudioController extends AbstractFlowCentralPageController<ApplicationStudioPageBean> {
 
     @Configurable
@@ -88,6 +89,17 @@ public class ApplicationStudioController extends AbstractFlowCentralPageControll
     }
 
     @Action
+    public String showUtilities() throws UnifyException {
+        removeSessionAttribute(StudioSessionAttributeConstants.CURRENT_APPLICATION_ID);
+        removeSessionAttribute(StudioSessionAttributeConstants.CURRENT_APPLICATION_NAME);
+        removeSessionAttribute(StudioSessionAttributeConstants.CURRENT_APPLICATION_DESC);
+        removeSessionAttribute(StudioSessionAttributeConstants.CLEAR_PAGES);
+        closeAllPages();
+        clearCategorySelect();
+        return ApplicationResultMappingConstants.REFRESH_ALL;
+    }
+
+    @Action
     public String logOut() throws UnifyException {
         logUserEvent(ApplicationModuleAuditConstants.LOGOUT);
         userLoginActivityProvider.logoutUser(true);
@@ -98,14 +110,9 @@ public class ApplicationStudioController extends AbstractFlowCentralPageControll
     public String onDeleteApplication() throws UnifyException {
         Long applicationId = (Long) getSessionAttribute(StudioSessionAttributeConstants.CURRENT_APPLICATION_ID);
         if (environment().countAll(new ApplicationQuery().id(applicationId)) == 0) {
-            removeSessionAttribute(StudioSessionAttributeConstants.CURRENT_APPLICATION_ID);
-            removeSessionAttribute(StudioSessionAttributeConstants.CURRENT_APPLICATION_NAME);
-            removeSessionAttribute(StudioSessionAttributeConstants.CURRENT_APPLICATION_DESC);
-            removeSessionAttribute(StudioSessionAttributeConstants.CLEAR_PAGES);
-            closeAllPages();
-            return ApplicationResultMappingConstants.REFRESH_ON_DELETE;
+            return showUtilities();
         }
-        
+
         return ApplicationResultMappingConstants.REFRESH_CONTENT;
     }
 
@@ -127,7 +134,11 @@ public class ApplicationStudioController extends AbstractFlowCentralPageControll
                 || Boolean.TRUE.equals(removeSessionAttribute(StudioSessionAttributeConstants.CLEAR_PAGES))) {
             ContentPanel contentPanel = getPageWidgetByShortName(ContentPanel.class, "content");
             contentPanel.clearPages();
+            clearCategorySelect();
         }
     }
 
+    private void clearCategorySelect() throws UnifyException {
+        getPageWidgetByShortName(StudioMenuWidget.class, "studioMenuPanel").setCurrentSel(null);
+    }
 }

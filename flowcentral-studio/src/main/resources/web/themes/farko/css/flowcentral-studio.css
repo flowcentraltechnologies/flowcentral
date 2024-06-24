@@ -38,7 +38,8 @@
 .fc-studiomenu .menucat:hover {background-color: #3e4a59;}
 .fc-studiomenu .menucat .symcat {display:block;padding: 4px;font-size: 16px;}
 .fc-studiomenu .menucat .labelcat {display:block;font-size: 10px;font-style: italic;word-wrap: break-word;}
-.fc-studiomenu .activecat {}
+.fc-studiomenu .activecat {background-color: #255D85;}
+.fc-studiomenu .activecat:hover {background-color: #507D9D;}
 .fc-studiomenu .menucatcap {margin: 0px 4px; padding: 2px 4px;color: #b0b0b0; font-size: 10px;}
 .fc-studiomenu .menu {}
 .fc-studiomenu .menu ul {list-style-type: none;}
