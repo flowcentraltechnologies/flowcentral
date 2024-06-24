@@ -38,8 +38,11 @@ public class SecuredLink extends BaseAuditTenantEntity {
     private String contentPath;
 
     @Column(length = 64, nullable = true)
-    private String assingedToLoginId;
+    private String assignedToLoginId;
 
+    @Column(length = 64, nullable = true)
+    private String assignedRole;
+    
     @Column(type = ColumnType.TIMESTAMP, nullable = true)
     private Date expiresOn;
 
@@ -70,12 +73,20 @@ public class SecuredLink extends BaseAuditTenantEntity {
         this.contentPath = contentPath;
     }
 
-    public String getAssingedToLoginId() {
-        return assingedToLoginId;
+    public String getAssignedToLoginId() {
+        return assignedToLoginId;
     }
 
-    public void setAssingedToLoginId(String assingedToLoginId) {
-        this.assingedToLoginId = assingedToLoginId;
+    public void setAssignedToLoginId(String assignedToLoginId) {
+        this.assignedToLoginId = assignedToLoginId;
+    }
+
+    public String getAssignedRole() {
+        return assignedRole;
+    }
+
+    public void setAssignedRole(String assignedRole) {
+        this.assignedRole = assignedRole;
     }
 
     public Date getExpiresOn() {

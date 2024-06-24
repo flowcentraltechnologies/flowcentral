@@ -29,8 +29,8 @@ public class SecuredLinkQuery extends BaseAuditEntityQuery<SecuredLink> {
         super(SecuredLink.class);
     }
 
-    public SecuredLinkQuery assingedToLoginId(Long assingedToLoginId) {
-        return (SecuredLinkQuery) addEquals("assingedToLoginId", assingedToLoginId);
+    public SecuredLinkQuery assignedToLoginId(Long assignedToLoginId) {
+        return (SecuredLinkQuery) addEquals("assignedToLoginId", assignedToLoginId);
     }
 
     public SecuredLinkQuery titleLike(String title) {

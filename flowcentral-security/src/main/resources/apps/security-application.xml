@@ -502,7 +502,10 @@
 			<field name="contentPath"
 				label="$m{security.securedlink.contentpath}" type="string"
 				inputWidget="application.text" maxLen="128" reportable="true" auditable="true"/>
-			<field name="assingedToLoginId" label="$m{security.securedlink.assingedtologinid}"
+			<field name="assignedToLoginId" label="$m{security.securedlink.assignedtologinid}"
+				type="string" inputWidget="application.text" maxLen="64"
+				nullable="true" reportable="true" auditable="true"/>
+			<field name="assignedRole" label="$m{security.securedlink.assignedrole}"
 				type="string" inputWidget="application.text" maxLen="64"
 				nullable="true" reportable="true" auditable="true"/>
 			<field name="expiresOn" label="$m{security.securedlink.expireson}"
@@ -622,7 +625,9 @@
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="contentPath" renderWidget="application.text"
 				widthRatio="1" />
-			<column field="assingedToLoginId" renderWidget="application.text"
+			<column field="assignedToLoginId" renderWidget="application.text"
+				widthRatio="1" />
+			<column field="assignedRole" renderWidget="application.text"
 				widthRatio="1" />
 			<column field="expiresOn" renderWidget="application.datetime"
 				widthRatio="1" />
@@ -789,7 +794,8 @@
 						required="true" />
 					<field name="contentPath" inputWidget="application.textarea"
 						column="0" required="true" />
-					<field name="assingedToLoginId" inputWidget="application.text" column="1" />
+					<field name="assignedToLoginId" inputWidget="application.text" column="1" />
+					<field name="assignedRole" inputWidget="application.text" column="1" />
 					<field name="expiresOn" inputWidget="application.datetime" column="1" />
 				</section>
 			</tab>
