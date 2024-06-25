@@ -28,4 +28,7 @@ public interface SecurityModuleNameConstants {
     String SECURITY_MODULE_SERVICE = "security-moduleservice";
 
     String SECURITY_REQUEST_USER_PHOTO_GENERATOR = "security-requestuserphotogenerator";
+    
+    String SECURED_LINK_ACCESS_CONTROLLER = "/application/securedlinkaccess";
+    
 }

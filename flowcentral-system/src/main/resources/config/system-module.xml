@@ -66,5 +66,8 @@
 			description="$m{system.sysparam.systemdatetimeformat}"
 			editor="!ui-select list:sysdatetimeformattypelist blankOption:$s{}"
 			type="string" editable="true" />
+		<sysParameter code="SYS-0010" defaultVal="http://localhost:8080"
+			description="$m{system.sysparam.applicationbaseurl}"
+			editor="!ui-textarea size:128" editable="true" />
 	</sysParameters>
 </module>

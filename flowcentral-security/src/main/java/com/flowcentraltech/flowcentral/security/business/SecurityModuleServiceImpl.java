@@ -30,10 +30,12 @@ import com.flowcentraltech.flowcentral.application.constants.FormatOverrideConst
 import com.flowcentraltech.flowcentral.common.business.AbstractFlowCentralService;
 import com.flowcentraltech.flowcentral.common.business.FileAttachmentProvider;
 import com.flowcentraltech.flowcentral.common.business.NotificationRecipientProvider;
+import com.flowcentraltech.flowcentral.common.business.SecuredLinkManager;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants;
 import com.flowcentraltech.flowcentral.common.constants.RecordStatus;
 import com.flowcentraltech.flowcentral.common.data.Attachment;
 import com.flowcentraltech.flowcentral.common.data.Recipient;
+import com.flowcentraltech.flowcentral.common.data.SecuredLinkInfo;
 import com.flowcentraltech.flowcentral.common.data.UserRoleInfo;
 import com.flowcentraltech.flowcentral.configuration.constants.DefaultApplicationConstants;
 import com.flowcentraltech.flowcentral.configuration.constants.NotifType;
@@ -52,6 +54,7 @@ import com.flowcentraltech.flowcentral.security.constants.SecurityModuleSysParam
 import com.flowcentraltech.flowcentral.security.constants.UserWorkflowStatus;
 import com.flowcentraltech.flowcentral.security.entities.PasswordHistory;
 import com.flowcentraltech.flowcentral.security.entities.PasswordHistoryQuery;
+import com.flowcentraltech.flowcentral.security.entities.SecuredLink;
 import com.flowcentraltech.flowcentral.security.entities.User;
 import com.flowcentraltech.flowcentral.security.entities.UserGroupMemberQuery;
 import com.flowcentraltech.flowcentral.security.entities.UserGroupRole;
@@ -75,6 +78,7 @@ import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.TransactionAttribute;
 import com.tcdng.unify.core.annotation.Transactional;
+import com.tcdng.unify.core.constant.FrequencyUnit;
 import com.tcdng.unify.core.criterion.Update;
 import com.tcdng.unify.core.data.FactoryMap;
 import com.tcdng.unify.core.database.Entity;
@@ -82,6 +86,7 @@ import com.tcdng.unify.core.security.OneWayStringCryptograph;
 import com.tcdng.unify.core.security.PasswordAutenticationService;
 import com.tcdng.unify.core.security.PasswordGenerator;
 import com.tcdng.unify.core.system.UserSessionManager;
+import com.tcdng.unify.core.util.CalendarUtils;
 import com.tcdng.unify.core.util.ColorUtils;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.StringUtils;
@@ -96,7 +101,7 @@ import com.tcdng.unify.web.UnifyWebSessionAttributeConstants;
 @Transactional
 @Component(SecurityModuleNameConstants.SECURITY_MODULE_SERVICE)
 public class SecurityModuleServiceImpl extends AbstractFlowCentralService
-        implements SecurityModuleService, NotificationRecipientProvider, UserTokenProvider {
+        implements SecurityModuleService, NotificationRecipientProvider, UserTokenProvider, SecuredLinkManager {
 
     @Configurable
     private UserSessionManager userSessionManager;
@@ -119,6 +124,39 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
     @Override
     public void clearDefinitionsCache() throws UnifyException {
 
+    }
+
+    @Override
+    public SecuredLinkInfo getSecuredLink(String title, String contentPath, int expirationInMinutes)
+            throws UnifyException {
+        return getSecuredLink(title, contentPath, null, null, expirationInMinutes);
+    }
+
+    @Override
+    public SecuredLinkInfo getSecuredLink(String title, String contentPath, String assignedLoginId,
+            int expirationInMinutes) throws UnifyException {
+        return getSecuredLink(title, contentPath, assignedLoginId, null, expirationInMinutes);
+    }
+
+    @Override
+    public SecuredLinkInfo getSecuredLink(String title, String contentPath, String assignedLoginId, String assignedRole,
+            int expirationInMinutes) throws UnifyException {
+        final String baseUrl = systemModuleService.getSysParameterValue(String.class,
+                SystemModuleSysParamConstants.APPLICATION_BASE_URL);
+        SecuredLink securedLink = new SecuredLink();
+        securedLink.setTitle(title);
+        securedLink.setContentPath(contentPath);
+        securedLink.setAssignedToLoginId(assignedLoginId);
+        securedLink.setAssignedRole(assignedRole);
+
+        final int actExpirationInMinutes = expirationInMinutes <= 0 ? 1 : expirationInMinutes;
+        Date expiresOn = CalendarUtils.getDateWithFrequencyOffset(getNow(), FrequencyUnit.MINUTE,
+                actExpirationInMinutes);
+        securedLink.setExpiresOn(expiresOn);
+        Long linkId = (Long) environment().create(securedLink);
+
+        final String linkUrl = baseUrl + SecurityModuleNameConstants.SECURED_LINK_ACCESS_CONTROLLER + "?lid=" + linkId;
+        return new SecuredLinkInfo(title, linkUrl, actExpirationInMinutes);
     }
 
     @Override
