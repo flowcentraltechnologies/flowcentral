@@ -85,11 +85,11 @@ public interface SecuredLinkManager extends FlowCentralComponent {
     /**
      * Gets secured link.
      * 
-     * @param linkId
-     *               the link ID
+     * @param linkAccessKey
+     *               the link access key
      * @return the secured link information
      * @throws UnifyException
      *                        if an error occurs
      */
-    SecuredLinkContentInfo getSecuredLink(Long linkId) throws UnifyException;
+    SecuredLinkContentInfo getSecuredLink(String linkAccessKey) throws UnifyException;
 }

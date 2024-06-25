@@ -106,6 +106,8 @@ import com.tcdng.unify.web.ui.constant.PageRequestParameterConstants;
 public class SecurityModuleServiceImpl extends AbstractFlowCentralService
         implements SecurityModuleService, NotificationRecipientProvider, UserTokenProvider, SecuredLinkManager {
 
+    private static final int SECURED_LINK_ACCESS_SUFFIX_LEN = 16;
+
     @Configurable
     private UserSessionManager userSessionManager;
 
@@ -146,9 +148,11 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
             String assignedRole, int expirationInMinutes) throws UnifyException {
         final String baseUrl = systemModuleService.getSysParameterValue(String.class,
                 SystemModuleSysParamConstants.APPLICATION_BASE_URL);
+        final String accessKey = StringUtils.generateRandomAlphanumeric(SECURED_LINK_ACCESS_SUFFIX_LEN);
         SecuredLink securedLink = new SecuredLink();
         securedLink.setTitle(title);
         securedLink.setContentPath(contentPath);
+        securedLink.setAccessKey(accessKey);
         securedLink.setAssignedToLoginId(assignedLoginId);
         securedLink.setAssignedRole(assignedRole);
 
@@ -158,18 +162,26 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
         securedLink.setExpiresOn(expiresOn);
         Long linkId = (Long) environment().create(securedLink);
 
+        final String linkAccessKey = String.format("%x%s", linkId, accessKey);
         final String linkUrl = baseUrl + SecurityModuleNameConstants.SECURED_LINK_ACCESS_CONTROLLER + "?"
-                + PageRequestParameterConstants.NO_TRANSFER + "=true&lid=" + linkId;
+                + PageRequestParameterConstants.NO_TRANSFER + "=true&lid=" + linkAccessKey;
         return new SecuredLinkInfo(title, linkUrl, actExpirationInMinutes);
     }
 
     @Override
-    public SecuredLinkContentInfo getSecuredLink(Long linkId) throws UnifyException {
-        SecuredLink securedLink = environment().find(new SecuredLinkQuery().id(linkId));
-        if (securedLink != null) {
-            final boolean expired = getNow().after(securedLink.getExpiresOn());
-            return new SecuredLinkContentInfo(securedLink.getTitle(), securedLink.getContentPath(),
-                    securedLink.getAssignedToLoginId(), securedLink.getAssignedRole(), expired);
+    public SecuredLinkContentInfo getSecuredLink(String linkAccessKey) throws UnifyException {
+        if (!StringUtils.isBlank(linkAccessKey)) {
+            final int rem = linkAccessKey.length() - SECURED_LINK_ACCESS_SUFFIX_LEN;
+            if (rem > 0) {
+                final Long linkId = Long.decode("0x" + linkAccessKey.substring(rem));
+                final String accessKey = linkAccessKey.substring(rem);
+                SecuredLink securedLink = environment().find(new SecuredLinkQuery().accessKey(accessKey).id(linkId));
+                if (securedLink != null) {
+                    final boolean expired = getNow().after(securedLink.getExpiresOn());
+                    return new SecuredLinkContentInfo(securedLink.getTitle(), securedLink.getContentPath(),
+                            securedLink.getAssignedToLoginId(), securedLink.getAssignedRole(), expired);
+                }
+            }
         }
 
         return SecuredLinkContentInfo.NOT_PRESENT;

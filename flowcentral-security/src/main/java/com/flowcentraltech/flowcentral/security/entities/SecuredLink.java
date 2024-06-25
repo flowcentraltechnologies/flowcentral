@@ -37,6 +37,9 @@ public class SecuredLink extends BaseAuditTenantEntity {
     @Column(length = 128)
     private String contentPath;
 
+    @Column(length = 32)
+    private String accessKey;
+
     @Column(length = 64, nullable = true)
     private String assignedToLoginId;
 
@@ -71,6 +74,14 @@ public class SecuredLink extends BaseAuditTenantEntity {
 
     public void setContentPath(String contentPath) {
         this.contentPath = contentPath;
+    }
+
+    public String getAccessKey() {
+        return accessKey;
+    }
+
+    public void setAccessKey(String accessKey) {
+        this.accessKey = accessKey;
     }
 
     public String getAssignedToLoginId() {

@@ -16,9 +16,13 @@
 
 package com.flowcentraltech.flowcentral.security.web.controllers;
 
+import com.flowcentraltech.flowcentral.common.business.SecuredLinkManager;
+import com.flowcentraltech.flowcentral.common.data.SecuredLinkContentInfo;
 import com.flowcentraltech.flowcentral.security.constants.SecurityModuleNameConstants;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.UserToken;
 import com.tcdng.unify.core.annotation.Component;
+import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.UplBinding;
 import com.tcdng.unify.web.constant.ReadOnly;
 import com.tcdng.unify.web.constant.ResetOnWrite;
@@ -35,6 +39,9 @@ import com.tcdng.unify.web.ui.AbstractPageController;
 @UplBinding("web/security/upl/securedlinkaccess.upl")
 public class SecuredLinkAccessController extends AbstractPageController<SecuredLinkAccessPageBean> {
 
+    @Configurable
+    private SecuredLinkManager securedLinkManager;
+
     public SecuredLinkAccessController() {
         super(SecuredLinkAccessPageBean.class, Secured.FALSE, ReadOnly.FALSE, ResetOnWrite.FALSE);
     }
@@ -42,9 +49,21 @@ public class SecuredLinkAccessController extends AbstractPageController<SecuredL
     @Override
     protected void onIndexPage() throws UnifyException {
         SecuredLinkAccessPageBean pageBean = getPageBean();
-        String lid = getHttpRequestParameter("lid");
-        // TODO
-        pageBean.setMessage(lid);
+        final String lid = getHttpRequestParameter("lid");
+        final SecuredLinkContentInfo securedLinkContentInfo = securedLinkManager.getSecuredLink(lid);
+        if (!securedLinkContentInfo.isPresent()) {
+            pageBean.setMessage(resolveSessionMessage("$m{securedlinkaccess.unresolvable}"));
+        } else if (securedLinkContentInfo.isExpired()) {
+            pageBean.setMessage(resolveSessionMessage("$m{securedlinkaccess.expired}"));
+        } else {
+            UserToken userToken = getUserToken();
+            if (!isUserLoggedIn()) {
+                
+            }
+            
+            // TODO
+            pageBean.setMessage("TODO");
+        }
     }
 
 }
