@@ -43,7 +43,7 @@ public class SecuredLink extends BaseAuditTenantEntity {
     @Column(length = 64, nullable = true)
     private String assignedRole;
     
-    @Column(type = ColumnType.TIMESTAMP, nullable = true)
+    @Column(type = ColumnType.TIMESTAMP)
     private Date expiresOn;
 
     @Column(length = 64, nullable = true)

@@ -35,6 +35,7 @@ import com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttrib
 import com.flowcentraltech.flowcentral.common.constants.RecordStatus;
 import com.flowcentraltech.flowcentral.common.data.Attachment;
 import com.flowcentraltech.flowcentral.common.data.Recipient;
+import com.flowcentraltech.flowcentral.common.data.SecuredLinkContentInfo;
 import com.flowcentraltech.flowcentral.common.data.SecuredLinkInfo;
 import com.flowcentraltech.flowcentral.common.data.UserRoleInfo;
 import com.flowcentraltech.flowcentral.configuration.constants.DefaultApplicationConstants;
@@ -55,6 +56,7 @@ import com.flowcentraltech.flowcentral.security.constants.UserWorkflowStatus;
 import com.flowcentraltech.flowcentral.security.entities.PasswordHistory;
 import com.flowcentraltech.flowcentral.security.entities.PasswordHistoryQuery;
 import com.flowcentraltech.flowcentral.security.entities.SecuredLink;
+import com.flowcentraltech.flowcentral.security.entities.SecuredLinkQuery;
 import com.flowcentraltech.flowcentral.security.entities.User;
 import com.flowcentraltech.flowcentral.security.entities.UserGroupMemberQuery;
 import com.flowcentraltech.flowcentral.security.entities.UserGroupRole;
@@ -127,19 +129,19 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
-    public SecuredLinkInfo getSecuredLink(String title, String contentPath, int expirationInMinutes)
+    public SecuredLinkInfo getNewSecuredLink(String title, String contentPath, int expirationInMinutes)
             throws UnifyException {
-        return getSecuredLink(title, contentPath, null, null, expirationInMinutes);
+        return getNewSecuredLink(title, contentPath, null, null, expirationInMinutes);
     }
 
     @Override
-    public SecuredLinkInfo getSecuredLink(String title, String contentPath, String assignedLoginId,
+    public SecuredLinkInfo getNewSecuredLink(String title, String contentPath, String assignedLoginId,
             int expirationInMinutes) throws UnifyException {
-        return getSecuredLink(title, contentPath, assignedLoginId, null, expirationInMinutes);
+        return getNewSecuredLink(title, contentPath, assignedLoginId, null, expirationInMinutes);
     }
 
     @Override
-    public SecuredLinkInfo getSecuredLink(String title, String contentPath, String assignedLoginId, String assignedRole,
+    public SecuredLinkInfo getNewSecuredLink(String title, String contentPath, String assignedLoginId, String assignedRole,
             int expirationInMinutes) throws UnifyException {
         final String baseUrl = systemModuleService.getSysParameterValue(String.class,
                 SystemModuleSysParamConstants.APPLICATION_BASE_URL);
@@ -157,6 +159,18 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
 
         final String linkUrl = baseUrl + SecurityModuleNameConstants.SECURED_LINK_ACCESS_CONTROLLER + "?lid=" + linkId;
         return new SecuredLinkInfo(title, linkUrl, actExpirationInMinutes);
+    }
+
+    @Override
+    public SecuredLinkContentInfo getSecuredLink(Long linkId) throws UnifyException {
+        SecuredLink securedLink = environment().find(new SecuredLinkQuery().id(linkId));
+        if (securedLink != null) {
+            final boolean expired = getNow().after(securedLink.getExpiresOn());
+            return new SecuredLinkContentInfo(securedLink.getTitle(), securedLink.getContentPath(),
+                    securedLink.getAssignedToLoginId(), securedLink.getAssignedRole(), expired);
+        }
+
+        return SecuredLinkContentInfo.NOT_PRESENT;
     }
 
     @Override

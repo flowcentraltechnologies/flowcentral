@@ -510,7 +510,7 @@
 				nullable="true" reportable="true" auditable="true"/>
 			<field name="expiresOn" label="$m{security.securedlink.expireson}"
 				type="timestamp" inputWidget="application.datetime"
-				nullable="true" reportable="true" auditable="true"/>
+				reportable="true" auditable="true"/>
 			<field name="lastAccessedBy" label="$m{security.securedlink.lastaccessedby}"
 				type="string" inputWidget="application.text" maxLen="64"
 				nullable="true" reportable="true" auditable="true"/>

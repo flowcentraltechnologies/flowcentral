@@ -17,7 +17,7 @@
 package com.flowcentraltech.flowcentral.common.data;
 
 /**
- * Secured information object.
+ * Secured link information object.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0

@@ -17,6 +17,7 @@
 package com.flowcentraltech.flowcentral.common.business;
 
 import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
+import com.flowcentraltech.flowcentral.common.data.SecuredLinkContentInfo;
 import com.flowcentraltech.flowcentral.common.data.SecuredLinkInfo;
 import com.tcdng.unify.core.UnifyException;
 
@@ -29,7 +30,7 @@ import com.tcdng.unify.core.UnifyException;
 public interface SecuredLinkManager extends FlowCentralComponent {
 
     /**
-     * Gets a secured link.
+     * Creates a new a secured link.
      * 
      * @param title
      *                            the title
@@ -41,10 +42,10 @@ public interface SecuredLinkManager extends FlowCentralComponent {
      * @throws UnifyException
      *                        if an error occurs
      */
-    SecuredLinkInfo getSecuredLink(String title, String contentPath, int expirationInMinutes) throws UnifyException;
+    SecuredLinkInfo getNewSecuredLink(String title, String contentPath, int expirationInMinutes) throws UnifyException;
 
     /**
-     * Gets a secured link.
+     * Creates a new secured link.
      * 
      * @param title
      *                            the title
@@ -58,11 +59,11 @@ public interface SecuredLinkManager extends FlowCentralComponent {
      * @throws UnifyException
      *                        if an error occurs
      */
-    SecuredLinkInfo getSecuredLink(String title, String contentPath, String assignedLoginId, int expirationInMinutes)
+    SecuredLinkInfo getNewSecuredLink(String title, String contentPath, String assignedLoginId, int expirationInMinutes)
             throws UnifyException;
 
     /**
-     * Gets a secured link.
+     * Creates a new secured link.
      * 
      * @param title
      *                            the title
@@ -78,7 +79,17 @@ public interface SecuredLinkManager extends FlowCentralComponent {
      * @throws UnifyException
      *                        if an error occurs
      */
-    SecuredLinkInfo getSecuredLink(String title, String contentPath, String assignedLoginId, String assignedRole,
+    SecuredLinkInfo getNewSecuredLink(String title, String contentPath, String assignedLoginId, String assignedRole,
             int expirationInMinutes) throws UnifyException;
 
+    /**
+     * Gets secured link.
+     * 
+     * @param linkId
+     *               the link ID
+     * @return the secured link information
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    SecuredLinkContentInfo getSecuredLink(Long linkId) throws UnifyException;
 }
