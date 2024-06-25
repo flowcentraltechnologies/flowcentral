@@ -14,6 +14,6 @@
 // the License.
 
 !ui-document favicon:$s{web/images/favicon_enduser.png}
-	 caption:$m{security.securedlinkaccess} components:$c{messagePanel}
+	 caption:$m{security.securedlink.access} components:$c{messagePanel}
 !ui-panel:messagePanel components:$c{message}
 !ui-label:message binding:message

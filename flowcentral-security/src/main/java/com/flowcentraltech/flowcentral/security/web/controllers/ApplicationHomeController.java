@@ -16,6 +16,7 @@
 
 package com.flowcentraltech.flowcentral.security.web.controllers;
 
+import com.flowcentraltech.flowcentral.security.constants.SecurityModuleNameConstants;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.UplBinding;
 import com.tcdng.unify.web.constant.ReadOnly;
@@ -29,7 +30,7 @@ import com.tcdng.unify.web.ui.AbstractPageController;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@Component("/application/home")
+@Component(SecurityModuleNameConstants.APPLICATION_HOME_CONTROLLER)
 @UplBinding("web/security/upl/applicationhome.upl")
 public class ApplicationHomeController extends AbstractPageController<ApplicationHomePageBean> {
 

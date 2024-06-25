@@ -16,7 +16,7 @@
 
 package com.flowcentraltech.flowcentral.security.web.controllers;
 
-import com.tcdng.unify.web.ui.AbstractPageBean;
+import com.flowcentraltech.flowcentral.common.web.controllers.AbstractForwarderPageBean;
 
 /**
  * Secured link access page bean.
@@ -24,7 +24,7 @@ import com.tcdng.unify.web.ui.AbstractPageBean;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class SecuredLinkAccessPageBean extends AbstractPageBean {
+public class SecuredLinkAccessPageBean extends AbstractForwarderPageBean {
 
     private String message;
 

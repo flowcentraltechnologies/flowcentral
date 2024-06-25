@@ -23,6 +23,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.Set;
 import java.util.TimeZone;
 
@@ -178,7 +179,10 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
                 SecuredLink securedLink = environment().find(new SecuredLinkQuery().accessKey(accessKey).id(linkId));
                 if (securedLink != null) {
                     final boolean expired = getNow().after(securedLink.getExpiresOn());
-                    return new SecuredLinkContentInfo(securedLink.getTitle(), securedLink.getContentPath(),
+                    final String baseUrl = systemModuleService.getSysParameterValue(String.class,
+                            SystemModuleSysParamConstants.APPLICATION_BASE_URL);
+                    final String loginUrl = baseUrl + SecurityModuleNameConstants.APPLICATION_HOME_CONTROLLER;
+                    return new SecuredLinkContentInfo(securedLink.getTitle(), securedLink.getContentPath(), loginUrl,
                             securedLink.getAssignedToLoginId(), securedLink.getAssignedRole(), expired);
                 }
             }
@@ -437,6 +441,12 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
         user.setLoginLocked(Boolean.FALSE);
         user.setLoginAttempts(Integer.valueOf(0));
         environment().updateLeanByIdVersion(user);
+    }
+
+    @Override
+    public Optional<UserRole> findUserRole(String userLoginId, String roleCode) throws UnifyException {
+        UserRole userRole = environment().find(new UserRoleQuery().userLoginId(userLoginId).roleCode(roleCode));
+        return Optional.ofNullable(userRole);
     }
 
     @Override

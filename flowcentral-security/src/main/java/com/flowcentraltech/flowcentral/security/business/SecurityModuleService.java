@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.security.business;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 
 import com.flowcentraltech.flowcentral.common.business.FlowCentralService;
 import com.flowcentraltech.flowcentral.common.business.UserLoginActivityProvider;
@@ -96,6 +97,19 @@ public interface SecurityModuleService extends FlowCentralService, UserLoginActi
      *                        if an error occurs
      */
     void unlockUser(Long userId) throws UnifyException;
+
+    /**
+     * Finds user role.
+     * 
+     * @param userLoginId
+     *                    the user login ID
+     * @param roleCode
+     *                    the role code
+     * @return optional user role
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    Optional<UserRole> findUserRole(String userLoginId, String roleCode) throws UnifyException;
 
     /**
      * Finds user roles based on supplied query.

@@ -31,4 +31,6 @@ public interface SecurityModuleNameConstants {
     
     String SECURED_LINK_ACCESS_CONTROLLER = "/application/securedlinkaccess";
     
+    String APPLICATION_HOME_CONTROLLER = "/application/home";
+    
 }

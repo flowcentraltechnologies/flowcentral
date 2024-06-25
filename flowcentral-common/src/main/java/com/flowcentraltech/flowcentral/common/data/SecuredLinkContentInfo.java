@@ -16,6 +16,8 @@
 
 package com.flowcentraltech.flowcentral.common.data;
 
+import com.tcdng.unify.core.util.StringUtils;
+
 /**
  * Secured link content information object.
  * 
@@ -25,11 +27,13 @@ package com.flowcentraltech.flowcentral.common.data;
 public class SecuredLinkContentInfo {
 
     public static final SecuredLinkContentInfo NOT_PRESENT = new SecuredLinkContentInfo();
-    
+
     private String title;
 
     private String contentPath;
-    
+
+    private String loginPath;
+
     private String assignedLoginId;
 
     private String assignedRole;
@@ -38,9 +42,11 @@ public class SecuredLinkContentInfo {
 
     private boolean expired;
 
-    public SecuredLinkContentInfo(String title, String contentPath, String assignedLoginId, String assignedRole, boolean expired) {
+    public SecuredLinkContentInfo(String title, String contentPath, String loginPath, String assignedLoginId,
+            String assignedRole, boolean expired) {
         this.title = title;
         this.contentPath = contentPath;
+        this.loginPath = loginPath;
         this.assignedLoginId = assignedLoginId;
         this.assignedRole = assignedRole;
         this.expired = expired;
@@ -59,12 +65,24 @@ public class SecuredLinkContentInfo {
         return contentPath;
     }
 
+    public String getLoginPath() {
+        return loginPath;
+    }
+
     public String getAssignedLoginId() {
         return assignedLoginId;
     }
 
     public String getAssignedRole() {
         return assignedRole;
+    }
+
+    public boolean isWithAssignedLoginId() {
+        return !StringUtils.isBlank(assignedLoginId);
+    }
+
+    public boolean isWithAssignedRole() {
+        return !StringUtils.isBlank(assignedRole);
     }
 
     public boolean isPresent() {
