@@ -26,4 +26,14 @@ import com.tcdng.unify.web.ui.AbstractPageBean;
  */
 public class SecuredLinkAccessPageBean extends AbstractPageBean {
 
+    private String message;
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+        
 }

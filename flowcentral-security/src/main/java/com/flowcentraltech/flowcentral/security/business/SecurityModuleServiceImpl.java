@@ -93,6 +93,7 @@ import com.tcdng.unify.core.util.ColorUtils;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.UnifyWebSessionAttributeConstants;
+import com.tcdng.unify.web.ui.constant.PageRequestParameterConstants;
 
 /**
  * Implementation of security module service.
@@ -141,8 +142,8 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
-    public SecuredLinkInfo getNewSecuredLink(String title, String contentPath, String assignedLoginId, String assignedRole,
-            int expirationInMinutes) throws UnifyException {
+    public SecuredLinkInfo getNewSecuredLink(String title, String contentPath, String assignedLoginId,
+            String assignedRole, int expirationInMinutes) throws UnifyException {
         final String baseUrl = systemModuleService.getSysParameterValue(String.class,
                 SystemModuleSysParamConstants.APPLICATION_BASE_URL);
         SecuredLink securedLink = new SecuredLink();
@@ -157,7 +158,8 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
         securedLink.setExpiresOn(expiresOn);
         Long linkId = (Long) environment().create(securedLink);
 
-        final String linkUrl = baseUrl + SecurityModuleNameConstants.SECURED_LINK_ACCESS_CONTROLLER + "?lid=" + linkId;
+        final String linkUrl = baseUrl + SecurityModuleNameConstants.SECURED_LINK_ACCESS_CONTROLLER + "?"
+                + PageRequestParameterConstants.NO_TRANSFER + "=true&lid=" + linkId;
         return new SecuredLinkInfo(title, linkUrl, actExpirationInMinutes);
     }
 

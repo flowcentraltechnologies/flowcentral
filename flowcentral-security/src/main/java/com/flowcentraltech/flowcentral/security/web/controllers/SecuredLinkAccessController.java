@@ -17,6 +17,7 @@
 package com.flowcentraltech.flowcentral.security.web.controllers;
 
 import com.flowcentraltech.flowcentral.security.constants.SecurityModuleNameConstants;
+import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.UplBinding;
 import com.tcdng.unify.web.constant.ReadOnly;
@@ -36,6 +37,14 @@ public class SecuredLinkAccessController extends AbstractPageController<SecuredL
 
     public SecuredLinkAccessController() {
         super(SecuredLinkAccessPageBean.class, Secured.FALSE, ReadOnly.FALSE, ResetOnWrite.FALSE);
+    }
+
+    @Override
+    protected void onIndexPage() throws UnifyException {
+        SecuredLinkAccessPageBean pageBean = getPageBean();
+        String lid = getHttpRequestParameter("lid");
+        // TODO
+        pageBean.setMessage(lid);
     }
 
 }
