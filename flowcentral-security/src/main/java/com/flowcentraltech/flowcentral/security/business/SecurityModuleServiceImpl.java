@@ -174,7 +174,7 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
         if (!StringUtils.isBlank(linkAccessKey)) {
             final int rem = linkAccessKey.length() - SECURED_LINK_ACCESS_SUFFIX_LEN;
             if (rem > 0) {
-                final Long linkId = Long.decode("0x" + linkAccessKey.substring(rem));
+                final Long linkId = Long.decode("0x" + linkAccessKey.substring(0, rem));
                 final String accessKey = linkAccessKey.substring(rem);
                 SecuredLink securedLink = environment().find(new SecuredLinkQuery().accessKey(accessKey).id(linkId));
                 if (securedLink != null) {

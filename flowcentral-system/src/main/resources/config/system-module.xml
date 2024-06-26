@@ -68,6 +68,6 @@
 			type="string" editable="true" />
 		<sysParameter code="SYS-0010" defaultVal="http://localhost:8080"
 			description="$m{system.sysparam.applicationbaseurl}"
-			editor="!ui-textarea size:128" editable="true" />
+			editor="!ui-textarea rows:8" editable="true" />
 	</sysParameters>
 </module>

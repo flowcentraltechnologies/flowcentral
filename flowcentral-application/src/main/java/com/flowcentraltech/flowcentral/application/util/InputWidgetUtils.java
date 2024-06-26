@@ -684,6 +684,7 @@ public final class InputWidgetUtils {
 
     public static String getFieldSequenceDefinition(FieldSequenceDef fieldSequenceDef) throws UnifyException {
         String result = null;
+        if (fieldSequenceDef != null) {
         try (StringWriter sw = new StringWriter(); BufferedWriter bw = new BufferedWriter(sw)) {
             for (FieldSequenceEntryDef fieldSequenceEntryDef : fieldSequenceDef.getFieldSequenceList()) {
                 bw.write(fieldSequenceEntryDef.getFieldName());
@@ -701,7 +702,8 @@ public final class InputWidgetUtils {
         } catch (IOException e) {
             throw new UnifyOperationException(e);
         }
-
+        }
+        
         return result;
     }
 
@@ -715,6 +717,7 @@ public final class InputWidgetUtils {
 
     public static String getFieldSequenceDefinition(FieldSequenceConfig fieldSequenceConfig) throws UnifyException {
         String result = null;
+        if (fieldSequenceConfig != null) {
         try (StringWriter sw = new StringWriter(); BufferedWriter bw = new BufferedWriter(sw)) {
             for (FieldSequenceEntryConfig entry : fieldSequenceConfig.getEntryList()) {
                 bw.write(entry.getFieldName());
@@ -732,7 +735,8 @@ public final class InputWidgetUtils {
         } catch (IOException e) {
             throw new UnifyOperationException(e);
         }
-
+        }
+        
         return result;
     }
 
@@ -772,32 +776,38 @@ public final class InputWidgetUtils {
 
     public static PropertySequenceConfig getPropertySequenceConfig(PropertySequenceDef propertySequenceDef)
             throws UnifyException {
-        List<PropertySequenceEntryConfig> entryList = new ArrayList<PropertySequenceEntryConfig>();
-        for (PropertySequenceEntryDef propertySequenceEntryDef : propertySequenceDef.getSequenceList()) {
-            entryList.add(new PropertySequenceEntryConfig(propertySequenceEntryDef.getProperty(),
-                    propertySequenceEntryDef.getLabel()));
+        if (propertySequenceDef != null) {
+            List<PropertySequenceEntryConfig> entryList = new ArrayList<PropertySequenceEntryConfig>();
+            for (PropertySequenceEntryDef propertySequenceEntryDef : propertySequenceDef.getSequenceList()) {
+                entryList.add(new PropertySequenceEntryConfig(propertySequenceEntryDef.getProperty(),
+                        propertySequenceEntryDef.getLabel()));
+            }
+
+            return new PropertySequenceConfig(entryList);
         }
 
-        return new PropertySequenceConfig(entryList);
+        return null;
     }
 
     public static String getPropertySequenceDefinition(PropertySequenceDef propertySequenceDef) throws UnifyException {
         String result = null;
-        try (StringWriter sw = new StringWriter(); BufferedWriter bw = new BufferedWriter(sw)) {
-            for (PropertySequenceEntryDef propertySequenceEntryDef : propertySequenceDef.getSequenceList()) {
-                bw.write(propertySequenceEntryDef.getProperty());
-                bw.write(']');
-                if (!StringUtils.isBlank(propertySequenceEntryDef.getLabel())) {
-                    bw.write(propertySequenceEntryDef.getLabel());
+        if (propertySequenceDef != null) {
+            try (StringWriter sw = new StringWriter(); BufferedWriter bw = new BufferedWriter(sw)) {
+                for (PropertySequenceEntryDef propertySequenceEntryDef : propertySequenceDef.getSequenceList()) {
+                    bw.write(propertySequenceEntryDef.getProperty());
                     bw.write(']');
+                    if (!StringUtils.isBlank(propertySequenceEntryDef.getLabel())) {
+                        bw.write(propertySequenceEntryDef.getLabel());
+                        bw.write(']');
+                    }
+                    bw.newLine();
                 }
-                bw.newLine();
-            }
 
-            bw.flush();
-            result = sw.toString();
-        } catch (IOException e) {
-            throw new UnifyOperationException(e);
+                bw.flush();
+                result = sw.toString();
+            } catch (IOException e) {
+                throw new UnifyOperationException(e);
+            }
         }
 
         return result;
@@ -815,22 +825,24 @@ public final class InputWidgetUtils {
     public static String getPropertySequenceDefinition(PropertySequenceConfig propertySequenceConfig)
             throws UnifyException {
         String result = null;
-        try (StringWriter sw = new StringWriter(); BufferedWriter bw = new BufferedWriter(sw)) {
-            for (PropertySequenceEntryConfig entry : propertySequenceConfig.getEntryList()) {
-                bw.write(entry.getProperty());
-                bw.write(']');
-                if (entry.getLabel() != null) {
-                    bw.write(entry.getLabel());
+        if (propertySequenceConfig != null) {
+            try (StringWriter sw = new StringWriter(); BufferedWriter bw = new BufferedWriter(sw)) {
+                for (PropertySequenceEntryConfig entry : propertySequenceConfig.getEntryList()) {
+                    bw.write(entry.getProperty());
                     bw.write(']');
+                    if (entry.getLabel() != null) {
+                        bw.write(entry.getLabel());
+                        bw.write(']');
+                    }
+
+                    bw.newLine();
                 }
 
-                bw.newLine();
+                bw.flush();
+                result = sw.toString();
+            } catch (IOException e) {
+                throw new UnifyOperationException(e);
             }
-
-            bw.flush();
-            result = sw.toString();
-        } catch (IOException e) {
-            throw new UnifyOperationException(e);
         }
 
         return result;
@@ -869,12 +881,16 @@ public final class InputWidgetUtils {
     }
 
     public static WidgetRulesConfig getWidgetRulesConfig(WidgetRulesDef widgetRulesDef) throws UnifyException {
+        if (widgetRulesDef != null) {
         List<WidgetRuleEntryConfig> entryList = new ArrayList<WidgetRuleEntryConfig>();
         for (WidgetRuleEntryDef widgetRuleEntryDef : widgetRulesDef.getWidgetRuleEntryList()) {
             entryList.add(new WidgetRuleEntryConfig(widgetRuleEntryDef.getFieldName(), widgetRuleEntryDef.getWidget()));
         }
 
         return new WidgetRulesConfig(entryList);
+        }
+        
+        return null;
     }
 
     public static AppWidgetRules newAppWidgetRules(WidgetRulesConfig widgetRulesConfig) throws UnifyException {
@@ -887,6 +903,7 @@ public final class InputWidgetUtils {
 
     public static String getWidgetRulesDefinition(WidgetRulesConfig widgetRulesConfig) throws UnifyException {
         String result = null;
+        if (widgetRulesConfig != null) {
         try (StringWriter sw = new StringWriter(); BufferedWriter bw = new BufferedWriter(sw)) {
             for (WidgetRuleEntryConfig entry : widgetRulesConfig.getEntryList()) {
                 bw.write(entry.getFieldName());
@@ -904,12 +921,14 @@ public final class InputWidgetUtils {
         } catch (IOException e) {
             throw new UnifyOperationException(e);
         }
-
+        }
+        
         return result;
     }
 
     public static String getWidgetRulesDefinition(WidgetRulesDef widgetRulesDef) throws UnifyException {
         String result = null;
+        if (widgetRulesDef != null) {
         try (StringWriter sw = new StringWriter(); BufferedWriter bw = new BufferedWriter(sw)) {
             for (WidgetRuleEntryDef widgetRuleEntryDef : widgetRulesDef.getWidgetRuleEntryList()) {
                 bw.write(widgetRuleEntryDef.getFieldName());
@@ -927,7 +946,8 @@ public final class InputWidgetUtils {
         } catch (IOException e) {
             throw new UnifyOperationException(e);
         }
-
+        }
+        
         return result;
     }
 
@@ -1312,6 +1332,7 @@ public final class InputWidgetUtils {
 
     public static String getUpdateDefinition(Update update) throws UnifyException {
         String result = null;
+        if (update != null) {
         try (StringWriter sw = new StringWriter(); BufferedWriter bw = new BufferedWriter(sw)) {
             for (Map.Entry<String, Object> entry : update.entrySet()) {
                 bw.write(entry.getKey());
@@ -1328,7 +1349,8 @@ public final class InputWidgetUtils {
         } catch (IOException e) {
             throw new UnifyOperationException(e);
         }
-
+        }
+        
         return result;
     }
 
@@ -1342,6 +1364,7 @@ public final class InputWidgetUtils {
 
     public static String getSearchInputDefinition(SearchInputsConfig searchInputsConfig) throws UnifyException {
         String result = null;
+        if (searchInputsConfig != null) {
         try (StringWriter sw = new StringWriter(); BufferedWriter bw = new BufferedWriter(sw);) {
             if (!DataUtils.isBlank(searchInputsConfig.getInputList())) {
                 for (SearchInputConfig searchInputConfig : searchInputsConfig.getInputList()) {
@@ -1364,12 +1387,14 @@ public final class InputWidgetUtils {
         } catch (IOException e) {
             throw new UnifyOperationException(e);
         }
-
+        }
+        
         return result;
     }
 
     public static String getSearchInputDefinition(SearchInputsDef searchInputsDef) throws UnifyException {
         String result = null;
+        if (searchInputsDef != null) {
         try (StringWriter sw = new StringWriter(); BufferedWriter bw = new BufferedWriter(sw);) {
             if (!searchInputsDef.isBlank()) {
                 for (SearchInputDef searchInputDef : searchInputsDef.getSearchInputDefList()) {
@@ -1392,7 +1417,8 @@ public final class InputWidgetUtils {
         } catch (IOException e) {
             throw new UnifyOperationException(e);
         }
-
+        }
+        
         return result;
     }
 
