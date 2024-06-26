@@ -86,11 +86,11 @@ public class SecuredLinkAccessController extends AbstractForwarderController<Sec
                 }
             }
 
-           setResultMapping(forwardToPath(securedLinkContentInfo.getContentPath()));
+            setResultMapping(externalForwardToPath(securedLinkContentInfo.getContentPath()));
         } else {
-            setResultMapping(forwardToPath(securedLinkContentInfo.getLoginPath()));
+            setResultMapping(externalForwardToPath(securedLinkContentInfo.getLoginPath()));
         }
-        
+
         setSessionAttribute(FlowCentralSessionAttributeConstants.SECURED_LINK_ACCESS, securedLinkContentInfo);
     }
 

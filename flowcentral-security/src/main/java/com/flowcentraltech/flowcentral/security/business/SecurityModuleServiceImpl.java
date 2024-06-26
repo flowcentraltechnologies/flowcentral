@@ -152,7 +152,7 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
         final String accessKey = StringUtils.generateRandomAlphanumeric(SECURED_LINK_ACCESS_SUFFIX_LEN);
         SecuredLink securedLink = new SecuredLink();
         securedLink.setTitle(title);
-        securedLink.setContentPath(contentPath);
+        securedLink.setContentPath(baseUrl + contentPath);
         securedLink.setAccessKey(accessKey);
         securedLink.setAssignedToLoginId(assignedLoginId);
         securedLink.setAssignedRole(assignedRole);
