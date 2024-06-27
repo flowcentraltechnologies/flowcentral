@@ -91,7 +91,7 @@ public class SecuredLinkAccessController extends AbstractForwarderController<Sec
                 }
             }
 
-            replacePage(securedLinkContentInfo.getContentUrl());
+            replacePage(securedLinkContentInfo.getDocUrl());
         } else {
             replacePage(securedLinkContentInfo.getLoginUrl());
         }

@@ -27,6 +27,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.TimeZone;
 
+import com.flowcentraltech.flowcentral.application.constants.ApplicationModulePathConstants;
 import com.flowcentraltech.flowcentral.application.constants.FormatOverrideConstants;
 import com.flowcentraltech.flowcentral.common.business.AbstractFlowCentralService;
 import com.flowcentraltech.flowcentral.common.business.FileAttachmentProvider;
@@ -152,7 +153,7 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
         final String accessKey = StringUtils.generateRandomAlphanumeric(SECURED_LINK_ACCESS_SUFFIX_LEN);
         SecuredLink securedLink = new SecuredLink();
         securedLink.setTitle(title);
-        securedLink.setContentPath(baseUrl + contentPath);
+        securedLink.setContentPath(contentPath);
         securedLink.setAccessKey(accessKey);
         securedLink.setAssignedToLoginId(assignedLoginId);
         securedLink.setAssignedRole(assignedRole);
@@ -190,10 +191,10 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
                         final String baseUrl = systemModuleService.getSysParameterValue(String.class,
                                 SystemModuleSysParamConstants.APPLICATION_BASE_URL);
                         final String loginUrl = baseUrl + SecurityModuleNameConstants.APPLICATION_HOME_CONTROLLER;
+                        final String docUrl = baseUrl + ApplicationModulePathConstants.APPLICATION_BROWSER_WINDOW;
                         return new SecuredLinkContentInfo(securedLink.getTitle(), securedLink.getContentPath(),
-                                loginUrl,
-
-                                securedLink.getAssignedToLoginId(), securedLink.getAssignedRole(), expired);
+                                loginUrl, docUrl, securedLink.getAssignedToLoginId(), securedLink.getAssignedRole(),
+                                expired);
                     }
                 }
             }
