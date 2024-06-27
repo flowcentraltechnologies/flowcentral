@@ -13,7 +13,4 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-!ui-document favicon:$s{web/images/favicon_enduser.png}
-	 caption:$m{security.securedlink.access} components:$c{messagePanel}
-!ui-panel:messagePanel components:$c{message}
-!ui-label:message binding:message
+!ui-plainhtml favicon:$s{web/images/favicon_enduser.png} caption:$m{security.securedlink.access}

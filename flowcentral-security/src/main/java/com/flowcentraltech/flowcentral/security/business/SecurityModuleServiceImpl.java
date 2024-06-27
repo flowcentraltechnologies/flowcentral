@@ -174,16 +174,27 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
         if (!StringUtils.isBlank(linkAccessKey)) {
             final int rem = linkAccessKey.length() - SECURED_LINK_ACCESS_SUFFIX_LEN;
             if (rem > 0) {
-                final Long linkId = Long.decode("0x" + linkAccessKey.substring(0, rem));
-                final String accessKey = linkAccessKey.substring(rem);
-                SecuredLink securedLink = environment().find(new SecuredLinkQuery().accessKey(accessKey).id(linkId));
-                if (securedLink != null) {
-                    final boolean expired = getNow().after(securedLink.getExpiresOn());
-                    final String baseUrl = systemModuleService.getSysParameterValue(String.class,
-                            SystemModuleSysParamConstants.APPLICATION_BASE_URL);
-                    final String loginUrl = baseUrl + SecurityModuleNameConstants.APPLICATION_HOME_CONTROLLER;
-                    return new SecuredLinkContentInfo(securedLink.getTitle(), securedLink.getContentPath(), loginUrl,
-                            securedLink.getAssignedToLoginId(), securedLink.getAssignedRole(), expired);
+                Long linkId = null;
+                try {
+                    linkId = Long.decode("0x" + linkAccessKey.substring(0, rem));
+                } catch (NumberFormatException e) {
+                    logSevere(e);
+                }
+
+                if (linkId != null) {
+                    final String accessKey = linkAccessKey.substring(rem);
+                    SecuredLink securedLink = environment()
+                            .find(new SecuredLinkQuery().accessKey(accessKey).id(linkId));
+                    if (securedLink != null) {
+                        final boolean expired = getNow().after(securedLink.getExpiresOn());
+                        final String baseUrl = systemModuleService.getSysParameterValue(String.class,
+                                SystemModuleSysParamConstants.APPLICATION_BASE_URL);
+                        final String loginUrl = baseUrl + SecurityModuleNameConstants.APPLICATION_HOME_CONTROLLER;
+                        return new SecuredLinkContentInfo(securedLink.getTitle(), securedLink.getContentPath(),
+                                loginUrl,
+
+                                securedLink.getAssignedToLoginId(), securedLink.getAssignedRole(), expired);
+                    }
                 }
             }
         }

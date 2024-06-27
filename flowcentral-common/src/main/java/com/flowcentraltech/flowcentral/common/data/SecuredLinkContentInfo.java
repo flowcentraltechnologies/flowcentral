@@ -30,9 +30,9 @@ public class SecuredLinkContentInfo {
 
     private String title;
 
-    private String contentPath;
+    private String contentUrl;
 
-    private String loginPath;
+    private String loginUrl;
 
     private String assignedLoginId;
 
@@ -42,11 +42,11 @@ public class SecuredLinkContentInfo {
 
     private boolean expired;
 
-    public SecuredLinkContentInfo(String title, String contentPath, String loginPath, String assignedLoginId,
+    public SecuredLinkContentInfo(String title, String contentUrl, String loginUrl, String assignedLoginId,
             String assignedRole, boolean expired) {
         this.title = title;
-        this.contentPath = contentPath;
-        this.loginPath = loginPath;
+        this.contentUrl = contentUrl;
+        this.loginUrl = loginUrl;
         this.assignedLoginId = assignedLoginId;
         this.assignedRole = assignedRole;
         this.expired = expired;
@@ -61,12 +61,12 @@ public class SecuredLinkContentInfo {
         return title;
     }
 
-    public String getContentPath() {
-        return contentPath;
+    public String getContentUrl() {
+        return contentUrl;
     }
 
-    public String getLoginPath() {
-        return loginPath;
+    public String getLoginUrl() {
+        return loginUrl;
     }
 
     public String getAssignedLoginId() {

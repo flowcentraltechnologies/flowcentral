@@ -29,8 +29,7 @@ import com.tcdng.unify.web.constant.Secured;
  * @since 1.0
  */
 @ResultMappings({
-        @ResultMapping(name = "forwardtopath", response = { "!forwardresponse pathBinding:$s{targetPath}" }),
-        @ResultMapping(name = "extforwardtopath", response = { "!forwardresponse pathBinding:$s{targetPath} external:true" })})
+        @ResultMapping(name = "forwardtopath", response = { "!forwardresponse pathBinding:$s{targetPath}" })})
 public abstract class AbstractForwarderController<T extends AbstractForwarderPageBean>
         extends AbstractFlowCentralPageController<T> {
 
@@ -43,12 +42,6 @@ public abstract class AbstractForwarderController<T extends AbstractForwarderPag
         AbstractForwarderPageBean pageBean = getPageBean();
         pageBean.setTargetPath(targetPath);
         return "forwardtopath";
-    }
-
-    protected String externalForwardToPath(String targetPath) throws UnifyException {
-        AbstractForwarderPageBean pageBean = getPageBean();
-        pageBean.setTargetPath(targetPath);
-        return "extforwardtopath";
     }
 
 }

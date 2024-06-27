@@ -30,6 +30,9 @@ import com.tcdng.unify.core.UserToken;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.UplBinding;
+import com.tcdng.unify.core.constant.MimeType;
+import com.tcdng.unify.web.annotation.ResultMapping;
+import com.tcdng.unify.web.annotation.ResultMappings;
 import com.tcdng.unify.web.constant.ReadOnly;
 import com.tcdng.unify.web.constant.ResetOnWrite;
 import com.tcdng.unify.web.constant.Secured;
@@ -42,6 +45,9 @@ import com.tcdng.unify.web.constant.Secured;
  */
 @Component(SecurityModuleNameConstants.SECURED_LINK_ACCESS_CONTROLLER)
 @UplBinding("web/security/upl/securedlinkaccess.upl")
+@ResultMappings({
+    @ResultMapping(type = MimeType.TEXT_HTML, name = "forwardtourl", response = { "!externalforwardresponse pathBinding:$s{targetPath}" }),
+    @ResultMapping(type = MimeType.TEXT_HTML, name = "plainmessage", response = { "!plainhtmlresponse htmlBinding:$s{message}" })})
 public class SecuredLinkAccessController extends AbstractForwarderController<SecuredLinkAccessPageBean> {
 
     @Configurable
@@ -56,16 +62,15 @@ public class SecuredLinkAccessController extends AbstractForwarderController<Sec
 
     @Override
     protected void onIndexPage() throws UnifyException {
-        SecuredLinkAccessPageBean pageBean = getPageBean();
         final String lid = getHttpRequestParameter("lid");
         final SecuredLinkContentInfo securedLinkContentInfo = securedLinkManager.getSecuredLink(lid);
         if (!securedLinkContentInfo.isPresent()) {
-            pageBean.setMessage(resolveSessionMessage("$m{securedlinkaccess.unresolvable}"));
+            showPlainMessage(resolveSessionMessage("$m{securedlinkaccess.unresolvable}"));
             return;
         }
 
         if (securedLinkContentInfo.isExpired()) {
-            pageBean.setMessage(resolveSessionMessage("$m{securedlinkaccess.expired}"));
+            showPlainMessage(resolveSessionMessage("$m{securedlinkaccess.expired}"));
             return;
         }
 
@@ -73,7 +78,7 @@ public class SecuredLinkAccessController extends AbstractForwarderController<Sec
             UserToken userToken = getUserToken();
             if (securedLinkContentInfo.isWithAssignedLoginId()
                     && !securedLinkContentInfo.getAssignedLoginId().equals(userToken.getUserLoginId())) {
-                pageBean.setMessage(resolveSessionMessage("$m{securedlinkaccess.assignedtoother}"));
+                showPlainMessage(resolveSessionMessage("$m{securedlinkaccess.assignedtoother}"));
                 return;
             }
 
@@ -81,17 +86,29 @@ public class SecuredLinkAccessController extends AbstractForwarderController<Sec
                 Optional<UserRole> optional = securityModuleService.findUserRole(
                         securedLinkContentInfo.getAssignedLoginId(), securedLinkContentInfo.getAssignedRole());
                 if (!optional.isPresent()) {
-                    pageBean.setMessage(resolveSessionMessage("$m{securedlinkaccess.norequiredrole}"));
+                    showPlainMessage(resolveSessionMessage("$m{securedlinkaccess.norequiredrole}"));
                     return;
                 }
             }
 
-            setResultMapping(externalForwardToPath(securedLinkContentInfo.getContentPath()));
+            replacePage(securedLinkContentInfo.getContentUrl());
         } else {
-            setResultMapping(externalForwardToPath(securedLinkContentInfo.getLoginPath()));
+            replacePage(securedLinkContentInfo.getLoginUrl());
         }
 
         setSessionAttribute(FlowCentralSessionAttributeConstants.SECURED_LINK_ACCESS, securedLinkContentInfo);
+    }
+
+    private void showPlainMessage(String msg) throws UnifyException {
+        SecuredLinkAccessPageBean pageBean = getPageBean();
+        pageBean.setMessage(resolveSessionMessage(msg));
+        setResultMapping("plainmessage");
+    }
+
+    private void replacePage(String targetPath) throws UnifyException {
+        SecuredLinkAccessPageBean pageBean = getPageBean();
+        pageBean.setTargetPath(targetPath);
+        setResultMapping("forwardtourl");
     }
 
 }
