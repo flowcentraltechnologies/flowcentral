@@ -33,8 +33,6 @@ public class UserRoleInfo {
     private String groupDesc;
 
     private String departmentCode;
-
-    private SecuredLinkContentInfo securedLinkContentInfo;
     
     public UserRoleInfo(String roleCode, String roleDesc, String groupName, String groupDesc, String departmentCode) {
         this.roleCode = roleCode;
@@ -70,11 +68,4 @@ public class UserRoleInfo {
         return departmentCode;
     }
 
-    public SecuredLinkContentInfo getSecuredLinkContentInfo() {
-        return securedLinkContentInfo;
-    }
-
-    public void setSecuredLinkContentInfo(SecuredLinkContentInfo securedLinkContentInfo) {
-        this.securedLinkContentInfo = securedLinkContentInfo;
-    }
 }

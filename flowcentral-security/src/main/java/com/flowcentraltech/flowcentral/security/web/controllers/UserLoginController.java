@@ -315,15 +315,15 @@ public class UserLoginController extends AbstractApplicationForwarderController<
     private String openApplication(UserRoleInfo userRole) throws UnifyException {
         final SecuredLinkContentInfo securedLinkContentInfo = (SecuredLinkContentInfo) getSessionAttribute(
                 FlowCentralSessionAttributeConstants.SECURED_LINK_ACCESS);
-        
+
         getSessionContext().removeAllAttributes();
-        
+
         if (userRole != null && workspacePrivilegeManager != null
                 && workspacePrivilegeManager.countRoleWorkspaces(userRole.getRoleCode()) <= 0) {
             throw new UnifyException(SecurityModuleErrorConstants.USER_ROLE_HAS_NO_WORKSPACE, userRole.getRoleDesc());
         }
 
-        userRole.setSecuredLinkContentInfo(securedLinkContentInfo);
+        setRequestAttribute(FlowCentralSessionAttributeConstants.SECURED_LINK_ACCESS, securedLinkContentInfo);
         return forwardToApplication(userRole);
     }
 
