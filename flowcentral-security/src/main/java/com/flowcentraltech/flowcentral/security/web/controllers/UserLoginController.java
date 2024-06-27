@@ -22,6 +22,8 @@ import java.util.Locale;
 import com.flowcentraltech.flowcentral.application.web.controllers.AbstractApplicationForwarderController;
 import com.flowcentraltech.flowcentral.common.business.LicenseProvider;
 import com.flowcentraltech.flowcentral.common.business.WorkspacePrivilegeManager;
+import com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants;
+import com.flowcentraltech.flowcentral.common.data.SecuredLinkContentInfo;
 import com.flowcentraltech.flowcentral.common.data.UserRoleInfo;
 import com.flowcentraltech.flowcentral.security.business.SecurityModuleService;
 import com.flowcentraltech.flowcentral.security.constants.SecurityModuleAuditConstants;
@@ -88,7 +90,7 @@ public class UserLoginController extends AbstractApplicationForwarderController<
             if (pageBean.isLanguage() && StringUtils.isNotBlank(pageBean.getLanguageTag())) {
                 loginLocale = Locale.forLanguageTag(pageBean.getLanguageTag());
             }
-
+            
             User user = securityModuleService.loginUser(pageBean.getUserName(), pageBean.getPassword(), loginLocale,
                     pageBean.getLoginTenantId());
             pageBean.setAllowLoginWithoutOtp(Boolean.TRUE.equals(user.getAllowLoginWithoutOtp()));
@@ -97,7 +99,7 @@ public class UserLoginController extends AbstractApplicationForwarderController<
             pageBean.setLoginTenantId(null);
 
             logUserEvent(SecurityModuleAuditConstants.LOGIN);
-            setLoginMessage(null);
+            setLoginMessage(null);            
 
             if (user.isChangeUserPassword() && !system().getSysParameterValue(boolean.class,
                     SecurityModuleSysParamConstants.ENABLE_THIRDPARTY_PASSWORD_AUTHENTICATION)) {
@@ -311,12 +313,17 @@ public class UserLoginController extends AbstractApplicationForwarderController<
     }
 
     private String openApplication(UserRoleInfo userRole) throws UnifyException {
+        final SecuredLinkContentInfo securedLinkContentInfo = (SecuredLinkContentInfo) getSessionAttribute(
+                FlowCentralSessionAttributeConstants.SECURED_LINK_ACCESS);
+        
         getSessionContext().removeAllAttributes();
+        
         if (userRole != null && workspacePrivilegeManager != null
                 && workspacePrivilegeManager.countRoleWorkspaces(userRole.getRoleCode()) <= 0) {
             throw new UnifyException(SecurityModuleErrorConstants.USER_ROLE_HAS_NO_WORKSPACE, userRole.getRoleDesc());
         }
 
+        userRole.setSecuredLinkContentInfo(securedLinkContentInfo);
         return forwardToApplication(userRole);
     }
 

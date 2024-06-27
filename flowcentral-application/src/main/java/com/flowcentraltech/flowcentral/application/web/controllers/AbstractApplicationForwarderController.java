@@ -68,8 +68,7 @@ public abstract class AbstractApplicationForwarderController<T extends AbstractF
         boolean inStudioWindow = LAUNCH_STUDIO_WINDOW
                 .equals(getRequestAttribute(PageRequestParameterConstants.WINDOW_NAME)); // TODO Check if role has
                                                                                          // developer privilege
-        final SecuredLinkContentInfo securedLinkContentInfo = (SecuredLinkContentInfo) removeSessionAttribute(
-                FlowCentralSessionAttributeConstants.SECURED_LINK_ACCESS);
+        final SecuredLinkContentInfo securedLinkContentInfo = userRoleInfo.getSecuredLinkContentInfo();
         final String applicationPath = inStudioWindow
                 ? appletUtilities.system().getSysParameterValue(String.class,
                         ApplicationModuleSysParamConstants.STUDIO_APPLICATION)
