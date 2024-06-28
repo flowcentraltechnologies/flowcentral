@@ -31,12 +31,6 @@ public class RequestOpenTabInfo {
 
     private boolean multiPage;
     
-    public RequestOpenTabInfo(String title, String tabName, String contentPath) {
-        this.title = title;
-        this.tabName = tabName;
-        this.contentPath = contentPath;
-    }
-    
     public RequestOpenTabInfo(String title, String tabName, String contentPath, boolean multiPage) {
         this.title = title;
         this.tabName = tabName;

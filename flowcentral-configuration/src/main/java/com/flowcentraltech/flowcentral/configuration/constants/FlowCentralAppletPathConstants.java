@@ -46,5 +46,7 @@ public interface FlowCentralAppletPathConstants {
     String REVIEW_SINGLEFORMWORKITEMS = "/reviewsingleformworkitemsapplet";
     
     String REVIEW_WIZARDWORKITEMS ="/reviewwizardworkitemsapplet";
+    
+    String MY_WORKITEM = "/myworkitemapplet";
 
 }

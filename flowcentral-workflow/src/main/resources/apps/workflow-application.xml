@@ -24,14 +24,14 @@
 	<!-- Applets -->
 	<applets>
 		<applet name="myWorkItems"
-			description="$m{workflowmyworkitems.application.workitems}"
-			label="$m{workflowmyworkitems.application.workitems.label}" icon="copy"
+			description="$m{workflow.myworkitems.application.workitems}"
+			label="$m{workflow.myworkitems.application.workitems.label}" icon="copy"
 			type="path_page" path="/workflow/myworkitems/openPage"
 			menuAccess="true" allowSecondaryTenants="true">
 		</applet>
 		<applet name="exceptionWorkItems"
-			description="$m{workflowexceptionworkitems.application.workitems}"
-			label="$m{workflowexceptionworkitems.application.workitems.label}" icon="exclamation-circle"
+			description="$m{workflow.exceptionworkitems.application.workitems}"
+			label="$m{workflow.exceptionworkitems.application.workitems.label}" icon="exclamation-circle"
 			type="path_page" path="/workflow/exceptionworkitems/openPage"
 			menuAccess="true" allowSecondaryTenants="true">
 		</applet>

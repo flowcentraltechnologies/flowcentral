@@ -97,7 +97,7 @@ public class MyWorkItemsController extends AbstractEntityFormAppletController<My
     @Override
     protected void onInitPage() throws UnifyException {
         super.onInitPage();
-        setPageTitle(resolveSessionMessage("$m{workflowmyworkitems.workitems}"));
+        setPageTitle(resolveSessionMessage("$m{workflow.myworkitems.workitems}"));
     }
 
     @Override

@@ -636,9 +636,9 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                 .findLean(new AppTableQuery().applicationName(tnp.getApplicationName()).name(tnp.getEntityName()));
         final long tableVersionNo = appTable.getVersionNo();
         final ApplicationEntityNameParts anp = ApplicationNameUtils.getApplicationEntityNameParts(loadinAppletName);
-        final String loadingAppletDesc = resolveApplicationMessage("$m{workflowmyworkitems.loadingapplet.description}",
+        final String loadingAppletDesc = resolveApplicationMessage("$m{workflow.myworkitems.loadingapplet.description}",
                 appTable.getDescription());
-        final String loadingAppletLabel = resolveApplicationMessage("$m{workflowmyworkitems.loadingapplet.label}",
+        final String loadingAppletLabel = resolveApplicationMessage("$m{workflow.myworkitems.loadingapplet.label}",
                 appTable.getLabel());
         AppApplet loadingApplet = environment()
                 .findLean(new AppAppletQuery().applicationName(anp.getApplicationName()).name(anp.getEntityName()));
