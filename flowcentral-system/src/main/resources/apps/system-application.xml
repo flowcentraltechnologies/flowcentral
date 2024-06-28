@@ -1025,6 +1025,8 @@
 			</tab>
 			<tab name="changeLog" label="$m{application.form.audit}"
 				contentType="miniform_changelog" />
+			<relatedList name="history" description="$m{system.scheduledtask.form.history}"
+				label="$m{system.scheduledtask.form.history}" applet="manageScheduledTaskHist" />
 		</form>
 		<form name="scheduledTaskHistForm"
 			description="$m{system.scheduledtaskhist.form}"
