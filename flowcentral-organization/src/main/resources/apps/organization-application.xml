@@ -403,10 +403,10 @@
 				label="$m{organization.role.description}" type="string"
 				inputWidget="application.text" maxLen="64" basicSearch="true" auditable="true"/>
 			<field name="activeAfter"
-				label="$m{organization.role.activeafter}" type="timestamp_utc"
+				label="$m{organization.role.activeafter}" type="timestamp"
 				inputWidget="application.time" auditable="true"/>
 			<field name="activeBefore"
-				label="$m{organization.role.activebefore}" type="timestamp_utc"
+				label="$m{organization.role.activebefore}" type="timestamp"
 				inputWidget="application.time" auditable="true"/>
 			<field name="email" label="$m{organization.role.email}"
 				type="string" maxLen="64" auditable="true"/>

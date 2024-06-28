@@ -410,7 +410,7 @@
 				label="$m{security.user.passwordexpirydt}" type="date"
 				inputWidget="application.date" />
 			<field name="lastLoginDt" label="$m{security.user.lastlogindt}"
-				type="timestamp_utc" inputWidget="application.datetime" />
+				type="timestamp" inputWidget="application.datetime" />
 			<field name="plainPassword"
 				label="$m{security.user.plainpassword}" type="scratch" />
 			<field name="userRoleList" label="$m{security.user.rolelist}"

@@ -520,15 +520,18 @@
 				label="$m{workflow.wfitemevent.wfstepname}" type="string"
 				maxLen="64" />
 			<field name="stepDt" label="$m{workflow.wfitemevent.stepdt}"
-				type="timestamp_utc" />
+				type="timestamp" />
+			<field name="reminderDt"
+				label="$m{workflow.wfitemevent.reminderdt}" type="timestamp"
+				nullable="true" />
 			<field name="expectedDt"
-				label="$m{workflow.wfitemevent.expecteddt}" type="timestamp_utc"
+				label="$m{workflow.wfitemevent.expecteddt}" type="timestamp"
 				nullable="true" />
 			<field name="criticalDt"
-				label="$m{workflow.wfitemevent.criticaldt}" type="timestamp_utc"
+				label="$m{workflow.wfitemevent.criticaldt}" type="timestamp"
 				nullable="true" />
 			<field name="actionDt"
-				label="$m{workflow.wfitemevent.actiondt}" type="timestamp_utc"
+				label="$m{workflow.wfitemevent.actiondt}" type="timestamp"
 				nullable="true" />
 			<field name="actor" label="$m{workflow.wfitemevent.actor}"
 				type="string" maxLen="64" nullable="true" />
@@ -596,6 +599,8 @@
 				type="list_only" key="wfItemEventId" property="wfStepName" />
 			<field name="stepDt" label="$m{workflow.wfitem.stepdt}"
 				type="list_only" key="wfItemEventId" property="stepDt" />
+			<field name="reminderDt" label="$m{workflow.wfitem.reminderdt}"
+				type="list_only" key="wfItemEventId" property="reminderDt" />
 			<field name="expectedDt" label="$m{workflow.wfitem.expecteddt}"
 				type="list_only" key="wfItemEventId" property="expectedDt" />
 			<field name="criticalDt" label="$m{workflow.wfitem.criticaldt}"

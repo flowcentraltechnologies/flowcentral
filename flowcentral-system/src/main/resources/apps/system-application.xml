@@ -481,17 +481,17 @@
 				label="$m{system.scheduledtask.taskname}" type="string"
 				inputWidget="schedulabletasklist" maxLen="64" basicSearch="true" auditable="true"/>
 			<field name="startTime"
-				label="$m{system.scheduledtask.starttime}" type="timestamp_utc"
+				label="$m{system.scheduledtask.starttime}" type="timestamp"
 				inputWidget="application.time" auditable="true"/>
 			<field name="endTime" label="$m{system.scheduledtask.endtime}"
-				type="timestamp_utc" inputWidget="application.timeclearable"
+				type="timestamp" inputWidget="application.timeclearable"
 				nullable="true" auditable="true"/>
 			<field name="nextExecutionOn"
 				label="$m{system.scheduledtask.nextexecutionon}"
-				type="timestamp_utc" inputWidget="application.datetime" auditable="true"/>
+				type="timestamp" inputWidget="application.datetime" auditable="true"/>
 			<field name="lastExecutionOn"
 				label="$m{system.scheduledtask.lastexecutionon}"
-				type="timestamp_utc" inputWidget="application.datetime"
+				type="timestamp" inputWidget="application.datetime"
 				nullable="true" auditable="true"/>
 			<field name="frequency"
 				label="$m{system.scheduledtask.frequency}" type="string"
@@ -524,10 +524,10 @@
 				references="taskstatuslist" inputWidget="application.enumlist"
 				basicSearch="true" />
 			<field name="startedOn"
-				label="$m{system.scheduledtaskhist.startedon}" type="timestamp_utc"
+				label="$m{system.scheduledtaskhist.startedon}" type="timestamp"
 				inputWidget="application.datetime" />
 			<field name="finishedOn"
-				label="$m{system.scheduledtask.finishedon}" type="timestamp_utc"
+				label="$m{system.scheduledtask.finishedon}" type="timestamp"
 				inputWidget="application.datetime" nullable="true" />
 			<field name="errorMsg"
 				label="$m{system.scheduledtaskhist.errormsg}" type="string"

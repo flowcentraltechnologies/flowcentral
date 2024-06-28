@@ -140,12 +140,16 @@ public class WfAlertDef {
         return type.isUserInteract();
     }
 
-    public boolean isCriticalNotification() {
-        return type.isCriticalNotification();
+    public boolean isOnReminder() {
+        return type.isOnReminder();
     }
 
-    public boolean isExpirationNotification() {
-        return type.isExpirationNotification();
+    public boolean isOnCritical() {
+        return type.isOnCritical();
+    }
+
+    public boolean isOnExpiration() {
+        return type.isOnExpiration();
     }
 
 }

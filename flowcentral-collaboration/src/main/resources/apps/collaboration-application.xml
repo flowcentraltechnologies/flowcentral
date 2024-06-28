@@ -107,7 +107,7 @@
 				type="string" inputWidget="application.text" maxLen="64"/>
 			<field name="frozenOn"
 				label="$m{collaboration.freezeunfreeze.frozenon}"
-				type="timestamp_utc" inputWidget="application.datetime"/>
+				type="timestamp" inputWidget="application.datetime"/>
 		</entity>
 	</entities>
 	<!-- Tables -->
