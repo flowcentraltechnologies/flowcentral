@@ -74,6 +74,15 @@ public class WfItemEvent extends BaseEntity {
     @Column(name = "ERROR_CD", length = 32, nullable = true)
     private String errorCode;
 
+    @Column(nullable = true)
+    private Boolean reminderAlertSent;
+
+    @Column(nullable = true)
+    private Boolean criticalAlertSent;
+
+    @Column(nullable = true)
+    private Boolean expirationAlertSent;
+
     @Column(type = ColumnType.CLOB, name = "ERROR_MSG", nullable = true)
     private String errorMsg;
 
@@ -206,6 +215,30 @@ public class WfItemEvent extends BaseEntity {
 
     public void setErrorCode(String errorCode) {
         this.errorCode = errorCode;
+    }
+
+    public Boolean getReminderAlertSent() {
+        return reminderAlertSent;
+    }
+
+    public void setReminderAlertSent(Boolean reminderAlertSent) {
+        this.reminderAlertSent = reminderAlertSent;
+    }
+
+    public Boolean getCriticalAlertSent() {
+        return criticalAlertSent;
+    }
+
+    public void setCriticalAlertSent(Boolean criticalAlertSent) {
+        this.criticalAlertSent = criticalAlertSent;
+    }
+
+    public Boolean getExpirationAlertSent() {
+        return expirationAlertSent;
+    }
+
+    public void setExpirationAlertSent(Boolean expirationAlertSent) {
+        this.expirationAlertSent = expirationAlertSent;
     }
 
     public String getErrorMsg() {

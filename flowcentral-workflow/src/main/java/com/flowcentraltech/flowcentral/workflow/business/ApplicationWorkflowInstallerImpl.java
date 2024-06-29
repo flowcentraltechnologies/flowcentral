@@ -516,6 +516,7 @@ public class ApplicationWorkflowInstallerImpl extends AbstractApplicationArtifac
                 wfStep.setLabel(resolveApplicationMessage(stepConfig.getLabel()));
                 wfStep.setAppletName(
                         ApplicationNameUtils.ensureLongNameReference(applicationName, stepConfig.getAppletName()));
+                wfStep.setReminderMinutes(stepConfig.getReminderMinutes());
                 wfStep.setCriticalMinutes(stepConfig.getCriticalMinutes());
                 wfStep.setExpiryMinutes(stepConfig.getExpiryMinutes());
                 wfStep.setAudit(stepConfig.isAudit());

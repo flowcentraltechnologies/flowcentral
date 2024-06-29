@@ -5402,6 +5402,8 @@
 					<field name="rule" column="1" visible="false" />
 					<field name="priority" inputWidget="application.enumlist"
 						column="1" required="true" />
+					<field name="reminderMinutes"
+						inputWidget="application.integer" column="1" />
 					<field name="criticalMinutes"
 						inputWidget="application.integer" column="1" />
 					<field name="expiryMinutes" inputWidget="application.integer"

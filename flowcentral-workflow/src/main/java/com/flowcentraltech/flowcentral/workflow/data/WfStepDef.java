@@ -84,6 +84,8 @@ public class WfStepDef {
 
     private String label;
 
+    private int reminderMinutes;
+
     private int criticalMinutes;
 
     private int expiryMinutes;
@@ -110,6 +112,12 @@ public class WfStepDef {
 
     private List<WfAlertDef> alertList;
 
+    private List<WfAlertDef> reminderAlertList;
+
+    private List<WfAlertDef> criticalAlertList;
+
+    private List<WfAlertDef> expirationAlertList;
+
     private List<FormActionDef> formActionDefList;
 
     private Set<String> roleSet;
@@ -119,10 +127,11 @@ public class WfStepDef {
             String nextStepName, String altNextStepName, String binaryConditionName, String readOnlyConditionName,
             String autoLoadingConditionName, String workItemLoadingRestriction, String attachmentProviderName,
             String newCommentCaption, String appletSetValuesName, String policy, String rule, String name,
-            String description, String label, int criticalMinutes, int expiryMinutes, boolean audit, boolean branchOnly,
-            boolean departmentOnly, boolean includeForwarder, boolean forwarderPreferred, String emails,
-            String comments, WfStepSetValuesDef wfSetValuesDef, Map<String, WfUserActionDef> userActions,
-            List<WfRoutingDef> routingList, List<WfAlertDef> alertList, Set<String> roleSet) {
+            String description, String label, int reminderMinutes, int criticalMinutes, int expiryMinutes,
+            boolean audit, boolean branchOnly, boolean departmentOnly, boolean includeForwarder,
+            boolean forwarderPreferred, String emails, String comments, WfStepSetValuesDef wfSetValuesDef,
+            Map<String, WfUserActionDef> userActions, List<WfRoutingDef> routingList, List<WfAlertDef> alertList,
+            Set<String> roleSet) {
         this.appletDef = appletDef;
         this.type = type;
         this.priority = priority;
@@ -142,6 +151,7 @@ public class WfStepDef {
         this.name = name;
         this.description = description;
         this.label = label;
+        this.reminderMinutes = reminderMinutes;
         this.criticalMinutes = criticalMinutes;
         this.expiryMinutes = expiryMinutes;
         this.audit = audit;
@@ -320,6 +330,10 @@ public class WfStepDef {
         return label;
     }
 
+    public int getReminderMinutes() {
+        return reminderMinutes;
+    }
+
     public int getCriticalMinutes() {
         return criticalMinutes;
     }
@@ -386,6 +400,63 @@ public class WfStepDef {
         return alertList;
     }
 
+    public List<WfAlertDef> getReminderAlertList() {
+        if (reminderAlertList == null) {
+            synchronized(this) {
+                if (reminderAlertList == null) {
+                    reminderAlertList = new ArrayList<WfAlertDef>();
+                    for (WfAlertDef wfAlertDef: reminderAlertList) {
+                        if (wfAlertDef.isOnReminder()) {
+                            reminderAlertList.add(wfAlertDef);
+                        }
+                    }
+                    
+                    reminderAlertList = DataUtils.unmodifiableList(reminderAlertList);
+                }                
+            }
+        }
+        
+        return reminderAlertList;
+    }
+
+    public List<WfAlertDef> getCriticalAlertList() {
+        if (criticalAlertList == null) {
+            synchronized(this) {
+                if (criticalAlertList == null) {
+                    criticalAlertList = new ArrayList<WfAlertDef>();
+                    for (WfAlertDef wfAlertDef: criticalAlertList) {
+                        if (wfAlertDef.isOnCritical()) {
+                            criticalAlertList.add(wfAlertDef);
+                        }
+                    }
+                    
+                    criticalAlertList = DataUtils.unmodifiableList(criticalAlertList);
+                }                
+            }
+        }
+        
+        return criticalAlertList;
+    }
+
+    public List<WfAlertDef> getExpirationAlertList() {
+        if (expirationAlertList == null) {
+            synchronized(this) {
+                if (expirationAlertList == null) {
+                    expirationAlertList = new ArrayList<WfAlertDef>();
+                    for (WfAlertDef wfAlertDef: expirationAlertList) {
+                        if (wfAlertDef.isOnExpiration()) {
+                            expirationAlertList.add(wfAlertDef);
+                        }
+                    }
+                    
+                    expirationAlertList = DataUtils.unmodifiableList(expirationAlertList);
+                }                
+            }
+        }
+        
+        return expirationAlertList;
+    }
+
     public Set<String> getRoleSet() {
         return roleSet;
     }
@@ -435,14 +506,14 @@ public class WfStepDef {
             String nextStepName, String altNextStepName, String binaryConditionName, String readOnlyConditionName,
             String autoLoadingConditionName, String workItemLoadingRestriction, String attachmentProviderName,
             String newCommentCaption, String appletSetValuesName, String policy, String rule, String name,
-            String description, String label, int criticalMinutes, int expiryMinutes, boolean audit, boolean branchOnly,
-            boolean departmentOnly, boolean includeForwarder, boolean forwarderPreferred, String emails,
-            String comments) {
+            String description, String label, int reminderMinutes, int criticalMinutes, int expiryMinutes,
+            boolean audit, boolean branchOnly, boolean departmentOnly, boolean includeForwarder,
+            boolean forwarderPreferred, String emails, String comments) {
         return new Builder(appletDef, stepAppletDef, type, priority, recordActionType, stepAppletName, nextStepName,
                 altNextStepName, binaryConditionName, readOnlyConditionName, autoLoadingConditionName,
                 workItemLoadingRestriction, attachmentProviderName, newCommentCaption, appletSetValuesName, policy,
-                rule, name, description, label, criticalMinutes, expiryMinutes, audit, branchOnly, departmentOnly,
-                includeForwarder, forwarderPreferred, emails, comments);
+                rule, name, description, label, reminderMinutes, criticalMinutes, expiryMinutes, audit, branchOnly,
+                departmentOnly, includeForwarder, forwarderPreferred, emails, comments);
     }
 
     public static class Builder {
@@ -487,6 +558,8 @@ public class WfStepDef {
 
         private String label;
 
+        private int reminderMinutes;
+
         private int criticalMinutes;
 
         private int expiryMinutes;
@@ -520,9 +593,9 @@ public class WfStepDef {
                 String nextStepName, String altNextStepName, String binaryConditionName, String readOnlyConditionName,
                 String autoLoadingConditionName, String workItemLoadingRestriction, String attachmentProviderName,
                 String newCommentCaption, String appletSetValuesName, String policy, String rule, String name,
-                String description, String label, int criticalMinutes, int expiryMinutes, boolean audit,
-                boolean branchOnly, boolean departmentOnly, boolean includeForwarder, boolean forwarderPreferred,
-                String emails, String comments) {
+                String description, String label, int reminderMinutes, int criticalMinutes, int expiryMinutes,
+                boolean audit, boolean branchOnly, boolean departmentOnly, boolean includeForwarder,
+                boolean forwarderPreferred, String emails, String comments) {
             this.appletDef = appletDef;
             this.stepAppletDef = stepAppletDef;
             this.type = type;
@@ -544,6 +617,7 @@ public class WfStepDef {
             this.name = name;
             this.description = description;
             this.label = label;
+            this.reminderMinutes = reminderMinutes;
             this.criticalMinutes = criticalMinutes;
             this.expiryMinutes = expiryMinutes;
             this.audit = audit;
@@ -635,8 +709,8 @@ public class WfStepDef {
             return new WfStepDef(appletDef, stepAppletDef, type, priority, recordActionType, stepAppletName,
                     nextStepName, altNextStepName, binaryConditionName, readOnlyConditionName, autoLoadingConditionName,
                     workItemLoadingRestriction, attachmentProviderName, newCommentCaption, appletSetValuesName, policy,
-                    rule, name, description, label, criticalMinutes, expiryMinutes, audit, branchOnly, departmentOnly,
-                    includeForwarder, forwarderPreferred, emails, comments, wfSetValuesDef,
+                    rule, name, description, label, reminderMinutes, criticalMinutes, expiryMinutes, audit, branchOnly,
+                    departmentOnly, includeForwarder, forwarderPreferred, emails, comments, wfSetValuesDef,
                     DataUtils.unmodifiableMap(userActionList), DataUtils.unmodifiableValuesList(routingList),
                     DataUtils.unmodifiableValuesList(alertList), DataUtils.unmodifiableSet(roleSet));
         }

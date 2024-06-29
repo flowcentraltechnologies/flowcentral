@@ -63,11 +63,13 @@ public class WfStepConfig extends BaseNameConfig {
 
     private String rule;
 
-    private Integer criticalMinutes;
-
     private String valueGenerator;
     
     private String appletSetValuesName;
+
+    private Integer reminderMinutes;
+
+    private Integer criticalMinutes;
     
     private Integer expiryMinutes;
 
@@ -224,6 +226,15 @@ public class WfStepConfig extends BaseNameConfig {
     @XmlAttribute
     public void setRule(String rule) {
         this.rule = rule;
+    }
+
+    public Integer getReminderMinutes() {
+        return reminderMinutes;
+    }
+
+    @XmlAttribute
+    public void setReminderMinutes(Integer reminderMinutes) {
+        this.reminderMinutes = reminderMinutes;
     }
 
     public Integer getCriticalMinutes() {

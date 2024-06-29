@@ -101,6 +101,9 @@ public class WfStep extends BaseConfigNamedEntity {
     private int designY;
 
     @Column(nullable = true)
+    private Integer reminderMinutes;
+
+    @Column(nullable = true)
     private Integer criticalMinutes;
 
     @Column(nullable = true)
@@ -336,6 +339,14 @@ public class WfStep extends BaseConfigNamedEntity {
 
     public void setDesignY(int designY) {
         this.designY = designY;
+    }
+
+    public Integer getReminderMinutes() {
+        return reminderMinutes;
+    }
+
+    public void setReminderMinutes(Integer reminderMinutes) {
+        this.reminderMinutes = reminderMinutes;
     }
 
     public Integer getCriticalMinutes() {

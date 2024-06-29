@@ -31,4 +31,6 @@ public interface WorkflowModuleSysParamConstants {
 
     String WF_ENABLE_AUTOLOADING = "WF-0004";
 
+    String WF_WORKITEM_ALERT_BATCH_SIZE = "WF-0005";
+
 }
