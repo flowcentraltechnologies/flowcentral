@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.flowcentraltech.flowcentral.common.business.FlowCentralService;
+import com.flowcentraltech.flowcentral.common.data.SecuredLinkInfo;
 import com.flowcentraltech.flowcentral.system.data.CredentialDef;
 import com.flowcentraltech.flowcentral.system.data.LicenseDef;
 import com.flowcentraltech.flowcentral.system.entities.Credential;
@@ -38,6 +39,59 @@ import com.tcdng.unify.core.data.Listable;
  * @since 1.0
  */
 public interface SystemModuleService extends FlowCentralService {
+
+    /**
+     * Creates a new a secured link.
+     * 
+     * @param title
+     *                            the title
+     * @param contentPath
+     *                            the content path
+     * @param expirationInMinutes
+     *                            expiration in minutes
+     * @return the secured link information
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    SecuredLinkInfo getNewSecuredLink(String title, String contentPath, int expirationInMinutes) throws UnifyException;
+
+    /**
+     * Creates a new secured link.
+     * 
+     * @param title
+     *                            the title
+     * @param contentPath
+     *                            the content path
+     * @param assignedLoginId
+     *                            the assigned login ID
+     * @param expirationInMinutes
+     *                            expiration in minutes
+     * @return the secured link information
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    SecuredLinkInfo getNewSecuredLink(String title, String contentPath, String assignedLoginId, int expirationInMinutes)
+            throws UnifyException;
+
+    /**
+     * Creates a new secured link.
+     * 
+     * @param title
+     *                            the title
+     * @param contentPath
+     *                            the content path
+     * @param assignedLoginId
+     *                            the assigned login ID
+     * @param assignedRole
+     *                            the assigned role
+     * @param expirationInMinutes
+     *                            expiration in minutes
+     * @return the secured link information
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    SecuredLinkInfo getNewSecuredLink(String title, String contentPath, String assignedLoginId, String assignedRole,
+            int expirationInMinutes) throws UnifyException;
 
     /**
      * Gets tenant IDs with primary tenant ID mapped.

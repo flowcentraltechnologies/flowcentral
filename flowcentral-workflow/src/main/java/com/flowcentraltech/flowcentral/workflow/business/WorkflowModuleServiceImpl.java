@@ -82,6 +82,7 @@ import com.flowcentraltech.flowcentral.common.constants.FlowCentralContainerProp
 import com.flowcentraltech.flowcentral.common.constants.ProcessErrorConstants;
 import com.flowcentraltech.flowcentral.common.constants.WfItemVersionType;
 import com.flowcentraltech.flowcentral.common.data.Recipient;
+import com.flowcentraltech.flowcentral.common.data.SecuredLinkInfo;
 import com.flowcentraltech.flowcentral.common.data.WfEntityInst;
 import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
 import com.flowcentraltech.flowcentral.configuration.constants.AppletType;
@@ -121,6 +122,7 @@ import com.flowcentraltech.flowcentral.workflow.entities.WfItem;
 import com.flowcentraltech.flowcentral.workflow.entities.WfItemEvent;
 import com.flowcentraltech.flowcentral.workflow.entities.WfItemEventQuery;
 import com.flowcentraltech.flowcentral.workflow.entities.WfItemHist;
+import com.flowcentraltech.flowcentral.workflow.entities.WfItemQuery;
 import com.flowcentraltech.flowcentral.workflow.entities.WfStep;
 import com.flowcentraltech.flowcentral.workflow.entities.WfStepAlert;
 import com.flowcentraltech.flowcentral.workflow.entities.WfStepQuery;
@@ -1218,40 +1220,33 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                 final Date now = getNow();
                 final int batchSize = appletUtil.system().getSysParameterValue(int.class,
                         WorkflowModuleSysParamConstants.WF_WORKITEM_ALERT_BATCH_SIZE);
-                List<WfItemEvent> wfItemEventList = environment()
-                        .listAll(new WfItemEventQuery().reminderDue(now).setLimit(batchSize));
-                logDebug("Sending [{0}] reminder work item alerts...", wfItemEventList.size());
-                for (WfItemEvent wfItemEvent : wfItemEventList) {
-                    if (sendWorkItemAlert(wfItemEvent, now, WorkflowAlertType.REMINDER_NOTIFICATION)) {
-                        wfItemEvent.setReminderAlertSent(true);
-                    } else {
-                        wfItemEvent.setReminderAlertSent(false);
-                        wfItemEvent.setReminderDt(null);
-                    }
-
-                    environment().updateByIdVersion(wfItemEvent);
+                List<WfItem> wfItemList = environment().listAll(new WfItemQuery().reminderDue(now).setLimit(batchSize));
+                logDebug("Sending [{0}] reminder work item alerts...", wfItemList.size());
+                for (WfItem wfItem : wfItemList) {
+                    boolean sent = sendWorkItemAlert(wfItem, now, WorkflowAlertType.REMINDER_NOTIFICATION);
+                    environment().updateById(WfItemEvent.class, wfItem.getWfItemEventId(),
+                            sent ? new Update().add("reminderAlertSent", true)
+                                    : new Update().add("reminderAlertSent", false).add("reminderDt", null));
                 }
 
                 commitTransactions();
 
-                wfItemEventList = environment().listAll(new WfItemEventQuery().criticalDue(now).setLimit(batchSize));
-                logDebug("Sending [{0}] critical work item alerts...", wfItemEventList.size());
-                for (WfItemEvent wfItemEvent : wfItemEventList) {
-                    wfItemEvent.setCriticalAlertSent(
-                            sendWorkItemAlert(wfItemEvent, now, WorkflowAlertType.CRITICAL_NOTIFICATION));
-                    wfItemEvent.setCriticalDt(null);
-                    environment().updateByIdVersion(wfItemEvent);
+                wfItemList = environment().listAll(new WfItemQuery().criticalDue(now).setLimit(batchSize));
+                logDebug("Sending [{0}] critical work item alerts...", wfItemList.size());
+                for (WfItem wfItem : wfItemList) {
+                    boolean sent = sendWorkItemAlert(wfItem, now, WorkflowAlertType.CRITICAL_NOTIFICATION);
+                    environment().updateById(WfItemEvent.class, wfItem.getWfItemEventId(),
+                            new Update().add("criticalAlertSent", sent).add("criticalDt", null));
                 }
 
                 commitTransactions();
 
-                wfItemEventList = environment().listAll(new WfItemEventQuery().expirationDue(now).setLimit(batchSize));
-                logDebug("Sending [{0}] expiration work item alerts...", wfItemEventList.size());
-                for (WfItemEvent wfItemEvent : wfItemEventList) {
-                    wfItemEvent.setExpirationAlertSent(
-                            sendWorkItemAlert(wfItemEvent, now, WorkflowAlertType.EXPIRATION_NOTIFICATION));
-                    wfItemEvent.setExpectedDt(null);
-                    environment().updateByIdVersion(wfItemEvent);
+                wfItemList = environment().listAll(new WfItemQuery().expirationDue(now).setLimit(batchSize));
+                logDebug("Sending [{0}] expiration work item alerts...", wfItemList.size());
+                for (WfItem wfItem : wfItemList) {
+                    boolean sent = sendWorkItemAlert(wfItem, now, WorkflowAlertType.EXPIRATION_NOTIFICATION);
+                    environment().updateById(WfItemEvent.class, wfItem.getWfItemEventId(),
+                            new Update().add("expirationAlertSent", sent).add("expectedDt", null));
                 }
 
                 commitTransactions();
@@ -1263,20 +1258,32 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         }
     }
 
-    private boolean sendWorkItemAlert(WfItemEvent wfItemEvent, Date now, WorkflowAlertType type) {
+    @SuppressWarnings("unchecked")
+    private boolean sendWorkItemAlert(WfItem wfItem, Date now, WorkflowAlertType type) {
         try {
-            final WfDef wfDef = getWfDef(wfItemEvent.getWorkflowName());
-            final WfStepDef wfStepDef = wfDef.getWfStepDef(wfItemEvent.getWfStepName());
-
-            WorkEntity inst = null;
-            List<WfAlertDef> alertList = type.isOnReminder() ? wfStepDef.getReminderAlertList()
+            final WfDef wfDef = getWfDef(wfItem.getWorkflowName());
+            final WfStepDef wfStepDef = wfDef.getWfStepDef(wfItem.getWfStepName());
+            final List<WfAlertDef> alertList = type.isOnReminder() ? wfStepDef.getReminderAlertList()
                     : (type.isOnCritical() ? wfStepDef.getCriticalAlertList() : wfStepDef.getExpirationAlertList());
-            for (WfAlertDef wfAlertDef : alertList) {
+            if (!DataUtils.isBlank(alertList)) {
+                final EntityClassDef entityClassDef = appletUtil.getEntityClassDef(wfItem.getEntity());
+                final WorkEntity inst = (WorkEntity) environment()
+                        .list((Class<? extends Entity>) entityClassDef.getEntityClass(), wfItem.getOriginWorkRecId());
+                final ValueStoreReader reader = new BeanValueStore(inst).getReader();
+                final String heldBy = wfItem.getHeldBy();
+                // TODO Generate link variable and add to reader
+                String contentPath = null;d
+                SecuredLinkInfo securedLinkInfo = appletUtil.system().getNewSecuredLink("Title", contentPath, heldBy, getPreferredPort());
+                reader.setTempValue(NotificationAlertSender.WFITEM_LINK_VARIABLE, securedLinkInfo.getLinkUrl());
+                
+                final Long tenantId = getTenantIdFromTransitionItem(entityClassDef, reader);
+                for (WfAlertDef wfAlertDef : alertList) {
+                    sendAlert(wfStepDef, wfAlertDef, reader, tenantId, heldBy);
+                }
 
-            }
-
-            if (type.isOnReminder() && !DataUtils.isBlank(alertList)) {
-                CalendarUtils.getDateWithFrequencyOffset(now, FrequencyUnit.MINUTE, wfStepDef.getReminderMinutes());
+                if (type.isOnReminder()) {
+                    CalendarUtils.getDateWithFrequencyOffset(now, FrequencyUnit.MINUTE, wfStepDef.getReminderMinutes());
+                }
             }
 
             return true;
@@ -1847,9 +1854,15 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             }
         }
 
+        final Long tenantId = getTenantIdFromTransitionItem(transitionItem);
+        final String heldBy = wfItem.getHeldBy();
+        sendAlert(wfStepDef, wfAlertDef, reader, tenantId, heldBy);
+    }
+
+    private void sendAlert(WfStepDef wfStepDef, WfAlertDef wfAlertDef, ValueStoreReader reader, final Long tenantId,
+            final String heldBy) throws UnifyException {
         if (!StringUtils.isBlank(wfAlertDef.getGenerator())) {
             NotificationAlertSender sender = getComponent(NotificationAlertSender.class, wfAlertDef.getGenerator());
-            final Long tenantId = getTenantIdFromTransitionItem(transitionItem);
             List<Recipient> recipientList = new ArrayList<Recipient>();
             if (wfAlertDef.isWithRecipientPolicy()) {
                 List<Recipient> policyRecipientList = ((WfRecipientPolicy) getComponent(
@@ -1860,9 +1873,9 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                 }
             }
 
-            if (wfAlertDef.isAlertHeldBy() && !StringUtils.isBlank(wfItem.getHeldBy())) {
+            if (wfAlertDef.isAlertHeldBy() && !StringUtils.isBlank(heldBy)) {
                 Recipient recipient = notifRecipientProvider.getRecipientByLoginId(tenantId, sender.getNotifType(),
-                        wfItem.getHeldBy());
+                        heldBy);
                 if (recipient != null) {
                     recipientList.add(recipient);
                 }
@@ -1881,12 +1894,17 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
     }
 
     private Long getTenantIdFromTransitionItem(TransitionItem transitionItem) throws UnifyException {
+        final EntityClassDef entityClassDef = appletUtil.getEntityClassDef(transitionItem.getWfDef().getEntity());
+        return getTenantIdFromTransitionItem(entityClassDef, transitionItem.getReader());
+    }
+
+    private Long getTenantIdFromTransitionItem(EntityClassDef entityClassDef, ValueStoreReader reader)
+            throws UnifyException {
         if (isTenancyEnabled()) {
-            final EntityClassDef entityClassDef = appletUtil.getEntityClassDef(transitionItem.getWfDef().getEntity());
             SqlEntityInfo sqlEntityInfo = ((SqlDataSourceDialect) db().getDataSource().getDialect())
                     .findSqlEntityInfo(entityClassDef.getEntityClass());
             if (sqlEntityInfo.isWithTenantId()) {
-                return transitionItem.getReader().read(Long.class, sqlEntityInfo.getTenantIdFieldInfo().getName());
+                return reader.read(Long.class, sqlEntityInfo.getTenantIdFieldInfo().getName());
             }
         }
 

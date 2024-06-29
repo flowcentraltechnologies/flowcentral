@@ -34,6 +34,7 @@ import java.util.Set;
 import com.flowcentraltech.flowcentral.common.business.AbstractFlowCentralService;
 import com.flowcentraltech.flowcentral.common.business.FileAttachmentProvider;
 import com.flowcentraltech.flowcentral.common.business.LicenseProvider;
+import com.flowcentraltech.flowcentral.common.business.SecuredLinkManager;
 import com.flowcentraltech.flowcentral.common.business.SpecialParamProvider;
 import com.flowcentraltech.flowcentral.common.business.SystemParameterProvider;
 import com.flowcentraltech.flowcentral.common.constants.CommonModuleNameConstants;
@@ -45,6 +46,7 @@ import com.flowcentraltech.flowcentral.common.constants.SystemSchedTaskConstants
 import com.flowcentraltech.flowcentral.common.data.Attachment;
 import com.flowcentraltech.flowcentral.common.data.ParamValueDef;
 import com.flowcentraltech.flowcentral.common.data.ParamValuesDef;
+import com.flowcentraltech.flowcentral.common.data.SecuredLinkInfo;
 import com.flowcentraltech.flowcentral.common.entities.FileAttachmentQuery;
 import com.flowcentraltech.flowcentral.common.util.CommonInputUtils;
 import com.flowcentraltech.flowcentral.configuration.business.ConfigurationLoader;
@@ -140,6 +142,9 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
 
     @Configurable
     private FileAttachmentProvider fileAttachmentProvider;
+
+    @Configurable
+    private SecuredLinkManager securedLinkManager;
 
     @Configurable(CommonModuleNameConstants.PARAMGENERATORMANAGER)
     private ParamGeneratorManager paramGeneratorManager;
@@ -245,7 +250,7 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
 
             };
     }
-    
+
     @Override
     public void clearDefinitionsCache() throws UnifyException {
         logDebug("Clearing definitions cache...");
@@ -253,6 +258,25 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
         scheduledTaskDefs.clear();
         licenseDefFactoryMap.clear();
         logDebug("Definitions cache clearing successfully completed.");
+    }
+
+    @Override
+    public SecuredLinkInfo getNewSecuredLink(String title, String contentPath, int expirationInMinutes)
+            throws UnifyException {
+        return securedLinkManager.getNewSecuredLink(title, contentPath, expirationInMinutes);
+    }
+
+    @Override
+    public SecuredLinkInfo getNewSecuredLink(String title, String contentPath, String assignedLoginId,
+            int expirationInMinutes) throws UnifyException {
+        return securedLinkManager.getNewSecuredLink(title, contentPath, assignedLoginId, expirationInMinutes);
+    }
+
+    @Override
+    public SecuredLinkInfo getNewSecuredLink(String title, String contentPath, String assignedLoginId,
+            String assignedRole, int expirationInMinutes) throws UnifyException {
+        return securedLinkManager.getNewSecuredLink(title, contentPath, assignedLoginId, assignedRole,
+                expirationInMinutes);
     }
 
     @Override
@@ -286,7 +310,7 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
-    public  Optional<Long> getModuleId(String moduleName) throws UnifyException {
+    public Optional<Long> getModuleId(String moduleName) throws UnifyException {
         return environment().valueOptional(Long.class, "id", new ModuleQuery().name(moduleName));
     }
 

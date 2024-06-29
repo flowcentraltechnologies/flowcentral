@@ -31,6 +31,8 @@ import com.tcdng.unify.core.data.ValueStoreReader;
  */
 public interface NotificationAlertSender extends FlowCentralComponent {
 
+    String WFITEM_LINK_VARIABLE = "rsv::wfitemlink";
+    
     /**
      * Gets the notification type for this sender.
      * 
