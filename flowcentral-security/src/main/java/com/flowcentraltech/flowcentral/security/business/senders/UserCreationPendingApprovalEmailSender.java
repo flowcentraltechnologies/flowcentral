@@ -48,9 +48,4 @@ public class UserCreationPendingApprovalEmailSender extends AbstractResourceBund
         return Collections.emptyList();
     }
 
-    @Override
-    protected List<Attachment> generateAttachments(ValueStoreReader reader) throws UnifyException {
-        return Collections.emptyList();
-    }
-
 }

@@ -47,9 +47,4 @@ public class WorkflowCopyDeletionPendingApprovalEmailSender extends AbstractReso
         return Collections.emptyList();
     }
 
-    @Override
-    protected List<Attachment> generateAttachments(ValueStoreReader reader) throws UnifyException {
-        return Collections.emptyList();
-    }
-
 }

@@ -62,6 +62,7 @@ import com.flowcentraltech.flowcentral.application.util.ApplicationEntityUtils;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.util.ApplicationPageUtils;
 import com.flowcentraltech.flowcentral.application.util.InputWidgetUtils;
+import com.flowcentraltech.flowcentral.application.util.OpenPagePathParts;
 import com.flowcentraltech.flowcentral.application.util.PrivilegeNameParts;
 import com.flowcentraltech.flowcentral.application.util.PrivilegeNameUtils;
 import com.flowcentraltech.flowcentral.application.validation.Validator;
@@ -1271,11 +1272,9 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                         .list((Class<? extends Entity>) entityClassDef.getEntityClass(), wfItem.getOriginWorkRecId());
                 final ValueStoreReader reader = new BeanValueStore(inst).getReader();
                 final String heldBy = wfItem.getHeldBy();
-                // TODO Generate link variable and add to reader
-                String contentPath = null;d
-                SecuredLinkInfo securedLinkInfo = appletUtil.system().getNewSecuredLink("Title", contentPath, heldBy, getPreferredPort());
+                SecuredLinkInfo securedLinkInfo = getWorkItemSecuredLink(wfStepDef.getStepAppletName(), wfItem);
                 reader.setTempValue(NotificationAlertSender.WFITEM_LINK_VARIABLE, securedLinkInfo.getLinkUrl());
-                
+
                 final Long tenantId = getTenantIdFromTransitionItem(entityClassDef, reader);
                 for (WfAlertDef wfAlertDef : alertList) {
                     sendAlert(wfStepDef, wfAlertDef, reader, tenantId, heldBy);
@@ -1294,6 +1293,15 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         return false;
     }
 
+    private SecuredLinkInfo getWorkItemSecuredLink(String appletName, WfItem wfItem) throws UnifyException {
+        OpenPagePathParts parts = ApplicationPageUtils.constructAppletOpenPagePath(AppletType.MY_WORKITEM, appletName,
+                wfItem.getId());
+        int expirationMinutes = appletUtil.system().getSysParameterValue(int.class,
+                SystemModuleSysParamConstants.SECURED_LINK_EXPIRATION_MINUTES);
+        return appletUtil.system().getNewSecuredLink(wfItem.getWfItemDesc(), parts.getOpenPath(), wfItem.getHeldBy(),
+                expirationMinutes);
+    }
+    
     @Periodic(PeriodicType.FASTER)
     public void processWfTransitionQueueItems(TaskMonitor taskMonitor) throws UnifyException {
         logDebug("Processing transition queue items...");

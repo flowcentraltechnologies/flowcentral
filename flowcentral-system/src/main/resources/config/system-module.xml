@@ -69,5 +69,8 @@
 		<sysParameter code="SYS-0010" defaultVal="http://localhost:8080"
 			description="$m{system.sysparam.applicationbaseurl}"
 			editor="!ui-textarea rows:8" editable="true" />
+		<sysParameter code="SYS-0011" defaultVal="1440"
+			description="$m{system.sysparam.securedlinkexpiration}"
+			editor="!ui-integer precision:6" editable="true" />
 	</sysParameters>
 </module>

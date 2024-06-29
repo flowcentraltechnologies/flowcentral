@@ -16,6 +16,7 @@
 package com.flowcentraltech.flowcentral.notification.senders;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.common.data.Attachment;
@@ -106,6 +107,11 @@ public abstract class AbstractResourceBundleNotificationAlertSender extends Abst
         } else {
             logDebug("Send notifcation aborted because there are no recipients.");
         }
+    }
+
+    @Override
+    protected final List<Attachment> generateAttachments(ValueStoreReader reader) throws UnifyException {
+        return Collections.emptyList();
     }
 
     /**
