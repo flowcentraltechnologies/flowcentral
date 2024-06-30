@@ -1473,7 +1473,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
 
             final EntityDef entityDef = appletUtil.getEntityDef(wfDef.getEntity());
             final Date now = getNow();
-            applySetValues(entityDef, startStepDef, now, workInst, Collections.emptyMap());
+            applySetValues(entityDef, startStepDef, now, new BeanValueStore(workInst), Collections.emptyMap());
 
             Long workRecId = (Long) workInst.getId();
             if (workRecId == null) {
@@ -1567,7 +1567,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             transitionItem.clearUpdated();
 
             if (transitionItem.isFlowTransition()) {
-                if (applySetValues(entityDef, currWfStepDef, now, wfEntityInst, transitionItem.getVariables())) {
+                if (applySetValues(entityDef, currWfStepDef, now, transitionItem.getValueStore(),
+                        transitionItem.getVariables())) {
                     transitionItem.setUpdated();
                 }
             }
@@ -1781,20 +1782,20 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         return variables;
     }
 
-    private boolean applySetValues(EntityDef entityDef, WfStepDef wfStepDef, Date now, WorkEntity wfEntityInst,
+    private boolean applySetValues(EntityDef entityDef, WfStepDef wfStepDef, Date now, ValueStore valueStore,
             Map<String, Object> variables) throws UnifyException {
         boolean updated = false;
         if (wfStepDef.isWithAppletSetValues()) {
             final AppletDef appletDef = appletUtil.getAppletDef(wfStepDef.getStepAppletName());
             final AppletSetValuesDef appletSetValuesDef = appletDef.getSetValues(wfStepDef.getAppletSetValuesName());
-            appletSetValuesDef.getSetValuesDef().apply(appletUtil, entityDef, now, wfEntityInst, Collections.emptyMap(),
+            appletSetValuesDef.getSetValuesDef().apply(appletUtil, entityDef, now, valueStore, Collections.emptyMap(),
                     null);
             updated = true;
         }
 
         WfStepSetValuesDef wfSetValuesDef = wfStepDef.getWfSetValuesDef();
         if (wfSetValuesDef != null && wfSetValuesDef.isSetValues()) {
-            wfSetValuesDef.getSetValues().apply(appletUtil, entityDef, now, wfEntityInst, variables, null);
+            wfSetValuesDef.getSetValues().apply(appletUtil, entityDef, now, valueStore, variables, null);
             updated = true;
         }
 
@@ -2043,6 +2044,10 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
 
         public ValueStoreWriter getWriter() {
             return wfEntityInst.getWriter();
+        }
+
+        public ValueStore getValueStore() {
+            return wfEntityInst.getWfInstValueStore();
         }
 
         public WorkEntity getWfEntityInst() {
