@@ -37,9 +37,12 @@ public class UserCreateApprovedSetValuesGenerator extends AbstractEntitySetValue
 
     @Override
     public void generate(EntityDef entityDef, ValueStore valueStore, String trigger) throws UnifyException {
+        logDebug("Generating set values...");
         if (valueStore.retrieve(Long.class, "originalCopyId") == null) {
-            PasswordGenerator passwordGenerator = (PasswordGenerator) getComponent(systemModuleService
-                    .getSysParameterValue(String.class, SecurityModuleSysParamConstants.USER_PASSWORD_GENERATOR));
+            final String generator = systemModuleService.getSysParameterValue(String.class,
+                    SecurityModuleSysParamConstants.USER_PASSWORD_GENERATOR);
+            logDebug("Using password generator [{0}]...", generator);
+            PasswordGenerator passwordGenerator = (PasswordGenerator) getComponent(generator);
             int passwordLength = systemModuleService.getSysParameterValue(int.class,
                     SecurityModuleSysParamConstants.USER_PASSWORD_LENGTH);
 

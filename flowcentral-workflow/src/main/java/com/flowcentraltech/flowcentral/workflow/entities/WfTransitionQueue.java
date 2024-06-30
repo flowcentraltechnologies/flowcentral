@@ -37,6 +37,9 @@ public class WfTransitionQueue extends BaseEntity {
     @Column(nullable = true)
     private Date processingDt;
 
+    @Column
+    private Boolean flowTransition;
+
     @Override
     public String getDescription() {
         return null;
@@ -56,6 +59,14 @@ public class WfTransitionQueue extends BaseEntity {
 
     public void setProcessingDt(Date processingDt) {
         this.processingDt = processingDt;
+    }
+
+    public Boolean getFlowTransition() {
+        return flowTransition;
+    }
+
+    public void setFlowTransition(Boolean flowTransition) {
+        this.flowTransition = flowTransition;
     }
 
 }

@@ -1007,6 +1007,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
     public boolean applyUserAction(final WorkEntity wfEntityInst, final Long wfItemId, final String stepName,
             final String userAction, final String comment, InputArrayEntries emails, WfReviewMode wfReviewMode,
             final boolean listing) {
+        logDebug("Applying user action [{0}] in step [{1}] and review mode [{2}]...", userAction, stepName,
+                wfReviewMode);
         try {
             final WfItem wfItem = environment().list(WfItem.class, wfItemId);
             if (!wfItem.getWfStepName().equals(stepName)) {
@@ -1071,12 +1073,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                 update = true;
             }
 
-            // Set values
             final EntityDef entityDef = appletUtil.getEntityDef(wfDef.getEntity());
-            final Date now = getNow();
-            final Map<String, Object> variables = getTransitionVariables(wfItem, entityDef);
-            update |= applySetValues(entityDef, nextWfStepDef, now, wfEntityInst, variables);
-
             if (wfReviewMode.lean()) {
                 if (emails != null) {
                     environment().findChildren(wfEntityInst);
@@ -1111,7 +1108,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             final TransitionItem currentTransitionItem = new TransitionItem(wfItem, wfDef, wfEntityInst);
             sendUserActionAlertsByAction(currentWfStepDef, currentTransitionItem, userAction);
 
-            pushToWfTransitionQueue(wfDef, wfItemId);
+            pushToWfTransitionQueue(wfDef, wfItemId, true);
 //            commitTransactions();
             return true;
         } catch (UnifyException e) {
@@ -1410,7 +1407,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                     .branchCode(wfEntityInst.getWorkBranchCode())
                     .reservedUser(DefaultApplicationConstants.SYSTEM_LOGINID.equals(wfItem.getForwardedBy())).build();
             getSessionContext().setUserToken(userToken);
-            return doWfTransition(new TransitionItem(wfItem, wfDef, wfEntityInst));
+            return doWfTransition(new TransitionItem(wfItem, wfDef, wfEntityInst,
+                    Boolean.TRUE.equals(wfTransitionQueue.getFlowTransition())));
         }
 
         return true;
@@ -1526,16 +1524,17 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             wfItem.setWorkRecId(workRecId);
             Long wfItemId = (Long) environment().create(wfItem);
 
-            pushToWfTransitionQueue(wfDef, wfItemId);
+            pushToWfTransitionQueue(wfDef, wfItemId, false);
         } catch (UnifyException e) {
             instValueStore.restore();
             throw e;
         }
     }
 
-    private void pushToWfTransitionQueue(WfDef wfDef, Long wfItemId) throws UnifyException {
+    private void pushToWfTransitionQueue(WfDef wfDef, Long wfItemId, boolean flowTransition) throws UnifyException {
         WfTransitionQueue wfTransitionQueue = new WfTransitionQueue();
         wfTransitionQueue.setWfItemId(wfItemId);
+        wfTransitionQueue.setFlowTransition(flowTransition);
         environment().create(wfTransitionQueue);
     }
 
@@ -1828,6 +1827,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
 
     private void sendPassThroughAlerts(final WfStepDef wfStepDef, final TransitionItem transitionItem,
             final String prevStepName) throws UnifyException {
+        logDebug("Sending pass through alerts in step [{0}] depending on previous step [{1}]...", wfStepDef.getName(),
+                prevStepName);
         for (WfAlertDef wfAlertDef : wfStepDef.getAlertList()) {
             if (wfAlertDef.isPassThrough() && wfAlertDef.isFireAlertOnPreviousStep(prevStepName)) {
                 sendAlert(wfStepDef, wfAlertDef, transitionItem);
@@ -1837,6 +1838,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
 
     private void sendUserActionAlertsByPreviousStep(final WfStepDef wfStepDef, final TransitionItem transitionItem,
             final String prevStepName) throws UnifyException {
+        logDebug("Sending user actions alerts in step [{0}] depending on previous step [{1}]...", wfStepDef.getName(),
+                prevStepName);
         for (WfAlertDef wfAlertDef : wfStepDef.getAlertList()) {
             if (wfAlertDef.isUserInteract() && wfAlertDef.isFireAlertOnPreviousStep(prevStepName)) {
                 sendAlert(wfStepDef, wfAlertDef, transitionItem);
@@ -1846,6 +1849,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
 
     private void sendUserActionAlertsByAction(final WfStepDef wfStepDef, final TransitionItem transitionItem,
             final String actionName) throws UnifyException {
+        logDebug("Sending user actions alerts in step [{0}] depending on action name [{1}]...", wfStepDef.getName(),
+                actionName);
         for (WfAlertDef wfAlertDef : wfStepDef.getAlertList()) {
             if (wfAlertDef.isUserInteract() && wfAlertDef.isFireAlertOnAction(actionName)) {
                 sendAlert(wfStepDef, wfAlertDef, transitionItem);
@@ -2008,12 +2013,18 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         private boolean deleted;
 
         public TransitionItem(WfItem wfItem, WfDef wfDef, WorkEntity wfInst) throws UnifyException {
+            this(wfItem, wfDef, wfInst, false);
+        }
+
+        public TransitionItem(WfItem wfItem, WfDef wfDef, WorkEntity wfInst, boolean flowTransition)
+                throws UnifyException {
             this.wfItem = wfItem;
             this.wfDef = wfDef;
             this.variables = new HashMap<String, Object>();
             this.wfEntityInst = new WfEntityInst(wfInst);
             this.wfEntityInst.getWfInstValueStore().setTempValue(CommonTempValueNameConstants.PROCESS_VARIABLES,
                     this.variables);
+            this.flowTransition = flowTransition;
         }
 
         public WfItem getWfItem() {

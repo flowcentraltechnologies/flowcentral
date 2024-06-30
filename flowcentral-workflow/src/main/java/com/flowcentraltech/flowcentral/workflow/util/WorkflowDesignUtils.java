@@ -283,7 +283,10 @@ public final class WorkflowDesignUtils {
             approveUserAction.setLabel("Approve");
             approveUserAction.setCommentRequirement(RequirementType.OPTIONAL);
             approveUserAction.setHighlightType(HighlightType.GREEN);
-            approveUserAction.setAppletSetValuesName(approveEventInfo.getSetValuesName());
+            if (!approveEventInfo.isWithAlert()) {
+                approveUserAction.setAppletSetValuesName(approveEventInfo.getSetValuesName());
+            }
+            
             approveUserAction.setNextStepName(approveEventInfo.isWithAlert() ? "approvalNotif" : type.approvalNext());
 
             final WfStepUserAction rejectUserAction = new WfStepUserAction();
@@ -332,7 +335,10 @@ public final class WorkflowDesignUtils {
                 discardUserAction.setLabel("Discard");
                 discardUserAction.setCommentRequirement(RequirementType.OPTIONAL);
                 discardUserAction.setHighlightType(HighlightType.RED);
-                discardUserAction.setAppletSetValuesName(discardEventInfo.getSetValuesName());
+                if(!discardEventInfo.isWithAlert()) {
+                    discardUserAction.setAppletSetValuesName(discardEventInfo.getSetValuesName());
+                }
+                
                 discardUserAction.setNextStepName(discardEventInfo.isWithAlert() ? "discardNotif" : type.discardNext());
 
                 reviewWfStep.setUserActionList(Arrays.asList(resubmitUserAction, discardUserAction));
@@ -348,6 +354,8 @@ public final class WorkflowDesignUtils {
                 notifWfStep.setDescription("Approval Notification");
                 notifWfStep.setLabel("Approval Notification");
                 notifWfStep.setNextStepName(type.approvalNext());
+                notifWfStep.setAppletName(appletWorkflowCopyInfo.getAppletName());
+                notifWfStep.setAppletSetValuesName(approveEventInfo.getSetValuesName());
 
                 WfStepAlert wfStepAlert = createWfStepAlert(WorkflowAlertType.PASS_THROUGH,
                         appletWorkflowCopyInfo.getAppletAlertDef(approveEventInfo.getAlertName()));
@@ -365,6 +373,8 @@ public final class WorkflowDesignUtils {
                     notifWfStep.setDescription("Discard Notification");
                     notifWfStep.setLabel("Discard Notification");
                     notifWfStep.setNextStepName(type.discardNext());
+                    notifWfStep.setAppletName(appletWorkflowCopyInfo.getAppletName());
+                    notifWfStep.setAppletSetValuesName(discardEventInfo.getSetValuesName());
 
                     WfStepAlert wfStepAlert = createWfStepAlert(WorkflowAlertType.PASS_THROUGH,
                             appletWorkflowCopyInfo.getAppletAlertDef(discardEventInfo.getAlertName()));
