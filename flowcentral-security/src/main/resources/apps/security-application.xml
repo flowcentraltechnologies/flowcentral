@@ -120,7 +120,7 @@
 			<property name="workflowCopy.create.setvalues"
 				value="onSubmitSetValues" />
 			<property name="workflowCopy.create.approval.setvalues"
-				value="onApproveSetValues" />
+				value="onCreateApproveSetValues" />
 			<property name="workflowCopy.create.rejection.setvalues"
 				value="onRejectSetValues" />
 			<property name="workflowCopy.update.copy.setvalues"
@@ -175,6 +175,13 @@
 				description="$m{security.user.setvalues.onsubmit}">
 				<setValues>
 					<setValue field="workflowStatus" value="AWA" />
+				</setValues>
+			</values>
+			<values name="onCreateApproveSetValues"
+				description="$m{security.user.setvalues.oncreateapprove}"
+				valueGenerator="user-createapprovedsetvaluesgenerator">
+				<setValues>
+					<setValue field="workflowStatus" value="APR" />
 				</setValues>
 			</values>
 			<values name="onApproveSetValues"

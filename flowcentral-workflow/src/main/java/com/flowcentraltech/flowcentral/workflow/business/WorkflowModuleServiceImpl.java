@@ -1767,8 +1767,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                 FlowCentralContainerPropertyConstants.FLOWCENTRAL_APPLICATION_TITLE);
         final String appCorresponder = getContainerSetting(String.class,
                 FlowCentralContainerPropertyConstants.FLOWCENTRAL_APPLICATION_CORRESPONDER);
-        final String appUrl = getContainerSetting(String.class,
-                FlowCentralContainerPropertyConstants.FLOWCENTRAL_APPLICATION_URL);
+        final String appUrl = appletUtil.system().getSysParameterValue(String.class,
+                SystemModuleSysParamConstants.APPLICATION_BASE_URL);
 
         variables.put(ProcessVariable.FORWARDED_BY.variableKey(), wfItem.getForwardedBy());
         variables.put(ProcessVariable.FORWARDED_BY_NAME.variableKey(), wfItem.getForwardedByName());
