@@ -55,7 +55,7 @@ public abstract class AbstractLoadingAppletController<T extends AbstractLoadingA
             }
         }
     }
-
+    
     protected abstract T createAbstractLoadingApplet(Page page, AppletUtilities au, List<String> pathVariables,
             AppletWidgetReferences appletWidgetReferences, EntityFormEventHandlers formEventHandlers) throws UnifyException;
 }

@@ -123,8 +123,4 @@ public class WorkflowStepInfo implements Listable {
         return !StringUtils.isBlank(departmentCode);
     }
 
-    @Override
-    public String toString() {
-        return StringUtils.toXmlString(this);
-    }
 }

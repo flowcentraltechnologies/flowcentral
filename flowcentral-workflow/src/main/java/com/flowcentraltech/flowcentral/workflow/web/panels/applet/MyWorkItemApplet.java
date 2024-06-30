@@ -19,8 +19,10 @@ import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.data.EntityFormEventHandlers;
+import com.flowcentraltech.flowcentral.application.data.WorkflowStepInfo;
 import com.flowcentraltech.flowcentral.application.web.controllers.AppletWidgetReferences;
 import com.flowcentraltech.flowcentral.application.web.panels.applet.AbstractLoadingApplet;
+import com.flowcentraltech.flowcentral.workflow.business.WorkflowModuleService;
 import com.flowcentraltech.flowcentral.workflow.constants.WorkflowModuleNameConstants;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.web.ui.widget.Page;
@@ -33,11 +35,19 @@ import com.tcdng.unify.web.ui.widget.Page;
  */
 public class MyWorkItemApplet extends AbstractLoadingApplet {
 
-    public MyWorkItemApplet(Page page, AppletUtilities au, List<String> pathVariables,
+    private final WorkflowModuleService workflow;
+    
+    public MyWorkItemApplet(WorkflowModuleService workflow, Page page, AppletUtilities au, List<String> pathVariables,
             AppletWidgetReferences appletWidgetReferences, EntityFormEventHandlers formEventHandlers)
             throws UnifyException {
         super(page, au, pathVariables, appletWidgetReferences, formEventHandlers,
                 WorkflowModuleNameConstants.WORKFLOW_MY_WORKITEMS_LOADING_TABLE_PROVIDER);
+        this.workflow = workflow;
+    }
+
+    @Override
+    protected WorkflowStepInfo getWorkflowStepInfo(Long sourceItemId) throws UnifyException {
+        return workflow.getWorkflowLoadingStepInfoByWorkItemId(sourceItemId, null, null);
     }
 
 }

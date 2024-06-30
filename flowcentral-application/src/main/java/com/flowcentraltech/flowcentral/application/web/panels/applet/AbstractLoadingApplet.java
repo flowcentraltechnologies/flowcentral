@@ -24,6 +24,7 @@ import com.flowcentraltech.flowcentral.application.data.EntityFormEventHandlers;
 import com.flowcentraltech.flowcentral.application.data.EntityItem;
 import com.flowcentraltech.flowcentral.application.data.FormDef;
 import com.flowcentraltech.flowcentral.application.data.LoadingWorkItemInfo;
+import com.flowcentraltech.flowcentral.application.data.WorkflowStepInfo;
 import com.flowcentraltech.flowcentral.application.policies.LoadingTableProvider;
 import com.flowcentraltech.flowcentral.application.util.AppletNameParts;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
@@ -48,7 +49,7 @@ import com.tcdng.unify.web.ui.widget.Page;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class AbstractLoadingApplet extends AbstractEntityFormApplet {
+public abstract class AbstractLoadingApplet extends AbstractEntityFormApplet {
 
     private final LoadingTableProvider loadingTableProvider;
     
@@ -65,8 +66,10 @@ public class AbstractLoadingApplet extends AbstractEntityFormApplet {
         this.loadingTableProvider = au.getComponent(LoadingTableProvider.class, providerName);
         if (parts.isWithVestigial()) {
             this.sourceItemId = Long.valueOf(parts.getVestigial());
-            final int options = this.loadingTableProvider.getSourceItemOptions(null);
-            final EntityItem item = this.loadingTableProvider.getSourceItem(sourceItemId, options);
+            final WorkflowStepInfo workflowStepInfo = getWorkflowStepInfo(sourceItemId);
+            loadingTableProvider.setWorkingParameter(workflowStepInfo);
+            final int options = loadingTableProvider.getSourceItemOptions(null);
+            final EntityItem item = loadingTableProvider.getSourceItem(sourceItemId, options);
             if (item.isEdit()) {
                 getCtx().setReview(false);
                 Entity _inst = item.getEntity();
@@ -199,6 +202,8 @@ public class AbstractLoadingApplet extends AbstractEntityFormApplet {
         
         // TODO Set command result
     }
+
+    protected abstract WorkflowStepInfo getWorkflowStepInfo(Long sourceItemId) throws UnifyException;
 
     protected final AppletDef resolveRootAppletDef(String appletName) throws UnifyException {
         AppletDef appletDef = au.getAppletDef(appletName);

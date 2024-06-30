@@ -18,8 +18,10 @@ package com.flowcentraltech.flowcentral.application.web.controllers;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
+import com.flowcentraltech.flowcentral.application.constants.AppletSessionAttributeConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModulePathConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleSysParamConstants;
+import com.flowcentraltech.flowcentral.application.data.SessionOpenTabInfo;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants;
 import com.flowcentraltech.flowcentral.common.data.SecuredLinkContentInfo;
 import com.flowcentraltech.flowcentral.common.data.UserRoleInfo;
@@ -69,7 +71,14 @@ public abstract class AbstractApplicationForwarderController<T extends AbstractF
                 .equals(getRequestAttribute(PageRequestParameterConstants.WINDOW_NAME)); // TODO Check if role has
                                                                                          // developer privilege
         final SecuredLinkContentInfo securedLinkContentInfo = (SecuredLinkContentInfo) getRequestAttribute(
-                FlowCentralSessionAttributeConstants.SECURED_LINK_ACCESS);;
+                FlowCentralSessionAttributeConstants.SECURED_LINK_ACCESS);
+
+        if (securedLinkContentInfo != null) {
+            setSessionAttribute(AppletSessionAttributeConstants.OPEN_TAB_INFO,
+                    new SessionOpenTabInfo(securedLinkContentInfo.getTitle(), securedLinkContentInfo.getDocUrl(),
+                            securedLinkContentInfo.getContentPath()));
+        }
+
         final String applicationPath = inStudioWindow
                 ? appletUtilities.system().getSysParameterValue(String.class,
                         ApplicationModuleSysParamConstants.STUDIO_APPLICATION)

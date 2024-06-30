@@ -26,7 +26,7 @@ import com.tcdng.unify.core.annotation.UplBinding;
  * @since 1.0
  */
 @Component("fc-myworkitemappletpanel")
-@UplBinding("web/application/upl/myworkitemappletpanel.upl")
+@UplBinding("web/workflow/upl/myworkitemappletpanel.upl")
 public class MyWorkItemAppletPanel extends AbstractLoadingAppletPanel<MyWorkItemApplet> {
 
     @Override

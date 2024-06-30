@@ -859,6 +859,18 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
+    public WorkflowStepInfo getWorkflowLoadingStepInfoByWorkItemId(Long workItemId, String branchCode,
+            String departmentCode) throws UnifyException {
+        WfItem wfItem = environment().list(WfItem.class, workItemId);
+        ApplicationEntityNameParts parts = ApplicationNameUtils.getApplicationEntityNameParts(wfItem.getWorkflowName());
+        WfStep wfStep = environment().list(new WfStepQuery().applicationName(parts.getApplicationName())
+                .workflowName(parts.getEntityName()).name(wfItem.getWfStepName()));
+        return new WorkflowStepInfo(wfItem.getWorkflowName(), wfItem.getApplicationName(), parts.getEntityName(), null,
+                wfItem.getEntity(), wfItem.getWfStepName(), wfStep.getDescription(), wfStep.getLabel(),
+                wfStep.isBranchOnly() ? branchCode : null, wfStep.isDepartmentOnly() ? departmentCode : null);
+    }
+
+    @Override
     public List<WorkflowStepInfo> findWorkflowLoadingStepInfoByRole(String loadingTableName, String roleCode,
             String branchCode, String departmentCode) throws UnifyException {
         return findWorkflowLoadingStepInfoByRole(WorkflowStepType.USER_ACTION, loadingTableName, roleCode, branchCode,
@@ -1552,8 +1564,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         final Long wfItemId = wfItem.getId();
         final Date now = getNow();
 
-        final Map<String, Object> variables = getTransitionVariables(wfItem, entityDef,
-                currWfStepDef.getStepAppletName());
+        final Map<String, Object> variables = getTransitionVariables(wfItem, entityDef);
         transitionItem.setVariables(variables);
         wfInstReader.setTempValues(variables);
 
@@ -1762,8 +1773,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         return true;
     }
 
-    private Map<String, Object> getTransitionVariables(WfItem wfItem, EntityDef entityDef, String appletName)
-            throws UnifyException {
+    private Map<String, Object> getTransitionVariables(WfItem wfItem, EntityDef entityDef) throws UnifyException {
         Map<String, Object> variables = new HashMap<String, Object>();
         final String appTitle = getContainerSetting(String.class,
                 FlowCentralContainerPropertyConstants.FLOWCENTRAL_APPLICATION_TITLE);
@@ -1771,8 +1781,6 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                 FlowCentralContainerPropertyConstants.FLOWCENTRAL_APPLICATION_CORRESPONDER);
         final String appUrl = appletUtil.system().getSysParameterValue(String.class,
                 SystemModuleSysParamConstants.APPLICATION_BASE_URL);
-
-        final SecuredLinkInfo securedLinkInfo = getWorkItemSecuredLink(appletName, wfItem);
 
         variables.put(ProcessVariable.FORWARDED_BY.variableKey(), wfItem.getForwardedBy());
         variables.put(ProcessVariable.FORWARDED_BY_NAME.variableKey(), wfItem.getForwardedByName());
@@ -1783,7 +1791,6 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         variables.put(ProcessVariable.APP_TITLE.variableKey(), appTitle);
         variables.put(ProcessVariable.APP_CORRESPONDER.variableKey(), appCorresponder);
         variables.put(ProcessVariable.APP_URL.variableKey(), appUrl);
-        variables.put(NotificationAlertSender.WFITEM_LINK_VARIABLE, securedLinkInfo.getLinkUrl());
         return variables;
     }
 
@@ -1835,6 +1842,13 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             final String prevStepName) throws UnifyException {
         logDebug("Sending pass through alerts in step [{0}] depending on previous step [{1}]...", wfStepDef.getName(),
                 prevStepName);
+        if (wfStepDef.isUserAction()) {
+            final SecuredLinkInfo securedLinkInfo = getWorkItemSecuredLink(wfStepDef.getStepAppletName(),
+                    transitionItem.getWfItem());
+            transitionItem.getReader().setTempValue(NotificationAlertSender.WFITEM_LINK_VARIABLE,
+                    securedLinkInfo.getLinkUrl());
+        }
+
         for (WfAlertDef wfAlertDef : wfStepDef.getAlertList()) {
             if (wfAlertDef.isPassThrough() && wfAlertDef.isFireAlertOnPreviousStep(prevStepName)) {
                 sendAlert(wfStepDef, wfAlertDef, transitionItem);
