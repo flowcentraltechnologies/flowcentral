@@ -1552,7 +1552,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         final Long wfItemId = wfItem.getId();
         final Date now = getNow();
 
-        final Map<String, Object> variables = getTransitionVariables(wfItem, entityDef);
+        final Map<String, Object> variables = getTransitionVariables(wfItem, entityDef,
+                currWfStepDef.getStepAppletName());
         transitionItem.setVariables(variables);
         wfInstReader.setTempValues(variables);
 
@@ -1761,7 +1762,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         return true;
     }
 
-    private Map<String, Object> getTransitionVariables(WfItem wfItem, EntityDef entityDef) throws UnifyException {
+    private Map<String, Object> getTransitionVariables(WfItem wfItem, EntityDef entityDef, String appletName)
+            throws UnifyException {
         Map<String, Object> variables = new HashMap<String, Object>();
         final String appTitle = getContainerSetting(String.class,
                 FlowCentralContainerPropertyConstants.FLOWCENTRAL_APPLICATION_TITLE);
@@ -1769,6 +1771,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                 FlowCentralContainerPropertyConstants.FLOWCENTRAL_APPLICATION_CORRESPONDER);
         final String appUrl = appletUtil.system().getSysParameterValue(String.class,
                 SystemModuleSysParamConstants.APPLICATION_BASE_URL);
+
+        final SecuredLinkInfo securedLinkInfo = getWorkItemSecuredLink(appletName, wfItem);
 
         variables.put(ProcessVariable.FORWARDED_BY.variableKey(), wfItem.getForwardedBy());
         variables.put(ProcessVariable.FORWARDED_BY_NAME.variableKey(), wfItem.getForwardedByName());
@@ -1779,6 +1783,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         variables.put(ProcessVariable.APP_TITLE.variableKey(), appTitle);
         variables.put(ProcessVariable.APP_CORRESPONDER.variableKey(), appCorresponder);
         variables.put(ProcessVariable.APP_URL.variableKey(), appUrl);
+        variables.put(NotificationAlertSender.WFITEM_LINK_VARIABLE, securedLinkInfo.getLinkUrl());
         return variables;
     }
 
