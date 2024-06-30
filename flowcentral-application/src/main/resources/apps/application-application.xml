@@ -912,6 +912,8 @@
 				type="string" maxLen="64" nullable="true" />
 			<field name="sender"
 				label="$m{application.appappletalert.sender}" type="string" />
+			<field name="template"
+				label="$m{application.appappletalert.template}" type="string" nullable = "true" />
 			<field name="applicationName"
 				label="$m{application.appappletalert.applicationname}"
 				type="list_only" key="appAppletId" property="applicationName" />

@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<!-- User update resubmit pending notification -->
+<notifTemplate name="userUpdateResubmitPending" description="$m{security.user.update.resubmit}"
+	type="email" format="html" entity="user">
+	<subject><![CDATA[$m{security.user.update.resubmit.required.subject}]]></subject>
+	<body><![CDATA[$m{security.user.update.resubmit.required.body}]]></body>
+</notifTemplate>

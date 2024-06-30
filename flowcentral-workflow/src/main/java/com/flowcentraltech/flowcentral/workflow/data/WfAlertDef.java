@@ -41,6 +41,8 @@ public class WfAlertDef {
 
     private String generator;
 
+    private String template;
+
     private String fireOnPrevStepName;
 
     private String fireOnAction;
@@ -52,7 +54,7 @@ public class WfAlertDef {
     private boolean alertWorkflowRoles;
 
     public WfAlertDef(WorkflowAlertType type, String name, String description, String recipientPolicy,
-            String recipientNameRule, String recipientContactRule, String generator, String fireOnPrevStepName,
+            String recipientNameRule, String recipientContactRule, String generator, String template, String fireOnPrevStepName,
             String fireOnAction, String fireOnCondition, boolean alertHeldBy, boolean alertWorkflowRoles) {
         this.type = type;
         this.name = name;
@@ -61,6 +63,7 @@ public class WfAlertDef {
         this.recipientNameRule = recipientNameRule;
         this.recipientContactRule = recipientContactRule;
         this.generator = generator;
+        this.template = template;
         this.fireOnPrevStepName = fireOnPrevStepName;
         this.fireOnCondition = fireOnCondition;
         this.alertHeldBy = alertHeldBy;
@@ -97,6 +100,10 @@ public class WfAlertDef {
 
     public String getGenerator() {
         return generator;
+    }
+
+    public String getTemplate() {
+        return template;
     }
 
     public boolean isAlertHeldBy() {

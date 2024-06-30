@@ -47,6 +47,9 @@ public class AppAppletAlert extends BaseConfigNamedEntity {
     @Column(length = 64)
     private String sender;
 
+    @Column(length = 64, nullable = true)
+    private String template;
+
     @ListOnly(key = "appAppletId", property = "applicationName")
     private String applicationName;
 
@@ -91,6 +94,14 @@ public class AppAppletAlert extends BaseConfigNamedEntity {
 
     public void setSender(String sender) {
         this.sender = sender;
+    }
+
+    public String getTemplate() {
+        return template;
+    }
+
+    public void setTemplate(String template) {
+        this.template = template;
     }
 
     public String getApplicationName() {

@@ -3,6 +3,15 @@
 <application name="workflow"
 	description="$m{workflow.short.description}" label="$m{workflow.label}"
 	module="workflow">
+	<!-- Notification Templates -->
+	<notifTemplates>
+		<notifTemplate
+			configFile="apps/notification/template/workflow-copy-create-approval.xml" />
+		<notifTemplate
+			configFile="apps/notification/template/workflow-copy-update-approval.xml" />
+		<notifTemplate
+			configFile="apps/notification/template/workflow-copy-deletion-approval.xml" />
+	</notifTemplates>
 	<!-- Widget Types -->
 	<widgetTypes>
 		<widgetType name="wfchanneldestinationlist"
@@ -433,6 +442,8 @@
 				maxLen="64" nullable="true" />
 			<field name="generator"
 				label="$m{workflow.stepalert.generator}" type="string" maxLen="128" />
+			<field name="template"
+				label="$m{workflow.stepalert.template}" type="string" nullable="true"/>
 			<field name="fireOnPrevStepName"
 				label="$m{workflow.stepalert.fireonprevstepname}" type="string"
 				nullable="true" maxLen="64" />

@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<!-- User creation approved notification -->
+<notifTemplate name="userCreationApproved" description="$m{security.notification.userwelcome}"
+	type="email" format="html" entity="user">
+	<subject><![CDATA[$m{security.notification.userwelcome.subject}]]></subject>
+	<body><![CDATA[$m{security.notification.userwelcome.body}]]></body>
+</notifTemplate>

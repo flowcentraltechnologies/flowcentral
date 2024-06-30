@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<!-- Workflow copy creation approval notification -->
+<notifTemplate name="copyCreateApproval" description="$m{workflow.notification.creation.approval}"
+	type="email" format="html" entity="wfItem">
+	<subject><![CDATA[$m{workflow.notification.creation.approval.required.subject}]]></subject>
+	<body><![CDATA[$m{workflow.notification.creation.approval.required.body}]]></body>
+</notifTemplate>

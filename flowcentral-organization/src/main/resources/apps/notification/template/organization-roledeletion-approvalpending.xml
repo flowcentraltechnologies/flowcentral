@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<!-- Role deletion approval pending notification -->
+<notifTemplate name="roleDeletionApprovalPending" description="$m{organization.role.deletion.approval}"
+	type="email" format="html" entity="role">
+	<subject><![CDATA[$m{organization.role.deletion.approval.required.subject}]]></subject>
+	<body><![CDATA[$m{organization.role.deletion.approval.required.body}]]></body>
+</notifTemplate>

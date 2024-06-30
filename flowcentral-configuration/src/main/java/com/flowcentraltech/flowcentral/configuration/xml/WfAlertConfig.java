@@ -39,6 +39,8 @@ public class WfAlertConfig extends BaseNameConfig {
     private String recipientContactRule;
 
     private String generator;
+    
+    private String template;
 
     private String fireOnPrevStepName;
     
@@ -95,6 +97,15 @@ public class WfAlertConfig extends BaseNameConfig {
     @XmlAttribute(required = true)
     public void setGenerator(String generator) {
         this.generator = generator;
+    }
+
+    public String getTemplate() {
+        return template;
+    }
+
+    @XmlAttribute(required = true)
+    public void setTemplate(String template) {
+        this.template = template;
     }
 
     public boolean isAlertHeldBy() {

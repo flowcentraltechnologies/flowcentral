@@ -374,9 +374,10 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                             wsdb.addWfAlertDef(wfStepAlert.getType(), wfStepAlert.getName(),
                                     wfStepAlert.getDescription(), wfStepAlert.getRecipientPolicy(),
                                     wfStepAlert.getRecipientNameRule(), wfStepAlert.getRecipientContactRule(),
-                                    wfStepAlert.getGenerator(), wfStepAlert.getFireOnPrevStepName(),
-                                    wfStepAlert.getFireOnActionName(), wfStepAlert.getFireOnConditionName(),
-                                    wfStepAlert.isAlertHeldBy(), wfStepAlert.isAlertWorkflowRoles());
+                                    wfStepAlert.getGenerator(), wfStepAlert.getTemplate(),
+                                    wfStepAlert.getFireOnPrevStepName(), wfStepAlert.getFireOnActionName(),
+                                    wfStepAlert.getFireOnConditionName(), wfStepAlert.isAlertHeldBy(),
+                                    wfStepAlert.isAlertWorkflowRoles());
                         }
 
                         for (WfStepRole wfStepRole : wfStep.getRoleList()) {
@@ -1301,7 +1302,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         return appletUtil.system().getNewSecuredLink(wfItem.getWfItemDesc(), parts.getOpenPath(), wfItem.getHeldBy(),
                 expirationMinutes);
     }
-    
+
     @Periodic(PeriodicType.FASTER)
     public void processWfTransitionQueueItems(TaskMonitor taskMonitor) throws UnifyException {
         logDebug("Processing transition queue items...");
@@ -1897,6 +1898,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                 }
             }
 
+            reader.setTempValue(NotificationAlertSender.TEMPLATE_VARIABLE, wfAlertDef.getTemplate());
             sender.composeAndSend(reader, recipientList);
         }
     }

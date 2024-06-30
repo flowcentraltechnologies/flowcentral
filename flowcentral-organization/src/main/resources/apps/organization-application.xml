@@ -3,6 +3,15 @@
 <application name="organization"
 	description="$m{organization.short.description}"
 	label="$m{organization.label}" module="organization">
+	<!-- Notification Templates -->
+	<notifTemplates>
+		<notifTemplate
+			configFile="apps/notification/template/organization-rolecreation-approvalpending.xml" />
+		<notifTemplate
+			configFile="apps/notification/template/organization-roleupdate-approvalpending.xml" />
+		<notifTemplate
+			configFile="apps/notification/template/organization-roledeletion-approvalpending.xml" />
+	</notifTemplates>
 	<!-- Widget Types -->
 	<widgetTypes>
 		<widgetType name="branchlist"
@@ -91,10 +100,12 @@
 				value="roleUpdateApproval" />
 			<alert name="roleCreationApproval"
 				description="Role Creation Approval Pending"
-				sender="rolecreation-approvalpending" />
+				sender="simpleemailalertsender"
+				template="roleCreationApprovalPending" />
 			<alert name="roleUpdateApproval"
 				description="Role Update Approval Pending"
-				sender="roleupdate-approvalpending" />
+				sender="simpleemailalertsender"
+				template="roleUpdateApprovalPending" />
 		</applet>
 		<applet name="manageRolePrivilege"
 			description="$m{organization.roleprivilege.manage}"

@@ -34,4 +34,10 @@ public interface NotificationModuleNameConstants {
     String EMAILMESSAGINGCHANNEL = "email-messagingchannel";
 
     String SMSMESSAGINGCHANNEL = "sms-messagingchannel";
+
+    String SIMPLE_EMAIL_ALERT_SENDER = "simpleemailalertsender";
+
+    String SIMPLE_SMS_ALERT_SENDER = "simplesmsalertsender";
+
+    String SIMPLE_SYSTEM_ALERT_SENDER = "simplesystemalertsender";
 }

@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<!-- Workflow copy deletion approval notification -->
+<notifTemplate name="copyDeletionApproval" description="$m{workflow.notification.deletion.approval}"
+	type="email" format="html" entity="wfItem">
+	<subject><![CDATA[$m{workflow.notification.deletion.approval.required.subject}]]></subject>
+	<body><![CDATA[$m{workflow.notification.deletion.approval.required.body}]]></body>
+</notifTemplate>

@@ -11,6 +11,22 @@
 			configFile="apps/notification/template/user-passwordreset.xml" />
 		<notifTemplate
 			configFile="apps/notification/template/user-creation-approval.xml" />
+		<notifTemplate
+			configFile="apps/notification/template/security-usercreation-approvalpending.xml" />
+		<notifTemplate
+			configFile="apps/notification/template/security-usercreation-approved.xml" />
+		<notifTemplate
+			configFile="apps/notification/template/security-usercreation-reviewpending.xml" />
+		<notifTemplate
+			configFile="apps/notification/template/security-usercreation-resubmitpending.xml" />
+		<notifTemplate
+			configFile="apps/notification/template/security-userupdate-approvalpending.xml" />
+		<notifTemplate
+			configFile="apps/notification/template/security-userupdate-reviewpending.xml" />
+		<notifTemplate
+			configFile="apps/notification/template/security-userupdate-resubmitpending.xml" />
+		<notifTemplate
+			configFile="apps/notification/template/security-userdeletion-approvalpending.xml" />
 	</notifTemplates>
 	<!-- Widget Types -->
 	<widgetTypes>
@@ -89,55 +105,62 @@
 				value="onCopySetValues" />
 			<property name="workflowCopy.create.alert"
 				value="userCreationApproval" />
-			<property name="workflowCopy.create.setvalues"
-				value="onSubmitSetValues" />
 			<property name="workflowCopy.create.approval.alert"
 				value="userCreationApproved" />
-			<property name="workflowCopy.create.approval.setvalues"
-				value="onApproveSetValues" />
 			<property name="workflowCopy.create.rejection.alert"
 				value="userCreationReject" />
-			<property name="workflowCopy.create.rejection.setvalues"
-				value="onRejectSetValues" />
 			<property name="workflowCopy.create.resubmit.alert"
 				value="userCreationResubmit" />
-			<property name="workflowCopy.update.copy.setvalues"
-				value="onCopySetValues" />
 			<property name="workflowCopy.update.alert"
 				value="userUpdateApproval" />
+			<property name="workflowCopy.update.rejection.alert"
+				value="userUpdateReject" />
+			<property name="workflowCopy.update.resubmit.alert"
+				value="userUpdateResubmit" />
+			<property name="workflowCopy.create.setvalues"
+				value="onSubmitSetValues" />
+			<property name="workflowCopy.create.approval.setvalues"
+				value="onApproveSetValues" />
+			<property name="workflowCopy.create.rejection.setvalues"
+				value="onRejectSetValues" />
+			<property name="workflowCopy.update.copy.setvalues"
+				value="onCopySetValues" />
 			<property name="workflowCopy.update.setvalues"
 				value="onSubmitSetValues" />
 			<property name="workflowCopy.update.approval.setvalues"
 				value="onApproveSetValues" />
-			<property name="workflowCopy.update.rejection.alert"
-				value="userUpdateReject" />
 			<property name="workflowCopy.update.rejection.setvalues"
 				value="onRejectSetValues" />
-			<property name="workflowCopy.update.resubmit.alert"
-				value="userUpdateResubmit" />
 			<alert name="userCreationApproval"
 				description="User Creation Approval Pending"
-				sender="usercreation-approvalpending" />
+				sender="simpleemailalertsender"
+				template="userCreationApprovalPending" />
 			<alert name="userCreationApproved"
 				description="User Creation Approved"
-				sender="usercreation-approved"
+				sender="simpleemailalertsender"
+				template="userCreationApproved"
 				recipientPolicy="entity-wfrecipientpolicy"
 				recipientNameRule="fullName" recipientContactRule="email" />
 			<alert name="userCreationReject"
 				description="User Creation Review Pending"
-				sender="usercreation-reviewpending" />
+				sender="simpleemailalertsender"
+				template="userCreationReviewPending" />
 			<alert name="userCreationResubmit"
 				description="User Creation Resubmit Pending"
-				sender="usercreation-resubmitpending" />
+				sender="simpleemailalertsender"
+				template="userCreationResubmitPending" />
 			<alert name="userUpdateApproval"
 				description="User Update Approval Pending"
-				sender="userupdate-approvalpending" />
+				sender="simpleemailalertsender"
+				template="userUpdateApprovalPending" />
 			<alert name="userUpdateReject"
 				description="User Update Review Pending"
-				sender="userupdate-reviewpending" />
+				sender="simpleemailalertsender"
+				template="userUpdateReviewPending" />
 			<alert name="userUpdateResubmit"
 				description="User Update Resubmit Pending"
-				sender="userupdate-resubmitpending" />
+				sender="simpleemailalertsender"
+				template="userUpdateResubmitPending" />
 			<filter name="nonSystemRecords"
 				description="$m{common.filter.nonsystemrecords}">
 				<restriction type="greater_than" field="id" paramA="0" />

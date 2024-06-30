@@ -33,6 +33,7 @@ import com.flowcentraltech.flowcentral.configuration.constants.RecordActionType;
 import com.flowcentraltech.flowcentral.configuration.constants.WorkflowAlertType;
 import com.flowcentraltech.flowcentral.configuration.constants.WorkflowStepPriority;
 import com.flowcentraltech.flowcentral.configuration.constants.WorkflowStepType;
+import com.flowcentraltech.flowcentral.notification.constants.NotificationModuleNameConstants;
 import com.flowcentraltech.flowcentral.workflow.constants.WorkflowModuleNameConstants;
 import com.flowcentraltech.flowcentral.workflow.entities.WfStep;
 import com.flowcentraltech.flowcentral.workflow.entities.WfStepAlert;
@@ -249,31 +250,32 @@ public final class WorkflowDesignUtils {
             approvalWfStep.setReadOnlyConditionName(ApplicationFilterConstants.RESERVED_ALWAYS_FILTERNAME);
             approvalWfStep.setAttachmentProviderName(appletWorkflowCopyInfo.getAttachmentProvider());
             approvalWfStep.setAppletSetValuesName(submitEventInfo.getSetValuesName());
-            List<WfStepAlert> alertList = new ArrayList<WfStepAlert> ();
+            List<WfStepAlert> alertList = new ArrayList<WfStepAlert>();
             if (submitEventInfo.isWithAlert()) {
                 WfStepAlert wfStepAlert = createWfStepAlert(WorkflowAlertType.USER_INTERACT,
                         appletWorkflowCopyInfo.getAppletAlertDef(submitEventInfo.getAlertName()));
                 wfStepAlert.setFireOnPrevStepName("start");
                 alertList.add(wfStepAlert);
             } else {
-                final String sender = type.isWorkflowCopyCreate()
-                        ? WorkflowModuleNameConstants.WORKFLOW_COPY_CREATE_APPROVAL_PENDING_EMAIL_SENDER
+                final String template = type.isWorkflowCopyCreate()
+                        ? WorkflowModuleNameConstants.WORKFLOW_COPY_CREATE_APPROVAL_TEMPLATE
                         : (type.isWorkflowCopyUpdate()
-                                ? WorkflowModuleNameConstants.WORKFLOW_COPY_UPDATE_APPROVAL_PENDING_EMAIL_SENDER
-                                : WorkflowModuleNameConstants.WORKFLOW_COPY_DELETION_APPROVAL_PENDING_EMAIL_SENDER);
-                WfStepAlert wfStepAlert = createWfStepAlert(WorkflowAlertType.USER_INTERACT, sender);
+                                ? WorkflowModuleNameConstants.WORKFLOW_COPY_UPDATE_APPROVAL_TEMPLATE
+                                : WorkflowModuleNameConstants.WORKFLOW_COPY_DELETION_APPROVAL_TEMPLATE);
+                WfStepAlert wfStepAlert = createWfStepAlert(WorkflowAlertType.USER_INTERACT,
+                        NotificationModuleNameConstants.SIMPLE_EMAIL_ALERT_SENDER, template);
                 alertList.add(wfStepAlert);
             }
-            
+
             if (type.isWorkflowCopyCreateOrUpdate() && resubmitEventInfo.isWithAlert()) {
                 WfStepAlert wfStepAlert = createWfStepAlert(WorkflowAlertType.USER_INTERACT,
                         appletWorkflowCopyInfo.getAppletAlertDef(resubmitEventInfo.getAlertName()));
                 wfStepAlert.setFireOnPrevStepName("draftReview");
                 alertList.add(wfStepAlert);
             }
-            
+
             approvalWfStep.setAlertList(alertList);
-          
+
             final WfStepUserAction approveUserAction = new WfStepUserAction();
             final EventInfo approveEventInfo = workflowCopyInfo.getEventInfo(EventType.ON_APPROVE);
             approveUserAction.setName("approve");
@@ -435,7 +437,7 @@ public final class WorkflowDesignUtils {
     }
 
     private static WfStepAlert createWfStepAlert(WorkflowAlertType type, AppletAlertDef appletAlertDef) {
-        WfStepAlert wfStepAlert = createWfStepAlert(type, appletAlertDef.getSender());
+        WfStepAlert wfStepAlert = createWfStepAlert(type, appletAlertDef.getSender(), appletAlertDef.getTemplate());
         wfStepAlert.setName(appletAlertDef.getName());
         wfStepAlert.setDescription(appletAlertDef.getDescription());
         wfStepAlert.setRecipientContactRule(appletAlertDef.getRecipientContactRule());
@@ -444,12 +446,13 @@ public final class WorkflowDesignUtils {
         return wfStepAlert;
     }
 
-    private static WfStepAlert createWfStepAlert(WorkflowAlertType type, String sender) {
+    private static WfStepAlert createWfStepAlert(WorkflowAlertType type, String sender, String template) {
         WfStepAlert wfStepAlert = new WfStepAlert();
         wfStepAlert.setType(type);
         wfStepAlert.setName("draftAlert");
         wfStepAlert.setDescription("Draft Alert");
         wfStepAlert.setGenerator(sender);
+        wfStepAlert.setTemplate(template);
         wfStepAlert.setAlertWorkflowRoles(true);
         return wfStepAlert;
     }
