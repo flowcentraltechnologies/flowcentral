@@ -31,6 +31,7 @@ import com.flowcentraltech.flowcentral.notification.util.DynamicNotifLargeTextIn
 import com.flowcentraltech.flowcentral.notification.util.DynamicNotifTemplateInfo;
 import com.flowcentraltech.flowcentral.notification.util.NotifLargeTextInfo;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.data.Listable;
 
 /**
  * Notification business service.
@@ -150,6 +151,17 @@ public interface NotificationModuleService extends FlowCentralService {
      *                        if an error occurs
      */
     List<NotificationTemplate> findNotificationTemplates(NotificationTemplateQuery query) throws UnifyException;
+    
+    /**
+     * Finds notification templates by application ID.
+     * 
+     * @param applicationId
+     *                      the application ID
+     * @return the list of notification templates
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    List<? extends Listable> findNotificationTemplatesByApplicationId(Long applicationId) throws UnifyException;
 
     /**
      * Finds notification template by ID.
@@ -230,4 +242,5 @@ public interface NotificationModuleService extends FlowCentralService {
      *                        if an error occurs
      */
     void sendNotification(NotifMessage notifMessage) throws UnifyException;
+
 }

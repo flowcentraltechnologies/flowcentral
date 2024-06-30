@@ -270,6 +270,11 @@
 			dataType="string" inputType="string"
 			editor="!ui-select list:studioappletentitynotifsenderlist listParams:$l{appAppletId} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
+		<widgetType name="appletalerttemplatelist"
+			description="$m{studio.widgettype.appletalerttemplatelist}"
+			dataType="string" inputType="string"
+			editor="!ui-select list:studioappletalerttemplatelist listParams:$l{propertyOwnerId} blankOption:$m{blank.none}"
+			renderer="!ui-label" />
 		<widgetType name="wfentitysetvaluesgenlist"
 			description="$m{studio.widgettype.wfentitysetvaluesgenlist}"
 			dataType="string" inputType="string"
@@ -284,6 +289,11 @@
 			description="$m{studio.widgettype.wfstepnotifsenderlist}"
 			dataType="string" inputType="string"
 			editor="!ui-select list:studiowfstepnotifsenderlist listParams:$l{wfStepId} blankOption:$m{blank.none}"
+			renderer="!ui-label" />
+		<widgetType name="wfstepalerttemplatelist"
+			description="$m{studio.widgettype.wfstepalerttemplatelist}"
+			dataType="string" inputType="string"
+			editor="!ui-select list:studiowfstepalerttemplatelist listParams:$l{wfStepId} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="wfstepreceivefromlist"
 			description="$m{studio.widgettype.wfstepreceivefromlist}"
@@ -2573,7 +2583,7 @@
 		</form>
 		<form name="appAppletAlertForm"
 			description="$m{studio.appappletalert.form}"
-			entity="application.appAppletAlert">
+			entity="application.appAppletAlert"> 
 			<tab name="basicDetails"
 				label="$m{studio.appappletalert.form.basicdetails}"
 				contentType="miniform">
@@ -2585,6 +2595,8 @@
 					<field name="sender"
 						inputWidget="studio.appletentitynotifsenderlist" required="true"
 						column="1" />
+					<field name="template"
+						inputWidget="studio.appletalerttemplatelist" column="1" />
 					<field name="recipientPolicy"
 						inputWidget="studio.wfrecipientpolicylist" column="1"
 						switchOnChange="true" />
@@ -5547,6 +5559,8 @@
 					<field name="generator"
 						inputWidget="studio.wfstepnotifsenderlist" column="0"
 						required="true" />
+					<field name="template"
+						inputWidget="studio.wfstepalerttemplatelist" column="0" />
 					<field name="recipientPolicy"
 						inputWidget="studio.wfrecipientpolicylist" column="0"
 						switchOnChange="true" />

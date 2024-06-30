@@ -1693,6 +1693,11 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
+    public Long getAppAppletApplicationId(Long appAppletId) throws UnifyException {
+        return environment().value(Long.class, "applicationId", new AppAppletQuery().id(appAppletId));
+    }
+
+    @Override
     public String getAppEntity(Long appEntityId) throws UnifyException {
         AppEntity appEntity = environment()
                 .listLean(new AppEntityQuery().id(appEntityId).addSelect("applicationName", "name"));

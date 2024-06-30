@@ -819,6 +819,11 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
+    public Long findApplicationIdWorkflowStepById(Long wfStepId) throws UnifyException {
+        return environment().value(Long.class, "applicationId", new WfStepQuery().addEquals("id", wfStepId));
+    }
+
+    @Override
     public List<WfStep> findWorkflowSteps(WfStepQuery query) throws UnifyException {
         return environment().listAll(query);
     }

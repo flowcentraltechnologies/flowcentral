@@ -82,6 +82,7 @@ import com.tcdng.unify.core.annotation.Transactional;
 import com.tcdng.unify.core.constant.FrequencyUnit;
 import com.tcdng.unify.core.criterion.Update;
 import com.tcdng.unify.core.data.FactoryMap;
+import com.tcdng.unify.core.data.Listable;
 import com.tcdng.unify.core.data.MapValueStore;
 import com.tcdng.unify.core.data.ParameterizedStringGenerator;
 import com.tcdng.unify.core.data.ValueStoreReader;
@@ -331,6 +332,13 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
     @Override
     public List<NotificationTemplate> findNotificationTemplates(NotificationTemplateQuery query) throws UnifyException {
         return environment().listAll(query);
+    }
+
+    @Override
+    public List<? extends Listable> findNotificationTemplatesByApplicationId(Long applicationId) throws UnifyException {
+        List<NotificationTemplate> templateList = environment().listAll(new NotificationTemplateQuery()
+                .applicationId(applicationId).addSelect("applicationName", "name", "description"));
+        return ApplicationNameUtils.getListableList(templateList);
     }
 
     @Override
