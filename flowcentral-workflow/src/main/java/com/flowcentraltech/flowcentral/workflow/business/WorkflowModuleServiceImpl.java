@@ -1950,19 +1950,21 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         wfItemEvent.setErrorDoc(errorDoc);
         wfItemEvent.setPrevWfStepName(prevWfStepName);
 
-        if (wfStepDef.getReminderMinutes() > 0) {
-            wfItemEvent.setReminderDt(CalendarUtils.getDateWithFrequencyOffset(now, FrequencyUnit.MINUTE,
-                    wfStepDef.getReminderMinutes()));
-        }
+        if (wfStepDef.isSettling()) {
+            if (wfStepDef.getReminderMinutes() > 0) {
+                wfItemEvent.setReminderDt(CalendarUtils.getDateWithFrequencyOffset(now, FrequencyUnit.MINUTE,
+                        wfStepDef.getReminderMinutes()));
+            }
 
-        if (wfStepDef.getCriticalMinutes() > 0) {
-            wfItemEvent.setCriticalDt(CalendarUtils.getDateWithFrequencyOffset(now, FrequencyUnit.MINUTE,
-                    wfStepDef.getCriticalMinutes()));
-        }
+            if (wfStepDef.getCriticalMinutes() > 0) {
+                wfItemEvent.setCriticalDt(CalendarUtils.getDateWithFrequencyOffset(now, FrequencyUnit.MINUTE,
+                        wfStepDef.getCriticalMinutes()));
+            }
 
-        if (wfStepDef.getExpiryMinutes() > 0) {
-            wfItemEvent.setExpectedDt(
-                    CalendarUtils.getDateWithFrequencyOffset(now, FrequencyUnit.MINUTE, wfStepDef.getExpiryMinutes()));
+            if (wfStepDef.getExpiryMinutes() > 0) {
+                wfItemEvent.setExpectedDt(CalendarUtils.getDateWithFrequencyOffset(now, FrequencyUnit.MINUTE,
+                        wfStepDef.getExpiryMinutes()));
+            }
         }
 
         return (Long) environment().create(wfItemEvent);

@@ -633,6 +633,8 @@
 				type="list_only" key="wfItemEventId" property="expectedDt" />
 			<field name="criticalDt" label="$m{workflow.wfitem.criticaldt}"
 				type="list_only" key="wfItemEventId" property="criticalDt" />
+			<field name="actionDt" label="$m{workflow.wfitem.actiondt}"
+				type="list_only" key="wfItemEventId" property="actionDt" />
 			<field name="wfItemDesc" label="$m{workflow.wfitem.itemdesc}"
 				type="list_only" key="wfItemEventId" property="wfItemDesc" />
 			<field name="branchCode" label="$m{workflow.wfitem.branchcode}"
