@@ -153,6 +153,27 @@ public interface LoadingTableProvider extends FlowCentralComponent {
             InputArrayEntries emails, boolean listing) throws UnifyException;
     
     /**
+     * Applies user action to work item.
+     * 
+     * @param wfEntityInst
+     *                     the work item instance
+     * @param workItemId
+     *                     the work item ID
+     * @param userAction
+     *                     the user action to apply
+     * @param comment
+     *                     the comment on this action
+     * @param emails
+     *                     the emails
+     * @param listing      the listing mode
+     * @return if successful
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    boolean applyUserActionByWorkItemId(WorkEntity wfEntityInst, Long workItemId, String userAction, String comment,
+            InputArrayEntries emails, boolean listing) throws UnifyException;
+    
+    /**
      * Checks if a new user comment is required.
      * 
      * @param userAction

@@ -197,7 +197,7 @@ public abstract class AbstractLoadingApplet extends AbstractEntityFormApplet {
     public void applyUserAction(String actionName) throws UnifyException {
         final AbstractForm _form = getResolvedForm();
         WorkEntity currEntityInst = (WorkEntity) _form.getFormBean();
-        loadingTableProvider.applyUserAction(currEntityInst, workItemId, actionName, _form.getNewComment(),
+        loadingTableProvider.applyUserActionByWorkItemId(currEntityInst, workItemId, actionName, _form.getNewComment(),
                 _form.getEmails(), _form.isListing());
         
         // TODO Set command result

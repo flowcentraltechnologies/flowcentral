@@ -177,6 +177,14 @@ public class MyWorkItemsLoadingTableProvider extends AbstractApplicationLoadingT
     }
 
     @Override
+    public boolean applyUserActionByWorkItemId(WorkEntity wfEntityInst, Long workItemId, String userAction,
+            String comment, InputArrayEntries emails, boolean listing) throws UnifyException {
+        final WorkflowStepInfo workflowStepInfo = getParameter(WorkflowStepInfo.class);
+        return workflowModuleService.applyUserAction(wfEntityInst, workItemId, workflowStepInfo.getStepName(),
+                userAction, comment, emails, WfReviewMode.NORMAL, listing);
+    }
+
+    @Override
     public boolean isNewCommentRequired(String userAction) throws UnifyException {
         final WorkflowStepInfo workflowStepInfo = getParameter(WorkflowStepInfo.class);
         WfDef wfDef = workflowModuleService.getWfDef(workflowStepInfo.getWorkflowLongName());

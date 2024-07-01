@@ -91,6 +91,12 @@ public abstract class AbstractApplicationLoadingTableProvider extends AbstractFl
     }
 
     @Override
+    public boolean applyUserActionByWorkItemId(WorkEntity wfEntityInst, Long workItemId, String userAction,
+            String comment, InputArrayEntries emails, boolean listing) throws UnifyException {
+        return false;
+    }
+
+    @Override
     public boolean isNewCommentRequired(String userAction) throws UnifyException {
         return false;
     }
