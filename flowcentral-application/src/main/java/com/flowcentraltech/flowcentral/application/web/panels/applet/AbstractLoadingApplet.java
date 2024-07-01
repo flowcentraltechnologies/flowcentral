@@ -44,7 +44,7 @@ import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.ui.widget.Page;
 
 /**
- * Abstract base class for Loading applet object.
+ * Abstract base class for loading applet object.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
@@ -81,14 +81,14 @@ public abstract class AbstractLoadingApplet extends AbstractEntityFormApplet {
                 }
 
                 setAltSubCaption(form.getFormTitle());
-                viewMode = ViewMode.MAINTAIN_FORM;
+                viewMode = ViewMode.MAINTAIN_PRIMARY_FORM_NO_SCROLL;
                 takeAuditSnapshot(AuditEventType.VIEW);
             } else if (item.isWorkItem()) {
                 final AppletDef _currentFormAppletDef = getFormAppletDef();
                 WorkEntity currEntityInst = (WorkEntity) item.getEntity();
                 FormDef formDef = getPreferredForm(PreferredFormType.ALL, _currentFormAppletDef, currEntityInst,
                         FormMode.MAINTAIN.formProperty());
-                LoadingWorkItemInfo loadingWorkItemInfo = this.loadingTableProvider.getLoadingWorkItemInfo(currEntityInst);
+                LoadingWorkItemInfo loadingWorkItemInfo = loadingTableProvider.getLoadingWorkItemInfo(currEntityInst);
                 getCtx().setRecovery(loadingWorkItemInfo.isError());
                 getCtx().setComments(loadingWorkItemInfo.isComments());
                 getCtx().setAttachments(loadingWorkItemInfo.isAttachments());
@@ -110,7 +110,7 @@ public abstract class AbstractLoadingApplet extends AbstractEntityFormApplet {
                     form.setAppendables(item);
                     getCtx().setReadOnly(loadingWorkItemInfo.isReadOnly());
                     setAltSubCaption(form.getFormTitle());
-                    viewMode = ViewMode.MAINTAIN_FORM;
+                    viewMode = ViewMode.MAINTAIN_PRIMARY_FORM_NO_SCROLL;
                     takeAuditSnapshot(AuditEventType.VIEW);
                 } else { // Listing
                     listingForm = constructListingForm(formDef, currEntityInst);
@@ -128,7 +128,7 @@ public abstract class AbstractLoadingApplet extends AbstractEntityFormApplet {
                 }
             } else if (item.isWorkItemSingleForm()) {
                 WorkEntity currEntityInst = (WorkEntity) item.getEntity();
-                LoadingWorkItemInfo loadingWorkItemInfo = this.loadingTableProvider.getLoadingWorkItemInfo(currEntityInst);
+                LoadingWorkItemInfo loadingWorkItemInfo = loadingTableProvider.getLoadingWorkItemInfo(currEntityInst);
                 getCtx().setRecovery(loadingWorkItemInfo.isError());
                 getCtx().setEmails(loadingWorkItemInfo.isEmails());
                 getCtx().setComments(loadingWorkItemInfo.isComments());

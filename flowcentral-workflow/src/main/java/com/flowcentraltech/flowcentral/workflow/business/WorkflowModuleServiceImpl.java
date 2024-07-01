@@ -61,6 +61,7 @@ import com.flowcentraltech.flowcentral.application.util.ApplicationEntityNamePar
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityUtils;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.util.ApplicationPageUtils;
+import com.flowcentraltech.flowcentral.application.util.HtmlUtils;
 import com.flowcentraltech.flowcentral.application.util.InputWidgetUtils;
 import com.flowcentraltech.flowcentral.application.util.OpenPagePathParts;
 import com.flowcentraltech.flowcentral.application.util.PrivilegeNameParts;
@@ -1289,6 +1290,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                 final String heldBy = wfItem.getHeldBy();
                 SecuredLinkInfo securedLinkInfo = getWorkItemSecuredLink(wfStepDef.getStepAppletName(), wfItem);
                 reader.setTempValue(NotificationAlertSender.WFITEM_LINK_VARIABLE, securedLinkInfo.getLinkUrl());
+                reader.setTempValue(NotificationAlertSender.WFITEM_HTMLLINK_VARIABLE, securedLinkInfo.getHtmlLink());
 
                 final Long tenantId = getTenantIdFromTransitionItem(entityClassDef, reader);
                 for (WfAlertDef wfAlertDef : alertList) {
@@ -1791,6 +1793,9 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         variables.put(ProcessVariable.APP_TITLE.variableKey(), appTitle);
         variables.put(ProcessVariable.APP_CORRESPONDER.variableKey(), appCorresponder);
         variables.put(ProcessVariable.APP_URL.variableKey(), appUrl);
+        variables.put(ProcessVariable.APP_HTML_LINK.variableKey(),
+                HtmlUtils.getSecuredHtmlLink(appUrl, resolveApplicationMessage("$m{link.here}")));
+
         return variables;
     }
 
@@ -1847,6 +1852,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                     transitionItem.getWfItem());
             transitionItem.getReader().setTempValue(NotificationAlertSender.WFITEM_LINK_VARIABLE,
                     securedLinkInfo.getLinkUrl());
+            transitionItem.getReader().setTempValue(NotificationAlertSender.WFITEM_HTMLLINK_VARIABLE,
+                    securedLinkInfo.getHtmlLink());
         }
 
         for (WfAlertDef wfAlertDef : wfStepDef.getAlertList()) {

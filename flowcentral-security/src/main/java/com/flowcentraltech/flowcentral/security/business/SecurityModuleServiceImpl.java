@@ -29,6 +29,7 @@ import java.util.TimeZone;
 
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModulePathConstants;
 import com.flowcentraltech.flowcentral.application.constants.FormatOverrideConstants;
+import com.flowcentraltech.flowcentral.application.util.HtmlUtils;
 import com.flowcentraltech.flowcentral.common.business.AbstractFlowCentralService;
 import com.flowcentraltech.flowcentral.common.business.FileAttachmentProvider;
 import com.flowcentraltech.flowcentral.common.business.NotificationRecipientProvider;
@@ -167,7 +168,8 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
         final String linkAccessKey = String.format("%x%s", linkId, accessKey);
         final String linkUrl = baseUrl + SecurityModuleNameConstants.SECURED_LINK_ACCESS_CONTROLLER + "?"
                 + PageRequestParameterConstants.NO_TRANSFER + "=true&lid=" + linkAccessKey;
-        return new SecuredLinkInfo(title, linkUrl, actExpirationInMinutes);
+        final String htmlLink = HtmlUtils.getSecuredHtmlLink(linkUrl, resolveApplicationMessage("$m{link.here}"));
+        return new SecuredLinkInfo(title, linkUrl, htmlLink, actExpirationInMinutes);
     }
 
     @Override

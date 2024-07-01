@@ -15,6 +15,8 @@
  */
 package com.flowcentraltech.flowcentral.application.util;
 
+import com.tcdng.unify.core.util.StringUtils;
+
 /**
  * HTML utilities.
  * 
@@ -30,7 +32,7 @@ public final class HtmlUtils {
     public static String formatHTML(final String html) {
         return HtmlUtils.formatReportHTML(html);
     }
-    
+
     public static String formatReportHTML(final String html) {
         if (html != null) {
             return html.replaceAll("&nbsp;", "&#160;").replaceAll(" ", "&#160;")
@@ -48,4 +50,12 @@ public final class HtmlUtils {
         return null;
     }
 
+    public static String getSecuredHtmlLink(String url, String title) {
+        return HtmlUtils.getHtmlLink(url, title, "_secured");
+    }
+
+    public static String getHtmlLink(String url, String title, String target) {
+        return "<a href=\"" + url + "\" target=\"" + target
+                + (StringUtils.isBlank(title) ? "\"></a>" : "\">" + title + "</a>");
+    }
 }

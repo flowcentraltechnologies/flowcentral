@@ -28,11 +28,14 @@ public class SecuredLinkInfo {
 
     private String linkUrl;
 
+    private String htmlLink;
+
     private int expirationInMinutes;
 
-    public SecuredLinkInfo(String title, String linkUrl, int expirationInMinutes) {
+    public SecuredLinkInfo(String title, String linkUrl, String htmlLink, int expirationInMinutes) {
         this.title = title;
         this.linkUrl = linkUrl;
+        this.htmlLink = htmlLink;
         this.expirationInMinutes = expirationInMinutes;
     }
 
@@ -42,6 +45,10 @@ public class SecuredLinkInfo {
 
     public String getLinkUrl() {
         return linkUrl;
+    }
+
+    public String getHtmlLink() {
+        return htmlLink;
     }
 
     public int getExpirationInMinutes() {
