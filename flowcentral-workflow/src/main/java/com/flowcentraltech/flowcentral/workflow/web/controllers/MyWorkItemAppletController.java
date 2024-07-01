@@ -22,11 +22,9 @@ import com.flowcentraltech.flowcentral.application.data.EntityFormEventHandlers;
 import com.flowcentraltech.flowcentral.application.web.controllers.AbstractLoadingAppletController;
 import com.flowcentraltech.flowcentral.application.web.controllers.AppletWidgetReferences;
 import com.flowcentraltech.flowcentral.configuration.constants.FlowCentralAppletPathConstants;
-import com.flowcentraltech.flowcentral.workflow.business.WorkflowModuleService;
 import com.flowcentraltech.flowcentral.workflow.web.panels.applet.MyWorkItemApplet;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
-import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.UplBinding;
 import com.tcdng.unify.web.ui.widget.Page;
 
@@ -41,9 +39,6 @@ import com.tcdng.unify.web.ui.widget.Page;
 public class MyWorkItemAppletController
         extends AbstractLoadingAppletController<MyWorkItemApplet, MyWorkItemAppletPageBean> {
 
-    @Configurable
-    private WorkflowModuleService workflowModuleService;
-
     public MyWorkItemAppletController() {
         super(MyWorkItemAppletPageBean.class);
     }
@@ -52,7 +47,7 @@ public class MyWorkItemAppletController
     protected MyWorkItemApplet createAbstractLoadingApplet(Page page, AppletUtilities au, List<String> pathVariables,
             AppletWidgetReferences appletWidgetReferences, EntityFormEventHandlers formEventHandlers)
             throws UnifyException {
-        return new MyWorkItemApplet(workflowModuleService, page, au, pathVariables, appletWidgetReferences,
+        return new MyWorkItemApplet(page, au, pathVariables, appletWidgetReferences,
                 formEventHandlers);
     }
 

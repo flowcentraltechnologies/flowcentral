@@ -84,7 +84,7 @@ public interface LoadingTableProvider extends FlowCentralComponent {
      *                        if an error occurs
      */
     int getSourceItemOptions(Entity loadingEntity) throws UnifyException;
-   
+    
     /**
      * Gets the source entity items using supplied ID
      * 
@@ -96,7 +96,20 @@ public interface LoadingTableProvider extends FlowCentralComponent {
      * @throws UnifyException
      *                        if an error occurs
      */
-    EntityItem getSourceItem(Long sourceItemId, int options) throws UnifyException;
+    EntityItem getSourceItemById(Long sourceItemId, int options) throws UnifyException;
+    
+    /**
+     * Gets the source entity items using supplied ID
+     * 
+     * @param workItemId
+     *                     the work item id to use
+     * @param options
+     *                     options
+     * @return the source entity item
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    EntityItem getSourceItemByWorkItemId(Long workItemId, int options) throws UnifyException;
 
     /**
      * Gets the source entity item form applet.

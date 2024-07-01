@@ -71,11 +71,17 @@ public abstract class AbstractApplicationLoadingTableProvider extends AbstractFl
 
     @SuppressWarnings("unchecked")
     @Override
-    public EntityItem getSourceItem(Long sourceItemId, int options) throws UnifyException {
+    public EntityItem getSourceItemById(Long sourceItemId, int options) throws UnifyException {
         EntityClassDef sourceEntityClassDef = application().getEntityClassDef(sourceEntity);
         Entity entity = environment().list((Class<? extends Entity>) sourceEntityClassDef.getEntityClass(),
                 sourceItemId);
         return new EditEntityItem(entity);
+    }
+
+    @Override
+    public EntityItem getSourceItemByWorkItemId(Long workItemId, int options) throws UnifyException {
+        // TODO Auto-generated method stub
+        return null;
     }
 
     @Override

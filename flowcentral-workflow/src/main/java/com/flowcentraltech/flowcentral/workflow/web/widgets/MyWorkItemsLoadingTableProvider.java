@@ -146,10 +146,15 @@ public class MyWorkItemsLoadingTableProvider extends AbstractApplicationLoadingT
     }
 
     @Override
-    public EntityItem getSourceItem(Long sourceItemId, int options) throws UnifyException {
+    public EntityItem getSourceItemById(Long sourceItemId, int options) throws UnifyException {
         final WorkflowStepInfo workflowStepInfo = getParameter(WorkflowStepInfo.class);
         final Long workItemId = environment().value(Long.class, "id", new WfItemQuery().workRecId(sourceItemId)
                 .workflowName(workflowStepInfo.getWorkflowLongName()).wfStepName(workflowStepInfo.getStepName()));
+        return workflowModuleService.getWfItemWorkEntityFromWorkItemId(workItemId, WfReviewMode.NORMAL);
+    }
+
+    @Override
+    public EntityItem getSourceItemByWorkItemId(Long workItemId, int options) throws UnifyException {
         return workflowModuleService.getWfItemWorkEntityFromWorkItemId(workItemId, WfReviewMode.NORMAL);
     }
 

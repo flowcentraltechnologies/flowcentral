@@ -35,18 +35,16 @@ import com.tcdng.unify.web.ui.widget.Page;
  */
 public class MyWorkItemApplet extends AbstractLoadingApplet {
 
-    private final WorkflowModuleService workflow;
-    
-    public MyWorkItemApplet(WorkflowModuleService workflow, Page page, AppletUtilities au, List<String> pathVariables,
+    public MyWorkItemApplet(Page page, AppletUtilities au, List<String> pathVariables,
             AppletWidgetReferences appletWidgetReferences, EntityFormEventHandlers formEventHandlers)
             throws UnifyException {
         super(page, au, pathVariables, appletWidgetReferences, formEventHandlers,
                 WorkflowModuleNameConstants.WORKFLOW_MY_WORKITEMS_LOADING_TABLE_PROVIDER);
-        this.workflow = workflow;
     }
 
     @Override
-    protected WorkflowStepInfo getWorkflowStepInfo(Long sourceItemId) throws UnifyException {
+    protected WorkflowStepInfo getWorkflowStepInfo(AppletUtilities au, Long sourceItemId) throws UnifyException {
+        WorkflowModuleService workflow = au.getComponent(WorkflowModuleService.class, WorkflowModuleNameConstants.WORKFLOW_MODULE_SERVICE);
         return workflow.getWorkflowLoadingStepInfoByWorkItemId(sourceItemId, null, null);
     }
 

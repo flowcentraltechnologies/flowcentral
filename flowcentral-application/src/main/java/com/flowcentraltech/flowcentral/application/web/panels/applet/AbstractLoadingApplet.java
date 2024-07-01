@@ -53,7 +53,7 @@ public abstract class AbstractLoadingApplet extends AbstractEntityFormApplet {
 
     private final LoadingTableProvider loadingTableProvider;
     
-    private final Long sourceItemId;
+    private final Long workItemId;
     
     private EntitySingleForm singleForm;
 
@@ -65,11 +65,11 @@ public abstract class AbstractLoadingApplet extends AbstractEntityFormApplet {
         final AppletNameParts parts = ApplicationNameUtils.getAppletNameParts(pathVariables.get(APPLET_NAME_INDEX));
         this.loadingTableProvider = au.getComponent(LoadingTableProvider.class, providerName);
         if (parts.isWithVestigial()) {
-            this.sourceItemId = Long.valueOf(parts.getVestigial());
-            final WorkflowStepInfo workflowStepInfo = getWorkflowStepInfo(sourceItemId);
+            this.workItemId = Long.valueOf(parts.getVestigial());
+            final WorkflowStepInfo workflowStepInfo = getWorkflowStepInfo(au, workItemId);
             loadingTableProvider.setWorkingParameter(workflowStepInfo);
             final int options = loadingTableProvider.getSourceItemOptions(null);
-            final EntityItem item = loadingTableProvider.getSourceItem(sourceItemId, options);
+            final EntityItem item = loadingTableProvider.getSourceItemByWorkItemId(workItemId, options);
             if (item.isEdit()) {
                 getCtx().setReview(false);
                 Entity _inst = item.getEntity();
@@ -148,7 +148,7 @@ public abstract class AbstractLoadingApplet extends AbstractEntityFormApplet {
                 viewMode = ViewMode.SINGLE_FORM;
             }
         } else {
-            this.sourceItemId = null;
+            this.workItemId = null;
             form = constructNewForm(FormMode.CREATE, null, false);
             viewMode = ViewMode.NEW_PRIMARY_FORM;
         }
@@ -197,13 +197,13 @@ public abstract class AbstractLoadingApplet extends AbstractEntityFormApplet {
     public void applyUserAction(String actionName) throws UnifyException {
         final AbstractForm _form = getResolvedForm();
         WorkEntity currEntityInst = (WorkEntity) _form.getFormBean();
-        loadingTableProvider.applyUserAction(currEntityInst, sourceItemId, actionName, _form.getNewComment(),
+        loadingTableProvider.applyUserAction(currEntityInst, workItemId, actionName, _form.getNewComment(),
                 _form.getEmails(), _form.isListing());
         
         // TODO Set command result
     }
 
-    protected abstract WorkflowStepInfo getWorkflowStepInfo(Long sourceItemId) throws UnifyException;
+    protected abstract WorkflowStepInfo getWorkflowStepInfo(AppletUtilities au, Long sourceItemId) throws UnifyException;
 
     protected final AppletDef resolveRootAppletDef(String appletName) throws UnifyException {
         AppletDef appletDef = au.getAppletDef(appletName);
