@@ -860,15 +860,21 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
-    public WorkflowStepInfo getWorkflowLoadingStepInfoByWorkItemId(Long workItemId, String branchCode,
+    public WorkflowStepInfo getWorkflowLoadingStepInfoByWorkItemEventId(Long workItemEventId, String branchCode,
             String departmentCode) throws UnifyException {
-        WfItem wfItem = environment().list(WfItem.class, workItemId);
-        ApplicationEntityNameParts parts = ApplicationNameUtils.getApplicationEntityNameParts(wfItem.getWorkflowName());
-        WfStep wfStep = environment().list(new WfStepQuery().applicationName(parts.getApplicationName())
-                .workflowName(parts.getEntityName()).name(wfItem.getWfStepName()));
-        return new WorkflowStepInfo(wfItem.getWorkflowName(), wfItem.getApplicationName(), parts.getEntityName(), null,
-                wfItem.getEntity(), wfItem.getWfStepName(), wfStep.getDescription(), wfStep.getLabel(),
-                wfStep.isBranchOnly() ? branchCode : null, wfStep.isDepartmentOnly() ? departmentCode : null);
+        WfItem wfItem = environment().list(new WfItemQuery().wfItemEventId(workItemEventId));
+        if (wfItem != null) {
+            ApplicationEntityNameParts parts = ApplicationNameUtils
+                    .getApplicationEntityNameParts(wfItem.getWorkflowName());
+            WfStep wfStep = environment().list(new WfStepQuery().applicationName(parts.getApplicationName())
+                    .workflowName(parts.getEntityName()).name(wfItem.getWfStepName()));
+            return new WorkflowStepInfo(wfItem.getWorkflowName(), wfItem.getApplicationName(), parts.getEntityName(),
+                    null, wfItem.getEntity(), wfItem.getWfStepName(), wfStep.getDescription(), wfStep.getLabel(),
+                    wfStep.isBranchOnly() ? branchCode : null, wfStep.isDepartmentOnly() ? departmentCode : null,
+                            wfItem.getId());
+        }
+
+        return WorkflowStepInfo.EMPTY;
     }
 
     @Override
@@ -1311,9 +1317,9 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
     }
 
     private SecuredLinkInfo getWorkItemSecuredLink(String appletName, WfItem wfItem) throws UnifyException {
-        OpenPagePathParts parts = ApplicationPageUtils.constructAppletOpenPagePath(AppletType.MY_WORKITEM, appletName,
-                wfItem.getId());
-        int expirationMinutes = appletUtil.system().getSysParameterValue(int.class,
+        final OpenPagePathParts parts = ApplicationPageUtils.constructAppletOpenPagePath(AppletType.MY_WORKITEM, appletName,
+                wfItem.getWfItemEventId());
+        final int expirationMinutes = appletUtil.system().getSysParameterValue(int.class,
                 SystemModuleSysParamConstants.SECURED_LINK_EXPIRATION_MINUTES);
         return appletUtil.system().getNewSecuredLink(wfItem.getWfItemDesc(), parts.getOpenPath(), wfItem.getHeldBy(),
                 expirationMinutes);

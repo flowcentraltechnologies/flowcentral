@@ -31,6 +31,7 @@ import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.UplBinding;
 import com.tcdng.unify.core.constant.MimeType;
+import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.annotation.ResultMapping;
 import com.tcdng.unify.web.annotation.ResultMappings;
 import com.tcdng.unify.web.constant.ReadOnly;
@@ -46,8 +47,10 @@ import com.tcdng.unify.web.constant.Secured;
 @Component(SecurityModuleNameConstants.SECURED_LINK_ACCESS_CONTROLLER)
 @UplBinding("web/security/upl/securedlinkaccess.upl")
 @ResultMappings({
-    @ResultMapping(type = MimeType.TEXT_HTML, name = "forwardtourl", response = { "!externalforwardresponse pathBinding:$s{targetPath}" }),
-    @ResultMapping(type = MimeType.TEXT_HTML, name = "plainmessage", response = { "!plainhtmlresponse htmlBinding:$s{message}" })})
+        @ResultMapping(type = MimeType.TEXT_HTML, name = "forwardtourl",
+                response = { "!externalforwardresponse pathBinding:$s{targetPath}" }),
+        @ResultMapping(type = MimeType.TEXT_HTML, name = "plainmessage",
+                response = { "!plainhtmlresponse htmlBinding:$s{message}" }) })
 public class SecuredLinkAccessController extends AbstractForwarderController<SecuredLinkAccessPageBean> {
 
     @Configurable
@@ -63,40 +66,45 @@ public class SecuredLinkAccessController extends AbstractForwarderController<Sec
     @Override
     protected void onIndexPage() throws UnifyException {
         final String lid = getHttpRequestParameter("lid");
-        final SecuredLinkContentInfo securedLinkContentInfo = securedLinkManager.getSecuredLink(lid);
-        if (!securedLinkContentInfo.isPresent()) {
-            showPlainMessage(resolveSessionMessage("$m{securedlinkaccess.unresolvable}"));
-            return;
-        }
-
-        if (securedLinkContentInfo.isExpired()) {
-            showPlainMessage(resolveSessionMessage("$m{securedlinkaccess.expired}"));
-            return;
-        }
-
-        if (isUserLoggedIn()) {
-            UserToken userToken = getUserToken();
-            if (securedLinkContentInfo.isWithAssignedLoginId()
-                    && !securedLinkContentInfo.getAssignedLoginId().equals(userToken.getUserLoginId())) {
-                showPlainMessage(resolveSessionMessage("$m{securedlinkaccess.assignedtoother}"));
+        if (!StringUtils.isBlank(lid)) {
+            final SecuredLinkContentInfo securedLinkContentInfo = securedLinkManager.getSecuredLink(lid);
+            if (!securedLinkContentInfo.isPresent()) {
+                showPlainMessage(resolveSessionMessage("$m{securedlinkaccess.unresolvable}"));
                 return;
             }
 
-            if (securedLinkContentInfo.isWithAssignedRole()) {
-                Optional<UserRole> optional = securityModuleService.findUserRole(
-                        securedLinkContentInfo.getAssignedLoginId(), securedLinkContentInfo.getAssignedRole());
-                if (!optional.isPresent()) {
-                    showPlainMessage(resolveSessionMessage("$m{securedlinkaccess.norequiredrole}"));
-                    return;
-                }
+            if (securedLinkContentInfo.isExpired()) {
+                showPlainMessage(resolveSessionMessage("$m{securedlinkaccess.expired}"));
+                return;
             }
 
-            replacePage(securedLinkContentInfo.getDocUrl());
-        } else {
-            replacePage(securedLinkContentInfo.getLoginUrl());
+            if (isUserLoggedIn()) {
+                UserToken userToken = getUserToken();
+                if (securedLinkContentInfo.isWithAssignedLoginId()
+                        && !securedLinkContentInfo.getAssignedLoginId().equals(userToken.getUserLoginId())) {
+                    showPlainMessage(resolveSessionMessage("$m{securedlinkaccess.assignedtoother}"));
+                    return;
+                }
+
+                if (securedLinkContentInfo.isWithAssignedRole()) {
+                    Optional<UserRole> optional = securityModuleService.findUserRole(
+                            securedLinkContentInfo.getAssignedLoginId(), securedLinkContentInfo.getAssignedRole());
+                    if (!optional.isPresent()) {
+                        showPlainMessage(resolveSessionMessage("$m{securedlinkaccess.norequiredrole}"));
+                        return;
+                    }
+                }
+
+                replacePage(securedLinkContentInfo.getDocUrl());
+            } else {
+                replacePage(securedLinkContentInfo.getLoginUrl());
+            }
+
+            setSessionAttribute(FlowCentralSessionAttributeConstants.SECURED_LINK_ACCESS, securedLinkContentInfo);
+            return;
         }
 
-        setSessionAttribute(FlowCentralSessionAttributeConstants.SECURED_LINK_ACCESS, securedLinkContentInfo);
+        showPlainMessage(resolveSessionMessage("$m{securedlinkaccess.itemnotfound}"));
     }
 
     private void showPlainMessage(String msg) throws UnifyException {

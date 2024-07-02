@@ -67,6 +67,7 @@ public abstract class AbstractLoadingAppletPanel<T extends AbstractLoadingApplet
                 }
             }
 
+            setCloseResultMapping();
             return;
         }
 

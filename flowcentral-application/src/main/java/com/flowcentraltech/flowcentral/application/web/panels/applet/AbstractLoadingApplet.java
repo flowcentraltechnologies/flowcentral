@@ -52,108 +52,115 @@ import com.tcdng.unify.web.ui.widget.Page;
 public abstract class AbstractLoadingApplet extends AbstractEntityFormApplet {
 
     private final LoadingTableProvider loadingTableProvider;
-    
-    private final Long workItemId;
-    
+
+    private Long workItemId;
+
     private EntitySingleForm singleForm;
 
-    public AbstractLoadingApplet(Page page, AppletUtilities au, List<String> pathVariables, AppletWidgetReferences appletWidgetReferences,
-            EntityFormEventHandlers formEventHandlers, String providerName) throws UnifyException {
+    public AbstractLoadingApplet(Page page, AppletUtilities au, List<String> pathVariables,
+            AppletWidgetReferences appletWidgetReferences, EntityFormEventHandlers formEventHandlers,
+            String providerName) throws UnifyException {
         super(page, au, pathVariables, appletWidgetReferences, formEventHandlers);
-        
+
         setCurrFormAppletDef(getRootAppletDef());
         final AppletNameParts parts = ApplicationNameUtils.getAppletNameParts(pathVariables.get(APPLET_NAME_INDEX));
-        this.loadingTableProvider = au.getComponent(LoadingTableProvider.class, providerName);
+        loadingTableProvider = au.getComponent(LoadingTableProvider.class, providerName);
         if (parts.isWithVestigial()) {
-            this.workItemId = Long.valueOf(parts.getVestigial());
-            final WorkflowStepInfo workflowStepInfo = getWorkflowStepInfo(au, workItemId);
-            loadingTableProvider.setWorkingParameter(workflowStepInfo);
-            final int options = loadingTableProvider.getSourceItemOptions(null);
-            final EntityItem item = loadingTableProvider.getSourceItemByWorkItemId(workItemId, options);
-            if (item.isEdit()) {
-                getCtx().setReview(false);
-                Entity _inst = item.getEntity();
-                _inst = reloadEntity(_inst, true);
-                if (form == null) {
-                    form = constructForm(_inst, FormMode.MAINTAIN, null, false);
-                } else {
-                    updateForm(HeaderWithTabsForm.UpdateType.MAINTAIN_INST, form, _inst);
-                }
-
-                setAltSubCaption(form.getFormTitle());
-                viewMode = ViewMode.MAINTAIN_PRIMARY_FORM_NO_SCROLL;
-                takeAuditSnapshot(AuditEventType.VIEW);
-            } else if (item.isWorkItem()) {
-                final AppletDef _currentFormAppletDef = getFormAppletDef();
-                WorkEntity currEntityInst = (WorkEntity) item.getEntity();
-                FormDef formDef = getPreferredForm(PreferredFormType.ALL, _currentFormAppletDef, currEntityInst,
-                        FormMode.MAINTAIN.formProperty());
-                LoadingWorkItemInfo loadingWorkItemInfo = loadingTableProvider.getLoadingWorkItemInfo(currEntityInst);
-                getCtx().setRecovery(loadingWorkItemInfo.isError());
-                getCtx().setComments(loadingWorkItemInfo.isComments());
-                getCtx().setAttachments(loadingWorkItemInfo.isAttachments());
-                getCtx().setReview(true);
-                if (formDef.isInputForm()) {
+            final Long workItemEventId = Long.valueOf(parts.getVestigial());
+            final WorkflowStepInfo workflowStepInfo = getWorkflowStepInfo(au, workItemEventId);
+            if (workflowStepInfo.isWithWorkItemId()) {
+                workItemId = workflowStepInfo.getWorkItemId();
+                loadingTableProvider.setWorkingParameter(workflowStepInfo);
+                final int options = loadingTableProvider.getSourceItemOptions(null);
+                final EntityItem item = loadingTableProvider.getSourceItemByWorkItemId(workItemId, options);
+                if (item.isEdit()) {
+                    getCtx().setReview(false);
+                    Entity _inst = item.getEntity();
+                    _inst = reloadEntity(_inst, true);
                     if (form == null) {
-                        form = constructForm(formDef, currEntityInst, FormMode.MAINTAIN, null, false);
-                        currEntityInst = (WorkEntity) form.getFormBean();
-                        form.setFormTitle(getRootAppletDef().getLabel());
-                        form.setFormActionDefList(loadingWorkItemInfo.getFormActionDefList());
+                        form = constructForm(_inst, FormMode.MAINTAIN, null, false);
                     } else {
-                        updateForm(HeaderWithTabsForm.UpdateType.MAINTAIN_INST, form, currEntityInst);
+                        updateForm(HeaderWithTabsForm.UpdateType.MAINTAIN_INST, form, _inst);
                     }
 
-                    if (loadingWorkItemInfo.isWithStepLabel()) {
-                        form.setDisplayItemCounter(loadingWorkItemInfo.getStepLabel().toUpperCase());
-                    }
-
-                    form.setAppendables(item);
-                    getCtx().setReadOnly(loadingWorkItemInfo.isReadOnly());
                     setAltSubCaption(form.getFormTitle());
                     viewMode = ViewMode.MAINTAIN_PRIMARY_FORM_NO_SCROLL;
                     takeAuditSnapshot(AuditEventType.VIEW);
-                } else { // Listing
-                    listingForm = constructListingForm(formDef, currEntityInst);
-                    listingForm.setFormTitle(getRootAppletDef().getLabel());
-                    listingForm.setFormActionDefList(loadingWorkItemInfo.getFormActionDefList());
-                    if (loadingWorkItemInfo.isWithStepLabel()) {
-                        listingForm.setDisplayItemCounter(loadingWorkItemInfo.getStepLabel().toUpperCase());
+                } else if (item.isWorkItem()) {
+                    final AppletDef _currentFormAppletDef = getFormAppletDef();
+                    WorkEntity currEntityInst = (WorkEntity) item.getEntity();
+                    FormDef formDef = getPreferredForm(PreferredFormType.ALL, _currentFormAppletDef, currEntityInst,
+                            FormMode.MAINTAIN.formProperty());
+                    LoadingWorkItemInfo loadingWorkItemInfo = loadingTableProvider
+                            .getLoadingWorkItemInfo(currEntityInst);
+                    getCtx().setRecovery(loadingWorkItemInfo.isError());
+                    getCtx().setComments(loadingWorkItemInfo.isComments());
+                    getCtx().setAttachments(loadingWorkItemInfo.isAttachments());
+                    getCtx().setReview(true);
+                    if (formDef.isInputForm()) {
+                        if (form == null) {
+                            form = constructForm(formDef, currEntityInst, FormMode.MAINTAIN, null, false);
+                            currEntityInst = (WorkEntity) form.getFormBean();
+                            form.setFormTitle(getRootAppletDef().getLabel());
+                            form.setFormActionDefList(loadingWorkItemInfo.getFormActionDefList());
+                        } else {
+                            updateForm(HeaderWithTabsForm.UpdateType.MAINTAIN_INST, form, currEntityInst);
+                        }
+
+                        if (loadingWorkItemInfo.isWithStepLabel()) {
+                            form.setDisplayItemCounter(loadingWorkItemInfo.getStepLabel().toUpperCase());
+                        }
+
+                        form.setAppendables(item);
+                        getCtx().setReadOnly(loadingWorkItemInfo.isReadOnly());
+                        setAltSubCaption(form.getFormTitle());
+                        viewMode = ViewMode.MAINTAIN_PRIMARY_FORM_NO_SCROLL;
+                        takeAuditSnapshot(AuditEventType.VIEW);
+                    } else { // Listing
+                        listingForm = constructListingForm(formDef, currEntityInst);
+                        listingForm.setFormTitle(getRootAppletDef().getLabel());
+                        listingForm.setFormActionDefList(loadingWorkItemInfo.getFormActionDefList());
+                        if (loadingWorkItemInfo.isWithStepLabel()) {
+                            listingForm.setDisplayItemCounter(loadingWorkItemInfo.getStepLabel().toUpperCase());
+                        }
+
+                        listingForm.setAppendables(item);
+                        getCtx().setEmails(loadingWorkItemInfo.isEmails());
+                        getCtx().setReadOnly(loadingWorkItemInfo.isError());
+                        setAltSubCaption(listingForm.getFormTitle());
+                        viewMode = ViewMode.LISTING_FORM;
+                    }
+                } else if (item.isWorkItemSingleForm()) {
+                    WorkEntity currEntityInst = (WorkEntity) item.getEntity();
+                    LoadingWorkItemInfo loadingWorkItemInfo = loadingTableProvider
+                            .getLoadingWorkItemInfo(currEntityInst);
+                    getCtx().setRecovery(loadingWorkItemInfo.isError());
+                    getCtx().setEmails(loadingWorkItemInfo.isEmails());
+                    getCtx().setComments(loadingWorkItemInfo.isComments());
+                    getCtx().setAttachments(loadingWorkItemInfo.isAttachments());
+                    getCtx().setReview(true);
+                    if (singleForm == null) {
+                        singleForm = constructSingleForm(currEntityInst, FormMode.MAINTAIN);
+                        singleForm.setFormTitle(getRootAppletDef().getLabel());
+                        singleForm.setFormActionDefList(loadingWorkItemInfo.getFormActionDefList());
+                    } else {
+                        updateSingleForm(EntitySingleForm.UpdateType.MAINTAIN_INST, singleForm, currEntityInst);
                     }
 
-                    listingForm.setAppendables(item);
-                    getCtx().setEmails(loadingWorkItemInfo.isEmails());
-                    getCtx().setReadOnly(loadingWorkItemInfo.isError());
-                    setAltSubCaption(listingForm.getFormTitle());
-                    viewMode = ViewMode.LISTING_FORM;
+                    singleForm.setAppendables(item);
+                    getCtx().setReadOnly(loadingWorkItemInfo.isReadOnly());
+                    setAltSubCaption(singleForm.getFormTitle());
+                    viewMode = ViewMode.SINGLE_FORM;
                 }
-            } else if (item.isWorkItemSingleForm()) {
-                WorkEntity currEntityInst = (WorkEntity) item.getEntity();
-                LoadingWorkItemInfo loadingWorkItemInfo = loadingTableProvider.getLoadingWorkItemInfo(currEntityInst);
-                getCtx().setRecovery(loadingWorkItemInfo.isError());
-                getCtx().setEmails(loadingWorkItemInfo.isEmails());
-                getCtx().setComments(loadingWorkItemInfo.isComments());
-                getCtx().setAttachments(loadingWorkItemInfo.isAttachments());
-                getCtx().setReview(true);
-                if (singleForm == null) {
-                    singleForm = constructSingleForm(currEntityInst, FormMode.MAINTAIN);
-                    singleForm.setFormTitle(getRootAppletDef().getLabel());
-                    singleForm.setFormActionDefList(loadingWorkItemInfo.getFormActionDefList());
-                } else {
-                    updateSingleForm(EntitySingleForm.UpdateType.MAINTAIN_INST, singleForm, currEntityInst);
-                }
-
-                singleForm.setAppendables(item);
-                getCtx().setReadOnly(loadingWorkItemInfo.isReadOnly());
-                setAltSubCaption(singleForm.getFormTitle());
-                viewMode = ViewMode.SINGLE_FORM;
             }
         } else {
-            this.workItemId = null;
             form = constructNewForm(FormMode.CREATE, null, false);
             viewMode = ViewMode.NEW_PRIMARY_FORM;
         }
 
-        setAltSubCaption(form.getFormTitle());
+        if (form != null) {
+            setAltSubCaption(form.getFormTitle());
+        }
     }
 
     @Override
@@ -164,6 +171,10 @@ public abstract class AbstractLoadingApplet extends AbstractEntityFormApplet {
     @Override
     public AbstractForm getForm() {
         return getResolvedForm();
+    }
+
+    public boolean isWithWorkItemId() {
+        return workItemId != null;
     }
 
     public EntitySingleForm getSingleForm() {
@@ -183,7 +194,7 @@ public abstract class AbstractLoadingApplet extends AbstractEntityFormApplet {
         return entityActionResult;
     }
 
-    public LoadingWorkItemInfo getCurrentLoadingWorkItemInfo() throws UnifyException{
+    public LoadingWorkItemInfo getCurrentLoadingWorkItemInfo() throws UnifyException {
         final AbstractForm _form = getResolvedForm();
         WorkEntity currEntityInst = (WorkEntity) _form.getFormBean();
         return loadingTableProvider.getLoadingWorkItemInfo(currEntityInst);
@@ -199,11 +210,10 @@ public abstract class AbstractLoadingApplet extends AbstractEntityFormApplet {
         WorkEntity currEntityInst = (WorkEntity) _form.getFormBean();
         loadingTableProvider.applyUserActionByWorkItemId(currEntityInst, workItemId, actionName, _form.getNewComment(),
                 _form.getEmails(), _form.isListing());
-        
-        // TODO Set command result
     }
 
-    protected abstract WorkflowStepInfo getWorkflowStepInfo(AppletUtilities au, Long sourceItemId) throws UnifyException;
+    protected abstract WorkflowStepInfo getWorkflowStepInfo(AppletUtilities au, Long sourceItemId)
+            throws UnifyException;
 
     protected final AppletDef resolveRootAppletDef(String appletName) throws UnifyException {
         AppletDef appletDef = au.getAppletDef(appletName);

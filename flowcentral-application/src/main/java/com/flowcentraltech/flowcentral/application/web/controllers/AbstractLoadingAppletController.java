@@ -21,6 +21,8 @@ import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.data.EntityFormEventHandlers;
 import com.flowcentraltech.flowcentral.application.web.panels.applet.AbstractLoadingApplet;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.web.annotation.ResultMapping;
+import com.tcdng.unify.web.annotation.ResultMappings;
 import com.tcdng.unify.web.constant.ReadOnly;
 import com.tcdng.unify.web.constant.ResetOnWrite;
 import com.tcdng.unify.web.constant.Secured;
@@ -32,8 +34,11 @@ import com.tcdng.unify.web.ui.widget.Page;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
+@ResultMappings({
+    @ResultMapping(name ="notfound",
+            response = { "!forwardresponse path:$s{/application/securedlinkaccess}" }) })
 public abstract class AbstractLoadingAppletController<T extends AbstractLoadingApplet, U extends AbstractLoadingAppletPageBean<T>>
-        extends AbstractEntityFormAppletController<T, U> {
+        extends AbstractEntityFormAppletController<T, U> { 
 
     public AbstractLoadingAppletController(Class<U> pageBeanClass) {
         super(pageBeanClass, Secured.TRUE, ReadOnly.FALSE, ResetOnWrite.FALSE);
@@ -44,15 +49,17 @@ public abstract class AbstractLoadingAppletController<T extends AbstractLoadingA
         super.onOpenPage();
 
         AbstractLoadingAppletPageBean<T> pageBean = getPageBean();
-        if (pageBean.getApplet() == null) {
-            AppletWidgetReferences appletWidgetReferences = getAppletWidgetReferences();
-            EntityFormEventHandlers formEventHandlers = getEntityFormEventHandlers();
-            T applet = createAbstractLoadingApplet(getPage(), au(), getPathVariables(),
-                    appletWidgetReferences, formEventHandlers);
-            pageBean.setApplet(applet);
-            if (pageBean.getAltCaption() == null) {
-                setPageTitle(applet);
-            }
+        AppletWidgetReferences appletWidgetReferences = getAppletWidgetReferences();
+        EntityFormEventHandlers formEventHandlers = getEntityFormEventHandlers();
+        T applet = createAbstractLoadingApplet(getPage(), au(), getPathVariables(),
+                appletWidgetReferences, formEventHandlers);
+        pageBean.setApplet(applet);
+        if (pageBean.getAltCaption() == null) {
+            setPageTitle(applet);
+        }
+        
+        if (!applet.isWithWorkItemId()) {
+            setResultMapping("notfound");
         }
     }
     

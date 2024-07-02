@@ -39,6 +39,10 @@ public class WfItemQuery extends BaseAuditTenantEntityQuery<WfItem> {
         super(WfItem.class);
     }
 
+    public WfItemQuery wfItemEventId(Long wfItemEventId) {
+        return (WfItemQuery) addEquals("wfItemEventId", wfItemEventId);
+    }
+
     public WfItemQuery workRecId(Long workRecId) {
         return (WfItemQuery) addEquals("workRecId", workRecId);
     }
