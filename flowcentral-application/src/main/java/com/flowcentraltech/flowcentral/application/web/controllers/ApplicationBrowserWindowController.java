@@ -70,6 +70,7 @@ public class ApplicationBrowserWindowController extends AbstractPageController<A
         final SessionOpenTabInfo sessionOpenTabInfo = (SessionOpenTabInfo) removeSessionAttribute(
                 AppletSessionAttributeConstants.OPEN_TAB_INFO);
         if (sessionOpenTabInfo != null) {
+            logDebug("Setting browser content path to [{0}]...", sessionOpenTabInfo.getContentPath());
             pageBean.setWindowTitle(sessionOpenTabInfo.getTitle());
             pageBean.setDocumentPath(sessionOpenTabInfo.getDocumentPath());
             pageBean.setContentPaths(new String[] { sessionOpenTabInfo.getContentPath() });
