@@ -33,6 +33,14 @@ import com.tcdng.unify.core.data.Listable;
  */
 public interface DashboardModuleService extends FlowCentralService {
 
+    /**
+     * Clears dashboard cache.
+     * 
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    void clearDashboardCache() throws UnifyException;
+    
 	/**
 	 * Finds dashboard by ID.
 	 * 

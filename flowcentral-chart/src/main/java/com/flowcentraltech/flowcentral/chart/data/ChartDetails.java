@@ -17,7 +17,6 @@
 package com.flowcentraltech.flowcentral.chart.data;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -65,6 +64,8 @@ public class ChartDetails {
     private Set<String> seriesInclusion;
 
     private Set<String> categoryInclusion;
+
+    private Map<String, AbstractSeries<?, ?>> groupingSeries;
 
     private ChartDetails(String title, String subTitle, int titleOffsetX, int titleFontSize, int subTitleOffsetX,
             int subTitleFontSize, ChartCategoryDataType categoryType, Map<Object, String> categoryLabels,
@@ -147,7 +148,7 @@ public class ChartDetails {
 
     public Map<String, AbstractSeries<?, ?>> getSeries(Set<String> inclusion) {
         if (!inclusion.isEmpty()) {
-            Map<String, AbstractSeries<?, ?>> _series = new HashMap<String, AbstractSeries<?, ?>>();
+            Map<String, AbstractSeries<?, ?>> _series = new LinkedHashMap<String, AbstractSeries<?, ?>>();
             for (Map.Entry<String, AbstractSeries<?, ?>> entry : series.entrySet()) {
                 if (inclusion.contains(entry.getKey())) {
                     _series.put(entry.getKey(), entry.getValue());
@@ -160,6 +161,58 @@ public class ChartDetails {
         return series;
     }
 
+    public Map<String, AbstractSeries<?, ?>> getGroupingSeries(ChartDef chartDef) {
+        if (groupingSeries == null) {
+            synchronized (this) {
+                if (groupingSeries == null) {
+                    groupingSeries = new LinkedHashMap<String, AbstractSeries<?, ?>>();
+                    for (Object[] row : tableSeries) {
+                        StringBuilder sb = new StringBuilder();
+                        final int len = headers.length;
+                        int i = 0;
+                        for (; i < len; i++) {
+                            ChartTableColumn col = headers[i];
+                            if (col.isCategory()) {
+                                if (i > 0) {
+                                    sb.append(' ');
+                                }
+
+                                sb.append(row[i]);
+                            } else {
+                                break;
+                            }
+                        }
+
+                        String cat = sb.toString();
+                        for (; i < len; i++) {
+                            ChartTableColumn col = headers[i];
+                            String name = col.getFieldName();
+                            if (chartDef.isSeriesInclusion(name)) {
+                                AbstractSeries<?, ?> _series = groupingSeries.get(name);
+                                if (_series == null) {
+                                    _series = col.getType().isInteger() ? new CategoryIntegerSeries(name)
+                                            : new CategoryDoubleSeries(name);
+                                    groupingSeries.put(name, _series);
+                                }
+
+                                _series.addData(cat, (Number) row[i]);
+                            }
+                        }
+
+                    }
+
+                    groupingSeries = DataUtils.unmodifiableMap(groupingSeries);
+                }
+            }
+        }
+
+        return groupingSeries;
+    }
+
+    public boolean isWithGroupingSeries(ChartDef chartDef) {
+        return !getGroupingSeries(chartDef).isEmpty();
+    }
+    
     public ChartTableColumn[] getTableHeaders() {
         return headers;
     }
@@ -170,14 +223,6 @@ public class ChartDetails {
 
     public boolean isWithTableSeries() {
         return headers != null;
-    }
-
-    @Override
-    public String toString() {
-        return "ChartDetails [title=" + title + ", subTitle=" + subTitle + ", titleOffsetX=" + titleOffsetX
-                + ", titleFontSize=" + titleFontSize + ", subTitleOffsetX=" + subTitleOffsetX + ", subTitleFontSize="
-                + subTitleFontSize + ", categoryType=" + categoryType + ", categoryLabels=" + categoryLabels
-                + ", series=" + series + ", headers=" + Arrays.toString(headers) + ", tableSeries=" + tableSeries + "]";
     }
 
     public static Builder newBuilder(ChartCategoryDataType categoryType) {

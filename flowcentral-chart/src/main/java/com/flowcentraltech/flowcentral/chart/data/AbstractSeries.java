@@ -156,12 +156,6 @@ public abstract class AbstractSeries<T, U extends Number> {
         jw.write(field, y);
     }
 
-    @Override
-    public String toString() {
-        return "AbstractSeries [categoryType=" + categoryType + ", dataType=" + dataType + ", name=" + name + ", data="
-                + data + ", dataList=" + dataList + "]";
-    }
-
     private String resolveX(Object xobj) {
         return categoryLabels.containsKey(xobj) ? categoryLabels.get(xobj) : String.valueOf(xobj);
     }

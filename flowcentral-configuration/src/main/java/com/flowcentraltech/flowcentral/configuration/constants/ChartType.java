@@ -33,6 +33,9 @@ public enum ChartType implements EnumConst {
     CARD(
             "CRD",
             "card"),
+    TABLE(
+            "TBL",
+            "table"),
     LINE(
             "LNE",
             "line"),
@@ -56,10 +59,7 @@ public enum ChartType implements EnumConst {
             "donut"),
     POLAR_AREA(
             "POL",
-            "polarArea"),
-    TABLE(
-            "TBL",
-            "table");
+            "polarArea");
 
     private final String code;
 
@@ -90,6 +90,10 @@ public enum ChartType implements EnumConst {
 
     public boolean axisChart() {
         return !PIE.equals(this) && !DONUT.equals(this) && !POLAR_AREA.equals(this);
+    }
+
+    public boolean isCircularChart() {
+        return PIE.equals(this) || DONUT.equals(this) || POLAR_AREA.equals(this);
     }
 
     public boolean isFlowCentralType() {

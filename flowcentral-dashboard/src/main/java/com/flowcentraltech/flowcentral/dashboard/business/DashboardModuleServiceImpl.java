@@ -133,6 +133,11 @@ public class DashboardModuleServiceImpl extends AbstractFlowCentralService imple
     }
 
     @Override
+    public void clearDashboardCache() throws UnifyException {
+        chartModuleService.clearChartCache();
+    }
+
+    @Override
     public Dashboard findDashboard(Long dashboardId) throws UnifyException {
         return environment().find(Dashboard.class, dashboardId);
     }

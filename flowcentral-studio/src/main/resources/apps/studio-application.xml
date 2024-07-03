@@ -3529,7 +3529,7 @@
 					<field name="provider" column="1" required="true"
 						switchOnChange="true" />
 					<field name="rule" column="1" switchOnChange="true" />
-					<field name="category" column="1" required="true" />
+					<field name="category" column="1" />
 					<field name="series" column="1" required="true" />
 					<field name="height" column="1" />
 				</section>
