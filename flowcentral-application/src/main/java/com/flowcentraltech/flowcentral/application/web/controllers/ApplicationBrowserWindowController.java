@@ -31,6 +31,7 @@ import com.tcdng.unify.web.constant.ReadOnly;
 import com.tcdng.unify.web.constant.ResetOnWrite;
 import com.tcdng.unify.web.constant.Secured;
 import com.tcdng.unify.web.ui.AbstractPageController;
+import com.tcdng.unify.web.ui.widget.ContentPanel;
 
 /**
  * Application browser window controller.
@@ -74,6 +75,9 @@ public class ApplicationBrowserWindowController extends AbstractPageController<A
             pageBean.setWindowTitle(sessionOpenTabInfo.getTitle());
             pageBean.setDocumentPath(sessionOpenTabInfo.getDocumentPath());
             pageBean.setContentPaths(new String[] { sessionOpenTabInfo.getContentPath() });
+            
+            ContentPanel contentPanel = getPageWidgetByShortName(ContentPanel.class, "content");
+            contentPanel.clearPages();
         }
     }
 

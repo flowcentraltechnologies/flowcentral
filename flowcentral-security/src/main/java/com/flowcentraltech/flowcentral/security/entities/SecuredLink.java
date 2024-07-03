@@ -55,6 +55,9 @@ public class SecuredLink extends BaseAuditTenantEntity {
     @Column(type = ColumnType.TIMESTAMP, nullable = true)
     private Date lastAccessedOn;
 
+    @Column(nullable = true)
+    private Boolean invalidated;
+
     @Override
     public String getDescription() {
         return title;
@@ -122,6 +125,14 @@ public class SecuredLink extends BaseAuditTenantEntity {
 
     public void setLastAccessedOn(Date lastAccessedOn) {
         this.lastAccessedOn = lastAccessedOn;
+    }
+
+    public Boolean getInvalidated() {
+        return invalidated;
+    }
+
+    public void setInvalidated(Boolean invalidated) {
+        this.invalidated = invalidated;
     }
 
 }

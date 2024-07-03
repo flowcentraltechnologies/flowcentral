@@ -21,8 +21,6 @@ import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.data.EntityFormEventHandlers;
 import com.flowcentraltech.flowcentral.application.web.panels.applet.AbstractLoadingApplet;
 import com.tcdng.unify.core.UnifyException;
-import com.tcdng.unify.web.annotation.ResultMapping;
-import com.tcdng.unify.web.annotation.ResultMappings;
 import com.tcdng.unify.web.constant.ReadOnly;
 import com.tcdng.unify.web.constant.ResetOnWrite;
 import com.tcdng.unify.web.constant.Secured;
@@ -34,9 +32,6 @@ import com.tcdng.unify.web.ui.widget.Page;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@ResultMappings({
-    @ResultMapping(name ="notfound",
-            response = { "!forwardresponse path:$s{/application/securedlinkaccess}" }) })
 public abstract class AbstractLoadingAppletController<T extends AbstractLoadingApplet, U extends AbstractLoadingAppletPageBean<T>>
         extends AbstractEntityFormAppletController<T, U> { 
 
@@ -56,9 +51,7 @@ public abstract class AbstractLoadingAppletController<T extends AbstractLoadingA
             setPageTitle(applet);
         }
         
-        if (!applet.isWithWorkItemId()) {
-            setResultMapping("notfound");
-        }
+        logDebug("Loading work item with ID [{0}]...", applet.getWorkItemId());
     }
     
     protected abstract T createAbstractLoadingApplet(Page page, AppletUtilities au, List<String> pathVariables,

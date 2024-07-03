@@ -25,6 +25,7 @@ import com.flowcentraltech.flowcentral.configuration.constants.FlowCentralApplet
 import com.flowcentraltech.flowcentral.workflow.web.panels.applet.MyWorkItemApplet;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
+import com.tcdng.unify.core.annotation.Singleton;
 import com.tcdng.unify.core.annotation.UplBinding;
 import com.tcdng.unify.web.ui.widget.Page;
 
@@ -34,6 +35,7 @@ import com.tcdng.unify.web.ui.widget.Page;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
+@Singleton(false)
 @Component(FlowCentralAppletPathConstants.MY_WORKITEM)
 @UplBinding("web/workflow/upl/myworkitemappletpage.upl")
 public class MyWorkItemAppletController

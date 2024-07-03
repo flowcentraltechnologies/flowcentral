@@ -42,16 +42,19 @@ public class SecuredLinkContentInfo {
 
     private boolean present;
 
+    private boolean invalidated;
+
     private boolean expired;
 
     public SecuredLinkContentInfo(String title, String contentPath, String loginUrl, String docUrl,
-            String assignedLoginId, String assignedRole, boolean expired) {
+            String assignedLoginId, String assignedRole, boolean invalidated, boolean expired) {
         this.title = title;
         this.contentPath = contentPath;
         this.loginUrl = loginUrl;
         this.docUrl = docUrl;
         this.assignedLoginId = assignedLoginId;
         this.assignedRole = assignedRole;
+        this.invalidated = invalidated;
         this.expired = expired;
         this.present = true;
     }
@@ -94,6 +97,10 @@ public class SecuredLinkContentInfo {
 
     public boolean isPresent() {
         return present;
+    }
+
+    public boolean isInvalidated() {
+        return invalidated;
     }
 
     public boolean isExpired() {

@@ -424,6 +424,17 @@ public interface AppletUtilities extends FlowCentralComponent {
      * @param componentClazz
      *                       the component class.
      * 
+     * @return the component instance
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    <T extends UnifyComponent> T getComponent(Class<T> componentClazz) throws UnifyException;
+    /**
+     * Gets a component.
+     * 
+     * @param componentClazz
+     *                       the component class.
+     * 
      * @param componentName
      *                       the component name
      * @return the component instance

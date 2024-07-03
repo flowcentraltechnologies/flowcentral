@@ -1124,6 +1124,10 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         return form == null;
     }
 
+    public Page getPage() {
+        return getCtx().getPage();
+    }
+
     public boolean isPromptEnterWorkflowDraft() throws UnifyException {
         return isRootForm() && isWorkflowCopy() && !getCtx().isInWorkflowPromptViewMode()
                 && WfItemVersionType.ORIGINAL.equals(((WorkEntity) form.getFormBean()).getWfItemVersionType())

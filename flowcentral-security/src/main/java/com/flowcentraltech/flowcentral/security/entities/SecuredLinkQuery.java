@@ -37,6 +37,10 @@ public class SecuredLinkQuery extends BaseAuditEntityQuery<SecuredLink> {
         return (SecuredLinkQuery) addEquals("accessKey", accessKey);
     }
 
+    public SecuredLinkQuery contentPath(String contentPath) {
+        return (SecuredLinkQuery) addEquals("contentPath", contentPath);
+    }
+
     public SecuredLinkQuery titleLike(String title) {
         return (SecuredLinkQuery) addLike("title", title);
     }

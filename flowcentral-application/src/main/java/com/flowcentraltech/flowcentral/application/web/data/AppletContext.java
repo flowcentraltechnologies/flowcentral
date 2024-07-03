@@ -178,6 +178,10 @@ public class AppletContext extends AbstractContext {
         this.auditingEnabled = auditingEnabled;
     }
 
+    public Page getPage() {
+        return page;
+    }
+
     public boolean isInDetachedWindow() throws UnifyException {
         return page != null && page.getAttribute(boolean.class, PageAttributeConstants.IN_DETACHED_WINDOW);
     }

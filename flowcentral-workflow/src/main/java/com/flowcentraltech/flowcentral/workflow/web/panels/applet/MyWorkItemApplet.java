@@ -44,8 +44,7 @@ public class MyWorkItemApplet extends AbstractLoadingApplet {
 
     @Override
     protected WorkflowStepInfo getWorkflowStepInfo(AppletUtilities au, Long sourceItemId) throws UnifyException {
-        WorkflowModuleService workflow = au.getComponent(WorkflowModuleService.class,
-                WorkflowModuleNameConstants.WORKFLOW_MODULE_SERVICE);
+        WorkflowModuleService workflow = au.getComponent(WorkflowModuleService.class);
         return workflow.getWorkflowLoadingStepInfoByWorkItemEventId(sourceItemId, null, null);
     }
 

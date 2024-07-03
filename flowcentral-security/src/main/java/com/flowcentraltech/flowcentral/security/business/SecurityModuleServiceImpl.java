@@ -189,20 +189,34 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
                     SecuredLink securedLink = environment()
                             .find(new SecuredLinkQuery().accessKey(accessKey).id(linkId));
                     if (securedLink != null) {
-                        final boolean expired = getNow().after(securedLink.getExpiresOn());
+                        final Date now = getNow();
+                        final boolean expired = now.after(securedLink.getExpiresOn());
+                        Update update = new Update().add("lastAccessedOn", now);
+                        if (isUserLoggedIn()) {
+                            update.add("lastAccessedBy", getUserToken().getUserLoginId());
+                        }
+
+                        environment().updateById(SecuredLink.class, securedLink.getId(), update);
+
                         final String baseUrl = systemModuleService.getSysParameterValue(String.class,
                                 SystemModuleSysParamConstants.APPLICATION_BASE_URL);
                         final String loginUrl = baseUrl + SecurityModuleNameConstants.APPLICATION_HOME_CONTROLLER;
                         final String docUrl = baseUrl + ApplicationModulePathConstants.APPLICATION_BROWSER_WINDOW;
                         return new SecuredLinkContentInfo(securedLink.getTitle(), securedLink.getContentPath(),
                                 loginUrl, docUrl, securedLink.getAssignedToLoginId(), securedLink.getAssignedRole(),
-                                expired);
+                                Boolean.TRUE.equals(securedLink.getInvalidated()), expired);
                     }
                 }
             }
         }
 
         return SecuredLinkContentInfo.NOT_PRESENT;
+    }
+
+    @Override
+    public int invalidateSecuredLinkByContentPath(String contentPath) throws UnifyException {
+        return environment().updateAll(new SecuredLinkQuery().contentPath(contentPath),
+                new Update().add("invalidated", Boolean.TRUE));
     }
 
     @Override

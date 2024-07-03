@@ -92,4 +92,15 @@ public interface SecuredLinkManager extends FlowCentralComponent {
      *                        if an error occurs
      */
     SecuredLinkContentInfo getSecuredLink(String linkAccessKey) throws UnifyException;
+    
+    /**
+     * Invalidates secured link by content path.
+     * 
+     * @param contentPath
+     *                    the content path
+     * @return number of links invalidated
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    int invalidateSecuredLinkByContentPath(String contentPath) throws UnifyException;
 }

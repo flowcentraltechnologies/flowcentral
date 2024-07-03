@@ -572,6 +572,11 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
         return applicationModuleService.getToday();
     }
 
+    @Override
+    public <T extends UnifyComponent> T getComponent(Class<T> componentType) throws UnifyException {
+        return super.getComponent(componentType);
+    }
+
     @SuppressWarnings("unchecked")
     @Override
     public <T extends UnifyComponent> T getComponent(Class<T> componentClazz, String componentName)

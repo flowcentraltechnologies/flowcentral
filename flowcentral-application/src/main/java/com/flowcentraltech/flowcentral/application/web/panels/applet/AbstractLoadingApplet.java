@@ -33,6 +33,7 @@ import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm;
 import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm.FormMode;
 import com.flowcentraltech.flowcentral.application.web.panels.EntitySingleForm;
 import com.flowcentraltech.flowcentral.application.web.panels.HeaderWithTabsForm;
+import com.flowcentraltech.flowcentral.common.business.SecuredLinkManager;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionContext;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
 import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
@@ -173,6 +174,10 @@ public abstract class AbstractLoadingApplet extends AbstractEntityFormApplet {
         return getResolvedForm();
     }
 
+    public Long getWorkItemId() {
+        return workItemId;
+    }
+
     public boolean isWithWorkItemId() {
         return workItemId != null;
     }
@@ -210,6 +215,10 @@ public abstract class AbstractLoadingApplet extends AbstractEntityFormApplet {
         WorkEntity currEntityInst = (WorkEntity) _form.getFormBean();
         loadingTableProvider.applyUserActionByWorkItemId(currEntityInst, workItemId, actionName, _form.getNewComment(),
                 _form.getEmails(), _form.isListing());
+
+        SecuredLinkManager slm = au.getComponent(SecuredLinkManager.class);
+        String contentPath = getPage().getPathId() + "/openPage";
+        slm.invalidateSecuredLinkByContentPath(contentPath);
     }
 
     protected abstract WorkflowStepInfo getWorkflowStepInfo(AppletUtilities au, Long sourceItemId)

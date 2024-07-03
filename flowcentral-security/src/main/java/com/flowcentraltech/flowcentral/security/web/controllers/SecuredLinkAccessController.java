@@ -76,6 +76,11 @@ public class SecuredLinkAccessController extends AbstractForwarderController<Sec
                 return;
             }
 
+            if (securedLinkContentInfo.isInvalidated()) {
+                showPlainMessage(resolveSessionMessage("$m{securedlinkaccess.invalidated}"));
+                return;
+            }
+
             if (securedLinkContentInfo.isExpired()) {
                 showPlainMessage(resolveSessionMessage("$m{securedlinkaccess.expired}"));
                 return;
