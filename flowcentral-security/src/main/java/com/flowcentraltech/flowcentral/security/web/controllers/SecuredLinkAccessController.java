@@ -18,6 +18,8 @@ package com.flowcentraltech.flowcentral.security.web.controllers;
 
 import java.util.Optional;
 
+import com.flowcentraltech.flowcentral.application.constants.AppletSessionAttributeConstants;
+import com.flowcentraltech.flowcentral.application.data.SessionOpenTabInfo;
 import com.flowcentraltech.flowcentral.common.business.SecuredLinkManager;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants;
 import com.flowcentraltech.flowcentral.common.data.SecuredLinkContentInfo;
@@ -66,6 +68,7 @@ public class SecuredLinkAccessController extends AbstractForwarderController<Sec
     @Override
     protected void onIndexPage() throws UnifyException {
         final String lid = getHttpRequestParameter("lid");
+        logDebug("Accessing secured item with id [{0}]...", lid);
         if (!StringUtils.isBlank(lid)) {
             final SecuredLinkContentInfo securedLinkContentInfo = securedLinkManager.getSecuredLink(lid);
             if (!securedLinkContentInfo.isPresent()) {
@@ -78,6 +81,7 @@ public class SecuredLinkAccessController extends AbstractForwarderController<Sec
                 return;
             }
 
+            String url = securedLinkContentInfo.getLoginUrl();
             if (isUserLoggedIn()) {
                 UserToken userToken = getUserToken();
                 if (securedLinkContentInfo.isWithAssignedLoginId()
@@ -95,12 +99,16 @@ public class SecuredLinkAccessController extends AbstractForwarderController<Sec
                     }
                 }
 
-                replacePage(securedLinkContentInfo.getDocUrl());
+                url = securedLinkContentInfo.getDocUrl();
+                setSessionAttribute(AppletSessionAttributeConstants.OPEN_TAB_INFO,
+                        new SessionOpenTabInfo(securedLinkContentInfo.getTitle(), securedLinkContentInfo.getDocUrl(),
+                                securedLinkContentInfo.getContentPath()));
             } else {
-                replacePage(securedLinkContentInfo.getLoginUrl());
+                setSessionAttribute(FlowCentralSessionAttributeConstants.SECURED_LINK_ACCESS, securedLinkContentInfo);
             }
 
-            setSessionAttribute(FlowCentralSessionAttributeConstants.SECURED_LINK_ACCESS, securedLinkContentInfo);
+            replacePage(url);
+            logDebug("Forwarding secured access to URL [{0}]...", url);
             return;
         }
 

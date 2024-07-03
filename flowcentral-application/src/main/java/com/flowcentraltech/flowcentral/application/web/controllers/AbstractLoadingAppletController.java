@@ -46,8 +46,6 @@ public abstract class AbstractLoadingAppletController<T extends AbstractLoadingA
 
     @Override
     protected void onOpenPage() throws UnifyException {
-        super.onOpenPage();
-
         AbstractLoadingAppletPageBean<T> pageBean = getPageBean();
         AppletWidgetReferences appletWidgetReferences = getAppletWidgetReferences();
         EntityFormEventHandlers formEventHandlers = getEntityFormEventHandlers();

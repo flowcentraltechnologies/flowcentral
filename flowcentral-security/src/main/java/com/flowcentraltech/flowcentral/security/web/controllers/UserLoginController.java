@@ -313,7 +313,7 @@ public class UserLoginController extends AbstractApplicationForwarderController<
     }
 
     private String openApplication(UserRoleInfo userRole) throws UnifyException {
-        final SecuredLinkContentInfo securedLinkContentInfo = (SecuredLinkContentInfo) getSessionAttribute(
+        final SecuredLinkContentInfo securedLinkContentInfo = (SecuredLinkContentInfo) removeSessionAttribute(
                 FlowCentralSessionAttributeConstants.SECURED_LINK_ACCESS);
 
         getSessionContext().removeAllAttributes();

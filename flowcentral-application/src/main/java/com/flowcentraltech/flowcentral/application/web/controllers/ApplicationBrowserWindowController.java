@@ -65,17 +65,14 @@ public class ApplicationBrowserWindowController extends AbstractPageController<A
     }
 
     @Override
-    protected void onInitPage() throws UnifyException {
-        super.onInitPage();
+    protected void onIndexPage() throws UnifyException {
         ApplicationBrowserWindowPageBean pageBean = getPageBean();
-        if (pageBean.getDocumentPath() == null) {
-            final SessionOpenTabInfo sessionOpenTabInfo = (SessionOpenTabInfo) removeSessionAttribute(
-                    AppletSessionAttributeConstants.OPEN_TAB_INFO);
-            if (sessionOpenTabInfo != null) {
-                pageBean.setWindowTitle(sessionOpenTabInfo.getTitle());
-                pageBean.setDocumentPath(sessionOpenTabInfo.getDocumentPath());
-                pageBean.setContentPaths(new String[] { sessionOpenTabInfo.getContentPath() });
-            }
+        final SessionOpenTabInfo sessionOpenTabInfo = (SessionOpenTabInfo) removeSessionAttribute(
+                AppletSessionAttributeConstants.OPEN_TAB_INFO);
+        if (sessionOpenTabInfo != null) {
+            pageBean.setWindowTitle(sessionOpenTabInfo.getTitle());
+            pageBean.setDocumentPath(sessionOpenTabInfo.getDocumentPath());
+            pageBean.setContentPaths(new String[] { sessionOpenTabInfo.getContentPath() });
         }
     }
 
