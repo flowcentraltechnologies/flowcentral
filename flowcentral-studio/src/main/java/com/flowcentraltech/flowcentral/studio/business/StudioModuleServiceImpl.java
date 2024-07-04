@@ -32,6 +32,7 @@ import java.util.zip.ZipFile;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.constants.AppletPropertyConstants;
+import com.flowcentraltech.flowcentral.application.constants.ApplicationPrivilegeConstants;
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.data.AppletFilterDef;
 import com.flowcentraltech.flowcentral.application.data.FilterDef;
@@ -42,6 +43,7 @@ import com.flowcentraltech.flowcentral.application.util.ApplicationCollaboration
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.util.ApplicationPageUtils;
 import com.flowcentraltech.flowcentral.application.util.InputWidgetUtils;
+import com.flowcentraltech.flowcentral.application.util.PrivilegeNameUtils;
 import com.flowcentraltech.flowcentral.chart.entities.Chart;
 import com.flowcentraltech.flowcentral.codegeneration.business.CodeGenerationModuleService;
 import com.flowcentraltech.flowcentral.codegeneration.constants.CodeGenerationModuleSysParamConstants;
@@ -52,6 +54,7 @@ import com.flowcentraltech.flowcentral.common.business.StudioProvider;
 import com.flowcentraltech.flowcentral.common.business.SynchronizableEnvironmentDelegate;
 import com.flowcentraltech.flowcentral.common.business.SystemRestoreService;
 import com.flowcentraltech.flowcentral.common.constants.CollaborationType;
+import com.flowcentraltech.flowcentral.common.constants.ConfigType;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralContainerPropertyConstants;
 import com.flowcentraltech.flowcentral.configuration.data.ApplicationRestore;
 import com.flowcentraltech.flowcentral.configuration.data.Messages;
@@ -85,6 +88,7 @@ import com.flowcentraltech.flowcentral.studio.business.data.DelegateSynchronizat
 import com.flowcentraltech.flowcentral.studio.constants.StudioAppComponentType;
 import com.flowcentraltech.flowcentral.studio.constants.StudioAppletPropertyConstants;
 import com.flowcentraltech.flowcentral.studio.constants.StudioDelegateSynchronizationTaskConstants;
+import com.flowcentraltech.flowcentral.studio.constants.StudioFeatureConstants;
 import com.flowcentraltech.flowcentral.studio.constants.StudioModuleNameConstants;
 import com.flowcentraltech.flowcentral.studio.constants.StudioModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.studio.constants.StudioSnapshotTaskConstants;
@@ -504,7 +508,17 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
 
     private void installStudioFeatures(final ModuleInstall moduleInstall) throws UnifyException {
         if (StudioModuleNameConstants.STUDIO_MODULE_NAME.equals(moduleInstall.getModuleConfig().getName())) {
-            // TODO
+            final Long applicationId = appletUtilities.application().getApplicationId("studio");
+            appletUtilities.applicationPrivilegeManager().registerPrivilege(ConfigType.STATIC, applicationId,
+                    ApplicationPrivilegeConstants.APPLICATION_FEATURE_CATEGORY_CODE,
+                    PrivilegeNameUtils
+                            .getFeaturePrivilegeName(StudioFeatureConstants.RESTORE),
+                    resolveApplicationMessage("$m{studio.privilege.restore}"));
+            appletUtilities.applicationPrivilegeManager().registerPrivilege(ConfigType.STATIC, applicationId,
+                    ApplicationPrivilegeConstants.APPLICATION_FEATURE_CATEGORY_CODE,
+                    PrivilegeNameUtils
+                            .getFeaturePrivilegeName(StudioFeatureConstants.SNAPSHOT),
+                    resolveApplicationMessage("$m{studio.privilege.snapshot}"));
         }
     }
 
