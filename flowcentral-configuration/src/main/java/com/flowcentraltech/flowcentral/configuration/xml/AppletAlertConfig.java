@@ -26,6 +26,8 @@ import javax.xml.bind.annotation.XmlAttribute;
 public class AppletAlertConfig extends BaseNameConfig {
 
     private String sender;
+    
+    private String template;
 
     private String recipientPolicy;
 
@@ -40,6 +42,15 @@ public class AppletAlertConfig extends BaseNameConfig {
     @XmlAttribute(required = true)
     public void setSender(String sender) {
         this.sender = sender;
+    }
+
+    public String getTemplate() {
+        return template;
+    }
+
+    @XmlAttribute
+    public void setTemplate(String template) {
+        this.template = template;
     }
 
     public String getRecipientPolicy() {

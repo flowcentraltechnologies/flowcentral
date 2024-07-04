@@ -296,6 +296,7 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                         appletAlertConfig.setName(appAppletAlert.getName());
                         appletAlertConfig.setDescription(appAppletAlert.getDescription());
                         appletAlertConfig.setSender(appAppletAlert.getSender());
+                        appletAlertConfig.setTemplate(appAppletAlert.getTemplate());
                         appletAlertConfig.setRecipientContactRule(appAppletAlert.getRecipientContactRule());
                         appletAlertConfig.setRecipientNameRule(appAppletAlert.getRecipientNameRule());
                         appletAlertConfig.setRecipientPolicy(appAppletAlert.getRecipientPolicy());

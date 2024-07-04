@@ -33,7 +33,7 @@ public class UserRoleInfo {
     private String groupDesc;
 
     private String departmentCode;
-
+    
     public UserRoleInfo(String roleCode, String roleDesc, String groupName, String groupDesc, String departmentCode) {
         this.roleCode = roleCode;
         this.roleDesc = roleDesc;
@@ -67,4 +67,5 @@ public class UserRoleInfo {
     public String getDepartmentCode() {
         return departmentCode;
     }
+
 }

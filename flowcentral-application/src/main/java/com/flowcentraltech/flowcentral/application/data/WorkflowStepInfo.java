@@ -26,6 +26,8 @@ import com.tcdng.unify.core.util.StringUtils;
  */
 public class WorkflowStepInfo implements Listable {
 
+    public static final WorkflowStepInfo EMPTY = new WorkflowStepInfo();
+    
     private String workflowLongName;
 
     private String applicationName;
@@ -46,6 +48,8 @@ public class WorkflowStepInfo implements Listable {
 
     private String departmentCode;
 
+    private Long workItemId;
+    
     public WorkflowStepInfo(String workflowLongName, String applicationName, String workflowName,
             String workItemFilterGenName, String entity, String stepName, String stepDesc, String stepLabel,
             String branchCode, String departmentCode) {
@@ -59,6 +63,26 @@ public class WorkflowStepInfo implements Listable {
         this.stepLabel = stepLabel;
         this.branchCode = branchCode;
         this.departmentCode = departmentCode;
+    }
+
+    public WorkflowStepInfo(String workflowLongName, String applicationName, String workflowName,
+            String workItemFilterGenName, String entity, String stepName, String stepDesc, String stepLabel,
+            String branchCode, String departmentCode, Long workItemId) {
+        this.workflowLongName = workflowLongName;
+        this.applicationName = applicationName;
+        this.workflowName = workflowName;
+        this.workItemFilterGenName = workItemFilterGenName;
+        this.entity = entity;
+        this.stepName = stepName;
+        this.stepDesc = stepDesc;
+        this.stepLabel = stepLabel;
+        this.branchCode = branchCode;
+        this.departmentCode = departmentCode;
+        this.workItemId = workItemId;
+    }
+
+    private WorkflowStepInfo() {
+        
     }
 
     @Override
@@ -115,6 +139,10 @@ public class WorkflowStepInfo implements Listable {
         return departmentCode;
     }
 
+    public Long getWorkItemId() {
+        return workItemId;
+    }
+
     public boolean isWithBranchCode() {
         return !StringUtils.isBlank(branchCode);
     }
@@ -123,8 +151,7 @@ public class WorkflowStepInfo implements Listable {
         return !StringUtils.isBlank(departmentCode);
     }
 
-    @Override
-    public String toString() {
-        return StringUtils.toXmlString(this);
+    public boolean isWithWorkItemId() {
+        return workItemId != null;
     }
 }

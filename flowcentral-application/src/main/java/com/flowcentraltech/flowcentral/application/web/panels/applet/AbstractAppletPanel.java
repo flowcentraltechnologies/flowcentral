@@ -54,12 +54,6 @@ public abstract class AbstractAppletPanel extends AbstractApplicationSwitchPanel
 
     private static final int ULTIMATE_MAX_TABLE_REPORT_ROWS = 800000;
 
-    @Override
-    public void onPageConstruct() throws UnifyException {
-        // TODO Auto-generated method stub
-        super.onPageConstruct();
-    }
-
     protected void addPanelToPushComponents(String panelName, boolean editable) throws UnifyException {
         if (editable && getApplet().isSaveHeaderFormOnTabAction()) {
             Panel formPanel = getWidgetByShortName(Panel.class, panelName);

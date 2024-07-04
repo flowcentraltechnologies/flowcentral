@@ -84,7 +84,7 @@ public interface LoadingTableProvider extends FlowCentralComponent {
      *                        if an error occurs
      */
     int getSourceItemOptions(Entity loadingEntity) throws UnifyException;
-   
+    
     /**
      * Gets the source entity items using supplied ID
      * 
@@ -96,7 +96,20 @@ public interface LoadingTableProvider extends FlowCentralComponent {
      * @throws UnifyException
      *                        if an error occurs
      */
-    EntityItem getSourceItem(Long sourceItemId, int options) throws UnifyException;
+    EntityItem getSourceItemById(Long sourceItemId, int options) throws UnifyException;
+    
+    /**
+     * Gets the source entity items using supplied ID
+     * 
+     * @param workItemId
+     *                     the work item id to use
+     * @param options
+     *                     options
+     * @return the source entity item
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    EntityItem getSourceItemByWorkItemId(Long workItemId, int options) throws UnifyException;
 
     /**
      * Gets the source entity item form applet.
@@ -137,6 +150,27 @@ public interface LoadingTableProvider extends FlowCentralComponent {
      *                        if an error occurs
      */
     boolean applyUserAction(WorkEntity wfEntityInst, Long sourceItemId, String userAction, String comment,
+            InputArrayEntries emails, boolean listing) throws UnifyException;
+    
+    /**
+     * Applies user action to work item.
+     * 
+     * @param wfEntityInst
+     *                     the work item instance
+     * @param workItemId
+     *                     the work item ID
+     * @param userAction
+     *                     the user action to apply
+     * @param comment
+     *                     the comment on this action
+     * @param emails
+     *                     the emails
+     * @param listing      the listing mode
+     * @return if successful
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    boolean applyUserActionByWorkItemId(WorkEntity wfEntityInst, Long workItemId, String userAction, String comment,
             InputArrayEntries emails, boolean listing) throws UnifyException;
     
     /**

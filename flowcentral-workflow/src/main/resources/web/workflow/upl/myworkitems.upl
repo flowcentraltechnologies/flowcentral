@@ -13,8 +13,8 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-!ui-page caption:$m{workflowmyworkitems.title} components:$c{basePanel}
-	subCaption:$m{workflowmyworkitems.title}
+!ui-page caption:$m{workflow.myworkitems.title} components:$c{basePanel}
+	subCaption:$m{workflow.myworkitems.title}
 
 // Base panel
 !ui-panel:basePanel layout:$d{!ui-vertical style:$s{width:100%;}}
@@ -24,7 +24,7 @@
 !ui-panel:myWorkItemsHeaderPanel layout:$d{!ui-horizontal style:$s{width:100%;} cellType:bottom}
 	components:$c{workItemLabel actionPanel} 
 	
-!ui-label:workItemLabel styleClass:$e{fc-largelabel} caption:$m{workflowmyworkitems.workitems}
+!ui-label:workItemLabel styleClass:$e{fc-largelabel} caption:$m{workflow.myworkitems.workitems}
 	textUppercase:true
 !ui-panel:actionPanel 
 	layout:$d{!ui-horizontal style:$s{float:right;} showCaption:true inlineCaption:true captionSuffix:$s{:} cellType:middle}

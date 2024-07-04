@@ -250,7 +250,7 @@ public class ChartDataSourceChartDetailsProvider extends AbstractChartDetailsPro
                             (i == 0 && chartDataSourceDef.isMerged()) || entityFieldDef.isListOnly()
                                     ? EntityFieldDataType.STRING
                                     : entityFieldDef.getDataType(),
-                            fieldName, entityFieldDef.getFieldLabel()));
+                            fieldName, entityFieldDef.getFieldLabel(), true));
                 }
             }
 
@@ -262,8 +262,8 @@ public class ChartDataSourceChartDetailsProvider extends AbstractChartDetailsPro
                 }
 
                 headers.add(new ChartTableColumn(
-                        entityFieldDef.isListOnly() ? EntityFieldDataType.STRING : entityFieldDef.getDataType(),
-                        entitySeriesDef.getFieldName(), entitySeriesDef.getLabel()));
+                        /*entityFieldDef.isListOnly() ? EntityFieldDataType.STRING : */entityFieldDef.getDataType(),
+                        entitySeriesDef.getFieldName(), entitySeriesDef.getLabel(), false));
             }
 
             cdb.createTableSeries(DataUtils.toArray(ChartTableColumn.class, headers));

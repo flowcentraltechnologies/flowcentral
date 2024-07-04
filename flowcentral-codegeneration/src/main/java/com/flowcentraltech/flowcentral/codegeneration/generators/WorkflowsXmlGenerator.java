@@ -164,6 +164,7 @@ public class WorkflowsXmlGenerator extends AbstractResourcesArtifactGenerator {
                         wfStepConfig.setDescription("$m{" + descKey + "}");
                         wfStepConfig.setLabel("$m{" + labelKey + "}");
                         wfStepConfig.setAppletName(wfStep.getAppletName());
+                        wfStepConfig.setReminderMinutes(wfStep.getReminderMinutes());
                         wfStepConfig.setCriticalMinutes(wfStep.getCriticalMinutes());
                         wfStepConfig.setExpiryMinutes(wfStep.getExpiryMinutes());
                         wfStepConfig.setAudit(wfStep.isAudit());
@@ -264,6 +265,7 @@ public class WorkflowsXmlGenerator extends AbstractResourcesArtifactGenerator {
                                 wfAlertConfig.setRecipientNameRule(wfStepAlert.getRecipientNameRule());
                                 wfAlertConfig.setRecipientContactRule(wfStepAlert.getRecipientContactRule());
                                 wfAlertConfig.setGenerator(wfStepAlert.getGenerator());
+                                wfAlertConfig.setTemplate(wfStepAlert.getTemplate());
                                 wfAlertConfig.setAlertHeldBy(wfStepAlert.isAlertHeldBy());
                                 wfAlertConfig.setAlertWorkflowRoles(wfStepAlert.isAlertWorkflowRoles());
                                 wfAlertConfig.setFireOnPrevStepName(wfStepAlert.getFireOnPrevStepName());

@@ -79,6 +79,11 @@ public enum AppletType implements EnumConst {
             null,
             false,
             true),
+    MY_WORKITEM(
+            "MWI",
+            FlowCentralAppletPathConstants.MY_WORKITEM,
+            true,
+            true),
     TASK_EXECUTION(
             "TEX",
             FlowCentralAppletPathConstants.TASK_EXECUTION,

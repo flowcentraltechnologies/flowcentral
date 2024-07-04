@@ -1693,6 +1693,11 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
+    public Long getAppAppletApplicationId(Long appAppletId) throws UnifyException {
+        return environment().value(Long.class, "applicationId", new AppAppletQuery().id(appAppletId));
+    }
+
+    @Override
     public String getAppEntity(Long appEntityId) throws UnifyException {
         AppEntity appEntity = environment()
                 .listLean(new AppEntityQuery().id(appEntityId).addSelect("applicationName", "name"));
@@ -1898,7 +1903,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         for (AppAppletAlert appAppletAlert : alerts) {
             awcb.withAlert(appAppletAlert.getName(), appAppletAlert.getDescription(),
                     appAppletAlert.getRecipientPolicy(), appAppletAlert.getRecipientNameRule(),
-                    appAppletAlert.getRecipientContactRule(), appAppletAlert.getSender());
+                    appAppletAlert.getRecipientContactRule(), appAppletAlert.getSender(), appAppletAlert.getTemplate());
         }
 
         return awcb.build();
@@ -5641,6 +5646,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appAppletAlert.setName(alertConfig.getName());
                     appAppletAlert.setDescription(resolveApplicationMessage(alertConfig.getDescription()));
                     appAppletAlert.setSender(alertConfig.getSender());
+                    appAppletAlert.setTemplate(
+                            ApplicationNameUtils.ensureLongNameReference(applicationName, alertConfig.getTemplate()));
                     appAppletAlert.setRecipientContactRule(alertConfig.getRecipientContactRule());
                     appAppletAlert.setRecipientNameRule(alertConfig.getRecipientNameRule());
                     appAppletAlert.setRecipientPolicy(alertConfig.getRecipientPolicy());
@@ -5649,6 +5656,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 } else {
                     oldAppAppletAlert.setDescription(resolveApplicationMessage(alertConfig.getDescription()));
                     oldAppAppletAlert.setSender(alertConfig.getSender());
+                    oldAppAppletAlert.setTemplate(
+                            ApplicationNameUtils.ensureLongNameReference(applicationName, alertConfig.getTemplate()));
                     oldAppAppletAlert.setRecipientContactRule(alertConfig.getRecipientContactRule());
                     oldAppAppletAlert.setRecipientNameRule(alertConfig.getRecipientNameRule());
                     oldAppAppletAlert.setRecipientPolicy(alertConfig.getRecipientPolicy());

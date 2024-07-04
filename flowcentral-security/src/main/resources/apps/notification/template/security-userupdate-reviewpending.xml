@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<!-- User update review pending notification -->
+<notifTemplate name="userUpdateReviewPending" description="$m{security.user.update.review}"
+	type="email" format="html" entity="user">
+	<subject><![CDATA[$m{security.user.update.review.required.subject}]]></subject>
+	<body><![CDATA[$m{security.user.update.review.required.body}]]></body>
+</notifTemplate>

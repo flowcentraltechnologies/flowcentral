@@ -37,11 +37,11 @@ public interface WorkflowModuleNameConstants {
 
     String REVIEW_WIZARD_SUBMIT_ACTION_POLICY = "reviewwizard-submitactionpolicy";
 
-    String WORKFLOW_COPY_CREATE_APPROVAL_PENDING_EMAIL_SENDER = "workflowcopycreateapproval-emailsender";
+    String WORKFLOW_COPY_CREATE_APPROVAL_TEMPLATE = "workflow.copyCreateApproval";
 
-    String WORKFLOW_COPY_UPDATE_APPROVAL_PENDING_EMAIL_SENDER = "workflowcopyupdateapproval-emailsender";
+    String WORKFLOW_COPY_UPDATE_APPROVAL_TEMPLATE= "workflow.copyUpdateApproval";
 
-    String WORKFLOW_COPY_DELETION_APPROVAL_PENDING_EMAIL_SENDER = "workflowcopydeletionapproval-emailsender";
+    String WORKFLOW_COPY_DELETION_APPROVAL_TEMPLATE= "workflow.copyDeletionApproval";
     
     String WORKFLOW_MY_WORKITEMS_LOADING_TABLE_PROVIDER = "workflowmyworkitems-loadingtableprovider";
     

@@ -29,7 +29,7 @@ import com.tcdng.unify.web.constant.Secured;
  * @since 1.0
  */
 @ResultMappings({
-        @ResultMapping(name = "forwardtopath", response = { "!forwardresponse pathBinding:$s{targetPath}" }) })
+        @ResultMapping(name = "forwardtopath", response = { "!forwardresponse pathBinding:$s{targetPath}" })})
 public abstract class AbstractForwarderController<T extends AbstractForwarderPageBean>
         extends AbstractFlowCentralPageController<T> {
 

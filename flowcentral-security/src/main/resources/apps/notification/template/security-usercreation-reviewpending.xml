@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<!-- User creation review pending notification -->
+<notifTemplate name="userCreationReviewPending" description="$m{security.user.creation.review}"
+	type="email" format="html" entity="user">
+	<subject><![CDATA[$m{security.user.creation.review.required.subject}]]></subject>
+	<body><![CDATA[$m{security.user.creation.review.required.body}]]></body>
+</notifTemplate>

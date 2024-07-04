@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<!-- User update approval pending notification -->
+<notifTemplate name="userDeletionApprovalPending" description="$m{security.user.deletion.approval}"
+	type="email" format="html" entity="user">
+	<subject><![CDATA[$m{security.user.deletion.approval.required.subject}]]></subject>
+	<body><![CDATA[$m{security.user.deletion.approval.required.body}]]></body>
+</notifTemplate>

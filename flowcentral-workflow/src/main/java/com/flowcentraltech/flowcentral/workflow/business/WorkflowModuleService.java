@@ -267,6 +267,17 @@ public interface WorkflowModuleService extends FlowCentralService, ApplicationWo
     WfStep findLeanWorkflowStepById(Long wfStepId) throws UnifyException;
 
     /**
+     * Finds application ID by workflow step by ID.
+     * 
+     * @param wfStepId
+     *                 the workflow step ID
+     * @return the application ID
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    Long findApplicationIdWorkflowStepById(Long wfStepId) throws UnifyException;
+
+    /**
      * Finds workflow steps by query.
      * 
      * @param query

@@ -52,4 +52,8 @@ public interface SystemModuleSysParamConstants {
     String SYSTEM_DATE_FORMAT = "SYS-000E";
     
     String SYSTEM_DATETIME_FORMAT = "SYS-000F";
+
+    String APPLICATION_BASE_URL= "SYS-0010";
+
+    String SECURED_LINK_EXPIRATION_MINUTES= "SYS-0011";
 }

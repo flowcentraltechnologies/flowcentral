@@ -16,7 +16,12 @@
 
 package com.flowcentraltech.flowcentral.workflow.entities;
 
+import java.util.Date;
+
 import com.flowcentraltech.flowcentral.common.entities.BaseEntityQuery;
+import com.tcdng.unify.core.criterion.And;
+import com.tcdng.unify.core.criterion.IsNotNull;
+import com.tcdng.unify.core.criterion.Less;
 
 /**
  * Workflow item event query.
@@ -34,7 +39,23 @@ public class WfItemEventQuery extends BaseEntityQuery<WfItemEvent> {
         return (WfItemEventQuery) addEquals("wfItemHistId", wfItemHistId);
     }
 
+    public WfItemEventQuery reminderDue(Date now) {
+        return (WfItemEventQuery) addRestriction(
+                new And().add(new IsNotNull("reminderDt")).add(new Less("reminderDt", now)));
+    }
+
+    public WfItemEventQuery expirationDue(Date now) {
+        return (WfItemEventQuery) addRestriction(
+                new And().add(new IsNotNull("expectedDt")).add(new Less("expectedDt", now)));
+    }
+
+    public WfItemEventQuery criticalDue(Date now) {
+        return (WfItemEventQuery) addRestriction(
+                new And().add(new IsNotNull("criticalDt")).add(new Less("criticalDt", now)));
+    }
+
     public WfItemEventQuery commentsOnly() {
         return (WfItemEventQuery) addIsNotNull("comment");
     }
+
 }

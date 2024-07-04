@@ -39,6 +39,14 @@ import com.tcdng.unify.core.data.Listable;
 public interface ChartModuleService extends FlowCentralService {
 
     /**
+     * Clears chart cache.
+     * 
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    void clearChartCache() throws UnifyException;
+    
+    /**
      * Finds charts by criteria.
      * 
      * @param query

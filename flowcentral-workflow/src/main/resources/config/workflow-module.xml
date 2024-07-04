@@ -28,5 +28,8 @@
 		<sysParameter code="WF-0004" defaultVal="false"
 			description="$m{workflow.sysparam.enableautoloading}"
 			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
+		<sysParameter code="WF-0005" defaultVal="40"
+			description="$m{workflow.sysparam.itemalertbatchsize}"
+			editor="!ui-integer precision:2" type="number" editable="true" />
 	</sysParameters>
 </module>

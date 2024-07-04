@@ -67,6 +67,12 @@ public class WfItem extends BaseAuditTenantEntity {
     @ListOnly(key = "wfItemEventId", property = "stepDt")
     private Date stepDt;
 
+    @ListOnly(key = "wfItemEventId", property = "actionDt")
+    private Date actionDt;
+
+    @ListOnly(key = "wfItemEventId", property = "reminderDt")
+    private Date reminderDt;
+
     @ListOnly(key = "wfItemEventId", property = "expectedDt")
     private Date expectedDt;
 
@@ -206,6 +212,22 @@ public class WfItem extends BaseAuditTenantEntity {
 
     public void setStepDt(Date stepDt) {
         this.stepDt = stepDt;
+    }
+
+    public Date getActionDt() {
+        return actionDt;
+    }
+
+    public void setActionDt(Date actionDt) {
+        this.actionDt = actionDt;
+    }
+
+    public Date getReminderDt() {
+        return reminderDt;
+    }
+
+    public void setReminderDt(Date reminderDt) {
+        this.reminderDt = reminderDt;
     }
 
     public Date getExpectedDt() {

@@ -3,6 +3,15 @@
 <application name="organization"
 	description="$m{organization.short.description}"
 	label="$m{organization.label}" module="organization">
+	<!-- Notification Templates -->
+	<notifTemplates>
+		<notifTemplate
+			configFile="apps/notification/template/organization-rolecreation-approvalpending.xml" />
+		<notifTemplate
+			configFile="apps/notification/template/organization-roleupdate-approvalpending.xml" />
+		<notifTemplate
+			configFile="apps/notification/template/organization-roledeletion-approvalpending.xml" />
+	</notifTemplates>
 	<!-- Widget Types -->
 	<widgetTypes>
 		<widgetType name="branchlist"
@@ -91,10 +100,12 @@
 				value="roleUpdateApproval" />
 			<alert name="roleCreationApproval"
 				description="Role Creation Approval Pending"
-				sender="rolecreation-approvalpending" />
+				sender="simpleemailalertsender"
+				template="roleCreationApprovalPending" />
 			<alert name="roleUpdateApproval"
 				description="Role Update Approval Pending"
-				sender="roleupdate-approvalpending" />
+				sender="simpleemailalertsender"
+				template="roleUpdateApprovalPending" />
 		</applet>
 		<applet name="manageRolePrivilege"
 			description="$m{organization.roleprivilege.manage}"
@@ -403,10 +414,10 @@
 				label="$m{organization.role.description}" type="string"
 				inputWidget="application.text" maxLen="64" basicSearch="true" auditable="true"/>
 			<field name="activeAfter"
-				label="$m{organization.role.activeafter}" type="timestamp_utc"
+				label="$m{organization.role.activeafter}" type="timestamp"
 				inputWidget="application.time" auditable="true"/>
 			<field name="activeBefore"
-				label="$m{organization.role.activebefore}" type="timestamp_utc"
+				label="$m{organization.role.activebefore}" type="timestamp"
 				inputWidget="application.time" auditable="true"/>
 			<field name="email" label="$m{organization.role.email}"
 				type="string" maxLen="64" auditable="true"/>

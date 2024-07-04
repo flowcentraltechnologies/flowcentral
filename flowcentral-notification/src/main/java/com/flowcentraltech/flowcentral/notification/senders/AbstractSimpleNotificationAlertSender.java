@@ -15,13 +15,14 @@
  */
 package com.flowcentraltech.flowcentral.notification.senders;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.common.data.Attachment;
 import com.flowcentraltech.flowcentral.common.data.Recipient;
 import com.flowcentraltech.flowcentral.configuration.constants.NotifType;
 import com.flowcentraltech.flowcentral.notification.data.NotifMessage;
+import com.flowcentraltech.flowcentral.notification.data.NotifTemplateDef;
 import com.tcdng.unify.common.util.StringToken;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.ValueStoreReader;
@@ -29,29 +30,17 @@ import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.StringUtils;
 
 /**
- * Convenient abstract base class for resource-bundle based notification alert
- * sender.
+ * Convenient base class for simple alert sender.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class AbstractResourceBundleNotificationAlertSender extends AbstractNotificationAlertSender {
+public abstract class AbstractSimpleNotificationAlertSender extends AbstractNotificationAlertSender {
 
     private final NotifType notifType;
 
-    private final String subjectMessageKey;
-
-    private final String bodyMessageKey;
-
-    private List<StringToken> subjectTokenList;
-
-    private List<StringToken> templateTokenList;
-
-    public AbstractResourceBundleNotificationAlertSender(NotifType notifType, String subjectMessageKey,
-            String bodyMessageKey) {
+    public AbstractSimpleNotificationAlertSender(NotifType notifType) {
         this.notifType = notifType;
-        this.subjectMessageKey = subjectMessageKey;
-        this.bodyMessageKey = bodyMessageKey;
     }
 
     @Override
@@ -60,33 +49,37 @@ public abstract class AbstractResourceBundleNotificationAlertSender extends Abst
     }
 
     @Override
-    public final void composeAndSend(ValueStoreReader reader, List<Recipient> recipientList) throws UnifyException {
-        logDebug("Composing and sending notification using type...");
-
-        List<Recipient> allRecipientList = new ArrayList<Recipient>(recipientList);
-        List<Recipient> additionalRecipientList = getAdditionalRecipients(reader);
-        if (!DataUtils.isBlank(additionalRecipientList)) {
-            allRecipientList.addAll(additionalRecipientList);
+    public void composeAndSend(ValueStoreReader reader, List<Recipient> recipientList) throws UnifyException {
+        final String template = reader.read(String.class, NotificationAlertSender.TEMPLATE_VARIABLE);
+        if (StringUtils.isBlank(template)) {
+            throwOperationErrorException(new IllegalArgumentException("Could not retreive template variable."));
         }
 
-        if (!DataUtils.isBlank(allRecipientList)) {
-            ensureTokenList();
-            
-            NotifMessage.Builder nb = NotifMessage.newBuilder(subjectTokenList, templateTokenList);
+        final NotifTemplateDef notifTemplateDef = notification().getNotifTemplateDef(template);
+        if (!notifTemplateDef.getNotifType().equals(notifType)) {
+            throwOperationErrorException(new IllegalArgumentException("Sender notification type [" + notifType
+                    + "] not compatible with template notification type [" + notifTemplateDef.getNotifType() + "]."));
+        }
+
+        logDebug("Composing and sending notification using template [{0}] and of type [{1}]...", template,
+                notifTemplateDef.getNotifType());
+        if (!DataUtils.isBlank(recipientList)) {
+            NotifMessage.Builder nb = NotifMessage.newBuilder(notifTemplateDef.getSubjectTokenList(),
+                    notifTemplateDef.getTemplateTokenList());
             // Set recipients
-            for (Recipient recipient : allRecipientList) {
+            for (Recipient recipient : recipientList) {
                 nb.addRecipient(recipient);
             }
 
             // Extract parameters
-            for (StringToken token : subjectTokenList) {
+            for (StringToken token : notifTemplateDef.getSubjectTokenList()) {
                 if (token.isParam()) {
                     String _token = token.getToken();
                     nb.addParam(_token, reader.read(_token));
                 }
             }
 
-            for (StringToken token : templateTokenList) {
+            for (StringToken token : notifTemplateDef.getTemplateTokenList()) {
                 if (token.isParam()) {
                     String _token = token.getToken();
                     nb.addParam(_token, reader.read(_token));
@@ -108,26 +101,9 @@ public abstract class AbstractResourceBundleNotificationAlertSender extends Abst
         }
     }
 
-    /**
-     * Gets additional notification recipients from reader.
-     * 
-     * @param reader
-     *               the reader
-     * @return list of additional recipients
-     * @throws UnifyException
-     *                        if an error occurs
-     */
-    protected abstract List<Recipient> getAdditionalRecipients(ValueStoreReader reader) throws UnifyException;
-
-    private void ensureTokenList() throws UnifyException {
-        if (subjectTokenList == null) {
-            synchronized (this) {
-                if (subjectTokenList == null) {
-                    subjectTokenList = StringUtils.breakdownParameterizedString(getApplicationMessage(subjectMessageKey));
-                    templateTokenList = StringUtils.breakdownParameterizedString(getApplicationMessage(bodyMessageKey));
-                }
-            }
-        }
+    @Override
+    protected final List<Attachment> generateAttachments(ValueStoreReader reader) throws UnifyException {
+        return Collections.emptyList();
     }
 
 }

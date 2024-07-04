@@ -31,6 +31,7 @@ import com.tcdng.unify.web.constant.ReadOnly;
 import com.tcdng.unify.web.constant.ResetOnWrite;
 import com.tcdng.unify.web.constant.Secured;
 import com.tcdng.unify.web.ui.AbstractPageController;
+import com.tcdng.unify.web.ui.widget.ContentPanel;
 
 /**
  * Application browser window controller.
@@ -65,17 +66,18 @@ public class ApplicationBrowserWindowController extends AbstractPageController<A
     }
 
     @Override
-    protected void onInitPage() throws UnifyException {
-        super.onInitPage();
+    protected void onIndexPage() throws UnifyException {
         ApplicationBrowserWindowPageBean pageBean = getPageBean();
-        if (pageBean.getDocumentPath() == null) {
-            final SessionOpenTabInfo sessionOpenTabInfo = (SessionOpenTabInfo) removeSessionAttribute(
-                    AppletSessionAttributeConstants.OPEN_TAB_INFO);
-            if (sessionOpenTabInfo != null) {
-                pageBean.setWindowTitle(sessionOpenTabInfo.getTitle());
-                pageBean.setDocumentPath(sessionOpenTabInfo.getDocumentPath());
-                pageBean.setContentPaths(new String[] { sessionOpenTabInfo.getContentPath() });
-            }
+        final SessionOpenTabInfo sessionOpenTabInfo = (SessionOpenTabInfo) removeSessionAttribute(
+                AppletSessionAttributeConstants.OPEN_TAB_INFO);
+        if (sessionOpenTabInfo != null) {
+            logDebug("Setting browser content path to [{0}]...", sessionOpenTabInfo.getContentPath());
+            pageBean.setWindowTitle(sessionOpenTabInfo.getTitle());
+            pageBean.setDocumentPath(sessionOpenTabInfo.getDocumentPath());
+            pageBean.setContentPaths(new String[] { sessionOpenTabInfo.getContentPath() });
+            
+            ContentPanel contentPanel = getPageWidgetByShortName(ContentPanel.class, "content");
+            contentPanel.clearPages();
         }
     }
 

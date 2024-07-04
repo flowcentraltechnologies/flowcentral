@@ -39,7 +39,7 @@ import com.tcdng.unify.core.security.PasswordGenerator;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@EntityReferences({ "security.user" })
+@EntityReferences({ "security.user" }) 
 @Component(name = "usercreation-enrichment", description = "$m{security.enrichmentpolicy.usercreation}")
 public class UserCreationEnrichment extends AbstractWfEnrichmentPolicy {
 
@@ -61,7 +61,7 @@ public class UserCreationEnrichment extends AbstractWfEnrichmentPolicy {
             String plainPassword = passwordGenerator.generatePassword(wfItemReader.read(String.class, "loginId"),
                     passwordLength);
             String encryptedPassword = passwordCryptograph.encrypt(plainPassword);
-            wfItemWriter.writeScratch("plainPassword", plainPassword);
+            wfItemWriter.setTempValue("plainPassword", plainPassword);
             wfItemWriter.write("password", encryptedPassword);
         }
     }

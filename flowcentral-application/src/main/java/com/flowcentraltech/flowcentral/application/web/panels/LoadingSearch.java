@@ -201,7 +201,7 @@ public class LoadingSearch {
         Entity loadingEntity = loadingTable.getDispItemList().get(index);
         LoadingTableProvider loadingTableProvider = getLoadingTableProvider(index);
         int options = loadingTableProvider.getSourceItemOptions(loadingEntity);
-        return loadingTableProvider != null ? loadingTableProvider.getSourceItem((Long) loadingEntity.getId(), options)
+        return loadingTableProvider != null ? loadingTableProvider.getSourceItemById((Long) loadingEntity.getId(), options)
                 : null;
     }
 

@@ -34,6 +34,8 @@ public enum WorkflowAlertType implements EnumConst {
             "P"),
     USER_INTERACT(
             "U"),
+    REMINDER_NOTIFICATION(
+            "R"),
     CRITICAL_NOTIFICATION(
             "C"),
     EXPIRATION_NOTIFICATION(
@@ -63,11 +65,15 @@ public enum WorkflowAlertType implements EnumConst {
         return USER_INTERACT.equals(this);
     }
 
-    public boolean isCriticalNotification() {
+    public boolean isOnReminder() {
+        return REMINDER_NOTIFICATION.equals(this);
+    }
+
+    public boolean isOnCritical() {
         return CRITICAL_NOTIFICATION.equals(this);
     }
 
-    public boolean isExpirationNotification() {
+    public boolean isOnExpiration() {
         return EXPIRATION_NOTIFICATION.equals(this);
     }
 

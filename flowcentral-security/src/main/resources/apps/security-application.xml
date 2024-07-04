@@ -11,6 +11,22 @@
 			configFile="apps/notification/template/user-passwordreset.xml" />
 		<notifTemplate
 			configFile="apps/notification/template/user-creation-approval.xml" />
+		<notifTemplate
+			configFile="apps/notification/template/security-usercreation-approvalpending.xml" />
+		<notifTemplate
+			configFile="apps/notification/template/security-usercreation-approved.xml" />
+		<notifTemplate
+			configFile="apps/notification/template/security-usercreation-reviewpending.xml" />
+		<notifTemplate
+			configFile="apps/notification/template/security-usercreation-resubmitpending.xml" />
+		<notifTemplate
+			configFile="apps/notification/template/security-userupdate-approvalpending.xml" />
+		<notifTemplate
+			configFile="apps/notification/template/security-userupdate-reviewpending.xml" />
+		<notifTemplate
+			configFile="apps/notification/template/security-userupdate-resubmitpending.xml" />
+		<notifTemplate
+			configFile="apps/notification/template/security-userdeletion-approvalpending.xml" />
 	</notifTemplates>
 	<!-- Widget Types -->
 	<widgetTypes>
@@ -89,55 +105,62 @@
 				value="onCopySetValues" />
 			<property name="workflowCopy.create.alert"
 				value="userCreationApproval" />
-			<property name="workflowCopy.create.setvalues"
-				value="onSubmitSetValues" />
 			<property name="workflowCopy.create.approval.alert"
 				value="userCreationApproved" />
-			<property name="workflowCopy.create.approval.setvalues"
-				value="onApproveSetValues" />
 			<property name="workflowCopy.create.rejection.alert"
 				value="userCreationReject" />
-			<property name="workflowCopy.create.rejection.setvalues"
-				value="onRejectSetValues" />
 			<property name="workflowCopy.create.resubmit.alert"
 				value="userCreationResubmit" />
-			<property name="workflowCopy.update.copy.setvalues"
-				value="onCopySetValues" />
 			<property name="workflowCopy.update.alert"
 				value="userUpdateApproval" />
+			<property name="workflowCopy.update.rejection.alert"
+				value="userUpdateReject" />
+			<property name="workflowCopy.update.resubmit.alert"
+				value="userUpdateResubmit" />
+			<property name="workflowCopy.create.setvalues"
+				value="onSubmitSetValues" />
+			<property name="workflowCopy.create.approval.setvalues"
+				value="onCreateApproveSetValues" />
+			<property name="workflowCopy.create.rejection.setvalues"
+				value="onRejectSetValues" />
+			<property name="workflowCopy.update.copy.setvalues"
+				value="onCopySetValues" />
 			<property name="workflowCopy.update.setvalues"
 				value="onSubmitSetValues" />
 			<property name="workflowCopy.update.approval.setvalues"
 				value="onApproveSetValues" />
-			<property name="workflowCopy.update.rejection.alert"
-				value="userUpdateReject" />
 			<property name="workflowCopy.update.rejection.setvalues"
 				value="onRejectSetValues" />
-			<property name="workflowCopy.update.resubmit.alert"
-				value="userUpdateResubmit" />
 			<alert name="userCreationApproval"
 				description="User Creation Approval Pending"
-				sender="usercreation-approvalpending" />
+				sender="simpleemailalertsender"
+				template="userCreationApprovalPending" />
 			<alert name="userCreationApproved"
 				description="User Creation Approved"
-				sender="usercreation-approved"
+				sender="simpleemailalertsender"
+				template="userCreationApproved"
 				recipientPolicy="entity-wfrecipientpolicy"
 				recipientNameRule="fullName" recipientContactRule="email" />
 			<alert name="userCreationReject"
 				description="User Creation Review Pending"
-				sender="usercreation-reviewpending" />
+				sender="simpleemailalertsender"
+				template="userCreationReviewPending" />
 			<alert name="userCreationResubmit"
 				description="User Creation Resubmit Pending"
-				sender="usercreation-resubmitpending" />
+				sender="simpleemailalertsender"
+				template="userCreationResubmitPending" />
 			<alert name="userUpdateApproval"
 				description="User Update Approval Pending"
-				sender="userupdate-approvalpending" />
+				sender="simpleemailalertsender"
+				template="userUpdateApprovalPending" />
 			<alert name="userUpdateReject"
 				description="User Update Review Pending"
-				sender="userupdate-reviewpending" />
+				sender="simpleemailalertsender"
+				template="userUpdateReviewPending" />
 			<alert name="userUpdateResubmit"
 				description="User Update Resubmit Pending"
-				sender="userupdate-resubmitpending" />
+				sender="simpleemailalertsender"
+				template="userUpdateResubmitPending" />
 			<filter name="nonSystemRecords"
 				description="$m{common.filter.nonsystemrecords}">
 				<restriction type="greater_than" field="id" paramA="0" />
@@ -152,6 +175,13 @@
 				description="$m{security.user.setvalues.onsubmit}">
 				<setValues>
 					<setValue field="workflowStatus" value="AWA" />
+				</setValues>
+			</values>
+			<values name="onCreateApproveSetValues"
+				description="$m{security.user.setvalues.oncreateapprove}"
+				valueGenerator="user-createapprovedsetvaluesgenerator">
+				<setValues>
+					<setValue field="workflowStatus" value="APR" />
 				</setValues>
 			</values>
 			<values name="onApproveSetValues"
@@ -209,6 +239,24 @@
 			<property name="searchTable.report" value="false" />
 			<property name="searchTable.quickFilter" value="true" />
 		</applet>
+		<applet name="manageSecuredLink"
+			description="$m{security.securedlink.manage}"
+			label="$m{security.securedlink.manage.label}" icon="link"
+			type="manage_entitylist" entity="securedLink" menuAccess="true"
+			allowSecondaryTenants="true">
+			<property name="searchTable" value="securedLinkTable" />
+			<property name="searchTable.new" value="false" />
+			<property name="searchTable.report" value="true" />
+			<property name="searchTable.quickFilter" value="true" />
+			<property name="searchTable.basicSearchOnly" value="true" />
+			<property name="createForm" value="securedLinkForm" />
+			<property name="createForm.save" value="false" />
+			<property name="createForm.save.next" value="false" />
+			<property name="createForm.save.close" value="false" />
+			<property name="maintainForm" value="securedLinkForm" />
+			<property name="maintainForm.update" value="false" />
+			<property name="maintainForm.delete" value="false" />
+		</applet>
 	</applets>
 	<!-- References -->
 	<references>
@@ -230,6 +278,9 @@
 		<reference name="userLoginEventRef"
 			description="$m{security.userloginevent.reference}"
 			entity="userLoginEvent" searchField="userFullName" />
+		<reference name="securedLinkRef"
+			description="$m{security.securedlink.reference}" entity="securedLink"
+			searchField="title" />
 	</references>
 	<!-- Entities -->
 	<entities>
@@ -389,7 +440,7 @@
 				label="$m{security.user.passwordexpirydt}" type="date"
 				inputWidget="application.date" />
 			<field name="lastLoginDt" label="$m{security.user.lastlogindt}"
-				type="timestamp_utc" inputWidget="application.datetime" />
+				type="timestamp" inputWidget="application.datetime" />
 			<field name="plainPassword"
 				label="$m{security.user.plainpassword}" type="scratch" />
 			<field name="userRoleList" label="$m{security.user.rolelist}"
@@ -470,6 +521,32 @@
 			<field name="eventTypeDesc"
 				label="$m{security.userloginevent.eventtypedesc}" type="list_only"
 				key="eventType" property="description" />
+		</entity>
+		<entity name="securedLink" description="$m{security.securedlink}"
+			label="$m{security.securedlink.label}"
+			type="com.flowcentraltech.flowcentral.security.entities.SecuredLink"
+			reportable="true" auditable="true">
+			<field name="title" label="$m{security.securedlink.title}"
+				type="string" inputWidget="application.text" maxLen="128"
+				basicSearch="true" reportable="true" auditable="true"/>
+			<field name="contentPath"
+				label="$m{security.securedlink.contentpath}" type="string"
+				inputWidget="application.text" maxLen="128" reportable="true" auditable="true"/>
+			<field name="assignedToLoginId" label="$m{security.securedlink.assignedtologinid}"
+				type="string" inputWidget="application.text" maxLen="64"
+				nullable="true" reportable="true" auditable="true"/>
+			<field name="assignedRole" label="$m{security.securedlink.assignedrole}"
+				type="string" inputWidget="application.text" maxLen="64"
+				nullable="true" reportable="true" auditable="true"/>
+			<field name="expiresOn" label="$m{security.securedlink.expireson}"
+				type="timestamp" inputWidget="application.datetime"
+				reportable="true" auditable="true"/>
+			<field name="lastAccessedBy" label="$m{security.securedlink.lastaccessedby}"
+				type="string" inputWidget="application.text" maxLen="64"
+				nullable="true" reportable="true" auditable="true"/>
+			<field name="lastAccessedOn" label="$m{security.securedlink.lastaccessedon}"
+				type="timestamp" inputWidget="application.datetime"
+				nullable="true" reportable="true" auditable="true"/>
 		</entity>
 	</entities>
 	<!-- Tables -->
@@ -569,6 +646,27 @@
 				widthRatio="1" />
 			<column field="eventTypeDesc" renderWidget="application.text"
 				label="$m{security.userloginevent.eventtype}" widthRatio="1" />
+		</table>
+		<table name="securedLinkTable"
+			description="$m{security.securedlink.table}"
+			label="$m{security.securedlink.table.label}" entity="securedLink"
+			itemsPerPage="20" serialNo="true" basicSearch="true">
+			<column field="title" renderWidget="application.text"
+				widthRatio="1" linkAct="maintainAct" />
+			<column field="contentPath" renderWidget="application.text"
+				widthRatio="1" />
+			<column field="assignedToLoginId" renderWidget="application.text"
+				widthRatio="1" />
+			<column field="assignedRole" renderWidget="application.text"
+				widthRatio="1" />
+			<column field="expiresOn" renderWidget="application.datetime"
+				widthRatio="1" />
+			<column field="lastAccessedBy" renderWidget="application.text"
+				widthRatio="1" />
+			<column field="lastAccessedOn" renderWidget="application.datetime"
+				widthRatio="1" />
+			<column field="createDt" renderWidget="application.datetime"
+				widthRatio="1" order="DESC" />
 		</table>
 	</tables>
 	<!-- Forms -->
@@ -715,6 +813,32 @@
 						inputWidget="application.checkbox" column="1" />
 				</section>
 			</tab>
+		</form>
+		<form name="securedLinkForm"
+			description="$m{security.securedlink.form}" entity="securedLink">
+			<tab name="basicDetails"
+				label="$m{security.securedlink.form.basicdetails}"
+				contentType="miniform">
+				<section name="securedLinkDetails" columns="type_2">
+					<field name="title" inputWidget="application.text" column="0"
+						required="true" />
+					<field name="contentPath" inputWidget="application.textarea"
+						column="0" required="true" />
+					<field name="assignedToLoginId" inputWidget="application.text" column="1" />
+					<field name="assignedRole" inputWidget="application.text" column="1" />
+					<field name="expiresOn" inputWidget="application.datetime" column="1" />
+				</section>
+			</tab>
+			<tab name="accessDetails"
+				label="$m{security.securedlink.form.accessdetails}"
+				contentType="miniform">
+				<section name="accessDetails" columns="type_2">
+					<field name="lastAccessedBy" inputWidget="application.text" column="0" />
+					<field name="lastAccessedOn" inputWidget="application.datetime" column="1" />
+				</section>
+			</tab>
+			<tab name="changeLog" label="$m{application.form.audit}"
+				contentType="miniform_changelog" />
 		</form>
 	</forms>
 	<!-- Assignment Pages -->

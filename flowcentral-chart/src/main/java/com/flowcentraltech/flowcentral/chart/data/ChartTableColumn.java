@@ -31,10 +31,13 @@ public class ChartTableColumn {
 
     private String label;
 
-    public ChartTableColumn(EntityFieldDataType type, String fieldName, String label) {
+    private boolean category;
+    
+    public ChartTableColumn(EntityFieldDataType type, String fieldName, String label, boolean category) {
         this.type = type;
         this.fieldName = fieldName;
         this.label = label;
+        this.category = category;
     }
 
     public EntityFieldDataType getType() {
@@ -49,9 +52,8 @@ public class ChartTableColumn {
         return label;
     }
 
-    @Override
-    public String toString() {
-        return "ChartTableColumn [type=" + type + ", fieldName=" + fieldName + ", label=" + label + "]";
+    public boolean isCategory() {
+        return category;
     }
 
 }

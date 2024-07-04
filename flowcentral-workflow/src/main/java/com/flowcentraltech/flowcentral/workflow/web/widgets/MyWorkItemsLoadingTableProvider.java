@@ -146,10 +146,15 @@ public class MyWorkItemsLoadingTableProvider extends AbstractApplicationLoadingT
     }
 
     @Override
-    public EntityItem getSourceItem(Long sourceItemId, int options) throws UnifyException {
+    public EntityItem getSourceItemById(Long sourceItemId, int options) throws UnifyException {
         final WorkflowStepInfo workflowStepInfo = getParameter(WorkflowStepInfo.class);
         final Long workItemId = environment().value(Long.class, "id", new WfItemQuery().workRecId(sourceItemId)
                 .workflowName(workflowStepInfo.getWorkflowLongName()).wfStepName(workflowStepInfo.getStepName()));
+        return workflowModuleService.getWfItemWorkEntityFromWorkItemId(workItemId, WfReviewMode.NORMAL);
+    }
+
+    @Override
+    public EntityItem getSourceItemByWorkItemId(Long workItemId, int options) throws UnifyException {
         return workflowModuleService.getWfItemWorkEntityFromWorkItemId(workItemId, WfReviewMode.NORMAL);
     }
 
@@ -167,6 +172,14 @@ public class MyWorkItemsLoadingTableProvider extends AbstractApplicationLoadingT
         final WorkflowStepInfo workflowStepInfo = getParameter(WorkflowStepInfo.class);
         final Long workItemId = environment().value(Long.class, "id", new WfItemQuery().workRecId(sourceItemId)
                 .workflowName(workflowStepInfo.getWorkflowLongName()).wfStepName(workflowStepInfo.getStepName()));
+        return workflowModuleService.applyUserAction(wfEntityInst, workItemId, workflowStepInfo.getStepName(),
+                userAction, comment, emails, WfReviewMode.NORMAL, listing);
+    }
+
+    @Override
+    public boolean applyUserActionByWorkItemId(WorkEntity wfEntityInst, Long workItemId, String userAction,
+            String comment, InputArrayEntries emails, boolean listing) throws UnifyException {
+        final WorkflowStepInfo workflowStepInfo = getParameter(WorkflowStepInfo.class);
         return workflowModuleService.applyUserAction(wfEntityInst, workItemId, workflowStepInfo.getStepName(),
                 userAction, comment, emails, WfReviewMode.NORMAL, listing);
     }

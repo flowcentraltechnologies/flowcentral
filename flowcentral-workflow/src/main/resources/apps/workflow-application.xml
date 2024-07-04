@@ -3,6 +3,15 @@
 <application name="workflow"
 	description="$m{workflow.short.description}" label="$m{workflow.label}"
 	module="workflow">
+	<!-- Notification Templates -->
+	<notifTemplates>
+		<notifTemplate
+			configFile="apps/notification/template/workflow-copy-create-approval.xml" />
+		<notifTemplate
+			configFile="apps/notification/template/workflow-copy-update-approval.xml" />
+		<notifTemplate
+			configFile="apps/notification/template/workflow-copy-deletion-approval.xml" />
+	</notifTemplates>
 	<!-- Widget Types -->
 	<widgetTypes>
 		<widgetType name="wfchanneldestinationlist"
@@ -24,16 +33,17 @@
 	<!-- Applets -->
 	<applets>
 		<applet name="myWorkItems"
-			description="$m{workflowmyworkitems.application.workitems}"
-			label="$m{workflowmyworkitems.application.workitems.label}" icon="copy"
-			type="path_page" path="/workflow/myworkitems/openPage"
+			description="$m{workflow.myworkitems.application.workitems}"
+			label="$m{workflow.myworkitems.application.workitems.label}"
+			icon="copy" type="path_page" path="/workflow/myworkitems/openPage"
 			menuAccess="true" allowSecondaryTenants="true">
 		</applet>
 		<applet name="exceptionWorkItems"
-			description="$m{workflowexceptionworkitems.application.workitems}"
-			label="$m{workflowexceptionworkitems.application.workitems.label}" icon="exclamation-circle"
-			type="path_page" path="/workflow/exceptionworkitems/openPage"
-			menuAccess="true" allowSecondaryTenants="true">
+			description="$m{workflow.exceptionworkitems.application.workitems}"
+			label="$m{workflow.exceptionworkitems.application.workitems.label}"
+			icon="exclamation-circle" type="path_page"
+			path="/workflow/exceptionworkitems/openPage" menuAccess="true"
+			allowSecondaryTenants="true">
 		</applet>
 		<applet name="manageWorkflow"
 			description="$m{workflow.workflow.manage}"
@@ -152,8 +162,9 @@
 				type="string" maxLen="64" />
 			<field name="entity" label="$m{workflow.workflow.entity}"
 				type="string" maxLen="128" />
-			<field name="loadingTable" label="$m{workflow.workflow.loadingtable}"
-				type="string" maxLen="128" nullable = "true"/>
+			<field name="loadingTable"
+				label="$m{workflow.workflow.loadingtable}" type="string"
+				maxLen="128" nullable="true" />
 			<field name="appletVersionNo"
 				label="$m{workflow.workflow.appletversionno}" type="long" />
 			<field name="supportMultiItemAction"
@@ -256,18 +267,24 @@
 			<field name="nextStepName"
 				label="$m{workflow.step.nextstepname}" type="string" nullable="true" />
 			<field name="binaryConditionName"
-				label="$m{workflow.step.binarycondition}" type="string" nullable="true" />
+				label="$m{workflow.step.binarycondition}" type="string"
+				nullable="true" />
 			<field name="readOnlyConditionName"
-				label="$m{workflow.step.readonlycondition}" type="string" nullable="true" />
+				label="$m{workflow.step.readonlycondition}" type="string"
+				nullable="true" />
 			<field name="autoLoadConditionName"
-				label="$m{workflow.step.autoloadingcondition}" type="string" nullable="true" />
+				label="$m{workflow.step.autoloadingcondition}" type="string"
+				nullable="true" />
 			<field name="attachmentProviderName"
-				label="$m{workflow.step.attachmentprovidername}" type="string" nullable="true" />
+				label="$m{workflow.step.attachmentprovidername}" type="string"
+				nullable="true" />
 			<field name="policy" label="$m{workflow.step.policy}"
 				type="string" maxLen="64" nullable="true"
 				inputWidget="wfsteppolicylist" />
 			<field name="rule" label="$m{workflow.step.rule}" type="string"
 				maxLen="64" nullable="true" inputWidget="wfsteprulelist" />
+			<field name="reminderMinutes"
+				label="$m{workflow.step.reminderminutes}" type="integer" />
 			<field name="criticalMinutes"
 				label="$m{workflow.step.criticalminutes}" type="integer" />
 			<field name="expiryMinutes"
@@ -284,8 +301,8 @@
 				type="string" />
 			<field name="comments" label="$m{workflow.step.comments}"
 				type="string" />
-			<field name="appletSetValuesName" label="$m{workflow.step.appletsetvaluesname}"
-				type="string" />
+			<field name="appletSetValuesName"
+				label="$m{workflow.step.appletsetvaluesname}" type="string" />
 			<field name="typeDesc" label="$m{workflow.step.typedesc}"
 				type="list_only" key="type" property="description" />
 			<field name="priorityDesc"
@@ -382,8 +399,8 @@
 				label="$m{workflow.stepuseraction.appletsetvaluesname}"
 				type="string" maxLen="64" nullable="true" />
 			<field name="showOnCondition"
-				label="$m{workflow.stepuseraction.showoncondition}"
-				type="string" maxLen="64" nullable="true" />
+				label="$m{workflow.stepuseraction.showoncondition}" type="string"
+				maxLen="64" nullable="true" />
 			<field name="orderIndex"
 				label="$m{workflow.stepuseraction.orderindex}" type="integer" />
 			<field name="formReview"
@@ -425,6 +442,8 @@
 				maxLen="64" nullable="true" />
 			<field name="generator"
 				label="$m{workflow.stepalert.generator}" type="string" maxLen="128" />
+			<field name="template"
+				label="$m{workflow.stepalert.template}" type="string" nullable="true"/>
 			<field name="fireOnPrevStepName"
 				label="$m{workflow.stepalert.fireonprevstepname}" type="string"
 				nullable="true" maxLen="64" />
@@ -520,15 +539,18 @@
 				label="$m{workflow.wfitemevent.wfstepname}" type="string"
 				maxLen="64" />
 			<field name="stepDt" label="$m{workflow.wfitemevent.stepdt}"
-				type="timestamp_utc" />
+				type="timestamp" />
+			<field name="reminderDt"
+				label="$m{workflow.wfitemevent.reminderdt}" type="timestamp"
+				nullable="true" />
 			<field name="expectedDt"
-				label="$m{workflow.wfitemevent.expecteddt}" type="timestamp_utc"
+				label="$m{workflow.wfitemevent.expecteddt}" type="timestamp"
 				nullable="true" />
 			<field name="criticalDt"
-				label="$m{workflow.wfitemevent.criticaldt}" type="timestamp_utc"
+				label="$m{workflow.wfitemevent.criticaldt}" type="timestamp"
 				nullable="true" />
 			<field name="actionDt"
-				label="$m{workflow.wfitemevent.actiondt}" type="timestamp_utc"
+				label="$m{workflow.wfitemevent.actiondt}" type="timestamp"
 				nullable="true" />
 			<field name="actor" label="$m{workflow.wfitemevent.actor}"
 				type="string" maxLen="64" nullable="true" />
@@ -542,6 +564,15 @@
 				maxLen="64" nullable="true" />
 			<field name="errorCode"
 				label="$m{workflow.wfitemevent.errorcode}" type="string" maxLen="32"
+				nullable="true" />
+			<field name="reminderAlertSent"
+				label="$m{workflow.wfitemevent.reminderalertsent}" type="boolean"
+				nullable="true" />
+			<field name="criticalAlertSent"
+				label="$m{workflow.wfitemevent.criticalalertsent}" type="boolean"
+				nullable="true" />
+			<field name="expirationAlertSent"
+				label="$m{workflow.wfitemevent.expirationalertsent}" type="boolean"
 				nullable="true" />
 			<field name="errorMsg"
 				label="$m{workflow.wfitemevent.errormsg}" type="string"
@@ -596,10 +627,14 @@
 				type="list_only" key="wfItemEventId" property="wfStepName" />
 			<field name="stepDt" label="$m{workflow.wfitem.stepdt}"
 				type="list_only" key="wfItemEventId" property="stepDt" />
+			<field name="reminderDt" label="$m{workflow.wfitem.reminderdt}"
+				type="list_only" key="wfItemEventId" property="reminderDt" />
 			<field name="expectedDt" label="$m{workflow.wfitem.expecteddt}"
 				type="list_only" key="wfItemEventId" property="expectedDt" />
 			<field name="criticalDt" label="$m{workflow.wfitem.criticaldt}"
 				type="list_only" key="wfItemEventId" property="criticalDt" />
+			<field name="actionDt" label="$m{workflow.wfitem.actiondt}"
+				type="list_only" key="wfItemEventId" property="actionDt" />
 			<field name="wfItemDesc" label="$m{workflow.wfitem.itemdesc}"
 				type="list_only" key="wfItemEventId" property="wfItemDesc" />
 			<field name="branchCode" label="$m{workflow.wfitem.branchcode}"
@@ -874,6 +909,8 @@
 					<field name="rule" column="1" visible="false" />
 					<field name="priority" inputWidget="application.enumlist"
 						column="1" required="true" />
+					<field name="reminderMinutes"
+						inputWidget="application.integer" column="1" />
 					<field name="criticalMinutes"
 						inputWidget="application.integer" column="1" />
 					<field name="expiryMinutes" inputWidget="application.integer"

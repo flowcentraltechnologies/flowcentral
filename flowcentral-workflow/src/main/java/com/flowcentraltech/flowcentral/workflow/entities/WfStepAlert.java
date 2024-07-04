@@ -52,6 +52,9 @@ public class WfStepAlert extends BaseNamedEntity {
     @Column(length = 64, nullable = true)
     private String generator;
 
+    @Column(length = 64, nullable = true)
+    private String template;
+
     @Column
     private boolean alertHeldBy;
 
@@ -144,6 +147,14 @@ public class WfStepAlert extends BaseNamedEntity {
 
     public void setGenerator(String generator) {
         this.generator = generator;
+    }
+
+    public String getTemplate() {
+        return template;
+    }
+
+    public void setTemplate(String template) {
+        this.template = template;
     }
 
     public String getFireOnPrevStepName() {

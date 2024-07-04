@@ -82,6 +82,7 @@ import com.tcdng.unify.core.annotation.Transactional;
 import com.tcdng.unify.core.constant.FrequencyUnit;
 import com.tcdng.unify.core.criterion.Update;
 import com.tcdng.unify.core.data.FactoryMap;
+import com.tcdng.unify.core.data.Listable;
 import com.tcdng.unify.core.data.MapValueStore;
 import com.tcdng.unify.core.data.ParameterizedStringGenerator;
 import com.tcdng.unify.core.data.ValueStoreReader;
@@ -334,6 +335,13 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
     }
 
     @Override
+    public List<? extends Listable> findNotificationTemplatesByApplicationId(Long applicationId) throws UnifyException {
+        List<NotificationTemplate> templateList = environment().listAll(new NotificationTemplateQuery()
+                .applicationId(applicationId).addSelect("applicationName", "name", "description"));
+        return ApplicationNameUtils.getListableList(templateList);
+    }
+
+    @Override
     public NotificationTemplate findNotificationTemplate(Long notifTemplateId) throws UnifyException {
         return environment().find(NotificationTemplate.class, notifTemplateId);
     }
@@ -421,7 +429,7 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
         }
     }
 
-    @Periodic(PeriodicType.SLOW)
+    @Periodic(PeriodicType.NORMAL)
     public void sendNotifications(TaskMonitor taskMonitor) throws UnifyException {
         if (au.system().getSysParameterValue(boolean.class, NotificationModuleSysParamConstants.NOTIFICATION_ENABLED)
                 && tryGrabLock(SEND_NOTIFICATION_LOCK)) {

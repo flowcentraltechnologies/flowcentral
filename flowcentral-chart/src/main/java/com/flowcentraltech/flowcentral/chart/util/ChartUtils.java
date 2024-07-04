@@ -95,9 +95,10 @@ public final class ChartUtils {
         JsonWriter jw = new JsonWriter();
         jw.beginObject();
         final ChartType chartType = chartDef.getType();
-        final Map<String, AbstractSeries<?, ?>> series = chartDetails
-                .getSeries(chartDetails.isWithSeriesInclusion() ? chartDetails.getSeriesInclusion()
-                        : chartDef.getSeriesInclusion());
+        final boolean isDynamicCategories = chartDetails.isWithGroupingSeries(chartDef);
+        final Map<String, AbstractSeries<?, ?>> series = isDynamicCategories ? chartDetails.getGroupingSeries(chartDef)
+                : (chartDetails.getSeries(chartDetails.isWithSeriesInclusion() ? chartDetails.getSeriesInclusion()
+                        : chartDef.getSeriesInclusion()));
         final ChartCategoryDataType categoryType = chartDetails.getCategoryType();
 
         // Title
@@ -217,9 +218,9 @@ public final class ChartUtils {
             jw.endObject();
         }
 
-        final Set<String> categoryInclusion = chartDetails.isWithCategoryInclusion()
-                ? chartDetails.getCategoryInclusion()
-                : chartDef.getCategoryInclusion();
+        final Set<String> categoryInclusion = isDynamicCategories ? Collections.emptySet()
+                : (chartDetails.isWithCategoryInclusion() ? chartDetails.getCategoryInclusion()
+                        : chartDef.getCategoryInclusion());
         List<AbstractSeries<?, ?>> actseries = new ArrayList<AbstractSeries<?, ?>>(series.values());
         if (chartType.axisChart()) {
             // Series

@@ -19,8 +19,11 @@ package com.flowcentraltech.flowcentral.workflow.entities;
 import java.util.Date;
 
 import com.flowcentraltech.flowcentral.common.entities.BaseAuditTenantEntityQuery;
+import com.tcdng.unify.core.criterion.And;
 import com.tcdng.unify.core.criterion.Equals;
+import com.tcdng.unify.core.criterion.IsNotNull;
 import com.tcdng.unify.core.criterion.IsNull;
+import com.tcdng.unify.core.criterion.Less;
 import com.tcdng.unify.core.criterion.NotEquals;
 import com.tcdng.unify.core.criterion.Or;
 
@@ -36,22 +39,8 @@ public class WfItemQuery extends BaseAuditTenantEntityQuery<WfItem> {
         super(WfItem.class);
     }
 
-    public WfItemQuery isCritical(Date now) {
-        return (WfItemQuery) addIsNotNull("criticalDt").addLessThan("criticalDt", now);
-    }
-
-    public WfItemQuery criticalAlertNotSent() {
-        return (WfItemQuery) addRestriction(
-                new Or().add(new IsNull("criticalAlertSent")).add(new Equals("criticalAlertSent", false)));
-    }
-
-    public WfItemQuery isExpired(Date now) {
-        return (WfItemQuery) addIsNotNull("expectedDt").addLessThan("expectedDt", now);
-    }
-
-    public WfItemQuery expiredAlertNotSent() {
-        return (WfItemQuery) addRestriction(
-                new Or().add(new IsNull("expirationAlertSent")).add(new Equals("expirationAlertSent", false)));
+    public WfItemQuery wfItemEventId(Long wfItemEventId) {
+        return (WfItemQuery) addEquals("wfItemEventId", wfItemEventId);
     }
 
     public WfItemQuery workRecId(Long workRecId) {
@@ -104,6 +93,21 @@ public class WfItemQuery extends BaseAuditTenantEntityQuery<WfItem> {
 
     public WfItemQuery stepDt(Date stepDt) {
         return (WfItemQuery) addEquals("stepDt", stepDt);
+    }
+
+    public WfItemQuery reminderDue(Date now) {
+        return (WfItemQuery) addRestriction(new And().add(new IsNull("actionDt")).add(new IsNotNull("reminderDt"))
+                .add(new Less("reminderDt", now)));
+    }
+
+    public WfItemQuery expirationDue(Date now) {
+        return (WfItemQuery) addRestriction(new And().add(new IsNull("actionDt")).add(new IsNotNull("expectedDt"))
+                .add(new Less("expectedDt", now)));
+    }
+
+    public WfItemQuery criticalDue(Date now) {
+        return (WfItemQuery) addRestriction(new And().add(new IsNull("actionDt")).add(new IsNotNull("criticalDt"))
+                .add(new Less("criticalDt", now)));
     }
 
     public WfItemQuery isUnheldOrHeldBy(String heldBy) {

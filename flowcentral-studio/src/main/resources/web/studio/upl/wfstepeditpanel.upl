@@ -23,7 +23,7 @@
 	layout:$d{!ui-vertical style:$s{table-layout:fixed;}}
     formCaptionSuffix:$s{:} formBinding:$g{dialogFormBinding} formColumns:2
 	formSection:$d{!ui-section components:$c{frmType frmName frmDesc frmLabel frmAppletName frmAppletSetValuesName frmBinaryConditionName frmReadOnlyConditionName frmValueGenerator frmEmails frmComments frmNewCommentCaption
-		frmAutoLoadingCondition frmWorkItemLoadingRestriction frmAttachmentProviderName frmPolicy frmRule frmActionType frmNextStepName frmAltNextStepName frmPriority frmCriticalMinutes frmExpiryMinutes
+		frmAutoLoadingCondition frmWorkItemLoadingRestriction frmAttachmentProviderName frmPolicy frmRule frmActionType frmNextStepName frmAltNextStepName frmPriority frmReminderMinutes frmCriticalMinutes frmExpiryMinutes
 		frmAudit frmBranchOnly frmDepartmentOnly frmIncludeForwarder frmForwarderPreferred}}
 
 !ui-name:frmName styleClass:$e{fc-formfield} caption:$m{wfstepeditpanel.name} size:32 binding:name required:true
@@ -37,6 +37,7 @@
 	binding:appletSetValuesName 
 !ui-text:frmNextStepName styleClass:$e{fc-formfield} caption:$m{wfstepeditpanel.nextstepname} size:32 binding:nextStepName
 !ui-text:frmAltNextStepName styleClass:$e{fc-formfield} caption:$m{wfstepeditpanel.altnextstepname} size:32 binding:altNextStepName
+!ui-integer:frmReminderMinutes styleClass:$e{fc-formfield} caption:$m{wfstepeditpanel.reminderminutes} precision:5 binding:reminderMinutes
 !ui-integer:frmCriticalMinutes styleClass:$e{fc-formfield} caption:$m{wfstepeditpanel.criticalminutes} precision:5 binding:criticalMinutes
 !ui-integer:frmExpiryMinutes styleClass:$e{fc-formfield} caption:$m{wfstepeditpanel.expiryminutes} precision:5 binding:expiryMinutes
 !ui-checkbox:frmAudit caption:$m{wfstepeditpanel.audit} binding:audit

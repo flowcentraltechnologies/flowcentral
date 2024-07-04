@@ -71,7 +71,7 @@ public abstract class AbstractApplicationLoadingTableProvider extends AbstractFl
 
     @SuppressWarnings("unchecked")
     @Override
-    public EntityItem getSourceItem(Long sourceItemId, int options) throws UnifyException {
+    public EntityItem getSourceItemById(Long sourceItemId, int options) throws UnifyException {
         EntityClassDef sourceEntityClassDef = application().getEntityClassDef(sourceEntity);
         Entity entity = environment().list((Class<? extends Entity>) sourceEntityClassDef.getEntityClass(),
                 sourceItemId);
@@ -79,8 +79,20 @@ public abstract class AbstractApplicationLoadingTableProvider extends AbstractFl
     }
 
     @Override
+    public EntityItem getSourceItemByWorkItemId(Long workItemId, int options) throws UnifyException {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
     public boolean applyUserAction(WorkEntity wfEntityInst, Long sourceItemId, String userAction, String comment,
             InputArrayEntries emails, boolean listing) throws UnifyException {
+        return false;
+    }
+
+    @Override
+    public boolean applyUserActionByWorkItemId(WorkEntity wfEntityInst, Long workItemId, String userAction,
+            String comment, InputArrayEntries emails, boolean listing) throws UnifyException {
         return false;
     }
 

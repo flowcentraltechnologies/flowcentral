@@ -69,6 +69,7 @@ public class ApplicationDashboardController extends AbstractPageController<Appli
     public String loadDashboardSlate() throws UnifyException {
         ApplicationDashboardPageBean pageBean = getPageBean();
         pageBean.setDashboardSlate(null);
+        dashboardModuleService.clearDashboardCache();
         if (!StringUtils.isBlank(pageBean.getSelDashboard())) {
             DashboardDef dashboardDef = dashboardModuleService.getDashboardDef(pageBean.getSelDashboard());
             if (dashboardDef.isActive()) {

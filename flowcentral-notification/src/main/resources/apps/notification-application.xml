@@ -125,14 +125,14 @@
 				inputWidget="application.integer" />
 			<field name="expiryDt"
 				label="$m{notification.notificationoutbox.expirydt}"
-				type="timestamp_utc" inputWidget="application.datetime"
+				type="timestamp" inputWidget="application.datetime"
 				nullable="true" />
 			<field name="nextAttemptDt"
 				label="$m{notification.notificationoutbox.nextattemptdt}"
-				type="timestamp_utc" inputWidget="application.datetime" />
+				type="timestamp" inputWidget="application.datetime" />
 			<field name="sentDt"
 				label="$m{notification.notificationoutbox.sentdt}"
-				type="timestamp_utc" inputWidget="application.datetime"
+				type="timestamp" inputWidget="application.datetime"
 				nullable="true" />
 			<field name="format"
 				label="$m{notification.notificationoutbox.format}" type="enum_ref"

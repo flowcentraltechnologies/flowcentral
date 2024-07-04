@@ -26,25 +26,28 @@ import com.tcdng.unify.core.data.Listable;
 public class AppletAlertDef implements Listable {
 
     private String name;
-    
+
     private String description;
-    
+
     private String recipientPolicy;
 
-     private String recipientNameRule;
+    private String recipientNameRule;
 
     private String recipientContactRule;
 
     private String sender;
 
+    private String template;
+
     public AppletAlertDef(String name, String description, String recipientPolicy, String recipientNameRule,
-            String recipientContactRule, String sender) {
+            String recipientContactRule, String sender, String template) {
         this.name = name;
         this.description = description;
         this.recipientPolicy = recipientPolicy;
         this.recipientNameRule = recipientNameRule;
         this.recipientContactRule = recipientContactRule;
         this.sender = sender;
+        this.template = template;
     }
 
     @Override
@@ -79,6 +82,10 @@ public class AppletAlertDef implements Listable {
 
     public String getSender() {
         return sender;
+    }
+
+    public String getTemplate() {
+        return template;
     }
 
 }

@@ -23,17 +23,23 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.Set;
 import java.util.TimeZone;
 
+import com.flowcentraltech.flowcentral.application.constants.ApplicationModulePathConstants;
 import com.flowcentraltech.flowcentral.application.constants.FormatOverrideConstants;
+import com.flowcentraltech.flowcentral.application.util.HtmlUtils;
 import com.flowcentraltech.flowcentral.common.business.AbstractFlowCentralService;
 import com.flowcentraltech.flowcentral.common.business.FileAttachmentProvider;
 import com.flowcentraltech.flowcentral.common.business.NotificationRecipientProvider;
+import com.flowcentraltech.flowcentral.common.business.SecuredLinkManager;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants;
 import com.flowcentraltech.flowcentral.common.constants.RecordStatus;
 import com.flowcentraltech.flowcentral.common.data.Attachment;
 import com.flowcentraltech.flowcentral.common.data.Recipient;
+import com.flowcentraltech.flowcentral.common.data.SecuredLinkContentInfo;
+import com.flowcentraltech.flowcentral.common.data.SecuredLinkInfo;
 import com.flowcentraltech.flowcentral.common.data.UserRoleInfo;
 import com.flowcentraltech.flowcentral.configuration.constants.DefaultApplicationConstants;
 import com.flowcentraltech.flowcentral.configuration.constants.NotifType;
@@ -52,6 +58,8 @@ import com.flowcentraltech.flowcentral.security.constants.SecurityModuleSysParam
 import com.flowcentraltech.flowcentral.security.constants.UserWorkflowStatus;
 import com.flowcentraltech.flowcentral.security.entities.PasswordHistory;
 import com.flowcentraltech.flowcentral.security.entities.PasswordHistoryQuery;
+import com.flowcentraltech.flowcentral.security.entities.SecuredLink;
+import com.flowcentraltech.flowcentral.security.entities.SecuredLinkQuery;
 import com.flowcentraltech.flowcentral.security.entities.User;
 import com.flowcentraltech.flowcentral.security.entities.UserGroupMemberQuery;
 import com.flowcentraltech.flowcentral.security.entities.UserGroupRole;
@@ -75,6 +83,7 @@ import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.TransactionAttribute;
 import com.tcdng.unify.core.annotation.Transactional;
+import com.tcdng.unify.core.constant.FrequencyUnit;
 import com.tcdng.unify.core.criterion.Update;
 import com.tcdng.unify.core.data.FactoryMap;
 import com.tcdng.unify.core.database.Entity;
@@ -82,10 +91,12 @@ import com.tcdng.unify.core.security.OneWayStringCryptograph;
 import com.tcdng.unify.core.security.PasswordAutenticationService;
 import com.tcdng.unify.core.security.PasswordGenerator;
 import com.tcdng.unify.core.system.UserSessionManager;
+import com.tcdng.unify.core.util.CalendarUtils;
 import com.tcdng.unify.core.util.ColorUtils;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.UnifyWebSessionAttributeConstants;
+import com.tcdng.unify.web.ui.constant.PageRequestParameterConstants;
 
 /**
  * Implementation of security module service.
@@ -96,7 +107,9 @@ import com.tcdng.unify.web.UnifyWebSessionAttributeConstants;
 @Transactional
 @Component(SecurityModuleNameConstants.SECURITY_MODULE_SERVICE)
 public class SecurityModuleServiceImpl extends AbstractFlowCentralService
-        implements SecurityModuleService, NotificationRecipientProvider, UserTokenProvider {
+        implements SecurityModuleService, NotificationRecipientProvider, UserTokenProvider, SecuredLinkManager {
+
+    private static final int SECURED_LINK_ACCESS_SUFFIX_LEN = 16;
 
     @Configurable
     private UserSessionManager userSessionManager;
@@ -119,6 +132,91 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
     @Override
     public void clearDefinitionsCache() throws UnifyException {
 
+    }
+
+    @Override
+    public SecuredLinkInfo getNewSecuredLink(String title, String contentPath, int expirationInMinutes)
+            throws UnifyException {
+        return getNewSecuredLink(title, contentPath, null, null, expirationInMinutes);
+    }
+
+    @Override
+    public SecuredLinkInfo getNewSecuredLink(String title, String contentPath, String assignedLoginId,
+            int expirationInMinutes) throws UnifyException {
+        return getNewSecuredLink(title, contentPath, assignedLoginId, null, expirationInMinutes);
+    }
+
+    @Override
+    public SecuredLinkInfo getNewSecuredLink(String title, String contentPath, String assignedLoginId,
+            String assignedRole, int expirationInMinutes) throws UnifyException {
+        final String baseUrl = systemModuleService.getSysParameterValue(String.class,
+                SystemModuleSysParamConstants.APPLICATION_BASE_URL);
+        final String accessKey = StringUtils.generateRandomAlphanumeric(SECURED_LINK_ACCESS_SUFFIX_LEN);
+        SecuredLink securedLink = new SecuredLink();
+        securedLink.setTitle(title);
+        securedLink.setContentPath(contentPath);
+        securedLink.setAccessKey(accessKey);
+        securedLink.setAssignedToLoginId(assignedLoginId);
+        securedLink.setAssignedRole(assignedRole);
+
+        final int actExpirationInMinutes = expirationInMinutes <= 0 ? 1 : expirationInMinutes;
+        Date expiresOn = CalendarUtils.getDateWithFrequencyOffset(getNow(), FrequencyUnit.MINUTE,
+                actExpirationInMinutes);
+        securedLink.setExpiresOn(expiresOn);
+        Long linkId = (Long) environment().create(securedLink);
+
+        final String linkAccessKey = String.format("%x%s", linkId, accessKey);
+        final String linkUrl = baseUrl + SecurityModuleNameConstants.SECURED_LINK_ACCESS_CONTROLLER + "?"
+                + PageRequestParameterConstants.NO_TRANSFER + "=true&lid=" + linkAccessKey;
+        final String htmlLink = HtmlUtils.getSecuredHtmlLink(linkUrl, resolveApplicationMessage("$m{link.here}"));
+        return new SecuredLinkInfo(title, linkUrl, htmlLink, actExpirationInMinutes);
+    }
+
+    @Override
+    public SecuredLinkContentInfo getSecuredLink(String linkAccessKey) throws UnifyException {
+        if (!StringUtils.isBlank(linkAccessKey)) {
+            final int rem = linkAccessKey.length() - SECURED_LINK_ACCESS_SUFFIX_LEN;
+            if (rem > 0) {
+                Long linkId = null;
+                try {
+                    linkId = Long.decode("0x" + linkAccessKey.substring(0, rem));
+                } catch (NumberFormatException e) {
+                    logSevere(e);
+                }
+
+                if (linkId != null) {
+                    final String accessKey = linkAccessKey.substring(rem);
+                    SecuredLink securedLink = environment()
+                            .find(new SecuredLinkQuery().accessKey(accessKey).id(linkId));
+                    if (securedLink != null) {
+                        final Date now = getNow();
+                        final boolean expired = now.after(securedLink.getExpiresOn());
+                        Update update = new Update().add("lastAccessedOn", now);
+                        if (isUserLoggedIn()) {
+                            update.add("lastAccessedBy", getUserToken().getUserLoginId());
+                        }
+
+                        environment().updateById(SecuredLink.class, securedLink.getId(), update);
+
+                        final String baseUrl = systemModuleService.getSysParameterValue(String.class,
+                                SystemModuleSysParamConstants.APPLICATION_BASE_URL);
+                        final String loginUrl = baseUrl + SecurityModuleNameConstants.APPLICATION_HOME_CONTROLLER;
+                        final String docUrl = baseUrl + ApplicationModulePathConstants.APPLICATION_BROWSER_WINDOW;
+                        return new SecuredLinkContentInfo(securedLink.getTitle(), securedLink.getContentPath(),
+                                loginUrl, docUrl, securedLink.getAssignedToLoginId(), securedLink.getAssignedRole(),
+                                Boolean.TRUE.equals(securedLink.getInvalidated()), expired);
+                    }
+                }
+            }
+        }
+
+        return SecuredLinkContentInfo.NOT_PRESENT;
+    }
+
+    @Override
+    public int invalidateSecuredLinkByContentPath(String contentPath) throws UnifyException {
+        return environment().updateAll(new SecuredLinkQuery().contentPath(contentPath),
+                new Update().add("invalidated", Boolean.TRUE));
     }
 
     @Override
@@ -371,6 +469,12 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
         user.setLoginLocked(Boolean.FALSE);
         user.setLoginAttempts(Integer.valueOf(0));
         environment().updateLeanByIdVersion(user);
+    }
+
+    @Override
+    public Optional<UserRole> findUserRole(String userLoginId, String roleCode) throws UnifyException {
+        UserRole userRole = environment().find(new UserRoleQuery().userLoginId(userLoginId).roleCode(roleCode));
+        return Optional.ofNullable(userRole);
     }
 
     @Override

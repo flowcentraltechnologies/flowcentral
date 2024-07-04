@@ -93,6 +93,22 @@ public interface ApplicationWorkItemUtilities extends FlowCentralComponent {
     List<WorkflowLoadingTableInfo> findWorkflowLoadingTableInfoByRole(String roleCode) throws UnifyException;
 
     /**
+     * Gets loading workflow step by work item event ID.
+     * 
+     * @param workItemEventId
+     *                        the work item event ID
+     * @param branchCode
+     *                        optional branch code
+     * @param departmentCode
+     *                        optional department code
+     * @return list of workflow steps
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    WorkflowStepInfo getWorkflowLoadingStepInfoByWorkItemEventId(Long workItemEventId, String branchCode,
+            String departmentCode) throws UnifyException;
+
+    /**
      * Finds loading workflow steps by role.
      * 
      * @param loadingTableName

@@ -159,7 +159,7 @@
 				label="$m{audit.entityauditdetails.entityid}" type="long" />
 			<field name="eventTimestamp"
 				label="$m{audit.entityauditdetails.eventtimestamp}"
-				type="timestamp_utc" inputWidget="application.datetime" />
+				type="timestamp" inputWidget="application.datetime" />
 			<field name="auditNo"
 				label="$m{audit.entityauditdetails.auditno}" type="string"
 				inputWidget="application.text" />

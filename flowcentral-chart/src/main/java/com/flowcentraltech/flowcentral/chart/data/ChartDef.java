@@ -97,8 +97,10 @@ public class ChartDef extends BaseApplicationEntityDef {
         this.formatDataLabels = formatDataLabels;
         this.formatYLabels = formatYLabels;
         this.smooth = smooth;
-        this.categoryInclusion = Collections.unmodifiableSet(new HashSet<String>(Arrays.asList(StringUtils.commaSplit(category))));
-        this.seriesInclusion = Collections.unmodifiableSet(new HashSet<String>(Arrays.asList(StringUtils.commaSplit(series))));
+        this.categoryInclusion = Collections
+                .unmodifiableSet(new HashSet<String>(Arrays.asList(StringUtils.commaSplit(category))));
+        this.seriesInclusion = Collections
+                .unmodifiableSet(new HashSet<String>(Arrays.asList(StringUtils.commaSplit(series))));
     }
 
     public ChartType getType() {
@@ -149,6 +151,18 @@ public class ChartDef extends BaseApplicationEntityDef {
         return seriesInclusion;
     }
 
+    public boolean isSeriesInclusion(String name) {
+        return seriesInclusion.contains(name);
+    }
+    
+    public boolean isWithCategoryInclusion() {
+        return !categoryInclusion.isEmpty();
+    }
+
+    public boolean isWithSeriesInclusion() {
+        return !seriesInclusion.isEmpty();
+    }
+
     public String getColor() {
         return color;
     }
@@ -187,15 +201,6 @@ public class ChartDef extends BaseApplicationEntityDef {
 
     public boolean isSmooth() {
         return smooth;
-    }
-
-    @Override
-    public String toString() {
-        return "ChartDef [type=" + type + ", paletteType=" + paletteType + ", title=" + title + ", subTitle=" + subTitle
-                + ", provider=" + provider + ", rule=" + rule + ", category=" + category + ", series=" + series
-                + ", color=" + color + ", width=" + width + ", height=" + height + ", stacked=" + stacked
-                + ", showGrid=" + showGrid + ", smooth=" + smooth + ", showDataLabels=" + showDataLabels
-                + ", formatDataLabels=" + formatDataLabels + ", formatYLabels=" + formatYLabels + "]";
     }
 
     public static Builder newBuilder(ChartType type, ChartPaletteType paletteType, String provider, String rule,

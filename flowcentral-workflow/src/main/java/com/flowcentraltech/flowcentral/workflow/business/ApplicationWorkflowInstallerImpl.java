@@ -136,8 +136,8 @@ public class ApplicationWorkflowInstallerImpl extends AbstractApplicationArtifac
                         oldWorkflow.setLabel(label);
                         oldWorkflow.setLoadingTable(wfConfig.getLoadingTable());
                         oldWorkflow.setSupportMultiItemAction(wfConfig.getSupportMultiItemAction());
-                        oldWorkflow.setEntity(ApplicationNameUtils.ensureLongNameReference(applicationName,
-                                wfConfig.getEntity()));
+                        oldWorkflow.setEntity(
+                                ApplicationNameUtils.ensureLongNameReference(applicationName, wfConfig.getEntity()));
                         oldWorkflow.setDeprecated(false);
                         oldWorkflow.setConfigType(ConfigType.STATIC);
                         populateChildList(wfConfig, oldWorkflow, applicationName, false);
@@ -180,8 +180,8 @@ public class ApplicationWorkflowInstallerImpl extends AbstractApplicationArtifac
                     logDebug("Upgrading application workflow channel [{0}]...", wfChannelConfig.getName());
                     oldWfChannel.setDescription(description);
                     oldWfChannel.setLabel(label);
-                    oldWfChannel.setEntity(ApplicationNameUtils.ensureLongNameReference(applicationName,
-                            wfChannelConfig.getEntity()));
+                    oldWfChannel.setEntity(
+                            ApplicationNameUtils.ensureLongNameReference(applicationName, wfChannelConfig.getEntity()));
                     oldWfChannel.setDestination(ApplicationNameUtils.ensureLongNameReference(applicationName,
                             wfChannelConfig.getDestination()));
                     oldWfChannel.setRule(wfChannelConfig.getRule());
@@ -235,7 +235,8 @@ public class ApplicationWorkflowInstallerImpl extends AbstractApplicationArtifac
                         oldAppFormWizard.setSubmitWorkflow(wfWizardConfig.getSubmitWorkflow());
                         oldAppFormWizard.setDeprecated(false);
                         oldAppFormWizard.setConfigType(ConfigType.STATIC);
-                        populateChildList(oldAppFormWizard, wfWizardConfig, applicationId, applicationConfig.getName(), false);
+                        populateChildList(oldAppFormWizard, wfWizardConfig, applicationId, applicationConfig.getName(),
+                                false);
                         environment().updateByIdVersion(oldAppFormWizard);
                     }
 
@@ -483,12 +484,11 @@ public class ApplicationWorkflowInstallerImpl extends AbstractApplicationArtifac
                     workflowSetValues.setOnCondition(InputWidgetUtils.newAppFilter(wfSetValuesConfig.getOnCondition()));
                     workflowSetValues.setValueGenerator(wfSetValuesConfig.getValueGenerator());
                     workflowSetValues.setSetValues(newAppSetValues(wfSetValuesConfig.getSetValues()));
-                    workflowSetValues.setConfigType(restore ? ConfigType.CUSTOM :ConfigType.STATIC);
+                    workflowSetValues.setConfigType(restore ? ConfigType.CUSTOM : ConfigType.STATIC);
                     setValuesList.add(workflowSetValues);
                 } else {
                     oldWorkflowSetValues.setType(wfSetValuesConfig.getType());
-                    oldWorkflowSetValues
-                            .setDescription(resolveApplicationMessage(wfSetValuesConfig.getDescription()));
+                    oldWorkflowSetValues.setDescription(resolveApplicationMessage(wfSetValuesConfig.getDescription()));
                     oldWorkflowSetValues
                             .setOnCondition(InputWidgetUtils.newAppFilter(wfSetValuesConfig.getOnCondition()));
                     oldWorkflowSetValues.setValueGenerator(wfSetValuesConfig.getValueGenerator());
@@ -516,6 +516,7 @@ public class ApplicationWorkflowInstallerImpl extends AbstractApplicationArtifac
                 wfStep.setLabel(resolveApplicationMessage(stepConfig.getLabel()));
                 wfStep.setAppletName(
                         ApplicationNameUtils.ensureLongNameReference(applicationName, stepConfig.getAppletName()));
+                wfStep.setReminderMinutes(stepConfig.getReminderMinutes());
                 wfStep.setCriticalMinutes(stepConfig.getCriticalMinutes());
                 wfStep.setExpiryMinutes(stepConfig.getExpiryMinutes());
                 wfStep.setAudit(stepConfig.isAudit());
@@ -536,7 +537,7 @@ public class ApplicationWorkflowInstallerImpl extends AbstractApplicationArtifac
                 wfStep.setValueGenerator(stepConfig.getValueGenerator());
                 wfStep.setAppletSetValuesName(stepConfig.getAppletSetValuesName());
                 wfStep.setRule(stepConfig.getRule());
-                wfStep.setConfigType(restore ? ConfigType.CUSTOM :ConfigType.STATIC);
+                wfStep.setConfigType(restore ? ConfigType.CUSTOM : ConfigType.STATIC);
                 populateChildList(stepConfig, applicationName, wfStep);
                 List<WfStepRole> participatingRoleList = environment()
                         .findAll(new WfStepRoleQuery().applicationName(applicationName).workflowName(workflow.getName())
@@ -624,6 +625,8 @@ public class ApplicationWorkflowInstallerImpl extends AbstractApplicationArtifac
                 wfStepAlert.setRecipientNameRule(wfAlertConfig.getRecipientNameRule());
                 wfStepAlert.setRecipientContactRule(wfAlertConfig.getRecipientContactRule());
                 wfStepAlert.setGenerator(wfAlertConfig.getGenerator());
+                wfStepAlert.setTemplate(
+                        ApplicationNameUtils.ensureLongNameReference(applicationName, wfAlertConfig.getTemplate()));
                 wfStepAlert.setAlertHeldBy(wfAlertConfig.isAlertHeldBy());
                 wfStepAlert.setAlertWorkflowRoles(wfAlertConfig.isAlertWorkflowRoles());
                 wfStepAlert.setFireOnPrevStepName(wfAlertConfig.getFireOnPrevStepName());

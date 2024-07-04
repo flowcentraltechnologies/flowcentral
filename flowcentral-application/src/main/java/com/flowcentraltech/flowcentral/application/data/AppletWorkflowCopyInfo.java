@@ -260,9 +260,9 @@ public class AppletWorkflowCopyInfo {
         }
 
         public Builder withAlert(String name, String description, String recipientPolicy, String recipientNameRule,
-                String recipientContactRule, String sender) {
+                String recipientContactRule, String sender, String template) {
             AppletAlertDef alert = new AppletAlertDef(name, description, recipientPolicy, recipientNameRule,
-                    recipientContactRule, sender);
+                    recipientContactRule, sender, template);
             alerts.put(alert.getName(), alert);
             return this;
         }

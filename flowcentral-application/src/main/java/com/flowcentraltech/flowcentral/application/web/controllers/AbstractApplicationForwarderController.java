@@ -18,8 +18,12 @@ package com.flowcentraltech.flowcentral.application.web.controllers;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
+import com.flowcentraltech.flowcentral.application.constants.AppletSessionAttributeConstants;
+import com.flowcentraltech.flowcentral.application.constants.ApplicationModulePathConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleSysParamConstants;
+import com.flowcentraltech.flowcentral.application.data.SessionOpenTabInfo;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants;
+import com.flowcentraltech.flowcentral.common.data.SecuredLinkContentInfo;
 import com.flowcentraltech.flowcentral.common.data.UserRoleInfo;
 import com.flowcentraltech.flowcentral.common.web.controllers.AbstractForwarderController;
 import com.flowcentraltech.flowcentral.common.web.controllers.AbstractForwarderPageBean;
@@ -66,11 +70,21 @@ public abstract class AbstractApplicationForwarderController<T extends AbstractF
         boolean inStudioWindow = LAUNCH_STUDIO_WINDOW
                 .equals(getRequestAttribute(PageRequestParameterConstants.WINDOW_NAME)); // TODO Check if role has
                                                                                          // developer privilege
-        String applicationPath = inStudioWindow
+        final SecuredLinkContentInfo securedLinkContentInfo = (SecuredLinkContentInfo) getRequestAttribute(
+                FlowCentralSessionAttributeConstants.SECURED_LINK_ACCESS);
+
+        if (securedLinkContentInfo != null) {
+            setSessionAttribute(AppletSessionAttributeConstants.OPEN_TAB_INFO,
+                    new SessionOpenTabInfo(securedLinkContentInfo.getTitle(), securedLinkContentInfo.getDocUrl(),
+                            securedLinkContentInfo.getContentPath()));
+        }
+
+        final String applicationPath = inStudioWindow
                 ? appletUtilities.system().getSysParameterValue(String.class,
                         ApplicationModuleSysParamConstants.STUDIO_APPLICATION)
-                : appletUtilities.system().getSysParameterValue(String.class,
-                        ApplicationModuleSysParamConstants.DEFAULT_APPLICATION);
+                : (securedLinkContentInfo != null ? ApplicationModulePathConstants.APPLICATION_BROWSER_WINDOW
+                        : appletUtilities.system().getSysParameterValue(String.class,
+                                ApplicationModuleSysParamConstants.DEFAULT_APPLICATION));
         return forwardToPath(applicationPath);
     }
 
@@ -81,15 +95,15 @@ public abstract class AbstractApplicationForwarderController<T extends AbstractF
     protected ApplicationModuleService application() {
         return appletUtilities.application();
     }
-    
+
     protected final void setReloadOnSwitch() throws UnifyException {
         appletUtilities.setReloadOnSwitch();
     }
-    
+
     protected final boolean clearReloadOnSwitch() throws UnifyException {
         return appletUtilities.clearReloadOnSwitch();
     }
-    
+
     protected final boolean isReloadOnSwitch() throws UnifyException {
         return appletUtilities.isReloadOnSwitch();
     }
