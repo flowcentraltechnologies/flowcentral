@@ -512,13 +512,13 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
             appletUtilities.applicationPrivilegeManager().registerPrivilege(ConfigType.STATIC, applicationId,
                     ApplicationPrivilegeConstants.APPLICATION_FEATURE_CATEGORY_CODE,
                     PrivilegeNameUtils
-                            .getFeaturePrivilegeName(StudioFeatureConstants.RESTORE),
-                    resolveApplicationMessage("$m{studio.privilege.restore}"));
+                            .getFeaturePrivilegeName(StudioFeatureConstants.RESTORE_SNAPSHOT),
+                    resolveApplicationMessage("$m{studio.privilege.restoresnapshot}"));
             appletUtilities.applicationPrivilegeManager().registerPrivilege(ConfigType.STATIC, applicationId,
                     ApplicationPrivilegeConstants.APPLICATION_FEATURE_CATEGORY_CODE,
                     PrivilegeNameUtils
-                            .getFeaturePrivilegeName(StudioFeatureConstants.SNAPSHOT),
-                    resolveApplicationMessage("$m{studio.privilege.snapshot}"));
+                            .getFeaturePrivilegeName(StudioFeatureConstants.DOWNLOAD_SNAPSHOT),
+                    resolveApplicationMessage("$m{studio.privilege.downloadsnapshot}"));
         }
     }
 

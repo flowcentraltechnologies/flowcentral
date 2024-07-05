@@ -24,7 +24,7 @@ package com.flowcentraltech.flowcentral.studio.constants;
  */
 public interface StudioFeatureConstants {
 
-    String RESTORE = "restore";
+    String RESTORE_SNAPSHOT = "restoreSnapshot";
 
-    String SNAPSHOT = "snapshot";
+    String DOWNLOAD_SNAPSHOT = "downloadSnapshot";
 }

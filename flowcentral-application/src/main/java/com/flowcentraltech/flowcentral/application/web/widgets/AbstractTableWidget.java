@@ -16,6 +16,7 @@
 package com.flowcentraltech.flowcentral.application.web.widgets;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -70,6 +71,7 @@ import com.tcdng.unify.web.ui.widget.panel.StandalonePanel;
         @UplAttribute(name = "detached", type = boolean.class),
         @UplAttribute(name = "actionLabel", type = String[].class),
         @UplAttribute(name = "actionSymbol", type = String[].class),
+        @UplAttribute(name = "actionPrivilege", type = String[].class),
         @UplAttribute(name = "actionHandler", type = EventHandler[].class),
         @UplAttribute(name = "actionButtonClass", type = String.class, defaultVal = "mbtn"),
         @UplAttribute(name = "multiAction", type = boolean.class, defaultVal = "false"),
@@ -798,7 +800,14 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
         }
 
         String[] actionLabel = getUplAttribute(String[].class, "actionLabel");
+        String[] actionPrivilege = getUplAttribute(String[].class, "actionPrivilege");
         if (actionLabel != null && actionLabel.length > 0) {
+            if (actionPrivilege != null && actionPrivilege.length != actionLabel.length) {
+                throwOperationErrorException(new IllegalArgumentException(
+                        "Number of action privilege must match number of action labels. Widget [" + getLongName()
+                                + "]."));
+            }
+            
             EventHandler[] actionHandler = getActionEventHandler();
             if (actionHandler == null || actionHandler.length != actionLabel.length) {
                 throwOperationErrorException(new IllegalArgumentException(
@@ -810,13 +819,19 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
             for (int i = 0; i < actionLabel.length; i++) {
                 String label = actionLabel[i];
                 actionCtrl[i] = (Control) addInternalChildWidget(
-                        "!ui-button symbol:$s{file} alwaysValueIndex:true styleClass:$e{"
+                        "!ui-button symbol:$s{file} alwaysValueIndex:true" + resolvePrivilege(actionPrivilege, i) + " styleClass:$e{"
                                 + getUplAttribute(String.class, "actionButtonClass") + " g_fsm} caption:"
                                 + "$s{" + resolveSessionMessage(label) + "}");
             }
         } else {
             String[] actionSymbol = getUplAttribute(String[].class, "actionSymbol");
             if (actionSymbol != null && actionSymbol.length > 0) {
+                if (actionPrivilege != null && actionPrivilege.length != actionLabel.length) {
+                    throwOperationErrorException(new IllegalArgumentException(
+                            "Number of action privilege must match number of action labels. Widget [" + getLongName()
+                                    + "]."));
+                }
+                
                 EventHandler[] actionHandler = getActionEventHandler();
                 if (actionHandler == null || actionHandler.length != actionSymbol.length) {
                     throwOperationErrorException(new IllegalArgumentException(
@@ -828,7 +843,7 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
                 for (int i = 0; i < actionSymbol.length; i++) {
                     String symbol = actionSymbol[i];
                     actionCtrl[i] = (Control) addInternalChildWidget(
-                            "!ui-symbol alwaysValueIndex:true styleClass:$e{mact} symbol:$s{" + symbol
+                            "!ui-symbol alwaysValueIndex:true" + resolvePrivilege(actionPrivilege, i) + " styleClass:$e{mact} symbol:$s{" + symbol
                                     + "} ignoreParentState:true");
                 }
             }
@@ -837,6 +852,17 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
         sortColumnCtrl = (Control) addInternalChildWidget("!ui-hidden binding:sortColumnIndex");
     }
 
+    private String resolvePrivilege(String[] privileges, int index) {
+        if (privileges != null && index >= 0 && index < privileges.length) {
+            String privilege = privileges[index];
+            if (!StringUtils.isBlank(privilege) && !"none".equals(privilege)) {
+                return " privilege:$s{" + privilege + "}";
+            }
+        }
+        
+        return "";
+    }
+    
     @Override
     protected ValueStore newValue(U object, int index) throws UnifyException {
         return createValueStore(object, index);
