@@ -20,6 +20,7 @@ import java.util.List;
 
 import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
 import com.flowcentraltech.flowcentral.common.constants.ConfigType;
+import com.tcdng.unify.core.RolePrivilegeManager;
 import com.tcdng.unify.core.UnifyException;
 
 /**
@@ -28,7 +29,7 @@ import com.tcdng.unify.core.UnifyException;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface ApplicationPrivilegeManager extends FlowCentralComponent {
+public interface ApplicationPrivilegeManager extends FlowCentralComponent, RolePrivilegeManager {
 
     /**
      * Registers a privilege.
@@ -144,16 +145,4 @@ public interface ApplicationPrivilegeManager extends FlowCentralComponent {
      */
     boolean isRegisteredPrivilege(String privilegeCategoryCode, String privilegeCode) throws UnifyException;
 
-    /**
-     * Checks if a role has a privilege.
-     * 
-     * @param roleCode
-     *                      the role code
-     * @param privilegeCode
-     *                      the privilege code
-     * @return true if supplied role has privilege otherwise false
-     * @throws UnifyException
-     *                        if an error occurs
-     */
-    boolean isRoleWithPrivilege(String roleCode, String privilegeCode) throws UnifyException;
 }

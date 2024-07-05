@@ -32,6 +32,7 @@ import java.util.zip.ZipFile;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.constants.AppletPropertyConstants;
+import com.flowcentraltech.flowcentral.application.constants.ApplicationPrivilegeConstants;
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.data.AppletFilterDef;
 import com.flowcentraltech.flowcentral.application.data.FilterDef;
@@ -42,6 +43,7 @@ import com.flowcentraltech.flowcentral.application.util.ApplicationCollaboration
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.util.ApplicationPageUtils;
 import com.flowcentraltech.flowcentral.application.util.InputWidgetUtils;
+import com.flowcentraltech.flowcentral.application.util.PrivilegeNameUtils;
 import com.flowcentraltech.flowcentral.chart.entities.Chart;
 import com.flowcentraltech.flowcentral.codegeneration.business.CodeGenerationModuleService;
 import com.flowcentraltech.flowcentral.codegeneration.constants.CodeGenerationModuleSysParamConstants;
@@ -52,6 +54,7 @@ import com.flowcentraltech.flowcentral.common.business.StudioProvider;
 import com.flowcentraltech.flowcentral.common.business.SynchronizableEnvironmentDelegate;
 import com.flowcentraltech.flowcentral.common.business.SystemRestoreService;
 import com.flowcentraltech.flowcentral.common.constants.CollaborationType;
+import com.flowcentraltech.flowcentral.common.constants.ConfigType;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralContainerPropertyConstants;
 import com.flowcentraltech.flowcentral.configuration.data.ApplicationRestore;
 import com.flowcentraltech.flowcentral.configuration.data.Messages;
@@ -85,6 +88,7 @@ import com.flowcentraltech.flowcentral.studio.business.data.DelegateSynchronizat
 import com.flowcentraltech.flowcentral.studio.constants.StudioAppComponentType;
 import com.flowcentraltech.flowcentral.studio.constants.StudioAppletPropertyConstants;
 import com.flowcentraltech.flowcentral.studio.constants.StudioDelegateSynchronizationTaskConstants;
+import com.flowcentraltech.flowcentral.studio.constants.StudioFeatureConstants;
 import com.flowcentraltech.flowcentral.studio.constants.StudioModuleNameConstants;
 import com.flowcentraltech.flowcentral.studio.constants.StudioModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.studio.constants.StudioSnapshotTaskConstants;
@@ -356,12 +360,13 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
             description = "Studio Take Snapshot Task",
             parameters = {
                     @Parameter(name = StudioSnapshotTaskConstants.STUDIO_SNAPSHOT_TYPE, description = "Snapshot Type",
-                            type = StudioSnapshotType.class, mandatory = true),
+                            type = StudioSnapshotType.class),
                     @Parameter(name = StudioSnapshotTaskConstants.STUDIO_SNAPSHOT_NAME, description = "Snapshot Name",
                             type = String.class, mandatory = true),
                     @Parameter(name = StudioSnapshotTaskConstants.STUDIO_SNAPSHOT_MESSAGE, description = "Message",
                             type = String.class) },
-            limit = TaskExecLimit.ALLOW_MULTIPLE, schedulable = true)
+            limit = TaskExecLimit.ALLOW_MULTIPLE)
+    @Override
     public int takeStudioSnapshotTask(TaskMonitor taskMonitor, StudioSnapshotType snapshotType, String snapshotName,
             String message) throws UnifyException {
         logDebug(taskMonitor, "Taking studio snapshot [{0}]...", snapshotName);
@@ -391,7 +396,7 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
                             description = "Snapshot Configuration", type = SnapshotConfig.class),
                     @Parameter(name = StudioSnapshotTaskConstants.STUDIO_SNAPSHOT_UPLOAD_FILE,
                             description = "Snapshot File", type = UploadedFile.class, mandatory = true) },
-            limit = TaskExecLimit.ALLOW_MULTIPLE, schedulable = true)
+            limit = TaskExecLimit.ALLOW_MULTIPLE)
     public int uploadStudioSnapshotTask(TaskMonitor taskMonitor, SnapshotConfig snapshotConfig,
             UploadedFile snapshotUploadFile) throws UnifyException {
         logDebug(taskMonitor, "Uploading studio snapshot [{0}]...", snapshotUploadFile.getFilename());
@@ -431,7 +436,7 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
             description = "Studio Restore from Snapshot Task",
             parameters = { @Parameter(name = StudioSnapshotTaskConstants.STUDIO_SNAPSHOT_DETAILS_ID,
                     description = "Snapshot Details ID", type = Long.class, mandatory = true) },
-            limit = TaskExecLimit.ALLOW_SINGLE, schedulable = true)
+            limit = TaskExecLimit.ALLOW_SINGLE)
     public int restoreStudioSnapshotTask(TaskMonitor taskMonitor, Long snapshotDetailsId) throws UnifyException {
         logDebug(taskMonitor, "Restoring studio from snapshot...");
         File tempFile = null;
@@ -504,7 +509,17 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
 
     private void installStudioFeatures(final ModuleInstall moduleInstall) throws UnifyException {
         if (StudioModuleNameConstants.STUDIO_MODULE_NAME.equals(moduleInstall.getModuleConfig().getName())) {
-            // TODO
+            final Long applicationId = appletUtilities.application().getApplicationId("studio");
+            appletUtilities.applicationPrivilegeManager().registerPrivilege(ConfigType.STATIC, applicationId,
+                    ApplicationPrivilegeConstants.APPLICATION_FEATURE_CATEGORY_CODE,
+                    PrivilegeNameUtils
+                            .getFeaturePrivilegeName(StudioFeatureConstants.RESTORE_SNAPSHOT),
+                    resolveApplicationMessage("$m{studio.privilege.restoresnapshot}"));
+            appletUtilities.applicationPrivilegeManager().registerPrivilege(ConfigType.STATIC, applicationId,
+                    ApplicationPrivilegeConstants.APPLICATION_FEATURE_CATEGORY_CODE,
+                    PrivilegeNameUtils
+                            .getFeaturePrivilegeName(StudioFeatureConstants.DOWNLOAD_SNAPSHOT),
+                    resolveApplicationMessage("$m{studio.privilege.downloadsnapshot}"));
         }
     }
 

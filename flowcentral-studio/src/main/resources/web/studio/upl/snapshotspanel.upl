@@ -20,6 +20,8 @@
 !fc-beanlisttable:snapshotsTable multiAction:true binding:snapshotsTable
 	actionLabel:$m{button.restore}
 	actionLabel:$m{button.download}
+	actionPrivilege:$s{restoreSnapshot}
+	actionPrivilege:$s{downloadSnapshot}
  	actionHandler:$g{snapshotActHandler}
  	actionButtonClass:$s{mbtn mblue}
 	
