@@ -179,10 +179,14 @@ public final class CommonInputUtils {
     }
 
     public static AbstractInput<?> newInput(ParamConfig paramConfig) throws UnifyException {
-        Class<? extends AbstractInput<?>> inputClass = classToInputMap
-                .get(classToInputTypeMap.get(paramConfig.getType()));
-        return (AbstractInput<?>) ReflectUtils.newInstance(inputClass, NEW_INPUT_PARAMS,
-                paramConfig.getEditor() + " style:$s{width:100%;}", "!ui-label");
+        if (paramConfig.isWithEditor()) {
+            Class<? extends AbstractInput<?>> inputClass = classToInputMap
+                    .get(classToInputTypeMap.get(paramConfig.getType()));
+            return (AbstractInput<?>) ReflectUtils.newInstance(inputClass, NEW_INPUT_PARAMS,
+                    paramConfig.getEditor() + " style:$s{width:100%;}", "!ui-label");
+        }
+
+        return null;
     }
 
     public static ParamValuesDef getParamValuesDef(List<ParamConfig> paramConfigList) throws UnifyException {

@@ -360,12 +360,13 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
             description = "Studio Take Snapshot Task",
             parameters = {
                     @Parameter(name = StudioSnapshotTaskConstants.STUDIO_SNAPSHOT_TYPE, description = "Snapshot Type",
-                            type = StudioSnapshotType.class, mandatory = true),
+                            type = StudioSnapshotType.class),
                     @Parameter(name = StudioSnapshotTaskConstants.STUDIO_SNAPSHOT_NAME, description = "Snapshot Name",
                             type = String.class, mandatory = true),
                     @Parameter(name = StudioSnapshotTaskConstants.STUDIO_SNAPSHOT_MESSAGE, description = "Message",
                             type = String.class) },
-            limit = TaskExecLimit.ALLOW_MULTIPLE, schedulable = true)
+            limit = TaskExecLimit.ALLOW_MULTIPLE)
+    @Override
     public int takeStudioSnapshotTask(TaskMonitor taskMonitor, StudioSnapshotType snapshotType, String snapshotName,
             String message) throws UnifyException {
         logDebug(taskMonitor, "Taking studio snapshot [{0}]...", snapshotName);
@@ -395,7 +396,7 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
                             description = "Snapshot Configuration", type = SnapshotConfig.class),
                     @Parameter(name = StudioSnapshotTaskConstants.STUDIO_SNAPSHOT_UPLOAD_FILE,
                             description = "Snapshot File", type = UploadedFile.class, mandatory = true) },
-            limit = TaskExecLimit.ALLOW_MULTIPLE, schedulable = true)
+            limit = TaskExecLimit.ALLOW_MULTIPLE)
     public int uploadStudioSnapshotTask(TaskMonitor taskMonitor, SnapshotConfig snapshotConfig,
             UploadedFile snapshotUploadFile) throws UnifyException {
         logDebug(taskMonitor, "Uploading studio snapshot [{0}]...", snapshotUploadFile.getFilename());
@@ -435,7 +436,7 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
             description = "Studio Restore from Snapshot Task",
             parameters = { @Parameter(name = StudioSnapshotTaskConstants.STUDIO_SNAPSHOT_DETAILS_ID,
                     description = "Snapshot Details ID", type = Long.class, mandatory = true) },
-            limit = TaskExecLimit.ALLOW_SINGLE, schedulable = true)
+            limit = TaskExecLimit.ALLOW_SINGLE)
     public int restoreStudioSnapshotTask(TaskMonitor taskMonitor, Long snapshotDetailsId) throws UnifyException {
         logDebug(taskMonitor, "Restoring studio from snapshot...");
         File tempFile = null;

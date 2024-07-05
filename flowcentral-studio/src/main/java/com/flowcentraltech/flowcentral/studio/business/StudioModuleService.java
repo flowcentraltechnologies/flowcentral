@@ -22,7 +22,9 @@ import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.data.SnapshotDetails;
 import com.flowcentraltech.flowcentral.common.business.FlowCentralService;
 import com.flowcentraltech.flowcentral.studio.constants.StudioAppComponentType;
+import com.flowcentraltech.flowcentral.studio.constants.StudioSnapshotType;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.task.TaskMonitor;
 
 /**
  * Studio module service.
@@ -31,6 +33,24 @@ import com.tcdng.unify.core.UnifyException;
  * @since 1.0
  */
 public interface StudioModuleService extends FlowCentralService {
+    
+    /**
+     * Takes studio snapshot.
+     * 
+     * @param taskMonitor
+     *                     the task monitor
+     * @param snapshotType
+     *                     the snapshot type
+     * @param snapshotName
+     *                     the snapshot name
+     * @param message
+     *                     the message
+     * @return success indicator
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    int takeStudioSnapshotTask(TaskMonitor taskMonitor, StudioSnapshotType snapshotType, String snapshotName,
+            String message) throws UnifyException;
 
     /**
      * Find snapshot details.
