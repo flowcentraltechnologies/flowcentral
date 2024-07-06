@@ -40,7 +40,7 @@ public abstract class AbstractSecurityPageController<T extends AbstractPageBean>
         super(pageBeanClass, secured, readOnly, resetOnWrite);
     }
 
-    protected SecurityModuleService getSecurityModuleService() {
+    protected SecurityModuleService security() {
         return securityModuleService;
     }
 

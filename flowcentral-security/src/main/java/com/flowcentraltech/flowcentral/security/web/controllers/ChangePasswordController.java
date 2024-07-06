@@ -16,12 +16,10 @@
 
 package com.flowcentraltech.flowcentral.security.web.controllers;
 
-import com.flowcentraltech.flowcentral.security.business.SecurityModuleService;
 import com.flowcentraltech.flowcentral.security.constants.SecurityModuleAuditConstants;
 import com.tcdng.unify.core.UnifyError;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
-import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.UplBinding;
 import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.annotation.Action;
@@ -43,9 +41,6 @@ import com.tcdng.unify.web.ui.widget.data.Hint.MODE;
 @ResultMappings({
     @ResultMapping(name = "refresh", response = { "!refreshpanelresponse panels:$l{changePasswordPanel}" })})
 public class ChangePasswordController extends AbstractSecurityPageController<ChangePasswordPageBean> {
-
-    @Configurable
-    private SecurityModuleService securityModuleService;
 
     public ChangePasswordController() {
         super(ChangePasswordPageBean.class, Secured.TRUE, ReadOnly.FALSE, ResetOnWrite.FALSE);
@@ -71,7 +66,7 @@ public class ChangePasswordController extends AbstractSecurityPageController<Cha
             hintUser(MODE.ERROR, "$m{security.application.newandconfirmpassword.notsame}");
         } else {
             try {
-                securityModuleService.changeUserPassword(pageBean.getOldPassword(), pageBean.getNewPassword());
+                security().changeUserPassword(pageBean.getOldPassword(), pageBean.getNewPassword());
                 logUserEvent(SecurityModuleAuditConstants.CHANGE_PASSWORD);
                 pageBean.setOldPassword(null);
                 pageBean.setNewPassword(null);
