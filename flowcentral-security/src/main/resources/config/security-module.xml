@@ -69,5 +69,8 @@
 		<sysParameter code="SEC-0013" defaultVal="false"
 			description="$m{security.sysparam.enablethirdpartypasswordauthentication}"
 			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
+		<sysParameter code="SEC-0014" defaultVal="false"
+			description="$m{security.sysparam.enablepasswordcomplexity}"
+			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
 	</sysParameters>
 </module>

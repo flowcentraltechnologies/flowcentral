@@ -61,4 +61,6 @@ public interface SecurityModuleSysParamConstants {
 
     String ENABLE_THIRDPARTY_PASSWORD_AUTHENTICATION = "SEC-0013";
 
+    String ENABLE_PASSWORD_COMPLEXITY= "SEC-0014";
+
 }

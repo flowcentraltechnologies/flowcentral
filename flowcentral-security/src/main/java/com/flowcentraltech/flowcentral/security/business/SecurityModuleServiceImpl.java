@@ -49,6 +49,8 @@ import com.flowcentraltech.flowcentral.configuration.data.ModuleInstall;
 import com.flowcentraltech.flowcentral.notification.business.NotificationModuleService;
 import com.flowcentraltech.flowcentral.organization.business.OrganizationModuleService;
 import com.flowcentraltech.flowcentral.organization.entities.MappedBranch;
+import com.flowcentraltech.flowcentral.security.business.data.PasswordComplexityCheck;
+import com.flowcentraltech.flowcentral.security.business.data.PasswordComplexitySettings;
 import com.flowcentraltech.flowcentral.security.constants.LoginEventType;
 import com.flowcentraltech.flowcentral.security.constants.SecurityModuleAttachmentConstants;
 import com.flowcentraltech.flowcentral.security.constants.SecurityModuleEntityConstants;
@@ -60,6 +62,8 @@ import com.flowcentraltech.flowcentral.security.entities.PasswordHistory;
 import com.flowcentraltech.flowcentral.security.entities.PasswordHistoryQuery;
 import com.flowcentraltech.flowcentral.security.entities.SecuredLink;
 import com.flowcentraltech.flowcentral.security.entities.SecuredLinkQuery;
+import com.flowcentraltech.flowcentral.security.entities.PasswordComplexity;
+import com.flowcentraltech.flowcentral.security.entities.PasswordComplexityQuery;
 import com.flowcentraltech.flowcentral.security.entities.User;
 import com.flowcentraltech.flowcentral.security.entities.UserGroupMemberQuery;
 import com.flowcentraltech.flowcentral.security.entities.UserGroupRole;
@@ -86,6 +90,7 @@ import com.tcdng.unify.core.annotation.Transactional;
 import com.tcdng.unify.core.constant.FrequencyUnit;
 import com.tcdng.unify.core.criterion.Update;
 import com.tcdng.unify.core.data.FactoryMap;
+import com.tcdng.unify.core.data.StringComposition;
 import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.security.OneWayStringCryptograph;
 import com.tcdng.unify.core.security.PasswordAutenticationService;
@@ -132,6 +137,61 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
     @Override
     public void clearDefinitionsCache() throws UnifyException {
 
+    }
+
+    @Override
+    public PasswordComplexitySettings getPasswordComplexity() throws UnifyException {
+        PasswordComplexitySettings passwordComplexitySettings = new PasswordComplexitySettings();
+        List<PasswordComplexity> list = environment().findAll(new PasswordComplexityQuery().ignoreEmptyCriteria(true));
+        PasswordComplexity passwordComplexity = list.get(0);
+        passwordComplexitySettings.setMinimumAlphabets(passwordComplexity.getMinimumAlphabets());
+        passwordComplexitySettings.setMinimumLowercase(passwordComplexity.getMinimumLowercase());
+        passwordComplexitySettings.setMinimumNumbers(passwordComplexity.getMinimumNumbers());
+        passwordComplexitySettings.setMinimumPasswordLen(passwordComplexity.getMinimumPasswordLen());
+        passwordComplexitySettings.setMinimumSpecial(passwordComplexity.getMinimumSpecial());
+        passwordComplexitySettings.setMinimumUppercase(passwordComplexity.getMinimumUppercase());
+        return passwordComplexitySettings;
+    }
+
+    @Override
+    public void savePasswordComplexity(PasswordComplexitySettings settings) throws UnifyException {
+        List<PasswordComplexity> list = environment().findAll(new PasswordComplexityQuery().ignoreEmptyCriteria(true));
+        PasswordComplexity passwordComplexity = list.get(0);
+        passwordComplexity.setMinimumAlphabets(settings.getMinimumAlphabets());
+        passwordComplexity.setMinimumLowercase(settings.getMinimumLowercase());
+        passwordComplexity.setMinimumNumbers(settings.getMinimumNumbers());
+        passwordComplexity.setMinimumPasswordLen(settings.getMinimumPasswordLen());
+        passwordComplexity.setMinimumSpecial(settings.getMinimumSpecial());
+        passwordComplexity.setMinimumUppercase(settings.getMinimumUppercase());
+        environment().updateByIdVersion(passwordComplexity);
+    }
+
+    @Override
+    public PasswordComplexityCheck checkPasswordComplexity(String password) throws UnifyException {
+        PasswordComplexitySettings settings = getPasswordComplexity();
+        StringComposition composition = StringUtils.getComposition(password);
+
+        boolean minimumPasswordLen = settings.getMinimumPasswordLen() != null
+                ? composition.getLength() >= settings.getMinimumPasswordLen()
+                : true;
+        boolean minimumAlphabets = settings.getMinimumAlphabets() != null
+                ? composition.getLetters() >= settings.getMinimumAlphabets()
+                : true;
+        boolean minimumNumbers = settings.getMinimumNumbers() != null
+                ? composition.getDigits() >= settings.getMinimumNumbers()
+                : true;
+        boolean minimumSpecial = settings.getMinimumSpecial() != null
+                ? composition.getSpecial() >= settings.getMinimumSpecial()
+                : true;
+        boolean minimumUppercase = settings.getMinimumUppercase() != null
+                ? composition.getUppercase() >= settings.getMinimumUppercase()
+                : true;
+        boolean minimumLowercase = settings.getMinimumLowercase() != null
+                ? composition.getLowercase() >= settings.getMinimumLowercase()
+                : true;
+
+        return new PasswordComplexityCheck(settings, minimumPasswordLen, minimumAlphabets, minimumNumbers,
+                minimumSpecial, minimumUppercase, minimumLowercase);
     }
 
     @Override
@@ -578,12 +638,12 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
 
     @Override
     protected void doInstallModuleFeatures(ModuleInstall moduleInstall) throws UnifyException {
-        installDefaultUsers(moduleInstall);
+        installDefaults(moduleInstall);
     }
 
-    private void installDefaultUsers(final ModuleInstall moduleInstall) throws UnifyException {
+    private void installDefaults(final ModuleInstall moduleInstall) throws UnifyException {
         if (SecurityModuleNameConstants.SECURITY_MODULE_NAME.equals(moduleInstall.getModuleConfig().getName())) {
-            logInfo("Installing default users ...");
+            logDebug("Installing default users ...");
             String email = systemModuleService.getSysParameterValue(String.class,
                     SystemModuleSysParamConstants.SYSTEM_EMAIL);
             if (environment().countAll(new UserQuery().id(DefaultApplicationConstants.SYSTEM_ENTITY_ID)) == 0) {
@@ -598,6 +658,18 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
                 environment().updateById(User.class, DefaultApplicationConstants.SYSTEM_ENTITY_ID,
                         new Update().add("email", email));
             }
+
+            if (environment().countAll(new PasswordComplexityQuery().ignoreEmptyCriteria(true)) == 0) {
+                PasswordComplexity passwordComplexity = new PasswordComplexity();
+                passwordComplexity.setMinimumPasswordLen(1);
+                passwordComplexity.setMinimumAlphabets(null);
+                passwordComplexity.setMinimumLowercase(null);
+                passwordComplexity.setMinimumNumbers(null);
+                passwordComplexity.setMinimumSpecial(null);
+                passwordComplexity.setMinimumUppercase(null);
+                environment().create(passwordComplexity);
+            }
+
         }
     }
 

@@ -257,6 +257,12 @@
 			<property name="maintainForm.update" value="false" />
 			<property name="maintainForm.delete" value="false" />
 		</applet>
+		<applet name="managePasswordComplexity"
+			description="$m{security.passwordcomplexity.manage}"
+			label="$m{security.passwordcomplexity.manage.label}" icon="key"
+			type="path_page" path="/security/passwordcomplexity/openPage"
+			menuAccess="true" allowSecondaryTenants="true">
+		</applet>
 	</applets>
 	<!-- References -->
 	<references>
@@ -547,6 +553,29 @@
 			<field name="lastAccessedOn" label="$m{security.securedlink.lastaccessedon}"
 				type="timestamp" inputWidget="application.datetime"
 				nullable="true" reportable="true" auditable="true"/>
+		</entity>
+		<entity name="securitySettings" description="$m{security.passwordcomplexity}"
+			label="$m{security.passwordcomplexity.label}"
+			type="com.flowcentraltech.flowcentral.security.entities.PasswordComplexity"
+			reportable="true" auditable="true">
+			<field name="minimumPasswordLen" label="$m{security.passwordcomplexity.minimumpasswordlen}"
+				type="integer" inputWidget="application.integer" precision="2"
+				nullable="false" auditable="true" reportable="true"/>
+			<field name="minimumAlphabets" label="$m{security.passwordcomplexity.minimumalphabets}"
+				type="integer" inputWidget="application.integer" precision="2"
+				nullable="true" auditable="true" reportable="true"/>
+			<field name="minimumNumbers" label="$m{security.passwordcomplexity.minimumnumbers}"
+				type="integer" inputWidget="application.integer" precision="2"
+				nullable="true" auditable="true" reportable="true"/>
+			<field name="minimumSpecial" label="$m{security.passwordcomplexity.minimumspecial}"
+				type="integer" inputWidget="application.integer" precision="2"
+				nullable="true" auditable="true" reportable="true"/>
+			<field name="minimumUppercase" label="$m{security.passwordcomplexity.minimumuppercase}"
+				type="integer" inputWidget="application.integer" precision="2"
+				nullable="true" auditable="true" reportable="true"/>
+			<field name="minimumLowercase" label="$m{security.passwordcomplexity.minimumlowercase}"
+				type="integer" inputWidget="application.integer" precision="2"
+				nullable="true" auditable="true" reportable="true"/>
 		</entity>
 	</entities>
 	<!-- Tables -->

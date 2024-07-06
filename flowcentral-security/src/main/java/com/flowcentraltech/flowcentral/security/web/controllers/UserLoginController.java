@@ -26,10 +26,12 @@ import com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttrib
 import com.flowcentraltech.flowcentral.common.data.SecuredLinkContentInfo;
 import com.flowcentraltech.flowcentral.common.data.UserRoleInfo;
 import com.flowcentraltech.flowcentral.security.business.SecurityModuleService;
+import com.flowcentraltech.flowcentral.security.business.data.PasswordComplexityCheck;
 import com.flowcentraltech.flowcentral.security.constants.SecurityModuleAuditConstants;
 import com.flowcentraltech.flowcentral.security.constants.SecurityModuleErrorConstants;
 import com.flowcentraltech.flowcentral.security.constants.SecurityModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.security.entities.User;
+import com.flowcentraltech.flowcentral.security.util.SecurityUtils;
 import com.flowcentraltech.flowcentral.system.constants.SystemModuleSysParamConstants;
 import com.tcdng.unify.core.ApplicationComponents;
 import com.tcdng.unify.core.UnifyError;
@@ -38,6 +40,7 @@ import com.tcdng.unify.core.UserToken;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.UplBinding;
+import com.tcdng.unify.core.message.MessageResolver;
 import com.tcdng.unify.core.security.TwoFactorAutenticationService;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.StringUtils;
@@ -78,6 +81,9 @@ public class UserLoginController extends AbstractApplicationForwarderController<
     @Configurable
     private WorkspacePrivilegeManager workspacePrivilegeManager;
 
+    @Configurable
+    private MessageResolver messageResolver;
+
     public UserLoginController() {
         super(UserLoginPageBean.class, Secured.FALSE, ReadOnly.FALSE, ResetOnWrite.FALSE);
     }
@@ -90,7 +96,7 @@ public class UserLoginController extends AbstractApplicationForwarderController<
             if (pageBean.isLanguage() && StringUtils.isNotBlank(pageBean.getLanguageTag())) {
                 loginLocale = Locale.forLanguageTag(pageBean.getLanguageTag());
             }
-            
+
             User user = securityModuleService.loginUser(pageBean.getUserName(), pageBean.getPassword(), loginLocale,
                     pageBean.getLoginTenantId());
             pageBean.setAllowLoginWithoutOtp(Boolean.TRUE.equals(user.getAllowLoginWithoutOtp()));
@@ -99,7 +105,7 @@ public class UserLoginController extends AbstractApplicationForwarderController<
             pageBean.setLoginTenantId(null);
 
             logUserEvent(SecurityModuleAuditConstants.LOGIN);
-            setLoginMessage(null);            
+            setLoginMessage(null);
 
             if (user.isChangeUserPassword() && !system().getSysParameterValue(boolean.class,
                     SecurityModuleSysParamConstants.ENABLE_THIRDPARTY_PASSWORD_AUTHENTICATION)) {
@@ -132,9 +138,20 @@ public class UserLoginController extends AbstractApplicationForwarderController<
             } else if (!pageBean.getConfirmPassword().equals(pageBean.getNewPassword())) {
                 setChgPwdMessage(getSessionMessage("security.application.newandconfirmpassword.notsame"));
             } else {
-                securityModuleService.changeUserPassword(pageBean.getOldPassword(), pageBean.getNewPassword());
-                logUserEvent(SecurityModuleAuditConstants.CHANGE_PASSWORD);
-                return twoFactorAuthCheck();
+                boolean pass = true;
+                if (system().getSysParameterValue(boolean.class,
+                        SecurityModuleSysParamConstants.ENABLE_PASSWORD_COMPLEXITY)) {
+                    PasswordComplexityCheck check = securityModuleService
+                            .checkPasswordComplexity(pageBean.getNewPassword());
+                    String msg = SecurityUtils.getPasswordComplexityCheckFailureMessage(check, messageResolver);
+                    setChgPwdMessage(msg);
+                }
+
+                if (pass) {
+                    securityModuleService.changeUserPassword(pageBean.getOldPassword(), pageBean.getNewPassword());
+                    logUserEvent(SecurityModuleAuditConstants.CHANGE_PASSWORD);
+                    return twoFactorAuthCheck();
+                }
             }
         } catch (UnifyException e) {
             UnifyError err = e.getUnifyError();
