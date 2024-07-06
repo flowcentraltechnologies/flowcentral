@@ -23,6 +23,7 @@ import java.util.Optional;
 import com.flowcentraltech.flowcentral.common.business.FlowCentralService;
 import com.flowcentraltech.flowcentral.common.business.UserLoginActivityProvider;
 import com.flowcentraltech.flowcentral.common.data.UserRoleInfo;
+import com.flowcentraltech.flowcentral.security.business.data.PasswordComplexityCheck;
 import com.flowcentraltech.flowcentral.security.business.data.PasswordComplexitySettings;
 import com.flowcentraltech.flowcentral.security.entities.User;
 import com.flowcentraltech.flowcentral.security.entities.UserQuery;
@@ -56,6 +57,17 @@ public interface SecurityModuleService extends FlowCentralService, UserLoginActi
      *                        if an error occurs
      */
     void savePasswordComplexity(PasswordComplexitySettings settings) throws UnifyException;
+    
+    /**
+     * Checks password complexity.
+     * 
+     * @param password
+     *                 the password
+     * @return the complexity object
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    PasswordComplexityCheck checkPasswordComplexity(String password) throws UnifyException;
     
     /**
      * Finds users by criteria.
