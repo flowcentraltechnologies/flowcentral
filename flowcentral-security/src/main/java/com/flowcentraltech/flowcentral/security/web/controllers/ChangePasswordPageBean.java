@@ -34,6 +34,8 @@ public class ChangePasswordPageBean extends AbstractPageBean {
     
     private String altSubCaption;
     
+    private String chgPwdMessage;
+    
     public String getOldPassword() {
         return oldPassword;
     }
@@ -64,6 +66,14 @@ public class ChangePasswordPageBean extends AbstractPageBean {
 
     public void setAltSubCaption(String altSubCaption) {
         this.altSubCaption = altSubCaption;
+    }
+
+    public String getChgPwdMessage() {
+        return chgPwdMessage;
+    }
+
+    public void setChgPwdMessage(String chgPwdMessage) {
+        this.chgPwdMessage = chgPwdMessage;
     }
 
 }
