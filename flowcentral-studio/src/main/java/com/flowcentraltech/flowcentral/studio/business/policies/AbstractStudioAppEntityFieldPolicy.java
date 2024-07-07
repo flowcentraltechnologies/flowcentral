@@ -45,7 +45,7 @@ public abstract class AbstractStudioAppEntityFieldPolicy extends AbstractStudioA
         return null;
     }
 
-    protected ReportModuleService getRds() {
+    protected ReportModuleService report() {
         return reportModuleService;
     }
 

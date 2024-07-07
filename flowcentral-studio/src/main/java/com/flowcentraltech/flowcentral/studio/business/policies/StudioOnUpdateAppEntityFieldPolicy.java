@@ -43,26 +43,16 @@ public class StudioOnUpdateAppEntityFieldPolicy extends AbstractStudioAppEntityF
         final AppEntityField appEntityField = (AppEntityField) ctx.getInst();
         // Update Reportable
         Long reportableDefinitionId = getReportableDefinitionId(appEntityField);
-        if (appEntityField.isReportable() && appEntityField.getDataType().isTableViewable()) {
-            if (QueryUtils.isValidLongCriteria(reportableDefinitionId)) {
-                ReportableField oldReportableField = getRds().findReportableField(
-                        new ReportableFieldQuery().reportableId(reportableDefinitionId).name(appEntityField.getName()));
-                if (oldReportableField == null) {
-                    ReportableField reportableField = new ReportableField();
-                    reportableField.setReportableId(reportableDefinitionId);
-                    ReportEntityUtils.populateReportableField(reportableField, appEntityField,
-                            FormatterOptions.DEFAULT);
-                    getRds().createReportableField(reportableField);
-                } else {
-                    ReportEntityUtils.populateReportableField(oldReportableField, appEntityField,
-                            FormatterOptions.DEFAULT);
-                    getRds().updateReportableField(oldReportableField);
-                }
-            }
-        } else {
-            if (QueryUtils.isValidLongCriteria(reportableDefinitionId)) {
-                getRds().deleteReportableField(
-                        new ReportableFieldQuery().reportableId(reportableDefinitionId).name(appEntityField.getName()));
+        if (QueryUtils.isValidLongCriteria(reportableDefinitionId)) {
+            report().deleteReportableField(
+                    new ReportableFieldQuery().reportableId(reportableDefinitionId).name(appEntityField.getName()));
+            
+            if (appEntityField.isReportable() && appEntityField.getDataType().isTableViewable()) {
+                ReportableField reportableField = new ReportableField();
+                reportableField.setReportableId(reportableDefinitionId);
+                ReportEntityUtils.populateReportableField(reportableField, appEntityField,
+                        FormatterOptions.DEFAULT);
+                report().createReportableField(reportableField);
             }
         }
 

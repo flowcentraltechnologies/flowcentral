@@ -362,7 +362,8 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService
         reportOptions.setDataSource(dataSourceName);
 
         Map<String, ReportableField> fieldMap = environment().listAllMap(String.class, "name",
-                new ReportableFieldQuery().reportableId(reportableDefinition.getId()).parameterOnly(false));
+                new ReportableFieldQuery().reportableId(reportableDefinition.getId()).parameterOnly(false)
+                        .setLenient(true));
         boolean isSelectAll = defaultReportColumnList == null;
         if (!isSelectAll) {
             for (DefaultReportColumn defaultColumn : defaultReportColumnList) {
