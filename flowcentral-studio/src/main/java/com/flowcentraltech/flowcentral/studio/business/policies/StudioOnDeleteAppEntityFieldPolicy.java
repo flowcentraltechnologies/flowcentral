@@ -41,7 +41,7 @@ public class StudioOnDeleteAppEntityFieldPolicy extends AbstractStudioAppEntityF
         // Update Reportable
         Long reportableDefinitionId = getReportableDefinitionId(appEntityField);
         if (QueryUtils.isValidLongCriteria(reportableDefinitionId)) {
-            getRds().deleteReportableField(
+            report().deleteReportableField(
                     new ReportableFieldQuery().reportableId(reportableDefinitionId).name(appEntityField.getName()));
         }
 

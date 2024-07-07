@@ -50,7 +50,7 @@ public class StudioOnCreateAppEntityFieldPolicy extends AbstractStudioAppEntityF
                     reportableField.setReportableId(reportableDefinitionId);
                     ReportEntityUtils.populateReportableField(reportableField, appEntityField,
                             FormatterOptions.DEFAULT);
-                    getRds().createReportableField(reportableField);
+                    report().createReportableField(reportableField);
                 }
             }
         }
