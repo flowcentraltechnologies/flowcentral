@@ -22,6 +22,7 @@ import com.flowcentraltech.flowcentral.common.business.policies.EntityActionCont
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
 import com.flowcentraltech.flowcentral.common.data.FormatterOptions;
 import com.flowcentraltech.flowcentral.report.entities.ReportableField;
+import com.flowcentraltech.flowcentral.report.entities.ReportableFieldQuery;
 import com.flowcentraltech.flowcentral.report.util.ReportEntityUtils;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
@@ -43,11 +44,14 @@ public class StudioOnCreateAppEntityFieldPolicy extends AbstractStudioAppEntityF
         if (appEntityField.isReportable() && appEntityField.getDataType().isTableViewable()) {
             Long reportableDefinitionId = getReportableDefinitionId(appEntityField);
             if (QueryUtils.isValidLongCriteria(reportableDefinitionId)) {
-                ReportableField reportableField = new ReportableField();
-                reportableField.setReportableId(reportableDefinitionId);
-                ReportEntityUtils.populateReportableField(reportableField, appEntityField,
-                        FormatterOptions.DEFAULT);
-                getRds().createReportableField(reportableField);
+                if (environment().countAll(new ReportableFieldQuery().reportableId(reportableDefinitionId)
+                        .name(appEntityField.getName())) == 0) {
+                    ReportableField reportableField = new ReportableField();
+                    reportableField.setReportableId(reportableDefinitionId);
+                    ReportEntityUtils.populateReportableField(reportableField, appEntityField,
+                            FormatterOptions.DEFAULT);
+                    getRds().createReportableField(reportableField);
+                }
             }
         }
 
