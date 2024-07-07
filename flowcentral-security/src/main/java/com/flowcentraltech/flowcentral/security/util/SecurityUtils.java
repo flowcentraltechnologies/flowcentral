@@ -38,58 +38,40 @@ public final class SecurityUtils {
         if (!check.pass()) {
             PasswordComplexitySettings settings = check.getSettings();
             StringBuilder sb = new StringBuilder();
-            boolean appendSym = false;
-            if (!check.isMinimumPasswordLen()) {
+            sb.append(messageResolver.resolveSessionMessage("$m{security.passwordcomplexity.checkfail}"));
+            
+            if (settings.getMinimumPasswordLen() != null) {
+                sb.append("<br>");
                 sb.append(messageResolver.resolveSessionMessage("$m{security.passwordcomplexity.checkfail.passwordlen}",
                         settings.getMinimumPasswordLen()));
-                appendSym = true;
             }
 
-            if (!check.isMinimumAlphabets()) {
-                if (appendSym) {
-                    sb.append(' ');
-                }
-
+            if (settings.getMinimumAlphabets() != null) {
+                sb.append("<br>");
                 sb.append(messageResolver.resolveSessionMessage("$m{security.passwordcomplexity.checkfail.alphabets}",
                         settings.getMinimumAlphabets()));
-                appendSym = true;
             }
 
-            if (!check.isMinimumNumbers()) {
-                if (appendSym) {
-                    sb.append(' ');
-                }
-
+            if (settings.getMinimumNumbers() != null) {
+                sb.append("<br>");
                 sb.append(messageResolver.resolveSessionMessage("$m{security.passwordcomplexity.checkfail.numbers}",
                         settings.getMinimumNumbers()));
-                appendSym = true;
             }
 
-            if (!check.isMinimumSpecial()) {
-                if (appendSym) {
-                    sb.append(' ');
-                }
-
+            if (settings.getMinimumSpecial() != null) {
+                sb.append("<br>");
                 sb.append(messageResolver.resolveSessionMessage("$m{security.passwordcomplexity.checkfail.special}",
                         settings.getMinimumSpecial()));
-                appendSym = true;
             }
 
-            if (!check.isMinimumUppercase()) {
-                if (appendSym) {
-                    sb.append(' ');
-                }
-
+            if (settings.getMinimumUppercase() != null) {
+                sb.append("<br>");
                 sb.append(messageResolver.resolveSessionMessage("$m{security.passwordcomplexity.checkfail.uppercase}",
                         settings.getMinimumUppercase()));
-                appendSym = true;
             }
 
-            if (!check.isMinimumLowercase()) {
-                if (appendSym) {
-                    sb.append(' ');
-                }
-
+            if (settings.getMinimumLowercase() != null) {
+                sb.append("<br>");
                 sb.append(messageResolver.resolveSessionMessage("$m{security.passwordcomplexity.checkfail.lowercase}",
                         settings.getMinimumLowercase()));
             }

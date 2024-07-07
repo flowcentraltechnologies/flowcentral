@@ -79,6 +79,7 @@
 !ui-password:confirmPassword styleClass:$e{fc-logintxt} binding:confirmPassword caption:$m{security.application.confirmpassword}
     eventHandler:$d{!ui-event event:onenter action:$c{changePwdAct}}
 !ui-label:pwdChangeMsg styleClass:$e{ui-loginmsg} binding:chgPwdMessage
+	htmlEscape:false
 !ui-button:changePwdBtn caption:$m{security.application.changepassword} styleClass:$e{fc-loginbtn}
 	eventHandler:$d{!ui-event event:onclick action:$c{changePwdAct}}
 !ui-button:cancelPwdBtn caption:$m{button.cancel} styleClass:$e{fc-logincancelbtn}

@@ -247,15 +247,6 @@ public class UserLoginController extends AbstractApplicationForwarderController<
         UserLoginPageBean pageBean = getPageBean();
         pageBean.setLoginTenantId(null);
         setPageWidgetVisible("frmLoginTenantId", isTenancyEnabled());
-//        boolean isLanguage = getSystemModuleService().getSysParameterValue(boolean.class,
-//                SecurityModuleSysParamConstants.USE_LOGIN_LOCALE);
-//        setPageWidgetVisible("loginPanel.languageField", isLanguage);
-//        if (isLanguage) {
-//            pageBean.setOrigLocale(getSessionLocale());
-//        }
-//
-//        pageBean.setLanguage(isLanguage);
-//
         setLoginMessage(null);
         setChgPwdMessage(null);
         setValidateOTPMsg(null);

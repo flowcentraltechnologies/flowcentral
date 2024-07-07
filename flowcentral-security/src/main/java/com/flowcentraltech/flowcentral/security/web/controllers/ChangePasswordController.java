@@ -64,6 +64,7 @@ public class ChangePasswordController extends AbstractSecurityPageController<Cha
         setPageTitle(resolveSessionMessage("$m{security.changepassword}"));
         ChangePasswordPageBean pageBean = getPageBean();
         pageBean.setAltSubCaption(resolveSessionMessage("$m{security.mypassword}"));
+        setChgPwdMessage(null);
     }
 
     @Action
