@@ -143,8 +143,11 @@ public class UserLoginController extends AbstractApplicationForwarderController<
                         SecurityModuleSysParamConstants.ENABLE_PASSWORD_COMPLEXITY)) {
                     PasswordComplexityCheck check = securityModuleService
                             .checkPasswordComplexity(pageBean.getNewPassword());
-                    String msg = SecurityUtils.getPasswordComplexityCheckFailureMessage(check, messageResolver);
-                    setChgPwdMessage(msg);
+                    pass = check.pass();
+                    if (!pass) {
+                        String msg = SecurityUtils.getPasswordComplexityCheckFailureMessage(check, messageResolver);
+                        setChgPwdMessage(msg);
+                    }
                 }
 
                 if (pass) {
@@ -162,6 +165,7 @@ public class UserLoginController extends AbstractApplicationForwarderController<
 
             setChgPwdMessage(getSessionMessage(err.getErrorCode(), err.getErrorParams()));
         }
+
         return "switchchangepassword";
     }
 
