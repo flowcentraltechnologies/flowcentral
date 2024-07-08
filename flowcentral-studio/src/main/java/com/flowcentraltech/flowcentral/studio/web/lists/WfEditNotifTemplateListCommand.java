@@ -48,7 +48,8 @@ public class WfEditNotifTemplateListCommand extends AbstractApplicationListComma
     @Override
     public List<? extends Listable> execute(Locale locale, StringParam param) throws UnifyException {
         if (param.isPresent()) {
-            return au().getApplicationEntitiesListables(new NotificationTemplateQuery().entity(param.getValue()));
+            return au().getApplicationEntityListables(
+                    new NotificationTemplateQuery().entityIsOrIsNull(param.getValue()));
         }
 
         return Collections.emptyList();

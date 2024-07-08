@@ -57,7 +57,7 @@ public class StudioAppletAllChildAppletListCommand extends AbstractApplicationLi
                         entityNames.add(entityFieldDef.getRefDef().getEntity());
                     }
 
-                    return au().getApplicationEntitiesListables(new AppAppletQuery().entityIn(entityNames));
+                    return au().getApplicationEntityListables(new AppAppletQuery().entityIn(entityNames));
                 }
             }
         }

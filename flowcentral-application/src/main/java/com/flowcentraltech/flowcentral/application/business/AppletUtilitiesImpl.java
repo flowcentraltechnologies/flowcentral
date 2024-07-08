@@ -437,7 +437,7 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
     }
 
     @Override
-    public List<? extends Listable> getApplicationEntitiesListables(final Query<? extends BaseApplicationEntity> query)
+    public List<? extends Listable> getApplicationEntityListables(final Query<? extends BaseApplicationEntity> query)
             throws UnifyException {
         if (!query.isEmptyCriteria() || query.isIgnoreEmptyCriteria()) {
             final Query<? extends BaseApplicationEntity> _query = query.copy();

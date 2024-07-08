@@ -178,7 +178,7 @@ public interface AppletUtilities extends FlowCentralComponent {
      * @throws UnifyException
      *                        if an error occurs
      */
-    List<? extends Listable> getApplicationEntitiesListables(Query<? extends BaseApplicationEntity> query)
+    List<? extends Listable> getApplicationEntityListables(Query<? extends BaseApplicationEntity> query)
             throws UnifyException;
 
     /**

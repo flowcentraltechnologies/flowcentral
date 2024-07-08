@@ -16,6 +16,9 @@
 package com.flowcentraltech.flowcentral.notification.entities;
 
 import com.flowcentraltech.flowcentral.application.entities.BaseApplicationEntityQuery;
+import com.tcdng.unify.core.criterion.Equals;
+import com.tcdng.unify.core.criterion.IsNull;
+import com.tcdng.unify.core.criterion.Or;
 
 /**
  * Query class for notification template records.
@@ -31,6 +34,11 @@ public class NotificationTemplateQuery extends BaseApplicationEntityQuery<Notifi
 
     public NotificationTemplateQuery entity(String entity) {
         return (NotificationTemplateQuery) addEquals("entity", entity);
+    }
+
+    public NotificationTemplateQuery entityIsOrIsNull(String entity) {
+        return (NotificationTemplateQuery) addRestriction(
+                new Or().add(new IsNull("entity")).add(new Equals("entity", entity)));
     }
 
     public NotificationTemplateQuery entityBeginsWith(String entity) {

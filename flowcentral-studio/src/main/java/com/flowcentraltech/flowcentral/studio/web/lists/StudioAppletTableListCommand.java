@@ -46,7 +46,7 @@ public class StudioAppletTableListCommand extends AbstractApplicationListCommand
         if (longParam.isPresent()) {
             String entity = application().getAppAppletEntity(longParam.getValue());
             if (!StringUtils.isBlank(entity)) {
-                return au().getApplicationEntitiesListables(new AppTableQuery().entity(entity));
+                return au().getApplicationEntityListables(new AppTableQuery().entity(entity));
             }
         }
 

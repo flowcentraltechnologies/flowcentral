@@ -42,7 +42,7 @@ public class StudioWorkflowTableListCommand extends AbstractApplicationListComma
     @Override
     public List<? extends Listable> execute(Locale locale, StringParam stringParam) throws UnifyException {
         if (stringParam.isPresent()) {
-            return au().getApplicationEntitiesListables(new AppTableQuery().entity(stringParam.getValue()));
+            return au().getApplicationEntityListables(new AppTableQuery().entity(stringParam.getValue()));
         }
 
         return Collections.emptyList();
