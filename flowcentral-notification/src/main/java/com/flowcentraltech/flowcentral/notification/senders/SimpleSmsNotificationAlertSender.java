@@ -25,7 +25,7 @@ import com.tcdng.unify.core.annotation.Component;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@Component(NotificationModuleNameConstants.SIMPLE_SMS_ALERT_SENDER)
+@Component(name = NotificationModuleNameConstants.SIMPLE_SMS_ALERT_SENDER, description = "Simple SMS Alert Sender")
 public class SimpleSmsNotificationAlertSender extends AbstractSimpleNotificationAlertSender {
 
     public SimpleSmsNotificationAlertSender() {

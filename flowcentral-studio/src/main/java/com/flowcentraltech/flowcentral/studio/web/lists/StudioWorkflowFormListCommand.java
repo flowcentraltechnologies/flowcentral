@@ -50,7 +50,7 @@ public class StudioWorkflowFormListCommand extends AbstractApplicationListComman
     public List<? extends Listable> execute(Locale locale, LongParam longParam) throws UnifyException {
         if (longParam.isPresent()) {
             Workflow workflow = workflowModuleService.findLeanWorkflowById(longParam.getValue());
-            return au().getApplicationEntitiesListables(new AppFormQuery().entity(workflow.getEntity()));
+            return au().getApplicationEntityListables(new AppFormQuery().entity(workflow.getEntity()));
         }
 
         return Collections.emptyList();

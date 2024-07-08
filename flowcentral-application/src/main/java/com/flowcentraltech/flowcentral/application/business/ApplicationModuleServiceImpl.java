@@ -1145,10 +1145,11 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                                         : entityFieldDef.getInputWidgetTypeDef();
                                 widgetTypeDef = widgetTypeDef != null ? widgetTypeDef
                                         : getWidgetTypeDef("application.text");
-                                WidgetColor color = appFormElement.getColor();
+                                WidgetColor color = entityFieldDef.isWithAutoFormat() ? WidgetColor.NAVY_GRAY
+                                        : appFormElement.getColor();
                                 if (useFormColorScheme) {
                                     color = entitySearchTypes.contains(widgetTypeDef.getLongName()) ? WidgetColor.PURPLE
-                                            : (entityFieldDef.isWithAutoFormat() ? WidgetColor.NAVY_GRAY : color);
+                                            : color;
                                 }
 
                                 fieldRenderInfos.put(fieldName,
@@ -1168,7 +1169,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                                         label, renderer, appFormElement.getFieldColumn(),
                                         appFormElement.isSwitchOnChange(), appFormElement.isSaveAs(),
                                         appFormElement.isRequired(), appFormElement.isVisible(),
-                                        appFormElement.isEditable(), appFormElement.isDisabled());
+                                        appFormElement.isEditable() && !entityFieldDef.isWithAutoFormat(),
+                                        appFormElement.isDisabled());
                             }
                         }
                     }

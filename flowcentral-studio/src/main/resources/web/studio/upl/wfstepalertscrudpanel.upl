@@ -15,7 +15,7 @@
 
 !fc-wfstepalertscrudpanel
 	tableComponents:$c{nameLabel descLabel}
-	formSection:$d{!ui-section components:$c{frmName frmDesc frmSender
+	formSection:$d{!ui-section components:$c{frmName frmDesc frmSender frmTemplate
 		frmFireOnPrevStepName frmFireOnActionName frmFireOnConditionName frmRecipientPolicy frmRecipientNameRule frmRecipientContactRule frmType
 		frmAlertHeldBy frmAlertWorkflowRoles}}
 !ui-label:nameLabel styleClass:$e{fc-formfield} caption:$m{wfstepalertscrudpanel.name} binding:name
@@ -25,6 +25,9 @@
 !ui-select:frmSender styleClass:$e{fc-formfield} caption:$m{wfstepalertscrudpanel.sender}
 	list:$s{wfeditnotifsenderlist} listParamType:$s{PANEL} listParams:$l{entityName} blankOption:$s{}
 	binding:generator required:true 
+!ui-select:frmTemplate styleClass:$e{fc-formfield} caption:$m{wfstepalertscrudpanel.template}
+	list:$s{wfeditnotiftemplatelist} listParamType:$s{PANEL} listParams:$l{entityName} blankOption:$s{}
+	binding:template
 !ui-select:frmFireOnPrevStepName styleClass:$e{fc-formfield} caption:$m{wfstepalertscrudpanel.fireonprevstepname}
 	list:$s{wfeditprevsteplist} listParamType:$s{PANEL} listParams:$l{prevStepList} blankOption:$s{}
 	binding:fireOnPrevStepName

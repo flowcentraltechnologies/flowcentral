@@ -42,7 +42,7 @@ public class NotificationTemplate extends BaseApplicationEntity {
     @ForeignKey
     private NotifMessageFormat messageFormat;
 
-    @Column(length = 128)
+    @Column(length = 128, nullable = true)
     private String entity;
 
     @Column(length = 128)

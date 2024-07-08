@@ -42,7 +42,7 @@ public class StudioEntityFormListCommand extends AbstractApplicationListCommand<
     @Override
     public List<? extends Listable> execute(Locale locale, StudioEntityFormParams params) throws UnifyException {
         if (params.isPresent()) {
-            return au().getApplicationEntitiesListables(new AppFormQuery().entity(params.getEntity()));
+            return au().getApplicationEntityListables(new AppFormQuery().entity(params.getEntity()));
         }
 
         return Collections.emptyList();

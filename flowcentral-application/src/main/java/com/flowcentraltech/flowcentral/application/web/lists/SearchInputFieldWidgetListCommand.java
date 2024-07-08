@@ -62,7 +62,7 @@ public class SearchInputFieldWidgetListCommand extends AbstractApplicationListCo
 
             Query<AppWidgetType> query = (Query<AppWidgetType>) au().application().queryOf("application.appWidgetType");
             ApplicationQueryUtils.addWidgetTypeCriteria(query, type);
-            return au().getApplicationEntitiesListables(query);
+            return au().getApplicationEntityListables(query);
         }
 
         return Collections.emptyList();

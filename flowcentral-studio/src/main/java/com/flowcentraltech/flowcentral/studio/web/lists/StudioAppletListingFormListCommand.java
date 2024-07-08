@@ -47,7 +47,7 @@ public class StudioAppletListingFormListCommand extends AbstractApplicationListC
         if (longParam.isPresent()) {
             String entity = application().getAppAppletEntity(longParam.getValue());
             if (!StringUtils.isBlank(entity)) {
-                return au().getApplicationEntitiesListables(new AppFormQuery().type(FormType.LISTING).entity(entity));
+                return au().getApplicationEntityListables(new AppFormQuery().type(FormType.LISTING).entity(entity));
             }
         }
 
