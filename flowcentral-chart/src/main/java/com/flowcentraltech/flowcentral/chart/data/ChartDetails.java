@@ -166,39 +166,41 @@ public class ChartDetails {
             synchronized (this) {
                 if (groupingSeries == null) {
                     groupingSeries = new LinkedHashMap<String, AbstractSeries<?, ?>>();
-                    for (Object[] row : tableSeries) {
-                        StringBuilder sb = new StringBuilder();
-                        final int len = headers.length;
-                        int i = 0;
-                        for (; i < len; i++) {
-                            ChartTableColumn col = headers[i];
-                            if (col.isCategory()) {
-                                if (i > 0) {
-                                    sb.append(' ');
+                    if (!DataUtils.isBlank(tableSeries)) {
+                        for (Object[] row : tableSeries) {
+                            StringBuilder sb = new StringBuilder();
+                            final int len = headers.length;
+                            int i = 0;
+                            for (; i < len; i++) {
+                                ChartTableColumn col = headers[i];
+                                if (col.isCategory()) {
+                                    if (i > 0) {
+                                        sb.append(' ');
+                                    }
+
+                                    sb.append(row[i]);
+                                } else {
+                                    break;
                                 }
-
-                                sb.append(row[i]);
-                            } else {
-                                break;
                             }
-                        }
 
-                        String cat = sb.toString();
-                        for (; i < len; i++) {
-                            ChartTableColumn col = headers[i];
-                            String name = col.getFieldName();
-                            if (chartDef.isSeriesInclusion(name)) {
-                                AbstractSeries<?, ?> _series = groupingSeries.get(name);
-                                if (_series == null) {
-                                    _series = col.getType().isInteger() ? new CategoryIntegerSeries(name)
-                                            : new CategoryDoubleSeries(name);
-                                    groupingSeries.put(name, _series);
+                            String cat = sb.toString();
+                            for (; i < len; i++) {
+                                ChartTableColumn col = headers[i];
+                                String name = col.getFieldName();
+                                if (chartDef.isSeriesInclusion(name)) {
+                                    AbstractSeries<?, ?> _series = groupingSeries.get(name);
+                                    if (_series == null) {
+                                        _series = col.getType().isInteger() ? new CategoryIntegerSeries(name)
+                                                : new CategoryDoubleSeries(name);
+                                        groupingSeries.put(name, _series);
+                                    }
+
+                                    _series.addData(cat, (Number) row[i]);
                                 }
-
-                                _series.addData(cat, (Number) row[i]);
                             }
-                        }
 
+                        }
                     }
 
                     groupingSeries = DataUtils.unmodifiableMap(groupingSeries);
