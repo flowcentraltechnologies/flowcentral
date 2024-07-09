@@ -248,7 +248,8 @@ public class ApplicationNotificationInstallerImpl extends AbstractApplicationArt
 
     @Override
     protected List<DeletionParams> getDeletionParams() throws UnifyException {
-        return Arrays.asList(new DeletionParams("notification templates", new NotificationTemplateQuery()));
+        return Arrays.asList(new DeletionParams("notification templates", new NotificationTemplateQuery()),
+                new DeletionParams("notification large texts", new NotificationLargeTextQuery()));
     }
 
     private void populateChildList(NotificationTemplate notificationTemplate, NotifTemplateConfig notifTemplateConfig)
