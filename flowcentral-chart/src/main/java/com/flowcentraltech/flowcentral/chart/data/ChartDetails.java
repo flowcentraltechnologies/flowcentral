@@ -51,6 +51,8 @@ public class ChartDetails {
 
     private int subTitleFontSize;
 
+    private boolean dynamicCategories;
+
     private ChartCategoryDataType categoryType;
 
     private Map<Object, String> categoryLabels;
@@ -68,7 +70,7 @@ public class ChartDetails {
     private Map<String, AbstractSeries<?, ?>> groupingSeries;
 
     private ChartDetails(String title, String subTitle, int titleOffsetX, int titleFontSize, int subTitleOffsetX,
-            int subTitleFontSize, ChartCategoryDataType categoryType, Map<Object, String> categoryLabels,
+            int subTitleFontSize, boolean dynamicCategories, ChartCategoryDataType categoryType, Map<Object, String> categoryLabels,
             Map<String, AbstractSeries<?, ?>> series, ChartTableColumn[] headers, List<Object[]> tableSeries,
             Set<String> seriesInclusion, Set<String> categoryInclusion) {
         this.title = title;
@@ -77,6 +79,7 @@ public class ChartDetails {
         this.titleFontSize = titleFontSize;
         this.subTitleOffsetX = subTitleOffsetX;
         this.subTitleFontSize = subTitleFontSize;
+        this.dynamicCategories = dynamicCategories;
         this.categoryType = categoryType;
         this.categoryLabels = categoryLabels;
         this.series = series;
@@ -116,6 +119,10 @@ public class ChartDetails {
 
     public int getSubTitleFontSize() {
         return subTitleFontSize;
+    }
+
+    public boolean isDynamicCategories() {
+        return dynamicCategories;
     }
 
     public ChartCategoryDataType getCategoryType() {
@@ -210,10 +217,6 @@ public class ChartDetails {
 
         return groupingSeries;
     }
-
-    public boolean isWithGroupingSeries(ChartDef chartDef) {
-        return !getGroupingSeries(chartDef).isEmpty();
-    }
     
     public ChartTableColumn[] getTableHeaders() {
         return headers;
@@ -244,6 +247,8 @@ public class ChartDetails {
         private int subTitleOffsetX;
 
         private int subTitleFontSize;
+
+        private boolean dynamicCategories;
 
         private ChartCategoryDataType categoryType;
 
@@ -294,6 +299,11 @@ public class ChartDetails {
 
         public Builder subTitleFontSize(int subTitleFontSize) {
             this.subTitleFontSize = subTitleFontSize;
+            return this;
+        }
+
+        public Builder dynamicCategories(boolean dynamicCategories) {
+            this.dynamicCategories = dynamicCategories;
             return this;
         }
 
@@ -377,7 +387,7 @@ public class ChartDetails {
 
         public ChartDetails build() throws UnifyException {
             return new ChartDetails(title, subTitle, titleOffsetX, titleFontSize, subTitleOffsetX, subTitleFontSize,
-                    categoryType, DataUtils.unmodifiableMap(categoryLabels), series, headers, tableSeries,
+                    dynamicCategories, categoryType, DataUtils.unmodifiableMap(categoryLabels), series, headers, tableSeries,
                     Collections.unmodifiableSet(seriesInclusion), Collections.unmodifiableSet(categoryInclusion));
         }
 

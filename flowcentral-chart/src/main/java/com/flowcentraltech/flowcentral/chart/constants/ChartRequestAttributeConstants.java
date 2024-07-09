@@ -16,12 +16,12 @@
 package com.flowcentraltech.flowcentral.chart.constants;
 
 /**
- * Chart session attribute constants.
+ * Chart request attribute constants.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface ChartSessionAttributeConstants {
+public interface ChartRequestAttributeConstants {
 
     String CHART_DETAILS_CACHE = "chart:details-cache";
 
