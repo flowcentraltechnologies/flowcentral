@@ -5754,11 +5754,34 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         List<AppEntityField> fieldList = new ArrayList<AppEntityField>();
         fieldList.addAll(ApplicationEntityUtils.getEntityBaseTypeFieldList(messageResolver, appEntity.getBaseType(),
                 ConfigType.STATIC));
+        Map<String, AppEntityField> base = Collections.emptyMap();
+        if (restore) {
+            base = new HashMap<String, AppEntityField>();
+            for (AppEntityField appEntityField : fieldList) {
+                base.put(appEntityField.getName(), appEntityField);
+            }
+        }
+
         Map<String, AppEntityField> map = restore || appEntity.isIdBlank() ? Collections.emptyMap()
                 : environment().findAllMap(String.class, "name",
                         new AppEntityFieldQuery().appEntityId(appEntity.getId()));
         if (!DataUtils.isBlank(appEntityConfig.getEntityFieldList())) {
             for (EntityFieldConfig entityFieldConfig : appEntityConfig.getEntityFieldList()) {
+                if (restore) {
+                    AppEntityField appEntityField = base.get(entityFieldConfig.getName());
+                    if (appEntityField != null) {
+                        if (!StringUtils.isBlank(entityFieldConfig.getColumnName())) {
+                            appEntityField.setColumnName(entityFieldConfig.getColumnName());
+                        }
+                        
+                        if (!StringUtils.isBlank(entityFieldConfig.getLabel())) {
+                            appEntityField.setLabel(resolveApplicationMessage(entityFieldConfig.getLabel()));
+                        }
+                        
+                        continue;
+                    }
+                }
+                
                 AppEntityField oldAppEntityField = map.remove(entityFieldConfig.getName());
                 if (oldAppEntityField == null) {
                     AppEntityField appEntityField = new AppEntityField();

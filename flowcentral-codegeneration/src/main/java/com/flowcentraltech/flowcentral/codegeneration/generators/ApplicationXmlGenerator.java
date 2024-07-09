@@ -415,7 +415,7 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                 ctx.addMessage(StaticMessageCategoryType.ENTITY, descKey, appEntity.getDescription());
                 ctx.addMessage(StaticMessageCategoryType.ENTITY, labelKey, appEntity.getLabel());
                 ctx.addEntity(ApplicationNameUtils.getApplicationEntityLongName(applicationName, appEntity.getName()));
-                appEntityConfig.setBaseType(ctx.isSnapshotMode() ? appEntity.getBaseType(): null);
+                appEntityConfig.setBaseType(ctx.isSnapshotMode() ? appEntity.getBaseType() : null);
                 appEntityConfig.setType(
                         ctx.isSnapshotMode() ? appEntity.getEntityClass() : ctx.getExtensionEntityClassName(appEntity));
                 appEntityConfig.setName(appEntity.getName());
@@ -434,7 +434,7 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                 if (!DataUtils.isBlank(appEntity.getFieldList())) {
                     List<EntityFieldConfig> entityFieldConfigList = new ArrayList<EntityFieldConfig>();
                     for (AppEntityField appEntityField : appEntity.getFieldList()) {
-                        if (!EntityFieldType.BASE.equals(appEntityField.getType())) {
+                        if (ctx.isSnapshotMode() || !EntityFieldType.BASE.equals(appEntityField.getType())) {
                             EntityFieldConfig entityFieldConfig = new EntityFieldConfig();
                             labelKey = getDescriptionKey(entityDescKey, "field.label", appEntityField.getName());
                             ctx.addMessage(StaticMessageCategoryType.ENTITY, labelKey, appEntityField.getLabel());
