@@ -3825,34 +3825,29 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         int deletionCount = 0;
         if (!DataUtils.isBlank(applicationArtifactInstallerList)) {
             for (ApplicationArtifactInstaller applicationArtifactInstaller : applicationArtifactInstallerList) {
-                deletionCount += applicationArtifactInstaller.deleteCustomApplicationArtifacts(taskMonitor,
+                deletionCount += applicationArtifactInstaller.deleteApplicationArtifacts(taskMonitor,
                         applicationId);
             }
         }
 
         applicationPrivilegeManager.unregisterCustonApplicationPrivileges(applicationId);
-        deletionCount += deleteApplicationArtifacts(taskMonitor, "suggestion types",
-                (BaseApplicationEntityQuery<?>) new AppSuggestionTypeQuery().isCustom(), applicationId);
-        deletionCount += deleteApplicationArtifacts(taskMonitor, "assignment pages",
-                (BaseApplicationEntityQuery<?>) new AppAssignmentPageQuery().isCustom(), applicationId);
-        deletionCount += deleteApplicationArtifacts(taskMonitor, "property rules",
-                (BaseApplicationEntityQuery<?>) new AppPropertyRuleQuery().isCustom(), applicationId);
-        deletionCount += deleteApplicationArtifacts(taskMonitor, "property lists",
-                (BaseApplicationEntityQuery<?>) new AppPropertyListQuery().isCustom(), applicationId);
-        deletionCount += deleteApplicationArtifacts(taskMonitor, "forms",
-                (BaseApplicationEntityQuery<?>) new AppFormQuery().isCustom(), applicationId);
-        deletionCount += deleteApplicationArtifacts(taskMonitor, "tables",
-                (BaseApplicationEntityQuery<?>) new AppTableQuery().isCustom(), applicationId);
-        deletionCount += deleteApplicationArtifacts(taskMonitor, "entities",
-                (BaseApplicationEntityQuery<?>) new AppEntityQuery().isCustom(), applicationId);
-        deletionCount += deleteApplicationArtifacts(taskMonitor, "references",
-                (BaseApplicationEntityQuery<?>) new AppRefQuery().isCustom(), applicationId);
-        deletionCount += deleteApplicationArtifacts(taskMonitor, "enumerations",
-                (BaseApplicationEntityQuery<?>) new AppEnumerationQuery().isCustom(), applicationId);
-        deletionCount += deleteApplicationArtifacts(taskMonitor, "widget types",
-                (BaseApplicationEntityQuery<?>) new AppWidgetTypeQuery().isCustom(), applicationId);
-        deletionCount += deleteApplicationArtifacts(taskMonitor, "applets",
-                (BaseApplicationEntityQuery<?>) new AppAppletQuery().isCustom(), applicationId);
+        deletionCount += deleteApplicationArtifacts(taskMonitor, "suggestion types", new AppSuggestionTypeQuery(),
+                applicationId);
+        deletionCount += deleteApplicationArtifacts(taskMonitor, "assignment pages", new AppAssignmentPageQuery(),
+                applicationId);
+        deletionCount += deleteApplicationArtifacts(taskMonitor, "property rules", new AppPropertyRuleQuery(),
+                applicationId);
+        deletionCount += deleteApplicationArtifacts(taskMonitor, "property lists", new AppPropertyListQuery(),
+                applicationId);
+        deletionCount += deleteApplicationArtifacts(taskMonitor, "forms", new AppFormQuery(), applicationId);
+        deletionCount += deleteApplicationArtifacts(taskMonitor, "tables", new AppTableQuery(), applicationId);
+        deletionCount += deleteApplicationArtifacts(taskMonitor, "entities", new AppEntityQuery(), applicationId);
+        deletionCount += deleteApplicationArtifacts(taskMonitor, "references", new AppRefQuery(), applicationId);
+        deletionCount += deleteApplicationArtifacts(taskMonitor, "enumerations", new AppEnumerationQuery(),
+                applicationId);
+        deletionCount += deleteApplicationArtifacts(taskMonitor, "widget types", new AppWidgetTypeQuery(),
+                applicationId);
+        deletionCount += deleteApplicationArtifacts(taskMonitor, "applets", new AppAppletQuery(), applicationId);
 
         environment().deleteAll(new ApplicationQuery().isCustom().addEquals("id", applicationId));
         logDebug(taskMonitor, "Application with ID [{0}] successfully deleted.", applicationId);

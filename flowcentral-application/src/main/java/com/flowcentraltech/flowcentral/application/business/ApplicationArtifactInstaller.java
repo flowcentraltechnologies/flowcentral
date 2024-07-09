@@ -87,16 +87,4 @@ public interface ApplicationArtifactInstaller extends FlowCentralComponent {
      */
     int deleteApplicationArtifacts(TaskMonitor taskMonitor, Long applicationId) throws UnifyException;
 
-    /**
-     * Deletes all custom application artifact.
-     * 
-     * @param taskMonitor
-     *                      the task monitor
-     * @param applicationId
-     *                      the application ID
-     * @return the deletion count
-     * @throws UnifyException
-     *                        if an error occurs
-     */
-    int deleteCustomApplicationArtifacts(TaskMonitor taskMonitor, Long applicationId) throws UnifyException;
 }
