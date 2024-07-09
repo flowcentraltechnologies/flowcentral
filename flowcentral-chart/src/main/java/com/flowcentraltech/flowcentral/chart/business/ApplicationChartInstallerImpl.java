@@ -274,7 +274,7 @@ public class ApplicationChartInstallerImpl extends AbstractApplicationArtifactIn
 
     @Override
     protected List<DeletionParams> getDeletionParams() throws UnifyException {
-        return Arrays.asList(new DeletionParams("charts", new ChartQuery()));
+        return Arrays.asList(new DeletionParams("charts", new ChartQuery()), new DeletionParams("chartDataSources", new ChartDataSourceQuery()));
     }
 
     private AppFieldSequence newAppFieldSequence(FieldSequenceConfig fieldSequenceConfig) throws UnifyException {
