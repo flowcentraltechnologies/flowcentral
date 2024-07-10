@@ -233,7 +233,7 @@ public final class ChartUtils {
             }
             jw.endArray();
 
-            if (chartType.isColumn()) {
+            if (chartType.isColumn() || chartType.isLine() || chartType.isArea()) {
                 // Y-axis
                 jw.write("_yintegers", integers);
                 jw.write("_yformatter", chartDef.isFormatYLabels());
