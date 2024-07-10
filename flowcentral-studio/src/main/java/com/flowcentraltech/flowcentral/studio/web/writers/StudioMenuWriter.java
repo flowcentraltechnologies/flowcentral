@@ -92,11 +92,17 @@ public class StudioMenuWriter extends AbstractPanelWriter {
     protected void doWriteStructureAndContent(ResponseWriter writer, Widget widget) throws UnifyException {
         final StudioMenuWidget studioMenuWidget = (StudioMenuWidget) widget;
         final boolean searchable = studioMenuWidget.isSearchable();
+
+        final String applicationName = (String) getSessionAttribute(
+                StudioSessionAttributeConstants.CURRENT_APPLICATION_NAME);
+        final boolean application = !StringUtils.isBlank(applicationName);
+
         writer.write("<div");
         writeTagAttributesWithTrailingExtraStyleClass(writer, studioMenuWidget, "g_fsm");
         writer.write("><div class=\"mheader\">");
         writer.write("<span>");
-        writer.writeWithHtmlEscape(getSessionMessage("studio.menu.application.components"));
+        writer.writeWithHtmlEscape(application ? getSessionMessage("studio.menu.application.components")
+                : getSessionMessage("studio.menu.application.utilities"));
         writer.write("</span></div><div class=\"mbody\">");
         if (searchable) {
             // Search
@@ -109,10 +115,6 @@ public class StudioMenuWriter extends AbstractPanelWriter {
             writer.write("</span>");
             writer.write("</div>");
         }
-
-        final String applicationName = (String) getSessionAttribute(
-                StudioSessionAttributeConstants.CURRENT_APPLICATION_NAME);
-        final boolean application = !StringUtils.isBlank(applicationName);
 
         final boolean isCollaborationEnabled = appletUtilities.collaborationProvider() != null;
         final List<StudioAppComponentType> selMenuCategoryList = application ? menuCategoryList
