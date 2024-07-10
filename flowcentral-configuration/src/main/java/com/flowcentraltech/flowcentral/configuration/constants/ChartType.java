@@ -115,6 +115,14 @@ public enum ChartType implements EnumConst {
     public boolean isColumn() {
         return COLUMN.equals(this);
     }
+
+    public boolean isLine() {
+        return LINE.equals(this);
+    }
+
+    public boolean isArea() {
+        return AREA.equals(this);
+    }
     
     public static ChartType fromCode(String code) {
         return EnumUtils.fromCode(ChartType.class, code);

@@ -95,7 +95,7 @@ public final class ChartUtils {
         JsonWriter jw = new JsonWriter();
         jw.beginObject();
         final ChartType chartType = chartDef.getType();
-        final boolean isDynamicCategories = chartDetails.isWithGroupingSeries(chartDef);
+        final boolean isDynamicCategories = chartDetails.isDynamicCategories();
         final Map<String, AbstractSeries<?, ?>> series = isDynamicCategories ? chartDetails.getGroupingSeries(chartDef)
                 : (chartDetails.getSeries(chartDetails.isWithSeriesInclusion() ? chartDetails.getSeriesInclusion()
                         : chartDef.getSeriesInclusion()));
@@ -233,7 +233,7 @@ public final class ChartUtils {
             }
             jw.endArray();
 
-            if (chartType.isColumn()) {
+            if (chartType.isColumn() || chartType.isLine() || chartType.isArea()) {
                 // Y-axis
                 jw.write("_yintegers", integers);
                 jw.write("_yformatter", chartDef.isFormatYLabels());

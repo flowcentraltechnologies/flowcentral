@@ -29,7 +29,6 @@ import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.util.InputWidgetUtils;
 import com.flowcentraltech.flowcentral.chart.constants.ChartModuleErrorConstants;
 import com.flowcentraltech.flowcentral.chart.constants.ChartModuleNameConstants;
-import com.flowcentraltech.flowcentral.chart.constants.ChartSessionAttributeConstants;
 import com.flowcentraltech.flowcentral.chart.data.ChartDataSourceDef;
 import com.flowcentraltech.flowcentral.chart.data.ChartDef;
 import com.flowcentraltech.flowcentral.chart.data.ChartDetails;
@@ -204,7 +203,7 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
 
     @Override
     public void clearChartCache() throws UnifyException {
-        removeSessionAttribute(ChartSessionAttributeConstants.CHART_DETAILS_CACHE);
+
     }
 
     @Override

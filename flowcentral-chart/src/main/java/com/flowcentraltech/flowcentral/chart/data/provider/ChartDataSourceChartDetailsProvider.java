@@ -91,7 +91,8 @@ public class ChartDataSourceChartDetailsProvider extends AbstractChartDetailsPro
                         ? ChartCategoryDataType.DATE
                         : ChartCategoryDataType.STRING;
         ChartDetails.Builder cdb = ChartDetails.newBuilder(chartCategoryType);
-
+        cdb.dynamicCategories(chartDataSourceDef.isWithGroupingFields());
+        
         final Date now = au().getNow();
         final PropertySequenceDef series = chartDataSourceDef.getSeries();
         final List<AggregateFunction> aggregateFunction = new ArrayList<AggregateFunction>();

@@ -23,7 +23,7 @@ import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.util.InputWidgetUtils;
 import com.flowcentraltech.flowcentral.chart.business.ChartModuleService;
-import com.flowcentraltech.flowcentral.chart.constants.ChartSessionAttributeConstants;
+import com.flowcentraltech.flowcentral.chart.constants.ChartRequestAttributeConstants;
 import com.flowcentraltech.flowcentral.chart.data.ChartConfiguration;
 import com.flowcentraltech.flowcentral.chart.data.ChartDataSourceDef;
 import com.flowcentraltech.flowcentral.chart.data.ChartDef;
@@ -185,17 +185,11 @@ public class ChartWriter extends AbstractWidgetWriter {
     }
 
     private ChartDetailsCache getChartDetailsCache() throws UnifyException {
-        ChartDetailsCache cache = getSessionAttribute(ChartDetailsCache.class,
-                ChartSessionAttributeConstants.CHART_DETAILS_CACHE);
+        ChartDetailsCache cache = getRequestAttribute(ChartDetailsCache.class,
+                ChartRequestAttributeConstants.CHART_DETAILS_CACHE);
         if (cache == null) {
-            synchronized (this) {
-                cache = getSessionAttribute(ChartDetailsCache.class,
-                        ChartSessionAttributeConstants.CHART_DETAILS_CACHE);
-                if (cache == null) {
-                    cache = new ChartDetailsCache();
-                    setSessionAttribute(ChartSessionAttributeConstants.CHART_DETAILS_CACHE, cache);
-                }
-            }
+            cache = new ChartDetailsCache();
+            setRequestAttribute(ChartRequestAttributeConstants.CHART_DETAILS_CACHE, cache);
         }
 
         return cache;
