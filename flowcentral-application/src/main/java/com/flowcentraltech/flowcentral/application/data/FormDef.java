@@ -654,8 +654,8 @@ public class FormDef extends BaseApplicationEntityDef {
         }
 
         public Builder addFormField(int tabIndex, int sectionIndex, EntityFieldDef entityFieldDef,
-                WidgetTypeDef widgetTypeDef, RefDef inputRefDef, String label, String renderer, int column,
-                boolean switchOnChange, boolean saveAs, boolean required, boolean visible, boolean editable,
+                WidgetTypeDef widgetTypeDef, RefDef inputRefDef, String previewForm, String label, String renderer,
+                int column, boolean switchOnChange, boolean saveAs, boolean required, boolean visible, boolean editable,
                 boolean disabled) {
             checkTabIndex(tabIndex);
 
@@ -676,8 +676,8 @@ public class FormDef extends BaseApplicationEntityDef {
                         + sectionIndex + "] and tab with index [" + tabIndex + "].");
             }
 
-            tempFormSectionDef.addFormFieldDef(entityFieldDef, widgetTypeDef, inputRefDef, label, renderer, column,
-                    switchOnChange, saveAs, required, visible, editable, disabled);
+            tempFormSectionDef.addFormFieldDef(entityFieldDef, widgetTypeDef, inputRefDef, previewForm, label, renderer,
+                    column, switchOnChange, saveAs, required, visible, editable, disabled);
             fieldNames.add(entityFieldDef.getFieldName());
             return this;
         }
@@ -1079,10 +1079,10 @@ public class FormDef extends BaseApplicationEntityDef {
             }
 
             public void addFormFieldDef(EntityFieldDef entityFieldDef, WidgetTypeDef widgetTypeDef, RefDef inputRefDef,
-                    String fieldLabel, String renderer, int column, boolean switchOnChange, boolean saveAs,
-                    boolean required, boolean visible, boolean editable, boolean disabled) {
-                formFieldDefList.add(new FormFieldDef(entityFieldDef, widgetTypeDef, inputRefDef, fieldLabel, renderer,
-                        column, switchOnChange, saveAs, required, visible, editable, disabled));
+                    String previewForm, String fieldLabel, String renderer, int column, boolean switchOnChange,
+                    boolean saveAs, boolean required, boolean visible, boolean editable, boolean disabled) {
+                formFieldDefList.add(new FormFieldDef(entityFieldDef, widgetTypeDef, inputRefDef, previewForm,
+                        fieldLabel, renderer, column, switchOnChange, saveAs, required, visible, editable, disabled));
             }
 
             public String getName() {

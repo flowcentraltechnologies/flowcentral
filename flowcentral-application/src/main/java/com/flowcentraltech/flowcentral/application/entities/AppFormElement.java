@@ -56,6 +56,9 @@ public class AppFormElement extends BaseConfigEntity {
     private String mappedFieldName;
 
     @Column(length = 128, nullable = true)
+    private String previewForm;
+
+    @Column(length = 128, nullable = true)
     private String tabApplet;
 
     @Column(length = 128, nullable = true)
@@ -203,6 +206,14 @@ public class AppFormElement extends BaseConfigEntity {
 
     public void setLabel(String label) {
         this.label = label;
+    }
+
+    public String getPreviewForm() {
+        return previewForm;
+    }
+
+    public void setPreviewForm(String previewForm) {
+        this.previewForm = previewForm;
     }
 
     public String getTabApplet() {

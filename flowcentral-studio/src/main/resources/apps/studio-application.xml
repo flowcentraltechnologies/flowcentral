@@ -4792,6 +4792,8 @@
 						column="0" />
 					<field name="fieldName" inputWidget="application.name"
 						column="0" />
+					<field name="previewForm" inputWidget="application.text"
+						column="0" />
 					<field name="inputWidget" inputWidget="application.name"
 						column="0" />
 					<field name="inputReference" inputWidget="application.name"

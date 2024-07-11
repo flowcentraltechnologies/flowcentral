@@ -23,7 +23,7 @@
 	layout:$d{!ui-vertical style:$s{table-layout:fixed;width:100%;}}
     formCaptionSuffix:$s{:} formBinding:$g{dialogFormBinding} formColumns:2
 	formSection:$d{!ui-section components:$c{frmName frmColumn frmLabel frmInputWidget frmInputReference
-		frmColor frmSwitchOnChange frmRequired frmVisible frmEditable frmDisabled}}
+		frmPreviewForm frmColor frmSwitchOnChange frmRequired frmVisible frmEditable frmDisabled}}
 !ui-text:frmName styleClass:$e{fc-formfield} caption:$m{formeditor.field.name} binding:name required:true focus:true
 !ui-integer:frmColumn styleClass:$e{fc-formfield} caption:$m{formeditor.field.column} binding:column
 !ui-text:frmLabel styleClass:$e{fc-formfield} caption:$m{formeditor.field.label} binding:label maxLen:64
@@ -31,6 +31,9 @@
 	list:studioentityfieldwidgetlist blankOption:$s{} listParams:$l{entity name dataType}
 !ui-select:frmInputReference styleClass:$e{fc-formfield} caption:$m{formeditor.field.inputreference} binding:reference
 	list:studioentityfieldinputreflist blankOption:$s{} listParams:$l{entity name dataType}	
+	eventHandler:$d{!ui-event event:onclick action:$c{referenceAct}}
+!ui-select:frmPreviewForm styleClass:$e{fc-formfield} caption:$m{formeditor.field.previewform} binding:previewForm
+	list:studiopreviewformlist blankOption:$s{} listParams:$l{reference}	
 !ui-select:frmColor styleClass:$e{fc-formfield} caption:$m{formeditor.field.color}
 	list:widgetcolorlist blankOption:$s{} binding:color
 !ui-checkbox:frmSwitchOnChange caption:$m{formeditor.field.switchonchange} binding:switchOnChange layoutCaption:true
@@ -49,6 +52,7 @@
     eventHandler:$d{!ui-event event:onclick action:$c{closeDialogAct}}
 
 //Actions
+!ui-postcommand:referenceAct command:referenceChange components:$c{formPanel}
 !ui-postcommand:applyAct command:apply components:$c{formPanel}
     validations:$c{formValidation} refresh:$f{refreshOnApply}
 !ui-postcommand:addAct command:add components:$c{formPanel}

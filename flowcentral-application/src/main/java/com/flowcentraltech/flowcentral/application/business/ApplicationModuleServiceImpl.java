@@ -1166,9 +1166,10 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                                 }
 
                                 fdb.addFormField(tabIndex, sectionIndex, entityFieldDef, widgetTypeDef, inputRefDef,
-                                        label, renderer, appFormElement.getFieldColumn(),
-                                        appFormElement.isSwitchOnChange(), appFormElement.isSaveAs(),
-                                        appFormElement.isRequired(), appFormElement.isVisible(),
+                                        appFormElement.getPreviewForm(), label, renderer,
+                                        appFormElement.getFieldColumn(), appFormElement.isSwitchOnChange(),
+                                        appFormElement.isSaveAs(), appFormElement.isRequired(),
+                                        appFormElement.isVisible(),
                                         appFormElement.isEditable() && !entityFieldDef.isWithAutoFormat(),
                                         appFormElement.isDisabled());
                             }
@@ -3825,8 +3826,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         int deletionCount = 0;
         if (!DataUtils.isBlank(applicationArtifactInstallerList)) {
             for (ApplicationArtifactInstaller applicationArtifactInstaller : applicationArtifactInstallerList) {
-                deletionCount += applicationArtifactInstaller.deleteApplicationArtifacts(taskMonitor,
-                        applicationId);
+                deletionCount += applicationArtifactInstaller.deleteApplicationArtifacts(taskMonitor, applicationId);
             }
         }
 
@@ -5768,15 +5768,15 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                         if (!StringUtils.isBlank(entityFieldConfig.getColumnName())) {
                             appEntityField.setColumnName(entityFieldConfig.getColumnName());
                         }
-                        
+
                         if (!StringUtils.isBlank(entityFieldConfig.getLabel())) {
                             appEntityField.setLabel(resolveApplicationMessage(entityFieldConfig.getLabel()));
                         }
-                        
+
                         continue;
                     }
                 }
-                
+
                 AppEntityField oldAppEntityField = map.remove(entityFieldConfig.getName());
                 if (oldAppEntityField == null) {
                     AppEntityField appEntityField = new AppEntityField();
@@ -6445,6 +6445,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                                     formFieldConfig.getInputWidget()));
                             appFormElement.setInputReference(ApplicationNameUtils
                                     .ensureLongNameReference(applicationName, formFieldConfig.getReference()));
+                            appFormElement.setPreviewForm(formFieldConfig.getPreviewForm());
                             appFormElement.setFieldColumn(formFieldConfig.getColumn());
                             appFormElement.setSwitchOnChange(formFieldConfig.getSwitchOnChange());
                             appFormElement.setSaveAs(formFieldConfig.getSaveAs());

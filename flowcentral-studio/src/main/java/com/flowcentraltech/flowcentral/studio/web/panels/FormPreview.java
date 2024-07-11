@@ -111,7 +111,8 @@ public class FormPreview {
                                         ? WidgetColor.fromCode(formField.getColor())
                                         : (entityFieldDef.isWithAutoFormat() ? WidgetColor.NAVY_GRAY : null);
                                 if (useFormColorScheme) {
-                                    color = au.isEntitySearchWidget(widgetTypeDef.getLongName()) ? WidgetColor.PURPLE : color;
+                                    color = au.isEntitySearchWidget(widgetTypeDef.getLongName()) ? WidgetColor.PURPLE
+                                            : color;
                                 }
 
                                 String renderer = InputWidgetUtils.constructEditorWithBinding(widgetTypeDef,
@@ -126,9 +127,11 @@ public class FormPreview {
                                 }
 
                                 fdb.addFormField(tabIndex, sectionIndex, entityFieldDef, widgetTypeDef, inputRefDef,
-                                        label, renderer, formField.getColumn(), formField.isSwitchOnChange(),
-                                        formField.isSaveAs(), formField.isRequired(), formField.isVisible(),
-                                        formField.isEditable() && !entityFieldDef.isWithAutoFormat(), formField.isDisabled());
+                                        formField.getPreviewForm(), label, renderer, formField.getColumn(),
+                                        formField.isSwitchOnChange(), formField.isSaveAs(), formField.isRequired(),
+                                        formField.isVisible(),
+                                        formField.isEditable() && !entityFieldDef.isWithAutoFormat(),
+                                        formField.isDisabled());
                             }
                         }
                     }

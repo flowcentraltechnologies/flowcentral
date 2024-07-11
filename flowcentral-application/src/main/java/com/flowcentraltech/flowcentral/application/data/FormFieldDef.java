@@ -15,6 +15,8 @@
  */
 package com.flowcentraltech.flowcentral.application.data;
 
+import com.tcdng.unify.core.util.StringUtils;
+
 /**
  * Form field definition.
  * 
@@ -28,6 +30,8 @@ public class FormFieldDef {
     private WidgetTypeDef widgetTypeDef;
 
     private RefDef inputRefDef;
+
+    private String previewForm;
 
     private String fieldLabel;
 
@@ -48,11 +52,12 @@ public class FormFieldDef {
     private boolean disabled;
 
     public FormFieldDef(EntityFieldDef entityFieldDef, WidgetTypeDef widgetTypeDef, RefDef inputRefDef,
-            String fieldLabel, String renderer, int column, boolean switchOnChange, boolean saveAs, boolean required,
+            String previewForm, String fieldLabel, String renderer, int column, boolean switchOnChange, boolean saveAs, boolean required,
             boolean visible, boolean editable, boolean disabled) {
         this.entityFieldDef = entityFieldDef;
         this.widgetTypeDef = widgetTypeDef;
         this.inputRefDef = inputRefDef;
+        this.previewForm = previewForm;
         this.fieldLabel = fieldLabel;
         this.renderer = renderer;
         this.column = column;
@@ -75,6 +80,7 @@ public class FormFieldDef {
         this.entityFieldDef = srcFormFieldDef.entityFieldDef;
         this.widgetTypeDef = srcFormFieldDef.widgetTypeDef;
         this.inputRefDef = srcFormFieldDef.inputRefDef;
+        this.previewForm = srcFormFieldDef.previewForm;
         this.fieldLabel = srcFormFieldDef.fieldLabel;
         this.renderer = srcFormFieldDef.renderer;
         this.switchOnChange = srcFormFieldDef.switchOnChange;
@@ -99,6 +105,14 @@ public class FormFieldDef {
 
     public boolean isWithInputRefDef() {
         return inputRefDef != null;
+    }
+
+    public String getPreviewForm() {
+        return previewForm;
+    }
+
+    public boolean isWithPreviewForm() {
+        return !StringUtils.isBlank(previewForm);
     }
 
     public String getFieldLabel() {

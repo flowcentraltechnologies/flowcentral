@@ -39,6 +39,8 @@ public class FormFieldConfig extends BaseConfig {
 
     private String reference;
 
+    private String previewForm;
+
     private WidgetColor color;
     
     private int column;
@@ -98,6 +100,15 @@ public class FormFieldConfig extends BaseConfig {
     @XmlAttribute
     public void setReference(String reference) {
         this.reference = reference;
+    }
+
+    public String getPreviewForm() {
+        return previewForm;
+    }
+
+    @XmlAttribute
+    public void setPreviewForm(String previewForm) {
+        this.previewForm = previewForm;
     }
 
     public WidgetColor getColor() {
