@@ -85,7 +85,7 @@ public class UserLoginController extends AbstractApplicationForwarderController<
     private MessageResolver messageResolver;
 
     public UserLoginController() {
-        super(UserLoginPageBean.class, Secured.FALSE, ReadOnly.FALSE, ResetOnWrite.FALSE);
+        super(UserLoginPageBean.class, Secured.PROTECTED, ReadOnly.FALSE, ResetOnWrite.FALSE);
     }
 
     @Action
