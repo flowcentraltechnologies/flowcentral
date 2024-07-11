@@ -48,8 +48,9 @@ public class CommonReportResourceController extends AbstractPageResourceControll
     }
 
     @Override
-    public void execute(OutputStream outputStream) throws UnifyException {
+    public String execute(OutputStream outputStream) throws UnifyException {
         ReportOptions reportOptions = (ReportOptions) removeSessionAttribute(getResourceName());
         reportProvider.generateDynamicReport(reportOptions, outputStream);
+        return null;
     }
 }

@@ -48,8 +48,9 @@ public class CommonListingReportResourceController extends AbstractPageResourceC
     }
 
     @Override
-    public void execute(OutputStream outputStream) throws UnifyException {
+    public String execute(OutputStream outputStream) throws UnifyException {
         Report report = (Report) removeSessionAttribute(getResourceName());
         reportProvider.generateReport(report, outputStream);
+        return null;
     }
 }
