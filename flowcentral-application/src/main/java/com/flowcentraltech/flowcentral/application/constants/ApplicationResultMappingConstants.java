@@ -42,6 +42,8 @@ public interface ApplicationResultMappingConstants {
     
     String SHOW_FILE_ATTACHMENTS= "showfileattachments";
     
+    String SHOW_PREVIEW_FORM = "showpreviewform";
+    
     String SHOW_CHILD_CRUD = "showchildcrud";
     
     String SHOW_QUICK_FORM_EDIT = "showquickformedit";

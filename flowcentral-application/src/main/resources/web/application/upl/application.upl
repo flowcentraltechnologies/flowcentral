@@ -105,6 +105,9 @@
 // Quick form edit
 !fc-quickformeditpanel:quickFormEditPopup binding:$w{}
 
+// Preview form panel
+!fc-previewformpanel:previewFormPopup binding:$w{}
+
 //Actions 
 !ui-post:wkspChangeAct path:$n{/changeWorkspace} components:$c{currentWkspSel}
 !ui-post:logoutAct path:$n{/logOut} confirm:$m{application.logout.confirm}
