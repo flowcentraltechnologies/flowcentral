@@ -16,6 +16,7 @@
 package com.flowcentraltech.flowcentral.application.web.writers;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.constants.AppletRequestAttributeConstants;
@@ -130,7 +131,7 @@ public class MiniFormWriter extends AbstractControlWriter {
         final MiniFormWidget miniFormWidget = (MiniFormWidget) widget;
         final FormContext ctx = miniFormWidget.getCtx();
         final List<EventHandler> switchOnChangeHandlers = ctx.getFormSwitchOnChangeHandlers();
-        final List<Preview> previews = new ArrayList<Preview>();
+        final List<Preview> previews = ctx.isPreviewFormMode() ? Collections.emptyList() : new ArrayList<Preview>();
         for (FormSection formSection : miniFormWidget.getFormSectionList()) {
             if (formSection.isVisible()) {
                 final int columns = formSection.getColumns();
@@ -161,7 +162,7 @@ public class MiniFormWriter extends AbstractControlWriter {
 
                             addPageAlias(miniFormWidget.getId(), chWidget);
 
-                            if (formWidget.isWithPreviewForm()) {
+                            if (!ctx.isPreviewFormMode() && formWidget.isWithPreviewForm()) {
                                 previews.add(new Preview(chWidget.getId(), formWidget.getPreviewForm()));
                             }
                         }
@@ -250,10 +251,10 @@ public class MiniFormWriter extends AbstractControlWriter {
                 writer.write("</div>");
                 writer.write("</div>");
 
-                if (formWidget.isWithPreviewForm()) {
+                if (!ctx.isPreviewFormMode() && formWidget.isWithPreviewForm()) {
                     final String bId = "view_" + chWidget.getId();
                     writer.write("<div class=\"mfview\">");
-                    writeSymbolButton(writer, bId, "mfact", "expand", quickView);
+                    writeSymbolButton(writer, bId, "mfact", "eye", quickView);
                     writer.write("</div>");
                 }
 

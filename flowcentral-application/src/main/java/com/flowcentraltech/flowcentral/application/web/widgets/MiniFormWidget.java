@@ -85,6 +85,31 @@ public class MiniFormWidget extends AbstractFlowCentralMultiControl implements F
     private Map<String, FormWidget> formWidgets;
 
     @SuppressWarnings("unchecked")
+    @Action
+    public void preview() throws UnifyException {
+        final String target = getRequestTarget(String.class);
+        String[] parts = target.split(":");
+        if (parts.length == 2) {
+            final Long instId = Long.valueOf(parts[0]);
+            final String formName = parts[1];
+
+            final FormDef mFormDef = appletUtilities.getFormDef(formName);
+            final EntityClassDef entityClassDef = appletUtilities
+                    .getEntityClassDef(mFormDef.getEntityDef().getLongName());
+            final FormContext mCtx = oldMiniForm.getCtx();
+            final Entity childInst = appletUtilities.environment()
+                    .listLean((Class<? extends Entity>) entityClassDef.getEntityClass(), instId);
+            FormContext _ctx = new FormContext(mCtx.getAppletContext(), mFormDef, mCtx.getFormEventHandlers(),
+                    childInst);
+            _ctx.revertTabStates();
+            _ctx.setPreviewFormMode();
+            MiniForm miniForm = new MiniForm(MiniFormScope.CHILD_FORM, _ctx, mFormDef.getFormTabDef(0));
+            PreviewFormInfo previewFormInfo = new PreviewFormInfo(mFormDef.getEntityDef().getLabel(), miniForm);
+            commandShowPopup(new Popup(ApplicationResultMappingConstants.SHOW_PREVIEW_FORM, previewFormInfo));
+        }
+    }
+
+    @SuppressWarnings("unchecked")
     public MiniForm getMiniForm() throws UnifyException {
         MiniForm miniForm = getValue(MiniForm.class);
         if (miniForm != oldMiniForm) {
@@ -177,31 +202,6 @@ public class MiniFormWidget extends AbstractFlowCentralMultiControl implements F
         }
 
         return miniForm;
-    }
-
-    @SuppressWarnings("unchecked")
-    @Action
-    public void preview() throws UnifyException {
-        final String target = getRequestTarget(String.class);
-        String[] parts = target.split("\\.");
-        if (parts.length == 2) {
-            final Long instId = Long.valueOf(parts[0]);
-            final String formName = parts[1];
-
-            final FormDef mFormDef = appletUtilities.getFormDef(formName);
-            final EntityClassDef entityClassDef = appletUtilities
-                    .getEntityClassDef(mFormDef.getEntityDef().getLongName());
-            final FormContext mCtx = oldMiniForm.getCtx();
-            final Entity childInst = appletUtilities.environment()
-                    .listLean((Class<? extends Entity>) entityClassDef.getEntityClass(), instId);
-            FormContext _ctx = new FormContext(mCtx.getAppletContext(), mFormDef, mCtx.getFormEventHandlers(),
-                    childInst);
-            _ctx.revertTabStates();
-            _ctx.setReadOnly(true);
-            MiniForm miniForm = new MiniForm(MiniFormScope.CHILD_FORM, _ctx, mFormDef.getFormTabDef(0));
-            PreviewFormInfo previewFormInfo = new PreviewFormInfo(miniForm);
-            commandShowPopup(new Popup(ApplicationResultMappingConstants.SHOW_PREVIEW_FORM, previewFormInfo));
-        }
     }
 
     public boolean isStrictRows() throws UnifyException {

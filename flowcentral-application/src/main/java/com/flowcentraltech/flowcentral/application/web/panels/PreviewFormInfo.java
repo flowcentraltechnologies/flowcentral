@@ -25,10 +25,17 @@ import com.flowcentraltech.flowcentral.application.web.widgets.MiniForm;
  */
 public class PreviewFormInfo {
 
+    private final String title;
+    
     private final MiniForm form;
  
-    public PreviewFormInfo(MiniForm form) {
+    public PreviewFormInfo(String title, MiniForm form) {
+        this.title = title;
         this.form = form;
+    }
+
+    public String getTitle() {
+        return title;
     }
 
     public MiniForm getForm() {
