@@ -712,6 +712,17 @@ public interface ApplicationModuleService extends FlowCentralService {
     AppEntityField findAppEntityField(AppEntityFieldQuery query) throws UnifyException;
 
     /**
+     * Finds application entity field references based on query.
+     * 
+     * @param query
+     *              the search query
+     * @return the references
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    String findAppEntityFieldReferences(AppEntityFieldQuery query) throws UnifyException;
+
+    /**
      * Finds entity search inputs.
      * 
      * @param entity

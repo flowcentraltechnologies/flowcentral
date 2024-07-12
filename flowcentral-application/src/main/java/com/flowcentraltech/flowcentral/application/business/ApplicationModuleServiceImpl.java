@@ -2038,6 +2038,12 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
+    public String findAppEntityFieldReferences(AppEntityFieldQuery query) throws UnifyException {
+        Optional<String> optional = environment().valueOptional(String.class, "references", query);
+        return optional.isPresent() ? optional.get() : null;
+    }
+
+    @Override
     public List<AppEntityField> findFormRelatedAppEntityFields(Long formId, String appletName) throws UnifyException {
         logDebug("Finding related application entity fields for form [{0}] and applet [{1}]...", formId, appletName);
         String entityName = environment().value(String.class, "entity", new AppFormQuery().id(formId));

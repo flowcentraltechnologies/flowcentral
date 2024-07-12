@@ -21,12 +21,14 @@ import java.util.List;
 import java.util.Locale;
 
 import com.flowcentraltech.flowcentral.application.data.RefDef;
+import com.flowcentraltech.flowcentral.application.entities.AppEntityFieldQuery;
 import com.flowcentraltech.flowcentral.application.entities.AppFormQuery;
+import com.flowcentraltech.flowcentral.application.util.ApplicationEntityNameParts;
+import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.web.lists.AbstractApplicationListCommand;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.data.Listable;
-import com.tcdng.unify.core.list.StringParam;
 
 /**
  * Studio preview form list command
@@ -35,19 +37,21 @@ import com.tcdng.unify.core.list.StringParam;
  * @since 1.0
  */
 @Component("studiopreviewformlist")
-public class StudioPreviewFormListCommand extends AbstractApplicationListCommand<StringParam> {
+public class StudioPreviewFormListCommand extends AbstractApplicationListCommand<StudioEntityFieldFormParams> {
 
     public StudioPreviewFormListCommand() {
-        super(StringParam.class);
+        super(StudioEntityFieldFormParams.class);
     }
 
     @Override
-    public List<? extends Listable> execute(Locale locale, StringParam params) throws UnifyException {
+    public List<? extends Listable> execute(Locale locale, StudioEntityFieldFormParams params) throws UnifyException {
         if (params.isPresent()) {
-            RefDef refDef = application().getRefDef(params.getValue());
-            AppFormQuery query = new AppFormQuery();
-            query.entity(refDef.getEntity());
-            return au().getApplicationEntityListables(query);
+            ApplicationEntityNameParts np = ApplicationNameUtils.getApplicationEntityNameParts(params.getEntity());
+            final String references = application().findAppEntityFieldReferences(
+                    (AppEntityFieldQuery) new AppEntityFieldQuery().applicationName(np.getApplicationName())
+                            .appEntityName(np.getEntityName()).name(params.getName()));
+            RefDef refDef = application().getRefDef(references);
+            return au().getApplicationEntityListables(new AppFormQuery().entity(refDef.getEntity()));
         }
 
         return Collections.emptyList();

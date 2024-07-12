@@ -53,6 +53,7 @@ import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.filter.ObjectFilter;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.StringUtils;
+import com.tcdng.unify.web.annotation.Action;
 import com.tcdng.unify.web.ui.widget.Widget;
 import com.tcdng.unify.web.ui.widget.control.CheckBox;
 import com.tcdng.unify.web.ui.widget.control.TextArea;
@@ -172,6 +173,14 @@ public class MiniFormWidget extends AbstractFlowCentralMultiControl implements F
         }
 
         return miniForm;
+    }
+
+    @Action
+    public void preview() throws UnifyException {
+        final String target = getRequestTarget(String.class);
+        System.out.println("@prime: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+        System.out.println("@prime: preview() target = " + target);
+        System.out.println("@prime: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
     }
 
     public boolean isStrictRows() throws UnifyException {
@@ -603,6 +612,14 @@ public class MiniFormWidget extends AbstractFlowCentralMultiControl implements F
         @Override
         public boolean isRequired() {
             return required;
+        }
+
+        public String getPreviewForm() {
+            return formFieldDef.getPreviewForm();
+        }
+
+        public boolean isWithPreviewForm() {
+            return formFieldDef.isWithPreviewForm();
         }
 
         public boolean isFocusable() {

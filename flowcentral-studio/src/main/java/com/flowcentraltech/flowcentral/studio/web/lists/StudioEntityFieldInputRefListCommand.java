@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.Locale;
 
 import com.flowcentraltech.flowcentral.application.data.RefDef;
-import com.flowcentraltech.flowcentral.application.entities.AppEntityField;
 import com.flowcentraltech.flowcentral.application.entities.AppEntityFieldQuery;
 import com.flowcentraltech.flowcentral.application.entities.AppRefQuery;
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityNameParts;
@@ -52,10 +51,10 @@ public class StudioEntityFieldInputRefListCommand extends AbstractApplicationLis
             EntityFieldDataType type = DataUtils.convert(EntityFieldDataType.class, params.getDataType());
             if (type.isForeignKey() && !type.isEnumGroup()) {
                 ApplicationEntityNameParts np = ApplicationNameUtils.getApplicationEntityNameParts(params.getEntity());
-                AppEntityField appEntityField = application().findAppEntityField(
+                final String references = application().findAppEntityFieldReferences(
                         (AppEntityFieldQuery) new AppEntityFieldQuery().applicationName(np.getApplicationName())
                                 .appEntityName(np.getEntityName()).name(params.getName()));
-                RefDef _refDef = application().getRefDef(appEntityField.getReferences());
+                RefDef _refDef = application().getRefDef(references);
                 AppRefQuery query = new AppRefQuery();
                 query.entity(_refDef.getEntity());
                 return au().getApplicationEntityListables(query);

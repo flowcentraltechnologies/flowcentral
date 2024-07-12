@@ -502,6 +502,9 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-miniform .mflabel .mfreq {width:9px; padding-right:4px;}
 .fc-miniform .mfcontent {}
 .fc-miniform .mfpost {display:table-cell;width:12px;}
+.fc-miniform .mfview {display:table-cell;width:32px;}
+.fc-miniform .mfact {margin-left: 4px;height: 24px; width: 24px;background-color: #fff; border: 1px solid #b0b0b0;
+	color: #525e6d;cursor: pointer;}
 .fc-miniform .mfannot {display:table-caption;}
 .fc-miniform .mfannot span {display:block; padding:8px 6px; margin: 0px 20px;}
 .fc-miniform .mwarn {border: 1px solid #ff823b;font-size: 8pt;color:#b35b29;font-weight: bold;background-color: #ffe6d7;padding: 6px 0px;}

@@ -15,6 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.application.web.writers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.constants.AppletRequestAttributeConstants;
@@ -31,6 +32,7 @@ import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.Writes;
+import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.ui.widget.EventHandler;
 import com.tcdng.unify.web.ui.widget.ResponseWriter;
@@ -67,6 +69,7 @@ public class MiniFormWriter extends AbstractControlWriter {
 
         FormContext ctx = miniFormWidget.getCtx();
         miniFormWidget.evaluateWidgetStates();
+        final String quickView = resolveSessionMessage("$m{button.quickview}");
         final boolean isClassicFormSection = systemModuleService.getSysParameterValue(boolean.class,
                 ApplicationModuleSysParamConstants.FORM_SECTION_CLASSIC_MODE);
         boolean isPreGap = false;
@@ -84,7 +87,7 @@ public class MiniFormWriter extends AbstractControlWriter {
                         int i = 0;
                         for (FormWidget formWidget : rowRegulator.getRowWidgets()) {
                             writer.write("<div class=\"mfcol\" ").write(columnInfos.get(i).getColumnStyle()).write(">");
-                            writeFieldCell(writer, ctx, formWidget);
+                            writeFieldCell(writer, ctx, formWidget, quickView);
                             writer.write("</div>");
                             i++;
                         }
@@ -106,7 +109,7 @@ public class MiniFormWriter extends AbstractControlWriter {
                     for (int i = 0; i < columns; i++) {
                         writer.write("<div class=\"mfcol\" ").write(columnInfos.get(i).getColumnStyle()).write(">");
                         for (FormWidget formWidget : formSection.getFormWidgetList(i)) {
-                            writeFieldCell(writer, ctx, formWidget);
+                            writeFieldCell(writer, ctx, formWidget, quickView);
                         }
                         writer.write("</div>");
                     }
@@ -127,6 +130,7 @@ public class MiniFormWriter extends AbstractControlWriter {
         final MiniFormWidget miniFormWidget = (MiniFormWidget) widget;
         final FormContext ctx = miniFormWidget.getCtx();
         final List<EventHandler> switchOnChangeHandlers = ctx.getFormSwitchOnChangeHandlers();
+        final List<Preview> previews = new ArrayList<Preview>();
         for (FormSection formSection : miniFormWidget.getFormSectionList()) {
             if (formSection.isVisible()) {
                 final int columns = formSection.getColumns();
@@ -156,6 +160,10 @@ public class MiniFormWriter extends AbstractControlWriter {
                             }
 
                             addPageAlias(miniFormWidget.getId(), chWidget);
+
+                            if (formWidget.isWithPreviewForm()) {
+                                previews.add(new Preview(chWidget.getId(), formWidget.getPreviewForm()));
+                            }
                         }
                     }
                 }
@@ -167,8 +175,11 @@ public class MiniFormWriter extends AbstractControlWriter {
 
         writer.beginFunction("fux.rigMiniForm");
         writer.writeParam("pId", miniFormWidget.getId());
+        writer.writeParam("pContId", miniFormWidget.getContainerId());
+        writer.writeCommandURLParam("pCmdURL");
         writer.writeParam("pFocusMemId", ctx.getFocusMemoryId());
         writer.writeParam("pTabMemId", ctx.getTabMemoryId());
+        writer.writeObjectParam("pPreview", DataUtils.toArray(Preview.class, previews));
         if (miniFormWidget.isMainForm()) {
             writer.writeParam("pTabWidId", miniFormWidget.getCtx().getTabWidgetIds());
         }
@@ -199,48 +210,79 @@ public class MiniFormWriter extends AbstractControlWriter {
         return false;
     }
 
-    private void writeFieldCell(ResponseWriter writer, FormContext ctx, FormWidget formWidget) throws UnifyException {
-        if (formWidget != null && formWidget.getResolvedWidget().isVisible()) {
-            writer.write("<div class=\"mffield\">");
-            writer.write("<div class=\"mffieldrow\">");
+    private void writeFieldCell(ResponseWriter writer, FormContext ctx, FormWidget formWidget, String quickView)
+            throws UnifyException {
+        if (formWidget != null) {           
+            Widget chWidget = formWidget.getResolvedWidget();
+            if (chWidget.isVisible()) {
+                writer.write("<div class=\"mffield\">");
+                writer.write("<div class=\"mffieldrow\">");
 
-            writer.write("<div class=\"mfpre").write("\">");
-            writer.write("<div class=\"mflabel\">");
-            writer.write("<span>");
-            if (formWidget.isRequired()) {
-                writer.write("<img class=\"mfreq\"src=\"");
-                if (StringUtils.isBlank(formWidget.getResolvedWidget().getValue(String.class))) {
-                    writer.writeFileImageContextURL("$t{images/red_asterix.png}");
-                } else {
-                    writer.writeFileImageContextURL("$t{images/gray_asterix.png}");
+                writer.write("<div class=\"mfpre").write("\">");
+                writer.write("<div class=\"mflabel\">");
+                writer.write("<span>");
+                if (formWidget.isRequired()) {
+                    writer.write("<img class=\"mfreq\"src=\"");
+                    if (StringUtils.isBlank(chWidget.getValue(String.class))) {
+                        writer.writeFileImageContextURL("$t{images/red_asterix.png}");
+                    } else {
+                        writer.writeFileImageContextURL("$t{images/gray_asterix.png}");
+                    }
+                    writer.write("\"/>");
                 }
-                writer.write("\"/>");
-            }
-            writer.writeWithHtmlEscape(formWidget.getFieldLabel());
-            writer.write("</span>");
-            writer.write("</div>");
-            writer.write("</div>");
+                writer.writeWithHtmlEscape(formWidget.getFieldLabel());
+                writer.write("</span>");
+                writer.write("</div>");
+                writer.write("</div>");
 
-            writer.write("<div class=\"mfmid\">");
-            writer.write("<div class=\"mfcon\">");
-            writer.write("<div class=\"mfcontent\">");
-            writer.writeStructureAndContent(formWidget.getResolvedWidget());
-            if (ctx.isWithFieldError(formWidget.getFieldName())) {
-                for (String msg : ctx.getFieldError(formWidget.getFieldName())) {
-                    writer.write("<div><span class=\"errmsg\">").write(resolveSessionMessage(msg))
-                            .write("</span></div>");
+                writer.write("<div class=\"mfmid\">");
+                writer.write("<div class=\"mfcon\">");
+                writer.write("<div class=\"mfcontent\">");
+                writer.writeStructureAndContent(chWidget);
+                if (ctx.isWithFieldError(formWidget.getFieldName())) {
+                    for (String msg : ctx.getFieldError(formWidget.getFieldName())) {
+                        writer.write("<div><span class=\"errmsg\">").write(resolveSessionMessage(msg))
+                                .write("</span></div>");
+                    }
                 }
-            }
 
-            writer.write("</div>");
-            writer.write("</div>");
-            writer.write("</div>");
+                writer.write("</div>");
+                writer.write("</div>");
+                writer.write("</div>");
 
-            writer.write("<div class=\"mfpost").write("\">");
-            writer.write("</div>");
+                if (formWidget.isWithPreviewForm()) {
+                    final String bId = "view_" + chWidget.getId();
+                    writer.write("<div class=\"mfview\">");
+                    writeSymbolButton(writer, bId, "mfact", "eye", quickView);
+                    writer.write("</div>");
+                }
 
-            writer.write("</div>");
-            writer.write("</div>");
+                writer.write("<div class=\"mfpost").write("\">");
+                writer.write("</div>");
+
+                writer.write("</div>");
+                writer.write("</div>");
+            }         
+        }
+    }
+    
+    public class Preview {
+        
+        private String id;
+        
+        private String frm;
+
+        public Preview(String id, String frm) {
+            this.id = id;
+            this.frm = frm;
+        }
+
+        public String getId() {
+            return id;
+        }
+
+        public String getFrm() {
+            return frm;
         }
     }
 }
