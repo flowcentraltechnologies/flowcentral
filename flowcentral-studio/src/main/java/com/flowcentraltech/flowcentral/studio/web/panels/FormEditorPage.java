@@ -149,6 +149,7 @@ public class FormEditorPage extends AbstractStudioEditorPage implements TabSheet
                         appFormElement.setLabel(formField.getLabel());
                         appFormElement.setInputWidget(formField.getInputWidget());
                         appFormElement.setInputReference(formField.getReference());
+                        appFormElement.setPreviewForm(formField.getPreviewForm());
                         WidgetColor color = !StringUtils.isBlank(formField.getColor())
                                 ? WidgetColor.fromCode(formField.getColor())
                                 : null;
@@ -181,10 +182,10 @@ public class FormEditorPage extends AbstractStudioEditorPage implements TabSheet
                         feb.addField(formDef.getEntityDef().getLongName(), entityFieldDef.getDataType(),
                                 appFormElement.getElementName(), appFormElement.getLabel(),
                                 appFormElement.getInputWidget(), appFormElement.getInputReference(),
-                                appFormElement.getColor(), appFormElement.getFieldColumn(),
-                                appFormElement.isSwitchOnChange(), appFormElement.isSaveAs(),
-                                appFormElement.isRequired(), appFormElement.isVisible(), appFormElement.isEditable(),
-                                appFormElement.isDisabled());
+                                appFormElement.getPreviewForm(), appFormElement.getColor(),
+                                appFormElement.getFieldColumn(), appFormElement.isSwitchOnChange(),
+                                appFormElement.isSaveAs(), appFormElement.isRequired(), appFormElement.isVisible(),
+                                appFormElement.isEditable(), appFormElement.isDisabled());
                     }
                     break;
                 case SECTION:

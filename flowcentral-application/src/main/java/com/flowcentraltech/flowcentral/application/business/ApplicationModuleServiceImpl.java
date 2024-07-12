@@ -1166,9 +1166,10 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                                 }
 
                                 fdb.addFormField(tabIndex, sectionIndex, entityFieldDef, widgetTypeDef, inputRefDef,
-                                        label, renderer, appFormElement.getFieldColumn(),
-                                        appFormElement.isSwitchOnChange(), appFormElement.isSaveAs(),
-                                        appFormElement.isRequired(), appFormElement.isVisible(),
+                                        appFormElement.getPreviewForm(), label, renderer,
+                                        appFormElement.getFieldColumn(), appFormElement.isSwitchOnChange(),
+                                        appFormElement.isSaveAs(), appFormElement.isRequired(),
+                                        appFormElement.isVisible(),
                                         appFormElement.isEditable() && !entityFieldDef.isWithAutoFormat(),
                                         appFormElement.isDisabled());
                             }
@@ -2037,6 +2038,12 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
+    public String findAppEntityFieldReferences(AppEntityFieldQuery query) throws UnifyException {
+        Optional<String> optional = environment().valueOptional(String.class, "references", query);
+        return optional.isPresent() ? optional.get() : null;
+    }
+
+    @Override
     public List<AppEntityField> findFormRelatedAppEntityFields(Long formId, String appletName) throws UnifyException {
         logDebug("Finding related application entity fields for form [{0}] and applet [{1}]...", formId, appletName);
         String entityName = environment().value(String.class, "entity", new AppFormQuery().id(formId));
@@ -2301,24 +2308,24 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
     @Override
     public <T extends BaseApplicationEntity> List<Long> findAppComponentIdList(String applicationName,
-            Class<T> componentClazz, String filter) throws UnifyException {
+            Class<T> componentClazz, String filterBy, String filter) throws UnifyException {
         return StringUtils.isBlank(filter)
                 ? environment().valueList(Long.class, "id",
                         Query.of(componentClazz).addEquals("applicationName", applicationName).addOrder("id"))
                 : environment().valueList(Long.class, "id", Query.of(componentClazz)
-                        .addEquals("applicationName", applicationName).addILike("label", filter).addOrder("id"));
+                        .addEquals("applicationName", applicationName).addILike(filterBy, filter).addOrder("id"));
     }
 
     @Override
     public <T extends BaseApplicationEntity> List<Long> findNonClassifiedAppComponentIdList(String applicationName,
-            Class<T> componentClazz, String filter) throws UnifyException {
+            Class<T> componentClazz, String filterBy, String filter) throws UnifyException {
         return StringUtils.isBlank(filter)
                 ? environment().valueList(Long.class, "id",
                         Query.of(componentClazz).addEquals("applicationName", applicationName)
                                 .addNotEquals("classified", true).addOrder("id"))
                 : environment().valueList(Long.class, "id",
-                        Query.of(componentClazz).addEquals("applicationName", applicationName).addILike("label", filter)
-                                .addNotEquals("classified", true).addOrder("id"));
+                        Query.of(componentClazz).addEquals("applicationName", applicationName)
+                                .addILike(filterBy, filter).addNotEquals("classified", true).addOrder("id"));
     }
 
     @Override
@@ -3825,8 +3832,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         int deletionCount = 0;
         if (!DataUtils.isBlank(applicationArtifactInstallerList)) {
             for (ApplicationArtifactInstaller applicationArtifactInstaller : applicationArtifactInstallerList) {
-                deletionCount += applicationArtifactInstaller.deleteApplicationArtifacts(taskMonitor,
-                        applicationId);
+                deletionCount += applicationArtifactInstaller.deleteApplicationArtifacts(taskMonitor, applicationId);
             }
         }
 
@@ -5768,15 +5774,15 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                         if (!StringUtils.isBlank(entityFieldConfig.getColumnName())) {
                             appEntityField.setColumnName(entityFieldConfig.getColumnName());
                         }
-                        
+
                         if (!StringUtils.isBlank(entityFieldConfig.getLabel())) {
                             appEntityField.setLabel(resolveApplicationMessage(entityFieldConfig.getLabel()));
                         }
-                        
+
                         continue;
                     }
                 }
-                
+
                 AppEntityField oldAppEntityField = map.remove(entityFieldConfig.getName());
                 if (oldAppEntityField == null) {
                     AppEntityField appEntityField = new AppEntityField();
@@ -6445,6 +6451,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                                     formFieldConfig.getInputWidget()));
                             appFormElement.setInputReference(ApplicationNameUtils
                                     .ensureLongNameReference(applicationName, formFieldConfig.getReference()));
+                            appFormElement.setPreviewForm(formFieldConfig.getPreviewForm());
                             appFormElement.setFieldColumn(formFieldConfig.getColumn());
                             appFormElement.setSwitchOnChange(formFieldConfig.getSwitchOnChange());
                             appFormElement.setSaveAs(formFieldConfig.getSaveAs());

@@ -939,7 +939,8 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
 
                                         formFieldConfig.setInputWidget(appFormElement.getInputWidget());
                                         formFieldConfig.setReference(appFormElement.getInputReference());
-                                        formFieldConfig.setColumn(appFormElement.getFieldColumn());
+                                        formFieldConfig.setPreviewForm(appFormElement.getPreviewForm());
+                                       formFieldConfig.setColumn(appFormElement.getFieldColumn());
                                         formFieldConfig.setSwitchOnChange(appFormElement.isSwitchOnChange());
                                         formFieldConfig.setSaveAs(appFormElement.isSaveAs());
                                         formFieldConfig.setRequired(appFormElement.isRequired());

@@ -255,13 +255,14 @@ public class FormEditor {
         }
 
         public Builder addField(String entity, EntityFieldDataType dataType, String name, String label,
-                String inputWidget, String reference, WidgetColor widgetColor, int column, boolean switchOnChange,
-                boolean saveAs, boolean required, boolean visible, boolean editable, boolean disabled) {
+                String inputWidget, String reference, String previewForm, WidgetColor widgetColor, int column,
+                boolean switchOnChange, boolean saveAs, boolean required, boolean visible, boolean editable,
+                boolean disabled) {
             String color = widgetColor != null ? widgetColor.code() : null;
             currentSection.getFields()
                     .add(new FormField(entity, dataType.code(), name, label,
-                            formDef.getEntityDef().getFieldDef(name).getFieldLabel(), inputWidget, reference, color,
-                            column, switchOnChange, saveAs, required, visible, editable, disabled));
+                            formDef.getEntityDef().getFieldDef(name).getFieldLabel(), inputWidget, reference,
+                            previewForm, color, column, switchOnChange, saveAs, required, visible, editable, disabled));
             return this;
         }
 
@@ -839,6 +840,8 @@ public class FormEditor {
 
         private String reference;
 
+        private String previewForm;
+
         private String color;
 
         private int column;
@@ -856,8 +859,8 @@ public class FormEditor {
         private boolean disabled;
 
         public FormField(String entity, String dataType, String name, String label, String fldLabel, String inputWidget,
-                String reference, String color, int column, boolean switchOnChange, boolean saveAs, boolean required,
-                boolean visible, boolean editable, boolean disabled) {
+                String reference, String previewForm, String color, int column, boolean switchOnChange, boolean saveAs,
+                boolean required, boolean visible, boolean editable, boolean disabled) {
             this.entity = entity;
             this.dataType = dataType;
             this.name = name;
@@ -865,6 +868,7 @@ public class FormEditor {
             this.fldLabel = fldLabel;
             this.inputWidget = inputWidget;
             this.reference = reference;
+            this.previewForm = previewForm;
             this.color = color;
             this.column = column;
             this.switchOnChange = switchOnChange;
@@ -941,6 +945,14 @@ public class FormEditor {
 
         public void setReference(String reference) {
             this.reference = reference;
+        }
+
+        public String getPreviewForm() {
+            return previewForm;
+        }
+
+        public void setPreviewForm(String previewForm) {
+            this.previewForm = previewForm;
         }
 
         public String getColor() {

@@ -75,7 +75,8 @@ public class FormContext extends AbstractContext {
         NORMAL,
         SAVE_AS,
         CRUD,
-        QUICK_EDIT
+        QUICK_EDIT,
+        PREVIEW_FORM
     }
 
     private AppletContext appletContext;
@@ -327,6 +328,10 @@ public class FormContext extends AbstractContext {
         return Mode.QUICK_EDIT.equals(mode);
     }
 
+    public boolean isPreviewFormMode() {
+        return Mode.PREVIEW_FORM.equals(mode);
+    }
+
     public void setNormalMode() {
         this.mode = Mode.NORMAL;
     }
@@ -337,6 +342,10 @@ public class FormContext extends AbstractContext {
 
     public void setCrudMode() {
         this.mode = Mode.CRUD;
+    }
+
+    public void setPreviewFormMode() {
+        this.mode = Mode.PREVIEW_FORM;
     }
 
     public void setQuickEditMode(List<EventHandler> quickEditFormEventHandlers) {

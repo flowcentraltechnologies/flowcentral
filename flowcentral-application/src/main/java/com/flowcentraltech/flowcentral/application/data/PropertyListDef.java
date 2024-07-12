@@ -120,7 +120,7 @@ public class PropertyListDef extends BaseApplicationEntityDef {
                 List<FormFieldDef> formFieldDefList = new ArrayList<FormFieldDef>();
                 for (PropertyListItemDef propertyListItemDef : entry.getValue()) {
                     formFieldDefList.add(new FormFieldDef(propertyListItemDef.getEntityFieldDef(),
-                            propertyListItemDef.getWidgetTypeDef(), null, propertyListItemDef.getDescription(),
+                            propertyListItemDef.getWidgetTypeDef(), null, null, propertyListItemDef.getDescription(),
                             propertyListItemDef.getRenderer(), 0, false, false, propertyListItemDef.isRequired(), true,
                             true, false));
                     itemList.add(propertyListItemDef);

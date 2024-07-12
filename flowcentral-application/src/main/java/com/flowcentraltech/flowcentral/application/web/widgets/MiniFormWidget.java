@@ -28,6 +28,8 @@ import java.util.Map;
 import java.util.Set;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
+import com.flowcentraltech.flowcentral.application.constants.ApplicationResultMappingConstants;
+import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.application.data.FormDef;
 import com.flowcentraltech.flowcentral.application.data.FormFieldDef;
 import com.flowcentraltech.flowcentral.application.data.FormSectionDef;
@@ -36,6 +38,7 @@ import com.flowcentraltech.flowcentral.application.data.FormWidgetRulesPolicyDef
 import com.flowcentraltech.flowcentral.application.data.SetStateDef;
 import com.flowcentraltech.flowcentral.application.web.data.FormContext;
 import com.flowcentraltech.flowcentral.application.web.data.FormContext.FormTab;
+import com.flowcentraltech.flowcentral.application.web.panels.PreviewFormInfo;
 import com.flowcentraltech.flowcentral.common.business.policies.ConsolidatedFormStatePolicy;
 import com.flowcentraltech.flowcentral.common.data.FormStateRule;
 import com.flowcentraltech.flowcentral.common.data.TargetFormState;
@@ -53,10 +56,12 @@ import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.filter.ObjectFilter;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.StringUtils;
+import com.tcdng.unify.web.annotation.Action;
 import com.tcdng.unify.web.ui.widget.Widget;
 import com.tcdng.unify.web.ui.widget.control.CheckBox;
 import com.tcdng.unify.web.ui.widget.control.TextArea;
 import com.tcdng.unify.web.ui.widget.control.TextField;
+import com.tcdng.unify.web.ui.widget.data.Popup;
 
 /**
  * Mini form widget.
@@ -78,6 +83,31 @@ public class MiniFormWidget extends AbstractFlowCentralMultiControl implements F
     private Map<String, FormSection> formSections;
 
     private Map<String, FormWidget> formWidgets;
+
+    @SuppressWarnings("unchecked")
+    @Action
+    public void preview() throws UnifyException {
+        final String target = getRequestTarget(String.class);
+        String[] parts = target.split(":");
+        if (parts.length == 2) {
+            final Long instId = Long.valueOf(parts[0]);
+            final String formName = parts[1];
+
+            final FormDef mFormDef = appletUtilities.getFormDef(formName);
+            final EntityClassDef entityClassDef = appletUtilities
+                    .getEntityClassDef(mFormDef.getEntityDef().getLongName());
+            final FormContext mCtx = oldMiniForm.getCtx();
+            final Entity childInst = appletUtilities.environment()
+                    .listLean((Class<? extends Entity>) entityClassDef.getEntityClass(), instId);
+            FormContext _ctx = new FormContext(mCtx.getAppletContext(), mFormDef, mCtx.getFormEventHandlers(),
+                    childInst);
+            _ctx.revertTabStates();
+            _ctx.setPreviewFormMode();
+            MiniForm miniForm = new MiniForm(MiniFormScope.CHILD_FORM, _ctx, mFormDef.getFormTabDef(0));
+            PreviewFormInfo previewFormInfo = new PreviewFormInfo(mFormDef.getEntityDef().getLabel(), miniForm);
+            commandShowPopup(new Popup(ApplicationResultMappingConstants.SHOW_PREVIEW_FORM, previewFormInfo));
+        }
+    }
 
     @SuppressWarnings("unchecked")
     public MiniForm getMiniForm() throws UnifyException {
@@ -603,6 +633,14 @@ public class MiniFormWidget extends AbstractFlowCentralMultiControl implements F
         @Override
         public boolean isRequired() {
             return required;
+        }
+
+        public String getPreviewForm() {
+            return formFieldDef.getPreviewForm();
+        }
+
+        public boolean isWithPreviewForm() {
+            return formFieldDef.isWithPreviewForm();
         }
 
         public boolean isFocusable() {

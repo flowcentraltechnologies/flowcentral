@@ -712,6 +712,17 @@ public interface ApplicationModuleService extends FlowCentralService {
     AppEntityField findAppEntityField(AppEntityFieldQuery query) throws UnifyException;
 
     /**
+     * Finds application entity field references based on query.
+     * 
+     * @param query
+     *              the search query
+     * @return the references
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    String findAppEntityFieldReferences(AppEntityFieldQuery query) throws UnifyException;
+
+    /**
      * Finds entity search inputs.
      * 
      * @param entity
@@ -977,14 +988,16 @@ public interface ApplicationModuleService extends FlowCentralService {
      *                        the application name
      * @param componentClazz
      *                        the application component type
+     * @param filterBy
+     *                        optional filter by
      * @param filter
-     *                        optional label filter
+     *                        optional filter
      * @return list of application component IDs
      * @throws UnifyException
      *                        if an error occurs
      */
     <T extends BaseApplicationEntity> List<Long> findAppComponentIdList(String applicationName, Class<T> componentClazz,
-            String filter) throws UnifyException;
+            String filterBy, String filter) throws UnifyException;
 
     /**
      * Finds all non-classified application component IDs.
@@ -993,14 +1006,16 @@ public interface ApplicationModuleService extends FlowCentralService {
      *                        the application name
      * @param componentClazz
      *                        the application component type
+     * @param filterBy
+     *                        optional filter by
      * @param filter
-     *                        optional label filter
+     *                        optional filter
      * @return list of non-classified application component IDs
      * @throws UnifyException
      *                        if an error occurs
      */
     <T extends BaseApplicationEntity> List<Long> findNonClassifiedAppComponentIdList(String applicationName,
-            Class<T> componentClazz, String filter) throws UnifyException;
+            Class<T> componentClazz, String filterBy, String filter) throws UnifyException;
 
     /**
      * Finds all application component names.

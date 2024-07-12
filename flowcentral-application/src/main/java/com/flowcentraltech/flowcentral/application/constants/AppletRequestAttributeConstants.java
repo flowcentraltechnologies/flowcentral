@@ -35,5 +35,7 @@ public interface AppletRequestAttributeConstants {
     String MAINFORM_PUSH_COMPONENTS = "mainform.push.components";
     
     String OPEN_TAB_INFO= "app:opentabinfo";
+    
+    String PREVIEW_FORM_INFO= "app:previewforminfo";
 
 }

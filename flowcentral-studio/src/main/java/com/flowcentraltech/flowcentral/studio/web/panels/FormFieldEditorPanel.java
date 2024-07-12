@@ -50,10 +50,16 @@ public class FormFieldEditorPanel extends AbstractDialogPanel {
         EntityFieldDataType dataType = EntityFieldDataType.fromCode(formField.getDataType());
         boolean isRef = dataType.isForeignKey() && ! dataType.isEnumGroup();
         setVisible("frmInputReference", isRef);
+        setVisible("frmPreviewForm", isRef);
         
         boolean isCreate = DialogFormMode.CREATE.equals(DialogFormMode.fromName(formField.getMode()));
         setVisible("addBtn", isCreate);
         setVisible("applyBtn", !isCreate);
+    }
+
+    @Action
+    public void referenceChange() throws UnifyException {
+
     }
 
     @Action

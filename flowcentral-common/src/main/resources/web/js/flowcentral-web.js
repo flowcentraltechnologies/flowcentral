@@ -685,7 +685,17 @@ fux.rigMiniForm = function(rgp) {
 			ux.addHdl(_id(evp.uTabId), "focus", fux.miniFormFocusMemory, evp);
 			ux.addHdl(_id(evp.uTabId), "keydown", fux.miniFormTabout, evp);
 		}
-	}    
+	}
+	
+	const preview = rgp.pPreview;
+	if (preview && preview.length) {	
+		for (var i = 0; i < preview.length; i++) {
+			var evp = ux.newEvPrm(rgp);
+			evp.uId = rgp.pId;
+			evp.uPreview = preview[i];
+			ux.addHdl(_id("view_" + evp.uPreview.id), "click", fux.miniFormPreview, evp);
+		}
+	}  
 }
 
 fux.preferredFocusId=null;
@@ -713,6 +723,17 @@ fux.miniFormTabout = function(uEv) {
 		}
 		
 		fux.preferredFocusId = evp.uTabId;
+	}
+}
+
+fux.miniFormPreview = function(uEv) {
+	const evp = uEv.evp;
+	const entId = _id(evp.uPreview.id).value;
+	if (entId) {
+		evp.uCmd = evp.uId + "->preview";
+		evp.uSendTrg = entId + ":" + evp.uPreview.frm;
+		evp.uIsDebounce = true;
+		ux.post(uEv);
 	}
 }
 

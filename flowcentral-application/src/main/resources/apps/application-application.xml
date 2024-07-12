@@ -1663,6 +1663,9 @@
 			<field name="label"
 				label="$m{application.appformelement.label}" type="string"
 				nullable="true" />
+			<field name="previewForm"
+				label="$m{application.appformelement.previewform}" type="string"
+				nullable="true" />
 			<field name="tabApplet"
 				label="$m{application.appformelement.tabapplet}" type="string"
 				nullable="true" />
