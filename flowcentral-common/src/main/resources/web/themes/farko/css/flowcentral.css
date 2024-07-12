@@ -502,8 +502,8 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-miniform .mflabel .mfreq {width:9px; padding-right:4px;}
 .fc-miniform .mfcontent {}
 .fc-miniform .mfpost {display:table-cell;width:12px;}
-.fc-miniform .mfview {display:table-cell;width:32px;}
-.fc-miniform .mfact {margin-left: 4px;height: 24px; width: 24px;background-color: #b5becd; border: 1px solid #b0b0b0;
+.fc-miniform .mfview {display:table-cell;width:28px;}
+.fc-miniform .mfact {margin-left: 4px;height: 20px; width: 20px;background-color: #b5becd; border: 1px solid #b0b0b0;
 	color:#525e6d;cursor: pointer;}
 .fc-miniform .mfannot {display:table-caption;}
 .fc-miniform .mfannot span {display:block; padding:8px 6px; margin: 0px 20px;}
@@ -1029,7 +1029,7 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-entitycrudpopuppanel .footer {display:block;padding-left:4px;box-sizing: border-box;}
 
 /* Preview form panel */
-.fc-previewformpanel {width:calc(100vw - 320px);background-color:#fff;border: 1px solid #b8b8b8;}
+.fc-previewformpanel {width:calc(100vw - 320px);min-width:720px;background-color:#fff;border: 1px solid #b8b8b8;}
 .fc-previewformpanel .header {display:block;width:100%;margin-bottom:10px;}
 .fc-previewformpanel .til {display:inline-block;background-color:#6e819d; color:#fff; padding:5px 8px;font-size: 11px;font-weight: bold;}
 .fc-previewformpanel .forms {width:100%;height:420px;}
