@@ -51,6 +51,8 @@ import com.tcdng.unify.web.ui.widget.ContentPanel;
                 response = { "!showpopupresponse popup:$s{entityTreeMultiselectPopup}" }),
         @ResultMapping(name = ApplicationResultMappingConstants.SHOW_TEXT_TEMPLATE_EDITOR,
                 response = { "!showpopupresponse popup:$s{textTemplatePopup}" }),
+        @ResultMapping(name = ApplicationResultMappingConstants.SHOW_PREVIEW_FORM,
+                response = { "!showpopupresponse popup:$s{previewFormPopup}" }),
         @ResultMapping(name = ApplicationResultMappingConstants.REFRESH_CONTENT,
                 response = { "!hidepopupresponse", "!refreshpanelresponse panels:$l{content}" }) })
 public class ApplicationBrowserWindowController extends AbstractPageController<ApplicationBrowserWindowPageBean> {

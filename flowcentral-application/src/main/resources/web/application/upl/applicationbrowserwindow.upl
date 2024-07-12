@@ -32,3 +32,6 @@
 
 // Text template pop up
 !fc-texttemplatepanel:textTemplatePopup binding:$w{}
+
+// Preview form panel
+!fc-previewformpanel:previewFormPopup binding:$w{}

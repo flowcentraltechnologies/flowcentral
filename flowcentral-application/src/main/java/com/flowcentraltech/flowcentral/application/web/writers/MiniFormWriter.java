@@ -254,7 +254,7 @@ public class MiniFormWriter extends AbstractControlWriter {
                 if (!ctx.isPreviewFormMode() && formWidget.isWithPreviewForm()) {
                     final String bId = "view_" + chWidget.getId();
                     writer.write("<div class=\"mfview\">");
-                    writeSymbolButton(writer, bId, "mfact", "eye", quickView);
+                    writeSymbolButton(writer, bId, "mfact", "info", quickView);
                     writer.write("</div>");
                 }
 
