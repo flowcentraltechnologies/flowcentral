@@ -304,9 +304,10 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
             throws UnifyException {
         List<AppletDef> appletDefList = null;
         List<Long> instIdList = type.isShowClassified()
-                ? appletUtilities.application().findAppComponentIdList(applicationName, type.componentType(), filter)
+                ? appletUtilities.application().findAppComponentIdList(applicationName, type.componentType(),
+                        "description", filter)
                 : appletUtilities.application().findNonClassifiedAppComponentIdList(applicationName,
-                        type.componentType(), filter);
+                        type.componentType(), "description", filter);
         if (!instIdList.isEmpty()) {
             appletDefList = new ArrayList<AppletDef>();
             for (Long instId : instIdList) {
@@ -512,13 +513,11 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
             final Long applicationId = appletUtilities.application().getApplicationId("studio");
             appletUtilities.applicationPrivilegeManager().registerPrivilege(ConfigType.STATIC, applicationId,
                     ApplicationPrivilegeConstants.APPLICATION_FEATURE_CATEGORY_CODE,
-                    PrivilegeNameUtils
-                            .getFeaturePrivilegeName(StudioFeatureConstants.RESTORE_SNAPSHOT),
+                    PrivilegeNameUtils.getFeaturePrivilegeName(StudioFeatureConstants.RESTORE_SNAPSHOT),
                     resolveApplicationMessage("$m{studio.privilege.restoresnapshot}"));
             appletUtilities.applicationPrivilegeManager().registerPrivilege(ConfigType.STATIC, applicationId,
                     ApplicationPrivilegeConstants.APPLICATION_FEATURE_CATEGORY_CODE,
-                    PrivilegeNameUtils
-                            .getFeaturePrivilegeName(StudioFeatureConstants.DOWNLOAD_SNAPSHOT),
+                    PrivilegeNameUtils.getFeaturePrivilegeName(StudioFeatureConstants.DOWNLOAD_SNAPSHOT),
                     resolveApplicationMessage("$m{studio.privilege.downloadsnapshot}"));
         }
     }
