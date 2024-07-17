@@ -180,7 +180,11 @@ public final class ChartUtils {
         // Data labels
         jw.beginObject("dataLabels");
         jw.write("enabled", chartDef.isShowDataLabels());
-        jw.write("_dformatter", chartDef.isFormatDataLabels());
+        if (chartType.isPieChart() || chartType.isDonutChart()) {
+            jw.write("_cformatter", true);
+        } else {
+            jw.write("_dformatter", chartDef.isFormatDataLabels());
+        }
         jw.endObject();
 
         // Theme

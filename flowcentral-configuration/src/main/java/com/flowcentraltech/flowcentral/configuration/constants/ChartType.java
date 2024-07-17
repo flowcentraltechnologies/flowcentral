@@ -96,6 +96,14 @@ public enum ChartType implements EnumConst {
         return PIE.equals(this) || DONUT.equals(this) || POLAR_AREA.equals(this);
     }
 
+    public boolean isPieChart() {
+        return PIE.equals(this);
+    }
+
+    public boolean isDonutChart() {
+        return DONUT.equals(this);
+    }
+
     public boolean isFlowCentralType() {
         return CARD.equals(this) || TABLE.equals(this);
     }
