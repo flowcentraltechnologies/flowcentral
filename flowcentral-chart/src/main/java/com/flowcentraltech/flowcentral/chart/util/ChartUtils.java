@@ -96,7 +96,8 @@ public final class ChartUtils {
         jw.beginObject();
         final ChartType chartType = chartDef.getType();
         final boolean isDynamicCategories = chartDetails.isDynamicCategories();
-        final Map<String, AbstractSeries<?, ?>> series = isDynamicCategories ? chartDetails.getGroupingSeries(chartDef)
+        final Map<String, AbstractSeries<?, ?>> series = isDynamicCategories && chartType.axisChart()
+                ? chartDetails.getGroupingSeries(chartDef)
                 : (chartDetails.getSeries(chartDetails.isWithSeriesInclusion() ? chartDetails.getSeriesInclusion()
                         : chartDef.getSeriesInclusion()));
         final ChartCategoryDataType categoryType = chartDetails.getCategoryType();

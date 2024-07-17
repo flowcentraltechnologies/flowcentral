@@ -65,6 +65,8 @@ public class ChartDetails {
 
     private Set<String> seriesInclusion;
 
+    private Set<String> seriesFieldInclusion;
+
     private Set<String> categoryInclusion;
 
     private Map<String, AbstractSeries<?, ?>> groupingSeries;
@@ -86,6 +88,7 @@ public class ChartDetails {
         this.headers = headers;
         this.tableSeries = tableSeries;
         this.seriesInclusion = seriesInclusion;
+        this.seriesFieldInclusion = Collections.emptySet();
         this.categoryInclusion = categoryInclusion;
     }
 
@@ -133,6 +136,15 @@ public class ChartDetails {
         return categoryLabels.get(name);
     }
 
+    public void setSeriesFieldInclusion(Set<String> seriesFieldInclusion) {
+        this.seriesFieldInclusion = seriesFieldInclusion;
+    }
+
+    public boolean isSeriesFieldInclusion(String fieldName) {
+        return seriesFieldInclusion == null || seriesFieldInclusion.isEmpty()
+                || seriesFieldInclusion.contains(fieldName);
+    }
+    
     public Map<String, AbstractSeries<?, ?>> getSeries() {
         return series;
     }

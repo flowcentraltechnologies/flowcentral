@@ -16,8 +16,11 @@
 
 package com.flowcentraltech.flowcentral.chart.web.writers;
 
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
@@ -69,8 +72,7 @@ public class ChartWriter extends AbstractWidgetWriter {
         final ChartConfiguration configuration = chartWidget.getChartConfiguration();
         final String chartLongName = chartWidget.getValue(String.class);
         ChartDef chartDef = chartModuleService.getChartDef(chartLongName);
-        ChartDetails chartDetails = getChartDetailsCache().getChartDetails(configuration, chartDef.getProvider(),
-                chartDef.getRule());
+        ChartDetails chartDetails = getChartDetailsCache().getChartDetails(configuration, chartDef);
         writer.write("<div");
         writeTagAttributes(writer, chartWidget);
         writer.write(">");
@@ -128,6 +130,10 @@ public class ChartWriter extends AbstractWidgetWriter {
                 writer.write(chartDef.getColor());
                 writer.write(";position: sticky;top: 0px;\">");
                 for (ChartTableColumn header : headers) {
+                    if (header.isSeries() && !chartDetails.isSeriesFieldInclusion(header.getFieldName())) {
+                        continue;
+                    }
+
                     writer.write("<th>");
                     writer.writeWithHtmlEscape(header.getLabel());
                     writer.write("</th>");
@@ -139,6 +145,10 @@ public class ChartWriter extends AbstractWidgetWriter {
                     writer.write("<tr>");
                     for (int i = 0; i < cols; i++) {
                         ChartTableColumn header = headers[i];
+                        if (header.isSeries() && !chartDetails.isSeriesFieldInclusion(header.getFieldName())) {
+                            continue;
+                        }
+
                         String[] sval = options.format(header.getType(), row[i]);
                         writer.write("<td><span class=\"");
                         writer.write(header.getType().alignType().styleClass());
@@ -208,21 +218,31 @@ public class ChartWriter extends AbstractWidgetWriter {
             this.cache = new HashMap<String, ChartDetails>();
         }
 
-        public ChartDetails getChartDetails(ChartConfiguration configuration, String providerName, String rule)
+        public ChartDetails getChartDetails(ChartConfiguration configuration, ChartDef chartDef)
                 throws UnifyException {
+            final String providerName = chartDef.getProvider();
+            final String rule = chartDef.getRule();
             final String key = providerName + (!StringUtils.isBlank(rule) ? "." + rule : "");
             ChartDetails chartDetails = cache.get(key);
             if (chartDetails == null) {
                 Restriction restriction = null;
                 ChartDetailsProvider provider = (ChartDetailsProvider) getComponent(providerName);
+                Set<String> seriesFieldInclusion = Collections.emptySet();
                 if (provider.isUsesChartDataSource()) {
                     final ChartDataSourceDef chartDataSourceDef = chartModuleService.getChartDataSourceDef(rule);
                     final EntityDef entityDef = chartDataSourceDef.getEntityDef();
                     restriction = InputWidgetUtils.getRestriction(appletUtilities, entityDef,
                             configuration.getCatBase(chartDataSourceDef.getLongName()), chartModuleService.getNow());
+                    
+                    seriesFieldInclusion = new HashSet<String>();
+                    for (String seriesName : chartDef.getSeriesInclusion()) {
+                        seriesFieldInclusion.add(entityDef.getEntitySeriesDef(seriesName).getFieldName());
+                    }
                 }
 
-                cache.put(key, chartDetails = provider.provide(rule, restriction));
+                chartDetails = provider.provide(rule, restriction);
+                chartDetails.setSeriesFieldInclusion(seriesFieldInclusion);
+                cache.put(key, chartDetails);
             }
 
             return chartDetails;
