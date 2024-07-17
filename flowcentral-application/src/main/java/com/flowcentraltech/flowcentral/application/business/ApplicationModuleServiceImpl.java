@@ -70,6 +70,7 @@ import com.flowcentraltech.flowcentral.application.data.FilterGroupDef;
 import com.flowcentraltech.flowcentral.application.data.FilterGroupDef.FilterType;
 import com.flowcentraltech.flowcentral.application.data.FormDef;
 import com.flowcentraltech.flowcentral.application.data.FormFilterDef;
+import com.flowcentraltech.flowcentral.application.data.IndexDef;
 import com.flowcentraltech.flowcentral.application.data.PropertyListDef;
 import com.flowcentraltech.flowcentral.application.data.PropertyListItem;
 import com.flowcentraltech.flowcentral.application.data.PropertyListItemDef;
@@ -6952,6 +6953,18 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                             }
                         }
                     }
+                }
+            }
+
+            if (entityDef.isWithIndexes()) {
+                for (IndexDef indexDef : entityDef.getIndexList()) {
+                    deib.addIndex(indexDef.getFieldList());
+                }
+            }
+
+            if (entityDef.isWithUniqueConstraints()) {
+                for (UniqueConstraintDef uniqueConstraintDef : entityDef.getUniqueConstraintList()) {
+                    deib.addUniqueConstraint(uniqueConstraintDef.getFieldList());
                 }
             }
 

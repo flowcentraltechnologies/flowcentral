@@ -149,7 +149,7 @@ public class EnvironmentServiceImpl extends AbstractBusinessService implements E
     @Override
     public EntityActionResult create(EntityActionContext ctx) throws UnifyException {
         EntityActionResult result = executeEntityPreActionPolicy(ctx);
-        if (result == null) {
+        if (result == null) { 
             Entity inst = ctx.getInst();
             ctx.setResult(create(inst));
             if (suggestionProvider != null) {
