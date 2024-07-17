@@ -879,6 +879,10 @@ public class EntityDef extends BaseApplicationEntityDef {
         return !expressionDefMap.isEmpty();
     }
 
+    public boolean isWithIndexes() {
+        return !indexList.isEmpty();
+    }
+
     public boolean isWithUniqueConstraints() {
         return !uniqueConstraintList.isEmpty();
     }
