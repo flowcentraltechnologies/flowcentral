@@ -789,7 +789,7 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-appletmenu .mpop .icon {display:inline-block;width:20px;font-size:12px;vertical-align:top;}
 .fc-appletmenu .mpop a {display:inline-block;width: calc(100% - 20px);}
 .fc-appletmenu .menu {background-color:#3c4e63;padding:6px 12px;margin-bottom:2px;font-weight:bold;cursor:pointer;}
-.fc-appletmenu .menu .ind {display:inline-block;width:28px;border-radius:4px;font-size:7px;padding-top:2px;padding-bottom:2px;margin-right:6px;text-align:center;}
+.fc-appletmenu .menu .ind {display:inline-block;width:28px;font-size:7px;padding-top:2px;padding-bottom:2px;margin-right:6px;text-align:center;}
 .fc-appletmenu .menu .lab {display:inline-block;padding: 2px 0px;}
 .fc-appletmenu .submenu {}
 .fc-appletmenu .submenu ul {}

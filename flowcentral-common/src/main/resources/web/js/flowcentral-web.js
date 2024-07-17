@@ -237,7 +237,11 @@ fux.rigChart = function(rgp) {
 		      };
 	}
 	
-	if (options.dataLabels._dformatter) {
+	if (options.dataLabels._cformatter) {
+		options.dataLabels.formatter = function(val, opts) {
+			        return (Math.round(val * 10) / 10).toFixed(1) + "%";
+			      };
+	} else if (options.dataLabels._dformatter) {
 		options.dataLabels.formatter = function(val, opts) {
 			        return val.toLocaleString();
 			      };

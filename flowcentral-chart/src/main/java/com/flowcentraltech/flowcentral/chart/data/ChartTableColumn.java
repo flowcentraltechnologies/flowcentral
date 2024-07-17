@@ -56,4 +56,8 @@ public class ChartTableColumn {
         return category;
     }
 
+    public boolean isSeries() {
+        return !category;
+    }
+
 }

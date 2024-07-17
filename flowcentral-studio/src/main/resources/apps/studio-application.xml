@@ -3587,8 +3587,11 @@
 				</onCondition>
 				<setStates>
 					<setState type="field" target="paletteType"
-						visible="false" />
+						editable="false" />
 				</setStates>
+				<setValues>
+					<setValue type="immediate" field="paletteType" value="PL0" />
+				</setValues>
 			</formStatePolicy>
 			<formStatePolicy type="on_switch"
 				name="chartPaletteTypeFormPolicy"

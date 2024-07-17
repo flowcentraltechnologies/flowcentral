@@ -103,18 +103,7 @@ public class ChartDataSourceChartDetailsProvider extends AbstractChartDetailsPro
 
         Restriction baseRestriction = InputWidgetUtils.getRestriction(au(), entityDef, chartDataSourceDef.getCategoryBase(),
                 now);
-        if (preferredCategoryEntityFieldDef != null) {
-            final Object cat = preferredCategoryEntityFieldDef.getFieldName();
-            if (erestriction != null) {
-                if (baseRestriction != null) {
-                    baseRestriction = new And().add(baseRestriction).add(erestriction);
-                } else {
-                    baseRestriction = erestriction;
-                }
-            }
-
-            performAggregation(cdb, chartDataSourceDef, aggregateFunction, now, baseRestriction, cat);
-        } else if (chartDataSourceDef.isWithCategories()) {
+        if (chartDataSourceDef.isWithCategories()) {
             final PropertySequenceDef categories = chartDataSourceDef.getCategories();
             if (!categories.isBlank()) {
                 for (PropertySequenceEntryDef propertySequenceEntryDef : categories.getSequenceList()) {
@@ -146,6 +135,17 @@ public class ChartDataSourceChartDetailsProvider extends AbstractChartDetailsPro
                     performAggregation(cdb, chartDataSourceDef, aggregateFunction, now, restriction, cat);
                 }
             }
+        } else {
+            final Object cat = preferredCategoryEntityFieldDef != null ? preferredCategoryEntityFieldDef.getFieldName() : null;
+            if (erestriction != null) {
+                if (baseRestriction != null) {
+                    baseRestriction = new And().add(baseRestriction).add(erestriction);
+                } else {
+                    baseRestriction = erestriction;
+                }
+            }
+
+            performAggregation(cdb, chartDataSourceDef, aggregateFunction, now, baseRestriction, cat);
         }
 
         return cdb.build();
