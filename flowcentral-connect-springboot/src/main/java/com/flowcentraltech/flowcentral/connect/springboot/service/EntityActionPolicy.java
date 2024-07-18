@@ -16,6 +16,7 @@
 
 package com.flowcentraltech.flowcentral.connect.springboot.service;
 
+import com.flowcentraltech.flowcentral.connect.common.data.QueryLoadingParams;
 import com.flowcentraltech.flowcentral.connect.configuration.constants.EvaluationMode;
 
 /**
@@ -26,6 +27,16 @@ import com.flowcentraltech.flowcentral.connect.configuration.constants.Evaluatio
  */
 public interface EntityActionPolicy<T> {
 
+    /**
+     * Executes pre-search action.
+     * 
+     * @param queryLoadingParams
+     *                           the loading parameters
+     * @throws Exception
+     *                   if an error occurs
+     */
+    void executePreSearchAction(QueryLoadingParams queryLoadingParams) throws Exception;
+    
     /**
      * Validates entity bean
      * 

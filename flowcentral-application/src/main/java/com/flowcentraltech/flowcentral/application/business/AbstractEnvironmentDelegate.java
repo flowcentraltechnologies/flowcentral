@@ -39,6 +39,7 @@ import com.flowcentraltech.flowcentral.common.entities.BaseAuditEntity;
 import com.flowcentraltech.flowcentral.common.entities.BaseVersionEntity;
 import com.flowcentraltech.flowcentral.connect.common.constants.DataSourceOperation;
 import com.flowcentraltech.flowcentral.connect.common.data.BaseResponse;
+import com.flowcentraltech.flowcentral.connect.common.data.DataSourceParam;
 import com.flowcentraltech.flowcentral.connect.common.data.DataSourceRequest;
 import com.flowcentraltech.flowcentral.connect.common.data.DelegateEntityListingDTO;
 import com.flowcentraltech.flowcentral.connect.common.data.EntityDTO;
@@ -808,6 +809,19 @@ public abstract class AbstractEnvironmentDelegate extends AbstractFlowCentralCom
         req.setIgnoreEmptyCriteria(query.isIgnoreEmptyCriteria());
         req.setOffset(query.getOffset());
         req.setLimit(query.getLimit());
+        
+        List<DataSourceParam> params = Collections.emptyList();
+        if (query.isWithParams()) {
+            params = new ArrayList<DataSourceParam>();
+            for(Map.Entry<String, String> entry : query.getParams().entrySet()) {
+                DataSourceParam param = new DataSourceParam();
+                param.setName(entry.getKey());
+                param.setVal(entry.getValue());
+                params.add(param);
+            }
+        }
+        
+        req.setParams(params);
     }
 
     private <T extends Entity> T readEntityResultFromJsonPayload(Class<T> entityClass, String json,

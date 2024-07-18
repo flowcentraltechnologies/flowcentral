@@ -29,6 +29,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -45,6 +46,7 @@ import com.flowcentraltech.flowcentral.connect.common.constants.LingualDateType;
 import com.flowcentraltech.flowcentral.connect.common.constants.LingualStringType;
 import com.flowcentraltech.flowcentral.connect.common.constants.RestrictionType;
 import com.flowcentraltech.flowcentral.connect.common.data.BaseRequest;
+import com.flowcentraltech.flowcentral.connect.common.data.DataSourceParam;
 import com.flowcentraltech.flowcentral.connect.common.data.DataSourceRequest;
 import com.flowcentraltech.flowcentral.connect.common.data.DateRange;
 import com.flowcentraltech.flowcentral.connect.common.data.EntityFieldInfo;
@@ -54,6 +56,7 @@ import com.flowcentraltech.flowcentral.connect.common.data.JsonProcedureResponse
 import com.flowcentraltech.flowcentral.connect.common.data.OrderDef;
 import com.flowcentraltech.flowcentral.connect.common.data.ProcedureRequest;
 import com.flowcentraltech.flowcentral.connect.common.data.QueryDef;
+import com.flowcentraltech.flowcentral.connect.common.data.QueryLoadingParams;
 import com.flowcentraltech.flowcentral.connect.common.data.ResolvedCondition;
 import com.flowcentraltech.flowcentral.connect.common.data.UpdateDef;
 import com.flowcentraltech.flowcentral.connect.configuration.constants.ConnectEntityBaseType;
@@ -797,6 +800,18 @@ public abstract class AbstractInterconnect {
         return null;
     }
 
+    public QueryLoadingParams getQueryLoadingParams(List<DataSourceParam> params) {
+        Map<String, String> _params = Collections.emptyMap();
+        if (params != null && !params.isEmpty()) {
+            _params = new LinkedHashMap<String, String>();
+            for (DataSourceParam param : params) {
+                _params.put(param.getName(), param.getVal());
+            }
+        }
+
+        return new QueryLoadingParams(_params);
+    }
+    
     public List<OrderDef> getOrderDef(EntityInfo entityInfo, String order) throws Exception {
         checkInitialized();
         if (order != null) {
