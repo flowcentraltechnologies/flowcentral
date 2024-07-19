@@ -15,6 +15,8 @@
  */
 package com.flowcentraltech.flowcentral.connect.common.data;
 
+import java.util.List;
+
 import com.flowcentraltech.flowcentral.connect.common.constants.DataSourceOperation;
 import com.flowcentraltech.flowcentral.connect.configuration.constants.EvaluationMode;
 
@@ -45,6 +47,8 @@ public class DataSourceRequest extends BaseRequest {
     private int offset;
     
     private int limit;
+    
+    private List<DataSourceParam> params;
     
     public DataSourceRequest(DataSourceOperation operation, Long id, Long versionNo) {
         this.operation = operation;
@@ -182,5 +186,13 @@ public class DataSourceRequest extends BaseRequest {
     
     public boolean delete() {
         return DataSourceOperation.DELETE_ALL.equals(operation);
+    }
+
+    public List<DataSourceParam> getParams() {
+        return params;
+    }
+
+    public void setParams(List<DataSourceParam> params) {
+        this.params = params;
     }
 }

@@ -68,6 +68,7 @@ import com.flowcentraltech.flowcentral.connect.common.data.JsonProcedureResponse
 import com.flowcentraltech.flowcentral.connect.common.data.OrderDef;
 import com.flowcentraltech.flowcentral.connect.common.data.ProcedureRequest;
 import com.flowcentraltech.flowcentral.connect.common.data.QueryDef;
+import com.flowcentraltech.flowcentral.connect.common.data.QueryLoadingParams;
 import com.flowcentraltech.flowcentral.connect.common.data.ResolvedCondition;
 import com.flowcentraltech.flowcentral.connect.common.data.UpdateDef;
 import com.flowcentraltech.flowcentral.connect.configuration.constants.ConnectFieldDataType;
@@ -293,6 +294,14 @@ public class SpringBootInterconnectServiceImpl implements SpringBootInterconnect
                         case LIST:
                         case LIST_ALL:
                         case LIST_LEAN: {
+                            if (req.getOperation().isMultipleResult()) {
+                                if (entityActionPolicy != null) {
+                                    QueryLoadingParams queryLoadingParams = interconnect
+                                            .getQueryLoadingParams(req.getParams());
+                                    entityActionPolicy.executePreSearchAction(queryLoadingParams);
+                                }
+                            }
+
                             CriteriaQuery<?> cq = createQuery(entityInfo.getImplClass(), em, req);
                             TypedQuery<?> query = em.createQuery(cq);
                             if (req.getOffset() >= 0) {

@@ -148,7 +148,7 @@ public abstract class AbstractStudioAppletActionPolicy extends AbstractAppletAct
 
         if (assignToRole) {
             UserToken userToken = getUserToken();
-            if (!userToken.isReservedUser() && systemModuleService.getSysParameterValue(boolean.class,
+            if (userToken != null && !userToken.isReservedUser() && systemModuleService.getSysParameterValue(boolean.class,
                     ApplicationModuleSysParamConstants.ASSIGN_APPLICATIONENTITY_ONCREATE)) {
                 for (String assgnPrivilegeCode : privilegeCodeList) {
                     assignPrivilegeToRole(userToken.getRoleCode(), assgnPrivilegeCode);

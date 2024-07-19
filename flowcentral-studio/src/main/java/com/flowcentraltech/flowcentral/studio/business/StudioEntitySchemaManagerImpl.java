@@ -154,7 +154,7 @@ public class StudioEntitySchemaManagerImpl extends AbstractEntitySchemaManager {
                     if (!entityFieldSchema.getDataType().isReportable()) {
                         update.add("reportable", false);
                     }
-                    
+
                     au.environment().updateAll(
                             new AppEntityFieldQuery().appEntityId(appEntityId).name(entityFieldSchema.getName()),
                             update);
@@ -233,7 +233,7 @@ public class StudioEntitySchemaManagerImpl extends AbstractEntitySchemaManager {
                 }
 
                 UserToken userToken = getUserToken();
-                if (!userToken.isReservedUser() && au.system().getSysParameterValue(boolean.class,
+                if (userToken != null && !userToken.isReservedUser() && au.system().getSysParameterValue(boolean.class,
                         ApplicationModuleSysParamConstants.ASSIGN_APPLICATIONENTITY_ONCREATE)) {
                     au.applicationPrivilegeManager().assignPrivilegeToRole(userToken.getRoleCode(), privilegeCode);
                 }
@@ -264,8 +264,8 @@ public class StudioEntitySchemaManagerImpl extends AbstractEntitySchemaManager {
                 reportableDefinition.setDescription(description);
                 List<ReportableField> reportableFieldList = ReportEntityUtils.getEntityBaseTypeReportableFieldList(
                         messageResolver, appEntity.getBaseType(), FormatterOptions.DEFAULT);
-                reportableFieldList.addAll(ReportEntityUtils.getReportableFieldList(messageResolver,
-                        appEntityFieldList, FormatterOptions.DEFAULT));
+                reportableFieldList.addAll(ReportEntityUtils.getReportableFieldList(messageResolver, appEntityFieldList,
+                        FormatterOptions.DEFAULT));
                 reportableDefinition.setFieldList(reportableFieldList);
                 reportModuleService.createReportableDefinition(reportableDefinition);
 
@@ -279,13 +279,13 @@ public class StudioEntitySchemaManagerImpl extends AbstractEntitySchemaManager {
                 }
 
                 UserToken userToken = getUserToken();
-                if (!userToken.isReservedUser() && au.system().getSysParameterValue(boolean.class,
+                if (userToken != null && !userToken.isReservedUser() && au.system().getSysParameterValue(boolean.class,
                         ApplicationModuleSysParamConstants.ASSIGN_APPLICATIONENTITY_ONCREATE)) {
                     au.applicationPrivilegeManager().assignPrivilegeToRole(userToken.getRoleCode(), privilegeCode);
                 }
             } else {
-                List<ReportableField> reportableFieldList = ReportEntityUtils.getReportableFieldList(messageResolver, appEntityFieldList,
-                        FormatterOptions.DEFAULT);
+                List<ReportableField> reportableFieldList = ReportEntityUtils.getReportableFieldList(messageResolver,
+                        appEntityFieldList, FormatterOptions.DEFAULT);
                 reportableDefinition.setFieldList(reportableFieldList);
                 reportModuleService.updateReportableDefinition(reportableDefinition);
             }
