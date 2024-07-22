@@ -162,6 +162,17 @@ public interface NotificationModuleService extends FlowCentralService {
      *                        if an error occurs
      */
     List<? extends Listable> findNotificationTemplatesByApplicationId(Long applicationId) throws UnifyException;
+    
+    /**
+     * Finds notification templates by entity.
+     * 
+     * @param entity
+     *                      the entity
+     * @return the list of notification templates
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    List<? extends Listable> findNotificationTemplatesByEntity(String entity) throws UnifyException;
 
     /**
      * Finds notification template by ID.
