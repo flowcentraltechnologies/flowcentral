@@ -17,7 +17,6 @@ package com.flowcentraltech.flowcentral.configuration.xml;
 
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 
 /**
@@ -28,18 +27,7 @@ import javax.xml.bind.annotation.XmlElement;
  */
 public class EnumerationConfig extends BaseNameConfig {
 
-    private String label;
-
     private List<EnumerationItemConfig> itemList;
-
-    public String getLabel() {
-        return label;
-    }
-
-    @XmlAttribute(required = true)
-    public void setLabel(String label) {
-        this.label = label;
-    }
 
     public List<EnumerationItemConfig> getItemList() {
         return itemList;
