@@ -871,7 +871,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             return new WorkflowStepInfo(wfItem.getWorkflowName(), wfItem.getApplicationName(), parts.getEntityName(),
                     null, wfItem.getEntity(), wfItem.getWfStepName(), wfStep.getDescription(), wfStep.getLabel(),
                     wfStep.isBranchOnly() ? branchCode : null, wfStep.isDepartmentOnly() ? departmentCode : null,
-                            wfItem.getId());
+                    wfItem.getId());
         }
 
         return WorkflowStepInfo.EMPTY;
@@ -1031,13 +1031,18 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         try {
             final WfItem wfItem = environment().list(WfItem.class, wfItemId);
             if (!wfItem.getWfStepName().equals(stepName)) {
+                logDebug(
+                        "Belaying user action [{0}] because step name disparity was detected between action step [{1}] and work item step [{2}].",
+                        userAction, stepName, wfItem.getWfStepName());
                 return false;
             }
 
             final WfDef wfDef = getWfDef(wfItem.getWorkflowName());
             final String userLoginId = getUserToken().getUserLoginId();
             final WfStepDef currentWfStepDef = wfDef.getWfStepDef(stepName);
-            if (!currentWfStepDef.isUserAction(userAction)) {
+            if (!currentWfStepDef.isUserAction(userAction) && !currentWfStepDef.isError()) {
+                logDebug("Belaying user action [{0}] because action step [{1}] doesn't support such action.",
+                        userAction, stepName);
                 return false;
             }
 
@@ -1052,6 +1057,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             final String nextStepName = currentWfStepDef.isError()
                     && StringUtils.isBlank(userActionDef.getNextStepName()) ? wfItem.getPrevWfStepName()
                             : userActionDef.getNextStepName();
+
             WfStepDef nextWfStepDef = wfDef.getWfStepDef(nextStepName);
             final Long wfItemEventId = createWfItemEvent(nextWfStepDef, wfItem.getWfItemHistId(), stepName, null, null,
                     null, null);
@@ -1317,8 +1323,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
     }
 
     private SecuredLinkInfo getWorkItemSecuredLink(String appletName, WfItem wfItem) throws UnifyException {
-        final OpenPagePathParts parts = ApplicationPageUtils.constructAppletOpenPagePath(AppletType.MY_WORKITEM, appletName,
-                wfItem.getWfItemEventId());
+        final OpenPagePathParts parts = ApplicationPageUtils.constructAppletOpenPagePath(AppletType.MY_WORKITEM,
+                appletName, wfItem.getWfItemEventId());
         final int expirationMinutes = appletUtil.system().getSysParameterValue(int.class,
                 SystemModuleSysParamConstants.SECURED_LINK_EXPIRATION_MINUTES);
         return appletUtil.system().getNewSecuredLink(wfItem.getWfItemDesc(), parts.getOpenPath(), wfItem.getHeldBy(),
