@@ -47,8 +47,8 @@ public class StudioAppletAlertTemplateListCommand extends AbstractApplicationLis
     @Override
     public List<? extends Listable> execute(Locale locale, LongParam longParam) throws UnifyException {
         if (longParam.isPresent()) {
-            final Long applicationId = application().getAppAppletApplicationId(longParam.getValue());
-            return notificationModuleService.findNotificationTemplatesByApplicationId(applicationId);
+            final String entity = application().getAppAppletEntity(longParam.getValue());
+            return notificationModuleService.findNotificationTemplatesByEntity(entity);
         }
 
         return Collections.emptyList();

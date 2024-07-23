@@ -273,7 +273,7 @@
 		<widgetType name="appletalerttemplatelist"
 			description="$m{studio.widgettype.appletalerttemplatelist}"
 			dataType="string" inputType="string"
-			editor="!ui-select list:studioappletalerttemplatelist listParams:$l{propertyOwnerId} blankOption:$m{blank.none}"
+			editor="!ui-select list:studioappletalerttemplatelist listParams:$l{appAppletId} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="wfentitysetvaluesgenlist"
 			description="$m{studio.widgettype.wfentitysetvaluesgenlist}"

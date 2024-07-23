@@ -342,6 +342,13 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
     }
 
     @Override
+    public List<? extends Listable> findNotificationTemplatesByEntity(String entity) throws UnifyException {
+        List<NotificationTemplate> templateList = environment().listAll(new NotificationTemplateQuery()
+                .entity(entity).addSelect("applicationName", "name", "description"));
+        return ApplicationNameUtils.getListableList(templateList);
+    }
+
+    @Override
     public NotificationTemplate findNotificationTemplate(Long notifTemplateId) throws UnifyException {
         return environment().find(NotificationTemplate.class, notifTemplateId);
     }
