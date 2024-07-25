@@ -16,7 +16,7 @@
 !fc-editpropertylistpanel layout:$d{!ui-vertical style:$s{width:100%;}} components:$c{headerBar propertiesBodyPanel}
 
 // Header Bar
-!ui-panel:headerBar styleClass:$s{hdbar} layout:$d{!ui-horizontal style:$s{width:100%;} widths:$l{42% none 42%}}
+!ui-panel:headerBar styleClass:$s{hdbar} layout:$d{!ui-horizontal style:$s{width:100%;} widths:$l{36% none 36%}}
 	components:$c{headerLeftPanel headerCenterPanel headerRightPanel}
 	
 !ui-panel:headerLeftPanel style:$s{display:inline-block; float:left;} layout:$d{!ui-horizontal cellType:middle cellStyle:$s{padding-right:8px;}}

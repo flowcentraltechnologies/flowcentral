@@ -170,6 +170,10 @@ public class ManageLoadingListApplet extends AbstractEntityFormApplet {
             FormDef formDef = getPreferredForm(PreferredFormType.ALL, _currentFormAppletDef, currEntityInst,
                     FormMode.MAINTAIN.formProperty());
             LoadingWorkItemInfo loadingWorkItemInfo = loadingSearch.getLoadingWorkItemInfo(currEntityInst, mIndex);
+            final String display = loadingWorkItemInfo.isWithStepLabel()
+                    ? au.resolveSessionMessage("$m{loading.workitem.display}", loadingWorkItemInfo.getWorkflowDesc(),
+                            loadingWorkItemInfo.getStepLabel()).toUpperCase()
+                    : null;
             getCtx().setRecovery(loadingWorkItemInfo.isError());
             getCtx().setComments(loadingWorkItemInfo.isComments());
             getCtx().setAttachments(loadingWorkItemInfo.isAttachments());
@@ -184,11 +188,9 @@ public class ManageLoadingListApplet extends AbstractEntityFormApplet {
                     updateForm(HeaderWithTabsForm.UpdateType.MAINTAIN_INST, form, currEntityInst);
                 }
 
-                if (loadingWorkItemInfo.isWithStepLabel()) {
-                    form.setDisplayItemCounter(loadingWorkItemInfo.getStepLabel().toUpperCase());
-                }
-
+                form.setDisplayItemCounter(display);
                 form.setAppendables(item);
+
                 getCtx().setReadOnly(loadingWorkItemInfo.isReadOnly());
                 setAltSubCaption(form.getFormTitle());
                 viewMode = ViewMode.MAINTAIN_FORM;
@@ -197,11 +199,10 @@ public class ManageLoadingListApplet extends AbstractEntityFormApplet {
                 listingForm = constructListingForm(formDef, currEntityInst);
                 listingForm.setFormTitle(getRootAppletDef().getLabel());
                 listingForm.setFormActionDefList(loadingWorkItemInfo.getFormActionDefList());
-                if (loadingWorkItemInfo.isWithStepLabel()) {
-                    listingForm.setDisplayItemCounter(loadingWorkItemInfo.getStepLabel().toUpperCase());
-                }
 
+                listingForm.setDisplayItemCounter(display);
                 listingForm.setAppendables(item);
+
                 getCtx().setEmails(loadingWorkItemInfo.isEmails());
                 getCtx().setReadOnly(loadingWorkItemInfo.isError());
                 setAltSubCaption(listingForm.getFormTitle());
@@ -210,6 +211,11 @@ public class ManageLoadingListApplet extends AbstractEntityFormApplet {
         } else if (item.isWorkItemSingleForm()) {
             WorkEntity currEntityInst = (WorkEntity) item.getEntity();
             LoadingWorkItemInfo loadingWorkItemInfo = loadingSearch.getLoadingWorkItemInfo(currEntityInst, mIndex);
+            final String display = loadingWorkItemInfo.isWithStepLabel()
+                    ? au.resolveSessionMessage("$m{loading.workitem.display}", loadingWorkItemInfo.getWorkflowDesc(),
+                            loadingWorkItemInfo.getStepLabel()).toUpperCase()
+                    : null;
+
             getCtx().setRecovery(loadingWorkItemInfo.isError());
             getCtx().setEmails(loadingWorkItemInfo.isEmails());
             getCtx().setComments(loadingWorkItemInfo.isComments());
@@ -223,7 +229,9 @@ public class ManageLoadingListApplet extends AbstractEntityFormApplet {
                 updateSingleForm(EntitySingleForm.UpdateType.MAINTAIN_INST, singleForm, currEntityInst);
             }
 
+            singleForm.setDisplayItemCounter(display);
             singleForm.setAppendables(item);
+
             getCtx().setReadOnly(loadingWorkItemInfo.isReadOnly());
             setAltSubCaption(singleForm.getFormTitle());
             viewMode = ViewMode.SINGLE_FORM;
@@ -244,7 +252,7 @@ public class ManageLoadingListApplet extends AbstractEntityFormApplet {
         navBackToSearch();
     }
 
-    public LoadingWorkItemInfo getCurrentLoadingWorkItemInfo() throws UnifyException{
+    public LoadingWorkItemInfo getCurrentLoadingWorkItemInfo() throws UnifyException {
         final AbstractForm _form = getResolvedForm();
         WorkEntity currEntityInst = (WorkEntity) _form.getFormBean();
         return loadingSearch.getLoadingWorkItemInfo(currEntityInst, mIndex);

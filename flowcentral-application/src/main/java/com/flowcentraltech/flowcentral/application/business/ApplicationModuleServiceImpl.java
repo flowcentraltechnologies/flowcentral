@@ -1421,7 +1421,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 for (ModuleRestore moduleRestore : systemRestore.getModuleList()) {
                     restoreModule(taskMonitor, moduleRestore);
                 }
-
+                
                 // All system cache
                 clearAllSystemDefinitionsCache();
 
@@ -1436,6 +1436,10 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         } else {
             logDebug(taskMonitor, "Some other process is executing system restore.");
         }
+        
+        logDebug(taskMonitor, "Ensuring system generated components...");
+        ensureAllWorkflowCopyComponents(true);
+        logDebug(taskMonitor, "System generated components resolved.");
     }
 
     @Broadcast
@@ -4055,22 +4059,9 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
         resolveMappedEntities();
 
-        // Ensure workflow copy workflow
-        List<String> updateDraftApplets = new ArrayList<String>();
-        List<AppAppletProp> appAppletPropList = environment().listAll(new AppAppletPropQuery()
-                .name(AppletPropertyConstants.WORKFLOWCOPY).value("true").addSelect("applicationName", "appletName"));
-        for (AppAppletProp appAppletProp : appAppletPropList) {
-            updateDraftApplets.add(ApplicationNameUtils.getApplicationEntityLongName(appAppletProp.getApplicationName(),
-                    appAppletProp.getAppletName()));
-        }
-
-        for (String appletName : updateDraftApplets) {
-            appletUtilities.ensureWorkflowCopyWorkflows(appletName, isInstallationPerformed);
-        }
-
-        appletUtilities.ensureWorkflowUserInteractionLoadingApplets(isInstallationPerformed);
+        ensureAllWorkflowCopyComponents(isInstallationPerformed);
     }
-
+    
     @SuppressWarnings("unchecked")
     @Synchronized(DYNAMIC_ENTITY_BUILD_LOCK)
     public EntityClassDef performDynamicEntityBuild(final String longName) throws UnifyException {
@@ -4399,6 +4390,22 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         for (String entityLongName : ApplicationNameUtils.getApplicationEntityLongNames(entityList)) {
             getEntityClassDef(entityLongName);
         }
+    }
+
+    private void ensureAllWorkflowCopyComponents(boolean isInstallationPerformed) throws UnifyException {
+        List<String> updateDraftApplets = new ArrayList<String>();
+        List<AppAppletProp> appAppletPropList = environment().listAll(new AppAppletPropQuery()
+                .name(AppletPropertyConstants.WORKFLOWCOPY).value("true").addSelect("applicationName", "appletName"));
+        for (AppAppletProp appAppletProp : appAppletPropList) {
+            updateDraftApplets.add(ApplicationNameUtils.getApplicationEntityLongName(appAppletProp.getApplicationName(),
+                    appAppletProp.getAppletName()));
+        }
+
+        for (String appletName : updateDraftApplets) {
+            appletUtilities.ensureWorkflowCopyWorkflows(appletName, isInstallationPerformed);
+        }
+
+        appletUtilities.ensureWorkflowUserInteractionLoadingApplets(isInstallationPerformed);
     }
 
     @SuppressWarnings("unchecked")

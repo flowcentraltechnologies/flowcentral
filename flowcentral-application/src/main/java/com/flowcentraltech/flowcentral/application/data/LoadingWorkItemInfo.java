@@ -28,6 +28,8 @@ public class LoadingWorkItemInfo {
 
     private List<FormActionDef> formActionDefList;
 
+    private String workflowDesc;
+
     private String stepLabel;
 
     private boolean readOnly;
@@ -40,9 +42,10 @@ public class LoadingWorkItemInfo {
 
     private boolean attachments;
 
-    public LoadingWorkItemInfo(List<FormActionDef> formActionDefList, String stepLabel, boolean readOnly,
+    public LoadingWorkItemInfo(List<FormActionDef> formActionDefList, String workflowDesc, String stepLabel, boolean readOnly,
             boolean comments, boolean emails, boolean error, boolean attachments) {
         this.formActionDefList = formActionDefList;
+        this.workflowDesc = workflowDesc;
         this.stepLabel = stepLabel;
         this.readOnly = readOnly;
         this.comments = comments;
@@ -72,6 +75,10 @@ public class LoadingWorkItemInfo {
     
     public List<FormActionDef> getFormActionDefList() {
         return formActionDefList;
+    }
+
+    public String getWorkflowDesc() {
+        return workflowDesc;
     }
 
     public String getStepLabel() {

@@ -86,8 +86,8 @@ public class MyWorkItemsLoadingTableProvider extends AbstractApplicationLoadingT
                 wfStepDef.getEmails());
         final boolean readOnly = WorkflowEntityUtils.isWorkflowConditionMatched(appletUtilities, reader, wfDef,
                 wfStepDef.getReadOnlyConditionName());
-        return new LoadingWorkItemInfo(wfStepDef.getFormActionDefList(), wfStepDef.getLabel(), readOnly, comments,
-                emails, wfStepDef.isError(), wfStepDef.isWithAttachmentProviderName());
+        return new LoadingWorkItemInfo(wfStepDef.getFormActionDefList(), wfDef.getDescription(), wfStepDef.getLabel(),
+                readOnly, comments, emails, wfStepDef.isError(), wfStepDef.isWithAttachmentProviderName());
     }
 
     @Override
@@ -122,7 +122,7 @@ public class MyWorkItemsLoadingTableProvider extends AbstractApplicationLoadingT
                     query.addRestriction(restriction);
                 }
             }
-            
+
             WfDef wfDef = workflowModuleService.getWfDef(workflowStepInfo.getWorkflowLongName());
             WfStepDef wfStepDef = wfDef.getWfStepDef(workflowStepInfo.getStepName());
             if (wfStepDef.isWithWorkItemLoadingRestriction()) {
@@ -168,7 +168,7 @@ public class MyWorkItemsLoadingTableProvider extends AbstractApplicationLoadingT
 
     @Override
     public boolean applyUserAction(WorkEntity wfEntityInst, Long sourceItemId, String userAction, String comment,
-            InputArrayEntries emails, boolean listing) throws UnifyException { 
+            InputArrayEntries emails, boolean listing) throws UnifyException {
         final WorkflowStepInfo workflowStepInfo = getParameter(WorkflowStepInfo.class);
         final Long workItemId = environment().value(Long.class, "id", new WfItemQuery().workRecId(sourceItemId)
                 .workflowName(workflowStepInfo.getWorkflowLongName()).wfStepName(workflowStepInfo.getStepName()));

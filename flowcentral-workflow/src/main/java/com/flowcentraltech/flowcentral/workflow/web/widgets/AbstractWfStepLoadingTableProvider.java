@@ -104,8 +104,8 @@ public abstract class AbstractWfStepLoadingTableProvider extends AbstractApplica
                 wfStepDef.getEmails());
         final boolean readOnly = WorkflowEntityUtils.isWorkflowConditionMatched(appletUtilities, reader, wfDef,
                 wfStepDef.getReadOnlyConditionName());
-        return new LoadingWorkItemInfo(wfStepDef.getFormActionDefList(), wfStepDef.getLabel(), readOnly, comments,
-                emails, wfStepDef.isError(), wfStepDef.isWithAttachmentProviderName());
+        return new LoadingWorkItemInfo(wfStepDef.getFormActionDefList(), wfDef.getDescription(), wfStepDef.getLabel(),
+                readOnly, comments, emails, wfStepDef.isError(), wfStepDef.isWithAttachmentProviderName());
     }
 
     @Override
