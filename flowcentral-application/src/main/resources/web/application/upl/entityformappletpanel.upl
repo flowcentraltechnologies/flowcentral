@@ -62,7 +62,7 @@
     eventHandler:$d{!ui-event event:onclick action:$c{nextAct}}
 !fc-formactionbuttons:frmActionBtns binding:formActionDefList
     eventHandler:$f{frmActionsHandler}
-
+ 
 // Listing Form
 !fc-listingformpanel:listingPanel binding:listingForm
 	moreCenterComponents:$c{listDisplayCounterLabel}
