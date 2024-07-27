@@ -144,6 +144,8 @@ public interface AppletPropertyConstants {
 
     String MAINTAIN_FORM_ATTACHMENTS = "maintainForm.attachments";
 
+    String MAINTAIN_FORM_ATTACHMENTS_ADHOC = "maintainForm.attachments.adhoc";
+
     String MAINTAIN_FORM_SAVEAS = "maintainForm.saveas";
 
     String MAINTAIN_FORM_SAVEAS_POLICY = "maintainForm.saveas.policy";

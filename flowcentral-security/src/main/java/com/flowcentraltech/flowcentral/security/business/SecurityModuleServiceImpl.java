@@ -34,6 +34,7 @@ import com.flowcentraltech.flowcentral.common.business.AbstractFlowCentralServic
 import com.flowcentraltech.flowcentral.common.business.FileAttachmentProvider;
 import com.flowcentraltech.flowcentral.common.business.NotificationRecipientProvider;
 import com.flowcentraltech.flowcentral.common.business.SecuredLinkManager;
+import com.flowcentraltech.flowcentral.common.constants.FileAttachmentCategoryType;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants;
 import com.flowcentraltech.flowcentral.common.constants.RecordStatus;
 import com.flowcentraltech.flowcentral.common.data.Attachment;
@@ -618,7 +619,7 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
     @Override
     public byte[] findUserPhotograph(String userLoginId) throws UnifyException {
         Long userId = environment().value(Long.class, "id", new UserQuery().loginId(userLoginId));
-        Attachment attachment = fileAttachmentProvider.retrieveFileAttachment("work",
+        Attachment attachment = fileAttachmentProvider.retrieveFileAttachment(FileAttachmentCategoryType.WORK_CATEGORY,
                 SecurityModuleEntityConstants.USER_ENTITY_NAME, userId, SecurityModuleAttachmentConstants.PHOTO);
         if (attachment != null) {
             return attachment.getData();

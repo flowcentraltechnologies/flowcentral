@@ -51,6 +51,7 @@ import com.flowcentraltech.flowcentral.common.business.policies.FormValidationCo
 import com.flowcentraltech.flowcentral.common.business.policies.ReviewResult;
 import com.flowcentraltech.flowcentral.common.business.policies.TableActionResult;
 import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
+import com.flowcentraltech.flowcentral.common.constants.FileAttachmentCategoryType;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralRequestAttributeConstants;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralResultMappingConstants;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants;
@@ -81,8 +82,6 @@ import com.tcdng.unify.web.ui.widget.data.MessageResult;
  */
 @UplBinding("web/application/upl/entityformappletpanel.upl")
 public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel {
-
-    private static final String WORK_CATEGORY = "work";
 
     private static final String IN_WORKFLOW_DRAFT_LOOP_FLAG = "IN_WORKFLOW_DRAFT_LOOP_FLAG";
 
@@ -129,7 +128,6 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         }
 
         final boolean isContextEditable = appCtx.isContextEditable();
-        applet.getFormFileAttachments().setDisabled(!isContextEditable);
         boolean enableSaveAs = false;
         boolean enableUpdate = false;
         boolean enableDelete = false;
@@ -205,7 +203,8 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                 }
 
                 if (enableAttachment) {
-                    form.setAttachmentCount(fileAttachmentProvider.countFileAttachments(WORK_CATEGORY,
+                    applet.getFormFileAttachments().setDisabled(!isContextEditable);
+                    form.setAttachmentCount(fileAttachmentProvider.countFileAttachments(FileAttachmentCategoryType.FORM_CATEGORY,
                             formEntityDef.getLongName(), (Long) inst.getId()));
                 }
             }
@@ -663,7 +662,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
     }
 
     @Action
-    public void performFormAction() throws UnifyException { 
+    public void performFormAction() throws UnifyException {
         String actionName = getRequestTarget(String.class);
         AbstractEntityFormApplet applet = getEntityFormApplet();
         FormActionDef formActionDef = applet.getCurrentFormDef().getFormActionDef(actionName);
@@ -900,7 +899,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         EntityActionResult entityActionResult = getEntityFormApplet().getCtx().getOriginalEntityActionResult();
         setCommandResultMapping(entityActionResult, true);
     }
-    
+
     @Action
     public void reviewConfirm() throws UnifyException {
         MessageResult messageResult = getMessageResult();

@@ -74,6 +74,7 @@ import com.flowcentraltech.flowcentral.application.web.widgets.MiniForm;
 import com.flowcentraltech.flowcentral.application.web.widgets.MiniFormScope;
 import com.flowcentraltech.flowcentral.application.web.widgets.SectorIcon;
 import com.flowcentraltech.flowcentral.application.web.widgets.TabSheet.TabSheetItem;
+import com.flowcentraltech.flowcentral.common.business.FileAttachmentProvider;
 import com.flowcentraltech.flowcentral.common.business.policies.ActionMode;
 import com.flowcentraltech.flowcentral.common.business.policies.ConsolidatedFormStatePolicy;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionContext;
@@ -84,7 +85,9 @@ import com.flowcentraltech.flowcentral.common.business.policies.ReviewResult;
 import com.flowcentraltech.flowcentral.common.business.policies.SweepingCommitPolicy;
 import com.flowcentraltech.flowcentral.common.business.policies.TableActionResult;
 import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
+import com.flowcentraltech.flowcentral.common.constants.FileAttachmentCategoryType;
 import com.flowcentraltech.flowcentral.common.constants.WfItemVersionType;
+import com.flowcentraltech.flowcentral.common.data.AttachmentDetails;
 import com.flowcentraltech.flowcentral.common.data.AuditSnapshot;
 import com.flowcentraltech.flowcentral.common.data.FormListingOptions;
 import com.flowcentraltech.flowcentral.common.data.RowChangeInfo;
@@ -755,7 +758,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
     public boolean isViewItemsInSeparateTabs() {
         return entitySearch.isViewItemsInSeparateTabs();
     }
-    
+
     public void enterWorkflowDraft(WorkflowDraftType type) throws UnifyException {
         final AppletDef _currFormAppletDef = getFormAppletDef();
         EntityActionResult entityActionResult = au.createEntityInstWorkflowDraftByFormContext(_currFormAppletDef,
@@ -1064,9 +1067,9 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
     public String getBeanTitle() {
         return getResolvedForm().getBeanTitle();
     }
-    
+
     public String getAssignmentTitle() {
-        return assignmentPage != null ? assignmentTitle = assignmentPage.getMainTitle(): assignmentTitle;
+        return assignmentPage != null ? assignmentTitle = assignmentPage.getMainTitle() : assignmentTitle;
     }
 
     public String getAssignmentSubTitle() {
@@ -1085,15 +1088,28 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         this.fileAttachmentsDisabled = fileAttachmentsDisabled;
     }
 
-    public EntityFileAttachments getFormFileAttachments() {
+    public EntityFileAttachments getFormFileAttachments() throws UnifyException {
         if (form != null) {
+            final Long parentEntityId = (Long) ((Entity) form.getFormBean()).getId();
             EntityDef formEntityDef = form.getFormDef().getEntityDef();
-            String parentId = ApplicationEntityUtils.getEntityInstName(formEntityDef.getLongName(),
-                    (Long) ((Entity) form.getFormBean()).getId());
+            String parentId = ApplicationEntityUtils.getEntityInstName(formEntityDef.getLongName(), parentEntityId);
             FileAttachmentsInfo.Builder fb = FileAttachmentsInfo.newBuilder(parentId);
-            for (EntityAttachmentDef entityAttachmentDef : formEntityDef.getAttachmentList()) {
-                fb.addFileAttachmentInfo(entityAttachmentDef.getType(), entityAttachmentDef.getName(),
-                        entityAttachmentDef.getDescription());
+            if (getRootAppletDef().getPropValue(boolean.class,
+                    AppletPropertyConstants.MAINTAIN_FORM_ATTACHMENTS_ADHOC)) {
+                FileAttachmentProvider fileAttachmentProvider = au().getComponent(FileAttachmentProvider.class);
+                List<AttachmentDetails> attachmentDetailsList = fileAttachmentProvider.retrieveAllFileAttachments(
+                        FileAttachmentCategoryType.FORM_CATEGORY, formEntityDef.getLongName(), parentEntityId);
+                for (AttachmentDetails attachmentDetails : attachmentDetailsList) {
+                    fb.addFileAttachmentInfo(attachmentDetails.getType(), attachmentDetails.getName(),
+                            attachmentDetails.getFileName());
+                }
+
+                fb.adhoc(true);
+            } else {
+                for (EntityAttachmentDef entityAttachmentDef : formEntityDef.getAttachmentList()) {
+                    fb.addFileAttachmentInfo(entityAttachmentDef.getType(), entityAttachmentDef.getName(),
+                            entityAttachmentDef.getDescription());
+                }
             }
 
             FileAttachmentsInfo fileAttachmentsInfo = fb.build();
@@ -1809,7 +1825,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
                 break;
             default:
         }
-        
+
         if (viewMode == ViewMode.NEW_FORM || viewMode == ViewMode.NEW_HEADLESSLIST_FORM
                 || viewMode == ViewMode.NEW_PRIMARY_FORM) {
             form = constructNewForm(FormMode.CREATE, null, false);

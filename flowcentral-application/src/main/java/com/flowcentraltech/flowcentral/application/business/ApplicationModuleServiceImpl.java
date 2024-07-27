@@ -119,11 +119,13 @@ import com.flowcentraltech.flowcentral.common.business.SystemDefinitionsCache;
 import com.flowcentraltech.flowcentral.common.business.SystemRestoreService;
 import com.flowcentraltech.flowcentral.common.business.policies.SweepingCommitPolicy;
 import com.flowcentraltech.flowcentral.common.constants.ConfigType;
+import com.flowcentraltech.flowcentral.common.constants.FileAttachmentCategoryType;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants;
 import com.flowcentraltech.flowcentral.common.constants.OwnershipType;
 import com.flowcentraltech.flowcentral.common.constants.RecordStatus;
 import com.flowcentraltech.flowcentral.common.constants.WfItemVersionType;
 import com.flowcentraltech.flowcentral.common.data.Attachment;
+import com.flowcentraltech.flowcentral.common.data.AttachmentDetails;
 import com.flowcentraltech.flowcentral.common.data.ParamValuesDef;
 import com.flowcentraltech.flowcentral.common.entities.BaseEntity;
 import com.flowcentraltech.flowcentral.common.entities.BaseVersionEntity;
@@ -2708,24 +2710,25 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
-    public int countFileAttachments(String category, String ownerEntityName, Long ownerInstId) throws UnifyException {
+    public int countFileAttachments(FileAttachmentCategoryType category, String ownerEntityName, Long ownerInstId)
+            throws UnifyException {
         final EntityDef entityDef = getEntityDef(ownerEntityName);
-        return environment().countAll(new FileAttachmentQuery().category(category).entity(entityDef.getTableName())
-                .entityInstId(ownerInstId));
+        return environment().countAll(new FileAttachmentQuery().category(category.code())
+                .entity(entityDef.getTableName()).entityInstId(ownerInstId));
     }
 
     @Override
-    public boolean saveFileAttachment(String category, String ownerEntityName, Long ownerInstId, Attachment attachment)
-            throws UnifyException {
+    public boolean saveFileAttachment(FileAttachmentCategoryType category, String ownerEntityName, Long ownerInstId,
+            Attachment attachment) throws UnifyException {
         final EntityDef entityDef = getEntityDef(ownerEntityName);
-        FileAttachment oldFileAttachment = environment().findLean(new FileAttachmentQuery().category(category)
+        FileAttachment oldFileAttachment = environment().findLean(new FileAttachmentQuery().category(category.code())
                 .entity(entityDef.getTableName()).entityInstId(ownerInstId).name(attachment.getName()));
         if (oldFileAttachment == null) {
             FileAttachment fileAttachment = new FileAttachment();
             fileAttachment.setType(attachment.getType());
             fileAttachment.setEntityInstId(ownerInstId);
             fileAttachment.setEntity(entityDef.getTableName());
-            fileAttachment.setCategory(category);
+            fileAttachment.setCategory(category.code());
             fileAttachment.setName(attachment.getName());
             fileAttachment.setTitle(attachment.getTitle());
             fileAttachment.setFileName(attachment.getFileName());
@@ -2743,39 +2746,39 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
-    public Map<String, String> retrieveAllAttachmentFileNames(String category, String ownerEntityName, Long ownerInstId)
-            throws UnifyException {
+    public Map<String, String> retrieveAllAttachmentFileNames(FileAttachmentCategoryType category,
+            String ownerEntityName, Long ownerInstId) throws UnifyException {
         final EntityDef entityDef = getEntityDef(ownerEntityName);
         return environment().valueMap(String.class, "name", String.class, "fileName", new FileAttachmentQuery()
-                .category(category).entity(entityDef.getTableName()).entityInstId(ownerInstId));
+                .category(category.code()).entity(entityDef.getTableName()).entityInstId(ownerInstId));
     }
 
     @Override
-    public List<Attachment> retrieveAllFileAttachments(String category, String ownerEntityName, Long ownerInstId)
-            throws UnifyException {
+    public List<AttachmentDetails> retrieveAllFileAttachments(FileAttachmentCategoryType category,
+            String ownerEntityName, Long ownerInstId) throws UnifyException {
         final EntityDef entityDef = getEntityDef(ownerEntityName);
-        List<Long> fileAttachmentIdList = environment().valueList(Long.class, "id", new FileAttachmentQuery()
-                .category(category).entity(entityDef.getTableName()).entityInstId(ownerInstId));
-        if (!DataUtils.isBlank(fileAttachmentIdList)) {
-            List<Attachment> list = new ArrayList<Attachment>();
-            for (Long fileAttachmentId : fileAttachmentIdList) {
-                FileAttachment fileAttachment = environment().find(FileAttachment.class, fileAttachmentId);
-                list.add(Attachment
-                        .newBuilder(fileAttachment.getId(), fileAttachment.getType(), fileAttachment.getVersionNo())
-                        .name(fileAttachment.getName()).title(fileAttachment.getTitle())
-                        .fileName(fileAttachment.getFileName()).data(fileAttachment.getFile().getData()).build());
-                return list;
+        List<FileAttachment> fileAttachmentList = environment()
+                .findAll(new FileAttachmentQuery().category(category.code()).entity(entityDef.getTableName())
+                        .entityInstId(ownerInstId).addSelect("id", "type", "versionNo", "name", "title", "fileName"));
+        if (!DataUtils.isBlank(fileAttachmentList)) {
+            List<AttachmentDetails> list = new ArrayList<AttachmentDetails>();
+            for (FileAttachment fileAttachment : fileAttachmentList) {
+                list.add(new AttachmentDetails(fileAttachment.getId(), fileAttachment.getType(),
+                        fileAttachment.getName(), fileAttachment.getTitle(), fileAttachment.getFileName(),
+                        fileAttachment.getVersionNo()));
             }
+
+            return list;
         }
 
         return Collections.emptyList();
     }
 
     @Override
-    public Attachment retrieveFileAttachment(String category, String ownerEntityName, Long ownerInstId,
-            String attachmentName) throws UnifyException {
+    public Attachment retrieveFileAttachment(FileAttachmentCategoryType category, String ownerEntityName,
+            Long ownerInstId, String attachmentName) throws UnifyException {
         final EntityDef entityDef = getEntityDef(ownerEntityName);
-        FileAttachment fileAttachment = environment().find(new FileAttachmentQuery().category(category)
+        FileAttachment fileAttachment = environment().find(new FileAttachmentQuery().category(category.code())
                 .entity(entityDef.getTableName()).entityInstId(ownerInstId).name(attachmentName));
         if (fileAttachment != null) {
             return Attachment
@@ -2788,22 +2791,22 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
-    public boolean deleteFileAttachment(String category, String ownerEntityName, Long ownerInstId,
+    public boolean deleteFileAttachment(FileAttachmentCategoryType category, String ownerEntityName, Long ownerInstId,
             String attachmentName) throws UnifyException {
         final EntityDef entityDef = getEntityDef(ownerEntityName);
-        return environment().deleteAll(new FileAttachmentQuery().category(category).entity(entityDef.getTableName())
-                .entityInstId(ownerInstId).name(attachmentName)) > 0;
+        return environment().deleteAll(new FileAttachmentQuery().category(category.code())
+                .entity(entityDef.getTableName()).entityInstId(ownerInstId).name(attachmentName)) > 0;
     }
 
     @Override
-    public boolean sychFileAttachments(String category, String ownerEntityName, Long destEntityInstId,
-            Long srcEntityInstId) throws UnifyException {
+    public boolean sychFileAttachments(FileAttachmentCategoryType category, String ownerEntityName,
+            Long destEntityInstId, Long srcEntityInstId) throws UnifyException {
         if (!destEntityInstId.equals(srcEntityInstId)) {
             final EntityDef entityDef = getEntityDef(ownerEntityName);
-            environment().deleteAll(new FileAttachmentQuery().category(category).entity(entityDef.getTableName())
+            environment().deleteAll(new FileAttachmentQuery().category(category.code()).entity(entityDef.getTableName())
                     .entityInstId(destEntityInstId));
             List<Long> fileAttachmentIdList = environment().valueList(Long.class, "id", new FileAttachmentQuery()
-                    .category(category).entity(entityDef.getTableName()).entityInstId(srcEntityInstId));
+                    .category(category.code()).entity(entityDef.getTableName()).entityInstId(srcEntityInstId));
             if (!DataUtils.isBlank(fileAttachmentIdList)) {
                 for (Long fileAttachmentId : fileAttachmentIdList) {
                     FileAttachment fileAttachment = environment().find(FileAttachment.class, fileAttachmentId);

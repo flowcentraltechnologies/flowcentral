@@ -2,7 +2,7 @@
  * Copyright (c) 2019, 2021, FlowCentral Technologies.
  * All rights reserved.
  * 
- * PROPRIETARY AND CONFIDENTIAL. USE IS SUBJECT TO LICENSE TERMS.
+ * PROPRIETARY AND CONFIDENTIAL. USE IS SUBJECT TO LICENSE_CATEGORY TERMS.
  */
 
 package com.flowcentraltech.flowcentral.security.business.policies;

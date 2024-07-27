@@ -23,6 +23,7 @@ import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleNa
 import com.flowcentraltech.flowcentral.application.data.EntityInstNameParts;
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityUtils;
 import com.flowcentraltech.flowcentral.common.business.FileAttachmentProvider;
+import com.flowcentraltech.flowcentral.common.constants.FileAttachmentCategoryType;
 import com.flowcentraltech.flowcentral.common.data.Attachment;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
@@ -39,8 +40,6 @@ import com.tcdng.unify.web.ui.widget.data.FileAttachmentInfo;
 @Component(ApplicationModuleNameConstants.WORKENTITY_FILE_ATTACHMENTS_HANDLER)
 public class WorkEntityFileAttachmentsHandler extends AbstractFileAttachmentHandler {
 
-    private static final String WORK_CATEGORY = "work";
-
     @Configurable
     private FileAttachmentProvider fileAttachmentProvider;
 
@@ -48,8 +47,8 @@ public class WorkEntityFileAttachmentsHandler extends AbstractFileAttachmentHand
     public void fillAttachFileNames(Object parentId, List<FileAttachmentInfo> attachmentInfoList)
             throws UnifyException {
         EntityInstNameParts np = getEntityInstNameParts(parentId);
-        Map<String, String> fileNames = fileAttachmentProvider.retrieveAllAttachmentFileNames(WORK_CATEGORY,
-                np.getEntityName(), np.getInstId());
+        Map<String, String> fileNames = fileAttachmentProvider
+                .retrieveAllAttachmentFileNames(FileAttachmentCategoryType.WORK_CATEGORY, np.getEntityName(), np.getInstId());
         for (FileAttachmentInfo fileAttachmentInfo : attachmentInfoList) {
             String fileName = fileNames.get(fileAttachmentInfo.getName());
             if (fileName != null) {
@@ -61,7 +60,7 @@ public class WorkEntityFileAttachmentsHandler extends AbstractFileAttachmentHand
     @Override
     public void handleAttach(Object parentId, FileAttachmentInfo fileAttachmenInfo) throws UnifyException {
         EntityInstNameParts np = getEntityInstNameParts(parentId);
-        fileAttachmentProvider.saveFileAttachment(WORK_CATEGORY, np.getEntityName(), np.getInstId(),
+        fileAttachmentProvider.saveFileAttachment(FileAttachmentCategoryType.WORK_CATEGORY, np.getEntityName(), np.getInstId(),
                 Attachment.newBuilder(fileAttachmenInfo.getType()).name(fileAttachmenInfo.getName())
                         .title(fileAttachmenInfo.getDescription()).fileName(fileAttachmenInfo.getFilename())
                         .data(fileAttachmenInfo.getAttachment()).build());
@@ -70,7 +69,7 @@ public class WorkEntityFileAttachmentsHandler extends AbstractFileAttachmentHand
     @Override
     public void handleDetach(Object parentId, FileAttachmentInfo fileAttachmenInfo) throws UnifyException {
         EntityInstNameParts np = getEntityInstNameParts(parentId);
-        fileAttachmentProvider.deleteFileAttachment(WORK_CATEGORY, np.getEntityName(), np.getInstId(),
+        fileAttachmentProvider.deleteFileAttachment(FileAttachmentCategoryType.WORK_CATEGORY, np.getEntityName(), np.getInstId(),
                 fileAttachmenInfo.getName());
     }
 
@@ -79,8 +78,8 @@ public class WorkEntityFileAttachmentsHandler extends AbstractFileAttachmentHand
         EntityInstNameParts np = getEntityInstNameParts(parentId);
         FileAttachmentInfo result = new FileAttachmentInfo(fileAttachmenInfo.getType(), fileAttachmenInfo.getName(),
                 fileAttachmenInfo.getDescription(), fileAttachmenInfo.getFilename());
-        Attachment attachment = fileAttachmentProvider.retrieveFileAttachment(WORK_CATEGORY, np.getEntityName(),
-                np.getInstId(), fileAttachmenInfo.getName());
+        Attachment attachment = fileAttachmentProvider.retrieveFileAttachment(FileAttachmentCategoryType.WORK_CATEGORY,
+                np.getEntityName(), np.getInstId(), fileAttachmenInfo.getName());
         if (attachment != null) {
             result.setFilename(attachment.getFileName());
             result.setAttachment(attachment.getData());

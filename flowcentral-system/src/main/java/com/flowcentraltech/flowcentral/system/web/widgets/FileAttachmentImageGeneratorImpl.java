@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import com.flowcentraltech.flowcentral.common.business.FileAttachmentProvider;
+import com.flowcentraltech.flowcentral.common.constants.FileAttachmentCategoryType;
 import com.flowcentraltech.flowcentral.common.data.Attachment;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
@@ -41,7 +42,7 @@ public class FileAttachmentImageGeneratorImpl extends AbstractImageGenerator imp
     @Configurable
     private FileAttachmentProvider fileAttachmentProvider;
 
-    private String category;
+    private FileAttachmentCategoryType category;
 
     private String entityName;
 
@@ -80,7 +81,7 @@ public class FileAttachmentImageGeneratorImpl extends AbstractImageGenerator imp
     }
 
     @Override
-    public void init(String category, String entityName, String attachmentName) {
+    public void init(FileAttachmentCategoryType category, String entityName, String attachmentName) {
         this.category = category;
         this.entityName = entityName;
         this.attachmentName = attachmentName;

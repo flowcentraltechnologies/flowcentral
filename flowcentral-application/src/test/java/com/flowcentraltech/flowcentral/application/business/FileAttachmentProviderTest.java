@@ -26,6 +26,7 @@ import org.junit.Test;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleNameConstants;
 import com.flowcentraltech.flowcentral.common.AbstractFlowCentralTest;
 import com.flowcentraltech.flowcentral.common.business.FileAttachmentProvider;
+import com.flowcentraltech.flowcentral.common.constants.FileAttachmentCategoryType;
 import com.flowcentraltech.flowcentral.common.data.Attachment;
 import com.flowcentraltech.flowcentral.common.entities.FileAttachment;
 import com.tcdng.unify.core.constant.FileAttachmentType;
@@ -44,11 +45,13 @@ public class FileAttachmentProviderTest extends AbstractFlowCentralTest {
     public void testSychFileAttachments() throws Exception {
         Attachment attachment = Attachment.newBuilder(FileAttachmentType.IMAGE).name("disk").title("Disk")
                 .data(new byte[] { (byte) 0xbe, (byte) 0xba }).build();
-        fileAttachmentProvider.saveFileAttachment("work", "application.application", 1L, attachment);
-        boolean synched = fileAttachmentProvider.sychFileAttachments("work", "application.application", 2L, 1L);
+        fileAttachmentProvider.saveFileAttachment(FileAttachmentCategoryType.WORK_CATEGORY, "application.application", 1L,
+                attachment);
+        boolean synched = fileAttachmentProvider.sychFileAttachments(FileAttachmentCategoryType.WORK_CATEGORY,
+                "application.application", 2L, 1L);
         assertTrue(synched);
-        Attachment synchAttachment = fileAttachmentProvider.retrieveFileAttachment("work", "application.application",
-                2L, "disk");
+        Attachment synchAttachment = fileAttachmentProvider.retrieveFileAttachment(FileAttachmentCategoryType.WORK_CATEGORY,
+                "application.application", 2L, "disk");
         assertNotNull(synchAttachment);
         assertEquals("disk", synchAttachment.getName());
         assertEquals("Disk", synchAttachment.getTitle());
@@ -61,7 +64,8 @@ public class FileAttachmentProviderTest extends AbstractFlowCentralTest {
 
     @Test
     public void testSychFileAttachmentsSameInst() throws Exception {
-        boolean synched = fileAttachmentProvider.sychFileAttachments("work", "application.application", 1L, 1L);
+        boolean synched = fileAttachmentProvider.sychFileAttachments(FileAttachmentCategoryType.WORK_CATEGORY,
+                "application.application", 1L, 1L);
         assertFalse(synched);
     }
 

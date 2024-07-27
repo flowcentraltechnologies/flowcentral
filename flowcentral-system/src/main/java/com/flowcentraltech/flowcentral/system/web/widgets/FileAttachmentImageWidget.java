@@ -16,6 +16,7 @@
 
 package com.flowcentraltech.flowcentral.system.web.widgets;
 
+import com.flowcentraltech.flowcentral.common.constants.FileAttachmentCategoryType;
 import com.flowcentraltech.flowcentral.common.web.widgets.AbstractFlowCentralMultiControl;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
@@ -53,8 +54,8 @@ public class FileAttachmentImageWidget extends AbstractFlowCentralMultiControl {
 
     @Override
     protected void doOnPageConstruct() throws UnifyException {
-        imageGenerator.init(getUplAttribute(String.class, "category"), getUplAttribute(String.class, "entityName"),
-                getUplAttribute(String.class, "attachmentName"));
+        imageGenerator.init(getUplAttribute(FileAttachmentCategoryType.class, "category"),
+                getUplAttribute(String.class, "entityName"), getUplAttribute(String.class, "attachmentName"));
         StringBuilder sb = new StringBuilder();
         sb.append("!ui-image src:$t{images/blank.png} binding:imageGenerator");
         appendUplAttribute(sb, "styleClass");

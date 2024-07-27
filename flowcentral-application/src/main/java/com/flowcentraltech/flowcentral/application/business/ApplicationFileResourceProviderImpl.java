@@ -21,6 +21,7 @@ import java.io.InputStream;
 
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleNameConstants;
 import com.flowcentraltech.flowcentral.common.business.FileAttachmentProvider;
+import com.flowcentraltech.flowcentral.common.constants.FileAttachmentCategoryType;
 import com.flowcentraltech.flowcentral.common.data.Attachment;
 import com.flowcentraltech.flowcentral.system.constants.SystemFileResourceConstants;
 import com.tcdng.unify.core.UnifyException;
@@ -48,8 +49,8 @@ public class ApplicationFileResourceProviderImpl extends AbstractFileResourcePro
 
     @Override
     public byte[] readFileResource(String category, String resourceName) throws UnifyException {
-        Attachment attachment = fileAttachmentProvider.retrieveFileAttachment(category,
-                SystemFileResourceConstants.FILERESOURCE_ENTITY_NAME,
+        Attachment attachment = fileAttachmentProvider.retrieveFileAttachment(
+                FileAttachmentCategoryType.fromCode(category), SystemFileResourceConstants.FILERESOURCE_ENTITY_NAME,
                 SystemFileResourceConstants.FILERESOURCE_ENTITY_INST_ID, resourceName);
         return attachment != null ? attachment.getData() : null;
     }

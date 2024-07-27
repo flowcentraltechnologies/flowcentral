@@ -17,6 +17,7 @@
 package com.flowcentraltech.flowcentral.system.web.controllers;
 
 import com.flowcentraltech.flowcentral.common.business.FileAttachmentProvider;
+import com.flowcentraltech.flowcentral.common.constants.FileAttachmentCategoryType;
 import com.flowcentraltech.flowcentral.common.data.Attachment;
 import com.flowcentraltech.flowcentral.system.constants.SystemFileResourceConstants;
 import com.flowcentraltech.flowcentral.system.constants.SystemModuleSysParamConstants;
@@ -97,7 +98,7 @@ public class UIOptionsController extends AbstractSystemPageController<UIOptionsP
 
     private byte[] loadFileResource(String resourceName) throws UnifyException {
         Attachment attachment = fileAttachmentProvider.retrieveFileAttachment(
-                SystemFileResourceConstants.FILERESOURCE_CATEGORY, SystemFileResourceConstants.FILERESOURCE_ENTITY_NAME,
+                FileAttachmentCategoryType.FILERESOURCE_CATEGORY, SystemFileResourceConstants.FILERESOURCE_ENTITY_NAME,
                 SystemFileResourceConstants.FILERESOURCE_ENTITY_INST_ID, resourceName);
         if (attachment != null) {
             return attachment.getData();
@@ -108,12 +109,12 @@ public class UIOptionsController extends AbstractSystemPageController<UIOptionsP
 
     private void saveFileResource(FileAttachmentType type, String resourceName, byte[] resource) throws UnifyException {
         if (resource != null) {
-            fileAttachmentProvider.saveFileAttachment(SystemFileResourceConstants.FILERESOURCE_CATEGORY,
+            fileAttachmentProvider.saveFileAttachment(FileAttachmentCategoryType.FILERESOURCE_CATEGORY,
                     SystemFileResourceConstants.FILERESOURCE_ENTITY_NAME,
                     SystemFileResourceConstants.FILERESOURCE_ENTITY_INST_ID,
                     Attachment.newBuilder(type).name(resourceName).title("").data(resource).build());
         } else {
-            fileAttachmentProvider.deleteFileAttachment(SystemFileResourceConstants.FILERESOURCE_CATEGORY,
+            fileAttachmentProvider.deleteFileAttachment(FileAttachmentCategoryType.FILERESOURCE_CATEGORY,
                     SystemFileResourceConstants.FILERESOURCE_ENTITY_NAME,
                     SystemFileResourceConstants.FILERESOURCE_ENTITY_INST_ID, resourceName);
         }

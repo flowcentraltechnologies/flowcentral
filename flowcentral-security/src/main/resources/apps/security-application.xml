@@ -33,7 +33,7 @@
 		<widgetType name="userphoto"
 			description="$m{security.widgettype.userphoto}" dataType="string"
 			inputType="string"
-			editor="!fc-fileattachmentimage category:$s{work} entityName:$s{security.user} attachmentName:$s{photo}"
+			editor="!fc-fileattachmentimage category:$s{form} entityName:$s{security.user} attachmentName:$s{photo}"
 			renderer="!ui-label" stretch="false" />
 	</widgetTypes>
 	<!-- Applets -->
