@@ -27,8 +27,8 @@ import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.constant.FileAttachmentType;
+import com.tcdng.unify.core.data.FileAttachmentInfo;
 import com.tcdng.unify.core.data.ValueStoreReader;
-import com.tcdng.unify.web.ui.widget.data.FileAttachmentInfo;
 
 /**
  * Convenient abstract base class for attachments provider.

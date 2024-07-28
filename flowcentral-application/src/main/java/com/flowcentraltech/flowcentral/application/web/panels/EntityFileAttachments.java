@@ -16,7 +16,7 @@
 
 package com.flowcentraltech.flowcentral.application.web.panels;
 
-import com.tcdng.unify.web.ui.widget.data.FileAttachmentsInfo;
+import com.tcdng.unify.core.data.FileAttachmentsInfo;
 
 /**
  * Entity file attachments

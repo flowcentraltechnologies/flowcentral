@@ -51,6 +51,7 @@ import com.flowcentraltech.flowcentral.common.business.policies.FormValidationCo
 import com.flowcentraltech.flowcentral.common.business.policies.ReviewResult;
 import com.flowcentraltech.flowcentral.common.business.policies.TableActionResult;
 import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
+import com.flowcentraltech.flowcentral.common.constants.FileAttachmentCategoryType;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralRequestAttributeConstants;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralResultMappingConstants;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants;
@@ -81,8 +82,6 @@ import com.tcdng.unify.web.ui.widget.data.MessageResult;
  */
 @UplBinding("web/application/upl/entityformappletpanel.upl")
 public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel {
-
-    private static final String WORK_CATEGORY = "work";
 
     private static final String IN_WORKFLOW_DRAFT_LOOP_FLAG = "IN_WORKFLOW_DRAFT_LOOP_FLAG";
 
@@ -129,7 +128,6 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         }
 
         final boolean isContextEditable = appCtx.isContextEditable();
-        applet.getFormFileAttachments().setDisabled(!isContextEditable);
         boolean enableSaveAs = false;
         boolean enableUpdate = false;
         boolean enableDelete = false;
@@ -184,9 +182,11 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                                     formEntityDef.getDeletePrivilege())
                             && applet.formBeanMatchAppletPropertyCondition(
                                     AppletPropertyConstants.MAINTAIN_FORM_DELETE_CONDITION);
-                    enableAttachment = isRootForm && formEntityDef.getBaseType().isWorkEntityType()
-                            && formEntityDef.isWithAttachments() && formAppletDef.getPropValue(boolean.class,
-                                    AppletPropertyConstants.MAINTAIN_FORM_ATTACHMENTS, false);
+                    enableAttachment = isRootForm
+                            && formAppletDef.getPropValue(boolean.class,
+                                    AppletPropertyConstants.MAINTAIN_FORM_ATTACHMENTS, false)
+                            && (formEntityDef.isWithAttachments() || formAppletDef.getPropValue(boolean.class,
+                                    AppletPropertyConstants.MAINTAIN_FORM_ATTACHMENTS_ADHOC, false));
                     enableUpdateSubmit = !isInWorkflow && isRootForm && applet.formBeanMatchAppletPropertyCondition(
                             AppletPropertyConstants.MAINTAIN_FORM_SUBMIT_CONDITION);
                     if (enableAttachment) {
@@ -200,13 +200,15 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                             && applet.formBeanMatchAppletPropertyCondition(
                                     AppletPropertyConstants.MAINTAIN_FORM_UPDATE_CONDITION);
                     enableDelete = false;
-                    enableAttachment = isRootForm && formEntityDef.getBaseType().isWorkEntityType()
-                            && formEntityDef.isWithAttachments();
+                    enableAttachment = isRootForm && formEntityDef.isWithAttachments();
                 }
 
                 if (enableAttachment) {
-                    form.setAttachmentCount(fileAttachmentProvider.countFileAttachments(WORK_CATEGORY,
-                            formEntityDef.getLongName(), (Long) inst.getId()));
+                    applet.getFormFileAttachments()
+                            .setDisabled(!isContextEditable || (isWorkflowCopyForm && !isUpdateDraft));
+                    form.setAttachmentCount(
+                            fileAttachmentProvider.countFileAttachments(FileAttachmentCategoryType.FORM_CATEGORY,
+                                    formEntityDef.getLongName(), (Long) inst.getId()));
                 }
             }
         }
@@ -253,7 +255,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                                 : null);
             }
 
-            final String displayCounter = form.getDisplayItemCounter();
+            final String _display = form.getDisplayItemCounter();
             form.clearDisplayItem();
 
             if (isCollaboration) {
@@ -267,23 +269,18 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                 }
             }
 
-            if (isUpdateDraft) {
-                if (appCtx.isInWorkflow()) {
-                    form.setDisplayItemCounterClass("fc-dispcounterorange");
-                    form.setDisplayItemCounter(
-                            resolveSessionMessage("$m{entityformapplet.form.workflowupdatecopy.viewonly}"));
+            if (appCtx.isInWorkflow()) {
+                if (appCtx.isReview()) {
+                    if (isRootForm) {
+                        showReviewFormCaption = true;
+                        form.setDisplayItemCounterClass("fc-dispcounterfrozen fc-dispcounterlarge");
+                        form.setDisplayItemCounter(_display);
+                    }
                 } else {
-                    form.setDisplayItemCounterClass("fc-dispcounterfrozen");
-                    form.setDisplayItemCounter(resolveSessionMessage("$m{entityformapplet.form.workflowupdatecopy}"));
-                }
-            } else {
-                if (appCtx.isInWorkflow()) {
-                    if (appCtx.isReview()) {
-                        if (isRootForm) {
-                            showReviewFormCaption = true;
-                            form.setDisplayItemCounterClass("fc-dispcounterfrozen fc-dispcounterlarge");
-                            form.setDisplayItemCounter(displayCounter);
-                        }
+                    if (isUpdateDraft) {
+                        form.setDisplayItemCounterClass("fc-dispcounterorange");
+                        form.setDisplayItemCounter(
+                                resolveSessionMessage("$m{entityformapplet.form.workflowupdatecopy.viewonly}"));
                     } else {
                         form.setDisplayItemCounterClass("fc-dispcounterorange");
                         if (isRootForm) {
@@ -301,6 +298,11 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                             parentDisabled = true;
                         }
                     }
+                }
+            } else {
+                if (isUpdateDraft) {
+                    form.setDisplayItemCounterClass("fc-dispcounterfrozen");
+                    form.setDisplayItemCounter(resolveSessionMessage("$m{entityformapplet.form.workflowupdatecopy}"));
                 }
             }
         }
@@ -610,8 +612,8 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
     }
 
     @Action
-    public void showFormFileAttachments() throws UnifyException {
-        setCommandResultMapping("showfileattachments");
+    public void showFormFileAttachments() throws UnifyException { 
+        setCommandResultMapping(ApplicationResultMappingConstants.SHOW_FILE_ATTACHMENTS);
     }
 
     @Action
@@ -663,7 +665,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
     }
 
     @Action
-    public void performFormAction() throws UnifyException { 
+    public void performFormAction() throws UnifyException {
         String actionName = getRequestTarget(String.class);
         AbstractEntityFormApplet applet = getEntityFormApplet();
         FormActionDef formActionDef = applet.getCurrentFormDef().getFormActionDef(actionName);
@@ -900,7 +902,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         EntityActionResult entityActionResult = getEntityFormApplet().getCtx().getOriginalEntityActionResult();
         setCommandResultMapping(entityActionResult, true);
     }
-    
+
     @Action
     public void reviewConfirm() throws UnifyException {
         MessageResult messageResult = getMessageResult();

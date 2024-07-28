@@ -29,21 +29,21 @@ public abstract class BaseCodeConfig extends BaseConfig {
 
     private String description;
 
-    public String getCode() {
+    public final String getCode() {
         return code;
     }
 
     @XmlAttribute(required = true)
-    public void setCode(String code) {
+    public final void setCode(String code) {
         this.code = code;
     }
 
-    public String getDescription() {
+    public final String getDescription() {
         return description;
     }
 
     @XmlAttribute(required = true)
-    public void setDescription(String description) {
+    public final void setDescription(String description) {
         this.description = description;
     }
 

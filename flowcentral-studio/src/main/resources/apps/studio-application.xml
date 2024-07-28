@@ -5663,6 +5663,9 @@
 				<property name="maintainForm.attachments"
 					description="$m{studio.appappletprop.createentity.maintainform.attachments}"
 					inputWidget="application.checkbox" />
+				<property name="maintainForm.attachments.adhoc"
+					description="$m{studio.appappletprop.createentity.maintainform.attachments.adhoc}"
+					inputWidget="application.checkbox" />
 			</propertySet>
 			<propertySet
 				label="$m{studio.appappletprop.createentity.workflowproperties}">
@@ -5980,6 +5983,9 @@
 					inputWidget="studio.propertyappletattachmentproviderlist" />
 				<property name="maintainForm.attachments"
 					description="$m{studio.appappletprop.manageentity.maintainform.attachments}"
+					inputWidget="application.checkbox" />
+				<property name="maintainForm.attachments.adhoc"
+					description="$m{studio.appappletprop.manageentity.maintainform.attachments.adhoc}"
 					inputWidget="application.checkbox" />
 			</propertySet>
 			<propertySet

@@ -94,6 +94,10 @@ public abstract class AbstractLoadingApplet extends AbstractEntityFormApplet {
                             FormMode.MAINTAIN.formProperty());
                     LoadingWorkItemInfo loadingWorkItemInfo = loadingTableProvider
                             .getLoadingWorkItemInfo(currEntityInst);
+                    final String display = loadingWorkItemInfo.isWithStepLabel()
+                            ? au.resolveSessionMessage("$m{loading.workitem.display}", loadingWorkItemInfo.getWorkflowDesc(),
+                                    loadingWorkItemInfo.getStepLabel())
+                            : null;
                     getCtx().setRecovery(loadingWorkItemInfo.isError());
                     getCtx().setComments(loadingWorkItemInfo.isComments());
                     getCtx().setAttachments(loadingWorkItemInfo.isAttachments());
@@ -108,11 +112,9 @@ public abstract class AbstractLoadingApplet extends AbstractEntityFormApplet {
                             updateForm(HeaderWithTabsForm.UpdateType.MAINTAIN_INST, form, currEntityInst);
                         }
 
-                        if (loadingWorkItemInfo.isWithStepLabel()) {
-                            form.setDisplayItemCounter(loadingWorkItemInfo.getStepLabel().toUpperCase());
-                        }
-
+                        form.setDisplayItemCounter(display);
                         form.setAppendables(item);
+
                         getCtx().setReadOnly(loadingWorkItemInfo.isReadOnly());
                         setAltSubCaption(form.getFormTitle());
                         viewMode = ViewMode.MAINTAIN_PRIMARY_FORM_NO_SCROLL;
@@ -121,10 +123,8 @@ public abstract class AbstractLoadingApplet extends AbstractEntityFormApplet {
                         listingForm = constructListingForm(formDef, currEntityInst);
                         listingForm.setFormTitle(getRootAppletDef().getLabel());
                         listingForm.setFormActionDefList(loadingWorkItemInfo.getFormActionDefList());
-                        if (loadingWorkItemInfo.isWithStepLabel()) {
-                            listingForm.setDisplayItemCounter(loadingWorkItemInfo.getStepLabel().toUpperCase());
-                        }
 
+                        listingForm.setDisplayItemCounter(display);
                         listingForm.setAppendables(item);
                         getCtx().setEmails(loadingWorkItemInfo.isEmails());
                         getCtx().setReadOnly(loadingWorkItemInfo.isError());

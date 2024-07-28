@@ -80,6 +80,7 @@ import com.flowcentraltech.flowcentral.common.business.policies.WfProcessPolicy;
 import com.flowcentraltech.flowcentral.common.business.policies.WfRecipientPolicy;
 import com.flowcentraltech.flowcentral.common.constants.CommonTempValueNameConstants;
 import com.flowcentraltech.flowcentral.common.constants.ConfigType;
+import com.flowcentraltech.flowcentral.common.constants.FileAttachmentCategoryType;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralContainerPropertyConstants;
 import com.flowcentraltech.flowcentral.common.constants.ProcessErrorConstants;
 import com.flowcentraltech.flowcentral.common.constants.WfItemVersionType;
@@ -205,8 +206,6 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
     private static final String WFWORKFLOWCOPY_LOCK = "wf::workflowcopy-lock";
 
     private static final String WORKFLOW_APPLICATION = "workflow";
-
-    private static final String WORK_CATEGORY = "work";
 
     @Configurable
     private OrganizationModuleService organizationModuleService;
@@ -1626,7 +1625,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                             case CREATE: {
                                 WorkEntity newInst = entityClassDef.newInst(wfEntityInst);
                                 Long originWorkRecId = (Long) environment().create(newInst);
-                                fileAttachmentProvider.sychFileAttachments(WORK_CATEGORY, entityDef.getLongName(),
+                                fileAttachmentProvider.sychFileAttachments(FileAttachmentCategoryType.FORM_CATEGORY, entityDef.getLongName(),
                                         originWorkRecId, (Long) wfEntityInst.getId());
                             }
                                 break;
@@ -1637,7 +1636,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                                 break;
                             case UPDATE: {
                                 transitionItem.setUpdated();
-                                fileAttachmentProvider.sychFileAttachments(WORK_CATEGORY, entityDef.getLongName(),
+                                fileAttachmentProvider.sychFileAttachments(FileAttachmentCategoryType.FORM_CATEGORY, entityDef.getLongName(),
                                         (Long) wfEntityInst.getId(), (Long) wfEntityInst.getId());
                             }
                                 break;
@@ -1652,7 +1651,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                                             new BeanValueStore(wfEntityInst),
                                             ApplicationEntityUtils.RESERVED_BASE_FIELDS);
                                     environment().updateByIdVersionEditableChildren(originalInst);
-                                    fileAttachmentProvider.sychFileAttachments(WORK_CATEGORY, entityDef.getLongName(),
+                                    fileAttachmentProvider.sychFileAttachments(FileAttachmentCategoryType.FORM_CATEGORY, entityDef.getLongName(),
                                             originalCopyId, (Long) wfEntityInst.getId());
 
                                     environment().findEditableChildren(wfEntityInst);
