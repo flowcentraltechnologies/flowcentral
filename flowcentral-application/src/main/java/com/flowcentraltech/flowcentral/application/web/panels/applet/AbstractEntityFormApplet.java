@@ -1094,7 +1094,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
             EntityDef formEntityDef = form.getFormDef().getEntityDef();
             String parentId = ApplicationEntityUtils.getEntityInstName(formEntityDef.getLongName(), parentEntityId);
             FileAttachmentsInfo.Builder fb = FileAttachmentsInfo.newBuilder(parentId);
-            if (getRootAppletDef().getPropValue(boolean.class,
+            if (getFormAppletDef().getPropValue(boolean.class,
                     AppletPropertyConstants.MAINTAIN_FORM_ATTACHMENTS_ADHOC)) {
                 FileAttachmentProvider fileAttachmentProvider = au().getComponent(FileAttachmentProvider.class);
                 List<AttachmentDetails> attachmentDetailsList = fileAttachmentProvider.retrieveAllFileAttachments(

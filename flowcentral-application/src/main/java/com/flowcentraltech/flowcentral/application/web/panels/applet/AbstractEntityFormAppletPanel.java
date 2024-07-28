@@ -612,7 +612,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
     }
 
     @Action
-    public void showFormFileAttachments() throws UnifyException {
+    public void showFormFileAttachments() throws UnifyException { 
         setCommandResultMapping(ApplicationResultMappingConstants.SHOW_FILE_ATTACHMENTS);
     }
 
