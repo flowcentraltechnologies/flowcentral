@@ -204,7 +204,8 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                 }
 
                 if (enableAttachment) {
-                    applet.getFormFileAttachments().setDisabled(!isContextEditable);
+                    applet.getFormFileAttachments()
+                            .setDisabled(!isContextEditable || (isWorkflowCopyForm && !isUpdateDraft));
                     form.setAttachmentCount(
                             fileAttachmentProvider.countFileAttachments(FileAttachmentCategoryType.FORM_CATEGORY,
                                     formEntityDef.getLongName(), (Long) inst.getId()));
@@ -254,7 +255,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                                 : null);
             }
 
-            final String displayCounter = form.getDisplayItemCounter();
+            final String _display = form.getDisplayItemCounter();
             form.clearDisplayItem();
 
             if (isCollaboration) {
@@ -268,23 +269,18 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                 }
             }
 
-            if (isUpdateDraft) {
-                if (appCtx.isInWorkflow()) {
-                    form.setDisplayItemCounterClass("fc-dispcounterorange");
-                    form.setDisplayItemCounter(
-                            resolveSessionMessage("$m{entityformapplet.form.workflowupdatecopy.viewonly}"));
+            if (appCtx.isInWorkflow()) {
+                if (appCtx.isReview()) {
+                    if (isRootForm) {
+                        showReviewFormCaption = true;
+                        form.setDisplayItemCounterClass("fc-dispcounterfrozen fc-dispcounterlarge");
+                        form.setDisplayItemCounter(_display);
+                    }
                 } else {
-                    form.setDisplayItemCounterClass("fc-dispcounterfrozen");
-                    form.setDisplayItemCounter(resolveSessionMessage("$m{entityformapplet.form.workflowupdatecopy}"));
-                }
-            } else {
-                if (appCtx.isInWorkflow()) {
-                    if (appCtx.isReview()) {
-                        if (isRootForm) {
-                            showReviewFormCaption = true;
-                            form.setDisplayItemCounterClass("fc-dispcounterfrozen fc-dispcounterlarge");
-                            form.setDisplayItemCounter(displayCounter);
-                        }
+                    if (isUpdateDraft) {
+                        form.setDisplayItemCounterClass("fc-dispcounterorange");
+                        form.setDisplayItemCounter(
+                                resolveSessionMessage("$m{entityformapplet.form.workflowupdatecopy.viewonly}"));
                     } else {
                         form.setDisplayItemCounterClass("fc-dispcounterorange");
                         if (isRootForm) {
@@ -302,6 +298,11 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                             parentDisabled = true;
                         }
                     }
+                }
+            } else {
+                if (isUpdateDraft) {
+                    form.setDisplayItemCounterClass("fc-dispcounterfrozen");
+                    form.setDisplayItemCounter(resolveSessionMessage("$m{entityformapplet.form.workflowupdatecopy}"));
                 }
             }
         }
