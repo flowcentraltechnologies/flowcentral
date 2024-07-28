@@ -27,7 +27,7 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 /** Button */ 
 .ui-button {padding: 0px 8px; min-height:32px; background-color: #f2f2f2; border: 1px solid #c8c8c8; cursor: pointer;/*border-radius: 4px;*/}
 .ui-button:hover:enabled {color:#000000; background-color: #fafafa;}
-.ui-button:disabled {cursor:default; color: #e0e0e0;}
+.ui-button:disabled {cursor:default; color: #a0a0a0;}
 .ui-button-alert {padding: 0px 8px; min-height:32px; background-color: #f2f2f2; border: 1px solid #c8c8c8; cursor: pointer;/*border-radius: 4px;*/}
 
 /** Checkbox */ 
@@ -751,15 +751,15 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 
 .fc-loadingtable {}
 
-.fc-dispcounter {display:inline-block; background-color:#a6aeb9; color:#404040; font-weight:bold; font-size:7pt;
+.fc-dispcounter {display:inline-block; background-color:#a6aeb9; color:#202020; font-weight:bold; font-size:7pt;
 	padding:4px 8px; margin-top:4px;}
-.fc-dispcountergreen {display:inline-block; background-color:#90d883; color:#404040; font-weight:bold; font-size:7pt;
+.fc-dispcountergreen {display:inline-block; background-color:#90d883; color:#202020; font-weight:bold; font-size:7pt;
 	padding:4px 8px; margin-top:4px;}
-.fc-dispcounterorange {display:inline-block; background-color:#ffdc1d; color:#404040; font-weight:bold; font-size:7pt;
+.fc-dispcounterorange {display:inline-block; background-color:#ffdc1d; color:#202020; font-weight:bold; font-size:7pt;
 	padding:4px 8px; margin-top:4px;}
-.fc-dispcounterfrozen {display:inline-block; background-color:#a5c5d9; color:#404040; font-weight:bold; font-size:7pt;
+.fc-dispcounterfrozen {display:inline-block; background-color:#a5c5d9; color:#202020; font-weight:bold; font-size:7pt;
 	padding:4px 8px; margin-top:4px;}
-.fc-dispcounterlarge {font-size:9pt;}
+.fc-dispcounterlarge {font-size:8pt;}
 
 .fc-entityauditsnapshotview {width:720px !important;}
 .fc-entityauditsnapshotview .snapshot {padding-top:10px;padding-bottom:10px;}

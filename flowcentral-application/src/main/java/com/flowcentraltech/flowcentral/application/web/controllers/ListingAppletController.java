@@ -15,6 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.application.web.controllers;
 
+import com.flowcentraltech.flowcentral.application.constants.ApplicationResultMappingConstants;
 import com.flowcentraltech.flowcentral.application.web.panels.applet.ListingApplet;
 import com.flowcentraltech.flowcentral.configuration.constants.FlowCentralAppletPathConstants;
 import com.tcdng.unify.core.UnifyException;
@@ -35,7 +36,7 @@ import com.tcdng.unify.web.constant.Secured;
  */
 @Component(FlowCentralAppletPathConstants.LISTING)
 @UplBinding("web/application/upl/listingappletpage.upl")
-@ResultMappings({ @ResultMapping(name = "showfileattachments",
+@ResultMappings({ @ResultMapping(name = ApplicationResultMappingConstants.SHOW_FILE_ATTACHMENTS,
         response = { "!validationerrorresponse", "!showpopupresponse popup:$s{fileAttachmentsPopup}" }) })
 public class ListingAppletController extends AbstractAppletController<ListingAppletPageBean> {
 

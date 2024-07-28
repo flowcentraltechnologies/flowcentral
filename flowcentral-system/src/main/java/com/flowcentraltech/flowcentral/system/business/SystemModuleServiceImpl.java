@@ -38,6 +38,7 @@ import com.flowcentraltech.flowcentral.common.business.SecuredLinkManager;
 import com.flowcentraltech.flowcentral.common.business.SpecialParamProvider;
 import com.flowcentraltech.flowcentral.common.business.SystemParameterProvider;
 import com.flowcentraltech.flowcentral.common.constants.CommonModuleNameConstants;
+import com.flowcentraltech.flowcentral.common.constants.FileAttachmentCategoryType;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralEditionConstants;
 import com.flowcentraltech.flowcentral.common.constants.LicenseFeatureCodeConstants;
 import com.flowcentraltech.flowcentral.common.constants.LicenseStatus;
@@ -128,8 +129,6 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
     private static final String SCHEDULED_TASK_EXECUTION_LOCK = "sys:scheduledtaskexecution-lock";
 
     private static final String ENSURE_LICENSE_LOCK = "sys:ensurelicense-lock";
-
-    private static final String LICENSE = "license";
 
     @Configurable
     private ConfigurationLoader configurationLoader;
@@ -387,7 +386,7 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
         pw.println(requestDt.getTime());
         pw.println(deploymentID.getValue());
         pw.println(deploymentInitDate.getValue());
-        LicenseDef licenseDef = licenseDefFactoryMap.get(LICENSE);
+        LicenseDef licenseDef = licenseDefFactoryMap.get(FileAttachmentCategoryType.LICENSE_CATEGORY.code());
         for (LicenseEntryDef entry : licenseDef.getEntryList()) {
             pw.println(LicenseUtils.getLineFromLicenseEntry(entry));
         }
@@ -470,22 +469,24 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
 
     @Override
     public LicenseDef getInstanceLicensing() throws UnifyException {
-        return licenseDefFactoryMap.get(LICENSE);
+        return licenseDefFactoryMap.get(FileAttachmentCategoryType.LICENSE_CATEGORY.code());
     }
 
     @Override
     public boolean isLicensed(String featureCode) throws UnifyException {
-        return true; // licenseDefFactoryMap.get(LICENSE).isLicensed(featureCode);
+        return true; // licenseDefFactoryMap.get(LICENSE_CATEGORY).isLicensed(featureCode);
     }
 
     @Override
     public Date licensedExpiresOn(String featureCode) throws UnifyException {
-        return licenseDefFactoryMap.get(LICENSE).getLicenseEntryDef(featureCode).getExpiryDate();
+        return licenseDefFactoryMap.get(FileAttachmentCategoryType.LICENSE_CATEGORY.code()).getLicenseEntryDef(featureCode)
+                .getExpiryDate();
     }
 
     @Override
     public LicenseStatus getLicenseStatus(String featureCode) throws UnifyException {
-        return licenseDefFactoryMap.get(LICENSE).getLicenseEntryDef(featureCode).getStatus();
+        return licenseDefFactoryMap.get(FileAttachmentCategoryType.LICENSE_CATEGORY.code()).getLicenseEntryDef(featureCode)
+                .getStatus();
     }
 
     @Periodic(PeriodicType.EON)
@@ -495,8 +496,9 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
 
     @Synchronized(ENSURE_LICENSE_LOCK)
     public Attachment ensureLicense() throws UnifyException {
-        Attachment attachment = fileAttachmentProvider.retrieveFileAttachment(LICENSE, "system.credential", 0L,
-                LICENSE);
+        final String licenseName = FileAttachmentCategoryType.LICENSE_CATEGORY.code();
+        Attachment attachment = fileAttachmentProvider.retrieveFileAttachment(FileAttachmentCategoryType.LICENSE_CATEGORY,
+                "system.credential", 0L, licenseName);
         if (attachment == null) {
             Feature deploymentID = environment().find(new FeatureQuery().code("deploymentID"));
             Feature deploymentInitDate = environment().find(new FeatureQuery().code("deploymentInitDate"));
@@ -523,10 +525,12 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
             String license = writer.toString();
             String encLicense = cryptograph.encrypt(license);
 
-            final Attachment _attachment = Attachment.newBuilder(FileAttachmentType.TEXT).name(LICENSE).title(LICENSE)
-                    .fileName(LICENSE).data(encLicense.getBytes()).build();
-            fileAttachmentProvider.saveFileAttachment(LICENSE, "system.credential", 0L, _attachment);
-            attachment = fileAttachmentProvider.retrieveFileAttachment(LICENSE, "system.credential", 0L, LICENSE);
+            final Attachment _attachment = Attachment.newBuilder(FileAttachmentType.TEXT).name(licenseName)
+                    .title(licenseName).fileName(licenseName).data(encLicense.getBytes()).build();
+            fileAttachmentProvider.saveFileAttachment(FileAttachmentCategoryType.LICENSE_CATEGORY, "system.credential", 0L,
+                    _attachment);
+            attachment = fileAttachmentProvider.retrieveFileAttachment(FileAttachmentCategoryType.LICENSE_CATEGORY,
+                    "system.credential", 0L, licenseName);
         }
 
         return attachment;
@@ -565,11 +569,13 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
 
             pw.flush();
 
+            final String licenseName = FileAttachmentCategoryType.LICENSE_CATEGORY.code();
             license = writer.toString();
             String encLicense = cryptograph.encrypt(license);
-            final Attachment _attachment = Attachment.newBuilder(FileAttachmentType.TEXT).name(LICENSE).title(LICENSE)
-                    .fileName(LICENSE).data(encLicense.getBytes()).build();
-            fileAttachmentProvider.saveFileAttachment(LICENSE, "system.credential", 0L, _attachment);
+            final Attachment _attachment = Attachment.newBuilder(FileAttachmentType.TEXT).name(licenseName)
+                    .title(licenseName).fileName(licenseName).data(encLicense.getBytes()).build();
+            fileAttachmentProvider.saveFileAttachment(FileAttachmentCategoryType.LICENSE_CATEGORY, "system.credential", 0L,
+                    _attachment);
             logDebug(taskMonitor, "...license file successfully loaded...");
         } catch (IOException e) {
             throwOperationErrorException(e);

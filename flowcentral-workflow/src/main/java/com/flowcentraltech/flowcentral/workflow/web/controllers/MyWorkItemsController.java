@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.workflow.web.controllers;
 import java.util.Arrays;
 import java.util.List;
 
+import com.flowcentraltech.flowcentral.application.constants.ApplicationResultMappingConstants;
 import com.flowcentraltech.flowcentral.application.data.EntityFormEventHandlers;
 import com.flowcentraltech.flowcentral.application.data.WorkflowLoadingTableInfo;
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityNameParts;
@@ -47,8 +48,11 @@ import com.tcdng.unify.web.constant.Secured;
  */
 @Component("/workflow/myworkitems")
 @UplBinding("web/workflow/upl/myworkitems.upl")
-@ResultMappings({ @ResultMapping(name = "refreshSlate",
-        response = { "!hidepopupresponse", "!refreshpanelresponse panels:$l{workItemsSlatePanel}" }) })
+@ResultMappings({
+    @ResultMapping(name = "refreshSlate",
+        response = { "!hidepopupresponse", "!refreshpanelresponse panels:$l{workItemsSlatePanel}" }),
+    @ResultMapping(name = ApplicationResultMappingConstants.SHOW_FILE_ATTACHMENTS,
+    response = { "!validationerrorresponse", "!showpopupresponse popup:$s{fileAttachmentsPopup}" })})
 public class MyWorkItemsController extends AbstractEntityFormAppletController<MyWorkItemsApplet, MyWorkItemsPageBean> {
 
     @Configurable
@@ -92,6 +96,11 @@ public class MyWorkItemsController extends AbstractEntityFormAppletController<My
         }
 
         return refreshSlate();
+    }
+
+    @Action
+    public String closeFileAttachments() throws UnifyException {
+        return "refreshapplet";
     }
 
     @Override

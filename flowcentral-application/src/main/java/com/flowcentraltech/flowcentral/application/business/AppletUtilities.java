@@ -110,6 +110,7 @@ import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.database.Query;
 import com.tcdng.unify.core.format.FormatHelper;
 import com.tcdng.unify.core.report.Report;
+import com.tcdng.unify.core.system.SequenceNumberService;
 import com.tcdng.unify.core.task.TaskLauncher;
 import com.tcdng.unify.core.upl.UplComponent;
 import com.tcdng.unify.web.ui.widget.Panel;
@@ -346,6 +347,17 @@ public interface AppletUtilities extends FlowCentralComponent {
     String getNextSequenceCode(String ownerId, String sequenceDefintion, ValueStoreReader valueStoreReader)
             throws UnifyException;
 
+    /**
+     * Gets next sequence number.
+     * 
+     * @param sequence
+     *                 the sequence name
+     * @return the next number
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    long getNextSequenceNumber(String sequence) throws UnifyException;
+    
     /**
      * Checks if application is developable.
      * 
@@ -616,6 +628,13 @@ public interface AppletUtilities extends FlowCentralComponent {
      */
     SequenceCodeGenerator sequenceCodeGenerator();
 
+    /**
+     * Gets the sequence number service
+     * 
+     * @return the sequence number service
+     */
+    SequenceNumberService sequence();
+    
     /**
      * Gets the report provider.
      * 

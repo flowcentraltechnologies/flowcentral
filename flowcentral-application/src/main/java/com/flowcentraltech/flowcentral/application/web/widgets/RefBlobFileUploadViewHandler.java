@@ -28,12 +28,12 @@ import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.constant.FileAttachmentType;
 import com.tcdng.unify.core.criterion.Update;
+import com.tcdng.unify.core.data.FileAttachmentInfo;
 import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.database.Query;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.ui.widget.control.AbstractFileUploadViewHandler;
-import com.tcdng.unify.web.ui.widget.data.FileAttachmentInfo;
 
 /**
  * File upload view handler for blob references.

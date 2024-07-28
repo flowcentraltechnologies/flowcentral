@@ -21,8 +21,8 @@ import com.flowcentraltech.flowcentral.application.data.Attachments;
 import com.flowcentraltech.flowcentral.application.data.AttachmentsOptions;
 import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.data.FileAttachmentInfo;
 import com.tcdng.unify.core.data.ValueStoreReader;
-import com.tcdng.unify.web.ui.widget.data.FileAttachmentInfo;
 
 /**
  * Attachments provider.

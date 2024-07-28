@@ -37,7 +37,7 @@ public interface ApplicationModuleNameConstants {
 
     String FORMCONTEXT_EVALUATOR = "formcontext-evaluator";
 
-    String WORKENTITY_FILE_ATTACHMENTS_HANDLER = "workentity-fileattachmentshandler";
+    String FORM_FILE_ATTACHMENTS_HANDLER = "form-fileattachmentshandler";
 
     String PROPERTYLIST_OWNERID_PROPERTY = "propertyOwnerId";
     

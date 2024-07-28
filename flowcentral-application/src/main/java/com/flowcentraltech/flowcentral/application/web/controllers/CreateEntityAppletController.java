@@ -15,6 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.application.web.controllers;
 
+import com.flowcentraltech.flowcentral.application.constants.ApplicationResultMappingConstants;
 import com.flowcentraltech.flowcentral.application.data.EntityFormEventHandlers;
 import com.flowcentraltech.flowcentral.application.web.panels.applet.CreateEntityApplet;
 import com.flowcentraltech.flowcentral.configuration.constants.FlowCentralAppletPathConstants;
@@ -36,7 +37,7 @@ import com.tcdng.unify.web.constant.Secured;
  */
 @Component(FlowCentralAppletPathConstants.CREATE_ENTITY)
 @UplBinding("web/application/upl/createentityappletpage.upl")
-@ResultMappings({ @ResultMapping(name = "showfileattachments",
+@ResultMappings({ @ResultMapping(name = ApplicationResultMappingConstants.SHOW_FILE_ATTACHMENTS,
         response = { "!validationerrorresponse", "!showpopupresponse popup:$s{fileAttachmentsPopup}" }) })
 public class CreateEntityAppletController
         extends AbstractEntityFormAppletController<CreateEntityApplet, CreateEntityAppletPageBean> {

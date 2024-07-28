@@ -16,6 +16,7 @@
 
 package com.flowcentraltech.flowcentral.system.web.widgets;
 
+import com.flowcentraltech.flowcentral.common.constants.FileAttachmentCategoryType;
 import com.tcdng.unify.core.resource.ImageGenerator;
 
 /**
@@ -26,7 +27,7 @@ import com.tcdng.unify.core.resource.ImageGenerator;
  */
 public interface FileAttachmentImageGenerator extends ImageGenerator {
 
-    void init(String category, String entityName, String attachmentName);
+    void init(FileAttachmentCategoryType category, String entityName, String attachmentName);
 
     void prepareGenerationFor(Long entityInstId);
 }

@@ -31,30 +31,30 @@ public abstract class BaseNameConfig extends BaseConfig {
 
     private String label;
 
-    public String getName() {
+    public final String getName() {
         return name;
     }
 
     @XmlAttribute(required = true)
-    public void setName(String name) {
+    public final void setName(String name) {
         this.name = name;
     }
 
-    public String getDescription() {
+    public final String getDescription() {
         return description;
     }
 
     @XmlAttribute(required = true)
-    public void setDescription(String description) {
+    public final void setDescription(String description) {
         this.description = description;
     }
 
-    public String getLabel() {
+    public final String getLabel() {
         return label;
     }
 
     @XmlAttribute(required = true)
-    public void setLabel(String label) {
+    public final void setLabel(String label) {
         this.label = label;
     }
 

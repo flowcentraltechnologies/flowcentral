@@ -17,7 +17,7 @@
     dialogCaption:$m{entityfileattachmentspanel.title}
     dialogBodyComponents:$c{attachmentsPanel}
     dialogActionComponents:$c{closeBtn}
-    fileAttachmentHandler:$j{com.flowcentraltech.flowcentral.application.constants.ApplicationModuleNameConstants.WORKENTITY_FILE_ATTACHMENTS_HANDLER}
+    fileAttachmentHandler:$j{com.flowcentraltech.flowcentral.application.constants.ApplicationModuleNameConstants.FORM_FILE_ATTACHMENTS_HANDLER}
     closeEventHandler:$d{!ui-event event:onclick action:$c{closeDialogAct}}
 
 // Attachments panel

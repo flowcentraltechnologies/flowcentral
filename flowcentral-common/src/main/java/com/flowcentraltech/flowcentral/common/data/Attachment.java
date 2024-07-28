@@ -16,8 +16,6 @@
 
 package com.flowcentraltech.flowcentral.common.data;
 
-import java.util.Arrays;
-
 import com.tcdng.unify.core.constant.FileAttachmentType;
 
 /**
@@ -26,59 +24,18 @@ import com.tcdng.unify.core.constant.FileAttachmentType;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class Attachment {
-
-    private Long id;
-
-    private FileAttachmentType type;
-
-    private String name;
-
-    private String title;
-
-    private String fileName;
+public class Attachment extends AttachmentDetails {
 
     private byte[] data;
 
-    private long versionNo;
-
-    private Attachment(Long id, FileAttachmentType type, String name, String title, String fileName, byte[] data,
+    public Attachment(Long id, FileAttachmentType type, String name, String title, String fileName, byte[] data,
             long versionNo) {
-        this.id = id;
-        this.type = type;
-        this.name = name;
-        this.title = title;
-        this.fileName = fileName;
+        super(id, type, name, title, fileName, versionNo);
         this.data = data;
-        this.versionNo = versionNo;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public FileAttachmentType getType() {
-        return type;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public String getFileName() {
-        return fileName;
     }
 
     public byte[] getData() {
         return data;
-    }
-
-    public long getVersionNo() {
-        return versionNo;
     }
 
     public static Builder newBuilder(Long id, FileAttachmentType type, long versionNo) {
@@ -152,9 +109,4 @@ public class Attachment {
         }
     }
 
-    @Override
-    public String toString() {
-        return "Attachment [type=" + type + ", name=" + name + ", title=" + title + ", versionNo=" + versionNo
-                + ", fileName=" + fileName + ", data=" + Arrays.toString(data) + "]";
-    }
 }
