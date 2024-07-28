@@ -86,7 +86,6 @@ import com.flowcentraltech.flowcentral.common.business.policies.SweepingCommitPo
 import com.flowcentraltech.flowcentral.common.business.policies.TableActionResult;
 import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
 import com.flowcentraltech.flowcentral.common.constants.FileAttachmentCategoryType;
-import com.flowcentraltech.flowcentral.common.constants.FileAttachmentConstants;
 import com.flowcentraltech.flowcentral.common.constants.WfItemVersionType;
 import com.flowcentraltech.flowcentral.common.data.AttachmentDetails;
 import com.flowcentraltech.flowcentral.common.data.AuditSnapshot;
@@ -102,9 +101,9 @@ import com.flowcentraltech.flowcentral.configuration.constants.FormReviewType;
 import com.flowcentraltech.flowcentral.configuration.constants.RecordActionType;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.UserToken;
-import com.tcdng.unify.core.constant.FileAttachmentType;
 import com.tcdng.unify.core.criterion.Restriction;
 import com.tcdng.unify.core.data.BeanValueStore;
+import com.tcdng.unify.core.data.FileAttachmentsInfo;
 import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.database.Database;
 import com.tcdng.unify.core.database.Entity;
@@ -116,7 +115,6 @@ import com.tcdng.unify.core.util.ReflectUtils;
 import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.ui.constant.WidgetTempValueConstants;
 import com.tcdng.unify.web.ui.widget.Page;
-import com.tcdng.unify.web.ui.widget.data.FileAttachmentsInfo;
 import com.tcdng.unify.web.ui.widget.data.Hint.MODE;
 
 /**
@@ -1106,9 +1104,6 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
                             attachmentDetails.getTitle());
                 }
 
-                final String name = FileAttachmentConstants.ADHOC_FILENAME_PREFIX
-                        + au.getNextSequenceNumber(FileAttachmentConstants.ADHOC_FILENAME_SEQUENCE);
-                fb.addFileAttachmentInfo(FileAttachmentType.WILDCARD, name, null);
                 fb.adhoc(true);
             } else {
                 for (EntityAttachmentDef entityAttachmentDef : formEntityDef.getAttachmentList()) {

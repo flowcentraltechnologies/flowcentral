@@ -31,8 +31,8 @@ import com.flowcentraltech.flowcentral.common.data.AttachmentDetails;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
+import com.tcdng.unify.core.data.FileAttachmentInfo;
 import com.tcdng.unify.web.ui.widget.control.AbstractFileAttachmentHandler;
-import com.tcdng.unify.web.ui.widget.data.FileAttachmentInfo;
 
 /**
  * Form file attachment handler.
