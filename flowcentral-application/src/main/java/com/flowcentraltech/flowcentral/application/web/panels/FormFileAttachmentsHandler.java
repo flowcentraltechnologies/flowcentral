@@ -19,12 +19,15 @@ package com.flowcentraltech.flowcentral.application.web.panels;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleNameConstants;
 import com.flowcentraltech.flowcentral.application.data.EntityInstNameParts;
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityUtils;
 import com.flowcentraltech.flowcentral.common.business.FileAttachmentProvider;
 import com.flowcentraltech.flowcentral.common.constants.FileAttachmentCategoryType;
 import com.flowcentraltech.flowcentral.common.data.Attachment;
+import com.flowcentraltech.flowcentral.common.data.AttachmentDetails;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -32,13 +35,13 @@ import com.tcdng.unify.web.ui.widget.control.AbstractFileAttachmentHandler;
 import com.tcdng.unify.web.ui.widget.data.FileAttachmentInfo;
 
 /**
- * Work entity file attachment handler.
+ * Form file attachment handler.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@Component(ApplicationModuleNameConstants.WORKENTITY_FILE_ATTACHMENTS_HANDLER)
-public class WorkEntityFileAttachmentsHandler extends AbstractFileAttachmentHandler {
+@Component(ApplicationModuleNameConstants.FORM_FILE_ATTACHMENTS_HANDLER)
+public class FormFileAttachmentsHandler extends AbstractFileAttachmentHandler {
 
     @Configurable
     private FileAttachmentProvider fileAttachmentProvider;
@@ -47,12 +50,12 @@ public class WorkEntityFileAttachmentsHandler extends AbstractFileAttachmentHand
     public void fillAttachFileNames(Object parentId, List<FileAttachmentInfo> attachmentInfoList)
             throws UnifyException {
         EntityInstNameParts np = getEntityInstNameParts(parentId);
-        Map<String, String> fileNames = fileAttachmentProvider
-                .retrieveAllAttachmentFileNames(FileAttachmentCategoryType.WORK_CATEGORY, np.getEntityName(), np.getInstId());
+        Map<String, AttachmentDetails> fileNames = fileAttachmentProvider.retrieveAllFileAttachmentsByName(
+                FileAttachmentCategoryType.FORM_CATEGORY, np.getEntityName(), np.getInstId());
         for (FileAttachmentInfo fileAttachmentInfo : attachmentInfoList) {
-            String fileName = fileNames.get(fileAttachmentInfo.getName());
-            if (fileName != null) {
-                fileAttachmentInfo.setFilename(fileName);
+            AttachmentDetails details = fileNames.get(fileAttachmentInfo.getName());
+            if (details != null) {
+                fileAttachmentInfo.setFilename(details.getFileName());
             }
         }
     }
@@ -60,17 +63,20 @@ public class WorkEntityFileAttachmentsHandler extends AbstractFileAttachmentHand
     @Override
     public void handleAttach(Object parentId, FileAttachmentInfo fileAttachmenInfo) throws UnifyException {
         EntityInstNameParts np = getEntityInstNameParts(parentId);
-        fileAttachmentProvider.saveFileAttachment(FileAttachmentCategoryType.WORK_CATEGORY, np.getEntityName(), np.getInstId(),
+        fileAttachmentProvider.saveFileAttachment(FileAttachmentCategoryType.FORM_CATEGORY, np.getEntityName(),
+                np.getInstId(),
                 Attachment.newBuilder(fileAttachmenInfo.getType()).name(fileAttachmenInfo.getName())
-                        .title(fileAttachmenInfo.getDescription()).fileName(fileAttachmenInfo.getFilename())
-                        .data(fileAttachmenInfo.getAttachment()).build());
+                        .title(!StringUtils.isBlank(fileAttachmenInfo.getDescription())
+                                ? fileAttachmenInfo.getDescription()
+                                : fileAttachmenInfo.getFilename())
+                        .fileName(fileAttachmenInfo.getFilename()).data(fileAttachmenInfo.getAttachment()).build());
     }
 
     @Override
     public void handleDetach(Object parentId, FileAttachmentInfo fileAttachmenInfo) throws UnifyException {
         EntityInstNameParts np = getEntityInstNameParts(parentId);
-        fileAttachmentProvider.deleteFileAttachment(FileAttachmentCategoryType.WORK_CATEGORY, np.getEntityName(), np.getInstId(),
-                fileAttachmenInfo.getName());
+        fileAttachmentProvider.deleteFileAttachment(FileAttachmentCategoryType.FORM_CATEGORY, np.getEntityName(),
+                np.getInstId(), fileAttachmenInfo.getName());
     }
 
     @Override
@@ -78,7 +84,7 @@ public class WorkEntityFileAttachmentsHandler extends AbstractFileAttachmentHand
         EntityInstNameParts np = getEntityInstNameParts(parentId);
         FileAttachmentInfo result = new FileAttachmentInfo(fileAttachmenInfo.getType(), fileAttachmenInfo.getName(),
                 fileAttachmenInfo.getDescription(), fileAttachmenInfo.getFilename());
-        Attachment attachment = fileAttachmentProvider.retrieveFileAttachment(FileAttachmentCategoryType.WORK_CATEGORY,
+        Attachment attachment = fileAttachmentProvider.retrieveFileAttachment(FileAttachmentCategoryType.FORM_CATEGORY,
                 np.getEntityName(), np.getInstId(), fileAttachmenInfo.getName());
         if (attachment != null) {
             result.setFilename(attachment.getFileName());

@@ -619,7 +619,7 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
     @Override
     public byte[] findUserPhotograph(String userLoginId) throws UnifyException {
         Long userId = environment().value(Long.class, "id", new UserQuery().loginId(userLoginId));
-        Attachment attachment = fileAttachmentProvider.retrieveFileAttachment(FileAttachmentCategoryType.WORK_CATEGORY,
+        Attachment attachment = fileAttachmentProvider.retrieveFileAttachment(FileAttachmentCategoryType.FORM_CATEGORY,
                 SecurityModuleEntityConstants.USER_ENTITY_NAME, userId, SecurityModuleAttachmentConstants.PHOTO);
         if (attachment != null) {
             return attachment.getData();

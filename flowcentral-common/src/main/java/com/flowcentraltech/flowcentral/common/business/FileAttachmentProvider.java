@@ -105,7 +105,7 @@ public interface FileAttachmentProvider extends FlowCentralComponent {
             Long ownerInstId) throws UnifyException;
 
     /**
-     * Retrieves all file attachment for an entity instance.
+     * Retrieves all file attachment details by name for an entity instance.
      * 
      * @param category
      *                        the file attachment category
@@ -113,11 +113,11 @@ public interface FileAttachmentProvider extends FlowCentralComponent {
      *                        the entity type long name
      * @param ownerInstId
      *                        the entity instance ID
-     * @return file names by attachment name
-     * @throws UnifyException
+     * @return attachment details by name
+     * @throws UnifyException if an error occurs
      */
-    Map<String, String> retrieveAllAttachmentFileNames(FileAttachmentCategoryType category, String ownerEntityName,
-            Long ownerInstId) throws UnifyException;
+    Map<String, AttachmentDetails> retrieveAllFileAttachmentsByName(FileAttachmentCategoryType category,
+            String ownerEntityName, Long ownerInstId) throws UnifyException;
 
     /**
      * Deletes a file attachment for an entity instance.

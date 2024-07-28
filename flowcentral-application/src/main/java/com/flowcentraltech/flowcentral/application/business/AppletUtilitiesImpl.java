@@ -178,6 +178,7 @@ import com.tcdng.unify.core.format.FormatHelper;
 import com.tcdng.unify.core.message.MessageResolver;
 import com.tcdng.unify.core.report.Report;
 import com.tcdng.unify.core.report.ReportLayoutType;
+import com.tcdng.unify.core.system.SequenceNumberService;
 import com.tcdng.unify.core.task.TaskLauncher;
 import com.tcdng.unify.core.upl.UplComponent;
 import com.tcdng.unify.core.util.DataUtils;
@@ -254,6 +255,9 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
 
     @Configurable
     private ApplicationPrivilegeManager applicationPrivilegeManager;
+
+    @Configurable
+    private SequenceNumberService sequenceNumberService;
 
     private final FactoryMap<String, Class<? extends SingleFormBean>> singleFormBeanClassByPanelName;
 
@@ -527,6 +531,11 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
     }
 
     @Override
+    public SequenceNumberService sequence() {
+        return sequenceNumberService;
+    }
+
+    @Override
     public ReportProvider reportProvider() {
         return reportProvider;
     }
@@ -535,6 +544,11 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
     public String getNextSequenceCode(String ownerId, String sequenceDefintion, ValueStoreReader valueStoreReader)
             throws UnifyException {
         return sequenceCodeGenerator.getNextSequenceCode(ownerId, sequenceDefintion, valueStoreReader);
+    }
+
+    @Override
+    public long getNextSequenceNumber(String sequence) throws UnifyException {
+        return sequenceNumberService.getNextSequenceNumber(sequence);
     }
 
     @Override

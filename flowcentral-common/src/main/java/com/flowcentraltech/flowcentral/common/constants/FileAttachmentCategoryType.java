@@ -29,7 +29,6 @@ public enum FileAttachmentCategoryType implements EnumConst {
 
     FORM_CATEGORY("form"),
     LICENSE_CATEGORY("license"),
-    WORK_CATEGORY("work"),
     FILERESOURCE_CATEGORY("/resource/file");
 
     private final String code;

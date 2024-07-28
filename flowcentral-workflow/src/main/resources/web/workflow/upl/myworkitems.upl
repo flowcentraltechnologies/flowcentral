@@ -41,6 +41,11 @@
 !ui-panel:workItemsSlatePanel style:$s{width:100%;} components:$c{appletPanel}
 !fc-manageloadinglistappletpanel:appletPanel style:$s{width:100%;height:100%;} binding:applet
 
+// Form attachments panel
+!fc-entityfileattachmentspanel:fileAttachmentsPopup binding:applet.formFileAttachments
+   closeEventHandler:$d{!ui-event event:onclick action:$c{closeFileAttachAct}}
+
 // Actions
 !ui-post:refreshWorkItemsAct  path:$n{/refreshSlate} components:$c{appletPanel} 
 !ui-post:switchWorkItemsAct  path:$n{/loadWorkItemsSlate} components:$c{stepSelect}
+!ui-post:closeFileAttachAct path:$p{/closeFileAttachments}

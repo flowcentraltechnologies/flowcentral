@@ -54,7 +54,7 @@ public class FileAttachmentImageWidget extends AbstractFlowCentralMultiControl {
 
     @Override
     protected void doOnPageConstruct() throws UnifyException {
-        imageGenerator.init(getUplAttribute(FileAttachmentCategoryType.class, "category"),
+        imageGenerator.init(FileAttachmentCategoryType.fromCode(getUplAttribute(String.class, "category")),
                 getUplAttribute(String.class, "entityName"), getUplAttribute(String.class, "attachmentName"));
         StringBuilder sb = new StringBuilder();
         sb.append("!ui-image src:$t{images/blank.png} binding:imageGenerator");

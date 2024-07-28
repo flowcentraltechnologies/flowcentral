@@ -248,7 +248,6 @@ import com.tcdng.unify.core.format.Formatter;
 import com.tcdng.unify.core.list.ListManager;
 import com.tcdng.unify.core.message.MessageResolver;
 import com.tcdng.unify.core.security.TwoWayStringCryptograph;
-import com.tcdng.unify.core.system.SequenceNumberService;
 import com.tcdng.unify.core.task.TaskExecLimit;
 import com.tcdng.unify.core.task.TaskMonitor;
 import com.tcdng.unify.core.util.ArgumentTypeInfo;
@@ -320,9 +319,6 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
     @Configurable("application-usagelistprovider")
     private UsageListProvider usageListProvider;
-
-    @Configurable
-    private SequenceNumberService sequenceNumberService;
 
     @Configurable
     private EnvironmentDelegateUtilities environmentDelegateUtilities;
@@ -2746,11 +2742,18 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
-    public Map<String, String> retrieveAllAttachmentFileNames(FileAttachmentCategoryType category,
+    public Map<String, AttachmentDetails> retrieveAllFileAttachmentsByName(FileAttachmentCategoryType category,
             String ownerEntityName, Long ownerInstId) throws UnifyException {
-        final EntityDef entityDef = getEntityDef(ownerEntityName);
-        return environment().valueMap(String.class, "name", String.class, "fileName", new FileAttachmentQuery()
-                .category(category.code()).entity(entityDef.getTableName()).entityInstId(ownerInstId));
+        Map<String, AttachmentDetails> map = Collections.emptyMap();
+        List<AttachmentDetails> detailList = retrieveAllFileAttachments(category, ownerEntityName, ownerInstId);
+        if (!DataUtils.isBlank(detailList)) {
+            map = new LinkedHashMap<String, AttachmentDetails>();
+            for (AttachmentDetails details: detailList) {
+                map.put(details.getName(), details);
+            }
+        }
+        
+        return map;
     }
 
     @Override
@@ -4732,7 +4735,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     entityId = oldAppEntity.getId();
                 }
 
-                sequenceNumberService.ensureCachedBlockSequence(appEntityConfig.getType());
+                appletUtilities.sequence().ensureCachedBlockSequence(appEntityConfig.getType());
 
                 final String entityLongName = ApplicationNameUtils.getApplicationEntityLongName(applicationName,
                         appEntityConfig.getName());
@@ -5316,7 +5319,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 populateChildList(appEntity, applicationName, appEntityConfig, true);
                 Long entityId = (Long) environment().create(appEntity);
 
-                sequenceNumberService.ensureCachedBlockSequence(appEntityConfig.getType());
+                appletUtilities.sequence().ensureCachedBlockSequence(appEntityConfig.getType());
 
                 final String entityLongName = ApplicationNameUtils.getApplicationEntityLongName(applicationName,
                         appEntityConfig.getName());

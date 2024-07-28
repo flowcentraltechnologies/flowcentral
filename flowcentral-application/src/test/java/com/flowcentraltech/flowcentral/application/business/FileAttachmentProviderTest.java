@@ -45,13 +45,13 @@ public class FileAttachmentProviderTest extends AbstractFlowCentralTest {
     public void testSychFileAttachments() throws Exception {
         Attachment attachment = Attachment.newBuilder(FileAttachmentType.IMAGE).name("disk").title("Disk")
                 .data(new byte[] { (byte) 0xbe, (byte) 0xba }).build();
-        fileAttachmentProvider.saveFileAttachment(FileAttachmentCategoryType.WORK_CATEGORY, "application.application", 1L,
-                attachment);
-        boolean synched = fileAttachmentProvider.sychFileAttachments(FileAttachmentCategoryType.WORK_CATEGORY,
+        fileAttachmentProvider.saveFileAttachment(FileAttachmentCategoryType.FORM_CATEGORY, "application.application",
+                1L, attachment);
+        boolean synched = fileAttachmentProvider.sychFileAttachments(FileAttachmentCategoryType.FORM_CATEGORY,
                 "application.application", 2L, 1L);
         assertTrue(synched);
-        Attachment synchAttachment = fileAttachmentProvider.retrieveFileAttachment(FileAttachmentCategoryType.WORK_CATEGORY,
-                "application.application", 2L, "disk");
+        Attachment synchAttachment = fileAttachmentProvider.retrieveFileAttachment(
+                FileAttachmentCategoryType.FORM_CATEGORY, "application.application", 2L, "disk");
         assertNotNull(synchAttachment);
         assertEquals("disk", synchAttachment.getName());
         assertEquals("Disk", synchAttachment.getTitle());
@@ -64,7 +64,7 @@ public class FileAttachmentProviderTest extends AbstractFlowCentralTest {
 
     @Test
     public void testSychFileAttachmentsSameInst() throws Exception {
-        boolean synched = fileAttachmentProvider.sychFileAttachments(FileAttachmentCategoryType.WORK_CATEGORY,
+        boolean synched = fileAttachmentProvider.sychFileAttachments(FileAttachmentCategoryType.FORM_CATEGORY,
                 "application.application", 1L, 1L);
         assertFalse(synched);
     }

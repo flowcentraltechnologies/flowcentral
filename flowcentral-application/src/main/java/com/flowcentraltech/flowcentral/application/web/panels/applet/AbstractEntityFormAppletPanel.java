@@ -182,9 +182,11 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                                     formEntityDef.getDeletePrivilege())
                             && applet.formBeanMatchAppletPropertyCondition(
                                     AppletPropertyConstants.MAINTAIN_FORM_DELETE_CONDITION);
-                    enableAttachment = isRootForm && formEntityDef.getBaseType().isWorkEntityType()
-                            && formEntityDef.isWithAttachments() && formAppletDef.getPropValue(boolean.class,
-                                    AppletPropertyConstants.MAINTAIN_FORM_ATTACHMENTS, false);
+                    enableAttachment = isRootForm
+                            && formAppletDef.getPropValue(boolean.class,
+                                    AppletPropertyConstants.MAINTAIN_FORM_ATTACHMENTS, false)
+                            && (formEntityDef.isWithAttachments() || formAppletDef.getPropValue(boolean.class,
+                                    AppletPropertyConstants.MAINTAIN_FORM_ATTACHMENTS_ADHOC, false));
                     enableUpdateSubmit = !isInWorkflow && isRootForm && applet.formBeanMatchAppletPropertyCondition(
                             AppletPropertyConstants.MAINTAIN_FORM_SUBMIT_CONDITION);
                     if (enableAttachment) {
@@ -198,14 +200,14 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                             && applet.formBeanMatchAppletPropertyCondition(
                                     AppletPropertyConstants.MAINTAIN_FORM_UPDATE_CONDITION);
                     enableDelete = false;
-                    enableAttachment = isRootForm && formEntityDef.getBaseType().isWorkEntityType()
-                            && formEntityDef.isWithAttachments();
+                    enableAttachment = isRootForm && formEntityDef.isWithAttachments();
                 }
 
                 if (enableAttachment) {
                     applet.getFormFileAttachments().setDisabled(!isContextEditable);
-                    form.setAttachmentCount(fileAttachmentProvider.countFileAttachments(FileAttachmentCategoryType.FORM_CATEGORY,
-                            formEntityDef.getLongName(), (Long) inst.getId()));
+                    form.setAttachmentCount(
+                            fileAttachmentProvider.countFileAttachments(FileAttachmentCategoryType.FORM_CATEGORY,
+                                    formEntityDef.getLongName(), (Long) inst.getId()));
                 }
             }
         }
@@ -610,7 +612,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
 
     @Action
     public void showFormFileAttachments() throws UnifyException {
-        setCommandResultMapping("showfileattachments");
+        setCommandResultMapping(ApplicationResultMappingConstants.SHOW_FILE_ATTACHMENTS);
     }
 
     @Action
