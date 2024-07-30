@@ -164,6 +164,8 @@ public class WorkflowsXmlGenerator extends AbstractResourcesArtifactGenerator {
                         wfStepConfig.setDescription("$m{" + descKey + "}");
                         wfStepConfig.setLabel("$m{" + labelKey + "}");
                         wfStepConfig.setAppletName(wfStep.getAppletName());
+                        wfStepConfig.setDesignX(wfStep.getDesignX());
+                        wfStepConfig.setDesignY(wfStep.getDesignY());
                         wfStepConfig.setReminderMinutes(wfStep.getReminderMinutes());
                         wfStepConfig.setCriticalMinutes(wfStep.getCriticalMinutes());
                         wfStepConfig.setExpiryMinutes(wfStep.getExpiryMinutes());
