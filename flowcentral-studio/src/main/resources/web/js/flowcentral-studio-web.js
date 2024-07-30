@@ -1970,8 +1970,8 @@ const WD_STEP_WIDTH = 164;
 const WD_STEP_FONT =  "Arial";
 const WD_STEP_ICON_COLOR =  "#888";
 const WD_STEP_ICON_FONT = "FontSymbolMngr0";
-const WD_CANVAS_WIDTH = 1920;
-const WD_CANVAS_HEIGHT= 1080;
+const WD_CANVAS_WIDTH = 3840;
+const WD_CANVAS_HEIGHT= 2160;
 
 const WD_STEP_COLORS = [
 	  "#943126",
