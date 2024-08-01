@@ -16,11 +16,12 @@
 
 package com.flowcentraltech.flowcentral.configuration.xml;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import com.flowcentraltech.flowcentral.configuration.constants.ChartDataSourceType;
 import com.flowcentraltech.flowcentral.configuration.constants.ChartTimeSeriesType;
 import com.flowcentraltech.flowcentral.configuration.xml.adapter.ChartDataSourceTypeXmlAdapter;
@@ -32,32 +33,45 @@ import com.flowcentraltech.flowcentral.configuration.xml.adapter.ChartTimeSeries
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@XmlRootElement(name = "chartDataSource")
+@JsonInclude(Include.NON_NULL)
+@JacksonXmlRootElement(localName = "chartDataSource")
 public class AppChartDataSourceConfig extends BaseNameConfig {
     
+    @JsonSerialize(using = ChartDataSourceTypeXmlAdapter.Serializer.class)
+    @JsonDeserialize(using = ChartDataSourceTypeXmlAdapter.Deserializer.class)
+    @JacksonXmlProperty(isAttribute = true)
     private ChartDataSourceType type;
 
+    @JsonSerialize(using = ChartTimeSeriesTypeXmlAdapter.Serializer.class)
+    @JsonDeserialize(using = ChartTimeSeriesTypeXmlAdapter.Deserializer.class)
+    @JacksonXmlProperty(isAttribute = true, localName = "timeseries")
     private ChartTimeSeriesType timeSeriesType;
     
+    @JacksonXmlProperty
     private String entity;
     
+    @JacksonXmlProperty(isAttribute = true, localName = "preferred-category-field")
     private String categoryField;
     
+    @JacksonXmlProperty(isAttribute = true)
     private Integer limit;
 
+    @JacksonXmlProperty(localName = "category-base")
     private FilterConfig categoryBase;
     
+    @JacksonXmlProperty
     private PropertySequenceConfig series;
     
+    @JacksonXmlProperty
     private PropertySequenceConfig categories;
 
+    @JacksonXmlProperty
     private FieldSequenceConfig fieldSequence;
    
     public String getEntity() {
         return entity;
     }
 
-    @XmlAttribute
     public void setEntity(String entity) {
         this.entity = entity;
     }
@@ -66,8 +80,6 @@ public class AppChartDataSourceConfig extends BaseNameConfig {
         return type;
     }
 
-    @XmlJavaTypeAdapter(ChartDataSourceTypeXmlAdapter.class)
-    @XmlAttribute(required = true)
     public void setType(ChartDataSourceType type) {
         this.type = type;
     }
@@ -76,7 +88,6 @@ public class AppChartDataSourceConfig extends BaseNameConfig {
         return limit;
     }
 
-    @XmlAttribute
     public void setLimit(Integer limit) {
         this.limit = limit;
     }
@@ -85,7 +96,6 @@ public class AppChartDataSourceConfig extends BaseNameConfig {
         return categoryBase;
     }
 
-    @XmlElement(name = "category-base", required = true)
     public void setCategoryBase(FilterConfig categoryBase) {
         this.categoryBase = categoryBase;
     }
@@ -94,7 +104,6 @@ public class AppChartDataSourceConfig extends BaseNameConfig {
         return series;
     }
 
-    @XmlElement(required = true)
     public void setSeries(PropertySequenceConfig series) {
         this.series = series;
     }
@@ -103,7 +112,6 @@ public class AppChartDataSourceConfig extends BaseNameConfig {
         return categories;
     }
 
-    @XmlElement(required = true)
     public void setCategories(PropertySequenceConfig categories) {
         this.categories = categories;
     }
@@ -112,8 +120,6 @@ public class AppChartDataSourceConfig extends BaseNameConfig {
         return timeSeriesType;
     }
 
-    @XmlJavaTypeAdapter(ChartTimeSeriesTypeXmlAdapter.class)
-    @XmlAttribute(name = "timeseries")
     public void setTimeSeriesType(ChartTimeSeriesType timeSeriesType) {
         this.timeSeriesType = timeSeriesType;
     }
@@ -122,7 +128,6 @@ public class AppChartDataSourceConfig extends BaseNameConfig {
         return categoryField;
     }
 
-    @XmlAttribute(name = "preferred-category-field")
     public void setCategoryField(String categoryField) {
         this.categoryField = categoryField;
     }
@@ -131,7 +136,6 @@ public class AppChartDataSourceConfig extends BaseNameConfig {
         return fieldSequence;
     }
 
-    @XmlElement
     public void setFieldSequence(FieldSequenceConfig fieldSequence) {
         this.fieldSequence = fieldSequence;
     }

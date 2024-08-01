@@ -15,9 +15,9 @@
  */
 package com.flowcentraltech.flowcentral.configuration.xml;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.flowcentraltech.flowcentral.configuration.xml.adapter.MessageTypeXmlAdapter;
 import com.tcdng.unify.web.ui.constant.MessageType;
 
@@ -29,16 +29,18 @@ import com.tcdng.unify.web.ui.constant.MessageType;
  */
 public class FormReviewPolicyConfig extends FormValidationPolicyConfig {
 
+    @JsonSerialize(using = MessageTypeXmlAdapter.Serializer.class)
+    @JsonDeserialize(using = MessageTypeXmlAdapter.Deserializer.class)
+    @JacksonXmlProperty(isAttribute = true)
     private MessageType messageType;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String events;
 
     public MessageType getMessageType() {
         return messageType;
     }
 
-    @XmlJavaTypeAdapter(MessageTypeXmlAdapter.class)
-    @XmlAttribute
     public void setMessageType(MessageType messageType) {
         this.messageType = messageType;
     }
@@ -47,7 +49,6 @@ public class FormReviewPolicyConfig extends FormValidationPolicyConfig {
         return events;
     }
 
-    @XmlAttribute
     public void setEvents(String events) {
         this.events = events;
     }

@@ -15,7 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.configuration.xml;
 
-import javax.xml.bind.annotation.XmlAttribute;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * Field validation policy configuration.
@@ -25,19 +25,22 @@ import javax.xml.bind.annotation.XmlAttribute;
  */
 public class FieldValidationPolicyConfig extends BaseNameConfig {
 
+    @JacksonXmlProperty(isAttribute = true)
     private String fieldName;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String validator;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String rule;
     
+    @JacksonXmlProperty(isAttribute = true)
     private Integer executionIndex;
 
     public String getFieldName() {
         return fieldName;
     }
 
-    @XmlAttribute(required = true)
     public void setFieldName(String fieldName) {
         this.fieldName = fieldName;
     }
@@ -46,7 +49,6 @@ public class FieldValidationPolicyConfig extends BaseNameConfig {
         return validator;
     }
 
-    @XmlAttribute(required = true)
     public void setValidator(String validator) {
         this.validator = validator;
     }
@@ -55,7 +57,6 @@ public class FieldValidationPolicyConfig extends BaseNameConfig {
         return rule;
     }
 
-    @XmlAttribute
     public void setRule(String rule) {
         this.rule = rule;
     }
@@ -64,7 +65,6 @@ public class FieldValidationPolicyConfig extends BaseNameConfig {
         return executionIndex;
     }
 
-    @XmlAttribute
     public void setExecutionIndex(Integer executionIndex) {
         this.executionIndex = executionIndex;
     }

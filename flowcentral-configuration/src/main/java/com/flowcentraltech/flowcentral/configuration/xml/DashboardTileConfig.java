@@ -15,9 +15,9 @@
  */
 package com.flowcentraltech.flowcentral.configuration.xml;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.flowcentraltech.flowcentral.configuration.constants.DashboardTileType;
 import com.flowcentraltech.flowcentral.configuration.xml.adapter.DashboardTileTypeXmlAdapter;
 
@@ -29,12 +29,18 @@ import com.flowcentraltech.flowcentral.configuration.xml.adapter.DashboardTileTy
  */
 public class DashboardTileConfig extends BaseNameConfig {
 
+    @JsonSerialize(using = DashboardTileTypeXmlAdapter.Serializer.class)
+    @JsonDeserialize(using = DashboardTileTypeXmlAdapter.Deserializer.class)
+    @JacksonXmlProperty(isAttribute = true)
     private DashboardTileType type;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String chart;
 
+    @JacksonXmlProperty(isAttribute = true)
     private int section;
 
+    @JacksonXmlProperty(isAttribute = true)
     private int index;
 
     public DashboardTileConfig() {
@@ -45,8 +51,6 @@ public class DashboardTileConfig extends BaseNameConfig {
         return type;
     }
 
-    @XmlJavaTypeAdapter(DashboardTileTypeXmlAdapter.class)
-    @XmlAttribute(required = true)
     public void setType(DashboardTileType type) {
         this.type = type;
     }
@@ -55,7 +59,6 @@ public class DashboardTileConfig extends BaseNameConfig {
         return chart;
     }
 
-    @XmlAttribute(required = true)
     public void setChart(String chart) {
         this.chart = chart;
     }
@@ -64,7 +67,6 @@ public class DashboardTileConfig extends BaseNameConfig {
         return section;
     }
 
-    @XmlAttribute(required = true)
     public void setSection(int section) {
         this.section = section;
     }
@@ -73,7 +75,6 @@ public class DashboardTileConfig extends BaseNameConfig {
         return index;
     }
 
-    @XmlAttribute
     public void setIndex(int index) {
         this.index = index;
     }

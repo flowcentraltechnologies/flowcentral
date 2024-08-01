@@ -15,7 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.configuration.xml;
 
-import javax.xml.bind.annotation.XmlAttribute;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * Convenient abstract base class for code configurations.
@@ -25,15 +25,16 @@ import javax.xml.bind.annotation.XmlAttribute;
  */
 public abstract class BaseCodeConfig extends BaseConfig {
 
+    @JacksonXmlProperty(isAttribute = true)
     private String code;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String description;
 
     public final String getCode() {
         return code;
     }
 
-    @XmlAttribute(required = true)
     public final void setCode(String code) {
         this.code = code;
     }
@@ -42,7 +43,6 @@ public abstract class BaseCodeConfig extends BaseConfig {
         return description;
     }
 
-    @XmlAttribute(required = true)
     public final void setDescription(String description) {
         this.description = description;
     }

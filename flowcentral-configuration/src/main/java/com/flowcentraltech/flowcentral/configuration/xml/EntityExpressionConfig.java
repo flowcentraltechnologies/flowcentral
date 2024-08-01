@@ -15,9 +15,9 @@
  */
 package com.flowcentraltech.flowcentral.configuration.xml;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.tcdng.unify.core.util.xml.adapter.CDataXmlAdapter;
 
 /**
@@ -28,17 +28,21 @@ import com.tcdng.unify.core.util.xml.adapter.CDataXmlAdapter;
  */
 public class EntityExpressionConfig extends BaseConfig {
 
+    @JacksonXmlProperty(isAttribute = true)
     private String name;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String description;
 
+    @JsonSerialize(using = CDataXmlAdapter.Serializer.class)
+    @JsonDeserialize(using = CDataXmlAdapter.Deserializer.class)
+    @JacksonXmlProperty(isAttribute = true)
     private String expression;
 
     public String getName() {
         return name;
     }
 
-    @XmlAttribute(required = true)
     public void setName(String name) {
         this.name = name;
     }
@@ -47,7 +51,6 @@ public class EntityExpressionConfig extends BaseConfig {
         return description;
     }
 
-    @XmlAttribute(required = true)
     public void setDescription(String description) {
         this.description = description;
     }
@@ -56,8 +59,6 @@ public class EntityExpressionConfig extends BaseConfig {
         return expression;
     }
 
-    @XmlJavaTypeAdapter(CDataXmlAdapter.class)
-    @XmlAttribute(required = true)
     public void setExpression(String expression) {
         this.expression = expression;
     }

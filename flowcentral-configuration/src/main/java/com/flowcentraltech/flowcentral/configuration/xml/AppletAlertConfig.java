@@ -15,7 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.configuration.xml;
 
-import javax.xml.bind.annotation.XmlAttribute;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * Applet alert configuration.
@@ -25,21 +25,25 @@ import javax.xml.bind.annotation.XmlAttribute;
  */
 public class AppletAlertConfig extends BaseNameConfig {
 
+    @JacksonXmlProperty(isAttribute = true)
     private String sender;
     
+    @JacksonXmlProperty(isAttribute = true)
     private String template;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String recipientPolicy;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String recipientNameRule;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String recipientContactRule;
 
     public String getSender() {
         return sender;
     }
 
-    @XmlAttribute(required = true)
     public void setSender(String sender) {
         this.sender = sender;
     }
@@ -48,7 +52,6 @@ public class AppletAlertConfig extends BaseNameConfig {
         return template;
     }
 
-    @XmlAttribute
     public void setTemplate(String template) {
         this.template = template;
     }
@@ -57,7 +60,6 @@ public class AppletAlertConfig extends BaseNameConfig {
         return recipientPolicy;
     }
 
-    @XmlAttribute
     public void setRecipientPolicy(String recipientPolicy) {
         this.recipientPolicy = recipientPolicy;
     }
@@ -66,7 +68,6 @@ public class AppletAlertConfig extends BaseNameConfig {
         return recipientNameRule;
     }
 
-    @XmlAttribute
     public void setRecipientNameRule(String recipientNameRule) {
         this.recipientNameRule = recipientNameRule;
     }
@@ -75,7 +76,6 @@ public class AppletAlertConfig extends BaseNameConfig {
         return recipientContactRule;
     }
 
-    @XmlAttribute
     public void setRecipientContactRule(String recipientContactRule) {
         this.recipientContactRule = recipientContactRule;
     }

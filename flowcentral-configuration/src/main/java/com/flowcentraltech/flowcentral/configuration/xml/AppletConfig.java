@@ -17,13 +17,12 @@ package com.flowcentraltech.flowcentral.configuration.xml;
 
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.flowcentraltech.flowcentral.configuration.constants.AppletType;
 import com.flowcentraltech.flowcentral.configuration.xml.adapter.AppletTypeXmlAdapter;
-import com.tcdng.unify.core.util.xml.MarshalFalseToNullXmlAdapter;
 
 /**
  * Applet configuration.
@@ -33,42 +32,68 @@ import com.tcdng.unify.core.util.xml.MarshalFalseToNullXmlAdapter;
  */
 public class AppletConfig extends BaseNameConfig {
 
+    @JsonSerialize(using = AppletTypeXmlAdapter.Serializer.class)
+    @JsonDeserialize(using = AppletTypeXmlAdapter.Deserializer.class)
+    @JacksonXmlProperty(isAttribute = true)
     private AppletType type;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String entity;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String icon;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String routeToApplet;
     
+    @JacksonXmlProperty(isAttribute = true)
     private String path;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String baseField;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String assignField;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String assignDescField;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String pseudoDeleteField;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String titleFormat;
     
+    @JacksonXmlProperty(isAttribute = true)
     private int displayIndex;
 
+    @JacksonXmlProperty(isAttribute = true)
     private Boolean menuAccess;
     
+    @JacksonXmlProperty(isAttribute = true)
     private Boolean supportOpenInNewWindow;
 
+    @JacksonXmlProperty(isAttribute = true)
     private Boolean allowSecondaryTenants;
 
+    @JacksonXmlElementWrapper(useWrapping = false)
+    @JacksonXmlProperty(localName = "property")
     private List<AppletPropConfig> propList;
 
+    @JacksonXmlElementWrapper(useWrapping = false)
+    @JacksonXmlProperty(localName = "routeToApplet")
     private List<AppletRouteToAppletConfig> routeToAppletList;
     
+    @JacksonXmlElementWrapper(useWrapping = false)
+    @JacksonXmlProperty(localName = "filter")
     private List<AppletFilterConfig> filterList;
 
+    @JacksonXmlElementWrapper(useWrapping = false)
+    @JacksonXmlProperty(localName = "values")
     private List<AppletSetValuesConfig> valuesList;
     
+    @JacksonXmlElementWrapper(useWrapping = false)
+    @JacksonXmlProperty(localName = "alert")
     private List<AppletAlertConfig> alertList;
     
     public AppletConfig() {
@@ -81,8 +106,6 @@ public class AppletConfig extends BaseNameConfig {
         return type;
     }
 
-    @XmlJavaTypeAdapter(AppletTypeXmlAdapter.class)
-    @XmlAttribute(required = true)
     public void setType(AppletType type) {
         this.type = type;
     }
@@ -91,7 +114,6 @@ public class AppletConfig extends BaseNameConfig {
         return entity;
     }
 
-    @XmlAttribute
     public void setEntity(String entity) {
         this.entity = entity;
     }
@@ -100,7 +122,6 @@ public class AppletConfig extends BaseNameConfig {
         return icon;
     }
 
-    @XmlAttribute
     public void setIcon(String icon) {
         this.icon = icon;
     }
@@ -109,7 +130,6 @@ public class AppletConfig extends BaseNameConfig {
         return routeToApplet;
     }
 
-    @XmlAttribute
     public void setRouteToApplet(String routeToApplet) {
         this.routeToApplet = routeToApplet;
     }
@@ -118,7 +138,6 @@ public class AppletConfig extends BaseNameConfig {
         return path;
     }
 
-    @XmlAttribute
     public void setPath(String path) {
         this.path = path;
     }
@@ -127,7 +146,6 @@ public class AppletConfig extends BaseNameConfig {
         return baseField;
     }
 
-    @XmlAttribute
     public void setBaseField(String baseField) {
         this.baseField = baseField;
     }
@@ -136,7 +154,6 @@ public class AppletConfig extends BaseNameConfig {
         return assignField;
     }
 
-    @XmlAttribute
     public void setAssignField(String assignField) {
         this.assignField = assignField;
     }
@@ -145,7 +162,6 @@ public class AppletConfig extends BaseNameConfig {
         return assignDescField;
     }
 
-    @XmlAttribute
     public void setAssignDescField(String assignDescField) {
         this.assignDescField = assignDescField;
     }
@@ -154,7 +170,6 @@ public class AppletConfig extends BaseNameConfig {
         return pseudoDeleteField;
     }
 
-    @XmlAttribute
     public void setPseudoDeleteField(String pseudoDeleteField) {
         this.pseudoDeleteField = pseudoDeleteField;
     }
@@ -163,8 +178,6 @@ public class AppletConfig extends BaseNameConfig {
         return menuAccess;
     }
 
-    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
-    @XmlAttribute
     public void setMenuAccess(Boolean menuAccess) {
         this.menuAccess = menuAccess;
     }
@@ -173,7 +186,6 @@ public class AppletConfig extends BaseNameConfig {
         return titleFormat;
     }
 
-    @XmlAttribute
     public void setTitleFormat(String titleFormat) {
         this.titleFormat = titleFormat;
     }
@@ -182,8 +194,6 @@ public class AppletConfig extends BaseNameConfig {
         return supportOpenInNewWindow;
     }
 
-    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
-    @XmlAttribute
     public void setSupportOpenInNewWindow(Boolean supportOpenInNewWindow) {
         this.supportOpenInNewWindow = supportOpenInNewWindow;
     }
@@ -192,8 +202,6 @@ public class AppletConfig extends BaseNameConfig {
         return allowSecondaryTenants;
     }
 
-    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
-    @XmlAttribute
     public void setAllowSecondaryTenants(Boolean allowSecondaryTenants) {
         this.allowSecondaryTenants = allowSecondaryTenants;
     }
@@ -202,7 +210,6 @@ public class AppletConfig extends BaseNameConfig {
         return displayIndex;
     }
 
-    @XmlAttribute
     public void setDisplayIndex(int displayIndex) {
         this.displayIndex = displayIndex;
     }
@@ -211,7 +218,6 @@ public class AppletConfig extends BaseNameConfig {
         return propList;
     }
 
-    @XmlElement(name = "property", required = true)
     public void setPropList(List<AppletPropConfig> propList) {
         this.propList = propList;
     }
@@ -220,7 +226,6 @@ public class AppletConfig extends BaseNameConfig {
         return routeToAppletList;
     }
 
-    @XmlElement(name = "routeToApplet")
     public void setRouteToAppletList(List<AppletRouteToAppletConfig> routeToAppletList) {
         this.routeToAppletList = routeToAppletList;
     }
@@ -229,7 +234,6 @@ public class AppletConfig extends BaseNameConfig {
         return filterList;
     }
 
-    @XmlElement(name = "filter", required = true)
     public void setFilterList(List<AppletFilterConfig> filterList) {
         this.filterList = filterList;
     }
@@ -238,7 +242,6 @@ public class AppletConfig extends BaseNameConfig {
         return valuesList;
     }
 
-    @XmlElement(name = "values")
     public void setValuesList(List<AppletSetValuesConfig> valuesList) {
         this.valuesList = valuesList;
     }
@@ -247,7 +250,6 @@ public class AppletConfig extends BaseNameConfig {
         return alertList;
     }
 
-    @XmlElement(name = "alert")
     public void setAlertList(List<AppletAlertConfig> alertList) {
         this.alertList = alertList;
     }

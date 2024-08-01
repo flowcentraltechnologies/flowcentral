@@ -15,6 +15,8 @@
  */
 package com.flowcentraltech.flowcentral.configuration.xml.adapter;
 
+import com.tcdng.unify.core.util.xml.AbstractEnumConstDeserializer;
+import com.tcdng.unify.core.util.xml.AbstractEnumConstSerializer;
 import com.tcdng.unify.core.util.xml.AbstractEnumConstXmlAdapter;
 import com.tcdng.unify.web.ui.constant.MessageType;
 
@@ -24,9 +26,20 @@ import com.tcdng.unify.web.ui.constant.MessageType;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class MessageTypeXmlAdapter extends AbstractEnumConstXmlAdapter<MessageType> {
+public class MessageTypeXmlAdapter extends AbstractEnumConstXmlAdapter {
+    
+    public static class Serializer extends AbstractEnumConstSerializer<MessageType> {
+        public Serializer() {
+            
+        }
 
-    public MessageTypeXmlAdapter() {
-        super(MessageType.class);
+    }
+    
+    public static class Deserializer extends AbstractEnumConstDeserializer<MessageType> {
+
+        public Deserializer() {
+            super(MessageType.class);
+        }
+
     }
 }

@@ -16,10 +16,9 @@
 
 package com.flowcentraltech.flowcentral.configuration.xml;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.flowcentraltech.flowcentral.configuration.constants.FormAnnotationType;
 import com.flowcentraltech.flowcentral.configuration.constants.VisibilityType;
 import com.flowcentraltech.flowcentral.configuration.xml.adapter.FormAnnotationTypeXmlAdapter;
@@ -34,20 +33,34 @@ import com.tcdng.unify.core.util.xml.adapter.CDataXmlAdapter;
  */
 public class FormAnnotationConfig extends BaseConfig {
 
+    @JsonSerialize(using = FormAnnotationTypeXmlAdapter.Serializer.class)
+    @JsonDeserialize(using = FormAnnotationTypeXmlAdapter.Deserializer.class)
+    @JacksonXmlProperty(isAttribute = true)
     private FormAnnotationType type;
     
+    @JsonSerialize(using = VisibilityTypeXmlAdapter.Serializer.class)
+    @JsonDeserialize(using = VisibilityTypeXmlAdapter.Deserializer.class)
+    @JacksonXmlProperty(isAttribute = true)
     private VisibilityType visibility;
     
+    @JacksonXmlProperty
     private FilterConfig onCondition;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String name;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String description;
 
+    @JsonSerialize(using = CDataXmlAdapter.Serializer.class)
+    @JsonDeserialize(using = CDataXmlAdapter.Deserializer.class)
+    @JacksonXmlProperty(isAttribute = true)
     private String message;
 
+    @JacksonXmlProperty(isAttribute = true)
     private boolean html;
     
+    @JacksonXmlProperty(isAttribute = true)
     private boolean directPlacement;
 
     public FormAnnotationConfig() {
@@ -58,8 +71,6 @@ public class FormAnnotationConfig extends BaseConfig {
         return type;
     }
 
-    @XmlJavaTypeAdapter(FormAnnotationTypeXmlAdapter.class)
-    @XmlAttribute
     public void setType(FormAnnotationType type) {
         this.type = type;
     }
@@ -68,8 +79,6 @@ public class FormAnnotationConfig extends BaseConfig {
         return visibility;
     }
 
-    @XmlJavaTypeAdapter(VisibilityTypeXmlAdapter.class)
-    @XmlAttribute
     public void setVisibility(VisibilityType visibility) {
         this.visibility = visibility;
     }
@@ -78,7 +87,6 @@ public class FormAnnotationConfig extends BaseConfig {
         return onCondition;
     }
 
-    @XmlElement(required = true)
     public void setOnCondition(FilterConfig onCondition) {
         this.onCondition = onCondition;
     }
@@ -87,7 +95,6 @@ public class FormAnnotationConfig extends BaseConfig {
         return name;
     }
 
-    @XmlAttribute(required = true)
     public void setName(String name) {
         this.name = name;
     }
@@ -96,7 +103,6 @@ public class FormAnnotationConfig extends BaseConfig {
         return description;
     }
 
-    @XmlAttribute(required = true)
     public void setDescription(String description) {
         this.description = description;
     }
@@ -105,8 +111,6 @@ public class FormAnnotationConfig extends BaseConfig {
         return message;
     }
 
-    @XmlJavaTypeAdapter(CDataXmlAdapter.class)
-    @XmlAttribute(required = true)
     public void setMessage(String message) {
         this.message = message;
     }
@@ -115,7 +119,6 @@ public class FormAnnotationConfig extends BaseConfig {
         return html;
     }
 
-    @XmlAttribute
     public void setHtml(boolean html) {
         this.html = html;
     }
@@ -124,7 +127,6 @@ public class FormAnnotationConfig extends BaseConfig {
         return directPlacement;
     }
 
-    @XmlAttribute
     public void setDirectPlacement(boolean directPlacement) {
         this.directPlacement = directPlacement;
     }

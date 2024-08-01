@@ -17,7 +17,8 @@ package com.flowcentraltech.flowcentral.configuration.xml;
 
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlElement;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * Entities configuration.
@@ -27,13 +28,14 @@ import javax.xml.bind.annotation.XmlElement;
  */
 public class AppEntitiesConfig extends BaseConfig {
 
+    @JacksonXmlElementWrapper(useWrapping = false)
+    @JacksonXmlProperty(localName = "entity")
     private List<AppEntityConfig> entityList;
 
     public List<AppEntityConfig> getEntityList() {
         return entityList;
     }
 
-    @XmlElement(name = "entity")
     public void setEntityList(List<AppEntityConfig> entityList) {
         this.entityList = entityList;
     }

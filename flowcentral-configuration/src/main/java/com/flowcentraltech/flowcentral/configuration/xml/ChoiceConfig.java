@@ -15,7 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.configuration.xml;
 
-import javax.xml.bind.annotation.XmlAttribute;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * Choice configuration.
@@ -25,15 +25,16 @@ import javax.xml.bind.annotation.XmlAttribute;
  */
 public class ChoiceConfig extends BaseConfig {
 
+    @JacksonXmlProperty(isAttribute = true)
     private String name;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String val;
 
     public String getName() {
         return name;
     }
 
-    @XmlAttribute(required = true)
     public void setName(String name) {
         this.name = name;
     }
@@ -42,7 +43,6 @@ public class ChoiceConfig extends BaseConfig {
         return val;
     }
 
-    @XmlAttribute(required = true)
     public void setVal(String val) {
         this.val = val;
     }

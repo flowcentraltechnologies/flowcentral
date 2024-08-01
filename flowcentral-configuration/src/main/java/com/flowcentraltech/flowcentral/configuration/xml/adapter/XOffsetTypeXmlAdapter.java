@@ -16,6 +16,8 @@
 package com.flowcentraltech.flowcentral.configuration.xml.adapter;
 
 import com.tcdng.unify.core.constant.XOffsetType;
+import com.tcdng.unify.core.util.xml.AbstractEnumConstDeserializer;
+import com.tcdng.unify.core.util.xml.AbstractEnumConstSerializer;
 import com.tcdng.unify.core.util.xml.AbstractEnumConstXmlAdapter;
 
 /**
@@ -24,9 +26,20 @@ import com.tcdng.unify.core.util.xml.AbstractEnumConstXmlAdapter;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class XOffsetTypeXmlAdapter extends AbstractEnumConstXmlAdapter<XOffsetType> {
+public class XOffsetTypeXmlAdapter extends AbstractEnumConstXmlAdapter {
+    
+    public static class Serializer extends AbstractEnumConstSerializer<XOffsetType> {
+        public Serializer() {
+            
+        }
 
-    public XOffsetTypeXmlAdapter() {
-        super(XOffsetType.class);
+    }
+    
+    public static class Deserializer extends AbstractEnumConstDeserializer<XOffsetType> {
+
+        public Deserializer() {
+            super(XOffsetType.class);
+        }
+
     }
 }

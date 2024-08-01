@@ -17,10 +17,9 @@ package com.flowcentraltech.flowcentral.configuration.xml;
 
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.tcdng.unify.core.criterion.FilterConditionType;
 import com.tcdng.unify.core.util.xml.adapter.FilterConditionTypeXmlAdapter;
 
@@ -32,22 +31,27 @@ import com.tcdng.unify.core.util.xml.adapter.FilterConditionTypeXmlAdapter;
  */
 public class FilterRestrictionConfig extends BaseConfig {
 
+    @JsonSerialize(using = FilterConditionTypeXmlAdapter.Serializer.class)
+    @JsonDeserialize(using = FilterConditionTypeXmlAdapter.Deserializer.class)
+    @JacksonXmlProperty(isAttribute = true)
     private FilterConditionType type;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String field;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String paramA;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String paramB;
 
+    @JacksonXmlProperty(localName = "restriction")
     private List<FilterRestrictionConfig> restrictionList;
 
     public FilterConditionType getType() {
         return type;
     }
 
-    @XmlJavaTypeAdapter(FilterConditionTypeXmlAdapter.class)
-    @XmlAttribute(required = true)
     public void setType(FilterConditionType type) {
         this.type = type;
     }
@@ -56,7 +60,6 @@ public class FilterRestrictionConfig extends BaseConfig {
         return field;
     }
 
-    @XmlAttribute(required = true)
     public void setField(String field) {
         this.field = field;
     }
@@ -65,7 +68,6 @@ public class FilterRestrictionConfig extends BaseConfig {
         return paramA;
     }
 
-    @XmlAttribute(required = true)
     public void setParamA(String paramA) {
         this.paramA = paramA;
     }
@@ -74,7 +76,6 @@ public class FilterRestrictionConfig extends BaseConfig {
         return paramB;
     }
 
-    @XmlAttribute(required = true)
     public void setParamB(String paramB) {
         this.paramB = paramB;
     }
@@ -83,7 +84,6 @@ public class FilterRestrictionConfig extends BaseConfig {
         return restrictionList;
     }
 
-    @XmlElement(name = "restriction")
     public void setRestrictionList(List<FilterRestrictionConfig> restrictionList) {
         this.restrictionList = restrictionList;
     }

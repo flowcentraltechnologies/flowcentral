@@ -15,7 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.configuration.xml;
 
-import javax.xml.bind.annotation.XmlAttribute;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * Enumeration configuration.
@@ -25,15 +25,16 @@ import javax.xml.bind.annotation.XmlAttribute;
  */
 public class EnumerationItemConfig extends BaseConfig {
 
+    @JacksonXmlProperty(isAttribute = true)
     private String code;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String label;
 
     public String getCode() {
         return code;
     }
 
-    @XmlAttribute(required = true)
     public void setCode(String code) {
         this.code = code;
     }
@@ -42,7 +43,6 @@ public class EnumerationItemConfig extends BaseConfig {
         return label;
     }
 
-    @XmlAttribute(required = true)
     public void setLabel(String label) {
         this.label = label;
     }

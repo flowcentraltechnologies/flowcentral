@@ -15,10 +15,9 @@
  */
 package com.flowcentraltech.flowcentral.configuration.xml;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.flowcentraltech.flowcentral.configuration.constants.FormStatePolicyType;
 import com.flowcentraltech.flowcentral.configuration.xml.adapter.FormStatePolicyTypeXmlAdapter;
 
@@ -30,26 +29,33 @@ import com.flowcentraltech.flowcentral.configuration.xml.adapter.FormStatePolicy
  */
 public class FormStatePolicyConfig extends BaseNameConfig {
 
+    @JsonSerialize(using = FormStatePolicyTypeXmlAdapter.Serializer.class)
+    @JsonDeserialize(using = FormStatePolicyTypeXmlAdapter.Deserializer.class)
+    @JacksonXmlProperty(isAttribute = true)
     private FormStatePolicyType type;
     
+    @JacksonXmlProperty
     private FilterConfig onCondition;
 
+    @JacksonXmlProperty(localName = "setStates")
     private SetStatesConfig setStates;
 
+    @JacksonXmlProperty(localName = "setValues")
     private SetValuesConfig setValues;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String valueGenerator;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String trigger;
 
+    @JacksonXmlProperty(isAttribute = true)
     private Integer executionIndex;
 
     public FormStatePolicyType getType() {
         return type;
     }
 
-    @XmlJavaTypeAdapter(FormStatePolicyTypeXmlAdapter.class)
-    @XmlAttribute(required = true)
     public void setType(FormStatePolicyType type) {
         this.type = type;
     }
@@ -58,7 +64,6 @@ public class FormStatePolicyConfig extends BaseNameConfig {
         return onCondition;
     }
 
-    @XmlElement(required = true)
     public void setOnCondition(FilterConfig onCondition) {
         this.onCondition = onCondition;
     }
@@ -67,7 +72,6 @@ public class FormStatePolicyConfig extends BaseNameConfig {
         return setStates;
     }
 
-    @XmlElement(name = "setStates")
     public void setSetStates(SetStatesConfig setStates) {
         this.setStates = setStates;
     }
@@ -76,7 +80,6 @@ public class FormStatePolicyConfig extends BaseNameConfig {
         return setValues;
     }
 
-    @XmlElement(name = "setValues")
     public void setSetValues(SetValuesConfig setValues) {
         this.setValues = setValues;
     }
@@ -85,7 +88,6 @@ public class FormStatePolicyConfig extends BaseNameConfig {
         return valueGenerator;
     }
 
-    @XmlAttribute
     public void setValueGenerator(String valueGenerator) {
         this.valueGenerator = valueGenerator;
     }
@@ -94,7 +96,6 @@ public class FormStatePolicyConfig extends BaseNameConfig {
         return trigger;
     }
 
-    @XmlAttribute
     public void setTrigger(String trigger) {
         this.trigger = trigger;
     }
@@ -103,7 +104,6 @@ public class FormStatePolicyConfig extends BaseNameConfig {
         return executionIndex;
     }
 
-    @XmlAttribute
     public void setExecutionIndex(Integer executionIndex) {
         this.executionIndex = executionIndex;
     }

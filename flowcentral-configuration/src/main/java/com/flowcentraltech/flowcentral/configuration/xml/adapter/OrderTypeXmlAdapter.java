@@ -16,6 +16,8 @@
 package com.flowcentraltech.flowcentral.configuration.xml.adapter;
 
 import com.tcdng.unify.core.constant.OrderType;
+import com.tcdng.unify.core.util.xml.AbstractEnumConstDeserializer;
+import com.tcdng.unify.core.util.xml.AbstractEnumConstSerializer;
 import com.tcdng.unify.core.util.xml.AbstractEnumConstXmlAdapter;
 
 /**
@@ -24,9 +26,20 @@ import com.tcdng.unify.core.util.xml.AbstractEnumConstXmlAdapter;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class OrderTypeXmlAdapter extends AbstractEnumConstXmlAdapter<OrderType> {
+public class OrderTypeXmlAdapter extends AbstractEnumConstXmlAdapter {
+    
+    public static class Serializer extends AbstractEnumConstSerializer<OrderType> {
+        public Serializer() {
+            
+        }
 
-    public OrderTypeXmlAdapter() {
-        super(OrderType.class);
+    }
+    
+    public static class Deserializer extends AbstractEnumConstDeserializer<OrderType> {
+
+        public Deserializer() {
+            super(OrderType.class);
+        }
+
     }
 }

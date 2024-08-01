@@ -15,13 +15,10 @@
  */
 package com.flowcentraltech.flowcentral.configuration.xml;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-
-import com.tcdng.unify.core.util.xml.MarshalFalseToNullXmlAdapter;
-import com.tcdng.unify.core.util.xml.MarshalTrueToNullXmlAdapter;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 
 /**
  * Application configuration.
@@ -29,59 +26,86 @@ import com.tcdng.unify.core.util.xml.MarshalTrueToNullXmlAdapter;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@XmlRootElement(name = "application")
+@JsonInclude(Include.NON_NULL)
+@JacksonXmlRootElement(localName = "application")
 public class AppConfig extends BaseNameConfig {
 
+    @JacksonXmlProperty(isAttribute = true)
     private String module;
 
+    @JacksonXmlProperty(isAttribute = true)
     private int displayIndex;
 
+    @JacksonXmlProperty(isAttribute = true)
     private Boolean developable;
 
+    @JacksonXmlProperty(isAttribute = true)
     private Boolean menuAccess;
 
+    @JacksonXmlProperty(isAttribute = true)
     private Boolean allowSecondaryTenants;
 
+    @JacksonXmlProperty(localName = "reports")
     private AppReportsConfig reportsConfig;
 
+    @JacksonXmlProperty(localName = "notifTemplates")
     private AppNotifTemplatesConfig notifTemplatesConfig;
 
+    @JacksonXmlProperty(localName = "notifLargeTexts")
     private AppNotifLargeTextsConfig notifLargeTextsConfig;
 
+    @JacksonXmlProperty(localName = "workflows")
     private AppWorkflowsConfig workflowsConfig;
 
+    @JacksonXmlProperty(localName = "workflow-wizards")
     private AppWorkflowWizardsConfig workflowWizardsConfig;
     
+    @JacksonXmlProperty(localName = "applets")
     private AppletsConfig appletsConfig;
     
+    @JacksonXmlProperty(localName = "enumerations")
     private EnumerationsConfig enumerationsConfig;
     
+    @JacksonXmlProperty(localName = "widgetTypes")
     private WidgetTypesConfig widgetTypesConfig;
 
+    @JacksonXmlProperty(localName = "references")
     private RefsConfig refsConfig;
 
+    @JacksonXmlProperty(localName = "entities")
     private AppEntitiesConfig entitiesConfig;
 
+    @JacksonXmlProperty(localName = "tables")
     private AppTablesConfig tablesConfig;
 
+    @JacksonXmlProperty(localName = "workflow-channels")
     private WfChannelsConfig wfChannelsConfig;
     
+    @JacksonXmlProperty(localName = "forms")
     private AppFormsConfig formsConfig;
 
+    @JacksonXmlProperty(localName = "assignmentPages")
     private AppAssignmentPagesConfig assignmentPagesConfig;
 
+    @JacksonXmlProperty(localName = "propertyLists")
     private PropertyListsConfig propertyListsConfig;
 
+    @JacksonXmlProperty(localName = "propertyRules")
     private PropertyRulesConfig propertyRulesConfig;
 
+    @JacksonXmlProperty(localName = "charts")
     private AppChartsConfig chartsConfig;
 
+    @JacksonXmlProperty(localName = "chart-datasources")
     private AppChartDataSourcesConfig chartDataSourcesConfig;
     
+    @JacksonXmlProperty(localName = "dashboards")
     private AppDashboardsConfig dashboardsConfig;
 
+    @JacksonXmlProperty(localName = "suggestionTypes")
     private SuggestionTypesConfig suggestionTypesConfig;
 
+    @JacksonXmlProperty(isAttribute = true)
     private Boolean custom;
     
     public AppConfig() {
@@ -95,7 +119,6 @@ public class AppConfig extends BaseNameConfig {
         return module;
     }
 
-    @XmlAttribute(required = true)
     public void setModule(String module) {
         this.module = module;
     }
@@ -104,7 +127,6 @@ public class AppConfig extends BaseNameConfig {
         return displayIndex;
     }
 
-    @XmlAttribute
     public void setDisplayIndex(int displayIndex) {
         this.displayIndex = displayIndex;
     }
@@ -113,8 +135,6 @@ public class AppConfig extends BaseNameConfig {
         return developable;
     }
 
-    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
-    @XmlAttribute
     public void setDevelopable(Boolean developable) {
         this.developable = developable;
     }
@@ -123,8 +143,6 @@ public class AppConfig extends BaseNameConfig {
         return custom;
     }
 
-    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
-    @XmlAttribute
     public void setCustom(Boolean custom) {
         this.custom = custom;
     }
@@ -133,8 +151,6 @@ public class AppConfig extends BaseNameConfig {
         return menuAccess;
     }
 
-    @XmlJavaTypeAdapter(MarshalTrueToNullXmlAdapter.class)
-    @XmlAttribute
     public void setMenuAccess(Boolean menuAccess) {
         this.menuAccess = menuAccess;
     }
@@ -143,8 +159,6 @@ public class AppConfig extends BaseNameConfig {
         return allowSecondaryTenants;
     }
 
-    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
-    @XmlAttribute
     public void setAllowSecondaryTenants(Boolean allowSecondaryTenants) {
         this.allowSecondaryTenants = allowSecondaryTenants;
     }
@@ -153,7 +167,6 @@ public class AppConfig extends BaseNameConfig {
         return reportsConfig;
     }
 
-    @XmlElement(name = "reports")
     public void setReportsConfig(AppReportsConfig reportsConfig) {
         this.reportsConfig = reportsConfig;
     }
@@ -162,7 +175,6 @@ public class AppConfig extends BaseNameConfig {
         return notifTemplatesConfig;
     }
 
-    @XmlElement(name = "notifTemplates")
     public void setNotifTemplatesConfig(AppNotifTemplatesConfig notifTemplatesConfig) {
         this.notifTemplatesConfig = notifTemplatesConfig;
     }
@@ -171,7 +183,6 @@ public class AppConfig extends BaseNameConfig {
         return notifLargeTextsConfig;
     }
 
-    @XmlElement(name = "notifLargeTexts")
     public void setNotifLargeTextsConfig(AppNotifLargeTextsConfig notifLargeTextsConfig) {
         this.notifLargeTextsConfig = notifLargeTextsConfig;
     }
@@ -180,7 +191,6 @@ public class AppConfig extends BaseNameConfig {
         return workflowsConfig;
     }
 
-    @XmlElement(name = "workflows")
     public void setWorkflowsConfig(AppWorkflowsConfig workflowsConfig) {
         this.workflowsConfig = workflowsConfig;
     }
@@ -189,7 +199,6 @@ public class AppConfig extends BaseNameConfig {
         return workflowWizardsConfig;
     }
 
-    @XmlElement(name = "workflow-wizards")
     public void setWorkflowWizardsConfig(AppWorkflowWizardsConfig workflowWizardsConfig) {
         this.workflowWizardsConfig = workflowWizardsConfig;
     }
@@ -198,7 +207,6 @@ public class AppConfig extends BaseNameConfig {
         return appletsConfig;
     }
 
-    @XmlElement(name = "applets")
     public void setAppletsConfig(AppletsConfig appletsConfig) {
         this.appletsConfig = appletsConfig;
     }
@@ -207,7 +215,6 @@ public class AppConfig extends BaseNameConfig {
         return enumerationsConfig;
     }
 
-    @XmlElement(name = "enumerations")
     public void setEnumerationsConfig(EnumerationsConfig enumerationsConfig) {
         this.enumerationsConfig = enumerationsConfig;
     }
@@ -216,7 +223,6 @@ public class AppConfig extends BaseNameConfig {
         return widgetTypesConfig;
     }
 
-    @XmlElement(name = "widgetTypes")
     public void setWidgetTypesConfig(WidgetTypesConfig widgetTypesConfig) {
         this.widgetTypesConfig = widgetTypesConfig;
     }
@@ -225,7 +231,6 @@ public class AppConfig extends BaseNameConfig {
         return refsConfig;
     }
 
-    @XmlElement(name = "references")
     public void setRefsConfig(RefsConfig refsConfig) {
         this.refsConfig = refsConfig;
     }
@@ -234,7 +239,6 @@ public class AppConfig extends BaseNameConfig {
         return entitiesConfig;
     }
 
-    @XmlElement(name = "entities")
     public void setEntitiesConfig(AppEntitiesConfig entitiesConfig) {
         this.entitiesConfig = entitiesConfig;
     }
@@ -243,7 +247,6 @@ public class AppConfig extends BaseNameConfig {
         return tablesConfig;
     }
 
-    @XmlElement(name = "tables")
     public void setTablesConfig(AppTablesConfig tablesConfig) {
         this.tablesConfig = tablesConfig;
     }
@@ -252,7 +255,6 @@ public class AppConfig extends BaseNameConfig {
         return formsConfig;
     }
 
-    @XmlElement(name = "forms")
     public void setFormsConfig(AppFormsConfig formsConfig) {
         this.formsConfig = formsConfig;
     }
@@ -261,7 +263,6 @@ public class AppConfig extends BaseNameConfig {
         return wfChannelsConfig;
     }
 
-    @XmlElement(name = "workflow-channels")
     public void setWfChannelsConfig(WfChannelsConfig wfChannelsConfig) {
         this.wfChannelsConfig = wfChannelsConfig;
     }
@@ -270,7 +271,6 @@ public class AppConfig extends BaseNameConfig {
         return assignmentPagesConfig;
     }
 
-    @XmlElement(name = "assignmentPages")
     public void setAssignmentPagesConfig(AppAssignmentPagesConfig assignmentPagesConfig) {
         this.assignmentPagesConfig = assignmentPagesConfig;
     }
@@ -279,7 +279,6 @@ public class AppConfig extends BaseNameConfig {
         return propertyListsConfig;
     }
 
-    @XmlElement(name = "propertyLists")
     public void setPropertyListsConfig(PropertyListsConfig propertyListsConfig) {
         this.propertyListsConfig = propertyListsConfig;
     }
@@ -288,7 +287,6 @@ public class AppConfig extends BaseNameConfig {
         return propertyRulesConfig;
     }
 
-    @XmlElement(name = "propertyRules")
     public void setPropertyRulesConfig(PropertyRulesConfig propertyRulesConfig) {
         this.propertyRulesConfig = propertyRulesConfig;
     }
@@ -297,7 +295,6 @@ public class AppConfig extends BaseNameConfig {
         return chartsConfig;
     }
 
-    @XmlElement(name = "charts")
     public void setChartsConfig(AppChartsConfig chartsConfig) {
         this.chartsConfig = chartsConfig;
     }
@@ -306,7 +303,6 @@ public class AppConfig extends BaseNameConfig {
         return chartDataSourcesConfig;
     }
 
-    @XmlElement(name = "chart-datasources")
     public void setChartDataSourcesConfig(AppChartDataSourcesConfig chartDataSourcesConfig) {
         this.chartDataSourcesConfig = chartDataSourcesConfig;
     }
@@ -315,7 +311,6 @@ public class AppConfig extends BaseNameConfig {
         return dashboardsConfig;
     }
 
-    @XmlElement(name = "dashboards")
     public void setDashboardsConfig(AppDashboardsConfig dashboardsConfig) {
         this.dashboardsConfig = dashboardsConfig;
     }
@@ -324,7 +319,6 @@ public class AppConfig extends BaseNameConfig {
         return suggestionTypesConfig;
     }
 
-    @XmlElement(name = "suggestionTypes")
     public void setSuggestionTypesConfig(SuggestionTypesConfig suggestionTypesConfig) {
         this.suggestionTypesConfig = suggestionTypesConfig;
     }

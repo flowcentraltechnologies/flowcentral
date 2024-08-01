@@ -16,6 +16,8 @@
 package com.flowcentraltech.flowcentral.configuration.xml.adapter;
 
 import com.flowcentraltech.flowcentral.configuration.constants.DashboardTileType;
+import com.tcdng.unify.core.util.xml.AbstractEnumConstDeserializer;
+import com.tcdng.unify.core.util.xml.AbstractEnumConstSerializer;
 import com.tcdng.unify.core.util.xml.AbstractEnumConstXmlAdapter;
 
 /**
@@ -24,9 +26,20 @@ import com.tcdng.unify.core.util.xml.AbstractEnumConstXmlAdapter;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class DashboardTileTypeXmlAdapter extends AbstractEnumConstXmlAdapter<DashboardTileType> {
+public class DashboardTileTypeXmlAdapter extends AbstractEnumConstXmlAdapter {
+    
+    public static class Serializer extends AbstractEnumConstSerializer<DashboardTileType> {
+        public Serializer() {
+            
+        }
 
-    public DashboardTileTypeXmlAdapter() {
-        super(DashboardTileType.class);
+    }
+    
+    public static class Deserializer extends AbstractEnumConstDeserializer<DashboardTileType> {
+
+        public Deserializer() {
+            super(DashboardTileType.class);
+        }
+
     }
 }

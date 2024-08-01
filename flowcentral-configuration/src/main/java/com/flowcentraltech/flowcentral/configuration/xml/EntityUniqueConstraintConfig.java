@@ -17,8 +17,8 @@ package com.flowcentraltech.flowcentral.configuration.xml;
 
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * Entity unique constraint configuration.
@@ -28,19 +28,23 @@ import javax.xml.bind.annotation.XmlElement;
  */
 public class EntityUniqueConstraintConfig extends BaseConfig {
 
+    @JacksonXmlProperty(isAttribute = true)
     private String name;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String description;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String fieldList;
 
+    @JacksonXmlElementWrapper(useWrapping = false)
+    @JacksonXmlProperty(localName = "condition")
     private List<EntityUniqueConditionConfig> conditionList;
     
     public String getFieldList() {
         return fieldList;
     }
 
-    @XmlAttribute(required = true)
     public void setFieldList(String fieldList) {
         this.fieldList = fieldList;
     }
@@ -49,7 +53,6 @@ public class EntityUniqueConstraintConfig extends BaseConfig {
         return name;
     }
 
-    @XmlAttribute(required = true)
     public void setName(String name) {
         this.name = name;
     }
@@ -58,7 +61,6 @@ public class EntityUniqueConstraintConfig extends BaseConfig {
         return description;
     }
 
-    @XmlAttribute(required = true)
     public void setDescription(String description) {
         this.description = description;
     }
@@ -67,7 +69,6 @@ public class EntityUniqueConstraintConfig extends BaseConfig {
         return conditionList;
     }
 
-    @XmlElement(name = "condition")
     public void setConditionList(List<EntityUniqueConditionConfig> conditionList) {
         this.conditionList = conditionList;
     }

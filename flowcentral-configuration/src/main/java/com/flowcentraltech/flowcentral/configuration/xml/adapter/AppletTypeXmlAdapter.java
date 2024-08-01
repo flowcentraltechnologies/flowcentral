@@ -16,6 +16,8 @@
 package com.flowcentraltech.flowcentral.configuration.xml.adapter;
 
 import com.flowcentraltech.flowcentral.configuration.constants.AppletType;
+import com.tcdng.unify.core.util.xml.AbstractEnumConstDeserializer;
+import com.tcdng.unify.core.util.xml.AbstractEnumConstSerializer;
 import com.tcdng.unify.core.util.xml.AbstractEnumConstXmlAdapter;
 
 /**
@@ -24,10 +26,20 @@ import com.tcdng.unify.core.util.xml.AbstractEnumConstXmlAdapter;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class AppletTypeXmlAdapter extends AbstractEnumConstXmlAdapter<AppletType> {
+public class AppletTypeXmlAdapter extends AbstractEnumConstXmlAdapter {
+    
+    public static class Serializer extends AbstractEnumConstSerializer<AppletType> {
+        public Serializer() {
+            
+        }
 
-    public AppletTypeXmlAdapter() {
-        super(AppletType.class);
     }
+    
+    public static class Deserializer extends AbstractEnumConstDeserializer<AppletType> {
 
+        public Deserializer() {
+            super(AppletType.class);
+        }
+
+    }
 }

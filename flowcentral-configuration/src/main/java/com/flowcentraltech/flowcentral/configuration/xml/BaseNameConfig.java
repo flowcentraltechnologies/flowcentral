@@ -15,7 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.configuration.xml;
 
-import javax.xml.bind.annotation.XmlAttribute;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * Convenient abstract base class for named configurations.
@@ -25,17 +25,19 @@ import javax.xml.bind.annotation.XmlAttribute;
  */
 public abstract class BaseNameConfig extends BaseConfig {
 
+    @JacksonXmlProperty(isAttribute = true)
     private String name;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String description;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String label;
 
     public final String getName() {
         return name;
     }
 
-    @XmlAttribute(required = true)
     public final void setName(String name) {
         this.name = name;
     }
@@ -44,7 +46,6 @@ public abstract class BaseNameConfig extends BaseConfig {
         return description;
     }
 
-    @XmlAttribute(required = true)
     public final void setDescription(String description) {
         this.description = description;
     }
@@ -53,7 +54,6 @@ public abstract class BaseNameConfig extends BaseConfig {
         return label;
     }
 
-    @XmlAttribute(required = true)
     public final void setLabel(String label) {
         this.label = label;
     }

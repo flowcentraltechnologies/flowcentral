@@ -17,7 +17,8 @@ package com.flowcentraltech.flowcentral.configuration.xml;
 
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlElement;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * Dashboards configuration.
@@ -27,13 +28,14 @@ import javax.xml.bind.annotation.XmlElement;
  */
 public class AppDashboardsConfig extends BaseConfig {
 
+    @JacksonXmlElementWrapper(useWrapping = false)
+    @JacksonXmlProperty(localName = "dashboard")
     private List<AppDashboardConfig> dashboardList;
 
     public List<AppDashboardConfig> getDashboardList() {
         return dashboardList;
     }
 
-    @XmlElement(name = "dashboard")
     public void setDashboardList(List<AppDashboardConfig> dashboardList) {
         this.dashboardList = dashboardList;
     }
