@@ -17,8 +17,8 @@ package com.flowcentraltech.flowcentral.configuration.xml;
 
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * Property rule configuration.
@@ -28,27 +28,35 @@ import javax.xml.bind.annotation.XmlElement;
  */
 public class PropertyRuleConfig extends BaseNameConfig {
 
+    @JacksonXmlProperty(isAttribute = true)
     private String entity;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String choiceField;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String listField;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String propNameField;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String propValField;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String defaultList;
 
+    @JacksonXmlProperty(isAttribute = true)
     private boolean ignoreCase;
 
+    @JacksonXmlElementWrapper(useWrapping = false)
+    @JacksonXmlProperty(localName = "choice")
     private List<ChoiceConfig> choiceList;
 
     public String getEntity() {
         return entity;
     }
 
-    @XmlAttribute(required = true)
     public void setEntity(String entity) {
         this.entity = entity;
     }
@@ -57,7 +65,6 @@ public class PropertyRuleConfig extends BaseNameConfig {
         return choiceField;
     }
 
-    @XmlAttribute(required = true)
     public void setChoiceField(String choiceField) {
         this.choiceField = choiceField;
     }
@@ -66,7 +73,6 @@ public class PropertyRuleConfig extends BaseNameConfig {
         return listField;
     }
 
-    @XmlAttribute(required = true)
     public void setListField(String listField) {
         this.listField = listField;
     }
@@ -75,7 +81,6 @@ public class PropertyRuleConfig extends BaseNameConfig {
         return propNameField;
     }
 
-    @XmlAttribute(required = true)
     public void setPropNameField(String propNameField) {
         this.propNameField = propNameField;
     }
@@ -84,7 +89,6 @@ public class PropertyRuleConfig extends BaseNameConfig {
         return propValField;
     }
 
-    @XmlAttribute(required = true)
     public void setPropValField(String propValField) {
         this.propValField = propValField;
     }
@@ -93,12 +97,10 @@ public class PropertyRuleConfig extends BaseNameConfig {
         return defaultList;
     }
 
-    @XmlAttribute
     public void setDefaultList(String defaultList) {
         this.defaultList = defaultList;
     }
 
-    @XmlAttribute
     public boolean isIgnoreCase() {
         return ignoreCase;
     }
@@ -111,7 +113,6 @@ public class PropertyRuleConfig extends BaseNameConfig {
         return choiceList;
     }
 
-    @XmlElement(name = "choice")
     public void setChoiceList(List<ChoiceConfig> choiceList) {
         this.choiceList = choiceList;
     }

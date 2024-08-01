@@ -15,9 +15,9 @@
  */
 package com.flowcentraltech.flowcentral.configuration.xml;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.flowcentraltech.flowcentral.configuration.xml.adapter.HAlignTypeXmlAdapter;
 import com.flowcentraltech.flowcentral.configuration.xml.adapter.OrderTypeXmlAdapter;
 import com.flowcentraltech.flowcentral.configuration.xml.adapter.VAlignTypeXmlAdapter;
@@ -33,37 +33,55 @@ import com.tcdng.unify.core.constant.VAlignType;
  */
 public class ReportColumnConfig extends BaseConfig {
 
+    @JacksonXmlProperty(isAttribute = true, localName = "field")
     private String fieldName;
 
+    @JsonSerialize(using = OrderTypeXmlAdapter.Serializer.class)
+    @JsonDeserialize(using = OrderTypeXmlAdapter.Deserializer.class)
+    @JacksonXmlProperty(isAttribute = true, localName = "order")
     private OrderType columnOrder;
 
+    @JsonSerialize(using = HAlignTypeXmlAdapter.Serializer.class)
+    @JsonDeserialize(using = HAlignTypeXmlAdapter.Deserializer.class)
+    @JacksonXmlProperty(isAttribute = true, localName = "halign")
     private HAlignType horizAlignType;
 
+    @JsonSerialize(using = VAlignTypeXmlAdapter.Serializer.class)
+    @JsonDeserialize(using = VAlignTypeXmlAdapter.Deserializer.class)
+    @JacksonXmlProperty(isAttribute = true, localName = "valign")
     private VAlignType vertAlignType;
-    
+
+    @JacksonXmlProperty(isAttribute = true)
     private String renderWidget;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String description;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String type;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String formatter;
 
+    @JacksonXmlProperty(isAttribute = true)
     private int width;
 
+    @JacksonXmlProperty(isAttribute = true)
     private boolean bold;
 
+    @JacksonXmlProperty(isAttribute = true)
     private boolean group;
 
+    @JacksonXmlProperty(isAttribute = true)
     private boolean groupOnNewPage;
 
+    @JacksonXmlProperty(isAttribute = true)
     private boolean sum;
 
     public String getFieldName() {
         return fieldName;
     }
 
-    @XmlAttribute(name = "field", required = true)
     public void setFieldName(String fieldName) {
         this.fieldName = fieldName;
     }
@@ -72,7 +90,6 @@ public class ReportColumnConfig extends BaseConfig {
         return type;
     }
 
-    @XmlAttribute(name = "type")
     public void setType(String type) {
         this.type = type;
     }
@@ -81,8 +98,6 @@ public class ReportColumnConfig extends BaseConfig {
         return columnOrder;
     }
 
-    @XmlJavaTypeAdapter(OrderTypeXmlAdapter.class)
-    @XmlAttribute(name = "order")
     public void setColumnOrder(OrderType columnOrder) {
         this.columnOrder = columnOrder;
     }
@@ -91,8 +106,6 @@ public class ReportColumnConfig extends BaseConfig {
         return horizAlignType;
     }
 
-    @XmlJavaTypeAdapter(HAlignTypeXmlAdapter.class)
-    @XmlAttribute(name = "halign")
     public void setHorizAlignType(HAlignType horizAlignType) {
         this.horizAlignType = horizAlignType;
     }
@@ -101,8 +114,6 @@ public class ReportColumnConfig extends BaseConfig {
         return vertAlignType;
     }
 
-    @XmlJavaTypeAdapter(VAlignTypeXmlAdapter.class)
-    @XmlAttribute(name = "valign")
     public void setVertAlignType(VAlignType vertAlignType) {
         this.vertAlignType = vertAlignType;
     }
@@ -111,7 +122,6 @@ public class ReportColumnConfig extends BaseConfig {
         return renderWidget;
     }
 
-    @XmlAttribute
     public void setRenderWidget(String renderWidget) {
         this.renderWidget = renderWidget;
     }
@@ -120,7 +130,6 @@ public class ReportColumnConfig extends BaseConfig {
         return formatter;
     }
 
-    @XmlAttribute
     public void setFormatter(String formatter) {
         this.formatter = formatter;
     }
@@ -129,7 +138,6 @@ public class ReportColumnConfig extends BaseConfig {
         return description;
     }
 
-    @XmlAttribute(required = true)
     public void setDescription(String description) {
         this.description = description;
     }
@@ -138,7 +146,6 @@ public class ReportColumnConfig extends BaseConfig {
         return width;
     }
 
-    @XmlAttribute
     public void setWidth(int width) {
         this.width = width;
     }
@@ -147,7 +154,6 @@ public class ReportColumnConfig extends BaseConfig {
         return bold;
     }
 
-    @XmlAttribute
     public void setBold(boolean bold) {
         this.bold = bold;
     }
@@ -156,7 +162,6 @@ public class ReportColumnConfig extends BaseConfig {
         return group;
     }
 
-    @XmlAttribute
     public void setGroup(boolean group) {
         this.group = group;
     }
@@ -165,7 +170,6 @@ public class ReportColumnConfig extends BaseConfig {
         return groupOnNewPage;
     }
 
-    @XmlAttribute
     public void setGroupOnNewPage(boolean groupOnNewPage) {
         this.groupOnNewPage = groupOnNewPage;
     }
@@ -174,7 +178,6 @@ public class ReportColumnConfig extends BaseConfig {
         return sum;
     }
 
-    @XmlAttribute
     public void setSum(boolean sum) {
         this.sum = sum;
     }

@@ -17,7 +17,8 @@ package com.flowcentraltech.flowcentral.configuration.xml;
 
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlElement;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * Module applications configuration.
@@ -27,13 +28,14 @@ import javax.xml.bind.annotation.XmlElement;
  */
 public class ModuleAppsConfig {
 
+    @JacksonXmlElementWrapper(useWrapping = false)
+    @JacksonXmlProperty(localName = "application")
     private List<ModuleAppConfig> moduleAppList;
 
     public List<ModuleAppConfig> getModuleAppList() {
         return moduleAppList;
     }
 
-    @XmlElement(name = "application", required = true)
     public void setModuleAppList(List<ModuleAppConfig> moduleAppList) {
         this.moduleAppList = moduleAppList;
     }

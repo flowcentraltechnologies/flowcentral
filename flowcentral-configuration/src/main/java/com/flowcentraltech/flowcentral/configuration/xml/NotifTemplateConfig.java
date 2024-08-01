@@ -18,11 +18,12 @@ package com.flowcentraltech.flowcentral.configuration.xml;
 
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.flowcentraltech.flowcentral.configuration.constants.NotifMessageFormat;
 import com.flowcentraltech.flowcentral.configuration.constants.NotifType;
 import com.flowcentraltech.flowcentral.configuration.xml.adapter.NotificationMessageFormatXmlAdapter;
@@ -38,16 +39,31 @@ import com.tcdng.unify.core.util.xml.adapter.CDataXmlAdapter;
 @XmlRootElement(name = "notifTemplate")
 public class NotifTemplateConfig extends BaseNameConfig {
 
+    @JsonSerialize(using = NotificationTypeXmlAdapter.Serializer.class)
+    @JsonDeserialize(using = NotificationTypeXmlAdapter.Deserializer.class)
+    @JacksonXmlProperty(isAttribute = true, localName="type")
     private NotifType notifType;
 
+    @JsonSerialize(using = NotificationMessageFormatXmlAdapter.Serializer.class)
+    @JsonDeserialize(using = NotificationMessageFormatXmlAdapter.Deserializer.class)
+    @JacksonXmlProperty(isAttribute = true, localName="format")
     private NotifMessageFormat messageFormat;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String entity;
 
+    @JsonSerialize(using = CDataXmlAdapter.Serializer.class)
+    @JsonDeserialize(using = CDataXmlAdapter.Deserializer.class)
+    @JacksonXmlProperty
     private String subject;
 
+    @JsonSerialize(using = CDataXmlAdapter.Serializer.class)
+    @JsonDeserialize(using = CDataXmlAdapter.Deserializer.class)
+    @JacksonXmlProperty
     private String body;
 
+    @JacksonXmlElementWrapper(useWrapping = false)
+    @JacksonXmlProperty(localName = "parameter")
     private List<NotifTemplateParamConfig> paramList;
     
     public NotifTemplateConfig() {
@@ -58,8 +74,6 @@ public class NotifTemplateConfig extends BaseNameConfig {
         return notifType;
     }
 
-    @XmlJavaTypeAdapter(NotificationTypeXmlAdapter.class)
-    @XmlAttribute(name = "type", required = true)
     public void setNotifType(NotifType notifType) {
         this.notifType = notifType;
     }
@@ -68,8 +82,6 @@ public class NotifTemplateConfig extends BaseNameConfig {
         return messageFormat;
     }
 
-    @XmlJavaTypeAdapter(NotificationMessageFormatXmlAdapter.class)
-    @XmlAttribute(name = "format")
     public void setMessageFormat(NotifMessageFormat messageFormat) {
         this.messageFormat = messageFormat;
     }
@@ -78,7 +90,6 @@ public class NotifTemplateConfig extends BaseNameConfig {
         return entity;
     }
 
-    @XmlAttribute(required = true)
     public void setEntity(String entity) {
         this.entity = entity;
     }
@@ -87,8 +98,6 @@ public class NotifTemplateConfig extends BaseNameConfig {
         return subject;
     }
 
-    @XmlJavaTypeAdapter(CDataXmlAdapter.class)
-    @XmlElement(required = true) 
     public void setSubject(String subject) {
         this.subject = subject;
     }
@@ -97,8 +106,6 @@ public class NotifTemplateConfig extends BaseNameConfig {
         return body;
     }
 
-    @XmlJavaTypeAdapter(CDataXmlAdapter.class)
-    @XmlElement(required = true)
     public void setBody(String body) {
         this.body = body;
     }
@@ -107,7 +114,6 @@ public class NotifTemplateConfig extends BaseNameConfig {
         return paramList;
     }
 
-    @XmlElement(name = "parameter", required = true)
     public void setParamList(List<NotifTemplateParamConfig> paramList) {
         this.paramList = paramList;
     }

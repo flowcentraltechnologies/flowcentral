@@ -15,7 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.configuration.xml;
 
-import javax.xml.bind.annotation.XmlAttribute;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * Property sequence entry configuration.
@@ -25,8 +25,10 @@ import javax.xml.bind.annotation.XmlAttribute;
  */
 public class PropertySequenceEntryConfig extends BaseConfig {
 
+    @JacksonXmlProperty(isAttribute = true, localName = "property")
     private String property;
 
+    @JacksonXmlProperty(isAttribute = true, localName = "label")
     private String label;
 
     public PropertySequenceEntryConfig(String property, String label) {
@@ -42,7 +44,6 @@ public class PropertySequenceEntryConfig extends BaseConfig {
         return property;
     }
 
-    @XmlAttribute(name = "property", required = true)
     public void setProperty(String property) {
         this.property = property;
     }
@@ -51,7 +52,6 @@ public class PropertySequenceEntryConfig extends BaseConfig {
         return label;
     }
 
-    @XmlAttribute(name = "label", required = true)
     public void setLabel(String label) {
         this.label = label;
     }

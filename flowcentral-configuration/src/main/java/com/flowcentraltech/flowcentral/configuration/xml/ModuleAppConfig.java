@@ -15,7 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.configuration.xml;
 
-import javax.xml.bind.annotation.XmlAttribute;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * Module application configuration
@@ -25,21 +25,25 @@ import javax.xml.bind.annotation.XmlAttribute;
  */
 public class ModuleAppConfig {
 
+    @JacksonXmlProperty(isAttribute = true)
     private String name;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String shortDescription;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String longDescription;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String configFile;
 
+    @JacksonXmlProperty(isAttribute = true)
     private boolean autoInstall;
 
     public String getName() {
         return name;
     }
 
-    @XmlAttribute(required = true)
     public void setName(String name) {
         this.name = name;
     }
@@ -48,7 +52,6 @@ public class ModuleAppConfig {
         return shortDescription;
     }
 
-    @XmlAttribute(required = true)
     public void setShortDescription(String shortDescription) {
         this.shortDescription = shortDescription;
     }
@@ -57,7 +60,6 @@ public class ModuleAppConfig {
         return longDescription;
     }
 
-    @XmlAttribute(required = true)
     public void setLongDescription(String longDescription) {
         this.longDescription = longDescription;
     }
@@ -66,7 +68,6 @@ public class ModuleAppConfig {
         return configFile;
     }
 
-    @XmlAttribute(required = true)
     public void setConfigFile(String configFile) {
         this.configFile = configFile;
     }
@@ -75,7 +76,6 @@ public class ModuleAppConfig {
         return autoInstall;
     }
 
-    @XmlAttribute
     public void setAutoInstall(boolean autoInstall) {
         this.autoInstall = autoInstall;
     }

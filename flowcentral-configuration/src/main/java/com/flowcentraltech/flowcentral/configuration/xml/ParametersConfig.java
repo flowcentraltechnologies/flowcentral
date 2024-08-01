@@ -17,7 +17,8 @@ package com.flowcentraltech.flowcentral.configuration.xml;
 
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlElement;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * Parameters configuration.
@@ -27,13 +28,14 @@ import javax.xml.bind.annotation.XmlElement;
  */
 public class ParametersConfig extends BaseConfig {
 
+    @JacksonXmlElementWrapper(useWrapping = false)
+    @JacksonXmlProperty(localName = "parameter")
     private List<ParameterConfig> parameterList;
 
     public List<ParameterConfig> getParameterList() {
         return parameterList;
     }
 
-    @XmlElement(name = "parameter", required = true)
     public void setParameterList(List<ParameterConfig> parameterList) {
         this.parameterList = parameterList;
     }

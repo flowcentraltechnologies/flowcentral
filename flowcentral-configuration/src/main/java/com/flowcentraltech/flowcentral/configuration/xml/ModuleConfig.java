@@ -15,9 +15,8 @@
  */
 package com.flowcentraltech.flowcentral.configuration.xml;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 
 /**
  * Module configuration.
@@ -25,15 +24,19 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@XmlRootElement(name = "module")
+@JacksonXmlRootElement(localName = "module")
 public class ModuleConfig extends BaseNameConfig {
 
+    @JacksonXmlProperty(isAttribute = true)
     private String shortCode;
 
+    @JacksonXmlProperty(isAttribute = true)
     private boolean principal;
     
+    @JacksonXmlProperty(localName = "applications")
     private ModuleAppsConfig moduleAppsConfig;
 
+    @JacksonXmlProperty(localName = "sysParameters")
     private SysParamsConfig sysParamsConfig;
 
     public ModuleConfig() {
@@ -44,7 +47,6 @@ public class ModuleConfig extends BaseNameConfig {
         return shortCode;
     }
 
-    @XmlAttribute(required = true)
     public void setShortCode(String shortCode) {
         this.shortCode = shortCode;
     }
@@ -53,7 +55,6 @@ public class ModuleConfig extends BaseNameConfig {
         return principal;
     }
 
-    @XmlAttribute
     public void setPrincipal(boolean principal) {
         this.principal = principal;
     }
@@ -62,7 +63,6 @@ public class ModuleConfig extends BaseNameConfig {
         return moduleAppsConfig;
     }
 
-    @XmlElement(name = "applications")
     public void setModuleAppsConfig(ModuleAppsConfig moduleAppsConfig) {
         this.moduleAppsConfig = moduleAppsConfig;
     }
@@ -71,7 +71,6 @@ public class ModuleConfig extends BaseNameConfig {
         return sysParamsConfig;
     }
 
-    @XmlElement(name = "sysParameters")
     public void setSysParamsConfig(SysParamsConfig sysParamsConfig) {
         this.sysParamsConfig = sysParamsConfig;
     }

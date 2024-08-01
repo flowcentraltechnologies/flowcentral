@@ -17,7 +17,8 @@ package com.flowcentraltech.flowcentral.configuration.xml;
 
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlElement;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * References configuration.
@@ -27,13 +28,14 @@ import javax.xml.bind.annotation.XmlElement;
  */
 public class RefsConfig extends BaseConfig {
 
+    @JacksonXmlElementWrapper(useWrapping = false)
+    @JacksonXmlProperty(localName = "reference")
     private List<RefConfig> refList;
 
     public List<RefConfig> getRefList() {
         return refList;
     }
 
-    @XmlElement(name = "reference")
     public void setRefList(List<RefConfig> refList) {
         this.refList = refList;
     }

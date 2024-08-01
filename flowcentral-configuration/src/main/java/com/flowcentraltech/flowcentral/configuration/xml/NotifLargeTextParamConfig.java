@@ -16,7 +16,7 @@
 
 package com.flowcentraltech.flowcentral.configuration.xml;
 
-import javax.xml.bind.annotation.XmlAttribute;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * Notification large text parameter configuration.
@@ -26,15 +26,16 @@ import javax.xml.bind.annotation.XmlAttribute;
  */
 public class NotifLargeTextParamConfig extends BaseConfig {
 
+    @JacksonXmlProperty(isAttribute = true)
     private String name;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String label;
 
     public String getName() {
         return name;
     }
 
-    @XmlAttribute(required = true)
     public void setName(String name) {
         this.name = name;
     }
@@ -43,7 +44,6 @@ public class NotifLargeTextParamConfig extends BaseConfig {
         return label;
     }
 
-    @XmlAttribute(required = true)
     public void setLabel(String label) {
         this.label = label;
     }

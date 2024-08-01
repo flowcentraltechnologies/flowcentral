@@ -15,8 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.configuration.xml;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * Form validation policy configuration.
@@ -26,23 +25,28 @@ import javax.xml.bind.annotation.XmlElement;
  */
 public class FormValidationPolicyConfig extends BaseNameConfig {
 
+    @JacksonXmlProperty(isAttribute = true)
     private String message;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String target;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String errorMatcher;
     
+    @JacksonXmlProperty(isAttribute = true)
     private boolean skippable;
 
+    @JacksonXmlProperty
     private FilterConfig errorCondition;
 
+    @JacksonXmlProperty(isAttribute = true)
     private Integer executionIndex;
     
     public String getMessage() {
         return message;
     }
 
-    @XmlAttribute(required = true)
     public void setMessage(String message) {
         this.message = message;
     }
@@ -55,12 +59,10 @@ public class FormValidationPolicyConfig extends BaseNameConfig {
         return target;
     }
 
-    @XmlAttribute
     public void setTarget(String target) {
         this.target = target;
     }
 
-    @XmlAttribute
     public void setErrorMatcher(String errorMatcher) {
         this.errorMatcher = errorMatcher;
     }
@@ -69,7 +71,6 @@ public class FormValidationPolicyConfig extends BaseNameConfig {
         return skippable;
     }
 
-    @XmlAttribute
     public void setSkippable(boolean skippable) {
         this.skippable = skippable;
     }
@@ -78,7 +79,6 @@ public class FormValidationPolicyConfig extends BaseNameConfig {
         return errorCondition;
     }
 
-    @XmlElement(required = true)
     public void setErrorCondition(FilterConfig errorCondition) {
         this.errorCondition = errorCondition;
     }
@@ -87,7 +87,6 @@ public class FormValidationPolicyConfig extends BaseNameConfig {
         return executionIndex;
     }
 
-    @XmlAttribute
     public void setExecutionIndex(Integer executionIndex) {
         this.executionIndex = executionIndex;
     }
