@@ -42,11 +42,6 @@
 			<artifactId>unify-jasperreports</artifactId>
 			<version>${unify.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>com.tcdng.unify</groupId>
-			<artifactId>unify-nashorn</artifactId>
-			<version>${unify.version}</version>
-		</dependency>
 		<!-- Test dependencies -->
 		<dependency>
 			<groupId>com.flowcentraltech.flowcentral</groupId>
