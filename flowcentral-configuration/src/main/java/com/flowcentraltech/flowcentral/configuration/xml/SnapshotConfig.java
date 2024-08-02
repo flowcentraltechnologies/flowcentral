@@ -15,11 +15,10 @@
  */
 package com.flowcentraltech.flowcentral.configuration.xml;
 
-import javax.xml.bind.annotation.XmlRootElement;
-
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import com.tcdng.unify.core.util.xml.adapter.CDataXmlAdapter;
 
 /**
@@ -28,7 +27,7 @@ import com.tcdng.unify.core.util.xml.adapter.CDataXmlAdapter;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@XmlRootElement(name = "snapshot")
+@JacksonXmlRootElement(localName = "snapshot")
 public class SnapshotConfig extends BaseConfig {
 
     @JacksonXmlProperty

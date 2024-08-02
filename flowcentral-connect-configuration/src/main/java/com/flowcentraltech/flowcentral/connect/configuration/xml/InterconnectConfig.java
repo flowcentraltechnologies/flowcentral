@@ -15,9 +15,8 @@
  */
 package com.flowcentraltech.flowcentral.connect.configuration.xml;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 
 /**
  * Interconnect configuration.
@@ -25,28 +24,34 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@XmlRootElement(name = "interconnect")
+@JacksonXmlRootElement(localName = "interconnect")
 public class InterconnectConfig {
 
+    @JacksonXmlProperty(isAttribute = true)
     private String name;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String description;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String redirect;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String dataSourceAlias;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String entityManagerFactory;
 
+    @JacksonXmlProperty(localName = "entities")
     private EntitiesConfig entitiesConfig;
 
+    @JacksonXmlProperty(localName = "interconnect-applications")
     private InterconnectAppConfigs interconnectAppConfigs;
 
     public String getName() {
         return name;
     }
 
-    @XmlAttribute(required = true)
     public void setName(String name) {
         this.name = name;
     }
@@ -55,7 +60,6 @@ public class InterconnectConfig {
         return description;
     }
 
-    @XmlAttribute(required = true)
     public void setDescription(String description) {
         this.description = description;
     }
@@ -64,7 +68,6 @@ public class InterconnectConfig {
         return redirect;
     }
 
-    @XmlAttribute
     public void setRedirect(String redirect) {
         this.redirect = redirect;
     }
@@ -73,7 +76,6 @@ public class InterconnectConfig {
         return interconnectAppConfigs;
     }
 
-    @XmlElement(name = "interconnect-applications")
     public void setInterconnectAppConfigs(InterconnectAppConfigs interconnectAppConfigs) {
         this.interconnectAppConfigs = interconnectAppConfigs;
     }
@@ -82,7 +84,6 @@ public class InterconnectConfig {
         return dataSourceAlias;
     }
 
-    @XmlAttribute(required = true)
     public void setDataSourceAlias(String dataSourceAlias) {
         this.dataSourceAlias = dataSourceAlias;
     }
@@ -91,7 +92,6 @@ public class InterconnectConfig {
         return entityManagerFactory;
     }
 
-    @XmlAttribute
     public void setEntityManagerFactory(String entityManagerFactory) {
         this.entityManagerFactory = entityManagerFactory;
     }
@@ -100,7 +100,6 @@ public class InterconnectConfig {
         return entitiesConfig;
     }
 
-    @XmlElement(name = "entities")
     public void setEntitiesConfig(EntitiesConfig entitiesConfig) {
         this.entitiesConfig = entitiesConfig;
     }

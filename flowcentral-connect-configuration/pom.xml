@@ -14,8 +14,18 @@
 	<description>Flowcentral Connect Configuration Module</description>
 	<url>http://www.flowcentralplatform.com</url>
 
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<jackson.version>2.11.1</jackson.version>
+	</properties>
+
 	<dependencies>
 		<!-- Main dependencies -->
-		<!-- Test dependencies -->
+		<!--XML-->
+		<dependency>
+		    <groupId>com.fasterxml.jackson.dataformat</groupId>
+		    <artifactId>jackson-dataformat-xml</artifactId>
+		    <version>${jackson.version}</version>
+		</dependency>
 	</dependencies>
 </project>

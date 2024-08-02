@@ -18,12 +18,11 @@ package com.flowcentraltech.flowcentral.configuration.xml;
 
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlRootElement;
-
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import com.flowcentraltech.flowcentral.configuration.constants.FontFamilyType;
 import com.flowcentraltech.flowcentral.configuration.xml.adapter.FontFamilyTypeXmlAdapter;
 import com.tcdng.unify.core.util.xml.adapter.CDataXmlAdapter;
@@ -34,7 +33,7 @@ import com.tcdng.unify.core.util.xml.adapter.CDataXmlAdapter;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@XmlRootElement(name = "notifLargeText")
+@JacksonXmlRootElement(localName = "notifLargeText")
 public class NotifLargeTextConfig extends BaseNameConfig {
 
     @JacksonXmlProperty(isAttribute = true)

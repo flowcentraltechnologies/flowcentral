@@ -17,10 +17,10 @@ package com.flowcentraltech.flowcentral.connect.configuration.xml;
 
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.flowcentraltech.flowcentral.connect.configuration.constants.ConnectEntityBaseType;
 import com.flowcentraltech.flowcentral.connect.configuration.xml.adapter.EntityBaseTypeXmlAdapter;
 
@@ -32,34 +32,46 @@ import com.flowcentraltech.flowcentral.connect.configuration.xml.adapter.EntityB
  */
 public class EntityConfig {
 
+    @JsonSerialize(using = EntityBaseTypeXmlAdapter.Serializer.class)
+    @JsonDeserialize(using = EntityBaseTypeXmlAdapter.Deserializer.class)
+    @JacksonXmlProperty(isAttribute = true)
     private ConnectEntityBaseType base;
     
+    @JacksonXmlProperty(isAttribute = true)
     private String name;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String description;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String table;
 
+    @JacksonXmlProperty(isAttribute = true, localName = "impl")
     private String implementation;
 
+    @JacksonXmlProperty(isAttribute = true, localName = "id-field")
     private String idFieldName;
 
+    @JacksonXmlProperty(isAttribute = true, localName = "version-field")
     private String versionNoFieldName;
 
+    @JacksonXmlProperty(isAttribute = true, localName = "handler")
     private String handler;
 
+    @JacksonXmlProperty(isAttribute = true, localName = "action-policy")
     private String actionPolicy;
 
+    @JacksonXmlProperty(isAttribute = true, localName = "ignore-on-sync")
     private boolean ignoreOnSync;
 
+    @JacksonXmlElementWrapper(useWrapping = false)
+    @JacksonXmlProperty(localName = "field")
     private List<EntityFieldConfig> entityFieldList;
 
     public ConnectEntityBaseType getBase() {
         return base;
     }
 
-    @XmlJavaTypeAdapter(EntityBaseTypeXmlAdapter.class)
-    @XmlAttribute(required = true)
     public void setBase(ConnectEntityBaseType base) {
         this.base = base;
     }
@@ -68,7 +80,6 @@ public class EntityConfig {
         return name;
     }
 
-    @XmlAttribute(required = true)
     public void setName(String name) {
         this.name = name;
     }
@@ -77,7 +88,6 @@ public class EntityConfig {
         return description;
     }
 
-    @XmlAttribute(required = true)
     public void setDescription(String description) {
         this.description = description;
     }
@@ -86,7 +96,6 @@ public class EntityConfig {
         return table;
     }
 
-    @XmlAttribute
     public void setTable(String table) {
         this.table = table;
     }
@@ -95,7 +104,6 @@ public class EntityConfig {
         return implementation;
     }
 
-    @XmlAttribute(name = "impl", required = true)
     public void setImplementation(String implementation) {
         this.implementation = implementation;
     }
@@ -104,7 +112,6 @@ public class EntityConfig {
         return idFieldName;
     }
 
-    @XmlAttribute(name = "id-field")
     public void setIdFieldName(String idFieldName) {
         this.idFieldName = idFieldName;
     }
@@ -113,7 +120,6 @@ public class EntityConfig {
         return versionNoFieldName;
     }
 
-    @XmlAttribute(name = "version-field")
     public void setVersionNoFieldName(String versionNoFieldName) {
         this.versionNoFieldName = versionNoFieldName;
     }
@@ -122,7 +128,6 @@ public class EntityConfig {
 		return handler;
 	}
 
-    @XmlAttribute(name = "handler")
 	public void setHandler(String handler) {
 		this.handler = handler;
 	}
@@ -131,7 +136,6 @@ public class EntityConfig {
         return actionPolicy;
     }
 
-    @XmlAttribute(name = "action-policy")
     public void setActionPolicy(String actionPolicy) {
         this.actionPolicy = actionPolicy;
     }
@@ -140,7 +144,6 @@ public class EntityConfig {
         return ignoreOnSync;
     }
 
-    @XmlAttribute(name = "ignore-on-sync")
     public void setIgnoreOnSync(boolean ignoreOnSync) {
         this.ignoreOnSync = ignoreOnSync;
     }
@@ -149,7 +152,6 @@ public class EntityConfig {
         return entityFieldList;
     }
 
-    @XmlElement(name = "field")
     public void setEntityFieldList(List<EntityFieldConfig> entityFieldList) {
         this.entityFieldList = entityFieldList;
     }

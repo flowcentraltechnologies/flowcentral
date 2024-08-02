@@ -17,8 +17,8 @@ package com.flowcentraltech.flowcentral.connect.configuration.xml;
 
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * Interconnect application configuration.
@@ -28,15 +28,17 @@ import javax.xml.bind.annotation.XmlElement;
  */
 public class InterconnectAppConfigs {
 
+    @JacksonXmlElementWrapper(useWrapping = false)
+    @JacksonXmlProperty(localName = "interconnect-application")
     private List<InterconnectAppConfig> appConfigList;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String application;
     
     public List<InterconnectAppConfig> getAppConfigList() {
         return appConfigList;
     }
 
-    @XmlElement(name = "interconnect-application")
     public void setAppConfigList(List<InterconnectAppConfig> appConfigList) {
         this.appConfigList = appConfigList;
     }
@@ -45,7 +47,6 @@ public class InterconnectAppConfigs {
         return application;
     }
 
-    @XmlAttribute
     public void setApplication(String application) {
         this.application = application;
     }

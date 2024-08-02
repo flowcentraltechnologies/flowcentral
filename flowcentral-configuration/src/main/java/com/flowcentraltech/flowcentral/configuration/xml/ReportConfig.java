@@ -15,11 +15,10 @@
  */
 package com.flowcentraltech.flowcentral.configuration.xml;
 
-import javax.xml.bind.annotation.XmlRootElement;
-
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import com.flowcentraltech.flowcentral.configuration.constants.ReportConfigType;
 import com.flowcentraltech.flowcentral.configuration.xml.adapter.PageSizeTypeXmlAdapter;
 import com.flowcentraltech.flowcentral.configuration.xml.adapter.ReportConfigTypeXmlAdapter;
@@ -31,7 +30,7 @@ import com.tcdng.unify.core.constant.PageSizeType;
  * @author FlowCentral Technologies Limited
  * @version 1.0
  */
-@XmlRootElement(name = "report")
+@JacksonXmlRootElement(localName = "report")
 public class ReportConfig extends BaseNameConfig {
 
     @JsonSerialize(using = ReportConfigTypeXmlAdapter.Serializer.class)

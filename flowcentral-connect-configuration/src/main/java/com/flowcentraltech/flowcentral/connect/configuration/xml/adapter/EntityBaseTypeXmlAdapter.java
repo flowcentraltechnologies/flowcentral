@@ -15,8 +15,15 @@
  */
 package com.flowcentraltech.flowcentral.connect.configuration.xml.adapter;
 
-import javax.xml.bind.annotation.adapters.XmlAdapter;
+import java.io.IOException;
 
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.JsonDeserializer;
+import com.fasterxml.jackson.databind.JsonSerializer;
+import com.fasterxml.jackson.databind.SerializerProvider;
 import com.flowcentraltech.flowcentral.connect.configuration.constants.ConnectEntityBaseType;
 
 /**
@@ -25,16 +32,27 @@ import com.flowcentraltech.flowcentral.connect.configuration.constants.ConnectEn
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class EntityBaseTypeXmlAdapter extends XmlAdapter<String, ConnectEntityBaseType> {
+public class EntityBaseTypeXmlAdapter {
 
-    @Override
-    public ConnectEntityBaseType unmarshal(String str) throws Exception {
-        return str != null ? ConnectEntityBaseType.valueOf(str.toUpperCase()) : null;
+    public static class Serializer extends JsonSerializer<ConnectEntityBaseType> {
+
+        @Override
+        public void serialize(ConnectEntityBaseType value, JsonGenerator gen, SerializerProvider serializers)
+                throws IOException {
+            gen.writeString(value != null ? value.name() : null);
+        }
+        
     }
 
-    @Override
-    public String marshal(ConnectEntityBaseType type) throws Exception {
-        return type != null ? type.name() : null;
+    public static class Deserializer extends JsonDeserializer<ConnectEntityBaseType> {
+
+        @Override
+        public ConnectEntityBaseType deserialize(JsonParser p, DeserializationContext ctxt)
+                throws IOException, JsonProcessingException {
+            String str = p.getText();
+            return str != null ? ConnectEntityBaseType.valueOf(str.toUpperCase()) : null;
+        }
+        
     }
 
 }
