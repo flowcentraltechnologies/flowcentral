@@ -16,7 +16,7 @@
 
 package com.flowcentraltech.flowcentral.configuration.xml;
 
-import javax.xml.bind.annotation.XmlAttribute;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * Workflow wizard step configuration.
@@ -26,15 +26,16 @@ import javax.xml.bind.annotation.XmlAttribute;
  */
 public class WfWizardStepConfig extends BaseNameConfig {
 
+    @JacksonXmlProperty(isAttribute = true)
     private String form;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String reference;
 
     public String getForm() {
         return form;
     }
 
-    @XmlAttribute(required = true)
     public void setForm(String form) {
         this.form = form;
     }
@@ -43,7 +44,6 @@ public class WfWizardStepConfig extends BaseNameConfig {
         return reference;
     }
 
-    @XmlAttribute
     public void setReference(String reference) {
         this.reference = reference;
     }

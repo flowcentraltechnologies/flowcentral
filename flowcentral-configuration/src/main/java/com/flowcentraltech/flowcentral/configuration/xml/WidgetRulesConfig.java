@@ -17,7 +17,8 @@ package com.flowcentraltech.flowcentral.configuration.xml;
 
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlElement;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * Widget rules configuration.
@@ -27,6 +28,8 @@ import javax.xml.bind.annotation.XmlElement;
  */
 public class WidgetRulesConfig extends BaseConfig {
 
+    @JacksonXmlElementWrapper(useWrapping = false)
+    @JacksonXmlProperty(localName = "entry")
     private List<WidgetRuleEntryConfig> entryList;
 
     public WidgetRulesConfig(List<WidgetRuleEntryConfig> entryList) {
@@ -41,7 +44,6 @@ public class WidgetRulesConfig extends BaseConfig {
         return entryList;
     }
 
-    @XmlElement(name = "entry", required = true)
     public void setEntryList(List<WidgetRuleEntryConfig> entryList) {
         this.entryList = entryList;
     }

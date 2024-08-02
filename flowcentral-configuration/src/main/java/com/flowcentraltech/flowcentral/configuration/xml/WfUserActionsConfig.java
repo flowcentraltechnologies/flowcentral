@@ -18,7 +18,8 @@ package com.flowcentraltech.flowcentral.configuration.xml;
 
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlElement;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * Workflow user actions configuration.
@@ -28,13 +29,14 @@ import javax.xml.bind.annotation.XmlElement;
  */
 public class WfUserActionsConfig extends BaseConfig {
 
+    @JacksonXmlElementWrapper(useWrapping = false)
+    @JacksonXmlProperty(localName = "userAction")
     private List<WfUserActionConfig> wfUserActionConfigList;
 
     public List<WfUserActionConfig> getWfUserActionConfigList() {
         return wfUserActionConfigList;
     }
 
-    @XmlElement(name = "userAction", required = true)
     public void setWfUserActionConfigList(List<WfUserActionConfig> wfUserActionConfigList) {
         this.wfUserActionConfigList = wfUserActionConfigList;
     }

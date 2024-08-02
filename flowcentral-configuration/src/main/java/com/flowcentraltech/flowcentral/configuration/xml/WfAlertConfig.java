@@ -16,9 +16,9 @@
 
 package com.flowcentraltech.flowcentral.configuration.xml;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.flowcentraltech.flowcentral.configuration.constants.WorkflowAlertType;
 import com.flowcentraltech.flowcentral.configuration.xml.adapter.WorkflowAlertTypeXmlAdapter;
 
@@ -30,26 +30,39 @@ import com.flowcentraltech.flowcentral.configuration.xml.adapter.WorkflowAlertTy
  */
 public class WfAlertConfig extends BaseNameConfig {
 
+    @JsonSerialize(using = WorkflowAlertTypeXmlAdapter.Serializer.class)
+    @JsonDeserialize(using = WorkflowAlertTypeXmlAdapter.Deserializer.class)
+    @JacksonXmlProperty(isAttribute = true, localName = "type")
     private WorkflowAlertType type;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String recipientPolicy;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String recipientNameRule;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String recipientContactRule;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String generator;
     
+    @JacksonXmlProperty(isAttribute = true)
     private String template;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String fireOnPrevStepName;
     
+    @JacksonXmlProperty(isAttribute = true)
     private String fireOnActionName;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String fireOnCondition;
 
+    @JacksonXmlProperty(isAttribute = true)
     private boolean alertHeldBy;
 
+    @JacksonXmlProperty(isAttribute = true)
     private boolean alertWorkflowRoles;
 
 
@@ -57,8 +70,6 @@ public class WfAlertConfig extends BaseNameConfig {
         return type;
     }
 
-    @XmlJavaTypeAdapter(WorkflowAlertTypeXmlAdapter.class)
-    @XmlAttribute(name = "type", required = true)
     public void setType(WorkflowAlertType type) {
         this.type = type;
     }
@@ -67,7 +78,6 @@ public class WfAlertConfig extends BaseNameConfig {
         return recipientPolicy;
     }
 
-    @XmlAttribute
     public void setRecipientPolicy(String recipientPolicy) {
         this.recipientPolicy = recipientPolicy;
     }
@@ -76,7 +86,6 @@ public class WfAlertConfig extends BaseNameConfig {
         return recipientNameRule;
     }
 
-    @XmlAttribute
     public void setRecipientNameRule(String recipientNameRule) {
         this.recipientNameRule = recipientNameRule;
     }
@@ -85,7 +94,6 @@ public class WfAlertConfig extends BaseNameConfig {
         return recipientContactRule;
     }
 
-    @XmlAttribute
     public void setRecipientContactRule(String recipientContactRule) {
         this.recipientContactRule = recipientContactRule;
     }
@@ -94,7 +102,6 @@ public class WfAlertConfig extends BaseNameConfig {
         return generator;
     }
 
-    @XmlAttribute(required = true)
     public void setGenerator(String generator) {
         this.generator = generator;
     }
@@ -103,7 +110,6 @@ public class WfAlertConfig extends BaseNameConfig {
         return template;
     }
 
-    @XmlAttribute(required = true)
     public void setTemplate(String template) {
         this.template = template;
     }
@@ -112,7 +118,6 @@ public class WfAlertConfig extends BaseNameConfig {
         return alertHeldBy;
     }
 
-    @XmlAttribute
     public void setAlertHeldBy(boolean alertHeldBy) {
         this.alertHeldBy = alertHeldBy;
     }
@@ -121,7 +126,6 @@ public class WfAlertConfig extends BaseNameConfig {
         return alertWorkflowRoles;
     }
 
-    @XmlAttribute
     public void setAlertWorkflowRoles(boolean alertWorkflowRoles) {
         this.alertWorkflowRoles = alertWorkflowRoles;
     }
@@ -130,7 +134,6 @@ public class WfAlertConfig extends BaseNameConfig {
         return fireOnPrevStepName;
     }
 
-    @XmlAttribute
     public void setFireOnPrevStepName(String fireOnPrevStepName) {
         this.fireOnPrevStepName = fireOnPrevStepName;
     }
@@ -139,7 +142,6 @@ public class WfAlertConfig extends BaseNameConfig {
         return fireOnActionName;
     }
 
-    @XmlAttribute
     public void setFireOnActionName(String fireOnActionName) {
         this.fireOnActionName = fireOnActionName;
     }
@@ -148,7 +150,6 @@ public class WfAlertConfig extends BaseNameConfig {
         return fireOnCondition;
     }
 
-    @XmlAttribute
     public void setFireOnCondition(String fireOnCondition) {
         this.fireOnCondition = fireOnCondition;
     }

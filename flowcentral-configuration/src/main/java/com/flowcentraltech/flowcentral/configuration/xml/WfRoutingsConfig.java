@@ -18,7 +18,8 @@ package com.flowcentraltech.flowcentral.configuration.xml;
 
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlElement;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * Workflow routings configuration.
@@ -28,13 +29,14 @@ import javax.xml.bind.annotation.XmlElement;
  */
 public class WfRoutingsConfig extends BaseConfig {
 
+    @JacksonXmlElementWrapper(useWrapping = false)
+    @JacksonXmlProperty(localName = "routing")
     private List<WfRoutingConfig> wfRoutingConfigList;
 
     public List<WfRoutingConfig> getWfRoutingConfigList() {
         return wfRoutingConfigList;
     }
 
-    @XmlElement(name = "routing", required = true)
     public void setWfRoutingConfigList(List<WfRoutingConfig> wfRoutingConfigList) {
         this.wfRoutingConfigList = wfRoutingConfigList;
     }

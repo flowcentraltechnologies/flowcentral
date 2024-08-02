@@ -15,7 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.configuration.xml;
 
-import javax.xml.bind.annotation.XmlAttribute;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * Widget rule entry configuration.
@@ -25,8 +25,10 @@ import javax.xml.bind.annotation.XmlAttribute;
  */
 public class WidgetRuleEntryConfig extends BaseConfig {
 
+    @JacksonXmlProperty(isAttribute = true, localName = "field")
     private String fieldName;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String widget;
 
     public WidgetRuleEntryConfig(String fieldName, String widget) {
@@ -42,7 +44,6 @@ public class WidgetRuleEntryConfig extends BaseConfig {
         return fieldName;
     }
 
-    @XmlAttribute(name = "field", required = true)
     public void setFieldName(String fieldName) {
         this.fieldName = fieldName;
     }
@@ -51,7 +52,6 @@ public class WidgetRuleEntryConfig extends BaseConfig {
         return widget;
     }
 
-    @XmlAttribute
     public void setWidget(String widget) {
         this.widget = widget;
     }

@@ -18,9 +18,9 @@ package com.flowcentraltech.flowcentral.configuration.xml;
 
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 
 /**
  * Workflow wizard configuration.
@@ -28,20 +28,23 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@XmlRootElement(name = "workflow-wizard")
+@JacksonXmlRootElement(localName = "workflow-wizard")
 public class WfWizardConfig extends BaseNameConfig {
 
+    @JacksonXmlProperty(isAttribute = true)
     private String entity;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String submitWorkflow;
 
+    @JacksonXmlElementWrapper(useWrapping = false)
+    @JacksonXmlProperty(localName = "workflow-wizard-step")
     private List<WfWizardStepConfig> stepList;
 
     public String getEntity() {
         return entity;
     }
 
-    @XmlAttribute(required = true)
     public void setEntity(String entity) {
         this.entity = entity;
     }
@@ -50,7 +53,6 @@ public class WfWizardConfig extends BaseNameConfig {
         return submitWorkflow;
     }
 
-    @XmlAttribute
     public void setSubmitWorkflow(String submitWorkflow) {
         this.submitWorkflow = submitWorkflow;
     }
@@ -59,7 +61,6 @@ public class WfWizardConfig extends BaseNameConfig {
         return stepList;
     }
 
-    @XmlElement(name = "workflow-wizard-step")
     public void setStepList(List<WfWizardStepConfig> stepList) {
         this.stepList = stepList;
     }

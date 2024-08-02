@@ -16,10 +16,11 @@
 
 package com.flowcentraltech.flowcentral.configuration.xml;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.flowcentraltech.flowcentral.configuration.constants.RecordActionType;
 import com.flowcentraltech.flowcentral.configuration.constants.WorkflowStepPriority;
 import com.flowcentraltech.flowcentral.configuration.constants.WorkflowStepType;
@@ -33,70 +34,109 @@ import com.flowcentraltech.flowcentral.configuration.xml.adapter.WorkflowStepTyp
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
+@JsonInclude(Include.NON_NULL)
 public class WfStepConfig extends BaseNameConfig {
 
+    @JsonSerialize(using = WorkflowStepTypeXmlAdapter.Serializer.class)
+    @JsonDeserialize(using = WorkflowStepTypeXmlAdapter.Deserializer.class)
+    @JacksonXmlProperty(isAttribute = true)
     private WorkflowStepType type;
 
+    @JsonSerialize(using = WorkflowStepPriorityXmlAdapter.Serializer.class)
+    @JsonDeserialize(using = WorkflowStepPriorityXmlAdapter.Deserializer.class)
+    @JacksonXmlProperty(isAttribute = true)
     private WorkflowStepPriority priority;
 
+    @JsonSerialize(using = RecordActionTypeXmlAdapter.Serializer.class)
+    @JsonDeserialize(using = RecordActionTypeXmlAdapter.Deserializer.class)
+    @JacksonXmlProperty(isAttribute = true, localName = "actionType")
     private RecordActionType actionType;
 
+    @JacksonXmlProperty(isAttribute = true, localName = "applet")
     private String appletName;
 
+    @JacksonXmlProperty(isAttribute = true, localName = "nextStep")
     private String nextStepName;
 
+    @JacksonXmlProperty(isAttribute = true, localName = "altNextStep")
     private String altNextStepName;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String binaryCondition;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String readOnlyCondition;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String autoLoadCondition;
     
+    @JacksonXmlProperty(isAttribute = true)
     private String workItemLoadingRestriction;
    
+    @JacksonXmlProperty(isAttribute = true)
     private String attachmentProvider;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String newCommentCaption;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String policy;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String rule;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String valueGenerator;
     
+    @JacksonXmlProperty(isAttribute = true, localName = "appletSetValues")
     private String appletSetValuesName;
 
+    @JacksonXmlProperty(isAttribute = true)
     private Integer reminderMinutes;
 
+    @JacksonXmlProperty(isAttribute = true)
     private Integer criticalMinutes;
     
+    @JacksonXmlProperty(isAttribute = true)
     private Integer expiryMinutes;
 
+    @JacksonXmlProperty(isAttribute = true)
     private boolean audit;
 
+    @JacksonXmlProperty(isAttribute = true)
     private boolean branchOnly;
 
+    @JacksonXmlProperty(isAttribute = true)
     private boolean departmentOnly;
 
+    @JacksonXmlProperty(isAttribute = true)
     private boolean includeForwarder;
 
+    @JacksonXmlProperty(isAttribute = true)
     private boolean forwarderPreffered;
 
+    @JacksonXmlProperty(isAttribute = true)
     private int designX;
 
+    @JacksonXmlProperty(isAttribute = true)
     private int designY;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String emails;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String comments;
 
+    @JacksonXmlProperty(localName = "setValues")
     private SetValuesConfig setValuesConfig;
 
+    @JacksonXmlProperty(localName = "routings")
     private WfRoutingsConfig wfRoutingsConfig;
 
+    @JacksonXmlProperty(localName = "userActions")
     private WfUserActionsConfig wfUserActionsConfig;
 
+    @JacksonXmlProperty(localName = "alerts")
     private WfAlertsConfig wfAlertsConfig;
 
     public WfStepConfig() {
@@ -107,8 +147,6 @@ public class WfStepConfig extends BaseNameConfig {
         return type;
     }
 
-    @XmlJavaTypeAdapter(WorkflowStepTypeXmlAdapter.class)
-    @XmlAttribute(required = true)
     public void setType(WorkflowStepType type) {
         this.type = type;
     }
@@ -117,8 +155,6 @@ public class WfStepConfig extends BaseNameConfig {
         return priority;
     }
 
-    @XmlJavaTypeAdapter(WorkflowStepPriorityXmlAdapter.class)
-    @XmlAttribute(required = true)
     public void setPriority(WorkflowStepPriority priority) {
         this.priority = priority;
     }
@@ -127,8 +163,6 @@ public class WfStepConfig extends BaseNameConfig {
         return actionType;
     }
 
-    @XmlJavaTypeAdapter(RecordActionTypeXmlAdapter.class)
-    @XmlAttribute(name = "actionType", required = true)
     public void setActionType(RecordActionType actionType) {
         this.actionType = actionType;
     }
@@ -137,12 +171,10 @@ public class WfStepConfig extends BaseNameConfig {
         return appletName;
     }
 
-    @XmlAttribute(name = "applet")
     public void setAppletName(String appletName) {
         this.appletName = appletName;
     }
 
-    @XmlAttribute(name = "nextStep")
     public void setNextStepName(String nextStepName) {
         this.nextStepName = nextStepName;
     }
@@ -155,7 +187,6 @@ public class WfStepConfig extends BaseNameConfig {
         return altNextStepName;
     }
 
-    @XmlAttribute(name = "altNextStep")
     public void setAltNextStepName(String altNextStepName) {
         this.altNextStepName = altNextStepName;
     }
@@ -164,7 +195,6 @@ public class WfStepConfig extends BaseNameConfig {
         return binaryCondition;
     }
 
-    @XmlAttribute
     public void setBinaryCondition(String binaryCondition) {
         this.binaryCondition = binaryCondition;
     }
@@ -173,7 +203,6 @@ public class WfStepConfig extends BaseNameConfig {
         return readOnlyCondition;
     }
 
-    @XmlAttribute
     public void setReadOnlyCondition(String readOnlyCondition) {
         this.readOnlyCondition = readOnlyCondition;
     }
@@ -182,7 +211,6 @@ public class WfStepConfig extends BaseNameConfig {
         return autoLoadCondition;
     }
 
-    @XmlAttribute
     public void setAutoLoadCondition(String autoLoadCondition) {
         this.autoLoadCondition = autoLoadCondition;
     }
@@ -191,7 +219,6 @@ public class WfStepConfig extends BaseNameConfig {
         return workItemLoadingRestriction;
     }
 
-    @XmlAttribute
     public void setWorkItemLoadingRestriction(String workItemLoadingRestriction) {
         this.workItemLoadingRestriction = workItemLoadingRestriction;
     }
@@ -200,7 +227,6 @@ public class WfStepConfig extends BaseNameConfig {
         return attachmentProvider;
     }
 
-    @XmlAttribute
     public void setAttachmentProvider(String attachmentProvider) {
         this.attachmentProvider = attachmentProvider;
     }
@@ -209,7 +235,6 @@ public class WfStepConfig extends BaseNameConfig {
         return newCommentCaption;
     }
 
-    @XmlAttribute
     public void setNewCommentCaption(String newCommentCaption) {
         this.newCommentCaption = newCommentCaption;
     }
@@ -218,7 +243,6 @@ public class WfStepConfig extends BaseNameConfig {
         return policy;
     }
 
-    @XmlAttribute
     public void setPolicy(String policy) {
         this.policy = policy;
     }
@@ -227,7 +251,6 @@ public class WfStepConfig extends BaseNameConfig {
         return rule;
     }
 
-    @XmlAttribute
     public void setRule(String rule) {
         this.rule = rule;
     }
@@ -236,7 +259,6 @@ public class WfStepConfig extends BaseNameConfig {
         return reminderMinutes;
     }
 
-    @XmlAttribute
     public void setReminderMinutes(Integer reminderMinutes) {
         this.reminderMinutes = reminderMinutes;
     }
@@ -245,7 +267,6 @@ public class WfStepConfig extends BaseNameConfig {
         return criticalMinutes;
     }
 
-    @XmlAttribute
     public void setCriticalMinutes(Integer criticalMinutes) {
         this.criticalMinutes = criticalMinutes;
     }
@@ -254,7 +275,6 @@ public class WfStepConfig extends BaseNameConfig {
         return valueGenerator;
     }
 
-    @XmlAttribute
     public void setValueGenerator(String valueGenerator) {
         this.valueGenerator = valueGenerator;
     }
@@ -263,7 +283,6 @@ public class WfStepConfig extends BaseNameConfig {
         return appletSetValuesName;
     }
 
-    @XmlAttribute(name = "appletSetValues")
     public void setAppletSetValuesName(String appletSetValuesName) {
         this.appletSetValuesName = appletSetValuesName;
     }
@@ -272,7 +291,6 @@ public class WfStepConfig extends BaseNameConfig {
         return expiryMinutes;
     }
 
-    @XmlAttribute
     public void setExpiryMinutes(Integer expiryMinutes) {
         this.expiryMinutes = expiryMinutes;
     }
@@ -281,7 +299,6 @@ public class WfStepConfig extends BaseNameConfig {
         return audit;
     }
 
-    @XmlAttribute
     public void setAudit(boolean audit) {
         this.audit = audit;
     }
@@ -290,7 +307,6 @@ public class WfStepConfig extends BaseNameConfig {
         return branchOnly;
     }
 
-    @XmlAttribute
     public void setBranchOnly(boolean branchOnly) {
         this.branchOnly = branchOnly;
     }
@@ -299,7 +315,6 @@ public class WfStepConfig extends BaseNameConfig {
         return departmentOnly;
     }
 
-    @XmlAttribute
     public void setDepartmentOnly(boolean departmentOnly) {
         this.departmentOnly = departmentOnly;
     }
@@ -308,7 +323,6 @@ public class WfStepConfig extends BaseNameConfig {
         return includeForwarder;
     }
 
-    @XmlAttribute
     public void setIncludeForwarder(boolean includeForwarder) {
         this.includeForwarder = includeForwarder;
     }
@@ -317,7 +331,6 @@ public class WfStepConfig extends BaseNameConfig {
         return forwarderPreffered;
     }
 
-    @XmlAttribute
     public void setForwarderPreffered(boolean forwarderPreffered) {
         this.forwarderPreffered = forwarderPreffered;
     }
@@ -326,7 +339,6 @@ public class WfStepConfig extends BaseNameConfig {
         return designX;
     }
 
-    @XmlAttribute
     public void setDesignX(int designX) {
         this.designX = designX;
     }
@@ -335,7 +347,6 @@ public class WfStepConfig extends BaseNameConfig {
         return designY;
     }
 
-    @XmlAttribute
     public void setDesignY(int designY) {
         this.designY = designY;
     }
@@ -344,7 +355,6 @@ public class WfStepConfig extends BaseNameConfig {
         return emails;
     }
 
-    @XmlAttribute
     public void setEmails(String emails) {
         this.emails = emails;
     }
@@ -353,7 +363,6 @@ public class WfStepConfig extends BaseNameConfig {
         return comments;
     }
 
-    @XmlAttribute
     public void setComments(String comments) {
         this.comments = comments;
     }
@@ -362,7 +371,6 @@ public class WfStepConfig extends BaseNameConfig {
         return setValuesConfig;
     }
 
-    @XmlElement(name = "setValues")
     public void setSetValuesConfig(SetValuesConfig setValuesConfig) {
         this.setValuesConfig = setValuesConfig;
     }
@@ -371,7 +379,6 @@ public class WfStepConfig extends BaseNameConfig {
         return wfRoutingsConfig;
     }
 
-    @XmlElement(name = "routings")
     public void setWfRoutingsConfig(WfRoutingsConfig wfRoutingsConfig) {
         this.wfRoutingsConfig = wfRoutingsConfig;
     }
@@ -380,7 +387,6 @@ public class WfStepConfig extends BaseNameConfig {
         return wfUserActionsConfig;
     }
 
-    @XmlElement(name = "userActions")
     public void setWfUserActionsConfig(WfUserActionsConfig wfUserActionsConfig) {
         this.wfUserActionsConfig = wfUserActionsConfig;
     }
@@ -389,7 +395,6 @@ public class WfStepConfig extends BaseNameConfig {
         return wfAlertsConfig;
     }
 
-    @XmlElement(name = "alerts")
     public void setWfAlertsConfig(WfAlertsConfig wfAlertsConfig) {
         this.wfAlertsConfig = wfAlertsConfig;
     }

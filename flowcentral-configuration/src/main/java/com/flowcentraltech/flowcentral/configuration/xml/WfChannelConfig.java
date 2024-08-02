@@ -16,9 +16,9 @@
 
 package com.flowcentraltech.flowcentral.configuration.xml;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.flowcentraltech.flowcentral.configuration.constants.ChannelDirectionType;
 import com.flowcentraltech.flowcentral.configuration.xml.adapter.ChannelDirectionTypeXmlAdapter;
 
@@ -30,20 +30,24 @@ import com.flowcentraltech.flowcentral.configuration.xml.adapter.ChannelDirectio
  */
 public class WfChannelConfig extends BaseNameConfig {
 
+    @JsonSerialize(using = ChannelDirectionTypeXmlAdapter.Serializer.class)
+    @JsonDeserialize(using = ChannelDirectionTypeXmlAdapter.Deserializer.class)
+    @JacksonXmlProperty(isAttribute = true, localName="direction")
     private ChannelDirectionType direction;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String entity;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String destination;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String rule;
 
     public ChannelDirectionType getDirection() {
         return direction;
     }
 
-    @XmlJavaTypeAdapter(ChannelDirectionTypeXmlAdapter.class)
-    @XmlAttribute(name = "direction", required = true)
     public void setDirection(ChannelDirectionType direction) {
         this.direction = direction;
     }
@@ -52,7 +56,6 @@ public class WfChannelConfig extends BaseNameConfig {
         return entity;
     }
 
-    @XmlAttribute(required = true)
     public void setEntity(String entity) {
         this.entity = entity;
     }
@@ -61,7 +64,6 @@ public class WfChannelConfig extends BaseNameConfig {
         return destination;
     }
 
-    @XmlAttribute(required = true)
     public void setDestination(String destination) {
         this.destination = destination;
     }
@@ -70,7 +72,6 @@ public class WfChannelConfig extends BaseNameConfig {
         return rule;
     }
 
-    @XmlAttribute
     public void setRule(String rule) {
         this.rule = rule;
     }

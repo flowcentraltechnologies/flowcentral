@@ -18,12 +18,9 @@ package com.flowcentraltech.flowcentral.configuration.xml;
 
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-
-import com.tcdng.unify.core.util.xml.MarshalFalseToNullXmlAdapter;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 
 /**
  * Workflow configuration.
@@ -31,21 +28,30 @@ import com.tcdng.unify.core.util.xml.MarshalFalseToNullXmlAdapter;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@XmlRootElement(name = "workflow")
+@JacksonXmlRootElement(localName = "workflow")
 public class WfConfig extends BaseNameConfig {
 
+    @JacksonXmlProperty(localName = "steps")
     private WfStepsConfig stepsConfig;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String entity;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String loadingTable;
     
+    @JacksonXmlProperty(isAttribute = true)
     private String descFormat;
     
+    @JacksonXmlProperty(isAttribute = true)
     private Boolean supportMultiItemAction;
 
+    @JacksonXmlElementWrapper(useWrapping = false)
+    @JacksonXmlProperty(localName = "filter")
     private List<WfFilterConfig> filterList;
 
+    @JacksonXmlElementWrapper(useWrapping = false)
+    @JacksonXmlProperty(localName = "setValues")
     private List<WfSetValuesConfig> setValuesList;
     
     public WfConfig() {
@@ -56,7 +62,6 @@ public class WfConfig extends BaseNameConfig {
         return stepsConfig;
     }
 
-    @XmlElement(name = "steps")
     public void setStepsConfig(WfStepsConfig stepsConfig) {
         this.stepsConfig = stepsConfig;
     }
@@ -65,7 +70,6 @@ public class WfConfig extends BaseNameConfig {
         return entity;
     }
 
-    @XmlAttribute(required = true)
     public void setEntity(String entity) {
         this.entity = entity;
     }
@@ -74,7 +78,6 @@ public class WfConfig extends BaseNameConfig {
         return loadingTable;
     }
 
-    @XmlAttribute
     public void setLoadingTable(String loadingTable) {
         this.loadingTable = loadingTable;
     }
@@ -83,7 +86,6 @@ public class WfConfig extends BaseNameConfig {
         return descFormat;
     }
 
-    @XmlAttribute
     public void setDescFormat(String descFormat) {
         this.descFormat = descFormat;
     }
@@ -92,8 +94,6 @@ public class WfConfig extends BaseNameConfig {
         return supportMultiItemAction;
     }
 
-    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
-    @XmlAttribute
     public void setSupportMultiItemAction(Boolean supportMultiItemAction) {
         this.supportMultiItemAction = supportMultiItemAction;
     }
@@ -102,7 +102,6 @@ public class WfConfig extends BaseNameConfig {
         return filterList;
     }
 
-    @XmlElement(name = "filter", required = true)
     public void setFilterList(List<WfFilterConfig> filterList) {
         this.filterList = filterList;
     }
@@ -111,7 +110,6 @@ public class WfConfig extends BaseNameConfig {
         return setValuesList;
     }
 
-    @XmlElement(name = "setValues")
     public void setSetValuesList(List<WfSetValuesConfig> setValuesList) {
         this.setValuesList = setValuesList;
     }
