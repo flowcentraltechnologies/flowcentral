@@ -19,6 +19,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.tcdng.unify.core.criterion.FilterConditionType;
 import com.tcdng.unify.core.util.xml.adapter.FilterConditionTypeXmlAdapter;
@@ -45,6 +46,7 @@ public class FilterRestrictionConfig extends BaseConfig {
     @JacksonXmlProperty(isAttribute = true)
     private String paramB;
 
+    @JacksonXmlElementWrapper(useWrapping = false)
     @JacksonXmlProperty(localName = "restriction")
     private List<FilterRestrictionConfig> restrictionList;
 

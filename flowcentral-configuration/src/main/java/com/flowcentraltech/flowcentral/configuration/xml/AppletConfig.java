@@ -81,7 +81,7 @@ public class AppletConfig extends BaseNameConfig {
     private List<AppletPropConfig> propList;
 
     @JacksonXmlElementWrapper(useWrapping = false)
-    @JacksonXmlProperty(localName = "routeToApplet")
+    @JacksonXmlProperty(localName = "routeToAppletItem")
     private List<AppletRouteToAppletConfig> routeToAppletList;
     
     @JacksonXmlElementWrapper(useWrapping = false)
