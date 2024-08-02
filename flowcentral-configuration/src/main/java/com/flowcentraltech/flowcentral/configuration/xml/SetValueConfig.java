@@ -15,9 +15,9 @@
  */
 package com.flowcentraltech.flowcentral.configuration.xml;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.flowcentraltech.flowcentral.configuration.constants.SetValueType;
 import com.flowcentraltech.flowcentral.configuration.xml.adapter.SetValueTypeXmlAdapter;
 
@@ -29,10 +29,15 @@ import com.flowcentraltech.flowcentral.configuration.xml.adapter.SetValueTypeXml
  */
 public class SetValueConfig extends BaseConfig {
 
+    @JsonSerialize(using = SetValueTypeXmlAdapter.Serializer.class)
+    @JsonDeserialize(using = SetValueTypeXmlAdapter.Deserializer.class)
+    @JacksonXmlProperty(isAttribute = true, localName = "type")
     private SetValueType type;
 
+    @JacksonXmlProperty(isAttribute = true, localName = "field")
     private String fieldName;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String value;
 
     public SetValueConfig() {
@@ -43,8 +48,6 @@ public class SetValueConfig extends BaseConfig {
         return type;
     }
 
-    @XmlJavaTypeAdapter(SetValueTypeXmlAdapter.class)
-    @XmlAttribute(name = "type")
     public void setType(SetValueType type) {
         this.type = type;
     }
@@ -53,7 +56,6 @@ public class SetValueConfig extends BaseConfig {
         return fieldName;
     }
 
-    @XmlAttribute(name = "field", required = true)
     public void setFieldName(String fieldName) {
         this.fieldName = fieldName;
     }
@@ -62,7 +64,6 @@ public class SetValueConfig extends BaseConfig {
         return value;
     }
 
-    @XmlAttribute
     public void setValue(String value) {
         this.value = value;
     }

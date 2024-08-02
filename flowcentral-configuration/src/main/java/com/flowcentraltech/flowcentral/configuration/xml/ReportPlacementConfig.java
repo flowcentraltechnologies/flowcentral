@@ -15,9 +15,9 @@
  */
 package com.flowcentraltech.flowcentral.configuration.xml;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.flowcentraltech.flowcentral.configuration.xml.adapter.HAlignTypeXmlAdapter;
 import com.flowcentraltech.flowcentral.configuration.xml.adapter.ReportPlacementTypeXmlAdapter;
 import com.flowcentraltech.flowcentral.configuration.xml.adapter.VAlignTypeXmlAdapter;
@@ -37,37 +37,59 @@ import com.tcdng.unify.core.report.ReportPlacementType;
  */
 public class ReportPlacementConfig extends BaseConfig {
 
+    @JsonSerialize(using = ReportPlacementTypeXmlAdapter.Serializer.class)
+    @JsonDeserialize(using = ReportPlacementTypeXmlAdapter.Deserializer.class)
+    @JacksonXmlProperty(isAttribute = true, localName = "type")
     private ReportPlacementType type;
 
+    @JsonSerialize(using = HAlignTypeXmlAdapter.Serializer.class)
+    @JsonDeserialize(using = HAlignTypeXmlAdapter.Deserializer.class)
+    @JacksonXmlProperty(isAttribute = true, localName = "halign")
     private HAlignType horizAlignType;
 
+    @JsonSerialize(using = VAlignTypeXmlAdapter.Serializer.class)
+    @JsonDeserialize(using = VAlignTypeXmlAdapter.Deserializer.class)
+    @JacksonXmlProperty(isAttribute = true, localName = "valign")
     private VAlignType vertAlignType;
 
+    @JsonSerialize(using = XOffsetTypeXmlAdapter.Serializer.class)
+    @JsonDeserialize(using = XOffsetTypeXmlAdapter.Deserializer.class)
+    @JacksonXmlProperty(isAttribute = true, localName = "x-offset")
     private XOffsetType xOffsetType;
 
+    @JsonSerialize(using = YOffsetTypeXmlAdapter.Serializer.class)
+    @JsonDeserialize(using = YOffsetTypeXmlAdapter.Deserializer.class)
+    @JacksonXmlProperty(isAttribute = true, localName = "y-offset")
     private YOffsetType yOffsetType;
     
+    @JacksonXmlProperty(isAttribute = true, localName="field")
     private String fieldName;
 
+    @JacksonXmlProperty(isAttribute = true, localName = "text")
     private String text;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String formatter;
 
+    @JacksonXmlProperty(isAttribute = true)
     private int x;
 
+    @JacksonXmlProperty(isAttribute = true)
     private int y;
 
+    @JacksonXmlProperty(isAttribute = true)
     private int width;
 
+    @JacksonXmlProperty(isAttribute = true)
     private int height;
 
+    @JacksonXmlProperty(isAttribute = true)
     private boolean bold;
 
     public String getFieldName() {
         return fieldName;
     }
 
-    @XmlAttribute(name = "field")
     public void setFieldName(String fieldName) {
         this.fieldName = fieldName;
     }
@@ -76,7 +98,6 @@ public class ReportPlacementConfig extends BaseConfig {
         return text;
     }
 
-    @XmlAttribute(name = "text")
     public void setText(String text) {
         this.text = text;
     }
@@ -85,8 +106,6 @@ public class ReportPlacementConfig extends BaseConfig {
         return type;
     }
 
-    @XmlJavaTypeAdapter(ReportPlacementTypeXmlAdapter.class)
-    @XmlAttribute(name = "type", required = true)
     public void setType(ReportPlacementType type) {
         this.type = type;
     }
@@ -95,8 +114,6 @@ public class ReportPlacementConfig extends BaseConfig {
         return horizAlignType;
     }
 
-    @XmlJavaTypeAdapter(HAlignTypeXmlAdapter.class)
-    @XmlAttribute(name = "halign")
     public void setHorizAlignType(HAlignType horizAlignType) {
         this.horizAlignType = horizAlignType;
     }
@@ -105,8 +122,6 @@ public class ReportPlacementConfig extends BaseConfig {
         return vertAlignType;
     }
 
-    @XmlJavaTypeAdapter(VAlignTypeXmlAdapter.class)
-    @XmlAttribute(name = "valign")
     public void setVertAlignType(VAlignType vertAlignType) {
         this.vertAlignType = vertAlignType;
     }
@@ -115,8 +130,6 @@ public class ReportPlacementConfig extends BaseConfig {
         return xOffsetType;
     }
 
-    @XmlJavaTypeAdapter(XOffsetTypeXmlAdapter.class)
-    @XmlAttribute(name = "x-offset")
     public void setXOffsetType(XOffsetType xOffsetType) {
         this.xOffsetType = xOffsetType;
     }
@@ -125,8 +138,6 @@ public class ReportPlacementConfig extends BaseConfig {
         return yOffsetType;
     }
 
-    @XmlJavaTypeAdapter(YOffsetTypeXmlAdapter.class)
-    @XmlAttribute(name = "y-offset")
     public void setYOffsetType(YOffsetType yOffsetType) {
         this.yOffsetType = yOffsetType;
     }
@@ -135,7 +146,6 @@ public class ReportPlacementConfig extends BaseConfig {
         return formatter;
     }
 
-    @XmlAttribute
     public void setFormatter(String formatter) {
         this.formatter = formatter;
     }
@@ -144,7 +154,6 @@ public class ReportPlacementConfig extends BaseConfig {
         return x;
     }
 
-    @XmlAttribute
     public void setX(int x) {
         this.x = x;
     }
@@ -153,7 +162,6 @@ public class ReportPlacementConfig extends BaseConfig {
         return y;
     }
 
-    @XmlAttribute
     public void setY(int y) {
         this.y = y;
     }
@@ -162,7 +170,6 @@ public class ReportPlacementConfig extends BaseConfig {
         return height;
     }
 
-    @XmlAttribute
     public void setHeight(int height) {
         this.height = height;
     }
@@ -171,7 +178,6 @@ public class ReportPlacementConfig extends BaseConfig {
         return width;
     }
 
-    @XmlAttribute
     public void setWidth(int width) {
         this.width = width;
     }
@@ -180,7 +186,6 @@ public class ReportPlacementConfig extends BaseConfig {
         return bold;
     }
 
-    @XmlAttribute
     public void setBold(boolean bold) {
         this.bold = bold;
     }

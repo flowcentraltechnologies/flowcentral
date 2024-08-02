@@ -15,9 +15,9 @@
  */
 package com.flowcentraltech.flowcentral.configuration.xml;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.flowcentraltech.flowcentral.configuration.constants.SearchConditionType;
 import com.flowcentraltech.flowcentral.configuration.xml.adapter.SearchConditionTypeXmlAdapter;
 
@@ -29,20 +29,24 @@ import com.flowcentraltech.flowcentral.configuration.xml.adapter.SearchCondition
  */
 public class SearchInputConfig extends BaseConfig {
 
+    @JsonSerialize(using = SearchConditionTypeXmlAdapter.Serializer.class)
+    @JsonDeserialize(using = SearchConditionTypeXmlAdapter.Deserializer.class)
+    @JacksonXmlProperty(isAttribute = true)
     private SearchConditionType type;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String field;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String widget;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String label;
 
     public SearchConditionType getType() {
         return type;
     }
 
-    @XmlJavaTypeAdapter(SearchConditionTypeXmlAdapter.class)
-    @XmlAttribute
     public void setType(SearchConditionType type) {
         this.type = type;
     }
@@ -51,7 +55,6 @@ public class SearchInputConfig extends BaseConfig {
         return field;
     }
 
-    @XmlAttribute(required = true)
     public void setField(String field) {
         this.field = field;
     }
@@ -60,7 +63,6 @@ public class SearchInputConfig extends BaseConfig {
         return widget;
     }
 
-    @XmlAttribute(required = true)
     public void setWidget(String widget) {
         this.widget = widget;
     }
@@ -69,7 +71,6 @@ public class SearchInputConfig extends BaseConfig {
         return label;
     }
 
-    @XmlAttribute(required = true)
     public void setLabel(String label) {
         this.label = label;
     }

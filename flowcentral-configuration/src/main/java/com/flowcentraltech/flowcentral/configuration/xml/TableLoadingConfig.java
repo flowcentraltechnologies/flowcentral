@@ -16,7 +16,7 @@
 
 package com.flowcentraltech.flowcentral.configuration.xml;
 
-import javax.xml.bind.annotation.XmlAttribute;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * Table loading configuration.
@@ -26,15 +26,16 @@ import javax.xml.bind.annotation.XmlAttribute;
  */
 public class TableLoadingConfig extends BaseNameConfig {
 
+    @JacksonXmlProperty(isAttribute = true)
     private String provider;
 
+    @JacksonXmlProperty(isAttribute = true)
     private int orderIndex;
 
     public String getProvider() {
         return provider;
     }
 
-    @XmlAttribute(required = true)
     public void setProvider(String provider) {
         this.provider = provider;
     }
@@ -43,7 +44,6 @@ public class TableLoadingConfig extends BaseNameConfig {
         return orderIndex;
     }
 
-    @XmlAttribute
     public void setOrderIndex(int orderIndex) {
         this.orderIndex = orderIndex;
     }

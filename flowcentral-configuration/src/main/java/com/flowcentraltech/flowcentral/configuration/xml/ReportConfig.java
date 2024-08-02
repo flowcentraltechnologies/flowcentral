@@ -15,16 +15,15 @@
  */
 package com.flowcentraltech.flowcentral.configuration.xml;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.flowcentraltech.flowcentral.configuration.constants.ReportConfigType;
 import com.flowcentraltech.flowcentral.configuration.xml.adapter.PageSizeTypeXmlAdapter;
 import com.flowcentraltech.flowcentral.configuration.xml.adapter.ReportConfigTypeXmlAdapter;
 import com.tcdng.unify.core.constant.PageSizeType;
-import com.tcdng.unify.core.util.xml.MarshalFalseToNullXmlAdapter;
 
 /**
  * Report configuration.
@@ -35,52 +34,80 @@ import com.tcdng.unify.core.util.xml.MarshalFalseToNullXmlAdapter;
 @XmlRootElement(name = "report")
 public class ReportConfig extends BaseNameConfig {
 
+    @JsonSerialize(using = ReportConfigTypeXmlAdapter.Serializer.class)
+    @JsonDeserialize(using = ReportConfigTypeXmlAdapter.Deserializer.class)
+    @JacksonXmlProperty(isAttribute = true, localName="type")
     private ReportConfigType type;
     
+    @JacksonXmlProperty(isAttribute = true)
     private String title;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String processor;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String reportable;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String template;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String letterGenerator;
     
+    @JacksonXmlProperty(isAttribute = true)
     private String summaryDatasource;
     
+    @JacksonXmlProperty
     private ReportColumnsConfig columns;
 
+    @JacksonXmlProperty
     private ReportPlacementsConfig placements;
     
+    @JacksonXmlProperty
     private ParametersConfig parameters;
 
+    @JacksonXmlProperty(localName="filter")
     private FilterConfig filter;
 
+    @JsonSerialize(using = PageSizeTypeXmlAdapter.Serializer.class)
+    @JsonDeserialize(using = PageSizeTypeXmlAdapter.Deserializer.class)
+    @JacksonXmlProperty(isAttribute = true, localName="sizeType")
     private PageSizeType sizeType;
     
+    @JacksonXmlProperty(isAttribute = true)
     private int width;
 
+    @JacksonXmlProperty(isAttribute = true)
     private int height;
 
+    @JacksonXmlProperty(isAttribute = true)
     private int marginTop;
 
+    @JacksonXmlProperty(isAttribute = true)
     private int marginBottom;
 
+    @JacksonXmlProperty(isAttribute = true)
     private int marginLeft;
 
+    @JacksonXmlProperty(isAttribute = true)
     private int marginRight;
     
+    @JacksonXmlProperty(isAttribute = true)
     private Boolean showGrandFooter;
 
+    @JacksonXmlProperty(isAttribute = true)
     private Boolean invertGroupColors;
 
+    @JacksonXmlProperty(isAttribute = true)
     private Boolean landscape;
 
+    @JacksonXmlProperty(isAttribute = true)
     private Boolean underlineRows;
 
+    @JacksonXmlProperty(isAttribute = true)
     private Boolean shadeOddRows;
 
+    @JacksonXmlProperty(isAttribute = true)
     private Boolean allowSecondaryTenants;
 
     public ReportConfig() {
@@ -98,8 +125,6 @@ public class ReportConfig extends BaseNameConfig {
         return type;
     }
 
-    @XmlJavaTypeAdapter(ReportConfigTypeXmlAdapter.class)
-    @XmlAttribute(name = "type", required = true)
     public void setType(ReportConfigType type) {
         this.type = type;
     }
@@ -108,8 +133,6 @@ public class ReportConfig extends BaseNameConfig {
         return sizeType;
     }
 
-    @XmlJavaTypeAdapter(PageSizeTypeXmlAdapter.class)
-    @XmlAttribute(name = "sizeType")
     public void setSizeType(PageSizeType sizeType) {
         this.sizeType = sizeType;
     }
@@ -118,7 +141,6 @@ public class ReportConfig extends BaseNameConfig {
         return width;
     }
 
-    @XmlAttribute
     public void setWidth(int width) {
         this.width = width;
     }
@@ -127,7 +149,6 @@ public class ReportConfig extends BaseNameConfig {
         return height;
     }
 
-    @XmlAttribute
     public void setHeight(int height) {
         this.height = height;
     }
@@ -136,7 +157,6 @@ public class ReportConfig extends BaseNameConfig {
         return marginTop;
     }
 
-    @XmlAttribute
     public void setMarginTop(int marginTop) {
         this.marginTop = marginTop;
     }
@@ -145,7 +165,6 @@ public class ReportConfig extends BaseNameConfig {
         return marginBottom;
     }
 
-    @XmlAttribute
     public void setMarginBottom(int marginBottom) {
         this.marginBottom = marginBottom;
     }
@@ -154,7 +173,6 @@ public class ReportConfig extends BaseNameConfig {
         return marginLeft;
     }
 
-    @XmlAttribute
     public void setMarginLeft(int marginLeft) {
         this.marginLeft = marginLeft;
     }
@@ -163,7 +181,6 @@ public class ReportConfig extends BaseNameConfig {
         return marginRight;
     }
 
-    @XmlAttribute
     public void setMarginRight(int marginRight) {
         this.marginRight = marginRight;
     }
@@ -172,7 +189,6 @@ public class ReportConfig extends BaseNameConfig {
         return title;
     }
 
-    @XmlAttribute(required = true)
     public void setTitle(String title) {
         this.title = title;
     }
@@ -181,7 +197,6 @@ public class ReportConfig extends BaseNameConfig {
         return processor;
     }
 
-    @XmlAttribute
     public void setProcessor(String processor) {
         this.processor = processor;
     }
@@ -190,7 +205,6 @@ public class ReportConfig extends BaseNameConfig {
         return letterGenerator;
     }
 
-    @XmlAttribute
     public void setLetterGenerator(String letterGenerator) {
         this.letterGenerator = letterGenerator;
     }
@@ -199,7 +213,6 @@ public class ReportConfig extends BaseNameConfig {
         return summaryDatasource;
     }
 
-    @XmlAttribute
     public void setSummaryDatasource(String summaryDatasource) {
         this.summaryDatasource = summaryDatasource;
     }
@@ -208,7 +221,6 @@ public class ReportConfig extends BaseNameConfig {
         return reportable;
     }
 
-    @XmlAttribute
     public void setReportable(String reportable) {
         this.reportable = reportable;
     }
@@ -217,7 +229,6 @@ public class ReportConfig extends BaseNameConfig {
         return columns;
     }
 
-    @XmlElement
     public void setColumns(ReportColumnsConfig columns) {
         this.columns = columns;
     }
@@ -226,7 +237,6 @@ public class ReportConfig extends BaseNameConfig {
         return placements;
     }
 
-    @XmlElement
     public void setPlacements(ReportPlacementsConfig placements) {
         this.placements = placements;
     }
@@ -235,7 +245,6 @@ public class ReportConfig extends BaseNameConfig {
         return parameters;
     }
 
-    @XmlElement
     public void setParameters(ParametersConfig parameters) {
         this.parameters = parameters;
     }
@@ -244,7 +253,6 @@ public class ReportConfig extends BaseNameConfig {
         return filter;
     }
 
-    @XmlElement(name = "filter")
     public void setFilter(FilterConfig filter) {
         this.filter = filter;
     }
@@ -253,7 +261,6 @@ public class ReportConfig extends BaseNameConfig {
         return template;
     }
 
-    @XmlAttribute
     public void setTemplate(String template) {
         this.template = template;
     }
@@ -262,8 +269,6 @@ public class ReportConfig extends BaseNameConfig {
         return showGrandFooter;
     }
 
-    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
-    @XmlAttribute
     public void setShowGrandFooter(Boolean showGrandFooter) {
         this.showGrandFooter = showGrandFooter;
     }
@@ -272,8 +277,6 @@ public class ReportConfig extends BaseNameConfig {
         return invertGroupColors;
     }
 
-    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
-    @XmlAttribute
     public void setInvertGroupColors(Boolean invertGroupColors) {
         this.invertGroupColors = invertGroupColors;
     }
@@ -282,8 +285,6 @@ public class ReportConfig extends BaseNameConfig {
         return landscape;
     }
 
-    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
-    @XmlAttribute
     public void setLandscape(Boolean landscape) {
         this.landscape = landscape;
     }
@@ -292,8 +293,6 @@ public class ReportConfig extends BaseNameConfig {
         return underlineRows;
     }
 
-    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
-    @XmlAttribute
     public void setUnderlineRows(Boolean underlineRows) {
         this.underlineRows = underlineRows;
     }
@@ -302,8 +301,6 @@ public class ReportConfig extends BaseNameConfig {
         return shadeOddRows;
     }
 
-    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
-    @XmlAttribute
     public void setShadeOddRows(Boolean shadeOddRows) {
         this.shadeOddRows = shadeOddRows;
     }
@@ -312,8 +309,6 @@ public class ReportConfig extends BaseNameConfig {
         return allowSecondaryTenants;
     }
 
-    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
-    @XmlAttribute
     public void setAllowSecondaryTenants(Boolean allowSecondaryTenants) {
         this.allowSecondaryTenants = allowSecondaryTenants;
     }

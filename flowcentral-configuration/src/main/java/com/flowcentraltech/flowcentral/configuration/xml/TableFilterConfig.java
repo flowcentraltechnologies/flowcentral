@@ -15,7 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.configuration.xml;
 
-import javax.xml.bind.annotation.XmlAttribute;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * Table filter configuration
@@ -25,15 +25,16 @@ import javax.xml.bind.annotation.XmlAttribute;
  */
 public class TableFilterConfig extends FilterConfig {
 
+    @JacksonXmlProperty(isAttribute = true)
     private String rowColor;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String legendLabel;
 
     public String getRowColor() {
         return rowColor;
     }
 
-    @XmlAttribute
     public void setRowColor(String rowColor) {
         this.rowColor = rowColor;
     }
@@ -42,7 +43,6 @@ public class TableFilterConfig extends FilterConfig {
         return legendLabel;
     }
 
-    @XmlAttribute
     public void setLegendLabel(String legendLabel) {
         this.legendLabel = legendLabel;
     }

@@ -15,9 +15,9 @@
  */
 package com.flowcentraltech.flowcentral.configuration.xml;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.flowcentraltech.flowcentral.configuration.constants.SysParamType;
 import com.flowcentraltech.flowcentral.configuration.xml.adapter.SysParamTypeXmlAdapter;
 
@@ -29,14 +29,21 @@ import com.flowcentraltech.flowcentral.configuration.xml.adapter.SysParamTypeXml
  */
 public class SysParamConfig extends BaseCodeConfig {
 
+    @JsonSerialize(using = SysParamTypeXmlAdapter.Serializer.class)
+    @JsonDeserialize(using = SysParamTypeXmlAdapter.Deserializer.class)
+    @JacksonXmlProperty(isAttribute = true)
     private SysParamType type;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String editor;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String defaultVal;
 
+    @JacksonXmlProperty(isAttribute = true)
     private boolean control;
 
+    @JacksonXmlProperty(isAttribute = true)
     private boolean editable;
 
     public SysParamConfig() {
@@ -47,8 +54,6 @@ public class SysParamConfig extends BaseCodeConfig {
         return type;
     }
 
-    @XmlJavaTypeAdapter(SysParamTypeXmlAdapter.class)
-    @XmlAttribute(required = true)
     public void setType(SysParamType type) {
         this.type = type;
     }
@@ -57,7 +62,6 @@ public class SysParamConfig extends BaseCodeConfig {
         return editor;
     }
 
-    @XmlAttribute
     public void setEditor(String editor) {
         this.editor = editor;
     }
@@ -66,7 +70,6 @@ public class SysParamConfig extends BaseCodeConfig {
         return defaultVal;
     }
 
-    @XmlAttribute
     public void setDefaultVal(String defaultVal) {
         this.defaultVal = defaultVal;
     }
@@ -75,7 +78,6 @@ public class SysParamConfig extends BaseCodeConfig {
         return control;
     }
 
-    @XmlAttribute
     public void setControl(boolean control) {
         this.control = control;
     }
@@ -84,7 +86,6 @@ public class SysParamConfig extends BaseCodeConfig {
         return editable;
     }
 
-    @XmlAttribute
     public void setEditable(boolean editable) {
         this.editable = editable;
     }

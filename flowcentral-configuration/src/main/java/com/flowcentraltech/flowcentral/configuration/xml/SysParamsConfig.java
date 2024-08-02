@@ -17,7 +17,8 @@ package com.flowcentraltech.flowcentral.configuration.xml;
 
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlElement;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * System parameters configuration.
@@ -27,13 +28,14 @@ import javax.xml.bind.annotation.XmlElement;
  */
 public class SysParamsConfig extends BaseConfig {
 
+    @JacksonXmlElementWrapper(useWrapping = false)
+    @JacksonXmlProperty(localName = "sysParameter")
     private List<SysParamConfig> sysParamList;
 
     public List<SysParamConfig> getSysParamList() {
         return sysParamList;
     }
 
-    @XmlElement(name = "sysParameter", required = true)
     public void setSysParamList(List<SysParamConfig> sysParamList) {
         this.sysParamList = sysParamList;
     }

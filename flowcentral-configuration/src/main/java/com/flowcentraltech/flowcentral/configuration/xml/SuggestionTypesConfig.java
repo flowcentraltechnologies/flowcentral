@@ -17,7 +17,8 @@ package com.flowcentraltech.flowcentral.configuration.xml;
 
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlElement;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * Suggestion types configuration.
@@ -27,13 +28,14 @@ import javax.xml.bind.annotation.XmlElement;
  */
 public class SuggestionTypesConfig extends BaseConfig {
 
+    @JacksonXmlElementWrapper(useWrapping = false)
+    @JacksonXmlProperty(localName = "suggestionType")
     private List<SuggestionTypeConfig> suggestionTypeList;
 
     public List<SuggestionTypeConfig> getSuggestionTypeList() {
         return suggestionTypeList;
     }
 
-    @XmlElement(name = "suggestionType", required = true)
     public void setSuggestionTypeList(List<SuggestionTypeConfig> suggestionTypeList) {
         this.suggestionTypeList = suggestionTypeList;
     }
