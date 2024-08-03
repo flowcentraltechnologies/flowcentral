@@ -17,13 +17,12 @@ package com.flowcentraltech.flowcentral.configuration.xml;
 
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityBaseType;
 import com.flowcentraltech.flowcentral.configuration.xml.adapter.EntityBaseTypeXmlAdapter;
-import com.tcdng.unify.core.util.xml.MarshalFalseToNullXmlAdapter;
 
 /**
  * Entity configuration.
@@ -33,42 +32,72 @@ import com.tcdng.unify.core.util.xml.MarshalFalseToNullXmlAdapter;
  */
 public class AppEntityConfig extends BaseNameConfig {
 
+    @JsonSerialize(using = EntityBaseTypeXmlAdapter.Serializer.class)
+    @JsonDeserialize(using = EntityBaseTypeXmlAdapter.Deserializer.class)
+    @JacksonXmlProperty(isAttribute = true)
     private EntityBaseType baseType;
     
+    @JacksonXmlProperty(isAttribute = true)
     private String type;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String emailProducerConsumer;
     
+    @JacksonXmlProperty(isAttribute = true)
     private String delegate;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String table;
     
+    @JacksonXmlProperty(isAttribute = true)
     private String dataSourceName;
     
+    @JacksonXmlProperty(isAttribute = true)
     private Boolean mapped;
     
+    @JacksonXmlProperty(isAttribute = true)
     private Boolean auditable;
 
+    @JacksonXmlProperty(isAttribute = true)
     private Boolean reportable;
     
+    @JacksonXmlProperty(isAttribute = true)
     private Boolean actionPolicy;
 
+    @JacksonXmlElementWrapper(useWrapping = false)
+    @JacksonXmlProperty(localName = "field")
     private List<EntityFieldConfig> entityFieldList;
 
+    @JacksonXmlElementWrapper(useWrapping = false)
+    @JacksonXmlProperty(localName = "attachment")
     private List<EntityAttachmentConfig> attachmentList;
 
+    @JacksonXmlElementWrapper(useWrapping = false)
+    @JacksonXmlProperty(localName = "expression")
     private List<EntityExpressionConfig> expressionList;
     
+    @JacksonXmlElementWrapper(useWrapping = false)
+    @JacksonXmlProperty(localName = "uniqueConstraint")
     private List<EntityUniqueConstraintConfig> uniqueConstraintList;
 
+    @JacksonXmlElementWrapper(useWrapping = false)
+    @JacksonXmlProperty(localName = "index")
     private List<EntityIndexConfig> indexList;
 
+    @JacksonXmlElementWrapper(useWrapping = false)
+    @JacksonXmlProperty(localName = "upload")
     private List<EntityUploadConfig> uploadList;
 
+    @JacksonXmlElementWrapper(useWrapping = false)
+    @JacksonXmlProperty(localName = "searchInput")
     private List<EntitySearchInputConfig> searchInputList;
 
+    @JacksonXmlElementWrapper(useWrapping = false)
+    @JacksonXmlProperty(localName = "series")
     private List<EntitySeriesConfig> seriesList;
 
+    @JacksonXmlElementWrapper(useWrapping = false)
+    @JacksonXmlProperty(localName = "category")
     private List<EntityCategoryConfig> categoryList;
     
     public AppEntityConfig() {
@@ -82,8 +111,6 @@ public class AppEntityConfig extends BaseNameConfig {
         return baseType;
     }
 
-    @XmlJavaTypeAdapter(EntityBaseTypeXmlAdapter.class)
-    @XmlAttribute(required = true)
     public void setBaseType(EntityBaseType baseType) {
         this.baseType = baseType;
     }
@@ -92,7 +119,6 @@ public class AppEntityConfig extends BaseNameConfig {
         return type;
     }
 
-    @XmlAttribute(required = true)
     public void setType(String type) {
         this.type = type;
     }
@@ -101,7 +127,6 @@ public class AppEntityConfig extends BaseNameConfig {
         return emailProducerConsumer;
     }
 
-    @XmlAttribute
     public void setEmailProducerConsumer(String emailProducerConsumer) {
         this.emailProducerConsumer = emailProducerConsumer;
     }
@@ -110,7 +135,6 @@ public class AppEntityConfig extends BaseNameConfig {
         return delegate;
     }
 
-    @XmlAttribute
     public void setDelegate(String delegate) {
         this.delegate = delegate;
     }
@@ -119,7 +143,6 @@ public class AppEntityConfig extends BaseNameConfig {
         return table;
     }
 
-    @XmlAttribute
     public void setTable(String table) {
         this.table = table;
     }
@@ -128,7 +151,6 @@ public class AppEntityConfig extends BaseNameConfig {
         return dataSourceName;
     }
 
-    @XmlAttribute
     public void setDataSourceName(String dataSourceName) {
         this.dataSourceName = dataSourceName;
     }
@@ -137,8 +159,6 @@ public class AppEntityConfig extends BaseNameConfig {
         return mapped;
     }
 
-    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
-    @XmlAttribute
     public void setMapped(Boolean mapped) {
         this.mapped = mapped;
     }
@@ -147,8 +167,6 @@ public class AppEntityConfig extends BaseNameConfig {
         return auditable;
     }
 
-    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
-    @XmlAttribute
     public void setAuditable(Boolean auditable) {
         this.auditable = auditable;
     }
@@ -157,8 +175,6 @@ public class AppEntityConfig extends BaseNameConfig {
         return reportable;
     }
 
-    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
-    @XmlAttribute
     public void setReportable(Boolean reportable) {
         this.reportable = reportable;
     }
@@ -167,8 +183,6 @@ public class AppEntityConfig extends BaseNameConfig {
         return actionPolicy;
     }
 
-    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
-    @XmlAttribute
     public void setActionPolicy(Boolean actionPolicy) {
         this.actionPolicy = actionPolicy;
     }
@@ -177,7 +191,6 @@ public class AppEntityConfig extends BaseNameConfig {
         return entityFieldList;
     }
 
-    @XmlElement(name = "field", required = true)
     public void setEntityFieldList(List<EntityFieldConfig> entityFieldList) {
         this.entityFieldList = entityFieldList;
     }
@@ -186,7 +199,6 @@ public class AppEntityConfig extends BaseNameConfig {
         return attachmentList;
     }
 
-    @XmlElement(name = "attachment")
     public void setAttachmentList(List<EntityAttachmentConfig> attachmentList) {
         this.attachmentList = attachmentList;
     }
@@ -195,7 +207,6 @@ public class AppEntityConfig extends BaseNameConfig {
         return expressionList;
     }
 
-    @XmlElement(name = "expression")
     public void setExpressionList(List<EntityExpressionConfig> expressionList) {
         this.expressionList = expressionList;
     }
@@ -204,7 +215,6 @@ public class AppEntityConfig extends BaseNameConfig {
         return uniqueConstraintList;
     }
 
-    @XmlElement(name = "uniqueConstraint")
     public void setUniqueConstraintList(List<EntityUniqueConstraintConfig> uniqueConstraintList) {
         this.uniqueConstraintList = uniqueConstraintList;
     }
@@ -213,7 +223,6 @@ public class AppEntityConfig extends BaseNameConfig {
         return indexList;
     }
 
-    @XmlElement(name = "index")
     public void setIndexList(List<EntityIndexConfig> indexList) {
         this.indexList = indexList;
     }
@@ -222,7 +231,6 @@ public class AppEntityConfig extends BaseNameConfig {
         return uploadList;
     }
 
-    @XmlElement(name = "upload")
     public void setUploadList(List<EntityUploadConfig> uploadList) {
         this.uploadList = uploadList;
     }
@@ -231,7 +239,6 @@ public class AppEntityConfig extends BaseNameConfig {
         return searchInputList;
     }
 
-    @XmlElement(name = "searchInput")
     public void setSearchInputList(List<EntitySearchInputConfig> searchInputList) {
         this.searchInputList = searchInputList;
     }
@@ -240,7 +247,6 @@ public class AppEntityConfig extends BaseNameConfig {
         return seriesList;
     }
 
-    @XmlElement(name = "series")
     public void setSeriesList(List<EntitySeriesConfig> seriesList) {
         this.seriesList = seriesList;
     }
@@ -249,7 +255,6 @@ public class AppEntityConfig extends BaseNameConfig {
         return categoryList;
     }
 
-    @XmlElement(name = "category")
     public void setCategoryList(List<EntityCategoryConfig> categoryList) {
         this.categoryList = categoryList;
     }

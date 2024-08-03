@@ -16,6 +16,8 @@
 package com.flowcentraltech.flowcentral.configuration.xml.adapter;
 
 import com.flowcentraltech.flowcentral.configuration.constants.RecordActionType;
+import com.tcdng.unify.core.util.xml.AbstractEnumConstDeserializer;
+import com.tcdng.unify.core.util.xml.AbstractEnumConstSerializer;
 import com.tcdng.unify.core.util.xml.AbstractEnumConstXmlAdapter;
 
 /**
@@ -24,9 +26,20 @@ import com.tcdng.unify.core.util.xml.AbstractEnumConstXmlAdapter;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class RecordActionTypeXmlAdapter extends AbstractEnumConstXmlAdapter<RecordActionType> {
+public class RecordActionTypeXmlAdapter extends AbstractEnumConstXmlAdapter {
+    
+    public static class Serializer extends AbstractEnumConstSerializer<RecordActionType> {
+        public Serializer() {
+            
+        }
 
-    public RecordActionTypeXmlAdapter() {
-        super(RecordActionType.class);
+    }
+    
+    public static class Deserializer extends AbstractEnumConstDeserializer<RecordActionType> {
+
+        public Deserializer() {
+            super(RecordActionType.class);
+        }
+
     }
 }

@@ -17,11 +17,8 @@ package com.flowcentraltech.flowcentral.configuration.xml;
 
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-
-import com.tcdng.unify.core.util.xml.MarshalFalseToNullXmlAdapter;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * Application dashboard configuration.
@@ -31,14 +28,22 @@ import com.tcdng.unify.core.util.xml.MarshalFalseToNullXmlAdapter;
  */
 public class AppDashboardConfig extends BaseNameConfig {
 
+    @JacksonXmlProperty(isAttribute = true)
     private Boolean allowSecondaryTenants;
 
+    @JacksonXmlProperty(isAttribute = true)
     private int sections;
 
+    @JacksonXmlElementWrapper(useWrapping = false)
+    @JacksonXmlProperty(localName = "dashboard-section")
     private List<DashboardSectionConfig> sectionList;
     
+    @JacksonXmlElementWrapper(useWrapping = false)
+    @JacksonXmlProperty(localName = "dashboard-tile")
     private List<DashboardTileConfig> tileList;
     
+    @JacksonXmlElementWrapper(useWrapping = false)
+    @JacksonXmlProperty(localName = "dashboard-option")
     private List<DashboardOptionConfig> optionsList;
 
     public AppDashboardConfig() {
@@ -49,8 +54,6 @@ public class AppDashboardConfig extends BaseNameConfig {
         return allowSecondaryTenants;
     }
 
-    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
-    @XmlAttribute
     public void setAllowSecondaryTenants(Boolean allowSecondaryTenants) {
         this.allowSecondaryTenants = allowSecondaryTenants;
     }
@@ -59,7 +62,6 @@ public class AppDashboardConfig extends BaseNameConfig {
         return sections;
     }
 
-    @XmlAttribute(required = true)
     public void setSections(int sections) {
         this.sections = sections;
     }
@@ -68,7 +70,6 @@ public class AppDashboardConfig extends BaseNameConfig {
         return sectionList;
     }
 
-    @XmlElement(name = "dashboard-section", required = true)
     public void setSectionList(List<DashboardSectionConfig> sectionList) {
         this.sectionList = sectionList;
     }
@@ -77,7 +78,6 @@ public class AppDashboardConfig extends BaseNameConfig {
         return tileList;
     }
 
-    @XmlElement(name = "dashboard-tile", required = true)
     public void setTileList(List<DashboardTileConfig> tileList) {
         this.tileList = tileList;
     }
@@ -86,7 +86,6 @@ public class AppDashboardConfig extends BaseNameConfig {
         return optionsList;
     }
 
-    @XmlElement(name = "dashboard-option", required = true)
     public void setOptionsList(List<DashboardOptionConfig> optionsList) {
         this.optionsList = optionsList;
     }

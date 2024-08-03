@@ -17,7 +17,8 @@ package com.flowcentraltech.flowcentral.configuration.xml;
 
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlElement;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * Enumeration configuration.
@@ -27,13 +28,14 @@ import javax.xml.bind.annotation.XmlElement;
  */
 public class EnumerationConfig extends BaseNameConfig {
 
+    @JacksonXmlElementWrapper(useWrapping = false)
+    @JacksonXmlProperty(localName = "item")
     private List<EnumerationItemConfig> itemList;
 
     public List<EnumerationItemConfig> getItemList() {
         return itemList;
     }
 
-    @XmlElement(name="item", required = true)
     public void setItemList(List<EnumerationItemConfig> itemList) {
         this.itemList = itemList;
     }

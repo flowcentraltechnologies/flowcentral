@@ -16,6 +16,8 @@
 package com.flowcentraltech.flowcentral.configuration.xml.adapter;
 
 import com.flowcentraltech.flowcentral.configuration.constants.InputType;
+import com.tcdng.unify.core.util.xml.AbstractEnumConstDeserializer;
+import com.tcdng.unify.core.util.xml.AbstractEnumConstSerializer;
 import com.tcdng.unify.core.util.xml.AbstractEnumConstXmlAdapter;
 
 /**
@@ -24,10 +26,20 @@ import com.tcdng.unify.core.util.xml.AbstractEnumConstXmlAdapter;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class InputTypeXmlAdapter extends AbstractEnumConstXmlAdapter<InputType> {
+public class InputTypeXmlAdapter extends AbstractEnumConstXmlAdapter {
+    
+    public static class Serializer extends AbstractEnumConstSerializer<InputType> {
+        public Serializer() {
+            
+        }
 
-    public InputTypeXmlAdapter() {
-        super(InputType.class);
     }
+    
+    public static class Deserializer extends AbstractEnumConstDeserializer<InputType> {
 
+        public Deserializer() {
+            super(InputType.class);
+        }
+
+    }
 }

@@ -15,9 +15,9 @@
  */
 package com.flowcentraltech.flowcentral.configuration.xml;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.tcdng.unify.core.constant.FileAttachmentType;
 import com.tcdng.unify.core.util.xml.adapter.FileAttachmentTypeXmlAdapter;
 
@@ -29,18 +29,21 @@ import com.tcdng.unify.core.util.xml.adapter.FileAttachmentTypeXmlAdapter;
  */
 public class EntityAttachmentConfig extends BaseConfig {
 
+    @JsonSerialize(using = FileAttachmentTypeXmlAdapter.Serializer.class)
+    @JsonDeserialize(using = FileAttachmentTypeXmlAdapter.Deserializer.class)
+    @JacksonXmlProperty(isAttribute = true)
     private FileAttachmentType type;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String name;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String description;
 
     public FileAttachmentType getType() {
         return type;
     }
 
-    @XmlJavaTypeAdapter(FileAttachmentTypeXmlAdapter.class)
-    @XmlAttribute(required = true)
     public void setType(FileAttachmentType type) {
         this.type = type;
     }
@@ -49,7 +52,6 @@ public class EntityAttachmentConfig extends BaseConfig {
         return name;
     }
 
-    @XmlAttribute(required = true)
     public void setName(String name) {
         this.name = name;
     }
@@ -58,7 +60,6 @@ public class EntityAttachmentConfig extends BaseConfig {
         return description;
     }
 
-    @XmlAttribute(required = true)
     public void setDescription(String description) {
         this.description = description;
     }

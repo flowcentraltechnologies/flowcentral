@@ -17,8 +17,8 @@ package com.flowcentraltech.flowcentral.configuration.xml;
 
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * Filter configuration
@@ -28,21 +28,26 @@ import javax.xml.bind.annotation.XmlElement;
  */
 public class FilterConfig extends BaseConfig {
 
+    @JacksonXmlProperty(isAttribute = true)
     private String name;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String description;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String filterGenerator;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String filterGeneratorRule;
 
+    @JacksonXmlElementWrapper(useWrapping = false)
+    @JacksonXmlProperty(localName = "restriction")
     private List<FilterRestrictionConfig> restrictionList;
 
     public String getName() {
         return name;
     }
 
-    @XmlAttribute
     public void setName(String name) {
         this.name = name;
     }
@@ -51,7 +56,6 @@ public class FilterConfig extends BaseConfig {
         return description;
     }
 
-    @XmlAttribute
     public void setDescription(String description) {
         this.description = description;
     }
@@ -60,7 +64,6 @@ public class FilterConfig extends BaseConfig {
         return filterGenerator;
     }
 
-    @XmlAttribute
     public void setFilterGenerator(String filterGenerator) {
         this.filterGenerator = filterGenerator;
     }
@@ -69,7 +72,6 @@ public class FilterConfig extends BaseConfig {
         return filterGeneratorRule;
     }
 
-    @XmlAttribute
     public void setFilterGeneratorRule(String filterGeneratorRule) {
         this.filterGeneratorRule = filterGeneratorRule;
     }
@@ -78,7 +80,6 @@ public class FilterConfig extends BaseConfig {
         return restrictionList;
     }
 
-    @XmlElement(name = "restriction", required = true)
     public void setRestrictionList(List<FilterRestrictionConfig> restrictionList) {
         this.restrictionList = restrictionList;
     }

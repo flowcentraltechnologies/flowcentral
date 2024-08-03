@@ -15,7 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.configuration.xml;
 
-import javax.xml.bind.annotation.XmlAttribute;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * Assignment page configuration.
@@ -25,37 +25,49 @@ import javax.xml.bind.annotation.XmlAttribute;
  */
 public class AppAssignmentPageConfig extends BaseNameConfig {
 
+    @JacksonXmlProperty(isAttribute = true)
     private String entity;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String commitPolicy;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String baseField;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String assignField;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String filterCaption1;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String filterCaption2;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String filterList1;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String filterList2;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String assignCaption;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String unassignCaption;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String assignList;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String unassignList;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String ruleDescField;
 
     public String getEntity() {
         return entity;
     }
 
-    @XmlAttribute(required = true)
     public void setEntity(String entity) {
         this.entity = entity;
     }
@@ -64,7 +76,6 @@ public class AppAssignmentPageConfig extends BaseNameConfig {
         return commitPolicy;
     }
 
-    @XmlAttribute
     public void setCommitPolicy(String commitPolicy) {
         this.commitPolicy = commitPolicy;
     }
@@ -73,7 +84,6 @@ public class AppAssignmentPageConfig extends BaseNameConfig {
         return baseField;
     }
 
-    @XmlAttribute(required = true)
     public void setBaseField(String baseField) {
         this.baseField = baseField;
     }
@@ -82,7 +92,6 @@ public class AppAssignmentPageConfig extends BaseNameConfig {
         return assignField;
     }
 
-    @XmlAttribute(required = true)
     public void setAssignField(String assignField) {
         this.assignField = assignField;
     }
@@ -91,7 +100,6 @@ public class AppAssignmentPageConfig extends BaseNameConfig {
         return filterCaption1;
     }
 
-    @XmlAttribute
     public void setFilterCaption1(String filterCaption1) {
         this.filterCaption1 = filterCaption1;
     }
@@ -100,7 +108,6 @@ public class AppAssignmentPageConfig extends BaseNameConfig {
         return filterCaption2;
     }
 
-    @XmlAttribute
     public void setFilterCaption2(String filterCaption2) {
         this.filterCaption2 = filterCaption2;
     }
@@ -109,7 +116,6 @@ public class AppAssignmentPageConfig extends BaseNameConfig {
         return filterList1;
     }
 
-    @XmlAttribute
     public void setFilterList1(String filterList1) {
         this.filterList1 = filterList1;
     }
@@ -118,7 +124,6 @@ public class AppAssignmentPageConfig extends BaseNameConfig {
         return filterList2;
     }
 
-    @XmlAttribute
     public void setFilterList2(String filterList2) {
         this.filterList2 = filterList2;
     }
@@ -127,7 +132,6 @@ public class AppAssignmentPageConfig extends BaseNameConfig {
         return assignCaption;
     }
 
-    @XmlAttribute(required = true)
     public void setAssignCaption(String assignCaption) {
         this.assignCaption = assignCaption;
     }
@@ -136,7 +140,6 @@ public class AppAssignmentPageConfig extends BaseNameConfig {
         return unassignCaption;
     }
 
-    @XmlAttribute(required = true)
     public void setUnassignCaption(String unassignCaption) {
         this.unassignCaption = unassignCaption;
     }
@@ -145,7 +148,6 @@ public class AppAssignmentPageConfig extends BaseNameConfig {
         return assignList;
     }
 
-    @XmlAttribute(required = true)
     public void setAssignList(String assignList) {
         this.assignList = assignList;
     }
@@ -154,7 +156,6 @@ public class AppAssignmentPageConfig extends BaseNameConfig {
         return unassignList;
     }
 
-    @XmlAttribute(required = true)
     public void setUnassignList(String unassignList) {
         this.unassignList = unassignList;
     }
@@ -163,7 +164,6 @@ public class AppAssignmentPageConfig extends BaseNameConfig {
         return ruleDescField;
     }
 
-    @XmlAttribute
     public void setRuleDescField(String ruleDescField) {
         this.ruleDescField = ruleDescField;
     }

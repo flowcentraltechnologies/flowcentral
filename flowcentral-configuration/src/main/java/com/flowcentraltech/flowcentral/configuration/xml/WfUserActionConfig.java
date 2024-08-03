@@ -16,9 +16,9 @@
 
 package com.flowcentraltech.flowcentral.configuration.xml;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.flowcentraltech.flowcentral.configuration.constants.HighlightType;
 import com.flowcentraltech.flowcentral.configuration.xml.adapter.HighlightTypeXmlAdapter;
 import com.tcdng.unify.core.constant.RequirementType;
@@ -32,26 +32,40 @@ import com.tcdng.unify.core.util.xml.adapter.RequirementTypeXmlAdapter;
  */
 public class WfUserActionConfig extends BaseNameConfig {
 
+    @JacksonXmlProperty(isAttribute = true, localName = "nextStep")
     private String nextStepName;
-    
+
+    @JacksonXmlProperty(isAttribute = true, localName = "setValues")
     private String setValuesName;
-    
+
+    @JacksonXmlProperty(isAttribute = true, localName = "appletSetValues")
     private String appletSetValuesName;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String showOnCondition;
-    
+
+    @JsonSerialize(using = RequirementTypeXmlAdapter.Serializer.class)
+    @JsonDeserialize(using = RequirementTypeXmlAdapter.Deserializer.class)
+    @JacksonXmlProperty(isAttribute = true, localName = "commentRequirement")
     private RequirementType commentRequirement;
 
+    @JsonSerialize(using = HighlightTypeXmlAdapter.Serializer.class)
+    @JsonDeserialize(using = HighlightTypeXmlAdapter.Deserializer.class)
+    @JacksonXmlProperty(isAttribute = true, localName = "highlight")
     private HighlightType highlightType;
 
+    @JacksonXmlProperty(isAttribute = true)
     private int orderIndex;
 
+    @JacksonXmlProperty(isAttribute = true)
     private boolean formReview;
-    
+
+    @JacksonXmlProperty(isAttribute = true, localName = "validatePage")
     private boolean validatePage;
-    
+
+    @JacksonXmlProperty(isAttribute = true)
     private boolean forwarderPreferred;
-    
+
     public WfUserActionConfig() {
         this.commentRequirement = RequirementType.NONE;
     }
@@ -60,7 +74,6 @@ public class WfUserActionConfig extends BaseNameConfig {
         return nextStepName;
     }
 
-    @XmlAttribute(name = "nextStep", required = true)
     public void setNextStepName(String nextStepName) {
         this.nextStepName = nextStepName;
     }
@@ -69,7 +82,6 @@ public class WfUserActionConfig extends BaseNameConfig {
         return setValuesName;
     }
 
-    @XmlAttribute(name = "setValues")
     public void setSetValuesName(String setValuesName) {
         this.setValuesName = setValuesName;
     }
@@ -78,7 +90,6 @@ public class WfUserActionConfig extends BaseNameConfig {
         return appletSetValuesName;
     }
 
-    @XmlAttribute(name = "appletSetValues")
     public void setAppletSetValuesName(String appletSetValuesName) {
         this.appletSetValuesName = appletSetValuesName;
     }
@@ -87,8 +98,7 @@ public class WfUserActionConfig extends BaseNameConfig {
         return showOnCondition;
     }
 
-    @XmlAttribute
-        public void setShowOnCondition(String showOnCondition) {
+    public void setShowOnCondition(String showOnCondition) {
         this.showOnCondition = showOnCondition;
     }
 
@@ -96,8 +106,6 @@ public class WfUserActionConfig extends BaseNameConfig {
         return commentRequirement;
     }
 
-    @XmlJavaTypeAdapter(RequirementTypeXmlAdapter.class)
-    @XmlAttribute(name = "commentRequirement")
     public void setCommentRequirement(RequirementType commentRequirement) {
         this.commentRequirement = commentRequirement;
     }
@@ -106,8 +114,6 @@ public class WfUserActionConfig extends BaseNameConfig {
         return highlightType;
     }
 
-    @XmlJavaTypeAdapter(HighlightTypeXmlAdapter.class)
-    @XmlAttribute(name = "highlight")
     public void setHighlightType(HighlightType highlightType) {
         this.highlightType = highlightType;
     }
@@ -116,7 +122,6 @@ public class WfUserActionConfig extends BaseNameConfig {
         return orderIndex;
     }
 
-    @XmlAttribute
     public void setOrderIndex(int orderIndex) {
         this.orderIndex = orderIndex;
     }
@@ -125,7 +130,6 @@ public class WfUserActionConfig extends BaseNameConfig {
         return formReview;
     }
 
-    @XmlAttribute
     public void setFormReview(boolean formReview) {
         this.formReview = formReview;
     }
@@ -134,7 +138,6 @@ public class WfUserActionConfig extends BaseNameConfig {
         return validatePage;
     }
 
-    @XmlAttribute(name = "validatePage")
     public void setValidatePage(boolean validatePage) {
         this.validatePage = validatePage;
     }
@@ -143,7 +146,6 @@ public class WfUserActionConfig extends BaseNameConfig {
         return forwarderPreferred;
     }
 
-    @XmlAttribute
     public void setForwarderPreferred(boolean forwarderPreferred) {
         this.forwarderPreferred = forwarderPreferred;
     }

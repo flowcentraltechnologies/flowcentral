@@ -15,7 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.configuration.xml;
 
-import javax.xml.bind.annotation.XmlAttribute;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * Entity index configuration.
@@ -25,17 +25,19 @@ import javax.xml.bind.annotation.XmlAttribute;
  */
 public class EntityIndexConfig extends BaseConfig {
 
+    @JacksonXmlProperty(isAttribute = true)
     private String name;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String description;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String fieldList;
 
     public String getFieldList() {
         return fieldList;
     }
 
-    @XmlAttribute(required = true)
     public void setFieldList(String fieldList) {
         this.fieldList = fieldList;
     }
@@ -44,7 +46,6 @@ public class EntityIndexConfig extends BaseConfig {
         return name;
     }
 
-    @XmlAttribute(required = true)
     public void setName(String name) {
         this.name = name;
     }
@@ -53,7 +54,6 @@ public class EntityIndexConfig extends BaseConfig {
         return description;
     }
 
-    @XmlAttribute(required = true)
     public void setDescription(String description) {
         this.description = description;
     }

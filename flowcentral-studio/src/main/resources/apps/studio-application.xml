@@ -3617,8 +3617,7 @@
 					<restriction type="not_equals" field="type"
 						paramA="CRD" />
 				</onCondition>
-				<widgetRules name="multiCategorySeries"
-					description="$m{studio.chart.form.multicategoryseries}">
+				<widgetRules>
 					<entry field="category"
 						widget="chart.chartdatasourcerulecategorymlist" />
 					<entry field="series"

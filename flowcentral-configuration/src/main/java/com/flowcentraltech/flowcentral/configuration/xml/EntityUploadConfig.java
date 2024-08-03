@@ -15,10 +15,9 @@
  */
 package com.flowcentraltech.flowcentral.configuration.xml;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.tcdng.unify.core.batch.ConstraintAction;
 import com.tcdng.unify.core.util.xml.adapter.ConstraintActionXmlAdapter;
 
@@ -30,8 +29,12 @@ import com.tcdng.unify.core.util.xml.adapter.ConstraintActionXmlAdapter;
  */
 public class EntityUploadConfig extends BaseNameConfig {
 
+    @JsonSerialize(using = ConstraintActionXmlAdapter.Serializer.class)
+    @JsonDeserialize(using = ConstraintActionXmlAdapter.Deserializer.class)
+    @JacksonXmlProperty(isAttribute = true, localName = "onConstraint")
     private ConstraintAction constraintAction;
 
+    @JacksonXmlProperty
     private FieldSequenceConfig fieldSequence;
 
     public EntityUploadConfig() {
@@ -42,8 +45,6 @@ public class EntityUploadConfig extends BaseNameConfig {
         return constraintAction;
     }
 
-    @XmlJavaTypeAdapter(ConstraintActionXmlAdapter.class)
-    @XmlAttribute(name = "onConstraint")
     public void setConstraintAction(ConstraintAction constraintAction) {
         this.constraintAction = constraintAction;
     }
@@ -52,7 +53,6 @@ public class EntityUploadConfig extends BaseNameConfig {
         return fieldSequence;
     }
 
-    @XmlElement(required = true)
     public void setFieldSequence(FieldSequenceConfig fieldSequence) {
         this.fieldSequence = fieldSequence;
     }

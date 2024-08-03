@@ -81,7 +81,7 @@
 			<uniqueConstraint name="descUc"
 				description="$m{integration.endpointconfig.uc.description}"
 				fieldList="description" />
-		</entity>DirectionType
+		</entity>
 		<entity name="endpointPath" description="$m{integration.endpointpath}"
 			label="$m{integration.endpointpath.label}"
 			type="com.flowcentraltech.flowcentral.integration.entities.EndpointPath" auditable="true"

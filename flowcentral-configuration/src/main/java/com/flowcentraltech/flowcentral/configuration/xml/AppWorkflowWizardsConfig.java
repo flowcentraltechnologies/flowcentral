@@ -17,7 +17,8 @@ package com.flowcentraltech.flowcentral.configuration.xml;
 
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlElement;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * Application workflow wizards configuration.
@@ -27,13 +28,14 @@ import javax.xml.bind.annotation.XmlElement;
  */
 public class AppWorkflowWizardsConfig extends BaseConfig {
 
+    @JacksonXmlElementWrapper(useWrapping = false)
+    @JacksonXmlProperty(localName = "workflow-wizard")
     private List<AppWorkflowWizardConfig> workflowWizardList;
 
     public List<AppWorkflowWizardConfig> getWorkflowWizardList() {
         return workflowWizardList;
     }
 
-    @XmlElement(name = "workflow-wizard", required = true)
     public void setWorkflowWizardList(List<AppWorkflowWizardConfig> workflowWizardList) {
         this.workflowWizardList = workflowWizardList;
     }

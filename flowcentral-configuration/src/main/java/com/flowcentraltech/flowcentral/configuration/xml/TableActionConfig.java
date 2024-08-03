@@ -16,7 +16,7 @@
 
 package com.flowcentraltech.flowcentral.configuration.xml;
 
-import javax.xml.bind.annotation.XmlAttribute;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * Table action configuration.
@@ -26,15 +26,16 @@ import javax.xml.bind.annotation.XmlAttribute;
  */
 public class TableActionConfig extends BaseNameConfig {
 
+    @JacksonXmlProperty(isAttribute = true)
     private String policy;
 
+    @JacksonXmlProperty(isAttribute = true)
     private int orderIndex;
 
     public String getPolicy() {
         return policy;
     }
 
-    @XmlAttribute(required = true)
     public void setPolicy(String policy) {
         this.policy = policy;
     }
@@ -43,7 +44,6 @@ public class TableActionConfig extends BaseNameConfig {
         return orderIndex;
     }
 
-    @XmlAttribute
     public void setOrderIndex(int orderIndex) {
         this.orderIndex = orderIndex;
     }

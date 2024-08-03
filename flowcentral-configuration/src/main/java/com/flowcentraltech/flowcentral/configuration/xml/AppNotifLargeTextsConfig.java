@@ -17,7 +17,8 @@ package com.flowcentraltech.flowcentral.configuration.xml;
 
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlElement;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * Application notification large texts configuration.
@@ -27,13 +28,14 @@ import javax.xml.bind.annotation.XmlElement;
  */
 public class AppNotifLargeTextsConfig extends BaseConfig {
 
+    @JacksonXmlElementWrapper(useWrapping = false)
+    @JacksonXmlProperty(localName = "notifLargeText")
     private List<AppNotifLargeTextConfig> notifLargeTextList;
 
     public List<AppNotifLargeTextConfig> getNotifLargeTextList() {
         return notifLargeTextList;
     }
 
-    @XmlElement(name = "notifLargeText")
     public void setNotifLargeTextList(List<AppNotifLargeTextConfig> notifLargeTextList) {
         this.notifLargeTextList = notifLargeTextList;
     }

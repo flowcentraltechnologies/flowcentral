@@ -17,7 +17,8 @@ package com.flowcentraltech.flowcentral.configuration.xml;
 
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlElement;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * Columns configuration.
@@ -27,14 +28,15 @@ import javax.xml.bind.annotation.XmlElement;
  */
 public class ReportColumnsConfig extends BaseConfig {
 
+    @JacksonXmlElementWrapper(useWrapping = false)
+    @JacksonXmlProperty(localName = "column")
     private List<ReportColumnConfig> columnList;
 
     public List<ReportColumnConfig> getColumnList() {
         return columnList;
     }
 
-    @XmlElement(name = "column")
-    public void setColumnList(List<ReportColumnConfig> columnList) {
+     public void setColumnList(List<ReportColumnConfig> columnList) {
         this.columnList = columnList;
     }
 }

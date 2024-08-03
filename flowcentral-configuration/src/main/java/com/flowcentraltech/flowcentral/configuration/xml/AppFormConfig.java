@@ -17,10 +17,10 @@ package com.flowcentraltech.flowcentral.configuration.xml;
 
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.flowcentraltech.flowcentral.configuration.constants.FormType;
 import com.flowcentraltech.flowcentral.configuration.xml.adapter.FormTypeXmlAdapter;
 
@@ -32,38 +32,67 @@ import com.flowcentraltech.flowcentral.configuration.xml.adapter.FormTypeXmlAdap
  */
 public class AppFormConfig extends BaseNameConfig {
 
+    @JacksonXmlElementWrapper(useWrapping = false)
+    @JacksonXmlProperty(localName = "filter")
     private List<FormFilterConfig> filterList;
     
+    @JacksonXmlElementWrapper(useWrapping = false)
+    @JacksonXmlProperty(localName = "annotation")
     private List<FormAnnotationConfig> annotationList;
 
+    @JacksonXmlElementWrapper(useWrapping = false)
+    @JacksonXmlProperty(localName = "action")
     private List<FormActionConfig> actionList;
 
+    @JacksonXmlElementWrapper(useWrapping = false)
+    @JacksonXmlProperty(localName = "tab")
     private List<FormTabConfig> tabList;
 
+    @JacksonXmlElementWrapper(useWrapping = false)
+    @JacksonXmlProperty(localName = "relatedList")
     private List<RelatedListConfig> relatedList;
 
+    @JacksonXmlElementWrapper(useWrapping = false)
+    @JacksonXmlProperty(localName = "formStatePolicy")
     private List<FormStatePolicyConfig> formStatePolicyList;
 
+    @JacksonXmlElementWrapper(useWrapping = false)
+    @JacksonXmlProperty(localName = "formWidgetRulesPolicy")
     private List<FormWidgetRulesPolicyConfig> widgetRulesPolicyList;
 
+    @JacksonXmlElementWrapper(useWrapping = false)
+    @JacksonXmlProperty(localName = "fieldValidationPolicy")
     private List<FieldValidationPolicyConfig> fieldValidationPolicyList;
 
+    @JacksonXmlElementWrapper(useWrapping = false)
+    @JacksonXmlProperty(localName = "formValidationPolicy")
     private List<FormValidationPolicyConfig> formValidationPolicyList;
 
+    @JacksonXmlElementWrapper(useWrapping = false)
+    @JacksonXmlProperty(localName = "formReviewPolicy")
     private List<FormReviewPolicyConfig> formReviewPolicyList;
 
+    @JsonSerialize(using = FormTypeXmlAdapter.Serializer.class)
+    @JsonDeserialize(using = FormTypeXmlAdapter.Deserializer.class)
+    @JacksonXmlProperty(isAttribute = true)
     private FormType type;
     
+    @JacksonXmlProperty(isAttribute = true)
     private String entity;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String titleFormat;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String listingGenerator;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String consolidatedValidation;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String consolidatedReview;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String consolidatedState;
 
     public AppFormConfig() {
@@ -74,7 +103,6 @@ public class AppFormConfig extends BaseNameConfig {
         return filterList;
     }
 
-    @XmlElement(name = "filter", required = true)
     public void setFilterList(List<FormFilterConfig> filterList) {
         this.filterList = filterList;
     }
@@ -83,7 +111,6 @@ public class AppFormConfig extends BaseNameConfig {
         return annotationList;
     }
 
-    @XmlElement(name = "annotation")
     public void setAnnotationList(List<FormAnnotationConfig> annotationList) {
         this.annotationList = annotationList;
     }
@@ -92,7 +119,6 @@ public class AppFormConfig extends BaseNameConfig {
         return actionList;
     }
 
-    @XmlElement(name = "action")
     public void setActionList(List<FormActionConfig> actionList) {
         this.actionList = actionList;
     }
@@ -101,7 +127,6 @@ public class AppFormConfig extends BaseNameConfig {
         return tabList;
     }
 
-    @XmlElement(name = "tab", required = true)
     public void setTabList(List<FormTabConfig> tabList) {
         this.tabList = tabList;
     }
@@ -110,7 +135,6 @@ public class AppFormConfig extends BaseNameConfig {
         return relatedList;
     }
 
-    @XmlElement(name = "relatedList")
     public void setRelatedList(List<RelatedListConfig> relatedList) {
         this.relatedList = relatedList;
     }
@@ -119,7 +143,6 @@ public class AppFormConfig extends BaseNameConfig {
         return formStatePolicyList;
     }
 
-    @XmlElement(name = "formStatePolicy")
     public void setFormStatePolicyList(List<FormStatePolicyConfig> formStatePolicyList) {
         this.formStatePolicyList = formStatePolicyList;
     }
@@ -128,7 +151,6 @@ public class AppFormConfig extends BaseNameConfig {
         return widgetRulesPolicyList;
     }
 
-    @XmlElement(name = "formWidgetRulesPolicy")
     public void setWidgetRulesPolicyList(List<FormWidgetRulesPolicyConfig> widgetRulesPolicyList) {
         this.widgetRulesPolicyList = widgetRulesPolicyList;
     }
@@ -137,7 +159,6 @@ public class AppFormConfig extends BaseNameConfig {
         return fieldValidationPolicyList;
     }
 
-    @XmlElement(name = "fieldValidationPolicy")
     public void setFieldValidationPolicyList(List<FieldValidationPolicyConfig> fieldValidationPolicyList) {
         this.fieldValidationPolicyList = fieldValidationPolicyList;
     }
@@ -146,7 +167,6 @@ public class AppFormConfig extends BaseNameConfig {
         return formValidationPolicyList;
     }
 
-    @XmlElement(name = "formValidationPolicy")
     public void setFormValidationPolicyList(List<FormValidationPolicyConfig> formValidationPolicyList) {
         this.formValidationPolicyList = formValidationPolicyList;
     }
@@ -155,7 +175,6 @@ public class AppFormConfig extends BaseNameConfig {
         return formReviewPolicyList;
     }
 
-    @XmlElement(name = "formReviewPolicy")
     public void setFormReviewPolicyList(List<FormReviewPolicyConfig> formReviewPolicyList) {
         this.formReviewPolicyList = formReviewPolicyList;
     }
@@ -164,8 +183,6 @@ public class AppFormConfig extends BaseNameConfig {
         return type;
     }
 
-    @XmlJavaTypeAdapter(FormTypeXmlAdapter.class)
-    @XmlAttribute(required = true)
     public void setType(FormType type) {
         this.type = type;
     }
@@ -174,7 +191,6 @@ public class AppFormConfig extends BaseNameConfig {
         return entity;
     }
 
-    @XmlAttribute(required = true)
     public void setEntity(String entity) {
         this.entity = entity;
     }
@@ -183,7 +199,6 @@ public class AppFormConfig extends BaseNameConfig {
         return titleFormat;
     }
 
-    @XmlAttribute
     public void setTitleFormat(String titleFormat) {
         this.titleFormat = titleFormat;
     }
@@ -192,7 +207,6 @@ public class AppFormConfig extends BaseNameConfig {
         return listingGenerator;
     }
 
-    @XmlAttribute
     public void setListingGenerator(String listingGenerator) {
         this.listingGenerator = listingGenerator;
     }
@@ -201,7 +215,6 @@ public class AppFormConfig extends BaseNameConfig {
         return consolidatedValidation;
     }
 
-    @XmlAttribute
     public void setConsolidatedValidation(String consolidatedValidation) {
         this.consolidatedValidation = consolidatedValidation;
     }
@@ -210,7 +223,6 @@ public class AppFormConfig extends BaseNameConfig {
         return consolidatedReview;
     }
 
-    @XmlAttribute
     public void setConsolidatedReview(String consolidatedReview) {
         this.consolidatedReview = consolidatedReview;
     }
@@ -219,7 +231,6 @@ public class AppFormConfig extends BaseNameConfig {
         return consolidatedState;
     }
 
-    @XmlAttribute
     public void setConsolidatedState(String consolidatedState) {
         this.consolidatedState = consolidatedState;
     }

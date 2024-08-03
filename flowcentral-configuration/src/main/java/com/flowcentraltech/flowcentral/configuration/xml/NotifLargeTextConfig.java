@@ -18,11 +18,11 @@ package com.flowcentraltech.flowcentral.configuration.xml;
 
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import com.flowcentraltech.flowcentral.configuration.constants.FontFamilyType;
 import com.flowcentraltech.flowcentral.configuration.xml.adapter.FontFamilyTypeXmlAdapter;
 import com.tcdng.unify.core.util.xml.adapter.CDataXmlAdapter;
@@ -33,24 +33,33 @@ import com.tcdng.unify.core.util.xml.adapter.CDataXmlAdapter;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@XmlRootElement(name = "notifLargeText")
+@JacksonXmlRootElement(localName = "notifLargeText")
 public class NotifLargeTextConfig extends BaseNameConfig {
 
+    @JacksonXmlProperty(isAttribute = true)
     private String entity;
 
+    @JsonSerialize(using = CDataXmlAdapter.Serializer.class)
+    @JsonDeserialize(using = CDataXmlAdapter.Deserializer.class)
+    @JacksonXmlProperty
     private String body;
 
+    @JsonSerialize(using = FontFamilyTypeXmlAdapter.Serializer.class)
+    @JsonDeserialize(using = FontFamilyTypeXmlAdapter.Deserializer.class)
+    @JacksonXmlProperty(isAttribute = true)
     private FontFamilyType fontFamily;
 
+    @JacksonXmlProperty(isAttribute = true)
     private Integer fontSizeInPixels;
 
+    @JacksonXmlElementWrapper(useWrapping = false)
+    @JacksonXmlProperty(localName = "parameter")
     private List<NotifLargeTextParamConfig> paramList;
 
     public String getEntity() {
         return entity;
     }
 
-    @XmlAttribute(required = true)
     public void setEntity(String entity) {
         this.entity = entity;
     }
@@ -59,8 +68,6 @@ public class NotifLargeTextConfig extends BaseNameConfig {
         return fontFamily;
     }
 
-    @XmlJavaTypeAdapter(FontFamilyTypeXmlAdapter.class)
-    @XmlAttribute
     public void setFontFamily(FontFamilyType fontFamily) {
         this.fontFamily = fontFamily;
     }
@@ -69,7 +76,6 @@ public class NotifLargeTextConfig extends BaseNameConfig {
         return fontSizeInPixels;
     }
 
-    @XmlAttribute
     public void setFontSizeInPixels(Integer fontSizeInPixels) {
         this.fontSizeInPixels = fontSizeInPixels;
     }
@@ -78,8 +84,6 @@ public class NotifLargeTextConfig extends BaseNameConfig {
         return body;
     }
 
-    @XmlJavaTypeAdapter(CDataXmlAdapter.class)
-    @XmlElement(required = true) 
     public void setBody(String body) {
         this.body = body;
     }
@@ -88,7 +92,6 @@ public class NotifLargeTextConfig extends BaseNameConfig {
         return paramList;
     }
 
-    @XmlElement(name = "parameter", required = true)
     public void setParamList(List<NotifLargeTextParamConfig> paramList) {
         this.paramList = paramList;
     }

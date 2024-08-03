@@ -15,8 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.configuration.xml;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * Form widget rules policy configuration.
@@ -26,17 +25,19 @@ import javax.xml.bind.annotation.XmlElement;
  */
 public class FormWidgetRulesPolicyConfig extends BaseNameConfig {
     
+    @JacksonXmlProperty(isAttribute = true)
     private Integer executionIndex;
     
+    @JacksonXmlProperty()
     private FilterConfig onCondition;
 
+    @JacksonXmlProperty(localName = "widgetRules")
     private WidgetRulesConfig widgetRules;
 
     public Integer getExecutionIndex() {
         return executionIndex;
     }
 
-    @XmlAttribute
     public void setExecutionIndex(Integer executionIndex) {
         this.executionIndex = executionIndex;
     }
@@ -45,7 +46,6 @@ public class FormWidgetRulesPolicyConfig extends BaseNameConfig {
         return onCondition;
     }
 
-    @XmlElement(required = true)
     public void setOnCondition(FilterConfig onCondition) {
         this.onCondition = onCondition;
     }
@@ -54,7 +54,6 @@ public class FormWidgetRulesPolicyConfig extends BaseNameConfig {
         return widgetRules;
     }
 
-    @XmlElement(name = "widgetRules")
     public void setWidgetRules(WidgetRulesConfig widgetRules) {
         this.widgetRules = widgetRules;
     }

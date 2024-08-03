@@ -15,11 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.configuration.xml;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-
-import com.tcdng.unify.core.util.xml.MarshalFalseToNullXmlAdapter;
-import com.tcdng.unify.core.util.xml.MarshalTrueToNullXmlAdapter;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * Table column configuration.
@@ -29,32 +25,46 @@ import com.tcdng.unify.core.util.xml.MarshalTrueToNullXmlAdapter;
  */
 public class TableColumnConfig extends BaseConfig {
 
+    @JacksonXmlProperty(isAttribute = true)
     private String field;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String label;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String renderWidget;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String linkAct;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String symbol;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String order;
 
+    @JacksonXmlProperty(isAttribute = true)
     private int widthRatio;
 
+    @JacksonXmlProperty(isAttribute = true)
     private Boolean switchOnChange;
     
+    @JacksonXmlProperty(isAttribute = true)
     private Boolean hiddenOnNull;
 
+    @JacksonXmlProperty(isAttribute = true)
     private Boolean hidden;
 
+    @JacksonXmlProperty(isAttribute = true)
     private Boolean disabled;
 
+    @JacksonXmlProperty(isAttribute = true)
     private Boolean editable;
 
+    @JacksonXmlProperty(isAttribute = true)
     private Boolean sortable;
 
+    @JacksonXmlProperty(isAttribute = true)
     private Boolean summary;
 
     public TableColumnConfig() {
@@ -71,7 +81,6 @@ public class TableColumnConfig extends BaseConfig {
         return field;
     }
 
-    @XmlAttribute(required = true)
     public void setField(String field) {
         this.field = field;
     }
@@ -80,7 +89,6 @@ public class TableColumnConfig extends BaseConfig {
         return label;
     }
 
-    @XmlAttribute
     public void setLabel(String label) {
         this.label = label;
     }
@@ -89,7 +97,6 @@ public class TableColumnConfig extends BaseConfig {
         return renderWidget;
     }
 
-    @XmlAttribute(required = true)
     public void setRenderWidget(String renderWidget) {
         this.renderWidget = renderWidget;
     }
@@ -98,7 +105,6 @@ public class TableColumnConfig extends BaseConfig {
         return linkAct;
     }
 
-    @XmlAttribute
     public void setLinkAct(String linkAct) {
         this.linkAct = linkAct;
     }
@@ -107,7 +113,6 @@ public class TableColumnConfig extends BaseConfig {
         return symbol;
     }
 
-    @XmlAttribute
     public void setSymbol(String symbol) {
         this.symbol = symbol;
     }
@@ -116,7 +121,6 @@ public class TableColumnConfig extends BaseConfig {
         return order;
     }
 
-    @XmlAttribute
     public void setOrder(String order) {
         this.order = order;
     }
@@ -125,7 +129,6 @@ public class TableColumnConfig extends BaseConfig {
         return widthRatio;
     }
 
-    @XmlAttribute
     public void setWidthRatio(int widthRatio) {
         this.widthRatio = widthRatio;
     }
@@ -134,8 +137,6 @@ public class TableColumnConfig extends BaseConfig {
         return switchOnChange;
     }
 
-    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
-    @XmlAttribute
     public void setSwitchOnChange(Boolean switchOnChange) {
         this.switchOnChange = switchOnChange;
     }
@@ -144,8 +145,6 @@ public class TableColumnConfig extends BaseConfig {
         return hiddenOnNull;
     }
 
-    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
-    @XmlAttribute
     public void setHiddenOnNull(Boolean hiddenOnNull) {
         this.hiddenOnNull = hiddenOnNull;
     }
@@ -154,8 +153,6 @@ public class TableColumnConfig extends BaseConfig {
         return hidden;
     }
 
-    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
-    @XmlAttribute
     public void setHidden(Boolean hidden) {
         this.hidden = hidden;
     }
@@ -164,8 +161,6 @@ public class TableColumnConfig extends BaseConfig {
         return disabled;
     }
 
-    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
-   @XmlAttribute
     public void setDisabled(Boolean disabled) {
         this.disabled = disabled;
     }
@@ -174,8 +169,6 @@ public class TableColumnConfig extends BaseConfig {
         return editable;
     }
 
-    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
-    @XmlAttribute
     public void setEditable(Boolean editable) {
         this.editable = editable;
     }
@@ -184,8 +177,6 @@ public class TableColumnConfig extends BaseConfig {
         return sortable;
     }
 
-    @XmlJavaTypeAdapter(MarshalTrueToNullXmlAdapter.class)
-    @XmlAttribute
     public void setSortable(Boolean sortable) {
         this.sortable = sortable;
     }
@@ -194,8 +185,6 @@ public class TableColumnConfig extends BaseConfig {
         return summary;
     }
 
-    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
-    @XmlAttribute
     public void setSummary(Boolean summary) {
         this.summary = summary;
     }

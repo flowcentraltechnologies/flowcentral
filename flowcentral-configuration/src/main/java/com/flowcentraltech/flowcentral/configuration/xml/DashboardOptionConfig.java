@@ -17,7 +17,8 @@ package com.flowcentraltech.flowcentral.configuration.xml;
 
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlElement;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * Dashboard option configuration.
@@ -27,13 +28,14 @@ import javax.xml.bind.annotation.XmlElement;
  */
 public class DashboardOptionConfig extends BaseNameConfig {
 
+    @JacksonXmlElementWrapper(useWrapping = false)
+    @JacksonXmlProperty(localName = "category-base")
     private List<DashboardOptionCategoryBaseConfig> baseList;
 
     public List<DashboardOptionCategoryBaseConfig> getBaseList() {
         return baseList;
     }
 
-    @XmlElement(name = "category-base", required = true)
     public void setBaseList(List<DashboardOptionCategoryBaseConfig> baseList) {
         this.baseList = baseList;
     }

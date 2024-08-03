@@ -15,9 +15,9 @@
  */
 package com.flowcentraltech.flowcentral.configuration.xml;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.flowcentraltech.flowcentral.configuration.constants.InputType;
 import com.flowcentraltech.flowcentral.configuration.xml.adapter.InputTypeXmlAdapter;
 import com.tcdng.unify.core.constant.DataType;
@@ -31,18 +31,29 @@ import com.tcdng.unify.core.util.xml.adapter.DataTypeXmlAdapter;
  */
 public class WidgetTypeConfig extends BaseNameConfig {
 
+    @JsonSerialize(using = DataTypeXmlAdapter.Serializer.class)
+    @JsonDeserialize(using = DataTypeXmlAdapter.Deserializer.class)
+    @JacksonXmlProperty(isAttribute = true)
     private DataType dataType;
 
+    @JsonSerialize(using = InputTypeXmlAdapter.Serializer.class)
+    @JsonDeserialize(using = InputTypeXmlAdapter.Deserializer.class)
+    @JacksonXmlProperty(isAttribute = true)
     private InputType inputType;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String editor;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String renderer;
 
+    @JacksonXmlProperty(isAttribute = true)
     private boolean stretch;
 
+    @JacksonXmlProperty(isAttribute = true)
     private boolean listOption;
 
+    @JacksonXmlProperty(isAttribute = true)
     private boolean enumOption;
 
     public WidgetTypeConfig() {
@@ -53,8 +64,6 @@ public class WidgetTypeConfig extends BaseNameConfig {
         return dataType;
     }
 
-    @XmlJavaTypeAdapter(DataTypeXmlAdapter.class)
-    @XmlAttribute(required = true)
     public void setDataType(DataType dataType) {
         this.dataType = dataType;
     }
@@ -63,8 +72,6 @@ public class WidgetTypeConfig extends BaseNameConfig {
         return inputType;
     }
 
-    @XmlJavaTypeAdapter(InputTypeXmlAdapter.class)
-    @XmlAttribute
     public void setInputType(InputType inputType) {
         this.inputType = inputType;
     }
@@ -73,7 +80,6 @@ public class WidgetTypeConfig extends BaseNameConfig {
         return editor;
     }
 
-    @XmlAttribute(required = true)
     public void setEditor(String editor) {
         this.editor = editor;
     }
@@ -82,7 +88,6 @@ public class WidgetTypeConfig extends BaseNameConfig {
         return renderer;
     }
 
-    @XmlAttribute(required = true)
     public void setRenderer(String renderer) {
         this.renderer = renderer;
     }
@@ -91,7 +96,6 @@ public class WidgetTypeConfig extends BaseNameConfig {
         return stretch;
     }
 
-    @XmlAttribute
     public void setStretch(boolean stretch) {
         this.stretch = stretch;
     }
@@ -100,7 +104,6 @@ public class WidgetTypeConfig extends BaseNameConfig {
         return listOption;
     }
 
-    @XmlAttribute
     public void setListOption(boolean listOption) {
         this.listOption = listOption;
     }
@@ -109,7 +112,6 @@ public class WidgetTypeConfig extends BaseNameConfig {
         return enumOption;
     }
 
-    @XmlAttribute
     public void setEnumOption(boolean enumOption) {
         this.enumOption = enumOption;
     }

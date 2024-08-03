@@ -17,7 +17,8 @@ package com.flowcentraltech.flowcentral.configuration.xml;
 
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlElement;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * Field sequence configuration.
@@ -27,6 +28,8 @@ import javax.xml.bind.annotation.XmlElement;
  */
 public class FieldSequenceConfig extends BaseConfig {
 
+    @JacksonXmlElementWrapper(useWrapping = false)
+    @JacksonXmlProperty(localName = "entry")
     private List<FieldSequenceEntryConfig> entryList;
 
     public FieldSequenceConfig(List<FieldSequenceEntryConfig> entryList) {
@@ -41,7 +44,6 @@ public class FieldSequenceConfig extends BaseConfig {
         return entryList;
     }
 
-    @XmlElement(name = "entry", required = true)
     public void setEntryList(List<FieldSequenceEntryConfig> entryList) {
         this.entryList = entryList;
     }

@@ -15,7 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.configuration.xml;
 
-import javax.xml.bind.annotation.XmlAttribute;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * Property list property configuration.
@@ -25,27 +25,34 @@ import javax.xml.bind.annotation.XmlAttribute;
  */
 public class PropertyListPropConfig extends BaseConfig {
 
+    @JacksonXmlProperty(isAttribute = true)
     private String name;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String description;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String references;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String inputWidget;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String defaultVal;
 
+    @JacksonXmlProperty(isAttribute = true)
     private boolean required;
 
+    @JacksonXmlProperty(isAttribute = true)
     private boolean mask;
 
+    @JacksonXmlProperty(isAttribute = true)
     private boolean encrypt;
 
     public String getName() {
         return name;
     }
 
-    @XmlAttribute(required = true)
     public void setName(String name) {
         this.name = name;
     }
@@ -54,7 +61,6 @@ public class PropertyListPropConfig extends BaseConfig {
         return description;
     }
 
-    @XmlAttribute(required = true)
     public void setDescription(String description) {
         this.description = description;
     }
@@ -63,7 +69,6 @@ public class PropertyListPropConfig extends BaseConfig {
         return references;
     }
 
-    @XmlAttribute
     public void setReferences(String references) {
         this.references = references;
     }
@@ -72,7 +77,6 @@ public class PropertyListPropConfig extends BaseConfig {
         return inputWidget;
     }
 
-    @XmlAttribute(required = true)
     public void setInputWidget(String inputWidget) {
         this.inputWidget = inputWidget;
     }
@@ -81,7 +85,6 @@ public class PropertyListPropConfig extends BaseConfig {
         return defaultVal;
     }
 
-    @XmlAttribute
     public void setDefaultVal(String defaultVal) {
         this.defaultVal = defaultVal;
     }
@@ -90,7 +93,6 @@ public class PropertyListPropConfig extends BaseConfig {
         return required;
     }
 
-    @XmlAttribute
     public void setRequired(boolean required) {
         this.required = required;
     }
@@ -99,7 +101,6 @@ public class PropertyListPropConfig extends BaseConfig {
         return mask;
     }
 
-    @XmlAttribute
     public void setMask(boolean mask) {
         this.mask = mask;
     }
@@ -108,7 +109,6 @@ public class PropertyListPropConfig extends BaseConfig {
         return encrypt;
     }
 
-    @XmlAttribute
     public void setEncrypt(boolean encrypt) {
         this.encrypt = encrypt;
     }

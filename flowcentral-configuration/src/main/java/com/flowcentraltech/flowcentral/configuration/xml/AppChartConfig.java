@@ -16,10 +16,12 @@
 
 package com.flowcentraltech.flowcentral.configuration.xml;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import com.flowcentraltech.flowcentral.configuration.constants.ChartPaletteType;
 import com.flowcentraltech.flowcentral.configuration.constants.ChartType;
 import com.flowcentraltech.flowcentral.configuration.xml.adapter.ChartPaletteTypeXmlAdapter;
@@ -31,41 +33,63 @@ import com.flowcentraltech.flowcentral.configuration.xml.adapter.ChartTypeXmlAda
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@XmlRootElement(name = "chart")
+@JsonInclude(Include.NON_NULL)
+@JacksonXmlRootElement(localName = "chart")
 public class AppChartConfig extends BaseNameConfig {
 
+    @JsonSerialize(using = ChartTypeXmlAdapter.Serializer.class)
+    @JsonDeserialize(using = ChartTypeXmlAdapter.Deserializer.class)
+    @JacksonXmlProperty(isAttribute = true)
     private ChartType type;
 
+    @JsonSerialize(using = ChartPaletteTypeXmlAdapter.Serializer.class)
+    @JsonDeserialize(using = ChartPaletteTypeXmlAdapter.Deserializer.class)
+    @JacksonXmlProperty(isAttribute = true, localName = "palette")
     private ChartPaletteType paletteType;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String title;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String subTitle;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String provider;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String category;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String series;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String color;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String rule;
 
+    @JacksonXmlProperty(isAttribute = true)
     private Integer width;
 
+    @JacksonXmlProperty(isAttribute = true)
     private Integer height;
 
+    @JacksonXmlProperty(isAttribute = true)
     private boolean stacked;
 
+    @JacksonXmlProperty(isAttribute = true)
     private boolean showGrid;
 
+    @JacksonXmlProperty(isAttribute = true)
     private boolean showDataLabels;
 
+    @JacksonXmlProperty(isAttribute = true)
     private boolean formatDataLabels;
 
+    @JacksonXmlProperty(isAttribute = true)
     private boolean formatYLabels;
 
+    @JacksonXmlProperty(isAttribute = true)
     private boolean smooth;
 
     public AppChartConfig() {
@@ -76,8 +100,6 @@ public class AppChartConfig extends BaseNameConfig {
         return type;
     }
 
-    @XmlJavaTypeAdapter(ChartTypeXmlAdapter.class)
-    @XmlAttribute(required = true)
     public void setType(ChartType type) {
         this.type = type;
     }
@@ -86,8 +108,6 @@ public class AppChartConfig extends BaseNameConfig {
         return paletteType;
     }
 
-    @XmlJavaTypeAdapter(ChartPaletteTypeXmlAdapter.class)
-    @XmlAttribute(name = "palette")
     public void setPaletteType(ChartPaletteType paletteType) {
         this.paletteType = paletteType;
     }
@@ -96,7 +116,6 @@ public class AppChartConfig extends BaseNameConfig {
         return title;
     }
 
-    @XmlAttribute
     public void setTitle(String title) {
         this.title = title;
     }
@@ -105,7 +124,6 @@ public class AppChartConfig extends BaseNameConfig {
         return subTitle;
     }
 
-    @XmlAttribute
     public void setSubTitle(String subTitle) {
         this.subTitle = subTitle;
     }
@@ -114,7 +132,6 @@ public class AppChartConfig extends BaseNameConfig {
         return provider;
     }
 
-    @XmlAttribute(required = true)
     public void setProvider(String provider) {
         this.provider = provider;
     }
@@ -123,7 +140,6 @@ public class AppChartConfig extends BaseNameConfig {
         return rule;
     }
 
-    @XmlAttribute
     public void setRule(String rule) {
         this.rule = rule;
     }
@@ -132,7 +148,6 @@ public class AppChartConfig extends BaseNameConfig {
         return category;
     }
 
-    @XmlAttribute
     public void setCategory(String category) {
         this.category = category;
     }
@@ -141,7 +156,6 @@ public class AppChartConfig extends BaseNameConfig {
         return series;
     }
 
-    @XmlAttribute
     public void setSeries(String series) {
         this.series = series;
     }
@@ -150,7 +164,6 @@ public class AppChartConfig extends BaseNameConfig {
         return color;
     }
 
-    @XmlAttribute
     public void setColor(String color) {
         this.color = color;
     }
@@ -159,7 +172,6 @@ public class AppChartConfig extends BaseNameConfig {
         return width;
     }
 
-    @XmlAttribute
     public void setWidth(Integer width) {
         this.width = width;
     }
@@ -168,7 +180,6 @@ public class AppChartConfig extends BaseNameConfig {
         return height;
     }
 
-    @XmlAttribute
     public void setHeight(Integer height) {
         this.height = height;
     }
@@ -177,7 +188,6 @@ public class AppChartConfig extends BaseNameConfig {
         return stacked;
     }
 
-    @XmlAttribute
     public void setStacked(boolean stacked) {
         this.stacked = stacked;
     }
@@ -186,7 +196,6 @@ public class AppChartConfig extends BaseNameConfig {
         return showGrid;
     }
 
-    @XmlAttribute
     public void setShowGrid(boolean showGrid) {
         this.showGrid = showGrid;
     }
@@ -195,7 +204,6 @@ public class AppChartConfig extends BaseNameConfig {
         return showDataLabels;
     }
 
-    @XmlAttribute
     public void setShowDataLabels(boolean showDataLabels) {
         this.showDataLabels = showDataLabels;
     }
@@ -204,7 +212,6 @@ public class AppChartConfig extends BaseNameConfig {
         return smooth;
     }
 
-    @XmlAttribute
     public void setSmooth(boolean smooth) {
         this.smooth = smooth;
     }
@@ -213,7 +220,6 @@ public class AppChartConfig extends BaseNameConfig {
         return formatDataLabels;
     }
 
-    @XmlAttribute
     public void setFormatDataLabels(boolean formatDataLabels) {
         this.formatDataLabels = formatDataLabels;
     }
@@ -222,7 +228,6 @@ public class AppChartConfig extends BaseNameConfig {
         return formatYLabels;
     }
 
-    @XmlAttribute
     public void setFormatYLabels(boolean formatYLabels) {
         this.formatYLabels = formatYLabels;
     }

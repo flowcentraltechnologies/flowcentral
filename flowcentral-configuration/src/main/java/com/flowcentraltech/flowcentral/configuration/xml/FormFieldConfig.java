@@ -15,13 +15,11 @@
  */
 package com.flowcentraltech.flowcentral.configuration.xml;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.flowcentraltech.flowcentral.configuration.constants.WidgetColor;
 import com.flowcentraltech.flowcentral.configuration.xml.adapter.WidgetColorXmlAdapter;
-import com.tcdng.unify.core.util.xml.MarshalFalseToNullXmlAdapter;
-import com.tcdng.unify.core.util.xml.MarshalTrueToNullXmlAdapter;
 
 /**
  * Form field configuration.
@@ -31,30 +29,45 @@ import com.tcdng.unify.core.util.xml.MarshalTrueToNullXmlAdapter;
  */
 public class FormFieldConfig extends BaseConfig {
 
+    @JacksonXmlProperty(isAttribute = true)
     private String name;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String label;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String inputWidget;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String reference;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String previewForm;
 
+    @JsonSerialize(using = WidgetColorXmlAdapter.Serializer.class)
+    @JsonDeserialize(using = WidgetColorXmlAdapter.Deserializer.class)
+    @JacksonXmlProperty(isAttribute = true)
     private WidgetColor color;
     
+    @JacksonXmlProperty(isAttribute = true)
     private int column;
 
+    @JacksonXmlProperty(isAttribute = true)
     private Boolean switchOnChange;
 
+    @JacksonXmlProperty(isAttribute = true)
     private Boolean saveAs;
 
+    @JacksonXmlProperty(isAttribute = true)
     private Boolean required;
 
+    @JacksonXmlProperty(isAttribute = true)
     private Boolean visible;
 
+    @JacksonXmlProperty(isAttribute = true)
     private Boolean editable;
 
+    @JacksonXmlProperty(isAttribute = true)
     private Boolean disabled;
 
     public FormFieldConfig() {
@@ -70,7 +83,6 @@ public class FormFieldConfig extends BaseConfig {
         return name;
     }
 
-    @XmlAttribute(required = true)
     public void setName(String name) {
         this.name = name;
     }
@@ -79,7 +91,6 @@ public class FormFieldConfig extends BaseConfig {
         return label;
     }
 
-    @XmlAttribute
     public void setLabel(String label) {
         this.label = label;
     }
@@ -88,7 +99,6 @@ public class FormFieldConfig extends BaseConfig {
         return inputWidget;
     }
 
-    @XmlAttribute(required = true)
     public void setInputWidget(String inputWidget) {
         this.inputWidget = inputWidget;
     }
@@ -97,7 +107,6 @@ public class FormFieldConfig extends BaseConfig {
         return reference;
     }
 
-    @XmlAttribute
     public void setReference(String reference) {
         this.reference = reference;
     }
@@ -106,7 +115,6 @@ public class FormFieldConfig extends BaseConfig {
         return previewForm;
     }
 
-    @XmlAttribute
     public void setPreviewForm(String previewForm) {
         this.previewForm = previewForm;
     }
@@ -115,8 +123,6 @@ public class FormFieldConfig extends BaseConfig {
         return color;
     }
 
-    @XmlJavaTypeAdapter(WidgetColorXmlAdapter.class)
-    @XmlAttribute
     public void setColor(WidgetColor color) {
         this.color = color;
     }
@@ -125,7 +131,6 @@ public class FormFieldConfig extends BaseConfig {
         return column;
     }
 
-    @XmlAttribute(required = true)
     public void setColumn(int column) {
         this.column = column;
     }
@@ -134,8 +139,6 @@ public class FormFieldConfig extends BaseConfig {
         return switchOnChange;
     }
 
-    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
-    @XmlAttribute
     public void setSwitchOnChange(Boolean switchOnChange) {
         this.switchOnChange = switchOnChange;
     }
@@ -144,8 +147,6 @@ public class FormFieldConfig extends BaseConfig {
         return saveAs;
     }
 
-    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
-    @XmlAttribute
     public void setSaveAs(Boolean saveAs) {
         this.saveAs = saveAs;
     }
@@ -154,8 +155,6 @@ public class FormFieldConfig extends BaseConfig {
         return required;
     }
 
-    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
-    @XmlAttribute
     public void setRequired(Boolean required) {
         this.required = required;
     }
@@ -164,8 +163,6 @@ public class FormFieldConfig extends BaseConfig {
         return visible;
     }
 
-    @XmlJavaTypeAdapter(MarshalTrueToNullXmlAdapter.class)
-    @XmlAttribute
     public void setVisible(Boolean visible) {
         this.visible = visible;
     }
@@ -174,8 +171,6 @@ public class FormFieldConfig extends BaseConfig {
         return editable;
     }
 
-    @XmlJavaTypeAdapter(MarshalTrueToNullXmlAdapter.class)
-    @XmlAttribute
     public void setEditable(Boolean editable) {
         this.editable = editable;
     }
@@ -184,8 +179,6 @@ public class FormFieldConfig extends BaseConfig {
         return disabled;
     }
 
-    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
-    @XmlAttribute
     public void setDisabled(Boolean disabled) {
         this.disabled = disabled;
     }

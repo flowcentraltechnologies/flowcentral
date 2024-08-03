@@ -15,7 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.configuration.xml;
 
-import javax.xml.bind.annotation.XmlAttribute;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * Applet property configuration.
@@ -25,15 +25,16 @@ import javax.xml.bind.annotation.XmlAttribute;
  */
 public class AppletPropConfig extends BaseConfig {
 
+    @JacksonXmlProperty(isAttribute = true)
     private String name;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String value;
 
     public String getName() {
         return name;
     }
 
-    @XmlAttribute(required = true)
     public void setName(String name) {
         this.name = name;
     }
@@ -42,7 +43,6 @@ public class AppletPropConfig extends BaseConfig {
         return value;
     }
 
-    @XmlAttribute
     public void setValue(String value) {
         this.value = value;
     }

@@ -15,7 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.configuration.xml;
 
-import javax.xml.bind.annotation.XmlAttribute;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * Entity category configuration.
@@ -25,13 +25,13 @@ import javax.xml.bind.annotation.XmlAttribute;
  */
 public class EntityCategoryConfig extends FilterConfig {
 
+    @JacksonXmlProperty(isAttribute = true)
     private String label;
 
     public String getLabel() {
         return label;
     }
 
-    @XmlAttribute(required = true)
     public void setLabel(String label) {
         this.label = label;
     }

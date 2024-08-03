@@ -15,7 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.configuration.xml;
 
-import javax.xml.bind.annotation.XmlAttribute;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * Related list configuration.
@@ -25,17 +25,19 @@ import javax.xml.bind.annotation.XmlAttribute;
  */
 public class RelatedListConfig extends BaseNameConfig {
 
+    @JacksonXmlProperty(isAttribute = true)
     private String applet;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String filter;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String editAction;
 
     public String getApplet() {
         return applet;
     }
 
-    @XmlAttribute(required = true)
     public void setApplet(String applet) {
         this.applet = applet;
     }
@@ -44,7 +46,6 @@ public class RelatedListConfig extends BaseNameConfig {
         return filter;
     }
 
-    @XmlAttribute
     public void setFilter(String filter) {
         this.filter = filter;
     }
@@ -53,7 +54,6 @@ public class RelatedListConfig extends BaseNameConfig {
         return editAction;
     }
 
-    @XmlAttribute
     public void setEditAction(String editAction) {
         this.editAction = editAction;
     }

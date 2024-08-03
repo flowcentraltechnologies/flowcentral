@@ -16,6 +16,8 @@
 package com.flowcentraltech.flowcentral.configuration.xml.adapter;
 
 import com.flowcentraltech.flowcentral.configuration.constants.ChildListActionType;
+import com.tcdng.unify.core.util.xml.AbstractEnumConstDeserializer;
+import com.tcdng.unify.core.util.xml.AbstractEnumConstSerializer;
 import com.tcdng.unify.core.util.xml.AbstractEnumConstXmlAdapter;
 
 /**
@@ -24,9 +26,20 @@ import com.tcdng.unify.core.util.xml.AbstractEnumConstXmlAdapter;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class ChildListActionTypeXmlAdapter extends AbstractEnumConstXmlAdapter<ChildListActionType> {
+public class ChildListActionTypeXmlAdapter extends AbstractEnumConstXmlAdapter {
+    
+    public static class Serializer extends AbstractEnumConstSerializer<ChildListActionType> {
+        public Serializer() {
+            
+        }
 
-    public ChildListActionTypeXmlAdapter() {
-        super(ChildListActionType.class);
+    }
+    
+    public static class Deserializer extends AbstractEnumConstDeserializer<ChildListActionType> {
+
+        public Deserializer() {
+            super(ChildListActionType.class);
+        }
+
     }
 }

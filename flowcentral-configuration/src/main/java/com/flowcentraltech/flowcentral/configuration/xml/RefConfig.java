@@ -15,8 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.configuration.xml;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * Reference configuration.
@@ -26,27 +25,34 @@ import javax.xml.bind.annotation.XmlElement;
  */
 public class RefConfig extends BaseNameConfig {
 
+    @JacksonXmlProperty(isAttribute = true)
     private String entity;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String searchField;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String searchTable;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String selectHandler;
     
+    @JacksonXmlProperty(isAttribute = true)
     private String listFormat;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String filterGenerator;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String filterGeneratorRule;
 
+    @JacksonXmlProperty
     private FilterConfig filter;
 
     public String getEntity() {
         return entity;
     }
 
-    @XmlAttribute(required = true)
     public void setEntity(String entity) {
         this.entity = entity;
     }
@@ -55,7 +61,6 @@ public class RefConfig extends BaseNameConfig {
         return searchField;
     }
 
-    @XmlAttribute(required = true)
     public void setSearchField(String searchField) {
         this.searchField = searchField;
     }
@@ -64,7 +69,6 @@ public class RefConfig extends BaseNameConfig {
         return searchTable;
     }
 
-    @XmlAttribute
     public void setSearchTable(String searchTable) {
         this.searchTable = searchTable;
     }
@@ -73,7 +77,6 @@ public class RefConfig extends BaseNameConfig {
         return selectHandler;
     }
 
-    @XmlAttribute
     public void setSelectHandler(String selectHandler) {
         this.selectHandler = selectHandler;
     }
@@ -82,7 +85,6 @@ public class RefConfig extends BaseNameConfig {
         return listFormat;
     }
 
-    @XmlAttribute
     public void setListFormat(String listFormat) {
         this.listFormat = listFormat;
     }
@@ -91,7 +93,6 @@ public class RefConfig extends BaseNameConfig {
         return filterGenerator;
     }
 
-    @XmlAttribute
     public void setFilterGenerator(String filterGenerator) {
         this.filterGenerator = filterGenerator;
     }
@@ -100,7 +101,6 @@ public class RefConfig extends BaseNameConfig {
         return filterGeneratorRule;
     }
 
-    @XmlAttribute
     public void setFilterGeneratorRule(String filterGeneratorRule) {
         this.filterGeneratorRule = filterGeneratorRule;
     }
@@ -109,7 +109,6 @@ public class RefConfig extends BaseNameConfig {
         return filter;
     }
 
-    @XmlElement
     public void setFilter(FilterConfig filter) {
         this.filter = filter;
     }

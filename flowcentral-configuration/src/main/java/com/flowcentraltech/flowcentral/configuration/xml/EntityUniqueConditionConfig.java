@@ -15,7 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.configuration.xml;
 
-import javax.xml.bind.annotation.XmlAttribute;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * Entity unique condition configuration.
@@ -25,15 +25,16 @@ import javax.xml.bind.annotation.XmlAttribute;
  */
 public class EntityUniqueConditionConfig extends BaseConfig {
 
+    @JacksonXmlProperty(isAttribute = true)
     private String field;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String value;
 
     public String getField() {
         return field;
     }
 
-    @XmlAttribute(required = true)
     public void setField(String field) {
         this.field = field;
     }
@@ -42,7 +43,6 @@ public class EntityUniqueConditionConfig extends BaseConfig {
         return value;
     }
 
-    @XmlAttribute(required = true)
     public void setValue(String value) {
         this.value = value;
     }

@@ -18,7 +18,8 @@ package com.flowcentraltech.flowcentral.configuration.xml;
 
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlElement;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * Charts data source configuration.
@@ -28,13 +29,14 @@ import javax.xml.bind.annotation.XmlElement;
  */
 public class AppChartDataSourcesConfig extends BaseConfig {
 
+    @JacksonXmlElementWrapper(useWrapping = false)
+    @JacksonXmlProperty(localName = "chart-datasource")
     private List<AppChartDataSourceConfig> chartDataSourceList;
 
     public List<AppChartDataSourceConfig> getChartDataSourceList() {
         return chartDataSourceList;
     }
 
-    @XmlElement(name = "chart-datasource")
     public void setChartDataSourceList(List<AppChartDataSourceConfig> chartDataSourceList) {
         this.chartDataSourceList = chartDataSourceList;
     }

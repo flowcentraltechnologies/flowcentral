@@ -17,7 +17,8 @@ package com.flowcentraltech.flowcentral.configuration.xml;
 
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlElement;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * Assignment pages configuration.
@@ -27,13 +28,14 @@ import javax.xml.bind.annotation.XmlElement;
  */
 public class AppAssignmentPagesConfig extends BaseConfig {
 
+    @JacksonXmlElementWrapper(useWrapping = false)
+    @JacksonXmlProperty(localName = "assignmentPage")
     private List<AppAssignmentPageConfig> assignmentPageList;
 
     public List<AppAssignmentPageConfig> getAssignmentPageList() {
         return assignmentPageList;
     }
 
-    @XmlElement(name = "assignmentPage")
     public void setAssignmentPageList(List<AppAssignmentPageConfig> assignmentPageList) {
         this.assignmentPageList = assignmentPageList;
     }

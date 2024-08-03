@@ -16,10 +16,9 @@
 
 package com.flowcentraltech.flowcentral.configuration.xml;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.flowcentraltech.flowcentral.configuration.constants.HighlightType;
 import com.flowcentraltech.flowcentral.configuration.constants.UIActionType;
 import com.flowcentraltech.flowcentral.configuration.xml.adapter.HighlightTypeXmlAdapter;
@@ -33,31 +32,44 @@ import com.flowcentraltech.flowcentral.configuration.xml.adapter.UIActionTypeXml
  */
 public class FormActionConfig extends BaseNameConfig {
     
+    @JacksonXmlProperty
     private FilterConfig onCondition;
 
+    @JsonSerialize(using = UIActionTypeXmlAdapter.Serializer.class)
+    @JsonDeserialize(using = UIActionTypeXmlAdapter.Deserializer.class)
+    @JacksonXmlProperty(isAttribute = true)
     private UIActionType type;
     
+    @JsonSerialize(using = HighlightTypeXmlAdapter.Serializer.class)
+    @JsonDeserialize(using = HighlightTypeXmlAdapter.Deserializer.class)
+    @JacksonXmlProperty(isAttribute = true, localName = "highlight")
     private HighlightType highlightType;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String policy;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String symbol;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String styleClass;
 
+    @JacksonXmlProperty(isAttribute = true)
     private int orderIndex;
 
+    @JacksonXmlProperty(isAttribute = true)
     private boolean showOnCreate;
 
+    @JacksonXmlProperty(isAttribute = true)
     private boolean showOnMaintain;
 
+    @JacksonXmlProperty(isAttribute = true)
     private boolean validateForm;
 
     public FilterConfig getOnCondition() {
         return onCondition;
     }
 
-    @XmlElement(required = false)
     public void setOnCondition(FilterConfig onCondition) {
         this.onCondition = onCondition;
     }
@@ -66,8 +78,6 @@ public class FormActionConfig extends BaseNameConfig {
         return type;
     }
 
-    @XmlJavaTypeAdapter(UIActionTypeXmlAdapter.class)
-    @XmlAttribute(required = true)
     public void setType(UIActionType type) {
         this.type = type;
     }
@@ -76,8 +86,6 @@ public class FormActionConfig extends BaseNameConfig {
         return highlightType;
     }
 
-    @XmlJavaTypeAdapter(HighlightTypeXmlAdapter.class)
-    @XmlAttribute(name = "highlight")
     public void setHighlightType(HighlightType highlightType) {
         this.highlightType = highlightType;
     }
@@ -86,7 +94,6 @@ public class FormActionConfig extends BaseNameConfig {
         return policy;
     }
 
-    @XmlAttribute(required = true)
     public void setPolicy(String policy) {
         this.policy = policy;
     }
@@ -95,7 +102,6 @@ public class FormActionConfig extends BaseNameConfig {
         return symbol;
     }
 
-    @XmlAttribute
     public void setSymbol(String symbol) {
         this.symbol = symbol;
     }
@@ -104,7 +110,6 @@ public class FormActionConfig extends BaseNameConfig {
         return styleClass;
     }
 
-    @XmlAttribute
     public void setStyleClass(String styleClass) {
         this.styleClass = styleClass;
     }
@@ -113,7 +118,6 @@ public class FormActionConfig extends BaseNameConfig {
         return orderIndex;
     }
 
-    @XmlAttribute
     public void setOrderIndex(int orderIndex) {
         this.orderIndex = orderIndex;
     }
@@ -122,7 +126,6 @@ public class FormActionConfig extends BaseNameConfig {
         return showOnCreate;
     }
 
-    @XmlAttribute
     public void setShowOnCreate(boolean showOnCreate) {
         this.showOnCreate = showOnCreate;
     }
@@ -131,7 +134,6 @@ public class FormActionConfig extends BaseNameConfig {
         return showOnMaintain;
     }
 
-    @XmlAttribute
     public void setShowOnMaintain(boolean showOnMaintain) {
         this.showOnMaintain = showOnMaintain;
     }
@@ -140,7 +142,6 @@ public class FormActionConfig extends BaseNameConfig {
         return validateForm;
     }
 
-    @XmlAttribute
     public void setValidateForm(boolean validateForm) {
         this.validateForm = validateForm;
     }

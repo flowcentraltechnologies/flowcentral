@@ -18,7 +18,8 @@ package com.flowcentraltech.flowcentral.configuration.xml;
 
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlElement;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * Workflow channels configuration.
@@ -28,13 +29,14 @@ import javax.xml.bind.annotation.XmlElement;
  */
 public class WfChannelsConfig extends BaseConfig {
 
+    @JacksonXmlElementWrapper(useWrapping = false)
+    @JacksonXmlProperty(localName = "workflow-channel")
     private List<WfChannelConfig> channelList;
 
     public List<WfChannelConfig> getChannelList() {
         return channelList;
     }
 
-    @XmlElement(name = "workflow-channel")
     public void setChannelList(List<WfChannelConfig> channelList) {
         this.channelList = channelList;
     }

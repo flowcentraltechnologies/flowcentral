@@ -15,7 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.configuration.xml;
 
-import javax.xml.bind.annotation.XmlAttribute;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * Application notification template configuration
@@ -25,13 +25,13 @@ import javax.xml.bind.annotation.XmlAttribute;
  */
 public class AppNotifTemplateConfig extends BaseConfig {
 
+    @JacksonXmlProperty(isAttribute = true)
     private String configFile;
 
     public String getConfigFile() {
         return configFile;
     }
 
-    @XmlAttribute(required = true)
     public void setConfigFile(String configFile) {
         this.configFile = configFile;
     }

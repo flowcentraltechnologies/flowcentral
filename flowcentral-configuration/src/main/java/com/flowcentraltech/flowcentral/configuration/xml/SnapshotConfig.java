@@ -15,10 +15,10 @@
  */
 package com.flowcentraltech.flowcentral.configuration.xml;
 
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import com.tcdng.unify.core.util.xml.adapter.CDataXmlAdapter;
 
 /**
@@ -27,32 +27,44 @@ import com.tcdng.unify.core.util.xml.adapter.CDataXmlAdapter;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@XmlRootElement(name = "snapshot")
+@JacksonXmlRootElement(localName = "snapshot")
 public class SnapshotConfig extends BaseConfig {
 
+    @JacksonXmlProperty
     private String applicationCode;
 
+    @JacksonXmlProperty
     private String applicationName;
 
+    @JacksonXmlProperty
     private String applicationVersion;
 
+    @JacksonXmlProperty
     private String snapshotTimestamp;
 
+    @JacksonXmlProperty
     private String snapshotVersion;
 
+    @JacksonXmlProperty
     private String snapshotTakenBy;
 
+    @JacksonXmlProperty
     private String snapshotType;
 
+    @JsonSerialize(using = CDataXmlAdapter.Serializer.class)
+    @JsonDeserialize(using = CDataXmlAdapter.Deserializer.class)
+    @JacksonXmlProperty
     private String snapshotTitle;
 
+    @JsonSerialize(using = CDataXmlAdapter.Serializer.class)
+    @JsonDeserialize(using = CDataXmlAdapter.Deserializer.class)
+    @JacksonXmlProperty
     private String snapshotMessage;
 
     public String getApplicationCode() {
         return applicationCode;
     }
 
-    @XmlElement
     public void setApplicationCode(String applicationCode) {
         this.applicationCode = applicationCode;
     }
@@ -61,7 +73,6 @@ public class SnapshotConfig extends BaseConfig {
         return applicationName;
     }
 
-    @XmlElement
     public void setApplicationName(String applicationName) {
         this.applicationName = applicationName;
     }
@@ -70,7 +81,6 @@ public class SnapshotConfig extends BaseConfig {
         return applicationVersion;
     }
 
-    @XmlElement
     public void setApplicationVersion(String applicationVersion) {
         this.applicationVersion = applicationVersion;
     }
@@ -79,7 +89,6 @@ public class SnapshotConfig extends BaseConfig {
         return snapshotTimestamp;
     }
 
-    @XmlElement
     public void setSnapshotTimestamp(String snapshotTimestamp) {
         this.snapshotTimestamp = snapshotTimestamp;
     }
@@ -88,7 +97,6 @@ public class SnapshotConfig extends BaseConfig {
         return snapshotVersion;
     }
 
-    @XmlElement
     public void setSnapshotVersion(String snapshotVersion) {
         this.snapshotVersion = snapshotVersion;
     }
@@ -97,7 +105,6 @@ public class SnapshotConfig extends BaseConfig {
         return snapshotTakenBy;
     }
 
-    @XmlElement
     public void setSnapshotTakenBy(String snapshotTakenBy) {
         this.snapshotTakenBy = snapshotTakenBy;
     }
@@ -106,7 +113,6 @@ public class SnapshotConfig extends BaseConfig {
         return snapshotType;
     }
 
-    @XmlElement
     public void setSnapshotType(String snapshotType) {
         this.snapshotType = snapshotType;
     }
@@ -115,8 +121,6 @@ public class SnapshotConfig extends BaseConfig {
         return snapshotTitle;
     }
 
-    @XmlElement
-    @XmlJavaTypeAdapter(CDataXmlAdapter.class)
     public void setSnapshotTitle(String snapshotTitle) {
         this.snapshotTitle = snapshotTitle;
     }
@@ -125,8 +129,6 @@ public class SnapshotConfig extends BaseConfig {
         return snapshotMessage;
     }
 
-    @XmlElement
-    @XmlJavaTypeAdapter(CDataXmlAdapter.class)
     public void setSnapshotMessage(String snapshotMessage) {
         this.snapshotMessage = snapshotMessage;
     }

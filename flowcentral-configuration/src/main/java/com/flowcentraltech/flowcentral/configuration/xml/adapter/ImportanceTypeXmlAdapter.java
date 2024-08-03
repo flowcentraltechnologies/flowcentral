@@ -16,6 +16,8 @@
 package com.flowcentraltech.flowcentral.configuration.xml.adapter;
 
 import com.flowcentraltech.flowcentral.configuration.constants.ImportanceType;
+import com.tcdng.unify.core.util.xml.AbstractEnumConstDeserializer;
+import com.tcdng.unify.core.util.xml.AbstractEnumConstSerializer;
 import com.tcdng.unify.core.util.xml.AbstractEnumConstXmlAdapter;
 
 /**
@@ -24,9 +26,20 @@ import com.tcdng.unify.core.util.xml.AbstractEnumConstXmlAdapter;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class ImportanceTypeXmlAdapter extends AbstractEnumConstXmlAdapter<ImportanceType> {
+public class ImportanceTypeXmlAdapter extends AbstractEnumConstXmlAdapter {
+    
+    public static class Serializer extends AbstractEnumConstSerializer<ImportanceType> {
+        public Serializer() {
+            
+        }
 
-    public ImportanceTypeXmlAdapter() {
-        super(ImportanceType.class);
+    }
+    
+    public static class Deserializer extends AbstractEnumConstDeserializer<ImportanceType> {
+
+        public Deserializer() {
+            super(ImportanceType.class);
+        }
+
     }
 }

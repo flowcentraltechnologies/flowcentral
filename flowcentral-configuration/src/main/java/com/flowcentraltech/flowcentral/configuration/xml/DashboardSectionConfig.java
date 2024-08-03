@@ -15,9 +15,9 @@
  */
 package com.flowcentraltech.flowcentral.configuration.xml;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.flowcentraltech.flowcentral.configuration.constants.DashboardColumnsType;
 import com.flowcentraltech.flowcentral.configuration.xml.adapter.DashboardColumnsTypeXmlAdapter;
 
@@ -29,10 +29,15 @@ import com.flowcentraltech.flowcentral.configuration.xml.adapter.DashboardColumn
  */
 public class DashboardSectionConfig extends BaseConfig {
 
+    @JsonSerialize(using = DashboardColumnsTypeXmlAdapter.Serializer.class)
+    @JsonDeserialize(using = DashboardColumnsTypeXmlAdapter.Deserializer.class)
+    @JacksonXmlProperty(isAttribute = true)
     private DashboardColumnsType type;
 
+    @JacksonXmlProperty(isAttribute = true)
     private int index;
 
+    @JacksonXmlProperty(isAttribute = true)
     private Integer height;
 
     public DashboardSectionConfig() {
@@ -43,8 +48,6 @@ public class DashboardSectionConfig extends BaseConfig {
         return type;
     }
 
-    @XmlJavaTypeAdapter(DashboardColumnsTypeXmlAdapter.class)
-    @XmlAttribute(required = true)
     public void setType(DashboardColumnsType type) {
         this.type = type;
     }
@@ -53,7 +56,6 @@ public class DashboardSectionConfig extends BaseConfig {
         return index;
     }
 
-    @XmlAttribute
     public void setIndex(int index) {
         this.index = index;
     }
@@ -62,7 +64,6 @@ public class DashboardSectionConfig extends BaseConfig {
         return height;
     }
 
-    @XmlAttribute
     public void setHeight(Integer height) {
         this.height = height;
     }

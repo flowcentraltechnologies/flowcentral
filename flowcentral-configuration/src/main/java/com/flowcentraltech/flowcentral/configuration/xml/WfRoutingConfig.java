@@ -16,7 +16,7 @@
 
 package com.flowcentraltech.flowcentral.configuration.xml;
 
-import javax.xml.bind.annotation.XmlAttribute;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * Workflow routing configuration.
@@ -26,15 +26,16 @@ import javax.xml.bind.annotation.XmlAttribute;
  */
 public class WfRoutingConfig extends BaseNameConfig {
 
+    @JacksonXmlProperty(isAttribute = true, localName = "nextStep")
     private String nextStepName;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String condition;
 
     public String getNextStepName() {
         return nextStepName;
     }
 
-    @XmlAttribute(name = "nextStep", required = true)
     public void setNextStepName(String nextStepName) {
         this.nextStepName = nextStepName;
     }
@@ -43,7 +44,6 @@ public class WfRoutingConfig extends BaseNameConfig {
         return condition;
     }
 
-    @XmlAttribute(required = true)
     public void setCondition(String condition) {
         this.condition = condition;
     }

@@ -15,7 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.configuration.xml;
 
-import javax.xml.bind.annotation.XmlAttribute;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * Suggestion type configuration.
@@ -25,13 +25,13 @@ import javax.xml.bind.annotation.XmlAttribute;
  */
 public class SuggestionTypeConfig extends BaseNameConfig {
 
+    @JacksonXmlProperty(isAttribute = true)
     private String parent;
 
     public String getParent() {
         return parent;
     }
 
-    @XmlAttribute
     public void setParent(String parent) {
         this.parent = parent;
     }

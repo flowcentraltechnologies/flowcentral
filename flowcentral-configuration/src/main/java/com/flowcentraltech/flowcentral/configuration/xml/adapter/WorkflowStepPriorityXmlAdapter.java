@@ -16,6 +16,8 @@
 package com.flowcentraltech.flowcentral.configuration.xml.adapter;
 
 import com.flowcentraltech.flowcentral.configuration.constants.WorkflowStepPriority;
+import com.tcdng.unify.core.util.xml.AbstractEnumConstDeserializer;
+import com.tcdng.unify.core.util.xml.AbstractEnumConstSerializer;
 import com.tcdng.unify.core.util.xml.AbstractEnumConstXmlAdapter;
 
 /**
@@ -24,9 +26,20 @@ import com.tcdng.unify.core.util.xml.AbstractEnumConstXmlAdapter;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class WorkflowStepPriorityXmlAdapter extends AbstractEnumConstXmlAdapter<WorkflowStepPriority> {
+public class WorkflowStepPriorityXmlAdapter extends AbstractEnumConstXmlAdapter {
+    
+    public static class Serializer extends AbstractEnumConstSerializer<WorkflowStepPriority> {
+        public Serializer() {
+            
+        }
 
-    public WorkflowStepPriorityXmlAdapter() {
-        super(WorkflowStepPriority.class);
+    }
+    
+    public static class Deserializer extends AbstractEnumConstDeserializer<WorkflowStepPriority> {
+
+        public Deserializer() {
+            super(WorkflowStepPriority.class);
+        }
+
     }
 }

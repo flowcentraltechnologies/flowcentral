@@ -18,8 +18,8 @@ package com.flowcentraltech.flowcentral.configuration.xml;
 
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * Search inputs configuration.
@@ -29,19 +29,23 @@ import javax.xml.bind.annotation.XmlElement;
  */
 public class SearchInputsConfig extends BaseConfig {
 
+    @JacksonXmlProperty(isAttribute = true)
     private String name;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String description;
     
+    @JacksonXmlProperty(isAttribute = true)
     private String restrictionResolver;
 
+    @JacksonXmlElementWrapper(useWrapping = false)
+    @JacksonXmlProperty(localName = "input")
     private List<SearchInputConfig> inputList;
 
     public String getName() {
         return name;
     }
 
-    @XmlAttribute(required = true)
     public void setName(String name) {
         this.name = name;
     }
@@ -50,7 +54,6 @@ public class SearchInputsConfig extends BaseConfig {
         return description;
     }
 
-    @XmlAttribute(required = true)
     public void setDescription(String description) {
         this.description = description;
     }
@@ -59,7 +62,6 @@ public class SearchInputsConfig extends BaseConfig {
         return restrictionResolver;
     }
 
-    @XmlAttribute
     public void setRestrictionResolver(String restrictionResolver) {
         this.restrictionResolver = restrictionResolver;
     }
@@ -68,7 +70,6 @@ public class SearchInputsConfig extends BaseConfig {
         return inputList;
     }
 
-    @XmlElement(name = "input", required = true)
     public void setInputList(List<SearchInputConfig> inputList) {
         this.inputList = inputList;
     }

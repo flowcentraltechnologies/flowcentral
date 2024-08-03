@@ -17,12 +17,8 @@ package com.flowcentraltech.flowcentral.configuration.xml;
 
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-
-import com.tcdng.unify.core.util.xml.MarshalFalseToNullXmlAdapter;
-import com.tcdng.unify.core.util.xml.MarshalTrueToNullXmlAdapter;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * Table configuration
@@ -32,52 +28,81 @@ import com.tcdng.unify.core.util.xml.MarshalTrueToNullXmlAdapter;
  */
 public class AppTableConfig extends BaseNameConfig {
 
+    @JacksonXmlProperty(isAttribute = true)
     private String entity;
 
+    @JacksonXmlProperty(isAttribute = true, localName = "detailsPanel")
     private String detailsPanelName;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String loadingSearchInput;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String loadingFilterGen;
 
+    @JacksonXmlProperty(isAttribute = true)
     private int sortHistory;
 
+    @JacksonXmlProperty(isAttribute = true)
     private int itemsPerPage;
     
+    @JacksonXmlProperty(isAttribute = true)
     private int summaryTitleColumns;
 
+    @JacksonXmlProperty(isAttribute = true)
     private Boolean serialNo;
 
+    @JacksonXmlProperty(isAttribute = true)
     private Boolean sortable;
     
+    @JacksonXmlProperty(isAttribute = true)
     private Boolean showLabelHeader;
 
+    @JacksonXmlProperty(isAttribute = true)
     private Boolean headerToUpperCase;
 
+    @JacksonXmlProperty(isAttribute = true)
     private Boolean headerCenterAlign;
 
+    @JacksonXmlProperty(isAttribute = true)
     private Boolean basicSearch;
 
+    @JacksonXmlProperty(isAttribute = true)
     private Boolean totalSummary;
 
+    @JacksonXmlProperty(isAttribute = true)
     private Boolean headerless;
 
+    @JacksonXmlProperty(isAttribute = true)
     private Boolean multiSelect;
 
+    @JacksonXmlProperty(isAttribute = true)
     private Boolean nonConforming;
 
+    @JacksonXmlProperty(isAttribute = true)
     private Boolean fixedRows;
 
+    @JacksonXmlProperty(isAttribute = true)
     private Boolean limitSelectToColumns;
 
+    @JacksonXmlElementWrapper(useWrapping = false)
+    @JacksonXmlProperty(localName = "loading")
     private List<TableLoadingConfig> loadingList;
 
+    @JacksonXmlElementWrapper(useWrapping = false)
+    @JacksonXmlProperty(localName = "action")
     private List<TableActionConfig> actionList;
 
+    @JacksonXmlElementWrapper(useWrapping = false)
+    @JacksonXmlProperty(localName = "column")
     private List<TableColumnConfig> columnList;
 
+    @JacksonXmlElementWrapper(useWrapping = false)
+    @JacksonXmlProperty(localName = "quickFilter")
     private List<FilterConfig> quickFilterList;
 
+    @JacksonXmlElementWrapper(useWrapping = false)
+    @JacksonXmlProperty(localName = "filter")
     private List<TableFilterConfig> filterList;
 
     public AppTableConfig() {
@@ -100,7 +125,6 @@ public class AppTableConfig extends BaseNameConfig {
         return entity;
     }
 
-    @XmlAttribute(required = true)
     public void setEntity(String entity) {
         this.entity = entity;
     }
@@ -109,7 +133,6 @@ public class AppTableConfig extends BaseNameConfig {
         return detailsPanelName;
     }
 
-    @XmlAttribute(name = "detailsPanel")
     public void setDetailsPanelName(String detailsPanelName) {
         this.detailsPanelName = detailsPanelName;
     }
@@ -118,7 +141,6 @@ public class AppTableConfig extends BaseNameConfig {
         return loadingSearchInput;
     }
 
-    @XmlAttribute
     public void setLoadingSearchInput(String loadingSearchInput) {
         this.loadingSearchInput = loadingSearchInput;
     }
@@ -127,7 +149,6 @@ public class AppTableConfig extends BaseNameConfig {
         return loadingFilterGen;
     }
 
-    @XmlAttribute
     public void setLoadingFilterGen(String loadingFilterGen) {
         this.loadingFilterGen = loadingFilterGen;
     }
@@ -136,7 +157,6 @@ public class AppTableConfig extends BaseNameConfig {
         return sortHistory;
     }
 
-    @XmlAttribute
     public void setSortHistory(int sortHistory) {
         this.sortHistory = sortHistory;
     }
@@ -145,7 +165,6 @@ public class AppTableConfig extends BaseNameConfig {
         return itemsPerPage;
     }
 
-    @XmlAttribute
     public void setItemsPerPage(int itemsPerPage) {
         this.itemsPerPage = itemsPerPage;
     }
@@ -154,7 +173,6 @@ public class AppTableConfig extends BaseNameConfig {
         return summaryTitleColumns;
     }
 
-    @XmlAttribute
     public void setSummaryTitleColumns(int summaryTitleColumns) {
         this.summaryTitleColumns = summaryTitleColumns;
     }
@@ -163,8 +181,6 @@ public class AppTableConfig extends BaseNameConfig {
         return sortable;
     }
 
-    @XmlJavaTypeAdapter(MarshalTrueToNullXmlAdapter.class)
-    @XmlAttribute
     public void setSortable(Boolean sortable) {
         this.sortable = sortable;
     }
@@ -173,8 +189,6 @@ public class AppTableConfig extends BaseNameConfig {
         return serialNo;
     }
 
-    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
-    @XmlAttribute
     public void setSerialNo(Boolean serialNo) {
         this.serialNo = serialNo;
     }
@@ -183,8 +197,6 @@ public class AppTableConfig extends BaseNameConfig {
         return showLabelHeader;
     }
 
-    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
-    @XmlAttribute
     public void setShowLabelHeader(Boolean showLabelHeader) {
         this.showLabelHeader = showLabelHeader;
     }
@@ -193,8 +205,6 @@ public class AppTableConfig extends BaseNameConfig {
         return headerToUpperCase;
     }
 
-    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
-    @XmlAttribute
     public void setHeaderToUpperCase(Boolean headerToUpperCase) {
         this.headerToUpperCase = headerToUpperCase;
     }
@@ -203,8 +213,6 @@ public class AppTableConfig extends BaseNameConfig {
         return headerCenterAlign;
     }
 
-    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
-    @XmlAttribute
     public void setHeaderCenterAlign(Boolean headerCenterAlign) {
         this.headerCenterAlign = headerCenterAlign;
     }
@@ -213,8 +221,6 @@ public class AppTableConfig extends BaseNameConfig {
         return basicSearch;
     }
 
-    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
-    @XmlAttribute
     public void setBasicSearch(Boolean basicSearch) {
         this.basicSearch = basicSearch;
     }
@@ -223,8 +229,6 @@ public class AppTableConfig extends BaseNameConfig {
         return totalSummary;
     }
 
-    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
-    @XmlAttribute
     public void setTotalSummary(Boolean totalSummary) {
         this.totalSummary = totalSummary;
     }
@@ -233,8 +237,6 @@ public class AppTableConfig extends BaseNameConfig {
         return headerless;
     }
 
-    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
-    @XmlAttribute
     public void setHeaderless(Boolean headerless) {
         this.headerless = headerless;
     }
@@ -243,8 +245,6 @@ public class AppTableConfig extends BaseNameConfig {
         return multiSelect;
     }
 
-    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
-    @XmlAttribute
     public void setMultiSelect(Boolean multiSelect) {
         this.multiSelect = multiSelect;
     }
@@ -253,8 +253,6 @@ public class AppTableConfig extends BaseNameConfig {
         return nonConforming;
     }
 
-    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
-    @XmlAttribute
     public void setNonConforming(Boolean nonConforming) {
         this.nonConforming = nonConforming;
     }
@@ -263,8 +261,6 @@ public class AppTableConfig extends BaseNameConfig {
         return fixedRows;
     }
 
-    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
-    @XmlAttribute
     public void setFixedRows(Boolean fixedRows) {
         this.fixedRows = fixedRows;
     }
@@ -273,8 +269,6 @@ public class AppTableConfig extends BaseNameConfig {
         return limitSelectToColumns;
     }
 
-    @XmlJavaTypeAdapter(MarshalTrueToNullXmlAdapter.class)
-    @XmlAttribute
     public void setLimitSelectToColumns(Boolean limitSelectToColumns) {
         this.limitSelectToColumns = limitSelectToColumns;
     }
@@ -283,7 +277,6 @@ public class AppTableConfig extends BaseNameConfig {
         return loadingList;
     }
 
-    @XmlElement(name = "loading", required = true)
     public void setLoadingList(List<TableLoadingConfig> loadingList) {
         this.loadingList = loadingList;
     }
@@ -292,7 +285,6 @@ public class AppTableConfig extends BaseNameConfig {
         return actionList;
     }
 
-    @XmlElement(name = "action", required = true)
     public void setActionList(List<TableActionConfig> actionList) {
         this.actionList = actionList;
     }
@@ -301,7 +293,6 @@ public class AppTableConfig extends BaseNameConfig {
         return columnList;
     }
 
-    @XmlElement(name = "column", required = true)
     public void setColumnList(List<TableColumnConfig> columnList) {
         this.columnList = columnList;
     }
@@ -310,7 +301,6 @@ public class AppTableConfig extends BaseNameConfig {
         return quickFilterList;
     }
 
-    @XmlElement(name = "quickFilter")
     public void setQuickFilterList(List<FilterConfig> quickFilterList) {
         this.quickFilterList = quickFilterList;
     }
@@ -319,7 +309,6 @@ public class AppTableConfig extends BaseNameConfig {
         return filterList;
     }
 
-    @XmlElement(name = "filter", required = true)
     public void setFilterList(List<TableFilterConfig> filterList) {
         this.filterList = filterList;
     }

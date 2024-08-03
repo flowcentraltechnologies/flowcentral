@@ -15,8 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.gateway.data;
 
-import javax.xml.bind.annotation.XmlElement;
-
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.flowcentraltech.flowcentral.gateway.constants.GatewayResponseConstants;
 
 /**
@@ -27,8 +26,10 @@ import com.flowcentraltech.flowcentral.gateway.constants.GatewayResponseConstant
  */
 public abstract class BaseGatewayResponse {
     
+    @JacksonXmlProperty
     private String responseCode;
 
+    @JacksonXmlProperty
     private String responseMessage;
 
     public BaseGatewayResponse(String responseCode, String responseMessage) {
@@ -45,7 +46,6 @@ public abstract class BaseGatewayResponse {
         return responseCode;
     }
 
-    @XmlElement
     public void setResponseCode(String responseCode) {
         this.responseCode = responseCode;
     }
@@ -54,7 +54,6 @@ public abstract class BaseGatewayResponse {
         return responseMessage;
     }
 
-    @XmlElement
     public void setResponseMessage(String responseMessage) {
         this.responseMessage = responseMessage;
     }

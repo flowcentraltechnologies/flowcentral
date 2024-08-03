@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!-- Test manage product application -->
 <application name="manageProduct" description="Manage Product"
-	label="Manage Product" module="test-application" version="1.0.1">
+	label="Manage Product" module="test-application">
 	<applets>
 		<applet name="manageProduct" description="Manage Product"
 			label="Manage Product" type="manage_entitylist" entity="product">

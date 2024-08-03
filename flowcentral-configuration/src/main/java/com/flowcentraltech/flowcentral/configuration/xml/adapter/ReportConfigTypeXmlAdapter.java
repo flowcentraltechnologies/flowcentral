@@ -16,6 +16,8 @@
 package com.flowcentraltech.flowcentral.configuration.xml.adapter;
 
 import com.flowcentraltech.flowcentral.configuration.constants.ReportConfigType;
+import com.tcdng.unify.core.util.xml.AbstractEnumConstDeserializer;
+import com.tcdng.unify.core.util.xml.AbstractEnumConstSerializer;
 import com.tcdng.unify.core.util.xml.AbstractEnumConstXmlAdapter;
 
 /**
@@ -24,10 +26,20 @@ import com.tcdng.unify.core.util.xml.AbstractEnumConstXmlAdapter;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class ReportConfigTypeXmlAdapter extends AbstractEnumConstXmlAdapter<ReportConfigType> {
+public class ReportConfigTypeXmlAdapter extends AbstractEnumConstXmlAdapter {
+    
+    public static class Serializer extends AbstractEnumConstSerializer<ReportConfigType> {
+        public Serializer() {
+            
+        }
 
-    public ReportConfigTypeXmlAdapter() {
-        super(ReportConfigType.class);
     }
+    
+    public static class Deserializer extends AbstractEnumConstDeserializer<ReportConfigType> {
 
+        public Deserializer() {
+            super(ReportConfigType.class);
+        }
+
+    }
 }

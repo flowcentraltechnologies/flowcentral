@@ -16,6 +16,8 @@
 package com.flowcentraltech.flowcentral.configuration.xml.adapter;
 
 import com.flowcentraltech.flowcentral.configuration.constants.VisibilityType;
+import com.tcdng.unify.core.util.xml.AbstractEnumConstDeserializer;
+import com.tcdng.unify.core.util.xml.AbstractEnumConstSerializer;
 import com.tcdng.unify.core.util.xml.AbstractEnumConstXmlAdapter;
 
 /**
@@ -24,10 +26,20 @@ import com.tcdng.unify.core.util.xml.AbstractEnumConstXmlAdapter;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class VisibilityTypeXmlAdapter extends AbstractEnumConstXmlAdapter<VisibilityType> {
+public class VisibilityTypeXmlAdapter extends AbstractEnumConstXmlAdapter {
+    
+    public static class Serializer extends AbstractEnumConstSerializer<VisibilityType> {
+        public Serializer() {
+            
+        }
 
-    public VisibilityTypeXmlAdapter() {
-        super(VisibilityType.class);
     }
+    
+    public static class Deserializer extends AbstractEnumConstDeserializer<VisibilityType> {
 
+        public Deserializer() {
+            super(VisibilityType.class);
+        }
+
+    }
 }

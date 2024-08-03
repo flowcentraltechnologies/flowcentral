@@ -15,10 +15,9 @@
  */
 package com.flowcentraltech.flowcentral.configuration.xml;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.flowcentraltech.flowcentral.configuration.constants.WorkflowSetValuesType;
 import com.flowcentraltech.flowcentral.configuration.xml.adapter.WorkflowSetValuesTypeXmlAdapter;
 
@@ -30,20 +29,24 @@ import com.flowcentraltech.flowcentral.configuration.xml.adapter.WorkflowSetValu
  */
 public class WfSetValuesConfig extends BaseNameConfig {
 
+    @JsonSerialize(using = WorkflowSetValuesTypeXmlAdapter.Serializer.class)
+    @JsonDeserialize(using = WorkflowSetValuesTypeXmlAdapter.Deserializer.class)
+    @JacksonXmlProperty(isAttribute = true)
     private WorkflowSetValuesType type;
     
+    @JacksonXmlProperty()
     private FilterConfig onCondition;
 
+    @JacksonXmlProperty(localName = "setValue")
     private SetValuesConfig setValues;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String valueGenerator;
 
     public WorkflowSetValuesType getType() {
         return type;
     }
 
-    @XmlJavaTypeAdapter(WorkflowSetValuesTypeXmlAdapter.class)
-    @XmlAttribute(required = true)
     public void setType(WorkflowSetValuesType type) {
         this.type = type;
     }
@@ -52,7 +55,6 @@ public class WfSetValuesConfig extends BaseNameConfig {
         return onCondition;
     }
 
-    @XmlElement(required = true)
     public void setOnCondition(FilterConfig onCondition) {
         this.onCondition = onCondition;
     }
@@ -61,7 +63,6 @@ public class WfSetValuesConfig extends BaseNameConfig {
         return setValues;
     }
 
-    @XmlElement(name = "setValue")
     public void setSetValues(SetValuesConfig setValues) {
         this.setValues = setValues;
     }
@@ -70,7 +71,6 @@ public class WfSetValuesConfig extends BaseNameConfig {
         return valueGenerator;
     }
 
-    @XmlAttribute
     public void setValueGenerator(String valueGenerator) {
         this.valueGenerator = valueGenerator;
     }

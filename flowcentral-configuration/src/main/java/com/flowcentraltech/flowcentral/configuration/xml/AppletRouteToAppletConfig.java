@@ -15,7 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.configuration.xml;
 
-import javax.xml.bind.annotation.XmlAttribute;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * Applet route to applet configuration.
@@ -25,13 +25,13 @@ import javax.xml.bind.annotation.XmlAttribute;
  */
 public class AppletRouteToAppletConfig extends BaseConfig {
 
+    @JacksonXmlProperty(isAttribute = true, localName = "applet")
     private String routeToApplet;
 
     public String getRouteToApplet() {
         return routeToApplet;
     }
 
-    @XmlAttribute(name = "applet")
     public void setRouteToApplet(String routeToApplet) {
         this.routeToApplet = routeToApplet;
     }

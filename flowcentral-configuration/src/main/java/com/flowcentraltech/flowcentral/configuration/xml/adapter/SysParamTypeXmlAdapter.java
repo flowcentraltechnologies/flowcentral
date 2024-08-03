@@ -16,6 +16,8 @@
 package com.flowcentraltech.flowcentral.configuration.xml.adapter;
 
 import com.flowcentraltech.flowcentral.configuration.constants.SysParamType;
+import com.tcdng.unify.core.util.xml.AbstractEnumConstDeserializer;
+import com.tcdng.unify.core.util.xml.AbstractEnumConstSerializer;
 import com.tcdng.unify.core.util.xml.AbstractEnumConstXmlAdapter;
 
 /**
@@ -24,10 +26,20 @@ import com.tcdng.unify.core.util.xml.AbstractEnumConstXmlAdapter;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class SysParamTypeXmlAdapter extends AbstractEnumConstXmlAdapter<SysParamType> {
+public class SysParamTypeXmlAdapter extends AbstractEnumConstXmlAdapter {
+    
+    public static class Serializer extends AbstractEnumConstSerializer<SysParamType> {
+        public Serializer() {
+            
+        }
 
-    public SysParamTypeXmlAdapter() {
-        super(SysParamType.class);
     }
+    
+    public static class Deserializer extends AbstractEnumConstDeserializer<SysParamType> {
 
+        public Deserializer() {
+            super(SysParamType.class);
+        }
+
+    }
 }

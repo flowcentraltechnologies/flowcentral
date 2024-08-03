@@ -17,14 +17,12 @@ package com.flowcentraltech.flowcentral.configuration.xml;
 
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.flowcentraltech.flowcentral.configuration.constants.FormColumnsType;
 import com.flowcentraltech.flowcentral.configuration.xml.adapter.FormColumnsTypeXmlAdapter;
-import com.tcdng.unify.core.util.xml.MarshalFalseToNullXmlAdapter;
-import com.tcdng.unify.core.util.xml.MarshalTrueToNullXmlAdapter;
 
 /**
  * Form section configuration.
@@ -34,18 +32,28 @@ import com.tcdng.unify.core.util.xml.MarshalTrueToNullXmlAdapter;
  */
 public class FormSectionConfig extends BaseConfig {
 
+    @JacksonXmlProperty(isAttribute = true)
     private String name;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String label;
 
+    @JsonSerialize(using = FormColumnsTypeXmlAdapter.Serializer.class)
+    @JsonDeserialize(using = FormColumnsTypeXmlAdapter.Deserializer.class)
+    @JacksonXmlProperty(isAttribute = true)
     private FormColumnsType columns;
 
+    @JacksonXmlProperty(isAttribute = true)
     private Boolean visible;
 
+    @JacksonXmlProperty(isAttribute = true)
     private Boolean editable;
 
+    @JacksonXmlProperty(isAttribute = true)
     private Boolean disabled;
 
+    @JacksonXmlElementWrapper(useWrapping = false)
+    @JacksonXmlProperty(localName = "field")
     private List<FormFieldConfig> fieldList;
 
     public FormSectionConfig() {
@@ -58,7 +66,6 @@ public class FormSectionConfig extends BaseConfig {
         return name;
     }
 
-    @XmlAttribute(required = true)
     public void setName(String name) {
         this.name = name;
     }
@@ -67,7 +74,6 @@ public class FormSectionConfig extends BaseConfig {
         return label;
     }
 
-    @XmlAttribute
     public void setLabel(String label) {
         this.label = label;
     }
@@ -76,8 +82,6 @@ public class FormSectionConfig extends BaseConfig {
         return columns;
     }
 
-    @XmlJavaTypeAdapter(FormColumnsTypeXmlAdapter.class)
-    @XmlAttribute(required = true)
     public void setColumns(FormColumnsType columns) {
         this.columns = columns;
     }
@@ -86,8 +90,6 @@ public class FormSectionConfig extends BaseConfig {
         return visible;
     }
 
-    @XmlJavaTypeAdapter(MarshalTrueToNullXmlAdapter.class)
-    @XmlAttribute
     public void setVisible(Boolean visible) {
         this.visible = visible;
     }
@@ -96,8 +98,6 @@ public class FormSectionConfig extends BaseConfig {
         return editable;
     }
 
-    @XmlJavaTypeAdapter(MarshalTrueToNullXmlAdapter.class)
-    @XmlAttribute
     public void setEditable(Boolean editable) {
         this.editable = editable;
     }
@@ -106,8 +106,6 @@ public class FormSectionConfig extends BaseConfig {
         return disabled;
     }
 
-    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
-    @XmlAttribute
     public void setDisabled(Boolean disabled) {
         this.disabled = disabled;
     }
@@ -116,7 +114,6 @@ public class FormSectionConfig extends BaseConfig {
         return fieldList;
     }
 
-    @XmlElement(name = "field", required = true)
     public void setFieldList(List<FormFieldConfig> fieldList) {
         this.fieldList = fieldList;
     }

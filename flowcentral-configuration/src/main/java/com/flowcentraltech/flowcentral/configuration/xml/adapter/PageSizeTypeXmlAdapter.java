@@ -16,6 +16,8 @@
 package com.flowcentraltech.flowcentral.configuration.xml.adapter;
 
 import com.tcdng.unify.core.constant.PageSizeType;
+import com.tcdng.unify.core.util.xml.AbstractEnumConstDeserializer;
+import com.tcdng.unify.core.util.xml.AbstractEnumConstSerializer;
 import com.tcdng.unify.core.util.xml.AbstractEnumConstXmlAdapter;
 
 /**
@@ -24,10 +26,20 @@ import com.tcdng.unify.core.util.xml.AbstractEnumConstXmlAdapter;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class PageSizeTypeXmlAdapter extends AbstractEnumConstXmlAdapter<PageSizeType> {
+public class PageSizeTypeXmlAdapter extends AbstractEnumConstXmlAdapter {
+    
+    public static class Serializer extends AbstractEnumConstSerializer<PageSizeType> {
+        public Serializer() {
+            
+        }
 
-    public PageSizeTypeXmlAdapter() {
-        super(PageSizeType.class);
     }
+    
+    public static class Deserializer extends AbstractEnumConstDeserializer<PageSizeType> {
 
+        public Deserializer() {
+            super(PageSizeType.class);
+        }
+
+    }
 }

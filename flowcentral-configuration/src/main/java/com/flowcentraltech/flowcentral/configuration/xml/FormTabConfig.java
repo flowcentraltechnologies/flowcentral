@@ -17,14 +17,12 @@ package com.flowcentraltech.flowcentral.configuration.xml;
 
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.flowcentraltech.flowcentral.configuration.constants.TabContentType;
 import com.flowcentraltech.flowcentral.configuration.xml.adapter.TabContentTypeXmlAdapter;
-import com.tcdng.unify.core.util.xml.MarshalFalseToNullXmlAdapter;
-import com.tcdng.unify.core.util.xml.MarshalTrueToNullXmlAdapter;
 
 /**
  * Form tab configuration.
@@ -34,44 +32,67 @@ import com.tcdng.unify.core.util.xml.MarshalTrueToNullXmlAdapter;
  */
 public class FormTabConfig extends BaseConfig {
 
+    @JsonSerialize(using = TabContentTypeXmlAdapter.Serializer.class)
+    @JsonDeserialize(using = TabContentTypeXmlAdapter.Deserializer.class)
+    @JacksonXmlProperty(isAttribute = true)
     private TabContentType contentType;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String name;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String label;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String applet;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String mappedFieldName;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String mappedForm;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String reference;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String filter;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String editAction;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String editFormless;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String editFixedRows;
     
+    @JacksonXmlProperty(isAttribute = true)
     private String editAllowAddition;
 
+    @JacksonXmlProperty(isAttribute = true)
     private Boolean ignoreParentCondition;
 
+    @JacksonXmlProperty(isAttribute = true)
     private Boolean showSearch;
 
+    @JacksonXmlProperty(isAttribute = true)
     private Boolean quickEdit;
 
+    @JacksonXmlProperty(isAttribute = true)
     private Boolean quickOrder;
 
+    @JacksonXmlProperty(isAttribute = true)
     private Boolean visible;
 
+    @JacksonXmlProperty(isAttribute = true)
     private Boolean editable;
 
+    @JacksonXmlProperty(isAttribute = true)
     private Boolean disabled;
 
+    @JacksonXmlElementWrapper(useWrapping = false)
+    @JacksonXmlProperty(localName = "section")
     private List<FormSectionConfig> sectionList;
 
     public FormTabConfig() {
@@ -88,8 +109,6 @@ public class FormTabConfig extends BaseConfig {
         return contentType;
     }
 
-    @XmlJavaTypeAdapter(TabContentTypeXmlAdapter.class)
-    @XmlAttribute(required = true)
     public void setContentType(TabContentType contentType) {
         this.contentType = contentType;
     }
@@ -98,7 +117,6 @@ public class FormTabConfig extends BaseConfig {
         return name;
     }
 
-    @XmlAttribute(required = true)
     public void setName(String name) {
         this.name = name;
     }
@@ -107,7 +125,6 @@ public class FormTabConfig extends BaseConfig {
         return label;
     }
 
-    @XmlAttribute(required = true)
     public void setLabel(String label) {
         this.label = label;
     }
@@ -116,7 +133,6 @@ public class FormTabConfig extends BaseConfig {
         return applet;
     }
 
-    @XmlAttribute
     public void setApplet(String applet) {
         this.applet = applet;
     }
@@ -125,7 +141,6 @@ public class FormTabConfig extends BaseConfig {
         return mappedFieldName;
     }
 
-    @XmlAttribute
     public void setMappedFieldName(String mappedFieldName) {
         this.mappedFieldName = mappedFieldName;
     }
@@ -134,7 +149,6 @@ public class FormTabConfig extends BaseConfig {
         return mappedForm;
     }
 
-    @XmlAttribute
     public void setMappedForm(String mappedForm) {
         this.mappedForm = mappedForm;
     }
@@ -143,7 +157,6 @@ public class FormTabConfig extends BaseConfig {
         return reference;
     }
 
-    @XmlAttribute
     public void setReference(String reference) {
         this.reference = reference;
     }
@@ -152,7 +165,6 @@ public class FormTabConfig extends BaseConfig {
         return filter;
     }
 
-    @XmlAttribute
     public void setFilter(String filter) {
         this.filter = filter;
     }
@@ -161,7 +173,6 @@ public class FormTabConfig extends BaseConfig {
         return editAction;
     }
 
-    @XmlAttribute
     public void setEditAction(String editAction) {
         this.editAction = editAction;
     }
@@ -170,7 +181,6 @@ public class FormTabConfig extends BaseConfig {
         return editFormless;
     }
 
-    @XmlAttribute
     public void setEditFormless(String editFormless) {
         this.editFormless = editFormless;
     }
@@ -179,7 +189,6 @@ public class FormTabConfig extends BaseConfig {
         return editFixedRows;
     }
 
-    @XmlAttribute
     public void setEditFixedRows(String editFixedRows) {
         this.editFixedRows = editFixedRows;
     }
@@ -188,7 +197,6 @@ public class FormTabConfig extends BaseConfig {
         return editAllowAddition;
     }
 
-    @XmlAttribute
     public void setEditAllowAddition(String editAllowAddition) {
         this.editAllowAddition = editAllowAddition;
     }
@@ -197,8 +205,6 @@ public class FormTabConfig extends BaseConfig {
         return ignoreParentCondition;
     }
 
-    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
-    @XmlAttribute
     public void setIgnoreParentCondition(Boolean ignoreParentCondition) {
         this.ignoreParentCondition = ignoreParentCondition;
     }
@@ -207,8 +213,6 @@ public class FormTabConfig extends BaseConfig {
         return showSearch;
     }
 
-    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
-    @XmlAttribute
     public void setShowSearch(Boolean showSearch) {
         this.showSearch = showSearch;
     }
@@ -217,8 +221,6 @@ public class FormTabConfig extends BaseConfig {
         return quickEdit;
     }
 
-    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
-    @XmlAttribute
     public void setQuickEdit(Boolean quickEdit) {
         this.quickEdit = quickEdit;
     }
@@ -227,8 +229,6 @@ public class FormTabConfig extends BaseConfig {
         return quickOrder;
     }
 
-    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
-    @XmlAttribute
     public void setQuickOrder(Boolean quickOrder) {
         this.quickOrder = quickOrder;
     }
@@ -237,8 +237,6 @@ public class FormTabConfig extends BaseConfig {
         return visible;
     }
 
-    @XmlJavaTypeAdapter(MarshalTrueToNullXmlAdapter.class)
-    @XmlAttribute
     public void setVisible(Boolean visible) {
         this.visible = visible;
     }
@@ -247,8 +245,6 @@ public class FormTabConfig extends BaseConfig {
         return editable;
     }
 
-    @XmlJavaTypeAdapter(MarshalTrueToNullXmlAdapter.class)
-    @XmlAttribute
     public void setEditable(Boolean editable) {
         this.editable = editable;
     }
@@ -257,8 +253,6 @@ public class FormTabConfig extends BaseConfig {
         return disabled;
     }
 
-    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
-    @XmlAttribute
     public void setDisabled(Boolean disabled) {
         this.disabled = disabled;
     }
@@ -267,7 +261,6 @@ public class FormTabConfig extends BaseConfig {
         return sectionList;
     }
 
-    @XmlElement(name = "section", required = true)
     public void setSectionList(List<FormSectionConfig> sectionList) {
         this.sectionList = sectionList;
     }

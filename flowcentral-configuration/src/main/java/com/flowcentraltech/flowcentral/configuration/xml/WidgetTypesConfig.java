@@ -17,7 +17,8 @@ package com.flowcentraltech.flowcentral.configuration.xml;
 
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlElement;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * Widget type configuration.
@@ -27,13 +28,14 @@ import javax.xml.bind.annotation.XmlElement;
  */
 public class WidgetTypesConfig extends BaseConfig {
 
+    @JacksonXmlElementWrapper(useWrapping = false)
+    @JacksonXmlProperty(localName = "widgetType")
     private List<WidgetTypeConfig> widgetTypeList;
 
     public List<WidgetTypeConfig> getWidgetTypeList() {
         return widgetTypeList;
     }
 
-    @XmlElement(name = "widgetType", required = true)
     public void setWidgetTypeList(List<WidgetTypeConfig> widgetTypeList) {
         this.widgetTypeList = widgetTypeList;
     }

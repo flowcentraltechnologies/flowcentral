@@ -17,7 +17,8 @@ package com.flowcentraltech.flowcentral.configuration.xml;
 
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlElement;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * Placements configuration.
@@ -27,13 +28,14 @@ import javax.xml.bind.annotation.XmlElement;
  */
 public class ReportPlacementsConfig extends BaseConfig {
 
+    @JacksonXmlElementWrapper(useWrapping = false)
+    @JacksonXmlProperty(localName = "placement")
     private List<ReportPlacementConfig> placementList;
 
     public List<ReportPlacementConfig> getPlacementList() {
         return placementList;
     }
 
-    @XmlElement(name = "placement")
     public void setPlacementList(List<ReportPlacementConfig> placementList) {
         this.placementList = placementList;
     }

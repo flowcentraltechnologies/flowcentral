@@ -7,7 +7,7 @@
 	<parent>
 		<groupId>com.flowcentraltech.flowcentral</groupId>
 		<artifactId>flowcentral</artifactId>
-		<version>1.0.66-SNAPSHOT</version>
+		<version>1.2.0-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>flowcentral-application</artifactId>
@@ -40,11 +40,6 @@
 		<dependency>
 			<groupId>com.tcdng.unify</groupId>
 			<artifactId>unify-jasperreports</artifactId>
-			<version>${unify.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.tcdng.unify</groupId>
-			<artifactId>unify-nashorn</artifactId>
 			<version>${unify.version}</version>
 		</dependency>
 		<!-- Test dependencies -->

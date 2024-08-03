@@ -18,7 +18,8 @@ package com.flowcentraltech.flowcentral.configuration.xml;
 
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlElement;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * Workflow steps configuration.
@@ -28,13 +29,14 @@ import javax.xml.bind.annotation.XmlElement;
  */
 public class WfStepsConfig extends BaseConfig {
 
+    @JacksonXmlElementWrapper(useWrapping = false)
+    @JacksonXmlProperty(localName = "step")
     private List<WfStepConfig> stepList;
 
     public List<WfStepConfig> getStepList() {
         return stepList;
     }
 
-    @XmlElement(name = "step", required = true)
     public void setStepList(List<WfStepConfig> stepList) {
         this.stepList = stepList;
     }

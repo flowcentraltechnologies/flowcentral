@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>com.flowcentraltech.flowcentral</groupId>
 		<artifactId>flowcentral</artifactId>
-		<version>1.0.66-SNAPSHOT</version>
+		<version>1.2.0-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>flowcentral-connect-configuration</artifactId>
@@ -14,8 +14,18 @@
 	<description>Flowcentral Connect Configuration Module</description>
 	<url>http://www.flowcentralplatform.com</url>
 
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<jackson.version>2.12.3</jackson.version>
+	</properties>
+
 	<dependencies>
 		<!-- Main dependencies -->
-		<!-- Test dependencies -->
+		<!--XML-->
+		<dependency>
+		    <groupId>com.fasterxml.jackson.dataformat</groupId>
+		    <artifactId>jackson-dataformat-xml</artifactId>
+		    <version>${jackson.version}</version>
+		</dependency>
 	</dependencies>
 </project>

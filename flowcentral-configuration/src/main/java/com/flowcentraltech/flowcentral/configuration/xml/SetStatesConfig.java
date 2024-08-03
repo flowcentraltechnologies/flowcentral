@@ -17,7 +17,8 @@ package com.flowcentraltech.flowcentral.configuration.xml;
 
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlElement;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * Set states configuration.
@@ -27,13 +28,14 @@ import javax.xml.bind.annotation.XmlElement;
  */
 public class SetStatesConfig extends BaseConfig {
 
+    @JacksonXmlElementWrapper(useWrapping = false)
+    @JacksonXmlProperty(localName = "setState")
     private List<SetStateConfig> setStateList;
 
     public List<SetStateConfig> getSetStateList() {
         return setStateList;
     }
 
-    @XmlElement(name = "setState", required = true)
     public void setSetStateList(List<SetStateConfig> setStateList) {
         this.setStateList = setStateList;
     }

@@ -184,8 +184,7 @@
 					<restriction type="is_null" field="code" />
 				</onCondition>
 				<setStates>
-					<setState type="field" target="code" showAnnotation="false"
-						visible="false" />
+					<setState type="field" target="code" visible="false" />
 				</setStates>
 			</formStatePolicy>
 		</form>

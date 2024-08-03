@@ -16,6 +16,8 @@
 package com.flowcentraltech.flowcentral.configuration.xml.adapter;
 
 import com.flowcentraltech.flowcentral.configuration.constants.NotifType;
+import com.tcdng.unify.core.util.xml.AbstractEnumConstDeserializer;
+import com.tcdng.unify.core.util.xml.AbstractEnumConstSerializer;
 import com.tcdng.unify.core.util.xml.AbstractEnumConstXmlAdapter;
 
 /**
@@ -24,10 +26,20 @@ import com.tcdng.unify.core.util.xml.AbstractEnumConstXmlAdapter;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class NotificationTypeXmlAdapter extends AbstractEnumConstXmlAdapter<NotifType> {
+public class NotificationTypeXmlAdapter extends AbstractEnumConstXmlAdapter {
+    
+    public static class Serializer extends AbstractEnumConstSerializer<NotifType> {
+        public Serializer() {
+            
+        }
 
-    public NotificationTypeXmlAdapter() {
-        super(NotifType.class);
     }
+    
+    public static class Deserializer extends AbstractEnumConstDeserializer<NotifType> {
 
+        public Deserializer() {
+            super(NotifType.class);
+        }
+
+    }
 }

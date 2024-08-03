@@ -15,14 +15,12 @@
  */
 package com.flowcentraltech.flowcentral.configuration.xml;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldDataType;
 import com.flowcentraltech.flowcentral.configuration.xml.adapter.EntityFieldDataTypeXmlAdapter;
 import com.tcdng.unify.core.constant.TextCase;
-import com.tcdng.unify.core.util.xml.MarshalFalseToNullXmlAdapter;
-import com.tcdng.unify.core.util.xml.MarshalTrueToNullXmlAdapter;
 import com.tcdng.unify.core.util.xml.adapter.TextCaseXmlAdapter;
 
 /**
@@ -33,70 +31,107 @@ import com.tcdng.unify.core.util.xml.adapter.TextCaseXmlAdapter;
  */
 public class EntityFieldConfig extends BaseConfig {
 
+    @JsonSerialize(using = EntityFieldDataTypeXmlAdapter.Serializer.class)
+    @JsonDeserialize(using = EntityFieldDataTypeXmlAdapter.Deserializer.class)
+    @JacksonXmlProperty(isAttribute = true)
     private EntityFieldDataType type;
 
+    @JsonSerialize(using = TextCaseXmlAdapter.Serializer.class)
+    @JsonDeserialize(using = TextCaseXmlAdapter.Deserializer.class)
+    @JacksonXmlProperty(isAttribute = true, localName = "case")
     private TextCase textCase;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String name;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String label;
 
+    @JacksonXmlProperty(isAttribute = true, localName = "column")
     private String columnName;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String references;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String key;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String property;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String category;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String inputLabel;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String inputWidget;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String suggestionType;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String inputListKey;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String lingualWidget;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String lingualListKey;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String autoFormat;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String defaultVal;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String mapped;
 
+    @JacksonXmlProperty(isAttribute = true)
     private Integer columns;
 
+    @JacksonXmlProperty(isAttribute = true)
     private Integer rows;
 
+    @JacksonXmlProperty(isAttribute = true)
     private Integer maxLen;
 
+    @JacksonXmlProperty(isAttribute = true)
     private Integer minLen;
 
+    @JacksonXmlProperty(isAttribute = true)
     private Integer precision;
 
+    @JacksonXmlProperty(isAttribute = true)
     private Integer scale;
 
+    @JacksonXmlProperty(isAttribute = true)
     private Boolean trim;
 
+    @JacksonXmlProperty(isAttribute = true)
     private Boolean allowNegative;
 
+    @JacksonXmlProperty(isAttribute = true)
     private Boolean readOnly;
 
+    @JacksonXmlProperty(isAttribute = true)
     private Boolean nullable;
 
+    @JacksonXmlProperty(isAttribute = true)
     private Boolean auditable;
 
+    @JacksonXmlProperty(isAttribute = true)
     private Boolean reportable;
 
+    @JacksonXmlProperty(isAttribute = true)
     private Boolean descriptive;
 
+    @JacksonXmlProperty(isAttribute = true, localName = "maintainAction")
     private Boolean maintainLink;
 
+    @JacksonXmlProperty(isAttribute = true)
     private Boolean basicSearch;
 
     public EntityFieldConfig() {
@@ -115,8 +150,6 @@ public class EntityFieldConfig extends BaseConfig {
         return type;
     }
 
-    @XmlJavaTypeAdapter(EntityFieldDataTypeXmlAdapter.class)
-    @XmlAttribute(required = true)
     public void setType(EntityFieldDataType type) {
         this.type = type;
     }
@@ -125,7 +158,6 @@ public class EntityFieldConfig extends BaseConfig {
         return name;
     }
 
-    @XmlAttribute(required = true)
     public void setName(String name) {
         this.name = name;
     }
@@ -134,7 +166,6 @@ public class EntityFieldConfig extends BaseConfig {
         return label;
     }
 
-    @XmlAttribute(required = true)
     public void setLabel(String label) {
         this.label = label;
     }
@@ -143,7 +174,6 @@ public class EntityFieldConfig extends BaseConfig {
         return columnName;
     }
 
-    @XmlAttribute(name = "column", required = true)
     public void setColumnName(String columnName) {
         this.columnName = columnName;
     }
@@ -152,7 +182,6 @@ public class EntityFieldConfig extends BaseConfig {
         return references;
     }
 
-    @XmlAttribute
     public void setReferences(String references) {
         this.references = references;
     }
@@ -161,7 +190,6 @@ public class EntityFieldConfig extends BaseConfig {
         return key;
     }
 
-    @XmlAttribute
     public void setKey(String key) {
         this.key = key;
     }
@@ -170,7 +198,6 @@ public class EntityFieldConfig extends BaseConfig {
         return property;
     }
 
-    @XmlAttribute
     public void setProperty(String property) {
         this.property = property;
     }
@@ -179,7 +206,6 @@ public class EntityFieldConfig extends BaseConfig {
         return category;
     }
 
-    @XmlAttribute
     public void setCategory(String category) {
         this.category = category;
     }
@@ -188,7 +214,6 @@ public class EntityFieldConfig extends BaseConfig {
         return inputLabel;
     }
 
-    @XmlAttribute
     public void setInputLabel(String inputLabel) {
         this.inputLabel = inputLabel;
     }
@@ -197,7 +222,6 @@ public class EntityFieldConfig extends BaseConfig {
         return inputWidget;
     }
 
-    @XmlAttribute
     public void setInputWidget(String inputWidget) {
         this.inputWidget = inputWidget;
     }
@@ -206,7 +230,6 @@ public class EntityFieldConfig extends BaseConfig {
         return suggestionType;
     }
 
-    @XmlAttribute
     public void setSuggestionType(String suggestionType) {
         this.suggestionType = suggestionType;
     }
@@ -215,7 +238,6 @@ public class EntityFieldConfig extends BaseConfig {
         return inputListKey;
     }
 
-    @XmlAttribute
     public void setInputListKey(String inputListKey) {
         this.inputListKey = inputListKey;
     }
@@ -224,7 +246,6 @@ public class EntityFieldConfig extends BaseConfig {
         return lingualWidget;
     }
 
-    @XmlAttribute
     public void setLingualWidget(String lingualWidget) {
         this.lingualWidget = lingualWidget;
     }
@@ -233,7 +254,6 @@ public class EntityFieldConfig extends BaseConfig {
         return lingualListKey;
     }
 
-    @XmlAttribute
     public void setLingualListKey(String lingualListKey) {
         this.lingualListKey = lingualListKey;
     }
@@ -242,7 +262,6 @@ public class EntityFieldConfig extends BaseConfig {
         return autoFormat;
     }
 
-    @XmlAttribute
     public void setAutoFormat(String autoFormat) {
         this.autoFormat = autoFormat;
     }
@@ -251,7 +270,6 @@ public class EntityFieldConfig extends BaseConfig {
         return mapped;
     }
 
-    @XmlAttribute
     public void setMapped(String mapped) {
         this.mapped = mapped;
     }
@@ -260,7 +278,6 @@ public class EntityFieldConfig extends BaseConfig {
         return defaultVal;
     }
 
-    @XmlAttribute
     public void setDefaultVal(String defaultVal) {
         this.defaultVal = defaultVal;
     }
@@ -269,8 +286,6 @@ public class EntityFieldConfig extends BaseConfig {
         return textCase;
     }
 
-    @XmlJavaTypeAdapter(TextCaseXmlAdapter.class)
-    @XmlAttribute(name = "case")
     public void setTextCase(TextCase textCase) {
         this.textCase = textCase;
     }
@@ -279,7 +294,6 @@ public class EntityFieldConfig extends BaseConfig {
         return columns;
     }
 
-    @XmlAttribute
     public void setColumns(Integer columns) {
         this.columns = columns;
     }
@@ -288,7 +302,6 @@ public class EntityFieldConfig extends BaseConfig {
         return rows;
     }
 
-    @XmlAttribute
     public void setRows(Integer rows) {
         this.rows = rows;
     }
@@ -297,7 +310,6 @@ public class EntityFieldConfig extends BaseConfig {
         return maxLen;
     }
 
-    @XmlAttribute
     public void setMaxLen(Integer maxLen) {
         this.maxLen = maxLen;
     }
@@ -306,7 +318,6 @@ public class EntityFieldConfig extends BaseConfig {
         return minLen;
     }
 
-    @XmlAttribute
     public void setMinLen(Integer minLen) {
         this.minLen = minLen;
     }
@@ -315,7 +326,6 @@ public class EntityFieldConfig extends BaseConfig {
         return precision;
     }
 
-    @XmlAttribute
     public void setPrecision(Integer precision) {
         this.precision = precision;
     }
@@ -324,7 +334,6 @@ public class EntityFieldConfig extends BaseConfig {
         return scale;
     }
 
-    @XmlAttribute
     public void setScale(Integer scale) {
         this.scale = scale;
     }
@@ -333,8 +342,6 @@ public class EntityFieldConfig extends BaseConfig {
         return trim;
     }
 
-    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
-    @XmlAttribute
     public void setTrim(Boolean trim) {
         this.trim = trim;
     }
@@ -343,8 +350,6 @@ public class EntityFieldConfig extends BaseConfig {
         return allowNegative;
     }
 
-    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
-    @XmlAttribute
     public void setAllowNegative(Boolean allowNegative) {
         this.allowNegative = allowNegative;
     }
@@ -353,8 +358,6 @@ public class EntityFieldConfig extends BaseConfig {
         return readOnly;
     }
 
-    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
-    @XmlAttribute
     public void setReadOnly(Boolean readOnly) {
         this.readOnly = readOnly;
     }
@@ -363,8 +366,6 @@ public class EntityFieldConfig extends BaseConfig {
         return nullable;
     }
 
-    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
-    @XmlAttribute
     public void setNullable(Boolean nullable) {
         this.nullable = nullable;
     }
@@ -373,8 +374,6 @@ public class EntityFieldConfig extends BaseConfig {
         return auditable;
     }
 
-    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
-    @XmlAttribute
     public void setAuditable(Boolean auditable) {
         this.auditable = auditable;
     }
@@ -383,8 +382,6 @@ public class EntityFieldConfig extends BaseConfig {
         return reportable;
     }
 
-    @XmlJavaTypeAdapter(MarshalTrueToNullXmlAdapter.class)
-    @XmlAttribute
     public void setReportable(Boolean reportable) {
         this.reportable = reportable;
     }
@@ -393,8 +390,6 @@ public class EntityFieldConfig extends BaseConfig {
         return descriptive;
     }
 
-    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
-    @XmlAttribute
     public void setDescriptive(Boolean descriptive) {
         this.descriptive = descriptive;
     }
@@ -403,8 +398,6 @@ public class EntityFieldConfig extends BaseConfig {
         return maintainLink;
     }
 
-    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
-    @XmlAttribute(name = "maintainAction")
     public void setMaintainLink(Boolean maintainLink) {
         this.maintainLink = maintainLink;
     }
@@ -413,8 +406,6 @@ public class EntityFieldConfig extends BaseConfig {
         return basicSearch;
     }
 
-    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
-    @XmlAttribute
     public void setBasicSearch(Boolean basicSearch) {
         this.basicSearch = basicSearch;
     }

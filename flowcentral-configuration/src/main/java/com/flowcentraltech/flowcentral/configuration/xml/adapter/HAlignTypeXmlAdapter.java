@@ -16,6 +16,8 @@
 package com.flowcentraltech.flowcentral.configuration.xml.adapter;
 
 import com.tcdng.unify.core.constant.HAlignType;
+import com.tcdng.unify.core.util.xml.AbstractEnumConstDeserializer;
+import com.tcdng.unify.core.util.xml.AbstractEnumConstSerializer;
 import com.tcdng.unify.core.util.xml.AbstractEnumConstXmlAdapter;
 
 /**
@@ -24,9 +26,20 @@ import com.tcdng.unify.core.util.xml.AbstractEnumConstXmlAdapter;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class HAlignTypeXmlAdapter extends AbstractEnumConstXmlAdapter<HAlignType> {
+public class HAlignTypeXmlAdapter extends AbstractEnumConstXmlAdapter {
+    
+    public static class Serializer extends AbstractEnumConstSerializer<HAlignType> {
+        public Serializer() {
+            
+        }
 
-    public HAlignTypeXmlAdapter() {
-        super(HAlignType.class);
+    }
+    
+    public static class Deserializer extends AbstractEnumConstDeserializer<HAlignType> {
+
+        public Deserializer() {
+            super(HAlignType.class);
+        }
+
     }
 }

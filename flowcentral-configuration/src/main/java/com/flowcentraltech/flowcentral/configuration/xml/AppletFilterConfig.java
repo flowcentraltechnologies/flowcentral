@@ -15,9 +15,9 @@
  */
 package com.flowcentraltech.flowcentral.configuration.xml;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.flowcentraltech.flowcentral.configuration.constants.ChildListActionType;
 import com.flowcentraltech.flowcentral.configuration.xml.adapter.ChildListActionTypeXmlAdapter;
 
@@ -29,19 +29,24 @@ import com.flowcentraltech.flowcentral.configuration.xml.adapter.ChildListAction
  */
 public class AppletFilterConfig extends FilterConfig {
 
+    @JacksonXmlProperty(isAttribute = true)
     private String preferredForm;
     
+    @JacksonXmlProperty(isAttribute = true)
     private String preferredChildListApplet;
     
+    @JsonSerialize(using = ChildListActionTypeXmlAdapter.Serializer.class)
+    @JsonDeserialize(using = ChildListActionTypeXmlAdapter.Deserializer.class)
+    @JacksonXmlProperty(isAttribute = true)
     private ChildListActionType childListActionType;
     
+    @JacksonXmlProperty(isAttribute = true)
     private boolean quickFilter;
 
     public String getPreferredForm() {
         return preferredForm;
     }
 
-    @XmlAttribute
     public void setPreferredForm(String preferredForm) {
         this.preferredForm = preferredForm;
     }
@@ -50,7 +55,6 @@ public class AppletFilterConfig extends FilterConfig {
         return preferredChildListApplet;
     }
 
-    @XmlAttribute
     public  void setPreferredChildListApplet(String preferredChildListApplet) {
         this.preferredChildListApplet = preferredChildListApplet;
     }
@@ -59,8 +63,6 @@ public class AppletFilterConfig extends FilterConfig {
         return childListActionType;
     }
 
-    @XmlJavaTypeAdapter(ChildListActionTypeXmlAdapter.class)
-    @XmlAttribute
     public void setChildListActionType(ChildListActionType childListActionType) {
         this.childListActionType = childListActionType;
     }
@@ -69,7 +71,6 @@ public class AppletFilterConfig extends FilterConfig {
         return quickFilter;
     }
 
-    @XmlAttribute
     public void setQuickFilter(boolean quickFilter) {
         this.quickFilter = quickFilter;
     }

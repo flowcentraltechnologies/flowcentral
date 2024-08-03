@@ -16,6 +16,8 @@
 package com.flowcentraltech.flowcentral.configuration.xml.adapter;
 
 import com.flowcentraltech.flowcentral.configuration.constants.WorkflowAlertType;
+import com.tcdng.unify.core.util.xml.AbstractEnumConstDeserializer;
+import com.tcdng.unify.core.util.xml.AbstractEnumConstSerializer;
 import com.tcdng.unify.core.util.xml.AbstractEnumConstXmlAdapter;
 
 /**
@@ -24,9 +26,20 @@ import com.tcdng.unify.core.util.xml.AbstractEnumConstXmlAdapter;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class WorkflowAlertTypeXmlAdapter extends AbstractEnumConstXmlAdapter<WorkflowAlertType> {
+public class WorkflowAlertTypeXmlAdapter extends AbstractEnumConstXmlAdapter {
+    
+    public static class Serializer extends AbstractEnumConstSerializer<WorkflowAlertType> {
+        public Serializer() {
+            
+        }
 
-    public WorkflowAlertTypeXmlAdapter() {
-        super(WorkflowAlertType.class);
+    }
+    
+    public static class Deserializer extends AbstractEnumConstDeserializer<WorkflowAlertType> {
+
+        public Deserializer() {
+            super(WorkflowAlertType.class);
+        }
+
     }
 }

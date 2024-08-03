@@ -15,8 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.configuration.xml;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * Dashboard option category base configuration.
@@ -26,17 +25,19 @@ import javax.xml.bind.annotation.XmlElement;
  */
 public class DashboardOptionCategoryBaseConfig extends BaseConfig  {
 
+    @JacksonXmlProperty(isAttribute = true)
     private String chartDataSource;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String entity;
 
+    @JacksonXmlProperty(localName = "base-condition")
     private FilterConfig categoryBase;
 
     public String getChartDataSource() {
         return chartDataSource;
     }
 
-    @XmlAttribute
     public void setChartDataSource(String chartDataSource) {
         this.chartDataSource = chartDataSource;
     }
@@ -45,7 +46,6 @@ public class DashboardOptionCategoryBaseConfig extends BaseConfig  {
         return entity;
     }
 
-    @XmlAttribute
     public void setEntity(String entity) {
         this.entity = entity;
     }
@@ -54,7 +54,6 @@ public class DashboardOptionCategoryBaseConfig extends BaseConfig  {
         return categoryBase;
     }
 
-    @XmlElement(name = "base-condition", required = true)
     public void setCategoryBase(FilterConfig categoryBase) {
         this.categoryBase = categoryBase;
     }

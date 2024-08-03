@@ -18,7 +18,8 @@ package com.flowcentraltech.flowcentral.configuration.xml;
 
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlElement;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * Property lists configuration.
@@ -28,13 +29,14 @@ import javax.xml.bind.annotation.XmlElement;
  */
 public class PropertyListsConfig extends BaseConfig {
 
+    @JacksonXmlElementWrapper(useWrapping = false)
+    @JacksonXmlProperty(localName = "propertyList")
     private List<PropertyListConfig> propertyConfigList;
 
     public List<PropertyListConfig> getPropertyConfigList() {
         return propertyConfigList;
     }
 
-    @XmlElement(name = "propertyList")
     public void setPropertyConfigList(List<PropertyListConfig> propertyConfigList) {
         this.propertyConfigList = propertyConfigList;
     }

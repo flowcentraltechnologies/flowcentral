@@ -17,8 +17,8 @@ package com.flowcentraltech.flowcentral.configuration.xml;
 
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * Set values configuration.
@@ -28,17 +28,20 @@ import javax.xml.bind.annotation.XmlElement;
  */
 public class SetValuesConfig extends BaseConfig {
 
+    @JacksonXmlProperty(isAttribute = true)
     private String name;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String description;
 
+    @JacksonXmlElementWrapper(useWrapping = false)
+    @JacksonXmlProperty(localName = "setValue")
     private List<SetValueConfig> setValueList;
 
     public String getName() {
         return name;
     }
 
-    @XmlAttribute
     public void setName(String name) {
         this.name = name;
     }
@@ -47,7 +50,6 @@ public class SetValuesConfig extends BaseConfig {
         return description;
     }
 
-    @XmlAttribute
     public void setDescription(String description) {
         this.description = description;
     }
@@ -56,7 +58,6 @@ public class SetValuesConfig extends BaseConfig {
         return setValueList;
     }
 
-    @XmlElement(name = "setValue", required = true)
     public void setSetValueList(List<SetValueConfig> setValueList) {
         this.setValueList = setValueList;
     }

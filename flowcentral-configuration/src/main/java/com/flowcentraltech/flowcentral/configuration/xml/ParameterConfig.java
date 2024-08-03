@@ -15,9 +15,9 @@
  */
 package com.flowcentraltech.flowcentral.configuration.xml;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.tcdng.unify.core.constant.DataType;
 import com.tcdng.unify.core.util.xml.adapter.DataTypeXmlAdapter;
 
@@ -29,18 +29,27 @@ import com.tcdng.unify.core.util.xml.adapter.DataTypeXmlAdapter;
  */
 public class ParameterConfig extends BaseConfig {
 
+    @JacksonXmlProperty(isAttribute = true)
     private String name;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String description;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String label;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String editor;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String defaultVal;
 
+    @JsonSerialize(using = DataTypeXmlAdapter.Serializer.class)
+    @JsonDeserialize(using = DataTypeXmlAdapter.Deserializer.class)
+    @JacksonXmlProperty(isAttribute = true)
     private DataType type;
 
+    @JacksonXmlProperty(isAttribute = true)
     private boolean mandatory;
 
     public ParameterConfig() {
@@ -51,7 +60,6 @@ public class ParameterConfig extends BaseConfig {
         return name;
     }
 
-    @XmlAttribute(required = true)
     public void setName(String name) {
         this.name = name;
     }
@@ -60,7 +68,6 @@ public class ParameterConfig extends BaseConfig {
         return description;
     }
 
-    @XmlAttribute
     public void setDescription(String description) {
         this.description = description;
     }
@@ -69,7 +76,6 @@ public class ParameterConfig extends BaseConfig {
         return editor;
     }
 
-    @XmlAttribute(required = true)
     public void setEditor(String editor) {
         this.editor = editor;
     }
@@ -78,7 +84,6 @@ public class ParameterConfig extends BaseConfig {
         return mandatory;
     }
 
-    @XmlAttribute
     public void setMandatory(boolean mandatory) {
         this.mandatory = mandatory;
     }
@@ -87,7 +92,6 @@ public class ParameterConfig extends BaseConfig {
         return label;
     }
 
-    @XmlAttribute(required = true)
     public void setLabel(String label) {
         this.label = label;
     }
@@ -96,7 +100,6 @@ public class ParameterConfig extends BaseConfig {
         return defaultVal;
     }
 
-    @XmlAttribute
     public void setDefaultVal(String defaultVal) {
         this.defaultVal = defaultVal;
     }
@@ -105,8 +108,6 @@ public class ParameterConfig extends BaseConfig {
         return type;
     }
 
-    @XmlJavaTypeAdapter(DataTypeXmlAdapter.class)
-    @XmlAttribute(required = true)
     public void setType(DataType type) {
         this.type = type;
     }

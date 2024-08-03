@@ -15,9 +15,9 @@
  */
 package com.flowcentraltech.flowcentral.configuration.xml;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.flowcentraltech.flowcentral.configuration.constants.SeriesType;
 import com.flowcentraltech.flowcentral.configuration.xml.adapter.SeriesTypeXmlAdapter;
 
@@ -29,22 +29,27 @@ import com.flowcentraltech.flowcentral.configuration.xml.adapter.SeriesTypeXmlAd
  */
 public class EntitySeriesConfig extends BaseConfig {
 
+    @JsonSerialize(using = SeriesTypeXmlAdapter.Serializer.class)
+    @JsonDeserialize(using = SeriesTypeXmlAdapter.Deserializer.class)
+    @JacksonXmlProperty(isAttribute = true)
     private SeriesType type;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String name;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String description;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String label;
 
+    @JacksonXmlProperty(isAttribute = true)
     private String fieldName;
 
     public SeriesType getType() {
         return type;
     }
 
-    @XmlJavaTypeAdapter(SeriesTypeXmlAdapter.class)
-    @XmlAttribute(required = true)
     public void setType(SeriesType type) {
         this.type = type;
     }
@@ -53,7 +58,6 @@ public class EntitySeriesConfig extends BaseConfig {
         return name;
     }
 
-    @XmlAttribute(required = true)
     public void setName(String name) {
         this.name = name;
     }
@@ -62,7 +66,6 @@ public class EntitySeriesConfig extends BaseConfig {
         return label;
     }
 
-    @XmlAttribute(required = true)
     public void setLabel(String label) {
         this.label = label;
     }

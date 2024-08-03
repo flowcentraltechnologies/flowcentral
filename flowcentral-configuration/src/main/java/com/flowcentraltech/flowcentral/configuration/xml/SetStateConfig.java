@@ -15,9 +15,9 @@
  */
 package com.flowcentraltech.flowcentral.configuration.xml;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.flowcentraltech.flowcentral.configuration.constants.FormElementType;
 import com.flowcentraltech.flowcentral.configuration.xml.adapter.FormElementTypeXmlAdapter;
 import com.tcdng.unify.core.constant.TriState;
@@ -31,16 +31,32 @@ import com.tcdng.unify.core.util.xml.adapter.TriStateXmlAdapter;
  */
 public class SetStateConfig extends BaseConfig {
 
+    @JsonSerialize(using = FormElementTypeXmlAdapter.Serializer.class)
+    @JsonDeserialize(using = FormElementTypeXmlAdapter.Deserializer.class)
+    @JacksonXmlProperty(isAttribute = true)
     private FormElementType type;
 
+    @JacksonXmlProperty(isAttribute = true, localName = "target")
     private String target;
 
+    @JsonSerialize(using = TriStateXmlAdapter.Serializer.class)
+    @JsonDeserialize(using = TriStateXmlAdapter.Deserializer.class)
+    @JacksonXmlProperty(isAttribute = true)
     private TriState required;
 
+    @JsonSerialize(using = TriStateXmlAdapter.Serializer.class)
+    @JsonDeserialize(using = TriStateXmlAdapter.Deserializer.class)
+    @JacksonXmlProperty(isAttribute = true)
     private TriState visible;
 
+    @JsonSerialize(using = TriStateXmlAdapter.Serializer.class)
+    @JsonDeserialize(using = TriStateXmlAdapter.Deserializer.class)
+    @JacksonXmlProperty(isAttribute = true)
     private TriState editable;
 
+    @JsonSerialize(using = TriStateXmlAdapter.Serializer.class)
+    @JsonDeserialize(using = TriStateXmlAdapter.Deserializer.class)
+    @JacksonXmlProperty(isAttribute = true)
     private TriState disabled;
 
     public SetStateConfig() {
@@ -54,8 +70,6 @@ public class SetStateConfig extends BaseConfig {
         return type;
     }
 
-    @XmlJavaTypeAdapter(FormElementTypeXmlAdapter.class)
-    @XmlAttribute(required = true)
     public void setType(FormElementType type) {
         this.type = type;
     }
@@ -64,7 +78,6 @@ public class SetStateConfig extends BaseConfig {
         return target;
     }
 
-    @XmlAttribute(name = "target", required = true)
     public void setTarget(String target) {
         this.target = target;
     }
@@ -73,8 +86,6 @@ public class SetStateConfig extends BaseConfig {
         return required;
     }
 
-    @XmlJavaTypeAdapter(TriStateXmlAdapter.class)
-    @XmlAttribute
     public void setRequired(TriState required) {
         this.required = required;
     }
@@ -83,8 +94,6 @@ public class SetStateConfig extends BaseConfig {
         return visible;
     }
 
-    @XmlJavaTypeAdapter(TriStateXmlAdapter.class)
-    @XmlAttribute
     public void setVisible(TriState visible) {
         this.visible = visible;
     }
@@ -93,8 +102,6 @@ public class SetStateConfig extends BaseConfig {
         return editable;
     }
 
-    @XmlJavaTypeAdapter(TriStateXmlAdapter.class)
-    @XmlAttribute
     public void setEditable(TriState editable) {
         this.editable = editable;
     }
@@ -103,8 +110,6 @@ public class SetStateConfig extends BaseConfig {
         return disabled;
     }
 
-    @XmlJavaTypeAdapter(TriStateXmlAdapter.class)
-    @XmlAttribute
     public void setDisabled(TriState disabled) {
         this.disabled = disabled;
     }
