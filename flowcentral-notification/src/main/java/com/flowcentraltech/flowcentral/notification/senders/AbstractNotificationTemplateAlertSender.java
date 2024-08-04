@@ -65,6 +65,9 @@ public abstract class AbstractNotificationTemplateAlertSender<T extends NotifTem
         }
 
         if (notifWrapper.isWithRecipients()) {
+            // Add parameters from reader
+            notifWrapper.addParams(reader);
+            
             // Set template variables
             setTemplateVariables(notifWrapper, reader);
 

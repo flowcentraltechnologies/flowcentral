@@ -19,7 +19,9 @@ import com.flowcentraltech.flowcentral.common.data.Attachment;
 import com.flowcentraltech.flowcentral.common.data.Recipient;
 import com.flowcentraltech.flowcentral.configuration.constants.ImportanceType;
 import com.flowcentraltech.flowcentral.configuration.constants.NotifType;
+import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.constant.FileAttachmentType;
+import com.tcdng.unify.core.data.ValueStoreReader;
 
 /**
  * Notification template wrapper.
@@ -47,6 +49,8 @@ public interface NotifTemplateWrapper {
 
     void setFrom(String from);
 
+    void addParams(ValueStoreReader reader) throws UnifyException;
+    
     void addParam(String name, Object val);
 
     void addAttachment(FileAttachmentType type, String name, String title, String fileName, byte[] data);

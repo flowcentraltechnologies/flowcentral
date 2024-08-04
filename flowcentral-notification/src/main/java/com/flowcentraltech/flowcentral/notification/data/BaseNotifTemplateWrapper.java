@@ -19,7 +19,10 @@ import com.flowcentraltech.flowcentral.common.data.Attachment;
 import com.flowcentraltech.flowcentral.common.data.Recipient;
 import com.flowcentraltech.flowcentral.configuration.constants.ImportanceType;
 import com.flowcentraltech.flowcentral.configuration.constants.NotifType;
+import com.tcdng.unify.common.util.StringToken;
+import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.constant.FileAttachmentType;
+import com.tcdng.unify.core.data.ValueStoreReader;
 
 /**
  * Convenient abstract base class for notification template wrappers.
@@ -81,6 +84,23 @@ public abstract class BaseNotifTemplateWrapper implements NotifTemplateWrapper {
     @Override
     public void setFrom(String from) {
         nmb.from(from);
+    }
+
+    @Override
+    public void addParams(ValueStoreReader reader) throws UnifyException {
+        for (StringToken token : notifTemplateDef.getSubjectTokenList()) {
+            if (token.isParam()) {
+                String _token = token.getToken();
+                nmb.addParam(_token, reader.read(_token));
+            }
+        }
+
+        for (StringToken token : notifTemplateDef.getTemplateTokenList()) {
+            if (token.isParam()) {
+                String _token = token.getToken();
+                nmb.addParam(_token, reader.read(_token));
+            }
+        }
     }
 
     @Override
