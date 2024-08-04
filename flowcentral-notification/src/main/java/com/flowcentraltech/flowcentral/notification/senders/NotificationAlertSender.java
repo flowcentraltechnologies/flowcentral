@@ -35,7 +35,7 @@ public interface NotificationAlertSender extends FlowCentralComponent {
 
     String WFITEM_LINK_VARIABLE = "rsvWfitemLink";
 
-    String WFITEM_HTMLLINK_VARIABLE = "rsvWfitemHtmlLink";
+    String WFITEM_HTMLLINK_VARIABLE = "rsvWfitemHtmlLink"; 
     
     /**
      * Gets the notification type for this sender.

@@ -87,7 +87,7 @@ public abstract class AbstractNotificationAlertSender extends AbstractFlowCentra
             Map<String, Object> parameters) throws UnifyException {
         return notification().wrapperOfNotifLargeText(wrapperType, parameters);
     }
-
+    
     /**
      * Generates notification attachments using reader.
      * 
