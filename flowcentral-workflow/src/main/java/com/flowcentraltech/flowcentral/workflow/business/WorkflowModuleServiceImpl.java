@@ -1865,6 +1865,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                     securedLinkInfo.getLinkUrl());
             transitionItem.getReader().setTempValue(NotificationAlertSender.WFITEM_HTMLLINK_VARIABLE,
                     securedLinkInfo.getHtmlLink());
+            logDebug("Setting work item link variables [{0}] and [{1}]...", securedLinkInfo.getLinkUrl(),
+                    securedLinkInfo.getHtmlLink());
         }
 
         for (WfAlertDef wfAlertDef : wfStepDef.getAlertList()) {
