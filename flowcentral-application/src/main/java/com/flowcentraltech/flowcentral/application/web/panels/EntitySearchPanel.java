@@ -56,88 +56,90 @@ public class EntitySearchPanel extends AbstractApplicationPanel {
         super.switchState();
 
         EntitySearch entitySearch = getEntitySearch();
-        setVisible("sectorIcon", entitySearch.isWithSectorIcon());
+        if (entitySearch != null) {
+            setVisible("sectorIcon", entitySearch.isWithSectorIcon());
 
-        // Makes sure edit button does not break on page scroll
-        setRequestAttribute(entitySearch.getEditActionKey(), entitySearch.getEditAction());
+            // Makes sure edit button does not break on page scroll
+            setRequestAttribute(entitySearch.getEditActionKey(), entitySearch.getEditAction());
 
-        entitySearch.ensureTableStruct();
-        if (isReloadOnSwitch()) {
-            entitySearch.applySearchEntriesToSearch();
-        }
+            entitySearch.ensureTableStruct();
+            if (isReloadOnSwitch()) {
+                entitySearch.applySearchEntriesToSearch();
+            }
 
-        String roleCode = getUserToken().getRoleCode();
-        final EntityTable entityTable = entitySearch.getEntityTable();
-        final TableDef tableDef = entityTable.getTableDef();
-        final EntityDef entityDef = tableDef.getEntityDef();
+            String roleCode = getUserToken().getRoleCode();
+            final EntityTable entityTable = entitySearch.getEntityTable();
+            final TableDef tableDef = entityTable.getTableDef();
+            final EntityDef entityDef = tableDef.getEntityDef();
 
-        setVisible("toggleDetailsBtn", entitySearch.isShowExpandDetails());
-        if (entitySearch.isShowExpandDetails()) {
-            entitySearch.setToggleDetails(
-                    entityTable.isExpandAllDetails() ? resolveSessionMessage("$m{button.collapsedetails}")
-                            : resolveSessionMessage("$m{button.expanddetails}"));
-        }
+            setVisible("toggleDetailsBtn", entitySearch.isShowExpandDetails());
+            if (entitySearch.isShowExpandDetails()) {
+                entitySearch.setToggleDetails(
+                        entityTable.isExpandAllDetails() ? resolveSessionMessage("$m{button.collapsedetails}")
+                                : resolveSessionMessage("$m{button.expanddetails}"));
+            }
 
-        setVisible("newBtn", entitySearch.isNewButtonVisible()
-                && applicationPrivilegeManager().isRoleWithPrivilege(roleCode, entityDef.getAddPrivilege()));
-        setVisible("editBtn", entitySearch.isEditButtonVisible()
-                && applicationPrivilegeManager().isRoleWithPrivilege(roleCode, entityDef.getEditPrivilege()));
-        final boolean quickEnabled = (entitySearch.isNewButtonVisible() || entitySearch.isEditButtonVisible())
-                && applicationPrivilegeManager().isRoleWithPrivilege(roleCode, entityDef.getEditPrivilege());
-        setVisible("quickEditBtn", quickEnabled && entitySearch.isShowQuickEdit());
-        setVisible("quickOrderBtn", quickEnabled && entitySearch.isShowQuickOrder());
-        setVisible("viewBtn", entitySearch.isViewButtonVisible()
-                && applicationPrivilegeManager().isRoleWithPrivilege(roleCode, entityDef.getEditPrivilege()));
-        setVisible("switchToBasic", entityTable.isSupportsBasicSearch());
-        setVisible("searchEntriesRequired", entitySearch.isRequiredCriteriaNotSet());
+            setVisible("newBtn", entitySearch.isNewButtonVisible()
+                    && applicationPrivilegeManager().isRoleWithPrivilege(roleCode, entityDef.getAddPrivilege()));
+            setVisible("editBtn", entitySearch.isEditButtonVisible()
+                    && applicationPrivilegeManager().isRoleWithPrivilege(roleCode, entityDef.getEditPrivilege()));
+            final boolean quickEnabled = (entitySearch.isNewButtonVisible() || entitySearch.isEditButtonVisible())
+                    && applicationPrivilegeManager().isRoleWithPrivilege(roleCode, entityDef.getEditPrivilege());
+            setVisible("quickEditBtn", quickEnabled && entitySearch.isShowQuickEdit());
+            setVisible("quickOrderBtn", quickEnabled && entitySearch.isShowQuickOrder());
+            setVisible("viewBtn", entitySearch.isViewButtonVisible()
+                    && applicationPrivilegeManager().isRoleWithPrivilege(roleCode, entityDef.getEditPrivilege()));
+            setVisible("switchToBasic", entityTable.isSupportsBasicSearch());
+            setVisible("searchEntriesRequired", entitySearch.isRequiredCriteriaNotSet());
 
-        final boolean reportBtnVisible = entityTable.getTotalItemCount() > 0 && entitySearch.isShowReport()
-                && entitySearch.au().reportProvider().isReportable(entityTable.getEntityDef().getLongName())
-                && applicationPrivilegeManager().isRoleWithPrivilege(roleCode,
-                        entityTable.getEntityDef().getReportPrivilege());
-        setVisible("reportBtn", reportBtnVisible);
+            final boolean reportBtnVisible = entityTable.getTotalItemCount() > 0 && entitySearch.isShowReport()
+                    && entitySearch.au().reportProvider().isReportable(entityTable.getEntityDef().getLongName())
+                    && applicationPrivilegeManager().isRoleWithPrivilege(roleCode,
+                            entityTable.getEntityDef().getReportPrivilege());
+            setVisible("reportBtn", reportBtnVisible);
 
-        setVisible("colorLegend", entityTable.isWithColorLegendInfo());
-        if (entitySearch.isBasicSearchOnly() || entityTable.isBasicSearchMode()) {
-            setVisible("searchEntriesPanel", entitySearch.isShowSearch() && entitySearch.isWithSearchInput());
-            setVisible("searchFilterPanel", false);
-            setVisible("quickFilterBlock", entitySearch.isShowQuickFilter());
-            setVisible("footerActionPanel", entitySearch.isShowActionFooter());
-            setVisible("switchToAdvanced", !entitySearch.isBasicSearchOnly());
-            setVisible("searchEntriesHeader", entitySearch.isShowBaseFilter());
-        } else {
-            setVisible("searchEntriesPanel", false);
-            setVisible("searchFilterPanel", entitySearch.isShowSearch());
-            setVisible("quickFilterBlock", entitySearch.isShowQuickFilter());
-            setVisible("footerActionPanel", entitySearch.isShowActionFooter());
-            setVisible("searchFilterBody", entitySearch.isFilterEditorVisible());
-            setDisabled("toggleFilterBtn", !entitySearch.isEditFilterEnabled());
-            setVisible("baseFilterTranslation", entitySearch.isShowBaseFilter());
-            if (entitySearch.isFilterEditorVisible()) {
-                setVisible("tackFilterBtn", entitySearch.isShowFilterThumbtack());
-                setDisabled("tackFilterBtn", entitySearch.isFilterEditorPinned());
-                setVisible("openSaveFilterBtn", entitySearch.isShowFilterSave());
-                if (isWidgetVisible("saveFilterPanel")) {
-                    setDisabled("saveFilterScope", !applicationPrivilegeManager().isRoleWithPrivilege(roleCode,
-                            entityTable.getSaveGlobalTableQuickFilterPrivilege()));
+            setVisible("colorLegend", entityTable.isWithColorLegendInfo());
+            if (entitySearch.isBasicSearchOnly() || entityTable.isBasicSearchMode()) {
+                setVisible("searchEntriesPanel", entitySearch.isShowSearch() && entitySearch.isWithSearchInput());
+                setVisible("searchFilterPanel", false);
+                setVisible("quickFilterBlock", entitySearch.isShowQuickFilter());
+                setVisible("footerActionPanel", entitySearch.isShowActionFooter());
+                setVisible("switchToAdvanced", !entitySearch.isBasicSearchOnly());
+                setVisible("searchEntriesHeader", entitySearch.isShowBaseFilter());
+            } else {
+                setVisible("searchEntriesPanel", false);
+                setVisible("searchFilterPanel", entitySearch.isShowSearch());
+                setVisible("quickFilterBlock", entitySearch.isShowQuickFilter());
+                setVisible("footerActionPanel", entitySearch.isShowActionFooter());
+                setVisible("searchFilterBody", entitySearch.isFilterEditorVisible());
+                setDisabled("toggleFilterBtn", !entitySearch.isEditFilterEnabled());
+                setVisible("baseFilterTranslation", entitySearch.isShowBaseFilter());
+                if (entitySearch.isFilterEditorVisible()) {
+                    setVisible("tackFilterBtn", entitySearch.isShowFilterThumbtack());
+                    setDisabled("tackFilterBtn", entitySearch.isFilterEditorPinned());
+                    setVisible("openSaveFilterBtn", entitySearch.isShowFilterSave());
+                    if (isWidgetVisible("saveFilterPanel")) {
+                        setDisabled("saveFilterScope", !applicationPrivilegeManager().isRoleWithPrivilege(roleCode,
+                                entityTable.getSaveGlobalTableQuickFilterPrivilege()));
+                    }
                 }
             }
-        }
 
-        if (entitySearch.isShowActionFooter()) {
-            boolean buttonsForFooterAction = system().getSysParameterValue(boolean.class,
-                    ApplicationModuleSysParamConstants.SHOW_BUTTONS_FOR_FOOTER_ACTION);
-            setVisible("tblActionBtns", buttonsForFooterAction);
-            setVisible("selFooterActionPanel", !buttonsForFooterAction);
-        }
+            if (entitySearch.isShowActionFooter()) {
+                boolean buttonsForFooterAction = system().getSysParameterValue(boolean.class,
+                        ApplicationModuleSysParamConstants.SHOW_BUTTONS_FOR_FOOTER_ACTION);
+                setVisible("tblActionBtns", buttonsForFooterAction);
+                setVisible("selFooterActionPanel", !buttonsForFooterAction);
+            }
 
-        setDisabled("fastBackBtn", entityTable.isAtFirstPage());
-        setDisabled("backBtn", entityTable.isAtFirstPage());
-        setDisabled("forwardBtn", entityTable.isAtLastPage());
-        setDisabled("fastForwardBtn", entityTable.isAtLastPage());
+            setDisabled("fastBackBtn", entityTable.isAtFirstPage());
+            setDisabled("backBtn", entityTable.isAtFirstPage());
+            setDisabled("forwardBtn", entityTable.isAtLastPage());
+            setDisabled("fastForwardBtn", entityTable.isAtLastPage());
 
-        if (!entityTable.isWithRefreshPanels()) {
-            entityTable.setRefreshPanelIds(new String[] { getWidgetByShortName("headerRightPanel").getId() });
+            if (!entityTable.isWithRefreshPanels()) {
+                entityTable.setRefreshPanelIds(new String[] { getWidgetByShortName("headerRightPanel").getId() });
+            }
         }
     }
 
@@ -216,70 +218,85 @@ public class EntitySearchPanel extends AbstractApplicationPanel {
     @Action
     public void refresh() throws UnifyException {
         EntitySearch entitySearch = getEntitySearch();
-        entitySearch.applySearchEntriesToSearch();
-        hideFilterEditor();
+        if (entitySearch != null) {
+            entitySearch.applySearchEntriesToSearch();
+            hideFilterEditor();
 
-        PageRequestContextUtil rcUtil = getRequestContextUtil();
-        if (entitySearch.isWithPushFormIds()) {
-            rcUtil.addListItem(AppletRequestAttributeConstants.MAINFORM_PUSH_COMPONENTS, entitySearch.getPushFormIds());
+            PageRequestContextUtil rcUtil = getRequestContextUtil();
+            if (entitySearch.isWithPushFormIds()) {
+                rcUtil.addListItem(AppletRequestAttributeConstants.MAINFORM_PUSH_COMPONENTS,
+                        entitySearch.getPushFormIds());
+            }
+
+            if (entitySearch.isWithEditActionKey()) {
+                setRequestAttribute(entitySearch.getEditActionKey(), entitySearch.getEditAction());
+            }
+
+            rcUtil.setContentScrollReset();
         }
-
-        if (entitySearch.isWithEditActionKey()) {
-            setRequestAttribute(entitySearch.getEditActionKey(), entitySearch.getEditAction());
-        }
-
-        rcUtil.setContentScrollReset();
     }
 
     @Action
     public void applyQuickFilter() throws UnifyException {
         EntitySearch entitySearch = getEntitySearch();
-        entitySearch.applyQuickFilter();
-        entitySearch.clearSearchEntries();
-        hideFilterEditor();
-        getRequestContextUtil().setContentScrollReset();
+        if (entitySearch != null) {
+            entitySearch.applyQuickFilter();
+            entitySearch.clearSearchEntries();
+            hideFilterEditor();
+            getRequestContextUtil().setContentScrollReset();
+        }
     }
 
     @Action
     public void search() throws UnifyException {
         EntitySearch entitySearch = getEntitySearch();
-        entitySearch.setAppAppletFilterName(null);
-        entitySearch.applySearchEntriesToSearch();
-        getRequestContextUtil().setContentScrollReset();
+        if (entitySearch != null) {
+            entitySearch.setAppAppletFilterName(null);
+            entitySearch.applySearchEntriesToSearch();
+            getRequestContextUtil().setContentScrollReset();
+        }
     }
 
     @Action
     public void clear() throws UnifyException {
         EntitySearch entitySearch = getEntitySearch();
-        entitySearch.setAppAppletFilterName(null);
-        entitySearch.clearSearchEntries();
-        entitySearch.applySearchEntriesToSearch();
-        getRequestContextUtil().setContentScrollReset();
+        if (entitySearch != null) {
+            entitySearch.setAppAppletFilterName(null);
+            entitySearch.clearSearchEntries();
+            entitySearch.applySearchEntriesToSearch();
+            getRequestContextUtil().setContentScrollReset();
+        }
     }
 
     @Action
     public void toggleDetails() throws UnifyException {
         EntitySearch entitySearch = getEntitySearch();
-        entitySearch.getEntityTable().setExpandAllDetails(!entitySearch.getEntityTable().isExpandAllDetails());
-        getRequestContextUtil().setContentScrollReset();
+        if (entitySearch != null) {
+            entitySearch.getEntityTable().setExpandAllDetails(!entitySearch.getEntityTable().isExpandAllDetails());
+            getRequestContextUtil().setContentScrollReset();
+        }
     }
 
     @Action
     public void runFilter() throws UnifyException {
         EntitySearch entitySearch = getEntitySearch();
-        entitySearch.setAppAppletFilterName(null);
-        entitySearch.applyFilterToSearch();
-        if (!entitySearch.isFilterEditorPinned()) {
-            entitySearch.toggleFilterEditor();
+        if (entitySearch != null) {
+            entitySearch.setAppAppletFilterName(null);
+            entitySearch.applyFilterToSearch();
+            if (!entitySearch.isFilterEditorPinned()) {
+                entitySearch.toggleFilterEditor();
+            }
+            hideSaveFilter();
+            getRequestContextUtil().setContentScrollReset();
         }
-        hideSaveFilter();
-        getRequestContextUtil().setContentScrollReset();
     }
 
     @Action
     public void applyTableAction() throws UnifyException {
         EntitySearch entitySearch = getEntitySearch();
-        applyTableBtnAction(entitySearch.getAppTableActionPolicy());
+        if (entitySearch != null) {
+            applyTableBtnAction(entitySearch.getAppTableActionPolicy());
+        }
     }
 
     @Action

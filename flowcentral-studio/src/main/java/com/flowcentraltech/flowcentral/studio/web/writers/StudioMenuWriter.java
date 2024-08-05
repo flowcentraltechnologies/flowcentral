@@ -80,13 +80,12 @@ public class StudioMenuWriter extends AbstractPanelWriter {
                     StudioAppComponentType.SYNCHRONIZATION, StudioAppComponentType.SNAPSHOT,
                     StudioAppComponentType.APPLICATION));
 
-    private static final List<StudioAppComponentType> menuCategoryList = Collections
-            .unmodifiableList(Arrays.asList(StudioAppComponentType.ENUMERATION, StudioAppComponentType.WIDGET,
-                    StudioAppComponentType.ENTITY, StudioAppComponentType.APPLET, StudioAppComponentType.REFERENCE,
-                    StudioAppComponentType.CHART_DATASOURCE, StudioAppComponentType.CHART,
-                    StudioAppComponentType.DASHBOARD, StudioAppComponentType.NOTIFICATION_TEMPLATE,
-                    StudioAppComponentType.NOTIFICATION_LARGETEXT, StudioAppComponentType.REPORT_CONFIGURATION,
-                    StudioAppComponentType.TABLE, StudioAppComponentType.FORM, StudioAppComponentType.WORKFLOW));
+    private static final List<StudioAppComponentType> menuCategoryList = Collections.unmodifiableList(Arrays.asList(
+            StudioAppComponentType.ENTITY, StudioAppComponentType.APPLET, StudioAppComponentType.TABLE,
+            StudioAppComponentType.FORM, StudioAppComponentType.REPORT_CONFIGURATION, StudioAppComponentType.WORKFLOW,
+            StudioAppComponentType.CHART_DATASOURCE, StudioAppComponentType.CHART, StudioAppComponentType.DASHBOARD,
+            StudioAppComponentType.NOTIFICATION_TEMPLATE, StudioAppComponentType.NOTIFICATION_LARGETEXT,
+            StudioAppComponentType.REFERENCE, StudioAppComponentType.ENUMERATION, StudioAppComponentType.WIDGET));
 
     @Override
     protected void doWriteStructureAndContent(ResponseWriter writer, Widget widget) throws UnifyException {
