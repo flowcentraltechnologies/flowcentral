@@ -146,6 +146,7 @@ import com.flowcentraltech.flowcentral.workflow.entities.WorkflowQuery;
 import com.flowcentraltech.flowcentral.workflow.entities.WorkflowSetValues;
 import com.flowcentraltech.flowcentral.workflow.entities.WorkflowSetValuesQuery;
 import com.flowcentraltech.flowcentral.workflow.util.WorkflowDesignUtils;
+import com.flowcentraltech.flowcentral.workflow.util.WorkflowDesignUtils.DesignType;
 import com.flowcentraltech.flowcentral.workflow.util.WorkflowEntityUtils;
 import com.flowcentraltech.flowcentral.workflow.util.WorkflowNameUtils;
 import com.flowcentraltech.flowcentral.workflow.util.WorkflowNameUtils.WfAppletNameParts;
@@ -230,6 +231,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
 
     private final Map<String, Set<WfStepInfo>> roleWfStepBackup;
 
+    private List<String> approvalPos;
+    
     public WorkflowModuleServiceImpl() {
         this.roleWfStepBackup = new HashMap<String, Set<WfStepInfo>>();
 
@@ -563,6 +566,28 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         }
     }
 
+    @Override
+    public List<WfStep> generateWorkflowSteps(DesignType type, String stepLabel,
+            AppletWorkflowCopyInfo appletWorkflowCopyInfo) throws UnifyException {
+        if (approvalPos == null) {
+            synchronized (this) {
+                if (approvalPos == null) {
+                    approvalPos = Arrays.asList(
+                            resolveApplicationMessage("$m{approval.1}"),
+                            resolveApplicationMessage("$m{approval.2}"),
+                            resolveApplicationMessage("$m{approval.3}"),
+                            resolveApplicationMessage("$m{approval.4}"),
+                            resolveApplicationMessage("$m{approval.5}"),
+                            resolveApplicationMessage("$m{approval.6}"),
+                            resolveApplicationMessage("$m{approval.7}"),
+                            resolveApplicationMessage("$m{approval.8}"));
+                }
+            }
+        }
+
+        return WorkflowDesignUtils.generateWorkflowSteps(type, stepLabel, appletWorkflowCopyInfo, approvalPos);
+    }
+
     private void updateWorkflowCopyWorkflow(WorkflowDesignUtils.DesignType designType, String appletName,
             boolean forceUpdate) throws UnifyException {
         final String workflowName = designType.isWorkflowCopyCreate()
@@ -593,7 +618,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             workflow.setDescFormat(null); // TODO
             workflow.setAppletVersionNo(appletWorkflowCopyInfo.getAppletVersionNo());
             workflow.setClassified(true);
-            final List<WfStep> stepList = WorkflowDesignUtils.generateWorkflowSteps(designType, stepLabel,
+            final List<WfStep> stepList = generateWorkflowSteps(designType, stepLabel,
                     appletWorkflowCopyInfo);
             workflow.setStepList(stepList);
             environment().create(workflow);
@@ -606,7 +631,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                 workflow.setLoadingTable(appletWorkflowCopyInfo.getAppletSearchTable());
                 workflow.setSupportMultiItemAction(true);
                 workflow.setClassified(true);
-                final List<WfStep> stepList = WorkflowDesignUtils.generateWorkflowSteps(designType, stepLabel,
+                final List<WfStep> stepList = generateWorkflowSteps(designType, stepLabel,
                         appletWorkflowCopyInfo);
                 keepAlreadyAssignedRoles(wnp.getApplicationName(), wnp.getEntityName(), stepList);
                 workflow.setStepList(stepList);

@@ -470,6 +470,11 @@
 			dataType="string" inputType="string"
 			editor="!ui-select list:studioappletsetvalueslist listParams:$l{propertyOwnerId} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
+		<widgetType name="propertyappletlevelslist"
+			description="$m{studio.widgettype.propertyappletlevelslist}"
+			dataType="string" inputType="string"
+			editor="!ui-select list:studioappletlevelslist blankOption:$m{blank.none}"
+			renderer="!ui-label" />
 		<widgetType name="propertyappletalertlist"
 			description="$m{studio.widgettype.propertyappletalertlist}"
 			dataType="string" inputType="string"
@@ -6049,6 +6054,9 @@
 				<property name="workflowCopy.create.approval.setvalues"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.create.approvalsetvalues}"
 					inputWidget="studio.propertyappletsetvalueslist" />
+				<property name="workflowCopy.create.approval.levels"
+					description="$m{studio.appappletprop.manageentity.workflowcopy.create.approvallevels}"
+					inputWidget="studio.propertyappletlevelslist" />
 				<property name="workflowCopy.create.rejection.alert"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.create.rejectionalert}"
 					inputWidget="studio.propertyappletalertlist" />
@@ -6088,6 +6096,9 @@
 				<property name="workflowCopy.update.approval.setvalues"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.update.approvalsetvalues}"
 					inputWidget="studio.propertyappletsetvalueslist" />
+				<property name="workflowCopy.update.approval.levels"
+					description="$m{studio.appappletprop.manageentity.workflowcopy.update.approvallevels}"
+					inputWidget="studio.propertyappletlevelslist" />
 				<property name="workflowCopy.update.rejection.alert"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.update.rejectionalert}"
 					inputWidget="studio.propertyappletalertlist" />
@@ -6124,6 +6135,9 @@
 				<property name="workflowCopy.delete.approval.setvalues"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.delete.approvalsetvalues}"
 					inputWidget="studio.propertyappletsetvalueslist" />
+				<property name="workflowCopy.delete.approval.levels"
+					description="$m{studio.appappletprop.manageentity.workflowcopy.delete.approvallevels}"
+					inputWidget="studio.propertyappletlevelslist" />
 				<property name="workflowCopy.delete.rejection.alert"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.delete.rejectionalert}"
 					inputWidget="studio.propertyappletalertlist" />
@@ -6312,6 +6326,9 @@
 				<property name="workflowCopy.create.approval.setvalues"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.create.approvalsetvalues}"
 					inputWidget="studio.propertyappletsetvalueslist" />
+				<property name="workflowCopy.create.approval.levels"
+					description="$m{studio.appappletprop.manageentity.workflowcopy.create.approvallevels}"
+					inputWidget="studio.propertyappletlevelslist" />
 				<property name="workflowCopy.create.rejection.alert"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.create.rejectionalert}"
 					inputWidget="studio.propertyappletalertlist" />
@@ -6351,6 +6368,9 @@
 				<property name="workflowCopy.update.approval.setvalues"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.update.approvalsetvalues}"
 					inputWidget="studio.propertyappletsetvalueslist" />
+				<property name="workflowCopy.update.approval.levels"
+					description="$m{studio.appappletprop.manageentity.workflowcopy.update.approvallevels}"
+					inputWidget="studio.propertyappletlevelslist" />
 				<property name="workflowCopy.update.rejection.alert"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.update.rejectionalert}"
 					inputWidget="studio.propertyappletalertlist" />
@@ -6387,6 +6407,9 @@
 				<property name="workflowCopy.delete.approval.setvalues"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.delete.approvalsetvalues}"
 					inputWidget="studio.propertyappletsetvalueslist" />
+				<property name="workflowCopy.delete.approval.levels"
+					description="$m{studio.appappletprop.manageentity.workflowcopy.delete.approvallevels}"
+					inputWidget="studio.propertyappletlevelslist" />
 				<property name="workflowCopy.delete.rejection.alert"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.delete.rejectionalert}"
 					inputWidget="studio.propertyappletalertlist" />

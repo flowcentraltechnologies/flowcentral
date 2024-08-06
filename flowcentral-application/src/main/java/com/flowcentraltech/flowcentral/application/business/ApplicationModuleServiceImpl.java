@@ -1419,7 +1419,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 for (ModuleRestore moduleRestore : systemRestore.getModuleList()) {
                     restoreModule(taskMonitor, moduleRestore);
                 }
-                
+
                 // All system cache
                 clearAllSystemDefinitionsCache();
 
@@ -1434,7 +1434,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         } else {
             logDebug(taskMonitor, "Some other process is executing system restore.");
         }
-        
+
         logDebug(taskMonitor, "Ensuring system generated components...");
         ensureAllWorkflowCopyComponents(true);
         logDebug(taskMonitor, "System generated components resolved.");
@@ -1845,10 +1845,18 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 new AppAppletQuery().applicationName(np.getApplicationName()).name(np.getEntityName()));
         final boolean supportMultiItemAction = appletUtilities.system().getSysParameterValue(boolean.class,
                 ApplicationModuleSysParamConstants.ENABLE_DRAFT_WORKFLOW_MULTIITEM_ACTION);
+
+        final int noOfCreateApprovals = DataUtils.convert(int.class,
+                getAppletProperty(np, AppletPropertyConstants.WORKFLOWCOPY_CREATE_APPROVAL_LEVELS));
+        final int noOfUpdateApprovals = DataUtils.convert(int.class,
+                getAppletProperty(np, AppletPropertyConstants.WORKFLOWCOPY_UPDATE_APPROVAL_LEVELS));
+        final int noOfDeleteApprovals = DataUtils.convert(int.class,
+                getAppletProperty(np, AppletPropertyConstants.WORKFLOWCOPY_DELETE_APPROVAL_LEVELS));
+
         final AppletWorkflowCopyInfo.Builder awcb = AppletWorkflowCopyInfo.newBuilder(appletName,
                 getAppletProperty(np, AppletPropertyConstants.SEARCH_TABLE),
-                getAppletProperty(np, AppletPropertyConstants.WORKFLOWCOPY_ATTACHMENT_PROVIDER), appletVersionNo,
-                supportMultiItemAction);
+                getAppletProperty(np, AppletPropertyConstants.WORKFLOWCOPY_ATTACHMENT_PROVIDER), noOfCreateApprovals,
+                noOfUpdateApprovals, noOfDeleteApprovals, appletVersionNo, supportMultiItemAction);
         // Creation workflow
         awcb.withEvent(WorkflowCopyType.CREATION, EventType.ON_SUBMIT,
                 getAppletProperty(np, AppletPropertyConstants.WORKFLOWCOPY_CREATE_SUBMIT_ALERT),
@@ -2752,11 +2760,11 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         List<AttachmentDetails> detailList = retrieveAllFileAttachments(category, ownerEntityName, ownerInstId);
         if (!DataUtils.isBlank(detailList)) {
             map = new LinkedHashMap<String, AttachmentDetails>();
-            for (AttachmentDetails details: detailList) {
+            for (AttachmentDetails details : detailList) {
                 map.put(details.getName(), details);
             }
         }
-        
+
         return map;
     }
 
@@ -4067,7 +4075,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
         ensureAllWorkflowCopyComponents(isInstallationPerformed);
     }
-    
+
     @SuppressWarnings("unchecked")
     @Synchronized(DYNAMIC_ENTITY_BUILD_LOCK)
     public EntityClassDef performDynamicEntityBuild(final String longName) throws UnifyException {

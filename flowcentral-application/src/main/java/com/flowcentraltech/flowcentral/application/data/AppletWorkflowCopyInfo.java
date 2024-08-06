@@ -87,6 +87,12 @@ public class AppletWorkflowCopyInfo {
 
     private String attachmentProvider;
 
+    private int noOfCreateApprovals;
+
+    private int noOfUpdateApprovals;
+
+    private int noOfDeleteApprovals;
+
     private long appletVersionNo;
 
     private boolean supportMultiItemAction;
@@ -96,11 +102,15 @@ public class AppletWorkflowCopyInfo {
     private Map<String, AppletAlertDef> alerts;
 
     public AppletWorkflowCopyInfo(String appletName, String appletSearchTable, String attachmentProvider,
-            long appletVersionNo, boolean supportMultiItemAction,
-            Map<WorkflowCopyType, WorkflowCopyInfo> workflowCopyInfos, Map<String, AppletAlertDef> alerts) {
+            int noOfCreateApprovals, int noOfUpdateApprovals, int noOfDeleteApprovals, long appletVersionNo,
+            boolean supportMultiItemAction, Map<WorkflowCopyType, WorkflowCopyInfo> workflowCopyInfos,
+            Map<String, AppletAlertDef> alerts) {
         this.appletName = appletName;
         this.appletSearchTable = appletSearchTable;
         this.attachmentProvider = attachmentProvider;
+        this.noOfCreateApprovals = noOfCreateApprovals;
+        this.noOfUpdateApprovals = noOfUpdateApprovals;
+        this.noOfDeleteApprovals = noOfDeleteApprovals;
         this.appletVersionNo = appletVersionNo;
         this.supportMultiItemAction = supportMultiItemAction;
         this.workflowCopyInfos = DataUtils.unmodifiableMap(workflowCopyInfos);
@@ -151,11 +161,23 @@ public class AppletWorkflowCopyInfo {
         return name != null && alerts.containsKey(name);
     }
 
+    public int getNoOfCreateApprovals() {
+        return noOfCreateApprovals;
+    }
+
+    public int getNoOfUpdateApprovals() {
+        return noOfUpdateApprovals;
+    }
+
+    public int getNoOfDeleteApprovals() {
+        return noOfDeleteApprovals;
+    }
+
     public static class WorkflowCopyInfo {
 
-        private WorkflowCopyType type;
+        private final WorkflowCopyType type;
 
-        private Map<EventType, EventInfo> eventInfos;
+        private final Map<EventType, EventInfo> eventInfos;
 
         private WorkflowCopyInfo(WorkflowCopyType type) {
             this.type = type;
@@ -221,8 +243,10 @@ public class AppletWorkflowCopyInfo {
     }
 
     public static Builder newBuilder(String appletName, String appletSearchTable, String attachmentProvider,
-            long appletVersionNo, boolean supportMultiItemAction) {
-        return new Builder(appletName, appletSearchTable, attachmentProvider, appletVersionNo, supportMultiItemAction);
+            int noOfCreateApprovals, int noOfUpdateApprovals, int noOfDeleteApprovals, long appletVersionNo,
+            boolean supportMultiItemAction) {
+        return new Builder(appletName, appletSearchTable, attachmentProvider, noOfCreateApprovals, noOfUpdateApprovals,
+                noOfDeleteApprovals, appletVersionNo, supportMultiItemAction);
     }
 
     public static class Builder {
@@ -233,6 +257,12 @@ public class AppletWorkflowCopyInfo {
 
         private String attachmentProvider;
 
+        private int noOfCreateApprovals;
+
+        private int noOfUpdateApprovals;
+
+        private int noOfDeleteApprovals;
+
         private long appletVersionNo;
 
         private boolean supportMultiItemAction;
@@ -241,19 +271,32 @@ public class AppletWorkflowCopyInfo {
 
         private Map<String, AppletAlertDef> alerts;
 
-        public Builder(String appletName, String appletSearchTable, String attachmentProvider, long appletVersionNo,
+        public Builder(String appletName, String appletSearchTable, String attachmentProvider, int noOfCreateApprovals,
+                int noOfUpdateApprovals, int noOfDeleteApprovals, long appletVersionNo,
                 boolean supportMultiItemAction) {
             this.appletName = appletName;
             this.appletSearchTable = appletSearchTable;
             this.attachmentProvider = attachmentProvider;
+            this.noOfCreateApprovals = applyApprovalConstraints(noOfCreateApprovals);
+            this.noOfUpdateApprovals = applyApprovalConstraints(noOfUpdateApprovals);
+            this.noOfDeleteApprovals = applyApprovalConstraints(noOfDeleteApprovals);
             this.appletVersionNo = appletVersionNo;
             this.supportMultiItemAction = supportMultiItemAction;
             this.workflowCopyInfos = new HashMap<WorkflowCopyType, WorkflowCopyInfo>();
             this.alerts = new HashMap<String, AppletAlertDef>();
         }
-
+        
         public Builder withEvent(WorkflowCopyType copyType, EventType eventType, String alertName,
                 String setValuesName) {
+            return withEvent(copyType, 0, eventType, alertName, setValuesName);
+        }
+
+        public Builder withEvent(WorkflowCopyType copyType, int noOfApprovalLevels, EventType eventType,
+                String alertName, String setValuesName) {
+            if (noOfApprovalLevels > 8) {
+                throw new IllegalArgumentException("Approval levels can not be more than 8.");
+            }
+
             getWorkflowCopyInfo(copyType).getEventInfos().put(eventType,
                     new EventInfo(eventType, alertName, setValuesName));
             return this;
@@ -277,15 +320,25 @@ public class AppletWorkflowCopyInfo {
             return workflowCopyInfo;
         }
 
+        private int applyApprovalConstraints(int levels) {
+            if (levels <= 0) {
+                levels = 1;
+            } else if (levels > 8) {
+                levels = 8;
+            }
+            
+            return levels;
+        }
+
         public AppletWorkflowCopyInfo build() {
             Map<WorkflowCopyType, WorkflowCopyInfo> _workflowCopyInfos = new HashMap<WorkflowCopyType, WorkflowCopyInfo>();
             for (Map.Entry<WorkflowCopyType, WorkflowCopyInfo> entry : workflowCopyInfos.entrySet()) {
                 _workflowCopyInfos.put(entry.getKey(), new WorkflowCopyInfo(entry.getValue()));
             }
 
-            return new AppletWorkflowCopyInfo(appletName, appletSearchTable, attachmentProvider, appletVersionNo,
-                    supportMultiItemAction, Collections.unmodifiableMap(_workflowCopyInfos),
-                    Collections.unmodifiableMap(alerts));
+            return new AppletWorkflowCopyInfo(appletName, appletSearchTable, attachmentProvider, noOfCreateApprovals,
+                    noOfUpdateApprovals, noOfDeleteApprovals, appletVersionNo, supportMultiItemAction,
+                    Collections.unmodifiableMap(_workflowCopyInfos), Collections.unmodifiableMap(alerts));
         }
     }
 }

@@ -210,6 +210,8 @@ public interface AppletPropertyConstants {
 
     String WORKFLOWCOPY_CREATE_APPROVAL_SETVALUES = "workflowCopy.create.approval.setvalues";
 
+    String WORKFLOWCOPY_CREATE_APPROVAL_LEVELS = "workflowCopy.create.approval.levels";
+
     String WORKFLOWCOPY_CREATE_REJECTION_ALERT = "workflowCopy.create.rejection.alert";
 
     String WORKFLOWCOPY_CREATE_REJECTION_SETVALUES = "workflowCopy.create.rejection.setvalues";
@@ -237,6 +239,8 @@ public interface AppletPropertyConstants {
 
     String WORKFLOWCOPY_UPDATE_APPROVAL_SETVALUES = "workflowCopy.update.approval.setvalues";
 
+    String WORKFLOWCOPY_UPDATE_APPROVAL_LEVELS = "workflowCopy.update.approval.levels";
+
     String WORKFLOWCOPY_UPDATE_REJECTION_ALERT = "workflowCopy.update.rejection.alert";
 
     String WORKFLOWCOPY_UPDATE_REJECTION_SETVALUES = "workflowCopy.update.rejection.setvalues";
@@ -261,6 +265,8 @@ public interface AppletPropertyConstants {
     String WORKFLOWCOPY_DELETE_APPROVAL_ALERT = "workflowCopy.delete.approval.alert";
 
     String WORKFLOWCOPY_DELETE_APPROVAL_SETVALUES = "workflowCopy.delete.approval.setvalues";
+
+    String WORKFLOWCOPY_DELETE_APPROVAL_LEVELS = "workflowCopy.delete.approval.levels";
 
     String WORKFLOWCOPY_DELETE_REJECTION_ALERT = "workflowCopy.delete.rejection.alert";
 

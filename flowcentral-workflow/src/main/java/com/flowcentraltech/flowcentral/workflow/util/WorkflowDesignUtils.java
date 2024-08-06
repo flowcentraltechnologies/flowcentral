@@ -185,7 +185,7 @@ public final class WorkflowDesignUtils {
     }
 
     public static List<WfStep> generateWorkflowSteps(final DesignType type, final String stepLabel,
-            final AppletWorkflowCopyInfo appletWorkflowCopyInfo) {
+            final AppletWorkflowCopyInfo appletWorkflowCopyInfo, final List<String> approvalPos) {
         final boolean isWorkflowCopy = type.isWorkflowCopy();
         final WorkflowCopyInfo workflowCopyInfo = isWorkflowCopy
                 ? appletWorkflowCopyInfo.getWorkflowCopyInfo(type.copyType())
@@ -237,69 +237,87 @@ public final class WorkflowDesignUtils {
         stepList.add(errorWfStep);
 
         if (isWorkflowCopy) {
-            // Draft approval step in read-only mode
-            final WfStep approvalWfStep = new WfStep();
+            final int noOfApprovalLevels = type.isWorkflowCopyCreate() ? appletWorkflowCopyInfo.getNoOfCreateApprovals()
+                    : (type.isWorkflowCopyUpdate() ? appletWorkflowCopyInfo.getNoOfUpdateApprovals()
+                            : appletWorkflowCopyInfo.getNoOfDeleteApprovals());
+            final EventInfo rejectEventInfo = workflowCopyInfo.getEventInfo(EventType.ON_REJECT);
+            final EventInfo approveEventInfo = workflowCopyInfo.getEventInfo(EventType.ON_APPROVE);
             final EventInfo submitEventInfo = workflowCopyInfo.getEventInfo(EventType.ON_SUBMIT);
             final EventInfo resubmitEventInfo = workflowCopyInfo.getEventInfo(EventType.ON_RESUBMIT);
-            approvalWfStep.setType(WorkflowStepType.USER_ACTION);
-            approvalWfStep.setPriority(WorkflowStepPriority.NORMAL);
-            approvalWfStep.setName("draftApproval");
-            approvalWfStep.setDescription(stepLabel + " Approval");
-            approvalWfStep.setLabel(stepLabel + " Approval");
-            approvalWfStep.setAppletName(appletWorkflowCopyInfo.getAppletName());
-            approvalWfStep.setReadOnlyConditionName(ApplicationFilterConstants.RESERVED_ALWAYS_FILTERNAME);
-            approvalWfStep.setAttachmentProviderName(appletWorkflowCopyInfo.getAttachmentProvider());
-            approvalWfStep.setAppletSetValuesName(submitEventInfo.getSetValuesName());
-            List<WfStepAlert> alertList = new ArrayList<WfStepAlert>();
-            if (submitEventInfo.isWithAlert()) {
-                WfStepAlert wfStepAlert = createWfStepAlert(WorkflowAlertType.USER_INTERACT,
-                        appletWorkflowCopyInfo.getAppletAlertDef(submitEventInfo.getAlertName()));
-                wfStepAlert.setFireOnPrevStepName("start");
-                alertList.add(wfStepAlert);
-            } else {
-                final String template = type.isWorkflowCopyCreate()
-                        ? WorkflowModuleNameConstants.WORKFLOW_COPY_CREATE_APPROVAL_TEMPLATE
-                        : (type.isWorkflowCopyUpdate()
-                                ? WorkflowModuleNameConstants.WORKFLOW_COPY_UPDATE_APPROVAL_TEMPLATE
-                                : WorkflowModuleNameConstants.WORKFLOW_COPY_DELETION_APPROVAL_TEMPLATE);
-                WfStepAlert wfStepAlert = createWfStepAlert(WorkflowAlertType.USER_INTERACT,
-                        NotificationModuleNameConstants.SIMPLE_EMAIL_ALERT_SENDER, template);
-                alertList.add(wfStepAlert);
+
+            for (int i = 1; i <= noOfApprovalLevels; i++) {
+                // Draft approval step in read-only mode
+                final WfStep approvalWfStep = new WfStep();
+                final boolean first = i == 1;
+                final boolean last = i == noOfApprovalLevels;
+                approvalWfStep.setType(WorkflowStepType.USER_ACTION);
+                approvalWfStep.setPriority(WorkflowStepPriority.NORMAL);
+                approvalWfStep.setName(first ? "draftApproval" : "draftApproval" + i);
+                String label = stepLabel + " " + approvalPos.get(i - 1) + " Approval";
+                approvalWfStep.setDescription(label);
+                approvalWfStep.setLabel(label);
+                approvalWfStep.setAppletName(appletWorkflowCopyInfo.getAppletName());
+                approvalWfStep.setReadOnlyConditionName(ApplicationFilterConstants.RESERVED_ALWAYS_FILTERNAME);
+                approvalWfStep.setAttachmentProviderName(appletWorkflowCopyInfo.getAttachmentProvider());
+                
+                if (first) {
+                    approvalWfStep.setAppletSetValuesName(submitEventInfo.getSetValuesName());
+                }
+                
+                List<WfStepAlert> alertList = new ArrayList<WfStepAlert>();
+                if (first && submitEventInfo.isWithAlert()) {
+                    WfStepAlert wfStepAlert = createWfStepAlert(WorkflowAlertType.USER_INTERACT,
+                            appletWorkflowCopyInfo.getAppletAlertDef(submitEventInfo.getAlertName()));
+                    wfStepAlert.setFireOnPrevStepName("start");
+                    alertList.add(wfStepAlert);
+                } else {
+                    final String template = type.isWorkflowCopyCreate()
+                            ? WorkflowModuleNameConstants.WORKFLOW_COPY_CREATE_APPROVAL_TEMPLATE
+                            : (type.isWorkflowCopyUpdate()
+                                    ? WorkflowModuleNameConstants.WORKFLOW_COPY_UPDATE_APPROVAL_TEMPLATE
+                                    : WorkflowModuleNameConstants.WORKFLOW_COPY_DELETION_APPROVAL_TEMPLATE);
+                    WfStepAlert wfStepAlert = createWfStepAlert(WorkflowAlertType.USER_INTERACT,
+                            NotificationModuleNameConstants.SIMPLE_EMAIL_ALERT_SENDER, template);
+                    alertList.add(wfStepAlert);
+                }
+
+                if (first && type.isWorkflowCopyCreateOrUpdate() && resubmitEventInfo.isWithAlert()) {
+                    WfStepAlert wfStepAlert = createWfStepAlert(WorkflowAlertType.USER_INTERACT,
+                            appletWorkflowCopyInfo.getAppletAlertDef(resubmitEventInfo.getAlertName()));
+                    wfStepAlert.setFireOnPrevStepName("draftReview");
+                    alertList.add(wfStepAlert);
+                }
+
+                approvalWfStep.setAlertList(alertList);
+
+                final WfStepUserAction approveUserAction = new WfStepUserAction();
+                approveUserAction.setName("approve");
+                approveUserAction.setDescription("Approve Draft");
+                approveUserAction.setLabel("Approve");
+                approveUserAction.setCommentRequirement(RequirementType.OPTIONAL);
+                approveUserAction.setHighlightType(HighlightType.GREEN);
+                if (last) {
+                    if (!approveEventInfo.isWithAlert()) {
+                        approveUserAction.setAppletSetValuesName(approveEventInfo.getSetValuesName());
+                    }
+
+                    approveUserAction
+                            .setNextStepName(approveEventInfo.isWithAlert() ? "approvalNotif" : type.approvalNext());
+                } else {
+                    approveUserAction.setNextStepName("draftApproval" + (i + 1));
+                }
+
+                final WfStepUserAction rejectUserAction = new WfStepUserAction();
+                rejectUserAction.setName("reject");
+                rejectUserAction.setDescription("Reject Draft");
+                rejectUserAction.setLabel("Reject");
+                rejectUserAction.setCommentRequirement(RequirementType.OPTIONAL);
+                rejectUserAction.setHighlightType(HighlightType.RED);
+                rejectUserAction.setNextStepName(type.reviewNext());
+
+                approvalWfStep.setUserActionList(Arrays.asList(approveUserAction, rejectUserAction));
+                stepList.add(approvalWfStep);
             }
-
-            if (type.isWorkflowCopyCreateOrUpdate() && resubmitEventInfo.isWithAlert()) {
-                WfStepAlert wfStepAlert = createWfStepAlert(WorkflowAlertType.USER_INTERACT,
-                        appletWorkflowCopyInfo.getAppletAlertDef(resubmitEventInfo.getAlertName()));
-                wfStepAlert.setFireOnPrevStepName("draftReview");
-                alertList.add(wfStepAlert);
-            }
-
-            approvalWfStep.setAlertList(alertList);
-
-            final WfStepUserAction approveUserAction = new WfStepUserAction();
-            final EventInfo approveEventInfo = workflowCopyInfo.getEventInfo(EventType.ON_APPROVE);
-            approveUserAction.setName("approve");
-            approveUserAction.setDescription("Approve Draft");
-            approveUserAction.setLabel("Approve");
-            approveUserAction.setCommentRequirement(RequirementType.OPTIONAL);
-            approveUserAction.setHighlightType(HighlightType.GREEN);
-            if (!approveEventInfo.isWithAlert()) {
-                approveUserAction.setAppletSetValuesName(approveEventInfo.getSetValuesName());
-            }
-            
-            approveUserAction.setNextStepName(approveEventInfo.isWithAlert() ? "approvalNotif" : type.approvalNext());
-
-            final WfStepUserAction rejectUserAction = new WfStepUserAction();
-            final EventInfo rejectEventInfo = workflowCopyInfo.getEventInfo(EventType.ON_REJECT);
-            rejectUserAction.setName("reject");
-            rejectUserAction.setDescription("Reject Draft");
-            rejectUserAction.setLabel("Reject");
-            rejectUserAction.setCommentRequirement(RequirementType.OPTIONAL);
-            rejectUserAction.setHighlightType(HighlightType.RED);
-            rejectUserAction.setNextStepName(type.reviewNext());
-
-            approvalWfStep.setUserActionList(Arrays.asList(approveUserAction, rejectUserAction));
-            stepList.add(approvalWfStep);
 
             // Draft review step
             final EventInfo discardEventInfo = workflowCopyInfo.getEventInfo(EventType.ON_DISCARD);
@@ -335,10 +353,10 @@ public final class WorkflowDesignUtils {
                 discardUserAction.setLabel("Discard");
                 discardUserAction.setCommentRequirement(RequirementType.OPTIONAL);
                 discardUserAction.setHighlightType(HighlightType.RED);
-                if(!discardEventInfo.isWithAlert()) {
+                if (!discardEventInfo.isWithAlert()) {
                     discardUserAction.setAppletSetValuesName(discardEventInfo.getSetValuesName());
                 }
-                
+
                 discardUserAction.setNextStepName(discardEventInfo.isWithAlert() ? "discardNotif" : type.discardNext());
 
                 reviewWfStep.setUserActionList(Arrays.asList(resubmitUserAction, discardUserAction));

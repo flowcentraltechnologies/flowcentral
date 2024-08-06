@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.workflow.business;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.business.ApplicationWorkItemUtilities;
+import com.flowcentraltech.flowcentral.application.data.AppletWorkflowCopyInfo;
 import com.flowcentraltech.flowcentral.application.web.widgets.InputArrayEntries;
 import com.flowcentraltech.flowcentral.common.business.FlowCentralService;
 import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
@@ -37,6 +38,7 @@ import com.flowcentraltech.flowcentral.workflow.entities.WorkflowFilterQuery;
 import com.flowcentraltech.flowcentral.workflow.entities.WorkflowQuery;
 import com.flowcentraltech.flowcentral.workflow.entities.WorkflowSetValues;
 import com.flowcentraltech.flowcentral.workflow.entities.WorkflowSetValuesQuery;
+import com.flowcentraltech.flowcentral.workflow.util.WorkflowDesignUtils.DesignType;
 import com.tcdng.unify.core.UnifyException;
 
 /**
@@ -428,4 +430,20 @@ public interface WorkflowModuleService extends FlowCentralService, ApplicationWo
      *                        if an error occurs
      */
     WfChannelDef getWfChannelDef(String workflowChannelName) throws UnifyException;
+    
+    /**
+     * Generates workflow steps.
+     * 
+     * @param type
+     *                               the design type
+     * @param stepLabel
+     *                               the step label
+     * @param appletWorkflowCopyInfo
+     *                               the workflow copy
+     * @return list of steps
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    List<WfStep> generateWorkflowSteps(final DesignType type, final String stepLabel,
+            final AppletWorkflowCopyInfo appletWorkflowCopyInfo) throws UnifyException;
 }
