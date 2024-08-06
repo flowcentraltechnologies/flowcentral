@@ -52,7 +52,7 @@ public class StudioOnCreateWorkflowPolicy extends StudioOnCreateComponentPolicy 
         super.doExecutePreAction(ctx);
         Workflow workflow = (Workflow) ctx.getInst();
         if (DataUtils.isBlank(workflow.getStepList())) {
-            List<WfStep> stepList = WorkflowDesignUtils.generateWorkflowSteps(
+            List<WfStep> stepList = workflowModuleService.generateWorkflowSteps(
                     WorkflowDesignUtils.DesignType.DEFAULT_WORKFLOW, workflow.getLabel(), new AppletWorkflowCopyInfo());
             workflow.setStepList(stepList);
         }
