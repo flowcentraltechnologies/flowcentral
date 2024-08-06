@@ -41,7 +41,7 @@ public class StudioAppletLevelsListCommand extends AbstractZeroParamsListCommand
 
     static {
         List<Listable> list = new ArrayList<Listable>();
-        for (int i = 1; i <= 10; i++) {
+        for (int i = 1; i <= 8; i++) {
             list.add(new ListNumberData(i));
         }
 

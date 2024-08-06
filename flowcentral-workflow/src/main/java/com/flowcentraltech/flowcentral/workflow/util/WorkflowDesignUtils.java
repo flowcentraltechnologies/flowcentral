@@ -259,7 +259,11 @@ public final class WorkflowDesignUtils {
                 approvalWfStep.setAppletName(appletWorkflowCopyInfo.getAppletName());
                 approvalWfStep.setReadOnlyConditionName(ApplicationFilterConstants.RESERVED_ALWAYS_FILTERNAME);
                 approvalWfStep.setAttachmentProviderName(appletWorkflowCopyInfo.getAttachmentProvider());
-                approvalWfStep.setAppletSetValuesName(submitEventInfo.getSetValuesName());
+                
+                if (first) {
+                    approvalWfStep.setAppletSetValuesName(submitEventInfo.getSetValuesName());
+                }
+                
                 List<WfStepAlert> alertList = new ArrayList<WfStepAlert>();
                 if (first && submitEventInfo.isWithAlert()) {
                     WfStepAlert wfStepAlert = createWfStepAlert(WorkflowAlertType.USER_INTERACT,
