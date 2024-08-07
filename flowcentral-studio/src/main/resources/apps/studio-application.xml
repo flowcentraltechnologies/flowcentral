@@ -6039,6 +6039,9 @@
 				<property name="workflowCopy.attachmentprovider"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.attachmentprovider}"
 					inputWidget="studio.propertyappletattachmentproviderlist" />
+			</propertySet>
+			<propertySet
+				label="$m{studio.appappletprop.manageentity.workflowcopyproperties.create}">
 				<property name="workflowCopy.create.copy.setvalues"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.create.copysetvalues}"
 					inputWidget="studio.propertyappletsetvalueslist" />
@@ -6081,6 +6084,9 @@
 				<property name="workflowCopy.create.abort.setvalues"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.create.abortsetvalues}"
 					inputWidget="studio.propertyappletsetvalueslist" />
+			</propertySet>
+			<propertySet
+				label="$m{studio.appappletprop.manageentity.workflowcopyproperties.update}">
 				<property name="workflowCopy.update.copy.setvalues"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.update.copysetvalues}"
 					inputWidget="studio.propertyappletsetvalueslist" />
@@ -6123,6 +6129,9 @@
 				<property name="workflowCopy.update.abort.setvalues"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.update.abortsetvalues}"
 					inputWidget="studio.propertyappletsetvalueslist" />
+			</propertySet>
+			<propertySet
+				label="$m{studio.appappletprop.manageentity.workflowcopyproperties.delete}">
 				<property name="workflowCopy.delete.alert"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.delete.submitalert}"
 					inputWidget="studio.propertyappletalertlist" />
@@ -6311,6 +6320,9 @@
 				<property name="workflowCopy.attachmentprovider"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.attachmentprovider}"
 					inputWidget="studio.propertyappletattachmentproviderlist" />
+			</propertySet>
+			<propertySet
+				label="$m{studio.appappletprop.manageentity.workflowcopyproperties.create}">
 				<property name="workflowCopy.create.copy.setvalues"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.create.copysetvalues}"
 					inputWidget="studio.propertyappletsetvalueslist" />
@@ -6353,6 +6365,9 @@
 				<property name="workflowCopy.create.abort.setvalues"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.create.abortsetvalues}"
 					inputWidget="studio.propertyappletsetvalueslist" />
+			</propertySet>
+			<propertySet
+				label="$m{studio.appappletprop.manageentity.workflowcopyproperties.update}">
 				<property name="workflowCopy.update.copy.setvalues"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.update.copysetvalues}"
 					inputWidget="studio.propertyappletsetvalueslist" />
@@ -6395,6 +6410,9 @@
 				<property name="workflowCopy.update.abort.setvalues"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.update.abortsetvalues}"
 					inputWidget="studio.propertyappletsetvalueslist" />
+			</propertySet>
+			<propertySet
+				label="$m{studio.appappletprop.manageentity.workflowcopyproperties.delete}">
 				<property name="workflowCopy.delete.alert"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.delete.submitalert}"
 					inputWidget="studio.propertyappletalertlist" />
