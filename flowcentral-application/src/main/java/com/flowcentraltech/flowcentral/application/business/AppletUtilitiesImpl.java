@@ -1337,7 +1337,7 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
                         specialParamProvider);
             }
 
-            _entitySearch.setChildTabIndex(i);
+            _entitySearch.setChildTabIndex(i); 
             _entitySearch.setHeadlessList(appletName);
             _entitySearch.applyFilterToSearch();
 

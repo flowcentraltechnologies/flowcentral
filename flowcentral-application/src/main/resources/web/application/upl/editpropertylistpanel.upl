@@ -39,9 +39,9 @@
 
 // Properties form panel
 !ui-panel:propertiesBodyPanel style:$s{width:60%; margin: 8px auto;} 
-	components:$c{propertiesForm}
-!fc-miniform:propertiesForm binding:inputForm
+	components:$c{headlessTabsFormPanel}
+!fc-headlesstabsformpanel:headlessTabsFormPanel binding:headlessForm
 	
 // Actions
-!ui-postcommand:savePropertiesAct command:saveProperties components:$c{propertiesForm}
+!ui-postcommand:savePropertiesAct command:saveProperties components:$c{headlessTabsFormPanel}
 
