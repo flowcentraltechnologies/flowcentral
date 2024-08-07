@@ -16,16 +16,24 @@
 
 package com.flowcentraltech.flowcentral.application.web.panels;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
+import com.flowcentraltech.flowcentral.application.data.FormTabDef;
 import com.flowcentraltech.flowcentral.application.data.PropertyRuleDef;
+import com.flowcentraltech.flowcentral.application.data.TabSheetDef;
 import com.flowcentraltech.flowcentral.application.web.data.AppletContext;
 import com.flowcentraltech.flowcentral.application.web.data.FormContext;
 import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs;
 import com.flowcentraltech.flowcentral.application.web.widgets.MiniForm;
 import com.flowcentraltech.flowcentral.application.web.widgets.MiniFormScope;
 import com.flowcentraltech.flowcentral.application.web.widgets.SectorIcon;
+import com.flowcentraltech.flowcentral.application.web.widgets.TabSheet;
+import com.flowcentraltech.flowcentral.application.web.widgets.TabSheet.TabSheetItem;
 import com.flowcentraltech.flowcentral.common.business.policies.SweepingCommitPolicy;
+import com.flowcentraltech.flowcentral.configuration.constants.RendererType;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.MapValues;
 import com.tcdng.unify.core.database.Entity;
@@ -50,16 +58,19 @@ public class EditPropertyList {
 
     private final BreadCrumbs breadCrumbs;
 
+    private MapValues propValues;
+
     private String childFkFieldName;
 
-    private MiniForm inputForm;
+    private HeadlessTabsForm headlessForm;
 
     private String displayItemCounter;
 
     private String displayItemCounterClass;
 
     public EditPropertyList(AppletContext ctx, SweepingCommitPolicy sweepingCommitPolicy,
-            PropertyRuleDef propertyRuleDef, Entity inst, SectorIcon sectorIcon, BreadCrumbs breadCrumbs, String childFkFieldName) {
+            PropertyRuleDef propertyRuleDef, Entity inst, SectorIcon sectorIcon, BreadCrumbs breadCrumbs,
+            String childFkFieldName) {
         this.ctx = ctx;
         this.sweepingCommitPolicy = sweepingCommitPolicy;
         this.propertyRuleDef = propertyRuleDef;
@@ -101,12 +112,12 @@ public class EditPropertyList {
         return propertyRuleDef.getEntityDef();
     }
 
-    public MiniForm getInputForm() {
-        return inputForm;
+    public HeadlessTabsForm getHeadlessForm() {
+        return headlessForm;
     }
 
-    public void setInputForm(MiniForm inputForm) {
-        this.inputForm = inputForm;
+    public void setHeadlessForm(HeadlessTabsForm headlessForm) {
+        this.headlessForm = headlessForm;
     }
 
     public String getDisplayItemCounter() {
@@ -133,16 +144,28 @@ public class EditPropertyList {
     public boolean isWithSectorIcon() {
         return sectorIcon != null;
     }
-    
+
     public void loadPropertyList(FormContext ctx) throws UnifyException {
-        MapValues propValues = ctx.au().getPropertyListValues(inst, childFkFieldName, propertyRuleDef);
-        inputForm = new MiniForm(MiniFormScope.PROPERTY_LIST,
-                new FormContext(ctx.getAppletContext(), ctx.getFormDef(), ctx.getFormEventHandlers(), propValues),
-                propertyRuleDef.getPropertyListDef(inst).getFormTabDef());
+        propValues = ctx.au().getPropertyListValues(inst, childFkFieldName, propertyRuleDef);
+
+        FormContext formContext = new FormContext(ctx.getAppletContext(), ctx.getFormDef(), ctx.getFormEventHandlers(),
+                propValues);
+        TabSheetDef.Builder tsdb = TabSheetDef.newBuilder(null, 1L);
+        List<TabSheetItem> tabSheetItemList = new ArrayList<TabSheetItem>();
+        final List<FormTabDef> formTabDefs = propertyRuleDef.getPropertyListDef(inst).getFormTabDefs();
+        final int len = formTabDefs.size();
+        for (int i = 0; i < len; i++) {
+            final FormTabDef formTabDef = formTabDefs.get(i);
+            tsdb.addTabDef(formTabDef.getName(), formTabDef.getLabel(), "!fc-miniform",
+                    RendererType.SIMPLE_WIDGET);
+            tabSheetItemList.add(new TabSheetItem(formTabDef.getName(), formTabDef.getApplet(),
+                    new MiniForm(MiniFormScope.CHILD_FORM, formContext, formTabDef), i, true));
+        }
+
+        headlessForm = new HeadlessTabsForm(ctx.au(), new TabSheet(tsdb.build(), tabSheetItemList, true));
     }
 
     public void commitPropertyList() throws UnifyException {
-        ctx.au().savePropertyListValues(sweepingCommitPolicy, inst, childFkFieldName, propertyRuleDef,
-                (MapValues) inputForm.getFormBean());
+        ctx.au().savePropertyListValues(sweepingCommitPolicy, inst, childFkFieldName, propertyRuleDef, propValues);
     }
 }

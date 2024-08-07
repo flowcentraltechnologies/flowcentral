@@ -107,7 +107,7 @@
 !ui-button:closeCrudBtn caption:$m{button.close}
 	eventHandler:$d{!ui-event event:onclick action:$c{navBackAct}}
 
-// Edit Property List
+// Edit Property List 
 !fc-editpropertylistpanel:editPropertyListPanel binding:editPropertyList
 	moreActionButtons:$c{savePropListCloseBtn closePropListBtn}
 !ui-button:savePropListCloseBtn caption:$m{button.saveclose}

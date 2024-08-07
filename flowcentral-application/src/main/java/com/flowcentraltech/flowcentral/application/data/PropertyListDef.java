@@ -17,6 +17,7 @@
 package com.flowcentraltech.flowcentral.application.data;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -38,19 +39,19 @@ import com.tcdng.unify.core.util.DataUtils;
  */
 public class PropertyListDef extends BaseApplicationEntityDef {
 
-    private FormTabDef formTabDef;
+    private List<FormTabDef> formTabDefs;
 
     private List<PropertyListItemDef> itemDefList;
 
-    private PropertyListDef(FormTabDef formTabDef, List<PropertyListItemDef> itemDefList,
+    private PropertyListDef(List<FormTabDef> formTabDefs, List<PropertyListItemDef> itemDefList,
             ApplicationEntityNameParts nameParts, String description, Long id, long version) {
         super(nameParts, description, id, version);
-        this.formTabDef = formTabDef;
+        this.formTabDefs = formTabDefs;
         this.itemDefList = itemDefList;
     }
 
-    public FormTabDef getFormTabDef() {
-        return formTabDef;
+    public List<FormTabDef> getFormTabDefs() {
+        return formTabDefs;
     }
 
     public List<PropertyListItemDef> getItemDefList() {
@@ -115,7 +116,7 @@ public class PropertyListDef extends BaseApplicationEntityDef {
 
         public PropertyListDef build() throws UnifyException {
             List<PropertyListItemDef> itemList = new ArrayList<PropertyListItemDef>();
-            List<FormSectionDef> formSectionDefList = new ArrayList<FormSectionDef>();
+            List<FormTabDef> formTabDefs = new ArrayList<FormTabDef>();
             for (Map.Entry<String, List<PropertyListItemDef>> entry : itemDefMap.entrySet()) {
                 List<FormFieldDef> formFieldDefList = new ArrayList<FormFieldDef>();
                 for (PropertyListItemDef propertyListItemDef : entry.getValue()) {
@@ -126,15 +127,16 @@ public class PropertyListDef extends BaseApplicationEntityDef {
                     itemList.add(propertyListItemDef);
                 }
 
-                formSectionDefList.add(new FormSectionDef(formFieldDefList, entry.getKey(), entry.getKey(),
-                        FormColumnsType.TYPE_1, true, true, false));
+                FormTabDef formTabDef = new FormTabDef(TabContentType.MINIFORM, null, entry.getKey(), entry.getKey(),
+                        null, null, null, null, null, null, null, null,
+                        Arrays.asList(new FormSectionDef(formFieldDefList, entry.getKey(), entry.getKey(),
+                                FormColumnsType.TYPE_1, true, true, false)),
+                        false, false, false, false, true, true, false);
+                formTabDefs.add(formTabDef);
             }
 
-            FormTabDef formTabDef = new FormTabDef(TabContentType.MINIFORM, null, "details", description, null, null,
-                    null, null, null, null, null, null, formSectionDefList, false, false, false, false, true, true, false);
-
             ApplicationEntityNameParts nameParts = ApplicationNameUtils.getApplicationEntityNameParts(longName);
-            return new PropertyListDef(formTabDef, DataUtils.unmodifiableList(itemList), nameParts, description, id,
+            return new PropertyListDef(formTabDefs, DataUtils.unmodifiableList(itemList), nameParts, description, id,
                     version);
         }
     }
