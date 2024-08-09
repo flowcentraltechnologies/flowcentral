@@ -21,6 +21,7 @@ import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.constants.DataChangeType;
+import com.flowcentraltech.flowcentral.application.data.Diff;
 import com.flowcentraltech.flowcentral.application.data.DiffEntity;
 import com.flowcentraltech.flowcentral.application.data.DiffEntityField;
 import com.flowcentraltech.flowcentral.application.data.FormDef;
@@ -44,8 +45,25 @@ public final class DiffUtils {
 
     }
 
-    public static DiffEntity diff(AppletUtilities au, FormDef formDef, Entity left, Entity right,
-            Formats.Instance formats) throws Exception {
+    /**
+     * Performs a form difference.
+     * 
+     * @param au
+     *                applet utility
+     * @param formDef
+     *                the form definition
+     * @param left
+     *                the left entity
+     * @param right
+     *                the right entity
+     * @param formats
+     *                formats object
+     * @return the difference
+     * @throws Exception
+     *                   if an error occurs
+     */
+    public static Diff diff(AppletUtilities au, FormDef formDef, Entity left, Entity right, Formats.Instance formats)
+            throws Exception {
         List<FormTabDef> tabs = formDef.getFormTabDefList();
         FormTabDef main = tabs.get(0);
         List<DiffEntityField> lfields = Collections.emptyList();
@@ -68,9 +86,9 @@ public final class DiffUtils {
                     if (!DataUtils.equals(lvalStr, rvalStr)) {
                         lChangeType = lvalStr != null ? (rvalStr != null ? DataChangeType.UPDATED : DataChangeType.NEW)
                                 : DataChangeType.NONE;
-                        
+
                         rChangeType = lvalStr != null ? (rvalStr != null ? DataChangeType.UPDATED : DataChangeType.NONE)
-                                : DataChangeType.DELETED;                        
+                                : DataChangeType.DELETED;
                     }
 
                     lfields.add(new DiffEntityField(lChangeType, formFieldDef.getFieldName(),
@@ -81,13 +99,19 @@ public final class DiffUtils {
             }
         }
 
+        final DiffEntity dleft = new DiffEntity(main.getLabel(), lfields);
+        final DiffEntity dright = new DiffEntity(main.getLabel(), rfields);
+
+        final List<Diff> children = new ArrayList<Diff>();
         final int len = tabs.size();
         for (int i = 1; i < len; i++) {
             FormTabDef child = tabs.get(i);
-            // TODO
+            switch (child.getContentType()) {
+
+            }
         }
 
-        return null;
+        return new Diff(dleft, dright, children);
     }
 
     private static List<DiffEntityField> getFields(FormTabDef formTabDef, Entity inst, DataChangeType changeType,

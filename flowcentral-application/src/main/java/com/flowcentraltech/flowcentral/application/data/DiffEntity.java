@@ -18,8 +18,6 @@ package com.flowcentraltech.flowcentral.application.data;
 
 import java.util.List;
 
-import com.flowcentraltech.flowcentral.application.constants.DataChangeType;
-
 /**
  * Difference entity.
  * 
@@ -28,20 +26,13 @@ import com.flowcentraltech.flowcentral.application.constants.DataChangeType;
  */
 public class DiffEntity {
 
-    private DataChangeType changeType;
-
     private String label;
 
     private List<DiffEntityField> fields;
 
-    public DiffEntity(DataChangeType changeType, String label, List<DiffEntityField> fields) {
-        this.changeType = changeType;
+    public DiffEntity(String label, List<DiffEntityField> fields) {
         this.label = label;
         this.fields = fields;
-    }
-
-    public DataChangeType getChangeType() {
-        return changeType;
     }
 
     public String getLabel() {
