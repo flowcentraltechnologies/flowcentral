@@ -18,6 +18,8 @@ package com.flowcentraltech.flowcentral.application.data;
 
 import java.util.List;
 
+import com.tcdng.unify.core.util.StringUtils;
+
 /**
  * Difference entity.
  * 
@@ -41,6 +43,10 @@ public class DiffEntity {
 
     public List<DiffEntityField> getFields() {
         return fields;
+    }
+
+    public String toString() {
+        return StringUtils.toXmlString(this);
     }
 
 }

@@ -18,6 +18,8 @@ package com.flowcentraltech.flowcentral.application.data;
 
 import java.util.List;
 
+import com.tcdng.unify.core.util.StringUtils;
+
 /**
  * Difference.
  * 
@@ -48,6 +50,10 @@ public class Diff {
 
     public List<Diff> getChildren() {
         return children;
+    }
+
+    public String toString() {
+        return StringUtils.toXmlString(this);
     }
 
 }

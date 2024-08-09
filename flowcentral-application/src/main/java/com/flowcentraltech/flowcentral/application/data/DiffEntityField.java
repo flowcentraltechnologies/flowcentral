@@ -17,6 +17,7 @@
 package com.flowcentraltech.flowcentral.application.data;
 
 import com.flowcentraltech.flowcentral.application.constants.DataChangeType;
+import com.tcdng.unify.core.util.StringUtils;
 
 /**
  * Difference entity field.
@@ -57,4 +58,7 @@ public class DiffEntityField {
         return value;
     }
 
+    public String toString() {
+        return StringUtils.toXmlString(this);
+    }
 }
