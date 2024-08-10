@@ -58,6 +58,10 @@ public class DiffEntityField {
         return value;
     }
 
+    public boolean isWithValue() {
+        return value != null;
+    }
+    
     public String toString() {
         return StringUtils.toXmlString(this);
     }

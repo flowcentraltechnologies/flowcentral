@@ -23,10 +23,12 @@ import java.util.Set;
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.constants.AppletPropertyConstants;
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
+import com.flowcentraltech.flowcentral.application.data.Diff;
 import com.flowcentraltech.flowcentral.application.data.EditEntityItem;
 import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.EntityItem;
+import com.flowcentraltech.flowcentral.application.util.DiffUtils;
 import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm.FormMode;
 import com.flowcentraltech.flowcentral.application.web.data.FormContext;
 import com.flowcentraltech.flowcentral.application.web.panels.EntitySearch;
@@ -44,6 +46,7 @@ import com.flowcentraltech.flowcentral.configuration.constants.FormReviewType;
 import com.flowcentraltech.flowcentral.configuration.constants.RecordActionType;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.UserToken;
+import com.tcdng.unify.core.data.Formats;
 import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.util.ReflectUtils;
 import com.tcdng.unify.core.util.StringUtils;
@@ -142,6 +145,12 @@ public abstract class AbstractEntitySingleFormApplet extends AbstractApplet {
         form = null;
         viewMode = ViewMode.SEARCH;
         entitySearch.applySearchEntriesToSearch();
+    }
+
+    public Diff diff() throws UnifyException {
+        WorkEntity workEntity = (WorkEntity) form.getFormBean();
+        return DiffUtils.diff(au, form.getFormDef(), (Long) workEntity.getId(), workEntity.getOriginalCopyId(),
+                Formats.DEFAULT.createInstance());
     }
 
     public TableActionResult previousInst() throws UnifyException {

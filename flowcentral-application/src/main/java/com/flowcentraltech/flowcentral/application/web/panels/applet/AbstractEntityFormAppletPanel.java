@@ -19,10 +19,12 @@ package com.flowcentraltech.flowcentral.application.web.panels.applet;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.constants.AppletPropertyConstants;
+import com.flowcentraltech.flowcentral.application.constants.AppletRequestAttributeConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationResultMappingConstants;
 import com.flowcentraltech.flowcentral.application.constants.WorkflowDraftType;
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
+import com.flowcentraltech.flowcentral.application.data.Diff;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.FormActionDef;
 import com.flowcentraltech.flowcentral.application.data.FormDef;
@@ -80,7 +82,7 @@ import com.tcdng.unify.web.ui.widget.data.MessageResult;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@UplBinding("web/application/upl/entityformappletpanel.upl")
+@UplBinding("web/application/upl/entityformappletpanel.upl") 
 public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel {
 
     private static final String IN_WORKFLOW_DRAFT_LOOP_FLAG = "IN_WORKFLOW_DRAFT_LOOP_FLAG";
@@ -246,6 +248,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
 
         boolean parentDisabled = false;
         boolean showReviewFormCaption = false;
+        boolean showDiff = false;
         if (form != null) {
             form.getCtx().setUpdateEnabled(enableUpdate);
             if (form.isWithAttachments()) {
@@ -273,6 +276,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                 if (appCtx.isReview()) {
                     if (isRootForm) {
                         showReviewFormCaption = true;
+                        showDiff = isInWorkflow && isWorkflowCopyForm && (viewMode.isMaintainForm() || viewMode.isListingForm());
                         form.setDisplayItemCounterClass("fc-dispcounterfrozen fc-dispcounterlarge");
                         form.setDisplayItemCounter(_display);
                     }
@@ -315,6 +319,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
             parentDisabled = true;
         }
 
+        setVisible("frmDiffBtn", showDiff);
         switch (viewMode) {
             case ENTITY_CRUD_PAGE:
                 switchContent("entityCrudPanel");
@@ -675,6 +680,14 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
             EntityActionResult entityActionResult = applet.formActionOnInst(formActionDef.getPolicy(), actionName);
             handleEntityActionResult(entityActionResult);
         }
+    }
+
+    @Action
+    public void diff() throws UnifyException {
+        final AbstractEntityFormApplet applet = getEntityFormApplet();
+        Diff diff = applet.diff();
+        setRequestAttribute(AppletRequestAttributeConstants.FORM_DIFF, diff);
+        setCommandResultMapping(ApplicationResultMappingConstants.SHOW_DIFF);
     }
 
     @Action

@@ -22,7 +22,7 @@
 !fc-headerwithtabsformpanel:formPanel binding:form
 	moreCenterComponents:$c{displayCounterLabel}
 	moreActionButtons:$f{moreActionButtons}
-	moreActionButtons:$c{formAttachmentBtn frmActionBtns submitNextBtn submitCloseBtn saveAsBtn saveBtn saveNextBtn saveCloseBtn}
+	moreActionButtons:$c{formAttachmentBtn frmDiffBtn frmActionBtns submitNextBtn submitCloseBtn saveAsBtn saveBtn saveNextBtn saveCloseBtn}
 	moreActionButtons:$c{updateBtn updateCloseBtn deleteBtn cancelBtn prevBtn nextBtn}
 	altActionButtons:$c{frmActionBtns submitNextBtn submitCloseBtn saveBtn saveNextBtn saveCloseBtn}
 	altActionButtons:$c{updateBtn updateCloseBtn deleteBtn cancelBtn}
@@ -34,6 +34,8 @@
 	styleClassBinding:displayItemCounterClass binding:displayItemCounter
 !ui-button:formAttachmentBtn caption:$m{button.attachments.param} captionParamBinding:attachmentCount
 	eventHandler:$d{!ui-event event:onclick action:$c{showAttachmentAct}}
+!ui-button:frmDiffBtn caption:$m{button.diff} symbol:$s{diff}
+	eventHandler:$d{!ui-event event:onclick action:$c{diffAct}}
 !ui-button:saveBtn caption:$m{button.save}
 	eventHandler:$d{!ui-event event:onclick action:$c{saveAct}}
 !ui-button:saveNextBtn caption:$m{button.savenext}
@@ -138,6 +140,7 @@
 !ui-postcommand:crudAct command:crudSelectItem refresh:$c{entityCrudPanel.crudBodyPanel}
 !ui-postcommand:saveAsSwitchOnChangeAct command:saveAsSwitchOnChange components:$c{entitySaveAsPanel}
 	refresh:$c{entitySaveAsPanel.entityFormBodyPanel}
+!ui-postcommand:diffAct command:diff
 !ui-postcommand:saveAct command:save components:$c{formPanel}
 !ui-postcommand:saveNextAct command:saveAndNext components:$c{formPanel}
 !ui-postcommand:saveCloseAct command:saveAndClose components:$c{formPanel}

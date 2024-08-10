@@ -36,8 +36,10 @@ import com.tcdng.unify.web.constant.Secured;
  */
 @Component(FlowCentralAppletPathConstants.LISTING)
 @UplBinding("web/application/upl/listingappletpage.upl")
-@ResultMappings({ @ResultMapping(name = ApplicationResultMappingConstants.SHOW_FILE_ATTACHMENTS,
-        response = { "!validationerrorresponse", "!showpopupresponse popup:$s{fileAttachmentsPopup}" }) })
+    @ResultMappings({ @ResultMapping(name = ApplicationResultMappingConstants.SHOW_FILE_ATTACHMENTS,
+        response = { "!validationerrorresponse", "!showpopupresponse popup:$s{fileAttachmentsPopup}" }),
+    @ResultMapping(name = ApplicationResultMappingConstants.SHOW_DIFF,
+        response = { "!validationerrorresponse", "!showpopupresponse popup:$s{formDiffPopup}" }) })
 public class ListingAppletController extends AbstractAppletController<ListingAppletPageBean> {
 
     public ListingAppletController() {
@@ -46,6 +48,11 @@ public class ListingAppletController extends AbstractAppletController<ListingApp
 
     @Action
     public String closeFileAttachments() throws UnifyException {
+        return "refreshapplet";
+    }
+
+    @Action
+    public String closeDiff() throws UnifyException {
         return "refreshapplet";
     }
 

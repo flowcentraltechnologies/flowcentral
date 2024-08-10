@@ -14,32 +14,20 @@
  * the License.
  */
 
-package com.flowcentraltech.flowcentral.application.constants;
+package com.flowcentraltech.flowcentral.application.web.panels;
+
+import com.flowcentraltech.flowcentral.common.web.panels.BaseDialogPanel;
+import com.tcdng.unify.core.annotation.Component;
+import com.tcdng.unify.core.annotation.UplBinding;
 
 /**
- * Data change type.
+ * Form diff panel.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public enum DataChangeType {
+@Component("fc-formdiffpanel")
+@UplBinding("web/application/upl/formdiffpanel.upl")
+public class FormDiffPanel extends BaseDialogPanel {
 
-    NEW("new"),
-    UPDATED("upd"),
-    DELETED("del"),
-    NONE("non");
-    
-    private final String shade;
-    
-    private DataChangeType(String shade) {
-       this.shade = shade; 
-    }
-
-    public String shade() {
-        return shade;
-    }
-
-    public boolean isNone() {
-        return NONE.equals(this);
-    }
 }

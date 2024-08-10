@@ -38,6 +38,7 @@ import com.flowcentraltech.flowcentral.application.data.FormTabDef;
 import com.flowcentraltech.flowcentral.application.data.FilterGroupDef.FilterType;
 import com.flowcentraltech.flowcentral.common.util.RestrictionUtils;
 import com.flowcentraltech.flowcentral.configuration.constants.TabContentType;
+import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.criterion.Restriction;
 import com.tcdng.unify.core.data.BeanValueStore;
 import com.tcdng.unify.core.data.Formats;
@@ -72,12 +73,12 @@ public final class DiffUtils {
      * @param formats
      *                      formats object
      * @return the difference
-     * @throws Exception
+     * @throws UnifyException
      *                   if an error occurs
      */
     @SuppressWarnings("unchecked")
     public static Diff diff(AppletUtilities au, FormDef formDef, Long leftEntityId, Long rightEntityId,
-            Formats.Instance formats) throws Exception {
+            Formats.Instance formats) throws UnifyException {
         final Date now = au.getNow();
         final EntityDef entityDef = formDef.getEntityDef();
         final EntityClassDef entityClassDef = au.getEntityClassDef(entityDef.getLongName());
@@ -191,7 +192,7 @@ public final class DiffUtils {
 
     @SuppressWarnings("unchecked")
     private static List<Long> getChildIdList(AppletUtilities au, FormTabDef childTabDef, EntityDef parentEntityDef,
-            Entity parentInst, Date now, boolean list) throws Exception {
+            Entity parentInst, Date now, boolean list) throws UnifyException {
         if (parentInst != null) {
             Restriction childRestriction = au.getChildRestriction(parentEntityDef, childTabDef.getReference(),
                     parentInst);
@@ -210,7 +211,7 @@ public final class DiffUtils {
     }
 
     private static List<DiffEntityField> getFields(FormTabDef formTabDef, Entity inst, DataChangeType changeType,
-            Formats.Instance formats) throws Exception {
+            Formats.Instance formats) throws UnifyException {
         List<DiffEntityField> fields = new ArrayList<DiffEntityField>();
         for (FormSectionDef formSectionDef : formTabDef.getFormSectionDefList()) {
             for (FormFieldDef formFieldDef : formSectionDef.getFormFieldDefList()) {

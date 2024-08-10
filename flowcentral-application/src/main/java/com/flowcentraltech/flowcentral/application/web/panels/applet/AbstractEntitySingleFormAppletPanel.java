@@ -17,9 +17,11 @@
 package com.flowcentraltech.flowcentral.application.web.panels.applet;
 
 import com.flowcentraltech.flowcentral.application.constants.AppletPropertyConstants;
+import com.flowcentraltech.flowcentral.application.constants.AppletRequestAttributeConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationResultMappingConstants;
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
+import com.flowcentraltech.flowcentral.application.data.Diff;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.web.data.AppletContext;
 import com.flowcentraltech.flowcentral.application.web.data.FormContext;
@@ -123,10 +125,12 @@ public abstract class AbstractEntitySingleFormAppletPanel extends AbstractApplet
             setPageAttribute("formPanel.id", formPanel.getId());
         }
 
+        boolean showDiff = false;
         if (form != null) {
             form.getCtx().setUpdateEnabled(enableUpdate);
             form.clearDisplayItem();
             if (isUpdateCopy) {
+                showDiff = isInWorkflow && viewMode.isMaintainForm();
                 form.setDisplayItemCounterClass("fc-dispcounterorange");
                 form.setDisplayItemCounter(
                         resolveSessionMessage("$m{entityformapplet.form.workflowupdatecopy.viewonly}"));
@@ -143,6 +147,7 @@ public abstract class AbstractEntitySingleFormAppletPanel extends AbstractApplet
             }
         }
 
+        setVisible("frmDiffBtn", showDiff);
         switch (viewMode) {
             case MAINTAIN_FORM_SCROLL:
                 final boolean closable = !appCtx.isInDetachedWindow();
@@ -297,6 +302,14 @@ public abstract class AbstractEntitySingleFormAppletPanel extends AbstractApplet
     @Action
     public void performFormAction() throws UnifyException {
 
+    }
+
+    @Action
+    public void diff() throws UnifyException {
+        final AbstractEntitySingleFormApplet applet = getEntityFormApplet();
+        Diff diff = applet.diff();
+        setRequestAttribute(AppletRequestAttributeConstants.FORM_DIFF, diff);
+        setCommandResultMapping(ApplicationResultMappingConstants.SHOW_DIFF);
     }
 
     @Action

@@ -440,6 +440,16 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-formannotation .cls {width:40px; text-align:center;}
 .fc-formannotation .icon {display:inline-block;padding:4px 2px;width:16px;font-size:12px;cursor:pointer;}
  
+/* Form diff */
+.fc-formdiff {width:100%;}
+.fc-formdiff .diff {display:table;}
+.fc-formdiff .diffrow {display:table-row;}
+.fc-formdiff .diffcell {display:table-cell;width:50%;}
+.fc-formdiff .difflbl {display:table-cell;width:40%;}
+.fc-formdiff .diffval {display:table-cell;width:60%;}
+.fc-formdiff .diffval .new {background-color:#7F8C6B;}
+.fc-formdiff .diffval .upd {background-color:#D9A76C;}
+.fc-formdiff .diffval .del {background-color:#B4746B;}
 
 /* Form bread crumbs */
 .fc-formbreadcrumbs {}
@@ -979,6 +989,10 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 /* Entity file attachments panel*/
 .fc-entityfileattachmentspanel {}
 .fc-entityfileattachmentspanel .abody{width:560px; height:220px; padding:1px; overflow-y:scroll;}
+
+/* Form diff panel*/
+.fc-formdiffpanel {}
+.fc-formdiffpanel .abody{width:720px; height:220px; padding:1px; overflow-y:scroll;}
 
 /* Entity widget rules panel */
 .fc-entitywidgetrulespanel {}

@@ -22,5 +22,9 @@
 !fc-entityfileattachmentspanel:fileAttachmentsPopup binding:applet.formFileAttachments
    closeEventHandler:$d{!ui-event event:onclick action:$c{closeFileAttachAct}}
 
+!fc-formdiffpanel:formDiffPopup
+   closeEventHandler:$d{!ui-event event:onclick action:$c{closeDiffAct}}
+
 // Actions
 !ui-post:closeFileAttachAct path:$p{/closeFileAttachments}
+!ui-post:closeDiffAct path:$p{/closeDiff}

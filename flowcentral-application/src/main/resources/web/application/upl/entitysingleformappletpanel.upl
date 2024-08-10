@@ -20,12 +20,14 @@
 !fc-entitysingleformpanel:formPanel binding:form
 	moreCenterComponents:$c{displayCounterLabel}
 	moreActionButtons:$f{moreActionButtons}
-	moreActionButtons:$c{frmActionBtns saveBtn saveNextBtn saveCloseBtn}
+	moreActionButtons:$c{frmActionBtns frmDiffBtn saveBtn saveNextBtn saveCloseBtn}
 	moreActionButtons:$c{submitNextBtn submitCloseBtn updateBtn updateCloseBtn deleteBtn cancelBtn prevBtn nextBtn}
 	altActionButtons:$c{frmActionBtns saveBtn saveNextBtn saveCloseBtn}
 	altActionButtons:$c{submitNextBtn submitCloseBtn updateBtn updateCloseBtn deleteBtn cancelBtn}
 !ui-label:displayCounterLabel styleClass:$e{fc-dispcounter}
 	styleClassBinding:displayItemCounterClass binding:displayItemCounter
+!ui-button:frmDiffBtn caption:$m{button.diff} symbol:$s{diff}
+	eventHandler:$d{!ui-event event:onclick action:$c{diffAct}}
 !ui-button:saveBtn caption:$m{button.save}
 	eventHandler:$d{!ui-event event:onclick action:$c{saveAct}}
 !ui-button:saveNextBtn caption:$m{button.savenext}
@@ -69,6 +71,7 @@
 
 // Actions
 !ui-postcommand:navBackAct command:navBackToPrevious
+!ui-postcommand:diffAct command:diff
 !ui-postcommand:saveAct command:save components:$c{formPanel}
 !ui-postcommand:saveNextAct command:saveAndNext components:$c{formPanel}
 !ui-postcommand:saveCloseAct command:saveAndClose components:$c{formPanel}

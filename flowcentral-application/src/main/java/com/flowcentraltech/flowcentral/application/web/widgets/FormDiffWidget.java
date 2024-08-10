@@ -14,32 +14,23 @@
  * the License.
  */
 
-package com.flowcentraltech.flowcentral.application.constants;
+package com.flowcentraltech.flowcentral.application.web.widgets;
+
+import com.flowcentraltech.flowcentral.application.data.Diff;
+import com.flowcentraltech.flowcentral.common.web.widgets.AbstractFlowCentralControl;
+import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.annotation.Component;
 
 /**
- * Data change type.
+ * Form diff widget.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public enum DataChangeType {
+@Component("fc-formdiff")
+public class FormDiffWidget extends AbstractFlowCentralControl {
 
-    NEW("new"),
-    UPDATED("upd"),
-    DELETED("del"),
-    NONE("non");
-    
-    private final String shade;
-    
-    private DataChangeType(String shade) {
-       this.shade = shade; 
-    }
-
-    public String shade() {
-        return shade;
-    }
-
-    public boolean isNone() {
-        return NONE.equals(this);
+    public Diff getDiff() throws UnifyException {
+        return getValue(Diff.class);
     }
 }
