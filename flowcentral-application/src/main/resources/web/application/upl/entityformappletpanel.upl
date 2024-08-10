@@ -33,6 +33,7 @@
 !ui-label:displayCounterLabel styleClass:$e{fc-dispcounter}
 	styleClassBinding:displayItemCounterClass binding:displayItemCounter
 !ui-button:formAttachmentBtn caption:$m{button.attachments.param} captionParamBinding:attachmentCount
+	symbol:$s{paper-clip}
 	eventHandler:$d{!ui-event event:onclick action:$c{showAttachmentAct}}
 !ui-button:frmDiffBtn caption:$m{button.diff} symbol:$s{diff}
 	eventHandler:$d{!ui-event event:onclick action:$c{diffAct}}
