@@ -80,6 +80,7 @@ public class FormDiffWriter extends AbstractControlWriter {
 
             writer.write("<div class=\"difflbl\">");
             writer.writeWithHtmlEscape(field.getLabel());
+            writer.write(":");
             writer.write("</div>");
 
             writer.write("<div class=\"diffval");
