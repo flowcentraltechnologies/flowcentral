@@ -16,6 +16,7 @@
 !fc-entityfileattachmentspanel
     dialogCaption:$m{entityfileattachmentspanel.title}
     dialogBodyComponents:$c{attachmentsPanel}
+    dialogActionLayout:$d{!ui-horizontal style:$s{float:right;}}
     dialogActionComponents:$c{closeBtn}
     fileAttachmentHandler:$j{com.flowcentraltech.flowcentral.application.constants.ApplicationModuleNameConstants.FORM_FILE_ATTACHMENTS_HANDLER}
     closeEventHandler:$d{!ui-event event:onclick action:$c{closeDialogAct}}
@@ -26,5 +27,5 @@
     handler:$f{fileAttachmentHandler}
 
 // Action components
-!ui-button:closeBtn styleClass:$e{ui-button-alert} caption:$m{button.done}
+!ui-button:closeBtn styleClass:$e{ui-button-alert} caption:$m{button.close}
     eventHandler:$f{closeEventHandler}

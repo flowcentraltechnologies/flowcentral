@@ -35,11 +35,14 @@ public class DiffEntityField {
 
     private String value;
 
-    public DiffEntityField(DataChangeType changeType, String name, String label, String value) {
+    private boolean number;
+
+    public DiffEntityField(DataChangeType changeType, String name, String label, String value, boolean number) {
         this.changeType = changeType;
         this.name = name;
         this.label = label;
         this.value = value;
+        this.number = number;
     }
 
     public DataChangeType getChangeType() {
@@ -61,7 +64,11 @@ public class DiffEntityField {
     public boolean isWithValue() {
         return value != null;
     }
-    
+
+    public boolean isNumber() {
+        return number;
+    }
+
     public String toString() {
         return StringUtils.toXmlString(this);
     }

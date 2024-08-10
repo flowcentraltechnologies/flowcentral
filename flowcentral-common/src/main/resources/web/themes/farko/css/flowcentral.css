@@ -103,6 +103,8 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 
 /* Title Bar */
 .ui-titlebar .base {background-color: #24303f;color: #FFF;}
+.ui-titlebar .tblabel {padding: 8px 6px;}
+.ui-titlebar .tbcontrols {padding: 8px 6px;}
 
 /* Login panel */
 .ui-loginpanel .ui-text {width:160px;}
@@ -445,8 +447,9 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-formdiff .diff {display:table;width:100%;}
 .fc-formdiff .diffrow {display:table-row;}
 .fc-formdiff .diffcell {display:table-cell;width:50%;}
-.fc-formdiff .difflbl {display:table-cell;width:30%;text-align: right; padding-right: 4px;font-size: 8pt;font-weight: bold;}
-.fc-formdiff .diffval {display:table-cell;width:70%;}
+.fc-formdiff .difflbl {display:table-cell;width:30%;border: solid 1px #C8C8C8;text-align: right; padding-right: 4px;font-size: 8pt;font-weight: bold;}
+.fc-formdiff .diffval {display:table-cell;width:70%;border: solid 1px #C8C8C8;padding: 2px;}
+.fc-formdiff .diffvaln {display:table-cell;width:70%;border: solid 1px #C8C8C8;padding: 2px;text-align:right;}
 .fc-formdiff .new {background-color:#008000;}
 .fc-formdiff .upd {background-color:#FFFF00;}
 .fc-formdiff .del {background-color:#FF0000;}

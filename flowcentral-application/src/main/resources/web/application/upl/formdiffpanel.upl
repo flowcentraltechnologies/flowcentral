@@ -16,6 +16,7 @@
 !fc-formdiffpanel
     dialogCaption:$m{formdiffpanel.title}
     dialogBodyComponents:$c{diffPanel}
+    dialogActionLayout:$d{!ui-horizontal style:$s{float:right;}}
     dialogActionComponents:$c{closeBtn}
 
 // Diff panel
@@ -24,5 +25,5 @@
 	binding:$j{com.flowcentraltech.flowcentral.application.constants.AppletRequestAttributeConstants.FORM_DIFF}
 
 // Action components
-!ui-button:closeBtn styleClass:$e{ui-button-alert} caption:$m{button.done}
+!ui-button:closeBtn styleClass:$e{ui-button-alert} caption:$m{button.close}
     eventHandler:$f{closeEventHandler}
