@@ -91,6 +91,10 @@ public class FormFieldDef {
         this.disabled = disabled;
     }
 
+    public EntityFieldDef getEntityFieldDef() {
+        return entityFieldDef;
+    }
+
     public String getFieldName() {
         return entityFieldDef.getFieldName();
     }

@@ -23,6 +23,8 @@ import com.flowcentraltech.flowcentral.application.web.widgets.FormDiffWidget;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Writes;
+import com.tcdng.unify.core.util.DataUtils;
+import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.ui.widget.ResponseWriter;
 import com.tcdng.unify.web.ui.widget.Widget;
 import com.tcdng.unify.web.ui.widget.writer.AbstractControlWriter;
@@ -53,15 +55,26 @@ public class FormDiffWriter extends AbstractControlWriter {
     }
 
     private void writeDiff(ResponseWriter writer, Diff diff, int depth) throws UnifyException {
+        final String style = depth > 0 ? " style=\"padding-right:" + depth * 10 + "px;\"" : null;
         writer.write("<div class=\"diff\">");
         writer.write("<div class=\"diffrow\">");
 
-        writer.write("<div class=\"diffcell\">");
-        writeDiff(writer, diff.getLeft(), depth);
+        writer.write("<div class=\"diffcell\"");
+        if (style != null) {
+            writer.write(style);
+        }
+
+        writer.write(">");
+        writeDiff(writer, diff.getLeft(), depth, false);
         writer.write("</div>");
 
-        writer.write("<div class=\"diffcell\">");
-        writeDiff(writer, diff.getRight(), depth);
+        writer.write("<div class=\"diffcell\"");
+        if (style != null) {
+            writer.write(style);
+        }
+
+        writer.write(">");
+        writeDiff(writer, diff.getRight(), depth, true);
         writer.write("</div>");
 
         writer.write("</div>");
@@ -73,38 +86,57 @@ public class FormDiffWriter extends AbstractControlWriter {
         }
     }
 
-    private void writeDiff(ResponseWriter writer, DiffEntity diffEntity, int depth) throws UnifyException {
-        writer.write("<div class=\"diff\">");
-        for (DiffEntityField field : diffEntity.getFields()) {
-            writer.write("<div class=\"diffrow\">");
+    private void writeDiff(ResponseWriter writer, DiffEntity diffEntity, int depth, boolean original)
+            throws UnifyException {
+        if (!DataUtils.isBlank(diffEntity.getFields())) {
+            if (!StringUtils.isBlank(diffEntity.getLabel())) {
+                if (depth == 0) {
+                    writer.write("<div class=\"head\">");
+                } else {
+                    writer.write("<div class=\"headtab\">");
+                }
 
-            writer.write("<div class=\"difflbl\">");
-            writer.writeWithHtmlEscape(field.getLabel());
-            writer.write(":");
-            writer.write("</div>");
+                writer.writeWithHtmlEscape(diffEntity.getLabel());
+                writer.write("</div>");
+            }
 
-            if (field.isNumber()) {
-                writer.write("<div class=\"diffvaln");
-            } else {
-                writer.write("<div class=\"diffval");
+            writer.write("<div class=\"diff");
+            if (original) {
+                writer.write(" orn");
             }
-            
-            if (!field.getChangeType().isNone()) {
-                writer.write(" ");
-                writer.write(field.getChangeType().shade());
-            }
+
             writer.write("\">");
+            for (DiffEntityField field : diffEntity.getFields()) {
+                writer.write("<div class=\"diffrow\">");
 
-            if (field.isWithValue()) {
-                writer.writeWithHtmlEscape(field.getValue());
+                writer.write("<div class=\"difflbl\">");
+                writer.writeWithHtmlEscape(field.getLabel());
+                writer.write(":");
+                writer.write("</div>");
+
+                if (field.isNumber()) {
+                    writer.write("<div class=\"diffvaln");
+                } else {
+                    writer.write("<div class=\"diffval");
+                }
+
+                if (!field.getChangeType().isNone()) {
+                    writer.write(" ");
+                    writer.write(field.getChangeType().shade());
+                }
+                writer.write("\">");
+
+                if (field.isWithValue()) {
+                    writer.writeWithHtmlEscape(field.getValue());
+                }
+
+                writer.write("</div>");
+
+                writer.write("</div>");
             }
-
-            writer.write("</div>");
 
             writer.write("</div>");
         }
-
-        writer.write("</div>");
     }
 
 }

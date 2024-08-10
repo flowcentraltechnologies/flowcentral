@@ -76,9 +76,14 @@ public final class DiffUtils {
      * @throws UnifyException
      *                        if an error occurs
      */
-    @SuppressWarnings("unchecked")
     public static Diff diff(AppletUtilities au, FormDef formDef, Long leftEntityId, Long rightEntityId,
             Formats.Instance formats) throws UnifyException {
+        return DiffUtils.diff(au, formDef, leftEntityId, rightEntityId, formats, null);
+    }
+
+    @SuppressWarnings("unchecked")
+    private static Diff diff(AppletUtilities au, FormDef formDef, Long leftEntityId, Long rightEntityId,
+            Formats.Instance formats, String label) throws UnifyException {
         final Date now = au.getNow();
         final EntityDef entityDef = formDef.getEntityDef();
         final EntityClassDef entityClassDef = au.getEntityClassDef(entityDef.getLongName());
@@ -102,8 +107,9 @@ public final class DiffUtils {
             rfields = new ArrayList<DiffEntityField>();
             for (FormSectionDef formSectionDef : mainTabDef.getFormSectionDefList()) {
                 for (FormFieldDef formFieldDef : formSectionDef.getFormFieldDefList()) {
-                    final Object lval = ReflectUtils.getBeanProperty(left, formFieldDef.getFieldName());
-                    final Object rval = ReflectUtils.getBeanProperty(right, formFieldDef.getFieldName());
+                    final String fieldName = formFieldDef.getFieldName();
+                    final Object lval = ReflectUtils.getBeanProperty(left, fieldName);
+                    final Object rval = ReflectUtils.getBeanProperty(right, fieldName);
                     final String lvalStr = formats.format(lval);
                     final String rvalStr = formats.format(rval);
                     DataChangeType lChangeType = DataChangeType.NONE;
@@ -116,17 +122,19 @@ public final class DiffUtils {
                                 : DataChangeType.DELETED;
                     }
 
-                    final boolean number = entityDef.getFieldDef(formFieldDef.getFieldName()).isNumber(); 
-                    lfields.add(new DiffEntityField(lChangeType, formFieldDef.getFieldName(),
-                            formFieldDef.getFieldLabel(), lvalStr, number));
-                    rfields.add(new DiffEntityField(rChangeType, formFieldDef.getFieldName(),
-                            formFieldDef.getFieldLabel(), rvalStr, number));
+                    final boolean number = entityDef.getFieldDef(fieldName).isNumber();
+                    lfields.add(
+                            new DiffEntityField(lChangeType, fieldName, formFieldDef.getFieldLabel(), lvalStr, number));
+                    rfields.add(
+                            new DiffEntityField(rChangeType, fieldName, formFieldDef.getFieldLabel(), rvalStr, number));
                 }
             }
         }
 
-        final DiffEntity dleft = new DiffEntity(mainTabDef.getLabel(), lfields);
-        final DiffEntity dright = new DiffEntity(mainTabDef.getLabel(), rfields);
+        final DiffEntity dleft = new DiffEntity(label == null ? au.resolveSessionMessage("$m{formdiff.draft}") : label,
+                lfields);
+        final DiffEntity dright = new DiffEntity(
+                label == null ? au.resolveSessionMessage("$m{formdiff.original}") : label, rfields);
 
         final List<Diff> children = new ArrayList<Diff>();
         final int len = tabs.size();
@@ -150,7 +158,8 @@ public final class DiffUtils {
                             for (int j = 0; j < clen; j++) {
                                 Long cleftEntityId = j < lChildIdList.size() ? lChildIdList.get(j) : null;
                                 Long crightEntityId = j < rChildIdList.size() ? rChildIdList.get(j) : null;
-                                Diff _diff = DiffUtils.diff(au, cformDef, cleftEntityId, crightEntityId, formats);
+                                Diff _diff = DiffUtils.diff(au, cformDef, cleftEntityId, crightEntityId, formats,
+                                        childTabDef.getLabel());
                                 children.add(_diff);
                             }
                         } else {
@@ -216,11 +225,11 @@ public final class DiffUtils {
         List<DiffEntityField> fields = new ArrayList<DiffEntityField>();
         for (FormSectionDef formSectionDef : formTabDef.getFormSectionDefList()) {
             for (FormFieldDef formFieldDef : formSectionDef.getFormFieldDefList()) {
-                final Object val = ReflectUtils.getBeanProperty(inst, formFieldDef.getFieldName());
+                final String fieldName = formFieldDef.getFieldName();
+                final Object val = ReflectUtils.getBeanProperty(inst, fieldName);
                 final String valStr = formats.format(val);
-                fields.add(new DiffEntityField(val == null ? DataChangeType.NONE : changeType,
-                        formFieldDef.getFieldName(), formFieldDef.getFieldLabel(), valStr,
-                        entityDef.getFieldDef(formFieldDef.getFieldName()).isNumber()));
+                fields.add(new DiffEntityField(val == null ? DataChangeType.NONE : changeType, fieldName,
+                        formFieldDef.getFieldLabel(), valStr, entityDef.getFieldDef(fieldName).isNumber()));
             }
         }
 
