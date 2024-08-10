@@ -213,8 +213,10 @@ public final class DiffUtils {
             }
 
             EntityClassDef cEntityDef = au.getAppletEntityClassDef(childTabDef.getApplet());
-            return au.environment().valueList(Long.class, "id",
+            List<Long> resultList = au.environment().valueList(Long.class, "id",
                     Query.of((Class<? extends Entity>) cEntityDef.getEntityClass()).addRestriction(childRestriction));
+            Collections.sort(resultList);
+            return resultList;
         }
 
         return Collections.emptyList();
