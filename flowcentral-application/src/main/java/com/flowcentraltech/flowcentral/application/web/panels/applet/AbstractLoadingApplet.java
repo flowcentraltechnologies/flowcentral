@@ -95,8 +95,7 @@ public abstract class AbstractLoadingApplet extends AbstractEntityFormApplet {
                     LoadingWorkItemInfo loadingWorkItemInfo = loadingTableProvider
                             .getLoadingWorkItemInfo(currEntityInst);
                     final String display = loadingWorkItemInfo.isWithStepLabel()
-                            ? au.resolveSessionMessage("$m{loading.workitem.display}", loadingWorkItemInfo.getWorkflowDesc(),
-                                    loadingWorkItemInfo.getStepLabel())
+                            ? au.resolveSessionMessage("$m{loading.workitem.display}", loadingWorkItemInfo.getStepLabel())
                             : null;
                     getCtx().setRecovery(loadingWorkItemInfo.isError());
                     getCtx().setComments(loadingWorkItemInfo.isComments());

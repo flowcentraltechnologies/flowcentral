@@ -112,7 +112,7 @@ public final class DiffUtils {
                         lChangeType = lvalStr != null ? (rvalStr != null ? DataChangeType.UPDATED : DataChangeType.NEW)
                                 : DataChangeType.NONE;
 
-                        rChangeType = lvalStr != null ? (rvalStr != null ? DataChangeType.UPDATED : DataChangeType.NONE)
+                        rChangeType = lvalStr != null ? (rvalStr != null ? DataChangeType.NONE : DataChangeType.NONE)
                                 : DataChangeType.DELETED;
                     }
 
