@@ -5919,6 +5919,9 @@
 				<property name="searchTable.showExpandedDetails"
 					description="$m{studio.appappletprop.manageentity.searchtable.showexpandeddetails}"
 					inputWidget="application.checkbox" />
+				<property name="searchTable.diffIgnore"
+					description="$m{studio.appappletprop.manageentity.searchtable.ignorediff}"
+					inputWidget="application.checkbox" />
 			</propertySet>
 			<propertySet
 				label="$m{studio.appappletprop.manageentity.formproperties}">
@@ -6262,6 +6265,9 @@
 					inputWidget="studio.propertyappletsingledigit" />
 				<property name="searchTable.viewItemInSeparateTab"
 					description="$m{studio.appappletprop.manageentity.searchtable.viewiteminseparatetab}"
+					inputWidget="application.checkbox" />
+				<property name="searchTable.diffIgnore"
+					description="$m{studio.appappletprop.manageentity.searchtable.ignorediff}"
 					inputWidget="application.checkbox" />
 			</propertySet>
 			<propertySet

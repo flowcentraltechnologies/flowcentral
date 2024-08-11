@@ -155,52 +155,58 @@ public final class DiffUtils {
             FormTabDef childTabDef = tabs.get(i);
             TabContentType contentType = childTabDef.getContentType();
             if (contentType.isChildOrChildList()) {
-                final List<Long> lChildIdList = getChildIdList(au, childTabDef, entityDef, left, now,
-                        contentType.isChildList());
-                final List<Long> rChildIdList = getChildIdList(au, childTabDef, entityDef, right, now,
-                        contentType.isChildList());
-                final int clen = lChildIdList.size() < rChildIdList.size() ? rChildIdList.size() : lChildIdList.size();
-                if (clen > 0) {
-                    final AppletDef _appletDef = au.getAppletDef(childTabDef.getApplet());
-                    final AppletType appletType = _appletDef.getType();
-                    if (appletType.isAssignment()) {
-                        final String assignmentPage = _appletDef.getPropValue(String.class,
-                                AppletPropertyConstants.ASSIGNMENT_PAGE);
-                        AssignmentPageDef assignmentPageDef = au.getAssignmentPageDef(assignmentPage);
-                        final EntityClassDef assignEntityClassDef = au.getEntityClassDef(assignmentPageDef.getEntity());
-                        final List<Long> lAssignedIdList = !lChildIdList.isEmpty()
-                                ? au.environment().valueList(Long.class, assignmentPageDef.getAssignField(),
-                                        Query.of((Class<? extends Entity>) assignEntityClassDef.getEntityClass())
-                                                .addAmongst("id", lChildIdList))
-                                : Collections.emptyList();
+                final AppletDef _appletDef = au.getAppletDef(childTabDef.getApplet());
+                final AppletType appletType = _appletDef.getType();
+                if (!_appletDef.getPropValue(boolean.class, AppletPropertyConstants.SEARCH_TABLE_DIFF_IGNORE)) {
+                    final List<Long> lChildIdList = getChildIdList(au, childTabDef, entityDef, left, now,
+                            contentType.isChildList());
+                    final List<Long> rChildIdList = getChildIdList(au, childTabDef, entityDef, right, now,
+                            contentType.isChildList());
+                    final int clen = lChildIdList.size() < rChildIdList.size() ? rChildIdList.size()
+                            : lChildIdList.size();
+                    if (clen > 0) {
+                        if (appletType.isAssignment()) {
+                            final String assignmentPage = _appletDef.getPropValue(String.class,
+                                    AppletPropertyConstants.ASSIGNMENT_PAGE);
+                            AssignmentPageDef assignmentPageDef = au.getAssignmentPageDef(assignmentPage);
+                            final EntityClassDef assignEntityClassDef = au
+                                    .getEntityClassDef(assignmentPageDef.getEntity());
+                            final List<Long> lAssignedIdList = !lChildIdList.isEmpty()
+                                    ? au.environment()
+                                            .valueList(Long.class, assignmentPageDef.getAssignField(), Query
+                                                    .of((Class<? extends Entity>) assignEntityClassDef.getEntityClass())
+                                                    .addAmongst("id", lChildIdList))
+                                    : Collections.emptyList();
 
-                        final List<Long> rAssignedIdList = !rChildIdList.isEmpty()
-                                ? au.environment().valueList(Long.class, assignmentPageDef.getAssignField(),
-                                        Query.of((Class<? extends Entity>) assignEntityClassDef.getEntityClass())
-                                                .addAmongst("id", rChildIdList))
-                                : Collections.emptyList();
+                            final List<Long> rAssignedIdList = !rChildIdList.isEmpty()
+                                    ? au.environment()
+                                            .valueList(Long.class, assignmentPageDef.getAssignField(), Query
+                                                    .of((Class<? extends Entity>) assignEntityClassDef.getEntityClass())
+                                                    .addAmongst("id", rChildIdList))
+                                    : Collections.emptyList();
 
-                        ListCommand<AssignParams> listCommand = (ListCommand<AssignParams>) au
-                                .getComponent(ListCommand.class, assignmentPageDef.getAssignList());
+                            ListCommand<AssignParams> listCommand = (ListCommand<AssignParams>) au
+                                    .getComponent(ListCommand.class, assignmentPageDef.getAssignList());
 
-                        List<? extends Listable> lListables = !lAssignedIdList.isEmpty()
-                                ? listCommand.execute(Locale.getDefault(), new AssignParams(lAssignedIdList))
-                                : Collections.emptyList();
-                        List<? extends Listable> rListables = !rAssignedIdList.isEmpty()
-                                ? listCommand.execute(Locale.getDefault(), new AssignParams(rAssignedIdList))
-                                : Collections.emptyList();
-                        Diff _diff = DiffUtils.diff(lListables, rListables, childTabDef.getLabel());
-                        children.add(_diff);
-                    } else if (appletType.isEntityList()) {
-                        final String cFormName = _appletDef.getPropValue(String.class,
-                                AppletPropertyConstants.MAINTAIN_FORM);
-                        FormDef cformDef = au.getFormDef(cFormName);
-                        for (int j = 0; j < clen; j++) {
-                            Long cleftEntityId = j < lChildIdList.size() ? lChildIdList.get(j) : null;
-                            Long crightEntityId = j < rChildIdList.size() ? rChildIdList.get(j) : null;
-                            Diff _diff = DiffUtils.diff(au, cformDef, cleftEntityId, crightEntityId, formats,
-                                    childTabDef.getLabel(), entityDef.getLongName());
+                            List<? extends Listable> lListables = !lAssignedIdList.isEmpty()
+                                    ? listCommand.execute(Locale.getDefault(), new AssignParams(lAssignedIdList))
+                                    : Collections.emptyList();
+                            List<? extends Listable> rListables = !rAssignedIdList.isEmpty()
+                                    ? listCommand.execute(Locale.getDefault(), new AssignParams(rAssignedIdList))
+                                    : Collections.emptyList();
+                            Diff _diff = DiffUtils.diff(lListables, rListables, childTabDef.getLabel());
                             children.add(_diff);
+                        } else if (appletType.isEntityList()) {
+                            final String cFormName = _appletDef.getPropValue(String.class,
+                                    AppletPropertyConstants.MAINTAIN_FORM);
+                            FormDef cformDef = au.getFormDef(cFormName);
+                            for (int j = 0; j < clen; j++) {
+                                Long cleftEntityId = j < lChildIdList.size() ? lChildIdList.get(j) : null;
+                                Long crightEntityId = j < rChildIdList.size() ? rChildIdList.get(j) : null;
+                                Diff _diff = DiffUtils.diff(au, cformDef, cleftEntityId, crightEntityId, formats,
+                                        childTabDef.getLabel(), entityDef.getLongName());
+                                children.add(_diff);
+                            }
                         }
                     }
                 }
@@ -215,27 +221,27 @@ public final class DiffUtils {
         // Sets
         final Set<String> lset = new HashSet<String>();
         for (Listable listable : lListables) {
-            lset.add(listable.getListKey());
+            lset.add(listable.getListDescription());
         }
 
         final Set<String> rset = new HashSet<String>();
         for (Listable listable : rListables) {
-            lset.add(listable.getListKey());
+            rset.add(listable.getListDescription());
         }
 
         // Fields
         final List<DiffEntityField> lfields = new ArrayList<DiffEntityField>();
         final List<DiffEntityField> rfields = new ArrayList<DiffEntityField>();
         for (Listable listable : lListables) {
-            lfields.add(
-                    new DiffEntityField(rset.contains(listable.getListKey()) ? DataChangeType.NONE : DataChangeType.NEW,
-                            listable.getListKey(), "prop", listable.getListDescription(), false));
+            lfields.add(new DiffEntityField(
+                    rset.contains(listable.getListDescription()) ? DataChangeType.NONE : DataChangeType.NEW,
+                    listable.getListKey(), "item", listable.getListDescription(), false));
         }
 
         for (Listable listable : rListables) {
-            rfields.add(
-                    new DiffEntityField(lset.contains(listable.getListKey()) ? DataChangeType.NONE : DataChangeType.DELETED,
-                            listable.getListKey(), "prop", listable.getListDescription(), false));
+            rfields.add(new DiffEntityField(
+                    lset.contains(listable.getListDescription()) ? DataChangeType.NONE : DataChangeType.DELETED,
+                    listable.getListKey(), "item", listable.getListDescription(), false));
         }
 
         final DiffEntity dleft = new DiffEntity(label, lfields);

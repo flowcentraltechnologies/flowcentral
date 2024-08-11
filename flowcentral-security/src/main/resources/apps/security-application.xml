@@ -238,6 +238,7 @@
 			<property name="searchTable.new" value="false" />
 			<property name="searchTable.report" value="false" />
 			<property name="searchTable.quickFilter" value="true" />
+			<property name="searchTable.diffIgnore" value="true" />
 		</applet>
 		<applet name="manageSecuredLink"
 			description="$m{security.securedlink.manage}"
