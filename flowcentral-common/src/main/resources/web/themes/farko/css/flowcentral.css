@@ -999,7 +999,7 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 
 /* Form diff panel*/
 .fc-formdiffpanel {}
-.fc-formdiffpanel .abody{width:720px; height:360px; padding:1px; overflow-y:scroll;}
+.fc-formdiffpanel .abody{width:840px; height:360px; padding:1px; overflow-y:scroll;}
 
 /* Entity widget rules panel */
 .fc-entitywidgetrulespanel {}

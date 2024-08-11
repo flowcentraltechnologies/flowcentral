@@ -16,6 +16,7 @@
 
 package com.flowcentraltech.flowcentral.application.data;
 
+import java.util.Collections;
 import java.util.List;
 
 import com.tcdng.unify.core.util.StringUtils;
@@ -38,6 +39,12 @@ public class Diff {
         this.left = left;
         this.right = right;
         this.children = children;
+    }
+
+    public Diff(DiffEntity left, DiffEntity right) {
+        this.left = left;
+        this.right = right;
+        this.children = Collections.emptyList();
     }
 
     public DiffEntity getLeft() {
