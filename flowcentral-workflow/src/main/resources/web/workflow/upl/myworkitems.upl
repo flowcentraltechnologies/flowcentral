@@ -44,8 +44,13 @@
 // Form attachments panel
 !fc-entityfileattachmentspanel:fileAttachmentsPopup binding:applet.formFileAttachments
    closeEventHandler:$d{!ui-event event:onclick action:$c{closeFileAttachAct}}
+   
+// Form diff
+!fc-formdiffpanel:formDiffPopup
+   closeEventHandler:$d{!ui-event event:onclick action:$c{closeDiffAct}}
 
 // Actions
 !ui-post:refreshWorkItemsAct  path:$n{/refreshSlate} components:$c{appletPanel} 
 !ui-post:switchWorkItemsAct  path:$n{/loadWorkItemsSlate} components:$c{stepSelect}
 !ui-post:closeFileAttachAct path:$p{/closeFileAttachments}
+!ui-post:closeDiffAct path:$p{/closeDiff}

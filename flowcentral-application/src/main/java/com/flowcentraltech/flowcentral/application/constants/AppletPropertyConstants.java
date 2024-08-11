@@ -69,6 +69,8 @@ public interface AppletPropertyConstants {
     String SEARCH_TABLE_VIEW_ITEM_SEPARATE_TAB = "searchTable.viewItemInSeparateTab";
     
     String SEARCH_TABLE_SHOW_EXPANDED_DETAILS = "searchTable.showExpandedDetails";
+
+    String SEARCH_TABLE_DIFF_IGNORE = "searchTable.diffIgnore";
     
     String ENTITY_FORM = "entityForm";
     

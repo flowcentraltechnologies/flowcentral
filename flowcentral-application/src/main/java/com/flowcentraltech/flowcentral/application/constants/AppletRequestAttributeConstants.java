@@ -37,5 +37,7 @@ public interface AppletRequestAttributeConstants {
     String OPEN_TAB_INFO= "app:opentabinfo";
     
     String PREVIEW_FORM_INFO= "app:previewforminfo";
+    
+    String FORM_DIFF= "app:formdiff";
 
 }

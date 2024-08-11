@@ -171,8 +171,7 @@ public class ManageLoadingListApplet extends AbstractEntityFormApplet {
                     FormMode.MAINTAIN.formProperty());
             LoadingWorkItemInfo loadingWorkItemInfo = loadingSearch.getLoadingWorkItemInfo(currEntityInst, mIndex);
             final String display = loadingWorkItemInfo.isWithStepLabel()
-                    ? au.resolveSessionMessage("$m{loading.workitem.display}", loadingWorkItemInfo.getWorkflowDesc(),
-                            loadingWorkItemInfo.getStepLabel())
+                    ? au.resolveSessionMessage("$m{loading.workitem.display}", loadingWorkItemInfo.getStepLabel())
                     : null;
             getCtx().setRecovery(loadingWorkItemInfo.isError());
             getCtx().setComments(loadingWorkItemInfo.isComments());
@@ -212,8 +211,7 @@ public class ManageLoadingListApplet extends AbstractEntityFormApplet {
             WorkEntity currEntityInst = (WorkEntity) item.getEntity();
             LoadingWorkItemInfo loadingWorkItemInfo = loadingSearch.getLoadingWorkItemInfo(currEntityInst, mIndex);
             final String display = loadingWorkItemInfo.isWithStepLabel()
-                    ? au.resolveSessionMessage("$m{loading.workitem.display}", loadingWorkItemInfo.getWorkflowDesc(),
-                            loadingWorkItemInfo.getStepLabel())
+                    ? au.resolveSessionMessage("$m{loading.workitem.display}", loadingWorkItemInfo.getStepLabel())
                     : null;
 
             getCtx().setRecovery(loadingWorkItemInfo.isError());

@@ -37,8 +37,10 @@ import com.tcdng.unify.web.constant.Secured;
  */
 @Component(FlowCentralAppletPathConstants.CREATE_ENTITY)
 @UplBinding("web/application/upl/createentityappletpage.upl")
-@ResultMappings({ @ResultMapping(name = ApplicationResultMappingConstants.SHOW_FILE_ATTACHMENTS,
-        response = { "!validationerrorresponse", "!showpopupresponse popup:$s{fileAttachmentsPopup}" }) })
+    @ResultMappings({ @ResultMapping(name = ApplicationResultMappingConstants.SHOW_FILE_ATTACHMENTS,
+        response = { "!validationerrorresponse", "!showpopupresponse popup:$s{fileAttachmentsPopup}" }),
+    @ResultMapping(name = ApplicationResultMappingConstants.SHOW_DIFF,
+    response = { "!validationerrorresponse", "!showpopupresponse popup:$s{formDiffPopup}" }) })
 public class CreateEntityAppletController
         extends AbstractEntityFormAppletController<CreateEntityApplet, CreateEntityAppletPageBean> {
 
@@ -48,6 +50,11 @@ public class CreateEntityAppletController
 
     @Action
     public String closeFileAttachments() throws UnifyException {
+        return "refreshapplet";
+    }
+
+    @Action
+    public String closeDiff() throws UnifyException {
         return "refreshapplet";
     }
 

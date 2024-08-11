@@ -79,6 +79,10 @@ public enum TabContentType implements EnumConst {
         return this.equals(CHILD) || this.equals(CHILD_LIST);
     }
 
+    public boolean isChildList() {
+        return this.equals(CHILD_LIST);
+    }
+
     public boolean isMappped() {
         return this.equals(MINIFORM_MAPPED);
     }

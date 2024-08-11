@@ -33,6 +33,7 @@ import com.flowcentraltech.flowcentral.application.data.AppletFilterDef;
 import com.flowcentraltech.flowcentral.application.data.AssignmentPageDef;
 import com.flowcentraltech.flowcentral.application.data.Attachments;
 import com.flowcentraltech.flowcentral.application.data.AttachmentsOptions;
+import com.flowcentraltech.flowcentral.application.data.Diff;
 import com.flowcentraltech.flowcentral.application.data.EditEntityItem;
 import com.flowcentraltech.flowcentral.application.data.EntityAttachmentDef;
 import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
@@ -48,6 +49,7 @@ import com.flowcentraltech.flowcentral.application.data.UniqueConditionDef;
 import com.flowcentraltech.flowcentral.application.data.UniqueConstraintDef;
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityUtils;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
+import com.flowcentraltech.flowcentral.application.util.DiffUtils;
 import com.flowcentraltech.flowcentral.application.validation.FormContextEvaluator;
 import com.flowcentraltech.flowcentral.application.web.controllers.AppletWidgetReferences;
 import com.flowcentraltech.flowcentral.application.web.data.FormContext;
@@ -104,6 +106,7 @@ import com.tcdng.unify.core.UserToken;
 import com.tcdng.unify.core.criterion.Restriction;
 import com.tcdng.unify.core.data.BeanValueStore;
 import com.tcdng.unify.core.data.FileAttachmentsInfo;
+import com.tcdng.unify.core.data.Formats;
 import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.database.Database;
 import com.tcdng.unify.core.database.Entity;
@@ -828,6 +831,12 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         return null;
     }
 
+    public Diff diff() throws UnifyException {
+        WorkEntity workEntity = (WorkEntity) form.getFormBean();
+        return DiffUtils.diff(au, form.getFormDef(), (Long) workEntity.getId(), workEntity.getOriginalCopyId(),
+                Formats.DEFAULT.createInstance());
+    }
+    
     public EntityActionResult saveNewInst() throws UnifyException {
         return saveNewInst(ActionMode.ACTION_ONLY, new FormReviewContext(FormReviewType.ON_SAVE));
     }
