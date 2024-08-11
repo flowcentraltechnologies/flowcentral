@@ -382,6 +382,10 @@ public enum EntityFieldDataType implements EnumConst {
                 || CHILD_LIST.equals(this) || REF_FILEUPLOAD.equals(this);
     }
 
+    public boolean isUnlinkable() {
+        return REF_UNLINKABLE.equals(this);
+    }
+
     public boolean isPrimitive() {
         return dataType != null;
     }

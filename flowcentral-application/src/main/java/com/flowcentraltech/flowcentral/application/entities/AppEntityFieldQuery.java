@@ -21,6 +21,9 @@ import java.util.Collection;
 import com.flowcentraltech.flowcentral.common.entities.BaseConfigEntityQuery;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldDataType;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldType;
+import com.tcdng.unify.core.criterion.Equals;
+import com.tcdng.unify.core.criterion.IsNull;
+import com.tcdng.unify.core.criterion.Or;
 
 /**
  * Application entity field query.
@@ -100,6 +103,11 @@ public class AppEntityFieldQuery extends BaseConfigEntityQuery<AppEntityField> {
 
     public AppEntityFieldQuery isListField() {
         return (AppEntityFieldQuery) addIsNotNull("key").addIsNotNull("property");
+    }
+
+    public AppEntityFieldQuery isNotUnlinked() {
+        return (AppEntityFieldQuery) addRestriction(
+                new Or().add(new IsNull("unlinked")).add(new Equals("unlinked", Boolean.FALSE)));
     }
 
 }
