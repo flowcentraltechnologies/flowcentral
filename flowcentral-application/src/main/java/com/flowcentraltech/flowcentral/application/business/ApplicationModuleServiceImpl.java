@@ -2103,7 +2103,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
             List<AppEntityField> fieldList = environment()
                     .listAll(new AppEntityFieldQuery().dataType(EntityFieldDataType.REF).referencesIn(refNames)
-                            .isNotUnlinked().addSelect("appEntityName", "applicationName"));
+                            .addSelect("appEntityName", "applicationName"));
             if (!DataUtils.isBlank(fieldList)) {
                 Set<String> result = new HashSet<String>();
                 for (AppEntityField appEntityField : fieldList) {
