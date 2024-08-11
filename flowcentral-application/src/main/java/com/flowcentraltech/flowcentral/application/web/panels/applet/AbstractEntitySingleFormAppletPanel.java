@@ -20,6 +20,7 @@ import com.flowcentraltech.flowcentral.application.constants.AppletPropertyConst
 import com.flowcentraltech.flowcentral.application.constants.AppletRequestAttributeConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationResultMappingConstants;
+import com.flowcentraltech.flowcentral.application.constants.WorkflowDraftType;
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.data.Diff;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
@@ -304,6 +305,16 @@ public abstract class AbstractEntitySingleFormAppletPanel extends AbstractApplet
     @Action
     public void performFormAction() throws UnifyException {
 
+    }
+
+    @Action
+    public void showFormFileAttachments() throws UnifyException {
+        final AbstractEntitySingleFormApplet applet = getEntityFormApplet();
+        if (applet.isPromptEnterWorkflowDraft()) {
+            showPromptWorkflowDraft(WorkflowDraftType.UPDATE, IndexedTarget.BLANK);
+        } else {
+            setCommandResultMapping(ApplicationResultMappingConstants.SHOW_FILE_ATTACHMENTS);
+        }
     }
 
     @Action

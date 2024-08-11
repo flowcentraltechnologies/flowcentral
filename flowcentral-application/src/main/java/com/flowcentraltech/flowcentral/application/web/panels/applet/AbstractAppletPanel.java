@@ -20,8 +20,10 @@ import java.util.List;
 import com.flowcentraltech.flowcentral.application.constants.AppletPropertyConstants;
 import com.flowcentraltech.flowcentral.application.constants.AppletRequestAttributeConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationResultMappingConstants;
+import com.flowcentraltech.flowcentral.application.constants.WorkflowDraftType;
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.data.RequestOpenTabInfo;
+import com.flowcentraltech.flowcentral.application.data.WorkflowDraftInfo;
 import com.flowcentraltech.flowcentral.application.web.data.FormContext;
 import com.flowcentraltech.flowcentral.application.web.panels.AbstractApplicationSwitchPanel;
 import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm.FormMode;
@@ -35,11 +37,15 @@ import com.flowcentraltech.flowcentral.common.data.ReportOptions;
 import com.tcdng.unify.common.util.StringToken;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.BeanValueStore;
+import com.tcdng.unify.core.data.IndexedTarget;
 import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.constant.ResultMappingConstants;
 import com.tcdng.unify.web.ui.widget.Panel;
+import com.tcdng.unify.web.ui.widget.data.MessageBoxCaptions;
+import com.tcdng.unify.web.ui.widget.data.MessageIcon;
+import com.tcdng.unify.web.ui.widget.data.MessageMode;
 import com.tcdng.unify.web.ui.widget.data.Hint.MODE;
 
 /**
@@ -126,6 +132,36 @@ public abstract class AbstractAppletPanel extends AbstractApplicationSwitchPanel
         }
 
         handleHints(entityActionResult, ctx);
+    }
+
+    protected void showPromptWorkflowDraft(WorkflowDraftType type, IndexedTarget target) throws UnifyException {
+        AbstractApplet applet = getValue(AbstractApplet.class);
+        applet.setWorkflowDraftInfo(new WorkflowDraftInfo(type, target));
+        final String caption = resolveSessionMessage("$m{formapplet.workflowdraft.caption}");
+        final String prompt = type.isDelete() ? resolveSessionMessage("$m{formapplet.workflowdraft.submitdeleteprompt}")
+                : resolveSessionMessage("$m{formapplet.workflowdraft.prompt}");
+        final String viewMessage = resolveSessionMessage("$m{formapplet.workflowdraft.enterview}");
+        final String okMessage = type.isDelete() ? resolveSessionMessage("$m{formapplet.workflowdraft.submitdelete}")
+                : resolveSessionMessage("$m{formapplet.workflowdraft.enteredit}");
+        final String cancelMessage = resolveSessionMessage("$m{formapplet.workflowdraft.cancel}");
+        final String commandPath = type.isDelete() ? getCommandFullPath("deletionToWorkflow")
+                : getCommandFullPath("openWorkflowDraft");
+        MessageBoxCaptions captions = new MessageBoxCaptions(caption);
+        if (type.isNew() || type.isUpdate() || type.isDelete()) {
+            captions.setOkStyleClass("fc-orangebutton");
+            captions.setCancelStyleClass("fc-bluebutton");
+            captions.setOkCaption(okMessage);
+            captions.setCancelCaption(cancelMessage);
+            showMessageBox(MessageIcon.QUESTION, MessageMode.OK_CANCEL, captions, prompt, commandPath);
+            return;
+        }
+
+        captions.setYesStyleClass("fc-orangebutton");
+        captions.setNoStyleClass("fc-bluebutton");
+
+        captions.setYesCaption(okMessage);
+        captions.setNoCaption(viewMessage);
+        showMessageBox(MessageIcon.QUESTION, MessageMode.YES_NO_CANCEL, captions, prompt, commandPath);
     }
 
     protected void setCommandResultMapping(EntityActionResult entityActionResult, boolean refereshPanel)
