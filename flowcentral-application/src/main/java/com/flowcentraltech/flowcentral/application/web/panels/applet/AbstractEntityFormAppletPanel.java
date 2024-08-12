@@ -71,7 +71,6 @@ import com.tcdng.unify.web.constant.ResultMappingConstants;
 import com.tcdng.unify.web.ui.constant.MessageType;
 import com.tcdng.unify.web.ui.widget.Panel;
 import com.tcdng.unify.web.ui.widget.data.Hint.MODE;
-import com.tcdng.unify.web.ui.widget.data.MessageBoxCaptions;
 import com.tcdng.unify.web.ui.widget.data.MessageIcon;
 import com.tcdng.unify.web.ui.widget.data.MessageMode;
 import com.tcdng.unify.web.ui.widget.data.MessageResult;
@@ -82,7 +81,7 @@ import com.tcdng.unify.web.ui.widget.data.MessageResult;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@UplBinding("web/application/upl/entityformappletpanel.upl") 
+@UplBinding("web/application/upl/entityformappletpanel.upl")
 public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel {
 
     private static final String IN_WORKFLOW_DRAFT_LOOP_FLAG = "IN_WORKFLOW_DRAFT_LOOP_FLAG";
@@ -142,7 +141,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
             EntityDef formEntityDef = form.getFormDef().getEntityDef();
             enableCreate = isContextEditable
                     && applicationPrivilegeManager.isRoleWithPrivilege(roleCode, formEntityDef.getAddPrivilege());
-            enableCreateSubmit = isRootForm && applet
+            enableCreateSubmit = !isWorkflowCopyForm && isRootForm && applet
                     .formBeanMatchAppletPropertyCondition(AppletPropertyConstants.CREATE_FORM_SUBMIT_CONDITION);
         } else if (viewMode.isMaintainForm()) {
             if (form.isSingleFormType()) {
@@ -159,7 +158,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                         && applicationPrivilegeManager.isRoleWithPrivilege(roleCode, _entityDef.getDeletePrivilege())
                         && applet.formBeanMatchAppletPropertyCondition(
                                 AppletPropertyConstants.MAINTAIN_FORM_DELETE_CONDITION);
-                enableUpdateSubmit = !isInWorkflow && applet
+                enableUpdateSubmit = !isWorkflowCopyForm && !isInWorkflow && applet
                         .formBeanMatchAppletPropertyCondition(AppletPropertyConstants.MAINTAIN_FORM_SUBMIT_CONDITION);
             } else {
                 EntityDef formEntityDef = form.getFormDef().getEntityDef();
@@ -189,8 +188,9 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                                     AppletPropertyConstants.MAINTAIN_FORM_ATTACHMENTS, false)
                             && (formEntityDef.isWithAttachments() || formAppletDef.getPropValue(boolean.class,
                                     AppletPropertyConstants.MAINTAIN_FORM_ATTACHMENTS_ADHOC, false));
-                    enableUpdateSubmit = !isInWorkflow && isRootForm && applet.formBeanMatchAppletPropertyCondition(
-                            AppletPropertyConstants.MAINTAIN_FORM_SUBMIT_CONDITION);
+                    enableUpdateSubmit = !isWorkflowCopyForm && !isInWorkflow && isRootForm
+                            && applet.formBeanMatchAppletPropertyCondition(
+                                    AppletPropertyConstants.MAINTAIN_FORM_SUBMIT_CONDITION);
                     if (enableAttachment) {
                         applet.setFileAttachmentsDisabled(!applicationPrivilegeManager.isRoleWithPrivilege(roleCode,
                                 formEntityDef.getAttachPrivilege()));
@@ -276,7 +276,8 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                 if (appCtx.isReview()) {
                     if (isRootForm) {
                         showReviewFormCaption = true;
-                        showDiff = isInWorkflow && isWorkflowCopyForm && (viewMode.isMaintainForm() || viewMode.isListingForm());
+                        showDiff = isInWorkflow && isWorkflowCopyForm
+                                && (viewMode.isMaintainForm() || viewMode.isListingForm());
                         form.setDisplayItemCounterClass("fc-dispcounterfrozen fc-dispcounterlarge");
                         form.setDisplayItemCounter(_display);
                     }
@@ -617,11 +618,6 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
     }
 
     @Action
-    public void showFormFileAttachments() throws UnifyException { 
-        setCommandResultMapping(ApplicationResultMappingConstants.SHOW_FILE_ATTACHMENTS);
-    }
-
-    @Action
     public void prepareSaveEntityAs() throws UnifyException {
         getEntityFormApplet().prepareSaveEntityAs();
         commandShowPopup(getWidgetByShortName("entitySaveAsPanel").getLongName());
@@ -679,6 +675,16 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         if (!ctx.isWithFormErrors()) {
             EntityActionResult entityActionResult = applet.formActionOnInst(formActionDef.getPolicy(), actionName);
             handleEntityActionResult(entityActionResult);
+        }
+    }
+
+    @Action
+    public void showFormFileAttachments() throws UnifyException {
+        final AbstractEntityFormApplet applet = getEntityFormApplet();
+        if (applet.isPromptEnterWorkflowDraft()) {
+            showPromptWorkflowDraft(WorkflowDraftType.UPDATE, IndexedTarget.BLANK);
+        } else {
+            setCommandResultMapping(ApplicationResultMappingConstants.SHOW_FILE_ATTACHMENTS);
         }
     }
 
@@ -795,7 +801,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
     }
 
     @Action
-    public void update() throws UnifyException {
+    public void update() throws UnifyException { 
         FormContext ctx = evaluateCurrentFormContext(new FormValidationContext(EvaluationMode.UPDATE));
         if (!ctx.isWithFormErrors()) {
             final AbstractEntityFormApplet applet = getEntityFormApplet();
@@ -1170,34 +1176,6 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         }
 
         return ctx;
-    }
-
-    private void showPromptWorkflowDraft(WorkflowDraftType type, IndexedTarget target) throws UnifyException {
-        getEntityFormApplet().setWorkflowDraftInfo(new WorkflowDraftInfo(type, target));
-        final String caption = resolveSessionMessage("$m{formapplet.workflowdraft.caption}");
-        final String prompt = type.isDelete() ? resolveSessionMessage("$m{formapplet.workflowdraft.submitdeleteprompt}")
-                : resolveSessionMessage("$m{formapplet.workflowdraft.prompt}");
-        final String viewMessage = resolveSessionMessage("$m{formapplet.workflowdraft.enterview}");
-        final String okMessage = type.isDelete() ? resolveSessionMessage("$m{formapplet.workflowdraft.submitdelete}")
-                : resolveSessionMessage("$m{formapplet.workflowdraft.enteredit}");
-        final String cancelMessage = resolveSessionMessage("$m{formapplet.workflowdraft.cancel}");
-        final String commandPath = type.isDelete() ? getCommandFullPath("deletionToWorkflow")
-                : getCommandFullPath("openWorkflowDraft");
-        MessageBoxCaptions captions = new MessageBoxCaptions(caption);
-        if (type.isNew() || type.isUpdate() || type.isDelete()) {
-            captions.setOkStyleClass("fc-orangebutton");
-            captions.setOkCaption(okMessage);
-            captions.setCancelCaption(cancelMessage);
-            showMessageBox(MessageIcon.QUESTION, MessageMode.OK_CANCEL, captions, prompt, commandPath);
-            return;
-        }
-
-        captions.setYesStyleClass("fc-orangebutton");
-        captions.setNoStyleClass("fc-bluebutton");
-
-        captions.setYesCaption(okMessage);
-        captions.setNoCaption(viewMessage);
-        showMessageBox(MessageIcon.QUESTION, MessageMode.YES_NO_CANCEL, captions, prompt, commandPath);
     }
 
     private FormContext evaluateCurrentFormContext(final FormContext ctx, FormValidationContext vCtx)

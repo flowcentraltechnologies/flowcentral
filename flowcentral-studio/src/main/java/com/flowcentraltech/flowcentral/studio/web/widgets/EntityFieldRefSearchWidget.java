@@ -134,7 +134,7 @@ public class EntityFieldRefSearchWidget extends EntitySearchWidget {
                     return Collections.emptyList();
                 }
                 case REF:
-                case REF_UNLINKABLE: {// TODO Change this implementation
+                case REF_UNLINKABLE: {
                     String entityName = ApplicationNameUtils.getApplicationEntityLongName(
                             getValue(String.class, getUplAttribute(String.class, "appName")),
                             getValue(String.class, getUplAttribute(String.class, "entityName")));

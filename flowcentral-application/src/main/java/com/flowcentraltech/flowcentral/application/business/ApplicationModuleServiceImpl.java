@@ -771,7 +771,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                                     appEntityField.isAllowNegative(), !appEntityField.isReadOnly(),
                                     appEntityField.isNullable(), appEntityField.isAuditable(),
                                     appEntityField.isReportable(), appEntityField.isMaintainLink(),
-                                    appEntityField.isBasicSearch(), appEntityField.isDescriptive());
+                                    appEntityField.isBasicSearch(),
+                                    appEntityField.isDescriptive());
                         } else {
                             edb.addFieldDef(textWidgetTypeDef, inputWidgetTypeDef, lingualWidgetTypeDef,
                                     appEntityField.getDataType(), appEntityField.getType(),
@@ -787,7 +788,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                                     appEntityField.isAllowNegative(), !appEntityField.isReadOnly(),
                                     appEntityField.isNullable(), appEntityField.isAuditable(),
                                     appEntityField.isReportable(), appEntityField.isMaintainLink(),
-                                    appEntityField.isBasicSearch(), appEntityField.isDescriptive());
+                                    appEntityField.isBasicSearch(),
+                                    appEntityField.isDescriptive());
                         }
 
                     }
@@ -6922,7 +6924,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                         deib.addForeignKeyField(type,
                                 listManager.getStaticListEnumType(entityFieldDef.getReferences()).getName(),
                                 entityFieldDef.getColumnName(), entityFieldDef.getFieldName(),
-                                entityFieldDef.getDefaultVal(), entityFieldDef.isNullable());
+                                entityFieldDef.getDefaultVal(), entityFieldDef.isUnlinked(),
+                                entityFieldDef.isNullable());
                     } else if (entityFieldDef.isChildRef()) {
                         DynamicFieldType fieldType = entityFieldDef.isCustom() ? DynamicFieldType.GENERATION
                                 : DynamicFieldType.INFO_ONLY;
@@ -6944,7 +6947,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                                                 extension);
                         deib.addForeignKeyField(type, _refDynamicEntityInfo, entityFieldDef.getColumnName(),
                                 entityFieldDef.getFieldName(), entityFieldDef.getDefaultVal(),
-                                entityFieldDef.isNullable());
+                                entityFieldDef.isUnlinked(), entityFieldDef.isNullable());
                     }
                 } else if (entityFieldDef.isListOnly()) {
                     if (listOnlyFieldList == null) {

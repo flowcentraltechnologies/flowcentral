@@ -469,6 +469,10 @@ public class EntityFieldDef implements Listable, EntityFieldAttributes {
         return dataType.isEnumGroup();
     }
 
+    public boolean isUnlinked() {
+        return dataType.isUnlinkable();
+    }
+
     public boolean isRefDataType() {
         return dataType.isRefDataType();
     }
