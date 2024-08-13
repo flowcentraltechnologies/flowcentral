@@ -257,8 +257,7 @@ public class EntityDef extends BaseApplicationEntityDef {
                 this.descriptiveFieldDefList.add(entityFieldDef);
             }
 
-            if (EntityFieldDataType.REF.equals(entityFieldDef.getDataType())
-                    || EntityFieldDataType.REF_UNLINKABLE.equals(entityFieldDef.getDataType())) {
+            if (EntityFieldDataType.REF.equals(entityFieldDef.getDataType())) {
                 if (refFieldDefMap == null) {
                     refFieldDefMap = new HashMap<String, EntityFieldDef>();
                 }
