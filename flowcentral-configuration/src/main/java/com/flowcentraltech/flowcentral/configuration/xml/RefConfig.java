@@ -15,6 +15,8 @@
  */
 package com.flowcentraltech.flowcentral.configuration.xml;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
@@ -23,6 +25,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
+@JsonInclude(value = Include.NON_NULL, content = Include.NON_EMPTY)
 public class RefConfig extends BaseNameConfig {
 
     @JacksonXmlProperty(isAttribute = true)

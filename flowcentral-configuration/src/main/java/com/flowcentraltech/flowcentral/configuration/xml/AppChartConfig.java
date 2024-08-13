@@ -33,7 +33,7 @@ import com.flowcentraltech.flowcentral.configuration.xml.adapter.ChartTypeXmlAda
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@JsonInclude(Include.NON_NULL)
+@JsonInclude(value = Include.NON_NULL, content = Include.NON_EMPTY)
 @JacksonXmlRootElement(localName = "chart")
 public class AppChartConfig extends BaseNameConfig {
 

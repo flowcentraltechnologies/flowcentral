@@ -26,7 +26,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@JsonInclude(Include.NON_NULL)
+@JsonInclude(value = Include.NON_NULL, content = Include.NON_EMPTY)
 @JacksonXmlRootElement(localName = "application")
 public class AppConfig extends BaseNameConfig {
 
