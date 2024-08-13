@@ -34,7 +34,7 @@ import com.flowcentraltech.flowcentral.configuration.xml.adapter.WorkflowStepTyp
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@JsonInclude(Include.NON_NULL)
+@JsonInclude(value = Include.NON_NULL, content = Include.NON_EMPTY)
 public class WfStepConfig extends BaseNameConfig {
 
     @JsonSerialize(using = WorkflowStepTypeXmlAdapter.Serializer.class)

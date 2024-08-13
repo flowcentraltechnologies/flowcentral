@@ -15,6 +15,8 @@
  */
 package com.flowcentraltech.flowcentral.configuration.xml;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
@@ -31,6 +33,7 @@ import com.tcdng.unify.core.constant.VAlignType;
  * @author FlowCentral Technologies Limited
  * @version 1.0
  */
+@JsonInclude(value = Include.NON_NULL, content = Include.NON_EMPTY)
 public class ReportColumnConfig extends BaseConfig {
 
     @JacksonXmlProperty(isAttribute = true, localName = "field")
