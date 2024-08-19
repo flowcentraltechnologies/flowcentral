@@ -232,7 +232,8 @@ public abstract class AbstractAppletPanel extends AbstractApplicationSwitchPanel
 				new BeanValueStore(entitySelectInfo.getInst()), null, null, filter, limit);
 		entitySelect.setEnableFilter(true);
 		entitySelect.applyFilterToSearch();
-		entitySelect.setTitle(entitySelect.getTitle());
+		entitySelect.setTitle(entitySelectInfo.getTitle());
+		entitySelect.setEnableFilter(false);
 		return entitySelect;
 	}
 	
