@@ -16,6 +16,7 @@
 
 package com.flowcentraltech.flowcentral.common.business.policies;
 
+import com.flowcentraltech.flowcentral.common.data.EntitySelectInfo;
 import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.task.TaskSetup;
 import com.tcdng.unify.core.util.StringUtils;
@@ -49,6 +50,8 @@ public class EntityActionResult {
     private ReviewResult reviewResult;
     
     private ActionMode actionMode;
+    
+    private EntitySelectInfo entitySelect;
     
     private boolean skipUpdate;
     
@@ -182,7 +185,19 @@ public class EntityActionResult {
         this.reviewResult = reviewResult;
     }
 
-    public boolean isWithReviewResult() {
+    public EntitySelectInfo getEntitySelect() {
+		return entitySelect;
+	}
+
+	public void setEntitySelect(EntitySelectInfo entitySelect) {
+		this.entitySelect = entitySelect;
+	}
+
+	public boolean isEntitySelect() {
+        return entitySelect != null;
+    }
+
+	public boolean isWithReviewResult() {
         return reviewResult != null;
     }
 
