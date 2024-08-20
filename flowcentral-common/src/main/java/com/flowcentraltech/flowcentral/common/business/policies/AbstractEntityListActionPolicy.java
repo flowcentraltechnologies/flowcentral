@@ -18,7 +18,13 @@ package com.flowcentraltech.flowcentral.common.business.policies;
 
 import com.flowcentraltech.flowcentral.common.AbstractFlowCentralComponent;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.data.ValueStoreReader;
+import com.tcdng.unify.core.task.TaskLauncher;
+import com.tcdng.unify.core.task.TaskMonitor;
+import com.tcdng.unify.core.task.TaskSetup;
+import com.tcdng.unify.web.UnifyWebSessionAttributeConstants;
+import com.tcdng.unify.web.ui.widget.data.TaskMonitorInfo;
 
 /**
  * Convenient abstract base class for entity list action policies.
@@ -28,6 +34,9 @@ import com.tcdng.unify.core.data.ValueStoreReader;
  */
 public abstract class AbstractEntityListActionPolicy extends AbstractFlowCentralComponent implements EntityListActionPolicy {
 
+	@Configurable
+	private TaskLauncher taskLauncher;
+	
     @Override
     public final EntityListActionResult executeAction(EntityListActionContext ctx) throws UnifyException {
         return executeAction(ctx, null);
@@ -36,6 +45,19 @@ public abstract class AbstractEntityListActionPolicy extends AbstractFlowCentral
     @Override
     public boolean isWidgetDisabled(ValueStoreReader parentReader) throws UnifyException {
         return false;
+    }
+
+    protected void launchTaskWithMonitorBox(TaskSetup taskSetup, String caption) throws UnifyException {
+        launchTaskWithMonitorBox(taskSetup, caption, null, null);
+    }
+
+    protected void launchTaskWithMonitorBox(TaskSetup taskSetup, String caption, String onSuccessPath,
+            String onFailurePath) throws UnifyException {
+        TaskMonitor taskMonitor = taskLauncher.launchTask(taskSetup);
+        TaskMonitorInfo taskMonitorInfo = new TaskMonitorInfo(taskMonitor, resolveSessionMessage(caption),
+                onSuccessPath, onFailurePath);
+        setSessionAttribute(UnifyWebSessionAttributeConstants.TASKMONITORINFO, taskMonitorInfo);
+        setCommandResultMapping("showapplicationtaskmonitor");
     }
 
     @Override

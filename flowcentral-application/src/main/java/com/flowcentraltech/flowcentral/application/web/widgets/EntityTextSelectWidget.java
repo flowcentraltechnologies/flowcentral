@@ -40,7 +40,7 @@ import com.tcdng.unify.web.ui.widget.data.Popup;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@Component("fc-entitytextselect")
+@Component("fc-entitytextselect") 
 @UplAttributes({ @UplAttribute(name = "limit", type = int.class, defaultVal = "20"),
         @UplAttribute(name = "ref", type = String.class, mandatory = true),
         @UplAttribute(name = "buttonImgSrc", type = String.class, defaultVal = "$t{images/search.png}"),
