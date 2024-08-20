@@ -20,6 +20,9 @@ import com.flowcentraltech.flowcentral.common.constants.FlowCentralEditionConsta
 import com.tcdng.unify.core.AbstractUnifyComponent;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.util.IOUtils;
+import com.tcdng.unify.web.TargetPath;
+import com.tcdng.unify.web.ui.PageRequestContextUtil;
+import com.tcdng.unify.web.ui.WebUIApplicationComponents;
 
 /**
  * Base class for flowCentral components.
@@ -50,5 +53,17 @@ public abstract class AbstractFlowCentralComponent extends AbstractUnifyComponen
         return FlowCentralEditionConstants.ENTERPRISE.equalsIgnoreCase(getContainerSetting(String.class,
                 FlowCentralContainerPropertyConstants.FLOWCENTRAL_INSTALLATION_TYPE));
     }
+
+	protected void setCommandResultMapping(String resultMappingName) throws UnifyException {
+		getRequestContextUtil().setCommandResultMapping(resultMappingName);
+	}
+
+	protected void setCommandResponsePath(TargetPath targetPath) throws UnifyException {
+		getRequestContextUtil().setCommandResponsePath(targetPath);
+	}
+
+	protected PageRequestContextUtil getRequestContextUtil() throws UnifyException {
+		return (PageRequestContextUtil) getComponent(WebUIApplicationComponents.APPLICATION_PAGEREQUESTCONTEXTUTIL);
+	}
     
 }
