@@ -188,11 +188,17 @@ public class SearchEntry implements EntityFieldAttributes {
     }
 
     public void normalize(WidgetTypeDef widgetTypeDef) throws UnifyException {
+    	final EntityFieldDef entityFieldDef = getEntityFieldDef().isWithResolvedTypeFieldDef()
+                ? getEntityFieldDef().getResolvedTypeFieldDef()
+                : getEntityFieldDef();
         if (widgetTypeDef != null) {
-            EntityFieldAttributes efa = isFieldEntry() ? getEntityFieldDef() : this;
-            paramInput = InputWidgetUtils.newInput(widgetTypeDef, efa);
+            if (isFieldEntry()) {
+            	paramInput = InputWidgetUtils.newInput(widgetTypeDef, entityFieldDef);
+            } else {
+            	paramInput = InputWidgetUtils.newInput(widgetTypeDef, this);
+            }
         } else {
-            paramInput = evalInput(getEntityFieldDef());
+            paramInput = evalInput(entityFieldDef);
         }
     }
 

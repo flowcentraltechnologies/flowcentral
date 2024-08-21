@@ -37,13 +37,13 @@ import com.tcdng.unify.core.list.ListManager;
 @Component("searchinputconditionlist")
 public class SearchInputConditionListCommand extends AbstractApplicationListCommand<EntityDefFieldListParams> {
 
-    private DataTypeConditions dataTypeConditions;
+	private DataTypeConditions dataTypeConditions;
 
-    public SearchInputConditionListCommand() {
-        super(EntityDefFieldListParams.class);
-    }
+	public SearchInputConditionListCommand() {
+		super(EntityDefFieldListParams.class);
+	}
 
-    @Override
+	@Override
     public List<? extends Listable> execute(Locale locale, EntityDefFieldListParams params) throws UnifyException {
         if (params.isPresent()) {
             if (params.getFieldName().startsWith("f:")) {
@@ -54,6 +54,10 @@ public class SearchInputConditionListCommand extends AbstractApplicationListComm
 
                 DataTypeConditions _dataTypeConditions = getDataTypeConditions();
                 EntityFieldDataType type = entityFieldDef.getDataType();
+                if (type.isForeignKey()) {
+                	return _dataTypeConditions.getFkConditions();
+                }
+                
                 if (type.isBoolean()) {
                     return _dataTypeConditions.getBooleanConditions();
                 }
@@ -75,78 +79,91 @@ public class SearchInputConditionListCommand extends AbstractApplicationListComm
         return Collections.emptyList();
     }
 
-    private DataTypeConditions getDataTypeConditions() throws UnifyException {
-        if (dataTypeConditions == null) {
-            synchronized (this) {
-                if (dataTypeConditions == null) {
-                    ListManager listManager = getComponent(ListManager.class);
-                    List<Listable> booleanConditions = new ArrayList<>();
-                    List<Listable> numberConditions = new ArrayList<>();
-                    List<Listable> stringConditions = new ArrayList<>();
-                    List<Listable> enumConditions = new ArrayList<>();
-                    List<? extends Listable> srclist = listManager.getList(getApplicationLocale(),
-                            "searchconditiontypelist");
-                    for (Listable listable : srclist) {
-                        SearchConditionType condition = SearchConditionType.fromCode(listable.getListKey());
-                        if (condition.supportsBoolean()) {
-                            booleanConditions.add(listable);
-                        }
+	private DataTypeConditions getDataTypeConditions() throws UnifyException {
+		if (dataTypeConditions == null) {
+			synchronized (this) {
+				if (dataTypeConditions == null) {
+					ListManager listManager = getComponent(ListManager.class);
+					List<Listable> fkConditions = new ArrayList<>();
+					List<Listable> booleanConditions = new ArrayList<>();
+					List<Listable> numberConditions = new ArrayList<>();
+					List<Listable> stringConditions = new ArrayList<>();
+					List<Listable> enumConditions = new ArrayList<>();
+					List<? extends Listable> srclist = listManager.getList(getApplicationLocale(),
+							"searchconditiontypelist");
+					for (Listable listable : srclist) {
+						SearchConditionType condition = SearchConditionType.fromCode(listable.getListKey());
+						if (condition.supportsFk()) {
+							fkConditions.add(listable);
+						}
 
-                        if (condition.supportsNumber()) {
-                            numberConditions.add(listable);
-                        }
+						if (condition.supportsBoolean()) {
+							booleanConditions.add(listable);
+						}
 
-                        if (condition.supportsString()) {
-                            stringConditions.add(listable);
-                        }
+						if (condition.supportsNumber()) {
+							numberConditions.add(listable);
+						}
 
-                        if (condition.supportsEnum()) {
-                            enumConditions.add(listable);
-                        }
-                    }
+						if (condition.supportsString()) {
+							stringConditions.add(listable);
+						}
 
-                    dataTypeConditions = new DataTypeConditions(booleanConditions, numberConditions, stringConditions,
-                            enumConditions);
-                }
-            }
-        }
+						if (condition.supportsEnum()) {
+							enumConditions.add(listable);
+						}
+					}
 
-        return dataTypeConditions;
-    }
+					dataTypeConditions = new DataTypeConditions(fkConditions, booleanConditions, numberConditions, stringConditions,
+							enumConditions);
+				}
+			}
+		}
 
-    private class DataTypeConditions {
+		return dataTypeConditions;
+	}
 
-        private final List<? extends Listable> booleanConditions;
+	private class DataTypeConditions {
 
-        private final List<? extends Listable> numberConditions;
+		private final List<? extends Listable> fkConditions;
 
-        private final List<? extends Listable> stringConditions;
+		private final List<? extends Listable> booleanConditions;
 
-        private final List<? extends Listable> enumConditions;
+		private final List<? extends Listable> numberConditions;
 
-        public DataTypeConditions(List<? extends Listable> booleanConditions, List<? extends Listable> numberConditions,
-                List<? extends Listable> stringConditions, List<? extends Listable> enumConditions) {
-            this.booleanConditions = Collections.unmodifiableList(booleanConditions);
-            this.numberConditions = Collections.unmodifiableList(numberConditions);
-            this.stringConditions = Collections.unmodifiableList(stringConditions);
-            this.enumConditions = Collections.unmodifiableList(enumConditions);
-        }
+		private final List<? extends Listable> stringConditions;
 
-        public List<? extends Listable> getBooleanConditions() {
-            return booleanConditions;
-        }
+		private final List<? extends Listable> enumConditions;
 
-        public List<? extends Listable> getNumberConditions() {
-            return numberConditions;
-        }
+		public DataTypeConditions(List<? extends Listable> fkConditions, List<? extends Listable> booleanConditions,
+				List<? extends Listable> numberConditions, List<? extends Listable> stringConditions,
+				List<? extends Listable> enumConditions) {
+			this.fkConditions = fkConditions;
+			this.booleanConditions = Collections.unmodifiableList(booleanConditions);
+			this.numberConditions = Collections.unmodifiableList(numberConditions);
+			this.stringConditions = Collections.unmodifiableList(stringConditions);
+			this.enumConditions = Collections.unmodifiableList(enumConditions);
+		}
 
-        public List<? extends Listable> getStringConditions() {
-            return stringConditions;
-        }
+		public List<? extends Listable> getFkConditions() {
+			return fkConditions;
+		}
 
-        public List<? extends Listable> getEnumConditions() {
-            return enumConditions;
-        }
-    }
+		public List<? extends Listable> getBooleanConditions() {
+			return booleanConditions;
+		}
+
+		public List<? extends Listable> getNumberConditions() {
+			return numberConditions;
+		}
+
+		public List<? extends Listable> getStringConditions() {
+			return stringConditions;
+		}
+
+		public List<? extends Listable> getEnumConditions() {
+			return enumConditions;
+		}
+	}
 
 }

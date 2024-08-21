@@ -255,6 +255,14 @@ public final class InputWidgetUtils {
         return (AbstractInput<?>) ReflectUtils.newInstance(inputClass, NEW_INPUT_PARAMS, editor, renderer);
     }
 
+    public static AbstractInput<?> newInput(WidgetTypeDef widgetTypeDef, EntityFieldDef entityFieldDef)
+            throws UnifyException {
+        Class<? extends AbstractInput<?>> inputClass = CommonInputUtils.getInputClass(widgetTypeDef.getInputType());
+        String editor = InputWidgetUtils.constructEditor(widgetTypeDef, entityFieldDef);
+        String renderer = InputWidgetUtils.constructRenderer(widgetTypeDef, entityFieldDef);
+        return (AbstractInput<?>) ReflectUtils.newInstance(inputClass, NEW_INPUT_PARAMS, editor, renderer);
+    }
+
     public static AbstractInput<?> newInput(WidgetTypeDef widgetTypeDef, EntityFieldAttributes efa)
             throws UnifyException {
         Class<? extends AbstractInput<?>> inputClass = CommonInputUtils.getInputClass(widgetTypeDef.getInputType());
