@@ -368,7 +368,7 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-filter .line {padding-bottom: 2px;}
 .fc-filter .tab {display:inline-block; width:32px !important; text-align:right;padding-right:2px; border-right:4px solid #f0f0f0;
 	font-weight:bold; vertical-align: middle;}
-.fc-filter .item {display:inline-block; margin-right:6px;width:200px;}
+.fc-filter .item {display:inline-block; margin-right:6px;width:232px;}
 .fc-filter .atab1 {display:inline-block;vertical-align: middle;height:24px;width:140px;}
 .fc-filter .atab1:hover {}
 .fc-filter .atab2 {display:inline-block;vertical-align: middle;height:24px;width:40px;}
@@ -622,7 +622,7 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-setvalues .line {padding-bottom: 2px;}
 .fc-setvalues .tab {display:inline-block; width:32px !important; text-align:right;padding-right:2px; border-right:4px solid #f0f0f0;
 	font-weight:bold; vertical-align: middle;}
-.fc-setvalues .item {display:inline-block; margin-right:6px;width:200px;}
+.fc-setvalues .item {display:inline-block; margin-right:6px;width:232px;}
 .fc-setvalues .atab {display:inline-block;vertical-align: middle;height:24px;width:40px;}
 .fc-setvalues .abutton {padding:0px 4px; min-height:22px; min-width:22px; margin-left:2px; font-size:10px; background-color: #fff !important;color:#4c4c4c;
 								border: 1px solid #c8c8c8; /*border-radius: 6px;*/ cursor: pointer;}
