@@ -449,7 +449,7 @@ public final class ChartUtils {
                 String cat = gaggregation.getGroupingAsString(0);
                 inputs.put(cat, gaggregation);
 
-                int _cat = Integer.parseInt(cat);
+                int _cat = cat != null && !"null".equals(cat) ? Integer.parseInt(cat) : 0;
                 if (_minend < _cat) {
                     _minend = _cat;
                 }
