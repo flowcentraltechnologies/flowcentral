@@ -24,19 +24,26 @@ package com.flowcentraltech.flowcentral.application.constants;
  */
 public enum DataChangeType {
 
-    NEW("new"),
-    UPDATED("upd"),
-    DELETED("del"),
-    NONE("non");
+    NEW("new", "$m{datachange.new}"),
+    UPDATED("upd", "$m{datachange.updated}"),
+    DELETED("del", "$m{datachange.deleted}"),
+    NONE("non", "$m{datachange.none}");
     
     private final String shade;
     
-    private DataChangeType(String shade) {
+    private final String hint;
+    
+    private DataChangeType(String shade, String hint) {
        this.shade = shade; 
+       this.hint = hint;
     }
 
     public String shade() {
         return shade;
+    }
+
+    public String hint() {
+        return hint;
     }
 
     public boolean isNone() {

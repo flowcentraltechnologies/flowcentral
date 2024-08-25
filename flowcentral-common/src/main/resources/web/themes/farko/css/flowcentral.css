@@ -447,14 +447,14 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-formdiff .diff {display:table;width:100%;}
 .fc-formdiff .diffrow {display:table-row;}
 .fc-formdiff .diffcell {display:table-cell;width:50%;}
-.fc-formdiff .difflbl {display:table-cell;width:30%;border: solid 1px #C8C8C8;text-align: right; padding: 2px 4px;font-size: 8pt;font-weight: bold;}
-.fc-formdiff .diffval {display:table-cell;width:70%;border: solid 1px #C8C8C8;padding: 2px;}
-.fc-formdiff .diffvaln {display:table-cell;width:70%;border: solid 1px #C8C8C8;padding: 2px;text-align:right;}
+.fc-formdiff .difflbl {display:table-cell;width:30%;border: solid 1px #bcbcbc;text-align: right; padding: 2px 4px;font-size: 8pt;font-weight: bold;}
+.fc-formdiff .diffval {display:table-cell;width:70%;border: solid 1px #bcbcbc;padding: 2px;}
+.fc-formdiff .diffvaln {display:table-cell;width:70%;border: solid 1px #bcbcbc;padding: 2px;text-align:right;}
 .fc-formdiff .head {font-weight:bold;text-align:center;text-decoration: underline;margin-bottom:2px;}
 .fc-formdiff .headtab {font-weight:bold;color:#606060;font-size: 8pt; padding-right:4px;}
-.fc-formdiff .new {color:#056608;font-weight:bold;}
-.fc-formdiff .upd {color:#0006b1;font-weight:bold;}
-.fc-formdiff .del {color:#850101;font-weight:bold;}
+.fc-formdiff .new {background-color:#e1eddb;color:#6aa84f;font-weight:bold;}
+.fc-formdiff .upd {background-color:#d0dce5;color:#16537e;font-weight:bold;}
+.fc-formdiff .del {background-color:#f4cccc;color:#cc0000;font-weight:bold;}
 .fc-formdiff .orn {background-color:#F8F8F8;}
 
 
