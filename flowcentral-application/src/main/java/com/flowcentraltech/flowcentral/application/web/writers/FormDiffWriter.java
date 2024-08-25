@@ -16,6 +16,11 @@
 
 package com.flowcentraltech.flowcentral.application.web.writers;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
+import com.flowcentraltech.flowcentral.application.constants.DataChangeType;
 import com.flowcentraltech.flowcentral.application.data.Diff;
 import com.flowcentraltech.flowcentral.application.data.DiffEntity;
 import com.flowcentraltech.flowcentral.application.data.DiffEntityField;
@@ -38,6 +43,8 @@ import com.tcdng.unify.web.ui.widget.writer.AbstractControlWriter;
 @Writes(FormDiffWidget.class)
 @Component("formdiff-writer")
 public class FormDiffWriter extends AbstractControlWriter {
+
+    private Map<DataChangeType, String> hints;
 
     @Override
     protected void doWriteStructureAndContent(ResponseWriter writer, Widget widget) throws UnifyException {
@@ -124,6 +131,11 @@ public class FormDiffWriter extends AbstractControlWriter {
                     writer.write(" ");
                     writer.write(field.getChangeType().shade());
                 }
+
+                if (!field.getChangeType().isNone()) {
+                    writer.write("\" title=\"").writeWithHtmlEscape(getHint(field.getChangeType()));
+                }
+
                 writer.write("\">");
 
                 if (field.isWithValue()) {
@@ -139,4 +151,20 @@ public class FormDiffWriter extends AbstractControlWriter {
         }
     }
 
+    private String getHint(DataChangeType changeType) throws UnifyException {
+        if (hints == null) {
+            synchronized (this) {
+                if (hints == null) {
+                    hints = new HashMap<DataChangeType, String>();
+                    hints.put(DataChangeType.NEW, resolveApplicationMessage(DataChangeType.NEW.hint()));
+                    hints.put(DataChangeType.UPDATED, resolveApplicationMessage(DataChangeType.UPDATED.hint()));
+                    hints.put(DataChangeType.DELETED, resolveApplicationMessage(DataChangeType.DELETED.hint()));
+                    hints.put(DataChangeType.NONE, resolveApplicationMessage(DataChangeType.NONE.hint()));
+                    hints = Collections.unmodifiableMap(hints);
+                }
+            }
+        }
+
+        return hints.get(changeType);
+    }
 }

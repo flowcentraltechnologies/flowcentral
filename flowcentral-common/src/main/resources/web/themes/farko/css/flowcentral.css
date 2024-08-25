@@ -368,7 +368,7 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-filter .line {padding-bottom: 2px;}
 .fc-filter .tab {display:inline-block; width:32px !important; text-align:right;padding-right:2px; border-right:4px solid #f0f0f0;
 	font-weight:bold; vertical-align: middle;}
-.fc-filter .item {display:inline-block; margin-right:6px;width:200px;}
+.fc-filter .item {display:inline-block; margin-right:6px;width:232px;}
 .fc-filter .atab1 {display:inline-block;vertical-align: middle;height:24px;width:140px;}
 .fc-filter .atab1:hover {}
 .fc-filter .atab2 {display:inline-block;vertical-align: middle;height:24px;width:40px;}
@@ -447,14 +447,14 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-formdiff .diff {display:table;width:100%;}
 .fc-formdiff .diffrow {display:table-row;}
 .fc-formdiff .diffcell {display:table-cell;width:50%;}
-.fc-formdiff .difflbl {display:table-cell;width:30%;border: solid 1px #C8C8C8;text-align: right; padding: 2px 4px;font-size: 8pt;font-weight: bold;}
-.fc-formdiff .diffval {display:table-cell;width:70%;border: solid 1px #C8C8C8;padding: 2px;}
-.fc-formdiff .diffvaln {display:table-cell;width:70%;border: solid 1px #C8C8C8;padding: 2px;text-align:right;}
+.fc-formdiff .difflbl {display:table-cell;width:30%;border: solid 1px #bcbcbc;text-align: right; padding: 2px 4px;font-size: 8pt;font-weight: bold;}
+.fc-formdiff .diffval {display:table-cell;width:70%;border: solid 1px #bcbcbc;padding: 2px;}
+.fc-formdiff .diffvaln {display:table-cell;width:70%;border: solid 1px #bcbcbc;padding: 2px;text-align:right;}
 .fc-formdiff .head {font-weight:bold;text-align:center;text-decoration: underline;margin-bottom:2px;}
 .fc-formdiff .headtab {font-weight:bold;color:#606060;font-size: 8pt; padding-right:4px;}
-.fc-formdiff .new {color:#056608;font-weight:bold;}
-.fc-formdiff .upd {color:#0006b1;font-weight:bold;}
-.fc-formdiff .del {color:#850101;font-weight:bold;}
+.fc-formdiff .new {background-color:#e1eddb;color:#6aa84f;font-weight:bold;}
+.fc-formdiff .upd {background-color:#d0dce5;color:#16537e;font-weight:bold;}
+.fc-formdiff .del {background-color:#f4cccc;color:#cc0000;font-weight:bold;}
 .fc-formdiff .orn {background-color:#F8F8F8;}
 
 
@@ -622,7 +622,7 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-setvalues .line {padding-bottom: 2px;}
 .fc-setvalues .tab {display:inline-block; width:32px !important; text-align:right;padding-right:2px; border-right:4px solid #f0f0f0;
 	font-weight:bold; vertical-align: middle;}
-.fc-setvalues .item {display:inline-block; margin-right:6px;width:200px;}
+.fc-setvalues .item {display:inline-block; margin-right:6px;width:232px;}
 .fc-setvalues .atab {display:inline-block;vertical-align: middle;height:24px;width:40px;}
 .fc-setvalues .abutton {padding:0px 4px; min-height:22px; min-width:22px; margin-left:2px; font-size:10px; background-color: #fff !important;color:#4c4c4c;
 								border: 1px solid #c8c8c8; /*border-radius: 6px;*/ cursor: pointer;}

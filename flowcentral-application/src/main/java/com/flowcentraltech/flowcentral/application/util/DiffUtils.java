@@ -17,8 +17,10 @@ package com.flowcentraltech.flowcentral.application.util;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
@@ -88,59 +90,51 @@ public final class DiffUtils {
         return DiffUtils.diff(au, formDef, leftEntityId, rightEntityId, formats, null, null);
     }
 
-    @SuppressWarnings("unchecked")
     private static Diff diff(AppletUtilities au, FormDef formDef, Long leftEntityId, Long rightEntityId,
             Formats.Instance formats, String label, String parentEntityName) throws UnifyException {
-        final Date now = au.getNow();
-        final EntityDef entityDef = formDef.getEntityDef();
-        final EntityClassDef entityClassDef = au.getEntityClassDef(entityDef.getLongName());
-        final Entity left = leftEntityId != null
-                ? au.environment().find((Class<? extends Entity>) entityClassDef.getEntityClass(), leftEntityId)
-                : null;
-        final Entity right = rightEntityId != null
-                ? au.environment().find((Class<? extends Entity>) entityClassDef.getEntityClass(), rightEntityId)
-                : null;
+        final DiffEntityParts leftDiffEntityParts = DiffUtils.getDiffEntityParts(au, formDef, leftEntityId, formats,
+                parentEntityName);
+        final DiffEntityParts rightDiffEntityParts = DiffUtils.getDiffEntityParts(au, formDef, rightEntityId, formats,
+                parentEntityName);
+        return DiffUtils.diff(au, formDef, leftDiffEntityParts, rightDiffEntityParts, formats, label);
+    }
 
-        List<FormTabDef> tabs = formDef.getFormTabDefList();
-        FormTabDef mainTabDef = tabs.get(0);
+    @SuppressWarnings("unchecked")
+    private static Diff diff(AppletUtilities au, FormDef formDef, DiffEntityParts leftDiffEntityParts,
+            DiffEntityParts rightDiffEntityParts, Formats.Instance formats, String label) throws UnifyException {
+        final Date now = au.getNow();
+
         List<DiffEntityField> lfields = Collections.emptyList();
         List<DiffEntityField> rfields = Collections.emptyList();
-        if (left != null && right == null) {
-            lfields = getFields(mainTabDef, entityDef, left, DataChangeType.NEW, formats, parentEntityName);
-        } else if (left == null && right != null) {
-            rfields = getFields(mainTabDef, entityDef, right, DataChangeType.DELETED, formats, parentEntityName);
-        } else if (left != null && right != null) {
+        if (leftDiffEntityParts != null && rightDiffEntityParts == null) {
+            lfields = DiffUtils.getFields(leftDiffEntityParts, DataChangeType.NEW);
+        } else if (leftDiffEntityParts == null && rightDiffEntityParts != null) {
+            rfields = DiffUtils.getFields(rightDiffEntityParts, DataChangeType.DELETED);
+        } else if (leftDiffEntityParts != null && rightDiffEntityParts != null) {
+            final EntityDef entityDef = leftDiffEntityParts.getEntityDef();
             lfields = new ArrayList<DiffEntityField>();
             rfields = new ArrayList<DiffEntityField>();
-            for (FormSectionDef formSectionDef : mainTabDef.getFormSectionDefList()) {
-                for (FormFieldDef formFieldDef : formSectionDef.getFormFieldDefList()) {
-                    final String fieldName = formFieldDef.getFieldName();
-                    final EntityFieldDef entityFieldDef = formFieldDef.getEntityFieldDef();
-                    if (entityFieldDef.isForeignKey() && entityFieldDef.isEntityRef()
-                            && entityFieldDef.getRefDef().getEntity().equals(parentEntityName)) {
-                        continue;
-                    }
+            List<DiffFieldPart> leftFieldParts = leftDiffEntityParts.getFieldParts();
+            List<DiffFieldPart> rightFieldParts = rightDiffEntityParts.getFieldParts();
+            final int len = leftFieldParts.size();
+            for (int i = 0; i < len; i++) {
+                final DiffFieldPart lpart = leftFieldParts.get(i);
+                final String lvalStr = lpart.getVal();
+                final String rvalStr = rightFieldParts.get(i).getVal();
+                DataChangeType lChangeType = DataChangeType.NONE;
+                DataChangeType rChangeType = DataChangeType.NONE;
+                if (!DataUtils.equals(lvalStr, rvalStr)) {
+                    lChangeType = lvalStr != null ? (rvalStr != null ? DataChangeType.UPDATED : DataChangeType.NEW)
+                            : DataChangeType.NONE;
 
-                    final Object lval = ReflectUtils.getBeanProperty(left, fieldName);
-                    final Object rval = ReflectUtils.getBeanProperty(right, fieldName);
-                    final String lvalStr = formats.format(lval);
-                    final String rvalStr = formats.format(rval);
-                    DataChangeType lChangeType = DataChangeType.NONE;
-                    DataChangeType rChangeType = DataChangeType.NONE;
-                    if (!DataUtils.equals(lvalStr, rvalStr)) {
-                        lChangeType = lvalStr != null ? (rvalStr != null ? DataChangeType.UPDATED : DataChangeType.NEW)
-                                : DataChangeType.NONE;
-
-                        rChangeType = lvalStr != null ? (rvalStr != null ? DataChangeType.NONE : DataChangeType.NONE)
-                                : DataChangeType.DELETED;
-                    }
-
-                    final boolean number = entityDef.getFieldDef(fieldName).isNumber();
-                    lfields.add(
-                            new DiffEntityField(lChangeType, fieldName, formFieldDef.getFieldLabel(), lvalStr, number));
-                    rfields.add(
-                            new DiffEntityField(rChangeType, fieldName, formFieldDef.getFieldLabel(), rvalStr, number));
+                    rChangeType = lvalStr != null ? (rvalStr != null ? DataChangeType.NONE : DataChangeType.NONE)
+                            : DataChangeType.DELETED;
                 }
+
+                final String fieldName = lpart.getFieldName();
+                final boolean number = entityDef.getFieldDef(fieldName).isNumber();
+                lfields.add(new DiffEntityField(lChangeType, fieldName, lpart.getLabel(), lvalStr, number));
+                rfields.add(new DiffEntityField(rChangeType, fieldName, lpart.getLabel(), rvalStr, number));
             }
         }
 
@@ -150,6 +144,7 @@ public final class DiffUtils {
                 label == null ? au.resolveSessionMessage("$m{formdiff.original}") : label, rfields);
 
         final List<Diff> children = new ArrayList<Diff>();
+        final List<FormTabDef> tabs = formDef.getFormTabDefList();
         final int len = tabs.size();
         for (int i = 1; i < len; i++) {
             FormTabDef childTabDef = tabs.get(i);
@@ -158,9 +153,9 @@ public final class DiffUtils {
                 final AppletDef _appletDef = au.getAppletDef(childTabDef.getApplet());
                 final AppletType appletType = _appletDef.getType();
                 if (!_appletDef.getPropValue(boolean.class, AppletPropertyConstants.SEARCH_TABLE_DIFF_IGNORE)) {
-                    final List<Long> lChildIdList = getChildIdList(au, childTabDef, entityDef, left, now,
+                    final List<Long> lChildIdList = DiffUtils.getChildIdList(au, childTabDef, leftDiffEntityParts, now,
                             contentType.isChildList());
-                    final List<Long> rChildIdList = getChildIdList(au, childTabDef, entityDef, right, now,
+                    final List<Long> rChildIdList = DiffUtils.getChildIdList(au, childTabDef, rightDiffEntityParts, now,
                             contentType.isChildList());
                     final int clen = lChildIdList.size() < rChildIdList.size() ? rChildIdList.size()
                             : lChildIdList.size();
@@ -197,14 +192,23 @@ public final class DiffUtils {
                             Diff _diff = DiffUtils.diff(lListables, rListables, childTabDef.getLabel());
                             children.add(_diff);
                         } else if (appletType.isEntityList()) {
+                            final EntityDef entityDef = leftDiffEntityParts != null ? leftDiffEntityParts.getEntityDef()
+                                    : rightDiffEntityParts.getEntityDef();
                             final String cFormName = _appletDef.getPropValue(String.class,
                                     AppletPropertyConstants.MAINTAIN_FORM);
                             FormDef cformDef = au.getFormDef(cFormName);
+                            DiffParts diffParts = DiffUtils.getDiffParts(au, cformDef, lChildIdList, rChildIdList,
+                                    formats, entityDef.getLongName());
+                            diffParts.sort();
+
+                            final List<DiffEntityParts> leftParts = diffParts.getLeftParts();
+                            final List<DiffEntityParts> rightParts = diffParts.getRightParts();
+
                             for (int j = 0; j < clen; j++) {
-                                Long cleftEntityId = j < lChildIdList.size() ? lChildIdList.get(j) : null;
-                                Long crightEntityId = j < rChildIdList.size() ? rChildIdList.get(j) : null;
-                                Diff _diff = DiffUtils.diff(au, cformDef, cleftEntityId, crightEntityId, formats,
-                                        childTabDef.getLabel(), entityDef.getLongName());
+                                DiffEntityParts cLeftParts = j < leftParts.size() ? leftParts.get(j) : null;
+                                DiffEntityParts cRightParts = j < rightParts.size() ? rightParts.get(j) : null;
+                                Diff _diff = DiffUtils.diff(au, cformDef, cLeftParts, cRightParts, formats,
+                                        childTabDef.getLabel());
                                 children.add(_diff);
                             }
                         }
@@ -250,14 +254,14 @@ public final class DiffUtils {
     }
 
     @SuppressWarnings("unchecked")
-    private static List<Long> getChildIdList(AppletUtilities au, FormTabDef childTabDef, EntityDef parentEntityDef,
-            Entity parentInst, Date now, boolean list) throws UnifyException {
-        if (parentInst != null) {
-            Restriction childRestriction = au.getChildRestriction(parentEntityDef, childTabDef.getReference(),
-                    parentInst);
+    private static List<Long> getChildIdList(AppletUtilities au, FormTabDef childTabDef,
+            DiffEntityParts parentDiffEntityParts, Date now, boolean list) throws UnifyException {
+        if (parentDiffEntityParts.isPresent()) {
+            Restriction childRestriction = au.getChildRestriction(parentDiffEntityParts.getEntityDef(),
+                    childTabDef.getReference(), parentDiffEntityParts.getInst());
             if (list) {
                 Restriction tabRestriction = childTabDef.getRestriction(FilterType.TAB,
-                        new BeanValueStore(parentInst).getReader(), now);
+                        new BeanValueStore(parentDiffEntityParts.getInst()).getReader(), now);
                 childRestriction = RestrictionUtils.and(childRestriction, tabRestriction);
             }
 
@@ -271,25 +275,237 @@ public final class DiffUtils {
         return Collections.emptyList();
     }
 
-    private static List<DiffEntityField> getFields(FormTabDef formTabDef, EntityDef entityDef, Entity inst,
-            DataChangeType changeType, Formats.Instance formats, String parentEntityName) throws UnifyException {
+    private static List<DiffEntityField> getFields(DiffEntityParts diffEntityParts, DataChangeType changeType)
+            throws UnifyException {
+        final EntityDef entityDef = diffEntityParts.getEntityDef();
         List<DiffEntityField> fields = new ArrayList<DiffEntityField>();
-        for (FormSectionDef formSectionDef : formTabDef.getFormSectionDefList()) {
-            for (FormFieldDef formFieldDef : formSectionDef.getFormFieldDefList()) {
-                final String fieldName = formFieldDef.getFieldName();
-                final EntityFieldDef entityFieldDef = formFieldDef.getEntityFieldDef();
-                if (entityFieldDef.isForeignKey() && entityFieldDef.isEntityRef()
-                        && entityFieldDef.getRefDef().getEntity().equals(parentEntityName)) {
-                    continue;
-                }
-
-                final Object val = ReflectUtils.getBeanProperty(inst, fieldName);
-                final String valStr = formats.format(val);
-                fields.add(new DiffEntityField(val == null ? DataChangeType.NONE : changeType, fieldName,
-                        formFieldDef.getFieldLabel(), valStr, entityDef.getFieldDef(fieldName).isNumber()));
-            }
+        for (DiffFieldPart diffFieldPart : diffEntityParts.getFieldParts()) {
+            fields.add(new DiffEntityField(diffFieldPart.getVal() == null ? DataChangeType.NONE : changeType,
+                    diffFieldPart.getFieldName(), diffFieldPart.getLabel(), diffFieldPart.getVal(),
+                    entityDef.getFieldDef(diffFieldPart.getFieldName()).isNumber()));
         }
 
         return fields;
+    }
+
+    private static DiffParts getDiffParts(AppletUtilities au, FormDef formDef, List<Long> leftEntityIds,
+            List<Long> rightEntityIds, Formats.Instance formats, String parentEntityName) throws UnifyException {
+        final List<DiffEntityParts> leftParts = new ArrayList<DiffEntityParts>();
+        for (Long id : leftEntityIds) {
+            leftParts.add(DiffUtils.getDiffEntityParts(au, formDef, id, formats, parentEntityName));
+        }
+
+        final List<DiffEntityParts> rightParts = new ArrayList<DiffEntityParts>();
+        for (Long id : rightEntityIds) {
+            rightParts.add(DiffUtils.getDiffEntityParts(au, formDef, id, formats, parentEntityName));
+        }
+
+        return new DiffParts(DataUtils.unmodifiableList(leftParts), DataUtils.unmodifiableList(rightParts));
+    }
+
+    @SuppressWarnings("unchecked")
+    private static DiffEntityParts getDiffEntityParts(AppletUtilities au, FormDef formDef, Long id,
+            Formats.Instance formats, String parentEntityName) throws UnifyException {
+        final EntityDef entityDef = formDef.getEntityDef();
+        final EntityClassDef entityClassDef = au.getEntityClassDef(entityDef.getLongName());
+        final Entity inst = id != null
+                ? au.environment().find((Class<? extends Entity>) entityClassDef.getEntityClass(), id)
+                : null;
+        if (inst != null) {
+            final List<DiffFieldPart> fieldParts = new ArrayList<DiffFieldPart>();
+            final FormTabDef formTabDef = formDef.getFormTabDefList().get(0);
+            for (FormSectionDef formSectionDef : formTabDef.getFormSectionDefList()) {
+                for (FormFieldDef formFieldDef : formSectionDef.getFormFieldDefList()) {
+                    final String fieldName = formFieldDef.getFieldName();
+                    final EntityFieldDef entityFieldDef = formFieldDef.getEntityFieldDef();
+                    if (entityFieldDef.isForeignKey() && entityFieldDef.isEntityRef()
+                            && entityFieldDef.getRefDef().getEntity().equals(parentEntityName)) {
+                        continue;
+                    }
+
+                    final Object val = ReflectUtils.getBeanProperty(inst, fieldName);
+                    final String valStr = formats.format(val);
+                    fieldParts.add(new DiffFieldPart(fieldName, formFieldDef.getFieldLabel(), valStr));
+                }
+            }
+
+            return new DiffEntityParts(entityDef, inst, DataUtils.unmodifiableList(fieldParts));
+        }
+
+        return null;
+    }
+
+    private static class DiffParts {
+
+        private final List<DiffEntityParts> leftParts;
+
+        private final List<DiffEntityParts> rightParts;
+
+        private List<DiffEntityParts> cleftParts;
+
+        private List<DiffEntityParts> crightParts;
+
+        public DiffParts(List<DiffEntityParts> leftParts, List<DiffEntityParts> rightParts) {
+            this.leftParts = leftParts;
+            this.rightParts = rightParts;
+            this.cleftParts = Collections.emptyList();
+            this.crightParts = Collections.emptyList();
+        }
+
+        public List<DiffEntityParts> getLeftParts() {
+            return cleftParts;
+        }
+
+        public List<DiffEntityParts> getRightParts() {
+            return crightParts;
+        }
+
+        public void sort() {
+            cleftParts = new ArrayList<DiffEntityParts>();
+            crightParts = new ArrayList<DiffEntityParts>();
+
+            for (DiffEntityParts _rightParts : rightParts) {
+                for (DiffEntityParts _leftParts : leftParts) {
+                    _leftParts.match(_rightParts);
+                }
+            }
+
+            Set<DiffEntityParts> leftBucket = new LinkedHashSet<DiffEntityParts>(leftParts);
+            Set<DiffEntityParts> rightBucket = new LinkedHashSet<DiffEntityParts>(rightParts);
+            for (DiffEntityParts _leftParts : leftParts) {
+                for (DiffMatch diffMatch : _leftParts.getMatches()) {
+                    if (rightBucket.remove(diffMatch.getDiffEntityParts())) {
+                        cleftParts.add(_leftParts);
+                        crightParts.add(diffMatch.getDiffEntityParts());
+                        leftBucket.remove(_leftParts);
+                        break;
+                    }
+                }
+            }
+
+            for (DiffEntityParts _leftParts : leftBucket) {
+                cleftParts.add(_leftParts);
+            }
+
+            for (DiffEntityParts _rightParts : rightBucket) {
+                crightParts.add(_rightParts);
+            }
+        }
+    }
+
+    private static class DiffEntityParts {
+
+        private final EntityDef entityDef;
+
+        private final Entity inst;
+
+        private final List<DiffFieldPart> fieldParts;
+
+        private List<DiffMatch> matches;
+
+        public DiffEntityParts(EntityDef entityDef, Entity inst, List<DiffFieldPart> fieldParts) {
+            this.entityDef = entityDef;
+            this.inst = inst;
+            this.fieldParts = fieldParts;
+            this.matches = new ArrayList<DiffMatch>();
+        }
+
+        public EntityDef getEntityDef() {
+            return entityDef;
+        }
+
+        public Entity getInst() {
+            return inst;
+        }
+
+        public List<DiffFieldPart> getFieldParts() {
+            return fieldParts;
+        }
+
+        public List<DiffMatch> getMatches() {
+            Collections.sort(matches, new Comparator<DiffMatch>()
+                {
+                    public int compare(DiffMatch m1, DiffMatch m2) {
+                        return m2.getMatch() - m1.getMatch();
+                    }
+                });
+
+            return matches;
+        }
+
+        public boolean isPresent() {
+            return inst != null && !fieldParts.isEmpty();
+        }
+
+        public int size() {
+            return fieldParts != null ? fieldParts.size() : 0;
+        }
+
+        public void match(DiffEntityParts parts) {
+            if (isPresent() && parts.isPresent() && entityDef.getLongName().equals(parts.getEntityDef().getLongName())
+                    && size() == parts.size()) {
+                final List<DiffFieldPart> _fieldParts = parts.getFieldParts();
+                final int len = size();
+                int match = 0;
+                for (int i = 0; i < len; i++) {
+                    if (DataUtils.equals(fieldParts.get(i).getVal(), _fieldParts.get(i).getVal())) {
+                        match++;
+                    }
+                }
+
+                if (match > 0) {
+                    matches.add(new DiffMatch(parts, match));
+                }
+            }
+        }
+    }
+
+    private static class DiffMatch {
+
+        private DiffEntityParts diffEntityParts;
+
+        private int match;
+
+        public DiffMatch(DiffEntityParts diffEntityParts, int match) {
+            this.diffEntityParts = diffEntityParts;
+            this.match = match;
+        }
+
+        public DiffEntityParts getDiffEntityParts() {
+            return diffEntityParts;
+        }
+
+        public int getMatch() {
+            return match;
+        }
+
+    }
+
+    private static class DiffFieldPart {
+
+        private final String fieldName;
+
+        private final String label;
+
+        private final String val;
+
+        public DiffFieldPart(String fieldName, String label, String val) {
+            this.fieldName = fieldName;
+            this.label = label;
+            this.val = val;
+        }
+
+        public String getFieldName() {
+            return fieldName;
+        }
+
+        public String getLabel() {
+            return label;
+        }
+
+        public String getVal() {
+            return val;
+        }
+
     }
 }
