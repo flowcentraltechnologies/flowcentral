@@ -16,6 +16,7 @@
 package com.flowcentraltech.flowcentral.application.business;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -38,6 +39,10 @@ import com.flowcentraltech.flowcentral.application.data.FormTabDef;
 import com.flowcentraltech.flowcentral.application.data.TableColumnDef;
 import com.flowcentraltech.flowcentral.application.data.TableDef;
 import com.flowcentraltech.flowcentral.application.data.WidgetTypeDef;
+import com.flowcentraltech.flowcentral.application.entities.AppApplet;
+import com.flowcentraltech.flowcentral.application.entities.AppEntity;
+import com.flowcentraltech.flowcentral.application.entities.AppForm;
+import com.flowcentraltech.flowcentral.application.entities.AppTable;
 import com.flowcentraltech.flowcentral.common.AbstractFlowCentralTest;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldDataType;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldType;
@@ -56,6 +61,19 @@ public class ApplicationModuleServiceTest extends AbstractFlowCentralTest {
     private ApplicationModuleService ams;
 
     private AppletUtilities au;
+
+    @Test
+    public void testIsComponentPresent() throws Exception {
+        assertFalse(ams.isComponentPresent(AppEntity.class, "manageProduct.promotion"));
+        assertFalse(ams.isComponentPresent(AppTable.class, "manageProduct.promotionTable"));
+        assertFalse(ams.isComponentPresent(AppForm.class, "manageProduct.promotionForm"));
+        assertFalse(ams.isComponentPresent(AppApplet.class, "manageProduct.promotionProduct"));
+
+        assertTrue(ams.isComponentPresent(AppEntity.class, "manageProduct.product"));
+        assertTrue(ams.isComponentPresent(AppTable.class, "manageProduct.productTable"));
+        assertTrue(ams.isComponentPresent(AppForm.class, "manageProduct.productForm"));
+        assertTrue(ams.isComponentPresent(AppApplet.class, "manageProduct.manageProduct"));
+    }
 
     @Test
     public void testGetAppletDefs() throws Exception {

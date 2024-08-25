@@ -108,6 +108,30 @@ import com.tcdng.unify.core.database.dynamic.DynamicEntityInfo;
 public interface ApplicationModuleService extends FlowCentralService {
 
     /**
+     * Checks if entity component is present.
+     * 
+     * @param wrapperType
+     *                    the entity wrapper type
+     * @return true if exists otherwise false
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    boolean isEntityComponentPresent(Class<? extends EntityWrapper> wrapperType) throws UnifyException;
+    
+    /**
+     * Checks if a component is present.
+     * 
+     * @param type
+     *                 the component type.
+     * @param longName
+     *                 the component long name
+     * @return true if exists otherwise false
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    boolean isComponentPresent(Class<? extends BaseApplicationEntity> type, String longName) throws UnifyException;
+    
+    /**
      * Creates a wrapper instance initialized with a new instance of wrapped entity
      * type.
      * 

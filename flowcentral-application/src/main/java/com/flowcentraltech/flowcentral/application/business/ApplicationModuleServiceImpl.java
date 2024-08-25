@@ -771,8 +771,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                                     appEntityField.isAllowNegative(), !appEntityField.isReadOnly(),
                                     appEntityField.isNullable(), appEntityField.isAuditable(),
                                     appEntityField.isReportable(), appEntityField.isMaintainLink(),
-                                    appEntityField.isBasicSearch(),
-                                    appEntityField.isDescriptive());
+                                    appEntityField.isBasicSearch(), appEntityField.isDescriptive());
                         } else {
                             edb.addFieldDef(textWidgetTypeDef, inputWidgetTypeDef, lingualWidgetTypeDef,
                                     appEntityField.getDataType(), appEntityField.getType(),
@@ -788,8 +787,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                                     appEntityField.isAllowNegative(), !appEntityField.isReadOnly(),
                                     appEntityField.isNullable(), appEntityField.isAuditable(),
                                     appEntityField.isReportable(), appEntityField.isMaintainLink(),
-                                    appEntityField.isBasicSearch(),
-                                    appEntityField.isDescriptive());
+                                    appEntityField.isBasicSearch(), appEntityField.isDescriptive());
                         }
 
                     }
@@ -1499,6 +1497,21 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     private static final Class<?>[] WRAPPER_PARAMS_2 = { EntityClassDef.class, List.class };
 
     private static final Class<?>[] WRAPPER_PARAMS_3 = { EntityClassDef.class, ValueStore.class };
+
+    @Override
+    public boolean isEntityComponentPresent(Class<? extends EntityWrapper> wrapperType) throws UnifyException {
+        final String entityName = ReflectUtils.getPublicStaticStringConstant(wrapperType,
+                ApplicationCodeGenUtils.ENTITY_NAME);
+        return isComponentPresent(AppEntity.class, entityName);
+    }
+
+    @Override
+    public boolean isComponentPresent(Class<? extends BaseApplicationEntity> type, String longName)
+            throws UnifyException {
+        ApplicationEntityNameParts parts = ApplicationNameUtils.getApplicationEntityNameParts(longName);
+        return environment().countAll(Query.of(type).addEquals("applicationName", parts.getApplicationName())
+                .addEquals("name", parts.getEntityName())) > 0;
+    }
 
     @Override
     public <T extends EntityWrapper> T wrapperOf(Class<T> wrapperType) throws UnifyException {
