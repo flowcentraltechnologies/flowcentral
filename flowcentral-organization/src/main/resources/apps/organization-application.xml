@@ -1119,8 +1119,8 @@
 						required="true" />
 					<field name="description" inputWidget="application.text"
 						column="0" required="true" />
-					<field name="countryId"
-						inputWidget="application.entitylist" column="1" />
+					<field name="countryId" label="$m{organization.state.country}"
+						inputWidget="application.entitylist" column="1" required="true" />
 					<field name="status" inputWidget="application.enumlist"
 						column="1" required="true" />
 				</section>

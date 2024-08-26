@@ -54,7 +54,9 @@ public class DataImportAppletController extends AbstractAppletController<DataImp
                     AppletPropertyConstants.IMPORTDATA_CONFIGNAME);
             final EntityDef entityDef = au().getEntityDef(appletDef.getEntity());
             final EntityUploadDef entityUploadDef = entityDef.getUploadDef(configName);
-            applet.setHeaderDetails(entityUploadDef.getHeader(entityDef));
+            final String headerDetails = resolveSessionMessage("$m{dataimportappletpanel.expected}",
+                    entityUploadDef.getHeader(entityDef));
+            applet.setHeaderDetails(headerDetails);
             pageBean.setApplet(applet);
             setPageTitle(applet);
         }
