@@ -145,6 +145,60 @@
 			<property name="maintainForm.update" value="true" />
 			<property name="maintainForm.delete" value="true" />
 		</applet>
+		<applet name="manageCountry"
+			description="$m{organization.country.manage}"
+			label="$m{organization.country.manage.label}" icon="globe-africa"
+			type="manage_entitylist" entity="country" menuAccess="true"
+			allowSecondaryTenants="true">
+			<property name="searchTable" value="countryTable" />
+			<property name="searchTable.new" value="true" />
+			<property name="searchTable.report" value="true" />
+			<property name="searchTable.quickFilter" value="true" />
+			<property name="searchTable.basicSearchOnly" value="true" />
+			<property name="createForm" value="countryForm" />
+			<property name="createForm.save" value="true" />
+			<property name="createForm.save.next" value="true" />
+			<property name="createForm.save.close" value="true" />
+			<property name="maintainForm" value="countryForm" />
+			<property name="maintainForm.update" value="true" />
+			<property name="maintainForm.delete" value="true" />
+		</applet>
+		<applet name="manageState"
+			description="$m{organization.state.manage}"
+			label="$m{organization.state.manage.label}" icon="globe-africa"
+			type="manage_entitylist" entity="state" menuAccess="true"
+			allowSecondaryTenants="true">
+			<property name="searchTable" value="stateTable" />
+			<property name="searchTable.new" value="true" />
+			<property name="searchTable.report" value="true" />
+			<property name="searchTable.quickFilter" value="true" />
+			<property name="searchTable.basicSearchOnly" value="true" />
+			<property name="createForm" value="stateForm" />
+			<property name="createForm.save" value="true" />
+			<property name="createForm.save.next" value="true" />
+			<property name="createForm.save.close" value="true" />
+			<property name="maintainForm" value="stateForm" />
+			<property name="maintainForm.update" value="true" />
+			<property name="maintainForm.delete" value="true" />
+		</applet>
+		<applet name="manageHub"
+			description="$m{organization.hub.manage}"
+			label="$m{organization.hub.manage.label}" icon="network-wired"
+			type="manage_entitylist" entity="hub" menuAccess="true"
+			allowSecondaryTenants="true">
+			<property name="searchTable" value="hubTable" />
+			<property name="searchTable.new" value="true" />
+			<property name="searchTable.report" value="true" />
+			<property name="searchTable.quickFilter" value="true" />
+			<property name="searchTable.basicSearchOnly" value="true" />
+			<property name="createForm" value="hubForm" />
+			<property name="createForm.save" value="true" />
+			<property name="createForm.save.next" value="true" />
+			<property name="createForm.save.close" value="true" />
+			<property name="maintainForm" value="hubForm" />
+			<property name="maintainForm.update" value="true" />
+			<property name="maintainForm.delete" value="true" />
+		</applet>
 		<applet name="loadZoneData"
 			description="$m{organization.zone.importdata}"
 			label="$m{organization.zone.importdata.label}" icon="file-import"
@@ -168,6 +222,15 @@
 	<references>
 		<reference name="zoneRef"
 			description="$m{organization.zone.reference}" entity="zone"
+			searchField="description" />
+		<reference name="countryRef"
+			description="$m{organization.country.reference}" entity="country"
+			searchField="description" />
+		<reference name="stateRef"
+			description="$m{organization.state.reference}" entity="state"
+			searchField="description" />
+		<reference name="hubRef"
+			description="$m{organization.hub.reference}" entity="hub"
 			searchField="description" />
 		<reference name="departmentRef"
 			description="$m{organization.department.reference}"
@@ -213,6 +276,14 @@
 				type="ref" inputLabel="$m{organization.branch.zone}"
 				inputWidget="application.entitylist" references="zoneRef"
 				basicSearch="true" />
+			<field name="stateId" label="$m{organization.branch.stateid}"
+				type="ref" inputLabel="$m{organization.branch.state}"
+				inputWidget="application.entitylist" references="stateRef"
+				basicSearch="true" />
+			<field name="hubId" label="$m{organization.branch.hubid}"
+				type="ref" inputLabel="$m{organization.branch.hub}"
+				inputWidget="application.entitylist" references="hubRef"
+				basicSearch="true" />
 			<field name="code" label="$m{organization.branch.code}"
 				type="string" inputWidget="application.name" maxLen="16"
 				basicSearch="true" auditable="true"/>
@@ -228,6 +299,18 @@
 			<field name="headOffice"
 				label="$m{organization.branch.headoffice}" type="boolean"
 				inputWidget="application.checkbox" auditable="true"/>
+			<field name="stateCode"
+				label="$m{organization.branch.state.code}" type="list_only"
+				key="stateId" property="code" />
+			<field name="stateDesc"
+				label="$m{organization.branch.state.description}" type="list_only"
+				key="stateId" property="description" />
+			<field name="hubName"
+				label="$m{organization.branch.hub.name}" type="list_only"
+				key="hubId" property="name" />
+			<field name="hubDesc"
+				label="$m{organization.branch.hub.description}" type="list_only"
+				key="hubId" property="description" />
 			<field name="zoneCode"
 				label="$m{organization.branch.zone.code}" type="list_only"
 				key="zoneId" property="code" />
@@ -572,6 +655,89 @@
 				</fieldSequence>
 			</upload>
 		</entity>
+		<entity name="country" description="$m{organization.country}"
+			label="$m{organization.country.label}"
+			type="com.flowcentraltech.flowcentral.organization.entities.Country"
+			auditable="true" reportable="true">
+			<field name="code" label="$m{organization.country.code}"
+				type="string" inputWidget="application.name" maxLen="16"
+				basicSearch="true" auditable="true"/>
+			<field name="description"
+				label="$m{organization.country.description}" type="string"
+				inputWidget="application.text" maxLen="64" basicSearch="true" auditable="true"/>
+			<uniqueConstraint name="codeUc"
+				description="$m{organization.country.uc.code}" fieldList="code" />
+			<uniqueConstraint name="descUc"
+				description="$m{organization.country.uc.description}"
+				fieldList="description" />
+			<upload name="countryUpload"
+				description="$m{organization.country.upload.countryupload}"
+				onConstraint="update">
+				<fieldSequence>
+					<entry field="code" />
+					<entry field="description" />
+				</fieldSequence>
+			</upload>
+		</entity>
+		<entity name="state" description="$m{organization.state}"
+			label="$m{organization.state.label}"
+			type="com.flowcentraltech.flowcentral.organization.entities.State"
+			auditable="true" reportable="true">
+			<field name="countryId" label="$m{organization.state.countryid}"
+				type="ref" inputLabel="$m{organization.branch.state}"
+				inputWidget="application.entitylist" references="stateRef"
+				basicSearch="true" />
+			<field name="code" label="$m{organization.state.code}"
+				type="string" inputWidget="application.name" maxLen="16"
+				basicSearch="true" auditable="true"/>
+			<field name="description"
+				label="$m{organization.state.description}" type="string"
+				inputWidget="application.text" maxLen="64" basicSearch="true" auditable="true"/>
+			<field name="countryCode"
+				label="$m{organization.state.country.code}" type="list_only"
+				key="countryId" property="code" />
+			<field name="countryDesc"
+				label="$m{organization.state.country.description}" type="list_only"
+				key="countryId" property="description" />
+			<uniqueConstraint name="codeUc"
+				description="$m{organization.state.uc.code}" fieldList="countryId,code" />
+			<uniqueConstraint name="descUc"
+				description="$m{organization.state.uc.description}"
+				fieldList="countryId,description" />
+			<upload name="stateUpload"
+				description="$m{organization.state.upload.stateupload}"
+				onConstraint="update">
+				<fieldSequence>
+					<entry field="countryCode" />
+					<entry field="code" />
+					<entry field="description" />
+				</fieldSequence>
+			</upload>
+		</entity>
+		<entity name="hub" description="$m{organization.hub}"
+			label="$m{organization.hub.label}"
+			type="com.flowcentraltech.flowcentral.organization.entities.Hub"
+			auditable="true" reportable="true">
+			<field name="name" label="$m{organization.hub.name}"
+				type="string" inputWidget="application.name" maxLen="32"
+				basicSearch="true" auditable="true"/>
+			<field name="description"
+				label="$m{organization.hub.description}" type="string"
+				inputWidget="application.text" maxLen="64" basicSearch="true" auditable="true"/>
+			<uniqueConstraint name="nameUc"
+				description="$m{organization.hub.uc.name}" fieldList="name" />
+			<uniqueConstraint name="descUc"
+				description="$m{organization.hub.uc.description}"
+				fieldList="description" />
+			<upload name="hubUpload"
+				description="$m{organization.hub.upload.hubupload}"
+				onConstraint="update">
+				<fieldSequence>
+					<entry field="name" />
+					<entry field="description" />
+				</fieldSequence>
+			</upload>
+		</entity>
 	</entities>
 	<!-- Tables -->
 	<tables>
@@ -656,6 +822,53 @@
 			<column field="languageTag" renderWidget="application.text"
 				widthRatio="1" />
 			<column field="timeZone" renderWidget="application.text"
+				widthRatio="1" />
+			<column field="statusDesc" renderWidget="application.text"
+				label="$m{basestatusentity.field.label.status}" widthRatio="1" />
+			<column field="createDt" renderWidget="application.datetime"
+				widthRatio="1" />
+			<column field="updateDt" renderWidget="application.datetime"
+				widthRatio="1" />
+		</table>
+		<table name="countryTable"
+			description="$m{organization.country.table}"
+			label="$m{organization.country.table.label}" entity="country"
+			itemsPerPage="20" serialNo="true" basicSearch="true">
+			<column field="code" renderWidget="application.name"
+				widthRatio="1" linkAct="maintainAct" />
+			<column field="description" renderWidget="application.text"
+				widthRatio="1" />
+			<column field="statusDesc" renderWidget="application.text"
+				label="$m{basestatusentity.field.label.status}" widthRatio="1" />
+			<column field="createDt" renderWidget="application.datetime"
+				widthRatio="1" />
+			<column field="updateDt" renderWidget="application.datetime"
+				widthRatio="1" />
+		</table>
+		<table name="stateTable"
+			description="$m{organization.state.table}"
+			label="$m{organization.state.table.label}" entity="state"
+			itemsPerPage="20" serialNo="true" basicSearch="true">
+			<column field="code" renderWidget="application.name"
+				widthRatio="1" linkAct="maintainAct" />
+			<column field="description" renderWidget="application.text"
+				widthRatio="1" />
+			<column field="countryDesc" renderWidget="application.text"
+				widthRatio="1" />
+			<column field="statusDesc" renderWidget="application.text"
+				label="$m{basestatusentity.field.label.status}" widthRatio="1" />
+			<column field="createDt" renderWidget="application.datetime"
+				widthRatio="1" />
+			<column field="updateDt" renderWidget="application.datetime"
+				widthRatio="1" />
+		</table>
+		<table name="hubTable"
+			description="$m{organization.hub.table}"
+			label="$m{organization.hub.table.label}" entity="hub"
+			itemsPerPage="20" serialNo="true" basicSearch="true">
+			<column field="name" renderWidget="application.name"
+				widthRatio="1" linkAct="maintainAct" />
+			<column field="description" renderWidget="application.text"
 				widthRatio="1" />
 			<column field="statusDesc" renderWidget="application.text"
 				label="$m{basestatusentity.field.label.status}" widthRatio="1" />
@@ -842,6 +1055,71 @@
 			<relatedList name="relBranch"
 				description="$m{organization.zone.form.related.branch.description}"
 				label="$m{organization.zone.form.related.branch.label}"
+				applet="manageBranch" />
+		</form>
+		<form name="countryForm" description="$m{organization.country.form}"
+			entity="country">
+			<tab name="basicDetails"
+				label="$m{organization.country.form.basicdetails}"
+				contentType="miniform">
+				<section name="countryDetails" columns="type_2">
+					<field name="code" inputWidget="application.name" column="0"
+						required="true" />
+					<field name="description" inputWidget="application.text"
+						column="0" required="true" />
+					<field name="status" inputWidget="application.enumlist"
+						column="1" required="true" />
+				</section>
+			</tab>
+			<tab name="changeLog" label="$m{application.form.audit}"
+				contentType="miniform_changelog" />
+			<relatedList name="relState"
+				description="$m{organization.country.form.related.state.description}"
+				label="$m{organization.country.form.related.state.label}"
+				applet="manageState" />
+		</form>
+		<form name="stateForm" description="$m{organization.state.form}"
+			entity="state">
+			<tab name="basicDetails"
+				label="$m{organization.state.form.basicdetails}"
+				contentType="miniform">
+				<section name="stateDetails" columns="type_2">
+					<field name="code" inputWidget="application.name" column="0"
+						required="true" />
+					<field name="description" inputWidget="application.text"
+						column="0" required="true" />
+					<field name="countryId"
+						inputWidget="application.entitylist" column="1" />
+					<field name="status" inputWidget="application.enumlist"
+						column="1" required="true" />
+				</section>
+			</tab>
+			<tab name="changeLog" label="$m{application.form.audit}"
+				contentType="miniform_changelog" />
+			<relatedList name="relBranch"
+				description="$m{organization.state.form.related.branch.description}"
+				label="$m{organization.state.form.related.branch.label}"
+				applet="manageBranch" />
+		</form>
+		<form name="hubForm" description="$m{organization.hub.form}"
+			entity="hub">
+			<tab name="basicDetails"
+				label="$m{organization.hub.form.basicdetails}"
+				contentType="miniform">
+				<section name="hubDetails" columns="type_2">
+					<field name="name" inputWidget="application.name" column="0"
+						required="true" />
+					<field name="description" inputWidget="application.text"
+						column="0" required="true" />
+					<field name="status" inputWidget="application.enumlist"
+						column="1" required="true" />
+				</section>
+			</tab>
+			<tab name="changeLog" label="$m{application.form.audit}"
+				contentType="miniform_changelog" />
+			<relatedList name="relBranch"
+				description="$m{organization.hub.form.related.branch.description}"
+				label="$m{organization.hub.form.related.branch.label}"
 				applet="manageBranch" />
 		</form>
 	</forms>
