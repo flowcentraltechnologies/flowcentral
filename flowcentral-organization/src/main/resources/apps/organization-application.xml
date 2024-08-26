@@ -199,6 +199,33 @@
 			<property name="maintainForm.update" value="true" />
 			<property name="maintainForm.delete" value="true" />
 		</applet>
+		<applet name="loadCountryData"
+			description="$m{organization.country.importdata}"
+			label="$m{organization.country.importdata.label}" icon="file-import"
+			type="data_import" entity="country" menuAccess="true"
+			allowSecondaryTenants="true">
+			<property name="importdata.configName" value="countryUpload" />
+			<property name="importdata.routeTo.appletName"
+				value="manageCountry" />
+		</applet>
+		<applet name="loadStateData"
+			description="$m{organization.state.importdata}"
+			label="$m{organization.state.importdata.label}" icon="file-import"
+			type="data_import" entity="state" menuAccess="true"
+			allowSecondaryTenants="true">
+			<property name="importdata.configName" value="stateUpload" />
+			<property name="importdata.routeTo.appletName"
+				value="manageState" />
+		</applet>
+		<applet name="loadHubData"
+			description="$m{organization.hub.importdata}"
+			label="$m{organization.hub.importdata.label}" icon="file-import"
+			type="data_import" entity="hub" menuAccess="true"
+			allowSecondaryTenants="true">
+			<property name="importdata.configName" value="hubUpload" />
+			<property name="importdata.routeTo.appletName"
+				value="manageHub" />
+		</applet>
 		<applet name="loadZoneData"
 			description="$m{organization.zone.importdata}"
 			label="$m{organization.zone.importdata.label}" icon="file-import"
