@@ -33,7 +33,9 @@
 // Load file panel
 !ui-panel:loadFilePanel style:$s{margin-bottom:10px;}
 	layout:$d{!ui-vertical showCaption:true style:$s{width:100%;}  cellStyle:$s{padding:5px 2px;}}
-	components:$c{frmFileSelect frmSkipHeader}	
+	components:$c{frmHeaderDetails frmFileSelect frmSkipHeader}
+!ui-label:frmHeaderDetails caption:$m{dataimportappletpanel.dataimport.order} styleClass:$e{hdtls}
+	layoutCaption:true binding:headerDetails	
 !ui-fileupload:frmFileSelect caption:$m{dataimportappletpanel.dataimport.selectfile} binding:uploadFile
     selectOnly:true required:true style:$s{width:380px;}
 !ui-checkbox:frmSkipHeader caption:$m{dataimportappletpanel.dataimport.hasheader} binding:hasHeader

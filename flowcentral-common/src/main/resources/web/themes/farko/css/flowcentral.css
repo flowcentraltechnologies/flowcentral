@@ -927,6 +927,9 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 
 .fc-listingformpanel {}
 
+.fc-dataimportappletpanel {}
+.fc-dataimportappletpanel .hdtls {font-weight:bold;font-size:7pt;font-style: italic;color:#0250af;}
+
 .fc-entitysingleformpanel {}
 .fc-entitysingleformpanel .formbase {padding:0px 0px;}
 
