@@ -930,12 +930,16 @@
 						required="true" />
 					<field name="description" inputWidget="application.text"
 						column="0" required="true" />
-					<field name="sortCode" inputWidget="application.name"
-						column="1" />
 					<field name="headOffice" inputWidget="application.checkbox"
-						column="1" />
+						column="0" />
 					<field name="status" inputWidget="application.enumlist"
 						column="1" required="true" />
+					<field name="stateId" inputWidget="application.entitylist"
+						column="1" label="$m{organization.branch.state}"  />
+					<field name="hubId" inputWidget="application.entitylist"
+						column="1" label="$m{organization.branch.hub}"  />
+					<field name="sortCode" inputWidget="application.name"
+						column="1" />
 				</section>
 				<section name="branchAddress" columns="type_1">
 					<field name="address" inputWidget="application.textarea"
