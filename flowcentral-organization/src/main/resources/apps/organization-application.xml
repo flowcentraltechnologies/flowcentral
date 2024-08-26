@@ -686,14 +686,14 @@
 			label="$m{organization.country.label}"
 			type="com.flowcentraltech.flowcentral.organization.entities.Country"
 			auditable="true" reportable="true">
-			<field name="code" label="$m{organization.country.code}"
+			<field name="iso3Code" label="$m{organization.country.code}"
 				type="string" inputWidget="application.name" maxLen="16"
 				basicSearch="true" auditable="true"/>
 			<field name="description"
 				label="$m{organization.country.description}" type="string"
 				inputWidget="application.text" maxLen="64" basicSearch="true" auditable="true"/>
 			<uniqueConstraint name="codeUc"
-				description="$m{organization.country.uc.code}" fieldList="code" />
+				description="$m{organization.country.uc.code}" fieldList="iso3Code" />
 			<uniqueConstraint name="descUc"
 				description="$m{organization.country.uc.description}"
 				fieldList="description" />
@@ -701,7 +701,7 @@
 				description="$m{organization.country.upload.countryupload}"
 				onConstraint="update">
 				<fieldSequence>
-					<entry field="code" />
+					<entry field="iso3Code" />
 					<entry field="description" />
 				</fieldSequence>
 			</upload>
@@ -711,8 +711,8 @@
 			type="com.flowcentraltech.flowcentral.organization.entities.State"
 			auditable="true" reportable="true">
 			<field name="countryId" label="$m{organization.state.countryid}"
-				type="ref" inputLabel="$m{organization.branch.state}"
-				inputWidget="application.entitylist" references="stateRef"
+				type="ref" inputLabel="$m{organization.state.country}"
+				inputWidget="application.entitylist" references="countryRef"
 				basicSearch="true" />
 			<field name="code" label="$m{organization.state.code}"
 				type="string" inputWidget="application.name" maxLen="16"
@@ -722,7 +722,7 @@
 				inputWidget="application.text" maxLen="64" basicSearch="true" auditable="true"/>
 			<field name="countryCode"
 				label="$m{organization.state.country.code}" type="list_only"
-				key="countryId" property="code" />
+				key="countryId" property="iso3Code" />
 			<field name="countryDesc"
 				label="$m{organization.state.country.description}" type="list_only"
 				key="countryId" property="description" />
@@ -861,7 +861,7 @@
 			description="$m{organization.country.table}"
 			label="$m{organization.country.table.label}" entity="country"
 			itemsPerPage="20" serialNo="true" basicSearch="true">
-			<column field="code" renderWidget="application.name"
+			<column field="iso3Code" renderWidget="application.name"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="description" renderWidget="application.text"
 				widthRatio="1" />
@@ -1090,7 +1090,7 @@
 				label="$m{organization.country.form.basicdetails}"
 				contentType="miniform">
 				<section name="countryDetails" columns="type_2">
-					<field name="code" inputWidget="application.name" column="0"
+					<field name="iso3Code" inputWidget="application.name" column="0"
 						required="true" />
 					<field name="description" inputWidget="application.text"
 						column="0" required="true" />
