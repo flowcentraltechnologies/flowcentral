@@ -30,6 +30,8 @@ public class DataImportApplet extends AbstractApplet {
 
     private final String importTitle;
 
+    private String headerDetails;
+    
     private byte[] uploadFile;
 
     private boolean hasHeader;
@@ -42,6 +44,14 @@ public class DataImportApplet extends AbstractApplet {
 
     public String getImportTitle() {
         return importTitle;
+    }
+
+    public String getHeaderDetails() {
+        return headerDetails;
+    }
+
+    public void setHeaderDetails(String headerDetails) {
+        this.headerDetails = headerDetails;
     }
 
     public byte[] getUploadFile() {

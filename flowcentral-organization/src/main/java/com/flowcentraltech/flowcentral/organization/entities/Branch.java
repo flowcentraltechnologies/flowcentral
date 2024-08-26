@@ -28,12 +28,21 @@ import com.tcdng.unify.core.annotation.UniqueConstraint;
  * @author FlowCentral Technologies Limited
  * @version 1.0
  */
-@Table(name = "FC_BRANCH", uniqueConstraints = { @UniqueConstraint({ "code" }), @UniqueConstraint({ "description" }),
+@Table(name = "FC_BRANCH",
+    uniqueConstraints = {
+        @UniqueConstraint({ "code" }),
+        @UniqueConstraint({ "description" }),
         @UniqueConstraint({ "sortCode" }) })
 public class Branch extends BaseStatusTenantEntity {
 
     @ForeignKey(Zone.class)
     private Long zoneId;
+
+    @ForeignKey(Hub.class)
+    private Long hubId;
+
+    @ForeignKey(State.class)
+    private Long stateId;
 
     @Column(name = "BRANCH_CD", length = 16)
     private String code;
@@ -49,6 +58,18 @@ public class Branch extends BaseStatusTenantEntity {
 
     @Column(name = "ADDRESS", length = 512, nullable = true)
     private String address;
+
+    @ListOnly(key = "stateId", property = "code")
+    private String stateCode;
+
+    @ListOnly(key = "stateId", property = "description")
+    private String stateDesc;
+
+    @ListOnly(key = "hubId", property = "name")
+    private String hubName;
+
+    @ListOnly(key = "hubId", property = "description")
+    private String hubDesc;
 
     @ListOnly(key = "zoneId", property = "code")
     private String zoneCode;
@@ -109,6 +130,54 @@ public class Branch extends BaseStatusTenantEntity {
 
     public void setZoneId(Long zoneId) {
         this.zoneId = zoneId;
+    }
+
+    public Long getHubId() {
+        return hubId;
+    }
+
+    public void setHubId(Long hubId) {
+        this.hubId = hubId;
+    }
+
+    public Long getStateId() {
+        return stateId;
+    }
+
+    public void setStateId(Long stateId) {
+        this.stateId = stateId;
+    }
+
+    public String getStateCode() {
+        return stateCode;
+    }
+
+    public void setStateCode(String stateCode) {
+        this.stateCode = stateCode;
+    }
+
+    public String getStateDesc() {
+        return stateDesc;
+    }
+
+    public void setStateDesc(String stateDesc) {
+        this.stateDesc = stateDesc;
+    }
+
+    public String getHubName() {
+        return hubName;
+    }
+
+    public void setHubName(String hubName) {
+        this.hubName = hubName;
+    }
+
+    public String getHubDesc() {
+        return hubDesc;
+    }
+
+    public void setHubDesc(String hubDesc) {
+        this.hubDesc = hubDesc;
     }
 
     public String getZoneCode() {

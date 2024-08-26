@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import com.tcdng.unify.common.constants.StandardFormatType;
 import com.tcdng.unify.core.batch.ConstraintAction;
 import com.tcdng.unify.core.data.Listable;
 
@@ -39,6 +40,8 @@ public class EntityUploadDef implements Listable {
     private List<String> fieldNameList;
 
     private ConstraintAction constraintAction;
+
+    private String header;
 
     public EntityUploadDef(String name, String description, FieldSequenceDef fieldSequenceDef,
             ConstraintAction constraintAction) {
@@ -74,6 +77,39 @@ public class EntityUploadDef implements Listable {
         return constraintAction;
     }
 
+    public String getHeader(EntityDef entityDef) {
+        if (header == null) {
+            synchronized (this) {
+                if (header == null) {
+                    StringBuilder sb = new StringBuilder();
+                    boolean appendSym = false;
+                    for (FieldSequenceEntryDef fieldSequenceEntryDef : fieldSequenceDef.getFieldSequenceList()) {
+                        if (appendSym) {
+                            sb.append(", ");
+                        } else {
+                            appendSym = true;
+                        }
+
+                        sb.append("[");
+                        sb.append(entityDef.getFieldDef(fieldSequenceEntryDef.getFieldName()).getFieldLabel());
+                        if (fieldSequenceEntryDef.isWithStandardFormatCode()) {
+                            StandardFormatType type = StandardFormatType
+                                    .fromCode(fieldSequenceEntryDef.getStandardFormatCode());
+                            if (type != null) {
+                                sb.append("{").append(type.format()).append("}");
+                            }
+                        }
+                        sb.append("]");
+                    }
+
+                    header = sb.toString();
+                }
+            }
+        }
+
+        return header;
+    }
+
     public List<String> getFieldNameList() {
         if (fieldNameList == null) {
             fieldNameList = new ArrayList<String>();
@@ -83,6 +119,7 @@ public class EntityUploadDef implements Listable {
 
             fieldNameList = Collections.unmodifiableList(fieldNameList);
         }
+
         return fieldNameList;
     }
 

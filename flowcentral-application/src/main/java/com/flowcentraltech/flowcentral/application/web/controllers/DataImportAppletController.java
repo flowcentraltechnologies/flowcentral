@@ -15,6 +15,10 @@
  */
 package com.flowcentraltech.flowcentral.application.web.controllers;
 
+import com.flowcentraltech.flowcentral.application.constants.AppletPropertyConstants;
+import com.flowcentraltech.flowcentral.application.data.AppletDef;
+import com.flowcentraltech.flowcentral.application.data.EntityDef;
+import com.flowcentraltech.flowcentral.application.data.EntityUploadDef;
 import com.flowcentraltech.flowcentral.application.web.panels.applet.DataImportApplet;
 import com.flowcentraltech.flowcentral.configuration.constants.FlowCentralAppletPathConstants;
 import com.tcdng.unify.core.UnifyException;
@@ -44,7 +48,15 @@ public class DataImportAppletController extends AbstractAppletController<DataImp
 
         DataImportPageBean pageBean = getPageBean();
         if (pageBean.getApplet() == null) {
-            DataImportApplet applet = new DataImportApplet(getPage(), au(), getPathVariables().get(0));
+            final DataImportApplet applet = new DataImportApplet(getPage(), au(), getPathVariables().get(0));
+            final AppletDef appletDef = application().getAppletDef(applet.getAppletName());
+            final String configName = appletDef.getPropValue(String.class,
+                    AppletPropertyConstants.IMPORTDATA_CONFIGNAME);
+            final EntityDef entityDef = au().getEntityDef(appletDef.getEntity());
+            final EntityUploadDef entityUploadDef = entityDef.getUploadDef(configName);
+            final String headerDetails = resolveSessionMessage("$m{dataimportappletpanel.expected}",
+                    entityUploadDef.getHeader(entityDef));
+            applet.setHeaderDetails(headerDetails);
             pageBean.setApplet(applet);
             setPageTitle(applet);
         }

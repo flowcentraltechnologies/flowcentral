@@ -17,7 +17,7 @@
 
 // Task panel
 !ui-panel:taskPanel layout:$d{!ui-vertical style:$s{width:100%;}}
-	components:$c{headerBar loadFilePanel actionPanel}
+	components:$c{headerBar loadFilePanel frmHeaderDetails actionPanel}
 
 // Header Bar
 !ui-panel:headerBar styleClass:$s{hdbar} layout:$d{!ui-horizontal style:$s{width:100%;}}
@@ -30,10 +30,14 @@
 !ui-label:title styleClass:$s{hdtitle} caption:$m{dataimportappletpanel.dataimport.title}
 !ui-label:subTitle styleClass:$s{hdsubtitle} binding:importTitle
 
+// File Header
+!ui-label:frmHeaderDetails caption:$m{dataimportappletpanel.dataimport.order} styleClass:$e{hdtls}
+	layoutCaption:true binding:headerDetails	
+
 // Load file panel
 !ui-panel:loadFilePanel style:$s{margin-bottom:10px;}
 	layout:$d{!ui-vertical showCaption:true style:$s{width:100%;}  cellStyle:$s{padding:5px 2px;}}
-	components:$c{frmFileSelect frmSkipHeader}	
+	components:$c{frmFileSelect frmSkipHeader}
 !ui-fileupload:frmFileSelect caption:$m{dataimportappletpanel.dataimport.selectfile} binding:uploadFile
     selectOnly:true required:true style:$s{width:380px;}
 !ui-checkbox:frmSkipHeader caption:$m{dataimportappletpanel.dataimport.hasheader} binding:hasHeader
