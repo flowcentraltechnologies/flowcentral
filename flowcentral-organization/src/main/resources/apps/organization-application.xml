@@ -42,6 +42,7 @@
 			label="$m{organization.branch.manage.label}" icon="site-map"
 			type="manage_entitylist" entity="branch" menuAccess="true"
 			allowSecondaryTenants="true">
+			<property name="baseRestriction" value="nonSystemRecords" />
 			<property name="searchTable" value="branchTable" />
 			<property name="searchTable.new" value="true" />
 			<property name="searchTable.report" value="true" />
@@ -54,12 +55,17 @@
 			<property name="maintainForm" value="branchForm" />
 			<property name="maintainForm.update" value="true" />
 			<property name="maintainForm.delete" value="true" />
+			<filter name="nonSystemRecords"
+				description="$m{common.filter.nonsystemrecords}">
+				<restriction type="greater_than" field="id" paramA="0" />
+			</filter>
 		</applet>
 		<applet name="manageDepartment"
 			description="$m{organization.department.manage}"
 			label="$m{organization.department.manage.label}" icon="door-open"
 			type="manage_entitylist" entity="department" menuAccess="true"
 			allowSecondaryTenants="true">
+			<property name="baseRestriction" value="nonSystemRecords" />
 			<property name="searchTable" value="departmentTable" />
 			<property name="searchTable.new" value="true" />
 			<property name="searchTable.report" value="true" />
@@ -72,6 +78,10 @@
 			<property name="maintainForm" value="departmentForm" />
 			<property name="maintainForm.update" value="true" />
 			<property name="maintainForm.delete" value="true" />
+			<filter name="nonSystemRecords"
+				description="$m{common.filter.nonsystemrecords}">
+				<restriction type="greater_than" field="id" paramA="0" />
+			</filter>
 		</applet>
 		<applet name="manageRole"
 			description="$m{organization.role.manage}"
@@ -132,6 +142,7 @@
 			label="$m{organization.zone.manage.label}" icon="globe-africa"
 			type="manage_entitylist" entity="zone" menuAccess="true"
 			allowSecondaryTenants="true">
+			<property name="baseRestriction" value="nonSystemRecords" />
 			<property name="searchTable" value="zoneTable" />
 			<property name="searchTable.new" value="true" />
 			<property name="searchTable.report" value="true" />
@@ -144,12 +155,17 @@
 			<property name="maintainForm" value="zoneForm" />
 			<property name="maintainForm.update" value="true" />
 			<property name="maintainForm.delete" value="true" />
+			<filter name="nonSystemRecords"
+				description="$m{common.filter.nonsystemrecords}">
+				<restriction type="greater_than" field="id" paramA="0" />
+			</filter>
 		</applet>
 		<applet name="manageCountry"
 			description="$m{organization.country.manage}"
 			label="$m{organization.country.manage.label}" icon="globe-africa"
 			type="manage_entitylist" entity="country" menuAccess="true"
 			allowSecondaryTenants="true">
+			<property name="baseRestriction" value="nonSystemRecords" />
 			<property name="searchTable" value="countryTable" />
 			<property name="searchTable.new" value="true" />
 			<property name="searchTable.report" value="true" />
@@ -162,12 +178,17 @@
 			<property name="maintainForm" value="countryForm" />
 			<property name="maintainForm.update" value="true" />
 			<property name="maintainForm.delete" value="true" />
+			<filter name="nonSystemRecords"
+				description="$m{common.filter.nonsystemrecords}">
+				<restriction type="greater_than" field="id" paramA="0" />
+			</filter>
 		</applet>
 		<applet name="manageState"
 			description="$m{organization.state.manage}"
 			label="$m{organization.state.manage.label}" icon="globe-africa"
 			type="manage_entitylist" entity="state" menuAccess="true"
 			allowSecondaryTenants="true">
+			<property name="baseRestriction" value="nonSystemRecords" />
 			<property name="searchTable" value="stateTable" />
 			<property name="searchTable.new" value="true" />
 			<property name="searchTable.report" value="true" />
@@ -180,12 +201,17 @@
 			<property name="maintainForm" value="stateForm" />
 			<property name="maintainForm.update" value="true" />
 			<property name="maintainForm.delete" value="true" />
+			<filter name="nonSystemRecords"
+				description="$m{common.filter.nonsystemrecords}">
+				<restriction type="greater_than" field="id" paramA="0" />
+			</filter>
 		</applet>
 		<applet name="manageHub"
 			description="$m{organization.hub.manage}"
 			label="$m{organization.hub.manage.label}" icon="network-wired"
 			type="manage_entitylist" entity="hub" menuAccess="true"
 			allowSecondaryTenants="true">
+			<property name="baseRestriction" value="nonSystemRecords" />
 			<property name="searchTable" value="hubTable" />
 			<property name="searchTable.new" value="true" />
 			<property name="searchTable.report" value="true" />
@@ -198,6 +224,10 @@
 			<property name="maintainForm" value="hubForm" />
 			<property name="maintainForm.update" value="true" />
 			<property name="maintainForm.delete" value="true" />
+			<filter name="nonSystemRecords"
+				description="$m{common.filter.nonsystemrecords}">
+				<restriction type="greater_than" field="id" paramA="0" />
+			</filter>
 		</applet>
 		<applet name="loadCountryData"
 			description="$m{organization.country.importdata}"
