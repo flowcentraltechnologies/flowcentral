@@ -350,6 +350,9 @@
 			<field name="sortCode" label="$m{organization.branch.sortcode}"
 				type="string" inputWidget="application.text" maxLen="32"
 				nullable="true" basicSearch="true" auditable="true"/>
+			<field name="altSortCode" label="$m{organization.branch.altsortcode}"
+				type="string" inputWidget="application.text" maxLen="32"
+				nullable="true" auditable="true"/>
 			<field name="address" label="$m{organization.branch.address}"
 				type="string" inputWidget="application.textarea" maxLen="512"
 				nullable="true" auditable="true"/>
@@ -382,9 +385,6 @@
 				key="zoneId" property="timeZone" />
 			<uniqueConstraint name="codeUc"
 				description="$m{organization.branch.uc.code}" fieldList="code" />
-			<uniqueConstraint name="descUc"
-				description="$m{organization.branch.uc.description}"
-				fieldList="description" />
 			<uniqueConstraint name="sortCodeUc"
 				description="$m{organization.branch.uc.sortcode}"
 				fieldList="sortCode" />
@@ -396,6 +396,7 @@
 					<entry field="code" />
 					<entry field="description" />
 					<entry field="sortCode" />
+					<entry field="altSortCode" />
 				</fieldSequence>
 			</upload>
 		</entity>
@@ -436,9 +437,6 @@
 				label="$m{organization.mappedbranch.zone.timezone}" type="string" />
 			<uniqueConstraint name="codeUc"
 				description="$m{organization.mappedbranch.uc.code}" fieldList="code" />
-			<uniqueConstraint name="descUc"
-				description="$m{organization.mappedbranch.uc.description}"
-				fieldList="description" />
 			<uniqueConstraint name="sortCodeUc"
 				description="$m{organization.mappedbranch.uc.sortcode}"
 				fieldList="sortCode" />
@@ -808,6 +806,8 @@
 				widthRatio="1" />
 			<column field="sortCode" renderWidget="application.text"
 				widthRatio="1" />
+			<column field="altSortCode" renderWidget="application.text"
+				widthRatio="1" />
 			<column field="zoneDesc" renderWidget="application.text"
 				label="$m{organization.branch.zone}" widthRatio="1" />
 			<column field="statusDesc" renderWidget="application.text"
@@ -968,7 +968,9 @@
 						column="1" label="$m{organization.branch.state}"  />
 					<field name="hubId" inputWidget="application.entitylist"
 						column="1" label="$m{organization.branch.hub}"  />
-					<field name="sortCode" inputWidget="application.name"
+					<field name="sortCode" inputWidget="application.integertext"
+						column="1" />
+					<field name="altSortCode" inputWidget="application.integertext"
 						column="1" />
 				</section>
 				<section name="branchAddress" columns="type_1">
