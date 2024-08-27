@@ -306,11 +306,11 @@
 			<field name="stateId" label="$m{organization.branch.stateid}"
 				type="ref" inputLabel="$m{organization.branch.state}"
 				inputWidget="application.entitylist" references="stateRef"
-				basicSearch="true" />
+				basicSearch="true" nullable="true"/>
 			<field name="hubId" label="$m{organization.branch.hubid}"
 				type="ref" inputLabel="$m{organization.branch.hub}"
 				inputWidget="application.entitylist" references="hubRef"
-				basicSearch="true" />
+				basicSearch="true" nullable="true" />
 			<field name="code" label="$m{organization.branch.code}"
 				type="string" inputWidget="application.name" maxLen="16"
 				basicSearch="true" auditable="true"/>

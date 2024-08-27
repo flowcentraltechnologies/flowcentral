@@ -38,10 +38,10 @@ public class Branch extends BaseStatusTenantEntity {
     @ForeignKey(Zone.class)
     private Long zoneId;
 
-    @ForeignKey(Hub.class)
+    @ForeignKey(type = Hub.class, nullable = true)
     private Long hubId;
 
-    @ForeignKey(State.class)
+    @ForeignKey(type = State.class, nullable = true)
     private Long stateId;
 
     @Column(name = "BRANCH_CD", length = 16)
