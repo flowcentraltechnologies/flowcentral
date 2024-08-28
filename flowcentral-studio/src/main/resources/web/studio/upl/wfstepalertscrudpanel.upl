@@ -17,7 +17,7 @@
 	tableComponents:$c{nameLabel descLabel}
 	formSection:$d{!ui-section components:$c{frmName frmDesc frmSender frmTemplate
 		frmFireOnPrevStepName frmFireOnActionName frmFireOnConditionName frmRecipientPolicy frmRecipientNameRule frmRecipientContactRule frmType
-		frmAlertHeldBy frmAlertWorkflowRoles}}
+		frmSendDelayInMinutes frmAlertHeldBy frmAlertWorkflowRoles}}
 !ui-label:nameLabel styleClass:$e{fc-formfield} caption:$m{wfstepalertscrudpanel.name} binding:name
 !ui-label:descLabel styleClass:$e{fc-formfield} caption:$m{wfstepalertscrudpanel.description} binding:description
 !ui-name:frmName styleClass:$e{fc-formfield} caption:$m{wfstepalertscrudpanel.name} size:32 binding:name required:true focus:true
@@ -46,6 +46,7 @@
 	list:$s{wfrecipientcontactrulelist} blankOption:$s{} listParamType:$s{PANEL} listParams:$l{entityName recipientPolicy}
 !ui-select:frmType styleClass:$e{fc-formfield} caption:$m{wfstepalertscrudpanel.type}
 	list:$s{wfalerttypelist} blankOption:$s{} binding:type required:true
+!ui-integer:frmSendDelayInMinutes caption:$m{wfstepalertscrudpanel.senddelayinminutes} binding:sendDelayInMinutes
 !ui-checkbox:frmAlertHeldBy caption:$m{wfstepalertscrudpanel.alertheldby} binding:alertHeldBy
 !ui-checkbox:frmAlertWorkflowRoles caption:$m{wfstepalertscrudpanel.alertworkflowroles} binding:alertWorkflowRoles
 	

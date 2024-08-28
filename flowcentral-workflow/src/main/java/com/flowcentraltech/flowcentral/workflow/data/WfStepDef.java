@@ -402,58 +402,58 @@ public class WfStepDef {
 
     public List<WfAlertDef> getReminderAlertList() {
         if (reminderAlertList == null) {
-            synchronized(this) {
+            synchronized (this) {
                 if (reminderAlertList == null) {
                     reminderAlertList = new ArrayList<WfAlertDef>();
-                    for (WfAlertDef wfAlertDef: reminderAlertList) {
+                    for (WfAlertDef wfAlertDef : reminderAlertList) {
                         if (wfAlertDef.isOnReminder()) {
                             reminderAlertList.add(wfAlertDef);
                         }
                     }
-                    
+
                     reminderAlertList = DataUtils.unmodifiableList(reminderAlertList);
-                }                
+                }
             }
         }
-        
+
         return reminderAlertList;
     }
 
     public List<WfAlertDef> getCriticalAlertList() {
         if (criticalAlertList == null) {
-            synchronized(this) {
+            synchronized (this) {
                 if (criticalAlertList == null) {
                     criticalAlertList = new ArrayList<WfAlertDef>();
-                    for (WfAlertDef wfAlertDef: criticalAlertList) {
+                    for (WfAlertDef wfAlertDef : criticalAlertList) {
                         if (wfAlertDef.isOnCritical()) {
                             criticalAlertList.add(wfAlertDef);
                         }
                     }
-                    
+
                     criticalAlertList = DataUtils.unmodifiableList(criticalAlertList);
-                }                
+                }
             }
         }
-        
+
         return criticalAlertList;
     }
 
     public List<WfAlertDef> getExpirationAlertList() {
         if (expirationAlertList == null) {
-            synchronized(this) {
+            synchronized (this) {
                 if (expirationAlertList == null) {
                     expirationAlertList = new ArrayList<WfAlertDef>();
-                    for (WfAlertDef wfAlertDef: expirationAlertList) {
+                    for (WfAlertDef wfAlertDef : expirationAlertList) {
                         if (wfAlertDef.isOnExpiration()) {
                             expirationAlertList.add(wfAlertDef);
                         }
                     }
-                    
+
                     expirationAlertList = DataUtils.unmodifiableList(expirationAlertList);
-                }                
+                }
             }
         }
-        
+
         return expirationAlertList;
     }
 
@@ -679,8 +679,9 @@ public class WfStepDef {
         }
 
         public Builder addWfAlertDef(WorkflowAlertType type, String name, String description, String recipientPolicy,
-                String recipientNameRule, String recipientContactRule, String generator, String template,  String fireOnPrevStepName,
-                String fireOnActionName, String fireOnCondition, boolean alertHeldBy, boolean alertWorkflowRoles) {
+                String recipientNameRule, String recipientContactRule, String generator, String template,
+                String fireOnPrevStepName, String fireOnActionName, String fireOnCondition, int sendDelayinMinutes,
+                boolean alertHeldBy, boolean alertWorkflowRoles) {
             if (alertList == null) {
                 alertList = new LinkedHashMap<String, WfAlertDef>();
             }
@@ -691,8 +692,8 @@ public class WfStepDef {
 
             alertList.put(name,
                     new WfAlertDef(type, name, description, recipientPolicy, recipientNameRule, recipientContactRule,
-                            generator, template, fireOnPrevStepName, fireOnActionName, fireOnCondition, alertHeldBy,
-                            alertWorkflowRoles));
+                            generator, template, fireOnPrevStepName, fireOnActionName, fireOnCondition,
+                            sendDelayinMinutes, alertHeldBy, alertWorkflowRoles));
             return this;
         }
 

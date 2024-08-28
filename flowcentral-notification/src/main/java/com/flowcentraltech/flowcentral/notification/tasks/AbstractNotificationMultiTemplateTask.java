@@ -49,6 +49,10 @@ public abstract class AbstractNotificationMultiTemplateTask extends AbstractNoti
         notification().sendNotification(templateWrapper.getMessage());
     }
 
+    protected final void send(NotifTemplateWrapper templateWrapper, int sendDelayInMinutes) throws UnifyException {
+        notification().sendNotification(templateWrapper.getMessage().setSendDelayInMinutes(sendDelayInMinutes));
+    }
+
     protected final <U extends EntityWrapper> U wrapperOf(Class<U> wrapperType) throws UnifyException {
         return application().wrapperOf(wrapperType);
     }

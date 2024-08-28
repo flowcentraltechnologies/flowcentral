@@ -56,6 +56,10 @@ public abstract class AbstractNotificationTemplateTask<T extends NotifTemplateWr
         notification().sendNotification(templateWrapper.getMessage());
     }
 
+    protected final void send(T templateWrapper, int sendDelayInMinutes) throws UnifyException {
+        notification().sendNotification(templateWrapper.getMessage().setSendDelayInMinutes(sendDelayInMinutes));
+    }
+
     protected final <U extends EntityWrapper> U wrapperOf(Class<U> wrapperType) throws UnifyException {
         return application().wrapperOf(wrapperType);
     }

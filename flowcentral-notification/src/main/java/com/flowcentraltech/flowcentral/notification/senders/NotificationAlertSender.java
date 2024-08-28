@@ -35,8 +35,8 @@ public interface NotificationAlertSender extends FlowCentralComponent {
 
     String WFITEM_LINK_VARIABLE = "rsvWfitemLink";
 
-    String WFITEM_HTMLLINK_VARIABLE = "rsvWfitemHtmlLink"; 
-    
+    String WFITEM_HTMLLINK_VARIABLE = "rsvWfitemHtmlLink";
+
     /**
      * Gets the notification type for this sender.
      * 
@@ -46,14 +46,17 @@ public interface NotificationAlertSender extends FlowCentralComponent {
     NotifType getNotifType() throws UnifyException;
 
     /**
-     * Composes and sends a notification.
+     * Composes and sends a notification with a delay.
      * 
      * @param reader
-     *                      backing value store reader
+     *                           backing value store reader
      * @param recipientList
-     *                      the recipient list
+     *                           the recipient list
+     * @param sendDelayInMinutes
+     *                           the delay in minutes
      * @throws UnifyException
      *                        if an error occurs
      */
-    void composeAndSend(ValueStoreReader reader, List<Recipient> recipientList) throws UnifyException;
+    void composeAndSend(ValueStoreReader reader, List<Recipient> recipientList, int sendDelayInMinutes)
+            throws UnifyException;
 }

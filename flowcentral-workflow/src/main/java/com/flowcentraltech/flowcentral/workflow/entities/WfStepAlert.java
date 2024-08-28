@@ -55,6 +55,9 @@ public class WfStepAlert extends BaseNamedEntity {
     @Column(length = 64, nullable = true)
     private String template;
 
+    @Column(nullable = true)
+    private Integer sendDelayInMinutes;
+    
     @Column
     private boolean alertHeldBy;
 
@@ -123,6 +126,14 @@ public class WfStepAlert extends BaseNamedEntity {
 
     public void setRecipientContactRule(String recipientContactRule) {
         this.recipientContactRule = recipientContactRule;
+    }
+
+    public Integer getSendDelayInMinutes() {
+        return sendDelayInMinutes;
+    }
+
+    public void setSendDelayInMinutes(Integer sendDelayInMinutes) {
+        this.sendDelayInMinutes = sendDelayInMinutes;
     }
 
     public boolean isAlertHeldBy() {
