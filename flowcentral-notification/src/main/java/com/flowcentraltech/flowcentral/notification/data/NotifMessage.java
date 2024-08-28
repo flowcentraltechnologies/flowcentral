@@ -57,10 +57,13 @@ public class NotifMessage {
     private List<Recipient> recipients;
 
     private List<Attachment> attachments;
+    
+    private int sendDelayInMinutes;
 
     private NotifMessage(ImportanceType importance, NotifType notifType, NotifMessageFormat format, String from,
             String template, List<StringToken> subjectTokenList, List<StringToken> templateTokenList,
-            Map<String, Object> params, List<Recipient> recipients, List<Attachment> attachments) {
+            Map<String, Object> params, List<Recipient> recipients, List<Attachment> attachments,
+            int sendDelayInMinutes) {
         this.importance = importance;
         this.notifType = notifType;
         this.format = format;
@@ -71,6 +74,7 @@ public class NotifMessage {
         this.params = params;
         this.recipients = recipients;
         this.attachments = attachments;
+        this.sendDelayInMinutes = sendDelayInMinutes;
     }
 
     public String getTemplate() {
@@ -117,6 +121,19 @@ public class NotifMessage {
         return template != null;
     }
 
+    public NotifMessage setSendDelayInMinutes(int sendDelayInMinutes) {
+        this.sendDelayInMinutes = sendDelayInMinutes;
+        return this;
+    }
+
+    public int getSendDelayInMinutes() {
+        return sendDelayInMinutes;
+    }
+
+    public boolean isWithSendDelayInMinutes() {
+        return sendDelayInMinutes > 0;
+    }
+
     public static Builder newBuilder(String template) {
         return new Builder(template);
     }
@@ -146,6 +163,8 @@ public class NotifMessage {
         private List<Recipient> recipients;
 
         private List<Attachment> attachments;
+        
+        private int sendDelayInMinutes;
 
         private Builder(String template) {
             this.importance = ImportanceType.LOW;
@@ -212,6 +231,11 @@ public class NotifMessage {
             return this;
         }
 
+        public Builder sendDelayInMinutes(int sendDelayInMinutes) {
+            this.sendDelayInMinutes = sendDelayInMinutes;
+            return this;
+        }
+
         public Builder addParam(String name, Object val) {
             params.put(name, val);
             return this;
@@ -248,7 +272,7 @@ public class NotifMessage {
 
             return new NotifMessage(importance, notifType, format, from, template, subjectTokenList, templateTokenList,
                     DataUtils.unmodifiableMap(params), DataUtils.unmodifiableList(recipients),
-                    DataUtils.unmodifiableList(attachments));
+                    DataUtils.unmodifiableList(attachments), sendDelayInMinutes);
         }
 
     }

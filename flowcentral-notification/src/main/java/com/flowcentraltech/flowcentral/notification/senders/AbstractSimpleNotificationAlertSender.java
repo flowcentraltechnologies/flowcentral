@@ -49,7 +49,8 @@ public abstract class AbstractSimpleNotificationAlertSender extends AbstractNoti
     }
 
     @Override
-    public void composeAndSend(ValueStoreReader reader, List<Recipient> recipientList) throws UnifyException {
+    public final void composeAndSend(ValueStoreReader reader, List<Recipient> recipientList, int sendDelayInMinutes)
+            throws UnifyException {
         final String template = reader.read(String.class, NotificationAlertSender.TEMPLATE_VARIABLE);
         if (StringUtils.isBlank(template)) {
             throwOperationErrorException(new IllegalArgumentException("Could not retreive template variable."));
@@ -94,6 +95,7 @@ public abstract class AbstractSimpleNotificationAlertSender extends AbstractNoti
                 }
             }
 
+            nb.sendDelayInMinutes(sendDelayInMinutes);
             notification().sendNotification(nb.build());
             logDebug("Notification successfully prepared for sending.");
         } else {

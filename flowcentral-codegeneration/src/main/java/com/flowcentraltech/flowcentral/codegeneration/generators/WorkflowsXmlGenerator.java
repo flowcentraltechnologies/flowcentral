@@ -268,6 +268,7 @@ public class WorkflowsXmlGenerator extends AbstractResourcesArtifactGenerator {
                                 wfAlertConfig.setRecipientContactRule(wfStepAlert.getRecipientContactRule());
                                 wfAlertConfig.setGenerator(wfStepAlert.getGenerator());
                                 wfAlertConfig.setTemplate(wfStepAlert.getTemplate());
+                                wfAlertConfig.setSendDelayInMinutes(wfStepAlert.getSendDelayInMinutes());
                                 wfAlertConfig.setAlertHeldBy(wfStepAlert.isAlertHeldBy());
                                 wfAlertConfig.setAlertWorkflowRoles(wfStepAlert.isAlertWorkflowRoles());
                                 wfAlertConfig.setFireOnPrevStepName(wfStepAlert.getFireOnPrevStepName());

@@ -224,7 +224,7 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
     private static final Class<?>[] NOTIF_LARGETEXT_WRAPPER_PARAMS_0 = { NotifLargeTextDef.class };
 
     private static final Class<?>[] NOTIF_LARGETEXT_WRAPPER_PARAMS_1 = { NotifLargeTextDef.class, Map.class };
-    
+
     @Override
     public void clearDefinitionsCache() throws UnifyException {
         logDebug("Clearing definitions cache...");
@@ -343,8 +343,8 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
 
     @Override
     public List<? extends Listable> findNotificationTemplatesByEntity(String entity) throws UnifyException {
-        List<NotificationTemplate> templateList = environment().listAll(new NotificationTemplateQuery()
-                .entity(entity).addSelect("applicationName", "name", "description"));
+        List<NotificationTemplate> templateList = environment().listAll(
+                new NotificationTemplateQuery().entity(entity).addSelect("applicationName", "name", "description"));
         return ApplicationNameUtils.getListableList(templateList);
     }
 
@@ -400,7 +400,10 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
             notification.setFrom(notifMessage.getFrom());
             notification.setType(notifType);
             notification.setExpiryDt(null);
-            notification.setNextAttemptDt(getNow());
+            notification.setNextAttemptDt(notifMessage.isWithSendDelayInMinutes()
+                    ? CalendarUtils.getDateWithFrequencyOffset(getNow(), FrequencyUnit.MINUTE,
+                            notifMessage.getSendDelayInMinutes())
+                    : getNow());
             notification.setSubject(messageParts.getSubject());
             notification.setStatus(NotificationOutboxStatus.NOT_SENT);
             notification.setFormat(format);

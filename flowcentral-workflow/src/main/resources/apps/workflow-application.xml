@@ -444,6 +444,12 @@
 				label="$m{workflow.stepalert.generator}" type="string" maxLen="128" />
 			<field name="template"
 				label="$m{workflow.stepalert.template}" type="string" nullable="true"/>
+			<field name="sendDelayInMinutes"
+				label="$m{workflow.stepalert.senddelayinminutes}" type="integer" nullable="true"/>
+			<field name="alertHeldBy"
+				label="$m{workflow.stepalert.alertheldby}" type="boolean"/>
+			<field name="alertWorkflowRoles"
+				label="$m{workflow.stepalert.alertworkflowroles}" type="boolean"/>
 			<field name="fireOnPrevStepName"
 				label="$m{workflow.stepalert.fireonprevstepname}" type="string"
 				nullable="true" maxLen="64" />

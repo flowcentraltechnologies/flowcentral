@@ -61,6 +61,9 @@ public class WfAlertConfig extends BaseNameConfig {
 
     @JacksonXmlProperty(isAttribute = true)
     private String fireOnCondition;
+    
+    @JacksonXmlProperty(isAttribute = true)
+    private Integer sendDelayInMinutes;
 
     @JacksonXmlProperty(isAttribute = true)
     private boolean alertHeldBy;
@@ -115,6 +118,14 @@ public class WfAlertConfig extends BaseNameConfig {
 
     public void setTemplate(String template) {
         this.template = template;
+    }
+
+    public Integer getSendDelayInMinutes() {
+        return sendDelayInMinutes;
+    }
+
+    public void setSendDelayInMinutes(Integer sendDelayInMinutes) {
+        this.sendDelayInMinutes = sendDelayInMinutes;
     }
 
     public boolean isAlertHeldBy() {

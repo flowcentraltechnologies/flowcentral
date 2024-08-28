@@ -232,7 +232,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
     private final Map<String, Set<WfStepInfo>> roleWfStepBackup;
 
     private List<String> approvalPos;
-    
+
     public WorkflowModuleServiceImpl() {
         this.roleWfStepBackup = new HashMap<String, Set<WfStepInfo>>();
 
@@ -379,8 +379,9 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                                     wfStepAlert.getRecipientNameRule(), wfStepAlert.getRecipientContactRule(),
                                     wfStepAlert.getGenerator(), wfStepAlert.getTemplate(),
                                     wfStepAlert.getFireOnPrevStepName(), wfStepAlert.getFireOnActionName(),
-                                    wfStepAlert.getFireOnConditionName(), wfStepAlert.isAlertHeldBy(),
-                                    wfStepAlert.isAlertWorkflowRoles());
+                                    wfStepAlert.getFireOnConditionName(),
+                                    DataUtils.convert(int.class, wfStepAlert.getSendDelayInMinutes()),
+                                    wfStepAlert.isAlertHeldBy(), wfStepAlert.isAlertWorkflowRoles());
                         }
 
                         for (WfStepRole wfStepRole : wfStep.getRoleList()) {
@@ -572,14 +573,10 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         if (approvalPos == null) {
             synchronized (this) {
                 if (approvalPos == null) {
-                    approvalPos = Arrays.asList(
-                            resolveApplicationMessage("$m{approval.1}"),
-                            resolveApplicationMessage("$m{approval.2}"),
-                            resolveApplicationMessage("$m{approval.3}"),
-                            resolveApplicationMessage("$m{approval.4}"),
-                            resolveApplicationMessage("$m{approval.5}"),
-                            resolveApplicationMessage("$m{approval.6}"),
-                            resolveApplicationMessage("$m{approval.7}"),
+                    approvalPos = Arrays.asList(resolveApplicationMessage("$m{approval.1}"),
+                            resolveApplicationMessage("$m{approval.2}"), resolveApplicationMessage("$m{approval.3}"),
+                            resolveApplicationMessage("$m{approval.4}"), resolveApplicationMessage("$m{approval.5}"),
+                            resolveApplicationMessage("$m{approval.6}"), resolveApplicationMessage("$m{approval.7}"),
                             resolveApplicationMessage("$m{approval.8}"));
                 }
             }
@@ -618,8 +615,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             workflow.setDescFormat(null); // TODO
             workflow.setAppletVersionNo(appletWorkflowCopyInfo.getAppletVersionNo());
             workflow.setClassified(true);
-            final List<WfStep> stepList = generateWorkflowSteps(designType, stepLabel,
-                    appletWorkflowCopyInfo);
+            final List<WfStep> stepList = generateWorkflowSteps(designType, stepLabel, appletWorkflowCopyInfo);
             workflow.setStepList(stepList);
             environment().create(workflow);
         } else {
@@ -631,8 +627,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                 workflow.setLoadingTable(appletWorkflowCopyInfo.getAppletSearchTable());
                 workflow.setSupportMultiItemAction(true);
                 workflow.setClassified(true);
-                final List<WfStep> stepList = generateWorkflowSteps(designType, stepLabel,
-                        appletWorkflowCopyInfo);
+                final List<WfStep> stepList = generateWorkflowSteps(designType, stepLabel, appletWorkflowCopyInfo);
                 keepAlreadyAssignedRoles(wnp.getApplicationName(), wnp.getEntityName(), stepList);
                 workflow.setStepList(stepList);
                 environment().updateByIdVersion(workflow);
@@ -1650,8 +1645,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                             case CREATE: {
                                 WorkEntity newInst = entityClassDef.newInst(wfEntityInst);
                                 Long originWorkRecId = (Long) environment().create(newInst);
-                                fileAttachmentProvider.sychFileAttachments(FileAttachmentCategoryType.FORM_CATEGORY, entityDef.getLongName(),
-                                        originWorkRecId, (Long) wfEntityInst.getId());
+                                fileAttachmentProvider.sychFileAttachments(FileAttachmentCategoryType.FORM_CATEGORY,
+                                        entityDef.getLongName(), originWorkRecId, (Long) wfEntityInst.getId());
                             }
                                 break;
                             case DELETE: {
@@ -1661,8 +1656,9 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                                 break;
                             case UPDATE: {
                                 transitionItem.setUpdated();
-                                fileAttachmentProvider.sychFileAttachments(FileAttachmentCategoryType.FORM_CATEGORY, entityDef.getLongName(),
-                                        (Long) wfEntityInst.getId(), (Long) wfEntityInst.getId());
+                                fileAttachmentProvider.sychFileAttachments(FileAttachmentCategoryType.FORM_CATEGORY,
+                                        entityDef.getLongName(), (Long) wfEntityInst.getId(),
+                                        (Long) wfEntityInst.getId());
                             }
                                 break;
                             case UPDATE_ORIGINAL: {
@@ -1676,8 +1672,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                                             new BeanValueStore(wfEntityInst),
                                             ApplicationEntityUtils.RESERVED_BASE_FIELDS);
                                     environment().updateByIdVersionEditableChildren(originalInst);
-                                    fileAttachmentProvider.sychFileAttachments(FileAttachmentCategoryType.FORM_CATEGORY, entityDef.getLongName(),
-                                            originalCopyId, (Long) wfEntityInst.getId());
+                                    fileAttachmentProvider.sychFileAttachments(FileAttachmentCategoryType.FORM_CATEGORY,
+                                            entityDef.getLongName(), originalCopyId, (Long) wfEntityInst.getId());
 
                                     environment().findEditableChildren(wfEntityInst);
                                 }
@@ -1974,7 +1970,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             }
 
             reader.setTempValue(NotificationAlertSender.TEMPLATE_VARIABLE, wfAlertDef.getTemplate());
-            sender.composeAndSend(reader, recipientList);
+            sender.composeAndSend(reader, recipientList, wfAlertDef.getSendDelayInMinutes());
         }
     }
 
