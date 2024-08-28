@@ -43,9 +43,9 @@ public abstract class AbstractReaderNotificationTemplateTask<T extends NotifTemp
 
     @Override
     public final void doExecute(TaskMonitor monitor, TaskInput input) throws UnifyException {
-        final T notifWrapper = notification().wrapperOfNotifTemplate(notifWrapperType);      
+        final T notifWrapper = notification().wrapperOfNotifTemplate(notifWrapperType);
         final ValueStoreReader reader = getReader(input);
-        
+
         // Set recipients
         List<Recipient> recipientList = getRecipientList(reader);
         if (!DataUtils.isBlank(recipientList)) {
@@ -66,7 +66,12 @@ public abstract class AbstractReaderNotificationTemplateTask<T extends NotifTemp
         }
 
         // Send notification
-        notification().sendNotification(notifWrapper.getMessage());
+        final int sendDelayInMinutes = getSendDelayInMinutes(reader);
+        notification().sendNotification(notifWrapper.getMessage().setSendDelayInMinutes(sendDelayInMinutes));
+    }
+
+    protected int getSendDelayInMinutes(ValueStoreReader reader) throws UnifyException {
+        return 0;
     }
 
     /**
@@ -79,7 +84,7 @@ public abstract class AbstractReaderNotificationTemplateTask<T extends NotifTemp
      *                        if an error occurs
      */
     protected abstract ValueStoreReader getReader(TaskInput input) throws UnifyException;
-    
+
     /**
      * Sets the notification template variables.
      * 
@@ -92,7 +97,7 @@ public abstract class AbstractReaderNotificationTemplateTask<T extends NotifTemp
      */
     protected abstract void setTemplateVariables(T notifWrapper, ValueStoreReader reader) throws UnifyException;
 
-     /**
+    /**
      * Gets recipient list.
      * 
      * @param reader
@@ -102,7 +107,7 @@ public abstract class AbstractReaderNotificationTemplateTask<T extends NotifTemp
      *                        if an error occurs
      */
     protected abstract List<Recipient> getRecipientList(ValueStoreReader reader) throws UnifyException;
-    
+
     /**
      * Generates notification attachments using reader.
      * 
