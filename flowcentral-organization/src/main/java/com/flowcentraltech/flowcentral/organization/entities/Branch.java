@@ -31,7 +31,6 @@ import com.tcdng.unify.core.annotation.UniqueConstraint;
 @Table(name = "FC_BRANCH",
     uniqueConstraints = {
         @UniqueConstraint({ "code" }),
-        @UniqueConstraint({ "description" }),
         @UniqueConstraint({ "sortCode" }) })
 public class Branch extends BaseStatusTenantEntity {
 
@@ -52,6 +51,9 @@ public class Branch extends BaseStatusTenantEntity {
 
     @Column(name = "SORT_CD", length = 32, nullable = true)
     private String sortCode;
+
+    @Column(name = "ALT_SORT_CD", length = 32, nullable = true)
+    private String altSortCode;
 
     @Column(name = "HEAD_OFFICE_FG")
     private boolean headOffice;
@@ -106,6 +108,14 @@ public class Branch extends BaseStatusTenantEntity {
 
     public void setSortCode(String sortCode) {
         this.sortCode = sortCode;
+    }
+
+    public String getAltSortCode() {
+        return altSortCode;
+    }
+
+    public void setAltSortCode(String altSortCode) {
+        this.altSortCode = altSortCode;
     }
 
     public boolean getHeadOffice() {
