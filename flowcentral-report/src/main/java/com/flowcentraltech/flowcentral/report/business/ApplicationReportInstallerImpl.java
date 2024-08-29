@@ -49,6 +49,7 @@ import com.flowcentraltech.flowcentral.report.constants.ReportModuleNameConstant
 import com.flowcentraltech.flowcentral.report.entities.ReportColumn;
 import com.flowcentraltech.flowcentral.report.entities.ReportConfiguration;
 import com.flowcentraltech.flowcentral.report.entities.ReportConfigurationQuery;
+import com.flowcentraltech.flowcentral.report.entities.ReportGroupMemberQuery;
 import com.flowcentraltech.flowcentral.report.entities.ReportParameter;
 import com.flowcentraltech.flowcentral.report.entities.ReportPlacement;
 import com.flowcentraltech.flowcentral.report.entities.ReportableDefinition;
@@ -399,6 +400,13 @@ public class ApplicationReportInstallerImpl extends AbstractApplicationArtifactI
     protected List<DeletionParams> getDeletionParams() throws UnifyException {
         return Arrays.asList(new DeletionParams("report configurations", new ReportConfigurationQuery()),
                 new DeletionParams("reportables", new ReportableDefinitionQuery()));
+    }
+
+    @Override
+    protected int deleteApplicationArtifacts(TaskMonitor taskMonitor, DeletionParams deletionParams, Long applicationId)
+            throws UnifyException {
+        environment().deleteAll(new ReportGroupMemberQuery().applicationId(applicationId));
+        return super.deleteApplicationArtifacts(taskMonitor, deletionParams, applicationId);
     }
 
     @SuppressWarnings("unchecked")
