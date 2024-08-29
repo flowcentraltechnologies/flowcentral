@@ -111,7 +111,7 @@ public abstract class AbstractApplicationArtifactInstaller extends AbstractFlowC
 
     protected abstract List<DeletionParams> getDeletionParams() throws UnifyException;
 
-    private int deleteApplicationArtifacts(TaskMonitor taskMonitor, DeletionParams deletionParams, Long applicationId) throws UnifyException {
+    protected int deleteApplicationArtifacts(TaskMonitor taskMonitor, DeletionParams deletionParams, Long applicationId) throws UnifyException {
         int deletion = 0;
         logDebug(taskMonitor, "Deleting application {0}...", deletionParams.getName());
         deletion = environment().deleteAll(deletionParams.getQuery().applicationId(applicationId));

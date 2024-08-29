@@ -223,7 +223,7 @@ public class OrganizationModuleServiceImpl extends AbstractFlowCentralService
     @Override
     public void unregisterCustonApplicationPrivileges(Long applicationId) throws UnifyException {
         environment().deleteAll(new RolePrivilegeQuery().applicationId(applicationId));
-        environment().deleteAll(new PrivilegeQuery().applicationId(applicationId).isCustom());
+        environment().deleteAll(new PrivilegeQuery().applicationId(applicationId));
 
         if (!DataUtils.isBlank(roleBackupAgentList)) {
             for (RolePrivilegeBackupAgent rolePrivilegeBackupAgent : roleBackupAgentList) {
