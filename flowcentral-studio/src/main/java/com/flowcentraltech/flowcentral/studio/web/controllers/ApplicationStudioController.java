@@ -23,6 +23,7 @@ import com.flowcentraltech.flowcentral.application.entities.ApplicationQuery;
 import com.flowcentraltech.flowcentral.common.business.LoginUserPhotoGenerator;
 import com.flowcentraltech.flowcentral.common.business.UserLoginActivityProvider;
 import com.flowcentraltech.flowcentral.common.web.controllers.AbstractFlowCentralPageController;
+import com.flowcentraltech.flowcentral.studio.constants.StudioAppComponentType;
 import com.flowcentraltech.flowcentral.studio.constants.StudioSessionAttributeConstants;
 import com.flowcentraltech.flowcentral.studio.web.widgets.StudioMenuWidget;
 import com.tcdng.unify.core.UnifyException;
@@ -136,10 +137,18 @@ public class ApplicationStudioController extends AbstractFlowCentralPageControll
                 || Boolean.TRUE.equals(removeSessionAttribute(StudioSessionAttributeConstants.CLEAR_PAGES))) {
             ContentPanel contentPanel = getPageWidgetByShortName(ContentPanel.class, "content");
             contentPanel.clearPages();
-            clearCategorySelect();
+            
+            StudioAppComponentType select = getCategorySelect();
+            if (select == null || !select.isComponentType()) {
+                clearCategorySelect();
+            }
         }
     }
 
+    private StudioAppComponentType getCategorySelect() throws UnifyException {
+        return getPageWidgetByShortName(StudioMenuWidget.class, "studioMenuPanel").getCurrentSel();
+    }
+    
     private void clearCategorySelect() throws UnifyException {
         getPageWidgetByShortName(StudioMenuWidget.class, "studioMenuPanel").setCurrentSel(null);
     }
