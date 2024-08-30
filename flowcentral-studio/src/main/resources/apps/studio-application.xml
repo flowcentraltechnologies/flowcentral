@@ -1526,8 +1526,8 @@
 	<!-- Tables -->
 	<tables>
 		<table name="switchApplicationTable"
-			description="$m{studio.application.new.table}"
-			label="$m{studio.application.new.table.label}"
+			description="$m{studio.application.switch.table}"
+			label="$m{studio.application.switch.table.label}"
 			entity="application.application" itemsPerPage="20" serialNo="true">
 			<column field="moduleLabel" renderWidget="application.text"
 				widthRatio="1" label="$m{application.application.module}" />
