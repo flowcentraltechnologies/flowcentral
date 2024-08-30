@@ -209,8 +209,14 @@ public class StudioMenuWriter extends AbstractPanelWriter {
             writer.write("<ul>");
             JsonWriter mjw = new JsonWriter();
             mjw.beginArray();
-            final StudioAppComponentType currCategory = studioMenuWidget.getCurrentSel();
-            setSessionAttribute(StudioSessionAttributeConstants.CURRENT_MENU_CATEGORY, currCategory);
+            StudioAppComponentType currCategory = studioMenuWidget.getCurrentSel();
+            if (currCategory == null) {
+                currCategory = getSessionAttribute(StudioAppComponentType.class,
+                        StudioSessionAttributeConstants.CURRENT_MENU_CATEGORY);
+            } else {
+                setSessionAttribute(StudioSessionAttributeConstants.CURRENT_MENU_CATEGORY, currCategory);
+            }
+
             final boolean isApplications = StudioAppComponentType.APPLICATION.equals(currCategory);
             final boolean isCollaboration = StudioAppComponentType.COLLABORATION.equals(currCategory);
             final boolean isCodeGeneration = codeGenerationProvider != null
