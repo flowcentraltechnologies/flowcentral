@@ -17,6 +17,7 @@
 package com.flowcentraltech.flowcentral.studio.web.controllers;
 
 import com.flowcentraltech.flowcentral.common.business.LoginUserPhotoGenerator;
+import com.flowcentraltech.flowcentral.studio.web.data.CreateAppForm;
 import com.tcdng.unify.web.ui.AbstractPageBean;
 
 /**
@@ -29,12 +30,32 @@ public class ApplicationStudioPageBean extends AbstractPageBean {
 
     private LoginUserPhotoGenerator userPhotoGenerator;
 
+    private Long currentApplicationId;
+
+    private CreateAppForm createAppForm;
+    
     public LoginUserPhotoGenerator getUserPhotoGenerator() {
         return userPhotoGenerator;
     }
 
     public void setUserPhotoGenerator(LoginUserPhotoGenerator userPhotoGenerator) {
         this.userPhotoGenerator = userPhotoGenerator;
+    }
+
+    public Long getCurrentApplicationId() {
+        return currentApplicationId;
+    }
+
+    public void setCurrentApplicationId(Long currentApplicationId) {
+        this.currentApplicationId = currentApplicationId;
+    }
+
+    public CreateAppForm getCreateAppForm() {
+        return createAppForm;
+    }
+
+    public void setCreateAppForm(CreateAppForm createAppForm) {
+        this.createAppForm = createAppForm;
     }
 
 }

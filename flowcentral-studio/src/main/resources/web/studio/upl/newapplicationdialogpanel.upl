@@ -1,4 +1,4 @@
-// UPL template for switch application dialog panel
+// UPL template for new application dialog panel
 // Copyright 2021-2024 FlowCentral Technologies Limited.
 // 
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
@@ -13,18 +13,13 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-!fc-switchapplicationdialogpanel
-    dialogBodyComponents:$c{searchBaseBodyPanel}
+!fc-newapplicationdialogpanel
+    dialogBodyComponents:$c{createBaseBodyPanel}
     dialogActionLayout:$d{!ui-vertical style:$s{width:100%;}}
     dialogActionComponents:$c{entitySearchActionPanel}
 
-!ui-switchpanel:searchBaseBodyPanel style:$s{width:100%;height:320px;overflow-y: scroll;}
-    components:$c{entitySearchPanel createApplicationBasePanel}
-
-// Search list
-!fc-entitysearchpanel:entitySearchPanel binding:$f{entitySearchBinding}
-	newInstEventHandler:$f{newInstEventHandler}
-	searchResultMarker:$j{com.flowcentraltech.flowcentral.application.web.panels.EntitySearchValueMarkerConstants.DEFAULT_LIST}
+!ui-panel:createBaseBodyPanel style:$s{width:100%;height:320px;overflow-y: scroll;}
+    components:$c{createApplicationBasePanel}
 
 // Create application panel
 !ui-panel:createApplicationBasePanel layout:$d{!ui-vertical style:$s{width:100%;}}

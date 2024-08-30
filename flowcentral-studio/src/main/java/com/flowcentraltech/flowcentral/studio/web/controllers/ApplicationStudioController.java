@@ -19,6 +19,7 @@ package com.flowcentraltech.flowcentral.studio.web.controllers;
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleAuditConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationResultMappingConstants;
+import com.flowcentraltech.flowcentral.application.entities.Application;
 import com.flowcentraltech.flowcentral.application.entities.ApplicationQuery;
 import com.flowcentraltech.flowcentral.common.business.LoginUserPhotoGenerator;
 import com.flowcentraltech.flowcentral.common.business.UserLoginActivityProvider;
@@ -92,13 +93,24 @@ public class ApplicationStudioController extends AbstractFlowCentralPageControll
     }
 
     @Action
-    public String showUtilities() throws UnifyException {
-        removeSessionAttribute(StudioSessionAttributeConstants.CURRENT_APPLICATION_ID);
-        removeSessionAttribute(StudioSessionAttributeConstants.CURRENT_APPLICATION_NAME);
-        removeSessionAttribute(StudioSessionAttributeConstants.CURRENT_APPLICATION_DESC);
-        removeSessionAttribute(StudioSessionAttributeConstants.CLEAR_PAGES);
+    public String switchApplication() throws UnifyException {
+        ApplicationStudioPageBean pageBean = getPageBean();
+        final Long applicationId = pageBean.getCurrentApplicationId();
+        if (applicationId == null) {
+            // Utilities
+            removeSessionAttribute(StudioSessionAttributeConstants.CURRENT_APPLICATION_ID);
+            removeSessionAttribute(StudioSessionAttributeConstants.CURRENT_APPLICATION_NAME);
+            removeSessionAttribute(StudioSessionAttributeConstants.CURRENT_APPLICATION_DESC);
+            removeSessionAttribute(StudioSessionAttributeConstants.CLEAR_PAGES);
+            clearCategorySelect();
+        } else {
+            // Actual Application
+            Application application = appletUtilities.application().findApplication(applicationId);
+            setApplicationSessionAttributes(application);
+            setCategorySelect();
+        }
+
         closeAllPages();
-        clearCategorySelect();
         return ApplicationResultMappingConstants.REFRESH_ALL;
     }
 
@@ -113,7 +125,9 @@ public class ApplicationStudioController extends AbstractFlowCentralPageControll
     public String onDeleteApplication() throws UnifyException {
         Long applicationId = (Long) getSessionAttribute(StudioSessionAttributeConstants.CURRENT_APPLICATION_ID);
         if (environment().countAll(new ApplicationQuery().id(applicationId)) == 0) {
-            return showUtilities();
+            ApplicationStudioPageBean pageBean = getPageBean();
+            pageBean.setCurrentApplicationId(null);
+            return switchApplication();
         }
 
         return ApplicationResultMappingConstants.REFRESH_CONTENT;
@@ -137,16 +151,20 @@ public class ApplicationStudioController extends AbstractFlowCentralPageControll
                 || Boolean.TRUE.equals(removeSessionAttribute(StudioSessionAttributeConstants.CLEAR_PAGES))) {
             ContentPanel contentPanel = getPageWidgetByShortName(ContentPanel.class, "content");
             contentPanel.clearPages();
-            
-            StudioAppComponentType select = getCategorySelect();
-            if (select == null || !select.isComponentType()) {
-                clearCategorySelect();
-            }
         }
     }
 
-    private StudioAppComponentType getCategorySelect() throws UnifyException {
-        return getPageWidgetByShortName(StudioMenuWidget.class, "studioMenuPanel").getCurrentSel();
+    private void setApplicationSessionAttributes(Application application) throws UnifyException {
+        setSessionAttribute(StudioSessionAttributeConstants.CURRENT_APPLICATION_ID, application.getId());
+        setSessionAttribute(StudioSessionAttributeConstants.CURRENT_APPLICATION_NAME, application.getName());
+        setSessionAttribute(StudioSessionAttributeConstants.CURRENT_APPLICATION_DESC, application.getDescription());
+        setSessionAttribute(StudioSessionAttributeConstants.CLEAR_PAGES, Boolean.TRUE);
+    }
+    
+    private void setCategorySelect() throws UnifyException {
+        final StudioAppComponentType currCategory = getSessionAttribute(StudioAppComponentType.class,
+                StudioSessionAttributeConstants.CURRENT_MENU_CATEGORY);
+        getPageWidgetByShortName(StudioMenuWidget.class, "studioMenuPanel").setCurrentSel(currCategory);
     }
     
     private void clearCategorySelect() throws UnifyException {

@@ -125,8 +125,13 @@ public class StudioMenuWriter extends AbstractPanelWriter {
                     : (isCollaborationEnabled ? StudioAppComponentType.COLLABORATION
                             : (codeGenerationProvider != null ? StudioAppComponentType.CODEGENERATION
                                     : StudioAppComponentType.APPLICATION));
-            studioMenuWidget.setCurrentSel(currCategory);
+        } else {
+            if (application && !currCategory.isComponentType()) {
+               currCategory =  StudioAppComponentType.ENTITY; 
+            }
         }
+
+        studioMenuWidget.setCurrentSel(currCategory);
 
         writer.write("<div");
         if (searchable) {
@@ -205,6 +210,7 @@ public class StudioMenuWriter extends AbstractPanelWriter {
             JsonWriter mjw = new JsonWriter();
             mjw.beginArray();
             final StudioAppComponentType currCategory = studioMenuWidget.getCurrentSel();
+            setSessionAttribute(StudioSessionAttributeConstants.CURRENT_MENU_CATEGORY, currCategory);
             final boolean isApplications = StudioAppComponentType.APPLICATION.equals(currCategory);
             final boolean isCollaboration = StudioAppComponentType.COLLABORATION.equals(currCategory);
             final boolean isCodeGeneration = codeGenerationProvider != null
