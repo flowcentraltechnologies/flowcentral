@@ -20,44 +20,21 @@ import com.flowcentraltech.flowcentral.studio.web.data.CreateAppForm;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.UplBinding;
-import com.tcdng.unify.core.data.ValueStore;
-import com.tcdng.unify.web.ui.widget.panel.SwitchPanel;
-import com.tcdng.unify.web.ui.widget.panel.SwitchPanelHandler;
 
 /**
- * Switch application dialog panel.
+ * New application dialog panel.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@Component("fc-switchapplicationdialogpanel")
-@UplBinding("web/studio/upl/switchapplicationdialogpanel.upl")
-public class SwitchApplicationDialogPanel extends BaseDialogPanel implements SwitchPanelHandler {
-
-    @Override
-    public void onPageConstruct() throws UnifyException {
-        super.onPageConstruct();
-        SwitchPanel switchPanel = getWidgetByShortName(SwitchPanel.class, "searchBaseBodyPanel");
-        switchPanel.setSwitchPanelHandler(this);
-        setVisible("createAppBtn", false);
-        setVisible("entitySearchPanel.reportBtn", false);
-    }
+@Component("fc-newapplicationdialogpanel")
+@UplBinding("web/studio/upl/newapplicationdialogpanel.upl")
+public class NewApplicationDialogPanel extends BaseDialogPanel {
 
     @Override
     public void switchState() throws UnifyException {
         super.switchState();
         setModuleState();
-    }
-
-    @Override
-    public void handleSwitchContent(SwitchPanel switchPanel, String compShortName, ValueStore valueStore,
-            boolean isNewSwitch) throws UnifyException {
-        if ("createApplicationBasePanel".equals(compShortName)) {
-            setVisible("createAppBtn", true);
-            setModuleState();
-        } else {
-            setVisible("createAppBtn", false);
-        }
     }
 
     private void setModuleState() throws UnifyException {

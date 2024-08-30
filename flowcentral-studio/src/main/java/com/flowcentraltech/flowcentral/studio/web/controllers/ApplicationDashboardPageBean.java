@@ -15,8 +15,6 @@
  */
 package com.flowcentraltech.flowcentral.studio.web.controllers;
 
-import com.flowcentraltech.flowcentral.application.web.panels.EntitySearch;
-import com.flowcentraltech.flowcentral.studio.web.data.CreateAppForm;
 import com.tcdng.unify.web.ui.AbstractPageBean;
 
 /**
@@ -27,23 +25,4 @@ import com.tcdng.unify.web.ui.AbstractPageBean;
  */
 public class ApplicationDashboardPageBean extends AbstractPageBean {
 
-    private EntitySearch switchApplicationSearch;
-
-    private CreateAppForm createAppForm;
-
-    public EntitySearch getSwitchApplicationSearch() {
-        return switchApplicationSearch;
-    }
-
-    public void setSwitchApplicationSearch(EntitySearch switchApplicationSearch) {
-        this.switchApplicationSearch = switchApplicationSearch;
-    }
-
-    public CreateAppForm getCreateAppForm() {
-        return createAppForm;
-    }
-
-    public void setCreateAppForm(CreateAppForm createAppForm) {
-        this.createAppForm = createAppForm;
-    }
 }

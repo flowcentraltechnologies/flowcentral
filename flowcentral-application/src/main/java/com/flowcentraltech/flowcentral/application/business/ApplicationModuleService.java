@@ -413,6 +413,17 @@ public interface ApplicationModuleService extends FlowCentralService {
     Application findApplication(String applicationName) throws UnifyException;
 
     /**
+     * Finds an application record by ID.
+     * 
+     * @param applicationId
+     *                        the application ID
+     * @return the application
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    Application findApplication(Long applicationId) throws UnifyException;
+
+    /**
      * Finds manage list applets.
      * 
      * @param entity

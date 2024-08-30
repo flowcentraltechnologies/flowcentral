@@ -18,16 +18,3 @@
 
 // Base panel
 !ui-panel:basePanel
-
-// Switch application dialog
-!fc-switchapplicationdialogpanel:switchApplicationPopup style:$s{width:740px;}
-	dialogCaption:$m{studio.application.switch}
-	entitySearchBinding:switchApplicationSearch
-	createAppBinding:createAppForm
-	dialogMaintainPath:$n{/openApplication}
-	dialogCreateApplicationPath:$n{/createApplication}
-    closeDialogPath:$n{/cancelSwitchApplication}
-    newInstEventHandler:$d{!ui-event event:onclick action:$c{prepareNewApplicationAct}}
-
-// Actions
-!ui-post:prepareNewApplicationAct path:$n{/prepareNewApplication}

@@ -60,7 +60,7 @@
 !ui-panel:wkspSelPanel layout:$d{!ui-horizontal cellType:middle style:$s{width:100%;}} styleClass:$e{fc-topbannerswitch}
     components:$c{currentWkspLabel currentWkspSel}
 !ui-label:currentWkspLabel caption:$m{application.workspace.caption} styleClass:$s{fc-applicationlabel}
-!ui-select:currentWkspSel styleClass:$e{fc-tiny} style:$s{width:220px;} list:$s{roleworkspacelist} listKey:code
+!ui-select:currentWkspSel style:$s{width:220px;} list:$s{roleworkspacelist} listKey:code
 	binding:workspaceCode
     eventHandler:$d{!ui-event event:onchange action:$c{wkspChangeAct}}
 

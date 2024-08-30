@@ -45,14 +45,13 @@
     eventHandler:$d{!ui-event event:onclick action:$c{userDetailsAct}}
 
 !ui-panel:topBannerSwitch layout:$d{!ui-horizontal cellType:middle style:$s{width:100%;}} styleClass:$e{fc-topbannerswitch}
-    components:$c{utilitiesBtn currentAppLabel currentAppText switchAppBtn}
+    components:$c{currentAppLabel currentAppSel newAppBtn}
 !ui-label:currentAppLabel caption:$m{studio.application.caption} styleClass:$s{fc-applicationlabel}
-!ui-text:currentAppText style:$s{width:220px;} readOnly:true
-    binding:$j{com.flowcentraltech.flowcentral.studio.constants.StudioSessionAttributeConstants.CURRENT_APPLICATION_DESC}
-!ui-button:switchAppBtn caption:$m{button.switch} styleClass:$e{fc-orangebutton}
-    eventHandler:$d{!ui-event event:onclick action:$c{switchAppAct}} debounce:false
-!ui-button:utilitiesBtn caption:$m{button.utilities} styleClass:$e{fc-greenbutton} style:$s{margin-right: 36px;}
-    eventHandler:$d{!ui-event event:onclick action:$c{utilitiesAct}} debounce:false
+!ui-select:currentAppSel style:$s{width:220px;} list:$s{devapplicationlist} binding:currentApplicationId
+	blankOption:$m{studio.application.utilities}
+    eventHandler:$d{!ui-event event:onchange action:$c{currentAppChangeAct}}
+!ui-button:newAppBtn caption:$m{button.newapplication} styleClass:$e{fc-bluebutton} debounce:false
+    eventHandler:$d{!ui-event event:onclick action:$c{newAppAct}}
     
 
 !ui-panel:navigationBand styleClass:$e{fc-topnavcontrol} components:$c{logoutLabel}
@@ -67,6 +66,13 @@
 !ui-contentpanel:content styleClassBinding:$e{fc-content-tabbed}
 	paths:$s{/applicationstudio/dashboard/openPage} tabbed:true
 	documentPath:$s{/applicationstudio} titleUppercase:false  
+
+// New application dialog
+!fc-newapplicationdialogpanel:createApplicationPopup style:$s{width:740px;}
+	dialogCaption:$m{studio.application.new}
+	createAppBinding:createAppForm
+	dialogCreateApplicationPath:$n{/createApplication}
+    closeDialogPath:$n{/cancelCreateApplication}
 	 
 // Show user details popup
 !fc-userdetailspanel:userDetailsPopup dialogCaption:$m{application.user.details}
@@ -86,6 +92,7 @@
 
 //Actions 
 !ui-post:userDetailsAct path:$n{/showUserDetails}
-!ui-post:utilitiesAct path:$n{/showUtilities}
-!ui-post:switchAppAct path:$s{/applicationstudio/dashboard/showSwitchApplication}
+!ui-post:currentAppChangeAct path:$n{/switchApplication} components:$c{currentAppSel}
+!ui-post:createApplicationAct path:$n{/createApplication}
+!ui-post:newAppAct path:$n{/showCreateApplication}
 !ui-post:logoutAct path:$n{/logOut} confirm:$m{application.logout.confirm}

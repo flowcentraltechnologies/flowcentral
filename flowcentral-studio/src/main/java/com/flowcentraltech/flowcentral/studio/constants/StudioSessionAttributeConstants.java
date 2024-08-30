@@ -32,5 +32,7 @@ public interface StudioSessionAttributeConstants {
 
     String CURRENT_APPLICATION_DESC = "fc.CURRENT_APPLICATION_DESC";
 
+    String CURRENT_MENU_CATEGORY = "fc.CURRENT_MENU_CATEGORY";
+
     String CLEAR_PAGES = "fc.CLEAR_PAGES";
 }

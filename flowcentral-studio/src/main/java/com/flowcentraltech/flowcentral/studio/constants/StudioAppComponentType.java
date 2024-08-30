@@ -446,6 +446,10 @@ public enum StudioAppComponentType implements EnumConst {
         return showClassified;
     }
     
+    public boolean isComponentType() {
+        return componentType != null;
+    }
+    
     public String labelKey() {
         return labelKey;
     }

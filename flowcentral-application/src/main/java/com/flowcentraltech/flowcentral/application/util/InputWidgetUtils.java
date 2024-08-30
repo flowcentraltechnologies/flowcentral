@@ -616,29 +616,31 @@ public final class InputWidgetUtils {
 
     public static String getSetValuesDefinition(SetValuesDef setValuesDef) throws UnifyException {
         String result = null;
-        try (StringWriter sw = new StringWriter(); BufferedWriter bw = new BufferedWriter(sw)) {
-            if (!DataUtils.isBlank(setValuesDef.getSetValueList())) {
-                for (SetValueDef setValueDef : setValuesDef.getSetValueList()) {
-                    bw.write(setValueDef.getFieldName());
-                    bw.write(']');
-                    if (setValueDef.getType() != null) {
-                        bw.write(setValueDef.getType().code());
+        if (setValuesDef != null) {
+            try (StringWriter sw = new StringWriter(); BufferedWriter bw = new BufferedWriter(sw)) {
+                if (!DataUtils.isBlank(setValuesDef.getSetValueList())) {
+                    for (SetValueDef setValueDef : setValuesDef.getSetValueList()) {
+                        bw.write(setValueDef.getFieldName());
                         bw.write(']');
-
-                        if (setValueDef.getParam() != null) {
-                            bw.write(setValueDef.getParam());
+                        if (setValueDef.getType() != null) {
+                            bw.write(setValueDef.getType().code());
                             bw.write(']');
+
+                            if (setValueDef.getParam() != null) {
+                                bw.write(setValueDef.getParam());
+                                bw.write(']');
+                            }
                         }
+
+                        bw.newLine();
                     }
-
-                    bw.newLine();
                 }
-            }
 
-            bw.flush();
-            result = sw.toString();
-        } catch (IOException e) {
-            throw new UnifyOperationException(e);
+                bw.flush();
+                result = sw.toString();
+            } catch (IOException e) {
+                throw new UnifyOperationException(e);
+            }
         }
 
         return result;

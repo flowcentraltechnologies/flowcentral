@@ -81,11 +81,12 @@ public class StudioMenuWriter extends AbstractPanelWriter {
                     StudioAppComponentType.APPLICATION));
 
     private static final List<StudioAppComponentType> menuCategoryList = Collections.unmodifiableList(Arrays.asList(
-            StudioAppComponentType.ENTITY, StudioAppComponentType.APPLET, StudioAppComponentType.TABLE,
-            StudioAppComponentType.FORM, StudioAppComponentType.REPORT_CONFIGURATION, StudioAppComponentType.WORKFLOW,
-            StudioAppComponentType.CHART_DATASOURCE, StudioAppComponentType.CHART, StudioAppComponentType.DASHBOARD,
+            StudioAppComponentType.ENTITY, StudioAppComponentType.REFERENCE, StudioAppComponentType.ENUMERATION,
+            StudioAppComponentType.WIDGET, StudioAppComponentType.APPLET, StudioAppComponentType.TABLE,
+            StudioAppComponentType.FORM, StudioAppComponentType.REPORT_CONFIGURATION,
             StudioAppComponentType.NOTIFICATION_TEMPLATE, StudioAppComponentType.NOTIFICATION_LARGETEXT,
-            StudioAppComponentType.REFERENCE, StudioAppComponentType.ENUMERATION, StudioAppComponentType.WIDGET));
+            StudioAppComponentType.WORKFLOW, StudioAppComponentType.CHART_DATASOURCE, StudioAppComponentType.CHART,
+            StudioAppComponentType.DASHBOARD));
 
     @Override
     protected void doWriteStructureAndContent(ResponseWriter writer, Widget widget) throws UnifyException {
@@ -120,12 +121,19 @@ public class StudioMenuWriter extends AbstractPanelWriter {
                 : (isCollaborationEnabled ? collabUtilMenuCategoryList : utilMenuCategoryList);
         StudioAppComponentType currCategory = studioMenuWidget.getCurrentSel();
         if (currCategory == null) {
+            currCategory = getSessionAttribute(StudioAppComponentType.class,
+                    StudioSessionAttributeConstants.CURRENT_MENU_CATEGORY);
+        }
+
+        if (currCategory == null || (application && !currCategory.isComponentType())
+                || (!application && currCategory.isComponentType())) {
             currCategory = application ? StudioAppComponentType.ENTITY
                     : (isCollaborationEnabled ? StudioAppComponentType.COLLABORATION
                             : (codeGenerationProvider != null ? StudioAppComponentType.CODEGENERATION
                                     : StudioAppComponentType.APPLICATION));
-            studioMenuWidget.setCurrentSel(currCategory);
         }
+
+        studioMenuWidget.setCurrentSel(currCategory);
 
         writer.write("<div");
         if (searchable) {
@@ -203,7 +211,14 @@ public class StudioMenuWriter extends AbstractPanelWriter {
             writer.write("<ul>");
             JsonWriter mjw = new JsonWriter();
             mjw.beginArray();
-            final StudioAppComponentType currCategory = studioMenuWidget.getCurrentSel();
+            StudioAppComponentType currCategory = studioMenuWidget.getCurrentSel();
+            if (currCategory == null) {
+                currCategory = getSessionAttribute(StudioAppComponentType.class,
+                        StudioSessionAttributeConstants.CURRENT_MENU_CATEGORY);
+            } else {
+                setSessionAttribute(StudioSessionAttributeConstants.CURRENT_MENU_CATEGORY, currCategory);
+            }
+
             final boolean isApplications = StudioAppComponentType.APPLICATION.equals(currCategory);
             final boolean isCollaboration = StudioAppComponentType.COLLABORATION.equals(currCategory);
             final boolean isCodeGeneration = codeGenerationProvider != null
