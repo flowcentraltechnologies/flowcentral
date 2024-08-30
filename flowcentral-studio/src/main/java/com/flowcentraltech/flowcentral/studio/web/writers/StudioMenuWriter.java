@@ -121,14 +121,16 @@ public class StudioMenuWriter extends AbstractPanelWriter {
                 : (isCollaborationEnabled ? collabUtilMenuCategoryList : utilMenuCategoryList);
         StudioAppComponentType currCategory = studioMenuWidget.getCurrentSel();
         if (currCategory == null) {
+            currCategory = getSessionAttribute(StudioAppComponentType.class,
+                    StudioSessionAttributeConstants.CURRENT_MENU_CATEGORY);
+        }
+
+        if (currCategory == null || (application && !currCategory.isComponentType())
+                || (!application && currCategory.isComponentType())) {
             currCategory = application ? StudioAppComponentType.ENTITY
                     : (isCollaborationEnabled ? StudioAppComponentType.COLLABORATION
                             : (codeGenerationProvider != null ? StudioAppComponentType.CODEGENERATION
                                     : StudioAppComponentType.APPLICATION));
-        } else {
-            if (application && !currCategory.isComponentType()) {
-               currCategory =  StudioAppComponentType.ENTITY; 
-            }
         }
 
         studioMenuWidget.setCurrentSel(currCategory);

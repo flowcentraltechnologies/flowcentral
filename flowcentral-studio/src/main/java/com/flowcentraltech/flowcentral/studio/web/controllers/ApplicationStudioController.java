@@ -145,8 +145,11 @@ public class ApplicationStudioController extends AbstractFlowCentralPageControll
     @Override
     protected void onIndexPage() throws UnifyException {
         super.onIndexPage();
+        ApplicationStudioPageBean pageBean = getPageBean();
 
         Long applicationId = (Long) getSessionAttribute(StudioSessionAttributeConstants.CURRENT_APPLICATION_ID);
+        pageBean.setCurrentApplicationId(applicationId);
+        
         if (!QueryUtils.isValidLongCriteria(applicationId)
                 || Boolean.TRUE.equals(removeSessionAttribute(StudioSessionAttributeConstants.CLEAR_PAGES))) {
             ContentPanel contentPanel = getPageWidgetByShortName(ContentPanel.class, "content");
