@@ -114,11 +114,5 @@ public class ApplicationDashboardController extends AbstractPageController<Appli
         super.onOpenPage();
 
     }
-//
-//    private void setApplicationSessionAttributes(Application application) throws UnifyException {
-//        setSessionAttribute(StudioSessionAttributeConstants.CURRENT_APPLICATION_ID, application.getId());
-//        setSessionAttribute(StudioSessionAttributeConstants.CURRENT_APPLICATION_NAME, application.getName());
-//        setSessionAttribute(StudioSessionAttributeConstants.CURRENT_APPLICATION_DESC, application.getDescription());
-//        setSessionAttribute(StudioSessionAttributeConstants.CLEAR_PAGES, Boolean.TRUE);
-//    }
+
 }

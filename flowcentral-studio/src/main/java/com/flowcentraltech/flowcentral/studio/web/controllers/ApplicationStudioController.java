@@ -20,13 +20,16 @@ import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleAuditConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationResultMappingConstants;
 import com.flowcentraltech.flowcentral.application.entities.Application;
+import com.flowcentraltech.flowcentral.system.entities.Module;
 import com.flowcentraltech.flowcentral.application.entities.ApplicationQuery;
 import com.flowcentraltech.flowcentral.common.business.LoginUserPhotoGenerator;
 import com.flowcentraltech.flowcentral.common.business.UserLoginActivityProvider;
 import com.flowcentraltech.flowcentral.common.web.controllers.AbstractFlowCentralPageController;
 import com.flowcentraltech.flowcentral.studio.constants.StudioAppComponentType;
 import com.flowcentraltech.flowcentral.studio.constants.StudioSessionAttributeConstants;
+import com.flowcentraltech.flowcentral.studio.web.data.CreateAppForm;
 import com.flowcentraltech.flowcentral.studio.web.widgets.StudioMenuWidget;
+
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -50,6 +53,9 @@ import com.tcdng.unify.web.ui.widget.ContentPanel;
 @UplBinding("web/studio/upl/applicationstudio.upl")
 @ResultMappings({
         @ResultMapping(name = "showuserdetails", response = { "!showpopupresponse popup:$s{userDetailsPopup}" }),
+        @ResultMapping(name = "reloadapplicationstudio", response = { "!forwardresponse path:$s{/applicationstudio}" }),
+        @ResultMapping(name = "showcreateapplication", response = {"!showpopupresponse popup:$s{createApplicationPopup}" }),
+        @ResultMapping(name = "cancelnewapplication", response = { "!hidepopupresponse" }),
         @ResultMapping(name = "forwardtohome", response = { "!forwardresponse path:$x{application.web.home}" }),
         @ResultMapping(name = ApplicationResultMappingConstants.SHOW_TEXT_TEMPLATE_EDITOR,
                 response = { "!showpopupresponse popup:$s{textTemplatePopup}" }),
@@ -115,6 +121,46 @@ public class ApplicationStudioController extends AbstractFlowCentralPageControll
     }
 
     @Action
+    public String showCreateApplication() throws UnifyException {
+        ApplicationStudioPageBean pageBean = getPageBean();
+        pageBean.setCreateAppForm(new CreateAppForm());
+        return "showcreateapplication";
+    }
+
+    @Action
+    public String createApplication() throws UnifyException {
+        ApplicationStudioPageBean pageBean = getPageBean();
+        CreateAppForm createAppForm = pageBean.getCreateAppForm();
+
+        Module module = null;
+        if (createAppForm.isCreateModule()) {
+            module = new Module();
+            module.setName(createAppForm.getModuleName());
+            module.setDescription(createAppForm.getModuleDesc());
+            module.setLabel(createAppForm.getModuleLabel());
+            module.setShortCode(createAppForm.getModuleShortCode());
+        }
+
+        Application application = new Application();
+        application.setModuleId(createAppForm.getModuleId());
+        application.setName(createAppForm.getApplicationName());
+        application.setDescription(createAppForm.getApplicationDesc());
+        application.setLabel(createAppForm.getApplicationLabel());
+        application.setDevelopable(true);
+        application.setMenuAccess(true);
+        final Long applicationId = appletUtilities.application().createApplication(application, module);
+
+        pageBean.setCurrentApplicationId(applicationId);
+        setApplicationSessionAttributes(application);
+        return "reloadapplicationstudio";
+    }
+
+    @Action
+    public String cancelCreateApplication() throws UnifyException {
+        return "cancelnewapplication";
+    }
+    
+    @Action
     public String logOut() throws UnifyException {
         logUserEvent(ApplicationModuleAuditConstants.LOGOUT);
         userLoginActivityProvider.logoutUser(true);
@@ -149,7 +195,7 @@ public class ApplicationStudioController extends AbstractFlowCentralPageControll
 
         Long applicationId = (Long) getSessionAttribute(StudioSessionAttributeConstants.CURRENT_APPLICATION_ID);
         pageBean.setCurrentApplicationId(applicationId);
-        
+
         if (!QueryUtils.isValidLongCriteria(applicationId)
                 || Boolean.TRUE.equals(removeSessionAttribute(StudioSessionAttributeConstants.CLEAR_PAGES))) {
             ContentPanel contentPanel = getPageWidgetByShortName(ContentPanel.class, "content");
@@ -163,13 +209,13 @@ public class ApplicationStudioController extends AbstractFlowCentralPageControll
         setSessionAttribute(StudioSessionAttributeConstants.CURRENT_APPLICATION_DESC, application.getDescription());
         setSessionAttribute(StudioSessionAttributeConstants.CLEAR_PAGES, Boolean.TRUE);
     }
-    
+
     private void setCategorySelect() throws UnifyException {
         final StudioAppComponentType currCategory = getSessionAttribute(StudioAppComponentType.class,
                 StudioSessionAttributeConstants.CURRENT_MENU_CATEGORY);
         getPageWidgetByShortName(StudioMenuWidget.class, "studioMenuPanel").setCurrentSel(currCategory);
     }
-    
+
     private void clearCategorySelect() throws UnifyException {
         getPageWidgetByShortName(StudioMenuWidget.class, "studioMenuPanel").setCurrentSel(null);
     }
