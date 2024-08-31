@@ -357,6 +357,12 @@ public final class InputWidgetUtils {
     private static String resolveEditor(String editor, WidgetTypeDef widgetTypeDef, EntityFieldAttributes efa,
             EntityFieldDef entityFieldDef, String reference) throws UnifyException {
         switch (widgetTypeDef.getLongName()) {
+            case "application.richtexteditor":
+            case "application.richtexteditormedium":
+            case "application.richtexteditorlarge":
+            case "application.richtexteditorxlarge":
+            case "application.richtexteditorxxlarge":
+                break;
             case "application.emailset":
             case "application.mobileset":
             case "application.textarea":

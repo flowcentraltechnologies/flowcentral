@@ -236,6 +236,29 @@
 			dataType="string" inputType="string"
 			editor="!ui-textarea minLen:%s maxLen:%s trim:%s rows:64"
 			renderer="!ui-label" />
+		<widgetType name="richtexteditor" listOption="true"
+			description="$m{application.widgettype.richtexteditor}" dataType="string"
+			inputType="string" editor="!ui-richtexteditor rows:4"
+			renderer="!ui-label" />
+		<widgetType name="richtexteditormedium" listOption="true"
+			description="$m{application.widgettype.richtexteditormedium}"
+			dataType="string" inputType="string"
+			editor="!ui-richtexteditor rows:8" renderer="!ui-label" />
+		<widgetType name="richtexteditorlarge" listOption="true"
+			description="$m{application.widgettype.richtexteditorlarge}"
+			dataType="string" inputType="string"
+			editor="!ui-richtexteditor rows:16"
+			renderer="!ui-label" />
+		<widgetType name="richtexteditorxlarge" listOption="true"
+			description="$m{application.widgettype.richtexteditorxlarge}"
+			dataType="string" inputType="string"
+			editor="!ui-richtexteditor rows:32"
+			renderer="!ui-label" />
+		<widgetType name="richtexteditorxxlarge" listOption="true"
+			description="$m{application.widgettype.richtexteditorxxlarge}"
+			dataType="string" inputType="string"
+			editor="!ui-richtexteditor rows:64"
+			renderer="!ui-label" />
 		<widgetType name="password" listOption="true"
 			description="$m{application.widgettype.password}" dataType="string"
 			inputType="string" editor="!ui-password minLen:%s maxLen:%s trim:%s"
