@@ -2986,7 +2986,7 @@
 				description="$m{studio.appentityfield.form.formstatepolicy.stringfield}">
 				<onCondition>
 					<restriction type="amongst" field="dataType"
-						paramA="ST|CT" />
+						paramA="ST" />
 				</onCondition>
 				<setStates>
 					<setState type="field"
@@ -3049,6 +3049,16 @@
 				description="$m{studio.appentityfield.form.formstatepolicy.blobfield}">
 				<onCondition>
 					<restriction type="equals" field="dataType" paramA="BT" />
+				</onCondition>
+				<setStates>
+					<setState type="field" target="nullable" visible="true" />
+				</setStates>
+			</formStatePolicy>
+			<formStatePolicy type="on_switch"
+				name="clobFieldPolicy"
+				description="$m{studio.appentityfield.form.formstatepolicy.clobfield}">
+				<onCondition>
+					<restriction type="equals" field="dataType" paramA="CT" />
 				</onCondition>
 				<setStates>
 					<setState type="field" target="nullable" visible="true" />

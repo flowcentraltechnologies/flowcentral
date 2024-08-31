@@ -57,6 +57,11 @@ public final class ApplicationQueryUtils {
                 query.addRestriction(new And().add(new Equals("applicationName", "application"))
                         .add(new Amongst("name", Arrays.asList("fileuploadwildcard", "fileuploadimage", "fileuploadcsv",
                                 "fileuploadexcel", "fileuploadpdf", "fileuploadtext", "picture"))));
+            } else if (EntityFieldDataType.CLOB.equals(entityFieldDataType)) {
+                query.addRestriction(new And().add(new Equals("applicationName", "application"))
+                        .add(new Amongst("name", Arrays.asList("richtexteditor", "richtexteditormedium", "richtexteditorlarge",
+                                "richtexteditorxlarge", "richtexteditorxxlarge","textarea", "textareamedium", "textarealarge",
+                                "textareaxlarge", "textareaxxlarge"))));
             } else if (entityFieldDataType.isEnumDataType()) {
                 query.addRestriction(new Or()
                         .add(new And().add(new Equals("applicationName", "application")).add(
