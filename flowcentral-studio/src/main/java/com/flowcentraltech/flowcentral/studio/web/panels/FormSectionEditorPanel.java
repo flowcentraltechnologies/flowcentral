@@ -17,6 +17,7 @@
 package com.flowcentraltech.flowcentral.studio.web.panels;
 
 import com.flowcentraltech.flowcentral.common.constants.DialogFormMode;
+import com.flowcentraltech.flowcentral.configuration.constants.FormColumnsType;
 import com.flowcentraltech.flowcentral.studio.web.widgets.FormEditor;
 import com.flowcentraltech.flowcentral.studio.web.widgets.FormEditor.FormSection;
 import com.tcdng.unify.core.UnifyException;
@@ -40,9 +41,16 @@ public class FormSectionEditorPanel extends AbstractDialogPanel {
         super.switchState();
 
         FormSection formSection = getValue(FormEditor.class).getEditSection();
-        boolean isCreate = DialogFormMode.CREATE.equals(DialogFormMode.fromName(formSection.getMode()));
+        final boolean isCreate = DialogFormMode.CREATE.equals(DialogFormMode.fromName(formSection.getMode()));
         setVisible("addBtn", isCreate);
         setVisible("applyBtn", !isCreate);
+
+        final boolean isSingleColumn = FormColumnsType.TYPE_1
+                .equals(FormColumnsType.fromCode(formSection.getColumns()));
+        setVisible("frmPanel", isSingleColumn);
+        if (!isSingleColumn) {
+            formSection.setPanel(null);
+        }
     }
 
     @Action
@@ -54,6 +62,11 @@ public class FormSectionEditorPanel extends AbstractDialogPanel {
     @Action
     public void apply() throws UnifyException {
         commandHidePopup();
+    }
+
+    @Action
+    public void columnChange() throws UnifyException {
+
     }
 
 }

@@ -647,9 +647,9 @@ public class FormDef extends BaseApplicationEntityDef {
         }
 
         public Builder addFormSection(int tabIndex, String name, String sectionLabel, FormColumnsType columns,
-                boolean visible, boolean editable, boolean disabled) {
+                String panel, boolean visible, boolean editable, boolean disabled) {
             checkTabIndex(tabIndex);
-            formTabDefList.get(tabIndex).addFormSectionDef(sectionLabel, name, columns, visible, editable, disabled);
+            formTabDefList.get(tabIndex).addFormSectionDef(sectionLabel, name, columns, panel, visible, editable, disabled);
             return this;
         }
 
@@ -853,8 +853,9 @@ public class FormDef extends BaseApplicationEntityDef {
                     formSectionDefList.add(
                             new FormSectionDef(DataUtils.unmodifiableList(tempFormSectionDef.getFormFieldDefList()),
                                     tempFormSectionDef.getName(), tempFormSectionDef.getSectionLabel(),
-                                    tempFormSectionDef.getColumns(), tempFormSectionDef.isVisible(),
-                                    tempFormSectionDef.isEditable(), tempFormSectionDef.isDisabled()));
+                                    tempFormSectionDef.getColumns(), tempFormSectionDef.getPanel(),
+                                    tempFormSectionDef.isVisible(), tempFormSectionDef.isEditable(),
+                                    tempFormSectionDef.isDisabled()));
                 }
 
                 formTabDefList.add(new FormTabDef(tempFormTabDef.getContentType(), tempFormTabDef.getFilterGroupDef(),
@@ -1012,10 +1013,10 @@ public class FormDef extends BaseApplicationEntityDef {
                 return formSectionDefList;
             }
 
-            public void addFormSectionDef(String sectionLabel, String name, FormColumnsType columns, boolean visible,
-                    boolean editable, boolean disabled) {
+            public void addFormSectionDef(String sectionLabel, String name, FormColumnsType columns, String panel,
+                    boolean visible, boolean editable, boolean disabled) {
                 formSectionDefList
-                        .add(new TempFormSectionDef(name, sectionLabel, columns, visible, editable, disabled));
+                        .add(new TempFormSectionDef(name, sectionLabel, columns, panel, visible, editable, disabled));
             }
 
             public boolean isIgnoreParentCondition() {
@@ -1057,18 +1058,21 @@ public class FormDef extends BaseApplicationEntityDef {
 
             private FormColumnsType columns;
 
+            private String panel;
+            
             private boolean visible;
 
             private boolean editable;
 
             private boolean disabled;
 
-            public TempFormSectionDef(String name, String sectionLabel, FormColumnsType columns, boolean visible,
-                    boolean editable, boolean disabled) {
+            public TempFormSectionDef(String name, String sectionLabel, FormColumnsType columns, String panel,
+                    boolean visible, boolean editable, boolean disabled) {
                 this.formFieldDefList = new ArrayList<FormFieldDef>();
                 this.name = name;
                 this.sectionLabel = sectionLabel;
                 this.columns = columns;
+                this.panel = panel;
                 this.visible = visible;
                 this.editable = editable;
                 this.disabled = disabled;
@@ -1095,6 +1099,10 @@ public class FormDef extends BaseApplicationEntityDef {
 
             public FormColumnsType getColumns() {
                 return columns;
+            }
+
+            public String getPanel() {
+                return panel;
             }
 
             public boolean isVisible() {

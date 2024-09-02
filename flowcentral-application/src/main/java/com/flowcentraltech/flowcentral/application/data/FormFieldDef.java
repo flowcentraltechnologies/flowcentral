@@ -52,8 +52,8 @@ public class FormFieldDef {
     private boolean disabled;
 
     public FormFieldDef(EntityFieldDef entityFieldDef, WidgetTypeDef widgetTypeDef, RefDef inputRefDef,
-            String previewForm, String fieldLabel, String renderer, int column, boolean switchOnChange, boolean saveAs, boolean required,
-            boolean visible, boolean editable, boolean disabled) {
+            String previewForm, String fieldLabel, String renderer, int column, boolean switchOnChange, boolean saveAs,
+            boolean required, boolean visible, boolean editable, boolean disabled) {
         this.entityFieldDef = entityFieldDef;
         this.widgetTypeDef = widgetTypeDef;
         this.inputRefDef = inputRefDef;

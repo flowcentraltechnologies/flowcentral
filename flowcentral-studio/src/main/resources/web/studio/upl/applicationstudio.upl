@@ -45,12 +45,13 @@
     eventHandler:$d{!ui-event event:onclick action:$c{userDetailsAct}}
 
 !ui-panel:topBannerSwitch layout:$d{!ui-horizontal cellType:middle style:$s{width:100%;}} styleClass:$e{fc-topbannerswitch}
-    components:$c{currentAppLabel currentAppSel newAppBtn}
+    components:$c{newAppBtn currentAppLabel currentAppSel}
 !ui-label:currentAppLabel caption:$m{studio.application.caption} styleClass:$s{fc-applicationlabel}
 !ui-select:currentAppSel style:$s{width:220px;} list:$s{devapplicationlist} binding:currentApplicationId
 	blankOption:$m{studio.application.utilities}
     eventHandler:$d{!ui-event event:onchange action:$c{currentAppChangeAct}}
 !ui-button:newAppBtn caption:$m{button.newapplication} styleClass:$e{fc-bluebutton} debounce:false
+	style:$s{margin-right:14px;}
     eventHandler:$d{!ui-event event:onclick action:$c{newAppAct}}
     
 

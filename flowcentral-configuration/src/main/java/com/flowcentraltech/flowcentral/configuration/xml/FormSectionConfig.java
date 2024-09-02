@@ -41,6 +41,9 @@ public class FormSectionConfig extends BaseConfig {
     @JacksonXmlProperty(isAttribute = true)
     private String label;
 
+    @JacksonXmlProperty(isAttribute = true)
+    private String panel;
+
     @JsonSerialize(using = FormColumnsTypeXmlAdapter.Serializer.class)
     @JsonDeserialize(using = FormColumnsTypeXmlAdapter.Deserializer.class)
     @JacksonXmlProperty(isAttribute = true)
@@ -79,6 +82,14 @@ public class FormSectionConfig extends BaseConfig {
 
     public void setLabel(String label) {
         this.label = label;
+    }
+
+    public String getPanel() {
+        return panel;
+    }
+
+    public void setPanel(String panel) {
+        this.panel = panel;
     }
 
     public FormColumnsType getColumns() {

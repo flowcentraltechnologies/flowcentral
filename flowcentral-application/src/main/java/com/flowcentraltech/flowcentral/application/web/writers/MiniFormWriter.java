@@ -26,6 +26,8 @@ import com.flowcentraltech.flowcentral.application.web.widgets.MiniFormWidget;
 import com.flowcentraltech.flowcentral.application.web.widgets.MiniFormWidget.FormSection;
 import com.flowcentraltech.flowcentral.application.web.widgets.MiniFormWidget.FormSection.RowRegulator;
 import com.flowcentraltech.flowcentral.application.web.widgets.MiniFormWidget.FormWidget;
+import com.flowcentraltech.flowcentral.common.annotation.FormSectionLoading;
+import com.flowcentraltech.flowcentral.common.business.policies.FormSectionBeanLoader;
 import com.flowcentraltech.flowcentral.common.web.util.WidgetWriterUtils;
 import com.flowcentraltech.flowcentral.common.web.util.WidgetWriterUtils.ColumnRenderInfo;
 import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
@@ -213,9 +215,17 @@ public class MiniFormWriter extends AbstractControlWriter {
 
     private void writeFieldCell(ResponseWriter writer, FormContext ctx, FormWidget formWidget, String quickView)
             throws UnifyException {
-        if (formWidget != null) {           
+        if (formWidget != null) {
             Widget chWidget = formWidget.getResolvedWidget();
             if (chWidget.isVisible()) {
+                if (formWidget.isPanel()) {
+                    FormSectionLoading fsl = formWidget.getResolvedWidget().getClass()
+                            .getAnnotation(FormSectionLoading.class);
+                    FormSectionBeanLoader loader = getComponent(FormSectionBeanLoader.class, fsl.value());
+                    Object valBean = loader.getLoadBean(ctx.getFormValueStore().getReader());
+                    setRequestAttribute(formWidget.getSectionName(), valBean);
+                }
+
                 writer.write("<div class=\"mffield\">");
                 writer.write("<div class=\"mffieldrow\">");
 
@@ -263,7 +273,7 @@ public class MiniFormWriter extends AbstractControlWriter {
 
                 writer.write("</div>");
                 writer.write("</div>");
-            }         
+            }
         }
     }
     

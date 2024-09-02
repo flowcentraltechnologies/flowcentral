@@ -71,6 +71,9 @@ public class AppFormElement extends BaseConfigEntity {
     private String filter;
 
     @Column(length = 64, nullable = true)
+    private String panel;
+
+    @Column(length = 64, nullable = true)
     private String editAction;
 
     @Column(length = 64, nullable = true)
@@ -238,6 +241,14 @@ public class AppFormElement extends BaseConfigEntity {
 
     public void setFilter(String filter) {
         this.filter = filter;
+    }
+
+    public String getPanel() {
+        return panel;
+    }
+
+    public void setPanel(String panel) {
+        this.panel = panel;
     }
 
     public String getEditAction() {

@@ -137,6 +137,7 @@ public class FormEditorPage extends AbstractStudioEditorPage implements TabSheet
                     appFormElement.setSectionColumns(FormColumnsType.fromCode(formSection.getColumns()));
                     appFormElement.setElementName(formSection.getName());
                     appFormElement.setLabel(formSection.getLabel());
+                    appFormElement.setPanel(formSection.getPanel());
                     appFormElement.setVisible(formSection.isVisible());
                     appFormElement.setEditable(formSection.isEditable());
                     appFormElement.setDisabled(formSection.isDisabled());
@@ -190,8 +191,8 @@ public class FormEditorPage extends AbstractStudioEditorPage implements TabSheet
                     break;
                 case SECTION:
                     feb.addSection(appFormElement.getElementName(), appFormElement.getLabel(),
-                            appFormElement.getSectionColumns(), appFormElement.isVisible(), appFormElement.isEditable(),
-                            appFormElement.isDisabled());
+                            appFormElement.getSectionColumns(), appFormElement.getPanel(), appFormElement.isVisible(),
+                            appFormElement.isEditable(), appFormElement.isDisabled());
                     break;
                 case TAB:
                     feb.addTab(appFormElement.getTabContentType().name(), appFormElement.getElementName(),
@@ -217,7 +218,6 @@ public class FormEditorPage extends AbstractStudioEditorPage implements TabSheet
         tsdb.addTabDef("preview", getAu().resolveSessionMessage("$m{studio.appform.form.preview}"),
                 "fc-formpreviewpanel", RendererType.STANDALONE_PANEL);
         formPreview = new FormPreview(getAu(), formEditor);
-//        formPreview.reload();
         final String appletName = null;
         tabSheet = new TabSheet(tsdb.build(),
                 Arrays.asList(new TabSheetItem("formEditor", appletName, formEditor, DESIGN_INDEX, true),
