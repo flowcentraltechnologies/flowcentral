@@ -146,11 +146,23 @@ public class MiniFormWidget extends AbstractFlowCentralMultiControl implements F
                     }
                 }
 
+                final FormContext ctx = miniForm.getCtx();
+                int sectionIndex = 0;
                 for (FormSectionDef formSectionDef : miniForm.getFormTabDef().getFormSectionDefList()) {
                     int columns = formSectionDef.getColumns().columns();
                     List<FormWidget>[] formWidgetLists = new List[columns];
                     for (int i = 0; i < columns; i++) {
                         formWidgetLists[i] = new ArrayList<FormWidget>();
+                    }
+
+                    if (formSectionDef.isWithPanel()) {
+                        final String bindingName = formSectionDef.getPanel() + sectionIndex;
+                        FormWidget formWidget = new FormWidget(bindingName, null,
+                                addExternalChildStandalonePanel(formSectionDef.getPanel(), getId() + sectionIndex,
+                                        bindingName),
+                                Collections.emptyMap());
+                        formWidgets.put(formWidget.getFieldName(), formWidget);
+                        formWidgetLists[0].add(formWidget);
                     }
 
                     for (FormFieldDef formFieldDef : formSectionDef.getFormFieldDefList()) {
@@ -177,11 +189,12 @@ public class MiniFormWidget extends AbstractFlowCentralMultiControl implements F
 
                 formSections = DataUtils.unmodifiableMap(formSections);
 
-                FormContext ctx = miniForm.getCtx();
                 ctx.addFormWidgetStateList(formWidgets.values());
                 if (miniForm.isMainForm()) {
                     ctx.setMainFormSections(formSections);
                 }
+
+                sectionIndex++;
             }
 
             oldMiniForm = miniForm;
@@ -247,7 +260,8 @@ public class MiniFormWidget extends AbstractFlowCentralMultiControl implements F
 
                 if (formDef.isWithFormWidgetRulesPolicy()) {
                     activatedAltRules = new HashSet<String>();
-                    for (FormWidgetRulesPolicyDef formWidgetRulesPolicyDef : formDef.getFormWidgetRulesPolicyDefList()) {
+                    for (FormWidgetRulesPolicyDef formWidgetRulesPolicyDef : formDef
+                            .getFormWidgetRulesPolicyDefList()) {
                         if (formWidgetRulesPolicyDef.match(formDef, formValueStore, now)) {
                             activatedAltRules.add(formWidgetRulesPolicyDef.getName());
                         }
@@ -599,33 +613,37 @@ public class MiniFormWidget extends AbstractFlowCentralMultiControl implements F
 
         @Override
         public String getFieldName() {
-            return formFieldDef.getFieldName();
+            return formFieldDef != null ? formFieldDef.getFieldName() : null;
         }
 
         @Override
         public String getWidgetName() {
-            return formFieldDef.getWidgetName();
+            return formFieldDef != null ? formFieldDef.getWidgetName() : null;
         }
 
         @Override
         public String getFieldLabel() {
-            return formFieldDef.getFieldLabel();
+            return formFieldDef != null ? formFieldDef.getFieldLabel() : "";
         }
 
         public boolean isSwitchOnChange() {
-            return formFieldDef.isSwitchOnChange();
+            return formFieldDef != null ? formFieldDef.isSwitchOnChange() : false;
         }
 
         @Override
         public Integer getMinLen() {
-            return formFieldDef.getMinLen();
+            return formFieldDef != null ? formFieldDef.getMinLen() : null;
         }
 
         @Override
         public Integer getMaxLen() {
-            return formFieldDef.getMaxLen();
+            return formFieldDef != null ? formFieldDef.getMaxLen() : null;
         }
 
+        public boolean isPanel() {
+            return formFieldDef == null;
+        }
+        
         public Widget getResolvedWidget() {
             return _widget;
         }
@@ -636,11 +654,11 @@ public class MiniFormWidget extends AbstractFlowCentralMultiControl implements F
         }
 
         public String getPreviewForm() {
-            return formFieldDef.getPreviewForm();
+            return formFieldDef != null ? formFieldDef.getPreviewForm() : null;
         }
 
         public boolean isWithPreviewForm() {
-            return formFieldDef.isWithPreviewForm();
+            return formFieldDef != null ? formFieldDef.isWithPreviewForm() : false;
         }
 
         public boolean isFocusable() {
@@ -673,42 +691,46 @@ public class MiniFormWidget extends AbstractFlowCentralMultiControl implements F
         }
 
         public void applyStatePolicy(FormStateRule rule) throws UnifyException {
-            FormSection formSection = formSections.get(sectionName);
-            if (!rule.getVisible().isConforming()) {
-                _widget.setVisible(rule.getVisible().isTrue());
-            }
+            if (formFieldDef != null) {
+                FormSection formSection = formSections.get(sectionName);
+                if (!rule.getVisible().isConforming()) {
+                    _widget.setVisible(rule.getVisible().isTrue());
+                }
 
-            if (!rule.getEditable().isConforming()) {
-                _widget.setEditable(isContainerEditable() && formSection.isEditable() && rule.getEditable().isTrue()
-                        && !formFieldDef.isListOnly());
-            }
+                if (!rule.getEditable().isConforming()) {
+                    _widget.setEditable(isContainerEditable() && formSection.isEditable() && rule.getEditable().isTrue()
+                            && !formFieldDef.isListOnly());
+                }
 
-            if (!rule.getDisabled().isConforming()) {
-                _widget.setDisabled(formSection.isDisabled() || rule.getDisabled().isTrue());
-            }
+                if (!rule.getDisabled().isConforming()) {
+                    _widget.setDisabled(formSection.isDisabled() || rule.getDisabled().isTrue());
+                }
 
-            if (!rule.getRequired().isConforming()) {
-                required = rule.getRequired().isTrue();
+                if (!rule.getRequired().isConforming()) {
+                    required = rule.getRequired().isTrue();
+                }
             }
         }
 
         public void revertState(Set<String> activatedAltRules) throws UnifyException {
-            FormSection formSection = formSections.get(sectionName);
-            _widget = widget;
-            if (!activatedAltRules.isEmpty() && !altWidgets.isEmpty()) {
-                for (Map.Entry<String, Widget> _entry : altWidgets.entrySet()) {
-                    if (activatedAltRules.contains(_entry.getKey())) {
-                        _widget = _entry.getValue();
-                        break;
+            if (formFieldDef != null) {
+                FormSection formSection = formSections.get(sectionName);
+                _widget = widget;
+                if (!activatedAltRules.isEmpty() && !altWidgets.isEmpty()) {
+                    for (Map.Entry<String, Widget> _entry : altWidgets.entrySet()) {
+                        if (activatedAltRules.contains(_entry.getKey())) {
+                            _widget = _entry.getValue();
+                            break;
+                        }
                     }
                 }
-            }
 
-            _widget.setVisible(formFieldDef.isVisible());
-            _widget.setEditable(isContainerEditable() && formSection.isEditable() && formFieldDef.isEditable());
-            _widget.setDisabled(formSection.isDisabled() || formFieldDef.isDisabled()
-                    || formFieldDef.getFieldName().equals(oldMiniForm.getCtx().getFixedReference()));
-            required = formFieldDef.isRequired();
+                _widget.setVisible(formFieldDef.isVisible());
+                _widget.setEditable(isContainerEditable() && formSection.isEditable() && formFieldDef.isEditable());
+                _widget.setDisabled(formSection.isDisabled() || formFieldDef.isDisabled()
+                        || formFieldDef.getFieldName().equals(oldMiniForm.getCtx().getFixedReference()));
+                required = formFieldDef.isRequired();
+            }
         }
     }
 }

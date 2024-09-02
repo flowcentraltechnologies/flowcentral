@@ -919,6 +919,7 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                                     formSectionConfig.setLabel("$m{" + labelKey + "}");
                                 }
 
+                                formSectionConfig.setPanel(appFormElement.getPanel());
                                 formSectionConfig.setVisible(appFormElement.isVisible());
                                 formSectionConfig.setEditable(appFormElement.isEditable());
                                 formSectionConfig.setDisabled(appFormElement.isDisabled());

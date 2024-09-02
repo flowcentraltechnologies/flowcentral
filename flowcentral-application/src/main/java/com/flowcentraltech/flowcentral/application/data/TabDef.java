@@ -70,9 +70,4 @@ public class TabDef {
         this.errors = errors;
     }
 
-    @Override
-    public String toString() {
-        return "TabDef [tabName=" + tabName + ", tabLabel=" + tabLabel + ", tabRenderer=" + tabRenderer
-                + ", rendererType=" + rendererType + ", errors=" + errors + "]";
-    }
 }

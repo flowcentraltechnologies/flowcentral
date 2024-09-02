@@ -155,6 +155,7 @@ public class FormEditor {
     // Sections
     public void performSectionAdd() throws UnifyException {
         FormTab formTab = design.getFormTab(originTabName);
+        editSection.setEntity(formDef.getEntityDef().getLongName());
         formTab.addFormSection(originSecName, editSection);
     }
 
@@ -164,6 +165,7 @@ public class FormEditor {
         originSecName = sectionName;
         editSection = new FormSection();
         editSection.setMode("CREATE");
+        editSection.setEntity(formDef.getEntityDef().getLongName());
         return editSectionPanelName;
     }
 
@@ -171,6 +173,7 @@ public class FormEditor {
         dialogTitle = au.resolveSessionMessage("$m{formeditor.formsectioneditorpanel.caption.edit}");
         editSection = design.getFormSection(tabName, sectionName);
         editSection.setMode("UPDATE");
+        editSection.setEntity(formDef.getEntityDef().getLongName());
         return editSectionPanelName;
     }
 
@@ -247,9 +250,9 @@ public class FormEditor {
             return this;
         }
 
-        public Builder addSection(String name, String label, FormColumnsType columns, boolean visible, boolean editable,
-                boolean disabled) {
-            currentSection = new FormSection(name, label, columns.code(), visible, editable, disabled);
+        public Builder addSection(String name, String label, FormColumnsType columns, String panel, boolean visible,
+                boolean editable, boolean disabled) {
+            currentSection = new FormSection(name, label, columns.code(), panel, visible, editable, disabled);
             currentTab.getSections().add(currentSection);
             return this;
         }
@@ -666,6 +669,8 @@ public class FormEditor {
 
     public static class FormSection {
 
+        private String entity;
+
         private String mode;
 
         private String name;
@@ -673,6 +678,8 @@ public class FormEditor {
         private String label;
 
         private String columns;
+
+        private String panel;
 
         private boolean visible;
 
@@ -682,19 +689,28 @@ public class FormEditor {
 
         private List<FormField> fields;
 
-        public FormSection(String name, String label, String columns, boolean visible, boolean editable,
+        public FormSection(String name, String label, String columns, String panel, boolean visible, boolean editable,
                 boolean disabled) {
-            this();
             this.name = name;
             this.label = label;
             this.columns = columns;
+            this.panel = panel;
             this.visible = visible;
             this.editable = editable;
             this.disabled = disabled;
+            this.fields = new ArrayList<FormField>();
         }
 
         public FormSection() {
             this.fields = new ArrayList<FormField>();
+        }
+
+        public String getEntity() {
+            return entity;
+        }
+
+        public void setEntity(String entity) {
+            this.entity = entity;
         }
 
         public String getMode() {
@@ -741,6 +757,14 @@ public class FormEditor {
             }
 
             this.columns = columns;
+        }
+
+        public String getPanel() {
+            return panel;
+        }
+
+        public void setPanel(String panel) {
+            this.panel = panel;
         }
 
         public boolean isVisible() {

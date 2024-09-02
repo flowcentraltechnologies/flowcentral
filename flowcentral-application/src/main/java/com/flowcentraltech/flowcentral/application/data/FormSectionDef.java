@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.application.data;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.configuration.constants.FormColumnsType;
+import com.tcdng.unify.core.util.StringUtils;
 
 /**
  * Form section definition.
@@ -35,28 +36,33 @@ public class FormSectionDef {
 
     private FormColumnsType columns;
 
+    private String panel;
+
     private boolean visible;
 
     private boolean editable;
 
     private boolean disabled;
 
-    public FormSectionDef(List<FormFieldDef> formFieldDefList, String name, String label, FormColumnsType columns, boolean visible,
-            boolean editable, boolean disabled) {
+    public FormSectionDef(List<FormFieldDef> formFieldDefList, String name, String label, FormColumnsType columns,
+            String panel, boolean visible, boolean editable, boolean disabled) {
         this.formFieldDefList = formFieldDefList;
         this.name = name;
         this.label = label;
         this.columns = columns;
+        this.panel = panel;
         this.visible = visible;
         this.editable = editable;
         this.disabled = disabled;
     }
 
-    public FormSectionDef(FormSectionDef srcFormSectionDef, List<FormFieldDef> formFieldDefList, FormColumnsType columns) {
+    public FormSectionDef(FormSectionDef srcFormSectionDef, List<FormFieldDef> formFieldDefList,
+            FormColumnsType columns) {
         this.formFieldDefList = formFieldDefList;
         this.columns = columns;
         this.name = srcFormSectionDef.name;
         this.label = srcFormSectionDef.label;
+        this.panel = srcFormSectionDef.panel;
         this.visible = srcFormSectionDef.visible;
         this.editable = srcFormSectionDef.editable;
         this.disabled = srcFormSectionDef.disabled;
@@ -72,6 +78,10 @@ public class FormSectionDef {
 
     public String getLabel() {
         return label;
+    }
+
+    public String getPanel() {
+        return panel;
     }
 
     public FormColumnsType getColumns() {
@@ -90,4 +100,7 @@ public class FormSectionDef {
         return disabled;
     }
 
+    public boolean isWithPanel() {
+        return !StringUtils.isBlank(panel);
+    }
 }
