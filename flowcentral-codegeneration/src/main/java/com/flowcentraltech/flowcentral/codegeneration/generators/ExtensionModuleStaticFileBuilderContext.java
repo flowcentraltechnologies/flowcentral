@@ -26,6 +26,7 @@ import com.flowcentraltech.flowcentral.codegeneration.data.DynamicModuleInfo;
 import com.flowcentraltech.flowcentral.configuration.xml.AppChartDataSourcesConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppChartsConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppDashboardsConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.AppHelpSheetsConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppNotifLargeTextsConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppNotifTemplatesConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppReportsConfig;
@@ -130,6 +131,10 @@ public class ExtensionModuleStaticFileBuilderContext {
         nextApplicationConfig.setNotifTemplatesConfig(notifTemplatesConfig);
     }
 
+    public void setAppHelpSheetsConfig(AppHelpSheetsConfig appHelpSheetsConfig) {
+        nextApplicationConfig.setHelpSheetsConfig(appHelpSheetsConfig);
+    }
+    
     public void setNotifLargeTextsConfig(AppNotifLargeTextsConfig notifLargeTextsConfig) {
         nextApplicationConfig.setNotifLargeTextsConfig(notifLargeTextsConfig);
     }

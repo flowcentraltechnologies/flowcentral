@@ -28,6 +28,7 @@ public enum StaticMessageCategoryType {
     CHART("Chart"),
     DASHBOARD("Dashboard"),
     NOTIFICATION("Notification"),
+    HELP("Help"),
     REPORT("Report"),
     WORKFLOW("Workflow"),
     ENUMERATION("Enumeration"),

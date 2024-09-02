@@ -4895,6 +4895,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appForm.setType(appFormConfig.getType());
                     appForm.setEntity(
                             ApplicationNameUtils.ensureLongNameReference(applicationName, appFormConfig.getEntity()));
+                    appForm.setHelpSheet(appFormConfig.getHelpSheet());
                     appForm.setConsolidatedReview(appFormConfig.getConsolidatedReview());
                     appForm.setConsolidatedValidation(appFormConfig.getConsolidatedValidation());
                     appForm.setConsolidatedState(appFormConfig.getConsolidatedState());
@@ -4911,6 +4912,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     oldAppForm.setType(appFormConfig.getType());
                     oldAppForm.setEntity(
                             ApplicationNameUtils.ensureLongNameReference(applicationName, appFormConfig.getEntity()));
+                    oldAppForm.setHelpSheet(appFormConfig.getHelpSheet());
                     oldAppForm.setConsolidatedReview(appFormConfig.getConsolidatedReview());
                     oldAppForm.setConsolidatedValidation(appFormConfig.getConsolidatedValidation());
                     oldAppForm.setConsolidatedState(appFormConfig.getConsolidatedState());
@@ -5440,6 +5442,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 appForm.setType(appFormConfig.getType());
                 appForm.setEntity(
                         ApplicationNameUtils.ensureLongNameReference(applicationName, appFormConfig.getEntity()));
+                appForm.setHelpSheet(appFormConfig.getHelpSheet());
                 appForm.setConsolidatedReview(appFormConfig.getConsolidatedReview());
                 appForm.setConsolidatedValidation(appFormConfig.getConsolidatedValidation());
                 appForm.setConsolidatedState(appFormConfig.getConsolidatedState());

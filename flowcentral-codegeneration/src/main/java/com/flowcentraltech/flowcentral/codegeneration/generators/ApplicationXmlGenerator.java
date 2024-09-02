@@ -795,6 +795,7 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                 appFormConfig.setName(appForm.getName());
                 appFormConfig.setDescription("$m{" + descKey + "}");
                 appFormConfig.setEntity(appForm.getEntity());
+                appFormConfig.setHelpSheet(appForm.getHelpSheet());
                 appFormConfig.setConsolidatedReview(appForm.getConsolidatedReview());
                 appFormConfig.setConsolidatedValidation(appForm.getConsolidatedValidation());
                 appFormConfig.setConsolidatedState(appForm.getConsolidatedState());

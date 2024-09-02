@@ -62,6 +62,7 @@ import com.flowcentraltech.flowcentral.application.entities.AppFormAnnotationQue
 import com.flowcentraltech.flowcentral.application.entities.AppFormElement;
 import com.flowcentraltech.flowcentral.application.entities.AppFormFilter;
 import com.flowcentraltech.flowcentral.application.entities.AppFormQuery;
+import com.flowcentraltech.flowcentral.application.entities.AppHelpSheet;
 import com.flowcentraltech.flowcentral.application.entities.AppPropertyList;
 import com.flowcentraltech.flowcentral.application.entities.AppPropertyRule;
 import com.flowcentraltech.flowcentral.application.entities.AppRef;
@@ -1934,4 +1935,27 @@ public interface ApplicationModuleService extends FlowCentralService {
      *                        if an error occurs
      */
     int getWorkitemCategoryParticipationCount(String role) throws UnifyException;
+
+    /**
+     * Finds help sheet by ID.
+     * 
+     * @param helpSheetId
+     *                        the help sheet ID
+     * @return the help sheet
+     * @throws UnifyException
+     *                        if help sheet with ID is not found. If an
+     *                        error occurs
+     */
+    AppHelpSheet findHelpSheet(Long helpSheetId) throws UnifyException;
+
+    /**
+     * Finds help sheet ID list for application.
+     * 
+     * @param applicationName
+     *                        the application name
+     * @return list of application help sheet IDs
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    List<Long> findCustomHelpSheetIdList(String applicationName) throws UnifyException;
 }

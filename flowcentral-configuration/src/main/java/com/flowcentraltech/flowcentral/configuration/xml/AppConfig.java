@@ -63,6 +63,9 @@ public class AppConfig extends BaseNameConfig {
     @JacksonXmlProperty(localName = "applets")
     private AppletsConfig appletsConfig;
     
+    @JacksonXmlProperty(localName = "helpSheets")
+    private AppHelpSheetsConfig helpSheetsConfig;
+    
     @JacksonXmlProperty(localName = "enumerations")
     private EnumerationsConfig enumerationsConfig;
     
@@ -201,6 +204,14 @@ public class AppConfig extends BaseNameConfig {
 
     public void setWorkflowWizardsConfig(AppWorkflowWizardsConfig workflowWizardsConfig) {
         this.workflowWizardsConfig = workflowWizardsConfig;
+    }
+
+    public AppHelpSheetsConfig getHelpSheetsConfig() {
+        return helpSheetsConfig;
+    }
+
+    public void setHelpSheetsConfig(AppHelpSheetsConfig helpSheetsConfig) {
+        this.helpSheetsConfig = helpSheetsConfig;
     }
 
     public AppletsConfig getAppletsConfig() {

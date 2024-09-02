@@ -17,6 +17,7 @@ package com.flowcentraltech.flowcentral.configuration.business;
 
 import com.flowcentraltech.flowcentral.configuration.data.ApplicationInstall;
 import com.flowcentraltech.flowcentral.configuration.data.FlowCentralInstall;
+import com.flowcentraltech.flowcentral.configuration.data.HelpSheetInstall;
 import com.flowcentraltech.flowcentral.configuration.data.NotifLargeTextInstall;
 import com.flowcentraltech.flowcentral.configuration.data.NotifTemplateInstall;
 import com.flowcentraltech.flowcentral.configuration.data.ReportInstall;
@@ -85,7 +86,18 @@ public interface ConfigurationLoader extends UnifyComponent {
      *                        if an error occurs
      */
     NotifLargeTextInstall loadNotifLargeTextInstallation(String configFile) throws UnifyException;
-
+    
+    /**
+     * Loads help sheet installation configuration.
+     * 
+     * @param configFile
+     *                   the configuration file
+     * @return the help sheet configuration
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    HelpSheetInstall loadHelpSheetInstallation(String configFile) throws UnifyException;
+    
     /**
      * Loads workflow installation configuration.
      * 

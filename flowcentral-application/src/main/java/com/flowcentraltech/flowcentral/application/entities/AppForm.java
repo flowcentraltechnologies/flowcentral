@@ -40,6 +40,9 @@ public class AppForm extends BaseApplicationEntity {
     private String entity;
 
     @Column(length = 64, nullable = true)
+    private String helpSheet;
+
+    @Column(length = 64, nullable = true)
     private String consolidatedValidation;
 
     @Column(length = 64, nullable = true)
@@ -125,6 +128,14 @@ public class AppForm extends BaseApplicationEntity {
 
     public void setTitleFormat(String titleFormat) {
         this.titleFormat = titleFormat;
+    }
+
+    public String getHelpSheet() {
+        return helpSheet;
+    }
+
+    public void setHelpSheet(String helpSheet) {
+        this.helpSheet = helpSheet;
     }
 
     public String getConsolidatedValidation() {

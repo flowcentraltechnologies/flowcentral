@@ -121,10 +121,10 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
         return codegenerationAppletList;
     }
 
-    private static final List<String> APPLICATION_ARTIFACT_GENERATORS = Collections
-            .unmodifiableList(Arrays.asList("charts-xml-generator", "dashboards-xml-generator",
-                    "notification-templates-xml-generator", "notification-largetexts-xml-generator",
-                    "reports-xml-generator", "workflows-xml-generator", "application-xml-generator"));
+    private static final List<String> APPLICATION_ARTIFACT_GENERATORS = Collections.unmodifiableList(
+            Arrays.asList("charts-xml-generator", "dashboards-xml-generator", "notification-templates-xml-generator",
+                    "notification-largetexts-xml-generator", "reports-xml-generator", "workflows-xml-generator",
+                    "help-sheets-xml-generator", "application-xml-generator"));
 
     @Taskable(name = CodeGenerationTaskConstants.GENERATE_EXTENSION_MODULE_FILES_TASK_NAME,
             description = "Generate Extension Module Files Task",

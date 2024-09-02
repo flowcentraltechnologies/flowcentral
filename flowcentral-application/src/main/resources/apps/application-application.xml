@@ -678,6 +678,12 @@
 		<reference name="appFormReviewPolicyRef"
 			description="$m{application.appformreviewpolicy.reference}"
 			entity="appFormReviewPolicy" searchField="message" />
+		<reference name="appHelpSheetRef"
+			description="$m{application.apphelpsheet.reference}" entity="appHelpSheet"
+			searchField="description" />
+		<reference name="appHelpEntryRef"
+			description="$m{application.apphelpentry.reference}"
+			entity="appFormFilter" searchField="fieldName" />
 		<reference name="appWidgetTypeRef"
 			description="$m{application.appwidgettype.reference}"
 			entity="appWidgetType" searchField="description" />
@@ -1581,6 +1587,9 @@
 				inputWidget="application.enumlist" />
 			<field name="entity" label="$m{application.appform.entity}"
 				type="string" />
+			<field name="helpSheet"
+				label="$m{application.appform.helpsheet}" type="string"
+				nullable="true" />
 			<field name="consolidatedValidation"
 				label="$m{application.appform.consolidatedvalidation}" type="string"
 				nullable="true" />
@@ -2012,6 +2021,57 @@
 			<field name="messageTypeDesc"
 				label="$m{application.appformreviewpolicy.messagetypedesc}"
 				type="list_only" key="messageType" property="description" />
+		</entity>
+		<entity name="appHelpSheet" description="$m{application.apphelpsheet}"
+			label="$m{application.apphelpsheet.label}"
+			type="com.flowcentraltech.flowcentral.application.entities.AppHelpSheet">
+			<field name="entity" label="$m{application.apphelpsheet.entity}"
+				type="string" />
+			<field name="label" label="$m{application.apphelpsheet.flabel}"
+				type="string" />
+			<field name="helpOverview" label="$m{application.apphelpsheet.helpoverview}"
+				type="clob" nullable="true" />
+			<field name="entryList"
+				label="$m{application.apphelpsheet.entries}" type="child_list"
+				references="appHelpEntryRef" />
+			<uniqueConstraint name="nameUc"
+				description="$m{application.apphelpsheet.uc.name}"
+				fieldList="applicationId,name">
+				<condition field="devVersionType" value="CRN" />
+			</uniqueConstraint>
+			<uniqueConstraint name="descUc"
+				description="$m{application.apphelpsheet.uc.description}"
+				fieldList="applicationId,description">
+				<condition field="devVersionType" value="CRN" />
+			</uniqueConstraint>
+		</entity>
+		<entity name="appHelpEntry"
+			description="$m{application.apphelpentry}"
+			label="$m{application.apphelpentry.label}"
+			type="com.flowcentraltech.flowcentral.application.entities.AppHelpEntry">
+			<field name="appHelpSheetId"
+				label="$m{application.apphelpentry.apphelpsheetid}" type="ref"
+				references="appHelpSheetRef" inputWidget="application.entitylist" />
+			<field name="fieldName"
+				label="$m{application.apphelpentry.fieldname}" type="string" />
+			<field name="helpContent"
+				label="$m{application.apphelpentry.helpcontent}" type="clob" />
+			<field name="sheetName"
+				label="$m{application.apphelpentry.sheetname}"
+				type="list_only" key="appHelpSheetId" property="name" />
+			<field name="applicationId"
+				label="$m{application.apphelpentry.applicationid}"
+				type="list_only" key="appHelpSheetId" property="applicationId" />
+			<field name="applicationName"
+				label="$m{application.apphelpentry.applicationname}"
+				type="list_only" key="appHelpSheetId" property="applicationName" />
+			<field name="entity"
+				label="$m{application.apphelpentry.entity}"
+				type="list_only" key="appHelpSheetId" property="entity" />
+			<uniqueConstraint name="fieldNameUc"
+				description="$m{application.apphelpentry.uc.fieldname}"
+				fieldList="appHelpSheetId,fieldName">
+			</uniqueConstraint>
 		</entity>
 		<entity name="appWidgetType"
 			description="$m{application.appwidgettype}"

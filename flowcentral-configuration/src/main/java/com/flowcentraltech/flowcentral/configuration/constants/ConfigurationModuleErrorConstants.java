@@ -41,4 +41,7 @@ public interface ConfigurationModuleErrorConstants {
     /** Workflow wizard configuration validation error. Config = {0}. */
     String WFWIZARDCONFIG_VALIDATION_ERROR = "CONFIG_0006";
 
+    /** Help sheet configuration validation error. Config = {0}. */
+    String HELPSHEETCONFIG_VALIDATION_ERROR = "CONFIG_0007";
+
 }
