@@ -519,7 +519,7 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-miniform .mflabel .mfreq {width:9px; padding-right:4px;}
 .fc-miniform .mfcontent {}
 .fc-miniform .mfpost {display:table-cell;width:12px;}
-.fc-miniform .mfview {display:table-cell;width:28px;}
+.fc-miniform .mfview {display:table-cell;width:24px;}
 .fc-miniform .mfact {margin-left: 4px;height: 20px; width: 20px;background-color: #b5becd; border: 1px solid #b0b0b0;
 	color:#525e6d;cursor: pointer;}
 .fc-miniform .mfannot {display:table-caption;}
@@ -1058,6 +1058,13 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-previewformpanel .til {display:inline-block;background-color:#6e819d; color:#fff; padding:5px 8px;font-size: 11px;font-weight: bold;}
 .fc-previewformpanel .forms {width:100%;height:420px;}
 .fc-previewformpanel .footer {display:block;padding-left:4px;box-sizing: border-box;}
+
+/* Help form panel */
+.fc-helpformpanel {width:360px;background-color:#fff;border: 1px solid #b8b8b8;}
+.fc-helpformpanel .header {display:block;width:100%;margin-bottom:10px;}
+.fc-helpformpanel .til {display:inline-block;background-color:#6e819d; color:#fff; padding:5px 8px;font-size: 11px;font-weight: bold;}
+.fc-helpformpanel .forms {width:100%;height:420px;}
+.fc-helpformpanel .footer {display:block;padding-left:4px;box-sizing: border-box;}
 
 /* Manage entity applet panel */
 .fc-manageentityappletpanel {}

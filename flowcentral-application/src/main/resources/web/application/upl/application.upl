@@ -108,6 +108,9 @@
 // Preview form panel
 !fc-previewformpanel:previewFormPopup binding:$w{}
 
+// Help form panel
+!fc-helpformpanel:helpFormPopup binding:$w{}
+
 //Actions 
 !ui-post:wkspChangeAct path:$n{/changeWorkspace} components:$c{currentWkspSel}
 !ui-post:logoutAct path:$n{/logOut} confirm:$m{application.logout.confirm}

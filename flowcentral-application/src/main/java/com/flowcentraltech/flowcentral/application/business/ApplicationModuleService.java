@@ -30,6 +30,7 @@ import com.flowcentraltech.flowcentral.application.data.FieldSequenceDef;
 import com.flowcentraltech.flowcentral.application.data.FilterDef;
 import com.flowcentraltech.flowcentral.application.data.FilterGroupDef;
 import com.flowcentraltech.flowcentral.application.data.FormDef;
+import com.flowcentraltech.flowcentral.application.data.HelpSheetDef;
 import com.flowcentraltech.flowcentral.application.data.PropertyListDef;
 import com.flowcentraltech.flowcentral.application.data.PropertyListItem;
 import com.flowcentraltech.flowcentral.application.data.PropertyRuleDef;
@@ -1135,6 +1136,17 @@ public interface ApplicationModuleService extends FlowCentralService {
      *                        if an error occurs
      */
     AppletDef getAppletDef(Long appAppletId) throws UnifyException;
+
+    /**
+     * Gets an application help sheet definition.
+     * 
+     * @param helpSheetName
+     *                      the help sheet name
+     * @return the help sheet definition
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    HelpSheetDef getHelpSheetDef(String helpSheetName) throws UnifyException;
 
     /**
      * Lists application widget types.

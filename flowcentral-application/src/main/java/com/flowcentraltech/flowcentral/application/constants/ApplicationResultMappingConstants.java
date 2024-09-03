@@ -46,6 +46,8 @@ public interface ApplicationResultMappingConstants {
     
     String SHOW_PREVIEW_FORM = "showpreviewform";
     
+    String SHOW_HELP_FORM = "showhelpform";
+    
     String SHOW_CHILD_CRUD = "showchildcrud";
     
     String SHOW_QUICK_FORM_EDIT = "showquickformedit";

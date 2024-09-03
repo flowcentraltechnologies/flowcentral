@@ -686,24 +686,34 @@ fux.rigMiniForm = function(rgp) {
 			evp.uTabId = tabWidgetIds[i];
 			i++;
 			evp.uNextTabId = i < tabWidgetIds.length ? tabWidgetIds[i] : "";			
-			ux.addHdl(_id(evp.uTabId), "focus", fux.miniFormFocusMemory, evp);
-			ux.addHdl(_id(evp.uTabId), "keydown", fux.miniFormTabout, evp);
+			ux.addHdl(_id(evp.uTabId), "focus", fux.mFrmFocusMem, evp);
+			ux.addHdl(_id(evp.uTabId), "keydown", fux.mFrmTabout, evp);
 		}
 	}
-	
+
+	const help = rgp.pHelp;
+	if (help && help.length) {	
+		for (var i = 0; i < help.length; i++) {
+			var evp = ux.newEvPrm(rgp);
+			evp.uId = rgp.pId;
+			evp.uHelp = help[i];
+			ux.addHdl(_id("help_" + evp.uHelp.id), "click", fux.mFrmHelp, evp);
+		}
+	}  
+
 	const preview = rgp.pPreview;
 	if (preview && preview.length) {	
 		for (var i = 0; i < preview.length; i++) {
 			var evp = ux.newEvPrm(rgp);
 			evp.uId = rgp.pId;
 			evp.uPreview = preview[i];
-			ux.addHdl(_id("view_" + evp.uPreview.id), "click", fux.miniFormPreview, evp);
+			ux.addHdl(_id("view_" + evp.uPreview.id), "click", fux.mFrmPreview, evp);
 		}
 	}  
 }
 
 fux.preferredFocusId=null;
-fux.miniFormFocusMemory = function(uEv) {
+fux.mFrmFocusMem = function(uEv) {
 	const evp = uEv.evp;
 	const focusMem = _id(evp.uFocusMemId);
 	const tabMem = _id(evp.uTabMemId);
@@ -718,7 +728,7 @@ fux.miniFormFocusMemory = function(uEv) {
 	fux.preferredFocusId = null;
 }
 
-fux.miniFormTabout = function(uEv) {
+fux.mFrmTabout = function(uEv) {
 	if (uEv.uKeyCode == UNIFY_KEY_TAB) {
 		const evp = uEv.evp;
 		const tabMem = _id(evp.uTabMemId);
@@ -730,12 +740,23 @@ fux.miniFormTabout = function(uEv) {
 	}
 }
 
-fux.miniFormPreview = function(uEv) {
+fux.mFrmPreview = function(uEv) {
 	const evp = uEv.evp;
 	const entId = _id(evp.uPreview.id).value;
 	if (entId) {
 		evp.uCmd = evp.uId + "->preview";
 		evp.uSendTrg = entId + ":" + evp.uPreview.frm;
+		evp.uIsDebounce = true;
+		ux.post(uEv);
+	}
+}
+
+fux.mFrmHelp = function(uEv) {
+	const evp = uEv.evp;
+	const entId = _id(evp.uHelp.id).value;
+	if (entId) {
+		evp.uCmd = evp.uId + "->help";
+		evp.uSendTrg = entId + ":" + evp.uHelp.fld;
 		evp.uIsDebounce = true;
 		ux.post(uEv);
 	}
