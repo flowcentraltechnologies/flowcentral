@@ -24,6 +24,7 @@ import com.flowcentraltech.flowcentral.application.entities.AppApplet;
 import com.flowcentraltech.flowcentral.application.entities.AppEntity;
 import com.flowcentraltech.flowcentral.application.entities.AppEnumeration;
 import com.flowcentraltech.flowcentral.application.entities.AppForm;
+import com.flowcentraltech.flowcentral.application.entities.AppHelpSheet;
 import com.flowcentraltech.flowcentral.application.entities.AppRef;
 import com.flowcentraltech.flowcentral.application.entities.AppTable;
 import com.flowcentraltech.flowcentral.application.entities.AppWidgetType;
@@ -308,6 +309,20 @@ public enum StudioAppComponentType implements EnumConst {
             StudioAppComponentFlags.SUPPORTS_NEW | StudioAppComponentFlags.SUPPORTS_SAVEAS,
             AppletType.STUDIO_FC_COMPONENT,
             ReportConfiguration.class),
+    HELP_SHEET(
+            "hlp_",
+            "appHelpSheetForm",
+            "$m{studio.application.component.type.helpsheet}",
+            "$m{studio.application.component.type.helpsheets}",
+            "studio.menu.label.helpsheet",
+            "question-circle",
+            "/studioappcomponentapplet",
+            "studiooncreatecomponent-policy",
+            null,
+            null,
+            StudioAppComponentFlags.SUPPORTS_NEW | StudioAppComponentFlags.SUPPORTS_SAVEAS,
+            AppletType.STUDIO_FC_COMPONENT,
+            AppHelpSheet.class),
     WORKFLOW(
             "wrk_",
             "workflowForm",

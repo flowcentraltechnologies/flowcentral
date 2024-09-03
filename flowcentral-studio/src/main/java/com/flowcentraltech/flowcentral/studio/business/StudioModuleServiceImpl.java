@@ -57,6 +57,7 @@ import com.flowcentraltech.flowcentral.common.constants.CollaborationType;
 import com.flowcentraltech.flowcentral.common.constants.ConfigType;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralContainerPropertyConstants;
 import com.flowcentraltech.flowcentral.configuration.data.ApplicationRestore;
+import com.flowcentraltech.flowcentral.configuration.data.HelpSheetRestore;
 import com.flowcentraltech.flowcentral.configuration.data.Messages;
 import com.flowcentraltech.flowcentral.configuration.data.ModuleInstall;
 import com.flowcentraltech.flowcentral.configuration.data.ModuleRestore;
@@ -67,11 +68,13 @@ import com.flowcentraltech.flowcentral.configuration.data.SystemRestore;
 import com.flowcentraltech.flowcentral.configuration.data.WorkflowRestore;
 import com.flowcentraltech.flowcentral.configuration.data.WorkflowWizardRestore;
 import com.flowcentraltech.flowcentral.configuration.xml.AppConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.AppHelpSheetConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppNotifLargeTextConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppNotifTemplateConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppReportConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppWorkflowConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppWorkflowWizardConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.HelpSheetConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.ModuleAppConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.ModuleConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.NotifLargeTextConfig;
@@ -598,6 +601,16 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
                 }
             }
 
+            List<HelpSheetRestore> helpList = new ArrayList<HelpSheetRestore>();
+            if (appConfig.getHelpSheetsConfig() != null
+                    && !DataUtils.isBlank(appConfig.getHelpSheetsConfig().getHelpSheetList())) {
+                for (AppHelpSheetConfig appHelpSheetConfig : appConfig.getHelpSheetsConfig().getHelpSheetList()) {
+                    HelpSheetRestore helpSheetRestore = loadHelpSheetRestoreFromZip(tm,
+                            appHelpSheetConfig.getConfigFile(), zipFile, _entries);
+                    helpList.add(helpSheetRestore);
+                }
+            }
+
             List<NotifTemplateRestore> notifTemplateList = new ArrayList<NotifTemplateRestore>();
             if (appConfig.getNotifTemplatesConfig() != null
                     && !DataUtils.isBlank(appConfig.getNotifTemplatesConfig().getNotifTemplateList())) {
@@ -641,8 +654,8 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
                 }
             }
 
-            applicationRestore = new ApplicationRestore(appConfig, reportList, notifTemplateList, notifLargeTextList,
-                    workflowList, workflowWizardList);
+            applicationRestore = new ApplicationRestore(appConfig, helpList, reportList, notifTemplateList,
+                    notifLargeTextList, workflowList, workflowWizardList);
             logDebug(tm, "Loaded application definition from [{0}] successfully.", configFile);
         } catch (IOException e) {
             throwOperationErrorException(e);
@@ -670,6 +683,25 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
         }
 
         return reportRestore;
+    }
+
+    private HelpSheetRestore loadHelpSheetRestoreFromZip(TaskMonitor tm, String configFile, ZipFile zipFile,
+            Map<String, ZipEntry> _entries) throws UnifyException {
+        HelpSheetRestore helpSheetRestore = null;
+        InputStream inputStream = null;
+        try {
+            logDebug(tm, "Loading help sheet definition from [{0}]...", configFile);
+            inputStream = zipFile.getInputStream(_entries.get(configFile));
+            HelpSheetConfig helpSheetConfig = ConfigurationUtils.readConfig(HelpSheetConfig.class, inputStream);
+            helpSheetRestore = new HelpSheetRestore(helpSheetConfig);
+            logDebug(tm, "Loaded help sheet definition from [{0}] successfully.", configFile);
+        } catch (IOException e) {
+            throwOperationErrorException(e);
+        } finally {
+            IOUtils.close(inputStream);
+        }
+
+        return helpSheetRestore;
     }
 
     private NotifTemplateRestore loadNotifTemplateRestoreFromZip(TaskMonitor tm, String configFile, ZipFile zipFile,

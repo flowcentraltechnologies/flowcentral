@@ -2545,6 +2545,12 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
+    public List<? extends Listable> findAppHelpSheetsByEntity(String entity) throws UnifyException {
+        List<AppHelpSheet> sheets = environment().listAll(new AppHelpSheetQuery().entity(entity));
+        return ApplicationNameUtils.getListableList(sheets);
+    }
+
+    @Override
     public List<Class<?>> getDelegateEntities(List<String> entityLongNames) throws UnifyException {
         List<AppEntity> entityList = environment()
                 .listAll(new AppEntityQuery().isDelegated().addSelect("applicationName", "name", "delegate"));
@@ -3300,6 +3306,17 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     @Override
     public boolean isReloadOnSwitch() throws UnifyException {
         return getRequestAttribute(boolean.class, AppletRequestAttributeConstants.RELOAD_ONSWITCH);
+    }
+
+    @Override
+    public AppHelpSheet findHelpSheet(Long helpSheetId) throws UnifyException {
+        return environment().list(AppHelpSheet.class, helpSheetId);
+    }
+
+    @Override
+    public List<Long> findCustomHelpSheetIdList(String applicationName) throws UnifyException {
+        return environment().valueList(Long.class, "id",
+                new AppHelpSheetQuery().applicationName(applicationName).isCustom());
     }
 
     @Taskable(name = ApplicationReplicationTaskConstants.APPLICATION_REPLICATION_TASK_NAME,

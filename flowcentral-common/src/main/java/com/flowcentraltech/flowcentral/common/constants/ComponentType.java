@@ -54,6 +54,9 @@ public enum ComponentType {
     TABLE(
             "TBL",
             "Table"),
+    HELP_SHEET(
+            "HLP",
+            "HelpSheet"),
     WORKFLOW(
             "WRK",
             "Workflow");

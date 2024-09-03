@@ -1272,6 +1272,17 @@ public interface ApplicationModuleService extends FlowCentralService {
      *                        if an error occurs
      */
     List<? extends Listable> getRelatedWidgetTypes(String applicationName) throws UnifyException;
+    
+    /**
+     * Gets help sheets by entity.
+     * 
+     * @param entity
+     *               the entity
+     * @return list of help sheets
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    List<? extends Listable> findAppHelpSheetsByEntity(String entity) throws UnifyException;
 
     /**
      * Gets delegate entities by entity name

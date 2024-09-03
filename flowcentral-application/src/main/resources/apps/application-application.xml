@@ -683,7 +683,7 @@
 			searchField="description" />
 		<reference name="appHelpEntryRef"
 			description="$m{application.apphelpentry.reference}"
-			entity="appFormFilter" searchField="fieldName" />
+			entity="appHelpEntry" searchField="fieldName" />
 		<reference name="appWidgetTypeRef"
 			description="$m{application.appwidgettype.reference}"
 			entity="appWidgetType" searchField="description" />
