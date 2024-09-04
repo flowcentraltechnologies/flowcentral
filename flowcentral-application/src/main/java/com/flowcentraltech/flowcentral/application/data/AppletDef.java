@@ -42,7 +42,7 @@ public interface AppletDef {
 
     String getDescription();
 
-    String getFieldName();
+    String getMinorName();
 
     Long getId();
 

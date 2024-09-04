@@ -79,7 +79,7 @@ public class FormPreview {
             final EntityDef entityDef = originFormDef.getEntityDef();
             final boolean useFormColorScheme = au.getSysParameterValue(boolean.class,
                     ApplicationModuleSysParamConstants.USE_APPLICATION_FORM_COLOR_SCHEME);
-            FormDef.Builder fdb = FormDef.newBuilder(FormType.INPUT, entityDef, null, null, null, null, null,
+            FormDef.Builder fdb = FormDef.newBuilder(FormType.INPUT, entityDef, null, null, null, null, null, null,
                     "studio.previewForm", "Preview Form", 0L, 0L);
             if (design != null && design.getTabs() != null) {
                 int tabIndex = -1;

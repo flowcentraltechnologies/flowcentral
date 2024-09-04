@@ -70,8 +70,8 @@ public abstract class AbstractDetachedAppletDef implements AppletDef {
     }
 
     @Override
-    public String getFieldName() {
-        return parentAppletDef.getFieldName();
+    public String getMinorName() {
+        return parentAppletDef.getMinorName();
     }
 
     @Override

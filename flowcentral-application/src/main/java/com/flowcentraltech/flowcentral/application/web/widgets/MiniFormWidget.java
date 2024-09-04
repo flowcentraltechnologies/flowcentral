@@ -122,7 +122,9 @@ public class MiniFormWidget extends AbstractFlowCentralMultiControl implements F
             HelpSheetDef helpSheetDef = appletUtilities.application().getHelpSheetDef(mCtx.getFormDef().getHelpSheet());
             HelpEntryDef entry = helpSheetDef.getHelpEntryDef(fieldName);
 
-            HelpFormInfo helpFormInfo = new HelpFormInfo(entry.getFieldName(), entry.getHelpContent());
+            final String fieldLabel = mCtx.getFormDef().getEntityDef().getFieldDef(fieldName).getFieldLabel();
+            final String label = resolveSessionMessage("$m{button.help.title}", fieldLabel);
+            HelpFormInfo helpFormInfo = new HelpFormInfo(label, entry.getHelpContent());
             commandShowPopup(new Popup(ApplicationResultMappingConstants.SHOW_HELP_FORM, helpFormInfo));
         }
     }

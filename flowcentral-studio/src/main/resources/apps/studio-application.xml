@@ -4702,6 +4702,8 @@
 						required="true" saveAs="true" />
 					<field name="description" inputWidget="application.text"
 						column="0" required="true" saveAs="true" />
+					<field name="label" inputWidget="application.text"
+						column="0" />
 					<field name="configType" inputWidget="application.enumlist"
 						column="1" disabled="true" required="true" />
 					<field name="entity" inputWidget="studio.entitybynamelist"
