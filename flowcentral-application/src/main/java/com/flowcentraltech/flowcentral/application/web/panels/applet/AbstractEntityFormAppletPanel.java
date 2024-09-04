@@ -29,6 +29,7 @@ import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.FormActionDef;
 import com.flowcentraltech.flowcentral.application.data.FormDef;
 import com.flowcentraltech.flowcentral.application.data.FormTabDef;
+import com.flowcentraltech.flowcentral.application.data.HelpSheetDef;
 import com.flowcentraltech.flowcentral.application.data.TabDef;
 import com.flowcentraltech.flowcentral.application.data.WorkflowDraftInfo;
 import com.flowcentraltech.flowcentral.application.entities.BaseApplicationEntity;
@@ -43,6 +44,7 @@ import com.flowcentraltech.flowcentral.application.web.panels.EntitySearchValueM
 import com.flowcentraltech.flowcentral.application.web.panels.EntryTablePage;
 import com.flowcentraltech.flowcentral.application.web.panels.FormPanel;
 import com.flowcentraltech.flowcentral.application.web.panels.HeaderWithTabsForm;
+import com.flowcentraltech.flowcentral.application.web.panels.HelpFormInfo;
 import com.flowcentraltech.flowcentral.application.web.widgets.TabSheet;
 import com.flowcentraltech.flowcentral.application.web.widgets.TabSheet.TabSheetItem;
 import com.flowcentraltech.flowcentral.application.web.widgets.TabSheetWidget;
@@ -74,6 +76,7 @@ import com.tcdng.unify.web.ui.widget.data.Hint.MODE;
 import com.tcdng.unify.web.ui.widget.data.MessageIcon;
 import com.tcdng.unify.web.ui.widget.data.MessageMode;
 import com.tcdng.unify.web.ui.widget.data.MessageResult;
+import com.tcdng.unify.web.ui.widget.data.Popup;
 
 /**
  * Convenient abstract base panel for entity form applet panels.
@@ -249,7 +252,12 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         boolean parentDisabled = false;
         boolean showReviewFormCaption = false;
         boolean showDiff = false;
+        boolean overview = false;
         if (form != null) {
+            if (form.getFormDef().isWithHelpSheet()) {
+                overview = application().getHelpSheetDef(form.getFormDef().getHelpSheet()).isWithHelpOverview();
+            }
+            
             form.getCtx().setUpdateEnabled(enableUpdate);
             if (form.isWithAttachments()) {
                 form.getAttachments()
@@ -321,6 +329,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         }
 
         setVisible("frmDiffBtn", showDiff);
+        setVisible("overviewBtn", overview);
         switch (viewMode) {
             case ENTITY_CRUD_PAGE:
                 switchContent("entityCrudPanel");
@@ -801,7 +810,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
     }
 
     @Action
-    public void update() throws UnifyException { 
+    public void update() throws UnifyException {
         FormContext ctx = evaluateCurrentFormContext(new FormValidationContext(EvaluationMode.UPDATE));
         if (!ctx.isWithFormErrors()) {
             final AbstractEntityFormApplet applet = getEntityFormApplet();
@@ -826,6 +835,21 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                 EntityActionResult entityActionResult = applet.updateInstAndClose();
                 entityActionResult.setSuccessHint("$m{entityformapplet.update.success.hint}");
                 handleEntityActionResult(entityActionResult, ctx);
+            }
+        }
+    }
+
+    @Action
+    public void overview() throws UnifyException {
+        final FormContext ctx = getEntityFormApplet().getResolvedForm().getCtx();
+        final FormDef formDef = ctx.getFormDef();
+        if (formDef.isWithHelpSheet()) {
+            HelpSheetDef helpSheetDef = application().getHelpSheetDef(formDef.getHelpSheet());
+            if (helpSheetDef.isWithHelpOverview()) {
+                final String label = resolveSessionMessage("$m{button.overview.title}",
+                        formDef.isWithLabel() ? formDef.getLabel() : "");
+                HelpFormInfo helpFormInfo = new HelpFormInfo(label, helpSheetDef.getHelpOverview());
+                commandShowPopup(new Popup(ApplicationResultMappingConstants.SHOW_HELP_FORM, helpFormInfo));
             }
         }
     }

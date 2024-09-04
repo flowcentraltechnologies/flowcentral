@@ -21,7 +21,7 @@
 	moreCenterComponents:$c{displayCounterLabel}
 	moreActionButtons:$f{moreActionButtons}
 	moreActionButtons:$c{formAttachmentBtn frmDiffBtn frmActionBtns saveBtn saveNextBtn saveCloseBtn}
-	moreActionButtons:$c{submitNextBtn submitCloseBtn updateBtn updateCloseBtn deleteBtn cancelBtn prevBtn nextBtn}
+	moreActionButtons:$c{submitNextBtn submitCloseBtn updateBtn updateCloseBtn deleteBtn cancelBtn overviewBtn prevBtn nextBtn}
 	altActionButtons:$c{frmActionBtns saveBtn saveNextBtn saveCloseBtn}
 	altActionButtons:$c{submitNextBtn submitCloseBtn updateBtn updateCloseBtn deleteBtn cancelBtn}
 !ui-label:displayCounterLabel styleClass:$e{fc-dispcounter}
@@ -51,6 +51,8 @@
 	eventHandler:$d{!ui-event event:onclick action:$c{deleteAct}}
 !ui-button:cancelBtn caption:$m{button.close}
 	eventHandler:$d{!ui-event event:onclick action:$c{navBackAct}}
+!ui-button:overviewBtn caption:$m{button.overview}
+	eventHandler:$d{!ui-event event:onclick action:$c{overviewAct}}
 !ui-button:prevBtn symbol:$s{angle-left} hint:$m{maintain.previous.item}
     eventHandler:$d{!ui-event event:onclick action:$c{prevAct}}
 !ui-button:nextBtn symbol:$s{angle-right} hint:$m{maintain.next.item}
@@ -84,6 +86,7 @@
 !ui-postcommand:updateAct command:update components:$c{formPanel}
 !ui-postcommand:updateCloseAct command:updateAndClose components:$c{formPanel}
 !ui-postcommand:deleteAct command:delete confirm:$m{entityformappletpanel.confirm.delete}
+!ui-postcommand:overviewAct command:overview components:$c{formPanel}
 !ui-postcommand:prevAct command:previous
 !ui-postcommand:nextAct command:next
 !ui-postcommand:formActionAct command:performFormAction components:$c{formPanel listingPanel}

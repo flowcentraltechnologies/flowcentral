@@ -95,6 +95,8 @@ public class FormDef extends BaseApplicationEntityDef {
 
     private List<StringToken> titleFormat;
 
+    private String label;
+
     private String helpSheet;
 
     private String consolidatedFormValidation;
@@ -107,9 +109,9 @@ public class FormDef extends BaseApplicationEntityDef {
 
     private boolean childOrChildListTabs;
 
-    private FormDef(FormType type, EntityDef entityDef, String helpSheet, String consolidatedFormValidation,
-            String consolidatedFormReview, String consolidatedFormState, String listingGenerator,
-            List<StringToken> titleFormat, Map<String, FormFilterDef> filterDefMap,
+    private FormDef(FormType type, EntityDef entityDef, String label, String helpSheet,
+            String consolidatedFormValidation, String consolidatedFormReview, String consolidatedFormState,
+            String listingGenerator, List<StringToken> titleFormat, Map<String, FormFilterDef> filterDefMap,
             Map<String, FormAnnotationDef> formAnnotationDefMap, List<FormActionDef> formActionDefList,
             List<FormTabDef> formTabDefList, List<FormRelatedListDef> formRelatedListDefList,
             List<FormStatePolicyDef> formStatePolicyDefList,
@@ -121,6 +123,7 @@ public class FormDef extends BaseApplicationEntityDef {
         super(nameParts, description, id, version);
         this.type = type;
         this.entityDef = entityDef;
+        this.label = label;
         this.helpSheet = helpSheet;
         this.consolidatedFormValidation = consolidatedFormValidation;
         this.consolidatedFormReview = consolidatedFormReview;
@@ -245,6 +248,14 @@ public class FormDef extends BaseApplicationEntityDef {
 
     public boolean isWithTitleFormat() {
         return titleFormat != null;
+    }
+
+    public String getLabel() {
+        return label;
+    }
+
+    public boolean isWithLabel() {
+        return !StringUtils.isBlank(label);
     }
 
     public String getHelpSheet() {
@@ -491,11 +502,11 @@ public class FormDef extends BaseApplicationEntityDef {
         return formTabDefList.get(tabIndex);
     }
 
-    public static Builder newBuilder(FormType type, EntityDef entityDef, String helpSheet, String consolidatedFormValidation,
-            String consolidatedFormReview, String consolidatedFormState, String listingGenerator, String longName,
-            String description, Long id, long version) {
-        return new Builder(type, entityDef, helpSheet, consolidatedFormValidation, consolidatedFormReview, consolidatedFormState,
-                listingGenerator, longName, description, id, version);
+    public static Builder newBuilder(FormType type, EntityDef entityDef, String label, String helpSheet,
+            String consolidatedFormValidation, String consolidatedFormReview, String consolidatedFormState,
+            String listingGenerator, String longName, String description, Long id, long version) {
+        return new Builder(type, entityDef, label, helpSheet, consolidatedFormValidation, consolidatedFormReview,
+                consolidatedFormState, listingGenerator, longName, description, id, version);
     }
 
     public static class Builder {
@@ -503,6 +514,8 @@ public class FormDef extends BaseApplicationEntityDef {
         private FormType type;
 
         private EntityDef entityDef;
+
+        private String label;
 
         private String helpSheet;
 
@@ -550,11 +563,12 @@ public class FormDef extends BaseApplicationEntityDef {
 
         private long version;
 
-        public Builder(FormType type, EntityDef entityDef, String helpSheet, String consolidatedFormValidation,
-                String consolidatedFormReview, String consolidatedFormState, String listingGenerator, String longName,
-                String description, Long id, long version) {
+        public Builder(FormType type, EntityDef entityDef, String label, String helpSheet,
+                String consolidatedFormValidation, String consolidatedFormReview, String consolidatedFormState,
+                String listingGenerator, String longName, String description, Long id, long version) {
             this.type = type;
             this.entityDef = entityDef;
+            this.label = label;
             this.helpSheet = helpSheet;
             this.consolidatedFormValidation = consolidatedFormValidation;
             this.consolidatedFormReview = consolidatedFormReview;
@@ -663,7 +677,8 @@ public class FormDef extends BaseApplicationEntityDef {
         public Builder addFormSection(int tabIndex, String name, String sectionLabel, FormColumnsType columns,
                 String panel, boolean visible, boolean editable, boolean disabled) {
             checkTabIndex(tabIndex);
-            formTabDefList.get(tabIndex).addFormSectionDef(sectionLabel, name, columns, panel, visible, editable, disabled);
+            formTabDefList.get(tabIndex).addFormSectionDef(sectionLabel, name, columns, panel, visible, editable,
+                    disabled);
             return this;
         }
 
@@ -888,7 +903,7 @@ public class FormDef extends BaseApplicationEntityDef {
             }
 
             ApplicationEntityNameParts nameParts = ApplicationNameUtils.getApplicationEntityNameParts(longName);
-            return new FormDef(type, entityDef, helpSheet, consolidatedFormValidation, consolidatedFormReview,
+            return new FormDef(type, entityDef, label, helpSheet, consolidatedFormValidation, consolidatedFormReview,
                     consolidatedFormState, listingGenerator, titleFormat, DataUtils.unmodifiableMap(filterDefMap),
                     DataUtils.unmodifiableMap(formAnnotationDefMap), DataUtils.unmodifiableList(formActionList),
                     DataUtils.unmodifiableList(formTabDefList),
@@ -1073,7 +1088,7 @@ public class FormDef extends BaseApplicationEntityDef {
             private FormColumnsType columns;
 
             private String panel;
-            
+
             private boolean visible;
 
             private boolean editable;

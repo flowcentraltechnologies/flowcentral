@@ -24,12 +24,15 @@ import com.flowcentraltech.flowcentral.application.constants.WorkflowDraftType;
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.data.Diff;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
+import com.flowcentraltech.flowcentral.application.data.FormDef;
+import com.flowcentraltech.flowcentral.application.data.HelpSheetDef;
 import com.flowcentraltech.flowcentral.application.web.data.AppletContext;
 import com.flowcentraltech.flowcentral.application.web.data.FormContext;
 import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm.FormMode;
 import com.flowcentraltech.flowcentral.application.web.panels.EntitySelect;
 import com.flowcentraltech.flowcentral.application.web.panels.EntitySingleForm;
 import com.flowcentraltech.flowcentral.application.web.panels.FormPanel;
+import com.flowcentraltech.flowcentral.application.web.panels.HelpFormInfo;
 import com.flowcentraltech.flowcentral.common.business.ApplicationPrivilegeManager;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
 import com.flowcentraltech.flowcentral.common.business.policies.FormValidationContext;
@@ -131,7 +134,12 @@ public abstract class AbstractEntitySingleFormAppletPanel extends AbstractApplet
 		}
 
 		boolean showDiff = false;
+        boolean overview = false;
 		if (form != null) {
+            if (form.getFormDef().isWithHelpSheet()) {
+                overview = application().getHelpSheetDef(form.getFormDef().getHelpSheet()).isWithHelpOverview();
+            }
+            
 			form.getCtx().setUpdateEnabled(enableUpdate);
 			form.clearDisplayItem();
 			if (isUpdateCopy) {
@@ -153,6 +161,7 @@ public abstract class AbstractEntitySingleFormAppletPanel extends AbstractApplet
 		}
 
 		setVisible("frmDiffBtn", showDiff);
+        setVisible("overviewBtn", overview);
 		switch (viewMode) {
 		case MAINTAIN_FORM_SCROLL:
 			final boolean closable = !appCtx.isInDetachedWindow();
@@ -400,7 +409,7 @@ public abstract class AbstractEntitySingleFormAppletPanel extends AbstractApplet
 	}
 
 	@Action
-	public void updateAndClose() throws UnifyException {
+	public void updateAndClose() throws UnifyException { 
 		FormContext ctx = evaluateCurrentFormContext(new FormValidationContext(EvaluationMode.UPDATE));
 		if (!ctx.isWithFormErrors()) {
 			EntityActionResult entityActionResult = getEntityFormApplet().updateInstAndClose();
@@ -408,6 +417,21 @@ public abstract class AbstractEntitySingleFormAppletPanel extends AbstractApplet
 			handleEntityActionResult(entityActionResult, ctx.getEntityName());
 		}
 	}
+
+    @Action
+    public void overview() throws UnifyException {
+        final FormContext ctx = getEntityFormApplet().getForm().getCtx();
+        final FormDef formDef = ctx.getFormDef();
+        if (formDef.isWithHelpSheet()) {
+            HelpSheetDef helpSheetDef = application().getHelpSheetDef(formDef.getHelpSheet());
+            if (helpSheetDef.isWithHelpOverview()) {
+                final String label = resolveSessionMessage("$m{button.overview.title}",
+                        formDef.isWithLabel() ? formDef.getLabel() : "");
+                HelpFormInfo helpFormInfo = new HelpFormInfo(label, helpSheetDef.getHelpOverview());
+                commandShowPopup(new Popup(ApplicationResultMappingConstants.SHOW_HELP_FORM, helpFormInfo));
+            }
+        }
+    }
 
 	@Action
 	public void delete() throws UnifyException {

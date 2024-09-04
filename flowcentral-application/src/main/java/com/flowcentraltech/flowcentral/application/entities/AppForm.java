@@ -40,6 +40,9 @@ public class AppForm extends BaseApplicationEntity {
     private String entity;
 
     @Column(length = 64, nullable = true)
+    private String label;
+
+    @Column(length = 64, nullable = true)
     private String helpSheet;
 
     @Column(length = 64, nullable = true)
@@ -128,6 +131,14 @@ public class AppForm extends BaseApplicationEntity {
 
     public void setTitleFormat(String titleFormat) {
         this.titleFormat = titleFormat;
+    }
+
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
     }
 
     public String getHelpSheet() {

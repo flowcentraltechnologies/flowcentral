@@ -1109,10 +1109,11 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     final boolean useFormColorScheme = appletUtilities.system().getSysParameterValue(boolean.class,
                             ApplicationModuleSysParamConstants.USE_APPLICATION_FORM_COLOR_SCHEME);
                     final EntityDef entityDef = getEntityDef(appForm.getEntity());
-                    FormDef.Builder fdb = FormDef.newBuilder(appForm.getType(), entityDef, appForm.getHelpSheet(),
-                            appForm.getConsolidatedValidation(), appForm.getConsolidatedReview(),
-                            appForm.getConsolidatedState(), appForm.getListingGenerator(), longName,
-                            appForm.getDescription(), appForm.getId(), appForm.getVersionNo());
+                    FormDef.Builder fdb = FormDef.newBuilder(appForm.getType(), entityDef, appForm.getLabel(),
+                            appForm.getHelpSheet(), appForm.getConsolidatedValidation(),
+                            appForm.getConsolidatedReview(), appForm.getConsolidatedState(),
+                            appForm.getListingGenerator(), longName, appForm.getDescription(), appForm.getId(),
+                            appForm.getVersionNo());
                     Map<String, FieldRenderInfo> fieldRenderInfos = new HashMap<String, FieldRenderInfo>();
                     int tabIndex = -1;
                     int sectionIndex = -1;
@@ -4947,6 +4948,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appForm.setType(appFormConfig.getType());
                     appForm.setEntity(
                             ApplicationNameUtils.ensureLongNameReference(applicationName, appFormConfig.getEntity()));
+                    appForm.setLabel(appFormConfig.getLabel());
                     appForm.setHelpSheet(appFormConfig.getHelpSheet());
                     appForm.setConsolidatedReview(appFormConfig.getConsolidatedReview());
                     appForm.setConsolidatedValidation(appFormConfig.getConsolidatedValidation());
@@ -4964,6 +4966,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     oldAppForm.setType(appFormConfig.getType());
                     oldAppForm.setEntity(
                             ApplicationNameUtils.ensureLongNameReference(applicationName, appFormConfig.getEntity()));
+                    oldAppForm.setLabel(appFormConfig.getLabel());
                     oldAppForm.setHelpSheet(appFormConfig.getHelpSheet());
                     oldAppForm.setConsolidatedReview(appFormConfig.getConsolidatedReview());
                     oldAppForm.setConsolidatedValidation(appFormConfig.getConsolidatedValidation());
@@ -5494,6 +5497,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 appForm.setType(appFormConfig.getType());
                 appForm.setEntity(
                         ApplicationNameUtils.ensureLongNameReference(applicationName, appFormConfig.getEntity()));
+                appForm.setLabel(appFormConfig.getLabel());
                 appForm.setHelpSheet(appFormConfig.getHelpSheet());
                 appForm.setConsolidatedReview(appFormConfig.getConsolidatedReview());
                 appForm.setConsolidatedValidation(appFormConfig.getConsolidatedValidation());

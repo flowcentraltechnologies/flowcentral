@@ -17,7 +17,7 @@
 	components:$c{titleBar helpBodyPanel footerActionPanel}
 
 // Header
-!ui-titlebar:titleBar caption:$m{helpformpanel.title} captionBinding:formCaption
+!ui-titlebar:titleBar caption:$m{helpformpanel.title} captionBinding:title
 	components:$c{closeBtn} draggable:true
 !ui-image:closeBtn src:$t{images/cross_white.png} styleClass:$e{tbbutton}
      eventHandler:$d{!ui-event event:onclick action:$c{closeAct}}
