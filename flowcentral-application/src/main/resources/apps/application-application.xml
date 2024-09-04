@@ -1587,6 +1587,9 @@
 				inputWidget="application.enumlist" />
 			<field name="entity" label="$m{application.appform.entity}"
 				type="string" />
+			<field name="label"
+				label="$m{application.appform.labelfield}" type="string"
+				nullable="true" />
 			<field name="helpSheet"
 				label="$m{application.appform.helpsheet}" type="string"
 				nullable="true" />
