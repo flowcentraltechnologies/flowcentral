@@ -179,7 +179,7 @@ public class MiniFormWriter extends AbstractControlWriter {
                             addPageAlias(miniFormWidget.getId(), chWidget);
 
                             if (!ctx.isPreviewFormMode()) {
-                                if (helpSheetDef.isWithHelpEntry(fieldName)) {
+                                if (helpSheetDef != null && helpSheetDef.isWithHelpEntry(fieldName)) {
                                     help.add(new Help(chWidget.getId(), fieldName));
                                 }
                                 
