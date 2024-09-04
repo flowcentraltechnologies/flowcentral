@@ -1,7 +1,8 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-
 	<groupId>com.flowcentraltech.flowcentral</groupId>
 	<artifactId>flowcentral</artifactId>
 	<version>1.2.0-SNAPSHOT</version>
@@ -59,6 +60,8 @@
 		<module>flowcentral-gateway</module>
 		<module>flowcentral-audit</module>
 		<module>flowcentral-messaging</module>
+		<module>flowcentral-repository</module>
+		<module>flowcentral-repository-git</module>
 	</modules>
 
 	<properties>
@@ -70,8 +73,10 @@
 	</properties>
 
 	<scm>
-		<connection>scm:git:git://github.com/flowcentraltechnologies/flowcentral.git</connection>
-		<developerConnection>scm:git:ssh://github.com:flowcentraltechnologies/flowcentral.git</developerConnection>
+		<connection>
+			scm:git:git://github.com/flowcentraltechnologies/flowcentral.git</connection>
+		<developerConnection>
+			scm:git:ssh://github.com:flowcentraltechnologies/flowcentral.git</developerConnection>
 		<url>http://github.com/flowcentraltechnologies/flowcentral/tree/master</url>
 	</scm>
 
@@ -145,16 +150,19 @@
 					</plugin>
 				</plugins>
 			</build>
+
 			<distributionManagement>
 				<snapshotRepository>
 					<id>sonatype-nexus-snapshots</id>
 					<name>Sonatype Nexus Snapshots</name>
-					<url>https://s01.oss.sonatype.org/content/repositories/snapshots/</url>
+					<url>
+						https://s01.oss.sonatype.org/content/repositories/snapshots/</url>
 				</snapshotRepository>
 				<repository>
 					<id>sonatype-nexus-staging</id>
 					<name>Nexus Release Repository</name>
-					<url>http://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+					<url>
+						http://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
 				</repository>
 			</distributionManagement>
 		</profile>
