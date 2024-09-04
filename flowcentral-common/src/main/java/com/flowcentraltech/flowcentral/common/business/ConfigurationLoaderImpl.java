@@ -25,6 +25,7 @@ import com.flowcentraltech.flowcentral.configuration.constants.ConfigurationModu
 import com.flowcentraltech.flowcentral.configuration.constants.FlowCentralStaticSettings;
 import com.flowcentraltech.flowcentral.configuration.data.ApplicationInstall;
 import com.flowcentraltech.flowcentral.configuration.data.FlowCentralInstall;
+import com.flowcentraltech.flowcentral.configuration.data.HelpSheetInstall;
 import com.flowcentraltech.flowcentral.configuration.data.ModuleInstall;
 import com.flowcentraltech.flowcentral.configuration.data.NotifLargeTextInstall;
 import com.flowcentraltech.flowcentral.configuration.data.NotifTemplateInstall;
@@ -32,6 +33,7 @@ import com.flowcentraltech.flowcentral.configuration.data.ReportInstall;
 import com.flowcentraltech.flowcentral.configuration.data.WorkflowInstall;
 import com.flowcentraltech.flowcentral.configuration.data.WorkflowWizardInstall;
 import com.flowcentraltech.flowcentral.configuration.xml.AppConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.HelpSheetConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.ModuleConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.NotifLargeTextConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.NotifTemplateConfig;
@@ -122,6 +124,16 @@ public class ConfigurationLoaderImpl extends AbstractFlowCentralComponent implem
  
         logDebug("Loaded notification large text definition from [{0}] successfully.", configFile);
         return new NotifLargeTextInstall(notifLargeTextConfig);
+    }
+
+    @Override
+    public HelpSheetInstall loadHelpSheetInstallation(String configFile) throws UnifyException {
+        logDebug("Loading help sheet definition from [{0}]...", configFile);
+        HelpSheetConfig helpSheetConfig = ConfigurationUtils.readConfig(HelpSheetConfig.class,
+                configFile, getUnifyComponentContext().getWorkingPath());
+ 
+        logDebug("Loaded help sheet definition from [{0}] successfully.", configFile);
+        return new HelpSheetInstall(helpSheetConfig);
     }
 
     @Override

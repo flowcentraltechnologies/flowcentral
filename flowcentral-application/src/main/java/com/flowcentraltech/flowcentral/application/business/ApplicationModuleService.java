@@ -30,6 +30,7 @@ import com.flowcentraltech.flowcentral.application.data.FieldSequenceDef;
 import com.flowcentraltech.flowcentral.application.data.FilterDef;
 import com.flowcentraltech.flowcentral.application.data.FilterGroupDef;
 import com.flowcentraltech.flowcentral.application.data.FormDef;
+import com.flowcentraltech.flowcentral.application.data.HelpSheetDef;
 import com.flowcentraltech.flowcentral.application.data.PropertyListDef;
 import com.flowcentraltech.flowcentral.application.data.PropertyListItem;
 import com.flowcentraltech.flowcentral.application.data.PropertyRuleDef;
@@ -62,6 +63,7 @@ import com.flowcentraltech.flowcentral.application.entities.AppFormAnnotationQue
 import com.flowcentraltech.flowcentral.application.entities.AppFormElement;
 import com.flowcentraltech.flowcentral.application.entities.AppFormFilter;
 import com.flowcentraltech.flowcentral.application.entities.AppFormQuery;
+import com.flowcentraltech.flowcentral.application.entities.AppHelpSheet;
 import com.flowcentraltech.flowcentral.application.entities.AppPropertyList;
 import com.flowcentraltech.flowcentral.application.entities.AppPropertyRule;
 import com.flowcentraltech.flowcentral.application.entities.AppRef;
@@ -1136,6 +1138,17 @@ public interface ApplicationModuleService extends FlowCentralService {
     AppletDef getAppletDef(Long appAppletId) throws UnifyException;
 
     /**
+     * Gets an application help sheet definition.
+     * 
+     * @param helpSheetName
+     *                      the help sheet name
+     * @return the help sheet definition
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    HelpSheetDef getHelpSheetDef(String helpSheetName) throws UnifyException;
+
+    /**
      * Lists application widget types.
      * 
      * @param query
@@ -1271,6 +1284,17 @@ public interface ApplicationModuleService extends FlowCentralService {
      *                        if an error occurs
      */
     List<? extends Listable> getRelatedWidgetTypes(String applicationName) throws UnifyException;
+    
+    /**
+     * Gets help sheets by entity.
+     * 
+     * @param entity
+     *               the entity
+     * @return list of help sheets
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    List<? extends Listable> findAppHelpSheetsByEntity(String entity) throws UnifyException;
 
     /**
      * Gets delegate entities by entity name
@@ -1934,4 +1958,27 @@ public interface ApplicationModuleService extends FlowCentralService {
      *                        if an error occurs
      */
     int getWorkitemCategoryParticipationCount(String role) throws UnifyException;
+
+    /**
+     * Finds help sheet by ID.
+     * 
+     * @param helpSheetId
+     *                        the help sheet ID
+     * @return the help sheet
+     * @throws UnifyException
+     *                        if help sheet with ID is not found. If an
+     *                        error occurs
+     */
+    AppHelpSheet findHelpSheet(Long helpSheetId) throws UnifyException;
+
+    /**
+     * Finds help sheet ID list for application.
+     * 
+     * @param applicationName
+     *                        the application name
+     * @return list of application help sheet IDs
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    List<Long> findCustomHelpSheetIdList(String applicationName) throws UnifyException;
 }

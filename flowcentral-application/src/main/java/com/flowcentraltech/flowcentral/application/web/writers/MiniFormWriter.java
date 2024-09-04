@@ -19,8 +19,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
 import com.flowcentraltech.flowcentral.application.constants.AppletRequestAttributeConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleSysParamConstants;
+import com.flowcentraltech.flowcentral.application.data.HelpSheetDef;
 import com.flowcentraltech.flowcentral.application.web.data.FormContext;
 import com.flowcentraltech.flowcentral.application.web.widgets.MiniFormWidget;
 import com.flowcentraltech.flowcentral.application.web.widgets.MiniFormWidget.FormSection;
@@ -55,6 +57,9 @@ public class MiniFormWriter extends AbstractControlWriter {
     @Configurable
     private SystemModuleService systemModuleService;
 
+    @Configurable
+    private ApplicationModuleService applicationModuleService;
+
     @Override
     protected void doWriteStructureAndContent(ResponseWriter writer, Widget widget) throws UnifyException {
         MiniFormWidget miniFormWidget = (MiniFormWidget) widget;
@@ -72,7 +77,11 @@ public class MiniFormWriter extends AbstractControlWriter {
 
         FormContext ctx = miniFormWidget.getCtx();
         miniFormWidget.evaluateWidgetStates();
-        final String quickView = resolveSessionMessage("$m{button.quickview}");
+        final HelpSheetDef helpSheetDef = ctx.getFormDef().isWithHelpSheet()
+                ? applicationModuleService.getHelpSheetDef(ctx.getFormDef().getHelpSheet())
+                : null;
+        final String helpHint = resolveSessionMessage("$m{button.help}");
+        final String detailsHint = resolveSessionMessage("$m{button.quickview}");
         final boolean isClassicFormSection = systemModuleService.getSysParameterValue(boolean.class,
                 ApplicationModuleSysParamConstants.FORM_SECTION_CLASSIC_MODE);
         boolean isPreGap = false;
@@ -90,7 +99,7 @@ public class MiniFormWriter extends AbstractControlWriter {
                         int i = 0;
                         for (FormWidget formWidget : rowRegulator.getRowWidgets()) {
                             writer.write("<div class=\"mfcol\" ").write(columnInfos.get(i).getColumnStyle()).write(">");
-                            writeFieldCell(writer, ctx, formWidget, quickView);
+                            writeFieldCell(writer, ctx, formWidget, helpHint, detailsHint, helpSheetDef);
                             writer.write("</div>");
                             i++;
                         }
@@ -112,7 +121,7 @@ public class MiniFormWriter extends AbstractControlWriter {
                     for (int i = 0; i < columns; i++) {
                         writer.write("<div class=\"mfcol\" ").write(columnInfos.get(i).getColumnStyle()).write(">");
                         for (FormWidget formWidget : formSection.getFormWidgetList(i)) {
-                            writeFieldCell(writer, ctx, formWidget, quickView);
+                            writeFieldCell(writer, ctx, formWidget, helpHint, detailsHint, helpSheetDef);
                         }
                         writer.write("</div>");
                     }
@@ -134,6 +143,10 @@ public class MiniFormWriter extends AbstractControlWriter {
         final FormContext ctx = miniFormWidget.getCtx();
         final List<EventHandler> switchOnChangeHandlers = ctx.getFormSwitchOnChangeHandlers();
         final List<Preview> previews = ctx.isPreviewFormMode() ? Collections.emptyList() : new ArrayList<Preview>();
+        final HelpSheetDef helpSheetDef = ctx.getFormDef().isWithHelpSheet()
+                ? applicationModuleService.getHelpSheetDef(ctx.getFormDef().getHelpSheet())
+                : null;
+        final List<Help> help = helpSheetDef != null ? new ArrayList<Help>(): Collections.emptyList();
         for (FormSection formSection : miniFormWidget.getFormSectionList()) {
             if (formSection.isVisible()) {
                 final int columns = formSection.getColumns();
@@ -150,10 +163,11 @@ public class MiniFormWriter extends AbstractControlWriter {
                                 writer.writeBehavior(chWidget);
                             }
 
+                            final String fieldName = formWidget.getFieldName();
                             if (switchOnChangeHandlers != null
                                     && (refreshesContainer || formWidget.isSwitchOnChange())) {
                                 for (EventHandler eventHandler : switchOnChangeHandlers) {
-                                    writer.writeBehavior(eventHandler, cId, formWidget.getFieldName());
+                                    writer.writeBehavior(eventHandler, cId, fieldName);
                                 }
                             }
 
@@ -164,8 +178,14 @@ public class MiniFormWriter extends AbstractControlWriter {
 
                             addPageAlias(miniFormWidget.getId(), chWidget);
 
-                            if (!ctx.isPreviewFormMode() && formWidget.isWithPreviewForm()) {
-                                previews.add(new Preview(chWidget.getId(), formWidget.getPreviewForm()));
+                            if (!ctx.isPreviewFormMode()) {
+                                if (helpSheetDef.isWithHelpEntry(fieldName)) {
+                                    help.add(new Help(chWidget.getId(), fieldName));
+                                }
+                                
+                                if (formWidget.isWithPreviewForm()) {
+                                    previews.add(new Preview(chWidget.getId(), formWidget.getPreviewForm()));
+                                }
                             }
                         }
                     }
@@ -182,6 +202,7 @@ public class MiniFormWriter extends AbstractControlWriter {
         writer.writeCommandURLParam("pCmdURL");
         writer.writeParam("pFocusMemId", ctx.getFocusMemoryId());
         writer.writeParam("pTabMemId", ctx.getTabMemoryId());
+        writer.writeObjectParam("pHelp", DataUtils.toArray(Help.class, help));
         writer.writeObjectParam("pPreview", DataUtils.toArray(Preview.class, previews));
         if (miniFormWidget.isMainForm()) {
             writer.writeParam("pTabWidId", miniFormWidget.getCtx().getTabWidgetIds());
@@ -213,8 +234,8 @@ public class MiniFormWriter extends AbstractControlWriter {
         return false;
     }
 
-    private void writeFieldCell(ResponseWriter writer, FormContext ctx, FormWidget formWidget, String quickView)
-            throws UnifyException {
+    private void writeFieldCell(ResponseWriter writer, FormContext ctx, FormWidget formWidget, String helpHint,
+            String detailsHint, HelpSheetDef helpSheetDef) throws UnifyException {
         if (formWidget != null) {
             Widget chWidget = formWidget.getResolvedWidget();
             if (chWidget.isVisible()) {
@@ -261,11 +282,18 @@ public class MiniFormWriter extends AbstractControlWriter {
                 writer.write("</div>");
                 writer.write("</div>");
 
-                if (!ctx.isPreviewFormMode() && formWidget.isWithPreviewForm()) {
-                    final String bId = "view_" + chWidget.getId();
-                    writer.write("<div class=\"mfview\">");
-                    writeSymbolButton(writer, bId, "mfact", "info", quickView);
-                    writer.write("</div>");
+                if (!ctx.isPreviewFormMode()) {
+                    if (helpSheetDef != null && helpSheetDef.isWithHelpEntry(formWidget.getFieldName())) {
+                        writer.write("<div class=\"mfview\">");
+                        writeSymbolButton(writer, "help_" + chWidget.getId(), "mfact", "question", helpHint);
+                        writer.write("</div>");
+                    }
+
+                    if (formWidget.isWithPreviewForm()) {
+                        writer.write("<div class=\"mfview\">");
+                        writeSymbolButton(writer, "view_" + chWidget.getId(), "mfact", "info", detailsHint);
+                        writer.write("</div>");
+                    }
                 }
 
                 writer.write("<div class=\"mfpost").write("\">");
@@ -276,11 +304,32 @@ public class MiniFormWriter extends AbstractControlWriter {
             }
         }
     }
-    
-    public class Preview {
-        
+
+    public class Help {
+
         private String id;
-        
+
+        private String fld;
+
+        public Help(String id, String fld) {
+            this.id = id;
+            this.fld = fld;
+        }
+
+        public String getId() {
+            return id;
+        }
+
+        public String getFld() {
+            return fld;
+        }
+
+    }
+
+    public class Preview {
+
+        private String id;
+
         private String frm;
 
         public Preview(String id, String frm) {

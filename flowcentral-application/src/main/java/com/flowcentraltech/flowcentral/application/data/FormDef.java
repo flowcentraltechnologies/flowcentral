@@ -95,6 +95,8 @@ public class FormDef extends BaseApplicationEntityDef {
 
     private List<StringToken> titleFormat;
 
+    private String helpSheet;
+
     private String consolidatedFormValidation;
 
     private String consolidatedFormReview;
@@ -105,7 +107,7 @@ public class FormDef extends BaseApplicationEntityDef {
 
     private boolean childOrChildListTabs;
 
-    private FormDef(FormType type, EntityDef entityDef, String consolidatedFormValidation,
+    private FormDef(FormType type, EntityDef entityDef, String helpSheet, String consolidatedFormValidation,
             String consolidatedFormReview, String consolidatedFormState, String listingGenerator,
             List<StringToken> titleFormat, Map<String, FormFilterDef> filterDefMap,
             Map<String, FormAnnotationDef> formAnnotationDefMap, List<FormActionDef> formActionDefList,
@@ -119,6 +121,7 @@ public class FormDef extends BaseApplicationEntityDef {
         super(nameParts, description, id, version);
         this.type = type;
         this.entityDef = entityDef;
+        this.helpSheet = helpSheet;
         this.consolidatedFormValidation = consolidatedFormValidation;
         this.consolidatedFormReview = consolidatedFormReview;
         this.consolidatedFormState = consolidatedFormState;
@@ -242,6 +245,14 @@ public class FormDef extends BaseApplicationEntityDef {
 
     public boolean isWithTitleFormat() {
         return titleFormat != null;
+    }
+
+    public String getHelpSheet() {
+        return helpSheet;
+    }
+
+    public boolean isWithHelpSheet() {
+        return !StringUtils.isBlank(helpSheet);
     }
 
     public boolean isWithConsolidatedFormValidation() {
@@ -480,10 +491,10 @@ public class FormDef extends BaseApplicationEntityDef {
         return formTabDefList.get(tabIndex);
     }
 
-    public static Builder newBuilder(FormType type, EntityDef entityDef, String consolidatedFormValidation,
+    public static Builder newBuilder(FormType type, EntityDef entityDef, String helpSheet, String consolidatedFormValidation,
             String consolidatedFormReview, String consolidatedFormState, String listingGenerator, String longName,
             String description, Long id, long version) {
-        return new Builder(type, entityDef, consolidatedFormValidation, consolidatedFormReview, consolidatedFormState,
+        return new Builder(type, entityDef, helpSheet, consolidatedFormValidation, consolidatedFormReview, consolidatedFormState,
                 listingGenerator, longName, description, id, version);
     }
 
@@ -492,6 +503,8 @@ public class FormDef extends BaseApplicationEntityDef {
         private FormType type;
 
         private EntityDef entityDef;
+
+        private String helpSheet;
 
         private String consolidatedFormValidation;
 
@@ -537,11 +550,12 @@ public class FormDef extends BaseApplicationEntityDef {
 
         private long version;
 
-        public Builder(FormType type, EntityDef entityDef, String consolidatedFormValidation,
+        public Builder(FormType type, EntityDef entityDef, String helpSheet, String consolidatedFormValidation,
                 String consolidatedFormReview, String consolidatedFormState, String listingGenerator, String longName,
                 String description, Long id, long version) {
             this.type = type;
             this.entityDef = entityDef;
+            this.helpSheet = helpSheet;
             this.consolidatedFormValidation = consolidatedFormValidation;
             this.consolidatedFormReview = consolidatedFormReview;
             this.consolidatedFormState = consolidatedFormState;
@@ -874,7 +888,7 @@ public class FormDef extends BaseApplicationEntityDef {
             }
 
             ApplicationEntityNameParts nameParts = ApplicationNameUtils.getApplicationEntityNameParts(longName);
-            return new FormDef(type, entityDef, consolidatedFormValidation, consolidatedFormReview,
+            return new FormDef(type, entityDef, helpSheet, consolidatedFormValidation, consolidatedFormReview,
                     consolidatedFormState, listingGenerator, titleFormat, DataUtils.unmodifiableMap(filterDefMap),
                     DataUtils.unmodifiableMap(formAnnotationDefMap), DataUtils.unmodifiableList(formActionList),
                     DataUtils.unmodifiableList(formTabDefList),

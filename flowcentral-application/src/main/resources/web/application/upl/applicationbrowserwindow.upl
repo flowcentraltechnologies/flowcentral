@@ -35,3 +35,6 @@
 
 // Preview form panel
 !fc-previewformpanel:previewFormPopup binding:$w{}
+
+// Help form panel
+!fc-helpformpanel:helpFormPopup binding:$w{}

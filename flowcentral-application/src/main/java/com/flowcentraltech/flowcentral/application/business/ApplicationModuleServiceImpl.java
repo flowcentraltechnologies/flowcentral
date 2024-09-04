@@ -70,6 +70,7 @@ import com.flowcentraltech.flowcentral.application.data.FilterGroupDef;
 import com.flowcentraltech.flowcentral.application.data.FilterGroupDef.FilterType;
 import com.flowcentraltech.flowcentral.application.data.FormDef;
 import com.flowcentraltech.flowcentral.application.data.FormFilterDef;
+import com.flowcentraltech.flowcentral.application.data.HelpSheetDef;
 import com.flowcentraltech.flowcentral.application.data.IndexDef;
 import com.flowcentraltech.flowcentral.application.data.PropertyListDef;
 import com.flowcentraltech.flowcentral.application.data.PropertyListItem;
@@ -350,6 +351,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     private FactoryMap<String, TableDef> tableDefFactoryMap;
 
     private FactoryMap<String, FormDef> formDefFactoryMap;
+
+    private FactoryMap<String, HelpSheetDef> helpSheetDefFactoryMap;
 
     private FactoryMap<String, AssignmentPageDef> assignmentPageDefFactoryMap;
 
@@ -1106,7 +1109,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     final boolean useFormColorScheme = appletUtilities.system().getSysParameterValue(boolean.class,
                             ApplicationModuleSysParamConstants.USE_APPLICATION_FORM_COLOR_SCHEME);
                     final EntityDef entityDef = getEntityDef(appForm.getEntity());
-                    FormDef.Builder fdb = FormDef.newBuilder(appForm.getType(), entityDef,
+                    FormDef.Builder fdb = FormDef.newBuilder(appForm.getType(), entityDef, appForm.getHelpSheet(),
                             appForm.getConsolidatedValidation(), appForm.getConsolidatedReview(),
                             appForm.getConsolidatedState(), appForm.getListingGenerator(), longName,
                             appForm.getDescription(), appForm.getId(), appForm.getVersionNo());
@@ -1132,8 +1135,9 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                         } else if (FormElementType.SECTION.equals(appFormElement.getType())) {
                             sectionIndex++;
                             fdb.addFormSection(tabIndex, appFormElement.getElementName(), appFormElement.getLabel(),
-                                    appFormElement.getSectionColumns(), appFormElement.getPanel(), appFormElement.isVisible(),
-                                    appFormElement.isEditable(), appFormElement.isDisabled());
+                                    appFormElement.getSectionColumns(), appFormElement.getPanel(),
+                                    appFormElement.isVisible(), appFormElement.isEditable(),
+                                    appFormElement.isDisabled());
                         } else {
                             // FIELD
                             final String fieldName = appFormElement.getElementName();
@@ -1294,6 +1298,32 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     }
 
                     return fdb.build();
+                }
+
+            };
+
+        this.helpSheetDefFactoryMap = new FactoryMap<String, HelpSheetDef>(true)
+            {
+                @Override
+                protected boolean stale(String longName, HelpSheetDef helpSheetDef) throws Exception {
+                    return (environment().value(long.class, "versionNo",
+                            new AppHelpSheetQuery().id(helpSheetDef.getId())) > helpSheetDef.getVersion());
+                }
+
+                @Override
+                protected HelpSheetDef create(String longName, Object... params) throws Exception {
+                    AppHelpSheet appHelpSheet = getApplicationEntity(AppHelpSheet.class, longName);
+                    HelpSheetDef.Builder hsdb = HelpSheetDef.newBuilder(appHelpSheet.getLabel(),
+                            appHelpSheet.getHelpOverview(), longName, appHelpSheet.getDescription(),
+                            appHelpSheet.getId(), appHelpSheet.getVersionNo());
+
+                    List<AppHelpEntry> entryList = environment()
+                            .listAll(new AppHelpEntryQuery().appHelpSheetId(appHelpSheet.getId()));
+                    for (AppHelpEntry entry : entryList) {
+                        hsdb.addEntry(entry.getFieldName(), entry.getHelpContent());
+                    }
+
+                    return hsdb.build();
                 }
 
             };
@@ -2474,6 +2504,11 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
+    public HelpSheetDef getHelpSheetDef(String helpSheetName) throws UnifyException {
+        return helpSheetDefFactoryMap.get(helpSheetName);
+    }
+
+    @Override
     public WidgetTypeDef getWidgetTypeDef(String widgetName) throws UnifyException {
         return widgetDefFactoryMap.get(widgetName);
     }
@@ -2542,6 +2577,12 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         }
 
         return list;
+    }
+
+    @Override
+    public List<? extends Listable> findAppHelpSheetsByEntity(String entity) throws UnifyException {
+        List<AppHelpSheet> sheets = environment().listAll(new AppHelpSheetQuery().entity(entity));
+        return ApplicationNameUtils.getListableList(sheets);
     }
 
     @Override
@@ -3300,6 +3341,17 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     @Override
     public boolean isReloadOnSwitch() throws UnifyException {
         return getRequestAttribute(boolean.class, AppletRequestAttributeConstants.RELOAD_ONSWITCH);
+    }
+
+    @Override
+    public AppHelpSheet findHelpSheet(Long helpSheetId) throws UnifyException {
+        return environment().list(AppHelpSheet.class, helpSheetId);
+    }
+
+    @Override
+    public List<Long> findCustomHelpSheetIdList(String applicationName) throws UnifyException {
+        return environment().valueList(Long.class, "id",
+                new AppHelpSheetQuery().applicationName(applicationName).isCustom());
     }
 
     @Taskable(name = ApplicationReplicationTaskConstants.APPLICATION_REPLICATION_TASK_NAME,
@@ -4895,6 +4947,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appForm.setType(appFormConfig.getType());
                     appForm.setEntity(
                             ApplicationNameUtils.ensureLongNameReference(applicationName, appFormConfig.getEntity()));
+                    appForm.setHelpSheet(appFormConfig.getHelpSheet());
                     appForm.setConsolidatedReview(appFormConfig.getConsolidatedReview());
                     appForm.setConsolidatedValidation(appFormConfig.getConsolidatedValidation());
                     appForm.setConsolidatedState(appFormConfig.getConsolidatedState());
@@ -4911,6 +4964,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     oldAppForm.setType(appFormConfig.getType());
                     oldAppForm.setEntity(
                             ApplicationNameUtils.ensureLongNameReference(applicationName, appFormConfig.getEntity()));
+                    oldAppForm.setHelpSheet(appFormConfig.getHelpSheet());
                     oldAppForm.setConsolidatedReview(appFormConfig.getConsolidatedReview());
                     oldAppForm.setConsolidatedValidation(appFormConfig.getConsolidatedValidation());
                     oldAppForm.setConsolidatedState(appFormConfig.getConsolidatedState());
@@ -5440,6 +5494,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 appForm.setType(appFormConfig.getType());
                 appForm.setEntity(
                         ApplicationNameUtils.ensureLongNameReference(applicationName, appFormConfig.getEntity()));
+                appForm.setHelpSheet(appFormConfig.getHelpSheet());
                 appForm.setConsolidatedReview(appFormConfig.getConsolidatedReview());
                 appForm.setConsolidatedValidation(appFormConfig.getConsolidatedValidation());
                 appForm.setConsolidatedState(appFormConfig.getConsolidatedState());

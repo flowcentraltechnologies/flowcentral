@@ -56,6 +56,11 @@
 			dataType="string" inputType="string"
 			editor="!ui-select list:studiolistinggeneratorlist listParams:$l{entity} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
+		<widgetType name="formhelpsheetlist"
+			description="$m{studio.widgettype.formhelpsheetlist}"
+			dataType="string" inputType="string"
+			editor="!ui-select list:studioformhelpsheetlist listParams:$l{entity} blankOption:$m{blank.none}"
+			renderer="!ui-label" />		
 		<widgetType name="formactionpolicylist"
 			description="$m{studio.widgettype.formactionpolicylist}"
 			dataType="string" inputType="string"
@@ -149,6 +154,11 @@
 			description="$m{studio.widgettype.reffiltergeneratorrulelist}"
 			dataType="string" inputType="string"
 			editor="!ui-select list:$s{rulelist} listParams:$l{filterGenerator} blankOption:$m{blank.none}"
+			renderer="!ui-label" />
+		<widgetType name="studiohelpentryfieldlist"
+			description="$m{studio.widgettype.studiohelpentryfieldlist}" dataType="long"
+			inputType="string"
+			editor="!ui-select list:studiohelpentryfieldlist listKey:$s{name} listParams:$l{appHelpSheetId} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="formlist"
 			description="$m{studio.widgettype.formlist}" dataType="long"
@@ -1270,6 +1280,24 @@
 			<property name="maintainForm.delete" value="true" />
 			<property name="quickOrder.field" value="executionIndex" />
 		</applet>
+		<applet name="manageAppHelpEntry"
+			description="$m{studio.apphelpentry.manage}"
+			label="$m{studio.apphelpentry.manage.label}"
+			type="manage_entitylist" entity="application.appHelpEntry"
+			menuAccess="false">
+			<property name="searchTable"
+				value="appHelpEntryTable" />
+			<property name="searchTable.new" value="true" />
+			<property name="searchTable.report" value="false" />
+			<property name="createForm" value="appHelpEntryForm" />
+			<property name="createForm.save" value="true" />
+			<property name="createForm.save.next" value="true" />
+			<property name="createForm.save.close" value="true" />
+			<property name="maintainForm"
+				value="appHelpEntryForm" />
+			<property name="maintainForm.update" value="true" />
+			<property name="maintainForm.delete" value="true" />
+		</applet>
 		<applet name="manageWorkflowFilter"
 			description="$m{studio.workflowfilter.manage}"
 			label="$m{studio.workflowfilter.manage.label}"
@@ -1997,6 +2025,17 @@
 				widthRatio="1" />
 			<column field="executionIndex" renderWidget="application.text"
 				widthRatio="1" order="ASC" />
+		</table>
+		<table name="appHelpEntryTable"
+			description="$m{studio.apphelpentry.table}"
+			label="$m{studio.apphelpentry.table.label}"
+			entity="application.appHelpEntry">
+			<column field="fieldName" renderWidget="application.name"
+				widthRatio="1" linkAct="maintainAct" />
+			<column field="createDt" renderWidget="application.datetime"
+				widthRatio="1" />
+			<column field="updateDt" renderWidget="application.datetime"
+				widthRatio="1" />
 		</table>
 		<table name="workflowFilterTable"
 			description="$m{studio.workflowfilter.table}"
@@ -4669,6 +4708,8 @@
 						column="1" required="true" switchOnChange="true" />
 					<field name="type" inputWidget="application.enumlist"
 						column="1" required="true" switchOnChange="true" />
+					<field name="helpSheet"
+						inputWidget="formhelpsheetlist" column="1" />
 					<field name="titleFormat"
 						inputWidget="application.texttemplate" column="1" />
 					<field name="consolidatedValidation"
@@ -5153,6 +5194,68 @@
 			<tab name="errorCondition"
 				label="$m{studio.appformreviewpolicy.form.errorcondition}"
 				reference="app_formreviewpolicy" contentType="filter_condition" />
+		</form>
+		<form name="appHelpSheetForm" description="$m{studio.apphelpsheet.form}"
+			entity="application.appHelpSheet">
+			<action type="button" name="lockResource" symbol="lock"
+				styleClass="fc-bluebutton"
+				description="$m{studio.common.form.action.lockresource}"
+				label="$m{studio.common.form.action.lockresource.label}"
+				policy="lockresource-actionpolicy" showOnMaintain="true" />
+			<action type="button" name="unlockResource" symbol="unlock"
+				styleClass="fc-bluebutton"
+				description="$m{studio.common.form.action.unlockresource}"
+				label="$m{studio.common.form.action.unlockresource.label}"
+				policy="unlockresource-actionpolicy" showOnMaintain="true" />
+			<annotation name="staticAnnotation"
+				description="$m{studio.common.form.annotation.static}"
+				message="$m{studio.common.form.annotation.static.message}" />
+			<tab name="basicDetails"
+				label="$m{studio.apphelpsheet.form.basicdetails}" contentType="miniform">
+				<section name="formDetails" columns="type_2">
+					<field name="applicationId"
+						reference="studio.applicationDevelopableRef"
+						inputWidget="application.entitysearch" column="0"
+						label="$m{studio.application}" disabled="true" required="true"
+						saveAs="true" />
+					<field name="name" inputWidget="application.name" column="0"
+						required="true" saveAs="true" />
+					<field name="description" inputWidget="application.text"
+						column="0" required="true" saveAs="true" />
+					<field name="label" inputWidget="application.text"
+						column="0" required="true" />
+					<field name="configType" inputWidget="application.enumlist"
+						column="1" disabled="true" required="true" />
+					<field name="entity" inputWidget="studio.entitybynamelist"
+						column="1" required="true" switchOnChange="true" />
+					<field name="helpOverview" inputWidget="application.richtexteditormedium"
+						column="1" />
+				</section>
+			</tab>
+			<tab name="entries" label="$m{studio.apphelpsheet.form.entries}"
+				contentType="child_list" applet="manageAppHelpEntry"
+				reference="entryList"/>
+			<tab name="changeLog" label="$m{application.form.audit}"
+				contentType="miniform_changelog" />
+		</form>
+		<form name="appHelpEntryForm"
+			description="$m{studio.apphelpentry.form}"
+			entity="application.appHelpEntry">
+			<tab name="basicDetails"
+				label="$m{studio.apphelpentry.form.basicdetails}"
+				contentType="miniform">
+				<section name="helpEntryDetails" columns="type_2">
+					<field name="appHelpSheetId" inputWidget="application.entitysearch"
+						disabled="true" column="0" required="true"
+						label="$m{application.apphelpentry.apphelpsheet}" />
+					<field name="fieldName" inputWidget="studiohelpentryfieldlist" column="0"
+						required="true" />
+					<field name="helpContent" inputWidget="application.richtexteditormedium"
+						column="1" required="true" />
+				</section>
+			</tab>
+			<tab name="changeLog" label="$m{application.form.audit}"
+				contentType="miniform_changelog" />
 		</form>
 		<form name="appWidgetTypeForm"
 			description="$m{studio.appwidgettype.form}"

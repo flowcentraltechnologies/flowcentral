@@ -86,7 +86,7 @@ public class StudioMenuWriter extends AbstractPanelWriter {
             StudioAppComponentType.FORM, StudioAppComponentType.REPORT_CONFIGURATION,
             StudioAppComponentType.NOTIFICATION_TEMPLATE, StudioAppComponentType.NOTIFICATION_LARGETEXT,
             StudioAppComponentType.WORKFLOW, StudioAppComponentType.CHART_DATASOURCE, StudioAppComponentType.CHART,
-            StudioAppComponentType.DASHBOARD));
+            StudioAppComponentType.DASHBOARD, StudioAppComponentType.HELP_SHEET));
 
     @Override
     protected void doWriteStructureAndContent(ResponseWriter writer, Widget widget) throws UnifyException {

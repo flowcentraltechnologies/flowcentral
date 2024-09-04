@@ -122,6 +122,8 @@ public abstract class AbstractStudioAppletActionPolicy extends AbstractAppletAct
                 break;
             case FORM:
                 break;
+            case HELP_SHEET:
+                break;
             case NOTIFICATION_TEMPLATE:
                 break;
             case NOTIFICATION_LARGETEXT:

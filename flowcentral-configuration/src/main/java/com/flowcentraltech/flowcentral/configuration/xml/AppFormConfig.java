@@ -82,6 +82,9 @@ public class AppFormConfig extends BaseNameConfig {
     
     @JacksonXmlProperty(isAttribute = true)
     private String entity;
+    
+    @JacksonXmlProperty(isAttribute = true)
+    private String helpSheet;
 
     @JacksonXmlProperty(isAttribute = true)
     private String titleFormat;
@@ -196,6 +199,14 @@ public class AppFormConfig extends BaseNameConfig {
 
     public void setEntity(String entity) {
         this.entity = entity;
+    }
+
+    public String getHelpSheet() {
+        return helpSheet;
+    }
+
+    public void setHelpSheet(String helpSheet) {
+        this.helpSheet = helpSheet;
     }
 
     public String getTitleFormat() {

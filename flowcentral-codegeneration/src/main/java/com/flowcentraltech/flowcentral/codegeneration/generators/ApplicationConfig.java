@@ -23,6 +23,7 @@ import java.util.Map;
 import com.flowcentraltech.flowcentral.configuration.xml.AppChartDataSourcesConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppChartsConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppDashboardsConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.AppHelpSheetsConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppNotifLargeTextsConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppNotifTemplatesConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppReportsConfig;
@@ -51,6 +52,8 @@ public class ApplicationConfig {
     private AppDashboardsConfig dashboardsConfig;
 
     private AppReportsConfig reportsConfig;
+
+    private AppHelpSheetsConfig helpSheetsConfig;
 
     private AppNotifTemplatesConfig notifTemplatesConfig;
 
@@ -115,6 +118,14 @@ public class ApplicationConfig {
 
     public void setReportsConfig(AppReportsConfig reportsConfig) {
         this.reportsConfig = reportsConfig;
+    }
+
+    public AppHelpSheetsConfig getHelpSheetsConfig() {
+        return helpSheetsConfig;
+    }
+
+    public void setHelpSheetsConfig(AppHelpSheetsConfig helpSheetsConfig) {
+        this.helpSheetsConfig = helpSheetsConfig;
     }
 
     public AppNotifTemplatesConfig getNotifTemplatesConfig() {

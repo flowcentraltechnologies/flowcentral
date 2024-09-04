@@ -64,4 +64,6 @@ public interface ApplicationModuleNameConstants {
     String MAPPEDENTITY_ENVIRONMENT_DELEGATE = "mappedentity-environmentdelegate";
     
     String APPLICATION_DYNAMICLIST_MANAGER= "application-dynamiclistmanager";
+    
+    String APPLICATION_HELPSHEET_INSTALLER = "application-helpsheetinstaller";
 }

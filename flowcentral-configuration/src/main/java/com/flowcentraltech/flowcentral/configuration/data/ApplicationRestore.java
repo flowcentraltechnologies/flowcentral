@@ -27,6 +27,8 @@ import com.flowcentraltech.flowcentral.configuration.xml.AppConfig;
  */
 public class ApplicationRestore extends ApplicationInstall {
 
+    private List<HelpSheetRestore> helpSheetList;
+
     private List<ReportRestore> reportList;
 
     private List<NotifTemplateRestore> notifTemplateList;
@@ -37,15 +39,21 @@ public class ApplicationRestore extends ApplicationInstall {
     
     private List<WorkflowWizardRestore> workflowWizardList;
     
-    public ApplicationRestore(AppConfig applicationConfig, List<ReportRestore> reportList,
-            List<NotifTemplateRestore> notifTemplateList, List<NotifLargeTextRestore> notifLargeTextList,
-            List<WorkflowRestore> workflowList, List<WorkflowWizardRestore> workflowWizardList) {
+    public ApplicationRestore(AppConfig applicationConfig, List<HelpSheetRestore> helpSheetList,
+            List<ReportRestore> reportList, List<NotifTemplateRestore> notifTemplateList,
+            List<NotifLargeTextRestore> notifLargeTextList, List<WorkflowRestore> workflowList,
+            List<WorkflowWizardRestore> workflowWizardList) {
         super(applicationConfig);
+        this.helpSheetList = helpSheetList;
         this.reportList = reportList;
         this.notifTemplateList = notifTemplateList;
         this.notifLargeTextList = notifLargeTextList;
         this.workflowList = workflowList;
         this.workflowWizardList = workflowWizardList;
+    }
+
+    public List<HelpSheetRestore> getHelpSheetList() {
+        return helpSheetList;
     }
 
     public List<ReportRestore> getReportList() {

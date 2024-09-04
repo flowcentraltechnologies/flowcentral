@@ -35,9 +35,12 @@ import com.flowcentraltech.flowcentral.application.data.FormFieldDef;
 import com.flowcentraltech.flowcentral.application.data.FormSectionDef;
 import com.flowcentraltech.flowcentral.application.data.FormStatePolicyDef;
 import com.flowcentraltech.flowcentral.application.data.FormWidgetRulesPolicyDef;
+import com.flowcentraltech.flowcentral.application.data.HelpEntryDef;
+import com.flowcentraltech.flowcentral.application.data.HelpSheetDef;
 import com.flowcentraltech.flowcentral.application.data.SetStateDef;
 import com.flowcentraltech.flowcentral.application.web.data.FormContext;
 import com.flowcentraltech.flowcentral.application.web.data.FormContext.FormTab;
+import com.flowcentraltech.flowcentral.application.web.panels.HelpFormInfo;
 import com.flowcentraltech.flowcentral.application.web.panels.PreviewFormInfo;
 import com.flowcentraltech.flowcentral.common.business.policies.ConsolidatedFormStatePolicy;
 import com.flowcentraltech.flowcentral.common.data.FormStateRule;
@@ -106,6 +109,21 @@ public class MiniFormWidget extends AbstractFlowCentralMultiControl implements F
             MiniForm miniForm = new MiniForm(MiniFormScope.CHILD_FORM, _ctx, mFormDef.getFormTabDef(0));
             PreviewFormInfo previewFormInfo = new PreviewFormInfo(mFormDef.getEntityDef().getLabel(), miniForm);
             commandShowPopup(new Popup(ApplicationResultMappingConstants.SHOW_PREVIEW_FORM, previewFormInfo));
+        }
+    }
+
+    @Action
+    public void help() throws UnifyException {
+        final String target = getRequestTarget(String.class);
+        String[] parts = target.split(":");
+        if (parts.length == 2) {
+            final String fieldName = parts[1];
+            final FormContext mCtx = oldMiniForm.getCtx();
+            HelpSheetDef helpSheetDef = appletUtilities.application().getHelpSheetDef(mCtx.getFormDef().getHelpSheet());
+            HelpEntryDef entry = helpSheetDef.getHelpEntryDef(fieldName);
+
+            HelpFormInfo helpFormInfo = new HelpFormInfo(entry.getFieldName(), entry.getHelpContent());
+            commandShowPopup(new Popup(ApplicationResultMappingConstants.SHOW_HELP_FORM, helpFormInfo));
         }
     }
 

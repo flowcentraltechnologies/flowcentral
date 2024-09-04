@@ -67,6 +67,8 @@ import com.tcdng.unify.web.ui.widget.ContentPanel;
                 response = { "!showpopupresponse popup:$s{quickTableOrderPopup}" }),
         @ResultMapping(name = ApplicationResultMappingConstants.SHOW_PREVIEW_FORM,
                 response = { "!showpopupresponse popup:$s{previewFormPopup}" }),
+        @ResultMapping(name = ApplicationResultMappingConstants.SHOW_HELP_FORM,
+            response = { "!showpopupresponse popup:$s{helpFormPopup}" }),
         @ResultMapping(name = ApplicationResultMappingConstants.REFRESH_CONTENT,
                 response = { "!hidepopupresponse", "!refreshpanelresponse panels:$l{content}" }),
         @ResultMapping(name = ApplicationResultMappingConstants.REFRESH_ALL, response = { "!hidepopupresponse",
