@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<!-- Repository application -->
+<application name="repository"
+	description="$m{repository.short.description}" label="$m{repository.label}"
+	module="repository">
+	<!-- Widget Types -->
+	<!-- Applets -->
+	<!-- References -->
+	<!-- Entities -->
+	<!-- Tables -->
+	<!-- Forms -->
+</application>
