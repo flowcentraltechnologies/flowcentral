@@ -509,6 +509,7 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-miniform .mfgap {display:block;width:100%;height:16px;}
 .fc-miniform .mfrow {display:table-row;}
 .fc-miniform .mfcol {display:table-cell; vertical-align: top;}
+.fc-miniform .mfpanel {}
 .fc-miniform .mffield {display:table;width:100%;padding:2px 2px;border-collapse:initial;}
 .fc-miniform .mffieldrow {display:table-row;}
 .fc-miniform .mfpre {display:table-cell;width:96px;vertical-align:top;}
