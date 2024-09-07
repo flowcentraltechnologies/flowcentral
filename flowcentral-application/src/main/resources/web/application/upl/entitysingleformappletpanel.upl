@@ -22,7 +22,7 @@
 	moreActionButtons:$f{moreActionButtons}
 	moreActionButtons:$c{formAttachmentBtn frmDiffBtn frmActionBtns saveBtn saveNextBtn saveCloseBtn}
 	moreActionButtons:$c{submitNextBtn submitCloseBtn updateBtn updateCloseBtn deleteBtn cancelBtn overviewBtn prevBtn nextBtn}
-	altActionButtons:$c{frmActionBtns saveBtn saveNextBtn saveCloseBtn}
+	altActionButtons:$c{saveBtn saveNextBtn saveCloseBtn}
 	altActionButtons:$c{submitNextBtn submitCloseBtn updateBtn updateCloseBtn deleteBtn cancelBtn}
 !ui-label:displayCounterLabel styleClass:$e{fc-dispcounter}
 	styleClassBinding:displayItemCounterClass binding:displayItemCounter
