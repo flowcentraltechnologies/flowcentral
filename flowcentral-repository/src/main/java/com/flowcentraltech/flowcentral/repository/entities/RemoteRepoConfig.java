@@ -43,7 +43,10 @@ public class RemoteRepoConfig extends BaseStatusEntity {
     private String remoteUrl;
 
     @Column(length = 64)
-    private String credential;
+    private String userName;
+
+    @Column(length = 256)
+    private String password;
 
     @Column(length = 64)
     private String provider;
@@ -73,12 +76,20 @@ public class RemoteRepoConfig extends BaseStatusEntity {
         this.remoteUrl = remoteUrl;
     }
 
-    public String getCredential() {
-        return credential;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setCredential(String credential) {
-        this.credential = credential;
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getProvider() {

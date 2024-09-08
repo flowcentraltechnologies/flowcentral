@@ -4,9 +4,99 @@
 	description="$m{repository.short.description}" label="$m{repository.label}"
 	module="repository">
 	<!-- Widget Types -->
+	<widgetTypes>
+		<widgetType name="repositoryproviderlist"
+			description="$m{repository.widgettype.repositoryproviderlist}" dataType="string"
+			inputType="string"
+			editor="!ui-select list:repositoryproviderlist blankOption:$m{blank.none}"
+			renderer="!ui-label" />
+	</widgetTypes>
 	<!-- Applets -->
 	<!-- References -->
+	<references>
+		<reference name="remoteRepoConfigRef"
+			description="$m{repository.remoterepoconfig.reference}" entity="remoteRepoConfig"
+			searchField="description" />
+	</references>
 	<!-- Entities -->
+	<entities>
+		<entity name="remoteRepoConfig" description="$m{repository.remoterepoconfig}"
+			label="$m{repository.remoterepoconfig.label}"
+			type="com.flowcentraltech.flowcentral.repository.entities.RemoteRepoConfig"
+			reportable="true" auditable="true">
+			<field name="name" label="$m{repository.remoterepoconfig.name}"
+				type="string" inputWidget="application.name" maxLen="64"
+				basicSearch="true" auditable="true"/>
+			<field name="description"
+				label="$m{repository.remoterepoconfig.description}" type="string"
+				inputWidget="application.text" maxLen="128" basicSearch="true" auditable="true"/>
+			<field name="remoteUrl" label="$m{repository.remoterepoconfig.remoteurl}"
+				type="string" inputWidget="application.textarea" maxLen="256"
+				auditable="true"/>
+			<field name="userName" label="$m{repository.remoterepoconfig.username}"
+				type="string" inputWidget="application.text" maxLen="64"
+				auditable="true"/>
+			<field name="password" label="$m{repository.remoterepoconfig.password}"
+				type="string" inputWidget="application.password" maxLen="256"
+				auditable="true"/>
+			<field name="provider" label="$m{repository.remoterepoconfig.provider}"
+				type="string" inputWidget="repositoryproviderlist" maxLen="64"
+				auditable="true"/>
+			<uniqueConstraint name="nameUc"
+				description="$m{repository.remoterepoconfig.uc.name}" fieldList="name" />
+			<uniqueConstraint name="descUc"
+				description="$m{repository.remoterepoconfig.uc.description}"
+				fieldList="description" />
+		</entity>
+	</entities>
 	<!-- Tables -->
+	<tables>
+		<table name="remoteRepoConfigTable"
+			description="$m{repository.remoterepoconfig.table}"
+			label="$m{repository.remoterepoconfig.label}" entity="remoteRepoConfig"
+			itemsPerPage="20" serialNo="true" basicSearch="true">
+			<column field="name" renderWidget="application.name"
+				widthRatio="1" linkAct="maintainAct" />
+			<column field="description" renderWidget="application.text"
+				widthRatio="1" />
+			<column field="remoteUrl" renderWidget="application.text"
+				widthRatio="1" />
+			<column field="provider" renderWidget="application.text"
+				widthRatio="1" />
+			<column field="createDt" renderWidget="application.datetime"
+				widthRatio="1" />
+			<column field="updateDt" renderWidget="application.datetime"
+				widthRatio="1" />
+			<column field="statusDesc" renderWidget="application.text"
+				label="$m{basestatusentity.field.label.status}" widthRatio="1" />
+		</table>
+	</tables>
 	<!-- Forms -->
+	<forms>
+		<form name="remoteRepoConfigForm"
+			description="$m{repository.remoterepoconfig.form}" entity="remoteRepoConfig">
+			<tab name="basicDetails"
+				label="$m{repository.remoterepoconfig.form.basicdetails}"
+				contentType="miniform">
+				<section name="remoteRepoConfig" label="$m{repository.remoterepoconfig.form.basicdetails}"
+					columns="type_2">
+					<field name="name" inputWidget="application.name" column="0"
+						required="true" />
+					<field name="description" inputWidget="application.text"
+						column="0" required="true" />
+					<field name="status" column="1" required="true" />
+					<field name="provider" column="1" required="true" />
+					<field name="remoteUrl" column="1" required="true" />
+				</section>
+				<section name="credentials" label="$m{repository.remoterepoconfig.form.credentials}"
+					columns="type_2">
+					<field name="userName" inputWidget="application.text" column="0"
+						required="true" />
+					<field name="password" column="1" required="true" />
+				</section>
+			</tab>
+			<tab name="changeLog" label="$m{application.form.audit}"
+				contentType="miniform_changelog" />
+		</form>
+	</forms>
 </application>

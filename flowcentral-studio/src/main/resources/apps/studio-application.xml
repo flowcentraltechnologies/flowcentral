@@ -623,6 +623,22 @@
 					paramA="Y" />
 			</filter>
 		</applet>
+		<applet name="manageRemoteRepoConfig"
+			description="$m{studio.remoterepoconfig.manage}"
+			label="$m{studio.remoterepoconfig.manage.label}" icon="archive"
+			type="manage_entitylist" entity="repository.remoteRepoConfig" menuAccess="false">
+			<property name="searchTable" value="repository.remoteRepoConfigTable" />
+			<property name="searchTable.report" value="false" />
+			<property name="searchTable.new" value="true" />
+			<property name="searchTable.basicSearchOnly" value="true" />
+			<property name="createForm" value="repository.remoteRepoConfigForm" />
+			<property name="createForm.save" value="true" />
+			<property name="createForm.save.next" value="true" />
+			<property name="createForm.save.close" value="true" />
+			<property name="maintainForm" value="repository.remoteRepoConfigForm" />
+			<property name="maintainForm.update" value="true" />
+			<property name="maintainForm.delete" value="true" />
+		</applet>
 		<applet name="applicationReplication"
 			description="$m{studio.applicationreplication.manage}"
 			label="$m{studio.applicationreplication.label}" icon="desktop"
