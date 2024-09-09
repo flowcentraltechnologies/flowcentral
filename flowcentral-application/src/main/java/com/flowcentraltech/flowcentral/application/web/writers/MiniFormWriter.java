@@ -245,6 +245,10 @@ public class MiniFormWriter extends AbstractControlWriter {
                     FormSectionBeanLoader loader = getComponent(FormSectionBeanLoader.class, fsl.value());
                     Object valBean = loader.getLoadBean(ctx.getFormValueStore().getReader());
                     setRequestAttribute(formWidget.getSectionName(), valBean);
+                    writer.write("<div class=\"mfpanel\">");
+                    writer.writeStructureAndContent(chWidget);
+                    writer.write("</div>");
+                    return;
                 }
 
                 writer.write("<div class=\"mffield\">");

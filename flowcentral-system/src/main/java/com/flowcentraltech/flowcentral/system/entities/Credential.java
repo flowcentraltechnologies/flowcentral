@@ -28,7 +28,9 @@ import com.tcdng.unify.core.annotation.UniqueConstraint;
  * @since 1.0
  */
 @Table(name = "FC_CREDENTIAL",
-        uniqueConstraints = { @UniqueConstraint({ "name" }), @UniqueConstraint({ "description" }) })
+        uniqueConstraints = {
+                @UniqueConstraint({ "name" }),
+                @UniqueConstraint({ "description" }) })
 public class Credential extends BaseStatusEntity {
 
     @Column(length = 64)
@@ -40,7 +42,7 @@ public class Credential extends BaseStatusEntity {
     @Column(length = 64)
     private String userName;
 
-    @Column(length = 512, transformer = "twoway-stringcryptograph", nullable = true)
+    @Column(length = 2048, transformer = "twoway-stringcryptograph", nullable = true)
     private String password;
 
     @Override

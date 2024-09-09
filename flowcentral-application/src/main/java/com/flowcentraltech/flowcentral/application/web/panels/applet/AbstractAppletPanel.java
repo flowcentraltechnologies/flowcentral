@@ -246,6 +246,8 @@ public abstract class AbstractAppletPanel extends AbstractApplicationSwitchPanel
 			String successHint = entityActionResult.getSuccessHint();
 			if (!StringUtils.isBlank(successHint)) {
 				formHintSuccess(successHint, ctx != null ? ctx.getEntityName() : null);
+			} else {
+			    formHintFailure(entityActionResult.getFailureHint(), ctx != null ? ctx.getEntityName() : null);
 			}
 		}
 	}
@@ -260,11 +262,21 @@ public abstract class AbstractAppletPanel extends AbstractApplicationSwitchPanel
 
 	protected abstract void onReviewErrors(EntityActionResult entityActionResult) throws UnifyException;
 
-	private void formHintSuccess(String messageKey, String entityName) throws UnifyException {
-		if (!StringUtils.isBlank(entityName)) {
-			hintUser(messageKey, StringUtils.capitalizeFirstLetter(entityName));
-		} else {
-			hintUser(messageKey);
-		}
-	}
+    private void formHintSuccess(String messageKey, String entityName) throws UnifyException {
+        if (!StringUtils.isBlank(entityName)) {
+            hintUser(messageKey, StringUtils.capitalizeFirstLetter(entityName));
+        } else {
+            hintUser(messageKey);
+        }
+    }
+
+    private void formHintFailure(String messageKey, String entityName) throws UnifyException {
+        if (!StringUtils.isBlank(messageKey)) {
+            if (!StringUtils.isBlank(entityName)) {
+                hintUser(MODE.ERROR, messageKey, StringUtils.capitalizeFirstLetter(entityName));
+            } else {
+                hintUser(MODE.ERROR, messageKey);
+            }
+        }
+    }
 }

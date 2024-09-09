@@ -19,7 +19,7 @@
 !fc-entitysingleformpanel:singleFormPanel binding:singleForm
 	moreCenterComponents:$c{sdisplayCounterLabel}
 	moreActionButtons:$c{sfrmActionBtns supdateBtn supdateCloseBtn sdeleteBtn scancelBtn}
-	altActionButtons:$c{sfrmActionBtns supdateBtn supdateCloseBtn sdeleteBtn scancelBtn}
+	altActionButtons:$c{supdateBtn supdateCloseBtn sdeleteBtn scancelBtn}
 !ui-label:sdisplayCounterLabel styleClass:$e{fc-dispcounter}
 	styleClassBinding:displayItemCounterClass binding:displayItemCounter
 !ui-button:supdateBtn caption:$m{button.update}

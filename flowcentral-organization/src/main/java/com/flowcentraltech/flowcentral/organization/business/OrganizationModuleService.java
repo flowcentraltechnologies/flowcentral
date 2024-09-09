@@ -16,8 +16,10 @@
 package com.flowcentraltech.flowcentral.organization.business;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.flowcentraltech.flowcentral.common.business.FlowCentralService;
+import com.flowcentraltech.flowcentral.organization.entities.BranchQuery;
 import com.flowcentraltech.flowcentral.organization.entities.Department;
 import com.flowcentraltech.flowcentral.organization.entities.DepartmentQuery;
 import com.flowcentraltech.flowcentral.organization.entities.MappedBranch;
@@ -95,6 +97,17 @@ public interface OrganizationModuleService extends FlowCentralService {
      *                        if an error occurs
      */
     Long getBranchId(String branchCode) throws UnifyException;
+
+    /**
+     * Get branch ID.
+     * 
+     * @param query
+     *                   the branch query
+     * @return the branch ID if found otherwise null
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    Optional<Long> getBranchId(BranchQuery query) throws UnifyException;
 
     /**
      * Get department ID..

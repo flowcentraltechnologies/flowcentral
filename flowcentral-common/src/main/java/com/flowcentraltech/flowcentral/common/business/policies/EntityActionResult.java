@@ -41,6 +41,8 @@ public class EntityActionResult {
 
     private String successHint;
 
+    private String failureHint;
+
     private String userAction;
 
     private Object result;
@@ -255,6 +257,14 @@ public class EntityActionResult {
 
     public void setSuccessHint(String successHint) {
         this.successHint = successHint;
+    }
+
+    public String getFailureHint() {
+        return failureHint;
+    }
+
+    public void setFailureHint(String failureHint) {
+        this.failureHint = failureHint;
     }
 
     @Override

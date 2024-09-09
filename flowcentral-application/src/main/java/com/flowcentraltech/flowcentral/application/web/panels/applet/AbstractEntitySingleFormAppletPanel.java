@@ -508,6 +508,8 @@ public abstract class AbstractEntitySingleFormAppletPanel extends AbstractApplet
 		String successHint = entityActionResult.getSuccessHint();
 		if (!StringUtils.isBlank(successHint)) {
 			formHintSuccess(successHint, entityName);
+		} else {
+		    formHintFailure(entityActionResult.getFailureHint(), entityName);
 		}
 	}
 
@@ -563,5 +565,15 @@ public abstract class AbstractEntitySingleFormAppletPanel extends AbstractApplet
 			hintUser(messageKey);
 		}
 	}
+
+    private void formHintFailure(String messageKey, String entityName) throws UnifyException {
+        if (!StringUtils.isBlank(messageKey)) {
+            if (!StringUtils.isBlank(entityName)) {
+                hintUser(MODE.ERROR, messageKey, StringUtils.capitalizeFirstLetter(entityName));
+            } else {
+                hintUser(MODE.ERROR, messageKey);
+            }
+        }
+    }
 
 }

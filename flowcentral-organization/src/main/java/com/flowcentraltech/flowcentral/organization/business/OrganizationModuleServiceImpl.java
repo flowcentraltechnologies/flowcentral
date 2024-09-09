@@ -327,6 +327,11 @@ public class OrganizationModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
+    public Optional<Long> getBranchId(BranchQuery query) throws UnifyException {
+        return environment().valueOptional(Long.class, "id", query);
+    }
+
+    @Override
     public Long getDepartmentId(String departmentCode) throws UnifyException {
         return environment().value(Long.class, "id", new DepartmentQuery().code(departmentCode));
     }

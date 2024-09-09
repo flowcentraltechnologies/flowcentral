@@ -48,6 +48,7 @@ public abstract class BaseEntityWrapper implements EntityWrapper {
     public BaseEntityWrapper(EntityClassDef entityClassDef, ValueStore valueStore) {
         Class<?> valueStoreClass = valueStore.getValueObject().getClass();
         if (!Collection.class.isAssignableFrom(valueStoreClass)
+                && !valueStoreClass.getName().equals(entityClassDef.getEntityClass().getName())
                 && !valueStoreClass.isAssignableFrom(entityClassDef.getEntityClass())) {
             throw new IllegalArgumentException(
                     "Supplied value store entity instance is incompatible with entity class definition.");
@@ -58,7 +59,8 @@ public abstract class BaseEntityWrapper implements EntityWrapper {
     }
 
     public BaseEntityWrapper(EntityClassDef entityClassDef, Entity inst) {
-        if (!inst.getClass().isAssignableFrom(entityClassDef.getEntityClass())) {
+        if (!inst.getClass().getName().equals(entityClassDef.getEntityClass().getName())
+                && !inst.getClass().isAssignableFrom(entityClassDef.getEntityClass())) {
             throw new IllegalArgumentException(
                     "Supplied entity instance is incompatible with entity class definition.");
         }
@@ -69,6 +71,7 @@ public abstract class BaseEntityWrapper implements EntityWrapper {
 
     public BaseEntityWrapper(EntityClassDef entityClassDef, List<? extends Entity> instList) {
         if (!DataUtils.isBlank(instList)
+                && !instList.get(0).getClass().getName().equals(entityClassDef.getEntityClass().getName())
                 && !instList.get(0).getClass().isAssignableFrom(entityClassDef.getEntityClass())) {
             throw new IllegalArgumentException(
                     "Supplied entity instance is incompatible with entity class definition.");

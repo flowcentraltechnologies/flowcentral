@@ -24,7 +24,7 @@
 	moreActionButtons:$f{moreActionButtons}
 	moreActionButtons:$c{formAttachmentBtn frmDiffBtn frmActionBtns submitNextBtn submitCloseBtn saveAsBtn saveBtn saveNextBtn saveCloseBtn}
 	moreActionButtons:$c{updateBtn updateCloseBtn deleteBtn cancelBtn overviewBtn prevBtn nextBtn}
-	altActionButtons:$c{frmActionBtns submitNextBtn submitCloseBtn saveBtn saveNextBtn saveCloseBtn}
+	altActionButtons:$c{submitNextBtn submitCloseBtn saveBtn saveNextBtn saveCloseBtn}
 	altActionButtons:$c{updateBtn updateCloseBtn deleteBtn cancelBtn}
 	moreMemoryComponents:$c{focusMemory tabMemory}
 	switchOnChangeEventHandler:$d{!ui-event event:onchange action:$c{switchOnChangeAct}}

@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<!--Repository module configuration -->
+<module name="repository" description="$m{repository.module}"
+	shortCode="RPO" label="$m{repository.label}">
+	<!-- Applications -->
+	<applications>
+		<application name="repository"
+			shortDescription="$m{repository.short.description}"
+			longDescription="$m{repository.long.description}" autoInstall="true"
+			configFile="apps/repository-application.xml" />
+	</applications>
+
+	<!-- System Parameters -->
+</module>
