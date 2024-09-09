@@ -100,6 +100,17 @@ public interface OrganizationModuleService extends FlowCentralService {
     Branch getBranch(Long branchId) throws UnifyException;
     
     /**
+     * Gets branch by criteria.
+     * 
+     * @param query
+     *              the criteria object
+     * @return the branch
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    Branch findBranch(BranchQuery query) throws UnifyException;
+    
+    /**
      * Gets branches by criteria.
      * 
      * @param query
