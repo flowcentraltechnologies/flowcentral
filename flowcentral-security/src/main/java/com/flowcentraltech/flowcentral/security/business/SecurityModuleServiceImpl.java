@@ -286,6 +286,11 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
+    public User findUserByCredentials(String userName, String password) throws UnifyException {
+        return environment().list(new UserQuery().loginId(userName).password(password));
+    }
+
+    @Override
     public User loginUser(String loginId, String password, Locale loginLocale, Long loginTenantId)
             throws UnifyException {
         final boolean isSystem = DefaultApplicationConstants.SYSTEM_LOGINID.equalsIgnoreCase(loginId);

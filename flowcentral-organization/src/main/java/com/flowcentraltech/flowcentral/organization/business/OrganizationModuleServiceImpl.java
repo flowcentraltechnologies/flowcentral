@@ -34,6 +34,7 @@ import com.flowcentraltech.flowcentral.configuration.constants.DefaultApplicatio
 import com.flowcentraltech.flowcentral.configuration.data.ModuleInstall;
 import com.flowcentraltech.flowcentral.configuration.xml.util.ConfigurationUtils;
 import com.flowcentraltech.flowcentral.organization.constants.OrganizationModuleNameConstants;
+import com.flowcentraltech.flowcentral.organization.entities.Branch;
 import com.flowcentraltech.flowcentral.organization.entities.BranchQuery;
 import com.flowcentraltech.flowcentral.organization.entities.Department;
 import com.flowcentraltech.flowcentral.organization.entities.DepartmentQuery;
@@ -319,6 +320,16 @@ public class OrganizationModuleServiceImpl extends AbstractFlowCentralService
     public boolean isRoleWithPrivilege(String roleCode, String privilegeCode) throws UnifyException {
         return (roleCode == null && getUserToken().isReservedUser())
                 || tenantRolePrivileges.get(getUserTenantId()).getRolePrivileges(roleCode).isPrivilege(privilegeCode);
+    }
+
+    @Override
+    public Branch findBranch(Long branchId) throws UnifyException {
+        return environment().list(Branch.class, branchId);
+    }
+
+    @Override
+    public List<Branch> getBranches(BranchQuery query) throws UnifyException {
+        return environment().listAll(query);
     }
 
     @Override

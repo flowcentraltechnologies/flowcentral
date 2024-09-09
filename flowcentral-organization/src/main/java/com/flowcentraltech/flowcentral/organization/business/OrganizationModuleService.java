@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.flowcentraltech.flowcentral.common.business.FlowCentralService;
+import com.flowcentraltech.flowcentral.organization.entities.Branch;
 import com.flowcentraltech.flowcentral.organization.entities.BranchQuery;
 import com.flowcentraltech.flowcentral.organization.entities.Department;
 import com.flowcentraltech.flowcentral.organization.entities.DepartmentQuery;
@@ -87,6 +88,28 @@ public interface OrganizationModuleService extends FlowCentralService {
      */
     List<Privilege> findPrivileges(PrivilegeQuery query) throws UnifyException;
 
+    /**
+     * Gets branch by ID
+     * 
+     * @param branchId
+     *                 the branch ID
+     * @return the branch
+     * @throws UnifyException
+     *                        if not found. If an error occurs
+     */
+    Branch findBranch(Long branchId) throws UnifyException;
+    
+    /**
+     * Gets branches by criteria.
+     * 
+     * @param query
+     *              the criteria object
+     * @return the list of branches
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    List<Branch> getBranches(BranchQuery query) throws UnifyException;
+    
     /**
      * Get branch ID.
      * 

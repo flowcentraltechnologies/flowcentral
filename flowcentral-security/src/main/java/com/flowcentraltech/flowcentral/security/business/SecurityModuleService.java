@@ -81,6 +81,19 @@ public interface SecurityModuleService extends FlowCentralService, UserLoginActi
     List<User> findUsers(UserQuery query) throws UnifyException;
 
     /**
+     * Finds user by credentials
+     * 
+     * @param userName
+     *                 the user name
+     * @param password
+     *                 the user password
+     * @return user if found otherwise null
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    User findUserByCredentials(String userName, String password) throws UnifyException;
+    
+    /**
      * Login user to application with login ID and password.
      * 
      * @param loginId
