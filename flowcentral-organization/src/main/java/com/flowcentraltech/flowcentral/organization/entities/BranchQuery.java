@@ -29,6 +29,10 @@ public class BranchQuery extends BaseStatusTenantEntityQuery<Branch> {
         super(Branch.class);
     }
 
+    public BranchQuery hubId(Long hubId) {
+        return (BranchQuery) addEquals("hubId", hubId);
+    }
+
     public BranchQuery zoneId(Long zoneId) {
         return (BranchQuery) addEquals("zoneId", zoneId);
     }

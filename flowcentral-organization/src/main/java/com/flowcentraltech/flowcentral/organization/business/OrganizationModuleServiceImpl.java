@@ -323,12 +323,12 @@ public class OrganizationModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
-    public Branch findBranch(Long branchId) throws UnifyException {
+    public Branch getBranch(Long branchId) throws UnifyException {
         return environment().list(Branch.class, branchId);
     }
 
     @Override
-    public List<Branch> getBranches(BranchQuery query) throws UnifyException {
+    public List<Branch> findBranches(BranchQuery query) throws UnifyException {
         return environment().listAll(query);
     }
 

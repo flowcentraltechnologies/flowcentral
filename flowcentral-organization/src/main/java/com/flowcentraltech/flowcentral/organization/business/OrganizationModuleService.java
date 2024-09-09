@@ -97,7 +97,7 @@ public interface OrganizationModuleService extends FlowCentralService {
      * @throws UnifyException
      *                        if not found. If an error occurs
      */
-    Branch findBranch(Long branchId) throws UnifyException;
+    Branch getBranch(Long branchId) throws UnifyException;
     
     /**
      * Gets branches by criteria.
@@ -108,7 +108,7 @@ public interface OrganizationModuleService extends FlowCentralService {
      * @throws UnifyException
      *                        if an error occurs
      */
-    List<Branch> getBranches(BranchQuery query) throws UnifyException;
+    List<Branch> findBranches(BranchQuery query) throws UnifyException;
     
     /**
      * Get branch ID.
