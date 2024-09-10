@@ -3897,22 +3897,23 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
         applicationPrivilegeManager.unregisterApplicationPrivileges(applicationId);
         deletionCount += deleteApplicationArtifacts(taskMonitor, "suggestion types", new AppSuggestionTypeQuery(),
-                applicationId);
+                applicationId, false);
         deletionCount += deleteApplicationArtifacts(taskMonitor, "assignment pages", new AppAssignmentPageQuery(),
-                applicationId);
+                applicationId, false);
         deletionCount += deleteApplicationArtifacts(taskMonitor, "property rules", new AppPropertyRuleQuery(),
-                applicationId);
+                applicationId, false);
         deletionCount += deleteApplicationArtifacts(taskMonitor, "property lists", new AppPropertyListQuery(),
-                applicationId);
-        deletionCount += deleteApplicationArtifacts(taskMonitor, "forms", new AppFormQuery(), applicationId);
-        deletionCount += deleteApplicationArtifacts(taskMonitor, "tables", new AppTableQuery(), applicationId);
-        deletionCount += deleteApplicationArtifacts(taskMonitor, "entities", new AppEntityQuery(), applicationId);
-        deletionCount += deleteApplicationArtifacts(taskMonitor, "references", new AppRefQuery(), applicationId);
+                applicationId, false);
+        deletionCount += deleteApplicationArtifacts(taskMonitor, "forms", new AppFormQuery(), applicationId, false);
+        deletionCount += deleteApplicationArtifacts(taskMonitor, "tables", new AppTableQuery(), applicationId, false);
+        deletionCount += deleteApplicationArtifacts(taskMonitor, "entities", new AppEntityQuery(), applicationId,
+                false);
+        deletionCount += deleteApplicationArtifacts(taskMonitor, "references", new AppRefQuery(), applicationId, false);
         deletionCount += deleteApplicationArtifacts(taskMonitor, "enumerations", new AppEnumerationQuery(),
-                applicationId);
+                applicationId, false);
         deletionCount += deleteApplicationArtifacts(taskMonitor, "widget types", new AppWidgetTypeQuery(),
-                applicationId);
-        deletionCount += deleteApplicationArtifacts(taskMonitor, "applets", new AppAppletQuery(), applicationId);
+                applicationId, false);
+        deletionCount += deleteApplicationArtifacts(taskMonitor, "applets", new AppAppletQuery(), applicationId, false);
 
         environment().delete(Application.class, applicationId);
         logDebug(taskMonitor, "Application with ID [{0}] successfully deleted.", applicationId);
@@ -3920,42 +3921,45 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     }
 
     private int deleteCustomApplication(TaskMonitor taskMonitor, Long applicationId) throws UnifyException {
-        logDebug(taskMonitor, "Deleting application with ID [{0}]...", applicationId);
+        logDebug(taskMonitor, "Deleting custom application with ID [{0}]...", applicationId);
         int deletionCount = 0;
         if (!DataUtils.isBlank(applicationArtifactInstallerList)) {
             for (ApplicationArtifactInstaller applicationArtifactInstaller : applicationArtifactInstallerList) {
-                deletionCount += applicationArtifactInstaller.deleteApplicationArtifacts(taskMonitor, applicationId);
+                deletionCount += applicationArtifactInstaller.deleteCustomApplicationArtifacts(taskMonitor,
+                        applicationId);
             }
         }
 
         applicationPrivilegeManager.unregisterCustonApplicationPrivileges(applicationId);
         deletionCount += deleteApplicationArtifacts(taskMonitor, "suggestion types", new AppSuggestionTypeQuery(),
-                applicationId);
+                applicationId, true);
         deletionCount += deleteApplicationArtifacts(taskMonitor, "assignment pages", new AppAssignmentPageQuery(),
-                applicationId);
+                applicationId, true);
         deletionCount += deleteApplicationArtifacts(taskMonitor, "property rules", new AppPropertyRuleQuery(),
-                applicationId);
+                applicationId, true);
         deletionCount += deleteApplicationArtifacts(taskMonitor, "property lists", new AppPropertyListQuery(),
-                applicationId);
-        deletionCount += deleteApplicationArtifacts(taskMonitor, "forms", new AppFormQuery(), applicationId);
-        deletionCount += deleteApplicationArtifacts(taskMonitor, "tables", new AppTableQuery(), applicationId);
-        deletionCount += deleteApplicationArtifacts(taskMonitor, "entities", new AppEntityQuery(), applicationId);
-        deletionCount += deleteApplicationArtifacts(taskMonitor, "references", new AppRefQuery(), applicationId);
+                applicationId, true);
+        deletionCount += deleteApplicationArtifacts(taskMonitor, "forms", new AppFormQuery(), applicationId, true);
+        deletionCount += deleteApplicationArtifacts(taskMonitor, "tables", new AppTableQuery(), applicationId, true);
+        deletionCount += deleteApplicationArtifacts(taskMonitor, "entities", new AppEntityQuery(), applicationId, true);
+        deletionCount += deleteApplicationArtifacts(taskMonitor, "references", new AppRefQuery(), applicationId, true);
         deletionCount += deleteApplicationArtifacts(taskMonitor, "enumerations", new AppEnumerationQuery(),
-                applicationId);
+                applicationId, true);
         deletionCount += deleteApplicationArtifacts(taskMonitor, "widget types", new AppWidgetTypeQuery(),
-                applicationId);
-        deletionCount += deleteApplicationArtifacts(taskMonitor, "applets", new AppAppletQuery(), applicationId);
+                applicationId, true);
+        deletionCount += deleteApplicationArtifacts(taskMonitor, "applets", new AppAppletQuery(), applicationId, true);
 
-        environment().deleteAll(new ApplicationQuery().isCustom().addEquals("id", applicationId));
+        environment().updateAll(new ApplicationQuery().addEquals("id", applicationId),
+                new Update().add("menuAccess", false));
         logDebug(taskMonitor, "Application with ID [{0}] successfully deleted.", applicationId);
         return deletionCount;
     }
 
     private int deleteApplicationArtifacts(TaskMonitor taskMonitor, String name, BaseApplicationEntityQuery<?> query,
-            Long applicationId) throws UnifyException {
+            Long applicationId, boolean customOnly) throws UnifyException {
         logDebug(taskMonitor, "Deleting application {0}...", name);
-        int deletion = environment().deleteAll(query.applicationId(applicationId));
+        int deletion = environment().deleteAll(
+                customOnly ? query.applicationId(applicationId).isCustom() : query.applicationId(applicationId));
         logDebug(taskMonitor, "[{1}] application {0} deleted.", name, deletion);
         return deletion;
     }
@@ -5214,8 +5218,9 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
         // Application
         Long applicationId = null;
-        ConfigType appConfigType = ConfigType.STATIC;
-        if (Boolean.TRUE.equals(applicationConfig.getCustom())) {
+        ConfigType appConfigType = null;
+        if (environment().updateAll(new ApplicationQuery().name(applicationConfig.getName()),
+                new Update().add("menuAccess", true)) == 0) {
             logDebug(taskMonitor, "Restoring application [{0}]...", description);
             Application application = new Application();
             application.setModuleId(moduleId.get());
@@ -5228,10 +5233,11 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             application.setAllowSecondaryTenants(applicationConfig.getAllowSecondaryTenants());
             application.setConfigType(ConfigType.CUSTOM);
             applicationId = (Long) environment().create(application);
-
             appConfigType = ConfigType.CUSTOM;
         } else {
             applicationId = getApplicationId(applicationConfig.getName());
+            appConfigType = environment().value(ConfigType.class, "configType",
+                    new ApplicationQuery().name(applicationConfig.getName()));
         }
 
         applicationRestore.setApplicationId(applicationId);
