@@ -279,7 +279,7 @@ public class FormContextEvaluatorImpl extends AbstractFlowCentralComponent imple
         }
     }
 
-//    private void checkUniqueConstraints(EntityDef entityDef, Object inst, Map<String, Object> fieldsInScope,
+//    private void checkUniqueConstraints(VersionedEntityDef entityDef, Object inst, Map<String, Object> fieldsInScope,
 //            final boolean multiErrorMessages, final boolean isCreate, final boolean isUpdate) throws UnifyException {
 //        final Object id = DataUtils.getBeanProperty(Object.class, inst, "id");
 //        if (entityDef.isWithUniqueConstraints()) {

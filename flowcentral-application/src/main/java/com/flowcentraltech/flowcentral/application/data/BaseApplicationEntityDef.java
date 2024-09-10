@@ -17,6 +17,7 @@
 package com.flowcentraltech.flowcentral.application.data;
 
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityNameParts;
+import com.flowcentraltech.flowcentral.common.data.VersionedEntityDef;
 import com.tcdng.unify.core.data.Listable;
 
 /**
@@ -25,7 +26,7 @@ import com.tcdng.unify.core.data.Listable;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class BaseApplicationEntityDef implements Listable {
+public abstract class BaseApplicationEntityDef implements Listable, VersionedEntityDef {
 
     private ApplicationEntityNameParts nameParts;
 
@@ -76,10 +77,12 @@ public abstract class BaseApplicationEntityDef implements Listable {
         return description;
     }
 
+    @Override
     public Long getId() {
         return id;
     }
 
+    @Override
     public long getVersion() {
         return version;
     }

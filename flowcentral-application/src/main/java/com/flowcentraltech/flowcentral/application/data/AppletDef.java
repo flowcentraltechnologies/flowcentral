@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.application.data;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityNameParts;
+import com.flowcentraltech.flowcentral.common.data.VersionedEntityDef;
 import com.flowcentraltech.flowcentral.configuration.constants.AppletType;
 import com.tcdng.unify.common.util.StringToken;
 import com.tcdng.unify.core.UnifyException;
@@ -28,7 +29,7 @@ import com.tcdng.unify.core.UnifyException;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface AppletDef {
+public interface AppletDef extends VersionedEntityDef {
 
     AppletDef facade(AppletDef appletDef);
 
@@ -43,10 +44,6 @@ public interface AppletDef {
     String getDescription();
 
     String getMinorName();
-
-    Long getId();
-
-    long getVersion();
 
     AppletType getType();
 

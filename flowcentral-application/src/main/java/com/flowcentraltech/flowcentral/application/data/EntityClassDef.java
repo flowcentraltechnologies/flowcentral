@@ -19,6 +19,7 @@ package com.flowcentraltech.flowcentral.application.data;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.flowcentraltech.flowcentral.common.data.VersionedEntityDef;
 import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.util.ReflectUtils;
@@ -29,7 +30,7 @@ import com.tcdng.unify.core.util.ReflectUtils;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class EntityClassDef {
+public class EntityClassDef implements VersionedEntityDef {
 
     private EntityDef entityDef;
 
@@ -50,10 +51,12 @@ public class EntityClassDef {
         return entityClass;
     }
 
+    @Override
     public Long getId() {
         return entityDef.getId();
     }
 
+    @Override
     public long getVersion() {
         return entityDef.getVersion();
     }

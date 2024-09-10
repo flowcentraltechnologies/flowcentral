@@ -79,8 +79,7 @@ public class MessagingModuleServiceImpl extends AbstractFlowCentralService imple
 
                 @Override
                 protected boolean stale(String key, MessagingConfigDef messagingConfigDef) throws Exception {
-                    if (environment().value(long.class, "versionNo", new MessagingReadConfigQuery()
-                            .id(messagingConfigDef.getId())) > messagingConfigDef.getVersion()) {
+                    if (isStale(new MessagingReadConfigQuery(), messagingConfigDef)) {
                         shutdownExecutorPool(messagingConfigDef.getCtx().getPool());
                         return true;
                     }
@@ -110,8 +109,7 @@ public class MessagingModuleServiceImpl extends AbstractFlowCentralService imple
 
                 @Override
                 protected boolean stale(String key, MessagingConfigDef messagingConfigDef) throws Exception {
-                    if (environment().value(long.class, "versionNo", new MessagingWriteConfigQuery()
-                            .id(messagingConfigDef.getId())) > messagingConfigDef.getVersion()) {
+                    if (isStale(new MessagingWriteConfigQuery(), messagingConfigDef)) {
                         shutdownExecutorPool(messagingConfigDef.getCtx().getPool());
                         return true;
                     }

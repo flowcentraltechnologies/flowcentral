@@ -375,8 +375,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
                 @Override
                 protected boolean stale(String name, ApplicationDef applicationDef) throws Exception {
-                    return (environment().value(long.class, "versionNo",
-                            new ApplicationQuery().id(applicationDef.getId())) > applicationDef.getVersion());
+                    return isStale(new ApplicationQuery(), applicationDef);
                 }
 
                 @Override
@@ -400,8 +399,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
                 @Override
                 protected boolean stale(String longName, AppletDef appletDef) throws Exception {
-                    return (environment().value(long.class, "versionNo",
-                            new AppAppletQuery().id(appletDef.getId())) > appletDef.getVersion());
+                    return isStale(new AppAppletQuery(), appletDef);
                 }
 
                 @Override
@@ -493,8 +491,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
                 @Override
                 protected boolean stale(String longName, WidgetTypeDef widgetTypeDef) throws Exception {
-                    return environment().value(long.class, "versionNo",
-                            new AppWidgetTypeQuery().id(widgetTypeDef.getId())) > widgetTypeDef.getVersion();
+                    return isStale(new AppWidgetTypeQuery(), widgetTypeDef);
                 }
 
                 @Override
@@ -515,8 +512,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
                 @Override
                 protected boolean stale(String longName, SuggestionTypeDef suggestionTypeDef) throws Exception {
-                    return environment().value(long.class, "versionNo", new AppSuggestionTypeQuery()
-                            .id(suggestionTypeDef.getId())) > suggestionTypeDef.getVersion();
+                    return isStale(new AppSuggestionTypeQuery(), suggestionTypeDef);
                 }
 
                 @Override
@@ -552,8 +548,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 @Override
                 protected boolean stale(String longName, EntityClassDef entityClassDef) throws Exception {
                     if (!RESERVED_ENTITIES.contains(longName)) {
-                        return environment().value(long.class, "versionNo",
-                                new AppEntityQuery().id(entityClassDef.getId())) > entityClassDef.getVersion();
+                        return isStale(new AppEntityQuery(), entityClassDef);
                     }
 
                     return false;
@@ -627,8 +622,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 @Override
                 protected boolean stale(String longName, EntityDef entityDef) throws Exception {
                     if (!RESERVED_ENTITIES.contains(longName)) {
-                        return environment().value(long.class, "versionNo",
-                                new AppEntityQuery().id(entityDef.getId())) > entityDef.getVersion();
+                        return isStale(new AppEntityQuery(), entityDef);
                     }
 
                     return false;
@@ -875,8 +869,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 @Override
                 protected boolean stale(String entityClass, EntityDef entityDef) throws Exception {
                     if (!PropertyListItem.class.getName().equals(entityClass)) {
-                        return (environment().value(long.class, "versionNo",
-                                new AppEntityQuery().id(entityDef.getId())) > entityDef.getVersion());
+                        return isStale(new AppEntityQuery(), entityDef);
                     }
 
                     return false;
@@ -900,8 +893,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
                 @Override
                 protected boolean stale(String longName, RefDef refDef) throws Exception {
-                    return (environment().value(long.class, "versionNo", new AppRefQuery().id(refDef.getId())) > refDef
-                            .getVersion());
+                    return isStale(new AppRefQuery(), refDef);
                 }
 
                 @Override
@@ -930,11 +922,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 @Override
                 protected boolean stale(String longName, TableDef tableDef) throws Exception {
                     if (!RESERVED_TABLES.contains(longName)) {
-                        return (environment().value(long.class, "versionNo",
-                                new AppTableQuery().id(tableDef.getId())) > tableDef.getVersion())
-                                || (tableDef.getEntityDef()
-                                        .getVersion() != getEntityDef(tableDef.getEntityDef().getLongName())
-                                                .getVersion());
+                        return isStale(new AppTableQuery(), tableDef) || (tableDef.getEntityDef()
+                                .getVersion() != getEntityDef(tableDef.getEntityDef().getLongName()).getVersion());
                     }
 
                     return false;
@@ -1096,10 +1085,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
                 @Override
                 protected boolean stale(String longName, FormDef formDef) throws Exception {
-                    return (environment().value(long.class, "versionNo",
-                            new AppFormQuery().id(formDef.getId())) > formDef.getVersion())
-                            || (formDef.getEntityDef()
-                                    .getVersion() != getEntityDef(formDef.getEntityDef().getLongName()).getVersion());
+                    return isStale(new AppFormQuery(), formDef) || (formDef.getEntityDef()
+                            .getVersion() != getEntityDef(formDef.getEntityDef().getLongName()).getVersion());
                 }
 
                 @SuppressWarnings("unchecked")
@@ -1307,8 +1294,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             {
                 @Override
                 protected boolean stale(String longName, HelpSheetDef helpSheetDef) throws Exception {
-                    return (environment().value(long.class, "versionNo",
-                            new AppHelpSheetQuery().id(helpSheetDef.getId())) > helpSheetDef.getVersion());
+                    return isStale(new AppHelpSheetQuery(), helpSheetDef);
                 }
 
                 @Override
@@ -1339,8 +1325,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
                 @Override
                 protected boolean stale(String longName, AssignmentPageDef assignmentPageDef) throws Exception {
-                    return (environment().value(long.class, "versionNo", new AppAssignmentPageQuery()
-                            .id(assignmentPageDef.getId())) > assignmentPageDef.getVersion());
+                    return isStale(new AppAssignmentPageQuery(), assignmentPageDef);
                 }
 
                 @Override
@@ -1369,8 +1354,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
                 @Override
                 protected boolean stale(String longName, PropertyListDef propertyListDef) throws Exception {
-                    return (environment().value(long.class, "versionNo",
-                            new AppPropertyListQuery().id(propertyListDef.getId())) > propertyListDef.getVersion());
+                    return isStale(new AppPropertyListQuery(), propertyListDef);
                 }
 
                 @Override
@@ -1411,8 +1395,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
                 @Override
                 protected boolean stale(String longName, PropertyRuleDef propertyRuleDef) throws Exception {
-                    return (environment().value(long.class, "versionNo",
-                            new AppPropertyRuleQuery().id(propertyRuleDef.getId())) > propertyRuleDef.getVersion());
+                    return isStale(new AppPropertyRuleQuery(), propertyRuleDef);
                 }
 
                 @Override

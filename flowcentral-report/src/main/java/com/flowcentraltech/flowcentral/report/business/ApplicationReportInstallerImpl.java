@@ -403,10 +403,11 @@ public class ApplicationReportInstallerImpl extends AbstractApplicationArtifactI
     }
 
     @Override
-    protected int deleteApplicationArtifacts(TaskMonitor taskMonitor, DeletionParams deletionParams, Long applicationId)
-            throws UnifyException {
-        environment().deleteAll(new ReportGroupMemberQuery().applicationId(applicationId));
-        return super.deleteApplicationArtifacts(taskMonitor, deletionParams, applicationId);
+    protected int deleteApplicationArtifacts(TaskMonitor taskMonitor, DeletionParams deletionParams, Long applicationId,
+            boolean customOnly) throws UnifyException {
+        environment().deleteAll(customOnly ? new ReportGroupMemberQuery().applicationId(applicationId).isCustom()
+                : new ReportGroupMemberQuery().applicationId(applicationId));
+        return super.deleteApplicationArtifacts(taskMonitor, deletionParams, applicationId, customOnly);
     }
 
     @SuppressWarnings("unchecked")

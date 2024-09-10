@@ -16,13 +16,15 @@
 
 package com.flowcentraltech.flowcentral.application.data;
 
+import com.flowcentraltech.flowcentral.common.data.VersionedEntityDef;
+
 /**
  * Application definition.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class ApplicationDef {
+public class ApplicationDef implements VersionedEntityDef {
 
     private String name;
 
@@ -73,10 +75,12 @@ public class ApplicationDef {
         return description;
     }
 
+    @Override
     public Long getId() {
         return id;
     }
 
+    @Override
     public long getVersion() {
         return version;
     }

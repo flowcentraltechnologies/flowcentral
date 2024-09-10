@@ -70,8 +70,7 @@ public class AuditModuleServiceImpl extends AbstractFlowCentralService implement
 
                 @Override
                 protected boolean stale(String name, EntityAuditConfigDef entityAuditConfigDef) throws Exception {
-                    return environment().value(long.class, "versionNo", new EntityAuditConfigQuery()
-                            .id(entityAuditConfigDef.getId())) > entityAuditConfigDef.getVersion();
+                    return isStale(new EntityAuditConfigQuery(), entityAuditConfigDef);
                 }
 
                 @Override

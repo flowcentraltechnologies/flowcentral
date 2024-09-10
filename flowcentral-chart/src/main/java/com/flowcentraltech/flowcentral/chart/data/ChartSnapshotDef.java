@@ -16,13 +16,15 @@
 
 package com.flowcentraltech.flowcentral.chart.data;
 
+import com.flowcentraltech.flowcentral.common.data.VersionedEntityDef;
+
 /**
  * Chart snapshot definition.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class ChartSnapshotDef {
+public class ChartSnapshotDef implements VersionedEntityDef {
 
     private String name;
 
@@ -54,10 +56,12 @@ public class ChartSnapshotDef {
         return chartDetails;
     }
 
+    @Override
     public Long getId() {
         return id;
     }
 
+    @Override
     public long getVersion() {
         return version;
     }

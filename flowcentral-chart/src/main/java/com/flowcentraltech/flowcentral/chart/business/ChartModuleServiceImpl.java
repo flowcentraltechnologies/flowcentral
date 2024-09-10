@@ -82,9 +82,8 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
 
                 @Override
                 protected boolean stale(String chartName, ChartDef chartDef) throws Exception {
-                    return environment().value(long.class, "versionNo",
-                            new ChartQuery().id(chartDef.getId())) > chartDef.getVersion();
-                }
+                    return isStale(new ChartQuery(), chartDef);
+                 }
 
                 @Override
                 protected ChartDef create(String longName, Object... arg1) throws Exception {
@@ -118,8 +117,7 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
 
                 @Override
                 protected boolean stale(String longName, ChartDataSourceDef chartDataSourceDef) throws Exception {
-                    return environment().value(long.class, "versionNo", new ChartDataSourceQuery()
-                            .id(chartDataSourceDef.getId())) > chartDataSourceDef.getVersion();
+                    return isStale(new ChartDataSourceQuery(), chartDataSourceDef);
                 }
 
                 @Override
@@ -157,8 +155,7 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
 
                 @Override
                 protected boolean stale(String chartSnapshotName, ChartSnapshotDef chartSnapshotDef) throws Exception {
-                    return environment().value(long.class, "versionNo",
-                            new ChartSnapshotQuery().id(chartSnapshotDef.getId())) > chartSnapshotDef.getVersion();
+                    return isStale(new ChartSnapshotQuery(), chartSnapshotDef);
                 }
 
                 @Override

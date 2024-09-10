@@ -77,8 +77,7 @@ public class DashboardModuleServiceImpl extends AbstractFlowCentralService imple
 
                 @Override
                 protected boolean stale(String dashboardName, DashboardDef dashboardDef) throws Exception {
-                    return environment().value(long.class, "versionNo",
-                            new DashboardQuery().id(dashboardDef.getId())) > dashboardDef.getVersion();
+                    return isStale(new DashboardQuery(), dashboardDef);
                 }
 
                 @Override
