@@ -6974,8 +6974,9 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             final DynamicEntityInfo.ManagedType managedType = entityDef.delegated()
                     ? DynamicEntityInfo.ManagedType.NOT_MANAGED
                     : DynamicEntityInfo.ManagedType.MANAGED;
-            final boolean schemaUpdateRequired = db().value(boolean.class, "schemaUpdateRequired",
+            final Optional<Boolean> opt = db().valueOptional(boolean.class, "schemaUpdateRequired",
                     new AppEntityQuery().addEquals("id", entityDef.getId()));
+            final boolean schemaUpdateRequired = !opt.isPresent() || opt.get();
             DynamicEntityInfo.Builder deib = DynamicEntityInfo
                     .newBuilder(dynamicEntityType, className, managedType, schemaUpdateRequired)
                     .baseClassName(baseClassName).tableName(entityDef.getTableName()).version(1L);
