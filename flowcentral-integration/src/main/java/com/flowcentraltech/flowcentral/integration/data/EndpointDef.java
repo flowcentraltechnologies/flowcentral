@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.flowcentraltech.flowcentral.common.data.ParamValuesDef;
+import com.flowcentraltech.flowcentral.common.data.VersionedEntityDef;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.Listable;
 import com.tcdng.unify.core.util.DataUtils;
@@ -31,7 +32,7 @@ import com.tcdng.unify.core.util.DataUtils;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class EndpointDef {
+public class EndpointDef implements VersionedEntityDef {
 
     private String name;
 
@@ -67,10 +68,12 @@ public class EndpointDef {
         return endpointName;
     }
 
+    @Override
     public Long getId() {
         return id;
     }
 
+    @Override
     public long getVersion() {
         return version;
     }

@@ -16,6 +16,7 @@
 package com.flowcentraltech.flowcentral.common.business;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionContext;
@@ -24,11 +25,14 @@ import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResu
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralContainerPropertyConstants;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralEditionConstants;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants;
+import com.flowcentraltech.flowcentral.common.data.VersionedEntityDef;
 import com.flowcentraltech.flowcentral.configuration.data.Messages;
 import com.flowcentraltech.flowcentral.configuration.data.ModuleInstall;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.business.AbstractBusinessService;
+import com.tcdng.unify.core.database.Entity;
+import com.tcdng.unify.core.database.Query;
 
 /**
  * Base class for flowCentral service.
@@ -99,6 +103,12 @@ public abstract class AbstractFlowCentralService extends AbstractBusinessService
 
     protected final boolean isInSystemRestoreMode() throws UnifyException {
         return isLocked(SYSTEM_RESTORE_LOCK);
+    }
+    
+    protected final boolean isStale(Query<? extends Entity> query, VersionedEntityDef baseDef) throws UnifyException {
+        final Optional<Long> versionOpt = environment().valueOptional(long.class, "versionNo",
+                query.addEquals("id", baseDef.getId()));
+        return !versionOpt.isPresent() || versionOpt.get() > baseDef.getVersion();
     }
     
     protected abstract void doInstallModuleFeatures(ModuleInstall moduleInstall) throws UnifyException;

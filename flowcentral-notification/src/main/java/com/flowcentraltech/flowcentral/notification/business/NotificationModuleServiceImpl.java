@@ -138,8 +138,7 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
 
                 @Override
                 protected boolean stale(String name, NotifTemplateDef notifTemplateDef) throws Exception {
-                    return (environment().value(long.class, "versionNo", new NotificationTemplateQuery()
-                            .id(notifTemplateDef.getId())) > notifTemplateDef.getVersion());
+                    return isStale(new NotificationTemplateQuery(), notifTemplateDef);
                 }
 
                 @Override
@@ -177,8 +176,7 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
 
                 @Override
                 protected boolean stale(String name, NotifLargeTextDef notifLargeTextDef) throws Exception {
-                    return (environment().value(long.class, "versionNo", new NotificationLargeTextQuery()
-                            .id(notifLargeTextDef.getId())) > notifLargeTextDef.getVersion());
+                    return isStale(new NotificationLargeTextQuery(), notifLargeTextDef);
                 }
 
                 @Override

@@ -25,6 +25,7 @@ import com.flowcentraltech.flowcentral.application.data.EntityFieldDef;
 import com.flowcentraltech.flowcentral.application.data.FieldSequenceDef;
 import com.flowcentraltech.flowcentral.application.data.FilterDef;
 import com.flowcentraltech.flowcentral.application.data.PropertySequenceDef;
+import com.flowcentraltech.flowcentral.common.data.VersionedEntityDef;
 import com.flowcentraltech.flowcentral.configuration.constants.ChartDataSourceType;
 import com.flowcentraltech.flowcentral.configuration.constants.ChartTimeSeriesType;
 import com.tcdng.unify.core.UnifyException;
@@ -36,7 +37,7 @@ import com.tcdng.unify.core.util.StringUtils;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class ChartDataSourceDef {
+public class ChartDataSourceDef implements VersionedEntityDef {
 
     private final ChartDataSourceType type;
 
@@ -129,10 +130,12 @@ public class ChartDataSourceDef {
         return limit;
     }
 
+    @Override
     public Long getId() {
         return id;
     }
 
+    @Override
     public long getVersion() {
         return version;
     }

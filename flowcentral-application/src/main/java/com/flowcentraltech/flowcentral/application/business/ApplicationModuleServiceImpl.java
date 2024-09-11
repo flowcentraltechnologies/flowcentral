@@ -375,8 +375,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
                 @Override
                 protected boolean stale(String name, ApplicationDef applicationDef) throws Exception {
-                    return (environment().value(long.class, "versionNo",
-                            new ApplicationQuery().id(applicationDef.getId())) > applicationDef.getVersion());
+                    return isStale(new ApplicationQuery(), applicationDef);
                 }
 
                 @Override
@@ -400,8 +399,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
                 @Override
                 protected boolean stale(String longName, AppletDef appletDef) throws Exception {
-                    return (environment().value(long.class, "versionNo",
-                            new AppAppletQuery().id(appletDef.getId())) > appletDef.getVersion());
+                    return isStale(new AppAppletQuery(), appletDef);
                 }
 
                 @Override
@@ -493,8 +491,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
                 @Override
                 protected boolean stale(String longName, WidgetTypeDef widgetTypeDef) throws Exception {
-                    return environment().value(long.class, "versionNo",
-                            new AppWidgetTypeQuery().id(widgetTypeDef.getId())) > widgetTypeDef.getVersion();
+                    return isStale(new AppWidgetTypeQuery(), widgetTypeDef);
                 }
 
                 @Override
@@ -515,8 +512,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
                 @Override
                 protected boolean stale(String longName, SuggestionTypeDef suggestionTypeDef) throws Exception {
-                    return environment().value(long.class, "versionNo", new AppSuggestionTypeQuery()
-                            .id(suggestionTypeDef.getId())) > suggestionTypeDef.getVersion();
+                    return isStale(new AppSuggestionTypeQuery(), suggestionTypeDef);
                 }
 
                 @Override
@@ -552,8 +548,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 @Override
                 protected boolean stale(String longName, EntityClassDef entityClassDef) throws Exception {
                     if (!RESERVED_ENTITIES.contains(longName)) {
-                        return environment().value(long.class, "versionNo",
-                                new AppEntityQuery().id(entityClassDef.getId())) > entityClassDef.getVersion();
+                        return isStale(new AppEntityQuery(), entityClassDef);
                     }
 
                     return false;
@@ -627,8 +622,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 @Override
                 protected boolean stale(String longName, EntityDef entityDef) throws Exception {
                     if (!RESERVED_ENTITIES.contains(longName)) {
-                        return environment().value(long.class, "versionNo",
-                                new AppEntityQuery().id(entityDef.getId())) > entityDef.getVersion();
+                        return isStale(new AppEntityQuery(), entityDef);
                     }
 
                     return false;
@@ -875,8 +869,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 @Override
                 protected boolean stale(String entityClass, EntityDef entityDef) throws Exception {
                     if (!PropertyListItem.class.getName().equals(entityClass)) {
-                        return (environment().value(long.class, "versionNo",
-                                new AppEntityQuery().id(entityDef.getId())) > entityDef.getVersion());
+                        return isStale(new AppEntityQuery(), entityDef);
                     }
 
                     return false;
@@ -900,8 +893,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
                 @Override
                 protected boolean stale(String longName, RefDef refDef) throws Exception {
-                    return (environment().value(long.class, "versionNo", new AppRefQuery().id(refDef.getId())) > refDef
-                            .getVersion());
+                    return isStale(new AppRefQuery(), refDef);
                 }
 
                 @Override
@@ -930,11 +922,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 @Override
                 protected boolean stale(String longName, TableDef tableDef) throws Exception {
                     if (!RESERVED_TABLES.contains(longName)) {
-                        return (environment().value(long.class, "versionNo",
-                                new AppTableQuery().id(tableDef.getId())) > tableDef.getVersion())
-                                || (tableDef.getEntityDef()
-                                        .getVersion() != getEntityDef(tableDef.getEntityDef().getLongName())
-                                                .getVersion());
+                        return isStale(new AppTableQuery(), tableDef) || (tableDef.getEntityDef()
+                                .getVersion() != getEntityDef(tableDef.getEntityDef().getLongName()).getVersion());
                     }
 
                     return false;
@@ -1096,10 +1085,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
                 @Override
                 protected boolean stale(String longName, FormDef formDef) throws Exception {
-                    return (environment().value(long.class, "versionNo",
-                            new AppFormQuery().id(formDef.getId())) > formDef.getVersion())
-                            || (formDef.getEntityDef()
-                                    .getVersion() != getEntityDef(formDef.getEntityDef().getLongName()).getVersion());
+                    return isStale(new AppFormQuery(), formDef) || (formDef.getEntityDef()
+                            .getVersion() != getEntityDef(formDef.getEntityDef().getLongName()).getVersion());
                 }
 
                 @SuppressWarnings("unchecked")
@@ -1307,8 +1294,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             {
                 @Override
                 protected boolean stale(String longName, HelpSheetDef helpSheetDef) throws Exception {
-                    return (environment().value(long.class, "versionNo",
-                            new AppHelpSheetQuery().id(helpSheetDef.getId())) > helpSheetDef.getVersion());
+                    return isStale(new AppHelpSheetQuery(), helpSheetDef);
                 }
 
                 @Override
@@ -1339,8 +1325,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
                 @Override
                 protected boolean stale(String longName, AssignmentPageDef assignmentPageDef) throws Exception {
-                    return (environment().value(long.class, "versionNo", new AppAssignmentPageQuery()
-                            .id(assignmentPageDef.getId())) > assignmentPageDef.getVersion());
+                    return isStale(new AppAssignmentPageQuery(), assignmentPageDef);
                 }
 
                 @Override
@@ -1369,8 +1354,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
                 @Override
                 protected boolean stale(String longName, PropertyListDef propertyListDef) throws Exception {
-                    return (environment().value(long.class, "versionNo",
-                            new AppPropertyListQuery().id(propertyListDef.getId())) > propertyListDef.getVersion());
+                    return isStale(new AppPropertyListQuery(), propertyListDef);
                 }
 
                 @Override
@@ -1411,8 +1395,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
                 @Override
                 protected boolean stale(String longName, PropertyRuleDef propertyRuleDef) throws Exception {
-                    return (environment().value(long.class, "versionNo",
-                            new AppPropertyRuleQuery().id(propertyRuleDef.getId())) > propertyRuleDef.getVersion());
+                    return isStale(new AppPropertyRuleQuery(), propertyRuleDef);
                 }
 
                 @Override
@@ -3897,22 +3880,23 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
         applicationPrivilegeManager.unregisterApplicationPrivileges(applicationId);
         deletionCount += deleteApplicationArtifacts(taskMonitor, "suggestion types", new AppSuggestionTypeQuery(),
-                applicationId);
+                applicationId, false);
         deletionCount += deleteApplicationArtifacts(taskMonitor, "assignment pages", new AppAssignmentPageQuery(),
-                applicationId);
+                applicationId, false);
         deletionCount += deleteApplicationArtifacts(taskMonitor, "property rules", new AppPropertyRuleQuery(),
-                applicationId);
+                applicationId, false);
         deletionCount += deleteApplicationArtifacts(taskMonitor, "property lists", new AppPropertyListQuery(),
-                applicationId);
-        deletionCount += deleteApplicationArtifacts(taskMonitor, "forms", new AppFormQuery(), applicationId);
-        deletionCount += deleteApplicationArtifacts(taskMonitor, "tables", new AppTableQuery(), applicationId);
-        deletionCount += deleteApplicationArtifacts(taskMonitor, "entities", new AppEntityQuery(), applicationId);
-        deletionCount += deleteApplicationArtifacts(taskMonitor, "references", new AppRefQuery(), applicationId);
+                applicationId, false);
+        deletionCount += deleteApplicationArtifacts(taskMonitor, "forms", new AppFormQuery(), applicationId, false);
+        deletionCount += deleteApplicationArtifacts(taskMonitor, "tables", new AppTableQuery(), applicationId, false);
+        deletionCount += deleteApplicationArtifacts(taskMonitor, "entities", new AppEntityQuery(), applicationId,
+                false);
+        deletionCount += deleteApplicationArtifacts(taskMonitor, "references", new AppRefQuery(), applicationId, false);
         deletionCount += deleteApplicationArtifacts(taskMonitor, "enumerations", new AppEnumerationQuery(),
-                applicationId);
+                applicationId, false);
         deletionCount += deleteApplicationArtifacts(taskMonitor, "widget types", new AppWidgetTypeQuery(),
-                applicationId);
-        deletionCount += deleteApplicationArtifacts(taskMonitor, "applets", new AppAppletQuery(), applicationId);
+                applicationId, false);
+        deletionCount += deleteApplicationArtifacts(taskMonitor, "applets", new AppAppletQuery(), applicationId, false);
 
         environment().delete(Application.class, applicationId);
         logDebug(taskMonitor, "Application with ID [{0}] successfully deleted.", applicationId);
@@ -3920,42 +3904,45 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     }
 
     private int deleteCustomApplication(TaskMonitor taskMonitor, Long applicationId) throws UnifyException {
-        logDebug(taskMonitor, "Deleting application with ID [{0}]...", applicationId);
+        logDebug(taskMonitor, "Deleting custom application with ID [{0}]...", applicationId);
         int deletionCount = 0;
         if (!DataUtils.isBlank(applicationArtifactInstallerList)) {
             for (ApplicationArtifactInstaller applicationArtifactInstaller : applicationArtifactInstallerList) {
-                deletionCount += applicationArtifactInstaller.deleteApplicationArtifacts(taskMonitor, applicationId);
+                deletionCount += applicationArtifactInstaller.deleteCustomApplicationArtifacts(taskMonitor,
+                        applicationId);
             }
         }
 
         applicationPrivilegeManager.unregisterCustonApplicationPrivileges(applicationId);
         deletionCount += deleteApplicationArtifacts(taskMonitor, "suggestion types", new AppSuggestionTypeQuery(),
-                applicationId);
+                applicationId, true);
         deletionCount += deleteApplicationArtifacts(taskMonitor, "assignment pages", new AppAssignmentPageQuery(),
-                applicationId);
+                applicationId, true);
         deletionCount += deleteApplicationArtifacts(taskMonitor, "property rules", new AppPropertyRuleQuery(),
-                applicationId);
+                applicationId, true);
         deletionCount += deleteApplicationArtifacts(taskMonitor, "property lists", new AppPropertyListQuery(),
-                applicationId);
-        deletionCount += deleteApplicationArtifacts(taskMonitor, "forms", new AppFormQuery(), applicationId);
-        deletionCount += deleteApplicationArtifacts(taskMonitor, "tables", new AppTableQuery(), applicationId);
-        deletionCount += deleteApplicationArtifacts(taskMonitor, "entities", new AppEntityQuery(), applicationId);
-        deletionCount += deleteApplicationArtifacts(taskMonitor, "references", new AppRefQuery(), applicationId);
+                applicationId, true);
+        deletionCount += deleteApplicationArtifacts(taskMonitor, "forms", new AppFormQuery(), applicationId, true);
+        deletionCount += deleteApplicationArtifacts(taskMonitor, "tables", new AppTableQuery(), applicationId, true);
+        deletionCount += deleteApplicationArtifacts(taskMonitor, "entities", new AppEntityQuery(), applicationId, true);
+        deletionCount += deleteApplicationArtifacts(taskMonitor, "references", new AppRefQuery(), applicationId, true);
         deletionCount += deleteApplicationArtifacts(taskMonitor, "enumerations", new AppEnumerationQuery(),
-                applicationId);
+                applicationId, true);
         deletionCount += deleteApplicationArtifacts(taskMonitor, "widget types", new AppWidgetTypeQuery(),
-                applicationId);
-        deletionCount += deleteApplicationArtifacts(taskMonitor, "applets", new AppAppletQuery(), applicationId);
+                applicationId, true);
+        deletionCount += deleteApplicationArtifacts(taskMonitor, "applets", new AppAppletQuery(), applicationId, true);
 
-        environment().deleteAll(new ApplicationQuery().isCustom().addEquals("id", applicationId));
+        environment().updateAll(new ApplicationQuery().addEquals("id", applicationId),
+                new Update().add("menuAccess", false));
         logDebug(taskMonitor, "Application with ID [{0}] successfully deleted.", applicationId);
         return deletionCount;
     }
 
     private int deleteApplicationArtifacts(TaskMonitor taskMonitor, String name, BaseApplicationEntityQuery<?> query,
-            Long applicationId) throws UnifyException {
+            Long applicationId, boolean customOnly) throws UnifyException {
         logDebug(taskMonitor, "Deleting application {0}...", name);
-        int deletion = environment().deleteAll(query.applicationId(applicationId));
+        int deletion = environment().deleteAll(
+                customOnly ? query.applicationId(applicationId).isCustom() : query.applicationId(applicationId));
         logDebug(taskMonitor, "[{1}] application {0} deleted.", name, deletion);
         return deletion;
     }
@@ -5214,8 +5201,9 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
         // Application
         Long applicationId = null;
-        ConfigType appConfigType = ConfigType.STATIC;
-        if (Boolean.TRUE.equals(applicationConfig.getCustom())) {
+        ConfigType appConfigType = null;
+        if (environment().updateAll(new ApplicationQuery().name(applicationConfig.getName()),
+                new Update().add("menuAccess", true)) == 0) {
             logDebug(taskMonitor, "Restoring application [{0}]...", description);
             Application application = new Application();
             application.setModuleId(moduleId.get());
@@ -5228,10 +5216,11 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             application.setAllowSecondaryTenants(applicationConfig.getAllowSecondaryTenants());
             application.setConfigType(ConfigType.CUSTOM);
             applicationId = (Long) environment().create(application);
-
             appConfigType = ConfigType.CUSTOM;
         } else {
             applicationId = getApplicationId(applicationConfig.getName());
+            appConfigType = environment().value(ConfigType.class, "configType",
+                    new ApplicationQuery().name(applicationConfig.getName()));
         }
 
         applicationRestore.setApplicationId(applicationId);
@@ -6985,8 +6974,9 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             final DynamicEntityInfo.ManagedType managedType = entityDef.delegated()
                     ? DynamicEntityInfo.ManagedType.NOT_MANAGED
                     : DynamicEntityInfo.ManagedType.MANAGED;
-            final boolean schemaUpdateRequired = db().value(boolean.class, "schemaUpdateRequired",
+            final Optional<Boolean> opt = db().valueOptional(boolean.class, "schemaUpdateRequired",
                     new AppEntityQuery().addEquals("id", entityDef.getId()));
+            final boolean schemaUpdateRequired = !opt.isPresent() || opt.get();
             DynamicEntityInfo.Builder deib = DynamicEntityInfo
                     .newBuilder(dynamicEntityType, className, managedType, schemaUpdateRequired)
                     .baseClassName(baseClassName).tableName(entityDef.getTableName()).version(1L);

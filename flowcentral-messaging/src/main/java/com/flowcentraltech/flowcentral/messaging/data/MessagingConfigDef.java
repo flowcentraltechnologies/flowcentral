@@ -16,6 +16,7 @@
 package com.flowcentraltech.flowcentral.messaging.data;
 
 import com.flowcentraltech.flowcentral.common.constants.RecordStatus;
+import com.flowcentraltech.flowcentral.common.data.VersionedEntityDef;
 
 /**
  * Messaging configuration definition.
@@ -23,7 +24,7 @@ import com.flowcentraltech.flowcentral.common.constants.RecordStatus;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class MessagingConfigDef {
+public class MessagingConfigDef implements VersionedEntityDef {
 
     private MessagingExecContext ctx;
 
@@ -59,10 +60,12 @@ public class MessagingConfigDef {
         this.status = status;
     }
 
+    @Override
     public Long getId() {
         return id;
     }
 
+    @Override
     public long getVersion() {
         return version;
     }

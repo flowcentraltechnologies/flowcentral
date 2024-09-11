@@ -245,8 +245,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
 
                 @Override
                 protected boolean stale(String wfName, WfDef wfDef) throws Exception {
-                    return environment().value(long.class, "versionNo", new WorkflowQuery().id(wfDef.getId())) > wfDef
-                            .getVersion();
+                    return isStale(new WorkflowQuery(), wfDef);
                 }
 
                 @Override
@@ -406,8 +405,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
 
                 @Override
                 protected boolean stale(String longName, WfWizardDef formWizardDef) throws Exception {
-                    return (environment().value(long.class, "versionNo",
-                            new WfWizardQuery().id(formWizardDef.getId())) > formWizardDef.getVersion());
+                    return isStale(new WfWizardQuery(), formWizardDef);
                 }
 
                 @Override
@@ -455,8 +453,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
 
                 @Override
                 protected boolean stale(String longName, WfChannelDef wfChannelDef) throws Exception {
-                    return (environment().value(long.class, "versionNo",
-                            new WfChannelQuery().id(wfChannelDef.getId())) > wfChannelDef.getVersion());
+                    return isStale(new WfChannelQuery(), wfChannelDef);
                 }
 
                 @Override
