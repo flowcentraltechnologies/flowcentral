@@ -273,6 +273,11 @@
 			routeToApplet="dashboard.manageDashboard" type="FACADE"
 			description="$m{system.dashboard.manage}"
 			label="$m{system.dashboard.manage.label}" name="manageDashboard" />
+		<applet name="manageDistributionListing"
+			description="$m{system.distributionlisting}"
+			label="$m{system.distributionlisting}" icon="file-download" type="path_page"
+			path="/system/distributionlisting/openPage" menuAccess="true">
+		</applet>
 	</applets>
 	<!-- References -->
 	<references>

@@ -72,5 +72,8 @@
 		<sysParameter code="SYS-0011" defaultVal="1440"
 			description="$m{system.sysparam.securedlinkexpiration}"
 			editor="!ui-integer precision:6" editable="true" />
+		<sysParameter code="SYS-0012"
+			description="$m{system.sysparam.distributionfolder}"
+			editor="!ui-text" editable="true" />
 	</sysParameters>
 </module>
