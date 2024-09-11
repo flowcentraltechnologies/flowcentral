@@ -725,7 +725,7 @@
 			<column field="autoInstall"
 				renderWidget="application.checkbox" widthRatio="1" />
 			<column field="createDt" renderWidget="application.datetime"
-				widthRatio="1" />
+				widthRatio="1" order="DESC" />
 			<column field="updateDt" renderWidget="application.datetime"
 				widthRatio="1" />
 		</table>
@@ -796,6 +796,8 @@
 			<column field="description" renderWidget="application.text"
 				widthRatio="1" />
 			<column field="createDt" renderWidget="application.datetime"
+				widthRatio="1" order="DESC" />
+			<column field="createdBy" renderWidget="application.text"
 				widthRatio="1" />
 			<column field="updateDt" renderWidget="application.datetime"
 				widthRatio="1" />
@@ -811,6 +813,8 @@
 			<column field="nodeUrl" renderWidget="application.text"
 				widthRatio="1" />
 			<column field="createDt" renderWidget="application.datetime"
+				widthRatio="1" order="DESC" />
+			<column field="createdBy" renderWidget="application.text"
 				widthRatio="1" />
 			<column field="updateDt" renderWidget="application.datetime"
 				widthRatio="1" />
@@ -828,6 +832,8 @@
 			<column field="typeDesc" renderWidget="application.text"
 				widthRatio="1" label="$m{system.delegateredirect.type}"/>
 			<column field="createDt" renderWidget="application.datetime"
+				widthRatio="1" order="DESC" />
+			<column field="createdBy" renderWidget="application.text"
 				widthRatio="1" />
 			<column field="updateDt" renderWidget="application.datetime"
 				widthRatio="1" />
@@ -843,8 +849,8 @@
 			<column field="remoteHost" renderWidget="application.text"
 				widthRatio="1" />
 			<column field="createDt" renderWidget="application.datetime"
-				widthRatio="1" />
-			<column field="updateDt" renderWidget="application.datetime"
+				widthRatio="1" order="DESC" />
+			<column field="createdBy" renderWidget="application.text"
 				widthRatio="1" />
 		</table>
 		<table name="environmentVariableTable"
@@ -859,7 +865,7 @@
 			<column field="variable" renderWidget="application.text"
 				widthRatio="1" />
 			<column field="createDt" renderWidget="application.datetime"
-				widthRatio="1" />
+				widthRatio="1" order="DESC" />
 			<column field="updateDt" renderWidget="application.datetime"
 				widthRatio="1" />
 		</table>
