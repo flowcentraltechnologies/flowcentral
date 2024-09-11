@@ -56,4 +56,6 @@ public interface SystemModuleSysParamConstants {
     String APPLICATION_BASE_URL= "SYS-0010";
 
     String SECURED_LINK_EXPIRATION_MINUTES= "SYS-0011";
+
+    String ARTIFACT_DISTRIBUTION_FOLDER= "SYS-0012";
 }

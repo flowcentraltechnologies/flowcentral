@@ -23,6 +23,7 @@ import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.web.AbstractDownloadPathLogger;
+import com.tcdng.unify.web.DownloadPathProvider;
 
 /**
  * System download path logger.
@@ -31,10 +32,16 @@ import com.tcdng.unify.web.AbstractDownloadPathLogger;
  * @since 1.0
  */
 @Component("system-downloadpathlogger")
-public class SystemDownloadPathLogger extends AbstractDownloadPathLogger {
+public class SystemDownloadPathLogger extends AbstractDownloadPathLogger implements DownloadPathProvider {
 
     @Configurable
     private SystemModuleService systemService;
+
+    @Override
+    public String getDownloadPath() throws UnifyException {
+        return systemService.getSysParameterValue(String.class,
+                SystemModuleSysParamConstants.ARTIFACT_DISTRIBUTION_FOLDER);
+    }
 
     @Override
     public void logDownloadAttempt(String resourceName) throws UnifyException {
