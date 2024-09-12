@@ -26,6 +26,7 @@ import com.flowcentraltech.flowcentral.repository.entities.RemoteRepoBranch;
 import com.flowcentraltech.flowcentral.repository.entities.RemoteRepoBranchQuery;
 import com.flowcentraltech.flowcentral.repository.entities.RemoteRepoConfig;
 import com.flowcentraltech.flowcentral.repository.entities.RemoteRepoConfigQuery;
+import com.flowcentraltech.flowcentral.repository.providers.RepositoryProvider;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Parameter;

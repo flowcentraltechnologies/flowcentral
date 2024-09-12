@@ -13,27 +13,25 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.repository.business;
+package com.flowcentraltech.flowcentral.repository.git.constants;
 
-import com.flowcentraltech.flowcentral.common.AbstractFlowCentralComponent;
-import com.tcdng.unify.core.UnifyException;
+import com.flowcentraltech.flowcentral.configuration.constants.AbstractFlowCentralStaticSettings;
+import com.flowcentraltech.flowcentral.configuration.constants.ModuleInstallLevelConstants;
+import com.tcdng.unify.core.annotation.AutoDetect;
 
 /**
- * Convenient base class for repository provider components.
+ * Git repository module static settings.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class AbstractRepositoryProvider extends AbstractFlowCentralComponent implements RepositoryProvider {
+@AutoDetect
+public class GitRepositoryModuleStaticSettings extends AbstractFlowCentralStaticSettings {
 
-    @Override
-    protected void onInitialize() throws UnifyException {
-
-    }
-
-    @Override
-    protected void onTerminate() throws UnifyException {
-
+    public GitRepositoryModuleStaticSettings() {
+        super(null, null,
+                "com.flowcentraltech.flowcentral.resources.repository-git-messages",
+                ModuleInstallLevelConstants.INTEGRATION_MODULE_LEVEL);
     }
 
 }

@@ -13,24 +13,16 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.repository.web.lists;
-
-import com.flowcentraltech.flowcentral.common.web.lists.AbstractFlowCentralTypeListCommand;
-import com.flowcentraltech.flowcentral.repository.providers.RepositoryProvider;
-import com.tcdng.unify.core.annotation.Component;
-import com.tcdng.unify.core.list.ZeroParams;
+package com.flowcentraltech.flowcentral.repository.git.constants;
 
 /**
- * Repository provider list command.
+ * Git repository module name constants.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@Component("repositoryproviderlist")
-public class RepositoryProviderListCommand extends AbstractFlowCentralTypeListCommand<RepositoryProvider, ZeroParams> {
+public interface GitRepositoryModuleNameConstants {
 
-    public RepositoryProviderListCommand() {
-        super(RepositoryProvider.class, ZeroParams.class);
-    }
+    String GIT_REPOSITORY_PROVIDER = "git-repository-moduleservice";
 
 }
