@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.repository.web.lists;
 import java.util.List;
 import java.util.Locale;
 
+import com.flowcentraltech.flowcentral.common.constants.RecordStatus;
 import com.flowcentraltech.flowcentral.repository.entities.RemoteRepoConfigQuery;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
@@ -40,7 +41,7 @@ public class RemoteRepoConfigListCommand extends AbstractRepositoryListCommand<Z
     @Override
     public List<? extends Listable> execute(Locale locale, ZeroParams param) throws UnifyException {
         return repository()
-                .findRemoteRepoConfigs((RemoteRepoConfigQuery) new RemoteRepoConfigQuery().ignoreEmptyCriteria(true));
+                .findRemoteRepoConfigs((RemoteRepoConfigQuery) new RemoteRepoConfigQuery().status(RecordStatus.ACTIVE));
     }
 
 }

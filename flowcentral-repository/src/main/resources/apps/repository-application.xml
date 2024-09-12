@@ -12,6 +12,24 @@
 			renderer="!ui-label" />
 	</widgetTypes>
 	<!-- Applets -->
+	<applets>
+		<applet name="manageRemoteRepoBranch"
+			description="$m{repository.remoterepobranch.manage}"
+			label="$m{repository.remoterepobranch.manage.label}" icon="code-branch"
+			type="manage_entitylist" entity="repository.remoteRepoBranch" menuAccess="false">
+			<property name="searchTable" value="repository.remoteRepoBranchTable" />
+			<property name="searchTable.report" value="false" />
+			<property name="searchTable.new" value="true" />
+			<property name="searchTable.basicSearchOnly" value="true" />
+			<property name="createForm" value="repository.remoteRepoBranchForm" />
+			<property name="createForm.save" value="true" />
+			<property name="createForm.save.next" value="true" />
+			<property name="createForm.save.close" value="true" />
+			<property name="maintainForm" value="repository.remoteRepoBranchForm" />
+			<property name="maintainForm.update" value="true" />
+			<property name="maintainForm.delete" value="true" />
+		</applet>
+	</applets>
 	<!-- References -->
 	<references>
 		<reference name="remoteRepoConfigRef"
@@ -158,7 +176,7 @@
 				</section>
 			</tab>
 			<tab name="branches" label="$m{repository.remoterepoconfig.form.branches}"
-				contentType="child_list" applet="manageRemoteRepoConfig"
+				contentType="child_list" applet="manageRemoteRepoBranch"
 				reference="branchList" />
 			<tab name="changeLog" label="$m{application.form.audit}"
 				contentType="miniform_changelog" />

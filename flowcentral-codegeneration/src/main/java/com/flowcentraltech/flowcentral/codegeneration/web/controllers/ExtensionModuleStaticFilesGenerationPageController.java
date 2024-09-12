@@ -61,7 +61,8 @@ public class ExtensionModuleStaticFilesGenerationPageController
     @Action
     public String generateStaticFiles() throws UnifyException {
         ExtensionModuleStaticFilesGenerationPageBean pageBean = getPageBean();
-        CodeGenerationItem codeGenerationItem = new CodeGenerationItem(pageBean.getBasePackage());
+        CodeGenerationItem codeGenerationItem = new CodeGenerationItem(pageBean.getBasePackage(),
+                pageBean.getRemoteRepoName(), pageBean.getRemoteRepoBranch());
         pageBean.setCodeGenerationItem(codeGenerationItem);
         TaskSetup taskSetup = TaskSetup
                 .newBuilder(CodeGenerationTaskConstants.GENERATE_EXTENSION_MODULE_FILES_TASK_NAME)
@@ -87,7 +88,8 @@ public class ExtensionModuleStaticFilesGenerationPageController
     @Action
     public String pushToRemote() throws UnifyException {
         ExtensionModuleStaticFilesGenerationPageBean pageBean = getPageBean();
-        final CodeGenerationItem codeGenerationItem = new CodeGenerationItem(pageBean.getBasePackage());
+        final CodeGenerationItem codeGenerationItem = new CodeGenerationItem(pageBean.getBasePackage(),
+                pageBean.getRemoteRepoName(), pageBean.getRemoteRepoBranch());
         final String workingPath = systemModuleService.getSysParameterValue(String.class,
                 CodeGenerationModuleSysParamConstants.EXTENSIONS_PATH);
         TransferToRemote transferToRemote = new TransferToRemote(codeGenerationItem.getRemoteRepoName(),

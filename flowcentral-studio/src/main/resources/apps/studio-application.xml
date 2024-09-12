@@ -639,22 +639,6 @@
 			<property name="maintainForm.update" value="true" />
 			<property name="maintainForm.delete" value="true" />
 		</applet>
-		<applet name="manageRemoteRepoBranch"
-			description="$m{studio.remoterepobranch.manage}"
-			label="$m{studio.remoterepobranch.manage.label}" icon="code-branch"
-			type="manage_entitylist" entity="repository.remoteRepoBranch" menuAccess="false">
-			<property name="searchTable" value="repository.remoteRepoBranchTable" />
-			<property name="searchTable.report" value="false" />
-			<property name="searchTable.new" value="true" />
-			<property name="searchTable.basicSearchOnly" value="true" />
-			<property name="createForm" value="repository.remoteRepoBranchForm" />
-			<property name="createForm.save" value="true" />
-			<property name="createForm.save.next" value="true" />
-			<property name="createForm.save.close" value="true" />
-			<property name="maintainForm" value="repository.remoteRepoBranchForm" />
-			<property name="maintainForm.update" value="true" />
-			<property name="maintainForm.delete" value="true" />
-		</applet>
 		<applet name="applicationReplication"
 			description="$m{studio.applicationreplication.manage}"
 			label="$m{studio.applicationreplication.label}" icon="desktop"

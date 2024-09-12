@@ -38,10 +38,11 @@
 	period:true case:lower binding:basePackage required:true size:48
 
 !ui-select:frmRemoteRepoName caption:$m{extensionmodulestaticfilesgeneration.form.remotereponame}
-	list:$s{remoterepoconfiglist} blankOption:$s{} binding:remoteRepoName
+	list:$s{remoterepoconfiglist} listKey:$s{name} blankOption:$s{} binding:remoteRepoName
 	eventHandler:$d{!ui-event event:onchange action:$c{repoChangeAct}}
 !ui-select:frmRemoteRepoBranch caption:$m{extensionmodulestaticfilesgeneration.form.remoterepobranch}
-	list:$s{remoterepobranchlist} listParams:$l{remoteRepoName} blankOption:$s{} binding:remoteRepoBranch
+	list:$s{remoterepobranchlist} listKey:$s{name} listParams:$l{remoteRepoName}
+	blankOption:$s{} binding:remoteRepoBranch
 
 !ui-button:generateBtn styleClass:$e{fc-bluebutton} caption:$m{button.generate}
 	eventHandler:$d{!ui-event event:onclick action:$c{generateAct}}

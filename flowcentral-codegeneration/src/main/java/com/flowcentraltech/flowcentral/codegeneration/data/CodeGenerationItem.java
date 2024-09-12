@@ -38,13 +38,19 @@ public class CodeGenerationItem {
 
     private String remoteRepoBranch;
 
-    public CodeGenerationItem(SnapshotMeta snapshotMeta, String basePackage) {
+    public CodeGenerationItem(SnapshotMeta snapshotMeta, String basePackage, String remoteRepoName,
+            String remoteRepoBranch) {
         this.snapshotMeta = snapshotMeta;
         this.basePackage = basePackage;
+        this.remoteRepoName = remoteRepoName;
+        this.remoteRepoBranch = remoteRepoBranch;
     }
 
-    public CodeGenerationItem(String basePackage) {
+    public CodeGenerationItem(String basePackage, String remoteRepoName,
+            String remoteRepoBranch) {
         this.basePackage = basePackage;
+        this.remoteRepoName = remoteRepoName;
+        this.remoteRepoBranch = remoteRepoBranch;
     }
 
     public SnapshotMeta getSnapshotMeta() {
@@ -75,16 +81,8 @@ public class CodeGenerationItem {
         return remoteRepoName;
     }
 
-    public void setRemoteRepoName(String remoteRepoName) {
-        this.remoteRepoName = remoteRepoName;
-    }
-
     public String getRemoteRepoBranch() {
         return remoteRepoBranch;
-    }
-
-    public void setRemoteRepoBranch(String remoteRepoBranch) {
-        this.remoteRepoBranch = remoteRepoBranch;
     }
 
     public boolean isWithRemoteRepo() {

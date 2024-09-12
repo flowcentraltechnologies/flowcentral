@@ -19,6 +19,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
+import com.flowcentraltech.flowcentral.common.constants.RecordStatus;
 import com.flowcentraltech.flowcentral.repository.entities.RemoteRepoBranchQuery;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
@@ -42,7 +43,7 @@ public class RemoteRepoBranchListCommand extends AbstractRepositoryListCommand<S
     public List<? extends Listable> execute(Locale locale, StringParam param) throws UnifyException {
         if (param.isPresent()) {
             return repository().findRemoteRepoBranches((RemoteRepoBranchQuery) new RemoteRepoBranchQuery()
-                    .repoName(param.getValue()).addSelect("id", "name", "description"));
+                    .repoName(param.getValue()).status(RecordStatus.ACTIVE).addSelect("id", "name", "description"));
         }
 
         return Collections.emptyList();

@@ -33,6 +33,10 @@ public class ExtensionModuleStaticFilesGenerationPageBean extends AbstractPageBe
 
     private String basePackage;
 
+    private String remoteRepoName;
+
+    private String remoteRepoBranch;
+
     public CodeGenerationItem getCodeGenerationItem() {
         return codeGenerationItem;
     }
@@ -55,6 +59,22 @@ public class ExtensionModuleStaticFilesGenerationPageBean extends AbstractPageBe
 
     public void setBasePackage(String basePackage) {
         this.basePackage = basePackage;
+    }
+
+    public String getRemoteRepoName() {
+        return remoteRepoName;
+    }
+
+    public void setRemoteRepoName(String remoteRepoName) {
+        this.remoteRepoName = remoteRepoName;
+    }
+
+    public String getRemoteRepoBranch() {
+        return remoteRepoBranch;
+    }
+
+    public void setRemoteRepoBranch(String remoteRepoBranch) {
+        this.remoteRepoBranch = remoteRepoBranch;
     }
     
 }
