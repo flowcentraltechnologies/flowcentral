@@ -43,7 +43,7 @@
 				type="string" inputWidget="application.text" maxLen="64"
 				auditable="true"/>
 			<field name="password" label="$m{repository.remoterepoconfig.password}"
-				type="string" inputWidget="application.password" maxLen="256"
+				type="string" inputWidget="application.password" maxLen="512"
 				auditable="true"/>
 			<field name="provider" label="$m{repository.remoterepoconfig.provider}"
 				type="string" inputWidget="repositoryproviderlist" maxLen="64"

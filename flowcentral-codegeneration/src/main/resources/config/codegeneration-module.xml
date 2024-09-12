@@ -23,5 +23,11 @@
 		<sysParameter code="CDN-0003" defaultVal="false"
 			description="$m{codegeneration.sysparam.codegenskippasswordfields}"
 			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
+		<sysParameter code="CDN-0004"
+			description="$m{codegeneration.sysparam.extensionspath}"
+			editor="!ui-text maxLen:128" type="string" editable="true" />
+		<sysParameter code="CDN-0005"
+			description="$m{codegeneration.sysparam.utilitiespath}"
+			editor="!ui-text maxLen:128" type="string" editable="true" />
 	</sysParameters>
 </module>

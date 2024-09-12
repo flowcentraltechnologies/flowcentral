@@ -33,6 +33,10 @@ public class RemoteRepoBranchQuery extends BaseStatusEntityQuery<RemoteRepoBranc
         return (RemoteRepoBranchQuery) addEquals("remoteRepoConfigId", remoteRepoConfigId);
     }
 
+    public RemoteRepoBranchQuery repoName(String repoName) {
+        return (RemoteRepoBranchQuery) addEquals("repoName", repoName);
+    }
+
     public RemoteRepoBranchQuery name(String name) {
         return (RemoteRepoBranchQuery) addEquals("name", name);
     }

@@ -33,12 +33,19 @@
 	caption:$m{extensionmodulestaticfilesgenerationpage.generationdetails.caption}
 !ui-panel:generationBodyPanel
 	layout:$d{!ui-vertical style:$s{width:100%;} showCaption:true cellStyle:$s{padding:5px 2px;}}
-	components:$c{frmBasePackage generateBtn}	
+	components:$c{frmBasePackage frmRemoteRepoName frmRemoteRepoBranch generateBtn}	
 !ui-name:frmBasePackage caption:$m{extensionmodulestaticfilesgeneration.form.basepackage}
 	period:true case:lower binding:basePackage required:true size:48
+
+!ui-select:frmRemoteRepoName caption:$m{extensionmodulestaticfilesgeneration.form.remotereponame}
+	list:$s{remoterepoconfiglist} blankOption:$s{} binding:remoteRepoName
+	eventHandler:$d{!ui-event event:onchange action:$c{repoChangeAct}}
+!ui-select:frmRemoteRepoBranch caption:$m{extensionmodulestaticfilesgeneration.form.remoterepobranch}
+	list:$s{remoterepobranchlist} listParams:$l{remoteRepoName} blankOption:$s{} binding:remoteRepoBranch
+
 !ui-button:generateBtn styleClass:$e{fc-bluebutton} caption:$m{button.generate}
 	eventHandler:$d{!ui-event event:onclick action:$c{generateAct}}
 	
 // Actions
 !ui-post:generateAct path:$n{/generateStaticFiles} components:$c{generationBodyPanel}
-	
+!ui-post:repoChangeAct path:$n{/repoChange} components:$c{generationBodyPanel}	

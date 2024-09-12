@@ -29,4 +29,8 @@ public interface CodeGenerationModuleSysParamConstants {
 
     String CODEGEN_SKIP_PASSWORD_FIELDS = "CDN-0003";
 
+    String EXTENSIONS_PATH = "CDN-0004";
+
+    String UTILITIES_PATH = "CDN-0005";
+
 }

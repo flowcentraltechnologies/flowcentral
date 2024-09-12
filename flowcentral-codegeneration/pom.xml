@@ -56,6 +56,11 @@
             <artifactId>flowcentral-workflow</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.flowcentraltech.flowcentral</groupId>
+            <artifactId>flowcentral-repository</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 		<!-- Test dependencies -->
 		<dependency>
             <groupId>com.flowcentraltech.flowcentral</groupId>

@@ -51,7 +51,7 @@ public class RemoteRepoConfig extends BaseStatusEntity {
     @Column(length = 64)
     private String userName;
 
-    @Column(length = 256)
+    @Column(length = 512)
     private String password;
 
     @Column(length = 64)

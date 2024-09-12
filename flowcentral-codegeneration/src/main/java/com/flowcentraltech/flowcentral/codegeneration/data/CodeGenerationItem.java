@@ -16,6 +16,8 @@
 
 package com.flowcentraltech.flowcentral.codegeneration.data;
 
+import com.tcdng.unify.core.util.StringUtils;
+
 /**
  * Code generation item.
  * 
@@ -27,10 +29,14 @@ public class CodeGenerationItem {
     private SnapshotMeta snapshotMeta;
 
     private String basePackage;
-    
+
     private String filename;
-    
+
     private byte[] data;
+
+    private String remoteRepoName;
+
+    private String remoteRepoBranch;
 
     public CodeGenerationItem(SnapshotMeta snapshotMeta, String basePackage) {
         this.snapshotMeta = snapshotMeta;
@@ -64,5 +70,24 @@ public class CodeGenerationItem {
     public void setData(byte[] data) {
         this.data = data;
     }
-    
+
+    public String getRemoteRepoName() {
+        return remoteRepoName;
+    }
+
+    public void setRemoteRepoName(String remoteRepoName) {
+        this.remoteRepoName = remoteRepoName;
+    }
+
+    public String getRemoteRepoBranch() {
+        return remoteRepoBranch;
+    }
+
+    public void setRemoteRepoBranch(String remoteRepoBranch) {
+        this.remoteRepoBranch = remoteRepoBranch;
+    }
+
+    public boolean isWithRemoteRepo() {
+        return !StringUtils.isBlank(remoteRepoName) && !StringUtils.isBlank(remoteRepoBranch);
+    }
 }
