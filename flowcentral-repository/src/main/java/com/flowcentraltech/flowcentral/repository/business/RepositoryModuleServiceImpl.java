@@ -64,7 +64,7 @@ public class RepositoryModuleServiceImpl extends AbstractFlowCentralService impl
             description = "Transfer file to Remote Repository Task",
             parameters = { @Parameter(name = TransferToRemoteTaskConstants.TRANSFER_ITEM, description = "Transfer Item",
                     type = TransferToRemote.class, mandatory = true) },
-            limit = TaskExecLimit.ALLOW_MULTIPLE, schedulable = false)
+            limit = TaskExecLimit.ALLOW_SINGLE, schedulable = false)
     public int transferFilesToRemoteTask(TaskMonitor taskMonitor, TransferToRemote transferItem)
             throws UnifyException {
         logDebug(taskMonitor, "Tranferring files to remote repository [{0}]...", transferItem.getRemoteName());

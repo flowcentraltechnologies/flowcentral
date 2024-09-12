@@ -15,11 +15,20 @@
  */
 package com.flowcentraltech.flowcentral.repository.git.providers;
 
+import java.io.File;
+
+import org.eclipse.jgit.api.CreateBranchCommand.SetupUpstreamMode;
+import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.lib.Ref;
+import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
+
 import com.flowcentraltech.flowcentral.repository.git.constants.GitRepositoryModuleNameConstants;
 import com.flowcentraltech.flowcentral.repository.providers.AbstractRepositoryProvider;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.task.TaskMonitor;
+import com.tcdng.unify.core.util.IOUtils;
+import com.tcdng.unify.core.util.ZipUtils;
 
 /**
  * Git repository provider implementation.
@@ -27,16 +36,70 @@ import com.tcdng.unify.core.task.TaskMonitor;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@Component(
-     name = GitRepositoryModuleNameConstants.GIT_REPOSITORY_PROVIDER,
+@Component(name = GitRepositoryModuleNameConstants.GIT_REPOSITORY_PROVIDER,
         description = "$m{repository.git.repository.provider}")
 public class GitRepositoryProvider extends AbstractRepositoryProvider {
 
     @Override
     public void replaceAllFiles(TaskMonitor taskMonitor, String repositoryUrl, String branch, String userName,
             String password, String localPath, String target, byte[] zippedFile) throws UnifyException {
-        // TODO Auto-generated method stub
+        logDebug(taskMonitor, "Replacing all files in remote git repository [{0}] at branch [{1}] in target [{2}]...",
+                repositoryUrl, branch, target);
+
+        try {
+            UsernamePasswordCredentialsProvider credentials = new UsernamePasswordCredentialsProvider(userName,
+                    password);
+            logDebug(taskMonitor, "Cloning git repository...");
+            final Git git = Git.cloneRepository()
+                    .setURI(repositoryUrl)
+                    .setDirectory(new File(localPath))
+                    .setCredentialsProvider(credentials)
+                    .call();
+            
+            logDebug(taskMonitor, "Checking out branch [{0}]...",branch);
+            checkoutBranch(taskMonitor, git, branch);
+            
+            final String targetPath = IOUtils.buildFilename(localPath, target);
+            logDebug(taskMonitor, "Deleting target directory [{0}] contents...",targetPath);
+            IOUtils.deleteDirectoryContents(targetPath);
+
+            logDebug(taskMonitor, "Writing new files to target directory...");
+            ZipUtils.extractAll(targetPath, zippedFile);
+            
+            logDebug(taskMonitor, "Committing changes...");
+            git.add()
+              .addFilepattern(target)
+              .call();
+            git.commit()
+              .setMessage("Files replaced in " + target)
+              .call();
+            
+            logDebug(taskMonitor, "Pushing changes to remote repository...");
+            git.push()
+              .setCredentialsProvider(credentials)
+              .call();
+            git.close();            
+        } catch (Exception e) {
+            throwOperationErrorException(e);
+        }
 
     }
 
+    private Ref checkoutBranch(TaskMonitor taskMonitor, Git git, String branch) throws Exception {
+        boolean exists = git.getRepository().getRefDatabase().findRef(branch) != null;
+        if (!exists) {
+            logDebug(taskMonitor, "Branch [{0}] does not exist. Creating branch...",branch);
+            return git.checkout()
+                    .setCreateBranch(true)
+                    .setName(branch)
+                    .setUpstreamMode(SetupUpstreamMode.TRACK)
+                    .setStartPoint("origin/" + branch)
+                    .call();
+        }
+
+        return git.checkout()
+                .setName(branch)
+                .call();
+    }
+    
 }
