@@ -62,9 +62,11 @@ public class StudioMenuWriter extends AbstractPanelWriter {
     @Configurable
     private CodeGenerationProvider codeGenerationProvider;
 
-    private static final List<String> applicationAppletList = Collections
-            .unmodifiableList(Arrays.asList("studio.stuManageModule", "studio.manageApplication",
-                    "studio.applicationReplication", "studio.manageRemoteRepoConfig"));
+    private static final List<String> applicationAppletList = Collections.unmodifiableList(
+            Arrays.asList("studio.stuManageModule", "studio.manageApplication", "studio.applicationReplication"));
+
+    private static final List<String> repositoryAppletList = Collections
+            .unmodifiableList(Arrays.asList("studio.manageRemoteRepoConfig"));
 
     private static final List<String> synchronizationAppletList = Collections
             .unmodifiableList(Arrays.asList("studio.delegateCreateSynchronization", "studio.delegateSynchronization"));
@@ -72,14 +74,14 @@ public class StudioMenuWriter extends AbstractPanelWriter {
     private static final List<String> snapshotAppletList = Collections
             .unmodifiableList(Arrays.asList("studio.takeSnapshot", "studio.uploadSnapshot", "studio.snapshots"));
 
-    private static final List<StudioAppComponentType> utilMenuCategoryList = Collections.unmodifiableList(
-            Arrays.asList(StudioAppComponentType.CODEGENERATION, StudioAppComponentType.SYNCHRONIZATION,
-                    StudioAppComponentType.SNAPSHOT, StudioAppComponentType.APPLICATION));
+    private static final List<StudioAppComponentType> utilMenuCategoryList = Collections.unmodifiableList(Arrays.asList(
+            StudioAppComponentType.CODEGENERATION, StudioAppComponentType.SYNCHRONIZATION,
+            StudioAppComponentType.SNAPSHOT, StudioAppComponentType.APPLICATION, StudioAppComponentType.REPOSITORY));
 
     private static final List<StudioAppComponentType> collabUtilMenuCategoryList = Collections
             .unmodifiableList(Arrays.asList(StudioAppComponentType.COLLABORATION, StudioAppComponentType.CODEGENERATION,
                     StudioAppComponentType.SYNCHRONIZATION, StudioAppComponentType.SNAPSHOT,
-                    StudioAppComponentType.APPLICATION));
+                    StudioAppComponentType.APPLICATION, StudioAppComponentType.REPOSITORY));
 
     private static final List<StudioAppComponentType> menuCategoryList = Collections.unmodifiableList(Arrays.asList(
             StudioAppComponentType.ENTITY, StudioAppComponentType.REFERENCE, StudioAppComponentType.ENUMERATION,
@@ -226,6 +228,7 @@ public class StudioMenuWriter extends AbstractPanelWriter {
                     && StudioAppComponentType.CODEGENERATION.equals(currCategory);
             final boolean isSynchronization = StudioAppComponentType.SYNCHRONIZATION.equals(currCategory);
             final boolean isSnapshot = StudioAppComponentType.SNAPSHOT.equals(currCategory);
+            final boolean isRepositories = StudioAppComponentType.REPOSITORY.equals(currCategory);
 
             final String searchInput = studioMenuWidget.isSearchable() ? studioMenuWidget.getSearchInput() : null;
             final List<AppletDef> appletDefList = isApplications
@@ -234,12 +237,14 @@ public class StudioMenuWriter extends AbstractPanelWriter {
                             : (isCodeGeneration ? getCodeGenerationAppletDefs(applicationName, searchInput)
                                     : (isSynchronization ? getSychronizationAppletDefs(applicationName, searchInput)
                                             : (isSnapshot ? getSnapshotAppletDefs(applicationName, searchInput)
-                                                    : studioModuleService.findAppletDefs(applicationName, currCategory,
-                                                            searchInput)))));
+                                                    : (isRepositories
+                                                            ? getRepositoriesAppletDefs(applicationName, searchInput)
+                                                            : studioModuleService.findAppletDefs(applicationName,
+                                                                    currCategory, searchInput))))));
 
             for (AppletDef appletDef : appletDefList) {
                 if (isApplications || isCollaboration || isCodeGeneration || isSynchronization || isSnapshot
-                        || appletDef.isMenuAccess()) {
+                        || isRepositories || appletDef.isMenuAccess()) {
                     writer.write("<li id=\"item_").write(appletDef.getViewId()).write("\">");
                     writer.write("<span>").writeWithHtmlEscape(appletDef.getLabel()).write("</span>");
                     writer.write("</li>");
@@ -309,6 +314,10 @@ public class StudioMenuWriter extends AbstractPanelWriter {
 
     private List<AppletDef> getApplicationAppletDefs(String applicationName, String filter) throws UnifyException {
         return getRoleAppletDefs(applicationName, applicationAppletList, filter);
+    }
+
+    private List<AppletDef> getRepositoriesAppletDefs(String applicationName, String filter) throws UnifyException {
+        return getRoleAppletDefs(applicationName, repositoryAppletList, filter);
     }
 
     private List<AppletDef> getCollaborationAppletDefs(String applicationName, String filter) throws UnifyException {

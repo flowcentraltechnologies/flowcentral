@@ -17,6 +17,9 @@
 		<reference name="remoteRepoConfigRef"
 			description="$m{repository.remoterepoconfig.reference}" entity="remoteRepoConfig"
 			searchField="description" />
+		<reference name="remoteRepoBranchRef"
+			description="$m{repository.remoterepobranch.reference}" entity="remoteRepoBranch"
+			searchField="description" />
 	</references>
 	<!-- Entities -->
 	<entities>
@@ -33,6 +36,9 @@
 			<field name="remoteUrl" label="$m{repository.remoterepoconfig.remoteurl}"
 				type="string" inputWidget="application.textarea" maxLen="256"
 				auditable="true"/>
+			<field name="localRepoPath" label="$m{repository.remoterepoconfig.localrepopath}"
+				type="string" inputWidget="application.textarea" maxLen="256"
+				auditable="true"/>
 			<field name="userName" label="$m{repository.remoterepoconfig.username}"
 				type="string" inputWidget="application.text" maxLen="64"
 				auditable="true"/>
@@ -42,11 +48,41 @@
 			<field name="provider" label="$m{repository.remoterepoconfig.provider}"
 				type="string" inputWidget="repositoryproviderlist" maxLen="64"
 				auditable="true"/>
+			<field name="branchList"
+				label="$m{repository.remoterepoconfig.branches}" type="child_list"
+				references="remoteRepoBranchRef" />
 			<uniqueConstraint name="nameUc"
 				description="$m{repository.remoterepoconfig.uc.name}" fieldList="name" />
 			<uniqueConstraint name="descUc"
 				description="$m{repository.remoterepoconfig.uc.description}"
 				fieldList="description" />
+		</entity>
+		<entity name="remoteRepoBranch" description="$m{repository.remoterepobranch}"
+			label="$m{repository.remoterepobranch.label}"
+			type="com.flowcentraltech.flowcentral.repository.entities.RemoteRepoBranch"
+			reportable="true" auditable="true">
+			<field name="remoteRepoConfigId"
+				label="$m{repository.remoterepobranch.remoterepoconfigid}" type="ref"
+				references="remoteRepoConfigRef"
+				inputLabel="$m{repository.remoterepobranch.remoterepoconfig}"
+				inputWidget="application.entitysearch" />
+			<field name="name" label="$m{repository.remoterepobranch.name}"
+				type="string" inputWidget="application.name" maxLen="96"
+				basicSearch="true" auditable="true"/>
+			<field name="description"
+				label="$m{repository.remoterepobranch.description}" type="string"
+				inputWidget="application.text" maxLen="128" basicSearch="true" auditable="true"/>
+			<field name="repoName"
+				label="$m{repository.remoterepobranch.reponame}" type="list_only"
+				key="remoteRepoConfigId" property="name" />
+			<field name="repoDesc"
+				label="$m{repository.remoterepobranch.repodesc}" type="list_only"
+				key="remoteRepoConfigId" property="description" />
+			<uniqueConstraint name="nameUc"
+				description="$m{repository.remoterepobranch.uc.name}" fieldList="remoteRepoConfigId,name" />
+			<uniqueConstraint name="descUc"
+				description="$m{repository.remoterepobranch.uc.description}"
+				fieldList="remoteRepoConfigId,description" />
 		</entity>
 	</entities>
 	<!-- Tables -->
@@ -61,7 +97,26 @@
 				widthRatio="1" />
 			<column field="remoteUrl" renderWidget="application.text"
 				widthRatio="1" />
+			<column field="localRepoPath" renderWidget="application.text"
+				widthRatio="1" />
 			<column field="provider" renderWidget="application.text"
+				widthRatio="1" />
+			<column field="createDt" renderWidget="application.datetime"
+				widthRatio="1" />
+			<column field="updateDt" renderWidget="application.datetime"
+				widthRatio="1" />
+			<column field="statusDesc" renderWidget="application.text"
+				label="$m{basestatusentity.field.label.status}" widthRatio="1" />
+		</table>
+		<table name="remoteRepoBranchTable"
+			description="$m{repository.remoterepobranch.table}"
+			label="$m{repository.remoterepobranch.label}" entity="remoteRepoBranch"
+			itemsPerPage="20" serialNo="true" basicSearch="true">
+			<column field="name" renderWidget="application.name"
+				widthRatio="1" linkAct="maintainAct" />
+			<column field="description" renderWidget="application.text"
+				widthRatio="1" />
+			<column field="repoDesc" renderWidget="application.text"
 				widthRatio="1" />
 			<column field="createDt" renderWidget="application.datetime"
 				widthRatio="1" />
@@ -85,14 +140,42 @@
 					<field name="description" inputWidget="application.text"
 						column="0" required="true" />
 					<field name="status" column="1" required="true" />
-					<field name="provider" column="1" required="true" />
-					<field name="remoteUrl" column="1" required="true" />
 				</section>
 				<section name="credentials" label="$m{repository.remoterepoconfig.form.credentials}"
 					columns="type_2">
 					<field name="userName" inputWidget="application.text" column="0"
 						required="true" />
 					<field name="password" column="1" required="true" />
+				</section>
+				<section name="hostDetails" label="$m{repository.remoterepoconfig.form.hostdetails}"
+					columns="type_2">
+					<field name="provider" column="0" required="true" />
+					<field name="remoteUrl" column="1" required="true" />
+				</section>
+				<section name="localDetails" label="$m{repository.remoterepoconfig.form.localdetails}"
+					columns="type_2">
+					<field name="localRepoPath" column="1" required="true" />
+				</section>
+			</tab>
+			<tab name="branches" label="$m{repository.remoterepoconfig.form.branches}"
+				contentType="child_list" applet="manageRemoteRepoConfig"
+				reference="branchList" />
+			<tab name="changeLog" label="$m{application.form.audit}"
+				contentType="miniform_changelog" />
+		</form>
+		<form name="remoteRepoBranchForm"
+			description="$m{repository.remoterepobranch.form}" entity="remoteRepoBranch">
+			<tab name="basicDetails"
+				label="$m{repository.remoterepobranch.form.basicdetails}"
+				contentType="miniform">
+				<section name="remoteRepoBranch" label="$m{repository.remoterepobranch.form.basicdetails}"
+					columns="type_2">
+					<field name="remoteRepoConfigId" inputWidget="application.entitysearch" column="0"/>
+					<field name="name" inputWidget="application.name" column="0"
+						required="true" />
+					<field name="description" inputWidget="application.text"
+						column="0" required="true" />
+					<field name="status" column="1" required="true" />
 				</section>
 			</tab>
 			<tab name="changeLog" label="$m{application.form.audit}"
