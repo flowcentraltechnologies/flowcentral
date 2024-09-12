@@ -16,6 +16,8 @@
 package com.flowcentraltech.flowcentral.repository.business;
 
 import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
+import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.task.TaskMonitor;
 
 /**
  * Repository provider component.
@@ -25,4 +27,28 @@ import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
  */
 public interface RepositoryProvider extends FlowCentralComponent {
 
+    /**
+     * Replaces all files in remote repository folder
+     * 
+     * @param taskMonitor
+     *                      the task monitor
+     * @param repositoryUrl
+     *                      the remote repository URL
+     * @param branch
+     *                      the remote branch
+     * @param userName
+     *                      the user name
+     * @param password
+     *                      the password
+     * @param localPath
+     *                      the local path
+     * @param target
+     *                      the target folder
+     * @param zippedFile
+     *                      zip file containing files
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    void replaceAllFiles(TaskMonitor taskMonitor, String repositoryUrl, String branch, String userName, String password,
+            String localPath, String target, byte[] zippedFile) throws UnifyException;
 }

@@ -15,7 +15,6 @@
  */
 package com.flowcentraltech.flowcentral.repository.business;
 
-import java.util.Date;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.common.business.AbstractFlowCentralService;
@@ -62,14 +61,25 @@ public class RepositoryModuleServiceImpl extends AbstractFlowCentralService impl
 
     @Taskable(name = TransferToRemoteTaskConstants.TRANSFER_TO_REMOTE_TASK_NAME,
             description = "Transfer file to Remote Repository Task",
-            parameters = { @Parameter(name = TransferToRemoteTaskConstants.TRANSFER_ITEM,
-                    description = "Transfer Item", type = TransferToRemote.class, mandatory = true) },
+            parameters = { @Parameter(name = TransferToRemoteTaskConstants.TRANSFER_ITEM, description = "Transfer Item",
+                    type = TransferToRemote.class, mandatory = true) },
             limit = TaskExecLimit.ALLOW_MULTIPLE, schedulable = false)
-    public int generateUtilitiesModuleFilesTask(TaskMonitor taskMonitor, TransferToRemote transferItem)
+    public int transferFilesToRemoteTask(TaskMonitor taskMonitor, TransferToRemote transferItem)
             throws UnifyException {
-        Date now = environment().getNow();
+        logDebug(taskMonitor, "Tranferring files to remote repository [{0}]...", transferItem.getRemoteName());
+        RemoteRepoConfig remoteRepoConfig = environment()
+                .find(new RemoteRepoConfigQuery().name(transferItem.getRemoteName()));
 
-        return 0;
+        logDebug(taskMonitor, "Successfully retrieved configuration...");
+        RepositoryProvider repositoryProvider = getComponent(RepositoryProvider.class, remoteRepoConfig.getProvider());
+
+        logDebug(taskMonitor, "Successfully obtained repository provider [{0}]...", remoteRepoConfig.getProvider());
+        logDebug(taskMonitor, "Executing repository provider...");
+        repositoryProvider.replaceAllFiles(taskMonitor, remoteRepoConfig.getRemoteUrl(), transferItem.getRemoteBranch(),
+                remoteRepoConfig.getUserName(), remoteRepoConfig.getPassword(), remoteRepoConfig.getLocalRepoPath(),
+                transferItem.getWorkingPath(), transferItem.getZip());
+        logDebug(taskMonitor, "Transfer to remote repository successfully completed.");
+       return 0;
     }
 
     @Override
