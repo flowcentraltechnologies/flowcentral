@@ -41,7 +41,7 @@ import com.tcdng.unify.core.util.ZipUtils;
 public class GitRepositoryProvider extends AbstractRepositoryProvider {
 
     @Override
-    public void replaceAllFiles(TaskMonitor taskMonitor, String repositoryUrl, String branch, String userName,
+    public void replaceDirectory(TaskMonitor taskMonitor, String repositoryUrl, String branch, String userName,
             String password, String localPath, String target, byte[] zippedFile) throws UnifyException {
         logDebug(taskMonitor, "Replacing all files in remote git repository [{0}] at branch [{1}] in target [{2}]...",
                 repositoryUrl, branch, target);
@@ -60,11 +60,12 @@ public class GitRepositoryProvider extends AbstractRepositoryProvider {
             checkoutBranch(taskMonitor, git, branch);
             
             final String targetPath = IOUtils.buildFilename(localPath, target);
-            logDebug(taskMonitor, "Deleting target directory [{0}] contents...",targetPath);
-            IOUtils.deleteDirectoryContents(targetPath);
-
+            logDebug(taskMonitor, "Deleting target directory [{0}]...",targetPath);
+            IOUtils.deleteDirectory(targetPath);
+            
             logDebug(taskMonitor, "Writing new files to target directory...");
-            ZipUtils.extractAll(targetPath, zippedFile);
+            final String parentPath = IOUtils.getParentDirectory(targetPath);
+            ZipUtils.extractAll(parentPath, zippedFile);
             
             logDebug(taskMonitor, "Committing changes...");
             git.add()

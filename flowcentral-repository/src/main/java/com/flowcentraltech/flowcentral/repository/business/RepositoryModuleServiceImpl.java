@@ -76,7 +76,7 @@ public class RepositoryModuleServiceImpl extends AbstractFlowCentralService impl
 
         logDebug(taskMonitor, "Successfully obtained repository provider [{0}]...", remoteRepoConfig.getProvider());
         logDebug(taskMonitor, "Executing repository provider...");
-        repositoryProvider.replaceAllFiles(taskMonitor, remoteRepoConfig.getRemoteUrl(), transferItem.getRemoteBranch(),
+        repositoryProvider.replaceDirectory(taskMonitor, remoteRepoConfig.getRemoteUrl(), transferItem.getRemoteBranch(),
                 remoteRepoConfig.getUserName(), remoteRepoConfig.getPassword(), remoteRepoConfig.getLocalRepoPath(),
                 transferItem.getWorkingPath(), transferItem.getZip());
         logDebug(taskMonitor, "Transfer to remote repository successfully completed.");

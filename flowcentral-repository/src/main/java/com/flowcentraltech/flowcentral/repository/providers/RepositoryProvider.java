@@ -28,7 +28,7 @@ import com.tcdng.unify.core.task.TaskMonitor;
 public interface RepositoryProvider extends FlowCentralComponent {
 
     /**
-     * Replaces all files in remote repository folder
+     * Replaces directory in remote repository folder
      * 
      * @param taskMonitor
      *                      the task monitor
@@ -49,6 +49,6 @@ public interface RepositoryProvider extends FlowCentralComponent {
      * @throws UnifyException
      *                        if an error occurs
      */
-    void replaceAllFiles(TaskMonitor taskMonitor, String repositoryUrl, String branch, String userName, String password,
-            String localPath, String target, byte[] zippedFile) throws UnifyException;
+    void replaceDirectory(TaskMonitor taskMonitor, String repositoryUrl, String branch, String userName,
+            String password, String localPath, String target, byte[] zippedFile) throws UnifyException;
 }
