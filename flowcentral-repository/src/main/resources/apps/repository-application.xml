@@ -12,6 +12,24 @@
 			renderer="!ui-label" />
 	</widgetTypes>
 	<!-- Applets -->
+	<applets>
+		<applet name="manageRemoteRepoConfig"
+			description="$m{repository.remoterepoconfig.manage}"
+			label="$m{repository.remoterepoconfig.manage.label}" icon="archive"
+			type="manage_entitylist" entity="remoteRepoConfig" menuAccess="true">
+			<property name="searchTable" value="repository.remoteRepoConfigTable" />
+			<property name="searchTable.report" value="false" />
+			<property name="searchTable.new" value="true" />
+			<property name="searchTable.basicSearchOnly" value="true" />
+			<property name="createForm" value="remoteRepoConfigForm" />
+			<property name="createForm.save" value="true" />
+			<property name="createForm.save.next" value="true" />
+			<property name="createForm.save.close" value="true" />
+			<property name="maintainForm" value="remoteRepoConfigForm" />
+			<property name="maintainForm.update" value="true" />
+			<property name="maintainForm.delete" value="true" />
+		</applet>
+	</applets>
 	<!-- References -->
 	<references>
 		<reference name="remoteRepoConfigRef"
