@@ -33,21 +33,13 @@
 	caption:$m{utilitiesmodulestaticfilesgenerationpage.generationdetails.caption}
 !ui-panel:generationBodyPanel
 	layout:$d{!ui-vertical style:$s{width:100%;} showCaption:true cellStyle:$s{padding:5px 2px;}}
-	components:$c{frmBasePackage frmRemoteRepoName frmRemoteRepoBranch generateBtn}	
+	components:$c{frmBasePackage generateBtn}	
 !ui-name:frmBasePackage caption:$m{utilitiesmodulestaticfilesgeneration.form.basepackage}
 	period:true case:lower binding:basePackage required:true size:48
-
-!ui-select:frmRemoteRepoName caption:$m{utilitiesmodulestaticfilesgeneration.form.remotereponame}
-	list:$s{remoterepoconfiglist} listKey:$s{name} blankOption:$s{} binding:remoteRepoName
-	eventHandler:$d{!ui-event event:onchange action:$c{repoChangeAct}}
-!ui-select:frmRemoteRepoBranch caption:$m{utilitiesmodulestaticfilesgeneration.form.remoterepobranch}
-	list:$s{remoterepobranchlist} listKey:$s{name} listParams:$l{remoteRepoName}
-	blankOption:$s{} binding:remoteRepoBranch
 		
 !ui-button:generateBtn styleClass:$e{fc-bluebutton} caption:$m{button.generate}
 	eventHandler:$d{!ui-event event:onclick action:$c{generateAct}}
 	
 // Actions
 !ui-post:generateAct path:$n{/generateStaticFiles} components:$c{generationBodyPanel}
-!ui-post:repoChangeAct path:$n{/repoChange} components:$c{generationBodyPanel}
 	

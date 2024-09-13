@@ -16,10 +16,7 @@
 
 package com.flowcentraltech.flowcentral.repository.entities;
 
-import java.util.List;
-
 import com.flowcentraltech.flowcentral.common.entities.BaseStatusEntity;
-import com.tcdng.unify.core.annotation.ChildList;
 import com.tcdng.unify.core.annotation.Column;
 import com.tcdng.unify.core.annotation.Table;
 import com.tcdng.unify.core.annotation.UniqueConstraint;
@@ -56,9 +53,6 @@ public class RemoteRepoConfig extends BaseStatusEntity {
 
     @Column(length = 64)
     private String provider;
-
-    @ChildList
-    private List<RemoteRepoBranch> branchList;
     
     @Override
     public String getDescription() {
@@ -115,14 +109,6 @@ public class RemoteRepoConfig extends BaseStatusEntity {
 
     public void setProvider(String provider) {
         this.provider = provider;
-    }
-
-    public List<RemoteRepoBranch> getBranchList() {
-        return branchList;
-    }
-
-    public void setBranchList(List<RemoteRepoBranch> branchList) {
-        this.branchList = branchList;
     }
 
 }

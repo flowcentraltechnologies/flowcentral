@@ -22,8 +22,6 @@ import com.flowcentraltech.flowcentral.configuration.data.ModuleInstall;
 import com.flowcentraltech.flowcentral.repository.constants.RepositoryModuleNameConstants;
 import com.flowcentraltech.flowcentral.repository.constants.TransferToRemoteTaskConstants;
 import com.flowcentraltech.flowcentral.repository.data.TransferToRemote;
-import com.flowcentraltech.flowcentral.repository.entities.RemoteRepoBranch;
-import com.flowcentraltech.flowcentral.repository.entities.RemoteRepoBranchQuery;
 import com.flowcentraltech.flowcentral.repository.entities.RemoteRepoConfig;
 import com.flowcentraltech.flowcentral.repository.entities.RemoteRepoConfigQuery;
 import com.flowcentraltech.flowcentral.repository.providers.RepositoryProvider;
@@ -52,11 +50,6 @@ public class RepositoryModuleServiceImpl extends AbstractFlowCentralService impl
 
     @Override
     public List<RemoteRepoConfig> findRemoteRepoConfigs(RemoteRepoConfigQuery query) throws UnifyException {
-        return environment().listAll(query);
-    }
-
-    @Override
-    public List<RemoteRepoBranch> findRemoteRepoBranches(RemoteRepoBranchQuery query) throws UnifyException {
         return environment().listAll(query);
     }
 

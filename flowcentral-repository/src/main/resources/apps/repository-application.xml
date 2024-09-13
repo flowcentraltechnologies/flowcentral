@@ -12,31 +12,10 @@
 			renderer="!ui-label" />
 	</widgetTypes>
 	<!-- Applets -->
-	<applets>
-		<applet name="manageRemoteRepoBranch"
-			description="$m{repository.remoterepobranch.manage}"
-			label="$m{repository.remoterepobranch.manage.label}" icon="code-branch"
-			type="manage_entitylist" entity="repository.remoteRepoBranch" menuAccess="false">
-			<property name="searchTable" value="repository.remoteRepoBranchTable" />
-			<property name="searchTable.report" value="false" />
-			<property name="searchTable.new" value="true" />
-			<property name="searchTable.basicSearchOnly" value="true" />
-			<property name="createForm" value="repository.remoteRepoBranchForm" />
-			<property name="createForm.save" value="true" />
-			<property name="createForm.save.next" value="true" />
-			<property name="createForm.save.close" value="true" />
-			<property name="maintainForm" value="repository.remoteRepoBranchForm" />
-			<property name="maintainForm.update" value="true" />
-			<property name="maintainForm.delete" value="true" />
-		</applet>
-	</applets>
 	<!-- References -->
 	<references>
 		<reference name="remoteRepoConfigRef"
 			description="$m{repository.remoterepoconfig.reference}" entity="remoteRepoConfig"
-			searchField="description" />
-		<reference name="remoteRepoBranchRef"
-			description="$m{repository.remoterepobranch.reference}" entity="remoteRepoBranch"
 			searchField="description" />
 	</references>
 	<!-- Entities -->
@@ -66,41 +45,11 @@
 			<field name="provider" label="$m{repository.remoterepoconfig.provider}"
 				type="string" inputWidget="repositoryproviderlist" maxLen="64"
 				auditable="true"/>
-			<field name="branchList"
-				label="$m{repository.remoterepoconfig.branches}" type="child_list"
-				references="remoteRepoBranchRef" />
 			<uniqueConstraint name="nameUc"
 				description="$m{repository.remoterepoconfig.uc.name}" fieldList="name" />
 			<uniqueConstraint name="descUc"
 				description="$m{repository.remoterepoconfig.uc.description}"
 				fieldList="description" />
-		</entity>
-		<entity name="remoteRepoBranch" description="$m{repository.remoterepobranch}"
-			label="$m{repository.remoterepobranch.label}"
-			type="com.flowcentraltech.flowcentral.repository.entities.RemoteRepoBranch"
-			reportable="true" auditable="true">
-			<field name="remoteRepoConfigId"
-				label="$m{repository.remoterepobranch.remoterepoconfigid}" type="ref"
-				references="remoteRepoConfigRef"
-				inputLabel="$m{repository.remoterepobranch.remoterepoconfig}"
-				inputWidget="application.entitysearch" />
-			<field name="name" label="$m{repository.remoterepobranch.name}"
-				type="string" inputWidget="application.name" maxLen="96"
-				basicSearch="true" auditable="true"/>
-			<field name="description"
-				label="$m{repository.remoterepobranch.description}" type="string"
-				inputWidget="application.text" maxLen="128" basicSearch="true" auditable="true"/>
-			<field name="repoName"
-				label="$m{repository.remoterepobranch.reponame}" type="list_only"
-				key="remoteRepoConfigId" property="name" />
-			<field name="repoDesc"
-				label="$m{repository.remoterepobranch.repodesc}" type="list_only"
-				key="remoteRepoConfigId" property="description" />
-			<uniqueConstraint name="nameUc"
-				description="$m{repository.remoterepobranch.uc.name}" fieldList="remoteRepoConfigId,name" />
-			<uniqueConstraint name="descUc"
-				description="$m{repository.remoterepobranch.uc.description}"
-				fieldList="remoteRepoConfigId,description" />
 		</entity>
 	</entities>
 	<!-- Tables -->
@@ -118,23 +67,6 @@
 			<column field="localRepoPath" renderWidget="application.text"
 				widthRatio="1" />
 			<column field="provider" renderWidget="application.text"
-				widthRatio="1" />
-			<column field="createDt" renderWidget="application.datetime"
-				widthRatio="1" />
-			<column field="updateDt" renderWidget="application.datetime"
-				widthRatio="1" />
-			<column field="statusDesc" renderWidget="application.text"
-				label="$m{basestatusentity.field.label.status}" widthRatio="1" />
-		</table>
-		<table name="remoteRepoBranchTable"
-			description="$m{repository.remoterepobranch.table}"
-			label="$m{repository.remoterepobranch.label}" entity="remoteRepoBranch"
-			itemsPerPage="20" serialNo="true" basicSearch="true">
-			<column field="name" renderWidget="application.name"
-				widthRatio="1" linkAct="maintainAct" />
-			<column field="description" renderWidget="application.text"
-				widthRatio="1" />
-			<column field="repoDesc" renderWidget="application.text"
 				widthRatio="1" />
 			<column field="createDt" renderWidget="application.datetime"
 				widthRatio="1" />
@@ -173,27 +105,6 @@
 				<section name="localDetails" label="$m{repository.remoterepoconfig.form.localdetails}"
 					columns="type_2">
 					<field name="localRepoPath" column="1" required="true" />
-				</section>
-			</tab>
-			<tab name="branches" label="$m{repository.remoterepoconfig.form.branches}"
-				contentType="child_list" applet="manageRemoteRepoBranch"
-				reference="branchList" />
-			<tab name="changeLog" label="$m{application.form.audit}"
-				contentType="miniform_changelog" />
-		</form>
-		<form name="remoteRepoBranchForm"
-			description="$m{repository.remoterepobranch.form}" entity="remoteRepoBranch">
-			<tab name="basicDetails"
-				label="$m{repository.remoterepobranch.form.basicdetails}"
-				contentType="miniform">
-				<section name="remoteRepoBranch" label="$m{repository.remoterepobranch.form.basicdetails}"
-					columns="type_2">
-					<field name="remoteRepoConfigId" inputWidget="application.entitysearch" column="0"/>
-					<field name="name" inputWidget="application.name" column="0"
-						required="true" />
-					<field name="description" inputWidget="application.text"
-						column="0" required="true" />
-					<field name="status" column="1" required="true" />
 				</section>
 			</tab>
 			<tab name="changeLog" label="$m{application.form.audit}"

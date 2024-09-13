@@ -18,8 +18,6 @@ package com.flowcentraltech.flowcentral.repository.business;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.common.business.FlowCentralService;
-import com.flowcentraltech.flowcentral.repository.entities.RemoteRepoBranch;
-import com.flowcentraltech.flowcentral.repository.entities.RemoteRepoBranchQuery;
 import com.flowcentraltech.flowcentral.repository.entities.RemoteRepoConfig;
 import com.flowcentraltech.flowcentral.repository.entities.RemoteRepoConfigQuery;
 import com.tcdng.unify.core.UnifyException;
@@ -43,14 +41,4 @@ public interface RepositoryModuleService extends FlowCentralService {
      */
     List<RemoteRepoConfig> findRemoteRepoConfigs(RemoteRepoConfigQuery query) throws UnifyException;
 
-    /**
-     * Finds remote repositories branches.
-     * 
-     * @param query
-     *              the query object
-     * @return list of configurations
-     * @throws UnifyException
-     *                        if an error occurs
-     */
-    List<RemoteRepoBranch> findRemoteRepoBranches(RemoteRepoBranchQuery query) throws UnifyException;
 }

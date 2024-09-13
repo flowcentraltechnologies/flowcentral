@@ -20,6 +20,7 @@ import java.io.File;
 import org.eclipse.jgit.api.CreateBranchCommand.SetupUpstreamMode;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.lib.Ref;
+import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 
 import com.flowcentraltech.flowcentral.repository.git.constants.GitRepositoryModuleNameConstants;
@@ -49,58 +50,65 @@ public class GitRepositoryProvider extends AbstractRepositoryProvider {
         try {
             UsernamePasswordCredentialsProvider credentials = new UsernamePasswordCredentialsProvider(userName,
                     password);
-            logDebug(taskMonitor, "Cloning git repository...");
-            final Git git = Git.cloneRepository()
-                    .setURI(repositoryUrl)
-                    .setDirectory(new File(localPath))
-                    .setCredentialsProvider(credentials)
-                    .call();
-            
-            logDebug(taskMonitor, "Checking out branch [{0}]...",branch);
+            Git git = null;
+            if (isRepoExistsInPath(localPath)) {
+                logDebug(taskMonitor, "Using existing local git repository...");
+                git = Git.open(new File(localPath));
+            } else {
+                logDebug(taskMonitor, "Cloning git repository...");
+                git = Git.cloneRepository().setURI(repositoryUrl).setDirectory(new File(localPath))
+                        .setCredentialsProvider(credentials).call();
+            }
+
+            logDebug(taskMonitor, "Checking out branch [{0}]...", branch);
             checkoutBranch(taskMonitor, git, branch);
-            
+
             final String targetPath = IOUtils.buildFilename(localPath, target);
-            logDebug(taskMonitor, "Deleting target directory [{0}]...",targetPath);
+            logDebug(taskMonitor, "Deleting target directory [{0}]...", targetPath);
             IOUtils.deleteDirectory(targetPath);
-            
+
             logDebug(taskMonitor, "Writing new files to target directory...");
             final String parentPath = IOUtils.getParentDirectory(targetPath);
             ZipUtils.extractAll(parentPath, zippedFile);
-            
+
             logDebug(taskMonitor, "Committing changes...");
-            git.add()
-              .addFilepattern(target)
-              .call();
-            git.commit()
-              .setMessage("Files replaced in " + target)
-              .call();
-            
+            git.add().addFilepattern(target).call();
+            git.commit().setMessage("Files replaced in " + target).call();
+
             logDebug(taskMonitor, "Pushing changes to remote repository...");
-            git.push()
-              .setCredentialsProvider(credentials)
-              .call();
-            git.close();            
+            git.push().setCredentialsProvider(credentials).call();
+            git.close();
         } catch (Exception e) {
             throwOperationErrorException(e);
         }
 
     }
 
+    private boolean isRepoExistsInPath(String path) {
+        try {
+            FileRepositoryBuilder rb = new FileRepositoryBuilder();
+            rb.setGitDir(new File(path, ".git")).readEnvironment().findGitDir();
+            return rb.getGitDir() != null && rb.getGitDir().exists();
+        } catch (Exception e) {
+        }
+
+        return false;
+    }
+
     private Ref checkoutBranch(TaskMonitor taskMonitor, Git git, String branch) throws Exception {
         boolean exists = git.getRepository().getRefDatabase().findRef(branch) != null;
         if (!exists) {
-            logDebug(taskMonitor, "Branch [{0}] does not exist. Creating branch...",branch);
-            return git.checkout()
+            logDebug(taskMonitor, "Branch [{0}] does not exist. Creating branch...", branch);
+            return git
+                    .checkout()
                     .setCreateBranch(true)
                     .setName(branch)
                     .setUpstreamMode(SetupUpstreamMode.TRACK)
-                    .setStartPoint("origin/" + branch)
+                    /*.setStartPoint("origin/" + branch)*/
                     .call();
         }
 
-        return git.checkout()
-                .setName(branch)
-                .call();
+        return git.checkout().setName(branch).call();
     }
-    
+
 }
