@@ -16,6 +16,7 @@
 package com.flowcentraltech.flowcentral.repository.git.providers;
 
 import java.io.File;
+import java.util.Arrays;
 
 import org.eclipse.jgit.api.CreateBranchCommand.SetupUpstreamMode;
 import org.eclipse.jgit.api.Git;
@@ -38,7 +39,8 @@ import com.tcdng.unify.core.util.ZipUtils;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@Component(name = GitRepositoryModuleNameConstants.GIT_REPOSITORY_PROVIDER,
+@Component(
+        name = GitRepositoryModuleNameConstants.GIT_REPOSITORY_PROVIDER,
         description = "$m{repository.git.repository.provider}")
 public class GitRepositoryProvider extends AbstractRepositoryProvider {
 
@@ -48,6 +50,7 @@ public class GitRepositoryProvider extends AbstractRepositoryProvider {
         logDebug(taskMonitor, "Replacing all files in remote git repository [{0}] at branch [{1}] in target [{2}]...",
                 repositoryUrl, branch, target);
 
+        final String remote = "refs/heads/" + branch;
         try {
             UsernamePasswordCredentialsProvider credentials = new UsernamePasswordCredentialsProvider(userName,
                     password);
@@ -55,23 +58,28 @@ public class GitRepositoryProvider extends AbstractRepositoryProvider {
             if (isRepoExistsInPath(localPath)) {
                 logDebug(taskMonitor, "Using existing local git repository...");
                 git = Git.open(new File(localPath));
+                
+                final String track = "refs/remotes/origin/" + branch;
                 git
                  .fetch()
                  .setRemote("origin")
-                 .setRefSpecs("refs/heads/" + branch + ":refs/remotes/origin/" + branch)
+                 .setRefSpecs(remote + ":" + track)
                  .setCredentialsProvider(credentials)
                  .call();
-                
+               
                 git
                  .reset()
                  .setMode(ResetType.HARD)
-                 .setRef("refs/remotes/origin/" + branch)
+                 .setRef(track)
                  .call();
             } else {
                 logDebug(taskMonitor, "Cloning git repository...");
+                IOUtils.deleteDirectory(localPath);
                 git = Git.cloneRepository()
                         .setURI(repositoryUrl)
                         .setDirectory(new File(localPath))
+                        .setBranch(branch)
+                        .setBranchesToClone(Arrays.asList(remote))
                         .setCredentialsProvider(credentials)
                         .call();
             }
@@ -107,6 +115,7 @@ public class GitRepositoryProvider extends AbstractRepositoryProvider {
             git
              .close();
         } catch (Exception e) {
+            addTaskMessage(taskMonitor, "Exception: " + e.getMessage());
             throwOperationErrorException(e);
         }
 
