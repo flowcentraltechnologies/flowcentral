@@ -15,22 +15,28 @@
  */
 package com.flowcentraltech.flowcentral.repository.web.lists;
 
-import com.flowcentraltech.flowcentral.common.web.lists.AbstractFlowCentralTypeListCommand;
-import com.flowcentraltech.flowcentral.repository.providers.RepositoryProvider;
-import com.tcdng.unify.core.annotation.Component;
-import com.tcdng.unify.core.list.ZeroParams;
+import com.flowcentraltech.flowcentral.common.web.lists.AbstractFlowCentralListCommand;
+import com.flowcentraltech.flowcentral.repository.business.RepositoryModuleService;
+import com.tcdng.unify.core.annotation.Configurable;
+import com.tcdng.unify.core.list.ListParam;
 
 /**
- * Repository provider list command.
+ * Convenient abstract base class for repository module list commands.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@Component("repositoryproviderlist")
-public class RepositoryProviderListCommand extends AbstractFlowCentralTypeListCommand<RepositoryProvider, ZeroParams> {
+public abstract class AbstractRepositoryListCommand<T extends ListParam> extends AbstractFlowCentralListCommand<T> {
 
-    public RepositoryProviderListCommand() {
-        super(RepositoryProvider.class, ZeroParams.class);
+    @Configurable
+    private RepositoryModuleService repositoryModuleService;
+
+    public AbstractRepositoryListCommand(Class<T> paramType) {
+        super(paramType);
+    }
+
+    protected RepositoryModuleService repository() {
+        return repositoryModuleService;
     }
 
 }

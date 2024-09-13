@@ -27,9 +27,9 @@ public class CodeGenerationItem {
     private SnapshotMeta snapshotMeta;
 
     private String basePackage;
-    
+
     private String filename;
-    
+
     private byte[] data;
 
     public CodeGenerationItem(SnapshotMeta snapshotMeta, String basePackage) {
@@ -64,5 +64,5 @@ public class CodeGenerationItem {
     public void setData(byte[] data) {
         this.data = data;
     }
-    
+
 }

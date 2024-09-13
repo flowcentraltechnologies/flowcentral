@@ -13,16 +13,25 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.repository.business;
+package com.flowcentraltech.flowcentral.repository.git.constants;
 
-import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
+import com.flowcentraltech.flowcentral.configuration.constants.AbstractFlowCentralStaticSettings;
+import com.flowcentraltech.flowcentral.configuration.constants.ModuleInstallLevelConstants;
+import com.tcdng.unify.core.annotation.AutoDetect;
 
 /**
- * Repository provider component.
+ * Git repository module static settings.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface RepositoryProvider extends FlowCentralComponent {
+@AutoDetect
+public class GitRepositoryModuleStaticSettings extends AbstractFlowCentralStaticSettings {
+
+    public GitRepositoryModuleStaticSettings() {
+        super(null, null,
+                "com.flowcentraltech.flowcentral.resources.repository-git-messages",
+                ModuleInstallLevelConstants.INTEGRATION_MODULE_LEVEL);
+    }
 
 }

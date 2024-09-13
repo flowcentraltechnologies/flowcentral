@@ -12,6 +12,24 @@
 			renderer="!ui-label" />
 	</widgetTypes>
 	<!-- Applets -->
+	<applets>
+		<applet name="manageRemoteRepoConfig"
+			description="$m{repository.remoterepoconfig.manage}"
+			label="$m{repository.remoterepoconfig.manage.label}" icon="archive"
+			type="manage_entitylist" entity="remoteRepoConfig" menuAccess="true">
+			<property name="searchTable" value="repository.remoteRepoConfigTable" />
+			<property name="searchTable.report" value="false" />
+			<property name="searchTable.new" value="true" />
+			<property name="searchTable.basicSearchOnly" value="true" />
+			<property name="createForm" value="remoteRepoConfigForm" />
+			<property name="createForm.save" value="true" />
+			<property name="createForm.save.next" value="true" />
+			<property name="createForm.save.close" value="true" />
+			<property name="maintainForm" value="remoteRepoConfigForm" />
+			<property name="maintainForm.update" value="true" />
+			<property name="maintainForm.delete" value="true" />
+		</applet>
+	</applets>
 	<!-- References -->
 	<references>
 		<reference name="remoteRepoConfigRef"
@@ -33,11 +51,14 @@
 			<field name="remoteUrl" label="$m{repository.remoterepoconfig.remoteurl}"
 				type="string" inputWidget="application.textarea" maxLen="256"
 				auditable="true"/>
+			<field name="localRepoPath" label="$m{repository.remoterepoconfig.localrepopath}"
+				type="string" inputWidget="application.textarea" maxLen="256"
+				auditable="true"/>
 			<field name="userName" label="$m{repository.remoterepoconfig.username}"
 				type="string" inputWidget="application.text" maxLen="64"
 				auditable="true"/>
 			<field name="password" label="$m{repository.remoterepoconfig.password}"
-				type="string" inputWidget="application.password" maxLen="256"
+				type="string" inputWidget="application.password" maxLen="512"
 				auditable="true"/>
 			<field name="provider" label="$m{repository.remoterepoconfig.provider}"
 				type="string" inputWidget="repositoryproviderlist" maxLen="64"
@@ -60,6 +81,8 @@
 			<column field="description" renderWidget="application.text"
 				widthRatio="1" />
 			<column field="remoteUrl" renderWidget="application.text"
+				widthRatio="1" />
+			<column field="localRepoPath" renderWidget="application.text"
 				widthRatio="1" />
 			<column field="provider" renderWidget="application.text"
 				widthRatio="1" />
@@ -85,14 +108,21 @@
 					<field name="description" inputWidget="application.text"
 						column="0" required="true" />
 					<field name="status" column="1" required="true" />
-					<field name="provider" column="1" required="true" />
-					<field name="remoteUrl" column="1" required="true" />
 				</section>
 				<section name="credentials" label="$m{repository.remoterepoconfig.form.credentials}"
 					columns="type_2">
 					<field name="userName" inputWidget="application.text" column="0"
 						required="true" />
 					<field name="password" column="1" required="true" />
+				</section>
+				<section name="hostDetails" label="$m{repository.remoterepoconfig.form.hostdetails}"
+					columns="type_2">
+					<field name="provider" column="0" required="true" />
+					<field name="remoteUrl" column="1" required="true" />
+				</section>
+				<section name="localDetails" label="$m{repository.remoterepoconfig.form.localdetails}"
+					columns="type_2">
+					<field name="localRepoPath" column="1" required="true" />
 				</section>
 			</tab>
 			<tab name="changeLog" label="$m{application.form.audit}"

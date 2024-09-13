@@ -19,6 +19,8 @@ package com.flowcentraltech.flowcentral.codegeneration.web.controllers;
 import com.flowcentraltech.flowcentral.codegeneration.constants.CodeGenerationModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.codegeneration.constants.CodeGenerationTaskConstants;
 import com.flowcentraltech.flowcentral.codegeneration.data.CodeGenerationItem;
+import com.flowcentraltech.flowcentral.repository.constants.TransferToRemoteTaskConstants;
+import com.flowcentraltech.flowcentral.repository.data.TransferToRemote;
 import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
@@ -32,6 +34,7 @@ import com.tcdng.unify.web.annotation.Action;
 import com.tcdng.unify.web.constant.ReadOnly;
 import com.tcdng.unify.web.constant.ResetOnWrite;
 import com.tcdng.unify.web.constant.Secured;
+import com.tcdng.unify.web.ui.widget.data.Hint.MODE;
 
 /**
  * Extension module static files generation page controller.
@@ -54,13 +57,31 @@ public class ExtensionModuleStaticFilesGenerationPageController
     @Action
     public String generateStaticFiles() throws UnifyException {
         ExtensionModuleStaticFilesGenerationPageBean pageBean = getPageBean();
-        pageBean.setCodeGenerationItem(new CodeGenerationItem(pageBean.getBasePackage()));
+        CodeGenerationItem codeGenerationItem = new CodeGenerationItem(pageBean.getBasePackage());
+        pageBean.setCodeGenerationItem(codeGenerationItem);
         TaskSetup taskSetup = TaskSetup
                 .newBuilder(CodeGenerationTaskConstants.GENERATE_EXTENSION_MODULE_FILES_TASK_NAME)
-                .setParam(CodeGenerationTaskConstants.CODEGENERATION_ITEM, pageBean.getCodeGenerationItem())
-                .logMessages().build();
+                .setParam(CodeGenerationTaskConstants.CODEGENERATION_ITEM, codeGenerationItem).logMessages().build();
+
+        final boolean isToRepository = systemModuleService.getSysParameterValue(boolean.class,
+                CodeGenerationModuleSysParamConstants.ENABLE_CODEGEN_TO_REPOSITORY);
+        if (isToRepository) {
+            if (StringUtils
+                    .isBlank(systemModuleService.getSysParameterValue(String.class,
+                            CodeGenerationModuleSysParamConstants.EXTENSIONS_SRC_PATH))
+                    || StringUtils.isBlank(systemModuleService.getSysParameterValue(String.class,
+                            CodeGenerationModuleSysParamConstants.CODEGEN_TARGET_REPOSITORY))
+                    || StringUtils.isBlank(systemModuleService.getSysParameterValue(String.class,
+                            CodeGenerationModuleSysParamConstants.CODEGEN_TARGET_BRANCH))) {
+                hintUser(MODE.ERROR, "$m{codegeneration.repository.error}");
+                return noResult();
+            }
+        }
+
         return launchTaskWithMonitorBox(taskSetup, "Generate Static Application Files (Extension)",
-                "/codegeneration/extensionmodulestaticfilesgeneration/downloadGeneratedFile", null);
+                isToRepository ? "/codegeneration/extensionmodulestaticfilesgeneration/pushToRemote"
+                        : "/codegeneration/extensionmodulestaticfilesgeneration/downloadGeneratedFile",
+                null);
     }
 
     @Action
@@ -71,6 +92,24 @@ public class ExtensionModuleStaticFilesGenerationPageController
                 codeGenerationItem.getData());
         pageBean.setCodeGenerationItem(null);
         return fileDownloadResult(downloadFile, true);
+    }
+
+    @Action
+    public String pushToRemote() throws UnifyException {
+        ExtensionModuleStaticFilesGenerationPageBean pageBean = getPageBean();
+        CodeGenerationItem codeGenerationItem = pageBean.getCodeGenerationItem();
+        final String workingPath = systemModuleService.getSysParameterValue(String.class,
+                CodeGenerationModuleSysParamConstants.EXTENSIONS_SRC_PATH);
+        final String repositoryName = systemModuleService.getSysParameterValue(String.class,
+                CodeGenerationModuleSysParamConstants.CODEGEN_TARGET_REPOSITORY);
+        final String branch = systemModuleService.getSysParameterValue(String.class,
+                CodeGenerationModuleSysParamConstants.CODEGEN_TARGET_BRANCH);
+        TransferToRemote transferToRemote = new TransferToRemote(repositoryName, branch, workingPath,
+                codeGenerationItem.getData());
+        TaskSetup taskSetup = TaskSetup.newBuilder(TransferToRemoteTaskConstants.TRANSFER_TO_REMOTE_TASK_NAME)
+                .setParam(TransferToRemoteTaskConstants.TRANSFER_ITEM, transferToRemote).logMessages().build();
+        pageBean.setCodeGenerationItem(null);
+        return launchTaskWithMonitorBox(taskSetup, "Push Extension Files to Remote");
     }
 
     @Override

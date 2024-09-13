@@ -13,27 +13,16 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.repository.business;
-
-import com.flowcentraltech.flowcentral.common.AbstractFlowCentralComponent;
-import com.tcdng.unify.core.UnifyException;
+package com.flowcentraltech.flowcentral.repository.git.constants;
 
 /**
- * Convenient base class for repository provider components.
+ * Git repository module name constants.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class AbstractRepositoryProvider extends AbstractFlowCentralComponent implements RepositoryProvider {
+public interface GitRepositoryModuleNameConstants {
 
-    @Override
-    protected void onInitialize() throws UnifyException {
-
-    }
-
-    @Override
-    protected void onTerminate() throws UnifyException {
-
-    }
+    String GIT_REPOSITORY_PROVIDER = "git-repository-moduleservice";
 
 }

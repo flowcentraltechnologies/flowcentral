@@ -62,9 +62,8 @@ public class StudioMenuWriter extends AbstractPanelWriter {
     @Configurable
     private CodeGenerationProvider codeGenerationProvider;
 
-    private static final List<String> applicationAppletList = Collections
-            .unmodifiableList(Arrays.asList("studio.stuManageModule", "studio.manageApplication",
-                    "studio.applicationReplication", "studio.manageRemoteRepoConfig"));
+    private static final List<String> applicationAppletList = Collections.unmodifiableList(
+            Arrays.asList("studio.stuManageModule", "studio.manageApplication", "studio.applicationReplication"));
 
     private static final List<String> synchronizationAppletList = Collections
             .unmodifiableList(Arrays.asList("studio.delegateCreateSynchronization", "studio.delegateSynchronization"));
@@ -72,9 +71,9 @@ public class StudioMenuWriter extends AbstractPanelWriter {
     private static final List<String> snapshotAppletList = Collections
             .unmodifiableList(Arrays.asList("studio.takeSnapshot", "studio.uploadSnapshot", "studio.snapshots"));
 
-    private static final List<StudioAppComponentType> utilMenuCategoryList = Collections.unmodifiableList(
-            Arrays.asList(StudioAppComponentType.CODEGENERATION, StudioAppComponentType.SYNCHRONIZATION,
-                    StudioAppComponentType.SNAPSHOT, StudioAppComponentType.APPLICATION));
+    private static final List<StudioAppComponentType> utilMenuCategoryList = Collections.unmodifiableList(Arrays.asList(
+            StudioAppComponentType.CODEGENERATION, StudioAppComponentType.SYNCHRONIZATION,
+            StudioAppComponentType.SNAPSHOT, StudioAppComponentType.APPLICATION));
 
     private static final List<StudioAppComponentType> collabUtilMenuCategoryList = Collections
             .unmodifiableList(Arrays.asList(StudioAppComponentType.COLLABORATION, StudioAppComponentType.CODEGENERATION,
@@ -234,8 +233,8 @@ public class StudioMenuWriter extends AbstractPanelWriter {
                             : (isCodeGeneration ? getCodeGenerationAppletDefs(applicationName, searchInput)
                                     : (isSynchronization ? getSychronizationAppletDefs(applicationName, searchInput)
                                             : (isSnapshot ? getSnapshotAppletDefs(applicationName, searchInput)
-                                                    : studioModuleService.findAppletDefs(applicationName, currCategory,
-                                                            searchInput)))));
+                                                    : studioModuleService.findAppletDefs(applicationName,
+                                                                    currCategory, searchInput)))));
 
             for (AppletDef appletDef : appletDefList) {
                 if (isApplications || isCollaboration || isCodeGeneration || isSynchronization || isSnapshot

@@ -15,7 +15,12 @@
  */
 package com.flowcentraltech.flowcentral.repository.business;
 
+import java.util.List;
+
 import com.flowcentraltech.flowcentral.common.business.FlowCentralService;
+import com.flowcentraltech.flowcentral.repository.entities.RemoteRepoConfig;
+import com.flowcentraltech.flowcentral.repository.entities.RemoteRepoConfigQuery;
+import com.tcdng.unify.core.UnifyException;
 
 /**
  * Repository business service.
@@ -24,5 +29,16 @@ import com.flowcentraltech.flowcentral.common.business.FlowCentralService;
  * @since 1.0
  */
 public interface RepositoryModuleService extends FlowCentralService {
+
+    /**
+     * Finds remote repositories configurations.
+     * 
+     * @param query
+     *              the query object
+     * @return list of configurations
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    List<RemoteRepoConfig> findRemoteRepoConfigs(RemoteRepoConfigQuery query) throws UnifyException;
 
 }

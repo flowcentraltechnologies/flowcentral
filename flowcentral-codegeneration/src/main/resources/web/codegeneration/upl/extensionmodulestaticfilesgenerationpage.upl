@@ -36,9 +36,9 @@
 	components:$c{frmBasePackage generateBtn}	
 !ui-name:frmBasePackage caption:$m{extensionmodulestaticfilesgeneration.form.basepackage}
 	period:true case:lower binding:basePackage required:true size:48
+
 !ui-button:generateBtn styleClass:$e{fc-bluebutton} caption:$m{button.generate}
 	eventHandler:$d{!ui-event event:onclick action:$c{generateAct}}
 	
 // Actions
 !ui-post:generateAct path:$n{/generateStaticFiles} components:$c{generationBodyPanel}
-	

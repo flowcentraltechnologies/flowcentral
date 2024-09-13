@@ -15,22 +15,33 @@
  */
 package com.flowcentraltech.flowcentral.repository.web.lists;
 
-import com.flowcentraltech.flowcentral.common.web.lists.AbstractFlowCentralTypeListCommand;
-import com.flowcentraltech.flowcentral.repository.providers.RepositoryProvider;
+import java.util.List;
+import java.util.Locale;
+
+import com.flowcentraltech.flowcentral.common.constants.RecordStatus;
+import com.flowcentraltech.flowcentral.repository.entities.RemoteRepoConfigQuery;
+import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
+import com.tcdng.unify.core.data.Listable;
 import com.tcdng.unify.core.list.ZeroParams;
 
 /**
- * Repository provider list command.
+ * Remote repository configuration list command.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@Component("repositoryproviderlist")
-public class RepositoryProviderListCommand extends AbstractFlowCentralTypeListCommand<RepositoryProvider, ZeroParams> {
+@Component("remoterepoconfiglist")
+public class RemoteRepoConfigListCommand extends AbstractRepositoryListCommand<ZeroParams> {
 
-    public RepositoryProviderListCommand() {
-        super(RepositoryProvider.class, ZeroParams.class);
+    public RemoteRepoConfigListCommand() {
+        super(ZeroParams.class);
+    }
+
+    @Override
+    public List<? extends Listable> execute(Locale locale, ZeroParams param) throws UnifyException {
+        return repository()
+                .findRemoteRepoConfigs((RemoteRepoConfigQuery) new RemoteRepoConfigQuery().status(RecordStatus.ACTIVE));
     }
 
 }
