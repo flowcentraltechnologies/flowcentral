@@ -15,6 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.common.web.lists;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -22,6 +23,7 @@ import com.tcdng.unify.core.UnifyComponent;
 import com.tcdng.unify.core.UnifyComponentConfig;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
+import com.tcdng.unify.core.data.ListData;
 import com.tcdng.unify.core.data.Listable;
 import com.tcdng.unify.core.list.AbstractListCommand;
 import com.tcdng.unify.core.list.ListParam;
@@ -39,7 +41,7 @@ public abstract class AbstractFlowCentralTypeListCommand<T extends UnifyComponen
 
     @Configurable
     private MessageResolver messageResolver;
-    
+
     private Class<T> typeClass;
 
     private List<UnifyComponentConfig> configList;
@@ -51,21 +53,31 @@ public abstract class AbstractFlowCentralTypeListCommand<T extends UnifyComponen
 
     @Override
     public List<? extends Listable> execute(Locale locale, U params) throws UnifyException {
-        return  filterList(getConfigList(), params);
+        return filterList(getConfigList(), params);
+    }
+
+    protected List<? extends Listable> filterList(List<UnifyComponentConfig> baseConfigList, U params)
+            throws UnifyException {
+        if (messageResolver != null && !DataUtils.isBlank(baseConfigList)) {
+            List<ListData> list = new ArrayList<ListData>();
+            for (Listable listable : baseConfigList) {
+                list.add(new ListData(listable.getListKey(),
+                        messageResolver.resolveSessionMessage(listable.getListDescription())));
+            }
+
+            return list;
+        }
+        
+        return baseConfigList;
     }
 
     protected MessageResolver getMessageResolver() {
         return messageResolver;
     }
 
-    protected List<? extends Listable> filterList(List<UnifyComponentConfig> baseConfigList, U params)
-            throws UnifyException {
-        return baseConfigList;
-    }
-
     private List<UnifyComponentConfig> getConfigList() throws UnifyException {
         if (configList == null) {
-            synchronized(this) {
+            synchronized (this) {
                 if (configList == null) {
                     configList = DataUtils.unmodifiableList(getComponentConfigs(typeClass));
                 }
