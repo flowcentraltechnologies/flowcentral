@@ -62,12 +62,14 @@ public class ExtensionModuleStaticFilesGenerationPageController
         TaskSetup taskSetup = TaskSetup
                 .newBuilder(CodeGenerationTaskConstants.GENERATE_EXTENSION_MODULE_FILES_TASK_NAME)
                 .setParam(CodeGenerationTaskConstants.CODEGENERATION_ITEM, codeGenerationItem).logMessages().build();
-        
+
         final boolean isToRepository = systemModuleService.getSysParameterValue(boolean.class,
                 CodeGenerationModuleSysParamConstants.ENABLE_CODEGEN_TO_REPOSITORY);
         if (isToRepository) {
             if (StringUtils
                     .isBlank(systemModuleService.getSysParameterValue(String.class,
+                            CodeGenerationModuleSysParamConstants.EXTENSIONS_SRC_PATH))
+                    || StringUtils.isBlank(systemModuleService.getSysParameterValue(String.class,
                             CodeGenerationModuleSysParamConstants.CODEGEN_TARGET_REPOSITORY))
                     || StringUtils.isBlank(systemModuleService.getSysParameterValue(String.class,
                             CodeGenerationModuleSysParamConstants.CODEGEN_TARGET_BRANCH))) {
@@ -102,8 +104,8 @@ public class ExtensionModuleStaticFilesGenerationPageController
                 CodeGenerationModuleSysParamConstants.CODEGEN_TARGET_REPOSITORY);
         final String branch = systemModuleService.getSysParameterValue(String.class,
                 CodeGenerationModuleSysParamConstants.CODEGEN_TARGET_BRANCH);
-        TransferToRemote transferToRemote = new TransferToRemote(repositoryName,
-                branch, workingPath, codeGenerationItem.getData());
+        TransferToRemote transferToRemote = new TransferToRemote(repositoryName, branch, workingPath,
+                codeGenerationItem.getData());
         TaskSetup taskSetup = TaskSetup.newBuilder(TransferToRemoteTaskConstants.TRANSFER_TO_REMOTE_TASK_NAME)
                 .setParam(TransferToRemoteTaskConstants.TRANSFER_ITEM, transferToRemote).logMessages().build();
         pageBean.setCodeGenerationItem(null);

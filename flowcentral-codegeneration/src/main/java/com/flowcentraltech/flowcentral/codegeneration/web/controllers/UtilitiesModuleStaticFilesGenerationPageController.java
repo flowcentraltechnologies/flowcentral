@@ -69,6 +69,8 @@ public class UtilitiesModuleStaticFilesGenerationPageController
         if (isToRepository) {
             if (StringUtils
                     .isBlank(systemModuleService.getSysParameterValue(String.class,
+                            CodeGenerationModuleSysParamConstants.UTILITIES_SRC_PATH))
+                    || StringUtils.isBlank(systemModuleService.getSysParameterValue(String.class,
                             CodeGenerationModuleSysParamConstants.CODEGEN_TARGET_REPOSITORY))
                     || StringUtils.isBlank(systemModuleService.getSysParameterValue(String.class,
                             CodeGenerationModuleSysParamConstants.CODEGEN_TARGET_BRANCH))) {
