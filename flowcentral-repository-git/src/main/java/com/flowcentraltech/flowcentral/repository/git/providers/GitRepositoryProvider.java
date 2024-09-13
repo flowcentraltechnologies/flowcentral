@@ -19,6 +19,7 @@ import java.io.File;
 
 import org.eclipse.jgit.api.CreateBranchCommand.SetupUpstreamMode;
 import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.api.ResetCommand.ResetType;
 import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
@@ -54,10 +55,25 @@ public class GitRepositoryProvider extends AbstractRepositoryProvider {
             if (isRepoExistsInPath(localPath)) {
                 logDebug(taskMonitor, "Using existing local git repository...");
                 git = Git.open(new File(localPath));
+                git
+                 .fetch()
+                 .setRemote("origin")
+                 .setRefSpecs("refs/heads/" + branch + ":refs/remotes/origin/" + branch)
+                 .setCredentialsProvider(credentials)
+                 .call();
+                
+                git
+                 .reset()
+                 .setMode(ResetType.HARD)
+                 .setRef("refs/remotes/origin/" + branch)
+                 .call();
             } else {
                 logDebug(taskMonitor, "Cloning git repository...");
-                git = Git.cloneRepository().setURI(repositoryUrl).setDirectory(new File(localPath))
-                        .setCredentialsProvider(credentials).call();
+                git = Git.cloneRepository()
+                        .setURI(repositoryUrl)
+                        .setDirectory(new File(localPath))
+                        .setCredentialsProvider(credentials)
+                        .call();
             }
 
             logDebug(taskMonitor, "Checking out branch [{0}]...", branch);
@@ -72,12 +88,24 @@ public class GitRepositoryProvider extends AbstractRepositoryProvider {
             ZipUtils.extractAll(parentPath, zippedFile);
 
             logDebug(taskMonitor, "Committing changes...");
-            git.add().addFilepattern(target).call();
-            git.commit().setMessage("Files replaced in " + target).call();
+            git
+             .add()
+             .addFilepattern(target)
+             .call();
+            
+            git
+             .commit()
+             .setMessage("Files replaced in " + target)
+             .call();
 
             logDebug(taskMonitor, "Pushing changes to remote repository...");
-            git.push().setCredentialsProvider(credentials).call();
-            git.close();
+            git
+             .push()
+             .setCredentialsProvider(credentials)
+             .call();
+            
+            git
+             .close();
         } catch (Exception e) {
             throwOperationErrorException(e);
         }
@@ -104,11 +132,13 @@ public class GitRepositoryProvider extends AbstractRepositoryProvider {
                     .setCreateBranch(true)
                     .setName(branch)
                     .setUpstreamMode(SetupUpstreamMode.TRACK)
-                    /*.setStartPoint("origin/" + branch)*/
                     .call();
         }
 
-        return git.checkout().setName(branch).call();
+        return git
+                .checkout()
+                .setName(branch)
+                .call();
     }
 
 }
