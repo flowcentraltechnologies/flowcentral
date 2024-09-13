@@ -17,13 +17,9 @@ package com.flowcentraltech.flowcentral.repository.git.providers;
 
 import java.io.File;
 import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 import org.eclipse.jgit.api.CreateBranchCommand.SetupUpstreamMode;
 import org.eclipse.jgit.api.Git;
-import org.eclipse.jgit.api.ListBranchCommand.ListMode;
 import org.eclipse.jgit.api.ResetCommand.ResetType;
 import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
@@ -43,7 +39,8 @@ import com.tcdng.unify.core.util.ZipUtils;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@Component(name = GitRepositoryModuleNameConstants.GIT_REPOSITORY_PROVIDER,
+@Component(
+        name = GitRepositoryModuleNameConstants.GIT_REPOSITORY_PROVIDER,
         description = "$m{repository.git.repository.provider}")
 public class GitRepositoryProvider extends AbstractRepositoryProvider {
 
@@ -53,6 +50,7 @@ public class GitRepositoryProvider extends AbstractRepositoryProvider {
         logDebug(taskMonitor, "Replacing all files in remote git repository [{0}] at branch [{1}] in target [{2}]...",
                 repositoryUrl, branch, target);
 
+        final String remote = "refs/heads/" + branch;
         try {
             UsernamePasswordCredentialsProvider credentials = new UsernamePasswordCredentialsProvider(userName,
                     password);
@@ -61,32 +59,19 @@ public class GitRepositoryProvider extends AbstractRepositoryProvider {
                 logDebug(taskMonitor, "Using existing local git repository...");
                 git = Git.open(new File(localPath));
                 
-                Set<String> refnames = new HashSet<String>();
-                List<Ref> refs = git
-                        .branchList()
-                        .setContains(branch)
-                        .setListMode(ListMode.ALL)
-                        .call();
-                for (Ref ref : refs) {
-                    refnames.add(ref.getName());
-                }
-                
-                final String remote = "refs/heads/" + branch;
                 final String track = "refs/remotes/origin/" + branch;
-                if (refnames.contains(remote) && refnames.contains(track)) {
-                    git
-                     .fetch()
-                     .setRemote("origin")
-                     .setRefSpecs(remote + ":" + track)
-                     .setCredentialsProvider(credentials)
-                     .call();
-                    
-                    git
-                     .reset()
-                     .setMode(ResetType.HARD)
-                     .setRef(track)
-                     .call();
-                }
+                git
+                 .fetch()
+                 .setRemote("origin")
+                 .setRefSpecs(remote + ":" + track)
+                 .setCredentialsProvider(credentials)
+                 .call();
+               
+                git
+                 .reset()
+                 .setMode(ResetType.HARD)
+                 .setRef(track)
+                 .call();
             } else {
                 logDebug(taskMonitor, "Cloning git repository...");
                 IOUtils.deleteDirectory(localPath);
@@ -94,7 +79,7 @@ public class GitRepositoryProvider extends AbstractRepositoryProvider {
                         .setURI(repositoryUrl)
                         .setDirectory(new File(localPath))
                         .setBranch(branch)
-                        .setBranchesToClone(Arrays.asList(branch))
+                        .setBranchesToClone(Arrays.asList(remote))
                         .setCredentialsProvider(credentials)
                         .call();
             }
@@ -130,6 +115,7 @@ public class GitRepositoryProvider extends AbstractRepositoryProvider {
             git
              .close();
         } catch (Exception e) {
+            addTaskMessage(taskMonitor, "Exception: " + e.getMessage());
             throwOperationErrorException(e);
         }
 
