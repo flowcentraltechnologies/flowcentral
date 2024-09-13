@@ -58,7 +58,7 @@
         </dependency>
         <dependency>
             <groupId>com.flowcentraltech.flowcentral</groupId>
-            <artifactId>flowcentral-repository</artifactId>
+            <artifactId>flowcentral-repository-git</artifactId>
             <version>${project.version}</version>
         </dependency>
 		<!-- Test dependencies -->
