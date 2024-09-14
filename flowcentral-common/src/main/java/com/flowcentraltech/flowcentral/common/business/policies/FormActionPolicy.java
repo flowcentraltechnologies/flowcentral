@@ -16,6 +16,8 @@
 
 package com.flowcentraltech.flowcentral.common.business.policies;
 
+import com.tcdng.unify.core.UnifyException;
+
 /**
  * Form action
  * 
@@ -24,4 +26,5 @@ package com.flowcentraltech.flowcentral.common.business.policies;
  */
 public interface FormActionPolicy extends EntityActionPolicy {
 
+    String getConfirmation() throws UnifyException;
 }
