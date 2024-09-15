@@ -71,7 +71,7 @@ public class EntitySelectWidget extends AbstractFlowCentralPopupTextField {
         String fieldA = getUplAttribute(String.class, "fieldA");
         String fieldB = getUplAttribute(String.class, "fieldB");
         EntitySelect entitySelect = new EntitySelect(au, tableDef, refDef.getSearchField(), fieldA, fieldB,
-                getValueStore(), refDef.getSelectHandler(), limit);
+                getValueStore(), refDef.getSelectHandler(), refDef.getOrderField(), limit);
         entitySelect.setEnableFilter(true);
         String label = tableDef.getEntityDef().getFieldDef(refDef.getSearchField()).getFieldLabel() + ":";
         String labelA = !StringUtils.isBlank(fieldA) ? tableDef.getEntityDef().getFieldDef(fieldA).getFieldLabel() + ":"

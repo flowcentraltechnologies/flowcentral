@@ -134,7 +134,15 @@ public class EntitySearchWidget extends AbstractEntityListWidget {
                     query.setLimit(limit);
                 }
 
-                query.addOrder(searchField);
+                if (refDef.isWithOrderField()) {
+                    query.addOrder(refDef.getOrderField());
+                    if (query.isSelect()) {
+                        query.addSelect(refDef.getOrderField());
+                    }
+               } else {
+                    query.addOrder(searchField);
+                }
+                
                 List<? extends Listable> result = environment().listAll(query);
                 if (encode || listFormat) {
                     ParameterizedStringGenerator generator = null;
