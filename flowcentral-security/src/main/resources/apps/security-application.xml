@@ -807,11 +807,11 @@
 		</form>
 		<form name="userResetForm"
 			description="$m{security.userresetunlock.form}" entity="user">
-			<action type="button" name="resetPassword"
+			<action type="button" name="resetPassword" highlight="ORANGE"
 				description="$m{security.userresetunlock.form.action.resetpassword}"
 				label="$m{security.userresetunlock.form.action.resetpassword.label}"
 				policy="resetpassword-actionpolicy" showOnMaintain="true" />
-			<action type="button" name="unlockUser"
+			<action type="button" name="unlockUser" highlight="GREEN"
 				description="$m{security.userresetunlock.form.action.unlockuser}"
 				label="$m{security.userresetunlock.form.action.unlockuser.label}"
 				policy="unlockuser-actionpolicy" showOnMaintain="true" />

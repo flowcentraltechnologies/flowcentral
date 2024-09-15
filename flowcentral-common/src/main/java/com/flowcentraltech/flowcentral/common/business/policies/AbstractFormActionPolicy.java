@@ -16,6 +16,8 @@
 
 package com.flowcentraltech.flowcentral.common.business.policies;
 
+import com.tcdng.unify.core.UnifyException;
+
 /**
  * Convenient abstract base class for form action policies.
  * 
@@ -23,5 +25,10 @@ package com.flowcentraltech.flowcentral.common.business.policies;
  * @since 1.0
  */
 public abstract class AbstractFormActionPolicy extends AbstractEntityActionPolicy implements FormActionPolicy {
+
+    @Override
+    public String getConfirmation() throws UnifyException {
+        return null;
+    }
 
 }

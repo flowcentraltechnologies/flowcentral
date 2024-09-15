@@ -106,7 +106,8 @@ public class FormActionButtonsWriter extends AbstractControlWriter {
 
     @SuppressWarnings("unchecked")
     @Override
-    protected void doWriteBehavior(ResponseWriter writer, Widget widget, EventHandler[] handlers) throws UnifyException {
+    protected void doWriteBehavior(ResponseWriter writer, Widget widget, EventHandler[] handlers)
+            throws UnifyException {
         FormActionButtons formActionButtons = (FormActionButtons) widget;
         // All behavior should be tied to action control
         EventHandler[] eventHandlers = formActionButtons.getEventHandlers();
@@ -117,10 +118,19 @@ public class FormActionButtonsWriter extends AbstractControlWriter {
             for (ValueStore valueStore : formActionButtons.getValueList()) {
                 FormActionDef formActionDef = (FormActionDef) valueStore.getValueObject();
                 if (showActionSet.contains(formActionDef.getName())) {
+                    String confirmation = formActionDef.isWithPolicy()
+                            ? getComponent(FormActionPolicy.class, formActionDef.getPolicy()).getConfirmation()
+                            : null;
+                    confirmation = resolveSessionMessage(confirmation);
                     actionCtrl.setValueStore(valueStore);
                     getRequestContext().setQuickReference(valueStore);
                     for (EventHandler eventHandler : eventHandlers) {
-                        writer.writeBehavior(eventHandler, actionCtrl.getId(), null);
+                        writer.setConfirm(confirmation);
+                        try {
+                            writer.writeBehavior(eventHandler, actionCtrl.getId(), null);
+                        } finally {
+                            writer.clearConfirm();
+                        }
                     }
                 }
             }
