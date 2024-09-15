@@ -35,6 +35,9 @@ public class RefConfig extends BaseNameConfig {
     private String searchField;
 
     @JacksonXmlProperty(isAttribute = true)
+    private String orderField;
+
+    @JacksonXmlProperty(isAttribute = true)
     private String searchTable;
 
     @JacksonXmlProperty(isAttribute = true)
@@ -66,6 +69,14 @@ public class RefConfig extends BaseNameConfig {
 
     public void setSearchField(String searchField) {
         this.searchField = searchField;
+    }
+
+    public String getOrderField() {
+        return orderField;
+    }
+
+    public void setOrderField(String orderField) {
+        this.orderField = orderField;
     }
 
     public String getSearchTable() {

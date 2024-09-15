@@ -33,6 +33,9 @@ public class AppRef extends BaseApplicationEntity {
     private String entity;
 
     @Column(length = 64, nullable = true)
+    private String orderField;
+
+    @Column(length = 64, nullable = true)
     private String searchField;
 
     @Column(length = 64, nullable = true)
@@ -59,6 +62,14 @@ public class AppRef extends BaseApplicationEntity {
 
     public void setEntity(String entity) {
         this.entity = entity;
+    }
+
+    public String getOrderField() {
+        return orderField;
+    }
+
+    public void setOrderField(String orderField) {
+        this.orderField = orderField;
     }
 
     public String getSearchField() {

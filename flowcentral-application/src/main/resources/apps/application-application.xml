@@ -1289,6 +1289,9 @@
 			type="com.flowcentraltech.flowcentral.application.entities.AppRef">
 			<field name="entity" label="$m{application.appref.entity}"
 				type="string" />
+			<field name="orderField"
+				label="$m{application.appref.orderfield}" type="string"
+				nullable="true" />
 			<field name="searchField"
 				label="$m{application.appref.searchfield}" type="string"
 				nullable="true" />

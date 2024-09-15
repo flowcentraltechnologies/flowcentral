@@ -32,6 +32,8 @@ public class RefDef extends BaseApplicationEntityDef {
 
     private String entity;
 
+    private String orderField;
+
     private String searchField;
 
     private String searchTable;
@@ -42,11 +44,12 @@ public class RefDef extends BaseApplicationEntityDef {
 
     private List<StringToken> listFormat;
 
-    public RefDef(String entity, String searchField, String searchTable, String selectHandler, FilterDef filter,
-            List<StringToken> listFormat, String longName, String description, Long id, long version)
+    public RefDef(String entity, String orderField, String searchField, String searchTable, String selectHandler,
+            FilterDef filter, List<StringToken> listFormat, String longName, String description, Long id, long version)
             throws UnifyException {
         super(ApplicationNameUtils.getApplicationEntityNameParts(longName), description, id, version);
         this.entity = entity;
+        this.orderField = orderField;
         this.searchField = searchField;
         this.searchTable = searchTable;
         this.selectHandler = selectHandler;
@@ -56,6 +59,10 @@ public class RefDef extends BaseApplicationEntityDef {
 
     public String getEntity() {
         return entity;
+    }
+
+    public String getOrderField() {
+        return orderField;
     }
 
     public String getSearchField() {
@@ -80,6 +87,10 @@ public class RefDef extends BaseApplicationEntityDef {
 
     public FilterDef getFilter() {
         return filter;
+    }
+
+    public boolean isWithOrderField() {
+        return !StringUtils.isBlank(orderField);
     }
 
     public boolean isWithSearchField() {

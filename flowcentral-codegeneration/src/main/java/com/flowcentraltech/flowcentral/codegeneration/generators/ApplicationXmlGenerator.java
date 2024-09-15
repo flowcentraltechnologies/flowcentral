@@ -386,6 +386,7 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                 refConfig.setName(appRef.getName());
                 refConfig.setDescription("$m{" + descKey + "}");
                 refConfig.setEntity(appRef.getEntity());
+                refConfig.setOrderField(appRef.getOrderField());
                 refConfig.setSearchField(appRef.getSearchField());
                 refConfig.setSearchTable(appRef.getSearchTable());
                 refConfig.setSelectHandler(appRef.getSelectHandler());

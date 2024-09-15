@@ -1825,7 +1825,7 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
         logDebug("Constructing entity select using reference definition [{0}]...", refDef.getLongName());
         TableDef tableDef = applicationModuleService.getTableDef(refDef.getSearchTable());
         EntitySelect entitySelect = new EntitySelect(this, tableDef, refDef.getSearchField(), fieldNameA, fieldNameB,
-                valueStore, refDef.getSelectHandler(), limit);
+                valueStore, refDef.getSelectHandler(), refDef.getOrderField(), limit);
         entitySelect.setEnableFilter(true);
         String label = tableDef.getEntityDef().getFieldDef(refDef.getSearchField()).getFieldLabel() + ":";
         String labelA = !StringUtils.isBlank(fieldNameA)

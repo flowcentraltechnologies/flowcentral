@@ -904,9 +904,9 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     List<StringToken> listFormat = !StringUtils.isBlank(appRef.getListFormat())
                             ? StringUtils.breakdownParameterizedString(appRef.getListFormat())
                             : null;
-                    return new RefDef(appRef.getEntity(), appRef.getSearchField(), appRef.getSearchTable(),
-                            appRef.getSelectHandler(), filterDef, listFormat, longName, appRef.getDescription(),
-                            appRef.getId(), appRef.getVersionNo());
+                    return new RefDef(appRef.getEntity(), appRef.getOrderField(), appRef.getSearchField(),
+                            appRef.getSearchTable(), appRef.getSelectHandler(), filterDef, listFormat, longName,
+                            appRef.getDescription(), appRef.getId(), appRef.getVersionNo());
                 }
 
             };
@@ -3493,6 +3493,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             srcAppRef.setName(ctx.nameSwap(srcAppRef.getName()));
             srcAppRef.setDescription(ctx.messageSwap(srcAppRef.getDescription()));
             srcAppRef.setEntity(ctx.entitySwap(srcAppRef.getEntity()));
+            srcAppRef.setOrderField(ctx.fieldSwap(srcAppRef.getOrderField()));
             srcAppRef.setSearchField(ctx.fieldSwap(srcAppRef.getSearchField()));
             srcAppRef.setSearchTable(ctx.entitySwap(srcAppRef.getSearchTable()));
             srcAppRef.setSelectHandler(ctx.componentSwap(srcAppRef.getSelectHandler()));
@@ -4716,6 +4717,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appRef.setDescription(description);
                     appRef.setEntity(
                             ApplicationNameUtils.ensureLongNameReference(applicationName, refConfig.getEntity()));
+                    appRef.setOrderField(refConfig.getOrderField());
                     appRef.setSearchField(refConfig.getSearchField());
                     appRef.setSearchTable(refConfig.getSearchTable());
                     appRef.setSelectHandler(refConfig.getSelectHandler());
@@ -4731,6 +4733,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     oldAppRef.setDescription(description);
                     oldAppRef.setEntity(
                             ApplicationNameUtils.ensureLongNameReference(applicationName, refConfig.getEntity()));
+                    oldAppRef.setOrderField(refConfig.getOrderField());
                     oldAppRef.setSearchField(refConfig.getSearchField());
                     oldAppRef.setSearchTable(refConfig.getSearchTable());
                     oldAppRef.setSelectHandler(refConfig.getSelectHandler());
@@ -5352,6 +5355,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 appRef.setName(refConfig.getName());
                 appRef.setDescription(description);
                 appRef.setEntity(ApplicationNameUtils.ensureLongNameReference(applicationName, refConfig.getEntity()));
+                appRef.setOrderField(refConfig.getOrderField());
                 appRef.setSearchField(refConfig.getSearchField());
                 appRef.setSearchTable(refConfig.getSearchTable());
                 appRef.setSelectHandler(refConfig.getSelectHandler());

@@ -80,9 +80,16 @@ public class EntityListWidget extends AbstractEntityListWidget {
                 query.setLimit(limit);
             }
 
-            String searchField = getSearchField(entityClassDef, refDef);
-            if (searchField != null) {
-                query.addOrder(searchField);
+            if (refDef.isWithOrderField()) {
+                query.addOrder(refDef.getOrderField());
+                if (query.isSelect()) {
+                    query.addSelect(refDef.getOrderField());
+                }
+            } else {
+                String searchField = getSearchField(entityClassDef, refDef);
+                if (searchField != null) {
+                    query.addOrder(searchField);
+                }
             }
 
             List<? extends Listable> listableList = environment().listAll(query);
