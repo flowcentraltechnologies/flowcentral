@@ -7,13 +7,18 @@
 	<applets>
 		<applet name="generateStaticFiles"
 			description="$m{codegeneration.generateextensionmodulestaticfiles.manage}"
-			label="$m{codegeneration.generateextensionmodulestaticfiles.manage.label}" icon="lock" type="path_page"
+			label="$m{codegeneration.generateextensionmodulestaticfiles.manage.label}" icon="cog" type="path_page"
 			path="/codegeneration/extensionmodulestaticfilesgeneration/openPage" menuAccess="false">
 		</applet>
 		<applet name="generateStaticUtilitiesFiles"
 			description="$m{codegeneration.generateutilitiesmodulestaticfiles.manage}"
-			label="$m{codegeneration.generateutilitiesmodulestaticfiles.manage.label}" icon="lock" type="path_page"
+			label="$m{codegeneration.generateutilitiesmodulestaticfiles.manage.label}" icon="cog" type="path_page"
 			path="/codegeneration/utilitiesmodulestaticfilesgeneration/openPage" menuAccess="false">
+		</applet>
+		<applet name="manageCodeGenerationSettings"
+			description="$m{codegeneration.codegenrationsettings.manage}"
+			label="$m{codegeneration.codegenrationsettings.manage.label}" icon="cogs" type="path_page"
+			path="/codegeneration/codegenrationsettings/openPage" menuAccess="false">
 		</applet>
 	</applets>
 	<!-- References -->
