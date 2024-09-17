@@ -44,7 +44,7 @@ import com.tcdng.unify.web.ui.widget.WriteWork;
  */
 @Component("fc-entitylist")
 @UplAttributes({ @UplAttribute(name = "styleClass", type = String.class, defaultVal = "$e{ui-select}"),
-        @UplAttribute(name = "limit", type = int.class, defaultVal = "100"),
+        @UplAttribute(name = "limit", type = int.class, defaultVal = "400"),
         @UplAttribute(name = "blankOption", type = String.class),
         @UplAttribute(name = "direct", type = boolean.class, defaultVal = "false") })
 public class EntityListWidget extends AbstractEntityListWidget {

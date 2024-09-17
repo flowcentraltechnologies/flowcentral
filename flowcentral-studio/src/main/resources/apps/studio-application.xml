@@ -193,7 +193,7 @@
 		<widgetType name="entityfieldlist"
 			description="$m{studio.widgettype.entityfieldlist}"
 			dataType="string" inputType="string"
-			editor="!ui-select list:studioentityfieldbynamelist listParams:$l{entity} blankOption:$m{blank.none}"
+			editor="!ui-select list:studioentityfieldbynamelist listParams:$l{entity} listKey:$s{name} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="entitysearchtablelist"
 			description="$m{studio.widgettype.entitysearchtablelist}"
