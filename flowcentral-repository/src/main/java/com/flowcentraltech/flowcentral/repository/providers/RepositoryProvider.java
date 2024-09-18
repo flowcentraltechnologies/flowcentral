@@ -28,7 +28,7 @@ import com.tcdng.unify.core.task.TaskMonitor;
 public interface RepositoryProvider extends FlowCentralComponent {
 
     /**
-     * Replaces directory in remote repository folder
+     * Replaces file in remote repository folder with supplied file.
      * 
      * @param taskMonitor
      *                      the task monitor
@@ -42,7 +42,34 @@ public interface RepositoryProvider extends FlowCentralComponent {
      *                      the password
      * @param localPath
      *                      the local path
-     * @param target
+     * @param targetPath
+     *                      the target folder
+     * @param fileName
+     *                      the file name
+     * @param file
+     *                      file used to replace
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    void replaceFile(TaskMonitor taskMonitor, String repositoryUrl, String branch, String userName, String password,
+            String localPath, String targetPath, String fileName, byte[] file) throws UnifyException;
+
+    /**
+     * Replaces directory in remote repository folder with contents of zipped file.
+     * 
+     * @param taskMonitor
+     *                      the task monitor
+     * @param repositoryUrl
+     *                      the remote repository URL
+     * @param branch
+     *                      the remote branch
+     * @param userName
+     *                      the user name
+     * @param password
+     *                      the password
+     * @param localPath
+     *                      the local path
+     * @param targetPath
      *                      the target folder
      * @param zippedFile
      *                      zip file containing files
@@ -50,5 +77,5 @@ public interface RepositoryProvider extends FlowCentralComponent {
      *                        if an error occurs
      */
     void replaceDirectory(TaskMonitor taskMonitor, String repositoryUrl, String branch, String userName,
-            String password, String localPath, String target, byte[] zippedFile) throws UnifyException;
+            String password, String localPath, String targetPath, byte[] zippedFile) throws UnifyException;
 }

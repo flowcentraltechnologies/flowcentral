@@ -38,6 +38,19 @@
 			editor="!ui-text maxLen:128" type="string" editable="true" />
 		<sysParameter code="CDN-0008" defaultVal="false"
 			description="$m{codegeneration.sysparam.codegentorepository}"
+			editor="!ui-select list:booleanlist" type="boolean" editable="true" />			
+		<sysParameter code="CDN-0009"
+			description="$m{codegeneration.sysparam.snapshotpath}"
+			editor="!ui-text maxLen:128" type="string" editable="true" />
+		<sysParameter code="CDN-0010"
+			description="$m{codegeneration.sysparam.snapshotrepository}"
+			editor="!ui-select list:$s{remoterepoconfiglist} listKey:$s{name} blankOption:$s{}"
+				type="string" editable="true" />
+		<sysParameter code="CDN-0011" defaultVal="development"
+			description="$m{codegeneration.sysparam.snapshotbranch}"
+			editor="!ui-text maxLen:128" type="string" editable="true" />
+		<sysParameter code="CDN-0012" defaultVal="false"
+			description="$m{codegeneration.sysparam.snapshottorepository}"
 			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
 	</sysParameters>
 </module>

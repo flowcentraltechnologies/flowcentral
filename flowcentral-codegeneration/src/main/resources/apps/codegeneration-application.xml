@@ -20,6 +20,11 @@
 			label="$m{codegeneration.codegenrationsettings.manage.label}" icon="cogs" type="path_page"
 			path="/codegeneration/codegenrationsettings/openPage" menuAccess="false">
 		</applet>
+		<applet name="manageSnapshotSettings"
+			description="$m{codegeneration.snapshotsettings.manage}"
+			label="$m{codegeneration.snapshotsettings.manage.label}" icon="camera" type="path_page"
+			path="/codegeneration/snapshotsettings/openPage" menuAccess="false">
+		</applet>
 	</applets>
 	<!-- References -->
 	<!-- Entities -->
