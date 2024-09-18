@@ -36,7 +36,7 @@
     formCaptionSuffix:$s{:} formColumns:1
 	formSection:$d{!ui-section caption:$m{snapshotsettingspage.settings.repository}
 		components:$c{frmRepository frmBranch frmSnapshotSrc frmGenerateToRepo}}
-!ui-text:frmSnapshotSrc styleClass:$e{fc-formfield}
+!ui-text:frmSnapshotSrc styleClass:$e{fc-formfield} size:60
 	caption:$m{snapshotsettingspage.form.snapshotsrc} binding:snapshotSrc
 !ui-select:frmRepository styleClass:$e{fc-formfield}
 	caption:$m{snapshotsettingspage.form.repository}
