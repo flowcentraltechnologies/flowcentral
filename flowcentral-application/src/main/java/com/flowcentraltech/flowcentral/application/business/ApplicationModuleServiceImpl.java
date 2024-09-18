@@ -295,7 +295,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
     private static final int MAX_LIST_DEPTH = 8;
 
-    private static final long CLEAR_SYSTEM_CACHE_WAIT_MILLISEC = 2500;
+    private static final long CLEAR_SYSTEM_CACHE_WAIT_MILLISEC = 8000;
 
     @Configurable
     private ApplicationPrivilegeManager applicationPrivilegeManager;
@@ -1474,6 +1474,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         formDefFactoryMap.clear();
         tableDefFactoryMap.clear();
         refDefFactoryMap.clear();
+        entityDefFactoryMap.clear();
         entityDefByClassFactoryMap.clear();
         entityClassDefFactoryMap.clear();
         suggestionDefFactoryMap.clear();
