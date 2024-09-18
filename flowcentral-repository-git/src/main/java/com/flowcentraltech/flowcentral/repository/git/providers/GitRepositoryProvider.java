@@ -45,6 +45,13 @@ import com.tcdng.unify.core.util.ZipUtils;
 public class GitRepositoryProvider extends AbstractRepositoryProvider {
 
     @Override
+    public void replaceFile(TaskMonitor taskMonitor, String repositoryUrl, String branch, String userName,
+            String password, String localPath, String targetPath, String fileName, byte[] file) throws UnifyException {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
     public void replaceDirectory(TaskMonitor taskMonitor, String repositoryUrl, String branch, String userName,
             String password, String localPath, String target, byte[] zippedFile) throws UnifyException {
         logDebug(taskMonitor, "Replacing all files in remote git repository [{0}] at branch [{1}] in target [{2}]...",
