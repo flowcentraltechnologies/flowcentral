@@ -1,0 +1,63 @@
+// UPL template for code generation settings page.
+// Copyright 2021-2024 FlowCentral Technologies Limited.
+// 
+// Licensed under the Apache License, Version 2.0 (the "License"); you may not
+// use this file except in compliance with the License. You may obtain a copy of
+// the License at
+// 
+// http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+// WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+// License for the specific language governing permissions and limitations under
+// the License.
+
+!ui-page caption:$m{snapshotsettingspage.title} components:$c{basePanel}
+
+// Base panel
+!ui-panel:basePanel layout:$d{!ui-vertical style:$s{width:100%;}}
+	components:$c{headerBar settingsPanel}
+
+// Header
+!ui-panel:headerBar layout:$d{!ui-horizontal style:$s{width:100%;} cellType:bottom}
+	components:$c{settingsLabel} 
+!ui-label:settingsLabel styleClass:$e{fc-largelabel}
+	caption:$m{snapshotsettingspage.header.title}
+
+// Settings panel
+!ui-panel:settingsPanel components:$c{settingsCaption settingsBodyPanel}
+!ui-label:settingsCaption styleClass:$e{label}
+	caption:$m{snapshotsettingspage.settings.caption}
+!ui-panel:settingsBodyPanel layout:$d{!ui-vertical style:$s{width:100%;}}
+	components:$c{formPanel actionPanel}	
+!ui-formpanel:formPanel
+	layout:$d{!ui-vertical style:$s{table-layout:fixed;}}
+    formCaptionSuffix:$s{:} formColumns:1
+	formSection:$d{!ui-section caption:$m{snapshotsettingspage.settings.repository}
+		components:$c{frmRepository frmBranch frmSnapshotSrc frmGenerateToRepo}}
+!ui-text:frmSnapshotSrc styleClass:$e{fc-formfield}
+	caption:$m{snapshotsettingspage.form.snapshotsrc} binding:snapshotSrc
+!ui-select:frmRepository styleClass:$e{fc-formfield}
+	caption:$m{snapshotsettingspage.form.repository}
+	list:$s{remoterepoconfiglist} listKey:$s{name} blankOption:$s{}
+	binding:repository
+!ui-text:frmBranch styleClass:$e{fc-formfield}
+	caption:$m{snapshotsettingspage.form.branch}
+	binding:branch
+!ui-select:frmGenerateToRepo styleClass:$e{fc-formfield}
+	list:booleanlist
+	caption:$m{snapshotsettingspage.form.generatetorepo}
+	binding:generateToRepo
+	
+	
+!ui-panel:actionPanel layout:$d{!ui-horizontal } components:$c{saveBtn cancelBtn}		
+!ui-button:saveBtn styleClass:$e{fc-bluebutton} caption:$m{button.save}
+	eventHandler:$d{!ui-event event:onclick action:$c{saveAct}}
+!ui-button:cancelBtn caption:$m{button.cancel}
+	eventHandler:$d{!ui-event event:onclick action:$c{cancelAct}}
+	
+// Actions
+!ui-post:saveAct path:$n{/save} components:$c{settingsBodyPanel}
+!ui-post:cancelAct path:$n{/closePage}
+	

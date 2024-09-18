@@ -69,7 +69,8 @@ public class StudioMenuWriter extends AbstractPanelWriter {
             .unmodifiableList(Arrays.asList("studio.delegateCreateSynchronization", "studio.delegateSynchronization"));
 
     private static final List<String> snapshotAppletList = Collections
-            .unmodifiableList(Arrays.asList("studio.takeSnapshot", "studio.uploadSnapshot", "studio.snapshots"));
+            .unmodifiableList(Arrays.asList("codegeneration.manageSnapshotSettings", "studio.takeSnapshot",
+                    "studio.uploadSnapshot", "studio.snapshots"));
 
     private static final List<StudioAppComponentType> utilMenuCategoryList = Collections.unmodifiableList(Arrays.asList(
             StudioAppComponentType.CODEGENERATION, StudioAppComponentType.SYNCHRONIZATION,

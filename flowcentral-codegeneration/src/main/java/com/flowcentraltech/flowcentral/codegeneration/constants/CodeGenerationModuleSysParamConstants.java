@@ -39,4 +39,12 @@ public interface CodeGenerationModuleSysParamConstants {
 
     String ENABLE_CODEGEN_TO_REPOSITORY = "CDN-0008";
 
+    String SNAPSHOT_SRC_PATH = "CDN-0009";
+
+    String SNAPSHOT_TARGET_REPOSITORY = "CDN-0010";
+
+    String SNAPSHOT_TARGET_BRANCH = "CDN-0011";
+
+    String ENABLE_SNAPSHOT_TO_REPOSITORY = "CDN-0012";
+
 }
