@@ -295,7 +295,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
     private static final int MAX_LIST_DEPTH = 8;
 
-    private static final long CLEAR_SYSTEM_CACHE_WAIT_MILLISEC = 8000;
+    private static final long CLEAR_SYSTEM_CACHE_WAIT_MILLISEC = 5000;
 
     @Configurable
     private ApplicationPrivilegeManager applicationPrivilegeManager;
