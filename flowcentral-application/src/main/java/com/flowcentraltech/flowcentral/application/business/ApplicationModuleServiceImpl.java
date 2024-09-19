@@ -3915,7 +3915,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             }
         }
 
-        applicationPrivilegeManager.unregisterCustonApplicationPrivileges(applicationId);
+        applicationPrivilegeManager.unregisterCustomApplicationPrivileges(applicationId);
         deletionCount += deleteApplicationArtifacts(taskMonitor, "suggestion types", new AppSuggestionTypeQuery(),
                 applicationId, true);
         deletionCount += deleteApplicationArtifacts(taskMonitor, "assignment pages", new AppAssignmentPageQuery(),

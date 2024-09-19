@@ -86,7 +86,7 @@ public interface ApplicationPrivilegeManager extends FlowCentralComponent, RoleP
      * @throws UnifyException
      *                        If an error occurs
      */
-    void unregisterCustonApplicationPrivileges(Long applicationId) throws UnifyException;
+    void unregisterCustomApplicationPrivileges(Long applicationId) throws UnifyException;
 
     /**
      * Backs up application role privileges (Not expected to be persistent).
