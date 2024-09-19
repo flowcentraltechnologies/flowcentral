@@ -16,6 +16,7 @@
 
 package com.flowcentraltech.flowcentral.studio.web.controllers;
 
+import com.flowcentraltech.flowcentral.studio.business.data.SnapshotResultDetails;
 import com.tcdng.unify.web.ui.AbstractPageBean;
 
 /**
@@ -30,6 +31,8 @@ public class StudioTakeSnapshotPageBean extends AbstractPageBean {
     
     private String message;
 
+    private SnapshotResultDetails resultDetails;
+    
     public String getSnapshotTitle() {
         return snapshotTitle;
     }
@@ -44,6 +47,14 @@ public class StudioTakeSnapshotPageBean extends AbstractPageBean {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public SnapshotResultDetails getResultDetails() {
+        return resultDetails;
+    }
+
+    public void setResultDetails(SnapshotResultDetails resultDetails) {
+        this.resultDetails = resultDetails;
     }
     
 }

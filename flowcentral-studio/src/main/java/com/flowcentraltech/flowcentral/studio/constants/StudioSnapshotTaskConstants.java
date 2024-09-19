@@ -32,6 +32,8 @@ public interface StudioSnapshotTaskConstants {
 
     String STUDIO_SNAPSHOT_MESSAGE = "message";
 
+    String STUDIO_SNAPSHOT_RESULT_DETAILS = "resultDetails";
+
     String STUDIO_RESTORE_SNAPSHOT_TASK_NAME = "studio.restoresnapshot.task";
 
     String STUDIO_SNAPSHOT_DETAILS_ID = "snapshotDetailsId";
