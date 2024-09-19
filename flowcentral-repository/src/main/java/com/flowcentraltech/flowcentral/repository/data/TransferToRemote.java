@@ -23,19 +23,35 @@ package com.flowcentraltech.flowcentral.repository.data;
  */
 public class TransferToRemote {
 
+    public enum TransferType {
+        REPLACE_FILE_IN_DIRECTORY,
+        REPLACE_DIRECTORY_WITH_ZIP
+    }
+
+    private TransferType type;
+
     private String remoteName;
 
     private String remoteBranch;
 
-    private String workingPath;
-    
-    private byte[] zip;
+    private String fileName;
 
-    public TransferToRemote(String remoteName, String remoteBranch, String workingPath, byte[] zip) {
+    private String workingPath;
+
+    private byte[] file;
+
+    public TransferToRemote(TransferType type, String remoteName, String remoteBranch, String workingPath,
+            String fileName, byte[] file) {
+        this.type = type;
         this.remoteName = remoteName;
         this.remoteBranch = remoteBranch;
         this.workingPath = workingPath;
-        this.zip = zip;
+        this.fileName = fileName;
+        this.file = file;
+    }
+
+    public TransferType getType() {
+        return type;
     }
 
     public String getRemoteName() {
@@ -50,7 +66,11 @@ public class TransferToRemote {
         return workingPath;
     }
 
-    public byte[] getZip() {
-        return zip;
+    public String getFileName() {
+        return fileName;
+    }
+
+    public byte[] getFile() {
+        return file;
     }
 }

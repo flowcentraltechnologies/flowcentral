@@ -88,6 +88,7 @@ import com.flowcentraltech.flowcentral.dashboard.entities.Dashboard;
 import com.flowcentraltech.flowcentral.notification.entities.NotificationTemplate;
 import com.flowcentraltech.flowcentral.report.entities.ReportConfiguration;
 import com.flowcentraltech.flowcentral.studio.business.data.DelegateSynchronizationItem;
+import com.flowcentraltech.flowcentral.studio.business.data.SnapshotResultDetails;
 import com.flowcentraltech.flowcentral.studio.constants.StudioAppComponentType;
 import com.flowcentraltech.flowcentral.studio.constants.StudioAppletPropertyConstants;
 import com.flowcentraltech.flowcentral.studio.constants.StudioDelegateSynchronizationTaskConstants;
@@ -368,11 +369,13 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
                     @Parameter(name = StudioSnapshotTaskConstants.STUDIO_SNAPSHOT_NAME, description = "Snapshot Name",
                             type = String.class, mandatory = true),
                     @Parameter(name = StudioSnapshotTaskConstants.STUDIO_SNAPSHOT_MESSAGE, description = "Message",
-                            type = String.class) },
+                            type = String.class),
+                    @Parameter(name = StudioSnapshotTaskConstants.STUDIO_SNAPSHOT_RESULT_DETAILS, description = "Result Details",
+                        type = SnapshotResultDetails.class) },
             limit = TaskExecLimit.ALLOW_MULTIPLE)
     @Override
     public int takeStudioSnapshotTask(TaskMonitor taskMonitor, StudioSnapshotType snapshotType, String snapshotName,
-            String message) throws UnifyException {
+            String message, SnapshotResultDetails resultDetails) throws UnifyException {
         logDebug(taskMonitor, "Taking studio snapshot [{0}]...", snapshotName);
         final String basePackage = appletUtilities.getSysParameterValue(String.class,
                 CodeGenerationModuleSysParamConstants.DEFAULT_CODEGEN_PACKAGE_BASE);
@@ -388,7 +391,11 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
         StudioSnapshot studioSnapshot = new StudioSnapshot();
         studioSnapshot.setSnapshotDetailsId(studioSnapshotDetailsId);
         studioSnapshot.setSnapshot(snapshot.getData());
-        environment().create(studioSnapshot);
+        Long snapshotId = (Long) environment().create(studioSnapshot);
+
+        resultDetails.setSnapshotId(snapshotId);
+        resultDetails.setFileName(snapshot.getFilename());
+        resultDetails.setSnapshot(snapshot.getData());
         logDebug(taskMonitor, "Snapshot successfully taken.");
         return 0;
     }

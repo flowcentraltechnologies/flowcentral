@@ -18,10 +18,16 @@ package com.flowcentraltech.flowcentral.studio.web.controllers;
 
 import java.text.SimpleDateFormat;
 
+import com.flowcentraltech.flowcentral.codegeneration.constants.CodeGenerationModuleSysParamConstants;
+import com.flowcentraltech.flowcentral.repository.constants.TransferToRemoteTaskConstants;
+import com.flowcentraltech.flowcentral.repository.data.TransferToRemote;
+import com.flowcentraltech.flowcentral.studio.business.data.SnapshotResultDetails;
 import com.flowcentraltech.flowcentral.studio.constants.StudioSnapshotTaskConstants;
 import com.flowcentraltech.flowcentral.studio.constants.StudioSnapshotType;
+import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
+import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.UplBinding;
 import com.tcdng.unify.core.task.TaskSetup;
 import com.tcdng.unify.core.util.StringUtils;
@@ -44,6 +50,9 @@ import com.tcdng.unify.web.ui.widget.data.Hint.MODE;
 @ResultMappings({ @ResultMapping(name = "refresh", response = { "!refreshpanelresponse panels:$l{formPanel}" }) })
 public class StudioTakeSnapshotPageController extends AbstractStudioPageController<StudioTakeSnapshotPageBean> {
 
+    @Configurable
+    private SystemModuleService systemModuleService;
+
     public StudioTakeSnapshotPageController() {
         super(StudioTakeSnapshotPageBean.class, Secured.TRUE, ReadOnly.FALSE, ResetOnWrite.FALSE);
     }
@@ -61,12 +70,54 @@ public class StudioTakeSnapshotPageController extends AbstractStudioPageControll
             return "refresh";
         }
 
+        SnapshotResultDetails resultDetails = new SnapshotResultDetails();
         TaskSetup taskSetup = TaskSetup.newBuilder(StudioSnapshotTaskConstants.STUDIO_TAKE_SNAPSHOT_TASK_NAME)
                 .setParam(StudioSnapshotTaskConstants.STUDIO_SNAPSHOT_TYPE, StudioSnapshotType.MANUAL_SYSTEM)
                 .setParam(StudioSnapshotTaskConstants.STUDIO_SNAPSHOT_NAME, pageBean.getSnapshotTitle())
-                .setParam(StudioSnapshotTaskConstants.STUDIO_SNAPSHOT_MESSAGE, pageBean.getMessage()).logMessages()
+                .setParam(StudioSnapshotTaskConstants.STUDIO_SNAPSHOT_MESSAGE, pageBean.getMessage())
+                .setParam(StudioSnapshotTaskConstants.STUDIO_SNAPSHOT_RESULT_DETAILS, resultDetails)
+                .logMessages()
                 .build();
-        return launchTaskWithMonitorBox(taskSetup, "Take Studio Snapshot", "/studio/snapshots/openPage", null);
+        final boolean isToRepository = systemModuleService.getSysParameterValue(boolean.class,
+                CodeGenerationModuleSysParamConstants.ENABLE_SNAPSHOT_TO_REPOSITORY);
+        if (isToRepository) {
+            if (StringUtils
+                    .isBlank(systemModuleService.getSysParameterValue(String.class,
+                            CodeGenerationModuleSysParamConstants.SNAPSHOT_SRC_PATH))
+                    || StringUtils.isBlank(systemModuleService.getSysParameterValue(String.class,
+                            CodeGenerationModuleSysParamConstants.SNAPSHOT_TARGET_REPOSITORY))
+                    || StringUtils.isBlank(systemModuleService.getSysParameterValue(String.class,
+                            CodeGenerationModuleSysParamConstants.SNAPSHOT_TARGET_BRANCH))) {
+                hintUser(MODE.ERROR, "$m{codegeneration.repository.error}");
+                return noResult();
+            }
+
+            pageBean.setResultDetails(resultDetails);
+        }
+        
+        return launchTaskWithMonitorBox(taskSetup, "Take Studio Snapshot",
+                isToRepository ? "/studio/takesnapshot/pushToRemote"
+                : "/studio/snapshots/openPage", null);
+    }
+
+    @Action
+    public String pushToRemote() throws UnifyException {
+        StudioTakeSnapshotPageBean pageBean = getPageBean();
+        SnapshotResultDetails resultDetails = pageBean.getResultDetails();
+        final String workingPath = systemModuleService.getSysParameterValue(String.class,
+                CodeGenerationModuleSysParamConstants.SNAPSHOT_SRC_PATH);
+        final String repositoryName = systemModuleService.getSysParameterValue(String.class,
+                CodeGenerationModuleSysParamConstants.SNAPSHOT_TARGET_REPOSITORY);
+        final String branch = systemModuleService.getSysParameterValue(String.class,
+                CodeGenerationModuleSysParamConstants.SNAPSHOT_TARGET_BRANCH);
+        TransferToRemote transferToRemote = new TransferToRemote(TransferToRemote.TransferType.REPLACE_FILE_IN_DIRECTORY,
+                repositoryName, branch, workingPath, resultDetails.getFileName(), resultDetails.getSnapshot());
+        TaskSetup taskSetup = TaskSetup.newBuilder(TransferToRemoteTaskConstants.TRANSFER_TO_REMOTE_TASK_NAME)
+                .setParam(TransferToRemoteTaskConstants.TRANSFER_ITEM, transferToRemote)
+                .logMessages()
+                .build();
+        pageBean.setResultDetails(null);
+        return launchTaskWithMonitorBox(taskSetup, "Push Snapshot File to Remote");
     }
 
     @Override
