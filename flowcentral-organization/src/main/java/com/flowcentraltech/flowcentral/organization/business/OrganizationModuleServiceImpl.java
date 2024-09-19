@@ -98,7 +98,7 @@ public class OrganizationModuleServiceImpl extends AbstractFlowCentralService
 
         this.privilegeBackup = new ConcurrentHashMap<String, Set<String>>();
     }
-    
+
     @Override
     public void clearDefinitionsCache() throws UnifyException {
         logDebug("Clearing definitions cache...");
@@ -174,8 +174,8 @@ public class OrganizationModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
-    public void registerPrivilege(ConfigType configType, Long applicationId, String privilegeCategoryCode, String privilegeCode,
-            String privilegeDesc) throws UnifyException {
+    public void registerPrivilege(ConfigType configType, Long applicationId, String privilegeCategoryCode,
+            String privilegeCode, String privilegeDesc) throws UnifyException {
         Long privilegeCategoryId = environment().value(Long.class, "id",
                 new PrivilegeCategoryQuery().code(privilegeCategoryCode));
         Privilege oldPrivilege = environment().find(new PrivilegeQuery().privilegeCategoryId(privilegeCategoryId)
@@ -269,10 +269,12 @@ public class OrganizationModuleServiceImpl extends AbstractFlowCentralService
                 Optional<Long> privilegeId = environment().valueOptional(Long.class, "id",
                         new PrivilegeQuery().code(privilegeCode));
                 if (privilegeId.isPresent()) {
-                    rolePrivilege.setId(null);
-                    rolePrivilege.setRoleId(roleId);
-                    rolePrivilege.setPrivilegeId(privilegeId.get());
-                    environment().create(rolePrivilege);
+                    if (environment().countAll(new RolePrivilegeQuery().privilegeId(roleId).roleId(roleId)) == 0) {
+                        rolePrivilege.setId(null);
+                        rolePrivilege.setRoleId(roleId);
+                        rolePrivilege.setPrivilegeId(privilegeId.get());
+                        environment().create(rolePrivilege);
+                    }
                 }
             }
         }
