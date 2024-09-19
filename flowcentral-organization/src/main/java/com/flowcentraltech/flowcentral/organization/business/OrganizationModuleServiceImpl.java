@@ -269,7 +269,8 @@ public class OrganizationModuleServiceImpl extends AbstractFlowCentralService
                 Optional<Long> privilegeId = environment().valueOptional(Long.class, "id",
                         new PrivilegeQuery().code(privilegeCode));
                 if (privilegeId.isPresent()) {
-                    if (environment().countAll(new RolePrivilegeQuery().privilegeId(roleId).roleId(roleId)) == 0) {
+                    if (environment()
+                            .countAll(new RolePrivilegeQuery().privilegeId(privilegeId.get()).roleId(roleId)) == 0) {
                         rolePrivilege.setId(null);
                         rolePrivilege.setRoleId(roleId);
                         rolePrivilege.setPrivilegeId(privilegeId.get());
