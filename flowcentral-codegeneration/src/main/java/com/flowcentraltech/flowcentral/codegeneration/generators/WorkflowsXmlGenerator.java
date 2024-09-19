@@ -331,7 +331,7 @@ public class WorkflowsXmlGenerator extends AbstractResourcesArtifactGenerator {
         }
 
         // Workflow wizards
-        List<Long> wfWizardIdList = workflowModuleService.findWfWizardIdList(applicationName);
+        List<Long> wfWizardIdList = workflowModuleService.findCustomWfWizardIdList(applicationName);
         if (!DataUtils.isBlank(wfWizardIdList)) {
             final String lowerCaseApplicationName = applicationName.toLowerCase();
 
