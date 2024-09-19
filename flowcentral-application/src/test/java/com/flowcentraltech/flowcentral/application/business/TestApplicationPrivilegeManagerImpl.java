@@ -57,7 +57,7 @@ public class TestApplicationPrivilegeManagerImpl extends AbstractFlowCentralComp
     }
 
     @Override
-    public void unregisterCustonApplicationPrivileges(Long applicationId) throws UnifyException {
+    public void unregisterCustomApplicationPrivileges(Long applicationId) throws UnifyException {
 
     }
 
