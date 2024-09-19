@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.organization.entities;
 import java.util.Collection;
 import java.util.List;
 
+import com.flowcentraltech.flowcentral.common.constants.ConfigType;
 import com.flowcentraltech.flowcentral.common.constants.WfItemVersionType;
 import com.flowcentraltech.flowcentral.common.entities.BaseAuditTenantEntityQuery;
 
@@ -51,6 +52,14 @@ public class RolePrivilegeQuery extends BaseAuditTenantEntityQuery<RolePrivilege
 
     public RolePrivilegeQuery roleWfItemVersionType(WfItemVersionType roleWfItemVersionType) {
         return (RolePrivilegeQuery) addEquals("roleWfItemVersionType", roleWfItemVersionType);
+    }
+
+    public RolePrivilegeQuery privilegeConfigType(ConfigType privilegeConfigType) {
+        return (RolePrivilegeQuery) addEquals("privilegeConfigType", privilegeConfigType);
+    }
+
+    public RolePrivilegeQuery isCustom() {
+        return (RolePrivilegeQuery) addEquals("privilegeConfigType", ConfigType.CUSTOM);
     }
 
     public RolePrivilegeQuery privilegeCatCode(String privilegeCatCode) {

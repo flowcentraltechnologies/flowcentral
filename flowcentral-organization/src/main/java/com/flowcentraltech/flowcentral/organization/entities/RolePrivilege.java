@@ -15,6 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.organization.entities;
 
+import com.flowcentraltech.flowcentral.common.constants.ConfigType;
 import com.flowcentraltech.flowcentral.common.constants.WfItemVersionType;
 import com.flowcentraltech.flowcentral.common.entities.BaseAuditTenantEntity;
 import com.tcdng.unify.core.annotation.ForeignKey;
@@ -46,6 +47,9 @@ public class RolePrivilege extends BaseAuditTenantEntity {
 
     @ListOnly(key = "roleId", property = "wfItemVersionType")
     private WfItemVersionType roleWfItemVersionType;
+    
+    @ListOnly(key = "privilegeId", property = "configType")
+    private ConfigType privilegeConfigType;
 
     @ListOnly(key = "privilegeId", property = "code")
     private String privilegeCode;
@@ -114,6 +118,14 @@ public class RolePrivilege extends BaseAuditTenantEntity {
 
     public void setRoleDesc(String roleDesc) {
         this.roleDesc = roleDesc;
+    }
+
+    public ConfigType getPrivilegeConfigType() {
+        return privilegeConfigType;
+    }
+
+    public void setPrivilegeConfigType(ConfigType privilegeConfigType) {
+        this.privilegeConfigType = privilegeConfigType;
     }
 
     public String getPrivilegeCode() {
