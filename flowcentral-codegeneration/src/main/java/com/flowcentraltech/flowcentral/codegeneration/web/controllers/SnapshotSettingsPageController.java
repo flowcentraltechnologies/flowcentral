@@ -85,6 +85,5 @@ public class SnapshotSettingsPageController
         pageBean.setSnapshotSrc(snapshotSrc);
         pageBean.setBranch(branch);
         pageBean.setGenerateToRepo(generateToRepo);
-
     }
 }

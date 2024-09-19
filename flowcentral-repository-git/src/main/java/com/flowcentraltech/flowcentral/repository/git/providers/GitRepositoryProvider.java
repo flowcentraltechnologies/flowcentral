@@ -46,9 +46,76 @@ public class GitRepositoryProvider extends AbstractRepositoryProvider {
 
     @Override
     public void replaceFile(TaskMonitor taskMonitor, String repositoryUrl, String branch, String userName,
-            String password, String localPath, String targetPath, String fileName, byte[] file) throws UnifyException {
-        // TODO Auto-generated method stub
-        
+            String password, String localPath, String target, String fileName, byte[] file) throws UnifyException {
+        logDebug(taskMonitor, "Replacing file[{3}] in remote git repository [{0}] at branch [{1}] in target [{2}]...",
+                repositoryUrl, branch, target, fileName);
+
+        final String remote = "refs/heads/" + branch;
+        try {
+            UsernamePasswordCredentialsProvider credentials = new UsernamePasswordCredentialsProvider(userName,
+                    password);
+            Git git = null;
+            if (isRepoExistsInPath(localPath)) {
+                logDebug(taskMonitor, "Using existing local git repository...");
+                git = Git.open(new File(localPath));
+                
+                final String track = "refs/remotes/origin/" + branch;
+                git
+                 .fetch()
+                 .setRemote("origin")
+                 .setRefSpecs(remote + ":" + track)
+                 .setCredentialsProvider(credentials)
+                 .call();
+               
+                git
+                 .reset()
+                 .setMode(ResetType.HARD)
+                 .setRef(track)
+                 .call();
+            } else {
+                logDebug(taskMonitor, "Cloning git repository...");
+                IOUtils.deleteDirectory(localPath);
+                git = Git.cloneRepository()
+                        .setURI(repositoryUrl)
+                        .setDirectory(new File(localPath))
+                        .setBranch(branch)
+                        .setBranchesToClone(Arrays.asList(remote))
+                        .setCredentialsProvider(credentials)
+                        .call();
+            }
+
+            logDebug(taskMonitor, "Checking out branch [{0}]...", branch);
+            checkoutBranch(taskMonitor, git, branch);
+
+            final String targetPath = IOUtils.buildFilename(localPath, target);
+            logDebug(taskMonitor, "Writing file [{0}] to target [{1}]...", fileName, targetPath);
+            final String targetFileName = IOUtils.buildFilename(targetPath, fileName);
+            IOUtils.writeToFile(targetFileName, file);
+
+            logDebug(taskMonitor, "Committing changes...");
+            git
+             .add()
+             .addFilepattern(target)
+             .call();
+            
+            git
+             .commit()
+             .setMessage("File replaced in " + target)
+             .call();
+
+            logDebug(taskMonitor, "Pushing changes to remote repository...");
+            git
+             .push()
+             .setCredentialsProvider(credentials)
+             .call();
+            
+            git
+             .close();
+        } catch (Exception e) {
+            addTaskMessage(taskMonitor, "Exception: " + e.getMessage());
+            throwOperationErrorException(e);
+        }
+
     }
 
     @Override

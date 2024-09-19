@@ -16,6 +16,7 @@
 
 package com.flowcentraltech.flowcentral.studio.business.tasks;
 
+import com.flowcentraltech.flowcentral.studio.business.data.SnapshotResultDetails;
 import com.flowcentraltech.flowcentral.studio.constants.StudioSnapshotType;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
@@ -41,7 +42,10 @@ public class TakeSnapshotStudioTask extends AbstractStudioSchedulableTask {
     public void doExecute(TaskMonitor taskMonitor, TaskInput input) throws UnifyException {
         final String snapshotName = input.getParam(String.class, "snapshotName");
         final String message = input.getParam(String.class, "message");
-        studio().takeStudioSnapshotTask(taskMonitor, StudioSnapshotType.AUTOMATIC_SYSTEM, snapshotName, message);
+        SnapshotResultDetails resultDetails = new SnapshotResultDetails();
+        studio().takeStudioSnapshotTask(taskMonitor, StudioSnapshotType.AUTOMATIC_SYSTEM, snapshotName, message,
+                resultDetails);
+        // TODO Push to remote repository
     }
 
 }

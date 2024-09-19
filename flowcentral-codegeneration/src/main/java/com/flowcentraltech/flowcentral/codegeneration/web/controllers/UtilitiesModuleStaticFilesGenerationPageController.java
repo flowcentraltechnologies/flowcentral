@@ -105,7 +105,8 @@ public class UtilitiesModuleStaticFilesGenerationPageController
                 CodeGenerationModuleSysParamConstants.CODEGEN_TARGET_REPOSITORY);
         final String branch = systemModuleService.getSysParameterValue(String.class,
                 CodeGenerationModuleSysParamConstants.CODEGEN_TARGET_BRANCH);
-        TransferToRemote transferToRemote = new TransferToRemote(repositoryName, branch, workingPath,
+        TransferToRemote transferToRemote = new TransferToRemote( TransferToRemote.TransferType.REPLACE_DIRECTORY_WITH_ZIP,
+                repositoryName, branch, workingPath, codeGenerationItem.getFilename(),
                 codeGenerationItem.getData());
         TaskSetup taskSetup = TaskSetup.newBuilder(TransferToRemoteTaskConstants.TRANSFER_TO_REMOTE_TASK_NAME)
                 .setParam(TransferToRemoteTaskConstants.TRANSFER_ITEM, transferToRemote).logMessages().build();
