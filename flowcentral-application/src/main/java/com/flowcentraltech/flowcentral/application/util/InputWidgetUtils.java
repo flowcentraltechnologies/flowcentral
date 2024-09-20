@@ -513,7 +513,7 @@ public final class InputWidgetUtils {
                 }
             } else {
                 listCommand = FilterUtils.getFilterConditionTypeListCommand(
-                        _entityFieldDef.getDataType().dataType().javaClass(), listType);
+                        _entityFieldDef.getDataType().dataType().javaClass(), listType,_entityFieldDef.isEnumGroup());
             }
 
             return String.format("!ui-select list:%s extStyleClass:$s{tcread} blankOption:$m{blank.none}", listCommand);
