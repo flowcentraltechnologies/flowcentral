@@ -131,6 +131,15 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
             appCtx.setInWorkflow(isInWorkflow);
         }
 
+        // Page synchronization
+        if (formAppletDef != null) {
+            if ((viewMode.isInForm() || viewMode.isListingForm()) && inst != null) {
+                setClientListenToTopic(formAppletDef.getEntity(), String.valueOf(inst.getId()));
+            } else {
+                setClientListenToTopic(formAppletDef.getEntity());
+            }
+        }
+
         final boolean isContextEditable = appCtx.isContextEditable();
         boolean enableSaveAs = false;
         boolean enableUpdate = false;
@@ -257,7 +266,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
             if (form.getFormDef().isWithHelpSheet()) {
                 overview = application().getHelpSheetDef(form.getFormDef().getHelpSheet()).isWithHelpOverview();
             }
-            
+
             form.getCtx().setUpdateEnabled(enableUpdate);
             if (form.isWithAttachments()) {
                 form.getAttachments()

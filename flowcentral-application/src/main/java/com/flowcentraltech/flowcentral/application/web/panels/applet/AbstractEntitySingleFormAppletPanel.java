@@ -89,6 +89,15 @@ public abstract class AbstractEntitySingleFormAppletPanel extends AbstractApplet
 				&& WfItemVersionType.DRAFT.equals(((WorkEntity) inst).getWfItemVersionType());
 		appCtx.setInWorkflow(isInWorkflow);
 
+        // Page synchronization
+        if (_appletDef != null) {
+            if (viewMode.isInForm() && inst != null) {
+                setClientListenToTopic(_appletDef.getEntity(), String.valueOf(inst.getId()));
+            } else {
+                setClientListenToTopic(_appletDef.getEntity());
+            }
+        }
+
 		final boolean isContextEditable = appCtx.isContextEditable();
 		boolean enableUpdate = false;
 		boolean enableDelete = false;
