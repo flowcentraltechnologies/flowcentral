@@ -118,6 +118,11 @@ public abstract class BaseEntityWrapper implements EntityWrapper {
     }
 
     @Override
+    public boolean isPresent() {
+        return size() > 0;
+    }
+
+    @Override
     public int size() {
         return valueStore.size();
     }

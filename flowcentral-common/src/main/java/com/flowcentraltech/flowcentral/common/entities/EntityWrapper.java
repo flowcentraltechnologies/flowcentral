@@ -72,6 +72,13 @@ public interface EntityWrapper {
     void setDataIndex(int dataIndex);
 
     /**
+     * Checks if at least one record is present.
+     * 
+     * @return true is present otherwise false
+     */
+    boolean isPresent();
+
+    /**
      * Returns the storage size for this wrapper
      * 
      * @return the storage size
