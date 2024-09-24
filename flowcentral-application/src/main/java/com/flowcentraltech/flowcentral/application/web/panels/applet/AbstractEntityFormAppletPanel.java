@@ -70,6 +70,7 @@ import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.web.annotation.Action;
 import com.tcdng.unify.web.constant.ResultMappingConstants;
+import com.tcdng.unify.web.constant.TopicEventType;
 import com.tcdng.unify.web.ui.constant.MessageType;
 import com.tcdng.unify.web.ui.widget.Panel;
 import com.tcdng.unify.web.ui.widget.data.Hint.MODE;
@@ -757,6 +758,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
             EntityActionResult entityActionResult = getEntityFormApplet().saveNewInst();
             entityActionResult.setSuccessHint("$m{entityformapplet.new.success.hint}");
             handleEntityActionResult(entityActionResult, ctx);
+            triggerClientTopicEvent(TopicEventType.CREATE, ctx.getEntityLongName(), null);
         }
     }
 
@@ -767,6 +769,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
             EntityActionResult entityActionResult = getEntityFormApplet().saveNewInstAndNext();
             entityActionResult.setSuccessHint("$m{entityformapplet.new.success.hint}");
             handleEntityActionResult(entityActionResult, ctx);
+            triggerClientTopicEvent(TopicEventType.CREATE, ctx.getEntityLongName(), null);
         }
     }
 
@@ -777,6 +780,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
             EntityActionResult entityActionResult = getEntityFormApplet().saveNewInstAndClose();
             entityActionResult.setSuccessHint("$m{entityformapplet.new.success.hint}");
             handleEntityActionResult(entityActionResult, ctx);
+            triggerClientTopicEvent(TopicEventType.CREATE, ctx.getEntityLongName(), null);
         }
     }
 
@@ -829,6 +833,8 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                 EntityActionResult entityActionResult = applet.updateInst();
                 entityActionResult.setSuccessHint("$m{entityformapplet.update.success.hint}");
                 handleEntityActionResult(entityActionResult, ctx);
+                triggerClientTopicEvent(TopicEventType.UPDATE, ctx.getEntityLongName(),
+                        ((Entity) ctx.getInst()).getId());
             }
         }
     }
@@ -844,6 +850,8 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                 EntityActionResult entityActionResult = applet.updateInstAndClose();
                 entityActionResult.setSuccessHint("$m{entityformapplet.update.success.hint}");
                 handleEntityActionResult(entityActionResult, ctx);
+                triggerClientTopicEvent(TopicEventType.UPDATE, ctx.getEntityLongName(),
+                        ((Entity) ctx.getInst()).getId());
             }
         }
     }
@@ -877,6 +885,8 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                 }
 
                 handleEntityActionResult(entityActionResult, ctx);
+                triggerClientTopicEvent(TopicEventType.DELETE, ctx.getEntityLongName(),
+                        ((Entity) ctx.getInst()).getId());
             }
         }
     }
@@ -1059,7 +1069,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                     "$m{entityformapplet.formreview.failure}", commandPath);
         }
     }
-
+    
     private IndexedTarget getIndexedTarget() throws UnifyException {
         AbstractEntityFormApplet applet = getEntityFormApplet();
         return getRequestAttribute(boolean.class, IN_WORKFLOW_DRAFT_LOOP_FLAG)
