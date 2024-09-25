@@ -59,6 +59,13 @@ public class ManageEntityListAppletController
     }
 
     @Override
+    protected void onReloadPage() throws UnifyException {
+        super.onReloadPage();
+        ManageEntityListAppletPageBean pageBean = getPageBean();
+        pageBean.getApplet().reload();
+    }
+
+    @Override
     protected void onOpenPage() throws UnifyException {
         super.onOpenPage();
 
@@ -66,8 +73,8 @@ public class ManageEntityListAppletController
         if (pageBean.getApplet() == null) {
             AppletWidgetReferences appletWidgetReferences = getAppletWidgetReferences();
             EntityFormEventHandlers formEventHandlers = getEntityFormEventHandlers();
-            ManageEntityListApplet applet = new ManageEntityListApplet(getPage(), au(), getPathVariables(), appletWidgetReferences,
-                    formEventHandlers);
+            ManageEntityListApplet applet = new ManageEntityListApplet(getPage(), au(), getPathVariables(),
+                    appletWidgetReferences, formEventHandlers);
             pageBean.setApplet(applet);
             if (pageBean.getAltCaption() == null) {
                 setPageTitle(applet);

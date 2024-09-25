@@ -185,6 +185,10 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
             return MAINTAIN_FORM_SCROLL.equals(this);
         }
 
+        public boolean isSearch() {
+            return SEARCH.equals(this);
+        }
+
         public boolean isPrimary() {
             return NEW_PRIMARY_FORM.equals(this) || MAINTAIN_PRIMARY_FORM_NO_SCROLL.equals(this);
         }
@@ -279,6 +283,26 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
 
     public ViewMode getViewMode() {
         return viewMode;
+    }
+
+    @Override
+    public void reload() throws UnifyException {
+        super.reload();
+        if (viewMode.isSearch()) {
+            entitySearch.applySearchEntriesToSearch();
+        } else if (viewMode.isMaintainForm()) {
+            Entity _inst = reloadEntity((Entity) form.getFormBean(), false);
+            if (_inst != null) {
+                form.getCtx().clearValidationErrors();
+                updateForm(HeaderWithTabsForm.UpdateType.RELOAD, form, _inst);
+            }
+        } else if (viewMode.isListingForm()) {
+            Entity _inst = (Entity) listingForm.getFormBean();
+            _inst = reloadEntity(_inst, true);
+            listingForm = constructListingForm(_inst);
+        }
+        
+        // TODO Other modes?
     }
 
     @Override

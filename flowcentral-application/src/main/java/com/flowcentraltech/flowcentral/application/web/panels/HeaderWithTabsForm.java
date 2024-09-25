@@ -34,6 +34,7 @@ public class HeaderWithTabsForm extends AbstractForm {
         SWITCH_ON_CHANGE,
         MAINTAIN_INST,
         NAV_BACK_TO_PREVIOUS,
+        RELOAD,
         FORMACTION_ON_INST,
         UPDATE_INST;
 

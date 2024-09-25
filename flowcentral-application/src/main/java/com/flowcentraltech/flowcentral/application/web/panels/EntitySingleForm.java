@@ -35,7 +35,8 @@ public class EntitySingleForm extends AbstractForm {
         MAINTAIN_INST,
         NAV_BACK_TO_PREVIOUS,
         FORMACTION_ON_INST,
-        UPDATE_INST
+        UPDATE_INST,
+        RELOAD
     }
 
     private SingleForm singleForm;

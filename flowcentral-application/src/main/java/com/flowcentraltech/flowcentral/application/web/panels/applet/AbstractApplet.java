@@ -129,6 +129,10 @@ public abstract class AbstractApplet {
         return rootAppletDef;
     }
 
+    public void reload() throws UnifyException {
+        
+    }
+    
     public boolean isAuditingEnabled() {
         return ctx.isAuditingEnabled();
     }
