@@ -199,6 +199,7 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
         appConfig.setReportsConfig(ctx.getReportsConfig());
         appConfig.setWorkflowsConfig(ctx.getWorkflowsConfig());
         appConfig.setWorkflowWizardsConfig(ctx.getWorkflowWizardsConfig());
+        appConfig.setHelpSheetsConfig(ctx.getHelpSheetsConfig());
         appConfig.setWfChannelsConfig(ctx.getWfChannelsConfig());
 
         // Applets

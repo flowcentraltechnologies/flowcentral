@@ -195,6 +195,10 @@ public class ExtensionModuleStaticFileBuilderContext {
         return nextApplicationConfig.getWorkflowsConfig();
     }
 
+    public AppHelpSheetsConfig getHelpSheetsConfig() {
+        return nextApplicationConfig.getHelpSheetsConfig();
+    }
+    
     public AppWorkflowWizardsConfig getWorkflowWizardsConfig() {
         return nextApplicationConfig.getWorkflowWizardsConfig();
     }

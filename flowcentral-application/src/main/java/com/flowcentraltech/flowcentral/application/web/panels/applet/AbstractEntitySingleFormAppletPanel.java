@@ -49,6 +49,7 @@ import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.annotation.Action;
+import com.tcdng.unify.web.constant.TopicEventType;
 import com.tcdng.unify.web.ui.widget.Panel;
 import com.tcdng.unify.web.ui.widget.data.Popup;
 import com.tcdng.unify.web.ui.widget.data.Hint.MODE;
@@ -88,6 +89,15 @@ public abstract class AbstractEntitySingleFormAppletPanel extends AbstractApplet
 		final boolean isUpdateCopy = inst instanceof WorkEntity
 				&& WfItemVersionType.DRAFT.equals(((WorkEntity) inst).getWfItemVersionType());
 		appCtx.setInWorkflow(isInWorkflow);
+
+        // Page synchronization
+        if (_appletDef != null) {
+            if (viewMode.isInForm() && inst != null) {
+                setClientListenToTopic(_appletDef.getEntity(), String.valueOf(inst.getId()));
+            } else {
+                setClientListenToTopic(_appletDef.getEntity());
+            }
+        }
 
 		final boolean isContextEditable = appCtx.isContextEditable();
 		boolean enableUpdate = false;
@@ -343,6 +353,8 @@ public abstract class AbstractEntitySingleFormAppletPanel extends AbstractApplet
 			EntityActionResult entityActionResult = getEntityFormApplet().saveNewInst();
 			entityActionResult.setSuccessHint("$m{entityformapplet.new.success.hint}");
 			handleEntityActionResult(entityActionResult, ctx.getEntityName());
+            triggerClientTopicEvent(TopicEventType.CREATE, ctx.getEntityLongName(),
+                    null);
 		}
 	}
 
@@ -353,6 +365,8 @@ public abstract class AbstractEntitySingleFormAppletPanel extends AbstractApplet
 			EntityActionResult entityActionResult = getEntityFormApplet().saveNewInstAndNext();
 			entityActionResult.setSuccessHint("$m{entityformapplet.new.success.hint}");
 			handleEntityActionResult(entityActionResult, ctx.getEntityName());
+            triggerClientTopicEvent(TopicEventType.CREATE, ctx.getEntityLongName(),
+                    null);
 		}
 	}
 
@@ -363,6 +377,8 @@ public abstract class AbstractEntitySingleFormAppletPanel extends AbstractApplet
 			EntityActionResult entityActionResult = getEntityFormApplet().saveNewInstAndClose();
 			entityActionResult.setSuccessHint("$m{entityformapplet.new.success.hint}");
 			handleEntityActionResult(entityActionResult, ctx.getEntityName());
+            triggerClientTopicEvent(TopicEventType.CREATE, ctx.getEntityLongName(),
+                    null);
 		}
 	}
 
@@ -405,6 +421,8 @@ public abstract class AbstractEntitySingleFormAppletPanel extends AbstractApplet
 			EntityActionResult entityActionResult = getEntityFormApplet().updateInst();
 			entityActionResult.setSuccessHint("$m{entityformapplet.update.success.hint}");
 			handleEntityActionResult(entityActionResult, ctx.getEntityName());
+            triggerClientTopicEvent(TopicEventType.UPDATE, ctx.getEntityLongName(),
+                    ((Entity) ctx.getInst()).getId());
 		}
 	}
 
@@ -415,6 +433,8 @@ public abstract class AbstractEntitySingleFormAppletPanel extends AbstractApplet
 			EntityActionResult entityActionResult = getEntityFormApplet().updateInstAndClose();
 			entityActionResult.setSuccessHint("$m{entityformapplet.update.success.hint}");
 			handleEntityActionResult(entityActionResult, ctx.getEntityName());
+            triggerClientTopicEvent(TopicEventType.UPDATE, ctx.getEntityLongName(),
+                    ((Entity) ctx.getInst()).getId());
 		}
 	}
 
@@ -440,6 +460,8 @@ public abstract class AbstractEntitySingleFormAppletPanel extends AbstractApplet
 			EntityActionResult entityActionResult = getEntityFormApplet().deleteInst();
 			entityActionResult.setSuccessHint("$m{entityformapplet.delete.success.hint}");
 			handleEntityActionResult(entityActionResult, ctx.getEntityName());
+            triggerClientTopicEvent(TopicEventType.DELETE, ctx.getEntityLongName(),
+                    ((Entity) ctx.getInst()).getId());
 		}
 	}
 

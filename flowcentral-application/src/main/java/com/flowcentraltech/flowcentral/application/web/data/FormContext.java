@@ -362,6 +362,10 @@ public class FormContext extends AbstractContext {
         return formValueStore;
     }
 
+    public String getEntityLongName() {
+        return entityDef.getLongName();
+    }
+
     public String getEntityName() {
         return entityDef.getName();
     }
