@@ -40,6 +40,13 @@ public class ManageEntityListSingleFormAppletController extends
     }
 
     @Override
+    protected void onReloadPage() throws UnifyException {
+        super.onReloadPage();
+        ManageEntityListSingleFormAppletPageBean pageBean = getPageBean();
+        pageBean.getApplet().reload();
+    }
+
+    @Override
     protected void onOpenPage() throws UnifyException {
         super.onOpenPage();
         ManageEntityListSingleFormAppletPageBean pageBean = getPageBean();

@@ -29,8 +29,8 @@ import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.EntityItem;
 import com.flowcentraltech.flowcentral.application.util.DiffUtils;
-import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm.FormMode;
 import com.flowcentraltech.flowcentral.application.web.data.FormContext;
+import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm.FormMode;
 import com.flowcentraltech.flowcentral.application.web.panels.EntitySearch;
 import com.flowcentraltech.flowcentral.application.web.panels.EntitySingleForm;
 import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs.BreadCrumb;
@@ -102,6 +102,10 @@ public abstract class AbstractEntitySingleFormApplet extends AbstractApplet {
             return rootEntityModes.contains(this);
         }
 
+        public boolean isSearch() {
+            return SEARCH.equals(this);
+        }
+
         public boolean isPrimary() {
             return NEW_PRIMARY_FORM.equals(this) || MAINTAIN_PRIMARY_FORM_NO_SCROLL.equals(this);
         }
@@ -135,6 +139,22 @@ public abstract class AbstractEntitySingleFormApplet extends AbstractApplet {
         return singleFormAppletDef != null ? singleFormAppletDef : getRootAppletDef();
     }
 
+    @Override
+    public void reload() throws UnifyException {
+        super.reload();
+        if (viewMode.isSearch()) {
+            entitySearch.applySearchEntriesToSearch();
+        } else if (viewMode.isMaintainForm()) {
+            Entity _inst = reloadEntity((Entity) form.getFormBean());
+            if (_inst != null) {
+                form.getCtx().clearValidationErrors();
+                updateSingleForm(EntitySingleForm.UpdateType.RELOAD, form, _inst);
+            }
+        }
+        
+        // TODO Other modes?
+    }
+    
     public boolean navBackToPrevious() throws UnifyException {
         navBackToSearch();
         return true;
