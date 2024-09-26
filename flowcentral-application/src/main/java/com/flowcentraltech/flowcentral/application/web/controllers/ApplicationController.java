@@ -191,11 +191,14 @@ public class ApplicationController extends AbstractApplicationForwarderControlle
                 ApplicationModuleSysParamConstants.ENABLE_HIGH_LATENCY_INDICATION);
         final boolean showWorkItemsOnLogin = system().getSysParameterValue(boolean.class,
                 ApplicationModuleSysParamConstants.SHOW_WORK_ITEMS_ON_LOGIN);
+        final boolean clientUpdateSync =  system().getSysParameterValue(boolean.class,
+                ApplicationModuleSysParamConstants.GLOBAL_CLIENT_UPDATE_SYNCHRONIZATION);
         final String contentStyleClass = enableMultipleTabs ? "fc-content-tabbed" : "fc-content";
         pageBean.setEnableStickyPaths(enableStickyPaths);
         pageBean.setEnableMultipleTabs(enableMultipleTabs);
         pageBean.setIndicateHighLatency(indicateHighLatency);
         pageBean.setContentStyleClass(contentStyleClass);
+        pageBean.setClientPushSync(clientUpdateSync);
 
         UserToken userToken = getUserToken();
         final int workitemCategoryParticipationCount = userToken != null? application()
@@ -228,12 +231,6 @@ public class ApplicationController extends AbstractApplicationForwarderControlle
         }
         pageBean.setHeaderTitle(headerTitle);
         setPageWidgetVisible("topTitle", !StringUtils.isBlank(headerTitle));
-    }
-
-    @Override
-    protected void onOpenPage() throws UnifyException {
-        super.onOpenPage();
-
     }
 
     private void setSessionWorkspace() throws UnifyException {

@@ -16,12 +16,15 @@
 
 package com.flowcentraltech.flowcentral.application.web.controllers;
 
+import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.constants.AppletSessionAttributeConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModulePathConstants;
+import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationResultMappingConstants;
 import com.flowcentraltech.flowcentral.application.data.SessionOpenTabInfo;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
+import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.Singleton;
 import com.tcdng.unify.core.annotation.UplBinding;
 import com.tcdng.unify.web.annotation.Action;
@@ -59,6 +62,9 @@ import com.tcdng.unify.web.ui.widget.ContentPanel;
                 response = { "!hidepopupresponse", "!refreshpanelresponse panels:$l{content}" }) })
 public class ApplicationBrowserWindowController extends AbstractPageController<ApplicationBrowserWindowPageBean> {
 
+    @Configurable
+    private AppletUtilities appletUtilities;
+    
     public ApplicationBrowserWindowController() {
         super(ApplicationBrowserWindowPageBean.class, Secured.TRUE, ReadOnly.FALSE, ResetOnWrite.FALSE);
     }
@@ -72,6 +78,10 @@ public class ApplicationBrowserWindowController extends AbstractPageController<A
     @Override
     protected void onIndexPage() throws UnifyException {
         ApplicationBrowserWindowPageBean pageBean = getPageBean();
+        final boolean clientUpdateSync = appletUtilities.system().getSysParameterValue(boolean.class,
+                ApplicationModuleSysParamConstants.GLOBAL_CLIENT_UPDATE_SYNCHRONIZATION);
+        pageBean.setClientPushSync(clientUpdateSync);
+
         final SessionOpenTabInfo sessionOpenTabInfo = (SessionOpenTabInfo) removeSessionAttribute(
                 AppletSessionAttributeConstants.OPEN_TAB_INFO);
         if (sessionOpenTabInfo != null) {
@@ -79,7 +89,7 @@ public class ApplicationBrowserWindowController extends AbstractPageController<A
             pageBean.setWindowTitle(sessionOpenTabInfo.getTitle());
             pageBean.setDocumentPath(sessionOpenTabInfo.getDocumentPath());
             pageBean.setContentPaths(new String[] { sessionOpenTabInfo.getContentPath() });
-            
+
             ContentPanel contentPanel = getPageWidgetByShortName(ContentPanel.class, "content");
             contentPanel.clearPages();
         }

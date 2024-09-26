@@ -19,6 +19,7 @@
 	script:$s{web/js/fabric.min.js}
 	script:$s{web/js/flowcentral-studio-web.js}
 	styleSheet:$t{css/flowcentral-studio.css}
+    pushUpdateBinding:clientPushSync
 	
 // Header    
 !ui-panel:topBanner styleClass:$e{fc-topbanner}
