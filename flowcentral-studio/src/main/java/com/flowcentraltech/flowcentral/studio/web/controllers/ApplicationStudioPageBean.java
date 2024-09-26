@@ -33,6 +33,8 @@ public class ApplicationStudioPageBean extends AbstractPageBean {
     private Long currentApplicationId;
 
     private CreateAppForm createAppForm;
+
+    private boolean clientPushSync;
     
     public LoginUserPhotoGenerator getUserPhotoGenerator() {
         return userPhotoGenerator;
@@ -48,6 +50,14 @@ public class ApplicationStudioPageBean extends AbstractPageBean {
 
     public void setCurrentApplicationId(Long currentApplicationId) {
         this.currentApplicationId = currentApplicationId;
+    }
+
+    public boolean isClientPushSync() {
+        return clientPushSync;
+    }
+
+    public void setClientPushSync(boolean clientPushSync) {
+        this.clientPushSync = clientPushSync;
     }
 
     public CreateAppForm getCreateAppForm() {

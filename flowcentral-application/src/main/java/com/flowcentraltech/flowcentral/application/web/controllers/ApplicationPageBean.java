@@ -41,7 +41,9 @@ public class ApplicationPageBean extends AbstractForwarderPageBean {
     private boolean enableMultipleTabs;
     
     private boolean indicateHighLatency;
-    
+
+    private boolean clientPushSync;
+   
     public LoginUserPhotoGenerator getUserPhotoGenerator() {
         return userPhotoGenerator;
     }
@@ -104,6 +106,14 @@ public class ApplicationPageBean extends AbstractForwarderPageBean {
 
     public void setIndicateHighLatency(boolean indicateHighLatency) {
         this.indicateHighLatency = indicateHighLatency;
+    }
+
+    public boolean isClientPushSync() {
+        return clientPushSync;
+    }
+
+    public void setClientPushSync(boolean clientPushSync) {
+        this.clientPushSync = clientPushSync;
     }
 
 }

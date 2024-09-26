@@ -104,4 +104,6 @@ public interface ApplicationModuleSysParamConstants {
     String MULTI_ERROR_MESSAGES_ENABLED = "APP-0028";
     
     String HIDE_ERROR_MESSAGES_ON_INPUT = "APP-0029";
+    
+    String GLOBAL_CLIENT_UPDATE_SYNCHRONIZATION = "APP-002A";
 }

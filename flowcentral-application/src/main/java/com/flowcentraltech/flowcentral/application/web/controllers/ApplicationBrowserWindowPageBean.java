@@ -32,6 +32,8 @@ public class ApplicationBrowserWindowPageBean extends AbstractPageBean {
 
     private String[] contentPaths;
 
+    private boolean clientPushSync;
+
     public String getWindowTitle() {
         return windowTitle;
     }
@@ -54,5 +56,13 @@ public class ApplicationBrowserWindowPageBean extends AbstractPageBean {
 
     public void setContentPaths(String[] contentPaths) {
         this.contentPaths = contentPaths;
+    }
+
+    public boolean isClientPushSync() {
+        return clientPushSync;
+    }
+
+    public void setClientPushSync(boolean clientPushSync) {
+        this.clientPushSync = clientPushSync;
     }
 }

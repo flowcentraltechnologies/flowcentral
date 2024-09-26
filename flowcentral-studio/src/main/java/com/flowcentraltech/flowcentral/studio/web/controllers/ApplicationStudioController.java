@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.studio.web.controllers;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleAuditConstants;
+import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationResultMappingConstants;
 import com.flowcentraltech.flowcentral.application.entities.Application;
 import com.flowcentraltech.flowcentral.system.entities.Module;
@@ -203,6 +204,10 @@ public class ApplicationStudioController extends AbstractFlowCentralPageControll
             ContentPanel contentPanel = getPageWidgetByShortName(ContentPanel.class, "content");
             contentPanel.clearPages();
         }
+
+        final boolean clientUpdateSync = appletUtilities.system().getSysParameterValue(boolean.class,
+                ApplicationModuleSysParamConstants.GLOBAL_CLIENT_UPDATE_SYNCHRONIZATION);
+        pageBean.setClientPushSync(clientUpdateSync);
     }
 
     private void setApplicationSessionAttributes(Application application) throws UnifyException {
