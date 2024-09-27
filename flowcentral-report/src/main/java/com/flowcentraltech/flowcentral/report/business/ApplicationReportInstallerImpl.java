@@ -155,6 +155,8 @@ public class ApplicationReportInstallerImpl extends AbstractApplicationArtifactI
                 String title = reportConfig.getTitle();
                 if (title == null) {
                     title = description;
+                } else {
+                    title = resolveApplicationMessage(title);
                 }
 
                 ReportConfiguration oldReportConfiguration = environment().findLean(
@@ -279,6 +281,8 @@ public class ApplicationReportInstallerImpl extends AbstractApplicationArtifactI
                 String title = reportConfig.getTitle();
                 if (title == null) {
                     title = description;
+                } else {
+                    title = resolveApplicationMessage(title);
                 }
 
                 String reportable = ApplicationNameUtils.ensureLongNameReference(applicationName,
