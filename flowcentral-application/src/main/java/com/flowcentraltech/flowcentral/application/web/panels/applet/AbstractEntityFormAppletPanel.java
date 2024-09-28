@@ -25,6 +25,7 @@ import com.flowcentraltech.flowcentral.application.constants.ApplicationResultMa
 import com.flowcentraltech.flowcentral.application.constants.WorkflowDraftType;
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.data.Diff;
+import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.FormActionDef;
 import com.flowcentraltech.flowcentral.application.data.FormDef;
@@ -48,7 +49,6 @@ import com.flowcentraltech.flowcentral.application.web.panels.HelpFormInfo;
 import com.flowcentraltech.flowcentral.application.web.widgets.TabSheet;
 import com.flowcentraltech.flowcentral.application.web.widgets.TabSheet.TabSheetItem;
 import com.flowcentraltech.flowcentral.application.web.widgets.TabSheetWidget;
-import com.flowcentraltech.flowcentral.common.business.ApplicationPrivilegeManager;
 import com.flowcentraltech.flowcentral.common.business.FileAttachmentProvider;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
 import com.flowcentraltech.flowcentral.common.business.policies.FormValidationContext;
@@ -70,7 +70,6 @@ import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.web.annotation.Action;
 import com.tcdng.unify.web.constant.ResultMappingConstants;
-import com.tcdng.unify.web.constant.TopicEventType;
 import com.tcdng.unify.web.ui.constant.MessageType;
 import com.tcdng.unify.web.ui.widget.Panel;
 import com.tcdng.unify.web.ui.widget.data.Hint.MODE;
@@ -89,9 +88,6 @@ import com.tcdng.unify.web.ui.widget.data.Popup;
 public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel {
 
     private static final String IN_WORKFLOW_DRAFT_LOOP_FLAG = "IN_WORKFLOW_DRAFT_LOOP_FLAG";
-
-    @Configurable
-    protected ApplicationPrivilegeManager applicationPrivilegeManager;
 
     @Configurable
     private FileAttachmentProvider fileAttachmentProvider;
@@ -134,10 +130,11 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
 
         // Page synchronization
         if (formAppletDef != null) {
+            EntityClassDef entityClassDef = application().getAppletEntityClassDef(formAppletDef.getLongName());
             if ((viewMode.isInForm() || viewMode.isListingForm()) && inst != null) {
-                setClientListenToTopic(formAppletDef.getEntity(), String.valueOf(inst.getId()));
+                setClientListenToEntity((Class<? extends Entity>) entityClassDef.getEntityClass(), inst.getId());
             } else {
-                setClientListenToTopic(formAppletDef.getEntity());
+                setClientListenToEntity((Class<? extends Entity>) entityClassDef.getEntityClass());
             }
         }
 
@@ -153,7 +150,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         if (viewMode.isCreateForm()) {
             EntityDef formEntityDef = form.getFormDef().getEntityDef();
             enableCreate = isContextEditable
-                    && applicationPrivilegeManager.isRoleWithPrivilege(roleCode, formEntityDef.getAddPrivilege());
+                    && applicationPrivilegeManager().isRoleWithPrivilege(roleCode, formEntityDef.getAddPrivilege());
             enableCreateSubmit = !isWorkflowCopyForm && isRootForm && applet
                     .formBeanMatchAppletPropertyCondition(AppletPropertyConstants.CREATE_FORM_SUBMIT_CONDITION);
         } else if (viewMode.isMaintainForm()) {
@@ -163,12 +160,12 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                 capture = _appletDef.getPropValue(boolean.class, AppletPropertyConstants.MAINTAIN_FORM_CAPTURE, false);
                 enableUpdate = isContextEditable
                         && _appletDef.getPropValue(boolean.class, AppletPropertyConstants.MAINTAIN_FORM_UPDATE, false)
-                        && applicationPrivilegeManager.isRoleWithPrivilege(roleCode, _entityDef.getEditPrivilege())
+                        && applicationPrivilegeManager().isRoleWithPrivilege(roleCode, _entityDef.getEditPrivilege())
                         && applet.formBeanMatchAppletPropertyCondition(
                                 AppletPropertyConstants.MAINTAIN_FORM_UPDATE_CONDITION);
                 enableDelete = !isInWorkflow && isContextEditable
                         && _appletDef.getPropValue(boolean.class, AppletPropertyConstants.MAINTAIN_FORM_DELETE, false)
-                        && applicationPrivilegeManager.isRoleWithPrivilege(roleCode, _entityDef.getDeletePrivilege())
+                        && applicationPrivilegeManager().isRoleWithPrivilege(roleCode, _entityDef.getDeletePrivilege())
                         && applet.formBeanMatchAppletPropertyCondition(
                                 AppletPropertyConstants.MAINTAIN_FORM_DELETE_CONDITION);
                 enableUpdateSubmit = !isWorkflowCopyForm && !isInWorkflow && applet
@@ -180,19 +177,19 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                             false);
                     enableSaveAs = formAppletDef.getPropValue(boolean.class,
                             AppletPropertyConstants.MAINTAIN_FORM_SAVEAS, false)
-                            && applicationPrivilegeManager.isRoleWithPrivilege(roleCode,
+                            && applicationPrivilegeManager().isRoleWithPrivilege(roleCode,
                                     formEntityDef.getAddPrivilege());
                     enableUpdate = isContextEditable
                             && formAppletDef.getPropValue(boolean.class, AppletPropertyConstants.MAINTAIN_FORM_UPDATE,
                                     false)
-                            && applicationPrivilegeManager.isRoleWithPrivilege(roleCode,
+                            && applicationPrivilegeManager().isRoleWithPrivilege(roleCode,
                                     formEntityDef.getEditPrivilege())
                             && applet.formBeanMatchAppletPropertyCondition(
                                     AppletPropertyConstants.MAINTAIN_FORM_UPDATE_CONDITION);
                     enableDelete = !isInWorkflow && isContextEditable
                             && formAppletDef.getPropValue(boolean.class, AppletPropertyConstants.MAINTAIN_FORM_DELETE,
                                     false)
-                            && applicationPrivilegeManager.isRoleWithPrivilege(roleCode,
+                            && applicationPrivilegeManager().isRoleWithPrivilege(roleCode,
                                     formEntityDef.getDeletePrivilege())
                             && applet.formBeanMatchAppletPropertyCondition(
                                     AppletPropertyConstants.MAINTAIN_FORM_DELETE_CONDITION);
@@ -205,12 +202,12 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                             && applet.formBeanMatchAppletPropertyCondition(
                                     AppletPropertyConstants.MAINTAIN_FORM_SUBMIT_CONDITION);
                     if (enableAttachment) {
-                        applet.setFileAttachmentsDisabled(!applicationPrivilegeManager.isRoleWithPrivilege(roleCode,
+                        applet.setFileAttachmentsDisabled(!applicationPrivilegeManager().isRoleWithPrivilege(roleCode,
                                 formEntityDef.getAttachPrivilege()));
                     }
                 } else {
                     enableUpdate = isContextEditable
-                            && applicationPrivilegeManager.isRoleWithPrivilege(roleCode,
+                            && applicationPrivilegeManager().isRoleWithPrivilege(roleCode,
                                     formEntityDef.getEditPrivilege())
                             && applet.formBeanMatchAppletPropertyCondition(
                                     AppletPropertyConstants.MAINTAIN_FORM_UPDATE_CONDITION);
@@ -758,7 +755,6 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
             EntityActionResult entityActionResult = getEntityFormApplet().saveNewInst();
             entityActionResult.setSuccessHint("$m{entityformapplet.new.success.hint}");
             handleEntityActionResult(entityActionResult, ctx);
-            triggerClientTopicEvent(TopicEventType.CREATE, ctx.getEntityLongName(), null);
         }
     }
 
@@ -769,7 +765,6 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
             EntityActionResult entityActionResult = getEntityFormApplet().saveNewInstAndNext();
             entityActionResult.setSuccessHint("$m{entityformapplet.new.success.hint}");
             handleEntityActionResult(entityActionResult, ctx);
-            triggerClientTopicEvent(TopicEventType.CREATE, ctx.getEntityLongName(), null);
         }
     }
 
@@ -780,7 +775,6 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
             EntityActionResult entityActionResult = getEntityFormApplet().saveNewInstAndClose();
             entityActionResult.setSuccessHint("$m{entityformapplet.new.success.hint}");
             handleEntityActionResult(entityActionResult, ctx);
-            triggerClientTopicEvent(TopicEventType.CREATE, ctx.getEntityLongName(), null);
         }
     }
 
@@ -833,8 +827,6 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                 EntityActionResult entityActionResult = applet.updateInst();
                 entityActionResult.setSuccessHint("$m{entityformapplet.update.success.hint}");
                 handleEntityActionResult(entityActionResult, ctx);
-                triggerClientTopicEvent(TopicEventType.UPDATE, ctx.getEntityLongName(),
-                        ((Entity) ctx.getInst()).getId());
             }
         }
     }
@@ -850,8 +842,6 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                 EntityActionResult entityActionResult = applet.updateInstAndClose();
                 entityActionResult.setSuccessHint("$m{entityformapplet.update.success.hint}");
                 handleEntityActionResult(entityActionResult, ctx);
-                triggerClientTopicEvent(TopicEventType.UPDATE, ctx.getEntityLongName(),
-                        ((Entity) ctx.getInst()).getId());
             }
         }
     }
@@ -885,8 +875,6 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                 }
 
                 handleEntityActionResult(entityActionResult, ctx);
-                triggerClientTopicEvent(TopicEventType.DELETE, ctx.getEntityLongName(),
-                        ((Entity) ctx.getInst()).getId());
             }
         }
     }
