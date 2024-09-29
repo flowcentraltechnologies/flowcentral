@@ -28,6 +28,7 @@ import com.tcdng.unify.web.annotation.ResultMappings;
 import com.tcdng.unify.web.constant.ReadOnly;
 import com.tcdng.unify.web.constant.ResetOnWrite;
 import com.tcdng.unify.web.constant.Secured;
+import com.tcdng.unify.web.ui.widget.data.Hint.MODE;
 
 /**
  * Manage entity list applet controller.
@@ -63,6 +64,7 @@ public class ManageEntityListAppletController
         super.onReloadPage();
         ManageEntityListAppletPageBean pageBean = getPageBean();
         pageBean.getApplet().reload();
+        hintUser(MODE.WARNING, "$m{application.client.synchronization}");
     }
 
     @Override
