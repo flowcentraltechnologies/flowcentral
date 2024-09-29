@@ -27,8 +27,8 @@ import com.flowcentraltech.flowcentral.application.data.RequestOpenTabInfo;
 import com.flowcentraltech.flowcentral.application.data.WorkflowDraftInfo;
 import com.flowcentraltech.flowcentral.application.web.data.FormContext;
 import com.flowcentraltech.flowcentral.application.web.panels.AbstractApplicationSwitchPanel;
-import com.flowcentraltech.flowcentral.application.web.panels.EntitySelect;
 import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm.FormMode;
+import com.flowcentraltech.flowcentral.application.web.panels.EntitySelect;
 import com.flowcentraltech.flowcentral.application.web.widgets.EntityTable;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
 import com.flowcentraltech.flowcentral.common.business.policies.TableActionResult;
@@ -45,13 +45,12 @@ import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.constant.ResultMappingConstants;
-import com.tcdng.unify.web.constant.TopicEventType;
 import com.tcdng.unify.web.ui.widget.Panel;
+import com.tcdng.unify.web.ui.widget.data.Hint.MODE;
 import com.tcdng.unify.web.ui.widget.data.MessageBoxCaptions;
 import com.tcdng.unify.web.ui.widget.data.MessageIcon;
 import com.tcdng.unify.web.ui.widget.data.MessageMode;
 import com.tcdng.unify.web.ui.widget.data.Popup;
-import com.tcdng.unify.web.ui.widget.data.Hint.MODE;
 
 /**
  * Convenient abstract base panel for applet panels.
@@ -93,14 +92,6 @@ public abstract class AbstractAppletPanel extends AbstractApplicationSwitchPanel
 	protected AbstractApplet getApplet() throws UnifyException {
 		return getValue(AbstractApplet.class);
 	}
-
-    protected void triggerClientTopicEvent(TopicEventType type, String topic, Object instId) throws UnifyException {
-        if (instId == null) {
-            addClientTopicEvent(type, topic);
-        } else {
-            addClientTopicEvent(type, topic, String.valueOf(instId));
-        }
-    }
 
 	protected void prepareGenerateReport(EntityTable entityTable) throws UnifyException {
 		final int maxReportRows = getContainerSetting(int.class,

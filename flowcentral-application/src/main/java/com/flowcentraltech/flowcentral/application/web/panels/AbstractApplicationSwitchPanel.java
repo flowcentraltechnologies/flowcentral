@@ -17,6 +17,7 @@ package com.flowcentraltech.flowcentral.application.web.panels;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
+import com.flowcentraltech.flowcentral.common.business.ApplicationPrivilegeManager;
 import com.flowcentraltech.flowcentral.common.business.CollaborationProvider;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralResultMappingConstants;
@@ -58,6 +59,10 @@ public abstract class AbstractApplicationSwitchPanel extends SwitchPanel {
     protected final CollaborationProvider collaborationProvider() {
         return appletUtilities.collaborationProvider();
     }   
+    
+    protected final ApplicationPrivilegeManager applicationPrivilegeManager() {
+        return appletUtilities.applicationPrivilegeManager();
+    }
     
     protected final AppletUtilities au() {
         return appletUtilities;

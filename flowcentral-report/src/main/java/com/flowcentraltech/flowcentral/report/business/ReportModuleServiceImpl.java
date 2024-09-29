@@ -225,8 +225,8 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService
         List<Long> reportConfigurationIdList = environment().valueList(Long.class, "reportConfigurationId",
                 new ReportGroupMemberQuery().reportGroupId(reportGroupId));
         if (!DataUtils.isBlank(reportConfigurationIdList)) {
-            return environment()
-                    .listAll(new ReportConfigurationQuery().idIn(reportConfigurationIdList).addOrder("description"));
+            return environment().listAll(new ReportConfigurationQuery().isNotDeprecated()
+                    .idIn(reportConfigurationIdList).addOrder("description"));
         }
 
         return Collections.emptyList();
