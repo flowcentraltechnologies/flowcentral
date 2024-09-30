@@ -61,7 +61,7 @@
 		<entity name="chart" description="$m{chart.chart}"
 			label="$m{chart.chart.label}"
 			type="com.flowcentraltech.flowcentral.chart.entities.Chart"
-			auditable="true" reportable="true">
+			auditable="true" reportable="true" changeEvents = "true">
 			<field name="type" label="$m{chart.chart.type}" type="enum_ref"
 				references="charttypelist" inputWidget="application.enumlist" />
 			<field name="paletteType" label="$m{chart.chart.palettetype}"
@@ -120,7 +120,7 @@
 		<entity name="chartDataSource"
 			description="$m{chart.chartdatasource}" label="$m{chart.chart.label}"
 			type="com.flowcentraltech.flowcentral.chart.entities.ChartDataSource"
-			auditable="true" reportable="true">
+			auditable="true" reportable="true" changeEvents = "true">
 			<field name="type" label="$m{chart.chartdatasource.type}"
 				type="enum_ref" references="chartdatasourcetypelist"
 				inputWidget="application.enumlist" />

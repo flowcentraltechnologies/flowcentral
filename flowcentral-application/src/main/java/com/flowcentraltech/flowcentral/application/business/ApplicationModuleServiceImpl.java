@@ -877,9 +877,10 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
                 @Override
                 protected EntityDef create(String entityClass, Object... arg1) throws Exception {
-                    AppEntity appEntity = environment().find(new AppEntityQuery().entityClass(entityClass));
-                    return getEntityDef(ApplicationNameUtils
-                            .getApplicationEntityLongName(appEntity.getApplicationName(), appEntity.getName()));
+                    AppEntity appEntity = environment()
+                            .list(new AppEntityQuery().entityClass(entityClass).addSelect("applicationName", "name"));
+                    return appEntity != null ? getEntityDef(ApplicationNameUtils
+                            .getApplicationEntityLongName(appEntity.getApplicationName(), appEntity.getName())) : null;
                 }
 
             };
@@ -1508,7 +1509,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     @Override
     public boolean isSupportsEntityChangeEvent(Class<? extends Entity> entityClass) throws UnifyException {
         EntityDef entityDef = getEntityDefByClass(entityClass.getName());
-        return entityDef.isSupportsChangeEvents();
+        return entityDef != null ? entityDef.isSupportsChangeEvents() : false;
     }
 
     private static final Class<?>[] WRAPPER_PARAMS_0 = { EntityClassDef.class };
@@ -4793,7 +4794,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appEntity.setDataSourceName(appEntityConfig.getDataSourceName());
                     appEntity.setMapped(appEntityConfig.getMapped());
                     appEntity.setSupportsChangeEvents(appEntityConfig.isSupportsChangeEvents());
-                    appEntity.setAuditable(appEntityConfig.getAuditable());               
+                    appEntity.setAuditable(appEntityConfig.getAuditable());
                     appEntity.setReportable(appEntityConfig.getReportable());
                     appEntity.setActionPolicy(appEntityConfig.getActionPolicy());
                     appEntity.setDeprecated(false);

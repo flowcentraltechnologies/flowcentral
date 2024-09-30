@@ -328,7 +328,7 @@
 		<entity name="branch" description="$m{organization.branch}"
 			label="$m{organization.branch.label}"
 			type="com.flowcentraltech.flowcentral.organization.entities.Branch"
-			auditable="true" reportable="true">
+			auditable="true" reportable="true" changeEvents = "true">
 			<field name="zoneId" label="$m{organization.branch.zoneid}"
 				type="ref" inputLabel="$m{organization.branch.zone}"
 				inputWidget="application.entitylist" references="zoneRef"
@@ -405,7 +405,7 @@
 			label="$m{organization.mappedbranch.label}"
 			type="com.flowcentraltech.flowcentral.organization.entities.MappedBranch"
 			delegate="mappedentity-environmentdelegate" table="FC_MAPPEDBRANCH"
-			mapped="true" auditable="true" reportable="true">
+			mapped="true" auditable="true" reportable="true" changeEvents = "true">
 			<field name="zoneId"
 				label="$m{organization.mappedbranch.zoneid}" type="long" />
 			<field name="tenantId"
@@ -445,7 +445,7 @@
 			description="$m{organization.department}"
 			label="$m{organization.department.label}"
 			type="com.flowcentraltech.flowcentral.organization.entities.Department"
-			auditable="true" reportable="true">
+			auditable="true" reportable="true" changeEvents = "true">
 			<field name="code" label="$m{organization.department.code}"
 				type="string" inputWidget="application.name" maxLen="16"
 				basicSearch="true" auditable="true"/>
@@ -464,7 +464,7 @@
 			type="com.flowcentraltech.flowcentral.organization.entities.MappedDepartment"
 			delegate="mappedentity-environmentdelegate"
 			table="FC_MAPPEDDEPARTMENT" mapped="true" auditable="true"
-			reportable="true">
+			reportable="true" changeEvents = "true">
 			<field name="code"
 				label="$m{organization.mappeddepartment.code}" type="string"
 				inputWidget="application.name" maxLen="16" basicSearch="true" />
@@ -539,7 +539,7 @@
 		<entity name="role" description="$m{organization.role}"
 			label="$m{organization.role.label}"
 			type="com.flowcentraltech.flowcentral.organization.entities.Role"
-			auditable="true" reportable="true">
+			auditable="true" reportable="true" changeEvents = "true">
 			<field name="departmentId"
 				label="$m{organization.role.departmentid}" type="mapped"
 				inputLabel="$m{organization.role.department}"
@@ -683,7 +683,7 @@
 		<entity name="zone" description="$m{organization.zone}"
 			label="$m{organization.zone.label}"
 			type="com.flowcentraltech.flowcentral.organization.entities.Zone"
-			auditable="true" reportable="true">
+			auditable="true" reportable="true" changeEvents = "true">
 			<field name="code" label="$m{organization.zone.code}"
 				type="string" inputWidget="application.name" maxLen="16"
 				basicSearch="true" auditable="true"/>
@@ -713,7 +713,7 @@
 		<entity name="country" description="$m{organization.country}"
 			label="$m{organization.country.label}"
 			type="com.flowcentraltech.flowcentral.organization.entities.Country"
-			auditable="true" reportable="true">
+			auditable="true" reportable="true" changeEvents = "true">
 			<field name="iso3Code" label="$m{organization.country.code}"
 				type="string" inputWidget="application.name" maxLen="16"
 				basicSearch="true" auditable="true"/>
@@ -737,7 +737,7 @@
 		<entity name="state" description="$m{organization.state}"
 			label="$m{organization.state.label}"
 			type="com.flowcentraltech.flowcentral.organization.entities.State"
-			auditable="true" reportable="true">
+			auditable="true" reportable="true" changeEvents = "true">
 			<field name="countryId" label="$m{organization.state.countryid}"
 				type="ref" inputLabel="$m{organization.state.country}"
 				inputWidget="application.entitylist" references="countryRef"
@@ -772,7 +772,7 @@
 		<entity name="hub" description="$m{organization.hub}"
 			label="$m{organization.hub.label}"
 			type="com.flowcentraltech.flowcentral.organization.entities.Hub"
-			auditable="true" reportable="true">
+			auditable="true" reportable="true" changeEvents = "true">
 			<field name="name" label="$m{organization.hub.name}"
 				type="string" inputWidget="application.name" maxLen="32"
 				basicSearch="true" auditable="true"/>

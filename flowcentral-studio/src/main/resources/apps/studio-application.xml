@@ -2704,14 +2704,16 @@
 						column="1" switchOnChange="true" />
 					<field name="dataSourceName" inputWidget="application.text"
 						column="1" required="true" visible="false" />
-					<field name="supportsChangeEvents" inputWidget="application.checkbox"
-						column="1" />
+				</section>
+				<section name="optionDetails" columns="type_1_2">
 					<field name="auditable" inputWidget="application.checkbox"
 						column="1" />
 					<field name="reportable" inputWidget="application.checkbox"
 						column="1" />
+					<field name="supportsChangeEvents" inputWidget="application.checkbox"
+						column="2" />
 					<field name="actionPolicy" inputWidget="application.checkbox"
-						column="1" disabled="true" />
+						column="2" disabled="true" />
 				</section>
 			</tab>
 			<tab name="fields" label="$m{studio.appentity.form.fields}"

@@ -113,7 +113,7 @@
 			description="$m{audit.entityauditconfig}"
 			label="$m{audit.entityauditconfig.label}"
 			type="com.flowcentraltech.flowcentral.audit.entities.EntityAuditConfig"
-			reportable="true">
+			reportable="true" changeEvents = "true">
 			<field name="sourceType"
 				label="$m{audit.entityauditconfig.sourcetype}" type="enum_ref"
 				references="auditsourcetypelist" inputWidget="application.enumlist" />

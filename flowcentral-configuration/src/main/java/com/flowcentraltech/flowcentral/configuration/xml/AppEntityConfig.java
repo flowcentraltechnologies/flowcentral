@@ -58,7 +58,7 @@ public class AppEntityConfig extends BaseNameConfig {
     @JacksonXmlProperty(isAttribute = true)
     private Boolean mapped;
 
-    @JacksonXmlProperty(isAttribute = true)
+    @JacksonXmlProperty(isAttribute = true, localName = "changeEvents")
     private boolean supportsChangeEvents;
     
     @JacksonXmlProperty(isAttribute = true)
