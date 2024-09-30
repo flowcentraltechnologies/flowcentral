@@ -2704,6 +2704,8 @@
 						column="1" switchOnChange="true" />
 					<field name="dataSourceName" inputWidget="application.text"
 						column="1" required="true" visible="false" />
+					<field name="supportsChangeEvents" inputWidget="application.checkbox"
+						column="1" />
 					<field name="auditable" inputWidget="application.checkbox"
 						column="1" />
 					<field name="reportable" inputWidget="application.checkbox"

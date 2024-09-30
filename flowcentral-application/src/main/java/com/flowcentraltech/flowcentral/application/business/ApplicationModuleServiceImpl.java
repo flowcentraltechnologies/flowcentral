@@ -638,7 +638,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                         EntityDef.Builder edb = EntityDef.newBuilder(ConfigType.STATIC,
                                 PropertyListItem.class.getName(),
                                 getApplicationMessage("application.propertyitem.label"), null, null, null, false, false,
-                                false, false, ApplicationPredefinedEntityConstants.PROPERTYITEM_ENTITY,
+                                false, false, false, ApplicationPredefinedEntityConstants.PROPERTYITEM_ENTITY,
                                 getApplicationMessage("application.propertyitem"), 0L, 1L);
                         edb.addFieldDef(textWidgetTypeDef, textWidgetTypeDef, EntityFieldDataType.STRING,
                                 EntityFieldType.STATIC, "name", getApplicationMessage("application.propertyitem.name"));
@@ -657,7 +657,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     if (ApplicationPredefinedEntityConstants.USAGE_ENTITY.equals(longName)) {
                         EntityDef.Builder edb = EntityDef.newBuilder(ConfigType.STATIC, Usage.class.getName(),
                                 getApplicationMessage("application.usage.label"), null, null, null, false, false, false,
-                                false, ApplicationPredefinedEntityConstants.USAGE_ENTITY,
+                                false, false, ApplicationPredefinedEntityConstants.USAGE_ENTITY,
                                 getApplicationMessage("application.usage"), 0L, 1L);
                         edb.addFieldDef(textWidgetTypeDef, textWidgetTypeDef, EntityFieldDataType.STRING,
                                 EntityFieldType.STATIC, "type", getApplicationMessage("application.usage.type"));
@@ -677,7 +677,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                         EntityDef.Builder edb = EntityDef.newBuilder(ConfigType.STATIC,
                                 com.flowcentraltech.flowcentral.application.data.Attachment.class.getName(),
                                 getApplicationMessage("application.attachment.label"), null, null, null, false, false,
-                                false, false, ApplicationPredefinedEntityConstants.ATTACHMENT_ENTITY,
+                                false, false, false, ApplicationPredefinedEntityConstants.ATTACHMENT_ENTITY,
                                 getApplicationMessage("application.attachment"), 0L, 1L);
                         edb.addFieldDef(textWidgetTypeDef, textWidgetTypeDef, EntityFieldDataType.STRING,
                                 EntityFieldType.STATIC, "name", getApplicationMessage("application.attachment.name"));
@@ -699,7 +699,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     if (ApplicationPredefinedEntityConstants.SNAPSHOT_ENTITY.equals(longName)) {
                         EntityDef.Builder edb = EntityDef.newBuilder(ConfigType.STATIC, SnapshotDetails.class.getName(),
                                 getApplicationMessage("application.snapshotdetails.label"), null, null, null, false,
-                                false, false, false, ApplicationPredefinedEntityConstants.SNAPSHOT_ENTITY,
+                                false, false, false, false, ApplicationPredefinedEntityConstants.SNAPSHOT_ENTITY,
                                 getApplicationMessage("application.snapshotdetails"), 0L, 1L);
                         edb.addFieldDef(intWidgetTypeDef, intWidgetTypeDef, EntityFieldDataType.LONG,
                                 EntityFieldType.STATIC, "snapshotId",
@@ -729,9 +729,9 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     EntityDef.Builder edb = EntityDef.newBuilder(appEntity.getBaseType(), appEntity.getConfigType(),
                             appEntity.getEntityClass(), appEntity.getTableName(), appEntity.getLabel(),
                             appEntity.getEmailProducerConsumer(), appEntity.getDelegate(),
-                            appEntity.getDataSourceName(), appEntity.isMapped(), appEntity.isAuditable(),
-                            appEntity.isReportable(), appEntity.isActionPolicy(), longName, appEntity.getDescription(),
-                            appEntity.getId(), appEntity.getVersionNo());
+                            appEntity.getDataSourceName(), appEntity.isMapped(), appEntity.isSupportsChangeEvents(),
+                            appEntity.isAuditable(), appEntity.isReportable(), appEntity.isActionPolicy(), longName,
+                            appEntity.getDescription(), appEntity.getId(), appEntity.getVersionNo());
 
                     for (AppEntityField appEntityField : appEntity.getFieldList()) {
                         WidgetTypeDef inputWidgetTypeDef = null;
@@ -1503,6 +1503,12 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         }
 
         return delegateHolder.getEntityLongName();
+    }
+
+    @Override
+    public boolean isSupportsEntityChangeEvent(Class<? extends Entity> entityClass) throws UnifyException {
+        EntityDef entityDef = getEntityDefByClass(entityClass.getName());
+        return entityDef.isSupportsChangeEvents();
     }
 
     private static final Class<?>[] WRAPPER_PARAMS_0 = { EntityClassDef.class };
@@ -4786,7 +4792,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appEntity.setTableName(tableName);
                     appEntity.setDataSourceName(appEntityConfig.getDataSourceName());
                     appEntity.setMapped(appEntityConfig.getMapped());
-                    appEntity.setAuditable(appEntityConfig.getAuditable());
+                    appEntity.setSupportsChangeEvents(appEntityConfig.isSupportsChangeEvents());
+                    appEntity.setAuditable(appEntityConfig.getAuditable());               
                     appEntity.setReportable(appEntityConfig.getReportable());
                     appEntity.setActionPolicy(appEntityConfig.getActionPolicy());
                     appEntity.setDeprecated(false);
@@ -4804,6 +4811,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     oldAppEntity.setTableName(tableName);
                     oldAppEntity.setDataSourceName(appEntityConfig.getDataSourceName());
                     oldAppEntity.setMapped(appEntityConfig.getMapped());
+                    oldAppEntity.setSupportsChangeEvents(appEntityConfig.isSupportsChangeEvents());
                     oldAppEntity.setAuditable(appEntityConfig.getAuditable());
                     oldAppEntity.setReportable(appEntityConfig.getReportable());
                     oldAppEntity.setActionPolicy(appEntityConfig.getActionPolicy());
@@ -5396,6 +5404,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 appEntity.setTableName(appEntityConfig.getTable());
                 appEntity.setDataSourceName(appEntityConfig.getDataSourceName());
                 appEntity.setMapped(appEntityConfig.getMapped());
+                appEntity.setSupportsChangeEvents(appEntityConfig.isSupportsChangeEvents());
                 appEntity.setAuditable(appEntityConfig.getAuditable());
                 appEntity.setReportable(appEntityConfig.getReportable());
                 appEntity.setActionPolicy(appEntityConfig.getActionPolicy());

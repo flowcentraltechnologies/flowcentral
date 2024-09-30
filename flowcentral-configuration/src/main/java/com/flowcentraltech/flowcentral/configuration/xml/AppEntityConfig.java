@@ -57,6 +57,9 @@ public class AppEntityConfig extends BaseNameConfig {
     
     @JacksonXmlProperty(isAttribute = true)
     private Boolean mapped;
+
+    @JacksonXmlProperty(isAttribute = true)
+    private boolean supportsChangeEvents;
     
     @JacksonXmlProperty(isAttribute = true)
     private Boolean auditable;
@@ -105,6 +108,7 @@ public class AppEntityConfig extends BaseNameConfig {
     
     public AppEntityConfig() {
         this.mapped = Boolean.FALSE;
+        this.supportsChangeEvents = Boolean.FALSE;
         this.auditable = Boolean.FALSE;
         this.reportable = Boolean.FALSE;
         this.actionPolicy = Boolean.FALSE;
@@ -164,6 +168,14 @@ public class AppEntityConfig extends BaseNameConfig {
 
     public void setMapped(Boolean mapped) {
         this.mapped = mapped;
+    }
+
+    public boolean isSupportsChangeEvents() {
+        return supportsChangeEvents;
+    }
+
+    public void setSupportsChangeEvents(boolean supportsChangeEvents) {
+        this.supportsChangeEvents = supportsChangeEvents;
     }
 
     public Boolean getAuditable() {

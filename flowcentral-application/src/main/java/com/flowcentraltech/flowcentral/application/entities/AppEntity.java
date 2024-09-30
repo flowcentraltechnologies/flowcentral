@@ -55,6 +55,9 @@ public class AppEntity extends BaseApplicationEntity {
     @Column(name = "TABLE_NM", length = 64)
     private String tableName;
 
+    @Column(name = "SUPPORTS_CHANGE_EVENT_FG")
+    private boolean supportsChangeEvents;
+    
     @Column(name = "AUDITABLE_FG")
     private boolean auditable;
 
@@ -154,6 +157,14 @@ public class AppEntity extends BaseApplicationEntity {
 
     public void setTableName(String tableName) {
         this.tableName = tableName;
+    }
+
+    public boolean isSupportsChangeEvents() {
+        return supportsChangeEvents;
+    }
+
+    public void setSupportsChangeEvents(boolean supportsChangeEvents) {
+        this.supportsChangeEvents = supportsChangeEvents;
     }
 
     public boolean isAuditable() {
