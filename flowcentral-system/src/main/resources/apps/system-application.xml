@@ -317,7 +317,7 @@
 		<entity name="sector" description="$m{system.sector}"
 			label="$m{system.sector.label}"
 			type="com.flowcentraltech.flowcentral.system.entities.Sector"
-			auditable="true" reportable="true">
+			auditable="true" reportable="true" changeEvents = "true">
 			<field name="name" label="$m{system.sector.name}" type="string"
 				inputWidget="application.name" maxLen="32" basicSearch="true" auditable="true"/>
 			<field name="description" label="$m{system.sector.description}"
@@ -344,7 +344,7 @@
 		<entity name="module" description="$m{system.module.module}"
 			label="$m{system.module.label}"
 			type="com.flowcentraltech.flowcentral.system.entities.Module"
-			auditable="true" reportable="true">
+			auditable="true" reportable="true" changeEvents = "true">
 			<field name="sectorId" label="$m{system.module.sector}"
 				type="ref" basicSearch="true" references="sectorRef"
 				inputWidget="application.entitylist" auditable="true"/>
@@ -424,7 +424,7 @@
 			description="$m{system.systemparameter}"
 			label="$m{system.systemparameter.label}"
 			type="com.flowcentraltech.flowcentral.system.entities.SystemParameter"
-			auditable="true" reportable="true">
+			auditable="true" reportable="true" changeEvents = "true">
 			<field name="moduleId"
 				label="$m{system.systemparameter.moduleid}" type="ref"
 				references="moduleRef"
@@ -478,7 +478,7 @@
 			description="$m{system.scheduledtask}"
 			label="$m{system.scheduledtask.label}"
 			type="com.flowcentraltech.flowcentral.system.entities.ScheduledTask"
-			auditable="true" reportable="true">
+			auditable="true" reportable="true" changeEvents = "true">
 			<field name="description"
 				label="$m{system.scheduledtask.description}" type="string"
 				inputWidget="application.text" maxLen="64" basicSearch="true" auditable="true"/>
@@ -553,7 +553,7 @@
 		<entity name="credential" description="$m{system.credential}"
 			label="$m{system.credential.label}"
 			type="com.flowcentraltech.flowcentral.system.entities.Credential"
-			auditable="true" reportable="true">
+			auditable="true" reportable="true" changeEvents = "true">
 			<field name="name" label="$m{system.credential.name}"
 				type="string" inputWidget="application.name" maxLen="64"
 				basicSearch="true" auditable="true"/>
@@ -573,7 +573,7 @@
 		<entity name="delegate" description="$m{system.delegate}"
 			label="$m{system.delegate.label}"
 			type="com.flowcentraltech.flowcentral.system.entities.Delegate"
-			auditable="true" reportable="true">
+			auditable="true" reportable="true" changeEvents = "true">
 			<field name="name" label="$m{system.delegate.name}"
 				type="string" inputWidget="application.name" maxLen="64"
 				basicSearch="true" auditable="true"/>
@@ -593,7 +593,7 @@
 		<entity name="delegateRedirect" description="$m{system.delegateredirect}"
 			label="$m{system.delegateredirect.label}"
 			type="com.flowcentraltech.flowcentral.system.entities.DelegateRedirect"
-			auditable="true" reportable="true">
+			auditable="true" reportable="true" changeEvents = "true">
 			<field name="delegateId"
 				label="$m{system.delegateredirect.delegateid}" type="ref"
 				references="delegateRef" inputWidget="application.entitylist" />
@@ -640,7 +640,7 @@
 			description="$m{system.environmentvariable}"
 			label="$m{system.environmentvariable.label}"
 			type="com.flowcentraltech.flowcentral.system.entities.EnvironmentVariable"
-			auditable="true" reportable="true">
+			auditable="true" reportable="true" changeEvents = "true">
 			<field name="name" label="$m{system.environmentvariable.name}"
 				type="string" inputWidget="application.name" maxLen="64"
 				basicSearch="true" auditable="true"/>

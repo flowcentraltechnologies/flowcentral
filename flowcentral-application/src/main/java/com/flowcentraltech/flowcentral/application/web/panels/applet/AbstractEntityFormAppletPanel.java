@@ -130,7 +130,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
 
         // Page synchronization
         if (formAppletDef != null) {
-            EntityClassDef entityClassDef = application().getAppletEntityClassDef(formAppletDef.getLongName());
+            EntityClassDef entityClassDef = application().getEntityClassDef(formAppletDef.getEntity());
             if ((viewMode.isInForm() || viewMode.isListingForm()) && inst != null) {
                 setClientListenToEntity((Class<? extends Entity>) entityClassDef.getEntityClass(), inst.getId());
             } else {

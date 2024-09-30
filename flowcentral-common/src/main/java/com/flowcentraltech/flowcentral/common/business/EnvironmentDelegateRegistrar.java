@@ -61,4 +61,14 @@ public interface EnvironmentDelegateRegistrar extends FlowCentralComponent {
      */
     String resolveLongName(Class<? extends Entity> entityClass) throws UnifyException;
 
+    /**
+     * Checks if entity supports entity change event.
+     * 
+     * @param entityClass
+     *                    the entity class
+     * @return true if supports otherwise false
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    boolean isSupportsEntityChangeEvent(Class<? extends Entity> entityClass) throws UnifyException;
 }

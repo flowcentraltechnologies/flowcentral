@@ -699,7 +699,7 @@
 		<entity name="application"
 			description="$m{application.application}"
 			label="$m{application.application.label}"
-			type="com.flowcentraltech.flowcentral.application.entities.Application">
+			type="com.flowcentraltech.flowcentral.application.entities.Application" changeEvents = "true">
 			<field name="moduleId" basicSearch="true"
 				label="$m{application.application.module}" type="ref"
 				references="system.moduleRef" inputWidget="application.entitylist" />
@@ -747,7 +747,7 @@
 		<entity name="appApplet"
 			description="$m{application.appapplet}"
 			label="$m{application.appapplet.label}"
-			type="com.flowcentraltech.flowcentral.application.entities.AppApplet">
+			type="com.flowcentraltech.flowcentral.application.entities.AppApplet" changeEvents = "true">
 			<field name="type" label="$m{application.appapplet.type}"
 				type="enum_ref" references="applettypelist"
 				inputWidget="application.enumlist" />
@@ -858,7 +858,7 @@
 		<entity name="appAppletFilter"
 			description="$m{application.appappletfilter}"
 			label="$m{application.appappletfilter.label}"
-			type="com.flowcentraltech.flowcentral.application.entities.AppAppletFilter">
+			type="com.flowcentraltech.flowcentral.application.entities.AppAppletFilter" changeEvents = "true">
 			<field name="appAppletId"
 				label="$m{application.appappletfilter.appappletid}" type="ref"
 				references="appAppletRef" inputWidget="application.entitylist" />
@@ -906,7 +906,7 @@
 		<entity name="appAppletSetValues"
 			description="$m{application.appappletsetvalues}"
 			label="$m{application.appappletsetvalues.label}"
-			type="com.flowcentraltech.flowcentral.application.entities.AppAppletSetValues">
+			type="com.flowcentraltech.flowcentral.application.entities.AppAppletSetValues" changeEvents = "true">
 			<field name="appAppletId"
 				label="$m{application.appappletsetvalues.appappletid}" type="ref"
 				references="appAppletRef" inputWidget="application.entitylist" />
@@ -926,7 +926,7 @@
 		<entity name="appAppletAlert"
 			description="$m{application.appappletalert}"
 			label="$m{application.appappletalert.label}"
-			type="com.flowcentraltech.flowcentral.application.entities.AppAppletAlert">
+			type="com.flowcentraltech.flowcentral.application.entities.AppAppletAlert" changeEvents = "true">
 			<field name="appAppletId"
 				label="$m{application.appappletalert.appappletid}" type="ref"
 				references="appAppletRef" inputWidget="application.entitylist" />
@@ -959,7 +959,7 @@
 		<entity name="appEntity"
 			description="$m{application.appentity}"
 			label="$m{application.appentity.label}"
-			type="com.flowcentraltech.flowcentral.application.entities.AppEntity">
+			type="com.flowcentraltech.flowcentral.application.entities.AppEntity" changeEvents = "true">
 			<field name="baseType"
 				label="$m{application.appentity.basetype}" type="enum_ref"
 				references="entitybasetypelist" inputWidget="application.enumlist" />
@@ -983,6 +983,9 @@
 				label="$m{application.appentity.reportable}" type="boolean" />
 			<field name="schemaUpdateRequired"
 				label="$m{application.appentity.schemaupdaterequired}"
+				type="boolean" />
+			<field name="supportsChangeEvents"
+				label="$m{application.appentity.supportschangeevents}"
 				type="boolean" />
 			<field name="actionPolicy"
 				label="$m{application.appentity.actionpolicy}" type="boolean" />
@@ -1033,7 +1036,7 @@
 		<entity name="appEntityField"
 			description="$m{application.appentityfield}"
 			label="$m{application.appentityfield.field.label}"
-			type="com.flowcentraltech.flowcentral.application.entities.AppEntityField">
+			type="com.flowcentraltech.flowcentral.application.entities.AppEntityField" changeEvents = "true">
 			<field name="appEntityId"
 				label="$m{application.appentityfield.appentityid}" type="ref"
 				references="appEntityRef" inputWidget="application.entitylist" />
@@ -1128,7 +1131,7 @@
 		<entity name="appEntitySeries"
 			description="$m{application.appentityseries}"
 			label="$m{application.appentityseries.series.label}"
-			type="com.flowcentraltech.flowcentral.application.entities.AppEntitySeries">
+			type="com.flowcentraltech.flowcentral.application.entities.AppEntitySeries" changeEvents = "true">
 			<field name="appEntityId"
 				label="$m{application.appentityseries.appentityid}" type="ref"
 				references="appEntityRef" inputWidget="application.entitylist" />
@@ -1167,7 +1170,7 @@
 		<entity name="appEntityCategory"
 			description="$m{application.appentitycategory}"
 			label="$m{application.appentitycategory.category.label}"
-			type="com.flowcentraltech.flowcentral.application.entities.AppEntityCategory">
+			type="com.flowcentraltech.flowcentral.application.entities.AppEntityCategory" changeEvents = "true">
 			<field name="appEntityId"
 				label="$m{application.appentitycategory.appentityid}" type="ref"
 				references="appEntityRef" inputWidget="application.entitylist" />
@@ -1201,7 +1204,7 @@
 		<entity name="appEntityAttachment"
 			description="$m{application.appentityattachment}"
 			label="$m{application.appentityattachment.label}"
-			type="com.flowcentraltech.flowcentral.application.entities.AppEntityAttachment">
+			type="com.flowcentraltech.flowcentral.application.entities.AppEntityAttachment" changeEvents = "true">
 			<field name="appEntityId"
 				label="$m{application.appentityattachment.appentityid}" type="ref"
 				references="appEntityRef" inputWidget="application.entitylist" />
@@ -1216,7 +1219,7 @@
 		<entity name="appEntityExpression"
 			description="$m{application.appentityexpression}"
 			label="$m{application.appentityexpression.label}"
-			type="com.flowcentraltech.flowcentral.application.entities.AppEntityExpression">
+			type="com.flowcentraltech.flowcentral.application.entities.AppEntityExpression" changeEvents = "true">
 			<field name="appEntityId"
 				label="$m{application.appentityexpression.appentityid}" type="ref"
 				references="appEntityRef" inputWidget="application.entitylist" />
@@ -1227,7 +1230,7 @@
 		<entity name="appEntityUniqueConstraint"
 			description="$m{application.appentityuniqueconstraint}"
 			label="$m{application.appentityuniqueconstraint.label}"
-			type="com.flowcentraltech.flowcentral.application.entities.AppEntityUniqueConstraint">
+			type="com.flowcentraltech.flowcentral.application.entities.AppEntityUniqueConstraint" changeEvents = "true">
 			<field name="appEntityId"
 				label="$m{application.appentityuniqueconstraint.appentityid}"
 				type="ref" references="appEntityRef"
@@ -1239,7 +1242,7 @@
 		<entity name="appEntityIndex"
 			description="$m{application.appentityindex}"
 			label="$m{application.appentityindex.label}"
-			type="com.flowcentraltech.flowcentral.application.entities.AppEntityIndex">
+			type="com.flowcentraltech.flowcentral.application.entities.AppEntityIndex" changeEvents = "true">
 			<field name="appEntityId"
 				label="$m{application.appentityindex.appentityid}" type="ref"
 				references="appEntityRef" inputWidget="application.entitylist" />
@@ -1249,7 +1252,7 @@
 		<entity name="appEntityUpload"
 			description="$m{application.appentityupload}"
 			label="$m{application.appentityupload.label}"
-			type="com.flowcentraltech.flowcentral.application.entities.AppEntityUpload">
+			type="com.flowcentraltech.flowcentral.application.entities.AppEntityUpload" changeEvents = "true">
 			<field name="appEntityId"
 				label="$m{application.appentityupload.appentityid}" type="ref"
 				references="appEntityRef" inputWidget="application.entitylist" />
@@ -1267,7 +1270,7 @@
 		<entity name="appEntitySearchInput"
 			description="$m{application.appentitysearchinput}"
 			label="$m{application.appentitysearchinput.label}"
-			type="com.flowcentraltech.flowcentral.application.entities.AppEntitySearchInput">
+			type="com.flowcentraltech.flowcentral.application.entities.AppEntitySearchInput" changeEvents = "true">
 			<field name="appEntityId"
 				label="$m{application.appentitysearchinput.appentityid}" type="ref"
 				references="appEntityRef" inputWidget="application.entitylist" />
@@ -1286,7 +1289,7 @@
 		</entity>
 		<entity name="appRef" description="$m{application.appref}"
 			label="$m{application.appref.label}"
-			type="com.flowcentraltech.flowcentral.application.entities.AppRef">
+			type="com.flowcentraltech.flowcentral.application.entities.AppRef" changeEvents = "true">
 			<field name="entity" label="$m{application.appref.entity}"
 				type="string" />
 			<field name="orderField"
@@ -1326,7 +1329,7 @@
 		<entity name="appFilter"
 			description="$m{application.appfilter}"
 			label="$m{application.appfilter.label}"
-			type="com.flowcentraltech.flowcentral.application.entities.AppFilter">
+			type="com.flowcentraltech.flowcentral.application.entities.AppFilter" changeEvents = "true">
 			<field name="entityInstId"
 				label="$m{application.appfilter.entityinstid}"
 				type="foster_parent_id" />
@@ -1340,7 +1343,7 @@
 		<entity name="appSearchInput"
 			description="$m{application.appsearchinput}"
 			label="$m{application.appsearchinput.label}"
-			type="com.flowcentraltech.flowcentral.application.entities.AppSearchInput">
+			type="com.flowcentraltech.flowcentral.application.entities.AppSearchInput" changeEvents = "true">
 			<field name="entityInstId"
 				label="$m{application.appsearchinput.entityinstid}"
 				type="foster_parent_id" />
@@ -1356,7 +1359,7 @@
 		<entity name="appFieldSequence"
 			description="$m{application.appfieldsequence}"
 			label="$m{application.appfieldsequence.label}"
-			type="com.flowcentraltech.flowcentral.application.entities.AppFieldSequence">
+			type="com.flowcentraltech.flowcentral.application.entities.AppFieldSequence" changeEvents = "true">
 			<field name="entityInstId"
 				label="$m{application.appfieldsequence.entityinstid}"
 				type="foster_parent_id" />
@@ -1372,7 +1375,7 @@
 		<entity name="appPropertySequence"
 			description="$m{application.apppropertysequence}"
 			label="$m{application.apppropertysequence.label}"
-			type="com.flowcentraltech.flowcentral.application.entities.AppPropertySequence">
+			type="com.flowcentraltech.flowcentral.application.entities.AppPropertySequence" changeEvents = "true">
 			<field name="entityInstId"
 				label="$m{application.apppropertysequence.entityinstid}"
 				type="foster_parent_id" />
@@ -1388,7 +1391,7 @@
 		<entity name="appSetValues"
 			description="$m{application.appsetvalues}"
 			label="$m{application.appsetvalues.label}"
-			type="com.flowcentraltech.flowcentral.application.entities.AppSetValues">
+			type="com.flowcentraltech.flowcentral.application.entities.AppSetValues" changeEvents = "true">
 			<field name="entityInstId"
 				label="$m{application.appsetvalues.entityinstid}"
 				type="foster_parent_type" />
@@ -1403,7 +1406,7 @@
 		<entity name="appWidgetRules"
 			description="$m{application.appwidgetrules}"
 			label="$m{application.appwidgetrules.label}"
-			type="com.flowcentraltech.flowcentral.application.entities.AppWidgetRules">
+			type="com.flowcentraltech.flowcentral.application.entities.AppWidgetRules" changeEvents = "true">
 			<field name="entityInstId"
 				label="$m{application.appwidgetrules.entityinstid}"
 				type="foster_parent_id" />
@@ -1418,7 +1421,7 @@
 		</entity>
 		<entity name="appTable" description="$m{application.apptable}"
 			label="$m{application.apptable.label}"
-			type="com.flowcentraltech.flowcentral.application.entities.AppTable">
+			type="com.flowcentraltech.flowcentral.application.entities.AppTable" changeEvents = "true">
 			<field name="entity" label="$m{application.apptable.entity}"
 				type="string" />
 			<field name="label" label="$m{application.apptable.label}"
@@ -1522,7 +1525,7 @@
 		<entity name="appTableAction"
 			description="$m{application.apptableaction}"
 			label="$m{application.apptableaction.label}"
-			type="com.flowcentraltech.flowcentral.application.entities.AppTableAction">
+			type="com.flowcentraltech.flowcentral.application.entities.AppTableAction" changeEvents = "true">
 			<field name="appTableId"
 				label="$m{application.apptableaction.apptableid}" type="ref"
 				references="appTableRef" inputWidget="application.entitylist" />
@@ -1539,7 +1542,7 @@
 		<entity name="appTableLoading"
 			description="$m{application.apptableloading}"
 			label="$m{application.apptableloading.label}"
-			type="com.flowcentraltech.flowcentral.application.entities.AppTableLoading">
+			type="com.flowcentraltech.flowcentral.application.entities.AppTableLoading" changeEvents = "true">
 			<field name="appTableId"
 				label="$m{application.apptableloading.apptableid}" type="ref"
 				references="appTableRef" inputWidget="application.entitylist" />
@@ -1556,7 +1559,7 @@
 		<entity name="appTableFilter"
 			description="$m{application.apptablefilter}"
 			label="$m{application.apptablefilter.label}"
-			type="com.flowcentraltech.flowcentral.application.entities.AppTableFilter">
+			type="com.flowcentraltech.flowcentral.application.entities.AppTableFilter" changeEvents = "true">
 			<field name="appTableId"
 				label="$m{application.apptablefilter.apptableid}" type="ref"
 				references="appTableRef" inputWidget="application.entitylist" />
@@ -1584,7 +1587,7 @@
 		</entity>
 		<entity name="appForm" description="$m{application.appform}"
 			label="$m{application.appform.label}"
-			type="com.flowcentraltech.flowcentral.application.entities.AppForm">
+			type="com.flowcentraltech.flowcentral.application.entities.AppForm" changeEvents = "true">
 			<field name="type" label="$m{application.appform.type}"
 				type="enum_ref" references="formtypelist"
 				inputWidget="application.enumlist" />
@@ -1660,7 +1663,7 @@
 		<entity name="appFormFilter"
 			description="$m{application.appformfilter}"
 			label="$m{application.appformfilter.label}"
-			type="com.flowcentraltech.flowcentral.application.entities.AppFormFilter">
+			type="com.flowcentraltech.flowcentral.application.entities.AppFormFilter" changeEvents = "true">
 			<field name="appFormId"
 				label="$m{application.appformfilter.appformid}" type="ref"
 				references="appFormRef" inputWidget="application.entitylist" />
@@ -1765,7 +1768,7 @@
 		<entity name="appFormAnnotation"
 			description="$m{application.appformannotation}"
 			label="$m{application.appformannotation.label}"
-			type="com.flowcentraltech.flowcentral.application.entities.AppFormAnnotation">
+			type="com.flowcentraltech.flowcentral.application.entities.AppFormAnnotation" changeEvents = "true">
 			<field name="appFormId"
 				label="$m{application.appformannotation.appformid}" type="ref"
 				references="appFormRef" inputWidget="application.entitylist" />
@@ -1802,7 +1805,7 @@
 		<entity name="appFormAction"
 			description="$m{application.appformaction}"
 			label="$m{application.appformaction.action.label}"
-			type="com.flowcentraltech.flowcentral.application.entities.AppFormAction">
+			type="com.flowcentraltech.flowcentral.application.entities.AppFormAction" changeEvents = "true">
 			<field name="appFormId"
 				label="$m{application.appformaction.appformid}" type="ref"
 				references="appFormRef" inputWidget="application.entitylist" />
@@ -1841,7 +1844,7 @@
 		<entity name="appFormRelatedList"
 			description="$m{application.appformrelatedlist}"
 			label="$m{application.appformrelatedlist.list.label}"
-			type="com.flowcentraltech.flowcentral.application.entities.AppFormRelatedList">
+			type="com.flowcentraltech.flowcentral.application.entities.AppFormRelatedList" changeEvents = "true">
 			<field name="appFormId"
 				label="$m{application.appformrelatedlist.appformid}" type="ref"
 				references="appFormRef" inputWidget="application.entitylist" />
@@ -1996,7 +1999,7 @@
 		<entity name="appFormReviewPolicy"
 			description="$m{application.appformreviewpolicy}"
 			label="$m{application.appformreviewpolicy.label}"
-			type="com.flowcentraltech.flowcentral.application.entities.AppFormReviewPolicy">
+			type="com.flowcentraltech.flowcentral.application.entities.AppFormReviewPolicy" changeEvents = "true">
 			<field name="appFormId"
 				label="$m{application.appformreviewpolicy.appformid}" type="ref"
 				references="appFormRef" inputWidget="application.entitylist" />
@@ -2030,7 +2033,7 @@
 		</entity>
 		<entity name="appHelpSheet" description="$m{application.apphelpsheet}"
 			label="$m{application.apphelpsheet.label}"
-			type="com.flowcentraltech.flowcentral.application.entities.AppHelpSheet">
+			type="com.flowcentraltech.flowcentral.application.entities.AppHelpSheet" changeEvents = "true">
 			<field name="entity" label="$m{application.apphelpsheet.entity}"
 				type="string" />
 			<field name="label" label="$m{application.apphelpsheet.flabel}"
@@ -2082,7 +2085,7 @@
 		<entity name="appWidgetType"
 			description="$m{application.appwidgettype}"
 			label="$m{application.appwidgettype.label}"
-			type="com.flowcentraltech.flowcentral.application.entities.AppWidgetType">
+			type="com.flowcentraltech.flowcentral.application.entities.AppWidgetType" changeEvents = "true">
 			<field name="dataType"
 				label="$m{application.appwidgettype.datatype}" type="enum_ref"
 				references="datatypelist" inputWidget="application.enumlist" />
@@ -2110,7 +2113,7 @@
 		<entity name="appSuggestionType"
 			description="$m{application.appsuggestiontype}"
 			label="$m{application.appsuggestiontype.label}"
-			type="com.flowcentraltech.flowcentral.application.entities.AppSuggestionType">
+			type="com.flowcentraltech.flowcentral.application.entities.AppSuggestionType" changeEvents = "true">
 			<field name="parent"
 				label="$m{application.appsuggestiontype.parent}" type="string"
 				nullable="true" inputWidget="application.text" />
@@ -2144,7 +2147,7 @@
 		<entity name="appEnumeration"
 			description="$m{application.appenumeration}"
 			label="$m{application.appenumeration.label}"
-			type="com.flowcentraltech.flowcentral.application.entities.AppEnumeration">
+			type="com.flowcentraltech.flowcentral.application.entities.AppEnumeration" changeEvents = "true">
 			<field name="label" label="$m{application.appenumeration.field.label}"
 				type="string" />
 			<field name="itemList"

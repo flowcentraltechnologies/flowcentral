@@ -294,7 +294,7 @@
 		<entity name="userGroup" description="$m{security.usergroup}"
 			label="$m{security.usergroup.label}"
 			type="com.flowcentraltech.flowcentral.security.entities.UserGroup"
-			reportable="true" auditable="true">
+			reportable="true" auditable="true" changeEvents = "true">
 			<field name="name" label="$m{security.usergroup.name}"
 				type="string" inputWidget="application.name" maxLen="64"
 				basicSearch="true" auditable="true"/>
@@ -319,7 +319,7 @@
 		<entity name="userGroupRole"
 			description="$m{security.usergrouprole}"
 			label="$m{security.usergrouprole.label}"
-			type="com.flowcentraltech.flowcentral.security.entities.UserGroupRole" auditable="true">
+			type="com.flowcentraltech.flowcentral.security.entities.UserGroupRole" auditable="true" changeEvents = "true">
 			<field name="userGroupId"
 				label="$m{security.usergrouprole.usergroupid}" type="ref"
 				references="userGroupRef"
@@ -360,7 +360,7 @@
 		<entity name="userGroupMember"
 			description="$m{security.usergroupmember}"
 			label="$m{security.usergroupmember.label}"
-			type="com.flowcentraltech.flowcentral.security.entities.UserGroupMember" auditable="true">
+			type="com.flowcentraltech.flowcentral.security.entities.UserGroupMember" auditable="true" changeEvents = "true">
 			<field name="userGroupId"
 				label="$m{security.usergroupmember.usergroupid}" type="ref"
 				references="userGroupRef"
@@ -395,7 +395,7 @@
 		<entity name="user" description="$m{security.user}"
 			label="$m{security.user.label}"
 			type="com.flowcentraltech.flowcentral.security.entities.User"
-			reportable="true" auditable="true">
+			reportable="true" auditable="true" changeEvents = "true">
 			<field name="workflowStatus"
 				label="$m{security.user.workflowstatus}" type="enum_ref"
 				inputWidget="application.enumlist"
@@ -462,7 +462,7 @@
 		</entity>
 		<entity name="userRole" description="$m{security.userrole}"
 			label="$m{security.userrole.label}"
-			type="com.flowcentraltech.flowcentral.security.entities.UserRole" auditable="true">
+			type="com.flowcentraltech.flowcentral.security.entities.UserRole" auditable="true" changeEvents = "true">
 			<field name="userId" label="$m{security.userrole.userid}"
 				type="ref" references="userRef"
 				inputLabel="$m{security.userrole.user}"
@@ -558,7 +558,7 @@
 		<entity name="securitySettings" description="$m{security.passwordcomplexity}"
 			label="$m{security.passwordcomplexity.label}"
 			type="com.flowcentraltech.flowcentral.security.entities.PasswordComplexity"
-			reportable="true" auditable="true">
+			reportable="true" auditable="true" changeEvents = "true">
 			<field name="minimumPasswordLen" label="$m{security.passwordcomplexity.minimumpasswordlen}"
 				type="integer" inputWidget="application.integer" precision="2"
 				nullable="false" auditable="true" reportable="true"/>

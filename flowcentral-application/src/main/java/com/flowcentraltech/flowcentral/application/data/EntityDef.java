@@ -171,6 +171,8 @@ public class EntityDef extends BaseApplicationEntityDef {
 
     private boolean mapped;
 
+    private boolean supportsChangeEvents;
+
     private boolean auditable;
 
     private boolean reportable;
@@ -196,8 +198,8 @@ public class EntityDef extends BaseApplicationEntityDef {
             Map<String, EntitySearchInputDef> searchInputDefs, Map<String, EntitySeriesDef> seriesDefs,
             Map<String, EntityCategoryDef> categoryDefs, ApplicationEntityNameParts nameParts, String originClassName,
             String tableName, String label, String emailProducerConsumer, String delegate, String dataSourceName,
-            boolean mapped, boolean auditable, boolean reportable, boolean actionPolicy, String description, Long id,
-            long version) {
+            boolean mapped, boolean supportsChangeEvents, boolean auditable, boolean reportable, boolean actionPolicy,
+            String description, Long id, long version) {
         super(nameParts, description, id, version);
         this.baseType = baseType;
         this.type = type;
@@ -208,6 +210,7 @@ public class EntityDef extends BaseApplicationEntityDef {
         this.mapped = mapped;
         this.delegate = delegate;
         this.dataSourceName = dataSourceName;
+        this.supportsChangeEvents = supportsChangeEvents;
         this.auditable = auditable;
         this.reportable = reportable;
         this.actionPolicy = actionPolicy;
@@ -484,7 +487,7 @@ public class EntityDef extends BaseApplicationEntityDef {
     public boolean isEntityCategorysDef(String name) {
         return categoryDefs.containsKey(name);
     }
-    
+
     public EntityCategoryDef getEntityCategorysDef(String name) {
         EntityCategoryDef entityCategoryDef = categoryDefs.get(name);
         if (entityCategoryDef == null) {
@@ -842,6 +845,10 @@ public class EntityDef extends BaseApplicationEntityDef {
         return mapped;
     }
 
+    public boolean isSupportsChangeEvents() {
+        return supportsChangeEvents;
+    }
+
     public boolean isAuditable() {
         return auditable;
     }
@@ -1113,18 +1120,20 @@ public class EntityDef extends BaseApplicationEntityDef {
     }
 
     public static Builder newBuilder(ConfigType type, String originClassName, String label,
-            String emailProducerConsumer, String delegate, String dataSourceName, boolean mapped, boolean auditable,
-            boolean reportable, boolean actionPolicy, String longName, String description, Long id, long version) {
+            String emailProducerConsumer, String delegate, String dataSourceName, boolean mapped,
+            boolean supportsChangeEvents, boolean auditable, boolean reportable, boolean actionPolicy, String longName,
+            String description, Long id, long version) {
         return new Builder(null, type, originClassName, null, label, emailProducerConsumer, delegate, dataSourceName,
-                mapped, auditable, reportable, actionPolicy, longName, description, id, version);
+                mapped, supportsChangeEvents, auditable, reportable, actionPolicy, longName, description, id, version);
     }
 
     public static Builder newBuilder(EntityBaseType baseType, ConfigType type, String originClassName, String tableName,
             String label, String emailProducerConsumer, String delegate, String dataSourceName, boolean mapped,
-            boolean auditable, boolean reportable, boolean actionPolicy, String longName, String description, Long id,
-            long version) {
+            boolean supportsChangeEvents, boolean auditable, boolean reportable, boolean actionPolicy, String longName,
+            String description, Long id, long version) {
         return new Builder(baseType, type, originClassName, tableName, label, emailProducerConsumer, delegate,
-                dataSourceName, mapped, auditable, reportable, actionPolicy, longName, description, id, version);
+                dataSourceName, mapped, supportsChangeEvents, auditable, reportable, actionPolicy, longName,
+                description, id, version);
     }
 
     public static class Builder {
@@ -1165,6 +1174,8 @@ public class EntityDef extends BaseApplicationEntityDef {
 
         private boolean mapped;
 
+        private boolean supportsChangeEvents;
+        
         private boolean auditable;
 
         private boolean reportable;
@@ -1187,8 +1198,9 @@ public class EntityDef extends BaseApplicationEntityDef {
         }
 
         public Builder(EntityBaseType baseType, ConfigType type, String originClassName, String tableName, String label,
-                String emailProducerConsumer, String delegate, String dataSourceName, boolean mapped, boolean auditable,
-                boolean reportable, boolean actionPolicy, String longName, String description, Long id, long version) {
+                String emailProducerConsumer, String delegate, String dataSourceName, boolean mapped,
+                boolean supportsChangeEvents, boolean auditable, boolean reportable, boolean actionPolicy,
+                String longName, String description, Long id, long version) {
             this.baseType = baseType;
             this.type = type;
             this.fieldDefMap = new LinkedHashMap<String, EntityFieldDef>();
@@ -1200,6 +1212,7 @@ public class EntityDef extends BaseApplicationEntityDef {
             this.delegate = delegate;
             this.dataSourceName = dataSourceName;
             this.mapped = mapped;
+            this.supportsChangeEvents = supportsChangeEvents;
             this.auditable = auditable;
             this.reportable = reportable;
             this.actionPolicy = actionPolicy;
@@ -1276,8 +1289,8 @@ public class EntityDef extends BaseApplicationEntityDef {
                 TextCase textCase, String fieldName, String mapped, String fieldLabel, String columnName,
                 String category, String suggestionType, String inputLabel, String inputListKey, String lingualListKey,
                 String autoFormat, String defaultVal, String references, String key, String property, Integer rows,
-                Integer columns, Integer minLen, Integer maxLen, Integer precision, Integer scale,
-                boolean trim, boolean allowNegative, boolean editable, boolean nullable, boolean auditable, boolean reportable,
+                Integer columns, Integer minLen, Integer maxLen, Integer precision, Integer scale, boolean trim,
+                boolean allowNegative, boolean editable, boolean nullable, boolean auditable, boolean reportable,
                 boolean maintainLink, boolean basicSearch, boolean descriptive) throws UnifyException {
             return addFieldDef(textWidgetTypeDef, inputWidgetTypeDef, lingualWidgetTypeDef, null, dataType, type,
                     textCase, fieldName, mapped, fieldLabel, columnName, category, suggestionType, inputLabel,
@@ -1291,21 +1304,20 @@ public class EntityDef extends BaseApplicationEntityDef {
                 TextCase textCase, String fieldName, String mapped, String fieldLabel, String columnName,
                 String category, String suggestionType, String inputLabel, String inputListKey, String lingualListKey,
                 String autoFormat, String defaultVal, String references, String key, String property, Integer rows,
-                Integer columns, Integer minLen, Integer maxLen, Integer precision, Integer scale,
-                boolean trim, boolean allowNegative, boolean editable, boolean nullable, boolean auditable, boolean reportable,
+                Integer columns, Integer minLen, Integer maxLen, Integer precision, Integer scale, boolean trim,
+                boolean allowNegative, boolean editable, boolean nullable, boolean auditable, boolean reportable,
                 boolean maintainLink, boolean basicSearch, boolean descriptive) throws UnifyException {
             if (fieldDefMap.containsKey(fieldName)) {
                 throw new RuntimeException("Field with name [" + fieldName + "] already exists in this definition.");
             }
 
-            fieldDefMap.put(fieldName,
-                    new EntityFieldDef(textWidgetTypeDef, inputWidgetTypeDef, lingualWidgetTypeDef, refDef, dataType,
-                            type, textCase, longName, fieldName, mapped, fieldLabel, columnName, references, category,
-                            suggestionType, inputLabel, inputListKey, lingualListKey, autoFormat, defaultVal, key,
-                            property, DataUtils.convert(int.class, rows), DataUtils.convert(int.class, columns),
-                            DataUtils.convert(int.class, minLen), DataUtils.convert(int.class, maxLen),
-                            DataUtils.convert(int.class, precision), DataUtils.convert(int.class, scale), trim, allowNegative,
-                            editable, nullable, auditable, reportable, maintainLink, basicSearch, descriptive));
+            fieldDefMap.put(fieldName, new EntityFieldDef(textWidgetTypeDef, inputWidgetTypeDef, lingualWidgetTypeDef,
+                    refDef, dataType, type, textCase, longName, fieldName, mapped, fieldLabel, columnName, references,
+                    category, suggestionType, inputLabel, inputListKey, lingualListKey, autoFormat, defaultVal, key,
+                    property, DataUtils.convert(int.class, rows), DataUtils.convert(int.class, columns),
+                    DataUtils.convert(int.class, minLen), DataUtils.convert(int.class, maxLen),
+                    DataUtils.convert(int.class, precision), DataUtils.convert(int.class, scale), trim, allowNegative,
+                    editable, nullable, auditable, reportable, maintainLink, basicSearch, descriptive));
             return this;
         }
 
@@ -1354,8 +1366,7 @@ public class EntityDef extends BaseApplicationEntityDef {
                 throw new RuntimeException("Category with name [" + name + "] already exists in this definition.");
             }
 
-            categoryDefMap.put(name,
-                    new EntityCategoryDef(name, description, label, filterDef));
+            categoryDefMap.put(name, new EntityCategoryDef(name, description, label, filterDef));
             return this;
         }
 
@@ -1425,8 +1436,8 @@ public class EntityDef extends BaseApplicationEntityDef {
                     DataUtils.unmodifiableList(indexList), DataUtils.unmodifiableList(uploadList),
                     DataUtils.unmodifiableMap(searchInputDefs), DataUtils.unmodifiableMap(seriesDefMap),
                     DataUtils.unmodifiableMap(categoryDefMap), nameParts, originClassName, tableName, label,
-                    emailProducerConsumer, delegate, dataSourceName, mapped, auditable, reportable, actionPolicy,
-                    description, id, version);
+                    emailProducerConsumer, delegate, dataSourceName, mapped, supportsChangeEvents, auditable,
+                    reportable, actionPolicy, description, id, version);
         }
     }
 

@@ -134,7 +134,7 @@
 		<entity name="reportConfig"
 			description="$m{report.reportconfiguration}"
 			label="$m{report.reportconfiguration.label}"
-			type="com.flowcentraltech.flowcentral.report.entities.ReportConfiguration">
+			type="com.flowcentraltech.flowcentral.report.entities.ReportConfiguration" changeEvents = "true">
 			<field name="type" label="$m{report.reportconfiguration.type}"
 				type="enum_ref" references="reportconfigtypelist"
 				inputWidget="application.enumlist" />
@@ -216,7 +216,7 @@
 		<entity name="reportColumn"
 			description="$m{report.reportcolumn}"
 			label="$m{report.reportcolumn.label}"
-			type="com.flowcentraltech.flowcentral.report.entities.ReportColumn">
+			type="com.flowcentraltech.flowcentral.report.entities.ReportColumn" changeEvents = "true">
 			<field name="reportConfigurationId"
 				label="$m{report.reportcolumn.reportconfigurationid}" type="ref"
 				references="reportConfigRef" inputWidget="application.entitylist" />
@@ -265,7 +265,7 @@
 		<entity name="reportPlacement"
 			description="$m{report.reportplacement}"
 			label="$m{report.reportplacement.label}"
-			type="com.flowcentraltech.flowcentral.report.entities.ReportPlacement">
+			type="com.flowcentraltech.flowcentral.report.entities.ReportPlacement" changeEvents = "true">
 			<field name="reportConfigurationId"
 				label="$m{report.reportplacement.reportconfigurationid}" type="ref"
 				references="reportConfigRef" inputWidget="application.entitylist" />
@@ -323,7 +323,7 @@
 		<entity name="reportParameter"
 			description="$m{report.reportparameter}"
 			label="$m{report.reportparameter.label}"
-			type="com.flowcentraltech.flowcentral.report.entities.ReportParameter">
+			type="com.flowcentraltech.flowcentral.report.entities.ReportParameter" changeEvents = "true">
 			<field name="reportConfigurationId"
 				label="$m{report.reportparameter.reportconfigurationid}" type="ref"
 				references="reportConfigRef" inputWidget="application.entitylist" />
@@ -352,7 +352,7 @@
 		<entity name="reportGroup" description="$m{report.reportgroup}"
 			label="$m{report.reportgroup.label}"
 			type="com.flowcentraltech.flowcentral.report.entities.ReportGroup"
-			reportable="true" auditable="true">
+			reportable="true" auditable="true" changeEvents = "true">
 			<field name="name" label="$m{report.reportgroup.name}"
 				type="string" inputWidget="application.name" maxLen="64"
 				basicSearch="true" auditable="true"/>
@@ -377,7 +377,7 @@
 		<entity name="reportGroupRole"
 			description="$m{report.reportgrouprole}"
 			label="$m{report.reportgrouprole.label}"
-			type="com.flowcentraltech.flowcentral.report.entities.ReportGroupRole" auditable="true">
+			type="com.flowcentraltech.flowcentral.report.entities.ReportGroupRole" auditable="true" changeEvents = "true">
 			<field name="reportGroupId"
 				label="$m{report.reportgrouprole.reportgroupid}" type="ref"
 				references="reportGroupRef"
@@ -418,7 +418,7 @@
 		<entity name="reportGroupMember"
 			description="$m{report.reportgroupmember}"
 			label="$m{report.reportgroupmember.label}"
-			type="com.flowcentraltech.flowcentral.report.entities.ReportGroupMember" auditable="true">
+			type="com.flowcentraltech.flowcentral.report.entities.ReportGroupMember" auditable="true" changeEvents = "true">
 			<field name="reportGroupId"
 				label="$m{report.reportgroupmember.reportgroupid}" type="ref"
 				references="reportGroupRef"

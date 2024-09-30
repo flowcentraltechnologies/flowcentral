@@ -125,7 +125,7 @@
 		<entity name="dashboard" description="$m{dashboard.dashboard}"
 			label="$m{dashboard.dashboard.label}"
 			type="com.flowcentraltech.flowcentral.dashboard.entities.Dashboard"
-			auditable="true" reportable="true">
+			auditable="true" reportable="true" changeEvents = "true">
 			<field name="sections" label="$m{dashboard.dashboard.sections}"
 				type="integer" inputWidget="application.integer" />
 			<field name="allowSecondaryTenants"
@@ -217,7 +217,7 @@
 			description="$m{dashboard.dashboardtile}"
 			label="$m{dashboard.dashboardtile.label}"
 			type="com.flowcentraltech.flowcentral.dashboard.entities.DashboardTile"
-			auditable="true" reportable="true">
+			auditable="true" reportable="true" changeEvents = "true">
 			<field name="dashboardId"
 				label="$m{dashboard.dashboardtile.dashboardid}" type="ref"
 				references="dashboardRef"

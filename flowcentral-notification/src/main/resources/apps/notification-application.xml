@@ -230,7 +230,7 @@
 			description="$m{notification.notificationchannel}"
 			label="$m{notification.notificationchannel.label}"
 			type="com.flowcentraltech.flowcentral.notification.entities.NotificationChannel"
-			reportable="true" auditable="true">
+			reportable="true" auditable="true" changeEvents = "true">
 			<field name="notificationType"
 				label="$m{notification.notificationchannel.type}" type="enum_ref"
 				references="notificationtypelist" inputWidget="application.enumlist"
@@ -295,7 +295,7 @@
 		<entity name="notifTemplate"
 			description="$m{notification.notificationtemplate}"
 			label="$m{notification.notificationtemplate.label}"
-			type="com.flowcentraltech.flowcentral.notification.entities.NotificationTemplate">
+			type="com.flowcentraltech.flowcentral.notification.entities.NotificationTemplate" changeEvents = "true">
 			<field name="notificationType"
 				label="$m{notification.notificationtemplate.type}" type="enum_ref"
 				references="notificationtypelist" inputWidget="application.enumlist"
@@ -353,7 +353,7 @@
 		<entity name="notifLargeText"
 			description="$m{notification.notificationlargetext}"
 			label="$m{notification.notificationlargetext.label}"
-			type="com.flowcentraltech.flowcentral.notification.entities.NotificationLargeText">
+			type="com.flowcentraltech.flowcentral.notification.entities.NotificationLargeText" changeEvents = "true">
 			<field name="entity"
 				label="$m{notification.notificationlargetext.entity}" type="string"
 				maxLen="128" />

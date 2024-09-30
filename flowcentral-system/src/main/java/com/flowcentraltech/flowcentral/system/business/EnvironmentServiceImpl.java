@@ -768,6 +768,14 @@ public class EnvironmentServiceImpl extends AbstractBusinessService implements E
         return delegateInfo != null ? delegateInfo.getDataSourceName() : db().getDataSourceName();
     }
 
+    @Override
+    protected void setOffEntityEvent(TopicEventType eventType, Class<? extends Entity> entityClass, Object id)
+            throws UnifyException {
+        if (environmentDelegateRegistrar.isSupportsEntityChangeEvent(entityClass)) {
+            super.setOffEntityEvent(eventType, entityClass, id);
+        }
+    }
+
     private Database db(Class<? extends Entity> entityClass) throws UnifyException {
         EnvironmentDelegateHolder delegateInfo = environmentDelegateRegistrar.getEnvironmentDelegateInfo(entityClass);
         return delegateInfo != null ? (delegateInfo.isDirect() ? db(delegateInfo.getDataSourceName())
