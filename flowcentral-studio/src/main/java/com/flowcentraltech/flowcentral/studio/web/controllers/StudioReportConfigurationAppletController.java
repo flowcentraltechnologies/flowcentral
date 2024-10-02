@@ -70,6 +70,8 @@ public class StudioReportConfigurationAppletController extends
                     (String) getSessionAttribute(StudioSessionAttributeConstants.CURRENT_APPLICATION_NAME),
                     appletWidgetReferences, formEventHandlers);
             pageBean.setApplet(applet);
+        } else {
+            pageBean.getApplet().ensureClearOnNew();
         }
     }
 
