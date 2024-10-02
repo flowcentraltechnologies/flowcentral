@@ -40,13 +40,13 @@ import com.tcdng.unify.web.ui.widget.Page;
  */
 public class StudioAppComponentApplet extends AbstractEntityFormApplet {
 
-    final private StudioModuleService sms;
+    private final StudioModuleService sms;
 
-    final private String instTitle;
+    private final String instTitle;
 
-    final private String typeTitle;
+    private final String typeTitle;
 
-    final private String applicationName;
+    private final String applicationName;
 
     public StudioAppComponentApplet(Page page, StudioModuleService sms, AppletUtilities au, List<String> pathVariables,
             String applicationName, AppletWidgetReferences appletWidgetReferences,
@@ -62,15 +62,17 @@ public class StudioAppComponentApplet extends AbstractEntityFormApplet {
         this.typeTitle = au.resolveSessionMessage(type.caption());
         Long instId = getCurrFormAppletDef().getPropValue(Long.class, StudioAppletPropertyConstants.ENTITY_INST_ID);
         if (instId == null || instId.longValue() == 0L) {
-            form = constructNewForm(FormMode.ENTITY_CREATE, null, false);
-            ((BaseApplicationEntity) form.getCtx().getInst()).setApplicationId(
-                    au.getSessionAttribute(Long.class, StudioSessionAttributeConstants.CURRENT_APPLICATION_ID));
-            viewMode = ViewMode.NEW_PRIMARY_FORM;
+            constructNewForm();
         } else {
             Entity _inst = au.environment().listLean(type.componentType(), instId);
             form = constructForm(_inst, FormMode.ENTITY_MAINTAIN, null, false);
             viewMode = ViewMode.MAINTAIN_PRIMARY_FORM_NO_SCROLL;
         }
+    }
+
+    @Override
+    public AppletDef getRootAppletDef() throws UnifyException {
+        return sms != null ? sms.getAppletDef(getAppletName()) : null;
     }
 
     public String getInstTitle() {
@@ -81,14 +83,16 @@ public class StudioAppComponentApplet extends AbstractEntityFormApplet {
         return typeTitle;
     }
 
+    public void ensureClearOnNew() throws UnifyException {
+        Long instId = getCurrFormAppletDef().getPropValue(Long.class, StudioAppletPropertyConstants.ENTITY_INST_ID);
+        if (instId == null || instId.longValue() == 0L) {
+            constructNewForm();
+        }
+    }
+    
     @Override
     protected AppletDef getAlternateFormAppletDef() throws UnifyException {
         return null;
-    }
-
-    @Override
-    public AppletDef getRootAppletDef() throws UnifyException {
-        return sms != null ? sms.getAppletDef(getAppletName()) : null;
     }
 
     @Override
@@ -103,5 +107,12 @@ public class StudioAppComponentApplet extends AbstractEntityFormApplet {
 
     protected String getApplicationName() {
         return applicationName;
+    }
+    
+    private void constructNewForm() throws UnifyException {
+        form = constructNewForm(FormMode.ENTITY_CREATE, null, false);
+        ((BaseApplicationEntity) form.getCtx().getInst()).setApplicationId(
+                au.getSessionAttribute(Long.class, StudioSessionAttributeConstants.CURRENT_APPLICATION_ID));
+        viewMode = ViewMode.NEW_PRIMARY_FORM;
     }
 }
