@@ -13,16 +13,31 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.os.messaging.constants;
+package com.flowcentraltech.flowcentral.messaging.os.data;
 
 /**
- * Messaging module name constants.
+ * Messaging error.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface MessagingModuleNameConstants {
+public class MessagingError {
 
-    String MESSAGING_CONTROLLER = "/flowcentral/os/messaging";
+    private String errorCode;
+    
+    private String errorMessage;
+    
+    public MessagingError(String errorCode, String errorMessage) {
+        this.errorCode = errorCode;
+        this.errorMessage = errorMessage;
+    }
 
-}
+    public String getErrorCode() {
+        return errorCode;
+    }
+
+    public String getErrorMessage() {
+        return errorMessage;
+    }
+
+ }

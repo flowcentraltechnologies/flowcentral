@@ -13,11 +13,11 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.os.messaging.business;
+package com.flowcentraltech.flowcentral.messaging.os.business;
 
 import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
-import com.flowcentraltech.flowcentral.os.messaging.data.BaseMessagingRequest;
-import com.flowcentraltech.flowcentral.os.messaging.data.BaseMessagingResponse;
+import com.flowcentraltech.flowcentral.messaging.os.data.BaseMessagingRequest;
+import com.flowcentraltech.flowcentral.messaging.os.data.BaseMessagingResponse;
 import com.tcdng.unify.core.UnifyException;
 
 /**

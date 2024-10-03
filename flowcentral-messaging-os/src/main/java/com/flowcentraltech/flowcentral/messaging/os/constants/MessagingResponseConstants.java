@@ -13,31 +13,25 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.os.messaging.data;
+package com.flowcentraltech.flowcentral.messaging.os.constants;
 
 /**
- * Messaging error.
+ * OS messaging response constants.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class MessagingError {
+public interface MessagingResponseConstants {
 
-    private String errorCode;
-    
-    private String errorMessage;
-    
-    public MessagingError(String errorCode, String errorMessage) {
-        this.errorCode = errorCode;
-        this.errorMessage = errorMessage;
-    }
+    String SUCCESS_CODE = "00";
 
-    public String getErrorCode() {
-        return errorCode;
-    }
+    String SUCCESS_MSG = "Success";
 
-    public String getErrorMessage() {
-        return errorMessage;
-    }
+    String PROCESSOR_UNKNOWN = "GP01";
 
- }
+    String NO_APPLICATION_SPECIFIED = "GP02";
+
+    String NO_PROCESSOR_SPECIFIED = "GP03";
+
+    String PROCESSING_EXCEPTION = "GP04";
+}

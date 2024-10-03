@@ -13,10 +13,10 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.os.messaging.data;
+package com.flowcentraltech.flowcentral.messaging.os.data;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
-import com.flowcentraltech.flowcentral.os.messaging.constants.MessagingResponseConstants;
+import com.flowcentraltech.flowcentral.messaging.os.constants.MessagingResponseConstants;
 
 /**
  * Abstract base class for messaging responses.

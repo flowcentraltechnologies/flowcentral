@@ -57,9 +57,9 @@
 		<module>flowcentral-integration-rabbitmq</module>
 		<module>flowcentral-tomcat</module>
 		<module>flowcentral-undertow</module>
-		<module>flowcentral-os-messaging</module>
 		<module>flowcentral-audit</module>
 		<module>flowcentral-messaging</module>
+		<module>flowcentral-messaging-os</module>
 		<module>flowcentral-repository</module>
 		<module>flowcentral-repository-git</module>
 	</modules>

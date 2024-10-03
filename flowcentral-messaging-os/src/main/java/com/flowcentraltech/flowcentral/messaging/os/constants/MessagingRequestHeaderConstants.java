@@ -13,21 +13,17 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.os.messaging.data;
+package com.flowcentraltech.flowcentral.messaging.os.constants;
 
 /**
- * Messaging error response.
- * 
- * @author FlowCentral Technologies Limited
- * @since 1.0
- */
-public class MessagingErrorResponse extends BaseMessagingResponse {
+* Messaging request header constants.
+* 
+* @author FlowCentral Technologies Limited
+* @since 1.0
+*/
+public interface MessagingRequestHeaderConstants {
 
-    public MessagingErrorResponse(MessagingError error) {
-        super(error.getErrorCode(), error.getErrorMessage());
-    }
+    String OS_APPLICATION = "OS-Application";
 
-    public MessagingErrorResponse() {
-
-    }
+    String OS_MESSAGING_PROCESSOR = "OS-Messaging-Processor";
 }

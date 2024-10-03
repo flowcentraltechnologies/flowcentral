@@ -13,25 +13,28 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.os.messaging.constants;
+package com.flowcentraltech.flowcentral.messaging.os.business;
+
+import com.flowcentraltech.flowcentral.common.AbstractFlowCentralComponent;
+import com.tcdng.unify.core.UnifyException;
 
 /**
- * OS messaging response constants.
+ * Convenient abstract base class for messaging access managers.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface MessagingResponseConstants {
+public abstract class AbstractMessagingAccessManager extends AbstractFlowCentralComponent
+        implements MessagingAccessManager {
 
-    String SUCCESS_CODE = "00";
+    @Override
+    protected void onInitialize() throws UnifyException {
 
-    String SUCCESS_MSG = "Success";
+    }
 
-    String PROCESSOR_UNKNOWN = "GP01";
+    @Override
+    protected void onTerminate() throws UnifyException {
 
-    String NO_APPLICATION_SPECIFIED = "GP02";
+    }
 
-    String NO_PROCESSOR_SPECIFIED = "GP03";
-
-    String PROCESSING_EXCEPTION = "GP04";
 }

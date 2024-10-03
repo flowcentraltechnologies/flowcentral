@@ -13,24 +13,16 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.os.messaging.data;
+package com.flowcentraltech.flowcentral.messaging.os.business;
+
+import com.flowcentraltech.flowcentral.common.business.FlowCentralService;
 
 /**
- * Abstract base class for messaging requests.
+ * OS messaging module service.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class BaseMessagingRequest {
-
-    private String application;
-
-    public String getApplication() {
-        return application;
-    }
-
-    public void setApplication(String application) {
-        this.application = application;
-    }
+public interface OSMessagingModuleService extends FlowCentralService {
 
 }

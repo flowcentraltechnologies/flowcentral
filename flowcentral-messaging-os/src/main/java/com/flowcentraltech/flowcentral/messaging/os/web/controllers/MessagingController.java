@@ -13,18 +13,18 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.os.messaging.web.controllers;
+package com.flowcentraltech.flowcentral.messaging.os.web.controllers;
 
-import com.flowcentraltech.flowcentral.os.messaging.business.MessagingAccessManager;
-import com.flowcentraltech.flowcentral.os.messaging.business.MessagingProcessor;
-import com.flowcentraltech.flowcentral.os.messaging.constants.MessagingModuleNameConstants;
-import com.flowcentraltech.flowcentral.os.messaging.constants.MessagingRequestHeaderConstants;
-import com.flowcentraltech.flowcentral.os.messaging.constants.MessagingResponseConstants;
-import com.flowcentraltech.flowcentral.os.messaging.data.BaseMessagingRequest;
-import com.flowcentraltech.flowcentral.os.messaging.data.BaseMessagingResponse;
-import com.flowcentraltech.flowcentral.os.messaging.data.MessagingAccess;
-import com.flowcentraltech.flowcentral.os.messaging.data.MessagingError;
-import com.flowcentraltech.flowcentral.os.messaging.data.MessagingErrorResponse;
+import com.flowcentraltech.flowcentral.messaging.os.business.MessagingAccessManager;
+import com.flowcentraltech.flowcentral.messaging.os.business.MessagingProcessor;
+import com.flowcentraltech.flowcentral.messaging.os.constants.MessagingModuleNameConstants;
+import com.flowcentraltech.flowcentral.messaging.os.constants.MessagingRequestHeaderConstants;
+import com.flowcentraltech.flowcentral.messaging.os.constants.MessagingResponseConstants;
+import com.flowcentraltech.flowcentral.messaging.os.data.BaseMessagingRequest;
+import com.flowcentraltech.flowcentral.messaging.os.data.BaseMessagingResponse;
+import com.flowcentraltech.flowcentral.messaging.os.data.MessagingAccess;
+import com.flowcentraltech.flowcentral.messaging.os.data.MessagingError;
+import com.flowcentraltech.flowcentral.messaging.os.data.MessagingErrorResponse;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;

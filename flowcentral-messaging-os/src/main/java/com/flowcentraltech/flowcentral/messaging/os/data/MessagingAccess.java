@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.os.messaging.data;
+package com.flowcentraltech.flowcentral.messaging.os.data;
 
 import com.tcdng.unify.core.util.StringUtils;
 
