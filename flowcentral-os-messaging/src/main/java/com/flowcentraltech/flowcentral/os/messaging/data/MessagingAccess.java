@@ -13,17 +13,17 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.gateway.data;
+package com.flowcentraltech.flowcentral.os.messaging.data;
 
 import com.tcdng.unify.core.util.StringUtils;
 
 /**
- * Gateway access.
+ * Messaging access.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class GatewayAccess {
+public class MessagingAccess {
     
     private String application;
     

@@ -13,21 +13,21 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.gateway.data;
+package com.flowcentraltech.flowcentral.os.messaging.data;
 
 /**
- * Gateway error.
+ * Messaging error.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class GatewayError {
+public class MessagingError {
 
     private String errorCode;
     
     private String errorMessage;
     
-    public GatewayError(String errorCode, String errorMessage) {
+    public MessagingError(String errorCode, String errorMessage) {
         this.errorCode = errorCode;
         this.errorMessage = errorMessage;
     }

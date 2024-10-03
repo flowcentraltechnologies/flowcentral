@@ -13,17 +13,25 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.gateway.constants;
+package com.flowcentraltech.flowcentral.os.messaging.constants;
 
 /**
-* Gateway request header constants.
-* 
-* @author FlowCentral Technologies Limited
-* @since 1.0
-*/
-public interface GatewayRequestHeaderConstants {
+ * OS messaging response constants.
+ * 
+ * @author FlowCentral Technologies Limited
+ * @since 1.0
+ */
+public interface MessagingResponseConstants {
 
-    String GATEWAY_APPLICATION = "Gateway-Application";
+    String SUCCESS_CODE = "00";
 
-    String GATEWAY_PROCESSOR = "Gateway-Processor";
+    String SUCCESS_MSG = "Success";
+
+    String PROCESSOR_UNKNOWN = "GP01";
+
+    String NO_APPLICATION_SPECIFIED = "GP02";
+
+    String NO_PROCESSOR_SPECIFIED = "GP03";
+
+    String PROCESSING_EXCEPTION = "GP04";
 }

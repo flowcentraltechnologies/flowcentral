@@ -13,25 +13,25 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.gateway.business;
+package com.flowcentraltech.flowcentral.os.messaging.business;
 
 import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
-import com.flowcentraltech.flowcentral.gateway.data.BaseGatewayRequest;
-import com.flowcentraltech.flowcentral.gateway.data.BaseGatewayResponse;
+import com.flowcentraltech.flowcentral.os.messaging.data.BaseMessagingRequest;
+import com.flowcentraltech.flowcentral.os.messaging.data.BaseMessagingResponse;
 import com.tcdng.unify.core.UnifyException;
 
 /**
- * Gateway processor.
+ * Messaging processor.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface GatewayProcessor<T extends BaseGatewayResponse, U extends BaseGatewayRequest> extends FlowCentralComponent {
+public interface MessagingProcessor<T extends BaseMessagingResponse, U extends BaseMessagingRequest> extends FlowCentralComponent {
      
     /**
      * Gets the processor request class.
      */
-    Class<? extends BaseGatewayRequest> getRequestClass();
+    Class<? extends BaseMessagingRequest> getRequestClass();
     
     /**
      * Processes a gateway request.

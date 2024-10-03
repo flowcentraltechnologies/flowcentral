@@ -13,50 +13,50 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.gateway.business;
+package com.flowcentraltech.flowcentral.os.messaging.business;
 
 import com.flowcentraltech.flowcentral.common.AbstractFlowCentralComponent;
-import com.flowcentraltech.flowcentral.gateway.constants.GatewayResponseConstants;
-import com.flowcentraltech.flowcentral.gateway.data.BaseGatewayRequest;
-import com.flowcentraltech.flowcentral.gateway.data.BaseGatewayResponse;
-import com.flowcentraltech.flowcentral.gateway.data.GatewayError;
+import com.flowcentraltech.flowcentral.os.messaging.constants.MessagingResponseConstants;
+import com.flowcentraltech.flowcentral.os.messaging.data.BaseMessagingRequest;
+import com.flowcentraltech.flowcentral.os.messaging.data.BaseMessagingResponse;
+import com.flowcentraltech.flowcentral.os.messaging.data.MessagingError;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.constant.LocaleType;
 import com.tcdng.unify.core.util.ReflectUtils;
 
 /**
- * Convenient abstract base class for gateway processors.
+ * Convenient abstract base class for messaging processors.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class AbstractGatewayProcessor<T extends BaseGatewayResponse, U extends BaseGatewayRequest>
-        extends AbstractFlowCentralComponent implements GatewayProcessor<T, U> {
+public abstract class AbstractMessagingProcessor<T extends BaseMessagingResponse, U extends BaseMessagingRequest>
+        extends AbstractFlowCentralComponent implements MessagingProcessor<T, U> {
 
     private final Class<T> responseClass;
 
     private final Class<U> requestClass;
 
-    public AbstractGatewayProcessor(Class<T> responseClass, Class<U> requestClass) {
+    public AbstractMessagingProcessor(Class<T> responseClass, Class<U> requestClass) {
         this.responseClass = responseClass;
         this.requestClass = requestClass;
     }
 
     @Override
-    public final Class<? extends BaseGatewayRequest> getRequestClass() {
+    public final Class<? extends BaseMessagingRequest> getRequestClass() {
         return requestClass;
     }
 
     @Override
     public final T process(U request) throws UnifyException {
-        GatewayError error = null;
+        MessagingError error = null;
         try {
             error = validateRequest(request);
             if (error == null) {
                 return doProcess(request);
             }
         } catch (Exception e) {
-            error = new GatewayError(GatewayResponseConstants.PROCESSING_EXCEPTION,
+            error = new MessagingError(MessagingResponseConstants.PROCESSING_EXCEPTION,
                     getExceptionMessage(LocaleType.APPLICATION, e));
         }
 
@@ -76,7 +76,7 @@ public abstract class AbstractGatewayProcessor<T extends BaseGatewayResponse, U 
 
     }
 
-    protected abstract GatewayError validateRequest(U request) throws UnifyException;
+    protected abstract MessagingError validateRequest(U request) throws UnifyException;
 
     protected abstract T doProcess(U request) throws UnifyException;
 }

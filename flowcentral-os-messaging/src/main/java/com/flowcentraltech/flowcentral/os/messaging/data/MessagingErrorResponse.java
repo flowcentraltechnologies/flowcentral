@@ -13,24 +13,21 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.gateway.data;
+package com.flowcentraltech.flowcentral.os.messaging.data;
 
 /**
- * Abstract base class for gateway requests.
+ * Messaging error response.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class BaseGatewayRequest {
+public class MessagingErrorResponse extends BaseMessagingResponse {
 
-    private String application;
-
-    public String getApplication() {
-        return application;
+    public MessagingErrorResponse(MessagingError error) {
+        super(error.getErrorCode(), error.getErrorMessage());
     }
 
-    public void setApplication(String application) {
-        this.application = application;
-    }
+    public MessagingErrorResponse() {
 
+    }
 }

@@ -13,28 +13,16 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.gateway.business;
-
-import com.flowcentraltech.flowcentral.common.AbstractFlowCentralComponent;
-import com.tcdng.unify.core.UnifyException;
+package com.flowcentraltech.flowcentral.os.messaging.constants;
 
 /**
- * Convenient abstract base class for gateway access managers.
+ * Messaging module name constants.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class AbstractGatewayAccessManager extends AbstractFlowCentralComponent
-        implements GatewayAccessManager {
+public interface MessagingModuleNameConstants {
 
-    @Override
-    protected void onInitialize() throws UnifyException {
-
-    }
-
-    @Override
-    protected void onTerminate() throws UnifyException {
-
-    }
+    String MESSAGING_CONTROLLER = "/flowcentral/os/messaging";
 
 }

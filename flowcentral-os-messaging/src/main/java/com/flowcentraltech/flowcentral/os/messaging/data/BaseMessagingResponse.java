@@ -13,18 +13,18 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.gateway.data;
+package com.flowcentraltech.flowcentral.os.messaging.data;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
-import com.flowcentraltech.flowcentral.gateway.constants.GatewayResponseConstants;
+import com.flowcentraltech.flowcentral.os.messaging.constants.MessagingResponseConstants;
 
 /**
- * Abstract base class for gateway responses.
+ * Abstract base class for messaging responses.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class BaseGatewayResponse {
+public abstract class BaseMessagingResponse {
     
     @JacksonXmlProperty
     private String responseCode;
@@ -32,14 +32,14 @@ public abstract class BaseGatewayResponse {
     @JacksonXmlProperty
     private String responseMessage;
 
-    public BaseGatewayResponse(String responseCode, String responseMessage) {
+    public BaseMessagingResponse(String responseCode, String responseMessage) {
         this.responseCode = responseCode;
         this.responseMessage = responseMessage;
     }
 
-    public BaseGatewayResponse() {
-        this.responseCode = GatewayResponseConstants.SUCCESS_CODE;
-        this.responseMessage = GatewayResponseConstants.SUCCESS_MSG;
+    public BaseMessagingResponse() {
+        this.responseCode = MessagingResponseConstants.SUCCESS_CODE;
+        this.responseMessage = MessagingResponseConstants.SUCCESS_MSG;
     }
 
     public String getResponseCode() {
@@ -56,6 +56,10 @@ public abstract class BaseGatewayResponse {
 
     public void setResponseMessage(String responseMessage) {
         this.responseMessage = responseMessage;
+    }
+    
+    public boolean isSuccessful() {
+        return MessagingResponseConstants.SUCCESS_CODE.equals(responseCode);
     }
 
 }
