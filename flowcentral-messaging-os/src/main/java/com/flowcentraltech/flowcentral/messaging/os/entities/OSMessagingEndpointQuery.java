@@ -13,16 +13,28 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.messaging.os.constants;
+package com.flowcentraltech.flowcentral.messaging.os.entities;
+
+import com.flowcentraltech.flowcentral.common.entities.BaseStatusEntityQuery;
 
 /**
- * Messaging module name constants.
+ * OS messaging end-point query.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface MessagingModuleNameConstants {
+public class OSMessagingEndpointQuery extends BaseStatusEntityQuery<OSMessagingEndpoint> {
 
-    String MESSAGING_CONTROLLER = "/flowcentral/os/messaging";
+    public OSMessagingEndpointQuery() {
+        super(OSMessagingEndpoint.class);
+    }
+
+    public OSMessagingEndpointQuery name(String name) {
+        return (OSMessagingEndpointQuery) addEquals("name", name);
+    }
+
+    public OSMessagingEndpointQuery descriptionLike(String description) {
+        return (OSMessagingEndpointQuery) addLike("description", description);
+    }
 
 }

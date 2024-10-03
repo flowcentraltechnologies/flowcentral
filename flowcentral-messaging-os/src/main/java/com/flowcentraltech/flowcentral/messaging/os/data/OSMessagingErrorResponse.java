@@ -16,21 +16,18 @@
 package com.flowcentraltech.flowcentral.messaging.os.data;
 
 /**
- * Abstract base class for messaging requests.
+ * OS messaging error response.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class BaseMessagingRequest {
+public class OSMessagingErrorResponse extends BaseOSMessagingResp {
 
-    private String application;
-
-    public String getApplication() {
-        return application;
+    public OSMessagingErrorResponse(OSMessagingError error) {
+        super(error.getErrorCode(), error.getErrorMessage());
     }
 
-    public void setApplication(String application) {
-        this.application = application;
-    }
+    public OSMessagingErrorResponse() {
 
+    }
 }

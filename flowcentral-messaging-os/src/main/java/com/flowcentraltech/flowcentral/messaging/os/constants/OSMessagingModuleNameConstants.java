@@ -16,14 +16,17 @@
 package com.flowcentraltech.flowcentral.messaging.os.constants;
 
 /**
-* Messaging request header constants.
-* 
-* @author FlowCentral Technologies Limited
-* @since 1.0
-*/
-public interface MessagingRequestHeaderConstants {
+ * OS messaging module name constants.
+ * 
+ * @author FlowCentral Technologies Limited
+ * @since 1.0
+ */
+public interface OSMessagingModuleNameConstants {
 
-    String OS_APPLICATION = "OS-Application";
+    String OSMESSAGING_MODULE_NAME = "osmessaging";
 
-    String OS_MESSAGING_PROCESSOR = "OS-Messaging-Processor";
+    String OSMESSAGING_MODULE_SERVICE = "osmessaging-moduleservice";
+
+    String OSMESSAGING_CONTROLLER = "/flowcentral/os/messaging";
+
 }

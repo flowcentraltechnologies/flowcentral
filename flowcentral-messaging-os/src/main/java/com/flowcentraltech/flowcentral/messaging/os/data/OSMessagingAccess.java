@@ -18,14 +18,16 @@ package com.flowcentraltech.flowcentral.messaging.os.data;
 import com.tcdng.unify.core.util.StringUtils;
 
 /**
- * Messaging access.
+ * OS messaging access.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class MessagingAccess {
+public class OSMessagingAccess {
     
-    private String application;
+    private String target;
+    
+    private String source;
     
     private String authorization;
     
@@ -41,12 +43,20 @@ public class MessagingAccess {
     
     private Long runtimeInMilliSec;
 
-    public String getApplication() {
-        return application;
+    public String getTarget() {
+        return target;
     }
 
-    public void setApplication(String application) {
-        this.application = application;
+    public void setTarget(String target) {
+        this.target = target;
+    }
+
+    public String getSource() {
+        return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
     }
 
     public String getAuthorization() {

@@ -16,32 +16,35 @@
 package com.flowcentraltech.flowcentral.messaging.os.business;
 
 import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
-import com.flowcentraltech.flowcentral.messaging.os.data.MessagingAccess;
-import com.flowcentraltech.flowcentral.messaging.os.data.MessagingError;
+import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingAccess;
+import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingError;
 import com.tcdng.unify.core.UnifyException;
 
 /**
- * Messaging access manager.
+ * OS messaging access manager.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface MessagingAccessManager extends FlowCentralComponent {
+public interface OSMessagingAccessManager extends FlowCentralComponent {
 
     /**
      * Checks if application has messaging access.
      * 
      * @param authorization
      *                      the authorization token
-     * @param application
-     *                      the application
+     * @param source
+     *                      the source application
+     * @param target
+     *                      the target application
      * @param processor
      *                      the processor
      * @return response on error otherwise null
      * @throws UnifyException
      *                        if an error occurs
      */
-    MessagingError checkAccess(String authorization, String application, String processor) throws UnifyException;
+    OSMessagingError checkAccess(String authorization, String source, String target, String processor)
+            throws UnifyException;
 
     /**
      * Logs messaging access.
@@ -51,5 +54,5 @@ public interface MessagingAccessManager extends FlowCentralComponent {
      * @throws UnifyException
      *                        if an error occurs
      */
-    void logAccess(MessagingAccess access) throws UnifyException;
+    void logAccess(OSMessagingAccess access) throws UnifyException;
 }

@@ -15,31 +15,28 @@
  */
 package com.flowcentraltech.flowcentral.messaging.os.data;
 
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
-import com.flowcentraltech.flowcentral.messaging.os.constants.MessagingResponseConstants;
+import com.flowcentraltech.flowcentral.messaging.os.constants.OSMessagingResponseConstants;
 
 /**
- * Abstract base class for messaging responses.
+ * Abstract base class for OS messaging responses.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class BaseMessagingResponse {
+public abstract class BaseOSMessagingResp {
     
-    @JacksonXmlProperty
     private String responseCode;
 
-    @JacksonXmlProperty
     private String responseMessage;
 
-    public BaseMessagingResponse(String responseCode, String responseMessage) {
+    public BaseOSMessagingResp(String responseCode, String responseMessage) {
         this.responseCode = responseCode;
         this.responseMessage = responseMessage;
     }
 
-    public BaseMessagingResponse() {
-        this.responseCode = MessagingResponseConstants.SUCCESS_CODE;
-        this.responseMessage = MessagingResponseConstants.SUCCESS_MSG;
+    public BaseOSMessagingResp() {
+        this.responseCode = OSMessagingResponseConstants.SUCCESS_CODE;
+        this.responseMessage = OSMessagingResponseConstants.SUCCESS_MSG;
     }
 
     public String getResponseCode() {
@@ -59,7 +56,7 @@ public abstract class BaseMessagingResponse {
     }
     
     public boolean isSuccessful() {
-        return MessagingResponseConstants.SUCCESS_CODE.equals(responseCode);
+        return OSMessagingResponseConstants.SUCCESS_CODE.equals(responseCode);
     }
 
 }

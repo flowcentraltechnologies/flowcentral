@@ -16,22 +16,22 @@
 package com.flowcentraltech.flowcentral.messaging.os.business;
 
 import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
-import com.flowcentraltech.flowcentral.messaging.os.data.BaseMessagingRequest;
-import com.flowcentraltech.flowcentral.messaging.os.data.BaseMessagingResponse;
+import com.flowcentraltech.flowcentral.messaging.os.data.BaseOSMessagingReq;
+import com.flowcentraltech.flowcentral.messaging.os.data.BaseOSMessagingResp;
 import com.tcdng.unify.core.UnifyException;
 
 /**
- * Messaging processor.
+ * OS messaging processor.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface MessagingProcessor<T extends BaseMessagingResponse, U extends BaseMessagingRequest> extends FlowCentralComponent {
+public interface OSMessagingProcessor<T extends BaseOSMessagingResp, U extends BaseOSMessagingReq> extends FlowCentralComponent {
      
     /**
      * Gets the processor request class.
      */
-    Class<? extends BaseMessagingRequest> getRequestClass();
+    Class<? extends BaseOSMessagingReq> getRequestClass();
     
     /**
      * Processes a gateway request.

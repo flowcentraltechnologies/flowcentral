@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!-- Messaging module configuration -->
+<module name="messaging" description="$m{messaging.module}"
+	shortCode="MSG" label="$m{messaging.label}">
+	<!-- Applications -->
+	<applications>
+		<application name="messaging"
+			shortDescription="$m{messaging.short.description}"
+			longDescription="$m{messaging.long.description}" autoInstall="true"
+			configFile="apps/messaging-application.xml" />
+	</applications>
+	<!-- System Parameters -->
+	<sysParameters>
+		<sysParameter code="MSG-0001" defaultVal="false"
+			description="$m{messaging.sysparam.messagingreadenabled}"
+			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
+		<sysParameter code="MSG-0002" defaultVal="false"
+			description="$m{messaging.sysparam.messagingwriteenabled}"
+			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
+	</sysParameters>
+</module>

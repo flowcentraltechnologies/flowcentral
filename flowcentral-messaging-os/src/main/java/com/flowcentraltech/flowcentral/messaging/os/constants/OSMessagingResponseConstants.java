@@ -21,17 +21,23 @@ package com.flowcentraltech.flowcentral.messaging.os.constants;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface MessagingResponseConstants {
+public interface OSMessagingResponseConstants {
 
     String SUCCESS_CODE = "00";
 
     String SUCCESS_MSG = "Success";
 
+    String ERROR_CODE = "01";
+
+    String ERROR_MSG = "Error";
+
     String PROCESSOR_UNKNOWN = "GP01";
 
-    String NO_APPLICATION_SPECIFIED = "GP02";
+    String NO_TARGET_SPECIFIED = "GP02";
 
-    String NO_PROCESSOR_SPECIFIED = "GP03";
+    String NO_SOURCE_SPECIFIED = "GP03";
 
-    String PROCESSING_EXCEPTION = "GP04";
+    String NO_PROCESSOR_SPECIFIED = "GP04";
+
+    String PROCESSING_EXCEPTION = "GP05";
 }

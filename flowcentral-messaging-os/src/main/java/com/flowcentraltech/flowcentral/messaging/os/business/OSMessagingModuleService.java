@@ -16,6 +16,9 @@
 package com.flowcentraltech.flowcentral.messaging.os.business;
 
 import com.flowcentraltech.flowcentral.common.business.FlowCentralService;
+import com.flowcentraltech.flowcentral.messaging.os.data.BaseOSMessagingReq;
+import com.flowcentraltech.flowcentral.messaging.os.data.BaseOSMessagingResp;
+import com.tcdng.unify.core.UnifyException;
 
 /**
  * OS messaging module service.
@@ -25,4 +28,48 @@ import com.flowcentraltech.flowcentral.common.business.FlowCentralService;
  */
 public interface OSMessagingModuleService extends FlowCentralService {
 
+    /**
+     * Sends synchronous message.
+     * 
+     * @param respClass
+     *                     the response class
+     * @param request
+     *                     the message
+     * @param endpointName
+     *                     the messaging end-point.
+     * @return the response object
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    <T extends BaseOSMessagingResp, U extends BaseOSMessagingReq> T sendSynchronousMessage(Class<T> respClass,
+            U request, String endpointName) throws UnifyException;
+
+    /**
+     * Sends asynchronous message.
+     * 
+     * @param request
+     *                     the message
+     * @param endpointName
+     *                     the messaging end-point.
+     * @return the response object
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    <T extends BaseOSMessagingReq> void sendAsynchronousMessage(T request, String endpointName) throws UnifyException;
+
+    /**
+     * Sends asynchronous message with a delay.
+     * 
+     * @param request
+     *                     the message
+     * @param endpointName
+     *                     the messaging end-point.
+     * @param delayInSecs
+     *                     the delay in seconds.
+     * @return the response object
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    <T extends BaseOSMessagingReq> void sendAsynchronousMessage(T request, String endpointName, long delayInSecs)
+            throws UnifyException;
 }

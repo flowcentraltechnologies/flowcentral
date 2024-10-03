@@ -15,29 +15,21 @@
  */
 package com.flowcentraltech.flowcentral.messaging.os.data;
 
+import com.flowcentraltech.flowcentral.messaging.os.constants.OSMessagingResponseConstants;
+
 /**
- * Messaging error.
+ * OS messaging async response.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class MessagingError {
+public class OSMessagingAsyncResponse extends BaseOSMessagingResp {
 
-    private String errorCode;
-    
-    private String errorMessage;
-    
-    public MessagingError(String errorCode, String errorMessage) {
-        this.errorCode = errorCode;
-        this.errorMessage = errorMessage;
+    public OSMessagingAsyncResponse(String responseCode, String responseMessage) {
+        super(responseCode, responseMessage);
     }
 
-    public String getErrorCode() {
-        return errorCode;
+    public OSMessagingAsyncResponse() {
+        super(OSMessagingResponseConstants.ERROR_CODE, OSMessagingResponseConstants.ERROR_MSG);
     }
-
-    public String getErrorMessage() {
-        return errorMessage;
-    }
-
- }
+}

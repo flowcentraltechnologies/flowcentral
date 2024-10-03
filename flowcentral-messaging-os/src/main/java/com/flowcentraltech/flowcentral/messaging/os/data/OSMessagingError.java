@@ -16,18 +16,28 @@
 package com.flowcentraltech.flowcentral.messaging.os.data;
 
 /**
- * Messaging error response.
+ * OS messaging error.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class MessagingErrorResponse extends BaseMessagingResponse {
+public class OSMessagingError {
 
-    public MessagingErrorResponse(MessagingError error) {
-        super(error.getErrorCode(), error.getErrorMessage());
+    private String errorCode;
+    
+    private String errorMessage;
+    
+    public OSMessagingError(String errorCode, String errorMessage) {
+        this.errorCode = errorCode;
+        this.errorMessage = errorMessage;
     }
 
-    public MessagingErrorResponse() {
-
+    public String getErrorCode() {
+        return errorCode;
     }
-}
+
+    public String getErrorMessage() {
+        return errorMessage;
+    }
+
+ }

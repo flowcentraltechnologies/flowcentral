@@ -13,28 +13,19 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.messaging.os.business;
-
-import com.flowcentraltech.flowcentral.common.AbstractFlowCentralComponent;
-import com.tcdng.unify.core.UnifyException;
+package com.flowcentraltech.flowcentral.messaging.os.constants;
 
 /**
- * Convenient abstract base class for messaging access managers.
- * 
- * @author FlowCentral Technologies Limited
- * @since 1.0
- */
-public abstract class AbstractMessagingAccessManager extends AbstractFlowCentralComponent
-        implements MessagingAccessManager {
+* OS messaging request header constants.
+* 
+* @author FlowCentral Technologies Limited
+* @since 1.0
+*/
+public interface OSMessagingRequestHeaderConstants {
 
-    @Override
-    protected void onInitialize() throws UnifyException {
+    String OS_TARGET_APPLICATION = "OS-Target-Application";
 
-    }
+    String OS_SOURCE_APPLICATION = "OS-Source-Application";
 
-    @Override
-    protected void onTerminate() throws UnifyException {
-
-    }
-
+    String OS_MESSAGING_PROCESSOR = "OS-Messaging-Processor";
 }

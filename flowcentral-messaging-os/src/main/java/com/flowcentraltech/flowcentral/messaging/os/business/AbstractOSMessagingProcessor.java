@@ -16,47 +16,47 @@
 package com.flowcentraltech.flowcentral.messaging.os.business;
 
 import com.flowcentraltech.flowcentral.common.AbstractFlowCentralComponent;
-import com.flowcentraltech.flowcentral.messaging.os.constants.MessagingResponseConstants;
-import com.flowcentraltech.flowcentral.messaging.os.data.BaseMessagingRequest;
-import com.flowcentraltech.flowcentral.messaging.os.data.BaseMessagingResponse;
-import com.flowcentraltech.flowcentral.messaging.os.data.MessagingError;
+import com.flowcentraltech.flowcentral.messaging.os.constants.OSMessagingResponseConstants;
+import com.flowcentraltech.flowcentral.messaging.os.data.BaseOSMessagingReq;
+import com.flowcentraltech.flowcentral.messaging.os.data.BaseOSMessagingResp;
+import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingError;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.constant.LocaleType;
 import com.tcdng.unify.core.util.ReflectUtils;
 
 /**
- * Convenient abstract base class for messaging processors.
+ * Convenient abstract base class for OS messaging processors.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class AbstractMessagingProcessor<T extends BaseMessagingResponse, U extends BaseMessagingRequest>
-        extends AbstractFlowCentralComponent implements MessagingProcessor<T, U> {
+public abstract class AbstractOSMessagingProcessor<T extends BaseOSMessagingResp, U extends BaseOSMessagingReq>
+        extends AbstractFlowCentralComponent implements OSMessagingProcessor<T, U> {
 
     private final Class<T> responseClass;
 
     private final Class<U> requestClass;
 
-    public AbstractMessagingProcessor(Class<T> responseClass, Class<U> requestClass) {
+    public AbstractOSMessagingProcessor(Class<T> responseClass, Class<U> requestClass) {
         this.responseClass = responseClass;
         this.requestClass = requestClass;
     }
 
     @Override
-    public final Class<? extends BaseMessagingRequest> getRequestClass() {
+    public final Class<? extends BaseOSMessagingReq> getRequestClass() {
         return requestClass;
     }
 
     @Override
     public final T process(U request) throws UnifyException {
-        MessagingError error = null;
+        OSMessagingError error = null;
         try {
             error = validateRequest(request);
             if (error == null) {
                 return doProcess(request);
             }
         } catch (Exception e) {
-            error = new MessagingError(MessagingResponseConstants.PROCESSING_EXCEPTION,
+            error = new OSMessagingError(OSMessagingResponseConstants.PROCESSING_EXCEPTION,
                     getExceptionMessage(LocaleType.APPLICATION, e));
         }
 
@@ -76,7 +76,7 @@ public abstract class AbstractMessagingProcessor<T extends BaseMessagingResponse
 
     }
 
-    protected abstract MessagingError validateRequest(U request) throws UnifyException;
+    protected abstract OSMessagingError validateRequest(U request) throws UnifyException;
 
     protected abstract T doProcess(U request) throws UnifyException;
 }

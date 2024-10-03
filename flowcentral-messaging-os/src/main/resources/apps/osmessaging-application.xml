@@ -1,0 +1,257 @@
+<?xml version="1.0"?>
+<!-- Messaging application -->
+<application name="messaging"
+	description="$m{messaging.short.description}"
+	label="$m{messaging.label}" module="messaging">
+	<!-- Widgets -->
+	<widgetTypes>
+		<widgetType name="messagingconfigsearch"
+			description="$m{messaging.widgettype.messagingconfigsearch}"
+			dataType="string" inputType="string"
+			editor="!fc-messagingconfigsearch" renderer="!ui-label" />
+		<widgetType name="messagingconsumersearch"
+			description="$m{messaging.widgettype.messagingconsumersearch}"
+			dataType="string" inputType="string"
+			editor="!fc-messagingconsumersearch" renderer="!ui-label" />
+		<widgetType name="messagingproducersearch"
+			description="$m{messaging.widgettype.messagingproducersearch}"
+			dataType="string" inputType="string"
+			editor="!fc-messagingproducersearch" renderer="!ui-label" />
+		<widgetType name="messagingconfiglist"
+			description="$m{messaging.widgettype.messagingconfiglist}"
+			dataType="string" inputType="string"
+			editor="!ui-select blankOption:$s{} list:messagingconfiglist"
+			renderer="!ui-label" />
+		<widgetType name="messagingconsumerlist"
+			description="$m{messaging.widgettype.messagingconsumerlist}"
+			dataType="string" inputType="string"
+			editor="!ui-select blankOption:$s{} list:messagingconsumerlist"
+			renderer="!ui-label" />
+		<widgetType name="messagingproducerlist"
+			description="$m{messaging.widgettype.messagingproducerlist}"
+			dataType="string" inputType="string"
+			editor="!ui-select blankOption:$s{} list:messagingproducerlist"
+			renderer="!ui-label" />
+		<widgetType name="messagingsourcelist"
+			description="$m{messaging.widgettype.messagingsourcelist}"
+			dataType="string" inputType="string"
+			editor="!ui-select blankOption:$s{} list:messagingsourcelist listParams:$l{endpointConfig}"
+			renderer="!ui-label" />
+		<widgetType name="messagingdestinationlist"
+			description="$m{messaging.widgettype.messagingdestinationlist}"
+			dataType="string" inputType="string"
+			editor="!ui-select blankOption:$s{} list:messagingdestinationlist listParams:$l{endpointConfig}"
+			renderer="!ui-label" />
+	</widgetTypes>
+	<!-- Applets -->
+	<applets>
+		<applet name="manageMessagingReadConfig"
+			description="$m{messaging.messagingreadconfig.manage}"
+			label="$m{messaging.messagingreadconfig.manage.label}" icon="mail"
+			type="manage_entitylist" entity="messagingReadConfig"
+			menuAccess="true">
+			<property name="searchTable"
+				value="messagingReadConfigTable" />
+			<property name="searchTable.new" value="true" />
+			<property name="searchTable.report" value="true" />
+			<property name="searchTable.quickFilter" value="true" />
+			<property name="searchTable.basicSearchOnly" value="true" />
+			<property name="createForm" value="messagingReadConfigForm" />
+			<property name="createForm.save" value="true" />
+			<property name="createForm.save.next" value="true" />
+			<property name="createForm.save.close" value="true" />
+			<property name="maintainForm"
+				value="messagingReadConfigForm" />
+			<property name="maintainForm.update" value="true" />
+			<property name="maintainForm.delete" value="true" />
+		</applet>
+		<applet name="manageMessagingWriteConfig"
+			description="$m{messaging.messagingwriteconfig.manage}"
+			label="$m{messaging.messagingwriteconfig.manage.label}" icon="mail"
+			type="manage_entitylist" entity="messagingWriteConfig"
+			menuAccess="true">
+			<property name="searchTable"
+				value="messagingWriteConfigTable" />
+			<property name="searchTable.new" value="true" />
+			<property name="searchTable.report" value="true" />
+			<property name="searchTable.quickFilter" value="true" />
+			<property name="searchTable.basicSearchOnly" value="true" />
+			<property name="createForm" value="messagingWriteConfigForm" />
+			<property name="createForm.save" value="true" />
+			<property name="createForm.save.next" value="true" />
+			<property name="createForm.save.close" value="true" />
+			<property name="maintainForm"
+				value="messagingWriteConfigForm" />
+			<property name="maintainForm.update" value="true" />
+			<property name="maintainForm.delete" value="true" />
+		</applet>
+	</applets>
+	<!-- References -->
+	<references>
+		<reference name="messagingReadConfigRef"
+			description="$m{messaging.messagingreadconfig.reference}"
+			entity="messagingReadConfig" searchField="description" />
+		<reference name="messagingWriteConfigRef"
+			description="$m{messaging.messagingwriteconfig.reference}"
+			entity="messagingWriteConfig" searchField="description" />
+	</references>
+	<!-- Entities -->
+	<entities>
+		<entity name="messagingReadConfig"
+			description="$m{messaging.messagingreadconfig}"
+			label="$m{messaging.messagingreadconfig.label}"
+			type="com.flowcentraltech.flowcentral.messaging.entities.MessagingReadConfig"
+			auditable="true" reportable="true">
+			<field name="name"
+				label="$m{messaging.messagingreadconfig.name}" type="string"
+				inputWidget="application.name" maxLen="64" basicSearch="true" />
+			<field name="description"
+				label="$m{messaging.messagingreadconfig.description}" type="string"
+				inputWidget="application.text" maxLen="96" />
+			<field name="endpointConfig"
+				label="$m{messaging.messagingreadconfig.endpointconfig}"
+				type="string" inputWidget="messagingconfiglist" maxLen="64" />
+			<field name="source"
+				label="$m{messaging.messagingreadconfig.source}" type="string"
+				inputWidget="messagingsourcelist" maxLen="128" />
+			<field name="consumer"
+				label="$m{messaging.messagingreadconfig.consumer}" type="string"
+				inputWidget="messagingconsumerlist" maxLen="64" />
+			<field name="maxConcurrent"
+				label="$m{messaging.messagingreadconfig.maxconcurrent}"
+				type="integer" inputWidget="application.integer" precision="2" />
+			<uniqueConstraint name="nameUc"
+				description="$m{messaging.messagingreadconfig.uc.name}"
+				fieldList="name" />
+			<uniqueConstraint name="descUc"
+				description="$m{messaging.messagingreadconfig.uc.description}"
+				fieldList="description" />
+		</entity>
+		<entity name="messagingWriteConfig"
+			description="$m{messaging.messagingwriteconfig}"
+			label="$m{messaging.messagingwriteconfig.label}"
+			type="com.flowcentraltech.flowcentral.messaging.entities.MessagingWriteConfig"
+			auditable="true" reportable="true">
+			<field name="name"
+				label="$m{messaging.messagingwriteconfig.name}" type="string"
+				inputWidget="application.name" maxLen="64" basicSearch="true" />
+			<field name="description"
+				label="$m{messaging.messagingwriteconfig.description}" type="string"
+				inputWidget="application.text" maxLen="96" />
+			<field name="endpointConfig"
+				label="$m{messaging.messagingwriteconfig.endpointconfig}"
+				type="string" inputWidget="messagingconfiglist" maxLen="64" />
+			<field name="destination"
+				label="$m{messaging.messagingwriteconfig.destination}" type="string"
+				inputWidget="messagingdestinationlist" maxLen="128" />
+			<field name="producer"
+				label="$m{messaging.messagingwriteconfig.producer}" type="string"
+				inputWidget="messagingproducerlist" maxLen="64" />
+			<uniqueConstraint name="nameUc"
+				description="$m{messaging.messagingwriteconfig.uc.name}"
+				fieldList="name" />
+			<uniqueConstraint name="descUc"
+				description="$m{messaging.messagingwriteconfig.uc.description}"
+				fieldList="description" />
+		</entity>
+	</entities>
+	<!-- Tables -->
+	<tables>
+		<table name="messagingReadConfigTable"
+			description="$m{messaging.messagingreadconfig.table}"
+			label="$m{messaging.messagingreadconfig.table.label}"
+			entity="messagingReadConfig" itemsPerPage="20" serialNo="true"
+			basicSearch="true">
+			<column field="name" renderWidget="application.name"
+				widthRatio="1" linkAct="maintainAct" />
+			<column field="description" renderWidget="application.text"
+				widthRatio="1" />
+			<column field="endpointConfig" renderWidget="application.text"
+				widthRatio="1" />
+			<column field="source" renderWidget="application.text"
+				widthRatio="1" />
+			<column field="statusDesc" renderWidget="application.text"
+				label="$m{messaging.messagingreadconfig.status}" widthRatio="1" />
+			<column field="createDt" renderWidget="application.datetime"
+				widthRatio="1" />
+			<column field="updateDt" renderWidget="application.datetime"
+				widthRatio="1" />
+		</table>
+		<table name="messagingWriteConfigTable"
+			description="$m{messaging.messagingwriteconfig.table}"
+			label="$m{messaging.messagingwriteconfig.table.label}"
+			entity="messagingWriteConfig" itemsPerPage="20" serialNo="true"
+			basicSearch="true">
+			<column field="name" renderWidget="application.name"
+				widthRatio="1" linkAct="maintainAct" />
+			<column field="description" renderWidget="application.text"
+				widthRatio="1" />
+			<column field="endpointConfig" renderWidget="application.text"
+				widthRatio="1" />
+			<column field="destination" renderWidget="application.text"
+				widthRatio="1" />
+			<column field="statusDesc" renderWidget="application.text"
+				label="$m{messaging.messagingwriteconfig.status}" widthRatio="1" />
+			<column field="createDt" renderWidget="application.datetime"
+				widthRatio="1" />
+			<column field="updateDt" renderWidget="application.datetime"
+				widthRatio="1" />
+		</table>
+	</tables>
+	<!-- Forms -->
+	<forms>
+		<form name="messagingReadConfigForm"
+			description="$m{messaging.messagingreadconfig.form}"
+			entity="messagingReadConfig">
+			<tab name="basicDetails"
+				label="$m{messaging.messagingreadconfig.form.basicdetails}"
+				contentType="miniform">
+				<section name="messagingReadConfigDetails" columns="type_2"
+					label="$m{messaging.messagingreadconfig.form.section.basicdetails}">
+					<field name="name" column="0" required="true" />
+					<field name="description" column="0" required="true" />
+					<field name="status" column="1" required="true" />
+				</section>
+				<section name="sourceDetails" columns="type_2"
+					label="$m{messaging.messagingreadconfig.form.section.source}">
+					<field name="endpointConfig" column="0" switchOnChange="true"
+						required="true" />
+					<field name="source" column="1" required="true" />
+				</section>
+				<section name="consumerDetails" columns="type_2"
+					label="$m{messaging.messagingreadconfig.form.section.consumer}">
+					<field name="consumer" column="0" required="true" />
+					<field name="maxConcurrent" column="1" required="true" />
+				</section>
+			</tab>
+			<tab name="changeLog" label="$m{application.form.audit}"
+				contentType="miniform_changelog" />
+		</form>
+		<form name="messagingWriteConfigForm"
+			description="$m{messaging.messagingwriteconfig.form}"
+			entity="messagingWriteConfig">
+			<tab name="basicDetails"
+				label="$m{messaging.messagingwriteconfig.form.basicdetails}"
+				contentType="miniform">
+				<section name="messagingWriteConfigDetails" columns="type_2"
+					label="$m{messaging.messagingwriteconfig.form.section.basicdetails}">
+					<field name="name" column="0" required="true" />
+					<field name="description" column="0" required="true" />
+					<field name="status" column="1" required="true" />
+				</section>
+				<section name="destinationDetails" columns="type_2"
+					label="$m{messaging.messagingwriteconfig.form.section.destination}">
+					<field name="endpointConfig" column="0" switchOnChange="true"
+						required="true" />
+					<field name="destination" column="1" required="true" />
+				</section>
+				<section name="producerDetails" columns="type_2"
+					label="$m{messaging.messagingwriteconfig.form.section.producer}">
+					<field name="producer" column="0" required="true" />
+				</section>
+			</tab>
+			<tab name="changeLog" label="$m{application.form.audit}"
+				contentType="miniform_changelog" />
+		</form>
+	</forms>
+</application>

@@ -54,6 +54,11 @@ public abstract class AbstractFlowCentralService extends AbstractBusinessService
         }
     }
 
+    @Override
+    public void clearDefinitionsCache() throws UnifyException {
+        
+    }
+
     protected final String generateRandomUUID() {
         return UUID.randomUUID().toString();
     }
