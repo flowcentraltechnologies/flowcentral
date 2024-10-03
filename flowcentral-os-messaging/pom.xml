@@ -9,9 +9,9 @@
 		<version>3.0.3-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>flowcentral-gateway</artifactId>
-	<name>flowcentral-gateway</name>
-	<description>Flowcentral Gateway Module</description>
+	<artifactId>flowcentral-os-messaging</artifactId>
+	<name>flowcentral-os-messaging</name>
+	<description>Flowcentral OS Messaging Module</description>
 	<url>http://www.flowcentralplatform.com</url>
 
 	<dependencies>
