@@ -62,7 +62,6 @@ public class MessagingController extends AbstractPlainJsonController {
         messagingAccess.setAuthorization(authorization);
         messagingAccess.setProcessor(processor);
         try {
-            
             if (StringUtils.isBlank(application)) {
                 error = new MessagingError(MessagingResponseConstants.NO_APPLICATION_SPECIFIED,
                         "No messaging application specified in request headers.");
