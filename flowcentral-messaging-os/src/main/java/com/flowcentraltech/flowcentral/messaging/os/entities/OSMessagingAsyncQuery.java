@@ -18,6 +18,9 @@ package com.flowcentraltech.flowcentral.messaging.os.entities;
 import java.util.Date;
 
 import com.flowcentraltech.flowcentral.common.entities.BaseAuditEntityQuery;
+import com.tcdng.unify.core.criterion.Equals;
+import com.tcdng.unify.core.criterion.IsNull;
+import com.tcdng.unify.core.criterion.Or;
 
 /**
  * OS messaging async query.
@@ -36,7 +39,7 @@ public class OSMessagingAsyncQuery extends BaseAuditEntityQuery<OSMessagingAsync
     }
 
     public OSMessagingAsyncQuery isDue(Date now) {
-        return (OSMessagingAsyncQuery) addLessThanEqual("sentOn", now);
+        return (OSMessagingAsyncQuery) addLessThanEqual("nextAttemptOn", now);
     }
 
     public OSMessagingAsyncQuery isSent() {
@@ -45,6 +48,15 @@ public class OSMessagingAsyncQuery extends BaseAuditEntityQuery<OSMessagingAsync
 
     public OSMessagingAsyncQuery isNotSent() {
         return (OSMessagingAsyncQuery) addIsNull("sentOn");
+    }
+
+    public OSMessagingAsyncQuery isNotProcessing() {
+        return (OSMessagingAsyncQuery) addRestriction(
+                new Or().add(new IsNull("processing")).add(new Equals("processing", Boolean.FALSE)));
+    }
+
+    public OSMessagingAsyncQuery isProcessing() {
+        return (OSMessagingAsyncQuery) addEquals("processing", Boolean.TRUE);
     }
 
 }

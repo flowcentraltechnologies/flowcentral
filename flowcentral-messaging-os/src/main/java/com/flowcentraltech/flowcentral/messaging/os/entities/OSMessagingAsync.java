@@ -42,9 +42,21 @@ public class OSMessagingAsync extends BaseAuditEntity {
     @Column(name = "NEXT_ATTEMPT_ON")
     private Date nextAttemptOn;
 
+    @Column(name = "PROCESS_BEFORE", nullable = true)
+    private Date processBefore;
+
     @Column(name = "SENT_ON", nullable = true)
     private Date sentOn;
 
+    @Column(name = "RESP_CD", length = 10, nullable = true)
+    private String responseCode;
+
+    @Column(name = "RESP_MSG", length=256, nullable = true)
+    private String responseMsg;
+
+    @Column(name = "PROCESSING_FG", nullable = true)
+    private Boolean processing;
+    
     @Override
     public String getDescription() {
         return this.endpoint;
@@ -74,6 +86,14 @@ public class OSMessagingAsync extends BaseAuditEntity {
         this.nextAttemptOn = nextAttemptOn;
     }
 
+    public Date getProcessBefore() {
+        return processBefore;
+    }
+
+    public void setProcessBefore(Date processBefore) {
+        this.processBefore = processBefore;
+    }
+
     public Date getSentOn() {
         return sentOn;
     }
@@ -82,5 +102,28 @@ public class OSMessagingAsync extends BaseAuditEntity {
         this.sentOn = sentOn;
     }
 
+    public String getResponseCode() {
+        return responseCode;
+    }
+
+    public void setResponseCode(String responseCode) {
+        this.responseCode = responseCode;
+    }
+
+    public String getResponseMsg() {
+        return responseMsg;
+    }
+
+    public void setResponseMsg(String responseMsg) {
+        this.responseMsg = responseMsg;
+    }
+
+    public Boolean getProcessing() {
+        return processing;
+    }
+
+    public void setProcessing(Boolean processing) {
+        this.processing = processing;
+    }
 
 }

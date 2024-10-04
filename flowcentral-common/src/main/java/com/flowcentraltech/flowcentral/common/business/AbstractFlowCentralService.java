@@ -33,6 +33,7 @@ import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.business.AbstractBusinessService;
 import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.database.Query;
+import com.tcdng.unify.core.system.HeartbeatManager;
 
 /**
  * Base class for flowCentral service.
@@ -45,7 +46,12 @@ public abstract class AbstractFlowCentralService extends AbstractBusinessService
     @Configurable
     private EnvironmentService environmentService;
 
+    @Configurable
+    private HeartbeatManager heartbeatManager;
+
     private static final String SYSTEM_RESTORE_LOCK = "app:system-restore-lock";
+
+    private static final int KEEP_CLUSTER_SAFE_IN_MINUTES = 2;
 
     @Override
     public final void installFeatures(List<ModuleInstall> moduleInstallList) throws UnifyException {
@@ -71,7 +77,7 @@ public abstract class AbstractFlowCentralService extends AbstractBusinessService
     protected final EnvironmentService environment() {
         return environmentService;
     }
-
+    
     @Override
     protected String resolveApplicationMessage(String message, Object... params) throws UnifyException {
         Messages messages = getSessionAttribute(Messages.class,
@@ -96,6 +102,11 @@ public abstract class AbstractFlowCentralService extends AbstractBusinessService
         }
 
         return new EntityActionResult(ctx);
+    }
+
+    protected void keepThreadAndClusterSafe(String expiryFieldName, Query<? extends Entity> query)
+            throws UnifyException {
+        heartbeatManager.startHeartbeat(query, expiryFieldName, KEEP_CLUSTER_SAFE_IN_MINUTES);
     }
 
     protected final boolean enterSystemRestoreMode() throws UnifyException {

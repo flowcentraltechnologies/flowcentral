@@ -15,8 +15,6 @@
  */
 package com.flowcentraltech.flowcentral.messaging.os.data;
 
-import com.flowcentraltech.flowcentral.messaging.os.constants.OSMessagingResponseConstants;
-
 /**
  * OS messaging async response.
  * 
@@ -30,6 +28,7 @@ public class OSMessagingAsyncResponse extends BaseOSMessagingResp {
     }
 
     public OSMessagingAsyncResponse() {
-        super(OSMessagingResponseConstants.ERROR_CODE, OSMessagingResponseConstants.ERROR_MSG);
+
     }
+
 }
