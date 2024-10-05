@@ -15,8 +15,6 @@
  */
 package com.flowcentraltech.flowcentral.messaging.os.data;
 
-import com.flowcentraltech.flowcentral.messaging.os.constants.OSMessagingResponseConstants;
-
 /**
  * Abstract base class for OS messaging responses.
  * 

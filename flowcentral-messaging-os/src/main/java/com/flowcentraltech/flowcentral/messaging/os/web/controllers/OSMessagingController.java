@@ -19,12 +19,12 @@ import com.flowcentraltech.flowcentral.messaging.os.business.OSMessagingAccessMa
 import com.flowcentraltech.flowcentral.messaging.os.business.OSMessagingProcessor;
 import com.flowcentraltech.flowcentral.messaging.os.constants.OSMessagingModuleNameConstants;
 import com.flowcentraltech.flowcentral.messaging.os.constants.OSMessagingRequestHeaderConstants;
-import com.flowcentraltech.flowcentral.messaging.os.constants.OSMessagingResponseConstants;
 import com.flowcentraltech.flowcentral.messaging.os.data.BaseOSMessagingReq;
 import com.flowcentraltech.flowcentral.messaging.os.data.BaseOSMessagingResp;
 import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingAccess;
 import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingError;
 import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingErrorResponse;
+import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingResponseConstants;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;

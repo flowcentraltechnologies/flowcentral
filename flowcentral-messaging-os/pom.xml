@@ -21,6 +21,11 @@
             <artifactId>flowcentral-common</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.flowcentraltech.flowcentral</groupId>
+            <artifactId>flowcentral-messaging-os-data</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 		<!-- Test dependencies -->
 	</dependencies>
 </project>
