@@ -15,9 +15,13 @@
  */
 package com.flowcentraltech.flowcentral.messaging.os.business;
 
+import java.util.List;
+
 import com.flowcentraltech.flowcentral.common.business.FlowCentralService;
 import com.flowcentraltech.flowcentral.messaging.os.data.BaseOSMessagingReq;
 import com.flowcentraltech.flowcentral.messaging.os.data.BaseOSMessagingResp;
+import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingEndpoint;
+import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingEndpointQuery;
 import com.tcdng.unify.core.UnifyException;
 
 /**
@@ -28,6 +32,17 @@ import com.tcdng.unify.core.UnifyException;
  */
 public interface OSMessagingModuleService extends FlowCentralService {
 
+    /**
+     * Finds messaging endpoints.
+     * 
+     * @param query
+     *              the search criteria
+     * @return list of endpoints
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    List<OSMessagingEndpoint> findMessagingEndpoints(OSMessagingEndpointQuery query) throws UnifyException;
+    
     /**
      * Sends synchronous message.
      * 

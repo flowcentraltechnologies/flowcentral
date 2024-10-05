@@ -3,11 +3,19 @@
 <application name="osmessaging"
 	description="$m{osmessaging.short.description}"
 	label="$m{osmessaging.label}" module="osmessaging">
+	<!-- Widgets -->
+	<widgetTypes>
+		<widgetType name="endpointlist"
+			description="$m{osmessaging.widgettype.endpointlist}"
+			dataType="string" inputType="string"
+			editor="!ui-select blankOption:$s{} list:osmessagingendpointlist listKey:$s{name}"
+			renderer="!ui-label" />
+	</widgetTypes>
 	<!-- Applets -->
 	<applets>
 		<applet name="manageOSMessagingEndpoint"
 			description="$m{osmessaging.osmessagingendpoint.manage}"
-			label="$m{osmessaging.osmessagingendpoint.manage.label}" icon="mail"
+			label="$m{osmessaging.osmessagingendpoint.manage.label}" icon="ethernet"
 			type="manage_entitylist" entity="osMessagingEndpoint"
 			menuAccess="true">
 			<property name="searchTable"
@@ -27,7 +35,7 @@
 		</applet>
 		<applet name="manageOSMessagingAsync"
 			description="$m{osmessaging.osmessagingasync.manage}"
-			label="$m{osmessaging.osmessagingasync.manage.label}" icon="mail"
+			label="$m{osmessaging.osmessagingasync.manage.label}" icon="mail-bulk"
 			type="manage_entitylist" entity="osMessagingAsync"
 			menuAccess="true">
 			<property name="searchTable" value="osMessagingAsyncTable" />
@@ -89,7 +97,7 @@
 			auditable="true" reportable="true">
 			<field name="endpoint"
 				label="$m{osmessaging.osmessagingasync.endpoint}" type="string"
-				inputWidget="application.name" maxLen="64" basicSearch="true" />
+				inputWidget="osmessaging.endpointlist" maxLen="64" basicSearch="true" />
 			<field name="message"
 				label="$m{osmessaging.osmessagingasync.message}" type="clob"
 				inputWidget="application.textareamedium" />

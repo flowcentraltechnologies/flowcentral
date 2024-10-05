@@ -107,6 +107,11 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
     }
 
     @Override
+    public List<OSMessagingEndpoint> findMessagingEndpoints(OSMessagingEndpointQuery query) throws UnifyException {
+        return environment().findAll(query);
+    }
+
+    @Override
     public <T extends BaseOSMessagingResp, U extends BaseOSMessagingReq> T sendSynchronousMessage(Class<T> respClass,
             U request, String endpointName) throws UnifyException {
         return sendMessage(respClass, endpointName, request);
