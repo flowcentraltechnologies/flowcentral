@@ -38,7 +38,7 @@ public class OSMessagingEndpoint extends BaseStatusEntity {
     @Column(name = "ENDPOINT_DESC", length = 128)
     private String description;
 
-    @Column(name = "NODE_URL", length = 128)
+    @Column(name = "NODE_URL", length = 256)
     private String nodeUrl;
 
     @Column(name = "TARGET", length = 64)

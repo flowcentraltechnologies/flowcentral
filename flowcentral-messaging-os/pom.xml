@@ -9,8 +9,8 @@
 		<version>3.1.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>flowcentral-os-messaging</artifactId>
-	<name>flowcentral-os-messaging</name>
+	<artifactId>flowcentral-messaging-os</artifactId>
+	<name>flowcentral-messaging-os</name>
 	<description>Flowcentral OS Messaging Module</description>
 	<url>http://www.flowcentralplatform.com</url>
 
