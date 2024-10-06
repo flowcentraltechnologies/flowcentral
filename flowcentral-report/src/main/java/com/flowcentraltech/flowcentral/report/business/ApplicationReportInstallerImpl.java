@@ -81,7 +81,7 @@ import com.tcdng.unify.core.util.StringUtils;
  */
 @Component(ReportModuleNameConstants.APPLICATION_REPORT_INSTALLER)
 public class ApplicationReportInstallerImpl extends AbstractApplicationArtifactInstaller {
-
+ 
     @Configurable
     private MessageResolver messageResolver;
 

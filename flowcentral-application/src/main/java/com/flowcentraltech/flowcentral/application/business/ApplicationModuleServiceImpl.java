@@ -368,10 +368,6 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         this.delegateHolderByLongName = new ConcurrentHashMap<String, EnvironmentDelegateHolder>();
         this.applicationDefFactoryMap = new FactoryMap<String, ApplicationDef>(true)
             {
-                @Override
-                protected boolean pause() throws Exception {
-                    return isInSystemRestoreMode();
-                }
 
                 @Override
                 protected boolean stale(String name, ApplicationDef applicationDef) throws Exception {
@@ -392,10 +388,6 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
         this.appletDefFactoryMap = new FactoryMap<String, AppletDef>(true)
             {
-                @Override
-                protected boolean pause() throws Exception {
-                    return isInSystemRestoreMode();
-                }
 
                 @Override
                 protected boolean stale(String longName, AppletDef appletDef) throws Exception {
@@ -484,10 +476,6 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
         this.widgetDefFactoryMap = new FactoryMap<String, WidgetTypeDef>(true)
             {
-                @Override
-                protected boolean pause() throws Exception {
-                    return isInSystemRestoreMode();
-                }
 
                 @Override
                 protected boolean stale(String longName, WidgetTypeDef widgetTypeDef) throws Exception {
@@ -505,10 +493,6 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
         this.suggestionDefFactoryMap = new FactoryMap<String, SuggestionTypeDef>(true)
             {
-                @Override
-                protected boolean pause() throws Exception {
-                    return isInSystemRestoreMode();
-                }
 
                 @Override
                 protected boolean stale(String longName, SuggestionTypeDef suggestionTypeDef) throws Exception {
@@ -539,11 +523,6 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
         this.entityClassDefFactoryMap = new EntityClassDefFactoryMap()
             {
-
-                @Override
-                protected boolean pause() throws Exception {
-                    return isInSystemRestoreMode();
-                }
 
                 @Override
                 protected boolean stale(String longName, EntityClassDef entityClassDef) throws Exception {
@@ -614,10 +593,6 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
         this.entityDefFactoryMap = new FactoryMap<String, EntityDef>(true)
             {
-                @Override
-                protected boolean pause() throws Exception {
-                    return isInSystemRestoreMode();
-                }
 
                 @Override
                 protected boolean stale(String longName, EntityDef entityDef) throws Exception {
@@ -861,10 +836,6 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
         this.entityDefByClassFactoryMap = new FactoryMap<String, EntityDef>(true)
             {
-                @Override
-                protected boolean pause() throws Exception {
-                    return isInSystemRestoreMode();
-                }
 
                 @Override
                 protected boolean stale(String entityClass, EntityDef entityDef) throws Exception {
@@ -879,18 +850,16 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 protected EntityDef create(String entityClass, Object... arg1) throws Exception {
                     AppEntity appEntity = environment()
                             .list(new AppEntityQuery().entityClass(entityClass).addSelect("applicationName", "name"));
-                    return appEntity != null ? getEntityDef(ApplicationNameUtils
-                            .getApplicationEntityLongName(appEntity.getApplicationName(), appEntity.getName())) : null;
+                    return appEntity != null
+                            ? getEntityDef(ApplicationNameUtils
+                                    .getApplicationEntityLongName(appEntity.getApplicationName(), appEntity.getName()))
+                            : null;
                 }
 
             };
 
         this.refDefFactoryMap = new FactoryMap<String, RefDef>(true)
             {
-                @Override
-                protected boolean pause() throws Exception {
-                    return isInSystemRestoreMode();
-                }
 
                 @Override
                 protected boolean stale(String longName, RefDef refDef) throws Exception {
@@ -914,11 +883,6 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
         this.tableDefFactoryMap = new FactoryMap<String, TableDef>(true)
             {
-
-                @Override
-                protected boolean pause() throws Exception {
-                    return isInSystemRestoreMode();
-                }
 
                 @Override
                 protected boolean stale(String longName, TableDef tableDef) throws Exception {
@@ -1078,11 +1042,6 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
         this.formDefFactoryMap = new FactoryMap<String, FormDef>(true)
             {
-
-                @Override
-                protected boolean pause() throws Exception {
-                    return isInSystemRestoreMode();
-                }
 
                 @Override
                 protected boolean stale(String longName, FormDef formDef) throws Exception {
@@ -1293,6 +1252,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
         this.helpSheetDefFactoryMap = new FactoryMap<String, HelpSheetDef>(true)
             {
+
                 @Override
                 protected boolean stale(String longName, HelpSheetDef helpSheetDef) throws Exception {
                     return isStale(new AppHelpSheetQuery(), helpSheetDef);
@@ -1320,11 +1280,6 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             {
 
                 @Override
-                protected boolean pause() throws Exception {
-                    return isInSystemRestoreMode();
-                }
-
-                @Override
                 protected boolean stale(String longName, AssignmentPageDef assignmentPageDef) throws Exception {
                     return isStale(new AppAssignmentPageQuery(), assignmentPageDef);
                 }
@@ -1347,11 +1302,6 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
         this.propertyListDefMap = new FactoryMap<String, PropertyListDef>()
             {
-
-                @Override
-                protected boolean pause() throws Exception {
-                    return isInSystemRestoreMode();
-                }
 
                 @Override
                 protected boolean stale(String longName, PropertyListDef propertyListDef) throws Exception {
@@ -1388,11 +1338,6 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
         this.propertyRuleDefMap = new FactoryMap<String, PropertyRuleDef>()
             {
-
-                @Override
-                protected boolean pause() throws Exception {
-                    return isInSystemRestoreMode();
-                }
 
                 @Override
                 protected boolean stale(String longName, PropertyRuleDef propertyRuleDef) throws Exception {
@@ -3943,6 +3888,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
         environment().updateAll(new ApplicationQuery().addEquals("id", applicationId),
                 new Update().add("menuAccess", false));
+
         logDebug(taskMonitor, "Application with ID [{0}] successfully deleted.", applicationId);
         return deletionCount;
     }
@@ -4308,6 +4254,10 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     @Override
     protected void onInitialize() throws UnifyException {
         super.onInitialize();
+        if (enterSystemRestoreMode()) {
+            exitSystemRestoreMode();
+        }
+
         applicationArtifactInstallerList = getComponents(ApplicationArtifactInstaller.class);
         applicationAppletDefProviderList = getComponents(ApplicationAppletDefProvider.class);
         List<UnifyComponentConfig> searchWidgets = getComponentConfigs(EntitySearchWidget.class);
@@ -6956,7 +6906,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         }
         return inst;
     }
-
+    
     private DynamicEntityInfo buildDynamicEntityInfo(final EntityDef entityDef,
             Map<String, DynamicEntityInfo> dynamicEntityInfoMap, String basePackage, boolean extension)
             throws UnifyException {

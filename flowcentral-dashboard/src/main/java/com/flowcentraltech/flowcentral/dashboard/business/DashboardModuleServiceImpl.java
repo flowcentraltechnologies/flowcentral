@@ -70,10 +70,6 @@ public class DashboardModuleServiceImpl extends AbstractFlowCentralService imple
 
         this.dashboardDefFactoryMap = new FactoryMap<String, DashboardDef>(true)
             {
-                @Override
-                protected boolean pause() throws Exception {
-                    return isInSystemRestoreMode();
-                }
 
                 @Override
                 protected boolean stale(String dashboardName, DashboardDef dashboardDef) throws Exception {
@@ -123,7 +119,7 @@ public class DashboardModuleServiceImpl extends AbstractFlowCentralService imple
             };
 
     }
-    
+
     @Override
     public void clearDefinitionsCache() throws UnifyException {
         logDebug("Clearing definitions cache...");

@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<!-- OS messaging module configuration -->
+<module name="osmessaging" description="$m{osmessaging.module}"
+	shortCode="OMG" label="$m{osmessaging.label}">
+	<!-- Applications -->
+	<applications>
+		<application name="osmessaging"
+			shortDescription="$m{osmessaging.short.description}"
+			longDescription="$m{osmessaging.long.description}" autoInstall="true"
+			configFile="apps/osmessaging-application.xml" />
+	</applications>
+</module>

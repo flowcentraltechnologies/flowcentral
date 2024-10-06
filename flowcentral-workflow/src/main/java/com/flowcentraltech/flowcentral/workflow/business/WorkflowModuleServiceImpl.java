@@ -238,10 +238,6 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
 
         this.wfDefFactoryMap = new FactoryMap<String, WfDef>(true)
             {
-                @Override
-                protected boolean pause() throws Exception {
-                    return isInSystemRestoreMode();
-                }
 
                 @Override
                 protected boolean stale(String wfName, WfDef wfDef) throws Exception {
@@ -399,11 +395,6 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             {
 
                 @Override
-                protected boolean pause() throws Exception {
-                    return isInSystemRestoreMode();
-                }
-
-                @Override
                 protected boolean stale(String longName, WfWizardDef formWizardDef) throws Exception {
                     return isStale(new WfWizardQuery(), formWizardDef);
                 }
@@ -445,11 +436,6 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
 
         this.wfChannelDefFactoryMap = new FactoryMap<String, WfChannelDef>(true)
             {
-
-                @Override
-                protected boolean pause() throws Exception {
-                    return isInSystemRestoreMode();
-                }
 
                 @Override
                 protected boolean stale(String longName, WfChannelDef wfChannelDef) throws Exception {

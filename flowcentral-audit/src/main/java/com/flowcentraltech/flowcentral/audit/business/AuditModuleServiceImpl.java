@@ -63,10 +63,6 @@ public class AuditModuleServiceImpl extends AbstractFlowCentralService implement
     public AuditModuleServiceImpl() {
         this.entityAuditConfigDefFactoryMap = new FactoryMap<String, EntityAuditConfigDef>(true)
             {
-                @Override
-                protected boolean pause() throws Exception {
-                    return isInSystemRestoreMode();
-                }
 
                 @Override
                 protected boolean stale(String name, EntityAuditConfigDef entityAuditConfigDef) throws Exception {

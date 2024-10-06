@@ -1,0 +1,219 @@
+<?xml version="1.0"?>
+<!-- OS Messaging application -->
+<application name="osmessaging"
+	description="$m{osmessaging.short.description}"
+	label="$m{osmessaging.label}" module="osmessaging">
+	<!-- Widgets -->
+	<widgetTypes>
+		<widgetType name="endpointlist"
+			description="$m{osmessaging.widgettype.endpointlist}"
+			dataType="string" inputType="string"
+			editor="!ui-select blankOption:$s{} list:osmessagingendpointlist listKey:$s{name}"
+			renderer="!ui-label" />
+	</widgetTypes>
+	<!-- Applets -->
+	<applets>
+		<applet name="manageOSMessagingEndpoint"
+			description="$m{osmessaging.osmessagingendpoint.manage}"
+			label="$m{osmessaging.osmessagingendpoint.manage.label}" icon="ethernet"
+			type="manage_entitylist" entity="osMessagingEndpoint"
+			menuAccess="true">
+			<property name="searchTable"
+				value="osMessagingEndpointTable" />
+			<property name="searchTable.new" value="true" />
+			<property name="searchTable.report" value="true" />
+			<property name="searchTable.quickFilter" value="true" />
+			<property name="searchTable.basicSearchOnly" value="true" />
+			<property name="createForm" value="osMessagingEndpointForm" />
+			<property name="createForm.save" value="true" />
+			<property name="createForm.save.next" value="true" />
+			<property name="createForm.save.close" value="true" />
+			<property name="maintainForm"
+				value="osMessagingEndpointForm" />
+			<property name="maintainForm.update" value="true" />
+			<property name="maintainForm.delete" value="true" />
+		</applet>
+		<applet name="manageOSMessagingAsync"
+			description="$m{osmessaging.osmessagingasync.manage}"
+			label="$m{osmessaging.osmessagingasync.manage.label}" icon="mail-bulk"
+			type="manage_entitylist" entity="osMessagingAsync"
+			menuAccess="true">
+			<property name="searchTable" value="osMessagingAsyncTable" />
+			<property name="searchTable.new" value="false" />
+			<property name="searchTable.report" value="false" />
+			<property name="searchTable.quickFilter" value="true" />
+			<property name="searchTable.basicSearchOnly" value="true" />
+			<property name="createForm" value="osMessagingAsyncForm" />
+			<property name="maintainForm" value="osMessagingAsyncForm" />
+			<property name="maintainForm.update" value="false" />
+			<property name="maintainForm.delete" value="false" />
+		</applet>
+	</applets>
+	<!-- References -->
+	<references>
+		<reference name="osMessagingEndpointRef"
+			description="$m{osmessaging.osmessagingendpoint.reference}"
+			entity="osMessagingEndpoint" searchField="description" />
+		<reference name="osMessagingAsyncRef"
+			description="$m{osmessaging.osmessagingasync.reference}"
+			entity="osMessagingAsync" searchField="endpoint" />
+	</references>
+	<!-- Entities -->
+	<entities>
+		<entity name="osMessagingEndpoint"
+			description="$m{osmessaging.osmessagingendpoint}"
+			label="$m{osmessaging.osmessagingendpoint.label}"
+			type="com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingEndpoint"
+			auditable="true" reportable="true">
+			<field name="name"
+				label="$m{osmessaging.osmessagingendpoint.name}" type="string"
+				inputWidget="application.name" maxLen="64" basicSearch="true" />
+			<field name="description"
+				label="$m{osmessaging.osmessagingendpoint.description}" type="string"
+				inputWidget="application.text" maxLen="128" />
+			<field name="nodeUrl"
+				label="$m{osmessaging.osmessagingendpoint.nodeurl}"
+				type="string" inputWidget="application.text" maxLen="256" />
+			<field name="target"
+				label="$m{osmessaging.osmessagingendpoint.target}" type="string"
+				inputWidget="application.text" maxLen="64" />
+			<field name="processor"
+				label="$m{osmessaging.osmessagingendpoint.processor}" type="string"
+				inputWidget="application.text" maxLen="64" />
+			<field name="authorization"
+				label="$m{osmessaging.osmessagingendpoint.authorization}" type="string"
+				inputWidget="application.textarea" maxLen="512" nullable="true"/>
+			<uniqueConstraint name="nameUc"
+				description="$m{osmessaging.osmessagingendpoint.uc.name}"
+				fieldList="name" />
+			<uniqueConstraint name="descUc"
+				description="$m{osmessaging.osmessagingendpoint.uc.description}"
+				fieldList="description" />
+		</entity>
+		<entity name="osMessagingAsync"
+			description="$m{osmessaging.osmessagingasync}"
+			label="$m{osmessaging.osmessagingasync.label}"
+			type="com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingAsync"
+			auditable="true" reportable="true">
+			<field name="endpoint"
+				label="$m{osmessaging.osmessagingasync.endpoint}" type="string"
+				inputWidget="osmessaging.endpointlist" maxLen="64" basicSearch="true" />
+			<field name="message"
+				label="$m{osmessaging.osmessagingasync.message}" type="clob"
+				inputWidget="application.textareamedium" />
+			<field name="nextAttemptOn"
+				label="$m{osmessaging.osmessagingasync.nextattempton}"
+				type="timestamp" inputWidget="application.text"/>
+			<field name="processBefore"
+				label="$m{osmessaging.osmessagingasync.processbefore}"
+				type="timestamp" inputWidget="application.text" nullable="true"/>
+			<field name="sentOn"
+				label="$m{osmessaging.osmessagingasync.senton}"
+				type="timestamp" inputWidget="application.text" nullable="true"/>
+			<field name="responseCode"
+				label="$m{osmessaging.osmessagingasync.responsecode}" type="string"
+				inputWidget="application.name" maxLen="10"/>
+			<field name="responseMsg"
+				label="$m{osmessaging.osmessagingasync.responsemsg}" type="string"
+				inputWidget="application.textarea" maxLen="256" />
+			<field name="processing"
+				label="$m{osmessaging.osmessagingasync.processing}" type="boolean"
+				inputWidget="application.checkbox" nullable="true" />
+		</entity>
+	</entities>
+	<!-- Tables -->
+	<tables>
+		<table name="osMessagingEndpointTable"
+			description="$m{osmessaging.osmessagingendpoint.table}"
+			label="$m{osmessaging.osmessagingendpoint.table.label}"
+			entity="osMessagingEndpoint" itemsPerPage="20" serialNo="true"
+			basicSearch="true">
+			<column field="name" renderWidget="application.name"
+				widthRatio="2" linkAct="maintainAct" />
+			<column field="description" renderWidget="application.text"
+				widthRatio="2" />
+			<column field="nodeUrl" renderWidget="application.text"
+				widthRatio="3" />
+			<column field="target" renderWidget="application.text"
+				widthRatio="2"/>
+			<column field="processor" renderWidget="application.text"
+				widthRatio="2"/>
+			<column field="statusDesc" renderWidget="application.text"
+				label="$m{osmessaging.osmessagingendpoint.status}" widthRatio="1" />
+			<column field="createDt" renderWidget="application.datetime"
+				widthRatio="2" order="DESC" />
+			<column field="updateDt" renderWidget="application.datetime"
+				widthRatio="2" />
+		</table>
+		<table name="osMessagingAsyncTable"
+			description="$m{osmessaging.osmessagingasync.table}"
+			label="$m{osmessaging.osmessagingasync.table.label}"
+			entity="osMessagingAsync" itemsPerPage="20" serialNo="true"
+			basicSearch="true">
+			<column field="endpoint" renderWidget="application.name"
+				widthRatio="1" linkAct="maintainAct" />
+			<column field="nextAttemptOn" renderWidget="application.text"
+				widthRatio="1" />
+			<column field="sentOn" renderWidget="application.datetime"
+				widthRatio="1"/>
+			<column field="responseCode" renderWidget="application.text"
+				widthRatio="1" />
+			<column field="createDt" renderWidget="application.datetime"
+				widthRatio="1" order="DESC" />
+			<column field="updateDt" renderWidget="application.datetime"
+				widthRatio="1" />
+		</table>
+	</tables>
+	<!-- Forms -->
+	<forms>
+		<form name="osMessagingEndpointForm"
+			description="$m{osmessaging.osmessagingendpoint.form}"
+			entity="osMessagingEndpoint">
+			<tab name="basicDetails"
+				label="$m{osmessaging.osmessagingendpoint.form.basicdetails}"
+				contentType="miniform">
+				<section name="osMessagingEndpointDetails" columns="type_2"
+					label="$m{osmessaging.osmessagingendpoint.form.section.basicdetails}">
+					<field name="name" column="0" required="true" />
+					<field name="description" column="0" required="true" />
+					<field name="status" column="1" required="true" />
+				</section>
+				<section name="targetDetails" columns="type_2"
+					label="$m{osmessaging.osmessagingendpoint.form.section.targetdetails}">
+					<field name="nodeUrl" column="0" required="true" />
+					<field name="authorization" column="0" required="true" />
+					<field name="target" column="1" required="true" />
+					<field name="processor" column="1" required="true" />
+				</section>
+			</tab>
+			<tab name="changeLog" label="$m{application.form.audit}"
+				contentType="miniform_changelog" />
+		</form>
+		<form name="osMessagingAsyncForm"
+			description="$m{osmessaging.osmessagingasync.form}"
+			entity="osMessagingAsync">
+			<tab name="basicDetails"
+				label="$m{osmessaging.osmessagingasync.form.basicdetails}"
+				contentType="miniform">
+				<section name="osMessagingAsyncDetails" columns="type_2"
+					label="$m{osmessaging.osmessagingasync.form.section.basicdetails}">
+					<field name="endpoint" column="0" required="true" />
+					<field name="message" column="1" required="true" />
+				</section>
+				<section name="processingDetails" columns="type_2"
+					label="$m{osmessaging.osmessagingasync.form.section.processing}">
+					<field name="nextAttemptOn" column="0" />
+					<field name="processBefore" column="0"/>
+					<field name="sentOn" column="1" />
+				</section>
+				<section name="responseDetails" columns="type_2"
+					label="$m{osmessaging.osmessagingasync.form.section.response}">
+					<field name="responseCode" column="0" />
+					<field name="responseMsg" column="1" />
+				</section>
+			</tab>
+			<tab name="changeLog" label="$m{application.form.audit}"
+				contentType="miniform_changelog" />
+		</form>
+	</forms>
+</application>

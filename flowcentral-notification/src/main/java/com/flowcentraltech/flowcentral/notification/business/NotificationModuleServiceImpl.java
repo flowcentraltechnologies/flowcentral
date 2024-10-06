@@ -131,10 +131,6 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
 
         this.templates = new FactoryMap<String, NotifTemplateDef>(true)
             {
-                @Override
-                protected boolean pause() throws Exception {
-                    return isInSystemRestoreMode();
-                }
 
                 @Override
                 protected boolean stale(String name, NotifTemplateDef notifTemplateDef) throws Exception {
@@ -169,10 +165,6 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
 
         this.largeTexts = new FactoryMap<String, NotifLargeTextDef>(true)
             {
-                @Override
-                protected boolean pause() throws Exception {
-                    return isInSystemRestoreMode();
-                }
 
                 @Override
                 protected boolean stale(String name, NotifLargeTextDef notifLargeTextDef) throws Exception {
