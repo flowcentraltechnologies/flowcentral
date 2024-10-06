@@ -63,11 +63,6 @@ public class WorkspaceModuleServiceImpl extends AbstractFlowCentralService
         privilegesByWorkspace = new FactoryMap<String, WorkspacePrivileges>(true)
             {
                 @Override
-                protected boolean pause() throws Exception {
-                    return isInSystemRestoreMode();
-                }
-
-                @Override
                 protected boolean stale(String workspaceCode, WorkspacePrivileges workspacePrivileges)
                         throws Exception {
                     return workspacePrivileges.getVersion() < environment().value(Long.class, "versionNo",
@@ -84,7 +79,7 @@ public class WorkspaceModuleServiceImpl extends AbstractFlowCentralService
                 }
             };
     }
-    
+
     @Override
     public void clearDefinitionsCache() throws UnifyException {
         logDebug("Clearing definitions cache...");

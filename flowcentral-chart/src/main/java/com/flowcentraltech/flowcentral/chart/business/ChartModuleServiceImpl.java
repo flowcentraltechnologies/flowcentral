@@ -75,15 +75,11 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
     public ChartModuleServiceImpl() {
         this.chartDefFactoryMap = new FactoryMap<String, ChartDef>(true)
             {
-                @Override
-                protected boolean pause() throws Exception {
-                    return isInSystemRestoreMode();
-                }
 
                 @Override
                 protected boolean stale(String chartName, ChartDef chartDef) throws Exception {
                     return isStale(new ChartQuery(), chartDef);
-                 }
+                }
 
                 @Override
                 protected ChartDef create(String longName, Object... arg1) throws Exception {
@@ -110,10 +106,6 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
 
         this.chartDataSourceDefFactoryMap = new FactoryMap<String, ChartDataSourceDef>(true)
             {
-                @Override
-                protected boolean pause() throws Exception {
-                    return isInSystemRestoreMode();
-                }
 
                 @Override
                 protected boolean stale(String longName, ChartDataSourceDef chartDataSourceDef) throws Exception {
@@ -148,10 +140,6 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
 
         this.chartSnapshotDefFactoryMap = new FactoryMap<String, ChartSnapshotDef>(true)
             {
-                @Override
-                protected boolean pause() throws Exception {
-                    return isInSystemRestoreMode();
-                }
 
                 @Override
                 protected boolean stale(String chartSnapshotName, ChartSnapshotDef chartSnapshotDef) throws Exception {

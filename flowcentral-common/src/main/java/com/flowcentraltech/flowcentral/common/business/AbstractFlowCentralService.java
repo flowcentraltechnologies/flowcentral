@@ -116,10 +116,6 @@ public abstract class AbstractFlowCentralService extends AbstractBusinessService
     protected final void exitSystemRestoreMode() throws UnifyException {
         releaseLock(SYSTEM_RESTORE_LOCK);
     }
-
-    protected final boolean isInSystemRestoreMode() throws UnifyException {
-        return isLocked(SYSTEM_RESTORE_LOCK);
-    }
     
     protected final boolean isStale(Query<? extends Entity> query, VersionedEntityDef baseDef) throws UnifyException {
         final Optional<Long> versionOpt = environment().valueOptional(long.class, "versionNo",

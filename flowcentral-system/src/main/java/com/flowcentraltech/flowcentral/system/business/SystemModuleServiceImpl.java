@@ -160,10 +160,6 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
     public SystemModuleServiceImpl() {
         this.authDefFactoryMap = new FactoryMap<String, CredentialDef>(true)
             {
-                @Override
-                protected boolean pause() throws Exception {
-                    return isInSystemRestoreMode();
-                }
 
                 @Override
                 protected boolean stale(String authName, CredentialDef credentialDef) throws Exception {
@@ -185,10 +181,6 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
 
         this.scheduledTaskDefs = new FactoryMap<Long, ScheduledTaskDef>(true)
             {
-                @Override
-                protected boolean pause() throws Exception {
-                    return isInSystemRestoreMode();
-                }
 
                 @Override
                 protected boolean stale(Long scheduledTaskId, ScheduledTaskDef scheduledTaskDef) throws Exception {
@@ -230,11 +222,6 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
 
         this.licenseDefFactoryMap = new FactoryMap<String, LicenseDef>(true)
             {
-                @Override
-                protected boolean pause() throws Exception {
-                    return isInSystemRestoreMode();
-                }
-
                 @Override
                 protected boolean stale(String name, LicenseDef licenseDef) throws Exception {
                     return environment().value(long.class, "versionNo",
@@ -479,14 +466,14 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
 
     @Override
     public Date licensedExpiresOn(String featureCode) throws UnifyException {
-        return licenseDefFactoryMap.get(FileAttachmentCategoryType.LICENSE_CATEGORY.code()).getLicenseEntryDef(featureCode)
-                .getExpiryDate();
+        return licenseDefFactoryMap.get(FileAttachmentCategoryType.LICENSE_CATEGORY.code())
+                .getLicenseEntryDef(featureCode).getExpiryDate();
     }
 
     @Override
     public LicenseStatus getLicenseStatus(String featureCode) throws UnifyException {
-        return licenseDefFactoryMap.get(FileAttachmentCategoryType.LICENSE_CATEGORY.code()).getLicenseEntryDef(featureCode)
-                .getStatus();
+        return licenseDefFactoryMap.get(FileAttachmentCategoryType.LICENSE_CATEGORY.code())
+                .getLicenseEntryDef(featureCode).getStatus();
     }
 
     @Periodic(PeriodicType.EON)
@@ -497,8 +484,8 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
     @Synchronized(ENSURE_LICENSE_LOCK)
     public Attachment ensureLicense() throws UnifyException {
         final String licenseName = FileAttachmentCategoryType.LICENSE_CATEGORY.code();
-        Attachment attachment = fileAttachmentProvider.retrieveFileAttachment(FileAttachmentCategoryType.LICENSE_CATEGORY,
-                "system.credential", 0L, licenseName);
+        Attachment attachment = fileAttachmentProvider.retrieveFileAttachment(
+                FileAttachmentCategoryType.LICENSE_CATEGORY, "system.credential", 0L, licenseName);
         if (attachment == null) {
             Feature deploymentID = environment().find(new FeatureQuery().code("deploymentID"));
             Feature deploymentInitDate = environment().find(new FeatureQuery().code("deploymentInitDate"));
@@ -527,8 +514,8 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
 
             final Attachment _attachment = Attachment.newBuilder(FileAttachmentType.TEXT).name(licenseName)
                     .title(licenseName).fileName(licenseName).data(encLicense.getBytes()).build();
-            fileAttachmentProvider.saveFileAttachment(FileAttachmentCategoryType.LICENSE_CATEGORY, "system.credential", 0L,
-                    _attachment);
+            fileAttachmentProvider.saveFileAttachment(FileAttachmentCategoryType.LICENSE_CATEGORY, "system.credential",
+                    0L, _attachment);
             attachment = fileAttachmentProvider.retrieveFileAttachment(FileAttachmentCategoryType.LICENSE_CATEGORY,
                     "system.credential", 0L, licenseName);
         }
@@ -574,8 +561,8 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
             String encLicense = cryptograph.encrypt(license);
             final Attachment _attachment = Attachment.newBuilder(FileAttachmentType.TEXT).name(licenseName)
                     .title(licenseName).fileName(licenseName).data(encLicense.getBytes()).build();
-            fileAttachmentProvider.saveFileAttachment(FileAttachmentCategoryType.LICENSE_CATEGORY, "system.credential", 0L,
-                    _attachment);
+            fileAttachmentProvider.saveFileAttachment(FileAttachmentCategoryType.LICENSE_CATEGORY, "system.credential",
+                    0L, _attachment);
             logDebug(taskMonitor, "...license file successfully loaded...");
         } catch (IOException e) {
             throwOperationErrorException(e);

@@ -73,11 +73,6 @@ public class MessagingModuleServiceImpl extends AbstractFlowCentralService imple
             {
 
                 @Override
-                protected boolean pause() throws Exception {
-                    return isInSystemRestoreMode();
-                }
-
-                @Override
                 protected boolean stale(String key, MessagingConfigDef messagingConfigDef) throws Exception {
                     if (isStale(new MessagingReadConfigQuery(), messagingConfigDef)) {
                         shutdownExecutorPool(messagingConfigDef.getCtx().getPool());
@@ -103,11 +98,6 @@ public class MessagingModuleServiceImpl extends AbstractFlowCentralService imple
             {
 
                 @Override
-                protected boolean pause() throws Exception {
-                    return isInSystemRestoreMode();
-                }
-
-                @Override
                 protected boolean stale(String key, MessagingConfigDef messagingConfigDef) throws Exception {
                     if (isStale(new MessagingWriteConfigQuery(), messagingConfigDef)) {
                         shutdownExecutorPool(messagingConfigDef.getCtx().getPool());
@@ -129,7 +119,7 @@ public class MessagingModuleServiceImpl extends AbstractFlowCentralService imple
             };
 
     }
-    
+
     @Override
     public void clearDefinitionsCache() throws UnifyException {
         logDebug("Clearing definitions cache...");
