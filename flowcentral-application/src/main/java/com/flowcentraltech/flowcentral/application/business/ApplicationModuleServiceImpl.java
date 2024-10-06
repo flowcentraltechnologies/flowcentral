@@ -4308,6 +4308,10 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     @Override
     protected void onInitialize() throws UnifyException {
         super.onInitialize();
+        if (enterSystemRestoreMode()) {
+            exitSystemRestoreMode();
+        }
+
         applicationArtifactInstallerList = getComponents(ApplicationArtifactInstaller.class);
         applicationAppletDefProviderList = getComponents(ApplicationAppletDefProvider.class);
         List<UnifyComponentConfig> searchWidgets = getComponentConfigs(EntitySearchWidget.class);
