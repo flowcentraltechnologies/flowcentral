@@ -25,7 +25,7 @@ import com.tcdng.unify.core.annotation.AutoDetect;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-//@AutoDetect
+@AutoDetect
 public class OSMessagingModuleStaticSettings extends AbstractFlowCentralStaticSettings {
 
     public OSMessagingModuleStaticSettings() {
