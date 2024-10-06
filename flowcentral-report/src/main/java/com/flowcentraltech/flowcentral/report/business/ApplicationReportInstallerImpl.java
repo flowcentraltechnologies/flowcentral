@@ -409,9 +409,6 @@ public class ApplicationReportInstallerImpl extends AbstractApplicationArtifactI
     @Override
     protected int deleteApplicationArtifacts(TaskMonitor taskMonitor, DeletionParams deletionParams, Long applicationId,
             boolean customOnly) throws UnifyException {
-        System.out.println("@prime: deleteApplicationArtifacts()");
-        System.out.println("@prime: applicationId = " + applicationId);
-        System.out.println("@prime: customOnly = " + customOnly);
         environment().deleteAll(customOnly ? new ReportGroupMemberQuery().applicationId(applicationId).isCustom()
                 : new ReportGroupMemberQuery().applicationId(applicationId));
         return super.deleteApplicationArtifacts(taskMonitor, deletionParams, applicationId, customOnly);

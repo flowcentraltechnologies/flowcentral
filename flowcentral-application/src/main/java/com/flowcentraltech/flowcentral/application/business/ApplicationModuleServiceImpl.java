@@ -3860,18 +3860,14 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     private int deleteCustomApplication(TaskMonitor taskMonitor, Long applicationId) throws UnifyException {
         logDebug(taskMonitor, "Deleting custom application with ID [{0}]...", applicationId);
         int deletionCount = 0;
-        System.out.println("@prime: QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ");
         if (!DataUtils.isBlank(applicationArtifactInstallerList)) {
             for (ApplicationArtifactInstaller applicationArtifactInstaller : applicationArtifactInstallerList) {
-                System.out.println(
-                        "@prime: applicationArtifactInstaller.getName() = " + applicationArtifactInstaller.getName());
                 deletionCount += applicationArtifactInstaller.deleteCustomApplicationArtifacts(taskMonitor,
                         applicationId);
             }
         }
 
         applicationPrivilegeManager.unregisterCustomApplicationPrivileges(applicationId);
-        System.out.println("@prime: applicationId = " + applicationId);
         deletionCount += deleteApplicationArtifacts(taskMonitor, "suggestion types", new AppSuggestionTypeQuery(),
                 applicationId, true);
         deletionCount += deleteApplicationArtifacts(taskMonitor, "assignment pages", new AppAssignmentPageQuery(),
@@ -3893,7 +3889,6 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         environment().updateAll(new ApplicationQuery().addEquals("id", applicationId),
                 new Update().add("menuAccess", false));
 
-        System.out.println("@prime: QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ");
         logDebug(taskMonitor, "Application with ID [{0}] successfully deleted.", applicationId);
         return deletionCount;
     }
