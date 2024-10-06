@@ -44,7 +44,6 @@ import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.Transactional;
 import com.tcdng.unify.core.business.AbstractBusinessService;
-import com.tcdng.unify.core.constant.TopicEventType;
 import com.tcdng.unify.core.criterion.AggregateFunction;
 import com.tcdng.unify.core.criterion.GroupingFunction;
 import com.tcdng.unify.core.criterion.Update;
@@ -137,18 +136,14 @@ public class EnvironmentServiceImpl extends AbstractBusinessService implements E
 
     @Override
     public Object create(Entity inst) throws UnifyException {
-        Object result = db(inst.getClass()).create(inst);
-        setOffEntityEvent(TopicEventType.CREATE, inst.getClass(), null);
-        return result;
+        return db(inst.getClass()).create(inst);
     }
 
     @Override
     public Object create(EntityWrapper wrapperInst) throws UnifyException {
         final Entity inst = wrapperInst.isIndexed() ? wrapperInst.getValueObjectAtDataIndex()
                 : wrapperInst.getValueObject();
-        Object result = db(inst.getClass()).create(inst);
-        setOffEntityEvent(TopicEventType.CREATE, inst.getClass(), null);
-        return result;
+        return db(inst.getClass()).create(inst);
     }
 
     @Override
@@ -167,8 +162,7 @@ public class EnvironmentServiceImpl extends AbstractBusinessService implements E
                         new Update().add("inWorkflow", Boolean.TRUE));
             }
 
-            result = executeEntityPostActionPolicy(db(inst.getClass()), ctx);
-            setOffEntityEvent(TopicEventType.CREATE, inst.getClass(), null);
+            return executeEntityPostActionPolicy(db(inst.getClass()), ctx);
         }
 
         return result;
@@ -290,46 +284,34 @@ public class EnvironmentServiceImpl extends AbstractBusinessService implements E
 
     @Override
     public int updateById(Entity record) throws UnifyException {
-        int result = db(record.getClass()).updateById(record);
-        setOffEntityEvent(TopicEventType.UPDATE, record.getClass(), record.getId());
-        return result;
+        return db(record.getClass()).updateById(record);
     }
 
     @Override
     public int updateByIdVersion(Entity record) throws UnifyException {
-        int result = db(record.getClass()).updateByIdVersion(record);
-        setOffEntityEvent(TopicEventType.UPDATE, record.getClass(), record.getId());
-        return result;
+        return db(record.getClass()).updateByIdVersion(record);
     }
 
     @Override
     public int updateByIdVersionEditableChildren(Entity record) throws UnifyException {
-        int result = db(record.getClass()).updateByIdVersionEditableChildren(record);
-        setOffEntityEvent(TopicEventType.UPDATE, record.getClass(), record.getId());
-        return result;
+        return db(record.getClass()).updateByIdVersionEditableChildren(record);
     }
 
     @Override
     public int updateLean(Entity record) throws UnifyException {
-        int result = db(record.getClass()).updateLeanByIdVersion(record);
-        setOffEntityEvent(TopicEventType.UPDATE, record.getClass(), record.getId());
-        return result;
+        return db(record.getClass()).updateLeanByIdVersion(record);
     }
 
     @Override
     public int updateByIdVersion(EntityWrapper wrappedInst) throws UnifyException {
         Entity inst = wrappedInst.isIndexed() ? wrappedInst.getValueObjectAtDataIndex() : wrappedInst.getValueObject();
-        int result = db(inst.getClass()).updateByIdVersion(inst);
-        setOffEntityEvent(TopicEventType.UPDATE, inst.getClass(), inst.getId());
-        return result;
+        return db(inst.getClass()).updateByIdVersion(inst);
     }
 
     @Override
     public int updateLean(EntityWrapper wrappedInst) throws UnifyException {
         Entity inst = wrappedInst.isIndexed() ? wrappedInst.getValueObjectAtDataIndex() : wrappedInst.getValueObject();
-        int result = db(inst.getClass()).updateLeanByIdVersion(inst);
-        setOffEntityEvent(TopicEventType.UPDATE, inst.getClass(), inst.getId());
-        return result;
+        return db(inst.getClass()).updateLeanByIdVersion(inst);
     }
 
     @Override
@@ -342,9 +324,7 @@ public class EnvironmentServiceImpl extends AbstractBusinessService implements E
                 suggestionProvider.saveSuggestions(ctx.getEntityDef(Object.class), inst);
             }
 
-            result = executeEntityPostActionPolicy(db(inst.getClass()), ctx);
-            setOffEntityEvent(TopicEventType.UPDATE, inst.getClass(), inst.getId());
-            return result;
+            return executeEntityPostActionPolicy(db(inst.getClass()), ctx);
         }
 
         return result;
@@ -360,9 +340,7 @@ public class EnvironmentServiceImpl extends AbstractBusinessService implements E
                 suggestionProvider.saveSuggestions(ctx.getEntityDef(Object.class), inst);
             }
 
-            result = executeEntityPostActionPolicy(db(inst.getClass()), ctx);
-            setOffEntityEvent(TopicEventType.UPDATE, inst.getClass(), inst.getId());
-            return result;
+            return executeEntityPostActionPolicy(db(inst.getClass()), ctx);
         }
 
         return result;
@@ -370,46 +348,34 @@ public class EnvironmentServiceImpl extends AbstractBusinessService implements E
 
     @Override
     public int updateById(Class<? extends Entity> clazz, Object id, Update update) throws UnifyException {
-        int result = db(clazz).updateById(clazz, id, update);
-        setOffEntityEvent(TopicEventType.UPDATE, clazz, id);
-        return result;
+        return db(clazz).updateById(clazz, id, update);
     }
 
     @Override
     public int updateAll(Query<? extends Entity> query, Update update) throws UnifyException {
-        int result = db(query.getEntityClass()).updateAll(query, update);
-        setOffEntityEvent(TopicEventType.UPDATE, query.getEntityClass(), null);
-        return result;
+        return db(query.getEntityClass()).updateAll(query, update);
     }
 
     @Override
     public int updateLeanById(Entity record) throws UnifyException {
-        int result = db(record.getClass()).updateLeanById(record);
-        setOffEntityEvent(TopicEventType.UPDATE, record.getClass(), record.getId());
-        return result;
+        return db(record.getClass()).updateLeanById(record);
     }
 
     @Override
     public int updateLeanByIdVersion(Entity record) throws UnifyException {
-        int result = db(record.getClass()).updateLeanByIdVersion(record);
-        setOffEntityEvent(TopicEventType.UPDATE, record.getClass(), record.getId());
-        return result;
+        return db(record.getClass()).updateLeanByIdVersion(record);
     }
 
     @Override
     public int updateLeanById(EntityWrapper wrappedInst) throws UnifyException {
         Entity inst = wrappedInst.isIndexed() ? wrappedInst.getValueObjectAtDataIndex() : wrappedInst.getValueObject();
-        int result = db(inst.getClass()).updateLeanById(inst);
-        setOffEntityEvent(TopicEventType.UPDATE, inst.getClass(), inst.getId());
-        return result;
+        return db(inst.getClass()).updateLeanById(inst);
     }
 
     @Override
     public int updateLeanByIdVersion(EntityWrapper wrappedInst) throws UnifyException {
         Entity inst = wrappedInst.isIndexed() ? wrappedInst.getValueObjectAtDataIndex() : wrappedInst.getValueObject();
-        int result = db(inst.getClass()).updateLeanByIdVersion(inst);
-        setOffEntityEvent(TopicEventType.UPDATE, inst.getClass(), inst.getId());
-        return result;
+        return db(inst.getClass()).updateLeanByIdVersion(inst);
     }
 
     @Override
@@ -450,9 +416,7 @@ public class EnvironmentServiceImpl extends AbstractBusinessService implements E
 
     @Override
     public int delete(Entity inst) throws UnifyException {
-        int result = db(inst.getClass()).deleteByIdVersion(inst);
-        setOffEntityEvent(TopicEventType.DELETE, inst.getClass(), inst.getId());
-        return result;
+        return db(inst.getClass()).deleteByIdVersion(inst);
     }
 
     @Override
@@ -462,9 +426,7 @@ public class EnvironmentServiceImpl extends AbstractBusinessService implements E
             Entity inst = ctx.getInst();
             ctx.setResult(db(inst.getClass()).deleteByIdVersion(inst));
             releaseOriginalCopy(inst);
-            result = executeEntityPostActionPolicy(db(inst.getClass()), ctx);
-            setOffEntityEvent(TopicEventType.DELETE, inst.getClass(), inst.getId());
-            return result;
+            return executeEntityPostActionPolicy(db(inst.getClass()), ctx);
         }
 
         return result;
@@ -473,23 +435,18 @@ public class EnvironmentServiceImpl extends AbstractBusinessService implements E
     @Override
     public <T extends Entity> int delete(Class<T> clazz, Object id) throws UnifyException {
         // TODO Release original copy
-        int result = db(clazz).delete(clazz, id);
-        setOffEntityEvent(TopicEventType.DELETE, clazz, id);
-        return result;
+        return db(clazz).delete(clazz, id);
     }
 
     @Override
     public int deleteAll(Query<? extends Entity> query) throws UnifyException {
-        int result = db(query.getEntityClass()).deleteAll(query);
-        setOffEntityEvent(TopicEventType.DELETE, query.getEntityClass(), null);
-        return result;
+        return db(query.getEntityClass()).deleteAll(query);
     }
 
     @Override
     public int deleteByIdVersion(Entity record) throws UnifyException {
         int result = db(record.getClass()).deleteByIdVersion(record);
         releaseOriginalCopy(record);
-        setOffEntityEvent(TopicEventType.DELETE, record.getClass(), record.getId());
         return result;
     }
 
@@ -497,7 +454,6 @@ public class EnvironmentServiceImpl extends AbstractBusinessService implements E
     public int deleteById(Entity record) throws UnifyException {
         int result = db(record.getClass()).deleteById(record);
         releaseOriginalCopy(record);
-        setOffEntityEvent(TopicEventType.DELETE, record.getClass(), record.getId());
         return result;
     }
 
@@ -506,7 +462,6 @@ public class EnvironmentServiceImpl extends AbstractBusinessService implements E
         Entity inst = wrappedInst.isIndexed() ? wrappedInst.getValueObjectAtDataIndex() : wrappedInst.getValueObject();
         int result = db(inst.getClass()).deleteById(inst);
         releaseOriginalCopy(inst);
-        setOffEntityEvent(TopicEventType.DELETE, inst.getClass(), inst.getId());
         return result;
     }
 
@@ -514,7 +469,6 @@ public class EnvironmentServiceImpl extends AbstractBusinessService implements E
     public int deleteByIdVersion(EntityWrapper wrappedInst) throws UnifyException {
         Entity inst = wrappedInst.isIndexed() ? wrappedInst.getValueObjectAtDataIndex() : wrappedInst.getValueObject();
         int result = db(inst.getClass()).deleteByIdVersion(inst);
-        setOffEntityEvent(TopicEventType.DELETE, inst.getClass(), inst.getId());
         return result;
     }
 
@@ -766,14 +720,6 @@ public class EnvironmentServiceImpl extends AbstractBusinessService implements E
     public String getEntityDataSourceName(Class<? extends Entity> entityClass) throws UnifyException {
         EnvironmentDelegateHolder delegateInfo = environmentDelegateRegistrar.getEnvironmentDelegateInfo(entityClass);
         return delegateInfo != null ? delegateInfo.getDataSourceName() : db().getDataSourceName();
-    }
-
-    @Override
-    protected void setOffEntityEvent(TopicEventType eventType, Class<? extends Entity> entityClass, Object id)
-            throws UnifyException {
-        if (environmentDelegateRegistrar.isSupportsEntityChangeEvent(entityClass)) {
-            super.setOffEntityEvent(eventType, entityClass, id);
-        }
     }
 
     private Database db(Class<? extends Entity> entityClass) throws UnifyException {

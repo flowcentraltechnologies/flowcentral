@@ -46,8 +46,8 @@ public abstract class AbstractFlowCentralService extends AbstractBusinessService
     @Configurable
     private EnvironmentService environmentService;
 
-    @Configurable
-    private HeartbeatManager heartbeatManager;
+//    @Configurable
+//    private HeartbeatManager heartbeatManager;
 
     private static final String SYSTEM_RESTORE_LOCK = "app:system-restore-lock";
 
@@ -55,6 +55,7 @@ public abstract class AbstractFlowCentralService extends AbstractBusinessService
 
     @Override
     public final void installFeatures(List<ModuleInstall> moduleInstallList) throws UnifyException {
+        String name = getName();
         for (ModuleInstall moduleInstall : moduleInstallList) {
             doInstallModuleFeatures(moduleInstall);
         }
@@ -103,11 +104,11 @@ public abstract class AbstractFlowCentralService extends AbstractBusinessService
 
         return new EntityActionResult(ctx);
     }
-
-    protected void keepThreadAndClusterSafe(String expiryFieldName, Query<? extends Entity> query)
-            throws UnifyException {
-        heartbeatManager.startHeartbeat(query, expiryFieldName, KEEP_CLUSTER_SAFE_IN_MINUTES);
-    }
+//
+//    protected void keepThreadAndClusterSafe(String expiryFieldName, Query<? extends Entity> query)
+//            throws UnifyException {
+//        heartbeatManager.startHeartbeat(query, expiryFieldName, KEEP_CLUSTER_SAFE_IN_MINUTES);
+//    }
 
     protected final boolean enterSystemRestoreMode() throws UnifyException {
         return tryGrabLock(SYSTEM_RESTORE_LOCK);
@@ -122,6 +123,7 @@ public abstract class AbstractFlowCentralService extends AbstractBusinessService
     }
     
     protected final boolean isStale(Query<? extends Entity> query, VersionedEntityDef baseDef) throws UnifyException {
+        System.out.println("@match: baseDef.getId() = " + baseDef.getId());
         final Optional<Long> versionOpt = environment().valueOptional(long.class, "versionNo",
                 query.addEquals("id", baseDef.getId()));
         return !versionOpt.isPresent() || versionOpt.get() > baseDef.getVersion();

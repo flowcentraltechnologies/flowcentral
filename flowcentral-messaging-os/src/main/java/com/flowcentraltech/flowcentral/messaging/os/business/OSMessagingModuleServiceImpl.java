@@ -135,20 +135,20 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
         environment().create(osMessagingAsync);
     }
 
-    @Synchronized(PROCESS_MESSAGE_ASYNC)
-    @Periodic(PeriodicType.FASTER)
-    public void processMessageAsync(TaskMonitor taskMonitor) throws UnifyException {
-        final List<Long> pendingList = environment().valueList(Long.class, "id",
-                new OSMessagingAsyncQuery().isDue(getNow()).isNotProcessing().setLimit(MAX_PROCESSING_BATCH_SIZE));
-        if (!DataUtils.isBlank(pendingList)) {
-            environment().updateAll(new OSMessagingAsyncQuery().idIn(pendingList),
-                    new Update().add("processing", Boolean.TRUE));
-            keepThreadAndClusterSafe("processBefore", new OSMessagingAsyncQuery().isProcessing().idIn(pendingList));
-            for (Long osMessagingAsyncId : pendingList) {
-                queuedExec.execute(osMessagingAsyncId);
-            }
-        }
-    }
+//    @Synchronized(PROCESS_MESSAGE_ASYNC)
+//    @Periodic(PeriodicType.FASTER)
+//    public void processMessageAsync(TaskMonitor taskMonitor) throws UnifyException {
+//        final List<Long> pendingList = environment().valueList(Long.class, "id",
+//                new OSMessagingAsyncQuery().isDue(getNow()).isNotProcessing().setLimit(MAX_PROCESSING_BATCH_SIZE));
+//        if (!DataUtils.isBlank(pendingList)) {
+//            environment().updateAll(new OSMessagingAsyncQuery().idIn(pendingList),
+//                    new Update().add("processing", Boolean.TRUE));
+//            keepThreadAndClusterSafe("processBefore", new OSMessagingAsyncQuery().isProcessing().idIn(pendingList));
+//            for (Long osMessagingAsyncId : pendingList) {
+//                queuedExec.execute(osMessagingAsyncId);
+//            }
+//        }
+//    }
 
     @Override
     protected void doInstallModuleFeatures(ModuleInstall moduleInstall) throws UnifyException {

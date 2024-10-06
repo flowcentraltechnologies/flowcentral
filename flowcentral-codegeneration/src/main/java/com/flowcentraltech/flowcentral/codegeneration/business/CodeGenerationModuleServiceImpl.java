@@ -403,7 +403,7 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
 
     @Override
     protected void doInstallModuleFeatures(final ModuleInstall moduleInstall) throws UnifyException {
-
+        System.out.println("@primus: moduleInstall.getModuleConfig().getName() = " + moduleInstall.getModuleConfig().getName());
     }
 
     private DynamicModuleInfo getDynamicModuleInfo(String moduleName) throws UnifyException {

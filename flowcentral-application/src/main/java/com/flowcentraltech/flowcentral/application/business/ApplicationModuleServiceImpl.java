@@ -542,11 +542,15 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
                 @Override
                 protected boolean pause() throws Exception {
+                    System.out.println("@Watch: DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
+                    System.out.println("@hatch: isInSystemRestoreMode() = " + isInSystemRestoreMode());
                     return isInSystemRestoreMode();
                 }
 
                 @Override
                 protected boolean stale(String longName, EntityClassDef entityClassDef) throws Exception {
+                    System.out.println("@Watch: WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW");
+                    System.out.println("@hatch: longName = " + longName);
                     if (!RESERVED_ENTITIES.contains(longName)) {
                         return isStale(new AppEntityQuery(), entityClassDef);
                     }
@@ -557,7 +561,9 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 @SuppressWarnings("unchecked")
                 @Override
                 protected EntityClassDef create(String longName, Object... arg1) throws Exception {
+                    System.out.println("@hatch: GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG");
                     final EntityDef entityDef = getEntityDef(longName);
+                    System.out.println("@hatch: longName = " + longName);
                     if (ApplicationPredefinedEntityConstants.PROPERTYITEM_ENTITY.equals(longName)) {
                         return new EntityClassDef(entityDef, PropertyListItem.class);
                     }
@@ -575,6 +581,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                         return new EntityClassDef(entityDef, SnapshotDetails.class);
                     }
 
+                    System.out.println("@hatch: entityDef.getOriginClassName() = " + entityDef.getOriginClassName());
                     if (!entityDef.isCustom()) {
                         Class<? extends Entity> entityClass = (Class<? extends Entity>) ReflectUtils
                                 .classForName(entityDef.getOriginClassName());
@@ -582,11 +589,13 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                         return new EntityClassDef(entityDef, entityClass);
                     }
 
-                    return performDynamicEntityBuild(longName);
+                    System.out.println("@hatch: Dynamic");
+                   return performDynamicEntityBuild(longName);
                 }
 
                 @Override
                 protected boolean onCreate(EntityClassDef entityClassDef) throws Exception {
+                    System.out.println("@batch: entityClassDef.getEntityDef().delegated() = " + entityClassDef.getEntityDef().delegated());
                     if (entityClassDef.getEntityDef().delegated()) {
                         List<ArgumentTypeInfo> childListArgs = new ArrayList<ArgumentTypeInfo>();
                         for (EntityFieldDef entityFieldDef : entityClassDef.getEntityDef().getFieldDefList()) {
@@ -1508,8 +1517,9 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
     @Override
     public boolean isSupportsEntityChangeEvent(Class<? extends Entity> entityClass) throws UnifyException {
-        EntityDef entityDef = getEntityDefByClass(entityClass.getName());
-        return entityDef != null ? entityDef.isSupportsChangeEvents() : false;
+//        EntityDef entityDef = getEntityDefByClass(entityClass.getName());
+//        return entityDef != null ? entityDef.isSupportsChangeEvents() : false;
+        return false;
     }
 
     private static final Class<?>[] WRAPPER_PARAMS_0 = { EntityClassDef.class };
@@ -3915,13 +3925,16 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     private int deleteCustomApplication(TaskMonitor taskMonitor, Long applicationId) throws UnifyException {
         logDebug(taskMonitor, "Deleting custom application with ID [{0}]...", applicationId);
         int deletionCount = 0;
+        System.out.println("@prime: XXXXXXXXXXXXXXXXXXXXXXXXXXXX");
         if (!DataUtils.isBlank(applicationArtifactInstallerList)) {
             for (ApplicationArtifactInstaller applicationArtifactInstaller : applicationArtifactInstallerList) {
+                System.out.println("@prime: installer.getName() =" + applicationArtifactInstaller.getName());
                 deletionCount += applicationArtifactInstaller.deleteCustomApplicationArtifacts(taskMonitor,
                         applicationId);
             }
         }
 
+        System.out.println("@prime: Unregister Custom Application Privileges, applicationId = " + applicationId);
         applicationPrivilegeManager.unregisterCustomApplicationPrivileges(applicationId);
         deletionCount += deleteApplicationArtifacts(taskMonitor, "suggestion types", new AppSuggestionTypeQuery(),
                 applicationId, true);
@@ -3943,6 +3956,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
         environment().updateAll(new ApplicationQuery().addEquals("id", applicationId),
                 new Update().add("menuAccess", false));
+        System.out.println("@prime: XXXXXXXXXXXXXXXXXXXXXXXXXXXX");
         logDebug(taskMonitor, "Application with ID [{0}] successfully deleted.", applicationId);
         return deletionCount;
     }
@@ -4467,12 +4481,15 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     }
 
     private void resolveMappedEntities() throws UnifyException {
+        System.out.println("@moose: ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
         List<AppEntity> entityList = environment()
                 .listAll(new AppEntityQuery().delegate(ApplicationModuleNameConstants.MAPPEDENTITY_ENVIRONMENT_DELEGATE)
                         .addSelect("applicationName", "name"));
         for (String entityLongName : ApplicationNameUtils.getApplicationEntityLongNames(entityList)) {
+            System.out.println("@moose: entityLongName = " + entityLongName);
             getEntityClassDef(entityLongName);
         }
+        System.out.println("@moose: ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
     }
 
     private void ensureAllWorkflowCopyComponents(boolean isInstallationPerformed) throws UnifyException {
