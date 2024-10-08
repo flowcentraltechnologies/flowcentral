@@ -87,7 +87,7 @@ public class TableEditorWriter extends AbstractControlWriter {
                 jsonWriter.write("fldLabel", entityFieldDef.getFieldLabel());
                 jsonWriter.write("fldNm", entityFieldDef.getFieldName());
                 if (entityFieldDef.isWithInputWidget()) {
-                    jsonWriter.write("fldWidget", entityFieldDef.getInputWidgetTypeDef().getLongName());
+                    jsonWriter.write("fldWidget", entityFieldDef.getInputWidget());
                 }
                 jsonWriter.endObject();
 

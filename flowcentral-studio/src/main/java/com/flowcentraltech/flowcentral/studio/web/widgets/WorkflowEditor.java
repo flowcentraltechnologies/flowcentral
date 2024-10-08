@@ -361,10 +361,10 @@ public class WorkflowEditor {
                 setValuesInfo
                         .setTitle(au.resolveSessionMessage("$m{wfstepsetvaluespanel.caption}", step.getDescription()));
                 SetValueEntries entries = (step.getSetValues() != null && step.getSetValues().getSetValues() != null)
-                        ? new SetValueEntries(entityDef,
+                        ? new SetValueEntries(au, entityDef,
                                 InputWidgetUtils.getSetValuesDef(null, step.getSetValues().getSetValues()),
                                 Editable.TRUE)
-                        : new SetValueEntries(entityDef);
+                        : new SetValueEntries(au, entityDef);
                 setValuesInfo.setEntries(entries);
                 return stepSetValuesPanelName;
             case STEP:

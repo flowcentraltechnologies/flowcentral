@@ -15,6 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.application.web.widgets;
 
+import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.EntityFieldDef;
 import com.flowcentraltech.flowcentral.application.util.InputWidgetUtils;
@@ -32,6 +33,8 @@ import com.tcdng.unify.core.util.DataUtils;
  */
 public class SetValueEntry {
 
+    private final AppletUtilities au;
+
     private EntityDef entityDef;
 
     private SetValueType type;
@@ -48,7 +51,8 @@ public class SetValueEntry {
 
     private boolean editable;
 
-    public SetValueEntry(EntityDef entityDef, boolean editable) {
+    public SetValueEntry(AppletUtilities au, EntityDef entityDef, boolean editable) {
+        this.au = au;
         this.entityDef = entityDef;
         this.editable = editable;
     }
@@ -144,7 +148,7 @@ public class SetValueEntry {
                 case IMMEDIATE:
                 case IMMEDIATE_LINGUAL:
                 default:
-                    return InputWidgetUtils.newInput(entityFieldDef, type.isLingual(), false);
+                    return InputWidgetUtils.newInput(au, entityFieldDef, type.isLingual(), false);
             }
         }
 
@@ -167,7 +171,7 @@ public class SetValueEntry {
                 case IMMEDIATE:
                 case IMMEDIATE_LINGUAL:
                 default:
-                    AbstractInput<?> newIn = InputWidgetUtils.newInput(entityFieldDef, type.isLingual(), false);
+                    AbstractInput<?> newIn = InputWidgetUtils.newInput(au, entityFieldDef, type.isLingual(), false);
                     if (!newIn.compatible(currentIn)) {
                         return newIn;
                     }
@@ -177,10 +181,4 @@ public class SetValueEntry {
         return currentIn;
     }
 
-    @Override
-    public String toString() {
-        return "SetValueEntry [entityDef=" + entityDef + ", type=" + type + ", fieldName=" + fieldName + ", paramField="
-                + paramField + ", paramInput=" + paramInput + ", fieldChange=" + fieldChange + ", typeChange="
-                + typeChange + ", editable=" + editable + "]";
-    }
 }

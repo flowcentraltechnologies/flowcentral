@@ -191,7 +191,7 @@ public class EntityDef extends BaseApplicationEntityDef {
 
     private boolean listOnlyTypesResolved;
 
-    private EntityDef(EntityBaseType baseType, ConfigType type, Map<String, EntityFieldDef> fieldDefMap,
+    private EntityDef(AppletUtilities au, EntityBaseType baseType, ConfigType type, Map<String, EntityFieldDef> fieldDefMap,
             List<EntityFieldDef> fieldDefList, List<EntityAttachmentDef> attachmentList,
             Map<String, EntityExpressionDef> expressionDefMap, List<UniqueConstraintDef> uniqueConstraintList,
             List<IndexDef> indexList, List<EntityUploadDef> uploadList,
@@ -199,7 +199,7 @@ public class EntityDef extends BaseApplicationEntityDef {
             Map<String, EntityCategoryDef> categoryDefs, ApplicationEntityNameParts nameParts, String originClassName,
             String tableName, String label, String emailProducerConsumer, String delegate, String dataSourceName,
             boolean mapped, boolean supportsChangeEvents, boolean auditable, boolean reportable, boolean actionPolicy,
-            String description, Long id, long version) {
+            String description, Long id, long version) throws UnifyException{
         super(nameParts, description, id, version);
         this.baseType = baseType;
         this.type = type;
@@ -265,7 +265,8 @@ public class EntityDef extends BaseApplicationEntityDef {
                     refFieldDefMap = new HashMap<String, EntityFieldDef>();
                 }
 
-                refFieldDefMap.put(entityFieldDef.getRefDef().getEntity(), entityFieldDef);
+                final RefDef refDef = au.getRefDef(entityFieldDef.getRefLongName());
+                refFieldDefMap.put(refDef.getEntity(), entityFieldDef);
             } else if (EntityFieldDataType.FOSTER_PARENT_ID.equals(entityFieldDef.getDataType())) {
                 fosterParentIdDef = entityFieldDef;
             } else if (EntityFieldDataType.FOSTER_PARENT_TYPE.equals(entityFieldDef.getDataType())) {
@@ -1175,7 +1176,7 @@ public class EntityDef extends BaseApplicationEntityDef {
         private boolean mapped;
 
         private boolean supportsChangeEvents;
-        
+
         private boolean auditable;
 
         private boolean reportable;
@@ -1276,45 +1277,44 @@ public class EntityDef extends BaseApplicationEntityDef {
             return this;
         }
 
-        public Builder addFieldDef(WidgetTypeDef textWidgetTypeDef, WidgetTypeDef inputWidgetTypeDef,
-                EntityFieldDataType dataType, EntityFieldType type, String fieldName, String fieldLabel)
-                throws UnifyException {
-            return addFieldDef(textWidgetTypeDef, inputWidgetTypeDef, null, dataType, type, null, fieldName, null,
-                    fieldLabel, null, null, null, null, null, null, null, null, null, null, null, null, null, null,
-                    null, null, null, false, false, true, false, false, false, false, false, false);
+        public Builder addFieldDef(String textWidget, String inputWidget, EntityFieldDataType dataType,
+                EntityFieldType type, String fieldName, String fieldLabel) throws UnifyException {
+            return addFieldDef(textWidget, inputWidget, null, dataType, type, null, fieldName, null, fieldLabel, null,
+                    null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null,
+                    false, false, true, false, false, false, false, false, false);
         }
 
-        public Builder addFieldDef(WidgetTypeDef textWidgetTypeDef, WidgetTypeDef inputWidgetTypeDef,
-                WidgetTypeDef lingualWidgetTypeDef, EntityFieldDataType dataType, EntityFieldType type,
-                TextCase textCase, String fieldName, String mapped, String fieldLabel, String columnName,
-                String category, String suggestionType, String inputLabel, String inputListKey, String lingualListKey,
-                String autoFormat, String defaultVal, String references, String key, String property, Integer rows,
-                Integer columns, Integer minLen, Integer maxLen, Integer precision, Integer scale, boolean trim,
-                boolean allowNegative, boolean editable, boolean nullable, boolean auditable, boolean reportable,
-                boolean maintainLink, boolean basicSearch, boolean descriptive) throws UnifyException {
-            return addFieldDef(textWidgetTypeDef, inputWidgetTypeDef, lingualWidgetTypeDef, null, dataType, type,
-                    textCase, fieldName, mapped, fieldLabel, columnName, category, suggestionType, inputLabel,
-                    inputListKey, lingualListKey, autoFormat, defaultVal, references, key, property, rows, columns,
-                    minLen, maxLen, precision, scale, trim, allowNegative, editable, nullable, auditable, reportable,
-                    maintainLink, basicSearch, descriptive);
+        public Builder addFieldDef(String textWidget, String inputWidget, String lingualWidget,
+                EntityFieldDataType dataType, EntityFieldType type, TextCase textCase, String fieldName, String mapped,
+                String fieldLabel, String columnName, String category, String suggestionType, String inputLabel,
+                String inputListKey, String lingualListKey, String autoFormat, String defaultVal, String references,
+                String key, String property, Integer rows, Integer columns, Integer minLen, Integer maxLen,
+                Integer precision, Integer scale, boolean trim, boolean allowNegative, boolean editable,
+                boolean nullable, boolean auditable, boolean reportable, boolean maintainLink, boolean basicSearch,
+                boolean descriptive) throws UnifyException {
+            return addFieldDef(textWidget, inputWidget, lingualWidget, dataType, type, textCase, fieldName,
+                    mapped, fieldLabel, columnName, category, suggestionType, inputLabel, inputListKey, lingualListKey,
+                    autoFormat, defaultVal, null, references, key, property, rows, columns, minLen, maxLen, precision, scale,
+                    trim, allowNegative, editable, nullable, auditable, reportable, maintainLink, basicSearch,
+                    descriptive);
         }
 
-        public Builder addFieldDef(WidgetTypeDef textWidgetTypeDef, WidgetTypeDef inputWidgetTypeDef,
-                WidgetTypeDef lingualWidgetTypeDef, RefDef refDef, EntityFieldDataType dataType, EntityFieldType type,
-                TextCase textCase, String fieldName, String mapped, String fieldLabel, String columnName,
-                String category, String suggestionType, String inputLabel, String inputListKey, String lingualListKey,
-                String autoFormat, String defaultVal, String references, String key, String property, Integer rows,
-                Integer columns, Integer minLen, Integer maxLen, Integer precision, Integer scale, boolean trim,
-                boolean allowNegative, boolean editable, boolean nullable, boolean auditable, boolean reportable,
-                boolean maintainLink, boolean basicSearch, boolean descriptive) throws UnifyException {
+        public Builder addFieldDef(String textWidget, String inputWidget, String lingualWidget,
+                EntityFieldDataType dataType, EntityFieldType type, TextCase textCase, String fieldName, String mapped,
+                String fieldLabel, String columnName, String category, String suggestionType, String inputLabel,
+                String inputListKey, String lingualListKey, String autoFormat, String defaultVal, String refLongName,
+                String references, String key, String property, Integer rows, Integer columns, Integer minLen,
+                Integer maxLen, Integer precision, Integer scale, boolean trim, boolean allowNegative, boolean editable,
+                boolean nullable, boolean auditable, boolean reportable, boolean maintainLink, boolean basicSearch,
+                boolean descriptive) throws UnifyException {
             if (fieldDefMap.containsKey(fieldName)) {
                 throw new RuntimeException("Field with name [" + fieldName + "] already exists in this definition.");
             }
 
-            fieldDefMap.put(fieldName, new EntityFieldDef(textWidgetTypeDef, inputWidgetTypeDef, lingualWidgetTypeDef,
-                    refDef, dataType, type, textCase, longName, fieldName, mapped, fieldLabel, columnName, references,
-                    category, suggestionType, inputLabel, inputListKey, lingualListKey, autoFormat, defaultVal, key,
-                    property, DataUtils.convert(int.class, rows), DataUtils.convert(int.class, columns),
+            fieldDefMap.put(fieldName, new EntityFieldDef(textWidget, inputWidget, lingualWidget, dataType, type,
+                    textCase, longName, fieldName, mapped, fieldLabel, columnName, refLongName, references, category,
+                    suggestionType, inputLabel, inputListKey, lingualListKey, autoFormat, defaultVal, key, property,
+                    DataUtils.convert(int.class, rows), DataUtils.convert(int.class, columns),
                     DataUtils.convert(int.class, minLen), DataUtils.convert(int.class, maxLen),
                     DataUtils.convert(int.class, precision), DataUtils.convert(int.class, scale), trim, allowNegative,
                     editable, nullable, auditable, reportable, maintainLink, basicSearch, descriptive));
@@ -1426,11 +1426,11 @@ public class EntityDef extends BaseApplicationEntityDef {
             return this;
         }
 
-        public EntityDef build() throws UnifyException {
+        public EntityDef build(AppletUtilities au) throws UnifyException {
             ApplicationEntityNameParts nameParts = ApplicationNameUtils.getApplicationEntityNameParts(longName);
             List<EntityFieldDef> fieldDefList = new ArrayList<EntityFieldDef>(fieldDefMap.values());
             DataUtils.sortDescending(fieldDefList, EntityFieldDef.class, "sortIndex");
-            return new EntityDef(baseType, type, DataUtils.unmodifiableMap(fieldDefMap),
+            return new EntityDef(au, baseType, type, DataUtils.unmodifiableMap(fieldDefMap),
                     DataUtils.unmodifiableList(fieldDefList), DataUtils.unmodifiableValuesList(attachmentDefMap),
                     DataUtils.unmodifiableMap(expressionDefMap), DataUtils.unmodifiableList(uniqueConstraintList),
                     DataUtils.unmodifiableList(indexList), DataUtils.unmodifiableList(uploadList),

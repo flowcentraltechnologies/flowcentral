@@ -142,6 +142,7 @@ import com.flowcentraltech.flowcentral.common.util.RestrictionUtils;
 import com.flowcentraltech.flowcentral.common.web.util.EntityConfigurationUtils;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityChildCategoryType;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldDataType;
+import com.flowcentraltech.flowcentral.configuration.constants.InputType;
 import com.flowcentraltech.flowcentral.configuration.constants.RecordActionType;
 import com.flowcentraltech.flowcentral.configuration.constants.RendererType;
 import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
@@ -155,6 +156,7 @@ import com.tcdng.unify.core.UserToken;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.Preferred;
+import com.tcdng.unify.core.constant.DataType;
 import com.tcdng.unify.core.constant.LocaleType;
 import com.tcdng.unify.core.criterion.AbstractRestrictionTranslatorMapper;
 import com.tcdng.unify.core.criterion.Equals;
@@ -260,7 +262,9 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
     private SequenceNumberService sequenceNumberService;
 
     private final FactoryMap<String, Class<? extends SingleFormBean>> singleFormBeanClassByPanelName;
-
+    
+    private final Map<String, WidgetTypeDef> adhocWidgets;
+    
     private MappedEntityProviderInfo mappedEntityProviderInfo;
 
     public AppletUtilitiesImpl() {
@@ -278,6 +282,8 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
                 }
 
             };
+       
+        this.adhocWidgets = new HashMap<String, WidgetTypeDef>();
     }
 
     @Override
@@ -740,7 +746,16 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
 
     @Override
     public WidgetTypeDef getWidgetTypeDef(String widgetName) throws UnifyException {
-        return applicationModuleService.getWidgetTypeDef(widgetName);
+        return adhocWidgets.containsKey(widgetName) ? adhocWidgets.get(widgetName) : applicationModuleService.getWidgetTypeDef(widgetName);
+    }
+
+    @Override
+    public String setAdhocWidgetTypeDef(DataType dataType, InputType type, String longName, String description,
+            String editor, String renderer) throws UnifyException {
+        WidgetTypeDef widgetTypeDef = new WidgetTypeDef(dataType, type, longName, description, 1L, 1L, editor,
+                renderer);
+        adhocWidgets.put(longName, widgetTypeDef);
+        return longName;
     }
 
     @Override
@@ -2181,7 +2196,8 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
                 if (id == null) {
                     clearListOnlyFields(entityDef, fkFieldName, inst);
                 } else {
-                    EntityClassDef _parentEntityClassDef = getEntityClassDef(entityFieldDef.getRefDef().getEntity());
+                    final RefDef refDef = applicationModuleService.getRefDef(entityFieldDef.getRefLongName());
+                    EntityClassDef _parentEntityClassDef = getEntityClassDef(refDef.getEntity());
                     Entity parentInst = environmentService
                             .listLean((Class<? extends Entity>) _parentEntityClassDef.getEntityClass(), id);
                     copyListOnlyFieldsFromForeignEntity(entityDef, fkFieldName, inst, parentInst);

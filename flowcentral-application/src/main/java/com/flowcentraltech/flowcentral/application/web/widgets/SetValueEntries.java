@@ -20,6 +20,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.ListIterator;
 
+import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.SetValueDef;
 import com.flowcentraltech.flowcentral.application.data.SetValuesDef;
@@ -36,28 +37,33 @@ import com.tcdng.unify.core.util.StringUtils;
  */
 public class SetValueEntries {
 
+    private final AppletUtilities au;
+
     private EntityDef entityDef;
 
     private List<SetValueEntry> entryList;
 
     private List<SetValueEntry> viewEntryList;
 
-    public SetValueEntries(EntityDef entityDef) {
-        this(entityDef, Editable.TRUE);
+    public SetValueEntries(AppletUtilities au, EntityDef entityDef) {
+        this(au, entityDef, Editable.TRUE);
     }
 
-    public SetValueEntries(EntityDef entityDef, Editable rootEditable) {
+    public SetValueEntries(AppletUtilities au, EntityDef entityDef, Editable rootEditable) {
+        this.au = au;
         this.entityDef = entityDef;
         this.entryList = new ArrayList<SetValueEntry>();
-        this.entryList.add(new SetValueEntry(entityDef, rootEditable.isTrue()));
+        this.entryList.add(new SetValueEntry(au, entityDef, rootEditable.isTrue()));
         this.viewEntryList = Collections.unmodifiableList(entryList);
     }
 
-    public SetValueEntries(EntityDef entityDef, SetValuesDef setValuesDef) throws UnifyException {
-        this(entityDef, setValuesDef, Editable.TRUE);
+    public SetValueEntries(AppletUtilities au, EntityDef entityDef, SetValuesDef setValuesDef) throws UnifyException {
+        this(au, entityDef, setValuesDef, Editable.TRUE);
     }
 
-    public SetValueEntries(EntityDef entityDef, SetValuesDef setValuesDef, Editable editable) throws UnifyException {
+    public SetValueEntries(AppletUtilities au, EntityDef entityDef, SetValuesDef setValuesDef, Editable editable)
+            throws UnifyException {
+        this.au = au;
         this.entityDef = entityDef;
         this.entryList = new ArrayList<SetValueEntry>();
         this.viewEntryList = Collections.unmodifiableList(entryList);
@@ -105,7 +111,7 @@ public class SetValueEntries {
 
         SetValueEntry last = entryList.get(entryList.size() - 1);
         if (last.isWithFieldName()) {
-            entryList.add(new SetValueEntry(entityDef, true));
+            entryList.add(new SetValueEntry(au, entityDef, true));
         }
     }
 
@@ -129,13 +135,13 @@ public class SetValueEntries {
     private void loadEntryList(SetValuesDef setValuesDef, Editable editable) throws UnifyException {
         if (setValuesDef != null) {
             for (SetValueDef setValueDef : setValuesDef.getSetValueList()) {
-                SetValueEntry svo = new SetValueEntry(entityDef, editable.isTrue());
+                SetValueEntry svo = new SetValueEntry(au, entityDef, editable.isTrue());
                 setFieldAndInputParams(svo, setValueDef);
                 entryList.add(svo);
             }
         }
 
-        entryList.add(new SetValueEntry(entityDef, editable.isTrue()));
+        entryList.add(new SetValueEntry(au, entityDef, editable.isTrue()));
     }
 
     private void setFieldAndInputParams(SetValueEntry svo, SetValueDef setValueDef) throws UnifyException {

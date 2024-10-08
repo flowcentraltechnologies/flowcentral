@@ -105,10 +105,11 @@ public class QuickTableOrder {
             }
 
             EntityFieldDef baseFieldDef = entityClassDef.getEntityDef().getFieldDef(baseField);
-            EntityDef parentEntityDef = ctx.au().getEntityDef(baseFieldDef.getRefDef().getEntity());
+            EntityDef parentEntityDef = ctx.au()
+                    .getEntityDef(ctx.au().getRefDef(baseFieldDef.getRefLongName()).getEntity());
             ctx.au().bumpVersion(parentEntityDef, (Long) baseId);
         }
-        
+
         return true;
     }
 

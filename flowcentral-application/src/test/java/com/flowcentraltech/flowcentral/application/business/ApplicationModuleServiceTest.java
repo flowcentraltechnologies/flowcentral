@@ -154,7 +154,7 @@ public class ApplicationModuleServiceTest extends AbstractFlowCentralTest {
         assertEquals("Category", entityFieldDef.getFieldLabel());
         assertEquals(EntityFieldDataType.ENUM_REF, entityFieldDef.getDataType());
         assertEquals(EntityFieldType.STATIC, entityFieldDef.getType());
-        assertEquals("prodcatlist", entityFieldDef.getInputWidgetTypeDef().getName());
+        assertEquals("manageProduct.prodcatlist", entityFieldDef.getInputWidget());
         assertEquals("productcategorylist", entityFieldDef.getReferences());
 
         entityFieldDef = entityDef.getFieldDef("salesPrice");
@@ -163,7 +163,7 @@ public class ApplicationModuleServiceTest extends AbstractFlowCentralTest {
         assertEquals("Sales Price", entityFieldDef.getFieldLabel());
         assertEquals(EntityFieldDataType.DOUBLE, entityFieldDef.getDataType());
         assertEquals(EntityFieldType.STATIC, entityFieldDef.getType());
-        assertEquals("amount", entityFieldDef.getInputWidgetTypeDef().getName());
+        assertEquals("manageProduct.amount", entityFieldDef.getInputWidget());
         assertNull(entityFieldDef.getReferences());
     }
 

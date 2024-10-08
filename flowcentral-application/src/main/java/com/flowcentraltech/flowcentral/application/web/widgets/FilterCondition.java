@@ -15,6 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.application.web.widgets;
 
+import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.EntityFieldDef;
 import com.flowcentraltech.flowcentral.application.data.LabelSuggestionDef;
@@ -34,7 +35,9 @@ import com.tcdng.unify.core.util.DataUtils;
  */
 public class FilterCondition {
 
-    private final WidgetTypeDef sessionParamWidgetTypeDef;
+    private final AppletUtilities au;
+
+    private final String sessionParamWidget;
 
     private EntityDef entityDef;
 
@@ -66,12 +69,13 @@ public class FilterCondition {
 
     private boolean editable;
 
-    public FilterCondition(EntityDef entityDef, LabelSuggestionDef labelSuggestionDef,
-            WidgetTypeDef sessionParamWidgetTypeDef, Long ownerInstId, FilterConditionType type,
+    public FilterCondition(AppletUtilities au, EntityDef entityDef, LabelSuggestionDef labelSuggestionDef,
+            String sessionParamWidget, Long ownerInstId, FilterConditionType type,
             FilterConditionListType listType, int depth, boolean editable) {
+        this.au = au;
         this.entityDef = entityDef;
         this.labelSuggestionDef = labelSuggestionDef;
-        this.sessionParamWidgetTypeDef = sessionParamWidgetTypeDef;
+        this.sessionParamWidget = sessionParamWidget;
         this.ownerInstId = ownerInstId;
         this.type = type;
         this.listType = listType;
@@ -195,6 +199,7 @@ public class FilterCondition {
                     paramInputA = null;
                     paramInputB = null;
                 } else if (type.isSessionParameterVal()) {
+                    final WidgetTypeDef sessionParamWidgetTypeDef = au.getWidgetTypeDef(sessionParamWidget);
                     paramInputA = evalInput(sessionParamWidgetTypeDef, entityFieldDef, paramInputA);
                 } else {
                     if (type.isSingleParam()) {
@@ -241,11 +246,11 @@ public class FilterCondition {
             throws UnifyException {
         final boolean search = false;
         if (currentIn == null) {
-            return InputWidgetUtils.newInput(entityFieldDef, type.isLingual(), search);
+            return InputWidgetUtils.newInput(au, entityFieldDef, type.isLingual(), search);
         }
 
         if (fieldChange || typeChange) {
-            AbstractInput<?> newIn = InputWidgetUtils.newInput(entityFieldDef, type.isLingual(), search);
+            AbstractInput<?> newIn = InputWidgetUtils.newInput(au, entityFieldDef, type.isLingual(), search);
             if (!newIn.compatible(currentIn)) {
                 return newIn;
             }
