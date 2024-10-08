@@ -29,7 +29,6 @@ import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.data.EntityFieldDef;
 import com.flowcentraltech.flowcentral.application.data.EntityInstNameParts;
 import com.flowcentraltech.flowcentral.application.data.RefDef;
-import com.flowcentraltech.flowcentral.application.data.WidgetTypeDef;
 import com.flowcentraltech.flowcentral.application.entities.AppEntityField;
 import com.flowcentraltech.flowcentral.application.entities.AppFormElement;
 import com.flowcentraltech.flowcentral.application.entities.BaseApplicationEntity;
@@ -304,21 +303,17 @@ public final class ApplicationEntityUtils {
 
     public static EntityFieldDef createEntityFieldDef(AppletUtilities au, String entityLongName,
             AppEntityField appEntityField) throws UnifyException {
-        final WidgetTypeDef textWidgetTypeDef = au.getWidgetTypeDef("application.text");
-        WidgetTypeDef inputWidgetTypeDef = null;
-        if (!StringUtils.isBlank(appEntityField.getInputWidget())) {
-            inputWidgetTypeDef = au.getWidgetTypeDef(appEntityField.getInputWidget());
-        }
-
-        WidgetTypeDef lingualWidgetTypeDef = null;
+        final String textWidget = "application.text";
+        String inputWidget = appEntityField.getInputWidget();
+        String lingualWidget = null;
         EntityFieldDataType type = appEntityField.getDataType();
         if (!StringUtils.isBlank(appEntityField.getLingualWidget())) {
-            lingualWidgetTypeDef = au.getWidgetTypeDef(appEntityField.getLingualWidget());
+            lingualWidget = appEntityField.getLingualWidget();
         } else {
             if (EntityFieldDataType.STRING.equals(type)) {
-                lingualWidgetTypeDef = au.getWidgetTypeDef("application.lingualstringtypelist");
+                lingualWidget = "application.lingualstringtypelist";
             } else if (type.isDate() || type.isTimestamp()) {
-                lingualWidgetTypeDef = au.getWidgetTypeDef("application.lingualdatetypelist");
+                lingualWidget = "application.lingualdatetypelist";
             }
         }
 
@@ -328,7 +323,7 @@ public final class ApplicationEntityUtils {
             refDef = au.getRefDef(references);
         }
 
-        return new EntityFieldDef(textWidgetTypeDef, inputWidgetTypeDef, lingualWidgetTypeDef, refDef,
+        return new EntityFieldDef(textWidget, inputWidget, lingualWidget, refDef,
                 appEntityField.getDataType(), appEntityField.getType(), appEntityField.getTextCase(), entityLongName,
                 appEntityField.getName(), appEntityField.getMapped(), appEntityField.getLabel(),
                 appEntityField.getColumnName(), references, appEntityField.getCategory(),

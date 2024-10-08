@@ -1276,31 +1276,31 @@ public class EntityDef extends BaseApplicationEntityDef {
             return this;
         }
 
-        public Builder addFieldDef(WidgetTypeDef textWidgetTypeDef, WidgetTypeDef inputWidgetTypeDef,
+        public Builder addFieldDef(String textWidget, String inputWidget,
                 EntityFieldDataType dataType, EntityFieldType type, String fieldName, String fieldLabel)
                 throws UnifyException {
-            return addFieldDef(textWidgetTypeDef, inputWidgetTypeDef, null, dataType, type, null, fieldName, null,
+            return addFieldDef(textWidget, inputWidget, null, dataType, type, null, fieldName, null,
                     fieldLabel, null, null, null, null, null, null, null, null, null, null, null, null, null, null,
                     null, null, null, false, false, true, false, false, false, false, false, false);
         }
 
-        public Builder addFieldDef(WidgetTypeDef textWidgetTypeDef, WidgetTypeDef inputWidgetTypeDef,
-                WidgetTypeDef lingualWidgetTypeDef, EntityFieldDataType dataType, EntityFieldType type,
+        public Builder addFieldDef(String textWidget, String inputWidget,
+                String lingualWidget, EntityFieldDataType dataType, EntityFieldType type,
                 TextCase textCase, String fieldName, String mapped, String fieldLabel, String columnName,
                 String category, String suggestionType, String inputLabel, String inputListKey, String lingualListKey,
                 String autoFormat, String defaultVal, String references, String key, String property, Integer rows,
                 Integer columns, Integer minLen, Integer maxLen, Integer precision, Integer scale, boolean trim,
                 boolean allowNegative, boolean editable, boolean nullable, boolean auditable, boolean reportable,
                 boolean maintainLink, boolean basicSearch, boolean descriptive) throws UnifyException {
-            return addFieldDef(textWidgetTypeDef, inputWidgetTypeDef, lingualWidgetTypeDef, null, dataType, type,
+            return addFieldDef(textWidget, inputWidget, lingualWidget, null, dataType, type,
                     textCase, fieldName, mapped, fieldLabel, columnName, category, suggestionType, inputLabel,
                     inputListKey, lingualListKey, autoFormat, defaultVal, references, key, property, rows, columns,
                     minLen, maxLen, precision, scale, trim, allowNegative, editable, nullable, auditable, reportable,
                     maintainLink, basicSearch, descriptive);
         }
 
-        public Builder addFieldDef(WidgetTypeDef textWidgetTypeDef, WidgetTypeDef inputWidgetTypeDef,
-                WidgetTypeDef lingualWidgetTypeDef, RefDef refDef, EntityFieldDataType dataType, EntityFieldType type,
+        public Builder addFieldDef(String textWidget, String inputWidget,
+                String lingualWidget, RefDef refDef, EntityFieldDataType dataType, EntityFieldType type,
                 TextCase textCase, String fieldName, String mapped, String fieldLabel, String columnName,
                 String category, String suggestionType, String inputLabel, String inputListKey, String lingualListKey,
                 String autoFormat, String defaultVal, String references, String key, String property, Integer rows,
@@ -1311,7 +1311,7 @@ public class EntityDef extends BaseApplicationEntityDef {
                 throw new RuntimeException("Field with name [" + fieldName + "] already exists in this definition.");
             }
 
-            fieldDefMap.put(fieldName, new EntityFieldDef(textWidgetTypeDef, inputWidgetTypeDef, lingualWidgetTypeDef,
+            fieldDefMap.put(fieldName, new EntityFieldDef(textWidget, inputWidget, lingualWidget,
                     refDef, dataType, type, textCase, longName, fieldName, mapped, fieldLabel, columnName, references,
                     category, suggestionType, inputLabel, inputListKey, lingualListKey, autoFormat, defaultVal, key,
                     property, DataUtils.convert(int.class, rows), DataUtils.convert(int.class, columns),

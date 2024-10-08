@@ -141,8 +141,8 @@ public class EntitySearch extends AbstractPanelFormBinding {
         super(ctx, sweepingCommitPolicy, tabName, ignoreConditionalDisabled);
         this.viewItemsInSeparateTabs = viewItemsInSeparateTabs;
         this.sectorIcon = sectorIcon;
-        this.entityFilter = new Filter(null, null, tableDef.getEntityDef(), tableDef.getLabelSuggestionDef(),
-                au().getWidgetTypeDef("application.sessionparamtypelist"), FilterConditionListType.IMMEDIATE_FIELD);
+        this.entityFilter = new Filter(au(), null, null, tableDef.getEntityDef(), tableDef.getLabelSuggestionDef(),
+                "application.sessionparamtypelist", FilterConditionListType.IMMEDIATE_FIELD);
         this.searchEntries = new SearchEntries(ctx.au(), tableDef.getEntityDef(), tableDef.getLabelSuggestionDef(),
                 appAppletSearchConfigName, columns, showConditions);
         this.entityTable = new EntityTable(ctx.au(), tableDef, null);
@@ -606,11 +606,11 @@ public class EntitySearch extends AbstractPanelFormBinding {
         FilterDef quickFilterDef = appAppletId != null && appAppletFilterName != null
                 ? getAppletCtx().au().getAppletDef(appAppletId).getFilterDef(appAppletFilterName).getFilterDef()
                 : null;
-        entityFilter = quickFilterDef != null ? new Filter(null, null, entityFilter.getEntityDef(),
+        entityFilter = quickFilterDef != null ? new Filter(au(), null, null, entityFilter.getEntityDef(),
                 quickFilterDef.explodeGenerator(getEntityDef(), au().getNow()),
-                au().getWidgetTypeDef("application.sessionparamtypelist"), FilterConditionListType.IMMEDIATE_FIELD)
-                : new Filter(null, null, entityFilter.getEntityDef(), entityFilter.getLabelSuggestionDef(),
-                        au().getWidgetTypeDef("application.sessionparamtypelist"),
+                "application.sessionparamtypelist", FilterConditionListType.IMMEDIATE_FIELD)
+                : new Filter(au(), null, null, entityFilter.getEntityDef(), entityFilter.getLabelSuggestionDef(),
+                        "application.sessionparamtypelist",
                         FilterConditionListType.IMMEDIATE_FIELD);
     }
 

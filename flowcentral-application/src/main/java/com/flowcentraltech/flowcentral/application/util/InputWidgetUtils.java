@@ -38,10 +38,10 @@ import com.flowcentraltech.flowcentral.application.data.FieldSequenceDef;
 import com.flowcentraltech.flowcentral.application.data.FieldSequenceEntryDef;
 import com.flowcentraltech.flowcentral.application.data.FilterDef;
 import com.flowcentraltech.flowcentral.application.data.FilterRestrictionDef;
-import com.flowcentraltech.flowcentral.application.data.SearchInputDef;
-import com.flowcentraltech.flowcentral.application.data.SearchInputsDef;
 import com.flowcentraltech.flowcentral.application.data.PropertySequenceDef;
 import com.flowcentraltech.flowcentral.application.data.PropertySequenceEntryDef;
+import com.flowcentraltech.flowcentral.application.data.SearchInputDef;
+import com.flowcentraltech.flowcentral.application.data.SearchInputsDef;
 import com.flowcentraltech.flowcentral.application.data.SetValueDef;
 import com.flowcentraltech.flowcentral.application.data.SetValuesDef;
 import com.flowcentraltech.flowcentral.application.data.TableLoadingDef;
@@ -53,8 +53,8 @@ import com.flowcentraltech.flowcentral.application.entities.AppEntitySearchInput
 import com.flowcentraltech.flowcentral.application.entities.AppFieldSequence;
 import com.flowcentraltech.flowcentral.application.entities.AppFilter;
 import com.flowcentraltech.flowcentral.application.entities.AppFormFilter;
-import com.flowcentraltech.flowcentral.application.entities.AppSearchInput;
 import com.flowcentraltech.flowcentral.application.entities.AppPropertySequence;
+import com.flowcentraltech.flowcentral.application.entities.AppSearchInput;
 import com.flowcentraltech.flowcentral.application.entities.AppSetValues;
 import com.flowcentraltech.flowcentral.application.entities.AppTableFilter;
 import com.flowcentraltech.flowcentral.application.entities.AppWidgetRules;
@@ -79,10 +79,10 @@ import com.flowcentraltech.flowcentral.configuration.xml.FieldSequenceEntryConfi
 import com.flowcentraltech.flowcentral.configuration.xml.FilterConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.FilterRestrictionConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.FormFilterConfig;
-import com.flowcentraltech.flowcentral.configuration.xml.SearchInputConfig;
-import com.flowcentraltech.flowcentral.configuration.xml.SearchInputsConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.PropertySequenceConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.PropertySequenceEntryConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.SearchInputConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.SearchInputsConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.SetValueConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.SetValuesConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.TableFilterConfig;
@@ -204,7 +204,7 @@ public final class InputWidgetUtils {
 
     public static String resolveEntityFieldWidget(final EntityFieldDef entityFieldDef) throws UnifyException {
         if (entityFieldDef.isWithInputWidget()) {
-            return entityFieldDef.getInputWidgetTypeDef().getLongName();
+            return entityFieldDef.getInputWidget();
         } else {
             String widget = InputWidgetUtils.getDefaultEntityFieldWidget(entityFieldDef.getDataType());
             if (widget != null) {
@@ -237,17 +237,18 @@ public final class InputWidgetUtils {
         return null;
     }
 
-    public static AbstractInput<?> newInput(final EntityFieldDef entityFieldDef, boolean lingual, boolean search)
+    public static AbstractInput<?> newInput(final AppletUtilities au, final EntityFieldDef entityFieldDef, boolean lingual, boolean search)
             throws UnifyException {
         final EntityFieldDef _entityFieldDef = entityFieldDef.isWithResolvedTypeFieldDef()
                 ? entityFieldDef.getResolvedTypeFieldDef()
                 : entityFieldDef;
-        WidgetTypeDef widgetTypeDef = lingual ? _entityFieldDef.getLigualWidgetTypeDef()
-                : _entityFieldDef.getInputWidgetTypeDef();
-        if (widgetTypeDef == null || (search && "application.textarea".equals(widgetTypeDef.getLongName()))) {
-            widgetTypeDef = _entityFieldDef.getTextWidgetTypeDef();
+        String widget = lingual ? _entityFieldDef.getLigualWidget()
+                : _entityFieldDef.getInputWidget();
+        if (widget == null || (search && "application.textarea".equals(widget))) {
+            widget = _entityFieldDef.getTextWidget();
         }
 
+        final WidgetTypeDef widgetTypeDef = au.getWidgetTypeDef(widget);
         Class<? extends AbstractInput<?>> inputClass = lingual ? StringInput.class
                 : CommonInputUtils.getInputClass(widgetTypeDef.getInputType());
         String editor = InputWidgetUtils.constructEditor(widgetTypeDef, _entityFieldDef);

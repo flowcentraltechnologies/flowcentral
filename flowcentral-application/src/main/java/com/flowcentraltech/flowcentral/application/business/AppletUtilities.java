@@ -92,11 +92,13 @@ import com.flowcentraltech.flowcentral.common.data.FormatterOptions;
 import com.flowcentraltech.flowcentral.common.data.GenerateListingReportOptions;
 import com.flowcentraltech.flowcentral.common.data.ParamValuesDef;
 import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
+import com.flowcentraltech.flowcentral.configuration.constants.InputType;
 import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
 import com.tcdng.unify.common.util.StringToken;
 import com.tcdng.unify.core.UnifyComponent;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.UserToken;
+import com.tcdng.unify.core.constant.DataType;
 import com.tcdng.unify.core.criterion.Restriction;
 import com.tcdng.unify.core.data.Formats;
 import com.tcdng.unify.core.data.Listable;
@@ -833,6 +835,28 @@ public interface AppletUtilities extends FlowCentralComponent {
      */
     WidgetTypeDef getWidgetTypeDef(String widgetName) throws UnifyException;
 
+    /**
+     * Sets an adhoc widget type.
+     * 
+     * @param dataType
+     *                    the data type
+     * @param type
+     *                    the input type
+     * @param longName
+     *                    the long name
+     * @param description
+     *                    the description
+     * @param editor
+     *                    the editor
+     * @param renderer
+     *                    the renderer
+     * @return the widget long name
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    String setAdhocWidgetTypeDef(DataType dataType, InputType type, String longName, String description, String editor,
+            String renderer) throws UnifyException;
+    
     /**
      * Gets a application property rule definition.
      * 

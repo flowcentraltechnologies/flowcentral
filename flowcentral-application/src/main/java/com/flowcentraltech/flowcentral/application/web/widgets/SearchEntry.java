@@ -203,7 +203,7 @@ public class SearchEntry implements EntityFieldAttributes {
     }
 
     private AbstractInput<?> evalInput(EntityFieldDef entityFieldDef) throws UnifyException {
-        return InputWidgetUtils.newInput(entityFieldDef, false, true);
+        return InputWidgetUtils.newInput(au, entityFieldDef, false, true);
     }
 
 }

@@ -33,12 +33,6 @@ import com.tcdng.unify.core.util.StringUtils;
  */
 public class EntityFieldDef implements Listable, EntityFieldAttributes {
 
-    private WidgetTypeDef textWidgetTypeDef;
-
-    private WidgetTypeDef inputWidgetTypeDef;
-
-    private WidgetTypeDef ligualWidgetTypeDef;
-
     private EntityFieldDef resolvedTypeFieldDef;
 
     private RefDef refDef;
@@ -50,6 +44,12 @@ public class EntityFieldDef implements Listable, EntityFieldAttributes {
     private TextCase textCase;
 
     private String entityLongName;
+
+    private String textWidget;
+
+    private String inputWidget;
+
+    private String ligualWidget;
 
     private String fieldName;
 
@@ -109,10 +109,10 @@ public class EntityFieldDef implements Listable, EntityFieldAttributes {
 
     private boolean basicSearch;
 
-    public EntityFieldDef(WidgetTypeDef textWidgetTypeDef, WidgetTypeDef inputWidgetTypeDef, RefDef refDef,
+    public EntityFieldDef(String textWidget, String inputWidget, RefDef refDef,
             String entityLongName, String fieldName, String mapped, String references, String inputListKey) {
-        this.textWidgetTypeDef = textWidgetTypeDef;
-        this.inputWidgetTypeDef = inputWidgetTypeDef;
+        this.textWidget = textWidget;
+        this.inputWidget = inputWidget;
         this.refDef = refDef;
         this.entityLongName = entityLongName;
         this.fieldName = fieldName;
@@ -121,17 +121,17 @@ public class EntityFieldDef implements Listable, EntityFieldAttributes {
         this.inputListKey = inputListKey;
     }
 
-    public EntityFieldDef(WidgetTypeDef textWidgetTypeDef, WidgetTypeDef inputWidgetTypeDef,
-            WidgetTypeDef ligualWidgetTypeDef, RefDef refDef, EntityFieldDataType dataType, EntityFieldType type,
+    public EntityFieldDef(String textWidget, String inputWidget,
+            String ligualWidget, RefDef refDef, EntityFieldDataType dataType, EntityFieldType type,
             TextCase textCase, String entityLongName, String fieldName, String mapped, String fieldLabel,
             String columnName, String references, String category, String suggestionType, String inputLabel,
             String inputListKey, String lingualListKey, String autoFormat, String defaultVal, String key,
             String property, int rows, int columns, int minLen, int maxLen, int precision, int scale,
             boolean trim, boolean allowNegative, boolean editable, boolean nullable, boolean auditable, boolean reportable,
             boolean maintainLink, boolean basicSearch, boolean descriptive) {
-        this.textWidgetTypeDef = textWidgetTypeDef;
-        this.inputWidgetTypeDef = inputWidgetTypeDef;
-        this.ligualWidgetTypeDef = ligualWidgetTypeDef;
+        this.textWidget= textWidget;
+        this.inputWidget = inputWidget;
+        this.ligualWidget = ligualWidget;
         this.refDef = refDef;
         this.dataType = dataType;
         this.type = type;
@@ -178,17 +178,17 @@ public class EntityFieldDef implements Listable, EntityFieldAttributes {
         return fieldName;
     }
 
-    public WidgetTypeDef getTextWidgetTypeDef() {
-        return textWidgetTypeDef;
+    public String getTextWidget() {
+        return textWidget;
     }
 
-    public WidgetTypeDef getInputWidgetTypeDef() {
-        return inputWidgetTypeDef != null ? inputWidgetTypeDef
-                : (resolvedTypeFieldDef != null ? resolvedTypeFieldDef.getInputWidgetTypeDef() : null);
+    public String getInputWidget() {
+        return !StringUtils.isBlank(inputWidget) ? inputWidget
+                : (resolvedTypeFieldDef != null ? resolvedTypeFieldDef.getInputWidget() : null);
     }
 
-    public WidgetTypeDef getLigualWidgetTypeDef() {
-        return ligualWidgetTypeDef != null ? ligualWidgetTypeDef : getInputWidgetTypeDef();
+    public String getLigualWidget() {
+        return !StringUtils.isBlank(ligualWidget) ? ligualWidget : getInputWidget();
     }
 
     public RefDef getRefDef() {
@@ -249,8 +249,8 @@ public class EntityFieldDef implements Listable, EntityFieldAttributes {
     }
 
     public boolean isWithSuggestionType() {
-        return inputWidgetTypeDef != null
-                && "application.suggestiontextsearch".equals(inputWidgetTypeDef.getLongName());
+        return inputWidget != null
+                && "application.suggestiontextsearch".equals(inputWidget);
     }
 
     public EntityFieldDef getResolvedTypeFieldDef() {
@@ -316,11 +316,11 @@ public class EntityFieldDef implements Listable, EntityFieldAttributes {
     }
 
     public boolean isWithUnresolvedInputWidget() {
-        return inputWidgetTypeDef != null;
+        return inputWidget != null;
     }
 
     public boolean isWithInputWidget() {
-        return inputWidgetTypeDef != null || (resolvedTypeFieldDef != null && resolvedTypeFieldDef.isWithInputWidget());
+        return inputWidget != null || (resolvedTypeFieldDef != null && resolvedTypeFieldDef.isWithInputWidget());
     }
 
     public String getFieldLongName() {
@@ -636,11 +636,11 @@ public class EntityFieldDef implements Listable, EntityFieldAttributes {
 
         private AppletUtilities au;
 
-        private WidgetTypeDef textWidgetTypeDef;
+        private String textWidget;
 
-        private WidgetTypeDef inputWidgetTypeDef;
+        private String inputWidget;
 
-        private WidgetTypeDef ligualWidgetTypeDef;
+        private String ligualWidget;
 
         private RefDef refDef;
 
@@ -720,17 +720,17 @@ public class EntityFieldDef implements Listable, EntityFieldAttributes {
         }
 
         public Builder textWidget(String widgetName) throws UnifyException {
-            this.textWidgetTypeDef = au.getWidgetTypeDef(widgetName);
+            this.textWidget = widgetName;
             return this;
         }
 
         public Builder inputWidget(String widgetName) throws UnifyException {
-            this.inputWidgetTypeDef = au.getWidgetTypeDef(widgetName);
+            this.inputWidget = widgetName;
             return this;
         }
 
         public Builder lingualWidget(String widgetName) throws UnifyException {
-            this.ligualWidgetTypeDef = au.getWidgetTypeDef(widgetName);
+            this.ligualWidget = widgetName;
             return this;
         }
 
@@ -885,7 +885,7 @@ public class EntityFieldDef implements Listable, EntityFieldAttributes {
         }
 
         public EntityFieldDef build() throws UnifyException {
-            if (inputWidgetTypeDef == null) {
+            if (inputWidget == null) {
                 throw new RuntimeException("Input widget is required.");
             }
 
@@ -897,7 +897,7 @@ public class EntityFieldDef implements Listable, EntityFieldAttributes {
                 throw new RuntimeException("Field label is blank.");
             }
 
-            return new EntityFieldDef(textWidgetTypeDef, inputWidgetTypeDef, ligualWidgetTypeDef, refDef, dataType,
+            return new EntityFieldDef(textWidget, inputWidget, ligualWidget, refDef, dataType,
                     type, textCase, entityLongName, fieldName, mapped, fieldLabel, columnName, references, category,
                     suggestionType, inputLabel, inputListKey, lingualListKey, autoFormat, defaultVal, key, property,
                     rows, columns, minLen, maxLen, precision, scale, trim, allowNegative, editable, nullable, auditable,

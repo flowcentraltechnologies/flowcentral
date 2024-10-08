@@ -104,7 +104,9 @@ public class FormPreview {
                                 EntityFieldDef entityFieldDef = entityDef.getFieldDef(fieldName);
                                 WidgetTypeDef widgetTypeDef = !StringUtils.isBlank(formField.getInputWidget())
                                         ? au.getWidgetTypeDef(formField.getInputWidget())
-                                        : entityFieldDef.getInputWidgetTypeDef();
+                                        : (!StringUtils.isBlank(entityFieldDef.getInputWidget())
+                                                ? au.getWidgetTypeDef(entityFieldDef.getInputWidget())
+                                                        : null);
                                 widgetTypeDef = widgetTypeDef != null ? widgetTypeDef
                                         : au.getWidgetTypeDef("application.text");
                                 WidgetColor color = formField.getColor() != null

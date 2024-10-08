@@ -606,24 +606,24 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 @SuppressWarnings("unchecked")
                 @Override
                 protected EntityDef create(String longName, Object... arg1) throws Exception {
-                    final WidgetTypeDef textWidgetTypeDef = widgetDefFactoryMap.get("application.text");
-                    final WidgetTypeDef intWidgetTypeDef = widgetDefFactoryMap.get("application.integer");
-                    final WidgetTypeDef manLabelWidgetTypeDef = widgetDefFactoryMap.get("application.mandatorylabel");
+                    final String textWidget = "application.text";
+                    final String intWidget = "application.integer";
+                    final String manLabelWidget = "application.mandatorylabel";
                     if (ApplicationPredefinedEntityConstants.PROPERTYITEM_ENTITY.equals(longName)) {
                         EntityDef.Builder edb = EntityDef.newBuilder(ConfigType.STATIC,
                                 PropertyListItem.class.getName(),
                                 getApplicationMessage("application.propertyitem.label"), null, null, null, false, false,
                                 false, false, false, ApplicationPredefinedEntityConstants.PROPERTYITEM_ENTITY,
                                 getApplicationMessage("application.propertyitem"), 0L, 1L);
-                        edb.addFieldDef(textWidgetTypeDef, textWidgetTypeDef, EntityFieldDataType.STRING,
+                        edb.addFieldDef(textWidget, textWidget, EntityFieldDataType.STRING,
                                 EntityFieldType.STATIC, "name", getApplicationMessage("application.propertyitem.name"));
-                        edb.addFieldDef(textWidgetTypeDef, textWidgetTypeDef, EntityFieldDataType.STRING,
+                        edb.addFieldDef(textWidget, textWidget, EntityFieldDataType.STRING,
                                 EntityFieldType.STATIC, "description",
                                 getApplicationMessage("application.propertyitem.description"));
-                        edb.addFieldDef(textWidgetTypeDef, textWidgetTypeDef, EntityFieldDataType.STRING,
+                        edb.addFieldDef(textWidget, textWidget, EntityFieldDataType.STRING,
                                 EntityFieldType.STATIC, "value",
                                 getApplicationMessage("application.propertyitem.value"));
-                        edb.addFieldDef(textWidgetTypeDef, textWidgetTypeDef, EntityFieldDataType.STRING,
+                        edb.addFieldDef(textWidget, textWidget, EntityFieldDataType.STRING,
                                 EntityFieldType.STATIC, "displayValue",
                                 getApplicationMessage("application.propertyitem.displayvalue"));
                         return edb.build();
@@ -634,16 +634,16 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                                 getApplicationMessage("application.usage.label"), null, null, null, false, false, false,
                                 false, false, ApplicationPredefinedEntityConstants.USAGE_ENTITY,
                                 getApplicationMessage("application.usage"), 0L, 1L);
-                        edb.addFieldDef(textWidgetTypeDef, textWidgetTypeDef, EntityFieldDataType.STRING,
+                        edb.addFieldDef(textWidget, textWidget, EntityFieldDataType.STRING,
                                 EntityFieldType.STATIC, "type", getApplicationMessage("application.usage.type"));
-                        edb.addFieldDef(textWidgetTypeDef, textWidgetTypeDef, EntityFieldDataType.STRING,
+                        edb.addFieldDef(textWidget, textWidget, EntityFieldDataType.STRING,
                                 EntityFieldType.STATIC, "usedByType",
                                 getApplicationMessage("application.usage.usedbytype"));
-                        edb.addFieldDef(textWidgetTypeDef, textWidgetTypeDef, EntityFieldDataType.STRING,
+                        edb.addFieldDef(textWidget, textWidget, EntityFieldDataType.STRING,
                                 EntityFieldType.STATIC, "usedBy", getApplicationMessage("application.usage.usedby"));
-                        edb.addFieldDef(textWidgetTypeDef, textWidgetTypeDef, EntityFieldDataType.STRING,
+                        edb.addFieldDef(textWidget, textWidget, EntityFieldDataType.STRING,
                                 EntityFieldType.STATIC, "usedFor", getApplicationMessage("application.usage.usedfor"));
-                        edb.addFieldDef(textWidgetTypeDef, textWidgetTypeDef, EntityFieldDataType.STRING,
+                        edb.addFieldDef(textWidget, textWidget, EntityFieldDataType.STRING,
                                 EntityFieldType.STATIC, "usage", getApplicationMessage("application.usage.usage"));
                         return edb.build();
                     }
@@ -654,18 +654,18 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                                 getApplicationMessage("application.attachment.label"), null, null, null, false, false,
                                 false, false, false, ApplicationPredefinedEntityConstants.ATTACHMENT_ENTITY,
                                 getApplicationMessage("application.attachment"), 0L, 1L);
-                        edb.addFieldDef(textWidgetTypeDef, textWidgetTypeDef, EntityFieldDataType.STRING,
+                        edb.addFieldDef(textWidget, textWidget, EntityFieldDataType.STRING,
                                 EntityFieldType.STATIC, "name", getApplicationMessage("application.attachment.name"));
-                        edb.addFieldDef(textWidgetTypeDef, textWidgetTypeDef, EntityFieldDataType.STRING,
+                        edb.addFieldDef(textWidget, textWidget, EntityFieldDataType.STRING,
                                 EntityFieldType.STATIC, "description",
                                 getApplicationMessage("application.attachment.description"));
-                        edb.addFieldDef(textWidgetTypeDef, textWidgetTypeDef, EntityFieldDataType.STRING,
+                        edb.addFieldDef(textWidget, textWidget, EntityFieldDataType.STRING,
                                 EntityFieldType.STATIC, "format",
                                 getApplicationMessage("application.attachment.format"));
-                        edb.addFieldDef(manLabelWidgetTypeDef, manLabelWidgetTypeDef, EntityFieldDataType.BOOLEAN,
+                        edb.addFieldDef(manLabelWidget, manLabelWidget, EntityFieldDataType.BOOLEAN,
                                 EntityFieldType.STATIC, "mandatory",
                                 getApplicationMessage("application.attachment.mandatory"));
-                        edb.addFieldDef(textWidgetTypeDef, textWidgetTypeDef, EntityFieldDataType.TIMESTAMP,
+                        edb.addFieldDef(textWidget, textWidget, EntityFieldDataType.TIMESTAMP,
                                 EntityFieldType.STATIC, "createdOn",
                                 getApplicationMessage("application.attachment.createdon"));
                         return edb.build();
@@ -676,25 +676,25 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                                 getApplicationMessage("application.snapshotdetails.label"), null, null, null, false,
                                 false, false, false, false, ApplicationPredefinedEntityConstants.SNAPSHOT_ENTITY,
                                 getApplicationMessage("application.snapshotdetails"), 0L, 1L);
-                        edb.addFieldDef(intWidgetTypeDef, intWidgetTypeDef, EntityFieldDataType.LONG,
+                        edb.addFieldDef(intWidget, intWidget, EntityFieldDataType.LONG,
                                 EntityFieldType.STATIC, "snapshotId",
                                 getApplicationMessage("application.snapshotdetails.snapshotid"));
-                        edb.addFieldDef(textWidgetTypeDef, textWidgetTypeDef, EntityFieldDataType.STRING,
+                        edb.addFieldDef(textWidget, textWidget, EntityFieldDataType.STRING,
                                 EntityFieldType.STATIC, "name",
                                 getApplicationMessage("application.snapshotdetails.name"));
-                        edb.addFieldDef(textWidgetTypeDef, textWidgetTypeDef, EntityFieldDataType.STRING,
+                        edb.addFieldDef(textWidget, textWidget, EntityFieldDataType.STRING,
                                 EntityFieldType.STATIC, "filename",
                                 getApplicationMessage("application.snapshotdetails.filename"));
-                        edb.addFieldDef(textWidgetTypeDef, textWidgetTypeDef, EntityFieldDataType.STRING,
+                        edb.addFieldDef(textWidget, textWidget, EntityFieldDataType.STRING,
                                 EntityFieldType.STATIC, "type",
                                 getApplicationMessage("application.snapshotdetails.type"));
-                        edb.addFieldDef(textWidgetTypeDef, textWidgetTypeDef, EntityFieldDataType.STRING,
+                        edb.addFieldDef(textWidget, textWidget, EntityFieldDataType.STRING,
                                 EntityFieldType.STATIC, "message",
                                 getApplicationMessage("application.snapshotdetails.message"));
-                        edb.addFieldDef(textWidgetTypeDef, textWidgetTypeDef, EntityFieldDataType.TIMESTAMP,
+                        edb.addFieldDef(textWidget, textWidget, EntityFieldDataType.TIMESTAMP,
                                 EntityFieldType.STATIC, "snapshotDate",
                                 getApplicationMessage("application.snapshotdetails.snapshotdate"));
-                        edb.addFieldDef(textWidgetTypeDef, textWidgetTypeDef, EntityFieldDataType.STRING,
+                        edb.addFieldDef(textWidget, textWidget, EntityFieldDataType.STRING,
                                 EntityFieldType.STATIC, "snapshotBy",
                                 getApplicationMessage("application.snapshotdetails.snapshotby"));
                         return edb.build();
@@ -709,27 +709,23 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                             appEntity.getDescription(), appEntity.getId(), appEntity.getVersionNo());
 
                     for (AppEntityField appEntityField : appEntity.getFieldList()) {
-                        WidgetTypeDef inputWidgetTypeDef = null;
-                        if (!StringUtils.isBlank(appEntityField.getInputWidget())) {
-                            inputWidgetTypeDef = getWidgetTypeDef(appEntityField.getInputWidget());
-                        }
-
-                        WidgetTypeDef lingualWidgetTypeDef = null;
+                        String inputWidget = appEntityField.getInputWidget();
+                        String lingualWidget = null;
                         EntityFieldDataType type = appEntityField.getDataType();
                         if (!StringUtils.isBlank(appEntityField.getLingualWidget())) {
-                            lingualWidgetTypeDef = getWidgetTypeDef(appEntityField.getLingualWidget());
+                            lingualWidget = appEntityField.getLingualWidget();
                         } else {
                             if (EntityFieldDataType.STRING.equals(type)) {
-                                lingualWidgetTypeDef = getWidgetTypeDef("application.lingualstringtypelist");
+                                lingualWidget = "application.lingualstringtypelist";
                             } else if (type.isDate() || type.isTimestamp()) {
-                                lingualWidgetTypeDef = getWidgetTypeDef("application.lingualdatetypelist");
+                                lingualWidget = "application.lingualdatetypelist";
                             }
                         }
 
                         String references = appEntityField.getReferences();
                         if (type.isEntityRef()
                                 || (!appEntityField.getDataType().isEnumGroup() && !StringUtils.isBlank(references))) {
-                            edb.addFieldDef(textWidgetTypeDef, inputWidgetTypeDef, lingualWidgetTypeDef,
+                            edb.addFieldDef(textWidget, inputWidget, lingualWidget,
                                     getRefDef(references), appEntityField.getDataType(), appEntityField.getType(),
                                     appEntityField.getTextCase(), appEntityField.getName(), appEntityField.getMapped(),
                                     appEntityField.getLabel(), appEntityField.getColumnName(),
@@ -745,7 +741,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                                     appEntityField.isReportable(), appEntityField.isMaintainLink(),
                                     appEntityField.isBasicSearch(), appEntityField.isDescriptive());
                         } else {
-                            edb.addFieldDef(textWidgetTypeDef, inputWidgetTypeDef, lingualWidgetTypeDef,
+                            edb.addFieldDef(textWidget, inputWidget, lingualWidget,
                                     appEntityField.getDataType(), appEntityField.getType(),
                                     appEntityField.getTextCase(), appEntityField.getName(), appEntityField.getMapped(),
                                     appEntityField.getLabel(), appEntityField.getColumnName(),
@@ -1093,7 +1089,9 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                                 EntityFieldDef entityFieldDef = entityDef.getFieldDef(fieldName);
                                 WidgetTypeDef widgetTypeDef = !StringUtils.isBlank(appFormElement.getInputWidget())
                                         ? getWidgetTypeDef(appFormElement.getInputWidget())
-                                        : entityFieldDef.getInputWidgetTypeDef();
+                                        :  (!StringUtils.isBlank(entityFieldDef.getInputWidget())
+                                                ? getWidgetTypeDef(entityFieldDef.getInputWidget())
+                                                        : null);
                                 widgetTypeDef = widgetTypeDef != null ? widgetTypeDef
                                         : getWidgetTypeDef("application.text");
                                 WidgetColor color = entityFieldDef.isWithAutoFormat() ? WidgetColor.NAVY_GRAY
@@ -1314,14 +1312,14 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     PropertyListDef.Builder pldb = PropertyListDef.newBuilder(longName,
                             appPropertyList.getDescription(), appPropertyList.getId(), appPropertyList.getVersionNo());
 
-                    final WidgetTypeDef textWidgetTypeDef = widgetDefFactoryMap.get("application.text");
+                    final String textWidget = "application.text";
                     for (AppPropertySet set : appPropertyList.getItemSet()) {
                         pldb.addSetDef(set.getLabel());
                         for (AppPropertyListItem listItem : set.getItemList()) {
-                            WidgetTypeDef widgetTypeDef = getWidgetTypeDef(listItem.getInputWidget());
+                            final WidgetTypeDef widgetTypeDef = getWidgetTypeDef(listItem.getInputWidget());
                             RefDef refDef = null; // TODO
                             String filterListKey = null; // TODO
-                            EntityFieldDef entityFieldDef = new EntityFieldDef(textWidgetTypeDef, widgetTypeDef, refDef,
+                            EntityFieldDef entityFieldDef = new EntityFieldDef(textWidget, listItem.getInputWidget(), refDef,
                                     longName, listItem.getName(), null, listItem.getReferences(), filterListKey);
                             String renderer = InputWidgetUtils.constructEditorWithBinding(widgetTypeDef,
                                     entityFieldDef);
