@@ -51,9 +51,8 @@ public interface OSMessagingAccessManager extends  FlowCentralService {
      * 
      * @param access
      *                    the access object
-     * @return access reference
      * @throws UnifyException
      *                        if an error occurs
      */
-    String logAccess(OSMessagingAccess access) throws UnifyException;
+    void logAccess(OSMessagingAccess access) throws UnifyException;
 }
