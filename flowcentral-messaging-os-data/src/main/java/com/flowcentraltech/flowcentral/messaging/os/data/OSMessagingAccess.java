@@ -42,6 +42,8 @@ public class OSMessagingAccess {
     private String requestBody;
     
     private Long runtimeInMilliSec;
+    
+    private String reference;
 
     public String getTarget() {
         return target;
@@ -113,6 +115,14 @@ public class OSMessagingAccess {
 
     public void setRuntimeInMilliSec(Long runtimeInMilliSec) {
         this.runtimeInMilliSec = runtimeInMilliSec;
+    }
+
+    public String getReference() {
+        return reference;
+    }
+
+    public void setReference(String reference) {
+        this.reference = reference;
     }
 
     public boolean isWithAuthorization() {
