@@ -62,13 +62,13 @@ public class StudioOnCreateAppAppletPolicy extends StudioOnCreateComponentPolicy
 
     private static final int MAX_DEFAULT_TABLE_COLUMNS = 8;
 
-	private final Set<String> skipTableColumn = Collections
-			.unmodifiableSet(new HashSet<String>(Arrays.asList("id", "versionNo", "originWorkRecId", "originalCopyId",
-					"inWorkflow", "wfItemVersionType", "workBranchCode", "workDepartmentCode", "processingStatus")));
+    private final Set<String> skipTableColumn = Collections
+            .unmodifiableSet(new HashSet<String>(Arrays.asList("id", "versionNo", "originWorkRecId", "originalCopyId",
+                    "inWorkflow", "wfItemVersionType", "workBranchCode", "workDepartmentCode", "processingStatus")));
 
-	private final Set<String> skipFormField = Collections.unmodifiableSet(new HashSet<String>(Arrays.asList("id",
-			"versionNo", "createDt", "createdBy", "updateDt", "updatedBy", "originWorkRecId", "originalCopyId",
-			"inWorkflow", "wfItemVersionType", "workBranchCode", "workDepartmentCode", "processingStatus")));
+    private final Set<String> skipFormField = Collections.unmodifiableSet(new HashSet<String>(Arrays.asList("id",
+            "versionNo", "createDt", "createdBy", "updateDt", "updatedBy", "originWorkRecId", "originalCopyId",
+            "inWorkflow", "wfItemVersionType", "workBranchCode", "workDepartmentCode", "processingStatus")));
 
     @Override
     protected EntityActionResult doExecutePreAction(EntityActionContext ctx) throws UnifyException {
@@ -78,15 +78,15 @@ public class StudioOnCreateAppAppletPolicy extends StudioOnCreateComponentPolicy
         final Long applicationId = (Long) getSessionAttribute(StudioSessionAttributeConstants.CURRENT_APPLICATION_ID);
         final AppApplet appApplet = (AppApplet) ctx.getInst();
         if (!appApplet.isIdBlank()) {
-        	return null;
+            return null;
         }
-        
+
         final AppletType type = appApplet.getType();
         if (AppletType.DATA_IMPORT.equals(type)) {
             appApplet.setIcon("file-import");
             return null;
         }
-        
+
         if (type.isCreate() || type.isEntityList()) {
             final String entity = appApplet.getEntity();
             EntityDef entityDef = application().getEntityDef(entity);
@@ -119,7 +119,8 @@ public class StudioOnCreateAppAppletPolicy extends StudioOnCreateComponentPolicy
                     appTable.setLimitSelectToColumns(true);
                     List<AppTableColumn> columnList = new ArrayList<AppTableColumn>();
                     for (EntityFieldDef entityFieldDef : entityDef.getFieldDefList()) {
-                        if (entityFieldDef.isTableViewable() && !skipTableColumn.contains(entityFieldDef.getFieldName())) {
+                        if (entityFieldDef.isTableViewable()
+                                && !skipTableColumn.contains(entityFieldDef.getFieldName())) {
                             AppTableColumn appTableColumn = new AppTableColumn();
                             appTableColumn.setField(entityFieldDef.getFieldName());
                             appTableColumn.setLabel(null);
@@ -157,13 +158,11 @@ public class StudioOnCreateAppAppletPolicy extends StudioOnCreateComponentPolicy
                 appAssignmentPage.setDescription(assignmentPageDesc);
                 appAssignmentPage.setLabel(assignmentPageDesc);
                 EntityFieldDef entityFieldDef = entityDef.getFieldDef(appApplet.getAssignField());
-                RefDef refDef = entityFieldDef.getRefDef();
+                RefDef refDef = application().getRefDef(entityFieldDef.getRefLongName());
                 EntityDef refEntityDef = application().getEntityDef(refDef.getEntity());
-                appAssignmentPage
-                        .setAssignCaption(resolveApplicationMessage("Assigned " + refEntityDef.getLabel()));
+                appAssignmentPage.setAssignCaption(resolveApplicationMessage("Assigned " + refEntityDef.getLabel()));
                 appAssignmentPage.setAssignList("entityinlist");
-                appAssignmentPage
-                        .setUnassignCaption(resolveApplicationMessage("Available " + refEntityDef.getLabel()));
+                appAssignmentPage.setUnassignCaption(resolveApplicationMessage("Available " + refEntityDef.getLabel()));
                 appAssignmentPage.setUnassignList("entitynotinlist");
                 appAssignmentPage.setEntity(entity);
                 appAssignmentPage.setBaseField(appApplet.getBaseField());
@@ -171,7 +170,7 @@ public class StudioOnCreateAppAppletPolicy extends StudioOnCreateComponentPolicy
                 appAssignmentPage.setRuleDescField(appApplet.getAssignDescField());
                 appAssignmentPage.setConfigType(ConfigType.CUSTOM);
                 application().createAppAssignmentPage(appAssignmentPage);
-                
+
                 // Add applet properties
                 appletPropList.add(new AppAppletProp(AppletPropertyConstants.SEARCH_TABLE, tableName));
                 appletPropList.add(new AppAppletProp(AppletPropertyConstants.SEARCH_TABLE_EDIT, "true"));
@@ -231,7 +230,8 @@ public class StudioOnCreateAppAppletPolicy extends StudioOnCreateComponentPolicy
                                 appFormElement.setElementName(entityFieldDef.getFieldName());
                                 appFormElement.setLabel(null);
                                 if (!entityFieldDef.isWithInputWidget()) {
-                                    String widget = InputWidgetUtils.getDefaultEntityFieldWidget(entityFieldDef.getDataType());
+                                    String widget = InputWidgetUtils
+                                            .getDefaultEntityFieldWidget(entityFieldDef.getDataType());
                                     if (widget != null) {
                                         appFormElement.setInputWidget(widget);
                                     } else {
@@ -269,8 +269,8 @@ public class StudioOnCreateAppAppletPolicy extends StudioOnCreateComponentPolicy
                                 appFormElement.setEditable(true);
                                 appFormElement.setDisabled(false);
                                 appFormElement.setTabReference(entityFieldDef.getFieldName());
-                                List<AppApplet> appletList = application()
-                                        .findManageEntityListApplets(entityFieldDef.getRefDef().getEntity());
+                                List<AppApplet> appletList = application().findManageEntityListApplets(
+                                        application().getRefDef(entityFieldDef.getRefLongName()).getEntity());
                                 if (!DataUtils.isBlank(appletList)) {
                                     AppApplet _childAppApplet = appletList.get(0);
                                     appFormElement.setTabApplet(ApplicationNameUtils.getApplicationEntityLongName(
@@ -297,11 +297,11 @@ public class StudioOnCreateAppAppletPolicy extends StudioOnCreateComponentPolicy
                         appForm.setElementList(elementList);
                         application().createAppForm(appForm);
                     }
-                    
+
                     appletPropList.add(new AppAppletProp(AppletPropertyConstants.CREATE_FORM, formName));
                     appletPropList.add(new AppAppletProp(AppletPropertyConstants.MAINTAIN_FORM, formName));
                 }
-                
+
                 // Add applet properties
                 if (type.isEntityList()) {
                     appletPropList.add(new AppAppletProp(AppletPropertyConstants.SEARCH_TABLE, tableName));
@@ -324,7 +324,7 @@ public class StudioOnCreateAppAppletPolicy extends StudioOnCreateComponentPolicy
 
             appApplet.setPropList(appletPropList);
         }
-        
+
         return null;
     }
 

@@ -52,15 +52,17 @@ public class EntityNotInListCommand extends AbstractApplicationListCommand<Assig
         if (params.isWithRule()) {
             EntityAssignRuleNameParts parts = ApplicationNameUtils.getEntityAssignRuleNameParts(params.getRule());
             EntityDef _rootEntityDef = application().getEntityDef(parts.getEntityLongName());
-            RefDef _assignRefDef = _rootEntityDef.getFieldDef(parts.getAssignFieldName()).getRefDef();
+            RefDef _assignRefDef = au()
+                    .getRefDef(_rootEntityDef.getFieldDef(parts.getAssignFieldName()).getRefLongName());
 
             EntityClassDef _assignEntityClassDef = application().getEntityClassDef(_assignRefDef.getEntity());
             Query<?> query = Query.of((Class<? extends Entity>) _assignEntityClassDef.getEntityClass());
             if (_assignRefDef.isWithFilter()) {
-                RefDef _baseRefDef = _rootEntityDef.getFieldDef(parts.getBaseFieldName()).getRefDef();
+                RefDef _baseRefDef = au()
+                        .getRefDef(_rootEntityDef.getFieldDef(parts.getBaseFieldName()).getRefLongName());
                 EntityClassDef _baseEntityClassDef = application().getEntityClassDef(_baseRefDef.getEntity());
-                Entity baseInst = environment().listLean(
-                        (Class<? extends Entity>) _baseEntityClassDef.getEntityClass(), params.getAssignBaseId());
+                Entity baseInst = environment().listLean((Class<? extends Entity>) _baseEntityClassDef.getEntityClass(),
+                        params.getAssignBaseId());
                 Restriction br = _assignRefDef.getFilter().getRestriction(_assignEntityClassDef.getEntityDef(),
                         new BeanValueStore(baseInst).getReader(), application().getNow());
                 if (br != null) {
@@ -71,7 +73,7 @@ public class EntityNotInListCommand extends AbstractApplicationListCommand<Assig
             if (params.isAssignedIdList()) {
                 query.addNotAmongst("id", params.getAssignedIdList(Long.class));
             }
-            
+
             if (parts.isWithDescField()) {
                 query.addSelect("id", parts.getDescField()).addOrder(parts.getDescField());
             }

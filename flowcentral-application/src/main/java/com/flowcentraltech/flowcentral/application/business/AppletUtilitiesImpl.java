@@ -2196,7 +2196,8 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
                 if (id == null) {
                     clearListOnlyFields(entityDef, fkFieldName, inst);
                 } else {
-                    EntityClassDef _parentEntityClassDef = getEntityClassDef(entityFieldDef.getRefDef().getEntity());
+                    final RefDef refDef = applicationModuleService.getRefDef(entityFieldDef.getRefLongName());
+                    EntityClassDef _parentEntityClassDef = getEntityClassDef(refDef.getEntity());
                     Entity parentInst = environmentService
                             .listLean((Class<? extends Entity>) _parentEntityClassDef.getEntityClass(), id);
                     copyListOnlyFieldsFromForeignEntity(entityDef, fkFieldName, inst, parentInst);

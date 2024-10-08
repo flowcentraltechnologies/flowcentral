@@ -289,12 +289,12 @@ public class AssignmentPage {
                 // Add unassigned list
                 final EntityFieldDef _assignFieldDef = entityClassDef.getEntityDef()
                         .getFieldDef(assignmentPageDef.getAssignField());
-                final RefDef _assignRefDef = _assignFieldDef.getRefDef();
+                final RefDef _assignRefDef = ctx.au().getRefDef(_assignFieldDef.getRefLongName());
                 final EntityClassDef _assignEntityClassDef = ctx.au().getEntityClassDef(_assignRefDef.getEntity());
                 query = Query.of((Class<? extends Entity>) _assignEntityClassDef.getEntityClass());
                 if (_assignRefDef.isWithFilterGenerator()) {
-                    RefDef _baseRefDef = entityClassDef.getEntityDef().getFieldDef(assignmentPageDef.getBaseField())
-                            .getRefDef();
+                    RefDef _baseRefDef = ctx.au().getRefDef(entityClassDef.getEntityDef()
+                            .getFieldDef(assignmentPageDef.getBaseField()).getRefLongName());
                     EntityClassDef _baseEntityClassDef = ctx.au().getEntityClassDef(_baseRefDef.getEntity());
                     Entity baseInst = ctx.au().environment()
                             .listLean((Class<? extends Entity>) _baseEntityClassDef.getEntityClass(), baseId);

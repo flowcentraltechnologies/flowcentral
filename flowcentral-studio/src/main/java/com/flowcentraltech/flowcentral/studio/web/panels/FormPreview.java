@@ -106,7 +106,7 @@ public class FormPreview {
                                         ? au.getWidgetTypeDef(formField.getInputWidget())
                                         : (!StringUtils.isBlank(entityFieldDef.getInputWidget())
                                                 ? au.getWidgetTypeDef(entityFieldDef.getInputWidget())
-                                                        : null);
+                                                : null);
                                 widgetTypeDef = widgetTypeDef != null ? widgetTypeDef
                                         : au.getWidgetTypeDef("application.text");
                                 WidgetColor color = formField.getColor() != null
@@ -121,8 +121,9 @@ public class FormPreview {
                                         entityFieldDef, formField.getReference(), color);
                                 RefDef inputRefDef = !StringUtils.isBlank(formField.getReference())
                                         ? au.getRefDef(formField.getReference())
-                                        : entityFieldDef.getRefDef();
-
+                                        : (!StringUtils.isBlank(entityFieldDef.getRefLongName())
+                                                ? au.getRefDef(entityFieldDef.getRefLongName())
+                                                : null);
                                 String label = formField.getLabel();
                                 if (label == null) {
                                     label = entityFieldDef.getFieldLabel();

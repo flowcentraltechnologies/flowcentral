@@ -31,6 +31,7 @@ import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleNa
 import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.EntityFieldDef;
+import com.flowcentraltech.flowcentral.application.data.RefDef;
 import com.flowcentraltech.flowcentral.common.AbstractFlowCentralComponent;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentDelegate;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentDelegateUtilities;
@@ -861,8 +862,9 @@ public abstract class AbstractEnvironmentDelegate extends AbstractFlowCentralCom
                         resolvedKeyObject = resolvedKeyObject != null ? new ListOption((Listable) resolvedKeyObject)
                                 : null;
                     } else {
-                        EntityClassDef _refEntityClassDef = au.application()
-                                .getEntityClassDef(_refEntityFieldDef.getRefDef().getEntity());
+                        final RefDef refDef = au.getRefDef(_refEntityFieldDef.getRefLongName());
+                        final EntityClassDef _refEntityClassDef = au.application()
+                                .getEntityClassDef(refDef.getEntity());
                         resolvedKeyObject = listLean((Class<? extends Entity>) _refEntityClassDef.getEntityClass(),
                                 keyVal);
                     }

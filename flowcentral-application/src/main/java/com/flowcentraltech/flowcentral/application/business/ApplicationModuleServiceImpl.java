@@ -570,7 +570,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                         List<ArgumentTypeInfo> childListArgs = new ArrayList<ArgumentTypeInfo>();
                         for (EntityFieldDef entityFieldDef : entityClassDef.getEntityDef().getFieldDefList()) {
                             if (entityFieldDef.isChildRef()) {
-                                EntityClassDef _refEntityClassDef = get(entityFieldDef.getRefDef().getEntity());
+                                final RefDef refDef = getRefDef(entityFieldDef.getRefLongName());
+                                final EntityClassDef _refEntityClassDef = get(refDef.getEntity());
                                 onCreate(_refEntityClassDef);
                                 if (entityFieldDef.isChildList()) {
                                     childListArgs.add(new ArgumentTypeInfo(entityFieldDef.getFieldName(),
@@ -626,7 +627,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                         edb.addFieldDef(textWidget, textWidget, EntityFieldDataType.STRING,
                                 EntityFieldType.STATIC, "displayValue",
                                 getApplicationMessage("application.propertyitem.displayvalue"));
-                        return edb.build();
+                        return edb.build(appletUtilities);
                     }
 
                     if (ApplicationPredefinedEntityConstants.USAGE_ENTITY.equals(longName)) {
@@ -645,7 +646,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                                 EntityFieldType.STATIC, "usedFor", getApplicationMessage("application.usage.usedfor"));
                         edb.addFieldDef(textWidget, textWidget, EntityFieldDataType.STRING,
                                 EntityFieldType.STATIC, "usage", getApplicationMessage("application.usage.usage"));
-                        return edb.build();
+                        return edb.build(appletUtilities);
                     }
 
                     if (ApplicationPredefinedEntityConstants.ATTACHMENT_ENTITY.equals(longName)) {
@@ -668,7 +669,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                         edb.addFieldDef(textWidget, textWidget, EntityFieldDataType.TIMESTAMP,
                                 EntityFieldType.STATIC, "createdOn",
                                 getApplicationMessage("application.attachment.createdon"));
-                        return edb.build();
+                        return edb.build(appletUtilities);
                     }
 
                     if (ApplicationPredefinedEntityConstants.SNAPSHOT_ENTITY.equals(longName)) {
@@ -697,7 +698,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                         edb.addFieldDef(textWidget, textWidget, EntityFieldDataType.STRING,
                                 EntityFieldType.STATIC, "snapshotBy",
                                 getApplicationMessage("application.snapshotdetails.snapshotby"));
-                        return edb.build();
+                        return edb.build(appletUtilities);
                     }
 
                     AppEntity appEntity = getApplicationEntity(AppEntity.class, longName);
@@ -726,13 +727,13 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                         if (type.isEntityRef()
                                 || (!appEntityField.getDataType().isEnumGroup() && !StringUtils.isBlank(references))) {
                             edb.addFieldDef(textWidget, inputWidget, lingualWidget,
-                                    getRefDef(references), appEntityField.getDataType(), appEntityField.getType(),
+                                    appEntityField.getDataType(), appEntityField.getType(),
                                     appEntityField.getTextCase(), appEntityField.getName(), appEntityField.getMapped(),
                                     appEntityField.getLabel(), appEntityField.getColumnName(),
                                     appEntityField.getCategory(), appEntityField.getSuggestionType(),
                                     appEntityField.getInputLabel(), appEntityField.getInputListKey(),
                                     appEntityField.getLingualListKey(), appEntityField.getAutoFormat(),
-                                    appEntityField.getDefaultVal(), references, appEntityField.getKey(),
+                                    appEntityField.getDefaultVal(), references, references, appEntityField.getKey(),
                                     appEntityField.getProperty(), appEntityField.getRows(), appEntityField.getColumns(),
                                     appEntityField.getMinLen(), appEntityField.getMaxLen(),
                                     appEntityField.getPrecision(), appEntityField.getScale(), appEntityField.isTrim(),
@@ -825,7 +826,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                         }
                     }
 
-                    return edb.build();
+                    return edb.build(appletUtilities);
                 }
 
             };
@@ -1107,8 +1108,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                                         entityFieldDef, appFormElement.getInputReference(), color);
                                 RefDef inputRefDef = !StringUtils.isBlank(appFormElement.getInputReference())
                                         ? getRefDef(appFormElement.getInputReference())
-                                        : entityFieldDef.getRefDef();
-
+                                        : (entityFieldDef.isEntityRef() ? getRefDef(entityFieldDef.getRefLongName()) : null);
                                 String label = appFormElement.getLabel();
                                 if (label == null) {
                                     label = entityFieldDef.getFieldLabel();
@@ -1317,10 +1317,10 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                         pldb.addSetDef(set.getLabel());
                         for (AppPropertyListItem listItem : set.getItemList()) {
                             final WidgetTypeDef widgetTypeDef = getWidgetTypeDef(listItem.getInputWidget());
-                            RefDef refDef = null; // TODO
+                            final String reflongName = null; // TODO
                             String filterListKey = null; // TODO
-                            EntityFieldDef entityFieldDef = new EntityFieldDef(textWidget, listItem.getInputWidget(), refDef,
-                                    longName, listItem.getName(), null, listItem.getReferences(), filterListKey);
+                            EntityFieldDef entityFieldDef = new EntityFieldDef(textWidget, listItem.getInputWidget(),
+                                    longName, listItem.getName(), null, reflongName, listItem.getReferences(), filterListKey);
                             String renderer = InputWidgetUtils.constructEditorWithBinding(widgetTypeDef,
                                     entityFieldDef);
                             pldb.addItemDef(entityFieldDef, widgetTypeDef, set.getLabel(), listItem.getDescription(),
@@ -2681,8 +2681,9 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     @Override
     public void savePropertyListValues(SweepingCommitPolicy sweepingCommitPolicy, Entity entityInst,
             String childFkFieldName, PropertyRuleDef propertyRuleDef, MapValues values) throws UnifyException {
-        EntityFieldDef childListFieldDef = propertyRuleDef.getEntityDef().getFieldDef(propertyRuleDef.getListField());
-        EntityClassDef childEntityClassDef = getEntityClassDef(childListFieldDef.getRefDef().getEntity());
+        final EntityFieldDef childListFieldDef = propertyRuleDef.getEntityDef().getFieldDef(propertyRuleDef.getListField());
+        final RefDef refDef = getRefDef(childListFieldDef.getRefLongName());
+        final EntityClassDef childEntityClassDef = getEntityClassDef(refDef.getEntity());
         Class<? extends Entity> childEntityClass = (Class<? extends Entity>) childEntityClassDef.getEntityClass();
         // Delete older child records
         environment().deleteAll(Query.of(childEntityClass).addEquals(childFkFieldName, entityInst.getId()));
@@ -4212,7 +4213,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                         : null;
                 return new RecLoadInfo(entityFieldDef.getKey(), keyVal, formatter);
             } else {
-                EntityClassDef refEntityClassDef = getEntityClassDef(refEntityFieldDef.getRefDef().getEntity());
+                final RefDef refDef = getRefDef(refEntityFieldDef.getRefLongName());
+                final EntityClassDef refEntityClassDef = getEntityClassDef(refDef.getEntity());
                 if (refEntityClassDef.getEntityDef().isSingleFieldUniqueConstraint(entityFieldDef.getProperty())) {
                     Long refId = null;
                     if (listVal != null) {
@@ -4242,7 +4244,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 return EntityFieldDataType.STRING;
             }
 
-            EntityDef _refEntityDef = getEntityDef(_refEntityFieldDef.getRefDef().getEntity());
+            final RefDef refDef = getRefDef(_refEntityFieldDef.getRefLongName());
+            final EntityDef _refEntityDef = getEntityDef(refDef.getEntity());
             return resolveListOnlyFieldDataType(_refEntityDef, propEntityFieldDef.getProperty());
         }
 
@@ -4394,7 +4397,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     break;
                 } else if (EntityFieldDataType.REF.equals(keyFieldDef.getDataType())
                         || EntityFieldDataType.REF_UNLINKABLE.equals(keyFieldDef.getDataType())) {
-                    _entityDef = entityDefFactoryMap.get(keyFieldDef.getRefDef().getEntity());
+                    final RefDef refDef = getRefDef(keyFieldDef.getRefLongName());
+                    _entityDef = entityDefFactoryMap.get(refDef.getEntity());
                     EntityFieldDef _resolvedTypeFieldDef = _entityDef.getFieldDef(_listOnlyFieldDef.getProperty());
                     if (_resolvedTypeFieldDef.isListOnly()) {
                         _listOnlyFieldDef = _resolvedTypeFieldDef;
@@ -6885,8 +6889,9 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     @SuppressWarnings("unchecked")
     private Map<String, String> localGetPropertyListValues(Entity entityInst, String childFkFieldName,
             PropertyRuleDef propertyRuleDef) throws UnifyException {
-        EntityFieldDef childListFieldDef = propertyRuleDef.getEntityDef().getFieldDef(propertyRuleDef.getListField());
-        EntityClassDef childEntityClassDef = getEntityClassDef(childListFieldDef.getRefDef().getEntity());
+        final EntityFieldDef childListFieldDef = propertyRuleDef.getEntityDef().getFieldDef(propertyRuleDef.getListField());
+        final RefDef refDef = getRefDef(childListFieldDef.getRefLongName());
+        final EntityClassDef childEntityClassDef = getEntityClassDef(refDef.getEntity());
         return environment().valueMap(String.class, propertyRuleDef.getPropNameField(), String.class,
                 propertyRuleDef.getPropValField(),
                 Query.of((Class<? extends Entity>) childEntityClassDef.getEntityClass()).addEquals(childFkFieldName,
@@ -6960,7 +6965,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     } else if (entityFieldDef.isChildRef()) {
                         DynamicFieldType fieldType = entityFieldDef.isCustom() ? DynamicFieldType.GENERATION
                                 : DynamicFieldType.INFO_ONLY;
-                        EntityDef _refEntityDef = getEntityDef(entityFieldDef.getRefDef().getEntity());
+                        final RefDef refDef = getRefDef(entityFieldDef.getRefLongName());
+                        EntityDef _refEntityDef = getEntityDef(refDef.getEntity());
                         DynamicEntityInfo _childDynamicEntityInfo = buildDynamicEntityInfo(_refEntityDef,
                                 dynamicEntityInfoMap, basePackage, extension);
                         if (entityFieldDef.isChild() || entityFieldDef.isRefFileUpload()) {
@@ -6971,7 +6977,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                                     entityFieldDef.isEditable());
                         }
                     } else {
-                        EntityDef _refEntityDef = getEntityDef(entityFieldDef.getRefDef().getEntity());
+                        final RefDef refDef = getRefDef(entityFieldDef.getRefLongName());
+                        EntityDef _refEntityDef = getEntityDef(refDef.getEntity());
                         DynamicEntityInfo _refDynamicEntityInfo = entityDef.getLongName()
                                 .equals(_refEntityDef.getLongName()) ? DynamicEntityInfo.SELF_REFERENCE
                                         : buildDynamicEntityInfo(_refEntityDef, dynamicEntityInfoMap, basePackage,

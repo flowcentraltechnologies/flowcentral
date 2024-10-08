@@ -39,7 +39,7 @@ import com.tcdng.unify.web.data.AssignParams;
  */
 @Component("entityinlist")
 public class EntityInListCommand extends AbstractApplicationListCommand<AssignParams> {
-    
+
     public EntityInListCommand() {
         super(AssignParams.class);
     }
@@ -50,7 +50,8 @@ public class EntityInListCommand extends AbstractApplicationListCommand<AssignPa
         if (params.isAssignedIdList() && params.isWithRule()) {
             EntityAssignRuleNameParts parts = ApplicationNameUtils.getEntityAssignRuleNameParts(params.getRule());
             EntityDef _rootEntityDef = application().getEntityDef(parts.getEntityLongName());
-            RefDef _assignRefDef = _rootEntityDef.getFieldDef(parts.getAssignFieldName()).getRefDef();
+            RefDef _assignRefDef = au()
+                    .getRefDef(_rootEntityDef.getFieldDef(parts.getAssignFieldName()).getRefLongName());
 
             EntityClassDef _assignEntityClassDef = application().getEntityClassDef(_assignRefDef.getEntity());
             Query<?> query = Query.of((Class<? extends Entity>) _assignEntityClassDef.getEntityClass());

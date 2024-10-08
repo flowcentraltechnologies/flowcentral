@@ -319,7 +319,7 @@ public final class DiffUtils {
                     final String fieldName = formFieldDef.getFieldName();
                     final EntityFieldDef entityFieldDef = formFieldDef.getEntityFieldDef();
                     if (entityFieldDef.isForeignKey() && entityFieldDef.isEntityRef()
-                            && entityFieldDef.getRefDef().getEntity().equals(parentEntityName)) {
+                            && au.getRefDef(entityFieldDef.getRefLongName()).getEntity().equals(parentEntityName)) {
                         continue;
                     }
 

@@ -469,7 +469,7 @@ public final class InputWidgetUtils {
             case "application.caseentitysearch":
                 if (entityFieldDef != null) {
                     if (StringUtils.isBlank(reference)) {
-                        reference = entityFieldDef.isEntityRef() ? entityFieldDef.getRefDef().getLongName()
+                        reference = entityFieldDef.isEntityRef() ? entityFieldDef.getRefLongName()
                                 : entityFieldDef.getReferences();
                     }
 
@@ -485,7 +485,7 @@ public final class InputWidgetUtils {
                 break;
             case "application.fileupload":
                 if (entityFieldDef != null) {
-                    editor = String.format(editor, entityFieldDef.getRefDef().getLongName(),
+                    editor = String.format(editor, entityFieldDef.getRefLongName(),
                             entityFieldDef.getEntityLongName(), entityFieldDef.getFieldName());
                 }
                 break;

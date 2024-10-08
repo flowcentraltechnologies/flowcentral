@@ -54,7 +54,7 @@ public class StudioAppletAllChildAppletListCommand extends AbstractApplicationLi
                 if (!childListFieldList.isEmpty()) {
                     List<String> entityNames = new ArrayList<String>();
                     for (EntityFieldDef entityFieldDef : childListFieldList) {
-                        entityNames.add(entityFieldDef.getRefDef().getEntity());
+                        entityNames.add(application().getRefDef(entityFieldDef.getRefLongName()).getEntity());
                     }
 
                     return au().getApplicationEntityListables(new AppAppletQuery().entityIn(entityNames));

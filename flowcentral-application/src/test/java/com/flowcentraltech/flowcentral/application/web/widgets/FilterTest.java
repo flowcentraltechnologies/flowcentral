@@ -704,7 +704,7 @@ public class FilterTest extends AbstractFlowCentralTest {
                             EntityFieldType.STATIC, "costPrice", "Cost Price")
                     .addFieldDef("application.text", "application.amount", EntityFieldDataType.DOUBLE,
                             EntityFieldType.STATIC, "salesPrice", "Sales Price")
-                    .build();
+                    .build(au);
         }
 
         return ed;
