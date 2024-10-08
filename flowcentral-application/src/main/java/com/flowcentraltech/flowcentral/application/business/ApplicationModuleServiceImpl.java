@@ -1451,8 +1451,12 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
     @Override
     public boolean isSupportsEntityChangeEvent(Class<? extends Entity> entityClass) throws UnifyException {
-        EntityDef entityDef = getEntityDefByClass(entityClass.getName());
-        return entityDef != null ? entityDef.isSupportsChangeEvents() : false;
+        if (isInterfacesOpen()) {
+            EntityDef entityDef = getEntityDefByClass(entityClass.getName());
+            return entityDef != null ? entityDef.isSupportsChangeEvents() : false;
+        }
+
+        return false;
     }
 
     private static final Class<?>[] WRAPPER_PARAMS_0 = { EntityClassDef.class };
