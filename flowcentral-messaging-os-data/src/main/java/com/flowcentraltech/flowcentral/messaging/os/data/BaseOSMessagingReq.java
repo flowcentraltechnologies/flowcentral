@@ -19,7 +19,7 @@ package com.flowcentraltech.flowcentral.messaging.os.data;
  * Abstract base class for OS messaging requests.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 1.0 
  */
 public abstract class BaseOSMessagingReq {
 
