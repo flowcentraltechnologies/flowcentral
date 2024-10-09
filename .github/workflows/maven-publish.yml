@@ -1,4 +1,4 @@
-# This workflow will build and deploy flowCentral
+# This workflow will build and deploy flowCentral.
 
 name: Deploy FlowCentral
 
