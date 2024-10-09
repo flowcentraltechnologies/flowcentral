@@ -15,6 +15,8 @@
  */
 package com.flowcentraltech.flowcentral.messaging.os.web.controllers;
 
+import java.util.UUID;
+
 import com.flowcentraltech.flowcentral.messaging.os.business.OSMessagingAccessManager;
 import com.flowcentraltech.flowcentral.messaging.os.business.OSMessagingProcessor;
 import com.flowcentraltech.flowcentral.messaging.os.constants.OSMessagingModuleNameConstants;
@@ -99,8 +101,12 @@ public class OSMessagingController extends AbstractPlainJsonController {
             response = new OSMessagingErrorResponse(error);
         }
         
+        final String reference = UUID.randomUUID().toString();
+        response.setReference(reference);
+        
         final String responseJson = getResponseJsonFromObject(response);
         if (oSMessagingAccessManager != null) {
+            oSMessagingAccess.setReference(reference);
             oSMessagingAccess.setResponseCode(response.getResponseCode());
             oSMessagingAccess.setResponseMessage(response.getResponseMessage());
             oSMessagingAccess.setRequestBody(requestJson);

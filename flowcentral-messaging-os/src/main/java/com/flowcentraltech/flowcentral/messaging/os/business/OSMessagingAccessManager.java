@@ -15,7 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.messaging.os.business;
 
-import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
+import com.flowcentraltech.flowcentral.common.business.FlowCentralService;
 import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingAccess;
 import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingError;
 import com.tcdng.unify.core.UnifyException;
@@ -26,7 +26,7 @@ import com.tcdng.unify.core.UnifyException;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface OSMessagingAccessManager extends FlowCentralComponent {
+public interface OSMessagingAccessManager extends  FlowCentralService {
 
     /**
      * Checks if application has messaging access.

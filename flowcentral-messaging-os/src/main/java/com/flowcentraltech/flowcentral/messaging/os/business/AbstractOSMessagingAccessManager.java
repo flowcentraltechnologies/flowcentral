@@ -15,7 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.messaging.os.business;
 
-import com.flowcentraltech.flowcentral.common.AbstractFlowCentralComponent;
+import com.flowcentraltech.flowcentral.common.business.AbstractFlowCentralService;
 import com.tcdng.unify.core.UnifyException;
 
 /**
@@ -24,7 +24,7 @@ import com.tcdng.unify.core.UnifyException;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class AbstractOSMessagingAccessManager extends AbstractFlowCentralComponent
+public abstract class AbstractOSMessagingAccessManager extends AbstractFlowCentralService
         implements OSMessagingAccessManager {
 
     @Override
