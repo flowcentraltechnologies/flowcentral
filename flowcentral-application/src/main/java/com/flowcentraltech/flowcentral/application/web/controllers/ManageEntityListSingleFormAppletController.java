@@ -43,9 +43,13 @@ public class ManageEntityListSingleFormAppletController extends
     @Override
     protected void onReloadPage() throws UnifyException {
         super.onReloadPage();
+        final String target = getRequestTarget(String.class);
         ManageEntityListSingleFormAppletPageBean pageBean = getPageBean();
         pageBean.getApplet().reload();
-        hintUser(MODE.WARNING, "$m{application.client.synchronization}");
+        
+        if("refresh".equals(target)) {
+            hintUser(MODE.WARNING, "$m{application.client.synchronization}");
+        }
     }
 
     @Override
