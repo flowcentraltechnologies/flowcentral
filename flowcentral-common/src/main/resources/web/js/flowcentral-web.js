@@ -751,13 +751,10 @@ fux.mFrmPreview = function(uEv) {
 
 fux.mFrmHelp = function(uEv) {
 	const evp = uEv.evp;
-	const entId = _id(evp.uHelp.id).value;
-	if (entId) {
-		evp.uCmd = evp.uId + "->help";
-		evp.uSendTrg = entId + ":" + evp.uHelp.fld;
-		evp.uIsDebounce = true;
-		ux.post(uEv);
-	}
+	evp.uCmd = evp.uId + "->help";
+	evp.uSendTrg = evp.uHelp.fld;
+	evp.uIsDebounce = true;
+	ux.post(uEv);
 }
 
 /** Popup window text  */

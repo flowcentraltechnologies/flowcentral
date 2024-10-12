@@ -38,15 +38,19 @@ public class EntitySelectPanel extends AbstractApplicationPanel {
         super.switchState();
         EntitySelect entitySelect = getEntitySelect();
         if (entitySelect != null) {
+            final boolean editable = !entitySelect.isDisableInput();
             setVisible("searchFilterPanel", entitySelect.isEnableFilter());
+            setEditable("filterInput", editable);
             
             setVisible("filterLabelA", entitySelect.isWithFilterA());
             setVisible("filterInputA", entitySelect.isWithFilterA());
-            setDisabled("filterInputA", entitySelect.isDisableInput());
+            setEditable("filterInputA", editable);
             
             setVisible("filterLabelB", entitySelect.isWithFilterB());
             setVisible("filterInputB", entitySelect.isWithFilterB());
-            setDisabled("filterInputB", entitySelect.isDisableInput());
+            setEditable("filterInputB", editable);
+            
+            setDisabled("clearBtn", entitySelect.isDisableInput());
         }
     }
 

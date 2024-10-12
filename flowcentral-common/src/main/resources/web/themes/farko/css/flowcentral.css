@@ -520,7 +520,7 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-miniform .mflabel .mfreq {width:9px; padding-right:4px;}
 .fc-miniform .mfcontent {}
 .fc-miniform .mfpost {display:table-cell;width:12px;}
-.fc-miniform .mfview {display:table-cell;width:24px;}
+.fc-miniform .mfview {display:table-cell;width:24px;vertical-align: top;}
 .fc-miniform .mfact {margin-left: 4px;height: 20px; width: 20px;background-color: #b5becd; border: 1px solid #b0b0b0;
 	color:#525e6d;cursor: pointer;}
 .fc-miniform .mfannot {display:table-caption;}
