@@ -459,9 +459,6 @@
 			<field name="wfStepDesc"
 				label="$m{workflow.stepalert.stepdesc}" type="list_only"
 				key="wfStepId" property="description" />
-			<field name="notificationTypeDesc"
-				label="$m{workflow.stepalert.notificationtypedesc}" type="list_only"
-				key="notificationType" property="description" />
 			<field name="typeDesc" label="$m{workflow.stepalert.typedesc}"
 				type="list_only" key="type" property="description" />
 		</entity>
