@@ -17,6 +17,7 @@ package com.flowcentraltech.flowcentral.messaging.os.entities;
 
 import com.flowcentraltech.flowcentral.common.entities.BaseStatusEntity;
 import com.tcdng.unify.core.annotation.Column;
+import com.tcdng.unify.core.annotation.Policy;
 import com.tcdng.unify.core.annotation.Table;
 import com.tcdng.unify.core.annotation.UniqueConstraint;
 
@@ -26,6 +27,7 @@ import com.tcdng.unify.core.annotation.UniqueConstraint;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
+@Policy("osmessagingendpoint-policy")
 @Table(name = "FC_OSMESSAGINGENDPOINT",
         uniqueConstraints = {
                 @UniqueConstraint({ "name" }),
@@ -47,7 +49,13 @@ public class OSMessagingEndpoint extends BaseStatusEntity {
     @Column(name = "PROCESSOR", length = 64)
     private String processor;
 
-    @Column(name = "AUTHORIZATION", length = 512, nullable = true)
+    @Column(name = "AUTH_USERNAME", length = 64)
+    private String userName;
+
+    @Column(name = "AUTH_PASSWORD", length = 64)
+    private String password;
+
+    @Column(name = "AUTH_BASE64", length = 512, nullable = true)
     private String authorization;
 
     @Override
@@ -89,6 +97,22 @@ public class OSMessagingEndpoint extends BaseStatusEntity {
 
     public void setProcessor(String processor) {
         this.processor = processor;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getAuthorization() {

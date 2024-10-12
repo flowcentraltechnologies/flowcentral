@@ -73,13 +73,19 @@
 				inputWidget="application.text" maxLen="128" />
 			<field name="nodeUrl"
 				label="$m{osmessaging.osmessagingendpoint.nodeurl}"
-				type="string" inputWidget="application.text" maxLen="256" />
+				type="string" inputWidget="application.textarea" maxLen="256" />
 			<field name="target"
 				label="$m{osmessaging.osmessagingendpoint.target}" type="string"
 				inputWidget="application.text" maxLen="64" />
 			<field name="processor"
 				label="$m{osmessaging.osmessagingendpoint.processor}" type="string"
 				inputWidget="application.text" maxLen="64" />
+			<field name="userName"
+				label="$m{osmessaging.osmessagingendpoint.username}" type="string"
+				inputWidget="application.text" maxLen="64" />
+			<field name="password"
+				label="$m{osmessaging.osmessagingendpoint.password}" type="string"
+				inputWidget="application.password" maxLen="64" />
 			<field name="authorization"
 				label="$m{osmessaging.osmessagingendpoint.authorization}" type="string"
 				inputWidget="application.textarea" maxLen="512" nullable="true"/>
@@ -180,10 +186,15 @@
 				</section>
 				<section name="targetDetails" columns="type_2"
 					label="$m{osmessaging.osmessagingendpoint.form.section.targetdetails}">
-					<field name="nodeUrl" column="0" required="true" />
-					<field name="authorization" column="0" required="true" />
-					<field name="target" column="1" required="true" />
-					<field name="processor" column="1" required="true" />
+					<field name="target" column="0" required="true" />
+					<field name="processor" column="0" required="true" />
+					<field name="nodeUrl" column="1" required="true" />
+				</section>
+				<section name="authDetails" columns="type_2"
+					label="$m{osmessaging.osmessagingendpoint.form.section.authdetails}">
+					<field name="userName" column="0" required="true" />
+					<field name="password" column="0" required="true" />
+					<field name="authorization" column="1" required="false" editable="false" />
 				</section>
 			</tab>
 			<tab name="changeLog" label="$m{application.form.audit}"

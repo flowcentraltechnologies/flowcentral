@@ -40,4 +40,6 @@ public interface OSMessagingResponseConstants {
     String NO_PROCESSOR_SPECIFIED = "GP04";
 
     String PROCESSING_EXCEPTION = "GP05";
+    
+    String NO_TARGET_NOT_ADDRESSED = "GP06"; 
 }

@@ -67,17 +67,15 @@ public class OSMessagingController extends AbstractPlainJsonController {
         oSMessagingAccess.setProcessor(processor);
         try {
             if (StringUtils.isBlank(target)) {
-                error = new OSMessagingError(OSMessagingResponseConstants.NO_TARGET_SPECIFIED,
-                        "No messaging target application specified in request headers.");
+                error = getOSMessagingError(OSMessagingResponseConstants.NO_TARGET_SPECIFIED);
+            } else if (!getApplicationCode().equals(target)) {
+                error = getOSMessagingError(OSMessagingResponseConstants.NO_TARGET_NOT_ADDRESSED);
             } else if (StringUtils.isBlank(source)) {
-                error = new OSMessagingError(OSMessagingResponseConstants.NO_SOURCE_SPECIFIED,
-                        "No messaging source application specified in request headers.");
+                error = getOSMessagingError(OSMessagingResponseConstants.NO_SOURCE_SPECIFIED);
             } else if (StringUtils.isBlank(processor)) {
-                error = new OSMessagingError(OSMessagingResponseConstants.NO_PROCESSOR_SPECIFIED,
-                        "No messaging processor specified in request headers.");
+                error = getOSMessagingError(OSMessagingResponseConstants.NO_PROCESSOR_SPECIFIED);
             } else if (!isComponent(processor)) {
-                error = new OSMessagingError(OSMessagingResponseConstants.PROCESSOR_UNKNOWN,
-                        "Messaging processor with name is unknown.");
+                error = getOSMessagingError(OSMessagingResponseConstants.PROCESSOR_UNKNOWN);
             } else {
                 if (oSMessagingAccessManager != null) {
                     error = oSMessagingAccessManager.checkAccess(authorization, source, target, processor);
@@ -100,10 +98,10 @@ public class OSMessagingController extends AbstractPlainJsonController {
         if (error != null) {
             response = new OSMessagingErrorResponse(error);
         }
-        
+
         final String reference = UUID.randomUUID().toString();
         response.setReference(reference);
-        
+
         final String responseJson = getResponseJsonFromObject(response);
         if (oSMessagingAccessManager != null) {
             oSMessagingAccess.setReference(reference);
@@ -118,4 +116,7 @@ public class OSMessagingController extends AbstractPlainJsonController {
         return responseJson;
     }
 
+    private OSMessagingError getOSMessagingError(String messageKey) throws UnifyException {
+        return new OSMessagingError(messageKey, getApplicationMessage(messageKey));
+    }
 }
