@@ -453,9 +453,7 @@ fux.rigEntitySelect = function(rgp) {
 		}
 		evp.uIsReqTrg = true;
 		evp.altered = false;
-		evp.selectOnly = rgp.pSelOnly;
 		if (rgp.pText) {
-			_id(evp.uFacId).readOnly = evp.selectOnly;
 			ux.addHdl(sel, "input", fux.entitySelectText, evp);
 			ux.addHdl(sel, "enter", fux.entitySelectInput, evp);
 			const btn = _id(rgp.pBtnId);
@@ -753,13 +751,10 @@ fux.mFrmPreview = function(uEv) {
 
 fux.mFrmHelp = function(uEv) {
 	const evp = uEv.evp;
-	const entId = _id(evp.uHelp.id).value;
-	if (entId) {
-		evp.uCmd = evp.uId + "->help";
-		evp.uSendTrg = entId + ":" + evp.uHelp.fld;
-		evp.uIsDebounce = true;
-		ux.post(uEv);
-	}
+	evp.uCmd = evp.uId + "->help";
+	evp.uSendTrg = evp.uHelp.fld;
+	evp.uIsDebounce = true;
+	ux.post(uEv);
 }
 
 /** Popup window text  */

@@ -69,6 +69,8 @@ public class EntitySelect {
 
     private boolean enableFilter;
 
+    private boolean disableInput;
+
     private boolean space;
 
     private boolean special;
@@ -183,6 +185,14 @@ public class EntitySelect {
 
     public void setEnableFilter(boolean enableFilter) {
         this.enableFilter = enableFilter;
+    }
+
+    public boolean isDisableInput() {
+        return disableInput;
+    }
+
+    public void setDisableInput(boolean disableInput) {
+        this.disableInput = disableInput;
     }
 
     public void select(int index) throws UnifyException {

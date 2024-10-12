@@ -114,10 +114,8 @@ public class MiniFormWidget extends AbstractFlowCentralMultiControl implements F
 
     @Action
     public void help() throws UnifyException {
-        final String target = getRequestTarget(String.class);
-        String[] parts = target.split(":");
-        if (parts.length == 2) {
-            final String fieldName = parts[1];
+        final String fieldName = getRequestTarget(String.class);
+        if (!StringUtils.isBlank(fieldName)) {
             final FormContext mCtx = oldMiniForm.getCtx();
             HelpSheetDef helpSheetDef = appletUtilities.application().getHelpSheetDef(mCtx.getFormDef().getHelpSheet());
             HelpEntryDef entry = helpSheetDef.getHelpEntryDef(fieldName);
