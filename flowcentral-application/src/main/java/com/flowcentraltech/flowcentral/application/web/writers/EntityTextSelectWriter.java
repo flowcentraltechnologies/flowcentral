@@ -59,7 +59,6 @@ public class EntityTextSelectWriter extends AbstractPopupTextFieldWriter {
             writer.writeParam("pFormId", formPanelId);
         }
         writer.writeParam("pText", true);
-        writer.writeParam("pSelOnly", entityTextSelectWidget.selectOnly());
         writer.writeParam("pBtnId", entityTextSelectWidget.getPopupButtonId());
         writer.endFunction();
     }

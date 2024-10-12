@@ -71,6 +71,7 @@ public class EntityTextSelectWidget extends AbstractFlowCentralPopupTextField {
         EntitySelect entitySelect = appletUtilities.constructEntitySelect(refDef, getValueStore(), fieldA, fieldB,
                 filter, limit);
         entitySelect.setEnableFilter(true);
+        entitySelect.setDisableInput(selectOnly());
         entitySelect.applyFilterToSearch();
         String title = resolveSessionMessage("$m{entityselect.select.entity}",
                 entitySelect.getEntityTable().getEntityDef().getLabel());

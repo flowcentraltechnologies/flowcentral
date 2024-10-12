@@ -42,9 +42,11 @@ public class EntitySelectPanel extends AbstractApplicationPanel {
             
             setVisible("filterLabelA", entitySelect.isWithFilterA());
             setVisible("filterInputA", entitySelect.isWithFilterA());
+            setDisabled("filterInputA", entitySelect.isDisableInput());
             
             setVisible("filterLabelB", entitySelect.isWithFilterB());
             setVisible("filterInputB", entitySelect.isWithFilterB());
+            setDisabled("filterInputB", entitySelect.isDisableInput());
         }
     }
 

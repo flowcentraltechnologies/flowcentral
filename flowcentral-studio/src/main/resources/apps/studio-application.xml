@@ -2130,9 +2130,6 @@
 				label="$m{workflow.stepalert.step}" widthRatio="1" />
 			<column field="typeDesc" renderWidget="application.text"
 				label="$m{workflow.stepalert.type}" widthRatio="1" />
-			<column field="typeDesc"
-				renderWidget="application.text"
-				label="$m{workflow.stepalert.typedesc}" widthRatio="1" />
 		</table>
 		<table name="dashboardTileTable"
 			description="$m{studio.dashboardtile.table}"
