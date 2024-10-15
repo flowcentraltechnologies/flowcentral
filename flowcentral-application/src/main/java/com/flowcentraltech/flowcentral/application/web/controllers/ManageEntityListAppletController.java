@@ -64,9 +64,11 @@ public class ManageEntityListAppletController
         super.onReloadPage();
         final String target = getRequestTarget(String.class);
         ManageEntityListAppletPageBean pageBean = getPageBean();
-        pageBean.getApplet().reload();
-        
-        if("refresh".equals(target)) {
+        if (pageBean.getApplet() != null) {
+            pageBean.getApplet().reload();
+        }
+
+        if ("refresh".equals(target)) {
             hintUser(MODE.WARNING, "$m{application.client.synchronization}");
         }
     }
