@@ -740,10 +740,6 @@
 						column="0" required="true" />
 					<field name="email" inputWidget="application.text" column="0"
 						required="true" />
-					<field name="mobileNo" inputWidget="application.name"
-						column="0" />
-					<field name="id" label="$m{security.user.form.photo}"
-						inputWidget="userphoto" column="0" />
 					<field name="workflowStatus"
 						inputWidget="application.enumlist" column="1" disabled="true"
 						required="true" />
@@ -751,14 +747,20 @@
 						column="1" required="true" />
 					<field name="branchId" inputWidget="organization.branchlist"
 						column="1" />
+				</section>
+				<section name="userDetails2" columns="type_1_2">
+					<field name="mobileNo" inputWidget="application.name"
+						column="0" />
+					<field name="id" label="$m{security.user.form.photo}"
+						inputWidget="userphoto" column="0" />
 					<field name="passwordExpires"
 						inputWidget="application.checkbox" column="1" />
 					<field name="localPasswordOnly"
-						inputWidget="application.checkbox" column="1" />
+						inputWidget="application.checkbox" column="2" />
 					<field name="allowMultipleLogin"
 						inputWidget="application.checkbox" column="1" />
 					<field name="allowLoginWithoutOtp"
-						inputWidget="application.checkbox" column="1" />
+						inputWidget="application.checkbox" column="2" />
 					<field name="supervisor" inputWidget="application.checkbox"
 						column="1" />
 				</section>
