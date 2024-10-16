@@ -17,7 +17,9 @@
 package com.flowcentraltech.flowcentral.report.util;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.flowcentraltech.flowcentral.application.entities.AppEntityField;
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityUtils;
@@ -45,6 +47,21 @@ public final class ReportEntityUtils {
 
     }
 
+    public static List<ReportableField> removeDuplicates(final List<ReportableField> fieldList) {
+        final List<ReportableField> resultList = new ArrayList<ReportableField>();
+        final Set<String> present = new HashSet<String>();
+        for (ReportableField field: fieldList) {
+            if (present.contains(field.getName())) {
+                continue;
+            }
+            
+            present.add(field.getName());
+            resultList.add(field);
+        }
+        
+        return resultList;
+    }
+    
     public static List<ReportableField> getEntityBaseTypeReportableFieldList(MessageResolver msgResolver,
             EntityBaseType type, FormatterOptions formatOptions) throws UnifyException {
         List<ReportableField> resultList = new ArrayList<ReportableField>();
