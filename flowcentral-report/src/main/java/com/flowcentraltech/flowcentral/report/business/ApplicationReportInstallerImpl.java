@@ -468,6 +468,7 @@ public class ApplicationReportInstallerImpl extends AbstractApplicationArtifactI
                         : appEntityConfig.getBaseType(),
                 FormatterOptions.DEFAULT);
         reportableFieldList.addAll(baseReportableFieldList);
+        reportableFieldList = ReportEntityUtils.removeDuplicates(reportableFieldList);
         reportableDefinition.setFieldList(reportableFieldList);
     }
 

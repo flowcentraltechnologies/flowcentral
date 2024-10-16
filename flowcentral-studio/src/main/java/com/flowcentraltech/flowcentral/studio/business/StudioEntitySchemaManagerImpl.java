@@ -220,6 +220,7 @@ public class StudioEntitySchemaManagerImpl extends AbstractEntitySchemaManager {
                         messageResolver, appEntity.getBaseType(), FormatterOptions.DEFAULT);
                 reportableFieldList.addAll(ReportEntityUtils.getReportableFieldList(messageResolver,
                         appEntity.getFieldList(), FormatterOptions.DEFAULT));
+                reportableFieldList = ReportEntityUtils.removeDuplicates(reportableFieldList);
                 reportableDefinition.setFieldList(reportableFieldList);
                 reportModuleService.createReportableDefinition(reportableDefinition);
 
@@ -266,6 +267,7 @@ public class StudioEntitySchemaManagerImpl extends AbstractEntitySchemaManager {
                         messageResolver, appEntity.getBaseType(), FormatterOptions.DEFAULT);
                 reportableFieldList.addAll(ReportEntityUtils.getReportableFieldList(messageResolver, appEntityFieldList,
                         FormatterOptions.DEFAULT));
+                reportableFieldList = ReportEntityUtils.removeDuplicates(reportableFieldList);
                 reportableDefinition.setFieldList(reportableFieldList);
                 reportModuleService.createReportableDefinition(reportableDefinition);
 
@@ -286,6 +288,7 @@ public class StudioEntitySchemaManagerImpl extends AbstractEntitySchemaManager {
             } else {
                 List<ReportableField> reportableFieldList = ReportEntityUtils.getReportableFieldList(messageResolver,
                         appEntityFieldList, FormatterOptions.DEFAULT);
+                reportableFieldList = ReportEntityUtils.removeDuplicates(reportableFieldList);
                 reportableDefinition.setFieldList(reportableFieldList);
                 reportModuleService.updateReportableDefinition(reportableDefinition);
             }
