@@ -17,6 +17,7 @@
 package com.flowcentraltech.flowcentral.studio.web.controllers;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import com.flowcentraltech.flowcentral.configuration.xml.SnapshotConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.util.ConfigurationUtils;
@@ -83,6 +84,7 @@ public class StudioUploadSnapshotPageController extends AbstractStudioPageContro
 
         snapshotConfig.setSnapshotTitle(pageBean.getSnapshotTitle());
         snapshotConfig.setSnapshotMessage(pageBean.getMessage());
+        pageBean.setMessage(null);
         TaskSetup taskSetup = TaskSetup.newBuilder(
                 StudioSnapshotTaskConstants.STUDIO_UPLOAD_SNAPSHOT_TASK_NAME)
                 .setParam(StudioSnapshotTaskConstants.STUDIO_SNAPSHOT_CONFIG, snapshotConfig)
@@ -95,9 +97,15 @@ public class StudioUploadSnapshotPageController extends AbstractStudioPageContro
     protected void onOpenPage() throws UnifyException {
         super.onOpenPage();
         StudioUploadSnapshotPageBean pageBean = getPageBean();
-        final String snapshotTitle = "SNAPSHOT_UPD_"
-                + new SimpleDateFormat("yyyyMMdd_HHmmss").format(studio().getNow());
+        final Date now = studio().getNow();
+        final String snapshotTitle = "SNAPSHOT_UPD_" + new SimpleDateFormat("yyyyMMdd_HHmmss").format(now);
         pageBean.setSnapshotTitle(snapshotTitle);
+
+        if (pageBean.getMessage() == null) {
+            final String message = resolveSessionMessage("$m{studio.uploadsnapshotpage.message.default}",
+                    new SimpleDateFormat("EEEE MMMM d, yyyy h:mma").format(now));
+            pageBean.setMessage(message);
+        }
     }
     
 }

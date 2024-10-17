@@ -17,6 +17,7 @@
 package com.flowcentraltech.flowcentral.studio.web.controllers;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import com.flowcentraltech.flowcentral.codegeneration.constants.CodeGenerationModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.repository.constants.TransferToRemoteTaskConstants;
@@ -95,6 +96,7 @@ public class StudioTakeSnapshotPageController extends AbstractStudioPageControll
             pageBean.setResultDetails(resultDetails);
         }
         
+        pageBean.setMessage(null);
         return launchTaskWithMonitorBox(taskSetup, "Take Studio Snapshot",
                 isToRepository ? "/studio/takesnapshot/pushToRemote"
                 : "/studio/snapshots/openPage", null);
@@ -117,16 +119,24 @@ public class StudioTakeSnapshotPageController extends AbstractStudioPageControll
                 .logMessages()
                 .build();
         pageBean.setResultDetails(null);
-        return launchTaskWithMonitorBox(taskSetup, "Push Snapshot File to Remote");
+        pageBean.setMessage(null);
+        return launchTaskWithMonitorBox(taskSetup, "Push Snapshot File to Remote", "/studio/snapshots/openPage", null);
     }
 
     @Override
     protected void onOpenPage() throws UnifyException {
         super.onOpenPage();
+        
         StudioTakeSnapshotPageBean pageBean = getPageBean();
-        final String snapshotTitle = "SNAPSHOT_SYS_"
-                + new SimpleDateFormat("yyyyMMdd_HHmmss").format(studio().getNow());
+        final Date now = studio().getNow();
+        final String snapshotTitle = "SNAPSHOT_SYS_" + new SimpleDateFormat("yyyyMMdd_HHmmss").format(now);
         pageBean.setSnapshotTitle(snapshotTitle);
+
+        if (pageBean.getMessage() == null) {
+            final String message = resolveSessionMessage("$m{studio.takesnapshotpage.message.default}",
+                    new SimpleDateFormat("EEEE MMMM d, yyyy h:mma").format(now));
+            pageBean.setMessage(message);
+        }
     }
 
 }
