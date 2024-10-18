@@ -41,7 +41,8 @@ import com.tcdng.unify.web.ui.widget.data.Popup;
  * @since 1.0
  */
 @Component("fc-entitytextselect") 
-@UplAttributes({ @UplAttribute(name = "limit", type = int.class, defaultVal = "20"),
+@UplAttributes({
+        @UplAttribute(name = "limit", type = int.class, defaultVal = "20"),
         @UplAttribute(name = "ref", type = String.class, mandatory = true),
         @UplAttribute(name = "buttonImgSrc", type = String.class, defaultVal = "$t{images/search.png}"),
         @UplAttribute(name = "buttonSymbol", type = String.class, defaultVal = "table-list"),
@@ -52,7 +53,8 @@ import com.tcdng.unify.web.ui.widget.data.Popup;
         @UplAttribute(name = "space", type = boolean.class, defaultVal = "false"),
         @UplAttribute(name = "special", type = boolean.class, defaultVal = "false"),
         @UplAttribute(name = "acceptPlus", type = boolean.class),
-        @UplAttribute(name = "acceptMinus", type = boolean.class), @UplAttribute(name = "fieldA", type = String.class),
+        @UplAttribute(name = "acceptMinus", type = boolean.class),
+        @UplAttribute(name = "fieldA", type = String.class),
         @UplAttribute(name = "fieldB", type = String.class),
         @UplAttribute(name = "text", type = TextType.class, defaultVal = "text") })
 public class EntityTextSelectWidget extends AbstractFlowCentralPopupTextField {
