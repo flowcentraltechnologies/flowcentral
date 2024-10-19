@@ -144,6 +144,17 @@ public interface OrganizationModuleService extends FlowCentralService {
     Optional<Long> getBranchId(BranchQuery query) throws UnifyException;
 
     /**
+     * Gets associated branch IDs by hub with branch itself included.
+     * 
+     * @param branchId
+     *                 the branch ID
+     * @return the associated branch IDs
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    List<Long> getAssociatedBranchIds(Long branchId) throws UnifyException;
+
+    /**
      * Get department ID..
      * 
      * @param departmentCode

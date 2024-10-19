@@ -16,6 +16,8 @@
 
 package com.flowcentraltech.flowcentral.common.data;
 
+import java.util.List;
+
 /**
  * User role information.
  * 
@@ -33,19 +35,24 @@ public class UserRoleInfo {
     private String groupDesc;
 
     private String departmentCode;
-    
-    public UserRoleInfo(String roleCode, String roleDesc, String groupName, String groupDesc, String departmentCode) {
+
+    private List<Long> branchScopingList;
+
+    public UserRoleInfo(String roleCode, String roleDesc, String groupName, String groupDesc, String departmentCode,
+            List<Long> branchScopingList) {
         this.roleCode = roleCode;
         this.roleDesc = roleDesc;
         this.groupName = groupName;
         this.groupDesc = groupDesc;
         this.departmentCode = departmentCode;
+        this.branchScopingList = branchScopingList;
     }
 
-    public UserRoleInfo(String roleCode, String roleDesc, String departmentCode) {
+    public UserRoleInfo(String roleCode, String roleDesc, String departmentCode, List<Long> branchScopingList) {
         this.roleCode = roleCode;
         this.roleDesc = roleDesc;
         this.departmentCode = departmentCode;
+        this.branchScopingList = branchScopingList;
     }
 
     public String getRoleCode() {
@@ -66,6 +73,10 @@ public class UserRoleInfo {
 
     public String getDepartmentCode() {
         return departmentCode;
+    }
+
+    public List<Long> getBranchScopingList() {
+        return branchScopingList;
     }
 
 }

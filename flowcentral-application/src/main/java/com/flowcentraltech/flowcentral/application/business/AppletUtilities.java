@@ -372,7 +372,7 @@ public interface AppletUtilities extends FlowCentralComponent {
     boolean isApplicationDevelopable(Long applicationId) throws UnifyException;
 
     /**
-     * Gets a session user token.
+     * Gets current session user token.
      * 
      * @return the session user token
      * @throws UnifyException
@@ -381,13 +381,22 @@ public interface AppletUtilities extends FlowCentralComponent {
     UserToken getSessionUserToken() throws UnifyException;
 
     /**
-     * Gets a session user ID.
+     * Gets current session user ID.
      * 
      * @return the session user ID
      * @throws UnifyException
      *                        if an error occurs
      */
     String getSessionUserLoginId() throws UnifyException;
+
+    /**
+     * Gets current session branch scope.
+     * 
+     * @return the branch scope
+     * @throws UnifyException
+     *                        if an error occurs.
+     */
+    List<Long> getSessionBranchScope() throws UnifyException;
 
     /**
      * Gets a session attribute.

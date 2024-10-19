@@ -95,6 +95,8 @@ public class EntityDef extends BaseApplicationEntityDef {
 
     private List<EntityFieldDef> mappedFieldDefList;
 
+    private List<EntityFieldDef> branchScopingFieldDefList;
+
     private Map<String, EntityFieldDef> fieldDefMap;
 
     private Map<String, String> fieldLabelMap;
@@ -697,14 +699,18 @@ public class EntityDef extends BaseApplicationEntityDef {
 
     public List<EntityFieldDef> getFkFieldDefList() {
         if (fkFieldDefList == null) {
-            fkFieldDefList = new ArrayList<EntityFieldDef>();
-            for (EntityFieldDef entityFieldDef : fieldDefList) {
-                if (entityFieldDef.isForeignKey()) {
-                    fkFieldDefList.add(entityFieldDef);
+            synchronized (this) {
+                if (fkFieldDefList == null) {
+                    fkFieldDefList = new ArrayList<EntityFieldDef>();
+                    for (EntityFieldDef entityFieldDef : fieldDefList) {
+                        if (entityFieldDef.isForeignKey()) {
+                            fkFieldDefList.add(entityFieldDef);
+                        }
+                    }
+
+                    fkFieldDefList = DataUtils.unmodifiableList(fkFieldDefList);
                 }
             }
-
-            fkFieldDefList = DataUtils.unmodifiableList(fkFieldDefList);
         }
 
         return fkFieldDefList;
@@ -712,19 +718,46 @@ public class EntityDef extends BaseApplicationEntityDef {
 
     public List<EntityFieldDef> getListOnlyFieldDefList() {
         if (listOnlyFieldDefList == null) {
-            listOnlyFieldDefList = new ArrayList<EntityFieldDef>();
-            for (EntityFieldDef entityFieldDef : fieldDefList) {
-                if (entityFieldDef.isListOnly()) {
-                    listOnlyFieldDefList.add(entityFieldDef);
+            synchronized (this) {
+                if (listOnlyFieldDefList == null) {
+                    listOnlyFieldDefList = new ArrayList<EntityFieldDef>();
+                    for (EntityFieldDef entityFieldDef : fieldDefList) {
+                        if (entityFieldDef.isListOnly()) {
+                            listOnlyFieldDefList.add(entityFieldDef);
+                        }
+                    }
+
+                    listOnlyFieldDefList = DataUtils.unmodifiableList(listOnlyFieldDefList);
                 }
             }
-
-            listOnlyFieldDefList = DataUtils.unmodifiableList(listOnlyFieldDefList);
         }
 
         return listOnlyFieldDefList;
     }
 
+    public List<EntityFieldDef> getBranchScopingFieldDefList() {
+        if (branchScopingFieldDefList == null) {
+            synchronized (this) {
+                if (branchScopingFieldDefList == null) {
+                    branchScopingFieldDefList = new ArrayList<EntityFieldDef>();
+                    for (EntityFieldDef entityFieldDef : fieldDefList) {
+                        if (entityFieldDef.isBranchScoping()) {
+                            branchScopingFieldDefList.add(entityFieldDef);
+                        }
+                    }
+
+                    branchScopingFieldDefList = DataUtils.unmodifiableList(branchScopingFieldDefList);
+                }
+            }
+        }
+
+        return branchScopingFieldDefList;
+    }
+
+    public boolean isWithBranchScoping() {
+        return !getBranchScopingFieldDefList().isEmpty();
+    }
+    
     public List<EntityFieldDef> getChildListFieldDefList() {
         if (childListFieldDefList == null) {
             childListFieldDefList = new ArrayList<EntityFieldDef>();

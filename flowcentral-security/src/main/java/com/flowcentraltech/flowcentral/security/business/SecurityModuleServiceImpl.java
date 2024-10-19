@@ -49,6 +49,7 @@ import com.flowcentraltech.flowcentral.configuration.constants.SysDatetimeFormat
 import com.flowcentraltech.flowcentral.configuration.data.ModuleInstall;
 import com.flowcentraltech.flowcentral.notification.business.NotificationModuleService;
 import com.flowcentraltech.flowcentral.organization.business.OrganizationModuleService;
+import com.flowcentraltech.flowcentral.organization.constants.BranchViewType;
 import com.flowcentraltech.flowcentral.organization.entities.MappedBranch;
 import com.flowcentraltech.flowcentral.security.business.data.PasswordComplexityCheck;
 import com.flowcentraltech.flowcentral.security.business.data.PasswordComplexitySettings;
@@ -717,8 +718,9 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
 
         final FactoryMap<Long, String> departmentCodes = organizationModuleService.getMappedDepartmentCodeFactoryMap();
         for (UserRole userRole : environment().listAll(userRoleQuery)) {
+            final List<Long> branchScopingIdList = getBranchIdList(userLoginId, userRole.getBranchViewType());
             userRoleInfoList.add(new UserRoleInfo(userRole.getRoleCode(), userRole.getRoleDesc(),
-                    departmentCodes.get(userRole.getDepartmentId())));
+                    departmentCodes.get(userRole.getDepartmentId()), branchScopingIdList));
             roleSet.add(userRole.getRoleCode());
         }
 
@@ -742,13 +744,30 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
             }
 
             for (UserGroupRole userGroupRole : environment().listAll(userGroupRoleQuery)) {
+                final List<Long> branchScopingIdList = getBranchIdList(userLoginId, userGroupRole.getBranchViewType());
                 userRoleInfoList.add(new UserRoleInfo(userGroupRole.getRoleCode(), userGroupRole.getRoleDesc(),
                         userGroupRole.getUserGroupName(), userGroupRole.getUserGroupDesc(),
-                        departmentCodes.get(userGroupRole.getDepartmentId())));
+                        departmentCodes.get(userGroupRole.getDepartmentId()), branchScopingIdList));
             }
         }
 
         return userRoleInfoList;
+    }
+
+    private List<Long> getBranchIdList(String userLoginId, BranchViewType branchViewType) throws UnifyException {
+        if (branchViewType != null) {
+            UserToken userToken = getUserToken();
+            if (!StringUtils.isBlank(userToken.getBranchCode())) {
+                final Long userBranchId = organizationModuleService.getBranchId(userToken.getBranchCode());
+                if (branchViewType.isUserBranchOnly()) {
+                    return Arrays.asList(userBranchId);
+                }
+
+                return organizationModuleService.getAssociatedBranchIds(userBranchId);
+            }
+        }
+
+        return Collections.emptyList();
     }
 
     private UserToken createUserToken(User user, MappedBranch userBranch, Long loginTenantId) throws UnifyException {

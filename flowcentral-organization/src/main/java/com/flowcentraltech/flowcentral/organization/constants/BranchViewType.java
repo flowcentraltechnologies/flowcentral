@@ -50,6 +50,10 @@ public enum BranchViewType implements EnumConst {
         return USER_BRANCH_ONLY.code();
     }
 
+    public boolean isUserBranchOnly() {
+        return USER_BRANCH_ONLY.equals(this);
+    }
+    
     public static BranchViewType fromCode(String code) {
         return EnumUtils.fromCode(BranchViewType.class, code);
     }

@@ -123,6 +123,7 @@ import com.flowcentraltech.flowcentral.common.business.policies.SweepingCommitPo
 import com.flowcentraltech.flowcentral.common.business.policies.TableSummaryLine;
 import com.flowcentraltech.flowcentral.common.constants.CollaborationType;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralApplicationAttributeConstants;
+import com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants;
 import com.flowcentraltech.flowcentral.common.constants.OwnershipType;
 import com.flowcentraltech.flowcentral.common.constants.WfItemVersionType;
 import com.flowcentraltech.flowcentral.common.data.AuditSnapshot;
@@ -570,6 +571,13 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
     @Override
     public String getSessionUserLoginId() throws UnifyException {
         return getSessionContext().getUserToken().getUserLoginId();
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<Long> getSessionBranchScope() throws UnifyException {
+        List<Long> branchIdList = (List<Long>) getSessionAttribute(FlowCentralSessionAttributeConstants.BRANCH_SCOPING);
+        return branchIdList == null ? Collections.emptyList() : branchIdList;
     }
 
     @Override

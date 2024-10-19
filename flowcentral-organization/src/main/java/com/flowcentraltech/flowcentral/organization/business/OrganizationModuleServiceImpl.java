@@ -15,6 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.organization.business;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -348,6 +349,14 @@ public class OrganizationModuleServiceImpl extends AbstractFlowCentralService
     @Override
     public Optional<Long> getBranchId(BranchQuery query) throws UnifyException {
         return environment().valueOptional(Long.class, "id", query);
+    }
+
+    @Override
+    public List<Long> getAssociatedBranchIds(Long branchId) throws UnifyException {
+        Optional<Long> optionalHub = environment().valueOptional(Long.class, "hubId", new BranchQuery().id(branchId));
+        return optionalHub.isPresent()
+                ? environment().valueList(Long.class, "id", new BranchQuery().hubId(optionalHub.get()))
+                : Arrays.asList(branchId);
     }
 
     @Override
