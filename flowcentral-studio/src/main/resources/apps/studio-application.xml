@@ -3055,7 +3055,7 @@
 				</setStates>
 			</formStatePolicy>
 			<formStatePolicy type="on_switch"
-				name="refFieldPolicy"
+				name="branchScopingPolicy"
 				description="$m{studio.appentityfield.form.formstatepolicy.branchscoping}">
 				<onCondition>
 					<restriction type="amongst" field="dataType"
