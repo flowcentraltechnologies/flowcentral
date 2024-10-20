@@ -49,7 +49,6 @@ import com.flowcentraltech.flowcentral.configuration.constants.SysDatetimeFormat
 import com.flowcentraltech.flowcentral.configuration.data.ModuleInstall;
 import com.flowcentraltech.flowcentral.notification.business.NotificationModuleService;
 import com.flowcentraltech.flowcentral.organization.business.OrganizationModuleService;
-import com.flowcentraltech.flowcentral.organization.constants.BranchViewType;
 import com.flowcentraltech.flowcentral.organization.entities.MappedBranch;
 import com.flowcentraltech.flowcentral.security.business.data.PasswordComplexityCheck;
 import com.flowcentraltech.flowcentral.security.business.data.PasswordComplexitySettings;
@@ -60,12 +59,12 @@ import com.flowcentraltech.flowcentral.security.constants.SecurityModuleErrorCon
 import com.flowcentraltech.flowcentral.security.constants.SecurityModuleNameConstants;
 import com.flowcentraltech.flowcentral.security.constants.SecurityModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.security.constants.UserWorkflowStatus;
+import com.flowcentraltech.flowcentral.security.entities.PasswordComplexity;
+import com.flowcentraltech.flowcentral.security.entities.PasswordComplexityQuery;
 import com.flowcentraltech.flowcentral.security.entities.PasswordHistory;
 import com.flowcentraltech.flowcentral.security.entities.PasswordHistoryQuery;
 import com.flowcentraltech.flowcentral.security.entities.SecuredLink;
 import com.flowcentraltech.flowcentral.security.entities.SecuredLinkQuery;
-import com.flowcentraltech.flowcentral.security.entities.PasswordComplexity;
-import com.flowcentraltech.flowcentral.security.entities.PasswordComplexityQuery;
 import com.flowcentraltech.flowcentral.security.entities.User;
 import com.flowcentraltech.flowcentral.security.entities.UserGroupMemberQuery;
 import com.flowcentraltech.flowcentral.security.entities.UserGroupRole;
@@ -718,7 +717,8 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
 
         final FactoryMap<Long, String> departmentCodes = organizationModuleService.getMappedDepartmentCodeFactoryMap();
         for (UserRole userRole : environment().listAll(userRoleQuery)) {
-            final List<Long> branchScopingIdList = getBranchIdList(userLoginId, userRole.getBranchViewType());
+            final List<Long> branchScopingIdList = organizationModuleService.getCurrentUserBranchIds(userLoginId,
+                    userRole.getBranchViewType());
             userRoleInfoList.add(new UserRoleInfo(userRole.getRoleCode(), userRole.getRoleDesc(),
                     departmentCodes.get(userRole.getDepartmentId()), branchScopingIdList));
             roleSet.add(userRole.getRoleCode());
@@ -744,7 +744,8 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
             }
 
             for (UserGroupRole userGroupRole : environment().listAll(userGroupRoleQuery)) {
-                final List<Long> branchScopingIdList = getBranchIdList(userLoginId, userGroupRole.getBranchViewType());
+                final List<Long> branchScopingIdList = organizationModuleService.getCurrentUserBranchIds(userLoginId,
+                        userGroupRole.getBranchViewType());
                 userRoleInfoList.add(new UserRoleInfo(userGroupRole.getRoleCode(), userGroupRole.getRoleDesc(),
                         userGroupRole.getUserGroupName(), userGroupRole.getUserGroupDesc(),
                         departmentCodes.get(userGroupRole.getDepartmentId()), branchScopingIdList));
@@ -752,22 +753,6 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
         }
 
         return userRoleInfoList;
-    }
-
-    private List<Long> getBranchIdList(String userLoginId, BranchViewType branchViewType) throws UnifyException {
-        if (branchViewType != null) {
-            UserToken userToken = getUserToken();
-            if (!StringUtils.isBlank(userToken.getBranchCode())) {
-                final Long userBranchId = organizationModuleService.getBranchId(userToken.getBranchCode());
-                if (branchViewType.isUserBranchOnly()) {
-                    return Arrays.asList(userBranchId);
-                }
-
-                return organizationModuleService.getAssociatedBranchIds(userBranchId);
-            }
-        }
-
-        return Collections.emptyList();
     }
 
     private UserToken createUserToken(User user, MappedBranch userBranch, Long loginTenantId) throws UnifyException {

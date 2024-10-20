@@ -20,7 +20,6 @@ import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
-import com.flowcentraltech.flowcentral.application.data.EntityFieldDef;
 import com.flowcentraltech.flowcentral.application.data.FilterDef;
 import com.flowcentraltech.flowcentral.application.data.TableDef;
 import com.flowcentraltech.flowcentral.application.web.data.AppletContext;
@@ -34,9 +33,7 @@ import com.flowcentraltech.flowcentral.common.business.SpecialParamProvider;
 import com.flowcentraltech.flowcentral.common.business.policies.SweepingCommitPolicy;
 import com.flowcentraltech.flowcentral.common.constants.OwnershipType;
 import com.tcdng.unify.core.UnifyException;
-import com.tcdng.unify.core.criterion.Amongst;
 import com.tcdng.unify.core.criterion.And;
-import com.tcdng.unify.core.criterion.Equals;
 import com.tcdng.unify.core.criterion.FilterConditionListType;
 import com.tcdng.unify.core.criterion.Order;
 import com.tcdng.unify.core.criterion.Restriction;
@@ -630,34 +627,10 @@ public class EntitySearch extends AbstractPanelFormBinding {
             searchRestriction = restriction;
         }
 
-        if (entityDef.isWithBranchScoping()) {
-            final List<Long> branchList = au().getSessionBranchScope();
-            if (!DataUtils.isBlank(branchList)) {
-                Restriction branchScopeRestriction = null;
-                List<EntityFieldDef> scopeFieldList = entityDef.getBranchScopingFieldDefList();
-                if (scopeFieldList.size() == 1) {
-                    if (branchList.size() == 1) {
-                        branchScopeRestriction = new Equals(scopeFieldList.get(0).getFieldName(), branchList.get(0));
-                    } else {
-                        branchScopeRestriction = new Amongst(scopeFieldList.get(0).getFieldName(), branchList);
-                    }
-                } else {
-                    And and = new And();
-                    final Long branchId = branchList.size() == 1 ? branchList.get(0) : null;
-                    for (EntityFieldDef entityFieldDef : scopeFieldList) {
-                        if (branchId != null) {
-                            and.add(new Equals(entityFieldDef.getFieldName(), branchId));
-                        } else {
-                            and.add(new Amongst(entityFieldDef.getFieldName(), branchList));
-                        }
-                    }
-
-                    branchScopeRestriction = and;
-                }
-
-                searchRestriction = searchRestriction == null ? branchScopeRestriction
-                        : new And().add(searchRestriction).add(branchScopeRestriction);
-            }
+        Restriction branchScopeRestriction = au().getSessionBranchScopeRestriction(entityDef);
+        if (branchScopeRestriction != null) {
+            searchRestriction = searchRestriction == null ? branchScopeRestriction
+                    : new And().add(searchRestriction).add(branchScopeRestriction);
         }
 
         entityTable.setSourceObjectClearSelected(searchRestriction);

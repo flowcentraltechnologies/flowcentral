@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.flowcentraltech.flowcentral.common.business.FlowCentralService;
+import com.flowcentraltech.flowcentral.organization.constants.BranchViewType;
 import com.flowcentraltech.flowcentral.organization.entities.Branch;
 import com.flowcentraltech.flowcentral.organization.entities.BranchQuery;
 import com.flowcentraltech.flowcentral.organization.entities.Department;
@@ -142,6 +143,17 @@ public interface OrganizationModuleService extends FlowCentralService {
      *                        if an error occurs
      */
     Optional<Long> getBranchId(BranchQuery query) throws UnifyException;
+
+    /**
+     * Gets current user branch IDs.
+     * 
+     * @param userLoginId
+     *                 the branch ID
+     * @return the user branch IDs
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    List<Long> getCurrentUserBranchIds(String userLoginId, BranchViewType branchViewType) throws UnifyException;
 
     /**
      * Gets associated branch IDs by hub with branch itself included.

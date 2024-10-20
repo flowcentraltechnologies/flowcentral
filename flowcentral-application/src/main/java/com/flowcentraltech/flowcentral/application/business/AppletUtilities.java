@@ -399,6 +399,15 @@ public interface AppletUtilities extends FlowCentralComponent {
     List<Long> getSessionBranchScope() throws UnifyException;
 
     /**
+     * Gets current session branch scope restriction.
+     * 
+     * @return the restriction otherwise null
+     * @throws UnifyException
+     *                        if an error occurs.
+     */
+    Restriction getSessionBranchScopeRestriction(EntityDef entityDef) throws UnifyException;
+
+    /**
      * Gets a session attribute.
      * 
      * @param clazz
