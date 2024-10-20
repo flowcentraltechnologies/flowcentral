@@ -38,6 +38,8 @@ public interface EntityFieldAttributes {
     
     int getScale() throws UnifyException;
     
+    boolean isBranchScoping() throws UnifyException;
+    
     boolean isTrim() throws UnifyException;
     
     boolean isAllowNegative() throws UnifyException;

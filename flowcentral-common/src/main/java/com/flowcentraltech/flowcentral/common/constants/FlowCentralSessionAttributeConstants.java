@@ -38,6 +38,9 @@ public interface FlowCentralSessionAttributeConstants {
     /** Branch Description */
     String BRANCHDESC = "fc.branchdesc";
 
+    /** Branch Scoping */
+    String BRANCH_SCOPING = "fc.branchscoping";
+
     /** Business Unit Description */
     String BUSINESSUNITDESC = "fc.businessunitdesc";
 

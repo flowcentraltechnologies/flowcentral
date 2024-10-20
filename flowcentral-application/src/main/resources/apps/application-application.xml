@@ -1097,6 +1097,8 @@
 			<field name="scale"
 				label="$m{application.appentityfield.scale}" type="integer"
 				nullable="true" />
+			<field name="branchScoping"
+				label="$m{application.appentityfield.branchscoping}" type="boolean" />
 			<field name="trim"
 				label="$m{application.appentityfield.trim}" type="boolean" />
 			<field name="allowNegative"
@@ -1896,6 +1898,9 @@
 			<field name="typeDesc"
 				label="$m{application.appformstatepolicy.typedesc}" type="list_only"
 				key="type" property="description" />
+			<uniqueConstraint name="nameUc"
+				description="$m{application.appformaction.uc.name}"
+				fieldList="appFormId,name" />
 		</entity>
 		<entity name="appFormWidgetRulesPolicy"
 			description="$m{application.appformwidgetrulespolicy}"

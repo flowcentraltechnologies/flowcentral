@@ -2916,6 +2916,10 @@
 						column="1" visible="false" />
 				</section>
 				<section name="optionDetails" columns="type_1_2">
+					<field name="auditable" inputWidget="application.checkbox"
+						column="1" visible="false" />
+					<field name="reportable" inputWidget="application.checkbox"
+						column="1" visible="false" />
 					<field name="trim"
 						inputWidget="application.checkbox" column="1" visible="false" />
 					<field name="allowNegative"
@@ -2924,15 +2928,13 @@
 						column="1" visible="false" />
 					<field name="nullable" inputWidget="application.checkbox"
 						column="1" visible="false" />
-					<field name="auditable" inputWidget="application.checkbox"
-						column="1" visible="false" />
-					<field name="reportable" inputWidget="application.checkbox"
-						column="1" visible="false" />
 					<field name="maintainLink" inputWidget="application.checkbox"
 						column="2" visible="false" />
 					<field name="descriptive" inputWidget="application.checkbox"
 						column="2" visible="false" />
 					<field name="basicSearch" inputWidget="application.checkbox"
+						column="2" visible="false" />
+					<field name="branchScoping" inputWidget="application.checkbox"
 						column="2" visible="false" />
 				</section>
 			</tab>
@@ -3050,6 +3052,17 @@
 					<setState type="field"
 						target="precision,defaultVal,allowNegative,nullable,auditable,reportable,descriptive,basicSearch"
 						visible="true" />
+				</setStates>
+			</formStatePolicy>
+			<formStatePolicy type="on_switch"
+				name="branchScopingPolicy"
+				description="$m{studio.appentityfield.form.formstatepolicy.branchscoping}">
+				<onCondition>
+					<restriction type="amongst" field="dataType"
+						paramA="RF|LN|LO" />
+				</onCondition>
+				<setStates>
+					<setState type="field" target="branchScoping" visible="true" />
 				</setStates>
 			</formStatePolicy>
 			<formStatePolicy type="on_switch"

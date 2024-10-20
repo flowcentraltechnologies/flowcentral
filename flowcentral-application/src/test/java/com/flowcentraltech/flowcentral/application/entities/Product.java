@@ -35,6 +35,9 @@ public class Product extends BaseAuditEntity {
     @ForeignKey
     private ProductCategory category;
 
+    @Column(nullable = true)
+    private Long branchId;
+    
     @Column(name = "PRODUCT_NM")
     private String name;
 
@@ -71,6 +74,14 @@ public class Product extends BaseAuditEntity {
 
     public void setCategory(ProductCategory category) {
         this.category = category;
+    }
+
+    public Long getBranchId() {
+        return branchId;
+    }
+
+    public void setBranchId(Long branchId) {
+        this.branchId = branchId;
     }
 
     public String getName() {
