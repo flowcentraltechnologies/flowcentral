@@ -1007,6 +1007,16 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             AttachmentsProvider attachmentsProvider = getComponent(AttachmentsProvider.class,
                     wfStepDef.getAttachmentProviderName());
             attachments = attachmentsProvider.provide(reader, new AttachmentsOptions(true));
+        } else {
+            if (!StringUtils.isBlank(wfStepDef.getStepAppletName())) {
+                AppletDef appletDef = appletUtil.getAppletDef(wfStepDef.getStepAppletName());
+                if (appletDef.isPropWithValue(AppletPropertyConstants.MAINTAIN_FORM_CAPTURE_ATTACHMENT_PROVIDER)) {
+                    final String providerName = appletDef.getPropValue(String.class,
+                            AppletPropertyConstants.MAINTAIN_FORM_CAPTURE_ATTACHMENT_PROVIDER);
+                    AttachmentsProvider attachmentsProvider = getComponent(AttachmentsProvider.class, providerName);
+                    attachments = attachmentsProvider.provide(reader, new AttachmentsOptions(true));
+                }
+            }
         }
 
         Errors errors = null;
