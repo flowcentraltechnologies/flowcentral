@@ -116,6 +116,14 @@ public class SearchEntry implements EntityFieldAttributes {
     }
 
     @Override
+    public boolean isBranchScoping() throws UnifyException {
+        return isGeneratorEntry()
+                ? au.getComponent(SearchInputRestrictionGenerator.class, generator).getEntryAttributes()
+                        .isBranchScoping()
+                : false;
+    }
+
+    @Override
     public boolean isTrim() throws UnifyException {
         return isGeneratorEntry()
                 ? au.getComponent(SearchInputRestrictionGenerator.class, generator).getEntryAttributes()

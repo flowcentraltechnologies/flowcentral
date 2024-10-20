@@ -540,6 +540,14 @@
 			label="$m{organization.role.label}"
 			type="com.flowcentraltech.flowcentral.organization.entities.Role"
 			auditable="true" reportable="true" changeEvents = "true">
+			<field name="branchViewType"
+				label="$m{organization.role.branchviewtype}" type="enum_ref"
+				inputWidget="application.enumlist"
+				references="branchviewtypelist" nullable="true" />
+			<field name="branchViewTypeDesc"
+				label="$m{organization.role.branchviewtypedesc}"
+				type="list_only" inputWidget="application.text" key="branchViewType"
+				property="description" />
 			<field name="departmentId"
 				label="$m{organization.role.departmentid}" type="mapped"
 				inputLabel="$m{organization.role.department}"
@@ -840,6 +848,8 @@
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="description" renderWidget="application.text"
 				widthRatio="1" />
+			<column field="branchViewTypeDesc" renderWidget="application.text"
+				label="$m{organization.role.branchviewtype}" widthRatio="1" />
 			<column field="activeAfter" renderWidget="application.time"
 				widthRatio="1" />
 			<column field="activeBefore" renderWidget="application.time"
@@ -1066,6 +1076,7 @@
 					<field name="description" inputWidget="application.text"
 						column="0" required="true" />
 					<field name="email" inputWidget="application.text" column="0" />
+					<field name="branchViewType" column="1" />
 					<field name="activeAfter" inputWidget="application.time"
 						column="1" />
 					<field name="activeBefore" inputWidget="application.time"

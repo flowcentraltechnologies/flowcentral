@@ -19,6 +19,7 @@ import java.util.Date;
 
 import com.flowcentraltech.flowcentral.common.constants.RecordStatus;
 import com.flowcentraltech.flowcentral.common.entities.BaseAuditTenantEntity;
+import com.flowcentraltech.flowcentral.organization.constants.BranchViewType;
 import com.flowcentraltech.flowcentral.organization.entities.Role;
 import com.tcdng.unify.core.annotation.ForeignKey;
 import com.tcdng.unify.core.annotation.ListOnly;
@@ -68,6 +69,9 @@ public class UserGroupRole extends BaseAuditTenantEntity implements Describable 
 
     @ListOnly(key = "roleId", property = "departmentId")
     private Long departmentId;
+    
+    @ListOnly(key = "roleId", property = "branchViewType")
+    private BranchViewType branchViewType;
 
     @Override
     public String getDescription() {
@@ -160,6 +164,14 @@ public class UserGroupRole extends BaseAuditTenantEntity implements Describable 
 
     public void setDepartmentId(Long departmentId) {
         this.departmentId = departmentId;
+    }
+
+    public BranchViewType getBranchViewType() {
+        return branchViewType;
+    }
+
+    public void setBranchViewType(BranchViewType branchViewType) {
+        this.branchViewType = branchViewType;
     }
 
 }

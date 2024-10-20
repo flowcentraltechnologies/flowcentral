@@ -123,6 +123,7 @@ import com.flowcentraltech.flowcentral.common.business.policies.SweepingCommitPo
 import com.flowcentraltech.flowcentral.common.business.policies.TableSummaryLine;
 import com.flowcentraltech.flowcentral.common.constants.CollaborationType;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralApplicationAttributeConstants;
+import com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants;
 import com.flowcentraltech.flowcentral.common.constants.OwnershipType;
 import com.flowcentraltech.flowcentral.common.constants.WfItemVersionType;
 import com.flowcentraltech.flowcentral.common.data.AuditSnapshot;
@@ -159,6 +160,8 @@ import com.tcdng.unify.core.annotation.Preferred;
 import com.tcdng.unify.core.constant.DataType;
 import com.tcdng.unify.core.constant.LocaleType;
 import com.tcdng.unify.core.criterion.AbstractRestrictionTranslatorMapper;
+import com.tcdng.unify.core.criterion.Amongst;
+import com.tcdng.unify.core.criterion.And;
 import com.tcdng.unify.core.criterion.Equals;
 import com.tcdng.unify.core.criterion.Restriction;
 import com.tcdng.unify.core.criterion.RestrictionTranslator;
@@ -570,6 +573,45 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
     @Override
     public String getSessionUserLoginId() throws UnifyException {
         return getSessionContext().getUserToken().getUserLoginId();
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<Long> getSessionBranchScope() throws UnifyException {
+        List<Long> branchIdList = (List<Long>) getSessionAttribute(FlowCentralSessionAttributeConstants.BRANCH_SCOPING);
+        return branchIdList == null ? Collections.emptyList() : branchIdList;
+    }
+
+    @Override
+    public Restriction getSessionBranchScopeRestriction(EntityDef entityDef) throws UnifyException {
+        Restriction branchScopeRestriction = null;
+        if (entityDef.isWithBranchScoping()) {
+            final List<Long> branchList = getSessionBranchScope();
+            if (!DataUtils.isBlank(branchList)) {
+                List<EntityFieldDef> scopeFieldList = entityDef.getBranchScopingFieldDefList();
+                if (scopeFieldList.size() == 1) {
+                    if (branchList.size() == 1) {
+                        branchScopeRestriction = new Equals(scopeFieldList.get(0).getFieldName(), branchList.get(0));
+                    } else {
+                        branchScopeRestriction = new Amongst(scopeFieldList.get(0).getFieldName(), branchList);
+                    }
+                } else {
+                    And and = new And();
+                    final Long branchId = branchList.size() == 1 ? branchList.get(0) : null;
+                    for (EntityFieldDef entityFieldDef : scopeFieldList) {
+                        if (branchId != null) {
+                            and.add(new Equals(entityFieldDef.getFieldName(), branchId));
+                        } else {
+                            and.add(new Amongst(entityFieldDef.getFieldName(), branchList));
+                        }
+                    }
+
+                    branchScopeRestriction = and;
+                }
+            }
+        }
+        
+        return branchScopeRestriction;
     }
 
     @Override

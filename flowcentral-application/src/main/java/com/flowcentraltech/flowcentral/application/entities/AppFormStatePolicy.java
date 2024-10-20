@@ -25,6 +25,7 @@ import com.tcdng.unify.core.annotation.Column;
 import com.tcdng.unify.core.annotation.ForeignKey;
 import com.tcdng.unify.core.annotation.ListOnly;
 import com.tcdng.unify.core.annotation.Table;
+import com.tcdng.unify.core.annotation.UniqueConstraint;
 
 /**
  * Application form state policy entity;
@@ -32,7 +33,8 @@ import com.tcdng.unify.core.annotation.Table;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@Table(name = "FC_FORMSTATEPOLICY")
+@Table(name = "FC_FORMSTATEPOLICY",
+    uniqueConstraints = { @UniqueConstraint({ "appFormId", "name" }) })
 public class AppFormStatePolicy extends BaseConfigNamedEntity {
 
     @ForeignKey(AppForm.class)

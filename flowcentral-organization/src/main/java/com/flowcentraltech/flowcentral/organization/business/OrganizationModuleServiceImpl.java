@@ -15,6 +15,8 @@
  */
 package com.flowcentraltech.flowcentral.organization.business;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -33,6 +35,7 @@ import com.flowcentraltech.flowcentral.common.constants.WfItemVersionType;
 import com.flowcentraltech.flowcentral.configuration.constants.DefaultApplicationConstants;
 import com.flowcentraltech.flowcentral.configuration.data.ModuleInstall;
 import com.flowcentraltech.flowcentral.configuration.xml.util.ConfigurationUtils;
+import com.flowcentraltech.flowcentral.organization.constants.BranchViewType;
 import com.flowcentraltech.flowcentral.organization.constants.OrganizationModuleNameConstants;
 import com.flowcentraltech.flowcentral.organization.entities.Branch;
 import com.flowcentraltech.flowcentral.organization.entities.BranchQuery;
@@ -51,6 +54,7 @@ import com.flowcentraltech.flowcentral.organization.entities.RolePrivilege;
 import com.flowcentraltech.flowcentral.organization.entities.RolePrivilegeQuery;
 import com.flowcentraltech.flowcentral.organization.entities.RoleQuery;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.UserToken;
 import com.tcdng.unify.core.annotation.Broadcast;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -58,6 +62,7 @@ import com.tcdng.unify.core.annotation.Synchronized;
 import com.tcdng.unify.core.annotation.Transactional;
 import com.tcdng.unify.core.data.FactoryMap;
 import com.tcdng.unify.core.util.DataUtils;
+import com.tcdng.unify.core.util.StringUtils;
 
 /**
  * Implementation of organization module service.
@@ -348,6 +353,31 @@ public class OrganizationModuleServiceImpl extends AbstractFlowCentralService
     @Override
     public Optional<Long> getBranchId(BranchQuery query) throws UnifyException {
         return environment().valueOptional(Long.class, "id", query);
+    }
+
+    @Override
+    public List<Long> getCurrentUserBranchIds(String userLoginId, BranchViewType branchViewType) throws UnifyException {
+        if (branchViewType != null) {
+            UserToken userToken = getUserToken();
+            if (!StringUtils.isBlank(userToken.getBranchCode())) {
+                final Long userBranchId = getBranchId(userToken.getBranchCode());
+                if (branchViewType.isUserBranchOnly()) {
+                    return Arrays.asList(userBranchId);
+                }
+
+                return getAssociatedBranchIds(userBranchId);
+            }
+        }
+
+        return Collections.emptyList();
+    }
+
+    @Override
+    public List<Long> getAssociatedBranchIds(Long branchId) throws UnifyException {
+        Optional<Long> optionalHub = environment().valueOptional(Long.class, "hubId", new BranchQuery().id(branchId));
+        return optionalHub.isPresent()
+                ? environment().valueList(Long.class, "id", new BranchQuery().hubId(optionalHub.get()))
+                : Arrays.asList(branchId);
     }
 
     @Override

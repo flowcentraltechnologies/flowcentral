@@ -617,7 +617,7 @@ public class EntitySearch extends AbstractPanelFormBinding {
     private void applyRestrictionToSearch(EntityDef entityDef, Restriction restriction) throws UnifyException {
         Restriction searchRestriction = null;
         if (isWithBaseFilter()) {
-            recalcBaseRestriction();            
+            recalcBaseRestriction();
             if (restriction != null) {
                 searchRestriction = new And().add(baseRestriction).add(restriction);
             } else {
@@ -627,7 +627,14 @@ public class EntitySearch extends AbstractPanelFormBinding {
             searchRestriction = restriction;
         }
 
+        Restriction branchScopeRestriction = au().getSessionBranchScopeRestriction(entityDef);
+        if (branchScopeRestriction != null) {
+            searchRestriction = searchRestriction == null ? branchScopeRestriction
+                    : new And().add(searchRestriction).add(branchScopeRestriction);
+        }
+
         entityTable.setSourceObjectClearSelected(searchRestriction);
         au().clearReloadOnSwitch();
     }
+    
 }

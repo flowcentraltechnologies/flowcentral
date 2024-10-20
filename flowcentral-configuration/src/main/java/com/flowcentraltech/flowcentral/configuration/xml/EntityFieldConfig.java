@@ -109,6 +109,9 @@ public class EntityFieldConfig extends BaseConfig {
 
     @JacksonXmlProperty(isAttribute = true)
     private Integer scale;
+    
+    @JacksonXmlProperty(isAttribute = true)
+    private Boolean branchScoping;
 
     @JacksonXmlProperty(isAttribute = true)
     private Boolean trim;
@@ -138,6 +141,7 @@ public class EntityFieldConfig extends BaseConfig {
     private Boolean basicSearch;
 
     public EntityFieldConfig() {
+        this.branchScoping = Boolean.FALSE;
         this.trim = Boolean.FALSE;
         this.allowNegative = Boolean.FALSE;
         this.readOnly = Boolean.FALSE;
@@ -339,6 +343,14 @@ public class EntityFieldConfig extends BaseConfig {
 
     public void setScale(Integer scale) {
         this.scale = scale;
+    }
+
+    public Boolean getBranchScoping() {
+        return branchScoping;
+    }
+
+    public void setBranchScoping(Boolean branchScoping) {
+        this.branchScoping = branchScoping;
     }
 
     public Boolean getTrim() {

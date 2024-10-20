@@ -472,6 +472,7 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                             entityFieldConfig.setMaxLen(appEntityField.getMaxLen());
                             entityFieldConfig.setPrecision(appEntityField.getPrecision());
                             entityFieldConfig.setScale(appEntityField.getScale());
+                            entityFieldConfig.setBranchScoping(appEntityField.isBranchScoping());
                             entityFieldConfig.setTrim(appEntityField.isTrim());
                             entityFieldConfig.setAllowNegative(appEntityField.isAllowNegative());
                             entityFieldConfig.setReadOnly(appEntityField.isReadOnly());

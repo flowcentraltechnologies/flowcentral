@@ -16,6 +16,8 @@
 
 package com.flowcentraltech.flowcentral.application.web.controllers;
 
+import java.util.Collections;
+
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
 import com.flowcentraltech.flowcentral.application.constants.AppletSessionAttributeConstants;
@@ -63,8 +65,10 @@ public abstract class AbstractApplicationForwarderController<T extends AbstractF
             setSessionAttribute(FlowCentralSessionAttributeConstants.DEPARTMENTCODE, userRoleInfo.getDepartmentCode());
             setSessionAttribute(FlowCentralSessionAttributeConstants.ROLECODE, userRoleInfo.getRoleCode());
             setSessionAttribute(FlowCentralSessionAttributeConstants.ROLEDESCRIPTION, userRoleInfo.getRoleDesc());
+            setSessionAttribute(FlowCentralSessionAttributeConstants.BRANCH_SCOPING, userRoleInfo.getBranchScopingList());
         } else {
             setSessionAttribute(FlowCentralSessionAttributeConstants.ROLEDESCRIPTION, getUserToken().getUserName());
+            setSessionAttribute(FlowCentralSessionAttributeConstants.BRANCH_SCOPING, Collections.emptyList());
         }
 
         boolean inStudioWindow = LAUNCH_STUDIO_WINDOW

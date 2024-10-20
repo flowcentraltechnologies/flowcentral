@@ -117,6 +117,9 @@ public class AppEntityField extends BaseConfigEntity {
     @Column(name = "FIELD_SCALE", nullable = true)
     private Integer scale;
 
+    @Column(name = "BRANCH_SCOPING")
+    private boolean branchScoping;
+    
     @Column(name = "TRIM_FG")
     private boolean trim;
 
@@ -158,7 +161,7 @@ public class AppEntityField extends BaseConfigEntity {
 
     public AppEntityField(EntityFieldDataType dataType, String name, String label, String references, String key,
             String property, String category, String inputLabel, String inputWidget, String suggestionType,
-            String inputListKey, Integer maxLen,  boolean trim, boolean allowNegative, boolean readOnly, boolean nullable,
+            String inputListKey, Integer maxLen,  boolean branchScoping,  boolean trim, boolean allowNegative, boolean readOnly, boolean nullable,
             boolean auditable, boolean reportable, boolean maintainLink) {
         setConfigType(ConfigType.STATIC);
         this.dataType = dataType;
@@ -173,6 +176,7 @@ public class AppEntityField extends BaseConfigEntity {
         this.suggestionType = suggestionType;
         this.inputListKey = inputListKey;
         this.maxLen = maxLen;
+        this.branchScoping = branchScoping;
         this.trim = trim;
         this.allowNegative = allowNegative;
         this.readOnly = readOnly;
@@ -389,6 +393,14 @@ public class AppEntityField extends BaseConfigEntity {
 
     public void setScale(Integer scale) {
         this.scale = scale;
+    }
+
+    public boolean isBranchScoping() {
+        return branchScoping;
+    }
+
+    public void setBranchScoping(boolean branchScoping) {
+        this.branchScoping = branchScoping;
     }
 
     public boolean isTrim() {
