@@ -19,6 +19,7 @@ import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.business.EntitySelectHandler;
+import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.TableDef;
 import com.flowcentraltech.flowcentral.application.web.widgets.EntityTable;
 import com.tcdng.unify.core.UnifyException;
@@ -247,6 +248,13 @@ public class EntitySelect {
             } else {
                 restriction = new And().add(baseRestriction).add(restriction);
             }
+        }
+
+        final EntityDef entityDef = entityTable.getEntityDef();
+        Restriction branchScopeRestriction = entityTable.au().getSessionBranchScopeRestriction(entityDef);
+        if (branchScopeRestriction != null) {
+            restriction = restriction == null ? branchScopeRestriction
+                    : new And().add(restriction).add(branchScopeRestriction);
         }
 
         entityTable.setSourceObjectClearSelected(restriction);

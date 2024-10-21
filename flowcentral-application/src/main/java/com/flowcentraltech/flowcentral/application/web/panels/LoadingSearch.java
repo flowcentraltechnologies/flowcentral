@@ -306,6 +306,13 @@ public class LoadingSearch {
             searchRestriction = entries.getRestriction();
         }
 
+        final EntityDef entityDef = loadingTable.getEntityDef();
+        Restriction branchScopeRestriction = au().getSessionBranchScopeRestriction(entityDef);
+        if (branchScopeRestriction != null) {
+            searchRestriction = searchRestriction == null ? branchScopeRestriction
+                    : new And().add(searchRestriction).add(branchScopeRestriction);
+        }
+
         loadingTable.setSourceObjectClearSelected(new LoadingParams(searchRestriction, entries.getInputs()));
     }
 
