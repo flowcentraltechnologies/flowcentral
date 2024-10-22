@@ -73,26 +73,30 @@ public class SearchEntries {
 
     private final boolean showConditions;
 
+    private final String preferredEvent;
+
     private String restrictionResolverName;
 
     private List<SearchEntry> entryList;
-
+    
     public SearchEntries(AppletUtilities au, EntityDef entityDef, LabelSuggestionDef labelSuggestion,
-            String searchConfigName, int columns, boolean showConditions) {
+            String searchConfigName, String preferredEvent, int columns, boolean showConditions) {
         this.au = au;
         this.entityDef = entityDef;
         this.labelSuggestion = labelSuggestion;
         this.searchConfigName = searchConfigName;
+        this.preferredEvent = preferredEvent;
         this.columns = columns;
         this.showConditions = showConditions;
     }
 
-    public SearchEntries(AppletUtilities au, EntityDef entityDef, String searchConfigName, int columns,
-            boolean showConditions) {
+    public SearchEntries(AppletUtilities au, EntityDef entityDef, String searchConfigName, String preferredEvent,
+            int columns, boolean showConditions) {
         this.au = au;
         this.entityDef = entityDef;
         this.labelSuggestion = null;
         this.searchConfigName = searchConfigName;
+        this.preferredEvent = preferredEvent;
         this.columns = columns;
         this.showConditions = showConditions;
     }
@@ -115,6 +119,10 @@ public class SearchEntries {
                 searchEntry.getParamInput().setValue(null);
             }
         }
+    }
+
+    public String getPreferredEvent() {
+        return preferredEvent;
     }
 
     public boolean isEmpty() {
