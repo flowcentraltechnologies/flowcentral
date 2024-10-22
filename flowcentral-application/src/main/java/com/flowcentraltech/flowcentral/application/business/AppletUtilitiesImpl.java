@@ -1875,7 +1875,7 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
                 : (systemSearchColumns > 0 ? systemSearchColumns : 1);
         final String preferredEvent = systemModuleService.getSysParameterValue(boolean.class,
                 ApplicationModuleSysParamConstants.ENABLE_SEARCH_ON_SEARCH_INPUT_CHANGE) ? "onchange" : null;
-        
+
         SectorIcon sectorIcon = getPageSectorIconByApplication(_rootAppletDef.getApplicationName());
         LoadingSearch loadingSearch = new LoadingSearch(ctx, sectorIcon, _tableDef, _rootAppletDef.getId(),
                 searchConfigName, preferredEvent, searchColumns, loadingSearchMode, showConditions);
