@@ -106,4 +106,6 @@ public interface ApplicationModuleSysParamConstants {
     String HIDE_ERROR_MESSAGES_ON_INPUT = "APP-0029";
     
     String GLOBAL_CLIENT_UPDATE_SYNCHRONIZATION = "APP-002A";
+    
+    String ENABLE_SEARCH_ON_SEARCH_INPUT_CHANGE = "APP-002B";
 }

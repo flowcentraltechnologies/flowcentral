@@ -127,7 +127,7 @@ public class FormActionButtonsWriter extends AbstractControlWriter {
                     for (EventHandler eventHandler : eventHandlers) {
                         writer.setConfirm(confirmation);
                         try {
-                            writer.writeBehavior(eventHandler, actionCtrl.getId(), null);
+                            writer.writeBehavior(eventHandler, actionCtrl.getId(), null, null);
                         } finally {
                             writer.clearConfirm();
                         }

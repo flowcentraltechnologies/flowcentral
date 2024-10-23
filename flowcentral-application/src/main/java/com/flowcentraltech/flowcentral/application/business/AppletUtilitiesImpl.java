@@ -265,9 +265,9 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
     private SequenceNumberService sequenceNumberService;
 
     private final FactoryMap<String, Class<? extends SingleFormBean>> singleFormBeanClassByPanelName;
-    
+
     private final Map<String, WidgetTypeDef> adhocWidgets;
-    
+
     private MappedEntityProviderInfo mappedEntityProviderInfo;
 
     public AppletUtilitiesImpl() {
@@ -285,7 +285,7 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
                 }
 
             };
-       
+
         this.adhocWidgets = new HashMap<String, WidgetTypeDef>();
     }
 
@@ -610,7 +610,7 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
                 }
             }
         }
-        
+
         return branchScopeRestriction;
     }
 
@@ -788,7 +788,8 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
 
     @Override
     public WidgetTypeDef getWidgetTypeDef(String widgetName) throws UnifyException {
-        return adhocWidgets.containsKey(widgetName) ? adhocWidgets.get(widgetName) : applicationModuleService.getWidgetTypeDef(widgetName);
+        return adhocWidgets.containsKey(widgetName) ? adhocWidgets.get(widgetName)
+                : applicationModuleService.getWidgetTypeDef(widgetName);
     }
 
     @Override
@@ -1394,7 +1395,7 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
                         specialParamProvider);
             }
 
-            _entitySearch.setChildTabIndex(i); 
+            _entitySearch.setChildTabIndex(i);
             _entitySearch.setHeadlessList(appletName);
             _entitySearch.applyFilterToSearch();
 
@@ -1826,10 +1827,13 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
                 ApplicationModuleSysParamConstants.SEARCH_ENTRY_COLUMNS);
         final int searchColumns = appletSearchColumns > 0 ? appletSearchColumns
                 : (systemSearchColumns > 0 ? systemSearchColumns : 1);
+        final String preferredEvent = systemModuleService.getSysParameterValue(boolean.class,
+                ApplicationModuleSysParamConstants.ENABLE_SEARCH_ON_SEARCH_INPUT_CHANGE) ? "onchange" : null;
+        
         SectorIcon sectorIcon = getPageSectorIconByApplication(_appletDef.getApplicationName());
         EntitySearch _entitySearch = new EntitySearch(ctx, sectorIcon, sweepingCommitPolicy, tabName, _tableDef,
-                _appletDef.getId(), editAction, defaultQuickFilter, searchConfigName, searchColumns, entitySearchMode,
-                showConditions, isIgnoreParentCondition, viewItemsInSeparateTabs);
+                _appletDef.getId(), editAction, defaultQuickFilter, searchConfigName, preferredEvent, searchColumns,
+                entitySearchMode, showConditions, isIgnoreParentCondition, viewItemsInSeparateTabs);
         _entitySearch.setPaginationLabel(resolveSessionMessage("$m{entitysearch.display.label}"));
         _entitySearch.setBasicSearchOnly(basicSearchOnly);
         _entitySearch.setShowBaseRestriction(showBaseRestriction);
@@ -1869,9 +1873,12 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
                 ApplicationModuleSysParamConstants.SEARCH_ENTRY_COLUMNS);
         final int searchColumns = appletSearchColumns > 0 ? appletSearchColumns
                 : (systemSearchColumns > 0 ? systemSearchColumns : 1);
+        final String preferredEvent = systemModuleService.getSysParameterValue(boolean.class,
+                ApplicationModuleSysParamConstants.ENABLE_SEARCH_ON_SEARCH_INPUT_CHANGE) ? "onchange" : null;
+
         SectorIcon sectorIcon = getPageSectorIconByApplication(_rootAppletDef.getApplicationName());
         LoadingSearch loadingSearch = new LoadingSearch(ctx, sectorIcon, _tableDef, _rootAppletDef.getId(),
-                searchConfigName, searchColumns, loadingSearchMode, showConditions);
+                searchConfigName, preferredEvent, searchColumns, loadingSearchMode, showConditions);
         loadingSearch.setEntitySubTitle(_rootAppletDef.getLabel());
         return loadingSearch;
     }

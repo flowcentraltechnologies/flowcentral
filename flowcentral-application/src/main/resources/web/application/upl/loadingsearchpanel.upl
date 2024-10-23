@@ -31,6 +31,7 @@
 !ui-panel:searchEntriesPanel layout:$d{!ui-horizontal style:$s{width:100%;} widths:$l{85% none} cellPadding:false}
 	components:$c{searchEntries searchEntriesAction} ignoreParentState:true
 !fc-search:searchEntries binding:searchEntries
+    eventHandler:$d{!ui-event event:onenter eventBinding:preferredEvent action:$c{searchAct}}
 !ui-panel:searchEntriesAction style:$s{padding-left:8px;} layout:$d{!ui-horizontal}
 	components:$c{searchBtn clearBtn}
 !ui-button:searchBtn caption:$m{button.search} styleClass:$e{fc-bluebutton fc-tinybutton}
