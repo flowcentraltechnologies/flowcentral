@@ -248,12 +248,12 @@ public class TableWriter extends AbstractControlWriter {
                             if (tabelColumnDef.isSwitchOnChange()) {
                                 if (switchOnChangeHandlers != null) {
                                     for (EventHandler eventHandler : switchOnChangeHandlers) {
-                                        writer.writeBehavior(eventHandler, cId, fieldName);
+                                        writer.writeBehavior(eventHandler, cId, fieldName, null);
                                     }
                                 }
 
                                 if (switchOnChangeHandler != null) {
-                                    writer.writeBehavior(switchOnChangeHandler, cId, null);
+                                    writer.writeBehavior(switchOnChangeHandler, cId, null, null);
                                 }
 
                                 if (switchOnChangeHandler == null && switchOnChangeHandlers == null) {
@@ -285,13 +285,13 @@ public class TableWriter extends AbstractControlWriter {
                         for (int k = 0; k < klen; k++) {
                             Control _actionCtrl = actionCtrl[k];
                             _actionCtrl.setValueStore(valueStore);
-                            writer.writeBehavior(actionHandler[k], _actionCtrl.getId(), null);
+                            writer.writeBehavior(actionHandler[k], _actionCtrl.getId(), null, null);
                         }
                     } else {
                         int _index = table.resolveActionIndex(valueStore, i, len);
                         Control _actionCtrl = actionCtrl[_index];
                         _actionCtrl.setValueStore(valueStore);
-                        writer.writeBehavior(actionHandler[_index], _actionCtrl.getId(), null);
+                        writer.writeBehavior(actionHandler[_index], _actionCtrl.getId(), null, null);
                     }
                 }
 
@@ -310,7 +310,7 @@ public class TableWriter extends AbstractControlWriter {
 
                     if (crudActionHandlers != null) {
                         for (EventHandler eventHandler : crudActionHandlers) {
-                            writer.writeBehavior(eventHandler, _crudCtrl.getId(), null);
+                            writer.writeBehavior(eventHandler, _crudCtrl.getId(), null, null);
                         }
                     }
                 }
