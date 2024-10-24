@@ -31,8 +31,8 @@ public abstract class AbstractFlowCentralPopupPageController<T> extends Abstract
     @Configurable
     private EnvironmentService environmentService;
 
-    public AbstractFlowCentralPopupPageController(String title, String panelName) {
-        super(title, panelName, Secured.TRUE);
+    public AbstractFlowCentralPopupPageController(String title, String panelName, int widthInPixels) {
+        super(title, panelName, widthInPixels, Secured.TRUE);
     }
 
     protected EnvironmentService environment() {

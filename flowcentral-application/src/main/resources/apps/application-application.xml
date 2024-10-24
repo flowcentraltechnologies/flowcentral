@@ -509,7 +509,12 @@
 			renderer="!ui-label" />
 	</widgetTypes>
 	<!-- Applets -->
-	<applets>
+	<applets> 
+		<applet name="showAbout"
+			description="$m{application.about.manage}"
+			label="$m{application.about.manage.label}" icon="about" type="path_page"
+			path="/application/about/openPage" menuAccess="true">
+		</applet>
 		<applet name="manageSuggestion"
 			description="$m{application.appsuggestion.manage}"
 			label="$m{application.appsuggestion.manage.label}" icon="ellipsis-h"
