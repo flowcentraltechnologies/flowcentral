@@ -138,6 +138,9 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .ui-taskmonitorpanel {width: 620px;}
 
 /****** OVERRIDE END **********/
+.fc-aboutpanel {}
+.fc-aboutpanel .ui-label {font-weight: bold; font-style: italic;}
+
 .fc-tiny {font-size:8pt;width:152px;}
 .fc-tiny .tread {font-size:8pt;}
 

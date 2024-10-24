@@ -13,21 +13,21 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.application.constants;
+
+package com.flowcentraltech.flowcentral.application.web.panels;
+
+import com.flowcentraltech.flowcentral.common.web.panels.AbstractFlowCentralStandalonePanel;
+import com.tcdng.unify.core.annotation.Component;
+import com.tcdng.unify.core.annotation.UplBinding;
 
 /**
- * Application module path constants.
+ * About panel.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface ApplicationModulePathConstants {
+@Component("fc-aboutpanel")
+@UplBinding("web/application/upl/aboutpanel.upl")
+public class AboutPanel extends AbstractFlowCentralStandalonePanel {
 
-    String APPLICATION = "/application";
-
-    String ABOUT     = "/application/about";
-
-    String APPLICATION_BROWSER_WINDOW = "/application/browserwindow";
-    
-    String APPLICATION_MENU_TO_WINDOW = "/application/menutowindow";
 }
