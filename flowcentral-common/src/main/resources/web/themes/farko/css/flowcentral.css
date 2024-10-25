@@ -174,7 +174,9 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-loginpage {height: auto;}
 .fc-loginsection {background-color:#f4f4f4;}
 .fc-loginbox {display:block;width:340px;margin:0px auto;}
+.fc-loginboxtop {margin-top:32px;padding-bottom: 16px;}
 .fc-loginheader {padding:4px 4px; margin-top:136px; box-sizing:border-box;text-align: center;}
+.fc-loginheadertop {margin-top:8px;}
 .fc-loginheaderimg {width: 82%;}
 .fc-logincaptionbox {display:inline-block; font-family:'arial', serif; padding:5px 5px;width:100%;text-align:center;box-sizing:border-box;}
 .fc-loginsequencebox {padding: 5px 7px 5px 11px; width: 100%;box-sizing: border-box;}
