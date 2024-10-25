@@ -18,3 +18,8 @@
 
 // Applet panel
 !fc-dataimportappletpanel:appletPanel style:$s{width:100%;height:100%;} binding:applet
+	closeEventHandler:$d{!ui-event event:onclick action:$c{closeAct}}
+
+
+// Actions
+!ui-post:closeAct path:$n{/closePage}
