@@ -190,7 +190,12 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-logininfo {text-align: center; width: 460px; padding-right:40px; min-height:320px;font-family: "avenir-regular",helvetica,arial}
 .fc-logininfo-label {display:block; text-align:left; font-size:32px; color:#444;}
 .fc-loginbannersection {display:inline-block; width:814px;}
-    
+
+/* TODO Move to layouts module*/    
+.fc-loginboxtop {margin-top:32px;padding-bottom: 16px;}
+.fc-loginheadertop {margin-top:8px;}
+.fc-loginsectionleft {margin-top:120px;margin-left: 32px;}
+.fc-loginsectionright {margin-top:120px;margin-left: -32px;}
 
 
 .fc-logintopbanner {display: inline-block; width: 260px; background-color: #000;}
