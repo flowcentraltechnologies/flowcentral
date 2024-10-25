@@ -174,9 +174,7 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-loginpage {height: auto;}
 .fc-loginsection {background-color:#f4f4f4;}
 .fc-loginbox {display:block;width:340px;margin:0px auto;}
-.fc-loginboxtop {margin-top:32px;padding-bottom: 16px;}
 .fc-loginheader {padding:4px 4px; margin-top:136px; box-sizing:border-box;text-align: center;}
-.fc-loginheadertop {margin-top:8px;}
 .fc-loginheaderimg {width: 82%;}
 .fc-logincaptionbox {display:inline-block; font-family:'arial', serif; padding:5px 5px;width:100%;text-align:center;box-sizing:border-box;}
 .fc-loginsequencebox {padding: 5px 7px 5px 11px; width: 100%;box-sizing: border-box;}
@@ -192,7 +190,12 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-logininfo {text-align: center; width: 460px; padding-right:40px; min-height:320px;font-family: "avenir-regular",helvetica,arial}
 .fc-logininfo-label {display:block; text-align:left; font-size:32px; color:#444;}
 .fc-loginbannersection {display:inline-block; width:814px;}
-    
+
+/* TODO Move to layouts module*/    
+.fc-loginboxtop {margin-top:32px;padding-bottom: 16px;}
+.fc-loginheadertop {margin-top:8px;}
+.fc-loginsectionleft {margin-top:120px;margin-left: 32px;}
+.fc-loginsectionright {margin-top:120px;margin-left: -32px;}
 
 
 .fc-logintopbanner {display: inline-block; width: 260px; background-color: #000;}

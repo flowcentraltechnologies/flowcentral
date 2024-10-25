@@ -14,14 +14,14 @@
 // the License.
 
 !ui-page caption:$m{security.application.login} backImageSrc:$s{/web/images/applicationloginbackground.jpg}
-	layout:$d{!ui-horizontal cellStyle:$s{padding:0px;} style:$s{width:100%;height:100%;} widths:$l{none 392px none} heights:$l{100% 100% 100%}}
-	components:$c{blankSection loginSection blankSection}
+	layout:$d{!ui-horizontal cellStyle:$s{padding:0px;} style:$s{width:100%;height:100%;} widths:$l{392px none} heights:$l{100% 100%}}
+	components:$c{loginSection blankSection}
 
 // Blank section
 !ui-panel:blankSection style:$s{width:100%;height:100%}
 
 // Login section
-!ui-panel:loginSection styleClass:$e{fc-loginsection}  style:$s{width:100%;} components:$c{loginBox}
+!ui-panel:loginSection styleClass:$e{fc-loginsection fc-loginsectionleft}  style:$s{width:100%;} components:$c{loginBox}
 
 !ui-panel:loginBox styleClass:$e{fc-loginbox fc-loginboxtop} layout:$d{!ui-vertical style:$s{width:100%;}}
 	components:$c{headerSection loginCaptionBox loginSequencePanel}
