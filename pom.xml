@@ -56,6 +56,7 @@
     <module>flowcentral-messaging-os-data</module>
     <module>flowcentral-repository</module>
     <module>flowcentral-repository-git</module>
+    <module>flowcentral-layouts</module>
   </modules>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
