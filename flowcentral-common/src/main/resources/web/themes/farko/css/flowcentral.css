@@ -94,7 +94,7 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 
 /* Select */
 .ui-select .sslist .norm {}
-.ui-select .sslist .norm:hover {background-color: var(--color-tablehov) color: #000;}
+.ui-select .sslist .norm:hover {background-color: var(--color-tablehov); color: #000;}
 
 /* Text */
 .ui-text {padding-left:4px;}
@@ -232,9 +232,9 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 
 .fc-tablepanel {}
 .fc-tablepanel .ui-table .todd {background-color:#fff;}
-.fc-tablepanel .ui-table .todd:hover {background-color: var(--color-tablehov)}
+.fc-tablepanel .ui-table .todd:hover {background-color: var(--color-tablehov);}
 .fc-tablepanel .ui-table .teven {background-color:#f8f8f8;}
-.fc-tablepanel .ui-table .teven:hover {background-color: var(--color-tablehov)}
+.fc-tablepanel .ui-table .teven:hover {background-color: var(--color-tablehov);}
 .fc-tablepanel .ui-table td {height: 24px; padding: 8px 6px; border: none; border-top: 1px solid #e8e8e8;
 	border-bottom: 1px solid #e8e8e8;}
 .fc-tablepanel .ui-table .ttable {border: none;}
@@ -295,9 +295,9 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-collapsibletable .act {display:inline-block;font-size:7pt;cursor:pointer;margin:2px;padding:2px;border:1px solid #a0a0a0;background-color:#f4f4f4;}
 .fc-collapsibletable .bdy {border-collapse: collapse;}
 .fc-collapsibletable .odd {background-color:#f1f4f5;}
-.fc-collapsibletable .odd:hover {background-color:var(--color-tablehov)}
+.fc-collapsibletable .odd:hover {background-color:var(--color-tablehov);}
 .fc-collapsibletable .even {}
-.fc-collapsibletable .even:hover {background-color:var(--color-tablehov)}
+.fc-collapsibletable .even:hover {background-color:var(--color-tablehov);}
 .fc-collapsibletable .ctrl {width:20px;}
 .fc-collapsibletable .ctrlr {border-right:none !important;}
 .fc-collapsibletable .ctrlb {border-left:none !important;border-right:none !important;}
@@ -313,9 +313,9 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-commentlisting {overflow-y:scroll;padding:2px;height:196px;border:solid 1px #b0b0b0;}
 .fc-commentlisting .ctable {display:table;border-collapse:collapse;width:100%;}
 .fc-commentlisting .codd {display:table-row; background-color:#fff;}
-.fc-commentlisting .codd:hover {background-color:var(--color-tablehov)}
+.fc-commentlisting .codd:hover {background-color:var(--color-tablehov);}
 .fc-commentlisting .ceven {display:table-row;background-color:#f4f4f4;}
-.fc-commentlisting .ceven:hover {background-color: var(--color-tablehov)}
+.fc-commentlisting .ceven:hover {background-color: var(--color-tablehov);}
 .fc-commentlisting .cuserimage {display:table-cell;width:36px;padding-left:2px;vertical-align:top;}
 .fc-commentlisting .cuserimage .image {width:32px;padding-top:6px;}
 .fc-commentlisting .cbody {display:table-cell;padding:6px 0px;}
@@ -347,7 +347,7 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-entitysearch .ellist a {display:block; padding:6px 4px; color:#2C2C2C;white-space:nowrap;
 	background-color: transparent; border: 0px; text-decoration: none;}
 .fc-entitysearch .ellist .norm {}
-.fc-entitysearch .ellist .norm:hover {background-color: var(--color-tablehov) color: #000;}
+.fc-entitysearch .ellist .norm:hover {background-color: var(--color-tablehov); color: #000;}
 .fc-entitysearch .ellist .sel {background-color: #5970B2; color: #FFF;}
 .fc-entitysearch .elactionrow {height: 24px;}
 .fc-entitysearch .elactbutton {/*border-radius: 6px;*/ width: 64px; padding: 4px 0px; cursor: pointer; font-size: 7pt;
@@ -368,7 +368,7 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-entitytextsearch .ellist a {display:block; padding:6px 4px; color:#2C2C2C;white-space:nowrap;
 	background-color: transparent; border: 0px; text-decoration: none;}
 .fc-entitytextsearch .ellist .norm {}
-.fc-entitytextsearch .ellist .norm:hover {background-color: var(--color-tablehov) color: #000;}
+.fc-entitytextsearch .ellist .norm:hover {background-color: var(--color-tablehov); color: #000;}
 .fc-entitytextsearch .ellist .sel {background-color: #5970B2; color: #FFF;}
 .fc-entitytextsearch .elactionrow {height: 24px;}
 .fc-entitytextsearch .elactbutton {/*border-radius: 6px;*/ width: 64px; padding: 4px 0px; cursor: pointer; font-size: 7pt;
@@ -689,9 +689,9 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-table .table .sheader {padding:2px 6px;font-weight: bold;font-size:10pt;background:#a5b7cc;vertical-align: middle;}
 .fc-table .table .sfooter {padding:0px 6px;font-weight: bold;font-size:8pt;background:#fff;vertical-align: middle;height:0px;}
 .fc-table .table .odd {background-color:#f1f4f5;}
-.fc-table .table .odd:hover {background-color:var(--color-tablehov)}
+.fc-table .table .odd:hover {background-color:var(--color-tablehov);}
 .fc-table .table .even {}
-.fc-table .table .even:hover {background-color:var(--color-tablehov)}
+.fc-table .table .even:hover {background-color:var(--color-tablehov);}
 .fc-table .table .info {border-left: solid 2px #a7ccf6; background-color: #e9f3fd;}
 .fc-table .table .warning {border-left: solid 2px #f6dea7; background-color: #fdf6e9;}
 .fc-table .table .error {border-left: solid 2px #f6a7ab; background-color: #fde9eb;}
@@ -760,9 +760,9 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-entitytreetable {}
 .fc-entitytreetable .table {table-layout:fixed; width:100%; border-collapse:collapse;}
 .fc-entitytreetable .table .odd {background-color:#f1f4f5;}
-.fc-entitytreetable .table .odd:hover {background-color:var(--color-tablehov)}
+.fc-entitytreetable .table .odd:hover {background-color:var(--color-tablehov);}
 .fc-entitytreetable .table .even {}
-.fc-entitytreetable .table .even:hover {background-color:var(--color-tablehov)}
+.fc-entitytreetable .table .even:hover {background-color:var(--color-tablehov);}
 .fc-entitytreetable .table .info {border-left: solid 2px #a7ccf6; background-color: #e9f3fd;}
 .fc-entitytreetable .table .warning {border-left: solid 2px #f6dea7; background-color: #fdf6e9;}
 .fc-entitytreetable .table .error {border-left: solid 2px #f6a7ab; background-color: #fde9eb;}

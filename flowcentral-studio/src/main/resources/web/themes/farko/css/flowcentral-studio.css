@@ -6,6 +6,10 @@
  */
 
 /* flowCentral studio CSS */
+.ui-select .sslist .norm:hover {
+  background-color: #d5e7fb;
+  color: #000;
+}
 
 /* CRUD dialog */
 .fc-cruddialog {}
