@@ -46,6 +46,7 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
   background-color: var(--color-tablesel);
 }
 
+
 /** Checkbox */ 
 .ui-checkbox {width: 18px; height: 18px;} 
 
@@ -95,6 +96,7 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 /* Select */
 .ui-select .sslist .norm {}
 .ui-select .sslist .norm:hover {background-color: var(--color-tablehov); color: #000;}
+.ui-select .sslist .sel {background-color: var(--color-menu);color: #FFF;}
 
 /* Text */
 .ui-text {padding-left:4px;}

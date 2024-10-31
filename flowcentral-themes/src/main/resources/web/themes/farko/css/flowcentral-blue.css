@@ -1,0 +1,19 @@
+/*
+ * Copyright (c) 2019, 2024, FlowCentral Technologies.
+ * All rights reserved.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License")
+ */
+/* flowcentral-blue.css */
+/****** VARIABLES *********/
+:root {
+	--color-deep: #00007f;
+	--color-menu: #333399;
+	--color-menuhov: #202080;
+	--color-formsec: #6666cc;
+	--color-icon: #404080;
+	--color-tablesel: #ccccff;
+	--color-tablehov: #e5e5ff;
+}
+
+			
