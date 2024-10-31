@@ -27,7 +27,7 @@
 .fc-topbannerswitch {float: right;margin-right: 40px;}
 
 /* Tab sheet */
-.fc-tabsheet .tactive {border-top: 3px solid #e36209;}
+.fc-tabsheet .tactive {border-top: 5px solid #e36209;}
 
 /* Studio */
 .fc-applicationlabel {color: #a0a0a0; font-size:16px;}
