@@ -5,11 +5,20 @@
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 
+ /****** VARIABLES *********/
+ :root {
+ 	--color-deep: #24303f;
+ 	--color-menu: #3c4e63;
+ 	--color-menuhov:#394452;
+ 	--color-formsec: #6e819d;
+ 	--color-icon: #525e6d;
+ 	--color-tablesel: #bfd6ff;
+ 	--color-tablehov: #d5e7fb;
+ }
+
 /* flowCentral studio CSS */
-.ui-select .sslist .norm:hover {
-  background-color: #d5e7fb;
-  color: #000;
-}
+.ui-select .sslist .norm:hover {background-color: #d5e7fb;color: #000;}
+.ui-select .sslist .sel {background-color: #3c4e63;color: #FFF;}
 
 /* CRUD dialog */
 .fc-cruddialog {}

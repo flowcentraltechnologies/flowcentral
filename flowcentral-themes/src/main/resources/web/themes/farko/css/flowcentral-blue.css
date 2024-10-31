@@ -7,13 +7,13 @@
 /* flowcentral-blue.css */
 /****** VARIABLES *********/
 :root {
-	--color-deep: #00007f;
-	--color-menu: #333399;
-	--color-menuhov: #202080;
-	--color-formsec: #6666cc;
-	--color-icon: #404080;
-	--color-tablesel: #ccccff;
-	--color-tablehov: #e5e5ff;
+	--color-deep: #007fbf;
+	--color-menu: #3399df;
+	--color-menuhov: #206ebf;
+	--color-formsec: #66b3cc;
+	--color-icon: #407ebf;
+	--color-tablesel: #66cfff;
+	--color-tablehov: #99dfff;
 }
 
 			

@@ -688,7 +688,7 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-table .table {table-layout:fixed; width:100%; border-collapse:collapse;}
 .fc-table .table tr {vertical-align: middle;}
 .fc-table .table .detached {max-height:70vh;}
-.fc-table .table .sheader {padding:2px 6px;font-weight: bold;font-size:10pt;background:#a5b7cc;vertical-align: middle;}
+.fc-table .table .sheader {padding:2px 6px;font-weight: bold;font-size:10pt;background:var(--color-formsec);vertical-align: middle;}
 .fc-table .table .sfooter {padding:0px 6px;font-weight: bold;font-size:8pt;background:#fff;vertical-align: middle;height:0px;}
 .fc-table .table .odd {background-color:#f1f4f5;}
 .fc-table .table .odd:hover {background-color:var(--color-tablehov);}

@@ -6,13 +6,13 @@
  */
 /****** VARIABLES *********/
 :root {
-	--color-deep: #7f7f00;
-	--color-menu: #999933;
-	--color-menuhov: #808020;
-	--color-formsec: #cccc66;
-	--color-icon: #808040;
-	--color-tablesel: #ffffcc;
-	--color-tablehov: #ffffe5;
+	--color-deep: #bf7f00;
+	--color-menu: #dfb333;
+	--color-menuhov: #bf7f20;
+	--color-formsec: #dfcc66;
+	--color-icon: #bf7f40;
+	--color-tablesel: #ffe066;
+	--color-tablehov: #ffeb99;
 }
 
 			

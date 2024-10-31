@@ -5,14 +5,15 @@
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 /****** VARIABLES *********/
+/* flowcentral-red.css */
 :root {
-	--color-deep: #7f0000;
-	--color-menu: #993333;
-	--color-menuhov: #802020;
-	--color-formsec: #cc6666;
-	--color-icon: #804040;
-	--color-tablesel: #ffcccc;
-	--color-tablehov: #ffe5e5;
+	--color-deep: #bf3333;
+	--color-menu: #df5050;
+	--color-menuhov: #bf4040;
+	--color-formsec: #df8080;
+	--color-icon: #bf5050;
+	--color-tablesel: #ff8080;
+	--color-tablehov: #ffb3b3;
 }
 
 			
