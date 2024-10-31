@@ -200,7 +200,7 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .ui-loginmsg {display: inline-block; padding: 8px 8px; border: 1px solid #A44747; background: #FCD0D0;
     color: black; font-weight: bold; font-size: 8pt;}
 .fc-loginbtn {padding:12px 0px;width:100%;background-color:var(--color-deep);color:#fff;font-weight:bold;}
-.fc-loginbtn:hover:enabled {color:#fff;background-color: #384453;}
+.fc-loginbtn:hover:enabled {color:#fff;background-color:var(--color-menu);}
 .fc-logincancelbtn {padding:12px 0px;width:100%;font-weight:bold;}
 
 .fc-logininfo {text-align: center; width: 460px; padding-right:40px; min-height:320px;font-family: "avenir-regular",helvetica,arial}
