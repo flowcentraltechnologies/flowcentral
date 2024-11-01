@@ -19,7 +19,7 @@
 
 // Brand section
 !ui-panel:brandSection style:$s{width:100%;height:100%}
-    backImageSrc:$s{/web/images/applicationloginbackground.jpg}
+    backImageSrc:$s{web/images/applicationloginbackground.jpg}
 
 // Login section
 !ui-panel:loginSection styleClass:$e{fc-loginsection}  style:$s{width:100%;height:100%} components:$c{loginBox}
