@@ -20,6 +20,8 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 	--color-icon: #525e6d;
 	--color-tablesel: #bfd6ff;
 	--color-tablehov: #d5e7fb;
+	--color-act:#1f6dcc;
+	--color-acthov:#1a5dbc;
 }
 
   
@@ -45,6 +47,7 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .ui-table .tsel {
   background-color: var(--color-tablesel);
 }
+
 
 /** Checkbox */ 
 .ui-checkbox {width: 18px; height: 18px;} 
@@ -95,6 +98,7 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 /* Select */
 .ui-select .sslist .norm {}
 .ui-select .sslist .norm:hover {background-color: var(--color-tablehov); color: #000;}
+.ui-select .sslist .sel {background-color: var(--color-menu);color: #FFF;}
 
 /* Text */
 .ui-text {padding-left:4px;}
@@ -200,7 +204,7 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .ui-loginmsg {display: inline-block; padding: 8px 8px; border: 1px solid #A44747; background: #FCD0D0;
     color: black; font-weight: bold; font-size: 8pt;}
 .fc-loginbtn {padding:12px 0px;width:100%;background-color:var(--color-deep);color:#fff;font-weight:bold;}
-.fc-loginbtn:hover:enabled {color:#fff;background-color: #384453;}
+.fc-loginbtn:hover:enabled {color:#fff;background-color:var(--color-menu);}
 .fc-logincancelbtn {padding:12px 0px;width:100%;font-weight:bold;}
 
 .fc-logininfo {text-align: center; width: 460px; padding-right:40px; min-height:320px;font-family: "avenir-regular",helvetica,arial}
@@ -248,6 +252,9 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-msg {display: inline-block;border-radius: 3px;padding: 4px;font-weight: bold;}
 
 /** Button */ 
+.fc-actbutton {background-color:var(--color-act); font-weight:bold; color: #FFF; border: 1px solid var(--color-acthov);}
+.fc-actbutton:hover:enabled {background-color:var(--color-acthov);color: #FFF;}
+
 .fc-bluebutton {background-color:#1f6dcc; font-weight:bold; color: #FFF; border: 1px solid #1a5dbc;}
 .fc-bluebutton:hover:enabled {background-color:#005dbc;color: #FFF;}
 
@@ -686,7 +693,7 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-table .table {table-layout:fixed; width:100%; border-collapse:collapse;}
 .fc-table .table tr {vertical-align: middle;}
 .fc-table .table .detached {max-height:70vh;}
-.fc-table .table .sheader {padding:2px 6px;font-weight: bold;font-size:10pt;background:#a5b7cc;vertical-align: middle;}
+.fc-table .table .sheader {padding:2px 6px;font-weight: bold;font-size:10pt;background:var(--color-formsec);vertical-align: middle;}
 .fc-table .table .sfooter {padding:0px 6px;font-weight: bold;font-size:8pt;background:#fff;vertical-align: middle;height:0px;}
 .fc-table .table .odd {background-color:#f1f4f5;}
 .fc-table .table .odd:hover {background-color:var(--color-tablehov);}
@@ -723,8 +730,8 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-table .table .mact {color:#525252;}
 .fc-table .table .mbtn {min-width:52px; min-height:22px;font-size: 7pt;padding: 0px 6px;}
 .fc-table .table .mbtnr {margin-right:6px;}
-.fc-table .table .mblue {background-color:#1f6dcc; font-weight:bold; color: #FFF; border: 1px solid #1a5dbc;}
-.fc-table .table .mblue:hover:enabled {background-color:#005dbc;color: #FFF;}
+.fc-table .table .mblue {background-color:var(--color-act); font-weight:bold; color: #FFF; border: 1px solid  var(--color-acthov);}
+.fc-table .table .mblue:hover:enabled {background-color:var(--color-acthov);color: #FFF;}
 .fc-table .table .mblue:disabled {background-color:#d5d5d5;color: #f8f8f8;border: 1px solid #e8e8e8;}
 .fc-table .table .mblue:hover:disabled{background-color:#d5d5d5;}
 .fc-table .table .msection {display:block;text-align:left; font-weight:bold; font-size:8pt;color:#121212; padding: 6px 8px;}

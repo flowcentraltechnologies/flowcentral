@@ -16,6 +16,7 @@
 !ui-document layout:$d{!ui-desktoptype2 collapsibleSidebar:true}
     headerPanel:$c{topBanner} menuPanel:$c{menuPanel} contentPanel:$c{content}
     favicon:$s{web/images/favicon_enduser.png}
+	styleSheet:$t{css/flowcentral-theme.css}
     pushUpdateBinding:clientPushSync
 
 // Header    

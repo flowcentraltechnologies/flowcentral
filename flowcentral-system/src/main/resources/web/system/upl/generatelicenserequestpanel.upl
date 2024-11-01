@@ -34,7 +34,7 @@
 
 // Action panel
 !ui-panel:generateActionPanel layout:$d{!ui-horizontal} components:$c{generateBtn cancelBtn}
-!ui-button:generateBtn styleClass:$e{fc-bluebutton} caption:$m{button.generate}
+!ui-button:generateBtn styleClass:$e{fc-actbutton} caption:$m{button.generate}
 	eventHandler:$d{!ui-event event:onclick action:$c{generateLicenceReqAct}}
 !ui-button:cancelBtn styleClass:$e{ui-button-alert} caption:$m{button.cancel}
     eventHandler:$d{!ui-event event:onclick action:$c{closeDialogAct}}

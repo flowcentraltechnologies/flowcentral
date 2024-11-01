@@ -15,6 +15,7 @@
 
 !ui-document layout:$d{!ui-desktoptype1} contentPanel:$c{content}
     favicon:$s{web/images/favicon_enduser.png}
+	styleSheet:$t{css/flowcentral-theme.css}
 
 !ui-contentpanel:content styleClass:$e{fc-login-contentpanel}
 	paths:$s{/security/loginpage/openPage} documentPath:$s{/application/home}

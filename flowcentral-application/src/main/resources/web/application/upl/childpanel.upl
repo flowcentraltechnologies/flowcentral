@@ -28,11 +28,11 @@
 !ui-panel:titleBlock style:$s{display:inline-block;} components:$c{title subTitle}
 !ui-label:title styleClass:$s{hdtitle} binding:entitySubTitle
 !ui-label:subTitle styleClass:$s{hdsubtitle} binding:entityTitle
-!ui-button:createBtn styleClass:$e{fc-bluebutton} caption:$m{button.create}
+!ui-button:createBtn styleClass:$e{fc-actbutton} caption:$m{button.create}
 	eventHandler:$d{!ui-event event:onclick action:$c{createAct}} binding:$s{childTabIndex}
-!ui-button:editBtn styleClass:$e{fc-bluebutton} caption:$m{button.edit.ellipsis}
+!ui-button:editBtn styleClass:$e{fc-actbutton} caption:$m{button.edit.ellipsis}
 	eventHandler:$d{!ui-event event:onclick action:$c{editAct}} binding:$s{childTabIndex}
-!ui-button:viewBtn styleClass:$e{fc-bluebutton} caption:$m{button.view.ellipsis}
+!ui-button:viewBtn styleClass:$e{fc-actbutton} caption:$m{button.view.ellipsis}
 	eventHandler:$d{!ui-event event:onclick action:$c{editAct}} binding:$s{childTabIndex}
 
 !ui-panel:headerRightPanel style:$s{display:inline-block;} layout:$d{!ui-horizontal cellType:middle}

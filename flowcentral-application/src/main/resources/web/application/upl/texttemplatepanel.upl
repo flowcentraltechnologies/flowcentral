@@ -32,7 +32,7 @@
 // Footer action panel
 !ui-panel:footerActionPanel styleClass:$e{footer} layout:$d{!ui-horizontal}
 	components:$c{setBtn clearBtn cancelBtn}
-!ui-button:setBtn styleClass:$e{fc-bluebutton} caption:$m{button.settemplate}
+!ui-button:setBtn styleClass:$e{fc-actbutton} caption:$m{button.settemplate}
     eventHandler:$d{!ui-event event:onclick action:$c{setAct}}
 !ui-button:clearBtn styleClass:$e{fc-orangebutton} caption:$m{button.clear}
     eventHandler:$d{!ui-event event:onclick action:$c{clearAct}}

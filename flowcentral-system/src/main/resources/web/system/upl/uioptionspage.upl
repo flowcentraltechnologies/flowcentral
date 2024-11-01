@@ -27,7 +27,7 @@
 !ui-panel:actionPanel 
 	layout:$d{!ui-horizontal style:$s{float:right;} showCaption:true inlineCaption:true captionSuffix:$s{:} cellType:middle}
 	components:$c{saveBtn}
-!ui-button:saveBtn styleClass:$e{fc-bluebutton} caption:$m{button.save}
+!ui-button:saveBtn styleClass:$e{fc-actbutton} caption:$m{button.save}
 	eventHandler:$d{!ui-event event:onclick action:$c{saveAct}}
 
 

@@ -26,9 +26,9 @@
 !ui-panel:titleBlock style:$s{display:inline-block;} components:$c{title subTitle}
 !ui-label:title styleClass:$s{hdtitle} binding:entityTitle
 !ui-label:subTitle styleClass:$s{hdsubtitle} binding:entitySubTitle
-!ui-button:editBtn styleClass:$e{fc-bluebutton} caption:$m{button.edit.ellipsis}
+!ui-button:editBtn styleClass:$e{fc-actbutton} caption:$m{button.edit.ellipsis}
 	eventHandler:$f{editInstEventHandler} binding:$f{editBtnBinding}
-!ui-button:viewBtn styleClass:$e{fc-bluebutton} caption:$m{button.view.ellipsis}
+!ui-button:viewBtn styleClass:$e{fc-actbutton} caption:$m{button.view.ellipsis}
 	eventHandler:$f{editInstEventHandler} binding:$f{editBtnBinding}
 
 // Search result panel

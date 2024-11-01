@@ -42,7 +42,7 @@
  	size:52 disabled:true
 !ui-textarea:message caption:$m{studio.takesnapshotpage.message} binding:message required:true
 	rows:8 columns:52 focus:true
-!ui-button:takeSnapshotBtn styleClass:$e{fc-bluebutton} caption:$m{button.takesnapshot}
+!ui-button:takeSnapshotBtn styleClass:$e{fc-actbutton} caption:$m{button.takesnapshot}
 	eventHandler:$d{!ui-event event:onclick action:$c{takeSnapshotAct}}
 	
 // Actions

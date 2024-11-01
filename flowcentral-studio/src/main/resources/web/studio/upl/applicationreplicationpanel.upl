@@ -46,7 +46,7 @@
 
 // Action panel
 !ui-panel:actionPanel layout:$d{!ui-horizontal style:$s{width:100%;}} components:$c{execBtn}
-!ui-button:execBtn styleClass:$e{fc-bluebutton} caption:$m{button.executereplication}
+!ui-button:execBtn styleClass:$e{fc-actbutton} caption:$m{button.executereplication}
 	eventHandler:$d{!ui-event event:onclick action:$c{execAct}}
 
 
