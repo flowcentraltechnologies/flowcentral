@@ -29,7 +29,7 @@
 
 // Footer action panel
 !ui-panel:footerActionPanel styleClass:$e{footer} layout:$d{!ui-horizontal} components:$c{selectBtn cancelBtn}
-!ui-button:selectBtn caption:$m{button.select} styleClass:$e{fc-bluebutton}
+!ui-button:selectBtn caption:$m{button.select} styleClass:$e{fc-actbutton}
     eventHandler:$d{!ui-event event:onclick action:$c{tmSelectAct}}
 !ui-button:cancelBtn caption:$m{button.cancel}
     eventHandler:$d{!ui-event event:onclick action:$c{tmCloseAct}}

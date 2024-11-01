@@ -26,12 +26,12 @@
 !ui-panel:titleBlock style:$s{display:inline-block;} components:$c{title subTitle}
 !ui-label:title styleClass:$s{hdtitle} binding:entitySubTitle
 !ui-label:subTitle styleClass:$s{hdsubtitle} binding:entityTitle
-!ui-button:newBtn styleClass:$e{fc-bluebutton}
+!ui-button:newBtn styleClass:$e{fc-actbutton}
 	caption:$m{button.new} captionBinding:entityNewLabel
 	eventHandler:$f{newInstEventHandler} binding:$f{newBtnBinding}
-!ui-button:editBtn styleClass:$e{fc-bluebutton} caption:$m{button.edit.ellipsis}
+!ui-button:editBtn styleClass:$e{fc-actbutton} caption:$m{button.edit.ellipsis}
 	eventHandler:$f{editInstEventHandler} binding:$f{editBtnBinding}
-!ui-button:viewBtn styleClass:$e{fc-bluebutton} caption:$m{button.view.ellipsis}
+!ui-button:viewBtn styleClass:$e{fc-actbutton} caption:$m{button.view.ellipsis}
 	eventHandler:$f{editInstEventHandler} binding:$f{editBtnBinding}
 !ui-panel:quickFilterBlock layout:$d{!ui-horizontal cellType:middle} components:$c{quickFilterTitle quickFilter}
 !ui-label:quickFilterTitle caption:$m{entitysearchpanel.quickfilter}
@@ -45,7 +45,7 @@
 	eventHandler:$f{reportEventHandler}
 !ui-button:quickEditBtn styleClass:$e{fc-orangebutton} caption:$m{button.quickedit}
 	eventHandler:$f{quickEditEventHandler} binding:$f{quickEditBtnBinding}
-!ui-button:quickOrderBtn styleClass:$e{fc-bluebutton} caption:$m{button.quickorder}
+!ui-button:quickOrderBtn styleClass:$e{fc-actbutton} caption:$m{button.quickorder}
 	eventHandler:$f{quickOrderEventHandler} binding:$f{quickOrderBtnBinding}
 !ui-button:refreshBtn caption:$m{button.refresh}
 	eventHandler:$d{!ui-event event:onclick action:$c{refreshAct}}
@@ -83,7 +83,7 @@
     eventHandler:$d{!ui-event event:onenter eventBinding:preferredEvent action:$c{searchAct}}
 !ui-panel:searchEntriesAction style:$s{padding-left:8px;} layout:$d{!ui-horizontal}
 	components:$c{searchBtn clearBtn}
-!ui-button:searchBtn caption:$m{button.search} styleClass:$e{fc-bluebutton fc-tinybutton}
+!ui-button:searchBtn caption:$m{button.search} styleClass:$e{fc-actbutton fc-tinybutton}
     eventHandler:$d{!ui-event event:onclick action:$c{searchAct}}
 !ui-button:clearBtn caption:$m{button.clear} styleClass:$e{fc-tinybutton}
     eventHandler:$d{!ui-event event:onclick action:$c{clearAct}}
@@ -144,7 +144,7 @@
 !ui-panel:selFooterActionPanel layout:$d{!ui-horizontal} components:$c{tblActionSel applyTblActionBtn}
 !ui-select:tblActionSel styleClass:$e{footersel} list:$s{tableactionlist} listKey:$s{policy} blankOption:$m{select.apply.toselected}
 	listParams:$l{appTableId} binding:appTableActionPolicy
-!ui-button:applyTblActionBtn styleClass:$e{fc-bluebutton} caption:$m{button.applyaction}
+!ui-button:applyTblActionBtn styleClass:$e{fc-actbutton} caption:$m{button.applyaction}
     eventHandler:$d{!ui-event event:onclick action:$c{applyTableAct}}
 !ui-buttongroup:tblActionBtns styleClass:$e{footerbtns} binding:appTableActionButtonInfo
     eventHandler:$d{!ui-event event:onclick action:$c{applyTableBtnAct}}

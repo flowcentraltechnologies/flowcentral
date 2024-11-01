@@ -50,7 +50,7 @@
 
 // Action buttons
 !ui-panel:dialogActionPanel layout:$d{!ui-horizontal} components:$c{createBtn cancelBtn}
-!ui-button:createBtn caption:$m{button.create} styleClass:$e{fc-bluebutton}
+!ui-button:createBtn caption:$m{button.create} styleClass:$e{fc-actbutton}
 	eventHandler:$d{!ui-event event:onclick action:$c{createAct}}
 !ui-button:cancelBtn caption:$m{button.cancel}
     eventHandler:$d{!ui-event event:onclick action:$c{closeDialogAct}}

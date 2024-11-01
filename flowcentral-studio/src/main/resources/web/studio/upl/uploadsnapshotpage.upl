@@ -45,7 +45,7 @@
 !ui-fileupload:frmFileSelect caption:$m{studio.uploadsnapshotpage.uploadfile} required:true
 	binding:snapshotFile selectOnly:true required:true style:$s{width:380px;} focus:true
 
-!ui-button:uploadSnapshotBtn styleClass:$e{fc-bluebutton} caption:$m{button.uploadsnapshot}
+!ui-button:uploadSnapshotBtn styleClass:$e{fc-actbutton} caption:$m{button.uploadsnapshot}
 	eventHandler:$d{!ui-event event:onclick action:$c{uploadSnapshotAct}}
 	
 // Actions
