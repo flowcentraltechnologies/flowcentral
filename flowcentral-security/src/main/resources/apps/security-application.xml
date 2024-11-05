@@ -682,21 +682,21 @@
 			label="$m{security.securedlink.table.label}" entity="securedLink"
 			itemsPerPage="20" serialNo="true" basicSearch="true">
 			<column field="title" renderWidget="application.text"
-				widthRatio="1" linkAct="maintainAct" />
+				widthRatio="2" linkAct="maintainAct" />
 			<column field="contentPath" renderWidget="application.text"
-				widthRatio="1" />
+				widthRatio="5" />
 			<column field="assignedToLoginId" renderWidget="application.text"
-				widthRatio="1" />
+				widthRatio="2" />
 			<column field="assignedRole" renderWidget="application.text"
-				widthRatio="1" />
+				widthRatio="2" />
 			<column field="expiresOn" renderWidget="application.datetime"
-				widthRatio="1" />
+				widthRatio="2" />
 			<column field="lastAccessedBy" renderWidget="application.text"
-				widthRatio="1" />
+				widthRatio="2" />
 			<column field="lastAccessedOn" renderWidget="application.datetime"
-				widthRatio="1" />
+				widthRatio="2" />
 			<column field="createDt" renderWidget="application.datetime"
-				widthRatio="1" order="DESC" />
+				widthRatio="2" order="DESC" />
 		</table>
 	</tables>
 	<!-- Forms -->

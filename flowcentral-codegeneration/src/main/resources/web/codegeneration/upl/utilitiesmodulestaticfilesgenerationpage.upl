@@ -37,7 +37,7 @@
 !ui-name:frmBasePackage caption:$m{utilitiesmodulestaticfilesgeneration.form.basepackage}
 	period:true case:lower binding:basePackage required:true size:48
 		
-!ui-button:generateBtn styleClass:$e{fc-bluebutton} caption:$m{button.generate}
+!ui-button:generateBtn styleClass:$e{fc-actbutton} caption:$m{button.generate}
 	eventHandler:$d{!ui-event event:onclick action:$c{generateAct}}
 	
 // Actions

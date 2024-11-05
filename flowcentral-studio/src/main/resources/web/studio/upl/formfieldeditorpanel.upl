@@ -43,9 +43,9 @@
 
 // Action buttons
 !ui-panel:dialogActionPanel layout:$d{!ui-horizontal} components:$c{addBtn applyBtn cancelBtn}
-!ui-button:addBtn caption:$m{button.add} styleClass:$e{fc-bluebutton}
+!ui-button:addBtn caption:$m{button.add} styleClass:$e{fc-actbutton}
 	eventHandler:$d{!ui-event event:onclick action:$c{addAct}}
-!ui-button:applyBtn caption:$m{button.apply} styleClass:$e{fc-bluebutton}
+!ui-button:applyBtn caption:$m{button.apply} styleClass:$e{fc-actbutton}
 	eventHandler:$d{!ui-event event:onclick action:$c{applyAct}}
 !ui-button:cancelBtn caption:$m{button.cancel}
     eventHandler:$d{!ui-event event:onclick action:$c{closeDialogAct}}

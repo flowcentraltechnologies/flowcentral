@@ -73,26 +73,30 @@ public class SearchEntries {
 
     private final boolean showConditions;
 
+    private final String preferredEvent;
+
     private String restrictionResolverName;
 
     private List<SearchEntry> entryList;
-
+    
     public SearchEntries(AppletUtilities au, EntityDef entityDef, LabelSuggestionDef labelSuggestion,
-            String searchConfigName, int columns, boolean showConditions) {
+            String searchConfigName, String preferredEvent, int columns, boolean showConditions) {
         this.au = au;
         this.entityDef = entityDef;
         this.labelSuggestion = labelSuggestion;
         this.searchConfigName = searchConfigName;
+        this.preferredEvent = preferredEvent;
         this.columns = columns;
         this.showConditions = showConditions;
     }
 
-    public SearchEntries(AppletUtilities au, EntityDef entityDef, String searchConfigName, int columns,
-            boolean showConditions) {
+    public SearchEntries(AppletUtilities au, EntityDef entityDef, String searchConfigName, String preferredEvent,
+            int columns, boolean showConditions) {
         this.au = au;
         this.entityDef = entityDef;
         this.labelSuggestion = null;
         this.searchConfigName = searchConfigName;
+        this.preferredEvent = preferredEvent;
         this.columns = columns;
         this.showConditions = showConditions;
     }
@@ -115,6 +119,10 @@ public class SearchEntries {
                 searchEntry.getParamInput().setValue(null);
             }
         }
+    }
+
+    public String getPreferredEvent() {
+        return preferredEvent;
     }
 
     public boolean isEmpty() {
@@ -258,12 +266,12 @@ public class SearchEntries {
                     final String label = au.resolveSessionMessage(searchInputDef.getLabel());
                     final SearchEntry searchEntry = searchInputDef.getFieldName().startsWith("s:")
                             ? new SearchEntry(au, entityDef, label, searchInputDef.getFieldName().substring(2),
-                                    SearchConditionType.SESSION_ATTRIBUTE)
+                                    SearchConditionType.SESSION_ATTRIBUTE, preferredEvent)
                             : (searchInputDef.getFieldName().startsWith("f:")
                                     ? new SearchEntry(au, entityDef, label, searchInputDef.getFieldName().substring(2),
-                                            searchInputDef.getType())
+                                            searchInputDef.getType(), preferredEvent)
                                     : new SearchEntry(au, entityDef, label,
-                                            searchInputDef.getFieldName().substring(2)));
+                                            searchInputDef.getFieldName().substring(2), preferredEvent));
                     WidgetTypeDef widgetTypeDef = au.getWidgetTypeDef(searchInputDef.getWidget());
                     searchEntry.normalize(widgetTypeDef);
                     entryList.add(searchEntry);
@@ -281,7 +289,7 @@ public class SearchEntries {
                             ? SearchConditionType.ILIKE
                             : SearchConditionType.EQUALS;
                     SearchEntry searchEntry = new SearchEntry(au, entityDef, label, entityFieldDef.getFieldName(),
-                            conditionType);
+                            conditionType, preferredEvent);
                     searchEntry.normalize();
                     entryList.add(searchEntry);
                 }

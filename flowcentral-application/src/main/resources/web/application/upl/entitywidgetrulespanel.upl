@@ -27,7 +27,7 @@
 	components:$c{clearBtn applyBtn}
 !ui-button:clearBtn caption:$m{button.clear}
     eventHandler:$d{!ui-event event:onclick action:$c{clearAct}}
-!ui-button:applyBtn styleClass:$e{fc-bluebutton} caption:$m{button.apply}
+!ui-button:applyBtn styleClass:$e{fc-actbutton} caption:$m{button.apply}
     eventHandler:$d{!ui-event event:onclick action:$c{applyAct}}
 	
 // Widget rules panel

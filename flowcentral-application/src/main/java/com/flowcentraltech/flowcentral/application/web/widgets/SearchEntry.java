@@ -37,11 +37,11 @@ public class SearchEntry implements EntityFieldAttributes {
 
     private final AppletUtilities au;
 
-    private EntityDef entityDef;
+    private final EntityDef entityDef;
 
     private SearchConditionType conditionType;
 
-    private String label;
+    final private String label;
 
     private String fieldName;
 
@@ -49,10 +49,12 @@ public class SearchEntry implements EntityFieldAttributes {
 
     private String generator;
 
+    private final String preferredEvent;
+
     private AbstractInput<?> paramInput;
 
     public SearchEntry(AppletUtilities au, EntityDef entityDef, String label, String fieldName,
-            SearchConditionType conditionType) {
+            SearchConditionType conditionType, String preferredEvent) {
         this.au = au;
         this.entityDef = entityDef;
         this.label = label;
@@ -63,13 +65,16 @@ public class SearchEntry implements EntityFieldAttributes {
         }
 
         this.conditionType = conditionType;
+        this.preferredEvent = preferredEvent;
     }
 
-    public SearchEntry(AppletUtilities au, EntityDef entityDef, String label, String generator) {
+    public SearchEntry(AppletUtilities au, EntityDef entityDef, String label, String generator,
+            String preferredEvent) {
         this.au = au;
         this.entityDef = entityDef;
         this.label = label;
         this.generator = generator;
+        this.preferredEvent = preferredEvent;
     }
 
     @Override
@@ -113,6 +118,14 @@ public class SearchEntry implements EntityFieldAttributes {
         return isGeneratorEntry()
                 ? au.getComponent(SearchInputRestrictionGenerator.class, generator).getEntryAttributes().getScale()
                 : 0;
+    }
+
+    @Override
+    public boolean isBranchScoping() throws UnifyException {
+        return isGeneratorEntry()
+                ? au.getComponent(SearchInputRestrictionGenerator.class, generator).getEntryAttributes()
+                        .isBranchScoping()
+                : false;
     }
 
     @Override
@@ -165,6 +178,10 @@ public class SearchEntry implements EntityFieldAttributes {
 
     public boolean isWithParamInput() {
         return paramInput != null;
+    }
+
+    public String getPreferredEvent() {
+        return preferredEvent;
     }
 
     public boolean isPseudoFieldEntry() throws UnifyException {

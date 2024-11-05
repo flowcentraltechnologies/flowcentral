@@ -24,7 +24,7 @@
 !ui-label:licensingLabel styleClass:$e{fc-largelabel} caption:$m{licensingpage.header.title}
 !ui-panel:actionPanel layout:$d{!ui-horizontal style:$s{float:right;} cellType:middle}
 	components:$c{licenceRequestBtn loadLicenceBtn}
-!ui-button:licenceRequestBtn styleClass:$e{fc-bluebutton} caption:$m{button.licenserequest}
+!ui-button:licenceRequestBtn styleClass:$e{fc-actbutton} caption:$m{button.licenserequest}
 	eventHandler:$d{!ui-event event:onclick action:$c{licenseRequestAct}}
 !ui-button:loadLicenceBtn styleClass:$e{fc-greenbutton} caption:$m{button.loadlicense}
 	eventHandler:$d{!ui-event event:onclick action:$c{loadLicenseAct}}

@@ -90,6 +90,8 @@ public class EntityFieldDef implements Listable, EntityFieldAttributes {
 
     private int scale;
 
+    private boolean branchScoping;
+
     private boolean trim;
 
     private boolean allowNegative;
@@ -125,7 +127,7 @@ public class EntityFieldDef implements Listable, EntityFieldAttributes {
             String fieldLabel, String columnName, String refLongName, String references, String category,
             String suggestionType, String inputLabel, String inputListKey, String lingualListKey, String autoFormat,
             String defaultVal, String key, String property, int rows, int columns, int minLen, int maxLen,
-            int precision, int scale, boolean trim, boolean allowNegative, boolean editable, boolean nullable,
+            int precision, int scale, boolean branchScoping, boolean trim, boolean allowNegative, boolean editable, boolean nullable,
             boolean auditable, boolean reportable, boolean maintainLink, boolean basicSearch, boolean descriptive) {
         this.textWidget = textWidget;
         this.inputWidget = inputWidget;
@@ -155,6 +157,7 @@ public class EntityFieldDef implements Listable, EntityFieldAttributes {
         this.maxLen = maxLen > 0 ? maxLen : 0;
         this.precision = precision;
         this.scale = scale;
+        this.branchScoping = branchScoping;
         this.trim = trim;
         this.allowNegative = allowNegative;
         this.editable = editable;
@@ -358,6 +361,11 @@ public class EntityFieldDef implements Listable, EntityFieldAttributes {
     @Override
     public int getScale() {
         return scale;
+    }
+
+    @Override
+    public boolean isBranchScoping() {
+        return branchScoping;
     }
 
     @Override
@@ -678,6 +686,8 @@ public class EntityFieldDef implements Listable, EntityFieldAttributes {
 
         private int scale;
 
+        private boolean branchScoping;
+        
         private boolean trim;
 
         private boolean allowNegative;
@@ -822,6 +832,11 @@ public class EntityFieldDef implements Listable, EntityFieldAttributes {
             this.scale = DataUtils.convert(int.class, scale);
             return this;
         }
+        
+        public Builder branchScoping(boolean branchScoping) throws UnifyException {
+            this.branchScoping = branchScoping;
+            return this;
+        }
 
         public Builder trim(boolean trim) throws UnifyException {
             this.trim = trim;
@@ -884,7 +899,7 @@ public class EntityFieldDef implements Listable, EntityFieldAttributes {
             return new EntityFieldDef(textWidget, inputWidget, ligualWidget, dataType, type, textCase, entityLongName,
                     fieldName, mapped, fieldLabel, columnName, refLongName, references, category, suggestionType,
                     inputLabel, inputListKey, lingualListKey, autoFormat, defaultVal, key, property, rows, columns,
-                    minLen, maxLen, precision, scale, trim, allowNegative, editable, nullable, auditable, reportable,
+                    minLen, maxLen, precision, scale, branchScoping, trim, allowNegative, editable, nullable, auditable, reportable,
                     maintainLink, basicSearch, descriptive);
         }
     }

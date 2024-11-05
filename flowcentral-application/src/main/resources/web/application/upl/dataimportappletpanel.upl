@@ -45,9 +45,10 @@
 
 
 // Action panel
-!ui-panel:actionPanel layout:$d{!ui-horizontal style:$s{width:100%;}} components:$c{execBtn}
-!ui-button:execBtn styleClass:$e{fc-bluebutton} caption:$m{button.executeimportdata}
+!ui-panel:actionPanel layout:$d{!ui-horizontal} components:$c{execBtn closeBtn}
+!ui-button:execBtn styleClass:$e{fc-actbutton} caption:$m{button.executeimportdata}
 	eventHandler:$d{!ui-event event:onclick action:$c{execAct}}
+!ui-button:closeBtn caption:$m{button.close} eventHandler:$g{closeEventHandler}
 
 
 // Actions

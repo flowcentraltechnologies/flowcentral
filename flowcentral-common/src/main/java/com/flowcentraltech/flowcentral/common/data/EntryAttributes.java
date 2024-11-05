@@ -16,6 +16,8 @@
 
 package com.flowcentraltech.flowcentral.common.data;
 
+import com.tcdng.unify.core.UnifyException;
+
 /**
  * Entry attributes
  * 
@@ -38,18 +40,21 @@ public class EntryAttributes implements EntityFieldAttributes {
 
     private int scale;
 
+    private boolean branchScoping;
+
     private boolean trim;
 
     private boolean allowNegative;
 
     private EntryAttributes(String suggestionType, String references, int minLen, int maxLen, int precision, int scale,
-            boolean trim, boolean allowNegative) {
+            boolean branchScoping, boolean trim, boolean allowNegative) {
         this.suggestionType = suggestionType;
         this.references = references;
         this.minLen = minLen;
         this.maxLen = maxLen;
         this.precision = precision;
         this.scale = scale;
+        this.branchScoping = branchScoping;
         this.trim = trim;
         this.allowNegative = allowNegative;
     }
@@ -89,6 +94,11 @@ public class EntryAttributes implements EntityFieldAttributes {
     }
 
     @Override
+    public boolean isBranchScoping() throws UnifyException {
+        return branchScoping;
+    }
+
+    @Override
     public boolean isTrim() {
         return trim;
     }
@@ -111,6 +121,8 @@ public class EntryAttributes implements EntityFieldAttributes {
         private int precision;
 
         private int scale;
+
+        private boolean branchScoping;
 
         private boolean trim;
 
@@ -146,6 +158,11 @@ public class EntryAttributes implements EntityFieldAttributes {
             return this;
         }
 
+        public Builder branchScoping(boolean branchScoping) {
+            this.branchScoping = branchScoping;
+            return this;
+        }
+
         public Builder trim(boolean trim) {
             this.trim = trim;
             return this;
@@ -157,8 +174,8 @@ public class EntryAttributes implements EntityFieldAttributes {
         }
 
         public EntryAttributes build() {
-            return new EntryAttributes(suggestionType, references, minLen, maxLen, precision, scale, trim,
-                    allowNegative);
+            return new EntryAttributes(suggestionType, references, minLen, maxLen, precision, scale, branchScoping,
+                    trim, allowNegative);
         }
     }
 }

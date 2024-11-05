@@ -19,10 +19,12 @@ import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.business.EntitySelectHandler;
+import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.TableDef;
 import com.flowcentraltech.flowcentral.application.web.widgets.EntityTable;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.criterion.And;
+import com.tcdng.unify.core.criterion.Equals;
 import com.tcdng.unify.core.criterion.ILike;
 import com.tcdng.unify.core.criterion.Order;
 import com.tcdng.unify.core.criterion.Restriction;
@@ -221,10 +223,14 @@ public class EntitySelect {
         }
     }
 
+    private static String RADICAL = "x-0-x";
+    
     public void applyFilterToSearch() throws UnifyException {
         And and = new And();
         if (!StringUtils.isBlank(filter)) {
             and.add(new ILike(fieldName, filter));
+        } else {
+            and.add(new Equals(fieldName, RADICAL));
         }
 
         if (!StringUtils.isBlank(filterA)) {
@@ -242,6 +248,13 @@ public class EntitySelect {
             } else {
                 restriction = new And().add(baseRestriction).add(restriction);
             }
+        }
+
+        final EntityDef entityDef = entityTable.getEntityDef();
+        Restriction branchScopeRestriction = entityTable.au().getSessionBranchScopeRestriction(entityDef);
+        if (branchScopeRestriction != null) {
+            restriction = restriction == null ? branchScopeRestriction
+                    : new And().add(restriction).add(branchScopeRestriction);
         }
 
         entityTable.setSourceObjectClearSelected(restriction);

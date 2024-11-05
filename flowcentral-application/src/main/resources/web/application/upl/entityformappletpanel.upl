@@ -124,7 +124,7 @@
 !fc-entitysaveasdialogpanel:entitySaveAsPanel binding:entitySaveAs
 	moreActionButtons:$c{entitySaveAsBtn cancelEntitySaveAsBtn}
 	switchOnChangeEventHandler:$d{!ui-event event:onchange action:$c{saveAsSwitchOnChangeAct}}
-!ui-button:entitySaveAsBtn styleClass:$e{fc-bluebutton} caption:$m{button.save}
+!ui-button:entitySaveAsBtn styleClass:$e{fc-actbutton} caption:$m{button.save}
 	eventHandler:$d{!ui-event event:onclick action:$c{entitySaveAsAct}}
 !ui-button:cancelEntitySaveAsBtn caption:$m{button.cancel}
 	eventHandler:$d{!ui-event event:onclick action:$c{cancelEntitySaveAsAct}}

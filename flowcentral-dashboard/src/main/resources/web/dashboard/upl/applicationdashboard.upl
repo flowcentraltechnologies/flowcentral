@@ -32,7 +32,7 @@
 !ui-select:optionSelect style:$s{width:220px;} list:dashboardoptionlist listParams:$l{selDashboard} binding:selOption
 	caption:$m{applicationdashboard.dashboard.option.select}
     eventHandler:$d{!ui-event event:onchange action:$c{switchOptionAct}}
-!ui-button:refreshBtn styleClass:$e{fc-bluebutton}
+!ui-button:refreshBtn styleClass:$e{fc-actbutton}
 	caption:$m{button.refresh}
     eventHandler:$d{!ui-event event:onclick action:$c{refreshDashboardAct}}
 	

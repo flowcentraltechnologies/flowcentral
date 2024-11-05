@@ -43,6 +43,24 @@
 			type="com.flowcentraltech.flowcentral.application.entities.Product">
 			<field name="category" label="Category" type="enum_ref"
 				inputWidget="prodcatlist" references="productcategorylist"/>
+			<field name="branchId" label="Branch" type="long" inputWidget="entitylist" branchScoping="true" />
+			<field name="name" label="Name" type="string" inputWidget="name" />
+			<field name="description" label="Description" type="string"
+				inputWidget="text" />
+			<field name="costPrice" label="Cost Price" type="double"
+				inputWidget="amount" />
+			<field name="salesPrice" label="Sales Price" type="double"
+				inputWidget="amount" />
+			<field name="notes" label="Notes" type="string" inputWidget="textarea" />
+			<field name="categoryDesc" label="Category" type="string"
+				inputWidget="text" />
+		</entity>
+		<entity name="locationProduct" description="Location Product" label="Location Product"
+			type="com.flowcentraltech.flowcentral.application.entities.LocationProduct">
+			<field name="category" label="Category" type="enum_ref"
+				inputWidget="prodcatlist" references="productcategorylist"/>
+			<field name="branchId" label="Branch" type="long" inputWidget="entitylist" branchScoping="true" />
+			<field name="locationId" label="Location" type="long" inputWidget="entitylist" branchScoping="true" />
 			<field name="name" label="Name" type="string" inputWidget="name" />
 			<field name="description" label="Description" type="string"
 				inputWidget="text" />

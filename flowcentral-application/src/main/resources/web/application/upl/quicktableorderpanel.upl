@@ -33,7 +33,7 @@
 // Footer action panel
 !ui-panel:footerActionPanel styleClass:$e{footer} layout:$d{!ui-horizontal style:$s{float:right;}}
 	components:$c{saveBtn cancelBtn}
-!ui-button:saveBtn styleClass:$e{fc-bluebutton} caption:$m{button.save}
+!ui-button:saveBtn styleClass:$e{fc-actbutton} caption:$m{button.save}
     eventHandler:$d{!ui-event event:onclick action:$c{saveOrderAct}}
 !ui-button:cancelBtn caption:$m{button.close}
     eventHandler:$d{!ui-event event:onclick action:$c{closeAct}}

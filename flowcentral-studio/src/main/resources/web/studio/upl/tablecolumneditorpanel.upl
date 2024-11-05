@@ -37,6 +37,6 @@
 
 !ui-panel:editActPanel layout:$d{!ui-horizontal}
 	components:$c{editApplyBtn editCancelBtn}
-!ui-button:editApplyBtn caption:$m{button.apply} styleClass:$e{fc-bluebutton}
+!ui-button:editApplyBtn caption:$m{button.apply} styleClass:$e{fc-actbutton}
 !ui-button:editCancelBtn caption:$m{button.cancel}
 

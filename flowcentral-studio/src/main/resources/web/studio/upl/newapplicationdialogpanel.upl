@@ -55,7 +55,7 @@
 !ui-panel:createActionPanel layout:$d{!ui-horizontal} components:$c{createAppBtn cancelCreateBtn}
 !ui-button:cancelCreateBtn styleClass:$e{ui-button-alert} caption:$m{button.cancel}
     eventHandler:$d{!ui-event event:onclick action:$c{closeDialogAct}}
-!ui-button:createAppBtn styleClass:$e{fc-bluebutton} caption:$m{button.createapplication}
+!ui-button:createAppBtn styleClass:$e{fc-actbutton} caption:$m{button.createapplication}
     eventHandler:$d{!ui-event event:onclick action:$c{dialogCreateAppAct}}
 
 // Actions

@@ -123,6 +123,7 @@ import com.flowcentraltech.flowcentral.common.business.policies.SweepingCommitPo
 import com.flowcentraltech.flowcentral.common.business.policies.TableSummaryLine;
 import com.flowcentraltech.flowcentral.common.constants.CollaborationType;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralApplicationAttributeConstants;
+import com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants;
 import com.flowcentraltech.flowcentral.common.constants.OwnershipType;
 import com.flowcentraltech.flowcentral.common.constants.WfItemVersionType;
 import com.flowcentraltech.flowcentral.common.data.AuditSnapshot;
@@ -159,6 +160,8 @@ import com.tcdng.unify.core.annotation.Preferred;
 import com.tcdng.unify.core.constant.DataType;
 import com.tcdng.unify.core.constant.LocaleType;
 import com.tcdng.unify.core.criterion.AbstractRestrictionTranslatorMapper;
+import com.tcdng.unify.core.criterion.Amongst;
+import com.tcdng.unify.core.criterion.And;
 import com.tcdng.unify.core.criterion.Equals;
 import com.tcdng.unify.core.criterion.Restriction;
 import com.tcdng.unify.core.criterion.RestrictionTranslator;
@@ -262,9 +265,9 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
     private SequenceNumberService sequenceNumberService;
 
     private final FactoryMap<String, Class<? extends SingleFormBean>> singleFormBeanClassByPanelName;
-    
+
     private final Map<String, WidgetTypeDef> adhocWidgets;
-    
+
     private MappedEntityProviderInfo mappedEntityProviderInfo;
 
     public AppletUtilitiesImpl() {
@@ -282,7 +285,7 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
                 }
 
             };
-       
+
         this.adhocWidgets = new HashMap<String, WidgetTypeDef>();
     }
 
@@ -572,6 +575,45 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
         return getSessionContext().getUserToken().getUserLoginId();
     }
 
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<Long> getSessionBranchScope() throws UnifyException {
+        List<Long> branchIdList = (List<Long>) getSessionAttribute(FlowCentralSessionAttributeConstants.BRANCH_SCOPING);
+        return branchIdList == null ? Collections.emptyList() : branchIdList;
+    }
+
+    @Override
+    public Restriction getSessionBranchScopeRestriction(EntityDef entityDef) throws UnifyException {
+        Restriction branchScopeRestriction = null;
+        if (entityDef.isWithBranchScoping()) {
+            final List<Long> branchList = getSessionBranchScope();
+            if (!DataUtils.isBlank(branchList)) {
+                List<EntityFieldDef> scopeFieldList = entityDef.getBranchScopingFieldDefList();
+                if (scopeFieldList.size() == 1) {
+                    if (branchList.size() == 1) {
+                        branchScopeRestriction = new Equals(scopeFieldList.get(0).getFieldName(), branchList.get(0));
+                    } else {
+                        branchScopeRestriction = new Amongst(scopeFieldList.get(0).getFieldName(), branchList);
+                    }
+                } else {
+                    And and = new And();
+                    final Long branchId = branchList.size() == 1 ? branchList.get(0) : null;
+                    for (EntityFieldDef entityFieldDef : scopeFieldList) {
+                        if (branchId != null) {
+                            and.add(new Equals(entityFieldDef.getFieldName(), branchId));
+                        } else {
+                            and.add(new Amongst(entityFieldDef.getFieldName(), branchList));
+                        }
+                    }
+
+                    branchScopeRestriction = and;
+                }
+            }
+        }
+
+        return branchScopeRestriction;
+    }
+
     @Override
     public <T> T getSessionAttribute(Class<T> clazz, String attributeName) throws UnifyException {
         return DataUtils.convert(clazz, getSessionAttribute(attributeName));
@@ -746,7 +788,8 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
 
     @Override
     public WidgetTypeDef getWidgetTypeDef(String widgetName) throws UnifyException {
-        return adhocWidgets.containsKey(widgetName) ? adhocWidgets.get(widgetName) : applicationModuleService.getWidgetTypeDef(widgetName);
+        return adhocWidgets.containsKey(widgetName) ? adhocWidgets.get(widgetName)
+                : applicationModuleService.getWidgetTypeDef(widgetName);
     }
 
     @Override
@@ -1352,7 +1395,7 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
                         specialParamProvider);
             }
 
-            _entitySearch.setChildTabIndex(i); 
+            _entitySearch.setChildTabIndex(i);
             _entitySearch.setHeadlessList(appletName);
             _entitySearch.applyFilterToSearch();
 
@@ -1784,10 +1827,13 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
                 ApplicationModuleSysParamConstants.SEARCH_ENTRY_COLUMNS);
         final int searchColumns = appletSearchColumns > 0 ? appletSearchColumns
                 : (systemSearchColumns > 0 ? systemSearchColumns : 1);
+        final String preferredEvent = systemModuleService.getSysParameterValue(boolean.class,
+                ApplicationModuleSysParamConstants.ENABLE_SEARCH_ON_SEARCH_INPUT_CHANGE) ? "onchange" : null;
+        
         SectorIcon sectorIcon = getPageSectorIconByApplication(_appletDef.getApplicationName());
         EntitySearch _entitySearch = new EntitySearch(ctx, sectorIcon, sweepingCommitPolicy, tabName, _tableDef,
-                _appletDef.getId(), editAction, defaultQuickFilter, searchConfigName, searchColumns, entitySearchMode,
-                showConditions, isIgnoreParentCondition, viewItemsInSeparateTabs);
+                _appletDef.getId(), editAction, defaultQuickFilter, searchConfigName, preferredEvent, searchColumns,
+                entitySearchMode, showConditions, isIgnoreParentCondition, viewItemsInSeparateTabs);
         _entitySearch.setPaginationLabel(resolveSessionMessage("$m{entitysearch.display.label}"));
         _entitySearch.setBasicSearchOnly(basicSearchOnly);
         _entitySearch.setShowBaseRestriction(showBaseRestriction);
@@ -1827,9 +1873,12 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
                 ApplicationModuleSysParamConstants.SEARCH_ENTRY_COLUMNS);
         final int searchColumns = appletSearchColumns > 0 ? appletSearchColumns
                 : (systemSearchColumns > 0 ? systemSearchColumns : 1);
+        final String preferredEvent = systemModuleService.getSysParameterValue(boolean.class,
+                ApplicationModuleSysParamConstants.ENABLE_SEARCH_ON_SEARCH_INPUT_CHANGE) ? "onchange" : null;
+
         SectorIcon sectorIcon = getPageSectorIconByApplication(_rootAppletDef.getApplicationName());
         LoadingSearch loadingSearch = new LoadingSearch(ctx, sectorIcon, _tableDef, _rootAppletDef.getId(),
-                searchConfigName, searchColumns, loadingSearchMode, showConditions);
+                searchConfigName, preferredEvent, searchColumns, loadingSearchMode, showConditions);
         loadingSearch.setEntitySubTitle(_rootAppletDef.getLabel());
         return loadingSearch;
     }

@@ -2327,12 +2327,12 @@
 			description="$m{studio.appapplet.form}"
 			entity="application.appApplet">
 			<action type="button" name="lockResource" symbol="lock"
-				styleClass="fc-bluebutton"
+				styleClass="fc-actbutton"
 				description="$m{studio.common.form.action.lockresource}"
 				label="$m{studio.common.form.action.lockresource.label}"
 				policy="lockresource-actionpolicy" showOnMaintain="true" />
 			<action type="button" name="unlockResource" symbol="unlock"
-				styleClass="fc-bluebutton"
+				styleClass="fc-actbutton"
 				description="$m{studio.common.form.action.unlockresource}"
 				label="$m{studio.common.form.action.unlockresource.label}"
 				policy="unlockresource-actionpolicy" showOnMaintain="true" />
@@ -2660,12 +2660,12 @@
 			description="$m{studio.appentity.form}"
 			entity="application.appEntity">
 			<action type="button" name="lockResource" symbol="lock"
-				styleClass="fc-bluebutton"
+				styleClass="fc-actbutton"
 				description="$m{studio.common.form.action.lockresource}"
 				label="$m{studio.common.form.action.lockresource.label}"
 				policy="lockresource-actionpolicy" showOnMaintain="true" />
 			<action type="button" name="unlockResource" symbol="unlock"
-				styleClass="fc-bluebutton"
+				styleClass="fc-actbutton"
 				description="$m{studio.common.form.action.unlockresource}"
 				label="$m{studio.common.form.action.unlockresource.label}"
 				policy="unlockresource-actionpolicy" showOnMaintain="true" />
@@ -2916,6 +2916,10 @@
 						column="1" visible="false" />
 				</section>
 				<section name="optionDetails" columns="type_1_2">
+					<field name="auditable" inputWidget="application.checkbox"
+						column="1" visible="false" />
+					<field name="reportable" inputWidget="application.checkbox"
+						column="1" visible="false" />
 					<field name="trim"
 						inputWidget="application.checkbox" column="1" visible="false" />
 					<field name="allowNegative"
@@ -2924,15 +2928,13 @@
 						column="1" visible="false" />
 					<field name="nullable" inputWidget="application.checkbox"
 						column="1" visible="false" />
-					<field name="auditable" inputWidget="application.checkbox"
-						column="1" visible="false" />
-					<field name="reportable" inputWidget="application.checkbox"
-						column="1" visible="false" />
 					<field name="maintainLink" inputWidget="application.checkbox"
 						column="2" visible="false" />
 					<field name="descriptive" inputWidget="application.checkbox"
 						column="2" visible="false" />
 					<field name="basicSearch" inputWidget="application.checkbox"
+						column="2" visible="false" />
+					<field name="branchScoping" inputWidget="application.checkbox"
 						column="2" visible="false" />
 				</section>
 			</tab>
@@ -3050,6 +3052,17 @@
 					<setState type="field"
 						target="precision,defaultVal,allowNegative,nullable,auditable,reportable,descriptive,basicSearch"
 						visible="true" />
+				</setStates>
+			</formStatePolicy>
+			<formStatePolicy type="on_switch"
+				name="branchScopingPolicy"
+				description="$m{studio.appentityfield.form.formstatepolicy.branchscoping}">
+				<onCondition>
+					<restriction type="amongst" field="dataType"
+						paramA="RF|LN|LO" />
+				</onCondition>
+				<setStates>
+					<setState type="field" target="branchScoping" visible="true" />
 				</setStates>
 			</formStatePolicy>
 			<formStatePolicy type="on_switch"
@@ -3414,12 +3427,12 @@
 			description="$m{studio.appenumeration.form}"
 			entity="application.appEnumeration">
 			<action type="button" name="lockResource" symbol="lock"
-				styleClass="fc-bluebutton"
+				styleClass="fc-actbutton"
 				description="$m{studio.common.form.action.lockresource}"
 				label="$m{studio.common.form.action.lockresource.label}"
 				policy="lockresource-actionpolicy" showOnMaintain="true" />
 			<action type="button" name="unlockResource" symbol="unlock"
-				styleClass="fc-bluebutton"
+				styleClass="fc-actbutton"
 				description="$m{studio.common.form.action.unlockresource}"
 				label="$m{studio.common.form.action.unlockresource.label}"
 				policy="unlockresource-actionpolicy" showOnMaintain="true" />
@@ -3466,12 +3479,12 @@
 		<form name="appRefForm" description="$m{studio.appref.form}"
 			entity="application.appRef">
 			<action type="button" name="lockResource" symbol="lock"
-				styleClass="fc-bluebutton"
+				styleClass="fc-actbutton"
 				description="$m{studio.common.form.action.lockresource}"
 				label="$m{studio.common.form.action.lockresource.label}"
 				policy="lockresource-actionpolicy" showOnMaintain="true" />
 			<action type="button" name="unlockResource" symbol="unlock"
-				styleClass="fc-bluebutton"
+				styleClass="fc-actbutton"
 				description="$m{studio.common.form.action.unlockresource}"
 				label="$m{studio.common.form.action.unlockresource.label}"
 				policy="unlockresource-actionpolicy" showOnMaintain="true" />
@@ -3553,12 +3566,12 @@
 		<form name="chartForm" description="$m{studio.chart.form}"
 			entity="chart.chart">
 			<action type="button" name="lockResource" symbol="lock"
-				styleClass="fc-bluebutton"
+				styleClass="fc-actbutton"
 				description="$m{studio.common.form.action.lockresource}"
 				label="$m{studio.common.form.action.lockresource.label}"
 				policy="lockresource-actionpolicy" showOnMaintain="true" />
 			<action type="button" name="unlockResource" symbol="unlock"
-				styleClass="fc-bluebutton"
+				styleClass="fc-actbutton"
 				description="$m{studio.common.form.action.unlockresource}"
 				label="$m{studio.common.form.action.unlockresource.label}"
 				policy="unlockresource-actionpolicy" showOnMaintain="true" />
@@ -3691,12 +3704,12 @@
 			description="$m{studio.chartdatasource.form}"
 			entity="chart.chartDataSource">
 			<action type="button" name="lockResource" symbol="lock"
-				styleClass="fc-bluebutton"
+				styleClass="fc-actbutton"
 				description="$m{studio.common.form.action.lockresource}"
 				label="$m{studio.common.form.action.lockresource.label}"
 				policy="lockresource-actionpolicy" showOnMaintain="true" />
 			<action type="button" name="unlockResource" symbol="unlock"
-				styleClass="fc-bluebutton"
+				styleClass="fc-actbutton"
 				description="$m{studio.common.form.action.unlockresource}"
 				label="$m{studio.common.form.action.unlockresource.label}"
 				policy="unlockresource-actionpolicy" showOnMaintain="true" />
@@ -3790,12 +3803,12 @@
 		<form name="dashboardForm"
 			description="$m{studio.dashboard.form}" entity="dashboard.dashboard">
 			<action type="button" name="lockResource" symbol="lock"
-				styleClass="fc-bluebutton"
+				styleClass="fc-actbutton"
 				description="$m{studio.common.form.action.lockresource}"
 				label="$m{studio.common.form.action.lockresource.label}"
 				policy="lockresource-actionpolicy" showOnMaintain="true" />
 			<action type="button" name="unlockResource" symbol="unlock"
-				styleClass="fc-bluebutton"
+				styleClass="fc-actbutton"
 				description="$m{studio.common.form.action.unlockresource}"
 				label="$m{studio.common.form.action.unlockresource.label}"
 				policy="unlockresource-actionpolicy" showOnMaintain="true" />
@@ -3938,12 +3951,12 @@
 			description="$m{studio.notificationtemplate.form}"
 			entity="notification.notifTemplate">
 			<action type="button" name="lockResource" symbol="lock"
-				styleClass="fc-bluebutton"
+				styleClass="fc-actbutton"
 				description="$m{studio.common.form.action.lockresource}"
 				label="$m{studio.common.form.action.lockresource.label}"
 				policy="lockresource-actionpolicy" showOnMaintain="true" />
 			<action type="button" name="unlockResource" symbol="unlock"
-				styleClass="fc-bluebutton"
+				styleClass="fc-actbutton"
 				description="$m{studio.common.form.action.unlockresource}"
 				label="$m{studio.common.form.action.unlockresource.label}"
 				policy="unlockresource-actionpolicy" showOnMaintain="true" />
@@ -4038,12 +4051,12 @@
 			description="$m{studio.notificationlargetext.form}"
 			entity="notification.notifLargeText">
 			<action type="button" name="lockResource" symbol="lock"
-				styleClass="fc-bluebutton"
+				styleClass="fc-actbutton"
 				description="$m{studio.common.form.action.lockresource}"
 				label="$m{studio.common.form.action.lockresource.label}"
 				policy="lockresource-actionpolicy" showOnMaintain="true" />
 			<action type="button" name="unlockResource" symbol="unlock"
-				styleClass="fc-bluebutton"
+				styleClass="fc-actbutton"
 				description="$m{studio.common.form.action.unlockresource}"
 				label="$m{studio.common.form.action.unlockresource.label}"
 				policy="unlockresource-actionpolicy" showOnMaintain="true" />
@@ -4135,12 +4148,12 @@
 			description="$m{studio.reportconfiguration.form}"
 			entity="report.reportConfig">
 			<action type="button" name="lockResource" symbol="lock"
-				styleClass="fc-bluebutton"
+				styleClass="fc-actbutton"
 				description="$m{studio.common.form.action.lockresource}"
 				label="$m{studio.common.form.action.lockresource.label}"
 				policy="lockresource-actionpolicy" showOnMaintain="true" />
 			<action type="button" name="unlockResource" symbol="unlock"
-				styleClass="fc-bluebutton"
+				styleClass="fc-actbutton"
 				description="$m{studio.common.form.action.unlockresource}"
 				label="$m{studio.common.form.action.unlockresource.label}"
 				policy="unlockresource-actionpolicy" showOnMaintain="true" />
@@ -4469,12 +4482,12 @@
 		<form name="appTableForm" description="$m{studio.apptable.form}"
 			entity="application.appTable">
 			<action type="button" name="lockResource" symbol="lock"
-				styleClass="fc-bluebutton"
+				styleClass="fc-actbutton"
 				description="$m{studio.common.form.action.lockresource}"
 				label="$m{studio.common.form.action.lockresource.label}"
 				policy="lockresource-actionpolicy" showOnMaintain="true" />
 			<action type="button" name="unlockResource" symbol="unlock"
-				styleClass="fc-bluebutton"
+				styleClass="fc-actbutton"
 				description="$m{studio.common.form.action.unlockresource}"
 				label="$m{studio.common.form.action.unlockresource.label}"
 				policy="unlockresource-actionpolicy" showOnMaintain="true" />
@@ -4686,12 +4699,12 @@
 		<form name="appFormForm" description="$m{studio.appform.form}"
 			entity="application.appForm">
 			<action type="button" name="lockResource" symbol="lock"
-				styleClass="fc-bluebutton"
+				styleClass="fc-actbutton"
 				description="$m{studio.common.form.action.lockresource}"
 				label="$m{studio.common.form.action.lockresource.label}"
 				policy="lockresource-actionpolicy" showOnMaintain="true" />
 			<action type="button" name="unlockResource" symbol="unlock"
-				styleClass="fc-bluebutton"
+				styleClass="fc-actbutton"
 				description="$m{studio.common.form.action.unlockresource}"
 				label="$m{studio.common.form.action.unlockresource.label}"
 				policy="unlockresource-actionpolicy" showOnMaintain="true" />
@@ -5208,12 +5221,12 @@
 		<form name="appHelpSheetForm" description="$m{studio.apphelpsheet.form}"
 			entity="application.appHelpSheet">
 			<action type="button" name="lockResource" symbol="lock"
-				styleClass="fc-bluebutton"
+				styleClass="fc-actbutton"
 				description="$m{studio.common.form.action.lockresource}"
 				label="$m{studio.common.form.action.lockresource.label}"
 				policy="lockresource-actionpolicy" showOnMaintain="true" />
 			<action type="button" name="unlockResource" symbol="unlock"
-				styleClass="fc-bluebutton"
+				styleClass="fc-actbutton"
 				description="$m{studio.common.form.action.unlockresource}"
 				label="$m{studio.common.form.action.unlockresource.label}"
 				policy="unlockresource-actionpolicy" showOnMaintain="true" />
@@ -5271,12 +5284,12 @@
 			description="$m{studio.appwidgettype.form}"
 			entity="application.appWidgetType">
 			<action type="button" name="lockResource" symbol="lock"
-				styleClass="fc-bluebutton"
+				styleClass="fc-actbutton"
 				description="$m{studio.common.form.action.lockresource}"
 				label="$m{studio.common.form.action.lockresource.label}"
 				policy="lockresource-actionpolicy" showOnMaintain="true" />
 			<action type="button" name="unlockResource" symbol="unlock"
-				styleClass="fc-bluebutton"
+				styleClass="fc-actbutton"
 				description="$m{studio.common.form.action.unlockresource}"
 				label="$m{studio.common.form.action.unlockresource.label}"
 				policy="unlockresource-actionpolicy" showOnMaintain="true" />
@@ -5369,12 +5382,12 @@
 		<form name="workflowForm" description="$m{studio.workflow.form}"
 			entity="workflow.workflow">
 			<action type="button" name="lockResource" symbol="lock"
-				styleClass="fc-bluebutton"
+				styleClass="fc-actbutton"
 				description="$m{studio.common.form.action.lockresource}"
 				label="$m{studio.common.form.action.lockresource.label}"
 				policy="lockresource-actionpolicy" showOnMaintain="true" />
 			<action type="button" name="unlockResource" symbol="unlock"
-				styleClass="fc-bluebutton"
+				styleClass="fc-actbutton"
 				description="$m{studio.common.form.action.unlockresource}"
 				label="$m{studio.common.form.action.unlockresource.label}"
 				policy="unlockresource-actionpolicy" showOnMaintain="true" />

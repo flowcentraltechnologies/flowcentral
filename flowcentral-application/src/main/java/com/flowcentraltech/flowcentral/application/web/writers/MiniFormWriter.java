@@ -167,7 +167,7 @@ public class MiniFormWriter extends AbstractControlWriter {
                             if (switchOnChangeHandlers != null
                                     && (refreshesContainer || formWidget.isSwitchOnChange())) {
                                 for (EventHandler eventHandler : switchOnChangeHandlers) {
-                                    writer.writeBehavior(eventHandler, cId, fieldName);
+                                    writer.writeBehavior(eventHandler, cId, fieldName, null);
                                 }
                             }
 

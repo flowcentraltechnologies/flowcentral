@@ -322,22 +322,21 @@ public final class ApplicationEntityUtils {
             refLongName = references;
         }
 
-        return new EntityFieldDef(textWidget, inputWidget, lingualWidget,
-                appEntityField.getDataType(), appEntityField.getType(), appEntityField.getTextCase(), entityLongName,
-                appEntityField.getName(), appEntityField.getMapped(), appEntityField.getLabel(),
-                appEntityField.getColumnName(), refLongName, references, appEntityField.getCategory(),
-                appEntityField.getSuggestionType(), appEntityField.getInputLabel(), appEntityField.getInputListKey(),
-                appEntityField.getLingualListKey(), appEntityField.getAutoFormat(), appEntityField.getDefaultVal(),
-                appEntityField.getKey(), appEntityField.getProperty(),
-                DataUtils.convert(int.class, appEntityField.getRows()),
+        return new EntityFieldDef(textWidget, inputWidget, lingualWidget, appEntityField.getDataType(),
+                appEntityField.getType(), appEntityField.getTextCase(), entityLongName, appEntityField.getName(),
+                appEntityField.getMapped(), appEntityField.getLabel(), appEntityField.getColumnName(), refLongName,
+                references, appEntityField.getCategory(), appEntityField.getSuggestionType(),
+                appEntityField.getInputLabel(), appEntityField.getInputListKey(), appEntityField.getLingualListKey(),
+                appEntityField.getAutoFormat(), appEntityField.getDefaultVal(), appEntityField.getKey(),
+                appEntityField.getProperty(), DataUtils.convert(int.class, appEntityField.getRows()),
                 DataUtils.convert(int.class, appEntityField.getColumns()),
                 DataUtils.convert(int.class, appEntityField.getMinLen()),
                 DataUtils.convert(int.class, appEntityField.getMaxLen()),
                 DataUtils.convert(int.class, appEntityField.getPrecision()),
-                DataUtils.convert(int.class, appEntityField.getScale()), appEntityField.isTrim(),
-                appEntityField.isAllowNegative(), !appEntityField.isReadOnly(), appEntityField.isNullable(),
-                appEntityField.isAuditable(), appEntityField.isReportable(), appEntityField.isMaintainLink(),
-                appEntityField.isBasicSearch(), appEntityField.isDescriptive());
+                DataUtils.convert(int.class, appEntityField.getScale()), appEntityField.isBranchScoping(),
+                appEntityField.isTrim(), appEntityField.isAllowNegative(), !appEntityField.isReadOnly(),
+                appEntityField.isNullable(), appEntityField.isAuditable(), appEntityField.isReportable(),
+                appEntityField.isMaintainLink(), appEntityField.isBasicSearch(), appEntityField.isDescriptive());
     }
 
     public static void addChangeLogFormElements(List<AppFormElement> elementList) {
@@ -521,12 +520,13 @@ public final class ApplicationEntityUtils {
         boolean nullable = nullables.contains(name);
         boolean reportable = !nonReportables.contains(name);
         boolean maintainLink = maintainLinks.contains(name);
+        boolean branchScoping = false;
         boolean trim = false;
         boolean allowNegative = false;
         boolean readOnly = false;
         String suggestionType = null;
         AppEntityField field = new AppEntityField(type, name, label, references, key, property, category, inputLabel,
-                inputWidget, suggestionType, inputListKey, length, trim, allowNegative, readOnly, nullable, auditable,
+                inputWidget, suggestionType, inputListKey, length, branchScoping, trim, allowNegative, readOnly, nullable, auditable,
                 reportable, maintainLink);
         if (type.isDate() || type.isTimestamp()) {
             field.setLingualWidget("application.lingualdatetypelist");

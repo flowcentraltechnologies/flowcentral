@@ -509,7 +509,12 @@
 			renderer="!ui-label" />
 	</widgetTypes>
 	<!-- Applets -->
-	<applets>
+	<applets> 
+		<applet name="showAbout"
+			description="$m{application.about.manage}"
+			label="$m{application.about.manage.label}" icon="about" type="path_page"
+			path="/application/about/openPage" menuAccess="true">
+		</applet>
 		<applet name="manageSuggestion"
 			description="$m{application.appsuggestion.manage}"
 			label="$m{application.appsuggestion.manage.label}" icon="ellipsis-h"
@@ -1097,6 +1102,8 @@
 			<field name="scale"
 				label="$m{application.appentityfield.scale}" type="integer"
 				nullable="true" />
+			<field name="branchScoping"
+				label="$m{application.appentityfield.branchscoping}" type="boolean" />
 			<field name="trim"
 				label="$m{application.appentityfield.trim}" type="boolean" />
 			<field name="allowNegative"
@@ -1896,6 +1903,9 @@
 			<field name="typeDesc"
 				label="$m{application.appformstatepolicy.typedesc}" type="list_only"
 				key="type" property="description" />
+			<uniqueConstraint name="nameUc"
+				description="$m{application.appformaction.uc.name}"
+				fieldList="appFormId,name" />
 		</entity>
 		<entity name="appFormWidgetRulesPolicy"
 			description="$m{application.appformwidgetrulespolicy}"

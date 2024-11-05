@@ -19,9 +19,12 @@ import java.util.Date;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.common.entities.BaseStatusWorkTenantEntity;
+import com.flowcentraltech.flowcentral.organization.constants.BranchViewType;
 import com.tcdng.unify.core.annotation.ChildList;
 import com.tcdng.unify.core.annotation.Column;
 import com.tcdng.unify.core.annotation.ColumnType;
+import com.tcdng.unify.core.annotation.ForeignKey;
+import com.tcdng.unify.core.annotation.ListOnly;
 import com.tcdng.unify.core.annotation.Mapped;
 import com.tcdng.unify.core.annotation.Table;
 import com.tcdng.unify.core.annotation.UniqueConstraint;
@@ -41,6 +44,9 @@ public class Role extends BaseStatusWorkTenantEntity {
     @Column(nullable = false)
     private Long departmentId;
 
+    @ForeignKey(nullable = true)
+    private BranchViewType branchViewType;
+    
     @Column(name = "ROLE_CD", length = 16)
     private String code;
 
@@ -58,6 +64,9 @@ public class Role extends BaseStatusWorkTenantEntity {
 
     @Column(name = "DASHBOARD_CD", length = 64, nullable = true)
     private String dashboardCode;
+
+    @ListOnly(key = "branchViewType", property = "description")
+    private String branchViewTypeDesc;
     
     @ChildList
     private List<RolePrivilege> privilegeList;
@@ -71,6 +80,14 @@ public class Role extends BaseStatusWorkTenantEntity {
 
     public void setDepartmentId(Long departmentId) {
         this.departmentId = departmentId;
+    }
+
+    public BranchViewType getBranchViewType() {
+        return branchViewType;
+    }
+
+    public void setBranchViewType(BranchViewType branchViewType) {
+        this.branchViewType = branchViewType;
     }
 
     public String getCode() {
@@ -119,6 +136,14 @@ public class Role extends BaseStatusWorkTenantEntity {
 
     public void setDashboardCode(String dashboardCode) {
         this.dashboardCode = dashboardCode;
+    }
+
+    public String getBranchViewTypeDesc() {
+        return branchViewTypeDesc;
+    }
+
+    public void setBranchViewTypeDesc(String branchViewTypeDesc) {
+        this.branchViewTypeDesc = branchViewTypeDesc;
     }
 
     public List<RolePrivilege> getPrivilegeList() {

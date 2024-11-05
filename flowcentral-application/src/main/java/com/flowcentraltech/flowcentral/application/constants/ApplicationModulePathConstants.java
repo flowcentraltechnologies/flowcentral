@@ -25,6 +25,8 @@ public interface ApplicationModulePathConstants {
 
     String APPLICATION = "/application";
 
+    String ABOUT     = "/application/about";
+
     String APPLICATION_BROWSER_WINDOW = "/application/browserwindow";
     
     String APPLICATION_MENU_TO_WINDOW = "/application/menutowindow";

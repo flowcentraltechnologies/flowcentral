@@ -85,12 +85,12 @@ public class LoadingSearch {
     private boolean showActionFooter;
     
     public LoadingSearch(AppletContext appletContext, SectorIcon sectorIcon, TableDef tableDef, Long appAppletId,
-            String searchInputConfigName, int columns, int mode,
+            String searchInputConfigName, String preferredSearchEvent, int columns, int mode,
             boolean showConditions) throws UnifyException {
         this.appletContext = appletContext;
         this.sectorIcon = sectorIcon;
         this.searchEntries = new SearchEntries(appletContext.au(), tableDef.getEntityDef(),
-                tableDef.getLabelSuggestionDef(), searchInputConfigName, columns,
+                tableDef.getLabelSuggestionDef(), searchInputConfigName, preferredSearchEvent, columns,
                 showConditions);
         this.loadingTable = new LoadingTable(appletContext.au(), tableDef);
         this.loadingTable.setCrudMode(LoadingTable.CrudMode.SIMPLE);
@@ -304,6 +304,13 @@ public class LoadingSearch {
             }
         } else {
             searchRestriction = entries.getRestriction();
+        }
+
+        final EntityDef entityDef = loadingTable.getEntityDef();
+        Restriction branchScopeRestriction = au().getSessionBranchScopeRestriction(entityDef);
+        if (branchScopeRestriction != null) {
+            searchRestriction = searchRestriction == null ? branchScopeRestriction
+                    : new And().add(searchRestriction).add(branchScopeRestriction);
         }
 
         loadingTable.setSourceObjectClearSelected(new LoadingParams(searchRestriction, entries.getInputs()));

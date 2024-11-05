@@ -31,7 +31,8 @@ import com.tcdng.unify.core.annotation.UniqueConstraint;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@Table(name = "FC_FORMACTION", uniqueConstraints = { @UniqueConstraint({ "appFormId", "name" }) })
+@Table(name = "FC_FORMACTION",
+    uniqueConstraints = { @UniqueConstraint({ "appFormId", "name" }) })
 public class AppFormAction extends BaseConfigNamedEntity {
 
     @ForeignKey(AppForm.class)

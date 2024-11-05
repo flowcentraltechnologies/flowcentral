@@ -59,12 +59,12 @@ import com.flowcentraltech.flowcentral.security.constants.SecurityModuleErrorCon
 import com.flowcentraltech.flowcentral.security.constants.SecurityModuleNameConstants;
 import com.flowcentraltech.flowcentral.security.constants.SecurityModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.security.constants.UserWorkflowStatus;
+import com.flowcentraltech.flowcentral.security.entities.PasswordComplexity;
+import com.flowcentraltech.flowcentral.security.entities.PasswordComplexityQuery;
 import com.flowcentraltech.flowcentral.security.entities.PasswordHistory;
 import com.flowcentraltech.flowcentral.security.entities.PasswordHistoryQuery;
 import com.flowcentraltech.flowcentral.security.entities.SecuredLink;
 import com.flowcentraltech.flowcentral.security.entities.SecuredLinkQuery;
-import com.flowcentraltech.flowcentral.security.entities.PasswordComplexity;
-import com.flowcentraltech.flowcentral.security.entities.PasswordComplexityQuery;
 import com.flowcentraltech.flowcentral.security.entities.User;
 import com.flowcentraltech.flowcentral.security.entities.UserGroupMemberQuery;
 import com.flowcentraltech.flowcentral.security.entities.UserGroupRole;
@@ -717,8 +717,10 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
 
         final FactoryMap<Long, String> departmentCodes = organizationModuleService.getMappedDepartmentCodeFactoryMap();
         for (UserRole userRole : environment().listAll(userRoleQuery)) {
+            final List<Long> branchScopingIdList = organizationModuleService.getCurrentUserBranchIds(userLoginId,
+                    userRole.getBranchViewType());
             userRoleInfoList.add(new UserRoleInfo(userRole.getRoleCode(), userRole.getRoleDesc(),
-                    departmentCodes.get(userRole.getDepartmentId())));
+                    departmentCodes.get(userRole.getDepartmentId()), branchScopingIdList));
             roleSet.add(userRole.getRoleCode());
         }
 
@@ -742,9 +744,11 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
             }
 
             for (UserGroupRole userGroupRole : environment().listAll(userGroupRoleQuery)) {
+                final List<Long> branchScopingIdList = organizationModuleService.getCurrentUserBranchIds(userLoginId,
+                        userGroupRole.getBranchViewType());
                 userRoleInfoList.add(new UserRoleInfo(userGroupRole.getRoleCode(), userGroupRole.getRoleDesc(),
                         userGroupRole.getUserGroupName(), userGroupRole.getUserGroupDesc(),
-                        departmentCodes.get(userGroupRole.getDepartmentId())));
+                        departmentCodes.get(userGroupRole.getDepartmentId()), branchScopingIdList));
             }
         }
 
