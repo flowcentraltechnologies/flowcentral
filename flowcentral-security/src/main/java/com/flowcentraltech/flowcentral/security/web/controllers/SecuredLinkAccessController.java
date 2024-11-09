@@ -50,7 +50,7 @@ import com.tcdng.unify.web.constant.Secured;
 @UplBinding("web/security/upl/securedlinkaccess.upl")
 @ResultMappings({
         @ResultMapping(type = MimeType.TEXT_HTML, name = "forwardtourl",
-                response = { "!externalforwardresponse pathBinding:$s{targetPath}" }),
+                response = { "!externalforwardresponse pathBinding:$s{targetPath} paramBinding:$s{targetParam}" }),
         @ResultMapping(type = MimeType.TEXT_HTML, name = "plainmessage",
                 response = { "!plainhtmlresponse htmlBinding:$s{message}" }) })
 public class SecuredLinkAccessController extends AbstractForwarderController<SecuredLinkAccessPageBean> {
@@ -71,6 +71,9 @@ public class SecuredLinkAccessController extends AbstractForwarderController<Sec
         logDebug("Accessing secured item with id [{0}]...", lid);
         if (!StringUtils.isBlank(lid)) {
             final SecuredLinkContentInfo securedLinkContentInfo = securedLinkManager.getSecuredLink(lid);
+            SecuredLinkAccessPageBean pageBean = getPageBean();
+            pageBean.setTargetParam(securedLinkContentInfo.getAccessKey());
+
             if (!securedLinkContentInfo.isPresent()) {
                 showPlainMessage(resolveSessionMessage("$m{securedlinkaccess.unresolvable}"));
                 return;

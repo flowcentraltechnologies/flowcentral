@@ -25,5 +25,7 @@ package com.flowcentraltech.flowcentral.application.constants;
 public interface AppletPageAttributeConstants {
     
     String TABLE_ACTIONS = "applet:page:tableaction";
+    
+    String SECURED_LINK_ACCESSKEY= "applet:page:securedlinkaccesskey";
 
 }

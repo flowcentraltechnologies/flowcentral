@@ -45,7 +45,7 @@ public abstract class AbstractStudioEditorPagePanel extends AbstractFlowCentralP
         super.switchState();
         final StudioAppComponentApplet applet = (StudioAppComponentApplet) getValueStore().getValueObject();
         final boolean isCollaboration = applet.isCollaboration() && collaborationProvider != null;
-        final boolean isEditable = !applet.getCtx().isReadOnly();
+        final boolean isEditable = !applet.appletCtx().isReadOnly();
         if (isCollaboration) {
             AbstractStudioEditorPage editorPage = getValue(AbstractStudioEditorPage.class);
             boolean isFrozen = checkFrozen((Entity) applet.getForm().getFormBean());
@@ -53,7 +53,7 @@ public abstract class AbstractStudioEditorPagePanel extends AbstractFlowCentralP
                 editorPage.setDisplayItemCounterClass("fc-dispcounterfrozen");
                 editorPage.setDisplayItemCounter(
                         resolveSessionMessage("$m{entityformapplet.form.collaboration.frozen}"));
-                applet.getCtx().setReadOnly(true);
+                applet.appletCtx().setReadOnly(true);
             } else if (isEditable) {
                 editorPage.setDisplayItemCounterClass("fc-dispcountergreen");
                 editorPage.setDisplayItemCounter(
@@ -69,7 +69,7 @@ public abstract class AbstractStudioEditorPagePanel extends AbstractFlowCentralP
     }
 
     protected boolean isAppletContextReadOnly() throws UnifyException {
-        return ((StudioAppComponentApplet) getValueStore().getValueObject()).getCtx().isReadOnly();
+        return ((StudioAppComponentApplet) getValueStore().getValueObject()).appletCtx().isReadOnly();
     }
     
     private boolean checkFrozen(Entity inst) throws UnifyException {

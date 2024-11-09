@@ -17,9 +17,12 @@ package com.flowcentraltech.flowcentral.security.entities;
 
 import java.util.Date;
 
+import com.flowcentraltech.flowcentral.common.constants.SecuredLinkType;
 import com.flowcentraltech.flowcentral.common.entities.BaseAuditTenantEntity;
 import com.tcdng.unify.core.annotation.Column;
 import com.tcdng.unify.core.annotation.ColumnType;
+import com.tcdng.unify.core.annotation.ForeignKey;
+import com.tcdng.unify.core.annotation.ListOnly;
 import com.tcdng.unify.core.annotation.Table;
 
 /**
@@ -31,6 +34,9 @@ import com.tcdng.unify.core.annotation.Table;
 @Table("FC_SECUREDLINK")
 public class SecuredLink extends BaseAuditTenantEntity {
 
+    @ForeignKey(name = "SECURED_LINK_TY", nullable = true)
+    private SecuredLinkType type;
+    
     @Column(length = 128)
     private String title;
 
@@ -58,9 +64,20 @@ public class SecuredLink extends BaseAuditTenantEntity {
     @Column(nullable = true)
     private Boolean invalidated;
 
+    @ListOnly(key = "type", property="description")
+    private String typeDesc;
+    
     @Override
     public String getDescription() {
         return title;
+    }
+
+    public SecuredLinkType getType() {
+        return type;
+    }
+
+    public void setType(SecuredLinkType type) {
+        this.type = type;
     }
 
     public String getTitle() {
@@ -133,6 +150,14 @@ public class SecuredLink extends BaseAuditTenantEntity {
 
     public void setInvalidated(Boolean invalidated) {
         this.invalidated = invalidated;
+    }
+
+    public String getTypeDesc() {
+        return typeDesc;
+    }
+
+    public void setTypeDesc(String typeDesc) {
+        this.typeDesc = typeDesc;
     }
 
 }

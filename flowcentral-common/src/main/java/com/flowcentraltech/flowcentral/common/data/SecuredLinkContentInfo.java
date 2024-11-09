@@ -16,6 +16,7 @@
 
 package com.flowcentraltech.flowcentral.common.data;
 
+import com.flowcentraltech.flowcentral.common.constants.SecuredLinkType;
 import com.tcdng.unify.core.util.StringUtils;
 
 /**
@@ -28,6 +29,8 @@ public class SecuredLinkContentInfo {
 
     public static final SecuredLinkContentInfo NOT_PRESENT = new SecuredLinkContentInfo();
 
+    private SecuredLinkType type;
+    
     private String title;
 
     private String contentPath;
@@ -40,20 +43,24 @@ public class SecuredLinkContentInfo {
 
     private String assignedRole;
 
+    private String accessKey;
+
     private boolean present;
 
     private boolean invalidated;
 
     private boolean expired;
 
-    public SecuredLinkContentInfo(String title, String contentPath, String loginUrl, String docUrl,
-            String assignedLoginId, String assignedRole, boolean invalidated, boolean expired) {
+    public SecuredLinkContentInfo(SecuredLinkType type, String title, String contentPath, String loginUrl, String docUrl,
+            String assignedLoginId, String assignedRole, String accessKey, boolean invalidated, boolean expired) {
+        this.type = type;
         this.title = title;
         this.contentPath = contentPath;
         this.loginUrl = loginUrl;
         this.docUrl = docUrl;
         this.assignedLoginId = assignedLoginId;
         this.assignedRole = assignedRole;
+        this.accessKey = accessKey;
         this.invalidated = invalidated;
         this.expired = expired;
         this.present = true;
@@ -61,6 +68,10 @@ public class SecuredLinkContentInfo {
 
     private SecuredLinkContentInfo() {
 
+    }
+
+    public SecuredLinkType getType() {
+        return type;
     }
 
     public String getTitle() {
@@ -87,6 +98,10 @@ public class SecuredLinkContentInfo {
         return assignedRole;
     }
 
+    public String getAccessKey() {
+        return accessKey;
+    }
+
     public boolean isWithAssignedLoginId() {
         return !StringUtils.isBlank(assignedLoginId);
     }
@@ -105,6 +120,10 @@ public class SecuredLinkContentInfo {
 
     public boolean isExpired() {
         return expired;
+    }
+
+    public boolean isRealContentPath() {
+        return  contentPath != null && contentPath.endsWith("/openPage");
     }
 
 }

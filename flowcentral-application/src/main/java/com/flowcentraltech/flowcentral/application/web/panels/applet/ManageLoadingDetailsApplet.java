@@ -61,7 +61,7 @@ public class ManageLoadingDetailsApplet extends AbstractApplet {
     }
 
     public void childCrudSwitchOnChange() throws UnifyException {
-        ctx.au().onMiniformSwitchOnChange(childEntityCrud.getForm());
+        au().onMiniformSwitchOnChange(childEntityCrud.getForm());
     }
 
     public void childCrudSelectItem(int index) throws UnifyException {
@@ -69,11 +69,11 @@ public class ManageLoadingDetailsApplet extends AbstractApplet {
     }
 
     public void createNewChildCrud(Long parentId) throws UnifyException {
-        childEntityCrud = ctx.au().constructEntityCRUD(ctx, childAppletName, formEventHandlers, childBaseFieldName,
+        childEntityCrud = au().constructEntityCRUD(appletCtx(), childAppletName, formEventHandlers, childBaseFieldName,
                 parentId);
         EntityTable entityTable = childEntityCrud.getTable();
         Restriction restriction = new Equals(childBaseFieldName, parentId);
-        Restriction baseRestriction = entityTable.getRestriction(FilterType.BASE, null, ctx.au().getNow());
+        Restriction baseRestriction = entityTable.getRestriction(FilterType.BASE, null, au().getNow());
         if (baseRestriction != null) {
             restriction = new And().add(restriction).add(baseRestriction);
         }
@@ -81,7 +81,7 @@ public class ManageLoadingDetailsApplet extends AbstractApplet {
         entityTable.setSourceObjectKeepSelected(restriction);
         entityTable.setCrudActionHandlers(formEventHandlers.getCrudActionHandlers());
 
-        if (ctx.isContextEditable()) {
+        if (appletCtx().isContextEditable()) {
             childEntityCrud.enterCreate();
         } else {
             childEntityCrud.enterMaintain(0);

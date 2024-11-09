@@ -112,7 +112,7 @@ public class StudioAppComponentApplet extends AbstractEntityFormApplet {
     private void constructNewForm() throws UnifyException {
         form = constructNewForm(FormMode.ENTITY_CREATE, null, false);
         ((BaseApplicationEntity) form.getCtx().getInst()).setApplicationId(
-                au.getSessionAttribute(Long.class, StudioSessionAttributeConstants.CURRENT_APPLICATION_ID));
+                au().getSessionAttribute(Long.class, StudioSessionAttributeConstants.CURRENT_APPLICATION_ID));
         viewMode = ViewMode.NEW_PRIMARY_FORM;
     }
 }

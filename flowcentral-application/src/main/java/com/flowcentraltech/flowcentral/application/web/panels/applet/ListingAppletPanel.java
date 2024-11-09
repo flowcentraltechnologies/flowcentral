@@ -46,7 +46,7 @@ public class ListingAppletPanel extends AbstractAppletPanel {
         final ListingApplet applet = getListEntityApplet();
         applet.ensureFormStruct();
 
-        final AppletContext appCtx = applet.getCtx();
+        final AppletContext appCtx = applet.appletCtx();
         setVisible("listingPanel.emailsPanel", appCtx.isReview() && appCtx.isEmails());
         setVisible("listingPanel.attachmentsPanel",
                 appCtx.isCapture() || (appCtx.isAttachments() && appCtx.isReview()));

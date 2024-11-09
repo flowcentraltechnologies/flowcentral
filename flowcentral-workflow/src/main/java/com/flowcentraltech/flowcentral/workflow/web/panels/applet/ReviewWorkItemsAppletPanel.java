@@ -48,7 +48,7 @@ public class ReviewWorkItemsAppletPanel extends AbstractEntityFormAppletPanel {
 
         ReviewWorkItemsApplet applet = getReviewWorkItemsApplet();
         final boolean userActionRight = applet.isUserActionRight();
-        final boolean editable = applet.getCtx().isContextEditable();
+        final boolean editable = applet.appletCtx().isContextEditable();
         final boolean update = userActionRight && editable && system().getSysParameterValue(boolean.class,
                 WorkflowModuleSysParamConstants.WF_ENABLE_UPDATES_ON_REVIEW);
         setVisible("frmActionBtns", userActionRight);

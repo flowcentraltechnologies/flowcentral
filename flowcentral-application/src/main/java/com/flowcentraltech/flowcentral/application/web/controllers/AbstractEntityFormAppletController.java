@@ -378,7 +378,7 @@ public abstract class AbstractEntityFormAppletController<T extends AbstractEntit
     private void performNormalViewMode() throws UnifyException {
         AbstractEntityFormAppletPageBean<T> pageBean = getPageBean();
         AbstractEntityFormApplet applet = pageBean.getApplet();
-        applet.getCtx().setInWorkflowPromptViewMode(true);
+        applet.appletCtx().setInWorkflowPromptViewMode(true);
         setRequestAttribute(IN_WORKFLOW_DRAFT_LOOP_FLAG, Boolean.TRUE);
         WorkflowDraftInfo workflowDraftInfo = applet.getWorkflowDraftInfo();
         switch (workflowDraftInfo.getType()) {
@@ -413,7 +413,7 @@ public abstract class AbstractEntityFormAppletController<T extends AbstractEntit
             case UPDATE:
             case UPDATE_CLOSE:
             default:
-                applet.getCtx().setInWorkflowPromptViewMode(false);
+                applet.appletCtx().setInWorkflowPromptViewMode(false);
                 setRequestAttribute(IN_WORKFLOW_DRAFT_LOOP_FLAG, Boolean.FALSE);
                 break;
         }

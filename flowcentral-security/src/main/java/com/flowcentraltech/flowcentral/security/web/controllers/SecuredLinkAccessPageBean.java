@@ -26,7 +26,17 @@ import com.flowcentraltech.flowcentral.common.web.controllers.AbstractForwarderP
  */
 public class SecuredLinkAccessPageBean extends AbstractForwarderPageBean {
 
+    private String targetParam;
+    
     private String message;
+
+    public String getTargetParam() {
+        return targetParam;
+    }
+
+    public void setTargetParam(String targetParam) {
+        this.targetParam = targetParam;
+    }
 
     public String getMessage() {
         return message;

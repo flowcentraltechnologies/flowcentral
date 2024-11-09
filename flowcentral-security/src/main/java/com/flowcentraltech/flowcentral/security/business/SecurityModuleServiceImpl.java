@@ -37,6 +37,7 @@ import com.flowcentraltech.flowcentral.common.business.SecuredLinkManager;
 import com.flowcentraltech.flowcentral.common.constants.FileAttachmentCategoryType;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants;
 import com.flowcentraltech.flowcentral.common.constants.RecordStatus;
+import com.flowcentraltech.flowcentral.common.constants.SecuredLinkType;
 import com.flowcentraltech.flowcentral.common.data.Attachment;
 import com.flowcentraltech.flowcentral.common.data.Recipient;
 import com.flowcentraltech.flowcentral.common.data.SecuredLinkContentInfo;
@@ -196,24 +197,25 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
-    public SecuredLinkInfo getNewSecuredLink(String title, String contentPath, int expirationInMinutes)
+    public SecuredLinkInfo getNewSecuredLink(SecuredLinkType type, String title, String contentPath, int expirationInMinutes)
             throws UnifyException {
-        return getNewSecuredLink(title, contentPath, null, null, expirationInMinutes);
+        return getNewSecuredLink(type, title, contentPath, null, null, expirationInMinutes);
     }
 
     @Override
-    public SecuredLinkInfo getNewSecuredLink(String title, String contentPath, String assignedLoginId,
+    public SecuredLinkInfo getNewSecuredLink(SecuredLinkType type, String title, String contentPath, String assignedLoginId,
             int expirationInMinutes) throws UnifyException {
-        return getNewSecuredLink(title, contentPath, assignedLoginId, null, expirationInMinutes);
+        return getNewSecuredLink(type, title, contentPath, assignedLoginId, null, expirationInMinutes);
     }
 
     @Override
-    public SecuredLinkInfo getNewSecuredLink(String title, String contentPath, String assignedLoginId,
+    public SecuredLinkInfo getNewSecuredLink(SecuredLinkType type, String title, String contentPath, String assignedLoginId,
             String assignedRole, int expirationInMinutes) throws UnifyException {
         final String baseUrl = systemModuleService.getSysParameterValue(String.class,
                 SystemModuleSysParamConstants.APPLICATION_BASE_URL);
         final String accessKey = StringUtils.generateRandomAlphanumeric(SECURED_LINK_ACCESS_SUFFIX_LEN);
         SecuredLink securedLink = new SecuredLink();
+        securedLink.setType(type);
         securedLink.setTitle(title);
         securedLink.setContentPath(contentPath);
         securedLink.setAccessKey(accessKey);
@@ -263,9 +265,9 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
                                 SystemModuleSysParamConstants.APPLICATION_BASE_URL);
                         final String loginUrl = baseUrl + SecurityModuleNameConstants.APPLICATION_HOME_CONTROLLER;
                         final String docUrl = baseUrl + ApplicationModulePathConstants.APPLICATION_BROWSER_WINDOW;
-                        return new SecuredLinkContentInfo(securedLink.getTitle(), securedLink.getContentPath(),
+                        return new SecuredLinkContentInfo(securedLink.getType(), securedLink.getTitle(), securedLink.getContentPath(),
                                 loginUrl, docUrl, securedLink.getAssignedToLoginId(), securedLink.getAssignedRole(),
-                                Boolean.TRUE.equals(securedLink.getInvalidated()), expired);
+                                securedLink.getAccessKey(), Boolean.TRUE.equals(securedLink.getInvalidated()), expired);
                     }
                 }
             }
@@ -275,8 +277,8 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
-    public int invalidateSecuredLinkByContentPath(String contentPath) throws UnifyException {
-        return environment().updateAll(new SecuredLinkQuery().contentPath(contentPath),
+    public int invalidateSecuredLinkByAccessKey(SecuredLinkType type, String accessKey) throws UnifyException {
+        return environment().updateAll(new SecuredLinkQuery().type(type).accessKey(accessKey),
                 new Update().add("invalidated", Boolean.TRUE));
     }
 

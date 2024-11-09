@@ -63,9 +63,9 @@ public class StudioWorkflowApplet extends StudioAppComponentApplet {
             throws UnifyException {
         BreadCrumbs breadCrumbs = form.getBreadCrumbs().advance();
         EntityDef entityDef = getEntityDef(entityName);
-        breadCrumbs.setLastCrumbTitle(au.resolveSessionMessage("$m{workfloweditor.workflowdesigner}"));
+        breadCrumbs.setLastCrumbTitle(au().resolveSessionMessage("$m{workfloweditor.workflowdesigner}"));
         breadCrumbs.setLastCrumbSubTitle(subTitle);
-        return new WorkflowEditorPage(au, entityDef, workflowId, breadCrumbs);
+        return new WorkflowEditorPage(au(), entityDef, workflowId, breadCrumbs);
     }
 
 }

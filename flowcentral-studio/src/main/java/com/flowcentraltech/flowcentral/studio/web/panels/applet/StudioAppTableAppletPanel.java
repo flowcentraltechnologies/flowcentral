@@ -63,7 +63,7 @@ public class StudioAppTableAppletPanel extends StudioAppComponentAppletPanel {
             case HEADLESS_TAB:
                 break;
             case CUSTOM_PAGE:
-                setWidgetVisible("saveDesignCloseBtn", !applet.getCtx().isReadOnly());
+                setWidgetVisible("saveDesignCloseBtn", !applet.appletCtx().isReadOnly());
                 switchContent("tableEditorPagePanel");
                 break;
             default:

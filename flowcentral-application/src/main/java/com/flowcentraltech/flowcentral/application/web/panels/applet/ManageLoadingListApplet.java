@@ -68,7 +68,7 @@ public class ManageLoadingListApplet extends AbstractEntityFormApplet {
             AppletWidgetReferences appletWidgetReferences, EntityFormEventHandlers formEventHandlers)
             throws UnifyException {
         super(page, au, pathVariables, appletWidgetReferences, formEventHandlers);
-        loadingSearch = au.constructLoadingSearch(ctx, LoadingSearch.ENABLE_ALL);
+        loadingSearch = au.constructLoadingSearch(appletCtx(), LoadingSearch.ENABLE_ALL);
         if (isRootAppletPropWithValue(AppletPropertyConstants.BASE_RESTRICTION)) {
             AppletFilterDef appletFilterDef = getRootAppletFilterDef(AppletPropertyConstants.BASE_RESTRICTION);
             loadingSearch.setBaseFilter(new FilterDef(appletFilterDef.getFilterDef()), au.specialParamProvider());
@@ -142,7 +142,7 @@ public class ManageLoadingListApplet extends AbstractEntityFormApplet {
         this.mIndex = mIndex;
         EntityItem item = loadingSearch.getSourceItem(mIndex);
         if (item.isEdit()) {
-            getCtx().setReview(false);
+            appletCtx().setReview(false);
             Entity _inst = item.getEntity();
             _inst = reloadEntity(_inst, true);
             if (form == null) {
@@ -171,12 +171,12 @@ public class ManageLoadingListApplet extends AbstractEntityFormApplet {
                     FormMode.MAINTAIN.formProperty());
             LoadingWorkItemInfo loadingWorkItemInfo = loadingSearch.getLoadingWorkItemInfo(currEntityInst, mIndex);
             final String display = loadingWorkItemInfo.isWithStepLabel()
-                    ? au.resolveSessionMessage("$m{loading.workitem.display}", loadingWorkItemInfo.getStepLabel())
+                    ? au().resolveSessionMessage("$m{loading.workitem.display}", loadingWorkItemInfo.getStepLabel())
                     : null;
-            getCtx().setRecovery(loadingWorkItemInfo.isError());
-            getCtx().setComments(loadingWorkItemInfo.isComments());
-            getCtx().setAttachments(loadingWorkItemInfo.isAttachments());
-            getCtx().setReview(true);
+            appletCtx().setRecovery(loadingWorkItemInfo.isError());
+            appletCtx().setComments(loadingWorkItemInfo.isComments());
+            appletCtx().setAttachments(loadingWorkItemInfo.isAttachments());
+            appletCtx().setReview(true);
             if (formDef.isInputForm()) {
                 if (form == null) {
                     form = constructForm(formDef, currEntityInst, FormMode.MAINTAIN, null, false);
@@ -190,7 +190,7 @@ public class ManageLoadingListApplet extends AbstractEntityFormApplet {
                 form.setDisplayItemCounter(display);
                 form.setAppendables(item);
 
-                getCtx().setReadOnly(loadingWorkItemInfo.isReadOnly());
+                appletCtx().setReadOnly(loadingWorkItemInfo.isReadOnly());
                 setAltSubCaption(form.getFormTitle());
                 viewMode = ViewMode.MAINTAIN_FORM;
                 takeAuditSnapshot(AuditEventType.VIEW);
@@ -202,8 +202,8 @@ public class ManageLoadingListApplet extends AbstractEntityFormApplet {
                 listingForm.setDisplayItemCounter(display);
                 listingForm.setAppendables(item);
 
-                getCtx().setEmails(loadingWorkItemInfo.isEmails());
-                getCtx().setReadOnly(loadingWorkItemInfo.isError());
+                appletCtx().setEmails(loadingWorkItemInfo.isEmails());
+                appletCtx().setReadOnly(loadingWorkItemInfo.isError());
                 setAltSubCaption(listingForm.getFormTitle());
                 viewMode = ViewMode.LISTING_FORM;
             }
@@ -211,14 +211,14 @@ public class ManageLoadingListApplet extends AbstractEntityFormApplet {
             WorkEntity currEntityInst = (WorkEntity) item.getEntity();
             LoadingWorkItemInfo loadingWorkItemInfo = loadingSearch.getLoadingWorkItemInfo(currEntityInst, mIndex);
             final String display = loadingWorkItemInfo.isWithStepLabel()
-                    ? au.resolveSessionMessage("$m{loading.workitem.display}", loadingWorkItemInfo.getStepLabel())
+                    ? au().resolveSessionMessage("$m{loading.workitem.display}", loadingWorkItemInfo.getStepLabel())
                     : null;
 
-            getCtx().setRecovery(loadingWorkItemInfo.isError());
-            getCtx().setEmails(loadingWorkItemInfo.isEmails());
-            getCtx().setComments(loadingWorkItemInfo.isComments());
-            getCtx().setAttachments(loadingWorkItemInfo.isAttachments());
-            getCtx().setReview(true);
+            appletCtx().setRecovery(loadingWorkItemInfo.isError());
+            appletCtx().setEmails(loadingWorkItemInfo.isEmails());
+            appletCtx().setComments(loadingWorkItemInfo.isComments());
+            appletCtx().setAttachments(loadingWorkItemInfo.isAttachments());
+            appletCtx().setReview(true);
             if (singleForm == null) {
                 singleForm = constructSingleForm(currEntityInst, FormMode.MAINTAIN);
                 singleForm.setFormTitle(getRootAppletDef().getLabel());
@@ -230,7 +230,7 @@ public class ManageLoadingListApplet extends AbstractEntityFormApplet {
             singleForm.setDisplayItemCounter(display);
             singleForm.setAppendables(item);
 
-            getCtx().setReadOnly(loadingWorkItemInfo.isReadOnly());
+            appletCtx().setReadOnly(loadingWorkItemInfo.isReadOnly());
             setAltSubCaption(singleForm.getFormTitle());
             viewMode = ViewMode.SINGLE_FORM;
             takeSingleFormAuditSnapshot(AuditEventType.VIEW);
@@ -273,7 +273,7 @@ public class ManageLoadingListApplet extends AbstractEntityFormApplet {
     @Override
     protected AppletDef getAlternateFormAppletDef() throws UnifyException {
         String formAppletName = loadingSearch.getSourceItemFormApplet(mIndex);
-        return !StringUtils.isBlank(formAppletName) ? au.getAppletDef(formAppletName) : null;
+        return !StringUtils.isBlank(formAppletName) ? au().getAppletDef(formAppletName) : null;
     }
 
     public final EntityDef getEntityDef() throws UnifyException {
@@ -287,9 +287,9 @@ public class ManageLoadingListApplet extends AbstractEntityFormApplet {
 
     protected void takeSingleFormAuditSnapshot(AuditEventType auditEventType) throws UnifyException {
         if (isAuditingEnabled()) {
-            AuditSnapshot.Builder asb = AuditSnapshot.newBuilder(AuditSourceType.APPLET, auditEventType, au.getNow(),
+            AuditSnapshot.Builder asb = AuditSnapshot.newBuilder(AuditSourceType.APPLET, auditEventType, au().getNow(),
                     getAppletName());
-            UserToken userToken = au.getSessionUserToken();
+            UserToken userToken = au().getSessionUserToken();
             asb.userLoginId(userToken.getUserLoginId());
             asb.userName(userToken.getUserName());
             asb.userIpAddress(userToken.getIpAddress());
@@ -319,7 +319,7 @@ public class ManageLoadingListApplet extends AbstractEntityFormApplet {
             }
 
             AuditSnapshot auditSnapshot = asb.build();
-            au.audit().log(auditSnapshot);
+            au().audit().log(auditSnapshot);
         }
     }
 

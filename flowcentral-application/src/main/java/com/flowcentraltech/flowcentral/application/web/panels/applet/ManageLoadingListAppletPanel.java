@@ -39,7 +39,7 @@ public class ManageLoadingListAppletPanel extends AbstractEntityFormAppletPanel 
     @Action
     public void performFormAction() throws UnifyException {
         final ManageLoadingListApplet applet = getManageLoadingListApplet();
-        if (applet.getCtx().isReview()) {
+        if (applet.appletCtx().isReview()) {
             final String actionName = getRequestTarget(String.class);
             final LoadingWorkItemInfo loadingWorkItemInfo = applet.getCurrentLoadingWorkItemInfo();
             final FormContext ctx = evaluateCurrentFormContext(new FormValidationContext(

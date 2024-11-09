@@ -253,7 +253,7 @@ public abstract class AbstractAppletPanel extends AbstractApplicationSwitchPanel
 	}
 
 	protected void setCloseResultMapping() throws UnifyException {
-		if (getApplet().getCtx().isInDetachedWindow()) {
+		if (getApplet().appletCtx().isInDetachedWindow()) {
 			setCommandResultMapping(ResultMappingConstants.CLOSE_WINDOW);
 		} else {
 			setCommandResultMapping(ResultMappingConstants.CLOSE);

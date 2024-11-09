@@ -35,7 +35,7 @@ public class ManageEntityListSingleFormApplet extends AbstractEntitySingleFormAp
 
     public ManageEntityListSingleFormApplet(Page page, AppletUtilities au, List<String> pathVariables) throws UnifyException {
         super(page, au, pathVariables);
-        entitySearch = au.constructEntitySearch(new FormContext(getCtx()), null, null,
+        entitySearch = au.constructEntitySearch(new FormContext(appletCtx()), null, null,
                 getRootAppletDef().getDescription(), getRootAppletDef(), null, EntitySearch.ENABLE_ALL, false, false);
         if (isRootAppletPropWithValue(AppletPropertyConstants.BASE_RESTRICTION)) {
             entitySearch.setBaseFilter(

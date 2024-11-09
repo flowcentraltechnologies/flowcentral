@@ -33,9 +33,9 @@ import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm;
 import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm.FormMode;
 import com.flowcentraltech.flowcentral.application.web.panels.EntitySingleForm;
 import com.flowcentraltech.flowcentral.application.web.panels.HeaderWithTabsForm;
-import com.flowcentraltech.flowcentral.common.business.SecuredLinkManager;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionContext;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
+import com.flowcentraltech.flowcentral.common.constants.SecuredLinkType;
 import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
 import com.flowcentraltech.flowcentral.configuration.constants.AuditEventType;
 import com.flowcentraltech.flowcentral.configuration.constants.RecordActionType;
@@ -75,7 +75,7 @@ public abstract class AbstractLoadingApplet extends AbstractEntityFormApplet {
                 final int options = loadingTableProvider.getSourceItemOptions(null);
                 final EntityItem item = loadingTableProvider.getSourceItemByWorkItemId(workItemId, options);
                 if (item.isEdit()) {
-                    getCtx().setReview(false);
+                    appletCtx().setReview(false);
                     Entity _inst = item.getEntity();
                     _inst = reloadEntity(_inst, true);
                     if (form == null) {
@@ -97,10 +97,10 @@ public abstract class AbstractLoadingApplet extends AbstractEntityFormApplet {
                     final String display = loadingWorkItemInfo.isWithStepLabel()
                             ? au.resolveSessionMessage("$m{loading.workitem.display}", loadingWorkItemInfo.getStepLabel())
                             : null;
-                    getCtx().setRecovery(loadingWorkItemInfo.isError());
-                    getCtx().setComments(loadingWorkItemInfo.isComments());
-                    getCtx().setAttachments(loadingWorkItemInfo.isAttachments());
-                    getCtx().setReview(true);
+                    appletCtx().setRecovery(loadingWorkItemInfo.isError());
+                    appletCtx().setComments(loadingWorkItemInfo.isComments());
+                    appletCtx().setAttachments(loadingWorkItemInfo.isAttachments());
+                    appletCtx().setReview(true);
                     if (formDef.isInputForm()) {
                         if (form == null) {
                             form = constructForm(formDef, currEntityInst, FormMode.MAINTAIN, null, false);
@@ -114,7 +114,7 @@ public abstract class AbstractLoadingApplet extends AbstractEntityFormApplet {
                         form.setDisplayItemCounter(display);
                         form.setAppendables(item);
 
-                        getCtx().setReadOnly(loadingWorkItemInfo.isReadOnly());
+                        appletCtx().setReadOnly(loadingWorkItemInfo.isReadOnly());
                         setAltSubCaption(form.getFormTitle());
                         viewMode = ViewMode.MAINTAIN_PRIMARY_FORM_NO_SCROLL;
                         takeAuditSnapshot(AuditEventType.VIEW);
@@ -125,8 +125,8 @@ public abstract class AbstractLoadingApplet extends AbstractEntityFormApplet {
 
                         listingForm.setDisplayItemCounter(display);
                         listingForm.setAppendables(item);
-                        getCtx().setEmails(loadingWorkItemInfo.isEmails());
-                        getCtx().setReadOnly(loadingWorkItemInfo.isError());
+                        appletCtx().setEmails(loadingWorkItemInfo.isEmails());
+                        appletCtx().setReadOnly(loadingWorkItemInfo.isError());
                         setAltSubCaption(listingForm.getFormTitle());
                         viewMode = ViewMode.LISTING_FORM;
                     }
@@ -134,11 +134,11 @@ public abstract class AbstractLoadingApplet extends AbstractEntityFormApplet {
                     WorkEntity currEntityInst = (WorkEntity) item.getEntity();
                     LoadingWorkItemInfo loadingWorkItemInfo = loadingTableProvider
                             .getLoadingWorkItemInfo(currEntityInst);
-                    getCtx().setRecovery(loadingWorkItemInfo.isError());
-                    getCtx().setEmails(loadingWorkItemInfo.isEmails());
-                    getCtx().setComments(loadingWorkItemInfo.isComments());
-                    getCtx().setAttachments(loadingWorkItemInfo.isAttachments());
-                    getCtx().setReview(true);
+                    appletCtx().setRecovery(loadingWorkItemInfo.isError());
+                    appletCtx().setEmails(loadingWorkItemInfo.isEmails());
+                    appletCtx().setComments(loadingWorkItemInfo.isComments());
+                    appletCtx().setAttachments(loadingWorkItemInfo.isAttachments());
+                    appletCtx().setReview(true);
                     if (singleForm == null) {
                         singleForm = constructSingleForm(currEntityInst, FormMode.MAINTAIN);
                         singleForm.setFormTitle(getRootAppletDef().getLabel());
@@ -148,7 +148,7 @@ public abstract class AbstractLoadingApplet extends AbstractEntityFormApplet {
                     }
 
                     singleForm.setAppendables(item);
-                    getCtx().setReadOnly(loadingWorkItemInfo.isReadOnly());
+                    appletCtx().setReadOnly(loadingWorkItemInfo.isReadOnly());
                     setAltSubCaption(singleForm.getFormTitle());
                     viewMode = ViewMode.SINGLE_FORM;
                 }
@@ -214,17 +214,14 @@ public abstract class AbstractLoadingApplet extends AbstractEntityFormApplet {
         WorkEntity currEntityInst = (WorkEntity) _form.getFormBean();
         loadingTableProvider.applyUserActionByWorkItemId(currEntityInst, workItemId, actionName, _form.getNewComment(),
                 _form.getEmails(), _form.isListing());
-
-        SecuredLinkManager slm = au.getComponent(SecuredLinkManager.class);
-        String contentPath = getPage().getPathId() + "/openPage";
-        slm.invalidateSecuredLinkByContentPath(contentPath);
+        invalidateSecuredLink(SecuredLinkType.WORKFLOW_DECISION);
     }
 
     protected abstract WorkflowStepInfo getWorkflowStepInfo(AppletUtilities au, Long sourceItemId)
             throws UnifyException;
 
     protected final AppletDef resolveRootAppletDef(String appletName) throws UnifyException {
-        AppletDef appletDef = au.getAppletDef(appletName);
+        AppletDef appletDef = au().getAppletDef(appletName);
         if (appletDef.getType().isEntityList()) {
             appletDef = appletDef.getMaintainAppletDef();
             setAltCaption(appletDef.getPropValue(String.class, AppletPropertyConstants.PAGE_MAINTAIN_CAPTION));
@@ -236,7 +233,7 @@ public abstract class AbstractLoadingApplet extends AbstractEntityFormApplet {
     @Override
     protected AppletDef getAlternateFormAppletDef() throws UnifyException {
         String formAppletName = loadingTableProvider.getSourceItemFormApplet();
-        return !StringUtils.isBlank(formAppletName) ? au.getAppletDef(formAppletName) : null;
+        return !StringUtils.isBlank(formAppletName) ? au().getAppletDef(formAppletName) : null;
     }
 
     private Entity reloadSingleFormEntity(Entity _inst) throws UnifyException {

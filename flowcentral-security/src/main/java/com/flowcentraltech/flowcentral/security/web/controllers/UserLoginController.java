@@ -23,6 +23,7 @@ import com.flowcentraltech.flowcentral.application.web.controllers.AbstractAppli
 import com.flowcentraltech.flowcentral.common.business.LicenseProvider;
 import com.flowcentraltech.flowcentral.common.business.WorkspacePrivilegeManager;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants;
+import com.flowcentraltech.flowcentral.common.constants.SecuredLinkType;
 import com.flowcentraltech.flowcentral.common.data.SecuredLinkContentInfo;
 import com.flowcentraltech.flowcentral.common.data.UserRoleInfo;
 import com.flowcentraltech.flowcentral.security.business.SecurityModuleService;
@@ -259,6 +260,8 @@ public class UserLoginController extends AbstractApplicationForwarderController<
 
     @Override
     protected void onOpenPage() throws UnifyException {
+        captureSecuredLink(SecuredLinkType.LOGIN);
+
         UserLoginPageBean pageBean = getPageBean();
         pageBean.setLoginTenantId(null);
         pageBean.setUserName(null);
@@ -281,6 +284,8 @@ public class UserLoginController extends AbstractApplicationForwarderController<
     }
 
     private String twoFactorAuthCheck() throws UnifyException {
+        invalidateSecuredLink(SecuredLinkType.LOGIN);
+
         UserLoginPageBean pageBean = getPageBean();
         UserToken userToken = getUserToken();
         // Check 2FA

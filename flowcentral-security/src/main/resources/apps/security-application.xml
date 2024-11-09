@@ -533,6 +533,9 @@
 			label="$m{security.securedlink.label}"
 			type="com.flowcentraltech.flowcentral.security.entities.SecuredLink"
 			reportable="true" auditable="true">
+			<field name="type" label="$m{security.securedlink.type}"
+				type="enum_ref" references="securedlinktypelist"
+				inputWidget="application.enumlist" />
 			<field name="title" label="$m{security.securedlink.title}"
 				type="string" inputWidget="application.text" maxLen="128"
 				basicSearch="true" reportable="true" auditable="true"/>
@@ -554,6 +557,9 @@
 			<field name="lastAccessedOn" label="$m{security.securedlink.lastaccessedon}"
 				type="timestamp" inputWidget="application.datetime"
 				nullable="true" reportable="true" auditable="true"/>
+			<field name="typeDesc"
+				label="$m{security.securedlink.typedesc}" type="list_only"
+				key="type" property="description" />
 		</entity>
 		<entity name="securitySettings" description="$m{security.passwordcomplexity}"
 			label="$m{security.passwordcomplexity.label}"
