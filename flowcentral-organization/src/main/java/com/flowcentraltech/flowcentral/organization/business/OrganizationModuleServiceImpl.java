@@ -15,6 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.organization.business;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
@@ -32,6 +33,7 @@ import com.flowcentraltech.flowcentral.common.business.RolePrivilegeBackupAgent;
 import com.flowcentraltech.flowcentral.common.business.StudioProvider;
 import com.flowcentraltech.flowcentral.common.constants.ConfigType;
 import com.flowcentraltech.flowcentral.common.constants.WfItemVersionType;
+import com.flowcentraltech.flowcentral.common.data.BranchInfo;
 import com.flowcentraltech.flowcentral.configuration.constants.DefaultApplicationConstants;
 import com.flowcentraltech.flowcentral.configuration.data.ModuleInstall;
 import com.flowcentraltech.flowcentral.configuration.xml.util.ConfigurationUtils;
@@ -378,6 +380,29 @@ public class OrganizationModuleServiceImpl extends AbstractFlowCentralService
         return optionalHub.isPresent()
                 ? environment().valueList(Long.class, "id", new BranchQuery().hubId(optionalHub.get()))
                 : Arrays.asList(branchId);
+    }
+
+    @Override
+    public List<BranchInfo> getAssociatedBranches(String branchCode) throws UnifyException {
+        if (!StringUtils.isBlank(branchCode)) {
+            Optional<Long> optionalHub = environment().valueOptional(Long.class, "hubId",
+                    new BranchQuery().code(branchCode));
+            List<String> branchCodeList = optionalHub.isPresent()
+                    ? environment().valueList(String.class, "code", new BranchQuery().hubId(optionalHub.get()))
+                    : Arrays.asList(branchCode);
+            if (!DataUtils.isBlank(branchCodeList)) {
+                List<BranchInfo> branchInfoList = new ArrayList<BranchInfo>();
+                List<Branch> branchList = environment().findAll(new BranchQuery().codeIn(branchCodeList)
+                        .addSelect("code", "description").addOrder("description"));
+                for (Branch branch : branchList) {
+                    branchInfoList.add(new BranchInfo(branch.getCode(), branch.getDescription()));
+                }
+
+                return branchInfoList;
+            }
+        }
+
+        return Collections.emptyList();
     }
 
     @Override

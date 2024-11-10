@@ -1,0 +1,38 @@
+// UPL template for select branch panel
+// Copyright 2021-2024 FlowCentral Technologies Limited.
+// 
+// Licensed under the Apache License, Version 2.0 (the "License"); you may not
+// use this file except in compliance with the License. You may obtain a copy of
+// the License at
+// 
+// http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+// WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+// License for the specific language governing permissions and limitations under
+// the License.
+
+!fc-selectbranchpanel
+    dialogBodyComponents:$c{branchTablePanel}
+    dialogActionComponents:$c{switchActionPanel}
+     
+!ui-tablepanel:branchTablePanel layout:$d{!ui-vertical style:$s{table-layout:fixed;width:100%;}}
+    tableBodyStyle:$s{height:220px;}
+    tableSerialNumbers:false tableBinding:$g{branchListBinding} tableColumnList:$c{branchCode branchDesc}
+    tableRowSelectable:true  tableSelDependentList:$c{selBranchBtn}
+    tableWindowed:true tablePagination:false tableMultiSelect:false tableSortable:false
+
+!ui-label:branchCode caption:$m{application.select.branch.code} binding:branchCode
+    columnStyle:$s{width:160px;}
+!ui-label:branchDesc caption:$m{application.select.branch.description} binding:branchDesc
+    columnStyle:$s{width:160px;}
+   
+!ui-panel:switchActionPanel layout:$d{!ui-horizontal} components:$c{selBranchBtn cancelSelBranchBtn}
+!ui-button:selBranchBtn caption:$m{button.switchrole} styleClass:$e{fc-orangebutton}
+    eventHandler:$d{!ui-event event:onclick action:$c{selBranchAct}}
+!ui-button:cancelSelBranchBtn caption:$m{button.cancel}
+    eventHandler:$d{!ui-event event:onclick action:$c{closeDialogAct}}
+    
+//Actions
+!ui-post:selBranchAct path:$g{selectBranchPath}  components:$c{branchTablePanel}

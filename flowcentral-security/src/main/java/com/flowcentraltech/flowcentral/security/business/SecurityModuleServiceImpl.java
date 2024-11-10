@@ -39,6 +39,7 @@ import com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttrib
 import com.flowcentraltech.flowcentral.common.constants.RecordStatus;
 import com.flowcentraltech.flowcentral.common.constants.SecuredLinkType;
 import com.flowcentraltech.flowcentral.common.data.Attachment;
+import com.flowcentraltech.flowcentral.common.data.BranchInfo;
 import com.flowcentraltech.flowcentral.common.data.Recipient;
 import com.flowcentraltech.flowcentral.common.data.SecuredLinkContentInfo;
 import com.flowcentraltech.flowcentral.common.data.SecuredLinkInfo;
@@ -559,6 +560,11 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
     @Override
     public List<UserRoleInfo> findConsolidatedUserRoles(String userLoginId, Date activeAt) throws UnifyException {
         return findConsolidatedUserRoles(userLoginId, null, activeAt);
+    }
+
+    @Override
+    public List<BranchInfo> getAssociatedBranches(String branchCode) throws UnifyException {
+        return organizationModuleService.getAssociatedBranches(branchCode);
     }
 
     @Override
