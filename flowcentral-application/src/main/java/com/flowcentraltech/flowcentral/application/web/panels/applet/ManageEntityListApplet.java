@@ -58,7 +58,7 @@ public class ManageEntityListApplet extends AbstractEntityFormApplet {
         setCurrFormAppletDef(_rootAppletDef);
         final AppletNameParts parts = ApplicationNameUtils.getAppletNameParts(pathVariables.get(APPLET_NAME_INDEX));
         final boolean isUpdateDraft = ApplicationNameUtils.WORKFLOW_COPY_UPDATE_DRAFT_PATH_SUFFIX.equals(parts.getVestigial());
-        entitySearch = au.constructEntitySearch(new FormContext(getCtx()), this, null, _rootAppletDef.getDescription(),
+        entitySearch = au.constructEntitySearch(new FormContext(appletCtx()), this, null, _rootAppletDef.getDescription(),
                 getCurrFormAppletDef(), null,
                 isUpdateDraft ? EntitySearch.ENABLE_ALL & ~EntitySearch.SHOW_NEW_BUTTON : EntitySearch.ENABLE_ALL,
                 false, false);

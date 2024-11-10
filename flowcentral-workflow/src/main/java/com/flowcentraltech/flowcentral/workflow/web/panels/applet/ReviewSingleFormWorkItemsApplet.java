@@ -67,7 +67,7 @@ public class ReviewSingleFormWorkItemsApplet extends AbstractReviewSingleFormWor
         super(page, au, pathVariables);
         this.wms = wms;
         AppletDef _appletDef = getRootAppletDef();
-        entitySearch = au.constructEntitySearch(new FormContext(getCtx()), null, null,
+        entitySearch = au.constructEntitySearch(new FormContext(appletCtx()), null, null,
                 getRootAppletDef().getDescription(), _appletDef, null,
                 EntitySearch.ENABLE_ALL & ~(EntitySearch.SHOW_NEW_BUTTON | EntitySearch.SHOW_EDIT_BUTTON), false,
                 false);
@@ -91,12 +91,12 @@ public class ReviewSingleFormWorkItemsApplet extends AbstractReviewSingleFormWor
         EntityItem entityItem = getEntitySearchItem(entitySearch, mIndex);
         ValueStoreReader reader = new BeanValueStore(currEntityInst).getReader();
         WfDef wfDef = wms.getWfDef(currWfItem.getWorkflowName());
-        final boolean emails = WorkflowEntityUtils.isWorkflowConditionMatched(au, reader, wfDef, wfStepDef.getEmails());
-        final boolean comments = WorkflowEntityUtils.isWorkflowConditionMatched(au, reader, wfDef,
+        final boolean emails = WorkflowEntityUtils.isWorkflowConditionMatched(au(), reader, wfDef, wfStepDef.getEmails());
+        final boolean comments = WorkflowEntityUtils.isWorkflowConditionMatched(au(), reader, wfDef,
                 wfStepDef.getComments());
-        getCtx().setRecovery(wfStepDef.isError());
-        getCtx().setEmails(emails);
-        getCtx().setComments(comments);
+        appletCtx().setRecovery(wfStepDef.isError());
+        appletCtx().setEmails(emails);
+        appletCtx().setComments(comments);
         if (form == null) {
             form = constructSingleForm(currEntityInst, FormMode.MAINTAIN);
             form.setFormTitle(getRootAppletDef().getLabel());
@@ -108,11 +108,11 @@ public class ReviewSingleFormWorkItemsApplet extends AbstractReviewSingleFormWor
         form.setAppendables(entityItem);
 
         // Check if enter read-only mode
-        getCtx().setReadOnly(!userActionRight || wfStepDef.isError());
+        appletCtx().setReadOnly(!userActionRight || wfStepDef.isError());
         if (userActionRight) {
-            final boolean readOnly = WorkflowEntityUtils.isWorkflowConditionMatched(au, reader, wfDef,
+            final boolean readOnly = WorkflowEntityUtils.isWorkflowConditionMatched(au(), reader, wfDef,
                     wfStepDef.getReadOnlyConditionName());
-            getCtx().setReadOnly(readOnly);
+            appletCtx().setReadOnly(readOnly);
         }
 
         setDisplayModeMessage(form);
@@ -126,10 +126,10 @@ public class ReviewSingleFormWorkItemsApplet extends AbstractReviewSingleFormWor
             currWfItem = (WfItem) entitySearch.getEntityTable().getDispItemList().get(mIndex);
             WorkEntityItem _workEntityItem = wms.getWfItemWorkEntityFromWorkItemId(currWfItem.getId(), WfReviewMode.SINGLEFORM);
             currEntityInst = _workEntityItem.getWorkEntity();
-            final String currentUser = au.getSessionUserLoginId();
+            final String currentUser = au().getSessionUserLoginId();
             if (StringUtils.isBlank(currWfItem.getHeldBy())) { // Current user should hold current item if it is unheld
                 currWfItem.setHeldBy(currentUser);
-                au.environment().updateByIdVersion(currWfItem);
+                au().environment().updateByIdVersion(currWfItem);
             }
 
             userActionRight = currentUser != null && currentUser.equals(currWfItem.getHeldBy());

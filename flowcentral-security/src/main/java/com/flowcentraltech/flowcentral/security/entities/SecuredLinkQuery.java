@@ -15,6 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.security.entities;
 
+import com.flowcentraltech.flowcentral.common.constants.SecuredLinkType;
 import com.flowcentraltech.flowcentral.common.entities.BaseAuditEntityQuery;
 
 /**
@@ -31,6 +32,10 @@ public class SecuredLinkQuery extends BaseAuditEntityQuery<SecuredLink> {
 
     public SecuredLinkQuery assignedToLoginId(String assignedToLoginId) {
         return (SecuredLinkQuery) addEquals("assignedToLoginId", assignedToLoginId);
+    }
+
+    public SecuredLinkQuery type(SecuredLinkType type) {
+        return (SecuredLinkQuery) addEquals("type", type);
     }
 
     public SecuredLinkQuery accessKey(String accessKey) {

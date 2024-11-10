@@ -43,6 +43,7 @@ import com.flowcentraltech.flowcentral.common.constants.FlowCentralEditionConsta
 import com.flowcentraltech.flowcentral.common.constants.LicenseFeatureCodeConstants;
 import com.flowcentraltech.flowcentral.common.constants.LicenseStatus;
 import com.flowcentraltech.flowcentral.common.constants.SectorStatus;
+import com.flowcentraltech.flowcentral.common.constants.SecuredLinkType;
 import com.flowcentraltech.flowcentral.common.constants.SystemSchedTaskConstants;
 import com.flowcentraltech.flowcentral.common.data.Attachment;
 import com.flowcentraltech.flowcentral.common.data.ParamValueDef;
@@ -247,21 +248,26 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
-    public SecuredLinkInfo getNewSecuredLink(String title, String contentPath, int expirationInMinutes)
+    public SecuredLinkInfo getNewSecuredLink(SecuredLinkType type, String title, String contentPath)
             throws UnifyException {
-        return securedLinkManager.getNewSecuredLink(title, contentPath, expirationInMinutes);
+        final int expirationInMinutes = getSysParameterValue(int.class,
+                SystemModuleSysParamConstants.SECURED_LINK_EXPIRATION_MINUTES);
+        return securedLinkManager.getNewSecuredLink(type, title, contentPath, expirationInMinutes);
     }
 
     @Override
-    public SecuredLinkInfo getNewSecuredLink(String title, String contentPath, String assignedLoginId,
-            int expirationInMinutes) throws UnifyException {
-        return securedLinkManager.getNewSecuredLink(title, contentPath, assignedLoginId, expirationInMinutes);
+    public SecuredLinkInfo getNewSecuredLink(SecuredLinkType type, String title, String contentPath, String assignedLoginId) throws UnifyException {
+        final int expirationInMinutes = getSysParameterValue(int.class,
+                SystemModuleSysParamConstants.SECURED_LINK_EXPIRATION_MINUTES);
+        return securedLinkManager.getNewSecuredLink(type, title, contentPath, assignedLoginId, expirationInMinutes);
     }
 
     @Override
-    public SecuredLinkInfo getNewSecuredLink(String title, String contentPath, String assignedLoginId,
-            String assignedRole, int expirationInMinutes) throws UnifyException {
-        return securedLinkManager.getNewSecuredLink(title, contentPath, assignedLoginId, assignedRole,
+    public SecuredLinkInfo getNewSecuredLink(SecuredLinkType type, String title, String contentPath, String assignedLoginId,
+            String assignedRole) throws UnifyException {
+        final int expirationInMinutes = getSysParameterValue(int.class,
+                SystemModuleSysParamConstants.SECURED_LINK_EXPIRATION_MINUTES);
+        return securedLinkManager.getNewSecuredLink(type, title, contentPath, assignedLoginId, assignedRole,
                 expirationInMinutes);
     }
 

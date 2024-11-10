@@ -63,4 +63,6 @@ public interface SecurityModuleSysParamConstants {
 
     String ENABLE_PASSWORD_COMPLEXITY= "SEC-0014";
 
+    String ENABLE_BRANCH_SELECT_MODE = "SEC-0015";
+
 }

@@ -72,5 +72,8 @@
 		<sysParameter code="SEC-0014" defaultVal="false"
 			description="$m{security.sysparam.enablepasswordcomplexity}"
 			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
+		<sysParameter code="SEC-0015" defaultVal="false"
+			description="$m{security.sysparam.enablebranchselectionmode}"
+			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
 	</sysParameters>
 </module>

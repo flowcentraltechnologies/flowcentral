@@ -63,7 +63,7 @@ public class StudioReportConfigurationAppletPanel extends StudioAppComponentAppl
             case HEADLESS_TAB:
                 break;
             case CUSTOM_PAGE:
-                setWidgetVisible("saveDesignCloseBtn", !applet.getCtx().isReadOnly());
+                setWidgetVisible("saveDesignCloseBtn", !applet.appletCtx().isReadOnly());
                 switchContent("reportEditorPagePanel");
                 break;
             default:

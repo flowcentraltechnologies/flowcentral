@@ -19,9 +19,10 @@
      
 !ui-tablepanel:roleTablePanel layout:$d{!ui-vertical style:$s{table-layout:fixed;width:100%;}}
     tableBodyStyle:$s{height:220px;}
-    tableSerialNumbers:false tableBinding:$g{roleListBinding} tableColumnList:$c{roleDesc userGroupDesc}
+    tableSerialNumbers:true tableBinding:$g{roleListBinding} tableColumnList:$c{roleDesc userGroupDesc}
     tableRowSelectable:true  tableSelDependentList:$c{selRoleBtn}
     tableWindowed:true tablePagination:false tableMultiSelect:false tableSortable:false
+    tableRowEventHandler:$d{!ui-event event:ondblclick action:$c{selRoleAct}}
 
 !ui-label:roleDesc caption:$m{application.select.role.description} binding:roleDesc
     columnStyle:$s{width:160px;}

@@ -14,36 +14,20 @@
  * the License.
  */
 
-package com.flowcentraltech.flowcentral.security.web.controllers;
+package com.flowcentraltech.flowcentral.application.web.panels;
 
-import com.flowcentraltech.flowcentral.common.web.controllers.AbstractForwarderPageBean;
+import com.flowcentraltech.flowcentral.common.web.panels.BaseDialogPanel;
+import com.tcdng.unify.core.annotation.Component;
+import com.tcdng.unify.core.annotation.UplBinding;
 
 /**
- * Secured link access page bean.
+ * Panel for presenting and selecting branch.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class SecuredLinkAccessPageBean extends AbstractForwarderPageBean {
+@Component("fc-selectbranchpanel")
+@UplBinding("web/application/upl/selectbranchpanel.upl")
+public class SelectBranchPanel extends BaseDialogPanel {
 
-    private String targetParam;
-    
-    private String message;
-
-    public String getTargetParam() {
-        return targetParam;
-    }
-
-    public void setTargetParam(String targetParam) {
-        this.targetParam = targetParam;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-        
 }

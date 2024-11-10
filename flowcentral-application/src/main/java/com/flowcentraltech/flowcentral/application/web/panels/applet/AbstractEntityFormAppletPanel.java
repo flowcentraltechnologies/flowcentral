@@ -113,7 +113,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
 
         final AppletDef formAppletDef = applet.getFormAppletDef();
         logDebug("Switching form applet panel [{0}]...", formAppletDef != null ? formAppletDef.getLongName() : null);
-        final AppletContext appCtx = applet.getCtx();
+        final AppletContext appCtx = applet.appletCtx();
         final boolean isCollaboration = applet.isCollaboration() && collaborationProvider() != null;
         final AbstractEntityFormApplet.ViewMode viewMode = applet.getMode();
         final String roleCode = getUserToken().getRoleCode();
@@ -950,7 +950,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
 
     @Action
     public void reviewAcknowledged() throws UnifyException {
-        EntityActionResult entityActionResult = getEntityFormApplet().getCtx().getOriginalEntityActionResult();
+        EntityActionResult entityActionResult = getEntityFormApplet().appletCtx().getOriginalEntityActionResult();
         setCommandResultMapping(entityActionResult, true);
     }
 
@@ -958,7 +958,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
     public void reviewConfirm() throws UnifyException {
         MessageResult messageResult = getMessageResult();
         if (MessageResult.YES.equals(messageResult)) {
-            EntityActionResult entityActionResult = getEntityFormApplet().getCtx().getOriginalEntityActionResult();
+            EntityActionResult entityActionResult = getEntityFormApplet().appletCtx().getOriginalEntityActionResult();
             if (entityActionResult.isSubmitToWorkflow()) {
                 entityActionResult = getEntityFormApplet().submitCurrentInst(entityActionResult.getActionMode());
                 entityActionResult.setSuccessHint("$m{entityformapplet.submit.success.hint}");
@@ -1039,7 +1039,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         ReviewResult reviewResult = entityActionResult.getReviewResult();
         if (reviewResult != null) {
             if (reviewResult.isSkippableOnly()) {
-                getEntityFormApplet().getCtx().setOriginalEntityActionResult(entityActionResult);
+                getEntityFormApplet().appletCtx().setOriginalEntityActionResult(entityActionResult);
                 final String message = concatenateMessages("$m{entityformapplet.formreview.skippable}",
                         reviewResult.getSkippableMessages());
                 final String commandPath = getCommandFullPath("reviewConfirm");
@@ -1068,7 +1068,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
 
     private void performNormalViewMode() throws UnifyException {
         AbstractEntityFormApplet applet = getEntityFormApplet();
-        applet.getCtx().setInWorkflowPromptViewMode(true);
+        applet.appletCtx().setInWorkflowPromptViewMode(true);
         setRequestAttribute(IN_WORKFLOW_DRAFT_LOOP_FLAG, Boolean.TRUE);
         WorkflowDraftInfo workflowDraftInfo = applet.getWorkflowDraftInfo();
         switch (workflowDraftInfo.getType()) {
@@ -1087,7 +1087,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
             case UPDATE:
             case UPDATE_CLOSE:
             default:
-                applet.getCtx().setInWorkflowPromptViewMode(false);
+                applet.appletCtx().setInWorkflowPromptViewMode(false);
                 setRequestAttribute(IN_WORKFLOW_DRAFT_LOOP_FLAG, Boolean.FALSE);
                 break;
         }

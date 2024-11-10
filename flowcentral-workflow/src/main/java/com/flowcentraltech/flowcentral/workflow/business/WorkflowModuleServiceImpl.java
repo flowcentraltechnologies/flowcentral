@@ -61,7 +61,6 @@ import com.flowcentraltech.flowcentral.application.util.ApplicationEntityNamePar
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityUtils;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.util.ApplicationPageUtils;
-import com.flowcentraltech.flowcentral.application.util.HtmlUtils;
 import com.flowcentraltech.flowcentral.application.util.InputWidgetUtils;
 import com.flowcentraltech.flowcentral.application.util.OpenPagePathParts;
 import com.flowcentraltech.flowcentral.application.util.PrivilegeNameParts;
@@ -83,6 +82,7 @@ import com.flowcentraltech.flowcentral.common.constants.ConfigType;
 import com.flowcentraltech.flowcentral.common.constants.FileAttachmentCategoryType;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralContainerPropertyConstants;
 import com.flowcentraltech.flowcentral.common.constants.ProcessErrorConstants;
+import com.flowcentraltech.flowcentral.common.constants.SecuredLinkType;
 import com.flowcentraltech.flowcentral.common.constants.WfItemVersionType;
 import com.flowcentraltech.flowcentral.common.data.Recipient;
 import com.flowcentraltech.flowcentral.common.data.SecuredLinkInfo;
@@ -1338,10 +1338,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
     private SecuredLinkInfo getWorkItemSecuredLink(String appletName, WfItem wfItem) throws UnifyException {
         final OpenPagePathParts parts = ApplicationPageUtils.constructAppletOpenPagePath(AppletType.MY_WORKITEM,
                 appletName, wfItem.getWfItemEventId());
-        final int expirationMinutes = appletUtil.system().getSysParameterValue(int.class,
-                SystemModuleSysParamConstants.SECURED_LINK_EXPIRATION_MINUTES);
-        return appletUtil.system().getNewSecuredLink(wfItem.getWfItemDesc(), parts.getOpenPath(), wfItem.getHeldBy(),
-                expirationMinutes);
+        return appletUtil.system().getNewSecuredLink(SecuredLinkType.WORKFLOW_DECISION, wfItem.getWfItemDesc(),
+                parts.getOpenPath(), wfItem.getHeldBy());
     }
 
     @Periodic(PeriodicType.FASTER)
@@ -1810,6 +1808,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         final String appUrl = appletUtil.system().getSysParameterValue(String.class,
                 SystemModuleSysParamConstants.APPLICATION_BASE_URL);
 
+        SecuredLinkInfo securedLinkInfo = appletUtil.system().getNewSecuredLink(SecuredLinkType.LOGIN, appTitle,
+                appUrl);
         variables.put(ProcessVariable.FORWARDED_BY.variableKey(), wfItem.getForwardedBy());
         variables.put(ProcessVariable.FORWARDED_BY_NAME.variableKey(), wfItem.getForwardedByName());
         variables.put(ProcessVariable.FORWARD_TO.variableKey(), wfItem.getForwardTo());
@@ -1819,9 +1819,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         variables.put(ProcessVariable.APP_TITLE.variableKey(), appTitle);
         variables.put(ProcessVariable.APP_CORRESPONDER.variableKey(), appCorresponder);
         variables.put(ProcessVariable.APP_URL.variableKey(), appUrl);
-        variables.put(ProcessVariable.APP_HTML_LINK.variableKey(),
-                HtmlUtils.getSecuredHtmlLink(appUrl, resolveApplicationMessage("$m{link.here}")));
-
+        variables.put(ProcessVariable.APP_HTML_LINK.variableKey(), securedLinkInfo.getHtmlLink());
         return variables;
     }
 

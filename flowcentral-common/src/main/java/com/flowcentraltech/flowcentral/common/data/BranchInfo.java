@@ -14,36 +14,31 @@
  * the License.
  */
 
-package com.flowcentraltech.flowcentral.security.web.controllers;
-
-import com.flowcentraltech.flowcentral.common.web.controllers.AbstractForwarderPageBean;
+package com.flowcentraltech.flowcentral.common.data;
 
 /**
- * Secured link access page bean.
+ * Branch information.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class SecuredLinkAccessPageBean extends AbstractForwarderPageBean {
+public class BranchInfo {
 
-    private String targetParam;
-    
-    private String message;
+    private String branchCode;
 
-    public String getTargetParam() {
-        return targetParam;
+    private String branchDesc;
+
+    public BranchInfo(String branchCode, String branchDesc) {
+        this.branchCode = branchCode;
+        this.branchDesc = branchDesc;
     }
 
-    public void setTargetParam(String targetParam) {
-        this.targetParam = targetParam;
+    public String getBranchCode() {
+        return branchCode;
     }
 
-    public String getMessage() {
-        return message;
+    public String getBranchDesc() {
+        return branchDesc;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
-    }
-        
 }

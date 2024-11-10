@@ -74,7 +74,7 @@ public class ReviewWorkItemsApplet extends AbstractReviewWorkItemsApplet {
         super(page, au, pathVariables, appletWidgetReferences, formEventHandlers);
         this.wms = wms;
         AppletDef _appletDef = getRootAppletDef();
-        entitySearch = au.constructEntitySearch(new FormContext(getCtx()), this, null,
+        entitySearch = au.constructEntitySearch(new FormContext(appletCtx()), this, null,
                 getRootAppletDef().getDescription(), _appletDef, null,
                 EntitySearch.ENABLE_ALL & ~(EntitySearch.SHOW_NEW_BUTTON | EntitySearch.SHOW_EDIT_BUTTON), false,
                 false);
@@ -102,10 +102,10 @@ public class ReviewWorkItemsApplet extends AbstractReviewWorkItemsApplet {
                 FormMode.MAINTAIN.formProperty());
         ValueStoreReader reader = new BeanValueStore(currEntityInst).getReader();
         WfDef wfDef = wms.getWfDef(currWfItem.getWorkflowName());
-        final boolean comments = WorkflowEntityUtils.isWorkflowConditionMatched(au, reader, wfDef,
+        final boolean comments = WorkflowEntityUtils.isWorkflowConditionMatched(au(), reader, wfDef,
                 wfStepDef.getComments());
-        getCtx().setRecovery(wfStepDef.isError());
-        getCtx().setComments(comments);
+        appletCtx().setRecovery(wfStepDef.isError());
+        appletCtx().setComments(comments);
         if (formDef.isInputForm()) {
             if (form == null) {
                 form = constructForm(formDef, currEntityInst, FormMode.MAINTAIN, null, false);
@@ -119,11 +119,11 @@ public class ReviewWorkItemsApplet extends AbstractReviewWorkItemsApplet {
             form.setAppendables(entityItem);
 
             // Check if enter read-only mode
-            getCtx().setReadOnly(!userActionRight || wfStepDef.isError());
+            appletCtx().setReadOnly(!userActionRight || wfStepDef.isError());
             if (userActionRight) {
-                final boolean readOnly = WorkflowEntityUtils.isWorkflowConditionMatched(au, reader, wfDef,
+                final boolean readOnly = WorkflowEntityUtils.isWorkflowConditionMatched(au(), reader, wfDef,
                         wfStepDef.getReadOnlyConditionName());
-                getCtx().setReadOnly(readOnly);
+                appletCtx().setReadOnly(readOnly);
             }
 
             setDisplayModeMessage(form);
@@ -133,10 +133,10 @@ public class ReviewWorkItemsApplet extends AbstractReviewWorkItemsApplet {
             listingForm.setFormTitle(getRootAppletDef().getLabel());
             listingForm.setFormActionDefList(wfStepDef.getFormActionDefList());
             listingForm.setAppendables(entityItem);
-            final boolean emails = WorkflowEntityUtils.isWorkflowConditionMatched(au, reader, wfDef,
+            final boolean emails = WorkflowEntityUtils.isWorkflowConditionMatched(au(), reader, wfDef,
                     wfStepDef.getEmails());
-            getCtx().setEmails(emails);
-            getCtx().setReadOnly(!userActionRight || wfStepDef.isError());
+            appletCtx().setEmails(emails);
+            appletCtx().setReadOnly(!userActionRight || wfStepDef.isError());
             setDisplayModeMessage(listingForm);
             viewMode = ViewMode.LISTING_FORM;
         }
@@ -180,10 +180,10 @@ public class ReviewWorkItemsApplet extends AbstractReviewWorkItemsApplet {
             WorkEntityItem _workEntityItem = wms.getWfItemWorkEntityFromWorkItemId(currWfItem.getId(), WfReviewMode.NORMAL);
             currEntityInst = _workEntityItem.getWorkEntity();
 
-            final String currentUser = au.getSessionUserLoginId();
+            final String currentUser = au().getSessionUserLoginId();
             if (StringUtils.isBlank(currWfItem.getHeldBy())) { // Current user should hold current item if it is unheld
                 currWfItem.setHeldBy(currentUser);
-                au.environment().updateByIdVersion(currWfItem);
+                au().environment().updateByIdVersion(currWfItem);
             }
 
             userActionRight = currentUser != null && currentUser.equals(currWfItem.getHeldBy());

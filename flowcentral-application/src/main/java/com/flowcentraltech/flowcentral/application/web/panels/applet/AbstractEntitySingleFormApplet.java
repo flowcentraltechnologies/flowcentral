@@ -161,7 +161,7 @@ public abstract class AbstractEntitySingleFormApplet extends AbstractApplet {
     }
 
     public void navBackToSearch() throws UnifyException {
-        getCtx().setInWorkflow(false);
+        appletCtx().setInWorkflow(false);
         form = null;
         viewMode = ViewMode.SEARCH;
         entitySearch.applySearchEntriesToSearch();
@@ -169,7 +169,7 @@ public abstract class AbstractEntitySingleFormApplet extends AbstractApplet {
 
     public Diff diff() throws UnifyException {
         WorkEntity workEntity = (WorkEntity) form.getFormBean();
-        return DiffUtils.diff(au, form.getFormDef(), (Long) workEntity.getId(), workEntity.getOriginalCopyId(),
+        return DiffUtils.diff(au(), form.getFormDef(), (Long) workEntity.getId(), workEntity.getOriginalCopyId(),
                 Formats.DEFAULT.createInstance());
     }
 
@@ -296,7 +296,7 @@ public abstract class AbstractEntitySingleFormApplet extends AbstractApplet {
     }
 
     public EntityActionResult submitInst() throws UnifyException {
-        if (getCtx().isInDetachedWindow() && !getSingleFormAppletDef().getPropValue(boolean.class,
+        if (appletCtx().isInDetachedWindow() && !getSingleFormAppletDef().getPropValue(boolean.class,
                 AppletPropertyConstants.ENTITY_FORM_CLOSE_DETACHED_ONSUBMIT, false)) { 
             return submitInstAndNext();
         }
@@ -360,9 +360,9 @@ public abstract class AbstractEntitySingleFormApplet extends AbstractApplet {
 
     protected void takeAuditSnapshot(AuditEventType auditEventType) throws UnifyException {
         if (isAuditingEnabled()) {
-            AuditSnapshot.Builder asb = AuditSnapshot.newBuilder(AuditSourceType.APPLET, auditEventType, au.getNow(),
+            AuditSnapshot.Builder asb = AuditSnapshot.newBuilder(AuditSourceType.APPLET, auditEventType, au().getNow(),
                     getAppletName());
-            UserToken userToken = au.getSessionUserToken();
+            UserToken userToken = au().getSessionUserToken();
             asb.userLoginId(userToken.getUserLoginId());
             asb.userName(userToken.getUserName());
             asb.userIpAddress(userToken.getIpAddress());
@@ -376,7 +376,7 @@ public abstract class AbstractEntitySingleFormApplet extends AbstractApplet {
             }
 
             AuditSnapshot auditSnapshot = asb.build();
-            au.audit().log(auditSnapshot);
+            au().audit().log(auditSnapshot);
         }
     }
 
@@ -386,7 +386,7 @@ public abstract class AbstractEntitySingleFormApplet extends AbstractApplet {
         final String createNewCaption = getRootAppletProp(String.class,
                 AppletPropertyConstants.CREATE_FORM_NEW_CAPTION);
         final String beanTitle = !StringUtils.isBlank(createNewCaption) ? createNewCaption
-                : au.resolveSessionMessage(formMode.isCreate() ? "$m{form.newentity}" : "$m{form.maintainentity}",
+                : au().resolveSessionMessage(formMode.isCreate() ? "$m{form.newentity}" : "$m{form.maintainentity}",
                         entityClassDef.getEntityDef().getDescription());
         return constructSingleForm((Entity) inst, formMode, beanTitle);
     }
@@ -401,7 +401,7 @@ public abstract class AbstractEntitySingleFormApplet extends AbstractApplet {
     }
 
     public boolean formBeanMatchAppletPropertyCondition(String conditionPropName) throws UnifyException {
-        return au.formBeanMatchAppletPropertyCondition(getRootAppletDef(), form, conditionPropName);
+        return au().formBeanMatchAppletPropertyCondition(getRootAppletDef(), form, conditionPropName);
     }
 
     @SuppressWarnings("unchecked")
@@ -426,14 +426,14 @@ public abstract class AbstractEntitySingleFormApplet extends AbstractApplet {
         eCtx.setAll(form.getCtx());
 
         // Populate values for auto-format fields
-        au.populateAutoFormatFields(_entityDef, inst);
+        au().populateAutoFormatFields(_entityDef, inst);
 
         EntityActionResult entityActionResult;
         try {
             entityActionResult = au().environment().create(eCtx);
         } catch (UnifyException e) {
             // Revert to skeleton values
-            au.revertAutoFormatFields(_entityDef, inst);
+            au().revertAutoFormatFields(_entityDef, inst);
             throw e;
         }
 
@@ -488,7 +488,7 @@ public abstract class AbstractEntitySingleFormApplet extends AbstractApplet {
                         (WorkEntity) inst,
                         getRootAppletProp(String.class, AppletPropertyConstants.MAINTAIN_FORM_SUBMIT_POLICY));
             } else {
-                au.populateAutoFormatFields(_entityDef, inst);
+                au().populateAutoFormatFields(_entityDef, inst);
                 entityActionResult = au().workItemUtilities().submitToWorkflowChannel(form.getEntityDef(),
                         getRootAppletProp(String.class, AppletPropertyConstants.CREATE_FORM_SUBMIT_WORKFLOW_CHANNEL),
                         (WorkEntity) inst,
@@ -498,13 +498,13 @@ public abstract class AbstractEntitySingleFormApplet extends AbstractApplet {
             takeAuditSnapshot(reviewType.auditEventType());
         } catch (UnifyException e) {
             if (!viewMode.isMaintainForm()) {
-                au.revertAutoFormatFields(_entityDef, inst);
+                au().revertAutoFormatFields(_entityDef, inst);
             }
             throw e;
         }
 
         if (actionMode.isWithNext()) {
-            if (getCtx().isInDetachedWindow() && viewMode.isMaintainForm()) {
+            if (appletCtx().isInDetachedWindow() && viewMode.isMaintainForm()) {
                 viewMode = viewMode.isPrimary() ? ViewMode.NEW_PRIMARY_FORM : ViewMode.NEW_FORM;
             }
 

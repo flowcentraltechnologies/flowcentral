@@ -1004,7 +1004,7 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
             Entity inst, BreadCrumbs breadCrumbs) throws UnifyException {
         logDebug("Constructing listing form for bean [{0}] using form definition [{1}]...", beanTitle,
                 formDef.getLongName());
-        final AppletContext appletContext = applet != null ? applet.getCtx() : new AppletContext(null, applet, this);
+        final AppletContext appletContext = applet != null ? applet.appletCtx() : new AppletContext(null, applet, this);
         final FormContext formContext = new FormContext(appletContext, formDef, null, inst);
         final SectorIcon sectorIcon = applet != null
                 ? getPageSectorIconByApplication(applet.getRootAppletDef().getApplicationName())
@@ -1022,7 +1022,7 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
             EntityFormEventHandlers formEventHandlers) throws UnifyException {
         logDebug("Constructing header with tabs form for bean [{0}] using form definition [{1}]...", beanTitle,
                 formDef.getLongName());
-        final AppletContext appletContext = applet != null ? applet.getCtx() : new AppletContext(null, applet, this);
+        final AppletContext appletContext = applet != null ? applet.appletCtx() : new AppletContext(null, applet, this);
         final SweepingCommitPolicy sweepingCommitPolicy = applet;
         final FormContext formContext = new FormContext(appletContext, formDef, formEventHandlers, inst);
         final SectorIcon sectorIcon = applet != null
@@ -1410,7 +1410,7 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
     @Override
     public EntitySingleForm constructEntitySingleForm(AbstractApplet applet, String rootTitle, String beanTitle,
             Entity inst, FormMode formMode, BreadCrumbs breadCrumbs) throws UnifyException {
-        final AppletContext appletContext = applet != null ? applet.getCtx() : new AppletContext(null, applet, this);
+        final AppletContext appletContext = applet != null ? applet.appletCtx() : new AppletContext(null, applet, this);
         final FormContext formContext = new FormContext(appletContext, applet.getEntityDef(), inst);
         final SectorIcon sectorIcon = applet != null
                 ? getPageSectorIconByApplication(applet.getRootAppletDef().getApplicationName())

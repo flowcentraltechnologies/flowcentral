@@ -22,6 +22,7 @@ package com.flowcentraltech.flowcentral.application.web.panels.applet;
 import java.util.Date;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
+import com.flowcentraltech.flowcentral.application.constants.AppletPageAttributeConstants;
 import com.flowcentraltech.flowcentral.application.constants.AppletPropertyConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
@@ -43,7 +44,9 @@ import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm;
 import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm.FormMode;
 import com.flowcentraltech.flowcentral.application.web.panels.EntitySingleForm;
 import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs;
+import com.flowcentraltech.flowcentral.common.business.SecuredLinkManager;
 import com.flowcentraltech.flowcentral.common.business.policies.TableActionResult;
+import com.flowcentraltech.flowcentral.common.constants.SecuredLinkType;
 import com.flowcentraltech.flowcentral.configuration.constants.AppletType;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.BeanValueStore;
@@ -73,9 +76,9 @@ public abstract class AbstractApplet {
 
     protected static final int APPLET_NAME_INDEX = 0;
 
-    protected final AppletUtilities au;
+    private final AppletUtilities au;
 
-    protected final AppletContext ctx;
+    private final AppletContext ctx;
 
     private final String appletName;
 
@@ -97,7 +100,7 @@ public abstract class AbstractApplet {
         return appletName;
     }
 
-    public final AppletContext getCtx() {
+    public final AppletContext appletCtx() {
         return ctx;
     }
 
@@ -166,6 +169,10 @@ public abstract class AbstractApplet {
         return au;
     }
 
+    public Page getPage() {
+        return appletCtx().getPage();
+    }
+
     public void ensureRootAppletStruct() throws UnifyException {
         if (rootAppletDef != null) {
             AppletDef _nAppletDef = resolveRootAppletDef(appletName);
@@ -199,6 +206,17 @@ public abstract class AbstractApplet {
 
     public boolean isWithWorkflowDraftInfo() {
         return workflowDraftInfo != null;
+    }
+
+    protected final void invalidateSecuredLink(SecuredLinkType type) throws UnifyException {
+        final String accessKey = getPage().getAttribute(String.class,
+                AppletPageAttributeConstants.SECURED_LINK_ACCESSKEY);
+        if (!StringUtils.isBlank(accessKey)) {
+            SecuredLinkManager slm = au.getComponent(SecuredLinkManager.class);
+            if (slm.invalidateSecuredLinkByAccessKey(type, accessKey) > 0) {
+                getPage().removeAttribute(String.class, AppletPageAttributeConstants.SECURED_LINK_ACCESSKEY);
+            }
+        }
     }
 
     protected void setAltCaption(String altCaption) {
