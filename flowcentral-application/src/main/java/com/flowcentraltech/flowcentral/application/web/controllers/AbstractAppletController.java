@@ -150,9 +150,6 @@ public abstract class AbstractAppletController<T extends AbstractAppletPageBean<
 
     protected final void captureSecuredLink(SecuredLinkType type) throws UnifyException {
         final String forward = getSessionContext().getExternalForward();
-        System.out.println("@prime: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
-        System.out.println("@prime: type = " + type);
-        System.out.println("@prime: forward = " + forward);
         if (!StringUtils.isBlank(forward)) {
             SecuredLinkManager slm = appletUtilities.getComponent(SecuredLinkManager.class);
             SecuredLinkContentInfo securedLinkContentInfo = slm.getSecuredLink(forward);
@@ -160,11 +157,8 @@ public abstract class AbstractAppletController<T extends AbstractAppletPageBean<
                 getSessionContext().removeExternalForward();
                 getPage().setAttribute(AppletPageAttributeConstants.SECURED_LINK_ACCESSKEY,
                         securedLinkContentInfo.getAccessKey());
-                System.out.println("@prime: page.longName = " + getPage().getLongName());
-                System.out.println("@prime: page.pageId = " + getPage().getPageId());
             }
         }
-        System.out.println("@prime: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
     }
 
     protected final void invalidateSecuredLink(SecuredLinkType type) throws UnifyException {

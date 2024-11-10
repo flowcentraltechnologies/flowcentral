@@ -50,9 +50,6 @@ public class LaunchAuditTrailFormActionPolicy extends AbstractApplicationFormAct
                 "audit.entityAuditTrail");
         EntityActionResult result = new EntityActionResult(ctx, parts.getOpenPath());
         final ValueStoreReader reader = new BeanValueStore(ctx.getInst()).getReader();
-        System.out.println("@prime: CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
-        System.out.println("@prime: ctx.getInst() = " + ctx.getInst());
-        System.out.println("@prime: CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
         setSessionAttribute(AuditModuleSessionAttributes.AUDIT_BASE_AUDIT_NO, reader.read(String.class, "auditNo"));
         return result;
     }

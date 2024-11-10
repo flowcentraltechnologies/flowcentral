@@ -1058,6 +1058,9 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-reportrunnerpanel .title {display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; background-color:#F0F0F0;
     font-size:14px; font-weight:bold; padding:2px; text-align:center;}
 
+/* Select branch panel */
+.fc-selectbranchpanel {width:380px;}
+
 /* Select role user panel */
 .fc-selectrolepanel {width:380px;}
 
