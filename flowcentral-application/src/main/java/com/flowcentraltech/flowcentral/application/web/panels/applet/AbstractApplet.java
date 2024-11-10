@@ -209,13 +209,20 @@ public abstract class AbstractApplet {
     }
 
     protected final void invalidateSecuredLink(SecuredLinkType type) throws UnifyException {
+        System.out.println("@prime: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+        System.out.println("@prime: type = " + type);
         final String accessKey = getPage().getAttribute(String.class,
                 AppletPageAttributeConstants.SECURED_LINK_ACCESSKEY);
+        System.out.println("@prime: accessKey = " + accessKey);
         if (!StringUtils.isBlank(accessKey)) {
             SecuredLinkManager slm = au.getComponent(SecuredLinkManager.class);
-            slm.invalidateSecuredLinkByAccessKey(type, accessKey);
-            getPage().removeAttribute(String.class, AppletPageAttributeConstants.SECURED_LINK_ACCESSKEY);
+            if (slm.invalidateSecuredLinkByAccessKey(type, accessKey) > 0) {
+                getPage().removeAttribute(String.class, AppletPageAttributeConstants.SECURED_LINK_ACCESSKEY);
+                System.out.println("@prime: page.longName = " + getPage().getLongName());
+                System.out.println("@prime: page.pageId = " + getPage().getPageId());
+            }
         }
+        System.out.println("@prime: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
     }
 
     protected void setAltCaption(String altCaption) {

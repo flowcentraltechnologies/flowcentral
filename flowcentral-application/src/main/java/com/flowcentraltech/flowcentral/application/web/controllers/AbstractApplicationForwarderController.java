@@ -60,7 +60,7 @@ public abstract class AbstractApplicationForwarderController<T extends AbstractF
             ResetOnWrite resetOnWrite) {
         super(pageBeanClass, secured, readOnly, resetOnWrite);
     }
- 
+
     protected final String forwardToApplication(UserRoleInfo userRoleInfo) throws UnifyException {
         UserToken userToken = getUserToken();
         if (userRoleInfo != null) {
@@ -125,7 +125,8 @@ public abstract class AbstractApplicationForwarderController<T extends AbstractF
             SecuredLinkContentInfo securedLinkContentInfo = slm.getSecuredLink(forward);
             if (type.equals(securedLinkContentInfo.getType())) {
                 getSessionContext().removeExternalForward();
-                getPage().setAttribute(AppletPageAttributeConstants.SECURED_LINK_ACCESSKEY, forward);
+                getPage().setAttribute(AppletPageAttributeConstants.SECURED_LINK_ACCESSKEY,
+                        securedLinkContentInfo.getAccessKey());
             }
         }
     }
@@ -135,8 +136,9 @@ public abstract class AbstractApplicationForwarderController<T extends AbstractF
                 AppletPageAttributeConstants.SECURED_LINK_ACCESSKEY);
         if (!StringUtils.isBlank(accessKey)) {
             SecuredLinkManager slm = appletUtilities.getComponent(SecuredLinkManager.class);
-            slm.invalidateSecuredLinkByAccessKey(type, accessKey);
-            getPage().removeAttribute(String.class, AppletPageAttributeConstants.SECURED_LINK_ACCESSKEY);
+            if (slm.invalidateSecuredLinkByAccessKey(type, accessKey) > 0) {
+                getPage().removeAttribute(String.class, AppletPageAttributeConstants.SECURED_LINK_ACCESSKEY);
+            }
         }
     }
 

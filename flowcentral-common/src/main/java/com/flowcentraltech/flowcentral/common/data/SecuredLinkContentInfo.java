@@ -122,6 +122,14 @@ public class SecuredLinkContentInfo {
         return expired;
     }
 
+    public boolean isLogin() {
+        return type != null && type.isLogin();
+    }
+
+    public boolean isWorkflowDecision() {
+        return type != null && type.isWorkflowDecision();
+    }
+    
     public boolean isRealContentPath() {
         return  contentPath != null && contentPath.endsWith("/openPage");
     }

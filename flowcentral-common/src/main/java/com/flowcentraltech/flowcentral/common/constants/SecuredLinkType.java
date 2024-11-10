@@ -52,6 +52,14 @@ public enum SecuredLinkType implements EnumConst {
         return LOGIN.code;
     }
 
+    public boolean isLogin() {
+        return LOGIN.equals(this);
+    }
+
+    public boolean isWorkflowDecision() {
+        return WORKFLOW_DECISION.equals(this);
+    }
+    
     public static SecuredLinkType fromCode(String code) {
         return EnumUtils.fromCode(SecuredLinkType.class, code);
     }
