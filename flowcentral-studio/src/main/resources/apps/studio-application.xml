@@ -2414,7 +2414,7 @@
 				<errorCondition>
 					<restriction type="and">
 						<restriction type="amongst" field="type"
-							paramA="MEL|MEA|MLS|MLL|CEN|CNS|DIM" />
+							paramA="MEL|MEA|MLS|MLL|FWZ|CEN|CNS|DIM" />
 						<restriction type="is_null" field="entity" />
 					</restriction>
 				</errorCondition>
@@ -2494,7 +2494,7 @@
 				description="$m{studio.appapplet.form.formstatepolicy.entity}">
 				<onCondition>
 					<restriction type="amongst" field="type"
-						paramA="MEL|MEA|MLS|MLL|CEN|CNS|DIM" />
+						paramA="MEL|MEA|MLS|MLL|FWZ|CEN|CNS|DIM" />
 				</onCondition>
 				<setStates>
 					<setState type="field" target="entity" visible="true" />
@@ -5958,6 +5958,21 @@
 					inputWidget="application.checkbox" />
 			</propertySet>
 		</propertyList>
+		<propertyList name="fwzAppAppletPropList"
+			description="$m{studio.appappletprop.formwizard.propertylist}">
+			<propertySet
+				label="$m{studio.appappletprop.formwizard.formproperties}">
+				<property name="createForm.new.caption"
+					description="$m{studio.appappletprop.formwizard.createform.newcaption}"
+					inputWidget="application.text" />
+				<property name="createForm"
+					description="$m{studio.appappletprop.formwizard.createform}"
+					inputWidget="studio.propertyappletformlist" required="false" />
+				<property name="createForm.new.policy"
+					description="$m{studio.appappletprop.formwizard.createform.newpolicy}"
+					inputWidget="studio.propertyentityactionpolicylist" />
+			</propertySet>
+		</propertyList>
 		<propertyList name="mllAppAppletPropList"
 			description="$m{studio.appappletprop.manageloading.propertylist}">
 			<propertySet
@@ -6724,6 +6739,7 @@
 			entity="application.appApplet" choiceField="type"
 			listField="propList" propNameField="name" propValField="value"
 			ignoreCase="true">
+			<choice name="fwz" val="fwzAppAppletPropList" />
 			<choice name="cen" val="cenAppAppletPropList" />
 			<choice name="cns" val="cnsAppAppletPropList" />
 			<choice name="mll" val="mllAppAppletPropList" />

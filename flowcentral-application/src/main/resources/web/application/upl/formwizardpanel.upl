@@ -1,0 +1,48 @@
+// UPL template for form wizard panel
+// Copyright 2021-2024 FlowCentral Technologies Limited.
+// 
+// Licensed under the Apache License, Version 2.0 (the "License"); you may not
+// use this file except in compliance with the License. You may obtain a copy of
+// the License at
+// 
+// http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+// WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+// License for the specific language governing permissions and limitations under
+// the License.
+
+!fc-formwizardpanel layout:$d{!ui-vertical style:$s{width:100%;} cellStyle:$s{padding:0px;}}
+	components:$c{formMessages pageFormPanel actionPanel}
+
+// Messages
+!fc-formmessages:formMessages binding:messages
+
+// Form
+!ui-panel:pageFormPanel components:$c{pageForm}
+!fc-miniform:pageForm binding:form
+
+// Action panel
+!ui-panel:actionPanel layout:$d{!ui-horizontal widths:$l{50% 50%}}
+	components:$c{navPanel exitPanel}
+
+!ui-panel:navPanel layout:$d{!ui-horizontal}
+	components:$c{prevBtn nextBtn}
+!ui-button:prevBtn caption:$m{button.previous}
+	eventHandler:$d{!ui-event event:onclick action:$c{prevAct}}
+!ui-button:nextBtn caption:$m{button.next}
+	eventHandler:$d{!ui-event event:onclick action:$c{nextAct}}
+	
+!ui-panel:exitPanel layout:$d{!ui-horizontal style:$s{float:right;}}
+	components:$f{wizardAddtionalAction}
+	components:$c{cancelBtn closeBtn}
+!ui-button:cancelBtn caption:$m{button.cancel}
+	eventHandler:$f{wizardCancelHandler}
+!ui-button:closeBtn caption:$m{button.close}
+	eventHandler:$f{wizardCloseHandler}
+
+// Actions
+!ui-postcommand:prevAct command:previous components:$c{pageFormPanel}
+!ui-postcommand:nextAct command:next components:$c{pageFormPanel}
+	

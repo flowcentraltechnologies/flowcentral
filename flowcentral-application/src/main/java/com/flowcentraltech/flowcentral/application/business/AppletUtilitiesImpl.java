@@ -86,6 +86,7 @@ import com.flowcentraltech.flowcentral.application.web.panels.EntitySelect;
 import com.flowcentraltech.flowcentral.application.web.panels.EntitySetValues;
 import com.flowcentraltech.flowcentral.application.web.panels.EntitySingleForm;
 import com.flowcentraltech.flowcentral.application.web.panels.EntityWidgetRules;
+import com.flowcentraltech.flowcentral.application.web.panels.FormWizard;
 import com.flowcentraltech.flowcentral.application.web.panels.HeaderWithTabsForm;
 import com.flowcentraltech.flowcentral.application.web.panels.HeadlessTabsForm;
 import com.flowcentraltech.flowcentral.application.web.panels.ListingForm;
@@ -1015,6 +1016,22 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
         return form;
     }
 
+    @Override
+    public FormWizard constructFormWizard(AbstractApplet applet, FormDef formDef, Entity inst) throws UnifyException {
+        logDebug("Constructing form wizard for bean using form definition [{0}]...", formDef.getLongName());
+        final AppletContext appletContext = applet != null ? applet.appletCtx() : new AppletContext(null, applet, this);
+        final FormContext formContext = new FormContext(appletContext, formDef, null, inst);
+        final FormTabDef mainFormTabDef = formDef.getFormTabDef(0);
+        
+        List<MiniForm> forms = new ArrayList<MiniForm>();
+        for (FormTabDef formTabDef: mainFormTabDef.wizardParts()) {
+            MiniForm miniForm = new MiniForm(MiniFormScope.MAIN_FORM, formContext, formTabDef);
+            forms.add(miniForm);
+        }
+        
+        return new FormWizard(formDef.getLongName(), forms, formContext);
+    }
+    
     @SuppressWarnings("unchecked")
     @Override
     public HeaderWithTabsForm constructHeaderWithTabsForm(AbstractEntityFormApplet applet, String rootTitle,

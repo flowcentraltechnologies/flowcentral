@@ -944,6 +944,10 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-editpropertylistpanel .mflgap1 {width:24%;}
 .fc-editpropertylistpanel .mfagap1 {width:16%;}
 
+/* Form wizard panel */
+.fc-formwizardpanel {}
+.fc-formwizardpanel .fc-miniform {}
+
 /* Form panel */
 .fc-tabsonlyformpanel {}
 

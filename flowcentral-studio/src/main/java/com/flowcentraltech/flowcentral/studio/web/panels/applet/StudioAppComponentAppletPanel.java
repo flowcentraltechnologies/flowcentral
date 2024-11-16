@@ -16,6 +16,7 @@
 package com.flowcentraltech.flowcentral.studio.web.panels.applet;
 
 import com.flowcentraltech.flowcentral.application.web.panels.applet.AbstractEntityFormAppletPanel;
+import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.UplBinding;
 
@@ -28,5 +29,18 @@ import com.tcdng.unify.core.annotation.UplBinding;
 @Component("fc-studioappcomponentappletpanel")
 @UplBinding("web/studio/upl/studioappcomponentappletpanel.upl")
 public class StudioAppComponentAppletPanel extends AbstractEntityFormAppletPanel {
+
+    @Override
+    public void switchState() throws UnifyException {
+        super.switchState();
+
+        final StudioAppComponentApplet applet = getValue(StudioAppComponentApplet.class);
+        ;
+        final boolean isRootForm = applet.isRootForm();
+        if (isRootForm) {
+            setVisible("prevBtn", false);
+            setVisible("nextBtn", false);
+        }
+    }
 
 }

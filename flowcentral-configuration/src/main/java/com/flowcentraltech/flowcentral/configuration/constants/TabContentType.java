@@ -87,6 +87,10 @@ public enum TabContentType implements EnumConst {
         return this.equals(MINIFORM_MAPPED);
     }
 
+    public boolean isMiniFormOnly() {
+        return this.equals(MINIFORM);
+    }
+
     public boolean isMiniForm() {
         return this.equals(MINIFORM) || this.equals(MINIFORM_CHANGELOG) || this.equals(MINIFORM_MAPPED);
     }
