@@ -20,10 +20,20 @@ import java.util.List;
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.constants.AppletPropertyConstants;
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
+import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.FormDef;
+import com.flowcentraltech.flowcentral.application.web.data.FormContext;
 import com.flowcentraltech.flowcentral.application.web.panels.FormWizard;
+import com.flowcentraltech.flowcentral.common.business.policies.ActionMode;
+import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
+import com.flowcentraltech.flowcentral.common.business.policies.FormReviewContext;
+import com.flowcentraltech.flowcentral.common.business.policies.SweepingCommitPolicy;
+import com.flowcentraltech.flowcentral.configuration.constants.FormReviewType;
+import com.flowcentraltech.flowcentral.configuration.constants.RecordActionType;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.database.Database;
 import com.tcdng.unify.core.database.Entity;
+import com.tcdng.unify.core.system.entities.AbstractSequencedEntity;
 import com.tcdng.unify.web.ui.widget.Page;
 
 /**
@@ -32,7 +42,7 @@ import com.tcdng.unify.web.ui.widget.Page;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class FormWizardApplet extends AbstractApplet {
+public class FormWizardApplet extends AbstractApplet implements SweepingCommitPolicy {
 
     private FormWizard formWizard;
     
@@ -45,9 +55,45 @@ public class FormWizardApplet extends AbstractApplet {
         final Entity inst = au.application().getEntityClassDef(appletDef.getEntity()).newInst();
         this.formWizard = au.constructFormWizard(this, formDef, inst);
     }
+    
+    @Override
+    public void bumpAllParentVersions(Database db, RecordActionType type) throws UnifyException {
+        
+    }
+
+    public EntityActionResult saveNewInst() throws UnifyException {
+        return saveNewInst(ActionMode.ACTION_ONLY, new FormReviewContext(FormReviewType.ON_SAVE));
+    }
+
+    public EntityActionResult submitInst() throws UnifyException {
+        return submitInst(ActionMode.ACTION_AND_CLOSE, new FormReviewContext(FormReviewType.ON_SUBMIT));
+    }
 
     public FormWizard getFormWizard() {
         return formWizard;
+    }
+
+    private EntityActionResult saveNewInst(ActionMode actionMode, FormReviewContext rCtx) throws UnifyException {
+        EntityActionResult entityActionResult = createInst();
+        return entityActionResult;
+    }
+
+    private EntityActionResult createInst() throws UnifyException {
+        final AppletDef _appletDef = getRootAppletDef();
+        return au().createEntityInstByFormContext(_appletDef, formWizard.getFormContext(), this);
+    }
+
+    private EntityActionResult submitInst(ActionMode actionMode, FormReviewContext rCtx) throws UnifyException {
+        final FormContext formContext = formWizard.getFormContext();
+        final Entity inst = (Entity) formContext.getInst();
+        final EntityDef _entityDef = formContext.getFormDef().getEntityDef();
+        EntityActionResult entityActionResult = createInst();
+        Long entityInstId = (Long) inst.getId();
+        if (_entityDef.delegated()) {
+            ((AbstractSequencedEntity) inst).setId(entityInstId);
+        }
+
+        return entityActionResult;
     }
 
 }

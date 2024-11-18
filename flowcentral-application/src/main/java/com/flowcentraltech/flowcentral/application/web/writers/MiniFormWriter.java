@@ -85,6 +85,7 @@ public class MiniFormWriter extends AbstractControlWriter {
         final boolean isClassicFormSection = systemModuleService.getSysParameterValue(boolean.class,
                 ApplicationModuleSysParamConstants.FORM_SECTION_CLASSIC_MODE);
         boolean isPreGap = false;
+
         if (miniFormWidget.isStrictRows()) {
             for (FormSection formSection : miniFormWidget.getFormSectionList()) {
                 if (formSection.isVisible()) {

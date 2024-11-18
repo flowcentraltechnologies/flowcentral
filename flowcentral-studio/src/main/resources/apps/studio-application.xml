@@ -5972,6 +5972,22 @@
 					description="$m{studio.appappletprop.formwizard.createform.newpolicy}"
 					inputWidget="studio.propertyentityactionpolicylist" />
 			</propertySet>
+			<propertySet
+				label="$m{studio.appappletprop.formwizard.workflowproperties}">
+				<property name="createForm.submit.caption"
+					description="$m{studio.appappletprop.formwizard.createform.submitcaption}"
+					inputWidget="application.text" />
+				<property name="createForm.submit.workflow.channel"
+					description="$m{studio.appappletprop.formwizard.createform.submitworkflow}"
+					inputWidget="studio.propertyappletworkflowchannellist"
+					required="false" />
+				<property name="createForm.submit"
+					description="$m{studio.appappletprop.formwizard.createform.submit}"
+					inputWidget="application.checkbox" />
+				<property name="createForm.submit.validate"
+					description="$m{studio.appappletprop.formwizard.createform.submitvalidate}"
+					inputWidget="application.checkbox" />
+			</propertySet>
 		</propertyList>
 		<propertyList name="mllAppAppletPropList"
 			description="$m{studio.appappletprop.manageloading.propertylist}">

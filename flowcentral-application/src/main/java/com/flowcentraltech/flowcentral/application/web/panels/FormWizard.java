@@ -32,30 +32,57 @@ public class FormWizard {
     private String formName;
     
     private List<MiniForm> forms;
+    
+    private String submitCaption;
+    
+    private String submitStyleClass;
 
-    private FormContext formContext;
+    private boolean submit;
 
     private int currentPage;
     
     private final int pageCount;
     
-    public FormWizard(String formName, List<MiniForm> forms, FormContext formContext) {
+    public FormWizard(String formName, List<MiniForm> forms) {
         this.formName = formName;
         this.forms = forms;
-        this.formContext = formContext;
         this.pageCount = forms.size();
     }
 
     public List<FormMessage> getMessages() {
-        return formContext.getValidationErrors();
+        return getFormContext().getValidationErrors();
     }
 
     public String getFormName() {
         return formName;
     }
 
+    public String getSubmitCaption() {
+        return submitCaption;
+    }
+
+    public void setSubmitCaption(String submitCaption) {
+        this.submitCaption = submitCaption;
+    }
+
+    public String getSubmitStyleClass() {
+        return submitStyleClass;
+    }
+
+    public void setSubmitStyleClass(String submitStyleClass) {
+        this.submitStyleClass = submitStyleClass;
+    }
+
+    public boolean isSubmit() {
+        return submit;
+    }
+
+    public void setSubmit(boolean submit) {
+        this.submit = submit;
+    }
+
     public FormContext getFormContext() {
-        return formContext;
+        return forms.get(currentPage).getCtx();
     }
 
     public MiniForm getForm() {

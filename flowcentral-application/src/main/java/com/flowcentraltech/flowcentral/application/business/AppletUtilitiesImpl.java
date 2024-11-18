@@ -1020,16 +1020,17 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
     public FormWizard constructFormWizard(AbstractApplet applet, FormDef formDef, Entity inst) throws UnifyException {
         logDebug("Constructing form wizard for bean using form definition [{0}]...", formDef.getLongName());
         final AppletContext appletContext = applet != null ? applet.appletCtx() : new AppletContext(null, applet, this);
-        final FormContext formContext = new FormContext(appletContext, formDef, null, inst);
         final FormTabDef mainFormTabDef = formDef.getFormTabDef(0);
         
         List<MiniForm> forms = new ArrayList<MiniForm>();
         for (FormTabDef formTabDef: mainFormTabDef.wizardParts()) {
+            final FormContext formContext = new FormContext(appletContext, formDef, null, inst);
+            formContext.evaluateTabStates();
             MiniForm miniForm = new MiniForm(MiniFormScope.MAIN_FORM, formContext, formTabDef);
             forms.add(miniForm);
         }
         
-        return new FormWizard(formDef.getLongName(), forms, formContext);
+        return new FormWizard(formDef.getLongName(), forms);
     }
     
     @SuppressWarnings("unchecked")

@@ -27,22 +27,23 @@
 !ui-panel:actionPanel layout:$d{!ui-horizontal widths:$l{50% 50%}}
 	components:$c{navPanel exitPanel}
 
-!ui-panel:navPanel layout:$d{!ui-horizontal}
-	components:$c{prevBtn nextBtn}
-!ui-button:prevBtn caption:$m{button.previous}
+!ui-panel:navPanel layout:$d{!ui-horizontal} components:$c{prevBtn nextBtn} 
+!ui-button:prevBtn caption:$m{button.previous} styleClass:$e{fc-actbutton}
 	eventHandler:$d{!ui-event event:onclick action:$c{prevAct}}
-!ui-button:nextBtn caption:$m{button.next}
+!ui-button:nextBtn caption:$m{button.next} styleClass:$e{fc-actbutton}
 	eventHandler:$d{!ui-event event:onclick action:$c{nextAct}}
 	
 !ui-panel:exitPanel layout:$d{!ui-horizontal style:$s{float:right;}}
-	components:$f{wizardAddtionalAction}
-	components:$c{cancelBtn closeBtn}
+	components:$c{cancelBtn saveCloseBtn submitCloseBtn}
 !ui-button:cancelBtn caption:$m{button.cancel}
 	eventHandler:$f{wizardCancelHandler}
-!ui-button:closeBtn caption:$m{button.close}
-	eventHandler:$f{wizardCloseHandler}
+!ui-button:saveCloseBtn caption:$m{button.saveclose}
+	eventHandler:$f{wizardSaveHandler}
+!ui-button:submitCloseBtn caption:$m{button.submit} captionBinding:submitCaption
+	styleClassBinding:$s{submitStyleClass}
+	eventHandler:$f{wizardSubmitHandler}
 
 // Actions
-!ui-postcommand:prevAct command:previous components:$c{pageFormPanel}
-!ui-postcommand:nextAct command:next components:$c{pageFormPanel}
+!ui-postcommand:prevAct command:previous components:$c{pageForm}
+!ui-postcommand:nextAct command:next components:$c{pageForm}
 	

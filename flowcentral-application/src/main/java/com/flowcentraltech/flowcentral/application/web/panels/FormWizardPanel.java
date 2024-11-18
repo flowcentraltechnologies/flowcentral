@@ -47,15 +47,20 @@ public class FormWizardPanel extends AbstractFlowCentralStandalonePanel {
     public void switchState() throws UnifyException {
         super.switchState();
         
-        FormWizard formWizard = getFormWizard();
+        final FormWizard formWizard = getFormWizard();
         setDisabled("prevBtn", formWizard.isFirstPage());
         setDisabled("nextBtn", formWizard.isLastPage());
 
         setVisible("cancelBtn", !formWizard.isLastPage());
-        setVisible("closeBtn", formWizard.isLastPage());
+        
+
+        final boolean last = formWizard.isLastPage();
+        setVisible("submitCloseBtn", last && formWizard.isSubmit());
+        setVisible("saveCloseBtn", last && !formWizard.isSubmit());
     }
     
     private FormWizard getFormWizard() throws UnifyException {
         return getValue(FormWizard.class);
     }
-}
+    
+ }
