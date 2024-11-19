@@ -20,11 +20,11 @@
 !fc-formmessages:formMessages binding:messages
 
 // Form
-!ui-panel:pageFormPanel components:$c{pageForm}
-!fc-miniform:pageForm binding:form
+!ui-panel:pageFormPanel styleClass:$s{fwzfrm} components:$c{pageForm}
+!fc-miniform:pageForm  style:$s{width:98%;} binding:form
 
 // Action panel
-!ui-panel:actionPanel layout:$d{!ui-horizontal widths:$l{50% 50%}}
+!ui-panel:actionPanel layout:$d{!ui-horizontal style:$s{width:100%;} widths:$l{50% 50%}}
 	components:$c{navPanel exitPanel}
 
 !ui-panel:navPanel layout:$d{!ui-horizontal} components:$c{prevBtn nextBtn} 

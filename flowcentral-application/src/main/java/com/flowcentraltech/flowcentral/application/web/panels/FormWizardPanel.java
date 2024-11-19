@@ -15,11 +15,17 @@
  */
 package com.flowcentraltech.flowcentral.application.web.panels;
 
+import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
+import com.flowcentraltech.flowcentral.application.web.data.FormContext;
+import com.flowcentraltech.flowcentral.common.business.policies.FormValidationContext;
+import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
 import com.flowcentraltech.flowcentral.common.web.panels.AbstractFlowCentralStandalonePanel;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
+import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.UplBinding;
 import com.tcdng.unify.web.annotation.Action;
+import com.tcdng.unify.web.ui.widget.data.Hint.MODE;
 
 /**
  * Form wizard panel.
@@ -31,16 +37,25 @@ import com.tcdng.unify.web.annotation.Action;
 @UplBinding("web/application/upl/formwizardpanel.upl")
 public class FormWizardPanel extends AbstractFlowCentralStandalonePanel {
 
+    @Configurable
+    private AppletUtilities appletUtilities;
+    
     @Action
     public void previous() throws UnifyException {
         FormWizard formWizard = getFormWizard();
+        FormContext ctx = getFormWizard().getFormContext();
+        ctx.clearValidationErrors();
+        ctx.clearReviewErrors();
         formWizard.prevPage();
     }
 
     @Action
     public void next() throws UnifyException {
         FormWizard formWizard = getFormWizard();
-        formWizard.nextPage();
+        FormContext ctx = evaluateCurrentFormContext(new FormValidationContext(EvaluationMode.CREATE));
+        if (!ctx.isWithFormErrors()) {
+            formWizard.nextPage();
+        }
     }
     
     @Override
@@ -57,6 +72,23 @@ public class FormWizardPanel extends AbstractFlowCentralStandalonePanel {
         final boolean last = formWizard.isLastPage();
         setVisible("submitCloseBtn", last && formWizard.isSubmit());
         setVisible("saveCloseBtn", last && !formWizard.isSubmit());
+    }
+
+    protected final FormContext evaluateCurrentFormContext(FormValidationContext vCtx)
+            throws UnifyException {
+        FormContext ctx = getFormWizard().getFormContext();
+        if (ctx.getFormDef() != null && ctx.getFormDef().isInputForm()) {
+            appletUtilities.formContextEvaluator().evaluateFormContext(ctx, vCtx);
+
+            if (ctx.isWithFieldErrors()) {
+                hintUser(MODE.ERROR, "$m{entityformapplet.formvalidation.error.hint}");
+            }
+        } else {
+            ctx.clearReviewErrors();
+            ctx.clearValidationErrors();
+        }
+
+        return ctx;
     }
     
     private FormWizard getFormWizard() throws UnifyException {

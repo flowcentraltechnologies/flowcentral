@@ -1021,6 +1021,7 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
         logDebug("Constructing form wizard for bean using form definition [{0}]...", formDef.getLongName());
         final AppletContext appletContext = applet != null ? applet.appletCtx() : new AppletContext(null, applet, this);
         final FormTabDef mainFormTabDef = formDef.getFormTabDef(0);
+        initSkeletonForAutoFormatFields(formDef.getEntityDef(), inst);
         
         List<MiniForm> forms = new ArrayList<MiniForm>();
         for (FormTabDef formTabDef: mainFormTabDef.wizardParts()) {
@@ -2476,16 +2477,7 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
             }
 
             // Populate skeleton for auto-format fields
-            if (entityDef.isWithAutoFormatFields()) {
-                logDebug("Populating auto-format fields for form [{0}]...", inst.getId());
-                final SequenceCodeGenerator gen = sequenceCodeGenerator();
-                for (EntityFieldDef entityFieldDef : entityDef.getAutoFormatFieldDefList()) {
-                    if (entityFieldDef.isStringAutoFormat()) {
-                        DataUtils.setBeanProperty(inst, entityFieldDef.getFieldName(),
-                                gen.getCodeSkeleton(entityFieldDef.getAutoFormat()));
-                    }
-                }
-            }
+            initSkeletonForAutoFormatFields(entityDef, inst);
         }
 
         if (formDef.isWithConsolidatedFormState()) {
@@ -2502,6 +2494,19 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
         }
     }
 
+    private void initSkeletonForAutoFormatFields(EntityDef entityDef, Entity inst) throws UnifyException {
+        if (entityDef.isWithAutoFormatFields()) {
+            logDebug("Populating auto-format fields for form [{0}]...", inst.getId());
+            final SequenceCodeGenerator gen = sequenceCodeGenerator();
+            for (EntityFieldDef entityFieldDef : entityDef.getAutoFormatFieldDefList()) {
+                if (entityFieldDef.isStringAutoFormat()) {
+                    DataUtils.setBeanProperty(inst, entityFieldDef.getFieldName(),
+                            gen.getCodeSkeleton(entityFieldDef.getAutoFormat()));
+                }
+            }
+        }
+    }
+    
     private void applySetValues(FormStatePolicyDef formStatePolicyDef, EntityDef entityDef, ValueStore valueStore,
             Date now) throws UnifyException {
         if (formStatePolicyDef.isSetValues()) {

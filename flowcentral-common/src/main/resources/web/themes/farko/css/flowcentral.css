@@ -187,7 +187,12 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 
 .fc-dashboard-header {}
 .fc-dashboard-header .llabelinl{width:78px;}
-    
+
+.fc-formwizardappletpanel {max-width:720px;}
+
+.fc-formwizardpanel {height: 100%;}
+.fc-formwizardpanel .fwzfrm {overflow-y:scroll;height:65vh !important;}
+
 /*** LOGIN ***/
 .fc-login-contentpanel {display:block;position:relative;left:0px;top:0px;width:100%;height:100%;}
 
