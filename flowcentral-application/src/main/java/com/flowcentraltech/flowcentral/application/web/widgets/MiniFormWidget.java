@@ -130,6 +130,7 @@ public class MiniFormWidget extends AbstractFlowCentralMultiControl implements F
     @SuppressWarnings("unchecked")
     public MiniForm getMiniForm() throws UnifyException {
         MiniForm miniForm = getValue(MiniForm.class);
+        boolean changed = false;
         if (miniForm != oldMiniForm) {
             removeAllExternalChildWidgets();
             if (oldMiniForm != null && formWidgets != null) {
@@ -216,10 +217,11 @@ public class MiniFormWidget extends AbstractFlowCentralMultiControl implements F
             }
 
             oldMiniForm = miniForm;
+            changed = true;
         }
 
         Object formBean = miniForm != null ? miniForm.getFormBean() : null;
-        if (formBean != oldFormBean) {
+        if (changed || formBean != oldFormBean) {
             if (miniForm != null) {
                 ValueStore formValueStore = miniForm.getCtx().getFormValueStore();
                 if (formWidgets != null) {

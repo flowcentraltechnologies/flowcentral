@@ -1165,11 +1165,11 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         return getEntityFormApplet().getPropertiesTitle();
     }
 
-    protected FormContext evaluateCurrentFormContext(FormValidationContext vCtx) throws UnifyException {
+    protected final FormContext evaluateCurrentFormContext(FormValidationContext vCtx) throws UnifyException {
         return evaluateCurrentFormContext(vCtx, false);
     }
 
-    protected FormContext evaluateCurrentFormContext(FormValidationContext vCtx, boolean commentRequired)
+    protected final FormContext evaluateCurrentFormContext(FormValidationContext vCtx, boolean commentRequired)
             throws UnifyException {
         FormContext ctx = getEntityFormApplet().getResolvedForm().getCtx();
         if (ctx.getFormDef() != null && ctx.getFormDef().isInputForm()) {

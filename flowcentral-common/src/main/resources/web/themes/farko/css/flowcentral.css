@@ -41,7 +41,7 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 /** Button */ 
 .ui-button {padding: 0px 8px; min-height:32px; background-color: #f2f2f2; border: 1px solid #c8c8c8; cursor: pointer;/*border-radius: 4px;*/}
 .ui-button:hover:enabled {color:#000000; background-color: #fafafa;}
-.ui-button:disabled {cursor:default; color: #a0a0a0;}
+.ui-button:disabled {cursor:default; background-color: #a0a0a0; border: 1px solid #808080;}
 .ui-button-alert {padding: 0px 8px; min-height:32px; background-color: #f2f2f2; border: 1px solid #c8c8c8; cursor: pointer;/*border-radius: 4px;*/}
 
 .ui-table .tsel {
@@ -187,7 +187,12 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 
 .fc-dashboard-header {}
 .fc-dashboard-header .llabelinl{width:78px;}
-    
+
+.fc-formwizardappletpanel {max-width:720px;}
+
+.fc-formwizardpanel {height: 100%;}
+.fc-formwizardpanel .fwzfrm {overflow-y:scroll;height:65vh !important;}
+
 /*** LOGIN ***/
 .fc-login-contentpanel {display:block;position:relative;left:0px;top:0px;width:100%;height:100%;}
 
@@ -943,6 +948,10 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 
 .fc-editpropertylistpanel .mflgap1 {width:24%;}
 .fc-editpropertylistpanel .mfagap1 {width:16%;}
+
+/* Form wizard panel */
+.fc-formwizardpanel {}
+.fc-formwizardpanel .fc-miniform {}
 
 /* Form panel */
 .fc-tabsonlyformpanel {}

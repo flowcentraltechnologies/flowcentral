@@ -86,6 +86,7 @@ import com.flowcentraltech.flowcentral.application.web.panels.EntitySelect;
 import com.flowcentraltech.flowcentral.application.web.panels.EntitySetValues;
 import com.flowcentraltech.flowcentral.application.web.panels.EntitySingleForm;
 import com.flowcentraltech.flowcentral.application.web.panels.EntityWidgetRules;
+import com.flowcentraltech.flowcentral.application.web.panels.FormWizard;
 import com.flowcentraltech.flowcentral.application.web.panels.HeaderWithTabsForm;
 import com.flowcentraltech.flowcentral.application.web.panels.HeadlessTabsForm;
 import com.flowcentraltech.flowcentral.application.web.panels.ListingForm;
@@ -1015,6 +1016,24 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
         return form;
     }
 
+    @Override
+    public FormWizard constructFormWizard(AbstractApplet applet, FormDef formDef, Entity inst) throws UnifyException {
+        logDebug("Constructing form wizard for bean using form definition [{0}]...", formDef.getLongName());
+        final AppletContext appletContext = applet != null ? applet.appletCtx() : new AppletContext(null, applet, this);
+        final FormTabDef mainFormTabDef = formDef.getFormTabDef(0);
+        initSkeletonForAutoFormatFields(formDef.getEntityDef(), inst);
+        
+        List<MiniForm> forms = new ArrayList<MiniForm>();
+        for (FormTabDef formTabDef: mainFormTabDef.wizardParts()) {
+            final FormContext formContext = new FormContext(appletContext, formDef, null, inst);
+            formContext.evaluateTabStates();
+            MiniForm miniForm = new MiniForm(MiniFormScope.MAIN_FORM, formContext, formTabDef);
+            forms.add(miniForm);
+        }
+        
+        return new FormWizard(formDef.getLongName(), forms);
+    }
+    
     @SuppressWarnings("unchecked")
     @Override
     public HeaderWithTabsForm constructHeaderWithTabsForm(AbstractEntityFormApplet applet, String rootTitle,
@@ -2458,16 +2477,7 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
             }
 
             // Populate skeleton for auto-format fields
-            if (entityDef.isWithAutoFormatFields()) {
-                logDebug("Populating auto-format fields for form [{0}]...", inst.getId());
-                final SequenceCodeGenerator gen = sequenceCodeGenerator();
-                for (EntityFieldDef entityFieldDef : entityDef.getAutoFormatFieldDefList()) {
-                    if (entityFieldDef.isStringAutoFormat()) {
-                        DataUtils.setBeanProperty(inst, entityFieldDef.getFieldName(),
-                                gen.getCodeSkeleton(entityFieldDef.getAutoFormat()));
-                    }
-                }
-            }
+            initSkeletonForAutoFormatFields(entityDef, inst);
         }
 
         if (formDef.isWithConsolidatedFormState()) {
@@ -2484,6 +2494,19 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
         }
     }
 
+    private void initSkeletonForAutoFormatFields(EntityDef entityDef, Entity inst) throws UnifyException {
+        if (entityDef.isWithAutoFormatFields()) {
+            logDebug("Populating auto-format fields for form [{0}]...", inst.getId());
+            final SequenceCodeGenerator gen = sequenceCodeGenerator();
+            for (EntityFieldDef entityFieldDef : entityDef.getAutoFormatFieldDefList()) {
+                if (entityFieldDef.isStringAutoFormat()) {
+                    DataUtils.setBeanProperty(inst, entityFieldDef.getFieldName(),
+                            gen.getCodeSkeleton(entityFieldDef.getAutoFormat()));
+                }
+            }
+        }
+    }
+    
     private void applySetValues(FormStatePolicyDef formStatePolicyDef, EntityDef entityDef, ValueStore valueStore,
             Date now) throws UnifyException {
         if (formStatePolicyDef.isSetValues()) {

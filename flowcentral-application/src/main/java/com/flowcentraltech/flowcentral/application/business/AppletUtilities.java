@@ -59,6 +59,7 @@ import com.flowcentraltech.flowcentral.application.web.panels.EntitySelect;
 import com.flowcentraltech.flowcentral.application.web.panels.EntitySetValues;
 import com.flowcentraltech.flowcentral.application.web.panels.EntitySingleForm;
 import com.flowcentraltech.flowcentral.application.web.panels.EntityWidgetRules;
+import com.flowcentraltech.flowcentral.application.web.panels.FormWizard;
 import com.flowcentraltech.flowcentral.application.web.panels.HeaderWithTabsForm;
 import com.flowcentraltech.flowcentral.application.web.panels.HeadlessTabsForm;
 import com.flowcentraltech.flowcentral.application.web.panels.ListingForm;
@@ -1296,7 +1297,22 @@ public interface AppletUtilities extends FlowCentralComponent {
      */
     ListingForm constructListingForm(AbstractApplet applet, String rootTitle, String beanTitle, FormDef formDef,
             Entity inst, BreadCrumbs breadCrumbs) throws UnifyException;
-
+    
+    /**
+     * Constructs a form wizard.
+     * 
+     * @param applet
+     *                the applet
+     * @param formDef
+     *                the form definition
+     * @param inst
+     *                the backing entity bean
+     * @return constructed form wizard
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    FormWizard constructFormWizard(AbstractApplet applet, FormDef formDef, Entity inst) throws UnifyException;
+    
     /**
      * Constructs a header with tabs form.
      * 

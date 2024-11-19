@@ -69,6 +69,11 @@ public enum AppletType implements EnumConst {
             FlowCentralAppletPathConstants.CREATE_ENTITY_SINGLEFORM,
             true,
             true),
+    FORM_WIZARD(
+            "FWZ",
+            FlowCentralAppletPathConstants.FORM_WIZARD,
+            true,
+            true),
     LISTING(
             "LST",
             FlowCentralAppletPathConstants.LISTING,
@@ -141,7 +146,7 @@ public enum AppletType implements EnumConst {
 
     public static final List<AppletType> UNRESERVED_LIST = Collections.unmodifiableList(Arrays.asList(MANAGE_ENTITYLIST,
             MANAGE_ENTITYLIST_ASSIGN, MANAGE_ENTITYLIST_SINGLEFORM, MANAGE_LOADINGLIST,  HEADLESS_TABS, CREATE_ENTITY,
-            CREATE_ENTITY_SINGLEFORM, LISTING, TASK_EXECUTION, FACADE, FACADE_MULTIPLE, PATH_WINDOW, PATH_PAGE));
+            CREATE_ENTITY_SINGLEFORM, FORM_WIZARD, LISTING, TASK_EXECUTION, FACADE, FACADE_MULTIPLE, PATH_WINDOW, PATH_PAGE));
 
     private final String code;
 
