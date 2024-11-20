@@ -21,6 +21,7 @@ import java.util.Date;
 import com.flowcentraltech.flowcentral.common.entities.BaseAuditTenantEntity;
 import com.flowcentraltech.flowcentral.configuration.constants.WorkflowStepPriority;
 import com.tcdng.unify.core.annotation.Column;
+import com.tcdng.unify.core.annotation.ColumnType;
 import com.tcdng.unify.core.annotation.ForeignKey;
 import com.tcdng.unify.core.annotation.ListOnly;
 import com.tcdng.unify.core.annotation.Table;
@@ -48,6 +49,9 @@ public class WfItem extends BaseAuditTenantEntity {
 
     @Column(length = 64, nullable = true)
     private String forwardTo;
+
+    @Column(type = ColumnType.TIMESTAMP, nullable = true)
+    private Date ejectionDt;
 
     @Column
     private Long workRecId;
@@ -164,6 +168,14 @@ public class WfItem extends BaseAuditTenantEntity {
 
     public void setForwardTo(String forwardTo) {
         this.forwardTo = forwardTo;
+    }
+
+    public Date getEjectionDt() {
+        return ejectionDt;
+    }
+
+    public void setEjectionDt(Date ejectionDt) {
+        this.ejectionDt = ejectionDt;
     }
 
     public Long getWorkRecId() {

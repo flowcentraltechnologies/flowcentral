@@ -109,6 +109,9 @@ public class WfStep extends BaseConfigNamedEntity {
     @Column(nullable = true)
     private Integer expiryMinutes;
 
+    @Column(nullable = true)
+    private Integer delayMinutes;
+
     @Column(name = "AUDIT_FG")
     private boolean audit;
 
@@ -363,6 +366,14 @@ public class WfStep extends BaseConfigNamedEntity {
 
     public void setExpiryMinutes(Integer expiryMinutes) {
         this.expiryMinutes = expiryMinutes;
+    }
+
+    public Integer getDelayMinutes() {
+        return delayMinutes;
+    }
+
+    public void setDelayMinutes(Integer delayMinutes) {
+        this.delayMinutes = delayMinutes;
     }
 
     public boolean isAudit() {

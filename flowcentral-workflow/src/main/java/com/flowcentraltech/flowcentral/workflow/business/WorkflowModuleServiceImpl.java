@@ -196,7 +196,9 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         implements WorkflowModuleService, ApplicationAppletDefProvider, RolePrivilegeBackupAgent {
 
     private static final List<WorkflowStepType> USER_INTERACTIVE_STEP_TYPES = Arrays
-            .asList(WorkflowStepType.USER_ACTION, WorkflowStepType.ERROR);
+            .asList(WorkflowStepType.USER_ACTION, WorkflowStepType.ERROR, WorkflowStepType.DELAY);
+
+    private static final String WFITEM_EJECTION_LOCK = "wf::itemejection-lock";
 
     private static final String WFITEMALERT_QUEUE_LOCK = "wf::itemalert-lock";
 
@@ -324,7 +326,9 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                                 wfStep.getRule(), wfStep.getName(), wfStep.getDescription(), wfStep.getLabel(),
                                 DataUtils.convert(int.class, wfStep.getReminderMinutes()),
                                 DataUtils.convert(int.class, wfStep.getCriticalMinutes()),
-                                DataUtils.convert(int.class, wfStep.getExpiryMinutes()), wfStep.isAudit(),
+                                DataUtils.convert(int.class, wfStep.getExpiryMinutes()),
+                                DataUtils.convert(int.class, wfStep.getDelayMinutes()),
+                                wfStep.isAudit(),
                                 wfStep.isBranchOnly(), wfStep.isDepartmentOnly(), wfStep.isIncludeForwarder(),
                                 wfStep.isForwarderPreffered(), wfStep.getEmails(), wfStep.getComments());
 
@@ -1342,6 +1346,41 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                 parts.getOpenPath(), wfItem.getHeldBy());
     }
 
+    @Periodic(PeriodicType.FAST)
+    public void ejectDelayedWorkItem(TaskMonitor taskMonitor) throws UnifyException {
+        logDebug("Ejecting delayed work items...");
+        if (tryGrabLock(WFITEM_EJECTION_LOCK)) {
+            try {
+                logDebug("Fetching delayed work items ready for ejection...");
+                final Date now = getNow();
+                final int batchSize = appletUtil.system().getSysParameterValue(int.class,
+                        WorkflowModuleSysParamConstants.WF_WORKITEM_EJECTION_BATCH_SIZE);
+                List<WfItem> wfItemList = environment().listAll(new WfItemQuery().ejectionDue(now).setLimit(batchSize));
+                logDebug("Ejecting [{0}] delayed work items...", wfItemList.size());
+                for (WfItem wfItem : wfItemList) {
+                    final Long wfItemId = wfItem.getId();
+                    final WfDef wfDef = getWfDef(wfItem.getWorkflowName());
+                    final WfStepDef currentWfStepDef = wfDef.getWfStepDef(wfItem.getWfStepName());
+                    final String nextStepName = currentWfStepDef.getNextStepName();
+
+                    WfStepDef nextWfStepDef = wfDef.getWfStepDef(nextStepName);
+                    final Long wfItemEventId = createWfItemEvent(nextWfStepDef, wfItem.getWfItemHistId(),
+                            wfItem.getWfStepName(), null, null, null, null);
+
+                    wfItem.setWfItemEventId(wfItemEventId);
+                    wfItem.setEjectionDt(null);
+                    environment().updateByIdVersion(wfItem);
+
+                    pushToWfTransitionQueue(wfDef, wfItemId, true);
+                    commitTransactions();
+                }
+            } finally {
+                releaseLock(WFITEM_EJECTION_LOCK);
+                logDebug("Work item ejections completed.");
+            }
+        }
+    }
+
     @Periodic(PeriodicType.FASTER)
     public void processWfTransitionQueueItems(TaskMonitor taskMonitor) throws UnifyException {
         logDebug("Processing transition queue items...");
@@ -1695,9 +1734,13 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                     WfStepDef routeToWfStep = resolveMultiRouting(wfDef, currWfStepDef, wfInstReader);
                     nextWfStep = routeToWfStep != null ? nextWfStep = routeToWfStep : nextWfStep;
                     break;
+                case DELAY:
+                    final Date ejectionDt = CalendarUtils.getDateWithFrequencyOffset(now, FrequencyUnit.MINUTE,
+                            currWfStepDef.getDelayMinutes() <= 0 ? 1 : currWfStepDef.getDelayMinutes());
+                    wfItem.setEjectionDt(ejectionDt);
                 case USER_ACTION:
                 case ERROR:
-                    // Workflow item has settled in current step
+                    // Workflow item has settled in current step. (Yes delay also settles here)
                     wfItem.setForwardTo(null);
                     environment().updateByIdVersion(wfItem);
                     break;

@@ -360,7 +360,7 @@ public interface AppletUtilities extends FlowCentralComponent {
      *                        if an error occurs
      */
     long getNextSequenceNumber(String sequence) throws UnifyException;
-    
+
     /**
      * Checks if application is developable.
      * 
@@ -412,9 +412,9 @@ public interface AppletUtilities extends FlowCentralComponent {
      * Gets a session attribute.
      * 
      * @param clazz
-     *                             the attribute class
+     *              the attribute class
      * @param name
-     *                             the attribute name
+     *              the attribute name
      * @return the session attribute
      * @throws UnifyException
      *                        if an error occurs
@@ -432,7 +432,7 @@ public interface AppletUtilities extends FlowCentralComponent {
      *                        if an error occurs
      */
     void setSessionAttribute(String name, Object val) throws UnifyException;
-    
+
     /**
      * Gets current system timestamp.
      * 
@@ -462,6 +462,7 @@ public interface AppletUtilities extends FlowCentralComponent {
      *                        if an error occurs
      */
     <T extends UnifyComponent> T getComponent(Class<T> componentClazz) throws UnifyException;
+
     /**
      * Gets a component.
      * 
@@ -655,7 +656,7 @@ public interface AppletUtilities extends FlowCentralComponent {
      * @return the sequence number service
      */
     SequenceNumberService sequence();
-    
+
     /**
      * Gets the report provider.
      * 
@@ -875,7 +876,7 @@ public interface AppletUtilities extends FlowCentralComponent {
      */
     String setAdhocWidgetTypeDef(DataType dataType, InputType type, String longName, String description, String editor,
             String renderer) throws UnifyException;
-    
+
     /**
      * Gets a application property rule definition.
      * 
@@ -1297,22 +1298,29 @@ public interface AppletUtilities extends FlowCentralComponent {
      */
     ListingForm constructListingForm(AbstractApplet applet, String rootTitle, String beanTitle, FormDef formDef,
             Entity inst, BreadCrumbs breadCrumbs) throws UnifyException;
-    
+
     /**
      * Constructs a form wizard.
      * 
      * @param applet
-     *                the applet
+     *                    the applet
      * @param formDef
-     *                the form definition
+     *                    the form definition
      * @param inst
-     *                the backing entity bean
+     *                    the backing entity bean
+     * @param rootTitle
+     *                    the root applet title
+     * @param beanTitle
+     *                    the bean title
+     * @param breadCrumbs
+     *                    optional bread crumbs
      * @return constructed form wizard
      * @throws UnifyException
      *                        if an error occurs
      */
-    FormWizard constructFormWizard(AbstractApplet applet, FormDef formDef, Entity inst) throws UnifyException;
-    
+    FormWizard constructFormWizard(AbstractApplet applet, FormDef formDef, Entity inst, String rootTitle,
+            String beanTitle, BreadCrumbs breadCrumbs) throws UnifyException;
+
     /**
      * Constructs a header with tabs form.
      * 

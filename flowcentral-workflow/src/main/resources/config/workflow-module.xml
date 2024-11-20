@@ -31,5 +31,8 @@
 		<sysParameter code="WF-0005" defaultVal="40"
 			description="$m{workflow.sysparam.itemalertbatchsize}"
 			editor="!ui-integer precision:2" type="number" editable="true" />
+		<sysParameter code="WF-0006" defaultVal="160"
+			description="$m{workflow.sysparam.itemejectionbatchsize}"
+			editor="!ui-integer precision:4" type="number" editable="true" />
 	</sysParameters>
 </module>

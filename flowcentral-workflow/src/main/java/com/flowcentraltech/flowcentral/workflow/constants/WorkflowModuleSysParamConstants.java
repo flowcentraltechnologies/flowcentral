@@ -33,4 +33,6 @@ public interface WorkflowModuleSysParamConstants {
 
     String WF_WORKITEM_ALERT_BATCH_SIZE = "WF-0005";
 
+    String WF_WORKITEM_EJECTION_BATCH_SIZE = "WF-0006";
+
 }

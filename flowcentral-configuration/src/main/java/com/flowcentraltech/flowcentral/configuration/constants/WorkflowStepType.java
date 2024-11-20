@@ -123,6 +123,15 @@ public enum WorkflowStepType implements EnumConst {
             true,
             true,
             9),
+    DELAY(
+            ProcessingStatus.NORMAL,
+            "DLY",
+            "circle-pause",
+            WorkflowStepColor.CYAN,
+            true,
+            true,
+            false,
+            10),
     ERROR(
             ProcessingStatus.ERROR,
             "ERR",
@@ -131,7 +140,7 @@ public enum WorkflowStepType implements EnumConst {
             true,
             true,
             true,
-            10),
+            11),
     END(
             ProcessingStatus.NORMAL,
             "END",
@@ -140,7 +149,7 @@ public enum WorkflowStepType implements EnumConst {
             true,
             false,
             false,
-            11);
+            12);
 
     private final ProcessingStatus processingStatus;
 
@@ -243,7 +252,7 @@ public enum WorkflowStepType implements EnumConst {
     }
 
     public boolean isAutomatic() {
-        return !USER_ACTION.equals(this) && !ERROR.equals(this);
+        return !isSettling();
     }
 
     public boolean isSetValues() {
@@ -251,7 +260,7 @@ public enum WorkflowStepType implements EnumConst {
     }
 
     public boolean isInteractive() {
-        return USER_ACTION.equals(this) || ERROR.equals(this);
+        return USER_ACTION.equals(this) || ERROR.equals(this) || DELAY.equals(this);
     }
 
     public boolean isUserAction() {
@@ -262,8 +271,12 @@ public enum WorkflowStepType implements EnumConst {
         return RECORD_ACTION.equals(this);
     }
 
+    public boolean isDelay() {
+        return DELAY.equals(this);
+    }
+
     public boolean isSettling() {
-        return USER_ACTION.equals(this) || ERROR.equals(this);
+        return USER_ACTION.equals(this) || ERROR.equals(this) || DELAY.equals(this);
     }
 
     public boolean isFlowing() {
@@ -271,7 +284,7 @@ public enum WorkflowStepType implements EnumConst {
     }
 
     public boolean isTerminal() {
-        return USER_ACTION.equals(this) || ERROR.equals(this) || END.equals(this);
+        return isSettling() || END.equals(this);
     }
 
     public static List<WorkflowStepType> asList() {

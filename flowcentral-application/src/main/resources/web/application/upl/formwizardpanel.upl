@@ -13,7 +13,9 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-!fc-formwizardpanel layout:$d{!ui-vertical style:$s{width:100%;} cellStyle:$s{padding:0px;}}
+!fc-formwizardpanel mainForm:$c{mainWizardPanel}
+
+!ui-panel:mainWizardPanel styleClass:$e{formbase} layout:$d{!ui-vertical style:$s{width:100%;} cellStyle:$s{padding:0px;}}
 	components:$c{formMessages pageFormPanel actionPanel}
 
 // Messages
@@ -37,7 +39,7 @@
 	components:$c{cancelBtn saveCloseBtn submitCloseBtn}
 !ui-button:cancelBtn caption:$m{button.cancel}
 	eventHandler:$f{wizardCancelHandler}
-!ui-button:saveCloseBtn caption:$m{button.saveclose}
+!ui-button:saveCloseBtn styleClass:$e{fc-bluebutton} caption:$m{button.saveclose}
 	eventHandler:$f{wizardSaveHandler}
 !ui-button:submitCloseBtn caption:$m{button.submit} captionBinding:submitCaption
 	styleClassBinding:$s{submitStyleClass}

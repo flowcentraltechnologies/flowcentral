@@ -1017,21 +1017,25 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
     }
 
     @Override
-    public FormWizard constructFormWizard(AbstractApplet applet, FormDef formDef, Entity inst) throws UnifyException {
+    public FormWizard constructFormWizard(AbstractApplet applet, FormDef formDef, Entity inst, String rootTitle,
+            String beanTitle, BreadCrumbs breadCrumbs) throws UnifyException {
         logDebug("Constructing form wizard for bean using form definition [{0}]...", formDef.getLongName());
         final AppletContext appletContext = applet != null ? applet.appletCtx() : new AppletContext(null, applet, this);
         final FormTabDef mainFormTabDef = formDef.getFormTabDef(0);
         initSkeletonForAutoFormatFields(formDef.getEntityDef(), inst);
-        
+
         List<MiniForm> forms = new ArrayList<MiniForm>();
-        for (FormTabDef formTabDef: mainFormTabDef.wizardParts()) {
+        for (FormTabDef formTabDef : mainFormTabDef.wizardParts()) {
             final FormContext formContext = new FormContext(appletContext, formDef, null, inst);
             formContext.evaluateTabStates();
             MiniForm miniForm = new MiniForm(MiniFormScope.MAIN_FORM, formContext, formTabDef);
             forms.add(miniForm);
         }
-        
-        return new FormWizard(formDef.getLongName(), forms);
+
+        final SectorIcon sectorIcon = applet != null
+                ? getPageSectorIconByApplication(applet.getRootAppletDef().getApplicationName())
+                : null;
+        return new FormWizard(formDef.getLongName(), forms, sectorIcon, breadCrumbs);
     }
     
     @SuppressWarnings("unchecked")

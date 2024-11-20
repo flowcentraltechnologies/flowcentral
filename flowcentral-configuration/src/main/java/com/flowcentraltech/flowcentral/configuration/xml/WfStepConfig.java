@@ -99,6 +99,9 @@ public class WfStepConfig extends BaseNameConfig {
     
     @JacksonXmlProperty(isAttribute = true)
     private Integer expiryMinutes;
+    
+    @JacksonXmlProperty(isAttribute = true)
+    private Integer delayMinutes;
 
     @JacksonXmlProperty(isAttribute = true)
     private boolean audit;
@@ -269,6 +272,14 @@ public class WfStepConfig extends BaseNameConfig {
 
     public void setCriticalMinutes(Integer criticalMinutes) {
         this.criticalMinutes = criticalMinutes;
+    }
+
+    public Integer getDelayMinutes() {
+        return delayMinutes;
+    }
+
+    public void setDelayMinutes(Integer delayMinutes) {
+        this.delayMinutes = delayMinutes;
     }
 
     public String getValueGenerator() {
