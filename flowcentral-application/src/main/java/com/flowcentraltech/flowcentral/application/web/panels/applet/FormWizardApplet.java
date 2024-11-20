@@ -24,10 +24,12 @@ import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.FormDef;
 import com.flowcentraltech.flowcentral.application.web.data.FormContext;
 import com.flowcentraltech.flowcentral.application.web.panels.FormWizard;
+import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs;
 import com.flowcentraltech.flowcentral.common.business.policies.ActionMode;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
 import com.flowcentraltech.flowcentral.common.business.policies.FormReviewContext;
 import com.flowcentraltech.flowcentral.common.business.policies.SweepingCommitPolicy;
+import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
 import com.flowcentraltech.flowcentral.configuration.constants.FormReviewType;
 import com.flowcentraltech.flowcentral.configuration.constants.RecordActionType;
 import com.tcdng.unify.core.UnifyException;
@@ -53,7 +55,11 @@ public class FormWizardApplet extends AbstractApplet implements SweepingCommitPo
         final String formName = appletDef.getPropValue(String.class, AppletPropertyConstants.CREATE_FORM);
         final FormDef formDef = au.getFormDef(formName);
         final Entity inst = au.application().getEntityClassDef(appletDef.getEntity()).newInst();
-        this.formWizard = au.constructFormWizard(this, formDef, inst);
+        BreadCrumbs.Builder bcb = BreadCrumbs.newBuilder();
+        bcb.addHistoryCrumb(appletDef.getDescription(), formDef.getLabel(), 0);
+        BreadCrumbs crumbs = bcb.build();
+
+        this.formWizard = au.constructFormWizard(this, formDef, inst, appletDef.getDescription(), formDef.getLabel(), crumbs);
     }
     
     @Override
@@ -93,6 +99,14 @@ public class FormWizardApplet extends AbstractApplet implements SweepingCommitPo
             ((AbstractSequencedEntity) inst).setId(entityInstId);
         }
 
+        final AppletDef appletDef = getRootAppletDef();
+        final String channel = appletDef.getPropValue(String.class,
+                AppletPropertyConstants.CREATE_FORM_SUBMIT_WORKFLOW_CHANNEL);
+        final String policy = appletDef.getPropValue(String.class,
+                AppletPropertyConstants.CREATE_FORM_SUBMIT_POLICY);
+
+        entityActionResult = au().workItemUtilities().submitToWorkflowChannel(_entityDef, channel,
+                (WorkEntity) inst, policy);
         return entityActionResult;
     }
 

@@ -18,7 +18,9 @@ package com.flowcentraltech.flowcentral.application.web.panels;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.web.data.FormContext;
+import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs;
 import com.flowcentraltech.flowcentral.application.web.widgets.MiniForm;
+import com.flowcentraltech.flowcentral.application.web.widgets.SectorIcon;
 import com.flowcentraltech.flowcentral.common.data.FormMessage;
 
 /**
@@ -27,7 +29,7 @@ import com.flowcentraltech.flowcentral.common.data.FormMessage;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class FormWizard {
+public class FormWizard extends AbstractForm {
 
     private String formName;
     
@@ -43,7 +45,8 @@ public class FormWizard {
     
     private final int pageCount;
     
-    public FormWizard(String formName, List<MiniForm> forms) {
+    public FormWizard(String formName, List<MiniForm> forms, SectorIcon sectorIcon, BreadCrumbs breadCrumbs) {
+        super(forms.get(0).getCtx(), sectorIcon, breadCrumbs);
         this.formName = formName;
         this.forms = forms;
         this.pageCount = forms.size();

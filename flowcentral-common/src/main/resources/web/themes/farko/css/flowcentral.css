@@ -149,6 +149,8 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .ui-contentpanel .cptab .cptitle .hd {width:156px;}
 .ui-contentpanel .cptab .cptitle .hds {width:156px;}
 
+.ui-contentpanel .cptab .cpactive .cpt {padding: 3px 8px;}
+
 .contentpanel-popup ul {background-color: #fff;}
 .contentpanel-popup .mitem {padding:6px 12px;font-size:11px;font-weight:bold;color: #454545;}
 .contentpanel-popup .mitem:hover {background-color: var(--color-menuhov);color:#fff;}
@@ -188,10 +190,10 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-dashboard-header {}
 .fc-dashboard-header .llabelinl{width:78px;}
 
-.fc-formwizardappletpanel {max-width:720px;}
+.fc-formwizardappletpanel {width:100%;}
 
 .fc-formwizardpanel {height: 100%;}
-.fc-formwizardpanel .fwzfrm {overflow-y:scroll;height:65vh !important;}
+.fc-formwizardpanel .fwzfrm {overflow-y:scroll;height:50vh !important;}
 
 /*** LOGIN ***/
 .fc-login-contentpanel {display:block;position:relative;left:0px;top:0px;width:100%;height:100%;}

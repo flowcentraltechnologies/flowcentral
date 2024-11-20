@@ -19,7 +19,6 @@ import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.web.data.FormContext;
 import com.flowcentraltech.flowcentral.common.business.policies.FormValidationContext;
 import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
-import com.flowcentraltech.flowcentral.common.web.panels.AbstractFlowCentralStandalonePanel;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -35,7 +34,7 @@ import com.tcdng.unify.web.ui.widget.data.Hint.MODE;
  */
 @Component("fc-formwizardpanel")
 @UplBinding("web/application/upl/formwizardpanel.upl")
-public class FormWizardPanel extends AbstractFlowCentralStandalonePanel {
+public class FormWizardPanel extends AbstractFormPanel {
 
     @Configurable
     private AppletUtilities appletUtilities;
