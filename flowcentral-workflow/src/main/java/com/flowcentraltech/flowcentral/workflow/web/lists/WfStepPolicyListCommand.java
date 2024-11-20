@@ -63,6 +63,7 @@ public class WfStepPolicyListCommand extends AbstractFlowCentralListCommand<WfSt
                 case MULTI_ROUTING:
                 case SET_VALUES:
                 case START:
+                case DELAY:
                 case USER_ACTION:
                 case NOTIFICATION:
                 default:

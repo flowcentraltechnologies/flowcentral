@@ -196,7 +196,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         implements WorkflowModuleService, ApplicationAppletDefProvider, RolePrivilegeBackupAgent {
 
     private static final List<WorkflowStepType> USER_INTERACTIVE_STEP_TYPES = Arrays
-            .asList(WorkflowStepType.USER_ACTION, WorkflowStepType.ERROR);
+            .asList(WorkflowStepType.USER_ACTION, WorkflowStepType.ERROR, WorkflowStepType.DELAY);
 
     private static final String WFITEMALERT_QUEUE_LOCK = "wf::itemalert-lock";
 
@@ -324,7 +324,9 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                                 wfStep.getRule(), wfStep.getName(), wfStep.getDescription(), wfStep.getLabel(),
                                 DataUtils.convert(int.class, wfStep.getReminderMinutes()),
                                 DataUtils.convert(int.class, wfStep.getCriticalMinutes()),
-                                DataUtils.convert(int.class, wfStep.getExpiryMinutes()), wfStep.isAudit(),
+                                DataUtils.convert(int.class, wfStep.getExpiryMinutes()),
+                                DataUtils.convert(int.class, wfStep.getDelayMinutes()),
+                                wfStep.isAudit(),
                                 wfStep.isBranchOnly(), wfStep.isDepartmentOnly(), wfStep.isIncludeForwarder(),
                                 wfStep.isForwarderPreffered(), wfStep.getEmails(), wfStep.getComments());
 
@@ -1695,9 +1697,13 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                     WfStepDef routeToWfStep = resolveMultiRouting(wfDef, currWfStepDef, wfInstReader);
                     nextWfStep = routeToWfStep != null ? nextWfStep = routeToWfStep : nextWfStep;
                     break;
+                case DELAY:
+                    final Date ejectionDt = CalendarUtils.getDateWithFrequencyOffset(now, FrequencyUnit.MINUTE,
+                            currWfStepDef.getDelayMinutes() <= 0 ? 1 : currWfStepDef.getDelayMinutes());
+                    wfItem.setEjectionDt(ejectionDt);
                 case USER_ACTION:
                 case ERROR:
-                    // Workflow item has settled in current step
+                    // Workflow item has settled in current step. (Yes delay also settles here)
                     wfItem.setForwardTo(null);
                     environment().updateByIdVersion(wfItem);
                     break;
