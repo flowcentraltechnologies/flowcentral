@@ -41,6 +41,7 @@
 !ui-integer:frmCriticalMinutes styleClass:$e{fc-formfield} caption:$m{wfstepeditpanel.criticalminutes} precision:5 binding:criticalMinutes
 !ui-integer:frmExpiryMinutes styleClass:$e{fc-formfield} caption:$m{wfstepeditpanel.expiryminutes} precision:5 binding:expiryMinutes
 !ui-integer:frmDelayMinutes styleClass:$e{fc-formfield} caption:$m{wfstepeditpanel.delayminutes} precision:5 binding:delayMinutes
+	required:true
 !ui-checkbox:frmAudit caption:$m{wfstepeditpanel.audit} binding:audit
 !ui-checkbox:frmBranchOnly caption:$m{wfstepeditpanel.branchonly} binding:branchOnly
 !ui-checkbox:frmDepartmentOnly caption:$m{wfstepeditpanel.departmentonly} binding:departmentOnly
