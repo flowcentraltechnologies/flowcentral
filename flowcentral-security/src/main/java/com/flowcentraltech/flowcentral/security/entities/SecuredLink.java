@@ -37,7 +37,7 @@ public class SecuredLink extends BaseAuditTenantEntity {
     @ForeignKey(name = "SECURED_LINK_TY", nullable = true)
     private SecuredLinkType type;
     
-    @Column(length = 128)
+    @Column(length = 128, nullable = true)
     private String title;
 
     @Column(length = 128)
