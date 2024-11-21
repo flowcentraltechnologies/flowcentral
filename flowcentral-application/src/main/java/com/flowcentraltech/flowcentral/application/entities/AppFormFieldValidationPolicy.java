@@ -38,7 +38,7 @@ public class AppFormFieldValidationPolicy extends BaseConfigNamedEntity {
     @Column(length = 64)
     private String validation;
 
-    @Column(length = 64, nullable = true)
+    @Column(name = "POLICY_RULE", length = 64, nullable = true)
     private String rule;
 
     @Column(length = 64, nullable = true)
