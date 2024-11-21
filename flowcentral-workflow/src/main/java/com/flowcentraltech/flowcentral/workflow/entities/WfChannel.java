@@ -47,7 +47,7 @@ public class WfChannel extends BaseApplicationEntity {
     @Column(length = 128)
     private String destination;
 
-    @Column(length = 128, nullable = true)
+    @Column(name = "CHANNEL_RULE", length = 128, nullable = true)
     private String rule;
 
     @ListOnly(key = "direction", property = "description")

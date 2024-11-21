@@ -1478,13 +1478,19 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         WorkEntity wfEntityInst = (WorkEntity) environment()
                 .list((Class<? extends WorkEntity>) entityClassDef.getEntityClass(), wfItem.getWorkRecId());
         if (wfEntityInst != null) {
-            final UserToken userToken = UserToken.newBuilder().userLoginId(wfItem.getForwardedBy())
-                    .userName(wfItem.getForwardedByName()).tenantId(wfItem.getTenantId())
-                    .branchCode(wfEntityInst.getWorkBranchCode())
-                    .reservedUser(DefaultApplicationConstants.SYSTEM_LOGINID.equals(wfItem.getForwardedBy())).build();
-            getSessionContext().setUserToken(userToken);
-            return doWfTransition(new TransitionItem(wfItem, wfDef, wfEntityInst,
-                    Boolean.TRUE.equals(wfTransitionQueue.getFlowTransition())));
+            try {
+                final UserToken userToken = UserToken.newBuilder().userLoginId(wfItem.getForwardedBy())
+                        .userName(wfItem.getForwardedByName()).tenantId(wfItem.getTenantId())
+                        .branchCode(wfEntityInst.getWorkBranchCode())
+                        .reservedUser(DefaultApplicationConstants.SYSTEM_LOGINID.equals(wfItem.getForwardedBy())).build();
+                getSessionContext().setUserToken(userToken);
+                return doWfTransition(new TransitionItem(wfItem, wfDef, wfEntityInst,
+                        Boolean.TRUE.equals(wfTransitionQueue.getFlowTransition())));
+            } catch (Exception e) {
+                logError(e);
+            }
+            
+            return false;
         }
 
         return true;
