@@ -530,7 +530,7 @@ public class ApplicationReportInstallerImpl extends AbstractApplicationArtifactI
             for (ParameterConfig parameterConfig : reportConfig.getParameters().getParameterList()) {
                 ReportParameter reportParameter = new ReportParameter();
                 reportParameter.setName(parameterConfig.getName());
-                String description = parameterConfig.getDescription();
+                String description = resolveApplicationMessage(parameterConfig.getDescription());
                 if (StringUtils.isBlank(description)) {
                     description = resolveApplicationMessage(parameterConfig.getLabel());
                 }
