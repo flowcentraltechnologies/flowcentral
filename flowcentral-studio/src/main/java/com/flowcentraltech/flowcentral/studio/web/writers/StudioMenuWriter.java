@@ -72,13 +72,16 @@ public class StudioMenuWriter extends AbstractPanelWriter {
             .unmodifiableList(Arrays.asList("codegeneration.manageSnapshotSettings", "studio.takeSnapshot",
                     "studio.uploadSnapshot", "studio.snapshots"));
 
+    private static final List<String> entityToolsAppletList = Collections
+            .unmodifiableList(Arrays.asList("studio.createJsonEntity"));
+
     private static final List<StudioAppComponentType> utilMenuCategoryList = Collections.unmodifiableList(Arrays.asList(
             StudioAppComponentType.CODEGENERATION, StudioAppComponentType.SYNCHRONIZATION,
-            StudioAppComponentType.SNAPSHOT, StudioAppComponentType.APPLICATION));
+            StudioAppComponentType.SNAPSHOT, StudioAppComponentType.ENTITY_TOOLS, StudioAppComponentType.APPLICATION));
 
     private static final List<StudioAppComponentType> collabUtilMenuCategoryList = Collections
             .unmodifiableList(Arrays.asList(StudioAppComponentType.COLLABORATION, StudioAppComponentType.CODEGENERATION,
-                    StudioAppComponentType.SYNCHRONIZATION, StudioAppComponentType.SNAPSHOT,
+                    StudioAppComponentType.SYNCHRONIZATION, StudioAppComponentType.SNAPSHOT, StudioAppComponentType.ENTITY_TOOLS,
                     StudioAppComponentType.APPLICATION));
 
     private static final List<StudioAppComponentType> menuCategoryList = Collections.unmodifiableList(Arrays.asList(
@@ -226,6 +229,7 @@ public class StudioMenuWriter extends AbstractPanelWriter {
                     && StudioAppComponentType.CODEGENERATION.equals(currCategory);
             final boolean isSynchronization = StudioAppComponentType.SYNCHRONIZATION.equals(currCategory);
             final boolean isSnapshot = StudioAppComponentType.SNAPSHOT.equals(currCategory);
+            final boolean isEntityTools= StudioAppComponentType.ENTITY_TOOLS.equals(currCategory);
 
             final String searchInput = studioMenuWidget.isSearchable() ? studioMenuWidget.getSearchInput() : null;
             final List<AppletDef> appletDefList = isApplications
@@ -234,11 +238,12 @@ public class StudioMenuWriter extends AbstractPanelWriter {
                             : (isCodeGeneration ? getCodeGenerationAppletDefs(applicationName, searchInput)
                                     : (isSynchronization ? getSychronizationAppletDefs(applicationName, searchInput)
                                             : (isSnapshot ? getSnapshotAppletDefs(applicationName, searchInput)
+                                                : (isEntityTools ? getEntityToolsAppletDefs(applicationName, searchInput)
                                                     : studioModuleService.findAppletDefs(applicationName,
-                                                                    currCategory, searchInput)))));
+                                                                    currCategory, searchInput))))));
 
             for (AppletDef appletDef : appletDefList) {
-                if (isApplications || isCollaboration || isCodeGeneration || isSynchronization || isSnapshot
+                if (isApplications || isCollaboration || isCodeGeneration || isSynchronization || isSnapshot || isEntityTools
                         || appletDef.isMenuAccess()) {
                     writer.write("<li id=\"item_").write(appletDef.getViewId()).write("\">");
                     writer.write("<span>").writeWithHtmlEscape(appletDef.getLabel()).write("</span>");
@@ -326,6 +331,10 @@ public class StudioMenuWriter extends AbstractPanelWriter {
 
     private List<AppletDef> getSnapshotAppletDefs(String applicationName, String filter) throws UnifyException {
         return getRoleAppletDefs(applicationName, snapshotAppletList, filter);
+    }
+
+    private List<AppletDef> getEntityToolsAppletDefs(String applicationName, String filter) throws UnifyException {
+        return getRoleAppletDefs(applicationName, entityToolsAppletList, filter);
     }
 
     private List<AppletDef> getRoleAppletDefs(String applicationName, List<String> applets, String filter)

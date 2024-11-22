@@ -575,6 +575,12 @@
 			label="$m{studio.snapshotspage.manage.label}" icon="lock" type="path_page"
 			path="/studio/snapshots/openPage" menuAccess="false">
 		</applet>
+		<applet name="createJsonEntity"
+			description="$m{studio.jsonentity.manage}"
+			label="$m{studio.jsonentity.manage.label}" type="form_wizard"
+			entity="studio.studioJsonEntity" menuAccess="false">
+			<property name="createForm" value="studioJsonEntityForm" />
+		</applet>
 		<applet name="stuManageModule"
 			description="$m{studio.module.manage}"
 			label="$m{studio.module.manage.label}" icon="cubes"
@@ -1494,6 +1500,9 @@
 		<reference name="studioRestoreDetailsRef"
 			description="$m{studio.restoredetails.reference}"
 			entity="studioRestoreDetails" />
+		<reference name="studioJsonEntityRef"
+			description="$m{studio.jsonentity.reference}"
+			entity="studioJsonEntity" />
 	</references>
 	<!-- Entities -->
 	<entities>
@@ -1554,6 +1563,37 @@
 			<field name="taskStatusDesc"
 				label="$m{studio.restoredetails.taskstatusdesc}" type="list_only"
 				key="taskStatus" property="description" />
+		</entity>
+		<entity name="studioJsonEntity" description="$m{studio.jsonentity}"
+			label="$m{studio.jsonentity.label}"
+			type="com.flowcentraltech.flowcentral.studio.entities.StudioJsonEntity"
+			reportable="false">
+			<field name="applicationId"
+				label="$m{studio.jsonentity.applicationid}" type="ref"
+				inputLabel="$m{studio.jsonentity.application}"
+				inputWidget="application.entitysearch"
+				references="application.applicationRef" basicSearch="true" />
+			<field name="sourceJson"
+				inputWidget="application.textarealarge"
+				label="$m{studio.jsonentity.sourcejson}" type="clob" />
+			<field name="refinedStructure"
+				inputWidget="application.textarealarge"
+				label="$m{studio.jsonentity.refinedstructure}" type="clob" />
+			<field name="applicationName"
+				label="$m{studio.jsonentity.applicationname}"
+				type="list_only" key="applicationId" property="name" />
+			<field name="applicationDesc"
+				label="$m{studio.jsonentity.applicationdesc}"
+				type="list_only" key="applicationId" property="description" />
+			<field name="moduleId"
+				label="$m{studio.jsonentity.moduleid}"
+				type="list_only" key="applicationId" property="moduleId" />
+			<field name="moduleName"
+				label="$m{studio.jsonentity.modulename}"
+				type="list_only" key="applicationId" property="moduleName" />
+			<field name="moduleDesc"
+				label="$m{studio.jsonentity.moduledesc}"
+				type="list_only" key="applicationId" property="moduleDesc" />
 		</entity>
 	</entities>
 	<!-- Tables -->
@@ -2322,6 +2362,26 @@
 					<setState type="field" target="menuAccess" editable="true" />
 				</setStates>
 			</formStatePolicy>
+		</form>
+		<form name="studioJsonEntityForm" description="$m{studio.jsonentity.form}"
+			entity="studioJsonEntity">
+			<tab name="basicDetails"
+				label="$m{studio.jsonentity.form.basicdetails}" contentType="miniform">
+				<section name="source" columns="type_1"
+					label="$m{studio.jsonentity.form.source}" >
+					<field name="sourceJson" inputWidget="application.textareaxlarge" column="0"
+						required="true" editable="true" />
+				</section>
+				<section name="structureDetails" columns="type_2"
+					label="$m{studio.jsonentity.form.structure}" >
+					<field name="applicationId" inputWidget="application.entitysearch" column="0"
+						required="true" editable="true" />
+				</section>
+				<section name="structure" columns="type_1">
+					<field name="refinedStructure" inputWidget="application.textarealarge" column="0"
+						required="true" editable="true" />
+				</section>
+			</tab>
 		</form>
 		<form name="appAppletForm"
 			description="$m{studio.appapplet.form}"
