@@ -250,9 +250,9 @@ public class FormEditor {
             return this;
         }
 
-        public Builder addSection(String name, String label, FormColumnsType columns, String panel, boolean visible,
-                boolean editable, boolean disabled) {
-            currentSection = new FormSection(name, label, columns.code(), panel, visible, editable, disabled);
+        public Builder addSection(String name, String label, FormColumnsType columns, String panel, String icon,
+                boolean visible, boolean editable, boolean disabled) {
+            currentSection = new FormSection(name, label, columns.code(), panel, icon, visible, editable, disabled);
             currentTab.getSections().add(currentSection);
             return this;
         }
@@ -681,6 +681,8 @@ public class FormEditor {
 
         private String panel;
 
+        private String icon;
+
         private boolean visible;
 
         private boolean editable;
@@ -689,12 +691,13 @@ public class FormEditor {
 
         private List<FormField> fields;
 
-        public FormSection(String name, String label, String columns, String panel, boolean visible, boolean editable,
-                boolean disabled) {
+        public FormSection(String name, String label, String columns, String panel, String icon, boolean visible,
+                boolean editable, boolean disabled) {
             this.name = name;
             this.label = label;
             this.columns = columns;
             this.panel = panel;
+            this.icon = icon;
             this.visible = visible;
             this.editable = editable;
             this.disabled = disabled;
@@ -735,6 +738,14 @@ public class FormEditor {
 
         public void setLabel(String label) {
             this.label = label;
+        }
+
+        public String getIcon() {
+            return icon;
+        }
+
+        public void setIcon(String icon) {
+            this.icon = icon;
         }
 
         public String getColumns() {

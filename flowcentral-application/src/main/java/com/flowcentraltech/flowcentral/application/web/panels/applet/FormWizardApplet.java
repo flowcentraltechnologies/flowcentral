@@ -60,6 +60,7 @@ public class FormWizardApplet extends AbstractApplet implements SweepingCommitPo
         BreadCrumbs crumbs = bcb.build();
 
         this.formWizard = au.constructFormWizard(this, formDef, inst, appletDef.getDescription(), formDef.getLabel(), crumbs);
+        setAltSubCaption(au.resolveSessionMessage("$m{formwizardpanel.creation}"));
     }
     
     @Override

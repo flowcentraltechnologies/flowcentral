@@ -114,6 +114,7 @@ import com.tcdng.unify.core.database.Query;
 import com.tcdng.unify.core.filter.ObjectFilter;
 import com.tcdng.unify.core.system.entities.AbstractSequencedEntity;
 import com.tcdng.unify.core.util.DataUtils;
+import com.tcdng.unify.core.util.QueryUtils;
 import com.tcdng.unify.core.util.ReflectUtils;
 import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.ui.constant.WidgetTempValueConstants;
@@ -857,6 +858,11 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
 
     public Diff diff() throws UnifyException {
         WorkEntity workEntity = (WorkEntity) form.getFormBean();
+        if (!QueryUtils.isValidLongCriteria((Long) workEntity.getId())
+                || !QueryUtils.isValidLongCriteria(workEntity.getOriginalCopyId())) {
+            return null;
+        }
+        
         return DiffUtils.diff(au(), form.getFormDef(), (Long) workEntity.getId(), workEntity.getOriginalCopyId(),
                 Formats.DEFAULT.createInstance());
     }

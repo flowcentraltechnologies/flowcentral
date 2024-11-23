@@ -82,6 +82,8 @@ public interface AppletPropertyConstants {
 
     String CREATE_FORM_NEW_POLICY = "createForm.new.policy";
 
+    String CREATE_FORM_NAVIGATION_POLICY = "createForm.navigation.policy";
+
     String CREATE_FORM_SUBMIT = "createForm.submit";
 
     String CREATE_FORM_SUBMIT_CAPTION = "createForm.submit.caption";

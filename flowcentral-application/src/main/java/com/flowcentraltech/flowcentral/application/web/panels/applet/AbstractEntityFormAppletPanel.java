@@ -708,6 +708,11 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
     public void diff() throws UnifyException {
         final AbstractEntityFormApplet applet = getEntityFormApplet();
         Diff diff = applet.diff();
+        if (diff == null) {
+            hintUser(MODE.WARNING, "$m{entityformapplet.diff.notpresent}");
+            return;
+        }
+        
         setRequestAttribute(AppletRequestAttributeConstants.FORM_DIFF, diff);
         setCommandResultMapping(ApplicationResultMappingConstants.SHOW_DIFF);
     }

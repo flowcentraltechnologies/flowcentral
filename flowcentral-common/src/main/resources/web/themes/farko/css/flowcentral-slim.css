@@ -5,22 +5,22 @@
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 /****** OVERRIDES (SLIM) **********/
-input[type = "text"],input[type = "password"] {height:28px;border-color: #b0b0b0;}
-select:not([multiple]){height:28px;}
+input[type = "text"],input[type = "password"] {height:32px;border-color: #b0b0b0;}
+select:not([multiple]){height:32px;}
 
 /** Button */ 
-.ui-button {min-height:28px;}
-.ui-button-alert {min-height:28px;}
+.ui-button {min-height:32px;}
+.ui-button-alert {min-height:32px;}
 
 /** Debit/credit field*/
-.ui-debitcredit .tpbutton {height:28px;padding:4px 4px;}
+.ui-debitcredit .tpbutton {height:32px;padding:4px 4px;}
 
 /** File upload */
-.ui-fileupload .fsbutton {height: 28px;}
+.ui-fileupload .fsbutton {height: 32px;}
 
 /* Text Area */
-.ui-text-popup .tpbutton {height:28px}
-.ui-text-popup .tplbutton {height:28px;}
+.ui-text-popup .tpbutton {height:32px}
+.ui-text-popup .tplbutton {height:32px;}
 
 /* Mini form */
 .fc-miniform .mfcon {min-height: 44px;}

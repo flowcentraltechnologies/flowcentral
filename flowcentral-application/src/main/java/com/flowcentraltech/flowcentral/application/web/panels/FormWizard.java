@@ -19,9 +19,11 @@ import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.web.data.FormContext;
 import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs;
+import com.flowcentraltech.flowcentral.application.web.widgets.IconBar;
 import com.flowcentraltech.flowcentral.application.web.widgets.MiniForm;
 import com.flowcentraltech.flowcentral.application.web.widgets.SectorIcon;
 import com.flowcentraltech.flowcentral.common.data.FormMessage;
+import com.tcdng.unify.core.util.StringUtils;
 
 /**
  * Form wizard.
@@ -31,7 +33,11 @@ import com.flowcentraltech.flowcentral.common.data.FormMessage;
  */
 public class FormWizard extends AbstractForm {
 
+    private IconBar iconBar;
+    
     private String formName;
+    
+    private String navPolicy;
     
     private List<MiniForm> forms;
     
@@ -45,9 +51,12 @@ public class FormWizard extends AbstractForm {
     
     private final int pageCount;
     
-    public FormWizard(String formName, List<MiniForm> forms, SectorIcon sectorIcon, BreadCrumbs breadCrumbs) {
+    public FormWizard(String formName, String navPolicy, IconBar iconBar, List<MiniForm> forms, SectorIcon sectorIcon,
+            BreadCrumbs breadCrumbs) {
         super(forms.get(0).getCtx(), sectorIcon, breadCrumbs);
         this.formName = formName;
+        this.navPolicy = navPolicy;
+        this.iconBar = iconBar;
         this.forms = forms;
         this.pageCount = forms.size();
     }
@@ -60,6 +69,14 @@ public class FormWizard extends AbstractForm {
         return formName;
     }
 
+    public String getNavPolicy() {
+        return navPolicy;
+    }
+
+    public boolean isWithNavPolicy() {
+        return !StringUtils.isBlank(navPolicy);
+    }
+    
     public String getSubmitCaption() {
         return submitCaption;
     }
@@ -88,6 +105,10 @@ public class FormWizard extends AbstractForm {
         return forms.get(currentPage).getCtx();
     }
 
+    public IconBar getIconBar() {
+        return iconBar;
+    }
+
     public MiniForm getForm() {
         return forms.get(currentPage);
     }
@@ -111,6 +132,7 @@ public class FormWizard extends AbstractForm {
     public boolean prevPage() {
         if (currentPage > 0) {
             currentPage--;
+            iconBar.setSelected(currentPage);
             return true;
         }
         
@@ -120,6 +142,7 @@ public class FormWizard extends AbstractForm {
     public boolean nextPage() {
         if (currentPage < (pageCount - 1)) {
             currentPage++;
+            iconBar.setSelected(currentPage);
             return true;
         }
         

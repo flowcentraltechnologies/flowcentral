@@ -99,6 +99,7 @@ import com.flowcentraltech.flowcentral.application.web.panels.applet.AbstractEnt
 import com.flowcentraltech.flowcentral.application.web.widgets.BeanListTable;
 import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs;
 import com.flowcentraltech.flowcentral.application.web.widgets.EntityTable;
+import com.flowcentraltech.flowcentral.application.web.widgets.IconBar;
 import com.flowcentraltech.flowcentral.application.web.widgets.MiniForm;
 import com.flowcentraltech.flowcentral.application.web.widgets.MiniFormScope;
 import com.flowcentraltech.flowcentral.application.web.widgets.SectorIcon;
@@ -1025,17 +1026,26 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
         initSkeletonForAutoFormatFields(formDef.getEntityDef(), inst);
 
         List<MiniForm> forms = new ArrayList<MiniForm>();
+        IconBar.Builder ibb = IconBar.newBuilder();
         for (FormTabDef formTabDef : mainFormTabDef.wizardParts()) {
             final FormContext formContext = new FormContext(appletContext, formDef, null, inst);
             formContext.evaluateTabStates();
             MiniForm miniForm = new MiniForm(MiniFormScope.MAIN_FORM, formContext, formTabDef);
             forms.add(miniForm);
+            
+            final String icon = !StringUtils.isBlank(formTabDef.getIcon()) ? formTabDef.getIcon(): "step";
+            ibb.addItem(icon, formTabDef.getLabel());
         }
 
         final SectorIcon sectorIcon = applet != null
                 ? getPageSectorIconByApplication(applet.getRootAppletDef().getApplicationName())
                 : null;
-        return new FormWizard(formDef.getLongName(), forms, sectorIcon, breadCrumbs);
+        final String navPolicy = applet != null
+                ? applet.getRootAppletDef().getPropValue(String.class,
+                        AppletPropertyConstants.CREATE_FORM_NAVIGATION_POLICY)
+                : null;
+        final IconBar iconBar = ibb.build();
+        return new FormWizard(formDef.getLongName(), navPolicy, iconBar, forms, sectorIcon, breadCrumbs);
     }
     
     @SuppressWarnings("unchecked")

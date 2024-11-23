@@ -505,6 +505,11 @@
 			dataType="string" inputType="string"
 			editor="!ui-select list:appletactionpolicylist listParams:$l{propertyOwnerId} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
+		<widgetType name="propertynavigationactionpolicylist"
+			description="$m{studio.widgettype.propertynavigationactionpolicylist}"
+			dataType="string" inputType="string"
+			editor="!ui-select list:navigationactionpolicylist listParams:$l{propertyOwnerId} blankOption:$m{blank.none}"
+			renderer="!ui-label" />
 		<widgetType name="tableentitylistactionpolicylist"
 			description="$m{studio.widgettype.tableentitylistactionpolicylist}"
 			dataType="string" inputType="string"
@@ -580,6 +585,7 @@
 			label="$m{studio.jsonentity.manage.label}" type="form_wizard"
 			entity="studio.studioJsonEntity" menuAccess="false">
 			<property name="createForm" value="studioJsonEntityForm" />
+			<property name="createForm.navigation.policy" value="createjsonentity-navigationpolicy" />
 		</applet>
 		<applet name="stuManageModule"
 			description="$m{studio.module.manage}"
@@ -6031,6 +6037,9 @@
 				<property name="createForm.new.policy"
 					description="$m{studio.appappletprop.formwizard.createform.newpolicy}"
 					inputWidget="studio.propertyentityactionpolicylist" />
+				<property name="createForm.navigation.policy"
+					description="$m{studio.appappletprop.formwizard.createform.navigationpolicy}"
+					inputWidget="studio.propertynavigationactionpolicylist" />
 			</propertySet>
 			<propertySet
 				label="$m{studio.appappletprop.formwizard.workflowproperties}">

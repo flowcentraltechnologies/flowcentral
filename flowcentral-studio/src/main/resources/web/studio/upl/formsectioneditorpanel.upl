@@ -23,7 +23,7 @@
 	layout:$d{!ui-vertical style:$s{table-layout:fixed;width:100%;}}
     formCaptionSuffix:$s{:} formBinding:$g{dialogFormBinding} formColumns:2
 	formSection:$d{!ui-section components:$c{frmName frmLabel frmColumns frmPanel
-		frmVisible frmEditable frmDisabled}}
+		frmIcon frmVisible frmEditable frmDisabled}}
 	
 !ui-text:frmName styleClass:$e{fc-formfield} caption:$m{formeditor.section.name} binding:name required:true focus:true
 !ui-text:frmLabel styleClass:$e{fc-formfield} caption:$m{formeditor.section.label} maxLen:64 binding:label
@@ -32,6 +32,7 @@
 	eventHandler:$d{!ui-event event:onchange action:$c{columnChangeAct}}
 !ui-select:frmPanel styleClass:$e{fc-formfield} caption:$m{formeditor.section.panel} binding:panel
 	list:studioformsectionpanellist blankOption:$s{} listParams:$l{entity}
+!ui-symbolselect:frmIcon styleClass:$e{fc-formfield} caption:$m{formeditor.section.icon} blankOption:$s{} binding:icon
 !ui-checkbox:frmVisible caption:$m{formeditor.section.visible} binding:visible layoutCaption:true
 !ui-checkbox:frmEditable caption:$m{formeditor.section.editable} binding:editable layoutCaption:true
 !ui-checkbox:frmDisabled caption:$m{formeditor.section.disabled} binding:disabled layoutCaption:true

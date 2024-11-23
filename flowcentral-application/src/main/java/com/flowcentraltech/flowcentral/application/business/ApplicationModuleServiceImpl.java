@@ -1067,7 +1067,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                         } else if (FormElementType.SECTION.equals(appFormElement.getType())) {
                             sectionIndex++;
                             fdb.addFormSection(tabIndex, appFormElement.getElementName(), appFormElement.getLabel(),
-                                    appFormElement.getSectionColumns(), appFormElement.getPanel(),
+                                    appFormElement.getSectionColumns(), appFormElement.getPanel(), appFormElement.getIcon(),
                                     appFormElement.isVisible(), appFormElement.isEditable(),
                                     appFormElement.isDisabled());
                         } else {
@@ -6487,6 +6487,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appFormElement.setElementName(formSectionConfig.getName());
                     appFormElement.setSectionColumns(formSectionConfig.getColumns());
                     appFormElement.setLabel(resolveApplicationMessage(formSectionConfig.getLabel()));
+                    appFormElement.setIcon(formSectionConfig.getIcon());
                     appFormElement.setPanel(formSectionConfig.getPanel());
                     appFormElement.setVisible(formSectionConfig.getVisible());
                     appFormElement.setEditable(formSectionConfig.getEditable());

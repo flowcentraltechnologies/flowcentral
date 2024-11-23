@@ -675,9 +675,9 @@ public class FormDef extends BaseApplicationEntityDef {
         }
 
         public Builder addFormSection(int tabIndex, String name, String sectionLabel, FormColumnsType columns,
-                String panel, boolean visible, boolean editable, boolean disabled) {
+                String panel, String icon, boolean visible, boolean editable, boolean disabled) {
             checkTabIndex(tabIndex);
-            formTabDefList.get(tabIndex).addFormSectionDef(sectionLabel, name, columns, panel, visible, editable,
+            formTabDefList.get(tabIndex).addFormSectionDef(sectionLabel, name, columns, panel, icon, visible, editable,
                     disabled);
             return this;
         }
@@ -883,12 +883,12 @@ public class FormDef extends BaseApplicationEntityDef {
                             new FormSectionDef(DataUtils.unmodifiableList(tempFormSectionDef.getFormFieldDefList()),
                                     tempFormSectionDef.getName(), tempFormSectionDef.getSectionLabel(),
                                     tempFormSectionDef.getColumns(), tempFormSectionDef.getPanel(),
-                                    tempFormSectionDef.isVisible(), tempFormSectionDef.isEditable(),
-                                    tempFormSectionDef.isDisabled()));
+                                    tempFormSectionDef.getIcon(), tempFormSectionDef.isVisible(),
+                                    tempFormSectionDef.isEditable(), tempFormSectionDef.isDisabled()));
                 }
 
                 formTabDefList.add(new FormTabDef(tempFormTabDef.getContentType(), tempFormTabDef.getFilterGroupDef(),
-                        tempFormTabDef.getName(), tempFormTabDef.getTabLabel(), tempFormTabDef.getTabApplet(),
+                        tempFormTabDef.getName(), tempFormTabDef.getTabLabel(), null, tempFormTabDef.getTabApplet(),
                         tempFormTabDef.getTabReference(), tempFormTabDef.getMappedFieldName(),
                         tempFormTabDef.getTabMappedForm(), tempFormTabDef.getEditAction(),
                         tempFormTabDef.getEditViewOnly(), tempFormTabDef.getEditAllowAddition(),
@@ -1043,9 +1043,9 @@ public class FormDef extends BaseApplicationEntityDef {
             }
 
             public void addFormSectionDef(String sectionLabel, String name, FormColumnsType columns, String panel,
-                    boolean visible, boolean editable, boolean disabled) {
-                formSectionDefList
-                        .add(new TempFormSectionDef(name, sectionLabel, columns, panel, visible, editable, disabled));
+                    String icon, boolean visible, boolean editable, boolean disabled) {
+                formSectionDefList.add(
+                        new TempFormSectionDef(name, sectionLabel, columns, panel, icon, visible, editable, disabled));
             }
 
             public boolean isIgnoreParentCondition() {
@@ -1089,6 +1089,8 @@ public class FormDef extends BaseApplicationEntityDef {
 
             private String panel;
 
+            private String icon;
+
             private boolean visible;
 
             private boolean editable;
@@ -1096,12 +1098,13 @@ public class FormDef extends BaseApplicationEntityDef {
             private boolean disabled;
 
             public TempFormSectionDef(String name, String sectionLabel, FormColumnsType columns, String panel,
-                    boolean visible, boolean editable, boolean disabled) {
+                    String icon, boolean visible, boolean editable, boolean disabled) {
                 this.formFieldDefList = new ArrayList<FormFieldDef>();
                 this.name = name;
                 this.sectionLabel = sectionLabel;
                 this.columns = columns;
                 this.panel = panel;
+                this.icon = icon;
                 this.visible = visible;
                 this.editable = editable;
                 this.disabled = disabled;
@@ -1132,6 +1135,10 @@ public class FormDef extends BaseApplicationEntityDef {
 
             public String getPanel() {
                 return panel;
+            }
+
+            public String getIcon() {
+                return icon;
             }
 
             public boolean isVisible() {

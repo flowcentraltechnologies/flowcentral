@@ -85,11 +85,14 @@ public class MiniFormWriter extends AbstractControlWriter {
         final boolean isClassicFormSection = systemModuleService.getSysParameterValue(boolean.class,
                 ApplicationModuleSysParamConstants.FORM_SECTION_CLASSIC_MODE);
         boolean isPreGap = false;
-
+        final boolean sectionHeaders = miniFormWidget.isSectionHeaders();
         if (miniFormWidget.isStrictRows()) {
             for (FormSection formSection : miniFormWidget.getFormSectionList()) {
                 if (formSection.isVisible()) {
-                    writeSectionLabel(writer, ctx, formSection, isPreGap, isClassicFormSection);
+                    if(sectionHeaders) {
+                        writeSectionLabel(writer, ctx, formSection, isPreGap, isClassicFormSection);
+                    }
+                    
                     writer.write("<div class=\"mftable\">");
                     RowRegulator rowRegulator = formSection.getRowRegulator();
                     rowRegulator.resetRows();
@@ -113,7 +116,10 @@ public class MiniFormWriter extends AbstractControlWriter {
         } else {
             for (FormSection formSection : miniFormWidget.getFormSectionList()) {
                 if (formSection.isVisible()) {
-                    writeSectionLabel(writer, ctx, formSection, isPreGap, isClassicFormSection);
+                    if(sectionHeaders) {
+                        writeSectionLabel(writer, ctx, formSection, isPreGap, isClassicFormSection);
+                    }
+                    
                     writer.write("<div class=\"mftable\">");
                     writer.write("<div class=\"mfrow\">");
                     final int columns = formSection.getColumns();
