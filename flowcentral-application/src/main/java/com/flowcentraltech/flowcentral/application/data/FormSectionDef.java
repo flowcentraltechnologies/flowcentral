@@ -38,6 +38,8 @@ public class FormSectionDef {
 
     private String panel;
 
+    private String icon;
+
     private boolean visible;
 
     private boolean editable;
@@ -45,12 +47,13 @@ public class FormSectionDef {
     private boolean disabled;
 
     public FormSectionDef(List<FormFieldDef> formFieldDefList, String name, String label, FormColumnsType columns,
-            String panel, boolean visible, boolean editable, boolean disabled) {
+            String panel, String icon, boolean visible, boolean editable, boolean disabled) {
         this.formFieldDefList = formFieldDefList;
         this.name = name;
         this.label = label;
         this.columns = columns;
         this.panel = panel;
+        this.icon = icon;
         this.visible = visible;
         this.editable = editable;
         this.disabled = disabled;
@@ -63,6 +66,7 @@ public class FormSectionDef {
         this.name = srcFormSectionDef.name;
         this.label = srcFormSectionDef.label;
         this.panel = srcFormSectionDef.panel;
+        this.icon = srcFormSectionDef.icon;
         this.visible = srcFormSectionDef.visible;
         this.editable = srcFormSectionDef.editable;
         this.disabled = srcFormSectionDef.disabled;
@@ -82,6 +86,10 @@ public class FormSectionDef {
 
     public String getPanel() {
         return panel;
+    }
+
+    public String getIcon() {
+        return icon;
     }
 
     public FormColumnsType getColumns() {

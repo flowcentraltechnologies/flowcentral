@@ -13,17 +13,27 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-!fc-formwizardpanel mainForm:$c{mainWizardPanel}
+!fc-formwizardpanel mainForm:$c{bodyPanel}
 
-!ui-panel:mainWizardPanel styleClass:$e{formbase} layout:$d{!ui-vertical style:$s{width:100%;} cellStyle:$s{padding:0px;}}
-	components:$c{formMessages pageFormPanel actionPanel}
+!ui-panel:bodyPanel layout:$d{!ui-vertical style:$s{width:100%;} cellStyle:$s{padding:0px;}}
+	components:$c{mainWizardPanel actionPanel}
+
+!ui-panel:mainWizardPanel layout:$d{!ui-horizontal style:$s{width:100%;} cellStyle:$s{padding:0px;}}
+	components:$c{iconBar frmContentPanel}
+
+//Icon bar
+!fc-iconbar:iconBar vertical:true binding:iconBar
+
+// Content
+!ui-panel:frmContentPanel styleClass:$e{formbase} layout:$d{!ui-vertical style:$s{width:100%;} cellStyle:$s{padding:0px;}}
+	components:$c{formMessages pageFormPanel}
 
 // Messages
 !fc-formmessages:formMessages binding:messages
 
 // Form
 !ui-panel:pageFormPanel styleClass:$s{fwzfrm} components:$c{pageForm}
-!fc-miniform:pageForm  style:$s{width:98%;} binding:form
+!fc-miniform:pageForm  style:$s{width:98%;} sectionHeaders:false binding:form
 
 // Action panel
 !ui-panel:actionPanel layout:$d{!ui-horizontal style:$s{width:100%;} widths:$l{50% 50%}}
@@ -36,7 +46,7 @@
 	eventHandler:$d{!ui-event event:onclick action:$c{nextAct}}
 	
 !ui-panel:exitPanel layout:$d{!ui-horizontal style:$s{float:right;}}
-	components:$c{cancelBtn saveCloseBtn submitCloseBtn}
+	components:$c{cancelBtn saveCloseBtn submitCloseBtn executeBtn}
 !ui-button:cancelBtn caption:$m{button.cancel}
 	eventHandler:$f{wizardCancelHandler}
 !ui-button:saveCloseBtn styleClass:$e{fc-bluebutton} caption:$m{button.saveclose}
@@ -44,6 +54,9 @@
 !ui-button:submitCloseBtn caption:$m{button.submit} captionBinding:submitCaption
 	styleClassBinding:$s{submitStyleClass}
 	eventHandler:$f{wizardSubmitHandler}
+!ui-button:executeBtn caption:$m{button.execute} captionBinding:execCaption
+	styleClassBinding:$s{execStyleClass}
+	eventHandler:$f{wizardExecHandler}
 
 // Actions
 !ui-postcommand:prevAct command:previous components:$c{pageForm}

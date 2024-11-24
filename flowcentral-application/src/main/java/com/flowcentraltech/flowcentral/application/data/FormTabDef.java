@@ -44,6 +44,8 @@ public class FormTabDef {
 
     private String label;
 
+    private String icon;
+
     private String applet;
 
     private String reference;
@@ -82,7 +84,7 @@ public class FormTabDef {
 
     private int listOnlyCheck;
 
-    public FormTabDef(TabContentType contentType, FilterGroupDef filterGroupDef, String name, String label,
+    public FormTabDef(TabContentType contentType, FilterGroupDef filterGroupDef, String name, String label, String icon,
             String applet, String reference, String mappedFieldName, String mappedForm, String editAction,
             String editViewOnly, String editAllowAddition, String editFixedRows,
             List<FormSectionDef> formSectionDefList, boolean ignoreParentCondition, boolean showSearch,
@@ -91,6 +93,7 @@ public class FormTabDef {
         this.filterGroupDef = filterGroupDef;
         this.name = name;
         this.label = label;
+        this.icon = icon;
         this.applet = applet;
         this.reference = reference;
         this.mappedFieldName = mappedFieldName;
@@ -116,6 +119,7 @@ public class FormTabDef {
         this.filterGroupDef = srcFormTabDef.filterGroupDef;
         this.name = srcFormTabDef.name;
         this.label = srcFormTabDef.label;
+        this.icon = srcFormTabDef.icon;
         this.applet = srcFormTabDef.applet;
         this.reference = srcFormTabDef.reference;
         this.mappedFieldName = srcFormTabDef.mappedFieldName;
@@ -134,12 +138,13 @@ public class FormTabDef {
         this.listOnlyCheck = srcFormTabDef.listOnlyCheck;
     }
 
-    private FormTabDef(FormTabDef srcFormTabDef, String name, String label, List<FormSectionDef> formSectionDefList) {
+    private FormTabDef(FormTabDef srcFormTabDef, String name, String label, String icon, List<FormSectionDef> formSectionDefList) {
         this.formSectionDefList = formSectionDefList;
         this.contentType = srcFormTabDef.contentType;
         this.filterGroupDef = srcFormTabDef.filterGroupDef;
         this.name = name;
         this.label = label;
+        this.icon = icon;
         this.applet = srcFormTabDef.applet;
         this.reference = srcFormTabDef.reference;
         this.mappedFieldName = srcFormTabDef.mappedFieldName;
@@ -180,6 +185,10 @@ public class FormTabDef {
 
     public String getLabel() {
         return label;
+    }
+
+    public String getIcon() {
+        return icon;
     }
 
     public String getApplet() {
@@ -329,7 +338,8 @@ public class FormTabDef {
             for (int i = 0; i < len; i++) {
                 FormSectionDef _formSectionDef = formSectionDefList.get(i);
                 if (i > 0 && !StringUtils.isBlank(_formSectionDef.getLabel())) {
-                    list.add(new FormTabDef(this, _name, _label, _formSectionDefList));
+                    list.add(new FormTabDef(this, _name, _label, _formSectionDefList.get(0).getIcon(),
+                            _formSectionDefList));
                     _name = _formSectionDef.getName();
                     _label = _formSectionDef.getLabel();
                     _formSectionDefList = new ArrayList<FormSectionDef>();
@@ -338,7 +348,7 @@ public class FormTabDef {
                 _formSectionDefList.add(_formSectionDef);
             }
 
-            list.add(new FormTabDef(this, _name, _label, _formSectionDefList));
+            list.add(new FormTabDef(this, _name, _label, _formSectionDefList.get(0).getIcon(), _formSectionDefList));
             return Collections.unmodifiableList(list);
         }
 

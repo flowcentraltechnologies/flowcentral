@@ -48,6 +48,8 @@ public class FormWizardApplet extends AbstractApplet implements SweepingCommitPo
 
     private FormWizard formWizard;
     
+    private String closePath;
+    
     public FormWizardApplet(Page page, AppletUtilities au, List<String> pathVariables) throws UnifyException {
         super(page, au, pathVariables.get(APPLET_NAME_INDEX));
         
@@ -60,6 +62,7 @@ public class FormWizardApplet extends AbstractApplet implements SweepingCommitPo
         BreadCrumbs crumbs = bcb.build();
 
         this.formWizard = au.constructFormWizard(this, formDef, inst, appletDef.getDescription(), formDef.getLabel(), crumbs);
+        setAltSubCaption(au.resolveSessionMessage("$m{formwizardpanel.creation}"));
     }
     
     @Override
@@ -77,6 +80,14 @@ public class FormWizardApplet extends AbstractApplet implements SweepingCommitPo
 
     public FormWizard getFormWizard() {
         return formWizard;
+    }
+
+    public String getClosePath() {
+        return closePath;
+    }
+
+    public void setClosePath(String closePath) {
+        this.closePath = closePath;
     }
 
     private EntityActionResult saveNewInst(ActionMode actionMode, FormReviewContext rCtx) throws UnifyException {

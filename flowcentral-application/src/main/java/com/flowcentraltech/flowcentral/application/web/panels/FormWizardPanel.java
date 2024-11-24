@@ -17,6 +17,7 @@ package com.flowcentraltech.flowcentral.application.web.panels;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.web.data.FormContext;
+import com.flowcentraltech.flowcentral.common.business.policies.AppletNavigationPolicy;
 import com.flowcentraltech.flowcentral.common.business.policies.FormValidationContext;
 import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
 import com.tcdng.unify.core.UnifyException;
@@ -38,13 +39,21 @@ public class FormWizardPanel extends AbstractFormPanel {
 
     @Configurable
     private AppletUtilities appletUtilities;
-    
+
     @Action
     public void previous() throws UnifyException {
         FormWizard formWizard = getFormWizard();
         FormContext ctx = getFormWizard().getFormContext();
         ctx.clearValidationErrors();
         ctx.clearReviewErrors();
+        if (formWizard.isWithNavPolicy()) {
+            getComponent(AppletNavigationPolicy.class, formWizard.getNavPolicy()).onPrevious(ctx.getFormValueStore(),
+                    ctx, formWizard.getCurrentPage());
+            if (ctx.isWithFormErrors()) {
+                return;
+            }
+        }
+
         formWizard.prevPage();
     }
 
@@ -53,28 +62,35 @@ public class FormWizardPanel extends AbstractFormPanel {
         FormWizard formWizard = getFormWizard();
         FormContext ctx = evaluateCurrentFormContext(new FormValidationContext(EvaluationMode.CREATE));
         if (!ctx.isWithFormErrors()) {
+            if (formWizard.isWithNavPolicy()) {
+                getComponent(AppletNavigationPolicy.class, formWizard.getNavPolicy()).onNext(ctx.getFormValueStore(),
+                        ctx, formWizard.getCurrentPage());
+                if (ctx.isWithFormErrors()) {
+                    return;
+                }
+            }
+
             formWizard.nextPage();
         }
     }
-    
+
     @Override
     public void switchState() throws UnifyException {
         super.switchState();
-        
+
         final FormWizard formWizard = getFormWizard();
         setDisabled("prevBtn", formWizard.isFirstPage());
         setDisabled("nextBtn", formWizard.isLastPage());
 
         setVisible("cancelBtn", !formWizard.isLastPage());
-        
 
         final boolean last = formWizard.isLastPage();
         setVisible("submitCloseBtn", last && formWizard.isSubmit());
-        setVisible("saveCloseBtn", last && !formWizard.isSubmit());
+        setVisible("executeBtn", last && formWizard.isExecute());
+        setVisible("saveCloseBtn", last && !formWizard.isSubmit() && !formWizard.isExecute());
     }
 
-    protected final FormContext evaluateCurrentFormContext(FormValidationContext vCtx)
-            throws UnifyException {
+    protected final FormContext evaluateCurrentFormContext(FormValidationContext vCtx) throws UnifyException {
         FormContext ctx = getFormWizard().getFormContext();
         if (ctx.getFormDef() != null && ctx.getFormDef().isInputForm()) {
             appletUtilities.formContextEvaluator().evaluateFormContext(ctx, vCtx);
@@ -89,9 +105,9 @@ public class FormWizardPanel extends AbstractFormPanel {
 
         return ctx;
     }
-    
+
     private FormWizard getFormWizard() throws UnifyException {
         return getValue(FormWizard.class);
     }
-    
- }
+
+}

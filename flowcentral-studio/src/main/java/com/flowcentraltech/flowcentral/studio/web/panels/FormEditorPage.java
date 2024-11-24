@@ -137,6 +137,7 @@ public class FormEditorPage extends AbstractStudioEditorPage implements TabSheet
                     appFormElement.setSectionColumns(FormColumnsType.fromCode(formSection.getColumns()));
                     appFormElement.setElementName(formSection.getName());
                     appFormElement.setLabel(formSection.getLabel());
+                    appFormElement.setIcon(formSection.getIcon());
                     appFormElement.setPanel(formSection.getPanel());
                     appFormElement.setVisible(formSection.isVisible());
                     appFormElement.setEditable(formSection.isEditable());
@@ -191,8 +192,8 @@ public class FormEditorPage extends AbstractStudioEditorPage implements TabSheet
                     break;
                 case SECTION:
                     feb.addSection(appFormElement.getElementName(), appFormElement.getLabel(),
-                            appFormElement.getSectionColumns(), appFormElement.getPanel(), appFormElement.isVisible(),
-                            appFormElement.isEditable(), appFormElement.isDisabled());
+                            appFormElement.getSectionColumns(), appFormElement.getPanel(), appFormElement.getIcon(),
+                            appFormElement.isVisible(), appFormElement.isEditable(), appFormElement.isDisabled());
                     break;
                 case TAB:
                     feb.addTab(appFormElement.getTabContentType().name(), appFormElement.getElementName(),

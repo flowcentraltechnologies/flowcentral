@@ -20,8 +20,13 @@
 	wizardCancelHandler:$d{!ui-event event:onclick action:$c{cancelAct}}
 	wizardSaveHandler:$d{!ui-event event:onclick action:$c{saveCloseAct}}
 	wizardSubmitHandler:$d{!ui-event event:onclick action:$c{submitAct}}
+	wizardExecHandler:$d{!ui-event event:onclick action:$c{execAct}}
 
 // Actions
 !ui-postcommand:cancelAct command:cancel confirm:$m{formwizardpanel.cancel.confirm}
 !ui-postcommand:saveCloseAct command:save components:$c{formWizardPanel}
+	confirm:$m{formwizardpanel.save.confirm}
 !ui-postcommand:submitAct command:submit components:$c{formWizardPanel}
+	confirm:$m{formwizardpanel.submit.confirm}
+!ui-postcommand:execAct command:execute components:$c{formWizardPanel}
+ 	confirm:$m{formwizardpanel.execute.confirm}

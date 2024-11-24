@@ -92,6 +92,9 @@ public class AppFormElement extends BaseConfigEntity {
     private String inputWidget;
 
     @Column(nullable = true)
+    private String icon;
+
+    @Column(nullable = true)
     private FormColumnsType sectionColumns;
 
     @Column
@@ -297,6 +300,14 @@ public class AppFormElement extends BaseConfigEntity {
 
     public void setInputWidget(String inputWidget) {
         this.inputWidget = inputWidget;
+    }
+
+    public String getIcon() {
+        return icon;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon;
     }
 
     public FormColumnsType getSectionColumns() {
