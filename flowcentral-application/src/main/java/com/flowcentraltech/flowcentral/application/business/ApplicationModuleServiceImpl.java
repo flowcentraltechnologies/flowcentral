@@ -49,6 +49,7 @@ import com.flowcentraltech.flowcentral.application.constants.ApplicationPredefin
 import com.flowcentraltech.flowcentral.application.constants.ApplicationPredefinedTableConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationPrivilegeConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationReplicationTaskConstants;
+import com.flowcentraltech.flowcentral.application.constants.FormWizardExecuteTaskConstants;
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.data.AppletFilterDef;
 import com.flowcentraltech.flowcentral.application.data.AppletWorkflowCopyInfo;
@@ -118,6 +119,7 @@ import com.flowcentraltech.flowcentral.common.business.PreInstallationSetup;
 import com.flowcentraltech.flowcentral.common.business.SuggestionProvider;
 import com.flowcentraltech.flowcentral.common.business.SystemDefinitionsCache;
 import com.flowcentraltech.flowcentral.common.business.SystemRestoreService;
+import com.flowcentraltech.flowcentral.common.business.policies.FormWizardTaskProcessor;
 import com.flowcentraltech.flowcentral.common.business.policies.SweepingCommitPolicy;
 import com.flowcentraltech.flowcentral.common.constants.ConfigType;
 import com.flowcentraltech.flowcentral.common.constants.FileAttachmentCategoryType;
@@ -3787,7 +3789,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Taskable(name = ApplicationDeletionTaskConstants.APPLICATION_DELETION_TASK_NAME,
-            description = "Application Deletion Task",
+            description = "Application Deletion Task", 
             parameters = { @Parameter(name = ApplicationDeletionTaskConstants.APPLICATION_NAME,
                     description = "$m{applicationdeletiontask.applicationname}", type = String.class,
                     mandatory = true) },
@@ -4027,6 +4029,21 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             }
         }
 
+        return 0;
+    }
+
+    @Taskable(name = FormWizardExecuteTaskConstants.FORM_WIZARD_EXECUTE_TASK_NAME,
+            description = "Form Wizard Execute Task", 
+            parameters = { @Parameter(name = FormWizardExecuteTaskConstants.FORM_WIZARD_ENTITY,
+                    description = "Form Wizard Entity", type = Entity.class,
+                    mandatory = true), @Parameter(name = FormWizardExecuteTaskConstants.FORM_WIZARD_PROCESSOR,
+                    description = "Form Wizard Processor", type = String.class,
+                    mandatory = true) },
+            limit = TaskExecLimit.ALLOW_MULTIPLE, schedulable = false)
+    public int executeFormWizardTask(TaskMonitor taskMonitor, Entity inst, String processor) throws UnifyException {
+        logDebug(taskMonitor, "Executing form wizard task using processor [{0}] ...", processor);
+        FormWizardTaskProcessor _processor = getComponent(FormWizardTaskProcessor.class, processor);
+        _processor.process(taskMonitor, new BeanValueStore(inst));
         return 0;
     }
 

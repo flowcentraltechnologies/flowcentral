@@ -86,7 +86,8 @@ public class FormWizardPanel extends AbstractFormPanel {
 
         final boolean last = formWizard.isLastPage();
         setVisible("submitCloseBtn", last && formWizard.isSubmit());
-        setVisible("saveCloseBtn", last && !formWizard.isSubmit());
+        setVisible("executeBtn", last && formWizard.isExecute());
+        setVisible("saveCloseBtn", last && !formWizard.isSubmit() && !formWizard.isExecute());
     }
 
     protected final FormContext evaluateCurrentFormContext(FormValidationContext vCtx) throws UnifyException {

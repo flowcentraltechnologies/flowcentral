@@ -49,6 +49,8 @@ public class FormWizardAppletController extends AbstractAppletController<FormWiz
             if (pageBean.getAltCaption() == null) {
                 setPageTitle(applet);
             }
+            
+            applet.setClosePath(FlowCentralAppletPathConstants.FORM_WIZARD + "/closePage");
         }
     }
 

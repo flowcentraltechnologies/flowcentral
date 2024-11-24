@@ -515,6 +515,11 @@
 			dataType="string" inputType="string"
 			editor="!ui-select list:navigationactionpolicylist listParams:$l{propertyOwnerId} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
+		<widgetType name="propertywizardtaskprocessorlist"
+			description="$m{studio.widgettype.propertywizardtaskprocessorlist}"
+			dataType="string" inputType="string"
+			editor="!ui-select list:wizardtaskprocessorlist listParams:$l{propertyOwnerId} blankOption:$m{blank.none}"
+			renderer="!ui-label" />
 		<widgetType name="tableentitylistactionpolicylist"
 			description="$m{studio.widgettype.tableentitylistactionpolicylist}"
 			dataType="string" inputType="string"

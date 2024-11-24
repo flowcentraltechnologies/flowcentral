@@ -46,7 +46,7 @@
 	eventHandler:$d{!ui-event event:onclick action:$c{nextAct}}
 	
 !ui-panel:exitPanel layout:$d{!ui-horizontal style:$s{float:right;}}
-	components:$c{cancelBtn saveCloseBtn submitCloseBtn}
+	components:$c{cancelBtn saveCloseBtn submitCloseBtn executeBtn}
 !ui-button:cancelBtn caption:$m{button.cancel}
 	eventHandler:$f{wizardCancelHandler}
 !ui-button:saveCloseBtn styleClass:$e{fc-bluebutton} caption:$m{button.saveclose}
@@ -54,6 +54,9 @@
 !ui-button:submitCloseBtn caption:$m{button.submit} captionBinding:submitCaption
 	styleClassBinding:$s{submitStyleClass}
 	eventHandler:$f{wizardSubmitHandler}
+!ui-button:executeBtn caption:$m{button.execute} captionBinding:execCaption
+	styleClassBinding:$s{execStyleClass}
+	eventHandler:$f{wizardExecHandler}
 
 // Actions
 !ui-postcommand:prevAct command:previous components:$c{pageForm}

@@ -19,6 +19,8 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.flowcentraltech.flowcentral.application.constants.AppletPropertyConstants;
 import com.flowcentraltech.flowcentral.application.constants.FormWizardCompletionType;
+import com.flowcentraltech.flowcentral.application.constants.FormWizardExecuteTaskConstants;
+import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.web.data.FormContext;
 import com.flowcentraltech.flowcentral.application.web.panels.FormWizard;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
@@ -27,6 +29,7 @@ import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.UplBinding;
+import com.tcdng.unify.core.task.TaskSetup;
 import com.tcdng.unify.web.annotation.Action;
 import com.tcdng.unify.web.ui.widget.data.Hint.MODE;
 
@@ -39,6 +42,23 @@ import com.tcdng.unify.web.ui.widget.data.Hint.MODE;
 @Component("fc-formwizardappletpanel")
 @UplBinding("web/application/upl/formwizardappletpanel.upl")
 public class FormWizardAppletPanel extends AbstractAppletPanel {
+
+    @Action
+    public void execute() throws UnifyException {
+        FormContext ctx = evaluateCurrentFormContext(new FormValidationContext(EvaluationMode.CREATE));
+        if (!ctx.isWithFormErrors()) {
+            final FormWizardApplet applet = getFormWizardApplet();
+            final AppletDef appletDef = application().getAppletDef(applet.getAppletName());
+            final String processorName = appletDef.getPropValue(String.class,
+                    AppletPropertyConstants.WIZARD_FORM_TASK_PROCESSOR);
+            TaskSetup taskSetup = TaskSetup.newBuilder(FormWizardExecuteTaskConstants.FORM_WIZARD_EXECUTE_TASK_NAME)
+                    .setParam(FormWizardExecuteTaskConstants.FORM_WIZARD_ENTITY, appletDef.getEntity())
+                    .setParam(FormWizardExecuteTaskConstants.FORM_WIZARD_PROCESSOR, processorName)
+                    .logMessages()
+                    .build();
+            launchTaskWithMonitorBox(taskSetup, appletDef.getDescription(), applet.getClosePath(), null);
+        }
+    }
 
     @Action
     public void submit() throws UnifyException {
@@ -82,20 +102,23 @@ public class FormWizardAppletPanel extends AbstractAppletPanel {
                 AppletPropertyConstants.WIZARD_FORM_COMPLETION);
         final FormWizard formWizard = applet.getFormWizard();
         formWizard.setSubmit(false);
-        if (completionType.isSubmit()) {
-            final String submitCaption = applet.getRootAppletProp(String.class,
-                    AppletPropertyConstants.CREATE_FORM_SUBMIT_CAPTION);
-            formWizard.setSubmitCaption(
-                    !StringUtils.isBlank(submitCaption) ? submitCaption : resolveSessionMessage("$m{button.submit}"));
-            formWizard.setSubmitStyleClass("fc-greenbutton");
-            formWizard.setSubmit(true);
-        } else if (completionType.isExecute()) {
-            final String processor = applet.getRootAppletProp(String.class,
-                    AppletPropertyConstants.WIZARD_FORM_TASK_PROCESSOR);
-            formWizard.setExecCaption(resolveSessionMessage("$m{button.execute}"));
-            formWizard.setExecStyleClass("fc-redbutton");
-            formWizard.setExecProcessor(processor);
-            formWizard.setExecute(true);
+        formWizard.setExecute(false);
+        if (completionType != null) {
+            if (completionType.isSubmit()) {
+                final String submitCaption = applet.getRootAppletProp(String.class,
+                        AppletPropertyConstants.CREATE_FORM_SUBMIT_CAPTION);
+                formWizard.setSubmitCaption(!StringUtils.isBlank(submitCaption) ? submitCaption
+                        : resolveSessionMessage("$m{button.submit}"));
+                formWizard.setSubmitStyleClass("fc-greenbutton");
+                formWizard.setSubmit(true);
+            } else if (completionType.isExecute()) {
+                final String processor = applet.getRootAppletProp(String.class,
+                        AppletPropertyConstants.WIZARD_FORM_TASK_PROCESSOR);
+                formWizard.setExecCaption(resolveSessionMessage("$m{button.execute}"));
+                formWizard.setExecStyleClass("fc-redbutton");
+                formWizard.setExecProcessor(processor);
+                formWizard.setExecute(true);
+            }
         }
     }
 
