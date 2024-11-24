@@ -11,6 +11,11 @@
 			dataType="string" inputType="string"
 			editor="!ui-select list:studioenvironmentdelegatelist blankOption:$m{blank.none}"
 			renderer="!ui-label" />
+		<widgetType name="formwizardcompletiontypelist"
+			description="$m{studio.widgettype.formwizardcompletiontypelist}"
+			dataType="string" inputType="string"
+			editor="!ui-select list:formwizardcompletiontypelist blankOption:$m{blank.none}"
+			renderer="!ui-label" />
 		<widgetType name="tablerowcolorlist"
 			description="$m{studio.widgettype.tablerowcolorlist}"
 			dataType="string" inputType="string"
@@ -6040,6 +6045,12 @@
 				<property name="createForm.navigation.policy"
 					description="$m{studio.appappletprop.formwizard.createform.navigationpolicy}"
 					inputWidget="studio.propertynavigationactionpolicylist" />
+				<property name="wizardForm.completion"
+					description="$m{studio.appappletprop.formwizard.wizardForm.completion"
+					inputWidget="studio.formwizardcompletiontypelist" />
+				<property name="wizardForm.task.processor"
+					description="$m{studio.appappletprop.formwizard.wizardForm.taskprocessor}"
+					inputWidget="studio.propertywizardtaskprocessorlist" />
 			</propertySet>
 			<propertySet
 				label="$m{studio.appappletprop.formwizard.workflowproperties}">
@@ -6050,9 +6061,6 @@
 					description="$m{studio.appappletprop.formwizard.createform.submitworkflow}"
 					inputWidget="studio.propertyappletworkflowchannellist"
 					required="false" />
-				<property name="createForm.submit"
-					description="$m{studio.appappletprop.formwizard.createform.submit}"
-					inputWidget="application.checkbox" />
 				<property name="createForm.submit.validate"
 					description="$m{studio.appappletprop.formwizard.createform.submitvalidate}"
 					inputWidget="application.checkbox" />

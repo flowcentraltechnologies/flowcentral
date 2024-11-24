@@ -199,6 +199,10 @@ public interface AppletPropertyConstants {
     String SINGLE_FORM_PANEL = "singleForm.panel";
 
     String PAGE_MULTIPLE = "page.multiple";    
+
+    String WIZARD_FORM_COMPLETION = "wizardForm.completion";    
+
+    String WIZARD_FORM_TASK_PROCESSOR = "wizardForm.task.processor";    
     
     String WORKFLOWCOPY = "workflowCopy";
 

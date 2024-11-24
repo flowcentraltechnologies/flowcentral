@@ -15,8 +15,12 @@
  */
 package com.flowcentraltech.flowcentral.application.web.panels.applet;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.flowcentraltech.flowcentral.application.constants.AppletPropertyConstants;
+import com.flowcentraltech.flowcentral.application.constants.FormWizardCompletionType;
 import com.flowcentraltech.flowcentral.application.web.data.FormContext;
+import com.flowcentraltech.flowcentral.application.web.panels.FormWizard;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
 import com.flowcentraltech.flowcentral.common.business.policies.FormValidationContext;
 import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
@@ -74,13 +78,24 @@ public class FormWizardAppletPanel extends AbstractAppletPanel {
         super.switchState();
 
         final FormWizardApplet applet = getFormWizardApplet();
-        final boolean submit = applet.getRootAppletProp(boolean.class, AppletPropertyConstants.CREATE_FORM_SUBMIT);
-        applet.getFormWizard().setSubmit(submit);
-        if (submit) {
+        final FormWizardCompletionType completionType = applet.getRootAppletProp(FormWizardCompletionType.class,
+                AppletPropertyConstants.WIZARD_FORM_COMPLETION);
+        final FormWizard formWizard = applet.getFormWizard();
+        formWizard.setSubmit(false);
+        if (completionType.isSubmit()) {
             final String submitCaption = applet.getRootAppletProp(String.class,
                     AppletPropertyConstants.CREATE_FORM_SUBMIT_CAPTION);
-            applet.getFormWizard().setSubmitCaption(submitCaption);
-            applet.getFormWizard().setSubmitStyleClass("fc-greenbutton");
+            formWizard.setSubmitCaption(
+                    !StringUtils.isBlank(submitCaption) ? submitCaption : resolveSessionMessage("$m{button.submit}"));
+            formWizard.setSubmitStyleClass("fc-greenbutton");
+            formWizard.setSubmit(true);
+        } else if (completionType.isExecute()) {
+            final String processor = applet.getRootAppletProp(String.class,
+                    AppletPropertyConstants.WIZARD_FORM_TASK_PROCESSOR);
+            formWizard.setExecCaption(resolveSessionMessage("$m{button.execute}"));
+            formWizard.setExecStyleClass("fc-redbutton");
+            formWizard.setExecProcessor(processor);
+            formWizard.setExecute(true);
         }
     }
 

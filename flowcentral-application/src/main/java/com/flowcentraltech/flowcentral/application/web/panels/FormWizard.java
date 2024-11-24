@@ -46,6 +46,14 @@ public class FormWizard extends AbstractForm {
     private String submitStyleClass;
 
     private boolean submit;
+    
+    private String execCaption;
+    
+    private String execStyleClass;
+    
+    private String execProcessor;
+
+    private boolean execute;
 
     private int currentPage;
     
@@ -99,6 +107,38 @@ public class FormWizard extends AbstractForm {
 
     public void setSubmit(boolean submit) {
         this.submit = submit;
+    }
+
+    public String getExecCaption() {
+        return execCaption;
+    }
+
+    public void setExecCaption(String execCaption) {
+        this.execCaption = execCaption;
+    }
+
+    public String getExecStyleClass() {
+        return execStyleClass;
+    }
+
+    public void setExecStyleClass(String execStyleClass) {
+        this.execStyleClass = execStyleClass;
+    }
+
+    public String getExecProcessor() {
+        return execProcessor;
+    }
+
+    public void setExecProcessor(String execProcessor) {
+        this.execProcessor = execProcessor;
+    }
+
+    public boolean isExecute() {
+        return execute;
+    }
+
+    public void setExecute(boolean execute) {
+        this.execute = execute;
     }
 
     public FormContext getFormContext() {
