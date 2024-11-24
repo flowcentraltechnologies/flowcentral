@@ -52,11 +52,11 @@ public class FormWizardAppletPanel extends AbstractAppletPanel {
             final String processorName = appletDef.getPropValue(String.class,
                     AppletPropertyConstants.WIZARD_FORM_TASK_PROCESSOR);
             TaskSetup taskSetup = TaskSetup.newBuilder(FormWizardExecuteTaskConstants.FORM_WIZARD_EXECUTE_TASK_NAME)
-                    .setParam(FormWizardExecuteTaskConstants.FORM_WIZARD_ENTITY, appletDef.getEntity())
+                    .setParam(FormWizardExecuteTaskConstants.FORM_WIZARD_ENTITY, ctx.getInst())
                     .setParam(FormWizardExecuteTaskConstants.FORM_WIZARD_PROCESSOR, processorName)
                     .logMessages()
                     .build();
-            launchTaskWithMonitorBox(taskSetup, appletDef.getDescription(), applet.getClosePath(), null);
+            launchTaskWithMonitorBox(taskSetup, appletDef.getDescription(), getActionFullPath("/closePage"), null);
         }
     }
 
