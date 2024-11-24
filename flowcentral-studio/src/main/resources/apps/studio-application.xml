@@ -6051,10 +6051,10 @@
 					description="$m{studio.appappletprop.formwizard.createform.navigationpolicy}"
 					inputWidget="studio.propertynavigationactionpolicylist" />
 				<property name="wizardForm.completion"
-					description="$m{studio.appappletprop.formwizard.wizardForm.completion"
+					description="$m{studio.appappletprop.formwizard.wizardform.completion}"
 					inputWidget="studio.formwizardcompletiontypelist" />
 				<property name="wizardForm.task.processor"
-					description="$m{studio.appappletprop.formwizard.wizardForm.taskprocessor}"
+					description="$m{studio.appappletprop.formwizard.wizardform.taskprocessor}"
 					inputWidget="studio.propertywizardtaskprocessorlist" />
 			</propertySet>
 			<propertySet
