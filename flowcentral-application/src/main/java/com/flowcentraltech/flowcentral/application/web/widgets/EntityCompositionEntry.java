@@ -17,7 +17,7 @@ package com.flowcentraltech.flowcentral.application.web.widgets;
 
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.constant.DataType;
-import com.tcdng.unify.core.constant.EntityFieldType;
+import com.tcdng.unify.core.constant.DynamicEntityFieldType;
 
 /**
  * Entity composition entry.
@@ -31,7 +31,7 @@ public class EntityCompositionEntry {
 
     private String table;
     
-    private EntityFieldType fieldType;
+    private DynamicEntityFieldType fieldType;
     
     private DataType dataType;
     
@@ -59,11 +59,11 @@ public class EntityCompositionEntry {
         this.table = table;
     }
 
-    public EntityFieldType getFieldType() {
+    public DynamicEntityFieldType getFieldType() {
         return fieldType;
     }
 
-    public void setFieldType(EntityFieldType fieldType) {
+    public void setFieldType(DynamicEntityFieldType fieldType) {
         this.fieldType = fieldType;
     }
 

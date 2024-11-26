@@ -4763,7 +4763,12 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appEntity.setDeprecated(false);
                     appEntity.setConfigType(ConfigType.STATIC);
                     populateChildList(appEntity, applicationName, appEntityConfig, false);
-                    entityId = (Long) environment().create(appEntity);
+                    try {
+                        entityId = (Long) environment().create(appEntity);
+                    } catch (UnifyException e) {
+                        System.out.println("@prime: appEntity = " + appEntity);
+                        throw e;
+                    }
                 } else {
                     logDebug("Upgrading application entity [{0}]...", appEntityConfig.getName());
                     oldAppEntity.setBaseType(baseType);
