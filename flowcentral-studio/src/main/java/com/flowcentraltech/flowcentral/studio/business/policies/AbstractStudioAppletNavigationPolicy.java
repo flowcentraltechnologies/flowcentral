@@ -15,7 +15,9 @@
  */
 package com.flowcentraltech.flowcentral.studio.business.policies;
 
+import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.common.business.policies.AbstractAppletNavigationPolicy;
+import com.tcdng.unify.core.annotation.Configurable;
 
 /**
  * Convenient abstract base class for studio applet navigation policies.
@@ -25,4 +27,11 @@ import com.flowcentraltech.flowcentral.common.business.policies.AbstractAppletNa
  */
 public abstract class AbstractStudioAppletNavigationPolicy extends AbstractAppletNavigationPolicy {
 
+    @Configurable
+    private AppletUtilities au;
+
+    protected AppletUtilities au() {
+        return au;
+    }
+    
 }

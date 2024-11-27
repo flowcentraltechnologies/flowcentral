@@ -21,6 +21,7 @@ import java.util.List;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.data.ValueStore;
+import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.web.annotation.Action;
 import com.tcdng.unify.web.ui.widget.Control;
 
@@ -33,6 +34,10 @@ import com.tcdng.unify.web.ui.widget.Control;
 @Component("fc-entitycomposition")
 public class EntityCompositionWidget extends AbstractValueListWidget<EntityCompositionEntry> {
 
+    private EntityComposition entityComposition;
+    
+    private String oldCompositionJson;
+    
     private Control entityNameCtrl;
 
     private Control entityTableCtrl;
@@ -49,36 +54,28 @@ public class EntityCompositionWidget extends AbstractValueListWidget<EntityCompo
 
     private Control addFieldCtrl;
 
-    private Control deleteEntityCtrl;
+    private Control delEntityCtrl;
 
-    private Control deleteFieldCtrl;
+    private Control delFieldCtrl;
 
     @Override
     protected void doOnPageConstruct() throws UnifyException {
-        entityNameCtrl = (Control) addInternalChildWidget("!ui-name style:$s{width:100%;} case:camel binding:entityName");
-        entityTableCtrl = (Control) addInternalChildWidget("!ui-name style:$s{width:100%;} case:upper underscore:true binding:table");
+        entityNameCtrl = (Control) addInternalChildWidget("!ui-name case:camel binding:entityName");
+        entityTableCtrl = (Control) addInternalChildWidget("!ui-name case:upper underscore:true binding:table");
         fieldTypeCtrl = (Control) addInternalChildWidget(
-                "!ui-select style:$s{width:100%;} blankOption:$s{} list:entityfieldtypelist binding:fieldType");
+                "!ui-select blankOption:$s{} list:dynamicentityfieldtypelist binding:fieldType");
         dataTypeCtrl = (Control) addInternalChildWidget(
-                "!ui-select style:$s{width:100%;} blankOption:$s{} list:datatypelist binding:dataType");
-        fieldNameCtrl = (Control) addInternalChildWidget("!ui-name style:$s{width:100%;} case:camel binding:name");
-        columnCtrl = (Control) addInternalChildWidget("!ui-name style:$s{width:100%;} underscore:true binding:column");
+                "!ui-select blankOption:$s{} list:datatypelist binding:dataType");
+        fieldNameCtrl = (Control) addInternalChildWidget("!ui-name case:camel binding:name");
+        columnCtrl = (Control) addInternalChildWidget("!ui-name underscore:true binding:column");
         addFieldCtrl = (Control) addInternalChildWidget(
                 "!ui-button alwaysValueIndex:true styleClass:$e{abutton} symbol:$s{plus} hint:$m{button.add.hint} debounce:false");
-        deleteFieldCtrl = (Control) addInternalChildWidget(
+        delFieldCtrl = (Control) addInternalChildWidget(
                 "!ui-button alwaysValueIndex:true styleClass:$e{abutton} symbol:$s{cross} hint:$m{button.delete.hint} debounce:false");
         addEntityCtrl = (Control) addInternalChildWidget(
                 "!ui-button alwaysValueIndex:true styleClass:$e{abutton} symbol:$s{plus} hint:$m{button.add.hint} debounce:false");
-        deleteEntityCtrl = (Control) addInternalChildWidget(
+        delEntityCtrl = (Control) addInternalChildWidget(
                 "!ui-button alwaysValueIndex:true styleClass:$e{abutton} symbol:$s{cross} hint:$m{button.delete.hint} debounce:false");
-    }
-
-    @Action
-    public void normalize() throws UnifyException {
-        EntityComposition entityComposition = getEntityComposition();
-        if (entityComposition != null) {
-            entityComposition.normalize();
-        }
     }
 
     @Action
@@ -133,16 +130,26 @@ public class EntityCompositionWidget extends AbstractValueListWidget<EntityCompo
         return addFieldCtrl;
     }
 
-    public Control getDeleteEntityCtrl() {
-        return deleteEntityCtrl;
+    public Control getDelEntityCtrl() {
+        return delEntityCtrl;
     }
 
-    public Control getDeleteFieldCtrl() {
-        return deleteFieldCtrl;
+    public Control getDelFieldCtrl() {
+        return delFieldCtrl;
     }
 
     public EntityComposition getEntityComposition() throws UnifyException {
-        return getValue(EntityComposition.class);
+        final String compositionJson = getValue(String.class);
+        if (!DataUtils.equals(oldCompositionJson, compositionJson)) {
+            entityComposition = DataUtils.fromJsonString(EntityComposition.class, compositionJson);
+            oldCompositionJson = compositionJson;
+            
+            System.out.println("@prime: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+            System.out.println("@prime: oldCompositionJson = " + oldCompositionJson);
+            System.out.println("@prime: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+        }
+        
+        return entityComposition;
     }
 
     @Override

@@ -507,6 +507,11 @@
 			dataType="string" inputType="string"
 			editor="!fc-texttemplate entityBinding:$s{entity}"
 			renderer="!ui-label" />
+		<widgetType name="entitycomposition"
+			description="$m{application.widgettype.entitycomposition}"
+			dataType="string" inputType="string"
+			editor="!fc-entitycomposition"
+			renderer="!ui-label" />
 	</widgetTypes>
 	<!-- Applets -->
 	<applets> 

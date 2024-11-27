@@ -15,15 +15,9 @@
  */
 package com.flowcentraltech.flowcentral.application.web.widgets;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
-import com.flowcentraltech.flowcentral.application.data.ApplicationDef;
-import com.flowcentraltech.flowcentral.application.util.ApplicationCodeGenUtils;
 import com.tcdng.unify.core.UnifyException;
-import com.tcdng.unify.core.util.EntityTypeFieldInfo;
-import com.tcdng.unify.core.util.EntityTypeInfo;
 
 /**
  * Entity composition object.
@@ -33,47 +27,27 @@ import com.tcdng.unify.core.util.EntityTypeInfo;
  */
 public class EntityComposition {
 
-    private final AppletUtilities au;
-
     private List<EntityCompositionEntry> entries;
 
-    public EntityComposition(AppletUtilities au) {
-        this.au = au;
-        this.entries = new ArrayList<EntityCompositionEntry>();
+    public EntityComposition(List<EntityCompositionEntry> entries) {
+        this.entries = entries;
     }
 
-    public void normalize() throws UnifyException {
-        for (EntityCompositionEntry entry : entries) {
-            entry.normalize();
-        }
+    public EntityComposition() {
+
     }
 
     public List<EntityCompositionEntry> getEntries() {
         return entries;
     }
 
-    public void load(String applicationName, List<EntityTypeInfo> entityTypeList) throws UnifyException {
-        final ApplicationDef applicationDef = au.application().getApplicationDef(applicationName);
-        entries.clear();
-        for (EntityTypeInfo entityTypeInfo : entityTypeList) {
-            final int depth = entityTypeInfo.getDepth();
-            EntityCompositionEntry entry = new EntityCompositionEntry();
-            entry.setEntityName(entityTypeInfo.getName());
-            entry.setTable(ApplicationCodeGenUtils.generateCustomEntityTableName(applicationDef.getModuleShortCode(),
-                    entityTypeInfo.getName()));
-            entry.setDepth(depth);
-            entries.add(entry);
+    public void setEntries(List<EntityCompositionEntry> entries) {
+        this.entries = entries;
+    }
 
-            for (EntityTypeFieldInfo entityTypeFieldInfo : entityTypeInfo.getFields()) {
-                entry = new EntityCompositionEntry();
-                entry.setFieldType(entityTypeFieldInfo.getType());
-                entry.setDataType(entityTypeFieldInfo.getDataType());
-                entry.setName(entityTypeFieldInfo.getName());
-                entry.setColumn(entityTypeFieldInfo.getColumn());
-                entry.setSample(entityTypeFieldInfo.getSample());
-                entry.setDepth(depth);
-                entries.add(entry);
-            }
+    public void normalize() throws UnifyException {
+        for (EntityCompositionEntry entry : entries) {
+            entry.normalize();
         }
     }
 

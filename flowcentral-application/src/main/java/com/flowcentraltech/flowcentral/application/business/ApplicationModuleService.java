@@ -1085,6 +1085,17 @@ public interface ApplicationModuleService extends FlowCentralService {
     /**
      * Gets application definition.
      * 
+     * @param applicationId
+     *                        the application ID
+     * @return the application definition
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    ApplicationDef getApplicationDef(Long applicationId) throws UnifyException;
+
+    /**
+     * Gets application definition.
+     * 
      * @param applicationName
      *                        the application name
      * @return the application definition

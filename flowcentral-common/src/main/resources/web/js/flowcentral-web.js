@@ -490,7 +490,10 @@ fux.entitySelectClick = function(uEv) {
 	ux.post(uEv);
 }
 
-
+/** Entity Composition */
+fux.rigEntityComposition =  function(rgp) {
+}
+	
 /** Filter */
 fux.rigFilter = function(rgp) {
 	var id = rgp.pId;
@@ -1158,8 +1161,9 @@ fux.init = function() {
 	ux.setfn(fux.rigInputArray,"fux12");  
 	ux.setfn(fux.rigPopupWinText,"fux13"); 
 	ux.setfn(fux.rigTokenEntries,"fux14");  
-	ux.setfn(fux.rigFormAnnotation,"fux15");  
+	ux.setfn(fux.rigFormAnnotation,"fux15"); 
 	ux.setfn(fux.rigCollapsibleTable,"fux16");  
+	ux.setfn(fux.rigEntityComposition,"fux17");  
 }
 
 fux.init();

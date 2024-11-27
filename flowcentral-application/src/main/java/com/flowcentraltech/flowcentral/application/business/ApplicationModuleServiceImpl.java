@@ -2340,6 +2340,13 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
+    public ApplicationDef getApplicationDef(Long applicationId) throws UnifyException {
+        final String applicationName = environment().value(String.class, "name",
+                Query.of(Application.class).addEquals("id", applicationId));
+        return applicationDefFactoryMap.get(applicationName);
+    }
+
+    @Override
     public List<ApplicationMenuDef> getApplicationMenuDefs(String appletFilter) throws UnifyException {
         final boolean indicateMenuSectorLabels = appletUtilities.system().getSysParameterValue(boolean.class,
                 ApplicationModuleSysParamConstants.SECTOR_LABEL_INDICATION_ON_MENU);
