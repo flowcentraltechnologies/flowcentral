@@ -4040,14 +4040,15 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Taskable(name = FormWizardExecuteTaskConstants.FORM_WIZARD_EXECUTE_TASK_NAME,
-            description = "Form Wizard Execute Task", 
-            parameters = { @Parameter(name = FormWizardExecuteTaskConstants.FORM_WIZARD_ENTITY,
-                    description = "Form Wizard Entity", type = Entity.class,
-                    mandatory = true), @Parameter(name = FormWizardExecuteTaskConstants.FORM_WIZARD_PROCESSOR,
-                    description = "Form Wizard Processor", type = String.class,
-                    mandatory = true) },
+            description = "Form Wizard Execute Task",
+            parameters = {
+                    @Parameter(name = FormWizardExecuteTaskConstants.FORM_WIZARD_ENTITY,
+                            description = "Form Wizard Entity", type = Entity.class, mandatory = true),
+                    @Parameter(name = FormWizardExecuteTaskConstants.FORM_WIZARD_PROCESSOR,
+                            description = "Form Wizard Processor", type = String.class, mandatory = true) },
             limit = TaskExecLimit.ALLOW_MULTIPLE, schedulable = false)
-    public int executeFormWizardTask(TaskMonitor taskMonitor, Entity inst, String processor) throws UnifyException {
+    public int executeFormWizardTask(TaskMonitor taskMonitor, Entity inst, String processor,
+            Map<String, Object> pageAttributes) throws UnifyException {
         logDebug(taskMonitor, "Executing form wizard task using processor [{0}] ...", processor);
         FormWizardTaskProcessor _processor = getComponent(FormWizardTaskProcessor.class, processor);
         _processor.process(taskMonitor, new BeanValueStore(inst));
@@ -4770,12 +4771,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appEntity.setDeprecated(false);
                     appEntity.setConfigType(ConfigType.STATIC);
                     populateChildList(appEntity, applicationName, appEntityConfig, false);
-                    try {
-                        entityId = (Long) environment().create(appEntity);
-                    } catch (UnifyException e) {
-                        System.out.println("@prime: appEntity = " + appEntity);
-                        throw e;
-                    }
+                    entityId = (Long) environment().create(appEntity);
                 } else {
                     logDebug("Upgrading application entity [{0}]...", appEntityConfig.getName());
                     oldAppEntity.setBaseType(baseType);

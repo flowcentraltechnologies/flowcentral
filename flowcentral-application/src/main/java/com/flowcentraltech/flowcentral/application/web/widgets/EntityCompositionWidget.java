@@ -69,33 +69,41 @@ public class EntityCompositionWidget extends AbstractValueListWidget<EntityCompo
         fieldNameCtrl = (Control) addInternalChildWidget("!ui-name case:camel binding:name");
         columnCtrl = (Control) addInternalChildWidget("!ui-name underscore:true binding:column");
         addFieldCtrl = (Control) addInternalChildWidget(
-                "!ui-button alwaysValueIndex:true styleClass:$e{abutton} symbol:$s{plus} hint:$m{button.add.hint} debounce:false");
+                "!ui-button alwaysValueIndex:true styleClass:$e{abutton} symbol:$s{plus} hint:$m{button.addfield.hint} debounce:false");
         delFieldCtrl = (Control) addInternalChildWidget(
                 "!ui-button alwaysValueIndex:true styleClass:$e{abutton} symbol:$s{cross} hint:$m{button.delete.hint} debounce:false");
         addEntityCtrl = (Control) addInternalChildWidget(
-                "!ui-button alwaysValueIndex:true styleClass:$e{abutton} symbol:$s{plus} hint:$m{button.add.hint} debounce:false");
+                "!ui-button alwaysValueIndex:true styleClass:$e{abutton} symbol:$s{plus-square} hint:$m{button.addentity.hint} debounce:false");
         delEntityCtrl = (Control) addInternalChildWidget(
                 "!ui-button alwaysValueIndex:true styleClass:$e{abutton} symbol:$s{cross} hint:$m{button.delete.hint} debounce:false");
     }
 
     @Action
-    public void addEntity() throws UnifyException {
-
+    public void normalize() throws UnifyException {
+        EntityComposition entityComposition = getEntityComposition();
+        if (entityComposition != null) {
+            entityComposition.normalize();
+        }
     }
 
     @Action
-    public void deleteEntity() throws UnifyException {
+    public void addEntity() throws UnifyException {
+        getEntityComposition().addEntity(getRequestTarget(int.class));
+    }
 
+    @Action
+    public void delEntity() throws UnifyException {
+        getEntityComposition().deleteEntity(getRequestTarget(int.class));
     }
 
     @Action
     public void addField() throws UnifyException {
-
+        getEntityComposition().addField(getRequestTarget(int.class));
     }
 
     @Action
-    public void deleteField() throws UnifyException {
-
+    public void delField() throws UnifyException {
+        getEntityComposition().deleteField(getRequestTarget(int.class));
     }
 
     public Control getEntityNameCtrl() {
@@ -143,10 +151,7 @@ public class EntityCompositionWidget extends AbstractValueListWidget<EntityCompo
         if (!DataUtils.equals(oldCompositionJson, compositionJson)) {
             entityComposition = DataUtils.fromJsonString(EntityComposition.class, compositionJson);
             oldCompositionJson = compositionJson;
-            
-            System.out.println("@prime: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
-            System.out.println("@prime: oldCompositionJson = " + oldCompositionJson);
-            System.out.println("@prime: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+            setPageAttribute("composition", entityComposition);
         }
         
         return entityComposition;

@@ -50,7 +50,7 @@ public class EntityCompositionWriter extends AbstractControlWriter {
         writer.write(">");
         List<ValueStore> valueStoreList = entityCompositionWidget.getValueList();
         if (valueStoreList != null) {
-            final Control entityNameCtrl = entityCompositionWidget.getFieldNameCtrl();
+            final Control entityNameCtrl = entityCompositionWidget.getEntityNameCtrl();
             final Control entityTableCtrl = entityCompositionWidget.getEntityTableCtrl();
             final Control fieldTypeCtrl = entityCompositionWidget.getFieldTypeCtrl();
             final Control dataTypeCtrl = entityCompositionWidget.getDataTypeCtrl();
@@ -64,43 +64,69 @@ public class EntityCompositionWriter extends AbstractControlWriter {
             final Control delFieldCtrl = entityCompositionWidget.getDelFieldCtrl();
             
             final int len = valueStoreList.size();
+            final String entityLabel = resolveSessionMessage("$m{entitycomposition.entity}");
+            final String tableLabel = resolveSessionMessage("$m{entitycomposition.table}");
+            final String fieldLabel = resolveSessionMessage("$m{entitycomposition.field}");
+            final String typeLabel = resolveSessionMessage("$m{entitycomposition.type}");
+            final String nameLabel = resolveSessionMessage("$m{entitycomposition.name}");
+            final String colLabel = resolveSessionMessage("$m{entitycomposition.column}");
             for (int i = 0; i < len; i++) {
                 ValueStore lineValueStore = valueStoreList.get(i);
                 EntityCompositionEntry entry = (EntityCompositionEntry) lineValueStore.getValueObject();
-                writer.write("<div class=\"line\">");
+                writer.write("<div style=\"display:table;\">");
+                writer.write("<div style=\"display:table-row;\">");
                 // Write depth tabs
                 int depth = entry.getDepth();
                 for (int j = 0; j < depth; j++) {
-                    writer.write("<span class=\"tab\">&nbsp;</span>");
+                    writer.write("<div style=\"display:table-cell;\"><span class=\"tab\">&nbsp;</span></div>");
                 }
 
                 final DynamicEntityFieldType fieldType = entry.getFieldType();
                 if (fieldType == null) {
-                    writeCompositionItem(writer, lineValueStore, entityNameCtrl);
-                    writeCompositionItem(writer, lineValueStore, entityTableCtrl);
+                    writeCompositionItem(writer, lineValueStore, entityNameCtrl, entityLabel);
+                    writeCompositionItem(writer, lineValueStore, entityTableCtrl, tableLabel);
                     
-                    writer.write("<div class=\"atab1\">");
                     writeActionItem(writer, lineValueStore, addEntityCtrl);
                     writeActionItem(writer, lineValueStore, addFieldCtrl);
                     if (i > 0) {
                         writeActionItem(writer, lineValueStore, delEntityCtrl);
                     }
-                    writer.write("</div>");
                 } else {
-                    writeCompositionItem(writer, lineValueStore, fieldTypeCtrl);
-                    writeCompositionItem(writer, lineValueStore, dataTypeCtrl);
-                    writeCompositionItem(writer, lineValueStore, fieldNameCtrl);
-                    writeCompositionItem(writer, lineValueStore, columnCtrl);
+                    if (fieldType.isChild() || fieldType.isChildList()) {
+                        writeCompositionItem(writer, lineValueStore, fieldTypeCtrl, fieldLabel);
+                        writeCompositionItem(writer, lineValueStore, fieldNameCtrl, nameLabel);
+                    } else {
+                        writeCompositionItem(writer, lineValueStore, fieldTypeCtrl, fieldLabel);
+                        writeCompositionItem(writer, lineValueStore, dataTypeCtrl, typeLabel);
+                        writeCompositionItem(writer, lineValueStore, fieldNameCtrl, nameLabel);
+                        writeCompositionItem(writer, lineValueStore, columnCtrl, colLabel);
+                    }
 
-                    writer.write("<div class=\"atab2\">");
                     writeActionItem(writer, lineValueStore, delFieldCtrl);
-                    writer.write("</div>");
                 }
 
+                writer.write("</div>");
                 writer.write("</div>");
             }
 
         }
+        writer.write("</div>");
+    }
+
+    private void writeCompositionItem(ResponseWriter writer, ValueStore lineValueStore, Control ctrl, String label) throws UnifyException {
+        writer.write("<div class=\"eccelll\">");
+        writer.write(label);
+        writer.write("</div>");
+        writer.write("<div class=\"eccell\">");
+        ctrl.setValueStore(lineValueStore);
+        writer.writeStructureAndContent(ctrl);
+        writer.write("</div>");
+    }
+
+    private void writeActionItem(ResponseWriter writer, ValueStore lineValueStore, Control ctrl) throws UnifyException {
+        writer.write("<div class=\"eccell\">");
+        ctrl.setValueStore(lineValueStore);
+        writer.writeStructureAndContent(ctrl);
         writer.write("</div>");
     }
 
@@ -112,7 +138,7 @@ public class EntityCompositionWriter extends AbstractControlWriter {
         List<ValueStore> valueStoreList = entityCompositionWidget.getValueList();
         List<String> csb = new ArrayList<String>();
         if (valueStoreList != null) {
-            final Control entityNameCtrl = entityCompositionWidget.getFieldNameCtrl();
+            final Control entityNameCtrl = entityCompositionWidget.getEntityNameCtrl();
             final Control entityTableCtrl = entityCompositionWidget.getEntityTableCtrl();
             final Control fieldTypeCtrl = entityCompositionWidget.getFieldTypeCtrl();
             final Control dataTypeCtrl = entityCompositionWidget.getDataTypeCtrl();
@@ -131,14 +157,21 @@ public class EntityCompositionWriter extends AbstractControlWriter {
                     csb.add(entityNameCtrl.getId());
                     csb.add(entityTableCtrl.getId());
                 } else {
-                    writeBehavior(writer, entityCompositionWidget, lineValueStore, fieldTypeCtrl);
-                    writeBehavior(writer, entityCompositionWidget, lineValueStore, dataTypeCtrl);
-                    writeBehavior(writer, entityCompositionWidget, lineValueStore, fieldNameCtrl);
-                    writeBehavior(writer, entityCompositionWidget, lineValueStore, columnCtrl);
-                    csb.add(fieldTypeCtrl.getId());
-                    csb.add(dataTypeCtrl.getId());
-                    csb.add(fieldNameCtrl.getId());
-                    csb.add(columnCtrl.getId());
+                    if (fieldType.isChild() || fieldType.isChildList()) {
+                        writeBehavior(writer, entityCompositionWidget, lineValueStore, fieldTypeCtrl);
+                        writeBehavior(writer, entityCompositionWidget, lineValueStore, fieldNameCtrl);
+                        csb.add(fieldTypeCtrl.getId());
+                        csb.add(fieldNameCtrl.getId());
+                    } else {
+                        writeBehavior(writer, entityCompositionWidget, lineValueStore, fieldTypeCtrl);
+                        writeBehavior(writer, entityCompositionWidget, lineValueStore, dataTypeCtrl);
+                        writeBehavior(writer, entityCompositionWidget, lineValueStore, fieldNameCtrl);
+                        writeBehavior(writer, entityCompositionWidget, lineValueStore, columnCtrl);
+                        csb.add(fieldTypeCtrl.getId());
+                        csb.add(dataTypeCtrl.getId());
+                        csb.add(fieldNameCtrl.getId());
+                        csb.add(columnCtrl.getId());
+                    }
                 }
             }
         }
@@ -153,20 +186,6 @@ public class EntityCompositionWriter extends AbstractControlWriter {
         writer.writeParam("pDelFId", entityCompositionWidget.getDelFieldCtrl().getBaseId());
         writer.writeParam("pOnChgId", DataUtils.toArray(String.class, csb));
         writer.endFunction();
-    }
-
-    private void writeCompositionItem(ResponseWriter writer, ValueStore lineValueStore, Control ctrl) throws UnifyException {
-        writer.write("<span class=\"item\">");
-        ctrl.setValueStore(lineValueStore);
-        writer.writeStructureAndContent(ctrl);
-        writer.write("</span>");
-    }
-
-    private void writeActionItem(ResponseWriter writer, ValueStore lineValueStore, Control ctrl) throws UnifyException {
-        writer.write("<span style=\"display:inline-block;\">");
-        ctrl.setValueStore(lineValueStore);
-        writer.writeStructureAndContent(ctrl);
-        writer.write("</span>");
     }
 
     private void writeBehavior(ResponseWriter writer, EntityCompositionWidget entityCompositionWidget, ValueStore lineValueStore,

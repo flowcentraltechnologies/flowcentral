@@ -15,7 +15,9 @@
  */
 package com.flowcentraltech.flowcentral.studio.business.policies;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import com.flowcentraltech.flowcentral.application.data.ApplicationDef;
 import com.flowcentraltech.flowcentral.application.util.EntityCompositionUtils;
@@ -41,8 +43,13 @@ import com.tcdng.unify.core.util.EntityTypeUtils;
 @Component(name = "createjsonentity-navigationpolicy", description = "Create JSON Entity Nav, Policy")
 public class CreateJsonEntityNavigationPolicy extends AbstractStudioAppletNavigationPolicy {
 
+    public CreateJsonEntityNavigationPolicy() {
+        super(Arrays.asList("composition"));
+    }
+
     @Override
-    public void onNext(ValueStore inst, ValidationErrors errors, int currentPage) throws UnifyException {
+    public void onNext(ValueStore inst, ValidationErrors errors, int currentPage, Map<String, Object> pageAttributes)
+            throws UnifyException {
         if (currentPage == 1) {
             final String sourceJson = inst.retrieve(String.class, "sourceJson");
             List<EntityTypeInfo> entityTypeInfos = EntityTypeUtils.getEntityTypeInfoFromJson(sourceJson);
@@ -54,15 +61,21 @@ public class CreateJsonEntityNavigationPolicy extends AbstractStudioAppletNaviga
             // Sets entity composition JSON
             final Long applicationId = inst.retrieve(Long.class, "applicationId");
             final ApplicationDef applicationDef = au().application().getApplicationDef(applicationId);
-            EntityComposition entityComposition = EntityCompositionUtils
+            final EntityComposition entityComposition = EntityCompositionUtils
                     .createEntityComposition(applicationDef.getModuleShortCode(), entityTypeInfos);
+            final String compositionJson = DataUtils.asJsonString(entityComposition, PrintFormat.PRETTY);
+            inst.store("refinedStructure", compositionJson);
+        } else if (currentPage == 2) {
+            inst.store("generateEntity", true);
+            final EntityComposition entityComposition = (EntityComposition) pageAttributes.get("composition");
             final String compositionJson = DataUtils.asJsonString(entityComposition, PrintFormat.PRETTY);
             inst.store("refinedStructure", compositionJson);
         }
     }
 
     @Override
-    public void onPrevious(ValueStore inst, ValidationErrors errors, int currentPage) throws UnifyException {
+    public void onPrevious(ValueStore inst, ValidationErrors errors, int currentPage,
+            Map<String, Object> pageAttributes) throws UnifyException {
 
     }
 

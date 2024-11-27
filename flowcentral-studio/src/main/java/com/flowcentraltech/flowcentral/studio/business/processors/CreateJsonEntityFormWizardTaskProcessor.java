@@ -15,12 +15,14 @@
  */
 package com.flowcentraltech.flowcentral.studio.business.processors;
 
+import com.flowcentraltech.flowcentral.application.web.widgets.EntityComposition;
 import com.flowcentraltech.flowcentral.common.annotation.EntityReferences;
 import com.flowcentraltech.flowcentral.common.business.policies.AbstractFormWizardTaskProcessor;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.task.TaskMonitor;
+import com.tcdng.unify.core.util.DataUtils;
 
 /**
  * Create JSON entity form wizard policies.
@@ -34,8 +36,12 @@ public class CreateJsonEntityFormWizardTaskProcessor extends AbstractFormWizardT
 
     @Override
     public void process(TaskMonitor taskMonitor, ValueStore instValueStore) throws UnifyException {
-        logDebug(taskMonitor, "Processing form wizard staff item...");
-        logDebug(taskMonitor, "Item: {0}...", instValueStore.getValueObject());
+        logDebug(taskMonitor, "Processing form wizard create JSON entity item...");
+        final String refinedStructure = instValueStore.retrieve(String.class, "refinedStructure");
+        logDebug(taskMonitor, "refinedStructure = " + refinedStructure);
+
+        EntityComposition entityComposition = DataUtils.fromJsonString(EntityComposition.class, refinedStructure);
+        
     }
 
 }

@@ -15,15 +15,21 @@
  */
 package com.flowcentraltech.flowcentral.application.web.panels;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.web.data.FormContext;
-import com.flowcentraltech.flowcentral.common.business.policies.AppletNavigationPolicy;
+import com.flowcentraltech.flowcentral.common.business.policies.FormWizardNavigationPolicy;
 import com.flowcentraltech.flowcentral.common.business.policies.FormValidationContext;
 import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.UplBinding;
+import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.web.annotation.Action;
 import com.tcdng.unify.web.ui.widget.data.Hint.MODE;
 
@@ -47,8 +53,9 @@ public class FormWizardPanel extends AbstractFormPanel {
         ctx.clearValidationErrors();
         ctx.clearReviewErrors();
         if (formWizard.isWithNavPolicy()) {
-            getComponent(AppletNavigationPolicy.class, formWizard.getNavPolicy()).onPrevious(ctx.getFormValueStore(),
-                    ctx, formWizard.getCurrentPage());
+            FormWizardNavigationPolicy policy = getComponent(FormWizardNavigationPolicy.class, formWizard.getNavPolicy());
+            Map<String, Object> attributes = getPageAttributes(policy.pageAttributeNames());
+            policy.onPrevious(ctx.getFormValueStore(), ctx, formWizard.getCurrentPage(), attributes);
             if (ctx.isWithFormErrors()) {
                 return;
             }
@@ -63,8 +70,9 @@ public class FormWizardPanel extends AbstractFormPanel {
         FormContext ctx = evaluateCurrentFormContext(new FormValidationContext(EvaluationMode.CREATE));
         if (!ctx.isWithFormErrors()) {
             if (formWizard.isWithNavPolicy()) {
-                getComponent(AppletNavigationPolicy.class, formWizard.getNavPolicy()).onNext(ctx.getFormValueStore(),
-                        ctx, formWizard.getCurrentPage());
+                FormWizardNavigationPolicy policy = getComponent(FormWizardNavigationPolicy.class, formWizard.getNavPolicy());
+                Map<String, Object> attributes = getPageAttributes(policy.pageAttributeNames());
+                policy.onNext(ctx.getFormValueStore(), ctx, formWizard.getCurrentPage(), attributes);
                 if (ctx.isWithFormErrors()) {
                     return;
                 }
@@ -106,6 +114,19 @@ public class FormWizardPanel extends AbstractFormPanel {
         return ctx;
     }
 
+    private Map<String, Object> getPageAttributes(List<String> pageAttributeNames) throws UnifyException {
+        if (!DataUtils.isBlank(pageAttributeNames)) {
+            Map<String, Object> attributes = new HashMap<String, Object>();
+            for (String name : pageAttributeNames) {
+                attributes.put(name, getPageAttribute(name));
+            }
+
+            return attributes;
+        }
+
+        return Collections.emptyMap();
+    }
+    
     private FormWizard getFormWizard() throws UnifyException {
         return getValue(FormWizard.class);
     }

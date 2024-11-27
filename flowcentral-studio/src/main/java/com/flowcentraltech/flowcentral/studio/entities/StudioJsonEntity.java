@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.studio.entities;
 
 import com.flowcentraltech.flowcentral.application.entities.Application;
 import com.flowcentraltech.flowcentral.common.entities.BaseAuditEntity;
+import com.flowcentraltech.flowcentral.configuration.constants.EntityBaseType;
 import com.tcdng.unify.core.annotation.Column;
 import com.tcdng.unify.core.annotation.ColumnType;
 import com.tcdng.unify.core.annotation.ForeignKey;
@@ -35,6 +36,9 @@ public class StudioJsonEntity extends BaseAuditEntity {
 
     @ForeignKey(Application.class)
     private Long applicationId;
+
+    @ForeignKey(name = "ENTITY_BASE_TY")
+    private EntityBaseType baseType;
     
     @Column(name = "SOURCE_JSON", type = ColumnType.CLOB)
     private String sourceJson;
@@ -42,6 +46,12 @@ public class StudioJsonEntity extends BaseAuditEntity {
     @Column(name = "REFINE_STRUCTURE", type = ColumnType.CLOB)
     private String refinedStructure;
 
+    @Column(nullable = true)
+    private Boolean generateEntity;
+
+    @Column(nullable = true)
+    private Boolean generateApplet;
+    
     @ListOnly(key = "applicationId", property = "name")
     private String applicationName;
 
@@ -70,6 +80,14 @@ public class StudioJsonEntity extends BaseAuditEntity {
         this.applicationId = applicationId;
     }
 
+    public EntityBaseType getBaseType() {
+        return baseType;
+    }
+
+    public void setBaseType(EntityBaseType baseType) {
+        this.baseType = baseType;
+    }
+
     public String getSourceJson() {
         return sourceJson;
     }
@@ -84,6 +102,22 @@ public class StudioJsonEntity extends BaseAuditEntity {
 
     public void setRefinedStructure(String refinedStructure) {
         this.refinedStructure = refinedStructure;
+    }
+
+    public Boolean getGenerateEntity() {
+        return generateEntity;
+    }
+
+    public void setGenerateEntity(Boolean generateEntity) {
+        this.generateEntity = generateEntity;
+    }
+
+    public Boolean getGenerateApplet() {
+        return generateApplet;
+    }
+
+    public void setGenerateApplet(Boolean generateApplet) {
+        this.generateApplet = generateApplet;
     }
 
     public String getApplicationName() {

@@ -15,8 +15,10 @@
  */
 package com.flowcentraltech.flowcentral.studio.business.policies;
 
+import java.util.List;
+
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
-import com.flowcentraltech.flowcentral.common.business.policies.AbstractAppletNavigationPolicy;
+import com.flowcentraltech.flowcentral.common.business.policies.AbstractFormWizardNavigationPolicy;
 import com.tcdng.unify.core.annotation.Configurable;
 
 /**
@@ -25,10 +27,18 @@ import com.tcdng.unify.core.annotation.Configurable;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class AbstractStudioAppletNavigationPolicy extends AbstractAppletNavigationPolicy {
+public abstract class AbstractStudioAppletNavigationPolicy extends AbstractFormWizardNavigationPolicy {
 
     @Configurable
     private AppletUtilities au;
+
+    public AbstractStudioAppletNavigationPolicy(List<String> pageAttributesNames) {
+        super(pageAttributesNames);
+    }
+
+    public AbstractStudioAppletNavigationPolicy() {
+
+    }
 
     protected AppletUtilities au() {
         return au;

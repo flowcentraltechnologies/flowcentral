@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.application.web.widgets;
 import java.util.List;
 
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.constant.DynamicEntityFieldType;
 
 /**
  * Entity composition object.
@@ -48,6 +49,64 @@ public class EntityComposition {
     public void normalize() throws UnifyException {
         for (EntityCompositionEntry entry : entries) {
             entry.normalize();
+        }
+    }
+
+    public void addEntity(final int index) {
+        if (entries != null) {
+            int target = index;
+            while(++target < entries.size()) {
+                if (entries.get(target).getFieldType() == null) {
+                    break;
+                }
+            }
+            
+            if (target >= entries.size()) {
+                target--;
+            }
+            
+            EntityCompositionEntry entry = new EntityCompositionEntry();
+            entry.setDepth(entries.get(index).getDepth() +  1);
+            entry.setFieldType(null);
+            entries.add(target, entry);
+        }
+    }
+    
+    public void deleteEntity(int index) {
+        if (entries != null && index < entries.size()) {
+            if (entries.get(index).getFieldType() == null) {
+                do {
+                    entries.remove(index);
+                } while (entries.get(index).getFieldType() != null && index < entries.size());
+            }
+        }
+    }
+
+    public void addField(final int index) {
+        if (entries != null) {
+            int target = index;
+            while(++target < entries.size()) {
+                if (entries.get(target).getFieldType() == null) {
+                    break;
+                }
+            }
+            
+            if (target >= entries.size()) {
+                target--;
+            }
+            
+            EntityCompositionEntry entry = new EntityCompositionEntry();
+            entry.setDepth(entries.get(index).getDepth());
+            entry.setFieldType(DynamicEntityFieldType.FIELD);
+            entries.add(target, entry);
+        }
+    }
+
+    public void deleteField(int index) {
+        if (entries != null && index < entries.size()) {
+            if (entries.get(index).getFieldType() != null) {
+                entries.remove(index);
+            }
         }
     }
 
