@@ -15,14 +15,38 @@
  */
 package com.flowcentraltech.flowcentral.studio.business.processors;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
+import com.flowcentraltech.flowcentral.application.business.EntitySchemaManager;
+import com.flowcentraltech.flowcentral.application.data.ApplicationDef;
+import com.flowcentraltech.flowcentral.application.entities.AppApplet;
+import com.flowcentraltech.flowcentral.application.entities.AppEntity;
+import com.flowcentraltech.flowcentral.application.entities.AppEntityField;
+import com.flowcentraltech.flowcentral.application.util.ApplicationCodeGenUtils;
+import com.flowcentraltech.flowcentral.application.util.ApplicationEntityNameParts;
+import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
+import com.flowcentraltech.flowcentral.application.util.InputWidgetUtils;
 import com.flowcentraltech.flowcentral.application.web.widgets.EntityComposition;
+import com.flowcentraltech.flowcentral.application.web.widgets.EntityCompositionEntry;
 import com.flowcentraltech.flowcentral.common.annotation.EntityReferences;
 import com.flowcentraltech.flowcentral.common.business.policies.AbstractFormWizardTaskProcessor;
+import com.flowcentraltech.flowcentral.common.constants.ConfigType;
+import com.flowcentraltech.flowcentral.configuration.constants.AppletType;
+import com.flowcentraltech.flowcentral.configuration.constants.EntityBaseType;
+import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldDataType;
+import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldType;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
+import com.tcdng.unify.core.annotation.Configurable;
+import com.tcdng.unify.core.constant.DataType;
 import com.tcdng.unify.core.data.ValueStore;
+import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.task.TaskMonitor;
 import com.tcdng.unify.core.util.DataUtils;
+import com.tcdng.unify.core.util.NameUtils;
+import com.tcdng.unify.core.util.StringUtils;
 
 /**
  * Create JSON entity form wizard policies.
@@ -30,18 +54,128 @@ import com.tcdng.unify.core.util.DataUtils;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@EntityReferences({"studio.studioJsonEntity"})
+@EntityReferences({ "studio.studioJsonEntity" })
 @Component("createjsonentity-formwizardprocessor")
 public class CreateJsonEntityFormWizardTaskProcessor extends AbstractFormWizardTaskProcessor {
+
+    @Configurable
+    private AppletUtilities au;
+
+    @Configurable
+    private EntitySchemaManager entitySchemaManager;
 
     @Override
     public void process(TaskMonitor taskMonitor, ValueStore instValueStore) throws UnifyException {
         logDebug(taskMonitor, "Processing form wizard create JSON entity item...");
         final String refinedStructure = instValueStore.retrieve(String.class, "refinedStructure");
-        logDebug(taskMonitor, "refinedStructure = " + refinedStructure);
-
+        final String delegate = instValueStore.retrieve(String.class, "delegate");
         EntityComposition entityComposition = DataUtils.fromJsonString(EntityComposition.class, refinedStructure);
-        
+
+        // Save source
+        au.environment().create((Entity) instValueStore.getValueObject());
+
+        // Create entities
+        List<String> entityNames = new ArrayList<String>();
+        final Long applicationId = instValueStore.retrieve(Long.class, "applicationId");
+        final ApplicationDef applicationDef = au.application().getApplicationDef(applicationId);
+        final String applicationName = applicationDef.getName();
+        AppEntity appEntity = null;
+        for (EntityCompositionEntry entry : entityComposition.getEntries()) {
+            if (entry.getFieldType() == null) {
+                if (appEntity != null) {
+                    final String entity = createEntity(applicationName, appEntity);
+                    entityNames.add(entity);
+                }
+
+                appEntity = new AppEntity();
+                appEntity.setFieldList(new ArrayList<AppEntityField>());
+
+                // Create entity
+                appEntity.setApplicationId(applicationId);
+                appEntity.setConfigType(ConfigType.CUSTOM);
+                appEntity.setBaseType(instValueStore.retrieve(EntityBaseType.class, "baseType"));
+                appEntity.setName(entry.getEntityName());
+                appEntity.setDescription(NameUtils.describeName(entry.getEntityName()));
+                appEntity.setLabel(appEntity.getDescription());
+                appEntity.setTableName(entry.getTable());
+                final String entityClass = ApplicationCodeGenUtils.generateCustomEntityClassName(ConfigType.CUSTOM,
+                        applicationName, entry.getEntityName());
+                appEntity.setEntityClass(entityClass);
+                appEntity.setDelegate(delegate);
+                appEntity.setActionPolicy(false);
+                appEntity.setAuditable(true);
+                appEntity.setReportable(true);
+            } else {
+                AppEntityField appEntityField = newAppEntityField(applicationName, entry);
+                appEntity.getFieldList().add(appEntityField);
+            }
+        }
+
+        final String entity = createEntity(applicationName, appEntity);
+        entityNames.add(entity);
+
+        // Create CRUD applets
+        final boolean generateApplets = instValueStore.retrieve(boolean.class, "generateApplet");
+        if (generateApplets) {
+            // Do reverse loop to create child applets first
+            for (int i = entityNames.size() - 1; i >= 0; i--) {
+                final String _entity = entityNames.get(i);
+                ApplicationEntityNameParts parts = ApplicationNameUtils.getApplicationEntityNameParts(_entity);
+                final String appletName = "manage" + StringUtils.capitalizeFirstLetter(parts.getEntityName());
+                AppApplet appApplet = new AppApplet();
+                appApplet.setName(appletName);
+                appApplet.setDescription(NameUtils.describeName(appletName));
+                appApplet.setConfigType(ConfigType.CUSTOM);
+                appApplet.setEntity(_entity);
+                appApplet.setLabel(StringUtils.capitalizeFirstLetter(parts.getEntityName()));
+                appApplet.setMenuAccess(i == 0);
+                appApplet.setType(AppletType.MANAGE_ENTITYLIST);
+                
+                entitySchemaManager.createDefaultAppletComponents(applicationName, appApplet);
+                au.environment().create(appApplet);
+            }
+        }
     }
 
+    private AppEntityField newAppEntityField(final String applicationName, final EntityCompositionEntry entry) {
+        AppEntityField appEntityField = new AppEntityField();
+        appEntityField.setConfigType(ConfigType.CUSTOM);
+        appEntityField.setType(EntityFieldType.CUSTOM);
+
+        EntityFieldDataType dataType = null;
+        String references = null;
+        if (entry.getFieldType().isTableColumn()) {
+            DataType _dataType = entry.getDataType();
+            dataType = EntityFieldDataType.fromName(_dataType.name());
+        } else if (entry.getFieldType().isForeignKey()) {
+            dataType = EntityFieldDataType.REF;
+        } else if (entry.getFieldType().isChild()) {
+            dataType = EntityFieldDataType.CHILD;
+        } else if (entry.getFieldType().isChildList()) {
+            dataType = EntityFieldDataType.CHILD_LIST;
+        }
+
+        appEntityField.setDataType(dataType);
+        appEntityField.setName(entry.getName());
+        appEntityField.setColumnName(entry.getColumn());
+        appEntityField.setReferences(references);
+        appEntityField.setLabel(NameUtils.describeName(entry.getName()));
+        appEntityField.setInputWidget(InputWidgetUtils.getDefaultSyncEntityFieldWidget(dataType));
+        appEntityField.setAuditable(true);
+        appEntityField.setReportable(true);
+        return appEntityField;
+    }
+
+    private String createEntity(String applicationName, AppEntity appEntity) throws UnifyException {
+        if (appEntity != null) {
+            // Save
+            au.environment().create(appEntity);
+
+            final String entity = ApplicationNameUtils.ensureLongNameReference(applicationName, appEntity.getName());
+            entitySchemaManager.createDefaultComponents(entity, appEntity);
+            return entity;
+        }
+
+        return null;
+    }
 }

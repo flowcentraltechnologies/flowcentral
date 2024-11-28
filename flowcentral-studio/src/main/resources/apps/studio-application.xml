@@ -1594,6 +1594,9 @@
 			<field name="baseType"
 				label="$m{studio.jsonentity.basetype}" type="enum_ref"
 				references="entitybasetypelist" inputWidget="application.enumlist" />
+			<field name="delegate" maxLen="64"
+				label="$m{studio.jsonentity.delegate}" type="string"
+				nullable="true" />
 			<field name="sourceJson"
 				inputWidget="application.textarealarge"
 				label="$m{studio.jsonentity.sourcejson}" type="clob" />
@@ -2401,6 +2404,8 @@
 						required="true" editable="true" />
 					<field name="baseType" column="0" label="$m{studio.jsonentity.basetype}"
 						required="true" editable="true" />
+					<field name="delegate" inputWidget="environmentdelegatelist"
+						column="0" />
 				</section>
 				<section name="source" columns="type_1"
 					label="$m{studio.jsonentity.form.source}" icon="file" >

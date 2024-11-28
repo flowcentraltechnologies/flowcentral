@@ -4047,8 +4047,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     @Parameter(name = FormWizardExecuteTaskConstants.FORM_WIZARD_PROCESSOR,
                             description = "Form Wizard Processor", type = String.class, mandatory = true) },
             limit = TaskExecLimit.ALLOW_MULTIPLE, schedulable = false)
-    public int executeFormWizardTask(TaskMonitor taskMonitor, Entity inst, String processor,
-            Map<String, Object> pageAttributes) throws UnifyException {
+    public int executeFormWizardTask(TaskMonitor taskMonitor, Entity inst, String processor) throws UnifyException {
         logDebug(taskMonitor, "Executing form wizard task using processor [{0}] ...", processor);
         FormWizardTaskProcessor _processor = getComponent(FormWizardTaskProcessor.class, processor);
         _processor.process(taskMonitor, new BeanValueStore(inst));

@@ -39,6 +39,9 @@ public class StudioJsonEntity extends BaseAuditEntity {
 
     @ForeignKey(name = "ENTITY_BASE_TY")
     private EntityBaseType baseType;
+
+    @Column(length = 64, nullable = true)
+    private String delegate;
     
     @Column(name = "SOURCE_JSON", type = ColumnType.CLOB)
     private String sourceJson;
@@ -86,6 +89,14 @@ public class StudioJsonEntity extends BaseAuditEntity {
 
     public void setBaseType(EntityBaseType baseType) {
         this.baseType = baseType;
+    }
+
+    public String getDelegate() {
+        return delegate;
+    }
+
+    public void setDelegate(String delegate) {
+        this.delegate = delegate;
     }
 
     public String getSourceJson() {
