@@ -86,7 +86,7 @@ public class CreateJsonEntityFormWizardTaskProcessor extends AbstractFormWizardT
         for (EntityCompositionEntry entry : entityComposition.getEntries()) {
             if (entry.getFieldType() == null) {
                 if (appEntity != null) {
-                    final String entity = createEntity(applicationName, appEntity);
+                    final String entity = createEntity(taskMonitor, applicationName, appEntity);
                     entityNames.add(entity);
                 }
 
@@ -119,7 +119,7 @@ public class CreateJsonEntityFormWizardTaskProcessor extends AbstractFormWizardT
             }
         }
 
-        final String entity = createEntity(applicationName, appEntity);
+        final String entity = createEntity(taskMonitor, applicationName, appEntity);
         entityNames.add(entity);
 
         // Create CRUD applets
@@ -131,6 +131,7 @@ public class CreateJsonEntityFormWizardTaskProcessor extends AbstractFormWizardT
                 final String _entity = entityNames.get(i);
                 ApplicationEntityNameParts parts = ApplicationNameUtils.getApplicationEntityNameParts(_entity);
                 final String appletName = "manage" + StringUtils.capitalizeFirstLetter(parts.getEntityName());
+                logDebug(taskMonitor, "Creating new entity list applet...");
                 AppApplet appApplet = new AppApplet();
                 appApplet.setApplicationId(applicationId);
                 appApplet.setName(appletName);
@@ -143,6 +144,7 @@ public class CreateJsonEntityFormWizardTaskProcessor extends AbstractFormWizardT
 
                 entitySchemaManager.createDefaultAppletComponents(applicationName, appApplet);
                 au.environment().create(appApplet);
+                logDebug(taskMonitor, "Applet [{0}] successfully created.", appletName);
             }
         }
     }
@@ -178,13 +180,15 @@ public class CreateJsonEntityFormWizardTaskProcessor extends AbstractFormWizardT
         return appEntityField;
     }
 
-    private String createEntity(String applicationName, AppEntity appEntity) throws UnifyException {
+    private String createEntity(TaskMonitor taskMonitor, String applicationName, AppEntity appEntity) throws UnifyException {
         if (appEntity != null) {
             // Save
+            logDebug(taskMonitor, "Creating new entity...");
             au.environment().create(appEntity);
 
             final String entity = ApplicationNameUtils.ensureLongNameReference(applicationName, appEntity.getName());
             entitySchemaManager.createDefaultComponents(entity, appEntity);
+            logDebug(taskMonitor, "Entity [{0}] successfully created.", entity);
             return entity;
         }
 

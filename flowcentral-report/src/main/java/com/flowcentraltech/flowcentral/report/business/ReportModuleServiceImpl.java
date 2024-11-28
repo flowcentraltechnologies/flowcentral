@@ -503,6 +503,7 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService
                         }
                     }
 
+                    columnName = sqlDialect.getReportingName(columnName);
                     rb.addColumn(reportColumnOptions.getDescription(), tableName, columnName,
                             reportColumnOptions.getType(), sqlBlobTypeName, reportColumnOptions.getFormatter(),
                             reportColumnOptions.getOrderType(), reportColumnOptions.getHAlignType(),
