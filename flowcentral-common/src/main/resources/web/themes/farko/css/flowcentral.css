@@ -398,6 +398,11 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 /** Entity field widget list */
 .fc-entityfieldwidgetlist {}
 
+/** Entity Composition */
+.fc-entitycomposition {}
+.fc-entitycomposition .eccell {display:table-cell;padding:2px;}
+.fc-entitycomposition .eccelll {display:table-cell;padding:2px;color:#808080;font-size:7pt;font-style:italic;}
+
 /* File attachment image */
 .fc-fileattachmentimage {width:180px; height:180px; padding: 2px;border: 1px solid #C8C8C8;}
 

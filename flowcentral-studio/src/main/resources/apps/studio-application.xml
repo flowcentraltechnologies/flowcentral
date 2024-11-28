@@ -596,6 +596,8 @@
 			entity="studio.studioJsonEntity" menuAccess="false">
 			<property name="createForm" value="studioJsonEntityForm" />
 			<property name="createForm.navigation.policy" value="createjsonentity-navigationpolicy" />
+			<property name="wizardForm.completion" value="EXE" />
+			<property name="wizardForm.task.processor" value="createjsonentity-formwizardprocessor" />
 		</applet>
 		<applet name="stuManageModule"
 			description="$m{studio.module.manage}"
@@ -1589,12 +1591,27 @@
 				inputLabel="$m{studio.jsonentity.application}"
 				inputWidget="application.entitysearch"
 				references="application.applicationRef" basicSearch="true" />
+			<field name="baseType"
+				label="$m{studio.jsonentity.basetype}" type="enum_ref"
+				references="entitybasetypelist" inputWidget="application.enumlist" />
+			<field name="entityName" maxLen="32"
+				label="$m{studio.jsonentity.entityname}" type="string"
+				nullable="true" />
+			<field name="delegate" maxLen="64"
+				label="$m{studio.jsonentity.delegate}" type="string"
+				nullable="true" />
 			<field name="sourceJson"
 				inputWidget="application.textarealarge"
 				label="$m{studio.jsonentity.sourcejson}" type="clob" />
 			<field name="refinedStructure"
-				inputWidget="application.textarealarge"
+				inputWidget="application.entitycomposition"
 				label="$m{studio.jsonentity.refinedstructure}" type="clob" />
+			<field name="generateEntity"
+				inputWidget="application.boolean"
+				label="$m{studio.jsonentity.generateentity}" type="boolean"/>
+			<field name="generateApplet"
+				inputWidget="application.boolean"
+				label="$m{studio.jsonentity.generateapplet}" type="boolean"/>
 			<field name="applicationName"
 				label="$m{studio.jsonentity.applicationname}"
 				type="list_only" key="applicationId" property="name" />
@@ -2382,20 +2399,35 @@
 		<form name="studioJsonEntityForm" description="$m{studio.jsonentity.form}"
 			entity="studioJsonEntity">
 			<tab name="basicDetails"
-				label="$m{studio.jsonentity.form.basicdetails}" contentType="miniform">
+				label="$m{studio.jsonentity.form.application}" contentType="miniform">
+				<section name="structureDetails" columns="type_2"
+					label="$m{studio.jsonentity.form.application}" icon="application" >
+					<field name="applicationId" inputWidget="application.entitysearch" column="0"
+						label="$m{studio.jsonentity.application}"
+						required="true" editable="true" />
+					<field name="entityName" inputWidget="application.name"
+						column="0" required="true" />
+					<field name="baseType" column="0" label="$m{studio.jsonentity.basetype}"
+						required="true" editable="true" />
+					<field name="delegate" inputWidget="environmentdelegatelist"
+						column="0" />
+				</section>
 				<section name="source" columns="type_1"
-					label="$m{studio.jsonentity.form.source}" >
+					label="$m{studio.jsonentity.form.source}" icon="file" >
 					<field name="sourceJson" inputWidget="application.textareaxlarge" column="0"
 						required="true" editable="true" />
 				</section>
-				<section name="structureDetails" columns="type_2"
-					label="$m{studio.jsonentity.form.structure}" >
-					<field name="applicationId" inputWidget="application.entitysearch" column="0"
+				<section name="structure" columns="type_1"
+					label="$m{studio.jsonentity.form.structure}" icon="scroll">
+					<field name="refinedStructure" inputWidget="application.entitycomposition" column="0"
 						required="true" editable="true" />
 				</section>
-				<section name="structure" columns="type_1">
-					<field name="refinedStructure" inputWidget="application.textarealarge" column="0"
-						required="true" editable="true" />
+				<section name="options" columns="type_1"
+					label="$m{studio.jsonentity.form.options}" icon="rocket">
+					<field name="generateEntity" inputWidget="application.checkbox" column="0"
+						disabled="true" />
+					<field name="generateApplet" inputWidget="application.checkbox" column="0"
+						editable="true" />
 				</section>
 			</tab>
 		</form>

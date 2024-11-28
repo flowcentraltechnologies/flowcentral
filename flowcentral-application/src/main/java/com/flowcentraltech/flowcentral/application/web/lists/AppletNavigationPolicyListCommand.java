@@ -17,7 +17,7 @@
 package com.flowcentraltech.flowcentral.application.web.lists;
 
 import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
-import com.flowcentraltech.flowcentral.common.business.policies.AppletNavigationPolicy;
+import com.flowcentraltech.flowcentral.common.business.policies.FormWizardNavigationPolicy;
 import com.flowcentraltech.flowcentral.common.web.lists.AbstractEntityTypeListCommand;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
@@ -31,13 +31,13 @@ import com.tcdng.unify.core.list.LongParam;
  * @since 1.0
  */
 @Component("navigationactionpolicylist")
-public class AppletNavigationPolicyListCommand extends AbstractEntityTypeListCommand<AppletNavigationPolicy, LongParam> {
+public class AppletNavigationPolicyListCommand extends AbstractEntityTypeListCommand<FormWizardNavigationPolicy, LongParam> {
 
     @Configurable
     private ApplicationModuleService applicationModuleService;
 
     public AppletNavigationPolicyListCommand() {
-        super(AppletNavigationPolicy.class, LongParam.class);
+        super(FormWizardNavigationPolicy.class, LongParam.class);
     }
 
     @Override

@@ -16,41 +16,58 @@
 
 package com.flowcentraltech.flowcentral.common.business.policies;
 
+import java.util.List;
+import java.util.Map;
+
 import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
 import com.flowcentraltech.flowcentral.common.data.ValidationErrors;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.ValueStore;
 
 /**
- * Applet navigation policy
+ * Form wizard navigation policy
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface AppletNavigationPolicy extends FlowCentralComponent {
+public interface FormWizardNavigationPolicy extends FlowCentralComponent {
 
+    /**
+     * Gets the page attribute names.
+     * 
+     * @return Gets the page attributes
+     */
+    List<String> pageAttributeNames();
+    
     /**
      * Executes on next navigation.
      * 
      * @param inst
-     *             the entity value store
-     * @param errors errors
+     *                       the entity value store
+     * @param errors
+     *                       errors
      * @param currentPage
-     *             the current page
+     *                       the current page
+     * @param pageAttributes
+     *                       the page attributes
      * @throws UnifyException
      *                        if an error occurs
      */
-    void onNext(ValueStore inst, ValidationErrors errors, int currentPage) throws UnifyException;
+    void onNext(ValueStore inst, ValidationErrors errors, int currentPage, Map<String, Object> pageAttributes)
+            throws UnifyException;
 
     /**
      * Executes on previous navigation.
      * 
      * @param inst
-     *             the entity value store
+     *                       the entity value store
      * @param currentPage
-     *             the current page
+     *                       the current page
+     * @param pageAttributes
+     *                       the page attributes
      * @throws UnifyException
      *                        if an error occurs
      */
-    void onPrevious(ValueStore inst, ValidationErrors errors, int currentPage) throws UnifyException;
+    void onPrevious(ValueStore inst, ValidationErrors errors, int currentPage, Map<String, Object> pageAttributes)
+            throws UnifyException;
 }

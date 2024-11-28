@@ -16,17 +16,35 @@
 
 package com.flowcentraltech.flowcentral.common.business.policies;
 
+import java.util.Collections;
+import java.util.List;
+
 import com.flowcentraltech.flowcentral.common.AbstractFlowCentralComponent;
 import com.tcdng.unify.core.UnifyException;
 
 /**
- * Convenient abstract base class for applet navigation policies.
+ * Convenient abstract base class for form wizard navigation policies.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class AbstractAppletNavigationPolicy extends AbstractFlowCentralComponent
-        implements AppletNavigationPolicy {
+public abstract class AbstractFormWizardNavigationPolicy extends AbstractFlowCentralComponent
+        implements FormWizardNavigationPolicy {
+
+    private final List<String> pageAttributesNames;
+
+    public AbstractFormWizardNavigationPolicy(List<String> pageAttributesNames) {
+        this.pageAttributesNames = pageAttributesNames;
+    }
+
+    public AbstractFormWizardNavigationPolicy() {
+        this.pageAttributesNames = Collections.emptyList();
+    }
+
+    @Override
+    public List<String> pageAttributeNames() {
+        return pageAttributesNames;
+    }
 
     @Override
     protected void onInitialize() throws UnifyException {

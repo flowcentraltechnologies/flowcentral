@@ -2340,6 +2340,13 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
+    public ApplicationDef getApplicationDef(Long applicationId) throws UnifyException {
+        final String applicationName = environment().value(String.class, "name",
+                Query.of(Application.class).addEquals("id", applicationId));
+        return applicationDefFactoryMap.get(applicationName);
+    }
+
+    @Override
     public List<ApplicationMenuDef> getApplicationMenuDefs(String appletFilter) throws UnifyException {
         final boolean indicateMenuSectorLabels = appletUtilities.system().getSysParameterValue(boolean.class,
                 ApplicationModuleSysParamConstants.SECTOR_LABEL_INDICATION_ON_MENU);
@@ -4033,12 +4040,12 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Taskable(name = FormWizardExecuteTaskConstants.FORM_WIZARD_EXECUTE_TASK_NAME,
-            description = "Form Wizard Execute Task", 
-            parameters = { @Parameter(name = FormWizardExecuteTaskConstants.FORM_WIZARD_ENTITY,
-                    description = "Form Wizard Entity", type = Entity.class,
-                    mandatory = true), @Parameter(name = FormWizardExecuteTaskConstants.FORM_WIZARD_PROCESSOR,
-                    description = "Form Wizard Processor", type = String.class,
-                    mandatory = true) },
+            description = "Form Wizard Execute Task",
+            parameters = {
+                    @Parameter(name = FormWizardExecuteTaskConstants.FORM_WIZARD_ENTITY,
+                            description = "Form Wizard Entity", type = Entity.class, mandatory = true),
+                    @Parameter(name = FormWizardExecuteTaskConstants.FORM_WIZARD_PROCESSOR,
+                            description = "Form Wizard Processor", type = String.class, mandatory = true) },
             limit = TaskExecLimit.ALLOW_MULTIPLE, schedulable = false)
     public int executeFormWizardTask(TaskMonitor taskMonitor, Entity inst, String processor) throws UnifyException {
         logDebug(taskMonitor, "Executing form wizard task using processor [{0}] ...", processor);

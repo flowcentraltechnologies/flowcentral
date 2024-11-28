@@ -490,7 +490,54 @@ fux.entitySelectClick = function(uEv) {
 	ux.post(uEv);
 }
 
-
+/** Entity Composition */
+fux.rigEntityComposition =  function(rgp) {
+	var id = rgp.pId;
+	
+	// Handle on change
+	var chgId = rgp.pOnChgId;
+	if (chgId && chgId.length) {
+		var addEId = rgp.pAddEId;
+		var delEId = rgp.pDelEId;
+		var addFId = rgp.pAddFId;
+		var delFId = rgp.pDelFId;
+	
+		var evpNorm = ux.newEvPrm(rgp);
+		evpNorm.uCmd = id + "->normalize";
+		evpNorm.uRef = [ id ];
+		evpNorm.uPanels = [ rgp.pContId ];
+	
+		var evpAddE = ux.newEvPrm(rgp);
+		evpAddE.uCmd = id + "->addEntity";
+		evpAddE.uRef = [ id ];
+		evpAddE.uPanels = [ rgp.pContId ];
+	
+		var evpDelE = ux.newEvPrm(rgp);
+		evpDelE.uCmd = id + "->delEntity";
+		evpDelE.uRef = [ id ];
+		evpDelE.uPanels = [ rgp.pContId ];
+	
+		var evpAddF = ux.newEvPrm(rgp);
+		evpAddF.uCmd = id + "->addField";
+		evpAddF.uRef = [ id ];
+		evpAddF.uPanels = [ rgp.pContId ];
+	
+		var evpDelF = ux.newEvPrm(rgp);
+		evpDelF.uCmd = id + "->delField";
+		evpDelF.uRef = [ id ];
+		evpDelF.uPanels = [ rgp.pContId ];
+	
+		for (var i = 0; i < chgId.length; i++) {
+			var idx = "d" + i;
+			ux.addHdl(_id(chgId[i]), "change", ux.post, evpNorm);
+			ux.addHdl(_id(addEId + idx), "click", ux.post, evpAddE);
+			ux.addHdl(_id(delEId + idx), "click", ux.post, evpDelE);
+			ux.addHdl(_id(addFId + idx), "click", ux.post, evpAddF);
+			ux.addHdl(_id(delFId + idx), "click", ux.post, evpDelF);
+		}
+	}
+}
+	
 /** Filter */
 fux.rigFilter = function(rgp) {
 	var id = rgp.pId;
@@ -1158,8 +1205,9 @@ fux.init = function() {
 	ux.setfn(fux.rigInputArray,"fux12");  
 	ux.setfn(fux.rigPopupWinText,"fux13"); 
 	ux.setfn(fux.rigTokenEntries,"fux14");  
-	ux.setfn(fux.rigFormAnnotation,"fux15");  
+	ux.setfn(fux.rigFormAnnotation,"fux15"); 
 	ux.setfn(fux.rigCollapsibleTable,"fux16");  
+	ux.setfn(fux.rigEntityComposition,"fux17");  
 }
 
 fux.init();

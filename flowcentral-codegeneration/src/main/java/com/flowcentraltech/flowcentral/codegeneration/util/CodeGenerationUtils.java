@@ -41,7 +41,7 @@ import com.flowcentraltech.flowcentral.notification.util.DynamicNotifLargeTextIn
 import com.flowcentraltech.flowcentral.notification.util.DynamicNotifTemplateInfo;
 import com.flowcentraltech.flowcentral.notification.util.NotificationCodeGenUtils;
 import com.tcdng.unify.core.UnifyException;
-import com.tcdng.unify.core.constant.EntityFieldType;
+import com.tcdng.unify.core.constant.DynamicEntityFieldType;
 import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.database.dynamic.DynamicEntityInfo;
@@ -135,7 +135,7 @@ public final class CodeGenerationUtils {
                 importSet.add(dynamicFieldInfo.getEnumClassName());
             }
 
-            final EntityFieldType type = dynamicFieldInfo.getFieldType();
+            final DynamicEntityFieldType type = dynamicFieldInfo.getFieldType();
             String fieldTypeName = null;
             String actFieldTypeName = null;
             if (type.isChild()) {
