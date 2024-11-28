@@ -39,6 +39,8 @@ public class EntityCompositionEntry {
     
     private String column;
     
+    private String references;
+    
     private String sample;
     
     private int depth;
@@ -89,6 +91,14 @@ public class EntityCompositionEntry {
 
     public void setColumn(String column) {
         this.column = column;
+    }
+
+    public String getReferences() {
+        return references;
+    }
+
+    public void setReferences(String references) {
+        this.references = references;
     }
 
     public String getSample() {

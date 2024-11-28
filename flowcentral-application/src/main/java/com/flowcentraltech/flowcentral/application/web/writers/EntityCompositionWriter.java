@@ -56,6 +56,7 @@ public class EntityCompositionWriter extends AbstractControlWriter {
             final Control dataTypeCtrl = entityCompositionWidget.getDataTypeCtrl();
             final Control fieldNameCtrl = entityCompositionWidget.getFieldNameCtrl();
             final Control columnCtrl = entityCompositionWidget.getColumnCtrl();
+            final Control referencesCtrl = entityCompositionWidget.getReferencesCtrl();
 
             final Control addEntityCtrl = entityCompositionWidget.getAddEntityCtrl();
             final Control delEntityCtrl = entityCompositionWidget.getDelEntityCtrl();
@@ -70,6 +71,7 @@ public class EntityCompositionWriter extends AbstractControlWriter {
             final String typeLabel = resolveSessionMessage("$m{entitycomposition.type}");
             final String nameLabel = resolveSessionMessage("$m{entitycomposition.name}");
             final String colLabel = resolveSessionMessage("$m{entitycomposition.column}");
+            final String referencesLabel = resolveSessionMessage("$m{entitycomposition.references}");
             for (int i = 0; i < len; i++) {
                 ValueStore lineValueStore = valueStoreList.get(i);
                 EntityCompositionEntry entry = (EntityCompositionEntry) lineValueStore.getValueObject();
@@ -95,6 +97,12 @@ public class EntityCompositionWriter extends AbstractControlWriter {
                     if (fieldType.isChild() || fieldType.isChildList()) {
                         writeCompositionItem(writer, lineValueStore, fieldTypeCtrl, fieldLabel);
                         writeCompositionItem(writer, lineValueStore, fieldNameCtrl, nameLabel);
+                        writeCompositionItem(writer, lineValueStore, referencesCtrl, referencesLabel);
+                    } else if (fieldType.isForeignKey()) {
+                        writeCompositionItem(writer, lineValueStore, fieldTypeCtrl, fieldLabel);
+                        writeCompositionItem(writer, lineValueStore, dataTypeCtrl, typeLabel);
+                        writeCompositionItem(writer, lineValueStore, fieldNameCtrl, nameLabel);
+                        writeCompositionItem(writer, lineValueStore, referencesCtrl, referencesLabel);
                     } else {
                         writeCompositionItem(writer, lineValueStore, fieldTypeCtrl, fieldLabel);
                         writeCompositionItem(writer, lineValueStore, dataTypeCtrl, typeLabel);
@@ -144,6 +152,7 @@ public class EntityCompositionWriter extends AbstractControlWriter {
             final Control dataTypeCtrl = entityCompositionWidget.getDataTypeCtrl();
             final Control fieldNameCtrl = entityCompositionWidget.getFieldNameCtrl();
             final Control columnCtrl = entityCompositionWidget.getColumnCtrl();
+            final Control referencesCtrl = entityCompositionWidget.getReferencesCtrl();
 
             final int len = valueStoreList.size();
             for (int i = 0; i < len; i++) {
@@ -160,8 +169,18 @@ public class EntityCompositionWriter extends AbstractControlWriter {
                     if (fieldType.isChild() || fieldType.isChildList()) {
                         writeBehavior(writer, entityCompositionWidget, lineValueStore, fieldTypeCtrl);
                         writeBehavior(writer, entityCompositionWidget, lineValueStore, fieldNameCtrl);
+                        writeBehavior(writer, entityCompositionWidget, lineValueStore, referencesCtrl);
                         csb.add(fieldTypeCtrl.getId());
                         csb.add(fieldNameCtrl.getId());
+                        csb.add(referencesCtrl.getId());
+                    } else if (fieldType.isForeignKey()) {
+                        writeBehavior(writer, entityCompositionWidget, lineValueStore, fieldTypeCtrl);
+                        writeBehavior(writer, entityCompositionWidget, lineValueStore, dataTypeCtrl);
+                        writeBehavior(writer, entityCompositionWidget, lineValueStore, fieldNameCtrl);
+                        writeBehavior(writer, entityCompositionWidget, lineValueStore, referencesCtrl);
+                        csb.add(fieldTypeCtrl.getId());
+                        csb.add(fieldNameCtrl.getId());
+                        csb.add(referencesCtrl.getId());
                     } else {
                         writeBehavior(writer, entityCompositionWidget, lineValueStore, fieldTypeCtrl);
                         writeBehavior(writer, entityCompositionWidget, lineValueStore, dataTypeCtrl);

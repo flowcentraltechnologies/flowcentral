@@ -21,6 +21,7 @@ import java.util.List;
 import com.flowcentraltech.flowcentral.application.web.widgets.EntityComposition;
 import com.flowcentraltech.flowcentral.application.web.widgets.EntityCompositionEntry;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.constant.DynamicEntityFieldType;
 import com.tcdng.unify.core.util.EntityTypeFieldInfo;
 import com.tcdng.unify.core.util.EntityTypeInfo;
 
@@ -50,12 +51,20 @@ public final class EntityCompositionUtils {
 
             for (EntityTypeFieldInfo entityTypeFieldInfo : entityTypeInfo.getFields()) {
                 entry = new EntityCompositionEntry();
-                entry.setFieldType(entityTypeFieldInfo.getType());
+                DynamicEntityFieldType fieldType = entityTypeFieldInfo.getType();
+                entry.setFieldType(fieldType);
                 entry.setDataType(entityTypeFieldInfo.getDataType());
                 entry.setName(entityTypeFieldInfo.getName());
                 entry.setColumn(entityTypeFieldInfo.getColumn());
                 entry.setSample(entityTypeFieldInfo.getSample());
                 entry.setDepth(depth);
+                
+                if (fieldType.isChild() || fieldType.isChildList()) {
+                    entry.setReferences(entityTypeFieldInfo.getChildEntityName());
+                } else if (fieldType.isForeignKey()) {
+                    entry.setReferences(entityTypeFieldInfo.getParentEntityName());
+                }
+                
                 entries.add(entry);
             }
         }

@@ -50,6 +50,8 @@ public class EntityCompositionWidget extends AbstractValueListWidget<EntityCompo
 
     private Control columnCtrl;
 
+    private Control referencesCtrl;
+
     private Control addEntityCtrl;
 
     private Control addFieldCtrl;
@@ -68,6 +70,7 @@ public class EntityCompositionWidget extends AbstractValueListWidget<EntityCompo
                 "!ui-select blankOption:$s{} list:datatypelist binding:dataType");
         fieldNameCtrl = (Control) addInternalChildWidget("!ui-name case:camel binding:name");
         columnCtrl = (Control) addInternalChildWidget("!ui-name underscore:true binding:column");
+        referencesCtrl = (Control) addInternalChildWidget("!ui-name case:camel binding:references");
         addFieldCtrl = (Control) addInternalChildWidget(
                 "!ui-button alwaysValueIndex:true styleClass:$e{abutton} symbol:$s{plus} hint:$m{button.addfield.hint} debounce:false");
         delFieldCtrl = (Control) addInternalChildWidget(
@@ -128,6 +131,10 @@ public class EntityCompositionWidget extends AbstractValueListWidget<EntityCompo
 
     public Control getColumnCtrl() {
         return columnCtrl;
+    }
+
+    public Control getReferencesCtrl() {
+        return referencesCtrl;
     }
 
     public Control getAddEntityCtrl() {
