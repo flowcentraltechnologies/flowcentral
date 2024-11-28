@@ -130,7 +130,7 @@ public class CreateJsonEntityFormWizardTaskProcessor extends AbstractFormWizardT
                 appApplet.setLabel(StringUtils.capitalizeFirstLetter(parts.getEntityName()));
                 appApplet.setMenuAccess(i == 0);
                 appApplet.setType(AppletType.MANAGE_ENTITYLIST);
-                
+
                 entitySchemaManager.createDefaultAppletComponents(applicationName, appApplet);
                 au.environment().create(appApplet);
             }
@@ -143,7 +143,9 @@ public class CreateJsonEntityFormWizardTaskProcessor extends AbstractFormWizardT
         appEntityField.setType(EntityFieldType.CUSTOM);
 
         EntityFieldDataType dataType = null;
-        String references = null;
+        String references = !StringUtils.isBlank(entry.getReferences())
+                ? ApplicationNameUtils.ensureLongNameReference(applicationName, entry.getReferences()) + "Ref"
+                : null;
         if (entry.getFieldType().isTableColumn()) {
             DataType _dataType = entry.getDataType();
             dataType = EntityFieldDataType.fromName(_dataType.name());
