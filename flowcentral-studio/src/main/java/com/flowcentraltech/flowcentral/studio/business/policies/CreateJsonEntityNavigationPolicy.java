@@ -52,7 +52,8 @@ public class CreateJsonEntityNavigationPolicy extends AbstractStudioAppletNaviga
             throws UnifyException {
         if (currentPage == 1) {
             final String sourceJson = inst.retrieve(String.class, "sourceJson");
-            List<EntityTypeInfo> entityTypeInfos = EntityTypeUtils.getEntityTypeInfoFromJson(sourceJson);
+            final String entityName = inst.retrieve(String.class, "entityName");
+            List<EntityTypeInfo> entityTypeInfos = EntityTypeUtils.getEntityTypeInfoFromJson(entityName, sourceJson);
             if (DataUtils.isBlank(entityTypeInfos)) {
                 errors.addValidationError(new FieldTarget("sourceJson"),
                         "$m{studio.jsonentity.validation.json.invalid}");

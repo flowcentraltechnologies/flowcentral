@@ -1594,6 +1594,9 @@
 			<field name="baseType"
 				label="$m{studio.jsonentity.basetype}" type="enum_ref"
 				references="entitybasetypelist" inputWidget="application.enumlist" />
+			<field name="entityName" maxLen="32"
+				label="$m{studio.jsonentity.entityname}" type="string"
+				nullable="true" />
 			<field name="delegate" maxLen="64"
 				label="$m{studio.jsonentity.delegate}" type="string"
 				nullable="true" />
@@ -2402,6 +2405,8 @@
 					<field name="applicationId" inputWidget="application.entitysearch" column="0"
 						label="$m{studio.jsonentity.application}"
 						required="true" editable="true" />
+					<field name="entityName" inputWidget="application.name"
+						column="0" required="true" />
 					<field name="baseType" column="0" label="$m{studio.jsonentity.basetype}"
 						required="true" editable="true" />
 					<field name="delegate" inputWidget="environmentdelegatelist"

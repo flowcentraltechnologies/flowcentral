@@ -40,6 +40,9 @@ public class StudioJsonEntity extends BaseAuditEntity {
     @ForeignKey(name = "ENTITY_BASE_TY")
     private EntityBaseType baseType;
 
+    @Column(length = 32)
+    private String entityName;
+
     @Column(length = 64, nullable = true)
     private String delegate;
     
@@ -89,6 +92,14 @@ public class StudioJsonEntity extends BaseAuditEntity {
 
     public void setBaseType(EntityBaseType baseType) {
         this.baseType = baseType;
+    }
+
+    public String getEntityName() {
+        return entityName;
+    }
+
+    public void setEntityName(String entityName) {
+        this.entityName = entityName;
     }
 
     public String getDelegate() {

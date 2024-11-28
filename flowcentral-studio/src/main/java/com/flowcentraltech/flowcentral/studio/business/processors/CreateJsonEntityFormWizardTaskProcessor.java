@@ -72,13 +72,16 @@ public class CreateJsonEntityFormWizardTaskProcessor extends AbstractFormWizardT
         EntityComposition entityComposition = DataUtils.fromJsonString(EntityComposition.class, refinedStructure);
 
         // Save source
+        logDebug(taskMonitor, "Saving source...");
         au.environment().create((Entity) instValueStore.getValueObject());
 
         // Create entities
+        logDebug(taskMonitor, "Creating one or more entities...");
         List<String> entityNames = new ArrayList<String>();
         final Long applicationId = instValueStore.retrieve(Long.class, "applicationId");
         final ApplicationDef applicationDef = au.application().getApplicationDef(applicationId);
         final String applicationName = applicationDef.getName();
+        final EntityBaseType baseType = instValueStore.retrieve(EntityBaseType.class, "baseType");
         AppEntity appEntity = null;
         for (EntityCompositionEntry entry : entityComposition.getEntries()) {
             if (entry.getFieldType() == null) {
@@ -88,12 +91,16 @@ public class CreateJsonEntityFormWizardTaskProcessor extends AbstractFormWizardT
                 }
 
                 appEntity = new AppEntity();
-                appEntity.setFieldList(new ArrayList<AppEntityField>());
+                // Add base fields
+                final EntityBaseType _baseType = entityNames.isEmpty() ? baseType : EntityBaseType.BASE_AUDIT_ENTITY;
+                List<AppEntityField> baseFieldList = au.application().getEntityBaseTypeFieldList(_baseType,
+                        ConfigType.CUSTOM);
+                appEntity.setFieldList(new ArrayList<AppEntityField>(baseFieldList));
 
                 // Create entity
                 appEntity.setApplicationId(applicationId);
                 appEntity.setConfigType(ConfigType.CUSTOM);
-                appEntity.setBaseType(instValueStore.retrieve(EntityBaseType.class, "baseType"));
+                appEntity.setBaseType(_baseType);
                 appEntity.setName(entry.getEntityName());
                 appEntity.setDescription(NameUtils.describeName(entry.getEntityName()));
                 appEntity.setLabel(appEntity.getDescription());
@@ -105,6 +112,7 @@ public class CreateJsonEntityFormWizardTaskProcessor extends AbstractFormWizardT
                 appEntity.setActionPolicy(false);
                 appEntity.setAuditable(true);
                 appEntity.setReportable(true);
+                appEntity.setSchemaUpdateRequired(true);
             } else {
                 AppEntityField appEntityField = newAppEntityField(applicationName, entry);
                 appEntity.getFieldList().add(appEntityField);
@@ -118,11 +126,13 @@ public class CreateJsonEntityFormWizardTaskProcessor extends AbstractFormWizardT
         final boolean generateApplets = instValueStore.retrieve(boolean.class, "generateApplet");
         if (generateApplets) {
             // Do reverse loop to create child applets first
+            logDebug(taskMonitor, "Creating one or more applets...");
             for (int i = entityNames.size() - 1; i >= 0; i--) {
                 final String _entity = entityNames.get(i);
                 ApplicationEntityNameParts parts = ApplicationNameUtils.getApplicationEntityNameParts(_entity);
                 final String appletName = "manage" + StringUtils.capitalizeFirstLetter(parts.getEntityName());
                 AppApplet appApplet = new AppApplet();
+                appApplet.setApplicationId(applicationId);
                 appApplet.setName(appletName);
                 appApplet.setDescription(NameUtils.describeName(appletName));
                 appApplet.setConfigType(ConfigType.CUSTOM);
@@ -149,6 +159,8 @@ public class CreateJsonEntityFormWizardTaskProcessor extends AbstractFormWizardT
         if (entry.getFieldType().isTableColumn()) {
             DataType _dataType = entry.getDataType();
             dataType = EntityFieldDataType.fromName(_dataType.name());
+            appEntityField.setAuditable(true);
+            appEntityField.setReportable(true);
         } else if (entry.getFieldType().isForeignKey()) {
             dataType = EntityFieldDataType.REF;
         } else if (entry.getFieldType().isChild()) {
@@ -163,8 +175,6 @@ public class CreateJsonEntityFormWizardTaskProcessor extends AbstractFormWizardT
         appEntityField.setReferences(references);
         appEntityField.setLabel(NameUtils.describeName(entry.getName()));
         appEntityField.setInputWidget(InputWidgetUtils.getDefaultSyncEntityFieldWidget(dataType));
-        appEntityField.setAuditable(true);
-        appEntityField.setReportable(true);
         return appEntityField;
     }
 
