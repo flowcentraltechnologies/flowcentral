@@ -1355,12 +1355,8 @@
 				inputWidget="application.enumlist" />
 			<field name="entity" label="$m{application.appapi.entity}"
 				maxLen="128" type="string" />
-			<field name="createSetValues"
-				label="$m{application.appapi.createsetvalues}" type="string"
-				maxLen="64" nullable="true" />
-			<field name="updateSetValues"
-				label="$m{application.appapi.updatesetvalues}" type="string"
-				maxLen="64" nullable="true" />
+			<field name="applet" label="$m{application.appapi.applet}"
+				maxLen="128" type="string" nullable="true" />
 			<field name="supportCreate"
 				label="$m{application.appapi.supportcreate}" type="boolean"
 				nullable="true" />

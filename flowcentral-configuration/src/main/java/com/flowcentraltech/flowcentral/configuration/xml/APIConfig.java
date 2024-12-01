@@ -13,48 +13,63 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.application.entities;
+package com.flowcentraltech.flowcentral.configuration.xml;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.flowcentraltech.flowcentral.configuration.constants.APIType;
-import com.tcdng.unify.core.annotation.Column;
-import com.tcdng.unify.core.annotation.ForeignKey;
-import com.tcdng.unify.core.annotation.Index;
-import com.tcdng.unify.core.annotation.ListOnly;
-import com.tcdng.unify.core.annotation.Table;
+import com.flowcentraltech.flowcentral.configuration.xml.adapter.APITypeXmlAdapter;
 
 /**
- * Application API entity.
+ * API configuration.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@Table(name = "FC_API", indexes = { @Index("entity") })
-public class AppAPI extends BaseApplicationEntity {
+@JsonInclude(value = Include.NON_NULL, content = Include.NON_EMPTY)
+public class APIConfig extends BaseNameConfig {
 
-    @ForeignKey(name = "API_TYPE")
+    @JsonSerialize(using = APITypeXmlAdapter.Serializer.class)
+    @JsonDeserialize(using = APITypeXmlAdapter.Deserializer.class)
+    @JacksonXmlProperty(isAttribute = true)
     private APIType type;
-    
-    @Column(length = 128)
+
+    @JacksonXmlProperty(isAttribute = true)
     private String entity;
     
-    @Column(length = 128, nullable = true)
+    @JacksonXmlProperty(isAttribute = true)
     private String applet;
 
-    @Column(name = "SUPPORT_CREATE_FG", nullable = true)
+    @JacksonXmlProperty(isAttribute = true)
     private Boolean supportCreate;
-
-    @Column(name = "SUPPORT_READ_FG", nullable = true)
+    
+    @JacksonXmlProperty(isAttribute = true)
     private Boolean supportRead;
 
-    @Column(name = "SUPPORT_UPDATE_FG", nullable = true)
+    @JacksonXmlProperty(isAttribute = true)
     private Boolean supportUpdate;
 
-    @Column(name = "SUPPORT_DELETE_FG", nullable = true)
+    @JacksonXmlProperty(isAttribute = true)
     private Boolean supportDelete;
     
-    @ListOnly(key = "type", property = "description")
-    private String typeDesc;
+    public APIConfig() {
+        this.supportCreate = Boolean.FALSE;
+        this.supportRead = Boolean.FALSE;
+        this.supportUpdate = Boolean.FALSE;
+        this.supportDelete = Boolean.FALSE;
+    }
     
+    public APIType getType() {
+        return type;
+    }
+
+    public void setType(APIType type) {
+        this.type = type;
+    }
+
     public String getEntity() {
         return entity;
     }
@@ -69,14 +84,6 @@ public class AppAPI extends BaseApplicationEntity {
 
     public void setApplet(String applet) {
         this.applet = applet;
-    }
-
-    public APIType getType() {
-        return type;
-    }
-
-    public void setType(APIType type) {
-        this.type = type;
     }
 
     public Boolean getSupportCreate() {
@@ -109,14 +116,6 @@ public class AppAPI extends BaseApplicationEntity {
 
     public void setSupportDelete(Boolean supportDelete) {
         this.supportDelete = supportDelete;
-    }
-
-    public String getTypeDesc() {
-        return typeDesc;
-    }
-
-    public void setTypeDesc(String typeDesc) {
-        this.typeDesc = typeDesc;
     }
 
 }

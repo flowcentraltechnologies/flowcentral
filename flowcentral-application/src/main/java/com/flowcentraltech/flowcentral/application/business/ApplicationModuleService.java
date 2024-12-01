@@ -443,7 +443,7 @@ public interface ApplicationModuleService extends FlowCentralService {
      *               the application entity
      * @return list of create entity applets
      * @throws UnifyException
-     *                        if an error occurs
+     *                        if an error occurs 
      */
     List<AppApplet> findCreateEntityApplets(String entity) throws UnifyException;
 

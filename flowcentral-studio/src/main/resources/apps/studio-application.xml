@@ -300,6 +300,11 @@
 			dataType="string" inputType="string"
 			editor="!ui-select list:studioappletalerttemplatelist listParams:$l{appAppletId} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
+		<widgetType name="apiappletlist"
+			description="$m{studio.widgettype.apiappletlist}"
+			dataType="string" inputType="string"
+			editor="!ui-select list:studioapiappletlist listParams:$l{entity} blankOption:$m{blank.none}"
+			renderer="!ui-label" />
 		<widgetType name="wfentitysetvaluesgenlist"
 			description="$m{studio.widgettype.wfentitysetvaluesgenlist}"
 			dataType="string" inputType="string"
@@ -3711,10 +3716,8 @@
 						column="1" disabled="true" required="true" />
 					<field name="entity" inputWidget="studio.entitysearch"
 						column="1" switchOnChange="true" required="true" />
-					<field name="createSetValues"
-						inputWidget="application.text" column="1" />
-					<field name="updateSetValues"
-						inputWidget="application.text" column="1" />
+					<field name="applet" inputWidget="studio.apiappletlist"
+						column="1" />
 					<field name="supportCreate"
 						inputWidget="application.checkbox" column="1" />
 					<field name="supportRead"
@@ -3740,7 +3743,7 @@
 				</onCondition>
 				<setStates>
 					<setState type="field"
-						target="name,description,type,entity,createSetValues,updateSetValues,supportCreate,supportRead,supportUpdate,supportDelete"
+						target="name,description,type,entity,supportCreate,supportRead,supportUpdate,supportDelete"
 						disabled="true" />
 				</setStates>
 			</formStatePolicy>

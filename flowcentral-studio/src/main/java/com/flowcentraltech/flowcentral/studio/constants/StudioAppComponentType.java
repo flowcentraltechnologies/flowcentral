@@ -211,8 +211,8 @@ public enum StudioAppComponentType implements EnumConst {
     API(
             "api_",
             "appAPIForm",
-            "$m{studio.application.component.type.reference}",
-            "$m{studio.application.component.type.references}",
+            "$m{studio.application.component.type.api}",
+            "$m{studio.application.component.type.apis}",
             "studio.menu.label.reference",
             "link",
             "/studioappcomponentapplet",
