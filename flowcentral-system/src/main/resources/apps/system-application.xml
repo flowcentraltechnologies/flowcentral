@@ -564,6 +564,8 @@
 				type="string" maxLen="64" auditable="true"/>
 			<field name="password" label="$m{system.credential.password}"
 				type="string" maxLen="512" auditable="true"/>
+			<field name="base64Encoded" label="$m{system.credential.base64encoded}"
+				type="clob" nullable="true"/>
 			<uniqueConstraint name="nameUc"
 				description="$m{system.credential.uc.name}" fieldList="name" />
 			<uniqueConstraint name="descUc"
@@ -1078,6 +1080,8 @@
 						column="1" required="true" />
 					<field name="password" inputWidget="application.password"
 						column="1" />
+					<field name="base64Encoded" inputWidget="application.textarea"
+						column="1" editable="false" />
 				</section>
 			</tab>
 			<tab name="changeLog" label="$m{application.form.audit}"
