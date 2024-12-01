@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.application.business;
 import java.util.List;
 import java.util.Set;
 
+import com.flowcentraltech.flowcentral.application.data.APIDef;
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.data.AppletWorkflowCopyInfo;
 import com.flowcentraltech.flowcentral.application.data.ApplicationDef;
@@ -1126,6 +1127,28 @@ public interface ApplicationModuleService extends FlowCentralService {
      *                        if an error occurs
      */
     List<ApplicationMenuDef> getApplicationMenuDefs(String appletFilter) throws UnifyException;
+    
+    /**
+     * Gets application API definition.
+     * 
+     * @param apiName
+     *                the API name
+     * @return the API definition
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    APIDef getAPIDef(String apiName) throws UnifyException;
+
+    /**
+     * Gets application API definition.
+     * 
+     * @param apiId
+     *              the API ID
+     * @return the API definition
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    APIDef getAPIDef(Long apiId) throws UnifyException;
 
     /**
      * Gets application applet definitions.

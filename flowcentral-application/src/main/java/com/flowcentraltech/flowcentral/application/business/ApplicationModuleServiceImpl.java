@@ -50,6 +50,7 @@ import com.flowcentraltech.flowcentral.application.constants.ApplicationPredefin
 import com.flowcentraltech.flowcentral.application.constants.ApplicationPrivilegeConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationReplicationTaskConstants;
 import com.flowcentraltech.flowcentral.application.constants.FormWizardExecuteTaskConstants;
+import com.flowcentraltech.flowcentral.application.data.APIDef;
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.data.AppletFilterDef;
 import com.flowcentraltech.flowcentral.application.data.AppletWorkflowCopyInfo;
@@ -337,6 +338,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
     private FactoryMap<String, ApplicationDef> applicationDefFactoryMap;
 
+    private FactoryMap<String, APIDef> apiDefFactoryMap;
+
     private FactoryMap<String, AppletDef> appletDefFactoryMap;
 
     private FactoryMap<String, WidgetTypeDef> widgetDefFactoryMap;
@@ -385,6 +388,27 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                             application.getModuleName(), application.getModuleDesc(), application.getModuleLabel(),
                             application.getModuleShortCode(), application.getSectorShortCode(),
                             application.getSectorColor());
+                }
+
+            };
+
+        this.apiDefFactoryMap = new FactoryMap<String, APIDef>(true)
+            {
+
+                @Override
+                protected boolean stale(String longName, APIDef apiDef) throws Exception {
+                    return isStale(new AppAPIQuery(), apiDef);
+                }
+
+                @Override
+                protected APIDef create(String longName, Object... arg1) throws Exception {
+                    AppAPI appAPI = getApplicationEntity(AppAPI.class, longName);
+                    return new APIDef(appAPI.getType(), appAPI.getEntity(), appAPI.getApplet(),
+                            DataUtils.convert(boolean.class, appAPI.getSupportCreate()),
+                            DataUtils.convert(boolean.class, appAPI.getSupportCreate()),
+                            DataUtils.convert(boolean.class, appAPI.getSupportUpdate()),
+                            DataUtils.convert(boolean.class, appAPI.getSupportDelete()), longName,
+                            appAPI.getDescription(), appAPI.getId(), appAPI.getVersionNo());
                 }
 
             };
@@ -1070,8 +1094,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                         } else if (FormElementType.SECTION.equals(appFormElement.getType())) {
                             sectionIndex++;
                             fdb.addFormSection(tabIndex, appFormElement.getElementName(), appFormElement.getLabel(),
-                                    appFormElement.getSectionColumns(), appFormElement.getPanel(), appFormElement.getIcon(),
-                                    appFormElement.isVisible(), appFormElement.isEditable(),
+                                    appFormElement.getSectionColumns(), appFormElement.getPanel(),
+                                    appFormElement.getIcon(), appFormElement.isVisible(), appFormElement.isEditable(),
                                     appFormElement.isDisabled());
                         } else {
                             // FIELD
@@ -1416,6 +1440,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         suggestionDefFactoryMap.clear();
         widgetDefFactoryMap.clear();
         appletDefFactoryMap.clear();
+        apiDefFactoryMap.clear();
         applicationDefFactoryMap.clear();
         logDebug("Definitions cache clearing successfully completed.");
     }
@@ -2383,6 +2408,19 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         }
 
         return Collections.emptyList();
+    }
+
+    @Override
+    public APIDef getAPIDef(String apiName) throws UnifyException {
+        return apiDefFactoryMap.get(apiName);
+    }
+
+    @Override
+    public APIDef getAPIDef(Long apiId) throws UnifyException {
+        AppAPI appAPI = environment().listLean(new AppAPIQuery().id(apiId).addSelect("applicationName", "name"));
+        String apiName = ApplicationNameUtils.getApplicationEntityLongName(appAPI.getApplicationName(),
+                appAPI.getName());
+        return apiDefFactoryMap.get(apiName);
     }
 
     @Override
@@ -3804,7 +3842,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Taskable(name = ApplicationDeletionTaskConstants.APPLICATION_DELETION_TASK_NAME,
-            description = "Application Deletion Task", 
+            description = "Application Deletion Task",
             parameters = { @Parameter(name = ApplicationDeletionTaskConstants.APPLICATION_NAME,
                     description = "$m{applicationdeletiontask.applicationname}", type = String.class,
                     mandatory = true) },
@@ -4520,7 +4558,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                             .getFeaturePrivilegeName(ApplicationFeatureConstants.SAVE_GLOBAL_TABLE_QUICK_FILTER),
                     resolveApplicationMessage("$m{application.privilege.saveglobaltablefilter}"));
         }
-        
+
         // APIs
         logDebug(taskMonitor, "Installing application APIs...");
         environment().updateAll(new AppAPIQuery().applicationId(applicationId).isStatic(),
@@ -4539,7 +4577,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                         .findLean(new AppAPIQuery().applicationId(applicationId).name(apiConfig.getName()));
                 description = resolveApplicationMessage(apiConfig.getDescription());
                 String entity = ApplicationNameUtils.ensureLongNameReference(applicationName, apiConfig.getEntity());
-                if (oldAppAPI== null) {
+                if (oldAppAPI == null) {
                     logDebug("Installing new application API [{0}]...", apiConfig.getName());
                     appAPI.setId(null);
                     appAPI.setName(apiConfig.getName());
@@ -5282,7 +5320,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                             .getFeaturePrivilegeName(ApplicationFeatureConstants.SAVE_GLOBAL_TABLE_QUICK_FILTER),
                     resolveApplicationMessage("$m{application.privilege.saveglobaltablefilter}"));
         }
-        
+
         // APIs
         logDebug(taskMonitor, "Restoring custom application APIs...");
         if (applicationConfig.getApisConfig() != null
@@ -5299,7 +5337,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                         .findLean(new AppAPIQuery().applicationId(applicationId).name(apiConfig.getName()));
                 description = resolveApplicationMessage(apiConfig.getDescription());
                 String entity = ApplicationNameUtils.ensureLongNameReference(applicationName, apiConfig.getEntity());
-                if (oldAppAPI== null) {
+                if (oldAppAPI == null) {
                     logDebug("Restoring custom application API [{0}]...", apiConfig.getName());
                     appAPI.setId(null);
                     appAPI.setName(apiConfig.getName());
@@ -5317,7 +5355,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 }
             }
 
-            logDebug(taskMonitor, "Restored [{0}] custom applicationAPIs...",
+            logDebug(taskMonitor, "Restored [{0}] custom application APIs...",
                     applicationConfig.getApisConfig().getApiList().size());
         }
 
