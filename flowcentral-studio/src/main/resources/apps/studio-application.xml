@@ -36,6 +36,11 @@
 			inputType="string"
 			editor="!ui-select list:passfaillist blankOption:$m{blank.none}"
 			renderer="!ui-label" />
+		<widgetType name="jsonformatterlist"
+			description="$m{studio.widgettype.jsonformatterlist}"
+			dataType="string" inputType="string"
+			editor="!ui-select list:studiojsonformatterlist listParams:$l{dataType} blankOption:$m{blank.none}"
+			renderer="!ui-label" />
 		<widgetType name="detailspanellist"
 			description="$m{studio.widgettype.detailspanellist}"
 			dataType="string" inputType="string"
@@ -2998,6 +3003,8 @@
 						visible="false" switchOnChange="true" />
 					<field name="property" inputWidget="entitypropertylist"
 						column="0" visible="false" switchOnChange="true" />
+					<field name="jsonName" inputWidget="application.text" column="0"/>
+					<field name="jsonFormatter" inputWidget="studio.jsonformatterlist" column="0"/>
 					<field name="type" inputWidget="application.enumlist"
 						column="1" required="true" disabled="true" />
 					<field name="columnName" inputWidget="application.columnname"

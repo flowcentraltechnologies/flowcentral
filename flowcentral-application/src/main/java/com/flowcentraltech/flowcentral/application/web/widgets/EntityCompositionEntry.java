@@ -37,7 +37,11 @@ public class EntityCompositionEntry {
     
     private String name;
     
+    private String jsonName;
+    
     private String column;
+    
+    private String formatter;
     
     private String references;
     
@@ -85,12 +89,28 @@ public class EntityCompositionEntry {
         this.name = name;
     }
 
+    public String getJsonName() {
+        return jsonName;
+    }
+
+    public void setJsonName(String jsonName) {
+        this.jsonName = jsonName;
+    }
+
     public String getColumn() {
         return column;
     }
 
     public void setColumn(String column) {
         this.column = column;
+    }
+
+    public String getFormatter() {
+        return formatter;
+    }
+
+    public void setFormatter(String formatter) {
+        this.formatter = formatter;
     }
 
     public String getReferences() {

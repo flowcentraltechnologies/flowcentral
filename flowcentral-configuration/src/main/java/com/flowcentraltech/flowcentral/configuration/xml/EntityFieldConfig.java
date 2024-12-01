@@ -57,6 +57,12 @@ public class EntityFieldConfig extends BaseConfig {
     private String references;
 
     @JacksonXmlProperty(isAttribute = true)
+    private String jsonName;
+
+    @JacksonXmlProperty(isAttribute = true)
+    private String jsonFormatter;
+
+    @JacksonXmlProperty(isAttribute = true)
     private String key;
 
     @JacksonXmlProperty(isAttribute = true)
@@ -191,6 +197,22 @@ public class EntityFieldConfig extends BaseConfig {
 
     public void setReferences(String references) {
         this.references = references;
+    }
+
+    public String getJsonName() {
+        return jsonName;
+    }
+
+    public void setJsonName(String jsonName) {
+        this.jsonName = jsonName;
+    }
+
+    public String getJsonFormatter() {
+        return jsonFormatter;
+    }
+
+    public void setJsonFormatter(String jsonFormatter) {
+        this.jsonFormatter = jsonFormatter;
     }
 
     public String getKey() {

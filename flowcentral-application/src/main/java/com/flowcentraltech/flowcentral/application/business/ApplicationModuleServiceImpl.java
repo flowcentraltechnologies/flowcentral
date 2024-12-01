@@ -3489,6 +3489,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 appEntityField.setAutoFormat(ctx.autoFormatSwap(appEntityField.getAutoFormat()));
                 appEntityField.setInputListKey(ctx.fieldSwap(appEntityField.getInputListKey()));
                 appEntityField.setReferences(ctx.entitySwap(appEntityField.getReferences()));
+                appEntityField.setJsonName(appEntityField.getJsonName());
+                appEntityField.setJsonFormatter(appEntityField.getJsonFormatter());
             }
 
             for (AppEntityField appEntityField : srcAppEntity.getFieldList()) {
@@ -5873,6 +5875,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
                     appEntityField.setColumnName(entityFieldConfig.getColumnName());
                     appEntityField.setReferences(references);
+                    appEntityField.setJsonName(entityFieldConfig.getJsonName());
+                    appEntityField.setJsonFormatter(entityFieldConfig.getJsonFormatter());
                     appEntityField.setKey(entityFieldConfig.getKey());
                     appEntityField.setProperty(entityFieldConfig.getProperty());
                     appEntityField.setCategory(entityFieldConfig.getCategory());
@@ -5922,6 +5926,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
                     oldAppEntityField.setColumnName(entityFieldConfig.getColumnName());
                     oldAppEntityField.setReferences(references);
+                    oldAppEntityField.setJsonName(entityFieldConfig.getJsonName());
+                    oldAppEntityField.setJsonFormatter(entityFieldConfig.getJsonFormatter());
                     oldAppEntityField.setKey(entityFieldConfig.getKey());
                     oldAppEntityField.setProperty(entityFieldConfig.getProperty());
                     oldAppEntityField.setCategory(entityFieldConfig.getCategory());

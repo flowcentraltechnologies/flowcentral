@@ -1067,6 +1067,12 @@
 			<field name="references"
 				label="$m{application.appentityfield.references}" type="string"
 				nullable="true" />
+			<field name="jsonName"
+				label="$m{application.appentityfield.jsonname}" type="string"
+				nullable="true" />
+			<field name="jsonFormatter"
+				label="$m{application.appentityfield.jsonformatter}" type="string"
+				nullable="true" />
 			<field name="key" label="$m{application.appentityfield.key}"
 				type="string" nullable="true" />
 			<field name="property"

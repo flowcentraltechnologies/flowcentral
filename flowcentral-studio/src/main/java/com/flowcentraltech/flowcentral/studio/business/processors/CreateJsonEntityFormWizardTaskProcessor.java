@@ -177,6 +177,8 @@ public class CreateJsonEntityFormWizardTaskProcessor extends AbstractFormWizardT
         appEntityField.setReferences(references);
         appEntityField.setLabel(NameUtils.describeName(entry.getName()));
         appEntityField.setInputWidget(InputWidgetUtils.getDefaultSyncEntityFieldWidget(dataType));
+        appEntityField.setJsonName(entry.getJsonName());
+        appEntityField.setJsonFormatter(entry.getFormatter());
         return appEntityField;
     }
 
