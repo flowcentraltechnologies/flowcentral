@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.zip.ZipOutputStream;
 
 import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
+import com.flowcentraltech.flowcentral.application.entities.AppAPI;
 import com.flowcentraltech.flowcentral.application.entities.AppApplet;
 import com.flowcentraltech.flowcentral.application.entities.AppAppletAlert;
 import com.flowcentraltech.flowcentral.application.entities.AppAppletFilter;
@@ -72,6 +73,8 @@ import com.flowcentraltech.flowcentral.application.util.InputWidgetUtils;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldType;
 import com.flowcentraltech.flowcentral.configuration.constants.FormElementType;
 import com.flowcentraltech.flowcentral.configuration.constants.TabContentType;
+import com.flowcentraltech.flowcentral.configuration.xml.APIConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.APIsConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppAssignmentPageConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppAssignmentPagesConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppConfig;
@@ -202,6 +205,35 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
         appConfig.setHelpSheetsConfig(ctx.getHelpSheetsConfig());
         appConfig.setWfChannelsConfig(ctx.getWfChannelsConfig());
 
+        // APIs
+        List<Long> apiIdList = applicationModuleService.findCustomAppComponentIdList(applicationName,
+                AppAPI.class);
+        if (!DataUtils.isBlank(apiIdList)) {
+            APIsConfig apisConfig = new APIsConfig();
+            List<APIConfig> apiList = new ArrayList<APIConfig>();
+            for (Long apiId : apiIdList) {
+                APIConfig apiConfig = new APIConfig();
+                AppAPI appAPI = applicationModuleService.findAppAPI(apiId);
+                descKey = getDescriptionKey(lowerCaseApplicationName, "api", appAPI.getName());
+                labelKey = descKey + ".label";
+                ctx.addMessage(StaticMessageCategoryType.API, descKey, appAPI.getDescription());
+                apiConfig.setName(appAPI.getName());
+                apiConfig.setDescription("$m{" + descKey + "}");
+                apiConfig.setType(appAPI.getType());
+                apiConfig.setEntity(appAPI.getEntity());
+                apiConfig.setApplet(appAPI.getApplet());
+                apiConfig.setSupportCreate(appAPI.getSupportCreate());
+                apiConfig.setSupportDelete(appAPI.getSupportDelete());
+                apiConfig.setSupportRead(appAPI.getSupportRead());
+                apiConfig.setSupportUpdate(appAPI.getSupportUpdate());
+                
+                apiList.add(apiConfig);
+            }
+            
+            apisConfig.setApiList(apiList);
+            appConfig.setApisConfig(apisConfig);
+        }
+        
         // Applets
         List<Long> appletIdList = applicationModuleService.findCustomAppComponentIdList(applicationName,
                 AppApplet.class);

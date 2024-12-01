@@ -156,6 +156,7 @@ import com.flowcentraltech.flowcentral.configuration.data.ApplicationRestore;
 import com.flowcentraltech.flowcentral.configuration.data.ModuleInstall;
 import com.flowcentraltech.flowcentral.configuration.data.ModuleRestore;
 import com.flowcentraltech.flowcentral.configuration.data.SystemRestore;
+import com.flowcentraltech.flowcentral.configuration.xml.APIConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppAssignmentPageConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppEntityConfig;
@@ -1742,6 +1743,11 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     @Override
     public Application findApplication(Long applicationId) throws UnifyException {
         return environment().list(Application.class, applicationId);
+    }
+
+    @Override
+    public AppAPI findAppAPI(Long apiId) throws UnifyException {
+        return environment().find(AppAPI.class, apiId);
     }
 
     @Override
@@ -4514,6 +4520,61 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                             .getFeaturePrivilegeName(ApplicationFeatureConstants.SAVE_GLOBAL_TABLE_QUICK_FILTER),
                     resolveApplicationMessage("$m{application.privilege.saveglobaltablefilter}"));
         }
+        
+        // APIs
+        logDebug(taskMonitor, "Installing application APIs...");
+        environment().updateAll(new AppAPIQuery().applicationId(applicationId).isStatic(),
+                new Update().add("deprecated", Boolean.TRUE));
+        if (applicationConfig.getApisConfig() != null
+                && !DataUtils.isBlank(applicationConfig.getApisConfig().getApiList())) {
+            AppAPI appAPI = new AppAPI();
+            appAPI.setApplicationId(applicationId);
+            List<String> apiNames = new ArrayList<String>();
+            for (APIConfig apiConfig : applicationConfig.getApisConfig().getApiList()) {
+                apiNames.add(apiConfig.getName());
+            }
+
+            for (APIConfig apiConfig : applicationConfig.getApisConfig().getApiList()) {
+                AppAPI oldAppAPI = environment()
+                        .findLean(new AppAPIQuery().applicationId(applicationId).name(apiConfig.getName()));
+                description = resolveApplicationMessage(apiConfig.getDescription());
+                String entity = ApplicationNameUtils.ensureLongNameReference(applicationName, apiConfig.getEntity());
+                if (oldAppAPI== null) {
+                    logDebug("Installing new application API [{0}]...", apiConfig.getName());
+                    appAPI.setId(null);
+                    appAPI.setName(apiConfig.getName());
+                    appAPI.setDescription(description);
+                    appAPI.setType(apiConfig.getType());
+                    appAPI.setEntity(entity);
+                    appAPI.setApplet(apiConfig.getApplet());
+                    appAPI.setSupportCreate(apiConfig.getSupportCreate());
+                    appAPI.setSupportDelete(apiConfig.getSupportDelete());
+                    appAPI.setSupportRead(apiConfig.getSupportRead());
+                    appAPI.setSupportUpdate(apiConfig.getSupportDelete());
+                    appAPI.setDeprecated(false);
+                    appAPI.setConfigType(ConfigType.STATIC);
+                    environment().create(appAPI);
+                } else {
+                    logDebug("Upgrading application API [{0}]...", apiConfig.getName());
+                    oldAppAPI.setDescription(description);
+                    oldAppAPI.setDescription(description);
+                    oldAppAPI.setType(apiConfig.getType());
+                    oldAppAPI.setEntity(entity);
+                    oldAppAPI.setApplet(apiConfig.getApplet());
+                    oldAppAPI.setSupportCreate(apiConfig.getSupportCreate());
+                    oldAppAPI.setSupportDelete(apiConfig.getSupportDelete());
+                    oldAppAPI.setSupportRead(apiConfig.getSupportRead());
+                    oldAppAPI.setSupportUpdate(apiConfig.getSupportDelete());
+                    oldAppAPI.setConfigType(ConfigType.STATIC);
+                    oldAppAPI.setDeprecated(false);
+                    environment().updateByIdVersion(oldAppAPI);
+                }
+
+            }
+
+            logDebug(taskMonitor, "Installed [{0}] application APIs...",
+                    applicationConfig.getApisConfig().getApiList().size());
+        }
 
         // Applets
         logDebug(taskMonitor, "Installing application applets...");
@@ -5220,6 +5281,44 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     PrivilegeNameUtils
                             .getFeaturePrivilegeName(ApplicationFeatureConstants.SAVE_GLOBAL_TABLE_QUICK_FILTER),
                     resolveApplicationMessage("$m{application.privilege.saveglobaltablefilter}"));
+        }
+        
+        // APIs
+        logDebug(taskMonitor, "Restoring custom application APIs...");
+        if (applicationConfig.getApisConfig() != null
+                && !DataUtils.isBlank(applicationConfig.getApisConfig().getApiList())) {
+            AppAPI appAPI = new AppAPI();
+            appAPI.setApplicationId(applicationId);
+            List<String> apiNames = new ArrayList<String>();
+            for (APIConfig apiConfig : applicationConfig.getApisConfig().getApiList()) {
+                apiNames.add(apiConfig.getName());
+            }
+
+            for (APIConfig apiConfig : applicationConfig.getApisConfig().getApiList()) {
+                AppAPI oldAppAPI = environment()
+                        .findLean(new AppAPIQuery().applicationId(applicationId).name(apiConfig.getName()));
+                description = resolveApplicationMessage(apiConfig.getDescription());
+                String entity = ApplicationNameUtils.ensureLongNameReference(applicationName, apiConfig.getEntity());
+                if (oldAppAPI== null) {
+                    logDebug("Restoring custom application API [{0}]...", apiConfig.getName());
+                    appAPI.setId(null);
+                    appAPI.setName(apiConfig.getName());
+                    appAPI.setDescription(description);
+                    appAPI.setType(apiConfig.getType());
+                    appAPI.setEntity(entity);
+                    appAPI.setApplet(apiConfig.getApplet());
+                    appAPI.setSupportCreate(apiConfig.getSupportCreate());
+                    appAPI.setSupportDelete(apiConfig.getSupportDelete());
+                    appAPI.setSupportRead(apiConfig.getSupportRead());
+                    appAPI.setSupportUpdate(apiConfig.getSupportDelete());
+                    appAPI.setDeprecated(false);
+                    appAPI.setConfigType(ConfigType.CUSTOM);
+                    environment().create(appAPI);
+                }
+            }
+
+            logDebug(taskMonitor, "Restored [{0}] custom applicationAPIs...",
+                    applicationConfig.getApisConfig().getApiList().size());
         }
 
         // Applets
