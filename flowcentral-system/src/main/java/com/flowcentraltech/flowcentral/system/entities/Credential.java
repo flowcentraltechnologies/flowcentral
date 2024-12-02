@@ -19,6 +19,7 @@ package com.flowcentraltech.flowcentral.system.entities;
 import com.flowcentraltech.flowcentral.common.entities.BaseStatusEntity;
 import com.tcdng.unify.core.annotation.Column;
 import com.tcdng.unify.core.annotation.ColumnType;
+import com.tcdng.unify.core.annotation.Policy;
 import com.tcdng.unify.core.annotation.Table;
 import com.tcdng.unify.core.annotation.UniqueConstraint;
 
@@ -28,6 +29,7 @@ import com.tcdng.unify.core.annotation.UniqueConstraint;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
+@Policy("credential-policy")
 @Table(name = "FC_CREDENTIAL",
         uniqueConstraints = {
                 @UniqueConstraint({ "name" }),

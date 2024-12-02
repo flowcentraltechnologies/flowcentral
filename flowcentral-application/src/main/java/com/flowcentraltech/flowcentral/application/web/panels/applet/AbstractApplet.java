@@ -1,8 +1,4 @@
 /*
-
-    public boolean isChangeOnlyAuditingEnabled() {
-        return changeOnlyAuditingEnabled;
-    }
  * Copyright 2021-2024 FlowCentral Technologies Limited.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
