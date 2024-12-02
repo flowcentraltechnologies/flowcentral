@@ -56,6 +56,10 @@ public class ParamValuesDef {
         return values;
     }
 
+    public Object getParamValue(String name) throws UnifyException {
+        return getValueMap().get(name);
+    }
+    
     public boolean isBlank() {
         return paramValueList == null || paramValueList.isEmpty();
     }
