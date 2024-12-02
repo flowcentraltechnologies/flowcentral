@@ -17,6 +17,7 @@ package com.flowcentraltech.flowcentral.application.util;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.EnumMap;
 import java.util.HashMap;
@@ -129,6 +130,10 @@ public final class ApplicationEntityUtils {
 
     private ApplicationEntityUtils() {
 
+    }
+
+    public static Collection<String> getReservedFieldNames() {
+        return RESERVED_BASE_FIELDS;
     }
 
     public static boolean isReservedFieldName(String fieldName) {

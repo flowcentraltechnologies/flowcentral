@@ -43,6 +43,7 @@ import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.batch.ConstraintAction;
 import com.tcdng.unify.core.constant.FileAttachmentType;
 import com.tcdng.unify.core.constant.TextCase;
+import com.tcdng.unify.core.data.JsonComposition;
 import com.tcdng.unify.core.data.ListData;
 import com.tcdng.unify.core.data.Listable;
 import com.tcdng.unify.core.data.ValueStore;
@@ -147,6 +148,8 @@ public class EntityDef extends BaseApplicationEntityDef {
 
     private List<ListData> searchInputFields;
 
+    private JsonComposition jsonComposition;
+    
     private String blobFieldName;
 
     private String originClassName;
@@ -467,6 +470,23 @@ public class EntityDef extends BaseApplicationEntityDef {
         return searchInputFields;
     }
 
+    public JsonComposition getJsonComposition() throws UnifyException {
+        if (jsonComposition == null) {
+            synchronized(this) {
+                if (jsonComposition == null) {
+                    // TODO
+                }                
+            }
+        }
+        return jsonComposition;
+    }
+
+    public List<String> validate(Entity inst) throws UnifyException {
+        List<String> errors = new ArrayList<String>();
+        // TODO
+        return errors;
+    }
+    
     public EntitySearchInputDef getEntitySearchInputDef(String name) {
         EntitySearchInputDef entitySearchInputDef = searchInputDefs.get(name);
         if (entitySearchInputDef == null) {

@@ -22,6 +22,8 @@ import java.util.List;
 import com.flowcentraltech.flowcentral.common.data.VersionedEntityDef;
 import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.data.JsonComposition;
+import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.util.ReflectUtils;
 
 /**
@@ -51,6 +53,14 @@ public class EntityClassDef implements VersionedEntityDef {
         return entityClass;
     }
 
+    public JsonComposition getJsonComposition() throws UnifyException {
+        return entityDef.getJsonComposition();
+    }
+
+    public List<String> validate(Entity inst) throws UnifyException {
+        return entityDef.validate(inst);
+    }
+    
     @Override
     public Long getId() {
         return entityDef.getId();
