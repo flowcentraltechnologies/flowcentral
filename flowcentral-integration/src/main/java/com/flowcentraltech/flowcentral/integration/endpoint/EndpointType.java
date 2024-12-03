@@ -51,6 +51,18 @@ public enum EndpointType implements EnumConst {
         return this.code;
     }
 
+    public boolean isFile() {
+        return FILE.equals(this);
+    }
+
+    public boolean isJms() {
+        return JMS.equals(this);
+    }
+
+    public boolean isRest() {
+        return REST.equals(this);
+    }
+    
     public static EndpointType fromCode(String code) {
         return EnumUtils.fromCode(EndpointType.class, code);
     }

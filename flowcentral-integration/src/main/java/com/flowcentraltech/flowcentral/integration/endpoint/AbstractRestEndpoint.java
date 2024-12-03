@@ -36,15 +36,8 @@ import com.tcdng.unify.core.annotation.Parameters;
     order = 32) })
 public abstract class AbstractRestEndpoint extends AbstractEndpoint implements RestEndpoint {
 
-    private String basePath;
-
-    private String credentialName;
-
     @Override
     public void setup(EndpointDef endpointDef) throws UnifyException {
-        basePath = (String) endpointDef.getEndpointParamsDef().getValueMap()
-                .get(RestEndpointConstants.BASE_PATH);
-        credentialName = (String) endpointDef.getEndpointParamsDef().getValueMap()
-                .get(RestEndpointConstants.CREDENTIAL_NAME);
+
     }
 }

@@ -25,7 +25,7 @@ public interface IntegrationRestModuleNameConstants {
 
     String INTEGRATION_REST_MODULE_SERVICE = "integration-rest-moduleservice";
 
-    String RESTJSONCRUD_CONTROLLER = "/integration/jsonrestcrud";
+    String INTEGRATION_REST_CONTROLLER = "/integration/rest";
 
     String RESTJSONCRUD_PROCESSOR = "integration-jsonrestcrud-processor";
 }

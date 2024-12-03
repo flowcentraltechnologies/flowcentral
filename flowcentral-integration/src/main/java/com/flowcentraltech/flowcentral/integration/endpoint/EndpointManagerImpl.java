@@ -16,11 +16,14 @@
 package com.flowcentraltech.flowcentral.integration.endpoint;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
+import com.flowcentraltech.flowcentral.common.constants.RecordStatus;
 import com.flowcentraltech.flowcentral.common.data.ParamValuesDef;
 import com.flowcentraltech.flowcentral.common.util.CommonInputUtils;
 import com.flowcentraltech.flowcentral.integration.constants.IntegrationModuleErrorConstants;
@@ -55,8 +58,10 @@ public class EndpointManagerImpl extends AbstractEndpointManager {
     @Configurable
     private EnvironmentService environmentService;
 
+    private Set<String> changed;
+    
     public EndpointManagerImpl() {
-
+        this.changed = new HashSet<String>();
         this.endpointDefFactoryMap = new FactoryMap<String, EndpointDef>(true)
             {
                 @Override
@@ -128,6 +133,24 @@ public class EndpointManagerImpl extends AbstractEndpointManager {
 
             };
 
+    }
+
+    @Override
+    public void setRestEndpointChanged(String endpointConfigName) throws UnifyException {
+        changed.add(endpointConfigName);
+    }
+
+    @Override
+    public Set<String> getAndClearChangedRestEndpoint() throws UnifyException {
+        Set<String> _changed = new HashSet<String>(changed);
+        changed = new HashSet<String>();
+        return _changed;
+    }
+
+    @Override
+    public Set<String> getActiveRestEndpoints() throws UnifyException {
+        return environmentService.valueSet(String.class, "name",
+                new EndpointConfigQuery().endpointType(EndpointType.REST).status(RecordStatus.ACTIVE));
     }
 
     @Override

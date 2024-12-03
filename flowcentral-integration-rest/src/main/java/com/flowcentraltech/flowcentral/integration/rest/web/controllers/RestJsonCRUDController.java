@@ -32,7 +32,7 @@ import com.tcdng.unify.web.HttpCRUDControllerProcessor;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@Component(IntegrationRestModuleNameConstants.RESTJSONCRUD_CONTROLLER)
+@Component(IntegrationRestModuleNameConstants.INTEGRATION_REST_CONTROLLER)
 public class RestJsonCRUDController extends AbstractJsonCRUDController {
 
     @Configurable

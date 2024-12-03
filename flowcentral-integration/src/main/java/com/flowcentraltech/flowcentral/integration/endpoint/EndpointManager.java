@@ -15,6 +15,8 @@
  */
 package com.flowcentraltech.flowcentral.integration.endpoint;
 
+import java.util.Set;
+
 import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
 import com.flowcentraltech.flowcentral.integration.data.EndpointDef;
 import com.tcdng.unify.core.UnifyException;
@@ -27,6 +29,34 @@ import com.tcdng.unify.core.UnifyException;
  */
 public interface EndpointManager extends FlowCentralComponent {
 
+    /**
+     * Sets REST endpoint changed.
+     * 
+     * @param endpointConfigName
+     *                           the endpoint configuration name
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    void setRestEndpointChanged(String endpointConfigName) throws UnifyException;
+    
+    /**
+     * Gets and clears changed REST end points.
+     * 
+     * @return the endpoint names
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    Set<String> getAndClearChangedRestEndpoint() throws UnifyException;
+    
+    /**
+     * Gets the names of all active REST end points.
+     * 
+     * @return the list of endpoints
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    Set<String> getActiveRestEndpoints() throws UnifyException;
+    
     /**
      * Get an end-point using supplied name.
      * 
