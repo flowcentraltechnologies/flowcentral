@@ -27,6 +27,7 @@ import com.flowcentraltech.flowcentral.integration.constants.RestEndpointConstan
 import com.flowcentraltech.flowcentral.integration.data.EndpointDef;
 import com.flowcentraltech.flowcentral.integration.data.EndpointPathDef;
 import com.flowcentraltech.flowcentral.integration.rest.constants.IntegrationRestModuleNameConstants;
+import com.flowcentraltech.flowcentral.integration.rest.data.CountResult;
 import com.flowcentraltech.flowcentral.integration.rest.data.CreateResult;
 import com.flowcentraltech.flowcentral.integration.rest.data.DeleteResult;
 import com.flowcentraltech.flowcentral.integration.rest.data.UpdateResult;
@@ -37,6 +38,7 @@ import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.data.BeanValueStore;
 import com.tcdng.unify.core.data.Parameters;
 import com.tcdng.unify.core.database.Entity;
+import com.tcdng.unify.core.database.Query;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.AbstractHttpCRUDControllerProcessor;
@@ -60,6 +62,8 @@ public class RestJsonCRUDControllerProcessorImpl extends AbstractHttpCRUDControl
     private EndpointDef endpointDef;
 
     private EndpointPathDef endpointPathDef;
+
+    private Response badRequestResponse;
 
     private Response notFoundResponse;
 
@@ -114,20 +118,36 @@ public class RestJsonCRUDControllerProcessorImpl extends AbstractHttpCRUDControl
             return getUnauthResponse();
         }
 
+        final String op = parameters.isParam("_op") ? parameters.getParam(String.class, "_op") : "find";
         final APIDef apiDef = getAPIDef();
         final EntityClassDef entityClassDef = appletUtilities.getEntityClassDef(apiDef.getEntity());
-        if (parameters.isParam("id")) {
-            final Long id = parameters.getParam(Long.class, "id");
-            final Entity srcInst = appletUtilities.environment()
-                    .find((Class<? extends Entity>) entityClassDef.getEntityClass(), id);
-            if (srcInst != null) {
-                return getResponse(entityClassDef.getJsonComposition(), HttpResponseConstants.OK, srcInst);
-            }
 
-            return getNotFoundResponse();
+        if ("count".equals(op)) {
+            Query<? extends Entity> query = appletUtilities.application().queryOf(apiDef.getEntity());
+            setCriteria(query, parameters);
+            final int count = appletUtilities.environment().countAll(query);
+            return getResponse(HttpResponseConstants.OK, new CountResult(entityClassDef.getEntityDef().getDescription(), count));
+        }
+
+        if ("find".equals(op)) {
+            if (parameters.isParam("id")) {
+                final Long id = parameters.getParam(Long.class, "id");
+                final Entity srcInst = appletUtilities.environment()
+                        .find((Class<? extends Entity>) entityClassDef.getEntityClass(), id);
+                if (srcInst != null) {
+                    return getResponse(entityClassDef.getJsonComposition(), HttpResponseConstants.OK, srcInst);
+                }
+
+                return getNotFoundResponse();
+            }
+            
+            Query<? extends Entity> query = appletUtilities.application().queryOf(apiDef.getEntity());
+            setCriteria(query, parameters);
+            List<? extends Entity> list = appletUtilities.environment().listAll(query);
+            return getResponse(entityClassDef.getJsonComposition(), HttpResponseConstants.OK, list);
         }
         
-        final int page = parameters.isParam("_page") ? parameters.getParam(int.class, "_page") : -1;
+        return getBadRequestResponse();
     }
 
     @SuppressWarnings("unchecked")
@@ -231,8 +251,27 @@ public class RestJsonCRUDControllerProcessorImpl extends AbstractHttpCRUDControl
         return appletUtilities.application().getAPIDef(endpointPathDef.getPath());
     }
 
+    private void setCriteria(Query<? extends Entity> query, Parameters parameters) throws UnifyException {
+        // TODO Auto-generated method stub
+        
+        query.ignoreEmptyCriteria(true);
+    }
+
     private Response getValidationErrorsResponse(List<String> errors) throws UnifyException {
         return getErrorResponse(HttpResponseConstants.BAD_REQUEST, "Validation Errors.", errors);
+    }
+
+    private Response getBadRequestResponse() throws UnifyException {
+        if (badRequestResponse == null) {
+            synchronized (this) {
+                if (badRequestResponse == null) {
+                    badRequestResponse = getErrorResponse(HttpResponseConstants.BAD_REQUEST, "Bad request.",
+                            "The server cannot not process the request.");
+                }
+            }
+        }
+
+        return badRequestResponse;
     }
 
     private Response getNotFoundResponse() throws UnifyException {
