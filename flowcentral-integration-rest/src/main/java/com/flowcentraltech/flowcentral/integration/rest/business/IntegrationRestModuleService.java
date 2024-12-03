@@ -13,19 +13,16 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.integration.rest.constants;
+package com.flowcentraltech.flowcentral.integration.rest.business;
+
+import com.flowcentraltech.flowcentral.common.business.FlowCentralService;
 
 /**
- * Integration REST module name constants.
+ * Integration REST module service.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface IntegrationRestModuleNameConstants {
+public interface IntegrationRestModuleService extends FlowCentralService  {
 
-    String INTEGRATION_REST_MODULE_SERVICE = "integration-rest-moduleservice";
-
-    String RESTJSONCRUD_CONTROLLER = "/integration/jsonrestcrud";
-
-    String RESTJSONCRUD_PROCESSOR = "integration-jsonrestcrud-processor";
 }
