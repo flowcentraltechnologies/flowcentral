@@ -19,6 +19,7 @@ package com.flowcentraltech.flowcentral.application.data;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.common.data.VersionedEntityDef;
 import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
 import com.tcdng.unify.core.UnifyException;
@@ -57,8 +58,8 @@ public class EntityClassDef implements VersionedEntityDef {
         return entityDef.getJsonComposition();
     }
 
-    public List<String> validate(Entity inst) throws UnifyException {
-        return entityDef.validate(inst);
+    public List<String> validate(AppletUtilities au, Entity inst) throws UnifyException {
+        return entityDef.validate(au, inst);
     }
     
     @Override

@@ -43,6 +43,7 @@ import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.batch.ConstraintAction;
 import com.tcdng.unify.core.constant.FileAttachmentType;
 import com.tcdng.unify.core.constant.TextCase;
+import com.tcdng.unify.core.data.BeanValueStore;
 import com.tcdng.unify.core.data.JsonComposition;
 import com.tcdng.unify.core.data.ListData;
 import com.tcdng.unify.core.data.Listable;
@@ -84,7 +85,11 @@ public class EntityDef extends BaseApplicationEntityDef {
 
     private List<EntityFieldDef> fkFieldDefList;
 
+    private List<EntityFieldDef> columnFieldDefList;
+
     private List<EntityFieldDef> listOnlyFieldDefList;
+
+    private List<EntityFieldDef> childFieldDefList;
 
     private List<EntityFieldDef> childListFieldDefList;
 
@@ -481,9 +486,58 @@ public class EntityDef extends BaseApplicationEntityDef {
         return jsonComposition;
     }
 
-    public List<String> validate(Entity inst) throws UnifyException {
+    public List<String> validate(AppletUtilities au, Entity inst) throws UnifyException {
+        return validate(au, inst, null);
+    }
+
+    @SuppressWarnings("unchecked")
+    private List<String> validate(AppletUtilities au, Entity inst, String parent) throws UnifyException {
         List<String> errors = new ArrayList<String>();
-        // TODO
+        ValueStore instValueStore = new BeanValueStore(inst);
+        for (EntityFieldDef entityFieldDef : getColumnFieldDefList()) {
+            final String fieldName = entityFieldDef.getFieldName();
+            if (!entityFieldDef.isNullable() && instValueStore.isNull(fieldName)) {
+                errors.add(au.resolveSessionMessage("$m{entitydef.validation.required}",
+                        parent != null ? parent + "." + fieldName : fieldName));
+                continue;
+            }
+
+            if (entityFieldDef.isString()) {
+                final String val = instValueStore.retrieve(String.class, fieldName);
+                final int minLen = entityFieldDef.getMinLen();
+                if (minLen > 0 && minLen > val.length()) {
+                    errors.add(au.resolveSessionMessage("$m{entitydef.validation.belowminmumumlength}",
+                            parent != null ? parent + "." + fieldName : fieldName, minLen));
+                    continue;
+                }
+
+                final int maxLen = entityFieldDef.getMaxLen();
+                if (maxLen > 0 && maxLen < val.length()) {
+                    errors.add(au.resolveSessionMessage("$m{entitydef.validation.abovemaximumlength}",
+                            parent != null ? parent + "." + fieldName : fieldName, maxLen));
+                    continue;
+                }
+            }
+        }
+
+        for (EntityFieldDef entityFieldDef : getChildFieldDefList()) {
+            final String fieldName = entityFieldDef.getFieldName();
+            Entity _inst = (Entity) instValueStore.retrieve(fieldName);
+            if (_inst != null) {
+                validate(au, _inst,  parent != null ? parent + "." + fieldName : fieldName);
+            }
+        }
+
+        for (EntityFieldDef entityFieldDef : getChildListFieldDefList()) {
+            final String fieldName = entityFieldDef.getFieldName();
+            List<? extends Entity> _insts = ( List<? extends Entity>) instValueStore.retrieve(fieldName);
+            if (_insts != null) {
+                for (Entity _inst: _insts) {
+                    validate(au, _inst,  parent != null ? parent + "." + fieldName : fieldName);
+                }
+            }
+        }
+        
         return errors;
     }
     
@@ -736,6 +790,26 @@ public class EntityDef extends BaseApplicationEntityDef {
         return fkFieldDefList;
     }
 
+    public List<EntityFieldDef> getColumnFieldDefList() {
+        if (columnFieldDefList == null) {
+            synchronized (this) {
+                if (columnFieldDefList == null) {
+                    columnFieldDefList = new ArrayList<EntityFieldDef>();
+                    for (EntityFieldDef entityFieldDef : fieldDefList) {
+                        if (!entityFieldDef.isForeignKey() && !entityFieldDef.isChild() && !entityFieldDef.isChildList()
+                                && !entityFieldDef.isListOnly()) {
+                            columnFieldDefList.add(entityFieldDef);
+                        }
+                    }
+
+                    columnFieldDefList = DataUtils.unmodifiableList(columnFieldDefList);
+                }
+            }
+        }
+
+        return columnFieldDefList;
+    }
+
     public List<EntityFieldDef> getListOnlyFieldDefList() {
         if (listOnlyFieldDefList == null) {
             synchronized (this) {
@@ -776,6 +850,21 @@ public class EntityDef extends BaseApplicationEntityDef {
 
     public boolean isWithBranchScoping() {
         return !getBranchScopingFieldDefList().isEmpty();
+    }
+    
+    public List<EntityFieldDef> getChildFieldDefList() {
+        if (childFieldDefList == null) {
+            childFieldDefList = new ArrayList<EntityFieldDef>();
+            for (EntityFieldDef entityFieldDef : fieldDefList) {
+                if (entityFieldDef.isChild()) {
+                    childFieldDefList.add(entityFieldDef);
+                }
+            }
+
+            childFieldDefList = DataUtils.unmodifiableList(childFieldDefList);
+        }
+
+        return childFieldDefList;
     }
     
     public List<EntityFieldDef> getChildListFieldDefList() {
