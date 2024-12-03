@@ -23,7 +23,7 @@ import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.common.data.VersionedEntityDef;
 import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
 import com.tcdng.unify.core.UnifyException;
-import com.tcdng.unify.core.data.JsonComposition;
+import com.tcdng.unify.core.data.JsonObjectComposition;
 import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.util.ReflectUtils;
 
@@ -54,8 +54,8 @@ public class EntityClassDef implements VersionedEntityDef {
         return entityClass;
     }
 
-    public JsonComposition getJsonComposition() throws UnifyException {
-        return entityDef.getJsonComposition();
+    public JsonObjectComposition getJsonComposition(AppletUtilities au) throws UnifyException {
+        return entityDef.getJsonComposition(au);
     }
 
     public List<String> validate(AppletUtilities au, Entity inst) throws UnifyException {

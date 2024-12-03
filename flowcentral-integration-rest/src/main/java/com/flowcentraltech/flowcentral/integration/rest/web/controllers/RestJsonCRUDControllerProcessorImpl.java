@@ -135,7 +135,7 @@ public class RestJsonCRUDControllerProcessorImpl extends AbstractHttpCRUDControl
                 final Entity srcInst = appletUtilities.environment()
                         .find((Class<? extends Entity>) entityClassDef.getEntityClass(), id);
                 if (srcInst != null) {
-                    return getResponse(entityClassDef.getJsonComposition(), HttpResponseConstants.OK, srcInst);
+                    return getResponse(entityClassDef.getJsonComposition(appletUtilities), HttpResponseConstants.OK, srcInst);
                 }
 
                 return getNotFoundResponse();
@@ -144,7 +144,7 @@ public class RestJsonCRUDControllerProcessorImpl extends AbstractHttpCRUDControl
             Query<? extends Entity> query = appletUtilities.application().queryOf(apiDef.getEntity());
             setCriteria(query, parameters);
             List<? extends Entity> list = appletUtilities.environment().listAll(query);
-            return getResponse(entityClassDef.getJsonComposition(), HttpResponseConstants.OK, list);
+            return getResponse(entityClassDef.getJsonComposition(appletUtilities), HttpResponseConstants.OK, list);
         }
         
         return getBadRequestResponse();
@@ -239,11 +239,11 @@ public class RestJsonCRUDControllerProcessorImpl extends AbstractHttpCRUDControl
         final APIDef apiDef = getAPIDef();
         final AppletDef appletDef = appletUtilities.getAppletDef(apiDef.getApplet());
         final EntityClassDef entityClassDef = appletUtilities.getEntityClassDef(apiDef.getEntity());
-        final Entity inst = (Entity) DataUtils.fromJsonString(entityClassDef.getJsonComposition(),
+        final Entity inst = (Entity) DataUtils.fromJsonString(entityClassDef.getJsonComposition(appletUtilities),
                 entityClassDef.getEntityClass(), body);
         final List<String> errors = inst == null
                 ? Arrays.asList(resolveApplicationMessage("$m{restjsoncrud.comtrollerprocessor.nomessagebody}"))
-                : entityClassDef.validate(inst);
+                : entityClassDef.validate(appletUtilities, inst);
         return new EntityItem(appletDef, entityClassDef, inst, errors);
     }
 

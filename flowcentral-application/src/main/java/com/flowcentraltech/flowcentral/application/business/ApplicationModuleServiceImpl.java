@@ -745,16 +745,16 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                                     appEntityField.getColumnName(), appEntityField.getCategory(),
                                     appEntityField.getSuggestionType(), appEntityField.getInputLabel(),
                                     appEntityField.getInputListKey(), appEntityField.getLingualListKey(),
-                                    appEntityField.getAutoFormat(), appEntityField.getDefaultVal(), references,
-                                    references, appEntityField.getKey(), appEntityField.getProperty(),
-                                    appEntityField.getRows(), appEntityField.getColumns(), appEntityField.getMinLen(),
-                                    appEntityField.getMaxLen(), appEntityField.getPrecision(),
-                                    appEntityField.getScale(), appEntityField.isBranchScoping(),
-                                    appEntityField.isTrim(), appEntityField.isAllowNegative(),
-                                    !appEntityField.isReadOnly(), appEntityField.isNullable(),
-                                    appEntityField.isAuditable(), appEntityField.isReportable(),
-                                    appEntityField.isMaintainLink(), appEntityField.isBasicSearch(),
-                                    appEntityField.isDescriptive());
+                                    appEntityField.getAutoFormat(), appEntityField.getDefaultVal(), references, references,
+                                    appEntityField.getJsonName(), appEntityField.getJsonFormatter(),
+                                    appEntityField.getKey(), appEntityField.getProperty(), appEntityField.getRows(),
+                                    appEntityField.getColumns(), appEntityField.getMinLen(), appEntityField.getMaxLen(),
+                                    appEntityField.getPrecision(), appEntityField.getScale(),
+                                    appEntityField.isBranchScoping(), appEntityField.isTrim(),
+                                    appEntityField.isAllowNegative(), !appEntityField.isReadOnly(),
+                                    appEntityField.isNullable(), appEntityField.isAuditable(),
+                                    appEntityField.isReportable(), appEntityField.isMaintainLink(),
+                                    appEntityField.isBasicSearch(), appEntityField.isDescriptive());
                         } else {
                             edb.addFieldDef(textWidget, inputWidget, lingualWidget, appEntityField.getDataType(),
                                     appEntityField.getType(), appEntityField.getTextCase(), appEntityField.getName(),
@@ -763,6 +763,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                                     appEntityField.getSuggestionType(), appEntityField.getInputLabel(),
                                     appEntityField.getInputListKey(), appEntityField.getLingualListKey(),
                                     appEntityField.getAutoFormat(), appEntityField.getDefaultVal(), references,
+                                    appEntityField.getJsonName(), appEntityField.getJsonFormatter(),
                                     appEntityField.getKey(), appEntityField.getProperty(), appEntityField.getRows(),
                                     appEntityField.getColumns(), appEntityField.getMinLen(), appEntityField.getMaxLen(),
                                     appEntityField.getPrecision(), appEntityField.getScale(),
@@ -1335,8 +1336,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                             final String reflongName = null; // TODO
                             String filterListKey = null; // TODO
                             EntityFieldDef entityFieldDef = new EntityFieldDef(textWidget, listItem.getInputWidget(),
-                                    longName, listItem.getName(), null, reflongName, listItem.getReferences(),
-                                    filterListKey);
+                                    longName, listItem.getName(), null, reflongName, listItem.getReferences(), null,
+                                    null, filterListKey);
                             String renderer = InputWidgetUtils.constructEditorWithBinding(widgetTypeDef,
                                     entityFieldDef);
                             pldb.addItemDef(entityFieldDef, widgetTypeDef, set.getLabel(), listItem.getDescription(),
@@ -6030,6 +6031,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appEntityField.setLingualListKey(entityFieldConfig.getLingualListKey());
                     appEntityField.setAutoFormat(entityFieldConfig.getAutoFormat());
                     appEntityField.setDefaultVal(entityFieldConfig.getDefaultVal());
+                    appEntityField.setJsonName(entityFieldConfig.getJsonName());
+                    appEntityField.setJsonFormatter(entityFieldConfig.getJsonFormatter());
                     appEntityField.setMapped(entityFieldConfig.getMapped());
                     appEntityField.setTextCase(entityFieldConfig.getTextCase());
                     appEntityField.setColumns(entityFieldConfig.getColumns());
@@ -6081,6 +6084,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     oldAppEntityField.setLingualListKey(entityFieldConfig.getLingualListKey());
                     oldAppEntityField.setAutoFormat(entityFieldConfig.getAutoFormat());
                     oldAppEntityField.setDefaultVal(entityFieldConfig.getDefaultVal());
+                    oldAppEntityField.setJsonName(entityFieldConfig.getJsonName());
+                    oldAppEntityField.setJsonFormatter(entityFieldConfig.getJsonFormatter());
                     oldAppEntityField.setMapped(entityFieldConfig.getMapped());
                     oldAppEntityField.setTextCase(entityFieldConfig.getTextCase());
                     oldAppEntityField.setColumns(entityFieldConfig.getColumns());

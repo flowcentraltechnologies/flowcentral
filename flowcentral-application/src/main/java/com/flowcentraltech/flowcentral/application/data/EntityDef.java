@@ -41,10 +41,12 @@ import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldType;
 import com.flowcentraltech.flowcentral.configuration.constants.SeriesType;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.batch.ConstraintAction;
+import com.tcdng.unify.core.constant.DynamicEntityFieldType;
 import com.tcdng.unify.core.constant.FileAttachmentType;
 import com.tcdng.unify.core.constant.TextCase;
 import com.tcdng.unify.core.data.BeanValueStore;
-import com.tcdng.unify.core.data.JsonComposition;
+import com.tcdng.unify.core.data.JsonFieldComposition;
+import com.tcdng.unify.core.data.JsonObjectComposition;
 import com.tcdng.unify.core.data.ListData;
 import com.tcdng.unify.core.data.Listable;
 import com.tcdng.unify.core.data.ValueStore;
@@ -153,8 +155,8 @@ public class EntityDef extends BaseApplicationEntityDef {
 
     private List<ListData> searchInputFields;
 
-    private JsonComposition jsonComposition;
-    
+    private JsonObjectComposition jsonComposition;
+
     private String blobFieldName;
 
     private String originClassName;
@@ -475,15 +477,44 @@ public class EntityDef extends BaseApplicationEntityDef {
         return searchInputFields;
     }
 
-    public JsonComposition getJsonComposition() throws UnifyException {
+    public JsonObjectComposition getJsonComposition(AppletUtilities au) throws UnifyException {
         if (jsonComposition == null) {
-            synchronized(this) {
+            synchronized (this) {
                 if (jsonComposition == null) {
-                    // TODO
-                }                
+                    jsonComposition = getJsonComposition(au, this, null);
+                }
             }
         }
         return jsonComposition;
+    }
+
+    private JsonObjectComposition getJsonComposition(AppletUtilities au, EntityDef entityDef, String name)
+            throws UnifyException {
+        List<JsonFieldComposition> fields = new ArrayList<JsonFieldComposition>();
+        for (EntityFieldDef entityFieldDef : entityDef.getColumnFieldDefList()) {
+            fields.add(new JsonFieldComposition(DynamicEntityFieldType.FIELD, entityFieldDef.getDataType().dataType(),
+                    entityFieldDef.getFieldName(), entityFieldDef.getJsonName(), entityFieldDef.getJsonFormatter()));
+        }
+
+        for (EntityFieldDef entityFieldDef : entityDef.getChildFieldDefList()) {
+            final EntityDef _entityDef = au.getEntityDef(entityFieldDef.getReferences());
+            JsonObjectComposition _jsonObjectComposition = getJsonComposition(au, _entityDef,
+                    entityFieldDef.getJsonName() == null ? entityFieldDef.getFieldName()
+                            : entityFieldDef.getJsonName());
+            fields.add(new JsonFieldComposition(_jsonObjectComposition, DynamicEntityFieldType.CHILD, null,
+                    entityFieldDef.getFieldName(), entityFieldDef.getJsonName(), entityFieldDef.getJsonFormatter()));
+        }
+
+        for (EntityFieldDef entityFieldDef : entityDef.getChildListFieldDefList()) {
+            final EntityDef _entityDef = au.getEntityDef(entityFieldDef.getReferences());
+            JsonObjectComposition _jsonObjectComposition = getJsonComposition(au, _entityDef,
+                    entityFieldDef.getJsonName() == null ? entityFieldDef.getFieldName()
+                            : entityFieldDef.getJsonName());
+            fields.add(new JsonFieldComposition(_jsonObjectComposition, DynamicEntityFieldType.CHILDLIST, null,
+                    entityFieldDef.getFieldName(), entityFieldDef.getJsonName(), entityFieldDef.getJsonFormatter()));
+        }
+
+        return new JsonObjectComposition(name, Collections.unmodifiableList(fields));
     }
 
     public List<String> validate(AppletUtilities au, Entity inst) throws UnifyException {
@@ -524,23 +555,23 @@ public class EntityDef extends BaseApplicationEntityDef {
             final String fieldName = entityFieldDef.getFieldName();
             Entity _inst = (Entity) instValueStore.retrieve(fieldName);
             if (_inst != null) {
-                validate(au, _inst,  parent != null ? parent + "." + fieldName : fieldName);
+                validate(au, _inst, parent != null ? parent + "." + fieldName : fieldName);
             }
         }
 
         for (EntityFieldDef entityFieldDef : getChildListFieldDefList()) {
             final String fieldName = entityFieldDef.getFieldName();
-            List<? extends Entity> _insts = ( List<? extends Entity>) instValueStore.retrieve(fieldName);
+            List<? extends Entity> _insts = (List<? extends Entity>) instValueStore.retrieve(fieldName);
             if (_insts != null) {
-                for (Entity _inst: _insts) {
-                    validate(au, _inst,  parent != null ? parent + "." + fieldName : fieldName);
+                for (Entity _inst : _insts) {
+                    validate(au, _inst, parent != null ? parent + "." + fieldName : fieldName);
                 }
             }
         }
-        
+
         return errors;
     }
-    
+
     public EntitySearchInputDef getEntitySearchInputDef(String name) {
         EntitySearchInputDef entitySearchInputDef = searchInputDefs.get(name);
         if (entitySearchInputDef == null) {
@@ -851,7 +882,7 @@ public class EntityDef extends BaseApplicationEntityDef {
     public boolean isWithBranchScoping() {
         return !getBranchScopingFieldDefList().isEmpty();
     }
-    
+
     public List<EntityFieldDef> getChildFieldDefList() {
         if (childFieldDefList == null) {
             childFieldDefList = new ArrayList<EntityFieldDef>();
@@ -866,7 +897,7 @@ public class EntityDef extends BaseApplicationEntityDef {
 
         return childFieldDefList;
     }
-    
+
     public List<EntityFieldDef> getChildListFieldDefList() {
         if (childListFieldDefList == null) {
             childListFieldDefList = new ArrayList<EntityFieldDef>();
@@ -1423,43 +1454,46 @@ public class EntityDef extends BaseApplicationEntityDef {
                 EntityFieldType type, String fieldName, String fieldLabel) throws UnifyException {
             return addFieldDef(textWidget, inputWidget, null, dataType, type, null, fieldName, null, fieldLabel, null,
                     null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null,
-                    false, false, false, true, false, false, false, false, false, false);
+                    null, null, false, false, false, true, false, false, false, false, false, false);
         }
 
         public Builder addFieldDef(String textWidget, String inputWidget, String lingualWidget,
                 EntityFieldDataType dataType, EntityFieldType type, TextCase textCase, String fieldName, String mapped,
                 String fieldLabel, String columnName, String category, String suggestionType, String inputLabel,
                 String inputListKey, String lingualListKey, String autoFormat, String defaultVal, String references,
-                String key, String property, Integer rows, Integer columns, Integer minLen, Integer maxLen,
-                Integer precision, Integer scale, boolean branchScoping, boolean trim, boolean allowNegative,
-                boolean editable, boolean nullable, boolean auditable, boolean reportable, boolean maintainLink,
-                boolean basicSearch, boolean descriptive) throws UnifyException {
+                String jsonName, String jsonFormatter, String key, String property, Integer rows, Integer columns,
+                Integer minLen, Integer maxLen, Integer precision, Integer scale, boolean branchScoping, boolean trim,
+                boolean allowNegative, boolean editable, boolean nullable, boolean auditable, boolean reportable,
+                boolean maintainLink, boolean basicSearch, boolean descriptive) throws UnifyException {
             return addFieldDef(textWidget, inputWidget, lingualWidget, dataType, type, textCase, fieldName, mapped,
                     fieldLabel, columnName, category, suggestionType, inputLabel, inputListKey, lingualListKey,
-                    autoFormat, defaultVal, null, references, key, property, rows, columns, minLen, maxLen, precision,
-                    scale, branchScoping, trim, allowNegative, editable, nullable, auditable, reportable, maintainLink,
-                    basicSearch, descriptive);
+                    autoFormat, defaultVal, null, references, jsonName, jsonFormatter, key, property, rows, columns,
+                    minLen, maxLen, precision, scale, branchScoping, trim, allowNegative, editable, nullable, auditable,
+                    reportable, maintainLink, basicSearch, descriptive);
         }
 
         public Builder addFieldDef(String textWidget, String inputWidget, String lingualWidget,
                 EntityFieldDataType dataType, EntityFieldType type, TextCase textCase, String fieldName, String mapped,
                 String fieldLabel, String columnName, String category, String suggestionType, String inputLabel,
                 String inputListKey, String lingualListKey, String autoFormat, String defaultVal, String refLongName,
-                String references, String key, String property, Integer rows, Integer columns, Integer minLen,
-                Integer maxLen, Integer precision, Integer scale, boolean branchScoping, boolean trim,
-                boolean allowNegative, boolean editable, boolean nullable, boolean auditable, boolean reportable,
-                boolean maintainLink, boolean basicSearch, boolean descriptive) throws UnifyException {
+                String references, String jsonName, String jsonFormatter, String key, String property, Integer rows,
+                Integer columns, Integer minLen, Integer maxLen, Integer precision, Integer scale,
+                boolean branchScoping, boolean trim, boolean allowNegative, boolean editable, boolean nullable,
+                boolean auditable, boolean reportable, boolean maintainLink, boolean basicSearch, boolean descriptive)
+                throws UnifyException {
             if (fieldDefMap.containsKey(fieldName)) {
                 throw new RuntimeException("Field with name [" + fieldName + "] already exists in this definition.");
             }
 
-            fieldDefMap.put(fieldName, new EntityFieldDef(textWidget, inputWidget, lingualWidget, dataType, type,
-                    textCase, longName, fieldName, mapped, fieldLabel, columnName, refLongName, references, category,
-                    suggestionType, inputLabel, inputListKey, lingualListKey, autoFormat, defaultVal, key, property,
-                    DataUtils.convert(int.class, rows), DataUtils.convert(int.class, columns),
-                    DataUtils.convert(int.class, minLen), DataUtils.convert(int.class, maxLen),
-                    DataUtils.convert(int.class, precision), DataUtils.convert(int.class, scale), branchScoping, trim,
-                    allowNegative, editable, nullable, auditable, reportable, maintainLink, basicSearch, descriptive));
+            fieldDefMap.put(fieldName,
+                    new EntityFieldDef(textWidget, inputWidget, lingualWidget, dataType, type, textCase, longName,
+                            fieldName, mapped, fieldLabel, columnName, refLongName, references, jsonName, jsonFormatter,
+                            category, suggestionType, inputLabel, inputListKey, lingualListKey, autoFormat, defaultVal,
+                            key, property, DataUtils.convert(int.class, rows), DataUtils.convert(int.class, columns),
+                            DataUtils.convert(int.class, minLen), DataUtils.convert(int.class, maxLen),
+                            DataUtils.convert(int.class, precision), DataUtils.convert(int.class, scale), branchScoping,
+                            trim, allowNegative, editable, nullable, auditable, reportable, maintainLink, basicSearch,
+                            descriptive));
             return this;
         }
 

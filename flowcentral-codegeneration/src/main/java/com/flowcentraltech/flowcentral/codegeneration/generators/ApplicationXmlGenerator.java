@@ -496,6 +496,8 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                             entityFieldConfig.setLingualListKey(appEntityField.getLingualListKey());
                             entityFieldConfig.setAutoFormat(appEntityField.getAutoFormat());
                             entityFieldConfig.setDefaultVal(appEntityField.getDefaultVal());
+                            entityFieldConfig.setJsonName(appEntityField.getJsonName());
+                            entityFieldConfig.setJsonFormatter(appEntityField.getJsonFormatter());
                             entityFieldConfig.setMapped(appEntityField.getMapped());
                             entityFieldConfig.setTextCase(appEntityField.getTextCase());
                             entityFieldConfig.setColumns(appEntityField.getColumns());
