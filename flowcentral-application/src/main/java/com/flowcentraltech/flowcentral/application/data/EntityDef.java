@@ -493,9 +493,9 @@ public class EntityDef extends BaseApplicationEntityDef {
         List<JsonFieldComposition> fields = new ArrayList<JsonFieldComposition>();
         for (EntityFieldDef entityFieldDef : entityDef.getColumnFieldDefList()) {
             final String fieldName = entityFieldDef.getFieldName();
-            fields.add(
-                    new JsonFieldComposition(DynamicEntityFieldType.FIELD, entityFieldDef.getDataType().dataType(),
-                            fieldName, entityFieldDef.getJsonName(), entityFieldDef.getJsonFormatter(), ApplicationEntityUtils.isReservedFieldName(fieldName)));
+            fields.add(new JsonFieldComposition(DynamicEntityFieldType.FIELD, entityFieldDef.getDataType().dataType(),
+                    fieldName, entityFieldDef.getJsonName(), entityFieldDef.getJsonFormatter(),
+                    ApplicationEntityUtils.isReservedFieldName(fieldName)));
         }
 
         for (EntityFieldDef entityFieldDef : entityDef.getChildFieldDefList()) {

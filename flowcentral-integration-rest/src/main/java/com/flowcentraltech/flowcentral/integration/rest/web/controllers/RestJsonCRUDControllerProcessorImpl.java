@@ -76,6 +76,16 @@ public class RestJsonCRUDControllerProcessorImpl extends AbstractHttpCRUDControl
     }
 
     @Override
+    public Response count(HttpRequestHeaders headers, Parameters parameters) throws UnifyException {
+        final APIDef apiDef = getAPIDef();
+      Query<? extends Entity> query = appletUtilities.application().queryOf(apiDef.getEntity());
+      final EntityClassDef entityClassDef = appletUtilities.getEntityClassDef(apiDef.getEntity());
+      setCriteria(query, parameters);
+      final int count = appletUtilities.environment().countAll(query);
+      return getResponse(HttpResponseConstants.OK, new CountResult(entityClassDef.getEntityDef().getDescription(), count));
+    }
+
+    @Override
     public Response create(HttpRequestHeaders headers, Parameters parameters, String body) throws UnifyException {
         if (!isAuthorized(headers)) {
             return getUnauthResponse();
@@ -93,19 +103,18 @@ public class RestJsonCRUDControllerProcessorImpl extends AbstractHttpCRUDControl
 
     @SuppressWarnings("unchecked")
     @Override
-    public Response delete(HttpRequestHeaders headers, Parameters parameters) throws UnifyException {
+    public Response delete(HttpRequestHeaders headers, Parameters parameters, Long resourceId) throws UnifyException {
         if (!isAuthorized(headers)) {
             return getUnauthResponse();
         }
 
         final APIDef apiDef = getAPIDef();
         final EntityClassDef entityClassDef = appletUtilities.getEntityClassDef(apiDef.getEntity());
-        final Long id = parameters.getParam(Long.class, "id");
         int deleted = appletUtilities.environment().delete((Class<? extends Entity>) entityClassDef.getEntityClass(),
-                id);
+                resourceId);
         if (deleted > 0) {
             return getResponse(HttpResponseConstants.OK,
-                    new DeleteResult(entityClassDef.getEntityDef().getDescription(), id));
+                    new DeleteResult(entityClassDef.getEntityDef().getDescription(), resourceId));
         }
 
         return getNotFoundResponse();
@@ -113,46 +122,33 @@ public class RestJsonCRUDControllerProcessorImpl extends AbstractHttpCRUDControl
 
     @SuppressWarnings("unchecked")
     @Override
-    public Response read(HttpRequestHeaders headers, Parameters parameters) throws UnifyException {
+    public Response read(HttpRequestHeaders headers, Parameters parameters, Long resourceId) throws UnifyException {
         if (!isAuthorized(headers)) {
             return getUnauthResponse();
         }
 
-        final String op = parameters.isParam("_op") ? parameters.getParam(String.class, "_op") : "find";
         final APIDef apiDef = getAPIDef();
         final EntityClassDef entityClassDef = appletUtilities.getEntityClassDef(apiDef.getEntity());
 
-        if ("count".equals(op)) {
-            Query<? extends Entity> query = appletUtilities.application().queryOf(apiDef.getEntity());
-            setCriteria(query, parameters);
-            final int count = appletUtilities.environment().countAll(query);
-            return getResponse(HttpResponseConstants.OK, new CountResult(entityClassDef.getEntityDef().getDescription(), count));
-        }
-
-        if ("find".equals(op)) {
-            if (parameters.isParam("id")) {
-                final Long id = parameters.getParam(Long.class, "id");
-                final Entity srcInst = appletUtilities.environment()
-                        .find((Class<? extends Entity>) entityClassDef.getEntityClass(), id);
-                if (srcInst != null) {
-                    return getResponse(entityClassDef.getJsonComposition(appletUtilities), HttpResponseConstants.OK, srcInst);
-                }
-
-                return getNotFoundResponse();
+        if (resourceId != null) {
+            final Entity srcInst = appletUtilities.environment()
+                    .find((Class<? extends Entity>) entityClassDef.getEntityClass(), resourceId);
+            if (srcInst != null) {
+                return getResponse(entityClassDef.getJsonComposition(appletUtilities), HttpResponseConstants.OK, srcInst);
             }
-            
-            Query<? extends Entity> query = appletUtilities.application().queryOf(apiDef.getEntity());
-            setCriteria(query, parameters);
-            List<? extends Entity> list = appletUtilities.environment().listAll(query);
-            return getResponse(entityClassDef.getJsonComposition(appletUtilities), HttpResponseConstants.OK, list);
+
+            return getNotFoundResponse();
         }
         
-        return getBadRequestResponse();
+        Query<? extends Entity> query = appletUtilities.application().queryOf(apiDef.getEntity());
+        setCriteria(query, parameters);
+        List<? extends Entity> list = appletUtilities.environment().listAll(query);
+        return getResponse(entityClassDef.getJsonComposition(appletUtilities), HttpResponseConstants.OK, list);
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public Response update(HttpRequestHeaders headers, Parameters parameters, String body) throws UnifyException {
+    public Response update(HttpRequestHeaders headers, Parameters parameters, String body, Long resourceId) throws UnifyException {
         if (!isAuthorized(headers)) {
             return getUnauthResponse();
         }
@@ -163,15 +159,14 @@ public class RestJsonCRUDControllerProcessorImpl extends AbstractHttpCRUDControl
         }
 
         final EntityClassDef entityClassDef = instItem.getEntityClassDef();
-        final Long id = parameters.getParam(Long.class, "id");
         final Entity destInst = appletUtilities.environment()
-                .find((Class<? extends Entity>) entityClassDef.getEntityClass(), id);
+                .find((Class<? extends Entity>) entityClassDef.getEntityClass(), resourceId);
         if (destInst != null) {
             new BeanValueStore(destInst).copyWithExclusions(new BeanValueStore(instItem.getInst()),
                     ApplicationEntityUtils.getReservedFieldNames());
             appletUtilities.environment().updateByIdVersion(destInst);
             return getResponse(HttpResponseConstants.OK,
-                    new UpdateResult(entityClassDef.getEntityDef().getDescription(), id));
+                    new UpdateResult(entityClassDef.getEntityDef().getDescription(), resourceId));
         }
 
         return getNotFoundResponse();
