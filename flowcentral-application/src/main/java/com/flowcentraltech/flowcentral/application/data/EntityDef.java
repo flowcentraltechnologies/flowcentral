@@ -492,8 +492,10 @@ public class EntityDef extends BaseApplicationEntityDef {
             throws UnifyException {
         List<JsonFieldComposition> fields = new ArrayList<JsonFieldComposition>();
         for (EntityFieldDef entityFieldDef : entityDef.getColumnFieldDefList()) {
-            fields.add(new JsonFieldComposition(DynamicEntityFieldType.FIELD, entityFieldDef.getDataType().dataType(),
-                    entityFieldDef.getFieldName(), entityFieldDef.getJsonName(), entityFieldDef.getJsonFormatter()));
+            final String fieldName = entityFieldDef.getFieldName();
+            fields.add(
+                    new JsonFieldComposition(DynamicEntityFieldType.FIELD, entityFieldDef.getDataType().dataType(),
+                            fieldName, entityFieldDef.getJsonName(), entityFieldDef.getJsonFormatter(), ApplicationEntityUtils.isReservedFieldName(fieldName)));
         }
 
         for (EntityFieldDef entityFieldDef : entityDef.getChildFieldDefList()) {
@@ -527,26 +529,28 @@ public class EntityDef extends BaseApplicationEntityDef {
         ValueStore instValueStore = new BeanValueStore(inst);
         for (EntityFieldDef entityFieldDef : getColumnFieldDefList()) {
             final String fieldName = entityFieldDef.getFieldName();
-            if (!entityFieldDef.isNullable() && instValueStore.isNull(fieldName)) {
-                errors.add(au.resolveSessionMessage("$m{entitydef.validation.required}",
-                        parent != null ? parent + "." + fieldName : fieldName));
-                continue;
-            }
-
-            if (entityFieldDef.isString()) {
-                final String val = instValueStore.retrieve(String.class, fieldName);
-                final int minLen = entityFieldDef.getMinLen();
-                if (minLen > 0 && minLen > val.length()) {
-                    errors.add(au.resolveSessionMessage("$m{entitydef.validation.belowminmumumlength}",
-                            parent != null ? parent + "." + fieldName : fieldName, minLen));
+            if (!ApplicationEntityUtils.isReservedFieldName(fieldName)) {
+                if (!entityFieldDef.isNullable() && instValueStore.isNull(fieldName)) {
+                    errors.add(au.resolveSessionMessage("$m{entitydef.validation.required}",
+                            parent != null ? parent + "." + fieldName : fieldName));
                     continue;
                 }
 
-                final int maxLen = entityFieldDef.getMaxLen();
-                if (maxLen > 0 && maxLen < val.length()) {
-                    errors.add(au.resolveSessionMessage("$m{entitydef.validation.abovemaximumlength}",
-                            parent != null ? parent + "." + fieldName : fieldName, maxLen));
-                    continue;
+                if (entityFieldDef.isString()) {
+                    final String val = instValueStore.retrieve(String.class, fieldName);
+                    final int minLen = entityFieldDef.getMinLen();
+                    if (minLen > 0 && minLen > val.length()) {
+                        errors.add(au.resolveSessionMessage("$m{entitydef.validation.belowminmumumlength}",
+                                parent != null ? parent + "." + fieldName : fieldName, minLen));
+                        continue;
+                    }
+
+                    final int maxLen = entityFieldDef.getMaxLen();
+                    if (maxLen > 0 && maxLen < val.length()) {
+                        errors.add(au.resolveSessionMessage("$m{entitydef.validation.abovemaximumlength}",
+                                parent != null ? parent + "." + fieldName : fieldName, maxLen));
+                        continue;
+                    }
                 }
             }
         }

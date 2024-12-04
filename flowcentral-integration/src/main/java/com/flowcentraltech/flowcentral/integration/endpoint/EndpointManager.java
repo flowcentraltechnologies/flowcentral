@@ -49,13 +49,13 @@ public interface EndpointManager extends FlowCentralComponent {
     Set<String> getAndClearChangedRestEndpoint() throws UnifyException;
     
     /**
-     * Gets the names of all active REST end points.
+     * Gets the names of all active REST end point paths.
      * 
-     * @return the list of endpoints
+     * @return the list of endpoint paths
      * @throws UnifyException
      *                        if an error occurs
      */
-    Set<String> getActiveRestEndpoints() throws UnifyException;
+    Set<String> getActiveRestEndpointPaths() throws UnifyException;
     
     /**
      * Get an end-point using supplied name.

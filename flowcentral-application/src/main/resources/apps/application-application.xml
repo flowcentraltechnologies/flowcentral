@@ -298,6 +298,11 @@
 			dataType="string" inputType="string"
 			editor="!ui-name minLen:%s maxLen:%s trim:%s underscore:true dollar:true"
 			renderer="!ui-label" />
+		<widgetType name="path" listOption="true"
+			description="$m{application.widgettype.path}"
+			dataType="string" inputType="string"
+			editor="!ui-name minLen:%s maxLen:%s trim:%s underscore:true slash:true"
+			renderer="!ui-label" />
 		<widgetType name="columnname" listOption="true"
 			description="$m{application.widgettype.columnname}" dataType="string"
 			inputType="string"

@@ -148,7 +148,7 @@ public class EndpointManagerImpl extends AbstractEndpointManager {
     }
 
     @Override
-    public Set<String> getActiveRestEndpoints() throws UnifyException {
+    public Set<String> getActiveRestEndpointPaths() throws UnifyException {
         return environmentService.valueSet(String.class, "name",
                 new EndpointConfigQuery().endpointType(EndpointType.REST).status(RecordStatus.ACTIVE));
     }

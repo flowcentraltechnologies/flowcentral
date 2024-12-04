@@ -67,9 +67,9 @@ public class IntegrationRestModuleServiceImpl extends AbstractFlowCentralService
     @Broadcast
     public void updateAllRestEndpointCache() throws UnifyException {
         logDebug("Updating REST endpoints...");
-        Set<String> activeRestEndpointNames = endpointManager.getActiveRestEndpoints();
+        Set<String> activeRestEndpointPaths = endpointManager.getActiveRestEndpointPaths();
         controllerFinder.setControllerAliases(IntegrationRestModuleNameConstants.INTEGRATION_REST_CONTROLLER,
-                activeRestEndpointNames);
+                activeRestEndpointPaths);
         logDebug("REST endpoints successfully updated.");
     }
  

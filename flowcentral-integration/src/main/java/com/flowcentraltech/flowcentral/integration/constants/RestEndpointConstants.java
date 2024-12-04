@@ -23,8 +23,6 @@ package com.flowcentraltech.flowcentral.integration.constants;
  */
 public interface RestEndpointConstants {
 
-    String BASE_PATH= "restBasePath";
-
     String CREDENTIAL_NAME = "restCredName";
 
 }

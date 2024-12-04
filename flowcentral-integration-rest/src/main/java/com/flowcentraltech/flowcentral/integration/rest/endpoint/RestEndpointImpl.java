@@ -13,28 +13,30 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.integration.endpoint;
+package com.flowcentraltech.flowcentral.integration.rest.endpoint;
 
-import com.flowcentraltech.flowcentral.integration.constants.RestEndpointConstants;
-import com.flowcentraltech.flowcentral.integration.data.EndpointDef;
+import com.flowcentraltech.flowcentral.integration.endpoint.AbstractRestEndpoint;
 import com.tcdng.unify.core.UnifyException;
-import com.tcdng.unify.core.annotation.Parameter;
-import com.tcdng.unify.core.annotation.Parameters;
+import com.tcdng.unify.core.annotation.Component;
 
 /**
- * Abstract REST end-point.
+ * REST end-point implementation.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@Parameters({
-    @Parameter(name = RestEndpointConstants.CREDENTIAL_NAME, description = "$m{restendpoint.credential}",
-    editor = "!ui-select list:$s{credentiallist} listKey:$s{name} blankOption:$s{}", type = String.class,
-    order = 32) })
-public abstract class AbstractRestEndpoint extends AbstractEndpoint implements RestEndpoint {
+@Component(name = "rest-endpoint", description = "Rest Endpoint")
+public class RestEndpointImpl extends AbstractRestEndpoint {
 
     @Override
-    public void setup(EndpointDef endpointDef) throws UnifyException {
-
+    public void sendMessage(String destination, String text) throws UnifyException {
+        throwUnsupportedOperationException();
     }
+
+    @Override
+    public String receiveMessage(String source) throws UnifyException {
+        throwUnsupportedOperationException();
+        return null;
+    }
+
 }

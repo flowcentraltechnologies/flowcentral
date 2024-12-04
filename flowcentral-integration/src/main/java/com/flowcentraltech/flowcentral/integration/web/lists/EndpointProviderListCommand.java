@@ -17,6 +17,7 @@ package com.flowcentraltech.flowcentral.integration.web.lists;
 
 import com.flowcentraltech.flowcentral.integration.endpoint.FileEndpoint;
 import com.flowcentraltech.flowcentral.integration.endpoint.JmsEndpoint;
+import com.flowcentraltech.flowcentral.integration.endpoint.RestEndpoint;
 import com.tcdng.unify.core.UnifyComponent;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
@@ -43,6 +44,8 @@ public class EndpointProviderListCommand extends AbstractParamTypeListCommand<En
                     return FileEndpoint.class;
                 case JMS:
                     return JmsEndpoint.class;
+                case REST:
+                    return RestEndpoint.class;
                 default:
                     break;
             }
