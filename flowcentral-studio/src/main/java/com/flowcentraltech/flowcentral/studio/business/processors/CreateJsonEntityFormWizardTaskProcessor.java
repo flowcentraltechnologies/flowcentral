@@ -21,6 +21,7 @@ import java.util.List;
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.business.EntitySchemaManager;
 import com.flowcentraltech.flowcentral.application.data.ApplicationDef;
+import com.flowcentraltech.flowcentral.application.entities.AppAPI;
 import com.flowcentraltech.flowcentral.application.entities.AppApplet;
 import com.flowcentraltech.flowcentral.application.entities.AppEntity;
 import com.flowcentraltech.flowcentral.application.entities.AppEntityField;
@@ -33,6 +34,7 @@ import com.flowcentraltech.flowcentral.application.web.widgets.EntityComposition
 import com.flowcentraltech.flowcentral.common.annotation.EntityReferences;
 import com.flowcentraltech.flowcentral.common.business.policies.AbstractFormWizardTaskProcessor;
 import com.flowcentraltech.flowcentral.common.constants.ConfigType;
+import com.flowcentraltech.flowcentral.configuration.constants.APIType;
 import com.flowcentraltech.flowcentral.configuration.constants.AppletType;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityBaseType;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldDataType;
@@ -125,12 +127,17 @@ public class CreateJsonEntityFormWizardTaskProcessor extends AbstractFormWizardT
         // Create CRUD applets
         final boolean generateApplets = instValueStore.retrieve(boolean.class, "generateApplet");
         if (generateApplets) {
+            String rootAppletName = null;
             // Do reverse loop to create child applets first
             logDebug(taskMonitor, "Creating one or more applets...");
             for (int i = entityNames.size() - 1; i >= 0; i--) {
                 final String _entity = entityNames.get(i);
                 ApplicationEntityNameParts parts = ApplicationNameUtils.getApplicationEntityNameParts(_entity);
                 final String appletName = "manage" + StringUtils.capitalizeFirstLetter(parts.getEntityName());
+                if (i == 0) {
+                    rootAppletName = appletName;
+                }
+                
                 logDebug(taskMonitor, "Creating new entity list applet...");
                 AppApplet appApplet = new AppApplet();
                 appApplet.setApplicationId(applicationId);
@@ -145,6 +152,33 @@ public class CreateJsonEntityFormWizardTaskProcessor extends AbstractFormWizardT
                 entitySchemaManager.createDefaultAppletComponents(applicationName, appApplet);
                 au.environment().create(appApplet);
                 logDebug(taskMonitor, "Applet [{0}] successfully created.", appletName);
+            }
+
+            // Create REST API
+            final boolean generateRest = instValueStore.retrieve(boolean.class, "generateRest");
+            if (generateRest) {
+                // Generate for root entity only
+                logDebug(taskMonitor, "Creating REST API...");
+                final String _entity = entityNames.get(0);
+                ApplicationEntityNameParts parts = ApplicationNameUtils.getApplicationEntityNameParts(_entity);
+                final String apiName = StringUtils.decapitalize(parts.getEntityName()) + "RestAPI";
+                final String apiDesc = StringUtils.capitalizeFirstLetter(parts.getEntityName()) + "Rest API";
+                logDebug(taskMonitor, "Creating entity REST API...");
+                AppAPI appAPI = new AppAPI();
+                appAPI.setApplicationId(applicationId);
+                appAPI.setType(APIType.REST_CRUD);
+                appAPI.setName(apiName);
+                appAPI.setDescription(apiDesc);
+                appAPI.setConfigType(ConfigType.CUSTOM);
+                appAPI.setEntity(_entity);
+                appAPI.setApplet(rootAppletName);
+                appAPI.setSupportCreate(Boolean.TRUE);
+                appAPI.setSupportDelete(Boolean.TRUE);
+                appAPI.setSupportRead(Boolean.TRUE);
+                appAPI.setSupportUpdate(Boolean.TRUE);
+
+                au.environment().create(appAPI);
+                logDebug(taskMonitor, "REST API [{0}] successfully created.", apiName);
             }
         }
     }

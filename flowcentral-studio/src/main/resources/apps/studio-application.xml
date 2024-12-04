@@ -1622,6 +1622,9 @@
 			<field name="generateApplet"
 				inputWidget="application.boolean"
 				label="$m{studio.jsonentity.generateapplet}" type="boolean"/>
+			<field name="generateRest"
+				inputWidget="application.boolean"
+				label="$m{studio.jsonentity.generaterest}" type="boolean"/>
 			<field name="applicationName"
 				label="$m{studio.jsonentity.applicationname}"
 				type="list_only" key="applicationId" property="name" />
@@ -2437,6 +2440,8 @@
 					<field name="generateEntity" inputWidget="application.checkbox" column="0"
 						disabled="true" />
 					<field name="generateApplet" inputWidget="application.checkbox" column="0"
+						editable="true" />
+					<field name="generateRest" inputWidget="application.checkbox" column="0"
 						editable="true" />
 				</section>
 			</tab>

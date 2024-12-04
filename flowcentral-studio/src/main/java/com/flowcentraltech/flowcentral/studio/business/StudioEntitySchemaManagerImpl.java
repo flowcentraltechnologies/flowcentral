@@ -363,12 +363,13 @@ public class StudioEntitySchemaManagerImpl extends AbstractEntitySchemaManager {
                     appTable.setDescription(tableDesc);
                     appTable.setLabel(tableDesc);
                     appTable.setSortHistory(-1);
-                    appTable.setItemsPerPage(20);
+                    appTable.setItemsPerPage(25);
                     appTable.setSortable(true);
+                    appTable.setSerialNo(true);
                     appTable.setShowLabelHeader(false);
                     appTable.setHeaderToUpperCase(false);
                     appTable.setHeaderCenterAlign(false);
-                    appTable.setBasicSearch(false);
+                    appTable.setBasicSearch(true);
                     appTable.setLimitSelectToColumns(true);
                     List<AppTableColumn> columnList = new ArrayList<AppTableColumn>();
                     for (EntityFieldDef entityFieldDef : entityDef.getFieldDefList()) {
@@ -380,7 +381,7 @@ public class StudioEntitySchemaManagerImpl extends AbstractEntitySchemaManager {
                             String widget = InputWidgetUtils.resolveEntityFieldWidget(entityFieldDef);
                             appTableColumn.setRenderWidget(widget);
 
-                            if (entityFieldDef.isMaintainLink()) {
+                            if (columnList.isEmpty() || entityFieldDef.isMaintainLink()) {
                                 appTableColumn.setLinkAct("maintainAct");
                             }
 

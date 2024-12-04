@@ -57,6 +57,9 @@ public class StudioJsonEntity extends BaseAuditEntity {
 
     @Column(nullable = true)
     private Boolean generateApplet;
+
+    @Column(nullable = true)
+    private Boolean generateRest;
     
     @ListOnly(key = "applicationId", property = "name")
     private String applicationName;
@@ -140,6 +143,14 @@ public class StudioJsonEntity extends BaseAuditEntity {
 
     public void setGenerateApplet(Boolean generateApplet) {
         this.generateApplet = generateApplet;
+    }
+
+    public Boolean getGenerateRest() {
+        return generateRest;
+    }
+
+    public void setGenerateRest(Boolean generateRest) {
+        this.generateRest = generateRest;
     }
 
     public String getApplicationName() {
