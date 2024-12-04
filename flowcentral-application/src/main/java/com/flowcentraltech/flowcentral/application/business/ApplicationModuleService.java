@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.application.business;
 import java.util.List;
 import java.util.Set;
 
+import com.flowcentraltech.flowcentral.application.data.APIDef;
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.data.AppletWorkflowCopyInfo;
 import com.flowcentraltech.flowcentral.application.data.ApplicationDef;
@@ -42,6 +43,7 @@ import com.flowcentraltech.flowcentral.application.data.SuggestionTypeDef;
 import com.flowcentraltech.flowcentral.application.data.TableDef;
 import com.flowcentraltech.flowcentral.application.data.WidgetRulesDef;
 import com.flowcentraltech.flowcentral.application.data.WidgetTypeDef;
+import com.flowcentraltech.flowcentral.application.entities.AppAPI;
 import com.flowcentraltech.flowcentral.application.entities.AppApplet;
 import com.flowcentraltech.flowcentral.application.entities.AppAppletAlert;
 import com.flowcentraltech.flowcentral.application.entities.AppAppletFilter;
@@ -426,6 +428,17 @@ public interface ApplicationModuleService extends FlowCentralService {
     Application findApplication(Long applicationId) throws UnifyException;
 
     /**
+     * Finds an API by ID.
+     * 
+     * @param apiId
+     *                 the API ID
+     * @return the application API record
+     * @throws UnifyException
+     *                        if API with ID is not found. If an error occurs
+     */
+    AppAPI findAppAPI(Long apiId) throws UnifyException;
+
+    /**
      * Finds manage list applets.
      * 
      * @param entity
@@ -443,7 +456,7 @@ public interface ApplicationModuleService extends FlowCentralService {
      *               the application entity
      * @return list of create entity applets
      * @throws UnifyException
-     *                        if an error occurs
+     *                        if an error occurs 
      */
     List<AppApplet> findCreateEntityApplets(String entity) throws UnifyException;
 
@@ -1114,6 +1127,28 @@ public interface ApplicationModuleService extends FlowCentralService {
      *                        if an error occurs
      */
     List<ApplicationMenuDef> getApplicationMenuDefs(String appletFilter) throws UnifyException;
+    
+    /**
+     * Gets application API definition.
+     * 
+     * @param apiName
+     *                the API name
+     * @return the API definition
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    APIDef getAPIDef(String apiName) throws UnifyException;
+
+    /**
+     * Gets application API definition.
+     * 
+     * @param apiId
+     *              the API ID
+     * @return the API definition
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    APIDef getAPIDef(Long apiId) throws UnifyException;
 
     /**
      * Gets application applet definitions.

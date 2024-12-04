@@ -175,7 +175,7 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
                         throw new UnifyException(SystemModuleErrorConstants.CANNOT_FIND_CREDENTIAL, authName);
                     }
 
-                    return new CredentialDef(authName, credential.getUserName(), credential.getPassword(),
+                    return new CredentialDef(authName, credential.getUserName(), credential.getPassword(), credential.getBase64Encoded(),
                             credential.getVersionNo());
                 }
             };

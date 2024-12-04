@@ -24,6 +24,7 @@ import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.constant.DynamicEntityFieldType;
 import com.tcdng.unify.core.util.EntityTypeFieldInfo;
 import com.tcdng.unify.core.util.EntityTypeInfo;
+import com.tcdng.unify.core.util.StringUtils;
 
 /**
  * Entity composition utilities.
@@ -54,7 +55,8 @@ public final class EntityCompositionUtils {
                 DynamicEntityFieldType fieldType = entityTypeFieldInfo.getType();
                 entry.setFieldType(fieldType);
                 entry.setDataType(entityTypeFieldInfo.getDataType());
-                entry.setName(entityTypeFieldInfo.getName());
+                entry.setName(StringUtils.decapitalize(entityTypeFieldInfo.getName()));
+                entry.setJsonName(entityTypeFieldInfo.getName());
                 entry.setColumn(entityTypeFieldInfo.getColumn());
                 entry.setSample(entityTypeFieldInfo.getSample());
                 entry.setDepth(depth);

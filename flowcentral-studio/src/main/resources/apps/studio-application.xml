@@ -36,6 +36,11 @@
 			inputType="string"
 			editor="!ui-select list:passfaillist blankOption:$m{blank.none}"
 			renderer="!ui-label" />
+		<widgetType name="jsonformatterlist"
+			description="$m{studio.widgettype.jsonformatterlist}"
+			dataType="string" inputType="string"
+			editor="!ui-select list:studiojsonformatterlist listParams:$l{dataType} blankOption:$m{blank.none}"
+			renderer="!ui-label" />
 		<widgetType name="detailspanellist"
 			description="$m{studio.widgettype.detailspanellist}"
 			dataType="string" inputType="string"
@@ -294,6 +299,11 @@
 			description="$m{studio.widgettype.appletalerttemplatelist}"
 			dataType="string" inputType="string"
 			editor="!ui-select list:studioappletalerttemplatelist listParams:$l{appAppletId} blankOption:$m{blank.none}"
+			renderer="!ui-label" />
+		<widgetType name="apiappletlist"
+			description="$m{studio.widgettype.apiappletlist}"
+			dataType="string" inputType="string"
+			editor="!ui-select list:studioapiappletlist listParams:$l{entity} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="wfentitysetvaluesgenlist"
 			description="$m{studio.widgettype.wfentitysetvaluesgenlist}"
@@ -2998,6 +3008,8 @@
 						visible="false" switchOnChange="true" />
 					<field name="property" inputWidget="entitypropertylist"
 						column="0" visible="false" switchOnChange="true" />
+					<field name="jsonName" inputWidget="application.text" column="0"/>
+					<field name="jsonFormatter" inputWidget="studio.jsonformatterlist" column="0"/>
 					<field name="type" inputWidget="application.enumlist"
 						column="1" required="true" disabled="true" />
 					<field name="columnName" inputWidget="application.columnname"
@@ -3667,6 +3679,71 @@
 				<setStates>
 					<setState type="field"
 						target="name,description,entity,searchField,searchTable,selectHandler"
+						disabled="true" />
+				</setStates>
+			</formStatePolicy>
+		</form>
+		<form name="appAPIForm" description="$m{studio.appapi.form}"
+			entity="application.appAPI">
+			<action type="button" name="lockResource" symbol="lock"
+				styleClass="fc-actbutton"
+				description="$m{studio.common.form.action.lockresource}"
+				label="$m{studio.common.form.action.lockresource.label}"
+				policy="lockresource-actionpolicy" showOnMaintain="true" />
+			<action type="button" name="unlockResource" symbol="unlock"
+				styleClass="fc-actbutton"
+				description="$m{studio.common.form.action.unlockresource}"
+				label="$m{studio.common.form.action.unlockresource.label}"
+				policy="unlockresource-actionpolicy" showOnMaintain="true" />
+			<annotation name="staticAnnotation"
+				description="$m{studio.common.form.annotation.static}"
+				message="$m{studio.common.form.annotation.static.message}" />
+			<tab name="basicDetails"
+				label="$m{studio.appref.form.basicdetails}" contentType="miniform">
+				<section name="refFormDetails" columns="type_2">
+					<field name="applicationId"
+						reference="studio.applicationDevelopableRef"
+						inputWidget="application.entitysearch" column="0"
+						label="$m{studio.application}" disabled="true" required="true"
+						saveAs="true" />
+					<field name="name" inputWidget="application.name" column="0"
+						required="true" saveAs="true" />
+					<field name="description" inputWidget="application.text"
+						column="0" required="true" saveAs="true" />
+					<field name="type" inputWidget="application.enumlist"
+						column="0" required="true" />
+					<field name="configType" inputWidget="application.enumlist"
+						column="1" disabled="true" required="true" />
+					<field name="entity" inputWidget="studio.entitysearch"
+						column="1" switchOnChange="true" required="true" />
+					<field name="applet" inputWidget="studio.apiappletlist"
+						column="1" />
+					<field name="supportCreate"
+						inputWidget="application.checkbox" column="1" />
+					<field name="supportRead"
+						inputWidget="application.checkbox" column="1" />
+					<field name="supportUpdate"
+						inputWidget="application.checkbox"
+						column="1" />
+					<field name="supportDelete"
+						inputWidget="application.checkbox" column="1" />
+				</section>
+			</tab>
+			<tab name="changeLog" label="$m{application.form.audit}"
+				contentType="miniform_changelog" />
+			<formStatePolicy type="on_switch"
+				name="immutableFormPolicy"
+				description="$m{studio.common.form.formstatepolicy.immutable}">
+				<onCondition>
+					<restriction type="and">
+						<restriction type="is_not_null" field="id" />
+						<restriction type="not_equals" field="configType"
+							paramA="C" />
+					</restriction>
+				</onCondition>
+				<setStates>
+					<setState type="field"
+						target="name,description,type,entity,supportCreate,supportRead,supportUpdate,supportDelete"
 						disabled="true" />
 				</setStates>
 			</formStatePolicy>

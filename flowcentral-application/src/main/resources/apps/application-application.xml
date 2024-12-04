@@ -298,6 +298,11 @@
 			dataType="string" inputType="string"
 			editor="!ui-name minLen:%s maxLen:%s trim:%s underscore:true dollar:true"
 			renderer="!ui-label" />
+		<widgetType name="path" listOption="true"
+			description="$m{application.widgettype.path}"
+			dataType="string" inputType="string"
+			editor="!ui-name minLen:%s maxLen:%s trim:%s underscore:true slash:true"
+			renderer="!ui-label" />
 		<widgetType name="columnname" listOption="true"
 			description="$m{application.widgettype.columnname}" dataType="string"
 			inputType="string"
@@ -618,6 +623,9 @@
 			entity="appEntitySearchInput" searchField="description" />
 		<reference name="appRefRef"
 			description="$m{application.appref.reference}" entity="appRef"
+			searchField="description" />
+		<reference name="appAPIRef"
+			description="$m{application.appapi.reference}" entity="appAPI"
 			searchField="description" />
 		<reference name="appFilterRef"
 			description="$m{application.appfilter.reference}" entity="appFilter"
@@ -1067,6 +1075,12 @@
 			<field name="references"
 				label="$m{application.appentityfield.references}" type="string"
 				nullable="true" />
+			<field name="jsonName"
+				label="$m{application.appentityfield.jsonname}" type="string"
+				nullable="true" />
+			<field name="jsonFormatter"
+				label="$m{application.appentityfield.jsonformatter}" type="string"
+				nullable="true" />
 			<field name="key" label="$m{application.appentityfield.key}"
 				type="string" nullable="true" />
 			<field name="property"
@@ -1334,6 +1348,41 @@
 			</uniqueConstraint>
 			<uniqueConstraint name="descUc"
 				description="$m{application.appref.uc.description}"
+				fieldList="applicationId,description">
+				<condition field="devVersionType" value="CRN" />
+			</uniqueConstraint>
+		</entity>
+		<entity name="appAPI" description="$m{application.appapi}"
+			label="$m{application.appapi.label}"
+			type="com.flowcentraltech.flowcentral.application.entities.AppAPI" changeEvents = "true">
+			<field name="type" label="$m{application.appapi.type}"
+				type="enum_ref" references="apitypelist"
+				inputWidget="application.enumlist" />
+			<field name="entity" label="$m{application.appapi.entity}"
+				maxLen="128" type="string" />
+			<field name="applet" label="$m{application.appapi.applet}"
+				maxLen="128" type="string" nullable="true" />
+			<field name="supportCreate"
+				label="$m{application.appapi.supportcreate}" type="boolean"
+				nullable="true" />
+			<field name="supportRead"
+				label="$m{application.appapi.supportread}" type="boolean"
+				nullable="true" />
+			<field name="supportUpdate"
+				label="$m{application.appapi.supportupdate}" type="boolean"
+				nullable="true" />
+			<field name="supportDelete"
+				label="$m{application.appapi.supportdelete}" type="boolean"
+				nullable="true" />
+			<field name="typeDesc" label="$m{application.appapi.typedesc}"
+				type="list_only" key="type" property="description" />
+			<uniqueConstraint name="nameUc"
+				description="$m{application.appapi.uc.name}"
+				fieldList="applicationId,name">
+				<condition field="devVersionType" value="CRN" />
+			</uniqueConstraint>
+			<uniqueConstraint name="descUc"
+				description="$m{application.appapi.uc.description}"
 				fieldList="applicationId,description">
 				<condition field="devVersionType" value="CRN" />
 			</uniqueConstraint>

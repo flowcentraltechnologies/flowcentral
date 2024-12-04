@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.integration.endpoint;
+package com.flowcentraltech.flowcentral.integration.constants;
 
 /**
  * JMS endpoint constants.

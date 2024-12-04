@@ -17,6 +17,7 @@ package com.flowcentraltech.flowcentral.application.util;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.EnumMap;
 import java.util.HashMap;
@@ -129,6 +130,10 @@ public final class ApplicationEntityUtils {
 
     private ApplicationEntityUtils() {
 
+    }
+
+    public static Collection<String> getReservedFieldNames() {
+        return RESERVED_BASE_FIELDS;
     }
 
     public static boolean isReservedFieldName(String fieldName) {
@@ -325,10 +330,11 @@ public final class ApplicationEntityUtils {
         return new EntityFieldDef(textWidget, inputWidget, lingualWidget, appEntityField.getDataType(),
                 appEntityField.getType(), appEntityField.getTextCase(), entityLongName, appEntityField.getName(),
                 appEntityField.getMapped(), appEntityField.getLabel(), appEntityField.getColumnName(), refLongName,
-                references, appEntityField.getCategory(), appEntityField.getSuggestionType(),
-                appEntityField.getInputLabel(), appEntityField.getInputListKey(), appEntityField.getLingualListKey(),
-                appEntityField.getAutoFormat(), appEntityField.getDefaultVal(), appEntityField.getKey(),
-                appEntityField.getProperty(), DataUtils.convert(int.class, appEntityField.getRows()),
+                references, appEntityField.getJsonName(), appEntityField.getJsonFormatter(),
+                appEntityField.getCategory(), appEntityField.getSuggestionType(), appEntityField.getInputLabel(),
+                appEntityField.getInputListKey(), appEntityField.getLingualListKey(), appEntityField.getAutoFormat(),
+                appEntityField.getDefaultVal(), appEntityField.getKey(), appEntityField.getProperty(),
+                DataUtils.convert(int.class, appEntityField.getRows()),
                 DataUtils.convert(int.class, appEntityField.getColumns()),
                 DataUtils.convert(int.class, appEntityField.getMinLen()),
                 DataUtils.convert(int.class, appEntityField.getMaxLen()),
@@ -517,17 +523,19 @@ public final class ApplicationEntityUtils {
     private static AppEntityField createBaseAppEntityField(EntityFieldDataType type, String name, String label,
             String references, String key, String property, String category, String inputLabel, String inputWidget,
             String inputListKey, Integer length, ConfigType configType, boolean auditable) {
-        boolean nullable = nullables.contains(name);
-        boolean reportable = !nonReportables.contains(name);
-        boolean maintainLink = maintainLinks.contains(name);
-        boolean branchScoping = false;
-        boolean trim = false;
-        boolean allowNegative = false;
-        boolean readOnly = false;
-        String suggestionType = null;
-        AppEntityField field = new AppEntityField(type, name, label, references, key, property, category, inputLabel,
-                inputWidget, suggestionType, inputListKey, length, branchScoping, trim, allowNegative, readOnly, nullable, auditable,
-                reportable, maintainLink);
+        final boolean nullable = nullables.contains(name);
+        final boolean reportable = !nonReportables.contains(name);
+        final boolean maintainLink = maintainLinks.contains(name);
+        final boolean branchScoping = false;
+        final boolean trim = false;
+        final boolean allowNegative = false;
+        final boolean readOnly = false;
+        final String suggestionType = null;
+        final String jsonName = null;
+        final String jsonConverter = null;
+        AppEntityField field = new AppEntityField(type, name, label, references, jsonName, jsonConverter, key, property,
+                category, inputLabel, inputWidget, suggestionType, inputListKey, length, branchScoping, trim,
+                allowNegative, readOnly, nullable, auditable, reportable, maintainLink);
         if (type.isDate() || type.isTimestamp()) {
             field.setLingualWidget("application.lingualdatetypelist");
         }

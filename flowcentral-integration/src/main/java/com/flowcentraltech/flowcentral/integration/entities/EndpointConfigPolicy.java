@@ -19,9 +19,11 @@ import java.util.Date;
 
 import com.flowcentraltech.flowcentral.common.entities.BaseStatusEntityPolicy;
 import com.flowcentraltech.flowcentral.integration.endpoint.Endpoint;
+import com.flowcentraltech.flowcentral.integration.endpoint.EndpointManager;
 import com.flowcentraltech.flowcentral.integration.endpoint.EndpointType;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
+import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.database.Entity;
 
 /**
@@ -32,7 +34,10 @@ import com.tcdng.unify.core.database.Entity;
  */
 @Component("endpointconfig-entitypolicy")
 public class EndpointConfigPolicy extends BaseStatusEntityPolicy {
-
+    
+    @Configurable
+    private EndpointManager endpointManager;
+    
     @Override
     public Object preCreate(Entity record, Date now) throws UnifyException {
         setTransportType(record);
@@ -47,9 +52,13 @@ public class EndpointConfigPolicy extends BaseStatusEntityPolicy {
 
     @SuppressWarnings("unchecked")
     private void setTransportType(Entity record) throws UnifyException {
-        EndpointConfig endpointConfig = (EndpointConfig) record;
-        Class<? extends Endpoint> type = (Class<? extends Endpoint>) this
+        final EndpointConfig endpointConfig = (EndpointConfig) record;
+        final Class<? extends Endpoint> type = (Class<? extends Endpoint>) this
                 .getComponentConfig(Endpoint.class, endpointConfig.getEndpoint()).getType();
-        endpointConfig.setEndpointType(EndpointType.fromType(type));
+        final EndpointType _type = EndpointType.fromType(type);
+        endpointConfig.setEndpointType(_type);   
+        if (_type.isRest()) {
+            endpointManager.setRestEndpointChanged(endpointConfig.getName());
+        }
     }
 }

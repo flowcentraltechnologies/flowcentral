@@ -387,6 +387,7 @@ public final class InputWidgetUtils {
                 break;
             case "application.text":
             case "application.name":
+            case "application.path":
             case "application.alphanumeric":
             case "application.alphanumericwithspace":
             case "application.alphanumericwithspecial":

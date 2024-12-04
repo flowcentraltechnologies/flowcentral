@@ -15,17 +15,15 @@
  */
 package com.flowcentraltech.flowcentral.application.web.lists;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
+import com.flowcentraltech.flowcentral.application.util.DataTypeUtils;
 import com.flowcentraltech.flowcentral.common.web.lists.AbstractFlowCentralListCommand;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldDataType;
-import com.tcdng.unify.common.constants.StandardFormatType;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
-import com.tcdng.unify.core.data.ListData;
 import com.tcdng.unify.core.data.Listable;
 import com.tcdng.unify.core.data.LocaleFactoryMaps;
 
@@ -43,74 +41,11 @@ public class EntityFieldDefFormatterListCommand extends AbstractFlowCentralListC
     public EntityFieldDefFormatterListCommand() {
         super(EntityFieldDefListParams.class);
         listMap = new LocaleFactoryMaps<EntityFieldDataType, List<? extends Listable>>()
-            {
-
+            { 
                 @Override
                 protected List<? extends Listable> createObject(Locale locale, EntityFieldDataType fieldType,
                         Object... params) throws Exception {
-                    List<ListData> list = Collections.emptyList();
-                    switch (fieldType) {
-                        case BLOB:
-                        case BOOLEAN:
-                        case CATEGORY_COLUMN:
-                        case CHAR:
-                        case CHILD:
-                        case CHILD_LIST:
-                        case REF_FILEUPLOAD:
-                        case CLOB:
-                            break;
-                        case DECIMAL:
-                        case DOUBLE:
-                        case FLOAT:
-                            list = getListables(
-                                    StandardFormatType.DECIMAL,
-                                    StandardFormatType.DECIMAL_GROUPED);
-                            break;
-                        case ENUM:
-                        case ENUM_REF:
-                        case ENUM_DYN:
-                        case FOSTER_PARENT_ID:
-                        case FOSTER_PARENT_TYPE:
-                            break;
-                        case INTEGER:
-                        case LONG:
-                        case SHORT:
-                            list = getListables(
-                                    StandardFormatType.INTEGER,
-                                    StandardFormatType.INTEGER_GROUPED);
-                            break;
-                        case TENANT_ID:
-                        case MAPPED:
-                        case LIST_ONLY:
-                        case REF:
-                        case REF_UNLINKABLE:
-                        case SCRATCH:
-                        case STRING:
-                            break;
-                        case DATE:
-                            list = getListables(
-                                    StandardFormatType.DATE_DDMMYYYY_SLASH,
-                                    StandardFormatType.DATE_MMDDYYYY_SLASH,
-                                    StandardFormatType.DATE_YYYYMMDD_SLASH,
-                                    StandardFormatType.DATE_DDMMYYYY_DASH,
-                                    StandardFormatType.DATE_MMDDYYYY_DASH,
-                                    StandardFormatType.DATE_YYYYMMDD_DASH);
-                            break;
-                        case TIMESTAMP:
-                        case TIMESTAMP_UTC:
-                            list = getListables(
-                                    StandardFormatType.DATETIME_DDMMYYYY_SLASH,
-                                    StandardFormatType.DATETIME_MMDDYYYY_SLASH,
-                                    StandardFormatType.DATETIME_YYYYMMDD_SLASH,
-                                    StandardFormatType.DATETIME_DDMMYYYY_DASH,
-                                    StandardFormatType.DATETIME_MMDDYYYY_DASH,
-                                    StandardFormatType.DATETIME_YYYYMMDD_DASH);
-                            break;
-                        default:
-                            break;
-                    }
-
-                    return list;
+                    return DataTypeUtils.getFormatterList(fieldType);
                 }
 
             };
@@ -125,15 +60,6 @@ public class EntityFieldDefFormatterListCommand extends AbstractFlowCentralListC
         }
 
         return Collections.emptyList();
-    }
-
-    private List<ListData> getListables(StandardFormatType... formatTypes) {
-        List<ListData> list = new ArrayList<ListData>();
-        for (StandardFormatType formatType: formatTypes) {
-            list.add(new ListData(formatType.code(), formatType.label()));
-        }
-        
-        return list;
     }
 
 }

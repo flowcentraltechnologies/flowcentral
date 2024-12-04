@@ -60,6 +60,12 @@ public class AppEntityField extends BaseConfigEntity {
     @Column(name = "ENTITY_REF", length = 128, nullable = true)
     private String references;
 
+    @Column(name = "JSON_NM", length = 64, nullable = true)
+    private String jsonName;
+
+    @Column(name = "JSON_FORMATTER", length = 64, nullable = true)
+    private String jsonFormatter;
+
     @Column(name = "LIST_KEY", length = 64, nullable = true)
     private String key;
 
@@ -119,7 +125,7 @@ public class AppEntityField extends BaseConfigEntity {
 
     @Column(name = "BRANCH_SCOPING")
     private boolean branchScoping;
-    
+
     @Column(name = "TRIM_FG")
     private boolean trim;
 
@@ -159,15 +165,18 @@ public class AppEntityField extends BaseConfigEntity {
     @ListOnly(key = "type", property = "description")
     private String typeDesc;
 
-    public AppEntityField(EntityFieldDataType dataType, String name, String label, String references, String key,
-            String property, String category, String inputLabel, String inputWidget, String suggestionType,
-            String inputListKey, Integer maxLen,  boolean branchScoping,  boolean trim, boolean allowNegative, boolean readOnly, boolean nullable,
-            boolean auditable, boolean reportable, boolean maintainLink) {
+    public AppEntityField(EntityFieldDataType dataType, String name, String label, String references, String jsonName,
+            String jsonFormatter, String key, String property, String category, String inputLabel, String inputWidget,
+            String suggestionType, String inputListKey, Integer maxLen, boolean branchScoping, boolean trim,
+            boolean allowNegative, boolean readOnly, boolean nullable, boolean auditable, boolean reportable,
+            boolean maintainLink) {
         setConfigType(ConfigType.STATIC);
         this.dataType = dataType;
         this.name = name;
         this.label = label;
         this.references = references;
+        this.jsonName = jsonName;
+        this.jsonFormatter = jsonFormatter;
         this.key = key;
         this.property = property;
         this.category = category;
@@ -241,6 +250,22 @@ public class AppEntityField extends BaseConfigEntity {
 
     public void setReferences(String references) {
         this.references = references;
+    }
+
+    public String getJsonName() {
+        return jsonName;
+    }
+
+    public void setJsonName(String jsonName) {
+        this.jsonName = jsonName;
+    }
+
+    public String getJsonFormatter() {
+        return jsonFormatter;
+    }
+
+    public void setJsonFormatter(String jsonFormatter) {
+        this.jsonFormatter = jsonFormatter;
     }
 
     public String getKey() {

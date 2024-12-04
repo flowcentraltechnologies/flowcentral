@@ -24,6 +24,7 @@ package com.flowcentraltech.flowcentral.codegeneration.generators;
  */
 public enum StaticMessageCategoryType {
     HEADER("Header"),
+    API("API"),
     APPLET("Applet"),
     CHART("Chart"),
     DASHBOARD("Dashboard"),

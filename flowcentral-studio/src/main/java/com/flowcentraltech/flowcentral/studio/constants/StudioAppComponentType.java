@@ -20,6 +20,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.flowcentraltech.flowcentral.application.entities.AppAPI;
 import com.flowcentraltech.flowcentral.application.entities.AppApplet;
 import com.flowcentraltech.flowcentral.application.entities.AppEntity;
 import com.flowcentraltech.flowcentral.application.entities.AppEnumeration;
@@ -207,6 +208,21 @@ public enum StudioAppComponentType implements EnumConst {
                     | StudioAppComponentFlags.SUPPORTS_SAVEAS,
             AppletType.STUDIO_FC_COMPONENT,
             AppRef.class),
+    API(
+            "api_",
+            "appAPIForm",
+            "$m{studio.application.component.type.api}",
+            "$m{studio.application.component.type.apis}",
+            "studio.menu.label.reference",
+            "link",
+            "/studioappcomponentapplet",
+            "studiooncreatecomponent-policy",
+            null,
+            null,
+            StudioAppComponentFlags.ENTITY_COMPONENT | StudioAppComponentFlags.SUPPORTS_NEW
+                    | StudioAppComponentFlags.SUPPORTS_SAVEAS,
+            AppletType.STUDIO_FC_COMPONENT,
+            AppAPI.class),
     CHART(
             "cht_",
             "chartForm",
