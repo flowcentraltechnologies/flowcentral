@@ -153,7 +153,7 @@ public class CreateJsonEntityFormWizardTaskProcessor extends AbstractFormWizardT
                 appApplet.setMenuAccess(i == 0);
                 appApplet.setType(AppletType.MANAGE_ENTITYLIST);
 
-                entitySchemaManager.createDefaultAppletComponents(applicationName, appApplet);
+                entitySchemaManager.createDefaultAppletComponents(applicationName, appApplet, i > 0);
                 au.environment().create(appApplet);
                 logDebug(taskMonitor, "Applet [{0}] successfully created.", appletName);
             }

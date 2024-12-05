@@ -46,7 +46,7 @@ public class StudioJsonEntity extends BaseAuditEntity {
     @Column(name = "DATE_FORMATTER", length = 64, nullable = true)
     private String dateFormatter;
 
-    @Column(name = "DATE_FORMATTER", length = 64, nullable = true)
+    @Column(name = "DATETIME_FORMATTER", length = 64, nullable = true)
     private String dateTimeFormatter;
 
     @Column(length = 64, nullable = true)

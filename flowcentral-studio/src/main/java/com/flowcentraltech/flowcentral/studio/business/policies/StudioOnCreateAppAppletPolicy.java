@@ -43,7 +43,7 @@ public class StudioOnCreateAppAppletPolicy extends StudioOnCreateComponentPolicy
         final String applicationName = (String) getSessionAttribute(
                 StudioSessionAttributeConstants.CURRENT_APPLICATION_NAME);
         final AppApplet appApplet = (AppApplet) ctx.getInst();
-        entitySchemaManager.createDefaultAppletComponents(applicationName, appApplet);
+        entitySchemaManager.createDefaultAppletComponents(applicationName, appApplet, false);
         return null;
     }
 

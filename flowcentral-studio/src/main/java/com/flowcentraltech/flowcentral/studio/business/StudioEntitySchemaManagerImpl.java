@@ -327,7 +327,7 @@ public class StudioEntitySchemaManagerImpl extends AbstractEntitySchemaManager {
     }
 
     @Override
-    public String createDefaultAppletComponents(String applicationName, AppApplet appApplet) throws UnifyException {
+    public String createDefaultAppletComponents(String applicationName, AppApplet appApplet, boolean child) throws UnifyException {
         if (!appApplet.isIdBlank()) {
             return null;
         }
@@ -375,6 +375,10 @@ public class StudioEntitySchemaManagerImpl extends AbstractEntitySchemaManager {
                     for (EntityFieldDef entityFieldDef : entityDef.getFieldDefList()) {
                         if (entityFieldDef.isTableViewable()
                                 && !skipTableColumn.contains(entityFieldDef.getFieldName())) {
+                            if (child && entityFieldDef.isNonEnumForeignKey()) {
+                                continue;
+                            }
+                            
                             AppTableColumn appTableColumn = new AppTableColumn();
                             appTableColumn.setField(entityFieldDef.getFieldName());
                             appTableColumn.setLabel(null);
@@ -479,6 +483,10 @@ public class StudioEntitySchemaManagerImpl extends AbstractEntitySchemaManager {
                         for (EntityFieldDef entityFieldDef : entityDef.getFieldDefList()) {
                             if (entityFieldDef.isFormViewable() && !entityFieldDef.isListOnly()
                                     && !skipFormField.contains(entityFieldDef.getFieldName())) {
+                                if (child && entityFieldDef.isNonEnumForeignKey()) {
+                                    continue;
+                                }
+                                
                                 appFormElement = new AppFormElement();
                                 appFormElement.setType(FormElementType.FIELD);
                                 appFormElement.setElementName(entityFieldDef.getFieldName());
