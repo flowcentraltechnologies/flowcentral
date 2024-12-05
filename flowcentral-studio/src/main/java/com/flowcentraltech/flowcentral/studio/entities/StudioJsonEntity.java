@@ -42,6 +42,12 @@ public class StudioJsonEntity extends BaseAuditEntity {
 
     @Column(length = 32)
     private String entityName;
+    
+    @Column(name = "DATE_FORMATTER", length = 64, nullable = true)
+    private String dateFormatter;
+
+    @Column(name = "DATETIME_FORMATTER", length = 64, nullable = true)
+    private String dateTimeFormatter;
 
     @Column(length = 64, nullable = true)
     private String delegate;
@@ -57,6 +63,9 @@ public class StudioJsonEntity extends BaseAuditEntity {
 
     @Column(nullable = true)
     private Boolean generateApplet;
+
+    @Column(nullable = true)
+    private Boolean generateRest;
     
     @ListOnly(key = "applicationId", property = "name")
     private String applicationName;
@@ -102,6 +111,22 @@ public class StudioJsonEntity extends BaseAuditEntity {
         this.entityName = entityName;
     }
 
+    public String getDateFormatter() {
+        return dateFormatter;
+    }
+
+    public void setDateFormatter(String dateFormatter) {
+        this.dateFormatter = dateFormatter;
+    }
+
+    public String getDateTimeFormatter() {
+        return dateTimeFormatter;
+    }
+
+    public void setDateTimeFormatter(String dateTimeFormatter) {
+        this.dateTimeFormatter = dateTimeFormatter;
+    }
+
     public String getDelegate() {
         return delegate;
     }
@@ -140,6 +165,14 @@ public class StudioJsonEntity extends BaseAuditEntity {
 
     public void setGenerateApplet(Boolean generateApplet) {
         this.generateApplet = generateApplet;
+    }
+
+    public Boolean getGenerateRest() {
+        return generateRest;
+    }
+
+    public void setGenerateRest(Boolean generateRest) {
+        this.generateRest = generateRest;
     }
 
     public String getApplicationName() {

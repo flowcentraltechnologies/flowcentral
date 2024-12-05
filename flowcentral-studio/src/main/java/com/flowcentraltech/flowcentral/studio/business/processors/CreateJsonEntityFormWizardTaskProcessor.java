@@ -21,6 +21,7 @@ import java.util.List;
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.business.EntitySchemaManager;
 import com.flowcentraltech.flowcentral.application.data.ApplicationDef;
+import com.flowcentraltech.flowcentral.application.entities.AppAPI;
 import com.flowcentraltech.flowcentral.application.entities.AppApplet;
 import com.flowcentraltech.flowcentral.application.entities.AppEntity;
 import com.flowcentraltech.flowcentral.application.entities.AppEntityField;
@@ -33,6 +34,7 @@ import com.flowcentraltech.flowcentral.application.web.widgets.EntityComposition
 import com.flowcentraltech.flowcentral.common.annotation.EntityReferences;
 import com.flowcentraltech.flowcentral.common.business.policies.AbstractFormWizardTaskProcessor;
 import com.flowcentraltech.flowcentral.common.constants.ConfigType;
+import com.flowcentraltech.flowcentral.configuration.constants.APIType;
 import com.flowcentraltech.flowcentral.configuration.constants.AppletType;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityBaseType;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldDataType;
@@ -82,6 +84,8 @@ public class CreateJsonEntityFormWizardTaskProcessor extends AbstractFormWizardT
         final ApplicationDef applicationDef = au.application().getApplicationDef(applicationId);
         final String applicationName = applicationDef.getName();
         final EntityBaseType baseType = instValueStore.retrieve(EntityBaseType.class, "baseType");
+        final String dateFormatter = instValueStore.retrieve(String.class, "dateFormatter");
+        final String dateTimeFormatter = instValueStore.retrieve(String.class, "dateTimeFormatter");
         AppEntity appEntity = null;
         for (EntityCompositionEntry entry : entityComposition.getEntries()) {
             if (entry.getFieldType() == null) {
@@ -105,7 +109,9 @@ public class CreateJsonEntityFormWizardTaskProcessor extends AbstractFormWizardT
                 appEntity.setDescription(NameUtils.describeName(entry.getEntityName()));
                 appEntity.setLabel(appEntity.getDescription());
                 appEntity.setTableName(entry.getTable());
-                final String entityClass = ApplicationCodeGenUtils.generateCustomEntityClassName(ConfigType.CUSTOM,
+                appEntity.setDateFormatter(dateFormatter); 
+                appEntity.setDateTimeFormatter(dateTimeFormatter);
+                final String entityClass = ApplicationCodeGenUtils.generateCustomEntityClassName(ConfigType.STATIC, //Not an error
                         applicationName, entry.getEntityName());
                 appEntity.setEntityClass(entityClass);
                 appEntity.setDelegate(delegate);
@@ -125,12 +131,17 @@ public class CreateJsonEntityFormWizardTaskProcessor extends AbstractFormWizardT
         // Create CRUD applets
         final boolean generateApplets = instValueStore.retrieve(boolean.class, "generateApplet");
         if (generateApplets) {
+            String rootAppletName = null;
             // Do reverse loop to create child applets first
             logDebug(taskMonitor, "Creating one or more applets...");
             for (int i = entityNames.size() - 1; i >= 0; i--) {
                 final String _entity = entityNames.get(i);
                 ApplicationEntityNameParts parts = ApplicationNameUtils.getApplicationEntityNameParts(_entity);
                 final String appletName = "manage" + StringUtils.capitalizeFirstLetter(parts.getEntityName());
+                if (i == 0) {
+                    rootAppletName = appletName;
+                }
+                
                 logDebug(taskMonitor, "Creating new entity list applet...");
                 AppApplet appApplet = new AppApplet();
                 appApplet.setApplicationId(applicationId);
@@ -142,9 +153,36 @@ public class CreateJsonEntityFormWizardTaskProcessor extends AbstractFormWizardT
                 appApplet.setMenuAccess(i == 0);
                 appApplet.setType(AppletType.MANAGE_ENTITYLIST);
 
-                entitySchemaManager.createDefaultAppletComponents(applicationName, appApplet);
+                entitySchemaManager.createDefaultAppletComponents(applicationName, appApplet, i > 0);
                 au.environment().create(appApplet);
                 logDebug(taskMonitor, "Applet [{0}] successfully created.", appletName);
+            }
+
+            // Create REST API
+            final boolean generateRest = instValueStore.retrieve(boolean.class, "generateRest");
+            if (generateRest) {
+                // Generate for root entity only
+                logDebug(taskMonitor, "Creating REST API...");
+                final String _entity = entityNames.get(0);
+                ApplicationEntityNameParts parts = ApplicationNameUtils.getApplicationEntityNameParts(_entity);
+                final String apiName = StringUtils.decapitalize(parts.getEntityName()) + "RestAPI";
+                final String apiDesc = StringUtils.capitalizeFirstLetter(parts.getEntityName()) + " Rest API";
+                logDebug(taskMonitor, "Creating entity REST API...");
+                AppAPI appAPI = new AppAPI();
+                appAPI.setApplicationId(applicationId);
+                appAPI.setType(APIType.REST_CRUD);
+                appAPI.setName(apiName);
+                appAPI.setDescription(apiDesc);
+                appAPI.setConfigType(ConfigType.CUSTOM);
+                appAPI.setEntity(_entity);
+                appAPI.setApplet(ApplicationNameUtils.ensureLongNameReference(applicationName, rootAppletName));
+                appAPI.setSupportCreate(Boolean.TRUE);
+                appAPI.setSupportDelete(Boolean.TRUE);
+                appAPI.setSupportRead(Boolean.TRUE);
+                appAPI.setSupportUpdate(Boolean.TRUE);
+
+                au.environment().create(appAPI);
+                logDebug(taskMonitor, "REST API [{0}] successfully created.", apiName);
             }
         }
     }
@@ -179,6 +217,11 @@ public class CreateJsonEntityFormWizardTaskProcessor extends AbstractFormWizardT
         appEntityField.setInputWidget(InputWidgetUtils.getDefaultSyncEntityFieldWidget(dataType));
         appEntityField.setJsonName(entry.getJsonName());
         appEntityField.setJsonFormatter(entry.getFormatter());
+        if (dataType.isDecimal()) {
+            appEntityField.setPrecision(20);
+            appEntityField.setScale(2);
+        }
+
         return appEntityField;
     }
 

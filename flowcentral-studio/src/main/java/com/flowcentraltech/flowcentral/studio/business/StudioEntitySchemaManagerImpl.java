@@ -327,7 +327,7 @@ public class StudioEntitySchemaManagerImpl extends AbstractEntitySchemaManager {
     }
 
     @Override
-    public String createDefaultAppletComponents(String applicationName, AppApplet appApplet) throws UnifyException {
+    public String createDefaultAppletComponents(String applicationName, AppApplet appApplet, boolean child) throws UnifyException {
         if (!appApplet.isIdBlank()) {
             return null;
         }
@@ -363,24 +363,29 @@ public class StudioEntitySchemaManagerImpl extends AbstractEntitySchemaManager {
                     appTable.setDescription(tableDesc);
                     appTable.setLabel(tableDesc);
                     appTable.setSortHistory(-1);
-                    appTable.setItemsPerPage(20);
+                    appTable.setItemsPerPage(25);
                     appTable.setSortable(true);
+                    appTable.setSerialNo(true);
                     appTable.setShowLabelHeader(false);
                     appTable.setHeaderToUpperCase(false);
                     appTable.setHeaderCenterAlign(false);
-                    appTable.setBasicSearch(false);
+                    appTable.setBasicSearch(true);
                     appTable.setLimitSelectToColumns(true);
                     List<AppTableColumn> columnList = new ArrayList<AppTableColumn>();
                     for (EntityFieldDef entityFieldDef : entityDef.getFieldDefList()) {
                         if (entityFieldDef.isTableViewable()
                                 && !skipTableColumn.contains(entityFieldDef.getFieldName())) {
+                            if (child && entityFieldDef.isNonEnumForeignKey()) {
+                                continue;
+                            }
+                            
                             AppTableColumn appTableColumn = new AppTableColumn();
                             appTableColumn.setField(entityFieldDef.getFieldName());
                             appTableColumn.setLabel(null);
                             String widget = InputWidgetUtils.resolveEntityFieldWidget(entityFieldDef);
                             appTableColumn.setRenderWidget(widget);
 
-                            if (entityFieldDef.isMaintainLink()) {
+                            if (columnList.isEmpty() || entityFieldDef.isMaintainLink()) {
                                 appTableColumn.setLinkAct("maintainAct");
                             }
 
@@ -478,6 +483,10 @@ public class StudioEntitySchemaManagerImpl extends AbstractEntitySchemaManager {
                         for (EntityFieldDef entityFieldDef : entityDef.getFieldDefList()) {
                             if (entityFieldDef.isFormViewable() && !entityFieldDef.isListOnly()
                                     && !skipFormField.contains(entityFieldDef.getFieldName())) {
+                                if (child && entityFieldDef.isNonEnumForeignKey()) {
+                                    continue;
+                                }
+                                
                                 appFormElement = new AppFormElement();
                                 appFormElement.setType(FormElementType.FIELD);
                                 appFormElement.setElementName(entityFieldDef.getFieldName());

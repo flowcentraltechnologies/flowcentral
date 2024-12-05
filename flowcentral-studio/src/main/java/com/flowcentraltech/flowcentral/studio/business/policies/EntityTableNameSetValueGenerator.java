@@ -21,6 +21,7 @@ import com.flowcentraltech.flowcentral.application.data.ApplicationDef;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.util.ApplicationCodeGenUtils;
 import com.flowcentraltech.flowcentral.common.annotation.EntityReferences;
+import com.flowcentraltech.flowcentral.studio.constants.StudioModuleSysParamConstants;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.data.ValueStore;
@@ -37,8 +38,10 @@ public class EntityTableNameSetValueGenerator extends AbstractFieldSetValueGener
 
     @Override
     public Object generate(EntityDef entityDef, ValueStore valueStore, String rule) throws UnifyException {
+        final String tablePrefix = system().getSysParameterValue(String.class,
+                StudioModuleSysParamConstants.DEFAULT_TABLE_PREFIX);
         ApplicationDef applicationDef = application().getApplicationDef(entityDef.getApplicationName());
-        return ApplicationCodeGenUtils.generateCustomEntityTableName(applicationDef.getModuleShortCode(),
+        return ApplicationCodeGenUtils.generateCustomEntityTableName(tablePrefix, applicationDef.getModuleShortCode(),
                 valueStore.retrieve(String.class, "name"));
     }
 

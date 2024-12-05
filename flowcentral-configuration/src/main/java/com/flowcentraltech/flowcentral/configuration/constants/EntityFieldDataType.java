@@ -435,6 +435,10 @@ public enum EntityFieldDataType implements EnumConst {
                 || CHILD_LIST.equals(this);
     }
 
+    public boolean isNonEnumForeignKey() {
+        return REF.equals(this) || REF_UNLINKABLE.equals(this);
+    }
+
     public boolean isForeignKey() {
         return REF.equals(this) || REF_UNLINKABLE.equals(this) || ENUM_REF.equals(this);
     }

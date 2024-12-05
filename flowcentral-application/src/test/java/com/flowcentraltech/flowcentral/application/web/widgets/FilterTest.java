@@ -692,8 +692,8 @@ public class FilterTest extends AbstractFlowCentralTest {
 
             ed = EntityDef
                     .newBuilder(ConfigType.STATIC, "com.flowcentraltech.flowcentral.application.web.widgets.Product",
-                            "Product", null, null, null, false, false, false, false, false, "application.product",
-                            "Products", 1L, 1L)
+                            "Product", null, null, null, null, null, false, false, false, false, false,
+                            "application.product", "Products", 1L, 1L)
                     .addFieldDef("application.text",
                             au.setAdhocWidgetTypeDef(DataType.STRING, InputType.STRING, "application.name",
                                     "Short Name", "!ui-name", "!ui-label"),

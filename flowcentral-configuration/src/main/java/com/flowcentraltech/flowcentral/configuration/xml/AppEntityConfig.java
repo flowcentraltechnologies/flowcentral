@@ -54,6 +54,12 @@ public class AppEntityConfig extends BaseNameConfig {
     
     @JacksonXmlProperty(isAttribute = true)
     private String dataSourceName;
+
+    @JacksonXmlProperty(isAttribute = true)
+    private String dateFormatter;
+
+    @JacksonXmlProperty(isAttribute = true)
+    private String dateTimeFormatter;
     
     @JacksonXmlProperty(isAttribute = true)
     private Boolean mapped;
@@ -160,6 +166,22 @@ public class AppEntityConfig extends BaseNameConfig {
 
     public void setDataSourceName(String dataSourceName) {
         this.dataSourceName = dataSourceName;
+    }
+
+    public String getDateFormatter() {
+        return dateFormatter;
+    }
+
+    public void setDateFormatter(String dateFormatter) {
+        this.dateFormatter = dateFormatter;
+    }
+
+    public String getDateTimeFormatter() {
+        return dateTimeFormatter;
+    }
+
+    public void setDateTimeFormatter(String dateTimeFormatter) {
+        this.dateTimeFormatter = dateTimeFormatter;
     }
 
     public Boolean getMapped() {

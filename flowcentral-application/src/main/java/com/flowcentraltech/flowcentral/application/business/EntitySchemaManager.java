@@ -80,9 +80,12 @@ public interface EntitySchemaManager extends FlowCentralComponent {
      *                        the application name
      * @param appApplet
      *                        the applet
+     * @param child
+     *                        child applet indication
      * @return the applet name
      * @throws UnifyException
      *                        if an error occurs
      */
-    String createDefaultAppletComponents(String applicationName, AppApplet appApplet) throws UnifyException;
+    String createDefaultAppletComponents(String applicationName, AppApplet appApplet, boolean child)
+            throws UnifyException;
 }

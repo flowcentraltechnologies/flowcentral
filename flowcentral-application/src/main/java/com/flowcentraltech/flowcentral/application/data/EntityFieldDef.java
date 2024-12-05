@@ -526,6 +526,10 @@ public class EntityFieldDef implements Listable, EntityFieldAttributes {
         return !StringUtils.isBlank(refLongName);
     }
 
+    public boolean isNonEnumForeignKey() {
+        return dataType.isNonEnumForeignKey();
+    }
+
     public boolean isForeignKey() {
         return dataType.isForeignKey();
     }

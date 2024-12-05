@@ -39,6 +39,7 @@ import com.flowcentraltech.flowcentral.configuration.constants.EntityBaseType;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldDataType;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldType;
 import com.flowcentraltech.flowcentral.configuration.constants.SeriesType;
+import com.tcdng.unify.common.constants.StandardFormatType;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.batch.ConstraintAction;
 import com.tcdng.unify.core.constant.DynamicEntityFieldType;
@@ -167,6 +168,10 @@ public class EntityDef extends BaseApplicationEntityDef {
 
     private String dataSourceName;
 
+    private String dateFormatter;
+
+    private String dateTimeFormatter;
+
     private String addPrivilege;
 
     private String editPrivilege;
@@ -210,8 +215,9 @@ public class EntityDef extends BaseApplicationEntityDef {
             Map<String, EntitySearchInputDef> searchInputDefs, Map<String, EntitySeriesDef> seriesDefs,
             Map<String, EntityCategoryDef> categoryDefs, ApplicationEntityNameParts nameParts, String originClassName,
             String tableName, String label, String emailProducerConsumer, String delegate, String dataSourceName,
-            boolean mapped, boolean supportsChangeEvents, boolean auditable, boolean reportable, boolean actionPolicy,
-            String description, Long id, long version) throws UnifyException {
+            String dateFormatter, String dateTimeFormatter, boolean mapped, boolean supportsChangeEvents,
+            boolean auditable, boolean reportable, boolean actionPolicy, String description, Long id, long version)
+            throws UnifyException {
         super(nameParts, description, id, version);
         this.baseType = baseType;
         this.type = type;
@@ -222,6 +228,8 @@ public class EntityDef extends BaseApplicationEntityDef {
         this.mapped = mapped;
         this.delegate = delegate;
         this.dataSourceName = dataSourceName;
+        this.dateFormatter = dateFormatter;
+        this.dateTimeFormatter = dateTimeFormatter;
         this.supportsChangeEvents = supportsChangeEvents;
         this.auditable = auditable;
         this.reportable = reportable;
@@ -355,6 +363,14 @@ public class EntityDef extends BaseApplicationEntityDef {
 
     public String getDataSourceName() {
         return dataSourceName;
+    }
+
+    public String getDateFormatter() {
+        return dateFormatter;
+    }
+
+    public String getDateTimeFormatter() {
+        return dateTimeFormatter;
     }
 
     public boolean isDelegate() {
@@ -494,29 +510,36 @@ public class EntityDef extends BaseApplicationEntityDef {
         for (EntityFieldDef entityFieldDef : entityDef.getColumnFieldDefList()) {
             final String fieldName = entityFieldDef.getFieldName();
             fields.add(new JsonFieldComposition(DynamicEntityFieldType.FIELD, entityFieldDef.getDataType().dataType(),
-                    fieldName, entityFieldDef.getJsonName(), entityFieldDef.getJsonFormatter(),
+                    fieldName, entityFieldDef.getJsonName(),
+                    StandardFormatType.fromCode(entityFieldDef.getJsonFormatter()),
                     ApplicationEntityUtils.isReservedFieldName(fieldName)));
         }
 
         for (EntityFieldDef entityFieldDef : entityDef.getChildFieldDefList()) {
-            final EntityDef _entityDef = au.getEntityDef(entityFieldDef.getReferences());
+            final RefDef refDef = au.getRefDef(entityFieldDef.getReferences());
+            final EntityDef _entityDef = au.getEntityDef(refDef.getEntity());
             JsonObjectComposition _jsonObjectComposition = getJsonComposition(au, _entityDef,
                     entityFieldDef.getJsonName() == null ? entityFieldDef.getFieldName()
                             : entityFieldDef.getJsonName());
             fields.add(new JsonFieldComposition(_jsonObjectComposition, DynamicEntityFieldType.CHILD, null,
-                    entityFieldDef.getFieldName(), entityFieldDef.getJsonName(), entityFieldDef.getJsonFormatter()));
+                    entityFieldDef.getFieldName(), entityFieldDef.getJsonName(),
+                    StandardFormatType.fromCode(entityFieldDef.getJsonFormatter())));
         }
 
         for (EntityFieldDef entityFieldDef : entityDef.getChildListFieldDefList()) {
-            final EntityDef _entityDef = au.getEntityDef(entityFieldDef.getReferences());
+            final RefDef refDef = au.getRefDef(entityFieldDef.getReferences());
+            final EntityDef _entityDef = au.getEntityDef(refDef.getEntity());
             JsonObjectComposition _jsonObjectComposition = getJsonComposition(au, _entityDef,
                     entityFieldDef.getJsonName() == null ? entityFieldDef.getFieldName()
                             : entityFieldDef.getJsonName());
             fields.add(new JsonFieldComposition(_jsonObjectComposition, DynamicEntityFieldType.CHILDLIST, null,
-                    entityFieldDef.getFieldName(), entityFieldDef.getJsonName(), entityFieldDef.getJsonFormatter()));
+                    entityFieldDef.getFieldName(), entityFieldDef.getJsonName(),
+                    StandardFormatType.fromCode(entityFieldDef.getJsonFormatter())));
         }
 
-        return new JsonObjectComposition(name, Collections.unmodifiableList(fields));
+        return new JsonObjectComposition(name, Collections.unmodifiableList(fields),
+                StandardFormatType.fromCode(entityDef.getDateFormatter()),
+                StandardFormatType.fromCode(entityDef.getDateTimeFormatter()));
     }
 
     public List<String> validate(AppletUtilities au, Entity inst) throws UnifyException {
@@ -1298,20 +1321,21 @@ public class EntityDef extends BaseApplicationEntityDef {
     }
 
     public static Builder newBuilder(ConfigType type, String originClassName, String label,
-            String emailProducerConsumer, String delegate, String dataSourceName, boolean mapped,
-            boolean supportsChangeEvents, boolean auditable, boolean reportable, boolean actionPolicy, String longName,
-            String description, Long id, long version) {
+            String emailProducerConsumer, String delegate, String dataSourceName, String dateFormatter,
+            String dateTimeFormatter, boolean mapped, boolean supportsChangeEvents, boolean auditable,
+            boolean reportable, boolean actionPolicy, String longName, String description, Long id, long version) {
         return new Builder(null, type, originClassName, null, label, emailProducerConsumer, delegate, dataSourceName,
-                mapped, supportsChangeEvents, auditable, reportable, actionPolicy, longName, description, id, version);
+                dateFormatter, dateTimeFormatter, mapped, supportsChangeEvents, auditable, reportable, actionPolicy,
+                longName, description, id, version);
     }
 
     public static Builder newBuilder(EntityBaseType baseType, ConfigType type, String originClassName, String tableName,
-            String label, String emailProducerConsumer, String delegate, String dataSourceName, boolean mapped,
-            boolean supportsChangeEvents, boolean auditable, boolean reportable, boolean actionPolicy, String longName,
-            String description, Long id, long version) {
+            String label, String emailProducerConsumer, String delegate, String dataSourceName, String dateFormatter,
+            String dateTimeFormatter, boolean mapped, boolean supportsChangeEvents, boolean auditable,
+            boolean reportable, boolean actionPolicy, String longName, String description, Long id, long version) {
         return new Builder(baseType, type, originClassName, tableName, label, emailProducerConsumer, delegate,
-                dataSourceName, mapped, supportsChangeEvents, auditable, reportable, actionPolicy, longName,
-                description, id, version);
+                dataSourceName, dateFormatter, dateTimeFormatter, mapped, supportsChangeEvents, auditable, reportable,
+                actionPolicy, longName, description, id, version);
     }
 
     public static class Builder {
@@ -1350,6 +1374,10 @@ public class EntityDef extends BaseApplicationEntityDef {
 
         private String dataSourceName;
 
+        private String dateFormatter;
+
+        private String dateTimeFormatter;
+
         private boolean mapped;
 
         private boolean supportsChangeEvents;
@@ -1376,9 +1404,9 @@ public class EntityDef extends BaseApplicationEntityDef {
         }
 
         public Builder(EntityBaseType baseType, ConfigType type, String originClassName, String tableName, String label,
-                String emailProducerConsumer, String delegate, String dataSourceName, boolean mapped,
-                boolean supportsChangeEvents, boolean auditable, boolean reportable, boolean actionPolicy,
-                String longName, String description, Long id, long version) {
+                String emailProducerConsumer, String delegate, String dataSourceName, String dateFormatter,
+                String dateTimeFormatter, boolean mapped, boolean supportsChangeEvents, boolean auditable,
+                boolean reportable, boolean actionPolicy, String longName, String description, Long id, long version) {
             this.baseType = baseType;
             this.type = type;
             this.fieldDefMap = new LinkedHashMap<String, EntityFieldDef>();
@@ -1389,6 +1417,8 @@ public class EntityDef extends BaseApplicationEntityDef {
             this.emailProducerConsumer = emailProducerConsumer;
             this.delegate = delegate;
             this.dataSourceName = dataSourceName;
+            this.dateFormatter = dateFormatter;
+            this.dateTimeFormatter = dateTimeFormatter;
             this.mapped = mapped;
             this.supportsChangeEvents = supportsChangeEvents;
             this.auditable = auditable;
@@ -1616,8 +1646,8 @@ public class EntityDef extends BaseApplicationEntityDef {
                     DataUtils.unmodifiableList(indexList), DataUtils.unmodifiableList(uploadList),
                     DataUtils.unmodifiableMap(searchInputDefs), DataUtils.unmodifiableMap(seriesDefMap),
                     DataUtils.unmodifiableMap(categoryDefMap), nameParts, originClassName, tableName, label,
-                    emailProducerConsumer, delegate, dataSourceName, mapped, supportsChangeEvents, auditable,
-                    reportable, actionPolicy, description, id, version);
+                    emailProducerConsumer, delegate, dataSourceName, dateFormatter, dateTimeFormatter, mapped,
+                    supportsChangeEvents, auditable, reportable, actionPolicy, description, id, version);
         }
     }
 

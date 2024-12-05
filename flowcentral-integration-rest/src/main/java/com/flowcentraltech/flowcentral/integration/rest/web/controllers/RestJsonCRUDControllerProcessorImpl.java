@@ -142,7 +142,7 @@ public class RestJsonCRUDControllerProcessorImpl extends AbstractHttpCRUDControl
         
         Query<? extends Entity> query = appletUtilities.application().queryOf(apiDef.getEntity());
         setCriteria(query, parameters);
-        List<? extends Entity> list = appletUtilities.environment().listAll(query);
+        List<? extends Entity> list = appletUtilities.environment().listAllWithChildren(query);
         return getResponse(entityClassDef.getJsonComposition(appletUtilities), HttpResponseConstants.OK, list);
     }
 

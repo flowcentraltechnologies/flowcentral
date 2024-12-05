@@ -55,6 +55,12 @@ public class AppEntity extends BaseApplicationEntity {
     @Column(name = "TABLE_NM", length = 64)
     private String tableName;
 
+    @Column(name = "DATE_FORMATTER", length = 64, nullable = true)
+    private String dateFormatter;
+
+    @Column(name = "DATETIME_FORMATTER", length = 64, nullable = true)
+    private String dateTimeFormatter;
+
     @Column(name = "SUPPORTS_CHANGE_EVENT_FG")
     private boolean supportsChangeEvents;
     
@@ -157,6 +163,22 @@ public class AppEntity extends BaseApplicationEntity {
 
     public void setTableName(String tableName) {
         this.tableName = tableName;
+    }
+
+    public String getDateFormatter() {
+        return dateFormatter;
+    }
+
+    public void setDateFormatter(String dateFormatter) {
+        this.dateFormatter = dateFormatter;
+    }
+
+    public String getDateTimeFormatter() {
+        return dateTimeFormatter;
+    }
+
+    public void setDateTimeFormatter(String dateTimeFormatter) {
+        this.dateTimeFormatter = dateTimeFormatter;
     }
 
     public boolean isSupportsChangeEvents() {

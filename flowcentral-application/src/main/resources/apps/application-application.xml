@@ -995,6 +995,10 @@
 				nullable="true" />
 			<field name="dataSourceName" maxLen="64"
 				label="$m{application.appentity.datasourcename}" type="string" />
+			<field name="dateFormatter" maxLen="64"
+				label="$m{application.appentity.dateformatter}" type="string" nullable="true"/>
+			<field name="dateTimeFormatter" maxLen="64"
+				label="$m{application.appentity.datetimeformatter}" type="string" nullable="true"/>
 			<field name="auditable"
 				label="$m{application.appentity.auditable}" type="boolean" />
 			<field name="reportable"
