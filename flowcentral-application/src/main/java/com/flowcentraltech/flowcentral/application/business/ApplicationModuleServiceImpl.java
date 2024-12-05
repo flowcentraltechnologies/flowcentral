@@ -640,8 +640,9 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     if (ApplicationPredefinedEntityConstants.PROPERTYITEM_ENTITY.equals(longName)) {
                         EntityDef.Builder edb = EntityDef.newBuilder(ConfigType.STATIC,
                                 PropertyListItem.class.getName(),
-                                getApplicationMessage("application.propertyitem.label"), null, null, null, false, false,
-                                false, false, false, ApplicationPredefinedEntityConstants.PROPERTYITEM_ENTITY,
+                                getApplicationMessage("application.propertyitem.label"), null, null, null, null, null,
+                                false, false, false, false, false,
+                                ApplicationPredefinedEntityConstants.PROPERTYITEM_ENTITY,
                                 getApplicationMessage("application.propertyitem"), 0L, 1L);
                         edb.addFieldDef(textWidget, textWidget, EntityFieldDataType.STRING, EntityFieldType.STATIC,
                                 "name", getApplicationMessage("application.propertyitem.name"));
@@ -656,8 +657,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
                     if (ApplicationPredefinedEntityConstants.USAGE_ENTITY.equals(longName)) {
                         EntityDef.Builder edb = EntityDef.newBuilder(ConfigType.STATIC, Usage.class.getName(),
-                                getApplicationMessage("application.usage.label"), null, null, null, false, false, false,
-                                false, false, ApplicationPredefinedEntityConstants.USAGE_ENTITY,
+                                getApplicationMessage("application.usage.label"), null, null, null, null, null, false,
+                                false, false, false, false, ApplicationPredefinedEntityConstants.USAGE_ENTITY,
                                 getApplicationMessage("application.usage"), 0L, 1L);
                         edb.addFieldDef(textWidget, textWidget, EntityFieldDataType.STRING, EntityFieldType.STATIC,
                                 "type", getApplicationMessage("application.usage.type"));
@@ -675,8 +676,9 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     if (ApplicationPredefinedEntityConstants.ATTACHMENT_ENTITY.equals(longName)) {
                         EntityDef.Builder edb = EntityDef.newBuilder(ConfigType.STATIC,
                                 com.flowcentraltech.flowcentral.application.data.Attachment.class.getName(),
-                                getApplicationMessage("application.attachment.label"), null, null, null, false, false,
-                                false, false, false, ApplicationPredefinedEntityConstants.ATTACHMENT_ENTITY,
+                                getApplicationMessage("application.attachment.label"), null, null, null, null, null,
+                                false, false, false, false, false,
+                                ApplicationPredefinedEntityConstants.ATTACHMENT_ENTITY,
                                 getApplicationMessage("application.attachment"), 0L, 1L);
                         edb.addFieldDef(textWidget, textWidget, EntityFieldDataType.STRING, EntityFieldType.STATIC,
                                 "name", getApplicationMessage("application.attachment.name"));
@@ -694,8 +696,9 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
                     if (ApplicationPredefinedEntityConstants.SNAPSHOT_ENTITY.equals(longName)) {
                         EntityDef.Builder edb = EntityDef.newBuilder(ConfigType.STATIC, SnapshotDetails.class.getName(),
-                                getApplicationMessage("application.snapshotdetails.label"), null, null, null, false,
-                                false, false, false, false, ApplicationPredefinedEntityConstants.SNAPSHOT_ENTITY,
+                                getApplicationMessage("application.snapshotdetails.label"), null, null, null, null,
+                                null, false, false, false, false, false,
+                                ApplicationPredefinedEntityConstants.SNAPSHOT_ENTITY,
                                 getApplicationMessage("application.snapshotdetails"), 0L, 1L);
                         edb.addFieldDef(intWidget, intWidget, EntityFieldDataType.LONG, EntityFieldType.STATIC,
                                 "snapshotId", getApplicationMessage("application.snapshotdetails.snapshotid"));
@@ -718,7 +721,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     EntityDef.Builder edb = EntityDef.newBuilder(appEntity.getBaseType(), appEntity.getConfigType(),
                             appEntity.getEntityClass(), appEntity.getTableName(), appEntity.getLabel(),
                             appEntity.getEmailProducerConsumer(), appEntity.getDelegate(),
-                            appEntity.getDataSourceName(), appEntity.isMapped(), appEntity.isSupportsChangeEvents(),
+                            appEntity.getDataSourceName(), appEntity.getDateFormatter(),
+                            appEntity.getDateTimeFormatter(), appEntity.isMapped(), appEntity.isSupportsChangeEvents(),
                             appEntity.isAuditable(), appEntity.isReportable(), appEntity.isActionPolicy(), longName,
                             appEntity.getDescription(), appEntity.getId(), appEntity.getVersionNo());
 
@@ -745,8 +749,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                                     appEntityField.getColumnName(), appEntityField.getCategory(),
                                     appEntityField.getSuggestionType(), appEntityField.getInputLabel(),
                                     appEntityField.getInputListKey(), appEntityField.getLingualListKey(),
-                                    appEntityField.getAutoFormat(), appEntityField.getDefaultVal(), references, references,
-                                    appEntityField.getJsonName(), appEntityField.getJsonFormatter(),
+                                    appEntityField.getAutoFormat(), appEntityField.getDefaultVal(), references,
+                                    references, appEntityField.getJsonName(), appEntityField.getJsonFormatter(),
                                     appEntityField.getKey(), appEntityField.getProperty(), appEntityField.getRows(),
                                     appEntityField.getColumns(), appEntityField.getMinLen(), appEntityField.getMaxLen(),
                                     appEntityField.getPrecision(), appEntityField.getScale(),

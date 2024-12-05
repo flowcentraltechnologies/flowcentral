@@ -15,19 +15,15 @@
  */
 package com.flowcentraltech.flowcentral.connect.common.util;
 
-import java.text.DecimalFormat;
 import java.text.Format;
-import java.text.SimpleDateFormat;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.commons.beanutils.PropertyUtils;
 
-import com.tcdng.unify.common.constants.StandardFormatType;
 import com.tcdng.unify.common.util.ParamToken;
 import com.tcdng.unify.common.util.StringToken;
 import com.tcdng.unify.common.util.StringTokenUtils;
+import com.tcdng.unify.convert.FormatContext;
 
 /**
  * Connect string utilities.
@@ -49,7 +45,7 @@ public final class ConnectStringUtil {
     public static String applyBeanToTemplate(List<StringToken> template, Object bean) throws Exception {
         StringBuilder sb = new StringBuilder();
         if (template != null && !template.isEmpty()) {
-            TemplateContext ctx = new TemplateContext();
+            FormatContext ctx = new FormatContext();
             for (StringToken token : template) {
                 Object val = null;
                 switch(token.getType()) {
@@ -82,28 +78,5 @@ public final class ConnectStringUtil {
         }
 
         return sb.toString();
-    }
-    
-    private static class TemplateContext {
-        
-        private Map<StandardFormatType, Format> formats;
-        
-        public TemplateContext() {
-            this.formats = new HashMap<StandardFormatType, Format>();
-        }
-        
-        public Format getFormat(StandardFormatType type) {
-            Format format = formats.get(type);
-            if (format == null) {
-                if (type.isDateType()) {
-                    format = new SimpleDateFormat(type.format());
-                } else {
-                    format = new DecimalFormat(type.format());
-                }
-                formats.put(type, format);
-            }
-
-            return format;
-        }
     }
 }
