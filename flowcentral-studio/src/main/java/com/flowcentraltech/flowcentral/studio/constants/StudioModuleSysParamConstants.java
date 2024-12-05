@@ -24,4 +24,6 @@ package com.flowcentraltech.flowcentral.studio.constants;
 public interface StudioModuleSysParamConstants {
 
     String SNAPSHOT_DETAILS_LIMIT = "STU-0001";
+
+    String DEFAULT_TABLE_PREFIX= "STU-0002";
 }

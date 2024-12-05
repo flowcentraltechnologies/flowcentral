@@ -41,6 +41,16 @@
 			dataType="string" inputType="string"
 			editor="!ui-select list:studiojsonformatterlist listParams:$l{dataType} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
+		<widgetType name="dateformatterlist"
+			description="$m{studio.widgettype.dateformatterlist}"
+			dataType="string" inputType="string"
+			editor="!ui-select list:studiodateformatterlist blankOption:$m{blank.none}"
+			renderer="!ui-label" />
+		<widgetType name="datetimeformatterlist"
+			description="$m{studio.widgettype.datetimeformatterlist}"
+			dataType="string" inputType="string"
+			editor="!ui-select list:studiodatetimeformatterlist blankOption:$m{blank.none}"
+			renderer="!ui-label" />
 		<widgetType name="detailspanellist"
 			description="$m{studio.widgettype.detailspanellist}"
 			dataType="string" inputType="string"
@@ -1607,6 +1617,10 @@
 			<field name="entityName" maxLen="32"
 				label="$m{studio.jsonentity.entityname}" type="string"
 				nullable="true" />
+			<field name="dateFormatter" maxLen="64"
+				label="$m{studio.jsonentity.dateformatter}" type="string" nullable="true"/>
+			<field name="dateTimeFormatter" maxLen="64"
+				label="$m{studio.jsonentity.datetimeformatter}" type="string" nullable="true"/>
 			<field name="delegate" maxLen="64"
 				label="$m{studio.jsonentity.delegate}" type="string"
 				nullable="true" />
@@ -2422,6 +2436,10 @@
 						column="0" required="true" />
 					<field name="baseType" column="0" label="$m{studio.jsonentity.basetype}"
 						required="true" editable="true" />
+					<field name="dateFormatter" inputWidget="studio.dateformatterlist"
+						column="0" required="false" />
+					<field name="dateTimeFormatter" inputWidget="studio.datetimeformatterlist"
+						column="0" required="false" />
 					<field name="delegate" inputWidget="environmentdelegatelist"
 						column="0" />
 				</section>
@@ -2824,6 +2842,10 @@
 						column="1" switchOnChange="true" />
 					<field name="dataSourceName" inputWidget="application.text"
 						column="1" required="true" visible="false" />
+					<field name="dateFormatter" inputWidget="studio.dateformatterlist"
+						column="1" required="false" />
+					<field name="dateTimeFormatter" inputWidget="studio.datetimeformatterlist"
+						column="1" required="false" />
 				</section>
 				<section name="optionDetails" columns="type_1_2">
 					<field name="auditable" inputWidget="application.checkbox"
@@ -3013,8 +3035,6 @@
 						visible="false" switchOnChange="true" />
 					<field name="property" inputWidget="entitypropertylist"
 						column="0" visible="false" switchOnChange="true" />
-					<field name="jsonName" inputWidget="application.text" column="0"/>
-					<field name="jsonFormatter" inputWidget="studio.jsonformatterlist" column="0"/>
 					<field name="type" inputWidget="application.enumlist"
 						column="1" required="true" disabled="true" />
 					<field name="columnName" inputWidget="application.columnname"
@@ -3039,6 +3059,8 @@
 						column="1" visible="false" />
 					<field name="defaultVal" inputWidget="application.text"
 						column="1" visible="false" />
+					<field name="jsonName" inputWidget="application.text" column="1"/>
+					<field name="jsonFormatter" inputWidget="studio.jsonformatterlist" column="1"/>
 				</section>
 				<section name="optionDetails" columns="type_1_2">
 					<field name="auditable" inputWidget="application.checkbox"

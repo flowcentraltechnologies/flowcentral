@@ -42,6 +42,12 @@ public class StudioJsonEntity extends BaseAuditEntity {
 
     @Column(length = 32)
     private String entityName;
+    
+    @Column(name = "DATE_FORMATTER", length = 64, nullable = true)
+    private String dateFormatter;
+
+    @Column(name = "DATE_FORMATTER", length = 64, nullable = true)
+    private String dateTimeFormatter;
 
     @Column(length = 64, nullable = true)
     private String delegate;
@@ -103,6 +109,22 @@ public class StudioJsonEntity extends BaseAuditEntity {
 
     public void setEntityName(String entityName) {
         this.entityName = entityName;
+    }
+
+    public String getDateFormatter() {
+        return dateFormatter;
+    }
+
+    public void setDateFormatter(String dateFormatter) {
+        this.dateFormatter = dateFormatter;
+    }
+
+    public String getDateTimeFormatter() {
+        return dateTimeFormatter;
+    }
+
+    public void setDateTimeFormatter(String dateTimeFormatter) {
+        this.dateTimeFormatter = dateTimeFormatter;
     }
 
     public String getDelegate() {

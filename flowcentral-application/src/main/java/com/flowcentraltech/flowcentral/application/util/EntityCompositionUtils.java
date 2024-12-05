@@ -38,7 +38,7 @@ public final class EntityCompositionUtils {
 
     }
 
-    public static EntityComposition createEntityComposition(String moduleShortCode, List<EntityTypeInfo> entityTypeList)
+    public static EntityComposition createEntityComposition(String tablePrefix, String moduleShortCode, List<EntityTypeInfo> entityTypeList)
             throws UnifyException {
         List<EntityCompositionEntry> entries = new ArrayList<EntityCompositionEntry>();
         for (EntityTypeInfo entityTypeInfo : entityTypeList) {
@@ -46,7 +46,7 @@ public final class EntityCompositionUtils {
             EntityCompositionEntry entry = new EntityCompositionEntry();
             entry.setEntityName(entityTypeInfo.getName());
             entry.setTable(
-                    ApplicationCodeGenUtils.generateCustomEntityTableName(moduleShortCode, entityTypeInfo.getName()));
+                    ApplicationCodeGenUtils.generateCustomEntityTableName(tablePrefix, moduleShortCode, entityTypeInfo.getName()));
             entry.setDepth(depth);
             entries.add(entry);
 

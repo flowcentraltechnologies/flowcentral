@@ -25,8 +25,11 @@ import com.flowcentraltech.flowcentral.application.web.widgets.EntityComposition
 import com.flowcentraltech.flowcentral.common.annotation.EntityReferences;
 import com.flowcentraltech.flowcentral.common.data.TargetFormMessage.FieldTarget;
 import com.flowcentraltech.flowcentral.common.data.ValidationErrors;
+import com.flowcentraltech.flowcentral.studio.constants.StudioModuleSysParamConstants;
+import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
+import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.constant.PrintFormat;
 import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.util.DataUtils;
@@ -42,6 +45,9 @@ import com.tcdng.unify.core.util.EntityTypeUtils;
 @EntityReferences({ "studio.studioJsonEntity" })
 @Component(name = "createjsonentity-navigationpolicy", description = "Create JSON Entity Nav, Policy")
 public class CreateJsonEntityNavigationPolicy extends AbstractStudioAppletNavigationPolicy {
+
+    @Configurable
+    private SystemModuleService systemModuleService;
 
     public CreateJsonEntityNavigationPolicy() {
         super(Arrays.asList("composition"));
@@ -60,10 +66,12 @@ public class CreateJsonEntityNavigationPolicy extends AbstractStudioAppletNaviga
             }
 
             // Sets entity composition JSON
+            final String tablePrefix = systemModuleService.getSysParameterValue(String.class,
+                    StudioModuleSysParamConstants.DEFAULT_TABLE_PREFIX);
             final Long applicationId = inst.retrieve(Long.class, "applicationId");
             final ApplicationDef applicationDef = au().application().getApplicationDef(applicationId);
-            final EntityComposition entityComposition = EntityCompositionUtils
-                    .createEntityComposition(applicationDef.getModuleShortCode(), entityTypeInfos);
+            final EntityComposition entityComposition = EntityCompositionUtils.createEntityComposition(tablePrefix,
+                    applicationDef.getModuleShortCode(), entityTypeInfos);
             final String compositionJson = DataUtils.asJsonString(entityComposition, PrintFormat.PRETTY);
             inst.store("refinedStructure", compositionJson);
         } else if (currentPage == 2) {

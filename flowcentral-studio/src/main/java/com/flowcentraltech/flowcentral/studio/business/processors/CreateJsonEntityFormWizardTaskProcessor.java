@@ -84,6 +84,8 @@ public class CreateJsonEntityFormWizardTaskProcessor extends AbstractFormWizardT
         final ApplicationDef applicationDef = au.application().getApplicationDef(applicationId);
         final String applicationName = applicationDef.getName();
         final EntityBaseType baseType = instValueStore.retrieve(EntityBaseType.class, "baseType");
+        final String dateFormatter = instValueStore.retrieve(String.class, "dateFormatter");
+        final String dateTimeFormatter = instValueStore.retrieve(String.class, "dateTimeFormatter");
         AppEntity appEntity = null;
         for (EntityCompositionEntry entry : entityComposition.getEntries()) {
             if (entry.getFieldType() == null) {
@@ -107,6 +109,8 @@ public class CreateJsonEntityFormWizardTaskProcessor extends AbstractFormWizardT
                 appEntity.setDescription(NameUtils.describeName(entry.getEntityName()));
                 appEntity.setLabel(appEntity.getDescription());
                 appEntity.setTableName(entry.getTable());
+                appEntity.setDateFormatter(dateFormatter); 
+                appEntity.setDateTimeFormatter(dateTimeFormatter);
                 final String entityClass = ApplicationCodeGenUtils.generateCustomEntityClassName(ConfigType.STATIC, //Not an error
                         applicationName, entry.getEntityName());
                 appEntity.setEntityClass(entityClass);
@@ -213,6 +217,11 @@ public class CreateJsonEntityFormWizardTaskProcessor extends AbstractFormWizardT
         appEntityField.setInputWidget(InputWidgetUtils.getDefaultSyncEntityFieldWidget(dataType));
         appEntityField.setJsonName(entry.getJsonName());
         appEntityField.setJsonFormatter(entry.getFormatter());
+        if (dataType.isDecimal()) {
+            appEntityField.setPrecision(20);
+            appEntityField.setScale(2);
+        }
+
         return appEntityField;
     }
 

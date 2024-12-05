@@ -459,6 +459,8 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                 appEntityConfig.setDelegate(appEntity.getDelegate());
                 appEntityConfig.setTable(appEntity.getTableName());
                 appEntityConfig.setDataSourceName(appEntity.getDataSourceName());
+                appEntityConfig.setDateFormatter(appEntity.getDateFormatter());
+                appEntityConfig.setDateTimeFormatter(appEntity.getDateTimeFormatter());
                 appEntityConfig.setMapped(appEntity.isMapped());
                 appEntityConfig.setSupportsChangeEvents(appEntity.isSupportsChangeEvents());
                 appEntityConfig.setAuditable(appEntity.isAuditable());

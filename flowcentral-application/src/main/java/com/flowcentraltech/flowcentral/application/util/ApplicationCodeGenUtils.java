@@ -35,8 +35,17 @@ public final class ApplicationCodeGenUtils {
     }
 
     public static String generateCustomEntityTableName(String moduleShortName, String entityName) {
+        return ApplicationCodeGenUtils.generateCustomEntityTableName(null, moduleShortName, entityName);
+    }
+
+    public static String generateCustomEntityTableName(String prefix, String moduleShortName, String entityName) {
+        if (prefix == null) {
         return StringUtils.isBlank(entityName) ? null
                 : "U_" + moduleShortName + "_" + SqlUtils.generateSchemaElementName(entityName, true);
+        }
+        
+        return StringUtils.isBlank(entityName) ? null
+                : prefix + moduleShortName + "_" + SqlUtils.generateSchemaElementName(entityName, true);
     }
 
     public static String generateCustomEntityClassName(ConfigType type, String applicationName, String entityName) {

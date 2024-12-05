@@ -4864,6 +4864,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appEntity.setEntityClass(appEntityConfig.getType());
                     appEntity.setTableName(tableName);
                     appEntity.setDataSourceName(appEntityConfig.getDataSourceName());
+                    appEntity.setDateFormatter(appEntityConfig.getDateFormatter());
+                    appEntity.setDateTimeFormatter(appEntityConfig.getDateTimeFormatter());
                     appEntity.setMapped(appEntityConfig.getMapped());
                     appEntity.setSupportsChangeEvents(appEntityConfig.isSupportsChangeEvents());
                     appEntity.setAuditable(appEntityConfig.getAuditable());
@@ -4883,6 +4885,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     oldAppEntity.setEntityClass(appEntityConfig.getType());
                     oldAppEntity.setTableName(tableName);
                     oldAppEntity.setDataSourceName(appEntityConfig.getDataSourceName());
+                    oldAppEntity.setDateFormatter(appEntityConfig.getDateFormatter());
+                    oldAppEntity.setDateTimeFormatter(appEntityConfig.getDateTimeFormatter());
                     oldAppEntity.setMapped(appEntityConfig.getMapped());
                     oldAppEntity.setSupportsChangeEvents(appEntityConfig.isSupportsChangeEvents());
                     oldAppEntity.setAuditable(appEntityConfig.getAuditable());
@@ -5513,6 +5517,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 appEntity.setDelegate(appEntityConfig.getDelegate());
                 appEntity.setEntityClass(appEntityConfig.getType());
                 appEntity.setTableName(appEntityConfig.getTable());
+                appEntity.setDateFormatter(appEntityConfig.getDateFormatter());
+                appEntity.setDateTimeFormatter(appEntityConfig.getDateTimeFormatter());
                 appEntity.setDataSourceName(appEntityConfig.getDataSourceName());
                 appEntity.setMapped(appEntityConfig.getMapped());
                 appEntity.setSupportsChangeEvents(appEntityConfig.isSupportsChangeEvents());
