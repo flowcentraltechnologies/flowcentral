@@ -107,7 +107,7 @@ public class CreateJsonEntityFormWizardTaskProcessor extends AbstractFormWizardT
                 appEntity.setDescription(NameUtils.describeName(entry.getEntityName()));
                 appEntity.setLabel(appEntity.getDescription());
                 appEntity.setTableName(entry.getTable());
-                final String entityClass = ApplicationCodeGenUtils.generateCustomEntityClassName(ConfigType.CUSTOM,
+                final String entityClass = ApplicationCodeGenUtils.generateCustomEntityClassName(ConfigType.STATIC, //Not an error
                         applicationName, entry.getEntityName());
                 appEntity.setEntityClass(entityClass);
                 appEntity.setDelegate(delegate);
@@ -162,7 +162,7 @@ public class CreateJsonEntityFormWizardTaskProcessor extends AbstractFormWizardT
                 final String _entity = entityNames.get(0);
                 ApplicationEntityNameParts parts = ApplicationNameUtils.getApplicationEntityNameParts(_entity);
                 final String apiName = StringUtils.decapitalize(parts.getEntityName()) + "RestAPI";
-                final String apiDesc = StringUtils.capitalizeFirstLetter(parts.getEntityName()) + "Rest API";
+                final String apiDesc = StringUtils.capitalizeFirstLetter(parts.getEntityName()) + " Rest API";
                 logDebug(taskMonitor, "Creating entity REST API...");
                 AppAPI appAPI = new AppAPI();
                 appAPI.setApplicationId(applicationId);
