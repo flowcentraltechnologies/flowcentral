@@ -171,7 +171,7 @@ public class CreateJsonEntityFormWizardTaskProcessor extends AbstractFormWizardT
                 appAPI.setDescription(apiDesc);
                 appAPI.setConfigType(ConfigType.CUSTOM);
                 appAPI.setEntity(_entity);
-                appAPI.setApplet(rootAppletName);
+                appAPI.setApplet(ApplicationNameUtils.ensureLongNameReference(applicationName, rootAppletName));
                 appAPI.setSupportCreate(Boolean.TRUE);
                 appAPI.setSupportDelete(Boolean.TRUE);
                 appAPI.setSupportRead(Boolean.TRUE);

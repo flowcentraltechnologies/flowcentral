@@ -499,7 +499,8 @@ public class EntityDef extends BaseApplicationEntityDef {
         }
 
         for (EntityFieldDef entityFieldDef : entityDef.getChildFieldDefList()) {
-            final EntityDef _entityDef = au.getEntityDef(entityFieldDef.getReferences());
+            final RefDef refDef = au.getRefDef(entityFieldDef.getReferences());
+            final EntityDef _entityDef = au.getEntityDef(refDef.getEntity());
             JsonObjectComposition _jsonObjectComposition = getJsonComposition(au, _entityDef,
                     entityFieldDef.getJsonName() == null ? entityFieldDef.getFieldName()
                             : entityFieldDef.getJsonName());
@@ -508,7 +509,8 @@ public class EntityDef extends BaseApplicationEntityDef {
         }
 
         for (EntityFieldDef entityFieldDef : entityDef.getChildListFieldDefList()) {
-            final EntityDef _entityDef = au.getEntityDef(entityFieldDef.getReferences());
+            final RefDef refDef = au.getRefDef(entityFieldDef.getReferences());
+            final EntityDef _entityDef = au.getEntityDef(refDef.getEntity());
             JsonObjectComposition _jsonObjectComposition = getJsonComposition(au, _entityDef,
                     entityFieldDef.getJsonName() == null ? entityFieldDef.getFieldName()
                             : entityFieldDef.getJsonName());
