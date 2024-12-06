@@ -75,7 +75,15 @@ public class EntityCompositionWriter extends AbstractControlWriter {
             for (int i = 0; i < len; i++) {
                 ValueStore lineValueStore = valueStoreList.get(i);
                 EntityCompositionEntry entry = (EntityCompositionEntry) lineValueStore.getValueObject();
-                writer.write("<div style=\"display:table;\">");
+                final DynamicEntityFieldType fieldType = entry.getFieldType();
+                writer.write("<div");
+                if (fieldType == null) {
+                    writer.write(" class=\"ehead\"");
+                } else {
+                    writer.write(" class=\"ebody\"");
+                }
+                
+                writer.write(" style=\"display:table;\">");
                 writer.write("<div style=\"display:table-row;\">");
                 // Write depth tabs
                 int depth = entry.getDepth();
@@ -83,10 +91,9 @@ public class EntityCompositionWriter extends AbstractControlWriter {
                     writer.write("<div style=\"display:table-cell;\"><span class=\"tab\">&nbsp;</span></div>");
                 }
 
-                final DynamicEntityFieldType fieldType = entry.getFieldType();
                 if (fieldType == null) {
-                    writeCompositionItem(writer, lineValueStore, entityNameCtrl, entityLabel);
-                    writeCompositionItem(writer, lineValueStore, entityTableCtrl, tableLabel);
+                    writeCompositionItem(writer, lineValueStore, entityNameCtrl, entityLabel, "eccelll");
+                    writeCompositionItem(writer, lineValueStore, entityTableCtrl, tableLabel, "eccelll");
                     
 //                    writeActionItem(writer, lineValueStore, addEntityCtrl);
 //                    writeActionItem(writer, lineValueStore, addFieldCtrl);
@@ -95,19 +102,19 @@ public class EntityCompositionWriter extends AbstractControlWriter {
 //                    }
                 } else {
                     if (fieldType.isChild() || fieldType.isChildList()) {
-                        writeCompositionItem(writer, lineValueStore, fieldTypeCtrl, fieldLabel);
-                        writeCompositionItem(writer, lineValueStore, fieldNameCtrl, nameLabel);
-                        writeCompositionItem(writer, lineValueStore, referencesCtrl, referencesLabel);
+                        writeCompositionItem(writer, lineValueStore, fieldTypeCtrl, fieldLabel, "eccellll");
+                        writeCompositionItem(writer, lineValueStore, fieldNameCtrl, nameLabel, "eccellll");
+                        writeCompositionItem(writer, lineValueStore, referencesCtrl, referencesLabel, "eccellll");
                     } else if (fieldType.isForeignKey()) {
-                        writeCompositionItem(writer, lineValueStore, fieldTypeCtrl, fieldLabel);
-                        writeCompositionItem(writer, lineValueStore, dataTypeCtrl, typeLabel);
-                        writeCompositionItem(writer, lineValueStore, fieldNameCtrl, nameLabel);
-                        writeCompositionItem(writer, lineValueStore, referencesCtrl, referencesLabel);
+                        writeCompositionItem(writer, lineValueStore, fieldTypeCtrl, fieldLabel, "eccellll");
+                        writeCompositionItem(writer, lineValueStore, dataTypeCtrl, typeLabel, "eccellll");
+                        writeCompositionItem(writer, lineValueStore, fieldNameCtrl, nameLabel, "eccellll");
+                        writeCompositionItem(writer, lineValueStore, referencesCtrl, referencesLabel, "eccellll");
                     } else {
-                        writeCompositionItem(writer, lineValueStore, fieldTypeCtrl, fieldLabel);
-                        writeCompositionItem(writer, lineValueStore, dataTypeCtrl, typeLabel);
-                        writeCompositionItem(writer, lineValueStore, fieldNameCtrl, nameLabel);
-                        writeCompositionItem(writer, lineValueStore, columnCtrl, colLabel);
+                        writeCompositionItem(writer, lineValueStore, fieldTypeCtrl, fieldLabel, "eccellll");
+                        writeCompositionItem(writer, lineValueStore, dataTypeCtrl, typeLabel, "eccellll");
+                        writeCompositionItem(writer, lineValueStore, fieldNameCtrl, nameLabel, "eccellll");
+                        writeCompositionItem(writer, lineValueStore, columnCtrl, colLabel, "eccellll");
                     }
 
 //                    writeActionItem(writer, lineValueStore, delFieldCtrl);
@@ -121,8 +128,10 @@ public class EntityCompositionWriter extends AbstractControlWriter {
         writer.write("</div>");
     }
 
-    private void writeCompositionItem(ResponseWriter writer, ValueStore lineValueStore, Control ctrl, String label) throws UnifyException {
-        writer.write("<div class=\"eccelll\">");
+    private void writeCompositionItem(ResponseWriter writer, ValueStore lineValueStore, Control ctrl, String label, String col) throws UnifyException {
+        writer.write("<div class=\"");
+        writer.write(col);
+        writer.write("\">");
         writer.write(label);
         writer.write("</div>");
         writer.write("<div class=\"eccell\">");
