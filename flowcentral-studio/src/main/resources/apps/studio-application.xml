@@ -1633,6 +1633,9 @@
 			<field name="generateEntity"
 				inputWidget="application.boolean"
 				label="$m{studio.jsonentity.generateentity}" type="boolean"/>
+			<field name="loadSourceJSON"
+				inputWidget="application.boolean"
+				label="$m{studio.jsonentity.loadsourcejson}" type="boolean"/>
 			<field name="generateApplet"
 				inputWidget="application.boolean"
 				label="$m{studio.jsonentity.generateapplet}" type="boolean"/>
@@ -2457,6 +2460,8 @@
 					label="$m{studio.jsonentity.form.options}" icon="rocket">
 					<field name="generateEntity" inputWidget="application.checkbox" column="0"
 						disabled="true" />
+					<field name="loadSourceJSON" inputWidget="application.checkbox" column="0"
+						editable="true" />
 					<field name="generateApplet" inputWidget="application.checkbox" column="0"
 						editable="true" />
 					<field name="generateRest" inputWidget="application.checkbox" column="0"

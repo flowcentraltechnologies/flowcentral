@@ -62,6 +62,9 @@ public class StudioJsonEntity extends BaseAuditEntity {
     private Boolean generateEntity;
 
     @Column(nullable = true)
+    private Boolean loadSourceJSON;
+    
+    @Column(nullable = true)
     private Boolean generateApplet;
 
     @Column(nullable = true)
@@ -157,6 +160,14 @@ public class StudioJsonEntity extends BaseAuditEntity {
 
     public void setGenerateEntity(Boolean generateEntity) {
         this.generateEntity = generateEntity;
+    }
+
+    public Boolean getLoadSourceJSON() {
+        return loadSourceJSON;
+    }
+
+    public void setLoadSourceJSON(Boolean loadSourceJSON) {
+        this.loadSourceJSON = loadSourceJSON;
     }
 
     public Boolean getGenerateApplet() {
