@@ -99,6 +99,11 @@ public class EnvironmentServiceImpl extends AbstractBusinessService implements E
     }
 
     @Override
+    public void commitTransactions() throws UnifyException {
+        super.commitTransactions();
+    }
+
+    @Override
     public List<String> validate(Entity inst, EvaluationMode mode) throws UnifyException {
         Database db = db(inst.getClass());
         if (db instanceof EnvironmentDelegate) {

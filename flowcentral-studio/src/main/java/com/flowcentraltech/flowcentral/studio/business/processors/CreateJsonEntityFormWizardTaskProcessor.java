@@ -21,6 +21,7 @@ import java.util.List;
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.business.EntitySchemaManager;
 import com.flowcentraltech.flowcentral.application.data.ApplicationDef;
+import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.application.entities.AppAPI;
 import com.flowcentraltech.flowcentral.application.entities.AppApplet;
 import com.flowcentraltech.flowcentral.application.entities.AppEntity;
@@ -66,6 +67,7 @@ public class CreateJsonEntityFormWizardTaskProcessor extends AbstractFormWizardT
     @Configurable
     private EntitySchemaManager entitySchemaManager;
 
+    @SuppressWarnings("unchecked")
     @Override
     public void process(TaskMonitor taskMonitor, ValueStore instValueStore) throws UnifyException {
         logDebug(taskMonitor, "Processing form wizard create JSON entity item...");
@@ -109,9 +111,11 @@ public class CreateJsonEntityFormWizardTaskProcessor extends AbstractFormWizardT
                 appEntity.setDescription(NameUtils.describeName(entry.getEntityName()));
                 appEntity.setLabel(appEntity.getDescription());
                 appEntity.setTableName(entry.getTable());
-                appEntity.setDateFormatter(dateFormatter); 
+                appEntity.setDateFormatter(dateFormatter);
                 appEntity.setDateTimeFormatter(dateTimeFormatter);
-                final String entityClass = ApplicationCodeGenUtils.generateCustomEntityClassName(ConfigType.STATIC, //Not an error
+                final String entityClass = ApplicationCodeGenUtils.generateCustomEntityClassName(ConfigType.STATIC, // Not
+                                                                                                                    // an
+                                                                                                                    // error
                         applicationName, entry.getEntityName());
                 appEntity.setEntityClass(entityClass);
                 appEntity.setDelegate(delegate);
@@ -141,7 +145,7 @@ public class CreateJsonEntityFormWizardTaskProcessor extends AbstractFormWizardT
                 if (i == 0) {
                     rootAppletName = appletName;
                 }
-                
+
                 logDebug(taskMonitor, "Creating new entity list applet...");
                 AppApplet appApplet = new AppApplet();
                 appApplet.setApplicationId(applicationId);
@@ -184,6 +188,20 @@ public class CreateJsonEntityFormWizardTaskProcessor extends AbstractFormWizardT
                 au.environment().create(appAPI);
                 logDebug(taskMonitor, "REST API [{0}] successfully created.", apiName);
             }
+
+            // Load Source JSON
+            final boolean loadSourceJSON = instValueStore.retrieve(boolean.class, "loadSourceJSON");
+            if (loadSourceJSON) {
+                au.environment().commitTransactions();
+                logDebug(taskMonitor, "Loading sample JSON object...");
+                final String sourceJson = instValueStore.retrieve(String.class, "sourceJson");
+                final String _entity = entityNames.get(0);
+                final EntityClassDef entityClassDef = au.getEntityClassDef(_entity);
+                final Entity inst = DataUtils.fromJsonString(entityClassDef.getJsonComposition(au),
+                        (Class<? extends Entity>) entityClassDef.getEntityClass(), sourceJson);
+                au.environment().create(inst);
+            }
+
         }
     }
 
@@ -225,7 +243,8 @@ public class CreateJsonEntityFormWizardTaskProcessor extends AbstractFormWizardT
         return appEntityField;
     }
 
-    private String createEntity(TaskMonitor taskMonitor, String applicationName, AppEntity appEntity) throws UnifyException {
+    private String createEntity(TaskMonitor taskMonitor, String applicationName, AppEntity appEntity)
+            throws UnifyException {
         if (appEntity != null) {
             // Save
             logDebug(taskMonitor, "Creating new entity...");
