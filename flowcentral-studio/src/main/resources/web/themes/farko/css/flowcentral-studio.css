@@ -7,13 +7,13 @@
 
  /****** VARIABLES *********/
  :root {
- 	--color-deep: #24303f;
- 	--color-menu: #3c4e63;
- 	--color-menuhov:#394452;
- 	--color-formsec: #6e819d;
- 	--color-icon: #525e6d;
- 	--color-tablesel: #bfd6ff;
- 	--color-tablehov: #d5e7fb;
+ 	--color-deep: #24303f !important;
+ 	--color-menu: #3c4e63 !important;
+ 	--color-menuhov:#394452 !important;
+ 	--color-formsec: #6e819d !important;
+ 	--color-icon: #525e6d !important;
+ 	--color-tablesel: #bfd6ff !important;
+ 	--color-tablehov: #d5e7fb !important;
  }
 
 /* flowCentral studio CSS */

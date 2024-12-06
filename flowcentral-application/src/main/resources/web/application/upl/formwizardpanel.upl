@@ -39,14 +39,12 @@
 !ui-panel:actionPanel layout:$d{!ui-horizontal style:$s{width:100%;} widths:$l{50% 50%}}
 	components:$c{navPanel exitPanel}
 
-!ui-panel:navPanel layout:$d{!ui-horizontal} components:$c{prevBtn nextBtn} 
+!ui-panel:navPanel layout:$d{!ui-horizontal} components:$c{prevBtn} 
 !ui-button:prevBtn caption:$m{button.previous} styleClass:$e{fc-actbutton}
 	eventHandler:$d{!ui-event event:onclick action:$c{prevAct}}
-!ui-button:nextBtn caption:$m{button.next} styleClass:$e{fc-actbutton}
-	eventHandler:$d{!ui-event event:onclick action:$c{nextAct}}
 	
 !ui-panel:exitPanel layout:$d{!ui-horizontal style:$s{float:right;}}
-	components:$c{cancelBtn saveCloseBtn submitCloseBtn executeBtn}
+	components:$c{cancelBtn saveCloseBtn submitCloseBtn executeBtn nextBtn}
 !ui-button:cancelBtn caption:$m{button.cancel}
 	eventHandler:$f{wizardCancelHandler}
 !ui-button:saveCloseBtn styleClass:$e{fc-bluebutton} caption:$m{button.saveclose}
@@ -57,6 +55,8 @@
 !ui-button:executeBtn caption:$m{button.execute} captionBinding:execCaption
 	styleClassBinding:$s{execStyleClass}
 	eventHandler:$f{wizardExecHandler}
+!ui-button:nextBtn caption:$m{button.next} styleClass:$e{fc-actbutton}
+	eventHandler:$d{!ui-event event:onclick action:$c{nextAct}}
 
 // Actions
 !ui-postcommand:prevAct command:previous components:$c{pageForm}

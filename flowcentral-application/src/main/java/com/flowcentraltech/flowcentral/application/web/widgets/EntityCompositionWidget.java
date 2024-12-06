@@ -63,9 +63,9 @@ public class EntityCompositionWidget extends AbstractValueListWidget<EntityCompo
     @Override
     protected void doOnPageConstruct() throws UnifyException {
         entityNameCtrl = (Control) addInternalChildWidget("!ui-name case:camel binding:entityName");
-        entityTableCtrl = (Control) addInternalChildWidget("!ui-name case:upper underscore:true binding:table");
+        entityTableCtrl = (Control) addInternalChildWidget("!ui-name case:upper underscore:true binding:table size:48");
         fieldTypeCtrl = (Control) addInternalChildWidget(
-                "!ui-select blankOption:$s{} list:dynamicentityfieldtypelist binding:fieldType");
+                "!ui-select blankOption:$s{} list:dynamicentityfieldtypelist binding:fieldType disabled:true");
         dataTypeCtrl = (Control) addInternalChildWidget(
                 "!ui-select blankOption:$s{} list:datatypelist binding:dataType");
         fieldNameCtrl = (Control) addInternalChildWidget("!ui-name case:camel binding:name");
