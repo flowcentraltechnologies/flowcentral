@@ -890,7 +890,7 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-appletmenu .hmsearch span {display: inline-block; padding: 4px; font-size: 10px; width: 14px;}
 /* TODO Revert calc(100% - 234px) */
 .fc-appletmenu .hmsection {display: inline-block; width: calc(100% - 300px);overflow-y:visible;overflow-x:clip;}
-.fc-appletmenu .hmslide {display: block;position: relative;left: 0px;white-space:nowrap;}
+.fc-appletmenu .hmslide {display: block;position: relative;left: 0px;white-space:nowrap;max-width:720px;}
 
 /*** Progress Bar ***/
 .fc-progressbar {background-color: #f44336;}
