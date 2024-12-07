@@ -33,7 +33,9 @@ import com.tcdng.unify.web.ui.widget.data.RefreshSection;
  * @since 1.0
  */
 @Component("fc-appletmenu")
-@UplAttributes({ @UplAttribute(name = "searchable", type = boolean.class, defaultVal = "false") })
+@UplAttributes({
+    @UplAttribute(name = "searchable", type = boolean.class, defaultVal = "false"),
+    @UplAttribute(name = "horizontal", type = boolean.class, defaultVal = "false")})
 public class AppletMenuWidget extends AbstractMenuWidget {
 
     private Control searchCtrl;
@@ -53,6 +55,7 @@ public class AppletMenuWidget extends AbstractMenuWidget {
         refereshSection();
     }
     
+    @Override
     public String getMenuSectionId() throws UnifyException {
         return getPrefixedId("msc_");
     }
@@ -63,6 +66,11 @@ public class AppletMenuWidget extends AbstractMenuWidget {
 
     public boolean isSearchable() throws UnifyException {
         return getUplAttribute(boolean.class, "searchable");
+    }
+
+    @Override
+    public boolean isHorizontal() throws UnifyException {
+        return getUplAttribute(boolean.class, "horizontal");
     }
 
     public String getSearchInput() {
