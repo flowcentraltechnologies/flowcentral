@@ -187,8 +187,8 @@ fux.menuHidePopup = function(uEv) {
 fux.menuToggle = function(uEv) {
 	const evp = uEv.evp;
 	const selem = _id(evp.submenuId);
-	fux.currSubMenuId = evp.submenuId;	
 	if (evp.horiz) {
+		fux.currSubMenuId = evp.submenuId;	
 		const srect = ux.boundingRect(_id(evp.secId));
 		const mrect = ux.boundingRect(_id(evp.menuId));
 		const x = mrect.left - srect.left;
