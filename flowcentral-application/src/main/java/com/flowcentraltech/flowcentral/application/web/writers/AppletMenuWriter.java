@@ -88,8 +88,8 @@ public class AppletMenuWriter extends AbstractMenuWriter {
                 writer.write("</div>");
             }
 
-            writer.write("<div class=\"hmnav\">");
-            writer.write("<span class=\"g_fsm\" id=\"").write(appletMenuWidget.getNavLeftId()).write("\">");
+            writer.write("<div class=\"hmnav\" id=\"").write(appletMenuWidget.getNavLeftId()).write("\">");;
+            writer.write("<span class=\"g_fsm\">");
             writer.write(resolveSymbolHtmlHexCode("chevron-left"));
             writer.write("</span>");
             writer.write("</div>");
@@ -101,8 +101,8 @@ public class AppletMenuWriter extends AbstractMenuWriter {
             doWriteSectionStructureAndContent(writer, appletMenuWidget, menuSectionId);
             writer.write("</div>");
 
-            writer.write("<div class=\"hmnav\">");
-            writer.write("<span class=\"g_fsm\" id=\"").write(appletMenuWidget.getNavRightId()).write("\">");
+            writer.write("<div class=\"hmnav\" id=\"").write(appletMenuWidget.getNavRightId()).write("\">");;
+            writer.write("<span class=\"g_fsm\">");
             writer.write(resolveSymbolHtmlHexCode("chevron-right"));
             writer.write("</span>");
             writer.write("</div>");
@@ -214,7 +214,7 @@ public class AppletMenuWriter extends AbstractMenuWriter {
 
             final boolean horizontal = appletMenuWidget.isHorizontal();
             if (horizontal) {
-                writer.write("<div class=\"hmslide\" id=\"").write(appletMenuWidget.getSlideId()).write("\">");
+                writer.write("<div class=\"hmslide\" style=\"left:0px;\" id=\"").write(appletMenuWidget.getSlideId()).write("\">");
             }
 
             for (ApplicationMenuDef applicationMenuDef : applicationDefList) {

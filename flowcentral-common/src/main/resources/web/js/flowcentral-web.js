@@ -22,6 +22,7 @@
  */
 const fux = {};
 const FC_USER_HINT_TIMEOUT = 3000; // 3 seconds.
+const NAV_SKIP_STEP = 32; // 32 pixels.
 
 /** Applet Menu */
 fux.rigMenu = function(rgp) {
@@ -69,6 +70,7 @@ fux.menuWire = function(rgp) {
 			evp.visible = initVisible;
 			evp.menuId = menuId;
 			evp.secId = rgp.pSecId;
+			evp.sldId = rgp.pSldId;
 			evp.submenuId = submenuId;
 			evp.mevps = mevps;
 			mevps.push(evp);
@@ -115,14 +117,78 @@ fux.menuWire = function(rgp) {
 
 fux.menuScrollLeft = function(uEv) {
 	const evp = uEv.evp;
-	const celem = _id(evp.secId);
 	const selem = _id(evp.sldId);
-	const crect = ux.boundingRect(celem);
-	const srect = ux.boundingRect(selem);
+	const skipped = - parseInt(selem.style.left);
+	if (skipped > 0) {
+		const skip = skipped > NAV_SKIP_STEP ? NAV_SKIP_STEP:skipped;
+		selem.style.left = -(skipped - skip) + "px";
+		fux.menuHidePopup(uEv);
+	}
 }
 
 fux.menuScrollRight = function(uEv) {
 	const evp = uEv.evp;
+	const celem = _id(evp.secId);
+	const selem = _id(evp.sldId);
+	
+	const w = celem.scrollWidth - celem.offsetWidth;
+	const skipped = - parseInt(selem.style.left);
+	const diff = w - skipped;
+	if (diff > 0) {
+		const skip = diff > NAV_SKIP_STEP ? NAV_SKIP_STEP:diff;
+		selem.style.left = -(skipped + skip) + "px";
+		fux.menuHidePopup(uEv);
+	}
+}
+
+fux.openWindow = function(uEv) {
+	fux.menuHidePopup(uEv);
+	ux.openWindow(uEv);
+}
+
+fux.menuOpenPath = function(uEv) {
+	fux.menuHidePopup(uEv);
+	ux.menuOpenPath(uEv);
+}
+
+fux.menuHidePopup = function(uEv) {
+	const evp = uEv.evp;
+	const elem = _id(evp.uMenuPopId);
+	if (elem) {
+		elem.style.display = "none";
+	} 
+
+	const selem = _id(fux.currSubMenuId);
+	if (selem) {
+		selem.style.display = "none";
+	} 
+}
+
+fux.menuToggle = function(uEv) {
+	const evp = uEv.evp;
+	const selem = _id(evp.submenuId);
+	if (evp.horiz) {
+		fux.currSubMenuId = evp.submenuId;	
+		const slelem = _id(evp.sldId);
+		const skipped = - parseInt(slelem.style.left);
+
+		const srect = ux.boundingRect(_id(evp.secId));
+		const mrect = ux.boundingRect(_id(evp.menuId));
+		const df = mrect.left - srect.left;
+		const ov = (mrect.left + 260) - srect.right;
+		var x = df > 0 ? skipped + df : skipped;
+		x = ov > 0 ? x - ov: x;
+		selem.style.left = x + "px";
+	}
+	
+	selem.style.display = evp.visible ? "none": "block";
+	evp.visible = !evp.visible;
+	for (var mevp of evp.mevps) {
+		if (mevp.submenuId != evp.submenuId) {
+			_id(mevp.submenuId).style.display = "none";
+			mevp.visible = false;
+		}
+	}
 }
 
 fux.menuShowPopup = function(uEv) {
@@ -176,50 +242,6 @@ fux.menuShowPopup = function(uEv) {
 				_evp.uIsDebounce = true;
 				ux.addHdl(melem, "click", fux.menuOpenPath, _evp);
 			}
-		}
-	}
-}
-
-fux.openWindow = function(uEv) {
-	fux.menuHidePopup(uEv);
-	ux.openWindow(uEv);
-}
-
-fux.menuOpenPath = function(uEv) {
-	fux.menuHidePopup(uEv);
-	ux.menuOpenPath(uEv);
-}
-
-fux.menuHidePopup = function(uEv) {
-	const evp = uEv.evp;
-	const elem = _id(evp.uMenuPopId);
-	if (elem) {
-		elem.style.display = "none";
-	} 
-
-	const selem = _id(fux.currSubMenuId);
-	if (selem) {
-		selem.style.display = "none";
-	} 
-}
-
-fux.menuToggle = function(uEv) {
-	const evp = uEv.evp;
-	const selem = _id(evp.submenuId);
-	if (evp.horiz) {
-		fux.currSubMenuId = evp.submenuId;	
-		const srect = ux.boundingRect(_id(evp.secId));
-		const mrect = ux.boundingRect(_id(evp.menuId));
-		const x = mrect.left - srect.left;
-		selem.style.left = x + "px";
-	}
-	
-	selem.style.display = evp.visible ? "none": "block";
-	evp.visible = !evp.visible;
-	for (var mevp of evp.mevps) {
-		if (mevp.submenuId != evp.submenuId) {
-			_id(mevp.submenuId).style.display = "none";
-			mevp.visible = false;
 		}
 	}
 }
