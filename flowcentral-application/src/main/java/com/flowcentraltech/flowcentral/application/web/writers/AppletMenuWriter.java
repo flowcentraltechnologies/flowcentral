@@ -71,7 +71,7 @@ public class AppletMenuWriter extends AbstractMenuWriter {
 
         if (horizontal) {
             writer.write("<div");
-            writeTagAttributesWithTrailingExtraStyleClass(writer, appletMenuWidget, "g_fsm horiz");
+            writeTagAttributesWithTrailingExtraStyleClass(writer, appletMenuWidget, "g_fsm");
             writer.write(">");
 
             // Body
@@ -88,14 +88,23 @@ public class AppletMenuWriter extends AbstractMenuWriter {
                 writer.write("</div>");
             }
 
-            writer.write("<div");
-            if (searchable) {
-                writer.write(" class=\"hmsection\"");
-            }
+            writer.write("<div class=\"hmnav\">");
+            writer.write("<span class=\"g_fsm\" id=\"").write(appletMenuWidget.getNavLeftId()).write("\">");
+            writer.write(resolveSymbolHtmlHexCode("chevron-left"));
+            writer.write("</span>");
+            writer.write("</div>");
+
+            writer.write("<div class=\"hmsection\"");
             String menuSectionId = appletMenuWidget.getMenuSectionId();
             writeTagId(writer, menuSectionId);
             writer.write(">");
             doWriteSectionStructureAndContent(writer, appletMenuWidget, menuSectionId);
+            writer.write("</div>");
+
+            writer.write("<div class=\"hmnav\">");
+            writer.write("<span class=\"g_fsm\" id=\"").write(appletMenuWidget.getNavRightId()).write("\">");
+            writer.write(resolveSymbolHtmlHexCode("chevron-right"));
+            writer.write("</span>");
             writer.write("</div>");
 
             writer.write("</div>");
@@ -205,8 +214,9 @@ public class AppletMenuWriter extends AbstractMenuWriter {
 
             final boolean horizontal = appletMenuWidget.isHorizontal();
             if (horizontal) {
-                writer.write("<div class=\"hmslide\">");
+                writer.write("<div class=\"hmslide\" id=\"").write(appletMenuWidget.getSlideId()).write("\">");
             }
+
             for (ApplicationMenuDef applicationMenuDef : applicationDefList) {
                 final String appPrivilegeCode = applicationMenuDef.getPrivilege();
                 if (appPrivilegeManager.isRoleWithPrivilege(roleCode, appPrivilegeCode) && (wkspPrivilegeManager == null
@@ -361,6 +371,9 @@ public class AppletMenuWriter extends AbstractMenuWriter {
             writer.writeParam("pReg", true);
             writer.writeParam("pHoriz", appletMenuWidget.isHorizontal());
             writer.writeParam("pSecId", appletMenuWidget.getMenuSectionId());
+            writer.writeParam("pSldId", appletMenuWidget.getSlideId());
+            writer.writeParam("pLeftId", appletMenuWidget.getNavLeftId());
+            writer.writeParam("pRightId", appletMenuWidget.getNavRightId());
             writer.writeResolvedParam("pMenuIds", (String) work.get(AbstractMenuWidget.WORK_MENUIDS));
             writer.writeResolvedParam("pMenuItems", (String) work.get(AbstractMenuWidget.WORK_MENUITEMS));
             writer.endFunction();

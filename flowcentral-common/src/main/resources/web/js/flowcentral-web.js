@@ -46,6 +46,15 @@ fux.menuWire = function(rgp) {
 	}
 	 
 	const horiz = rgp.pHoriz;
+	// Scroll
+	if (horiz) {
+		var evp = {};
+		evp.secId = rgp.pSecId;
+		evp.sldId = rgp.pSldId;
+		ux.addHdl(_id(rgp.pLeftId), "click", fux.menuScrollLeft, evp);
+		ux.addHdl(_id(rgp.pRightId), "click", fux.menuScrollRight, evp);
+	}
+	
 	// Menus
 	if (rgp.pMenuIds) {
 		var mevps = [];
@@ -63,9 +72,7 @@ fux.menuWire = function(rgp) {
 			evp.submenuId = submenuId;
 			evp.mevps = mevps;
 			mevps.push(evp);
-			if (horiz) {
-				
-			} else {
+			if (!horiz) {
 				ux.addHdl(melem, "mouseover", fux.menuHidePopup, evp);
 			}
 			
@@ -104,6 +111,18 @@ fux.menuWire = function(rgp) {
 			}
 		}
 	}
+}
+
+fux.menuScrollLeft = function(uEv) {
+	const evp = uEv.evp;
+	const celem = _id(evp.secId);
+	const selem = _id(evp.sldId);
+	const crect = ux.boundingRect(celem);
+	const srect = ux.boundingRect(selem);
+}
+
+fux.menuScrollRight = function(uEv) {
+	const evp = uEv.evp;
 }
 
 fux.menuShowPopup = function(uEv) {

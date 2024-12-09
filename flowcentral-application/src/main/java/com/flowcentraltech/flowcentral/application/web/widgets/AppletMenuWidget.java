@@ -64,6 +64,21 @@ public class AppletMenuWidget extends AbstractMenuWidget {
         return getPrefixedId("clr_");
     }
 
+    @Override
+    public String getNavLeftId() throws UnifyException {
+        return getPrefixedId("nlf_");
+    }
+
+    @Override
+    public String getNavRightId() throws UnifyException {
+        return getPrefixedId("nrt_");
+    }
+
+    @Override
+    public String getSlideId() throws UnifyException {
+        return getPrefixedId("sld_");
+    }
+
     public boolean isSearchable() throws UnifyException {
         return getUplAttribute(boolean.class, "searchable");
     }

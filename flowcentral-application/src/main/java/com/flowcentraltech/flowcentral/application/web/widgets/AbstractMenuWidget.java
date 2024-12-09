@@ -51,4 +51,16 @@ public abstract class AbstractMenuWidget extends AbstractFlowCentralPanel {
     public String getMenuSectionId() throws UnifyException {
         return "";
     }
+
+    public String getNavLeftId() throws UnifyException {
+        return "";
+    }
+
+    public String getNavRightId() throws UnifyException {
+        return "";
+    }
+
+    public String getSlideId() throws UnifyException {
+        return "";
+    }
 }
