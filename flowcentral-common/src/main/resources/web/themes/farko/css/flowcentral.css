@@ -893,6 +893,8 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-appletmenu .hmslide {display: block;position: relative;left: 0px;white-space:nowrap;max-width:720px;}
 .fc-appletmenu .hmnav {display: inline-block;width:24px;text-align:center;padding: 6px 0px;}
 .fc-appletmenu .hmnav:hover {background-color:var(--color-menu);}
+.fc-appletmenu .hmnavi {color:#808080;}
+.fc-appletmenu .hmnavi:hover {background-color:transparent;}
 
 /*** Progress Bar ***/
 .fc-progressbar {background-color: #f44336;}

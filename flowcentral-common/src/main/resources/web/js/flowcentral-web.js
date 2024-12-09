@@ -23,6 +23,7 @@
 const fux = {};
 const FC_USER_HINT_TIMEOUT = 3000; // 3 seconds.
 const NAV_SKIP_STEP = 32; // 32 pixels.
+const MINIMUM_MENU_WIDTH = 260;
 
 /** Applet Menu */
 fux.rigMenu = function(rgp) {
@@ -52,6 +53,8 @@ fux.menuWire = function(rgp) {
 		var evp = {};
 		evp.secId = rgp.pSecId;
 		evp.sldId = rgp.pSldId;
+		evp.leftId = rgp.pLeftId;
+		evp.rightId = rgp.pRightId;
 		ux.addHdl(_id(rgp.pLeftId), "click", fux.menuScrollLeft, evp);
 		ux.addHdl(_id(rgp.pRightId), "click", fux.menuScrollRight, evp);
 	}
@@ -175,7 +178,7 @@ fux.menuToggle = function(uEv) {
 		const srect = ux.boundingRect(_id(evp.secId));
 		const mrect = ux.boundingRect(_id(evp.menuId));
 		const df = mrect.left - srect.left;
-		const ov = (mrect.left + 260) - srect.right;
+		const ov = (mrect.left + MINIMUM_MENU_WIDTH) - srect.right;
 		var x = df > 0 ? skipped + df : skipped;
 		x = ov > 0 ? x - ov: x;
 		selem.style.left = x + "px";
