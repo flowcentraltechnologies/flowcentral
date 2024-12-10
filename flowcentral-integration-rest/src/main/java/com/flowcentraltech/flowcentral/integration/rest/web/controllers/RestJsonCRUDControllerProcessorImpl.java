@@ -15,13 +15,17 @@
  */
 package com.flowcentraltech.flowcentral.integration.rest.web.controllers;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.data.APIDef;
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
+import com.flowcentraltech.flowcentral.application.data.EntityDef;
+import com.flowcentraltech.flowcentral.application.data.EntityFieldDef;
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityUtils;
 import com.flowcentraltech.flowcentral.integration.constants.RestEndpointConstants;
 import com.flowcentraltech.flowcentral.integration.data.EndpointDef;
@@ -35,7 +39,9 @@ import com.flowcentraltech.flowcentral.system.data.CredentialDef;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
+import com.tcdng.unify.core.criterion.FilterConditionType;
 import com.tcdng.unify.core.data.BeanValueStore;
+import com.tcdng.unify.core.data.JsonObjectComposition;
 import com.tcdng.unify.core.data.Parameters;
 import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.database.Query;
@@ -78,11 +84,16 @@ public class RestJsonCRUDControllerProcessorImpl extends AbstractHttpCRUDControl
     @Override
     public Response count(HttpRequestHeaders headers, Parameters parameters) throws UnifyException {
         final APIDef apiDef = getAPIDef();
-      Query<? extends Entity> query = appletUtilities.application().queryOf(apiDef.getEntity());
-      final EntityClassDef entityClassDef = appletUtilities.getEntityClassDef(apiDef.getEntity());
-      setCriteria(query, parameters);
-      final int count = appletUtilities.environment().countAll(query);
-      return getResponse(HttpResponseConstants.OK, new CountResult(entityClassDef.getEntityDef().getDescription(), count));
+        Query<? extends Entity> query = appletUtilities.application().queryOf(apiDef.getEntity());
+        final EntityClassDef entityClassDef = appletUtilities.getEntityClassDef(apiDef.getEntity());
+        Response resp = setCriteria(entityClassDef.getEntityDef(), query, parameters);
+        if (resp == null) {
+            final int count = appletUtilities.environment().countAll(query);
+            return getResponse(HttpResponseConstants.OK,
+                    new CountResult(entityClassDef.getEntityDef().getDescription(), count));
+        }
+
+        return getBadRequestResponse(null);
     }
 
     @Override
@@ -134,21 +145,27 @@ public class RestJsonCRUDControllerProcessorImpl extends AbstractHttpCRUDControl
             final Entity srcInst = appletUtilities.environment()
                     .find((Class<? extends Entity>) entityClassDef.getEntityClass(), resourceId);
             if (srcInst != null) {
-                return getResponse(entityClassDef.getJsonComposition(appletUtilities), HttpResponseConstants.OK, srcInst);
+                return getResponse(entityClassDef.getJsonComposition(appletUtilities), HttpResponseConstants.OK,
+                        srcInst);
             }
 
             return getNotFoundResponse();
         }
-        
+
         Query<? extends Entity> query = appletUtilities.application().queryOf(apiDef.getEntity());
-        setCriteria(query, parameters);
-        List<? extends Entity> list = appletUtilities.environment().listAllWithChildren(query);
-        return getResponse(entityClassDef.getJsonComposition(appletUtilities), HttpResponseConstants.OK, list);
+        Response resp = setCriteria(entityClassDef.getEntityDef(), query, parameters);
+        if (resp == null) {
+            List<? extends Entity> list = appletUtilities.environment().listAllWithChildren(query);
+            return getResponse(entityClassDef.getJsonComposition(appletUtilities), HttpResponseConstants.OK, list);
+        }
+
+        return getBadRequestResponse(null);
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public Response update(HttpRequestHeaders headers, Parameters parameters, String body, Long resourceId) throws UnifyException {
+    public Response update(HttpRequestHeaders headers, Parameters parameters, String body, Long resourceId)
+            throws UnifyException {
         if (!isAuthorized(headers)) {
             return getUnauthResponse();
         }
@@ -246,22 +263,79 @@ public class RestJsonCRUDControllerProcessorImpl extends AbstractHttpCRUDControl
         return appletUtilities.application().getAPIDef(endpointPathDef.getPath());
     }
 
-    private void setCriteria(Query<? extends Entity> query, Parameters parameters) throws UnifyException {
-        // TODO Auto-generated method stub
-        
-        query.ignoreEmptyCriteria(true);
+    @SuppressWarnings("unchecked")
+    private Response setCriteria(EntityDef entityDef, Query<? extends Entity> query, Parameters parameters)
+            throws UnifyException {
+        try {
+            for (String name : parameters.getParamNames()) {
+                final int index = name.lastIndexOf('_');
+                final String fieldName = index > 0 ? name.substring(0, index) : name;
+                if (entityDef.isField(fieldName)) {
+                    final String cond = index > 0 ? name.substring(index + 1).toUpperCase() : "EQ";
+                    final FilterConditionType type = FilterConditionType.fromCode(cond);
+                    if (type != null) {
+                        Object val = parameters.getParam(name);
+                        Object paramA = null;
+                        Object paramB = null;
+                        if (val != null) {
+                            if (type.isRange()) {
+                                String[] _val = String.valueOf(val).split(",");
+                                if (_val.length == 2) {
+                                    paramA = _val[0];
+                                    paramB = _val[1];
+                                }
+                            } else if (type.isAmongst()) {
+                                paramA = Arrays.asList(String.valueOf(val).split(","));
+                            } else {
+                                paramA = val;
+                            }
+
+                            EntityFieldDef entityFieldDef = entityDef.getFieldDef(fieldName);
+                            if (entityFieldDef.isDate() || entityFieldDef.isTimestamp()) {
+                                JsonObjectComposition jsonComposition = entityDef.getJsonComposition(appletUtilities);
+                                if (type.isRange()) {
+                                    paramA = DataUtils.getDateValue(jsonComposition, fieldName, (String) paramA);
+                                    paramB = DataUtils.getDateValue(jsonComposition, fieldName, (String) paramB);
+                                } else if (type.isAmongst()) {
+                                    if (paramA != null) {
+                                        List<Date> _paramA = new ArrayList<Date>();
+                                        for (String _val : (List<String>) paramA) {
+                                            _paramA.add(
+                                                    (Date) DataUtils.getDateValue(jsonComposition, fieldName, _val));
+                                        }
+                                        paramA = _paramA;
+                                    }
+                                } else {
+                                    paramA = DataUtils.getDateValue(jsonComposition, fieldName, (String) paramA);
+                                }
+                            }
+                        }
+
+                        query.addRestriction(type.createSimpleCriteria(fieldName, paramA, paramB));
+                    } else {
+                        return getBadRequestResponse("Unknown condition type [" + cond + "].");
+                    }
+                }
+            }
+
+            query.ignoreEmptyCriteria(true);
+        } catch (Exception e) {
+            return getBadRequestResponse(e.getMessage());
+        }
+
+        return null;
     }
 
     private Response getValidationErrorsResponse(List<String> errors) throws UnifyException {
         return getErrorResponse(HttpResponseConstants.BAD_REQUEST, "Validation Errors.", errors);
     }
 
-    private Response getBadRequestResponse() throws UnifyException {
+    private Response getBadRequestResponse(String message) throws UnifyException {
         if (badRequestResponse == null) {
             synchronized (this) {
                 if (badRequestResponse == null) {
                     badRequestResponse = getErrorResponse(HttpResponseConstants.BAD_REQUEST, "Bad request.",
-                            "The server cannot not process the request.");
+                            message != null ? message : "The server cannot not process the request.");
                 }
             }
         }
