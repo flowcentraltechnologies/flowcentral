@@ -868,6 +868,7 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-appletmenu .menu {background-color:var(--color-menu);padding:6px 12px;margin-bottom:2px;font-weight:bold;cursor:pointer;}
 .fc-appletmenu .menu .ind {display:inline-block;width:28px;font-size:7px;padding-top:2px;padding-bottom:2px;margin-right:6px;text-align:center;}
 .fc-appletmenu .menu .lab {display:inline-block;padding: 2px 0px;}
+.fc-appletmenu .hsubmenu {position:absolute;z-index:500;min-width:260px !important;background-color: var(--color-deep);}
 .fc-appletmenu .submenu {}
 .fc-appletmenu .submenu ul {}
 .fc-appletmenu .submenu li {padding:8px 4px 8px 16px;cursor:pointer;}
@@ -881,6 +882,19 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-appletmenu .msearch {background-color:var(--color-deep);padding:4px;position: fixed;min-width: 232px;}
 .fc-appletmenu .msearch span {display: inline-block; padding: 4px; font-size: 10px; width: 14px;}
 .fc-appletmenu .search {display: inline-block;padding-left: 4px;font-size: 8pt;height: 22px;width: calc(100% - 48px);}
+.fc-appletmenu .hmenu {display: inline-block; padding:6px 12px;margin-bottom:2px;font-weight:bold;cursor:pointer;}
+.fc-appletmenu .hmenu:hover {background-color:var(--color-menu);}
+.fc-appletmenu .hmenu .ind {width:28px;font-size:7px;padding-top:2px;padding-bottom:2px;margin-right:6px;text-align:center;}
+.fc-appletmenu .hmenu .lab {padding: 2px 0px;}
+.fc-appletmenu .hmsearch {display: inline-block; background-color:var(--color-deep);padding:4px;width: 232px;box-sizing: border-box;}
+.fc-appletmenu .hmsearch span {display: inline-block; padding: 4px; font-size: 10px; width: 14px;}
+/* TODO Revert calc(100% - 234px) */
+.fc-appletmenu .hmsection {display: inline-block; width: calc(100% - 300px);overflow-y:visible;overflow-x:clip;}
+.fc-appletmenu .hmslide {display: block;position: relative;left: 0px;white-space:nowrap;max-width:720px;}
+.fc-appletmenu .hmnav {display: inline-block;width:24px;text-align:center;padding: 6px 0px;}
+.fc-appletmenu .hmnav:hover {background-color:var(--color-menu);}
+.fc-appletmenu .hmnavi {color:#808080;}
+.fc-appletmenu .hmnavi:hover {background-color:transparent;}
 
 /*** Progress Bar ***/
 .fc-progressbar {background-color: #f44336;}

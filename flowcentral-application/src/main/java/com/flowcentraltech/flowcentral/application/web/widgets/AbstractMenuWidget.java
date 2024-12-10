@@ -43,5 +43,24 @@ public abstract class AbstractMenuWidget extends AbstractFlowCentralPanel {
     public void setCollapsedInitial(boolean collapsedInitial) {
         this.collapsedInitial = collapsedInitial;
     }
+    
+    public boolean isHorizontal() throws UnifyException {
+        return false;
+    }
 
+    public String getMenuSectionId() throws UnifyException {
+        return "";
+    }
+
+    public String getNavLeftId() throws UnifyException {
+        return "";
+    }
+
+    public String getNavRightId() throws UnifyException {
+        return "";
+    }
+
+    public String getSlideId() throws UnifyException {
+        return "";
+    }
 }
