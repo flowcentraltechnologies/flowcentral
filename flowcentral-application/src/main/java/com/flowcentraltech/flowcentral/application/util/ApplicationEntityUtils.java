@@ -68,10 +68,11 @@ import com.tcdng.unify.core.util.StringUtils;
  */
 public final class ApplicationEntityUtils {
 
-    public static final Set<String> RESERVED_BASE_FIELDS = Collections.unmodifiableSet(new HashSet<String>(
-            Arrays.asList("id", "versionNo", "createDt", "createdBy", "updateDt", "updatedBy", "originWorkRecId",
-                    "originalCopyId", "wfItemVersionType", "inWorkflow", "workBranchCode", "workDepartmentCode",
-                    "processingStatus", "devVersionType", "devMergeVersionNo", "classified", "deprecated")));
+    public static final Set<String> RESERVED_BASE_FIELDS = Collections
+            .unmodifiableSet(new HashSet<String>(Arrays.asList("id", "versionNo", "createDt", "createdBy", "updateDt",
+                    "updatedBy", "originWorkRecId", "originalCopyId", "wfItemVersionType", "inWorkflow",
+                    "workBranchCode", "workDepartmentCode", "status", "processingStatus", "configType",
+                    "devVersionType", "devMergeVersionNo", "classified", "deprecated")));
 
     public static final Set<String> AUDITABLE_BASE_FIELDS = Collections
             .unmodifiableSet(new HashSet<String>(Arrays.asList("createDt", "createdBy", "updateDt", "updatedBy")));
