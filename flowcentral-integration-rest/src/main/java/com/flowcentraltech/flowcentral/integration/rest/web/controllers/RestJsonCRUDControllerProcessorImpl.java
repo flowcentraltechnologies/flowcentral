@@ -39,6 +39,7 @@ import com.flowcentraltech.flowcentral.system.data.CredentialDef;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
+import com.tcdng.unify.core.constant.OrderType;
 import com.tcdng.unify.core.criterion.FilterConditionType;
 import com.tcdng.unify.core.data.BeanValueStore;
 import com.tcdng.unify.core.data.JsonObjectComposition;
@@ -121,6 +122,12 @@ public class RestJsonCRUDControllerProcessorImpl extends AbstractHttpCRUDControl
 
         final APIDef apiDef = getAPIDef();
         final EntityClassDef entityClassDef = appletUtilities.getEntityClassDef(apiDef.getEntity());
+        Query<? extends Entity> query = appletUtilities.application().queryOf(apiDef.getEntity());
+        query.addEquals("id", resourceId);
+        if (appletUtilities.environment().countAll(query) == 0) {
+            return getNotFoundResponse();
+        }
+        
         int deleted = appletUtilities.environment().delete((Class<? extends Entity>) entityClassDef.getEntityClass(),
                 resourceId);
         if (deleted > 0) {
@@ -268,53 +275,85 @@ public class RestJsonCRUDControllerProcessorImpl extends AbstractHttpCRUDControl
             throws UnifyException {
         try {
             for (String name : parameters.getParamNames()) {
-                final int index = name.lastIndexOf('_');
-                final String fieldName = index > 0 ? name.substring(0, index) : name;
-                if (entityDef.isField(fieldName)) {
-                    final String cond = index > 0 ? name.substring(index + 1).toUpperCase() : "EQ";
-                    final FilterConditionType type = FilterConditionType.fromCode(cond);
-                    if (type != null) {
-                        Object val = parameters.getParam(name);
-                        Object paramA = null;
-                        Object paramB = null;
-                        if (val != null) {
-                            if (type.isRange()) {
-                                String[] _val = String.valueOf(val).split(",");
-                                if (_val.length == 2) {
-                                    paramA = _val[0];
-                                    paramB = _val[1];
-                                }
-                            } else if (type.isAmongst()) {
-                                paramA = Arrays.asList(String.valueOf(val).split(","));
-                            } else {
-                                paramA = val;
-                            }
-
-                            EntityFieldDef entityFieldDef = entityDef.getFieldDef(fieldName);
-                            if (entityFieldDef.isDate() || entityFieldDef.isTimestamp()) {
-                                JsonObjectComposition jsonComposition = entityDef.getJsonComposition(appletUtilities);
-                                if (type.isRange()) {
-                                    paramA = DataUtils.getDateValue(jsonComposition, fieldName, (String) paramA);
-                                    paramB = DataUtils.getDateValue(jsonComposition, fieldName, (String) paramB);
-                                } else if (type.isAmongst()) {
-                                    if (paramA != null) {
-                                        List<Date> _paramA = new ArrayList<Date>();
-                                        for (String _val : (List<String>) paramA) {
-                                            _paramA.add(
-                                                    (Date) DataUtils.getDateValue(jsonComposition, fieldName, _val));
+                switch (name) {
+                    case "_offset": {
+                        final int offset = DataUtils.convert(int.class, parameters.getParam("_offset"));
+                        if (offset >= 0) {
+                            query.setOffset(offset);
+                        }
+                    }
+                        break;
+                    case "_limit": {
+                        final int limit = DataUtils.convert(int.class, parameters.getParam("_limit"));
+                        if (limit > 0) {
+                            query.setLimit(limit);
+                        }
+                    }
+                        break;
+                    case "_sort": {
+                        final String[] _vals = DataUtils.convert(String.class, parameters.getParam("_sort")).split(",");
+                        for (String _val : _vals) {
+                            final int index = _val.lastIndexOf('_');
+                            final String _order = index > 0 ? _val.substring(0, index) : _val;
+                            final String _direc = index > 0 ? _val.substring(index + 1).toUpperCase() : "ASC";
+                            query.addOrder(OrderType.fromCode(_direc), _order);
+                        }
+                    }
+                        break;
+                    default:
+                        final int index = name.lastIndexOf('_');
+                        final String fieldName = index > 0 ? name.substring(0, index) : name;
+                        if (entityDef.isField(fieldName)) {
+                            final String cond = index > 0 ? name.substring(index + 1).toUpperCase() : "EQ";
+                            final FilterConditionType type = FilterConditionType.fromCode(cond);
+                            if (type != null) {
+                                Object val = parameters.getParam(name);
+                                Object paramA = null;
+                                Object paramB = null;
+                                if (val != null) {
+                                    if (type.isRange()) {
+                                        String[] _val = String.valueOf(val).split(",");
+                                        if (_val.length == 2) {
+                                            paramA = _val[0];
+                                            paramB = _val[1];
                                         }
-                                        paramA = _paramA;
+                                    } else if (type.isAmongst()) {
+                                        paramA = Arrays.asList(String.valueOf(val).split(","));
+                                    } else {
+                                        paramA = val;
                                     }
-                                } else {
-                                    paramA = DataUtils.getDateValue(jsonComposition, fieldName, (String) paramA);
+
+                                    EntityFieldDef entityFieldDef = entityDef.getFieldDef(fieldName);
+                                    if (entityFieldDef.isDate() || entityFieldDef.isTimestamp()) {
+                                        JsonObjectComposition jsonComposition = entityDef
+                                                .getJsonComposition(appletUtilities);
+                                        if (type.isRange()) {
+                                            paramA = DataUtils.getDateValue(jsonComposition, fieldName,
+                                                    (String) paramA);
+                                            paramB = DataUtils.getDateValue(jsonComposition, fieldName,
+                                                    (String) paramB);
+                                        } else if (type.isAmongst()) {
+                                            if (paramA != null) {
+                                                List<Date> _paramA = new ArrayList<Date>();
+                                                for (String _val : (List<String>) paramA) {
+                                                    _paramA.add((Date) DataUtils.getDateValue(jsonComposition,
+                                                            fieldName, _val));
+                                                }
+                                                paramA = _paramA;
+                                            }
+                                        } else {
+                                            paramA = DataUtils.getDateValue(jsonComposition, fieldName,
+                                                    (String) paramA);
+                                        }
+                                    }
                                 }
+
+                                query.addRestriction(type.createSimpleCriteria(fieldName, paramA, paramB));
+                            } else {
+                                return getBadRequestResponse("Unknown condition type [" + cond + "].");
                             }
                         }
-
-                        query.addRestriction(type.createSimpleCriteria(fieldName, paramA, paramB));
-                    } else {
-                        return getBadRequestResponse("Unknown condition type [" + cond + "].");
-                    }
+                        break;
                 }
             }
 
