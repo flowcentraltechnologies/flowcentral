@@ -56,7 +56,8 @@ public class SearchWriter extends AbstractControlWriter {
             DynamicField paramCtrl = searchWidget.getParamCtrl();
             final String captionSuffix = searchWidget.getCaptionSuffix();
             final int len = valueStoreList.size();
-            final int columns = searchEntries.getColumns() > 0 ? searchEntries.getColumns() : 1;
+            final boolean vertical = searchWidget.isVertical();
+            final int columns = !vertical && searchEntries.getColumns() > 0 ? searchEntries.getColumns() : 1;
             writer.write("<div class=\"sftable\">");
 
             int i = 0;
@@ -68,7 +69,7 @@ public class SearchWriter extends AbstractControlWriter {
                 for (j = 0; j < columns && i < len; j++, i++) {
                     writer.write("<div class=\"sfcol\">");
                     ValueStore itemValueStore = valueStoreList.get(i);
-                    writeFieldCell(writer, searchEntries, itemValueStore, paramCtrl, captionSuffix);
+                    writeFieldCell(writer, searchEntries, itemValueStore, paramCtrl, captionSuffix, vertical);
                     writer.write("</div>");
                 }
 
@@ -104,14 +105,14 @@ public class SearchWriter extends AbstractControlWriter {
 
     @SuppressWarnings("unchecked")
     private void writeFieldCell(ResponseWriter writer, SearchEntries searchEntries, ValueStore lineValueStore,
-            Control ctrl, String captionSuffix) throws UnifyException {
+            Control ctrl, String captionSuffix, boolean vertical) throws UnifyException {
         SearchEntry searchEntry = (SearchEntry) lineValueStore.getValueObject();
         writer.write("<div class=\"sffield\">");
         writer.write("<div class=\"sffieldrow\">");
 
         // Label
         writer.write("<div class=\"sfpre").write("\">");
-        writer.write("<div class=\"sflabel\">");
+        writer.write(vertical ? "<div class=\"sflabelv\">" : "<div class=\"sflabel\">");
         writer.write("<span class=\"sfbasetxt\">");
         writer.writeWithHtmlEscape(searchEntry.getLabel());
         if (captionSuffix != null) {

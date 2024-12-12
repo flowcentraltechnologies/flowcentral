@@ -1,0 +1,182 @@
+// UPL template for entity search panel
+// Copyright 2021-2024 FlowCentral Technologies Limited.
+// 
+// Licensed under the Apache License, Version 2.0 (the "License"); you may not
+// use this file except in compliance with the License. You may obtain a copy of
+// the License at
+// 
+// http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+// WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+// License for the specific language governing permissions and limitations under
+// the License.
+
+!fc-entitysearchpanel layout:$d{!ui-vertical}
+	components:$c{headerBar searchFilterPanel horizontalBarPanel}
+
+// Header Bar
+!ui-panel:headerBar styleClass:$s{hdbar} layout:$d{!ui-horizontal style:$s{width:100%;}}
+	components:$c{headerLeftPanel headerRightPanel}
+	
+!ui-panel:headerLeftPanel style:$s{display:inline-block; float:left;} layout:$d{!ui-horizontal cellType:middle cellStyle:$s{padding-right:8px;}}
+	components:$c{sectorIcon titleBlock newBtn editBtn viewBtn quickFilterBlock}
+!fc-sectoricon:sectorIcon binding:sectorIcon
+!ui-panel:titleBlock style:$s{display:inline-block;} components:$c{title subTitle}
+!ui-label:title styleClass:$s{hdtitle} binding:entitySubTitle
+!ui-label:subTitle styleClass:$s{hdsubtitle} binding:entityTitle
+!ui-button:newBtn styleClass:$e{fc-actbutton}
+	caption:$m{button.new} captionBinding:entityNewLabel
+	eventHandler:$f{newInstEventHandler} binding:$f{newBtnBinding}
+!ui-button:editBtn styleClass:$e{fc-actbutton} caption:$m{button.edit.ellipsis}
+	eventHandler:$f{editInstEventHandler} binding:$f{editBtnBinding}
+!ui-button:viewBtn styleClass:$e{fc-actbutton} caption:$m{button.view.ellipsis}
+	eventHandler:$f{editInstEventHandler} binding:$f{editBtnBinding}
+!ui-panel:quickFilterBlock layout:$d{!ui-horizontal cellType:middle} components:$c{quickFilterTitle quickFilter}
+!ui-label:quickFilterTitle caption:$m{entitysearchpanel.quickfilter}
+!ui-select:quickFilter list:$s{appletquickfilterlist} blankOption:$s{} listKey:$s{name}
+	listParams:$l{appAppletId} binding:appAppletFilterName ignoreParentState:true
+    eventHandler:$d{!ui-event event:onchange action:$c{quickFilterAct}}
+
+!ui-panel:headerRightPanel style:$s{display:inline-block; float:right;} layout:$d{!ui-horizontal cellType:middle}
+	components:$c{reportBtn quickEditBtn quickOrderBtn refreshBtn fastBackBtn backBtn displayStart paginationLabel forwardBtn fastForwardBtn}
+!ui-button:reportBtn styleClass:$e{fc-greenbutton} caption:$m{button.report}
+	eventHandler:$f{reportEventHandler}
+!ui-button:quickEditBtn styleClass:$e{fc-orangebutton} caption:$m{button.quickedit}
+	eventHandler:$f{quickEditEventHandler} binding:$f{quickEditBtnBinding}
+!ui-button:quickOrderBtn styleClass:$e{fc-actbutton} caption:$m{button.quickorder}
+	eventHandler:$f{quickOrderEventHandler} binding:$f{quickOrderBtnBinding}
+!ui-button:refreshBtn caption:$m{button.refresh}
+	eventHandler:$d{!ui-event event:onclick action:$c{refreshAct}}
+!ui-symbol:fastBackBtn symbol:$s{backward-fast} hint:$m{pagination.firstpage}
+	ignoreParentState:true
+    eventHandler:$d{!ui-event event:onclick action:$c{fastBackAct}}
+!ui-symbol:backBtn symbol:$s{backward} hint:$m{pagination.previouspage}
+	ignoreParentState:true
+    eventHandler:$d{!ui-event event:onclick action:$c{backAct}}
+!ui-integer:displayStart binding:displayStart size:5 readOnly:true
+!ui-label:paginationLabel binding:paginationLabel
+!ui-symbol:forwardBtn symbol:$s{forward} hint:$m{pagination.nextpage}
+	ignoreParentState:true
+    eventHandler:$d{!ui-event event:onclick action:$c{forwardAct}}
+!ui-symbol:fastForwardBtn symbol:$s{forward-fast} hint:$m{pagination.lastpage}
+	ignoreParentState:true
+    eventHandler:$d{!ui-event event:onclick action:$c{fastForwardAct}}
+
+// Horzontal Bar
+!ui-panel:horizontalBarPanel layout:$d{!ui-horizontal style:$s{width:100%;} widths:$l{280px none} strict:true}
+	components:$c{searchEntriesPanel verticalBarPanel}
+
+// Vertical Bar
+!ui-panel:verticalBarPanel layout:$d{!ui-vertical style:$s{width:100%;}}
+	components:$c{colorLegend searchResultPanel footerActionPanel}
+
+// Search entries panel
+!ui-panel:searchEntriesPanel styleClass:$s{filallv} layout:$d{!ui-vertical style:$s{width:100%;}}
+	components:$c{searchEntriesHeader searchEntriesRequired searchEntriesBodyPanel}
+	ignoreParentState:true
+
+!ui-panel:searchEntriesHeader style:$s{display:inline-block;} components:$c{baseFilterTranslation}
+!ui-label:searchEntriesRequired styleClass:$e{ewarn} caption:$m{entitysearchpanel.searchentriesrequired}
+!ui-panel:searchEntriesBodyPanel layout:$d{!ui-horizontal style:$s{width:100%;}  widths:$l{100% none}}
+	components:$c{searchEntriesBody switchToAdvanced}
+
+!ui-label:switchToAdvanced styleClass:$s{filswitch} caption:$s{Switch to Advanced}
+    eventHandler:$d{!ui-event event:onclick action:$c{switchToAdvancedAct}}
+
+!ui-panel:searchEntriesBody layout:$d{!ui-vertical style:$s{width:100%;}}
+	components:$c{searchEntries searchEntriesAction}
+!fc-search:searchEntries binding:searchEntries vertical:true
+    eventHandler:$d{!ui-event event:onenter eventBinding:preferredEvent action:$c{searchAct}}
+!ui-panel:searchEntriesAction style:$s{padding-left:8px;} layout:$d{!ui-horizontal}
+	components:$c{searchBtn clearBtn}
+!ui-button:searchBtn caption:$m{button.search} styleClass:$e{fc-actbutton fc-tinybutton}
+    eventHandler:$d{!ui-event event:onclick action:$c{searchAct}}
+!ui-button:clearBtn caption:$m{button.clear} styleClass:$e{fc-tinybutton}
+    eventHandler:$d{!ui-event event:onclick action:$c{clearAct}}
+	
+// Search filter panel
+!ui-panel:searchFilterPanel styleClass:$s{filall} layout:$d{!ui-vertical style:$s{width:100%;}}
+	components:$c{searchFilterHeader searchFilterBody}
+	ignoreParentState:true
+	
+!ui-panel:searchFilterHeader layout:$d{!ui-horizontal style:$s{width:100%;} widths:$l{none 100% 128px}}
+	components:$c{toggleFilterBtn filterTrnBlock switchToBasic}
+!ui-symbol:toggleFilterBtn styleClass:$e{filbtn} symbol:$s{filter}
+    eventHandler:$d{!ui-event event:onclick action:$c{toggleFilterAct}}
+!ui-panel:filterTrnBlock style:$s{display:inline-block;} components:$c{baseFilterTranslation filterTranslation}
+!ui-label:baseFilterTranslation styleClass:$s{filbasetxt} binding:baseFilterTranslation
+!ui-label:filterTranslation styleClass:$s{filtxt} binding:entityFilterTranslation
+!ui-label:switchToBasic styleClass:$s{filswitch} caption:$s{Switch to Basic}
+    eventHandler:$d{!ui-event event:onclick action:$c{switchToBasicAct}}
+	
+!ui-panel:searchFilterBody styleClass:$s{filbody} layout:$d{!ui-vertical style:$s{width:100%;}}
+	components:$c{searchFilterActions saveFilterPanel searchFilter}
+
+!ui-panel:searchFilterActions styleClass:$s{filact} layout:$d{!ui-horizontal}
+	components:$c{runFilterBtn openSaveFilterBtn tackFilterBtn}
+!ui-button:runFilterBtn styleClass:$e{filactbtn} caption:$m{button.run}
+    eventHandler:$d{!ui-event event:onclick action:$c{runFilterAct}}
+!ui-button:openSaveFilterBtn styleClass:$e{filactbtn} caption:$m{button.save.ellipsis}
+    eventHandler:$d{!ui-event event:onclick action:$c{openSaveFilterAct}}
+!ui-button:tackFilterBtn styleClass:$e{filactbtn} symbol:$s{thumbtack}
+    eventHandler:$d{!ui-event event:onclick action:$c{tackFilterAct}}
+    
+!ui-panel:saveFilterPanel styleClass:$s{filsave}
+	layout:$d{!ui-horizontal styleClass:$s{savebar} showCaption:true inlineCaption:true captionSuffix:$s{:} cellType:middle}
+	components:$c{saveFilterName saveFilterDesc	saveFilterScope saveFilterBtn cancelSaveBtn}
+!ui-name:saveFilterName	caption:$m{entitysearchpanel.savefilter.name} binding:saveFilterName focus:true maxLen:64
+!ui-text:saveFilterDesc	caption:$m{entitysearchpanel.savefilter.description} size:32 maxLen:96 binding:saveFilterDesc
+!ui-radiobuttons:saveFilterScope caption:$m{entitysearchpanel.savefilter.scope} binding:saveFilterScope
+	list:$s{ownershiptypelist} flow:true
+!ui-button:saveFilterBtn styleClass:$e{filactbtn} caption:$m{button.save}
+    eventHandler:$d{!ui-event event:onclick action:$c{saveFilterAct}}
+!ui-button:cancelSaveBtn styleClass:$e{filactbtn} caption:$m{button.cancel}
+    eventHandler:$d{!ui-event event:onclick action:$c{cancelSaveFilterAct}}
+   
+!fc-filter:searchFilter binding:entityFilter
+
+// Color legend
+!ui-colorlegend:colorLegend style:$s{width:100%;} columns:6 binding:entityTable.colorLegendInfo
+
+// Search result panel
+!ui-panel:searchResultPanel layout:$d{!ui-vertical style:$s{width:100%;}} components:$c{toggleDetailsBtn searchResultTbl}
+!fc-entitytable:searchResultTbl binding:entityTable multiSelect:false valueMarker:$f{searchResultMarker}
+	multiSelDependentList:$c{tblActionSel tblActionBtns}
+!ui-button:toggleDetailsBtn captionBinding:toggleDetails styleClass:$e{fc-purplebutton fc-tinybutton} style:$s{min-height:14px;}
+    eventHandler:$d{!ui-event event:onclick action:$c{toggleDetailsAct}}
+
+// Footer action panel
+!ui-panel:footerActionPanel styleClass:$e{footer} style:$s{width:100%;} components:$c{selFooterActionPanel tblActionBtns}
+!ui-panel:selFooterActionPanel layout:$d{!ui-horizontal} components:$c{tblActionSel applyTblActionBtn}
+!ui-select:tblActionSel styleClass:$e{footersel} list:$s{tableactionlist} listKey:$s{policy} blankOption:$m{select.apply.toselected}
+	listParams:$l{appTableId} binding:appTableActionPolicy
+!ui-button:applyTblActionBtn styleClass:$e{fc-actbutton} caption:$m{button.applyaction}
+    eventHandler:$d{!ui-event event:onclick action:$c{applyTableAct}}
+!ui-buttongroup:tblActionBtns styleClass:$e{footerbtns} binding:appTableActionButtonInfo
+    eventHandler:$d{!ui-event event:onclick action:$c{applyTableBtnAct}}
+
+// Actions
+!ui-postcommand:switchToBasicAct command:switchToBasicSearch
+!ui-postcommand:switchToAdvancedAct command:switchToAdvancedSearch
+!ui-postcommand:fastBackAct command:fastBack
+!ui-postcommand:backAct command:back
+!ui-postcommand:forwardAct command:forward
+!ui-postcommand:fastForwardAct command:fastForward
+!ui-postcommand:toggleFilterAct command:toggleFilter refresh:$c{searchFilterPanel}
+!ui-postcommand:refreshAct command:refresh
+!ui-postcommand:searchAct command:search components:$c{searchEntries}
+!ui-postcommand:clearAct command:clear
+!ui-postcommand:toggleDetailsAct command:toggleDetails components:$c{searchEntries}
+!ui-postcommand:runFilterAct command:runFilter components:$c{searchFilter}
+!ui-postcommand:tackFilterAct command:tackFilter refresh:$c{searchFilterBody} components:$c{searchFilter}
+!ui-postcommand:quickFilterAct command:applyQuickFilter components:$c{quickFilter}
+	refresh:$c{headerBar searchFilterPanel searchResultPanel} pushSrc:true
+!ui-postcommand:openSaveFilterAct command:openSaveFilter refresh:$c{searchFilterBody} components:$c{searchFilter}
+!ui-postcommand:saveFilterAct command:saveFilter refresh:$c{headerLeftPanel searchFilterBody}
+	components:$c{saveFilterPanel searchFilter}
+!ui-postcommand:cancelSaveFilterAct command:cancelSaveFilter refresh:$c{searchFilterBody}
+!ui-postcommand:applyTableAct command:applyTableAction refresh:$c{searchResultPanel} components:$c{searchResultTbl tblActionSel}
+!ui-postcommand:applyTableBtnAct command:applyTableBtnAction refresh:$c{searchResultPanel} components:$c{searchResultTbl}
+

@@ -668,6 +668,7 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-search .sfmid {display:table-cell;}
 .fc-search .sfcon {}
 .fc-search .sflabel {text-align:right;}
+.fc-search .sflabelv {text-align:left;}
 .fc-search .sfbasetxt {display:inline-block; padding-right:3px;font-size: 7pt;font-weight: bold;color: #262c33;}
 .fc-search .sfcondtxt {display:block; padding-right:2px;color:#808080;font-style: italic;font-size: 7pt;}
 .fc-search .sflabel .mfreq {width:9px; padding-right:4px;}
@@ -1035,6 +1036,7 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-entitysearchpanel .pgbtn:disabled {color: #c0c0c0;}
 .fc-entitysearchpanel .fc-filter {}
 .fc-entitysearchpanel .filall {border-top:1px solid #b8b8b8;border-bottom: 1px solid #b8b8b8;}
+.fc-entitysearchpanel .filallv {border:1px solid #b8b8b8;}
 .fc-entitysearchpanel .filbody {border:1px solid #b8b8b8;}
 .fc-entitysearchpanel .filbtn {font-size: 16px; color: #0366d6; cursor: pointer; padding: 2px 4px;}
 .fc-entitysearchpanel .filbtn:disabled {color: #a0a0a0;}
