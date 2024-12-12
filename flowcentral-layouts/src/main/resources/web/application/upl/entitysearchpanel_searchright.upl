@@ -89,7 +89,7 @@
 	components:$c{searchEntries searchEntriesAction}
 !fc-search:searchEntries binding:searchEntries vertical:true
     eventHandler:$d{!ui-event event:onenter eventBinding:preferredEvent action:$c{searchAct}}
-!ui-panel:searchEntriesAction style:$s{padding-left:8px;} layout:$d{!ui-horizontal}
+!ui-panel:searchEntriesAction style:$s{padding-left:8px;} layout:$d{!ui-horizontal style:$s{float:right;}}
 	components:$c{searchBtn clearBtn}
 !ui-button:searchBtn caption:$m{button.search} styleClass:$e{fc-actbutton fc-tinybutton}
     eventHandler:$d{!ui-event event:onclick action:$c{searchAct}}
