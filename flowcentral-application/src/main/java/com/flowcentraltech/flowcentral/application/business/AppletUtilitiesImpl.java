@@ -1032,8 +1032,8 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
             formContext.evaluateTabStates();
             MiniForm miniForm = new MiniForm(MiniFormScope.MAIN_FORM, formContext, formTabDef);
             forms.add(miniForm);
-            
-            final String icon = !StringUtils.isBlank(formTabDef.getIcon()) ? formTabDef.getIcon(): "step";
+
+            final String icon = !StringUtils.isBlank(formTabDef.getIcon()) ? formTabDef.getIcon() : "step";
             ibb.addItem(icon, formTabDef.getLabel());
         }
 
@@ -1047,7 +1047,7 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
         final IconBar iconBar = ibb.build();
         return new FormWizard(formDef.getLongName(), navPolicy, iconBar, forms, sectorIcon, breadCrumbs);
     }
-    
+
     @SuppressWarnings("unchecked")
     @Override
     public HeaderWithTabsForm constructHeaderWithTabsForm(AbstractEntityFormApplet applet, String rootTitle,
@@ -1080,6 +1080,10 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
         final EntityDef entityDef = formDef.getEntityDef();
         final boolean isCreateMode = formMode.isCreate();
         if (formDef.getTabCount() > 1) {
+            final boolean expanded = _formAppletDef != null
+                    && _formAppletDef.getPropValue(boolean.class, AppletPropertyConstants.LONGFORM_SUPPORT)
+                    && systemModuleService.getSysParameterValue(boolean.class,
+                            ApplicationModuleSysParamConstants.ENABLE_LONGFORM);
             TabSheetDef.Builder tsdb = TabSheetDef.newBuilder(formContext, 1L);
             List<TabSheetItem> tabSheetItemList = new ArrayList<TabSheetItem>();
             final int len = formDef.getTabCount();
@@ -1359,7 +1363,9 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
                 }
             }
 
-            form.setTabSheet(new TabSheet(tsdb.build(), tabSheetItemList));
+            final TabSheet tabSheet = new TabSheet(tsdb.build(), tabSheetItemList);
+            tabSheet.setExpanded(expanded);
+            form.setTabSheet(tabSheet);
         }
 
         // Related lists
@@ -1862,7 +1868,7 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
                 : (systemSearchColumns > 0 ? systemSearchColumns : 1);
         final String preferredEvent = systemModuleService.getSysParameterValue(boolean.class,
                 ApplicationModuleSysParamConstants.ENABLE_SEARCH_ON_SEARCH_INPUT_CHANGE) ? "onchange" : null;
-        
+
         SectorIcon sectorIcon = getPageSectorIconByApplication(_appletDef.getApplicationName());
         EntitySearch _entitySearch = new EntitySearch(ctx, sectorIcon, sweepingCommitPolicy, tabName, _tableDef,
                 _appletDef.getId(), editAction, defaultQuickFilter, searchConfigName, preferredEvent, searchColumns,
@@ -2520,7 +2526,7 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
             }
         }
     }
-    
+
     private void applySetValues(FormStatePolicyDef formStatePolicyDef, EntityDef entityDef, ValueStore valueStore,
             Date now) throws UnifyException {
         if (formStatePolicyDef.isSetValues()) {

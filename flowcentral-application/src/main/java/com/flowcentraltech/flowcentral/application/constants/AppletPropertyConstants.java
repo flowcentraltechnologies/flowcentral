@@ -76,6 +76,8 @@ public interface AppletPropertyConstants {
     
     String ENTITY_FORM_CLOSE_DETACHED_ONSUBMIT = "entityForm.submit.close";
 
+    String LONGFORM_SUPPORT = "longForm.support";
+
     String CREATE_FORM = "createForm";
 
     String CREATE_FORM_NEW_CAPTION= "createForm.new.caption";

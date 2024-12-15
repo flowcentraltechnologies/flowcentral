@@ -108,4 +108,6 @@ public interface ApplicationModuleSysParamConstants {
     String GLOBAL_CLIENT_UPDATE_SYNCHRONIZATION = "APP-002A";
     
     String ENABLE_SEARCH_ON_SEARCH_INPUT_CHANGE = "APP-002B";
+    
+    String ENABLE_LONGFORM = "APP-002C";
 }

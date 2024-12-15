@@ -104,6 +104,15 @@ public class TabSheetWidget extends AbstractFlowCentralValueListMultiControl<Val
         return null;
     }
 
+    public Widget getTabWidget(int tabIndex) throws UnifyException {
+        TabSheet tabSheet = getTabSheet();
+        if (tabSheet != null) {
+            return tabWidgets[tabIndex];
+        }
+
+        return null;
+    }
+
     public void setAppAppletFilterId(Long id) {
         
     }
