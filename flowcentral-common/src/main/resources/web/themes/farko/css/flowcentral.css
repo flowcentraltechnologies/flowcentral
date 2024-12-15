@@ -713,6 +713,10 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-tabsheet .tinactiveright .err{border-right:4px solid #ae6060; padding-right: 4px; color:#5c6166 !important;}
 .fc-tabsheet .tinactiveright img {filter: grayscale(100%);vertical-align:middle; display: inline-block; width: 14px; height: 14px; border: none;}
 .fc-tabsheet .tbody {margin-top:-4px; border: 1px solid #c8c8c8; padding:4px;}
+.fc-tabsheet .ttabxc {display:inline-block; margin-bottom: -1px; background-color: #fff;
+	border-bottom: 2px solid #fff; border-top: 5px solid var(--color-formsec);border-left: 1px solid #c8c8c8;border-right: 1px solid #c8c8c8;}
+.fc-tabsheet .ttabxc span {display: inline-block;color: #24292e; padding: 4px 8px;}
+.fc-tabsheet .ttabxb {display:block; background-color: #fff;border-top: 1px solid #c8c8c8;padding-top:4px;}
 
 .fc-tabsheet .msg {padding-left:4px;}
 
