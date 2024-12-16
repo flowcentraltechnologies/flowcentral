@@ -134,6 +134,8 @@ public class EntitySearch extends AbstractPanelFormBinding {
 
     private boolean newButtonVisible;
 
+    private boolean expandedMode;
+
     public EntitySearch(FormContext ctx, SectorIcon sectorIcon, SweepingCommitPolicy sweepingCommitPolicy,
             String tabName, TableDef tableDef, Long appAppletId, String editAction, String appAppletFilterName,
             String appAppletSearchConfigName, String preferredSearchEvent, int columns, int mode,
@@ -540,6 +542,14 @@ public class EntitySearch extends AbstractPanelFormBinding {
 
     public void setShowBaseRestriction(boolean showBaseRestriction) {
         this.showBaseRestriction = showBaseRestriction;
+    }
+
+    public boolean isExpandedMode() {
+        return expandedMode;
+    }
+
+    public void setExpandedMode(boolean expandedMode) {
+        this.expandedMode = expandedMode;
     }
 
     public void setNewButtonVisible(boolean newButtonVisible) {

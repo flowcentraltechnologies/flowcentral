@@ -57,7 +57,10 @@ public class EntitySearchPanel extends AbstractApplicationPanel {
 
         EntitySearch entitySearch = getEntitySearch();
         if (entitySearch != null) {
-            setVisible("sectorIcon", entitySearch.isWithSectorIcon());
+            final boolean showHeaderParts = !entitySearch.isExpandedMode();
+            setVisible("sectorIcon", showHeaderParts && entitySearch.isWithSectorIcon());
+            setVisible("titleBlock", showHeaderParts);
+            setVisible("headerRightPanel", showHeaderParts);
 
             // Makes sure edit button does not break on page scroll
             setRequestAttribute(entitySearch.getEditActionKey(), entitySearch.getEditAction());
@@ -85,12 +88,12 @@ public class EntitySearchPanel extends AbstractApplicationPanel {
                     && applicationPrivilegeManager().isRoleWithPrivilege(roleCode, entityDef.getEditPrivilege()));
             final boolean quickEnabled = (entitySearch.isNewButtonVisible() || entitySearch.isEditButtonVisible())
                     && applicationPrivilegeManager().isRoleWithPrivilege(roleCode, entityDef.getEditPrivilege());
-            setVisible("quickEditBtn", quickEnabled && entitySearch.isShowQuickEdit());
-            setVisible("quickOrderBtn", quickEnabled && entitySearch.isShowQuickOrder());
+            setVisible("quickEditBtn", showHeaderParts && quickEnabled && entitySearch.isShowQuickEdit());
+            setVisible("quickOrderBtn", showHeaderParts && quickEnabled && entitySearch.isShowQuickOrder());
             setVisible("viewBtn", entitySearch.isViewButtonVisible()
                     && applicationPrivilegeManager().isRoleWithPrivilege(roleCode, entityDef.getEditPrivilege()));
-            setVisible("switchToBasic", entityTable.isSupportsBasicSearch());
-            setVisible("searchEntriesRequired", entitySearch.isRequiredCriteriaNotSet());
+            setVisible("switchToBasic", showHeaderParts && entityTable.isSupportsBasicSearch());
+            setVisible("searchEntriesRequired", showHeaderParts && entitySearch.isRequiredCriteriaNotSet());
 
             final boolean reportBtnVisible = entityTable.getTotalItemCount() > 0 && entitySearch.isShowReport()
                     && entitySearch.au().reportProvider().isReportable(entityTable.getEntityDef().getLongName())
@@ -100,24 +103,24 @@ public class EntitySearchPanel extends AbstractApplicationPanel {
 
             setVisible("colorLegend", entityTable.isWithColorLegendInfo());
             if (entitySearch.isBasicSearchOnly() || entityTable.isBasicSearchMode()) {
-                setVisible("searchEntriesPanel", entitySearch.isShowSearch() && entitySearch.isWithSearchInput());
+                setVisible("searchEntriesPanel", showHeaderParts && entitySearch.isShowSearch() && entitySearch.isWithSearchInput());
                 setVisible("searchFilterPanel", false);
-                setVisible("quickFilterBlock", entitySearch.isShowQuickFilter());
-                setVisible("footerActionPanel", entitySearch.isShowActionFooter());
-                setVisible("switchToAdvanced", !entitySearch.isBasicSearchOnly());
-                setVisible("searchEntriesHeader", entitySearch.isShowBaseFilter());
+                setVisible("quickFilterBlock", showHeaderParts && entitySearch.isShowQuickFilter());
+                setVisible("footerActionPanel", showHeaderParts && entitySearch.isShowActionFooter());
+                setVisible("switchToAdvanced", showHeaderParts && !entitySearch.isBasicSearchOnly());
+                setVisible("searchEntriesHeader", showHeaderParts && entitySearch.isShowBaseFilter());
             } else {
                 setVisible("searchEntriesPanel", false);
-                setVisible("searchFilterPanel", entitySearch.isShowSearch());
-                setVisible("quickFilterBlock", entitySearch.isShowQuickFilter());
-                setVisible("footerActionPanel", entitySearch.isShowActionFooter());
-                setVisible("searchFilterBody", entitySearch.isFilterEditorVisible());
-                setDisabled("toggleFilterBtn", !entitySearch.isEditFilterEnabled());
-                setVisible("baseFilterTranslation", entitySearch.isShowBaseFilter());
+                setVisible("searchFilterPanel", showHeaderParts && entitySearch.isShowSearch());
+                setVisible("quickFilterBlock", showHeaderParts && entitySearch.isShowQuickFilter());
+                setVisible("footerActionPanel", showHeaderParts && entitySearch.isShowActionFooter());
+                setVisible("searchFilterBody", showHeaderParts && entitySearch.isFilterEditorVisible());
+                setDisabled("toggleFilterBtn", showHeaderParts && !entitySearch.isEditFilterEnabled());
+                setVisible("baseFilterTranslation", showHeaderParts && entitySearch.isShowBaseFilter());
                 if (entitySearch.isFilterEditorVisible()) {
-                    setVisible("tackFilterBtn", entitySearch.isShowFilterThumbtack());
-                    setDisabled("tackFilterBtn", entitySearch.isFilterEditorPinned());
-                    setVisible("openSaveFilterBtn", entitySearch.isShowFilterSave());
+                    setVisible("tackFilterBtn", showHeaderParts && entitySearch.isShowFilterThumbtack());
+                    setDisabled("tackFilterBtn", showHeaderParts && entitySearch.isFilterEditorPinned());
+                    setVisible("openSaveFilterBtn", showHeaderParts && entitySearch.isShowFilterSave());
                     if (isWidgetVisible("saveFilterPanel")) {
                         setDisabled("saveFilterScope", !applicationPrivilegeManager().isRoleWithPrivilege(roleCode,
                                 entityTable.getSaveGlobalTableQuickFilterPrivilege()));
@@ -125,7 +128,7 @@ public class EntitySearchPanel extends AbstractApplicationPanel {
                 }
             }
 
-            if (entitySearch.isShowActionFooter()) {
+            if (showHeaderParts && entitySearch.isShowActionFooter()) {
                 boolean buttonsForFooterAction = system().getSysParameterValue(boolean.class,
                         ApplicationModuleSysParamConstants.SHOW_BUTTONS_FOR_FOOTER_ACTION);
                 setVisible("tblActionBtns", buttonsForFooterAction);

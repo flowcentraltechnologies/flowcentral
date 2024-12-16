@@ -1169,6 +1169,7 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
                         _entityChild.setCanCreate(canCreate);
                         Restriction childRestriction = getChildRestriction(entityDef, formTabDef.getReference(), inst);
                         _entityChild.setChildTabIndex(tabIndex);
+                        _entityChild.setExpandedMode(expanded);
                         _entityChild.load(formContext, childRestriction);
                         tsdb.addTabDef(formTabDef.getName(), formTabDef.getLabel(), "fc-childpanel",
                                 RendererType.STANDALONE_PANEL);
@@ -1213,7 +1214,8 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
                         childRestriction = RestrictionUtils.and(childRestriction, tabRestriction);
 
                         _entitySearch.setChildTabIndex(tabIndex);
-                        _entitySearch.setRelatedList(formTabDef.getApplet());
+                        _entitySearch.setExpandedMode(expanded);
+                       _entitySearch.setRelatedList(formTabDef.getApplet());
                         _entitySearch.setBaseRestriction(childRestriction, specialParamProvider);
                         _entitySearch.applyFilterToSearch();
 
