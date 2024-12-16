@@ -44,6 +44,7 @@ import com.flowcentraltech.flowcentral.application.data.TableDef;
 import com.flowcentraltech.flowcentral.application.data.WidgetRulesDef;
 import com.flowcentraltech.flowcentral.application.data.WidgetTypeDef;
 import com.flowcentraltech.flowcentral.application.entities.AppAPI;
+import com.flowcentraltech.flowcentral.application.entities.AppAPIQuery;
 import com.flowcentraltech.flowcentral.application.entities.AppApplet;
 import com.flowcentraltech.flowcentral.application.entities.AppAppletAlert;
 import com.flowcentraltech.flowcentral.application.entities.AppAppletFilter;
@@ -437,6 +438,17 @@ public interface ApplicationModuleService extends FlowCentralService {
      *                        if API with ID is not found. If an error occurs
      */
     AppAPI findAppAPI(Long apiId) throws UnifyException;
+
+    /**
+     * Finds a list of APIs.
+     * 
+     * @param query
+     *              the application applet query
+     * @return list of APIs
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    List<AppAPI> findAppAPIs(AppAPIQuery query) throws UnifyException;
 
     /**
      * Finds manage list applets.
