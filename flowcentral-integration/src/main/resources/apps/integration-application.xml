@@ -192,7 +192,7 @@
 				name="onCreateFormStatePolicy"
 				description="$m{integration.endpointpath.form.statepolicy.onswitch}">
 				<onCondition>
-					<restriction type="RST" field="endpointType" />
+					<restriction type="equals" paramA="RST" field="endpointType" />
 				</onCondition>
 				<setStates>
 					<setState type="field" target="direction"
@@ -207,7 +207,7 @@
 				name="restPathRules"
 				description="$m{integration.endpointpath.form.widgetrulespolicy.restpathrules}">
 				<onCondition>
-					<restriction type="RST" field="endpointType" />
+					<restriction type="equals" paramA="RST" field="endpointType" />
 				</onCondition>
 				<widgetRules>
 					<entry field="path"

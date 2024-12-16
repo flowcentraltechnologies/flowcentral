@@ -53,7 +53,7 @@ public class RestAPIListCommand extends AbstractApplicationListCommand<ZeroParam
             List<ListData> list = new ArrayList<ListData>();
             for (AppAPI appAPI : appApiList) {
                 list.add(new ListData(
-                        ApplicationNameUtils.getApplicationEntityLongName(appAPI.getApplet(), appAPI.getName()),
+                        ApplicationNameUtils.getApplicationEntityLongName(appAPI.getApplicationName(), appAPI.getName()),
                         appAPI.getDescription()));
             }
 
