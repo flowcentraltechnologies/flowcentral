@@ -88,8 +88,8 @@ public abstract class AbstractEntityDetailsPageController<T extends AbstractEnti
     @Action
     public final String details() throws UnifyException {
         IndexedTarget target = getRequestTarget(IndexedTarget.class);
-        if (target.isValidIndex()) {
-            getResultTable().setDetailsIndex(target.getIndex());
+        if (target.isValidValueIndex()) {
+            getResultTable().setDetailsIndex(target.getValueIndex());
             return refreshResult();
         }
 
@@ -99,9 +99,9 @@ public abstract class AbstractEntityDetailsPageController<T extends AbstractEnti
     @Action
     public final String columns() throws UnifyException {
         IndexedTarget target = getRequestTarget(IndexedTarget.class);
-        if (target.isValidIndex()) {
-            return onColumnSelect(target.getIndex(),
-                    new BeanValueStore(getResultTable().getDispItemList().get(target.getIndex())).getReader(),
+        if (target.isValidValueIndex()) {
+            return onColumnSelect(target.getValueIndex(),
+                    new BeanValueStore(getResultTable().getDispItemList().get(target.getValueIndex())).getReader(),
                     target.getBinding());
         }
 
@@ -111,9 +111,9 @@ public abstract class AbstractEntityDetailsPageController<T extends AbstractEnti
     @Action
     public final String buttons() throws UnifyException {
         IndexedTarget target = getRequestTarget(IndexedTarget.class);
-        if (target.isValidIndex()) {
-            return onAction(target.getIndex(),
-                    new BeanValueStore(getResultTable().getDispItemList().get(target.getIndex())).getReader(),
+        if (target.isValidValueIndex()) {
+            return onAction(target.getValueIndex(),
+                    new BeanValueStore(getResultTable().getDispItemList().get(target.getValueIndex())).getReader(),
                     target.getTarget());
         }
 

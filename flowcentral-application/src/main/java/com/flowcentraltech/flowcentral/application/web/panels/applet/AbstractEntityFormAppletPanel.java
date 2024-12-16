@@ -712,7 +712,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
             hintUser(MODE.WARNING, "$m{entityformapplet.diff.notpresent}");
             return;
         }
-        
+
         setRequestAttribute(AppletRequestAttributeConstants.FORM_DIFF, diff);
         setCommandResultMapping(ApplicationResultMappingConstants.SHOW_DIFF);
     }
@@ -901,7 +901,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
     @Action
     public void maintain() throws UnifyException {
         IndexedTarget target = getIndexedTarget();
-        if (target.isValidIndex()) {
+        if (target.isValidValueIndex()) {
             if (getEntityFormApplet().isPromptEnterWorkflowDraft()
                     && EntitySearchValueMarkerConstants.CHILD_LIST.equals(target.getTarget())) {
                 showPromptWorkflowDraft(WorkflowDraftType.MAINTAIN, target);
@@ -909,18 +909,18 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                 getRequestContextUtil().setContentScrollReset();
                 switch (target.getTarget()) {
                     case EntitySearchValueMarkerConstants.CHILD_LIST:
-                        getEntityFormApplet().maintainChildInst(target.getIndex());
+                        getEntityFormApplet().maintainChildInst(target);
                         return;
                     case EntitySearchValueMarkerConstants.RELATED_LIST:
-                        getEntityFormApplet().maintainRelatedInst(target.getIndex());
+                        getEntityFormApplet().maintainRelatedInst(target);
                         return;
                     case EntitySearchValueMarkerConstants.HEADLESS_LIST:
-                        getEntityFormApplet().maintainHeadlessInst(target.getIndex());
+                        getEntityFormApplet().maintainHeadlessInst(target.getValueIndex());
                         return;
                     default:
                 }
 
-                TableActionResult result = getEntityFormApplet().maintainInst(target.getIndex());
+                TableActionResult result = getEntityFormApplet().maintainInst(target.getValueIndex());
                 processTableActionResult(result);
             }
         } else {
@@ -937,7 +937,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
     public void listing() throws UnifyException {
         getRequestContextUtil().setContentScrollReset();
         IndexedTarget target = getRequestTarget(IndexedTarget.class);
-        if (target.isValidIndex()) {
+        if (target.isValidValueIndex()) {
             switch (target.getTarget()) {
                 case EntitySearchValueMarkerConstants.CHILD_LIST:
                     return;
@@ -948,7 +948,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                 default:
             }
 
-            TableActionResult result = getEntityFormApplet().listingInst(target.getIndex());
+            TableActionResult result = getEntityFormApplet().listingInst(target.getValueIndex());
             processTableActionResult(result);
         }
     }
@@ -1063,7 +1063,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                     "$m{entityformapplet.formreview.failure}", commandPath);
         }
     }
-    
+
     private IndexedTarget getIndexedTarget() throws UnifyException {
         AbstractEntityFormApplet applet = getEntityFormApplet();
         return getRequestAttribute(boolean.class, IN_WORKFLOW_DRAFT_LOOP_FLAG)
