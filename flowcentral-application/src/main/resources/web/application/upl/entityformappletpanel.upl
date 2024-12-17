@@ -14,10 +14,20 @@
 // the License.
 
 !fc-entityformappletpanel components:$c{formPanel assignmentPanel entryTablePanel}
-	frmActionsHandler:$d{!ui-event event:onclick action:$c{formActionAct}}
+	frmActionsHandler:$d{!ui-event event:onclick action:$c{formActionAct}} 
 
 !ui-hidden:maintainActHolder eventHandler:$d{!ui-event event:onclick action:$c{maintainAct}}
-	
+
+// Floating Form
+//!fc-headerwithtabsformpanel:popupFormPanel styleClass:$e{fc-floating-form} binding:form
+//	moreCenterComponents:$c{displayCounterLabel}
+//	moreActionButtons:$c{formAttachmentBtn frmDiffBtn frmActionBtns submitNextBtn submitCloseBtn saveAsBtn saveBtn saveNextBtn saveCloseBtn}
+//	moreActionButtons:$c{updateBtn updateCloseBtn deleteBtn cancelBtn overviewBtn prevBtn nextBtn}
+//	altActionButtons:$c{frmActionBtns submitNextBtn submitCloseBtn saveBtn saveNextBtn saveCloseBtn}
+//	altActionButtons:$c{updateBtn updateCloseBtn deleteBtn cancelBtn}
+//	moreMemoryComponents:$c{focusMemory tabMemory}
+//	switchOnChangeEventHandler:$d{!ui-event event:onchange action:$c{switchOnChangeAct}}
+
 // Form
 !fc-headerwithtabsformpanel:formPanel binding:form
 	moreCenterComponents:$c{displayCounterLabel}

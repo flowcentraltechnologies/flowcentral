@@ -86,7 +86,7 @@ import com.tcdng.unify.web.ui.widget.data.Popup;
  */
 @UplBinding("web/application/upl/entityformappletpanel.upl")
 public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel {
-
+ 
     private static final String IN_WORKFLOW_DRAFT_LOOP_FLAG = "IN_WORKFLOW_DRAFT_LOOP_FLAG";
 
     @Configurable

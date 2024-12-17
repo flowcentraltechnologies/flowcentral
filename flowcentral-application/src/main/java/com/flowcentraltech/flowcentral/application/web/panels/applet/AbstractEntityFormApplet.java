@@ -785,15 +785,6 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
             takeAuditSnapshot(form.isUpdateDraft() ? AuditEventType.VIEW_DRAFT : AuditEventType.VIEW);
         }
     }
-//
-//    public void maintainChildInst(int mIndex) throws UnifyException {
-//        if (ensureSaveOnTabAction()) {
-//            EntitySearch _entitySearch = (EntitySearch) form.getTabSheet().getCurrentItem().getValObject();
-//            Entity _inst = getEntitySearchItem(_entitySearch, mIndex).getEntity();
-//            maintainChildInst(_inst, _entitySearch.getChildTabIndex());
-//            takeAuditSnapshot(form.isUpdateDraft() ? AuditEventType.VIEW_DRAFT : AuditEventType.VIEW);
-//        }
-//    }
 
     public boolean isViewItemsInSeparateTabs() {
         return entitySearch.isViewItemsInSeparateTabs();
@@ -811,7 +802,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         return submitCurrentInst(ActionMode.DELETE_AND_CLOSE);
     }
 
-    private void maintainChildInst(Entity _inst, int tabIndex) throws UnifyException {
+    private void maintainChildInst(Entity _inst, int tabIndex) throws UnifyException { 
         FormTabDef _currFormTabDef = form.getFormDef().getFormTabDef(tabIndex);
         AppletDef childAppletDef = getAppletDef(_currFormTabDef.getApplet());
         saveCurrentForm(_currFormTabDef);
@@ -1706,6 +1697,8 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
                 : null;
         if (!StringUtils.isBlank(ucName)) {
             this.currUniqueConstraintDef = au().getEntityDef(currFormAppletDef.getEntity()).getUniqueConstraint(ucName);
+        } else {
+            this.currUniqueConstraintDef = null;
         }
     }
 

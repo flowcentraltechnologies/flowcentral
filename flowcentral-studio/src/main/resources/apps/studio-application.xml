@@ -6315,9 +6315,9 @@
 			</propertySet>
 			<propertySet
 				label="$m{studio.appappletprop.manageentity.formproperties}">
-				<property name="longForm.support"
+				<!--property name="longForm.support"
 					description="$m{studio.appappletprop.manageentity.longform.support}"
-					inputWidget="application.checkbox" />
+					inputWidget="application.checkbox" /-->
 				<property name="createForm.new.caption"
 					description="$m{studio.appappletprop.createentity.createform.newcaption}"
 					inputWidget="application.text" />
