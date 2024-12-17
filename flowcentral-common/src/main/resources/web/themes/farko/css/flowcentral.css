@@ -713,6 +713,11 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-tabsheet .tinactiveright .err{border-right:4px solid #ae6060; padding-right: 4px; color:#5c6166 !important;}
 .fc-tabsheet .tinactiveright img {filter: grayscale(100%);vertical-align:middle; display: inline-block; width: 14px; height: 14px; border: none;}
 .fc-tabsheet .tbody {margin-top:-4px; border: 1px solid #c8c8c8; padding:4px;}
+.fc-tabsheet .ttabx {display:block; margin-bottom: 12px;}
+.fc-tabsheet .ttabx .hdbar {background-color: #fff;float:right;}
+.fc-tabsheet .ttabxc {display:inline-block; font-size:16px;font-weight:bold;}
+.fc-tabsheet .ttabxc span {display: inline-block;color: #24292e; padding: 4px 8px;}
+.fc-tabsheet .ttabxb {display:block; background-color: #fff;border-top: 4px solid #c8c8c8;padding-top:4px;}
 
 .fc-tabsheet .msg {padding-left:4px;}
 
@@ -1003,6 +1008,8 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-headerwithtabsformpanel .reltitle {font-size: 16px;}
 .fc-headerwithtabsformpanel .attachbtn {font-size: 20px; color: #707070; cursor: pointer; padding: 0px 0px;}
 .fc-headerwithtabsformpanel .formbase {padding:0px 16px;}
+
+.fc-floating-form {width:80%;background-color:#ffffff;margin:auto;}
 
 .fc-listingformpanel {}
 

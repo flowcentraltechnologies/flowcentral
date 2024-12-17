@@ -50,40 +50,65 @@ public class TabSheetWriter extends AbstractControlWriter {
         writer.write("<div>");
         TabSheet tabSheet = tabSheetWidget.getTabSheet();
         if (tabSheet != null && tabSheet.isInStateForDisplay()) {
-            writer.write("<ul class=\"ttab\">");
-            final String tabPrefix = tabSheetWidget.getPrefixedId("tab_");
-            List<TabDef> tabDefList = tabSheet.getTabDefList();
-            int currentIndex = tabSheet.getCurrentTabIndex();
-            int len = tabDefList.size();
-            for (int i = 0; i < len; i++) {
-                if (tabSheet.getTabSheetItem(i).isVisible()) {
-                    TabDef tabDef = tabDefList.get(i);
-                    logDebug("Writing tab structure [{0}] with label [{1}]...", tabDef.getTabName(),
-                            tabDef.getTabLabel());
-                    MessageType messageType = tabSheet.getReviewMessageType(tabDef.getTabName());
-                    writer.write("<li id=\"").write(tabPrefix).write(i).write("\" class=\"");
-                    writer.write(WidgetWriterUtils.getTabClass(i, currentIndex));
-                    writer.write("\">");
-                    if (messageType != null) {
-                        writer.write("<img src=\"");
-                        writer.writeFileImageContextURL(messageType.image());
-                        writer.write("\">");
-                        writer.write("<span class=\"msg\">").writeWithHtmlEscape(tabDef.getTabLabel()).write("</span>");
-                    } else if (tabDef.isErrors()) {
-                        writer.write("<span class=\"err\">").writeWithHtmlEscape(tabDef.getTabLabel()).write("</span>");
-                    } else {
+            final List<TabDef> tabDefList = tabSheet.getTabDefList();
+            final int len = tabDefList.size();
+            if (tabSheet.isExpanded()) {
+                for (int i = 0; i < len; i++) {
+                    if (tabSheet.getTabSheetItem(i).isVisible()) {
+                        TabDef tabDef = tabDefList.get(i);
+                        writer.write("<div class=\"ttabx\">");
+                        writer.write("<div class=\"ttabxc\">");
+                        writer.write("<span>");
                         writer.writeWithHtmlEscape(tabDef.getTabLabel());
-                    }
+                        writer.write("</span>");
+                        writer.write("</div>");
 
-                    writer.write("</li>");
+                        writer.write("<div class=\"ttabxb\">");
+                        Widget tabWidget = tabSheetWidget.getTabWidget(i);
+                        if (tabWidget != null) {
+                            tabWidget.setValueStore(tabSheetWidget.getValueList().get(i));
+                            writer.writeStructureAndContent(tabWidget);
+                        }
+                        writer.write("</div>");
+                        writer.write("</div>");
+                    }
                 }
-            }
-            writer.write("</ul>");
-            writer.write("</div><div class=\"tbody\">");
-            Widget tabWidget = tabSheetWidget.getCurrentTabWidget();
-            if (tabWidget != null) {
-                tabWidget.setValueStore(tabSheetWidget.getValueList().get(tabSheet.getCurrentTabIndex()));
-                writer.writeStructureAndContent(tabWidget);
+            } else {
+                writer.write("<ul class=\"ttab\">");
+                final String tabPrefix = tabSheetWidget.getPrefixedId("tab_");
+                int currentIndex = tabSheet.getCurrentTabIndex();
+                for (int i = 0; i < len; i++) {
+                    if (tabSheet.getTabSheetItem(i).isVisible()) {
+                        TabDef tabDef = tabDefList.get(i);
+                        logDebug("Writing tab structure [{0}] with label [{1}]...", tabDef.getTabName(),
+                                tabDef.getTabLabel());
+                        MessageType messageType = tabSheet.getReviewMessageType(tabDef.getTabName());
+                        writer.write("<li id=\"").write(tabPrefix).write(i).write("\" class=\"");
+                        writer.write(WidgetWriterUtils.getTabClass(i, currentIndex));
+                        writer.write("\">");
+                        if (messageType != null) {
+                            writer.write("<img src=\"");
+                            writer.writeFileImageContextURL(messageType.image());
+                            writer.write("\">");
+                            writer.write("<span class=\"msg\">").writeWithHtmlEscape(tabDef.getTabLabel())
+                                    .write("</span>");
+                        } else if (tabDef.isErrors()) {
+                            writer.write("<span class=\"err\">").writeWithHtmlEscape(tabDef.getTabLabel())
+                                    .write("</span>");
+                        } else {
+                            writer.writeWithHtmlEscape(tabDef.getTabLabel());
+                        }
+
+                        writer.write("</li>");
+                    }
+                }
+                writer.write("</ul>");
+                writer.write("</div><div class=\"tbody\">");
+                Widget tabWidget = tabSheetWidget.getCurrentTabWidget();
+                if (tabWidget != null) {
+                    tabWidget.setValueStore(tabSheetWidget.getValueList().get(tabSheet.getCurrentTabIndex()));
+                    writer.writeStructureAndContent(tabWidget);
+                }
             }
         }
 
@@ -101,13 +126,28 @@ public class TabSheetWriter extends AbstractControlWriter {
 
         TabSheet tabSheet = tabSheetWidget.getTabSheet();
         if (tabSheet != null && tabSheet.isInStateForDisplay()) {
-            Widget tabWidget = tabSheetWidget.getCurrentTabWidget();
-            if (tabWidget != null) {
-                tabWidget.setValueStore(tabSheetWidget.getValueList().get(tabSheet.getCurrentTabIndex()));
-                writer.writeBehavior(tabWidget);
-                addPageAlias(tabSheetWidget.getId(), tabWidget);
+            if (tabSheet.isExpanded()) {
+                final int len = tabSheet.getTabCount();
+                for (int i = 0; i < len; i++) {
+                    if (tabSheet.getTabSheetItem(i).isVisible()) {
+                        Widget tabWidget = tabSheetWidget.getTabWidget(i);
+                        if (tabWidget != null) {
+                            tabWidget.setValueStore(tabSheetWidget.getValueList().get(i));
+                            writer.writeBehavior(tabWidget);
+                            addPageAlias(tabSheetWidget.getId(), tabWidget);
+                        }
+                    }
+                }
+            } else {
+                if (tabSheet.getTabSheetItem(tabSheet.getCurrentTabIndex()).isVisible()) {
+                    Widget tabWidget = tabSheetWidget.getCurrentTabWidget();
+                    if (tabWidget != null) {
+                        tabWidget.setValueStore(tabSheetWidget.getValueList().get(tabSheet.getCurrentTabIndex()));
+                        writer.writeBehavior(tabWidget);
+                        addPageAlias(tabSheetWidget.getId(), tabWidget);
+                    }
+                }
             }
-
             // Append tab sheet rigging
             writer.beginFunction("fux.rigTabSheet");
             writer.writeParam("pId", tabSheetWidget.getId());

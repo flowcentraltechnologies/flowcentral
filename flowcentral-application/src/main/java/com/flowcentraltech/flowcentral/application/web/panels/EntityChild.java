@@ -52,6 +52,8 @@ public class EntityChild extends AbstractPanelFormBinding {
 
     private boolean quickEdit;
 
+    private boolean expandedMode;
+
     public EntityChild(FormContext ctx, SweepingCommitPolicy sweepingCommitPolicy, String tabName, FormDef childFormDef,
             boolean quickEdit, boolean ignoreConditionalDisabled) {
         super(ctx, sweepingCommitPolicy, tabName, ignoreConditionalDisabled);
@@ -105,6 +107,14 @@ public class EntityChild extends AbstractPanelFormBinding {
 
     public void setCanCreate(boolean canCreate) {
         this.canCreate = canCreate;
+    }
+
+    public boolean isExpandedMode() {
+        return expandedMode;
+    }
+
+    public void setExpandedMode(boolean expandedMode) {
+        this.expandedMode = expandedMode;
     }
 
     public boolean isEditButtonVisible() {

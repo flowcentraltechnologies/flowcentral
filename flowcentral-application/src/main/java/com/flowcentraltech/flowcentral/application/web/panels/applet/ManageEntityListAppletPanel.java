@@ -77,10 +77,10 @@ public class ManageEntityListAppletPanel extends AbstractEntityFormAppletPanel {
     @Action
     public final void details() throws UnifyException {
         IndexedTarget target = getRequestTarget(IndexedTarget.class);
-        if (target.isValidIndex()) {
+        if (target.isValidValueIndex()) {
             final ManageEntityListApplet applet = getManageEntityListApplet();
             EntitySearch entitySearch = applet.getEntitySearch();
-            entitySearch.getEntityTable().setDetailsIndex(target.getIndex());
+            entitySearch.getEntityTable().setDetailsIndex(target.getValueIndex());
         }
     }
 

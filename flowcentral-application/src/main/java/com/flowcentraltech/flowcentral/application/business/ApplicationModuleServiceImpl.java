@@ -1781,6 +1781,11 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
+    public List<AppAPI> findAppAPIs(AppAPIQuery query) throws UnifyException {
+        return environment().listAll(query);
+    }
+
+    @Override
     public List<AppApplet> findManageEntityListApplets(String entity) throws UnifyException {
         return environment().listAll(new AppAppletQuery().typeIn(AppletType.MANAGE_ENTITY_LIST_TYPES).entity(entity));
     }

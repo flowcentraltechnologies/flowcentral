@@ -10,6 +10,11 @@
 			dataType="boolean" inputType="boolean" listOption="true"
 			editor="!ui-booleanlabel onTrue:$m{label.mandatory} onFalse:$m{label.optional}"
 			renderer="!ui-booleanlabel onTrue:$m{label.mandatory} onFalse:$m{label.optional}" />
+		<widgetType name="restapilist"
+			description="$m{application.widgettype.restapilist}"
+			dataType="string" inputType="string"
+			editor="!ui-select blankOption:$s{} list:restapilist"
+			renderer="!ui-label" />
 		<widgetType name="datatypeeditorlist"
 			description="$m{application.widgettype.datatypeeditorlist}"
 			dataType="string" inputType="string"

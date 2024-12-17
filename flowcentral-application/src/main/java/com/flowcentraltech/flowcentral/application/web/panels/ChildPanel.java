@@ -42,6 +42,10 @@ public class ChildPanel extends AbstractFlowCentralStandalonePanel {
 
         EntityChild entityChild = getEntityChild();
         entityChild.reload();
+        
+        final boolean showHeaderParts = !entityChild.isExpandedMode();
+        setVisible("titleBlock", showHeaderParts);
+        setVisible("headerRightPanel", showHeaderParts);
 
         boolean editMode = entityChild.isWithChild();
         setWidgetVisible("createBtn", !editMode && entityChild.isCreateButtonVisible());

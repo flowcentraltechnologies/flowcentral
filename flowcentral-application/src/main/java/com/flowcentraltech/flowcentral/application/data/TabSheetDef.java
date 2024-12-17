@@ -36,7 +36,7 @@ public class TabSheetDef {
     
     private long version;
 
-    private TabSheetDef(FormContext formContext, List<TabDef> tabDefList, long version) {
+    protected TabSheetDef(FormContext formContext, List<TabDef> tabDefList, long version) {
         this.formContext = formContext;
         this.tabDefList = DataUtils.unmodifiableList(tabDefList);
         this.version = version;
