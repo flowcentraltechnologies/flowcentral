@@ -3960,7 +3960,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         return deletion;
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "deprecation" })
     @Taskable(name = ApplicationImportDataTaskConstants.IMPORTDATA_TASK_NAME, description = "Import Data Task",
             parameters = { @Parameter(name = ApplicationImportDataTaskConstants.IMPORTDATA_ENTITY,
                     description = "$m{dataimportappletpanel.dataimport.entity}", type = String.class, mandatory = true),

@@ -619,6 +619,15 @@
 			<property name="wizardForm.completion" value="EXE" />
 			<property name="wizardForm.task.processor" value="createjsonentity-formwizardprocessor" />
 		</applet>
+		<applet name="createCsvEntity"
+			description="$m{studio.csventity.manage}"
+			label="$m{studio.csventity.manage.label}" type="form_wizard"
+			entity="studio.studioJsonEntity" menuAccess="false">
+			<property name="createForm" value="studioCsvEntityForm" />
+			<property name="createForm.navigation.policy" value="createcsventity-navigationpolicy" />
+			<property name="wizardForm.completion" value="EXE" />
+			<property name="wizardForm.task.processor" value="createcsventity-formwizardprocessor" />
+		</applet>
 		<applet name="stuManageModule"
 			description="$m{studio.module.manage}"
 			label="$m{studio.module.manage.label}" icon="cubes"
@@ -1541,6 +1550,9 @@
 		<reference name="studioJsonEntityRef"
 			description="$m{studio.jsonentity.reference}"
 			entity="studioJsonEntity" />
+		<reference name="studioCsvEntityRef"
+			description="$m{studio.csventity.reference}"
+			entity="studioJsonEntity" />
 	</references>
 	<!-- Entities -->
 	<entities>
@@ -2458,6 +2470,49 @@
 				</section>
 				<section name="options" columns="type_1"
 					label="$m{studio.jsonentity.form.options}" icon="rocket">
+					<field name="generateEntity" inputWidget="application.checkbox" column="0"
+						disabled="true" />
+					<field name="loadSourceJSON" inputWidget="application.checkbox" column="0"
+						editable="true" />
+					<field name="generateApplet" inputWidget="application.checkbox" column="0"
+						editable="true" />
+					<field name="generateRest" inputWidget="application.checkbox" column="0"
+						editable="true" />
+				</section>
+			</tab>
+		</form>
+		<form name="studioCsvEntityForm" description="$m{studio.csventity.form}"
+			entity="studioJsonEntity">
+			<tab name="basicDetails"
+				label="$m{studio.csventity.form.application}" contentType="miniform">
+				<section name="structureDetails" columns="type_2"
+					label="$m{studio.csventity.form.application}" icon="application" >
+					<field name="applicationId" inputWidget="application.entitysearch" column="0"
+						label="$m{studio.csventity.application}"
+						required="true" editable="true" />
+					<field name="entityName" inputWidget="application.name"
+						column="0" required="true" />
+					<field name="baseType" column="0" label="$m{studio.csventity.basetype}"
+						required="true" editable="true" />
+					<field name="dateFormatter" inputWidget="studio.dateformatterlist"
+						column="0" required="false" />
+					<field name="dateTimeFormatter" inputWidget="studio.datetimeformatterlist"
+						column="0" required="false" />
+					<field name="delegate" inputWidget="environmentdelegatelist"
+						column="0" />
+				</section>
+				<section name="source" columns="type_1"
+					label="$m{studio.csventity.form.source}" icon="file" >
+					<field name="sourceJson" inputWidget="application.textareaxlarge" column="0"
+						required="true" editable="true" />
+				</section>
+				<section name="structure" columns="type_1"
+					label="$m{studio.csventity.form.structure}" icon="scroll">
+					<field name="refinedStructure" inputWidget="application.entitycomposition" column="0"
+						required="true" editable="true" />
+				</section>
+				<section name="options" columns="type_1"
+					label="$m{studio.csventity.form.options}" icon="rocket">
 					<field name="generateEntity" inputWidget="application.checkbox" column="0"
 						disabled="true" />
 					<field name="loadSourceJSON" inputWidget="application.checkbox" column="0"
