@@ -2598,6 +2598,11 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
+    public boolean isEntityExist(String entityName) throws UnifyException {
+        return environment().countAll(new AppEntityQuery().name(entityName)) > 0;
+    }
+
+    @Override
     public boolean isEntityDef(String entityName) throws UnifyException {
         ApplicationEntityNameParts nameParts = ApplicationNameUtils.getApplicationEntityNameParts(entityName);
         return environment().countAll(new AppEntityQuery().applicationName(nameParts.getApplicationName())

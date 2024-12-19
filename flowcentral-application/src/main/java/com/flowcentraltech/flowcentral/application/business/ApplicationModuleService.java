@@ -1371,6 +1371,17 @@ public interface ApplicationModuleService extends FlowCentralService {
      * Checks if application entity class is defined.
      * 
      * @param entityName
+     *                   the entity name
+     * @return true if define otherwise false
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    boolean isEntityExist(String entityName) throws UnifyException;
+
+    /**
+     * Checks if application entity class is defined.
+     * 
+     * @param entityName
      *                   the entity long name
      * @return true if define otherwise false
      * @throws UnifyException

@@ -2483,6 +2483,9 @@
 						editable="true" />
 				</section>
 			</tab>
+			<fieldValidationPolicy name="entityValidation"
+				description="$m{studio.jsonentity.form.fieldvalidationpolicy.entity}"
+				fieldName="entityName" validator="fc-entitynameexistvalidator" />
 		</form>
 		<form name="studioCsvEntityForm" description="$m{studio.csventity.form}"
 			entity="studioJsonEntity">
@@ -2526,6 +2529,9 @@
 						editable="true" />
 				</section>
 			</tab>
+			<fieldValidationPolicy name="entityValidation"
+				description="$m{studio.csventity.form.fieldvalidationpolicy.entity}"
+				fieldName="entityName" validator="fc-entitynameexistvalidator" />
 		</form>
 		<form name="appAppletForm"
 			description="$m{studio.appapplet.form}"
