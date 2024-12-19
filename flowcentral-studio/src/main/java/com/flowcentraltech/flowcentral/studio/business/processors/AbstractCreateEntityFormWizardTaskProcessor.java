@@ -243,9 +243,15 @@ public abstract class AbstractCreateEntityFormWizardTaskProcessor extends Abstra
         appEntityField.setInputWidget(InputWidgetUtils.getDefaultSyncEntityFieldWidget(dataType));
         appEntityField.setJsonName(entry.getJsonName());
         appEntityField.setJsonFormatter(entry.getFormatter());
+        
+        // TODO Make available for input
         if (dataType.isDecimal()) {
             appEntityField.setPrecision(20);
             appEntityField.setScale(2);
+        }
+
+        if (dataType.isString()) {
+            appEntityField.setMaxLen(128);
         }
 
         return appEntityField;
