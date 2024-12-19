@@ -1535,10 +1535,8 @@
 			description="$m{studio.reference.applicationdevelopableref}"
 			name="applicationDevelopableRef">
 			<filter>
-				<restriction type="AND">
-					<restriction field="developable" paramA="true"
-						type="EQUALS" />
-				</restriction>
+				<restriction field="developable" paramA="true"
+					type="EQUALS" />
 			</filter>
 		</reference>
 		<reference name="studioSnapshotDetailsRef"
@@ -2448,6 +2446,7 @@
 				<section name="structureDetails" columns="type_2"
 					label="$m{studio.jsonentity.form.application}" icon="application" >
 					<field name="applicationId" inputWidget="application.entitysearch" column="0"
+						reference="studio.applicationDevelopableRef"
 						label="$m{studio.jsonentity.application}"
 						required="true" editable="true" />
 					<field name="entityName" inputWidget="application.name"
@@ -2495,6 +2494,7 @@
 					label="$m{studio.csventity.form.application}" icon="application" >
 					<field name="applicationId" inputWidget="application.entitysearch" column="0"
 						label="$m{studio.csventity.application}"
+						reference="studio.applicationDevelopableRef"
 						required="true" editable="true" />
 					<field name="entityName" inputWidget="application.name"
 						column="0" required="true" />

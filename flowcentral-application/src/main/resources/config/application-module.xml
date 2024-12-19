@@ -137,7 +137,7 @@
 		<sysParameter code="APP-002A" defaultVal="false"
 			description="$m{application.sysparam.globalclientupdatesychronization}"
 			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
-		<sysParameter code="APP-002B" defaultVal="false"
+		<sysParameter code="APP-002B" defaultVal="true"
 			description="$m{application.sysparam.entitysearchonsearchinputchange}"
 			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
 		<sysParameter code="APP-002C" defaultVal="false"
