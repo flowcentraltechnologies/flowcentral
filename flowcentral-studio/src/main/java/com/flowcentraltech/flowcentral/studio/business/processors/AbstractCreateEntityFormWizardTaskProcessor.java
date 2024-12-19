@@ -16,6 +16,8 @@
 package com.flowcentraltech.flowcentral.studio.business.processors;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
@@ -25,6 +27,8 @@ import com.flowcentraltech.flowcentral.application.entities.AppAPI;
 import com.flowcentraltech.flowcentral.application.entities.AppApplet;
 import com.flowcentraltech.flowcentral.application.entities.AppEntity;
 import com.flowcentraltech.flowcentral.application.entities.AppEntityField;
+import com.flowcentraltech.flowcentral.application.entities.AppEntityUpload;
+import com.flowcentraltech.flowcentral.application.entities.AppFieldSequence;
 import com.flowcentraltech.flowcentral.application.util.ApplicationCodeGenUtils;
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityNameParts;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
@@ -38,8 +42,11 @@ import com.flowcentraltech.flowcentral.configuration.constants.AppletType;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityBaseType;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldDataType;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldType;
+import com.flowcentraltech.flowcentral.configuration.xml.FieldSequenceConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.FieldSequenceEntryConfig;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
+import com.tcdng.unify.core.batch.ConstraintAction;
 import com.tcdng.unify.core.constant.DataType;
 import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.database.Entity;
@@ -82,11 +89,14 @@ public abstract class AbstractCreateEntityFormWizardTaskProcessor extends Abstra
         final EntityBaseType baseType = instValueStore.retrieve(EntityBaseType.class, "baseType");
         final String dateFormatter = instValueStore.retrieve(String.class, "dateFormatter");
         final String dateTimeFormatter = instValueStore.retrieve(String.class, "dateTimeFormatter");
+        final boolean generateImport = instValueStore.retrieve(boolean.class, "generateImport");
+        final List<String> importList = new ArrayList<String>();
         AppEntity appEntity = null;
         for (EntityCompositionEntry entry : entityComposition.getEntries()) {
             if (entry.getFieldType() == null) {
                 if (appEntity != null) {
-                    final String entity = createEntity(taskMonitor, applicationName, appEntity);
+                    final String entity = createEntity(taskMonitor, applicationName, appEntity,
+                            generateImport && entityNames.size() == 0 ? importList : Collections.emptyList());
                     entityNames.add(entity);
                 }
 
@@ -107,9 +117,7 @@ public abstract class AbstractCreateEntityFormWizardTaskProcessor extends Abstra
                 appEntity.setTableName(entry.getTable());
                 appEntity.setDateFormatter(dateFormatter);
                 appEntity.setDateTimeFormatter(dateTimeFormatter);
-                final String entityClass = ApplicationCodeGenUtils.generateCustomEntityClassName(ConfigType.STATIC, // Not
-                                                                                                                    // an
-                                                                                                                    // error
+                final String entityClass = ApplicationCodeGenUtils.generateCustomEntityClassName(ConfigType.STATIC,
                         applicationName, entry.getEntityName());
                 appEntity.setEntityClass(entityClass);
                 appEntity.setDelegate(delegate);
@@ -120,10 +128,14 @@ public abstract class AbstractCreateEntityFormWizardTaskProcessor extends Abstra
             } else {
                 AppEntityField appEntityField = newAppEntityField(applicationName, entry);
                 appEntity.getFieldList().add(appEntityField);
+                if (generateImport && entityNames.size() == 0) {
+                    importList.add(appEntityField.getName());
+                }
             }
         }
 
-        final String entity = createEntity(taskMonitor, applicationName, appEntity);
+        final String entity = createEntity(taskMonitor, applicationName, appEntity,
+                generateImport && entityNames.size() == 0 ? importList : Collections.emptyList());
         entityNames.add(entity);
 
         // Create CRUD applets
@@ -164,7 +176,7 @@ public abstract class AbstractCreateEntityFormWizardTaskProcessor extends Abstra
                 final String _entity = entityNames.get(0);
                 ApplicationEntityNameParts parts = ApplicationNameUtils.getApplicationEntityNameParts(_entity);
                 final String apiName = StringUtils.decapitalize(parts.getEntityName()) + "RestAPI";
-                final String apiDesc = StringUtils.capitalizeFirstLetter(parts.getEntityName()) + " Rest API";
+                final String apiDesc =  NameUtils.describeName(parts.getEntityName()) + " Rest API";
                 logDebug(taskMonitor, "Creating entity REST API...");
                 AppAPI appAPI = new AppAPI();
                 appAPI.setApplicationId(applicationId);
@@ -189,7 +201,7 @@ public abstract class AbstractCreateEntityFormWizardTaskProcessor extends Abstra
                 logDebug(taskMonitor, "Loading source...");
                 final String sourceJson = instValueStore.retrieve(String.class, "sourceJson");
                 final String _entity = entityNames.get(0);
-                loadSource(sourceJson, _entity);
+                loadSource(taskMonitor, sourceJson, _entity);
             }
 
         }
@@ -198,9 +210,9 @@ public abstract class AbstractCreateEntityFormWizardTaskProcessor extends Abstra
     protected final AppletUtilities au() {
         return au;
     }
-    
-    protected abstract void loadSource(String source, String entity) throws UnifyException;
-    
+
+    protected abstract void loadSource(TaskMonitor taskMonitor, String source, String entity) throws UnifyException;
+
     private AppEntityField newAppEntityField(final String applicationName, final EntityCompositionEntry entry) {
         AppEntityField appEntityField = new AppEntityField();
         appEntityField.setConfigType(ConfigType.CUSTOM);
@@ -239,9 +251,34 @@ public abstract class AbstractCreateEntityFormWizardTaskProcessor extends Abstra
         return appEntityField;
     }
 
-    private String createEntity(TaskMonitor taskMonitor, String applicationName, AppEntity appEntity)
-            throws UnifyException {
+    private String createEntity(TaskMonitor taskMonitor, String applicationName, AppEntity appEntity,
+            List<String> importList) throws UnifyException {
         if (appEntity != null) {
+            if (!importList.isEmpty()) {
+                FieldSequenceConfig fieldSequenceConfig = new FieldSequenceConfig();
+                List<FieldSequenceEntryConfig> entryList = new ArrayList<FieldSequenceEntryConfig>();
+                for (String fieldName: importList) {
+                    FieldSequenceEntryConfig fieldSequenceEntryConfig = new FieldSequenceEntryConfig();
+                    fieldSequenceEntryConfig.setFieldName(fieldName);
+                    fieldSequenceEntryConfig.setFormatter(null); // TODO
+                    entryList.add(fieldSequenceEntryConfig);
+                }
+                
+                fieldSequenceConfig.setEntryList(entryList);
+
+                AppFieldSequence fieldSequence = new AppFieldSequence(
+                        InputWidgetUtils.getFieldSequenceDefinition(fieldSequenceConfig));
+                
+                final String uploadName = StringUtils.decapitalize(appEntity.getName()) + "Upload";
+                final String uploadDesc =  NameUtils.describeName(appEntity.getName()) + " Upload";
+                AppEntityUpload appEntityUpload = new AppEntityUpload();
+                appEntityUpload.setName(uploadName);
+                appEntityUpload.setDescription(uploadDesc);
+                appEntityUpload.setConstraintAction(ConstraintAction.SKIP);
+                appEntityUpload.setFieldSequence(fieldSequence);
+                appEntity.setUploadList(Arrays.asList(appEntityUpload));
+            }
+
             // Save
             logDebug(taskMonitor, "Creating new entity...");
             au.environment().create(appEntity);

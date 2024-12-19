@@ -15,9 +15,15 @@
  */
 package com.flowcentraltech.flowcentral.studio.business.processors;
 
+import java.io.StringReader;
+
+import com.flowcentraltech.flowcentral.application.util.ApplicationEntityNameParts;
+import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.common.annotation.EntityReferences;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
+import com.tcdng.unify.core.task.TaskMonitor;
+import com.tcdng.unify.core.util.StringUtils;
 
 /**
  * Create CSV entity form wizard policies.
@@ -30,9 +36,10 @@ import com.tcdng.unify.core.annotation.Component;
 public class CreateCsvEntityFormWizardTaskProcessor extends AbstractCreateEntityFormWizardTaskProcessor {
 
     @Override
-    protected void loadSource(String source, String entity) throws UnifyException {
-        // TODO Auto-generated method stub
-        
+    protected void loadSource(TaskMonitor taskMonitor, String source, String entity) throws UnifyException {
+        ApplicationEntityNameParts parts = ApplicationNameUtils.getApplicationEntityNameParts(entity);
+        final String uploadName = StringUtils.decapitalize(parts.getEntityName()) + "Upload";
+        au().application().executeImportDataTask(taskMonitor, entity, uploadName, new StringReader(source), true);
     }
 
 }

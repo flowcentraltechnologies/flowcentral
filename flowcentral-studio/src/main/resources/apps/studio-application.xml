@@ -1654,6 +1654,9 @@
 			<field name="generateRest"
 				inputWidget="application.boolean"
 				label="$m{studio.jsonentity.generaterest}" type="boolean"/>
+			<field name="generateImport"
+				inputWidget="application.boolean"
+				label="$m{studio.jsonentity.generateimport}" type="boolean" nullable="true"/>
 			<field name="applicationName"
 				label="$m{studio.jsonentity.applicationname}"
 				type="list_only" key="applicationId" property="name" />
@@ -2504,7 +2507,7 @@
 				<section name="source" columns="type_1"
 					label="$m{studio.csventity.form.source}" icon="file" >
 					<field name="sourceJson" inputWidget="application.textareaxlarge" column="0"
-						required="true" editable="true" />
+						required="true" editable="true" label="$m{studio.csventity.sourcecsv}" />
 				</section>
 				<section name="structure" columns="type_1"
 					label="$m{studio.csventity.form.structure}" icon="scroll">
@@ -2516,7 +2519,7 @@
 					<field name="generateEntity" inputWidget="application.checkbox" column="0"
 						disabled="true" />
 					<field name="loadSourceJSON" inputWidget="application.checkbox" column="0"
-						editable="true" />
+						editable="true" label="$m{studio.csventity.loadsourcecsv}" />
 					<field name="generateApplet" inputWidget="application.checkbox" column="0"
 						editable="true" />
 					<field name="generateRest" inputWidget="application.checkbox" column="0"

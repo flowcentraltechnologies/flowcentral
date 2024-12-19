@@ -20,6 +20,7 @@ import com.flowcentraltech.flowcentral.common.annotation.EntityReferences;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.database.Entity;
+import com.tcdng.unify.core.task.TaskMonitor;
 import com.tcdng.unify.core.util.DataUtils;
 
 /**
@@ -34,7 +35,7 @@ public class CreateJsonEntityFormWizardTaskProcessor extends AbstractCreateEntit
 
     @SuppressWarnings("unchecked")
     @Override
-    protected void loadSource(String source, String entity) throws UnifyException {
+    protected void loadSource(TaskMonitor taskMonitor, String source, String entity) throws UnifyException {
         final EntityClassDef entityClassDef = au().getEntityClassDef(entity);
         final Entity inst = DataUtils.fromJsonString(entityClassDef.getJsonComposition(au()),
                 (Class<? extends Entity>) entityClassDef.getEntityClass(), source);

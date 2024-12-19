@@ -61,8 +61,7 @@ public class CreateCsvEntityNavigationPolicy extends AbstractStudioAppletNavigat
             final String entityName = inst.retrieve(String.class, "entityName");
             List<EntityTypeInfo> entityTypeInfos = EntityTypeUtils.getEntityTypeInfoFromCsv(entityName, sourceCsv);
             if (DataUtils.isBlank(entityTypeInfos)) {
-                errors.addValidationError(new FieldTarget("sourceJson"),
-                        "$m{studio.csventity.validation.csv.invalid}");
+                errors.addValidationError(new FieldTarget("sourceJson"), "$m{studio.csventity.validation.csv.invalid}");
             }
 
             // Sets entity composition JSON
@@ -76,10 +75,19 @@ public class CreateCsvEntityNavigationPolicy extends AbstractStudioAppletNavigat
             inst.store("refinedStructure", compositionJson);
         } else if (currentPage == 2) {
             inst.store("generateEntity", true);
+            inst.store("generateImport", true);
             if (inst.isNull("loadSourceJSON")) {
                 inst.store("loadSourceJSON", true);
             }
-            
+
+            if (inst.isNull("generateApplet")) {
+                inst.store("generateApplet", true);
+            }
+
+            if (inst.isNull("generateRest")) {
+                inst.store("generateRest", true);
+            }
+
             final EntityComposition entityComposition = (EntityComposition) pageAttributes.get("composition");
             final String compositionJson = DataUtils.asJsonString(entityComposition, PrintFormat.PRETTY);
             inst.store("refinedStructure", compositionJson);

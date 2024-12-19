@@ -79,6 +79,14 @@ public class CreateJsonEntityNavigationPolicy extends AbstractStudioAppletNaviga
             if (inst.isNull("loadSourceJSON")) {
                 inst.store("loadSourceJSON", true);
             }
+
+            if (inst.isNull("generateApplet")) {
+                inst.store("generateApplet", true);
+            }
+
+            if (inst.isNull("generateRest")) {
+                inst.store("generateRest", true);
+            }
             
             final EntityComposition entityComposition = (EntityComposition) pageAttributes.get("composition");
             final String compositionJson = DataUtils.asJsonString(entityComposition, PrintFormat.PRETTY);
