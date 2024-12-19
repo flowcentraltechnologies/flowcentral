@@ -89,7 +89,13 @@ public class DataTypeUtils {
                         StandardFormatType.DATETIME_YYYYMMDD_SLASH,
                         StandardFormatType.DATETIME_DDMMYYYY_DASH,
                         StandardFormatType.DATETIME_MMDDYYYY_DASH,
-                        StandardFormatType.DATETIME_YYYYMMDD_DASH);
+                        StandardFormatType.DATETIME_YYYYMMDD_DASH,
+                        StandardFormatType.DATETIMEA_DDMMYYYY_SLASH,
+                        StandardFormatType.DATETIMEA_MMDDYYYY_SLASH,
+                        StandardFormatType.DATETIMEA_YYYYMMDD_SLASH,
+                        StandardFormatType.DATETIMEA_DDMMYYYY_DASH,
+                        StandardFormatType.DATETIMEA_MMDDYYYY_DASH,
+                        StandardFormatType.DATETIMEA_YYYYMMDD_DASH);
                 break;
             default:
                 break;

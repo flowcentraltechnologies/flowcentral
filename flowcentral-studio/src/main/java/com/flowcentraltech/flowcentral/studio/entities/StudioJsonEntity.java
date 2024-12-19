@@ -69,6 +69,9 @@ public class StudioJsonEntity extends BaseAuditEntity {
 
     @Column(nullable = true)
     private Boolean generateRest;
+
+    @Column(nullable = true)
+    private Boolean generateImport;
     
     @ListOnly(key = "applicationId", property = "name")
     private String applicationName;
@@ -184,6 +187,14 @@ public class StudioJsonEntity extends BaseAuditEntity {
 
     public void setGenerateRest(Boolean generateRest) {
         this.generateRest = generateRest;
+    }
+
+    public Boolean getGenerateImport() {
+        return generateImport;
+    }
+
+    public void setGenerateImport(Boolean generateImport) {
+        this.generateImport = generateImport;
     }
 
     public String getApplicationName() {

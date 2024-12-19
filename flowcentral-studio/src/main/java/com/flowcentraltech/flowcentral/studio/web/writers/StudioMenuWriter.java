@@ -73,7 +73,7 @@ public class StudioMenuWriter extends AbstractPanelWriter {
                     "studio.uploadSnapshot", "studio.snapshots"));
 
     private static final List<String> entityToolsAppletList = Collections
-            .unmodifiableList(Arrays.asList("studio.createJsonEntity"));
+            .unmodifiableList(Arrays.asList("studio.createJsonEntity", "studio.createCsvEntity"));
 
     private static final List<StudioAppComponentType> utilMenuCategoryList = Collections
             .unmodifiableList(Arrays.asList(StudioAppComponentType.ENTITY_TOOLS, StudioAppComponentType.SNAPSHOT,

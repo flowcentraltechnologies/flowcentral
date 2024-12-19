@@ -3960,7 +3960,6 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         return deletion;
     }
 
-    @SuppressWarnings("unchecked")
     @Taskable(name = ApplicationImportDataTaskConstants.IMPORTDATA_TASK_NAME, description = "Import Data Task",
             parameters = { @Parameter(name = ApplicationImportDataTaskConstants.IMPORTDATA_ENTITY,
                     description = "$m{dataimportappletpanel.dataimport.entity}", type = String.class, mandatory = true),
@@ -3976,6 +3975,14 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             limit = TaskExecLimit.ALLOW_MULTIPLE, schedulable = false)
     public int executeImportDataTask(TaskMonitor taskMonitor, String entity, String uploadConfig, byte[] uploadFile,
             boolean withHeaderFlag) throws UnifyException {
+        return executeImportDataTask(taskMonitor, entity, uploadConfig,
+                new InputStreamReader(new ByteArrayInputStream(uploadFile)), withHeaderFlag);
+    }
+
+    @SuppressWarnings({ "unchecked", "deprecation" })
+    @Override
+    public int executeImportDataTask(TaskMonitor taskMonitor, String entity, String uploadConfig, Reader uploadFile,
+            boolean withHeaderFlag) throws UnifyException {
         logDebug(taskMonitor, "Importing data to entity [{0}] table...", entity);
         int totalRecords = 0;
         int updatedRecords = 0;
@@ -3988,7 +3995,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             List<FieldSequenceEntryDef> fieldSequenceList = entityUploadDef.getFieldSequenceDef()
                     .getFieldSequenceList();
             Entity inst = entityClassDef.newInst();
-            Reader reader = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(uploadFile)));
+            Reader reader = new BufferedReader(uploadFile);
             CSVFormat csvFormat = CSVFormat.RFC4180
                     .withHeader(DataUtils.toArray(String.class, entityUploadDef.getFieldNameList()))
                     .withIgnoreHeaderCase().withIgnoreEmptyLines().withTrim().withIgnoreSurroundingSpaces()

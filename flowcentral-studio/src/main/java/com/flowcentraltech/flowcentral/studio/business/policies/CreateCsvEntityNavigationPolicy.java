@@ -37,19 +37,19 @@ import com.tcdng.unify.core.util.EntityTypeInfo;
 import com.tcdng.unify.core.util.EntityTypeUtils;
 
 /**
- * Create JSON entity navigation policy.
+ * Create CSV entity navigation policy.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
 @EntityReferences({ "studio.studioJsonEntity" })
-@Component(name = "createjsonentity-navigationpolicy", description = "Create JSON Entity Nav, Policy")
-public class CreateJsonEntityNavigationPolicy extends AbstractStudioAppletNavigationPolicy {
+@Component(name = "createcsventity-navigationpolicy", description = "Create CSV Entity Nav, Policy")
+public class CreateCsvEntityNavigationPolicy extends AbstractStudioAppletNavigationPolicy {
 
     @Configurable
     private SystemModuleService systemModuleService;
 
-    public CreateJsonEntityNavigationPolicy() {
+    public CreateCsvEntityNavigationPolicy() {
         super(Arrays.asList("composition"));
     }
 
@@ -57,12 +57,11 @@ public class CreateJsonEntityNavigationPolicy extends AbstractStudioAppletNaviga
     public void onNext(ValueStore inst, ValidationErrors errors, int currentPage, Map<String, Object> pageAttributes)
             throws UnifyException {
         if (currentPage == 1) {
-            final String sourceJson = inst.retrieve(String.class, "sourceJson");
+            final String sourceCsv = inst.retrieve(String.class, "sourceJson");
             final String entityName = inst.retrieve(String.class, "entityName");
-            List<EntityTypeInfo> entityTypeInfos = EntityTypeUtils.getEntityTypeInfoFromJson(entityName, sourceJson);
+            List<EntityTypeInfo> entityTypeInfos = EntityTypeUtils.getEntityTypeInfoFromCsv(entityName, sourceCsv);
             if (DataUtils.isBlank(entityTypeInfos)) {
-                errors.addValidationError(new FieldTarget("sourceJson"),
-                        "$m{studio.jsonentity.validation.json.invalid}");
+                errors.addValidationError(new FieldTarget("sourceJson"), "$m{studio.csventity.validation.csv.invalid}");
             }
 
             // Sets entity composition JSON
@@ -76,6 +75,7 @@ public class CreateJsonEntityNavigationPolicy extends AbstractStudioAppletNaviga
             inst.store("refinedStructure", compositionJson);
         } else if (currentPage == 2) {
             inst.store("generateEntity", true);
+            inst.store("generateImport", true);
             if (inst.isNull("loadSourceJSON")) {
                 inst.store("loadSourceJSON", true);
             }
@@ -87,7 +87,7 @@ public class CreateJsonEntityNavigationPolicy extends AbstractStudioAppletNaviga
             if (inst.isNull("generateRest")) {
                 inst.store("generateRest", true);
             }
-            
+
             final EntityComposition entityComposition = (EntityComposition) pageAttributes.get("composition");
             final String compositionJson = DataUtils.asJsonString(entityComposition, PrintFormat.PRETTY);
             inst.store("refinedStructure", compositionJson);

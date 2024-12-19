@@ -15,6 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.application.business;
 
+import java.io.Reader;
 import java.util.List;
 import java.util.Set;
 
@@ -103,6 +104,7 @@ import com.tcdng.unify.core.data.ValueStoreWriter;
 import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.database.Query;
 import com.tcdng.unify.core.database.dynamic.DynamicEntityInfo;
+import com.tcdng.unify.core.task.TaskMonitor;
 
 /**
  * Application service.
@@ -2039,4 +2041,24 @@ public interface ApplicationModuleService extends FlowCentralService {
      *                        if an error occurs
      */
     List<Long> findCustomHelpSheetIdList(String applicationName) throws UnifyException;
+    
+    /**
+     * Executes data import task
+     * 
+     * @param taskMonitor
+     *                       the task monitor
+     * @param entity
+     *                       the entity
+     * @param uploadConfig
+     *                       the upload config
+     * @param uploadFile
+     *                       the upload file
+     * @param withHeaderFlag
+     *                       the with header flag
+     * @return None zero value
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    int executeImportDataTask(TaskMonitor taskMonitor, String entity, String uploadConfig, Reader uploadFile,
+            boolean withHeaderFlag) throws UnifyException;
 }
