@@ -273,7 +273,11 @@ public class MiniFormWriter extends AbstractControlWriter {
                     }
                     writer.write("\"/>");
                 }
-                writer.writeWithHtmlEscape(formWidget.getFieldLabel());
+                
+                if (chWidget.isLayoutCaption()) {
+                    writer.writeWithHtmlEscape(formWidget.getFieldLabel());
+                }
+                
                 writer.write("</span>");
                 writer.write("</div>");
                 writer.write("</div>");
@@ -282,6 +286,10 @@ public class MiniFormWriter extends AbstractControlWriter {
                 writer.write("<div class=\"mfcon\">");
                 writer.write("<div class=\"mfcontent\">");
                 writer.writeStructureAndContent(chWidget);
+                if (!chWidget.isLayoutCaption()) {
+                    writer.writeWithHtmlEscape(formWidget.getFieldLabel());
+                }
+                
                 if (ctx.isWithFieldError(formWidget.getFieldName())) {
                     for (String msg : ctx.getFieldError(formWidget.getFieldName())) {
                         writer.write("<div><span class=\"errmsg\">").write(resolveSessionMessage(msg))
