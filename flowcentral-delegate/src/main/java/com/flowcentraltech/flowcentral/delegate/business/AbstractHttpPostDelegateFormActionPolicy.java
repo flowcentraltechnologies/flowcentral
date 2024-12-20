@@ -40,7 +40,8 @@ public abstract class AbstractHttpPostDelegateFormActionPolicy extends AbstractD
 
     @Override
     protected String sendToDelegateProcedureService(String jsonReq) throws UnifyException {
-        return IOUtils.postJsonToEndpoint( getEndpoint() + FlowCentralInterconnectConstants.INTERCONNECT_CONTROLLER + "/procedure", jsonReq);
+        return extractResult(IOUtils.postJsonToEndpoint(
+                getEndpoint() + FlowCentralInterconnectConstants.INTERCONNECT_CONTROLLER + "/procedure", jsonReq));
     }
 
     protected abstract String getEndpoint() throws UnifyException;

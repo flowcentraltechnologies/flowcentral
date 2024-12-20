@@ -34,6 +34,7 @@ import com.tcdng.unify.core.business.AbstractBusinessService;
 import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.database.Query;
 import com.tcdng.unify.core.system.HeartbeatManager;
+import com.tcdng.unify.core.util.PostResp;
 
 /**
  * Base class for flowCentral service.
@@ -102,6 +103,14 @@ public abstract class AbstractFlowCentralService extends AbstractBusinessService
         }
 
         return new EntityActionResult(ctx);
+    }
+    
+    protected <T> T extractResult(PostResp<T> resp) throws UnifyException {
+        if (resp.isError()) {
+            throwOperationErrorException(new Exception(resp.getError()));
+        }
+
+        return resp.getResult();
     }
 
     protected void keepThreadAndClusterSafe(String expiryFieldName, Query<? extends Entity> query)
