@@ -98,7 +98,7 @@
 		<sysParameter code="APP-001D" defaultVal="false"
 			description="$m{application.sysparam.sectioncolorindicationonmenu}"
 			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
-		<sysParameter code="APP-001E" defaultVal="false"
+		<sysParameter code="APP-001E" defaultVal="true"
 			description="$m{application.sysparam.enablequickreport}"
 			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
 		<sysParameter code="APP-001F" defaultVal="false"
@@ -137,7 +137,7 @@
 		<sysParameter code="APP-002A" defaultVal="false"
 			description="$m{application.sysparam.globalclientupdatesychronization}"
 			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
-		<sysParameter code="APP-002B" defaultVal="false"
+		<sysParameter code="APP-002B" defaultVal="true"
 			description="$m{application.sysparam.entitysearchonsearchinputchange}"
 			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
 		<sysParameter code="APP-002C" defaultVal="false"
