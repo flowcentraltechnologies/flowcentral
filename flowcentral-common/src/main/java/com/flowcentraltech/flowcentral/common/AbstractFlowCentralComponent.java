@@ -20,6 +20,7 @@ import com.flowcentraltech.flowcentral.common.constants.FlowCentralEditionConsta
 import com.tcdng.unify.core.AbstractUnifyComponent;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.util.IOUtils;
+import com.tcdng.unify.core.util.PostResp;
 import com.tcdng.unify.web.TargetPath;
 import com.tcdng.unify.web.ui.PageRequestContextUtil;
 import com.tcdng.unify.web.ui.WebUIApplicationComponents;
@@ -45,7 +46,7 @@ public abstract class AbstractFlowCentralComponent extends AbstractUnifyComponen
      * @throws UnifyException
      *                        if an error occurs
      */
-    protected <T, U> T postJsonObject(Class<T> respClass, String endpoint, U req) throws UnifyException {
+    protected <T, U> PostResp<T> postJsonObject(Class<T> respClass, String endpoint, U req) throws UnifyException {
         return IOUtils.postObjectToEndpointUsingJson(respClass, endpoint, req);
     }
   
@@ -65,5 +66,13 @@ public abstract class AbstractFlowCentralComponent extends AbstractUnifyComponen
 	protected PageRequestContextUtil getRequestContextUtil() throws UnifyException {
 		return (PageRequestContextUtil) getComponent(WebUIApplicationComponents.APPLICATION_PAGEREQUESTCONTEXTUTIL);
 	}
+    
+    protected <T> T extractResult(PostResp<T> resp) throws UnifyException {
+        if (resp.isError()) {
+            throwOperationErrorException(new Exception(resp.getError()));
+        }
+
+        return resp.getResult();
+    }
     
 }

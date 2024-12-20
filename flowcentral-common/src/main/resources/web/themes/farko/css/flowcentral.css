@@ -577,7 +577,7 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-miniform .mflabel {margin-top:2px; text-align:right;}
 .fc-miniform .mflabel span {display:inline-block; padding-right:6px;font-size: 11px;font-weight: bold;color: #262c33;}
 .fc-miniform .mflabel .mfreq {width:9px; padding-right:4px;}
-.fc-miniform .mfclabel {display:inline-block; font-size: 11px;font-weight: bold;color: #262c33;}
+.fc-miniform .mfclabel {display:inline-block; font-size: 11px;font-weight: bold;color: #262c33;padding-left: 4px;}
 .fc-miniform .mfcontent {}
 .fc-miniform .mfpost {display:table-cell;width:12px;}
 .fc-miniform .mfview {display:table-cell;width:24px;vertical-align: top;}
