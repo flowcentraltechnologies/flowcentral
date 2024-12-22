@@ -33,6 +33,7 @@ import com.flowcentraltech.flowcentral.application.util.ApplicationEntityUtils;
 import com.flowcentraltech.flowcentral.codegeneration.data.DynamicModuleInfo;
 import com.flowcentraltech.flowcentral.codegeneration.data.DynamicModuleInfo.ApplicationInfo;
 import com.flowcentraltech.flowcentral.common.constants.ComponentType;
+import com.flowcentraltech.flowcentral.common.entities.EntityWrapperIterator;
 import com.flowcentraltech.flowcentral.notification.data.BaseNotifLargeTextWrapper;
 import com.flowcentraltech.flowcentral.notification.data.BaseNotifTemplateWrapper;
 import com.flowcentraltech.flowcentral.notification.data.NotifLargeTextDef;
@@ -117,6 +118,8 @@ public final class CodeGenerationUtils {
         importSet.add(listEntityInfo.getCanonicalName());
         importSet.add(entityClassDefEntityInfo.getCanonicalName());
         importSet.add(valueStoreEntityInfo.getCanonicalName());
+
+        importSet.add(EntityWrapperIterator.class.getCanonicalName());
 
         // Evaluate fields
         Set<String> fieldNames = new HashSet<String>();
