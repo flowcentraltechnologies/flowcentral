@@ -99,7 +99,7 @@ public final class CodeGenerationUtils {
     }
 
     private static final String PASSWORD = "password";
-    
+
     public static String generateEntityWrapperJavaClassSource(String packageName, DynamicEntityInfo dynamicEntityInfo)
             throws UnifyException {
         StringBuilder esb = new StringBuilder();
@@ -125,7 +125,7 @@ public final class CodeGenerationUtils {
             if (dynamicEntityInfo.isSkipPasswordFields() && fieldName.toLowerCase().contains(PASSWORD)) {
                 continue;
             }
-            
+
             final String capField = StringUtils.capitalizeFirstLetter(fieldName);
             fieldNames.add(fieldName);
 
@@ -184,7 +184,8 @@ public final class CodeGenerationUtils {
         esb.append("import ").append(baseEntityInfo.getCanonicalName()).append(";\n");
 
         esb.append("public class ").append(typeInfo.getSimpleName()).append(" extends ")
-                .append(baseEntityInfo.getSimpleName()).append(" {\n");
+                .append(baseEntityInfo.getSimpleName()).append(" implements Iterable<").append(typeInfo.getSimpleName())
+                .append("> {\n");
         esb.append("public static final String ").append(ApplicationCodeGenUtils.ENTITY_NAME).append(" = \"")
                 .append(dynamicEntityInfo.getAlias()).append("\";\n");
         esb.append(fsb);
@@ -197,6 +198,9 @@ public final class CodeGenerationUtils {
         esb.append("public ").append(typeInfo.getSimpleName()).append(
                 "(EntityClassDef entityClassDef, List<? extends Entity> instList) throws UnifyException {super(entityClassDef, instList);}\n");
         esb.append(msb);
+        esb.append("public Iterator<").append(typeInfo.getSimpleName())
+                .append("> iterator() {return new EntityWrapperIterator<").append(typeInfo.getSimpleName())
+                .append(">(this);}");
         esb.append("}\n");
         return esb.toString();
     }
