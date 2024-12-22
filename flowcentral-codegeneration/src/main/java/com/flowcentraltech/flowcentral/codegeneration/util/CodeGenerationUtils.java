@@ -22,6 +22,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -119,6 +120,7 @@ public final class CodeGenerationUtils {
         importSet.add(entityClassDefEntityInfo.getCanonicalName());
         importSet.add(valueStoreEntityInfo.getCanonicalName());
 
+        importSet.add(Iterator.class.getCanonicalName());
         importSet.add(EntityWrapperIterator.class.getCanonicalName());
 
         // Evaluate fields
