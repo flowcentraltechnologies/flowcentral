@@ -29,6 +29,8 @@ import java.util.zip.ZipOutputStream;
 import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
 import com.flowcentraltech.flowcentral.application.entities.AppApplet;
 import com.flowcentraltech.flowcentral.application.entities.AppEntity;
+import com.flowcentraltech.flowcentral.application.entities.AppEnumeration;
+import com.flowcentraltech.flowcentral.application.entities.AppEnumerationItem;
 import com.flowcentraltech.flowcentral.application.entities.AppForm;
 import com.flowcentraltech.flowcentral.application.entities.AppRef;
 import com.flowcentraltech.flowcentral.application.entities.AppTable;
@@ -44,6 +46,7 @@ import com.flowcentraltech.flowcentral.codegeneration.constants.CodeGenerationTa
 import com.flowcentraltech.flowcentral.codegeneration.data.CodeGenerationItem;
 import com.flowcentraltech.flowcentral.codegeneration.data.DynamicModuleInfo;
 import com.flowcentraltech.flowcentral.codegeneration.data.DynamicModuleInfo.ApplicationInfo;
+import com.flowcentraltech.flowcentral.codegeneration.data.DynamicModuleInfo.EnumInfo;
 import com.flowcentraltech.flowcentral.codegeneration.data.Snapshot;
 import com.flowcentraltech.flowcentral.codegeneration.data.SnapshotMeta;
 import com.flowcentraltech.flowcentral.codegeneration.generators.ExtensionModuleStaticFileBuilderContext;
@@ -360,6 +363,15 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
                             "extension-module-componentnames-java-generator");
                     generator.generate(moduleCtx, moduleName, zos);
 
+                    // Generate enumeration constants
+                    addTaskMessage(taskMonitor, "Generating enumeration constants classes for module [{0}]...",
+                            moduleName);
+                    addTaskMessage(taskMonitor, "Executing artifact generator [{0}]...",
+                            "extension-application-enum-java-generator");
+                    generator = (StaticModuleArtifactGenerator) getComponent(
+                            "extension-application-enum-java-generator");
+                    generator.generate(moduleCtx, moduleName, zos);
+
                     // Generate entity wrappers
                     addTaskMessage(taskMonitor, "Generating entity wrapper classes for module [{0}]...", moduleName);
                     addTaskMessage(taskMonitor, "Executing artifact generator [{0}]...",
@@ -415,7 +427,19 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
                 componentNames.put(entry.getKey(), names);
             }
 
-            applications.add(new ApplicationInfo(applicationName, componentNames));
+            List<EnumInfo> enumerations = new ArrayList<EnumInfo>();
+            for (Long enumId : applicationModuleService.findCustomAppComponentIdList(applicationName,
+                    AppEnumeration.class)) {
+                AppEnumeration appEnumeration = applicationModuleService.findAppEnumeration(enumId);
+                Map<String, String> options = new LinkedHashMap<String, String>();
+                for (AppEnumerationItem item : appEnumeration.getItemList()) {
+                    options.put(item.getCode(), item.getLabel());
+                }
+
+                enumerations.add(new EnumInfo(appEnumeration.getName(), options));
+            }
+
+            applications.add(new ApplicationInfo(applicationName, componentNames, enumerations));
         }
 
         return new DynamicModuleInfo(moduleName, applications);

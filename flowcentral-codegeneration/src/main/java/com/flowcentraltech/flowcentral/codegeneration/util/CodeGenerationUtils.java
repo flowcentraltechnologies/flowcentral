@@ -33,6 +33,7 @@ import com.flowcentraltech.flowcentral.application.util.ApplicationCodeGenUtils;
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityUtils;
 import com.flowcentraltech.flowcentral.codegeneration.data.DynamicModuleInfo;
 import com.flowcentraltech.flowcentral.codegeneration.data.DynamicModuleInfo.ApplicationInfo;
+import com.flowcentraltech.flowcentral.codegeneration.data.DynamicModuleInfo.EnumInfo;
 import com.flowcentraltech.flowcentral.common.constants.ComponentType;
 import com.flowcentraltech.flowcentral.common.entities.EntityWrapperIterator;
 import com.flowcentraltech.flowcentral.notification.data.BaseNotifLargeTextWrapper;
@@ -318,6 +319,28 @@ public final class CodeGenerationUtils {
                 }
 
                 sb.append("}\n");
+            }
+
+            sb.append("}\n");
+        }
+
+        sb.append("}\n");
+        return sb.toString();
+    }
+
+    public static String generateApplicationEnumJavaClassSource(TypeInfo typeInfo, String packageName,
+            ApplicationInfo applicationInfo) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("package ").append(packageName).append(";\n");
+        sb.append("public interface ").append(StringUtils.capitalizeFirstLetter(applicationInfo.getApplicationName()))
+                .append("Application {\n");
+        sb.append("String NAME = \"").append(applicationInfo.getApplicationName()).append("\";\n");
+
+        for (EnumInfo enumInfo : applicationInfo.getEnumerations()) {
+            sb.append("interface ").append(StringUtils.capitalizeFirstLetter(enumInfo.getEnumName())).append(" {\n");
+            for (Map.Entry<String, String> entry : enumInfo.getOptions().entrySet()) {
+                final String fieldNameConst = StringUtils.flatten(entry.getValue()).toUpperCase();
+                sb.append("String ").append(fieldNameConst).append(" = \"").append(entry.getKey()).append("\";\n");
             }
 
             sb.append("}\n");
