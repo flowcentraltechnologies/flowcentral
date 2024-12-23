@@ -333,7 +333,7 @@ public final class CodeGenerationUtils {
         StringBuilder sb = new StringBuilder();
         sb.append("package ").append(packageName).append(";\n");
         sb.append("public interface ").append(StringUtils.capitalizeFirstLetter(applicationInfo.getApplicationName()))
-                .append("Application {\n");
+                .append("Enums {\n");
         sb.append("String NAME = \"").append(applicationInfo.getApplicationName()).append("\";\n");
 
         for (EnumInfo enumInfo : applicationInfo.getEnumerations()) {
