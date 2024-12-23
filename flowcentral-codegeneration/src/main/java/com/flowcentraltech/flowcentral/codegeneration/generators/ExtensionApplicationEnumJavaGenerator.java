@@ -51,7 +51,7 @@ public class ExtensionApplicationEnumJavaGenerator extends AbstractJavaArtifactG
         final TypeInfo typeInfo = new TypeInfo(className);
 
         for (ApplicationInfo applicationInfo : dynamicModuleInfo.getApplications()) {
-            final String filename = StringUtils.capitalizeFirstLetter(applicationInfo.getApplicationName()) + "Application.java";
+            final String filename = StringUtils.capitalizeFirstLetter(applicationInfo.getApplicationName()) + "Enums.java";
             openEntry(ctx, filename, zos);
             try {
                 BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(zos));
