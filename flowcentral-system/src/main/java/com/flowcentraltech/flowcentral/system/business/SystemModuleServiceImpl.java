@@ -103,6 +103,7 @@ import com.tcdng.unify.core.data.Listable;
 import com.tcdng.unify.core.data.ParamGeneratorManager;
 import com.tcdng.unify.core.data.ParameterizedStringGenerator;
 import com.tcdng.unify.core.data.Period;
+import com.tcdng.unify.core.data.StaleableFactoryMap;
 import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.database.dynamic.sql.DynamicSqlDataSourceManager;
@@ -159,7 +160,7 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
             .asList(LicenseFeatureCodeConstants.APPLICATION_AUDIT, LicenseFeatureCodeConstants.APPLICATION_ARCHIVING));
 
     public SystemModuleServiceImpl() {
-        this.authDefFactoryMap = new FactoryMap<String, CredentialDef>(true)
+        this.authDefFactoryMap = new StaleableFactoryMap<String, CredentialDef>()
             {
 
                 @Override
@@ -180,7 +181,7 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
                 }
             };
 
-        this.scheduledTaskDefs = new FactoryMap<Long, ScheduledTaskDef>(true)
+        this.scheduledTaskDefs = new StaleableFactoryMap<Long, ScheduledTaskDef>()
             {
 
                 @Override
@@ -221,7 +222,7 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
                 }
             };
 
-        this.licenseDefFactoryMap = new FactoryMap<String, LicenseDef>(true)
+        this.licenseDefFactoryMap = new StaleableFactoryMap<String, LicenseDef>()
             {
                 @Override
                 protected boolean stale(String name, LicenseDef licenseDef) throws Exception {
