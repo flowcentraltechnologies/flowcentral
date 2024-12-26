@@ -2247,7 +2247,7 @@
 			<field name="code" label="$m{application.appenumerationitem.code}"
 				type="string" inputWidget="application.alphanumeric"/>
 			<field name="label" label="$m{application.appenumerationitem.field.label}"
-				type="string" inputWidget="application.text"/>
+				type="string" inputWidget="application.text" descriptive="true"/>
 			<field name="displayIndex" label="$m{application.appenumerationitem.displayindex}"
 				type="integer" />
 			<uniqueConstraint name="codeUc"
