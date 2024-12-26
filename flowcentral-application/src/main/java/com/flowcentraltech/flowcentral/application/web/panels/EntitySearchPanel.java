@@ -89,6 +89,11 @@ public class EntitySearchPanel extends AbstractApplicationPanel {
             final boolean quickEnabled = (entitySearch.isNewButtonVisible() || entitySearch.isEditButtonVisible())
                     && applicationPrivilegeManager().isRoleWithPrivilege(roleCode, entityDef.getEditPrivilege());
             setVisible("quickEditBtn", showHeaderParts && quickEnabled && entitySearch.isShowQuickEdit());
+            System.out.println("@prime: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+            System.out.println("@prime: showHeaderParts = " + showHeaderParts);
+            System.out.println("@prime: quickEnabled = " + quickEnabled);
+            System.out.println("@prime: entitySearch.isShowQuickOrder() = " + entitySearch.isShowQuickOrder());
+            System.out.println("@prime: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
             setVisible("quickOrderBtn", showHeaderParts && quickEnabled && entitySearch.isShowQuickOrder());
             setVisible("viewBtn", entitySearch.isViewButtonVisible()
                     && applicationPrivilegeManager().isRoleWithPrivilege(roleCode, entityDef.getEditPrivilege()));

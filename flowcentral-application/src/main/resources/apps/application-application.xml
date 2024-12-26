@@ -2248,6 +2248,8 @@
 				type="string" inputWidget="application.alphanumeric"/>
 			<field name="label" label="$m{application.appenumerationitem.field.label}"
 				type="string" inputWidget="application.text"/>
+			<field name="displayIndex" label="$m{application.appenumerationitem.displayindex}"
+				type="integer" />
 			<uniqueConstraint name="codeUc"
 				description="$m{application.appenumerationitem.uc.code}"
 				fieldList="appEnumerationId,code" />

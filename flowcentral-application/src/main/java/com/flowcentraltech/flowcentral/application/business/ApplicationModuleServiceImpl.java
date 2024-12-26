@@ -5805,6 +5805,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 AppEnumerationItem appEnumerationItem = new AppEnumerationItem();
                 appEnumerationItem.setCode(itemConfig.getCode());
                 appEnumerationItem.setLabel(itemConfig.getLabel());
+                appEnumerationItem.setDisplayIndex(itemConfig.getDisplayIndex());
                 itemList.add(appEnumerationItem);
             }
         }

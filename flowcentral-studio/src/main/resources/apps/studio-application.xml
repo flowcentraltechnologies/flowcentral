@@ -696,6 +696,7 @@
 			<property name="searchTable.new" value="true" />
 			<property name="searchTable.edit" value="false" />
 			<property name="searchTable.report" value="false" />
+			<property name="quickOrder.field" value="displayIndex" />
 			<property name="createForm" value="appEnumerationItemForm" />
 			<property name="createForm.save" value="true" />
 			<property name="createForm.save.next" value="true" />
@@ -1714,6 +1715,8 @@
 			<column field="code" renderWidget="application.text"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="label" renderWidget="application.text"
+				widthRatio="1" />
+			<column field="displayIndex" renderWidget="application.text"
 				widthRatio="1" />
 		</table>
 		<table name="appEntityFieldTable"
@@ -3674,7 +3677,7 @@
 			</tab>
 			<tab name="items" label="$m{studio.appenumeration.form.items}"
 				contentType="child_list" applet="manageAppEnumerationItem"
-				reference="itemList" />
+				quickOrder="true" reference="itemList" />
 		</form>
 		<form name="appEnumerationItemForm"
 			description="$m{studio.appenumerationitem.form}"

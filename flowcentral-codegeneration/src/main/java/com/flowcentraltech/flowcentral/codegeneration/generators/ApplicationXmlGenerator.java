@@ -368,6 +368,7 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                     EnumerationItemConfig enumerationItemConfig = new EnumerationItemConfig();
                     enumerationItemConfig.setCode(appEnumerationItem.getCode());
                     enumerationItemConfig.setLabel(appEnumerationItem.getLabel());
+                    enumerationItemConfig.setDisplayIndex(appEnumerationItem.getDisplayIndex());
                     itemList.add(enumerationItemConfig);
                 }
 
