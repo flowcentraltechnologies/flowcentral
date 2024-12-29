@@ -63,6 +63,7 @@ import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.Synchronized;
 import com.tcdng.unify.core.annotation.Transactional;
 import com.tcdng.unify.core.data.FactoryMap;
+import com.tcdng.unify.core.data.StaleableFactoryMap;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.StringUtils;
 
@@ -546,7 +547,7 @@ public class OrganizationModuleServiceImpl extends AbstractFlowCentralService
 
         public TenantRolePrivileges(Long _tenantId) {
             this.tenantId = _tenantId;
-            this.privilegesByRole = new FactoryMap<String, RolePrivileges>(true)
+            this.privilegesByRole = new StaleableFactoryMap<String, RolePrivileges>()
                 {
                     @Override
                     protected boolean stale(String roleCode, RolePrivileges rolePrivileges) throws Exception {

@@ -240,6 +240,7 @@ import com.tcdng.unify.core.data.ListData;
 import com.tcdng.unify.core.data.Listable;
 import com.tcdng.unify.core.data.MapValues;
 import com.tcdng.unify.core.data.ParamConfig;
+import com.tcdng.unify.core.data.StaleableFactoryMap;
 import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.data.ValueStoreWriter;
@@ -372,7 +373,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         this.entitySearchTypes = new HashSet<String>();
         this.delegateHolderByEntityClass = new ConcurrentHashMap<String, EnvironmentDelegateHolder>();
         this.delegateHolderByLongName = new ConcurrentHashMap<String, EnvironmentDelegateHolder>();
-        this.applicationDefFactoryMap = new FactoryMap<String, ApplicationDef>(true)
+        this.applicationDefFactoryMap = new StaleableFactoryMap<String, ApplicationDef>()
             {
 
                 @Override
@@ -392,7 +393,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
             };
 
-        this.apiDefFactoryMap = new FactoryMap<String, APIDef>(true)
+        this.apiDefFactoryMap = new StaleableFactoryMap<String, APIDef>()
             {
 
                 @Override
@@ -413,7 +414,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
             };
 
-        this.appletDefFactoryMap = new FactoryMap<String, AppletDef>(true)
+        this.appletDefFactoryMap = new StaleableFactoryMap<String, AppletDef>()
             {
 
                 @Override
@@ -501,7 +502,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
             };
 
-        this.widgetDefFactoryMap = new FactoryMap<String, WidgetTypeDef>(true)
+        this.widgetDefFactoryMap = new StaleableFactoryMap<String, WidgetTypeDef>()
             {
 
                 @Override
@@ -518,7 +519,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 }
             };
 
-        this.suggestionDefFactoryMap = new FactoryMap<String, SuggestionTypeDef>(true)
+        this.suggestionDefFactoryMap = new StaleableFactoryMap<String, SuggestionTypeDef>()
             {
 
                 @Override
@@ -619,7 +620,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
             };
 
-        this.entityDefFactoryMap = new FactoryMap<String, EntityDef>(true)
+        this.entityDefFactoryMap = new StaleableFactoryMap<String, EntityDef>()
             {
 
                 @Override
@@ -850,7 +851,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
             };
 
-        this.entityDefByClassFactoryMap = new FactoryMap<String, EntityDef>(true)
+        this.entityDefByClassFactoryMap = new StaleableFactoryMap<String, EntityDef>()
             {
 
                 @Override
@@ -874,7 +875,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
             };
 
-        this.refDefFactoryMap = new FactoryMap<String, RefDef>(true)
+        this.refDefFactoryMap = new StaleableFactoryMap<String, RefDef>()
             {
 
                 @Override
@@ -897,7 +898,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
             };
 
-        this.tableDefFactoryMap = new FactoryMap<String, TableDef>(true)
+        this.tableDefFactoryMap = new StaleableFactoryMap<String, TableDef>()
             {
 
                 @Override
@@ -1056,7 +1057,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
             };
 
-        this.formDefFactoryMap = new FactoryMap<String, FormDef>(true)
+        this.formDefFactoryMap = new StaleableFactoryMap<String, FormDef>()
             {
 
                 @Override
@@ -1268,7 +1269,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
             };
 
-        this.helpSheetDefFactoryMap = new FactoryMap<String, HelpSheetDef>(true)
+        this.helpSheetDefFactoryMap = new StaleableFactoryMap<String, HelpSheetDef>()
             {
 
                 @Override
@@ -1294,7 +1295,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
             };
 
-        this.assignmentPageDefFactoryMap = new FactoryMap<String, AssignmentPageDef>(true)
+        this.assignmentPageDefFactoryMap = new StaleableFactoryMap<String, AssignmentPageDef>()
             {
 
                 @Override
@@ -5804,6 +5805,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 AppEnumerationItem appEnumerationItem = new AppEnumerationItem();
                 appEnumerationItem.setCode(itemConfig.getCode());
                 appEnumerationItem.setLabel(itemConfig.getLabel());
+                appEnumerationItem.setDisplayIndex(itemConfig.getDisplayIndex());
                 itemList.add(appEnumerationItem);
             }
         }

@@ -38,6 +38,7 @@ import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.data.FactoryMap;
 import com.tcdng.unify.core.data.ParamConfig;
+import com.tcdng.unify.core.data.StaleableFactoryMap;
 import com.tcdng.unify.core.util.DataUtils;
 
 /**
@@ -62,7 +63,7 @@ public class EndpointManagerImpl extends AbstractEndpointManager {
     
     public EndpointManagerImpl() {
         this.changed = new HashSet<String>();
-        this.endpointDefFactoryMap = new FactoryMap<String, EndpointDef>(true)
+        this.endpointDefFactoryMap = new StaleableFactoryMap<String, EndpointDef>()
             {
                 @Override
                 protected boolean stale(String endpointConfigName, EndpointDef endpointDef) throws Exception {
@@ -111,7 +112,7 @@ public class EndpointManagerImpl extends AbstractEndpointManager {
 
             };
 
-        endpointInstFactoryMap = new FactoryMap<String, EndpointInst>(true)
+        endpointInstFactoryMap = new StaleableFactoryMap<String, EndpointInst>()
             {
                 @Override
                 protected boolean stale(String endpointName, EndpointInst endpointInst) throws Exception {

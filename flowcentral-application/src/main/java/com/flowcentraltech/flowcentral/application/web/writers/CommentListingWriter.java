@@ -73,8 +73,7 @@ public class CommentListingWriter extends AbstractWidgetWriter {
                 if (photoGenerator.isReady()) {
                     String imageName = "Img_" + id + '_' + i + '_' + time;
                     setSessionAttribute(imageName, photoGenerator);
-                    writer.writeScopeImageContextURL(imageName);
-                    writer.writeURLParameter("clearOnRead", "true");
+                    writer.writeScopeImageContextURL(imageName, true);
                 } else {
                     writer.writeFileImageContextURL(src);
                 }

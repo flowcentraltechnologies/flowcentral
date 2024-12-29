@@ -172,6 +172,7 @@ import com.tcdng.unify.core.criterion.Update;
 import com.tcdng.unify.core.data.BeanValueStore;
 import com.tcdng.unify.core.data.FactoryMap;
 import com.tcdng.unify.core.data.ParameterizedStringGenerator;
+import com.tcdng.unify.core.data.StaleableFactoryMap;
 import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.data.ValueStoreWriter;
@@ -238,7 +239,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
     public WorkflowModuleServiceImpl() {
         this.roleWfStepBackup = new HashMap<String, Set<WfStepInfo>>();
 
-        this.wfDefFactoryMap = new FactoryMap<String, WfDef>(true)
+        this.wfDefFactoryMap = new StaleableFactoryMap<String, WfDef>()
             {
 
                 @Override
@@ -395,7 +396,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
 
             };
 
-        this.wfWizardDefFactoryMap = new FactoryMap<String, WfWizardDef>(true)
+        this.wfWizardDefFactoryMap = new StaleableFactoryMap<String, WfWizardDef>()
             {
 
                 @Override
@@ -438,7 +439,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
 
             };
 
-        this.wfChannelDefFactoryMap = new FactoryMap<String, WfChannelDef>(true)
+        this.wfChannelDefFactoryMap = new StaleableFactoryMap<String, WfChannelDef>()
             {
 
                 @Override

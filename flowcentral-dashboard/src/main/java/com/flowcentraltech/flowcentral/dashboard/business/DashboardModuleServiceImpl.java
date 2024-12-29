@@ -45,6 +45,7 @@ import com.tcdng.unify.core.annotation.Transactional;
 import com.tcdng.unify.core.criterion.Update;
 import com.tcdng.unify.core.data.FactoryMap;
 import com.tcdng.unify.core.data.Listable;
+import com.tcdng.unify.core.data.StaleableFactoryMap;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.StringUtils;
 
@@ -68,7 +69,7 @@ public class DashboardModuleServiceImpl extends AbstractFlowCentralService imple
 
     public DashboardModuleServiceImpl() {
 
-        this.dashboardDefFactoryMap = new FactoryMap<String, DashboardDef>(true)
+        this.dashboardDefFactoryMap = new StaleableFactoryMap<String, DashboardDef>()
             {
 
                 @Override

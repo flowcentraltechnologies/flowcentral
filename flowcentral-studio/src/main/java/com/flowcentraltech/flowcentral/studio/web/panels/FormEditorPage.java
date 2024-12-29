@@ -126,6 +126,8 @@ public class FormEditorPage extends AbstractStudioEditorPage implements TabSheet
                 appFormElement.setEditFixedRows(formTab.getEditFixedRows());
                 appFormElement.setIgnoreParentCondition(formTab.isIgnoreParentCondition());
                 appFormElement.setShowSearch(formTab.isShowSearch());
+                appFormElement.setQuickEdit(formTab.isQuickEdit());
+                appFormElement.setQuickOrder(formTab.isQuickOrder());
                 appFormElement.setVisible(formTab.isVisible());
                 appFormElement.setEditable(formTab.isEditable());
                 appFormElement.setDisabled(formTab.isDisabled());
