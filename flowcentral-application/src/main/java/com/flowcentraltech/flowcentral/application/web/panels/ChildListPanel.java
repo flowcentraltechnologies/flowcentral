@@ -16,8 +16,10 @@
 package com.flowcentraltech.flowcentral.application.web.panels;
 
 import com.flowcentraltech.flowcentral.application.constants.AppletRequestAttributeConstants;
+import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.UplBinding;
+import com.tcdng.unify.web.ui.widget.Widget;
 
 /**
  * Child list panel.
@@ -32,6 +34,13 @@ public class ChildListPanel extends AbstractInlineEntitySearchPanel {
     @Override
     protected String getEditActionKey() {
         return AppletRequestAttributeConstants.CHILDLIST_EDIT_ACTIONPATH;
+    }
+
+    @Override
+    public void setTabIndex(int tabIndex) throws UnifyException {
+        super.setTabIndex(tabIndex);
+        Widget widget = getWidgetByShortName("entitySearchPanel.searchResultTbl");
+        widget.setTabIndex(tabIndex);
     }
 
 }

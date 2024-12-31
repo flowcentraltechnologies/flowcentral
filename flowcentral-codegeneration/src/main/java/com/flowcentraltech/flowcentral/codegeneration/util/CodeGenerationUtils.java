@@ -22,6 +22,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -32,7 +33,9 @@ import com.flowcentraltech.flowcentral.application.util.ApplicationCodeGenUtils;
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityUtils;
 import com.flowcentraltech.flowcentral.codegeneration.data.DynamicModuleInfo;
 import com.flowcentraltech.flowcentral.codegeneration.data.DynamicModuleInfo.ApplicationInfo;
+import com.flowcentraltech.flowcentral.codegeneration.data.DynamicModuleInfo.EnumInfo;
 import com.flowcentraltech.flowcentral.common.constants.ComponentType;
+import com.flowcentraltech.flowcentral.common.entities.EntityWrapperIterator;
 import com.flowcentraltech.flowcentral.notification.data.BaseNotifLargeTextWrapper;
 import com.flowcentraltech.flowcentral.notification.data.BaseNotifTemplateWrapper;
 import com.flowcentraltech.flowcentral.notification.data.NotifLargeTextDef;
@@ -41,7 +44,7 @@ import com.flowcentraltech.flowcentral.notification.util.DynamicNotifLargeTextIn
 import com.flowcentraltech.flowcentral.notification.util.DynamicNotifTemplateInfo;
 import com.flowcentraltech.flowcentral.notification.util.NotificationCodeGenUtils;
 import com.tcdng.unify.core.UnifyException;
-import com.tcdng.unify.core.constant.EntityFieldType;
+import com.tcdng.unify.core.constant.DynamicEntityFieldType;
 import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.database.dynamic.DynamicEntityInfo;
@@ -99,7 +102,7 @@ public final class CodeGenerationUtils {
     }
 
     private static final String PASSWORD = "password";
-    
+
     public static String generateEntityWrapperJavaClassSource(String packageName, DynamicEntityInfo dynamicEntityInfo)
             throws UnifyException {
         StringBuilder esb = new StringBuilder();
@@ -118,6 +121,9 @@ public final class CodeGenerationUtils {
         importSet.add(entityClassDefEntityInfo.getCanonicalName());
         importSet.add(valueStoreEntityInfo.getCanonicalName());
 
+        importSet.add(Iterator.class.getCanonicalName());
+        importSet.add(EntityWrapperIterator.class.getCanonicalName());
+
         // Evaluate fields
         Set<String> fieldNames = new HashSet<String>();
         for (DynamicFieldInfo dynamicFieldInfo : dynamicEntityInfo.getFieldInfos()) {
@@ -125,7 +131,7 @@ public final class CodeGenerationUtils {
             if (dynamicEntityInfo.isSkipPasswordFields() && fieldName.toLowerCase().contains(PASSWORD)) {
                 continue;
             }
-            
+
             final String capField = StringUtils.capitalizeFirstLetter(fieldName);
             fieldNames.add(fieldName);
 
@@ -135,7 +141,7 @@ public final class CodeGenerationUtils {
                 importSet.add(dynamicFieldInfo.getEnumClassName());
             }
 
-            final EntityFieldType type = dynamicFieldInfo.getFieldType();
+            final DynamicEntityFieldType type = dynamicFieldInfo.getFieldType();
             String fieldTypeName = null;
             String actFieldTypeName = null;
             if (type.isChild()) {
@@ -184,7 +190,8 @@ public final class CodeGenerationUtils {
         esb.append("import ").append(baseEntityInfo.getCanonicalName()).append(";\n");
 
         esb.append("public class ").append(typeInfo.getSimpleName()).append(" extends ")
-                .append(baseEntityInfo.getSimpleName()).append(" {\n");
+                .append(baseEntityInfo.getSimpleName()).append(" implements Iterable<").append(typeInfo.getSimpleName())
+                .append("> {\n");
         esb.append("public static final String ").append(ApplicationCodeGenUtils.ENTITY_NAME).append(" = \"")
                 .append(dynamicEntityInfo.getAlias()).append("\";\n");
         esb.append(fsb);
@@ -197,6 +204,9 @@ public final class CodeGenerationUtils {
         esb.append("public ").append(typeInfo.getSimpleName()).append(
                 "(EntityClassDef entityClassDef, List<? extends Entity> instList) throws UnifyException {super(entityClassDef, instList);}\n");
         esb.append(msb);
+        esb.append("public Iterator<").append(typeInfo.getSimpleName())
+                .append("> iterator() {return new EntityWrapperIterator<").append(typeInfo.getSimpleName())
+                .append(">(this);}");
         esb.append("}\n");
         return esb.toString();
     }
@@ -309,6 +319,28 @@ public final class CodeGenerationUtils {
                 }
 
                 sb.append("}\n");
+            }
+
+            sb.append("}\n");
+        }
+
+        sb.append("}\n");
+        return sb.toString();
+    }
+
+    public static String generateApplicationEnumJavaClassSource(TypeInfo typeInfo, String packageName,
+            ApplicationInfo applicationInfo) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("package ").append(packageName).append(";\n");
+        sb.append("public interface ").append(StringUtils.capitalizeFirstLetter(applicationInfo.getApplicationName()))
+                .append("Enums {\n");
+        sb.append("String NAME = \"").append(applicationInfo.getApplicationName()).append("\";\n");
+
+        for (EnumInfo enumInfo : applicationInfo.getEnumerations()) {
+            sb.append("interface ").append(StringUtils.capitalizeFirstLetter(enumInfo.getEnumName())).append(" {\n");
+            for (Map.Entry<String, String> entry : enumInfo.getOptions().entrySet()) {
+                final String fieldNameConst = StringUtils.flatten(entry.getValue()).toUpperCase();
+                sb.append("String ").append(fieldNameConst).append(" = \"").append(entry.getKey()).append("\";\n");
             }
 
             sb.append("}\n");

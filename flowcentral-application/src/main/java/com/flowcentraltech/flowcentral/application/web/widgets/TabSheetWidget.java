@@ -85,6 +85,10 @@ public class TabSheetWidget extends AbstractFlowCentralValueListMultiControl<Val
                         } else {
                             tabWidgets[i] = addExternalChildWidget(tabDef.getTabRenderer());
                         }
+                        
+                        if (tabSheet.isExpanded()) {
+                            tabWidgets[i].setTabIndex(i);
+                        }
                     }
                 }
             }
@@ -99,6 +103,15 @@ public class TabSheetWidget extends AbstractFlowCentralValueListMultiControl<Val
         TabSheet tabSheet = getTabSheet();
         if (tabSheet != null) {
             return tabWidgets[tabSheet.getCurrentTabIndex()];
+        }
+
+        return null;
+    }
+
+    public Widget getTabWidget(int tabIndex) throws UnifyException {
+        TabSheet tabSheet = getTabSheet();
+        if (tabSheet != null) {
+            return tabWidgets[tabIndex];
         }
 
         return null;

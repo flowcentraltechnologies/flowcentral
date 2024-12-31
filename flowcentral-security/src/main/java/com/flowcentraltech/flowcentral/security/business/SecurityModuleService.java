@@ -22,6 +22,7 @@ import java.util.Optional;
 
 import com.flowcentraltech.flowcentral.common.business.FlowCentralService;
 import com.flowcentraltech.flowcentral.common.business.UserLoginActivityProvider;
+import com.flowcentraltech.flowcentral.common.data.BranchInfo;
 import com.flowcentraltech.flowcentral.common.data.UserRoleInfo;
 import com.flowcentraltech.flowcentral.security.business.data.PasswordComplexityCheck;
 import com.flowcentraltech.flowcentral.security.business.data.PasswordComplexitySettings;
@@ -180,6 +181,17 @@ public interface SecurityModuleService extends FlowCentralService, UserLoginActi
      *                        if an error occurs
      */
     List<UserRoleInfo> findConsolidatedUserRoles(String userLoginId, Date activeAt) throws UnifyException;
+
+    /**
+     * Gets associated branches by hub with branch itself included.
+     * 
+     * @param branchCode
+     *                   the branch code
+     * @return the associated branches
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    List<BranchInfo> getAssociatedBranches(String branchCode) throws UnifyException;
 
     /**
      * Finds a user by login ID.

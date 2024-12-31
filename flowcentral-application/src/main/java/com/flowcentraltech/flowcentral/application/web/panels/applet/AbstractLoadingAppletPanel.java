@@ -39,7 +39,7 @@ public abstract class AbstractLoadingAppletPanel<T extends AbstractLoadingApplet
     @Action
     public void performFormAction() throws UnifyException {
         final T applet = getLoadingApplet();
-        if (applet.getCtx().isReview()) {
+        if (applet.appletCtx().isReview()) {
             final String actionName = getRequestTarget(String.class);
             final LoadingWorkItemInfo loadingWorkItemInfo = applet.getCurrentLoadingWorkItemInfo();
             final FormContext ctx = evaluateCurrentFormContext(new FormValidationContext(

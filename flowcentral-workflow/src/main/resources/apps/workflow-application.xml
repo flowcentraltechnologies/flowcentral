@@ -289,6 +289,8 @@
 				label="$m{workflow.step.criticalminutes}" type="integer" />
 			<field name="expiryMinutes"
 				label="$m{workflow.step.expiryminutes}" type="integer" />
+			<field name="delayMinutes"
+				label="$m{workflow.step.delayminutes}" type="integer" nullable = "true"/>
 			<field name="audit" label="$m{workflow.step.audit}"
 				type="boolean" />
 			<field name="branchOnly" label="$m{workflow.step.branchonly}"
@@ -621,6 +623,9 @@
 				maxLen="64" nullable="true" type="string" />
 			<field name="forwardedBy"
 				label="$m{workflow.wfitem.forwardedby}" type="string" maxLen="64"
+				nullable="true" />
+			<field name="ejectionDt"
+				label="$m{workflow.wfitem.ejectiondt}" type="timestamp"
 				nullable="true" />
 			<field name="criticalAlertSent"
 				label="$m{workflow.wfitem.criticalalertsent}" type="boolean" />

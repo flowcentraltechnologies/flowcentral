@@ -169,6 +169,7 @@ public class WorkflowsXmlGenerator extends AbstractResourcesArtifactGenerator {
                         wfStepConfig.setReminderMinutes(wfStep.getReminderMinutes());
                         wfStepConfig.setCriticalMinutes(wfStep.getCriticalMinutes());
                         wfStepConfig.setExpiryMinutes(wfStep.getExpiryMinutes());
+                        wfStepConfig.setDelayMinutes(wfStep.getDelayMinutes());
                         wfStepConfig.setAudit(wfStep.isAudit());
                         wfStepConfig.setBranchOnly(wfStep.isBranchOnly());
                         wfStepConfig.setDepartmentOnly(wfStep.isDepartmentOnly());

@@ -24,6 +24,7 @@ import javax.jms.MessageProducer;
 import javax.jms.Session;
 import javax.jms.TextMessage;
 
+import com.flowcentraltech.flowcentral.integration.constants.JmsEndpointConstants;
 import com.flowcentraltech.flowcentral.integration.data.EndpointDef;
 import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
 import com.flowcentraltech.flowcentral.system.data.CredentialDef;

@@ -18,6 +18,8 @@ package com.flowcentraltech.flowcentral.system.entities;
 
 import com.flowcentraltech.flowcentral.common.entities.BaseStatusEntity;
 import com.tcdng.unify.core.annotation.Column;
+import com.tcdng.unify.core.annotation.ColumnType;
+import com.tcdng.unify.core.annotation.Policy;
 import com.tcdng.unify.core.annotation.Table;
 import com.tcdng.unify.core.annotation.UniqueConstraint;
 
@@ -27,6 +29,7 @@ import com.tcdng.unify.core.annotation.UniqueConstraint;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
+@Policy("credential-policy")
 @Table(name = "FC_CREDENTIAL",
         uniqueConstraints = {
                 @UniqueConstraint({ "name" }),
@@ -44,6 +47,9 @@ public class Credential extends BaseStatusEntity {
 
     @Column(length = 2048, transformer = "twoway-stringcryptograph", nullable = true)
     private String password;
+
+    @Column(type = ColumnType.CLOB, nullable = true)
+    private String base64Encoded;
 
     @Override
     public String getDescription() {
@@ -76,6 +82,14 @@ public class Credential extends BaseStatusEntity {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getBase64Encoded() {
+        return base64Encoded;
+    }
+
+    public void setBase64Encoded(String base64Encoded) {
+        this.base64Encoded = base64Encoded;
     }
 
 }

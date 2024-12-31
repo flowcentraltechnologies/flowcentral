@@ -76,11 +76,15 @@ public interface AppletPropertyConstants {
     
     String ENTITY_FORM_CLOSE_DETACHED_ONSUBMIT = "entityForm.submit.close";
 
+    String LONGFORM_SUPPORT = "longForm.support";
+
     String CREATE_FORM = "createForm";
 
     String CREATE_FORM_NEW_CAPTION= "createForm.new.caption";
 
     String CREATE_FORM_NEW_POLICY = "createForm.new.policy";
+
+    String CREATE_FORM_NAVIGATION_POLICY = "createForm.navigation.policy";
 
     String CREATE_FORM_SUBMIT = "createForm.submit";
 
@@ -197,6 +201,10 @@ public interface AppletPropertyConstants {
     String SINGLE_FORM_PANEL = "singleForm.panel";
 
     String PAGE_MULTIPLE = "page.multiple";    
+
+    String WIZARD_FORM_COMPLETION = "wizardForm.completion";    
+
+    String WIZARD_FORM_TASK_PROCESSOR = "wizardForm.task.processor";    
     
     String WORKFLOWCOPY = "workflowCopy";
 

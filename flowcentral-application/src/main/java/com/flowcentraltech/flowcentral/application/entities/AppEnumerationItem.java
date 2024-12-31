@@ -41,6 +41,9 @@ public class AppEnumerationItem extends BaseAuditEntity {
     @Column(name = "ITEM_LABEL", length = 128)
     private String label;
 
+    @Column(nullable = true)
+    private Integer displayIndex;
+    
     @Override
     public String getDescription() {
         return label;
@@ -68,6 +71,14 @@ public class AppEnumerationItem extends BaseAuditEntity {
 
     public void setLabel(String label) {
         this.label = label;
+    }
+
+    public Integer getDisplayIndex() {
+        return displayIndex;
+    }
+
+    public void setDisplayIndex(Integer displayIndex) {
+        this.displayIndex = displayIndex;
     }
 
 }

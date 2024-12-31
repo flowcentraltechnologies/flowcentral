@@ -49,8 +49,10 @@ import com.flowcentraltech.flowcentral.common.data.FormMessage;
 import com.flowcentraltech.flowcentral.common.data.FormStateRule;
 import com.flowcentraltech.flowcentral.common.data.FormValidationErrors;
 import com.flowcentraltech.flowcentral.common.data.TargetFormMessage;
+import com.flowcentraltech.flowcentral.common.data.TargetFormMessage.Target;
 import com.flowcentraltech.flowcentral.common.data.TargetFormState;
 import com.flowcentraltech.flowcentral.common.data.TargetFormTabStates;
+import com.flowcentraltech.flowcentral.common.data.ValidationErrors;
 import com.flowcentraltech.flowcentral.configuration.constants.FormReviewType;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.ValueStore;
@@ -69,7 +71,7 @@ import com.tcdng.unify.web.ui.widget.EventHandler;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class FormContext extends AbstractContext {
+public class FormContext extends AbstractContext implements  ValidationErrors {
 
     public enum Mode {
         NORMAL,
@@ -304,8 +306,8 @@ public class FormContext extends AbstractContext {
                                 formDef.getTitleFormat())
                         .generate()
                 : (inst instanceof Entity && ((Entity) inst).getId() == null
-                        ? au().resolveSessionMessage("$m{form.newrecord}")
-                        : au().resolveSessionMessage("$m{form.editrecord}"));
+                        ? au().resolveSessionMessage("$m{form.newentity}", entityDef.getLabel())
+                        : au().resolveSessionMessage("$m{form.maintainentity}", entityDef.getLabel()));
     }
 
     public Object getInst() {
@@ -382,6 +384,7 @@ public class FormContext extends AbstractContext {
         this.formValidationErrors.merge(formValidationErrors);
     }
 
+    @Override
     public void addValidationError(String message) {
         formValidationErrors.addValidationError(message);
     }
@@ -402,11 +405,13 @@ public class FormContext extends AbstractContext {
         }
     }
 
+    @Override
     public void addValidationError(FormMessage message) {
         formValidationErrors.addValidationError(message);
     }
 
-    public void addValidationError(TargetFormMessage.Target target, String message) {
+    @Override
+    public void addValidationError(Target target, String message) {
         formValidationErrors.addValidationError(target, message);
     }
 

@@ -63,9 +63,9 @@ public class StudioReportConfigurationApplet extends StudioAppComponentApplet {
             throws UnifyException {
         BreadCrumbs breadCrumbs = form.getBreadCrumbs().advance();
         EntityDef entityDef = getEntityDef(entityName);
-        breadCrumbs.setLastCrumbTitle(au.resolveSessionMessage("$m{reporteditor.reportdesigner}"));
+        breadCrumbs.setLastCrumbTitle(au().resolveSessionMessage("$m{reporteditor.reportdesigner}"));
         breadCrumbs.setLastCrumbSubTitle(subTitle);
-        return new ReportEditorPage(au, entityDef, id, breadCrumbs);
+        return new ReportEditorPage(au(), entityDef, id, breadCrumbs);
     }
 
 }

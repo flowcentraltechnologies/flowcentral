@@ -17,6 +17,7 @@ package com.flowcentraltech.flowcentral.integration.entities;
 
 import com.flowcentraltech.flowcentral.common.entities.BaseAuditEntity;
 import com.flowcentraltech.flowcentral.configuration.constants.DirectionType;
+import com.flowcentraltech.flowcentral.integration.endpoint.EndpointType;
 import com.tcdng.unify.core.annotation.Column;
 import com.tcdng.unify.core.annotation.ForeignKey;
 import com.tcdng.unify.core.annotation.ListOnly;
@@ -48,6 +49,9 @@ public class EndpointPath extends BaseAuditEntity {
 
     @Column(name = "PATH", length = 128)
     private String path;
+    
+    @ListOnly(key = "endpointConfigId", property = "endpointType")
+    private EndpointType endpointType;
 
     @ListOnly(key = "endpointConfigId", property = "name")
     private String endpointConfigName;
@@ -73,6 +77,14 @@ public class EndpointPath extends BaseAuditEntity {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public EndpointType getEndpointType() {
+        return endpointType;
+    }
+
+    public void setEndpointType(EndpointType endpointType) {
+        this.endpointType = endpointType;
     }
 
     public Long getEndpointConfigId() {

@@ -1,0 +1,122 @@
+// UPL template for application page
+// Copyright 2021-2024 FlowCentral Technologies Limited.
+// 
+// Licensed under the Apache License, Version 2.0 (the "License"); you may not
+// use this file except in compliance with the License. You may obtain a copy of
+// the License at
+// 
+// http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+// WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+// License for the specific language governing permissions and limitations under
+// the License.
+
+!ui-document layout:$d{!ui-desktoptype1}
+    headerPanel:$c{topBanner} contentPanel:$c{content}
+    menuPanel:$c{menuPanel}
+    favicon:$s{web/images/favicon_enduser.png}
+	styleSheet:$t{css/flowcentral-theme.css}
+    pushUpdateBinding:clientPushSync
+
+// Header    
+!ui-panel:topBanner styleClass:$e{fc-topbanner}
+	components:$c{topBannerImgBdy topTitle navigationBand topAlert topBannerControl userImg wkspSelPanel}
+!ui-panel:topBannerImgBdy styleClass:$e{fc-topbannerimgbody} components:$c{topBannerImg}
+!ui-image:topBannerImg src:$s{web/images/applicationbanner.png} styleClass:$e{fc-topbannerimg}
+
+!ui-panel:topTitle styleClass:$e{fc-topheadertitle} components:$c{headerTitle}
+!ui-label:headerTitle binding:headerTitle
+
+!ui-panel:topBannerControl layout:$d{!ui-vertical style:$s{width:100%;}} styleClass:$e{fc-topbannercontrol}
+    components:$c{businessUnitLabel upperInfoBand lowerInfoBand}
+
+
+!ui-image:userImg  src:$t{/images/user_large.png} styleClass:$e{fc-topuserimg}
+    binding:userPhotoGenerator
+    eventHandler:$d{!ui-event event:onclick action:$c{userDetailsAct}}
+    
+!ui-panel:topAlert styleClass:$e{fc-topalert} components:$c{alertBell} refreshEvery:20000
+!ui-bell:alertBell styleClass:$e{fc-topbell} binding:alertCount hint:$m{application.notifications}
+    eventHandler:$d{!ui-event event:onclick action:$c{userNotificationsAct}}
+
+!ui-panel:lowerInfoBand styleClass:$e{fc-userinfoband} components:$c{roleLabel clock}
+!ui-textclock:clock
+!ui-panel:upperInfoBand styleClass:$e{fc-userinfoband} components:$c{userLabel branchLabel}
+!ui-labeledtext:userLabel caption:$m{application.login.user} maxLen:24
+    binding:$j{com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants.USERNAME}
+!ui-labeledtext:roleLabel style:$s{cursor:pointer;} caption:$m{application.login.role} hint:$m{application.switchrole}
+    eventHandler:$d{!ui-event event:onclick action:$c{switchRoleAct}}
+    binding:$j{com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants.ROLEDESCRIPTION}
+!ui-labeledtext:branchLabel caption:$m{application.login.branch}
+    binding:$j{com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants.BRANCHDESC}
+!ui-labeledtext:businessUnitLabel style:$s{float:left;} caption:$m{security.application.businessunit}
+    binding:$j{com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants.BUSINESSUNITDESC}
+
+!ui-panel:navigationBand styleClass:$e{fc-topnavcontrol} components:$c{switchRoleLabel logoutLabel}
+!ui-button:switchRoleLabel caption:$m{application.switchrole} styleClass:$e{fc-switchrole}
+    eventHandler:$d{!ui-event event:onclick action:$c{switchRoleAct}} debounce:false
+!ui-button:logoutLabel caption:$m{application.logout} styleClass:$e{fc-logout}
+    eventHandler:$d{!ui-event event:onclick action:$c{logoutAct}} debounce:false
+
+!ui-panel:wkspSelPanel layout:$d{!ui-horizontal cellType:middle style:$s{width:100%;}} styleClass:$e{fc-topbannerswitch}
+    components:$c{currentWkspLabel currentWkspSel}
+!ui-label:currentWkspLabel caption:$m{application.workspace.caption} styleClass:$s{fc-applicationlabel}
+!ui-select:currentWkspSel style:$s{width:220px;} list:$s{roleworkspacelist} listKey:code
+	binding:workspaceCode
+    eventHandler:$d{!ui-event event:onchange action:$c{wkspChangeAct}}
+
+// Menu
+!ui-panel:menuPanel style:$s{width:100%;} components:$c{menuColPanel}
+!fc-appletmenu:menuColPanel searchable:true horizontal:true
+
+// Content
+!ui-contentpanel:content styleClassBinding:$s{contentStyleClass}
+	pathsBinding:applicationPaths stickyPathsBinding:enableStickyPaths
+	tabbedBinding:enableMultipleTabs documentPath:$s{/application}
+	titleUppercase:false
+	
+// TODO
+// Put all popups in a single dynamic panel so that they are created as needed
+//Select user role popup
+!fc-selectrolepanel:userRoleOptionsPopup dialogCaption:$m{application.switch.role}
+    roleListBinding:userRoleList selectRolePath:$n{/switchUserRole} binding:$w{}
+    
+// Show user details popup
+!fc-userdetailspanel:userDetailsPopup dialogCaption:$m{application.user.details}
+    imageGenBinding:userPhotoGenerator
+
+// Entity select pop up
+!fc-entityselectpanel:entitySelectPopup binding:$w{}
+
+// Entity multiselect pop up
+!fc-entitymultiselectpanel:entityMultiselectPopup binding:$w{}
+
+// Entity tree multiselect pop up
+!fc-entitytreemultiselectpanel:entityTreeMultiselectPopup binding:$w{}
+
+// Text template pop up
+!fc-texttemplatepanel:textTemplatePopup binding:$w{}
+
+// Quick table edit
+!fc-quicktableeditpanel:quickTableEditPopup binding:$w{}
+
+// Quick table order
+!fc-quicktableorderpanel:quickTableOrderPopup binding:$w{}
+
+// Quick form edit
+!fc-quickformeditpanel:quickFormEditPopup binding:$w{}
+
+// Preview form panel
+!fc-previewformpanel:previewFormPopup binding:$w{}
+
+// Help form panel
+!fc-helpformpanel:helpFormPopup binding:$w{}
+
+//Actions 
+!ui-post:wkspChangeAct path:$n{/changeWorkspace} components:$c{currentWkspSel}
+!ui-post:logoutAct path:$n{/logOut} confirm:$m{application.logout.confirm}
+!ui-post:switchRoleAct path:$n{/prepareUserRoleOptions}
+!ui-post:userNotificationsAct path:$n{/showUserNotifications}
+!ui-post:userDetailsAct path:$n{/showUserDetails}

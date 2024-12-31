@@ -69,6 +69,11 @@ public abstract class AbstractMenuWriter extends AbstractPanelWriter {
         writer.writeCommandURLParam("pCmdURL");
         writer.writeParam("pCollInit", appletMenuWidget.isCollapsedInitial());
         writer.writeParam("pReg", true);
+        writer.writeParam("pHoriz", appletMenuWidget.isHorizontal());
+        writer.writeParam("pSecId", appletMenuWidget.getMenuSectionId());
+        writer.writeParam("pSldId", appletMenuWidget.getSlideId());
+        writer.writeParam("pLeftId", appletMenuWidget.getNavLeftId());
+        writer.writeParam("pRightId", appletMenuWidget.getNavRightId());
         writer.writeResolvedParam("pMenuIds", (String) work.get(AbstractMenuWidget.WORK_MENUIDS));
         writer.writeResolvedParam("pMenuItems", (String) work.get(AbstractMenuWidget.WORK_MENUITEMS));
         writer.endFunction();

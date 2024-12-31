@@ -11,6 +11,11 @@
 			dataType="string" inputType="string"
 			editor="!ui-select list:studioenvironmentdelegatelist blankOption:$m{blank.none}"
 			renderer="!ui-label" />
+		<widgetType name="formwizardcompletiontypelist"
+			description="$m{studio.widgettype.formwizardcompletiontypelist}"
+			dataType="string" inputType="string"
+			editor="!ui-select list:formwizardcompletiontypelist blankOption:$m{blank.none}"
+			renderer="!ui-label" />
 		<widgetType name="tablerowcolorlist"
 			description="$m{studio.widgettype.tablerowcolorlist}"
 			dataType="string" inputType="string"
@@ -30,6 +35,21 @@
 			description="$m{studio.widgettype.passfaillist}" dataType="string"
 			inputType="string"
 			editor="!ui-select list:passfaillist blankOption:$m{blank.none}"
+			renderer="!ui-label" />
+		<widgetType name="jsonformatterlist"
+			description="$m{studio.widgettype.jsonformatterlist}"
+			dataType="string" inputType="string"
+			editor="!ui-select list:studiojsonformatterlist listParams:$l{dataType} blankOption:$m{blank.none}"
+			renderer="!ui-label" />
+		<widgetType name="dateformatterlist"
+			description="$m{studio.widgettype.dateformatterlist}"
+			dataType="string" inputType="string"
+			editor="!ui-select list:studiodateformatterlist blankOption:$m{blank.none}"
+			renderer="!ui-label" />
+		<widgetType name="datetimeformatterlist"
+			description="$m{studio.widgettype.datetimeformatterlist}"
+			dataType="string" inputType="string"
+			editor="!ui-select list:studiodatetimeformatterlist blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="detailspanellist"
 			description="$m{studio.widgettype.detailspanellist}"
@@ -290,6 +310,11 @@
 			dataType="string" inputType="string"
 			editor="!ui-select list:studioappletalerttemplatelist listParams:$l{appAppletId} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
+		<widgetType name="apiappletlist"
+			description="$m{studio.widgettype.apiappletlist}"
+			dataType="string" inputType="string"
+			editor="!ui-select list:studioapiappletlist listParams:$l{entity} blankOption:$m{blank.none}"
+			renderer="!ui-label" />
 		<widgetType name="wfentitysetvaluesgenlist"
 			description="$m{studio.widgettype.wfentitysetvaluesgenlist}"
 			dataType="string" inputType="string"
@@ -505,6 +530,16 @@
 			dataType="string" inputType="string"
 			editor="!ui-select list:appletactionpolicylist listParams:$l{propertyOwnerId} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
+		<widgetType name="propertynavigationactionpolicylist"
+			description="$m{studio.widgettype.propertynavigationactionpolicylist}"
+			dataType="string" inputType="string"
+			editor="!ui-select list:navigationactionpolicylist listParams:$l{propertyOwnerId} blankOption:$m{blank.none}"
+			renderer="!ui-label" />
+		<widgetType name="propertywizardtaskprocessorlist"
+			description="$m{studio.widgettype.propertywizardtaskprocessorlist}"
+			dataType="string" inputType="string"
+			editor="!ui-select list:wizardtaskprocessorlist listParams:$l{propertyOwnerId} blankOption:$m{blank.none}"
+			renderer="!ui-label" />
 		<widgetType name="tableentitylistactionpolicylist"
 			description="$m{studio.widgettype.tableentitylistactionpolicylist}"
 			dataType="string" inputType="string"
@@ -575,6 +610,24 @@
 			label="$m{studio.snapshotspage.manage.label}" icon="lock" type="path_page"
 			path="/studio/snapshots/openPage" menuAccess="false">
 		</applet>
+		<applet name="createJsonEntity"
+			description="$m{studio.jsonentity.manage}"
+			label="$m{studio.jsonentity.manage.label}" type="form_wizard"
+			entity="studio.studioJsonEntity" menuAccess="false">
+			<property name="createForm" value="studioJsonEntityForm" />
+			<property name="createForm.navigation.policy" value="createjsonentity-navigationpolicy" />
+			<property name="wizardForm.completion" value="EXE" />
+			<property name="wizardForm.task.processor" value="createjsonentity-formwizardprocessor" />
+		</applet>
+		<applet name="createCsvEntity"
+			description="$m{studio.csventity.manage}"
+			label="$m{studio.csventity.manage.label}" type="form_wizard"
+			entity="studio.studioJsonEntity" menuAccess="false">
+			<property name="createForm" value="studioCsvEntityForm" />
+			<property name="createForm.navigation.policy" value="createcsventity-navigationpolicy" />
+			<property name="wizardForm.completion" value="EXE" />
+			<property name="wizardForm.task.processor" value="createcsventity-formwizardprocessor" />
+		</applet>
 		<applet name="stuManageModule"
 			description="$m{studio.module.manage}"
 			label="$m{studio.module.manage.label}" icon="cubes"
@@ -643,6 +696,7 @@
 			<property name="searchTable.new" value="true" />
 			<property name="searchTable.edit" value="false" />
 			<property name="searchTable.report" value="false" />
+			<property name="quickOrder.field" value="displayIndex" />
 			<property name="createForm" value="appEnumerationItemForm" />
 			<property name="createForm.save" value="true" />
 			<property name="createForm.save.next" value="true" />
@@ -1482,10 +1536,8 @@
 			description="$m{studio.reference.applicationdevelopableref}"
 			name="applicationDevelopableRef">
 			<filter>
-				<restriction type="AND">
-					<restriction field="developable" paramA="true"
-						type="EQUALS" />
-				</restriction>
+				<restriction field="developable" paramA="true"
+					type="EQUALS" />
 			</filter>
 		</reference>
 		<reference name="studioSnapshotDetailsRef"
@@ -1494,6 +1546,12 @@
 		<reference name="studioRestoreDetailsRef"
 			description="$m{studio.restoredetails.reference}"
 			entity="studioRestoreDetails" />
+		<reference name="studioJsonEntityRef"
+			description="$m{studio.jsonentity.reference}"
+			entity="studioJsonEntity" />
+		<reference name="studioCsvEntityRef"
+			description="$m{studio.csventity.reference}"
+			entity="studioJsonEntity" />
 	</references>
 	<!-- Entities -->
 	<entities>
@@ -1555,6 +1613,65 @@
 				label="$m{studio.restoredetails.taskstatusdesc}" type="list_only"
 				key="taskStatus" property="description" />
 		</entity>
+		<entity name="studioJsonEntity" description="$m{studio.jsonentity}"
+			label="$m{studio.jsonentity.label}"
+			type="com.flowcentraltech.flowcentral.studio.entities.StudioJsonEntity"
+			reportable="false">
+			<field name="applicationId"
+				label="$m{studio.jsonentity.applicationid}" type="ref"
+				inputLabel="$m{studio.jsonentity.application}"
+				inputWidget="application.entitysearch"
+				references="application.applicationRef" basicSearch="true" />
+			<field name="baseType"
+				label="$m{studio.jsonentity.basetype}" type="enum_ref"
+				references="entitybasetypelist" inputWidget="application.enumlist" />
+			<field name="entityName" maxLen="32"
+				label="$m{studio.jsonentity.entityname}" type="string"
+				nullable="true" />
+			<field name="dateFormatter" maxLen="64"
+				label="$m{studio.jsonentity.dateformatter}" type="string" nullable="true"/>
+			<field name="dateTimeFormatter" maxLen="64"
+				label="$m{studio.jsonentity.datetimeformatter}" type="string" nullable="true"/>
+			<field name="delegate" maxLen="64"
+				label="$m{studio.jsonentity.delegate}" type="string"
+				nullable="true" />
+			<field name="sourceJson"
+				inputWidget="application.textarealarge"
+				label="$m{studio.jsonentity.sourcejson}" type="clob" />
+			<field name="refinedStructure"
+				inputWidget="application.entitycomposition"
+				label="$m{studio.jsonentity.refinedstructure}" type="clob" />
+			<field name="generateEntity"
+				inputWidget="application.boolean"
+				label="$m{studio.jsonentity.generateentity}" type="boolean"/>
+			<field name="loadSourceJSON"
+				inputWidget="application.boolean"
+				label="$m{studio.jsonentity.loadsourcejson}" type="boolean"/>
+			<field name="generateApplet"
+				inputWidget="application.boolean"
+				label="$m{studio.jsonentity.generateapplet}" type="boolean"/>
+			<field name="generateRest"
+				inputWidget="application.boolean"
+				label="$m{studio.jsonentity.generaterest}" type="boolean"/>
+			<field name="generateImport"
+				inputWidget="application.boolean"
+				label="$m{studio.jsonentity.generateimport}" type="boolean" nullable="true"/>
+			<field name="applicationName"
+				label="$m{studio.jsonentity.applicationname}"
+				type="list_only" key="applicationId" property="name" />
+			<field name="applicationDesc"
+				label="$m{studio.jsonentity.applicationdesc}"
+				type="list_only" key="applicationId" property="description" />
+			<field name="moduleId"
+				label="$m{studio.jsonentity.moduleid}"
+				type="list_only" key="applicationId" property="moduleId" />
+			<field name="moduleName"
+				label="$m{studio.jsonentity.modulename}"
+				type="list_only" key="applicationId" property="moduleName" />
+			<field name="moduleDesc"
+				label="$m{studio.jsonentity.moduledesc}"
+				type="list_only" key="applicationId" property="moduleDesc" />
+		</entity>
 	</entities>
 	<!-- Tables -->
 	<tables>
@@ -1598,6 +1715,8 @@
 			<column field="code" renderWidget="application.text"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="label" renderWidget="application.text"
+				widthRatio="1" />
+			<column field="displayIndex" renderWidget="application.text"
 				widthRatio="1" />
 		</table>
 		<table name="appEntityFieldTable"
@@ -2323,6 +2442,100 @@
 				</setStates>
 			</formStatePolicy>
 		</form>
+		<form name="studioJsonEntityForm" description="$m{studio.jsonentity.form}"
+			entity="studioJsonEntity">
+			<tab name="basicDetails"
+				label="$m{studio.jsonentity.form.application}" contentType="miniform">
+				<section name="structureDetails" columns="type_2"
+					label="$m{studio.jsonentity.form.application}" icon="application" >
+					<field name="applicationId" inputWidget="application.entitysearch" column="0"
+						reference="studio.applicationDevelopableRef"
+						label="$m{studio.jsonentity.application}"
+						required="true" editable="true" />
+					<field name="entityName" inputWidget="application.name"
+						column="0" required="true" />
+					<field name="baseType" column="0" label="$m{studio.jsonentity.basetype}"
+						required="true" editable="true" />
+					<field name="dateFormatter" inputWidget="studio.dateformatterlist"
+						column="0" required="false" />
+					<field name="dateTimeFormatter" inputWidget="studio.datetimeformatterlist"
+						column="0" required="false" />
+					<field name="delegate" inputWidget="environmentdelegatelist"
+						column="0" />
+				</section>
+				<section name="source" columns="type_1"
+					label="$m{studio.jsonentity.form.source}" icon="file" >
+					<field name="sourceJson" inputWidget="application.textareaxlarge" column="0"
+						required="true" editable="true" />
+				</section>
+				<section name="structure" columns="type_1"
+					label="$m{studio.jsonentity.form.structure}" icon="scroll">
+					<field name="refinedStructure" inputWidget="application.entitycomposition" column="0"
+						required="true" editable="true" />
+				</section>
+				<section name="options" columns="type_1"
+					label="$m{studio.jsonentity.form.options}" icon="rocket">
+					<field name="generateEntity" inputWidget="application.checkbox" column="0"
+						disabled="true" />
+					<field name="loadSourceJSON" inputWidget="application.checkbox" column="0"
+						editable="true" />
+					<field name="generateApplet" inputWidget="application.checkbox" column="0"
+						editable="true" />
+					<field name="generateRest" inputWidget="application.checkbox" column="0"
+						editable="true" />
+				</section>
+			</tab>
+			<fieldValidationPolicy name="entityValidation"
+				description="$m{studio.jsonentity.form.fieldvalidationpolicy.entity}"
+				fieldName="entityName" validator="fc-entitynameexistvalidator" />
+		</form>
+		<form name="studioCsvEntityForm" description="$m{studio.csventity.form}"
+			entity="studioJsonEntity">
+			<tab name="basicDetails"
+				label="$m{studio.csventity.form.application}" contentType="miniform">
+				<section name="structureDetails" columns="type_2"
+					label="$m{studio.csventity.form.application}" icon="application" >
+					<field name="applicationId" inputWidget="application.entitysearch" column="0"
+						label="$m{studio.csventity.application}"
+						reference="studio.applicationDevelopableRef"
+						required="true" editable="true" />
+					<field name="entityName" inputWidget="application.name"
+						column="0" required="true" />
+					<field name="baseType" column="0" label="$m{studio.csventity.basetype}"
+						required="true" editable="true" />
+					<field name="dateFormatter" inputWidget="studio.dateformatterlist"
+						column="0" required="false" />
+					<field name="dateTimeFormatter" inputWidget="studio.datetimeformatterlist"
+						column="0" required="false" />
+					<field name="delegate" inputWidget="environmentdelegatelist"
+						column="0" />
+				</section>
+				<section name="source" columns="type_1"
+					label="$m{studio.csventity.form.source}" icon="file" >
+					<field name="sourceJson" inputWidget="application.textareaxlarge" column="0"
+						required="true" editable="true" label="$m{studio.csventity.sourcecsv}" />
+				</section>
+				<section name="structure" columns="type_1"
+					label="$m{studio.csventity.form.structure}" icon="scroll">
+					<field name="refinedStructure" inputWidget="application.entitycomposition" column="0"
+						required="true" editable="true" />
+				</section>
+				<section name="options" columns="type_1"
+					label="$m{studio.csventity.form.options}" icon="rocket">
+					<field name="generateEntity" inputWidget="application.checkbox" column="0"
+						disabled="true" />
+					<field name="loadSourceJSON" inputWidget="application.checkbox" column="0"
+						editable="true" label="$m{studio.csventity.loadsourcecsv}" />
+					<field name="generateApplet" inputWidget="application.checkbox" column="0"
+						editable="true" />
+					<field name="generateRest" inputWidget="application.checkbox" column="0"
+						editable="true" />
+				</section>
+			</tab>
+			<fieldValidationPolicy name="entityValidation"
+				description="$m{studio.csventity.form.fieldvalidationpolicy.entity}"
+				fieldName="entityName" validator="fc-entitynameexistvalidator" />
+		</form>
 		<form name="appAppletForm"
 			description="$m{studio.appapplet.form}"
 			entity="application.appApplet">
@@ -2414,7 +2627,7 @@
 				<errorCondition>
 					<restriction type="and">
 						<restriction type="amongst" field="type"
-							paramA="MEL|MEA|MLS|MLL|CEN|CNS|DIM" />
+							paramA="MEL|MEA|MLS|MLL|FWZ|CEN|CNS|DIM" />
 						<restriction type="is_null" field="entity" />
 					</restriction>
 				</errorCondition>
@@ -2494,7 +2707,7 @@
 				description="$m{studio.appapplet.form.formstatepolicy.entity}">
 				<onCondition>
 					<restriction type="amongst" field="type"
-						paramA="MEL|MEA|MLS|MLL|CEN|CNS|DIM" />
+						paramA="MEL|MEA|MLS|MLL|FWZ|CEN|CNS|DIM" />
 				</onCondition>
 				<setStates>
 					<setState type="field" target="entity" visible="true" />
@@ -2701,6 +2914,10 @@
 						column="1" switchOnChange="true" />
 					<field name="dataSourceName" inputWidget="application.text"
 						column="1" required="true" visible="false" />
+					<field name="dateFormatter" inputWidget="studio.dateformatterlist"
+						column="1" required="false" />
+					<field name="dateTimeFormatter" inputWidget="studio.datetimeformatterlist"
+						column="1" required="false" />
 				</section>
 				<section name="optionDetails" columns="type_1_2">
 					<field name="auditable" inputWidget="application.checkbox"
@@ -2914,6 +3131,8 @@
 						column="1" visible="false" />
 					<field name="defaultVal" inputWidget="application.text"
 						column="1" visible="false" />
+					<field name="jsonName" inputWidget="application.text" column="1"/>
+					<field name="jsonFormatter" inputWidget="studio.jsonformatterlist" column="1"/>
 				</section>
 				<section name="optionDetails" columns="type_1_2">
 					<field name="auditable" inputWidget="application.checkbox"
@@ -3458,7 +3677,7 @@
 			</tab>
 			<tab name="items" label="$m{studio.appenumeration.form.items}"
 				contentType="child_list" applet="manageAppEnumerationItem"
-				reference="itemList" />
+				quickOrder="true" reference="itemList" />
 		</form>
 		<form name="appEnumerationItemForm"
 			description="$m{studio.appenumerationitem.form}"
@@ -3559,6 +3778,71 @@
 				<setStates>
 					<setState type="field"
 						target="name,description,entity,searchField,searchTable,selectHandler"
+						disabled="true" />
+				</setStates>
+			</formStatePolicy>
+		</form>
+		<form name="appAPIForm" description="$m{studio.appapi.form}"
+			entity="application.appAPI">
+			<action type="button" name="lockResource" symbol="lock"
+				styleClass="fc-actbutton"
+				description="$m{studio.common.form.action.lockresource}"
+				label="$m{studio.common.form.action.lockresource.label}"
+				policy="lockresource-actionpolicy" showOnMaintain="true" />
+			<action type="button" name="unlockResource" symbol="unlock"
+				styleClass="fc-actbutton"
+				description="$m{studio.common.form.action.unlockresource}"
+				label="$m{studio.common.form.action.unlockresource.label}"
+				policy="unlockresource-actionpolicy" showOnMaintain="true" />
+			<annotation name="staticAnnotation"
+				description="$m{studio.common.form.annotation.static}"
+				message="$m{studio.common.form.annotation.static.message}" />
+			<tab name="basicDetails"
+				label="$m{studio.appref.form.basicdetails}" contentType="miniform">
+				<section name="refFormDetails" columns="type_2">
+					<field name="applicationId"
+						reference="studio.applicationDevelopableRef"
+						inputWidget="application.entitysearch" column="0"
+						label="$m{studio.application}" disabled="true" required="true"
+						saveAs="true" />
+					<field name="name" inputWidget="application.name" column="0"
+						required="true" saveAs="true" />
+					<field name="description" inputWidget="application.text"
+						column="0" required="true" saveAs="true" />
+					<field name="type" inputWidget="application.enumlist"
+						column="0" required="true" />
+					<field name="configType" inputWidget="application.enumlist"
+						column="1" disabled="true" required="true" />
+					<field name="entity" inputWidget="studio.entitysearch"
+						column="1" switchOnChange="true" required="true" />
+					<field name="applet" inputWidget="studio.apiappletlist"
+						column="1" />
+					<field name="supportCreate"
+						inputWidget="application.checkbox" column="1" />
+					<field name="supportRead"
+						inputWidget="application.checkbox" column="1" />
+					<field name="supportUpdate"
+						inputWidget="application.checkbox"
+						column="1" />
+					<field name="supportDelete"
+						inputWidget="application.checkbox" column="1" />
+				</section>
+			</tab>
+			<tab name="changeLog" label="$m{application.form.audit}"
+				contentType="miniform_changelog" />
+			<formStatePolicy type="on_switch"
+				name="immutableFormPolicy"
+				description="$m{studio.common.form.formstatepolicy.immutable}">
+				<onCondition>
+					<restriction type="and">
+						<restriction type="is_not_null" field="id" />
+						<restriction type="not_equals" field="configType"
+							paramA="C" />
+					</restriction>
+				</onCondition>
+				<setStates>
+					<setState type="field"
+						target="name,description,type,entity,supportCreate,supportRead,supportUpdate,supportDelete"
 						disabled="true" />
 				</setStates>
 			</formStatePolicy>
@@ -5958,6 +6242,43 @@
 					inputWidget="application.checkbox" />
 			</propertySet>
 		</propertyList>
+		<propertyList name="fwzAppAppletPropList"
+			description="$m{studio.appappletprop.formwizard.propertylist}">
+			<propertySet
+				label="$m{studio.appappletprop.formwizard.formproperties}">
+				<property name="createForm.new.caption"
+					description="$m{studio.appappletprop.formwizard.createform.newcaption}"
+					inputWidget="application.text" />
+				<property name="createForm"
+					description="$m{studio.appappletprop.formwizard.createform}"
+					inputWidget="studio.propertyappletformlist" required="false" />
+				<property name="createForm.new.policy"
+					description="$m{studio.appappletprop.formwizard.createform.newpolicy}"
+					inputWidget="studio.propertyentityactionpolicylist" />
+				<property name="createForm.navigation.policy"
+					description="$m{studio.appappletprop.formwizard.createform.navigationpolicy}"
+					inputWidget="studio.propertynavigationactionpolicylist" />
+				<property name="wizardForm.completion"
+					description="$m{studio.appappletprop.formwizard.wizardform.completion}"
+					inputWidget="studio.formwizardcompletiontypelist" />
+				<property name="wizardForm.task.processor"
+					description="$m{studio.appappletprop.formwizard.wizardform.taskprocessor}"
+					inputWidget="studio.propertywizardtaskprocessorlist" />
+			</propertySet>
+			<propertySet
+				label="$m{studio.appappletprop.formwizard.workflowproperties}">
+				<property name="createForm.submit.caption"
+					description="$m{studio.appappletprop.formwizard.createform.submitcaption}"
+					inputWidget="application.text" />
+				<property name="createForm.submit.workflow.channel"
+					description="$m{studio.appappletprop.formwizard.createform.submitworkflow}"
+					inputWidget="studio.propertyappletworkflowchannellist"
+					required="false" />
+				<property name="createForm.submit.validate"
+					description="$m{studio.appappletprop.formwizard.createform.submitvalidate}"
+					inputWidget="application.checkbox" />
+			</propertySet>
+		</propertyList>
 		<propertyList name="mllAppAppletPropList"
 			description="$m{studio.appappletprop.manageloading.propertylist}">
 			<propertySet
@@ -6061,6 +6382,9 @@
 			</propertySet>
 			<propertySet
 				label="$m{studio.appappletprop.manageentity.formproperties}">
+				<!--property name="longForm.support"
+					description="$m{studio.appappletprop.manageentity.longform.support}"
+					inputWidget="application.checkbox" /-->
 				<property name="createForm.new.caption"
 					description="$m{studio.appappletprop.createentity.createform.newcaption}"
 					inputWidget="application.text" />
@@ -6724,6 +7048,7 @@
 			entity="application.appApplet" choiceField="type"
 			listField="propList" propNameField="name" propValField="value"
 			ignoreCase="true">
+			<choice name="fwz" val="fwzAppAppletPropList" />
 			<choice name="cen" val="cenAppAppletPropList" />
 			<choice name="cns" val="cnsAppAppletPropList" />
 			<choice name="mll" val="mllAppAppletPropList" />

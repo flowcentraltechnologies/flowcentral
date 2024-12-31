@@ -16,6 +16,7 @@
 package com.flowcentraltech.flowcentral.application.data;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -42,6 +43,8 @@ public class FormTabDef {
     private String name;
 
     private String label;
+
+    private String icon;
 
     private String applet;
 
@@ -81,7 +84,7 @@ public class FormTabDef {
 
     private int listOnlyCheck;
 
-    public FormTabDef(TabContentType contentType, FilterGroupDef filterGroupDef, String name, String label,
+    public FormTabDef(TabContentType contentType, FilterGroupDef filterGroupDef, String name, String label, String icon,
             String applet, String reference, String mappedFieldName, String mappedForm, String editAction,
             String editViewOnly, String editAllowAddition, String editFixedRows,
             List<FormSectionDef> formSectionDefList, boolean ignoreParentCondition, boolean showSearch,
@@ -90,6 +93,7 @@ public class FormTabDef {
         this.filterGroupDef = filterGroupDef;
         this.name = name;
         this.label = label;
+        this.icon = icon;
         this.applet = applet;
         this.reference = reference;
         this.mappedFieldName = mappedFieldName;
@@ -115,6 +119,32 @@ public class FormTabDef {
         this.filterGroupDef = srcFormTabDef.filterGroupDef;
         this.name = srcFormTabDef.name;
         this.label = srcFormTabDef.label;
+        this.icon = srcFormTabDef.icon;
+        this.applet = srcFormTabDef.applet;
+        this.reference = srcFormTabDef.reference;
+        this.mappedFieldName = srcFormTabDef.mappedFieldName;
+        this.mappedForm = srcFormTabDef.mappedForm;
+        this.editAction = srcFormTabDef.editAction;
+        this.editViewOnly = srcFormTabDef.editViewOnly;
+        this.editAllowAddition = srcFormTabDef.editAllowAddition;
+        this.editFixedRows = srcFormTabDef.editFixedRows;
+        this.ignoreParentCondition = srcFormTabDef.ignoreParentCondition;
+        this.showSearch = srcFormTabDef.showSearch;
+        this.quickEdit = srcFormTabDef.quickEdit;
+        this.quickOrder = srcFormTabDef.quickOrder;
+        this.visible = srcFormTabDef.visible;
+        this.editable = srcFormTabDef.editable;
+        this.disabled = srcFormTabDef.disabled;
+        this.listOnlyCheck = srcFormTabDef.listOnlyCheck;
+    }
+
+    private FormTabDef(FormTabDef srcFormTabDef, String name, String label, String icon, List<FormSectionDef> formSectionDefList) {
+        this.formSectionDefList = formSectionDefList;
+        this.contentType = srcFormTabDef.contentType;
+        this.filterGroupDef = srcFormTabDef.filterGroupDef;
+        this.name = name;
+        this.label = label;
+        this.icon = icon;
         this.applet = srcFormTabDef.applet;
         this.reference = srcFormTabDef.reference;
         this.mappedFieldName = srcFormTabDef.mappedFieldName;
@@ -155,6 +185,10 @@ public class FormTabDef {
 
     public String getLabel() {
         return label;
+    }
+
+    public String getIcon() {
+        return icon;
     }
 
     public String getApplet() {
@@ -293,9 +327,32 @@ public class FormTabDef {
         return disabled;
     }
 
-    @Override
-    public String toString() {
-        return StringUtils.toXmlString(this);
+    public List<FormTabDef> wizardParts() {
+        if (contentType.isMiniFormOnly()) {
+            List<FormTabDef> list = new ArrayList<FormTabDef>();
+            String _name = name;
+            String _label = label;
+            List<FormSectionDef> _formSectionDefList = new ArrayList<FormSectionDef>();
+
+            final int len = formSectionDefList.size();
+            for (int i = 0; i < len; i++) {
+                FormSectionDef _formSectionDef = formSectionDefList.get(i);
+                if (i > 0 && !StringUtils.isBlank(_formSectionDef.getLabel())) {
+                    list.add(new FormTabDef(this, _name, _label, _formSectionDefList.get(0).getIcon(),
+                            _formSectionDefList));
+                    _name = _formSectionDef.getName();
+                    _label = _formSectionDef.getLabel();
+                    _formSectionDefList = new ArrayList<FormSectionDef>();
+                }
+
+                _formSectionDefList.add(_formSectionDef);
+            }
+
+            list.add(new FormTabDef(this, _name, _label, _formSectionDefList.get(0).getIcon(), _formSectionDefList));
+            return Collections.unmodifiableList(list);
+        }
+
+        return Collections.emptyList();
     }
 
 }

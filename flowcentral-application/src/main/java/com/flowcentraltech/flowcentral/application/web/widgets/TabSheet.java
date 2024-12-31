@@ -42,6 +42,8 @@ public class TabSheet {
 
     private boolean active;
 
+    private boolean expanded;
+
     public TabSheet(TabSheetDef tabSheetDef, List<TabSheetItem> tabSheetItemList) {
         this.tabSheetDef = tabSheetDef;
         this.tabSheetItemList = Collections.unmodifiableList(tabSheetItemList);
@@ -159,6 +161,14 @@ public class TabSheet {
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    public boolean isExpanded() {
+        return expanded;
+    }
+
+    public void setExpanded(boolean expanded) {
+        this.expanded = expanded;
     }
 
     public boolean isInStateForDisplay() {

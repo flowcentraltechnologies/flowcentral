@@ -7,7 +7,7 @@
 	<parent>
 		<groupId>com.flowcentraltech.flowcentral</groupId>
 		<artifactId>flowcentral</artifactId>
-		<version>3.2.1</version>
+		<version>3.2.2-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>flowcentral-application</artifactId>
@@ -26,11 +26,6 @@
 			<groupId>com.flowcentraltech.flowcentral</groupId>
 			<artifactId>flowcentral-system</artifactId>
 			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-		    <groupId>org.apache.commons</groupId>
-		    <artifactId>commons-csv</artifactId>
-		    <version>1.4</version>
 		</dependency>
 		<dependency>
 			<groupId>com.tcdng.unify</groupId>

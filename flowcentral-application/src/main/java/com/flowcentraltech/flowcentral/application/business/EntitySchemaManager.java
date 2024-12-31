@@ -16,6 +16,7 @@
 package com.flowcentraltech.flowcentral.application.business;
 
 import com.flowcentraltech.flowcentral.application.data.EntitySchema;
+import com.flowcentraltech.flowcentral.application.entities.AppApplet;
 import com.flowcentraltech.flowcentral.application.entities.AppEntity;
 import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
 import com.tcdng.unify.core.UnifyException;
@@ -71,4 +72,20 @@ public interface EntitySchemaManager extends FlowCentralComponent {
      *                        if an error occurs
      */
     void updateDefaultComponents(String entity, AppEntity appEntity) throws UnifyException;
+    
+    /**
+     * Creates an applet component.
+     * 
+     * @param applicationName
+     *                        the application name
+     * @param appApplet
+     *                        the applet
+     * @param child
+     *                        child applet indication
+     * @return the applet name
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    String createDefaultAppletComponents(String applicationName, AppApplet appApplet, boolean child)
+            throws UnifyException;
 }

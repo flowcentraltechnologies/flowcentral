@@ -20,6 +20,7 @@ import java.util.List;
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.data.EntityFormEventHandlers;
 import com.flowcentraltech.flowcentral.application.web.panels.applet.AbstractLoadingApplet;
+import com.flowcentraltech.flowcentral.common.constants.SecuredLinkType;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.web.constant.ReadOnly;
 import com.tcdng.unify.web.constant.ResetOnWrite;
@@ -41,6 +42,8 @@ public abstract class AbstractLoadingAppletController<T extends AbstractLoadingA
 
     @Override
     protected void onOpenPage() throws UnifyException {
+        captureSecuredLink(SecuredLinkType.WORKFLOW_DECISION);
+
         AbstractLoadingAppletPageBean<T> pageBean = getPageBean();
         AppletWidgetReferences appletWidgetReferences = getAppletWidgetReferences();
         EntityFormEventHandlers formEventHandlers = getEntityFormEventHandlers();

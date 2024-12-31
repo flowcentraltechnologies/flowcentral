@@ -35,6 +35,8 @@ public interface FlowCentralAppletPathConstants {
     
     String CREATE_ENTITY_SINGLEFORM = "/createentitysingleformapplet";
     
+    String FORM_WIZARD = "/formwizardapplet";
+    
     String LISTING = "/listingapplet";
     
     String TASK_EXECUTION = "/taskexecutionapplet";

@@ -23,6 +23,8 @@ import com.flowcentraltech.flowcentral.application.web.controllers.AbstractAppli
 import com.flowcentraltech.flowcentral.common.business.LicenseProvider;
 import com.flowcentraltech.flowcentral.common.business.WorkspacePrivilegeManager;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants;
+import com.flowcentraltech.flowcentral.common.constants.SecuredLinkType;
+import com.flowcentraltech.flowcentral.common.data.BranchInfo;
 import com.flowcentraltech.flowcentral.common.data.SecuredLinkContentInfo;
 import com.flowcentraltech.flowcentral.common.data.UserRoleInfo;
 import com.flowcentraltech.flowcentral.security.business.SecurityModuleService;
@@ -69,6 +71,7 @@ import com.tcdng.unify.web.ui.widget.panel.SwitchPanel;
                 response = { "!switchpanelresponse panels:$l{loginSequencePanel.changePasswordPanel}" }),
         @ResultMapping(name = "switchvalidateotp",
                 response = { "!switchpanelresponse panels:$l{loginSequencePanel.validateOTPPanel}" }),
+        @ResultMapping(name = "switchbranchpanel", response = { "!showpopupresponse popup:$s{selectBranchPanel}" }) ,
         @ResultMapping(name = "switchrolepanel", response = { "!showpopupresponse popup:$s{selectRolePanel}" }) })
 public class UserLoginController extends AbstractApplicationForwarderController<UserLoginPageBean> {
 
@@ -183,7 +186,8 @@ public class UserLoginController extends AbstractApplicationForwarderController<
             }
 
             getUserToken().setAuthorized(true); // Restore authorization on 2FA pass
-            return selectRole();
+            return system().getSysParameterValue(boolean.class,
+                    SecurityModuleSysParamConstants.ENABLE_BRANCH_SELECT_MODE) ? selectBranch() : selectRole();
         } catch (UnifyException e) {
             UnifyError err = e.getUnifyError();
             setValidateOTPMsg(getSessionMessage(err.getErrorCode(), err.getErrorParams()));
@@ -206,6 +210,19 @@ public class UserLoginController extends AbstractApplicationForwarderController<
     }
 
     @Action
+    public String selectUserBranch() throws UnifyException {
+        UserLoginPageBean pageBean = getPageBean();
+        if (!DataUtils.isBlank(pageBean.getBranchInfoList())) {
+            BranchInfo branchInfo = pageBean.getBranchInfoList().get(getBranchTable().getViewIndex());
+            pageBean.setBranchInfoList(null);
+            setSessionStickyAttribute(FlowCentralSessionAttributeConstants.BRANCHCODE, branchInfo.getBranchCode());
+            setSessionStickyAttribute(FlowCentralSessionAttributeConstants.BRANCHDESC, branchInfo.getBranchDesc());
+        }
+
+        return selectRole();
+    }
+
+    @Action
     public String selectUserRole() throws UnifyException {
         UserLoginPageBean pageBean = getPageBean();
         if (DataUtils.isBlank(pageBean.getUserRoleList())) {
@@ -223,6 +240,11 @@ public class UserLoginController extends AbstractApplicationForwarderController<
         }
 
         return "switchlogin";
+    }
+
+    @Action
+    public String cancelSelectUserBranch() throws UnifyException {
+        return revertLogin();
     }
 
     @Action
@@ -259,6 +281,8 @@ public class UserLoginController extends AbstractApplicationForwarderController<
 
     @Override
     protected void onOpenPage() throws UnifyException {
+        captureSecuredLink(SecuredLinkType.LOGIN);
+
         UserLoginPageBean pageBean = getPageBean();
         pageBean.setLoginTenantId(null);
         pageBean.setUserName(null);
@@ -281,6 +305,8 @@ public class UserLoginController extends AbstractApplicationForwarderController<
     }
 
     private String twoFactorAuthCheck() throws UnifyException {
+        invalidateSecuredLink(SecuredLinkType.LOGIN);
+
         UserLoginPageBean pageBean = getPageBean();
         UserToken userToken = getUserToken();
         // Check 2FA
@@ -291,6 +317,20 @@ public class UserLoginController extends AbstractApplicationForwarderController<
                     ApplicationComponents.APPLICATION_TWOFACTORAUTHENTICATIONSERVICE);
             twoFactorAuthService.sendOneTimePasscode(userToken.getUserLoginId(), userToken.getUserEmail());
             return "switchvalidateotp";
+        }
+
+        return system().getSysParameterValue(boolean.class, SecurityModuleSysParamConstants.ENABLE_BRANCH_SELECT_MODE)
+                ? selectBranch()
+                : selectRole();
+    }
+
+    private String selectBranch() throws UnifyException {
+        final String branchCode = getSessionAttribute(String.class, FlowCentralSessionAttributeConstants.BRANCHCODE);
+        List<BranchInfo> branchInfoList = securityModuleService.getAssociatedBranches(branchCode);
+        if (branchInfoList.size() > 1) {
+            UserLoginPageBean pageBean = getPageBean();
+            pageBean.setBranchInfoList(branchInfoList);
+            return "switchbranchpanel";
         }
 
         return selectRole();
@@ -337,6 +377,10 @@ public class UserLoginController extends AbstractApplicationForwarderController<
 
         setRequestAttribute(FlowCentralSessionAttributeConstants.SECURED_LINK_ACCESS, securedLinkContentInfo);
         return forwardToApplication(userRole);
+    }
+
+    private Table getBranchTable() throws UnifyException {
+        return getPageWidgetByShortName(Table.class, "selectBranchPanel.branchTablePanel.contentTbl");
     }
 
     private Table getRoleTable() throws UnifyException {

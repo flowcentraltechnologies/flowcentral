@@ -19,6 +19,7 @@ package com.flowcentraltech.flowcentral.security.web.controllers;
 import java.util.List;
 import java.util.Locale;
 
+import com.flowcentraltech.flowcentral.common.data.BranchInfo;
 import com.flowcentraltech.flowcentral.common.data.UserRoleInfo;
 import com.flowcentraltech.flowcentral.common.web.controllers.AbstractForwarderPageBean;
 
@@ -58,6 +59,8 @@ public class UserLoginPageBean extends AbstractForwarderPageBean {
     
     private List<UserRoleInfo> userRoleList;
 
+    private List<BranchInfo> branchInfoList;
+    
     private Locale origLocale;
 
     private boolean isLanguage;
@@ -158,6 +161,14 @@ public class UserLoginPageBean extends AbstractForwarderPageBean {
 
     public void setUserRoleList(List<UserRoleInfo> userRoleList) {
         this.userRoleList = userRoleList;
+    }
+
+    public List<BranchInfo> getBranchInfoList() {
+        return branchInfoList;
+    }
+
+    public void setBranchInfoList(List<BranchInfo> branchInfoList) {
+        this.branchInfoList = branchInfoList;
     }
 
     public Locale getOrigLocale() {

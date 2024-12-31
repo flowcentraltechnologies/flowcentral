@@ -48,7 +48,7 @@ public class Chart extends BaseApplicationEntity {
     @Column(length = 64)
     private String provider;
 
-    @Column(length = 64, nullable = true)
+    @Column(name = "CHART_RULE", length = 64, nullable = true)
     private String rule;
 
     @Column(length = 2048, nullable = true)

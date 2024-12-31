@@ -33,6 +33,7 @@ import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.data.FactoryMap;
 import com.tcdng.unify.core.data.Listable;
+import com.tcdng.unify.core.data.StaleableFactoryMap;
 import com.tcdng.unify.core.database.Query;
 import com.tcdng.unify.core.list.AbstractDynamicListManager;
 
@@ -52,7 +53,7 @@ public class DynamicListManagerImpl extends AbstractDynamicListManager {
     
     public DynamicListManagerImpl() {
 
-        this.enumDefFactoryMap = new FactoryMap<String, EnumerationDef>(true)
+        this.enumDefFactoryMap = new StaleableFactoryMap<String, EnumerationDef>()
             {
                 @Override
                 protected boolean stale(String longName, EnumerationDef enumerationDef) throws Exception {

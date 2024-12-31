@@ -82,6 +82,10 @@ public class EndpointDef implements VersionedEntityDef {
         return endpointParamsDef;
     }
 
+    public <T> T getParam(Class<T> type, String name) throws UnifyException {
+        return DataUtils.convert(type, endpointParamsDef.getParamValue(name));
+    }
+    
     public EndpointPathDef getPathDef(String name) {
         return paths.get(name);
     }

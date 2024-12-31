@@ -15,5 +15,8 @@
 		<sysParameter code="STU-0001" defaultVal="100"
 			description="$m{studio.sysparam.snapshotdetailslimit}"
 			editor="!ui-integer precision:3" type="number" editable="true" />
+		<sysParameter code="STU-0002" defaultVal="U_"
+			description="$m{studio.sysparam.defaulttableprefix}"
+			editor="!ui-name case:upper underscore:true" type="string" editable="true" />
 	</sysParameters>
 </module>

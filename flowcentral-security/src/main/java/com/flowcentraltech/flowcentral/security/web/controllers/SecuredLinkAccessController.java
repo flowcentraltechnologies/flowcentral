@@ -50,7 +50,7 @@ import com.tcdng.unify.web.constant.Secured;
 @UplBinding("web/security/upl/securedlinkaccess.upl")
 @ResultMappings({
         @ResultMapping(type = MimeType.TEXT_HTML, name = "forwardtourl",
-                response = { "!externalforwardresponse pathBinding:$s{targetPath}" }),
+                response = { "!externalforwardresponse pathBinding:$s{targetPath} paramBinding:$s{targetParam}" }),
         @ResultMapping(type = MimeType.TEXT_HTML, name = "plainmessage",
                 response = { "!plainhtmlresponse htmlBinding:$s{message}" }) })
 public class SecuredLinkAccessController extends AbstractForwarderController<SecuredLinkAccessPageBean> {
@@ -70,6 +70,9 @@ public class SecuredLinkAccessController extends AbstractForwarderController<Sec
         final String lid = getHttpRequestParameter("lid");
         logDebug("Accessing secured item with id [{0}]...", lid);
         if (!StringUtils.isBlank(lid)) {
+            SecuredLinkAccessPageBean pageBean = getPageBean();
+            pageBean.setTargetParam(lid);
+
             final SecuredLinkContentInfo securedLinkContentInfo = securedLinkManager.getSecuredLink(lid);
             if (!securedLinkContentInfo.isPresent()) {
                 showPlainMessage(resolveSessionMessage("$m{securedlinkaccess.unresolvable}"));
@@ -89,25 +92,31 @@ public class SecuredLinkAccessController extends AbstractForwarderController<Sec
             String url = securedLinkContentInfo.getLoginUrl();
             if (isUserLoggedIn()) {
                 UserToken userToken = getUserToken();
-                if (securedLinkContentInfo.isWithAssignedLoginId()
-                        && !securedLinkContentInfo.getAssignedLoginId().equals(userToken.getUserLoginId())) {
-                    showPlainMessage(resolveSessionMessage("$m{securedlinkaccess.assignedtoother}"));
-                    return;
-                }
-
-                if (securedLinkContentInfo.isWithAssignedRole()) {
-                    Optional<UserRole> optional = securityModuleService.findUserRole(
-                            securedLinkContentInfo.getAssignedLoginId(), securedLinkContentInfo.getAssignedRole());
-                    if (!optional.isPresent()) {
-                        showPlainMessage(resolveSessionMessage("$m{securedlinkaccess.norequiredrole}"));
+                if (securedLinkContentInfo.isLogin()) {
+                    securityModuleService.logoutUser(false);
+                    setSessionAttribute(FlowCentralSessionAttributeConstants.SECURED_LINK_ACCESS,
+                            securedLinkContentInfo);
+                } else {
+                    if (securedLinkContentInfo.isWithAssignedLoginId()
+                            && !securedLinkContentInfo.getAssignedLoginId().equals(userToken.getUserLoginId())) {
+                        showPlainMessage(resolveSessionMessage("$m{securedlinkaccess.assignedtoother}"));
                         return;
                     }
-                }
 
-                url = securedLinkContentInfo.getDocUrl();
-                setSessionAttribute(AppletSessionAttributeConstants.OPEN_TAB_INFO,
-                        new SessionOpenTabInfo(securedLinkContentInfo.getTitle(), securedLinkContentInfo.getDocUrl(),
-                                securedLinkContentInfo.getContentPath()));
+                    if (securedLinkContentInfo.isWithAssignedRole()) {
+                        Optional<UserRole> optional = securityModuleService.findUserRole(
+                                securedLinkContentInfo.getAssignedLoginId(), securedLinkContentInfo.getAssignedRole());
+                        if (!optional.isPresent()) {
+                            showPlainMessage(resolveSessionMessage("$m{securedlinkaccess.norequiredrole}"));
+                            return;
+                        }
+                    }
+
+                    url = securedLinkContentInfo.getDocUrl();
+                    setSessionAttribute(AppletSessionAttributeConstants.OPEN_TAB_INFO,
+                            new SessionOpenTabInfo(securedLinkContentInfo.getTitle(),
+                                    securedLinkContentInfo.getDocUrl(), securedLinkContentInfo.getContentPath()));
+                }
             } else {
                 setSessionAttribute(FlowCentralSessionAttributeConstants.SECURED_LINK_ACCESS, securedLinkContentInfo);
             }

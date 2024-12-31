@@ -30,12 +30,15 @@ public class CredentialDef {
 
     private String password;
 
+    private String base64Encoded;
+
     private long versionNo;
 
-    public CredentialDef(String credName, String userName, String password, long versionNo) {
+    public CredentialDef(String credName, String userName, String password, String base64Encoded, long versionNo) {
         this.credName = credName;
         this.userName = userName;
         this.password = password;
+        this.base64Encoded = base64Encoded;
         this.versionNo = versionNo;
     }
 
@@ -49,6 +52,10 @@ public class CredentialDef {
 
     public String getPassword() {
         return password;
+    }
+
+    public String getBase64Encoded() {
+        return base64Encoded;
     }
 
     public long getVersionNo() {

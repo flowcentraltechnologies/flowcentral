@@ -31,7 +31,9 @@ public enum EndpointType implements EnumConst {
     FILE(
             "FLE"),
     JMS(
-            "JMS");
+            "JMS"),
+    REST(
+            "RST");
 
     private final String code;
 
@@ -49,6 +51,18 @@ public enum EndpointType implements EnumConst {
         return this.code;
     }
 
+    public boolean isFile() {
+        return FILE.equals(this);
+    }
+
+    public boolean isJms() {
+        return JMS.equals(this);
+    }
+
+    public boolean isRest() {
+        return REST.equals(this);
+    }
+    
     public static EndpointType fromCode(String code) {
         return EnumUtils.fromCode(EndpointType.class, code);
     }
@@ -61,9 +75,13 @@ public enum EndpointType implements EnumConst {
         if (JmsEndpoint.class.isAssignableFrom(type)) {
             return JMS;
         }
-
+        
         if (FileEndpoint.class.isAssignableFrom(type)) {
             return FILE;
+        }
+
+        if (RestEndpoint.class.isAssignableFrom(type)) {
+            return REST;
         }
 
         return null;

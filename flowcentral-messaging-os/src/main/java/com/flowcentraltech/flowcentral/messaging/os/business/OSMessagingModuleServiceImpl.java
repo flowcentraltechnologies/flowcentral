@@ -168,6 +168,6 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
         headers.put(OSMessagingRequestHeaderConstants.OS_TARGET_APPLICATION, endpoint.getTarget());
         headers.put(OSMessagingRequestHeaderConstants.OS_MESSAGING_PROCESSOR, endpoint.getProcessor());
         final String messagingUrl = endpoint.getNodeUrl() + OSMessagingModuleNameConstants.OSMESSAGING_CONTROLLER;
-        return IOUtils.postObjectToEndpointUsingJson(respClass, messagingUrl, message, headers);
+        return extractResult(IOUtils.postObjectToEndpointUsingJson(respClass, messagingUrl, message, headers));
     }
 }

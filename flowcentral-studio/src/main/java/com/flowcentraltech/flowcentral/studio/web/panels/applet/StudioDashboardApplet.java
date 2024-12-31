@@ -75,9 +75,9 @@ public class StudioDashboardApplet extends StudioAppComponentApplet {
             throws UnifyException {
         BreadCrumbs breadCrumbs = form.getBreadCrumbs().advance();
         DashboardDef dashboardDef = dms.getDashboardDef(dashboardName);
-        breadCrumbs.setLastCrumbTitle(au.resolveSessionMessage("$m{dashboardeditor.dashboarddesigner}"));
+        breadCrumbs.setLastCrumbTitle(au().resolveSessionMessage("$m{dashboardeditor.dashboarddesigner}"));
         breadCrumbs.setLastCrumbSubTitle(subTitle);
-        return new DashboardEditorPage(au, cms, dashboardDef, id, breadCrumbs);
+        return new DashboardEditorPage(au(), cms, dashboardDef, id, breadCrumbs);
     }
 
 }

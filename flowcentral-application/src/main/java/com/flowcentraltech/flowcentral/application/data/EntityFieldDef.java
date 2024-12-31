@@ -58,6 +58,10 @@ public class EntityFieldDef implements Listable, EntityFieldAttributes {
 
     private String references;
 
+    private String jsonName;
+
+    private String jsonFormatter;
+
     private String key;
 
     private String property;
@@ -111,7 +115,7 @@ public class EntityFieldDef implements Listable, EntityFieldAttributes {
     private boolean basicSearch;
 
     public EntityFieldDef(String textWidget, String inputWidget, String entityLongName, String fieldName, String mapped,
-            String refLongName, String references, String inputListKey) {
+            String refLongName, String references, String jsonName, String jsonFormatter, String inputListKey) {
         this.textWidget = textWidget;
         this.inputWidget = inputWidget;
         this.entityLongName = entityLongName;
@@ -119,12 +123,14 @@ public class EntityFieldDef implements Listable, EntityFieldAttributes {
         this.mapped = mapped;
         this.refLongName = refLongName;
         this.references = references;
+        this.jsonName = jsonName;
+        this.jsonFormatter = jsonFormatter;
         this.inputListKey = inputListKey;
     }
 
     public EntityFieldDef(String textWidget, String inputWidget, String ligualWidget, EntityFieldDataType dataType,
             EntityFieldType type, TextCase textCase, String entityLongName, String fieldName, String mapped,
-            String fieldLabel, String columnName, String refLongName, String references, String category,
+            String fieldLabel, String columnName, String refLongName, String references, String jsonName, String jsonFormatter, String category,
             String suggestionType, String inputLabel, String inputListKey, String lingualListKey, String autoFormat,
             String defaultVal, String key, String property, int rows, int columns, int minLen, int maxLen,
             int precision, int scale, boolean branchScoping, boolean trim, boolean allowNegative, boolean editable, boolean nullable,
@@ -142,6 +148,8 @@ public class EntityFieldDef implements Listable, EntityFieldAttributes {
         this.columnName = columnName;
         this.refLongName = refLongName;
         this.references = references;
+        this.jsonName = jsonName;
+        this.jsonFormatter = jsonFormatter;
         this.category = category;
         this.suggestionType = suggestionType;
         this.inputLabel = inputLabel;
@@ -239,6 +247,14 @@ public class EntityFieldDef implements Listable, EntityFieldAttributes {
     @Override
     public String getReferences() {
         return references;
+    }
+
+    public String getJsonName() {
+        return jsonName;
+    }
+
+    public String getJsonFormatter() {
+        return jsonFormatter;
     }
 
     public String getCategory() {
@@ -510,6 +526,10 @@ public class EntityFieldDef implements Listable, EntityFieldAttributes {
         return !StringUtils.isBlank(refLongName);
     }
 
+    public boolean isNonEnumForeignKey() {
+        return dataType.isNonEnumForeignKey();
+    }
+
     public boolean isForeignKey() {
         return dataType.isForeignKey();
     }
@@ -656,6 +676,10 @@ public class EntityFieldDef implements Listable, EntityFieldAttributes {
 
         private String references;
 
+        private String jsonName;
+
+        private String jsonFormatter;
+
         private String key;
 
         private String property;
@@ -755,6 +779,16 @@ public class EntityFieldDef implements Listable, EntityFieldAttributes {
 
         public Builder references(String references) throws UnifyException {
             this.references = references;
+            return this;
+        }
+
+        public Builder jsonName(String jsonName) throws UnifyException {
+            this.jsonName = jsonName;
+            return this;
+        }
+
+        public Builder jsonFormatter(String jsonFormatter) throws UnifyException {
+            this.jsonFormatter = jsonFormatter;
             return this;
         }
 
@@ -897,7 +931,7 @@ public class EntityFieldDef implements Listable, EntityFieldAttributes {
             }
 
             return new EntityFieldDef(textWidget, inputWidget, ligualWidget, dataType, type, textCase, entityLongName,
-                    fieldName, mapped, fieldLabel, columnName, refLongName, references, category, suggestionType,
+                    fieldName, mapped, fieldLabel, columnName, refLongName, references, jsonName, jsonFormatter, category, suggestionType,
                     inputLabel, inputListKey, lingualListKey, autoFormat, defaultVal, key, property, rows, columns,
                     minLen, maxLen, precision, scale, branchScoping, trim, allowNegative, editable, nullable, auditable, reportable,
                     maintainLink, basicSearch, descriptive);

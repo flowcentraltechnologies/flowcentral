@@ -73,7 +73,9 @@ import com.tcdng.unify.web.ui.widget.data.Popup;
  * @since 1.0
  */
 @Component("fc-miniform")
-@UplAttributes({ @UplAttribute(name = "strictRows", type = boolean.class) })
+@UplAttributes({
+    @UplAttribute(name = "strictRows", type = boolean.class),
+    @UplAttribute(name = "sectionHeaders", type = boolean.class, defaultVal = "true")})
 public class MiniFormWidget extends AbstractFlowCentralMultiControl implements FormTriggerEvaluator {
 
     @Configurable
@@ -130,6 +132,7 @@ public class MiniFormWidget extends AbstractFlowCentralMultiControl implements F
     @SuppressWarnings("unchecked")
     public MiniForm getMiniForm() throws UnifyException {
         MiniForm miniForm = getValue(MiniForm.class);
+        boolean changed = false;
         if (miniForm != oldMiniForm) {
             removeAllExternalChildWidgets();
             if (oldMiniForm != null && formWidgets != null) {
@@ -216,10 +219,11 @@ public class MiniFormWidget extends AbstractFlowCentralMultiControl implements F
             }
 
             oldMiniForm = miniForm;
+            changed = true;
         }
 
         Object formBean = miniForm != null ? miniForm.getFormBean() : null;
-        if (formBean != oldFormBean) {
+        if (changed || formBean != oldFormBean) {
             if (miniForm != null) {
                 ValueStore formValueStore = miniForm.getCtx().getFormValueStore();
                 if (formWidgets != null) {
@@ -237,6 +241,10 @@ public class MiniFormWidget extends AbstractFlowCentralMultiControl implements F
 
     public boolean isStrictRows() throws UnifyException {
         return getUplAttribute(boolean.class, "strictRows");
+    }
+
+    public boolean isSectionHeaders() throws UnifyException {
+        return getUplAttribute(boolean.class, "sectionHeaders");
     }
 
     public FormContext getCtx() throws UnifyException {

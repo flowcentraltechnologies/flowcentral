@@ -65,59 +65,105 @@ public class AppletMenuWriter extends AbstractMenuWriter {
     protected void doWriteStructureAndContent(ResponseWriter writer, Widget widget) throws UnifyException {
         final AppletMenuWidget appletMenuWidget = (AppletMenuWidget) widget;
         final boolean searchable = appletMenuWidget.isSearchable();
+        final boolean horizontal = appletMenuWidget.isHorizontal();
         removeSessionAttribute(AppletSessionAttributeConstants.MENU_OPEN_TAB_INFO);
         appletMenuWidget.setCollapsedInitial(true);
-        writer.write("<div");
-        writeTagAttributesWithTrailingExtraStyleClass(writer, appletMenuWidget, "g_fsm");
-        writer.write(">");
-        // Header
-        writer.write("<div class=\"mheader\">");
-        writer.write("<div style=\"display:inline-block;float:left;\"><span>");
-        writer.writeWithHtmlEscape(getSessionMessage("appletmenu.application"));
-        writer.write("</span></div>");
-        writer.write("<div style=\"display:inline-block;float:right;\">");
-        writer.write("<span id=\"exp_").write(appletMenuWidget.getId()).write("\" class=\"icon\">");
-        writer.write(resolveSymbolHtmlHexCode("plus-square"));
-        writer.write("</span>");
-        writer.write("<span id=\"col_").write(appletMenuWidget.getId()).write("\" class=\"icon\">");
-        writer.write(resolveSymbolHtmlHexCode("minus-square"));
-        writer.write("</span>");
-        writer.write("</div></div>");
-        // End header
 
-        // pop-up menu
-        writer.write("<div id=\"mpop_").write(appletMenuWidget.getId())
-                .write("\" class=\"mpop\" style=\"display:none;\">");
-        writer.write("</div>");
+        if (horizontal) {
+            writer.write("<div");
+            writeTagAttributesWithTrailingExtraStyleClass(writer, appletMenuWidget, "g_fsm");
+            writer.write(">");
 
-        // Body
-        writer.write("<div class=\"mbody\">");
-        if (searchable) {
-            // Search
-            writer.write("<div class=\"msearch\"><span class=\"mfil g_fsm\">");
-            writer.write(resolveSymbolHtmlHexCode("filter"));
-            writer.write("</span>");
-            writer.writeStructureAndContent(appletMenuWidget.getSearchCtrl());
-            writer.write("<span class=\"mban g_fsm\" id=\"").write(appletMenuWidget.getClearId()).write("\">");
-            writer.write(resolveSymbolHtmlHexCode("ban"));
+            // Body
+            writer.write("<div class=\"hmbody\">");
+            if (searchable) {
+                // Search
+                writer.write("<div class=\"hmsearch\"><span class=\"mfil g_fsm\">");
+                writer.write(resolveSymbolHtmlHexCode("filter"));
+                writer.write("</span>");
+                writer.writeStructureAndContent(appletMenuWidget.getSearchCtrl());
+                writer.write("<span class=\"mban g_fsm\" id=\"").write(appletMenuWidget.getClearId()).write("\">");
+                writer.write(resolveSymbolHtmlHexCode("ban"));
+                writer.write("</span>");
+                writer.write("</div>");
+            }
+
+            writer.write("<div class=\"hmnav\" id=\"").write(appletMenuWidget.getNavLeftId()).write("\">");;
+            writer.write("<span class=\"g_fsm\">");
+            writer.write(resolveSymbolHtmlHexCode("chevron-left"));
             writer.write("</span>");
             writer.write("</div>");
+
+            writer.write("<div class=\"hmsection\"");
+            String menuSectionId = appletMenuWidget.getMenuSectionId();
+            writeTagId(writer, menuSectionId);
+            writer.write(">");
+            doWriteSectionStructureAndContent(writer, appletMenuWidget, menuSectionId);
+            writer.write("</div>");
+
+            writer.write("<div class=\"hmnav\" id=\"").write(appletMenuWidget.getNavRightId()).write("\">");;
+            writer.write("<span class=\"g_fsm\">");
+            writer.write(resolveSymbolHtmlHexCode("chevron-right"));
+            writer.write("</span>");
+            writer.write("</div>");
+
+            writer.write("</div>");
+            // End body
+
+            writer.write("</div>");
+        } else {
+            writer.write("<div");
+            writeTagAttributesWithTrailingExtraStyleClass(writer, appletMenuWidget, "g_fsm");
+            writer.write(">");
+            // Header
+            writer.write("<div class=\"mheader\">");
+            writer.write("<div style=\"display:inline-block;float:left;\"><span>");
+            writer.writeWithHtmlEscape(getSessionMessage("appletmenu.application"));
+            writer.write("</span></div>");
+            writer.write("<div style=\"display:inline-block;float:right;\">");
+            writer.write("<span id=\"exp_").write(appletMenuWidget.getId()).write("\" class=\"icon\">");
+            writer.write(resolveSymbolHtmlHexCode("plus-square"));
+            writer.write("</span>");
+            writer.write("<span id=\"col_").write(appletMenuWidget.getId()).write("\" class=\"icon\">");
+            writer.write(resolveSymbolHtmlHexCode("minus-square"));
+            writer.write("</span>");
+            writer.write("</div></div>");
+            // End header
+
+            // pop-up menu
+            writer.write("<div id=\"mpop_").write(appletMenuWidget.getId())
+                    .write("\" class=\"mpop\" style=\"display:none;\">");
+            writer.write("</div>");
+
+            // Body
+            writer.write("<div class=\"mbody\">");
+            if (searchable) {
+                // Search
+                writer.write("<div class=\"msearch\"><span class=\"mfil g_fsm\">");
+                writer.write(resolveSymbolHtmlHexCode("filter"));
+                writer.write("</span>");
+                writer.writeStructureAndContent(appletMenuWidget.getSearchCtrl());
+                writer.write("<span class=\"mban g_fsm\" id=\"").write(appletMenuWidget.getClearId()).write("\">");
+                writer.write(resolveSymbolHtmlHexCode("ban"));
+                writer.write("</span>");
+                writer.write("</div>");
+            }
+
+            writer.write("<div");
+            if (searchable) {
+                writer.write(" class=\"msection\"");
+            }
+            String menuSectionId = appletMenuWidget.getMenuSectionId();
+            writeTagId(writer, menuSectionId);
+            writer.write(">");
+            doWriteSectionStructureAndContent(writer, appletMenuWidget, menuSectionId);
+            writer.write("</div>");
+
+            writer.write("</div>");
+            // End body
+
+            writer.write("</div>");
         }
-
-        writer.write("<div");
-        if (searchable) {
-            writer.write(" class=\"msection\"");
-        }
-        String menuSectionId = appletMenuWidget.getMenuSectionId();
-        writeTagId(writer, menuSectionId);
-        writer.write(">");
-        doWriteSectionStructureAndContent(writer, appletMenuWidget, menuSectionId);
-        writer.write("</div>");
-
-        writer.write("</div>");
-        // End body
-
-        writer.write("</div>");
     }
 
     private static final Set<String> STANDARD_EXCLUSION = Collections
@@ -166,6 +212,11 @@ public class AppletMenuWriter extends AbstractMenuWriter {
                 }
             }
 
+            final boolean horizontal = appletMenuWidget.isHorizontal();
+            if (horizontal) {
+                writer.write("<div class=\"hmslide\" style=\"left:0px;\" id=\"").write(appletMenuWidget.getSlideId()).write("\">");
+            }
+
             for (ApplicationMenuDef applicationMenuDef : applicationDefList) {
                 final String appPrivilegeCode = applicationMenuDef.getPrivilege();
                 if (appPrivilegeManager.isRoleWithPrivilege(roleCode, appPrivilegeCode) && (wkspPrivilegeManager == null
@@ -187,7 +238,9 @@ public class AppletMenuWriter extends AbstractMenuWriter {
                         final String color = (indicateSectorLabels || indicateSectorColors)
                                 && applicationMenuDef.isWithSectionColor() ? applicationMenuDef.getSectionColor()
                                         : SystemColorType.GRAY.code();
-                        writer.write("<div id=\"menu_").write(applicationId).write("\" class=\"menu\"");
+
+                        writer.write("<div id=\"menu_").write(applicationId)
+                                .write(horizontal ? "\" class=\"hmenu\"" : "\" class=\"menu\"");
                         if (indicateSectorColors) {
                             writer.write(" style=\"background-color:");
                             writer.write(color);
@@ -211,7 +264,9 @@ public class AppletMenuWriter extends AbstractMenuWriter {
                         writer.writeWithHtmlEscape(applicationMenuDef.getLabel());
                         writer.write("</span></div>");
                         writer.write("<div id=\"submenu_").write(applicationId)
-                                .write("\" class=\"submenu\" style=\"display:").write(submenuStyle).write("\">");
+                                .write(horizontal ? "\" class=\"hsubmenu submenu\" style=\"display:"
+                                        : "\" class=\"submenu\" style=\"display:")
+                                .write(submenuStyle).write("\">");
                         writer.write("<ul>");
 
                         if (isWorkflowDraft) {
@@ -255,7 +310,7 @@ public class AppletMenuWriter extends AbstractMenuWriter {
 
                         writer.write("</ul></div>");
                     } finally {
-                        if (isWithSubMenus) {
+                        if (horizontal || isWithSubMenus) {
                             if (appendSym) {
                                 msb.append(',');
                             } else {
@@ -270,6 +325,11 @@ public class AppletMenuWriter extends AbstractMenuWriter {
                     }
                 }
             }
+
+            if (horizontal) {
+                writer.write("</div>");
+            }
+
             msb.append(']');
             misb.append(']');
 
@@ -290,6 +350,7 @@ public class AppletMenuWriter extends AbstractMenuWriter {
             writer.writeParam("pId", appletMenuWidget.getId());
             writer.writeParam("pInpId", appletMenuWidget.getSearchCtrl().getId());
             writer.writeParam("pClrId", appletMenuWidget.getClearId());
+            writer.writeParam("pHoriz", appletMenuWidget.isHorizontal());
             writer.writeCommandURLParam("pCmdURL");
             writer.endFunction();
             getRequestContextUtil().setDefaultFocusOnWidgetId(appletMenuWidget.getSearchCtrl().getId());
@@ -308,6 +369,11 @@ public class AppletMenuWriter extends AbstractMenuWriter {
             writer.writeCommandURLParam("pCmdURL");
             writer.writeParam("pCollInit", appletMenuWidget.isCollapsedInitial());
             writer.writeParam("pReg", true);
+            writer.writeParam("pHoriz", appletMenuWidget.isHorizontal());
+            writer.writeParam("pSecId", appletMenuWidget.getMenuSectionId());
+            writer.writeParam("pSldId", appletMenuWidget.getSlideId());
+            writer.writeParam("pLeftId", appletMenuWidget.getNavLeftId());
+            writer.writeParam("pRightId", appletMenuWidget.getNavRightId());
             writer.writeResolvedParam("pMenuIds", (String) work.get(AbstractMenuWidget.WORK_MENUIDS));
             writer.writeResolvedParam("pMenuItems", (String) work.get(AbstractMenuWidget.WORK_MENUITEMS));
             writer.endFunction();

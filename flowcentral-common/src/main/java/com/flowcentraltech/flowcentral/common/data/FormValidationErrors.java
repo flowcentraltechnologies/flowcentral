@@ -33,7 +33,7 @@ import com.tcdng.unify.web.ui.constant.MessageType;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class FormValidationErrors {
+public class FormValidationErrors implements ValidationErrors {
 
     private Map<String, List<String>> invalidFields;
 
@@ -45,6 +45,7 @@ public class FormValidationErrors {
 
     private boolean hidden;
 
+    @Override
     public void addValidationError(String message) {
         addValidationError(new FormMessage(MessageType.ERROR, message));
     }
@@ -53,6 +54,7 @@ public class FormValidationErrors {
         addValidationError(new FormMessage(MessageType.ERROR, message, true));
     }
 
+    @Override
     public void addValidationError(FormMessage message) {
         if (validationErrors == null) {
             validationErrors = new ArrayList<FormMessage>();
@@ -61,6 +63,7 @@ public class FormValidationErrors {
         validationErrors.add(message);
     }
 
+    @Override
     public void addValidationError(TargetFormMessage.Target target, String message) {
         if (target.isFieldTarget()) {
             if (invalidFields == null) {

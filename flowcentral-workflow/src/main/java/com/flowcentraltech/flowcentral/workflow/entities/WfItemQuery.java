@@ -95,6 +95,11 @@ public class WfItemQuery extends BaseAuditTenantEntityQuery<WfItem> {
         return (WfItemQuery) addEquals("stepDt", stepDt);
     }
 
+    public WfItemQuery ejectionDue(Date now) {
+        return (WfItemQuery) addRestriction(
+                new And().add(new IsNotNull("ejectionDt")).add(new Less("ejectionDt", now)));
+    }
+
     public WfItemQuery reminderDue(Date now) {
         return (WfItemQuery) addRestriction(new And().add(new IsNull("actionDt")).add(new IsNotNull("reminderDt"))
                 .add(new Less("reminderDt", now)));

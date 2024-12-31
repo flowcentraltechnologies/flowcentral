@@ -15,6 +15,8 @@
  */
 package com.flowcentraltech.flowcentral.organization.entities;
 
+import java.util.Collection;
+
 import com.flowcentraltech.flowcentral.common.entities.BaseStatusTenantEntityQuery;
 
 /**
@@ -39,6 +41,10 @@ public class BranchQuery extends BaseStatusTenantEntityQuery<Branch> {
 
     public BranchQuery code(String code) {
         return (BranchQuery) addEquals("code", code);
+    }
+
+    public BranchQuery codeIn(Collection<String> code) {
+        return (BranchQuery) addAmongst("code", code);
     }
 
     public BranchQuery sortCode(String sortCode) {

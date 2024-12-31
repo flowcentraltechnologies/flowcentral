@@ -17,6 +17,7 @@
 package com.flowcentraltech.flowcentral.common.business;
 
 import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
+import com.flowcentraltech.flowcentral.common.constants.SecuredLinkType;
 import com.flowcentraltech.flowcentral.common.data.SecuredLinkContentInfo;
 import com.flowcentraltech.flowcentral.common.data.SecuredLinkInfo;
 import com.tcdng.unify.core.UnifyException;
@@ -42,7 +43,8 @@ public interface SecuredLinkManager extends FlowCentralComponent {
      * @throws UnifyException
      *                        if an error occurs
      */
-    SecuredLinkInfo getNewSecuredLink(String title, String contentPath, int expirationInMinutes) throws UnifyException;
+    SecuredLinkInfo getNewSecuredLink(SecuredLinkType type, String title, String contentPath, int expirationInMinutes)
+            throws UnifyException;
 
     /**
      * Creates a new secured link.
@@ -59,8 +61,8 @@ public interface SecuredLinkManager extends FlowCentralComponent {
      * @throws UnifyException
      *                        if an error occurs
      */
-    SecuredLinkInfo getNewSecuredLink(String title, String contentPath, String assignedLoginId, int expirationInMinutes)
-            throws UnifyException;
+    SecuredLinkInfo getNewSecuredLink(SecuredLinkType type, String title, String contentPath, String assignedLoginId,
+            int expirationInMinutes) throws UnifyException;
 
     /**
      * Creates a new secured link.
@@ -79,28 +81,30 @@ public interface SecuredLinkManager extends FlowCentralComponent {
      * @throws UnifyException
      *                        if an error occurs
      */
-    SecuredLinkInfo getNewSecuredLink(String title, String contentPath, String assignedLoginId, String assignedRole,
-            int expirationInMinutes) throws UnifyException;
+    SecuredLinkInfo getNewSecuredLink(SecuredLinkType type, String title, String contentPath, String assignedLoginId,
+            String assignedRole, int expirationInMinutes) throws UnifyException;
 
     /**
      * Gets secured link.
      * 
      * @param linkAccessKey
-     *               the link access key
+     *                      the link access key
      * @return the secured link information
      * @throws UnifyException
      *                        if an error occurs
      */
     SecuredLinkContentInfo getSecuredLink(String linkAccessKey) throws UnifyException;
-    
+
     /**
-     * Invalidates secured link by content path.
+     * Invalidates secured link by type and access key.
      * 
-     * @param contentPath
-     *                    the content path
+     * @param type
+     *                  the secured link type
+     * @param accessKey
+     *                  the access key
      * @return number of links invalidated
      * @throws UnifyException
      *                        if an error occurs
      */
-    int invalidateSecuredLinkByContentPath(String contentPath) throws UnifyException;
+    int invalidateSecuredLinkByAccessKey(SecuredLinkType type, String accessKey) throws UnifyException;
 }

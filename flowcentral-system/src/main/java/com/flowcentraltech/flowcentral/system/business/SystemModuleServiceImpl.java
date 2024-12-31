@@ -43,6 +43,7 @@ import com.flowcentraltech.flowcentral.common.constants.FlowCentralEditionConsta
 import com.flowcentraltech.flowcentral.common.constants.LicenseFeatureCodeConstants;
 import com.flowcentraltech.flowcentral.common.constants.LicenseStatus;
 import com.flowcentraltech.flowcentral.common.constants.SectorStatus;
+import com.flowcentraltech.flowcentral.common.constants.SecuredLinkType;
 import com.flowcentraltech.flowcentral.common.constants.SystemSchedTaskConstants;
 import com.flowcentraltech.flowcentral.common.data.Attachment;
 import com.flowcentraltech.flowcentral.common.data.ParamValueDef;
@@ -102,6 +103,7 @@ import com.tcdng.unify.core.data.Listable;
 import com.tcdng.unify.core.data.ParamGeneratorManager;
 import com.tcdng.unify.core.data.ParameterizedStringGenerator;
 import com.tcdng.unify.core.data.Period;
+import com.tcdng.unify.core.data.StaleableFactoryMap;
 import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.database.dynamic.sql.DynamicSqlDataSourceManager;
@@ -158,7 +160,7 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
             .asList(LicenseFeatureCodeConstants.APPLICATION_AUDIT, LicenseFeatureCodeConstants.APPLICATION_ARCHIVING));
 
     public SystemModuleServiceImpl() {
-        this.authDefFactoryMap = new FactoryMap<String, CredentialDef>(true)
+        this.authDefFactoryMap = new StaleableFactoryMap<String, CredentialDef>()
             {
 
                 @Override
@@ -174,12 +176,12 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
                         throw new UnifyException(SystemModuleErrorConstants.CANNOT_FIND_CREDENTIAL, authName);
                     }
 
-                    return new CredentialDef(authName, credential.getUserName(), credential.getPassword(),
+                    return new CredentialDef(authName, credential.getUserName(), credential.getPassword(), credential.getBase64Encoded(),
                             credential.getVersionNo());
                 }
             };
 
-        this.scheduledTaskDefs = new FactoryMap<Long, ScheduledTaskDef>(true)
+        this.scheduledTaskDefs = new StaleableFactoryMap<Long, ScheduledTaskDef>()
             {
 
                 @Override
@@ -220,7 +222,7 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
                 }
             };
 
-        this.licenseDefFactoryMap = new FactoryMap<String, LicenseDef>(true)
+        this.licenseDefFactoryMap = new StaleableFactoryMap<String, LicenseDef>()
             {
                 @Override
                 protected boolean stale(String name, LicenseDef licenseDef) throws Exception {
@@ -247,21 +249,26 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
-    public SecuredLinkInfo getNewSecuredLink(String title, String contentPath, int expirationInMinutes)
+    public SecuredLinkInfo getNewSecuredLink(SecuredLinkType type, String title, String contentPath)
             throws UnifyException {
-        return securedLinkManager.getNewSecuredLink(title, contentPath, expirationInMinutes);
+        final int expirationInMinutes = getSysParameterValue(int.class,
+                SystemModuleSysParamConstants.SECURED_LINK_EXPIRATION_MINUTES);
+        return securedLinkManager.getNewSecuredLink(type, title, contentPath, expirationInMinutes);
     }
 
     @Override
-    public SecuredLinkInfo getNewSecuredLink(String title, String contentPath, String assignedLoginId,
-            int expirationInMinutes) throws UnifyException {
-        return securedLinkManager.getNewSecuredLink(title, contentPath, assignedLoginId, expirationInMinutes);
+    public SecuredLinkInfo getNewSecuredLink(SecuredLinkType type, String title, String contentPath, String assignedLoginId) throws UnifyException {
+        final int expirationInMinutes = getSysParameterValue(int.class,
+                SystemModuleSysParamConstants.SECURED_LINK_EXPIRATION_MINUTES);
+        return securedLinkManager.getNewSecuredLink(type, title, contentPath, assignedLoginId, expirationInMinutes);
     }
 
     @Override
-    public SecuredLinkInfo getNewSecuredLink(String title, String contentPath, String assignedLoginId,
-            String assignedRole, int expirationInMinutes) throws UnifyException {
-        return securedLinkManager.getNewSecuredLink(title, contentPath, assignedLoginId, assignedRole,
+    public SecuredLinkInfo getNewSecuredLink(SecuredLinkType type, String title, String contentPath, String assignedLoginId,
+            String assignedRole) throws UnifyException {
+        final int expirationInMinutes = getSysParameterValue(int.class,
+                SystemModuleSysParamConstants.SECURED_LINK_EXPIRATION_MINUTES);
+        return securedLinkManager.getNewSecuredLink(type, title, contentPath, assignedLoginId, assignedRole,
                 expirationInMinutes);
     }
 

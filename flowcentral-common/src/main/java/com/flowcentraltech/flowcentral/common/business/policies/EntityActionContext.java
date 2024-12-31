@@ -65,6 +65,11 @@ public class EntityActionContext extends AbstractContext {
         this.actionPolicyName = actionPolicyName;
     }
 
+    public EntityActionContext(Object entityDef, Entity inst) {
+        this.entityDef = entityDef;
+        this.inst = inst;
+    }
+
     public EntityActionContext(Object entityDef, Entity inst, RecordActionType actionType,
             SweepingCommitPolicy sweepingCommitPolicy, String actionPolicyName) {
         this.entityDef = entityDef;

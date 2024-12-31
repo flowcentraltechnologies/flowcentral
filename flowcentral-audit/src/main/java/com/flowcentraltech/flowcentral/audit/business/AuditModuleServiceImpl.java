@@ -41,6 +41,7 @@ import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.Transactional;
 import com.tcdng.unify.core.constant.PrintFormat;
 import com.tcdng.unify.core.data.FactoryMap;
+import com.tcdng.unify.core.data.StaleableFactoryMap;
 import com.tcdng.unify.core.util.DataUtils;
 
 /**
@@ -61,7 +62,7 @@ public class AuditModuleServiceImpl extends AbstractFlowCentralService implement
     private FactoryMap<String, EntityAuditConfigDef> entityAuditConfigDefFactoryMap;
 
     public AuditModuleServiceImpl() {
-        this.entityAuditConfigDefFactoryMap = new FactoryMap<String, EntityAuditConfigDef>(true)
+        this.entityAuditConfigDefFactoryMap = new StaleableFactoryMap<String, EntityAuditConfigDef>()
             {
 
                 @Override

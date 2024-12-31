@@ -38,6 +38,7 @@ import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.Transactional;
 import com.tcdng.unify.core.data.FactoryMap;
+import com.tcdng.unify.core.data.StaleableFactoryMap;
 import com.tcdng.unify.core.util.DataUtils;
 
 /**
@@ -60,7 +61,7 @@ public class WorkspaceModuleServiceImpl extends AbstractFlowCentralService
     private FactoryMap<String, WorkspacePrivileges> privilegesByWorkspace;
 
     public WorkspaceModuleServiceImpl() {
-        privilegesByWorkspace = new FactoryMap<String, WorkspacePrivileges>(true)
+        privilegesByWorkspace = new StaleableFactoryMap<String, WorkspacePrivileges>()
             {
                 @Override
                 protected boolean stale(String workspaceCode, WorkspacePrivileges workspacePrivileges)

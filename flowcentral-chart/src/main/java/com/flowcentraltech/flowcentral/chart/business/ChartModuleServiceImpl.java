@@ -51,6 +51,7 @@ import com.tcdng.unify.core.annotation.Transactional;
 import com.tcdng.unify.core.data.FactoryMap;
 import com.tcdng.unify.core.data.ListData;
 import com.tcdng.unify.core.data.Listable;
+import com.tcdng.unify.core.data.StaleableFactoryMap;
 import com.tcdng.unify.core.util.DataUtils;
 
 /**
@@ -73,7 +74,7 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
     private FactoryMap<String, ChartSnapshotDef> chartSnapshotDefFactoryMap;
 
     public ChartModuleServiceImpl() {
-        this.chartDefFactoryMap = new FactoryMap<String, ChartDef>(true)
+        this.chartDefFactoryMap = new StaleableFactoryMap<String, ChartDef>()
             {
 
                 @Override
@@ -104,7 +105,7 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
 
             };
 
-        this.chartDataSourceDefFactoryMap = new FactoryMap<String, ChartDataSourceDef>(true)
+        this.chartDataSourceDefFactoryMap = new StaleableFactoryMap<String, ChartDataSourceDef>()
             {
 
                 @Override
@@ -138,7 +139,7 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
 
             };
 
-        this.chartSnapshotDefFactoryMap = new FactoryMap<String, ChartSnapshotDef>(true)
+        this.chartSnapshotDefFactoryMap = new StaleableFactoryMap<String, ChartSnapshotDef>()
             {
 
                 @Override

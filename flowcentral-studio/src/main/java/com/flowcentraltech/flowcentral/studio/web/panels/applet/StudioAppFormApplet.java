@@ -66,9 +66,9 @@ public class StudioAppFormApplet extends StudioAppComponentApplet {
             throws UnifyException {
         BreadCrumbs breadCrumbs = form.getBreadCrumbs().advance();
         FormDef formDef = getFormDef(formName);
-        breadCrumbs.setLastCrumbTitle(au.resolveSessionMessage("$m{formeditor.formdesigner}"));
+        breadCrumbs.setLastCrumbTitle(au().resolveSessionMessage("$m{formeditor.formdesigner}"));
         breadCrumbs.setLastCrumbSubTitle(subTitle);
-        return new FormEditorPage(au, formDef, id, breadCrumbs);
+        return new FormEditorPage(au(), formDef, id, breadCrumbs);
     }
 
 }

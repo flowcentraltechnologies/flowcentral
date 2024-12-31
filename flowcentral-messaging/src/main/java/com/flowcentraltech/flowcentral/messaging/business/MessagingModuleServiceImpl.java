@@ -44,6 +44,7 @@ import com.tcdng.unify.core.annotation.Periodic;
 import com.tcdng.unify.core.annotation.PeriodicType;
 import com.tcdng.unify.core.annotation.Transactional;
 import com.tcdng.unify.core.data.FactoryMap;
+import com.tcdng.unify.core.data.StaleableFactoryMap;
 import com.tcdng.unify.core.task.TaskMonitor;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.StringUtils;
@@ -69,7 +70,7 @@ public class MessagingModuleServiceImpl extends AbstractFlowCentralService imple
     private final FactoryMap<String, MessagingConfigDef> writeMessagingConfigDefFactoryMap;
 
     public MessagingModuleServiceImpl() {
-        this.readMessagingConfigDefFactoryMap = new FactoryMap<String, MessagingConfigDef>(true)
+        this.readMessagingConfigDefFactoryMap = new StaleableFactoryMap<String, MessagingConfigDef>()
             {
 
                 @Override
@@ -94,7 +95,7 @@ public class MessagingModuleServiceImpl extends AbstractFlowCentralService imple
                 }
             };
 
-        this.writeMessagingConfigDefFactoryMap = new FactoryMap<String, MessagingConfigDef>(true)
+        this.writeMessagingConfigDefFactoryMap = new StaleableFactoryMap<String, MessagingConfigDef>()
             {
 
                 @Override

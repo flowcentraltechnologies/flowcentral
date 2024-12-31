@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.flowcentraltech.flowcentral</groupId>
   <artifactId>flowcentral</artifactId>
-  <version>3.2.1</version>
+  <version>3.2.2-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>flowcentral</name>
   <description>FlowCentral</description>
@@ -58,13 +58,14 @@
     <module>flowcentral-repository-git</module>
     <module>flowcentral-layouts</module>
     <module>flowcentral-themes</module>
+    <module>flowcentral-integration-rest</module>
   </modules>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <java.version>1.8</java.version>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
-    <unify.version>3.1.1</unify.version>
+    <unify.version>3.1.2-SNAPSHOT</unify.version>
   </properties>
   <scm>
     <connection>

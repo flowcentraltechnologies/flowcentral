@@ -1241,4 +1241,12 @@ public interface EnvironmentService extends BusinessService {
      *                        if an error occurs
      */
     String getEntityDataSourceName(Class<? extends Entity> entityClass) throws UnifyException;
+
+    /**
+     * Commits transactions.
+     * 
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    void commitTransactions() throws UnifyException;
 }

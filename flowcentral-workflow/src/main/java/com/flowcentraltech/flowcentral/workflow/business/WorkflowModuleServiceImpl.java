@@ -61,7 +61,6 @@ import com.flowcentraltech.flowcentral.application.util.ApplicationEntityNamePar
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityUtils;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.util.ApplicationPageUtils;
-import com.flowcentraltech.flowcentral.application.util.HtmlUtils;
 import com.flowcentraltech.flowcentral.application.util.InputWidgetUtils;
 import com.flowcentraltech.flowcentral.application.util.OpenPagePathParts;
 import com.flowcentraltech.flowcentral.application.util.PrivilegeNameParts;
@@ -83,6 +82,7 @@ import com.flowcentraltech.flowcentral.common.constants.ConfigType;
 import com.flowcentraltech.flowcentral.common.constants.FileAttachmentCategoryType;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralContainerPropertyConstants;
 import com.flowcentraltech.flowcentral.common.constants.ProcessErrorConstants;
+import com.flowcentraltech.flowcentral.common.constants.SecuredLinkType;
 import com.flowcentraltech.flowcentral.common.constants.WfItemVersionType;
 import com.flowcentraltech.flowcentral.common.data.Recipient;
 import com.flowcentraltech.flowcentral.common.data.SecuredLinkInfo;
@@ -172,6 +172,7 @@ import com.tcdng.unify.core.criterion.Update;
 import com.tcdng.unify.core.data.BeanValueStore;
 import com.tcdng.unify.core.data.FactoryMap;
 import com.tcdng.unify.core.data.ParameterizedStringGenerator;
+import com.tcdng.unify.core.data.StaleableFactoryMap;
 import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.data.ValueStoreWriter;
@@ -196,7 +197,9 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         implements WorkflowModuleService, ApplicationAppletDefProvider, RolePrivilegeBackupAgent {
 
     private static final List<WorkflowStepType> USER_INTERACTIVE_STEP_TYPES = Arrays
-            .asList(WorkflowStepType.USER_ACTION, WorkflowStepType.ERROR);
+            .asList(WorkflowStepType.USER_ACTION, WorkflowStepType.ERROR, WorkflowStepType.DELAY);
+
+    private static final String WFITEM_EJECTION_LOCK = "wf::itemejection-lock";
 
     private static final String WFITEMALERT_QUEUE_LOCK = "wf::itemalert-lock";
 
@@ -236,7 +239,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
     public WorkflowModuleServiceImpl() {
         this.roleWfStepBackup = new HashMap<String, Set<WfStepInfo>>();
 
-        this.wfDefFactoryMap = new FactoryMap<String, WfDef>(true)
+        this.wfDefFactoryMap = new StaleableFactoryMap<String, WfDef>()
             {
 
                 @Override
@@ -324,7 +327,9 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                                 wfStep.getRule(), wfStep.getName(), wfStep.getDescription(), wfStep.getLabel(),
                                 DataUtils.convert(int.class, wfStep.getReminderMinutes()),
                                 DataUtils.convert(int.class, wfStep.getCriticalMinutes()),
-                                DataUtils.convert(int.class, wfStep.getExpiryMinutes()), wfStep.isAudit(),
+                                DataUtils.convert(int.class, wfStep.getExpiryMinutes()),
+                                DataUtils.convert(int.class, wfStep.getDelayMinutes()),
+                                wfStep.isAudit(),
                                 wfStep.isBranchOnly(), wfStep.isDepartmentOnly(), wfStep.isIncludeForwarder(),
                                 wfStep.isForwarderPreffered(), wfStep.getEmails(), wfStep.getComments());
 
@@ -391,7 +396,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
 
             };
 
-        this.wfWizardDefFactoryMap = new FactoryMap<String, WfWizardDef>(true)
+        this.wfWizardDefFactoryMap = new StaleableFactoryMap<String, WfWizardDef>()
             {
 
                 @Override
@@ -434,7 +439,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
 
             };
 
-        this.wfChannelDefFactoryMap = new FactoryMap<String, WfChannelDef>(true)
+        this.wfChannelDefFactoryMap = new StaleableFactoryMap<String, WfChannelDef>()
             {
 
                 @Override
@@ -1338,10 +1343,43 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
     private SecuredLinkInfo getWorkItemSecuredLink(String appletName, WfItem wfItem) throws UnifyException {
         final OpenPagePathParts parts = ApplicationPageUtils.constructAppletOpenPagePath(AppletType.MY_WORKITEM,
                 appletName, wfItem.getWfItemEventId());
-        final int expirationMinutes = appletUtil.system().getSysParameterValue(int.class,
-                SystemModuleSysParamConstants.SECURED_LINK_EXPIRATION_MINUTES);
-        return appletUtil.system().getNewSecuredLink(wfItem.getWfItemDesc(), parts.getOpenPath(), wfItem.getHeldBy(),
-                expirationMinutes);
+        return appletUtil.system().getNewSecuredLink(SecuredLinkType.WORKFLOW_DECISION, wfItem.getWfItemDesc(),
+                parts.getOpenPath(), wfItem.getHeldBy());
+    }
+
+    @Periodic(PeriodicType.FAST)
+    public void ejectDelayedWorkItem(TaskMonitor taskMonitor) throws UnifyException {
+        logDebug("Ejecting delayed work items...");
+        if (tryGrabLock(WFITEM_EJECTION_LOCK)) {
+            try {
+                logDebug("Fetching delayed work items ready for ejection...");
+                final Date now = getNow();
+                final int batchSize = appletUtil.system().getSysParameterValue(int.class,
+                        WorkflowModuleSysParamConstants.WF_WORKITEM_EJECTION_BATCH_SIZE);
+                List<WfItem> wfItemList = environment().listAll(new WfItemQuery().ejectionDue(now).setLimit(batchSize));
+                logDebug("Ejecting [{0}] delayed work items...", wfItemList.size());
+                for (WfItem wfItem : wfItemList) {
+                    final Long wfItemId = wfItem.getId();
+                    final WfDef wfDef = getWfDef(wfItem.getWorkflowName());
+                    final WfStepDef currentWfStepDef = wfDef.getWfStepDef(wfItem.getWfStepName());
+                    final String nextStepName = currentWfStepDef.getNextStepName();
+
+                    WfStepDef nextWfStepDef = wfDef.getWfStepDef(nextStepName);
+                    final Long wfItemEventId = createWfItemEvent(nextWfStepDef, wfItem.getWfItemHistId(),
+                            wfItem.getWfStepName(), null, null, null, null);
+
+                    wfItem.setWfItemEventId(wfItemEventId);
+                    wfItem.setEjectionDt(null);
+                    environment().updateByIdVersion(wfItem);
+
+                    pushToWfTransitionQueue(wfDef, wfItemId, true);
+                    commitTransactions();
+                }
+            } finally {
+                releaseLock(WFITEM_EJECTION_LOCK);
+                logDebug("Work item ejections completed.");
+            }
+        }
     }
 
     @Periodic(PeriodicType.FASTER)
@@ -1441,13 +1479,19 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         WorkEntity wfEntityInst = (WorkEntity) environment()
                 .list((Class<? extends WorkEntity>) entityClassDef.getEntityClass(), wfItem.getWorkRecId());
         if (wfEntityInst != null) {
-            final UserToken userToken = UserToken.newBuilder().userLoginId(wfItem.getForwardedBy())
-                    .userName(wfItem.getForwardedByName()).tenantId(wfItem.getTenantId())
-                    .branchCode(wfEntityInst.getWorkBranchCode())
-                    .reservedUser(DefaultApplicationConstants.SYSTEM_LOGINID.equals(wfItem.getForwardedBy())).build();
-            getSessionContext().setUserToken(userToken);
-            return doWfTransition(new TransitionItem(wfItem, wfDef, wfEntityInst,
-                    Boolean.TRUE.equals(wfTransitionQueue.getFlowTransition())));
+            try {
+                final UserToken userToken = UserToken.newBuilder().userLoginId(wfItem.getForwardedBy())
+                        .userName(wfItem.getForwardedByName()).tenantId(wfItem.getTenantId())
+                        .branchCode(wfEntityInst.getWorkBranchCode())
+                        .reservedUser(DefaultApplicationConstants.SYSTEM_LOGINID.equals(wfItem.getForwardedBy())).build();
+                getSessionContext().setUserToken(userToken);
+                return doWfTransition(new TransitionItem(wfItem, wfDef, wfEntityInst,
+                        Boolean.TRUE.equals(wfTransitionQueue.getFlowTransition())));
+            } catch (Exception e) {
+                logError(e);
+            }
+            
+            return false;
         }
 
         return true;
@@ -1697,9 +1741,13 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                     WfStepDef routeToWfStep = resolveMultiRouting(wfDef, currWfStepDef, wfInstReader);
                     nextWfStep = routeToWfStep != null ? nextWfStep = routeToWfStep : nextWfStep;
                     break;
+                case DELAY:
+                    final Date ejectionDt = CalendarUtils.getDateWithFrequencyOffset(now, FrequencyUnit.MINUTE,
+                            currWfStepDef.getDelayMinutes() <= 0 ? 1 : currWfStepDef.getDelayMinutes());
+                    wfItem.setEjectionDt(ejectionDt);
                 case USER_ACTION:
                 case ERROR:
-                    // Workflow item has settled in current step
+                    // Workflow item has settled in current step. (Yes delay also settles here)
                     wfItem.setForwardTo(null);
                     environment().updateByIdVersion(wfItem);
                     break;
@@ -1810,6 +1858,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         final String appUrl = appletUtil.system().getSysParameterValue(String.class,
                 SystemModuleSysParamConstants.APPLICATION_BASE_URL);
 
+        SecuredLinkInfo securedLinkInfo = appletUtil.system().getNewSecuredLink(SecuredLinkType.LOGIN, appTitle,
+                appUrl);
         variables.put(ProcessVariable.FORWARDED_BY.variableKey(), wfItem.getForwardedBy());
         variables.put(ProcessVariable.FORWARDED_BY_NAME.variableKey(), wfItem.getForwardedByName());
         variables.put(ProcessVariable.FORWARD_TO.variableKey(), wfItem.getForwardTo());
@@ -1819,9 +1869,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         variables.put(ProcessVariable.APP_TITLE.variableKey(), appTitle);
         variables.put(ProcessVariable.APP_CORRESPONDER.variableKey(), appCorresponder);
         variables.put(ProcessVariable.APP_URL.variableKey(), appUrl);
-        variables.put(ProcessVariable.APP_HTML_LINK.variableKey(),
-                HtmlUtils.getSecuredHtmlLink(appUrl, resolveApplicationMessage("$m{link.here}")));
-
+        variables.put(ProcessVariable.APP_HTML_LINK.variableKey(), securedLinkInfo.getHtmlLink());
         return variables;
     }
 

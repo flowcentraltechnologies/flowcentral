@@ -30,9 +30,9 @@ import com.flowcentraltech.flowcentral.common.constants.ComponentType;
 public class DynamicModuleInfo {
 
     private String moduleName;
-    
+
     private List<ApplicationInfo> applications;
-    
+
     public DynamicModuleInfo(String moduleName, List<ApplicationInfo> applications) {
         this.moduleName = moduleName;
         this.applications = Collections.unmodifiableList(applications);
@@ -47,14 +47,18 @@ public class DynamicModuleInfo {
     }
 
     public static class ApplicationInfo {
-        
+
         private String applicationName;
-        
+
         private Map<ComponentType, List<String>> componentNames;
 
-        public ApplicationInfo(String applicationName, Map<ComponentType, List<String>> componentNames) {
+        private List<EnumInfo> enumerations;
+
+        public ApplicationInfo(String applicationName, Map<ComponentType, List<String>> componentNames,
+                List<EnumInfo> enumerations) {
             this.applicationName = applicationName;
             this.componentNames = Collections.unmodifiableMap(componentNames);
+            this.enumerations = enumerations;
         }
 
         public String getApplicationName() {
@@ -64,5 +68,31 @@ public class DynamicModuleInfo {
         public Map<ComponentType, List<String>> getComponentNames() {
             return componentNames;
         }
+
+        public List<EnumInfo> getEnumerations() {
+            return enumerations;
+        }
     }
+
+    public static class EnumInfo {
+
+        private String enumName;
+
+        private Map<String, String> options;
+
+        public EnumInfo(String enumName, Map<String, String> options) {
+            this.enumName = enumName;
+            this.options = options;
+        }
+
+        public String getEnumName() {
+            return enumName;
+        }
+
+        public Map<String, String> getOptions() {
+            return options;
+        }
+
+    }
+
 }

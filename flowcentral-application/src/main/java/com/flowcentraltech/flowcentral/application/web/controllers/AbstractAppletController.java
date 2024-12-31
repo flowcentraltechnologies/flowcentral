@@ -17,6 +17,7 @@ package com.flowcentraltech.flowcentral.application.web.controllers;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
+import com.flowcentraltech.flowcentral.application.constants.AppletPageAttributeConstants;
 import com.flowcentraltech.flowcentral.application.constants.AppletPropertyConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationResultMappingConstants;
@@ -25,15 +26,19 @@ import com.flowcentraltech.flowcentral.application.listing.DetailsFormListingGen
 import com.flowcentraltech.flowcentral.application.util.ApplicationPageUtils;
 import com.flowcentraltech.flowcentral.application.web.data.DetailsFormListing;
 import com.flowcentraltech.flowcentral.application.web.panels.applet.AbstractApplet;
+import com.flowcentraltech.flowcentral.common.business.SecuredLinkManager;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralRequestAttributeConstants;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralResultMappingConstants;
+import com.flowcentraltech.flowcentral.common.constants.SecuredLinkType;
 import com.flowcentraltech.flowcentral.common.data.FormListingOptions;
+import com.flowcentraltech.flowcentral.common.data.SecuredLinkContentInfo;
 import com.flowcentraltech.flowcentral.common.web.controllers.AbstractFlowCentralPageController;
 import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.report.Report;
+import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.annotation.ResultMapping;
 import com.tcdng.unify.web.annotation.ResultMappings;
 import com.tcdng.unify.web.constant.ReadOnly;
@@ -141,5 +146,28 @@ public abstract class AbstractAppletController<T extends AbstractAppletPageBean<
     protected String viewListingReport(Report report) throws UnifyException {
         setRequestAttribute(FlowCentralRequestAttributeConstants.REPORT, report);
         return FlowCentralResultMappingConstants.VIEW_LISTING_REPORT;
+    }
+
+    protected final void captureSecuredLink(SecuredLinkType type) throws UnifyException {
+        final String forward = getSessionContext().getExternalForward();
+        if (!StringUtils.isBlank(forward)) {
+            SecuredLinkManager slm = appletUtilities.getComponent(SecuredLinkManager.class);
+            SecuredLinkContentInfo securedLinkContentInfo = slm.getSecuredLink(forward);
+            if (type.equals(securedLinkContentInfo.getType())) {
+                getSessionContext().removeExternalForward();
+                getPage().setAttribute(AppletPageAttributeConstants.SECURED_LINK_ACCESSKEY,
+                        securedLinkContentInfo.getAccessKey());
+            }
+        }
+    }
+
+    protected final void invalidateSecuredLink(SecuredLinkType type) throws UnifyException {
+        final String accessKey = getPage().getAttribute(String.class,
+                AppletPageAttributeConstants.SECURED_LINK_ACCESSKEY);
+        if (!StringUtils.isBlank(accessKey)) {
+            SecuredLinkManager slm = appletUtilities.getComponent(SecuredLinkManager.class);
+            slm.invalidateSecuredLinkByAccessKey(type, accessKey);
+            getPage().removeAttribute(String.class, AppletPageAttributeConstants.SECURED_LINK_ACCESSKEY);
+        }
     }
 }

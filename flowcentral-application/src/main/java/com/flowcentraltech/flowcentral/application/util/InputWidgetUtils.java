@@ -387,6 +387,7 @@ public final class InputWidgetUtils {
                 break;
             case "application.text":
             case "application.name":
+            case "application.path":
             case "application.alphanumeric":
             case "application.alphanumericwithspace":
             case "application.alphanumericwithspecial":
@@ -414,7 +415,7 @@ public final class InputWidgetUtils {
                 break;
             case "application.alphanumericwithspecialcamel": {
                 editor = String.format(editor, efa.getMinLen(), efa.getMaxLen(), efa.isTrim(),
-                        TextCase.CAMEL.toString().toLowerCase());
+                        TextCase.CAPITAL.toString().toLowerCase());
             }
                 break;
             case "application.series": {
@@ -425,8 +426,8 @@ public final class InputWidgetUtils {
             case "application.fullnamewithspecial": {
                 String textCase = entityFieldDef != null
                         ? (entityFieldDef.getTextCase() != null ? entityFieldDef.getTextCase().toString().toLowerCase()
-                                : TextCase.CAMEL.toString().toLowerCase())
-                        : TextCase.CAMEL.toString().toLowerCase();
+                                : TextCase.CAPITAL.toString().toLowerCase())
+                        : TextCase.CAPITAL.toString().toLowerCase();
                 editor = String.format(editor, efa.getMinLen(), efa.getMaxLen(), efa.isTrim(), textCase);
             }
                 break;

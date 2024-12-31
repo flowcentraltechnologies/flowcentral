@@ -10,6 +10,11 @@
 			dataType="boolean" inputType="boolean" listOption="true"
 			editor="!ui-booleanlabel onTrue:$m{label.mandatory} onFalse:$m{label.optional}"
 			renderer="!ui-booleanlabel onTrue:$m{label.mandatory} onFalse:$m{label.optional}" />
+		<widgetType name="restapilist"
+			description="$m{application.widgettype.restapilist}"
+			dataType="string" inputType="string"
+			editor="!ui-select blankOption:$s{} list:restapilist"
+			renderer="!ui-label" />
 		<widgetType name="datatypeeditorlist"
 			description="$m{application.widgettype.datatypeeditorlist}"
 			dataType="string" inputType="string"
@@ -298,6 +303,11 @@
 			dataType="string" inputType="string"
 			editor="!ui-name minLen:%s maxLen:%s trim:%s underscore:true dollar:true"
 			renderer="!ui-label" />
+		<widgetType name="path" listOption="true"
+			description="$m{application.widgettype.path}"
+			dataType="string" inputType="string"
+			editor="!ui-name minLen:%s maxLen:%s trim:%s underscore:true slash:true"
+			renderer="!ui-label" />
 		<widgetType name="columnname" listOption="true"
 			description="$m{application.widgettype.columnname}" dataType="string"
 			inputType="string"
@@ -507,6 +517,11 @@
 			dataType="string" inputType="string"
 			editor="!fc-texttemplate entityBinding:$s{entity}"
 			renderer="!ui-label" />
+		<widgetType name="entitycomposition"
+			description="$m{application.widgettype.entitycomposition}"
+			dataType="string" inputType="string"
+			editor="!fc-entitycomposition"
+			renderer="!ui-label" />
 	</widgetTypes>
 	<!-- Applets -->
 	<applets> 
@@ -613,6 +628,9 @@
 			entity="appEntitySearchInput" searchField="description" />
 		<reference name="appRefRef"
 			description="$m{application.appref.reference}" entity="appRef"
+			searchField="description" />
+		<reference name="appAPIRef"
+			description="$m{application.appapi.reference}" entity="appAPI"
 			searchField="description" />
 		<reference name="appFilterRef"
 			description="$m{application.appfilter.reference}" entity="appFilter"
@@ -982,6 +1000,10 @@
 				nullable="true" />
 			<field name="dataSourceName" maxLen="64"
 				label="$m{application.appentity.datasourcename}" type="string" />
+			<field name="dateFormatter" maxLen="64"
+				label="$m{application.appentity.dateformatter}" type="string" nullable="true"/>
+			<field name="dateTimeFormatter" maxLen="64"
+				label="$m{application.appentity.datetimeformatter}" type="string" nullable="true"/>
 			<field name="auditable"
 				label="$m{application.appentity.auditable}" type="boolean" />
 			<field name="reportable"
@@ -1061,6 +1083,12 @@
 				label="$m{application.appentityfield.label}" type="string" />
 			<field name="references"
 				label="$m{application.appentityfield.references}" type="string"
+				nullable="true" />
+			<field name="jsonName"
+				label="$m{application.appentityfield.jsonname}" type="string"
+				nullable="true" />
+			<field name="jsonFormatter"
+				label="$m{application.appentityfield.jsonformatter}" type="string"
 				nullable="true" />
 			<field name="key" label="$m{application.appentityfield.key}"
 				type="string" nullable="true" />
@@ -1329,6 +1357,41 @@
 			</uniqueConstraint>
 			<uniqueConstraint name="descUc"
 				description="$m{application.appref.uc.description}"
+				fieldList="applicationId,description">
+				<condition field="devVersionType" value="CRN" />
+			</uniqueConstraint>
+		</entity>
+		<entity name="appAPI" description="$m{application.appapi}"
+			label="$m{application.appapi.label}"
+			type="com.flowcentraltech.flowcentral.application.entities.AppAPI" changeEvents = "true">
+			<field name="type" label="$m{application.appapi.type}"
+				type="enum_ref" references="apitypelist"
+				inputWidget="application.enumlist" />
+			<field name="entity" label="$m{application.appapi.entity}"
+				maxLen="128" type="string" />
+			<field name="applet" label="$m{application.appapi.applet}"
+				maxLen="128" type="string" nullable="true" />
+			<field name="supportCreate"
+				label="$m{application.appapi.supportcreate}" type="boolean"
+				nullable="true" />
+			<field name="supportRead"
+				label="$m{application.appapi.supportread}" type="boolean"
+				nullable="true" />
+			<field name="supportUpdate"
+				label="$m{application.appapi.supportupdate}" type="boolean"
+				nullable="true" />
+			<field name="supportDelete"
+				label="$m{application.appapi.supportdelete}" type="boolean"
+				nullable="true" />
+			<field name="typeDesc" label="$m{application.appapi.typedesc}"
+				type="list_only" key="type" property="description" />
+			<uniqueConstraint name="nameUc"
+				description="$m{application.appapi.uc.name}"
+				fieldList="applicationId,name">
+				<condition field="devVersionType" value="CRN" />
+			</uniqueConstraint>
+			<uniqueConstraint name="descUc"
+				description="$m{application.appapi.uc.description}"
 				fieldList="applicationId,description">
 				<condition field="devVersionType" value="CRN" />
 			</uniqueConstraint>
@@ -2184,7 +2247,9 @@
 			<field name="code" label="$m{application.appenumerationitem.code}"
 				type="string" inputWidget="application.alphanumeric"/>
 			<field name="label" label="$m{application.appenumerationitem.field.label}"
-				type="string" inputWidget="application.text"/>
+				type="string" inputWidget="application.text" descriptive="true"/>
+			<field name="displayIndex" label="$m{application.appenumerationitem.displayindex}"
+				type="integer" />
 			<uniqueConstraint name="codeUc"
 				description="$m{application.appenumerationitem.uc.code}"
 				fieldList="appEnumerationId,code" />

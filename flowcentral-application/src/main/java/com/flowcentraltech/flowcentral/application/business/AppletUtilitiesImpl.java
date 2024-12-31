@@ -86,6 +86,7 @@ import com.flowcentraltech.flowcentral.application.web.panels.EntitySelect;
 import com.flowcentraltech.flowcentral.application.web.panels.EntitySetValues;
 import com.flowcentraltech.flowcentral.application.web.panels.EntitySingleForm;
 import com.flowcentraltech.flowcentral.application.web.panels.EntityWidgetRules;
+import com.flowcentraltech.flowcentral.application.web.panels.FormWizard;
 import com.flowcentraltech.flowcentral.application.web.panels.HeaderWithTabsForm;
 import com.flowcentraltech.flowcentral.application.web.panels.HeadlessTabsForm;
 import com.flowcentraltech.flowcentral.application.web.panels.ListingForm;
@@ -98,6 +99,7 @@ import com.flowcentraltech.flowcentral.application.web.panels.applet.AbstractEnt
 import com.flowcentraltech.flowcentral.application.web.widgets.BeanListTable;
 import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs;
 import com.flowcentraltech.flowcentral.application.web.widgets.EntityTable;
+import com.flowcentraltech.flowcentral.application.web.widgets.IconBar;
 import com.flowcentraltech.flowcentral.application.web.widgets.MiniForm;
 import com.flowcentraltech.flowcentral.application.web.widgets.MiniFormScope;
 import com.flowcentraltech.flowcentral.application.web.widgets.SectorIcon;
@@ -1004,7 +1006,7 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
             Entity inst, BreadCrumbs breadCrumbs) throws UnifyException {
         logDebug("Constructing listing form for bean [{0}] using form definition [{1}]...", beanTitle,
                 formDef.getLongName());
-        final AppletContext appletContext = applet != null ? applet.getCtx() : new AppletContext(null, applet, this);
+        final AppletContext appletContext = applet != null ? applet.appletCtx() : new AppletContext(null, applet, this);
         final FormContext formContext = new FormContext(appletContext, formDef, null, inst);
         final SectorIcon sectorIcon = applet != null
                 ? getPageSectorIconByApplication(applet.getRootAppletDef().getApplicationName())
@@ -1015,6 +1017,37 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
         return form;
     }
 
+    @Override
+    public FormWizard constructFormWizard(AbstractApplet applet, FormDef formDef, Entity inst, String rootTitle,
+            String beanTitle, BreadCrumbs breadCrumbs) throws UnifyException {
+        logDebug("Constructing form wizard for bean using form definition [{0}]...", formDef.getLongName());
+        final AppletContext appletContext = applet != null ? applet.appletCtx() : new AppletContext(null, applet, this);
+        final FormTabDef mainFormTabDef = formDef.getFormTabDef(0);
+        initSkeletonForAutoFormatFields(formDef.getEntityDef(), inst);
+
+        List<MiniForm> forms = new ArrayList<MiniForm>();
+        IconBar.Builder ibb = IconBar.newBuilder();
+        for (FormTabDef formTabDef : mainFormTabDef.wizardParts()) {
+            final FormContext formContext = new FormContext(appletContext, formDef, null, inst);
+            formContext.evaluateTabStates();
+            MiniForm miniForm = new MiniForm(MiniFormScope.MAIN_FORM, formContext, formTabDef);
+            forms.add(miniForm);
+
+            final String icon = !StringUtils.isBlank(formTabDef.getIcon()) ? formTabDef.getIcon() : "step";
+            ibb.addItem(icon, formTabDef.getLabel());
+        }
+
+        final SectorIcon sectorIcon = applet != null
+                ? getPageSectorIconByApplication(applet.getRootAppletDef().getApplicationName())
+                : null;
+        final String navPolicy = applet != null
+                ? applet.getRootAppletDef().getPropValue(String.class,
+                        AppletPropertyConstants.CREATE_FORM_NAVIGATION_POLICY)
+                : null;
+        final IconBar iconBar = ibb.build();
+        return new FormWizard(formDef.getLongName(), navPolicy, iconBar, forms, sectorIcon, breadCrumbs);
+    }
+
     @SuppressWarnings("unchecked")
     @Override
     public HeaderWithTabsForm constructHeaderWithTabsForm(AbstractEntityFormApplet applet, String rootTitle,
@@ -1022,7 +1055,7 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
             EntityFormEventHandlers formEventHandlers) throws UnifyException {
         logDebug("Constructing header with tabs form for bean [{0}] using form definition [{1}]...", beanTitle,
                 formDef.getLongName());
-        final AppletContext appletContext = applet != null ? applet.getCtx() : new AppletContext(null, applet, this);
+        final AppletContext appletContext = applet != null ? applet.appletCtx() : new AppletContext(null, applet, this);
         final SweepingCommitPolicy sweepingCommitPolicy = applet;
         final FormContext formContext = new FormContext(appletContext, formDef, formEventHandlers, inst);
         final SectorIcon sectorIcon = applet != null
@@ -1047,6 +1080,10 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
         final EntityDef entityDef = formDef.getEntityDef();
         final boolean isCreateMode = formMode.isCreate();
         if (formDef.getTabCount() > 1) {
+            final boolean expanded = _formAppletDef != null
+                    && _formAppletDef.getPropValue(boolean.class, AppletPropertyConstants.LONGFORM_SUPPORT)
+                    && systemModuleService.getSysParameterValue(boolean.class,
+                            ApplicationModuleSysParamConstants.ENABLE_LONGFORM);
             TabSheetDef.Builder tsdb = TabSheetDef.newBuilder(formContext, 1L);
             List<TabSheetItem> tabSheetItemList = new ArrayList<TabSheetItem>();
             final int len = formDef.getTabCount();
@@ -1132,6 +1169,7 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
                         _entityChild.setCanCreate(canCreate);
                         Restriction childRestriction = getChildRestriction(entityDef, formTabDef.getReference(), inst);
                         _entityChild.setChildTabIndex(tabIndex);
+                        _entityChild.setExpandedMode(expanded);
                         _entityChild.load(formContext, childRestriction);
                         tsdb.addTabDef(formTabDef.getName(), formTabDef.getLabel(), "fc-childpanel",
                                 RendererType.STANDALONE_PANEL);
@@ -1176,7 +1214,8 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
                         childRestriction = RestrictionUtils.and(childRestriction, tabRestriction);
 
                         _entitySearch.setChildTabIndex(tabIndex);
-                        _entitySearch.setRelatedList(formTabDef.getApplet());
+                        _entitySearch.setExpandedMode(expanded);
+                       _entitySearch.setRelatedList(formTabDef.getApplet());
                         _entitySearch.setBaseRestriction(childRestriction, specialParamProvider);
                         _entitySearch.applyFilterToSearch();
 
@@ -1326,7 +1365,9 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
                 }
             }
 
-            form.setTabSheet(new TabSheet(tsdb.build(), tabSheetItemList));
+            final TabSheet tabSheet = new TabSheet(tsdb.build(), tabSheetItemList);
+            tabSheet.setExpanded(expanded);
+            form.setTabSheet(tabSheet);
         }
 
         // Related lists
@@ -1410,7 +1451,7 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
     @Override
     public EntitySingleForm constructEntitySingleForm(AbstractApplet applet, String rootTitle, String beanTitle,
             Entity inst, FormMode formMode, BreadCrumbs breadCrumbs) throws UnifyException {
-        final AppletContext appletContext = applet != null ? applet.getCtx() : new AppletContext(null, applet, this);
+        final AppletContext appletContext = applet != null ? applet.appletCtx() : new AppletContext(null, applet, this);
         final FormContext formContext = new FormContext(appletContext, applet.getEntityDef(), inst);
         final SectorIcon sectorIcon = applet != null
                 ? getPageSectorIconByApplication(applet.getRootAppletDef().getApplicationName())
@@ -1829,7 +1870,7 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
                 : (systemSearchColumns > 0 ? systemSearchColumns : 1);
         final String preferredEvent = systemModuleService.getSysParameterValue(boolean.class,
                 ApplicationModuleSysParamConstants.ENABLE_SEARCH_ON_SEARCH_INPUT_CHANGE) ? "onchange" : null;
-        
+
         SectorIcon sectorIcon = getPageSectorIconByApplication(_appletDef.getApplicationName());
         EntitySearch _entitySearch = new EntitySearch(ctx, sectorIcon, sweepingCommitPolicy, tabName, _tableDef,
                 _appletDef.getId(), editAction, defaultQuickFilter, searchConfigName, preferredEvent, searchColumns,
@@ -2458,16 +2499,7 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
             }
 
             // Populate skeleton for auto-format fields
-            if (entityDef.isWithAutoFormatFields()) {
-                logDebug("Populating auto-format fields for form [{0}]...", inst.getId());
-                final SequenceCodeGenerator gen = sequenceCodeGenerator();
-                for (EntityFieldDef entityFieldDef : entityDef.getAutoFormatFieldDefList()) {
-                    if (entityFieldDef.isStringAutoFormat()) {
-                        DataUtils.setBeanProperty(inst, entityFieldDef.getFieldName(),
-                                gen.getCodeSkeleton(entityFieldDef.getAutoFormat()));
-                    }
-                }
-            }
+            initSkeletonForAutoFormatFields(entityDef, inst);
         }
 
         if (formDef.isWithConsolidatedFormState()) {
@@ -2481,6 +2513,19 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
         logDebug("Populating on-form-construct set values for form [{0}]...", inst.getId());
         for (FormStatePolicyDef formStatePolicyDef : formDef.getOnFormConstructSetValuesFormStatePolicyDefList()) {
             applySetValues(formStatePolicyDef, entityDef, formValueStore, now);
+        }
+    }
+
+    private void initSkeletonForAutoFormatFields(EntityDef entityDef, Entity inst) throws UnifyException {
+        if (entityDef.isWithAutoFormatFields()) {
+            logDebug("Populating auto-format fields for form [{0}]...", inst.getId());
+            final SequenceCodeGenerator gen = sequenceCodeGenerator();
+            for (EntityFieldDef entityFieldDef : entityDef.getAutoFormatFieldDefList()) {
+                if (entityFieldDef.isStringAutoFormat()) {
+                    DataUtils.setBeanProperty(inst, entityFieldDef.getFieldName(),
+                            gen.getCodeSkeleton(entityFieldDef.getAutoFormat()));
+                }
+            }
         }
     }
 

@@ -69,7 +69,7 @@ public abstract class AbstractEntitySingleFormAppletPanel extends AbstractApplet
         applet.ensureRootAppletStruct();
 
         final AppletDef _appletDef = applet.getRootAppletDef();
-        final AppletContext appCtx = applet.getCtx();
+        final AppletContext appCtx = applet.appletCtx();
         final AbstractEntitySingleFormApplet.ViewMode viewMode = applet.getMode();
         final EntityDef _entityDef = applet.getEntityDef();
         final String roleCode = getUserToken().getRoleCode();
@@ -461,8 +461,8 @@ public abstract class AbstractEntitySingleFormAppletPanel extends AbstractApplet
     @Action
     public void maintain() throws UnifyException {
         IndexedTarget target = getRequestTarget(IndexedTarget.class);
-        if (target.isValidIndex()) {
-            TableActionResult result = getEntityFormApplet().maintainInst(target.getIndex());
+        if (target.isValidValueIndex()) {
+            TableActionResult result = getEntityFormApplet().maintainInst(target.getValueIndex());
             processTableActionResult(result);
         }
     }

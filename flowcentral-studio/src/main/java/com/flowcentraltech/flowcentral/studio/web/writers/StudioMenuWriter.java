@@ -72,22 +72,27 @@ public class StudioMenuWriter extends AbstractPanelWriter {
             .unmodifiableList(Arrays.asList("codegeneration.manageSnapshotSettings", "studio.takeSnapshot",
                     "studio.uploadSnapshot", "studio.snapshots"));
 
-    private static final List<StudioAppComponentType> utilMenuCategoryList = Collections.unmodifiableList(Arrays.asList(
-            StudioAppComponentType.CODEGENERATION, StudioAppComponentType.SYNCHRONIZATION,
-            StudioAppComponentType.SNAPSHOT, StudioAppComponentType.APPLICATION));
+    private static final List<String> entityToolsAppletList = Collections
+            .unmodifiableList(Arrays.asList("studio.createJsonEntity", "studio.createCsvEntity"));
 
-    private static final List<StudioAppComponentType> collabUtilMenuCategoryList = Collections
-            .unmodifiableList(Arrays.asList(StudioAppComponentType.COLLABORATION, StudioAppComponentType.CODEGENERATION,
-                    StudioAppComponentType.SYNCHRONIZATION, StudioAppComponentType.SNAPSHOT,
+    private static final List<StudioAppComponentType> utilMenuCategoryList = Collections
+            .unmodifiableList(Arrays.asList(StudioAppComponentType.ENTITY_TOOLS, StudioAppComponentType.SNAPSHOT,
+                    StudioAppComponentType.SYNCHRONIZATION, StudioAppComponentType.CODEGENERATION,
                     StudioAppComponentType.APPLICATION));
 
-    private static final List<StudioAppComponentType> menuCategoryList = Collections.unmodifiableList(Arrays.asList(
-            StudioAppComponentType.ENTITY, StudioAppComponentType.REFERENCE, StudioAppComponentType.ENUMERATION,
-            StudioAppComponentType.WIDGET, StudioAppComponentType.APPLET, StudioAppComponentType.TABLE,
-            StudioAppComponentType.FORM, StudioAppComponentType.REPORT_CONFIGURATION,
-            StudioAppComponentType.NOTIFICATION_TEMPLATE, StudioAppComponentType.NOTIFICATION_LARGETEXT,
-            StudioAppComponentType.WORKFLOW, StudioAppComponentType.CHART_DATASOURCE, StudioAppComponentType.CHART,
-            StudioAppComponentType.DASHBOARD, StudioAppComponentType.HELP_SHEET));
+    private static final List<StudioAppComponentType> collabUtilMenuCategoryList = Collections
+            .unmodifiableList(Arrays.asList(StudioAppComponentType.ENTITY_TOOLS, StudioAppComponentType.SNAPSHOT,
+                    StudioAppComponentType.SYNCHRONIZATION, StudioAppComponentType.CODEGENERATION,
+                    StudioAppComponentType.APPLICATION, StudioAppComponentType.COLLABORATION));
+
+    private static final List<StudioAppComponentType> menuCategoryList = Collections
+            .unmodifiableList(Arrays.asList(StudioAppComponentType.ENTITY, StudioAppComponentType.REFERENCE,
+                    StudioAppComponentType.ENUMERATION, StudioAppComponentType.WIDGET, StudioAppComponentType.API,
+                    StudioAppComponentType.APPLET, StudioAppComponentType.TABLE, StudioAppComponentType.FORM,
+                    StudioAppComponentType.HELP_SHEET, StudioAppComponentType.REPORT_CONFIGURATION,
+                    StudioAppComponentType.NOTIFICATION_TEMPLATE, /* StudioAppComponentType.NOTIFICATION_LARGETEXT, */
+                    StudioAppComponentType.DASHBOARD, StudioAppComponentType.CHART_DATASOURCE,
+                    StudioAppComponentType.CHART, StudioAppComponentType.WORKFLOW));
 
     @Override
     protected void doWriteStructureAndContent(ResponseWriter writer, Widget widget) throws UnifyException {
@@ -128,10 +133,7 @@ public class StudioMenuWriter extends AbstractPanelWriter {
 
         if (currCategory == null || (application && !currCategory.isComponentType())
                 || (!application && currCategory.isComponentType())) {
-            currCategory = application ? StudioAppComponentType.ENTITY
-                    : (isCollaborationEnabled ? StudioAppComponentType.COLLABORATION
-                            : (codeGenerationProvider != null ? StudioAppComponentType.CODEGENERATION
-                                    : StudioAppComponentType.APPLICATION));
+            currCategory = application ? StudioAppComponentType.ENTITY : StudioAppComponentType.ENTITY_TOOLS;
         }
 
         studioMenuWidget.setCurrentSel(currCategory);
@@ -226,6 +228,7 @@ public class StudioMenuWriter extends AbstractPanelWriter {
                     && StudioAppComponentType.CODEGENERATION.equals(currCategory);
             final boolean isSynchronization = StudioAppComponentType.SYNCHRONIZATION.equals(currCategory);
             final boolean isSnapshot = StudioAppComponentType.SNAPSHOT.equals(currCategory);
+            final boolean isEntityTools = StudioAppComponentType.ENTITY_TOOLS.equals(currCategory);
 
             final String searchInput = studioMenuWidget.isSearchable() ? studioMenuWidget.getSearchInput() : null;
             final List<AppletDef> appletDefList = isApplications
@@ -234,12 +237,14 @@ public class StudioMenuWriter extends AbstractPanelWriter {
                             : (isCodeGeneration ? getCodeGenerationAppletDefs(applicationName, searchInput)
                                     : (isSynchronization ? getSychronizationAppletDefs(applicationName, searchInput)
                                             : (isSnapshot ? getSnapshotAppletDefs(applicationName, searchInput)
-                                                    : studioModuleService.findAppletDefs(applicationName,
-                                                                    currCategory, searchInput)))));
+                                                    : (isEntityTools
+                                                            ? getEntityToolsAppletDefs(applicationName, searchInput)
+                                                            : studioModuleService.findAppletDefs(applicationName,
+                                                                    currCategory, searchInput))))));
 
             for (AppletDef appletDef : appletDefList) {
                 if (isApplications || isCollaboration || isCodeGeneration || isSynchronization || isSnapshot
-                        || appletDef.isMenuAccess()) {
+                        || isEntityTools || appletDef.isMenuAccess()) {
                     writer.write("<li id=\"item_").write(appletDef.getViewId()).write("\">");
                     writer.write("<span>").writeWithHtmlEscape(appletDef.getLabel()).write("</span>");
                     writer.write("</li>");
@@ -326,6 +331,10 @@ public class StudioMenuWriter extends AbstractPanelWriter {
 
     private List<AppletDef> getSnapshotAppletDefs(String applicationName, String filter) throws UnifyException {
         return getRoleAppletDefs(applicationName, snapshotAppletList, filter);
+    }
+
+    private List<AppletDef> getEntityToolsAppletDefs(String applicationName, String filter) throws UnifyException {
+        return getRoleAppletDefs(applicationName, entityToolsAppletList, filter);
     }
 
     private List<AppletDef> getRoleAppletDefs(String applicationName, List<String> applets, String filter)

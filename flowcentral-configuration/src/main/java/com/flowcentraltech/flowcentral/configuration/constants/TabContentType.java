@@ -87,10 +87,18 @@ public enum TabContentType implements EnumConst {
         return this.equals(MINIFORM_MAPPED);
     }
 
+    public boolean isMiniFormOnly() {
+        return this.equals(MINIFORM);
+    }
+
     public boolean isMiniForm() {
         return this.equals(MINIFORM) || this.equals(MINIFORM_CHANGELOG) || this.equals(MINIFORM_MAPPED);
     }
 
+    public boolean isLongFormSupport() {
+        return isMiniForm() || isChildOrChildList();
+    }
+    
     public static TabContentType fromCode(String code) {
         return EnumUtils.fromCode(TabContentType.class, code);
     }

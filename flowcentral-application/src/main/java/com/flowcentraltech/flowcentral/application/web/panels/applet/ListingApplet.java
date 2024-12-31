@@ -135,7 +135,7 @@ public class ListingApplet extends AbstractApplet implements SweepingCommitPolic
     }
 
     protected final AppletDef resolveRootAppletDef(String appletName) throws UnifyException {
-        AppletDef appletDef = au.getAppletDef(appletName);
+        AppletDef appletDef = au().getAppletDef(appletName);
         if (appletDef.getType().isEntityList()) {
             appletDef = appletDef.getMaintainAppletDef();
             setAltCaption(appletDef.getPropValue(String.class, AppletPropertyConstants.PAGE_LISTING_CAPTION));
@@ -149,9 +149,9 @@ public class ListingApplet extends AbstractApplet implements SweepingCommitPolic
         FormDef formDef = getPreferredForm(PreferredFormType.LISTING_ONLY, _appletDef, _inst,
                 FormMode.LISTING.formProperty());
 
-        String beanTitle = au.getEntityDescription(au.getEntityClassDef(formDef.getEntityDef().getLongName()), _inst,
+        String beanTitle = au().getEntityDescription(au().getEntityClassDef(formDef.getEntityDef().getLongName()), _inst,
                 null);
-        ListingForm listingForm = au.constructListingForm(this, _appletDef.getDescription(), beanTitle, formDef, _inst,
+        ListingForm listingForm = au().constructListingForm(this, _appletDef.getDescription(), beanTitle, formDef, _inst,
                 makeFormBreadCrumbs());
         return listingForm;
     }

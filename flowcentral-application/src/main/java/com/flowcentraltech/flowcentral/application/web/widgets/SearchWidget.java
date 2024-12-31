@@ -33,7 +33,9 @@ import com.tcdng.unify.web.ui.widget.control.DynamicField;
  * @since 1.0
  */
 @Component("fc-search")
-@UplAttributes({@UplAttribute(name = "captionSuffix", type = String.class, defaultVal = ":")})
+    @UplAttributes({
+        @UplAttribute(name = "captionSuffix", type = String.class, defaultVal = ":"),
+        @UplAttribute(name = "vertical", type = boolean.class, defaultVal = "false")})
 public class SearchWidget extends AbstractValueListWidget<SearchEntry> {
 
     private DynamicField paramCtrl;
@@ -54,6 +56,10 @@ public class SearchWidget extends AbstractValueListWidget<SearchEntry> {
 
     public String getCaptionSuffix() throws UnifyException {
         return getUplAttribute(String.class, "captionSuffix");
+    }
+
+    public boolean isVertical() throws UnifyException {
+        return getUplAttribute(boolean.class, "vertical");
     }
     
     public DynamicField getParamCtrl() {

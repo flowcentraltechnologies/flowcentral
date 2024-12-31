@@ -96,7 +96,7 @@ public class FormPreview {
                     for (FormSection formSection : formTab.getSections()) {
                         sectionIndex++;
                         fdb.addFormSection(tabIndex, formSection.getName(), formSection.getLabel(),
-                                FormColumnsType.fromCode(formSection.getColumns()), formSection.getPanel(),
+                                FormColumnsType.fromCode(formSection.getColumns()), formSection.getPanel(), formSection.getIcon(),
                                 formSection.isVisible(), formSection.isEditable(), formSection.isDisabled());
                         for (FormField formField : formSection.getFields()) {
                             final String fieldName = formField.getName();

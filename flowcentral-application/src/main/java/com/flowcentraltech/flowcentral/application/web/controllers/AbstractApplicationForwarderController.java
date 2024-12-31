@@ -20,11 +20,14 @@ import java.util.Collections;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
+import com.flowcentraltech.flowcentral.application.constants.AppletPageAttributeConstants;
 import com.flowcentraltech.flowcentral.application.constants.AppletSessionAttributeConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModulePathConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.application.data.SessionOpenTabInfo;
+import com.flowcentraltech.flowcentral.common.business.SecuredLinkManager;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants;
+import com.flowcentraltech.flowcentral.common.constants.SecuredLinkType;
 import com.flowcentraltech.flowcentral.common.data.SecuredLinkContentInfo;
 import com.flowcentraltech.flowcentral.common.data.UserRoleInfo;
 import com.flowcentraltech.flowcentral.common.web.controllers.AbstractForwarderController;
@@ -33,6 +36,7 @@ import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.UserToken;
 import com.tcdng.unify.core.annotation.Configurable;
+import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.constant.ReadOnly;
 import com.tcdng.unify.web.constant.ResetOnWrite;
 import com.tcdng.unify.web.constant.Secured;
@@ -65,7 +69,8 @@ public abstract class AbstractApplicationForwarderController<T extends AbstractF
             setSessionAttribute(FlowCentralSessionAttributeConstants.DEPARTMENTCODE, userRoleInfo.getDepartmentCode());
             setSessionAttribute(FlowCentralSessionAttributeConstants.ROLECODE, userRoleInfo.getRoleCode());
             setSessionAttribute(FlowCentralSessionAttributeConstants.ROLEDESCRIPTION, userRoleInfo.getRoleDesc());
-            setSessionAttribute(FlowCentralSessionAttributeConstants.BRANCH_SCOPING, userRoleInfo.getBranchScopingList());
+            setSessionAttribute(FlowCentralSessionAttributeConstants.BRANCH_SCOPING,
+                    userRoleInfo.getBranchScopingList());
         } else {
             setSessionAttribute(FlowCentralSessionAttributeConstants.ROLEDESCRIPTION, getUserToken().getUserName());
             setSessionAttribute(FlowCentralSessionAttributeConstants.BRANCH_SCOPING, Collections.emptyList());
@@ -86,7 +91,8 @@ public abstract class AbstractApplicationForwarderController<T extends AbstractF
         final String applicationPath = inStudioWindow
                 ? appletUtilities.system().getSysParameterValue(String.class,
                         ApplicationModuleSysParamConstants.STUDIO_APPLICATION)
-                : (securedLinkContentInfo != null ? ApplicationModulePathConstants.APPLICATION_BROWSER_WINDOW
+                : (securedLinkContentInfo != null && securedLinkContentInfo.isRealContentPath()
+                        ? ApplicationModulePathConstants.APPLICATION_BROWSER_WINDOW
                         : appletUtilities.system().getSysParameterValue(String.class,
                                 ApplicationModuleSysParamConstants.DEFAULT_APPLICATION));
         return forwardToPath(applicationPath);
@@ -110,6 +116,30 @@ public abstract class AbstractApplicationForwarderController<T extends AbstractF
 
     protected final boolean isReloadOnSwitch() throws UnifyException {
         return appletUtilities.isReloadOnSwitch();
+    }
+
+    protected final void captureSecuredLink(SecuredLinkType type) throws UnifyException {
+        final String forward = getSessionContext().getExternalForward();
+        if (!StringUtils.isBlank(forward)) {
+            SecuredLinkManager slm = appletUtilities.getComponent(SecuredLinkManager.class);
+            SecuredLinkContentInfo securedLinkContentInfo = slm.getSecuredLink(forward);
+            if (type.equals(securedLinkContentInfo.getType())) {
+                getSessionContext().removeExternalForward();
+                getPage().setAttribute(AppletPageAttributeConstants.SECURED_LINK_ACCESSKEY,
+                        securedLinkContentInfo.getAccessKey());
+            }
+        }
+    }
+
+    protected final void invalidateSecuredLink(SecuredLinkType type) throws UnifyException {
+        final String accessKey = getPage().getAttribute(String.class,
+                AppletPageAttributeConstants.SECURED_LINK_ACCESSKEY);
+        if (!StringUtils.isBlank(accessKey)) {
+            SecuredLinkManager slm = appletUtilities.getComponent(SecuredLinkManager.class);
+            if (slm.invalidateSecuredLinkByAccessKey(type, accessKey) > 0) {
+                getPage().removeAttribute(String.class, AppletPageAttributeConstants.SECURED_LINK_ACCESSKEY);
+            }
+        }
     }
 
 }

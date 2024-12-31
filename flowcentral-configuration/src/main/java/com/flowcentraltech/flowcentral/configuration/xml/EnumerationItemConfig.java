@@ -34,6 +34,9 @@ public class EnumerationItemConfig extends BaseConfig {
     @JacksonXmlProperty(isAttribute = true)
     private String label;
 
+    @JacksonXmlProperty(isAttribute = true)
+    private Integer displayIndex;
+    
     public String getCode() {
         return code;
     }
@@ -48,6 +51,14 @@ public class EnumerationItemConfig extends BaseConfig {
 
     public void setLabel(String label) {
         this.label = label;
+    }
+
+    public Integer getDisplayIndex() {
+        return displayIndex;
+    }
+
+    public void setDisplayIndex(Integer displayIndex) {
+        this.displayIndex = displayIndex;
     }
 
 }

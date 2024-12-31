@@ -56,7 +56,7 @@ public class CreateEntityApplet extends AbstractEntityFormApplet {
     }
 
     protected final AppletDef resolveRootAppletDef(String appletName) throws UnifyException {
-        AppletDef appletDef = au.getAppletDef(appletName);
+        AppletDef appletDef = au().getAppletDef(appletName);
         if (appletDef.getType().isEntityList()) {
             appletDef = appletDef.getMaintainAppletDef();
             setAltCaption(appletDef.getPropValue(String.class, AppletPropertyConstants.PAGE_MAINTAIN_CAPTION));

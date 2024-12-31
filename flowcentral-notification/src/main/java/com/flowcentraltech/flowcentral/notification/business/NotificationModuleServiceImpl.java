@@ -85,6 +85,7 @@ import com.tcdng.unify.core.data.FactoryMap;
 import com.tcdng.unify.core.data.Listable;
 import com.tcdng.unify.core.data.MapValueStore;
 import com.tcdng.unify.core.data.ParameterizedStringGenerator;
+import com.tcdng.unify.core.data.StaleableFactoryMap;
 import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.security.TwoWayStringCryptograph;
 import com.tcdng.unify.core.task.TaskMonitor;
@@ -129,7 +130,7 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
     public NotificationModuleServiceImpl() {
         this.messagingChannels = new HashMap<NotifType, NotificationMessagingChannel>();
 
-        this.templates = new FactoryMap<String, NotifTemplateDef>(true)
+        this.templates = new StaleableFactoryMap<String, NotifTemplateDef>()
             {
 
                 @Override
@@ -163,7 +164,7 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
 
             };
 
-        this.largeTexts = new FactoryMap<String, NotifLargeTextDef>(true)
+        this.largeTexts = new StaleableFactoryMap<String, NotifLargeTextDef>()
             {
 
                 @Override
@@ -687,7 +688,7 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
 
         public TenantChannelInfo(Long _tenantId) {
             this.tenantId = _tenantId;
-            channelDefsByType = new FactoryMap<NotifType, NotifChannelDef>(true)
+            channelDefsByType = new StaleableFactoryMap<NotifType, NotifChannelDef>()
                 {
 
                     @Override
@@ -705,7 +706,7 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
 
                 };
 
-            channelDefsByName = new FactoryMap<String, NotifChannelDef>(true)
+            channelDefsByName = new StaleableFactoryMap<String, NotifChannelDef>()
                 {
 
                     @Override

@@ -65,7 +65,7 @@
 				type="enum_ref" references="endpointtypelist"
 				inputWidget="application.enumlist" basicSearch="true" />
 			<field name="name" label="$m{integration.endpointconfig.name}" type="string"
-				inputWidget="application.name" maxLen="64" basicSearch="true"/>
+				inputWidget="application.path" maxLen="64" basicSearch="true"/>
 			<field name="description" label="$m{integration.endpointconfig.description}"
 				type="string" inputWidget="application.text" maxLen="96" />
 			<field name="endpoint" label="$m{integration.endpointconfig.endpointprovider}"
@@ -93,11 +93,13 @@
 				type="enum_ref" references="directiontypelist"
 				inputWidget="application.enumlist"/>
 			<field name="name" label="$m{integration.endpointpath.name}" type="string"
-				inputWidget="application.name" maxLen="64"/>
+				inputWidget="application.path" maxLen="64"/>
 			<field name="description" label="$m{integration.endpointpath.description}"
 				type="string" inputWidget="application.text" maxLen="96" />
 			<field name="path" label="$m{integration.endpointpath.path}"
 				type="string" inputWidget="application.textarea" maxLen="128"/>
+			<field name="endpointType" label="$m{integration.endpointpath.endpointtype}"
+				type="list_only" key="endpointConfigId" property="endpointType" />
 			<field name="endpointConfigName" label="$m{integration.endpointpath.endpointconfigname}"
 				type="list_only" key="endpointConfigId" property="name" />
 			<field name="endpointConfigDesc" label="$m{integration.endpointpath.endpointconfigdesc}"
@@ -186,6 +188,32 @@
 			</tab>
 			<tab name="changeLog" label="$m{application.form.audit}"
 				contentType="miniform_changelog" />
+			<formStatePolicy type="ON_SWITCH"
+				name="onCreateFormStatePolicy"
+				description="$m{integration.endpointpath.form.statepolicy.onswitch}">
+				<onCondition>
+					<restriction type="equals" paramA="RST" field="endpointType" />
+				</onCondition>
+				<setStates>
+					<setState type="field" target="direction"
+						disabled="true" />
+				</setStates>
+				<setValues>
+					<setValue field="direction" type="IMMEDIATE"
+						value="IN" />
+				</setValues>
+			</formStatePolicy>
+			<formWidgetRulesPolicy
+				name="restPathRules"
+				description="$m{integration.endpointpath.form.widgetrulespolicy.restpathrules}">
+				<onCondition>
+					<restriction type="equals" paramA="RST" field="endpointType" />
+				</onCondition>
+				<widgetRules>
+					<entry field="path"
+						widget="application.restapilist" />
+				</widgetRules>
+			</formWidgetRulesPolicy>
 		</form>
 	</forms>
 </application>

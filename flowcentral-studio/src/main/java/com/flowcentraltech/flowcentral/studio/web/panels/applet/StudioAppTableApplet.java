@@ -63,9 +63,9 @@ public class StudioAppTableApplet extends StudioAppComponentApplet {
             throws UnifyException {
         BreadCrumbs breadCrumbs = form.getBreadCrumbs().advance();
         EntityDef entityDef = getEntityDef(entityName);
-        breadCrumbs.setLastCrumbTitle(au.resolveSessionMessage("$m{tableeditor.tabledesigner}"));
+        breadCrumbs.setLastCrumbTitle(au().resolveSessionMessage("$m{tableeditor.tabledesigner}"));
         breadCrumbs.setLastCrumbSubTitle(subTitle);
-        return new TableEditorPage(au, entityDef, id, breadCrumbs);
+        return new TableEditorPage(au(), entityDef, id, breadCrumbs);
     }
 
 }

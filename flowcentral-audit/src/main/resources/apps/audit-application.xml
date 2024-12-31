@@ -254,15 +254,6 @@
 				<input field="f:eventType"
 					label="$m{audit.entityauditkeys.input.eventtype}" type="EQUALS"
 					widget="audit.auditeventcattypelist" />
-				<input field="f:eventOnAfter"
-					label="$m{audit.entityauditkeys.input.eventonafter}" type="EQUALS"
-					widget="application.date" />
-				<input field="f:eventOnBefore"
-					label="$m{audit.entityauditkeys.input.eventonbefore}" type="EQUALS"
-					widget="application.date" />
-				<input field="f:key"
-					label="$m{audit.entityauditkeys.input.data}" type="LIKE"
-					widget="application.text" />
 			</searchInput>
 			<searchInput description="Entity Audit Trail Input"
 				name="entityKeysTrialInput"
@@ -273,15 +264,6 @@
 				<input field="f:eventType"
 					label="$m{audit.entityauditkeys.input.eventtype}" type="EQUALS"
 					widget="audit.auditeventcattypelist" />
-				<input field="f:eventOnAfter"
-					label="$m{audit.entityauditkeys.input.eventonafter}" type="EQUALS"
-					widget="application.date" />
-				<input field="f:eventOnBefore"
-					label="$m{audit.entityauditkeys.input.eventonbefore}" type="EQUALS"
-					widget="application.date" />
-				<input field="f:key"
-					label="$m{audit.entityauditkeys.input.data}" type="LIKE"
-					widget="application.text" />
 			</searchInput>
 		</entity>
 		<entity name="entityAuditSnapshot"
