@@ -17,7 +17,7 @@
 		<!-- Main dependencies -->
 		<dependency>
 			<groupId>com.tcdng.unify</groupId>
-			<artifactId>unify-core</artifactId>
+			<artifactId>unify-common</artifactId>
 			<version>${unify.version}</version>
 		</dependency>
 	</dependencies>
