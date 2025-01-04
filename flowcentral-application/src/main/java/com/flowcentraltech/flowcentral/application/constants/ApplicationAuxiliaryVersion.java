@@ -16,7 +16,7 @@
 
 package com.flowcentraltech.flowcentral.application.constants;
 
-import com.tcdng.unify.core.annotation.AutoDetect;
+import com.tcdng.unify.common.annotation.AutoDetect;
 
 /**
  * Application auxiliary version.
