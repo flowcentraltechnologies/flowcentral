@@ -312,7 +312,7 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
         }
 
         User user = isSystem ? environment().list(new UserQuery().id(DefaultApplicationConstants.SYSTEM_ENTITY_ID))
-                : environment().list(new UserQuery().loginId(loginId).tenantId(loginTenantId));
+                : environment().list(new UserQuery().loginId(loginId));
         if (user == null) {
             throw new UnifyException(SecurityModuleErrorConstants.INVALID_LOGIN_ID_PASSWORD);
         }
@@ -569,7 +569,7 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
 
     @Override
     public Recipient getRecipientByLoginId(Long tenantId, NotifType type, String userLoginId) throws UnifyException {
-        User user = environment().find(new UserQuery().loginId(userLoginId).tenantId(tenantId));
+        User user = environment().find(new UserQuery().loginId(userLoginId));
         switch (type) {
             case EMAIL:
                 return new Recipient(userLoginId, user.getEmail());
@@ -692,10 +692,10 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
         Set<Long> userIds = new HashSet<Long>();
         if (!DataUtils.isBlank(roleCodes)) {
             userIds.addAll(environment().valueSet(Long.class, "userId",
-                    new UserRoleQuery().roleCodeIn(roleCodes).roleIsOriginal().userIsOriginal().tenantId(tenantId)));
+                    new UserRoleQuery().roleCodeIn(roleCodes).roleIsOriginal().userIsOriginal()));
 
             Set<Long> userGroupIds = environment().valueSet(Long.class, "userGroupId",
-                    new UserGroupRoleQuery().roleCodeIn(roleCodes).tenantId(tenantId));
+                    new UserGroupRoleQuery().roleCodeIn(roleCodes));
             if (!DataUtils.isBlank(userGroupIds)) {
                 userIds.addAll(environment().valueSet(Long.class, "userId",
                         new UserGroupMemberQuery().userGroupIdIn(userGroupIds)));

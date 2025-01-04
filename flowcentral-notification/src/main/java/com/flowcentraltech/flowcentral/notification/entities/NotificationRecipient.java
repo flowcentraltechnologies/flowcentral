@@ -15,7 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.notification.entities;
 
-import com.flowcentraltech.flowcentral.common.entities.BaseVersionTenantEntity;
+import com.flowcentraltech.flowcentral.common.entities.BaseVersionEntity;
 import com.flowcentraltech.flowcentral.configuration.constants.NotifRecipientType;
 import com.tcdng.unify.common.annotation.Table;
 import com.tcdng.unify.core.annotation.Column;
@@ -29,7 +29,7 @@ import com.tcdng.unify.core.annotation.ListOnly;
  * @since 1.0
  */
 @Table(name = "FC_NOTIFRECIPIENT")
-public class NotificationRecipient extends BaseVersionTenantEntity {
+public class NotificationRecipient extends BaseVersionEntity {
 
     @ForeignKey(NotificationOutbox.class)
     private Long notificationId;

@@ -28,8 +28,6 @@ public class ScheduledTaskDef {
     
     private Long id;
 
-    private Long tenantId;
-
     private String userLoginId;
 
     private String lock;
@@ -54,11 +52,10 @@ public class ScheduledTaskDef {
 
     private long version;
 
-    public ScheduledTaskDef(Long id, Long tenantId, String userLoginId, String lock, String description, String taskName, long startOffset, long endOffset,
+    public ScheduledTaskDef(Long id, String userLoginId, String lock, String description, String taskName, long startOffset, long endOffset,
             long repeatMillSecs, String[] weekdays, String[] days, String[] months, ParamValuesDef paramValuesDef,
             long version) {
         this.id = id;
-        this.tenantId = tenantId;
         this.userLoginId = userLoginId;
         this.lock = lock;
         this.description = description;
@@ -75,10 +72,6 @@ public class ScheduledTaskDef {
 
     public Long getId() {
         return id;
-    }
-
-    public Long getTenantId() {
-        return tenantId;
     }
 
     public String getUserLoginId() {

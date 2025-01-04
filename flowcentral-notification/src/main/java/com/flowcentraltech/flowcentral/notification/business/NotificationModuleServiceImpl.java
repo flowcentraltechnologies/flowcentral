@@ -199,15 +199,15 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
 
             };
 
-        this.tenantChannelInfos = new FactoryMap<Long, TenantChannelInfo>()
-            {
+            this.tenantChannelInfos = new FactoryMap<Long, TenantChannelInfo>()
+                {
 
-                @Override
-                protected TenantChannelInfo create(Long tenantId, Object... params) throws Exception {
-                    return new TenantChannelInfo(tenantId);
-                }
+                    @Override
+                    protected TenantChannelInfo create(Long tenantId, Object... params) throws Exception {
+                        return new TenantChannelInfo();
+                    }
 
-            };
+                };
     }
 
     private static final Class<?>[] NOTIF_TEMPLATE_WRAPPER_PARAMS_0 = { NotifTemplateDef.class };
@@ -386,7 +386,6 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
         } else {
             MessageParts messageParts = getMessageParts(notifMessage);
             NotificationOutbox notification = new NotificationOutbox();
-            notification.setTenantId(getUserTenantId());
             notification.setImportance(notifMessage.getImportance());
             notification.setFrom(notifMessage.getFrom());
             notification.setType(notifType);
@@ -448,7 +447,7 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
                     for (Long tenantId : au.system().getPrimaryMappedTenantIds()) {
                         logDebug("Checking [{0}] notifications for tenant with id [{1}]...", notifType, tenantId);
                         if (environment().countAll(new NotificationChannelQuery().notifType(notifType)
-                                .tenantId(tenantId).status(RecordStatus.ACTIVE)) > 0) {
+                                .status(RecordStatus.ACTIVE)) > 0) {
                             logDebug("Sending [{0}] notifications for tenant with id [{1}]...", notifType, tenantId);
                             TenantChannelInfo tenantChannelInfo = tenantChannelInfos.get(tenantId);
                             final NotifChannelDef notifChannelDef = tenantChannelInfo
@@ -531,8 +530,7 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
                             } finally {
                                 if (notifChannelDef.isThrottled()) {
                                     NotificationChannel notificationChannel = environment()
-                                            .find(new NotificationChannelQuery().name(notifChannelDef.getName())
-                                                    .tenantId(tenantId));
+                                            .find(new NotificationChannelQuery().name(notifChannelDef.getName()));
                                     Date nextTransmissionOn = CalendarUtils.getNowWithFrequencyOffset(now,
                                             FrequencyUnit.MINUTE, 1);
                                     notificationChannel.setNextTransmissionOn(nextTransmissionOn);
@@ -684,23 +682,20 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
 
         private final FactoryMap<String, NotifChannelDef> channelDefsByName;
 
-        private final Long tenantId;
-
-        public TenantChannelInfo(Long _tenantId) {
-            this.tenantId = _tenantId;
+        public TenantChannelInfo() {
             channelDefsByType = new StaleableFactoryMap<NotifType, NotifChannelDef>()
                 {
 
                     @Override
                     protected boolean stale(NotifType type, NotifChannelDef notifChannelDef) throws Exception {
                         return (environment().value(long.class, "versionNo", new NotificationChannelQuery()
-                                .tenantId(tenantId).id(notifChannelDef.getId())) > notifChannelDef.getVersion());
+                                .id(notifChannelDef.getId())) > notifChannelDef.getVersion());
                     }
 
                     @Override
                     protected NotifChannelDef create(NotifType type, Object... params) throws Exception {
                         String name = environment().value(String.class, "name",
-                                new NotificationChannelQuery().notifType(type).tenantId(tenantId));
+                                new NotificationChannelQuery().notifType(type));
                         return channelDefsByName.get(name);
                     }
 
@@ -712,13 +707,13 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
                     @Override
                     protected boolean stale(String name, NotifChannelDef notifChannelDef) throws Exception {
                         return (environment().value(long.class, "versionNo", new NotificationChannelQuery()
-                                .tenantId(tenantId).id(notifChannelDef.getId())) > notifChannelDef.getVersion());
+                                .id(notifChannelDef.getId())) > notifChannelDef.getVersion());
                     }
 
                     @Override
                     protected NotifChannelDef create(String name, Object... params) throws Exception {
                         NotificationChannel notificationChannel = environment()
-                                .list(new NotificationChannelQuery().name(name).tenantId(tenantId));
+                                .list(new NotificationChannelQuery().name(name));
                         if (notificationChannel == null) {
                             throw new UnifyException(
                                     NotificationModuleErrorConstants.NOTIFICATION_CHANNEL_WITH_NAME_UNKNOWN, name);

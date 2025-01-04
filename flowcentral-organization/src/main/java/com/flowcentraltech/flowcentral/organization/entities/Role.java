@@ -18,7 +18,7 @@ package com.flowcentraltech.flowcentral.organization.entities;
 import java.util.Date;
 import java.util.List;
 
-import com.flowcentraltech.flowcentral.common.entities.BaseStatusWorkTenantEntity;
+import com.flowcentraltech.flowcentral.common.entities.BaseStatusWorkEntity;
 import com.flowcentraltech.flowcentral.organization.constants.BranchViewType;
 import com.tcdng.unify.common.annotation.ColumnType;
 import com.tcdng.unify.common.annotation.Table;
@@ -38,7 +38,7 @@ import com.tcdng.unify.core.annotation.Mapped;
 @Table(name = "FC_ROLE", uniqueConstraints = {
         @UniqueConstraint({ "code" }),
         @UniqueConstraint({ "description" }) })
-public class Role extends BaseStatusWorkTenantEntity {
+public class Role extends BaseStatusWorkEntity {
 
     @Mapped("organization.mappedDepartment")
     @Column(nullable = false)

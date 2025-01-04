@@ -18,7 +18,7 @@ package com.flowcentraltech.flowcentral.security.entities;
 import java.util.Date;
 
 import com.flowcentraltech.flowcentral.common.constants.SecuredLinkType;
-import com.flowcentraltech.flowcentral.common.entities.BaseAuditTenantEntity;
+import com.flowcentraltech.flowcentral.common.entities.BaseAuditEntity;
 import com.tcdng.unify.common.annotation.ColumnType;
 import com.tcdng.unify.common.annotation.Table;
 import com.tcdng.unify.core.annotation.Column;
@@ -32,7 +32,7 @@ import com.tcdng.unify.core.annotation.ListOnly;
  * @since 1.0
  */
 @Table("FC_SECUREDLINK")
-public class SecuredLink extends BaseAuditTenantEntity {
+public class SecuredLink extends BaseAuditEntity {
 
     @ForeignKey(name = "SECURED_LINK_TY", nullable = true)
     private SecuredLinkType type;

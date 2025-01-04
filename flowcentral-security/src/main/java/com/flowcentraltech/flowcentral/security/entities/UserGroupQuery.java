@@ -15,7 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.security.entities;
 
-import com.flowcentraltech.flowcentral.common.entities.BaseStatusTenantEntityQuery;
+import com.flowcentraltech.flowcentral.common.entities.BaseStatusEntityQuery;
 
 /**
  * Query class for user group records.
@@ -23,7 +23,7 @@ import com.flowcentraltech.flowcentral.common.entities.BaseStatusTenantEntityQue
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class UserGroupQuery extends BaseStatusTenantEntityQuery<UserGroup> {
+public class UserGroupQuery extends BaseStatusEntityQuery<UserGroup> {
 
     public UserGroupQuery() {
         super(UserGroup.class);

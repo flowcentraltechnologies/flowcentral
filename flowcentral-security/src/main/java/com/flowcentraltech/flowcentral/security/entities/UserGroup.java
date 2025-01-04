@@ -17,7 +17,7 @@ package com.flowcentraltech.flowcentral.security.entities;
 
 import java.util.List;
 
-import com.flowcentraltech.flowcentral.common.entities.BaseStatusTenantEntity;
+import com.flowcentraltech.flowcentral.common.entities.BaseStatusEntity;
 import com.tcdng.unify.common.annotation.Table;
 import com.tcdng.unify.common.annotation.UniqueConstraint;
 import com.tcdng.unify.core.annotation.ChildList;
@@ -31,7 +31,7 @@ import com.tcdng.unify.core.annotation.Column;
  */
 @Table(name = "FC_USERGROUP",
         uniqueConstraints = { @UniqueConstraint({ "name" }), @UniqueConstraint({ "description" }) })
-public class UserGroup extends BaseStatusTenantEntity {
+public class UserGroup extends BaseStatusEntity {
 
     @Column(name = "USERGROUP_NM", length = 64)
     private String name;

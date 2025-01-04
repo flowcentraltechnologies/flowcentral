@@ -15,7 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.organization.entities;
 
-import com.flowcentraltech.flowcentral.common.entities.BaseStatusTenantEntityQuery;
+import com.flowcentraltech.flowcentral.common.entities.BaseStatusEntityQuery;
 
 /**
  * Query class for countries.
@@ -23,7 +23,7 @@ import com.flowcentraltech.flowcentral.common.entities.BaseStatusTenantEntityQue
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class CountryQuery extends BaseStatusTenantEntityQuery<Country> {
+public class CountryQuery extends BaseStatusEntityQuery<Country> {
 
     public CountryQuery() {
         super(Country.class);

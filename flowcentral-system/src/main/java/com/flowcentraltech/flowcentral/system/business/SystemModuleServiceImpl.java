@@ -215,7 +215,7 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
                     String[] weekDays = DataUtils.convert(String[].class, scheduledTask.getWeekdays());
                     String[] days = DataUtils.convert(String[].class, scheduledTask.getDays());
                     String[] months = DataUtils.convert(String[].class, scheduledTask.getMonths());
-                    return new ScheduledTaskDef(scheduledTaskId, scheduledTask.getTenantId(),
+                    return new ScheduledTaskDef(scheduledTaskId,
                             scheduledTask.getUpdatedBy(), lock, scheduledTask.getDescription(),
                             scheduledTask.getTaskName(), startTimeOffset, endTimeOffset, repeatMillSecs, weekDays, days,
                             months, pvd, scheduledTask.getVersionNo());
@@ -615,7 +615,7 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
                     taskLock);
             Map<String, Object> taskParameters = new HashMap<String, Object>();
             taskParameters.put(TaskParameterConstants.USER_LOGIN_ID, scheduledTaskDef.getUserLoginId());
-            taskParameters.put(TaskParameterConstants.TENANT_ID, scheduledTaskDef.getTenantId());
+            taskParameters.put(TaskParameterConstants.TENANT_ID, Entity.PRIMARY_TENANT_ID);
             taskParameters.put(TaskParameterConstants.LOCK_TO_TRY, taskLock);
             taskParameters.put(SystemSchedTaskConstants.SCHEDULEDTASK_ID, scheduledTaskId);
 

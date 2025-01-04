@@ -1481,7 +1481,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         if (wfEntityInst != null) {
             try {
                 final UserToken userToken = UserToken.newBuilder().userLoginId(wfItem.getForwardedBy())
-                        .userName(wfItem.getForwardedByName()).tenantId(wfItem.getTenantId())
+                        .userName(wfItem.getForwardedByName())
                         .branchCode(wfEntityInst.getWorkBranchCode())
                         .reservedUser(DefaultApplicationConstants.SYSTEM_LOGINID.equals(wfItem.getForwardedBy())).build();
                 getSessionContext().setUserToken(userToken);
@@ -1600,7 +1600,6 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
 
             final String userFullName = securityModuleService.getUserFullName(userLoginId);
             WfItem wfItem = new WfItem();
-            wfItem.setTenantId(workInst.getTenantId());
             wfItem.setWfItemEventId(wfItemEventId);
             wfItem.setForwardedBy(userLoginId);
             wfItem.setForwardedByName(userFullName);

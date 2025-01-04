@@ -18,7 +18,7 @@ package com.flowcentraltech.flowcentral.workflow.entities;
 
 import java.util.Date;
 
-import com.flowcentraltech.flowcentral.common.entities.BaseAuditTenantEntity;
+import com.flowcentraltech.flowcentral.common.entities.BaseAuditEntity;
 import com.flowcentraltech.flowcentral.configuration.constants.WorkflowStepPriority;
 import com.tcdng.unify.common.annotation.ColumnType;
 import com.tcdng.unify.common.annotation.Table;
@@ -33,7 +33,7 @@ import com.tcdng.unify.core.annotation.ListOnly;
  * @version 1.0
  */
 @Table(name = "FC_WORKITEM")
-public class WfItem extends BaseAuditTenantEntity {
+public class WfItem extends BaseAuditEntity {
 
     @ForeignKey(type = WfItemEvent.class)
     private Long wfItemEventId;

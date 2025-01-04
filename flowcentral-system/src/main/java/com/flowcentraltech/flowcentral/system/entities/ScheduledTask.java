@@ -17,7 +17,7 @@ package com.flowcentraltech.flowcentral.system.entities;
 
 import java.util.Date;
 
-import com.flowcentraltech.flowcentral.common.entities.BaseStatusTenantEntity;
+import com.flowcentraltech.flowcentral.common.entities.BaseStatusEntity;
 import com.flowcentraltech.flowcentral.common.entities.ParamValues;
 import com.tcdng.unify.common.annotation.ColumnType;
 import com.tcdng.unify.common.annotation.Table;
@@ -34,7 +34,7 @@ import com.tcdng.unify.core.annotation.Policy;
  */
 @Policy("scheduledtask-entitypolicy")
 @Table(name = "FC_SCHEDULEDTASK", uniqueConstraints = { @UniqueConstraint({ "description" }) })
-public class ScheduledTask extends BaseStatusTenantEntity {
+public class ScheduledTask extends BaseStatusEntity {
 
     @Column(name = "SCHEDTASK_DESC", length = 64)
     private String description;

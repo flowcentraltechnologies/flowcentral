@@ -15,7 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.security.entities;
 
-import com.flowcentraltech.flowcentral.common.entities.BaseAuditTenantEntity;
+import com.flowcentraltech.flowcentral.common.entities.BaseAuditEntity;
 import com.tcdng.unify.common.annotation.Table;
 import com.tcdng.unify.core.annotation.Column;
 
@@ -26,7 +26,7 @@ import com.tcdng.unify.core.annotation.Column;
  * @since 1.0
  */
 @Table("FC_PASSWORDCOMPLEXITY")
-public class PasswordComplexity extends BaseAuditTenantEntity {
+public class PasswordComplexity extends BaseAuditEntity {
 
     @Column(name = "minimum_password_len", length = 2)
     private Integer minimumPasswordLen;

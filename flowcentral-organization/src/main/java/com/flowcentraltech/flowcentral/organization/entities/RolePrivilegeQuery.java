@@ -20,7 +20,7 @@ import java.util.List;
 
 import com.flowcentraltech.flowcentral.common.constants.ConfigType;
 import com.flowcentraltech.flowcentral.common.constants.WfItemVersionType;
-import com.flowcentraltech.flowcentral.common.entities.BaseAuditTenantEntityQuery;
+import com.flowcentraltech.flowcentral.common.entities.BaseAuditEntityQuery;
 
 /**
  * Role privilege query.
@@ -28,7 +28,7 @@ import com.flowcentraltech.flowcentral.common.entities.BaseAuditTenantEntityQuer
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class RolePrivilegeQuery extends BaseAuditTenantEntityQuery<RolePrivilege> {
+public class RolePrivilegeQuery extends BaseAuditEntityQuery<RolePrivilege> {
 
     public RolePrivilegeQuery() {
         super(RolePrivilege.class);

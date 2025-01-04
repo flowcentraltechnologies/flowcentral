@@ -100,7 +100,7 @@ public class OrganizationModuleServiceImpl extends AbstractFlowCentralService
             {
                 @Override
                 protected TenantRolePrivileges create(Long tenantId, Object... arg2) throws Exception {
-                    return new TenantRolePrivileges(tenantId);
+                    return new TenantRolePrivileges();
                 }
             };
 
@@ -543,25 +543,22 @@ public class OrganizationModuleServiceImpl extends AbstractFlowCentralService
 
         private final FactoryMap<String, RolePrivileges> privilegesByRole;
 
-        private final Long tenantId;
-
-        public TenantRolePrivileges(Long _tenantId) {
-            this.tenantId = _tenantId;
+        public TenantRolePrivileges() {
             this.privilegesByRole = new StaleableFactoryMap<String, RolePrivileges>()
                 {
                     @Override
                     protected boolean stale(String roleCode, RolePrivileges rolePrivileges) throws Exception {
                         return rolePrivileges.getVersion() < environment().value(Long.class, "versionNo",
-                                new RoleQuery().code(roleCode).tenantId(tenantId));
+                                new RoleQuery().code(roleCode));
                     }
 
                     @Override
                     protected RolePrivileges create(String roleCode, Object... arg2) throws Exception {
                         Set<String> privileges = environment().valueSet(String.class, "privilegeCode",
                                 new RolePrivilegeQuery().roleWfItemVersionType(WfItemVersionType.ORIGINAL)
-                                        .roleCode(roleCode).tenantId(tenantId));
+                                        .roleCode(roleCode));
                         long version = environment().value(Long.class, "versionNo",
-                                new RoleQuery().code(roleCode).tenantId(tenantId));
+                                new RoleQuery().code(roleCode));
                         return new RolePrivileges(privileges, version);
                     }
                 };

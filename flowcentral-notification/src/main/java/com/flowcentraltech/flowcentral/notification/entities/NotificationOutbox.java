@@ -18,7 +18,7 @@ package com.flowcentraltech.flowcentral.notification.entities;
 import java.util.Date;
 import java.util.List;
 
-import com.flowcentraltech.flowcentral.common.entities.BaseAuditTenantEntity;
+import com.flowcentraltech.flowcentral.common.entities.BaseAuditEntity;
 import com.flowcentraltech.flowcentral.configuration.constants.ImportanceType;
 import com.flowcentraltech.flowcentral.configuration.constants.NotifMessageFormat;
 import com.flowcentraltech.flowcentral.configuration.constants.NotifType;
@@ -37,7 +37,7 @@ import com.tcdng.unify.core.annotation.ListOnly;
  * @since 1.0
  */
 @Table(name = "FC_NOTIFOUTBOX")
-public class NotificationOutbox extends BaseAuditTenantEntity {
+public class NotificationOutbox extends BaseAuditEntity {
 
     @ForeignKey(name = "NOTIFICATION_TY")
     private NotifType type;

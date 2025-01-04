@@ -35,83 +35,43 @@ public enum EntityBaseType implements EnumConst {
     BASE_ENTITY(
             "ENI",
             false,
-            false,
             false),
     BASE_VERSION_ENTITY(
             "ENT",
-            false,
             false,
             false),
     BASE_AUDIT_ENTITY(
             "ADE",
             true,
-            false,
             false),
     BASE_STATUS_ENTITY(
             "STA",
             true,
-            false,
             false),
     BASE_WORK_ENTITY(
             "WKE",
             true,
-            true,
-            false),
+            true),
     BASE_STATUS_WORK_ENTITY(
             "SWK",
             true,
-            true,
-            false),
+            true),
     BASE_NAMED_ENTITY(
             "NME",
             true,
-            false,
             false),
     BASE_CONFIG_ENTITY(
             "CGE",
             true,
-            false,
             false),
     BASE_CONFIG_NAMED_ENTITY(
             "CNE",
             true,
-            false,
             false),
     BASE_APPLICATION_ENTITY(
             "APE",
             true,
-            false,
-            false),
-    BASE_TENANT_ENTITY(
-            "ENIT",
-            false,
-            false,
-            true),
-    BASE_VERSION_TENANT_ENTITY(
-            "ENTT",
-            false,
-            false,
-            true),
-    BASE_AUDIT_TENANT_ENTITY(
-            "ADET",
-            true,
-            false,
-            true),
-    BASE_STATUS_TENANT_ENTITY(
-            "STAT",
-            true,
-            false,
-            true),
-    BASE_WORK_TENANT_ENTITY(
-            "WKET",
-            true,
-            true,
-            true),
-    BASE_STATUS_WORK_TENANT_ENTITY(
-            "SWKT",
-            true,
-            true,
-            true);
+            false);
 
     private final String code;
 
@@ -119,13 +79,10 @@ public enum EntityBaseType implements EnumConst {
 
     private final boolean work;
 
-    private final boolean tenant;
-
-    private EntityBaseType(String code, boolean audit, boolean work, boolean tenant) {
+    private EntityBaseType(String code, boolean audit, boolean work) {
         this.code = code;
         this.audit = audit;
         this.work = work;
-        this.tenant = tenant;
     }
 
     @Override
@@ -139,7 +96,7 @@ public enum EntityBaseType implements EnumConst {
     }
 
     public boolean isTenantType() {
-        return tenant;
+        return false;
     }
 
     public boolean isAuditType() {

@@ -15,7 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.security.entities;
 
-import com.flowcentraltech.flowcentral.common.entities.BaseAuditTenantEntity;
+import com.flowcentraltech.flowcentral.common.entities.BaseAuditEntity;
 import com.tcdng.unify.common.annotation.Table;
 import com.tcdng.unify.common.annotation.UniqueConstraint;
 import com.tcdng.unify.common.data.Describable;
@@ -30,7 +30,7 @@ import com.tcdng.unify.core.util.StringUtils;
  * @since 1.0
  */
 @Table(name = "FC_USERGROUPMEMBER", uniqueConstraints = { @UniqueConstraint({ "userGroupId", "userId" }) })
-public class UserGroupMember extends BaseAuditTenantEntity implements Describable {
+public class UserGroupMember extends BaseAuditEntity implements Describable {
 
     @ForeignKey(UserGroup.class)
     private Long userGroupId;

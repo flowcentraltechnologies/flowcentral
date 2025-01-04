@@ -18,7 +18,7 @@ package com.flowcentraltech.flowcentral.security.entities;
 import java.util.Date;
 import java.util.List;
 
-import com.flowcentraltech.flowcentral.common.entities.BaseStatusWorkTenantEntity;
+import com.flowcentraltech.flowcentral.common.entities.BaseStatusWorkEntity;
 import com.flowcentraltech.flowcentral.security.constants.UserWorkflowStatus;
 import com.tcdng.unify.common.annotation.ColumnType;
 import com.tcdng.unify.common.annotation.Table;
@@ -38,7 +38,7 @@ import com.tcdng.unify.core.annotation.Policy;
  */
 @Policy("userpolicy")
 @Table(name = "FC_USER", uniqueConstraints = { @UniqueConstraint({ "loginId" }) })
-public class User extends BaseStatusWorkTenantEntity {
+public class User extends BaseStatusWorkEntity {
 
     @ForeignKey(name = "WORKFLOW_STATUS")
     private UserWorkflowStatus workflowStatus;
