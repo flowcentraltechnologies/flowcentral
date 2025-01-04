@@ -27,12 +27,12 @@ import com.flowcentraltech.flowcentral.application.data.UniqueConditionDef;
 import com.flowcentraltech.flowcentral.application.data.UniqueConstraintDef;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
 import com.flowcentraltech.flowcentral.common.business.policies.AbstractWfBinaryPolicy;
+import com.tcdng.unify.common.data.Listable;
+import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
-import com.tcdng.unify.core.data.Listable;
 import com.tcdng.unify.core.data.ValueStoreReader;
-import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.database.Query;
 
 /**

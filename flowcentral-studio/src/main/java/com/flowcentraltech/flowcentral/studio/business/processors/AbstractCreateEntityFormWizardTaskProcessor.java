@@ -44,12 +44,12 @@ import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldDataTy
 import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldType;
 import com.flowcentraltech.flowcentral.configuration.xml.FieldSequenceConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.FieldSequenceEntryConfig;
+import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.batch.ConstraintAction;
 import com.tcdng.unify.core.constant.DataType;
 import com.tcdng.unify.core.data.ValueStore;
-import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.task.TaskMonitor;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.NameUtils;

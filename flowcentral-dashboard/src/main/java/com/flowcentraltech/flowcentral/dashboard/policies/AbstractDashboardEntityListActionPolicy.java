@@ -23,9 +23,9 @@ import com.flowcentraltech.flowcentral.common.business.policies.EntityListAction
 import com.flowcentraltech.flowcentral.common.business.policies.EntityListActionResult;
 import com.flowcentraltech.flowcentral.dashboard.business.DashboardModuleService;
 import com.flowcentraltech.flowcentral.dashboard.entities.DashboardQuery;
+import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
-import com.tcdng.unify.core.database.Entity;
 
 /**
  * Convenient abstract base class for entity list action policies.

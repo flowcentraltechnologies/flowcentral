@@ -19,9 +19,9 @@ import java.util.List;
 
 import com.flowcentraltech.flowcentral.common.entities.EntityWrapper;
 import com.flowcentraltech.flowcentral.notification.data.NotifTemplateWrapper;
+import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.ValueStore;
-import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.database.Query;
 import com.tcdng.unify.core.task.TaskInput;
 import com.tcdng.unify.core.task.TaskMonitor;

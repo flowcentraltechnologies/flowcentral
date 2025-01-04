@@ -18,7 +18,7 @@ package com.flowcentraltech.flowcentral.application.web.widgets;
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.data.FilterGroupDef;
 import com.flowcentraltech.flowcentral.application.data.TableDef;
-import com.tcdng.unify.core.database.Entity;
+import com.tcdng.unify.common.database.Entity;
 
 /**
  * Entity list table object.

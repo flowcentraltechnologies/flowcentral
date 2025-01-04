@@ -41,13 +41,13 @@ import com.flowcentraltech.flowcentral.configuration.constants.ChartCategoryData
 import com.flowcentraltech.flowcentral.configuration.constants.ChartSeriesDataType;
 import com.flowcentraltech.flowcentral.configuration.constants.ChartTimeSeriesType;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldDataType;
+import com.tcdng.unify.common.data.Listable;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.criterion.AggregateFunction;
 import com.tcdng.unify.core.criterion.And;
 import com.tcdng.unify.core.criterion.GroupingFunction;
 import com.tcdng.unify.core.criterion.Restriction;
-import com.tcdng.unify.core.data.Listable;
 import com.tcdng.unify.core.database.Aggregation;
 import com.tcdng.unify.core.database.GroupingAggregation;
 import com.tcdng.unify.core.database.GroupingAggregation.Grouping;

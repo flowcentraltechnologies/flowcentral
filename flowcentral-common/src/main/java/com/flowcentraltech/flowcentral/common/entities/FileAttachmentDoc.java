@@ -15,9 +15,9 @@
  */
 package com.flowcentraltech.flowcentral.common.entities;
 
+import com.tcdng.unify.common.annotation.Table;
 import com.tcdng.unify.core.annotation.Column;
 import com.tcdng.unify.core.annotation.ForeignKey;
-import com.tcdng.unify.core.annotation.Table;
 
 /**
  * File attachment document entity.

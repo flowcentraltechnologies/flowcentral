@@ -25,11 +25,11 @@ import com.flowcentraltech.flowcentral.common.business.policies.EntityActionCont
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
 import com.flowcentraltech.flowcentral.connect.common.data.JsonProcedureResponse;
 import com.flowcentraltech.flowcentral.connect.common.data.ProcedureRequest;
+import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.constant.PrintFormat;
 import com.tcdng.unify.core.data.BeanValueStore;
-import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.util.DataUtils;
 
 /**

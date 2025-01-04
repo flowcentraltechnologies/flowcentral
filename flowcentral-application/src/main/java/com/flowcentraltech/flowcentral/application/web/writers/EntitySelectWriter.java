@@ -16,10 +16,10 @@
 package com.flowcentraltech.flowcentral.application.web.writers;
 
 import com.flowcentraltech.flowcentral.application.web.widgets.EntitySelectWidget;
+import com.tcdng.unify.common.data.Listable;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Writes;
-import com.tcdng.unify.core.data.Listable;
 import com.tcdng.unify.web.ui.widget.EventHandler;
 import com.tcdng.unify.web.ui.widget.ResponseWriter;
 import com.tcdng.unify.web.ui.widget.Widget;

@@ -16,12 +16,12 @@
 package com.flowcentraltech.flowcentral.common;
 
 import com.flowcentraltech.flowcentral.common.constants.CommonModuleNameConstants;
+import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.AbstractUnifyComponentTest;
 import com.tcdng.unify.core.ApplicationComponents;
 import com.tcdng.unify.core.UnifyCorePropertyConstants;
 import com.tcdng.unify.core.database.Database;
 import com.tcdng.unify.core.database.DatabaseTransactionManager;
-import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.database.Query;
 import com.tcdng.unify.core.system.entities.AbstractSequencedEntity;
 

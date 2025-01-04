@@ -18,10 +18,10 @@ package com.flowcentraltech.flowcentral.workflow.entities;
 
 import com.flowcentraltech.flowcentral.application.entities.AppSetValues;
 import com.flowcentraltech.flowcentral.common.entities.BaseAuditEntity;
+import com.tcdng.unify.common.annotation.Table;
 import com.tcdng.unify.core.annotation.Child;
 import com.tcdng.unify.core.annotation.ForeignKey;
 import com.tcdng.unify.core.annotation.ListOnly;
-import com.tcdng.unify.core.annotation.Table;
 
 /**
  * Workflow step set values entity.

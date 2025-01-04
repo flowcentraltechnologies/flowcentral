@@ -18,8 +18,8 @@ package com.flowcentraltech.flowcentral.common.entities;
 import java.util.Date;
 
 import com.flowcentraltech.flowcentral.configuration.constants.DefaultApplicationConstants;
+import com.tcdng.unify.common.annotation.ColumnType;
 import com.tcdng.unify.core.annotation.Column;
-import com.tcdng.unify.core.annotation.ColumnType;
 import com.tcdng.unify.core.annotation.Policy;
 
 /**

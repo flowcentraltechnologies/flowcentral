@@ -21,10 +21,10 @@ import com.flowcentraltech.flowcentral.common.entities.BaseStatusEntityPolicy;
 import com.flowcentraltech.flowcentral.integration.endpoint.Endpoint;
 import com.flowcentraltech.flowcentral.integration.endpoint.EndpointManager;
 import com.flowcentraltech.flowcentral.integration.endpoint.EndpointType;
+import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
-import com.tcdng.unify.core.database.Entity;
 
 /**
  * End-point configuration entity policy.

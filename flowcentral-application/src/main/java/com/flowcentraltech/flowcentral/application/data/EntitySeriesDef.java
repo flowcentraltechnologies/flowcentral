@@ -16,7 +16,7 @@
 package com.flowcentraltech.flowcentral.application.data;
 
 import com.flowcentraltech.flowcentral.configuration.constants.SeriesType;
-import com.tcdng.unify.core.data.Listable;
+import com.tcdng.unify.common.data.Listable;
 
 /**
  * Entity series definition.

@@ -16,8 +16,8 @@
 package com.flowcentraltech.flowcentral.configuration.constants;
 
 import com.tcdng.unify.common.annotation.StaticList;
+import com.tcdng.unify.common.annotation.Table;
 import com.tcdng.unify.common.constants.EnumConst;
-import com.tcdng.unify.core.annotation.Table;
 import com.tcdng.unify.core.criterion.AggregateFunction;
 import com.tcdng.unify.core.criterion.AggregateType;
 import com.tcdng.unify.core.util.EnumUtils;

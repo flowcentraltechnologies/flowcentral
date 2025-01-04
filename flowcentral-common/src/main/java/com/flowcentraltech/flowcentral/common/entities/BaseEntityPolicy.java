@@ -19,9 +19,9 @@ import java.util.Date;
 
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralContainerPropertyConstants;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralEditionConstants;
+import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
-import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.system.entities.SequencedEntityPolicy;
 
 /**

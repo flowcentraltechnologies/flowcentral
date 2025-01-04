@@ -20,8 +20,8 @@ import java.util.Collections;
 import java.util.List;
 
 import com.tcdng.unify.common.constants.StandardFormatType;
+import com.tcdng.unify.common.data.Listable;
 import com.tcdng.unify.core.batch.ConstraintAction;
-import com.tcdng.unify.core.data.Listable;
 
 /**
  * Entity upload definition.

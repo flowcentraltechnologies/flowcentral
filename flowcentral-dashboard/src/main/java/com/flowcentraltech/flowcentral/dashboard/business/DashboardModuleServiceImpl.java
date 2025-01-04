@@ -38,13 +38,13 @@ import com.flowcentraltech.flowcentral.dashboard.entities.DashboardOptionCategor
 import com.flowcentraltech.flowcentral.dashboard.entities.DashboardQuery;
 import com.flowcentraltech.flowcentral.dashboard.entities.DashboardSection;
 import com.flowcentraltech.flowcentral.dashboard.entities.DashboardTile;
+import com.tcdng.unify.common.data.Listable;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.Transactional;
 import com.tcdng.unify.core.criterion.Update;
 import com.tcdng.unify.core.data.FactoryMap;
-import com.tcdng.unify.core.data.Listable;
 import com.tcdng.unify.core.data.StaleableFactoryMap;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.StringUtils;

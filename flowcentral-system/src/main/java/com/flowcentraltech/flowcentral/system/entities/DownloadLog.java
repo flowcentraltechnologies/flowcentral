@@ -17,8 +17,8 @@
 package com.flowcentraltech.flowcentral.system.entities;
 
 import com.flowcentraltech.flowcentral.common.entities.BaseAuditEntity;
+import com.tcdng.unify.common.annotation.Table;
 import com.tcdng.unify.core.annotation.Column;
-import com.tcdng.unify.core.annotation.Table;
 
 /**
  * Download log entity.

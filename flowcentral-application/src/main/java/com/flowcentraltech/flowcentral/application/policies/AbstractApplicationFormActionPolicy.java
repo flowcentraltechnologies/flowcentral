@@ -19,9 +19,9 @@ package com.flowcentraltech.flowcentral.application.policies;
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
 import com.flowcentraltech.flowcentral.common.business.policies.AbstractFormActionPolicy;
+import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
-import com.tcdng.unify.core.database.Entity;
 
 /**
  * Convenient abstract application form action policy.

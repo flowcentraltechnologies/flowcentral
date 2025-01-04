@@ -19,8 +19,8 @@ package com.flowcentraltech.flowcentral.application.data;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.tcdng.unify.common.data.Listable;
 import com.tcdng.unify.core.UnifyException;
-import com.tcdng.unify.core.data.Listable;
 import com.tcdng.unify.core.util.DataUtils;
 
 /**

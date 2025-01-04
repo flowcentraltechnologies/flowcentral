@@ -21,7 +21,6 @@ import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleAu
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationResultMappingConstants;
 import com.flowcentraltech.flowcentral.application.entities.Application;
-import com.flowcentraltech.flowcentral.system.entities.Module;
 import com.flowcentraltech.flowcentral.application.entities.ApplicationQuery;
 import com.flowcentraltech.flowcentral.common.business.LoginUserPhotoGenerator;
 import com.flowcentraltech.flowcentral.common.business.UserLoginActivityProvider;
@@ -30,7 +29,7 @@ import com.flowcentraltech.flowcentral.studio.constants.StudioAppComponentType;
 import com.flowcentraltech.flowcentral.studio.constants.StudioSessionAttributeConstants;
 import com.flowcentraltech.flowcentral.studio.web.data.CreateAppForm;
 import com.flowcentraltech.flowcentral.studio.web.widgets.StudioMenuWidget;
-
+import com.flowcentraltech.flowcentral.system.entities.Module;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;

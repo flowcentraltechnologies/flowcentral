@@ -41,10 +41,10 @@ import com.flowcentraltech.flowcentral.workflow.constants.WorkflowModuleNameCons
 import com.flowcentraltech.flowcentral.workflow.data.WfWizardDef;
 import com.flowcentraltech.flowcentral.workflow.data.WfWizardStepDef;
 import com.flowcentraltech.flowcentral.workflow.entities.WfWizardItem;
+import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.criterion.AndBuilder;
 import com.tcdng.unify.core.criterion.Restriction;
-import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.database.Query;
 import com.tcdng.unify.core.util.ReflectUtils;
 import com.tcdng.unify.web.ui.widget.Page;

@@ -19,9 +19,9 @@ package com.flowcentraltech.flowcentral.common.business;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
+import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.database.Database;
-import com.tcdng.unify.core.database.Entity;
 
 /**
  * Environment delegate.

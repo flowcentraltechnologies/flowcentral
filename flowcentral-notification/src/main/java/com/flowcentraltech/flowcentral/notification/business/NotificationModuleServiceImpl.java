@@ -72,6 +72,7 @@ import com.flowcentraltech.flowcentral.notification.util.DynamicNotifLargeTextIn
 import com.flowcentraltech.flowcentral.notification.util.DynamicNotifTemplateInfo;
 import com.flowcentraltech.flowcentral.notification.util.NotifLargeTextInfo;
 import com.flowcentraltech.flowcentral.notification.util.NotificationCodeGenUtils;
+import com.tcdng.unify.common.data.Listable;
 import com.tcdng.unify.common.util.StringToken;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
@@ -82,7 +83,6 @@ import com.tcdng.unify.core.annotation.Transactional;
 import com.tcdng.unify.core.constant.FrequencyUnit;
 import com.tcdng.unify.core.criterion.Update;
 import com.tcdng.unify.core.data.FactoryMap;
-import com.tcdng.unify.core.data.Listable;
 import com.tcdng.unify.core.data.MapValueStore;
 import com.tcdng.unify.core.data.ParameterizedStringGenerator;
 import com.tcdng.unify.core.data.StaleableFactoryMap;

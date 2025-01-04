@@ -17,8 +17,8 @@
 package com.flowcentraltech.flowcentral.common.business.policies;
 
 import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
+import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.UnifyException;
-import com.tcdng.unify.core.database.Entity;
 
 /**
  * Entity action policy.

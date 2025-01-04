@@ -25,10 +25,10 @@ import java.util.Map;
 
 import com.flowcentraltech.flowcentral.application.web.lists.AbstractApplicationListCommand;
 import com.flowcentraltech.flowcentral.configuration.constants.AppletType;
+import com.tcdng.unify.common.data.Listable;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
-import com.tcdng.unify.core.data.Listable;
 import com.tcdng.unify.core.data.LocaleFactoryMap;
 import com.tcdng.unify.core.list.ListManager;
 

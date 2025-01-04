@@ -20,14 +20,14 @@ import java.util.List;
 import com.flowcentraltech.flowcentral.common.entities.BaseStatusEntity;
 import com.flowcentraltech.flowcentral.common.entities.ParamValues;
 import com.flowcentraltech.flowcentral.integration.endpoint.EndpointType;
+import com.tcdng.unify.common.annotation.Table;
+import com.tcdng.unify.common.annotation.UniqueConstraint;
 import com.tcdng.unify.core.annotation.Child;
 import com.tcdng.unify.core.annotation.ChildList;
 import com.tcdng.unify.core.annotation.Column;
 import com.tcdng.unify.core.annotation.ForeignKey;
 import com.tcdng.unify.core.annotation.ListOnly;
 import com.tcdng.unify.core.annotation.Policy;
-import com.tcdng.unify.core.annotation.Table;
-import com.tcdng.unify.core.annotation.UniqueConstraint;
 
 /**
  * End-point configuration.

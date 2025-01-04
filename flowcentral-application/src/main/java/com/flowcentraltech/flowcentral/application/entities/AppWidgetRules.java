@@ -17,13 +17,13 @@
 package com.flowcentraltech.flowcentral.application.entities;
 
 import com.flowcentraltech.flowcentral.common.entities.BaseAuditEntity;
+import com.tcdng.unify.common.annotation.ColumnType;
+import com.tcdng.unify.common.annotation.Index;
+import com.tcdng.unify.common.annotation.Table;
 import com.tcdng.unify.core.annotation.CategoryColumn;
 import com.tcdng.unify.core.annotation.Column;
-import com.tcdng.unify.core.annotation.ColumnType;
 import com.tcdng.unify.core.annotation.FosterParentId;
 import com.tcdng.unify.core.annotation.FosterParentType;
-import com.tcdng.unify.core.annotation.Index;
-import com.tcdng.unify.core.annotation.Table;
 
 /**
  * Application widget rules entity.

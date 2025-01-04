@@ -19,9 +19,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.ValueStore;
-import com.tcdng.unify.core.database.Entity;
 
 /**
  * Entity wrapper.

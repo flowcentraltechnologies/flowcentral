@@ -21,7 +21,7 @@ import com.flowcentraltech.flowcentral.application.data.Errors;
 import com.flowcentraltech.flowcentral.application.web.widgets.InputArrayEntries;
 import com.flowcentraltech.flowcentral.common.constants.MaintainType;
 import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
-import com.tcdng.unify.core.database.Entity;
+import com.tcdng.unify.common.database.Entity;
 
 /**
  * Work entity single form item

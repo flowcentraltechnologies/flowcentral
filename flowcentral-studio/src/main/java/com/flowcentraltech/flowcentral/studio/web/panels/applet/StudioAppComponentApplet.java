@@ -28,8 +28,8 @@ import com.flowcentraltech.flowcentral.studio.business.StudioModuleService;
 import com.flowcentraltech.flowcentral.studio.constants.StudioAppComponentType;
 import com.flowcentraltech.flowcentral.studio.constants.StudioAppletPropertyConstants;
 import com.flowcentraltech.flowcentral.studio.constants.StudioSessionAttributeConstants;
+import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.UnifyException;
-import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.web.ui.widget.Page;
 
 /**

@@ -20,9 +20,9 @@ import java.util.Date;
 
 import com.flowcentraltech.flowcentral.common.entities.BaseConfigEntityPolicy;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldType;
+import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
-import com.tcdng.unify.core.database.Entity;
 
 /**
  * Application entity field policy.

@@ -23,10 +23,10 @@ import com.flowcentraltech.flowcentral.collaboration.entities.CollaborationLockQ
 import com.flowcentraltech.flowcentral.common.business.policies.AbstractEntityListActionPolicy;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityListActionContext;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityListActionResult;
+import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
-import com.tcdng.unify.core.database.Entity;
 
 /**
  * Release collaboration locks action policy.

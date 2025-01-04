@@ -23,9 +23,9 @@ import com.flowcentraltech.flowcentral.configuration.constants.DefaultApplicatio
 import com.flowcentraltech.flowcentral.organization.entities.Department;
 import com.flowcentraltech.flowcentral.organization.entities.DepartmentQuery;
 import com.flowcentraltech.flowcentral.organization.entities.MappedDepartmentQuery;
+import com.tcdng.unify.common.data.Listable;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
-import com.tcdng.unify.core.data.Listable;
 import com.tcdng.unify.core.list.ZeroParams;
 
 /**

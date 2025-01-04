@@ -16,9 +16,9 @@
 package com.flowcentraltech.flowcentral.report.entities;
 
 import com.flowcentraltech.flowcentral.common.entities.BaseEntity;
+import com.tcdng.unify.common.annotation.Table;
 import com.tcdng.unify.core.annotation.Column;
 import com.tcdng.unify.core.annotation.ForeignKey;
-import com.tcdng.unify.core.annotation.Table;
 
 /**
  * Entity for storing reportable field information.

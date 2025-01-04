@@ -22,9 +22,9 @@ import java.util.Locale;
 import com.flowcentraltech.flowcentral.application.business.FieldSetValueGenerator;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.common.web.lists.AbstractEntityTypeListCommand;
+import com.tcdng.unify.common.data.Listable;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
-import com.tcdng.unify.core.data.Listable;
 
 /**
  * Field set value generator list command.

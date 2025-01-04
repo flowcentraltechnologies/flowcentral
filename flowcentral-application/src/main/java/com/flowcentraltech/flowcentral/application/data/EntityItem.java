@@ -19,7 +19,7 @@ package com.flowcentraltech.flowcentral.application.data;
 import com.flowcentraltech.flowcentral.application.web.widgets.InputArrayEntries;
 import com.flowcentraltech.flowcentral.common.constants.MaintainType;
 import com.flowcentraltech.flowcentral.common.data.FormListingOptions;
-import com.tcdng.unify.core.database.Entity;
+import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.util.StringUtils;
 
 /**

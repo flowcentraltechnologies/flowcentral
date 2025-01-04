@@ -15,7 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.common.business.policies;
 
-import com.tcdng.unify.core.database.Entity;
+import com.tcdng.unify.common.database.Entity;
 
 /**
  * Table action result

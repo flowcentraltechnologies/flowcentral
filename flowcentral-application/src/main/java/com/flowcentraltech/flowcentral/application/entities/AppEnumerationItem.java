@@ -16,10 +16,10 @@
 package com.flowcentraltech.flowcentral.application.entities;
 
 import com.flowcentraltech.flowcentral.common.entities.BaseAuditEntity;
+import com.tcdng.unify.common.annotation.Table;
+import com.tcdng.unify.common.annotation.UniqueConstraint;
 import com.tcdng.unify.core.annotation.Column;
 import com.tcdng.unify.core.annotation.ForeignKey;
-import com.tcdng.unify.core.annotation.Table;
-import com.tcdng.unify.core.annotation.UniqueConstraint;
 
 /**
  * Application enumeration item entity.

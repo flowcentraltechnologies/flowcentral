@@ -25,9 +25,9 @@ import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.EntityFieldDef;
 import com.flowcentraltech.flowcentral.application.entities.AppAppletQuery;
 import com.flowcentraltech.flowcentral.application.web.lists.AbstractApplicationListCommand;
+import com.tcdng.unify.common.data.Listable;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
-import com.tcdng.unify.core.data.Listable;
 import com.tcdng.unify.core.list.LongParam;
 import com.tcdng.unify.core.util.StringUtils;
 

@@ -27,8 +27,8 @@ import com.flowcentraltech.flowcentral.common.business.policies.EntityActionCont
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
 import com.flowcentraltech.flowcentral.common.business.policies.SweepingCommitPolicy;
 import com.flowcentraltech.flowcentral.configuration.constants.RecordActionType;
+import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.UnifyException;
-import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.util.DataUtils;
 
 /**

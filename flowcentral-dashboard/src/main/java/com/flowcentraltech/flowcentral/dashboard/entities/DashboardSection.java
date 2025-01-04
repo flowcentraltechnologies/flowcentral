@@ -18,10 +18,10 @@ package com.flowcentraltech.flowcentral.dashboard.entities;
 
 import com.flowcentraltech.flowcentral.common.entities.BaseAuditEntity;
 import com.flowcentraltech.flowcentral.configuration.constants.DashboardColumnsType;
+import com.tcdng.unify.common.annotation.Table;
 import com.tcdng.unify.core.annotation.Column;
 import com.tcdng.unify.core.annotation.ForeignKey;
 import com.tcdng.unify.core.annotation.ListOnly;
-import com.tcdng.unify.core.annotation.Table;
 
 /**
  * Dashboard section entity.

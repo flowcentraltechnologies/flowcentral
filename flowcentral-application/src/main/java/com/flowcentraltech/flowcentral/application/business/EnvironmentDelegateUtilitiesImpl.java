@@ -20,6 +20,7 @@ import com.flowcentraltech.flowcentral.common.business.AbstractEnvironmentDelega
 import com.flowcentraltech.flowcentral.common.business.QueryEncoder;
 import com.flowcentraltech.flowcentral.common.constants.WfItemVersionType;
 import com.flowcentraltech.flowcentral.common.entities.BaseWorkEntity;
+import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -29,7 +30,6 @@ import com.tcdng.unify.core.criterion.Equals;
 import com.tcdng.unify.core.criterion.IsNull;
 import com.tcdng.unify.core.criterion.Or;
 import com.tcdng.unify.core.criterion.Update;
-import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.database.Query;
 import com.tcdng.unify.core.util.DataUtils;
 

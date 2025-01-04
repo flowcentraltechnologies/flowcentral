@@ -19,6 +19,7 @@ package com.flowcentraltech.flowcentral.application.web.widgets;
 import com.flowcentraltech.flowcentral.application.data.SuggestionTypeDef;
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityNameParts;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
+import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.UplAttribute;
@@ -26,7 +27,6 @@ import com.tcdng.unify.core.annotation.UplAttributes;
 import com.tcdng.unify.core.criterion.And;
 import com.tcdng.unify.core.criterion.Equals;
 import com.tcdng.unify.core.criterion.Or;
-import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.database.Query;
 import com.tcdng.unify.core.util.StringUtils;
 

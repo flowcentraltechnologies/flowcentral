@@ -15,10 +15,10 @@
  */
 package com.flowcentraltech.flowcentral.application.entities;
 
+import com.tcdng.unify.common.annotation.Index;
+import com.tcdng.unify.common.annotation.Table;
 import com.tcdng.unify.core.annotation.Child;
 import com.tcdng.unify.core.annotation.Column;
-import com.tcdng.unify.core.annotation.Index;
-import com.tcdng.unify.core.annotation.Table;
 
 /**
  * Application reference entity.

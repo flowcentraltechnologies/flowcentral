@@ -18,13 +18,13 @@ package com.flowcentraltech.flowcentral.collaboration.entities;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.common.constants.CollaborationType;
 import com.flowcentraltech.flowcentral.common.entities.BaseAuditEntity;
+import com.tcdng.unify.common.annotation.Index;
+import com.tcdng.unify.common.annotation.Table;
+import com.tcdng.unify.common.annotation.UniqueConstraint;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Column;
 import com.tcdng.unify.core.annotation.ForeignKey;
-import com.tcdng.unify.core.annotation.Index;
 import com.tcdng.unify.core.annotation.ListOnly;
-import com.tcdng.unify.core.annotation.Table;
-import com.tcdng.unify.core.annotation.UniqueConstraint;
 
 /**
  * Entity for storing collaboration lock information.

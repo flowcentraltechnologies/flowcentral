@@ -16,7 +16,7 @@
 package com.flowcentraltech.flowcentral.workflow.data;
 
 import com.flowcentraltech.flowcentral.application.data.FilterDef;
-import com.tcdng.unify.core.data.Listable;
+import com.tcdng.unify.common.data.Listable;
 
 /**
  * Workflow filter definition.

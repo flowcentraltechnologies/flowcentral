@@ -79,6 +79,7 @@ import com.flowcentraltech.flowcentral.security.templatewrappers.UserPasswordRes
 import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
 import com.flowcentraltech.flowcentral.system.constants.SystemModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.system.entities.MappedTenant;
+import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.ApplicationComponents;
 import com.tcdng.unify.core.SessionContext;
 import com.tcdng.unify.core.UnifyCorePropertyConstants;
@@ -94,7 +95,6 @@ import com.tcdng.unify.core.constant.FrequencyUnit;
 import com.tcdng.unify.core.criterion.Update;
 import com.tcdng.unify.core.data.FactoryMap;
 import com.tcdng.unify.core.data.StringComposition;
-import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.security.OneWayStringCryptograph;
 import com.tcdng.unify.core.security.PasswordAutenticationService;
 import com.tcdng.unify.core.security.PasswordGenerator;

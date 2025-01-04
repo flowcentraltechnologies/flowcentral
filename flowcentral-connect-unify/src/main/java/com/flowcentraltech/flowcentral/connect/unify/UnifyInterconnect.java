@@ -22,8 +22,8 @@ import com.flowcentraltech.flowcentral.connect.common.AbstractInterconnect;
 import com.flowcentraltech.flowcentral.connect.common.data.EntityFieldInfo;
 import com.flowcentraltech.flowcentral.connect.common.data.EntityInfo;
 import com.flowcentraltech.flowcentral.connect.configuration.constants.ConnectFieldDataType;
+import com.tcdng.unify.common.annotation.Table;
 import com.tcdng.unify.core.annotation.Column;
-import com.tcdng.unify.core.annotation.Table;
 import com.tcdng.unify.core.annotation.TableName;
 
 /**

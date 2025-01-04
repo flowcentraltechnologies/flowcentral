@@ -18,11 +18,11 @@ package com.flowcentraltech.flowcentral.workflow.entities;
 
 import com.flowcentraltech.flowcentral.common.entities.BaseNamedEntity;
 import com.flowcentraltech.flowcentral.configuration.constants.WorkflowAlertType;
+import com.tcdng.unify.common.annotation.Table;
+import com.tcdng.unify.common.annotation.UniqueConstraint;
 import com.tcdng.unify.core.annotation.Column;
 import com.tcdng.unify.core.annotation.ForeignKey;
 import com.tcdng.unify.core.annotation.ListOnly;
-import com.tcdng.unify.core.annotation.Table;
-import com.tcdng.unify.core.annotation.UniqueConstraint;
 
 /**
  * Workflow step alert entity.

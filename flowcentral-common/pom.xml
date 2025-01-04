@@ -28,6 +28,11 @@
 		</dependency>
 		<dependency>
 			<groupId>com.tcdng.unify</groupId>
+			<artifactId>unify-common</artifactId>
+			<version>${unify.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.tcdng.unify</groupId>
 			<artifactId>unify-convert</artifactId>
 			<version>${unify.version}</version>
 		</dependency>

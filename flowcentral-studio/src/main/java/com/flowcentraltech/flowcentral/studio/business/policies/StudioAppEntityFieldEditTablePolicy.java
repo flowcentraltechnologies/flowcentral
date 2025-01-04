@@ -33,11 +33,11 @@ import com.flowcentraltech.flowcentral.common.data.PageLoadDetails;
 import com.flowcentraltech.flowcentral.common.data.RowChangeInfo;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldDataType;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldType;
+import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.data.ValueStoreReader;
-import com.tcdng.unify.core.database.Entity;
 
 /**
  * Studio application entity field table policy.

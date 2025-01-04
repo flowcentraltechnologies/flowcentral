@@ -23,10 +23,10 @@ import java.util.Locale;
 
 import com.flowcentraltech.flowcentral.report.entities.ReportParameter;
 import com.flowcentraltech.flowcentral.report.entities.ReportParameterQuery;
+import com.tcdng.unify.common.data.Listable;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.data.ListData;
-import com.tcdng.unify.core.data.Listable;
 import com.tcdng.unify.core.list.LongParam;
 import com.tcdng.unify.core.util.DataUtils;
 

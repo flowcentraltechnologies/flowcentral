@@ -21,8 +21,8 @@ import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.util.AppletNameParts;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm.FormMode;
+import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.UnifyException;
-import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.web.ui.widget.Page;
 
 /**

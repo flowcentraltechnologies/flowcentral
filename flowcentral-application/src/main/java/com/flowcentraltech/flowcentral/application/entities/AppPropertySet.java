@@ -18,12 +18,12 @@ package com.flowcentraltech.flowcentral.application.entities;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.common.entities.BaseEntity;
+import com.tcdng.unify.common.annotation.Table;
+import com.tcdng.unify.common.annotation.UniqueConstraint;
 import com.tcdng.unify.core.annotation.ChildList;
 import com.tcdng.unify.core.annotation.Column;
 import com.tcdng.unify.core.annotation.ForeignKey;
 import com.tcdng.unify.core.annotation.ListOnly;
-import com.tcdng.unify.core.annotation.Table;
-import com.tcdng.unify.core.annotation.UniqueConstraint;
 
 /**
  * Application property set entity.
