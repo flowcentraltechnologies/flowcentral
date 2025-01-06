@@ -125,6 +125,6 @@ public class OSMessagingAccess {
     }
 
     public boolean isWithAuthorization() {
-        return authorization != null && !authorization.isBlank();
+        return authorization != null && !authorization.trim().isEmpty();
     }
 }
