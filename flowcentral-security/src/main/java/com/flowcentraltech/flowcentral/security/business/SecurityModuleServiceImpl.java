@@ -79,6 +79,7 @@ import com.flowcentraltech.flowcentral.security.templatewrappers.UserPasswordRes
 import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
 import com.flowcentraltech.flowcentral.system.constants.SystemModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.system.entities.MappedTenant;
+import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.ApplicationComponents;
 import com.tcdng.unify.core.SessionContext;
 import com.tcdng.unify.core.UnifyCorePropertyConstants;
@@ -94,7 +95,6 @@ import com.tcdng.unify.core.constant.FrequencyUnit;
 import com.tcdng.unify.core.criterion.Update;
 import com.tcdng.unify.core.data.FactoryMap;
 import com.tcdng.unify.core.data.StringComposition;
-import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.security.OneWayStringCryptograph;
 import com.tcdng.unify.core.security.PasswordAutenticationService;
 import com.tcdng.unify.core.security.PasswordGenerator;
@@ -312,7 +312,7 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
         }
 
         User user = isSystem ? environment().list(new UserQuery().id(DefaultApplicationConstants.SYSTEM_ENTITY_ID))
-                : environment().list(new UserQuery().loginId(loginId).tenantId(loginTenantId));
+                : environment().list(new UserQuery().loginId(loginId));
         if (user == null) {
             throw new UnifyException(SecurityModuleErrorConstants.INVALID_LOGIN_ID_PASSWORD);
         }
@@ -569,7 +569,7 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
 
     @Override
     public Recipient getRecipientByLoginId(Long tenantId, NotifType type, String userLoginId) throws UnifyException {
-        User user = environment().find(new UserQuery().loginId(userLoginId).tenantId(tenantId));
+        User user = environment().find(new UserQuery().loginId(userLoginId));
         switch (type) {
             case EMAIL:
                 return new Recipient(userLoginId, user.getEmail());
@@ -692,10 +692,10 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
         Set<Long> userIds = new HashSet<Long>();
         if (!DataUtils.isBlank(roleCodes)) {
             userIds.addAll(environment().valueSet(Long.class, "userId",
-                    new UserRoleQuery().roleCodeIn(roleCodes).roleIsOriginal().userIsOriginal().tenantId(tenantId)));
+                    new UserRoleQuery().roleCodeIn(roleCodes).roleIsOriginal().userIsOriginal()));
 
             Set<Long> userGroupIds = environment().valueSet(Long.class, "userGroupId",
-                    new UserGroupRoleQuery().roleCodeIn(roleCodes).tenantId(tenantId));
+                    new UserGroupRoleQuery().roleCodeIn(roleCodes));
             if (!DataUtils.isBlank(userGroupIds)) {
                 userIds.addAll(environment().valueSet(Long.class, "userId",
                         new UserGroupMemberQuery().userGroupIdIn(userGroupIds)));

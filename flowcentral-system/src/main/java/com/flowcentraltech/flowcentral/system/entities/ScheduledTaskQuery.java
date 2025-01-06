@@ -19,7 +19,7 @@ package com.flowcentraltech.flowcentral.system.entities;
 import java.util.Date;
 
 import com.flowcentraltech.flowcentral.common.constants.RecordStatus;
-import com.flowcentraltech.flowcentral.common.entities.BaseStatusTenantEntityQuery;
+import com.flowcentraltech.flowcentral.common.entities.BaseStatusEntityQuery;
 
 /**
  * Scheduled task query.
@@ -27,7 +27,7 @@ import com.flowcentraltech.flowcentral.common.entities.BaseStatusTenantEntityQue
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class ScheduledTaskQuery extends BaseStatusTenantEntityQuery<ScheduledTask> {
+public class ScheduledTaskQuery extends BaseStatusEntityQuery<ScheduledTask> {
 
     public ScheduledTaskQuery() {
         super(ScheduledTask.class);

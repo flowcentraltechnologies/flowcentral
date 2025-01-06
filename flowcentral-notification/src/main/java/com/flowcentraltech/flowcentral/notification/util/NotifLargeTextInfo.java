@@ -15,7 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.notification.util;
 
-import com.tcdng.unify.core.data.Listable;
+import com.tcdng.unify.common.data.Listable;
 
 /**
  * Notification large text information.

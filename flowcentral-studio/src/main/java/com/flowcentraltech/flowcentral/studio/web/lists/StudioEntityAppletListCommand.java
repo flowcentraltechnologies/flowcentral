@@ -22,9 +22,9 @@ import java.util.Locale;
 
 import com.flowcentraltech.flowcentral.application.entities.AppAppletQuery;
 import com.flowcentraltech.flowcentral.application.web.lists.AbstractApplicationListCommand;
+import com.tcdng.unify.common.data.Listable;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
-import com.tcdng.unify.core.data.Listable;
 
 /**
  * Studio entity applet list command

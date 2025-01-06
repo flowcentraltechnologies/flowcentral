@@ -15,7 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.configuration.constants;
 
-import com.tcdng.unify.core.annotation.AutoDetect;
+import com.tcdng.unify.common.annotation.AutoDetect;
 
 /**
  * Configuration module static settings.

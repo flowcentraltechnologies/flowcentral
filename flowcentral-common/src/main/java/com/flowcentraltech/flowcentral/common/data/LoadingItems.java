@@ -17,7 +17,7 @@ package com.flowcentraltech.flowcentral.common.data;
 
 import java.util.List;
 
-import com.tcdng.unify.core.database.Entity;
+import com.tcdng.unify.common.database.Entity;
 
 /**
  * Loading items.

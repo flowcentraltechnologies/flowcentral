@@ -24,11 +24,11 @@ import java.util.Locale;
 import com.flowcentraltech.flowcentral.system.constants.SystemModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.system.entities.MappedTenant;
 import com.flowcentraltech.flowcentral.system.entities.MappedTenantQuery;
+import com.tcdng.unify.common.data.Listable;
+import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.data.ListData;
-import com.tcdng.unify.core.data.Listable;
-import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.list.ZeroParams;
 import com.tcdng.unify.core.util.DataUtils;
 

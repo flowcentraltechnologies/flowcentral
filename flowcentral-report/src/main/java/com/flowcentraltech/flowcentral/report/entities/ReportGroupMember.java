@@ -16,12 +16,12 @@
 package com.flowcentraltech.flowcentral.report.entities;
 
 import com.flowcentraltech.flowcentral.common.constants.ConfigType;
-import com.flowcentraltech.flowcentral.common.entities.BaseAuditTenantEntity;
+import com.flowcentraltech.flowcentral.common.entities.BaseAuditEntity;
+import com.tcdng.unify.common.annotation.Table;
+import com.tcdng.unify.common.annotation.UniqueConstraint;
+import com.tcdng.unify.common.data.Describable;
 import com.tcdng.unify.core.annotation.ForeignKey;
 import com.tcdng.unify.core.annotation.ListOnly;
-import com.tcdng.unify.core.annotation.Table;
-import com.tcdng.unify.core.annotation.UniqueConstraint;
-import com.tcdng.unify.core.data.Describable;
 import com.tcdng.unify.core.util.StringUtils;
 
 /**
@@ -31,7 +31,7 @@ import com.tcdng.unify.core.util.StringUtils;
  * @since 1.0
  */
 @Table(name = "FC_REPORTGROUPMEMBER", uniqueConstraints = { @UniqueConstraint({ "reportGroupId", "reportConfigurationId" }) })
-public class ReportGroupMember extends BaseAuditTenantEntity implements Describable {
+public class ReportGroupMember extends BaseAuditEntity implements Describable {
 
     @ForeignKey(ReportGroup.class)
     private Long reportGroupId;

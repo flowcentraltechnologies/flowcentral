@@ -42,8 +42,8 @@ import com.flowcentraltech.flowcentral.studio.web.widgets.FormEditor.Design;
 import com.flowcentraltech.flowcentral.studio.web.widgets.FormEditor.FormField;
 import com.flowcentraltech.flowcentral.studio.web.widgets.FormEditor.FormSection;
 import com.flowcentraltech.flowcentral.studio.web.widgets.FormEditor.FormTab;
+import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.UnifyException;
-import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.util.ReflectUtils;
 import com.tcdng.unify.core.util.StringUtils;
 

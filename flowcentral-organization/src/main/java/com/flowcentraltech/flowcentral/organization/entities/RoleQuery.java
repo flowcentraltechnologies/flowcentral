@@ -17,7 +17,7 @@ package com.flowcentraltech.flowcentral.organization.entities;
 
 import java.util.Date;
 
-import com.flowcentraltech.flowcentral.common.entities.BaseStatusWorkTenantEntityQuery;
+import com.flowcentraltech.flowcentral.common.entities.BaseStatusWorkEntityQuery;
 import com.tcdng.unify.core.criterion.OrBuilder;
 
 /**
@@ -26,7 +26,7 @@ import com.tcdng.unify.core.criterion.OrBuilder;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class RoleQuery extends BaseStatusWorkTenantEntityQuery<Role> {
+public class RoleQuery extends BaseStatusWorkEntityQuery<Role> {
 
     public RoleQuery() {
         super(Role.class);

@@ -16,7 +16,7 @@
 package com.flowcentraltech.flowcentral.integration.data;
 
 import com.flowcentraltech.flowcentral.configuration.constants.DirectionType;
-import com.tcdng.unify.core.data.Listable;
+import com.tcdng.unify.common.data.Listable;
 
 /**
  * End-point path definition

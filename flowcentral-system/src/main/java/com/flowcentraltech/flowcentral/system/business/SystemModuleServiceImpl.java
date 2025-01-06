@@ -82,6 +82,8 @@ import com.flowcentraltech.flowcentral.system.entities.SectorQuery;
 import com.flowcentraltech.flowcentral.system.entities.SystemParameter;
 import com.flowcentraltech.flowcentral.system.entities.SystemParameterQuery;
 import com.flowcentraltech.flowcentral.system.util.LicenseUtils;
+import com.tcdng.unify.common.data.Listable;
+import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.common.util.StringToken;
 import com.tcdng.unify.core.Setting;
 import com.tcdng.unify.core.UnifyException;
@@ -99,13 +101,11 @@ import com.tcdng.unify.core.constant.FileAttachmentType;
 import com.tcdng.unify.core.constant.FrequencyUnit;
 import com.tcdng.unify.core.criterion.Update;
 import com.tcdng.unify.core.data.FactoryMap;
-import com.tcdng.unify.core.data.Listable;
 import com.tcdng.unify.core.data.ParamGeneratorManager;
 import com.tcdng.unify.core.data.ParameterizedStringGenerator;
 import com.tcdng.unify.core.data.Period;
 import com.tcdng.unify.core.data.StaleableFactoryMap;
 import com.tcdng.unify.core.data.ValueStoreReader;
-import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.database.dynamic.sql.DynamicSqlDataSourceManager;
 import com.tcdng.unify.core.security.TwoWayStringCryptograph;
 import com.tcdng.unify.core.task.TaskExecLimit;
@@ -215,7 +215,7 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
                     String[] weekDays = DataUtils.convert(String[].class, scheduledTask.getWeekdays());
                     String[] days = DataUtils.convert(String[].class, scheduledTask.getDays());
                     String[] months = DataUtils.convert(String[].class, scheduledTask.getMonths());
-                    return new ScheduledTaskDef(scheduledTaskId, scheduledTask.getTenantId(),
+                    return new ScheduledTaskDef(scheduledTaskId,
                             scheduledTask.getUpdatedBy(), lock, scheduledTask.getDescription(),
                             scheduledTask.getTaskName(), startTimeOffset, endTimeOffset, repeatMillSecs, weekDays, days,
                             months, pvd, scheduledTask.getVersionNo());
@@ -615,7 +615,7 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
                     taskLock);
             Map<String, Object> taskParameters = new HashMap<String, Object>();
             taskParameters.put(TaskParameterConstants.USER_LOGIN_ID, scheduledTaskDef.getUserLoginId());
-            taskParameters.put(TaskParameterConstants.TENANT_ID, scheduledTaskDef.getTenantId());
+            taskParameters.put(TaskParameterConstants.TENANT_ID, Entity.PRIMARY_TENANT_ID);
             taskParameters.put(TaskParameterConstants.LOCK_TO_TRY, taskLock);
             taskParameters.put(SystemSchedTaskConstants.SCHEDULEDTASK_ID, scheduledTaskId);
 

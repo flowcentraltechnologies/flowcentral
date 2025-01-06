@@ -18,7 +18,7 @@ package com.flowcentraltech.flowcentral.studio.web.lists;
 
 import java.util.List;
 
-import com.tcdng.unify.core.data.Listable;
+import com.tcdng.unify.common.data.Listable;
 import com.tcdng.unify.core.list.AbstractListParam;
 import com.tcdng.unify.core.util.DataUtils;
 

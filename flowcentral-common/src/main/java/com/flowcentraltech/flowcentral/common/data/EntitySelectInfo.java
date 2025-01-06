@@ -16,7 +16,7 @@
 
 package com.flowcentraltech.flowcentral.common.data;
 
-import com.tcdng.unify.core.database.Entity;
+import com.tcdng.unify.common.database.Entity;
 
 /**
  * Entity select information object.

@@ -23,8 +23,8 @@ import com.flowcentraltech.flowcentral.connect.common.data.EntityListingResponse
 import com.flowcentraltech.flowcentral.connect.common.data.GetEntityRequest;
 import com.flowcentraltech.flowcentral.connect.common.data.GetEntityResponse;
 import com.flowcentraltech.flowcentral.connect.common.data.JsonDataSourceResponse;
-import com.flowcentraltech.flowcentral.connect.common.data.ProcedureRequest;
 import com.flowcentraltech.flowcentral.connect.common.data.JsonProcedureResponse;
+import com.flowcentraltech.flowcentral.connect.common.data.ProcedureRequest;
 
 /**
  * Flow central spring boot interconnect service.

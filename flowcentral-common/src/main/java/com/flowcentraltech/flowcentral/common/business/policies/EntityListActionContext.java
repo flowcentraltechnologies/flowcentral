@@ -21,7 +21,7 @@ import java.util.List;
 
 import com.flowcentraltech.flowcentral.common.data.AbstractContext;
 import com.flowcentraltech.flowcentral.common.data.LoadingItems;
-import com.tcdng.unify.core.database.Entity;
+import com.tcdng.unify.common.database.Entity;
 
 /**
  * Entity list action context object.

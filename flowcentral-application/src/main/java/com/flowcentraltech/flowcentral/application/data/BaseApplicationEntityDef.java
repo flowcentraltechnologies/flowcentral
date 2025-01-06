@@ -18,7 +18,7 @@ package com.flowcentraltech.flowcentral.application.data;
 
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityNameParts;
 import com.flowcentraltech.flowcentral.common.data.VersionedEntityDef;
-import com.tcdng.unify.core.data.Listable;
+import com.tcdng.unify.common.data.Listable;
 
 /**
  * Base class for application entity definition

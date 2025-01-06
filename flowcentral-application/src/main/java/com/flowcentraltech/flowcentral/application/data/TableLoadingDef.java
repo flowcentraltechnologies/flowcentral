@@ -17,7 +17,7 @@ package com.flowcentraltech.flowcentral.application.data;
 
 import java.util.List;
 
-import com.tcdng.unify.core.data.Listable;
+import com.tcdng.unify.common.data.Listable;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.web.ui.widget.data.ButtonInfo;
 

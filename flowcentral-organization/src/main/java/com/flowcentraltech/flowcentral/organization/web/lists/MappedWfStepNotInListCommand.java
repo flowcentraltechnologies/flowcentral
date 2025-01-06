@@ -22,9 +22,9 @@ import java.util.Locale;
 
 import com.flowcentraltech.flowcentral.configuration.constants.WorkflowStepType;
 import com.flowcentraltech.flowcentral.organization.entities.MappedWfStepQuery;
+import com.tcdng.unify.common.data.Listable;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
-import com.tcdng.unify.core.data.Listable;
 import com.tcdng.unify.core.util.QueryUtils;
 import com.tcdng.unify.web.data.AssignParams;
 

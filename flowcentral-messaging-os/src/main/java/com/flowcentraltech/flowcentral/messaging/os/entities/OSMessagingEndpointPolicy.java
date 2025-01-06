@@ -9,9 +9,9 @@ package com.flowcentraltech.flowcentral.messaging.os.entities;
 import java.util.Date;
 
 import com.flowcentraltech.flowcentral.common.entities.BaseStatusEntityPolicy;
+import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
-import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.util.EncodingUtils;
 
 /**

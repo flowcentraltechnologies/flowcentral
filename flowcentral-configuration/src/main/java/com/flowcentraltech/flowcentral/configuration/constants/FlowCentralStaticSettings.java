@@ -15,7 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.configuration.constants;
 
-import com.tcdng.unify.core.UnifyStaticSettings;
+import com.tcdng.unify.common.constants.UnifyStaticSettings;
 
 /**
  * Flowcentral static settings.

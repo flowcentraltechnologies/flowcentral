@@ -48,6 +48,7 @@ import com.flowcentraltech.flowcentral.connect.common.data.ResolvedCondition;
 import com.flowcentraltech.flowcentral.connect.common.data.UpdateDef;
 import com.flowcentraltech.flowcentral.connect.configuration.constants.ConnectFieldDataType;
 import com.flowcentraltech.flowcentral.connect.unify.UnifyInterconnect;
+import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.convert.util.ConverterUtils;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
@@ -80,7 +81,6 @@ import com.tcdng.unify.core.criterion.NotEquals;
 import com.tcdng.unify.core.criterion.NotLike;
 import com.tcdng.unify.core.criterion.Or;
 import com.tcdng.unify.core.criterion.Restriction;
-import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.database.Query;
 
 /**

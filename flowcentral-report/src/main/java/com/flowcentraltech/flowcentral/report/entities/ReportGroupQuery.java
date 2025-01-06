@@ -15,7 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.report.entities;
 
-import com.flowcentraltech.flowcentral.common.entities.BaseStatusTenantEntityQuery;
+import com.flowcentraltech.flowcentral.common.entities.BaseStatusEntityQuery;
 
 /**
  * Query class for report group records.
@@ -23,7 +23,7 @@ import com.flowcentraltech.flowcentral.common.entities.BaseStatusTenantEntityQue
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class ReportGroupQuery extends BaseStatusTenantEntityQuery<ReportGroup> {
+public class ReportGroupQuery extends BaseStatusEntityQuery<ReportGroup> {
 
     public ReportGroupQuery() {
         super(ReportGroup.class);

@@ -21,11 +21,11 @@ import java.util.List;
 import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleNameConstants;
 import com.flowcentraltech.flowcentral.application.data.DelegateEntityInfo;
+import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.database.AbstractDataSourceEntityListProvider;
-import com.tcdng.unify.core.database.Entity;
 
 /**
  * Application delegate datasource entity list provider..

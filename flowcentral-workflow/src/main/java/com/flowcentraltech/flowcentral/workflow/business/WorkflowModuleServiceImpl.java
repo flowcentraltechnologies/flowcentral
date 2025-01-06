@@ -151,6 +151,7 @@ import com.flowcentraltech.flowcentral.workflow.util.WorkflowEntityUtils;
 import com.flowcentraltech.flowcentral.workflow.util.WorkflowNameUtils;
 import com.flowcentraltech.flowcentral.workflow.util.WorkflowNameUtils.WfAppletNameParts;
 import com.flowcentraltech.flowcentral.workflow.util.WorkflowNameUtils.WfWizardAppletNameParts;
+import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.common.util.StringToken;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.UserToken;
@@ -176,7 +177,6 @@ import com.tcdng.unify.core.data.StaleableFactoryMap;
 import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.data.ValueStoreWriter;
-import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.database.Query;
 import com.tcdng.unify.core.database.sql.SqlDataSourceDialect;
 import com.tcdng.unify.core.database.sql.SqlEntityInfo;
@@ -1481,7 +1481,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         if (wfEntityInst != null) {
             try {
                 final UserToken userToken = UserToken.newBuilder().userLoginId(wfItem.getForwardedBy())
-                        .userName(wfItem.getForwardedByName()).tenantId(wfItem.getTenantId())
+                        .userName(wfItem.getForwardedByName())
                         .branchCode(wfEntityInst.getWorkBranchCode())
                         .reservedUser(DefaultApplicationConstants.SYSTEM_LOGINID.equals(wfItem.getForwardedBy())).build();
                 getSessionContext().setUserToken(userToken);
@@ -1600,7 +1600,6 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
 
             final String userFullName = securityModuleService.getUserFullName(userLoginId);
             WfItem wfItem = new WfItem();
-            wfItem.setTenantId(workInst.getTenantId());
             wfItem.setWfItemEventId(wfItemEventId);
             wfItem.setForwardedBy(userLoginId);
             wfItem.setForwardedByName(userFullName);

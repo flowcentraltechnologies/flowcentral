@@ -15,7 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.application.data;
 
-import com.tcdng.unify.core.data.Listable;
+import com.tcdng.unify.common.data.Listable;
 import com.tcdng.unify.core.util.StringUtils;
 
 /**

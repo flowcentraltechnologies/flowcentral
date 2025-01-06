@@ -17,7 +17,7 @@ package com.flowcentraltech.flowcentral.codegeneration.constants;
 
 import com.flowcentraltech.flowcentral.configuration.constants.AbstractFlowCentralStaticSettings;
 import com.flowcentraltech.flowcentral.configuration.constants.ModuleInstallLevelConstants;
-import com.tcdng.unify.core.annotation.AutoDetect;
+import com.tcdng.unify.common.annotation.AutoDetect;
 
 /**
  * Code generation module static settings.

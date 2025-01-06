@@ -34,20 +34,14 @@ import com.flowcentraltech.flowcentral.application.entities.AppFormElement;
 import com.flowcentraltech.flowcentral.application.entities.BaseApplicationEntity;
 import com.flowcentraltech.flowcentral.common.constants.ConfigType;
 import com.flowcentraltech.flowcentral.common.entities.BaseAuditEntity;
-import com.flowcentraltech.flowcentral.common.entities.BaseAuditTenantEntity;
 import com.flowcentraltech.flowcentral.common.entities.BaseConfigEntity;
 import com.flowcentraltech.flowcentral.common.entities.BaseConfigNamedEntity;
 import com.flowcentraltech.flowcentral.common.entities.BaseEntity;
 import com.flowcentraltech.flowcentral.common.entities.BaseNamedEntity;
 import com.flowcentraltech.flowcentral.common.entities.BaseStatusEntity;
-import com.flowcentraltech.flowcentral.common.entities.BaseStatusTenantEntity;
 import com.flowcentraltech.flowcentral.common.entities.BaseStatusWorkEntity;
-import com.flowcentraltech.flowcentral.common.entities.BaseStatusWorkTenantEntity;
-import com.flowcentraltech.flowcentral.common.entities.BaseTenantEntity;
 import com.flowcentraltech.flowcentral.common.entities.BaseVersionEntity;
-import com.flowcentraltech.flowcentral.common.entities.BaseVersionTenantEntity;
 import com.flowcentraltech.flowcentral.common.entities.BaseWorkEntity;
-import com.flowcentraltech.flowcentral.common.entities.BaseWorkTenantEntity;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityBaseType;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldDataType;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldType;
@@ -78,8 +72,7 @@ public final class ApplicationEntityUtils {
             .unmodifiableSet(new HashSet<String>(Arrays.asList("createDt", "createdBy", "updateDt", "updatedBy")));
 
     public static final List<EntityBaseType> BASE_WORK_TYPES = Collections
-            .unmodifiableList(Arrays.asList(EntityBaseType.BASE_WORK_ENTITY, EntityBaseType.BASE_STATUS_WORK_ENTITY,
-                    EntityBaseType.BASE_WORK_TENANT_ENTITY, EntityBaseType.BASE_STATUS_WORK_TENANT_ENTITY));
+            .unmodifiableList(Arrays.asList(EntityBaseType.BASE_WORK_ENTITY, EntityBaseType.BASE_STATUS_WORK_ENTITY));
 
     public static final Restriction WORK_ENTITY_RESTRICTION = new Amongst("type",
             ApplicationEntityUtils.BASE_WORK_TYPES);
@@ -111,12 +104,6 @@ public final class ApplicationEntityUtils {
         map.put(EntityBaseType.BASE_WORK_ENTITY, BaseWorkEntity.class);
         map.put(EntityBaseType.BASE_CONFIG_ENTITY, BaseConfigEntity.class);
         map.put(EntityBaseType.BASE_CONFIG_NAMED_ENTITY, BaseConfigNamedEntity.class);
-        map.put(EntityBaseType.BASE_AUDIT_TENANT_ENTITY, BaseAuditTenantEntity.class);
-        map.put(EntityBaseType.BASE_TENANT_ENTITY, BaseTenantEntity.class);
-        map.put(EntityBaseType.BASE_VERSION_TENANT_ENTITY, BaseVersionTenantEntity.class);
-        map.put(EntityBaseType.BASE_STATUS_TENANT_ENTITY, BaseStatusTenantEntity.class);
-        map.put(EntityBaseType.BASE_STATUS_WORK_TENANT_ENTITY, BaseStatusWorkTenantEntity.class);
-        map.put(EntityBaseType.BASE_WORK_TENANT_ENTITY, BaseWorkTenantEntity.class);
         entityClassMap = Collections.unmodifiableMap(map);
 
         Map<String, String> _map = new HashMap<String, String>();
@@ -176,10 +163,6 @@ public final class ApplicationEntityUtils {
             return EntityBaseType.BASE_NAMED_ENTITY;
         }
 
-        if (BaseStatusWorkTenantEntity.class.isAssignableFrom(entityClass)) {
-            return EntityBaseType.BASE_STATUS_WORK_TENANT_ENTITY;
-        }
-
         if (BaseStatusWorkEntity.class.isAssignableFrom(entityClass)) {
             return EntityBaseType.BASE_STATUS_WORK_ENTITY;
         }
@@ -188,40 +171,20 @@ public final class ApplicationEntityUtils {
             return EntityBaseType.BASE_CONFIG_ENTITY;
         }
 
-        if (BaseWorkTenantEntity.class.isAssignableFrom(entityClass)) {
-            return EntityBaseType.BASE_WORK_TENANT_ENTITY;
-        }
-
         if (BaseWorkEntity.class.isAssignableFrom(entityClass)) {
             return EntityBaseType.BASE_WORK_ENTITY;
-        }
-
-        if (BaseStatusTenantEntity.class.isAssignableFrom(entityClass)) {
-            return EntityBaseType.BASE_STATUS_TENANT_ENTITY;
         }
 
         if (BaseStatusEntity.class.isAssignableFrom(entityClass)) {
             return EntityBaseType.BASE_STATUS_ENTITY;
         }
 
-        if (BaseAuditTenantEntity.class.isAssignableFrom(entityClass)) {
-            return EntityBaseType.BASE_AUDIT_TENANT_ENTITY;
-        }
-
         if (BaseAuditEntity.class.isAssignableFrom(entityClass)) {
             return EntityBaseType.BASE_AUDIT_ENTITY;
         }
 
-        if (BaseVersionTenantEntity.class.isAssignableFrom(entityClass)) {
-            return EntityBaseType.BASE_VERSION_TENANT_ENTITY;
-        }
-
         if (BaseVersionEntity.class.isAssignableFrom(entityClass)) {
             return EntityBaseType.BASE_VERSION_ENTITY;
-        }
-
-        if (BaseTenantEntity.class.isAssignableFrom(entityClass)) {
-            return EntityBaseType.BASE_TENANT_ENTITY;
         }
 
         return EntityBaseType.BASE_ENTITY;
@@ -232,49 +195,27 @@ public final class ApplicationEntityUtils {
         Map<EntityBaseType, List<EntityBaseType>> map = new EnumMap<EntityBaseType, List<EntityBaseType>>(
                 EntityBaseType.class);
         map.put(EntityBaseType.BASE_ENTITY, Collections.unmodifiableList(Arrays.asList(EntityBaseType.BASE_ENTITY)));
-        map.put(EntityBaseType.BASE_TENANT_ENTITY, Collections
-                .unmodifiableList(Arrays.asList(EntityBaseType.BASE_ENTITY, EntityBaseType.BASE_TENANT_ENTITY)));
 
         map.put(EntityBaseType.BASE_VERSION_ENTITY, Collections
                 .unmodifiableList(Arrays.asList(EntityBaseType.BASE_ENTITY, EntityBaseType.BASE_VERSION_ENTITY)));
-        map.put(EntityBaseType.BASE_VERSION_TENANT_ENTITY,
-                Collections.unmodifiableList(Arrays.asList(EntityBaseType.BASE_ENTITY,
-                        EntityBaseType.BASE_VERSION_ENTITY, EntityBaseType.BASE_VERSION_TENANT_ENTITY)));
 
         map.put(EntityBaseType.BASE_AUDIT_ENTITY, Collections.unmodifiableList(Arrays.asList(EntityBaseType.BASE_ENTITY,
                 EntityBaseType.BASE_VERSION_ENTITY, EntityBaseType.BASE_AUDIT_ENTITY)));
-        map.put(EntityBaseType.BASE_AUDIT_TENANT_ENTITY,
-                Collections
-                        .unmodifiableList(Arrays.asList(EntityBaseType.BASE_ENTITY, EntityBaseType.BASE_VERSION_ENTITY,
-                                EntityBaseType.BASE_AUDIT_ENTITY, EntityBaseType.BASE_AUDIT_TENANT_ENTITY)));
 
         map.put(EntityBaseType.BASE_STATUS_ENTITY,
                 Collections
                         .unmodifiableList(Arrays.asList(EntityBaseType.BASE_ENTITY, EntityBaseType.BASE_VERSION_ENTITY,
                                 EntityBaseType.BASE_AUDIT_ENTITY, EntityBaseType.BASE_STATUS_ENTITY)));
-        map.put(EntityBaseType.BASE_STATUS_TENANT_ENTITY,
-                Collections.unmodifiableList(Arrays.asList(EntityBaseType.BASE_ENTITY,
-                        EntityBaseType.BASE_VERSION_ENTITY, EntityBaseType.BASE_AUDIT_ENTITY,
-                        EntityBaseType.BASE_STATUS_ENTITY, EntityBaseType.BASE_STATUS_TENANT_ENTITY)));
 
         map.put(EntityBaseType.BASE_WORK_ENTITY,
                 Collections
                         .unmodifiableList(Arrays.asList(EntityBaseType.BASE_ENTITY, EntityBaseType.BASE_VERSION_ENTITY,
                                 EntityBaseType.BASE_AUDIT_ENTITY, EntityBaseType.BASE_WORK_ENTITY)));
-        map.put(EntityBaseType.BASE_WORK_TENANT_ENTITY,
-                Collections.unmodifiableList(Arrays.asList(EntityBaseType.BASE_ENTITY,
-                        EntityBaseType.BASE_VERSION_ENTITY, EntityBaseType.BASE_AUDIT_ENTITY,
-                        EntityBaseType.BASE_WORK_ENTITY, EntityBaseType.BASE_WORK_TENANT_ENTITY)));
 
         map.put(EntityBaseType.BASE_STATUS_WORK_ENTITY,
                 Collections.unmodifiableList(Arrays.asList(EntityBaseType.BASE_ENTITY,
                         EntityBaseType.BASE_VERSION_ENTITY, EntityBaseType.BASE_AUDIT_ENTITY,
                         EntityBaseType.BASE_WORK_ENTITY, EntityBaseType.BASE_STATUS_WORK_ENTITY)));
-        map.put(EntityBaseType.BASE_STATUS_WORK_TENANT_ENTITY,
-                Collections.unmodifiableList(Arrays.asList(EntityBaseType.BASE_ENTITY,
-                        EntityBaseType.BASE_VERSION_ENTITY, EntityBaseType.BASE_AUDIT_ENTITY,
-                        EntityBaseType.BASE_WORK_ENTITY, EntityBaseType.BASE_STATUS_WORK_ENTITY,
-                        EntityBaseType.BASE_STATUS_WORK_TENANT_ENTITY)));
 
         map.put(EntityBaseType.BASE_NAMED_ENTITY,
                 Collections

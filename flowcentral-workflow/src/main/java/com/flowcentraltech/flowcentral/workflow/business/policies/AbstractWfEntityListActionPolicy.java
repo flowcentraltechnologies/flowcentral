@@ -22,9 +22,9 @@ import com.flowcentraltech.flowcentral.common.business.policies.AbstractEntityLi
 import com.flowcentraltech.flowcentral.common.business.policies.EntityListActionContext;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityListActionResult;
 import com.flowcentraltech.flowcentral.workflow.business.WorkflowModuleService;
+import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
-import com.tcdng.unify.core.database.Entity;
 
 /**
  * Convenient abstract base class for workflow entity list action policies.

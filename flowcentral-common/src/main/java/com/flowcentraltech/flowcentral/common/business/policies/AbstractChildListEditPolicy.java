@@ -19,8 +19,8 @@ package com.flowcentraltech.flowcentral.common.business.policies;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.common.data.FormMessages;
+import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.UnifyException;
-import com.tcdng.unify.core.database.Entity;
 
 /**
  * Convenient abstract base class for child list edit policies.

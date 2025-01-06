@@ -18,7 +18,7 @@ package com.flowcentraltech.flowcentral.report.entities;
 import java.util.Collection;
 
 import com.flowcentraltech.flowcentral.common.constants.ConfigType;
-import com.flowcentraltech.flowcentral.common.entities.BaseAuditTenantEntityQuery;
+import com.flowcentraltech.flowcentral.common.entities.BaseAuditEntityQuery;
 
 /**
  * Query class for report group members.
@@ -26,7 +26,7 @@ import com.flowcentraltech.flowcentral.common.entities.BaseAuditTenantEntityQuer
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class ReportGroupMemberQuery extends BaseAuditTenantEntityQuery<ReportGroupMember> {
+public class ReportGroupMemberQuery extends BaseAuditEntityQuery<ReportGroupMember> {
 
     public ReportGroupMemberQuery() {
         super(ReportGroupMember.class);

@@ -20,9 +20,9 @@ import java.util.Date;
 import com.flowcentraltech.flowcentral.common.entities.BaseStatusEntityPolicy;
 import com.flowcentraltech.flowcentral.common.util.WorkspaceNamingUtils;
 import com.flowcentraltech.flowcentral.configuration.constants.DefaultApplicationConstants;
+import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
-import com.tcdng.unify.core.database.Entity;
 
 /**
  * Workspace entity policy.

@@ -15,7 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.common.data;
 
-import com.tcdng.unify.core.data.Listable;
+import com.tcdng.unify.common.data.Listable;
 
 /**
  * Convenient abstract base class for named definitions.

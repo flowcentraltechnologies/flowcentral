@@ -18,7 +18,7 @@ package com.flowcentraltech.flowcentral.common.entities;
 
 import com.flowcentraltech.flowcentral.common.constants.WfItemVersionType;
 import com.flowcentraltech.flowcentral.configuration.constants.ProcessingStatus;
-import com.tcdng.unify.core.database.Entity;
+import com.tcdng.unify.common.database.Entity;
 
 /**
  * Work entity definition.

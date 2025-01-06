@@ -21,8 +21,8 @@ import java.util.List;
 
 import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldDataType;
 import com.tcdng.unify.common.constants.StandardFormatType;
+import com.tcdng.unify.common.data.Listable;
 import com.tcdng.unify.core.data.ListData;
-import com.tcdng.unify.core.data.Listable;
 
 /**
  * Data type utilities.
