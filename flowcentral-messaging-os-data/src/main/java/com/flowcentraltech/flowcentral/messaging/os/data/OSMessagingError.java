@@ -45,6 +45,6 @@ public class OSMessagingError {
     }
 
     public boolean isErrorPresent() {
-        return errorCode != null && !errorCode.isBlank();
+        return errorCode != null && !errorCode.trim().isEmpty();
     }
  }
