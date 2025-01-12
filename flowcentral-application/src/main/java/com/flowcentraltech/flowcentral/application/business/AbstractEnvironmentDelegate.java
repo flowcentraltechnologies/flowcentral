@@ -97,6 +97,16 @@ public abstract class AbstractEnvironmentDelegate extends AbstractFlowCentralCom
     }
 
     @Override
+    public final boolean isManaged() throws UnifyException {
+        return false;
+    }
+
+    @Override
+    public final <T extends Entity> boolean isOfThisDatabase(Class<T> entityClass) throws UnifyException {
+        return true;
+    }
+
+    @Override
     public final DataSource getDataSource() throws UnifyException {
         throw new UnsupportedOperationException();
     }
