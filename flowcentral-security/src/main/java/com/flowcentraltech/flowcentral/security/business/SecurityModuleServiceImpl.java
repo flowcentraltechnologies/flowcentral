@@ -290,6 +290,7 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
 
     @Override
     public User findUserByCredentials(String userName, String password) throws UnifyException {
+        password = passwordCryptograph.encrypt(password);
         return environment().list(new UserQuery().loginId(userName).password(password));
     }
 
