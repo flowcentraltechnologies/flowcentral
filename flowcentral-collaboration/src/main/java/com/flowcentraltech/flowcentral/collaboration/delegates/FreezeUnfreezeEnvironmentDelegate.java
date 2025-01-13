@@ -47,7 +47,7 @@ import com.tcdng.unify.core.util.StringUtils;
 @Component(name = "freezeunfreeze-environmentdelegate", description = "$m{collaboration.freezeunfreeze.delegate}")
 public class FreezeUnfreezeEnvironmentDelegate extends AbstractPseudoEntityEnvironmentDelegate<FreezeUnfreeze> {
 
-	@Override
+    @Override
 	protected long countAll(DataSourceRequest req) throws UnifyException {
 		QueryInfo info = getQueryInfo(req);
 		if (info.validQuery()) {

@@ -66,6 +66,7 @@ public final class CodeGenerationUtils {
     static {
         Set<String> reserved = new HashSet<String>(ApplicationEntityUtils.RESERVED_BASE_FIELDS);
         reserved.remove("id");
+        reserved.remove("status");
         RESERVED_BASE_FIELDS = Collections.unmodifiableSet(reserved);
     }
 
