@@ -53,13 +53,13 @@ public class ApplicationDelegateDataSourceEntityListProviderImpl extends Abstrac
     }
 
     @Override
-    public List<Class<?>> getTableEntityTypes(String dataSourceName) throws UnifyException {
+    public List<Class<?>> getTableEntityTypes(String dataSourceName, boolean strict) throws UnifyException {
         List<String> entityAliases = getEntityAliasesByDataSource(dataSourceName);
         return applicationModuleService.getDelegateEntities(entityAliases);
     }
 
     @Override
-    public List<Class<? extends Entity>> getViewEntityTypes(String dataSourceName) throws UnifyException {
+    public List<Class<? extends Entity>> getViewEntityTypes(String dataSourceName, boolean strict) throws UnifyException {
         return Collections.emptyList();
     }
 }
