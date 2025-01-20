@@ -274,7 +274,7 @@ fux.rigMenuSearch = function(rgp) {
 	evp.uIsReqTrg = true;
 	ux.addHdl(_id(rgp.pInpId), "input", ux.post, evp);
 
-	var evp = ux.newEvPrm(rgp);
+	evp = ux.newEvPrm(rgp);
 	evp.uInpId = rgp.pInpId;
 	evp.uCmd = id + "->clear";
 	evp.uIsReqTrg = true;

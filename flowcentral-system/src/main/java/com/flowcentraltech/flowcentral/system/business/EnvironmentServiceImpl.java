@@ -781,15 +781,15 @@ public class EnvironmentServiceImpl extends AbstractBusinessService implements E
         }
     }
 
-    private Database db(Class<? extends Entity> entityClass) throws UnifyException {
+    protected Database db(Class<? extends Entity> entityClass) throws UnifyException {
         EnvironmentDelegateHolder delegateInfo = environmentDelegateRegistrar.getEnvironmentDelegateInfo(entityClass);
         return delegateInfo != null ? (delegateInfo.isDirect() ? db(delegateInfo.getDataSourceName())
-                : delegateInfo.getEnvironmentDelegate()) : db();
+                : delegateInfo.getEnvironmentDelegate()) : super.db(entityClass);
     }
 
     private Database db_direct(Class<? extends Entity> entityClass) throws UnifyException {
         EnvironmentDelegateHolder delegateInfo = environmentDelegateRegistrar.getEnvironmentDelegateInfo(entityClass);
-        return delegateInfo != null ? db(delegateInfo.getDataSourceName()) : db();
+        return delegateInfo != null ? db(delegateInfo.getDataSourceName()) : super.db(entityClass);
     }
 
     private EntityActionResult executeEntityPreActionPolicy(EntityActionContext ctx) throws UnifyException {
