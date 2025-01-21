@@ -16,6 +16,7 @@
 package com.flowcentraltech.flowcentral.organization.entities;
 
 import java.util.Date;
+import java.util.List;
 
 import com.flowcentraltech.flowcentral.common.entities.BaseStatusWorkEntityQuery;
 import com.tcdng.unify.core.criterion.OrBuilder;
@@ -44,6 +45,10 @@ public class RoleQuery extends BaseStatusWorkEntityQuery<Role> {
 
     public RoleQuery departmentId(Long departmentId) {
         return (RoleQuery) addEquals("departmentId", departmentId);
+    }
+
+    public RoleQuery codeIn(List<String> codeList) {
+        return (RoleQuery) addAmongst("code", codeList);
     }
 
     public RoleQuery code(String code) {

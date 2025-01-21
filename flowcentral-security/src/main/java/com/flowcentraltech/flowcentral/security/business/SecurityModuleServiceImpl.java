@@ -51,7 +51,10 @@ import com.flowcentraltech.flowcentral.configuration.constants.SysDatetimeFormat
 import com.flowcentraltech.flowcentral.configuration.data.ModuleInstall;
 import com.flowcentraltech.flowcentral.notification.business.NotificationModuleService;
 import com.flowcentraltech.flowcentral.organization.business.OrganizationModuleService;
+import com.flowcentraltech.flowcentral.organization.constants.BranchViewType;
 import com.flowcentraltech.flowcentral.organization.entities.MappedBranch;
+import com.flowcentraltech.flowcentral.organization.entities.Role;
+import com.flowcentraltech.flowcentral.organization.entities.RoleQuery;
 import com.flowcentraltech.flowcentral.security.business.data.PasswordComplexityCheck;
 import com.flowcentraltech.flowcentral.security.business.data.PasswordComplexitySettings;
 import com.flowcentraltech.flowcentral.security.constants.LoginEventType;
@@ -80,7 +83,6 @@ import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
 import com.flowcentraltech.flowcentral.system.constants.SystemModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.system.entities.MappedTenant;
 import com.tcdng.unify.common.database.Entity;
-import com.tcdng.unify.core.ApplicationComponents;
 import com.tcdng.unify.core.SessionContext;
 import com.tcdng.unify.core.UnifyCorePropertyConstants;
 import com.tcdng.unify.core.UnifyCoreSessionAttributeConstants;
@@ -335,7 +337,7 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
         if (!isSystem && !Boolean.TRUE.equals(user.getLocalPasswordOnly()) && systemModuleService.getSysParameterValue(
                 boolean.class, SecurityModuleSysParamConstants.ENABLE_THIRDPARTY_PASSWORD_AUTHENTICATION)) {
             PasswordAutenticationService passwordAuthService = (PasswordAutenticationService) getComponent(
-                    ApplicationComponents.APPLICATION_PASSWORDAUTHENTICATIONSERVICE);
+                    PasswordAutenticationService.class);
             if (!passwordAuthService.authenticate(loginId, user.getEmail(), password)) {
                 throw new UnifyException(SecurityModuleErrorConstants.INVALID_LOGIN_ID_PASSWORD);
             }
@@ -561,6 +563,31 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
     @Override
     public List<UserRoleInfo> findConsolidatedUserRoles(String userLoginId, Date activeAt) throws UnifyException {
         return findConsolidatedUserRoles(userLoginId, null, activeAt);
+    }
+
+    @Override
+    public List<UserRoleInfo> findConsolidatedThirdpartyUserRoles(String userLoginId, Date activeAt)
+            throws UnifyException {
+        PasswordAutenticationService passwordAuthService = (PasswordAutenticationService) getComponent(
+                PasswordAutenticationService.class);
+        List<String> roleCodes = passwordAuthService.getRoles(userLoginId);
+        if (!DataUtils.isBlank(roleCodes)) {
+            List<Role> roleList = organizationModuleService.findRoles(new RoleQuery().codeIn(roleCodes));
+            if (!DataUtils.isBlank(roleList)) {
+                final List<UserRoleInfo> result = new ArrayList<UserRoleInfo>();
+                final List<Long> branchScopingIdList = organizationModuleService.getCurrentUserBranchIds(userLoginId,
+                        BranchViewType.USER_BRANCH_ONLY);
+                for (Role role: roleList) {
+                    final String departmentCode = organizationModuleService.getDepartmentCode(role.getDepartmentId());
+                    result.add(new UserRoleInfo(role.getCode(), role.getDescription(),
+                            departmentCode, branchScopingIdList));
+                }
+                
+                return result;
+            }
+        }
+
+        return Collections.emptyList();
     }
 
     @Override

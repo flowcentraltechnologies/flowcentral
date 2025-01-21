@@ -411,6 +411,11 @@ public class OrganizationModuleServiceImpl extends AbstractFlowCentralService
         return environment().value(Long.class, "id", new DepartmentQuery().code(departmentCode));
     }
 
+    @Override
+    public String getDepartmentCode(Long departmentId) throws UnifyException {
+        return environment().value(String.class, "code", new DepartmentQuery().id(departmentId));
+    }
+
     @Broadcast
     public synchronized void invalidateRolePrivilegesCache(String... roleCodes) throws UnifyException {
         for (TenantRolePrivileges tenantRolePrivileges : tenantRolePrivileges.values()) {

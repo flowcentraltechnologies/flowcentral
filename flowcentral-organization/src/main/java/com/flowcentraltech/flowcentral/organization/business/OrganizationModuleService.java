@@ -179,7 +179,7 @@ public interface OrganizationModuleService extends FlowCentralService {
     List<BranchInfo> getAssociatedBranches(String branchCode) throws UnifyException;
 
     /**
-     * Get department ID..
+     * Get department ID.
      * 
      * @param departmentCode
      *                       the department code
@@ -188,6 +188,17 @@ public interface OrganizationModuleService extends FlowCentralService {
      *                        if an error occurs
      */
     Long getDepartmentId(String departmentCode) throws UnifyException;
+
+    /**
+     * Get department Code.
+     * 
+     * @param departmentId
+     *                     the department ID
+     * @return the department code if found otherwise null
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    String getDepartmentCode(Long departmentId) throws UnifyException;
 
     /**
      * Invalidates role privileges cache.
