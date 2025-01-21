@@ -14,9 +14,11 @@
 // the License.
 
 !ui-document layout:$d{!ui-desktoptype1} contentPanel:$c{content}
-	excludeScript:$s{web/js/apexcharts.min.js}
     favicon:$s{web/images/favicon_enduser.png} captionBinding:windowTitle
+	styleSheet:$t{css/flowcentral.css}
+	styleSheet:$t{css/flowcentral-slim.css}
 	styleSheet:$t{css/flowcentral-theme.css}
+	script:$s{web/js/flowcentral-web.js}
     pushUpdateBinding:clientPushSync
 
 !ui-contentpanel:content styleClass:$e{fc-login-contentpanel}
