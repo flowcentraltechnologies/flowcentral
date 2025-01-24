@@ -344,8 +344,12 @@ public class UserLoginController extends AbstractApplicationForwarderController<
 
         // Get user roles that are active based on current time
         UserToken userToken = getUserToken();
-        List<UserRoleInfo> userRoleList = securityModuleService.findConsolidatedUserRoles(userToken.getUserLoginId(),
-                securityModuleService.getNow());
+        List<UserRoleInfo> userRoleList = !userToken.isReservedUser() && system().getSysParameterValue(boolean.class,
+                SecurityModuleSysParamConstants.ENABLE_THIRDPARTY_PASSWORD_AUTHENTICATION)
+                        ? securityModuleService.findConsolidatedThirdpartyUserRoles(userToken.getUserLoginId(),
+                                securityModuleService.getNow())
+                        : securityModuleService.findConsolidatedUserRoles(userToken.getUserLoginId(),
+                                securityModuleService.getNow());
 
         UserRoleInfo userRole = null;
         if (userRoleList.isEmpty()) {
