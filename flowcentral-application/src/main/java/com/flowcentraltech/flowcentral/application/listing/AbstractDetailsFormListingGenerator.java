@@ -52,7 +52,7 @@ public abstract class AbstractDetailsFormListingGenerator extends AbstractFormLi
     }
 
     @Override
-    protected String additionalStyleClass() {
+    protected String additionalStyleClass() { 
         return "fc-detailsformlisting";
     }
 
