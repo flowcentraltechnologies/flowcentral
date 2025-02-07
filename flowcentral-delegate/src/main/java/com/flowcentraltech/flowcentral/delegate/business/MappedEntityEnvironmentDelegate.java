@@ -333,6 +333,11 @@ public class MappedEntityEnvironmentDelegate extends AbstractEnvironmentDelegate
     }
 
     @Override
+    public List<Set<String>> getUniqueConstraints(Class<? extends Entity> entityClass) throws UnifyException {
+        return Collections.emptyList();
+    }
+
+    @Override
     public int deleteAll(Query<? extends Entity> query) throws UnifyException {
         return au().isMappingProviderPresent(query) ? au().getMappingProvider(query).deleteAll(query) : 0;
     }

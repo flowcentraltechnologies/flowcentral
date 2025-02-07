@@ -600,6 +600,12 @@ public abstract class AbstractEnvironmentDelegate extends AbstractFlowCentralCom
     }
 
     @Override
+    public List<Set<String>> getUniqueConstraints(Class<? extends Entity> entityClass) throws UnifyException {
+        // TODO 
+        return Collections.emptyList();
+    }
+
+    @Override
     public Aggregation aggregate(AggregateFunction aggregateFunction, Query<? extends Entity> query)
             throws UnifyException {
         // TODO Implement direct reporting
