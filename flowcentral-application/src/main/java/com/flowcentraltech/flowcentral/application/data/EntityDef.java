@@ -386,7 +386,7 @@ public class EntityDef extends BaseApplicationEntityDef {
     }
 
     public boolean isWorkType() {
-        return baseType.isWorkEntityType();
+        return baseType != null && baseType.isWorkEntityType();
     }
 
     public void setListOnlyTypesResolved() {
