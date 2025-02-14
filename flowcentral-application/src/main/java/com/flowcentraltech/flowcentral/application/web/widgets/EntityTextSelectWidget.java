@@ -51,6 +51,7 @@ import com.tcdng.unify.web.ui.widget.data.Popup;
         @UplAttribute(name = "filterBinding", type = String.class),
         @UplAttribute(name = "listKey", type = String.class),
         @UplAttribute(name = "space", type = boolean.class, defaultVal = "false"),
+        @UplAttribute(name = "dash", type = boolean.class, defaultVal = "false"),
         @UplAttribute(name = "special", type = boolean.class, defaultVal = "false"),
         @UplAttribute(name = "acceptPlus", type = boolean.class),
         @UplAttribute(name = "acceptMinus", type = boolean.class),
@@ -109,6 +110,10 @@ public class EntityTextSelectWidget extends AbstractFlowCentralPopupTextField {
 
     public String getFormPanelId() throws UnifyException {
         return getPageAttribute(String.class, "formPanel.id");
+    }
+
+    public boolean isDash() throws UnifyException {
+        return getUplAttribute(boolean.class, "dash");
     }
 
     public boolean isSpecial() throws UnifyException {
