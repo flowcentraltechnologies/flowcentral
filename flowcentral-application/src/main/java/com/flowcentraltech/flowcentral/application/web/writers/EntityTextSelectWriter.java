@@ -80,7 +80,7 @@ public class EntityTextSelectWriter extends AbstractPopupTextFieldWriter {
         EntityTextSelectWidget entityTextSelect = (EntityTextSelectWidget) textField;
         switch (entityTextSelect.type()) {
             case ALPHANUMERIC:
-                return WebRegexUtils.getAlphanumericFormatRegex(entityTextSelect.isSpecial(),
+                return WebRegexUtils.getAlphanumericFormatRegex(entityTextSelect.isSpecial(), entityTextSelect.isDash(),
                         entityTextSelect.isSpace());
             case FULLNAME:
                 return WebRegexUtils.getFullNameFormatRegex(entityTextSelect.isSpecial());
