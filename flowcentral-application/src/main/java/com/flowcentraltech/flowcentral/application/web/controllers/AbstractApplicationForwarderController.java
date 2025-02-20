@@ -98,11 +98,15 @@ public abstract class AbstractApplicationForwarderController<T extends AbstractF
         return forwardToPath(applicationPath);
     }
 
-    protected SystemModuleService system() {
+    protected final AppletUtilities au() {
+        return appletUtilities;
+    }
+
+    protected final SystemModuleService system() {
         return appletUtilities.system();
     }
 
-    protected ApplicationModuleService application() {
+    protected final ApplicationModuleService application() {
         return appletUtilities.application();
     }
 

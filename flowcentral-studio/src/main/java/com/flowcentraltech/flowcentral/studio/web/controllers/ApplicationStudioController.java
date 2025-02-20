@@ -16,7 +16,6 @@
 
 package com.flowcentraltech.flowcentral.studio.web.controllers;
 
-import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleAuditConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationResultMappingConstants;
@@ -81,9 +80,6 @@ public class ApplicationStudioController extends AbstractApplicationForwarderCon
     @Configurable
     private UserLoginActivityProvider userLoginActivityProvider;
 
-    @Configurable
-    private AppletUtilities appletUtilities;
-
     public ApplicationStudioController() {
         super(ApplicationStudioPageBean.class, Secured.TRUE, ReadOnly.FALSE, ResetOnWrite.FALSE);
     }
@@ -91,7 +87,7 @@ public class ApplicationStudioController extends AbstractApplicationForwarderCon
     @Action
     @Override
     public String content() throws UnifyException {
-        appletUtilities.setReloadOnSwitch();
+        au().setReloadOnSwitch();
         return ApplicationResultMappingConstants.REFRESH_CONTENT;
     }
 
@@ -113,7 +109,7 @@ public class ApplicationStudioController extends AbstractApplicationForwarderCon
             clearCategorySelect();
         } else {
             // Actual Application
-            Application application = appletUtilities.application().findApplication(applicationId);
+            Application application = application().findApplication(applicationId);
             setApplicationSessionAttributes(application);
             setCategorySelect();
         }
@@ -150,7 +146,7 @@ public class ApplicationStudioController extends AbstractApplicationForwarderCon
         application.setLabel(createAppForm.getApplicationLabel());
         application.setDevelopable(true);
         application.setMenuAccess(true);
-        final Long applicationId = appletUtilities.application().createApplication(application, module);
+        final Long applicationId = application().createApplication(application, module);
 
         pageBean.setCurrentApplicationId(applicationId);
         setApplicationSessionAttributes(application);
@@ -208,7 +204,7 @@ public class ApplicationStudioController extends AbstractApplicationForwarderCon
             contentPanel.clearPages();
         }
 
-        final boolean clientUpdateSync = appletUtilities.system().getSysParameterValue(boolean.class,
+        final boolean clientUpdateSync = system().getSysParameterValue(boolean.class,
                 ApplicationModuleSysParamConstants.GLOBAL_CLIENT_UPDATE_SYNCHRONIZATION);
         pageBean.setClientPushSync(clientUpdateSync);
     }
