@@ -532,7 +532,7 @@
 		</applet>
 		<applet name="manageSuggestion"
 			description="$m{application.appsuggestion.manage}"
-			label="$m{application.appsuggestion.manage.label}" icon="ellipsis-h"
+			label="$m{application.appsuggestion.manage.label}" icon="clipboard-check"
 			type="manage_entitylist" entity="appSuggestion" menuAccess="false">
 			<property name="searchTable" value="suggestionTable" />
 			<property name="searchTable.new" value="true" />

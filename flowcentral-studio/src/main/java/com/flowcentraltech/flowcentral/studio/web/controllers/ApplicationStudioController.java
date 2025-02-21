@@ -16,15 +16,14 @@
 
 package com.flowcentraltech.flowcentral.studio.web.controllers;
 
-import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleAuditConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationResultMappingConstants;
 import com.flowcentraltech.flowcentral.application.entities.Application;
 import com.flowcentraltech.flowcentral.application.entities.ApplicationQuery;
+import com.flowcentraltech.flowcentral.application.web.controllers.AbstractApplicationForwarderController;
 import com.flowcentraltech.flowcentral.common.business.LoginUserPhotoGenerator;
 import com.flowcentraltech.flowcentral.common.business.UserLoginActivityProvider;
-import com.flowcentraltech.flowcentral.common.web.controllers.AbstractFlowCentralPageController;
 import com.flowcentraltech.flowcentral.studio.constants.StudioAppComponentType;
 import com.flowcentraltech.flowcentral.studio.constants.StudioSessionAttributeConstants;
 import com.flowcentraltech.flowcentral.studio.web.data.CreateAppForm;
@@ -73,16 +72,13 @@ import com.tcdng.unify.web.ui.widget.ContentPanel;
                 response = { "!hidepopupresponse", "!refreshpanelresponse panels:$l{content}" }),
         @ResultMapping(name = ApplicationResultMappingConstants.REFRESH_ALL, response = { "!hidepopupresponse",
                 "!refreshpanelresponse panels:$l{topBanner menuColPanel content}" }) })
-public class ApplicationStudioController extends AbstractFlowCentralPageController<ApplicationStudioPageBean> {
+public class ApplicationStudioController extends AbstractApplicationForwarderController<ApplicationStudioPageBean> {
 
     @Configurable
     private LoginUserPhotoGenerator userPhotoGenerator;
 
     @Configurable
     private UserLoginActivityProvider userLoginActivityProvider;
-
-    @Configurable
-    private AppletUtilities appletUtilities;
 
     public ApplicationStudioController() {
         super(ApplicationStudioPageBean.class, Secured.TRUE, ReadOnly.FALSE, ResetOnWrite.FALSE);
@@ -91,7 +87,7 @@ public class ApplicationStudioController extends AbstractFlowCentralPageControll
     @Action
     @Override
     public String content() throws UnifyException {
-        appletUtilities.setReloadOnSwitch();
+        au().setReloadOnSwitch();
         return ApplicationResultMappingConstants.REFRESH_CONTENT;
     }
 
@@ -113,7 +109,7 @@ public class ApplicationStudioController extends AbstractFlowCentralPageControll
             clearCategorySelect();
         } else {
             // Actual Application
-            Application application = appletUtilities.application().findApplication(applicationId);
+            Application application = application().findApplication(applicationId);
             setApplicationSessionAttributes(application);
             setCategorySelect();
         }
@@ -150,7 +146,7 @@ public class ApplicationStudioController extends AbstractFlowCentralPageControll
         application.setLabel(createAppForm.getApplicationLabel());
         application.setDevelopable(true);
         application.setMenuAccess(true);
-        final Long applicationId = appletUtilities.application().createApplication(application, module);
+        final Long applicationId = application().createApplication(application, module);
 
         pageBean.setCurrentApplicationId(applicationId);
         setApplicationSessionAttributes(application);
@@ -187,6 +183,10 @@ public class ApplicationStudioController extends AbstractFlowCentralPageControll
         ApplicationStudioPageBean pageBean = getPageBean();
         pageBean.setUserPhotoGenerator(userPhotoGenerator);
 
+        final boolean clientUpdateSync = system().getSysParameterValue(boolean.class,
+                ApplicationModuleSysParamConstants.GLOBAL_CLIENT_UPDATE_SYNCHRONIZATION);
+
+        pageBean.setClientPushSync(clientUpdateSync);       
         setPageWidgetVisible("businessUnitLabel", isTenancyEnabled());
     }
 
@@ -204,7 +204,7 @@ public class ApplicationStudioController extends AbstractFlowCentralPageControll
             contentPanel.clearPages();
         }
 
-        final boolean clientUpdateSync = appletUtilities.system().getSysParameterValue(boolean.class,
+        final boolean clientUpdateSync = system().getSysParameterValue(boolean.class,
                 ApplicationModuleSysParamConstants.GLOBAL_CLIENT_UPDATE_SYNCHRONIZATION);
         pageBean.setClientPushSync(clientUpdateSync);
     }
