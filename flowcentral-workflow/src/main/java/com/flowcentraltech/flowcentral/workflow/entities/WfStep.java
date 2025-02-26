@@ -76,6 +76,9 @@ public class WfStep extends BaseConfigNamedEntity {
     @Column(name = "WORKITEM_LOADING_RESTR", length = 64, nullable = true)
     private String workItemLoadingRestriction;
     
+    @Column(name = "EJECTION_RESTR", length = 64, nullable = true)
+    private String ejectionRestriction;
+    
     @Column(name = "ATTACHMENT_PROVIDER_NM", length = 64, nullable = true)
     private String attachmentProviderName;
 
@@ -278,6 +281,14 @@ public class WfStep extends BaseConfigNamedEntity {
 
     public void setWorkItemLoadingRestriction(String workItemLoadingRestriction) {
         this.workItemLoadingRestriction = workItemLoadingRestriction;
+    }
+
+    public String getEjectionRestriction() {
+        return ejectionRestriction;
+    }
+
+    public void setEjectionRestriction(String ejectionRestriction) {
+        this.ejectionRestriction = ejectionRestriction;
     }
 
     public String getAttachmentProviderName() {

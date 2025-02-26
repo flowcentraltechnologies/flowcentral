@@ -536,6 +536,8 @@ public class ApplicationWorkflowInstallerImpl extends AbstractApplicationArtifac
                 wfStep.setAutoLoadConditionName(stepConfig.getAutoLoadCondition());
                 wfStep.setAttachmentProviderName(stepConfig.getAttachmentProvider());
                 wfStep.setNewCommentCaption(stepConfig.getNewCommentCaption());
+                wfStep.setWorkItemLoadingRestriction(stepConfig.getWorkItemLoadingRestriction());
+                wfStep.setEjectionRestriction(stepConfig.getEjectionRestriction());
                 wfStep.setPolicy(stepConfig.getPolicy());
                 wfStep.setValueGenerator(stepConfig.getValueGenerator());
                 wfStep.setAppletSetValuesName(stepConfig.getAppletSetValuesName());

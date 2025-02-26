@@ -24,7 +24,7 @@
     formCaptionSuffix:$s{:} formBinding:$g{dialogFormBinding} formColumns:2
 	formSection:$d{!ui-section components:$c{frmType frmName frmDesc frmLabel frmAppletName frmAppletSetValuesName frmBinaryConditionName frmReadOnlyConditionName frmValueGenerator frmEmails frmComments frmNewCommentCaption
 		frmAutoLoadingCondition frmWorkItemLoadingRestriction frmAttachmentProviderName frmPolicy frmRule frmActionType frmNextStepName frmAltNextStepName frmPriority frmReminderMinutes frmCriticalMinutes frmExpiryMinutes
-		frmDelayMinutes frmAudit frmBranchOnly frmDepartmentOnly frmIncludeForwarder frmForwarderPreferred}}
+		frmDelayMinutes frmEjectionRestriction frmAudit frmBranchOnly frmDepartmentOnly frmIncludeForwarder frmForwarderPreferred}}
 
 !ui-name:frmName styleClass:$e{fc-formfield} caption:$m{wfstepeditpanel.name} size:32 binding:name required:true
 !ui-text:frmDesc styleClass:$e{fc-formfield} caption:$m{wfstepeditpanel.description} size:32 binding:description required:true focus:true
@@ -40,7 +40,7 @@
 !ui-integer:frmReminderMinutes styleClass:$e{fc-formfield} caption:$m{wfstepeditpanel.reminderminutes} precision:5 binding:reminderMinutes
 !ui-integer:frmCriticalMinutes styleClass:$e{fc-formfield} caption:$m{wfstepeditpanel.criticalminutes} precision:5 binding:criticalMinutes
 !ui-integer:frmExpiryMinutes styleClass:$e{fc-formfield} caption:$m{wfstepeditpanel.expiryminutes} precision:5 binding:expiryMinutes
-!ui-integer:frmDelayMinutes styleClass:$e{fc-formfield} caption:$m{wfstepeditpanel.delayminutes} precision:5 binding:delayMinutes
+!ui-integer:frmDelayMinutes styleClass:$e{fc-formfield} caption:$m{wfstepeditpanel.delayminutes} precision:8 binding:delayMinutes
 	required:true
 !ui-checkbox:frmAudit caption:$m{wfstepeditpanel.audit} binding:audit
 !ui-checkbox:frmBranchOnly caption:$m{wfstepeditpanel.branchonly} binding:branchOnly
@@ -73,6 +73,9 @@
 !ui-select:frmWorkItemLoadingRestriction styleClass:$e{fc-formfield} caption:$m{wfstepeditpanel.workitemloadingrestriction}
 	list:$s{studioworkflowfilterlist} listParams:$l{workflowId} blankOption:$s{}
 	binding:workItemLoadingRestriction
+!ui-select:frmEjectionRestriction styleClass:$e{fc-formfield} caption:$m{wfstepeditpanel.ejectionrestriction}
+	list:$s{studioworkflowfilterlist} listParams:$l{workflowId} blankOption:$s{}
+	binding:ejectionRestriction
 !ui-select:frmAttachmentProviderName styleClass:$e{fc-formfield} caption:$m{wfstepeditpanel.attachmentprovidername}
 	list:$s{studioattachmentproviderlist} listParams:$l{workflowId} blankOption:$s{}
 	binding:attachmentProviderName
