@@ -300,7 +300,7 @@ public class FormContext extends AbstractContext implements  ValidationErrors {
     public void setInst(Object inst) throws UnifyException {
         appletContext.extractReference(entityDef, inst);
         this.inst = inst;
-        altFormTitle = formDef != null && isWithInst() && formDef.isWithTitleFormat()
+        altFormTitle = (formDef != null && isWithInst() && formDef.isWithTitleFormat())
                 ? appletContext.specialParamProvider()
                         .getStringGenerator(getFormValueStore().getReader(), getFormValueStore().getReader(),
                                 formDef.getTitleFormat())

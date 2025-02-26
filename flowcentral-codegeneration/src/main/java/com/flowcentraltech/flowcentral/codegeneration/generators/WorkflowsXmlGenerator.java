@@ -183,6 +183,7 @@ public class WorkflowsXmlGenerator extends AbstractResourcesArtifactGenerator {
                         wfStepConfig.setReadOnlyCondition(wfStep.getReadOnlyConditionName());
                         wfStepConfig.setAutoLoadCondition(wfStep.getAutoLoadConditionName());
                         wfStepConfig.setWorkItemLoadingRestriction(wfStep.getWorkItemLoadingRestriction());
+                        wfStepConfig.setEjectionRestriction(wfStep.getEjectionRestriction());
                         wfStepConfig.setAttachmentProvider(wfStep.getAttachmentProviderName());
                         wfStepConfig.setNewCommentCaption(wfStep.getNewCommentCaption());
                         wfStepConfig.setPolicy(wfStep.getPolicy());

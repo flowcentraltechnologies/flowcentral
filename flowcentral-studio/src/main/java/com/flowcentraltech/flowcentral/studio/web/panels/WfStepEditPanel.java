@@ -62,6 +62,7 @@ public class WfStepEditPanel extends AbstractDialogPanel {
         setVisible("frmCriticalMinutes", isUserAct);
         setVisible("frmExpiryMinutes", isUserAct);
         setVisible("frmDelayMinutes", WorkflowStepType.DELAY.equals(type));
+        setVisible("frmEjectionRestriction", WorkflowStepType.DELAY.equals(type));
         setVisible("frmAudit", isUserAct);
         setVisible("frmBranchOnly", isUserAct);
         setVisible("frmDepartmentOnly", isUserAct);
