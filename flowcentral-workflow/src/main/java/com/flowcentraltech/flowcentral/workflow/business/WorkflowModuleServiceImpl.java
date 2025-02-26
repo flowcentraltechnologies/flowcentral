@@ -1358,7 +1358,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                 final int batchSize = appletUtil.system().getSysParameterValue(int.class,
                         WorkflowModuleSysParamConstants.WF_WORKITEM_EJECTION_BATCH_SIZE);
                 List<WfItem> wfItemList = environment().listAll(new WfItemQuery().ejectionDue(now).setLimit(batchSize));
-                logDebug("Ejecting [{0}] delayed work items based on delay minutes...", wfItemList.size());
+                logDebug("Ejecting [{0}] delayed work item(s) based on delay minutes...", wfItemList.size());
                 List<Long> ejected =  new ArrayList<Long>();
                 for (WfItem wfItem : wfItemList) {
                     final Long wfItemId = wfItem.getId();
@@ -1385,6 +1385,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                 for (WfStep wfStep : stepList) {
                     final String workflowName = ApplicationNameUtils
                             .getApplicationEntityLongName(wfStep.getApplicationName(), wfStep.getWorkflowName());
+                    logDebug("Checking step [{0}] in workflow [{1}] for retriction ejection...", wfStep.getName(), workflowName);
                     final WfDef wfDef = getWfDef(workflowName);
                     final WfStepDef currentWfStepDef = wfDef.getWfStepDef(wfStep.getName());
                     final String nextStepName = currentWfStepDef.getNextStepName();
@@ -1402,6 +1403,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                         }
                         
                         List<Long> workRecIds = environment().valueList(Long.class, "workRecId", wfItemQuery);
+                        logDebug("Processing [{0}] work item(s) for conditional ejection...", workRecIds.size());
                         if (!DataUtils.isBlank(workRecIds)) {
                             List<Long> actWorkRecIds = environment().valueList(Long.class, "id",
                                     Query.of((Class<? extends Entity>) entityDef.getEntityClass())
@@ -1409,7 +1411,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                             if (!DataUtils.isBlank(actWorkRecIds)) {
                                 wfItemList = environment()
                                         .listAll(new WfItemQuery().addAmongst("workRecId", actWorkRecIds));
-                                logDebug("Ejecting [{0}] delayed work items based on condition...", wfItemList.size());
+                                logDebug("Ejecting [{0}] delayed work item(s) based on condition...", wfItemList.size());
                                 for (WfItem wfItem : wfItemList) {
                                     final Long wfItemId = wfItem.getId();
                                     final Long wfItemEventId = createWfItemEvent(nextWfStepDef,
