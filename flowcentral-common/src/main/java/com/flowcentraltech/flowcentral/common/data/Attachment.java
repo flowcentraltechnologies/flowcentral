@@ -28,14 +28,33 @@ public class Attachment extends AttachmentDetails {
 
     private byte[] data;
 
+    private String sourceId;
+
+    private String provider;
+
     public Attachment(Long id, FileAttachmentType type, String name, String title, String fileName, byte[] data,
             long versionNo) {
         super(id, type, name, title, fileName, versionNo);
         this.data = data;
     }
 
+    public Attachment(Long id, FileAttachmentType type, String name, String title, String fileName, String provider,
+            String sourceId, long versionNo) {
+        super(id, type, name, title, fileName, versionNo);
+        this.provider = provider;
+        this.sourceId = sourceId;
+    }
+
     public byte[] getData() {
         return data;
+    }
+
+    public String getSourceId() {
+        return sourceId;
+    }
+
+    public String getProvider() {
+        return provider;
     }
 
     public static Builder newBuilder(Long id, FileAttachmentType type, long versionNo) {
@@ -59,6 +78,10 @@ public class Attachment extends AttachmentDetails {
         private String fileName;
 
         private byte[] data;
+
+        private String sourceId;
+
+        private String provider;
 
         private long versionNo;
 
@@ -88,6 +111,12 @@ public class Attachment extends AttachmentDetails {
             return this;
         }
 
+        public Builder source(String provider, String sourceId) {
+            this.provider = provider;
+            this.sourceId = sourceId;
+            return this;
+        }
+
         public Attachment build() {
             if (type == null) {
                 throw new RuntimeException("Attachment type is required.");
@@ -101,11 +130,16 @@ public class Attachment extends AttachmentDetails {
                 throw new RuntimeException("Attachment title is required.");
             }
 
-            if (data == null) {
-                throw new RuntimeException("Attachment data is required.");
+            if (data == null && provider == null) {
+                throw new RuntimeException("Attachment data source is required.");
             }
 
-            return new Attachment(id, type, name, title, fileName, data, versionNo);
+            if (provider != null && sourceId == null) {
+                throw new RuntimeException("Source is required for provider datasource.");
+            }
+
+            return provider != null ? new Attachment(id, type, name, title, fileName, provider, sourceId, versionNo)
+                    : new Attachment(id, type, name, title, fileName, data, versionNo);
         }
     }
 

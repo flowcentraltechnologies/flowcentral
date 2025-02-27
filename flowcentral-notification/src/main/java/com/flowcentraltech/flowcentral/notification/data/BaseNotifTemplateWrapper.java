@@ -33,9 +33,9 @@ import com.tcdng.unify.core.data.ValueStoreReader;
 public abstract class BaseNotifTemplateWrapper implements NotifTemplateWrapper {
 
     protected final NotifTemplateDef notifTemplateDef;
-    
+
     protected final NotifMessage.Builder nmb;
-    
+
     public BaseNotifTemplateWrapper(NotifTemplateDef notifTemplateDef) {
         this.notifTemplateDef = notifTemplateDef;
         this.nmb = NotifMessage.newBuilder(notifTemplateDef.getLongName());
@@ -60,7 +60,7 @@ public abstract class BaseNotifTemplateWrapper implements NotifTemplateWrapper {
     public void setImportance(ImportanceType importance) {
         nmb.importance(importance);
     }
-  
+
     @Override
     public void addTORecipient(String name, String contact) {
         nmb.addTORecipient(name, contact);
@@ -116,6 +116,17 @@ public abstract class BaseNotifTemplateWrapper implements NotifTemplateWrapper {
     @Override
     public void addAttachment(FileAttachmentType type, String name, String title, byte[] data) {
         nmb.addAttachment(type, name, title, data);
+    }
+
+    @Override
+    public void addAttachment(FileAttachmentType type, String name, String title, String fileName, String provider,
+            String sourceId) {
+        nmb.addAttachment(type, name, title, fileName, provider, sourceId);
+    }
+
+    @Override
+    public void addAttachment(FileAttachmentType type, String name, String title, String provider, String sourceId) {
+        nmb.addAttachment(type, name, title, provider, sourceId);
     }
 
     @Override

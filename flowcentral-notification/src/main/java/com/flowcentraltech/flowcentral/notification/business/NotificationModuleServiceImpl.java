@@ -419,6 +419,8 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
                 notifAttachment.setTitle(attachment.getTitle());
                 notifAttachment.setType(attachment.getType());
                 notifAttachment.setData(attachment.getData());
+                notifAttachment.setProvider(attachment.getProvider());
+                notifAttachment.setSourceId(attachment.getSourceId());
                 attachmentList.add(notifAttachment);
             }
 
