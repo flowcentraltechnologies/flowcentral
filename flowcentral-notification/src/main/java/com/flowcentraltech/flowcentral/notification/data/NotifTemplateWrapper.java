@@ -62,6 +62,15 @@ public interface NotifTemplateWrapper {
 
     void addAttachment(FileAttachmentType type, String name, String title, String provider, String sourceId);
 
+    void addAttachment(FileAttachmentType type, String name, String title, String fileName, byte[] data, boolean inline);
+
+    void addAttachment(FileAttachmentType type, String name, String title, byte[] data, boolean inline);
+
+    void addAttachment(FileAttachmentType type, String name, String title, String fileName, String provider,
+            String sourceId, boolean inline);
+
+    void addAttachment(FileAttachmentType type, String name, String title, String provider, String sourceId, boolean inline);
+
     void addAttachment(Attachment attachment);
 
     NotifMessage getMessage();

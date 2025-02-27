@@ -2839,7 +2839,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             List<AttachmentDetails> list = new ArrayList<AttachmentDetails>();
             for (FileAttachment fileAttachment : fileAttachmentList) {
                 list.add(new AttachmentDetails(fileAttachment.getId(), fileAttachment.getType(),
-                        fileAttachment.getName(), fileAttachment.getTitle(), fileAttachment.getFileName(),
+                        fileAttachment.getName(), fileAttachment.getTitle(), fileAttachment.getFileName(), false,
                         fileAttachment.getVersionNo()));
             }
 
@@ -2857,7 +2857,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 .entity(entityDef.getTableName()).entityInstId(ownerInstId).name(attachmentName));
         if (fileAttachment != null) {
             return Attachment
-                    .newBuilder(fileAttachment.getId(), fileAttachment.getType(), fileAttachment.getVersionNo())
+                    .newBuilder(fileAttachment.getId(), fileAttachment.getType(), false, fileAttachment.getVersionNo())
                     .name(fileAttachment.getName()).title(fileAttachment.getTitle())
                     .fileName(fileAttachment.getFileName()).data(fileAttachment.getFile().getData()).build();
         }

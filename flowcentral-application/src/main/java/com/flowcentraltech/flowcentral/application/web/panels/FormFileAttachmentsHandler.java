@@ -65,7 +65,7 @@ public class FormFileAttachmentsHandler extends AbstractFileAttachmentHandler {
         EntityInstNameParts np = getEntityInstNameParts(parentId);
         fileAttachmentProvider.saveFileAttachment(FileAttachmentCategoryType.FORM_CATEGORY, np.getEntityName(),
                 np.getInstId(),
-                Attachment.newBuilder(fileAttachmenInfo.getType()).name(fileAttachmenInfo.getName())
+                Attachment.newBuilder(fileAttachmenInfo.getType(), false).name(fileAttachmenInfo.getName())
                         .title(!StringUtils.isBlank(fileAttachmenInfo.getDescription())
                                 ? fileAttachmenInfo.getDescription()
                                 : fileAttachmenInfo.getFilename())

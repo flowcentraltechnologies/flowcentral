@@ -519,7 +519,7 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
             String license = writer.toString();
             String encLicense = cryptograph.encrypt(license);
 
-            final Attachment _attachment = Attachment.newBuilder(FileAttachmentType.TEXT).name(licenseName)
+            final Attachment _attachment = Attachment.newBuilder(FileAttachmentType.TEXT, false).name(licenseName)
                     .title(licenseName).fileName(licenseName).data(encLicense.getBytes()).build();
             fileAttachmentProvider.saveFileAttachment(FileAttachmentCategoryType.LICENSE_CATEGORY, "system.credential",
                     0L, _attachment);
@@ -566,7 +566,7 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
             final String licenseName = FileAttachmentCategoryType.LICENSE_CATEGORY.code();
             license = writer.toString();
             String encLicense = cryptograph.encrypt(license);
-            final Attachment _attachment = Attachment.newBuilder(FileAttachmentType.TEXT).name(licenseName)
+            final Attachment _attachment = Attachment.newBuilder(FileAttachmentType.TEXT, false).name(licenseName)
                     .title(licenseName).fileName(licenseName).data(encLicense.getBytes()).build();
             fileAttachmentProvider.saveFileAttachment(FileAttachmentCategoryType.LICENSE_CATEGORY, "system.credential",
                     0L, _attachment);
