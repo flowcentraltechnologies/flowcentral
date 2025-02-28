@@ -17,6 +17,7 @@ package com.flowcentraltech.flowcentral.application.business;
 
 import java.io.Reader;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import com.flowcentraltech.flowcentral.application.data.APIDef;
@@ -114,6 +115,17 @@ import com.tcdng.unify.core.task.TaskMonitor;
  */
 public interface ApplicationModuleService extends FlowCentralService {
 
+    /**
+     * Gets process variables.
+     * 
+     * @param entity
+     *               optional entity long name
+     * @return the process variables
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    Map<String, Object> getProcessVariables(String entity) throws UnifyException;
+    
     /**
      * Checks if entity component is present.
      * 

@@ -80,7 +80,6 @@ import com.flowcentraltech.flowcentral.common.business.policies.WfRecipientPolic
 import com.flowcentraltech.flowcentral.common.constants.CommonTempValueNameConstants;
 import com.flowcentraltech.flowcentral.common.constants.ConfigType;
 import com.flowcentraltech.flowcentral.common.constants.FileAttachmentCategoryType;
-import com.flowcentraltech.flowcentral.common.constants.FlowCentralContainerPropertyConstants;
 import com.flowcentraltech.flowcentral.common.constants.ProcessErrorConstants;
 import com.flowcentraltech.flowcentral.common.constants.SecuredLinkType;
 import com.flowcentraltech.flowcentral.common.constants.WfItemVersionType;
@@ -1902,26 +1901,11 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
     }
 
     private Map<String, Object> getTransitionVariables(WfItem wfItem, EntityDef entityDef) throws UnifyException {
-        Map<String, Object> variables = new HashMap<String, Object>();
-        final String appTitle = getContainerSetting(String.class,
-                FlowCentralContainerPropertyConstants.FLOWCENTRAL_APPLICATION_TITLE);
-        final String appCorresponder = getContainerSetting(String.class,
-                FlowCentralContainerPropertyConstants.FLOWCENTRAL_APPLICATION_CORRESPONDER);
-        final String appUrl = appletUtil.system().getSysParameterValue(String.class,
-                SystemModuleSysParamConstants.APPLICATION_BASE_URL);
-
-        SecuredLinkInfo securedLinkInfo = appletUtil.system().getNewSecuredLink(SecuredLinkType.LOGIN, appTitle,
-                appUrl);
+        final Map<String, Object> variables = appletUtil.application().getProcessVariables(entityDef.getLongName());
         variables.put(ProcessVariable.FORWARDED_BY.variableKey(), wfItem.getForwardedBy());
         variables.put(ProcessVariable.FORWARDED_BY_NAME.variableKey(), wfItem.getForwardedByName());
         variables.put(ProcessVariable.FORWARD_TO.variableKey(), wfItem.getForwardTo());
         variables.put(ProcessVariable.HELD_BY.variableKey(), wfItem.getHeldBy());
-        variables.put(ProcessVariable.ENTITY_NAME.variableKey(), entityDef.getName());
-        variables.put(ProcessVariable.ENTITY_DESC.variableKey(), entityDef.getDescription());
-        variables.put(ProcessVariable.APP_TITLE.variableKey(), appTitle);
-        variables.put(ProcessVariable.APP_CORRESPONDER.variableKey(), appCorresponder);
-        variables.put(ProcessVariable.APP_URL.variableKey(), appUrl);
-        variables.put(ProcessVariable.APP_HTML_LINK.variableKey(), securedLinkInfo.getHtmlLink());
         return variables;
     }
 

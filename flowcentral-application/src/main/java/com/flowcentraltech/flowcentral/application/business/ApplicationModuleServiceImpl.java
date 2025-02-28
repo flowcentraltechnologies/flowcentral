@@ -50,6 +50,7 @@ import com.flowcentraltech.flowcentral.application.constants.ApplicationPredefin
 import com.flowcentraltech.flowcentral.application.constants.ApplicationPrivilegeConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationReplicationTaskConstants;
 import com.flowcentraltech.flowcentral.application.constants.FormWizardExecuteTaskConstants;
+import com.flowcentraltech.flowcentral.application.constants.ProcessVariable;
 import com.flowcentraltech.flowcentral.application.data.APIDef;
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.data.AppletFilterDef;
@@ -124,13 +125,16 @@ import com.flowcentraltech.flowcentral.common.business.policies.FormWizardTaskPr
 import com.flowcentraltech.flowcentral.common.business.policies.SweepingCommitPolicy;
 import com.flowcentraltech.flowcentral.common.constants.ConfigType;
 import com.flowcentraltech.flowcentral.common.constants.FileAttachmentCategoryType;
+import com.flowcentraltech.flowcentral.common.constants.FlowCentralContainerPropertyConstants;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants;
 import com.flowcentraltech.flowcentral.common.constants.OwnershipType;
 import com.flowcentraltech.flowcentral.common.constants.RecordStatus;
+import com.flowcentraltech.flowcentral.common.constants.SecuredLinkType;
 import com.flowcentraltech.flowcentral.common.constants.WfItemVersionType;
 import com.flowcentraltech.flowcentral.common.data.Attachment;
 import com.flowcentraltech.flowcentral.common.data.AttachmentDetails;
 import com.flowcentraltech.flowcentral.common.data.ParamValuesDef;
+import com.flowcentraltech.flowcentral.common.data.SecuredLinkInfo;
 import com.flowcentraltech.flowcentral.common.entities.BaseEntity;
 import com.flowcentraltech.flowcentral.common.entities.BaseVersionEntity;
 import com.flowcentraltech.flowcentral.common.entities.EntityWrapper;
@@ -1386,6 +1390,31 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     return prdb.build();
                 }
             };
+    }
+
+    @Override
+    public Map<String, Object> getProcessVariables(String entity) throws UnifyException {
+        Map<String, Object> variables = new HashMap<String, Object>();
+        final String appTitle = getContainerSetting(String.class,
+                FlowCentralContainerPropertyConstants.FLOWCENTRAL_APPLICATION_TITLE);
+        final String appCorresponder = getContainerSetting(String.class,
+                FlowCentralContainerPropertyConstants.FLOWCENTRAL_APPLICATION_CORRESPONDER);
+        final String appUrl = appletUtilities.system().getSysParameterValue(String.class,
+                SystemModuleSysParamConstants.APPLICATION_BASE_URL);
+
+        SecuredLinkInfo securedLinkInfo = appletUtilities.system().getNewSecuredLink(SecuredLinkType.LOGIN, appTitle,
+                appUrl);
+        variables.put(ProcessVariable.APP_TITLE.variableKey(), appTitle);
+        variables.put(ProcessVariable.APP_CORRESPONDER.variableKey(), appCorresponder);
+        variables.put(ProcessVariable.APP_URL.variableKey(), appUrl);
+        variables.put(ProcessVariable.APP_HTML_LINK.variableKey(), securedLinkInfo.getHtmlLink());
+        if (!StringUtils.isBlank(entity)) {
+            EntityDef entityDef = getEntityDef(entity);
+            variables.put(ProcessVariable.ENTITY_NAME.variableKey(), entityDef.getName());
+            variables.put(ProcessVariable.ENTITY_DESC.variableKey(), entityDef.getDescription());
+        }
+
+        return variables;
     }
 
     @Override
