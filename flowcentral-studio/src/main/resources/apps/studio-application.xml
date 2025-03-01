@@ -4,6 +4,10 @@
 	description="$m{studio.application.short.description}"
 	label="$m{studio.application.mainlabel}" module="studio"
 	displayIndex="1000">
+	<!-- Help Sheets-->
+	<helpSheets>
+		<helpSheet configFile="apps/help/sheet/notif-template-help-sheet.xml"/>
+	</helpSheets>
 	<!-- Widget Types -->
 	<widgetTypes>
 		<widgetType name="environmentdelegatelist"
@@ -4352,7 +4356,8 @@
 		</form>
 		<form name="notifTemplateForm"
 			description="$m{studio.notificationtemplate.form}"
-			entity="notification.notifTemplate">
+			entity="notification.notifTemplate"
+			helpSheet="studio.notifTemplateHelpSheet">
 			<action type="button" name="lockResource" symbol="lock"
 				styleClass="fc-actbutton"
 				description="$m{studio.common.form.action.lockresource}"
@@ -5774,11 +5779,13 @@
 						disabled="true" column="0" required="true"
 						label="$m{application.apphelpentry.apphelpsheet}" />
 					<field name="fieldName"
-						inputWidget="studiohelpentryfieldlist" column="0"
+						inputWidget="studiohelpentryfieldlist" column="1"
 						required="true" />
+				</section>
+				<section name="helpEntryCont" columns="type_1">
 					<field name="helpContent"
-						inputWidget="application.richtexteditormedium"
-						column="1" required="true" />
+						inputWidget="application.richtexteditorlarge"
+						column="0" required="true" />
 				</section>
 			</tab>
 			<tab name="changeLog" label="$m{application.form.audit}"

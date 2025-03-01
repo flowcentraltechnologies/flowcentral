@@ -1151,7 +1151,7 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-previewformpanel .footer {display:block;padding-left:4px;box-sizing: border-box;}
 
 /* Help form panel */
-.fc-helpformpanel {width:420px;background-color:#FDFFDF;border: 1px solid #b8b8b8;}
+.fc-helpformpanel {width:420px;background-color:#ffffff;border: 1px solid #b8b8b8;}
 .fc-helpformpanel .header {display:block;width:100%;margin-bottom:10px;}
 .fc-helpformpanel .til {display:inline-block;background-color:var(--color-formsec); color:#fff; padding:5px 8px;font-size: 11px;font-weight: bold;}
 .fc-helpformpanel .forms {width:100%;height:280px;padding:4px;box-sizing: border-box;}
