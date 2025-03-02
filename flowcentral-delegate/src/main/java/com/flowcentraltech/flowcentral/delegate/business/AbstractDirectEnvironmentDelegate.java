@@ -15,12 +15,20 @@
  */
 package com.flowcentraltech.flowcentral.delegate.business;
 
-import com.flowcentraltech.flowcentral.application.business.AbstractEnvironmentDelegate;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import com.flowcentraltech.flowcentral.connect.common.data.BaseResponse;
 import com.flowcentraltech.flowcentral.connect.common.data.DataSourceRequest;
-import com.flowcentraltech.flowcentral.connect.common.data.DelegateEntityListingDTO;
-import com.flowcentraltech.flowcentral.connect.common.data.EntityDTO;
+import com.tcdng.unify.common.data.DelegateEntityListingDTO;
+import com.tcdng.unify.common.data.EntityDTO;
+import com.tcdng.unify.common.data.EntityListingDTO;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.database.sql.SqlDataSource;
+import com.tcdng.unify.core.database.sql.SqlEntityInfo;
 
 /**
  * Convenient abstract base class for direct environment delegates.
@@ -28,10 +36,14 @@ import com.tcdng.unify.core.UnifyException;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class AbstractDirectEnvironmentDelegate extends AbstractEnvironmentDelegate {
+public abstract class AbstractDirectEnvironmentDelegate extends AbstractSynchronizableEnvironmentDelegate {
 
     private final String dataSourceName;
-    
+
+    private DelegateEntityListingDTO delegateEntityListingDTO;
+
+    private Map<String, EntityDTO> entities;
+
     public AbstractDirectEnvironmentDelegate(String dataSourceName) {
         this.dataSourceName = dataSourceName;
     }
@@ -58,12 +70,52 @@ public abstract class AbstractDirectEnvironmentDelegate extends AbstractEnvironm
 
     @Override
     protected DelegateEntityListingDTO getDelegatedEntityList() throws UnifyException {
-        return null;
+        if (delegateEntityListingDTO == null) {
+            synchronized (this) {
+                if (delegateEntityListingDTO == null) {
+                    try {
+                        List<EntityListingDTO> listings = new ArrayList<EntityListingDTO>();
+                        for (SqlEntityInfo sqlEntityInfo : ((SqlDataSource) getDataSource()).getSqlEntityInfos()) {
+                            if (sqlEntityInfo.isWithEntityDTO()) {
+                                listings.add(new EntityListingDTO(sqlEntityInfo.getEntityDTO().getName()));
+                            }
+                        }
+
+                        delegateEntityListingDTO = new DelegateEntityListingDTO(Collections.unmodifiableList(listings),
+                                Collections.emptyList());
+                    } catch (Exception e) {
+                        throwOperationErrorException(e);
+                    }
+                }
+            }
+        }
+
+        return delegateEntityListingDTO;
     }
 
     @Override
     protected EntityDTO getDelegatedEntitySchema(String entity) throws UnifyException {
-        return null;
+        if (entities == null) {
+            synchronized (this) {
+                if (entities == null) {
+                    try {
+                        entities = new HashMap<String, EntityDTO>();
+                        for (SqlEntityInfo sqlEntityInfo : ((SqlDataSource) getDataSource()).getSqlEntityInfos()) {
+                            if (sqlEntityInfo.isWithEntityDTO()) {
+                                EntityDTO entityDTO = sqlEntityInfo.getEntityDTO();
+                                entities.put(entityDTO.getName(), entityDTO);
+                            }
+                        }
+
+                        entities = Collections.unmodifiableMap(entities);
+                    } catch (Exception e) {
+                        throwOperationErrorException(e);
+                    }
+                }
+            }
+        }
+
+        return entities.get(entity);
     }
 
     @Override

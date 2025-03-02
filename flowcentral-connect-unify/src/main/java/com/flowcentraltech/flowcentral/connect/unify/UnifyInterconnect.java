@@ -19,10 +19,10 @@ import java.lang.reflect.Field;
 import java.util.Map;
 
 import com.flowcentraltech.flowcentral.connect.common.AbstractInterconnect;
-import com.flowcentraltech.flowcentral.connect.common.data.EntityFieldInfo;
-import com.flowcentraltech.flowcentral.connect.common.data.EntityInfo;
-import com.flowcentraltech.flowcentral.connect.configuration.constants.ConnectFieldDataType;
 import com.tcdng.unify.common.annotation.Table;
+import com.tcdng.unify.common.constants.ConnectFieldDataType;
+import com.tcdng.unify.common.data.EntityFieldInfo;
+import com.tcdng.unify.common.data.EntityInfo;
 import com.tcdng.unify.core.annotation.Column;
 import com.tcdng.unify.core.annotation.TableName;
 

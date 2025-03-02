@@ -42,11 +42,11 @@ import com.flowcentraltech.flowcentral.connect.common.constants.DataSourceOperat
 import com.flowcentraltech.flowcentral.connect.common.data.BaseResponse;
 import com.flowcentraltech.flowcentral.connect.common.data.DataSourceParam;
 import com.flowcentraltech.flowcentral.connect.common.data.DataSourceRequest;
-import com.flowcentraltech.flowcentral.connect.common.data.DelegateEntityListingDTO;
-import com.flowcentraltech.flowcentral.connect.common.data.EntityDTO;
 import com.flowcentraltech.flowcentral.connect.common.data.JsonDataSourceResponse;
 import com.flowcentraltech.flowcentral.connect.common.data.PseudoDataSourceResponse;
 import com.tcdng.unify.common.constants.EnumConst;
+import com.tcdng.unify.common.data.DelegateEntityListingDTO;
+import com.tcdng.unify.common.data.EntityDTO;
 import com.tcdng.unify.common.data.Listable;
 import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.UnifyException;
