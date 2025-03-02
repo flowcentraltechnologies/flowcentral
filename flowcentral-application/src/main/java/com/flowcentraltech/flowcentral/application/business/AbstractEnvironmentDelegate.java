@@ -107,7 +107,7 @@ public abstract class AbstractEnvironmentDelegate extends AbstractFlowCentralCom
     }
 
     @Override
-    public final DataSource getDataSource() throws UnifyException {
+    public DataSource getDataSource() throws UnifyException {
         throw new UnsupportedOperationException();
     }
 

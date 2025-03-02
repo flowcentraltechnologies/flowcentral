@@ -56,6 +56,16 @@ public interface EnvironmentService extends BusinessService {
     Database getDatabase() throws UnifyException;
 
     /**
+     * Gets the environment database.
+     * 
+     * @param datasource the data source
+     * @return the environment database
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    Database getDatabase(String datasource) throws UnifyException;
+
+    /**
      * Clears roll back on current transactions in database session.
      * 
      * @throws UnifyException

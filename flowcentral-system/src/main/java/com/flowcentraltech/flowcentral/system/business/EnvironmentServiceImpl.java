@@ -79,6 +79,11 @@ public class EnvironmentServiceImpl extends AbstractBusinessService implements E
     }
 
     @Override
+    public Database getDatabase(String datasource) throws UnifyException {
+        return db(datasource);
+    }
+
+    @Override
     public void clearRollbackTransactions() throws UnifyException {
         super.clearRollbackTransactions();
     }

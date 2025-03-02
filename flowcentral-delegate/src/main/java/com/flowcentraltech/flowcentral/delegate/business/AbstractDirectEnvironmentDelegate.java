@@ -27,6 +27,7 @@ import com.tcdng.unify.common.data.DelegateEntityListingDTO;
 import com.tcdng.unify.common.data.EntityDTO;
 import com.tcdng.unify.common.data.EntityListingDTO;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.database.DataSource;
 import com.tcdng.unify.core.database.sql.SqlDataSource;
 import com.tcdng.unify.core.database.sql.SqlEntityInfo;
 
@@ -121,6 +122,11 @@ public abstract class AbstractDirectEnvironmentDelegate extends AbstractSynchron
     @Override
     protected BaseResponse sendToDelegateDatasourceService(DataSourceRequest req) throws UnifyException {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public DataSource getDataSource() throws UnifyException {
+        return au().environment().getDatabase(dataSourceName).getDataSource();
     }
 
 }
