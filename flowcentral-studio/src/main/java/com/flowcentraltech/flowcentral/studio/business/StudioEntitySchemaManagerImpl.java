@@ -209,6 +209,7 @@ public class StudioEntitySchemaManagerImpl extends AbstractEntitySchemaManager {
                 appEntity.setDataSourceName(entitySchema.getDataSourceAlias());
             }
 
+            appEntity.setBaseType(entitySchema.getBaseType());
             final String entityClass = entitySchema.isDynamic()
                     ? ApplicationCodeGenUtils.generateCustomEntityClassName(ConfigType.CUSTOM, np.getApplicationName(),
                             np.getEntityName())
