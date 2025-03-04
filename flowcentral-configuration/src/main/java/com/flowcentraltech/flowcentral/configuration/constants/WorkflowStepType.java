@@ -119,7 +119,7 @@ public enum WorkflowStepType implements EnumConst {
             "NTF",
             "mail",
             WorkflowStepColor.GREEN,
-            false,
+            true,
             true,
             true,
             9),

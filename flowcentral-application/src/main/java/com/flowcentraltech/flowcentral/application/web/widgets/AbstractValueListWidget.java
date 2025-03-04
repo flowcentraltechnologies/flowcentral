@@ -36,13 +36,12 @@ public abstract class AbstractValueListWidget<T> extends AbstractFlowCentralValu
         if (transferBlock != null) {
             DataTransferBlock ctrlBlock = transferBlock.getChildBlock();
             Control control = (Control) getChildWidgetInfo(ctrlBlock.getId()).getWidget();
-            if (ctrlBlock.getChildBlock() == null) {
-                control.setValueStore(getValueList().get(ctrlBlock.getItemIndex()));
-            } else {
-                control.setValueStore(getValueList().get(ctrlBlock.getChildBlock().getItemIndex()));
+            final int index = ctrlBlock.getChildBlock() == null ? ctrlBlock.getItemIndex()
+                    : ctrlBlock.getChildBlock().getItemIndex();
+            if (index >= 0) {
+                control.setValueStore(getValueList().get(index));
+                control.populate(ctrlBlock);
             }
-
-            control.populate(ctrlBlock);
         }
     }
 
