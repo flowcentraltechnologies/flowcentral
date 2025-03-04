@@ -1358,7 +1358,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                         WorkflowModuleSysParamConstants.WF_WORKITEM_EJECTION_BATCH_SIZE);
                 List<WfItem> wfItemList = environment().listAll(new WfItemQuery().ejectionDue(now).setLimit(batchSize));
                 logDebug("Ejecting [{0}] delayed work item(s) based on delay minutes...", wfItemList.size());
-                List<Long> ejected =  new ArrayList<Long>();
+                List<Long> ejected = new ArrayList<Long>();
                 for (WfItem wfItem : wfItemList) {
                     final Long wfItemId = wfItem.getId();
                     final WfDef wfDef = getWfDef(wfItem.getWorkflowName());
@@ -1384,7 +1384,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                 for (WfStep wfStep : stepList) {
                     final String workflowName = ApplicationNameUtils
                             .getApplicationEntityLongName(wfStep.getApplicationName(), wfStep.getWorkflowName());
-                    logDebug("Checking step [{0}] in workflow [{1}] for retriction ejection...", wfStep.getName(), workflowName);
+                    logDebug("Checking step [{0}] in workflow [{1}] for retriction ejection...", wfStep.getName(),
+                            workflowName);
                     final WfDef wfDef = getWfDef(workflowName);
                     final WfStepDef currentWfStepDef = wfDef.getWfStepDef(wfStep.getName());
                     final String nextStepName = currentWfStepDef.getNextStepName();
@@ -1395,12 +1396,12 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                     final Restriction restriction = wfDef.getFilterDef(wfStep.getEjectionRestriction()).getFilterDef()
                             .getRestriction(entityDef.getEntityDef(), null, now);
                     if (restriction != null) {
-                        WfItemQuery wfItemQuery = (WfItemQuery) new WfItemQuery()
-                                .workflowName(workflowName).wfStepName(wfStep.getName()).setLimit(batchSize);
+                        WfItemQuery wfItemQuery = (WfItemQuery) new WfItemQuery().workflowName(workflowName)
+                                .wfStepName(wfStep.getName()).setLimit(batchSize);
                         if (!DataUtils.isBlank(ejected)) {
                             wfItemQuery.addNotAmongst("id", ejected);
                         }
-                        
+
                         List<Long> workRecIds = environment().valueList(Long.class, "workRecId", wfItemQuery);
                         logDebug("Processing [{0}] work item(s) for conditional ejection...", workRecIds.size());
                         if (!DataUtils.isBlank(workRecIds)) {
@@ -1410,7 +1411,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                             if (!DataUtils.isBlank(actWorkRecIds)) {
                                 wfItemList = environment()
                                         .listAll(new WfItemQuery().addAmongst("workRecId", actWorkRecIds));
-                                logDebug("Ejecting [{0}] delayed work item(s) based on condition...", wfItemList.size());
+                                logDebug("Ejecting [{0}] delayed work item(s) based on condition...",
+                                        wfItemList.size());
                                 for (WfItem wfItem : wfItemList) {
                                     final Long wfItemId = wfItem.getId();
                                     final Long wfItemEventId = createWfItemEvent(nextWfStepDef,
@@ -1686,9 +1688,10 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         final Long wfItemId = wfItem.getId();
         final Date now = getNow();
 
-        final Map<String, Object> variables = getTransitionVariables(wfItem, entityDef);
-        transitionItem.setVariables(variables);
-        wfInstReader.setTempValues(variables);
+        if (!transitionItem.isWithVariables()) {
+            final Map<String, Object> variables = getTransitionVariables(wfItem, entityDef);
+            transitionItem.setVariables(variables);
+        }
 
         setSavePoint();
         wfItem.setHeldBy(null);
@@ -1707,6 +1710,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                 }
             }
 
+            wfInstReader.setTempValues(transitionItem.getVariables());
             final WorkflowStepType type = currWfStepDef.getType();
             switch (type) {
                 case START:
@@ -2198,6 +2202,10 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
 
         public Map<String, Object> getVariables() {
             return variables;
+        }
+
+        public boolean isWithVariables() {
+            return !DataUtils.isBlank(variables);
         }
 
         public boolean isFlowTransition() {
