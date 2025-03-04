@@ -22,6 +22,7 @@ import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.common.AbstractFlowCentralComponent;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
+import com.flowcentraltech.flowcentral.common.util.ProcessVariableUtils;
 import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
 import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.UnifyException;
@@ -118,5 +119,13 @@ public abstract class AbstractEntitySetValuesGenerator extends AbstractFlowCentr
         List<? extends Entity> childEntityList = environment().listAll(Query
                 .ofDefaultingToAnd((Class<? extends Entity>) _childEntityClassDef.getEntityClass(), _childRestriction));
         return new BeanValueListStore(childEntityList);
+    }
+    
+    protected void setProcessVariable(ValueStore valueStore, String name, Object val) throws UnifyException {
+        valueStore.setTempValue(ProcessVariableUtils.getVariable(name), val);
+    }
+    
+    protected void setProperty(ValueStore valueStore, String property, Object val) throws UnifyException {
+        valueStore.store(property, val);
     }
 }

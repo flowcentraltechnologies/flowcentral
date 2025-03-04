@@ -18,8 +18,10 @@ package com.flowcentraltech.flowcentral.common.business.policies;
 
 import com.flowcentraltech.flowcentral.common.AbstractFlowCentralComponent;
 import com.flowcentraltech.flowcentral.common.constants.ProcessErrorConstants;
+import com.flowcentraltech.flowcentral.common.util.ProcessVariableUtils;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.ValueStoreReader;
+import com.tcdng.unify.core.data.ValueStoreWriter;
 
 /**
  * Convenient abstract base class for workflow enrichment policies.
@@ -53,5 +55,13 @@ public abstract class AbstractWfEnrichmentPolicy extends AbstractFlowCentralComp
         if (errorDoc != null) {
             wfItemReader.setTempValue(ProcessErrorConstants.ERROR_DOC, errorDoc);
         }
+    }
+    
+    protected void setProcessVariable(ValueStoreWriter wfItemWriter, String name, Object val) throws UnifyException {
+        wfItemWriter.setTempValue(ProcessVariableUtils.getVariable(name), val);
+    }
+    
+    protected void setProperty(ValueStoreWriter wfItemWriter, String property, Object val) throws UnifyException {
+        wfItemWriter.write(property, val);
     }
 }

@@ -58,11 +58,11 @@ public class UserCreationEnrichment extends AbstractWfEnrichmentPolicy {
             int passwordLength = systemModuleService.getSysParameterValue(int.class,
                     SecurityModuleSysParamConstants.USER_PASSWORD_LENGTH);
 
-            String plainPassword = passwordGenerator.generatePassword(wfItemReader.read(String.class, "loginId"),
+            final String plainPassword = passwordGenerator.generatePassword(wfItemReader.read(String.class, "loginId"),
                     passwordLength);
-            String encryptedPassword = passwordCryptograph.encrypt(plainPassword);
-            wfItemWriter.setTempValue("plainPassword", plainPassword);
-            wfItemWriter.write("password", encryptedPassword);
+            final String encryptedPassword = passwordCryptograph.encrypt(plainPassword);
+            setProcessVariable(wfItemWriter, "plainPassword", plainPassword);
+            setProperty(wfItemWriter, "password", encryptedPassword);
         }
     }
 

@@ -16,7 +16,7 @@
 
 package com.flowcentraltech.flowcentral.application.constants;
 
-import com.flowcentraltech.flowcentral.application.util.ProcessVariableUtils;
+import com.flowcentraltech.flowcentral.common.util.ProcessVariableUtils;
 import com.tcdng.unify.common.annotation.StaticList;
 import com.tcdng.unify.common.annotation.Table;
 import com.tcdng.unify.common.constants.EnumConst;

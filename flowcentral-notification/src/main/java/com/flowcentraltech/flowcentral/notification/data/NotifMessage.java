@@ -22,6 +22,7 @@ import java.util.Map;
 
 import com.flowcentraltech.flowcentral.common.data.Attachment;
 import com.flowcentraltech.flowcentral.common.data.Recipient;
+import com.flowcentraltech.flowcentral.common.util.ProcessVariableUtils;
 import com.flowcentraltech.flowcentral.configuration.constants.ImportanceType;
 import com.flowcentraltech.flowcentral.configuration.constants.NotifMessageFormat;
 import com.flowcentraltech.flowcentral.configuration.constants.NotifRecipientType;
@@ -238,6 +239,11 @@ public class NotifMessage {
 
         public Builder addParam(String name, Object val) {
             params.put(name, val);
+            return this;
+        }
+
+        public Builder addProcessVariable(String name, Object val) {
+            params.put(ProcessVariableUtils.getVariable(name), val);
             return this;
         }
 
