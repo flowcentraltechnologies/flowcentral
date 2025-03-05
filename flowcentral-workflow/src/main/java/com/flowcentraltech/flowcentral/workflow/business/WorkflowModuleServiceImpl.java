@@ -1688,10 +1688,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         final Long wfItemId = wfItem.getId();
         final Date now = getNow();
 
-        if (!transitionItem.isWithVariables()) {
-            final Map<String, Object> variables = getTransitionVariables(wfItem, entityDef);
-            transitionItem.setVariables(variables);
-        }
+        transitionItem.setVariables(getTransitionVariables(wfItem, entityDef));
 
         setSavePoint();
         wfItem.setHeldBy(null);
@@ -1710,7 +1707,6 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                 }
             }
 
-            wfInstReader.setTempValues(transitionItem.getVariables());
             final WorkflowStepType type = currWfStepDef.getType();
             switch (type) {
                 case START:
@@ -2196,16 +2192,13 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             return wfEntityInst.getWfEntityInst();
         }
 
-        public void setVariables(Map<String, Object> variables) {
+        public void setVariables(Map<String, Object> variables) throws UnifyException {
             this.variables.putAll(variables);
+            getReader().setTempValues(variables);
         }
 
         public Map<String, Object> getVariables() {
             return variables;
-        }
-
-        public boolean isWithVariables() {
-            return !DataUtils.isBlank(variables);
         }
 
         public boolean isFlowTransition() {
