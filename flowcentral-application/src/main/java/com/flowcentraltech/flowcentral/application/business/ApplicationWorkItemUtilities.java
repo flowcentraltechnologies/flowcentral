@@ -23,7 +23,7 @@ import com.flowcentraltech.flowcentral.application.data.WorkflowLoadingTableInfo
 import com.flowcentraltech.flowcentral.application.data.WorkflowStepInfo;
 import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
-import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
+import com.tcdng.unify.common.database.WorkEntity;
 import com.tcdng.unify.core.UnifyException;
 
 /**

@@ -33,7 +33,6 @@ import com.flowcentraltech.flowcentral.application.web.panels.applet.AbstractEnt
 import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs.BreadCrumb;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
 import com.flowcentraltech.flowcentral.common.business.policies.TableActionResult;
-import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
 import com.flowcentraltech.flowcentral.configuration.constants.DefaultApplicationConstants;
 import com.flowcentraltech.flowcentral.workflow.business.WorkflowModuleService;
 import com.flowcentraltech.flowcentral.workflow.constants.WfWizardAppletPropertyConstants;
@@ -42,6 +41,7 @@ import com.flowcentraltech.flowcentral.workflow.data.WfWizardDef;
 import com.flowcentraltech.flowcentral.workflow.data.WfWizardStepDef;
 import com.flowcentraltech.flowcentral.workflow.entities.WfWizardItem;
 import com.tcdng.unify.common.database.Entity;
+import com.tcdng.unify.common.database.WorkEntity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.criterion.AndBuilder;
 import com.tcdng.unify.core.criterion.Restriction;

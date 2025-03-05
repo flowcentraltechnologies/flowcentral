@@ -15,8 +15,8 @@
  */
 package com.flowcentraltech.flowcentral.common.entities;
 
-import com.flowcentraltech.flowcentral.common.constants.WfItemVersionType;
-import com.flowcentraltech.flowcentral.configuration.constants.ProcessingStatus;
+import com.tcdng.unify.common.constants.ProcessingStatus;
+import com.tcdng.unify.common.constants.WfItemVersionType;
 
 /**
  * Base query object for base work entity sub-classes.

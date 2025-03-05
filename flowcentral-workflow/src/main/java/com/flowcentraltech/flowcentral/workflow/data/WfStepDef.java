@@ -28,12 +28,12 @@ import com.flowcentraltech.flowcentral.application.constants.ApplicationFilterCo
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.data.FormActionDef;
 import com.flowcentraltech.flowcentral.configuration.constants.HighlightType;
-import com.flowcentraltech.flowcentral.configuration.constants.ProcessingStatus;
 import com.flowcentraltech.flowcentral.configuration.constants.RecordActionType;
 import com.flowcentraltech.flowcentral.configuration.constants.UIActionType;
 import com.flowcentraltech.flowcentral.configuration.constants.WorkflowAlertType;
 import com.flowcentraltech.flowcentral.configuration.constants.WorkflowStepPriority;
 import com.flowcentraltech.flowcentral.configuration.constants.WorkflowStepType;
+import com.tcdng.unify.common.constants.ProcessingStatus;
 import com.tcdng.unify.core.constant.RequirementType;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.StringUtils;

@@ -19,8 +19,8 @@ import java.util.List;
 
 import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
 import com.flowcentraltech.flowcentral.common.data.Recipient;
-import com.flowcentraltech.flowcentral.common.util.ProcessVariableUtils;
 import com.flowcentraltech.flowcentral.configuration.constants.NotifType;
+import com.tcdng.unify.common.util.ProcessVariableUtils;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.ValueStoreReader;
 

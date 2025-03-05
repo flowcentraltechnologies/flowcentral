@@ -18,7 +18,7 @@ package com.flowcentraltech.flowcentral.common.business.policies;
 
 import com.flowcentraltech.flowcentral.common.AbstractFlowCentralComponent;
 import com.flowcentraltech.flowcentral.common.constants.ProcessErrorConstants;
-import com.flowcentraltech.flowcentral.common.util.ProcessVariableUtils;
+import com.tcdng.unify.common.util.ProcessVariableUtils;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.data.ValueStoreWriter;

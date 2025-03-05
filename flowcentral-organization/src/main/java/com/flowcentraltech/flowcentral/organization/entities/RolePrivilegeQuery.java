@@ -19,8 +19,8 @@ import java.util.Collection;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.common.constants.ConfigType;
-import com.flowcentraltech.flowcentral.common.constants.WfItemVersionType;
 import com.flowcentraltech.flowcentral.common.entities.BaseAuditEntityQuery;
+import com.tcdng.unify.common.constants.WfItemVersionType;
 
 /**
  * Role privilege query.

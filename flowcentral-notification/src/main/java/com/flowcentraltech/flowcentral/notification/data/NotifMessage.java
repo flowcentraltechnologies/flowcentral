@@ -22,11 +22,11 @@ import java.util.Map;
 
 import com.flowcentraltech.flowcentral.common.data.Attachment;
 import com.flowcentraltech.flowcentral.common.data.Recipient;
-import com.flowcentraltech.flowcentral.common.util.ProcessVariableUtils;
 import com.flowcentraltech.flowcentral.configuration.constants.ImportanceType;
 import com.flowcentraltech.flowcentral.configuration.constants.NotifMessageFormat;
 import com.flowcentraltech.flowcentral.configuration.constants.NotifRecipientType;
 import com.flowcentraltech.flowcentral.configuration.constants.NotifType;
+import com.tcdng.unify.common.util.ProcessVariableUtils;
 import com.tcdng.unify.common.util.StringToken;
 import com.tcdng.unify.core.constant.FileAttachmentType;
 import com.tcdng.unify.core.util.DataUtils;

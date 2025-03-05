@@ -18,9 +18,9 @@ package com.flowcentraltech.flowcentral.workflow.entities;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.common.constants.ConfigType;
-import com.flowcentraltech.flowcentral.common.constants.WfItemVersionType;
 import com.flowcentraltech.flowcentral.common.entities.BaseEntityQuery;
 import com.flowcentraltech.flowcentral.configuration.constants.WorkflowStepType;
+import com.tcdng.unify.common.constants.WfItemVersionType;
 
 /**
  * Workflow role query.

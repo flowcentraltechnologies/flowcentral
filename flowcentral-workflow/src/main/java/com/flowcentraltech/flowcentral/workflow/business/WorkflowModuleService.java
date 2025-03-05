@@ -21,7 +21,6 @@ import com.flowcentraltech.flowcentral.application.business.ApplicationWorkItemU
 import com.flowcentraltech.flowcentral.application.data.AppletWorkflowCopyInfo;
 import com.flowcentraltech.flowcentral.application.web.widgets.InputArrayEntries;
 import com.flowcentraltech.flowcentral.common.business.FlowCentralService;
-import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
 import com.flowcentraltech.flowcentral.workflow.constants.WfReviewMode;
 import com.flowcentraltech.flowcentral.workflow.data.WfChannelDef;
 import com.flowcentraltech.flowcentral.workflow.data.WfDef;
@@ -39,6 +38,7 @@ import com.flowcentraltech.flowcentral.workflow.entities.WorkflowQuery;
 import com.flowcentraltech.flowcentral.workflow.entities.WorkflowSetValues;
 import com.flowcentraltech.flowcentral.workflow.entities.WorkflowSetValuesQuery;
 import com.flowcentraltech.flowcentral.workflow.util.WorkflowDesignUtils.DesignType;
+import com.tcdng.unify.common.database.WorkEntity;
 import com.tcdng.unify.core.UnifyException;
 
 /**
