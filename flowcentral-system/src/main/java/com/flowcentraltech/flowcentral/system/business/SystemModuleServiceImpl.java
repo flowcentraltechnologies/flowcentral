@@ -21,6 +21,7 @@ import java.io.PrintWriter;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
@@ -347,6 +348,7 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
         List<SystemParameter> params = environment().listAll(new SystemParameterQuery().addIsNotNull("filterName")
                 .addSelect("type", "code", "filterName").addOrder("filterName"));
         if (!DataUtils.isBlank(params)) {
+            result = new ArrayList<ListData>();
             for (SystemParameter systemParameter : params) {
                 final SysParamType type = systemParameter.getType();
                 result.add(new ListData(type.encodeFilterCode(systemParameter.getCode()),

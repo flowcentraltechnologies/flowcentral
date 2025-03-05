@@ -64,9 +64,6 @@ public class FilterWidget extends AbstractValueListWidget<FilterCondition> {
 
     @Override
     protected void doOnPageConstruct() throws UnifyException {
-        fieldSelectCtrl = (Control) addInternalChildWidget(isIncludeSysParam()
-                ? "!ui-select style:$s{width:100%;} blankOption:$s{} list:sysentityfilterfielddeflist listParams:$l{entityDef labelSuggestionDef} binding:fieldName"
-                : "!ui-select style:$s{width:100%;} blankOption:$s{} list:entityfilterfielddeflist listParams:$l{entityDef labelSuggestionDef} binding:fieldName");
         conditionTypeCtrl = (DynamicField) addInternalChildWidget(
                 "!ui-dynamic style:$s{width:100%;} binding:type descriptorBinding:typeSelector");
         paramCtrlA = (DynamicField) addInternalChildWidget(
@@ -122,7 +119,13 @@ public class FilterWidget extends AbstractValueListWidget<FilterCondition> {
         return getUplAttribute(boolean.class, "includeSysParam", "includeSysParamBinding");
     }
     
-    public Control getFieldSelectCtrl() {
+    public Control getFieldSelectCtrl() throws UnifyException {
+        if (fieldSelectCtrl == null) {
+            fieldSelectCtrl = (Control) addInternalChildWidget(isIncludeSysParam()
+                    ? "!ui-select style:$s{width:100%;} blankOption:$s{} list:sysentityfilterfielddeflist listParams:$l{entityDef labelSuggestionDef} binding:fieldName"
+                    : "!ui-select style:$s{width:100%;} blankOption:$s{} list:entityfilterfielddeflist listParams:$l{entityDef labelSuggestionDef} binding:fieldName");
+        }
+        
         return fieldSelectCtrl;
     }
 

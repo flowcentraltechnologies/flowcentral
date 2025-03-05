@@ -1972,8 +1972,8 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
     public EntityFilter constructEntityFilter(FormContext ctx, SweepingCommitPolicy sweepingCommitPolicy,
             String tabName, EntityDef ownerEntityDef, int entityFilterMode, boolean isIgnoreParentCondition, boolean includeSysParam)
             throws UnifyException {
-        logDebug("Constructing entity filter for [{0}] using entity definition [{1}]...", tabName,
-                ownerEntityDef.getLongName());
+        logDebug("Constructing entity filter for [{0}] using entity definition [{1}] with system parameter [{2}]...", tabName,
+                ownerEntityDef.getLongName(), includeSysParam);
         return new EntityFilter(ctx, sweepingCommitPolicy, tabName, ownerEntityDef, entityFilterMode,
                 isIgnoreParentCondition, includeSysParam);
     }
