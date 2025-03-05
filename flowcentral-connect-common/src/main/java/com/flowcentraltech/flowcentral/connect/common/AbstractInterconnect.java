@@ -49,8 +49,6 @@ import com.flowcentraltech.flowcentral.connect.common.data.BaseRequest;
 import com.flowcentraltech.flowcentral.connect.common.data.DataSourceParam;
 import com.flowcentraltech.flowcentral.connect.common.data.DataSourceRequest;
 import com.flowcentraltech.flowcentral.connect.common.data.DateRange;
-import com.flowcentraltech.flowcentral.connect.common.data.EntityFieldInfo;
-import com.flowcentraltech.flowcentral.connect.common.data.EntityInfo;
 import com.flowcentraltech.flowcentral.connect.common.data.JsonDataSourceResponse;
 import com.flowcentraltech.flowcentral.connect.common.data.JsonProcedureResponse;
 import com.flowcentraltech.flowcentral.connect.common.data.OrderDef;
@@ -59,13 +57,15 @@ import com.flowcentraltech.flowcentral.connect.common.data.QueryDef;
 import com.flowcentraltech.flowcentral.connect.common.data.QueryLoadingParams;
 import com.flowcentraltech.flowcentral.connect.common.data.ResolvedCondition;
 import com.flowcentraltech.flowcentral.connect.common.data.UpdateDef;
-import com.flowcentraltech.flowcentral.connect.configuration.constants.ConnectEntityBaseType;
-import com.flowcentraltech.flowcentral.connect.configuration.constants.ConnectFieldDataType;
 import com.flowcentraltech.flowcentral.connect.configuration.xml.ApplicationConfig;
 import com.flowcentraltech.flowcentral.connect.configuration.xml.EntitiesConfig;
 import com.flowcentraltech.flowcentral.connect.configuration.xml.EntityConfig;
 import com.flowcentraltech.flowcentral.connect.configuration.xml.EntityFieldConfig;
 import com.flowcentraltech.flowcentral.connect.configuration.xml.util.XmlUtils;
+import com.tcdng.unify.common.constants.ConnectEntityBaseType;
+import com.tcdng.unify.common.constants.ConnectFieldDataType;
+import com.tcdng.unify.common.data.EntityFieldInfo;
+import com.tcdng.unify.common.data.EntityInfo;
 import com.tcdng.unify.convert.util.ConverterUtils;
 
 /**

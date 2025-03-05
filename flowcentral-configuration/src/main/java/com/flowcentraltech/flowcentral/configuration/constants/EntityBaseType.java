@@ -16,9 +16,9 @@
 
 package com.flowcentraltech.flowcentral.configuration.constants;
 
-import com.flowcentraltech.flowcentral.connect.configuration.constants.ConnectEntityBaseType;
 import com.tcdng.unify.common.annotation.StaticList;
 import com.tcdng.unify.common.annotation.Table;
+import com.tcdng.unify.common.constants.ConnectEntityBaseType;
 import com.tcdng.unify.common.constants.EnumConst;
 import com.tcdng.unify.core.util.EnumUtils;
 

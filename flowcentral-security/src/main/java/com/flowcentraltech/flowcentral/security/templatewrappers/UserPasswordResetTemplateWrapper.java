@@ -44,6 +44,6 @@ public class UserPasswordResetTemplateWrapper extends BaseNotifTemplateWrapper {
     }
 
     public void setPlainPassword(String val) {
-        nmb.addParam(PLAIN_PASSWORD, val);
+        nmb.addProcessVariable(PLAIN_PASSWORD, val);
     }
 }

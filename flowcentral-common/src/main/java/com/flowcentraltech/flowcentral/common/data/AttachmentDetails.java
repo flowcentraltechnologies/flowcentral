@@ -36,15 +36,18 @@ public class AttachmentDetails {
 
     private String fileName;
 
+    private boolean inline;
+
     private long versionNo;
 
     public AttachmentDetails(Long id, FileAttachmentType type, String name, String title, String fileName,
-            long versionNo) {
+            boolean inline, long versionNo) {
         this.id = id;
         this.type = type;
         this.name = name;
         this.title = title;
         this.fileName = fileName;
+        this.inline = inline;
         this.versionNo = versionNo;
     }
 
@@ -66,6 +69,10 @@ public class AttachmentDetails {
 
     public String getFileName() {
         return fileName;
+    }
+
+    public boolean isInline() {
+        return inline;
     }
 
     public long getVersionNo() {

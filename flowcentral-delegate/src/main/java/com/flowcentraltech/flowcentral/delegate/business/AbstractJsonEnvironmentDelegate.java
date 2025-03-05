@@ -18,8 +18,6 @@ package com.flowcentraltech.flowcentral.delegate.business;
 
 import com.flowcentraltech.flowcentral.connect.common.data.BaseResponse;
 import com.flowcentraltech.flowcentral.connect.common.data.DataSourceRequest;
-import com.flowcentraltech.flowcentral.connect.common.data.DelegateEntityListingDTO;
-import com.flowcentraltech.flowcentral.connect.common.data.EntityDTO;
 import com.flowcentraltech.flowcentral.connect.common.data.EntityListingRequest;
 import com.flowcentraltech.flowcentral.connect.common.data.EntityListingResponse;
 import com.flowcentraltech.flowcentral.connect.common.data.GetEntityRequest;
@@ -28,6 +26,8 @@ import com.flowcentraltech.flowcentral.connect.common.data.JsonDataSourceRespons
 import com.flowcentraltech.flowcentral.connect.common.data.JsonProcedureResponse;
 import com.flowcentraltech.flowcentral.connect.common.data.ProcedureRequest;
 import com.flowcentraltech.flowcentral.delegate.constants.DelegateErrorCodeConstants;
+import com.tcdng.unify.common.data.DelegateEntityListingDTO;
+import com.tcdng.unify.common.data.EntityDTO;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.constant.PrintFormat;
 import com.tcdng.unify.core.util.DataUtils;

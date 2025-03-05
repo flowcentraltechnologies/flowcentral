@@ -29,11 +29,11 @@ import com.flowcentraltech.flowcentral.application.entities.AppEntityQuery;
 import com.flowcentraltech.flowcentral.common.business.SynchronizableEnvironmentDelegate;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityBaseType;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldDataType;
-import com.flowcentraltech.flowcentral.connect.common.data.DelegateEntityListingDTO;
-import com.flowcentraltech.flowcentral.connect.common.data.EntityDTO;
-import com.flowcentraltech.flowcentral.connect.common.data.EntityFieldDTO;
-import com.flowcentraltech.flowcentral.connect.common.data.EntityListingDTO;
-import com.flowcentraltech.flowcentral.connect.common.data.RedirectErrorDTO;
+import com.tcdng.unify.common.data.DelegateEntityListingDTO;
+import com.tcdng.unify.common.data.EntityDTO;
+import com.tcdng.unify.common.data.EntityFieldDTO;
+import com.tcdng.unify.common.data.EntityListingDTO;
+import com.tcdng.unify.common.data.RedirectErrorDTO;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.task.TaskMonitor;
@@ -89,9 +89,9 @@ public abstract class AbstractSynchronizableEnvironmentDelegate extends Abstract
 
                                 EntityBaseType baseType = EntityBaseType.fromInterconnect(entityDTO.getBaseType());
                                 EntitySchema entitySchema = new EntitySchema(baseType, delegate,
-                                        entityDTO.getDataSourceAlias(), entity, entityDTO.getName(),
-                                        entityDTO.getDescription(), entityDTO.getTableName(),
-                                        entityDTO.isActionPolicy(), fields);
+                                        entityDTO.getDataSourceAlias(), entityDTO.getImplClass(), entity,
+                                        entityDTO.getName(), entityDTO.getDescription(), entityDTO.getTableName(),
+                                        entityDTO.isDynamic(), entityDTO.isActionPolicy(), fields);
                                 entitySchemaManager.createEntitySchema(entitySchema);
                                 logInfo(taskMonitor, "Entity schema create for [{0}] completed.", entity);
                             } else {
@@ -152,9 +152,9 @@ public abstract class AbstractSynchronizableEnvironmentDelegate extends Abstract
 
                                 EntityBaseType baseType = EntityBaseType.fromInterconnect(entityDTO.getBaseType());
                                 EntitySchema entitySchema = new EntitySchema(baseType, delegate,
-                                        entityDTO.getDataSourceAlias(), entity, entityDTO.getName(),
-                                        entityDTO.getDescription(), entityDTO.getTableName(),
-                                        entityDTO.isActionPolicy(), fields);
+                                        entityDTO.getDataSourceAlias(), entityDTO.getImplClass(), entity,
+                                        entityDTO.getName(), entityDTO.getDescription(), entityDTO.getTableName(),
+                                        entityDTO.isDynamic(), entityDTO.isActionPolicy(), fields);
                                 entitySchemaManager.updateEntitySchema(entitySchema);
                                 logInfo(taskMonitor, "Entity schema update for [{0}] completed.", entity);
                             } else {

@@ -340,16 +340,20 @@ public class WorkflowEditor {
                 alertsCrudInfo.setItemList(step.getAlertList());
                 List<ListData> prevList = new ArrayList<ListData>();
                 for (WfStep prevStep : workflowSteps.values()) {
-                    if (!prevStep.getName().equals(stepName) /*&& prevStep.getType().isFlowing()*/) {
+                    if (!prevStep.getName().equals(stepName) /* && prevStep.getType().isFlowing() */) {
                         prevList.add(new ListData(prevStep.getName(), prevStep.getDescription()));
                     }
                 }
                 alertsCrudInfo.setPrevStepList(prevList);
 
-                List<ListData> actionList = new ArrayList<ListData>();
-                for (WfStepUserAction wfStepUserAction : step.getUserActionList()) {
-                    actionList.add(new ListData(wfStepUserAction.getName(), wfStepUserAction.getDescription()));
+                List<ListData> actionList = Collections.emptyList();
+                if (!DataUtils.isBlank(step.getUserActionList())) {
+                    actionList = new ArrayList<ListData>();
+                    for (WfStepUserAction wfStepUserAction : step.getUserActionList()) {
+                        actionList.add(new ListData(wfStepUserAction.getName(), wfStepUserAction.getDescription()));
+                    }
                 }
+
                 alertsCrudInfo.setActionList(actionList);
 
                 return stepAlertsPanelName;

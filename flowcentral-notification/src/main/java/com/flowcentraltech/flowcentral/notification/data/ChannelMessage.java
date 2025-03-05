@@ -33,7 +33,7 @@ import com.tcdng.unify.core.util.StringUtils;
  * @since 1.0
  */
 public class ChannelMessage {
-    
+
     private NotifMessageFormat format;
 
     private String from;
@@ -47,15 +47,15 @@ public class ChannelMessage {
     private List<Recipient> recipients;
 
     private List<Attachment> attachments;
-    
+
     private Long originId;
 
     private int attempts;
-    
+
     private boolean sent;
-    
+
     private boolean retry;
-    
+
     public ChannelMessage(NotifMessageFormat format, Long originId, String from, String subject, String message,
             List<Recipient> recipients, List<Attachment> attachments, int attempts) {
         this.format = format;
@@ -132,13 +132,13 @@ public class ChannelMessage {
     public boolean isWithFrom() {
         return !StringUtils.isBlank(from);
     }
-    
+
     public static Builder newBuilder(NotifMessageFormat format, Long originId) {
         return new Builder(format, originId);
     }
 
     public static class Builder {
-        
+
         private NotifMessageFormat format;
 
         private String from;
@@ -150,7 +150,7 @@ public class ChannelMessage {
         private List<Recipient> recipients;
 
         private List<Attachment> attachments;
-        
+
         private Long originId;
 
         private int attempts;
@@ -187,14 +187,22 @@ public class ChannelMessage {
             return this;
         }
 
-        public Builder addAttachment(FileAttachmentType type, String name, String title, byte[] data) {
-            attachments.add(Attachment.newBuilder(type).name(name).fileName(name).title(title).data(data).build());
+        public Builder addAttachment(FileAttachmentType type, String name, String title, byte[] data, boolean inline) {
+            attachments
+                    .add(Attachment.newBuilder(type, inline).name(name).fileName(name).title(title).data(data).build());
+            return this;
+        }
+
+        public Builder addAttachment(FileAttachmentType type, String name, String title, String provider,
+                String sourceId, boolean inline) {
+            attachments.add(Attachment.newBuilder(type, inline).name(name).fileName(name).title(title)
+                    .source(provider, sourceId).build());
             return this;
         }
 
         public ChannelMessage build() {
-            return new ChannelMessage(format, originId, from, subject, message,
-                    DataUtils.unmodifiableList(recipients), DataUtils.unmodifiableList(attachments), attempts);
+            return new ChannelMessage(format, originId, from, subject, message, DataUtils.unmodifiableList(recipients),
+                    DataUtils.unmodifiableList(attachments), attempts);
         }
 
     }

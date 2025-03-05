@@ -28,22 +28,41 @@ public class Attachment extends AttachmentDetails {
 
     private byte[] data;
 
+    private String sourceId;
+
+    private String provider;
+
     public Attachment(Long id, FileAttachmentType type, String name, String title, String fileName, byte[] data,
-            long versionNo) {
-        super(id, type, name, title, fileName, versionNo);
+            boolean inline, long versionNo) {
+        super(id, type, name, title, fileName, inline, versionNo);
         this.data = data;
+    }
+
+    public Attachment(Long id, FileAttachmentType type, String name, String title, String fileName, String provider,
+            String sourceId, boolean inline, long versionNo) {
+        super(id, type, name, title, fileName, inline, versionNo);
+        this.provider = provider;
+        this.sourceId = sourceId;
     }
 
     public byte[] getData() {
         return data;
     }
 
-    public static Builder newBuilder(Long id, FileAttachmentType type, long versionNo) {
-        return new Builder(id, type, versionNo);
+    public String getSourceId() {
+        return sourceId;
     }
 
-    public static Builder newBuilder(FileAttachmentType type) {
-        return new Builder(null, type, 0L);
+    public String getProvider() {
+        return provider;
+    }
+
+    public static Builder newBuilder(Long id, FileAttachmentType type, boolean inline, long versionNo) {
+        return new Builder(id, type, inline, versionNo);
+    }
+
+    public static Builder newBuilder(FileAttachmentType type, boolean inline) {
+        return new Builder(null, type, inline, 0L);
     }
 
     public static class Builder {
@@ -60,11 +79,18 @@ public class Attachment extends AttachmentDetails {
 
         private byte[] data;
 
+        private String sourceId;
+
+        private String provider;
+
+        private boolean inline;
+
         private long versionNo;
 
-        public Builder(Long id, FileAttachmentType type, long versionNo) {
+        public Builder(Long id, FileAttachmentType type, boolean inline, long versionNo) {
             this.id = id;
             this.type = type;
+            this.inline = inline;
             this.versionNo = versionNo;
         }
 
@@ -88,6 +114,12 @@ public class Attachment extends AttachmentDetails {
             return this;
         }
 
+        public Builder source(String provider, String sourceId) {
+            this.provider = provider;
+            this.sourceId = sourceId;
+            return this;
+        }
+
         public Attachment build() {
             if (type == null) {
                 throw new RuntimeException("Attachment type is required.");
@@ -101,11 +133,17 @@ public class Attachment extends AttachmentDetails {
                 throw new RuntimeException("Attachment title is required.");
             }
 
-            if (data == null) {
-                throw new RuntimeException("Attachment data is required.");
+            if (data == null && provider == null) {
+                throw new RuntimeException("Attachment data source is required.");
             }
 
-            return new Attachment(id, type, name, title, fileName, data, versionNo);
+            if (provider != null && sourceId == null) {
+                throw new RuntimeException("Source is required for provider datasource.");
+            }
+
+            return provider != null
+                    ? new Attachment(id, type, name, title, fileName, provider, sourceId, inline, versionNo)
+                    : new Attachment(id, type, name, title, fileName, data, inline, versionNo);
         }
     }
 

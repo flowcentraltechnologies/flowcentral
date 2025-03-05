@@ -54,10 +54,6 @@ import com.flowcentraltech.flowcentral.connect.common.constants.RestrictionType;
 import com.flowcentraltech.flowcentral.connect.common.data.DataSourceRequest;
 import com.flowcentraltech.flowcentral.connect.common.data.DetectEntityRequest;
 import com.flowcentraltech.flowcentral.connect.common.data.DetectEntityResponse;
-import com.flowcentraltech.flowcentral.connect.common.data.EntityDTO;
-import com.flowcentraltech.flowcentral.connect.common.data.EntityFieldInfo;
-import com.flowcentraltech.flowcentral.connect.common.data.EntityInfo;
-import com.flowcentraltech.flowcentral.connect.common.data.EntityListingDTO;
 import com.flowcentraltech.flowcentral.connect.common.data.EntityListingRequest;
 import com.flowcentraltech.flowcentral.connect.common.data.EntityListingResponse;
 import com.flowcentraltech.flowcentral.connect.common.data.FilterRestrictionDef;
@@ -71,8 +67,12 @@ import com.flowcentraltech.flowcentral.connect.common.data.QueryDef;
 import com.flowcentraltech.flowcentral.connect.common.data.QueryLoadingParams;
 import com.flowcentraltech.flowcentral.connect.common.data.ResolvedCondition;
 import com.flowcentraltech.flowcentral.connect.common.data.UpdateDef;
-import com.flowcentraltech.flowcentral.connect.configuration.constants.ConnectFieldDataType;
 import com.flowcentraltech.flowcentral.connect.springboot.SpringBootInterconnect;
+import com.tcdng.unify.common.constants.ConnectFieldDataType;
+import com.tcdng.unify.common.data.EntityDTO;
+import com.tcdng.unify.common.data.EntityFieldInfo;
+import com.tcdng.unify.common.data.EntityInfo;
+import com.tcdng.unify.common.data.EntityListingDTO;
 import com.tcdng.unify.convert.util.ConverterUtils;
 
 /**

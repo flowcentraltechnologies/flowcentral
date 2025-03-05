@@ -18,8 +18,8 @@ package com.flowcentraltech.flowcentral.connect.configuration.xml;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
-import com.flowcentraltech.flowcentral.connect.configuration.constants.ConnectFieldDataType;
 import com.flowcentraltech.flowcentral.connect.configuration.xml.adapter.FieldDataTypeXmlAdapter;
+import com.tcdng.unify.common.constants.ConnectFieldDataType;
 
 /**
  * Entity field configuration.

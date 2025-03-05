@@ -43,8 +43,17 @@ public class NotificationOutboxAttachment extends BaseAuditEntity {
     @Column(name = "ATTACHMENT_TITLE", length = 128)
     private String title;
     
-    @Column(name = "ATTACHMENT_DATA")
+    @Column(name = "ATTACHMENT_DATA", nullable = true)
     private byte[] data;
+    
+    @Column(name = "SOURCE_ID", length = 128, nullable = true)
+    private String sourceId;
+    
+    @Column(name = "PROVIDER", length = 64, nullable = true)
+    private String provider;
+    
+    @Column(name = "INLINE_ATTACH")
+    private boolean inline;
 
     @ListOnly(key = "type", property = "description")
     private String typeDesc;
@@ -92,6 +101,30 @@ public class NotificationOutboxAttachment extends BaseAuditEntity {
 
     public void setData(byte[] data) {
         this.data = data;
+    }
+
+    public String getSourceId() {
+        return sourceId;
+    }
+
+    public void setSourceId(String sourceId) {
+        this.sourceId = sourceId;
+    }
+
+    public String getProvider() {
+        return provider;
+    }
+
+    public void setProvider(String provider) {
+        this.provider = provider;
+    }
+
+    public boolean isInline() {
+        return inline;
+    }
+
+    public void setInline(boolean inline) {
+        this.inline = inline;
     }
 
     public String getTypeDesc() {

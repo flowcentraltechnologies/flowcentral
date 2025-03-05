@@ -50,6 +50,7 @@ import com.flowcentraltech.flowcentral.application.constants.ApplicationPredefin
 import com.flowcentraltech.flowcentral.application.constants.ApplicationPrivilegeConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationReplicationTaskConstants;
 import com.flowcentraltech.flowcentral.application.constants.FormWizardExecuteTaskConstants;
+import com.flowcentraltech.flowcentral.application.constants.ProcessVariable;
 import com.flowcentraltech.flowcentral.application.data.APIDef;
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.data.AppletFilterDef;
@@ -124,13 +125,15 @@ import com.flowcentraltech.flowcentral.common.business.policies.FormWizardTaskPr
 import com.flowcentraltech.flowcentral.common.business.policies.SweepingCommitPolicy;
 import com.flowcentraltech.flowcentral.common.constants.ConfigType;
 import com.flowcentraltech.flowcentral.common.constants.FileAttachmentCategoryType;
+import com.flowcentraltech.flowcentral.common.constants.FlowCentralContainerPropertyConstants;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants;
 import com.flowcentraltech.flowcentral.common.constants.OwnershipType;
 import com.flowcentraltech.flowcentral.common.constants.RecordStatus;
-import com.flowcentraltech.flowcentral.common.constants.WfItemVersionType;
+import com.flowcentraltech.flowcentral.common.constants.SecuredLinkType;
 import com.flowcentraltech.flowcentral.common.data.Attachment;
 import com.flowcentraltech.flowcentral.common.data.AttachmentDetails;
 import com.flowcentraltech.flowcentral.common.data.ParamValuesDef;
+import com.flowcentraltech.flowcentral.common.data.SecuredLinkInfo;
 import com.flowcentraltech.flowcentral.common.entities.BaseEntity;
 import com.flowcentraltech.flowcentral.common.entities.BaseVersionEntity;
 import com.flowcentraltech.flowcentral.common.entities.EntityWrapper;
@@ -139,7 +142,6 @@ import com.flowcentraltech.flowcentral.common.entities.FileAttachmentDoc;
 import com.flowcentraltech.flowcentral.common.entities.FileAttachmentQuery;
 import com.flowcentraltech.flowcentral.common.entities.ParamValues;
 import com.flowcentraltech.flowcentral.common.entities.ParamValuesQuery;
-import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
 import com.flowcentraltech.flowcentral.common.util.CommonInputUtils;
 import com.flowcentraltech.flowcentral.common.util.EntityUtils;
 import com.flowcentraltech.flowcentral.configuration.business.ConfigurationLoader;
@@ -215,8 +217,10 @@ import com.flowcentraltech.flowcentral.system.constants.SystemModuleSysParamCons
 import com.flowcentraltech.flowcentral.system.entities.MappedTenant;
 import com.flowcentraltech.flowcentral.system.entities.MappedTenantQuery;
 import com.flowcentraltech.flowcentral.system.entities.Module;
+import com.tcdng.unify.common.constants.WfItemVersionType;
 import com.tcdng.unify.common.data.Listable;
 import com.tcdng.unify.common.database.Entity;
+import com.tcdng.unify.common.database.WorkEntity;
 import com.tcdng.unify.common.util.StringToken;
 import com.tcdng.unify.core.UnifyComponentConfig;
 import com.tcdng.unify.core.UnifyException;
@@ -1386,6 +1390,31 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     return prdb.build();
                 }
             };
+    }
+
+    @Override
+    public Map<String, Object> getProcessVariables(String entity) throws UnifyException {
+        Map<String, Object> variables = new HashMap<String, Object>();
+        final String appTitle = getContainerSetting(String.class,
+                FlowCentralContainerPropertyConstants.FLOWCENTRAL_APPLICATION_TITLE);
+        final String appCorresponder = getContainerSetting(String.class,
+                FlowCentralContainerPropertyConstants.FLOWCENTRAL_APPLICATION_CORRESPONDER);
+        final String appUrl = appletUtilities.system().getSysParameterValue(String.class,
+                SystemModuleSysParamConstants.APPLICATION_BASE_URL);
+
+        SecuredLinkInfo securedLinkInfo = appletUtilities.system().getNewSecuredLink(SecuredLinkType.LOGIN, appTitle,
+                appUrl);
+        variables.put(ProcessVariable.APP_TITLE.variableKey(), appTitle);
+        variables.put(ProcessVariable.APP_CORRESPONDER.variableKey(), appCorresponder);
+        variables.put(ProcessVariable.APP_URL.variableKey(), appUrl);
+        variables.put(ProcessVariable.APP_HTML_LINK.variableKey(), securedLinkInfo.getHtmlLink());
+        if (!StringUtils.isBlank(entity)) {
+            EntityDef entityDef = getEntityDef(entity);
+            variables.put(ProcessVariable.ENTITY_NAME.variableKey(), entityDef.getName());
+            variables.put(ProcessVariable.ENTITY_DESC.variableKey(), entityDef.getDescription());
+        }
+
+        return variables;
     }
 
     @Override
@@ -2839,7 +2868,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             List<AttachmentDetails> list = new ArrayList<AttachmentDetails>();
             for (FileAttachment fileAttachment : fileAttachmentList) {
                 list.add(new AttachmentDetails(fileAttachment.getId(), fileAttachment.getType(),
-                        fileAttachment.getName(), fileAttachment.getTitle(), fileAttachment.getFileName(),
+                        fileAttachment.getName(), fileAttachment.getTitle(), fileAttachment.getFileName(), false,
                         fileAttachment.getVersionNo()));
             }
 
@@ -2857,7 +2886,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 .entity(entityDef.getTableName()).entityInstId(ownerInstId).name(attachmentName));
         if (fileAttachment != null) {
             return Attachment
-                    .newBuilder(fileAttachment.getId(), fileAttachment.getType(), fileAttachment.getVersionNo())
+                    .newBuilder(fileAttachment.getId(), fileAttachment.getType(), false, fileAttachment.getVersionNo())
                     .name(fileAttachment.getName()).title(fileAttachment.getTitle())
                     .fileName(fileAttachment.getFileName()).data(fileAttachment.getFile().getData()).build();
         }

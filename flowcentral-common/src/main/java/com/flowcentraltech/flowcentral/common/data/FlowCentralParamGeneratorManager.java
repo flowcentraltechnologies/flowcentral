@@ -18,7 +18,6 @@ package com.flowcentraltech.flowcentral.common.data;
 
 import com.flowcentraltech.flowcentral.common.constants.CommonGeneratorComponentConstants;
 import com.flowcentraltech.flowcentral.common.constants.CommonModuleNameConstants;
-import com.tcdng.unify.common.util.ParamToken;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -41,12 +40,12 @@ public class FlowCentralParamGeneratorManager extends AbstractParamGeneratorMana
     private ParamGenerator processVariableGenerator;
 
     @Override
-    protected ParamGenerator resolveParamGenerator(ParamToken token) throws UnifyException {
-        if (CommonGeneratorComponentConstants.SYSTEM_PARAMETER.equals(token.getComponent())) {
+    protected ParamGenerator resolveParamGenerator(String prefix) throws UnifyException {
+        if (CommonGeneratorComponentConstants.SYSTEM_PARAMETER.equals(prefix)) {
             return sysParamGenerator;
         }
 
-        if (CommonGeneratorComponentConstants.PROCESS_VARIABLE.equals(token.getComponent())) {
+        if (CommonGeneratorComponentConstants.PROCESS_VARIABLE.equals(prefix)) {
             return processVariableGenerator;
         }
         

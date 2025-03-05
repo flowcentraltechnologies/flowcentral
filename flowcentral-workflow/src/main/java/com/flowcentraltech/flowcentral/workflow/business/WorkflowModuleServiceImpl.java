@@ -80,14 +80,11 @@ import com.flowcentraltech.flowcentral.common.business.policies.WfRecipientPolic
 import com.flowcentraltech.flowcentral.common.constants.CommonTempValueNameConstants;
 import com.flowcentraltech.flowcentral.common.constants.ConfigType;
 import com.flowcentraltech.flowcentral.common.constants.FileAttachmentCategoryType;
-import com.flowcentraltech.flowcentral.common.constants.FlowCentralContainerPropertyConstants;
 import com.flowcentraltech.flowcentral.common.constants.ProcessErrorConstants;
 import com.flowcentraltech.flowcentral.common.constants.SecuredLinkType;
-import com.flowcentraltech.flowcentral.common.constants.WfItemVersionType;
 import com.flowcentraltech.flowcentral.common.data.Recipient;
 import com.flowcentraltech.flowcentral.common.data.SecuredLinkInfo;
 import com.flowcentraltech.flowcentral.common.data.WfEntityInst;
-import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
 import com.flowcentraltech.flowcentral.configuration.constants.AppletType;
 import com.flowcentraltech.flowcentral.configuration.constants.DefaultApplicationConstants;
 import com.flowcentraltech.flowcentral.configuration.constants.RecordActionType;
@@ -151,7 +148,9 @@ import com.flowcentraltech.flowcentral.workflow.util.WorkflowEntityUtils;
 import com.flowcentraltech.flowcentral.workflow.util.WorkflowNameUtils;
 import com.flowcentraltech.flowcentral.workflow.util.WorkflowNameUtils.WfAppletNameParts;
 import com.flowcentraltech.flowcentral.workflow.util.WorkflowNameUtils.WfWizardAppletNameParts;
+import com.tcdng.unify.common.constants.WfItemVersionType;
 import com.tcdng.unify.common.database.Entity;
+import com.tcdng.unify.common.database.WorkEntity;
 import com.tcdng.unify.common.util.StringToken;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.UserToken;
@@ -1359,7 +1358,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                         WorkflowModuleSysParamConstants.WF_WORKITEM_EJECTION_BATCH_SIZE);
                 List<WfItem> wfItemList = environment().listAll(new WfItemQuery().ejectionDue(now).setLimit(batchSize));
                 logDebug("Ejecting [{0}] delayed work item(s) based on delay minutes...", wfItemList.size());
-                List<Long> ejected =  new ArrayList<Long>();
+                List<Long> ejected = new ArrayList<Long>();
                 for (WfItem wfItem : wfItemList) {
                     final Long wfItemId = wfItem.getId();
                     final WfDef wfDef = getWfDef(wfItem.getWorkflowName());
@@ -1385,7 +1384,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                 for (WfStep wfStep : stepList) {
                     final String workflowName = ApplicationNameUtils
                             .getApplicationEntityLongName(wfStep.getApplicationName(), wfStep.getWorkflowName());
-                    logDebug("Checking step [{0}] in workflow [{1}] for retriction ejection...", wfStep.getName(), workflowName);
+                    logDebug("Checking step [{0}] in workflow [{1}] for retriction ejection...", wfStep.getName(),
+                            workflowName);
                     final WfDef wfDef = getWfDef(workflowName);
                     final WfStepDef currentWfStepDef = wfDef.getWfStepDef(wfStep.getName());
                     final String nextStepName = currentWfStepDef.getNextStepName();
@@ -1396,12 +1396,12 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                     final Restriction restriction = wfDef.getFilterDef(wfStep.getEjectionRestriction()).getFilterDef()
                             .getRestriction(entityDef.getEntityDef(), null, now);
                     if (restriction != null) {
-                        WfItemQuery wfItemQuery = (WfItemQuery) new WfItemQuery()
-                                .workflowName(workflowName).wfStepName(wfStep.getName()).setLimit(batchSize);
+                        WfItemQuery wfItemQuery = (WfItemQuery) new WfItemQuery().workflowName(workflowName)
+                                .wfStepName(wfStep.getName()).setLimit(batchSize);
                         if (!DataUtils.isBlank(ejected)) {
                             wfItemQuery.addNotAmongst("id", ejected);
                         }
-                        
+
                         List<Long> workRecIds = environment().valueList(Long.class, "workRecId", wfItemQuery);
                         logDebug("Processing [{0}] work item(s) for conditional ejection...", workRecIds.size());
                         if (!DataUtils.isBlank(workRecIds)) {
@@ -1411,7 +1411,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                             if (!DataUtils.isBlank(actWorkRecIds)) {
                                 wfItemList = environment()
                                         .listAll(new WfItemQuery().addAmongst("workRecId", actWorkRecIds));
-                                logDebug("Ejecting [{0}] delayed work item(s) based on condition...", wfItemList.size());
+                                logDebug("Ejecting [{0}] delayed work item(s) based on condition...",
+                                        wfItemList.size());
                                 for (WfItem wfItem : wfItemList) {
                                     final Long wfItemId = wfItem.getId();
                                     final Long wfItemEventId = createWfItemEvent(nextWfStepDef,
@@ -1687,9 +1688,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         final Long wfItemId = wfItem.getId();
         final Date now = getNow();
 
-        final Map<String, Object> variables = getTransitionVariables(wfItem, entityDef);
-        transitionItem.setVariables(variables);
-        wfInstReader.setTempValues(variables);
+        transitionItem.setVariables(getTransitionVariables(wfItem, entityDef));
 
         setSavePoint();
         wfItem.setHeldBy(null);
@@ -1902,26 +1901,11 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
     }
 
     private Map<String, Object> getTransitionVariables(WfItem wfItem, EntityDef entityDef) throws UnifyException {
-        Map<String, Object> variables = new HashMap<String, Object>();
-        final String appTitle = getContainerSetting(String.class,
-                FlowCentralContainerPropertyConstants.FLOWCENTRAL_APPLICATION_TITLE);
-        final String appCorresponder = getContainerSetting(String.class,
-                FlowCentralContainerPropertyConstants.FLOWCENTRAL_APPLICATION_CORRESPONDER);
-        final String appUrl = appletUtil.system().getSysParameterValue(String.class,
-                SystemModuleSysParamConstants.APPLICATION_BASE_URL);
-
-        SecuredLinkInfo securedLinkInfo = appletUtil.system().getNewSecuredLink(SecuredLinkType.LOGIN, appTitle,
-                appUrl);
+        final Map<String, Object> variables = appletUtil.application().getProcessVariables(entityDef.getLongName());
         variables.put(ProcessVariable.FORWARDED_BY.variableKey(), wfItem.getForwardedBy());
         variables.put(ProcessVariable.FORWARDED_BY_NAME.variableKey(), wfItem.getForwardedByName());
         variables.put(ProcessVariable.FORWARD_TO.variableKey(), wfItem.getForwardTo());
         variables.put(ProcessVariable.HELD_BY.variableKey(), wfItem.getHeldBy());
-        variables.put(ProcessVariable.ENTITY_NAME.variableKey(), entityDef.getName());
-        variables.put(ProcessVariable.ENTITY_DESC.variableKey(), entityDef.getDescription());
-        variables.put(ProcessVariable.APP_TITLE.variableKey(), appTitle);
-        variables.put(ProcessVariable.APP_CORRESPONDER.variableKey(), appCorresponder);
-        variables.put(ProcessVariable.APP_URL.variableKey(), appUrl);
-        variables.put(ProcessVariable.APP_HTML_LINK.variableKey(), securedLinkInfo.getHtmlLink());
         return variables;
     }
 
@@ -2208,8 +2192,9 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             return wfEntityInst.getWfEntityInst();
         }
 
-        public void setVariables(Map<String, Object> variables) {
+        public void setVariables(Map<String, Object> variables) throws UnifyException {
             this.variables.putAll(variables);
+            getReader().setTempValues(variables);
         }
 
         public Map<String, Object> getVariables() {

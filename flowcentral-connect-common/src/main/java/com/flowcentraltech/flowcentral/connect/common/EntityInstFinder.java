@@ -15,7 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.connect.common;
 
-import com.flowcentraltech.flowcentral.connect.common.data.EntityInfo;
+import com.tcdng.unify.common.data.EntityInfo;
 
 /**
  * Entity instance finder.

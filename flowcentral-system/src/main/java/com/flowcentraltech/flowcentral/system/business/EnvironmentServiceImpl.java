@@ -36,10 +36,10 @@ import com.flowcentraltech.flowcentral.common.business.policies.EntityListAction
 import com.flowcentraltech.flowcentral.common.business.policies.SweepingCommitPolicy;
 import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
 import com.flowcentraltech.flowcentral.common.entities.EntityWrapper;
-import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
 import com.flowcentraltech.flowcentral.configuration.constants.RecordActionType;
 import com.flowcentraltech.flowcentral.system.constants.SystemModuleNameConstants;
 import com.tcdng.unify.common.database.Entity;
+import com.tcdng.unify.common.database.WorkEntity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -76,6 +76,11 @@ public class EnvironmentServiceImpl extends AbstractBusinessService implements E
     @Override
     public Database getDatabase() throws UnifyException {
         return db();
+    }
+
+    @Override
+    public Database getDatabase(String datasource) throws UnifyException {
+        return db(datasource);
     }
 
     @Override

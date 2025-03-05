@@ -98,6 +98,9 @@
 // Quick form edit
 !fc-quickformeditpanel:quickFormEditPopup binding:$w{}
 
+// Help form panel
+!fc-helpformpanel:helpFormPopup binding:$w{}
+
 //Actions 
 !ui-post:userDetailsAct path:$n{/showUserDetails}
 !ui-post:currentAppChangeAct path:$n{/switchApplication} components:$c{currentAppSel}

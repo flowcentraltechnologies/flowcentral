@@ -27,9 +27,9 @@ import javax.persistence.TemporalType;
 import org.springframework.stereotype.Component;
 
 import com.flowcentraltech.flowcentral.connect.common.AbstractInterconnect;
-import com.flowcentraltech.flowcentral.connect.common.data.EntityFieldInfo;
-import com.flowcentraltech.flowcentral.connect.common.data.EntityInfo;
-import com.flowcentraltech.flowcentral.connect.configuration.constants.ConnectFieldDataType;
+import com.tcdng.unify.common.constants.ConnectFieldDataType;
+import com.tcdng.unify.common.data.EntityFieldInfo;
+import com.tcdng.unify.common.data.EntityInfo;
 
 /**
  * Flowcentral spring boot interconnect.

@@ -19,6 +19,7 @@ package com.flowcentraltech.flowcentral.application.constants;
 import com.tcdng.unify.common.annotation.StaticList;
 import com.tcdng.unify.common.annotation.Table;
 import com.tcdng.unify.common.constants.EnumConst;
+import com.tcdng.unify.common.util.ProcessVariableUtils;
 import com.tcdng.unify.core.util.EnumUtils;
 
 /**
@@ -32,25 +33,25 @@ import com.tcdng.unify.core.util.EnumUtils;
 public enum ProcessVariable implements EnumConst {
 
     FORWARDED_BY(
-            "FWB", "prcForwardedBy"),
+            "FWB", ProcessVariableUtils.getVariable("forwardedBy")),
     FORWARDED_BY_NAME(
-            "FWN", "prcForwardedByName"),
+            "FWN", ProcessVariableUtils.getVariable("forwardedByName")),
     FORWARD_TO(
-            "FWT", "prcForwardTo"),
+            "FWT", ProcessVariableUtils.getVariable("forwardTo")),
     HELD_BY(
-            "HDB", "prcHeldBy"),
+            "HDB", ProcessVariableUtils.getVariable("heldBy")),
     ENTITY_NAME(
-            "ENM", "prcEntityName"),
+            "ENM", ProcessVariableUtils.getVariable("entityName")),
     ENTITY_DESC(
-            "END", "prcEntityDesc"),
+            "END", ProcessVariableUtils.getVariable("entityDesc")),
     APP_TITLE(
-            "APT", "prcAppTitle"),
+            "APT", ProcessVariableUtils.getVariable("appTitle")),
     APP_CORRESPONDER(
-            "APC", "prcAppCorresponder"),
+            "APC", ProcessVariableUtils.getVariable("appCorresponder")),
     APP_URL(
-            "APU", "prcAppURL"),
+            "APU", ProcessVariableUtils.getVariable("appURL")),
     APP_HTML_LINK(
-            "APH", "prcAppHtmlLink");
+            "APH", ProcessVariableUtils.getVariable("appHtmlLink"));
 
     private final String code;
 

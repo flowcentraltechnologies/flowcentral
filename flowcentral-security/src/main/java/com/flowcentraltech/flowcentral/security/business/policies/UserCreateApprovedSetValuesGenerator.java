@@ -55,11 +55,11 @@ public class UserCreateApprovedSetValuesGenerator extends AbstractEntitySetValue
             int passwordLength = systemModuleService.getSysParameterValue(int.class,
                     SecurityModuleSysParamConstants.USER_PASSWORD_LENGTH);
 
-            String plainPassword = passwordGenerator.generatePassword(valueStore.retrieve(String.class, "loginId"),
+            final String plainPassword = passwordGenerator.generatePassword(valueStore.retrieve(String.class, "loginId"),
                     passwordLength);
-            String encryptedPassword = passwordCryptograph.encrypt(plainPassword);
-            valueStore.setTempValue("plainPassword", plainPassword);
-            valueStore.store("password", encryptedPassword);
+            final String encryptedPassword = passwordCryptograph.encrypt(plainPassword);
+            setProcessVariable(valueStore, "plainPassword", plainPassword);
+            setProperty(valueStore, "password", encryptedPassword);
         }
     }
 

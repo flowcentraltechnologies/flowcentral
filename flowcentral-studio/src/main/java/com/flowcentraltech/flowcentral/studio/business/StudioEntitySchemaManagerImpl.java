@@ -112,14 +112,16 @@ public class StudioEntitySchemaManagerImpl extends AbstractEntitySchemaManager {
             final Long applicationId = au.application().getApplicationId(np.getApplicationName());
             appEntity = new AppEntity();
             appEntity.setApplicationId(applicationId);
-            appEntity.setConfigType(ConfigType.CUSTOM);
+            appEntity.setConfigType(entitySchema.isDynamic() ? ConfigType.CUSTOM : ConfigType.STATIC);
             appEntity.setBaseType(entitySchema.getBaseType());
             appEntity.setName(np.getEntityName());
             appEntity.setDescription(entitySchema.getDescription());
             appEntity.setLabel(entitySchema.getDescription());
             appEntity.setTableName(entitySchema.getTableName());
-            final String entityClass = ApplicationCodeGenUtils.generateCustomEntityClassName(ConfigType.CUSTOM,
-                    np.getApplicationName(), np.getEntityName());
+            final String entityClass = entitySchema.isDynamic()
+                    ? ApplicationCodeGenUtils.generateCustomEntityClassName(ConfigType.CUSTOM, np.getApplicationName(),
+                            np.getEntityName())
+                    : entitySchema.getImplClass();
             appEntity.setEntityClass(entityClass);
             appEntity.setDataSourceName(entitySchema.getDataSourceAlias());
             appEntity.setDelegate(entitySchema.getDelegate());
@@ -207,6 +209,12 @@ public class StudioEntitySchemaManagerImpl extends AbstractEntitySchemaManager {
                 appEntity.setDataSourceName(entitySchema.getDataSourceAlias());
             }
 
+            appEntity.setBaseType(entitySchema.getBaseType());
+            final String entityClass = entitySchema.isDynamic()
+                    ? ApplicationCodeGenUtils.generateCustomEntityClassName(ConfigType.CUSTOM, np.getApplicationName(),
+                            np.getEntityName())
+                    : entitySchema.getImplClass();
+            appEntity.setEntityClass(entityClass);
             appEntity.setActionPolicy(entitySchema.isActionPolicy());
 
             au.environment().updateLeanByIdVersion(appEntity);
@@ -327,7 +335,8 @@ public class StudioEntitySchemaManagerImpl extends AbstractEntitySchemaManager {
     }
 
     @Override
-    public String createDefaultAppletComponents(String applicationName, AppApplet appApplet, boolean child) throws UnifyException {
+    public String createDefaultAppletComponents(String applicationName, AppApplet appApplet, boolean child)
+            throws UnifyException {
         if (!appApplet.isIdBlank()) {
             return null;
         }
@@ -378,7 +387,7 @@ public class StudioEntitySchemaManagerImpl extends AbstractEntitySchemaManager {
                             if (child && entityFieldDef.isNonEnumForeignKey()) {
                                 continue;
                             }
-                            
+
                             AppTableColumn appTableColumn = new AppTableColumn();
                             appTableColumn.setField(entityFieldDef.getFieldName());
                             appTableColumn.setLabel(null);
@@ -486,7 +495,7 @@ public class StudioEntitySchemaManagerImpl extends AbstractEntitySchemaManager {
                                 if (child && entityFieldDef.isNonEnumForeignKey()) {
                                     continue;
                                 }
-                                
+
                                 appFormElement = new AppFormElement();
                                 appFormElement.setType(FormElementType.FIELD);
                                 appFormElement.setElementName(entityFieldDef.getFieldName());
@@ -585,10 +594,8 @@ public class StudioEntitySchemaManagerImpl extends AbstractEntitySchemaManager {
             }
 
             appApplet.setPropList(appletPropList);
-            
-            
-            return ApplicationNameUtils.getApplicationEntityLongName(applicationName,
-                    appApplet.getName());
+
+            return ApplicationNameUtils.getApplicationEntityLongName(applicationName, appApplet.getName());
         }
 
         return null;

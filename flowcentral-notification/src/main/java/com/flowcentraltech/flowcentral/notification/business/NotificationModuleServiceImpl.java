@@ -419,6 +419,8 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
                 notifAttachment.setTitle(attachment.getTitle());
                 notifAttachment.setType(attachment.getType());
                 notifAttachment.setData(attachment.getData());
+                notifAttachment.setProvider(attachment.getProvider());
+                notifAttachment.setSourceId(attachment.getSourceId());
                 attachmentList.add(notifAttachment);
             }
 
@@ -603,8 +605,13 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
 
             // Attachments
             for (NotificationOutboxAttachment attachment : notification.getAttachmentList()) {
-                cmb.addAttachment(attachment.getType(), attachment.getName(), attachment.getTitle(),
-                        attachment.getData());
+                if (attachment.getData() != null) {
+                    cmb.addAttachment(attachment.getType(), attachment.getName(), attachment.getTitle(),
+                            attachment.getData(), attachment.isInline());
+                } else {
+                    cmb.addAttachment(attachment.getType(), attachment.getName(), attachment.getTitle(),
+                            attachment.getProvider(), attachment.getSourceId(), attachment.isInline());
+                }
             }
 
             messages.add(cmb.build());

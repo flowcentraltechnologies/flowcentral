@@ -21,8 +21,8 @@ import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.common.data.VersionedEntityDef;
-import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
 import com.tcdng.unify.common.database.Entity;
+import com.tcdng.unify.common.database.WorkEntity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.JsonObjectComposition;
 import com.tcdng.unify.core.util.ReflectUtils;
