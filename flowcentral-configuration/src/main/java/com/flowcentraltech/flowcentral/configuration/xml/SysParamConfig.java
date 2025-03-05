@@ -44,6 +44,9 @@ public class SysParamConfig extends BaseCodeConfig {
     private String defaultVal;
 
     @JacksonXmlProperty(isAttribute = true)
+    private String filterName;
+
+    @JacksonXmlProperty(isAttribute = true)
     private boolean control;
 
     @JacksonXmlProperty(isAttribute = true)
@@ -75,6 +78,14 @@ public class SysParamConfig extends BaseCodeConfig {
 
     public void setDefaultVal(String defaultVal) {
         this.defaultVal = defaultVal;
+    }
+
+    public String getFilterName() {
+        return filterName;
+    }
+
+    public void setFilterName(String filterName) {
+        this.filterName = filterName;
     }
 
     public boolean isControl() {

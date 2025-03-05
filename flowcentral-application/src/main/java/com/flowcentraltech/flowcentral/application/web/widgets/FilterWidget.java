@@ -20,6 +20,8 @@ import java.util.List;
 
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
+import com.tcdng.unify.core.annotation.UplAttribute;
+import com.tcdng.unify.core.annotation.UplAttributes;
 import com.tcdng.unify.core.constant.Editable;
 import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.web.annotation.Action;
@@ -33,6 +35,9 @@ import com.tcdng.unify.web.ui.widget.control.DynamicField;
  * @since 1.0
  */
 @Component("fc-filter")
+@UplAttributes({
+    @UplAttribute(name = "includeSysParam", type = boolean.class),
+    @UplAttribute(name = "includeSysParamBinding", type = String.class)})
 public class FilterWidget extends AbstractValueListWidget<FilterCondition> {
 
     private Control fieldSelectCtrl;
@@ -59,8 +64,9 @@ public class FilterWidget extends AbstractValueListWidget<FilterCondition> {
 
     @Override
     protected void doOnPageConstruct() throws UnifyException {
-        fieldSelectCtrl = (Control) addInternalChildWidget(
-                "!ui-select style:$s{width:100%;} blankOption:$s{} list:entityfilterfielddeflist listParams:$l{entityDef labelSuggestionDef} binding:fieldName");
+        fieldSelectCtrl = (Control) addInternalChildWidget(isIncludeSysParam()
+                ? "!ui-select style:$s{width:100%;} blankOption:$s{} list:sysentityfilterfielddeflist listParams:$l{entityDef labelSuggestionDef} binding:fieldName"
+                : "!ui-select style:$s{width:100%;} blankOption:$s{} list:entityfilterfielddeflist listParams:$l{entityDef labelSuggestionDef} binding:fieldName");
         conditionTypeCtrl = (DynamicField) addInternalChildWidget(
                 "!ui-dynamic style:$s{width:100%;} binding:type descriptorBinding:typeSelector");
         paramCtrlA = (DynamicField) addInternalChildWidget(
@@ -112,6 +118,10 @@ public class FilterWidget extends AbstractValueListWidget<FilterCondition> {
         getFilter().swapLogic(getRequestTarget(int.class));
     }
 
+    public boolean isIncludeSysParam() throws UnifyException {
+        return getUplAttribute(boolean.class, "includeSysParam", "includeSysParamBinding");
+    }
+    
     public Control getFieldSelectCtrl() {
         return fieldSelectCtrl;
     }

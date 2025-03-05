@@ -57,6 +57,23 @@ public enum SysParamType implements EnumConst {
         return STRING.code;
     }
 
+    public String encodeFilterCode(String param) {
+        return "sp:" + param + ":" + code;
+    }
+
+    public String encodeFilterName(String name) {
+        return "SP:" + name;
+    }
+    
+    public static boolean isSysParam(String encoded) {
+        return encoded.startsWith("sp:");
+    }
+    
+    public static SysParamType fromEncoded(String encoded) {
+        int index = encoded.lastIndexOf(':');
+        return fromCode(encoded.substring(index + 1));
+    }
+    
     public static SysParamType fromCode(String code) {
         return EnumUtils.fromCode(SysParamType.class, code);
     }

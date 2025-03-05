@@ -25,6 +25,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -67,10 +68,12 @@ import com.flowcentraltech.flowcentral.common.input.StringInput;
 import com.flowcentraltech.flowcentral.common.util.CommonInputUtils;
 import com.flowcentraltech.flowcentral.common.util.LingualDateUtils;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldDataType;
+import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldType;
 import com.flowcentraltech.flowcentral.configuration.constants.LingualDateType;
 import com.flowcentraltech.flowcentral.configuration.constants.LingualStringType;
 import com.flowcentraltech.flowcentral.configuration.constants.SearchConditionType;
 import com.flowcentraltech.flowcentral.configuration.constants.SetValueType;
+import com.flowcentraltech.flowcentral.configuration.constants.SysParamType;
 import com.flowcentraltech.flowcentral.configuration.constants.WidgetColor;
 import com.flowcentraltech.flowcentral.configuration.xml.AppletFilterConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.EntitySearchInputConfig;
@@ -174,6 +177,29 @@ public final class InputWidgetUtils {
         defaultSyncFormInputWidgets = Collections.unmodifiableMap(map);
     }
 
+    private static final Map<SysParamType, EntityFieldDef> entityFieldDefBySysParamType;
+
+    static {
+        final EntityFieldDef stringEntityFieldDef = new EntityFieldDef("application.text", "application.text",
+                "application.text", EntityFieldDataType.STRING, EntityFieldType.CUSTOM, 0, 0, 0, 0, false);
+
+        final EntityFieldDef numberEntityFieldDef = new EntityFieldDef("application.decimal", "application.decimal",
+                "application.decimal", EntityFieldDataType.DECIMAL, EntityFieldType.CUSTOM, 0, 0, 20, 2, true);
+
+        final EntityFieldDef boolEntityFieldDef = new EntityFieldDef("application.booleanlist",
+                "application.booleanlist", "application.booleanlist", EntityFieldDataType.BOOLEAN,
+                EntityFieldType.CUSTOM, 0, 0, 0, 0, false);
+        
+        Map<SysParamType, EntityFieldDef> map = new HashMap<SysParamType, EntityFieldDef>();
+        map.put(SysParamType.BOOLEAN, boolEntityFieldDef);
+        map.put(SysParamType.CONTACT, stringEntityFieldDef);
+        map.put(SysParamType.NAME, stringEntityFieldDef);
+        map.put(SysParamType.NUMBER, numberEntityFieldDef);
+        map.put(SysParamType.STRING, stringEntityFieldDef);
+        
+        entityFieldDefBySysParamType = Collections.unmodifiableMap(map);
+    }
+    
     private InputWidgetUtils() {
 
     }
@@ -202,6 +228,10 @@ public final class InputWidgetUtils {
         return ENUMERATION_WIDGETS.contains(widgetName);
     }
 
+    public static EntityFieldDef getEntityFieldDef(SysParamType sysParamType) {
+        return entityFieldDefBySysParamType.get(sysParamType);
+    }
+    
     public static String resolveEntityFieldWidget(final EntityFieldDef entityFieldDef) throws UnifyException {
         if (entityFieldDef.isWithInputWidget()) {
             return entityFieldDef.getInputWidget();

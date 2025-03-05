@@ -299,11 +299,20 @@ public interface SystemModuleService extends FlowCentralService {
     List<? extends Listable> getNamesSystemParameters() throws UnifyException;
 
     /**
-     * Get contact system parameters.
+     * Gets contact system parameters.
      * 
      * @return list of contact system parameters
      * @throws UnifyException
      *                        if an error occurs
      */
     List<? extends Listable> getContactSystemParameters() throws UnifyException;
+    
+    /**
+     * Gets filter system parameters.
+     * 
+     * @return list of filter system parameters
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    List<? extends Listable> getFilterSystemParameters() throws UnifyException;
 }

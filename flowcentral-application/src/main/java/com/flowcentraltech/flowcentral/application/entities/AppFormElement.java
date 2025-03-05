@@ -113,6 +113,9 @@ public class AppFormElement extends BaseConfigEntity {
     private boolean ignoreParentCondition;
 
     @Column
+    private boolean includeSysParam;
+    
+    @Column
     private boolean showSearch;
 
     @Column
@@ -356,6 +359,14 @@ public class AppFormElement extends BaseConfigEntity {
 
     public void setIgnoreParentCondition(boolean ignoreParentCondition) {
         this.ignoreParentCondition = ignoreParentCondition;
+    }
+
+    public boolean isIncludeSysParam() {
+        return includeSysParam;
+    }
+
+    public void setIncludeSysParam(boolean includeSysParam) {
+        this.includeSysParam = includeSysParam;
     }
 
     public boolean isShowSearch() {

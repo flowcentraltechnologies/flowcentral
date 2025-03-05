@@ -77,6 +77,9 @@ public class FormTabConfig extends BaseConfig {
     private Boolean ignoreParentCondition;
 
     @JacksonXmlProperty(isAttribute = true)
+    private Boolean includeSysParam;
+    
+    @JacksonXmlProperty(isAttribute = true)
     private Boolean showSearch;
 
     @JacksonXmlProperty(isAttribute = true)
@@ -100,6 +103,7 @@ public class FormTabConfig extends BaseConfig {
 
     public FormTabConfig() {
         this.ignoreParentCondition = Boolean.FALSE;
+        this.includeSysParam = Boolean.FALSE;
         this.showSearch = Boolean.FALSE;
         this.quickEdit = Boolean.FALSE;
         this.quickOrder = Boolean.FALSE;
@@ -210,6 +214,14 @@ public class FormTabConfig extends BaseConfig {
 
     public void setIgnoreParentCondition(Boolean ignoreParentCondition) {
         this.ignoreParentCondition = ignoreParentCondition;
+    }
+
+    public Boolean getIncludeSysParam() {
+        return includeSysParam;
+    }
+
+    public void setIncludeSysParam(Boolean includeSysParam) {
+        this.includeSysParam = includeSysParam;
     }
 
     public Boolean getShowSearch() {
