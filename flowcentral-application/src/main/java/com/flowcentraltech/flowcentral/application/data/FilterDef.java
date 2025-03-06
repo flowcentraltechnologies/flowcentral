@@ -117,7 +117,7 @@ public class FilterDef implements Listable {
             return au.getComponent(EntityBasedFilterGenerator.class, filterGenerator).generate(valueStoreReader, null);
         }
 
-        return InputWidgetUtils.getRestriction(au, entityDef, this, now, parameters);
+        return InputWidgetUtils.getRestriction(au, entityDef, valueStoreReader, this, now, parameters);
     }
 
     public ObjectFilter getObjectFilter(EntityDef entityDef, ValueStoreReader valueStoreReader, Date now)

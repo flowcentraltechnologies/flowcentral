@@ -231,7 +231,7 @@ public class ChartWriter extends AbstractWidgetWriter {
                 if (provider.isUsesChartDataSource()) {
                     final ChartDataSourceDef chartDataSourceDef = chartModuleService.getChartDataSourceDef(rule);
                     final EntityDef entityDef = chartDataSourceDef.getEntityDef();
-                    restriction = InputWidgetUtils.getRestriction(appletUtilities, entityDef,
+                    restriction = InputWidgetUtils.getRestriction(appletUtilities, entityDef, null,
                             configuration.getCatBase(chartDataSourceDef.getLongName()), chartModuleService.getNow());
                     
                     seriesFieldInclusion = new HashSet<String>();

@@ -72,7 +72,7 @@ public class ApplicationQueryEncoder extends AbstractFlowCentralComponent implem
         Restriction restriction = null;
         if (!StringUtils.isBlank(queryStr)) {
             FilterDef filterDef = InputWidgetUtils.getFilterDef(appletUtilities, queryStr);
-            restriction = InputWidgetUtils.getRestriction(appletUtilities, entityClassDef.getEntityDef(), filterDef,
+            restriction = InputWidgetUtils.getRestriction(appletUtilities, entityClassDef.getEntityDef(), null, filterDef,
                     applicationModuleService.getNow());
         }
 

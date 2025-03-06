@@ -29,22 +29,29 @@ import com.tcdng.unify.core.util.EnumUtils;
 @Table("FC_SYSPARAMTYPE")
 @StaticList(name = "sysparamtypelist", description = "$m{staticlist.sysparamtypelist}")
 public enum SysParamType implements EnumConst {
-
+    
     BOOLEAN(
-            "B"),
+            "B", Boolean.class),
     NUMBER(
-            "N"),
+            "N", Integer.class),
     STRING(
-            "S"),
+            "S", String.class),
     NAME(
-            "M"),
+            "M", String.class),
     CONTACT(
-            "C");
+            "C", String.class);
+
+    private static final String PREFIX = "sp:";
+
+    private static final String PREFIX_UPPERCASE = PREFIX.toUpperCase();
 
     private final String code;
 
-    private SysParamType(String code) {
+    private final Class<?> dataType;
+
+    private SysParamType(String code, Class<?> dataType) {
         this.code = code;
+        this.dataType = dataType;
     }
 
     @Override
@@ -58,15 +65,23 @@ public enum SysParamType implements EnumConst {
     }
 
     public String encodeFilterCode(String param) {
-        return "sp:" + param + ":" + code;
+        return PREFIX + param + ":" + code;
     }
 
     public String encodeFilterName(String name) {
-        return "SP:" + name;
+        return PREFIX_UPPERCASE + name;
+    }
+
+    public Class<?> dataType() {
+        return dataType;
     }
     
     public static boolean isSysParam(String encoded) {
-        return encoded.startsWith("sp:");
+        return encoded.startsWith(PREFIX);
+    }
+    
+    public static String getSysParamCode(String encoded) {
+        return encoded.substring(PREFIX.length(), encoded.length() - 2);
     }
     
     public static SysParamType fromEncoded(String encoded) {

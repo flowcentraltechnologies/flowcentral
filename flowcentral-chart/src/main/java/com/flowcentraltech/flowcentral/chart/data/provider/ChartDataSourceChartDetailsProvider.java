@@ -101,7 +101,7 @@ public class ChartDataSourceChartDetailsProvider extends AbstractChartDetailsPro
             aggregateFunction.add(entitySeriesDef.getType().function(entitySeriesDef.getFieldName()));
         }
 
-        Restriction baseRestriction = InputWidgetUtils.getRestriction(au(), entityDef, chartDataSourceDef.getCategoryBase(),
+        Restriction baseRestriction = InputWidgetUtils.getRestriction(au(), entityDef, null, chartDataSourceDef.getCategoryBase(),
                 now);
         if (chartDataSourceDef.isWithCategories()) {
             final PropertySequenceDef categories = chartDataSourceDef.getCategories();
@@ -113,7 +113,7 @@ public class ChartDataSourceChartDetailsProvider extends AbstractChartDetailsPro
                     final String catlabel = !StringUtils.isBlank(propertySequenceEntryDef.getLabel())
                             ? propertySequenceEntryDef.getLabel()
                             : entityCategoryDef.getLabel();
-                    Restriction restriction = InputWidgetUtils.getRestriction(au(), entityDef,
+                    Restriction restriction = InputWidgetUtils.getRestriction(au(), entityDef, null,
                             entityCategoryDef.getFilterDef(), now);
                     if (restriction != null) {
                         if (baseRestriction != null) {
