@@ -38,7 +38,7 @@
 		<sysParameter code="NOT-0008" defaultVal=""
 			description="$m{notification.sysparam.notificationtestmodeebccemail}"
 			editor="!ui-textarea" type="string" editable="true" />
-		<sysParameter code="NOT-0009" defaultVal="false"
+		<sysParameter code="NOT-0009" defaultVal="true"
 			description="$m{notification.sysparam.notificationhtmlemailenabled}"
 			editor="!ui-select list:booleanlist" type="boolean" control="true"
 			editable="true" />
