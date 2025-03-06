@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.notification.senders;
 import java.util.Collections;
 import java.util.List;
 
+import com.flowcentraltech.flowcentral.application.constants.ProcessVariable;
 import com.flowcentraltech.flowcentral.common.data.Attachment;
 import com.flowcentraltech.flowcentral.common.data.Recipient;
 import com.flowcentraltech.flowcentral.configuration.constants.NotifType;
@@ -67,18 +68,15 @@ public abstract class AbstractSimpleNotificationAlertSender extends AbstractNoti
         if (!DataUtils.isBlank(recipientList)) {
             NotifMessage.Builder nb = NotifMessage.newBuilder(notifTemplateDef.getSubjectTokenList(),
                     notifTemplateDef.getTemplateTokenList());
+            nb.from(reader.read(String.class, ProcessVariable.APP_CORRESPONDER.variableKey()));
+
             // Set recipients
             for (Recipient recipient : recipientList) {
                 nb.addRecipient(recipient);
             }
 
             // Extract parameters
-            System.out.println("@prime: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
-            System.out.println("@prime: composeAndSend()");
-            System.out.println("@prime: reader.getTempValues()" + reader.getValueStore().getTempValues());
-            System.out.println("@prime: reader.getValueObject() = " + reader.getValueObject());
             for (StringToken token : notifTemplateDef.getSubjectTokenList()) {
-                System.out.println("@prime: token = " + token);
                 if (token.isParam()) {
                     String _token = token.getToken();
                     nb.addParam(_token, reader.read(_token));
@@ -86,7 +84,6 @@ public abstract class AbstractSimpleNotificationAlertSender extends AbstractNoti
             }
 
             for (StringToken token : notifTemplateDef.getTemplateTokenList()) {
-                System.out.println("@prime: token = " + token);
                 if (token.isParam()) {
                     String _token = token.getToken();
                     nb.addParam(_token, reader.read(_token));

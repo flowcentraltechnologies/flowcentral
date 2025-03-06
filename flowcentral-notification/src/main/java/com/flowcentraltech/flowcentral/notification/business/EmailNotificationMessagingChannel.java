@@ -146,10 +146,6 @@ public class EmailNotificationMessagingChannel extends AbstractNotificationMessa
     private Email conctructEmail(EmailContext textCtx, NotifChannelDef notifChannelDef, ChannelMessage channelMessage)
             throws UnifyException {
         Email.Builder eb = Email.newBuilder();
-        if (channelMessage.isWithFrom()) {
-            eb.fromSender(channelMessage.getFrom());
-        }
-
         if (textCtx.isTestMode()) {
             textCtx.resetUsed();
             for (Recipient recipient : channelMessage.getRecipients()) {
@@ -185,7 +181,7 @@ public class EmailNotificationMessagingChannel extends AbstractNotificationMessa
         final boolean isHTML = NotifMessageFormat.HTML.equals(channelMessage.getFormat());
         final String msg = isHTML ? HtmlUtils.formatEmailHTML(channelMessage.getMessage())
                 : channelMessage.getMessage();
-        eb.fromSender(notifChannelDef.getSenderContact()).withSubject(channelMessage.getSubject())
+        eb.fromSender(notifChannelDef.getSenderContact(), channelMessage.getFrom()).withSubject(channelMessage.getSubject())
                 .containingMessage(msg).asHTML(isHTML);
 
         for (Attachment attachment : channelMessage.getAttachments()) {

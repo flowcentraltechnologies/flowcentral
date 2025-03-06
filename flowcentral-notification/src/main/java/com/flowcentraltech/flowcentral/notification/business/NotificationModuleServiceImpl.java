@@ -29,6 +29,7 @@ import com.flowcentraltech.flowcentral.application.util.ApplicationEntityNamePar
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.common.business.AbstractFlowCentralService;
 import com.flowcentraltech.flowcentral.common.business.FileAttachmentProvider;
+import com.flowcentraltech.flowcentral.common.constants.FlowCentralContainerPropertyConstants;
 import com.flowcentraltech.flowcentral.common.constants.RecordStatus;
 import com.flowcentraltech.flowcentral.common.data.Attachment;
 import com.flowcentraltech.flowcentral.common.data.Recipient;
@@ -593,8 +594,12 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
             NotificationOutbox notification = environment().find(NotificationOutbox.class, notificationId);
             final NotifMessageFormat format = htmlFormatSupported ? notification.getFormat()
                     : NotifMessageFormat.PLAIN_TEXT;
+            String from = notification.getFrom();
             ChannelMessage.Builder cmb = ChannelMessage.newBuilder(format, notification.getId())
-                    .subject(notification.getSubject()).message(notification.getMessage())
+                    .from(!StringUtils.isBlank(from) ? from : getContainerSetting(String.class,
+                            FlowCentralContainerPropertyConstants.FLOWCENTRAL_APPLICATION_CORRESPONDER))
+                    .subject(notification.getSubject())
+                    .message(notification.getMessage())
                     .attempts(notification.getAttempts());
 
             // Recipients
