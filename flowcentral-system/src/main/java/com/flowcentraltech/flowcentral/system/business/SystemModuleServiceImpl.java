@@ -21,6 +21,7 @@ import java.io.PrintWriter;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
@@ -101,6 +102,7 @@ import com.tcdng.unify.core.constant.FileAttachmentType;
 import com.tcdng.unify.core.constant.FrequencyUnit;
 import com.tcdng.unify.core.criterion.Update;
 import com.tcdng.unify.core.data.FactoryMap;
+import com.tcdng.unify.core.data.ListData;
 import com.tcdng.unify.core.data.ParamGeneratorManager;
 import com.tcdng.unify.core.data.ParameterizedStringGenerator;
 import com.tcdng.unify.core.data.Period;
@@ -338,6 +340,23 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
     public List<? extends Listable> getContactSystemParameters() throws UnifyException {
         return environment()
                 .listAll(new SystemParameterQuery().type(SysParamType.CONTACT).addSelect("code", "description"));
+    }
+
+    @Override
+    public List<? extends Listable> getFilterSystemParameters() throws UnifyException {
+        List<ListData> result = Collections.emptyList();
+        List<SystemParameter> params = environment().listAll(new SystemParameterQuery().addIsNotNull("filterName")
+                .addSelect("type", "code", "filterName").addOrder("filterName"));
+        if (!DataUtils.isBlank(params)) {
+            result = new ArrayList<ListData>();
+            for (SystemParameter systemParameter : params) {
+                final SysParamType type = systemParameter.getType();
+                result.add(new ListData(type.encodeFilterCode(systemParameter.getCode()),
+                        type.encodeFilterName(systemParameter.getFilterName())));
+            }
+        }
+
+        return result;
     }
 
     @Override
@@ -814,6 +833,7 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
                     sysParameter.setValue(sysParamConfig.getDefaultVal());
                     sysParameter.setDefaultValue(sysParamConfig.getDefaultVal());
                     sysParameter.setEditor(sysParamConfig.getEditor());
+                    sysParameter.setFilterName(sysParamConfig.getFilterName());
                     sysParameter.setType(sysParamConfig.getType());
                     sysParameter.setControl(sysParamConfig.isControl());
                     sysParameter.setEditable(sysParamConfig.isEditable());
@@ -822,6 +842,7 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
                     oldSysParameter.setDescription(resolveApplicationMessage(sysParamConfig.getDescription()));
                     oldSysParameter.setDefaultValue(sysParamConfig.getDefaultVal());
                     oldSysParameter.setEditor(sysParamConfig.getEditor());
+                    oldSysParameter.setFilterName(sysParamConfig.getFilterName());
                     oldSysParameter.setType(sysParamConfig.getType());
                     oldSysParameter.setControl(sysParamConfig.isControl());
                     oldSysParameter.setEditable(sysParamConfig.isEditable());

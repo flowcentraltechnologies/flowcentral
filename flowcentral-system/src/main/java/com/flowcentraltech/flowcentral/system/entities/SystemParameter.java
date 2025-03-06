@@ -54,6 +54,9 @@ public class SystemParameter extends BaseAuditEntity {
     @Column(length = 256)
     private String editor;
 
+    @Column(name = "FILTER_NM", length = 64, nullable = true)
+    private String filterName;
+
     @Column
     private Boolean control;
 
@@ -131,6 +134,14 @@ public class SystemParameter extends BaseAuditEntity {
 
     public void setEditor(String editor) {
         this.editor = editor;
+    }
+
+    public String getFilterName() {
+        return filterName;
+    }
+
+    public void setFilterName(String filterName) {
+        this.filterName = filterName;
     }
 
     public Boolean getControl() {

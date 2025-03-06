@@ -177,6 +177,20 @@ public class EntityFieldDef implements Listable, EntityFieldAttributes {
         this.descriptive = descriptive;
     }
 
+    public EntityFieldDef(String textWidget, String inputWidget, String ligualWidget, EntityFieldDataType dataType,
+            EntityFieldType type, int minLen, int maxLen, int precision, int scale, boolean allowNegative) {
+        this.textWidget = textWidget;
+        this.inputWidget = inputWidget;
+        this.ligualWidget = ligualWidget;
+        this.dataType = dataType;
+        this.type = type;
+        this.minLen = minLen;
+        this.maxLen = maxLen > 0 ? maxLen : 0;
+        this.precision = precision;
+        this.scale = scale;
+        this.allowNegative = allowNegative;
+    }
+
     @Override
     public String getListDescription() {
         return inputLabel != null ? inputLabel : fieldLabel;

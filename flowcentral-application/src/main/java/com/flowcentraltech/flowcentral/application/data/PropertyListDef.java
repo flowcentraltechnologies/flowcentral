@@ -131,7 +131,7 @@ public class PropertyListDef extends BaseApplicationEntityDef {
                         null, null, null, null, null, null, null, null, null,
                         Arrays.asList(new FormSectionDef(formFieldDefList, entry.getKey(), entry.getKey(),
                                 FormColumnsType.TYPE_1, null, null, true, true, false)),
-                        false, false, false, false, true, true, false);
+                        false, false, false, false, false, true, true, false);
                 formTabDefs.add(formTabDef);
             }
 

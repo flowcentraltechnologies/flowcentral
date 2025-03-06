@@ -273,12 +273,15 @@ public class WfDef extends BaseApplicationEntityDef {
         }
 
         public Builder addFilterDef(WfFilterDef filterDef) {
-            if (filterDefMap.containsKey(filterDef.getName())) {
-                throw new RuntimeException(
-                        "Filter with name [" + filterDef.getName() + "] already exists in this definition.");
+            if (filterDef.isWithFilter()) {
+                if (filterDefMap.containsKey(filterDef.getName())) {
+                    throw new RuntimeException(
+                            "Filter with name [" + filterDef.getName() + "] already exists in this definition.");
+                }
+
+                filterDefMap.put(filterDef.getName(), filterDef);
             }
 
-            filterDefMap.put(filterDef.getName(), filterDef);
             return this;
         }
 

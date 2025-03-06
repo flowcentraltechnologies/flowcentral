@@ -241,11 +241,12 @@ public class FormEditor {
 
         public Builder addTab(String contentType, String name, String label, String applet, String reference,
                 String filter, String mappedFieldName, String mappedForm, String editAction, String editViewOnly,
-                String editAllowAddition, String editFixedRows, boolean ignoreParentCondition, boolean showSearch,
-                boolean quickEdit, boolean quickOrder, boolean visible, boolean editable, boolean disabled) {
+                String editAllowAddition, String editFixedRows, boolean ignoreParentCondition, boolean includeSysParam,
+                boolean showSearch, boolean quickEdit, boolean quickOrder, boolean visible, boolean editable,
+                boolean disabled) {
             currentTab = new FormTab(contentType, name, label, applet, reference, filter, mappedFieldName, mappedForm,
-                    editAction, editViewOnly, editAllowAddition, editFixedRows, ignoreParentCondition, showSearch,
-                    quickEdit, quickOrder, visible, editable, disabled);
+                    editAction, editViewOnly, editAllowAddition, editFixedRows, ignoreParentCondition, includeSysParam,
+                    showSearch, quickEdit, quickOrder, visible, editable, disabled);
             tabs.add(currentTab);
             return this;
         }
@@ -395,6 +396,8 @@ public class FormEditor {
 
         private boolean ignoreParentCondition;
 
+        private boolean includeSysParam;
+
         private boolean showSearch;
 
         private boolean quickEdit;
@@ -411,8 +414,9 @@ public class FormEditor {
 
         public FormTab(String contentType, String name, String label, String applet, String reference, String filter,
                 String mappedFieldName, String mappedForm, String editAction, String editViewOnly,
-                String editAllowAddition, String editFixedRows, boolean ignoreParentCondition, boolean showSearch,
-                boolean quickEdit, boolean quickOrder, boolean visible, boolean editable, boolean disabled) {
+                String editAllowAddition, String editFixedRows, boolean ignoreParentCondition, boolean includeSysParam,
+                boolean showSearch, boolean quickEdit, boolean quickOrder, boolean visible, boolean editable,
+                boolean disabled) {
             this();
             this.contentType = contentType;
             this.name = name;
@@ -427,6 +431,7 @@ public class FormEditor {
             this.editAllowAddition = editAllowAddition;
             this.editFixedRows = editFixedRows;
             this.ignoreParentCondition = ignoreParentCondition;
+            this.includeSysParam = includeSysParam;
             this.showSearch = showSearch;
             this.quickEdit = quickEdit;
             this.quickOrder = quickOrder;
@@ -573,6 +578,14 @@ public class FormEditor {
 
         public void setIgnoreParentCondition(boolean ignoreParentCondition) {
             this.ignoreParentCondition = ignoreParentCondition;
+        }
+
+        public boolean isIncludeSysParam() {
+            return includeSysParam;
+        }
+
+        public void setIncludeSysParam(boolean includeSysParam) {
+            this.includeSysParam = includeSysParam;
         }
 
         public boolean isShowSearch() {

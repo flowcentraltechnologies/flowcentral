@@ -1234,9 +1234,9 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
                         EntityDef _entityDef = getEntityDef(appletContext.getReference(categoryType));
                         EntityFilter _entityFilter = constructEntityFilter(formContext, sweepingCommitPolicy,
                                 formTabDef.getName(), formDef.getEntityDef(), EntityFilter.ENABLE_ALL,
-                                formTabDef.isIgnoreParentCondition());
+                                formTabDef.isIgnoreParentCondition(), formTabDef.isIncludeSysParam());
                         _entityFilter.setListType(categoryType.listType());
-                        _entityFilter.setParamList(categoryType.paramList());
+                        _entityFilter.setParamList(categoryType.paramList()); 
                         _entityFilter.setCategory(categoryType.category());
                         _entityFilter.setOwnerInstId((Long) inst.getId());
                         _entityFilter.load(_entityDef);
@@ -1970,12 +1970,12 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
 
     @Override
     public EntityFilter constructEntityFilter(FormContext ctx, SweepingCommitPolicy sweepingCommitPolicy,
-            String tabName, EntityDef ownerEntityDef, int entityFilterMode, boolean isIgnoreParentCondition)
+            String tabName, EntityDef ownerEntityDef, int entityFilterMode, boolean isIgnoreParentCondition, boolean includeSysParam)
             throws UnifyException {
-        logDebug("Constructing entity filter for [{0}] using entity definition [{1}]...", tabName,
-                ownerEntityDef.getLongName());
+        logDebug("Constructing entity filter for [{0}] using entity definition [{1}] with system parameter [{2}]...", tabName,
+                ownerEntityDef.getLongName(), includeSysParam);
         return new EntityFilter(ctx, sweepingCommitPolicy, tabName, ownerEntityDef, entityFilterMode,
-                isIgnoreParentCondition);
+                isIgnoreParentCondition, includeSysParam);
     }
 
     @Override

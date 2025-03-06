@@ -50,4 +50,7 @@ public class WfFilterDef implements Listable {
         return filterDef.getName();
     }
 
+    public boolean isWithFilter() {
+        return filterDef != null;
+    }
 }

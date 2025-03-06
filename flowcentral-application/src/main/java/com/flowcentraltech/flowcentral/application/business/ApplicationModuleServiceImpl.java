@@ -1097,10 +1097,10 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                                     appFormElement.getMappedFieldName(), appFormElement.getTabMappedForm(),
                                     appFormElement.getEditAction(), appFormElement.getEditFormless(),
                                     appFormElement.getEditAllowAddition(), appFormElement.getEditFixedRows(),
-                                    appFormElement.isIgnoreParentCondition(), appFormElement.isShowSearch(),
-                                    appFormElement.isQuickEdit(), appFormElement.isQuickOrder(),
-                                    appFormElement.isVisible(), appFormElement.isEditable(),
-                                    appFormElement.isDisabled());
+                                    appFormElement.isIgnoreParentCondition(), appFormElement.isIncludeSysParam(),
+                                    appFormElement.isShowSearch(), appFormElement.isQuickEdit(),
+                                    appFormElement.isQuickOrder(), appFormElement.isVisible(),
+                                    appFormElement.isEditable(), appFormElement.isDisabled());
                         } else if (FormElementType.SECTION.equals(appFormElement.getType())) {
                             sectionIndex++;
                             fdb.addFormSection(tabIndex, appFormElement.getElementName(), appFormElement.getLabel(),
@@ -6700,6 +6700,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             appFormElement.setEditFixedRows(formTabConfig.getEditFixedRows());
             appFormElement.setEditAllowAddition(formTabConfig.getEditAllowAddition());
             appFormElement.setIgnoreParentCondition(formTabConfig.getIgnoreParentCondition());
+            appFormElement.setIncludeSysParam(formTabConfig.getIncludeSysParam());
             appFormElement.setShowSearch(formTabConfig.getShowSearch());
             appFormElement.setQuickEdit(formTabConfig.getQuickEdit());
             appFormElement.setQuickOrder(formTabConfig.getQuickOrder());

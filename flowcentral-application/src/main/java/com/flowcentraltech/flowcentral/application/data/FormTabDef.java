@@ -70,6 +70,8 @@ public class FormTabDef {
 
     private boolean ignoreParentCondition;
 
+    private boolean includeSysParam;
+
     private boolean showSearch;
 
     private boolean quickEdit;
@@ -87,7 +89,7 @@ public class FormTabDef {
     public FormTabDef(TabContentType contentType, FilterGroupDef filterGroupDef, String name, String label, String icon,
             String applet, String reference, String mappedFieldName, String mappedForm, String editAction,
             String editViewOnly, String editAllowAddition, String editFixedRows,
-            List<FormSectionDef> formSectionDefList, boolean ignoreParentCondition, boolean showSearch,
+            List<FormSectionDef> formSectionDefList, boolean ignoreParentCondition, boolean includeSysParam, boolean showSearch,
             boolean quickEdit, boolean quickOrder, boolean visible, boolean editable, boolean disabled) {
         this.contentType = contentType;
         this.filterGroupDef = filterGroupDef;
@@ -104,6 +106,7 @@ public class FormTabDef {
         this.editFixedRows = editFixedRows;
         this.formSectionDefList = formSectionDefList;
         this.ignoreParentCondition = ignoreParentCondition;
+        this.includeSysParam = includeSysParam;
         this.showSearch = showSearch;
         this.quickEdit = quickEdit;
         this.quickOrder = quickOrder;
@@ -129,6 +132,7 @@ public class FormTabDef {
         this.editAllowAddition = srcFormTabDef.editAllowAddition;
         this.editFixedRows = srcFormTabDef.editFixedRows;
         this.ignoreParentCondition = srcFormTabDef.ignoreParentCondition;
+        this.includeSysParam = srcFormTabDef.includeSysParam;
         this.showSearch = srcFormTabDef.showSearch;
         this.quickEdit = srcFormTabDef.quickEdit;
         this.quickOrder = srcFormTabDef.quickOrder;
@@ -154,6 +158,7 @@ public class FormTabDef {
         this.editAllowAddition = srcFormTabDef.editAllowAddition;
         this.editFixedRows = srcFormTabDef.editFixedRows;
         this.ignoreParentCondition = srcFormTabDef.ignoreParentCondition;
+        this.includeSysParam = srcFormTabDef.includeSysParam;
         this.showSearch = srcFormTabDef.showSearch;
         this.quickEdit = srcFormTabDef.quickEdit;
         this.quickOrder = srcFormTabDef.quickOrder;
@@ -301,6 +306,10 @@ public class FormTabDef {
 
     public boolean isIgnoreParentCondition() {
         return ignoreParentCondition;
+    }
+
+    public boolean isIncludeSysParam() {
+        return includeSysParam;
     }
 
     public boolean isShowSearch() {

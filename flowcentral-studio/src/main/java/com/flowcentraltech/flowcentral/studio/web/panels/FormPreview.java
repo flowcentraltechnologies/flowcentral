@@ -90,7 +90,7 @@ public class FormPreview {
                             formTab.getLabel(), formTab.getApplet(), formTab.getReference(),
                             formTab.getMappedFieldName(), formTab.getMappedForm(), formTab.getEditAction(),
                             formTab.getEditViewOnly(), formTab.getEditAllowAddition(), formTab.getEditFixedRows(),
-                            formTab.isIgnoreParentCondition(), formTab.isShowSearch(), formTab.isQuickEdit(),
+                            formTab.isIgnoreParentCondition(), formTab.isIncludeSysParam(), formTab.isShowSearch(), formTab.isQuickEdit(),
                             formTab.isQuickOrder(), formTab.isVisible(), formTab.isEditable(), formTab.isDisabled());
                     int sectionIndex = -1;
                     for (FormSection formSection : formTab.getSections()) {

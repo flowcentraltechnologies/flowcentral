@@ -33,7 +33,7 @@
 // Search filter panel
 !ui-panel:searchFilterPanel styleClass:$s{filall} layout:$d{!ui-vertical style:$s{width:100%;}}
 	components:$c{searchFilter}	
-!fc-filter:searchFilter binding:filter
+!fc-filter:searchFilter includeSysParamBinding:includeSysParam binding:filter 
 
 // Actions
 !ui-postcommand:clearAct command:clear

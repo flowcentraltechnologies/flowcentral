@@ -6017,7 +6017,8 @@
 			</tab>
 			<tab name="condition"
 				label="$m{studio.workflowfilter.form.condition}"
-				reference="workflow" contentType="filter_condition" />
+				reference="workflow" contentType="filter_condition"
+				includeSysParam="true" />
 			<tab name="changeLog" label="$m{application.form.audit}"
 				contentType="miniform_changelog" />
 		</form>
@@ -6040,7 +6041,8 @@
 			</tab>
 			<tab name="condition"
 				label="$m{studio.workflowsetvalues.form.condition}"
-				reference="workflow" contentType="filter_condition" />
+				reference="workflow" contentType="filter_condition"
+				includeSysParam="true" />
 			<tab name="setValues"
 				label="$m{studio.workflowsetvalues.form.setvalues}"
 				reference="workflow" contentType="set_values" />
@@ -6179,7 +6181,8 @@
 			</tab>
 			<tab name="routeCondition"
 				label="$m{studio.workflow.steprouting.form.oncondition}"
-				reference="wfstep_routing" contentType="filter_condition" />
+				reference="wfstep_routing" contentType="filter_condition"
+				includeSysParam="true" />
 		</form>
 		<form name="wfStepUserActionForm"
 			description="$m{studio.workflow.stepuseraction.form}"
@@ -6257,7 +6260,8 @@
 			</tab>
 			<tab name="fireOnCondition"
 				label="$m{studio.workflow.stepalert.form.oncondition}"
-				reference="wfstep_alert_fire_on" contentType="filter_condition" />
+				reference="wfstep_alert_fire_on" contentType="filter_condition"
+				includeSysParam="true" />
 		</form>
 	</forms>
 	<!-- Property Lists -->
