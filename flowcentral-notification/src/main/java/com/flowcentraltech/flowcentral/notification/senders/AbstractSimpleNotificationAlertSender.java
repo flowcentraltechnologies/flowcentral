@@ -73,7 +73,12 @@ public abstract class AbstractSimpleNotificationAlertSender extends AbstractNoti
             }
 
             // Extract parameters
+            System.out.println("@prime: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+            System.out.println("@prime: composeAndSend()");
+            System.out.println("@prime: reader.getTempValues()" + reader.getValueStore().getTempValues());
+            System.out.println("@prime: reader.getValueObject() = " + reader.getValueObject());
             for (StringToken token : notifTemplateDef.getSubjectTokenList()) {
+                System.out.println("@prime: token = " + token);
                 if (token.isParam()) {
                     String _token = token.getToken();
                     nb.addParam(_token, reader.read(_token));
@@ -81,6 +86,7 @@ public abstract class AbstractSimpleNotificationAlertSender extends AbstractNoti
             }
 
             for (StringToken token : notifTemplateDef.getTemplateTokenList()) {
+                System.out.println("@prime: token = " + token);
                 if (token.isParam()) {
                     String _token = token.getToken();
                     nb.addParam(_token, reader.read(_token));
