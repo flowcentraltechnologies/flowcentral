@@ -29,6 +29,23 @@ import com.tcdng.unify.core.UnifyException;
  * @since 1.0
  */
 public interface SecuredLinkManager extends FlowCentralComponent {
+    
+    /**
+     * Creates a new open link.
+     * 
+     * @param title
+     *                        the title (optional)
+     * @param openPath
+     *                        the open path
+     * @param entityId
+     *                        the target entity ID
+     * @param validityMinutes
+     *                        the validity minutes
+     * @return the secured link information
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    SecuredLinkInfo getNewOpenLink(String title, String openPath, Long entityId, int validityMinutes) throws UnifyException;
 
     /**
      * Creates a new a secured link.
@@ -107,4 +124,5 @@ public interface SecuredLinkManager extends FlowCentralComponent {
      *                        if an error occurs
      */
     int invalidateSecuredLinkByAccessKey(SecuredLinkType type, String accessKey) throws UnifyException;
+
 }
