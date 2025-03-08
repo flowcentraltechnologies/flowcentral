@@ -55,7 +55,12 @@ public final class HtmlUtils {
     }
 
     public static String getHtmlLink(String url, String title, String target) {
-        return "<a href=\"" + url + "\" target=\"" + target + "\">" 
-                + (StringUtils.isBlank(title) ? "" : title) + "</a>";
+        if (!StringUtils.isBlank(target)) {
+            return "<a href=\"" + url + "\" target=\"" + target + "\">" 
+                    + (StringUtils.isBlank(title) ? url : title) + "</a>";
+        }
+
+        return "<a href=\"" + url + "\">" 
+                + (StringUtils.isBlank(title) ? url : title) + "</a>";
     }
 }

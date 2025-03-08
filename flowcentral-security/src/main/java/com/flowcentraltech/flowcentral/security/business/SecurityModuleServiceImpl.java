@@ -241,8 +241,8 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
         final String linkAccessKey = String.format("%x%s", linkId, accessKey);
         final String linkUrl = baseUrl + SecurityModuleNameConstants.SECURED_LINK_ACCESS_CONTROLLER + "?"
                 + PageRequestParameterConstants.NO_TRANSFER + "=true&lid=" + linkAccessKey;
-        final String htmlLink = HtmlUtils.getSecuredHtmlLink(linkUrl,
-                type.isOpen() || !StringUtils.isBlank(title) ? resolveApplicationMessage(title)
+        final String htmlLink = type.isOpen() ? HtmlUtils.getHtmlLink(linkUrl, resolveApplicationMessage(title), null)
+                : HtmlUtils.getSecuredHtmlLink(linkUrl, !StringUtils.isBlank(title) ? resolveApplicationMessage(title)
                         : resolveApplicationMessage("$m{link.here}"));
         return new SecuredLinkInfo(title, linkUrl, htmlLink, actExpirationInMinutes);
     }
