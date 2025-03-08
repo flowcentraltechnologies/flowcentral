@@ -207,6 +207,13 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
+    public SecuredLinkInfo getNewOpenLink(String baseUrl, String title, String openPath, Long entityId,
+            int validityMinutes) throws UnifyException {
+        final String contentPath = openPath + "?itemId=" + entityId;
+        return getNewSecuredLink(SecuredLinkType.OPEN, baseUrl, title, contentPath, null, null, validityMinutes);
+    }
+
+    @Override
     public SecuredLinkInfo getNewSecuredLink(SecuredLinkType type, String title, String contentPath, int expirationInMinutes)
             throws UnifyException {
         return getNewSecuredLink(type, title, contentPath, null, null, expirationInMinutes);
@@ -223,28 +230,7 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
             String assignedLoginId, String assignedRole, int expirationInMinutes) throws UnifyException {
         final String baseUrl = systemModuleService.getSysParameterValue(String.class,
                 SystemModuleSysParamConstants.APPLICATION_BASE_URL);
-        final String accessKey = StringUtils.generateRandomAlphanumeric(SECURED_LINK_ACCESS_SUFFIX_LEN);
-        SecuredLink securedLink = new SecuredLink();
-        securedLink.setType(type);
-        securedLink.setTitle(title);
-        securedLink.setContentPath(contentPath);
-        securedLink.setAccessKey(accessKey);
-        securedLink.setAssignedToLoginId(assignedLoginId);
-        securedLink.setAssignedRole(assignedRole);
-
-        final int actExpirationInMinutes = expirationInMinutes <= 0 ? 1 : expirationInMinutes;
-        Date expiresOn = CalendarUtils.getDateWithFrequencyOffset(getNow(), FrequencyUnit.MINUTE,
-                actExpirationInMinutes);
-        securedLink.setExpiresOn(expiresOn);
-        Long linkId = (Long) environment().create(securedLink);
-
-        final String linkAccessKey = String.format("%x%s", linkId, accessKey);
-        final String linkUrl = baseUrl + SecurityModuleNameConstants.SECURED_LINK_ACCESS_CONTROLLER + "?"
-                + PageRequestParameterConstants.NO_TRANSFER + "=true&lid=" + linkAccessKey;
-        final String htmlLink = type.isOpen() ? HtmlUtils.getHtmlLink(linkUrl, resolveApplicationMessage(title), null)
-                : HtmlUtils.getSecuredHtmlLink(linkUrl, !StringUtils.isBlank(title) ? resolveApplicationMessage(title)
-                        : resolveApplicationMessage("$m{link.here}"));
-        return new SecuredLinkInfo(title, linkUrl, htmlLink, actExpirationInMinutes);
+        return getNewSecuredLink(type, baseUrl, title, contentPath, assignedLoginId, assignedRole, expirationInMinutes);
     }
 
     @Override
@@ -722,6 +708,32 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
             }
 
         }
+    }
+
+    private SecuredLinkInfo getNewSecuredLink(SecuredLinkType type, String baseUrl, String title, String contentPath,
+            String assignedLoginId, String assignedRole, int expirationInMinutes) throws UnifyException {
+        final String accessKey = StringUtils.generateRandomAlphanumeric(SECURED_LINK_ACCESS_SUFFIX_LEN);
+        SecuredLink securedLink = new SecuredLink();
+        securedLink.setType(type);
+        securedLink.setTitle(title);
+        securedLink.setContentPath(contentPath);
+        securedLink.setAccessKey(accessKey);
+        securedLink.setAssignedToLoginId(assignedLoginId);
+        securedLink.setAssignedRole(assignedRole);
+
+        final int actExpirationInMinutes = expirationInMinutes <= 0 ? 1 : expirationInMinutes;
+        Date expiresOn = CalendarUtils.getDateWithFrequencyOffset(getNow(), FrequencyUnit.MINUTE,
+                actExpirationInMinutes);
+        securedLink.setExpiresOn(expiresOn);
+        Long linkId = (Long) environment().create(securedLink);
+
+        final String linkAccessKey = String.format("%x%s", linkId, accessKey);
+        final String linkUrl = baseUrl + SecurityModuleNameConstants.SECURED_LINK_ACCESS_CONTROLLER + "?"
+                + PageRequestParameterConstants.NO_TRANSFER + "=true&lid=" + linkAccessKey;
+        final String htmlLink = type.isOpen() ? HtmlUtils.getHtmlLink(linkUrl, resolveApplicationMessage(title), null)
+                : HtmlUtils.getSecuredHtmlLink(linkUrl, !StringUtils.isBlank(title) ? resolveApplicationMessage(title)
+                        : resolveApplicationMessage("$m{link.here}"));
+        return new SecuredLinkInfo(title, linkUrl, htmlLink, actExpirationInMinutes);
     }
 
     private Set<Long> findIdsOfAllUsersWithRole(final Long tenantId, final Collection<String> roleCodes)

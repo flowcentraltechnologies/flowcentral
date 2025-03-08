@@ -22,7 +22,6 @@ import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.common.AbstractFlowCentralComponent;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
-import com.flowcentraltech.flowcentral.common.data.SecuredLinkInfo;
 import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
 import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.common.util.ProcessVariableUtils;
@@ -140,7 +139,7 @@ public abstract class AbstractEntitySetValuesGenerator extends AbstractFlowCentr
     }
 
     /**
-     * Gets a new open link.
+     * Gets a new open link. Uses application base URL.
      * 
      * @param title
      *                        the link title (optional)
@@ -156,8 +155,29 @@ public abstract class AbstractEntitySetValuesGenerator extends AbstractFlowCentr
      */
     protected String getNewOpenLink(String title, String openPath, Long entityId, int validityMinutes)
             throws UnifyException {
-        final SecuredLinkInfo securedLinkInfo = system().getNewOpenLink(title, openPath, entityId, validityMinutes);
-        return securedLinkInfo.getHtmlLink();
+        return system().getNewOpenLink(title, openPath, entityId, validityMinutes).getHtmlLink();
+    }
+
+    /**
+     * Gets a new open link with a base URL.
+     * 
+     * @param baseUrl
+     *                        the base URL
+     * @param title
+     *                        the link title (optional)
+     * @param openPath
+     *                        the open path
+     * @param entityId
+     *                        the entity ID
+     * @param validityMinutes
+     *                        the validity minutes
+     * @return the open link (HTML)
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    protected String getNewOpenLink(String baseUrl, String title, String openPath, Long entityId, int validityMinutes)
+            throws UnifyException {
+        return system().getNewOpenLink(baseUrl, title, openPath, entityId, validityMinutes).getHtmlLink();
     }
    
     /**
