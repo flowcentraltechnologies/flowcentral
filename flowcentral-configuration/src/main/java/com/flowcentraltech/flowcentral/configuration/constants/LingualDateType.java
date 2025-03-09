@@ -109,6 +109,10 @@ public enum LingualDateType implements EnumConst {
         return TODAY.code;
     }
 
+    public boolean isNow() {
+        return NOW.equals(this);
+    }
+    
     public static LingualDateType fromCode(String code) {
         return EnumUtils.fromCode(LingualDateType.class, code);
     }

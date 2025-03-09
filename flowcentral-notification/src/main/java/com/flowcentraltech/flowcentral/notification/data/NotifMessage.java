@@ -26,7 +26,6 @@ import com.flowcentraltech.flowcentral.configuration.constants.ImportanceType;
 import com.flowcentraltech.flowcentral.configuration.constants.NotifMessageFormat;
 import com.flowcentraltech.flowcentral.configuration.constants.NotifRecipientType;
 import com.flowcentraltech.flowcentral.configuration.constants.NotifType;
-import com.tcdng.unify.common.util.ProcessVariableUtils;
 import com.tcdng.unify.common.util.StringToken;
 import com.tcdng.unify.core.constant.FileAttachmentType;
 import com.tcdng.unify.core.util.DataUtils;
@@ -239,11 +238,6 @@ public class NotifMessage {
 
         public Builder addParam(String name, Object val) {
             params.put(name, val);
-            return this;
-        }
-
-        public Builder addProcessVariable(String name, Object val) {
-            params.put(ProcessVariableUtils.getVariable(name), val);
             return this;
         }
 

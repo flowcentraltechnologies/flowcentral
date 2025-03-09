@@ -121,10 +121,71 @@ public abstract class AbstractEntitySetValuesGenerator extends AbstractFlowCentr
         return new BeanValueListStore(childEntityList);
     }
     
+    /**
+     * Gets a new open link.
+     * 
+     * @param openPath
+     *                        the open path
+     * @param entityId
+     *                        the entity ID
+     * @param validityMinutes
+     *                        the validity minutes
+     * @return the open link (HTML)
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    protected String getNewOpenLink(String openPath, Long entityId, int validityMinutes) throws UnifyException {
+        return getNewOpenLink(null, openPath, entityId, validityMinutes);
+    }
+
+    /**
+     * Gets a new open link.
+     * 
+     * @param title
+     *                        the link title (optional)
+     * @param openUrl
+     *                        the open URL
+     * @param entityId
+     *                        the entity ID
+     * @param validityMinutes
+     *                        the validity minutes
+     * @return the open link (HTML)
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    protected String getNewOpenLink(String title, String openUrl, Long entityId, int validityMinutes)
+            throws UnifyException {
+        return system().getNewOpenLink(title, openUrl, entityId, validityMinutes).getHtmlLink();
+    }
+   
+    /**
+     * Sets a process variable in supplied value store.
+     * 
+     * @param valueStore
+     *                   the value store
+     * @param name
+     *                   the process variable name
+     * @param val
+     *                   the value to set the process variable to
+     * @throws UnifyException
+     *                        if an error occurs
+     */
     protected void setProcessVariable(ValueStore valueStore, String name, Object val) throws UnifyException {
         valueStore.setTempValue(ProcessVariableUtils.getVariable(name), val);
     }
-    
+
+    /**
+     * Sets a property value in supplied value store.
+     * 
+     * @param valueStore
+     *                   the value store
+     * @param property
+     *                   the property name
+     * @param val
+     *                   the value to set the property to
+     * @throws UnifyException
+     *                        if an error occurs
+     */
     protected void setProperty(ValueStore valueStore, String property, Object val) throws UnifyException {
         valueStore.store(property, val);
     }

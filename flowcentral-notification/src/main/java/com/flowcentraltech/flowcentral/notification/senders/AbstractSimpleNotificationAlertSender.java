@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.notification.senders;
 import java.util.Collections;
 import java.util.List;
 
+import com.flowcentraltech.flowcentral.application.constants.ProcessVariable;
 import com.flowcentraltech.flowcentral.common.data.Attachment;
 import com.flowcentraltech.flowcentral.common.data.Recipient;
 import com.flowcentraltech.flowcentral.configuration.constants.NotifType;
@@ -67,6 +68,8 @@ public abstract class AbstractSimpleNotificationAlertSender extends AbstractNoti
         if (!DataUtils.isBlank(recipientList)) {
             NotifMessage.Builder nb = NotifMessage.newBuilder(notifTemplateDef.getSubjectTokenList(),
                     notifTemplateDef.getTemplateTokenList());
+            nb.from(reader.read(String.class, ProcessVariable.APP_CORRESPONDER.variableKey()));
+
             // Set recipients
             for (Recipient recipient : recipientList) {
                 nb.addRecipient(recipient);

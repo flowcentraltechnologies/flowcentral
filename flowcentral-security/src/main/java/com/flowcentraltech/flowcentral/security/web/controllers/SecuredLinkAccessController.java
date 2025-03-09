@@ -89,36 +89,43 @@ public class SecuredLinkAccessController extends AbstractForwarderController<Sec
                 return;
             }
 
-            String url = securedLinkContentInfo.getLoginUrl();
-            if (isUserLoggedIn()) {
-                UserToken userToken = getUserToken();
-                if (securedLinkContentInfo.isLogin()) {
-                    securityModuleService.logoutUser(false);
-                    setSessionAttribute(FlowCentralSessionAttributeConstants.SECURED_LINK_ACCESS,
-                            securedLinkContentInfo);
-                } else {
-                    if (securedLinkContentInfo.isWithAssignedLoginId()
-                            && !securedLinkContentInfo.getAssignedLoginId().equals(userToken.getUserLoginId())) {
-                        showPlainMessage(resolveSessionMessage("$m{securedlinkaccess.assignedtoother}"));
-                        return;
-                    }
-
-                    if (securedLinkContentInfo.isWithAssignedRole()) {
-                        Optional<UserRole> optional = securityModuleService.findUserRole(
-                                securedLinkContentInfo.getAssignedLoginId(), securedLinkContentInfo.getAssignedRole());
-                        if (!optional.isPresent()) {
-                            showPlainMessage(resolveSessionMessage("$m{securedlinkaccess.norequiredrole}"));
+            String url = null;
+            if (securedLinkContentInfo.getType().isOpen()) {
+                url = securedLinkContentInfo.getContentPath();
+            } else {
+                url = securedLinkContentInfo.getLoginUrl();
+                if (isUserLoggedIn()) {
+                    UserToken userToken = getUserToken();
+                    if (securedLinkContentInfo.isLogin()) {
+                        securityModuleService.logoutUser(false);
+                        setSessionAttribute(FlowCentralSessionAttributeConstants.SECURED_LINK_ACCESS,
+                                securedLinkContentInfo);
+                    } else {
+                        if (securedLinkContentInfo.isWithAssignedLoginId()
+                                && !securedLinkContentInfo.getAssignedLoginId().equals(userToken.getUserLoginId())) {
+                            showPlainMessage(resolveSessionMessage("$m{securedlinkaccess.assignedtoother}"));
                             return;
                         }
-                    }
 
-                    url = securedLinkContentInfo.getDocUrl();
-                    setSessionAttribute(AppletSessionAttributeConstants.OPEN_TAB_INFO,
-                            new SessionOpenTabInfo(securedLinkContentInfo.getTitle(),
-                                    securedLinkContentInfo.getDocUrl(), securedLinkContentInfo.getContentPath()));
+                        if (securedLinkContentInfo.isWithAssignedRole()) {
+                            Optional<UserRole> optional = securityModuleService.findUserRole(
+                                    securedLinkContentInfo.getAssignedLoginId(),
+                                    securedLinkContentInfo.getAssignedRole());
+                            if (!optional.isPresent()) {
+                                showPlainMessage(resolveSessionMessage("$m{securedlinkaccess.norequiredrole}"));
+                                return;
+                            }
+                        }
+
+                        url = securedLinkContentInfo.getDocUrl();
+                        setSessionAttribute(AppletSessionAttributeConstants.OPEN_TAB_INFO,
+                                new SessionOpenTabInfo(securedLinkContentInfo.getTitle(),
+                                        securedLinkContentInfo.getDocUrl(), securedLinkContentInfo.getContentPath()));
+                    }
+                } else {
+                    setSessionAttribute(FlowCentralSessionAttributeConstants.SECURED_LINK_ACCESS,
+                            securedLinkContentInfo);
                 }
-            } else {
-                setSessionAttribute(FlowCentralSessionAttributeConstants.SECURED_LINK_ACCESS, securedLinkContentInfo);
             }
 
             replacePage(url);
@@ -135,9 +142,9 @@ public class SecuredLinkAccessController extends AbstractForwarderController<Sec
         setResultMapping("plainmessage");
     }
 
-    private void replacePage(String targetPath) throws UnifyException {
+    private void replacePage(String targetUrl) throws UnifyException {
         SecuredLinkAccessPageBean pageBean = getPageBean();
-        pageBean.setTargetPath(targetPath);
+        pageBean.setTargetPath(targetUrl);
         setResultMapping("forwardtourl");
     }
 

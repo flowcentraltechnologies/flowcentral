@@ -34,7 +34,9 @@ public enum SecuredLinkType implements EnumConst {
     LOGIN(
             "LGI"),
     WORKFLOW_DECISION(
-            "WFD");
+            "WFD"),
+    OPEN(
+            "OPN");
 
     private final String code;
 
@@ -58,6 +60,10 @@ public enum SecuredLinkType implements EnumConst {
 
     public boolean isWorkflowDecision() {
         return WORKFLOW_DECISION.equals(this);
+    }
+
+    public boolean isOpen() {
+        return OPEN.equals(this);
     }
     
     public static SecuredLinkType fromCode(String code) {

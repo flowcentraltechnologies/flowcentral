@@ -77,7 +77,6 @@ import com.flowcentraltech.flowcentral.common.business.policies.WfBinaryPolicy;
 import com.flowcentraltech.flowcentral.common.business.policies.WfEnrichmentPolicy;
 import com.flowcentraltech.flowcentral.common.business.policies.WfProcessPolicy;
 import com.flowcentraltech.flowcentral.common.business.policies.WfRecipientPolicy;
-import com.flowcentraltech.flowcentral.common.constants.CommonTempValueNameConstants;
 import com.flowcentraltech.flowcentral.common.constants.ConfigType;
 import com.flowcentraltech.flowcentral.common.constants.FileAttachmentCategoryType;
 import com.flowcentraltech.flowcentral.common.constants.ProcessErrorConstants;
@@ -2163,8 +2162,6 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             this.wfDef = wfDef;
             this.variables = new HashMap<String, Object>();
             this.wfEntityInst = new WfEntityInst(wfInst);
-            this.wfEntityInst.getWfInstValueStore().setTempValue(CommonTempValueNameConstants.PROCESS_VARIABLES,
-                    this.variables);
             this.flowTransition = flowTransition;
         }
 
