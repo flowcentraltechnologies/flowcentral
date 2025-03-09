@@ -40,7 +40,7 @@ public class SecuredLink extends BaseAuditEntity {
     @Column(length = 128, nullable = true)
     private String title;
 
-    @Column(length = 128)
+    @Column(length = 256)
     private String contentPath;
 
     @Column(length = 32)

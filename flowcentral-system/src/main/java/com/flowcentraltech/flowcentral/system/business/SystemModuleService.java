@@ -46,8 +46,8 @@ public interface SystemModuleService extends FlowCentralService {
      * 
      * @param title
      *                        the title (optional)
-     * @param openPath
-     *                        the open path
+     * @param openUrl
+     *                        the open URL
      * @param entityId
      *                        the target entity ID
      * @param validityMinutes
@@ -56,27 +56,7 @@ public interface SystemModuleService extends FlowCentralService {
      * @throws UnifyException
      *                        if an error occurs
      */
-    SecuredLinkInfo getNewOpenLink(String title, String openPath, Long entityId, int validityMinutes)
-            throws UnifyException;
-
-    /**
-     * Creates a new open link with a base URL.
-     * 
-     * @param baseUrl
-     *                        the base URL
-     * @param title
-     *                        the title (optional)
-     * @param openPath
-     *                        the open path
-     * @param entityId
-     *                        the target entity ID
-     * @param validityMinutes
-     *                        the validity minutes
-     * @return the secured link information
-     * @throws UnifyException
-     *                        if an error occurs
-     */
-    SecuredLinkInfo getNewOpenLink(String baseUrl, String title, String openPath, Long entityId, int validityMinutes)
+    SecuredLinkInfo getNewOpenLink(String title, String openUrl, Long entityId, int validityMinutes)
             throws UnifyException;
 
     /**

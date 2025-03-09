@@ -251,15 +251,9 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
-    public SecuredLinkInfo getNewOpenLink(String title, String openPath, Long entityId, int validityMinutes)
+    public SecuredLinkInfo getNewOpenLink(String title, String openUrl, Long entityId, int validityMinutes)
             throws UnifyException {
-        return securedLinkManager.getNewOpenLink(title, openPath, entityId, validityMinutes);
-    }
-
-    @Override
-    public SecuredLinkInfo getNewOpenLink(String baseUrl, String title, String openPath, Long entityId, int validityMinutes)
-            throws UnifyException {
-        return securedLinkManager.getNewOpenLink(baseUrl, title, openPath, entityId, validityMinutes);
+        return securedLinkManager.getNewOpenLink(title, openUrl, entityId, validityMinutes);
     }
 
     @Override

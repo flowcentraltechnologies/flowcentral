@@ -139,12 +139,12 @@ public abstract class AbstractEntitySetValuesGenerator extends AbstractFlowCentr
     }
 
     /**
-     * Gets a new open link. Uses application base URL.
+     * Gets a new open link.
      * 
      * @param title
      *                        the link title (optional)
-     * @param openPath
-     *                        the open path
+     * @param openUrl
+     *                        the open URL
      * @param entityId
      *                        the entity ID
      * @param validityMinutes
@@ -153,31 +153,9 @@ public abstract class AbstractEntitySetValuesGenerator extends AbstractFlowCentr
      * @throws UnifyException
      *                        if an error occurs
      */
-    protected String getNewOpenLink(String title, String openPath, Long entityId, int validityMinutes)
+    protected String getNewOpenLink(String title, String openUrl, Long entityId, int validityMinutes)
             throws UnifyException {
-        return system().getNewOpenLink(title, openPath, entityId, validityMinutes).getHtmlLink();
-    }
-
-    /**
-     * Gets a new open link with a base URL.
-     * 
-     * @param baseUrl
-     *                        the base URL
-     * @param title
-     *                        the link title (optional)
-     * @param openPath
-     *                        the open path
-     * @param entityId
-     *                        the entity ID
-     * @param validityMinutes
-     *                        the validity minutes
-     * @return the open link (HTML)
-     * @throws UnifyException
-     *                        if an error occurs
-     */
-    protected String getNewOpenLink(String baseUrl, String title, String openPath, Long entityId, int validityMinutes)
-            throws UnifyException {
-        return system().getNewOpenLink(baseUrl, title, openPath, entityId, validityMinutes).getHtmlLink();
+        return system().getNewOpenLink(title, openUrl, entityId, validityMinutes).getHtmlLink();
     }
    
     /**
