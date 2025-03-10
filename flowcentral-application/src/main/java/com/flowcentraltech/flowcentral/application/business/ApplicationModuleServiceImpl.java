@@ -111,7 +111,6 @@ import com.flowcentraltech.flowcentral.application.web.widgets.EntitySearchWidge
 import com.flowcentraltech.flowcentral.common.annotation.LongName;
 import com.flowcentraltech.flowcentral.common.business.AbstractFlowCentralService;
 import com.flowcentraltech.flowcentral.common.business.ApplicationPrivilegeManager;
-import com.flowcentraltech.flowcentral.common.business.DirectEnvironmentDelegate;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentDelegate;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentDelegateHolder;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentDelegateRegistrar;
@@ -237,10 +236,8 @@ import com.tcdng.unify.core.annotation.Taskable;
 import com.tcdng.unify.core.annotation.Transactional;
 import com.tcdng.unify.core.constant.LocaleType;
 import com.tcdng.unify.core.constant.OrderType;
-import com.tcdng.unify.core.criterion.Amongst;
 import com.tcdng.unify.core.criterion.And;
 import com.tcdng.unify.core.criterion.Equals;
-import com.tcdng.unify.core.criterion.Or;
 import com.tcdng.unify.core.criterion.Restriction;
 import com.tcdng.unify.core.criterion.Update;
 import com.tcdng.unify.core.data.BeanValueStore;
@@ -2405,26 +2402,6 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             Class<T> componentClazz) throws UnifyException {
         return environment().valueList(Long.class, "id",
                 Query.of(componentClazz).addEquals("applicationName", applicationName)
-                        .addEquals("configType", ConfigType.CUSTOM).addOrder("id"));
-    }
-
-    @Override
-    public <T extends BaseApplicationEntity> List<Long> findExtensionEntityIdList(String applicationName)
-            throws UnifyException {
-        List<String> directDelegates = getComponentNames(DirectEnvironmentDelegate.class);
-        if (!DataUtils.isBlank(directDelegates)) {
-            return environment()
-                    .valueList(Long.class, "id",
-                            Query.of(AppEntity.class).addEquals("applicationName", applicationName)
-                                    .addRestriction(
-                                            new Or().add(new Equals("configType", ConfigType.CUSTOM))
-                                                    .add(new And().add(new Equals("configType", ConfigType.STATIC))
-                                                            .add(new Amongst("delegate", directDelegates))))
-                                    .addOrder("id"));
-        }
-
-        return environment().valueList(Long.class, "id",
-                Query.of(AppEntity.class).addEquals("applicationName", applicationName)
                         .addEquals("configType", ConfigType.CUSTOM).addOrder("id"));
     }
 
