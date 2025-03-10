@@ -436,8 +436,7 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
         }
 
         // Entities
-        List<Long> entityIdList = applicationModuleService.findCustomAppComponentIdList(applicationName,
-                AppEntity.class);
+        List<Long> entityIdList = applicationModuleService.findExtensionEntityIdList(applicationName);
         if (!DataUtils.isBlank(entityIdList)) {
             AppEntitiesConfig entitiesConfig = new AppEntitiesConfig();
             List<AppEntityConfig> entityList = new ArrayList<AppEntityConfig>();

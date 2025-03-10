@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.flowcentraltech.flowcentral.common.business.DirectEnvironmentDelegate;
 import com.flowcentraltech.flowcentral.connect.common.data.BaseResponse;
 import com.flowcentraltech.flowcentral.connect.common.data.DataSourceRequest;
 import com.tcdng.unify.common.data.DelegateEntityListingDTO;
@@ -37,7 +38,8 @@ import com.tcdng.unify.core.database.sql.SqlEntityInfo;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class AbstractDirectEnvironmentDelegate extends AbstractSynchronizableEnvironmentDelegate {
+public abstract class AbstractDirectEnvironmentDelegate extends AbstractSynchronizableEnvironmentDelegate
+        implements DirectEnvironmentDelegate {
 
     private final String dataSourceName;
 

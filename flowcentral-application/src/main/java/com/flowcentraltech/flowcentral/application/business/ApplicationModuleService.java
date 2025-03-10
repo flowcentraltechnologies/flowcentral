@@ -1122,6 +1122,18 @@ public interface ApplicationModuleService extends FlowCentralService {
             Class<T> componentClazz) throws UnifyException;
 
     /**
+     * Finds all extension entity IDs.
+     * 
+     * @param applicationName
+     *                        the application name
+     * @return list of application component IDs
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    <T extends BaseApplicationEntity> List<Long> findExtensionEntityIdList(String applicationName)
+            throws UnifyException;
+
+    /**
      * Gets application definition.
      * 
      * @param applicationId
