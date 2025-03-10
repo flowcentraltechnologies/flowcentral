@@ -70,6 +70,7 @@ import com.flowcentraltech.flowcentral.application.entities.AppWidgetType;
 import com.flowcentraltech.flowcentral.application.entities.Application;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.util.InputWidgetUtils;
+import com.flowcentraltech.flowcentral.common.constants.ConfigType;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldType;
 import com.flowcentraltech.flowcentral.configuration.constants.FormElementType;
 import com.flowcentraltech.flowcentral.configuration.constants.TabContentType;
@@ -142,6 +143,7 @@ import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.util.DataUtils;
+import com.tcdng.unify.core.util.StringUtils;
 
 /**
  * Application XML generator.
@@ -443,15 +445,19 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
             for (Long entityId : entityIdList) {
                 AppEntityConfig appEntityConfig = new AppEntityConfig();
                 AppEntity appEntity = applicationModuleService.findAppEntity(entityId);
+                final boolean isDirectDelegate = ConfigType.STATIC.equals(appEntity.getConfigType()) && !StringUtils.isBlank(appEntity.getDelegate());
                 descKey = getDescriptionKey(lowerCaseApplicationName, "entity", appEntity.getName());
                 labelKey = descKey + ".label";
                 final String entityDescKey = descKey;
                 ctx.addMessage(StaticMessageCategoryType.ENTITY, descKey, appEntity.getDescription());
                 ctx.addMessage(StaticMessageCategoryType.ENTITY, labelKey, appEntity.getLabel());
-                ctx.addEntity(ApplicationNameUtils.getApplicationEntityLongName(applicationName, appEntity.getName()));
-                appEntityConfig.setBaseType(ctx.isSnapshotMode() ? appEntity.getBaseType() : null);
+                if (!isDirectDelegate) {
+                    ctx.addEntity(ApplicationNameUtils.getApplicationEntityLongName(applicationName, appEntity.getName()));
+                }
+                
+                appEntityConfig.setBaseType(ctx.isSnapshotMode() || isDirectDelegate ? appEntity.getBaseType() : null);
                 appEntityConfig.setType(
-                        ctx.isSnapshotMode() ? appEntity.getEntityClass() : ctx.getExtensionEntityClassName(appEntity));
+                        ctx.isSnapshotMode() || isDirectDelegate ? appEntity.getEntityClass() : ctx.getExtensionEntityClassName(appEntity));
                 appEntityConfig.setName(appEntity.getName());
                 appEntityConfig.setDescription("$m{" + descKey + "}");
                 appEntityConfig.setLabel("$m{" + labelKey + "}");
