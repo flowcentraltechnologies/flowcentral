@@ -70,4 +70,12 @@ public final class ApplicationCodeGenUtils {
     public static String generateUtilitiesEntityWrapperPackageName(String basePackage, String moduleName) {
         return basePackage + ".utilities." + moduleName.toLowerCase() + ".entitywrappers";
     }
+    
+    public static boolean isCustomClass(Class<?> entityClass) {
+        return ApplicationCodeGenUtils.isCustomClass(entityClass.getName());
+    }
+    
+    public static boolean isCustomClass(String entityClass) {
+        return (entityClass.contains(".z.") && entityClass.endsWith("z")) || (entityClass.contains(".u.") && entityClass.endsWith("u"));
+    }
 }

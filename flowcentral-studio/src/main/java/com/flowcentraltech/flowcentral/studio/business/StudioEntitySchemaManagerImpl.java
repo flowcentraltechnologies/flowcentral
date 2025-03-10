@@ -112,7 +112,7 @@ public class StudioEntitySchemaManagerImpl extends AbstractEntitySchemaManager {
             final Long applicationId = au.application().getApplicationId(np.getApplicationName());
             appEntity = new AppEntity();
             appEntity.setApplicationId(applicationId);
-            appEntity.setConfigType(entitySchema.isDynamic() ? ConfigType.CUSTOM : ConfigType.STATIC);
+            appEntity.setConfigType(ConfigType.CUSTOM);
             appEntity.setBaseType(entitySchema.getBaseType());
             appEntity.setName(np.getEntityName());
             appEntity.setDescription(entitySchema.getDescription());
@@ -210,6 +210,7 @@ public class StudioEntitySchemaManagerImpl extends AbstractEntitySchemaManager {
             }
 
             appEntity.setBaseType(entitySchema.getBaseType());
+            appEntity.setConfigType(ConfigType.CUSTOM);
             final String entityClass = entitySchema.isDynamic()
                     ? ApplicationCodeGenUtils.generateCustomEntityClassName(ConfigType.CUSTOM, np.getApplicationName(),
                             np.getEntityName())
