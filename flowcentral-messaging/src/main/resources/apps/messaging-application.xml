@@ -49,7 +49,7 @@
 			description="$m{messaging.messagingreadconfig.manage}"
 			label="$m{messaging.messagingreadconfig.manage.label}" icon="mail"
 			type="manage_entitylist" entity="messagingReadConfig"
-			menuAccess="true">
+			menuAccess="false">
 			<property name="searchTable"
 				value="messagingReadConfigTable" />
 			<property name="searchTable.new" value="true" />
@@ -69,7 +69,7 @@
 			description="$m{messaging.messagingwriteconfig.manage}"
 			label="$m{messaging.messagingwriteconfig.manage.label}" icon="mail"
 			type="manage_entitylist" entity="messagingWriteConfig"
-			menuAccess="true">
+			menuAccess="false">
 			<property name="searchTable"
 				value="messagingWriteConfigTable" />
 			<property name="searchTable.new" value="true" />
