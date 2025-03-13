@@ -1257,7 +1257,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         return Collections.emptyList();
     }
 
-    @Periodic(PeriodicType.SLOW)
+    @Periodic(PeriodicType.NORMAL)
     public void sendWorkItemAlerts(TaskMonitor taskMonitor) throws UnifyException {
         if (tryGrabLock(WFITEMALERT_QUEUE_LOCK)) {
             try {
@@ -1346,7 +1346,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @SuppressWarnings("unchecked")
-    @Periodic(PeriodicType.FAST)
+    @Periodic(PeriodicType.FASTER)
     public void ejectDelayedWorkItem(TaskMonitor taskMonitor) throws UnifyException {
         logDebug("Ejecting delayed work items...");
         if (tryGrabLock(WFITEM_EJECTION_LOCK)) {
@@ -1435,7 +1435,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         }
     }
 
-    @Periodic(PeriodicType.FASTER)
+    @Periodic(PeriodicType.FASTEST)
     public void processWfTransitionQueueItems(TaskMonitor taskMonitor) throws UnifyException {
         logDebug("Processing transition queue items...");
         List<WfTransitionQueue> pendingList = null;
@@ -1477,7 +1477,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @SuppressWarnings("unchecked")
-    @Periodic(PeriodicType.SLOW)
+    @Periodic(PeriodicType.FASTER)
     public void processAutoloadingItems(TaskMonitor taskMonitor) throws UnifyException {
         if (appletUtil.system().getSysParameterValue(boolean.class,
                 WorkflowModuleSysParamConstants.WF_ENABLE_AUTOLOADING)) {

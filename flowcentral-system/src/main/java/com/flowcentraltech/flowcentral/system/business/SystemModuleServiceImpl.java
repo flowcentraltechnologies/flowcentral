@@ -509,7 +509,7 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
                 .getLicenseEntryDef(featureCode).getStatus();
     }
 
-    @Periodic(PeriodicType.EON)
+    @Periodic(PeriodicType.EXTREME_SLOW)
     public void refreshLicense(TaskMonitor taskMonitor) throws UnifyException {
         licenseDefFactoryMap.clear();
     }
@@ -603,7 +603,7 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
         return 0;
     }
 
-    @Periodic(PeriodicType.NORMAL)
+    @Periodic(PeriodicType.FAST)
     @Synchronized(lock = SCHEDULED_TASK_EXECUTION_LOCK, waitForLock = false)
     public void triggerScheduledTasksForExecution(TaskMonitor taskMonitor) throws UnifyException {
         // If periodic task is canceled or scheduler is disabled cancel all scheduled

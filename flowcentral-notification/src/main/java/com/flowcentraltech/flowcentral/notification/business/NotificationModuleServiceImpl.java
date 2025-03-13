@@ -432,7 +432,7 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
         }
     }
 
-    @Periodic(PeriodicType.NORMAL)
+    @Periodic(PeriodicType.FAST)
     public void sendNotifications(TaskMonitor taskMonitor) throws UnifyException {
         if (au.system().getSysParameterValue(boolean.class, NotificationModuleSysParamConstants.NOTIFICATION_ENABLED)
                 && tryGrabLock(SEND_NOTIFICATION_LOCK)) {
