@@ -21,6 +21,7 @@ import com.flowcentraltech.flowcentral.application.web.controllers.AppletWidgetR
 import com.flowcentraltech.flowcentral.studio.business.StudioModuleService;
 import com.flowcentraltech.flowcentral.studio.constants.StudioSessionAttributeConstants;
 import com.flowcentraltech.flowcentral.studio.web.panels.applet.StudioWorkflowApplet;
+import com.flowcentraltech.flowcentral.workflow.business.WorkflowModuleService;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -44,6 +45,9 @@ public class StudioWorkflowAppletController
     @Configurable
     private StudioModuleService studioModuleService;
 
+    @Configurable
+    private WorkflowModuleService workflowModuleService;
+
     public StudioWorkflowAppletController() {
         super(StudioWorkflowAppletPageBean.class, Secured.TRUE, ReadOnly.FALSE, ResetOnWrite.FALSE);
     }
@@ -65,7 +69,8 @@ public class StudioWorkflowAppletController
         if (pageBean.getApplet() == null) {
             AppletWidgetReferences appletWidgetReferences = getAppletWidgetReferences();
             EntityFormEventHandlers formEventHandlers = getEntityFormEventHandlers();
-            StudioWorkflowApplet applet = new StudioWorkflowApplet(getPage(), studioModuleService, au(), getPathVariables(),
+            StudioWorkflowApplet applet = new StudioWorkflowApplet(workflowModuleService, getPage(),
+                    studioModuleService, au(), getPathVariables(),
                     (String) getSessionAttribute(StudioSessionAttributeConstants.CURRENT_APPLICATION_NAME),
                     appletWidgetReferences, formEventHandlers);
             pageBean.setApplet(applet);

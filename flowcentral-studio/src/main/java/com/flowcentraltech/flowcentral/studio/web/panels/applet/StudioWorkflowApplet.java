@@ -25,6 +25,7 @@ import com.flowcentraltech.flowcentral.application.web.controllers.AppletWidgetR
 import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs;
 import com.flowcentraltech.flowcentral.studio.business.StudioModuleService;
 import com.flowcentraltech.flowcentral.studio.web.panels.WorkflowEditorPage;
+import com.flowcentraltech.flowcentral.workflow.business.WorkflowModuleService;
 import com.flowcentraltech.flowcentral.workflow.entities.Workflow;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.web.ui.widget.Page;
@@ -39,10 +40,14 @@ public class StudioWorkflowApplet extends StudioAppComponentApplet {
 
     private WorkflowEditorPage workflowEditorPage;
 
-    public StudioWorkflowApplet(Page page, StudioModuleService sms, AppletUtilities au, List<String> pathVariables,
-            String applicationName, AppletWidgetReferences appletWidgetReferences,
-            EntityFormEventHandlers formEventHandlers) throws UnifyException {
+    private final WorkflowModuleService workflowModuleService;
+
+    public StudioWorkflowApplet(WorkflowModuleService workflowModuleService, Page page, StudioModuleService sms,
+            AppletUtilities au, List<String> pathVariables, String applicationName,
+            AppletWidgetReferences appletWidgetReferences, EntityFormEventHandlers formEventHandlers)
+            throws UnifyException {
         super(page, sms, au, pathVariables, applicationName, appletWidgetReferences, formEventHandlers);
+        this.workflowModuleService = workflowModuleService;
     }
 
     public WorkflowEditorPage getWorkflowEditorPage() {
@@ -65,7 +70,7 @@ public class StudioWorkflowApplet extends StudioAppComponentApplet {
         EntityDef entityDef = getEntityDef(entityName);
         breadCrumbs.setLastCrumbTitle(au().resolveSessionMessage("$m{workfloweditor.workflowdesigner}"));
         breadCrumbs.setLastCrumbSubTitle(subTitle);
-        return new WorkflowEditorPage(au(), entityDef, workflowId, breadCrumbs);
+        return new WorkflowEditorPage(workflowModuleService, au(), entityDef, workflowId, breadCrumbs);
     }
 
 }

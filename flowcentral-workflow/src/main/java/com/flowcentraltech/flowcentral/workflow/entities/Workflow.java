@@ -49,6 +49,12 @@ public class Workflow extends BaseApplicationEntity {
     
     @Column
     private boolean supportMultiItemAction;
+    
+    @Column
+    private boolean published;
+    
+    @Column
+    private boolean runnable;
    
     @ChildList
     private List<WorkflowFilter> filterList;
@@ -81,6 +87,22 @@ public class Workflow extends BaseApplicationEntity {
 
     public void setLoadingTable(String loadingTable) {
         this.loadingTable = loadingTable;
+    }
+
+    public boolean isPublished() {
+        return published;
+    }
+
+    public void setPublished(boolean published) {
+        this.published = published;
+    }
+
+    public boolean isRunnable() {
+        return runnable;
+    }
+
+    public void setRunnable(boolean runnable) {
+        this.runnable = runnable;
     }
 
     public String getDescFormat() {

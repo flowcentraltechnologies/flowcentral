@@ -241,17 +241,20 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             {
 
                 @Override
-                protected boolean stale(String wfName, WfDef wfDef) throws Exception {
+                protected boolean stale(String longName, WfDef wfDef) throws Exception {
                     return isStale(new WorkflowQuery(), wfDef);
                 }
 
                 @Override
                 protected WfDef create(String longName, Object... arg1) throws Exception {
                     ApplicationEntityNameParts nameParts = ApplicationNameUtils.getApplicationEntityNameParts(longName);
-                    Workflow workflow = environment().list(new WorkflowQuery()
-                            .applicationName(nameParts.getApplicationName()).name(nameParts.getEntityName()));
+                    final String workflowName = !ApplicationNameUtils.isWorkflowCopyName(nameParts.getEntityName())
+                            ? WorkflowNameUtils.getWorkflowPublishedName(nameParts.getEntityName())
+                            : nameParts.getEntityName();
+                    Workflow workflow = environment().list(
+                            new WorkflowQuery().applicationName(nameParts.getApplicationName()).name(workflowName));
                     if (workflow == null) {
-                        throw new UnifyException(WorkflowModuleErrorConstants.CANNOT_FIND_APPLICATION_WORKFLOW,
+                        throw new UnifyException(WorkflowModuleErrorConstants.CANNOT_FIND_PUBLISHED_APPLICATION_WORKFLOW,
                                 longName);
                     }
 
@@ -522,6 +525,30 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
+    public void publishWorkflow(String workflowName) throws UnifyException {
+        ApplicationEntityNameParts anp = ApplicationNameUtils.getApplicationEntityNameParts(workflowName);
+        final String publishedName = WorkflowNameUtils.getWorkflowPublishedName(anp.getEntityName());
+        Workflow workflow = environment()
+                .find(new WorkflowQuery().applicationName(anp.getApplicationName()).name(anp.getEntityName()));
+        // TODO Validate if workflow is runnable
+        Workflow runWorkflow = environment()
+                .find(new WorkflowQuery().applicationName(anp.getApplicationName()).name(publishedName));
+        if (runWorkflow == null) {
+            workflow.setName(publishedName);
+            workflow.setPublished(true);
+            workflow.setRunnable(true);
+            environment().create(workflow);
+        } else {
+            runWorkflow.setFilterList(workflow.getFilterList());
+            runWorkflow.setSetValuesList(workflow.getSetValuesList());
+            runWorkflow.setStepList(workflow.getStepList());
+            runWorkflow.setPublished(true);
+            runWorkflow.setRunnable(true);
+            environment().updateByIdVersion(runWorkflow);
+        }
+    }
+
+    @Override
     public EntityActionResult submitToWorkflow(EntityDef entityDef, String workflowName, WorkEntity inst,
             String policyName) throws UnifyException {
         EntityActionContext ctx = new EntityActionContext(entityDef, inst, policyName);
@@ -598,6 +625,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             workflow.setEntity(entityDef.getLongName());
             workflow.setLoadingTable(appletWorkflowCopyInfo.getAppletSearchTable());
             workflow.setSupportMultiItemAction(true);
+            workflow.setPublished(true);
+            workflow.setRunnable(true);
             workflow.setDescFormat(null); // TODO
             workflow.setAppletVersionNo(appletWorkflowCopyInfo.getAppletVersionNo());
             workflow.setClassified(true);
@@ -612,6 +641,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                 workflow.setLabel(workflowLabel);
                 workflow.setLoadingTable(appletWorkflowCopyInfo.getAppletSearchTable());
                 workflow.setSupportMultiItemAction(true);
+                workflow.setPublished(true);
+                workflow.setRunnable(true);
                 workflow.setClassified(true);
                 final List<WfStep> stepList = generateWorkflowSteps(designType, stepLabel, appletWorkflowCopyInfo);
                 keepAlreadyAssignedRoles(wnp.getApplicationName(), wnp.getEntityName(), stepList);

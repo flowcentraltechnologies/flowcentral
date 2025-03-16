@@ -32,6 +32,7 @@
 
 !ui-panel:headerRightPanel style:$s{display:inline-block; float:right;}
 	layout:$d{!ui-horizontal cellType:middle cellStyle:$s{padding-right:8px;}}
+	components:$f{preMoreActionButtons}
 	components:$c{saveBtn}
 	components:$f{moreActionButtons}
 

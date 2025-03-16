@@ -17,11 +17,15 @@
 
 // Workflow Editor Page
 !fc-workfloweditorpagepanel:workflowEditorPagePanel binding:workflowEditorPage
+	preMoreActionButtons:$c{publishBtn}
 	moreActionButtons:$c{saveDesignCloseBtn closeDesignBtn}
+!ui-button:publishBtn caption:$m{button.publish}
+	eventHandler:$d{!ui-event event:onclick action:$c{publishAct}}
 !ui-button:saveDesignCloseBtn caption:$m{button.saveclose}
 	eventHandler:$d{!ui-event event:onclick action:$c{saveDesignCloseAct}}
 !ui-button:closeDesignBtn caption:$m{button.close}
 	eventHandler:$d{!ui-event event:onclick action:$c{navBackAct}}
 
 // Actions
+!ui-postcommand:publishAct command:publish
 !ui-postcommand:saveDesignCloseAct command:saveDesignAndClose components:$c{workflowEditorPagePanel}

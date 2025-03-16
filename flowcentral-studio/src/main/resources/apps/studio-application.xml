@@ -5903,6 +5903,10 @@
 				description="$m{studio.common.form.action.unlockresource}"
 				label="$m{studio.common.form.action.unlockresource.label}"
 				policy="unlockresource-actionpolicy" showOnMaintain="true" />
+			<action type="button" name="publish" highlight="ORANGE"
+				description="$m{workflow.workflow.form.action.publish}"
+				label="$m{workflow.workflow.form.action.publish.label}"
+				policy="wfpublish-actionpolicy" showOnMaintain="true" />
 			<annotation name="staticAnnotation"
 				description="$m{studio.common.form.annotation.static}"
 				message="$m{studio.common.form.annotation.static.message}" />

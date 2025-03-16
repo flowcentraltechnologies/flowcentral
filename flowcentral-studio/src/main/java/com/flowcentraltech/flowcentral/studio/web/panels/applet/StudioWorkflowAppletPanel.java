@@ -72,6 +72,14 @@ public class StudioWorkflowAppletPanel extends StudioAppComponentAppletPanel {
     }
 
     @Action
+    public void publish() throws UnifyException {
+        StudioWorkflowApplet applet = getValue(StudioWorkflowApplet.class);
+        WorkflowEditorPage workflowEditorPage = applet.getWorkflowEditorPage();
+        workflowEditorPage.publish();
+        hintUser("$m{studioworkflowapplet.workfloweditor.publish.hint}", workflowEditorPage.getSubTitle());
+    }
+
+    @Action
     public void saveDesignAndClose() throws UnifyException {
         StudioWorkflowApplet applet = getValue(StudioWorkflowApplet.class);
         WorkflowEditorPage workflowEditorPage = applet.getWorkflowEditorPage();

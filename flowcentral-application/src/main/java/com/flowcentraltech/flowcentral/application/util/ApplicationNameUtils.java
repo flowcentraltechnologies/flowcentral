@@ -181,6 +181,12 @@ public final class ApplicationNameUtils {
         return getApplicationEntityLongName(applicationName, loadingTableName + WORKFLOW_LOADING_APPLET_NAME_SUFFIX);
     }
 
+    public static boolean isWorkflowCopyName(String workflowName) {
+        return workflowName.endsWith(WORKFLOW_COPY_CREATE_WORKFLOW_NAME_SUFFIX)
+                || workflowName.endsWith(WORKFLOW_COPY_UPDATE_WORKFLOW_NAME_SUFFIX)
+                || workflowName.endsWith(WORKFLOW_COPY_DELETE_WORKFLOW_NAME_SUFFIX);
+    }
+    
     public static String getWorkflowCopyCreateWorkflowName(String appletName) {
         return appletName + WORKFLOW_COPY_CREATE_WORKFLOW_NAME_SUFFIX;
     }
