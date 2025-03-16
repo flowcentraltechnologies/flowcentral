@@ -41,4 +41,8 @@ public class WorkflowQuery extends BaseApplicationEntityQuery<Workflow> {
         return (WorkflowQuery) addIsNotNull("loadingTable");
     }
 
+    public WorkflowQuery runnable() {
+        return (WorkflowQuery) addEquals("runnable", true);
+    }
+
 }

@@ -41,9 +41,13 @@ public class WfStepRoleQuery extends BaseEntityQuery<WfStepRole> {
     public WfStepRoleQuery wfStepName(String wfStepName) {
         return (WfStepRoleQuery) addEquals("wfStepName", wfStepName);
     }
-
+    
     public WfStepRoleQuery workflowName(String workflowName) {
         return (WfStepRoleQuery) addEquals("workflowName", workflowName);
+    }
+    
+    public WfStepRoleQuery workflowRunnable(boolean workflowRunnable) {
+        return (WfStepRoleQuery) addEquals("workflowRunnable", workflowRunnable);
     }
     
     public WfStepRoleQuery wfStepId(Long wfStepId) {

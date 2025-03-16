@@ -301,7 +301,12 @@
 		<widgetType name="javafieldname" listOption="true"
 			description="$m{application.widgettype.javafieldname}"
 			dataType="string" inputType="string"
-			editor="!ui-name minLen:%s maxLen:%s trim:%s underscore:true dollar:true"
+			editor="!ui-name minLen:%s maxLen:%s trim:%s underscore:true dollar:true case:CAMEL"
+			renderer="!ui-label" />
+		<widgetType name="componentname" listOption="true"
+			description="$m{application.widgettype.componentname}"
+			dataType="string" inputType="string"
+			editor="!ui-name minLen:%s maxLen:%s trim:true case:CAMEL"
 			renderer="!ui-label" />
 		<widgetType name="path" listOption="true"
 			description="$m{application.widgettype.path}"

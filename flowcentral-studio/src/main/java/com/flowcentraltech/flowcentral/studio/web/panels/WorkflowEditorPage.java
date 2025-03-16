@@ -77,7 +77,6 @@ public class WorkflowEditorPage extends AbstractStudioEditorPage {
                 workflow.getName());
         workflowModuleService.publishWorkflow(workflowName);
         workflow.setPublished(true);
-        workflow.setRunnable(false);
         getAu().environment().updateByIdVersion(workflow);
     }
 
