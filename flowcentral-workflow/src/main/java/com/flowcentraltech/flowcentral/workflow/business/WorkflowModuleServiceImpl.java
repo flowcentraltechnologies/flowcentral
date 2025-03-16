@@ -249,8 +249,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                 protected WfDef create(String longName, Object... arg1) throws Exception {
                     ApplicationEntityNameParts nameParts = ApplicationNameUtils.getApplicationEntityNameParts(longName);
                     final String workflowName = WorkflowNameUtils.getWorkflowRunnableName(nameParts.getEntityName());
-                    Workflow workflow = environment().list(
-                            new WorkflowQuery().runnable().applicationName(nameParts.getApplicationName()).name(workflowName));
+                    Workflow workflow = environment().list(new WorkflowQuery().runnable()
+                            .applicationName(nameParts.getApplicationName()).name(workflowName));
                     if (workflow == null) {
                         throw new UnifyException(WorkflowModuleErrorConstants.CANNOT_FIND_RUNNABLE_APPLICATION_WORKFLOW,
                                 longName);
@@ -488,8 +488,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
 
     @Override
     public void backupApplicationRolePrivileges(Long applicationId) throws UnifyException {
-        List<WfStepRole> wfStepRoleList = environment().listAll(new WfStepRoleQuery().workflowRunnable(true).applicationId(applicationId)
-                .addSelect("roleCode", "wfStepName", "workflowName", "applicationName"));
+        List<WfStepRole> wfStepRoleList = environment().listAll(new WfStepRoleQuery().workflowRunnable(true)
+                .applicationId(applicationId).addSelect("roleCode", "wfStepName", "workflowName", "applicationName"));
         for (WfStepRole wfStepRole : wfStepRoleList) {
             Set<WfStepInfo> wfStepInfos = roleWfStepBackup.get(wfStepRole.getRoleCode());
             if (wfStepInfos == null) {
@@ -664,7 +664,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
     @Override
     public void ensureWorkflowUserInteractionLoadingApplets(boolean forceUpdate) throws UnifyException {
         final Set<String> loadingTableNameList = environment().valueSet(String.class, "loadingTable",
-                new WorkflowQuery().isWithLoadingTable());
+                new WorkflowQuery().runnable().isWithLoadingTable());
         for (String loadingTableName : loadingTableNameList) {
             ensureWorkflowUserInteractionLoadingApplet(loadingTableName, forceUpdate);
         }
@@ -868,7 +868,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
 
     @Override
     public int countWorkflowLoadingTableInfoByRole(String roleCode) throws UnifyException {
-        return StringUtils.isBlank(roleCode) ? environment().countAll(new WorkflowQuery().isWithLoadingTable())
+        return StringUtils.isBlank(roleCode) ? environment().countAll(new WorkflowQuery().runnable().isWithLoadingTable())
                 : environment().countAll(new WfStepRoleQuery().workflowRunnable(true)
                         .wfStepTypeIn(USER_INTERACTIVE_STEP_TYPES).roleCode(roleCode).isWithLoadingTable());
     }
@@ -933,9 +933,9 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
     private List<WorkflowStepInfo> findWorkflowLoadingStepInfoByRole(WorkflowStepType type, String loadingTableName,
             String roleCode, String branchCode, String departmentCode) throws UnifyException {
         if (StringUtils.isBlank(roleCode)) {
-            List<WfStep> wfStepList = environment().listAll(
-                    new WfStepQuery().workflowLoadingTable(loadingTableName).type(type).addSelect("name", "description",
-                            "label", "entityName", "applicationName", "workflowName", "branchOnly", "departmentOnly"));
+            List<WfStep> wfStepList = environment().listAll(new WfStepQuery().workflowRunnable(true)
+                    .workflowLoadingTable(loadingTableName).type(type).addSelect("name", "description", "label",
+                            "entityName", "applicationName", "workflowName", "branchOnly", "departmentOnly"));
             if (!DataUtils.isBlank(wfStepList)) {
                 List<WorkflowStepInfo> workflowStepInfoList = new ArrayList<WorkflowStepInfo>();
                 for (WfStep wfStep : wfStepList) {
@@ -1411,7 +1411,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                     ejected.add(wfItemId);
                 }
 
-                List<WfStep> stepList = environment().listAll(new WfStepQuery().withEjectionRestriction()
+                List<WfStep> stepList = environment().listAll(new WfStepQuery().workflowRunnable(true)
+                        .withEjectionRestriction()
                         .addSelect("applicationName", "workflowName", "name", "ejectionRestriction").setDistinct(true));
                 for (WfStep wfStep : stepList) {
                     final String workflowName = ApplicationNameUtils
@@ -1521,8 +1522,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                     final Date now = getNow();
                     final int batchSize = appletUtil.system().getSysParameterValue(int.class,
                             WorkflowModuleSysParamConstants.WF_AUTOLOADING_BATCH_SIZE);
-                    List<WfStep> autoLoadStepList = environment().listAll(new WfStepQuery().supportsAutoload()
-                            .addSelect("applicationName", "workflowName", "autoLoadConditionName"));
+                    List<WfStep> autoLoadStepList = environment().listAll(new WfStepQuery().workflowRunnable(true)
+                            .supportsAutoload().addSelect("applicationName", "workflowName", "autoLoadConditionName"));
                     logDebug("[{0}] steps detected with auto loading...", autoLoadStepList.size());
                     for (WfStep wfStep : autoLoadStepList) {
                         String workflowName = ApplicationNameUtils
