@@ -528,16 +528,19 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         final String runnableName = WorkflowNameUtils.getWorkflowRunnableName(anp.getEntityName());
         Workflow workflow = environment()
                 .find(new WorkflowQuery().applicationName(anp.getApplicationName()).name(anp.getEntityName()));
+        final String runnableDesc = WorkflowNameUtils.getWorkflowRunnableDescription(workflow.getDescription());
         // TODO Validate if workflow is runnable
         Workflow runWorkflow = environment()
                 .find(new WorkflowQuery().applicationName(anp.getApplicationName()).name(runnableName));
         if (runWorkflow == null) {
             workflow.setName(runnableName);
+            workflow.setDescription(runnableDesc);
             workflow.setPublished(false);
             workflow.setRunnable(true);
             workflow.setClassified(true);
             environment().create(workflow);
         } else {
+            runWorkflow.setDescription(runnableDesc);
             runWorkflow.setFilterList(workflow.getFilterList());
             runWorkflow.setSetValuesList(workflow.getSetValuesList());
             runWorkflow.setStepList(workflow.getStepList());
