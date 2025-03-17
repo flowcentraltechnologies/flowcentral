@@ -19,7 +19,7 @@
 !fc-workfloweditorpagepanel:workflowEditorPagePanel binding:workflowEditorPage
 	preMoreActionButtons:$c{publishBtn}
 	moreActionButtons:$c{saveDesignCloseBtn closeDesignBtn}
-!ui-button:publishBtn caption:$m{button.publish}
+!ui-button:publishBtn styleClass:$e{fc-orangebutton} caption:$m{button.publish}
 	eventHandler:$d{!ui-event event:onclick action:$c{publishAct}}
 !ui-button:saveDesignCloseBtn caption:$m{button.saveclose}
 	eventHandler:$d{!ui-event event:onclick action:$c{saveDesignCloseAct}}

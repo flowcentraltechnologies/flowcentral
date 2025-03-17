@@ -32,6 +32,7 @@ import com.flowcentraltech.flowcentral.studio.web.widgets.WorkflowEditor.DesignW
 import com.flowcentraltech.flowcentral.workflow.business.WorkflowModuleService;
 import com.flowcentraltech.flowcentral.workflow.entities.WfStep;
 import com.flowcentraltech.flowcentral.workflow.entities.Workflow;
+import com.flowcentraltech.flowcentral.workflow.entities.WorkflowQuery;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.database.Query;
 
@@ -71,13 +72,15 @@ public class WorkflowEditorPage extends AbstractStudioEditorPage {
         return workflowEditor;
     }
 
+    public boolean isPublished() throws UnifyException {
+        return getAu().environment().value(boolean.class, "published", new WorkflowQuery().id(workflowId));
+    }
+    
     public void publish() throws UnifyException {
-        Workflow workflow = getAu().environment().find(Workflow.class, workflowId);
+        Workflow workflow = getAu().environment().listLean(Workflow.class, workflowId);
         final String workflowName = ApplicationNameUtils.getApplicationEntityLongName(workflow.getApplicationName(),
                 workflow.getName());
         workflowModuleService.publishWorkflow(workflowName);
-        workflow.setPublished(true);
-        getAu().environment().updateByIdVersion(workflow);
     }
 
     public void commitDesign() throws UnifyException {

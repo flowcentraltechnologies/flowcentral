@@ -256,6 +256,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                                 longName);
                     }
 
+                    longName = ApplicationNameUtils.getApplicationEntityLongName(nameParts.getApplicationName(),
+                            workflowName);
                     List<StringToken> descFormat = !StringUtils.isBlank(workflow.getDescFormat())
                             ? StringUtils.breakdownParameterizedString(workflow.getDescFormat())
                             : Collections.emptyList();
@@ -526,8 +528,9 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
     public void publishWorkflow(String workflowName) throws UnifyException {
         ApplicationEntityNameParts anp = ApplicationNameUtils.getApplicationEntityNameParts(workflowName);
         final String runnableName = WorkflowNameUtils.getWorkflowRunnableName(anp.getEntityName());
-        Workflow workflow = environment()
+        final Workflow workflow = environment()
                 .find(new WorkflowQuery().applicationName(anp.getApplicationName()).name(anp.getEntityName()));
+        final Long workflowId = workflow.getId();
         final String runnableDesc = WorkflowNameUtils.getWorkflowRunnableDescription(workflow.getDescription());
         // TODO Validate if workflow is runnable
         Workflow runWorkflow = environment()
@@ -549,6 +552,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             runWorkflow.setClassified(true);
             environment().updateByIdVersion(runWorkflow);
         }
+        
+        environment().updateById(Workflow.class, workflowId, new Update().add("published", true));
     }
 
     @Override
@@ -871,7 +876,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
 
     @Override
     public int countWorkflowLoadingTableInfoByRole(String roleCode) throws UnifyException {
-        return StringUtils.isBlank(roleCode) ? environment().countAll(new WorkflowQuery().runnable().isWithLoadingTable())
+        return StringUtils.isBlank(roleCode)
+                ? environment().countAll(new WorkflowQuery().runnable().isWithLoadingTable())
                 : environment().countAll(new WfStepRoleQuery().workflowRunnable(true)
                         .wfStepTypeIn(USER_INTERACTIVE_STEP_TYPES).roleCode(roleCode).isWithLoadingTable());
     }

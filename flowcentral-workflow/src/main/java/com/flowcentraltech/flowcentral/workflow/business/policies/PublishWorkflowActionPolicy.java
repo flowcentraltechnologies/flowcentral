@@ -43,7 +43,7 @@ public class PublishWorkflowActionPolicy extends AbstractFormActionPolicy {
 
     @Override
     public boolean checkAppliesTo(Entity inst) throws UnifyException {
-        return true;
+        return !((Workflow) inst).isPublished();
     }
 
     @Override
@@ -58,6 +58,7 @@ public class PublishWorkflowActionPolicy extends AbstractFormActionPolicy {
         final String workflowName = ApplicationNameUtils.getApplicationEntityLongName(workflow.getApplicationName(),
                 workflow.getName());
         workflowModuleService.publishWorkflow(workflowName);
+        workflow.setPublished(true);
         return null;
     }
 
