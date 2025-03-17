@@ -40,7 +40,8 @@ public class MappedWorkflowListCommand extends AbstractOrganizationListCommand<Z
 
     @Override
     public List<? extends Listable> execute(Locale locale, ZeroParams params) throws UnifyException {
-        return environment().findAll(new MappedWorkflowQuery().addOrder("description").ignoreEmptyCriteria(true));
+        return environment()
+                .findAll(new MappedWorkflowQuery().runnable().addOrder("description").ignoreEmptyCriteria(true));
     }
 
 }

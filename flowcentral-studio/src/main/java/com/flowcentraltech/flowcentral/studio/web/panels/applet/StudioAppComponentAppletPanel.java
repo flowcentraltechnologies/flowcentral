@@ -35,7 +35,6 @@ public class StudioAppComponentAppletPanel extends AbstractEntityFormAppletPanel
         super.switchState();
 
         final StudioAppComponentApplet applet = getValue(StudioAppComponentApplet.class);
-        ;
         final boolean isRootForm = applet.isRootForm();
         if (isRootForm) {
             setVisible("prevBtn", false);

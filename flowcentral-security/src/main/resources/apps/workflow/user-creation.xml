@@ -2,7 +2,7 @@
 <!-- User Creation Workflow -->
 <workflow name="userCreation"
 	description="$m{security.workflow.usercreation}"
-	label="$m{security.workflow.usercreation.label}" entity="user">
+	label="$m{security.workflow.usercreation.label}" entity="user" published="true" runnable="true">
 	<steps>
 		<step type="start" name="start"
 			description="$m{security.workflow.usercreation.step.start}"

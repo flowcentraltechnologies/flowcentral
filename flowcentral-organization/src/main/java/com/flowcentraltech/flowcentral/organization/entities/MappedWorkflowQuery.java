@@ -29,4 +29,7 @@ public class MappedWorkflowQuery extends BaseApplicationEntityQuery<MappedWorkfl
         super(MappedWorkflow.class);
     }
 
+    public MappedWorkflowQuery runnable() {
+        return (MappedWorkflowQuery) addEquals("runnable", true);
+    }
 }

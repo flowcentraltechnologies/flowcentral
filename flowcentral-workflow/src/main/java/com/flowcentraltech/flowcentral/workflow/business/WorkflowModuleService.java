@@ -50,6 +50,16 @@ import com.tcdng.unify.core.UnifyException;
 public interface WorkflowModuleService extends FlowCentralService, ApplicationWorkItemUtilities {
 
     /**
+     * Publishes a workflow.
+     * 
+     * @param workflowName
+     *                     the workflow name
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    void publishWorkflow(String workflowName) throws UnifyException;
+
+    /**
      * Submit work entity instance to workflow by name.
      * 
      * @param workflowName

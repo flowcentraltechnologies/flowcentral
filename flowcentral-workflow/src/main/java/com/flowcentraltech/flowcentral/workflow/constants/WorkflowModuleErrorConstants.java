@@ -24,7 +24,7 @@ package com.flowcentraltech.flowcentral.workflow.constants;
 public interface WorkflowModuleErrorConstants {
 
     /** Can not find workflow {0}. */
-    String CANNOT_FIND_APPLICATION_WORKFLOW = "WORKFLOW_0001";
+    String CANNOT_FIND_RUNNABLE_APPLICATION_WORKFLOW = "WORKFLOW_0001";
 
     /**
      * Can not submit incompatible instance type {0} to workflow {1} in application

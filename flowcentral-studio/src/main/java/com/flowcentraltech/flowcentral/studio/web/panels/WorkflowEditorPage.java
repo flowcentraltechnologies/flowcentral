@@ -23,13 +23,16 @@ import java.util.Map;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
+import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs;
 import com.flowcentraltech.flowcentral.configuration.constants.WorkflowStepType;
 import com.flowcentraltech.flowcentral.studio.web.widgets.WorkflowEditor;
 import com.flowcentraltech.flowcentral.studio.web.widgets.WorkflowEditor.DesignWfStep;
 import com.flowcentraltech.flowcentral.studio.web.widgets.WorkflowEditor.DesignWfStepRouting;
+import com.flowcentraltech.flowcentral.workflow.business.WorkflowModuleService;
 import com.flowcentraltech.flowcentral.workflow.entities.WfStep;
 import com.flowcentraltech.flowcentral.workflow.entities.Workflow;
+import com.flowcentraltech.flowcentral.workflow.entities.WorkflowQuery;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.database.Query;
 
@@ -47,9 +50,12 @@ public class WorkflowEditorPage extends AbstractStudioEditorPage {
 
     private WorkflowEditor workflowEditor;
 
-    public WorkflowEditorPage(AppletUtilities au, EntityDef entityDef, Long workflowId,
-            BreadCrumbs breadCrumbs) {
+    private WorkflowModuleService workflowModuleService;
+    
+    public WorkflowEditorPage(WorkflowModuleService workflowModuleService, AppletUtilities au, EntityDef entityDef,
+            Long workflowId, BreadCrumbs breadCrumbs) {
         super(au, breadCrumbs);
+        this.workflowModuleService = workflowModuleService;
         this.entityDef = entityDef;
         this.workflowId = workflowId;
     }
@@ -64,6 +70,17 @@ public class WorkflowEditorPage extends AbstractStudioEditorPage {
 
     public WorkflowEditor getWorkflowEditor() {
         return workflowEditor;
+    }
+
+    public boolean isPublished() throws UnifyException {
+        return getAu().environment().value(boolean.class, "published", new WorkflowQuery().id(workflowId));
+    }
+    
+    public void publish() throws UnifyException {
+        Workflow workflow = getAu().environment().listLean(Workflow.class, workflowId);
+        final String workflowName = ApplicationNameUtils.getApplicationEntityLongName(workflow.getApplicationName(),
+                workflow.getName());
+        workflowModuleService.publishWorkflow(workflowName);
     }
 
     public void commitDesign() throws UnifyException {

@@ -22,6 +22,7 @@ import com.flowcentraltech.flowcentral.application.entities.BaseApplicationEntit
 import com.tcdng.unify.common.annotation.Table;
 import com.tcdng.unify.core.annotation.ChildList;
 import com.tcdng.unify.core.annotation.Column;
+import com.tcdng.unify.core.annotation.Policy;
 
 /**
  * Workflow entity.
@@ -29,6 +30,7 @@ import com.tcdng.unify.core.annotation.Column;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
+@Policy("workflowpolicy")
 @Table(name = "FC_WORKFLOW")
 public class Workflow extends BaseApplicationEntity {
 
@@ -49,6 +51,12 @@ public class Workflow extends BaseApplicationEntity {
     
     @Column
     private boolean supportMultiItemAction;
+    
+    @Column
+    private boolean published;
+    
+    @Column
+    private boolean runnable;
    
     @ChildList
     private List<WorkflowFilter> filterList;
@@ -81,6 +89,22 @@ public class Workflow extends BaseApplicationEntity {
 
     public void setLoadingTable(String loadingTable) {
         this.loadingTable = loadingTable;
+    }
+
+    public boolean isPublished() {
+        return published;
+    }
+
+    public void setPublished(boolean published) {
+        this.published = published;
+    }
+
+    public boolean isRunnable() {
+        return runnable;
+    }
+
+    public void setRunnable(boolean runnable) {
+        this.runnable = runnable;
     }
 
     public String getDescFormat() {

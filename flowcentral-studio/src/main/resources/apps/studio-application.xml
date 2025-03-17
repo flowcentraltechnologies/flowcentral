@@ -2625,7 +2625,7 @@
 						saveAs="true" />
 					<field name="type" inputWidget="applettypelist" column="0"
 						disabled="true" switchOnChange="true" required="true" />
-					<field name="name" inputWidget="application.name" column="0"
+					<field name="name" inputWidget="application.componentname" column="0"
 						required="true" saveAs="true" />
 					<field name="description" inputWidget="application.text"
 						column="0" required="true" saveAs="true" />
@@ -2848,7 +2848,7 @@
 				label="$m{studio.appappletfilter.form.basicdetails}"
 				contentType="miniform">
 				<section name="filterDetails" columns="type_2">
-					<field name="name" inputWidget="application.name" column="0"
+					<field name="name" inputWidget="application.componentname" column="0"
 						required="true" />
 					<field name="description" inputWidget="application.text"
 						column="0" required="true" />
@@ -2898,7 +2898,7 @@
 				label="$m{studio.appappletsetvalues.form.basicdetails}"
 				contentType="miniform">
 				<section name="setValuesDetails" columns="type_2">
-					<field name="name" inputWidget="application.name" column="0"
+					<field name="name" inputWidget="application.componentname" column="0"
 						required="true" />
 					<field name="description" inputWidget="application.text"
 						column="0" required="true" />
@@ -2920,7 +2920,7 @@
 				label="$m{studio.appappletalert.form.basicdetails}"
 				contentType="miniform">
 				<section name="setVaalertDetails" columns="type_2">
-					<field name="name" inputWidget="application.name" column="0"
+					<field name="name" inputWidget="application.componentname" column="0"
 						required="true" />
 					<field name="description" inputWidget="application.text"
 						column="0" required="true" />
@@ -2970,7 +2970,7 @@
 						label="$m{studio.application}" disabled="true"
 						required="true"
 						saveAs="true" />
-					<field name="name" inputWidget="application.name" column="0"
+					<field name="name" inputWidget="application.componentname" column="0"
 						required="true" switchOnChange="true" saveAs="true" />
 					<field name="description" inputWidget="application.text"
 						column="0" required="true" saveAs="true" />
@@ -3478,7 +3478,7 @@
 						label="$m{application.appentityseries.appentity}"
 						column="0"
 						required="true" />
-					<field name="name" inputWidget="application.name" column="0"
+					<field name="name" inputWidget="application.componentname" column="0"
 						required="true" />
 					<field name="description" inputWidget="application.text"
 						column="0" required="true" />
@@ -3508,7 +3508,7 @@
 						label="$m{application.appentitycategory.appentity}"
 						column="0"
 						required="true" />
-					<field name="name" inputWidget="application.name" column="0"
+					<field name="name" inputWidget="application.componentname" column="0"
 						required="true" />
 					<field name="description" inputWidget="application.text"
 						column="0" required="true" />
@@ -3538,7 +3538,7 @@
 						label="$m{application.appentityattachment.appentity}"
 						column="0"
 						required="true" />
-					<field name="name" column="0" required="true" />
+					<field name="name" inputWidget="application.componentname" column="0" required="true" />
 					<field name="description" column="0" required="true" />
 					<field name="configType" inputWidget="application.enumlist"
 						column="1" disabled="true" required="true" />
@@ -3576,7 +3576,7 @@
 						label="$m{application.appentityexpression.appentity}"
 						column="0"
 						required="true" />
-					<field name="name" column="0" required="true" />
+					<field name="name" inputWidget="application.componentname" column="0" required="true" />
 					<field name="description" column="0" required="true" />
 					<field name="configType" inputWidget="application.enumlist"
 						column="1" disabled="true" required="true" />
@@ -3614,7 +3614,7 @@
 						inputWidget="application.entitysearch"
 						label="$m{application.appentityuniqueconstraint.appentity}"
 						column="0" required="true" />
-					<field name="name" column="0" required="true" />
+					<field name="name" inputWidget="application.componentname" column="0" required="true" />
 					<field name="description" column="0" required="true" />
 					<field name="configType" inputWidget="application.enumlist"
 						column="1" disabled="true" required="true" />
@@ -3654,7 +3654,7 @@
 						label="$m{application.appentityindex.appentity}"
 						column="0"
 						required="true" />
-					<field name="name" column="0" required="true" />
+					<field name="name" inputWidget="application.componentname" column="0" required="true" />
 					<field name="description" column="0" required="true" />
 					<field name="configType" inputWidget="application.enumlist"
 						column="1" disabled="true" required="true" />
@@ -3694,7 +3694,7 @@
 						label="$m{application.appentityupload.appentity}"
 						column="0"
 						required="true" />
-					<field name="name" column="0" required="true" />
+					<field name="name" inputWidget="application.componentname" column="0" required="true" />
 					<field name="description" column="0" required="true" />
 					<field name="configType" inputWidget="application.enumlist"
 						column="1" disabled="true" required="true" />
@@ -3732,7 +3732,7 @@
 						label="$m{application.appentitysearchinput.appentity}"
 						column="0"
 						required="true" />
-					<field name="name" inputWidget="application.name" column="0"
+					<field name="name" inputWidget="application.componentname" column="0"
 						required="true" />
 					<field name="description" inputWidget="application.text"
 						column="0" required="true" />
@@ -3775,7 +3775,7 @@
 						label="$m{studio.application}" disabled="true"
 						required="true"
 						saveAs="true" />
-					<field name="name" inputWidget="application.name" column="0"
+					<field name="name" inputWidget="application.componentname" column="0"
 						required="true" saveAs="true" />
 					<field name="description" inputWidget="application.text"
 						column="1" required="true" saveAs="true" />
@@ -3830,7 +3830,7 @@
 						label="$m{studio.application}" disabled="true"
 						required="true"
 						saveAs="true" />
-					<field name="name" inputWidget="application.name" column="0"
+					<field name="name" inputWidget="application.componentname" column="0"
 						required="true" saveAs="true" />
 					<field name="description" inputWidget="application.text"
 						column="0" required="true" saveAs="true" />
@@ -3988,7 +3988,7 @@
 						label="$m{studio.application}" disabled="true"
 						required="true"
 						saveAs="true" />
-					<field name="name" inputWidget="application.name" column="0"
+					<field name="name" inputWidget="application.componentname" column="0"
 						required="true" saveAs="true" />
 					<field name="description" inputWidget="application.text"
 						column="0" required="true" saveAs="true" />
@@ -4127,7 +4127,7 @@
 						label="$m{studio.application}" disabled="true"
 						required="true"
 						saveAs="true" />
-					<field name="name" inputWidget="application.name" column="0"
+					<field name="name" inputWidget="application.componentname" column="0"
 						required="true" saveAs="true" />
 					<field name="description" inputWidget="application.text"
 						column="0" required="true" saveAs="true" />
@@ -4228,7 +4228,7 @@
 						label="$m{studio.application}" disabled="true"
 						required="true"
 						saveAs="true" />
-					<field name="name" inputWidget="application.name" column="0"
+					<field name="name" inputWidget="application.componentname" column="0"
 						required="true" saveAs="true" />
 					<field name="description" inputWidget="application.text"
 						column="0" required="true" saveAs="true" />
@@ -4291,7 +4291,7 @@
 						inputWidget="application.entitysearch" column="0"
 						label="$m{dashboard.dashboardtile.dashboard}"
 						required="true" />
-					<field name="name" column="0" required="true" />
+					<field name="name" inputWidget="application.componentname"  column="0" required="true" />
 					<field name="description" column="0" required="true" />
 					<field name="type" column="1" required="true" />
 					<field name="chart" column="1" required="true" />
@@ -4313,7 +4313,7 @@
 						inputWidget="application.entitysearch" column="0"
 						label="$m{dashboard.dashboardoption.dashboard}"
 						required="true" />
-					<field name="name" column="0" required="true" />
+					<field name="name" inputWidget="application.componentname"  column="0" required="true" />
 					<field name="description" column="0" required="true" />
 					<field name="label" column="1" required="true" />
 				</section>
@@ -4381,7 +4381,7 @@
 						label="$m{studio.application}" disabled="true"
 						required="true"
 						saveAs="true" />
-					<field name="name" inputWidget="application.name" column="0"
+					<field name="name" inputWidget="application.componentname" column="0"
 						required="true" saveAs="true" />
 					<field name="description" inputWidget="application.text"
 						column="0" required="true" saveAs="true" />
@@ -4487,7 +4487,7 @@
 				label="$m{studio.notificationtemplateparam.form.basicdetails}"
 				contentType="miniform" editable="true">
 				<section name="templateParamDetails" columns="type_2">
-					<field name="name" inputWidget="application.name" column="0"
+					<field name="name" inputWidget="application.componentname" column="0"
 						required="true" />
 					<field name="label" inputWidget="application.text"
 						column="1"
@@ -4523,7 +4523,7 @@
 						label="$m{studio.application}" disabled="true"
 						required="true"
 						saveAs="true" />
-					<field name="name" inputWidget="application.name" column="0"
+					<field name="name" inputWidget="application.componentname" column="0"
 						required="true" saveAs="true" />
 					<field name="description" inputWidget="application.text"
 						column="0" required="true" saveAs="true" />
@@ -4587,7 +4587,7 @@
 				label="$m{studio.notificationlargetextparam.form.basicdetails}"
 				contentType="miniform" editable="true">
 				<section name="templateParamDetails" columns="type_2">
-					<field name="name" inputWidget="application.name" column="0"
+					<field name="name" inputWidget="application.componentname" column="0"
 						required="true" />
 					<field name="label" inputWidget="application.text"
 						column="1"
@@ -4624,7 +4624,7 @@
 						label="$m{studio.application}" disabled="true"
 						required="true"
 						saveAs="true" />
-					<field name="name" inputWidget="application.name" column="0"
+					<field name="name" inputWidget="application.componentname" column="0"
 						required="true" saveAs="true" />
 					<field name="description" inputWidget="application.text"
 						column="0" required="true" saveAs="true" />
@@ -4924,7 +4924,7 @@
 					<field name="reportConfigurationId"
 						inputWidget="application.entitysearch" column="0"
 						required="true" />
-					<field name="name" inputWidget="application.name" column="0"
+					<field name="name" inputWidget="application.componentname" column="0"
 						required="true" />
 					<field name="description" inputWidget="application.text"
 						column="0" required="true" />
@@ -4964,7 +4964,7 @@
 						label="$m{studio.application}" disabled="true"
 						required="true"
 						saveAs="true" />
-					<field name="name" inputWidget="application.name" column="0"
+					<field name="name" inputWidget="application.componentname" column="0"
 						required="true" saveAs="true" />
 					<field name="description" inputWidget="application.text"
 						column="0" required="true" saveAs="true" />
@@ -5104,7 +5104,7 @@
 					<field name="appTableId"
 						inputWidget="application.entitysearch" column="0"
 						required="true" />
-					<field name="name" inputWidget="application.name" column="0"
+					<field name="name" inputWidget="application.componentname" column="0"
 						required="true" saveAs="true" />
 					<field name="description" inputWidget="application.text"
 						column="0" required="true" saveAs="true" />
@@ -5130,7 +5130,7 @@
 					<field name="appTableId"
 						inputWidget="application.entitysearch" column="0"
 						required="true" />
-					<field name="name" inputWidget="application.name" column="0"
+					<field name="name" inputWidget="application.componentname" column="0"
 						required="true" saveAs="true" />
 					<field name="description" inputWidget="application.text"
 						column="0" required="true" saveAs="true" />
@@ -5152,7 +5152,7 @@
 				label="$m{studio.apptablefilter.form.basicdetails}"
 				contentType="miniform">
 				<section name="filterDetails" columns="type_2">
-					<field name="name" inputWidget="application.name" column="0"
+					<field name="name" inputWidget="application.componentname" column="0"
 						required="true" />
 					<field name="description" inputWidget="application.text"
 						column="0" required="true" />
@@ -5429,7 +5429,7 @@
 						label="$m{application.appformelement.appform}"
 						column="0"
 						required="true" disabled="true" />
-					<field name="name" inputWidget="application.name" column="0"
+					<field name="name" inputWidget="application.componentname" column="0"
 						required="true" />
 					<field name="description" inputWidget="application.text"
 						column="0" required="true" />
@@ -5462,7 +5462,7 @@
 						label="$m{application.appformelement.appform}"
 						column="0"
 						disabled="true" required="true" />
-					<field name="name" inputWidget="application.name" column="0"
+					<field name="name" inputWidget="application.componentname" column="0"
 						required="true" />
 					<field name="description" inputWidget="application.text"
 						column="0" required="true" />
@@ -5503,7 +5503,7 @@
 						label="$m{application.appformelement.appform}"
 						column="0"
 						disabled="true" required="true" />
-					<field name="name" inputWidget="application.name" column="0"
+					<field name="name" inputWidget="application.componentname" column="0"
 						required="true" />
 					<field name="description" inputWidget="application.text"
 						column="0" required="true" />
@@ -5532,7 +5532,7 @@
 					<field name="appFormId" inputWidget="studio.formlist"
 						disabled="true" column="0" required="true"
 						label="$m{application.appformstatepolicy.appform}" />
-					<field name="name" inputWidget="application.name" column="0"
+					<field name="name" inputWidget="application.componentname" column="0"
 						required="true" />
 					<field name="description" inputWidget="application.text"
 						column="0" required="true" />
@@ -5567,7 +5567,7 @@
 					<field name="appFormId" inputWidget="studio.formlist"
 						disabled="true" column="0" required="true"
 						label="$m{application.appformwidgetrulespolicy.appform}" />
-					<field name="name" inputWidget="application.name" column="0"
+					<field name="name" inputWidget="application.componentname" column="0"
 						required="true" />
 					<field name="description" inputWidget="application.text"
 						column="1" required="true" />
@@ -5642,7 +5642,7 @@
 						label="$m{application.appformelement.appform}"
 						column="0"
 						disabled="true" required="true" />
-					<field name="name" inputWidget="application.name" column="0"
+					<field name="name" inputWidget="application.componentname" column="0"
 						required="true" />
 					<field name="description" inputWidget="application.text"
 						column="0" required="true" />
@@ -5668,7 +5668,7 @@
 					<field name="appFormId" inputWidget="studio.formlist"
 						disabled="true" column="0" required="true"
 						label="$m{application.appformvalidationpolicy.appform}" />
-					<field name="name" inputWidget="application.name" column="0"
+					<field name="name" inputWidget="application.componentname" column="0"
 						required="true" />
 					<field name="description" inputWidget="application.text"
 						column="0" required="true" />
@@ -5697,7 +5697,7 @@
 					<field name="appFormId" inputWidget="studio.formlist"
 						disabled="true" column="0" required="true"
 						label="$m{application.appformreviewpolicy.appform}" />
-					<field name="name" inputWidget="application.name" column="0"
+					<field name="name" inputWidget="application.componentname" column="0"
 						required="true" />
 					<field name="description" inputWidget="application.text"
 						column="0" required="true" />
@@ -5746,7 +5746,7 @@
 						label="$m{studio.application}" disabled="true"
 						required="true"
 						saveAs="true" />
-					<field name="name" inputWidget="application.name" column="0"
+					<field name="name" inputWidget="application.componentname" column="0"
 						required="true" saveAs="true" />
 					<field name="description" inputWidget="application.text"
 						column="0" required="true" saveAs="true" />
@@ -5817,7 +5817,7 @@
 						label="$m{studio.application}" disabled="true"
 						required="true"
 						saveAs="true" />
-					<field name="name" inputWidget="application.name" column="0"
+					<field name="name" inputWidget="application.componentname" column="0"
 						required="true" saveAs="true" />
 					<field name="description" inputWidget="application.text"
 						column="0" required="true" saveAs="true" />
@@ -5903,6 +5903,10 @@
 				description="$m{studio.common.form.action.unlockresource}"
 				label="$m{studio.common.form.action.unlockresource.label}"
 				policy="unlockresource-actionpolicy" showOnMaintain="true" />
+			<action type="button" name="publish" highlight="ORANGE"
+				description="$m{workflow.workflow.form.action.publish}"
+				label="$m{workflow.workflow.form.action.publish.label}"
+				policy="wfpublish-actionpolicy" showOnMaintain="true" />
 			<annotation name="staticAnnotation"
 				description="$m{studio.common.form.annotation.static}"
 				message="$m{studio.common.form.annotation.static.message}" />
@@ -5917,7 +5921,7 @@
 						label="$m{studio.application}" disabled="true"
 						required="true"
 						saveAs="true" switchOnChange="true" />
-					<field name="name" inputWidget="application.name" column="0"
+					<field name="name" inputWidget="application.componentname" column="0"
 						required="true" saveAs="true" />
 					<field name="description" inputWidget="application.text"
 						column="0" required="true" saveAs="true" />
@@ -6006,7 +6010,7 @@
 				label="$m{studio.workflowfilter.form.basicdetails}"
 				contentType="miniform">
 				<section name="filterDetails" columns="type_2">
-					<field name="name" inputWidget="application.name" column="0"
+					<field name="name" inputWidget="application.componentname" column="0"
 						required="true" />
 					<field name="description" inputWidget="application.text"
 						column="1" required="true" />
@@ -6029,7 +6033,7 @@
 				label="$m{studio.workflowsetvalues.form.basicdetails}"
 				contentType="miniform">
 				<section name="setValuesDetails" columns="type_2">
-					<field name="name" inputWidget="application.name" column="0"
+					<field name="name" inputWidget="application.componentname" column="0"
 						required="true" />
 					<field name="description" inputWidget="application.text"
 						column="0" required="true" />
@@ -6059,7 +6063,7 @@
 						inputWidget="application.entitysearch" column="0"
 						label="$m{workflow.step.workflow}" disabled="true"
 						required="true" />
-					<field name="name" inputWidget="application.name" column="0"
+					<field name="name" inputWidget="application.componentname" column="0"
 						required="true" />
 					<field name="description" inputWidget="application.text"
 						column="0" required="true" />
@@ -6169,7 +6173,7 @@
 						inputWidget="application.entitysearch"
 						column="0" label="$m{workflow.steprouting.step}"
 						required="true" />
-					<field name="name" inputWidget="application.name" column="0"
+					<field name="name" inputWidget="application.componentname" column="0"
 						required="true" />
 					<field name="description" inputWidget="application.text"
 						column="0" required="true" />
@@ -6195,7 +6199,7 @@
 						inputWidget="application.entitysearch"
 						column="0" label="$m{workflow.stepuseraction.step}"
 						required="true" />
-					<field name="name" inputWidget="application.name" column="0"
+					<field name="name" inputWidget="application.componentname" column="0"
 						required="true" />
 					<field name="description" inputWidget="application.text"
 						column="0" required="true" />
@@ -6230,7 +6234,7 @@
 						inputWidget="application.entitysearch"
 						column="0" label="$m{workflow.stepalert.step}"
 						required="true" />
-					<field name="name" inputWidget="application.name" column="0"
+					<field name="name" inputWidget="application.componentname" column="0"
 						required="true" />
 					<field name="description" inputWidget="application.text"
 						column="0" required="true" />

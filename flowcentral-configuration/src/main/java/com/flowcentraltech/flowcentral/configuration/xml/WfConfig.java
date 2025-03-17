@@ -48,6 +48,12 @@ public class WfConfig extends BaseNameConfig {
     
     @JacksonXmlProperty(isAttribute = true)
     private Boolean supportMultiItemAction;
+    
+    @JacksonXmlProperty(isAttribute = true)
+    private Boolean published;
+    
+    @JacksonXmlProperty(isAttribute = true)
+    private Boolean runnable;
 
     @JacksonXmlElementWrapper(useWrapping = false)
     @JacksonXmlProperty(localName = "filter")
@@ -59,6 +65,8 @@ public class WfConfig extends BaseNameConfig {
     
     public WfConfig() {
         this.supportMultiItemAction = Boolean.FALSE;
+        this.published = Boolean.FALSE;
+        this.runnable = Boolean.FALSE;
     }
 
     public WfStepsConfig getStepsConfig() {
@@ -99,6 +107,22 @@ public class WfConfig extends BaseNameConfig {
 
     public void setSupportMultiItemAction(Boolean supportMultiItemAction) {
         this.supportMultiItemAction = supportMultiItemAction;
+    }
+
+    public Boolean getPublished() {
+        return published;
+    }
+
+    public void setPublished(Boolean published) {
+        this.published = published;
+    }
+
+    public Boolean getRunnable() {
+        return runnable;
+    }
+
+    public void setRunnable(Boolean runnable) {
+        this.runnable = runnable;
     }
 
     public List<WfFilterConfig> getFilterList() {

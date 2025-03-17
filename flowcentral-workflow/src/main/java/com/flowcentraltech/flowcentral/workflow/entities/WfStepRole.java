@@ -68,6 +68,9 @@ public class WfStepRole extends BaseAuditEntity {
     @ListOnly(key = "wfStepId", property = "workflowLoadingTable")
     private String workflowLoadingTable;
 
+    @ListOnly(key = "wfStepId", property = "workflowRunnable")
+    private boolean workflowRunnable;
+
     @ListOnly(key = "wfStepId", property = "applicationId")
     private Long applicationId;
 
@@ -178,6 +181,14 @@ public class WfStepRole extends BaseAuditEntity {
 
     public void setWorkflowLoadingTable(String workflowLoadingTable) {
         this.workflowLoadingTable = workflowLoadingTable;
+    }
+
+    public boolean isWorkflowRunnable() {
+        return workflowRunnable;
+    }
+
+    public void setWorkflowRunnable(boolean workflowRunnable) {
+        this.workflowRunnable = workflowRunnable;
     }
 
     public String getEntityName() {
