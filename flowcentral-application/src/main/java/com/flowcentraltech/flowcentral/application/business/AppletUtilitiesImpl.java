@@ -2988,6 +2988,15 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
                 case STRING:
                 case TIMESTAMP:
                 case TIMESTAMP_UTC:
+                case BOOLEAN_ARRAY:
+                case SHORT_ARRAY:
+                case INTEGER_ARRAY:
+                case LONG_ARRAY:
+                case FLOAT_ARRAY:
+                case DOUBLE_ARRAY:
+                case DECIMAL_ARRAY:
+                case DATE_ARRAY:
+                case STRING_ARRAY:
                 default:
                     break;
 

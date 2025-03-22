@@ -150,6 +150,15 @@ public final class InputWidgetUtils {
         map.put(EntityFieldDataType.REF, "application.entitylist");
         map.put(EntityFieldDataType.REF_UNLINKABLE, "application.entitylist");
         map.put(EntityFieldDataType.REF_FILEUPLOAD, "application.fileupload");
+        map.put(EntityFieldDataType.BOOLEAN_ARRAY, "application.textarea");
+        map.put(EntityFieldDataType.SHORT_ARRAY, "application.textarea");
+        map.put(EntityFieldDataType.INTEGER_ARRAY, "application.textarea");
+        map.put(EntityFieldDataType.LONG_ARRAY, "application.textarea");
+        map.put(EntityFieldDataType.FLOAT_ARRAY, "application.textarea");
+        map.put(EntityFieldDataType.DOUBLE_ARRAY, "application.textarea");
+        map.put(EntityFieldDataType.DECIMAL_ARRAY, "application.textarea");
+        map.put(EntityFieldDataType.DATE_ARRAY, "application.textarea");
+        map.put(EntityFieldDataType.STRING_ARRAY, "application.textarea");
         defaultFormInputWidgets = Collections.unmodifiableMap(map);
     }
 
@@ -166,15 +175,24 @@ public final class InputWidgetUtils {
         map.put(EntityFieldDataType.DOUBLE, "application.decimal");
         map.put(EntityFieldDataType.DECIMAL, "application.decimal");
         map.put(EntityFieldDataType.DATE, "application.date");
+        map.put(EntityFieldDataType.STRING, "application.text");
         map.put(EntityFieldDataType.TIMESTAMP_UTC, "application.datetime");
         map.put(EntityFieldDataType.TIMESTAMP, "application.datetime");
-        map.put(EntityFieldDataType.STRING, "application.text");
         map.put(EntityFieldDataType.ENUM, "application.text");
         map.put(EntityFieldDataType.ENUM_REF, "application.text");
         map.put(EntityFieldDataType.ENUM_DYN, "application.text");
         map.put(EntityFieldDataType.REF, "application.entitylist");
         map.put(EntityFieldDataType.REF_UNLINKABLE, "application.entitylist");
         map.put(EntityFieldDataType.REF_FILEUPLOAD, "application.fileupload");
+        map.put(EntityFieldDataType.BOOLEAN_ARRAY, "application.textarea");
+        map.put(EntityFieldDataType.SHORT_ARRAY, "application.textarea");
+        map.put(EntityFieldDataType.INTEGER_ARRAY, "application.textarea");
+        map.put(EntityFieldDataType.LONG_ARRAY, "application.textarea");
+        map.put(EntityFieldDataType.FLOAT_ARRAY, "application.textarea");
+        map.put(EntityFieldDataType.DOUBLE_ARRAY, "application.textarea");
+        map.put(EntityFieldDataType.DECIMAL_ARRAY, "application.textarea");
+        map.put(EntityFieldDataType.DATE_ARRAY, "application.textarea");
+        map.put(EntityFieldDataType.STRING_ARRAY, "application.textarea");
         defaultSyncFormInputWidgets = Collections.unmodifiableMap(map);
     }
 

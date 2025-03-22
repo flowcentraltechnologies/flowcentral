@@ -460,6 +460,10 @@ public class EntityFieldDef implements Listable, EntityFieldAttributes {
         return dataType.isSupportSetValue() && !isListOnly();
     }
 
+    public boolean isArray() {
+        return dataType.isArray();
+    }
+
     public boolean isPrimitive() {
         return dataType.isPrimitive();
     }
