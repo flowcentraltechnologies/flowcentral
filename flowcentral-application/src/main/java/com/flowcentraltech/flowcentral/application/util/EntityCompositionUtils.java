@@ -20,6 +20,7 @@ import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.web.widgets.EntityComposition;
 import com.flowcentraltech.flowcentral.application.web.widgets.EntityCompositionEntry;
+import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldDataType;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.constant.DynamicEntityFieldType;
 import com.tcdng.unify.core.util.EntityTypeFieldInfo;
@@ -38,15 +39,15 @@ public final class EntityCompositionUtils {
 
     }
 
-    public static EntityComposition createEntityComposition(String tablePrefix, String moduleShortCode, List<EntityTypeInfo> entityTypeList)
-            throws UnifyException {
+    public static EntityComposition createEntityComposition(String tablePrefix, String moduleShortCode,
+            List<EntityTypeInfo> entityTypeList) throws UnifyException {
         List<EntityCompositionEntry> entries = new ArrayList<EntityCompositionEntry>();
         for (EntityTypeInfo entityTypeInfo : entityTypeList) {
             final int depth = entityTypeInfo.getDepth();
             EntityCompositionEntry entry = new EntityCompositionEntry();
             entry.setEntityName(entityTypeInfo.getName());
-            entry.setTable(
-                    ApplicationCodeGenUtils.generateCustomEntityTableName(tablePrefix, moduleShortCode, entityTypeInfo.getName()));
+            entry.setTable(ApplicationCodeGenUtils.generateCustomEntityTableName(tablePrefix, moduleShortCode,
+                    entityTypeInfo.getName()));
             entry.setDepth(depth);
             entries.add(entry);
 
@@ -54,19 +55,20 @@ public final class EntityCompositionUtils {
                 entry = new EntityCompositionEntry();
                 DynamicEntityFieldType fieldType = entityTypeFieldInfo.getType();
                 entry.setFieldType(fieldType);
-                entry.setDataType(entityTypeFieldInfo.getDataType());
+                entry.setDataType(
+                        EntityFieldDataType.fromName(entityTypeFieldInfo.getDataType(), entityTypeFieldInfo.isArray()));
                 entry.setName(StringUtils.decapitalize(entityTypeFieldInfo.getName()));
                 entry.setJsonName(entityTypeFieldInfo.getName());
                 entry.setColumn(entityTypeFieldInfo.getColumn());
                 entry.setSample(entityTypeFieldInfo.getSample());
                 entry.setDepth(depth);
-                
+
                 if (fieldType.isChild() || fieldType.isChildList()) {
                     entry.setReferences(entityTypeFieldInfo.getChildEntityName());
                 } else if (fieldType.isForeignKey()) {
                     entry.setReferences(entityTypeFieldInfo.getParentEntityName());
                 }
-                
+
                 entries.add(entry);
             }
         }

@@ -593,6 +593,84 @@ public enum EntityFieldDataType implements EnumConst {
         return EnumUtils.fromName(EntityFieldDataType.class, name);
     }
 
+    public static EntityFieldDataType fromName(DataType dataType, boolean array) {
+        EntityFieldDataType fieldDataType = EntityFieldDataType.fromName(dataType.name());
+        if (array && fieldDataType != null) {
+            fieldDataType = fieldDataType.array();
+        }
+        
+        return fieldDataType;
+    }
+
+    private EntityFieldDataType array() {
+        switch(this) {
+            case BOOLEAN:
+            case BOOLEAN_ARRAY:
+                return BOOLEAN_ARRAY;
+            case CATEGORY_COLUMN:
+                break;
+            case CHAR:
+                break;
+            case CHILD:
+                break;
+            case CHILD_LIST:
+                break;
+            case CLOB:
+                break;
+            case DATE:
+            case DATE_ARRAY:
+                return DATE_ARRAY;
+            case DECIMAL:
+            case DECIMAL_ARRAY:
+                return DECIMAL_ARRAY;
+            case DOUBLE:
+            case DOUBLE_ARRAY:
+                return DOUBLE_ARRAY;
+            case ENUM:
+                break;
+            case ENUM_DYN:
+                break;
+            case ENUM_REF:
+                break;
+            case FLOAT:
+            case FLOAT_ARRAY:
+                return FLOAT_ARRAY;
+            case FOSTER_PARENT_ID:
+            case FOSTER_PARENT_TYPE:
+                break;
+            case INTEGER:
+            case INTEGER_ARRAY:
+                return INTEGER_ARRAY;
+            case LIST_ONLY:
+                break;
+            case LONG:
+            case LONG_ARRAY:
+                return LONG_ARRAY;
+            case MAPPED:
+            case REF:
+            case REF_FILEUPLOAD:
+            case REF_UNLINKABLE:
+            case SCRATCH:
+            case SHORT:
+            case SHORT_ARRAY:
+                return SHORT_ARRAY;
+            case STRING:
+            case STRING_ARRAY:
+                return STRING_ARRAY;
+            case TENANT_ID:
+                break;
+            case TIMESTAMP:
+                break;
+            case TIMESTAMP_UTC:
+                break;
+            default:
+                break;
+            
+        }
+        
+        return this;
+    }
+
     public static EntityFieldDataType fromInterconnect(ConnectFieldDataType dataType) {
         return dataType != null ? (dataType.isEnum() ? STRING : fromName(dataType.name())) : null;
     }
