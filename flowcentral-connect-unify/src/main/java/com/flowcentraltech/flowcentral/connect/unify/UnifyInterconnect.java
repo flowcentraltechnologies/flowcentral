@@ -76,7 +76,7 @@ public class UnifyInterconnect extends AbstractInterconnect {
 
         if (ca != null) {
             column = ca.name();
-            length = type.isString() ? ca.length() : 0;
+            length = type.isString() || type.isArray() ? ca.length() : 0;
             precision = ca.precision();
             scale = ca.scale();
             nullable = ca.nullable();

@@ -84,10 +84,12 @@ public class StudioAppComponentApplet extends AbstractEntityFormApplet {
     }
 
     public void ensureClearOnNew() throws UnifyException {
-        // TODO Apply only to root Fixes exception
-        Long instId = getCurrFormAppletDef().getPropValue(Long.class, StudioAppletPropertyConstants.ENTITY_INST_ID);
-        if (instId == null || instId.longValue() == 0L) {
-            constructNewForm();
+        // Apply only to root Fixes general exception  17/03/25
+        if (isRootForm()) {
+            Long instId = getCurrFormAppletDef().getPropValue(Long.class, StudioAppletPropertyConstants.ENTITY_INST_ID);
+            if (instId == null || instId.longValue() == 0L) {
+                constructNewForm();
+            }
         }
     }
     

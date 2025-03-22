@@ -43,7 +43,16 @@ public class DataTypeUtils {
             case CHILD_LIST:
             case REF_FILEUPLOAD:
             case CLOB:
-                break;
+            case BOOLEAN_ARRAY:
+            case SHORT_ARRAY:
+            case INTEGER_ARRAY:
+            case LONG_ARRAY:
+            case FLOAT_ARRAY:
+            case DOUBLE_ARRAY:
+            case DECIMAL_ARRAY:
+            case DATE_ARRAY:
+            case STRING_ARRAY:
+               break;
             case DECIMAL:
             case DOUBLE:
             case FLOAT:

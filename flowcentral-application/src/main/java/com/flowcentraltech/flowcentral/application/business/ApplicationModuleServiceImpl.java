@@ -7227,7 +7227,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                         deib.addField(type, listManager.getStaticListEnumType(entityFieldDef.getReferences()).getName(),
                                 entityFieldDef.getColumnName(), entityFieldDef.getFieldName(),
                                 entityFieldDef.getMapping(), entityFieldDef.getDefaultVal(),
-                                entityFieldDef.isNullable(), entityFieldDef.isDescriptive());
+                                entityFieldDef.isNullable(), entityFieldDef.isDescriptive(), entityFieldDef.isArray());
                     } else {
                         if (!entityFieldDef.isChildRef()) {
                             if (entityFieldDef.isTenantId()) {
@@ -7240,7 +7240,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                                         entityFieldDef.getMapping(), entityFieldDef.getDefaultVal(),
                                         entityFieldDef.getMaxLen(), entityFieldDef.getPrecision(),
                                         entityFieldDef.getScale(), entityFieldDef.isNullable(),
-                                        entityFieldDef.isDescriptive());
+                                        entityFieldDef.isDescriptive(), entityFieldDef.isArray());
                             }
                         }
                     }

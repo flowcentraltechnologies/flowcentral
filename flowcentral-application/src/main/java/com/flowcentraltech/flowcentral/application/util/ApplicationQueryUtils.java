@@ -45,7 +45,11 @@ public final class ApplicationQueryUtils {
         if (entityFieldDataType == null) {
             query.addRestriction(new IsNull("dataType"));
         } else {
-            if (entityFieldDataType.isEntityRef()) {
+            if (entityFieldDataType.isArray()) {
+                query.addRestriction(new And().add(new Equals("applicationName", "application"))
+                        .add(new Amongst("name", Arrays.asList("textarea", "textareamedium", "textarealarge",
+                                "textareaxlarge", "textareaxxlarge"))));
+            } else if (entityFieldDataType.isEntityRef()) {
                 if (entityFieldDataType.isRefFileUpload()) {
                     query.addRestriction(new And().add(new Equals("applicationName", "application"))
                             .add(new Equals("name", "fileupload")));

@@ -67,7 +67,7 @@ public class EntityCompositionWidget extends AbstractValueListWidget<EntityCompo
         fieldTypeCtrl = (Control) addInternalChildWidget(
                 "!ui-select blankOption:$s{} list:dynamicentityfieldtypelist binding:fieldType disabled:true");
         dataTypeCtrl = (Control) addInternalChildWidget(
-                "!ui-select blankOption:$s{} list:datatypelist binding:dataType");
+                "!ui-select blankOption:$s{} list:entitycompositionfielddatatypelist binding:dataType");
         fieldNameCtrl = (Control) addInternalChildWidget("!ui-name case:camel binding:name");
         columnCtrl = (Control) addInternalChildWidget("!ui-name underscore:true binding:column");
         referencesCtrl = (Control) addInternalChildWidget("!ui-name case:camel binding:references");
