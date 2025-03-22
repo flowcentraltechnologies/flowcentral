@@ -56,7 +56,7 @@ public final class EntityCompositionUtils {
                 DynamicEntityFieldType fieldType = entityTypeFieldInfo.getType();
                 entry.setFieldType(fieldType);
                 entry.setDataType(
-                        EntityFieldDataType.fromName(entityTypeFieldInfo.getDataType(), entityTypeFieldInfo.isArray()));
+                        EntityFieldDataType.fromData(entityTypeFieldInfo.getDataType(), entityTypeFieldInfo.isArray()));
                 entry.setName(StringUtils.decapitalize(entityTypeFieldInfo.getName()));
                 entry.setJsonName(entityTypeFieldInfo.getName());
                 entry.setColumn(entityTypeFieldInfo.getColumn());

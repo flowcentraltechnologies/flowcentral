@@ -101,11 +101,26 @@ public abstract class AbstractInterconnect {
         map.put(Double.class, ConnectFieldDataType.DOUBLE);
         map.put(BigDecimal.class, ConnectFieldDataType.DECIMAL);
         map.put(Date.class, ConnectFieldDataType.DATE);
+        map.put(boolean[].class, ConnectFieldDataType.BOOLEAN_ARRAY);
+        map.put(Boolean[].class, ConnectFieldDataType.BOOLEAN_ARRAY);
+        map.put(short[].class, ConnectFieldDataType.SHORT_ARRAY);
+        map.put(Short[].class, ConnectFieldDataType.SHORT_ARRAY);
+        map.put(int[].class, ConnectFieldDataType.INTEGER_ARRAY);
+        map.put(Integer[].class, ConnectFieldDataType.INTEGER_ARRAY);
+        map.put(long[].class, ConnectFieldDataType.LONG_ARRAY);
+        map.put(Long[].class, ConnectFieldDataType.LONG_ARRAY);
+        map.put(float[].class, ConnectFieldDataType.FLOAT_ARRAY);
+        map.put(Float[].class, ConnectFieldDataType.FLOAT_ARRAY);
+        map.put(double[].class, ConnectFieldDataType.DOUBLE_ARRAY);
+        map.put(Double[].class, ConnectFieldDataType.DOUBLE_ARRAY);
+        map.put(BigDecimal[].class, ConnectFieldDataType.DECIMAL_ARRAY);
+        map.put(Date[].class, ConnectFieldDataType.DATE_ARRAY);
         map.put(org.joda.time.LocalDate.class, ConnectFieldDataType.DATE);
         map.put(org.joda.time.LocalDateTime.class, ConnectFieldDataType.DATE);
         map.put(java.time.LocalDate.class, ConnectFieldDataType.DATE);
         map.put(java.time.LocalDateTime.class, ConnectFieldDataType.DATE);
         map.put(String.class, ConnectFieldDataType.STRING);
+        map.put(String[].class, ConnectFieldDataType.STRING_ARRAY);
         map.put(List.class, ConnectFieldDataType.CHILD_LIST);
         map.put(Set.class, ConnectFieldDataType.CHILD_LIST);
         classToConnectDataTypeMap = Collections.unmodifiableMap(map);
@@ -364,6 +379,10 @@ public abstract class AbstractInterconnect {
 
         public boolean isWithReferences() {
             return references != null;
+        }
+        
+        public boolean isArray() {
+            return type.isArray();
         }
     }
 

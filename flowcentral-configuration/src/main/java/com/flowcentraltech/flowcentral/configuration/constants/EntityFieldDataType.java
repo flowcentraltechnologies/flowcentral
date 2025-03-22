@@ -593,13 +593,17 @@ public enum EntityFieldDataType implements EnumConst {
         return EnumUtils.fromName(EntityFieldDataType.class, name);
     }
 
-    public static EntityFieldDataType fromName(DataType dataType, boolean array) {
+    public static EntityFieldDataType fromData(DataType dataType, boolean array) {
         EntityFieldDataType fieldDataType = EntityFieldDataType.fromName(dataType.name());
         if (array && fieldDataType != null) {
             fieldDataType = fieldDataType.array();
         }
         
         return fieldDataType;
+    }
+
+    public static EntityFieldDataType fromInterconnect(ConnectFieldDataType dataType) {
+        return dataType != null ? (dataType.isEnum() ? STRING : fromName(dataType.name())) : null;
     }
 
     private EntityFieldDataType array() {
@@ -669,10 +673,6 @@ public enum EntityFieldDataType implements EnumConst {
         }
         
         return this;
-    }
-
-    public static EntityFieldDataType fromInterconnect(ConnectFieldDataType dataType) {
-        return dataType != null ? (dataType.isEnum() ? STRING : fromName(dataType.name())) : null;
     }
 
 }
