@@ -699,8 +699,8 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
                     SystemModuleSysParamConstants.SYSTEM_EMAIL);
             if (environment().countAll(new UserQuery().id(DefaultApplicationConstants.SYSTEM_ENTITY_ID)) == 0) {
                 User user = new User(DefaultApplicationConstants.SYSTEM_ENTITY_ID,
-                        DefaultApplicationConstants.SYSTEM_FULLNAME, DefaultApplicationConstants.SYSTEM_LOGINID, email,
-                        Boolean.FALSE);
+                        resolveSessionMessage(DefaultApplicationConstants.SYSTEM_FULLNAME),
+                        DefaultApplicationConstants.SYSTEM_LOGINID, email, Boolean.FALSE);
                 String password = generatePasswordAndSendEmail(user);
                 user.setWorkflowStatus(UserWorkflowStatus.APPROVED);
                 user.setPassword(passwordCryptograph.encrypt(password));
