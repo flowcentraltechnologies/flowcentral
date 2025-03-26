@@ -27,13 +27,13 @@ public interface DefaultApplicationConstants {
 
     String ROOT_WORKSPACE_NAME = "root";
 
-    String ROOT_WORKSPACE_DESC = "Root Workspace";
+    String ROOT_WORKSPACE_DESC = "$m{system.rootworkspace}";
 
     Long ROOT_WORKSPACE_ENTITY_ID = -99L;
 
     String SYSTEM_LOGINID = "SYSTEM";
 
-    String SYSTEM_FULLNAME = "System";
+    String SYSTEM_FULLNAME = "$m{system.fullname}";
 
     Long SYSTEM_ENTITY_ID = -99L;
 
