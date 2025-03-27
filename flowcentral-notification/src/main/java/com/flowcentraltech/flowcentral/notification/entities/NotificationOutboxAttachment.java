@@ -43,7 +43,7 @@ public class NotificationOutboxAttachment extends BaseAuditEntity {
     @Column(name = "ATTACHMENT_TITLE", length = 128)
     private String title;
     
-    @Column(name = "ATTACHMENT_DATA")
+    @Column(name = "ATTACHMENT_DATA", length = 128, nullable = true)
     private byte[] data;
     
     @Column(name = "SOURCE_ID", length = 128, nullable = true)
