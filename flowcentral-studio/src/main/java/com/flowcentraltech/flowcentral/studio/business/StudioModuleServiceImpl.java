@@ -371,8 +371,8 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
                             type = String.class, mandatory = true),
                     @Parameter(name = StudioSnapshotTaskConstants.STUDIO_SNAPSHOT_MESSAGE, description = "Message",
                             type = String.class),
-                    @Parameter(name = StudioSnapshotTaskConstants.STUDIO_SNAPSHOT_RESULT_DETAILS, description = "Result Details",
-                        type = SnapshotResultDetails.class) },
+                    @Parameter(name = StudioSnapshotTaskConstants.STUDIO_SNAPSHOT_RESULT_DETAILS,
+                            description = "Result Details", type = SnapshotResultDetails.class) },
             limit = TaskExecLimit.ALLOW_MULTIPLE)
     @Override
     public int takeStudioSnapshotTask(TaskMonitor taskMonitor, StudioSnapshotType snapshotType, String snapshotName,
@@ -396,16 +396,19 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
         commitTransactions();
         logDebug(taskMonitor, "Snapshot successfully taken.");
 
-        final String snapshots = appletUtilities.getSysParameterValue(String.class,
-                CodeGenerationModuleSysParamConstants.SNAPSHOT_LOCAL_WORKING_FOLDER);
-        final String path = getWorkingPathFilename(snapshots);
-        final String fullSnapshotName = IOUtils.buildFilename(path, snapshot.getFilename());
-        logDebug(taskMonitor, "Writing snapshot to file[{0}]...", fullSnapshotName);
-        
-        IOUtils.ensureDirectoryExists(path);
-        IOUtils.writeToFile(fullSnapshotName, snapshot.getData());
-        logDebug(taskMonitor, "Snapshot local image successfully written.");
-        
+        if (appletUtilities.getSysParameterValue(boolean.class,
+                CodeGenerationModuleSysParamConstants.ENABLE_SNAPSHOT_TO_LOCAL_WORKING_FOLDER)) {
+            final String snapshots = appletUtilities.getSysParameterValue(String.class,
+                    CodeGenerationModuleSysParamConstants.SNAPSHOT_LOCAL_WORKING_FOLDER);
+            final String path = StringUtils.isBlank(snapshots) ? getWorkingPathFilename("/snapshots") : snapshots;
+            final String fullSnapshotName = IOUtils.buildFilename(path, snapshot.getFilename());
+            logDebug(taskMonitor, "Writing snapshot to file[{0}]...", fullSnapshotName);
+
+            IOUtils.ensureDirectoryExists(path);
+            IOUtils.writeToFile(fullSnapshotName, snapshot.getData());
+            logDebug(taskMonitor, "Snapshot local image successfully written.");
+        }
+
         resultDetails.setSnapshotId(snapshotId);
         resultDetails.setFileName(snapshot.getFilename());
         resultDetails.setSnapshot(snapshot.getData());

@@ -14,7 +14,7 @@
  * the License.
  */
 
-package com.flowcentraltech.flowcentral.repository.constants;
+package com.flowcentraltech.flowcentral.common.constants;
 
 /**
  * Transfer to remote task constants.

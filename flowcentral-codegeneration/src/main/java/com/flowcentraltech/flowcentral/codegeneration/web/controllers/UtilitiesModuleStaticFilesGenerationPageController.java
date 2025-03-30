@@ -19,8 +19,7 @@ package com.flowcentraltech.flowcentral.codegeneration.web.controllers;
 import com.flowcentraltech.flowcentral.codegeneration.constants.CodeGenerationModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.codegeneration.constants.CodeGenerationTaskConstants;
 import com.flowcentraltech.flowcentral.codegeneration.data.CodeGenerationItem;
-import com.flowcentraltech.flowcentral.repository.constants.TransferToRemoteTaskConstants;
-import com.flowcentraltech.flowcentral.repository.data.TransferToRemote;
+import com.flowcentraltech.flowcentral.common.data.TransferToRemote;
 import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
@@ -105,13 +104,11 @@ public class UtilitiesModuleStaticFilesGenerationPageController
                 CodeGenerationModuleSysParamConstants.CODEGEN_TARGET_REPOSITORY);
         final String branch = systemModuleService.getSysParameterValue(String.class,
                 CodeGenerationModuleSysParamConstants.CODEGEN_TARGET_BRANCH);
-        TransferToRemote transferToRemote = new TransferToRemote( TransferToRemote.TransferType.REPLACE_DIRECTORY_WITH_ZIP,
-                repositoryName, branch, workingPath, codeGenerationItem.getFilename(),
-                codeGenerationItem.getData());
-        TaskSetup taskSetup = TaskSetup.newBuilder(TransferToRemoteTaskConstants.TRANSFER_TO_REMOTE_TASK_NAME)
-                .setParam(TransferToRemoteTaskConstants.TRANSFER_ITEM, transferToRemote).logMessages().build();
+        TransferToRemote transferToRemote = new TransferToRemote(
+                TransferToRemote.TransferType.REPLACE_DIRECTORY_WITH_ZIP, repositoryName, branch, workingPath,
+                codeGenerationItem.getFilename(), codeGenerationItem.getData());
         pageBean.setCodeGenerationItem(null);
-        return launchTaskWithMonitorBox(taskSetup, "Push Utility Files to Remote");
+        return executeRepositoryTransfer(transferToRemote, "Push Utility Files to Remote");
     }
 
     @Override
