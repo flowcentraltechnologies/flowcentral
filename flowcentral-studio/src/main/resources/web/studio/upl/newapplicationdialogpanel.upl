@@ -49,7 +49,7 @@
 !ui-text:frmModuleLabel caption:$m{switchapplicationdialogpanel.form.modulelabel}
 	size:32 binding:moduleLabel required:true
 !ui-name:frmModuleShortCode caption:$m{switchapplicationdialogpanel.form.moduleshortcode}
-	size:8 minLen:3 maxLen:3 binding:moduleShortCode required:true
+	size:8 minLen:3 maxLen:3 case:upper binding:moduleShortCode required:true
 
 // Action buttons
 !ui-panel:createActionPanel layout:$d{!ui-horizontal} components:$c{createAppBtn cancelCreateBtn}
