@@ -128,6 +128,10 @@
 			dataType="double" inputType="double"
 			editor="!ui-debitcredit precision:%s scale:%s useGrouping:true negativeCredit:true type:$s{credit}"
 			renderer="!ui-debitcreditlabel negativeCredit:true formatter:$d{!decimalformat precision:%s scale:%s useGrouping:true} style:$s{text-align:right;}" />
+		<widgetType name="path" listOption="true"
+			description="$m{application.widgettype.path}" dataType="string"
+			inputType="string" editor="!ui-path minLen:%s maxLen:%s trim:%s"
+			renderer="!ui-label" />
 		<widgetType name="name" listOption="true"
 			description="$m{application.widgettype.name}" dataType="string"
 			inputType="string" editor="!ui-name minLen:%s maxLen:%s trim:%s case:$s{%s}"
@@ -307,11 +311,6 @@
 			description="$m{application.widgettype.componentname}"
 			dataType="string" inputType="string"
 			editor="!ui-name minLen:%s maxLen:%s trim:true case:CAMEL"
-			renderer="!ui-label" />
-		<widgetType name="path" listOption="true"
-			description="$m{application.widgettype.path}"
-			dataType="string" inputType="string"
-			editor="!ui-name minLen:%s maxLen:%s trim:%s underscore:true slash:true"
 			renderer="!ui-label" />
 		<widgetType name="columnname" listOption="true"
 			description="$m{application.widgettype.columnname}" dataType="string"

@@ -20,8 +20,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import com.flowcentraltech.flowcentral.codegeneration.constants.CodeGenerationModuleSysParamConstants;
-import com.flowcentraltech.flowcentral.repository.constants.TransferToRemoteTaskConstants;
-import com.flowcentraltech.flowcentral.repository.data.TransferToRemote;
+import com.flowcentraltech.flowcentral.common.data.TransferToRemote;
 import com.flowcentraltech.flowcentral.studio.business.data.SnapshotResultDetails;
 import com.flowcentraltech.flowcentral.studio.constants.StudioSnapshotTaskConstants;
 import com.flowcentraltech.flowcentral.studio.constants.StudioSnapshotType;
@@ -112,15 +111,13 @@ public class StudioTakeSnapshotPageController extends AbstractStudioPageControll
                 CodeGenerationModuleSysParamConstants.SNAPSHOT_TARGET_REPOSITORY);
         final String branch = systemModuleService.getSysParameterValue(String.class,
                 CodeGenerationModuleSysParamConstants.SNAPSHOT_TARGET_BRANCH);
-        TransferToRemote transferToRemote = new TransferToRemote(TransferToRemote.TransferType.REPLACE_FILE_IN_DIRECTORY,
-                repositoryName, branch, workingPath, resultDetails.getFileName(), resultDetails.getSnapshot());
-        TaskSetup taskSetup = TaskSetup.newBuilder(TransferToRemoteTaskConstants.TRANSFER_TO_REMOTE_TASK_NAME)
-                .setParam(TransferToRemoteTaskConstants.TRANSFER_ITEM, transferToRemote)
-                .logMessages()
-                .build();
+        TransferToRemote transferToRemote = new TransferToRemote(
+                TransferToRemote.TransferType.REPLACE_FILE_IN_DIRECTORY, repositoryName, branch, workingPath,
+                resultDetails.getFileName(), resultDetails.getSnapshot());
         pageBean.setResultDetails(null);
         pageBean.setMessage(null);
-        return launchTaskWithMonitorBox(taskSetup, "Push Snapshot File to Remote", "/studio/snapshots/openPage", null);
+        return executeRepositoryTransfer(transferToRemote, "Push Snapshot File to Remote", "/studio/snapshots/openPage",
+                null);
     }
 
     @Override
