@@ -15,12 +15,16 @@
  */
 package com.flowcentraltech.flowcentral.configuration.constants;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
 import com.tcdng.unify.common.annotation.StaticList;
 import com.tcdng.unify.common.annotation.Table;
 import com.tcdng.unify.common.constants.ConnectFieldDataType;
 import com.tcdng.unify.common.constants.EnumConst;
 import com.tcdng.unify.core.constant.DataType;
 import com.tcdng.unify.core.constant.HAlignType;
+import com.tcdng.unify.core.util.EntityTypeFieldInfo;
 import com.tcdng.unify.core.util.EnumUtils;
 
 /**
@@ -163,7 +167,7 @@ public enum EntityFieldDataType implements EnumConst {
             false,
             true,
             true),
-   DOUBLE(
+    DOUBLE(
             "DB",
             DataType.DOUBLE,
             true,
@@ -173,16 +177,16 @@ public enum EntityFieldDataType implements EnumConst {
             true,
             true,
             false),
-   DOUBLE_ARRAY(
-           "DBA",
-           DataType.DOUBLE,
-           true,
-           true,
-           true,
-           false,
-           false,
-           true,
-           true),
+    DOUBLE_ARRAY(
+            "DBA",
+            DataType.DOUBLE,
+            true,
+            true,
+            true,
+            false,
+            false,
+            true,
+            true),
     DECIMAL(
             "DC",
             DataType.DECIMAL,
@@ -243,6 +247,16 @@ public enum EntityFieldDataType implements EnumConst {
             true,
             true,
             false),
+    TIMESTAMP_ARRAY(
+            "TSA",
+            DataType.TIMESTAMP,
+            false,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true),
     CLOB(
             "CT",
             DataType.CLOB,
@@ -593,13 +607,41 @@ public enum EntityFieldDataType implements EnumConst {
         return EnumUtils.fromName(EntityFieldDataType.class, name);
     }
 
-    public static EntityFieldDataType fromData(DataType dataType, boolean array) {
-        EntityFieldDataType fieldDataType = EntityFieldDataType.fromName(dataType.name());
-        if (array && fieldDataType != null) {
-            fieldDataType = fieldDataType.array();
+    public static EntityFieldDataType fromData(SimpleDateFormat dateFormatter, SimpleDateFormat dateTimeFormatter,
+            EntityTypeFieldInfo entityTypeFieldInfo) {
+        if (entityTypeFieldInfo.getType().isChild()) {
+            return EntityFieldDataType.CHILD;
         }
-        
-        return fieldDataType;
+
+        if (entityTypeFieldInfo.getType().isChildList()) {
+            return EntityFieldDataType.CHILD_LIST;
+        }
+
+        DataType dataType = entityTypeFieldInfo.getDataType();
+        final boolean array = entityTypeFieldInfo.isArray();
+        if (dataType != null) {
+            if (dataType.isString()) {
+                try {
+                    dateTimeFormatter.parse(entityTypeFieldInfo.getSample());
+                    dataType = DataType.TIMESTAMP;
+                } catch (ParseException e) {
+                    try {
+                        dateFormatter.parse(entityTypeFieldInfo.getSample());
+                        dataType = DataType.DATE;
+                    } catch (ParseException e1) {
+                    }
+                }
+            }
+
+            EntityFieldDataType fieldDataType = EntityFieldDataType.fromName(dataType.name());
+            if (array && fieldDataType != null) {
+                fieldDataType = fieldDataType.array();
+            }
+
+            return fieldDataType;
+        }
+
+        return null;
     }
 
     public static EntityFieldDataType fromInterconnect(ConnectFieldDataType dataType) {
@@ -607,7 +649,7 @@ public enum EntityFieldDataType implements EnumConst {
     }
 
     private EntityFieldDataType array() {
-        switch(this) {
+        switch (this) {
             case BOOLEAN:
             case BOOLEAN_ARRAY:
                 return BOOLEAN_ARRAY;
@@ -664,14 +706,15 @@ public enum EntityFieldDataType implements EnumConst {
             case TENANT_ID:
                 break;
             case TIMESTAMP:
-                break;
+            case TIMESTAMP_ARRAY:
+                return TIMESTAMP_ARRAY;
             case TIMESTAMP_UTC:
                 break;
             default:
                 break;
-            
+
         }
-        
+
         return this;
     }
 

@@ -15,6 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.application.util;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,7 +40,8 @@ public final class EntityCompositionUtils {
 
     }
 
-    public static EntityComposition createEntityComposition(String tablePrefix, String moduleShortCode,
+    public static EntityComposition createEntityComposition(SimpleDateFormat dateFormatter,
+            SimpleDateFormat dateTimeFormatter, String tablePrefix, String moduleShortCode,
             List<EntityTypeInfo> entityTypeList) throws UnifyException {
         List<EntityCompositionEntry> entries = new ArrayList<EntityCompositionEntry>();
         for (EntityTypeInfo entityTypeInfo : entityTypeList) {
@@ -55,10 +57,9 @@ public final class EntityCompositionUtils {
                 entry = new EntityCompositionEntry();
                 DynamicEntityFieldType fieldType = entityTypeFieldInfo.getType();
                 entry.setFieldType(fieldType);
-                entry.setDataType(
-                        EntityFieldDataType.fromData(entityTypeFieldInfo.getDataType(), entityTypeFieldInfo.isArray()));
+                entry.setDataType(EntityFieldDataType.fromData(dateFormatter, dateTimeFormatter, entityTypeFieldInfo));
                 entry.setName(StringUtils.decapitalize(entityTypeFieldInfo.getName()));
-                entry.setJsonName(entityTypeFieldInfo.getName());
+                entry.setJsonName(entityTypeFieldInfo.getJsonName());
                 entry.setColumn(entityTypeFieldInfo.getColumn());
                 entry.setSample(entityTypeFieldInfo.getSample());
                 entry.setDepth(depth);

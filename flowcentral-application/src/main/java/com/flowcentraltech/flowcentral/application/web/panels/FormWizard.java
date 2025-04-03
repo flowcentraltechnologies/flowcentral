@@ -35,6 +35,8 @@ public class FormWizard extends AbstractForm {
 
     private IconBar iconBar;
     
+    private String title;
+    
     private String formName;
     
     private String navPolicy;
@@ -143,6 +145,14 @@ public class FormWizard extends AbstractForm {
 
     public FormContext getFormContext() {
         return forms.get(currentPage).getCtx();
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public IconBar getIconBar() {

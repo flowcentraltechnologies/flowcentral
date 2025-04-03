@@ -22,6 +22,7 @@ import java.util.Map;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.web.data.FormContext;
+import com.flowcentraltech.flowcentral.application.web.widgets.IconBar.Item;
 import com.flowcentraltech.flowcentral.common.business.policies.FormValidationContext;
 import com.flowcentraltech.flowcentral.common.business.policies.FormWizardNavigationPolicy;
 import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
@@ -96,6 +97,9 @@ public class FormWizardPanel extends AbstractFormPanel {
         setVisible("submitCloseBtn", last && formWizard.isSubmit());
         setVisible("executeBtn", last && formWizard.isExecute());
         setVisible("saveCloseBtn", last && !formWizard.isSubmit() && !formWizard.isExecute());
+        
+        Item item = formWizard.getIconBar().getSelectedItem();
+        formWizard.setTitle(item.getLabel());
     }
 
     protected final FormContext evaluateCurrentFormContext(FormValidationContext vCtx) throws UnifyException {

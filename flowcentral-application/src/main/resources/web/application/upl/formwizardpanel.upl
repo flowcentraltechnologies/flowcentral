@@ -16,7 +16,7 @@
 !fc-formwizardpanel mainForm:$c{bodyPanel}
 
 !ui-panel:bodyPanel layout:$d{!ui-vertical style:$s{width:100%;} cellStyle:$s{padding:0px;}}
-	components:$c{mainWizardPanel actionPanel}
+	components:$c{mainWizardPanel}
 
 !ui-panel:mainWizardPanel layout:$d{!ui-horizontal style:$s{width:100%;} cellStyle:$s{padding:0px;}}
 	components:$c{iconBar frmContentPanel}
@@ -26,7 +26,8 @@
 
 // Content
 !ui-panel:frmContentPanel styleClass:$e{formbase} layout:$d{!ui-vertical style:$s{width:100%;} cellStyle:$s{padding:0px;}}
-	components:$c{formMessages pageFormPanel}
+	components:$c{frmTitle formMessages pageFormPanel actionPanel}
+!ui-label:frmTitle styleClass:$e{fwzTitle} binding:title
 
 // Messages
 !fc-formmessages:formMessages binding:messages
@@ -36,7 +37,7 @@
 !fc-miniform:pageForm  style:$s{width:98%;} sectionHeaders:false binding:form
 
 // Action panel
-!ui-panel:actionPanel layout:$d{!ui-horizontal style:$s{width:100%;} widths:$l{50% 50%}}
+!ui-panel:actionPanel styleClass:$e{fwzAct} layout:$d{!ui-horizontal style:$s{width:100%;} widths:$l{50% 50%}}
 	components:$c{navPanel exitPanel}
 
 !ui-panel:navPanel layout:$d{!ui-horizontal} components:$c{prevBtn} 
