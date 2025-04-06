@@ -2986,6 +2986,12 @@
 						saveAs="true" />
 					<field name="tableName" inputWidget="application.text"
 						column="1" required="true" saveAs="true" />
+					<field name="dateFormatter"
+						inputWidget="studio.dateformatterlist"
+						column="1" required="false" />
+					<field name="dateTimeFormatter"
+						inputWidget="studio.datetimeformatterlist"
+						column="1" required="false" />
 					<field name="emailProducerConsumer"
 						inputWidget="application.emailproducerconsumerlist"
 						column="1" />
@@ -2993,12 +2999,6 @@
 						column="1" switchOnChange="true" />
 					<field name="dataSourceName" inputWidget="application.text"
 						column="1" required="true" visible="false" />
-					<field name="dateFormatter"
-						inputWidget="studio.dateformatterlist"
-						column="1" required="false" />
-					<field name="dateTimeFormatter"
-						inputWidget="studio.datetimeformatterlist"
-						column="1" required="false" />
 				</section>
 				<section name="optionDetails" columns="type_1_2">
 					<field name="auditable" inputWidget="application.checkbox"
@@ -3198,6 +3198,10 @@
 					<field name="columnName"
 						inputWidget="application.columnname"
 						column="1" required="false" />
+					<field name="jsonName" inputWidget="application.text"
+						column="1" />
+					<field name="jsonFormatter"
+						inputWidget="studio.jsonformatterlist" column="1" />
 					<field name="inputLabel" inputWidget="application.text"
 						column="1" required="false" />
 					<field name="inputWidget"
@@ -3220,10 +3224,6 @@
 						column="1" visible="false" />
 					<field name="defaultVal" inputWidget="application.text"
 						column="1" visible="false" />
-					<field name="jsonName" inputWidget="application.text"
-						column="1" />
-					<field name="jsonFormatter"
-						inputWidget="studio.jsonformatterlist" column="1" />
 				</section>
 				<section name="optionDetails" columns="type_1_2">
 					<field name="auditable" inputWidget="application.checkbox"

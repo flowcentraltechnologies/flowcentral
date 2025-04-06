@@ -31,7 +31,7 @@
 	formSection:$d{!ui-section components:$c{frmAppName frmAppDesc frmAppLabel}}
 	formSection:$d{!ui-section components:$c{frmCreateModule frmModuleId}}
 	formSection:$d{!ui-section components:$c{frmModuleName frmModuleDesc frmModuleLabel frmModuleShortCode}}
-!ui-name:frmAppName caption:$m{switchapplicationdialogpanel.form.applicationname}
+!ui-name:frmAppName caption:$m{switchapplicationdialogpanel.form.applicationname} case:CAMEL
 	size:32 binding:applicationName required:true focus:true
 !ui-text:frmAppDesc caption:$m{switchapplicationdialogpanel.form.applicationdesc}
 	size:32 binding:applicationDesc required:true
@@ -42,7 +42,7 @@
     eventHandler:$d{!ui-event event:onchange action:$c{createModuleChangeAct}}
 !ui-select:frmModuleId caption:$m{switchapplicationdialogpanel.form.module}
 	list:$s{modulelist} blankOption:$s{} binding:moduleId required:true
-!ui-name:frmModuleName caption:$m{switchapplicationdialogpanel.form.modulename}
+!ui-name:frmModuleName caption:$m{switchapplicationdialogpanel.form.modulename} case:CAMEL
 	size:32 binding:moduleName required:true
 !ui-text:frmModuleDesc caption:$m{switchapplicationdialogpanel.form.moduledesc}
 	size:32 binding:moduleDesc required:true

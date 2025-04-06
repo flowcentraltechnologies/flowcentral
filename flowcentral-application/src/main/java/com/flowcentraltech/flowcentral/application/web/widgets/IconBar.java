@@ -57,6 +57,10 @@ public class IconBar {
         return items;
     }
 
+    public Item getSelectedItem() {
+        return items.get(selected);
+    }
+    
     public static Builder newBuilder() {
         return new Builder();
     }
