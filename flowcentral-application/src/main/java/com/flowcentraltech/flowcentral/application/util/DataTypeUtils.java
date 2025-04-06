@@ -43,6 +43,7 @@ public class DataTypeUtils {
             case CHILD_LIST:
             case REF_FILEUPLOAD:
             case CLOB:
+                break;
             case BOOLEAN_ARRAY:
             case SHORT_ARRAY:
             case INTEGER_ARRAY:
@@ -52,6 +53,9 @@ public class DataTypeUtils {
             case DECIMAL_ARRAY:
             case DATE_ARRAY:
             case STRING_ARRAY:
+                list = getListables(
+                        StandardFormatType.COMMA_ARRAY,
+                        StandardFormatType.PIPE_ARRAY);
                break;
             case DECIMAL:
             case DOUBLE:
