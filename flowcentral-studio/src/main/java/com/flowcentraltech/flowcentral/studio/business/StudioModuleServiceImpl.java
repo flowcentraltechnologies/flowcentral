@@ -169,6 +169,7 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
                     switch (type.appletType()) {
                         case MANAGE_ENTITYLIST:
                         case MANAGE_ENTITYLIST_ASSIGN:
+                        case MANAGE_ENTITYLIST_SUBMISSION:
                         case MANAGE_ENTITYLIST_SINGLEFORM:
                         case HEADLESS_TABS:
                         case MANAGE_PROPERTYLIST:

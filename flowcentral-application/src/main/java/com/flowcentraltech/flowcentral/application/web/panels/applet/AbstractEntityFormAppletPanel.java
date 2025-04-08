@@ -154,7 +154,9 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
             enableCreateSubmit = !isWorkflowCopyForm && isRootForm && applet
                     .formBeanMatchAppletPropertyCondition(AppletPropertyConstants.CREATE_FORM_SUBMIT_CONDITION);
         } else if (viewMode.isMaintainForm()) {
-            if (form.isSingleFormType()) {
+            if (formAppletDef != null && formAppletDef.getType().isSubmission()) {
+                enableUpdateSubmit = true;
+            } else if (form.isSingleFormType()) {
                 final AppletDef _appletDef = applet.getRootAppletDef();
                 final EntityDef _entityDef = applet.getEntityDef();
                 capture = _appletDef.getPropValue(boolean.class, AppletPropertyConstants.MAINTAIN_FORM_CAPTURE, false);

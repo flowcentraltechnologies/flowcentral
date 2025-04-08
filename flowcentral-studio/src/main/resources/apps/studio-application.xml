@@ -7255,6 +7255,77 @@
 					inputWidget="application.checkbox" />
 			</propertySet>
 		</propertyList>
+		<propertyList name="mebAppAppletPropList"
+			description="$m{studio.appappletprop.manageentitysubmit.propertylist}">
+			<propertySet
+				label="$m{studio.appappletprop.manageentity.searchproperties}">
+				<property name="searchTable"
+					description="$m{studio.appappletprop.manageentity.searchtable}"
+					inputWidget="studio.propertyapplettablelist" required="true" />
+				<property name="searchTable.searchOnCriteriaOnly"
+					description="$m{studio.appappletprop.manageentity.searchtable.searchoncriteriaonly}"
+					inputWidget="application.checkbox" />
+				<property name="searchTable.selectByConstraint"
+					description="$m{studio.appappletprop.manageentity.searchtable.selectbyconstraint}"
+					inputWidget="studio.propertyappletuniqueconstraintlist" />
+				<property name="baseRestriction"
+					description="$m{studio.appappletprop.manageentity.baserestriction}"
+					inputWidget="studio.propertyappletfilterlist" />
+				<property name="searchTable.quickFilter"
+					description="$m{studio.appappletprop.manageentity.searchtable.quickfilter}"
+					inputWidget="application.checkbox" />
+				<property name="searchTable.quickFilter.default"
+					description="$m{studio.appappletprop.manageentity.searchtable.quickfilterdef}"
+					inputWidget="studio.propertyappletquickfilterlist" />
+				<property name="searchTable.actionFooter"
+					description="$m{studio.appappletprop.manageentity.searchtable.actionfooter}"
+					inputWidget="application.checkbox" />
+				<property name="searchTable.report"
+					description="$m{studio.appappletprop.manageentity.searchtable.report}"
+					inputWidget="application.checkbox" />
+				<property name="searchTable.basicSearchOnly"
+					description="$m{studio.appappletprop.manageentity.searchtable.basicsearchonly}"
+					inputWidget="application.checkbox" />
+				<property name="searchTable.searchInput"
+					description="$m{studio.appappletprop.manageentity.searchtable.searchinput}"
+					inputWidget="studio.propertyappletsearchinputlist" />
+				<property name="searchTable.searchColumns"
+					description="$m{studio.appappletprop.manageentity.searchtable.searchcolumns}"
+					inputWidget="studio.propertyappletsingledigit" />
+			</propertySet>
+			<propertySet
+				label="$m{studio.appappletprop.manageentity.formproperties}">
+				<property name="listingForm"
+					description="$m{studio.appappletprop.manageentity.listingform}"
+					inputWidget="studio.propertyappletlistformlist"
+					required="false" />
+				<property name="maintainForm"
+					description="$m{studio.appappletprop.manageentity.maintainform}"
+					inputWidget="studio.propertyappletformlist" />
+				<property name="maintainForm.capture"
+					description="$m{studio.appappletprop.manageentity.maintainform.capture}"
+					inputWidget="application.checkbox" />
+				<property name="maintainForm.capture.attachmentprovider"
+					description="$m{studio.appappletprop.manageentity.maintainform.capture.attachmentprovider}"
+					inputWidget="studio.propertyappletattachmentproviderlist" />
+				<property name="maintainForm.attachments"
+					description="$m{studio.appappletprop.manageentity.maintainform.attachments}"
+					inputWidget="application.checkbox" />
+				<property name="maintainForm.attachments.adhoc"
+					description="$m{studio.appappletprop.manageentity.maintainform.attachments.adhoc}"
+					inputWidget="application.checkbox" />
+			</propertySet>
+			<propertySet
+				label="$m{studio.appappletprop.manageentity.workflowproperties}">
+				<property name="createForm.submit.caption"
+					description="$m{studio.appappletprop.manageentitysubmit.createform.submitcaption}"
+					inputWidget="application.text" />
+				<property name="maintainForm.submit.workflow.channel"
+					description="$m{studio.appappletprop.manageentitysubmit.maintainform.submitworkflow}"
+					inputWidget="studio.propertyappletworkflowchannellist"
+					required="false" />
+			</propertySet>
+		</propertyList>
 		<propertyList name="mplAppAppletPropList"
 			description="$m{studio.appappletprop.managepropertylist.propertylist}">
 			<propertySet
@@ -7324,6 +7395,7 @@
 			<choice name="mel" val="melAppAppletPropList" />
 			<choice name="mls" val="mlsAppAppletPropList" />
 			<choice name="mea" val="meaAppAppletPropList" />
+			<choice name="meb" val="mebAppAppletPropList" />
 			<choice name="mpl" val="mplAppAppletPropList" />
 			<choice name="hdl" val="hdlAppAppletPropList" />
 			<choice name="tex" val="texAppAppletPropList" />

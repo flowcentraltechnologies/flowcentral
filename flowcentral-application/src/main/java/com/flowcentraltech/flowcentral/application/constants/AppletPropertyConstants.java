@@ -124,6 +124,8 @@ public interface AppletPropertyConstants {
 
     String MAINTAIN_FORM_SUBMIT = "maintainForm.submit";
 
+    String MAINTAIN_FORM_SUBMIT_CAPTION = "maintainForm.submit.caption";
+
     String MAINTAIN_FORM_SUBMIT_POLICY = "maintainForm.submit.policy";
 
     String MAINTAIN_FORM_SUBMIT_VALIDATE = "maintainForm.submit.validate";
