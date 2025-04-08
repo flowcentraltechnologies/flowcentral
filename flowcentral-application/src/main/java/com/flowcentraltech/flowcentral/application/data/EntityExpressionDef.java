@@ -15,7 +15,11 @@
  */
 package com.flowcentraltech.flowcentral.application.data;
 
+import java.util.List;
+
 import com.tcdng.unify.common.data.Listable;
+import com.tcdng.unify.common.util.StringToken;
+import com.tcdng.unify.core.util.StringUtils;
 
 /**
  * Entity expression definition.
@@ -31,10 +35,13 @@ public class EntityExpressionDef implements Listable {
 
     private String expression;
 
+    private List<StringToken> expressionTokenList;
+
     public EntityExpressionDef(String name, String description, String expression) {
         this.name = name;
         this.description = description;
         this.expression = expression;
+        this.expressionTokenList = StringUtils.breakdownParameterizedString(expression);
     }
 
     @Override
@@ -57,6 +64,10 @@ public class EntityExpressionDef implements Listable {
 
     public String getExpression() {
         return expression;
+    }
+
+    public List<StringToken> getExpressionTokenList() {
+        return expressionTokenList;
     }
 
 }

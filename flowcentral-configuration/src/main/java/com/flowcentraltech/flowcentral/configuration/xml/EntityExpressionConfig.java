@@ -39,7 +39,7 @@ public class EntityExpressionConfig extends BaseConfig {
 
     @JsonSerialize(using = CDataXmlAdapter.Serializer.class)
     @JsonDeserialize(using = CDataXmlAdapter.Deserializer.class)
-    @JacksonXmlProperty(isAttribute = true)
+    @JacksonXmlProperty(isAttribute = false)
     private String expression;
 
     public String getName() {
