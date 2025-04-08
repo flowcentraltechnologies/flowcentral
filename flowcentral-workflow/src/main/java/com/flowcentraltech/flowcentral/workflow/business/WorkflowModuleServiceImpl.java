@@ -544,6 +544,10 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             environment().create(workflow);
         } else {
             runWorkflow.setDescription(runnableDesc);
+            runWorkflow.setLoadingTable(workflow.getLoadingTable());
+            runWorkflow.setSupportMultiItemAction(workflow.isSupportMultiItemAction());
+            runWorkflow.setEntity(workflow.getEntity());
+            runWorkflow.setLabel(workflow.getLabel());
             runWorkflow.setFilterList(workflow.getFilterList());
             runWorkflow.setSetValuesList(workflow.getSetValuesList());
             runWorkflow.setStepList(workflow.getStepList());
