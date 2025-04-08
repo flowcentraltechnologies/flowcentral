@@ -2696,7 +2696,7 @@
 				<errorCondition>
 					<restriction type="and">
 						<restriction type="amongst" field="type"
-							paramA="MEL|MEA|MLS|MLL|FWZ|CEN|CNS|DIM" />
+							paramA="MEL|MEA|MEB|MLS|MLL|FWZ|CEN|CNS|DIM" />
 						<restriction type="is_null" field="entity" />
 					</restriction>
 				</errorCondition>
@@ -2776,7 +2776,7 @@
 				description="$m{studio.appapplet.form.formstatepolicy.entity}">
 				<onCondition>
 					<restriction type="amongst" field="type"
-						paramA="MEL|MEA|MLS|MLL|FWZ|CEN|CNS|DIM" />
+						paramA="MEL|MEA|MEB|MLS|MLL|FWZ|CEN|CNS|DIM" />
 				</onCondition>
 				<setStates>
 					<setState type="field" target="entity" visible="true" />
