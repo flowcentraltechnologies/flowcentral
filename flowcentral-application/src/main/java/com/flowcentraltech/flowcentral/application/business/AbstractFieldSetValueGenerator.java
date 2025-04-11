@@ -65,6 +65,10 @@ public abstract class AbstractFieldSetValueGenerator extends AbstractFlowCentral
         return appletUtilities.system();
     }
 
+    protected final AppletUtilities au() {
+        return appletUtilities;
+    }
+
     /**
      * Gets the child value store.
      * 

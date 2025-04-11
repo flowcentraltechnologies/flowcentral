@@ -22,6 +22,7 @@ import java.util.Locale;
 
 import com.flowcentraltech.flowcentral.application.entities.AppAppletQuery;
 import com.flowcentraltech.flowcentral.application.web.lists.AbstractApplicationListCommand;
+import com.flowcentraltech.flowcentral.configuration.constants.AppletType;
 import com.tcdng.unify.common.data.Listable;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
@@ -42,7 +43,8 @@ public class StudioEntityAppletListCommand extends AbstractApplicationListComman
     @Override
     public List<? extends Listable> execute(Locale locale, StudioEntityFormParams params) throws UnifyException {
         if (params.isPresent()) {
-            return au().getApplicationEntityListables(new AppAppletQuery().entity(params.getEntity()));
+            return au().getApplicationEntityListables(
+                    new AppAppletQuery().type(AppletType.MANAGE_ENTITYLIST).entity(params.getEntity()));
         }
 
         return Collections.emptyList();

@@ -544,6 +544,10 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             environment().create(workflow);
         } else {
             runWorkflow.setDescription(runnableDesc);
+            runWorkflow.setLoadingTable(workflow.getLoadingTable());
+            runWorkflow.setSupportMultiItemAction(workflow.isSupportMultiItemAction());
+            runWorkflow.setEntity(workflow.getEntity());
+            runWorkflow.setLabel(workflow.getLabel());
             runWorkflow.setFilterList(workflow.getFilterList());
             runWorkflow.setSetValuesList(workflow.getSetValuesList());
             runWorkflow.setStepList(workflow.getStepList());
@@ -552,7 +556,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             runWorkflow.setClassified(true);
             environment().updateByIdVersion(runWorkflow);
         }
-        
+
         environment().updateById(Workflow.class, workflowId, new Update().add("published", true));
     }
 
@@ -1140,8 +1144,10 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                     if (!wfSetValuesDef.isWithOnCondition() || wfSetValuesDef.getOnCondition()
                             .getObjectFilter(entityDef, wfEntityInstValueStore.getReader(), now)
                             .matchReader(wfEntityInstValueStore.getReader())) {
-                        wfSetValuesDef.getSetValues().apply(appletUtil, entityDef, now, wfEntityInst,
-                                Collections.emptyMap(), null);
+                        if (wfSetValuesDef.isWithSetValues()) {
+                            wfSetValuesDef.getSetValues().apply(appletUtil, entityDef, now, wfEntityInst,
+                                    Collections.emptyMap(), null);
+                        }
                     }
                 }
 
@@ -1643,8 +1649,10 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                     if (!wfSetValuesDef.isWithOnCondition() || wfSetValuesDef.getOnCondition()
                             .getObjectFilter(entityDef, instValueStore.getReader(), now)
                             .matchReader(instValueStore.getReader())) {
-                        wfSetValuesDef.getSetValues().apply(appletUtil, entityDef, now, workInst,
-                                Collections.emptyMap(), null);
+                        if (wfSetValuesDef.isWithSetValues()) {
+                            wfSetValuesDef.getSetValues().apply(appletUtil, entityDef, now, workInst,
+                                    Collections.emptyMap(), null);
+                        }
                     }
                 }
             }

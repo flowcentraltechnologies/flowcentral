@@ -44,6 +44,11 @@ public enum AppletType implements EnumConst {
             FlowCentralAppletPathConstants.MANAGE_ENTITYLIST,
             false,
             true),
+    MANAGE_ENTITYLIST_SUBMISSION(
+            "MEB",
+            FlowCentralAppletPathConstants.MANAGE_ENTITYLIST,
+            false,
+            true),
     MANAGE_ENTITYLIST_SINGLEFORM(
             "MLS",
             FlowCentralAppletPathConstants.MANAGE_ENTITYLIST_SINGLEFORM,
@@ -141,12 +146,12 @@ public enum AppletType implements EnumConst {
             true);
 
     public static final List<AppletType> MANAGE_ENTITY_LIST_TYPES = Collections
-            .unmodifiableList(Arrays.asList(MANAGE_ENTITYLIST, MANAGE_ENTITYLIST_ASSIGN,
-                    MANAGE_ENTITYLIST_SINGLEFORM));
+            .unmodifiableList(Arrays.asList(MANAGE_ENTITYLIST, MANAGE_ENTITYLIST_ASSIGN, MANAGE_ENTITYLIST_SUBMISSION, MANAGE_ENTITYLIST_SINGLEFORM));
 
-    public static final List<AppletType> UNRESERVED_LIST = Collections.unmodifiableList(Arrays.asList(MANAGE_ENTITYLIST,
-            MANAGE_ENTITYLIST_ASSIGN, MANAGE_ENTITYLIST_SINGLEFORM, MANAGE_LOADINGLIST,  HEADLESS_TABS, CREATE_ENTITY,
-            CREATE_ENTITY_SINGLEFORM, FORM_WIZARD, LISTING, TASK_EXECUTION, FACADE, FACADE_MULTIPLE, PATH_WINDOW, PATH_PAGE));
+    public static final List<AppletType> UNRESERVED_LIST = Collections
+            .unmodifiableList(Arrays.asList(MANAGE_ENTITYLIST, MANAGE_ENTITYLIST_ASSIGN, MANAGE_ENTITYLIST_SUBMISSION, MANAGE_ENTITYLIST_SINGLEFORM,
+                    MANAGE_LOADINGLIST, HEADLESS_TABS, CREATE_ENTITY, CREATE_ENTITY_SINGLEFORM, FORM_WIZARD, LISTING,
+                    TASK_EXECUTION, FACADE, FACADE_MULTIPLE, PATH_WINDOW, PATH_PAGE));
 
     private final String code;
 
@@ -176,7 +181,7 @@ public enum AppletType implements EnumConst {
     public String path() {
         return path;
     }
-    
+
     public boolean isFormInitial() {
         return formInitial;
     }
@@ -190,7 +195,8 @@ public enum AppletType implements EnumConst {
     }
 
     public boolean workflow() {
-        return REVIEW_WIZARDWORKITEMS.equals(this) || REVIEW_WORKITEMS.equals(this) || REVIEW_SINGLEFORMWORKITEMS.equals(this);
+        return REVIEW_WIZARDWORKITEMS.equals(this) || REVIEW_WORKITEMS.equals(this)
+                || REVIEW_SINGLEFORMWORKITEMS.equals(this);
     }
 
     public boolean isOpenWindow() {
@@ -206,29 +212,35 @@ public enum AppletType implements EnumConst {
     }
 
     public boolean isEntityList() {
-        return MANAGE_ENTITYLIST.equals(this) || MANAGE_ENTITYLIST_ASSIGN.equals(this) || MANAGE_ENTITYLIST_SINGLEFORM.equals(this);
+        return MANAGE_ENTITYLIST.equals(this) || MANAGE_ENTITYLIST_ASSIGN.equals(this)
+                || MANAGE_ENTITYLIST_SUBMISSION.equals(this) || MANAGE_ENTITYLIST_SINGLEFORM.equals(this);
     }
 
     public boolean isAssignment() {
         return MANAGE_ENTITYLIST_ASSIGN.equals(this);
     }
-    
+
+    public boolean isSubmission() {
+        return MANAGE_ENTITYLIST_SUBMISSION.equals(this);
+    }
+
     public boolean isSingleForm() {
         return CREATE_ENTITY_SINGLEFORM.equals(this) || MANAGE_ENTITYLIST_SINGLEFORM.equals(this);
     }
-    
+
     public boolean isCreate() {
         return CREATE_ENTITY.equals(this) || CREATE_ENTITY_SINGLEFORM.equals(this);
     }
-    
+
     public boolean isStudioComponent() {
         return STUDIO_FC_COMPONENT.equals(this);
     }
-    
+
     public boolean supportsDetachedMaintain() {
-        return MANAGE_ENTITYLIST.equals(this) || MANAGE_ENTITYLIST_ASSIGN.equals(this) ;
+        return MANAGE_ENTITYLIST.equals(this) || MANAGE_ENTITYLIST_ASSIGN.equals(this)
+                || MANAGE_ENTITYLIST_SUBMISSION.equals(this);
     }
-    
+
     public static AppletType fromCode(String code) {
         return EnumUtils.fromCode(AppletType.class, code);
     }

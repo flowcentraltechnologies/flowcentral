@@ -1190,7 +1190,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
                 && !((WorkEntity) form.getFormBean()).isInWorkflow();
     }
 
-    public boolean formBeanMatchAppletPropertyCondition(String conditionPropName) throws UnifyException {
+    public boolean matchFormBeanToAppletPropertyCondition(String conditionPropName) throws UnifyException {
         return au().formBeanMatchAppletPropertyCondition(getFormAppletDef(), form, conditionPropName);
     }
 

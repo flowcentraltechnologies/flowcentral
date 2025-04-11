@@ -146,30 +146,33 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         boolean enableAttachment = false;
         boolean enableCreateSubmit = false;
         boolean enableUpdateSubmit = false;
+        boolean forceUpdateSubmit = false;
         boolean capture = false;
         if (viewMode.isCreateForm()) {
             EntityDef formEntityDef = form.getFormDef().getEntityDef();
             enableCreate = isContextEditable
                     && applicationPrivilegeManager().isRoleWithPrivilege(roleCode, formEntityDef.getAddPrivilege());
             enableCreateSubmit = !isWorkflowCopyForm && isRootForm && applet
-                    .formBeanMatchAppletPropertyCondition(AppletPropertyConstants.CREATE_FORM_SUBMIT_CONDITION);
+                    .matchFormBeanToAppletPropertyCondition(AppletPropertyConstants.CREATE_FORM_SUBMIT_CONDITION);
         } else if (viewMode.isMaintainForm()) {
-            if (form.isSingleFormType()) {
+            if (formAppletDef != null && formAppletDef.getType().isSubmission()) {
+                forceUpdateSubmit = true;
+            } else if (form.isSingleFormType()) {
                 final AppletDef _appletDef = applet.getRootAppletDef();
                 final EntityDef _entityDef = applet.getEntityDef();
                 capture = _appletDef.getPropValue(boolean.class, AppletPropertyConstants.MAINTAIN_FORM_CAPTURE, false);
                 enableUpdate = isContextEditable
                         && _appletDef.getPropValue(boolean.class, AppletPropertyConstants.MAINTAIN_FORM_UPDATE, false)
                         && applicationPrivilegeManager().isRoleWithPrivilege(roleCode, _entityDef.getEditPrivilege())
-                        && applet.formBeanMatchAppletPropertyCondition(
+                        && applet.matchFormBeanToAppletPropertyCondition(
                                 AppletPropertyConstants.MAINTAIN_FORM_UPDATE_CONDITION);
                 enableDelete = !isInWorkflow && isContextEditable
                         && _appletDef.getPropValue(boolean.class, AppletPropertyConstants.MAINTAIN_FORM_DELETE, false)
                         && applicationPrivilegeManager().isRoleWithPrivilege(roleCode, _entityDef.getDeletePrivilege())
-                        && applet.formBeanMatchAppletPropertyCondition(
+                        && applet.matchFormBeanToAppletPropertyCondition(
                                 AppletPropertyConstants.MAINTAIN_FORM_DELETE_CONDITION);
                 enableUpdateSubmit = !isWorkflowCopyForm && !isInWorkflow && applet
-                        .formBeanMatchAppletPropertyCondition(AppletPropertyConstants.MAINTAIN_FORM_SUBMIT_CONDITION);
+                        .matchFormBeanToAppletPropertyCondition(AppletPropertyConstants.MAINTAIN_FORM_SUBMIT_CONDITION);
             } else {
                 EntityDef formEntityDef = form.getFormDef().getEntityDef();
                 if (formAppletDef != null) { // Normal, null for workflow applet root
@@ -184,14 +187,14 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                                     false)
                             && applicationPrivilegeManager().isRoleWithPrivilege(roleCode,
                                     formEntityDef.getEditPrivilege())
-                            && applet.formBeanMatchAppletPropertyCondition(
+                            && applet.matchFormBeanToAppletPropertyCondition(
                                     AppletPropertyConstants.MAINTAIN_FORM_UPDATE_CONDITION);
                     enableDelete = !isInWorkflow && isContextEditable
                             && formAppletDef.getPropValue(boolean.class, AppletPropertyConstants.MAINTAIN_FORM_DELETE,
                                     false)
                             && applicationPrivilegeManager().isRoleWithPrivilege(roleCode,
                                     formEntityDef.getDeletePrivilege())
-                            && applet.formBeanMatchAppletPropertyCondition(
+                            && applet.matchFormBeanToAppletPropertyCondition(
                                     AppletPropertyConstants.MAINTAIN_FORM_DELETE_CONDITION);
                     enableAttachment = isRootForm
                             && formAppletDef.getPropValue(boolean.class,
@@ -199,7 +202,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                             && (formEntityDef.isWithAttachments() || formAppletDef.getPropValue(boolean.class,
                                     AppletPropertyConstants.MAINTAIN_FORM_ATTACHMENTS_ADHOC, false));
                     enableUpdateSubmit = !isWorkflowCopyForm && !isInWorkflow && isRootForm
-                            && applet.formBeanMatchAppletPropertyCondition(
+                            && applet.matchFormBeanToAppletPropertyCondition(
                                     AppletPropertyConstants.MAINTAIN_FORM_SUBMIT_CONDITION);
                     if (enableAttachment) {
                         applet.setFileAttachmentsDisabled(!applicationPrivilegeManager().isRoleWithPrivilege(roleCode,
@@ -209,7 +212,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                     enableUpdate = isContextEditable
                             && applicationPrivilegeManager().isRoleWithPrivilege(roleCode,
                                     formEntityDef.getEditPrivilege())
-                            && applet.formBeanMatchAppletPropertyCondition(
+                            && applet.matchFormBeanToAppletPropertyCondition(
                                     AppletPropertyConstants.MAINTAIN_FORM_UPDATE_CONDITION);
                     enableDelete = false;
                     enableAttachment = isRootForm && formEntityDef.isWithAttachments();
@@ -394,7 +397,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                 setVisible("saveBtn", false);
                 setVisible("saveNextBtn", false);
                 setVisible("saveCloseBtn", false);
-                setVisible("submitCloseBtn",
+                setVisible("submitCloseBtn", (forceUpdateSubmit && !isInWorkflow) ||
                         (enableUpdate && isWorkflowCopyForm && isUpdateDraft && !isInWorkflow)
                                 || (enableUpdateSubmit && formAppletDef.getPropValue(boolean.class,
                                         AppletPropertyConstants.MAINTAIN_FORM_SUBMIT, false)));
@@ -466,7 +469,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                 setVisible("saveBtn", false);
                 setVisible("saveNextBtn", false);
                 setVisible("saveCloseBtn", false);
-                setVisible("submitCloseBtn",
+                setVisible("submitCloseBtn", (forceUpdateSubmit && !isInWorkflow) ||
                         (enableUpdate && isWorkflowCopyForm && isUpdateDraft && !isInWorkflow)
                                 || (enableUpdateSubmit && formAppletDef.getPropValue(boolean.class,
                                         AppletPropertyConstants.MAINTAIN_FORM_SUBMIT, false)));

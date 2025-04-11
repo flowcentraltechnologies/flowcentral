@@ -41,12 +41,12 @@ import com.tcdng.unify.core.list.ListManager;
 @Component("studioapplettypelist")
 public class StudioAppletTypeListCommand extends AbstractApplicationListCommand<ConfigTypeParams> {
 
-    private static final List<AppletType> CREATABLE_APPLETTYPE_LIST = Collections
-            .unmodifiableList(Arrays.asList(AppletType.MANAGE_ENTITYLIST, AppletType.MANAGE_ENTITYLIST_ASSIGN,
-                    AppletType.MANAGE_ENTITYLIST_SINGLEFORM, AppletType.MANAGE_LOADINGLIST, AppletType.HEADLESS_TABS,
-                    AppletType.CREATE_ENTITY, AppletType.CREATE_ENTITY_SINGLEFORM, AppletType.FORM_WIZARD,
-                    AppletType.LISTING, AppletType.TASK_EXECUTION, AppletType.DATA_IMPORT, AppletType.FACADE,
-                    AppletType.FACADE_MULTIPLE, AppletType.PATH_WINDOW, AppletType.PATH_PAGE));
+    private static final List<AppletType> CREATABLE_APPLETTYPE_LIST = Collections.unmodifiableList(Arrays.asList(
+            AppletType.MANAGE_ENTITYLIST, AppletType.MANAGE_ENTITYLIST_ASSIGN, AppletType.MANAGE_ENTITYLIST_SUBMISSION,
+            AppletType.MANAGE_ENTITYLIST_SINGLEFORM, AppletType.MANAGE_LOADINGLIST, AppletType.HEADLESS_TABS,
+            AppletType.CREATE_ENTITY, AppletType.CREATE_ENTITY_SINGLEFORM, AppletType.FORM_WIZARD, AppletType.LISTING,
+            AppletType.TASK_EXECUTION, AppletType.DATA_IMPORT, AppletType.FACADE, AppletType.FACADE_MULTIPLE,
+            AppletType.PATH_WINDOW, AppletType.PATH_PAGE));
 
     @Configurable
     private ListManager listManager;

@@ -577,21 +577,29 @@ public class StudioEntitySchemaManagerImpl extends AbstractEntitySchemaManager {
                 // Add applet properties
                 if (type.isEntityList()) {
                     appletPropList.add(new AppAppletProp(AppletPropertyConstants.SEARCH_TABLE, tableName));
-                    appletPropList.add(new AppAppletProp(AppletPropertyConstants.SEARCH_TABLE_NEW, "true"));
                     appletPropList.add(new AppAppletProp(AppletPropertyConstants.SEARCH_TABLE_QUICKFILTER, "true"));
                     appletPropList.add(new AppAppletProp(AppletPropertyConstants.SEARCH_TABLE_BASICSEARCHONLY, "true"));
                     if (entityDef.isReportable()) {
                         appletPropList.add(new AppAppletProp(AppletPropertyConstants.SEARCH_TABLE_REPORT, "true"));
                     }
 
-                    appletPropList.add(new AppAppletProp(AppletPropertyConstants.CREATE_FORM_SAVE_CLOSE, "true"));
+                    if (!type.isSubmission()) {
+                        appletPropList.add(new AppAppletProp(AppletPropertyConstants.SEARCH_TABLE_NEW, "true"));
+
+                        appletPropList.add(new AppAppletProp(AppletPropertyConstants.CREATE_FORM_SAVE, "true"));
+                        appletPropList.add(new AppAppletProp(AppletPropertyConstants.CREATE_FORM_SAVE_NEXT, "true"));
+                        appletPropList.add(new AppAppletProp(AppletPropertyConstants.CREATE_FORM_SAVE_CLOSE, "true"));
+
+                        appletPropList.add(new AppAppletProp(AppletPropertyConstants.MAINTAIN_FORM_UPDATE, "true"));
+                        appletPropList.add(new AppAppletProp(AppletPropertyConstants.MAINTAIN_FORM_DELETE, "true"));
+                    }
+                } else {
+                    appletPropList.add(new AppAppletProp(AppletPropertyConstants.CREATE_FORM_SAVE, "true"));
+                    appletPropList.add(new AppAppletProp(AppletPropertyConstants.CREATE_FORM_SAVE_NEXT, "true"));
+
+                    appletPropList.add(new AppAppletProp(AppletPropertyConstants.MAINTAIN_FORM_UPDATE, "true"));
+                    appletPropList.add(new AppAppletProp(AppletPropertyConstants.MAINTAIN_FORM_DELETE, "true"));
                 }
-
-                appletPropList.add(new AppAppletProp(AppletPropertyConstants.CREATE_FORM_SAVE, "true"));
-                appletPropList.add(new AppAppletProp(AppletPropertyConstants.CREATE_FORM_SAVE_NEXT, "true"));
-
-                appletPropList.add(new AppAppletProp(AppletPropertyConstants.MAINTAIN_FORM_UPDATE, "true"));
-                appletPropList.add(new AppAppletProp(AppletPropertyConstants.MAINTAIN_FORM_DELETE, "true"));
             }
 
             appApplet.setPropList(appletPropList);
