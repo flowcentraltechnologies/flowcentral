@@ -14,6 +14,6 @@
 	<sysParameters>
 		<sysParameter code="AUD-0001" defaultVal="true"
 			description="$m{audit.sysparam.enableviewonlyauditlogging}"
-			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
+			editor="!ui-select list:booleanlist" type="BOOLEAN" editable="true" />
 	</sysParameters>
 </module>

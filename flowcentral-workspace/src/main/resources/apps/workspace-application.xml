@@ -10,7 +10,7 @@
 		<applet name="manageWorkspace"
 			description="$m{workspace.workspace.manage}"
 			label="$m{workspace.workspace.manage.label}" icon="laptop-house"
-			type="manage_entitylist" entity="workspace" menuAccess="true">
+			type="MANAGE_ENTITYLIST" entity="workspace" menuAccess="true">
 			<property name="searchTable" value="workspaceTable" />
 			<property name="searchTable.new" value="true" />
 			<property name="searchTable.report" value="true" />
@@ -60,14 +60,14 @@
 			label="$m{workspace.workspace.label}"
 			type="com.flowcentraltech.flowcentral.workspace.entities.Workspace" auditable="true"
 			reportable="true">
-			<field name="code" label="$m{workspace.workspace.code}" type="string"
+			<field name="code" label="$m{workspace.workspace.code}" type="STRING"
 				inputWidget="application.name"  maxLen="32" />
-			<field name="name" label="$m{workspace.workspace.name}" type="string"
+			<field name="name" label="$m{workspace.workspace.name}" type="STRING"
 				inputWidget="application.name"  maxLen="64"  basicSearch="true"/>
 			<field name="description" label="$m{workspace.workspace.description}"
-				type="string" inputWidget="application.text" maxLen="96"  basicSearch="true"/>
+				type="STRING" inputWidget="application.text" maxLen="96"  basicSearch="true"/>
 			<field name="privilegeList" label="$m{workspace.workspace.privileges}"
-				type="child_list" references="workspacePrivilegeRef" />
+				type="CHILD_LIST" references="workspacePrivilegeRef" />
 			<uniqueConstraint name="codeUc"
 				description="$m{workspace.workspace.uc.code}" fieldList="code" />
 			<uniqueConstraint name="nameUc"
@@ -80,42 +80,42 @@
 			label="$m{workspace.workspaceprivilege.label}"
 			type="com.flowcentraltech.flowcentral.workspace.entities.WorkspacePrivilege">
 			<field name="workspaceId" label="$m{workspace.workspaceprivilege.workspaceid}"
-				inputLabel="$m{workspace.workspaceprivilege.workspace}" type="ref"
+				inputLabel="$m{workspace.workspaceprivilege.workspace}" type="REF"
 				references="workspaceRef" inputWidget="application.entitylist" />
 			<field name="privilegeId"
-				label="$m{workspace.workspaceprivilege.privilegeid}" type="ref"
+				label="$m{workspace.workspaceprivilege.privilegeid}" type="REF"
 				references="organization.privilegeRef" inputWidget="application.entitysearch" />
 			<field name="workspaceCode" label="$m{workspace.workspaceprivilege.workspacecode}"
-				type="list_only" key="workspaceId" property="code" />
+				type="LIST_ONLY" key="workspaceId" property="code" />
 			<field name="workspaceDesc" label="$m{workspace.workspaceprivilege.workspacedesc}"
-				type="list_only" key="workspaceId" property="description" />
+				type="LIST_ONLY" key="workspaceId" property="description" />
 			<field name="privilegeCode"
-				label="$m{workspace.workspaceprivilege.privilegecode}" type="list_only"
+				label="$m{workspace.workspaceprivilege.privilegecode}" type="LIST_ONLY"
 				key="privilegeId" property="code" />
 			<field name="privilegeDesc"
-				label="$m{workspace.workspaceprivilege.privilegedesc}" type="list_only"
+				label="$m{workspace.workspaceprivilege.privilegedesc}" type="LIST_ONLY"
 				key="privilegeId" property="description" />
 			<field name="privilegeCategoryId"
-				label="$m{workspace.workspaceprivilege.privilegecatid}" type="list_only"
+				label="$m{workspace.workspaceprivilege.privilegecatid}" type="LIST_ONLY"
 				key="privilegeId" property="privilegeCategoryId"
 				inputLabel="$m{workspace.workspaceprivilege.privilegecat}"
 				references="organization.privilegeCategoryRef" inputWidget="application.entitylist" />
 			<field name="privilegeCatCode"
-				label="$m{workspace.workspaceprivilege.privilegecatcode}" type="list_only"
+				label="$m{workspace.workspaceprivilege.privilegecatcode}" type="LIST_ONLY"
 				key="privilegeId" property="privilegeCatCode" />
 			<field name="privilegeCatDesc"
-				label="$m{workspace.workspaceprivilege.privilegecatdesc}" type="list_only"
+				label="$m{workspace.workspaceprivilege.privilegecatdesc}" type="LIST_ONLY"
 				key="privilegeId" property="privilegeCatDesc" />
 			<field name="applicationId"
-				label="$m{workspace.workspaceprivilege.applicationid}" type="list_only"
+				label="$m{workspace.workspaceprivilege.applicationid}" type="LIST_ONLY"
 				key="privilegeId" property="applicationId"
 				inputLabel="$m{workspace.workspaceprivilege.application}"
 				references="application.applicationRef" inputWidget="application.entitylist" />
 			<field name="applicationName"
-				label="$m{workspace.workspaceprivilege.applicationcode}" type="list_only"
+				label="$m{workspace.workspaceprivilege.applicationcode}" type="LIST_ONLY"
 				key="privilegeId" property="applicationName" />
 			<field name="applicationDesc"
-				label="$m{workspace.workspaceprivilege.applicationdesc}" type="list_only"
+				label="$m{workspace.workspaceprivilege.applicationdesc}" type="LIST_ONLY"
 				key="privilegeId" property="applicationDesc" />
 			<uniqueConstraint name="privilegeUc"
 				description="$m{workspace.workspaceprivilege.uc.privilege}"
@@ -161,8 +161,8 @@
 		<form name="workspaceForm" description="$m{workspace.workspace.form}"
 			entity="workspace">
 			<tab name="basicDetails"
-				label="$m{workspace.workspace.form.basicdetails}" contentType="miniform">
-				<section name="workspaceDetails" columns="type_2">
+				label="$m{workspace.workspace.form.basicdetails}" contentType="MINIFORM">
+				<section name="workspaceDetails" columns="TYPE_2">
 					<field name="code" inputWidget="application.name" column="1"
 						disabled="true" />
 					<field name="name" inputWidget="application.name" column="0"
@@ -177,7 +177,7 @@
 				contentType="child_list" applet="manageWorkspacePrivilege"
 				reference="privilegeList" />
 			<tab name="changeLog" label="$m{application.form.audit}"
-				contentType="miniform_changelog" />
+				contentType="MINIFORM_CHANGELOG" />
 			<formStatePolicy type="on_switch" name="codeVisiblePolicy"
 				description="$m{workspace.workspace.form.fieldstatepolicy.codevisiblepolicy}">
 				<onCondition>

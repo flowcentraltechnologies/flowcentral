@@ -13,67 +13,67 @@
 	<sysParameters>
 		<sysParameter code="APP-0001" defaultVal="/application"
 			description="$m{application.sysparam.defaultapplication}"
-			editor="!ui-select list:webapplicationlist" type="string" />
+			editor="!ui-select list:webapplicationlist" type="STRING" />
 		<sysParameter code="APP-0002" defaultVal="true"
 			description="$m{application.sysparam.formshowalternateactions}"
-			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
+			editor="!ui-select list:booleanlist" type="BOOLEAN" editable="true" />
 		<sysParameter code="APP-0003" defaultVal="true"
 			description="$m{application.sysparam.menusectionwithitemsonly}"
-			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
+			editor="!ui-select list:booleanlist" type="BOOLEAN" editable="true" />
 		<sysParameter code="APP-0004" defaultVal="studio"
 			description="$m{application.sysparam.studioapplicationname}"
 			editor="!ui-text" type="name" />
 		<sysParameter code="APP-0005" defaultVal="true"
 			description="$m{application.sysparam.studiomenuenabled}"
-			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
+			editor="!ui-select list:booleanlist" type="BOOLEAN" editable="true" />
 		<sysParameter code="APP-0006" defaultVal="/applicationstudio"
 			description="$m{application.sysparam.studioapplicationpath}"
-			editor="!ui-text" type="string" editable="true" />
+			editor="!ui-text" type="STRING" editable="true" />
 		<sysParameter code="APP-0007" defaultVal="import"
 			description="$m{application.sysparam.importapplicationname}"
 			editor="!ui-text" type="name" />
 		<sysParameter code="APP-0008" defaultVal="false"
 			description="$m{application.sysparam.tabbedcontent}"
-			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
+			editor="!ui-select list:booleanlist" type="BOOLEAN" editable="true" />
 		<sysParameter code="APP-0009" defaultVal="true"
 			description="$m{application.sysparam.assignapplicationentityoncreate}"
-			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
+			editor="!ui-select list:booleanlist" type="BOOLEAN" editable="true" />
 		<sysParameter code="APP-000A" defaultVal="false"
 			description="$m{application.sysparam.useformcolorscheme}"
-			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
+			editor="!ui-select list:booleanlist" type="BOOLEAN" editable="true" />
 		<sysParameter code="APP-000B" defaultVal="false"
 			description="$m{application.sysparam.tableheaderuppercase}"
-			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
+			editor="!ui-select list:booleanlist" type="BOOLEAN" editable="true" />
 		<sysParameter code="APP-000C" defaultVal="false"
 			description="$m{application.sysparam.tableheadercenter}"
-			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
+			editor="!ui-select list:booleanlist" type="BOOLEAN" editable="true" />
 		<sysParameter code="APP-000D" defaultVal="false"
 			description="$m{application.sysparam.strictformreviewmode}"
-			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
+			editor="!ui-select list:booleanlist" type="BOOLEAN" editable="true" />
 		<sysParameter code="APP-000E" defaultVal="true"
 			description="$m{application.sysparam.autosavesuggestions}"
-			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
+			editor="!ui-select list:booleanlist" type="BOOLEAN" editable="true" />
 		<sysParameter code="APP-000F" defaultVal="true"
 			description="$m{application.sysparam.tableclassicmode}"
-			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
+			editor="!ui-select list:booleanlist" type="BOOLEAN" editable="true" />
 		<sysParameter code="APP-0010"
 			description="$m{application.sysparam.applicationheadertitle}"
-			editor="!ui-text" type="string" editable="true" />
+			editor="!ui-text" type="STRING" editable="true" />
 		<sysParameter code="APP-0011" defaultVal="false"
 			description="$m{application.sysparam.sectionlabelindicationonmenu}"
-			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
+			editor="!ui-select list:booleanlist" type="BOOLEAN" editable="true" />
 		<sysParameter code="APP-0012" defaultVal="false"
 			description="$m{application.sysparam.sectionindicationontabs}"
-			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
+			editor="!ui-select list:booleanlist" type="BOOLEAN" editable="true" />
 		<sysParameter code="APP-0013" defaultVal="false"
 			description="$m{application.sysparam.sectionindicationonpage}"
-			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
+			editor="!ui-select list:booleanlist" type="BOOLEAN" editable="true" />
 		<sysParameter code="APP-0014" defaultVal="true"
 			description="$m{application.sysparam.saveheaderformontabaction}"
-			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
+			editor="!ui-select list:booleanlist" type="BOOLEAN" editable="true" />
 		<sysParameter code="APP-0015" defaultVal="false"
 			description="$m{application.sysparam.showbuttonsforfooteraction}"
-			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
+			editor="!ui-select list:booleanlist" type="BOOLEAN" editable="true" />
 		<sysParameter code="APP-0016" defaultVal="4"
 			description="$m{application.sysparam.searchentrycolumns}"
 			editor="!ui-integer precision:1" type="number" editable="true" />
@@ -82,66 +82,66 @@
 			editor="!ui-integer precision:2" type="number" editable="true" />
 		<sysParameter code="APP-0018" defaultVal="true"
 			description="$m{application.sysparam.highlatencyindication}"
-			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
+			editor="!ui-select list:booleanlist" type="BOOLEAN" editable="true" />
 		<sysParameter code="APP-0019" defaultVal="false"
 			description="$m{application.sysparam.showresolvedbaserestriction}"
-			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
+			editor="!ui-select list:booleanlist" type="BOOLEAN" editable="true" />
 		<sysParameter code="APP-001A" defaultVal="true"
 			description="$m{application.sysparam.searchentryshowconditions}"
-			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
+			editor="!ui-select list:booleanlist" type="BOOLEAN" editable="true" />
 		<sysParameter code="APP-001B" defaultVal="true"
 			description="$m{application.sysparam.sectorsortonmenu}"
-			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
+			editor="!ui-select list:booleanlist" type="BOOLEAN" editable="true" />
 		<sysParameter code="APP-001C" defaultVal="false"
 			description="$m{application.sysparam.formsectionclassicmode}"
-			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
+			editor="!ui-select list:booleanlist" type="BOOLEAN" editable="true" />
 		<sysParameter code="APP-001D" defaultVal="false"
 			description="$m{application.sysparam.sectioncolorindicationonmenu}"
-			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
+			editor="!ui-select list:booleanlist" type="BOOLEAN" editable="true" />
 		<sysParameter code="APP-001E" defaultVal="true"
 			description="$m{application.sysparam.enablequickreport}"
-			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
+			editor="!ui-select list:booleanlist" type="BOOLEAN" editable="true" />
 		<sysParameter code="APP-001F" defaultVal="false"
 			description="$m{application.sysparam.enableviewentityinseparatetab}"
-			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
+			editor="!ui-select list:booleanlist" type="BOOLEAN" editable="true" />
 		<sysParameter code="APP-0020" defaultVal="false"
 			description="$m{application.sysparam.showworkitemsonlogin}"
-			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
+			editor="!ui-select list:booleanlist" type="BOOLEAN" editable="true" />
 		<sysParameter code="APP-0021" defaultVal="false"
 			description="$m{application.sysparam.enablestickyworkitemspage}"
-			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
+			editor="!ui-select list:booleanlist" type="BOOLEAN" editable="true" />
 		<sysParameter code="APP-0022" defaultVal="true"
 			description="$m{application.sysparam.enableclassiclinkdecoration}"
-			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
+			editor="!ui-select list:booleanlist" type="BOOLEAN" editable="true" />
 		<sysParameter code="APP-0023" defaultVal="false"
 			description="$m{application.sysparam.enableappletsourceauditing}"
-			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
+			editor="!ui-select list:booleanlist" type="BOOLEAN" editable="true" />
 		<sysParameter code="APP-0024" defaultVal="true"
 			description="$m{application.sysparam.enableparentstateauditing}"
-			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
+			editor="!ui-select list:booleanlist" type="BOOLEAN" editable="true" />
 		<sysParameter code="APP-0025" defaultVal="false"
 			description="$m{application.sysparam.enableopentabinbrowser}"
-			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
+			editor="!ui-select list:booleanlist" type="BOOLEAN" editable="true" />
 		<sysParameter code="APP-0026" defaultVal="false"
 			description="$m{application.sysparam.enabledraftworkflowmultiitemaction}"
-			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
+			editor="!ui-select list:booleanlist" type="BOOLEAN" editable="true" />
 		<sysParameter code="APP-0027" defaultVal="5"
 			description="$m{application.sysparam.messagevisibilitytimeout}"
 			editor="!ui-integer precision:2" type="number" editable="true" />
 		<sysParameter code="APP-0028" defaultVal="false"
 			description="$m{application.sysparam.enablemultierrormessages}"
-			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
+			editor="!ui-select list:booleanlist" type="BOOLEAN" editable="true" />
 		<sysParameter code="APP-0029" defaultVal="false"
 			description="$m{application.sysparam.enablehideerrormessagesoninput}"
-			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
+			editor="!ui-select list:booleanlist" type="BOOLEAN" editable="true" />
 		<sysParameter code="APP-002A" defaultVal="false"
 			description="$m{application.sysparam.globalclientupdatesychronization}"
-			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
+			editor="!ui-select list:booleanlist" type="BOOLEAN" editable="true" />
 		<sysParameter code="APP-002B" defaultVal="true"
 			description="$m{application.sysparam.entitysearchonsearchinputchange}"
-			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
+			editor="!ui-select list:booleanlist" type="BOOLEAN" editable="true" />
 		<sysParameter code="APP-002C" defaultVal="false"
 			description="$m{application.sysparam.enablelongform}"
-			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
+			editor="!ui-select list:booleanlist" type="BOOLEAN" editable="true" />
 	</sysParameters>
 </module>

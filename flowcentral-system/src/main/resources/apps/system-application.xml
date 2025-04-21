@@ -6,37 +6,37 @@
 	<!-- Widget Types -->
 	<widgetTypes>
 		<widgetType name="sysparamvalue"
-			description="$m{system.widgettype.sysparamvalue}" dataType="string"
-			inputType="string" editor="!ui-dynamic descriptorBinding:editor"
+			description="$m{system.widgettype.sysparamvalue}" dataType="STRING"
+			inputType="STRING" editor="!ui-dynamic descriptorBinding:editor"
 			renderer="!ui-label" />
 		<widgetType name="schedulabletasklist"
 			description="$m{system.widgettype.schedulabletasklist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!ui-select list:schedulabletasklist blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="weekdayschecklist"
 			description="$m{system.widgettype.weekdayschecklist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!ui-dropdownchecklist list:dayinweeklist selectAllOption:$m{system.scheduledtask.selectalldays}"
 			renderer="!ui-label" />
 		<widgetType name="dayschecklist"
-			description="$m{system.widgettype.dayschecklist}" dataType="string"
-			inputType="string"
+			description="$m{system.widgettype.dayschecklist}" dataType="STRING"
+			inputType="STRING"
 			editor="!ui-dropdownchecklist list:dayinmonthlist columns:7 selectAllOption:$m{system.scheduledtask.selectalldays}"
 			renderer="!ui-label" />
 		<widgetType name="monthschecklist"
-			description="$m{system.widgettype.monthschecklist}" dataType="string"
-			inputType="string"
+			description="$m{system.widgettype.monthschecklist}" dataType="STRING"
+			inputType="STRING"
 			editor="!ui-dropdownchecklist list:monthinyearlist columns:3 selectAllOption:$m{system.scheduledtask.selectallmonths}"
 			renderer="!ui-label" />
 		<widgetType name="colorlist"
-			description="$m{system.widgettype.colorlist}" dataType="string"
-			inputType="string"
+			description="$m{system.widgettype.colorlist}" dataType="STRING"
+			inputType="STRING"
 			editor="!ui-select list:systemcolorlist blankOption:$m{blank.none} colors:true"
 			renderer="!ui-label" />
 		<widgetType name="tenantlist"
-			description="$m{system.widgettype.tenantlist}" dataType="long"
-			inputType="long"
+			description="$m{system.widgettype.tenantlist}" dataType="LONG"
+			inputType="LONG"
 			editor="!ui-select list:tenantlist blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 	</widgetTypes>
@@ -45,7 +45,7 @@
 		<applet name="manageSector"
 			description="$m{system.sector.manage}"
 			label="$m{system.sector.manage.label}" icon="vector-square"
-			type="manage_entitylist" entity="sector" menuAccess="true">
+			type="MANAGE_ENTITYLIST" entity="sector" menuAccess="true">
 			<property name="searchTable" value="sectorTable" />
 			<property name="searchTable.new" value="true" />
 			<property name="searchTable.report" value="true" />
@@ -71,7 +71,7 @@
 		<applet name="manageModule"
 			description="$m{system.module.manage}"
 			label="$m{system.module.manage.label}" icon="cubes"
-			type="manage_entitylist" entity="module" menuAccess="true">
+			type="MANAGE_ENTITYLIST" entity="module" menuAccess="true">
 			<property name="searchTable" value="moduleTable" />
 			<property name="searchTable.report" value="true" />
 			<property name="searchTable.basicSearchOnly" value="true" />
@@ -90,7 +90,7 @@
 		</applet>
 		<applet name="manageModuleApp"
 			description="$m{system.moduleapp.manage}"
-			label="$m{system.moduleapp.manage.label}" type="manage_entitylist"
+			label="$m{system.moduleapp.manage.label}" type="MANAGE_ENTITYLIST"
 			entity="moduleApp">
 			<property name="searchTable" value="moduleAppTable" />
 			<property name="maintainForm" value="moduleAppForm" />
@@ -98,7 +98,7 @@
 		<applet name="manageSysParam"
 			description="$m{system.systemparameter.manage}"
 			label="$m{system.systemparameter.manage.label}" icon="cogs"
-			type="manage_entitylist" entity="sysParam" menuAccess="true">
+			type="MANAGE_ENTITYLIST" entity="sysParam" menuAccess="true">
 			<property name="searchTable" value="sysParamTable" />
 			<property name="searchTable.report" value="true" />
 			<property name="searchTable.quickFilter" value="true" />
@@ -143,7 +143,7 @@
 		<applet name="manageScheduledTask"
 			description="$m{system.scheduledtask.manage}"
 			label="$m{system.scheduledtask.manage.label}" icon="clock"
-			type="manage_entitylist" entity="scheduledTask" menuAccess="true">
+			type="MANAGE_ENTITYLIST" entity="scheduledTask" menuAccess="true">
 			<property name="searchTable" value="scheduledTaskTable" />
 			<property name="searchTable.new" value="true" />
 			<property name="searchTable.report" value="true" />
@@ -160,7 +160,7 @@
 		<applet name="manageScheduledTaskHist"
 			description="$m{system.scheduledtaskhist.manage}"
 			label="$m{system.scheduledtaskhist.manage.label}" icon="history"
-			type="manage_entitylist" entity="scheduledTaskHist" menuAccess="true">
+			type="MANAGE_ENTITYLIST" entity="scheduledTaskHist" menuAccess="true">
 			<property name="searchTable" value="scheduledTaskHistTable" />
 			<property name="searchTable.new" value="false" />
 			<property name="searchTable.report" value="true" />
@@ -173,7 +173,7 @@
 		<applet name="manageCredential"
 			description="$m{system.credential.manage}"
 			label="$m{system.credential.manage.label}" icon="key"
-			type="manage_entitylist" entity="credential" menuAccess="true">
+			type="MANAGE_ENTITYLIST" entity="credential" menuAccess="true">
 			<property name="searchTable" value="credentialTable" />
 			<property name="searchTable.new" value="true" />
 			<property name="searchTable.report" value="true" />
@@ -189,7 +189,7 @@
 		<applet name="manageDelegate"
 			description="$m{system.delegate.manage}"
 			label="$m{system.delegate.manage.label}" icon="network-wired"
-			type="manage_entitylist" entity="delegate" menuAccess="true">
+			type="MANAGE_ENTITYLIST" entity="delegate" menuAccess="true">
 			<property name="searchTable" value="delegateTable" />
 			<property name="searchTable.new" value="true" />
 			<property name="searchTable.report" value="true" />
@@ -205,7 +205,7 @@
 		<applet name="manageDelegateRedirect"
 			description="$m{system.delegateredirect.manage}"
 			label="$m{system.delegateredirect.manage.label}"
-			type="manage_entitylist" entity="delegateRedirect" menuAccess="false">
+			type="MANAGE_ENTITYLIST" entity="delegateRedirect" menuAccess="false">
 			<property name="searchTable" value="delegateRedirectTable" />
 			<property name="searchTable.new" value="true" />
 			<property name="searchTable.report" value="true" />
@@ -221,7 +221,7 @@
 		<applet name="manageDownloadLog"
 			description="$m{system.downloadlog.manage}"
 			label="$m{system.downloadlog.manage.label}" icon="logs"
-			type="manage_entitylist" entity="downloadLog" menuAccess="true">
+			type="MANAGE_ENTITYLIST" entity="downloadLog" menuAccess="true">
 			<property name="searchTable" value="downloadLogTable" />
 			<property name="searchTable.report" value="true" />
 			<property name="searchTable.basicSearchOnly" value="true" />
@@ -240,7 +240,7 @@
 		<applet name="manageEnvironmentVariable"
 			description="$m{system.environmentvariable.manage}"
 			label="$m{system.environmentvariable.manage.label}" icon="cog"
-			type="manage_entitylist" entity="environmentVariable"
+			type="MANAGE_ENTITYLIST" entity="environmentVariable"
 			menuAccess="true">
 			<property name="searchTable"
 				value="environmentVariableTable" />
@@ -259,7 +259,7 @@
 		<applet name="manageTenant"
 			description="$m{system.tenant.manage}"
 			label="$m{system.tenant.manage.label}" icon="man"
-			type="manage_entitylist" entity="tenant" menuAccess="true">
+			type="MANAGE_ENTITYLIST" entity="tenant" menuAccess="true">
 			<property name="searchTable" value="tenantTable" />
 			<property name="searchTable.report" value="true" />
 			<property name="searchTable.basicSearchOnly" value="true" />
@@ -318,20 +318,20 @@
 			label="$m{system.sector.label}"
 			type="com.flowcentraltech.flowcentral.system.entities.Sector"
 			auditable="true" reportable="true" changeEvents = "true">
-			<field name="name" label="$m{system.sector.name}" type="string"
+			<field name="name" label="$m{system.sector.name}" type="STRING"
 				inputWidget="application.name" maxLen="32" basicSearch="true" auditable="true"/>
 			<field name="description" label="$m{system.sector.description}"
-				type="string" inputWidget="application.text" maxLen="64"
+				type="STRING" inputWidget="application.text" maxLen="64"
 				basicSearch="true" auditable="true"/>
 			<field name="shortCode" label="$m{system.sector.shortcode}"
-				type="string" inputWidget="application.name" minLen="3" maxLen="3" auditable="true"/>
+				type="STRING" inputWidget="application.name" minLen="3" maxLen="3" auditable="true"/>
 			<field name="color" label="$m{system.sector.color}"
-				type="string" inputWidget="system.colorlist" maxLen="16" auditable="true"/>
+				type="STRING" inputWidget="system.colorlist" maxLen="16" auditable="true"/>
 			<field name="status" label="$m{system.sector.status}"
-				type="enum_ref" references="sectorstatuslist"
+				type="ENUM_REF" references="sectorstatuslist"
 				inputWidget="application.enumlist" basicSearch="true" auditable="true"/>
 			<field name="statusDesc" label="$m{system.sector.statusdesc}"
-				type="list_only" inputWidget="application.text" key="status"
+				type="LIST_ONLY" inputWidget="application.text" key="status"
 				property="description" />
 			<uniqueConstraint name="nameUc"
 				description="$m{system.sector.uc.name}" fieldList="name" />
@@ -346,34 +346,34 @@
 			type="com.flowcentraltech.flowcentral.system.entities.Module"
 			auditable="true" reportable="true" changeEvents = "true">
 			<field name="sectorId" label="$m{system.module.sector}"
-				type="ref" basicSearch="true" references="sectorRef"
+				type="REF" basicSearch="true" references="sectorRef"
 				inputWidget="application.entitylist" auditable="true"/>
-			<field name="name" label="$m{system.module.name}" type="string"
+			<field name="name" label="$m{system.module.name}" type="STRING"
 				basicSearch="true" inputWidget="application.name" maxLen="32" auditable="true"/>
 			<field name="description" label="$m{system.module.description}"
-				basicSearch="true" type="string" inputWidget="application.text"
+				basicSearch="true" type="STRING" inputWidget="application.text"
 				maxLen="196" auditable="true"/>
 			<field name="label" label="$m{system.module.label.field}"
-				type="string" inputWidget="application.text" maxLen="64" auditable="true"/>
+				type="STRING" inputWidget="application.text" maxLen="64" auditable="true"/>
 			<field name="shortCode" label="$m{system.module.shortcode}"
-				type="string" inputWidget="application.name" maxLen="16" auditable="true"/>
+				type="STRING" inputWidget="application.name" maxLen="16" auditable="true"/>
 			<field name="sectorName" label="$m{system.module.sectorname}"
-				type="list_only" inputWidget="application.text" key="sectorId"
+				type="LIST_ONLY" inputWidget="application.text" key="sectorId"
 				property="name" />
 			<field name="sectorDesc" label="$m{system.module.sectordesc}"
-				type="list_only" inputWidget="application.text" key="sectorId"
+				type="LIST_ONLY" inputWidget="application.text" key="sectorId"
 				property="description" />
 			<field name="sectorColor" label="$m{system.module.sectorcolor}"
-				type="list_only" inputWidget="application.text" key="sectorId"
+				type="LIST_ONLY" inputWidget="application.text" key="sectorId"
 				property="color" />
 			<field name="sectorShortCode"
-				label="$m{system.module.sectorshortcode}" type="list_only"
+				label="$m{system.module.sectorshortcode}" type="LIST_ONLY"
 				inputWidget="application.text" key="sectorId" property="shortCode" />
 			<field name="sectorStatus"
-				label="$m{system.module.sectorstatus}" type="list_only"
+				label="$m{system.module.sectorstatus}" type="LIST_ONLY"
 				inputWidget="application.text" key="sectorId" property="status" />
 			<field name="sectorStatusDesc"
-				label="$m{system.module.sectorstatusdesc}" type="list_only"
+				label="$m{system.module.sectorstatusdesc}" type="LIST_ONLY"
 				inputWidget="application.text" key="sectorId" property="statusDesc" />
 			<uniqueConstraint name="nameUc"
 				description="$m{system.module.uc.name}" fieldList="name" />
@@ -385,34 +385,34 @@
 			label="$m{system.moduleapp.label}"
 			type="com.flowcentraltech.flowcentral.system.entities.ModuleApp" auditable="true">
 			<field name="moduleId" label="$m{system.moduleapp.module}"
-				type="ref" references="moduleRef"
+				type="REF" references="moduleRef"
 				inputWidget="application.entitylist" basicSearch="true" auditable="true"/>
 			<field name="name" label="$m{system.moduleapp.name}"
-				type="string" inputWidget="application.name" maxLen="64"
+				type="STRING" inputWidget="application.name" maxLen="64"
 				basicSearch="true" auditable="true"/>
 			<field name="shortDescription"
-				label="$m{system.moduleapp.shortdescription}" type="string"
+				label="$m{system.moduleapp.shortdescription}" type="STRING"
 				inputWidget="application.text" maxLen="96" basicSearch="true" auditable="true" />
 			<field name="longDescription"
-				label="$m{system.moduleapp.longdescription}" type="string"
+				label="$m{system.moduleapp.longdescription}" type="STRING"
 				inputWidget="application.text" maxLen="256" auditable="true"/>
 			<field name="configFile"
-				label="$m{system.moduleapp.configfile}" type="string"
+				label="$m{system.moduleapp.configfile}" type="STRING"
 				inputWidget="application.text" maxLen="128" auditable="true"/>
 			<field name="autoInstall"
-				label="$m{system.moduleapp.autoinstall}" type="boolean"
+				label="$m{system.moduleapp.autoinstall}" type="BOOLEAN"
 				inputWidget="application.checkbox" auditable="true"/>
 			<field name="moduleName"
-				label="$m{system.moduleapp.modulename}" type="list_only"
+				label="$m{system.moduleapp.modulename}" type="LIST_ONLY"
 				key="moduleId" property="name" />
 			<field name="moduleDesc"
-				label="$m{system.moduleapp.moduledesc}" type="list_only"
+				label="$m{system.moduleapp.moduledesc}" type="LIST_ONLY"
 				key="moduleId" property="description" />
 			<field name="moduleLabel"
-				label="$m{system.moduleapp.modulelabel}" type="list_only"
+				label="$m{system.moduleapp.modulelabel}" type="LIST_ONLY"
 				key="moduleId" property="label" />
 			<field name="moduleShortCode"
-				label="$m{system.moduleapp.moduleshortcode}" type="list_only"
+				label="$m{system.moduleapp.moduleshortcode}" type="LIST_ONLY"
 				key="moduleId" property="shortCode" />
 			<uniqueConstraint name="nameUc"
 				description="$m{system.moduleapp.uc.name}" fieldList="name" />
@@ -426,47 +426,47 @@
 			type="com.flowcentraltech.flowcentral.system.entities.SystemParameter"
 			auditable="true" reportable="true" changeEvents = "true">
 			<field name="moduleId"
-				label="$m{system.systemparameter.moduleid}" type="ref"
+				label="$m{system.systemparameter.moduleid}" type="REF"
 				references="moduleRef"
 				inputLabel="$m{system.systemparameter.module}"
 				inputWidget="application.entitylist" basicSearch="true" />
 			<field name="type" label="$m{system.systemparameter.type}"
-				type="enum_ref" references="sysparamtypelist"
+				type="ENUM_REF" references="sysparamtypelist"
 				inputWidget="application.enumlist" basicSearch="true" />
 			<field name="code" label="$m{system.systemparameter.code}"
-				type="string" inputWidget="application.name" maxLen="32"
+				type="STRING" inputWidget="application.name" maxLen="32"
 				basicSearch="true" auditable="true"/>
 			<field name="description"
-				label="$m{system.systemparameter.description}" type="string"
+				label="$m{system.systemparameter.description}" type="STRING"
 				inputWidget="application.text" maxLen="196" basicSearch="true" auditable="true"/>
 			<field name="value" label="$m{system.systemparameter.value}"
-				type="string" inputWidget="sysparamvalue" maxLen="256"
+				type="STRING" inputWidget="sysparamvalue" maxLen="256"
 				nullable="true" auditable="true"/>
 			<field name="defaultValue"
-				label="$m{system.systemparameter.defaultvalue}" type="string"
+				label="$m{system.systemparameter.defaultvalue}" type="STRING"
 				maxLen="256" nullable="true" auditable="true"/>
 			<field name="editor" label="$m{system.systemparameter.editor}"
-				type="string" maxLen="256" />
+				type="STRING" maxLen="256" />
 			<field name="control"
-				label="$m{system.systemparameter.control}" type="boolean"
+				label="$m{system.systemparameter.control}" type="BOOLEAN"
 				inputWidget="application.booleanlist" />
 			<field name="editable"
-				label="$m{system.systemparameter.editable}" type="boolean"
+				label="$m{system.systemparameter.editable}" type="BOOLEAN"
 				inputWidget="application.booleanlist" />
 			<field name="moduleName"
-				label="$m{system.systemparameter.modulename}" type="list_only"
+				label="$m{system.systemparameter.modulename}" type="LIST_ONLY"
 				key="moduleId" property="name" />
 			<field name="moduleDesc"
-				label="$m{system.systemparameter.moduledesc}" type="list_only"
+				label="$m{system.systemparameter.moduledesc}" type="LIST_ONLY"
 				key="moduleId" property="description" />
 			<field name="moduleLabel"
-				label="$m{system.systemparameter.modulelabel}" type="list_only"
+				label="$m{system.systemparameter.modulelabel}" type="LIST_ONLY"
 				key="moduleId" property="label" />
 			<field name="moduleShortCode"
-				label="$m{system.systemparameter.moduleshortcode}" type="list_only"
+				label="$m{system.systemparameter.moduleshortcode}" type="LIST_ONLY"
 				key="moduleId" property="shortCode" />
 			<field name="typeDesc"
-				label="$m{system.systemparameter.typedesc}" type="list_only"
+				label="$m{system.systemparameter.typedesc}" type="LIST_ONLY"
 				key="type" property="description" />
 			<uniqueConstraint name="codeUc"
 				description="$m{system.systemparameter.uc.code}" fieldList="code" />
@@ -480,35 +480,35 @@
 			type="com.flowcentraltech.flowcentral.system.entities.ScheduledTask"
 			auditable="true" reportable="true" changeEvents = "true">
 			<field name="description"
-				label="$m{system.scheduledtask.description}" type="string"
+				label="$m{system.scheduledtask.description}" type="STRING"
 				inputWidget="application.text" maxLen="64" basicSearch="true" auditable="true"/>
 			<field name="taskName"
-				label="$m{system.scheduledtask.taskname}" type="string"
+				label="$m{system.scheduledtask.taskname}" type="STRING"
 				inputWidget="schedulabletasklist" maxLen="64" basicSearch="true" auditable="true"/>
 			<field name="startTime"
-				label="$m{system.scheduledtask.starttime}" type="timestamp"
+				label="$m{system.scheduledtask.starttime}" type="TIMESTAMP"
 				inputWidget="application.time" auditable="true"/>
 			<field name="endTime" label="$m{system.scheduledtask.endtime}"
-				type="timestamp" inputWidget="application.timeclearable"
+				type="TIMESTAMP" inputWidget="application.timeclearable"
 				nullable="true" auditable="true"/>
 			<field name="nextExecutionOn"
 				label="$m{system.scheduledtask.nextexecutionon}"
-				type="timestamp" inputWidget="application.datetime" auditable="true"/>
+				type="TIMESTAMP" inputWidget="application.datetime" auditable="true"/>
 			<field name="lastExecutionOn"
 				label="$m{system.scheduledtask.lastexecutionon}"
-				type="timestamp" inputWidget="application.datetime"
+				type="TIMESTAMP" inputWidget="application.datetime"
 				nullable="true" auditable="true"/>
 			<field name="frequency"
-				label="$m{system.scheduledtask.frequency}" type="string"
+				label="$m{system.scheduledtask.frequency}" type="STRING"
 				inputWidget="application.period" maxLen="32" nullable="true" auditable="true"/>
 			<field name="weekdays"
-				label="$m{system.scheduledtask.weekdays}" type="string"
+				label="$m{system.scheduledtask.weekdays}" type="STRING"
 				inputWidget="weekdayschecklist" maxLen="256" nullable="true" auditable="true"/>
 			<field name="days" label="$m{system.scheduledtask.days}"
-				type="string" inputWidget="dayschecklist" maxLen="256"
+				type="STRING" inputWidget="dayschecklist" maxLen="256"
 				nullable="true" auditable="true"/>
 			<field name="months" label="$m{system.scheduledtask.months}"
-				type="string" inputWidget="monthschecklist" maxLen="256"
+				type="STRING" inputWidget="monthschecklist" maxLen="256"
 				nullable="true" auditable="true"/>
 			<uniqueConstraint name="descUc"
 				description="$m{system.scheduledtask.uc.description}"
@@ -520,33 +520,33 @@
 			type="com.flowcentraltech.flowcentral.system.entities.ScheduledTaskHist"
 			auditable="true" reportable="true">
 			<field name="scheduledTaskId"
-				label="$m{system.scheduledtaskhist.scheduledtaskid}" type="ref"
+				label="$m{system.scheduledtaskhist.scheduledtaskid}" type="REF"
 				references="scheduledTaskRef"
 				inputLabel="$m{system.scheduledtaskhist.scheduledtask}"
 				inputWidget="application.entitylist" basicSearch="true" />
 			<field name="taskStatus"
-				label="$m{system.scheduledtaskhist.status}" type="enum_ref"
+				label="$m{system.scheduledtaskhist.status}" type="ENUM_REF"
 				references="taskstatuslist" inputWidget="application.enumlist"
 				basicSearch="true" />
 			<field name="startedOn"
-				label="$m{system.scheduledtaskhist.startedon}" type="timestamp"
+				label="$m{system.scheduledtaskhist.startedon}" type="TIMESTAMP"
 				inputWidget="application.datetime" />
 			<field name="finishedOn"
-				label="$m{system.scheduledtask.finishedon}" type="timestamp"
+				label="$m{system.scheduledtask.finishedon}" type="TIMESTAMP"
 				inputWidget="application.datetime" nullable="true" />
 			<field name="errorMsg"
-				label="$m{system.scheduledtaskhist.errormsg}" type="string"
+				label="$m{system.scheduledtaskhist.errormsg}" type="STRING"
 				inputWidget="application.textarealarge" maxLen="512" nullable="true" />
 			<field name="scheduledTaskDesc"
 				label="$m{system.scheduledtaskhist.scheduledtaskdesc}"
-				type="list_only" inputWidget="application.text"
+				type="LIST_ONLY" inputWidget="application.text"
 				key="scheduledTaskId" property="description" />
 			<field name="taskName"
-				label="$m{system.scheduledtaskhist.taskname}" type="list_only"
+				label="$m{system.scheduledtaskhist.taskname}" type="LIST_ONLY"
 				inputWidget="application.text" key="scheduledTaskId"
 				property="taskName" />
 			<field name="taskStatusDesc"
-				label="$m{system.scheduledtaskhist.taskstatusdesc}" type="list_only"
+				label="$m{system.scheduledtaskhist.taskstatusdesc}" type="LIST_ONLY"
 				inputWidget="application.text" key="taskStatus"
 				property="description" />
 		</entity>
@@ -555,17 +555,17 @@
 			type="com.flowcentraltech.flowcentral.system.entities.Credential"
 			auditable="true" reportable="true" changeEvents = "true">
 			<field name="name" label="$m{system.credential.name}"
-				type="string" inputWidget="application.name" maxLen="64"
+				type="STRING" inputWidget="application.name" maxLen="64"
 				basicSearch="true" auditable="true"/>
 			<field name="description"
-				label="$m{system.credential.description}" type="string"
+				label="$m{system.credential.description}" type="STRING"
 				inputWidget="application.text" maxLen="128" basicSearch="true" auditable="true"/>
 			<field name="userName" label="$m{system.credential.username}"
-				type="string" maxLen="64" auditable="true"/>
+				type="STRING" maxLen="64" auditable="true"/>
 			<field name="password" label="$m{system.credential.password}"
-				type="string" maxLen="512" auditable="true"/>
+				type="STRING" maxLen="512" auditable="true"/>
 			<field name="base64Encoded" label="$m{system.credential.base64encoded}"
-				type="clob" nullable="true"/>
+				type="CLOB" nullable="true"/>
 			<uniqueConstraint name="nameUc"
 				description="$m{system.credential.uc.name}" fieldList="name" />
 			<uniqueConstraint name="descUc"
@@ -577,15 +577,15 @@
 			type="com.flowcentraltech.flowcentral.system.entities.Delegate"
 			auditable="true" reportable="true" changeEvents = "true">
 			<field name="name" label="$m{system.delegate.name}"
-				type="string" inputWidget="application.name" maxLen="64"
+				type="STRING" inputWidget="application.name" maxLen="64"
 				basicSearch="true" auditable="true"/>
 			<field name="description"
-				label="$m{system.delegate.description}" type="string"
+				label="$m{system.delegate.description}" type="STRING"
 				inputWidget="application.text" maxLen="128" basicSearch="true" />
 			<field name="nodeUrl" label="$m{system.delegate.nodeurl}"
-				type="string" inputWidget="application.textarea" maxLen="1024" />
+				type="STRING" inputWidget="application.textarea" maxLen="1024" />
 			<field name="redirects" label="$m{system.delegate.redirects}"
-				type="child_list" references="delegateRedirectRef"  />
+				type="CHILD_LIST" references="delegateRedirectRef"  />
 			<uniqueConstraint name="nameUc"
 				description="$m{system.delegate.uc.name}" fieldList="name" />
 			<uniqueConstraint name="descUc"
@@ -597,27 +597,27 @@
 			type="com.flowcentraltech.flowcentral.system.entities.DelegateRedirect"
 			auditable="true" reportable="true" changeEvents = "true">
 			<field name="delegateId"
-				label="$m{system.delegateredirect.delegateid}" type="ref"
+				label="$m{system.delegateredirect.delegateid}" type="REF"
 				references="delegateRef" inputWidget="application.entitylist" />
 			<field name="type" label="$m{system.delegateredirect.type}"
-				type="enum_ref" references="delegateredirecttypelist"
+				type="ENUM_REF" references="delegateredirecttypelist"
 				inputWidget="application.enumlist" />
 			<field name="name" label="$m{system.delegateredirect.name}"
-				type="string" inputWidget="application.name" maxLen="64"
+				type="STRING" inputWidget="application.name" maxLen="64"
 				basicSearch="true" auditable="true"/>
 			<field name="description"
-				label="$m{system.delegateredirect.description}" type="string"
+				label="$m{system.delegateredirect.description}" type="STRING"
 				inputWidget="application.text" maxLen="128" basicSearch="true" />
 			<field name="redirectUrl" label="$m{system.delegateredirect.redirecturl}"
-				type="string" inputWidget="application.textarea" maxLen="1024" />
+				type="STRING" inputWidget="application.textarea" maxLen="1024" />
 			<field name="supportedOperations" label="$m{system.delegateredirect.supportedoperations}"
-				type="string" inputWidget="application.textarea" maxLen="2048" nullable="true"/>
+				type="STRING" inputWidget="application.textarea" maxLen="2048" nullable="true"/>
 			<field name="typeDesc" label="$m{system.delegateredirect.typedesc}"
-				type="list_only" key="type" property="description" />
+				type="LIST_ONLY" key="type" property="description" />
 			<field name="delegateName" label="$m{system.delegateredirect.delegatename}"
-				type="list_only" key="delegateId" property="name" />
+				type="LIST_ONLY" key="delegateId" property="name" />
 			<field name="delegateDesc" label="$m{system.delegateredirect.delegatedesc}"
-				type="list_only" key="delegateId" property="description" />
+				type="LIST_ONLY" key="delegateId" property="description" />
 			<uniqueConstraint name="nameUc"
 				description="$m{system.delegateredirect.uc.name}" fieldList="delegateId,name" />
 			<uniqueConstraint name="descUc"
@@ -629,13 +629,13 @@
 			type="com.flowcentraltech.flowcentral.system.entities.DownloadLog"
 			auditable="true" reportable="true">
 			<field name="resourceName"
-				label="$m{system.downloadlog.resourcename}" type="string"
+				label="$m{system.downloadlog.resourcename}" type="STRING"
 				inputWidget="application.name" maxLen="128" basicSearch="true" />
 			<field name="remoteAddress"
-				label="$m{system.downloadlog.remoteaddress}" type="string"
+				label="$m{system.downloadlog.remoteaddress}" type="STRING"
 				inputWidget="application.text" maxLen="64" basicSearch="true" />
 			<field name="remoteHost"
-				label="$m{system.downloadlog.remotehost}" type="string" maxLen="96"
+				label="$m{system.downloadlog.remotehost}" type="STRING" maxLen="96"
 				nullable="true" basicSearch="true" />
 		</entity>
 		<entity name="environmentVariable"
@@ -644,13 +644,13 @@
 			type="com.flowcentraltech.flowcentral.system.entities.EnvironmentVariable"
 			auditable="true" reportable="true" changeEvents = "true">
 			<field name="name" label="$m{system.environmentvariable.name}"
-				type="string" inputWidget="application.name" maxLen="64"
+				type="STRING" inputWidget="application.name" maxLen="64"
 				basicSearch="true" auditable="true"/>
 			<field name="description"
-				label="$m{system.environmentvariable.description}" type="string"
+				label="$m{system.environmentvariable.description}" type="STRING"
 				inputWidget="application.text" maxLen="128" basicSearch="true" auditable="true"/>
 			<field name="variable"
-				label="$m{system.environmentvariable.variable}" type="string"
+				label="$m{system.environmentvariable.variable}" type="STRING"
 				maxLen="1024" auditable="true"/>
 			<uniqueConstraint name="nameUc"
 				description="$m{system.environmentvariable.uc.name}"
@@ -664,12 +664,12 @@
 			type="com.flowcentraltech.flowcentral.system.entities.MappedTenant"
 			delegate="mappedentity-environmentdelegate" table="FC_MAPPEDTENANT"
 			mapped="true" auditable="true" reportable="true">
-			<field name="name" label="$m{system.tenant.name}" type="string"
+			<field name="name" label="$m{system.tenant.name}" type="STRING"
 				inputWidget="application.text" maxLen="64" auditable="true"/>
-			<field name="dateFormat" label="$m{system.tenant.dateformat}" type="string"
+			<field name="dateFormat" label="$m{system.tenant.dateformat}" type="STRING"
 				inputWidget="application.text" maxLen="32" auditable="true"/>
 			<field name="primary" label="$m{system.tenant.primary}"
-				type="boolean" inputWidget="application.booleanlist" auditable="true"/>
+				type="BOOLEAN" inputWidget="application.booleanlist" auditable="true"/>
 			<uniqueConstraint name="nameUc"
 				description="$m{system.tenant.uc.name}" fieldList="name" />
 		</entity>
@@ -885,8 +885,8 @@
 		<form name="sectorForm" description="$m{system.sector.form}"
 			entity="sector">
 			<tab name="basicDetails"
-				label="$m{system.sector.form.basicdetails}" contentType="miniform">
-				<section name="basicDetails" columns="type_2">
+				label="$m{system.sector.form.basicdetails}" contentType="MINIFORM">
+				<section name="basicDetails" columns="TYPE_2">
 					<field name="name" inputWidget="application.name" column="0"
 						required="true" />
 					<field name="description" inputWidget="application.text"
@@ -898,13 +898,13 @@
 				</section>
 			</tab>
 			<tab name="changeLog" label="$m{application.form.audit}"
-				contentType="miniform_changelog" />
+				contentType="MINIFORM_CHANGELOG" />
 		</form>
 		<form name="moduleForm" description="$m{system.module.form}"
 			entity="module">
 			<tab name="basicDetails"
-				label="$m{system.module.form.basicdetails}" contentType="miniform">
-				<section name="details1" columns="type_2">
+				label="$m{system.module.form.basicdetails}" contentType="MINIFORM">
+				<section name="details1" columns="TYPE_2">
 					<field name="name" inputWidget="application.name" column="0"
 						required="true" editable="false" />
 					<field name="description" inputWidget="application.text"
@@ -918,7 +918,7 @@
 				</section>
 			</tab>
 			<tab name="changeLog" label="$m{application.form.audit}"
-				contentType="miniform_changelog" />
+				contentType="MINIFORM_CHANGELOG" />
 			<relatedList name="relSysParam"
 				description="$m{system.module.form.related.systemparameter.description}"
 				label="$m{system.module.form.related.systemparameter.label}"
@@ -932,8 +932,8 @@
 			description="$m{system.moduleapp.form}" entity="moduleApp">
 			<tab name="basicDetails"
 				label="$m{system.moduleapp.form.basicdetails}"
-				contentType="miniform">
-				<section name="details1" columns="type_2">
+				contentType="MINIFORM">
+				<section name="details1" columns="TYPE_2">
 					<field name="moduleId" inputWidget="application.entitylist"
 						column="0" required="true" />
 					<field name="name" inputWidget="application.name" column="0"
@@ -943,7 +943,7 @@
 					<field name="autoInstall" inputWidget="application.checkbox"
 						column="1" />
 				</section>
-				<section name="details2" columns="type_1">
+				<section name="details2" columns="TYPE_1">
 					<field name="longDescription" inputWidget="application.text"
 						column="0" required="true" />
 					<field name="configFile" inputWidget="application.text"
@@ -951,7 +951,7 @@
 				</section>
 			</tab>
 			<tab name="changeLog" label="$m{application.form.audit}"
-				contentType="miniform_changelog" />
+				contentType="MINIFORM_CHANGELOG" />
 		</form>
 		<form name="sysParamForm"
 			description="$m{system.systemparameter.form}" entity="sysParam">
@@ -963,8 +963,8 @@
 				message="$m{system.systemparameter.form.annotation.value.message}" />
 			<tab name="basicDetails"
 				label="$m{system.systemparameter.form.basicdetails}"
-				contentType="miniform">
-				<section name="sysParamDetails" columns="type_2">
+				contentType="MINIFORM">
+				<section name="sysParamDetails" columns="TYPE_2">
 					<field name="moduleId" inputWidget="application.entitylist"
 						column="0" required="true" editable="false"
 						label="$m{system.systemparameter.module}" />
@@ -977,7 +977,7 @@
 				</section>
 			</tab>
 			<tab name="changeLog" label="$m{application.form.audit}"
-				contentType="miniform_changelog" />
+				contentType="MINIFORM_CHANGELOG" />
 			<formStatePolicy type="on_switch"
 				name="valueEditPolicy"
 				description="$m{system.systemparameter.form.fieldstatepolicy.valueeditpolicy}">
@@ -1008,8 +1008,8 @@
 			description="$m{system.scheduledtask.form}" entity="scheduledTask">
 			<tab name="basicDetails"
 				label="$m{system.scheduledtask.form.basicdetails}"
-				contentType="miniform">
-				<section name="scheduledTaskDetails" columns="type_2">
+				contentType="MINIFORM">
+				<section name="scheduledTaskDetails" columns="TYPE_2">
 					<field name="taskName" column="0" required="true"
 						switchOnChange="true" />
 					<field name="description" column="0" required="true" />
@@ -1028,8 +1028,8 @@
 				contentType="param_values" />
 			<tab name="executionDetails"
 				label="$m{system.scheduledtask.form.executiondetails}"
-				contentType="miniform" disabled="true">
-				<section name="executionDetails" columns="type_2">
+				contentType="MINIFORM" disabled="true">
+				<section name="executionDetails" columns="TYPE_2">
 					<field name="nextExecutionOn"
 						inputWidget="application.datetimetext" column="0" />
 					<field name="lastExecutionOn"
@@ -1037,7 +1037,7 @@
 				</section>
 			</tab>
 			<tab name="changeLog" label="$m{application.form.audit}"
-				contentType="miniform_changelog" />
+				contentType="MINIFORM_CHANGELOG" />
 			<relatedList name="history" description="$m{system.scheduledtask.form.history}"
 				label="$m{system.scheduledtask.form.history}" applet="manageScheduledTaskHist" />
 		</form>
@@ -1046,21 +1046,21 @@
 			entity="scheduledTaskHist">
 			<tab name="basicDetails"
 				label="$m{system.scheduledtaskhist.form.basicdetails}"
-				contentType="miniform">
-				<section name="scheduledTaskHistDetails" columns="type_2">
+				contentType="MINIFORM">
+				<section name="scheduledTaskHistDetails" columns="TYPE_2">
 					<field name="scheduledTaskId" column="0" required="true" />
 					<field name="startedOn" column="0" required="true" />
 					<field name="finishedOn" column="0" required="false" />
 					<field name="taskStatus" column="1" required="true" />
 				</section>
-				<section name="errorDetails" columns="type_1">
+				<section name="errorDetails" columns="TYPE_1">
 					<field name="errorMsg" column="0" />
 				</section>
 			</tab>
 			<tab name="taskDetails"
 				label="$m{system.scheduledtaskhist.form.taskdetails}"
-				contentType="miniform" disabled="true">
-				<section name="taskDetails" columns="type_2">
+				contentType="MINIFORM" disabled="true">
+				<section name="taskDetails" columns="TYPE_2">
 					<field name="scheduledTaskDesc" column="0" />
 					<field name="taskName" column="1" />
 				</section>
@@ -1070,8 +1070,8 @@
 			description="$m{system.credential.form}" entity="credential">
 			<tab name="basicDetails"
 				label="$m{system.credential.form.basicdetails}"
-				contentType="miniform">
-				<section name="credentialDetails" columns="type_2">
+				contentType="MINIFORM">
+				<section name="credentialDetails" columns="TYPE_2">
 					<field name="name" inputWidget="application.name" column="0"
 						required="true" />
 					<field name="description" inputWidget="application.text"
@@ -1085,14 +1085,14 @@
 				</section>
 			</tab>
 			<tab name="changeLog" label="$m{application.form.audit}"
-				contentType="miniform_changelog" />
+				contentType="MINIFORM_CHANGELOG" />
 		</form>
 		<form name="delegateForm"
 			description="$m{system.delegate.form}" entity="delegate">
 			<tab name="basicDetails"
 				label="$m{system.delegate.form.basicdetails}"
-				contentType="miniform">
-				<section name="delegateDetails" columns="type_2">
+				contentType="MINIFORM">
+				<section name="delegateDetails" columns="TYPE_2">
 					<field name="name" inputWidget="application.name" column="0"
 						required="true" />
 					<field name="description" inputWidget="application.text"
@@ -1106,14 +1106,14 @@
 				contentType="child_list" applet="manageDelegateRedirect"
 				reference="redirects" />
 			<tab name="changeLog" label="$m{application.form.audit}"
-				contentType="miniform_changelog" />
+				contentType="MINIFORM_CHANGELOG" />
 		</form>
 		<form name="delegateRedirectForm"
 			description="$m{system.delegateredirect.form}" entity="delegateRedirect">
 			<tab name="basicDetails"
 				label="$m{system.delegateredirect.form.basicdetails}"
-				contentType="miniform">
-				<section name="delegateRedirectDetails" columns="type_2">
+				contentType="MINIFORM">
+				<section name="delegateRedirectDetails" columns="TYPE_2">
 					<field name="delegateId" column="0" required="true" />
 					<field name="name" column="0" required="true" />
 					<field name="description" column="0" required="true" />
@@ -1123,14 +1123,14 @@
 				</section>
 			</tab>
 			<tab name="changeLog" label="$m{application.form.audit}"
-				contentType="miniform_changelog" />
+				contentType="MINIFORM_CHANGELOG" />
 		</form>
 		<form name="downloadLogForm"
 			description="$m{system.downloadlog.form}" entity="downloadLog">
 			<tab name="basicDetails"
 				label="$m{system.downloadlog.form.basicdetails}"
-				contentType="miniform">
-				<section name="downloadDetails" columns="type_1">
+				contentType="MINIFORM">
+				<section name="downloadDetails" columns="TYPE_1">
 					<field name="resourceName" inputWidget="application.text"
 						column="0" required="true" />
 					<field name="remoteAddress" inputWidget="application.text"
@@ -1140,33 +1140,33 @@
 				</section>
 			</tab>
 			<tab name="changeLog" label="$m{application.form.audit}"
-				contentType="miniform_changelog" />
+				contentType="MINIFORM_CHANGELOG" />
 		</form>
 		<form name="environmentVariableForm"
 			description="$m{system.environmentvariable.form}"
 			entity="environmentVariable">
 			<tab name="basicDetails"
 				label="$m{system.environmentvariable.form.basicdetails}"
-				contentType="miniform">
-				<section name="basicDetails" columns="type_2">
+				contentType="MINIFORM">
+				<section name="basicDetails" columns="TYPE_2">
 					<field name="name" inputWidget="application.name" column="0"
 						required="true" />
 					<field name="description" inputWidget="application.text"
 						column="1" required="true" />
 				</section>
-				<section name="variable" columns="type_1">
+				<section name="variable" columns="TYPE_1">
 					<field name="variable" inputWidget="application.textarea"
 						column="0" required="true" />
 				</section>
 			</tab>
 			<tab name="changeLog" label="$m{application.form.audit}"
-				contentType="miniform_changelog" />
+				contentType="MINIFORM_CHANGELOG" />
 		</form>
 		<form name="tenantForm" description="$m{system.tenant.form}"
 			entity="tenant">
 			<tab name="basicDetails"
-				label="$m{system.tenant.form.basicdetails}" contentType="miniform">
-				<section name="basicDetails" columns="type_2">
+				label="$m{system.tenant.form.basicdetails}" contentType="MINIFORM">
+				<section name="basicDetails" columns="TYPE_2">
 					<field name="name" inputWidget="application.text" column="0"
 						required="true" />
 					<field name="primary" inputWidget="application.booleanlist"

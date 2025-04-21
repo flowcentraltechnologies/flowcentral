@@ -8,7 +8,7 @@
 		<applet name="manageHeldCollaborationLock"
 			description="$m{collaboration.heldcollaborationlock.manage}"
 			label="$m{collaboration.heldcollaborationlock.manage.label}"
-			entity="collaborationLock" type="manage_entitylist"
+			entity="collaborationLock" type="MANAGE_ENTITYLIST"
 			menuAccess="false">
 			<property name="page.alternateCaption" value="$m{collaboration.heldcollaborationlock.manage.label}" />
 			<property name="page.alternateSubCaption" value="$m{collaboration.collaborationlock}" />
@@ -30,7 +30,7 @@
 		<applet name="manageFreezeUnfreeze"
 			description="$m{collaboration.freezeunfreeze.manage}"
 			label="$m{collaboration.freezeunfreeze.manage.label}"
-			entity="freezeUnfreeze" type="manage_entitylist"
+			entity="freezeUnfreeze" type="MANAGE_ENTITYLIST"
 			menuAccess="false">
 			<property name="searchTable" value="freezeUnfreezeTable" />
 			<property name="searchTable.report" value="false" />
@@ -60,54 +60,54 @@
 			label="$m{collaboration.collaborationlock.label}"
 			type="com.flowcentraltech.flowcentral.collaboration.entities.CollaborationLock">
 			<field name="type"
-				label="$m{collaboration.collaborationlock.type}" type="enum_ref"
+				label="$m{collaboration.collaborationlock.type}" type="ENUM_REF"
 				references="collaborationtypelist"
 				inputWidget="application.enumlist" />
 			<field name="applicationName"
 				label="$m{collaboration.collaborationlock.applicationname}"
-				type="string" inputWidget="application.name" maxLen="64"
+				type="STRING" inputWidget="application.name" maxLen="64"
 				descriptive="true" />
 			<field name="resourceName"
 				label="$m{collaboration.collaborationlock.resourcename}"
-				type="string" inputWidget="application.name" maxLen="128"
+				type="STRING" inputWidget="application.name" maxLen="128"
 				descriptive="true" />
 			<field name="typeDesc"
 				label="$m{collaboration.collaborationlock.typedesc}"
-				type="list_only" key="type" property="description" />
+				type="LIST_ONLY" key="type" property="description" />
 		</entity>
 		<entity name="freezeUnfreeze" delegate="freezeunfreeze-environmentdelegate" 
 			description="$m{collaboration.freezeunfreeze}"  table="FC_FREEZEUNFREEZE"
 			label="$m{collaboration.freezeunfreeze.label}"
 			type="com.flowcentraltech.flowcentral.collaboration.entities.FreezeUnfreeze">
 			<field name="type" basicSearch="true"
-				label="$m{collaboration.freezeunfreeze.type}" type="enum_ref"
+				label="$m{collaboration.freezeunfreeze.type}" type="ENUM_REF"
 				references="collaborationtypelist"
 				inputWidget="application.enumlist" />
 			<field name="status" basicSearch="true"
-				label="$m{collaboration.freezeunfreeze.status}" type="enum_ref"
+				label="$m{collaboration.freezeunfreeze.status}" type="ENUM_REF"
 				references="frozenstatuslist"
 				inputWidget="application.enumlist" />
 			<field name="applicationName"
 				label="$m{collaboration.freezeunfreeze.applicationname}"
-				type="string" inputWidget="application.name" maxLen="64"/>
+				type="STRING" inputWidget="application.name" maxLen="64"/>
 			<field name="resourceName"
 				label="$m{collaboration.freezeunfreeze.resourcename}"
-				type="string" inputWidget="application.name" maxLen="128"/>
+				type="STRING" inputWidget="application.name" maxLen="128"/>
 			<field name="resourceDesc"
 				label="$m{collaboration.freezeunfreeze.resourcedesc}"
-				type="string" inputWidget="application.text" maxLen="128"/>
+				type="STRING" inputWidget="application.text" maxLen="128"/>
 			<field name="typeDesc"
 				label="$m{collaboration.freezeunfreeze.typedesc}"
-				type="list_only" key="type" property="description" />
+				type="LIST_ONLY" key="type" property="description" />
 			<field name="statusDesc"
 				label="$m{collaboration.freezeunfreeze.statusdesc}"
-				type="list_only" key="status" property="description" />
+				type="LIST_ONLY" key="status" property="description" />
 			<field name="frozenBy"
 				label="$m{collaboration.freezeunfreeze.frozenby}"
-				type="string" inputWidget="application.text" maxLen="64"/>
+				type="STRING" inputWidget="application.text" maxLen="64"/>
 			<field name="frozenOn"
 				label="$m{collaboration.freezeunfreeze.frozenon}"
-				type="timestamp" inputWidget="application.datetime"/>
+				type="TIMESTAMP" inputWidget="application.datetime"/>
 		</entity>
 	</entities>
 	<!-- Tables -->

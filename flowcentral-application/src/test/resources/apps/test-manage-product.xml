@@ -4,7 +4,7 @@
 	label="Manage Product" module="test-application">
 	<applets>
 		<applet name="manageProduct" description="Manage Product"
-			label="Manage Product" type="manage_entitylist" entity="product">
+			label="Manage Product" type="MANAGE_ENTITYLIST" entity="product">
 			<property name="searchTable" value="productTable" />
 			<filter name="expensiveShirt" description="Expensive Shirts">
 				<restriction type="and">
@@ -20,10 +20,10 @@
 		</applet>
 	</applets>
 	<widgetTypes>
-		<widgetType name="name" description="Short Name" dataType="string"
-			inputType="string" editor="!ui-name" renderer="!ui-label" />
-		<widgetType name="text" description="Text" dataType="string"
-			inputType="string" editor="!ui-text" renderer="!ui-label" />
+		<widgetType name="name" description="Short Name" dataType="STRING"
+			inputType="STRING" editor="!ui-name" renderer="!ui-label" />
+		<widgetType name="text" description="Text" dataType="STRING"
+			inputType="STRING" editor="!ui-text" renderer="!ui-label" />
 		<widgetType name="datetime" description="Date Time"
 			dataType="timestamp_utc" inputType="datetime" editor="!ui-date"
 			renderer="!ui-label formatter:$d{!dateformat" />
@@ -31,45 +31,45 @@
 			inputType="double" editor="!ui-decimal precision:14 scale:2"
 			renderer="!ui-label formatter:$d{!decimalformat precision:14 scale:2} style:$s{text-align:right;}" />
 		<widgetType name="prodcatlist" description="Product Category List"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!ui-select list:$s{productcategorylist} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="textarea" description="Text Area"
-			dataType="string" inputType="string" editor="!ui-textarea"
+			dataType="STRING" inputType="STRING" editor="!ui-textarea"
 			renderer="!ui-label" />
 	</widgetTypes>
 	<entities>
 		<entity name="product" description="Product" label="Product"
 			type="com.flowcentraltech.flowcentral.application.entities.Product">
-			<field name="category" label="Category" type="enum_ref"
+			<field name="category" label="Category" type="ENUM_REF"
 				inputWidget="prodcatlist" references="productcategorylist"/>
-			<field name="branchId" label="Branch" type="long" inputWidget="entitylist" branchScoping="true" />
-			<field name="name" label="Name" type="string" inputWidget="name" />
-			<field name="description" label="Description" type="string"
+			<field name="branchId" label="Branch" type="LONG" inputWidget="entitylist" branchScoping="true" />
+			<field name="name" label="Name" type="STRING" inputWidget="name" />
+			<field name="description" label="Description" type="STRING"
 				inputWidget="text" />
 			<field name="costPrice" label="Cost Price" type="double"
 				inputWidget="amount" />
 			<field name="salesPrice" label="Sales Price" type="double"
 				inputWidget="amount" />
-			<field name="notes" label="Notes" type="string" inputWidget="textarea" />
-			<field name="categoryDesc" label="Category" type="string"
+			<field name="notes" label="Notes" type="STRING" inputWidget="textarea" />
+			<field name="categoryDesc" label="Category" type="STRING"
 				inputWidget="text" />
 		</entity>
 		<entity name="locationProduct" description="Location Product" label="Location Product"
 			type="com.flowcentraltech.flowcentral.application.entities.LocationProduct">
-			<field name="category" label="Category" type="enum_ref"
+			<field name="category" label="Category" type="ENUM_REF"
 				inputWidget="prodcatlist" references="productcategorylist"/>
-			<field name="branchId" label="Branch" type="long" inputWidget="entitylist" branchScoping="true" />
-			<field name="locationId" label="Location" type="long" inputWidget="entitylist" branchScoping="true" />
-			<field name="name" label="Name" type="string" inputWidget="name" />
-			<field name="description" label="Description" type="string"
+			<field name="branchId" label="Branch" type="LONG" inputWidget="entitylist" branchScoping="true" />
+			<field name="locationId" label="Location" type="LONG" inputWidget="entitylist" branchScoping="true" />
+			<field name="name" label="Name" type="STRING" inputWidget="name" />
+			<field name="description" label="Description" type="STRING"
 				inputWidget="text" />
 			<field name="costPrice" label="Cost Price" type="double"
 				inputWidget="amount" />
 			<field name="salesPrice" label="Sales Price" type="double"
 				inputWidget="amount" />
-			<field name="notes" label="Notes" type="string" inputWidget="textarea" />
-			<field name="categoryDesc" label="Category" type="string"
+			<field name="notes" label="Notes" type="STRING" inputWidget="textarea" />
+			<field name="categoryDesc" label="Category" type="STRING"
 				inputWidget="text" />
 		</entity>
 	</entities>
@@ -85,14 +85,14 @@
 	</tables>
 	<forms>
 		<form name="productForm" description="Product" entity="product">
-			<tab name="basicDetails" label="Basic Details" contentType="miniform">
-				<section name="details1" columns="type_2">
+			<tab name="basicDetails" label="Basic Details" contentType="MINIFORM">
+				<section name="details1" columns="TYPE_2">
 					<field name="name" inputWidget="name" column="0" />
 					<field name="category" inputWidget="prodcatlist" column="0" />
 					<field name="costPrice" inputWidget="amount" column="1" />
 					<field name="salesPrice" inputWidget="amount" column="1" />
 				</section>
-				<section name="details2" columns="type_1">
+				<section name="details2" columns="TYPE_1">
 					<field name="description" inputWidget="text" column="0" />
 					<field name="notes" inputWidget="textarea" column="0" />
 				</section>

@@ -7,7 +7,7 @@
 	<widgetTypes>
 		<widgetType name="chartdatasourcelist" 
 			description="$m{dashboard.widgettype.chartdatasourcelist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!ui-dropdownchecklist list:dashboardchartdatasourcelist listParams:$l{entity} columns:3"
 			renderer="!ui-label" />
 	</widgetTypes>
@@ -22,7 +22,7 @@
 		<applet name="manageDashboard"
 			description="$m{dashboard.dashboard.manage}"
 			label="$m{dashboard.dashboard.manage.label}" entity="dashboard"
-			type="manage_entitylist" menuAccess="false">
+			type="MANAGE_ENTITYLIST" menuAccess="false">
 			<property name="page.alternateCaption"
 				value="$m{dashboard.dashboard.manage.label}" />
 			<!--property name="page.alternateSubCaption" value="$m{collaboration.collaborationlock}" 
@@ -127,22 +127,22 @@
 			type="com.flowcentraltech.flowcentral.dashboard.entities.Dashboard"
 			auditable="true" reportable="true" changeEvents = "true">
 			<field name="sections" label="$m{dashboard.dashboard.sections}"
-				type="integer" inputWidget="application.integer" />
+				type="INTEGER" inputWidget="application.integer" />
 			<field name="allowSecondaryTenants"
-				label="$m{dashboard.dashboard.allowsecondarytenants}" type="boolean" />
+				label="$m{dashboard.dashboard.allowsecondarytenants}" type="BOOLEAN" />
 			<field name="status" label="$m{dashboard.dashboard.status}"
-				type="enum_ref" references="statuslist"
+				type="ENUM_REF" references="statuslist"
 				inputWidget="application.enumlist" />
 			<field name="statusDesc"
-				label="$m{dashboard.dashboard.statusdesc}" type="list_only"
+				label="$m{dashboard.dashboard.statusdesc}" type="LIST_ONLY"
 				key="status" property="description" />
 			<field name="sectionList"
-				label="$m{dashboard.dashboard.sections}" type="child_list"
+				label="$m{dashboard.dashboard.sections}" type="CHILD_LIST"
 				references="dashboardSectionRef" />
 			<field name="tileList" label="$m{dashboard.dashboard.tiles}"
-				type="child_list" references="dashboardTileRef" />
+				type="CHILD_LIST" references="dashboardTileRef" />
 			<field name="optionsList"
-				label="$m{dashboard.dashboard.options}" type="child_list"
+				label="$m{dashboard.dashboard.options}" type="CHILD_LIST"
 				references="dashboardOptionRef" />
 		</entity>
 		<entity name="dashboardOption"
@@ -151,26 +151,26 @@
 			type="com.flowcentraltech.flowcentral.dashboard.entities.DashboardOption"
 			auditable="true" reportable="true">
 			<field name="dashboardId"
-				label="$m{dashboard.dashboardoption.dashboardid}" type="ref"
+				label="$m{dashboard.dashboardoption.dashboardid}" type="REF"
 				references="dashboardRef"
 				inputLabel="$m{dashboard.dashboardoption.dashboard}"
 				inputWidget="application.entitysearch" />
 			<field name="name" label="$m{dashboard.dashboardoption.name}"
-				type="string" inputWidget="application.name" maxLen="64" />
+				type="STRING" inputWidget="application.name" maxLen="64" />
 			<field name="description"
-				label="$m{dashboard.dashboardoption.description}" type="string"
+				label="$m{dashboard.dashboardoption.description}" type="STRING"
 				inputWidget="application.text" maxLen="128" />
 			<field name="label" label="$m{dashboard.dashboardoption.label1}"
-				type="string" inputWidget="application.text" maxLen="96" />
+				type="STRING" inputWidget="application.text" maxLen="96" />
 			<field name="applicationName"
-				label="$m{dashboard.dashboardoption.applicationname}" type="list_only"
+				label="$m{dashboard.dashboardoption.applicationname}" type="LIST_ONLY"
 				key="dashboardId" property="applicationName" />
 			<field name="dashboardName"
-				label="$m{dashboard.dashboardoption.dashboardname}" type="list_only"
+				label="$m{dashboard.dashboardoption.dashboardname}" type="LIST_ONLY"
 				key="dashboardId" property="name" />
 			<field name="baseList"
 				label="$m{dashboard.dashboardoption.categorybases}"
-				type="child_list" references="dashboardOptionCatBaseRef" />
+				type="CHILD_LIST" references="dashboardOptionCatBaseRef" />
 		</entity>
 		<entity name="dashboardOptionCatBase"
 			description="$m{dashboard.dashboardoptioncatbase}"
@@ -179,18 +179,18 @@
 			auditable="true" reportable="true">
 			<field name="dashboardOptionId"
 				label="$m{dashboard.dashboardoptioncatbase.dashboardoptionid}"
-				type="ref" references="dashboardOptionRef"
+				type="REF" references="dashboardOptionRef"
 				inputLabel="$m{dashboard.dashboardoptioncatbase.dashboardoption}"
 				inputWidget="application.entitysearch" />
 			<field name="chartDataSource"
 				label="$m{dashboard.dashboardoptioncatbase.chartdatasource}"
-				type="string" inputWidget="dashboard.chartdatasourcelist" />
+				type="STRING" inputWidget="dashboard.chartdatasourcelist" />
 			<field name="entity"
 				label="$m{dashboard.dashboardoptioncatbase.entity}"
-				type="string" />
+				type="STRING" />
 			<field name="categoryBase"
 				label="$m{dashboard.dashboardoptioncatbase.categorybase}"
-				type="child" category="dashboard-option"
+				type="CHILD" category="dashboard-option"
 				references="application.appFilterRef" />
 		</entity>
 		<entity name="dashboardSection"
@@ -199,18 +199,18 @@
 			type="com.flowcentraltech.flowcentral.dashboard.entities.DashboardSection"
 			auditable="true" reportable="true">
 			<field name="dashboardId"
-				label="$m{dashboard.dashboardsection.dashboardid}" type="ref"
+				label="$m{dashboard.dashboardsection.dashboardid}" type="REF"
 				references="dashboardRef"
 				inputLabel="$m{dashboard.dashboardsection.dashboard}"
 				inputWidget="application.entitysearch" />
 			<field name="index"
-				label="$m{dashboard.dashboardsection.index}" type="integer"
+				label="$m{dashboard.dashboardsection.index}" type="INTEGER"
 				inputWidget="application.integer" />
 			<field name="type" label="$m{dashboard.dashboardsection.type}"
-				type="enum_ref" references="dashboardcolumnstypelist"
+				type="ENUM_REF" references="dashboardcolumnstypelist"
 				inputWidget="application.enumlist" />
 			<field name="typeDesc"
-				label="$m{dashboard.dashboardsection.typedesc}" type="list_only"
+				label="$m{dashboard.dashboardsection.typedesc}" type="LIST_ONLY"
 				key="type" property="description" />
 		</entity>
 		<entity name="dashboardTile"
@@ -219,22 +219,22 @@
 			type="com.flowcentraltech.flowcentral.dashboard.entities.DashboardTile"
 			auditable="true" reportable="true" changeEvents = "true">
 			<field name="dashboardId"
-				label="$m{dashboard.dashboardtile.dashboardid}" type="ref"
+				label="$m{dashboard.dashboardtile.dashboardid}" type="REF"
 				references="dashboardRef"
 				inputLabel="$m{dashboard.dashboardtile.dashboard}"
 				inputWidget="application.entitysearch" />
 			<field name="chart" label="$m{dashboard.dashboardtile.chart}"
-				type="string" inputWidget="chart.chartlist" maxLen="128" />
+				type="STRING" inputWidget="chart.chartlist" maxLen="128" />
 			<field name="section"
-				label="$m{dashboard.dashboardtile.section}" type="integer"
+				label="$m{dashboard.dashboardtile.section}" type="INTEGER"
 				inputWidget="application.integer" />
 			<field name="index" label="$m{dashboard.dashboardtile.index}"
-				type="integer" inputWidget="application.integer" />
+				type="INTEGER" inputWidget="application.integer" />
 			<field name="type" label="$m{dashboard.dashboardtile.type}"
-				type="enum_ref" references="dashboardtiletypelist"
+				type="ENUM_REF" references="dashboardtiletypelist"
 				inputWidget="application.enumlist" />
 			<field name="typeDesc"
-				label="$m{dashboard.dashboardtile.typedesc}" type="list_only"
+				label="$m{dashboard.dashboardtile.typedesc}" type="LIST_ONLY"
 				key="type" property="description" />
 		</entity>
 	</entities>

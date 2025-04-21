@@ -13,47 +13,47 @@
 	<sysParameters>
 		<sysParameter code="SEC-0001" defaultVal="false"
 			description="$m{security.sysparam.enablepasswordhist}"
-			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
+			editor="!ui-select list:booleanlist" type="BOOLEAN" editable="true" />
 		<sysParameter code="SEC-0002" defaultVal="6"
 			description="$m{security.sysparam.passwordhistlen}"
 			editor="!ui-integer precision:2" type="number" editable="true" />
 		<sysParameter code="SEC-0003" defaultVal="false"
 			description="$m{security.sysparam.enablepasswordexpiry}"
-			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
+			editor="!ui-select list:booleanlist" type="BOOLEAN" editable="true" />
 		<sysParameter code="SEC-0004" defaultVal="30"
 			description="$m{security.sysparam.passwordexpirydays}"
 			editor="!ui-integer precision:3" type="number" editable="true" />
 		<sysParameter code="SEC-0005" defaultVal="true"
 			description="$m{security.sysparam.enableaccountlock}"
-			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
+			editor="!ui-select list:booleanlist" type="BOOLEAN" editable="true" />
 		<sysParameter code="SEC-0006" defaultVal="4"
 			description="$m{security.sysparam.maxlogintries}"
 			editor="!ui-integer precision:2" type="number" editable="true" />
 		<sysParameter code="SEC-0007"
 			defaultVal="lowercaseprincipal-passwordgenerator"
 			description="$m{security.sysparam.userpasswordgenerator}"
-			editor="!ui-select list:passwordgeneratorlist" type="string" editable="true" />
+			editor="!ui-select list:passwordgeneratorlist" type="STRING" editable="true" />
 		<sysParameter code="SEC-0008" defaultVal="8"
 			description="$m{security.sysparam.userpasswordlength}"
 			editor="!ui-integer precision:2" type="number" editable="true" />
 		<sysParameter code="SEC-0009" defaultVal="false"
 			description="$m{security.sysparam.userpasswordsendemail}"
-			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
+			editor="!ui-select list:booleanlist" type="BOOLEAN" editable="true" />
 		<sysParameter code="SEC-000A" defaultVal="/application"
 			description="$m{security.sysparam.userdefaultapplication}"
-			editor="!ui-select list:webapplicationlist" type="string" editable="true" />
+			editor="!ui-select list:webapplicationlist" type="STRING" editable="true" />
 		<sysParameter code="SEC-000B" defaultVal="false"
 			description="$m{security.sysparam.enabletwofactorauthentication}"
-			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
+			editor="!ui-select list:booleanlist" type="BOOLEAN" editable="true" />
 		<sysParameter code="SEC-000C" defaultVal="false"
 			description="$m{security.sysparam.enablesystemwidemultiloginrule}"
-			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
+			editor="!ui-select list:booleanlist" type="BOOLEAN" editable="true" />
 		<sysParameter code="SEC-000D" defaultVal="false"
 			description="$m{security.sysparam.systemwidemultiloginrule}"
-			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
+			editor="!ui-select list:booleanlist" type="BOOLEAN" editable="true" />
 		<sysParameter code="SEC-000E" defaultVal="/application"
 			description="$m{security.sysparam.applicationkey}"
-			editor="!ui-text maxLen:48" type="string" editable="true" />
+			editor="!ui-text maxLen:48" type="STRING" editable="true" />
 		<sysParameter code="SEC-000F" type="contact"
 			description="$m{security.sysparam.administratoremail}"
 			editor="!ui-text size:40" editable="true" />
@@ -62,18 +62,18 @@
 			editor="!ui-text size:24" editable="true" />
 		<sysParameter code="SEC-0011" defaultVal="false"
 			description="$m{security.sysparam.useloginlocale}"
-			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
+			editor="!ui-select list:booleanlist" type="BOOLEAN" editable="true" />
 		<sysParameter code="SEC-0012" defaultVal="false"
 			description="$m{security.sysparam.keeploginevents}"
-			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
+			editor="!ui-select list:booleanlist" type="BOOLEAN" editable="true" />
 		<sysParameter code="SEC-0013" defaultVal="false"
 			description="$m{security.sysparam.enablethirdpartypasswordauthentication}"
-			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
+			editor="!ui-select list:booleanlist" type="BOOLEAN" editable="true" />
 		<sysParameter code="SEC-0014" defaultVal="false"
 			description="$m{security.sysparam.enablepasswordcomplexity}"
-			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
+			editor="!ui-select list:booleanlist" type="BOOLEAN" editable="true" />
 		<sysParameter code="SEC-0015" defaultVal="false"
 			description="$m{security.sysparam.enablebranchselectionmode}"
-			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
+			editor="!ui-select list:booleanlist" type="BOOLEAN" editable="true" />
 	</sysParameters>
 </module>

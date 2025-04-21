@@ -8,7 +8,7 @@
 		<applet name="manageNotifOutbox"
 			description="$m{notification.notificationoutbox.manage}"
 			label="$m{notification.notificationoutbox.manage.label}"
-			icon="mail-bulk" entity="notifOutbox" type="manage_entitylist"
+			icon="mail-bulk" entity="notifOutbox" type="MANAGE_ENTITYLIST"
 			menuAccess="true" allowSecondaryTenants="true">
 			<property name="searchTable" value="notifOutboxTable" />
 			<property name="searchTable.report" value="true" />
@@ -19,14 +19,14 @@
 		<applet name="manageNotifRecipient"
 			description="$m{notification.notificationrecipient.manage}"
 			label="$m{notification.notificationrecipient.manage.label}"
-			entity="notifRecipient" type="manage_entitylist" menuAccess="false">
+			entity="notifRecipient" type="MANAGE_ENTITYLIST" menuAccess="false">
 			<property name="searchTable" value="notifRecipientTable" />
 			<property name="searchTable.basicSearchOnly" value="true" />
 		</applet>
 		<applet name="manageNotifOutboxAttachment"
 			description="$m{notification.notificationoutboxattachment.manage}"
 			label="$m{notification.notificationoutboxattachment.manage.label}"
-			entity="notifOutboxAttachment" type="manage_entitylist"
+			entity="notifOutboxAttachment" type="MANAGE_ENTITYLIST"
 			menuAccess="false">
 			<property name="searchTable"
 				value="notifOutboxAttachmentTable" />
@@ -35,14 +35,14 @@
 		<applet name="manageNotifOutboxError"
 			description="$m{notification.notificationoutboxerror.manage}"
 			label="$m{notification.notificationoutboxerror.manage.label}"
-			entity="notifOutboxError" type="manage_entitylist" menuAccess="false">
+			entity="notifOutboxError" type="MANAGE_ENTITYLIST" menuAccess="false">
 			<property name="searchTable" value="notifOutboxErrorTable" />
 			<property name="searchTable.basicSearchOnly" value="true" />
 		</applet>
 		<applet name="manageNotifChannel"
 			description="$m{notification.notificationchannel.manage}"
 			label="$m{notification.notificationchannel.manage.label}"
-			icon="satellite-disk" entity="notifChannel" type="manage_entitylist"
+			icon="satellite-disk" entity="notifChannel" type="MANAGE_ENTITYLIST"
 			menuAccess="true" allowSecondaryTenants="true">
 			<property name="searchTable" value="notifChannelTable" />
 			<property name="searchTable.basicSearchOnly" value="true" />
@@ -105,66 +105,66 @@
 			label="$m{notification.notificationoutbox.label}"
 			type="com.flowcentraltech.flowcentral.notification.entities.NotificationOutbox">
 			<field name="type"
-				label="$m{notification.notificationoutbox.type}" type="enum_ref"
+				label="$m{notification.notificationoutbox.type}" type="ENUM_REF"
 				references="notificationtypelist" inputWidget="application.enumlist"
 				basicSearch="true" />
 			<field name="status"
-				label="$m{notification.notificationoutbox.status}" type="enum_ref"
+				label="$m{notification.notificationoutbox.status}" type="ENUM_REF"
 				references="notificationoutboxstatuslist"
 				inputWidget="application.enumlist" basicSearch="true" />
 			<field name="from"
-				label="$m{notification.notificationoutbox.from}" type="string"
+				label="$m{notification.notificationoutbox.from}" type="STRING"
 				inputWidget="application.text" maxLen="128" descriptive="true"
 				basicSearch="true" />
 			<field name="subject"
-				label="$m{notification.notificationoutbox.subject}" type="string"
+				label="$m{notification.notificationoutbox.subject}" type="STRING"
 				inputWidget="application.text" maxLen="128" descriptive="true"
 				basicSearch="true" />
 			<field name="attempts"
-				label="$m{notification.notificationoutbox.attempts}" type="integer"
+				label="$m{notification.notificationoutbox.attempts}" type="INTEGER"
 				inputWidget="application.integer" />
 			<field name="expiryDt"
 				label="$m{notification.notificationoutbox.expirydt}"
-				type="timestamp" inputWidget="application.datetime"
+				type="TIMESTAMP" inputWidget="application.datetime"
 				nullable="true" />
 			<field name="nextAttemptDt"
 				label="$m{notification.notificationoutbox.nextattemptdt}"
-				type="timestamp" inputWidget="application.datetime" />
+				type="TIMESTAMP" inputWidget="application.datetime" />
 			<field name="sentDt"
 				label="$m{notification.notificationoutbox.sentdt}"
-				type="timestamp" inputWidget="application.datetime"
+				type="TIMESTAMP" inputWidget="application.datetime"
 				nullable="true" />
 			<field name="format"
-				label="$m{notification.notificationoutbox.format}" type="enum_ref"
+				label="$m{notification.notificationoutbox.format}" type="ENUM_REF"
 				references="notifmessageformatlist"
 				inputWidget="application.enumlist" />
 			<field name="importance"
 				label="$m{notification.notificationoutbox.importance}"
-				type="enum_ref" references="importancetypelist"
+				type="ENUM_REF" references="importancetypelist"
 				inputWidget="application.enumlist" />
 			<field name="message"
-				label="$m{notification.notificationoutbox.message}" type="clob"
+				label="$m{notification.notificationoutbox.message}" type="CLOB"
 				nullable="true" />
 			<field name="statusDesc"
 				label="$m{notification.notificationoutbox.statusdesc}"
-				type="list_only" key="status" property="description" />
+				type="LIST_ONLY" key="status" property="description" />
 			<field name="typeDesc"
 				label="$m{notification.notificationoutbox.typedesc}"
-				type="list_only" key="type" property="description" />
+				type="LIST_ONLY" key="type" property="description" />
 			<field name="formatDesc"
 				label="$m{notification.notificationoutbox.formatdesc}"
-				type="list_only" key="format" property="description" />
+				type="LIST_ONLY" key="format" property="description" />
 			<field name="importanceDesc"
 				label="$m{notification.notificationoutbox.importancedesc}"
-				type="list_only" key="importance" property="description" />
+				type="LIST_ONLY" key="importance" property="description" />
 			<field name="recipientList"
 				label="$m{notification.notificationoutbox.recipients}"
-				type="child_list" references="notifRecipientRef" />
+				type="CHILD_LIST" references="notifRecipientRef" />
 			<field name="attachmentList"
 				label="$m{notification.notificationoutbox.attachments}"
-				type="child_list" references="notifOutboxAttachmentRef" />
+				type="CHILD_LIST" references="notifOutboxAttachmentRef" />
 			<field name="errorList"
-				label="$m{notification.notificationoutbox.errors}" type="child_list"
+				label="$m{notification.notificationoutbox.errors}" type="CHILD_LIST"
 				references="notifOutboxErrorRef" />
 		</entity>
 		<entity name="notifRecipient"
@@ -173,20 +173,20 @@
 			type="com.flowcentraltech.flowcentral.notification.entities.NotificationRecipient">
 			<field name="notificationId"
 				label="$m{notification.notificationrecipient.notificationid}"
-				type="ref" references="notifOutboxRef" basicSearch="true" />
+				type="REF" references="notifOutboxRef" basicSearch="true" />
 			<field name="type"
-				label="$m{notification.notificationrecipient.type}" type="enum_ref"
+				label="$m{notification.notificationrecipient.type}" type="ENUM_REF"
 				references="notificationrecipienttypelist"
 				inputWidget="application.enumlist" basicSearch="true" />
 			<field name="recipientName"
 				label="$m{notification.notificationrecipient.recipientname}"
-				type="string" maxLen="64" basicSearch="true" />
+				type="STRING" maxLen="64" basicSearch="true" />
 			<field name="recipientContact"
 				label="$m{notification.notificationrecipient.recipientcontact}"
-				type="string" maxLen="96" />
+				type="STRING" maxLen="96" />
 			<field name="typeDesc"
 				label="$m{notification.notificationrecipient.typedesc}"
-				type="list_only" key="type" property="description" />
+				type="LIST_ONLY" key="type" property="description" />
 		</entity>
 		<entity name="notifOutboxError"
 			description="$m{notification.notificationoutboxerror}"
@@ -194,9 +194,9 @@
 			type="com.flowcentraltech.flowcentral.notification.entities.NotificationOutboxError">
 			<field name="notificationId"
 				label="$m{notification.notificationoutboxerror.notificationid}"
-				type="ref" references="notifOutboxRef" basicSearch="true" />
+				type="REF" references="notifOutboxRef" basicSearch="true" />
 			<field name="error"
-				label="$m{notification.notificationoutboxerror.error}" type="string" />
+				label="$m{notification.notificationoutboxerror.error}" type="STRING" />
 		</entity>
 		<entity name="notifOutboxAttachment"
 			description="$m{notification.notificationoutboxattachment}"
@@ -204,24 +204,24 @@
 			type="com.flowcentraltech.flowcentral.notification.entities.NotificationOutboxAttachment">
 			<field name="notificationOutboxId"
 				label="$m{notification.notificationoutboxattachment.notificationoutboxid}"
-				type="ref" references="notifOutboxRef"
+				type="REF" references="notifOutboxRef"
 				inputWidget="application.entitylist" />
 			<field name="name"
 				label="$m{notification.notificationoutboxattachment.name}"
-				type="string" maxLen="128" />
+				type="STRING" maxLen="128" />
 			<field name="title"
 				label="$m{notification.notificationoutboxattachment.title}"
-				type="string" maxLen="128" />
+				type="STRING" maxLen="128" />
 			<field name="type"
 				label="$m{notification.notificationoutboxattachment.type}"
-				type="enum_ref" references="fileattachmenttypelist"
+				type="ENUM_REF" references="fileattachmenttypelist"
 				inputWidget="application.enumlist" basicSearch="true" />
 			<field name="data"
 				label="$m{notification.notificationoutboxattachment.data}"
 				type="blob" />
 			<field name="typeDesc"
 				label="$m{notification.notificationoutboxattachment.typedesc}"
-				type="list_only" key="type" property="description" />
+				type="LIST_ONLY" key="type" property="description" />
 			<uniqueConstraint name="nameUc"
 				description="$m{notification.notificationoutboxattachment.uc.name}"
 				fieldList="notificationOutboxId,name" />
@@ -232,35 +232,35 @@
 			type="com.flowcentraltech.flowcentral.notification.entities.NotificationChannel"
 			reportable="true" auditable="true" changeEvents = "true">
 			<field name="notificationType"
-				label="$m{notification.notificationchannel.type}" type="enum_ref"
+				label="$m{notification.notificationchannel.type}" type="ENUM_REF"
 				references="notificationtypelist" inputWidget="application.enumlist"
 				basicSearch="true" />
 			<field name="name"
-				label="$m{notification.notificationchannel.name}" type="string"
+				label="$m{notification.notificationchannel.name}" type="STRING"
 				inputWidget="application.name" maxLen="48" basicSearch="true" />
 			<field name="description"
 				label="$m{notification.notificationchannel.description}"
-				type="string" inputWidget="application.text" maxLen="64"
+				type="STRING" inputWidget="application.text" maxLen="64"
 				basicSearch="true" />
 			<field name="senderName"
 				label="$m{notification.notificationchannel.sendername}"
-				type="string" inputWidget="application.text" maxLen="64" />
+				type="STRING" inputWidget="application.text" maxLen="64" />
 			<field name="senderContact"
 				label="$m{notification.notificationchannel.sendercontact}"
-				type="string" inputWidget="application.text" maxLen="96" />
+				type="STRING" inputWidget="application.text" maxLen="96" />
 			<field name="nextTransmissionOn"
 				label="$m{notification.notificationchannel.nexttransmissionon}"
-				type="timestamp" inputWidget="application.datetime" nullable="true" />
+				type="TIMESTAMP" inputWidget="application.datetime" nullable="true" />
 			<field name="messagesPerMinute"
 				label="$m{notification.notificationchannel.messagesperminute}"
-				type="integer" inputWidget="application.integer" nullable="true"
+				type="INTEGER" inputWidget="application.integer" nullable="true"
 				precision="6" />
 			<field name="notificationTypeDesc"
 				label="$m{notification.notificationchannel.typedesc}"
-				type="list_only" key="notificationType" property="description" />
+				type="LIST_ONLY" key="notificationType" property="description" />
 			<field name="channelPropList"
 				label="$m{notification.notificationchannel.settings}"
-				type="child_list" references="notifChannelPropRef" />
+				type="CHILD_LIST" references="notifChannelPropRef" />
 			<uniqueConstraint name="typeUc"
 				description="$m{notification.notificationchannel.uc.type}"
 				fieldList="notificationType" />
@@ -277,17 +277,17 @@
 			type="com.flowcentraltech.flowcentral.notification.entities.NotificationChannelProp">
 			<field name="notificationChannelId"
 				label="$m{notification.notificationchannelprop.notificationchannelid}"
-				type="ref" references="notifChannelRef"
+				type="REF" references="notifChannelRef"
 				inputWidget="application.entitylist" />
 			<field name="name"
-				label="$m{notification.notificationchannelprop.name}" type="string"
+				label="$m{notification.notificationchannelprop.name}" type="STRING"
 				maxLen="128" />
 			<field name="value"
-				label="$m{notification.notificationchannelprop.value}" type="string"
+				label="$m{notification.notificationchannelprop.value}" type="STRING"
 				maxLen="256" />
 			<field name="notificationChannelDesc"
 				label="$m{notification.notificationchannelprop.notificationchanneldesc}"
-				type="list_only" key="notificationChannelId" property="description" />
+				type="LIST_ONLY" key="notificationChannelId" property="description" />
 			<uniqueConstraint name="nameUc"
 				description="$m{notification.notificationchannelprop.uc.name}"
 				fieldList="notificationChannelId,name" />
@@ -297,30 +297,30 @@
 			label="$m{notification.notificationtemplate.label}"
 			type="com.flowcentraltech.flowcentral.notification.entities.NotificationTemplate" changeEvents = "true">
 			<field name="notificationType"
-				label="$m{notification.notificationtemplate.type}" type="enum_ref"
+				label="$m{notification.notificationtemplate.type}" type="ENUM_REF"
 				references="notificationtypelist" inputWidget="application.enumlist"
 				basicSearch="true" />
 			<field name="messageFormat"
-				label="$m{notification.notificationtemplate.format}" type="enum_ref"
+				label="$m{notification.notificationtemplate.format}" type="ENUM_REF"
 				references="notifmessageformatlist"
 				inputWidget="application.enumlist" />
 			<field name="entity"
-				label="$m{notification.notificationtemplate.entity}" type="string"
+				label="$m{notification.notificationtemplate.entity}" type="STRING"
 				maxLen="128" />
 			<field name="subject"
-				label="$m{notification.notificationtemplate.subject}" type="string"
+				label="$m{notification.notificationtemplate.subject}" type="STRING"
 				maxLen="128" basicSearch="true" />
 			<field name="template"
-				label="$m{notification.notificationtemplate.template}" type="clob" />
+				label="$m{notification.notificationtemplate.template}" type="CLOB" />
 			<field name="notificationTypeDesc"
 				label="$m{notification.notificationtemplate.typedesc}"
-				type="list_only" key="notificationType" property="description" />
+				type="LIST_ONLY" key="notificationType" property="description" />
 			<field name="messageFormatDesc"
 				label="$m{notification.notificationtemplate.formatdesc}"
-				type="list_only" key="messageFormat" property="description" />
+				type="LIST_ONLY" key="messageFormat" property="description" />
 			<field name="paramList"
 				label="$m{notification.notificationtemplate.params}"
-				type="child_list" references="notifTemplateParamRef" />
+				type="CHILD_LIST" references="notifTemplateParamRef" />
 			<uniqueConstraint name="nameUc"
 				description="$m{notification.notificationtemplate.uc.name}"
 				fieldList="applicationId,name">
@@ -338,14 +338,14 @@
 			type="com.flowcentraltech.flowcentral.notification.entities.NotificationTemplateParam">
 			<field name="notificationTemplateId"
 				label="$m{notification.notificationtemplateparam.notificationtemplateid}"
-				type="ref" references="notifTemplateRef"
+				type="REF" references="notifTemplateRef"
 				inputWidget="application.entitylist" />
 			<field name="name"
 				label="$m{notification.notificationtemplateparam.name}"
-				type="string" maxLen="128" />
+				type="STRING" maxLen="128" />
 			<field name="label"
 				label="$m{notification.notificationtemplateparam.llabel}"
-				type="string" maxLen="128" />
+				type="STRING" maxLen="128" />
 			<uniqueConstraint name="nameUc"
 				description="$m{notification.notificationtemplateparam.uc.name}"
 				fieldList="notificationTemplateId,name" />
@@ -355,20 +355,20 @@
 			label="$m{notification.notificationlargetext.label}"
 			type="com.flowcentraltech.flowcentral.notification.entities.NotificationLargeText" changeEvents = "true">
 			<field name="entity"
-				label="$m{notification.notificationlargetext.entity}" type="string"
+				label="$m{notification.notificationlargetext.entity}" type="STRING"
 				maxLen="128" />
 			<field name="fontFamily"
 				label="$m{notification.notificationlargetext.fontfamily}"
-				type="enum" references="fontfamilylist"
+				type="ENUM" references="fontfamilylist"
 				inputWidget="application.enumlist" nullable="true" />
 			<field name="fontSizeInPixels"
 				label="$m{notification.notificationlargetext.fontsizeinpixels}"
-				type="integer" precision="2" nullable="true" />
+				type="INTEGER" precision="2" nullable="true" />
 			<field name="body"
-				label="$m{notification.notificationlargetext.body}" type="clob" />
+				label="$m{notification.notificationlargetext.body}" type="CLOB" />
 			<field name="paramList"
 				label="$m{notification.notificationlargetext.params}"
-				type="child_list" references="notifLargeTextParamRef" />
+				type="CHILD_LIST" references="notifLargeTextParamRef" />
 			<uniqueConstraint name="nameUc"
 				description="$m{notification.notificationlargetext.uc.name}"
 				fieldList="applicationId,name">
@@ -386,14 +386,14 @@
 			type="com.flowcentraltech.flowcentral.notification.entities.NotificationLargeTextParam">
 			<field name="notifLargeTextId"
 				label="$m{notification.notificationlargetextparam.notificationlargetextid}"
-				type="ref" references="notifLargeTextRef"
+				type="REF" references="notifLargeTextRef"
 				inputWidget="application.entitylist" />
 			<field name="name"
 				label="$m{notification.notificationlargetextparam.name}"
-				type="string" maxLen="128" />
+				type="STRING" maxLen="128" />
 			<field name="label"
 				label="$m{notification.notificationlargetextparam.llabel}"
-				type="string" maxLen="128" />
+				type="STRING" maxLen="128" />
 			<uniqueConstraint name="nameUc"
 				description="$m{notification.notificationlargetextparam.uc.name}"
 				fieldList="notifLargeTextId,name" />
@@ -496,8 +496,8 @@
 			entity="notifOutbox">
 			<tab name="basicDetails"
 				label="$m{notification.notificationoutbox.form.basicdetails}"
-				contentType="miniform">
-				<section name="outboxDetails" columns="type_2"
+				contentType="MINIFORM">
+				<section name="outboxDetails" columns="TYPE_2"
 					label="$m{notification.notificationoutbox.form.basicdetails}">
 					<field name="type" inputWidget="application.enumlist"
 						column="0" required="true" />
@@ -508,7 +508,7 @@
 					<field name="status" inputWidget="application.enumlist"
 						column="1" required="true" />
 				</section>
-				<section name="message" columns="type_1">
+				<section name="message" columns="TYPE_1">
 					<field name="from" inputWidget="application.name" column="0"
 						required="false" />
 					<field name="subject" inputWidget="application.text"
@@ -516,7 +516,7 @@
 					<field name="message" inputWidget="application.textarealarge"
 						column="0" required="true" />
 				</section>
-				<section name="procDetails" columns="type_2"
+				<section name="procDetails" columns="TYPE_2"
 					label="$m{notification.notificationoutbox.form.processingdetails}">
 					<field name="nextAttemptDt"
 						inputWidget="application.datetime" column="0" />
@@ -541,15 +541,15 @@
 				contentType="child_list" applet="manageNotifOutboxError"
 				reference="errorList" />
 			<tab name="changeLog" label="$m{application.form.audit}"
-				contentType="miniform_changelog" />
+				contentType="MINIFORM_CHANGELOG" />
 		</form>
 		<form name="notifChannelForm"
 			description="$m{notification.notificationchannel.form}"
 			entity="notifChannel">
 			<tab name="basicDetails"
 				label="$m{notification.notificationchannel.form.basicdetails}"
-				contentType="miniform">
-				<section name="channelDetails" columns="type_2"
+				contentType="MINIFORM">
+				<section name="channelDetails" columns="TYPE_2"
 					label="$m{notification.notificationchannel.form.basicdetails}">
 					<field name="notificationType"
 						inputWidget="application.enumlist" column="0" required="true"
@@ -565,7 +565,7 @@
 					<field name="status" inputWidget="application.enumlist"
 						column="1" required="true" />
 				</section>
-				<section name="throttlingDetails" columns="type_2"
+				<section name="throttlingDetails" columns="TYPE_2"
 					label="$m{notification.notificationchannel.form.throttlingdetails}">
 					<field name="messagesPerMinute" column="0"
 						required="false" />
@@ -578,7 +578,7 @@
 				contentType="property_list" applet="manageNotifChannelProp"
 				reference="channelPropList" />
 			<tab name="changeLog" label="$m{application.form.audit}"
-				contentType="miniform_changelog" />
+				contentType="MINIFORM_CHANGELOG" />
 		</form>
 	</forms>
 	<!-- Property Lists -->

@@ -31,8 +31,8 @@
 	<!-- Widget Types -->
 	<widgetTypes>
 		<widgetType name="userphoto"
-			description="$m{security.widgettype.userphoto}" dataType="string"
-			inputType="string"
+			description="$m{security.widgettype.userphoto}" dataType="STRING"
+			inputType="STRING"
 			editor="!fc-fileattachmentimage category:$s{form} entityName:$s{security.user} attachmentName:$s{photo}"
 			renderer="!ui-label" stretch="false" />
 	</widgetTypes>
@@ -41,7 +41,7 @@
 		<applet name="manageUserGroup"
 			description="$m{security.usergroup.manage}"
 			label="$m{security.usergroup.manage.label}" icon="users"
-			type="manage_entitylist" entity="userGroup" menuAccess="true"
+			type="MANAGE_ENTITYLIST" entity="userGroup" menuAccess="true"
 			allowSecondaryTenants="true">
 			<property name="searchTable" value="userGroupTable" />
 			<property name="searchTable.new" value="true" />
@@ -79,7 +79,7 @@
 		<applet name="manageUser"
 			description="$m{security.user.manage}"
 			label="$m{security.user.manage.label}" icon="user"
-			type="manage_entitylist" entity="user" menuAccess="true"
+			type="MANAGE_ENTITYLIST" entity="user" menuAccess="true"
 			allowSecondaryTenants="true">
 			<property name="baseRestriction" value="nonSystemRecords" />
 			<property name="searchTable" value="userTable" />
@@ -215,7 +215,7 @@
 		<applet name="manageResetUser"
 			description="$m{security.userresetunlock.manage}"
 			label="$m{security.userresetunlock.manage.label}" icon="unlock"
-			type="manage_entitylist" entity="user" menuAccess="true"
+			type="MANAGE_ENTITYLIST" entity="user" menuAccess="true"
 			allowSecondaryTenants="true">
 			<property name="searchTable" value="userTable" />
 			<property name="searchTable.new" value="false" />
@@ -233,7 +233,7 @@
 		<applet name="manageUserLoginEvent"
 			description="$m{security.userloginevent.manage}"
 			label="$m{security.userloginevent.manage.label}"
-			type="manage_entitylist" entity="userLoginEvent" menuAccess="false">
+			type="MANAGE_ENTITYLIST" entity="userLoginEvent" menuAccess="false">
 			<property name="searchTable" value="userLoginEventTable" />
 			<property name="searchTable.new" value="false" />
 			<property name="searchTable.report" value="false" />
@@ -243,7 +243,7 @@
 		<applet name="manageSecuredLink"
 			description="$m{security.securedlink.manage}"
 			label="$m{security.securedlink.manage.label}" icon="link"
-			type="manage_entitylist" entity="securedLink" menuAccess="true"
+			type="MANAGE_ENTITYLIST" entity="securedLink" menuAccess="true"
 			allowSecondaryTenants="true">
 			<property name="searchTable" value="securedLinkTable" />
 			<property name="searchTable.new" value="false" />
@@ -296,19 +296,19 @@
 			type="com.flowcentraltech.flowcentral.security.entities.UserGroup"
 			reportable="true" auditable="true" changeEvents = "true">
 			<field name="name" label="$m{security.usergroup.name}"
-				type="string" inputWidget="application.name" maxLen="64"
+				type="STRING" inputWidget="application.name" maxLen="64"
 				basicSearch="true" auditable="true"/>
 			<field name="description"
-				label="$m{security.usergroup.description}" type="string"
+				label="$m{security.usergroup.description}" type="STRING"
 				inputWidget="application.text" maxLen="96" basicSearch="true" auditable="true"/>
 			<field name="email" label="$m{security.usergroup.email}"
-				type="string" inputWidget="application.text" maxLen="64"
+				type="STRING" inputWidget="application.text" maxLen="64"
 				nullable="true" auditable="true"/>
 			<field name="userGroupRoleList"
-				label="$m{security.usergroup.usergrouprolelist}" type="child_list"
+				label="$m{security.usergroup.usergrouprolelist}" type="CHILD_LIST"
 				references="userGroupRoleRef" />
 			<field name="userGroupMemberList"
-				label="$m{security.usergroup.usergroupmemberlist}" type="child_list"
+				label="$m{security.usergroup.usergroupmemberlist}" type="CHILD_LIST"
 				references="userGroupMemberRef" />
 			<uniqueConstraint name="nameUc"
 				description="$m{security.usergroup.uc.name}" fieldList="name" />
@@ -321,37 +321,37 @@
 			label="$m{security.usergrouprole.label}"
 			type="com.flowcentraltech.flowcentral.security.entities.UserGroupRole" auditable="true" changeEvents = "true">
 			<field name="userGroupId"
-				label="$m{security.usergrouprole.usergroupid}" type="ref"
+				label="$m{security.usergrouprole.usergroupid}" type="REF"
 				references="userGroupRef"
 				inputLabel="$m{security.usergrouprole.usergroup}"
 				inputWidget="application.entitysearch" />
 			<field name="roleId" label="$m{security.usergrouprole.roleid}"
-				type="ref" references="organization.roleRef"
+				type="REF" references="organization.roleRef"
 				inputLabel="$m{security.usergrouprole.role}"
 				inputWidget="application.entitysearch" />
 			<field name="userGroupName"
-				label="$m{security.usergrouprole.usergroupname}" type="list_only"
+				label="$m{security.usergrouprole.usergroupname}" type="LIST_ONLY"
 				key="userGroupId" property="name" />
 			<field name="userGroupDesc"
-				label="$m{security.usergrouprole.usergroupdesc}" type="list_only"
+				label="$m{security.usergrouprole.usergroupdesc}" type="LIST_ONLY"
 				key="userGroupId" property="description" />
 			<field name="userGroupEmail"
-				label="$m{security.usergrouprole.usergroupemail}" type="list_only"
+				label="$m{security.usergrouprole.usergroupemail}" type="LIST_ONLY"
 				key="userGroupId" property="email" />
 			<field name="roleCode"
-				label="$m{security.usergrouprole.rolecode}" type="list_only"
+				label="$m{security.usergrouprole.rolecode}" type="LIST_ONLY"
 				key="roleId" property="code" />
 			<field name="roleDesc"
-				label="$m{security.usergrouprole.roledesc}" type="list_only"
+				label="$m{security.usergrouprole.roledesc}" type="LIST_ONLY"
 				key="roleId" property="description" auditable="true"/>
 			<field name="activeBefore"
-				label="$m{security.usergrouprole.roleactivebefore}" type="list_only"
+				label="$m{security.usergrouprole.roleactivebefore}" type="LIST_ONLY"
 				key="roleId" property="activeBefore" />
 			<field name="activeAfter"
-				label="$m{security.usergrouprole.roleactiveafter}" type="list_only"
+				label="$m{security.usergrouprole.roleactiveafter}" type="LIST_ONLY"
 				key="roleId" property="activeAfter" />
 			<field name="departmentId"
-				label="$m{security.usergrouprole.departmentid}" type="list_only"
+				label="$m{security.usergrouprole.departmentid}" type="LIST_ONLY"
 				key="roleId" property="departmentId" />
 			<uniqueConstraint name="roleUc"
 				description="$m{security.usergrouprole.uc.role}"
@@ -362,31 +362,31 @@
 			label="$m{security.usergroupmember.label}"
 			type="com.flowcentraltech.flowcentral.security.entities.UserGroupMember" auditable="true" changeEvents = "true">
 			<field name="userGroupId"
-				label="$m{security.usergroupmember.usergroupid}" type="ref"
+				label="$m{security.usergroupmember.usergroupid}" type="REF"
 				references="userGroupRef"
 				inputLabel="$m{security.usergroupmember.usergroup}"
 				inputWidget="application.entitysearch" basicSearch="true" />
 			<field name="userId"
-				label="$m{security.usergroupmember.userid}" type="ref"
+				label="$m{security.usergroupmember.userid}" type="REF"
 				references="userRef" inputLabel="$m{security.usergroupmember.user}"
 				inputWidget="application.entitysearch" />
 			<field name="userGroupName"
-				label="$m{security.usergroupmember.usergroupname}" type="list_only"
+				label="$m{security.usergroupmember.usergroupname}" type="LIST_ONLY"
 				key="userGroupId" property="name" />
 			<field name="userGroupDesc"
-				label="$m{security.usergroupmember.usergroupdesc}" type="list_only"
+				label="$m{security.usergroupmember.usergroupdesc}" type="LIST_ONLY"
 				key="userGroupId" property="description" />
 			<field name="userGroupEmail"
-				label="$m{security.usergroupmember.usergroupemail}" type="list_only"
+				label="$m{security.usergroupmember.usergroupemail}" type="LIST_ONLY"
 				key="userGroupId" property="email" />
 			<field name="userFullName"
-				label="$m{security.usergroupmember.username}" type="list_only"
+				label="$m{security.usergroupmember.username}" type="LIST_ONLY"
 				key="userId" property="fullName" auditable="true"/>
 			<field name="userEmail"
-				label="$m{security.usergroupmember.useremail}" type="list_only"
+				label="$m{security.usergroupmember.useremail}" type="LIST_ONLY"
 				key="userId" property="email" />
 			<field name="userBranchId"
-				label="$m{security.usergroupmember.branchid}" type="list_only"
+				label="$m{security.usergroupmember.branchid}" type="LIST_ONLY"
 				key="userId" property="branchId" />
 			<uniqueConstraint name="userUc"
 				description="$m{security.usergroupmember.uc.user}"
@@ -397,63 +397,63 @@
 			type="com.flowcentraltech.flowcentral.security.entities.User"
 			reportable="true" auditable="true" changeEvents = "true">
 			<field name="workflowStatus"
-				label="$m{security.user.workflowstatus}" type="enum_ref"
+				label="$m{security.user.workflowstatus}" type="ENUM_REF"
 				inputWidget="application.enumlist"
 				references="userworkflowstatuslist" basicSearch="true" />
 			<field name="workflowStatusDesc"
 				label="$m{security.user.workflowstatus.description}"
-				type="list_only" inputWidget="application.text" key="workflowStatus"
+				type="LIST_ONLY" inputWidget="application.text" key="workflowStatus"
 				property="description" />
 			<field name="branchId" label="$m{security.user.branch}"
 				type="mapped" inputWidget="organization.branchlist"
 				mapped="organization.mappedBranch" basicSearch="true" auditable="true"/>
 			<field name="fullName" label="$m{security.user.fullname}"
-				type="string" inputWidget="application.fullname" maxLen="96"
+				type="STRING" inputWidget="application.fullname" maxLen="96"
 				basicSearch="true" auditable="true"/>
 			<field name="loginId" label="$m{security.user.loginid}"
-				type="string" inputWidget="application.name" maxLen="64"
+				type="STRING" inputWidget="application.name" maxLen="64"
 				case="upper" auditable="true"/>
 			<field name="password" label="$m{security.user.password}"
-				type="string" inputWidget="application.password" auditable="false"
+				type="STRING" inputWidget="application.password" auditable="false"
 				reportable="false" maxLen="512" nullable="true" />
 			<field name="email" label="$m{security.user.email}"
-				type="string" inputWidget="application.text" maxLen="64" auditable="true"/>
+				type="STRING" inputWidget="application.text" maxLen="64" auditable="true"/>
 			<field name="mobileNo" label="$m{security.user.mobileno}"
-				type="string" inputWidget="application.text" maxLen="64"
+				type="STRING" inputWidget="application.text" maxLen="64"
 				nullable="true" auditable="true"/>
 			<field name="loginAttempts"
-				label="$m{security.user.loginattempts}" type="integer"
+				label="$m{security.user.loginattempts}" type="INTEGER"
 				inputWidget="application.integer" />
 			<field name="loginLocked" label="$m{security.user.loginlocked}"
-				type="boolean" inputWidget="application.checkbox" />
+				type="BOOLEAN" inputWidget="application.checkbox" />
 			<field name="changePassword"
-				label="$m{security.user.changepassword}" type="boolean"
+				label="$m{security.user.changepassword}" type="BOOLEAN"
 				inputWidget="application.checkbox" />
 			<field name="passwordExpires"
-				label="$m{security.user.passwordexpires}" type="boolean"
+				label="$m{security.user.passwordexpires}" type="BOOLEAN"
 				inputWidget="application.checkbox" />
 			<field name="allowMultipleLogin"
-				label="$m{security.user.allowmultiplelogin}" type="boolean"
+				label="$m{security.user.allowmultiplelogin}" type="BOOLEAN"
 				inputWidget="application.checkbox" auditable="true"/>
 			<field name="localPasswordOnly"
-				label="$m{security.user.localpasswordonly}" type="boolean"
+				label="$m{security.user.localpasswordonly}" type="BOOLEAN"
 				inputWidget="application.checkbox" auditable="true"/>
 			<field name="allowLoginWithoutOtp"
-				label="$m{security.user.allowloginwithoutotp}" type="boolean"
+				label="$m{security.user.allowloginwithoutotp}" type="BOOLEAN"
 				inputWidget="application.checkbox" auditable="true"/>
 			<field name="supervisor" label="$m{security.user.supervisor}"
-				type="boolean" inputWidget="application.checkbox" auditable="true"/>
+				type="BOOLEAN" inputWidget="application.checkbox" auditable="true"/>
 			<field name="passwordExpiryDt"
 				label="$m{security.user.passwordexpirydt}" type="date"
 				inputWidget="application.date" />
 			<field name="lastLoginDt" label="$m{security.user.lastlogindt}"
-				type="timestamp" inputWidget="application.datetime" />
+				type="TIMESTAMP" inputWidget="application.datetime" />
 			<field name="plainPassword"
 				label="$m{security.user.plainpassword}" type="scratch" />
 			<field name="userRoleList" label="$m{security.user.rolelist}"
-				type="child_list" references="userRoleRef" />
+				type="CHILD_LIST" references="userRoleRef" />
 			<field name="userLoginEventList"
-				label="$m{security.user.userlogineventlist}" type="child_list"
+				label="$m{security.user.userlogineventlist}" type="CHILD_LIST"
 				references="userLoginEventRef" />
 			<uniqueConstraint name="loginIdUc"
 				description="$m{security.user.uc.loginid}" fieldList="loginId" />
@@ -464,37 +464,37 @@
 			label="$m{security.userrole.label}"
 			type="com.flowcentraltech.flowcentral.security.entities.UserRole" auditable="true" changeEvents = "true">
 			<field name="userId" label="$m{security.userrole.userid}"
-				type="ref" references="userRef"
+				type="REF" references="userRef"
 				inputLabel="$m{security.userrole.user}"
 				inputWidget="application.entitysearch" />
 			<field name="roleId" label="$m{security.userrole.roleid}"
-				type="ref" references="organization.roleRef"
+				type="REF" references="organization.roleRef"
 				inputLabel="$m{security.userrole.role}"
 				inputWidget="application.entitysearch"/>
 			<field name="userName" label="$m{security.userrole.username}"
-				type="list_only" key="userId" property="fullName" />
+				type="LIST_ONLY" key="userId" property="fullName" />
 			<field name="userEmail" label="$m{security.userrole.useremail}"
-				type="list_only" key="userId" property="email" />
+				type="LIST_ONLY" key="userId" property="email" />
 			<field name="userMobileNo"
-				label="$m{security.userrole.usermobileno}" type="list_only"
+				label="$m{security.userrole.usermobileno}" type="LIST_ONLY"
 				key="userId" property="mobileNo" />
 			<field name="supervisor"
-				label="$m{security.userrole.supervisor}" type="list_only"
+				label="$m{security.userrole.supervisor}" type="LIST_ONLY"
 				key="userId" property="supervisor" />
 			<field name="branchId" label="$m{security.userrole.branchid}"
-				type="list_only" key="userId" property="branchId" />
+				type="LIST_ONLY" key="userId" property="branchId" />
 			<field name="roleCode" label="$m{security.userrole.rolecode}"
-				type="list_only" key="roleId" property="code" />
+				type="LIST_ONLY" key="roleId" property="code" />
 			<field name="roleDesc" label="$m{security.userrole.roledesc}"
-				type="list_only" key="roleId" property="description" auditable="true"/>
+				type="LIST_ONLY" key="roleId" property="description" auditable="true"/>
 			<field name="departmentId"
-				label="$m{security.userrole.departmentid}" type="list_only"
+				label="$m{security.userrole.departmentid}" type="LIST_ONLY"
 				key="roleId" property="departmentId" />
 			<field name="activeBefore"
-				label="$m{security.userrole.roleactivebefore}" type="list_only"
+				label="$m{security.userrole.roleactivebefore}" type="LIST_ONLY"
 				key="roleId" property="activeBefore" />
 			<field name="activeAfter"
-				label="$m{security.userrole.roleactiveafter}" type="list_only"
+				label="$m{security.userrole.roleactiveafter}" type="LIST_ONLY"
 				key="roleId" property="activeAfter" />
 			<uniqueConstraint name="roleUc"
 				description="$m{security.userrole.uc.role}"
@@ -505,28 +505,28 @@
 			label="$m{security.userloginevent.label}"
 			type="com.flowcentraltech.flowcentral.security.entities.UserLoginEvent">
 			<field name="eventType"
-				label="$m{security.userloginevent.eventtype}" type="enum_ref"
+				label="$m{security.userloginevent.eventtype}" type="ENUM_REF"
 				inputWidget="application.enumlist" references="logineventtypelist" />
 			<field name="userId" label="$m{security.userloginevent.userid}"
-				type="ref" references="userRef"
+				type="REF" references="userRef"
 				inputLabel="$m{security.userloginevent.user}"
 				inputWidget="application.entitysearch" />
 			<field name="remoteAddress"
-				label="$m{security.userloginevent.remoteaddress}" type="string"
+				label="$m{security.userloginevent.remoteaddress}" type="STRING"
 				inputWidget="application.text" auditable="false" reportable="true"
 				nullable="true" />
 			<field name="remoteHost"
-				label="$m{security.userloginevent.remotehost}" type="string"
+				label="$m{security.userloginevent.remotehost}" type="STRING"
 				inputWidget="application.text" auditable="false" reportable="true"
 				nullable="true" />
 			<field name="userLoginId"
-				label="$m{security.userloginevent.userloginid}" type="list_only"
+				label="$m{security.userloginevent.userloginid}" type="LIST_ONLY"
 				key="userId" property="loginId" />
 			<field name="userFullName"
-				label="$m{security.userloginevent.userfullname}" type="list_only"
+				label="$m{security.userloginevent.userfullname}" type="LIST_ONLY"
 				key="userId" property="fullName" />
 			<field name="eventTypeDesc"
-				label="$m{security.userloginevent.eventtypedesc}" type="list_only"
+				label="$m{security.userloginevent.eventtypedesc}" type="LIST_ONLY"
 				key="eventType" property="description" />
 		</entity>
 		<entity name="securedLink" description="$m{security.securedlink}"
@@ -534,31 +534,31 @@
 			type="com.flowcentraltech.flowcentral.security.entities.SecuredLink"
 			reportable="true" auditable="true">
 			<field name="type" label="$m{security.securedlink.type}"
-				type="enum_ref" references="securedlinktypelist"
+				type="ENUM_REF" references="securedlinktypelist"
 				inputWidget="application.enumlist" />
 			<field name="title" label="$m{security.securedlink.title}"
-				type="string" inputWidget="application.text" maxLen="128"
+				type="STRING" inputWidget="application.text" maxLen="128"
 				basicSearch="true" reportable="true" auditable="true"/>
 			<field name="contentPath"
-				label="$m{security.securedlink.contentpath}" type="string"
+				label="$m{security.securedlink.contentpath}" type="STRING"
 				inputWidget="application.text" maxLen="128" reportable="true" auditable="true"/>
 			<field name="assignedToLoginId" label="$m{security.securedlink.assignedtologinid}"
-				type="string" inputWidget="application.text" maxLen="64"
+				type="STRING" inputWidget="application.text" maxLen="64"
 				nullable="true" reportable="true" auditable="true"/>
 			<field name="assignedRole" label="$m{security.securedlink.assignedrole}"
-				type="string" inputWidget="application.text" maxLen="64"
+				type="STRING" inputWidget="application.text" maxLen="64"
 				nullable="true" reportable="true" auditable="true"/>
 			<field name="expiresOn" label="$m{security.securedlink.expireson}"
-				type="timestamp" inputWidget="application.datetime"
+				type="TIMESTAMP" inputWidget="application.datetime"
 				reportable="true" auditable="true"/>
 			<field name="lastAccessedBy" label="$m{security.securedlink.lastaccessedby}"
-				type="string" inputWidget="application.text" maxLen="64"
+				type="STRING" inputWidget="application.text" maxLen="64"
 				nullable="true" reportable="true" auditable="true"/>
 			<field name="lastAccessedOn" label="$m{security.securedlink.lastaccessedon}"
-				type="timestamp" inputWidget="application.datetime"
+				type="TIMESTAMP" inputWidget="application.datetime"
 				nullable="true" reportable="true" auditable="true"/>
 			<field name="typeDesc"
-				label="$m{security.securedlink.typedesc}" type="list_only"
+				label="$m{security.securedlink.typedesc}" type="LIST_ONLY"
 				key="type" property="description" />
 		</entity>
 		<entity name="securitySettings" description="$m{security.passwordcomplexity}"
@@ -566,22 +566,22 @@
 			type="com.flowcentraltech.flowcentral.security.entities.PasswordComplexity"
 			reportable="true" auditable="true" changeEvents = "true">
 			<field name="minimumPasswordLen" label="$m{security.passwordcomplexity.minimumpasswordlen}"
-				type="integer" inputWidget="application.integer" precision="2"
+				type="INTEGER" inputWidget="application.integer" precision="2"
 				nullable="false" auditable="true" reportable="true"/>
 			<field name="minimumAlphabets" label="$m{security.passwordcomplexity.minimumalphabets}"
-				type="integer" inputWidget="application.integer" precision="2"
+				type="INTEGER" inputWidget="application.integer" precision="2"
 				nullable="true" auditable="true" reportable="true"/>
 			<field name="minimumNumbers" label="$m{security.passwordcomplexity.minimumnumbers}"
-				type="integer" inputWidget="application.integer" precision="2"
+				type="INTEGER" inputWidget="application.integer" precision="2"
 				nullable="true" auditable="true" reportable="true"/>
 			<field name="minimumSpecial" label="$m{security.passwordcomplexity.minimumspecial}"
-				type="integer" inputWidget="application.integer" precision="2"
+				type="INTEGER" inputWidget="application.integer" precision="2"
 				nullable="true" auditable="true" reportable="true"/>
 			<field name="minimumUppercase" label="$m{security.passwordcomplexity.minimumuppercase}"
-				type="integer" inputWidget="application.integer" precision="2"
+				type="INTEGER" inputWidget="application.integer" precision="2"
 				nullable="true" auditable="true" reportable="true"/>
 			<field name="minimumLowercase" label="$m{security.passwordcomplexity.minimumlowercase}"
-				type="integer" inputWidget="application.integer" precision="2"
+				type="INTEGER" inputWidget="application.integer" precision="2"
 				nullable="true" auditable="true" reportable="true"/>
 		</entity>
 	</entities>
@@ -713,8 +713,8 @@
 			description="$m{security.usergroup.form}" entity="userGroup">
 			<tab name="basicDetails"
 				label="$m{security.usergroup.form.basicdetails}"
-				contentType="miniform">
-				<section name="userGroupDetails" columns="type_2">
+				contentType="MINIFORM">
+				<section name="userGroupDetails" columns="TYPE_2">
 					<field name="name" inputWidget="application.name" column="0"
 						required="true" />
 					<field name="description" inputWidget="application.text"
@@ -732,7 +732,7 @@
 				contentType="child_list" applet="manageUserGroupRole"
 				reference="userGroupRoleList" />
 			<tab name="changeLog" label="$m{application.form.audit}"
-				contentType="miniform_changelog" />
+				contentType="MINIFORM_CHANGELOG" />
 			<fieldValidationPolicy name="emailValidation"
 				description="$m{security.usergroup.form.fieldvalidationpolicy.email}"
 				fieldName="email" validator="fc-emailvalidator" />
@@ -740,8 +740,8 @@
 		<form name="userForm" description="$m{security.user.form}"
 			entity="user">
 			<tab name="basicDetails"
-				label="$m{security.user.form.basicdetails}" contentType="miniform">
-				<section name="userDetails" columns="type_2">
+				label="$m{security.user.form.basicdetails}" contentType="MINIFORM">
+				<section name="userDetails" columns="TYPE_2">
 					<field name="loginId" inputWidget="application.name"
 						column="0" required="true" />
 					<field name="fullName" inputWidget="application.fullname"
@@ -784,9 +784,9 @@
 				contentType="miniform_mapped" mappedFieldName="branchId"
 				mappedForm="organization.mappedBranchForm" disabled="true" />
 			<tab name="accountDetails"
-				label="$m{security.user.form.accountdetails}" contentType="miniform"
+				label="$m{security.user.form.accountdetails}" contentType="MINIFORM"
 				disabled="true">
-				<section name="accountDetails" columns="type_2">
+				<section name="accountDetails" columns="TYPE_2">
 					<field name="lastLoginDt" inputWidget="application.datetime"
 						column="0" />
 					<field name="passwordExpiryDt"
@@ -798,7 +798,7 @@
 				</section>
 			</tab>
 			<tab name="changeLog" label="$m{application.form.audit}"
-				contentType="miniform_changelog" />
+				contentType="MINIFORM_CHANGELOG" />
 			<formStatePolicy type="ON_CREATE"
 				name="onCreateFormStatePolicy"
 				description="$m{security.user.form.statepolicy.oncreate}">
@@ -827,8 +827,8 @@
 				policy="unlockuser-actionpolicy" showOnMaintain="true" />
 			<tab name="basicDetails"
 				label="$m{security.userresetunlock.form.basicdetails}"
-				contentType="miniform" disabled="true">
-				<section name="userDetails" columns="type_2">
+				contentType="MINIFORM" disabled="true">
+				<section name="userDetails" columns="TYPE_2">
 					<field name="loginId" inputWidget="application.name"
 						column="0" required="true" />
 					<field name="fullName" inputWidget="application.fullname"
@@ -858,8 +858,8 @@
 			description="$m{security.securedlink.form}" entity="securedLink">
 			<tab name="basicDetails"
 				label="$m{security.securedlink.form.basicdetails}"
-				contentType="miniform">
-				<section name="securedLinkDetails" columns="type_2">
+				contentType="MINIFORM">
+				<section name="securedLinkDetails" columns="TYPE_2">
 					<field name="title" inputWidget="application.text" column="0"
 						required="true" />
 					<field name="contentPath" inputWidget="application.textarea"
@@ -871,14 +871,14 @@
 			</tab>
 			<tab name="accessDetails"
 				label="$m{security.securedlink.form.accessdetails}"
-				contentType="miniform">
-				<section name="accessDetails" columns="type_2">
+				contentType="MINIFORM">
+				<section name="accessDetails" columns="TYPE_2">
 					<field name="lastAccessedBy" inputWidget="application.text" column="0" />
 					<field name="lastAccessedOn" inputWidget="application.datetime" column="1" />
 				</section>
 			</tab>
 			<tab name="changeLog" label="$m{application.form.audit}"
-				contentType="miniform_changelog" />
+				contentType="MINIFORM_CHANGELOG" />
 		</form>
 	</forms>
 	<!-- Assignment Pages -->

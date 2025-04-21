@@ -25,13 +25,25 @@ public class DeleteResult extends AbstractResult {
 
     private Long id;
 
+    private int deletedCount;
+
     public DeleteResult(String resource, Long id) {
         super("delete", resource);
         this.id = id;
+        this.deletedCount = 1;
+    }
+
+    public DeleteResult(String resource, int deletedCount) {
+        super("delete", resource);
+        this.deletedCount = deletedCount;
     }
 
     public Long getId() {
         return id;
+    }
+
+    public int getDeletedCount() {
+        return deletedCount;
     }
      
 }

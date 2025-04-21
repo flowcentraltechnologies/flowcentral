@@ -14,7 +14,7 @@
 	<sysParameters>
 		<sysParameter code="NOT-0001" defaultVal="false"
 			description="$m{notification.sysparam.notificationenabled}"
-			editor="!ui-select list:booleanlist" type="boolean" control="true"
+			editor="!ui-select list:booleanlist" type="BOOLEAN" control="true"
 			editable="true" />
 		<sysParameter code="NOT-0002" defaultVal="15"
 			description="$m{notification.sysparam.notificationmaximumtries}"
@@ -27,20 +27,20 @@
 			editor="!ui-integer precision:2" type="number" editable="true" />
 		<sysParameter code="NOT-0005" defaultVal="false"
 			description="$m{notification.sysparam.notificationtestmodeenabled}"
-			editor="!ui-select list:booleanlist" type="boolean" control="true"
+			editor="!ui-select list:booleanlist" type="BOOLEAN" control="true"
 			editable="true" />
 		<sysParameter code="NOT-0006" defaultVal=""
 			description="$m{notification.sysparam.notificationtestmodeetoemail}"
-			editor="!ui-textarea" type="string" editable="true" />
+			editor="!ui-textarea" type="STRING" editable="true" />
 		<sysParameter code="NOT-0007" defaultVal=""
 			description="$m{notification.sysparam.notificationtestmodeeccemail}"
-			editor="!ui-textarea" type="string" editable="true" />
+			editor="!ui-textarea" type="STRING" editable="true" />
 		<sysParameter code="NOT-0008" defaultVal=""
 			description="$m{notification.sysparam.notificationtestmodeebccemail}"
-			editor="!ui-textarea" type="string" editable="true" />
+			editor="!ui-textarea" type="STRING" editable="true" />
 		<sysParameter code="NOT-0009" defaultVal="true"
 			description="$m{notification.sysparam.notificationhtmlemailenabled}"
-			editor="!ui-select list:booleanlist" type="boolean" control="true"
+			editor="!ui-select list:booleanlist" type="BOOLEAN" control="true"
 			editable="true" />
 	</sysParameters>
 </module>

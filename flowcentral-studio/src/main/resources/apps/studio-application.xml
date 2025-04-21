@@ -12,563 +12,563 @@
 	<widgetTypes>
 		<widgetType name="environmentdelegatelist"
 			description="$m{studio.widgettype.environmentdelegatelist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!ui-select list:studioenvironmentdelegatelist blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="formwizardcompletiontypelist"
 			description="$m{studio.widgettype.formwizardcompletiontypelist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!ui-select list:formwizardcompletiontypelist blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="tablerowcolorlist"
 			description="$m{studio.widgettype.tablerowcolorlist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!ui-select list:studiotablerowcolorlist blankOption:$m{blank.none} colors:true"
 			renderer="!ui-label" />
 		<widgetType name="chartcolorlist"
-			description="$m{studio.widgettype.chartcolorlist}" dataType="string"
-			inputType="string"
+			description="$m{studio.widgettype.chartcolorlist}" dataType="STRING"
+			inputType="STRING"
 			editor="!ui-select list:studiochartcolorlist blankOption:$m{blank.none} colors:true"
 			renderer="!ui-label" />
 		<widgetType name="yesnolist"
-			description="$m{studio.widgettype.yesnolist}" dataType="string"
-			inputType="string"
+			description="$m{studio.widgettype.yesnolist}" dataType="STRING"
+			inputType="STRING"
 			editor="!ui-select list:yesnolist blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="passfaillist"
-			description="$m{studio.widgettype.passfaillist}" dataType="string"
-			inputType="string"
+			description="$m{studio.widgettype.passfaillist}" dataType="STRING"
+			inputType="STRING"
 			editor="!ui-select list:passfaillist blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="jsonformatterlist"
 			description="$m{studio.widgettype.jsonformatterlist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!ui-select list:studiojsonformatterlist listParams:$l{dataType} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="dateformatterlist"
 			description="$m{studio.widgettype.dateformatterlist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!ui-select list:studiodateformatterlist blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="datetimeformatterlist"
 			description="$m{studio.widgettype.datetimeformatterlist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!ui-select list:studiodatetimeformatterlist blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="detailspanellist"
 			description="$m{studio.widgettype.detailspanellist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!ui-select list:studiodetailspanellist listParams:$l{entity} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="consformvalidationpolicylist"
 			description="$m{studio.widgettype.consformvalidationpolicylist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!ui-select list:studioconsolidatedformvalidationpolicylist listParams:$l{entity} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="consformreviewpolicylist"
 			description="$m{studio.widgettype.consformreviewpolicylist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!ui-select list:studioconsolidatedformreviewpolicylist listParams:$l{entity} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="consformstatepolicylist"
 			description="$m{studio.widgettype.consformstatepolicylist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!ui-select list:studioconsolidatedformstatepolicylist listParams:$l{entity} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="listinggeneratorlist"
 			description="$m{studio.widgettype.listinggeneratorlist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!ui-select list:studiolistinggeneratorlist listParams:$l{entity} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="formhelpsheetlist"
 			description="$m{studio.widgettype.formhelpsheetlist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!ui-select list:studioformhelpsheetlist listParams:$l{entity} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="formactionpolicylist"
 			description="$m{studio.widgettype.formactionpolicylist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!ui-select blankOption:$s{} list:formactionpolicylist listParams:$l{appFormId}"
 			renderer="!ui-label" />
 		<widgetType name="entitymatcherlist"
 			description="$m{studio.widgettype.entitymatcherlist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!ui-select blankOption:$s{} list:entitymatcherlist listParams:$s{entityName}"
 			renderer="!ui-label" />
 		<widgetType name="entitysearch"
-			description="$m{studio.widgettype.entitysearch}" dataType="string"
-			inputType="string"
+			description="$m{studio.widgettype.entitysearch}" dataType="STRING"
+			inputType="STRING"
 			editor="!fc-entitysearch ref:$s{application.appEntityLoadingRef} listKey:$s{longName}"
 			renderer="!ui-label" />
 		<widgetType name="entityfieldwidgetlist"
 			description="$m{studio.widgettype.entityfieldwidgetlist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!fc-entityfieldwidgetlist typeField:$s{dataType}  blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="suggestiontypelist"
 			description="$m{studio.widgettype.suggestiontypelist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!fc-suggestiontypelist blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="entityfieldreflist"
 			description="$m{studio.widgettype.entityfieldreflist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!fc-entityfieldrefsearch caseInsensitive:true typeField:$s{dataType} entityName:$s{appEntityName} appName:$s{applicationName}"
 			renderer="!ui-label" />
 		<widgetType name="entityreflist"
-			description="$m{studio.widgettype.entityreflist}" dataType="string"
-			inputType="string" editor="!fc-entityrefsearch caseInsensitive:true"
+			description="$m{studio.widgettype.entityreflist}" dataType="STRING"
+			inputType="STRING" editor="!fc-entityrefsearch caseInsensitive:true"
 			renderer="!ui-label" />
 		<widgetType name="entitykeylist"
-			description="$m{studio.widgettype.entitykeylist}" dataType="string"
-			inputType="string"
+			description="$m{studio.widgettype.entitykeylist}" dataType="STRING"
+			inputType="STRING"
 			editor="!ui-select list:entitykeylist listKey:$s{name} listDescription:$s{name} listParams:$l{appEntityId} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="entitypropertylist"
 			description="$m{studio.widgettype.entitypropertylist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!ui-select list:entitypropertylist listKey:$s{name} listDescription:$s{name} listParams:$l{dataType appEntityId key} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="applettypelist"
-			description="$m{studio.widgettype.applettypelist}" dataType="string"
-			inputType="string"
+			description="$m{studio.widgettype.applettypelist}" dataType="STRING"
+			inputType="STRING"
 			editor="!ui-select list:studioapplettypelist listParams:$l{configType} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="entityfielddatatypelist"
 			description="$m{studio.widgettype.entityfielddatatypelist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!ui-select list:studioentityfielddatatypelist listParams:$l{type} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="entitybynamelist"
 			description="$m{studio.widgettype.entitybynamelist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!ui-select list:studioentitybynamelist blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="mappedentitybynamelist"
 			description="$m{studio.widgettype.mappedentitybynamelist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!ui-select list:studiomappedentitybynamelist blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="workentitybynamelist"
 			description="$m{studio.widgettype.workentitybynamelist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!ui-select list:studioworkentitybynamelist listParams:$l{applicationId} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="reportablebynamelist"
 			description="$m{studio.widgettype.reportablebynamelist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!ui-select list:studioreportablebynamelist blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="summarydatasourcelist"
 			description="$m{studio.widgettype.summarydatasourcelist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!ui-select list:studiosummarydatasourcelist listParams:$l{reportable}  blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="reportablelargetextlist"
 			description="$m{studio.widgettype.reportablelargetextlist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!ui-select list:studioreportablelargetextlist listParams:$l{reportable} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="reportablelettergeneratorlist"
 			description="$m{studio.widgettype.reportablelettergeneratorlist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!ui-select list:studioreportablelettergeneratorlist listParams:$l{reportable} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="reffiltergeneratorrulelist"
 			description="$m{studio.widgettype.reffiltergeneratorrulelist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!ui-select list:$s{rulelist} listParams:$l{filterGenerator} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="studiohelpentryfieldlist"
 			description="$m{studio.widgettype.studiohelpentryfieldlist}"
-			dataType="long"
-			inputType="string"
+			dataType="LONG"
+			inputType="STRING"
 			editor="!ui-select list:studiohelpentryfieldlist listKey:$s{name} listParams:$l{appHelpSheetId} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="formlist"
-			description="$m{studio.widgettype.formlist}" dataType="long"
-			inputType="long"
+			description="$m{studio.widgettype.formlist}" dataType="LONG"
+			inputType="LONG"
 			editor="!ui-select list:studioformlist blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="entityrefdesclist"
 			description="$m{studio.widgettype.entityrefdesclist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!ui-select list:studioentityrefdesclist listParams:$l{entity assignField} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="entityreffieldlist"
 			description="$m{studio.widgettype.entityreffieldlist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!ui-select list:studioentityreffieldlist listKey:$s{name} listParams:$l{entity} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="entitybooleanfieldlist"
 			description="$m{studio.widgettype.entitybooleanfieldlist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!ui-select list:studioentitybooleanfieldlist listKey:$s{name} listParams:$l{entity} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="entitycategoryfieldlist"
 			description="$m{studio.widgettype.entitycategoryfieldlist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!ui-select list:studioentitycategoryfieldlist listKey:$s{name} listParams:$l{entity} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="entitysearchfieldlist"
 			description="$m{studio.widgettype.entitysearchfieldlist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!ui-select list:studioentitysearchfieldlist listParams:$l{entity} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="entityfieldlist"
 			description="$m{studio.widgettype.entityfieldlist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!ui-select list:studioentityfieldbynamelist listParams:$l{entity} listKey:$s{name} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="entitysearchtablelist"
 			description="$m{studio.widgettype.entitysearchtablelist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!ui-select list:studioentitytablelist listParams:$l{entity} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="entityselecthandlerlist"
 			description="$m{studio.widgettype.entityselecthandlerlist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!ui-select list:studioentityselecthandlerlist listParams:$l{entity} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="entityfieldmultiselectlist"
 			description="$m{system.widgettype.entityfieldmultiselectlist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!ui-dropdownchecklist list:studioentityfieldlist listKey:$s{name} listParams:$l{appEntityId} columns:3"
 			renderer="!ui-label" />
 		<widgetType name="searchentriesrestrictionresolverlist"
 			description="$m{studio.widgettype.searchentriesrestrictionresolverlist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!ui-select list:searchentriesrestrictionresolverlist listParams:$l{appEntityId} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="seriesentityfieldlist"
 			description="$m{studio.widgettype.seriesentityfieldlist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!ui-select list:studioseriesentityfieldlist listKey:$s{name} listParams:$l{appEntityId} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="formannotationlist"
 			description="$m{studio.widgettype.formannotationlist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!ui-select list:studioformannotationlist listKey:$s{name} listParams:$l{id} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="formrelatedappletlist"
 			description="$m{studio.widgettype.formrelatedappletlist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!ui-select list:studioformrelatedappletlist listParams:$l{appFormId} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="formappletfilterlist"
 			description="$m{studio.widgettype.formappletfilterlist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!ui-select list:studioformappletfilterlist listParams:$l{applet} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="rellisteditactionlist"
 			description="$m{studio.widgettype.rellisteditactionlist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!ui-select list:rellisteditactionlist blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="formfieldlist"
-			description="$m{studio.widgettype.formfieldlist}" dataType="string"
-			inputType="string"
+			description="$m{studio.widgettype.formfieldlist}" dataType="STRING"
+			inputType="STRING"
 			editor="!ui-select list:studioformfieldlist listParams:$l{appFormId} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="formfieldvalidationrulelist"
 			description="$m{studio.widgettype.formfieldvalidationrulelist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!ui-select list:$s{rulelist} listParams:$l{validation} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="formelementlist"
 			description="$m{studio.widgettype.formelementlist}"
-			dataType="string"
-			inputType="string"
+			dataType="STRING"
+			inputType="STRING"
 			editor="!ui-dropdownchecklist list:studioformelementlist listParams:$l{appFormStatePolicyId type} columns:3"
 			renderer="!ui-label" />
 		<widgetType name="formstatefieldlist"
 			description="$m{studio.widgettype.formstatefieldlist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!ui-dropdownchecklist list:studioformstatefieldlist listParams:$l{appFormId} columns:3"
 			renderer="!ui-label" />
 		<widgetType name="formstatetablist"
 			description="$m{studio.widgettype.formstatetablist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!ui-dropdownchecklist list:studioformstatetablist listParams:$l{appFormId} columns:3"
 			renderer="!ui-label" />
 		<widgetType name="formreviewtypelist"
 			description="$m{studio.widgettype.formreviewtypelist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!ui-dropdownchecklist list:formreviewtypelist columns:1"
 			renderer="!ui-label" />
 		<widgetType name="formentitysetvaluesgenlist"
 			description="$m{studio.widgettype.formentitysetvaluesgenlist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!ui-select list:studioformentitysetvaluesgenlist listParams:$l{appFormId} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="appletentitysetvaluesgenlist"
 			description="$m{studio.widgettype.appletentitysetvaluesgenlist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!ui-select list:studioappletentitysetvaluesgenlist listParams:$l{appAppletId} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="appletentitynotifsenderlist"
 			description="$m{studio.widgettype.appletentitynotifsenderlist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!ui-select list:studioappletentitynotifsenderlist listParams:$l{appAppletId} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="appletalerttemplatelist"
 			description="$m{studio.widgettype.appletalerttemplatelist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!ui-select list:studioappletalerttemplatelist listParams:$l{appAppletId} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="apiappletlist"
 			description="$m{studio.widgettype.apiappletlist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!ui-select list:studioapiappletlist listParams:$l{entity} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="wfentitysetvaluesgenlist"
 			description="$m{studio.widgettype.wfentitysetvaluesgenlist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!ui-select list:studiowfentitysetvaluesgenlist listParams:$l{workflowId} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="workflowformlist"
 			description="$m{studio.widgettype.workflowformlist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!ui-select list:studioworkflowformlist listParams:$l{workflowId} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="wfstepnotifsenderlist"
 			description="$m{studio.widgettype.wfstepnotifsenderlist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!ui-select list:studiowfstepnotifsenderlist listParams:$l{wfStepId} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="wfstepalerttemplatelist"
 			description="$m{studio.widgettype.wfstepalerttemplatelist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!ui-select list:studiowfstepalerttemplatelist listParams:$l{wfStepId} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="wfstepreceivefromlist"
 			description="$m{studio.widgettype.wfstepreceivefromlist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!ui-select list:studiowfstepreceivefromlist listParams:$l{wfStepId} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="wfsteproutetolist"
 			description="$m{studio.widgettype.wfsteproutetolist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!ui-select list:studiowfsteproutetolist listParams:$l{wfStepId} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="wfstepfilterlist"
 			description="$m{studio.widgettype.wfstepfilterlist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!ui-select list:studiowfstepfilterlist listParams:$l{wfStepId} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="wfrecipientpolicylist"
 			description="$m{studio.widgettype.wfrecipientpolicylist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!ui-select list:wfrecipientpolicylist blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="wfrecipientnamerulelist"
 			description="$m{studio.widgettype.wfrecipientnamerulelist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!ui-select list:studiowfrecipientnamerulelist listParams:$l{recipientPolicy propertyOwnerId} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="wfrecipientcontactrulelist"
 			description="$m{studio.widgettype.wfrecipientcontactrulelist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!ui-select list:studiowfrecipientcontactrulelist listParams:$l{recipientPolicy propertyOwnerId} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="propertyapplettablelist"
 			description="$m{studio.widgettype.propertyapplettablelist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!ui-select list:studioapplettablelist listParams:$l{propertyOwnerId} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="propertyappletintegerfieldlist"
 			description="$m{studio.widgettype.propertyappletintegerfieldlist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!ui-select list:studioappletintegerfieldlist listKey:$s{name} listParams:$l{propertyOwnerId} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="propertyappletuniqueconstraintlist"
 			description="$m{studio.widgettype.propertyappletuniqueconstraintlist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!ui-select list:studioappletuniqueconstraintlist listParams:$l{propertyOwnerId} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="propertyappletbeantablepolicylist"
 			description="$m{studio.widgettype.propertyappletbeantablepolicylist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!ui-select list:studioappletchildlisteditpolicylist listParams:$l{propertyOwnerId} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="propertyappletlistingredirectpolicylist"
 			description="$m{studio.widgettype.propertyappletlistingredirectpolicylist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!ui-select list:studioappletlistingredirectpolicylist listParams:$l{propertyOwnerId} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="propertyapplettreetablegenlist"
 			description="$m{studio.widgettype.propertyapplettreetablegenlist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!ui-select list:studioapplettreetablegenlist listParams:$l{propertyOwnerId} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="propertyappletformlist"
 			description="$m{studio.widgettype.propertyappletformlist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!ui-select list:studioappletinputformlist listParams:$l{propertyOwnerId} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="propertyappletlistformlist"
 			description="$m{studio.widgettype.propertyappletlistformlist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!ui-select list:studioappletlistingformlist listParams:$l{propertyOwnerId} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="appletformlist"
-			description="$m{studio.widgettype.appletformlist}" dataType="string"
-			inputType="string"
+			description="$m{studio.widgettype.appletformlist}" dataType="STRING"
+			inputType="STRING"
 			editor="!ui-select list:studioappletallformlist listParams:$l{appAppletId} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="appletfiltergeneratorlist"
 			description="$m{studio.widgettype.appletfiltergeneratorlist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!ui-select list:studioappletfiltergeneratorlist listParams:$l{appAppletId} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="tablefiltergeneratorlist"
 			description="$m{studio.widgettype.tablefiltergeneratorlist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!ui-select list:studiotablefiltergeneratorlist listParams:$l{appTableId} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="tableworkitemfiltergenlist"
 			description="$m{studio.widgettype.tableworkitemfiltergenlist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!ui-select list:studiotableworkitemfiltergenlist listParams:$l{entity} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="tableloadingproviderlist"
 			description="$m{studio.widgettype.tableloadingproviderlist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!ui-select list:studiotableloadingproviderlist listParams:$l{appTableId} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="formfiltergeneratorlist"
 			description="$m{studio.widgettype.formfiltergeneratorlist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!ui-select list:studioformfiltergeneratorlist listParams:$l{appFormId} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="workflowfiltergeneratorlist"
 			description="$m{studio.widgettype.workflowfiltergeneratorlist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!ui-select list:studioworkflowfiltergeneratorlist listParams:$l{workflowId} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="appletchildlistappletlist"
 			description="$m{studio.widgettype.appletchildlistappletlist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!ui-select list:studioappletallchildappletlist listParams:$l{appAppletId} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="propertyappletcreateformstatepolicylist"
 			description="$m{studio.widgettype.propertyappletcreateformstatepolicylist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!ui-select list:studioappletcreateformstatepolicylist listParams:$l{createForm} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="propertyappletloadconfiglist"
 			description="$m{studio.widgettype.propertyappletloadconfiglist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!ui-select list:studioappletloadconfiglist listKey:$s{name} listParams:$l{propertyOwnerId} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="facadeappletroutetoappletlist"
 			description="$m{studio.widgettype.facadeappletroutetoappletlist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!fc-entitysearch ref:$s{application.appAppletFacadeRef} listKey:$s{longName}"
 			renderer="!ui-label" />
 		<widgetType name="propertyroutetoappletlist"
 			description="$m{studio.widgettype.propertyroutetoappletlist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!ui-select list:studioappletroutetoappletlist listParams:$l{propertyOwnerId} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="propertymaintainappletlist"
 			description="$m{studio.widgettype.propertymaintainappletlist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!ui-select list:studioappletmaintainappletlist listParams:$l{propertyOwnerId} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="propertyappletassignpagelist"
 			description="$m{studio.widgettype.propertyappletassignpagelist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!ui-select list:studioappletassignpagelist listParams:$l{propertyOwnerId} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="propertysingleformpanellist"
 			description="$m{studio.widgettype.propertysingleformpanellist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!ui-select list:studiosingleformpanellist listParams:$l{propertyOwnerId} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="propertyappletworkflowlist"
 			description="$m{studio.widgettype.propertyappletworkflowlist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!ui-select list:studioappletworkflowlist listParams:$l{propertyOwnerId} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="propertyappletworkflowchannellist"
 			description="$m{studio.widgettype.propertyappletworkflowlchannellist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!ui-select list:studioappletworkflowchannellist listParams:$l{propertyOwnerId} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="propertyappletfilterlist"
 			description="$m{studio.widgettype.propertyappletfilterlist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!ui-select list:studioappletfilterlist listParams:$l{propertyOwnerId} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="propertyappletsearchinputlist"
 			description="$m{studio.widgettype.propertyappletsearchinputlist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!ui-select list:studioappletsearchinputlist listParams:$l{propertyOwnerId} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="propertyappletquickfilterlist"
 			description="$m{studio.widgettype.propertyappletquickfilterlist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!ui-select list:studioappletquickfilterlist listParams:$l{propertyOwnerId} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="propertyappletsetvalueslist"
 			description="$m{studio.widgettype.propertyappletsetvalueslist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!ui-select list:studioappletsetvalueslist listParams:$l{propertyOwnerId} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="propertyappletlevelslist"
 			description="$m{studio.widgettype.propertyappletlevelslist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!ui-select list:studioappletlevelslist blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="propertyappletalertlist"
 			description="$m{studio.widgettype.propertyappletalertlist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!ui-select list:studioappletalertlist listParams:$l{propertyOwnerId} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="propertyappletattachmentproviderlist"
 			description="$m{studio.widgettype.propertyappletattachmentproviderlist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!ui-select list:appletattachmentproviderlist listParams:$l{propertyOwnerId} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="propertyentityactionpolicylist"
 			description="$m{studio.widgettype.propertyentityactionpolicylist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!ui-select list:appletactionpolicylist listParams:$l{propertyOwnerId} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="propertynavigationactionpolicylist"
 			description="$m{studio.widgettype.propertynavigationactionpolicylist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!ui-select list:navigationactionpolicylist listParams:$l{propertyOwnerId} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="propertywizardtaskprocessorlist"
 			description="$m{studio.widgettype.propertywizardtaskprocessorlist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!ui-select list:wizardtaskprocessorlist listParams:$l{propertyOwnerId} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="tableentitylistactionpolicylist"
 			description="$m{studio.widgettype.tableentitylistactionpolicylist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!ui-select list:studioentitylistactionpolicylist listParams:$l{appTableId} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="workflowtablelist"
 			description="$m{studio.widgettype.workflowtablelist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!ui-select list:studioworkflowtablelist listParams:$l{entity} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="tablesearchinputlist"
 			description="$m{studio.widgettype.tablesearchinputlist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!ui-select list:studiotablesearchinputlist listParams:$l{entity} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="reportconfigfieldlist"
 			description="$m{studio.widgettype.reportconfigfieldlist}"
-			dataType="string" inputType="string"
+			dataType="STRING" inputType="STRING"
 			editor="!ui-select list:reportconfigfieldlist listParams:$l{reportConfigurationId} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="tasklist"
-			description="$m{studio.widgettype.tasklist}" dataType="string"
-			inputType="string"
+			description="$m{studio.widgettype.tasklist}" dataType="STRING"
+			inputType="STRING"
 			editor="!ui-select list:tasklist blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="propertyappletintegerdimension"
@@ -644,7 +644,7 @@
 		<applet name="stuManageModule"
 			description="$m{studio.module.manage}"
 			label="$m{studio.module.manage.label}" icon="cubes"
-			type="manage_entitylist" entity="system.module" menuAccess="false">
+			type="MANAGE_ENTITYLIST" entity="system.module" menuAccess="false">
 			<property name="searchTable" value="system.moduleTable" />
 			<property name="searchTable.report" value="false" />
 			<property name="searchTable.new" value="true" />
@@ -669,7 +669,7 @@
 		<applet name="manageApplication"
 			description="$m{studio.application.manage}"
 			label="$m{studio.application.manage.label}" icon="desktop"
-			type="manage_entitylist" entity="application.application"
+			type="MANAGE_ENTITYLIST" entity="application.application"
 			menuAccess="false">
 			<property name="searchTable" value="appApplicationTable" />
 			<property name="searchTable.report" value="false" />
@@ -703,7 +703,7 @@
 		<applet name="manageAppEnumerationItem"
 			description="$m{studio.appenumerationitem.manage}"
 			label="$m{studio.appenumerationitem.manage.label}"
-			type="manage_entitylist" entity="application.appEnumerationItem"
+			type="MANAGE_ENTITYLIST" entity="application.appEnumerationItem"
 			menuAccess="false">
 			<property name="searchTable" value="appEnumerationItemTable" />
 			<property name="searchTable.new" value="true" />
@@ -721,7 +721,7 @@
 		<applet name="manageAppEntityField"
 			description="$m{studio.appentityfield.manage}"
 			label="$m{studio.appentityfield.manage.label}"
-			type="manage_entitylist" entity="application.appEntityField"
+			type="MANAGE_ENTITYLIST" entity="application.appEntityField"
 			menuAccess="false">
 			<property name="searchTable" value="appEntityFieldTable" />
 			<property name="searchTable.new" value="true" />
@@ -820,7 +820,7 @@
 		<applet name="manageAppEntitySeries"
 			description="$m{studio.appentityseries.manage}"
 			label="$m{studio.appentityseries.manage.label}"
-			type="manage_entitylist" entity="application.appEntitySeries"
+			type="MANAGE_ENTITYLIST" entity="application.appEntitySeries"
 			menuAccess="false">
 			<property name="searchTable" value="appEntitySeriesTable" />
 			<property name="searchTable.new" value="true" />
@@ -837,7 +837,7 @@
 		<applet name="manageAppEntityCategory"
 			description="$m{studio.appentitycategory.manage}"
 			label="$m{studio.appentitycategory.manage.label}"
-			type="manage_entitylist" entity="application.appEntityCategory"
+			type="MANAGE_ENTITYLIST" entity="application.appEntityCategory"
 			menuAccess="false">
 			<property name="searchTable" value="appEntityCategoryTable" />
 			<property name="searchTable.new" value="true" />
@@ -854,7 +854,7 @@
 		<applet name="manageAppEntityAttachment"
 			description="$m{studio.appentityattachment.manage}"
 			label="$m{studio.appentityattachment.manage.label}"
-			type="manage_entitylist" entity="application.appEntityAttachment"
+			type="MANAGE_ENTITYLIST" entity="application.appEntityAttachment"
 			menuAccess="false">
 			<property name="searchTable"
 				value="appEntityAttachmentTable" />
@@ -872,7 +872,7 @@
 		<applet name="manageAppEntityExpression"
 			description="$m{studio.appentityexpression.manage}"
 			label="$m{studio.appentityexpression.manage.label}"
-			type="manage_entitylist" entity="application.appEntityExpression"
+			type="MANAGE_ENTITYLIST" entity="application.appEntityExpression"
 			menuAccess="false">
 			<property name="searchTable"
 				value="appEntityExpressionTable" />
@@ -890,7 +890,7 @@
 		<applet name="manageAppEntityUniqueConstraint"
 			description="$m{studio.appentityuniqueconstraint.manage}"
 			label="$m{studio.appentityuniqueconstraint.manage.label}"
-			type="manage_entitylist"
+			type="MANAGE_ENTITYLIST"
 			entity="application.appEntityUniqueConstraint" menuAccess="false">
 			<property name="searchTable"
 				value="appEntityUniqueConstraintTable" />
@@ -909,7 +909,7 @@
 		<applet name="manageAppEntityIndex"
 			description="$m{studio.appentityindex.manage}"
 			label="$m{studio.appentityindex.manage.label}"
-			type="manage_entitylist" entity="application.appEntityIndex"
+			type="MANAGE_ENTITYLIST" entity="application.appEntityIndex"
 			menuAccess="false">
 			<property name="searchTable" value="appEntityIndexTable" />
 			<property name="searchTable.new" value="true" />
@@ -925,7 +925,7 @@
 		<applet name="manageAppEntityUpload"
 			description="$m{studio.appentityupload.manage}"
 			label="$m{studio.appentityupload.manage.label}"
-			type="manage_entitylist" entity="application.appEntityUpload"
+			type="MANAGE_ENTITYLIST" entity="application.appEntityUpload"
 			menuAccess="false">
 			<property name="searchTable" value="appEntityUploadTable" />
 			<property name="searchTable.new" value="true" />
@@ -941,7 +941,7 @@
 		<applet name="manageAppEntitySearchInput"
 			description="$m{studio.appentitysearchinput.manage}"
 			label="$m{studio.appentitysearchinput.manage.label}"
-			type="manage_entitylist" entity="application.appEntitySearchInput"
+			type="MANAGE_ENTITYLIST" entity="application.appEntitySearchInput"
 			menuAccess="false">
 			<property name="searchTable"
 				value="appEntitySearchInputTable" />
@@ -968,7 +968,7 @@
 		<applet name="manageAppAppletRouteToApplet"
 			description="$m{studio.appappletroutetoapplet.manage}"
 			label="$m{studio.appappletroutetoapplet.manage.label}"
-			type="manage_entitylist" entity="application.appAppletRouteToApplet"
+			type="MANAGE_ENTITYLIST" entity="application.appAppletRouteToApplet"
 			menuAccess="false">
 			<property name="searchTable"
 				value="appAppletRouteToAppletTable" />
@@ -988,7 +988,7 @@
 		<applet name="manageAppAppletFilter"
 			description="$m{studio.appappletfilter.manage}"
 			label="$m{studio.appappletfilter.manage.label}"
-			type="manage_entitylist" entity="application.appAppletFilter"
+			type="MANAGE_ENTITYLIST" entity="application.appAppletFilter"
 			menuAccess="false">
 			<property name="searchTable" value="appAppletFilterTable" />
 			<property name="searchTable.new" value="true" />
@@ -1005,7 +1005,7 @@
 		<applet name="manageAppAppletSetValues"
 			description="$m{studio.appappletsetvalues.manage}"
 			label="$m{studio.appappletsetvalues.manage.label}"
-			type="manage_entitylist" entity="application.appAppletSetValues"
+			type="MANAGE_ENTITYLIST" entity="application.appAppletSetValues"
 			menuAccess="false">
 			<property name="searchTable" value="appAppletSetValuesTable" />
 			<property name="searchTable.new" value="true" />
@@ -1022,7 +1022,7 @@
 		<applet name="manageAppAppletAlert"
 			description="$m{studio.appappletalert.manage}"
 			label="$m{studio.appappletalert.manage.label}"
-			type="manage_entitylist" entity="application.appAppletAlert"
+			type="MANAGE_ENTITYLIST" entity="application.appAppletAlert"
 			menuAccess="false">
 			<property name="searchTable" value="appAppletAlertTable" />
 			<property name="searchTable.new" value="true" />
@@ -1039,7 +1039,7 @@
 		<applet name="manageDashboardTile"
 			description="$m{studio.dashboardtile.manage}"
 			label="$m{studio.dashboardtile.manage.label}"
-			type="manage_entitylist" entity="dashboard.dashboardTile"
+			type="MANAGE_ENTITYLIST" entity="dashboard.dashboardTile"
 			menuAccess="false">
 			<property name="searchTable" value="dashboardTileTable" />
 			<property name="searchTable.new" value="false" />
@@ -1052,7 +1052,7 @@
 		<applet name="manageDashboardOption"
 			description="$m{studio.dashboardoption.manage}"
 			label="$m{studio.dashboardoption.manage.label}"
-			type="manage_entitylist" entity="dashboard.dashboardOption"
+			type="MANAGE_ENTITYLIST" entity="dashboard.dashboardOption"
 			menuAccess="false">
 			<property name="searchTable" value="dashboardOptionTable" />
 			<property name="searchTable.new" value="true" />
@@ -1068,7 +1068,7 @@
 		<applet name="manageDashboardOptionCatBase"
 			description="$m{studio.dashboardoptioncatbase.manage}"
 			label="$m{studio.dashboardoptioncatbase.manage.label}"
-			type="manage_entitylist" entity="dashboard.dashboardOptionCatBase"
+			type="MANAGE_ENTITYLIST" entity="dashboard.dashboardOptionCatBase"
 			menuAccess="false">
 			<property name="searchTable"
 				value="dashboardOptionCatBaseTable" />
@@ -1087,7 +1087,7 @@
 		<applet name="manageAppTableColumn"
 			description="$m{studio.apptablecolumn.manage}"
 			label="$m{studio.apptablecolumn.manage.label}"
-			type="manage_entitylist" entity="application.appTableColumn"
+			type="MANAGE_ENTITYLIST" entity="application.appTableColumn"
 			menuAccess="false">
 			<property name="searchTable" value="appTableColumnTable" />
 			<property name="searchTable.new" value="false" />
@@ -1104,7 +1104,7 @@
 		<applet name="manageAppTableAction"
 			description="$m{studio.apptableaction.manage}"
 			label="$m{studio.apptableaction.manage.label}"
-			type="manage_entitylist" entity="application.appTableAction"
+			type="MANAGE_ENTITYLIST" entity="application.appTableAction"
 			menuAccess="false">
 			<property name="searchTable" value="appTableActionTable" />
 			<property name="searchTable.new" value="true" />
@@ -1121,7 +1121,7 @@
 		<applet name="manageAppTableLoading"
 			description="$m{studio.apptableloading.manage}"
 			label="$m{studio.apptableloading.manage.label}"
-			type="manage_entitylist" entity="application.appTableLoading"
+			type="MANAGE_ENTITYLIST" entity="application.appTableLoading"
 			menuAccess="false">
 			<property name="searchTable" value="appTableLoadingTable" />
 			<property name="searchTable.new" value="true" />
@@ -1138,7 +1138,7 @@
 		<applet name="manageAppTableFilter"
 			description="$m{studio.apptablefilter.manage}"
 			label="$m{studio.apptablefilter.manage.label}"
-			type="manage_entitylist" entity="application.appTableFilter"
+			type="MANAGE_ENTITYLIST" entity="application.appTableFilter"
 			menuAccess="false">
 			<property name="searchTable" value="appTableFilterTable" />
 			<property name="searchTable.new" value="true" />
@@ -1155,7 +1155,7 @@
 		<applet name="manageAppFormElement"
 			description="$m{studio.appformelement.manage}"
 			label="$m{studio.appformelement.manage.label}"
-			type="manage_entitylist" entity="application.appFormElement"
+			type="MANAGE_ENTITYLIST" entity="application.appFormElement"
 			menuAccess="false">
 			<property name="searchTable" value="appFormElementTable" />
 			<property name="searchTable.new" value="false" />
@@ -1172,7 +1172,7 @@
 		<applet name="manageAppFormFilter"
 			description="$m{studio.appformfilter.manage}"
 			label="$m{studio.appformfilter.manage.label}"
-			type="manage_entitylist" entity="application.appFormFilter"
+			type="MANAGE_ENTITYLIST" entity="application.appFormFilter"
 			menuAccess="false">
 			<property name="searchTable" value="appFormFilterTable" />
 			<property name="searchTable.new" value="true" />
@@ -1189,7 +1189,7 @@
 		<applet name="manageAppFormAnnotation"
 			description="$m{studio.appformannotation.manage}"
 			label="$m{studio.appformannotation.manage.label}"
-			type="manage_entitylist" entity="application.appFormAnnotation"
+			type="MANAGE_ENTITYLIST" entity="application.appFormAnnotation"
 			menuAccess="false">
 			<property name="searchTable" value="appFormAnnotationTable" />
 			<property name="searchTable.new" value="true" />
@@ -1205,7 +1205,7 @@
 		<applet name="manageAppFormAction"
 			description="$m{studio.appformaction.manage}"
 			label="$m{studio.appformaction.manage.label}"
-			type="manage_entitylist" entity="application.appFormAction"
+			type="MANAGE_ENTITYLIST" entity="application.appFormAction"
 			menuAccess="false">
 			<property name="searchTable" value="appFormActionTable" />
 			<property name="searchTable.new" value="true" />
@@ -1227,7 +1227,7 @@
 		<applet name="manageAppFormRelatedList"
 			description="$m{studio.appformrelatedlist.manage}"
 			label="$m{studio.appformrelatedlist.manage.label}"
-			type="manage_entitylist" entity="application.appFormRelatedList"
+			type="MANAGE_ENTITYLIST" entity="application.appFormRelatedList"
 			menuAccess="false">
 			<property name="searchTable" value="appFormRelatedListTable" />
 			<property name="searchTable.new" value="true" />
@@ -1243,7 +1243,7 @@
 		<applet name="manageAppFormStatePolicy"
 			description="$m{studio.appformstatepolicy.manage}"
 			label="$m{studio.appformstatepolicy.manage.label}"
-			type="manage_entitylist" entity="application.appFormStatePolicy"
+			type="MANAGE_ENTITYLIST" entity="application.appFormStatePolicy"
 			menuAccess="false">
 			<property name="searchTable" value="appFormStatePolicyTable" />
 			<property name="searchTable.new" value="true" />
@@ -1260,7 +1260,7 @@
 		<applet name="manageAppFormWidgetRulesPolicy"
 			description="$m{studio.appformwidgetrulespolicy.manage}"
 			label="$m{studio.appformwidgetrulespolicy.manage.label}"
-			type="manage_entitylist"
+			type="MANAGE_ENTITYLIST"
 			entity="application.appFormWidgetRulesPolicy" menuAccess="false">
 			<property name="searchTable"
 				value="appFormWidgetRulesPolicyTable" />
@@ -1280,7 +1280,7 @@
 		<applet name="manageAppFormSetState"
 			description="$m{studio.appformsetstate.manage}"
 			label="$m{studio.appformsetstate.manage.label}"
-			type="manage_entitylist" entity="application.appFormSetState"
+			type="MANAGE_ENTITYLIST" entity="application.appFormSetState"
 			menuAccess="false">
 			<property name="searchTable" value="appFormSetStateTable" />
 			<property name="searchTable.new" value="true" />
@@ -1296,7 +1296,7 @@
 		<applet name="manageAppFormFieldValidationPolicy"
 			description="$m{studio.appformfieldvalidationpolicy.manage}"
 			label="$m{studio.appformfieldvalidationpolicy.manage.label}"
-			type="manage_entitylist"
+			type="MANAGE_ENTITYLIST"
 			entity="application.appFormFieldValidationPolicy" menuAccess="false">
 			<property name="searchTable"
 				value="appFormFieldValidationPolicyTable" />
@@ -1316,7 +1316,7 @@
 		<applet name="manageAppFormValidationPolicy"
 			description="$m{studio.appformvalidationpolicy.manage}"
 			label="$m{studio.appformvalidationpolicy.manage.label}"
-			type="manage_entitylist"
+			type="MANAGE_ENTITYLIST"
 			entity="application.appFormValidationPolicy"
 			menuAccess="false">
 			<property name="searchTable"
@@ -1337,7 +1337,7 @@
 		<applet name="manageAppFormReviewPolicy"
 			description="$m{studio.appformreviewpolicy.manage}"
 			label="$m{studio.appformreviewpolicy.manage.label}"
-			type="manage_entitylist" entity="application.appFormReviewPolicy"
+			type="MANAGE_ENTITYLIST" entity="application.appFormReviewPolicy"
 			menuAccess="false">
 			<property name="searchTable"
 				value="appFormReviewPolicyTable" />
@@ -1356,7 +1356,7 @@
 		<applet name="manageAppHelpEntry"
 			description="$m{studio.apphelpentry.manage}"
 			label="$m{studio.apphelpentry.manage.label}"
-			type="manage_entitylist" entity="application.appHelpEntry"
+			type="MANAGE_ENTITYLIST" entity="application.appHelpEntry"
 			menuAccess="false">
 			<property name="searchTable"
 				value="appHelpEntryTable" />
@@ -1374,7 +1374,7 @@
 		<applet name="manageWorkflowFilter"
 			description="$m{studio.workflowfilter.manage}"
 			label="$m{studio.workflowfilter.manage.label}"
-			type="manage_entitylist" entity="workflow.workflowFilter"
+			type="MANAGE_ENTITYLIST" entity="workflow.workflowFilter"
 			menuAccess="false">
 			<property name="searchTable" value="workflowFilterTable" />
 			<property name="searchTable.new" value="true" />
@@ -1391,7 +1391,7 @@
 		<applet name="manageWorkflowSetValues"
 			description="$m{studio.workflowsetvalues.manage}"
 			label="$m{studio.workflowsetvalues.manage.label}"
-			type="manage_entitylist" entity="workflow.workflowSetValues"
+			type="MANAGE_ENTITYLIST" entity="workflow.workflowSetValues"
 			menuAccess="false">
 			<property name="searchTable" value="workflowSetValuesTable" />
 			<property name="searchTable.new" value="true" />
@@ -1408,7 +1408,7 @@
 		<applet name="manageWfStep"
 			description="$m{studio.workflow.step.manage}"
 			label="$m{studio.workflow.step.manage.label}"
-			type="manage_entitylist" entity="workflow.wfStep" menuAccess="false">
+			type="MANAGE_ENTITYLIST" entity="workflow.wfStep" menuAccess="false">
 			<property name="searchTable" value="wfStepTable" />
 			<property name="searchTable.new" value="false" />
 			<property name="searchTable.edit" value="true" />
@@ -1420,7 +1420,7 @@
 		<applet name="manageWfStepRouting"
 			description="$m{studio.workflow.steprouting.manage}"
 			label="$m{studio.workflow.steprouting.manage.label}"
-			type="manage_entitylist" entity="workflow.wfStepRouting"
+			type="MANAGE_ENTITYLIST" entity="workflow.wfStepRouting"
 			menuAccess="false">
 			<property name="searchTable" value="wfStepRoutingTable" />
 			<property name="searchTable.new" value="false" />
@@ -1433,7 +1433,7 @@
 		<applet name="manageWfStepUserAction"
 			description="$m{studio.workflow.stepuseraction.manage}"
 			label="$m{studio.workflow.stepuseraction.manage.label}"
-			type="manage_entitylist" entity="workflow.wfStepUserAction"
+			type="MANAGE_ENTITYLIST" entity="workflow.wfStepUserAction"
 			menuAccess="false">
 			<property name="searchTable" value="wfStepUserActionTable" />
 			<property name="searchTable.new" value="false" />
@@ -1446,7 +1446,7 @@
 		<applet name="manageWfStepAlert"
 			description="$m{studio.workflow.stepalert.manage}"
 			label="$m{studio.workflow.stepalert.manage.label}"
-			type="manage_entitylist" entity="workflow.wfStepAlert"
+			type="MANAGE_ENTITYLIST" entity="workflow.wfStepAlert"
 			menuAccess="false">
 			<property name="searchTable" value="wfStepAlertTable" />
 			<property name="searchTable.new" value="false" />
@@ -1459,7 +1459,7 @@
 		<applet name="manageNotifTemplateParam"
 			description="$m{studio.notificationtemplateparam.manage}"
 			label="$m{studio.notificationtemplateparam.manage.label}"
-			type="manage_entitylist" entity="notification.notifTemplateParam"
+			type="MANAGE_ENTITYLIST" entity="notification.notifTemplateParam"
 			menuAccess="false">
 			<property name="searchTable" value="notifTemplateParamTable" />
 			<property name="searchTable.new" value="true" />
@@ -1476,7 +1476,7 @@
 		<applet name="manageNotifLargeTextParam"
 			description="$m{studio.notificationlargetextparam.manage}"
 			label="$m{studio.notificationlargetextparam.manage.label}"
-			type="manage_entitylist" entity="notification.notifLargeTextParam"
+			type="MANAGE_ENTITYLIST" entity="notification.notifLargeTextParam"
 			menuAccess="false">
 			<property name="searchTable"
 				value="notifLargeTextParamTable" />
@@ -1495,7 +1495,7 @@
 		<applet name="manageReportColumn"
 			description="$m{studio.reportcolumn.manage}"
 			label="$m{studio.reportcolumn.manage.label}"
-			type="manage_entitylist"
+			type="MANAGE_ENTITYLIST"
 			entity="report.reportColumn" menuAccess="false">
 			<property name="searchTable" value="reportColumnTable" />
 			<property name="searchTable.new" value="false" />
@@ -1512,7 +1512,7 @@
 		<applet name="manageReportPlacement"
 			description="$m{studio.reportplacement.manage}"
 			label="$m{studio.reportplacement.manage.label}"
-			type="manage_entitylist" entity="report.reportPlacement"
+			type="MANAGE_ENTITYLIST" entity="report.reportPlacement"
 			menuAccess="false">
 			<property name="searchTable" value="reportPlacementTable" />
 			<property name="searchTable.new" value="true" />
@@ -1529,7 +1529,7 @@
 		<applet name="manageReportParameter"
 			description="$m{studio.reportparameter.manage}"
 			label="$m{studio.reportparameter.manage.label}"
-			type="manage_entitylist" entity="report.reportParameter"
+			type="MANAGE_ENTITYLIST" entity="report.reportParameter"
 			menuAccess="false">
 			<property name="searchTable" value="reportParameterTable" />
 			<property name="searchTable.new" value="true" />
@@ -1576,20 +1576,20 @@
 			type="com.flowcentraltech.flowcentral.studio.entities.StudioSnapshotDetails"
 			reportable="true">
 			<field name="snapshotType"
-				label="$m{studio.snapshotdetails.snapshottype}" type="enum_ref"
+				label="$m{studio.snapshotdetails.snapshottype}" type="ENUM_REF"
 				references="studiosnapshottypelist"
 				inputWidget="application.enumlist" />
 			<field name="snapshotName"
-				label="$m{studio.snapshotdetails.snapshotname}" type="string" />
+				label="$m{studio.snapshotdetails.snapshotname}" type="STRING" />
 			<field name="fileName"
-				label="$m{studio.snapshotdetails.filename}" type="string"
+				label="$m{studio.snapshotdetails.filename}" type="STRING"
 				nullable="true" />
 			<field name="message"
-				label="$m{studio.snapshotdetails.message}" type="string"
+				label="$m{studio.snapshotdetails.message}" type="STRING"
 				nullable="true" />
 			<field name="snapshotTypeDesc"
 				label="$m{studio.snapshotdetails.snapshottypedesc}"
-				type="list_only"
+				type="LIST_ONLY"
 				key="snapshotType" property="description" />
 		</entity>
 		<entity name="studioSnapshot" description="$m{studio.snapshot}"
@@ -1597,7 +1597,7 @@
 			type="com.flowcentraltech.flowcentral.studio.entities.StudioSnapshot"
 			reportable="true">
 			<field name="snapshotDetailsId"
-				label="$m{studio.snapshot.snapshotdetailsid}" type="ref"
+				label="$m{studio.snapshot.snapshotdetailsid}" type="REF"
 				inputLabel="$m{studio.snapshot.snapshotdetails}"
 				inputWidget="application.entitylist"
 				references="studioSnapshotDetailsRef" basicSearch="true" />
@@ -1610,24 +1610,24 @@
 			type="com.flowcentraltech.flowcentral.studio.entities.StudioRestoreDetails"
 			reportable="true">
 			<field name="snapshotDetailsId"
-				label="$m{studio.restoredetails.snapshotdetailsid}" type="ref"
+				label="$m{studio.restoredetails.snapshotdetailsid}" type="REF"
 				inputLabel="$m{studio.restoredetails.snapshotdetails}"
 				inputWidget="application.entitylist"
 				references="studioSnapshotDetailsRef" basicSearch="true" />
 			<field name="taskStatus"
-				label="$m{studio.restoredetails.taskstatus}" type="enum_ref"
+				label="$m{studio.restoredetails.taskstatus}" type="ENUM_REF"
 				references="taskstatuslist" inputWidget="application.enumlist" />
 			<field name="restoreName"
-				label="$m{studio.restoredetails.restorename}" type="string" />
+				label="$m{studio.restoredetails.restorename}" type="STRING" />
 			<field name="snapshotName"
-				label="$m{studio.restoredetails.snapshotname}" type="list_only"
+				label="$m{studio.restoredetails.snapshotname}" type="LIST_ONLY"
 				key="snapshotDetailsId" property="snapshotName" />
 			<field name="fileName"
-				label="$m{studio.restoredetails.filename}" type="list_only"
+				label="$m{studio.restoredetails.filename}" type="LIST_ONLY"
 				key="snapshotDetailsId" property="fileName" />
 			<field name="taskStatusDesc"
 				label="$m{studio.restoredetails.taskstatusdesc}"
-				type="list_only"
+				type="LIST_ONLY"
 				key="taskStatus" property="description" />
 		</entity>
 		<entity name="studioJsonEntity" description="$m{studio.jsonentity}"
@@ -1635,63 +1635,63 @@
 			type="com.flowcentraltech.flowcentral.studio.entities.StudioJsonEntity"
 			reportable="false">
 			<field name="applicationId"
-				label="$m{studio.jsonentity.applicationid}" type="ref"
+				label="$m{studio.jsonentity.applicationid}" type="REF"
 				inputLabel="$m{studio.jsonentity.application}"
 				inputWidget="application.entitysearch"
 				references="application.applicationRef" basicSearch="true" />
 			<field name="baseType"
-				label="$m{studio.jsonentity.basetype}" type="enum_ref"
+				label="$m{studio.jsonentity.basetype}" type="ENUM_REF"
 				references="entitybasetypelist"
 				inputWidget="application.enumlist" />
 			<field name="entityName" maxLen="32"
-				label="$m{studio.jsonentity.entityname}" type="string"
+				label="$m{studio.jsonentity.entityname}" type="STRING"
 				nullable="true" />
 			<field name="dateFormatter" maxLen="64"
-				label="$m{studio.jsonentity.dateformatter}" type="string"
+				label="$m{studio.jsonentity.dateformatter}" type="STRING"
 				nullable="true" />
 			<field name="dateTimeFormatter" maxLen="64"
-				label="$m{studio.jsonentity.datetimeformatter}" type="string"
+				label="$m{studio.jsonentity.datetimeformatter}" type="STRING"
 				nullable="true" />
 			<field name="delegate" maxLen="64"
-				label="$m{studio.jsonentity.delegate}" type="string"
+				label="$m{studio.jsonentity.delegate}" type="STRING"
 				nullable="true" />
 			<field name="sourceJson"
 				inputWidget="application.textarealarge"
-				label="$m{studio.jsonentity.sourcejson}" type="clob" />
+				label="$m{studio.jsonentity.sourcejson}" type="CLOB" />
 			<field name="refinedStructure"
 				inputWidget="application.entitycomposition"
-				label="$m{studio.jsonentity.refinedstructure}" type="clob" />
+				label="$m{studio.jsonentity.refinedstructure}" type="CLOB" />
 			<field name="generateEntity"
 				inputWidget="application.boolean"
-				label="$m{studio.jsonentity.generateentity}" type="boolean" />
+				label="$m{studio.jsonentity.generateentity}" type="BOOLEAN" />
 			<field name="loadSourceJSON"
 				inputWidget="application.boolean"
-				label="$m{studio.jsonentity.loadsourcejson}" type="boolean" />
+				label="$m{studio.jsonentity.loadsourcejson}" type="BOOLEAN" />
 			<field name="generateApplet"
 				inputWidget="application.boolean"
-				label="$m{studio.jsonentity.generateapplet}" type="boolean" />
+				label="$m{studio.jsonentity.generateapplet}" type="BOOLEAN" />
 			<field name="generateRest"
 				inputWidget="application.boolean"
-				label="$m{studio.jsonentity.generaterest}" type="boolean" />
+				label="$m{studio.jsonentity.generaterest}" type="BOOLEAN" />
 			<field name="generateImport"
 				inputWidget="application.boolean"
-				label="$m{studio.jsonentity.generateimport}" type="boolean"
+				label="$m{studio.jsonentity.generateimport}" type="BOOLEAN"
 				nullable="true" />
 			<field name="applicationName"
 				label="$m{studio.jsonentity.applicationname}"
-				type="list_only" key="applicationId" property="name" />
+				type="LIST_ONLY" key="applicationId" property="name" />
 			<field name="applicationDesc"
 				label="$m{studio.jsonentity.applicationdesc}"
-				type="list_only" key="applicationId" property="description" />
+				type="LIST_ONLY" key="applicationId" property="description" />
 			<field name="moduleId"
 				label="$m{studio.jsonentity.moduleid}"
-				type="list_only" key="applicationId" property="moduleId" />
+				type="LIST_ONLY" key="applicationId" property="moduleId" />
 			<field name="moduleName"
 				label="$m{studio.jsonentity.modulename}"
-				type="list_only" key="applicationId" property="moduleName" />
+				type="LIST_ONLY" key="applicationId" property="moduleName" />
 			<field name="moduleDesc"
 				label="$m{studio.jsonentity.moduledesc}"
-				type="list_only" key="applicationId" property="moduleDesc" />
+				type="LIST_ONLY" key="applicationId" property="moduleDesc" />
 		</entity>
 	</entities>
 	<!-- Tables -->
@@ -2402,8 +2402,8 @@
 			entity="system.module">
 			<tab name="basicDetails"
 				label="$m{system.module.form.basicdetails}"
-				contentType="miniform">
-				<section name="details1" columns="type_2">
+				contentType="MINIFORM">
+				<section name="details1" columns="TYPE_2">
 					<field name="name" inputWidget="application.name" column="0"
 						required="true" editable="false" />
 					<field name="description" inputWidget="application.text"
@@ -2418,7 +2418,7 @@
 				</section>
 			</tab>
 			<tab name="changeLog" label="$m{application.form.audit}"
-				contentType="miniform_changelog" />
+				contentType="MINIFORM_CHANGELOG" />
 			<formStatePolicy type="on_switch" name="onNewPolicy"
 				description="$m{studio.common.form.formstatepolicy.onstatic}">
 				<onCondition>
@@ -2436,8 +2436,8 @@
 			entity="application.application">
 			<tab name="basicDetails"
 				label="$m{studio.application.form.basicdetails}"
-				contentType="miniform">
-				<section name="details1" columns="type_2">
+				contentType="MINIFORM">
+				<section name="details1" columns="TYPE_2">
 					<field name="name" inputWidget="application.name" column="0"
 						required="true" editable="false" />
 					<field name="description" inputWidget="application.text"
@@ -2457,7 +2457,7 @@
 				contentType="usage_list"
 				reference="application-usagelistprovider" />
 			<tab name="changeLog" label="$m{application.form.audit}"
-				contentType="miniform_changelog" />
+				contentType="MINIFORM_CHANGELOG" />
 			<formStatePolicy type="on_switch" name="onNewPolicy"
 				description="$m{studio.common.form.formstatepolicy.onstatic}">
 				<onCondition>
@@ -2483,8 +2483,8 @@
 			entity="studioJsonEntity">
 			<tab name="basicDetails"
 				label="$m{studio.jsonentity.form.application}"
-				contentType="miniform">
-				<section name="structureDetails" columns="type_2"
+				contentType="MINIFORM">
+				<section name="structureDetails" columns="TYPE_2"
 					label="$m{studio.jsonentity.form.application}"
 					icon="application">
 					<field name="applicationId"
@@ -2506,19 +2506,19 @@
 					<field name="delegate" inputWidget="environmentdelegatelist"
 						column="0" />
 				</section>
-				<section name="source" columns="type_1"
+				<section name="source" columns="TYPE_1"
 					label="$m{studio.jsonentity.form.source}" icon="file">
 					<field name="sourceJson"
 						inputWidget="application.textareaxlarge" column="0"
 						required="true" editable="true" />
 				</section>
-				<section name="structure" columns="type_1"
+				<section name="structure" columns="TYPE_1"
 					label="$m{studio.jsonentity.form.structure}" icon="scroll">
 					<field name="refinedStructure"
 						inputWidget="application.entitycomposition" column="0"
 						required="true" editable="true" />
 				</section>
-				<section name="options" columns="type_1"
+				<section name="options" columns="TYPE_1"
 					label="$m{studio.jsonentity.form.options}" icon="rocket">
 					<field name="generateEntity"
 						inputWidget="application.checkbox" column="0"
@@ -2542,8 +2542,8 @@
 			entity="studioJsonEntity">
 			<tab name="basicDetails"
 				label="$m{studio.csventity.form.application}"
-				contentType="miniform">
-				<section name="structureDetails" columns="type_2"
+				contentType="MINIFORM">
+				<section name="structureDetails" columns="TYPE_2"
 					label="$m{studio.csventity.form.application}"
 					icon="application">
 					<field name="applicationId"
@@ -2565,20 +2565,20 @@
 					<field name="delegate" inputWidget="environmentdelegatelist"
 						column="0" />
 				</section>
-				<section name="source" columns="type_1"
+				<section name="source" columns="TYPE_1"
 					label="$m{studio.csventity.form.source}" icon="file">
 					<field name="sourceJson"
 						inputWidget="application.textareaxlarge" column="0"
 						required="true" editable="true"
 						label="$m{studio.csventity.sourcecsv}" />
 				</section>
-				<section name="structure" columns="type_1"
+				<section name="structure" columns="TYPE_1"
 					label="$m{studio.csventity.form.structure}" icon="scroll">
 					<field name="refinedStructure"
 						inputWidget="application.entitycomposition" column="0"
 						required="true" editable="true" />
 				</section>
-				<section name="options" columns="type_1"
+				<section name="options" columns="TYPE_1"
 					label="$m{studio.csventity.form.options}" icon="rocket">
 					<field name="generateEntity"
 						inputWidget="application.checkbox" column="0"
@@ -2617,8 +2617,8 @@
 				message="$m{studio.common.form.annotation.static.message}" />
 			<tab name="basicDetails"
 				label="$m{studio.appapplet.form.basicdetails}" editable="false"
-				contentType="miniform">
-				<section name="appletDetails" columns="type_2">
+				contentType="MINIFORM">
+				<section name="appletDetails" columns="TYPE_2">
 					<field name="applicationId"
 						reference="studio.applicationDevelopableRef"
 						inputWidget="application.entitysearch" column="0"
@@ -2688,7 +2688,7 @@
 				contentType="child_list" applet="manageAppAppletAlert"
 				reference="alertList" />
 			<tab name="changeLog" label="$m{application.form.audit}"
-				contentType="miniform_changelog" />
+				contentType="MINIFORM_CHANGELOG" />
 			<formValidationPolicy
 				name="entityValidationPolicy"
 				description="$m{studio.appapplet.form.formvalidationpolicy.entity}"
@@ -2831,8 +2831,8 @@
 			entity="application.appAppletRouteToApplet">
 			<tab name="basicDetails"
 				label="$m{studio.appappletroutetoapplet.form.basicdetails}"
-				contentType="miniform">
-				<section name="routeToAppletDetails" columns="type_2">
+				contentType="MINIFORM">
+				<section name="routeToAppletDetails" columns="TYPE_2">
 					<field name="appAppletId" column="0" required="true" />
 					<field name="routeToApplet"
 						inputWidget="studio.facadeappletroutetoappletlist"
@@ -2841,15 +2841,15 @@
 				</section>
 			</tab>
 			<tab name="changeLog" label="$m{application.form.audit}"
-				contentType="miniform_changelog" />
+				contentType="MINIFORM_CHANGELOG" />
 		</form>
 		<form name="appAppletFilterForm"
 			description="$m{studio.appappletfilter.form}"
 			entity="application.appAppletFilter">
 			<tab name="basicDetails"
 				label="$m{studio.appappletfilter.form.basicdetails}"
-				contentType="miniform">
-				<section name="filterDetails" columns="type_2">
+				contentType="MINIFORM">
+				<section name="filterDetails" columns="TYPE_2">
 					<field name="name" inputWidget="application.componentname" column="0"
 						required="true" />
 					<field name="description" inputWidget="application.text"
@@ -2879,7 +2879,7 @@
 				label="$m{studio.appappletfilter.form.condition}"
 				reference="app_applet" contentType="filter_condition" />
 			<tab name="changeLog" label="$m{application.form.audit}"
-				contentType="miniform_changelog" />
+				contentType="MINIFORM_CHANGELOG" />
 			<formStatePolicy type="on_switch"
 				name="childListActionPolicy"
 				description="$m{studio.appapplet.form.formstatepolicy.childlistaction}">
@@ -2898,8 +2898,8 @@
 			entity="application.appAppletSetValues">
 			<tab name="basicDetails"
 				label="$m{studio.appappletsetvalues.form.basicdetails}"
-				contentType="miniform">
-				<section name="setValuesDetails" columns="type_2">
+				contentType="MINIFORM">
+				<section name="setValuesDetails" columns="TYPE_2">
 					<field name="name" inputWidget="application.componentname" column="0"
 						required="true" />
 					<field name="description" inputWidget="application.text"
@@ -2913,15 +2913,15 @@
 				label="$m{studio.appappletsetvalues.form.setvalues}"
 				reference="app_applet" contentType="set_values" />
 			<tab name="changeLog" label="$m{application.form.audit}"
-				contentType="miniform_changelog" />
+				contentType="MINIFORM_CHANGELOG" />
 		</form>
 		<form name="appAppletAlertForm"
 			description="$m{studio.appappletalert.form}"
 			entity="application.appAppletAlert">
 			<tab name="basicDetails"
 				label="$m{studio.appappletalert.form.basicdetails}"
-				contentType="miniform">
-				<section name="setVaalertDetails" columns="type_2">
+				contentType="MINIFORM">
+				<section name="setVaalertDetails" columns="TYPE_2">
 					<field name="name" inputWidget="application.componentname" column="0"
 						required="true" />
 					<field name="description" inputWidget="application.text"
@@ -2943,7 +2943,7 @@
 				</section>
 			</tab>
 			<tab name="changeLog" label="$m{application.form.audit}"
-				contentType="miniform_changelog" />
+				contentType="MINIFORM_CHANGELOG" />
 		</form>
 		<form name="appEntityForm"
 			consolidatedReview="studioentity-consolidatedformreview"
@@ -2964,8 +2964,8 @@
 				message="$m{studio.common.form.annotation.static.message}" />
 			<tab name="basicDetails"
 				label="$m{studio.appentity.form.basicdetails}" editable="false"
-				contentType="miniform">
-				<section name="entityDetails" columns="type_2">
+				contentType="MINIFORM">
+				<section name="entityDetails" columns="TYPE_2">
 					<field name="applicationId"
 						reference="studio.applicationDevelopableRef"
 						inputWidget="application.entitysearch" column="0"
@@ -3051,7 +3051,7 @@
 			<tab name="usages" label="$m{studio.appentity.form.usages}"
 				contentType="usage_list" reference="entity-usagelistprovider" />
 			<tab name="changeLog" label="$m{application.form.audit}"
-				contentType="miniform_changelog" />
+				contentType="MINIFORM_CHANGELOG" />
 			<formStatePolicy type="on_switch"
 				name="onCreatePolicy"
 				description="$m{studio.appentity.form.formstatepolicy.oncreate}">
@@ -3175,8 +3175,8 @@
 				message="$m{studio.appentityfield.form.annotation.basestatic.message}" />
 			<tab name="basicDetails"
 				label="$m{studio.appentityfield.form.basicdetails}"
-				contentType="miniform" editable="true">
-				<section name="entityFieldDetails" columns="type_2">
+				contentType="MINIFORM" editable="true">
+				<section name="entityFieldDetails" columns="TYPE_2">
 					<field name="appEntityId"
 						inputWidget="application.entitysearch"
 						label="$m{application.appentityfield.appentity}"
@@ -3255,7 +3255,7 @@
 				</section>
 			</tab>
 			<tab name="changeLog" label="$m{application.form.audit}"
-				contentType="miniform_changelog" />
+				contentType="MINIFORM_CHANGELOG" />
 			<formValidationPolicy name="refValidationPolicy"
 				description="$m{studio.appentityfield.form.formvalidationpolicy.ref}"
 				message="$m{studio.appentityfield.form.formvalidationpolicy.ref.message}">
@@ -3473,8 +3473,8 @@
 				message="$m{studio.common.form.annotation.static.message}" />
 			<tab name="basicDetails"
 				label="$m{studio.appentityseries.form.basicdetails}"
-				contentType="miniform" editable="true">
-				<section name="entitySeriesDetails" columns="type_2">
+				contentType="MINIFORM" editable="true">
+				<section name="entitySeriesDetails" columns="TYPE_2">
 					<field name="appEntityId"
 						inputWidget="application.entitysearch"
 						label="$m{application.appentityseries.appentity}"
@@ -3493,7 +3493,7 @@
 				</section>
 			</tab>
 			<tab name="changeLog" label="$m{application.form.audit}"
-				contentType="miniform_changelog" />
+				contentType="MINIFORM_CHANGELOG" />
 		</form>
 		<form name="appEntityCategoryForm"
 			description="$m{studio.appentitycategory.form}"
@@ -3503,8 +3503,8 @@
 				message="$m{studio.common.form.annotation.static.message}" />
 			<tab name="basicDetails"
 				label="$m{studio.appentitycategory.form.basicdetails}"
-				contentType="miniform" editable="true">
-				<section name="entityCategoryDetails" columns="type_2">
+				contentType="MINIFORM" editable="true">
+				<section name="entityCategoryDetails" columns="TYPE_2">
 					<field name="appEntityId"
 						inputWidget="application.entitysearch"
 						label="$m{application.appentitycategory.appentity}"
@@ -3523,7 +3523,7 @@
 				label="$m{studio.appentitycategory.form.condition}"
 				reference="app_entitycategory" contentType="filter_condition" />
 			<tab name="changeLog" label="$m{application.form.audit}"
-				contentType="miniform_changelog" />
+				contentType="MINIFORM_CHANGELOG" />
 		</form>
 		<form name="appEntityAttachmentForm"
 			description="$m{studio.appentityattachment.form}"
@@ -3533,8 +3533,8 @@
 				message="$m{studio.common.form.annotation.static.message}" />
 			<tab name="basicDetails"
 				label="$m{studio.appentityattachment.form.basicdetails}"
-				contentType="miniform">
-				<section name="entityAttachmentDetails" columns="type_2">
+				contentType="MINIFORM">
+				<section name="entityAttachmentDetails" columns="TYPE_2">
 					<field name="appEntityId"
 						inputWidget="application.entitysearch"
 						label="$m{application.appentityattachment.appentity}"
@@ -3571,8 +3571,8 @@
 				message="$m{studio.common.form.annotation.static.message}" />
 			<tab name="basicDetails"
 				label="$m{studio.appentityexpression.form.basicdetails}"
-				contentType="miniform">
-				<section name="entityExpressionDetails" columns="type_2">
+				contentType="MINIFORM">
+				<section name="entityExpressionDetails" columns="TYPE_2">
 					<field name="appEntityId"
 						inputWidget="application.entitysearch"
 						label="$m{application.appentityexpression.appentity}"
@@ -3609,9 +3609,9 @@
 				message="$m{studio.common.form.annotation.static.message}" />
 			<tab name="basicDetails"
 				label="$m{studio.appentityuniqueconstraint.form.basicdetails}"
-				contentType="miniform">
+				contentType="MINIFORM">
 				<section name="entityUniqueConstraintDetails"
-					columns="type_2">
+					columns="TYPE_2">
 					<field name="appEntityId"
 						inputWidget="application.entitysearch"
 						label="$m{application.appentityuniqueconstraint.appentity}"
@@ -3649,8 +3649,8 @@
 				message="$m{studio.common.form.annotation.static.message}" />
 			<tab name="basicDetails"
 				label="$m{studio.appentityindex.form.basicdetails}"
-				contentType="miniform">
-				<section name="entityIndexDetails" columns="type_2">
+				contentType="MINIFORM">
+				<section name="entityIndexDetails" columns="TYPE_2">
 					<field name="appEntityId"
 						inputWidget="application.entitysearch"
 						label="$m{application.appentityindex.appentity}"
@@ -3689,8 +3689,8 @@
 				message="$m{studio.common.form.annotation.static.message}" />
 			<tab name="basicDetails"
 				label="$m{studio.appentityupload.form.basicdetails}"
-				contentType="miniform">
-				<section name="entityUploadDetails" columns="type_2">
+				contentType="MINIFORM">
+				<section name="entityUploadDetails" columns="TYPE_2">
 					<field name="appEntityId"
 						inputWidget="application.entitysearch"
 						label="$m{application.appentityupload.appentity}"
@@ -3727,8 +3727,8 @@
 			entity="application.appEntitySearchInput">
 			<tab name="basicDetails"
 				label="$m{studio.appentitysearchinput.form.basicdetails}"
-				contentType="miniform">
-				<section name="searchInputDetails" columns="type_2">
+				contentType="MINIFORM">
+				<section name="searchInputDetails" columns="TYPE_2">
 					<field name="appEntityId"
 						inputWidget="application.entitysearch"
 						label="$m{application.appentitysearchinput.appentity}"
@@ -3749,7 +3749,7 @@
 				label="$m{studio.appentitysearchinput.form.inputs}"
 				reference="app_entitysearchinput" contentType="search_input" />
 			<tab name="changeLog" label="$m{application.form.audit}"
-				contentType="miniform_changelog" />
+				contentType="MINIFORM_CHANGELOG" />
 		</form>
 		<form name="appEnumerationForm"
 			description="$m{studio.appenumeration.form}"
@@ -3769,8 +3769,8 @@
 				message="$m{studio.common.form.annotation.static.message}" />
 			<tab name="basicDetails"
 				label="$m{studio.appapplet.form.basicdetails}"
-				contentType="miniform">
-				<section name="appletDetails" columns="type_2">
+				contentType="MINIFORM">
+				<section name="appletDetails" columns="TYPE_2">
 					<field name="applicationId"
 						reference="studio.applicationDevelopableRef"
 						inputWidget="application.entitysearch" column="0"
@@ -3795,8 +3795,8 @@
 			entity="application.appEnumerationItem">
 			<tab name="basicDetails"
 				label="$m{studio.appenumerationitem.form.basicdetails}"
-				contentType="miniform">
-				<section name="filterDetails" columns="type_2">
+				contentType="MINIFORM">
+				<section name="filterDetails" columns="TYPE_2">
 					<field name="code" inputWidget="application.name" column="0"
 						required="true" />
 					<field name="label" inputWidget="application.text"
@@ -3805,7 +3805,7 @@
 				</section>
 			</tab>
 			<tab name="changeLog" label="$m{application.form.audit}"
-				contentType="miniform_changelog" />
+				contentType="MINIFORM_CHANGELOG" />
 		</form>
 		<form name="appRefForm" description="$m{studio.appref.form}"
 			entity="application.appRef">
@@ -3824,8 +3824,8 @@
 				message="$m{studio.common.form.annotation.static.message}" />
 			<tab name="basicDetails"
 				label="$m{studio.appref.form.basicdetails}"
-				contentType="miniform">
-				<section name="refFormDetails" columns="type_2">
+				contentType="MINIFORM">
+				<section name="refFormDetails" columns="TYPE_2">
 					<field name="applicationId"
 						reference="studio.applicationDevelopableRef"
 						inputWidget="application.entitysearch" column="0"
@@ -3861,7 +3861,7 @@
 			<tab name="filter" label="$m{studio.appref.form.filter}"
 				reference="app_ref" contentType="filter_condition" />
 			<tab name="changeLog" label="$m{application.form.audit}"
-				contentType="miniform_changelog" />
+				contentType="MINIFORM_CHANGELOG" />
 			<formStatePolicy type="on_switch"
 				name="onStaticPolicy"
 				description="$m{studio.common.form.formstatepolicy.onstatic}">
@@ -3914,8 +3914,8 @@
 				message="$m{studio.common.form.annotation.static.message}" />
 			<tab name="basicDetails"
 				label="$m{studio.appref.form.basicdetails}"
-				contentType="miniform">
-				<section name="refFormDetails" columns="type_2">
+				contentType="MINIFORM">
+				<section name="refFormDetails" columns="TYPE_2">
 					<field name="applicationId"
 						reference="studio.applicationDevelopableRef"
 						inputWidget="application.entitysearch" column="0"
@@ -3946,7 +3946,7 @@
 				</section>
 			</tab>
 			<tab name="changeLog" label="$m{application.form.audit}"
-				contentType="miniform_changelog" />
+				contentType="MINIFORM_CHANGELOG" />
 			<formStatePolicy type="on_switch"
 				name="immutableFormPolicy"
 				description="$m{studio.common.form.formstatepolicy.immutable}">
@@ -3981,9 +3981,9 @@
 				message="$m{studio.common.form.annotation.static.message}" />
 			<tab name="basicDetails"
 				label="$m{studio.chart.form.basicdetails}"
-				contentType="miniform"
+				contentType="MINIFORM"
 				editable="true">
-				<section name="chartDetails" columns="type_2">
+				<section name="chartDetails" columns="TYPE_2">
 					<field name="applicationId"
 						reference="studio.applicationDevelopableRef"
 						inputWidget="application.entitysearch" column="0"
@@ -4021,7 +4021,7 @@
 				</section>
 			</tab>
 			<tab name="changeLog" label="$m{application.form.audit}"
-				contentType="miniform_changelog" />
+				contentType="MINIFORM_CHANGELOG" />
 			<formStatePolicy type="on_switch"
 				name="onStaticPolicy"
 				description="$m{studio.common.form.formstatepolicy.onstatic}">
@@ -4121,8 +4121,8 @@
 				message="$m{studio.common.form.annotation.static.message}" />
 			<tab name="basicDetails"
 				label="$m{studio.chartdatasource.form.basicdetails}"
-				contentType="miniform" editable="true">
-				<section name="chartDataSourceDetails" columns="type_2">
+				contentType="MINIFORM" editable="true">
+				<section name="chartDataSourceDetails" columns="TYPE_2">
 					<field name="applicationId"
 						reference="studio.applicationDevelopableRef"
 						inputWidget="application.entitysearch" column="0"
@@ -4159,7 +4159,7 @@
 				label="$m{studio.chartdatasource.form.grouping}"
 				reference="chart_grouping" contentType="field_sequence" />
 			<tab name="changeLog" label="$m{application.form.audit}"
-				contentType="miniform_changelog" />
+				contentType="MINIFORM_CHANGELOG" />
 			<formStatePolicy type="on_switch"
 				name="onStaticPolicy"
 				description="$m{studio.common.form.formstatepolicy.onstatic}">
@@ -4222,8 +4222,8 @@
 				message="$m{studio.common.form.annotation.static.message}" />
 			<tab name="basicDetails"
 				label="$m{studio.dashboard.form.basicdetails}"
-				contentType="miniform">
-				<section name="entityDetails" columns="type_2">
+				contentType="MINIFORM">
+				<section name="entityDetails" columns="TYPE_2">
 					<field name="applicationId"
 						reference="studio.applicationDevelopableRef"
 						inputWidget="application.entitysearch" column="0"
@@ -4248,7 +4248,7 @@
 				contentType="child_list" applet="manageDashboardOption"
 				reference="optionsList" />
 			<tab name="changeLog" label="$m{application.form.audit}"
-				contentType="miniform_changelog" />
+				contentType="MINIFORM_CHANGELOG" />
 			<formStatePolicy type="on_switch"
 				name="onStaticPolicy"
 				description="$m{studio.common.form.formstatepolicy.onstatic}">
@@ -4287,8 +4287,8 @@
 			entity="dashboard.dashboardTile">
 			<tab name="basicDetails"
 				label="$m{studio.dashboardtile.form.basicdetails}"
-				contentType="miniform">
-				<section name="entityDetails" columns="type_2">
+				contentType="MINIFORM">
+				<section name="entityDetails" columns="TYPE_2">
 					<field name="dashboardId"
 						inputWidget="application.entitysearch" column="0"
 						label="$m{dashboard.dashboardtile.dashboard}"
@@ -4302,15 +4302,15 @@
 				</section>
 			</tab>
 			<tab name="changeLog" label="$m{application.form.audit}"
-				contentType="miniform_changelog" />
+				contentType="MINIFORM_CHANGELOG" />
 		</form>
 		<form name="dashboardOptionForm"
 			description="$m{studio.dashboardoption.form}"
 			entity="dashboard.dashboardOption">
 			<tab name="basicDetails"
 				label="$m{studio.dashboardoption.form.basicdetails}"
-				contentType="miniform">
-				<section name="basicDetails" columns="type_2">
+				contentType="MINIFORM">
+				<section name="basicDetails" columns="TYPE_2">
 					<field name="dashboardId"
 						inputWidget="application.entitysearch" column="0"
 						label="$m{dashboard.dashboardoption.dashboard}"
@@ -4324,15 +4324,15 @@
 				contentType="child_list" applet="manageDashboardOptionCatBase"
 				reference="baseList" />
 			<tab name="changeLog" label="$m{application.form.audit}"
-				contentType="miniform_changelog" />
+				contentType="MINIFORM_CHANGELOG" />
 		</form>
 		<form name="dashboardOptionCatBaseForm"
 			description="$m{studio.dashboardoptioncatbase.form}"
 			entity="dashboard.dashboardOptionCatBase">
 			<tab name="basicDetails"
 				label="$m{studio.dashboardoptioncatbase.form.basicdetails}"
-				contentType="miniform">
-				<section name="basicDetails" columns="type_2">
+				contentType="MINIFORM">
+				<section name="basicDetails" columns="TYPE_2">
 					<field name="dashboardOptionId"
 						inputWidget="application.entitysearch" column="0"
 						required="true" />
@@ -4347,7 +4347,7 @@
 				reference="dashboardoption_categorybase"
 				contentType="filter_condition" />
 			<tab name="changeLog" label="$m{application.form.audit}"
-				contentType="miniform_changelog" />
+				contentType="MINIFORM_CHANGELOG" />
 			<formStatePolicy type="on_switch"
 				name="onDataSourceSwitch"
 				description="$m{studio.dashboardoptioncatbase.form.formstatepolicy.ondatasourceswitch}">
@@ -4375,8 +4375,8 @@
 				message="$m{studio.common.form.annotation.static.message}" />
 			<tab name="basicDetails"
 				label="$m{studio.notificationtemplate.form.basicdetails}"
-				contentType="miniform" editable="true">
-				<section name="templateDetails" columns="type_2">
+				contentType="MINIFORM" editable="true">
+				<section name="templateDetails" columns="TYPE_2">
 					<field name="applicationId"
 						reference="studio.applicationDevelopableRef"
 						inputWidget="application.entitysearch" column="0"
@@ -4400,7 +4400,7 @@
 						required="true"
 						disabled="true" />
 				</section>
-				<section name="messageDetails" columns="type_1">
+				<section name="messageDetails" columns="TYPE_1">
 					<field name="subject" inputWidget="application.text"
 						column="0" required="true" />
 					<field name="template"
@@ -4413,7 +4413,7 @@
 				contentType="child_list" applet="manageNotifTemplateParam"
 				reference="paramList" /-->
 			<tab name="changeLog" label="$m{application.form.audit}"
-				contentType="miniform_changelog" />
+				contentType="MINIFORM_CHANGELOG" />
 			<formStatePolicy type="on_switch"
 				name="onStaticPolicy"
 				description="$m{studio.common.form.formstatepolicy.onstatic}">
@@ -4487,8 +4487,8 @@
 			entity="notification.notifTemplateParam">
 			<tab name="basicDetails"
 				label="$m{studio.notificationtemplateparam.form.basicdetails}"
-				contentType="miniform" editable="true">
-				<section name="templateParamDetails" columns="type_2">
+				contentType="MINIFORM" editable="true">
+				<section name="templateParamDetails" columns="TYPE_2">
 					<field name="name" inputWidget="application.componentname" column="0"
 						required="true" />
 					<field name="label" inputWidget="application.text"
@@ -4497,7 +4497,7 @@
 				</section>
 			</tab>
 			<tab name="changeLog" label="$m{application.form.audit}"
-				contentType="miniform_changelog" />
+				contentType="MINIFORM_CHANGELOG" />
 		</form>
 		<form name="notifLargeTextForm"
 			description="$m{studio.notificationlargetext.form}"
@@ -4517,8 +4517,8 @@
 				message="$m{studio.common.form.annotation.static.message}" />
 			<tab name="basicDetails"
 				label="$m{studio.notificationlargetext.form.basicdetails}"
-				contentType="miniform" editable="true">
-				<section name="largeTextDetails" columns="type_2">
+				contentType="MINIFORM" editable="true">
+				<section name="largeTextDetails" columns="TYPE_2">
 					<field name="applicationId"
 						reference="studio.applicationDevelopableRef"
 						inputWidget="application.entitysearch" column="0"
@@ -4537,7 +4537,7 @@
 					<field name="fontSizeInPixels"
 						inputWidget="application.integer" column="1" />
 				</section>
-				<section name="bodyDetails" columns="type_1">
+				<section name="bodyDetails" columns="TYPE_1">
 					<field name="body" inputWidget="application.textareaxxlarge"
 						column="0" required="true" />
 				</section>
@@ -4547,7 +4547,7 @@
 				contentType="child_list" applet="manageNotifLargeTextParam"
 				reference="paramList" />
 			<tab name="changeLog" label="$m{application.form.audit}"
-				contentType="miniform_changelog" />
+				contentType="MINIFORM_CHANGELOG" />
 			<formStatePolicy type="on_switch"
 				name="onStaticPolicy"
 				description="$m{studio.common.form.formstatepolicy.onstatic}">
@@ -4587,8 +4587,8 @@
 			entity="notification.notifLargeTextParam">
 			<tab name="basicDetails"
 				label="$m{studio.notificationlargetextparam.form.basicdetails}"
-				contentType="miniform" editable="true">
-				<section name="templateParamDetails" columns="type_2">
+				contentType="MINIFORM" editable="true">
+				<section name="templateParamDetails" columns="TYPE_2">
 					<field name="name" inputWidget="application.componentname" column="0"
 						required="true" />
 					<field name="label" inputWidget="application.text"
@@ -4597,7 +4597,7 @@
 				</section>
 			</tab>
 			<tab name="changeLog" label="$m{application.form.audit}"
-				contentType="miniform_changelog" />
+				contentType="MINIFORM_CHANGELOG" />
 		</form>
 		<form name="reportConfigForm"
 			description="$m{studio.reportconfiguration.form}"
@@ -4617,8 +4617,8 @@
 				message="$m{studio.common.form.annotation.static.message}" />
 			<tab name="basicDetails"
 				label="$m{studio.reportconfiguration.form.basicdetails}"
-				contentType="miniform">
-				<section name="configDetails" columns="type_2"
+				contentType="MINIFORM">
+				<section name="configDetails" columns="TYPE_2"
 					label="$m{studio.reportconfiguration.form.basicdetails}">
 					<field name="applicationId"
 						reference="studio.applicationDevelopableRef"
@@ -4663,7 +4663,7 @@
 						inputWidget="application.checkbox"
 						column="1" />
 				</section>
-				<section name="pageDetails" columns="type_2"
+				<section name="pageDetails" columns="TYPE_2"
 					label="$m{studio.reportconfiguration.form.pagedimension}"
 					visible="false">
 					<field name="sizeType" inputWidget="application.enumlist"
@@ -4698,7 +4698,7 @@
 				label="$m{studio.reportconfiguration.form.filter}"
 				reference="report_config" contentType="filter_condition" />
 			<tab name="changeLog" label="$m{application.form.audit}"
-				contentType="miniform_changelog" />
+				contentType="MINIFORM_CHANGELOG" />
 			<formStatePolicy type="on_switch"
 				name="onStaticPolicy"
 				description="$m{studio.common.form.formstatepolicy.onstatic}">
@@ -4811,8 +4811,8 @@
 			entity="report.reportColumn">
 			<tab name="basicDetails"
 				label="$m{studio.reportcolumn.form.basicdetails}"
-				contentType="miniform">
-				<section name="basicDetails" columns="type_2">
+				contentType="MINIFORM">
+				<section name="basicDetails" columns="TYPE_2">
 					<field name="reportConfigurationId"
 						inputWidget="application.entitysearch" column="0"
 						required="true"
@@ -4849,8 +4849,8 @@
 			entity="report.reportPlacement">
 			<tab name="basicDetails"
 				label="$m{studio.reportplacement.form.basicdetails}"
-				contentType="miniform">
-				<section name="basicDetails" columns="type_2"
+				contentType="MINIFORM">
+				<section name="basicDetails" columns="TYPE_2"
 					label="$m{studio.reportplacement.form.basicdetails}">
 					<field name="reportConfigurationId"
 						inputWidget="application.entitysearch" column="0"
@@ -4876,7 +4876,7 @@
 					<field name="bold" inputWidget="application.checkbox"
 						column="1" visible="false" />
 				</section>
-				<section name="dimensionDetails" columns="type_2"
+				<section name="dimensionDetails" columns="TYPE_2"
 					label="$m{studio.reportplacement.form.placementdimension}">
 					<field name="xOffsetType" inputWidget="application.enumlist"
 						column="0" required="true" />
@@ -4921,8 +4921,8 @@
 			entity="report.reportParameter">
 			<tab name="basicDetails"
 				label="$m{studio.reportparameter.form.basicdetails}"
-				contentType="miniform">
-				<section name="basicDetails" columns="type_2">
+				contentType="MINIFORM">
+				<section name="basicDetails" columns="TYPE_2">
 					<field name="reportConfigurationId"
 						inputWidget="application.entitysearch" column="0"
 						required="true" />
@@ -4958,8 +4958,8 @@
 				policy="unlockresource-actionpolicy" showOnMaintain="true" />
 			<tab name="basicDetails"
 				label="$m{studio.apptable.form.basicdetails}"
-				contentType="miniform">
-				<section name="tableDetails" columns="type_2">
+				contentType="MINIFORM">
+				<section name="tableDetails" columns="TYPE_2">
 					<field name="applicationId"
 						reference="studio.applicationDevelopableRef"
 						inputWidget="application.entitysearch" column="0"
@@ -5029,7 +5029,7 @@
 				contentType="child_list" applet="manageAppTableLoading"
 				reference="loadingList" />
 			<tab name="changeLog" label="$m{application.form.audit}"
-				contentType="miniform_changelog" />
+				contentType="MINIFORM_CHANGELOG" />
 			<formStatePolicy type="on_switch"
 				name="onCreatePolicy"
 				description="$m{studio.appentity.form.formstatepolicy.oncreate}">
@@ -5079,8 +5079,8 @@
 			entity="application.appTableColumn">
 			<tab name="basicDetails"
 				label="$m{studio.apptablecolumn.form.basicdetails}"
-				contentType="miniform">
-				<section name="tableColumnDetails" columns="type_2">
+				contentType="MINIFORM">
+				<section name="tableColumnDetails" columns="TYPE_2">
 					<field name="appTableId"
 						inputWidget="application.entitysearch" column="0"
 						required="true" />
@@ -5101,8 +5101,8 @@
 			entity="application.appTableAction">
 			<tab name="basicDetails"
 				label="$m{studio.apptableaction.form.basicdetails}"
-				contentType="miniform">
-				<section name="tableColumnDetails" columns="type_2">
+				contentType="MINIFORM">
+				<section name="tableColumnDetails" columns="TYPE_2">
 					<field name="appTableId"
 						inputWidget="application.entitysearch" column="0"
 						required="true" />
@@ -5127,8 +5127,8 @@
 			entity="application.appTableLoading">
 			<tab name="basicDetails"
 				label="$m{studio.apptableloading.form.basicdetails}"
-				contentType="miniform">
-				<section name="tableColumnDetails" columns="type_2">
+				contentType="MINIFORM">
+				<section name="tableColumnDetails" columns="TYPE_2">
 					<field name="appTableId"
 						inputWidget="application.entitysearch" column="0"
 						required="true" />
@@ -5152,8 +5152,8 @@
 			entity="application.appTableFilter">
 			<tab name="basicDetails"
 				label="$m{studio.apptablefilter.form.basicdetails}"
-				contentType="miniform">
-				<section name="filterDetails" columns="type_2">
+				contentType="MINIFORM">
+				<section name="filterDetails" columns="TYPE_2">
 					<field name="name" inputWidget="application.componentname" column="0"
 						required="true" />
 					<field name="description" inputWidget="application.text"
@@ -5172,7 +5172,7 @@
 				label="$m{studio.apptablefilter.form.condition}"
 				reference="app_table" contentType="filter_condition" />
 			<tab name="changeLog" label="$m{application.form.audit}"
-				contentType="miniform_changelog" />
+				contentType="MINIFORM_CHANGELOG" />
 		</form>
 		<form name="appFormForm" description="$m{studio.appform.form}"
 			entity="application.appForm">
@@ -5191,8 +5191,8 @@
 				message="$m{studio.common.form.annotation.static.message}" />
 			<tab name="basicDetails"
 				label="$m{studio.appform.form.basicdetails}"
-				contentType="miniform">
-				<section name="formDetails" columns="type_2">
+				contentType="MINIFORM">
+				<section name="formDetails" columns="TYPE_2">
 					<field name="applicationId"
 						reference="studio.applicationDevelopableRef"
 						inputWidget="application.entitysearch" column="0"
@@ -5271,7 +5271,7 @@
 				contentType="child_list" applet="manageAppFormReviewPolicy"
 				reference="formReviewList" visible="false" />
 			<tab name="changeLog" label="$m{application.form.audit}"
-				contentType="miniform_changelog" />
+				contentType="MINIFORM_CHANGELOG" />
 			<formStatePolicy type="on_switch"
 				name="onStaticPolicy"
 				description="$m{studio.common.form.formstatepolicy.onstatic}">
@@ -5338,8 +5338,8 @@
 			entity="application.appFormElement">
 			<tab name="basicDetails"
 				label="$m{studio.appformelement.form.basicdetails}"
-				contentType="miniform">
-				<section name="formElementDetails" columns="type_2">
+				contentType="MINIFORM">
+				<section name="formElementDetails" columns="TYPE_2">
 					<field name="appFormId" inputWidget="studio.formlist"
 						disabled="true" column="0" required="true" />
 					<field name="type" inputWidget="application.enumlist"
@@ -5401,8 +5401,8 @@
 			entity="application.appFormFilter">
 			<tab name="basicDetails"
 				label="$m{studio.appformfilter.form.basicdetails}"
-				contentType="miniform">
-				<section name="filterDetails" columns="type_2">
+				contentType="MINIFORM">
+				<section name="filterDetails" columns="TYPE_2">
 					<field name="name" inputWidget="application.name" column="0"
 						required="true" />
 					<field name="description" inputWidget="application.text"
@@ -5418,15 +5418,15 @@
 				reference="app_form"
 				contentType="filter_condition" />
 			<tab name="changeLog" label="$m{application.form.audit}"
-				contentType="miniform_changelog" />
+				contentType="MINIFORM_CHANGELOG" />
 		</form>
 		<form name="appFormAnnotationForm"
 			description="$m{studio.appformannotation.form}"
 			entity="application.appFormAnnotation">
 			<tab name="basicDetails"
 				label="$m{studio.appformannotation.form.basicdetails}"
-				contentType="miniform">
-				<section name="formAnnotationDetails" columns="type_2">
+				contentType="MINIFORM">
+				<section name="formAnnotationDetails" columns="TYPE_2">
 					<field name="appFormId" inputWidget="studio.formlist"
 						label="$m{application.appformelement.appform}"
 						column="0"
@@ -5444,7 +5444,7 @@
 					<field name="directPlacement"
 						inputWidget="application.checkbox" column="1" />
 				</section>
-				<section name="messageDetails" columns="type_1">
+				<section name="messageDetails" columns="TYPE_1">
 					<field name="message" inputWidget="application.textarea"
 						required="true" column="0" />
 				</section>
@@ -5458,8 +5458,8 @@
 			entity="application.appFormAction">
 			<tab name="basicDetails"
 				label="$m{studio.appformaction.form.basicdetails}"
-				contentType="miniform">
-				<section name="formActionDetails" columns="type_2">
+				contentType="MINIFORM">
+				<section name="formActionDetails" columns="TYPE_2">
 					<field name="appFormId" inputWidget="studio.formlist"
 						label="$m{application.appformelement.appform}"
 						column="0"
@@ -5499,8 +5499,8 @@
 			entity="application.appFormRelatedList">
 			<tab name="basicDetails"
 				label="$m{studio.appformrelatedlist.form.basicdetails}"
-				contentType="miniform">
-				<section name="formRelatedListDetails" columns="type_2">
+				contentType="MINIFORM">
+				<section name="formRelatedListDetails" columns="TYPE_2">
 					<field name="appFormId" inputWidget="studio.formlist"
 						label="$m{application.appformelement.appform}"
 						column="0"
@@ -5529,8 +5529,8 @@
 			entity="application.appFormStatePolicy">
 			<tab name="basicDetails"
 				label="$m{studio.appformstatepolicy.form.basicdetails}"
-				contentType="miniform">
-				<section name="fieldStatePolicyDetails" columns="type_2">
+				contentType="MINIFORM">
+				<section name="fieldStatePolicyDetails" columns="TYPE_2">
 					<field name="appFormId" inputWidget="studio.formlist"
 						disabled="true" column="0" required="true"
 						label="$m{application.appformstatepolicy.appform}" />
@@ -5564,8 +5564,8 @@
 			entity="application.appFormWidgetRulesPolicy">
 			<tab name="basicDetails"
 				label="$m{studio.appformwidgetrulespolicy.form.basicdetails}"
-				contentType="miniform">
-				<section name="fieldStatePolicyDetails" columns="type_2">
+				contentType="MINIFORM">
+				<section name="fieldStatePolicyDetails" columns="TYPE_2">
 					<field name="appFormId" inputWidget="studio.formlist"
 						disabled="true" column="0" required="true"
 						label="$m{application.appformwidgetrulespolicy.appform}" />
@@ -5588,8 +5588,8 @@
 			entity="application.appFormSetState">
 			<tab name="basicDetails"
 				label="$m{studio.appformsetstate.form.basicdetails}"
-				contentType="miniform">
-				<section name="setStateDetails" columns="type_2">
+				contentType="MINIFORM">
+				<section name="setStateDetails" columns="TYPE_2">
 					<field name="appFormStatePolicyId" disabled="true"
 						column="0"
 						required="true"
@@ -5637,9 +5637,9 @@
 			entity="application.appFormFieldValidationPolicy">
 			<tab name="basicDetails"
 				label="$m{studio.appformfieldvalidationpolicy.form.basicdetails}"
-				contentType="miniform">
+				contentType="MINIFORM">
 				<section name="fieldValidationPolicyDetails"
-					columns="type_2">
+					columns="TYPE_2">
 					<field name="appFormId" inputWidget="studio.formlist"
 						label="$m{application.appformelement.appform}"
 						column="0"
@@ -5665,8 +5665,8 @@
 			entity="application.appFormValidationPolicy">
 			<tab name="basicDetails"
 				label="$m{studio.appformvalidationpolicy.form.basicdetails}"
-				contentType="miniform">
-				<section name="formValidationPolicyDetails" columns="type_2">
+				contentType="MINIFORM">
+				<section name="formValidationPolicyDetails" columns="TYPE_2">
 					<field name="appFormId" inputWidget="studio.formlist"
 						disabled="true" column="0" required="true"
 						label="$m{application.appformvalidationpolicy.appform}" />
@@ -5679,7 +5679,7 @@
 					<field name="errorMatcher"
 						inputWidget="studio.entitymatcherlist" column="1" />
 				</section>
-				<section name="messageDetails" columns="type_1">
+				<section name="messageDetails" columns="TYPE_1">
 					<field name="message" inputWidget="application.textarea"
 						column="0" required="true" />
 				</section>
@@ -5694,8 +5694,8 @@
 			entity="application.appFormReviewPolicy">
 			<tab name="basicDetails"
 				label="$m{studio.appformreviewpolicy.form.basicdetails}"
-				contentType="miniform">
-				<section name="formReviewPolicyDetails" columns="type_2">
+				contentType="MINIFORM">
+				<section name="formReviewPolicyDetails" columns="TYPE_2">
 					<field name="appFormId" inputWidget="studio.formlist"
 						disabled="true" column="0" required="true"
 						label="$m{application.appformreviewpolicy.appform}" />
@@ -5712,7 +5712,7 @@
 					<field name="skippable" inputWidget="application.checkbox"
 						column="1" />
 				</section>
-				<section name="messageDetails" columns="type_2">
+				<section name="messageDetails" columns="TYPE_2">
 					<field name="messageType" inputWidget="application.enumlist"
 						column="0" required="true" />
 					<field name="message" inputWidget="application.textarea"
@@ -5740,8 +5740,8 @@
 				message="$m{studio.common.form.annotation.static.message}" />
 			<tab name="basicDetails"
 				label="$m{studio.apphelpsheet.form.basicdetails}"
-				contentType="miniform">
-				<section name="formDetails" columns="type_2">
+				contentType="MINIFORM">
+				<section name="formDetails" columns="TYPE_2">
 					<field name="applicationId"
 						reference="studio.applicationDevelopableRef"
 						inputWidget="application.entitysearch" column="0"
@@ -5767,15 +5767,15 @@
 				contentType="child_list" applet="manageAppHelpEntry"
 				reference="entryList" />
 			<tab name="changeLog" label="$m{application.form.audit}"
-				contentType="miniform_changelog" />
+				contentType="MINIFORM_CHANGELOG" />
 		</form>
 		<form name="appHelpEntryForm"
 			description="$m{studio.apphelpentry.form}"
 			entity="application.appHelpEntry">
 			<tab name="basicDetails"
 				label="$m{studio.apphelpentry.form.basicdetails}"
-				contentType="miniform">
-				<section name="helpEntryDetails" columns="type_2">
+				contentType="MINIFORM">
+				<section name="helpEntryDetails" columns="TYPE_2">
 					<field name="appHelpSheetId"
 						inputWidget="application.entitysearch"
 						disabled="true" column="0" required="true"
@@ -5784,14 +5784,14 @@
 						inputWidget="studiohelpentryfieldlist" column="1"
 						required="true" />
 				</section>
-				<section name="helpEntryCont" columns="type_1">
+				<section name="helpEntryCont" columns="TYPE_1">
 					<field name="helpContent"
 						inputWidget="application.richtexteditorlarge"
 						column="0" required="true" />
 				</section>
 			</tab>
 			<tab name="changeLog" label="$m{application.form.audit}"
-				contentType="miniform_changelog" />
+				contentType="MINIFORM_CHANGELOG" />
 		</form>
 		<form name="appWidgetTypeForm"
 			description="$m{studio.appwidgettype.form}"
@@ -5811,8 +5811,8 @@
 				message="$m{studio.common.form.annotation.static.message}" />
 			<tab name="basicDetails"
 				label="$m{studio.appwidgettype.form.basicdetails}"
-				contentType="miniform">
-				<section name="basicDetails" columns="type_2">
+				contentType="MINIFORM">
+				<section name="basicDetails" columns="TYPE_2">
 					<field name="applicationId"
 						reference="studio.applicationDevelopableRef"
 						inputWidget="application.entitysearch" column="0"
@@ -5836,7 +5836,7 @@
 					<field name="enumOption" inputWidget="application.checkbox"
 						column="1" />
 				</section>
-				<section name="editorDetails" columns="type_1">
+				<section name="editorDetails" columns="TYPE_1">
 					<field name="editor" inputWidget="application.textarea"
 						column="0" required="true" />
 					<field name="renderer" inputWidget="application.textarea"
@@ -5844,7 +5844,7 @@
 				</section>
 			</tab>
 			<tab name="changeLog" label="$m{application.form.audit}"
-				contentType="miniform_changelog" />
+				contentType="MINIFORM_CHANGELOG" />
 			<formStatePolicy type="on_switch"
 				name="onStaticPolicy"
 				description="$m{studio.common.form.formstatepolicy.onstatic}">
@@ -5914,9 +5914,9 @@
 				message="$m{studio.common.form.annotation.static.message}" />
 			<tab name="basicDetails"
 				label="$m{studio.workflow.form.basicdetails}"
-				contentType="miniform"
+				contentType="MINIFORM"
 				editable="true">
-				<section name="workflowDetails" columns="type_2">
+				<section name="workflowDetails" columns="TYPE_2">
 					<field name="applicationId"
 						reference="studio.applicationDevelopableRef"
 						inputWidget="application.entitysearch" column="0"
@@ -5957,7 +5957,7 @@
 				contentType="child_list" applet="manageWorkflowSetValues"
 				reference="setValuesList" />
 			<tab name="changeLog" label="$m{application.form.audit}"
-				contentType="miniform_changelog" />
+				contentType="MINIFORM_CHANGELOG" />
 			<formStatePolicy type="on_switch"
 				name="onStaticPolicy"
 				description="$m{studio.common.form.formstatepolicy.onstatic}">
@@ -6010,8 +6010,8 @@
 			entity="workflow.workflowFilter">
 			<tab name="basicDetails"
 				label="$m{studio.workflowfilter.form.basicdetails}"
-				contentType="miniform">
-				<section name="filterDetails" columns="type_2">
+				contentType="MINIFORM">
+				<section name="filterDetails" columns="TYPE_2">
 					<field name="name" inputWidget="application.componentname" column="0"
 						required="true" />
 					<field name="description" inputWidget="application.text"
@@ -6026,15 +6026,15 @@
 				reference="workflow" contentType="filter_condition"
 				includeSysParam="true" />
 			<tab name="changeLog" label="$m{application.form.audit}"
-				contentType="miniform_changelog" />
+				contentType="MINIFORM_CHANGELOG" />
 		</form>
 		<form name="workflowSetValuesForm"
 			description="$m{studio.workflowsetvalues.form}"
 			entity="workflow.workflowSetValues">
 			<tab name="basicDetails"
 				label="$m{studio.workflowsetvalues.form.basicdetails}"
-				contentType="miniform">
-				<section name="setValuesDetails" columns="type_2">
+				contentType="MINIFORM">
+				<section name="setValuesDetails" columns="TYPE_2">
 					<field name="name" inputWidget="application.componentname" column="0"
 						required="true" />
 					<field name="description" inputWidget="application.text"
@@ -6053,14 +6053,14 @@
 				label="$m{studio.workflowsetvalues.form.setvalues}"
 				reference="workflow" contentType="set_values" />
 			<tab name="changeLog" label="$m{application.form.audit}"
-				contentType="miniform_changelog" />
+				contentType="MINIFORM_CHANGELOG" />
 		</form>
 		<form name="wfStepForm"
 			description="$m{studio.workflow.step.form}" entity="workflow.wfStep">
 			<tab name="basicDetails"
 				label="$m{studio.workflow.step.form.basicdetails}"
-				contentType="miniform" editable="false">
-				<section name="stepDetails" columns="type_2">
+				contentType="MINIFORM" editable="false">
+				<section name="stepDetails" columns="TYPE_2">
 					<field name="workflowId"
 						inputWidget="application.entitysearch" column="0"
 						label="$m{workflow.step.workflow}" disabled="true"
@@ -6169,8 +6169,8 @@
 			entity="workflow.wfStepRouting">
 			<tab name="basicDetails"
 				label="$m{studio.workflow.steprouting.form.basicdetails}"
-				contentType="miniform" editable="false">
-				<section name="stepRoutingDetails" columns="type_2">
+				contentType="MINIFORM" editable="false">
+				<section name="stepRoutingDetails" columns="TYPE_2">
 					<field name="wfStepId"
 						inputWidget="application.entitysearch"
 						column="0" label="$m{workflow.steprouting.step}"
@@ -6195,8 +6195,8 @@
 			entity="workflow.wfStepUserAction">
 			<tab name="basicDetails"
 				label="$m{studio.workflow.stepuseraction.form.basicdetails}"
-				contentType="miniform" editable="false">
-				<section name="stepUserActionDetails" columns="type_2">
+				contentType="MINIFORM" editable="false">
+				<section name="stepUserActionDetails" columns="TYPE_2">
 					<field name="wfStepId"
 						inputWidget="application.entitysearch"
 						column="0" label="$m{workflow.stepuseraction.step}"
@@ -6230,8 +6230,8 @@
 			entity="workflow.wfStepAlert">
 			<tab name="basicDetails"
 				label="$m{studio.workflow.stepalert.form.basicdetails}"
-				contentType="miniform" editable="false">
-				<section name="stepAlertDetails" columns="type_2">
+				contentType="MINIFORM" editable="false">
+				<section name="stepAlertDetails" columns="TYPE_2">
 					<field name="wfStepId"
 						inputWidget="application.entitysearch"
 						column="0" label="$m{workflow.stepalert.step}"

@@ -6,8 +6,8 @@
 	<!-- Widget Types -->
 	<widgetTypes>
 		<widgetType name="endpointproviderlist"
-			description="$m{integration.widgettype.endpointproviderlist}" dataType="string"
-			inputType="string"
+			description="$m{integration.widgettype.endpointproviderlist}" dataType="STRING"
+			inputType="STRING"
 			editor="!ui-select list:endpointproviderlist listParams:$l{endpointType} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 	</widgetTypes>
@@ -16,7 +16,7 @@
 		<applet name="manageEndpointConfig"
 			description="$m{integration.endpointconfig.manage}"
 			label="$m{integration.endpointconfig.manage.label}" icon="network-wired"
-			type="manage_entitylist" entity="endpointConfig" menuAccess="true">
+			type="MANAGE_ENTITYLIST" entity="endpointConfig" menuAccess="true">
 			<property name="searchTable" value="endpointConfigTable" />
 			<property name="searchTable.new" value="true" />
 			<property name="searchTable.report" value="true" />
@@ -33,7 +33,7 @@
 		<applet name="manageEndpointPath"
 			description="$m{integration.endpointpath.manage}"
 			label="$m{integration.endpointpath.manage.label}" icon="network-wired"
-			type="manage_entitylist" entity="endpointPath" menuAccess="false">
+			type="MANAGE_ENTITYLIST" entity="endpointPath" menuAccess="false">
 			<property name="searchTable" value="endpointPathTable" />
 			<property name="searchTable.new" value="true" />
 			<property name="searchTable.report" value="false" />
@@ -62,18 +62,18 @@
 			type="com.flowcentraltech.flowcentral.integration.entities.EndpointConfig" auditable="true"
 			reportable="true">
 			<field name="endpointType" label="$m{integration.endpointconfig.endpointtype}"
-				type="enum_ref" references="endpointtypelist"
+				type="ENUM_REF" references="endpointtypelist"
 				inputWidget="application.enumlist" basicSearch="true" />
-			<field name="name" label="$m{integration.endpointconfig.name}" type="string"
+			<field name="name" label="$m{integration.endpointconfig.name}" type="STRING"
 				inputWidget="application.path" maxLen="64" basicSearch="true"/>
 			<field name="description" label="$m{integration.endpointconfig.description}"
-				type="string" inputWidget="application.text" maxLen="96" />
+				type="STRING" inputWidget="application.text" maxLen="96" />
 			<field name="endpoint" label="$m{integration.endpointconfig.endpointprovider}"
-				type="string" inputWidget="endpointproviderlist" maxLen="64"/>
+				type="STRING" inputWidget="endpointproviderlist" maxLen="64"/>
 			<field name="endpointTypeDesc" label="$m{integration.endpointconfig.endpointtypedesc}"
-				type="list_only" key="endpointType" property="description" />
+				type="LIST_ONLY" key="endpointType" property="description" />
 			<field name="pathList"
-				label="$m{integration.endpointconfig.paths}" type="child_list"
+				label="$m{integration.endpointconfig.paths}" type="CHILD_LIST"
 				references="endpointPathRef" />
 			<uniqueConstraint name="nameUc"
 				description="$m{integration.endpointconfig.uc.name}"
@@ -87,25 +87,25 @@
 			type="com.flowcentraltech.flowcentral.integration.entities.EndpointPath" auditable="true"
 			reportable="true">
 			<field name="endpointConfigId" label="$m{integration.endpointpath.endpointconfigid}"
-				inputLabel="$m{integration.endpointpath.endpointconfig}" type="ref"
+				inputLabel="$m{integration.endpointpath.endpointconfig}" type="REF"
 				references="endpointConfigRef" inputWidget="application.entitysearch" />
 			<field name="direction" label="$m{integration.endpointpath.direction}"
-				type="enum_ref" references="directiontypelist"
+				type="ENUM_REF" references="directiontypelist"
 				inputWidget="application.enumlist"/>
-			<field name="name" label="$m{integration.endpointpath.name}" type="string"
+			<field name="name" label="$m{integration.endpointpath.name}" type="STRING"
 				inputWidget="application.path" maxLen="64"/>
 			<field name="description" label="$m{integration.endpointpath.description}"
-				type="string" inputWidget="application.text" maxLen="96" />
+				type="STRING" inputWidget="application.text" maxLen="96" />
 			<field name="path" label="$m{integration.endpointpath.path}"
-				type="string" inputWidget="application.textarea" maxLen="128"/>
+				type="STRING" inputWidget="application.textarea" maxLen="128"/>
 			<field name="endpointType" label="$m{integration.endpointpath.endpointtype}"
-				type="list_only" key="endpointConfigId" property="endpointType" />
+				type="LIST_ONLY" key="endpointConfigId" property="endpointType" />
 			<field name="endpointConfigName" label="$m{integration.endpointpath.endpointconfigname}"
-				type="list_only" key="endpointConfigId" property="name" />
+				type="LIST_ONLY" key="endpointConfigId" property="name" />
 			<field name="endpointConfigDesc" label="$m{integration.endpointpath.endpointconfigdesc}"
-				type="list_only" key="endpointConfigId" property="description" />
+				type="LIST_ONLY" key="endpointConfigId" property="description" />
 			<field name="directionDesc" label="$m{integration.endpointpath.directiondesc}"
-				type="list_only" key="direction" property="description" />
+				type="LIST_ONLY" key="direction" property="description" />
 			<uniqueConstraint name="nameUc"
 				description="$m{integration.endpointpath.uc.name}"
 				fieldList="endpointConfigId,name" />
@@ -156,8 +156,8 @@
 		<form name="endpointConfigForm"
 			description="$m{integration.endpointconfig.form}" entity="endpointConfig">
 			<tab name="basicDetails"
-				label="$m{integration.endpointconfig.form.basicdetails}" contentType="miniform">
-				<section name="endpointConfigDetails" columns="type_2">
+				label="$m{integration.endpointconfig.form.basicdetails}" contentType="MINIFORM">
+				<section name="endpointConfigDetails" columns="TYPE_2">
 					<field name="name" column="0" required="true" />
 					<field name="description" column="0" required="true" />
 					<field name="endpointType" column="1" required="true" switchOnChange="true"/>
@@ -173,13 +173,13 @@
 				contentType="child_list" applet="manageEndpointPath"
 				reference="pathList" />
 			<tab name="changeLog" label="$m{application.form.audit}"
-				contentType="miniform_changelog" />
+				contentType="MINIFORM_CHANGELOG" />
 		</form>
 		<form name="endpointPathForm"
 			description="$m{integration.endpointpath.form}" entity="endpointPath">
 			<tab name="basicDetails"
-				label="$m{integration.endpointpath.form.basicdetails}" contentType="miniform">
-				<section name="endpointPathDetails" columns="type_2">
+				label="$m{integration.endpointpath.form.basicdetails}" contentType="MINIFORM">
+				<section name="endpointPathDetails" columns="TYPE_2">
 					<field name="name" column="0" required="true" />
 					<field name="description" column="0" required="true" />
 					<field name="direction" column="1" required="true"/>
@@ -187,7 +187,7 @@
 				</section>
 			</tab>
 			<tab name="changeLog" label="$m{application.form.audit}"
-				contentType="miniform_changelog" />
+				contentType="MINIFORM_CHANGELOG" />
 			<formStatePolicy type="ON_SWITCH"
 				name="onCreateFormStatePolicy"
 				description="$m{integration.endpointpath.form.statepolicy.onswitch}">

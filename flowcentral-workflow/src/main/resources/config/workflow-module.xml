@@ -24,10 +24,10 @@
 			editor="!ui-integer precision:2" type="number" editable="true" />
 		<sysParameter code="WF-0003" defaultVal="true"
 			description="$m{workflow.sysparam.enableupdateonreview}"
-			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
+			editor="!ui-select list:booleanlist" type="BOOLEAN" editable="true" />
 		<sysParameter code="WF-0004" defaultVal="true"
 			description="$m{workflow.sysparam.enableautoloading}"
-			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
+			editor="!ui-select list:booleanlist" type="BOOLEAN" editable="true" />
 		<sysParameter code="WF-0005" defaultVal="64"
 			description="$m{workflow.sysparam.itemalertbatchsize}"
 			editor="!ui-integer precision:2" type="number" editable="true" />
