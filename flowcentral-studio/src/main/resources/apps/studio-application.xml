@@ -1,6 +1,8 @@
 <?xml version="1.0"?>
 <!-- Studio application -->
-<application name="studio"
+<application xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="file:///C:/Users/Lateef Ojulari/git/flowcentral/flowcentral-application/src/main/resources/flowcentral-application.xsd"
+	name="studio"
 	description="$m{studio.application.short.description}"
 	label="$m{studio.application.mainlabel}" module="studio"
 	displayIndex="1000">
@@ -573,11 +575,11 @@
 			renderer="!ui-label" />
 		<widgetType name="propertyappletintegerdimension"
 			description="$m{studio.widgettype.propertyappletintegerdimension}"
-			dataType="integer" inputType="integer"
+			dataType="INTEGER" inputType="INTEGER"
 			editor="!ui-integer precision:4" renderer="!ui-label" />
 		<widgetType name="propertyappletsingledigit"
 			description="$m{studio.widgettype.propertyappletsingledigit}"
-			dataType="integer" inputType="integer"
+			dataType="INTEGER" inputType="INTEGER"
 			editor="!ui-integer precision:1" renderer="!ui-label" />
 	</widgetTypes>
 	<!-- Applets -->
@@ -585,43 +587,43 @@
 		<applet name="launchStudio"
 			description="$m{studio.application.launch}"
 			label="$m{studio.application.launch.label}" icon="rocket"
-			type="path_window" path="/applicationstudio" menuAccess="true">
+			type="PATH_WINDOW" path="/applicationstudio" menuAccess="true">
 		</applet>
 		<applet name="delegateCreateSynchronization"
 			description="$m{studio.delegatecreatesynchronization.manage}"
 			label="$m{studio.delegatecreatesynchronization.manage.label}"
-			icon="lock" type="path_page"
+			icon="lock" type="PATH_PAGE"
 			path="/studio/delegatecreatesynchronization/openPage"
 			menuAccess="false">
 		</applet>
 		<applet name="delegateSynchronization"
 			description="$m{studio.delegateupdatesynchronization.manage}"
 			label="$m{studio.delegateupdatesynchronization.manage.label}"
-			icon="lock" type="path_page"
+			icon="lock" type="PATH_PAGE"
 			path="/studio/delegateupdatesynchronization/openPage"
 			menuAccess="false">
 		</applet>
 		<applet name="takeSnapshot"
 			description="$m{studio.takesnapshotpage.manage}"
 			label="$m{studio.takesnapshotpage.manage.label}" icon="lock"
-			type="path_page"
+			type="PATH_PAGE"
 			path="/studio/takesnapshot/openPage" menuAccess="false">
 		</applet>
 		<applet name="uploadSnapshot"
 			description="$m{studio.uploadsnapshotpage.manage}"
 			label="$m{studio.uploadsnapshotpage.manage.label}" icon="lock"
-			type="path_page"
+			type="PATH_PAGE"
 			path="/studio/uploadsnapshot/openPage" menuAccess="false">
 		</applet>
 		<applet name="snapshots"
 			description="$m{studio.snapshotspage.manage}"
 			label="$m{studio.snapshotspage.manage.label}" icon="lock"
-			type="path_page"
+			type="PATH_PAGE"
 			path="/studio/snapshots/openPage" menuAccess="false">
 		</applet>
 		<applet name="createJsonEntity"
 			description="$m{studio.jsonentity.manage}"
-			label="$m{studio.jsonentity.manage.label}" type="form_wizard"
+			label="$m{studio.jsonentity.manage.label}" type="FORM_WIZARD"
 			entity="studio.studioJsonEntity" menuAccess="false">
 			<property name="createForm" value="studioJsonEntityForm" />
 			<property name="createForm.navigation.policy"
@@ -632,7 +634,7 @@
 		</applet>
 		<applet name="createCsvEntity"
 			description="$m{studio.csventity.manage}"
-			label="$m{studio.csventity.manage.label}" type="form_wizard"
+			label="$m{studio.csventity.manage.label}" type="FORM_WIZARD"
 			entity="studio.studioJsonEntity" menuAccess="false">
 			<property name="createForm" value="studioCsvEntityForm" />
 			<property name="createForm.navigation.policy"
@@ -662,7 +664,7 @@
 				value="moduleEditable" />
 			<filter name="moduleEditable"
 				description="$m{system.module.filter.editable}">
-				<restriction type="not_amongst" field="shortCode"
+				<restriction type="NOT_AMONGST" field="shortCode"
 					paramA="SYS|SEC|ORG|APP|RPT|CHT|NOT|DSH|WRK|INT|STU|WKS|CLB|CDN" />
 			</filter>
 		</applet>
@@ -690,14 +692,14 @@
 				value="studioondeleteapplication-policy" />
 			<filter name="appEditable"
 				description="$m{studio.application.filter.editable}">
-				<restriction type="equals" field="developable"
+				<restriction type="EQUALS" field="developable"
 					paramA="Y" />
 			</filter>
 		</applet>
 		<applet name="applicationReplication"
 			description="$m{studio.applicationreplication.manage}"
 			label="$m{studio.applicationreplication.label}" icon="desktop"
-			type="path_page" path="/studio/applicationreplication/openPage"
+			type="PATH_PAGE" path="/studio/applicationreplication/openPage"
 			menuAccess="false" allowSecondaryTenants="false">
 		</applet>
 		<applet name="manageAppEnumerationItem"
@@ -753,67 +755,67 @@
 			<property name="quickEdit.width" value="1124" />
 			<filter name="appEntityFieldEditable"
 				description="$m{application.appentityfield.filter.editable}">
-				<restriction type="not_equals" field="type" paramA="STC" />
+				<restriction type="NOT_EQUALS" field="type" paramA="STC" />
 			</filter>
 			<filter name="appEntityFieldDeletable"
 				description="$m{application.appentityfield.filter.deletable}">
-				<restriction type="equals" field="type" paramA="CST" />
+				<restriction type="EQUALS" field="type" paramA="CST" />
 			</filter>
 			<filter name="baseFieldFilter"
 				description="$m{studio.appentityfield.quickfilter.basefields}"
 				quickFilter="true">
-				<restriction type="equals" field="type" paramA="BSE" />
+				<restriction type="EQUALS" field="type" paramA="BSE" />
 			</filter>
 			<filter name="staticFieldFilter"
 				description="$m{studio.appentityfield.quickfilter.staticfields}"
 				quickFilter="true">
-				<restriction type="equals" field="type" paramA="STC" />
+				<restriction type="EQUALS" field="type" paramA="STC" />
 			</filter>
 			<filter name="customFieldFilter"
 				description="$m{studio.appentityfield.quickfilter.customfields}"
 				quickFilter="true">
-				<restriction type="equals" field="type" paramA="CST" />
+				<restriction type="EQUALS" field="type" paramA="CST" />
 			</filter>
 			<filter name="customFieldRefFilter"
 				description="$m{studio.appentityfield.quickfilter.customfields.ref}"
 				quickFilter="true">
-				<restriction type="and">
-					<restriction type="equals" field="type" paramA="CST" />
-					<restriction type="amongst" field="dataType"
+				<restriction type="AND">
+					<restriction type="EQUALS" field="type" paramA="CST" />
+					<restriction type="AMONGST" field="dataType"
 						paramA="RF|ER|UR|CU" />
 				</restriction>
 			</filter>
 			<filter name="customFieldDataFilter"
 				description="$m{studio.appentityfield.quickfilter.customfields.data}"
 				quickFilter="true">
-				<restriction type="and">
-					<restriction type="equals" field="type" paramA="CST" />
-					<restriction type="not_amongst" field="dataType"
+				<restriction type="AND">
+					<restriction type="EQUALS" field="type" paramA="CST" />
+					<restriction type="NOT_AMONGST" field="dataType"
 						paramA="RF|ER|UR|CU|LO|CD|CL" />
 				</restriction>
 			</filter>
 			<filter name="customFieldListFilter"
 				description="$m{studio.appentityfield.quickfilter.customfields.listonly}"
 				quickFilter="true">
-				<restriction type="and">
-					<restriction type="equals" field="type" paramA="CST" />
-					<restriction type="equals" field="dataType" paramA="LO" />
+				<restriction type="AND">
+					<restriction type="EQUALS" field="type" paramA="CST" />
+					<restriction type="EQUALS" field="dataType" paramA="LO" />
 				</restriction>
 			</filter>
 			<filter name="customFieldChildFilter"
 				description="$m{studio.appentityfield.quickfilter.customfields.child}"
 				quickFilter="true">
-				<restriction type="and">
-					<restriction type="equals" field="type" paramA="CST" />
-					<restriction type="equals" field="dataType" paramA="CD" />
+				<restriction type="AND">
+					<restriction type="EQUALS" field="type" paramA="CST" />
+					<restriction type="EQUALS" field="dataType" paramA="CD" />
 				</restriction>
 			</filter>
 			<filter name="customFieldChildListFilter"
 				description="$m{studio.appentityfield.quickfilter.customfields.childlist}"
 				quickFilter="true">
-				<restriction type="and">
-					<restriction type="equals" field="type" paramA="CST" />
-					<restriction type="equals" field="dataType" paramA="CL" />
+				<restriction type="AND">
+					<restriction type="EQUALS" field="type" paramA="CST" />
+					<restriction type="EQUALS" field="dataType" paramA="CL" />
 				</restriction>
 			</filter>
 		</applet>
@@ -960,7 +962,7 @@
 		<applet name="manageAppAppletProp"
 			description="$m{studio.appappletprop.manage}"
 			label="$m{studio.appappletprop.manage.label}"
-			type="manage_propertylist" entity="application.appAppletProp"
+			type="MANAGE_PROPERTYLIST" entity="application.appAppletProp"
 			menuAccess="false">
 			<property name="propertyList.rule" value="appAppletPropRule" />
 			<property name="propertyList.update" value="true" />
@@ -1602,7 +1604,7 @@
 				inputWidget="application.entitylist"
 				references="studioSnapshotDetailsRef" basicSearch="true" />
 			<field name="snapshot" label="$m{studio.snapshot.snapshot}"
-				type="blob" />
+				type="BLOB" />
 		</entity>
 		<entity name="studioRestoreDetails"
 			description="$m{studio.restoredetails}"
@@ -2419,14 +2421,14 @@
 			</tab>
 			<tab name="changeLog" label="$m{application.form.audit}"
 				contentType="MINIFORM_CHANGELOG" />
-			<formStatePolicy type="on_switch" name="onNewPolicy"
+			<formStatePolicy type="ON_SWITCH" name="onNewPolicy"
 				description="$m{studio.common.form.formstatepolicy.onstatic}">
 				<onCondition>
-					<restriction type="is_null" field="id" />
+					<restriction type="IS_NULL" field="id" />
 				</onCondition>
 				<setStates>
-					<setState type="field" target="name,shortCode"
-						editable="true" />
+					<setState type="FIELD" target="name,shortCode"
+						editable="TRUE" />
 				</setStates>
 			</formStatePolicy>
 		</form>
@@ -2454,27 +2456,27 @@
 				</section>
 			</tab>
 			<tab name="usages" label="$m{studio.application.form.usages}"
-				contentType="usage_list"
+				contentType="USAGE_LIST"
 				reference="application-usagelistprovider" />
 			<tab name="changeLog" label="$m{application.form.audit}"
 				contentType="MINIFORM_CHANGELOG" />
-			<formStatePolicy type="on_switch" name="onNewPolicy"
+			<formStatePolicy type="ON_SWITCH" name="onNewPolicy"
 				description="$m{studio.common.form.formstatepolicy.onstatic}">
 				<onCondition>
-					<restriction type="is_null" field="id" />
+					<restriction type="IS_NULL" field="id" />
 				</onCondition>
 				<setStates>
-					<setState type="field" target="name" editable="true" />
+					<setState type="FIELD" target="name" editable="TRUE" />
 				</setStates>
 			</formStatePolicy>
-			<formStatePolicy type="on_switch"
+			<formStatePolicy type="ON_SWITCH"
 				name="onDevelopable" description="Developable">
 				<onCondition>
-					<restriction type="equals" field="developable"
+					<restriction type="EQUALS" field="developable"
 						paramA="true" />
 				</onCondition>
 				<setStates>
-					<setState type="field" target="menuAccess" editable="true" />
+					<setState type="FIELD" target="menuAccess" editable="TRUE" />
 				</setStates>
 			</formStatePolicy>
 		</form>
@@ -2602,19 +2604,19 @@
 		<form name="appAppletForm"
 			description="$m{studio.appapplet.form}"
 			entity="application.appApplet">
-			<action type="button" name="lockResource" symbol="lock"
+			<annotation name="staticAnnotation"
+				description="$m{studio.common.form.annotation.static}"
+				message="$m{studio.common.form.annotation.static.message}" />
+			<action type="BUTTON" name="lockResource" symbol="lock"
 				styleClass="fc-actbutton"
 				description="$m{studio.common.form.action.lockresource}"
 				label="$m{studio.common.form.action.lockresource.label}"
 				policy="lockresource-actionpolicy" showOnMaintain="true" />
-			<action type="button" name="unlockResource" symbol="unlock"
+			<action type="BUTTON" name="unlockResource" symbol="unlock"
 				styleClass="fc-actbutton"
 				description="$m{studio.common.form.action.unlockresource}"
 				label="$m{studio.common.form.action.unlockresource.label}"
 				policy="unlockresource-actionpolicy" showOnMaintain="true" />
-			<annotation name="staticAnnotation"
-				description="$m{studio.common.form.annotation.static}"
-				message="$m{studio.common.form.annotation.static.message}" />
 			<tab name="basicDetails"
 				label="$m{studio.appapplet.form.basicdetails}" editable="false"
 				contentType="MINIFORM">
@@ -2672,32 +2674,144 @@
 			</tab>
 			<tab name="properties"
 				label="$m{studio.appapplet.form.properties}"
-				contentType="property_list" applet="manageAppAppletProp"
+				contentType="PROPERTY_LIST" applet="manageAppAppletProp"
 				reference="propList" />
 			<tab name="routeToApplets"
 				label="$m{studio.appapplet.form.routetoapplets}"
-				contentType="child_list" applet="manageAppAppletRouteToApplet"
+				contentType="CHILD_LIST" applet="manageAppAppletRouteToApplet"
 				reference="routeToAppletList" visible="false" />
 			<tab name="filters" label="$m{studio.appapplet.form.filters}"
-				contentType="child_list" applet="manageAppAppletFilter"
+				contentType="CHILD_LIST" applet="manageAppAppletFilter"
 				reference="filterList" />
 			<tab name="setValues" label="$m{studio.appapplet.form.setvalues}"
-				contentType="child_list" applet="manageAppAppletSetValues"
+				contentType="CHILD_LIST" applet="manageAppAppletSetValues"
 				reference="setValuesList" />
 			<tab name="alerts" label="$m{studio.appapplet.form.alerts}"
-				contentType="child_list" applet="manageAppAppletAlert"
+				contentType="CHILD_LIST" applet="manageAppAppletAlert"
 				reference="alertList" />
 			<tab name="changeLog" label="$m{application.form.audit}"
 				contentType="MINIFORM_CHANGELOG" />
+			<formStatePolicy type="ON_SWITCH"
+				name="onStaticPolicy"
+				description="$m{studio.common.form.formstatepolicy.onstatic}">
+				<onCondition>
+					<restriction type="AND">
+						<restriction type="IS_NOT_NULL" field="id" />
+						<restriction type="EQUALS" field="configType"
+							paramA="S" />
+					</restriction>
+				</onCondition>
+				<setStates>
+					<setState type="ANNOTATION" target="staticAnnotation"
+						visible="TRUE" />
+				</setStates>
+			</formStatePolicy>
+			<formStatePolicy type="ON_SWITCH"
+				name="immutableFormPolicy"
+				description="$m{studio.common.form.formstatepolicy.immutable}">
+				<onCondition>
+					<restriction type="AND">
+						<restriction type="IS_NOT_NULL" field="id" />
+						<restriction type="NOT_EQUALS" field="configType"
+							paramA="C" />
+					</restriction>
+				</onCondition>
+				<setStates>
+					<setState type="FIELD"
+						target="name,description,entity,type,label,baseField,assignField,assignDescField,pseudoDeleteField"
+						disabled="TRUE" />
+				</setStates>
+			</formStatePolicy>
+			<formStatePolicy type="ON_SWITCH"
+				name="mutableFormPolicy"
+				description="$m{studio.common.form.formstatepolicy.mutable}">
+				<onCondition>
+					<restriction type="AND">
+						<restriction type="IS_NOT_NULL" field="id" />
+						<restriction type="EQUALS" field="configType"
+							paramA="C" />
+					</restriction>
+				</onCondition>
+				<setStates>
+					<setState type="TAB" target="basicDetails" editable="TRUE" />
+					<setState type="FIELD"
+						target="name,description,entity,type,baseField,assignField"
+						editable="FALSE" />
+				</setStates>
+			</formStatePolicy>
+			<formStatePolicy type="ON_SWITCH"
+				name="onCreatePolicy"
+				description="$m{studio.appapplet.form.formstatepolicy.oncreate}">
+				<onCondition>
+					<restriction type="IS_NULL" field="id" />
+				</onCondition>
+				<setStates>
+					<setState type="TAB" target="basicDetails" editable="TRUE" />
+					<setState type="FIELD" target="type" disabled="FALSE" />
+				</setStates>
+			</formStatePolicy>
+			<formStatePolicy type="ON_SWITCH" name="entityPolicy"
+				description="$m{studio.appapplet.form.formstatepolicy.entity}">
+				<onCondition>
+					<restriction type="AMONGST" field="type"
+						paramA="MEL|MEA|MEB|MLS|MLL|FWZ|CEN|CNS|DIM" />
+				</onCondition>
+				<setStates>
+					<setState type="FIELD" target="entity" visible="TRUE" />
+				</setStates>
+			</formStatePolicy>
+			<formStatePolicy type="ON_SWITCH"
+				name="entityAssignPolicy"
+				description="$m{studio.appapplet.form.formstatepolicy.entityassign}">
+				<onCondition>
+					<restriction type="EQUALS" field="type" paramA="MEA" />
+				</onCondition>
+				<setStates>
+					<setState type="FIELD"
+						target="baseField,assignField,assignDescField,pseudoDeleteField"
+						visible="TRUE" />
+				</setStates>
+			</formStatePolicy>
+			<formStatePolicy type="ON_SWITCH" name="facadePolicy"
+				description="$m{studio.appapplet.form.formstatepolicy.facade}">
+				<onCondition>
+					<restriction type="EQUALS" field="type" paramA="FAC" />
+				</onCondition>
+				<setStates>
+					<setState type="FIELD" target="routeToApplet"
+						visible="TRUE" />
+				</setStates>
+			</formStatePolicy>
+			<formStatePolicy type="ON_SWITCH"
+				name="multiFacadePolicy"
+				description="$m{studio.appapplet.form.formstatepolicy.multifacade}">
+				<onCondition>
+					<restriction type="EQUALS" field="type" paramA="FCM" />
+				</onCondition>
+				<setStates>
+					<setState type="TAB" target="routeToApplets"
+						visible="TRUE" />
+				</setStates>
+			</formStatePolicy>
+			<formStatePolicy type="ON_SWITCH" name="pathPolicy"
+				description="$m{studio.appapplet.form.formstatepolicy.path}">
+				<onCondition>
+					<restriction type="AMONGST" field="type"
+						paramA="PPG|PWN" />
+				</onCondition>
+				<setStates>
+					<setState type="FIELD" target="path" visible="TRUE" />
+				</setStates>
+			</formStatePolicy>
 			<formValidationPolicy
 				name="entityValidationPolicy"
 				description="$m{studio.appapplet.form.formvalidationpolicy.entity}"
 				message="$m{studio.appapplet.form.formvalidationpolicy.entity.message}">
 				<errorCondition>
-					<restriction type="and">
-						<restriction type="amongst" field="type"
+					<restriction type="AND">
+						<restriction type="AMONGST" field="type"
 							paramA="MEL|MEA|MEB|MLS|MLL|FWZ|CEN|CNS|DIM" />
-						<restriction type="is_null" field="entity" />
+						<restriction type="IS_NULL" field="entity" />
 					</restriction>
 				</errorCondition>
 			</formValidationPolicy>
@@ -2706,125 +2820,13 @@
 				description="$m{studio.appapplet.form.formvalidationpolicy.path}"
 				message="$m{studio.appapplet.form.formvalidationpolicy.path.message}">
 				<errorCondition>
-					<restriction type="and">
-						<restriction type="amongst" field="type"
+					<restriction type="AND">
+						<restriction type="AMONGST" field="type"
 							paramA="PPG|PWN" />
-						<restriction type="is_null" field="path" />
+						<restriction type="IS_NULL" field="path" />
 					</restriction>
 				</errorCondition>
 			</formValidationPolicy>
-			<formStatePolicy type="on_switch"
-				name="onStaticPolicy"
-				description="$m{studio.common.form.formstatepolicy.onstatic}">
-				<onCondition>
-					<restriction type="and">
-						<restriction type="is_not_null" field="id" />
-						<restriction type="equals" field="configType"
-							paramA="S" />
-					</restriction>
-				</onCondition>
-				<setStates>
-					<setState type="annotation" target="staticAnnotation"
-						visible="true" />
-				</setStates>
-			</formStatePolicy>
-			<formStatePolicy type="on_switch"
-				name="immutableFormPolicy"
-				description="$m{studio.common.form.formstatepolicy.immutable}">
-				<onCondition>
-					<restriction type="and">
-						<restriction type="is_not_null" field="id" />
-						<restriction type="not_equals" field="configType"
-							paramA="C" />
-					</restriction>
-				</onCondition>
-				<setStates>
-					<setState type="field"
-						target="name,description,entity,type,label,baseField,assignField,assignDescField,pseudoDeleteField"
-						disabled="true" />
-				</setStates>
-			</formStatePolicy>
-			<formStatePolicy type="on_switch"
-				name="mutableFormPolicy"
-				description="$m{studio.common.form.formstatepolicy.mutable}">
-				<onCondition>
-					<restriction type="and">
-						<restriction type="is_not_null" field="id" />
-						<restriction type="equals" field="configType"
-							paramA="C" />
-					</restriction>
-				</onCondition>
-				<setStates>
-					<setState type="tab" target="basicDetails" editable="true" />
-					<setState type="field"
-						target="name,description,entity,type,baseField,assignField"
-						editable="false" />
-				</setStates>
-			</formStatePolicy>
-			<formStatePolicy type="on_switch"
-				name="onCreatePolicy"
-				description="$m{studio.appapplet.form.formstatepolicy.oncreate}">
-				<onCondition>
-					<restriction type="is_null" field="id" />
-				</onCondition>
-				<setStates>
-					<setState type="tab" target="basicDetails" editable="true" />
-					<setState type="field" target="type" disabled="false" />
-				</setStates>
-			</formStatePolicy>
-			<formStatePolicy type="on_switch" name="entityPolicy"
-				description="$m{studio.appapplet.form.formstatepolicy.entity}">
-				<onCondition>
-					<restriction type="amongst" field="type"
-						paramA="MEL|MEA|MEB|MLS|MLL|FWZ|CEN|CNS|DIM" />
-				</onCondition>
-				<setStates>
-					<setState type="field" target="entity" visible="true" />
-				</setStates>
-			</formStatePolicy>
-			<formStatePolicy type="on_switch"
-				name="entityAssignPolicy"
-				description="$m{studio.appapplet.form.formstatepolicy.entityassign}">
-				<onCondition>
-					<restriction type="equals" field="type" paramA="MEA" />
-				</onCondition>
-				<setStates>
-					<setState type="field"
-						target="baseField,assignField,assignDescField,pseudoDeleteField"
-						visible="true" />
-				</setStates>
-			</formStatePolicy>
-			<formStatePolicy type="on_switch" name="facadePolicy"
-				description="$m{studio.appapplet.form.formstatepolicy.facade}">
-				<onCondition>
-					<restriction type="equals" field="type" paramA="FAC" />
-				</onCondition>
-				<setStates>
-					<setState type="field" target="routeToApplet"
-						visible="true" />
-				</setStates>
-			</formStatePolicy>
-			<formStatePolicy type="on_switch"
-				name="multiFacadePolicy"
-				description="$m{studio.appapplet.form.formstatepolicy.multifacade}">
-				<onCondition>
-					<restriction type="equals" field="type" paramA="FCM" />
-				</onCondition>
-				<setStates>
-					<setState type="tab" target="routeToApplets"
-						visible="true" />
-				</setStates>
-			</formStatePolicy>
-			<formStatePolicy type="on_switch" name="pathPolicy"
-				description="$m{studio.appapplet.form.formstatepolicy.path}">
-				<onCondition>
-					<restriction type="amongst" field="type"
-						paramA="PPG|PWN" />
-				</onCondition>
-				<setStates>
-					<setState type="field" target="path" visible="true" />
-				</setStates>
-			</formStatePolicy>
 		</form>
 		<form name="appAppletRouteToAppletForm"
 			description="$m{studio.appappletroutetoapplet.form}"
@@ -2877,19 +2879,19 @@
 			</tab>
 			<tab name="condition"
 				label="$m{studio.appappletfilter.form.condition}"
-				reference="app_applet" contentType="filter_condition" />
+				reference="app_applet" contentType="FILTER_CONDITION" />
 			<tab name="changeLog" label="$m{application.form.audit}"
 				contentType="MINIFORM_CHANGELOG" />
-			<formStatePolicy type="on_switch"
+			<formStatePolicy type="ON_SWITCH"
 				name="childListActionPolicy"
 				description="$m{studio.appapplet.form.formstatepolicy.childlistaction}">
 				<onCondition>
-					<restriction type="is_not_null"
+					<restriction type="IS_NOT_NULL"
 						field="preferredChildListApplet" />
 				</onCondition>
 				<setStates>
-					<setState type="field" target="childListActionType"
-						visible="true" />
+					<setState type="FIELD" target="childListActionType"
+						visible="TRUE" />
 				</setStates>
 			</formStatePolicy>
 		</form>
@@ -2911,7 +2913,7 @@
 			</tab>
 			<tab name="setValues"
 				label="$m{studio.appappletsetvalues.form.setvalues}"
-				reference="app_applet" contentType="set_values" />
+				reference="app_applet" contentType="SET_VALUES" />
 			<tab name="changeLog" label="$m{application.form.audit}"
 				contentType="MINIFORM_CHANGELOG" />
 		</form>
@@ -2949,19 +2951,19 @@
 			consolidatedReview="studioentity-consolidatedformreview"
 			description="$m{studio.appentity.form}"
 			entity="application.appEntity">
-			<action type="button" name="lockResource" symbol="lock"
+			<annotation name="staticAnnotation"
+				description="$m{studio.common.form.annotation.static}"
+				message="$m{studio.common.form.annotation.static.message}" />
+			<action type="BUTTON" name="lockResource" symbol="lock"
 				styleClass="fc-actbutton"
 				description="$m{studio.common.form.action.lockresource}"
 				label="$m{studio.common.form.action.lockresource.label}"
 				policy="lockresource-actionpolicy" showOnMaintain="true" />
-			<action type="button" name="unlockResource" symbol="unlock"
+			<action type="BUTTON" name="unlockResource" symbol="unlock"
 				styleClass="fc-actbutton"
 				description="$m{studio.common.form.action.unlockresource}"
 				label="$m{studio.common.form.action.unlockresource.label}"
 				policy="unlockresource-actionpolicy" showOnMaintain="true" />
-			<annotation name="staticAnnotation"
-				description="$m{studio.common.form.annotation.static}"
-				message="$m{studio.common.form.annotation.static.message}" />
 			<tab name="basicDetails"
 				label="$m{studio.appentity.form.basicdetails}" editable="false"
 				contentType="MINIFORM">
@@ -3002,7 +3004,7 @@
 					<field name="dataSourceName" inputWidget="application.text"
 						column="1" required="true" visible="false" />
 				</section>
-				<section name="optionDetails" columns="type_1_2">
+				<section name="optionDetails" columns="TYPE_1_2">
 					<field name="auditable" inputWidget="application.checkbox"
 						column="1" />
 					<field name="reportable" inputWidget="application.checkbox"
@@ -3016,154 +3018,154 @@
 				</section>
 			</tab>
 			<tab name="fields" label="$m{studio.appentity.form.fields}"
-				contentType="child_list" applet="manageAppEntityField"
+				contentType="CHILD_LIST" applet="manageAppEntityField"
 				reference="fieldList" quickEdit="true" />
 			<tab name="expressions"
 				label="$m{studio.appentity.form.expressions}"
-				contentType="child_list" applet="manageAppEntityExpression"
+				contentType="CHILD_LIST" applet="manageAppEntityExpression"
 				reference="expressionList" />
 			<tab name="attachments"
 				label="$m{studio.appentity.form.attachments}"
-				contentType="child_list" applet="manageAppEntityAttachment"
+				contentType="CHILD_LIST" applet="manageAppEntityAttachment"
 				reference="attachmentList" visible="false" />
 			<tab name="uniqueConstraints"
 				label="$m{studio.appentity.form.uniqueconstraints}"
-				contentType="child_list"
+				contentType="CHILD_LIST"
 				applet="manageAppEntityUniqueConstraint"
 				reference="uniqueConstraintList" />
 			<tab name="indexes" label="$m{studio.appentity.form.indexes}"
-				contentType="child_list" applet="manageAppEntityIndex"
+				contentType="CHILD_LIST" applet="manageAppEntityIndex"
 				reference="indexList" />
 			<tab name="uploads" label="$m{studio.appentity.form.uploads}"
-				contentType="child_list" applet="manageAppEntityUpload"
+				contentType="CHILD_LIST" applet="manageAppEntityUpload"
 				reference="uploadList" />
 			<tab name="searchInputs"
 				label="$m{studio.appentity.form.searchinputs}"
-				contentType="child_list" applet="manageAppEntitySearchInput"
+				contentType="CHILD_LIST" applet="manageAppEntitySearchInput"
 				reference="searchInputList" />
 			<tab name="series" label="$m{studio.appentity.form.series}"
-				contentType="child_list" applet="manageAppEntitySeries"
+				contentType="CHILD_LIST" applet="manageAppEntitySeries"
 				reference="seriesList" />
 			<tab name="categories"
 				label="$m{studio.appentity.form.categories}"
-				contentType="child_list" applet="manageAppEntityCategory"
+				contentType="CHILD_LIST" applet="manageAppEntityCategory"
 				reference="categoryList" />
 			<tab name="usages" label="$m{studio.appentity.form.usages}"
-				contentType="usage_list" reference="entity-usagelistprovider" />
+				contentType="USAGE_LIST" reference="entity-usagelistprovider" />
 			<tab name="changeLog" label="$m{application.form.audit}"
 				contentType="MINIFORM_CHANGELOG" />
-			<formStatePolicy type="on_switch"
+			<formStatePolicy type="ON_SWITCH"
 				name="onCreatePolicy"
 				description="$m{studio.appentity.form.formstatepolicy.oncreate}">
 				<onCondition>
-					<restriction type="is_null" field="id" />
+					<restriction type="IS_NULL" field="id" />
 				</onCondition>
-				<setStates>
-					<setState type="tab" target="basicDetails" editable="true" />
-					<setState type="field" target="baseType" disabled="false" />
-				</setStates>
 				<setValues>
-					<setValue type="generator" field="entityClass"
+					<setValue type="GENERATOR" field="entityClass"
 						value="studioentityclassname-generator" />
 				</setValues>
+				<setStates>
+					<setState type="TAB" target="basicDetails" editable="TRUE" />
+					<setState type="FIELD" target="baseType" disabled="FALSE" />
+				</setStates>
 			</formStatePolicy>
-			<formStatePolicy type="on_switch"
+			<formStatePolicy type="ON_SWITCH"
 				name="onCreateTableNamePolicy"
 				description="$m{studio.appentity.form.formstatepolicy.oncreatetablename}">
 				<onCondition>
-					<restriction type="and">
-						<restriction type="is_null" field="id" />
-						<restriction type="is_null" field="tableName" />
+					<restriction type="AND">
+						<restriction type="IS_NULL" field="id" />
+						<restriction type="IS_NULL" field="tableName" />
 					</restriction>
 				</onCondition>
 				<setValues>
-					<setValue type="generator" field="tableName"
+					<setValue type="GENERATOR" field="tableName"
 						value="studioentitytablename-generator" />
 				</setValues>
 			</formStatePolicy>
-			<formStatePolicy type="on_switch"
+			<formStatePolicy type="ON_SWITCH"
 				name="onStaticPolicy"
 				description="$m{studio.common.form.formstatepolicy.onstatic}">
 				<onCondition>
-					<restriction type="and">
-						<restriction type="is_not_null" field="id" />
-						<restriction type="equals" field="configType"
+					<restriction type="AND">
+						<restriction type="IS_NOT_NULL" field="id" />
+						<restriction type="EQUALS" field="configType"
 							paramA="S" />
 					</restriction>
 				</onCondition>
 				<setStates>
-					<setState type="annotation" target="staticAnnotation"
-						visible="true" />
+					<setState type="ANNOTATION" target="staticAnnotation"
+						visible="TRUE" />
 				</setStates>
 			</formStatePolicy>
-			<formStatePolicy type="on_switch"
+			<formStatePolicy type="ON_SWITCH"
 				name="immutableFormPolicy"
 				description="$m{studio.common.form.formstatepolicy.immutable}">
 				<onCondition>
-					<restriction type="and">
-						<restriction type="is_not_null" field="id" />
-						<restriction type="not_equals" field="configType"
+					<restriction type="AND">
+						<restriction type="IS_NOT_NULL" field="id" />
+						<restriction type="NOT_EQUALS" field="configType"
 							paramA="C" />
 					</restriction>
 				</onCondition>
 				<setStates>
-					<setState type="field"
+					<setState type="FIELD"
 						target="name,description,label,entityClass,tableName,baseType"
-						disabled="true" />
+						disabled="TRUE" />
 				</setStates>
 			</formStatePolicy>
-			<formStatePolicy type="on_switch"
+			<formStatePolicy type="ON_SWITCH"
 				name="mutableFormPolicy"
 				description="$m{studio.common.form.formstatepolicy.mutable}">
 				<onCondition>
-					<restriction type="and">
-						<restriction type="is_not_null" field="id" />
-						<restriction type="equals" field="configType"
+					<restriction type="AND">
+						<restriction type="IS_NOT_NULL" field="id" />
+						<restriction type="EQUALS" field="configType"
 							paramA="C" />
 					</restriction>
 				</onCondition>
 				<setStates>
-					<setState type="tab" target="basicDetails" editable="true" />
-					<setState type="field" target="baseType" disabled="false" />
-					<setState type="field"
-						target="name,description,entityClass" disabled="true" />
+					<setState type="TAB" target="basicDetails" editable="TRUE" />
+					<setState type="FIELD" target="baseType" disabled="FALSE" />
+					<setState type="FIELD"
+						target="name,description,entityClass" disabled="TRUE" />
 				</setStates>
 			</formStatePolicy>
-			<formStatePolicy type="on_switch"
+			<formStatePolicy type="ON_SWITCH"
 				name="tableNameMutablePolicy"
 				description="$m{studio.common.form.formstatepolicy.tablenamemutable}">
 				<onCondition>
-					<restriction type="and">
-						<restriction type="is_not_null" field="id" />
-						<restriction type="is_null" field="delegate" />
-						<restriction type="equals" field="configType"
+					<restriction type="AND">
+						<restriction type="IS_NOT_NULL" field="id" />
+						<restriction type="IS_NULL" field="delegate" />
+						<restriction type="EQUALS" field="configType"
 							paramA="C" />
 					</restriction>
 				</onCondition>
 				<setStates>
-					<setState type="field" target="tableName" disabled="true" />
+					<setState type="FIELD" target="tableName" disabled="TRUE" />
 				</setStates>
 			</formStatePolicy>
-			<formStatePolicy type="on_switch"
+			<formStatePolicy type="ON_SWITCH"
 				name="dataSourceVisiblePolicy"
 				description="$m{studio.common.form.formstatepolicy.datasourcevisible}">
 				<onCondition>
-					<restriction type="is_not_null" field="delegate" />
+					<restriction type="IS_NOT_NULL" field="delegate" />
 				</onCondition>
 				<setStates>
-					<setState type="field" target="dataSourceName"
-						visible="true" />
+					<setState type="FIELD" target="dataSourceName"
+						visible="TRUE" />
 				</setStates>
 			</formStatePolicy>
-			<formStatePolicy type="on_switch"
+			<formStatePolicy type="ON_SWITCH"
 				name="attachmentPolicy"
 				description="$m{studio.appentity.form.formstatepolicy.attachment}">
 				<onCondition>
-					<restriction type="amongst" field="baseType"
+					<restriction type="AMONGST" field="baseType"
 						paramA="WKE|SWK|WKET|SWKT" />
 				</onCondition>
 				<setStates>
-					<setState type="tab" target="attachments" visible="true" />
+					<setState type="TAB" target="attachments" visible="TRUE" />
 				</setStates>
 			</formStatePolicy>
 		</form>
@@ -3227,7 +3229,7 @@
 					<field name="defaultVal" inputWidget="application.text"
 						column="1" visible="false" />
 				</section>
-				<section name="optionDetails" columns="type_1_2">
+				<section name="optionDetails" columns="TYPE_1_2">
 					<field name="auditable" inputWidget="application.checkbox"
 						column="1" visible="false" />
 					<field name="reportable" inputWidget="application.checkbox"
@@ -3256,14 +3258,196 @@
 			</tab>
 			<tab name="changeLog" label="$m{application.form.audit}"
 				contentType="MINIFORM_CHANGELOG" />
+			<formStatePolicy type="ON_SWITCH"
+				name="typeEditablePolicy"
+				description="$m{studio.appentityfield.form.formstatepolicy.typeeditable}">
+				<onCondition>
+					<restriction type="EQUALS" field="type" paramA="STC" />
+				</onCondition>
+				<setStates>
+					<setState type="ANNOTATION" target="baseStaticAnnotation"
+						visible="TRUE" />
+					<setState type="TAB" target="basicDetails"
+						editable="FALSE" />
+				</setStates>
+			</formStatePolicy>
+			<formStatePolicy type="ON_SWITCH"
+				name="basicEditablePolicy"
+				description="$m{studio.appentityfield.form.formstatepolicy.basiceditable}">
+				<onCondition>
+					<restriction type="EQUALS" field="type" paramA="BSE" />
+				</onCondition>
+				<setStates>
+					<setState type="FIELD"
+						target="appEntityId,name,label,dataType,references,key,property,minLen,maxLen,precision,scale,allowNegative,nullable"
+						editable="FALSE" />
+				</setStates>
+			</formStatePolicy>
+			<formStatePolicy type="ON_SWITCH"
+				name="refFieldPolicy"
+				description="$m{studio.appentityfield.form.formstatepolicy.reffield}">
+				<onCondition>
+					<restriction type="AMONGST" field="dataType"
+						paramA="RF|UR|CU" />
+				</onCondition>
+				<setStates>
+					<setState type="FIELD"
+						target="references,defaultVal,nullable,basicSearch"
+						visible="TRUE" />
+				</setStates>
+			</formStatePolicy>
+			<formStatePolicy type="ON_SWITCH"
+				name="enumFieldPolicy"
+				description="$m{studio.appentityfield.form.formstatepolicy.enumfield}">
+				<onCondition>
+					<restriction type="AMONGST" field="dataType"
+						paramA="ER|EN|ED" />
+				</onCondition>
+				<setStates>
+					<setState type="FIELD"
+						target="references,defaultVal,nullable,auditable,reportable,basicSearch"
+						visible="TRUE" />
+				</setStates>
+			</formStatePolicy>
+			<formStatePolicy type="ON_SWITCH"
+				name="childFieldPolicy"
+				description="$m{studio.appentityfield.form.formstatepolicy.childfield}">
+				<onCondition>
+					<restriction type="AMONGST" field="dataType"
+						paramA="CD|CL|CU" />
+				</onCondition>
+				<setStates>
+					<setState type="FIELD" target="references,readOnly"
+						visible="TRUE" />
+				</setStates>
+			</formStatePolicy>
+			<formStatePolicy type="ON_SWITCH"
+				name="strFieldPolicy"
+				description="$m{studio.appentityfield.form.formstatepolicy.stringfield}">
+				<onCondition>
+					<restriction type="AMONGST" field="dataType"
+						paramA="ST" />
+				</onCondition>
+				<setStates>
+					<setState type="FIELD"
+						target="minLen,maxLen,trim,autoFormat,defaultVal,nullable,auditable,reportable,maintainLink,descriptive,basicSearch"
+						visible="TRUE" />
+				</setStates>
+			</formStatePolicy>
+			<formStatePolicy type="ON_SWITCH"
+				name="intFieldPolicy"
+				description="$m{studio.appentityfield.form.formstatepolicy.integerfield}">
+				<onCondition>
+					<restriction type="AMONGST" field="dataType"
+						paramA="LN|IN|SH" />
+				</onCondition>
+				<setStates>
+					<setState type="FIELD"
+						target="precision,defaultVal,allowNegative,nullable,auditable,reportable,descriptive,basicSearch"
+						visible="TRUE" />
+				</setStates>
+			</formStatePolicy>
+			<formStatePolicy type="ON_SWITCH"
+				name="branchScopingPolicy"
+				description="$m{studio.appentityfield.form.formstatepolicy.branchscoping}">
+				<onCondition>
+					<restriction type="AMONGST" field="dataType"
+						paramA="RF|LN|LO" />
+				</onCondition>
+				<setStates>
+					<setState type="FIELD" target="branchScoping" visible="TRUE" />
+				</setStates>
+			</formStatePolicy>
+			<formStatePolicy type="ON_SWITCH"
+				name="decFieldPolicy"
+				description="$m{studio.appentityfield.form.formstatepolicy.decimalfield}">
+				<onCondition>
+					<restriction type="AMONGST" field="dataType"
+						paramA="DC|DB|FL" />
+				</onCondition>
+				<setStates>
+					<setState type="FIELD"
+						target="precision,scale,defaultVal,allowNegative,nullable,auditable,reportable,descriptive,basicSearch"
+						visible="TRUE" />
+				</setStates>
+			</formStatePolicy>
+			<formStatePolicy type="ON_SWITCH"
+				name="dateFieldPolicy"
+				description="$m{studio.appentityfield.form.formstatepolicy.datefield}">
+				<onCondition>
+					<restriction type="AMONGST" field="dataType"
+						paramA="DT|TU|TS" />
+				</onCondition>
+				<setStates>
+					<setState type="FIELD"
+						target="defaultVal,nullable,auditable,reportable,basicSearch"
+						visible="TRUE" />
+				</setStates>
+			</formStatePolicy>
+			<formStatePolicy type="ON_SWITCH"
+				name="boolFieldPolicy"
+				description="$m{studio.appentityfield.form.formstatepolicy.booleanfield}">
+				<onCondition>
+					<restriction type="EQUALS" field="dataType" paramA="BL" />
+				</onCondition>
+				<setStates>
+					<setState type="FIELD"
+						target="nullable,auditable,reportable,basicSearch"
+						visible="TRUE" />
+				</setStates>
+			</formStatePolicy>
+			<formStatePolicy type="ON_SWITCH"
+				name="blobFieldPolicy"
+				description="$m{studio.appentityfield.form.formstatepolicy.blobfield}">
+				<onCondition>
+					<restriction type="EQUALS" field="dataType" paramA="BT" />
+				</onCondition>
+				<setStates>
+					<setState type="FIELD" target="nullable" visible="TRUE" />
+				</setStates>
+			</formStatePolicy>
+			<formStatePolicy type="ON_SWITCH"
+				name="clobFieldPolicy"
+				description="$m{studio.appentityfield.form.formstatepolicy.clobfield}">
+				<onCondition>
+					<restriction type="EQUALS" field="dataType" paramA="CT" />
+				</onCondition>
+				<setStates>
+					<setState type="FIELD" target="nullable" visible="TRUE" />
+				</setStates>
+			</formStatePolicy>
+			<formStatePolicy type="ON_SWITCH"
+				name="listFieldPolicy"
+				description="$m{studio.appentityfield.form.formstatepolicy.listfield}">
+				<onCondition>
+					<restriction type="EQUALS" field="dataType" paramA="LO" />
+				</onCondition>
+				<setStates>
+					<setState type="FIELD"
+						target="key,property,reportable,maintainLink,descriptive,basicSearch"
+						visible="TRUE" />
+				</setStates>
+			</formStatePolicy>
+			<formStatePolicy type="ON_SWITCH"
+				name="suggestionTypePolicy"
+				description="$m{studio.appentityfield.form.formstatepolicy.suggestiontype">
+				<onCondition>
+					<restriction type="EQUALS" field="inputWidget"
+						paramA="application.suggestiontextsearch" />
+				</onCondition>
+				<setStates>
+					<setState type="FIELD" target="suggestionType"
+						visible="TRUE" />
+				</setStates>
+			</formStatePolicy>
 			<formValidationPolicy name="refValidationPolicy"
 				description="$m{studio.appentityfield.form.formvalidationpolicy.ref}"
 				message="$m{studio.appentityfield.form.formvalidationpolicy.ref.message}">
 				<errorCondition>
-					<restriction type="and">
-						<restriction type="amongst" field="dataType"
+					<restriction type="AND">
+						<restriction type="AMONGST" field="dataType"
 							paramA="RF|UR|ER|EN|ED|CD|CL|CU" />
-						<restriction type="is_null" field="references" />
+						<restriction type="IS_NULL" field="references" />
 					</restriction>
 				</errorCondition>
 			</formValidationPolicy>
@@ -3272,198 +3456,16 @@
 				description="$m{studio.appentityfield.form.formvalidationpolicy.listonly}"
 				message="$m{studio.appentityfield.form.formvalidationpolicy.listonly.message}">
 				<errorCondition>
-					<restriction type="and">
-						<restriction type="equals" field="dataType"
+					<restriction type="AND">
+						<restriction type="EQUALS" field="dataType"
 							paramA="LO" />
-						<restriction type="or">
-							<restriction type="is_null" field="key" />
-							<restriction type="is_null" field="property" />
+						<restriction type="OR">
+							<restriction type="IS_NULL" field="key" />
+							<restriction type="IS_NULL" field="property" />
 						</restriction>
 					</restriction>
 				</errorCondition>
 			</formValidationPolicy>
-			<formStatePolicy type="on_switch"
-				name="typeEditablePolicy"
-				description="$m{studio.appentityfield.form.formstatepolicy.typeeditable}">
-				<onCondition>
-					<restriction type="equals" field="type" paramA="STC" />
-				</onCondition>
-				<setStates>
-					<setState type="annotation" target="baseStaticAnnotation"
-						visible="true" />
-					<setState type="tab" target="basicDetails"
-						editable="false" />
-				</setStates>
-			</formStatePolicy>
-			<formStatePolicy type="on_switch"
-				name="basicEditablePolicy"
-				description="$m{studio.appentityfield.form.formstatepolicy.basiceditable}">
-				<onCondition>
-					<restriction type="equals" field="type" paramA="BSE" />
-				</onCondition>
-				<setStates>
-					<setState type="field"
-						target="appEntityId,name,label,dataType,references,key,property,minLen,maxLen,precision,scale,allowNegative,nullable"
-						editable="false" />
-				</setStates>
-			</formStatePolicy>
-			<formStatePolicy type="on_switch"
-				name="refFieldPolicy"
-				description="$m{studio.appentityfield.form.formstatepolicy.reffield}">
-				<onCondition>
-					<restriction type="amongst" field="dataType"
-						paramA="RF|UR|CU" />
-				</onCondition>
-				<setStates>
-					<setState type="field"
-						target="references,defaultVal,nullable,basicSearch"
-						visible="true" />
-				</setStates>
-			</formStatePolicy>
-			<formStatePolicy type="on_switch"
-				name="enumFieldPolicy"
-				description="$m{studio.appentityfield.form.formstatepolicy.enumfield}">
-				<onCondition>
-					<restriction type="amongst" field="dataType"
-						paramA="ER|EN|ED" />
-				</onCondition>
-				<setStates>
-					<setState type="field"
-						target="references,defaultVal,nullable,auditable,reportable,basicSearch"
-						visible="true" />
-				</setStates>
-			</formStatePolicy>
-			<formStatePolicy type="on_switch"
-				name="childFieldPolicy"
-				description="$m{studio.appentityfield.form.formstatepolicy.childfield}">
-				<onCondition>
-					<restriction type="amongst" field="dataType"
-						paramA="CD|CL|CU" />
-				</onCondition>
-				<setStates>
-					<setState type="field" target="references,readOnly"
-						visible="true" />
-				</setStates>
-			</formStatePolicy>
-			<formStatePolicy type="on_switch"
-				name="strFieldPolicy"
-				description="$m{studio.appentityfield.form.formstatepolicy.stringfield}">
-				<onCondition>
-					<restriction type="amongst" field="dataType"
-						paramA="ST" />
-				</onCondition>
-				<setStates>
-					<setState type="field"
-						target="minLen,maxLen,trim,autoFormat,defaultVal,nullable,auditable,reportable,maintainLink,descriptive,basicSearch"
-						visible="true" />
-				</setStates>
-			</formStatePolicy>
-			<formStatePolicy type="on_switch"
-				name="intFieldPolicy"
-				description="$m{studio.appentityfield.form.formstatepolicy.integerfield}">
-				<onCondition>
-					<restriction type="amongst" field="dataType"
-						paramA="LN|IN|SH" />
-				</onCondition>
-				<setStates>
-					<setState type="field"
-						target="precision,defaultVal,allowNegative,nullable,auditable,reportable,descriptive,basicSearch"
-						visible="true" />
-				</setStates>
-			</formStatePolicy>
-			<formStatePolicy type="on_switch"
-				name="branchScopingPolicy"
-				description="$m{studio.appentityfield.form.formstatepolicy.branchscoping}">
-				<onCondition>
-					<restriction type="amongst" field="dataType"
-						paramA="RF|LN|LO" />
-				</onCondition>
-				<setStates>
-					<setState type="field" target="branchScoping" visible="true" />
-				</setStates>
-			</formStatePolicy>
-			<formStatePolicy type="on_switch"
-				name="decFieldPolicy"
-				description="$m{studio.appentityfield.form.formstatepolicy.decimalfield}">
-				<onCondition>
-					<restriction type="amongst" field="dataType"
-						paramA="DC|DB|FL" />
-				</onCondition>
-				<setStates>
-					<setState type="field"
-						target="precision,scale,defaultVal,allowNegative,nullable,auditable,reportable,descriptive,basicSearch"
-						visible="true" />
-				</setStates>
-			</formStatePolicy>
-			<formStatePolicy type="on_switch"
-				name="dateFieldPolicy"
-				description="$m{studio.appentityfield.form.formstatepolicy.datefield}">
-				<onCondition>
-					<restriction type="amongst" field="dataType"
-						paramA="DT|TU|TS" />
-				</onCondition>
-				<setStates>
-					<setState type="field"
-						target="defaultVal,nullable,auditable,reportable,basicSearch"
-						visible="true" />
-				</setStates>
-			</formStatePolicy>
-			<formStatePolicy type="on_switch"
-				name="boolFieldPolicy"
-				description="$m{studio.appentityfield.form.formstatepolicy.booleanfield}">
-				<onCondition>
-					<restriction type="equals" field="dataType" paramA="BL" />
-				</onCondition>
-				<setStates>
-					<setState type="field"
-						target="nullable,auditable,reportable,basicSearch"
-						visible="true" />
-				</setStates>
-			</formStatePolicy>
-			<formStatePolicy type="on_switch"
-				name="blobFieldPolicy"
-				description="$m{studio.appentityfield.form.formstatepolicy.blobfield}">
-				<onCondition>
-					<restriction type="equals" field="dataType" paramA="BT" />
-				</onCondition>
-				<setStates>
-					<setState type="field" target="nullable" visible="true" />
-				</setStates>
-			</formStatePolicy>
-			<formStatePolicy type="on_switch"
-				name="clobFieldPolicy"
-				description="$m{studio.appentityfield.form.formstatepolicy.clobfield}">
-				<onCondition>
-					<restriction type="equals" field="dataType" paramA="CT" />
-				</onCondition>
-				<setStates>
-					<setState type="field" target="nullable" visible="true" />
-				</setStates>
-			</formStatePolicy>
-			<formStatePolicy type="on_switch"
-				name="listFieldPolicy"
-				description="$m{studio.appentityfield.form.formstatepolicy.listfield}">
-				<onCondition>
-					<restriction type="equals" field="dataType" paramA="LO" />
-				</onCondition>
-				<setStates>
-					<setState type="field"
-						target="key,property,reportable,maintainLink,descriptive,basicSearch"
-						visible="true" />
-				</setStates>
-			</formStatePolicy>
-			<formStatePolicy type="on_switch"
-				name="suggestionTypePolicy"
-				description="$m{studio.appentityfield.form.formstatepolicy.suggestiontype">
-				<onCondition>
-					<restriction type="equals" field="inputWidget"
-						paramA="application.suggestiontextsearch" />
-				</onCondition>
-				<setStates>
-					<setState type="field" target="suggestionType"
-						visible="true" />
-				</setStates>
-			</formStatePolicy>
 		</form>
 		<form name="appEntitySeriesForm"
 			description="$m{studio.appentityseries.form}"
@@ -3521,7 +3523,7 @@
 			</tab>
 			<tab name="condition"
 				label="$m{studio.appentitycategory.form.condition}"
-				reference="app_entitycategory" contentType="filter_condition" />
+				reference="app_entitycategory" contentType="FILTER_CONDITION" />
 			<tab name="changeLog" label="$m{application.form.audit}"
 				contentType="MINIFORM_CHANGELOG" />
 		</form>
@@ -3547,19 +3549,19 @@
 					<field name="type" column="1" required="true" />
 				</section>
 			</tab>
-			<formStatePolicy type="on_switch"
+			<formStatePolicy type="ON_SWITCH"
 				name="onStaticPolicy"
 				description="$m{studio.common.form.formstatepolicy.onstatic}">
 				<onCondition>
-					<restriction type="and">
-						<restriction type="is_not_null" field="id" />
-						<restriction type="equals" field="configType"
+					<restriction type="AND">
+						<restriction type="IS_NOT_NULL" field="id" />
+						<restriction type="EQUALS" field="configType"
 							paramA="S" />
 					</restriction>
 				</onCondition>
 				<setStates>
-					<setState type="annotation" target="staticAnnotation"
-						visible="true" />
+					<setState type="ANNOTATION" target="staticAnnotation"
+						visible="TRUE" />
 				</setStates>
 			</formStatePolicy>
 		</form>
@@ -3585,19 +3587,19 @@
 					<field name="expression" column="1" required="true" />
 				</section>
 			</tab>
-			<formStatePolicy type="on_switch"
+			<formStatePolicy type="ON_SWITCH"
 				name="onStaticPolicy"
 				description="$m{studio.common.form.formstatepolicy.onstatic}">
 				<onCondition>
-					<restriction type="and">
-						<restriction type="is_not_null" field="id" />
-						<restriction type="equals" field="configType"
+					<restriction type="AND">
+						<restriction type="IS_NOT_NULL" field="id" />
+						<restriction type="EQUALS" field="configType"
 							paramA="S" />
 					</restriction>
 				</onCondition>
 				<setStates>
-					<setState type="annotation" target="staticAnnotation"
-						visible="true" />
+					<setState type="ANNOTATION" target="staticAnnotation"
+						visible="TRUE" />
 				</setStates>
 			</formStatePolicy>
 		</form>
@@ -3625,19 +3627,19 @@
 						required="true" />
 				</section>
 			</tab>
-			<formStatePolicy type="on_switch"
+			<formStatePolicy type="ON_SWITCH"
 				name="onStaticPolicy"
 				description="$m{studio.common.form.formstatepolicy.onstatic}">
 				<onCondition>
-					<restriction type="and">
-						<restriction type="is_not_null" field="id" />
-						<restriction type="equals" field="configType"
+					<restriction type="AND">
+						<restriction type="IS_NOT_NULL" field="id" />
+						<restriction type="EQUALS" field="configType"
 							paramA="S" />
 					</restriction>
 				</onCondition>
 				<setStates>
-					<setState type="annotation" target="staticAnnotation"
-						visible="true" />
+					<setState type="ANNOTATION" target="staticAnnotation"
+						visible="TRUE" />
 				</setStates>
 			</formStatePolicy>
 		</form>
@@ -3665,19 +3667,19 @@
 						required="true" />
 				</section>
 			</tab>
-			<formStatePolicy type="on_switch"
+			<formStatePolicy type="ON_SWITCH"
 				name="onStaticPolicy"
 				description="$m{studio.common.form.formstatepolicy.onstatic}">
 				<onCondition>
-					<restriction type="and">
-						<restriction type="is_not_null" field="id" />
-						<restriction type="equals" field="configType"
+					<restriction type="AND">
+						<restriction type="IS_NOT_NULL" field="id" />
+						<restriction type="EQUALS" field="configType"
 							paramA="S" />
 					</restriction>
 				</onCondition>
 				<setStates>
-					<setState type="annotation" target="staticAnnotation"
-						visible="true" />
+					<setState type="ANNOTATION" target="staticAnnotation"
+						visible="TRUE" />
 				</setStates>
 			</formStatePolicy>
 		</form>
@@ -3705,20 +3707,20 @@
 			</tab>
 			<tab name="fieldSequence"
 				label="$m{studio.appentityupload.form.fieldsequence}"
-				reference="app_entityupload" contentType="field_sequence" />
-			<formStatePolicy type="on_switch"
+				reference="app_entityupload" contentType="FIELD_SEQUENCE" />
+			<formStatePolicy type="ON_SWITCH"
 				name="onStaticPolicy"
 				description="$m{studio.common.form.formstatepolicy.onstatic}">
 				<onCondition>
-					<restriction type="and">
-						<restriction type="is_not_null" field="id" />
-						<restriction type="equals" field="configType"
+					<restriction type="AND">
+						<restriction type="IS_NOT_NULL" field="id" />
+						<restriction type="EQUALS" field="configType"
 							paramA="S" />
 					</restriction>
 				</onCondition>
 				<setStates>
-					<setState type="annotation" target="staticAnnotation"
-						visible="true" />
+					<setState type="ANNOTATION" target="staticAnnotation"
+						visible="TRUE" />
 				</setStates>
 			</formStatePolicy>
 		</form>
@@ -3747,26 +3749,26 @@
 			</tab>
 			<tab name="inputs"
 				label="$m{studio.appentitysearchinput.form.inputs}"
-				reference="app_entitysearchinput" contentType="search_input" />
+				reference="app_entitysearchinput" contentType="SEARCH_INPUT" />
 			<tab name="changeLog" label="$m{application.form.audit}"
 				contentType="MINIFORM_CHANGELOG" />
 		</form>
 		<form name="appEnumerationForm"
 			description="$m{studio.appenumeration.form}"
 			entity="application.appEnumeration">
-			<action type="button" name="lockResource" symbol="lock"
+			<annotation name="staticAnnotation"
+				description="$m{studio.common.form.annotation.static}"
+				message="$m{studio.common.form.annotation.static.message}" />
+			<action type="BUTTON" name="lockResource" symbol="lock"
 				styleClass="fc-actbutton"
 				description="$m{studio.common.form.action.lockresource}"
 				label="$m{studio.common.form.action.lockresource.label}"
 				policy="lockresource-actionpolicy" showOnMaintain="true" />
-			<action type="button" name="unlockResource" symbol="unlock"
+			<action type="BUTTON" name="unlockResource" symbol="unlock"
 				styleClass="fc-actbutton"
 				description="$m{studio.common.form.action.unlockresource}"
 				label="$m{studio.common.form.action.unlockresource.label}"
 				policy="unlockresource-actionpolicy" showOnMaintain="true" />
-			<annotation name="staticAnnotation"
-				description="$m{studio.common.form.annotation.static}"
-				message="$m{studio.common.form.annotation.static.message}" />
 			<tab name="basicDetails"
 				label="$m{studio.appapplet.form.basicdetails}"
 				contentType="MINIFORM">
@@ -3787,7 +3789,7 @@
 				</section>
 			</tab>
 			<tab name="items" label="$m{studio.appenumeration.form.items}"
-				contentType="child_list" applet="manageAppEnumerationItem"
+				contentType="CHILD_LIST" applet="manageAppEnumerationItem"
 				quickOrder="true" reference="itemList" />
 		</form>
 		<form name="appEnumerationItemForm"
@@ -3809,19 +3811,19 @@
 		</form>
 		<form name="appRefForm" description="$m{studio.appref.form}"
 			entity="application.appRef">
-			<action type="button" name="lockResource" symbol="lock"
+			<annotation name="staticAnnotation"
+				description="$m{studio.common.form.annotation.static}"
+				message="$m{studio.common.form.annotation.static.message}" />
+			<action type="BUTTON" name="lockResource" symbol="lock"
 				styleClass="fc-actbutton"
 				description="$m{studio.common.form.action.lockresource}"
 				label="$m{studio.common.form.action.lockresource.label}"
 				policy="lockresource-actionpolicy" showOnMaintain="true" />
-			<action type="button" name="unlockResource" symbol="unlock"
+			<action type="BUTTON" name="unlockResource" symbol="unlock"
 				styleClass="fc-actbutton"
 				description="$m{studio.common.form.action.unlockresource}"
 				label="$m{studio.common.form.action.unlockresource.label}"
 				policy="unlockresource-actionpolicy" showOnMaintain="true" />
-			<annotation name="staticAnnotation"
-				description="$m{studio.common.form.annotation.static}"
-				message="$m{studio.common.form.annotation.static.message}" />
 			<tab name="basicDetails"
 				label="$m{studio.appref.form.basicdetails}"
 				contentType="MINIFORM">
@@ -3859,59 +3861,59 @@
 				</section>
 			</tab>
 			<tab name="filter" label="$m{studio.appref.form.filter}"
-				reference="app_ref" contentType="filter_condition" />
+				reference="app_ref" contentType="FILTER_CONDITION" />
 			<tab name="changeLog" label="$m{application.form.audit}"
 				contentType="MINIFORM_CHANGELOG" />
-			<formStatePolicy type="on_switch"
+			<formStatePolicy type="ON_SWITCH"
 				name="onStaticPolicy"
 				description="$m{studio.common.form.formstatepolicy.onstatic}">
 				<onCondition>
-					<restriction type="and">
-						<restriction type="is_not_null" field="id" />
-						<restriction type="equals" field="configType"
+					<restriction type="AND">
+						<restriction type="IS_NOT_NULL" field="id" />
+						<restriction type="EQUALS" field="configType"
 							paramA="S" />
 					</restriction>
 				</onCondition>
 				<setStates>
-					<setState type="annotation" target="staticAnnotation"
-						visible="true" />
-					<setState type="field" target="listFormat" visible="true" />
-					<setState type="tab" target="refFormDetails"
-						editable="false" />
+					<setState type="ANNOTATION" target="staticAnnotation"
+						visible="TRUE" />
+					<setState type="FIELD" target="listFormat" visible="TRUE" />
+					<setState type="TAB" target="refFormDetails"
+						editable="FALSE" />
 				</setStates>
 			</formStatePolicy>
-			<formStatePolicy type="on_switch"
+			<formStatePolicy type="ON_SWITCH"
 				name="immutableFormPolicy"
 				description="$m{studio.common.form.formstatepolicy.immutable}">
 				<onCondition>
-					<restriction type="and">
-						<restriction type="is_not_null" field="id" />
-						<restriction type="not_equals" field="configType"
+					<restriction type="AND">
+						<restriction type="IS_NOT_NULL" field="id" />
+						<restriction type="NOT_EQUALS" field="configType"
 							paramA="C" />
 					</restriction>
 				</onCondition>
 				<setStates>
-					<setState type="field"
+					<setState type="FIELD"
 						target="name,description,entity,searchField,searchTable,selectHandler"
-						disabled="true" />
+						disabled="TRUE" />
 				</setStates>
 			</formStatePolicy>
 		</form>
 		<form name="appAPIForm" description="$m{studio.appapi.form}"
 			entity="application.appAPI">
-			<action type="button" name="lockResource" symbol="lock"
+			<annotation name="staticAnnotation"
+				description="$m{studio.common.form.annotation.static}"
+				message="$m{studio.common.form.annotation.static.message}" />
+			<action type="BUTTON" name="lockResource" symbol="lock"
 				styleClass="fc-actbutton"
 				description="$m{studio.common.form.action.lockresource}"
 				label="$m{studio.common.form.action.lockresource.label}"
 				policy="lockresource-actionpolicy" showOnMaintain="true" />
-			<action type="button" name="unlockResource" symbol="unlock"
+			<action type="BUTTON" name="unlockResource" symbol="unlock"
 				styleClass="fc-actbutton"
 				description="$m{studio.common.form.action.unlockresource}"
 				label="$m{studio.common.form.action.unlockresource.label}"
 				policy="unlockresource-actionpolicy" showOnMaintain="true" />
-			<annotation name="staticAnnotation"
-				description="$m{studio.common.form.annotation.static}"
-				message="$m{studio.common.form.annotation.static.message}" />
 			<tab name="basicDetails"
 				label="$m{studio.appref.form.basicdetails}"
 				contentType="MINIFORM">
@@ -3947,38 +3949,38 @@
 			</tab>
 			<tab name="changeLog" label="$m{application.form.audit}"
 				contentType="MINIFORM_CHANGELOG" />
-			<formStatePolicy type="on_switch"
+			<formStatePolicy type="ON_SWITCH"
 				name="immutableFormPolicy"
 				description="$m{studio.common.form.formstatepolicy.immutable}">
 				<onCondition>
-					<restriction type="and">
-						<restriction type="is_not_null" field="id" />
-						<restriction type="not_equals" field="configType"
+					<restriction type="AND">
+						<restriction type="IS_NOT_NULL" field="id" />
+						<restriction type="NOT_EQUALS" field="configType"
 							paramA="C" />
 					</restriction>
 				</onCondition>
 				<setStates>
-					<setState type="field"
+					<setState type="FIELD"
 						target="name,description,type,entity,supportCreate,supportRead,supportUpdate,supportDelete"
-						disabled="true" />
+						disabled="TRUE" />
 				</setStates>
 			</formStatePolicy>
 		</form>
 		<form name="chartForm" description="$m{studio.chart.form}"
 			entity="chart.chart">
-			<action type="button" name="lockResource" symbol="lock"
+			<annotation name="staticAnnotation"
+				description="$m{studio.common.form.annotation.static}"
+				message="$m{studio.common.form.annotation.static.message}" />
+			<action type="BUTTON" name="lockResource" symbol="lock"
 				styleClass="fc-actbutton"
 				description="$m{studio.common.form.action.lockresource}"
 				label="$m{studio.common.form.action.lockresource.label}"
 				policy="lockresource-actionpolicy" showOnMaintain="true" />
-			<action type="button" name="unlockResource" symbol="unlock"
+			<action type="BUTTON" name="unlockResource" symbol="unlock"
 				styleClass="fc-actbutton"
 				description="$m{studio.common.form.action.unlockresource}"
 				label="$m{studio.common.form.action.unlockresource.label}"
 				policy="unlockresource-actionpolicy" showOnMaintain="true" />
-			<annotation name="staticAnnotation"
-				description="$m{studio.common.form.annotation.static}"
-				message="$m{studio.common.form.annotation.static.message}" />
 			<tab name="basicDetails"
 				label="$m{studio.chart.form.basicdetails}"
 				contentType="MINIFORM"
@@ -4011,7 +4013,7 @@
 					<field name="series" column="1" required="true" />
 					<field name="height" column="1" />
 				</section>
-				<section name="chartFlags" columns="type_1_2">
+				<section name="chartFlags" columns="TYPE_1_2">
 					<field name="stacked" column="1" />
 					<field name="smooth" column="2" />
 					<field name="showGrid" column="1" />
@@ -4022,77 +4024,77 @@
 			</tab>
 			<tab name="changeLog" label="$m{application.form.audit}"
 				contentType="MINIFORM_CHANGELOG" />
-			<formStatePolicy type="on_switch"
+			<formStatePolicy type="ON_SWITCH"
 				name="onStaticPolicy"
 				description="$m{studio.common.form.formstatepolicy.onstatic}">
 				<onCondition>
-					<restriction type="and">
-						<restriction type="is_not_null" field="id" />
-						<restriction type="equals" field="configType"
+					<restriction type="AND">
+						<restriction type="IS_NOT_NULL" field="id" />
+						<restriction type="EQUALS" field="configType"
 							paramA="S" />
 					</restriction>
 				</onCondition>
 				<setStates>
-					<setState type="annotation" target="staticAnnotation"
-						visible="true" />
-					<setState type="tab" target="basicDetails"
+					<setState type="ANNOTATION" target="staticAnnotation"
+						visible="TRUE" />
+					<setState type="TAB" target="basicDetails"
 						editable="false" />
 				</setStates>
 			</formStatePolicy>
-			<formStatePolicy type="on_switch"
+			<formStatePolicy type="ON_SWITCH"
 				name="immutableFormPolicy"
 				description="$m{studio.common.form.formstatepolicy.immutable}">
 				<onCondition>
-					<restriction type="and">
-						<restriction type="is_not_null" field="id" />
-						<restriction type="not_equals" field="configType"
+					<restriction type="AND">
+						<restriction type="IS_NOT_NULL" field="id" />
+						<restriction type="NOT_EQUALS" field="configType"
 							paramA="C" />
 					</restriction>
 				</onCondition>
 				<setStates>
-					<setState type="field" target="name,description,entity"
+					<setState type="FIELD" target="name,description,entity"
 						disabled="true" />
 				</setStates>
 			</formStatePolicy>
-			<formStatePolicy type="on_switch"
+			<formStatePolicy type="ON_SWITCH"
 				name="chartDataSourceFormPolicy"
 				description="$m{studio.chart.form.chartdatasource.policy}">
 				<onCondition>
 					<restriction type="or">
-						<restriction type="equals" field="type" paramA="CRD" />
-						<restriction type="equals" field="type" paramA="TBL" />
+						<restriction type="EQUALS" field="type" paramA="CRD" />
+						<restriction type="EQUALS" field="type" paramA="TBL" />
 					</restriction>
 				</onCondition>
 				<setStates>
-					<setState type="field" target="paletteType"
+					<setState type="FIELD" target="paletteType"
 						editable="false" />
 				</setStates>
 				<setValues>
 					<setValue type="immediate" field="paletteType" value="PL0" />
 				</setValues>
 			</formStatePolicy>
-			<formStatePolicy type="on_switch"
+			<formStatePolicy type="ON_SWITCH"
 				name="chartPaletteTypeFormPolicy"
 				description="$m{studio.chart.form.chartpalettetype.policy}">
 				<onCondition>
-					<restriction type="and">
-						<restriction type="not_equals" field="paletteType"
+					<restriction type="AND">
+						<restriction type="NOT_EQUALS" field="paletteType"
 							paramA="PL0" />
-						<restriction type="not_equals" field="type"
+						<restriction type="NOT_EQUALS" field="type"
 							paramA="CRD" />
-						<restriction type="not_equals" field="type"
+						<restriction type="NOT_EQUALS" field="type"
 							paramA="TBL" />
 					</restriction>
 				</onCondition>
 				<setStates>
-					<setState type="field" target="color" visible="false" />
+					<setState type="FIELD" target="color" visible="false" />
 				</setStates>
 			</formStatePolicy>
 			<formWidgetRulesPolicy
 				name="multiCategorySeries"
 				description="$m{studio.chart.form.multicategoryseries.policy}">
 				<onCondition>
-					<restriction type="not_equals" field="type"
+					<restriction type="NOT_EQUALS" field="type"
 						paramA="CRD" />
 				</onCondition>
 				<widgetRules>
@@ -4106,12 +4108,12 @@
 		<form name="chartDataSourceForm"
 			description="$m{studio.chartdatasource.form}"
 			entity="chart.chartDataSource">
-			<action type="button" name="lockResource" symbol="lock"
+			<action type="BUTTON" name="lockResource" symbol="lock"
 				styleClass="fc-actbutton"
 				description="$m{studio.common.form.action.lockresource}"
 				label="$m{studio.common.form.action.lockresource.label}"
 				policy="lockresource-actionpolicy" showOnMaintain="true" />
-			<action type="button" name="unlockResource" symbol="unlock"
+			<action type="BUTTON" name="unlockResource" symbol="unlock"
 				styleClass="fc-actbutton"
 				description="$m{studio.common.form.action.unlockresource}"
 				label="$m{studio.common.form.action.unlockresource.label}"
@@ -4151,68 +4153,68 @@
 			<tab name="categories"
 				label="$m{studio.chartdatasource.form.categories}"
 				reference="chart_categories" contentType="property_sequence"
-				visible="true" />
+				visible="TRUE" />
 			<tab name="categoryBase"
 				label="$m{studio.chartdatasource.form.categorybase}"
-				reference="chart_categorybase" contentType="filter_condition" />
+				reference="chart_categorybase" contentType="FILTER_CONDITION" />
 			<tab name="fieldSequence"
 				label="$m{studio.chartdatasource.form.grouping}"
-				reference="chart_grouping" contentType="field_sequence" />
+				reference="chart_grouping" contentType="FIELD_SEQUENCE" />
 			<tab name="changeLog" label="$m{application.form.audit}"
 				contentType="MINIFORM_CHANGELOG" />
-			<formStatePolicy type="on_switch"
+			<formStatePolicy type="ON_SWITCH"
 				name="onStaticPolicy"
 				description="$m{studio.common.form.formstatepolicy.onstatic}">
 				<onCondition>
-					<restriction type="and">
-						<restriction type="is_not_null" field="id" />
-						<restriction type="equals" field="configType"
+					<restriction type="AND">
+						<restriction type="IS_NOT_NULL" field="id" />
+						<restriction type="EQUALS" field="configType"
 							paramA="S" />
 					</restriction>
 				</onCondition>
 				<setStates>
-					<setState type="annotation" target="staticAnnotation"
-						visible="true" />
-					<setState type="tab" target="basicDetails"
+					<setState type="ANNOTATION" target="staticAnnotation"
+						visible="TRUE" />
+					<setState type="TAB" target="basicDetails"
 						editable="false" />
 				</setStates>
 			</formStatePolicy>
-			<formStatePolicy type="on_switch"
+			<formStatePolicy type="ON_SWITCH"
 				name="immutableFormPolicy"
 				description="$m{studio.common.form.formstatepolicy.immutable}">
 				<onCondition>
-					<restriction type="and">
-						<restriction type="is_not_null" field="id" />
-						<restriction type="not_equals" field="configType"
+					<restriction type="AND">
+						<restriction type="IS_NOT_NULL" field="id" />
+						<restriction type="NOT_EQUALS" field="configType"
 							paramA="C" />
 					</restriction>
 				</onCondition>
 				<setStates>
-					<setState type="field" target="name,description,entity"
+					<setState type="FIELD" target="name,description,entity"
 						disabled="true" />
 				</setStates>
 			</formStatePolicy>
-			<formStatePolicy type="on_switch"
+			<formStatePolicy type="ON_SWITCH"
 				name="categoriesFormPolicy"
 				description="$m{studio.chartdatasource.form.formstatepolicy.categories}">
 				<onCondition>
-					<restriction type="is_not_null" field="categoryField" />
+					<restriction type="IS_NOT_NULL" field="categoryField" />
 				</onCondition>
 				<setStates>
-					<!--setState type="tab" target="categories" visible="false" / -->
-					<setState type="field" target="timeSeriesType"
-						visible="true" />
+					<!--setState type="TAB" target="categories" visible="false" / -->
+					<setState type="FIELD" target="timeSeriesType"
+						visible="TRUE" />
 				</setStates>
 			</formStatePolicy>
 		</form>
 		<form name="dashboardForm"
 			description="$m{studio.dashboard.form}" entity="dashboard.dashboard">
-			<action type="button" name="lockResource" symbol="lock"
+			<action type="BUTTON" name="lockResource" symbol="lock"
 				styleClass="fc-actbutton"
 				description="$m{studio.common.form.action.lockresource}"
 				label="$m{studio.common.form.action.lockresource.label}"
 				policy="lockresource-actionpolicy" showOnMaintain="true" />
-			<action type="button" name="unlockResource" symbol="unlock"
+			<action type="BUTTON" name="unlockResource" symbol="unlock"
 				styleClass="fc-actbutton"
 				description="$m{studio.common.form.action.unlockresource}"
 				label="$m{studio.common.form.action.unlockresource.label}"
@@ -4242,42 +4244,42 @@
 				</section>
 			</tab>
 			<tab name="design" label="$m{studio.dashboard.form.design}"
-				contentType="child_list" applet="manageDashboardTile"
+				contentType="CHILD_LIST" applet="manageDashboardTile"
 				reference="tileList" editAction="/designChildItem" />
 			<tab name="options" label="$m{studio.dashboard.form.options}"
-				contentType="child_list" applet="manageDashboardOption"
+				contentType="CHILD_LIST" applet="manageDashboardOption"
 				reference="optionsList" />
 			<tab name="changeLog" label="$m{application.form.audit}"
 				contentType="MINIFORM_CHANGELOG" />
-			<formStatePolicy type="on_switch"
+			<formStatePolicy type="ON_SWITCH"
 				name="onStaticPolicy"
 				description="$m{studio.common.form.formstatepolicy.onstatic}">
 				<onCondition>
-					<restriction type="and">
-						<restriction type="is_not_null" field="id" />
-						<restriction type="equals" field="configType"
+					<restriction type="AND">
+						<restriction type="IS_NOT_NULL" field="id" />
+						<restriction type="EQUALS" field="configType"
 							paramA="S" />
 					</restriction>
 				</onCondition>
 				<setStates>
-					<setState type="annotation" target="staticAnnotation"
-						visible="true" />
-					<setState type="tab" target="basicDetails"
+					<setState type="ANNOTATION" target="staticAnnotation"
+						visible="TRUE" />
+					<setState type="TAB" target="basicDetails"
 						editable="false" />
 				</setStates>
 			</formStatePolicy>
-			<formStatePolicy type="on_switch"
+			<formStatePolicy type="ON_SWITCH"
 				name="immutableFormPolicy"
 				description="$m{studio.common.form.formstatepolicy.immutable}">
 				<onCondition>
-					<restriction type="and">
-						<restriction type="is_not_null" field="id" />
-						<restriction type="not_equals" field="configType"
+					<restriction type="AND">
+						<restriction type="IS_NOT_NULL" field="id" />
+						<restriction type="NOT_EQUALS" field="configType"
 							paramA="C" />
 					</restriction>
 				</onCondition>
 				<setStates>
-					<setState type="field" target="name,description"
+					<setState type="FIELD" target="name,description"
 						disabled="true" />
 				</setStates>
 			</formStatePolicy>
@@ -4321,7 +4323,7 @@
 				</section>
 			</tab>
 			<tab name="bases" label="$m{studio.dashboardoption.form.bases}"
-				contentType="child_list" applet="manageDashboardOptionCatBase"
+				contentType="CHILD_LIST" applet="manageDashboardOptionCatBase"
 				reference="baseList" />
 			<tab name="changeLog" label="$m{application.form.audit}"
 				contentType="MINIFORM_CHANGELOG" />
@@ -4345,14 +4347,14 @@
 			<tab name="categoryBase"
 				label="$m{studio.dashboardoptioncatbase.form.categorybase}"
 				reference="dashboardoption_categorybase"
-				contentType="filter_condition" />
+				contentType="FILTER_CONDITION" />
 			<tab name="changeLog" label="$m{application.form.audit}"
 				contentType="MINIFORM_CHANGELOG" />
-			<formStatePolicy type="on_switch"
+			<formStatePolicy type="ON_SWITCH"
 				name="onDataSourceSwitch"
 				description="$m{studio.dashboardoptioncatbase.form.formstatepolicy.ondatasourceswitch}">
 				<onCondition>
-					<restriction type="is_not_null" field="chartDataSource" />
+					<restriction type="IS_NOT_NULL" field="chartDataSource" />
 				</onCondition>
 			</formStatePolicy>
 		</form>
@@ -4360,12 +4362,12 @@
 			description="$m{studio.notificationtemplate.form}"
 			entity="notification.notifTemplate"
 			helpSheet="studio.notifTemplateHelpSheet">
-			<action type="button" name="lockResource" symbol="lock"
+			<action type="BUTTON" name="lockResource" symbol="lock"
 				styleClass="fc-actbutton"
 				description="$m{studio.common.form.action.lockresource}"
 				label="$m{studio.common.form.action.lockresource.label}"
 				policy="lockresource-actionpolicy" showOnMaintain="true" />
-			<action type="button" name="unlockResource" symbol="unlock"
+			<action type="BUTTON" name="unlockResource" symbol="unlock"
 				styleClass="fc-actbutton"
 				description="$m{studio.common.form.action.unlockresource}"
 				label="$m{studio.common.form.action.unlockresource.label}"
@@ -4410,59 +4412,59 @@
 			</tab>
 			<!--tab name="params"
 				label="$m{studio.notificationtemplate.form.params}"
-				contentType="child_list" applet="manageNotifTemplateParam"
+				contentType="CHILD_LIST" applet="manageNotifTemplateParam"
 				reference="paramList" /-->
 			<tab name="changeLog" label="$m{application.form.audit}"
 				contentType="MINIFORM_CHANGELOG" />
-			<formStatePolicy type="on_switch"
+			<formStatePolicy type="ON_SWITCH"
 				name="onStaticPolicy"
 				description="$m{studio.common.form.formstatepolicy.onstatic}">
 				<onCondition>
-					<restriction type="and">
-						<restriction type="is_not_null" field="id" />
-						<restriction type="equals" field="configType"
+					<restriction type="AND">
+						<restriction type="IS_NOT_NULL" field="id" />
+						<restriction type="EQUALS" field="configType"
 							paramA="S" />
 					</restriction>
 				</onCondition>
 				<setStates>
-					<setState type="annotation" target="staticAnnotation"
-						visible="true" />
-					<setState type="tab" target="basicDetails"
+					<setState type="ANNOTATION" target="staticAnnotation"
+						visible="TRUE" />
+					<setState type="TAB" target="basicDetails"
 						editable="false" />
 				</setStates>
 			</formStatePolicy>
-			<formStatePolicy type="on_switch"
+			<formStatePolicy type="ON_SWITCH"
 				name="immutableFormPolicy"
 				description="$m{studio.common.form.formstatepolicy.immutable}">
 				<onCondition>
-					<restriction type="and">
-						<restriction type="is_not_null" field="id" />
-						<restriction type="not_equals" field="configType"
+					<restriction type="AND">
+						<restriction type="IS_NOT_NULL" field="id" />
+						<restriction type="NOT_EQUALS" field="configType"
 							paramA="C" />
 					</restriction>
 				</onCondition>
 				<setStates>
-					<setState type="field"
+					<setState type="FIELD"
 						target="name,description,entity,notificationType"
 						disabled="true" />
 				</setStates>
 			</formStatePolicy>
-			<formStatePolicy type="on_switch"
+			<formStatePolicy type="ON_SWITCH"
 				name="notificationTypeNotSMSPolicy"
 				description="$m{studio.notificationtemplate.form.formstatepolicy.notificationtype.notsms}">
 				<onCondition>
-					<restriction type="not_equals" field="notificationType"
+					<restriction type="NOT_EQUALS" field="notificationType"
 						paramA="SMS" />
 				</onCondition>
 				<setValues>
 					<setValue type="immediate" field="messageFormat" value="HTM" />
 				</setValues>
 			</formStatePolicy>
-			<formStatePolicy type="on_switch"
+			<formStatePolicy type="ON_SWITCH"
 				name="notificationTypeSMSPolicy"
 				description="$m{studio.notificationtemplate.form.formstatepolicy.notificationtype.sms}">
 				<onCondition>
-					<restriction type="equals" field="notificationType"
+					<restriction type="EQUALS" field="notificationType"
 						paramA="SMS" />
 				</onCondition>
 				<setValues>
@@ -4473,7 +4475,7 @@
 				name="templateWidgetRule"
 				description="$m{studio.notificationtemplate.form.formwidgetrulespolicy.template}">
 				<onCondition>
-					<restriction type="not_equals" field="notificationType"
+					<restriction type="NOT_EQUALS" field="notificationType"
 						paramA="SMS" />
 				</onCondition>
 				<widgetRules>
@@ -4502,12 +4504,12 @@
 		<form name="notifLargeTextForm"
 			description="$m{studio.notificationlargetext.form}"
 			entity="notification.notifLargeText">
-			<action type="button" name="lockResource" symbol="lock"
+			<action type="BUTTON" name="lockResource" symbol="lock"
 				styleClass="fc-actbutton"
 				description="$m{studio.common.form.action.lockresource}"
 				label="$m{studio.common.form.action.lockresource.label}"
 				policy="lockresource-actionpolicy" showOnMaintain="true" />
-			<action type="button" name="unlockResource" symbol="unlock"
+			<action type="BUTTON" name="unlockResource" symbol="unlock"
 				styleClass="fc-actbutton"
 				description="$m{studio.common.form.action.unlockresource}"
 				label="$m{studio.common.form.action.unlockresource.label}"
@@ -4544,39 +4546,39 @@
 			</tab>
 			<tab name="params"
 				label="$m{studio.notificationlargetext.form.params}"
-				contentType="child_list" applet="manageNotifLargeTextParam"
+				contentType="CHILD_LIST" applet="manageNotifLargeTextParam"
 				reference="paramList" />
 			<tab name="changeLog" label="$m{application.form.audit}"
 				contentType="MINIFORM_CHANGELOG" />
-			<formStatePolicy type="on_switch"
+			<formStatePolicy type="ON_SWITCH"
 				name="onStaticPolicy"
 				description="$m{studio.common.form.formstatepolicy.onstatic}">
 				<onCondition>
-					<restriction type="and">
-						<restriction type="is_not_null" field="id" />
-						<restriction type="equals" field="configType"
+					<restriction type="AND">
+						<restriction type="IS_NOT_NULL" field="id" />
+						<restriction type="EQUALS" field="configType"
 							paramA="S" />
 					</restriction>
 				</onCondition>
 				<setStates>
-					<setState type="annotation" target="staticAnnotation"
-						visible="true" />
-					<setState type="tab" target="basicDetails"
+					<setState type="ANNOTATION" target="staticAnnotation"
+						visible="TRUE" />
+					<setState type="TAB" target="basicDetails"
 						editable="false" />
 				</setStates>
 			</formStatePolicy>
-			<formStatePolicy type="on_switch"
+			<formStatePolicy type="ON_SWITCH"
 				name="immutableFormPolicy"
 				description="$m{studio.common.form.formstatepolicy.immutable}">
 				<onCondition>
-					<restriction type="and">
-						<restriction type="is_not_null" field="id" />
-						<restriction type="not_equals" field="configType"
+					<restriction type="AND">
+						<restriction type="IS_NOT_NULL" field="id" />
+						<restriction type="NOT_EQUALS" field="configType"
 							paramA="C" />
 					</restriction>
 				</onCondition>
 				<setStates>
-					<setState type="field"
+					<setState type="FIELD"
 						target="name,description,entity,notificationType"
 						disabled="true" />
 				</setStates>
@@ -4602,12 +4604,12 @@
 		<form name="reportConfigForm"
 			description="$m{studio.reportconfiguration.form}"
 			entity="report.reportConfig">
-			<action type="button" name="lockResource" symbol="lock"
+			<action type="BUTTON" name="lockResource" symbol="lock"
 				styleClass="fc-actbutton"
 				description="$m{studio.common.form.action.lockresource}"
 				label="$m{studio.common.form.action.lockresource.label}"
 				policy="lockresource-actionpolicy" showOnMaintain="true" />
-			<action type="button" name="unlockResource" symbol="unlock"
+			<action type="BUTTON" name="unlockResource" symbol="unlock"
 				styleClass="fc-actbutton"
 				description="$m{studio.common.form.action.unlockresource}"
 				label="$m{studio.common.form.action.unlockresource.label}"
@@ -4673,136 +4675,136 @@
 					<field name="height" inputWidget="application.integer"
 						column="0" required="true" visible="false" />
 					<field name="marginTop" inputWidget="application.integer"
-						column="1" required="true" visible="true" />
+						column="1" required="true" visible="TRUE" />
 					<field name="marginLeft" inputWidget="application.integer"
-						column="1" required="true" visible="true" />
+						column="1" required="true" visible="TRUE" />
 					<field name="marginRight" inputWidget="application.integer"
-						column="1" required="true" visible="true" />
+						column="1" required="true" visible="TRUE" />
 					<field name="marginBottom" inputWidget="application.integer"
-						column="1" required="true" visible="true" />
+						column="1" required="true" visible="TRUE" />
 				</section>
 			</tab>
 			<tab name="design"
 				label="$m{studio.reportconfiguration.form.design}"
-				contentType="child_list" applet="manageReportColumn"
+				contentType="CHILD_LIST" applet="manageReportColumn"
 				reference="columnList" editAction="/designChildItem" />
 			<tab name="placements"
 				label="$m{studio.reportconfiguration.form.placements}"
-				contentType="child_list" applet="manageReportPlacement"
+				contentType="CHILD_LIST" applet="manageReportPlacement"
 				reference="placementList" />
 			<tab name="parameters"
 				label="$m{studio.reportconfiguration.form.parameters}"
-				contentType="child_list" applet="manageReportParameter"
+				contentType="CHILD_LIST" applet="manageReportParameter"
 				reference="parameterList" />
 			<tab name="filter"
 				label="$m{studio.reportconfiguration.form.filter}"
-				reference="report_config" contentType="filter_condition" />
+				reference="report_config" contentType="FILTER_CONDITION" />
 			<tab name="changeLog" label="$m{application.form.audit}"
 				contentType="MINIFORM_CHANGELOG" />
-			<formStatePolicy type="on_switch"
+			<formStatePolicy type="ON_SWITCH"
 				name="onStaticPolicy"
 				description="$m{studio.common.form.formstatepolicy.onstatic}">
 				<onCondition>
-					<restriction type="and">
-						<restriction type="is_not_null" field="id" />
-						<restriction type="equals" field="configType"
+					<restriction type="AND">
+						<restriction type="IS_NOT_NULL" field="id" />
+						<restriction type="EQUALS" field="configType"
 							paramA="S" />
 					</restriction>
 				</onCondition>
 				<setStates>
-					<setState type="annotation" target="staticAnnotation"
-						visible="true" />
-					<setState type="tab" target="basicDetails"
+					<setState type="ANNOTATION" target="staticAnnotation"
+						visible="TRUE" />
+					<setState type="TAB" target="basicDetails"
 						editable="false" />
 				</setStates>
 			</formStatePolicy>
-			<formStatePolicy type="on_switch"
+			<formStatePolicy type="ON_SWITCH"
 				name="immutableFormPolicy"
 				description="$m{studio.common.form.formstatepolicy.immutable}">
 				<onCondition>
-					<restriction type="and">
-						<restriction type="is_not_null" field="id" />
-						<restriction type="not_equals" field="configType"
+					<restriction type="AND">
+						<restriction type="IS_NOT_NULL" field="id" />
+						<restriction type="NOT_EQUALS" field="configType"
 							paramA="C" />
 					</restriction>
 				</onCondition>
 				<setStates>
-					<setState type="field"
+					<setState type="FIELD"
 						target="name,description,reportable" disabled="true" />
 				</setStates>
 			</formStatePolicy>
-			<formStatePolicy type="on_switch"
+			<formStatePolicy type="ON_SWITCH"
 				name="onTabularPolicy"
 				description="$m{studio.reportconfiguration.form.formstatepolicy.tabular}">
 				<onCondition>
-					<restriction type="equals" field="type" paramA="TBL" />
+					<restriction type="EQUALS" field="type" paramA="TBL" />
 				</onCondition>
 				<setStates>
-					<setState type="field" target="sizeType,width,height"
+					<setState type="FIELD" target="sizeType,width,height"
 						visible="false" />
-					<!--setState type="field" target="template" visible="true" / -->
-					<setState type="tab" target="placements" visible="false" />
+					<!--setState type="FIELD" target="template" visible="TRUE" / -->
+					<setState type="TAB" target="placements" visible="false" />
 				</setStates>
 			</formStatePolicy>
-			<formStatePolicy type="on_switch"
+			<formStatePolicy type="ON_SWITCH"
 				name="onSummaryPolicy"
 				description="$m{studio.reportconfiguration.form.formstatepolicy.summary}">
 				<onCondition>
-					<restriction type="equals" field="type" paramA="CSM" />
+					<restriction type="EQUALS" field="type" paramA="CSM" />
 				</onCondition>
 				<setStates>
-					<setState type="field" target="summaryDatasource"
-						visible="true" />
-					<setState type="tab" target="design" visible="false" />
-					<setState type="tab" target="placements" visible="false" />
+					<setState type="FIELD" target="summaryDatasource"
+						visible="TRUE" />
+					<setState type="TAB" target="design" visible="false" />
+					<setState type="TAB" target="placements" visible="false" />
 				</setStates>
 			</formStatePolicy>
-			<formStatePolicy type="on_switch"
+			<formStatePolicy type="ON_SWITCH"
 				name="onPlacementPolicy"
 				description="$m{studio.reportconfiguration.form.formstatepolicy.placement}">
 				<onCondition>
-					<restriction type="equals" field="type" paramA="PLC" />
+					<restriction type="EQUALS" field="type" paramA="PLC" />
 				</onCondition>
 				<setStates>
-					<setState type="field"
+					<setState type="FIELD"
 						target="processor,showGrandFooter,invertGroupColors,underlineRows,shadeOddRows"
 						visible="false" />
 					<setState type="section" target="pageDetails"
-						visible="true" />
-					<setState type="tab" target="columns" visible="false" />
+						visible="TRUE" />
+					<setState type="TAB" target="columns" visible="false" />
 				</setStates>
 			</formStatePolicy>
-			<formStatePolicy type="on_switch"
+			<formStatePolicy type="ON_SWITCH"
 				name="onLetterPolicy"
 				description="$m{studio.reportconfiguration.form.formstatepolicy.letter}">
 				<onCondition>
-					<restriction type="equals" field="type" paramA="LTR" />
+					<restriction type="EQUALS" field="type" paramA="LTR" />
 				</onCondition>
 				<setStates>
-					<setState type="field"
+					<setState type="FIELD"
 						target="processor,showGrandFooter,invertGroupColors,underlineRows,shadeOddRows,landscape"
 						visible="false" />
-					<setState type="field" target="letterGenerator"
-						visible="true" />
-					<setState type="tab" target="placements" visible="false" />
-					<setState type="tab" target="columns" visible="false" />
+					<setState type="FIELD" target="letterGenerator"
+						visible="TRUE" />
+					<setState type="TAB" target="placements" visible="false" />
+					<setState type="TAB" target="columns" visible="false" />
 					<setState type="section" target="pageDetails"
 						visible="false" />
 				</setStates>
 			</formStatePolicy>
-			<formStatePolicy type="on_switch"
+			<formStatePolicy type="ON_SWITCH"
 				name="onDimensionPolicy"
 				description="$m{studio.reportconfiguration.form.formstatepolicy.dimension}">
 				<onCondition>
-					<restriction type="and">
-						<restriction type="equals" field="type" paramA="PLC" />
-						<restriction type="equals" field="sizeType"
+					<restriction type="AND">
+						<restriction type="EQUALS" field="type" paramA="PLC" />
+						<restriction type="EQUALS" field="sizeType"
 							paramA="custom" />
 					</restriction>
 				</onCondition>
 				<setStates>
-					<setState type="field" target="width,height"
-						visible="true" />
+					<setState type="FIELD" target="width,height"
+						visible="TRUE" />
 				</setStates>
 			</formStatePolicy>
 		</form>
@@ -4892,27 +4894,27 @@
 						column="1" required="true" />
 				</section>
 			</tab>
-			<formStatePolicy type="on_switch"
+			<formStatePolicy type="ON_SWITCH"
 				name="onFieldPolicy"
 				description="$m{studio.reportplacement.form.formstatepolicy.field}">
 				<onCondition>
-					<restriction type="equals" field="type" paramA="FLD" />
+					<restriction type="EQUALS" field="type" paramA="FLD" />
 				</onCondition>
 				<setStates>
-					<setState type="field"
+					<setState type="FIELD"
 						target="fieldName,formatter,bold,horizAlignType,vertAlignType"
-						visible="true" />
+						visible="TRUE" />
 				</setStates>
 			</formStatePolicy>
-			<formStatePolicy type="on_switch" name="onTextPolicy"
+			<formStatePolicy type="ON_SWITCH" name="onTextPolicy"
 				description="$m{studio.reportplacement.form.formstatepolicy.text}">
 				<onCondition>
-					<restriction type="equals" field="type" paramA="TXT" />
+					<restriction type="EQUALS" field="type" paramA="TXT" />
 				</onCondition>
 				<setStates>
-					<setState type="field"
+					<setState type="FIELD"
 						target="text,formatter,bold,horizAlignType,vertAlignType"
-						visible="true" />
+						visible="TRUE" />
 				</setStates>
 			</formStatePolicy>
 		</form>
@@ -4946,12 +4948,12 @@
 		</form>
 		<form name="appTableForm" description="$m{studio.apptable.form}"
 			entity="application.appTable">
-			<action type="button" name="lockResource" symbol="lock"
+			<action type="BUTTON" name="lockResource" symbol="lock"
 				styleClass="fc-actbutton"
 				description="$m{studio.common.form.action.lockresource}"
 				label="$m{studio.common.form.action.lockresource.label}"
 				policy="lockresource-actionpolicy" showOnMaintain="true" />
-			<action type="button" name="unlockResource" symbol="unlock"
+			<action type="BUTTON" name="unlockResource" symbol="unlock"
 				styleClass="fc-actbutton"
 				description="$m{studio.common.form.action.unlockresource}"
 				label="$m{studio.common.form.action.unlockresource.label}"
@@ -4988,7 +4990,7 @@
 					<field name="summaryTitleColumns"
 						inputWidget="application.integer" column="1" />
 				</section>
-				<section name="tableFlags" columns="type_1_2">
+				<section name="tableFlags" columns="TYPE_1_2">
 					<field name="headerless" inputWidget="application.checkbox"
 						column="1" />
 					<field name="showLabelHeader"
@@ -5017,59 +5019,59 @@
 				</section>
 			</tab>
 			<tab name="design" label="$m{studio.apptable.form.design}"
-				contentType="child_list" applet="manageAppTableColumn"
+				contentType="CHILD_LIST" applet="manageAppTableColumn"
 				reference="columnList" editAction="/designChildItem" />
 			<tab name="filters" label="$m{studio.apptable.form.filters}"
-				contentType="child_list" applet="manageAppTableFilter"
+				contentType="CHILD_LIST" applet="manageAppTableFilter"
 				reference="filterList" />
 			<tab name="actions" label="$m{studio.apptable.form.actions}"
-				contentType="child_list" applet="manageAppTableAction"
+				contentType="CHILD_LIST" applet="manageAppTableAction"
 				reference="actionList" />
 			<tab name="loadings" label="$m{studio.apptable.form.loadings}"
-				contentType="child_list" applet="manageAppTableLoading"
+				contentType="CHILD_LIST" applet="manageAppTableLoading"
 				reference="loadingList" />
 			<tab name="changeLog" label="$m{application.form.audit}"
 				contentType="MINIFORM_CHANGELOG" />
-			<formStatePolicy type="on_switch"
+			<formStatePolicy type="ON_SWITCH"
 				name="onCreatePolicy"
 				description="$m{studio.appentity.form.formstatepolicy.oncreate}">
 				<onCondition>
-					<restriction type="is_null" field="id" />
+					<restriction type="IS_NULL" field="id" />
 				</onCondition>
 				<setValues>
 					<setValue type="immediate" field="serialNo" value="true" />
 					<setValue type="immediate" field="sortable" value="true" />
 				</setValues>
 			</formStatePolicy>
-			<formStatePolicy type="on_switch"
+			<formStatePolicy type="ON_SWITCH"
 				name="onStaticPolicy"
 				description="$m{studio.common.form.formstatepolicy.onstatic}">
 				<onCondition>
-					<restriction type="and">
-						<restriction type="is_not_null" field="id" />
-						<restriction type="equals" field="configType"
+					<restriction type="AND">
+						<restriction type="IS_NOT_NULL" field="id" />
+						<restriction type="EQUALS" field="configType"
 							paramA="S" />
 					</restriction>
 				</onCondition>
 				<setStates>
-					<setState type="annotation" target="staticAnnotation"
-						visible="true" />
-					<setState type="tab" target="basicDetails"
+					<setState type="ANNOTATION" target="staticAnnotation"
+						visible="TRUE" />
+					<setState type="TAB" target="basicDetails"
 						editable="false" />
 				</setStates>
 			</formStatePolicy>
-			<formStatePolicy type="on_switch"
+			<formStatePolicy type="ON_SWITCH"
 				name="immutableFormPolicy"
 				description="$m{studio.common.form.formstatepolicy.immutable}">
 				<onCondition>
-					<restriction type="and">
-						<restriction type="is_not_null" field="id" />
-						<restriction type="not_equals" field="configType"
+					<restriction type="AND">
+						<restriction type="IS_NOT_NULL" field="id" />
+						<restriction type="NOT_EQUALS" field="configType"
 							paramA="C" />
 					</restriction>
 				</onCondition>
 				<setStates>
-					<setState type="field"
+					<setState type="FIELD"
 						target="name,description,entity,label" disabled="true" />
 				</setStates>
 			</formStatePolicy>
@@ -5170,18 +5172,18 @@
 			</tab>
 			<tab name="condition"
 				label="$m{studio.apptablefilter.form.condition}"
-				reference="app_table" contentType="filter_condition" />
+				reference="app_table" contentType="FILTER_CONDITION" />
 			<tab name="changeLog" label="$m{application.form.audit}"
 				contentType="MINIFORM_CHANGELOG" />
 		</form>
 		<form name="appFormForm" description="$m{studio.appform.form}"
 			entity="application.appForm">
-			<action type="button" name="lockResource" symbol="lock"
+			<action type="BUTTON" name="lockResource" symbol="lock"
 				styleClass="fc-actbutton"
 				description="$m{studio.common.form.action.lockresource}"
 				label="$m{studio.common.form.action.lockresource.label}"
 				policy="lockresource-actionpolicy" showOnMaintain="true" />
-			<action type="button" name="unlockResource" symbol="unlock"
+			<action type="BUTTON" name="unlockResource" symbol="unlock"
 				styleClass="fc-actbutton"
 				description="$m{studio.common.form.action.unlockresource}"
 				label="$m{studio.common.form.action.unlockresource.label}"
@@ -5231,105 +5233,105 @@
 				</section>
 			</tab>
 			<tab name="design" label="$m{studio.appform.form.design}"
-				contentType="child_list" applet="manageAppFormElement"
+				contentType="CHILD_LIST" applet="manageAppFormElement"
 				reference="elementList" editAction="/designChildItem"
 				visible="false" />
 			<tab name="filters" label="$m{studio.appform.form.filters}"
-				contentType="child_list" applet="manageAppFormFilter"
+				contentType="CHILD_LIST" applet="manageAppFormFilter"
 				reference="filterList" visible="false" />
 			<tab name="annotations"
 				label="$m{studio.appform.form.annotations}"
-				contentType="child_list"
+				contentType="CHILD_LIST"
 				applet="manageAppFormAnnotation" reference="annotationList"
 				visible="false" />
 			<tab name="actions" label="$m{studio.appform.form.actions}"
-				contentType="child_list" applet="manageAppFormAction"
+				contentType="CHILD_LIST" applet="manageAppFormAction"
 				reference="actionList" visible="false" />
 			<tab name="relatedLists"
 				label="$m{studio.appform.form.relatedlists}"
-				contentType="child_list" applet="manageAppFormRelatedList"
+				contentType="CHILD_LIST" applet="manageAppFormRelatedList"
 				reference="relatedList" visible="false" />
 			<tab name="widgetRulesPolicies" quickOrder="true"
 				label="$m{studio.appform.form.widgetrulespolicies}"
-				contentType="child_list" applet="manageAppFormWidgetRulesPolicy"
+				contentType="CHILD_LIST" applet="manageAppFormWidgetRulesPolicy"
 				reference="widgetRulesList" visible="false" />
 			<tab name="fieldValidationPolicies" quickOrder="true"
 				label="$m{studio.appform.form.fieldvalidationpolicies}"
-				contentType="child_list"
+				contentType="CHILD_LIST"
 				applet="manageAppFormFieldValidationPolicy"
 				reference="fieldValidationList" visible="false" />
 			<tab name="fieldStatePolicies" quickOrder="true"
 				label="$m{studio.appform.form.fieldstatepolicies}"
-				contentType="child_list" applet="manageAppFormStatePolicy"
+				contentType="CHILD_LIST" applet="manageAppFormStatePolicy"
 				reference="fieldStateList" visible="false" />
 			<tab name="formValidationPolicies" quickOrder="true"
 				label="$m{studio.appform.form.validationpolicies}"
-				contentType="child_list" applet="manageAppFormValidationPolicy"
+				contentType="CHILD_LIST" applet="manageAppFormValidationPolicy"
 				reference="formValidationList" visible="false" />
 			<tab name="formReviewPolicies" quickOrder="true"
 				label="$m{studio.appform.form.reviewpolicies}"
-				contentType="child_list" applet="manageAppFormReviewPolicy"
+				contentType="CHILD_LIST" applet="manageAppFormReviewPolicy"
 				reference="formReviewList" visible="false" />
 			<tab name="changeLog" label="$m{application.form.audit}"
 				contentType="MINIFORM_CHANGELOG" />
-			<formStatePolicy type="on_switch"
+			<formStatePolicy type="ON_SWITCH"
 				name="onStaticPolicy"
 				description="$m{studio.common.form.formstatepolicy.onstatic}">
 				<onCondition>
-					<restriction type="and">
-						<restriction type="is_not_null" field="id" />
-						<restriction type="equals" field="configType"
+					<restriction type="AND">
+						<restriction type="IS_NOT_NULL" field="id" />
+						<restriction type="EQUALS" field="configType"
 							paramA="S" />
 					</restriction>
 				</onCondition>
 				<setStates>
-					<setState type="annotation" target="staticAnnotation"
-						visible="true" />
-					<setState type="tab" target="basicDetails"
+					<setState type="ANNOTATION" target="staticAnnotation"
+						visible="TRUE" />
+					<setState type="TAB" target="basicDetails"
 						editable="false" />
 				</setStates>
 			</formStatePolicy>
-			<formStatePolicy type="on_switch"
+			<formStatePolicy type="ON_SWITCH"
 				name="immutableFormPolicy"
 				description="$m{studio.common.form.formstatepolicy.immutable}">
 				<onCondition>
-					<restriction type="and">
-						<restriction type="is_not_null" field="id" />
-						<restriction type="not_equals" field="configType"
+					<restriction type="AND">
+						<restriction type="IS_NOT_NULL" field="id" />
+						<restriction type="NOT_EQUALS" field="configType"
 							paramA="C" />
 					</restriction>
 				</onCondition>
 				<setStates>
-					<setState type="field"
+					<setState type="FIELD"
 						target="name,description,entity,searchField"
 						disabled="true" />
 				</setStates>
 			</formStatePolicy>
-			<formStatePolicy type="on_switch"
+			<formStatePolicy type="ON_SWITCH"
 				name="inputFormPolicy"
 				description="$m{studio.common.form.formstatepolicy.inputform}">
 				<onCondition>
-					<restriction type="equals" field="type" paramA="INP" />
+					<restriction type="EQUALS" field="type" paramA="INP" />
 				</onCondition>
 				<setStates>
-					<setState type="field"
+					<setState type="FIELD"
 						target="consolidatedValidation,consolidatedReview,consolidatedState"
-						visible="true" />
-					<setState type="tab"
+						visible="TRUE" />
+					<setState type="TAB"
 						target="design,filters,annotations,actions,relatedLists,widgetRulesPolicies,fieldValidationPolicies,fieldStatePolicies,formValidationPolicies,formReviewPolicies"
-						visible="true" />
+						visible="TRUE" />
 				</setStates>
 			</formStatePolicy>
-			<formStatePolicy type="on_switch"
+			<formStatePolicy type="ON_SWITCH"
 				name="listingFormPolicy"
 				description="$m{studio.common.form.formstatepolicy.listingform}">
 				<onCondition>
-					<restriction type="equals" field="type" paramA="LST" />
+					<restriction type="EQUALS" field="type" paramA="LST" />
 				</onCondition>
 				<setStates>
-					<setState type="field" target="listingGenerator"
-						visible="true" />
-					<setState type="tab" target="actions" visible="true" />
+					<setState type="FIELD" target="listingGenerator"
+						visible="TRUE" />
+					<setState type="TAB" target="actions" visible="TRUE" />
 				</setStates>
 			</formStatePolicy>
 		</form>
@@ -5416,7 +5418,7 @@
 			<tab name="condition"
 				label="$m{studio.appformfilter.form.condition}"
 				reference="app_form"
-				contentType="filter_condition" />
+				contentType="FILTER_CONDITION" />
 			<tab name="changeLog" label="$m{application.form.audit}"
 				contentType="MINIFORM_CHANGELOG" />
 		</form>
@@ -5451,7 +5453,7 @@
 			</tab>
 			<tab name="onCondition"
 				label="$m{studio.appformannotation.form.oncondition}"
-				reference="app_formannotation" contentType="filter_condition" />
+				reference="app_formannotation" contentType="FILTER_CONDITION" />
 		</form>
 		<form name="appFormActionForm"
 			description="$m{studio.appformaction.form}"
@@ -5492,7 +5494,7 @@
 			</tab>
 			<tab name="onCondition"
 				label="$m{studio.appformaction.form.oncondition}"
-				reference="app_formaction" contentType="filter_condition" />
+				reference="app_formaction" contentType="FILTER_CONDITION" />
 		</form>
 		<form name="appFormRelatedListForm"
 			description="$m{studio.appformrelatedlist.form}"
@@ -5550,14 +5552,14 @@
 			</tab>
 			<tab name="onCondition"
 				label="$m{studio.appformstatepolicy.form.oncondition}"
-				reference="app_formstatepolicy" contentType="filter_condition" />
+				reference="app_formstatepolicy" contentType="FILTER_CONDITION" />
 			<tab name="setStates"
 				label="$m{studio.appformstatepolicy.form.setstates}"
-				contentType="child_list" applet="manageAppFormSetState"
+				contentType="CHILD_LIST" applet="manageAppFormSetState"
 				reference="setStateList" />
 			<tab name="setValues"
 				label="$m{studio.appformstatepolicy.form.setvalues}"
-				reference="app_formstatepolicy" contentType="set_values" />
+				reference="app_formstatepolicy" contentType="SET_VALUES" />
 		</form>
 		<form name="appFormWidgetRulesPolicyForm"
 			description="$m{studio.appformwidgetrulespolicy.form}"
@@ -5578,7 +5580,7 @@
 			<tab name="onCondition"
 				label="$m{studio.appformwidgetrulespolicy.form.oncondition}"
 				reference="app_formwidgetrulespolicy"
-				contentType="filter_condition" />
+				contentType="FILTER_CONDITION" />
 			<tab name="widgetRules"
 				label="$m{studio.appformwidgetrulespolicy.form.widgetrules}"
 				reference="app_formwidgetrulespolicy" contentType="widget_rules" />
@@ -5608,25 +5610,25 @@
 						column="1" required="true" disabled="true" />
 				</section>
 			</tab>
-			<formStatePolicy type="on_switch"
+			<formStatePolicy type="ON_SWITCH"
 				name="setStateTypePolicyA"
 				description="$m{studio.appformsetstate.form.formstatepolicy.setstatetypea}">
 				<onCondition>
-					<restriction type="equals" field="type" paramA="ANO" />
+					<restriction type="EQUALS" field="type" paramA="ANO" />
 				</onCondition>
 				<setStates>
-					<setState type="field" target="visible" disabled="false" />
+					<setState type="FIELD" target="visible" disabled="false" />
 				</setStates>
 			</formStatePolicy>
-			<formStatePolicy type="on_switch"
+			<formStatePolicy type="ON_SWITCH"
 				name="setStateTypePolicyB"
 				description="$m{studio.appformsetstate.form.formstatepolicy.setstatetypeb}">
 				<onCondition>
-					<restriction type="amongst" field="type"
+					<restriction type="AMONGST" field="type"
 						paramA="TAB|SEC|FLD" />
 				</onCondition>
 				<setStates>
-					<setState type="field"
+					<setState type="FIELD"
 						target="required,visible,editable,disabled"
 						disabled="false" />
 				</setStates>
@@ -5687,7 +5689,7 @@
 			<tab name="errorCondition"
 				label="$m{studio.appformvalidationpolicy.form.errorcondition}"
 				reference="app_formvalidationpolicy"
-				contentType="filter_condition" />
+				contentType="FILTER_CONDITION" />
 		</form>
 		<form name="appFormReviewPolicyForm"
 			description="$m{studio.appformreviewpolicy.form}"
@@ -5721,16 +5723,16 @@
 			</tab>
 			<tab name="errorCondition"
 				label="$m{studio.appformreviewpolicy.form.errorcondition}"
-				reference="app_formreviewpolicy" contentType="filter_condition" />
+				reference="app_formreviewpolicy" contentType="FILTER_CONDITION" />
 		</form>
 		<form name="appHelpSheetForm" description="$m{studio.apphelpsheet.form}"
 			entity="application.appHelpSheet">
-			<action type="button" name="lockResource" symbol="lock"
+			<action type="BUTTON" name="lockResource" symbol="lock"
 				styleClass="fc-actbutton"
 				description="$m{studio.common.form.action.lockresource}"
 				label="$m{studio.common.form.action.lockresource.label}"
 				policy="lockresource-actionpolicy" showOnMaintain="true" />
-			<action type="button" name="unlockResource" symbol="unlock"
+			<action type="BUTTON" name="unlockResource" symbol="unlock"
 				styleClass="fc-actbutton"
 				description="$m{studio.common.form.action.unlockresource}"
 				label="$m{studio.common.form.action.unlockresource.label}"
@@ -5764,7 +5766,7 @@
 				</section>
 			</tab>
 			<tab name="entries" label="$m{studio.apphelpsheet.form.entries}"
-				contentType="child_list" applet="manageAppHelpEntry"
+				contentType="CHILD_LIST" applet="manageAppHelpEntry"
 				reference="entryList" />
 			<tab name="changeLog" label="$m{application.form.audit}"
 				contentType="MINIFORM_CHANGELOG" />
@@ -5796,12 +5798,12 @@
 		<form name="appWidgetTypeForm"
 			description="$m{studio.appwidgettype.form}"
 			entity="application.appWidgetType">
-			<action type="button" name="lockResource" symbol="lock"
+			<action type="BUTTON" name="lockResource" symbol="lock"
 				styleClass="fc-actbutton"
 				description="$m{studio.common.form.action.lockresource}"
 				label="$m{studio.common.form.action.lockresource.label}"
 				policy="lockresource-actionpolicy" showOnMaintain="true" />
-			<action type="button" name="unlockResource" symbol="unlock"
+			<action type="BUTTON" name="unlockResource" symbol="unlock"
 				styleClass="fc-actbutton"
 				description="$m{studio.common.form.action.unlockresource}"
 				label="$m{studio.common.form.action.unlockresource.label}"
@@ -5845,67 +5847,67 @@
 			</tab>
 			<tab name="changeLog" label="$m{application.form.audit}"
 				contentType="MINIFORM_CHANGELOG" />
-			<formStatePolicy type="on_switch"
+			<formStatePolicy type="ON_SWITCH"
 				name="onStaticPolicy"
 				description="$m{studio.common.form.formstatepolicy.onstatic}">
 				<onCondition>
-					<restriction type="and">
-						<restriction type="is_not_null" field="id" />
-						<restriction type="equals" field="configType"
+					<restriction type="AND">
+						<restriction type="IS_NOT_NULL" field="id" />
+						<restriction type="EQUALS" field="configType"
 							paramA="S" />
 					</restriction>
 				</onCondition>
 				<setStates>
-					<setState type="annotation" target="staticAnnotation"
-						visible="true" />
-					<setState type="tab" target="basicDetails,editorDetails"
+					<setState type="ANNOTATION" target="staticAnnotation"
+						visible="TRUE" />
+					<setState type="TAB" target="basicDetails,editorDetails"
 						editable="false" />
 				</setStates>
 			</formStatePolicy>
-			<formStatePolicy type="on_switch"
+			<formStatePolicy type="ON_SWITCH"
 				name="immutableFormPolicy"
 				description="$m{studio.common.form.formstatepolicy.immutable}">
 				<onCondition>
-					<restriction type="and">
-						<restriction type="is_not_null" field="id" />
-						<restriction type="not_equals" field="configType"
+					<restriction type="AND">
+						<restriction type="IS_NOT_NULL" field="id" />
+						<restriction type="NOT_EQUALS" field="configType"
 							paramA="C" />
 					</restriction>
 				</onCondition>
 				<setStates>
-					<setState type="field"
+					<setState type="FIELD"
 						target="name,description,dataType,inputType,editor,renderer,stretch,listOption,enumOption"
 						disabled="true" />
 				</setStates>
 			</formStatePolicy>
-			<formStatePolicy type="on_switch"
+			<formStatePolicy type="ON_SWITCH"
 				name="immutableNamePolicy"
 				description="$m{studio.appwidgettype.form.formstatepolicy.name.immutable}">
 				<onCondition>
-					<restriction type="and">
-						<restriction type="is_not_null" field="id" />
-						<restriction type="equals" field="configType"
+					<restriction type="AND">
+						<restriction type="IS_NOT_NULL" field="id" />
+						<restriction type="EQUALS" field="configType"
 							paramA="C" />
 					</restriction>
 				</onCondition>
 				<setStates>
-					<setState type="field" target="name" disabled="true" />
+					<setState type="FIELD" target="name" disabled="true" />
 				</setStates>
 			</formStatePolicy>
 		</form>
 		<form name="workflowForm" description="$m{studio.workflow.form}"
 			entity="workflow.workflow">
-			<action type="button" name="lockResource" symbol="lock"
+			<action type="BUTTON" name="lockResource" symbol="lock"
 				styleClass="fc-actbutton"
 				description="$m{studio.common.form.action.lockresource}"
 				label="$m{studio.common.form.action.lockresource.label}"
 				policy="lockresource-actionpolicy" showOnMaintain="true" />
-			<action type="button" name="unlockResource" symbol="unlock"
+			<action type="BUTTON" name="unlockResource" symbol="unlock"
 				styleClass="fc-actbutton"
 				description="$m{studio.common.form.action.unlockresource}"
 				label="$m{studio.common.form.action.unlockresource.label}"
 				policy="unlockresource-actionpolicy" showOnMaintain="true" />
-			<action type="button" name="publish" highlight="ORANGE"
+			<action type="BUTTON" name="publish" highlight="ORANGE"
 				description="$m{workflow.workflow.form.action.publish}"
 				label="$m{workflow.workflow.form.action.publish.label}"
 				policy="wfpublish-actionpolicy" showOnMaintain="true" />
@@ -5947,61 +5949,61 @@
 				</section>
 			</tab>
 			<tab name="design" label="$m{studio.workflow.form.design}"
-				contentType="child_list" applet="manageWfStep"
+				contentType="CHILD_LIST" applet="manageWfStep"
 				reference="stepList"
 				editAction="/designChildItem" />
 			<tab name="filters" label="$m{studio.workflow.form.filters}"
-				contentType="child_list" applet="manageWorkflowFilter"
+				contentType="CHILD_LIST" applet="manageWorkflowFilter"
 				reference="filterList" />
 			<tab name="setValues" label="$m{studio.workflow.form.setvalues}"
-				contentType="child_list" applet="manageWorkflowSetValues"
+				contentType="CHILD_LIST" applet="manageWorkflowSetValues"
 				reference="setValuesList" />
 			<tab name="changeLog" label="$m{application.form.audit}"
 				contentType="MINIFORM_CHANGELOG" />
-			<formStatePolicy type="on_switch"
+			<formStatePolicy type="ON_SWITCH"
 				name="onStaticPolicy"
 				description="$m{studio.common.form.formstatepolicy.onstatic}">
 				<onCondition>
-					<restriction type="and">
-						<restriction type="is_not_null" field="id" />
-						<restriction type="equals" field="configType"
+					<restriction type="AND">
+						<restriction type="IS_NOT_NULL" field="id" />
+						<restriction type="EQUALS" field="configType"
 							paramA="S" />
 					</restriction>
 				</onCondition>
 				<setStates>
-					<setState type="annotation" target="staticAnnotation"
-						visible="true" />
-					<setState type="tab" target="basicDetails"
+					<setState type="ANNOTATION" target="staticAnnotation"
+						visible="TRUE" />
+					<setState type="TAB" target="basicDetails"
 						editable="false" />
 				</setStates>
 			</formStatePolicy>
-			<formStatePolicy type="on_switch"
+			<formStatePolicy type="ON_SWITCH"
 				name="immutableFormPolicy"
 				description="$m{studio.common.form.formstatepolicy.immutable}">
 				<onCondition>
-					<restriction type="and">
-						<restriction type="is_not_null" field="id" />
-						<restriction type="not_equals" field="configType"
+					<restriction type="AND">
+						<restriction type="IS_NOT_NULL" field="id" />
+						<restriction type="NOT_EQUALS" field="configType"
 							paramA="C" />
 					</restriction>
 				</onCondition>
 				<setStates>
-					<setState type="field" target="name,description,entity"
+					<setState type="FIELD" target="name,description,entity"
 						disabled="true" />
 				</setStates>
 			</formStatePolicy>
-			<formStatePolicy type="on_switch"
+			<formStatePolicy type="ON_SWITCH"
 				name="customFormPolicy"
 				description="$m{studio.common.form.formstatepolicy.custom}">
 				<onCondition>
-					<restriction type="and">
-						<restriction type="is_not_null" field="id" />
-						<restriction type="equals" field="configType"
+					<restriction type="AND">
+						<restriction type="IS_NOT_NULL" field="id" />
+						<restriction type="EQUALS" field="configType"
 							paramA="C" />
 					</restriction>
 				</onCondition>
 				<setStates>
-					<setState type="field" target="name" disabled="true" />
+					<setState type="FIELD" target="name" disabled="true" />
 				</setStates>
 			</formStatePolicy>
 		</form>
@@ -6023,7 +6025,7 @@
 			</tab>
 			<tab name="condition"
 				label="$m{studio.workflowfilter.form.condition}"
-				reference="workflow" contentType="filter_condition"
+				reference="workflow" contentType="FILTER_CONDITION"
 				includeSysParam="true" />
 			<tab name="changeLog" label="$m{application.form.audit}"
 				contentType="MINIFORM_CHANGELOG" />
@@ -6047,11 +6049,11 @@
 			</tab>
 			<tab name="condition"
 				label="$m{studio.workflowsetvalues.form.condition}"
-				reference="workflow" contentType="filter_condition"
+				reference="workflow" contentType="FILTER_CONDITION"
 				includeSysParam="true" />
 			<tab name="setValues"
 				label="$m{studio.workflowsetvalues.form.setvalues}"
-				reference="workflow" contentType="set_values" />
+				reference="workflow" contentType="SET_VALUES" />
 			<tab name="changeLog" label="$m{application.form.audit}"
 				contentType="MINIFORM_CHANGELOG" />
 		</form>
@@ -6104,63 +6106,63 @@
 			</tab>
 			<tab name="routings"
 				label="$m{studio.workflow.step.form.routings}"
-				contentType="child_list" applet="manageWfStepRouting"
+				contentType="CHILD_LIST" applet="manageWfStepRouting"
 				reference="routingList" visible="false" />
 			<tab name="userActions"
 				label="$m{studio.workflow.step.form.useractions}"
-				contentType="child_list" applet="manageWfStepUserAction"
+				contentType="CHILD_LIST" applet="manageWfStepUserAction"
 				reference="userActionList" visible="false" />
 			<tab name="alerts" label="$m{studio.workflow.step.form.alerts}"
-				contentType="child_list" applet="manageWfStepAlert"
+				contentType="CHILD_LIST" applet="manageWfStepAlert"
 				reference="alertList" visible="false" />
-			<formStatePolicy type="on_switch" name="policyPolicy"
+			<formStatePolicy type="ON_SWITCH" name="policyPolicy"
 				description="$m{workflow.step.form.fieldstatepolicy.policy}">
 				<onCondition>
-					<restriction type="amongst" field="type" paramA="N|P" />
+					<restriction type="AMONGST" field="type" paramA="N|P" />
 				</onCondition>
 				<setStates>
-					<setState type="field" target="policy,rule" visible="true" />
+					<setState type="FIELD" target="policy,rule" visible="TRUE" />
 				</setStates>
 			</formStatePolicy>
-			<formStatePolicy type="on_switch"
+			<formStatePolicy type="ON_SWITCH"
 				name="recordActionPolicy"
 				description="$m{workflow.step.form.fieldstatepolicy.recordactiontype}">
 				<onCondition>
-					<restriction type="equals" field="type" paramA="R" />
+					<restriction type="EQUALS" field="type" paramA="R" />
 				</onCondition>
 				<setStates>
-					<setState type="field" target="recordActionType"
-						visible="true" />
+					<setState type="FIELD" target="recordActionType"
+						visible="TRUE" />
 				</setStates>
 			</formStatePolicy>
-			<formStatePolicy type="on_switch"
+			<formStatePolicy type="ON_SWITCH"
 				name="routingPolicy"
 				description="$m{studio.workflow.step.form.fieldstatepolicy.routingpolicy}">
 				<onCondition>
-					<restriction type="equals" field="type" paramA="T" />
+					<restriction type="EQUALS" field="type" paramA="T" />
 				</onCondition>
 				<setStates>
-					<setState type="tab" target="routings" visible="true" />
+					<setState type="TAB" target="routings" visible="TRUE" />
 				</setStates>
 			</formStatePolicy>
-			<formStatePolicy type="on_switch"
+			<formStatePolicy type="ON_SWITCH"
 				name="userActionPolicy"
 				description="$m{studio.workflow.step.form.fieldstatepolicy.useractionpolicy}">
 				<onCondition>
-					<restriction type="equals" field="type" paramA="U" />
+					<restriction type="EQUALS" field="type" paramA="U" />
 				</onCondition>
 				<setStates>
-					<setState type="tab" target="userActions" visible="true" />
+					<setState type="TAB" target="userActions" visible="TRUE" />
 				</setStates>
 			</formStatePolicy>
-			<formStatePolicy type="on_switch" name="alertPolicy"
+			<formStatePolicy type="ON_SWITCH" name="alertPolicy"
 				description="$m{studio.workflow.step.form.fieldstatepolicy.alertpolicy}">
 				<onCondition>
-					<restriction type="amongst" field="type"
+					<restriction type="AMONGST" field="type"
 						paramA="T|U|N|P|R|X" />
 				</onCondition>
 				<setStates>
-					<setState type="tab" target="alerts" visible="true" />
+					<setState type="TAB" target="alerts" visible="TRUE" />
 				</setStates>
 			</formStatePolicy>
 		</form>
@@ -6187,7 +6189,7 @@
 			</tab>
 			<tab name="routeCondition"
 				label="$m{studio.workflow.steprouting.form.oncondition}"
-				reference="wfstep_routing" contentType="filter_condition"
+				reference="wfstep_routing" contentType="FILTER_CONDITION"
 				includeSysParam="true" />
 		</form>
 		<form name="wfStepUserActionForm"
@@ -6266,7 +6268,7 @@
 			</tab>
 			<tab name="fireOnCondition"
 				label="$m{studio.workflow.stepalert.form.oncondition}"
-				reference="wfstep_alert_fire_on" contentType="filter_condition"
+				reference="wfstep_alert_fire_on" contentType="FILTER_CONDITION"
 				includeSysParam="true" />
 		</form>
 	</forms>

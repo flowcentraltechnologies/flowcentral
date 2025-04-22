@@ -246,7 +246,7 @@
 		<xs:sequence>
 			<xs:element name="entry" maxOccurs="unbounded" minOccurs="0">
 				<xs:complexType>
-					<xs:attribute type="xs:string" name="fieldName" use="required"/>
+					<xs:attribute type="xs:string" name="field" use="required"/>
 					<xs:attribute type="xs:string" name="formatter" use="optional"/>
 				</xs:complexType>
 			</xs:element>
@@ -263,27 +263,20 @@
 			</xs:element>
 		</xs:sequence>
 	</xs:complexType>
+	<!-- Restriction -->
+	<xs:complexType name="fcrestriction">
+	    <xs:choice minOccurs="0" maxOccurs="unbounded">
+	      <xs:element name="restriction" type="fcrestriction"/>
+	    </xs:choice>
+		<xs:attribute type="fcfiltercondtype" name="type" use="required"/>
+		<xs:attribute type="xs:string" name="field" use="optional"/>
+		<xs:attribute type="xs:string" name="paramA" use="optional"/>
+		<xs:attribute type="xs:string" name="paramB" use="optional"/>
+	</xs:complexType>
 	<!-- Filter -->
 	<xs:complexType name="fcfilter">
 		<xs:sequence>
-			<xs:element name="restriction" maxOccurs="unbounded" minOccurs="0">
-				<xs:complexType>
-					<xs:sequence>
-						<xs:element name="restriction" maxOccurs="unbounded" minOccurs="0">
-							<xs:complexType>
-								<xs:attribute type="fcfiltercondtype" name="type" use="required"/>
-								<xs:attribute type="xs:string" name="field" use="required"/>
-								<xs:attribute type="xs:string" name="paramA" use="optional"/>
-								<xs:attribute type="xs:string" name="paramB" use="optional"/>
-							</xs:complexType>
-						</xs:element>
-					</xs:sequence>
-					<xs:attribute type="fcfiltercondtype" name="type" use="optional"/>
-					<xs:attribute type="xs:string" name="field" use="optional"/>
-					<xs:attribute type="xs:string" name="paramA" use="optional"/>
-					<xs:attribute type="xs:string" name="paramB" use="optional"/>
-				</xs:complexType>
-			</xs:element>
+			<xs:element type="fcrestriction" name="restriction" maxOccurs="unbounded" minOccurs="0"/>
 		</xs:sequence>
 		<xs:attribute type="xs:string" name="name" use="optional"/>
 		<xs:attribute type="xs:string" name="description" use="optional"/>
@@ -306,25 +299,21 @@
 		<xs:sequence>
 			<xs:element name="setValue" maxOccurs="unbounded" minOccurs="0">
 				<xs:complexType>
-					<xs:simpleContent>
-						<xs:extension base="xs:string">
-							<xs:attribute name="type" use="required">
-								<xs:simpleType>
-									<xs:restriction base="xs:string">
-										<xs:enumeration value="NULL"/>
-										<xs:enumeration value="IMMEDIATE"/>
-										<xs:enumeration value="IMMEDIATE_LINGUAL"/>
-										<xs:enumeration value="IMMEDIATE_FIELD"/>
-										<xs:enumeration value="PROCESS_VARIABLE"/>
-										<xs:enumeration value="SESSION_PARAMETER"/>
-										<xs:enumeration value="GENERATOR"/>
-									</xs:restriction>
-								</xs:simpleType>
-							</xs:attribute>
-							<xs:attribute type="xs:string" name="field" use="required"/>
-							<xs:attribute type="xs:string" name="value" use="optional"/>
-						</xs:extension>
-					</xs:simpleContent>
+					<xs:attribute name="type" use="optional">
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:enumeration value="NULL"/>
+								<xs:enumeration value="IMMEDIATE"/>
+								<xs:enumeration value="IMMEDIATE_LINGUAL"/>
+								<xs:enumeration value="IMMEDIATE_FIELD"/>
+								<xs:enumeration value="PROCESS_VARIABLE"/>
+								<xs:enumeration value="SESSION_PARAMETER"/>
+								<xs:enumeration value="GENERATOR"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:attribute>
+					<xs:attribute type="xs:string" name="field" use="required"/>
+					<xs:attribute type="xs:string" name="value" use="optional"/>
 				</xs:complexType>
 			</xs:element>
 		</xs:sequence>
@@ -395,18 +384,6 @@
 												</xs:simpleContent>
 											</xs:complexType>
 										</xs:element>
-										<xs:element name="filter" type="fcfilter" maxOccurs="unbounded" minOccurs="0"/>
-										<xs:element name="values" maxOccurs="unbounded" minOccurs="0">
-											<xs:complexType>
-												<xs:sequence>
-													<xs:element name="setValues" type="fcsetvalues" maxOccurs="1" minOccurs="0"/>
-												</xs:sequence>
-												<xs:attribute type="xs:string" name="name" use="required"/>
-												<xs:attribute type="xs:string" name="description" use="required"/>
-												<xs:attribute type="xs:string" name="label" use="optional"/>
-												<xs:attribute type="xs:string" name="valueGenerator" use="optional"/>
-											</xs:complexType>
-										</xs:element>
 										<xs:element name="alert" maxOccurs="unbounded" minOccurs="0">
 											<xs:complexType>
 												<xs:attribute type="xs:string" name="name" use="required"/>
@@ -417,6 +394,18 @@
 												<xs:attribute type="xs:string" name="recipientPolicy" use="optional"/>
 												<xs:attribute type="xs:string" name="recipientNameRule" use="optional"/>
 												<xs:attribute type="xs:string" name="recipientContactRule" use="optional"/>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="filter" type="fcfilter" maxOccurs="unbounded" minOccurs="0"/>
+										<xs:element name="values" maxOccurs="unbounded" minOccurs="0">
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="setValues" type="fcsetvalues" maxOccurs="1" minOccurs="0"/>
+												</xs:sequence>
+												<xs:attribute type="xs:string" name="name" use="required"/>
+												<xs:attribute type="xs:string" name="description" use="required"/>
+												<xs:attribute type="xs:string" name="label" use="optional"/>
+												<xs:attribute type="xs:string" name="valueGenerator" use="optional"/>
 											</xs:complexType>
 										</xs:element>
 									</xs:sequence>
@@ -433,6 +422,10 @@
 									<xs:attribute type="xs:boolean" name="supportOpenInNewWindow" use="optional"/>
 									<xs:attribute type="xs:boolean" name="allowSecondaryTenants" use="optional"/>
 									<xs:attribute type="xs:string" name="routeToApplet" use="optional"/>
+									<xs:attribute type="xs:string" name="baseField" use="optional"/>
+									<xs:attribute type="xs:string" name="assignField" use="optional"/>
+									<xs:attribute type="xs:string" name="assignDescField" use="optional"/>
+									<xs:attribute type="xs:string" name="pseudoDeleteField" use="optional"/>
 								</xs:complexType>
 							</xs:element>
 						</xs:sequence>
@@ -523,10 +516,15 @@
 														<xs:attribute type="xs:boolean" name="maintainAction" use="optional"/>
 														<xs:attribute type="xs:string" name="references" use="optional"/>
 														<xs:attribute type="xs:integer" name="minLen" use="optional"/>
+														<xs:attribute type="xs:integer" name="columns" use="optional"/>
+														<xs:attribute type="xs:integer" name="rows" use="optional"/>
 														<xs:attribute type="xs:integer" name="precision" use="optional"/>
 														<xs:attribute type="xs:integer" name="scale" use="optional"/>
 														<xs:attribute type="xs:string" name="key" use="optional"/>
 														<xs:attribute type="xs:string" name="property" use="optional"/>
+														<xs:attribute type="xs:string" name="mapped" use="optional"/>
+														<xs:attribute type="xs:string" name="jsonName" use="optional"/>
+														<xs:attribute type="xs:string" name="jsonFormatter" use="optional"/>
 													</xs:extension>
 												</xs:simpleContent>
 											</xs:complexType>
@@ -536,32 +534,6 @@
 												<xs:attribute type="xs:string" name="name" use="required"/>
 												<xs:attribute type="xs:string" name="description" use="required"/>
 												<xs:attribute type="xs:string" name="expression" use="required"/>
-											</xs:complexType>
-										</xs:element>
-										<xs:element name="attachment" maxOccurs="unbounded" minOccurs="0">
-											<xs:complexType>
-												<xs:attribute name="type" use="required">
-													<xs:simpleType>
-														<xs:restriction base="xs:string">
-															<xs:enumeration value="AUDIO"/>
-															<xs:enumeration value="CSV"/>
-															<xs:enumeration value="EXCEL"/>
-															<xs:enumeration value="IMAGE"/>
-															<xs:enumeration value="IMAGE_PNG"/>
-															<xs:enumeration value="IMAGE_JPG"/>
-															<xs:enumeration value="IMAGE_GIF"/>
-															<xs:enumeration value="IMAGE_BMP"/>
-															<xs:enumeration value="PDF"/>
-															<xs:enumeration value="XML"/>
-															<xs:enumeration value="TEXT"/>
-															<xs:enumeration value="VIDEO"/>
-															<xs:enumeration value="WILDCARD"/>
-															<xs:enumeration value="WORD"/>
-														</xs:restriction>
-													</xs:simpleType>
-												</xs:attribute>
-												<xs:attribute type="xs:string" name="name" use="required"/>
-												<xs:attribute type="xs:string" name="description" use="required"/>
 											</xs:complexType>
 										</xs:element>
 										<xs:element name="searchInput" maxOccurs="unbounded" minOccurs="0">
@@ -616,6 +588,32 @@
 												<xs:attribute type="xs:string" name="fieldList" use="required"/>
 											</xs:complexType>
 										</xs:element>
+										<xs:element name="attachment" maxOccurs="unbounded" minOccurs="0">
+											<xs:complexType>
+												<xs:attribute name="type" use="required">
+													<xs:simpleType>
+														<xs:restriction base="xs:string">
+															<xs:enumeration value="AUDIO"/>
+															<xs:enumeration value="CSV"/>
+															<xs:enumeration value="EXCEL"/>
+															<xs:enumeration value="IMAGE"/>
+															<xs:enumeration value="IMAGE_PNG"/>
+															<xs:enumeration value="IMAGE_JPG"/>
+															<xs:enumeration value="IMAGE_GIF"/>
+															<xs:enumeration value="IMAGE_BMP"/>
+															<xs:enumeration value="PDF"/>
+															<xs:enumeration value="XML"/>
+															<xs:enumeration value="TEXT"/>
+															<xs:enumeration value="VIDEO"/>
+															<xs:enumeration value="WILDCARD"/>
+															<xs:enumeration value="WORD"/>
+														</xs:restriction>
+													</xs:simpleType>
+												</xs:attribute>
+												<xs:attribute type="xs:string" name="name" use="required"/>
+												<xs:attribute type="xs:string" name="description" use="required"/>
+											</xs:complexType>
+										</xs:element>
 										<xs:element name="index" maxOccurs="unbounded" minOccurs="0">
 											<xs:complexType>
 												<xs:attribute type="xs:string" name="name" use="required"/>
@@ -630,8 +628,8 @@
 												</xs:sequence>
 												<xs:attribute type="xs:string" name="name" use="required"/>
 												<xs:attribute type="xs:string" name="description" use="required"/>
-												<xs:attribute type="xs:string" name="label" use="required"/>
-												<xs:attribute name="constraintAction" use="required">
+												<xs:attribute type="xs:string" name="label" use="optional"/>
+												<xs:attribute name="onConstraint" use="required">
 													<xs:simpleType>
 														<xs:restriction base="xs:string">
 															<xs:enumeration value="UPDATE"/>
@@ -705,7 +703,7 @@
 												<xs:attribute type="xs:string" name="description" use="required"/>
 												<xs:attribute type="xs:string" name="label" use="optional"/>
 												<xs:attribute type="xs:string" name="policy" use="required"/>
-												<xs:attribute type="xs:integer" name="orderIndex" use="required"/>
+												<xs:attribute type="xs:integer" name="orderIndex" use="optional"/>
 											</xs:complexType>
 										</xs:element>
 										<xs:element type="fcfilter" name="quickFilter" maxOccurs="unbounded" minOccurs="0"/>
@@ -774,6 +772,72 @@
 							<xs:element name="form" maxOccurs="unbounded" minOccurs="0">
 								<xs:complexType>
 									<xs:sequence>
+										<xs:element name="annotation" maxOccurs="unbounded" minOccurs="0">
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element type="fcfilter" name="onCondition"  maxOccurs="1" minOccurs="0"/>
+												</xs:sequence>
+												<xs:attribute name="type" use="optional">
+													<xs:simpleType>
+														<xs:restriction base="xs:string">
+															<xs:enumeration value="INFO"/>
+															<xs:enumeration value="WARNING"/>
+															<xs:enumeration value="ERROR"/>
+														</xs:restriction>
+													</xs:simpleType>
+												</xs:attribute>
+												<xs:attribute name="visibility" use="optional">
+													<xs:simpleType>
+														<xs:restriction base="xs:string">
+															<xs:enumeration value="FIXED"/>
+															<xs:enumeration value="DISAPPEARING"/>
+															<xs:enumeration value="CLOSABLE"/>
+														</xs:restriction>
+													</xs:simpleType>
+												</xs:attribute>
+												<xs:attribute type="xs:string" name="name" use="required"/>
+												<xs:attribute type="xs:string" name="description" use="required"/>
+												<xs:attribute type="xs:string" name="message" use="required"/>
+												<xs:attribute type="xs:boolean" name="html" use="optional"/>
+												<xs:attribute type="xs:boolean" name="directPlacement" use="optional"/>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="action" maxOccurs="unbounded" minOccurs="0">
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element type="fcfilter" name="onCondition"  maxOccurs="1" minOccurs="0"/>
+												</xs:sequence>
+												<xs:attribute type="xs:string" name="name" use="required"/>
+												<xs:attribute type="xs:string" name="description" use="required"/>
+												<xs:attribute type="xs:string" name="label" use="optional"/>
+												<xs:attribute name="type" use="required">
+													<xs:simpleType>
+														<xs:restriction base="xs:string">
+															<xs:enumeration value="BUTTON"/>
+															<xs:enumeration value="LINK"/>
+														</xs:restriction>
+													</xs:simpleType>
+												</xs:attribute>
+												<xs:attribute name="highlight" use="optional">
+													<xs:simpleType>
+														<xs:restriction base="xs:string">
+															<xs:enumeration value="BLUE"/>
+															<xs:enumeration value="GREEN"/>
+															<xs:enumeration value="ORANGE"/>
+															<xs:enumeration value="RED"/>
+															<xs:enumeration value="GRAY"/>
+														</xs:restriction>
+													</xs:simpleType>
+												</xs:attribute>
+												<xs:attribute type="xs:string" name="policy" use="optional"/>
+												<xs:attribute type="xs:string" name="symbol" use="optional"/>
+												<xs:attribute type="xs:string" name="styleClass" use="optional"/>
+												<xs:attribute type="xs:integer" name="orderIndex" use="optional"/>
+												<xs:attribute type="xs:boolean" name="showOnCreate" use="optional"/>
+												<xs:attribute type="xs:boolean" name="showOnMaintain" use="optional"/>
+												<xs:attribute type="xs:boolean" name="validateForm" use="optional"/>
+											</xs:complexType>
+										</xs:element>
 										<xs:element name="tab" maxOccurs="unbounded" minOccurs="0">
 											<xs:complexType mixed="true">
 												<xs:sequence>
@@ -881,72 +945,6 @@
 											</xs:complexType>
 										</xs:element>
 										<xs:element type="fcfilter" name="filter" maxOccurs="unbounded" minOccurs="0"/>
-										<xs:element name="annotation" maxOccurs="unbounded" minOccurs="0">
-											<xs:complexType>
-												<xs:sequence>
-													<xs:element type="fcfilter" name="onCondition"  maxOccurs="1" minOccurs="0"/>
-												</xs:sequence>
-												<xs:attribute name="type" use="required">
-													<xs:simpleType>
-														<xs:restriction base="xs:string">
-															<xs:enumeration value="INFO"/>
-															<xs:enumeration value="WARNING"/>
-															<xs:enumeration value="ERROR"/>
-														</xs:restriction>
-													</xs:simpleType>
-												</xs:attribute>
-												<xs:attribute name="visibility" use="required">
-													<xs:simpleType>
-														<xs:restriction base="xs:string">
-															<xs:enumeration value="FIXED"/>
-															<xs:enumeration value="DISAPPEARING"/>
-															<xs:enumeration value="CLOSABLE"/>
-														</xs:restriction>
-													</xs:simpleType>
-												</xs:attribute>
-												<xs:attribute type="xs:string" name="name" use="required"/>
-												<xs:attribute type="xs:string" name="description" use="required"/>
-												<xs:attribute type="xs:string" name="message" use="required"/>
-												<xs:attribute type="xs:boolean" name="html" use="optional"/>
-												<xs:attribute type="xs:boolean" name="directPlacement" use="optional"/>
-											</xs:complexType>
-										</xs:element>
-										<xs:element name="action" maxOccurs="unbounded" minOccurs="0">
-											<xs:complexType>
-												<xs:sequence>
-													<xs:element type="fcfilter" name="onCondition"  maxOccurs="1" minOccurs="0"/>
-												</xs:sequence>
-												<xs:attribute type="xs:string" name="name" use="required"/>
-												<xs:attribute type="xs:string" name="description" use="required"/>
-												<xs:attribute type="xs:string" name="label" use="optional"/>
-												<xs:attribute name="type" use="required">
-													<xs:simpleType>
-														<xs:restriction base="xs:string">
-															<xs:enumeration value="BUTTON"/>
-															<xs:enumeration value="LINK"/>
-														</xs:restriction>
-													</xs:simpleType>
-												</xs:attribute>
-												<xs:attribute name="highlight" use="required">
-													<xs:simpleType>
-														<xs:restriction base="xs:string">
-															<xs:enumeration value="BLUE"/>
-															<xs:enumeration value="GREEN"/>
-															<xs:enumeration value="ORANGE"/>
-															<xs:enumeration value="RED"/>
-															<xs:enumeration value="GRAY"/>
-														</xs:restriction>
-													</xs:simpleType>
-												</xs:attribute>
-												<xs:attribute type="xs:string" name="policy" use="optional"/>
-												<xs:attribute type="xs:string" name="symbol" use="optional"/>
-												<xs:attribute type="xs:string" name="styleClass" use="optional"/>
-												<xs:attribute type="xs:integer" name="orderIndex" use="optional"/>
-												<xs:attribute type="xs:boolean" name="showOnCreate" use="optional"/>
-												<xs:attribute type="xs:boolean" name="showOnMaintain" use="optional"/>
-												<xs:attribute type="xs:boolean" name="validateForm" use="optional"/>
-											</xs:complexType>
-										</xs:element>
 										<xs:element name="relatedList" maxOccurs="unbounded" minOccurs="0">
 											<xs:complexType>
 												<xs:attribute type="xs:string" name="name" use="required"/>
@@ -1019,7 +1017,7 @@
 															<xs:sequence>
 																<xs:element name="entry"  maxOccurs="unbounded" minOccurs="0">
 																	<xs:complexType>
-																		<xs:attribute type="xs:string" name="fieldName" use="required"/>
+																		<xs:attribute type="xs:string" name="field" use="required"/>
 																		<xs:attribute type="xs:string" name="widget" use="required"/>
 																	</xs:complexType>
 																</xs:element>

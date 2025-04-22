@@ -7,8 +7,8 @@
 			label="Manage Product" type="MANAGE_ENTITYLIST" entity="product">
 			<property name="searchTable" value="productTable" />
 			<filter name="expensiveShirt" description="Expensive Shirts">
-				<restriction type="and">
-					<restriction type="equals" field="category" paramA="SHT" />
+				<restriction type="AND">
+					<restriction type="EQUALS" field="category" paramA="SHT" />
 					<restriction type="or">
 						<restriction type="greater_than" field="costPrice"
 							paramA="30.00" />

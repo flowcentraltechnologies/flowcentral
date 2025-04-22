@@ -1,11 +1,13 @@
 <?xml version="1.0"?>
 <!-- Dashboard application -->
-<application name="dashboard"
+<application xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="file:///C:/Users/Lateef Ojulari/git/flowcentral/flowcentral-application/src/main/resources/flowcentral-application.xsd"
+	name="dashboard"
 	description="$m{dashboard.short.description}"
 	label="$m{dashboard.label}" module="dashboard" displayIndex="-10">
 	<!-- Widgets -->
 	<widgetTypes>
-		<widgetType name="chartdatasourcelist" 
+		<widgetType name="chartdatasourcelist"
 			description="$m{dashboard.widgettype.chartdatasourcelist}"
 			dataType="STRING" inputType="STRING"
 			editor="!ui-dropdownchecklist list:dashboardchartdatasourcelist listParams:$l{entity} columns:3"
@@ -15,8 +17,9 @@
 	<applets>
 		<applet name="appDashboard"
 			description="$m{dashboard.application.appdashboard}"
-			label="$m{dashboard.application.appdashboard.label}" icon="chart-pie"
-			type="path_page" path="/application/dashboard/openPage"
+			label="$m{dashboard.application.appdashboard.label}"
+			icon="chart-pie"
+			type="PATH_PAGE" path="/application/dashboard/openPage"
 			menuAccess="true" allowSecondaryTenants="true">
 		</applet>
 		<applet name="manageDashboard"
@@ -62,41 +65,42 @@
 	<!-- Charts -->
 	<charts>
 		<chart name="sampleChart1"
-			description="$m{dashboard.samplechart1.description}" type="bar"
+			description="$m{dashboard.samplechart1.description}" type="BAR"
 			title="$m{dashboard.samplechart1.title}"
 			subTitle="$m{dashboard.samplechart1.subtitle}"
 			provider="chartsnapshot-provider" rule="sampleSalesChartSnapshot"
 			showGrid="false" smooth="true" showDataLabels="true" />
 		<chart name="sampleChart2"
-			description="$m{dashboard.samplechart2.description}" type="bar"
-			palette="palette3" title="$m{dashboard.samplechart2.title}"
+			description="$m{dashboard.samplechart2.description}" type="BAR"
+			palette="PALETTE3" title="$m{dashboard.samplechart2.title}"
 			subTitle="$m{dashboard.samplechart2.subtitle}"
 			provider="chartsnapshot-provider" rule="sampleCostsChartSnapshot"
 			showGrid="false" smooth="true" showDataLabels="true" />
 
 		<chart name="sampleChart3"
-			description="$m{dashboard.samplechart3.description}" type="area"
+			description="$m{dashboard.samplechart3.description}" type="AREA"
 			title="$m{dashboard.samplechart3.title}"
 			subTitle="$m{dashboard.samplechart3.subtitle}"
 			provider="chartsnapshot-provider" rule="sampleSalesChartSnapshot"
 			showGrid="false" smooth="false" />
 		<chart name="sampleChart4"
-			description="$m{dashboard.samplechart4.description}" type="area"
-			palette="palette7" title="$m{dashboard.samplechart4.title}"
+			description="$m{dashboard.samplechart4.description}" type="AREA"
+			palette="PALETTE7" title="$m{dashboard.samplechart4.title}"
 			subTitle="$m{dashboard.samplechart4.subtitle}"
 			provider="chartsnapshot-provider" rule="sampleCostsChartSnapshot"
 			showGrid="false" smooth="false" />
 
 		<chart name="sampleChart5"
-			description="$m{dashboard.samplechart5.description}" type="column"
+			description="$m{dashboard.samplechart5.description}" type="COLUMN"
 			title="$m{dashboard.samplechart5.title}"
 			subTitle="$m{dashboard.samplechart5.subtitle}"
 			provider="chartsnapshot-provider"
-			rule="sampleSalesAndCostsChartSnapshot" showGrid="true" smooth="true"
+			rule="sampleSalesAndCostsChartSnapshot" showGrid="true"
+			smooth="true"
 			stacked="true" showDataLabels="true" formatDataLabels="true"
 			formatYLabels="true" />
 		<chart name="sampleChart6"
-			description="$m{dashboard.samplechart6.description}" type="donut"
+			description="$m{dashboard.samplechart6.description}" type="DONUT"
 			title="$m{dashboard.samplechart6.title}"
 			subTitle="$m{dashboard.samplechart6.subtitle}" height="300"
 			provider="chartsnapshot-provider" rule="sampleCostsChartSnapshot"
@@ -125,11 +129,12 @@
 		<entity name="dashboard" description="$m{dashboard.dashboard}"
 			label="$m{dashboard.dashboard.label}"
 			type="com.flowcentraltech.flowcentral.dashboard.entities.Dashboard"
-			auditable="true" reportable="true" changeEvents = "true">
+			auditable="true" reportable="true" changeEvents="true">
 			<field name="sections" label="$m{dashboard.dashboard.sections}"
 				type="INTEGER" inputWidget="application.integer" />
 			<field name="allowSecondaryTenants"
-				label="$m{dashboard.dashboard.allowsecondarytenants}" type="BOOLEAN" />
+				label="$m{dashboard.dashboard.allowsecondarytenants}"
+				type="BOOLEAN" />
 			<field name="status" label="$m{dashboard.dashboard.status}"
 				type="ENUM_REF" references="statuslist"
 				inputWidget="application.enumlist" />
@@ -163,10 +168,12 @@
 			<field name="label" label="$m{dashboard.dashboardoption.label1}"
 				type="STRING" inputWidget="application.text" maxLen="96" />
 			<field name="applicationName"
-				label="$m{dashboard.dashboardoption.applicationname}" type="LIST_ONLY"
+				label="$m{dashboard.dashboardoption.applicationname}"
+				type="LIST_ONLY"
 				key="dashboardId" property="applicationName" />
 			<field name="dashboardName"
-				label="$m{dashboard.dashboardoption.dashboardname}" type="LIST_ONLY"
+				label="$m{dashboard.dashboardoption.dashboardname}"
+				type="LIST_ONLY"
 				key="dashboardId" property="name" />
 			<field name="baseList"
 				label="$m{dashboard.dashboardoption.categorybases}"
@@ -217,7 +224,7 @@
 			description="$m{dashboard.dashboardtile}"
 			label="$m{dashboard.dashboardtile.label}"
 			type="com.flowcentraltech.flowcentral.dashboard.entities.DashboardTile"
-			auditable="true" reportable="true" changeEvents = "true">
+			auditable="true" reportable="true" changeEvents="true">
 			<field name="dashboardId"
 				label="$m{dashboard.dashboardtile.dashboardid}" type="REF"
 				references="dashboardRef"

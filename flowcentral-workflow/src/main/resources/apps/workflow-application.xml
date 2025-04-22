@@ -35,13 +35,13 @@
 		<applet name="myWorkItems"
 			description="$m{workflow.myworkitems.application.workitems}"
 			label="$m{workflow.myworkitems.application.workitems.label}"
-			icon="copy" type="path_page" path="/workflow/myworkitems/openPage"
+			icon="copy" type="PATH_PAGE" path="/workflow/myworkitems/openPage"
 			menuAccess="true" allowSecondaryTenants="true">
 		</applet>
 		<applet name="exceptionWorkItems"
 			description="$m{workflow.exceptionworkitems.application.workitems}"
 			label="$m{workflow.exceptionworkitems.application.workitems.label}"
-			icon="exclamation-circle" type="path_page"
+			icon="exclamation-circle" type="PATH_PAGE"
 			path="/workflow/exceptionworkitems/openPage" menuAccess="true"
 			allowSecondaryTenants="true">
 		</applet>
@@ -66,7 +66,7 @@
 			<property name="baseRestriction" value="interactiveSteps" />
 			<filter name="interactiveSteps"
 				description="$m{workflow.steps.filter.interactive}">
-				<restriction type="amongst" field="type"
+				<restriction type="AMONGST" field="type"
 					paramA="USR|ERR|SET|MRT|PRT|BRT|REC|ENR|PRC|NTF" />
 			</filter>
 		</applet>
@@ -100,7 +100,7 @@
 				value="delatableWorkflowChannel" />
 			<filter name="delatableWorkflowChannel"
 				description="$m{workflow.workflowchannel.filter.deletableworkflowchannel}">
-				<restriction type="equals" field="configType" paramA="C" />
+				<restriction type="EQUALS" field="configType" paramA="C" />
 			</filter>
 		</applet>
 		<applet name="workflowItem"
@@ -890,7 +890,7 @@
 			</tab>
 			<tab name="interactiveSteps"
 				label="$m{workflow.workflow.form.interactivesteps}"
-				contentType="child_list" applet="manageInteractiveSteps"
+				contentType="CHILD_LIST" applet="manageInteractiveSteps"
 				reference="stepList" />
 		</form>
 		<form name="wfStepForm" description="$m{workflow.step.form}"
@@ -933,26 +933,26 @@
 			</tab>
 			<tab name="assignedRoles"
 				label="$m{workflow.step.form.assignedroles}"
-				contentType="child_list" applet="manageWfStepRoles"
+				contentType="CHILD_LIST" applet="manageWfStepRoles"
 				reference="roleList" />
-			<formStatePolicy type="on_switch" name="policyPolicy"
+			<formStatePolicy type="ON_SWITCH" name="policyPolicy"
 				description="$m{workflow.step.form.fieldstatepolicy.policy}">
 				<onCondition>
-					<restriction type="amongst" field="type" paramA="N|P" />
+					<restriction type="AMONGST" field="type" paramA="N|P" />
 				</onCondition>
 				<setStates>
-					<setState type="field" target="policy,rule" visible="true" />
+					<setState type="FIELD" target="policy,rule" visible="TRUE" />
 				</setStates>
 			</formStatePolicy>
-			<formStatePolicy type="on_switch"
+			<formStatePolicy type="ON_SWITCH"
 				name="recordActionPolicy"
 				description="$m{workflow.step.form.fieldstatepolicy.recordactiontype}">
 				<onCondition>
-					<restriction type="equals" field="type" paramA="R" />
+					<restriction type="EQUALS" field="type" paramA="R" />
 				</onCondition>
 				<setStates>
-					<setState type="field" target="recordActionType"
-						visible="true" />
+					<setState type="FIELD" target="recordActionType"
+						visible="TRUE" />
 				</setStates>
 			</formStatePolicy>
 		</form>
@@ -1026,14 +1026,14 @@
 			</tab>
 			<tab name="changeLog" label="$m{application.form.audit}"
 				contentType="MINIFORM_CHANGELOG" />
-			<formStatePolicy type="on_switch" name="editPolicy"
+			<formStatePolicy type="ON_SWITCH" name="editPolicy"
 				description="$m{workflow.workflowchannel.form.fieldstatepolicy.editpolicy}">
 				<onCondition>
-					<restriction type="equals" field="configType"
+					<restriction type="EQUALS" field="configType"
 						paramA="C" />
 				</onCondition>
 				<setStates>
-					<setState type="field"
+					<setState type="FIELD"
 						target="applicationId,name,description,direction,entity"
 						disabled="false" />
 				</setStates>

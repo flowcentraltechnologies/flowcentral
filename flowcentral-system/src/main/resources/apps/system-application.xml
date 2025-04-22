@@ -64,7 +64,7 @@
 				value="sectorEditable" />
 			<filter name="sectorEditable"
 				description="$m{system.sector.filter.editable}">
-				<restriction type="not_equals" field="name"
+				<restriction type="NOT_EQUALS" field="name"
 					paramA="central" />
 			</filter>
 		</applet>
@@ -84,7 +84,7 @@
 				value="moduleEditable" />
 			<filter name="moduleEditable"
 				description="$m{system.module.filter.editable}">
-				<restriction type="not_amongst" field="shortCode"
+				<restriction type="NOT_AMONGST" field="shortCode"
 					paramA="SYS|SEC|ORG|APP|RPT|CHT|NOT|DSH|WRK|INT|STU|WKS|CLB|CDN" />
 			</filter>
 		</applet>
@@ -111,33 +111,33 @@
 				value="sysParamEditable" />
 			<filter name="sysParamEditable"
 				description="$m{system.systemparameter.filter.editable}">
-				<restriction type="equals" field="editable"
+				<restriction type="EQUALS" field="editable"
 					paramA="true" />
 			</filter>
 			<filter name="sysParamSystemNumber"
 				description="$m{system.systemparameter.filter.number}"
 				quickFilter="true">
-				<restriction type="equals" field="type" paramA="N" />
+				<restriction type="EQUALS" field="type" paramA="N" />
 			</filter>
 			<filter name="sysParamSystemName"
 				description="$m{system.systemparameter.filter.name}"
 				quickFilter="true">
-				<restriction type="equals" field="type" paramA="M" />
+				<restriction type="EQUALS" field="type" paramA="M" />
 			</filter>
 			<filter name="sysParamSystemContact"
 				description="$m{system.systemparameter.filter.contact}"
 				quickFilter="true">
-				<restriction type="equals" field="type" paramA="C" />
+				<restriction type="EQUALS" field="type" paramA="C" />
 			</filter>
 			<filter name="sysParamSystemString"
 				description="$m{system.systemparameter.filter.string}"
 				quickFilter="true">
-				<restriction type="equals" field="type" paramA="S" />
+				<restriction type="EQUALS" field="type" paramA="S" />
 			</filter>
 			<filter name="sysParamSystemFlag"
 				description="$m{system.systemparameter.filter.flag}"
 				quickFilter="true">
-				<restriction type="equals" field="type" paramA="B" />
+				<restriction type="EQUALS" field="type" paramA="B" />
 			</filter>
 		</applet>
 		<applet name="manageScheduledTask"
@@ -229,13 +229,13 @@
 		</applet>
 		<applet name="manageUIOptions"
 			description="$m{system.uioptions.manage}"
-			label="$m{system.uioptions.label}" icon="cog" type="path_page"
+			label="$m{system.uioptions.label}" icon="cog" type="PATH_PAGE"
 			path="/system/uioptions/openPage" menuAccess="true">
 		</applet>
 		<applet name="manageLicensing"
 			description="$m{system.licensing.manage}"
 			label="$m{system.licensing.label}" icon="credit-card"
-			type="path_page" path="/system/licensing/openPage" menuAccess="true">
+			type="PATH_PAGE" path="/system/licensing/openPage" menuAccess="true">
 		</applet>
 		<applet name="manageEnvironmentVariable"
 			description="$m{system.environmentvariable.manage}"
@@ -275,7 +275,7 @@
 			label="$m{system.dashboard.manage.label}" name="manageDashboard" />
 		<applet name="manageDistributionListing"
 			description="$m{system.distributionlisting}"
-			label="$m{system.distributionlisting}" icon="file-download" type="path_page"
+			label="$m{system.distributionlisting}" icon="file-download" type="PATH_PAGE"
 			path="/system/distributionlisting/openPage" menuAccess="true">
 		</applet>
 	</applets>
@@ -751,7 +751,7 @@
 				widthRatio="1" />
 			<quickFilter name="systemFlagsFilter"
 				description="$m{system.systemparameter.table.quickfilter.systemflags}">
-				<restriction type="equals" field="type" paramA="B" />
+				<restriction type="EQUALS" field="type" paramA="B" />
 			</quickFilter>
 		</table>
 		<table name="scheduledTaskTable"
@@ -978,29 +978,29 @@
 			</tab>
 			<tab name="changeLog" label="$m{application.form.audit}"
 				contentType="MINIFORM_CHANGELOG" />
-			<formStatePolicy type="on_switch"
+			<formStatePolicy type="ON_SWITCH"
 				name="valueEditPolicy"
 				description="$m{system.systemparameter.form.fieldstatepolicy.valueeditpolicy}">
 				<onCondition>
-					<restriction type="equals" field="editable"
+					<restriction type="EQUALS" field="editable"
 						paramA="true" />
 				</onCondition>
 				<setStates>
-					<setState type="annotation" target="valueAnnotation"
-						visible="true" />
-					<setState type="field" target="value" editable="true" />
+					<setState type="ANNOTATION" target="valueAnnotation"
+						visible="TRUE" />
+					<setState type="FIELD" target="value" editable="true" />
 				</setStates>
 			</formStatePolicy>
-			<formStatePolicy type="on_switch"
+			<formStatePolicy type="ON_SWITCH"
 				name="valueNonEditPolicy"
 				description="$m{system.systemparameter.form.fieldstatepolicy.valuenoneditpolicy}">
 				<onCondition>
-					<restriction type="equals" field="editable"
+					<restriction type="EQUALS" field="editable"
 						paramA="false" />
 				</onCondition>
 				<setStates>
-					<setState type="annotation" target="headerAnnotation"
-						visible="true" />
+					<setState type="ANNOTATION" target="headerAnnotation"
+						visible="TRUE" />
 				</setStates>
 			</formStatePolicy>
 		</form>
@@ -1025,7 +1025,7 @@
 			<tab name="paramValues"
 				label="$m{system.scheduledtask.form.parameters}"
 				reference="scheduledtask-paramconfigprovider"
-				contentType="param_values" />
+				contentType="PARAM_VALUES" />
 			<tab name="executionDetails"
 				label="$m{system.scheduledtask.form.executiondetails}"
 				contentType="MINIFORM" disabled="true">
@@ -1103,7 +1103,7 @@
 				</section>
 			</tab>
 			<tab name="redirects" label="$m{system.delegate.form.redirects}"
-				contentType="child_list" applet="manageDelegateRedirect"
+				contentType="CHILD_LIST" applet="manageDelegateRedirect"
 				reference="redirects" />
 			<tab name="changeLog" label="$m{application.form.audit}"
 				contentType="MINIFORM_CHANGELOG" />

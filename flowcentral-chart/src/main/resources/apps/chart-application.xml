@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <!-- Chart application -->
-<application name="chart"
+<application  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="file:///C:/Users/Lateef Ojulari/git/flowcentral/flowcentral-application/src/main/resources/flowcentral-application.xsd" name="chart"
 	description="$m{chart.short.description}" label="$m{chart.label}"
 	module="chart">
 	<!-- Widget Types -->

@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <!-- Collaboration application -->
-<application name="collaboration"
+<application  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="file:///C:/Users/Lateef Ojulari/git/flowcentral/flowcentral-application/src/main/resources/flowcentral-application.xsd" name="collaboration"
 	description="$m{collaboration.short.description}"
 	label="$m{collaboration.label}" module="collaboration">
 	<!-- Applets -->
@@ -19,10 +20,10 @@
 			<property name="baseRestriction" value="myLocksFilter" />
 			<filter name="myLocksFilter"
 				description="$m{collaboration.heldcollaborationlock.filter.mylocks">
-				<restriction type="and">
-					<!--restriction type="equals" field="applicationName"
+				<restriction type="AND">
+					<!--restriction type="EQUALS" field="applicationName"
 						paramA="{{s:fc.CURRENT_APPLICATION_NAME}}" /-->
-					<restriction type="equals" field="createdBy"
+					<restriction type="EQUALS" field="createdBy"
 						paramA="{{u:loginId}}" />
 				</restriction>
 			</filter>
@@ -40,8 +41,8 @@
 			<property name="baseRestriction" value="byApplicationFilter" />
 			<filter name="byApplicationFilter"
 				description="$m{collaboration.freezeunfreeze.filter.byapplication">
-				<restriction type="and">
-					<restriction type="equals" field="applicationName"
+				<restriction type="AND">
+					<restriction type="EQUALS" field="applicationName"
 						paramA="{{s:fc.CURRENT_APPLICATION_NAME}}" />
 				</restriction>
 			</filter>

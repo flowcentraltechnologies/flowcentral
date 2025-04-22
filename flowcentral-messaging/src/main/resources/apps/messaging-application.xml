@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <!-- Messaging application -->
-<application name="messaging"
+<application  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="file:///C:/Users/Lateef Ojulari/git/flowcentral/flowcentral-application/src/main/resources/flowcentral-application.xsd" name="messaging"
 	description="$m{messaging.short.description}"
 	label="$m{messaging.label}" module="messaging">
 	<!-- Widgets -->

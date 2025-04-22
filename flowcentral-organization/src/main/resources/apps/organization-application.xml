@@ -1,6 +1,8 @@
 <?xml version="1.0"?>
 <!-- Organization application -->
-<application name="organization"
+<application xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="file:///C:/Users/Lateef Ojulari/git/flowcentral/flowcentral-application/src/main/resources/flowcentral-application.xsd"
+	name="organization"
 	description="$m{organization.short.description}"
 	label="$m{organization.label}" module="organization">
 	<!-- Notification Templates -->
@@ -16,22 +18,22 @@
 	<widgetTypes>
 		<widgetType name="branchlist"
 			description="$m{organization.widgettype.branchlist}" dataType="LONG"
-			inputType="mapped"
+			inputType="MAPPED"
 			editor="!ui-select list:branchlist blankOption:$m{blank.none}"
 			renderer="!ui-listlabel list:branchlist" />
 		<widgetType name="departmentlist"
 			description="$m{organization.widgettype.departmentlist}"
-			dataType="LONG" inputType="mapped"
+			dataType="LONG" inputType="MAPPED"
 			editor="!ui-select list:departmentlist blankOption:$m{blank.none}"
 			renderer="!ui-listlabel list:departmentlist" />
 		<widgetType name="branchsearch"
 			description="$m{organization.widgettype.branchsearch}"
-			dataType="LONG" inputType="mapped"
+			dataType="LONG" inputType="MAPPED"
 			editor="!fc-entitysearch ref:$s{organization.mappedBranch}"
 			renderer="!ui-label" />
 		<widgetType name="departmentsearch"
 			description="$m{organization.widgettype.departmentsearch}"
-			dataType="LONG" inputType="mapped"
+			dataType="LONG" inputType="MAPPED"
 			editor="!fc-entitysearch ref:$s{organization.mappedDepartment}"
 			renderer="!ui-label" />
 	</widgetTypes>
@@ -57,7 +59,7 @@
 			<property name="maintainForm.delete" value="true" />
 			<filter name="nonSystemRecords"
 				description="$m{common.filter.nonsystemrecords}">
-				<restriction type="greater_than" field="id" paramA="0" />
+				<restriction type="GREATER_THAN" field="id" paramA="0" />
 			</filter>
 		</applet>
 		<applet name="manageDepartment"
@@ -80,7 +82,7 @@
 			<property name="maintainForm.delete" value="true" />
 			<filter name="nonSystemRecords"
 				description="$m{common.filter.nonsystemrecords}">
-				<restriction type="greater_than" field="id" paramA="0" />
+				<restriction type="GREATER_THAN" field="id" paramA="0" />
 			</filter>
 		</applet>
 		<applet name="manageRole"
@@ -120,7 +122,7 @@
 		<applet name="manageRolePrivilege"
 			description="$m{organization.roleprivilege.manage}"
 			label="$m{organization.roleprivilege.manage.label}"
-			type="manage_entitylist_assign" entity="rolePrivilege"
+			type="MANAGE_ENTITYLIST_ASSIGN" entity="rolePrivilege"
 			baseField="roleId" assignField="privilegeId">
 			<property name="searchTable" value="rolePrivilegeTable" />
 			<property name="searchTable.edit" value="true" />
@@ -130,7 +132,7 @@
 		<applet name="manageMappedRoleWfStep"
 			description="$m{organization.mappedrolewfstep.manage}"
 			label="$m{organization.mappedrolewfstep.label}"
-			type="manage_entitylist_assign" entity="mappedRoleWfStep"
+			type="MANAGE_ENTITYLIST_ASSIGN" entity="mappedRoleWfStep"
 			baseField="roleId" assignField="wfStepId">
 			<property name="searchTable" value="mappedRoleWfStepTable" />
 			<property name="searchTable.edit" value="true" />
@@ -157,7 +159,7 @@
 			<property name="maintainForm.delete" value="true" />
 			<filter name="nonSystemRecords"
 				description="$m{common.filter.nonsystemrecords}">
-				<restriction type="greater_than" field="id" paramA="0" />
+				<restriction type="GREATER_THAN" field="id" paramA="0" />
 			</filter>
 		</applet>
 		<applet name="manageCountry"
@@ -180,7 +182,7 @@
 			<property name="maintainForm.delete" value="true" />
 			<filter name="nonSystemRecords"
 				description="$m{common.filter.nonsystemrecords}">
-				<restriction type="greater_than" field="id" paramA="0" />
+				<restriction type="GREATER_THAN" field="id" paramA="0" />
 			</filter>
 		</applet>
 		<applet name="manageState"
@@ -203,7 +205,7 @@
 			<property name="maintainForm.delete" value="true" />
 			<filter name="nonSystemRecords"
 				description="$m{common.filter.nonsystemrecords}">
-				<restriction type="greater_than" field="id" paramA="0" />
+				<restriction type="GREATER_THAN" field="id" paramA="0" />
 			</filter>
 		</applet>
 		<applet name="manageHub"
@@ -226,13 +228,13 @@
 			<property name="maintainForm.delete" value="true" />
 			<filter name="nonSystemRecords"
 				description="$m{common.filter.nonsystemrecords}">
-				<restriction type="greater_than" field="id" paramA="0" />
+				<restriction type="GREATER_THAN" field="id" paramA="0" />
 			</filter>
 		</applet>
 		<applet name="loadCountryData"
 			description="$m{organization.country.importdata}"
 			label="$m{organization.country.importdata.label}" icon="file-import"
-			type="data_import" entity="country" menuAccess="true"
+			type="DATA_IMPORT" entity="country" menuAccess="true"
 			allowSecondaryTenants="true">
 			<property name="importdata.configName" value="countryUpload" />
 			<property name="importdata.routeTo.appletName"
@@ -241,7 +243,7 @@
 		<applet name="loadStateData"
 			description="$m{organization.state.importdata}"
 			label="$m{organization.state.importdata.label}" icon="file-import"
-			type="data_import" entity="state" menuAccess="true"
+			type="DATA_IMPORT" entity="state" menuAccess="true"
 			allowSecondaryTenants="true">
 			<property name="importdata.configName" value="stateUpload" />
 			<property name="importdata.routeTo.appletName"
@@ -250,7 +252,7 @@
 		<applet name="loadHubData"
 			description="$m{organization.hub.importdata}"
 			label="$m{organization.hub.importdata.label}" icon="file-import"
-			type="data_import" entity="hub" menuAccess="true"
+			type="DATA_IMPORT" entity="hub" menuAccess="true"
 			allowSecondaryTenants="true">
 			<property name="importdata.configName" value="hubUpload" />
 			<property name="importdata.routeTo.appletName"
@@ -259,7 +261,7 @@
 		<applet name="loadZoneData"
 			description="$m{organization.zone.importdata}"
 			label="$m{organization.zone.importdata.label}" icon="file-import"
-			type="data_import" entity="zone" menuAccess="true"
+			type="DATA_IMPORT" entity="zone" menuAccess="true"
 			allowSecondaryTenants="true">
 			<property name="importdata.configName" value="zoneUpload" />
 			<property name="importdata.routeTo.appletName"
@@ -268,7 +270,7 @@
 		<applet name="loadBranchData"
 			description="$m{organization.branch.importdata}"
 			label="$m{organization.branch.importdata.label}" icon="file-import"
-			type="data_import" entity="branch" menuAccess="true"
+			type="DATA_IMPORT" entity="branch" menuAccess="true"
 			allowSecondaryTenants="true">
 			<property name="importdata.configName" value="branchUpload" />
 			<property name="importdata.routeTo.appletName"
@@ -390,7 +392,7 @@
 				fieldList="sortCode" />
 			<upload name="branchUpload"
 				description="$m{organization.branch.upload.branchupload}"
-				onConstraint="update">
+				onConstraint="UPDATE">
 				<fieldSequence>
 					<entry field="zoneCode" />
 					<entry field="code" />
@@ -549,7 +551,7 @@
 				type="LIST_ONLY" inputWidget="application.text" key="branchViewType"
 				property="description" />
 			<field name="departmentId"
-				label="$m{organization.role.departmentid}" type="mapped"
+				label="$m{organization.role.departmentid}" type="MAPPED"
 				inputLabel="$m{organization.role.department}"
 				mapped="organization.mappedDepartment"
 				inputWidget="organization.departmentlist" basicSearch="true" />
@@ -711,7 +713,7 @@
 				fieldList="description" />
 			<upload name="zoneUpload"
 				description="$m{organization.zone.upload.zoneupload}"
-				onConstraint="update">
+				onConstraint="UPDATE">
 				<fieldSequence>
 					<entry field="code" />
 					<entry field="description" />
@@ -735,7 +737,7 @@
 				fieldList="description" />
 			<upload name="countryUpload"
 				description="$m{organization.country.upload.countryupload}"
-				onConstraint="update">
+				onConstraint="UPDATE">
 				<fieldSequence>
 					<entry field="iso3Code" />
 					<entry field="description" />
@@ -769,7 +771,7 @@
 				fieldList="countryId,description" />
 			<upload name="stateUpload"
 				description="$m{organization.state.upload.stateupload}"
-				onConstraint="update">
+				onConstraint="UPDATE">
 				<fieldSequence>
 					<entry field="countryCode" />
 					<entry field="code" />
@@ -794,7 +796,7 @@
 				fieldList="description" />
 			<upload name="hubUpload"
 				description="$m{organization.hub.upload.hubupload}"
-				onConstraint="update">
+				onConstraint="UPDATE">
 				<fieldSequence>
 					<entry field="name" />
 					<entry field="description" />
@@ -1089,17 +1091,17 @@
 			</tab>
 			<tab name="privileges"
 				label="$m{organization.role.form.privileges}"
-				contentType="child_list" applet="manageRolePrivilege"
+				contentType="CHILD_LIST" applet="manageRolePrivilege"
 				reference="privilegeList" />
 			<tab name="workflowSteps"
 				label="$m{organization.role.form.wfsteps}"
-				contentType="child_list" applet="manageMappedRoleWfStep"
+				contentType="CHILD_LIST" applet="manageMappedRoleWfStep"
 				reference="wfStepList" />
 			<tab name="departmentDetails"
 				label="$m{organization.role.form.departmentdetails}"
 				mappedFieldName="departmentId"
 				mappedForm="organization.mappedDepartmentForm"
-				contentType="miniform_mapped" disabled="true" />
+				contentType="MINIFORM_MAPPED" disabled="true" />
 			<tab name="changeLog" label="$m{application.form.audit}"
 				contentType="MINIFORM_CHANGELOG" />
 			<fieldValidationPolicy name="emailValidation"

@@ -1,6 +1,8 @@
 <?xml version="1.0"?>
 <!-- Security application -->
-<application name="security"
+<application xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="file:///C:/Users/Lateef Ojulari/git/flowcentral/flowcentral-application/src/main/resources/flowcentral-application.xsd"
+	name="security"
 	description="$m{security.short.description}" label="$m{security.label}"
 	module="security">
 	<!-- Notification Templates -->
@@ -59,7 +61,7 @@
 		<applet name="manageUserGroupRole"
 			description="$m{security.usergrouprole.manage}"
 			label="$m{security.usergrouprole.manage.label}"
-			type="manage_entitylist_assign" entity="userGroupRole"
+			type="MANAGE_ENTITYLIST_ASSIGN" entity="userGroupRole"
 			baseField="userGroupId" assignField="roleId">
 			<property name="searchTable" value="userGroupRoleTable" />
 			<property name="searchTable.edit" value="true" />
@@ -69,7 +71,7 @@
 		<applet name="manageUserGroupMember"
 			description="$m{security.usergroupmember.manage}"
 			label="$m{security.usergroupmember.manage.label}"
-			type="manage_entitylist_assign" entity="userGroupMember"
+			type="MANAGE_ENTITYLIST_ASSIGN" entity="userGroupMember"
 			baseField="userGroupId" assignField="userId">
 			<property name="searchTable" value="userGroupMemberTable" />
 			<property name="searchTable.edit" value="true" />
@@ -163,7 +165,7 @@
 				template="userUpdateResubmitPending" />
 			<filter name="nonSystemRecords"
 				description="$m{common.filter.nonsystemrecords}">
-				<restriction type="greater_than" field="id" paramA="0" />
+				<restriction type="GREATER_THAN" field="id" paramA="0" />
 			</filter>
 			<values name="onCopySetValues"
 				description="$m{security.user.setvalues.oncopy}">
@@ -200,7 +202,7 @@
 		<applet name="manageUserRole"
 			description="$m{security.userrole.manage}"
 			label="$m{security.userrole.manage.label}"
-			type="manage_entitylist_assign" entity="userRole" baseField="userId"
+			type="MANAGE_ENTITYLIST_ASSIGN" entity="userRole" baseField="userId"
 			assignField="roleId">
 			<property name="searchTable" value="userRoleTable" />
 			<property name="searchTable.edit" value="true" />
@@ -209,7 +211,7 @@
 		<applet name="manageChangePassword"
 			description="$m{security.changepassword.manage}"
 			label="$m{security.changepassword.label}" icon="lock"
-			type="path_page" path="/security/changepassword/openPage"
+			type="PATH_PAGE" path="/security/changepassword/openPage"
 			menuAccess="true" allowSecondaryTenants="true">
 		</applet>
 		<applet name="manageResetUser"
@@ -227,7 +229,7 @@
 			<property name="baseRestriction" value="nonSystemRecords" />
 			<filter name="nonSystemRecords"
 				description="$m{common.filter.nonsystemrecords}">
-				<restriction type="greater_than" field="id" paramA="0" />
+				<restriction type="GREATER_THAN" field="id" paramA="0" />
 			</filter>
 		</applet>
 		<applet name="manageUserLoginEvent"
@@ -261,7 +263,7 @@
 		<applet name="managePasswordComplexity"
 			description="$m{security.passwordcomplexity.manage}"
 			label="$m{security.passwordcomplexity.manage.label}" icon="key"
-			type="path_page" path="/security/passwordcomplexity/openPage"
+			type="PATH_PAGE" path="/security/passwordcomplexity/openPage"
 			menuAccess="true" allowSecondaryTenants="true">
 		</applet>
 	</applets>
@@ -405,14 +407,14 @@
 				type="LIST_ONLY" inputWidget="application.text" key="workflowStatus"
 				property="description" />
 			<field name="branchId" label="$m{security.user.branch}"
-				type="mapped" inputWidget="organization.branchlist"
+				type="MAPPED" inputWidget="organization.branchlist"
 				mapped="organization.mappedBranch" basicSearch="true" auditable="true"/>
 			<field name="fullName" label="$m{security.user.fullname}"
 				type="STRING" inputWidget="application.fullname" maxLen="96"
 				basicSearch="true" auditable="true"/>
 			<field name="loginId" label="$m{security.user.loginid}"
 				type="STRING" inputWidget="application.name" maxLen="64"
-				case="upper" auditable="true"/>
+				case="UPPER" auditable="true"/>
 			<field name="password" label="$m{security.user.password}"
 				type="STRING" inputWidget="application.password" auditable="false"
 				reportable="false" maxLen="512" nullable="true" />
@@ -444,12 +446,12 @@
 			<field name="supervisor" label="$m{security.user.supervisor}"
 				type="BOOLEAN" inputWidget="application.checkbox" auditable="true"/>
 			<field name="passwordExpiryDt"
-				label="$m{security.user.passwordexpirydt}" type="date"
+				label="$m{security.user.passwordexpirydt}" type="DATE"
 				inputWidget="application.date" />
 			<field name="lastLoginDt" label="$m{security.user.lastlogindt}"
 				type="TIMESTAMP" inputWidget="application.datetime" />
 			<field name="plainPassword"
-				label="$m{security.user.plainpassword}" type="scratch" />
+				label="$m{security.user.plainpassword}" type="SCRATCH" />
 			<field name="userRoleList" label="$m{security.user.rolelist}"
 				type="CHILD_LIST" references="userRoleRef" />
 			<field name="userLoginEventList"
@@ -457,7 +459,7 @@
 				references="userLoginEventRef" />
 			<uniqueConstraint name="loginIdUc"
 				description="$m{security.user.uc.loginid}" fieldList="loginId" />
-			<attachment type="image" name="photo"
+			<attachment type="IMAGE" name="photo"
 				description="$m{security.user.attachment.photo}" />
 		</entity>
 		<entity name="userRole" description="$m{security.userrole}"
@@ -726,10 +728,10 @@
 				</section>
 			</tab>
 			<tab name="members" label="$m{security.usergroup.form.members}"
-				contentType="child_list" applet="manageUserGroupMember"
+				contentType="CHILD_LIST" applet="manageUserGroupMember"
 				reference="userGroupMemberList" />
 			<tab name="roles" label="$m{security.usergroup.form.roles}"
-				contentType="child_list" applet="manageUserGroupRole"
+				contentType="CHILD_LIST" applet="manageUserGroupRole"
 				reference="userGroupRoleList" />
 			<tab name="changeLog" label="$m{application.form.audit}"
 				contentType="MINIFORM_CHANGELOG" />
@@ -756,7 +758,7 @@
 					<field name="branchId" inputWidget="organization.branchlist"
 						column="1" />
 				</section>
-				<section name="userDetails2" columns="type_1_2">
+				<section name="userDetails2" columns="TYPE_1_2">
 					<field name="mobileNo" inputWidget="application.name"
 						column="0" />
 					<field name="id" label="$m{security.user.form.photo}"
@@ -774,14 +776,14 @@
 				</section>
 			</tab>
 			<tab name="roles" label="$m{security.user.form.roles}"
-				contentType="child_list" applet="manageUserRole"
+				contentType="CHILD_LIST" applet="manageUserRole"
 				reference="userRoleList" />
 			<tab name="userLoginEvents"
-				label="$m{security.user.form.loginevents}" contentType="child_list"
+				label="$m{security.user.form.loginevents}" contentType="CHILD_LIST"
 				applet="manageUserLoginEvent" reference="userLoginEventList" />
 			<tab name="branchDetails"
 				label="$m{security.user.form.branchdetails}"
-				contentType="miniform_mapped" mappedFieldName="branchId"
+				contentType="MINIFORM_MAPPED" mappedFieldName="branchId"
 				mappedForm="organization.mappedBranchForm" disabled="true" />
 			<tab name="accountDetails"
 				label="$m{security.user.form.accountdetails}" contentType="MINIFORM"
@@ -817,11 +819,11 @@
 		</form>
 		<form name="userResetForm"
 			description="$m{security.userresetunlock.form}" entity="user">
-			<action type="button" name="resetPassword" highlight="ORANGE"
+			<action type="BUTTON" name="resetPassword" highlight="ORANGE"
 				description="$m{security.userresetunlock.form.action.resetpassword}"
 				label="$m{security.userresetunlock.form.action.resetpassword.label}"
 				policy="resetpassword-actionpolicy" showOnMaintain="true" />
-			<action type="button" name="unlockUser" highlight="GREEN"
+			<action type="BUTTON" name="unlockUser" highlight="GREEN"
 				description="$m{security.userresetunlock.form.action.unlockuser}"
 				label="$m{security.userresetunlock.form.action.unlockuser.label}"
 				policy="unlockuser-actionpolicy" showOnMaintain="true" />

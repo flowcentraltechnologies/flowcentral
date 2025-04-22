@@ -174,17 +174,17 @@
 				</section>
 			</tab>
 			<tab name="privileges" label="$m{workspace.workspace.form.privileges}"
-				contentType="child_list" applet="manageWorkspacePrivilege"
+				contentType="CHILD_LIST" applet="manageWorkspacePrivilege"
 				reference="privilegeList" />
 			<tab name="changeLog" label="$m{application.form.audit}"
 				contentType="MINIFORM_CHANGELOG" />
-			<formStatePolicy type="on_switch" name="codeVisiblePolicy"
+			<formStatePolicy type="ON_SWITCH" name="codeVisiblePolicy"
 				description="$m{workspace.workspace.form.fieldstatepolicy.codevisiblepolicy}">
 				<onCondition>
-					<restriction type="is_null" field="code" />
+					<restriction type="IS_NULL" field="code" />
 				</onCondition>
 				<setStates>
-					<setState type="field" target="code" visible="false" />
+					<setState type="FIELD" target="code" visible="false" />
 				</setStates>
 			</formStatePolicy>
 		</form>

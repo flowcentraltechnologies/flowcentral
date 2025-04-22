@@ -1,6 +1,8 @@
 <?xml version="1.0"?>
 <!-- Report application -->
-<application name="report"
+<application xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="file:///C:/Users/Lateef Ojulari/git/flowcentral/flowcentral-application/src/main/resources/flowcentral-application.xsd"
+	name="report"
 	description="$m{report.short.description}" label="$m{report.label}"
 	module="report">
 	<!-- Applets -->
@@ -26,7 +28,7 @@
 		<applet name="manageReportGroupRole"
 			description="$m{report.reportgrouprole.manage}"
 			label="$m{report.reportgrouprole.manage.label}"
-			type="manage_entitylist_assign" entity="reportGroupRole"
+			type="MANAGE_ENTITYLIST_ASSIGN" entity="reportGroupRole"
 			baseField="reportGroupId" assignField="roleId">
 			<property name="searchTable" value="reportGroupRoleTable" />
 			<property name="searchTable.edit" value="true" />
@@ -36,7 +38,7 @@
 		<applet name="manageReportGroupMember"
 			description="$m{report.reportgroupmember.manage}"
 			label="$m{report.reportgroupmember.manage.label}"
-			type="manage_entitylist_assign" entity="reportGroupMember"
+			type="MANAGE_ENTITYLIST_ASSIGN" entity="reportGroupMember"
 			baseField="reportGroupId" assignField="reportConfigurationId">
 			<property name="searchTable" value="reportGroupMemberTable" />
 			<property name="searchTable.edit" value="true" />
@@ -46,7 +48,7 @@
 		<applet name="appReportListing"
 			description="$m{report.application.appreportlisting}"
 			label="$m{report.application.appreportlisting.label}" icon="copy"
-			type="path_page" path="/report/reportlisting/openPage"
+			type="PATH_PAGE" path="/report/reportlisting/openPage"
 			menuAccess="true" allowSecondaryTenants="true">
 		</applet>
 	</applets>
@@ -521,10 +523,10 @@
 				</section>
 			</tab>
 			<tab name="members" label="$m{report.reportgroup.form.members}"
-				contentType="child_list" applet="manageReportGroupMember"
+				contentType="CHILD_LIST" applet="manageReportGroupMember"
 				reference="reportGroupMemberList" />
 			<tab name="roles" label="$m{report.reportgroup.form.roles}"
-				contentType="child_list" applet="manageReportGroupRole"
+				contentType="CHILD_LIST" applet="manageReportGroupRole"
 				reference="reportGroupRoleList" />
 			<tab name="changeLog" label="$m{application.form.audit}"
 				contentType="MINIFORM_CHANGELOG" />

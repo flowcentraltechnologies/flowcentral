@@ -1,6 +1,8 @@
 <?xml version="1.0"?>
 <!-- Notification application -->
-<application name="notification"
+<application  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="file:///C:/Users/Lateef Ojulari/git/flowcentral/flowcentral-application/src/main/resources/flowcentral-application.xsd"
+	name="notification"
 	description="$m{notification.short.description}"
 	label="$m{notification.label}" module="notification">
 	<!-- Applets -->
@@ -59,7 +61,7 @@
 		<applet name="manageNotifChannelProp"
 			description="$m{notification.notificationchannelprop.manage}"
 			label="$m{notification.notificationchannelprop.manage.label}"
-			entity="notifChannelProp" type="manage_propertylist">
+			entity="notifChannelProp" type="MANAGE_PROPERTYLIST">
 			<property name="propertyList.rule"
 				value="notifChannelPropRule" />
 			<property name="propertyList.update" value="true" />
@@ -218,7 +220,7 @@
 				inputWidget="application.enumlist" basicSearch="true" />
 			<field name="data"
 				label="$m{notification.notificationoutboxattachment.data}"
-				type="blob" />
+				type="BLOB" />
 			<field name="typeDesc"
 				label="$m{notification.notificationoutboxattachment.typedesc}"
 				type="LIST_ONLY" key="type" property="description" />
@@ -530,15 +532,15 @@
 			</tab>
 			<tab name="recipients"
 				label="$m{notification.notificationoutbox.recipients}"
-				contentType="child_list" applet="manageNotifRecipient"
+				contentType="CHILD_LIST" applet="manageNotifRecipient"
 				reference="recipientList" />
 			<tab name="attachments"
 				label="$m{notification.notificationoutbox.attachments}"
-				contentType="child_list" applet="manageNotifOutboxAttachment"
+				contentType="CHILD_LIST" applet="manageNotifOutboxAttachment"
 				reference="attachmentList" />
 			<tab name="errors"
 				label="$m{notification.notificationoutbox.errors}"
-				contentType="child_list" applet="manageNotifOutboxError"
+				contentType="CHILD_LIST" applet="manageNotifOutboxError"
 				reference="errorList" />
 			<tab name="changeLog" label="$m{application.form.audit}"
 				contentType="MINIFORM_CHANGELOG" />
@@ -575,7 +577,7 @@
 			</tab>
 			<tab name="settings"
 				label="$m{notification.notificationchannel.form.settings}"
-				contentType="property_list" applet="manageNotifChannelProp"
+				contentType="PROPERTY_LIST" applet="manageNotifChannelProp"
 				reference="channelPropList" />
 			<tab name="changeLog" label="$m{application.form.audit}"
 				contentType="MINIFORM_CHANGELOG" />
