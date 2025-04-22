@@ -1,1319 +1,1509 @@
-<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified"
-	xmlns:xs="http://www.w3.org/2001/XMLSchema">
-	<!-- Applet Type -->
-	<xs:simpleType name="fcapplettype">
-		<xs:restriction base="xs:string">
-			<xs:enumeration value="MANAGE_ENTITYLIST"/>
-			<xs:enumeration value="MANAGE_ENTITYLIST_ASSIGN"/>
-			<xs:enumeration value="MANAGE_ENTITYLIST_SUBMISSION"/>
-			<xs:enumeration value="MANAGE_ENTITYLIST_SINGLEFORM"/>
-			<xs:enumeration value="MANAGE_LOADINGLIST"/>
-			<xs:enumeration value="HEADLESS_TABS"/>
-			<xs:enumeration value="CREATE_ENTITY"/>
-			<xs:enumeration value="CREATE_ENTITY_SINGLEFORM"/>
-			<xs:enumeration value="FORM_WIZARD"/>
-			<xs:enumeration value="LISTING"/>
-			<xs:enumeration value="MANAGE_PROPERTYLIST"/>
-			<xs:enumeration value="MY_WORKITEM"/>
-			<xs:enumeration value="TASK_EXECUTION"/>
-			<xs:enumeration value="DATA_IMPORT"/>
-			<xs:enumeration value="FACADE"/>
-			<xs:enumeration value="FACADE_MULTIPLE"/>
-			<xs:enumeration value="PATH_PAGE"/>
-			<xs:enumeration value="PATH_WINDOW"/>
-			<xs:enumeration value="REVIEW_WORKITEMS"/>
-			<xs:enumeration value="REVIEW_SINGLEFORMWORKITEMS"/>
-			<xs:enumeration value="REVIEW_WIZARDWORKITEMS"/>
-			<xs:enumeration value="STUDIO_FC_COMPONENT"/>
-		</xs:restriction>
-	</xs:simpleType>
-	<!-- Data Type -->
-	<xs:simpleType name="fcdatatype">
-		<xs:restriction base="xs:string">
-			<xs:enumeration value="CHAR"/>
-			<xs:enumeration value="BOOLEAN"/>
-			<xs:enumeration value="SHORT"/>
-			<xs:enumeration value="INTEGER"/>
-			<xs:enumeration value="LONG"/>
-			<xs:enumeration value="FLOAT"/>
-			<xs:enumeration value="DOUBLE"/>
-			<xs:enumeration value="DECIMAL"/>
-			<xs:enumeration value="DATE"/>
-			<xs:enumeration value="STRING"/>
-			<xs:enumeration value="TIMESTAMP"/>
-			<xs:enumeration value="TIMESTAMP_UTC"/>
-			<xs:enumeration value="CLOB"/>
-			<xs:enumeration value="BLOB"/>
-		</xs:restriction>
-	</xs:simpleType>
-	<!-- Input Type -->
-	<xs:simpleType name="fcinputtype">
-		<xs:restriction base="xs:string">
-			<xs:enumeration value="CHAR"/>
-			<xs:enumeration value="CHAR_ARRAY"/>
-			<xs:enumeration value="BOOLEAN"/>
-			<xs:enumeration value="BOOLEAN_ARRAY"/>
-			<xs:enumeration value="SHORT"/>
-			<xs:enumeration value="SHORT_ARRAY"/>
-			<xs:enumeration value="INTEGER"/>
-			<xs:enumeration value="INTEGER_ARRAY"/>
-			<xs:enumeration value="LONG"/>
-			<xs:enumeration value="LONG_ARRAY"/>
-			<xs:enumeration value="MAPPED"/>
-			<xs:enumeration value="FLOAT"/>
-			<xs:enumeration value="FLOAT_ARRAY"/>
-			<xs:enumeration value="DOUBLE"/>
-			<xs:enumeration value="DOUBLE_ARRAY"/>
-			<xs:enumeration value="DECIMAL"/>
-			<xs:enumeration value="DECIMAL_ARRAY"/>
-			<xs:enumeration value="DATE"/>
-			<xs:enumeration value="DATE_ARRAY"/>
-			<xs:enumeration value="DATETIME"/>
-			<xs:enumeration value="DATETIME_ARRAY"/>
-			<xs:enumeration value="STRING"/>
-			<xs:enumeration value="STRING_ARRAY"/>
-			<xs:enumeration value="FILE"/>
-		</xs:restriction>
-	</xs:simpleType>
-	<!-- Entity Field Data Type -->
-	<xs:simpleType name="fcfielddatatype">
-		<xs:restriction base="xs:string">
-			<xs:enumeration value="CHAR"/>
-			<xs:enumeration value="BOOLEAN"/>
-			<xs:enumeration value="BOOLEAN_ARRAY"/>
-			<xs:enumeration value="SHORT"/>
-			<xs:enumeration value="SHORT_ARRAY"/>
-			<xs:enumeration value="INTEGER"/>
-			<xs:enumeration value="INTEGER_ARRAY"/>
-			<xs:enumeration value="LONG"/>
-			<xs:enumeration value="LONG_ARRAY"/>
-			<xs:enumeration value="TENANT_ID"/>
-			<xs:enumeration value="MAPPED"/>
-			<xs:enumeration value="FLOAT"/>
-			<xs:enumeration value="FLOAT_ARRAY"/>
-			<xs:enumeration value="DOUBLE"/>
-			<xs:enumeration value="DOUBLE_ARRAY"/>
-			<xs:enumeration value="DECIMAL"/>
-			<xs:enumeration value="DECIMAL_ARRAY"/>
-			<xs:enumeration value="DATE"/>
-			<xs:enumeration value="DATE_ARRAY"/>
-			<xs:enumeration value="TIMESTAMP_UTC"/>
-			<xs:enumeration value="TIMESTAMP"/>
-			<xs:enumeration value="TIMESTAMP_ARRAY"/>
-			<xs:enumeration value="CLOB"/>
-			<xs:enumeration value="BLOB"/>
-			<xs:enumeration value="STRING"/>
-			<xs:enumeration value="STRING_ARRAY"/>
-			<xs:enumeration value="ENUM"/>
-			<xs:enumeration value="ENUM_REF"/>
-			<xs:enumeration value="ENUM_DYN"/>
-			<xs:enumeration value="REF"/>
-			<xs:enumeration value="REF_UNLINKABLE"/>
-			<xs:enumeration value="REF_FILEUPLOAD"/>
-			<xs:enumeration value="FOSTER_PARENT_ID"/>
-			<xs:enumeration value="FOSTER_PARENT_TYPE"/>
-			<xs:enumeration value="CATEGORY_COLUMN"/>
-			<xs:enumeration value="SCRATCH"/>
-			<xs:enumeration value="LIST_ONLY"/>
-			<xs:enumeration value="CHILD"/>
-			<xs:enumeration value="CHILD_LIST"/>
-		</xs:restriction>
-	</xs:simpleType>
-	<!-- Entity Base Type -->
-	<xs:simpleType name="fcentitybasetype">
-		<xs:restriction base="xs:string">
-			<xs:enumeration value="BASE_ENTITY"/>
-			<xs:enumeration value="BASE_VERSION_ENTITY"/>
-			<xs:enumeration value="BASE_AUDIT_ENTITY"/>
-			<xs:enumeration value="BASE_STATUS_ENTITY"/>
-			<xs:enumeration value="BASE_WORK_ENTITY"/>
-			<xs:enumeration value="BASE_STATUS_WORK_ENTITY"/>
-			<xs:enumeration value="BASE_NAMED_ENTITY"/>
-			<xs:enumeration value="BASE_CONFIG_ENTITY"/>
-			<xs:enumeration value="BASE_CONFIG_NAMED_ENTITY"/>
-			<xs:enumeration value="BASE_APPLICATION_ENTITY"/>
-		</xs:restriction>
-	</xs:simpleType>
-	<!-- Search Condition Type -->
-	<xs:simpleType name="fcsearchcondtype">
-		<xs:restriction base="xs:string">
-			<xs:enumeration value="SESSION_ATTRIBUTE"/>
-			<xs:enumeration value="EQUALS"/>
-			<xs:enumeration value="LESS_THAN"/>
-			<xs:enumeration value="LESS_OR_EQUAL"/>
-			<xs:enumeration value="GREATER_THAN"/>
-			<xs:enumeration value="GREATER_OR_EQUAL"/>
-			<xs:enumeration value="BEGINS_WITH"/>
-			<xs:enumeration value="ENDS_WITH"/>
-			<xs:enumeration value="LIKE"/>
-			<xs:enumeration value="ILIKE"/>
-			<xs:enumeration value="NOT_EQUALS"/>
-			<xs:enumeration value="NOT_LIKE"/>
-			<xs:enumeration value="NOT_BEGIN_WITH"/>
-			<xs:enumeration value="NOT_END_WITH"/>
-		</xs:restriction>
-	</xs:simpleType>
-	<!-- Filter Condition Type -->
-	<xs:simpleType name="fcfiltercondtype">
-		<xs:restriction base="xs:string">
-			<xs:enumeration value="EQUALS"/>
-			<xs:enumeration value="IEQUALS"/>
-			<xs:enumeration value="EQUALS_LINGUAL"/>
-			<xs:enumeration value="NOT_EQUALS"/>
-			<xs:enumeration value="NOT_EQUALS_LINGUAL"/>
-			<xs:enumeration value="INOT_EQUALS"/>
-			<xs:enumeration value="LESS_THAN"/>
-			<xs:enumeration value="LESS_THAN_LINGUAL"/>
-			<xs:enumeration value="LESS_OR_EQUAL"/>
-			<xs:enumeration value="LESS_OR_EQUAL_LINGUAL"/>
-			<xs:enumeration value="GREATER_THAN"/>
-			<xs:enumeration value="GREATER_THAN_LINGUAL"/>
-			<xs:enumeration value="GREATER_OR_EQUAL"/>
-			<xs:enumeration value="GREATER_OR_EQUAL_LINGUAL"/>
-			<xs:enumeration value="BETWEEN"/>
-			<xs:enumeration value="BETWEEN_LINGUAL"/>
-			<xs:enumeration value="NOT_BETWEEN"/>
-			<xs:enumeration value="NOT_BETWEEN_LINGUAL"/>
-			<xs:enumeration value="AMONGST"/>
-			<xs:enumeration value="NOT_AMONGST"/>
-			<xs:enumeration value="LIKE"/>
-			<xs:enumeration value="ILIKE"/>
-			<xs:enumeration value="NOT_LIKE"/>
-			<xs:enumeration value="BEGINS_WITH"/>
-			<xs:enumeration value="BEGINS_WITH"/>
-			<xs:enumeration value="NOT_BEGIN_WITH"/>
-			<xs:enumeration value="ENDS_WITH"/>
-			<xs:enumeration value="IENDS_WITH"/>
-			<xs:enumeration value="NOT_END_WITH"/>
-			<xs:enumeration value="IS_NULL"/>
-			<xs:enumeration value="IS_NOT_NULL"/>
-			<xs:enumeration value="EQUALS_FIELD"/>
-			<xs:enumeration value="NOT_EQUALS_FIELD"/>
-			<xs:enumeration value="EQUALS_SESSIONPARAM"/>
-			<xs:enumeration value="NOT_EQUALS_SESSIONPARAM"/>
-			<xs:enumeration value="LESS_THAN_FIELD"/>
-			<xs:enumeration value="LESS_OR_EQUAL_FIELD"/>
-			<xs:enumeration value="GREATER_THAN_FIELD"/>
-			<xs:enumeration value="GREATER_OR_EQUAL_FIELD"/>
-			<xs:enumeration value="BETWEEN_FIELD"/>
-			<xs:enumeration value="NOT_BETWEEN_FIELD"/>
-			<xs:enumeration value="LIKE_FIELD"/>
-			<xs:enumeration value="ILIKE_FIELD"/>
-			<xs:enumeration value="NOT_LIKE_FIELD"/>
-			<xs:enumeration value="BEGINS_WITH_FIELD"/>
-			<xs:enumeration value="IBEGINS_WITH_FIELD"/>
-			<xs:enumeration value="NOT_BEGIN_WITH_FIELD"/>
-			<xs:enumeration value="ENDS_WITH_FIELD"/>
-			<xs:enumeration value="IENDS_WITH_FIELD"/>
-			<xs:enumeration value="NOT_END_WITH_FIELD"/>
-			<xs:enumeration value="EQUALS_PARAM"/>
-			<xs:enumeration value="NOT_EQUALS_PARAM"/>
-			<xs:enumeration value="LESS_THAN_PARAM"/>
-			<xs:enumeration value="LESS_OR_EQUAL_PARAM"/>
-			<xs:enumeration value="GREATER_THAN_PARAM"/>
-			<xs:enumeration value="GREATER_OR_EQUAL_PARAM"/>
-			<xs:enumeration value="BETWEEN_PARAM"/>
-			<xs:enumeration value="NOT_BETWEEN_PARAM"/>
-			<xs:enumeration value="LIKE_PARAM"/>
-			<xs:enumeration value="ILIKE_PARAM"/>
-			<xs:enumeration value="NOT_LIKE_PARAM"/>
-			<xs:enumeration value="BEGINS_WITH_PARAM"/>
-			<xs:enumeration value="IBEGINS_WITH_PARAM"/>
-			<xs:enumeration value="NOT_BEGIN_WITH_PARAM"/>
-			<xs:enumeration value="ENDS_WITH_PARAM"/>
-			<xs:enumeration value="IENDS_WITH_PARAM"/>
-			<xs:enumeration value="NOT_END_WITH_PARAM"/>
-			<xs:enumeration value="EQUALS_COLLECTION"/>
-			<xs:enumeration value="NOT_EQUALS_COLLECTION"/>
-			<xs:enumeration value="LESS_THAN_COLLECTION"/>
-			<xs:enumeration value="LESS_OR_EQUAL_COLLECTION"/>
-			<xs:enumeration value="GREATER_THAN_COLLECTION"/>
-			<xs:enumeration value="GREATER_OR_EQUAL_COLLECTION"/>
-			<xs:enumeration value="AND"/>
-			<xs:enumeration value="OR"/>
-		</xs:restriction>
-	</xs:simpleType>
-	<!-- Tristate Type -->
-	<xs:simpleType name="fctristate">
-		<xs:restriction base="xs:string">
-			<xs:enumeration value="TRUE"/>
-			<xs:enumeration value="FALSE"/>
-			<xs:enumeration value="CONFORMING"/>
-		</xs:restriction>
-	</xs:simpleType>
-	<!-- Field Sequence -->
-	<xs:complexType name="fcfieldsequence">
-		<xs:sequence>
-			<xs:element name="entry" maxOccurs="unbounded" minOccurs="0">
-				<xs:complexType>
-					<xs:attribute type="xs:string" name="field" use="required"/>
-					<xs:attribute type="xs:string" name="formatter" use="optional"/>
-				</xs:complexType>
-			</xs:element>
-		</xs:sequence>
-	</xs:complexType>
-	<!-- Property Sequence-->
-	<xs:complexType name="fcpropertysequence">
-		<xs:sequence>
-			<xs:element name="entry" maxOccurs="unbounded" minOccurs="0">
-				<xs:complexType>
-					<xs:attribute type="xs:string" name="property" use="required"/>
-					<xs:attribute type="xs:string" name="label" use="required"/>
-				</xs:complexType>
-			</xs:element>
-		</xs:sequence>
-	</xs:complexType>
-	<!-- Restriction -->
-	<xs:complexType name="fcrestriction">
-	    <xs:choice minOccurs="0" maxOccurs="unbounded">
-	      <xs:element name="restriction" type="fcrestriction"/>
-	    </xs:choice>
-		<xs:attribute type="fcfiltercondtype" name="type" use="required"/>
-		<xs:attribute type="xs:string" name="field" use="optional"/>
-		<xs:attribute type="xs:string" name="paramA" use="optional"/>
-		<xs:attribute type="xs:string" name="paramB" use="optional"/>
-	</xs:complexType>
-	<!-- Filter -->
-	<xs:complexType name="fcfilter">
-		<xs:sequence>
-			<xs:element type="fcrestriction" name="restriction" maxOccurs="unbounded" minOccurs="0"/>
-		</xs:sequence>
-		<xs:attribute type="xs:string" name="name" use="optional"/>
-		<xs:attribute type="xs:string" name="description" use="optional"/>
-		<xs:attribute type="xs:string" name="label" use="optional"/>
-		<xs:attribute type="xs:string" name="filterGenerator" use="optional"/>
-		<xs:attribute type="xs:string" name="filterGeneratorRule" use="optional"/>
-		<xs:attribute type="xs:boolean" name="quickFilter" use="optional"/>
-	</xs:complexType>
-	<!-- Filter with Color -->
-	<xs:complexType name="fccolorfilter">
-	  <xs:complexContent>
-	      <xs:extension base="fcfilter">
-			<xs:attribute type="xs:string" name="rowColor" use="optional"/>
-			<xs:attribute type="xs:string" name="legendLabel" use="optional"/>
-	      </xs:extension>
-	  </xs:complexContent>
-	</xs:complexType>
-	<!-- Set Values -->
-	<xs:complexType name="fcsetvalues">
-		<xs:sequence>
-			<xs:element name="setValue" maxOccurs="unbounded" minOccurs="0">
-				<xs:complexType>
-					<xs:attribute name="type" use="optional">
-						<xs:simpleType>
-							<xs:restriction base="xs:string">
-								<xs:enumeration value="NULL"/>
-								<xs:enumeration value="IMMEDIATE"/>
-								<xs:enumeration value="IMMEDIATE_LINGUAL"/>
-								<xs:enumeration value="IMMEDIATE_FIELD"/>
-								<xs:enumeration value="PROCESS_VARIABLE"/>
-								<xs:enumeration value="SESSION_PARAMETER"/>
-								<xs:enumeration value="GENERATOR"/>
-							</xs:restriction>
-						</xs:simpleType>
-					</xs:attribute>
-					<xs:attribute type="xs:string" name="field" use="required"/>
-					<xs:attribute type="xs:string" name="value" use="optional"/>
-				</xs:complexType>
-			</xs:element>
-		</xs:sequence>
-		<xs:attribute type="xs:string" name="name" use="optional"/>
-		<xs:attribute type="xs:string" name="description" use="optional"/>
-		<xs:attribute type="xs:string" name="label" use="optional"/>
-	</xs:complexType>
-	
-	<!-- Application -->
-	<xs:element name="application">
-		<xs:complexType>
-			<xs:all minOccurs="0" maxOccurs="1">
-				<!-- Reports -->
-				<xs:element name="reports" minOccurs="0">
-					<xs:complexType>
-						<xs:sequence>
-							<xs:element name="report" maxOccurs="unbounded" minOccurs="0">
-								<xs:complexType>
-									<xs:attribute type="xs:string" name="configFile" use="required"/>
-								</xs:complexType>
-							</xs:element>
-						</xs:sequence>
-					</xs:complexType>
-				</xs:element>
-				<!-- Notification Templates -->
-				<xs:element name="notifTemplates" minOccurs="0">
-					<xs:complexType>
-						<xs:sequence>
-							<xs:element name="notifTemplate" maxOccurs="unbounded" minOccurs="0">
-								<xs:complexType>
-									<xs:attribute type="xs:string" name="configFile" use="required"/>
-								</xs:complexType>
-							</xs:element>
-						</xs:sequence>
-					</xs:complexType>
-				</xs:element>
-				<!-- Workflows -->
-				<xs:element name="workflows" minOccurs="0">
-					<xs:complexType>
-						<xs:sequence>
-							<xs:element name="workflow" maxOccurs="unbounded" minOccurs="0">
-								<xs:complexType>
-									<xs:attribute type="xs:string" name="configFile" use="required"/>
-								</xs:complexType>
-							</xs:element>
-						</xs:sequence>
-					</xs:complexType>
-				</xs:element>
-				<!-- Applets -->
-				<xs:element name="applets" minOccurs="0">
-					<xs:complexType>
-						<xs:sequence>
-							<xs:element name="applet" maxOccurs="unbounded" minOccurs="0">
-								<xs:complexType mixed="true">
-									<xs:sequence>
-										<xs:element name="property" maxOccurs="unbounded" minOccurs="0">
-											<xs:complexType>
-												<xs:attribute type="xs:string" name="name" use="required"/>
-												<xs:attribute type="xs:string" name="value" use="optional"/>
-											</xs:complexType>
-										</xs:element>
-										<xs:element name="routeToAppletItem" maxOccurs="unbounded" minOccurs="0">
-											<xs:complexType>
-												<xs:simpleContent>
-													<xs:extension base="xs:string">
-														<xs:attribute type="xs:string" name="routeToApplet" use="required"/>
-													</xs:extension>
-												</xs:simpleContent>
-											</xs:complexType>
-										</xs:element>
-										<xs:element name="alert" maxOccurs="unbounded" minOccurs="0">
-											<xs:complexType>
-												<xs:attribute type="xs:string" name="name" use="required"/>
-												<xs:attribute type="xs:string" name="description" use="required"/>
-												<xs:attribute type="xs:string" name="label" use="optional"/>
-												<xs:attribute type="xs:string" name="sender" use="optional"/>
-												<xs:attribute type="xs:string" name="template" use="optional"/>
-												<xs:attribute type="xs:string" name="recipientPolicy" use="optional"/>
-												<xs:attribute type="xs:string" name="recipientNameRule" use="optional"/>
-												<xs:attribute type="xs:string" name="recipientContactRule" use="optional"/>
-											</xs:complexType>
-										</xs:element>
-										<xs:element name="filter" type="fcfilter" maxOccurs="unbounded" minOccurs="0"/>
-										<xs:element name="values" maxOccurs="unbounded" minOccurs="0">
-											<xs:complexType>
-												<xs:sequence>
-													<xs:element name="setValues" type="fcsetvalues" maxOccurs="1" minOccurs="0"/>
-												</xs:sequence>
-												<xs:attribute type="xs:string" name="name" use="required"/>
-												<xs:attribute type="xs:string" name="description" use="required"/>
-												<xs:attribute type="xs:string" name="label" use="optional"/>
-												<xs:attribute type="xs:string" name="valueGenerator" use="optional"/>
-											</xs:complexType>
-										</xs:element>
-									</xs:sequence>
-									<xs:attribute type="fcapplettype" name="type" use="required"/>
-									<xs:attribute type="xs:string" name="name" use="required"/>
-									<xs:attribute type="xs:string" name="description" use="required"/>
-									<xs:attribute type="xs:string" name="label" use="required"/>
-									<xs:attribute type="xs:string" name="entity" use="optional"/>
-									<xs:attribute type="xs:string" name="icon" use="optional"/>
-									<xs:attribute type="xs:string" name="path" use="optional"/>
-									<xs:attribute type="xs:string" name="titleFormat" use="optional"/>
-									<xs:attribute type="xs:integer" name="displayIndex" use="optional"/>
-									<xs:attribute type="xs:boolean" name="menuAccess" use="optional"/>
-									<xs:attribute type="xs:boolean" name="supportOpenInNewWindow" use="optional"/>
-									<xs:attribute type="xs:boolean" name="allowSecondaryTenants" use="optional"/>
-									<xs:attribute type="xs:string" name="routeToApplet" use="optional"/>
-									<xs:attribute type="xs:string" name="baseField" use="optional"/>
-									<xs:attribute type="xs:string" name="assignField" use="optional"/>
-									<xs:attribute type="xs:string" name="assignDescField" use="optional"/>
-									<xs:attribute type="xs:string" name="pseudoDeleteField" use="optional"/>
-								</xs:complexType>
-							</xs:element>
-						</xs:sequence>
-					</xs:complexType>
-				</xs:element>
-				<!-- Widget Types -->
-				<xs:element name="widgetTypes" minOccurs="0">
-					<xs:complexType>
-						<xs:sequence>
-							<xs:element name="widgetType" maxOccurs="unbounded" minOccurs="0">
-								<xs:complexType>
-									<xs:attribute type="fcdatatype" name="dataType" use="required"/>
-									<xs:attribute type="fcinputtype" name="inputType" use="optional"/>
-									<xs:attribute type="xs:string" name="name" use="required"/>
-									<xs:attribute type="xs:string" name="description" use="required"/>
-									<xs:attribute type="xs:string" name="editor" use="required"/>
-									<xs:attribute type="xs:string" name="renderer" use="optional"/>
-									<xs:attribute type="xs:boolean" name="stretch" use="optional"/>
-									<xs:attribute type="xs:boolean" name="listOption" use="optional"/>
-									<xs:attribute type="xs:boolean" name="enumOption" use="optional"/>
-								</xs:complexType>
-							</xs:element>
-						</xs:sequence>
-					</xs:complexType>
-				</xs:element>
-				<!-- References -->
-				<xs:element name="references" minOccurs="0">
-					<xs:complexType>
-						<xs:sequence>
-							<xs:element name="reference" maxOccurs="unbounded" minOccurs="0">
-								<xs:complexType>
-									<xs:sequence>
-										<xs:element name="filter" type="fcfilter" maxOccurs="1" minOccurs="0"/>
-									</xs:sequence>
-									<xs:attribute type="xs:string" name="name" use="required"/>
-									<xs:attribute type="xs:string" name="description" use="required"/>
-									<xs:attribute type="xs:string" name="entity" use="required"/>
-									<xs:attribute type="xs:string" name="searchField" use="optional"/>
-									<xs:attribute type="xs:string" name="orderField" use="optional"/>
-									<xs:attribute type="xs:string" name="searchTable" use="optional"/>
-									<xs:attribute type="xs:string" name="selectHandler" use="optional"/>
-									<xs:attribute type="xs:string" name="listFormat" use="optional"/>
-									<xs:attribute type="xs:string" name="filterGenerator" use="optional"/>
-									<xs:attribute type="xs:string" name="filterGeneratorRule" use="optional"/>
-								</xs:complexType>
-							</xs:element>
-						</xs:sequence>
-					</xs:complexType>
-				</xs:element>
-				<!-- Entities -->
-				<xs:element name="entities" minOccurs="0">
-					<xs:complexType>
-						<xs:sequence>
-							<xs:element name="entity" maxOccurs="unbounded" minOccurs="0">
-								<xs:complexType mixed="true">
-									<xs:sequence>
-										<xs:element name="field" maxOccurs="unbounded" minOccurs="0">
-											<xs:complexType>
-												<xs:simpleContent>
-													<xs:extension base="xs:string">
-														<xs:attribute type="fcfielddatatype" name="type" use="required"/>
-														<xs:attribute name="case" use="optional">
-															<xs:simpleType>
-																<xs:restriction base="xs:string">
-																	<xs:enumeration value="LOWER"/>
-																	<xs:enumeration value="UPPER"/>
-																	<xs:enumeration value="CAMEL"/>
-																	<xs:enumeration value="CAPITAL"/>
-																	<xs:enumeration value="PATH"/>
-																</xs:restriction>
-															</xs:simpleType>
-														</xs:attribute>
-														<xs:attribute type="xs:string" name="name" use="required"/>
-														<xs:attribute type="xs:string" name="label" use="required"/>
-														<xs:attribute type="xs:string" name="inputLabel" use="optional"/>
-														<xs:attribute type="xs:string" name="inputWidget" use="optional"/>
-														<xs:attribute type="xs:string" name="category" use="optional"/>
-														<xs:attribute type="xs:integer" name="maxLen" use="optional"/>
-														<xs:attribute type="xs:boolean" name="trim" use="optional"/>
-														<xs:attribute type="xs:boolean" name="allowNegative" use="optional"/>
-														<xs:attribute type="xs:boolean" name="readOnly" use="optional"/>
-														<xs:attribute type="xs:boolean" name="nullable" use="optional"/>
-														<xs:attribute type="xs:boolean" name="auditable" use="optional"/>
-														<xs:attribute type="xs:boolean" name="reportable" use="optional"/>
-														<xs:attribute type="xs:boolean" name="descriptive" use="optional"/>
-														<xs:attribute type="xs:boolean" name="basicSearch" use="optional"/>
-														<xs:attribute type="xs:string" name="column" use="optional"/>
-														<xs:attribute type="xs:boolean" name="maintainAction" use="optional"/>
-														<xs:attribute type="xs:string" name="references" use="optional"/>
-														<xs:attribute type="xs:integer" name="minLen" use="optional"/>
-														<xs:attribute type="xs:integer" name="columns" use="optional"/>
-														<xs:attribute type="xs:integer" name="rows" use="optional"/>
-														<xs:attribute type="xs:integer" name="precision" use="optional"/>
-														<xs:attribute type="xs:integer" name="scale" use="optional"/>
-														<xs:attribute type="xs:string" name="key" use="optional"/>
-														<xs:attribute type="xs:string" name="property" use="optional"/>
-														<xs:attribute type="xs:string" name="mapped" use="optional"/>
-														<xs:attribute type="xs:string" name="jsonName" use="optional"/>
-														<xs:attribute type="xs:string" name="jsonFormatter" use="optional"/>
-													</xs:extension>
-												</xs:simpleContent>
-											</xs:complexType>
-										</xs:element>
-										<xs:element name="expression" maxOccurs="unbounded" minOccurs="0">
-											<xs:complexType>
-												<xs:attribute type="xs:string" name="name" use="required"/>
-												<xs:attribute type="xs:string" name="description" use="required"/>
-												<xs:attribute type="xs:string" name="expression" use="required"/>
-											</xs:complexType>
-										</xs:element>
-										<xs:element name="searchInput" maxOccurs="unbounded" minOccurs="0">
-											<xs:complexType>
-												<xs:sequence>
-													<xs:element name="input" maxOccurs="unbounded" minOccurs="0">
-														<xs:complexType>
-															<xs:attribute type="fcsearchcondtype" name="type" use="required"/>
-															<xs:attribute type="xs:string" name="field" use="required"/>
-															<xs:attribute type="xs:string" name="widget" use="required"/>
-															<xs:attribute type="xs:string" name="label" use="required"/>
-														</xs:complexType>
-													</xs:element>
-												</xs:sequence>
-												<xs:attribute type="xs:string" name="name" use="required"/>
-												<xs:attribute type="xs:string" name="description" use="required"/>
-												<xs:attribute type="xs:string" name="restrictionResolver" use="optional"/>
-											</xs:complexType>
-										</xs:element>
-										<xs:element name="series" maxOccurs="unbounded" minOccurs="0">
-											<xs:complexType>
-												<xs:attribute name="type" use="required">
-													<xs:simpleType>
-														<xs:restriction base="xs:string">
-															<xs:enumeration value="COUNT"/>
-															<xs:enumeration value="SUM"/>
-															<xs:enumeration value="AVERAGE"/>
-															<xs:enumeration value="MINIMUM"/>
-															<xs:enumeration value="MAXIMUM"/>
-														</xs:restriction>
-													</xs:simpleType>
-												</xs:attribute>
-												<xs:attribute type="xs:string" name="name" use="required"/>
-												<xs:attribute type="xs:string" name="description" use="required"/>
-												<xs:attribute type="xs:string" name="label" use="required"/>
-												<xs:attribute type="xs:string" name="fieldName" use="required"/>
-											</xs:complexType>
-										</xs:element>
-										<xs:element name="category" type="fcfilter" maxOccurs="unbounded" minOccurs="0"/>
-										<xs:element name="uniqueConstraint" maxOccurs="unbounded" minOccurs="0">
-											<xs:complexType>
-												<xs:sequence>
-													<xs:element name="condition" maxOccurs="unbounded" minOccurs="0">
-														<xs:complexType>
-															<xs:attribute type="xs:string" name="field" use="required"/>
-															<xs:attribute type="xs:string" name="value" use="required"/>
-														</xs:complexType>
-													</xs:element>
-												</xs:sequence>
-												<xs:attribute type="xs:string" name="name" use="required"/>
-												<xs:attribute type="xs:string" name="description" use="required"/>
-												<xs:attribute type="xs:string" name="fieldList" use="required"/>
-											</xs:complexType>
-										</xs:element>
-										<xs:element name="attachment" maxOccurs="unbounded" minOccurs="0">
-											<xs:complexType>
-												<xs:attribute name="type" use="required">
-													<xs:simpleType>
-														<xs:restriction base="xs:string">
-															<xs:enumeration value="AUDIO"/>
-															<xs:enumeration value="CSV"/>
-															<xs:enumeration value="EXCEL"/>
-															<xs:enumeration value="IMAGE"/>
-															<xs:enumeration value="IMAGE_PNG"/>
-															<xs:enumeration value="IMAGE_JPG"/>
-															<xs:enumeration value="IMAGE_GIF"/>
-															<xs:enumeration value="IMAGE_BMP"/>
-															<xs:enumeration value="PDF"/>
-															<xs:enumeration value="XML"/>
-															<xs:enumeration value="TEXT"/>
-															<xs:enumeration value="VIDEO"/>
-															<xs:enumeration value="WILDCARD"/>
-															<xs:enumeration value="WORD"/>
-														</xs:restriction>
-													</xs:simpleType>
-												</xs:attribute>
-												<xs:attribute type="xs:string" name="name" use="required"/>
-												<xs:attribute type="xs:string" name="description" use="required"/>
-											</xs:complexType>
-										</xs:element>
-										<xs:element name="index" maxOccurs="unbounded" minOccurs="0">
-											<xs:complexType>
-												<xs:attribute type="xs:string" name="name" use="required"/>
-												<xs:attribute type="xs:string" name="description" use="required"/>
-												<xs:attribute type="xs:string" name="fieldList" use="required"/>
-											</xs:complexType>
-										</xs:element>
-										<xs:element name="upload" maxOccurs="unbounded" minOccurs="0">
-											<xs:complexType>
-												<xs:sequence>
-													<xs:element type="fcfieldsequence" name="fieldSequence" maxOccurs="1" minOccurs="0"/>
-												</xs:sequence>
-												<xs:attribute type="xs:string" name="name" use="required"/>
-												<xs:attribute type="xs:string" name="description" use="required"/>
-												<xs:attribute type="xs:string" name="label" use="optional"/>
-												<xs:attribute name="onConstraint" use="required">
-													<xs:simpleType>
-														<xs:restriction base="xs:string">
-															<xs:enumeration value="UPDATE"/>
-															<xs:enumeration value="SKIP"/>
-															<xs:enumeration value="FAIL"/>
-														</xs:restriction>
-													</xs:simpleType>
-												</xs:attribute>
-											</xs:complexType>
-										</xs:element>
-									</xs:sequence>
-									<xs:attribute type="fcentitybasetype" name="baseType" use="optional"/>
-									<xs:attribute type="xs:string" name="name" use="required"/>
-									<xs:attribute type="xs:string" name="description" use="required"/>
-									<xs:attribute type="xs:string" name="label" use="required"/>
-									<xs:attribute type="xs:string" name="type" use="required"/>
-									<xs:attribute type="xs:string" name="delegate" use="optional"/>
-									<xs:attribute type="xs:string" name="table" use="optional"/>
-									<xs:attribute type="xs:string" name="dataSourceName" use="optional"/>
-									<xs:attribute type="xs:boolean" name="mapped" use="optional"/>
-									<xs:attribute type="xs:boolean" name="auditable" use="optional"/>
-									<xs:attribute type="xs:boolean" name="reportable" use="optional"/>
-									<xs:attribute type="xs:boolean" name="actionPolicy" use="optional"/>
-									<xs:attribute type="xs:boolean" name="changeEvents" use="optional"/>
-								</xs:complexType>
-							</xs:element>
-						</xs:sequence>
-					</xs:complexType>
-				</xs:element>
-				<!-- Tables -->
-				<xs:element name="tables" minOccurs="0">
-					<xs:complexType>
-						<xs:sequence>
-							<xs:element name="table" maxOccurs="unbounded" minOccurs="0">
-								<xs:complexType>
-									<xs:sequence>
-										<xs:element name="column" maxOccurs="unbounded" minOccurs="0">
-											<xs:complexType>
-												<xs:simpleContent>
-													<xs:extension base="xs:string">
-														<xs:attribute type="xs:string" name="field" use="required"/>
-														<xs:attribute type="xs:string" name="label" use="optional"/>
-														<xs:attribute type="xs:string" name="renderWidget" use="optional"/>
-														<xs:attribute type="xs:string" name="linkAct" use="optional"/>
-														<xs:attribute type="xs:integer" name="widthRatio" use="optional"/>
-														<xs:attribute type="xs:boolean" name="switchOnChange" use="optional"/>
-														<xs:attribute type="xs:boolean" name="hiddenOnNull" use="optional"/>
-														<xs:attribute type="xs:boolean" name="hidden" use="optional"/>
-														<xs:attribute type="xs:boolean" name="disabled" use="optional"/>
-														<xs:attribute type="xs:boolean" name="editable" use="optional"/>
-														<xs:attribute type="xs:boolean" name="sortable" use="optional"/>
-														<xs:attribute type="xs:boolean" name="summary" use="optional"/>
-														<xs:attribute type="xs:string" name="symbol" use="optional"/>
-														<xs:attribute type="xs:string" name="order" use="optional"/>
-													</xs:extension>
-												</xs:simpleContent>
-											</xs:complexType>
-										</xs:element>
-										<xs:element name="loading" maxOccurs="unbounded" minOccurs="0">
-											<xs:complexType>
-												<xs:attribute type="xs:string" name="name" use="required"/>
-												<xs:attribute type="xs:string" name="description" use="required"/>
-												<xs:attribute type="xs:string" name="label" use="optional"/>
-												<xs:attribute type="xs:string" name="provider" use="required"/>
-												<xs:attribute type="xs:integer" name="orderIndex" use="required"/>
-											</xs:complexType>
-										</xs:element>
-										<xs:element name="action" maxOccurs="unbounded" minOccurs="0">
-											<xs:complexType>
-												<xs:attribute type="xs:string" name="name" use="required"/>
-												<xs:attribute type="xs:string" name="description" use="required"/>
-												<xs:attribute type="xs:string" name="label" use="optional"/>
-												<xs:attribute type="xs:string" name="policy" use="required"/>
-												<xs:attribute type="xs:integer" name="orderIndex" use="optional"/>
-											</xs:complexType>
-										</xs:element>
-										<xs:element type="fcfilter" name="quickFilter" maxOccurs="unbounded" minOccurs="0"/>
-										<xs:element type="fccolorfilter" name="filter" maxOccurs="unbounded" minOccurs="0"/>
-									</xs:sequence>
-									<xs:attribute type="xs:string" name="name" use="required"/>
-									<xs:attribute type="xs:string" name="description" use="required"/>
-									<xs:attribute type="xs:string" name="label" use="required"/>
-									<xs:attribute type="xs:string" name="entity" use="required"/>
-									<xs:attribute type="xs:string" name="detailsPanel" use="optional"/>
-									<xs:attribute type="xs:string" name="loadingSearchInput" use="optional"/>
-									<xs:attribute type="xs:string" name="loadingFilterGen" use="optional"/>
-									<xs:attribute type="xs:integer" name="sortHistory" use="optional"/>
-									<xs:attribute type="xs:integer" name="itemsPerPage" use="optional"/>
-									<xs:attribute type="xs:integer" name="summaryTitleColumns" use="optional"/>
-									<xs:attribute type="xs:boolean" name="serialNo" use="optional"/>
-									<xs:attribute type="xs:boolean" name="sortable" use="optional"/>
-									<xs:attribute type="xs:boolean" name="showLabelHeader" use="optional"/>
-									<xs:attribute type="xs:boolean" name="headerToUpperCase" use="optional"/>
-									<xs:attribute type="xs:boolean" name="headerCenterAlign" use="optional"/>
-									<xs:attribute type="xs:boolean" name="basicSearch" use="optional"/>
-									<xs:attribute type="xs:boolean" name="totalSummary" use="optional"/>
-									<xs:attribute type="xs:boolean" name="headerless" use="optional"/>
-									<xs:attribute type="xs:boolean" name="multiSelect" use="optional"/>
-									<xs:attribute type="xs:boolean" name="nonConforming" use="optional"/>
-									<xs:attribute type="xs:boolean" name="fixedRows" use="optional"/>
-									<xs:attribute type="xs:boolean" name="limitSelectToColumns" use="optional"/>
-								</xs:complexType>
-							</xs:element>
-						</xs:sequence>
-					</xs:complexType>
-				</xs:element>
-				<!-- Workflow Channels -->
-				<xs:element name="workflow-channels" minOccurs="0">
-					<xs:complexType>
-						<xs:sequence>
-							<xs:element name="workflow-channel" maxOccurs="unbounded" minOccurs="0">
-								<xs:complexType>
-									<xs:simpleContent>
-										<xs:extension base="xs:string">
-											<xs:attribute type="xs:string" name="name" use="required"/>
-											<xs:attribute type="xs:string" name="description" use="required"/>
-											<xs:attribute type="xs:string" name="label" use="required"/>
-											<xs:attribute type="xs:string" name="entity" use="required"/>
-											<xs:attribute type="xs:string" name="destination" use="required"/>
-											<xs:attribute type="xs:string" name="rule" use="optional"/>
-											<xs:attribute name="direction" use="required">
-												<xs:simpleType>
-													<xs:restriction base="xs:string">
-														<xs:enumeration value="INWARD"/>
-														<xs:enumeration value="OUTWARD"/>
-													</xs:restriction>
-												</xs:simpleType>
-											</xs:attribute>
-										</xs:extension>
-									</xs:simpleContent>
-								</xs:complexType>
-							</xs:element>
-						</xs:sequence>
-					</xs:complexType>
-				</xs:element>
-				<!-- Forms -->
-				<xs:element name="forms" minOccurs="0">
-					<xs:complexType>
-						<xs:sequence>
-							<xs:element name="form" maxOccurs="unbounded" minOccurs="0">
-								<xs:complexType>
-									<xs:sequence>
-										<xs:element name="annotation" maxOccurs="unbounded" minOccurs="0">
-											<xs:complexType>
-												<xs:sequence>
-													<xs:element type="fcfilter" name="onCondition"  maxOccurs="1" minOccurs="0"/>
-												</xs:sequence>
-												<xs:attribute name="type" use="optional">
-													<xs:simpleType>
-														<xs:restriction base="xs:string">
-															<xs:enumeration value="INFO"/>
-															<xs:enumeration value="WARNING"/>
-															<xs:enumeration value="ERROR"/>
-														</xs:restriction>
-													</xs:simpleType>
-												</xs:attribute>
-												<xs:attribute name="visibility" use="optional">
-													<xs:simpleType>
-														<xs:restriction base="xs:string">
-															<xs:enumeration value="FIXED"/>
-															<xs:enumeration value="DISAPPEARING"/>
-															<xs:enumeration value="CLOSABLE"/>
-														</xs:restriction>
-													</xs:simpleType>
-												</xs:attribute>
-												<xs:attribute type="xs:string" name="name" use="required"/>
-												<xs:attribute type="xs:string" name="description" use="required"/>
-												<xs:attribute type="xs:string" name="message" use="required"/>
-												<xs:attribute type="xs:boolean" name="html" use="optional"/>
-												<xs:attribute type="xs:boolean" name="directPlacement" use="optional"/>
-											</xs:complexType>
-										</xs:element>
-										<xs:element name="action" maxOccurs="unbounded" minOccurs="0">
-											<xs:complexType>
-												<xs:sequence>
-													<xs:element type="fcfilter" name="onCondition"  maxOccurs="1" minOccurs="0"/>
-												</xs:sequence>
-												<xs:attribute type="xs:string" name="name" use="required"/>
-												<xs:attribute type="xs:string" name="description" use="required"/>
-												<xs:attribute type="xs:string" name="label" use="optional"/>
-												<xs:attribute name="type" use="required">
-													<xs:simpleType>
-														<xs:restriction base="xs:string">
-															<xs:enumeration value="BUTTON"/>
-															<xs:enumeration value="LINK"/>
-														</xs:restriction>
-													</xs:simpleType>
-												</xs:attribute>
-												<xs:attribute name="highlight" use="optional">
-													<xs:simpleType>
-														<xs:restriction base="xs:string">
-															<xs:enumeration value="BLUE"/>
-															<xs:enumeration value="GREEN"/>
-															<xs:enumeration value="ORANGE"/>
-															<xs:enumeration value="RED"/>
-															<xs:enumeration value="GRAY"/>
-														</xs:restriction>
-													</xs:simpleType>
-												</xs:attribute>
-												<xs:attribute type="xs:string" name="policy" use="optional"/>
-												<xs:attribute type="xs:string" name="symbol" use="optional"/>
-												<xs:attribute type="xs:string" name="styleClass" use="optional"/>
-												<xs:attribute type="xs:integer" name="orderIndex" use="optional"/>
-												<xs:attribute type="xs:boolean" name="showOnCreate" use="optional"/>
-												<xs:attribute type="xs:boolean" name="showOnMaintain" use="optional"/>
-												<xs:attribute type="xs:boolean" name="validateForm" use="optional"/>
-											</xs:complexType>
-										</xs:element>
-										<xs:element name="tab" maxOccurs="unbounded" minOccurs="0">
-											<xs:complexType mixed="true">
-												<xs:sequence>
-													<xs:element name="section" maxOccurs="unbounded" minOccurs="0">
-														<xs:complexType>
-															<xs:sequence>
-																<xs:element name="field" maxOccurs="unbounded" minOccurs="0">
-																	<xs:complexType>
-																		<xs:simpleContent>
-																			<xs:extension base="xs:string">
-																				<xs:attribute type="xs:string" name="name" use="required"/>
-																				<xs:attribute type="xs:string" name="label" use="optional"/>
-																				<xs:attribute type="xs:string" name="inputWidget" use="optional"/>
-																				<xs:attribute type="xs:string" name="reference" use="optional"/>
-																				<xs:attribute type="xs:string" name="previewForm" use="optional"/>
-																				<xs:attribute name="color" use="optional">
-																					<xs:simpleType>
-																						<xs:restriction base="xs:string">
-																							<xs:enumeration value="WHITE"/>
-																							<xs:enumeration value="RED"/>
-																							<xs:enumeration value="ORANGE"/>
-																							<xs:enumeration value="YELLOW"/>
-																							<xs:enumeration value="GREEN"/>
-																							<xs:enumeration value="CYAN"/>
-																							<xs:enumeration value="BLUE"/>
-																							<xs:enumeration value="PURPLE"/>
-																							<xs:enumeration value="NAVY_GRAY"/>
-																						</xs:restriction>
-																					</xs:simpleType>
-																				</xs:attribute>
-																				<xs:attribute type="xs:integer" name="column" use="required"/>
-																				<xs:attribute type="xs:boolean" name="switchOnChange" use="optional"/>
-																				<xs:attribute type="xs:boolean" name="saveAs" use="optional"/>
-																				<xs:attribute type="xs:boolean" name="required" use="optional"/>
-																				<xs:attribute type="xs:boolean" name="visible" use="optional"/>
-																				<xs:attribute type="xs:boolean" name="editable" use="optional"/>
-																				<xs:attribute type="xs:boolean" name="disabled" use="optional"/>
-																			</xs:extension>
-																		</xs:simpleContent>
-																	</xs:complexType>
-																</xs:element>
-															</xs:sequence>
-															<xs:attribute type="xs:string" name="name" use="required"/>
-															<xs:attribute type="xs:string" name="label" use="optional"/>
-															<xs:attribute type="xs:string" name="panel" use="optional"/>
-															<xs:attribute type="xs:string" name="icon" use="optional"/>
-															<xs:attribute name="columns" use="required">
-																<xs:simpleType>
-																	<xs:restriction base="xs:string">
-																		<xs:enumeration value="TYPE_1"/>
-																		<xs:enumeration value="TYPE_2"/>
-																		<xs:enumeration value="TYPE_1_2"/>
-																		<xs:enumeration value="TYPE_2_1"/>
-																		<xs:enumeration value="TYPE_3"/>
-																		<xs:enumeration value="TYPE_4"/>
-																		<xs:enumeration value="TYPE_5"/>
-																	</xs:restriction>
-																</xs:simpleType>
-															</xs:attribute>
-															<xs:attribute type="xs:boolean" name="visible" use="optional"/>
-															<xs:attribute type="xs:boolean" name="editable" use="optional"/>
-															<xs:attribute type="xs:boolean" name="disabled" use="optional"/>
-														</xs:complexType>
-													</xs:element>
-												</xs:sequence>
-												<xs:attribute name="contentType" use="required">
-													<xs:simpleType>
-														<xs:restriction base="xs:string">
-															<xs:enumeration value="MINIFORM"/>
-															<xs:enumeration value="MINIFORM_CHANGELOG"/>
-															<xs:enumeration value="MINIFORM_MAPPED"/>
-															<xs:enumeration value="CHILD"/>
-															<xs:enumeration value="CHILD_LIST"/>
-															<xs:enumeration value="FILTER_CONDITION"/>
-															<xs:enumeration value="FIELD_SEQUENCE"/>
-															<xs:enumeration value="PROPERTY_SEQUENCE"/>
-															<xs:enumeration value="PARAM_VALUES"/>
-															<xs:enumeration value="PROPERTY_LIST"/>
-															<xs:enumeration value="USAGE_LIST"/>
-															<xs:enumeration value="SEARCH_INPUT"/>
-															<xs:enumeration value="SET_VALUES"/>
-															<xs:enumeration value="WIDGET_RULES"/>
-														</xs:restriction>
-													</xs:simpleType>
-												</xs:attribute>
-												<xs:attribute type="xs:string" name="name" use="required"/>
-												<xs:attribute type="xs:string" name="label" use="optional"/>
-												<xs:attribute type="xs:string" name="applet" use="optional"/>
-												<xs:attribute type="xs:string" name="mappedFieldName" use="optional"/>
-												<xs:attribute type="xs:string" name="mappedForm" use="optional"/>
-												<xs:attribute type="xs:string" name="reference" use="optional"/>
-												<xs:attribute type="xs:string" name="filter" use="optional"/>
-												<xs:attribute type="xs:string" name="editAction" use="optional"/>
-												<xs:attribute type="xs:string" name="editFormless" use="optional"/>
-												<xs:attribute type="xs:string" name="editFixedRows" use="optional"/>
-												<xs:attribute type="xs:string" name="editAllowAddition" use="optional"/>
-												<xs:attribute type="xs:boolean" name="ignoreParentCondition" use="optional"/>
-												<xs:attribute type="xs:boolean" name="includeSysParam" use="optional"/>
-												<xs:attribute type="xs:boolean" name="showSearch" use="optional"/>
-												<xs:attribute type="xs:boolean" name="quickEdit" use="optional"/>
-												<xs:attribute type="xs:boolean" name="quickOrder" use="optional"/>
-												<xs:attribute type="xs:boolean" name="visible" use="optional"/>
-												<xs:attribute type="xs:boolean" name="editable" use="optional"/>
-												<xs:attribute type="xs:boolean" name="disabled" use="optional"/>
-											</xs:complexType>
-										</xs:element>
-										<xs:element type="fcfilter" name="filter" maxOccurs="unbounded" minOccurs="0"/>
-										<xs:element name="relatedList" maxOccurs="unbounded" minOccurs="0">
-											<xs:complexType>
-												<xs:attribute type="xs:string" name="name" use="required"/>
-												<xs:attribute type="xs:string" name="description" use="required"/>
-												<xs:attribute type="xs:string" name="label" use="optional"/>
-												<xs:attribute type="xs:string" name="applet" use="optional"/>
-												<xs:attribute type="xs:string" name="filter" use="optional"/>
-												<xs:attribute type="xs:string" name="editAction" use="optional"/>
-											</xs:complexType>
-										</xs:element>
-										<xs:element name="formStatePolicy" maxOccurs="unbounded" minOccurs="0">
-											<xs:complexType>
-												<xs:sequence>
-													<xs:element type="fcfilter" name="onCondition"  maxOccurs="1" minOccurs="0"/>
-													<xs:element type="fcsetvalues" name="setValues" maxOccurs="1" minOccurs="0"/>
-													<xs:element name="setStates" minOccurs="0">
-														<xs:complexType>
-															<xs:sequence>
-																<xs:element name="setState" maxOccurs="unbounded" minOccurs="0">
-																	<xs:complexType>
-																		<xs:simpleContent>
-																			<xs:extension base="xs:string">
-																				<xs:attribute name="type" use="required">
-																					<xs:simpleType>
-																						<xs:restriction base="xs:string">
-																							<xs:enumeration value="ANNOTATION"/>
-																							<xs:enumeration value="TAB"/>
-																							<xs:enumeration value="SECTION"/>
-																							<xs:enumeration value="FIELD"/>
-																						</xs:restriction>
-																					</xs:simpleType>
-																				</xs:attribute>
-																				<xs:attribute type="xs:string" name="target" use="required"/>
-																				<xs:attribute type="fctristate" name="required" use="optional"/>
-																				<xs:attribute type="fctristate" name="visible" use="optional"/>
-																				<xs:attribute type="fctristate" name="editable" use="optional"/>
-																				<xs:attribute type="fctristate" name="disabled" use="optional"/>
-																			</xs:extension>
-																		</xs:simpleContent>
-																	</xs:complexType>
-																</xs:element>
-															</xs:sequence>
-														</xs:complexType>
-													</xs:element>
-												</xs:sequence>
-												<xs:attribute type="xs:string" name="name" use="required"/>
-												<xs:attribute type="xs:string" name="description" use="required"/>
-												<xs:attribute type="xs:string" name="label" use="optional"/>
-												<xs:attribute name="type" use="required">
-													<xs:simpleType>
-														<xs:restriction base="xs:string">
-															<xs:enumeration value="ON_CREATE"/>
-															<xs:enumeration value="ON_SWITCH"/>
-															<xs:enumeration value="ON_FORM_CONSTRUCT_SET_VALUES"/>
-															<xs:enumeration value="ON_DELAYED_SET_VALUES"/>
-														</xs:restriction>
-													</xs:simpleType>
-												</xs:attribute>
-												<xs:attribute type="xs:string" name="valueGenerator" use="optional"/>
-												<xs:attribute type="xs:string" name="trigger" use="optional"/>
-												<xs:attribute type="xs:integer" name="executionIndex" use="optional"/>
-											</xs:complexType>
-										</xs:element>
-										<xs:element name="formWidgetRulesPolicy" maxOccurs="unbounded" minOccurs="0">
-											<xs:complexType>
-												<xs:sequence>
-													<xs:element type="fcfilter" name="onCondition"  maxOccurs="1" minOccurs="0"/>
-													<xs:element name="widgetRules"  maxOccurs="1" minOccurs="0">
-														<xs:complexType>
-															<xs:sequence>
-																<xs:element name="entry"  maxOccurs="unbounded" minOccurs="0">
-																	<xs:complexType>
-																		<xs:attribute type="xs:string" name="field" use="required"/>
-																		<xs:attribute type="xs:string" name="widget" use="required"/>
-																	</xs:complexType>
-																</xs:element>
-															</xs:sequence>
-														</xs:complexType>
-													</xs:element>
-												</xs:sequence>
-												<xs:attribute type="xs:string" name="name" use="required"/>
-												<xs:attribute type="xs:string" name="description" use="required"/>
-												<xs:attribute type="xs:string" name="label" use="optional"/>
-												<xs:attribute type="xs:integer" name="executionIndex" use="optional"/>
-											</xs:complexType>
-										</xs:element>
-										<xs:element name="fieldValidationPolicy" maxOccurs="unbounded" minOccurs="0">
-											<xs:complexType>
-												<xs:attribute type="xs:string" name="name" use="required"/>
-												<xs:attribute type="xs:string" name="description" use="required"/>
-												<xs:attribute type="xs:string" name="label" use="optional"/>
-												<xs:attribute type="xs:string" name="fieldName" use="required"/>
-												<xs:attribute type="xs:string" name="validator" use="required"/>
-												<xs:attribute type="xs:string" name="rule" use="optional"/>
-												<xs:attribute type="xs:integer" name="executionIndex" use="optional"/>
-											</xs:complexType>
-										</xs:element>
-										<xs:element name="formValidationPolicy" maxOccurs="unbounded" minOccurs="0">
-											<xs:complexType>
-												<xs:sequence>
-													<xs:element type="fcfilter" name="errorCondition" minOccurs="0"/>
-												</xs:sequence>
-												<xs:attribute type="xs:string" name="name" use="required"/>
-												<xs:attribute type="xs:string" name="description" use="required"/>
-												<xs:attribute type="xs:string" name="label" use="optional"/>
-												<xs:attribute type="xs:string" name="message" use="optional"/>
-												<xs:attribute type="xs:string" name="target" use="optional"/>
-												<xs:attribute type="xs:string" name="errorMatcher" use="optional"/>
-												<xs:attribute type="xs:boolean" name="skippable" use="optional"/>
-												<xs:attribute type="xs:integer" name="executionIndex" use="optional"/>
-											</xs:complexType>
-										</xs:element>
-										<xs:element name="formReviewPolicy" maxOccurs="unbounded" minOccurs="0">
-											<xs:complexType>
-												<xs:sequence>
-													<xs:element type="fcfilter" name="errorCondition" minOccurs="0"/>
-												</xs:sequence>
-												<xs:attribute type="xs:string" name="name" use="required"/>
-												<xs:attribute type="xs:string" name="description" use="required"/>
-												<xs:attribute type="xs:string" name="label" use="optional"/>
-												<xs:attribute type="xs:string" name="message" use="optional"/>
-												<xs:attribute type="xs:string" name="target" use="optional"/>
-												<xs:attribute type="xs:string" name="errorMatcher" use="optional"/>
-												<xs:attribute type="xs:boolean" name="skippable" use="optional"/>
-												<xs:attribute type="xs:integer" name="executionIndex" use="optional"/>
-												<xs:attribute type="xs:string" name="events" use="optional"/>
-												<xs:attribute name="messageType" use="required">
-													<xs:simpleType>
-														<xs:restriction base="xs:string">
-															<xs:enumeration value="INFO"/>
-															<xs:enumeration value="WARNING"/>
-															<xs:enumeration value="ERROR"/>
-															<xs:enumeration value="PASS"/>
-														</xs:restriction>
-													</xs:simpleType>
-												</xs:attribute>
-											</xs:complexType>
-										</xs:element>
-									</xs:sequence>
-									<xs:attribute name="type" use="optional">
-										<xs:simpleType>
-											<xs:restriction base="xs:string">
-												<xs:enumeration value="INPUT"/>
-												<xs:enumeration value="LISTING"/>
-											</xs:restriction>
-										</xs:simpleType>
-									</xs:attribute>
-									<xs:attribute type="xs:string" name="name" use="required"/>
-									<xs:attribute type="xs:string" name="description" use="required"/>
-									<xs:attribute type="xs:string" name="label" use="optional"/>
-									<xs:attribute type="xs:string" name="entity" use="required"/>
-									<xs:attribute type="xs:string" name="helpSheet" use="optional"/>
-									<xs:attribute type="xs:string" name="titleFormat" use="optional"/>
-									<xs:attribute type="xs:string" name="listingGenerator" use="optional"/>
-									<xs:attribute type="xs:string" name="consolidatedValidation" use="optional"/>
-									<xs:attribute type="xs:string" name="consolidatedReview" use="optional"/>
-									<xs:attribute type="xs:string" name="consolidatedState" use="optional"/>
-								</xs:complexType>
-							</xs:element>
-						</xs:sequence>
-					</xs:complexType>
-				</xs:element>
-				<!-- Charts -->
-				<xs:element name="charts" minOccurs="0">
-					<xs:complexType>
-						<xs:sequence>
-							<xs:element name="chart" maxOccurs="unbounded" minOccurs="0">
-								<xs:complexType>
-									<xs:attribute name="type" use="required">
-										<xs:simpleType>
-											<xs:restriction base="xs:string">
-												<xs:enumeration value="CARD"/>
-												<xs:enumeration value="TABLE"/>
-												<xs:enumeration value="LINE"/>
-												<xs:enumeration value="AREA"/>
-												<xs:enumeration value="COLUMN"/>
-												<xs:enumeration value="BAR"/>
-												<xs:enumeration value="RADAR"/>
-												<xs:enumeration value="PIE"/>
-												<xs:enumeration value="DONUT"/>
-												<xs:enumeration value="POLAR_AREA"/>
-											</xs:restriction>
-										</xs:simpleType>
-									</xs:attribute>
-									<xs:attribute name="palette" use="optional">
-										<xs:simpleType>
-											<xs:restriction base="xs:string">
-												<xs:enumeration value="PALETTE0"/>
-												<xs:enumeration value="PALETTE1"/>
-												<xs:enumeration value="PALETTE2"/>
-												<xs:enumeration value="PALETTE3"/>
-												<xs:enumeration value="PALETTE4"/>
-												<xs:enumeration value="PALETTE5"/>
-												<xs:enumeration value="PALETTE6"/>
-												<xs:enumeration value="PALETTE7"/>
-												<xs:enumeration value="PALETTE8"/>
-												<xs:enumeration value="PALETTE9"/>
-												<xs:enumeration value="PALETTE10"/>
-											</xs:restriction>
-										</xs:simpleType>
-									</xs:attribute>
-									<xs:attribute type="xs:string" name="name" use="required"/>
-									<xs:attribute type="xs:string" name="description" use="required"/>
-									<xs:attribute type="xs:string" name="label" use="optional"/>
-									<xs:attribute type="xs:string" name="title" use="optional"/>
-									<xs:attribute type="xs:string" name="subTitle" use="optional"/>
-									<xs:attribute type="xs:string" name="provider" use="optional"/>
-									<xs:attribute type="xs:integer" name="width" use="optional"/>
-									<xs:attribute type="xs:integer" name="height" use="optional"/>
-									<xs:attribute type="xs:boolean" name="stacked" use="optional"/>
-									<xs:attribute type="xs:boolean" name="showGrid" use="optional"/>
-									<xs:attribute type="xs:boolean" name="showDataLabels" use="optional"/>
-									<xs:attribute type="xs:boolean" name="formatDataLabels" use="optional"/>
-									<xs:attribute type="xs:boolean" name="formatYLabels" use="optional"/>
-									<xs:attribute type="xs:boolean" name="smooth" use="optional"/>
-									<xs:attribute type="xs:string" name="category" use="optional"/>
-									<xs:attribute type="xs:string" name="series" use="optional"/>
-									<xs:attribute type="xs:string" name="color" use="optional"/>
-									<xs:attribute type="xs:string" name="rule" use="optional"/>
-								</xs:complexType>
-							</xs:element>
-						</xs:sequence>
-					</xs:complexType>
-				</xs:element>
-				<!-- Chart Datasources -->
-				<xs:element name="chart-datasources" minOccurs="0">
-					<xs:complexType>
-						<xs:sequence>
-							<xs:element name="chart-datasource" maxOccurs="unbounded" minOccurs="0">
-								<xs:complexType>
-									<xs:sequence>
-										<xs:element type="xs:string" name="entity"/>
-										<xs:element type="fcfilter" name="category-base" maxOccurs="1" minOccurs="0"/>
-										<xs:element type="fcpropertysequence" name="series" maxOccurs="1" minOccurs="0"/>
-										<xs:element type="fcpropertysequence" name="categories" maxOccurs="1" minOccurs="0"/>
-										<xs:element type="fcfieldsequence" name="fieldSequence" maxOccurs="1" minOccurs="0"/>
-									</xs:sequence>
-									<xs:attribute name="type" use="required">
-										<xs:simpleType>
-											<xs:restriction base="xs:string">
-												<xs:enumeration value="ENTITY"/>
-											</xs:restriction>
-										</xs:simpleType>
-									</xs:attribute>
-									<xs:attribute name="timeseries" use="optional">
-										<xs:simpleType>
-											<xs:restriction base="xs:string">
-												<xs:enumeration value="HOUR"/>
-												<xs:enumeration value="HOUR_OVER_DAY"/>
-												<xs:enumeration value="HOUR_OVER_DAY_MERGED"/>
-												<xs:enumeration value="DAY"/>
-												<xs:enumeration value="DAY_OVER_WEEK"/>
-												<xs:enumeration value="DAY_OVER_MONTH"/>
-												<xs:enumeration value="DAY_OVER_YEAR"/>
-												<xs:enumeration value="DAY_OVER_WEEK_MERGED"/>
-												<xs:enumeration value="DAY_OVER_MONTH_MERGED"/>
-												<xs:enumeration value="DAY_OVER_YEAR_MERGED"/>
-												<xs:enumeration value="WEEK"/>
-												<xs:enumeration value="WEEK_MERGED"/>
-												<xs:enumeration value="MONTH"/>
-												<xs:enumeration value="MONTH_MERGED"/>
-												<xs:enumeration value="YEAR"/>
-												<xs:enumeration value="YEAR_MERGED"/>
-											</xs:restriction>
-										</xs:simpleType>
-									</xs:attribute>
-									<xs:attribute type="xs:string" name="name" use="required"/>
-									<xs:attribute type="xs:string" name="description" use="required"/>
-									<xs:attribute type="xs:string" name="label" use="optional"/>
-									<xs:attribute type="xs:integer" name="limit" use="optional"/>
-									<xs:attribute type="xs:string" name="preferred-category-field" use="optional"/>
-								</xs:complexType>
-							</xs:element>
-						</xs:sequence>
-					</xs:complexType>
-				</xs:element>
-				<!-- Dashboards -->
-				<xs:element name="dashboards" minOccurs="0">
-					<xs:complexType>
-						<xs:sequence>
-							<xs:element name="dashboard" maxOccurs="unbounded" minOccurs="0">
-								<xs:complexType>
-									<xs:sequence>
-										<xs:element name="dashboard-section" maxOccurs="unbounded" minOccurs="0">
-											<xs:complexType>
-												<xs:attribute name="type" use="required">
-													<xs:simpleType>
-														<xs:restriction base="xs:string">
-															<xs:enumeration value="TYPE_1"/>
-															<xs:enumeration value="TYPE_1_1"/>
-															<xs:enumeration value="TYPE_1_2"/>
-															<xs:enumeration value="TYPE_2_1"/>
-															<xs:enumeration value="TYPE_1_1_1"/>
-															<xs:enumeration value="TYPE_1_3"/>
-															<xs:enumeration value="TYPE_1_1_2"/>
-															<xs:enumeration value="TYPE_1_2_1"/>
-															<xs:enumeration value="TYPE_2_1_1"/>
-															<xs:enumeration value="TYPE_3_1"/>
-															<xs:enumeration value="TYPE_1_1_1_1"/>
-															<xs:enumeration value="TYPE_1_1_1_1_1"/>
-															<xs:enumeration value="TYPE_1_1_1_1_1_1"/>
-														</xs:restriction>
-													</xs:simpleType>
-												</xs:attribute>
-												<xs:attribute type="xs:integer" name="index" use="required"/>
-												<xs:attribute type="xs:integer" name="height" use="optional"/>
-											</xs:complexType>
-										</xs:element>
-										<xs:element name="dashboard-tile" maxOccurs="unbounded" minOccurs="0">
-											<xs:complexType>
-												<xs:simpleContent>
-													<xs:extension base="xs:string">
-														<xs:attribute name="type" use="required">
-															<xs:simpleType>
-																<xs:restriction base="xs:string">
-																	<xs:enumeration value="SIMPLE"/>
-																	<xs:enumeration value="SPARKLINE"/>
-																</xs:restriction>
-															</xs:simpleType>
-														</xs:attribute>
-														<xs:attribute type="xs:string" name="name" use="required"/>
-														<xs:attribute type="xs:string" name="description" use="required"/>
-														<xs:attribute type="xs:string" name="label" use="optional"/>
-														<xs:attribute type="xs:string" name="chart" use="required"/>
-														<xs:attribute type="xs:integer" name="section" use="required"/>
-														<xs:attribute type="xs:integer" name="index" use="required"/>
-													</xs:extension>
-												</xs:simpleContent>
-											</xs:complexType>
-										</xs:element>
-										<xs:element name="dashboard-option" maxOccurs="unbounded" minOccurs="0">
-											<xs:complexType>
-												<xs:sequence>
-													<xs:element name="category-base">
-														<xs:complexType>
-															<xs:sequence>
-																<xs:element type="fcfilter" name="base-condition"/>
-															</xs:sequence>
-															<xs:attribute type="xs:string" name="chartDataSource" use="required"/>
-															<xs:attribute type="xs:string" name="entity" use="required"/>
-														</xs:complexType>
-													</xs:element>
-												</xs:sequence>
-												<xs:attribute type="xs:string" name="name" use="required"/>
-												<xs:attribute type="xs:string" name="description" use="required"/>
-												<xs:attribute type="xs:string" name="label" use="optional"/>
-											</xs:complexType>
-										</xs:element>
-									</xs:sequence>
-									<xs:attribute type="xs:string" name="name" use="required"/>
-									<xs:attribute type="xs:string" name="description" use="required"/>
-									<xs:attribute type="xs:string" name="label" use="optional"/>
-									<xs:attribute type="xs:boolean" name="allowSecondaryTenants" use="optional"/>
-									<xs:attribute type="xs:integer" name="sections" use="required"/>
-								</xs:complexType>
-							</xs:element>
-						</xs:sequence>
-					</xs:complexType>
-				</xs:element>
-			</xs:all> 
-			<xs:attribute type="xs:string" name="name" use="required"/>
-			<xs:attribute type="xs:string" name="description" use="required"/>
-			<xs:attribute type="xs:string" name="label" use="required"/>
-			<xs:attribute type="xs:string" name="module" use="required"/>
-			<xs:attribute type="xs:integer" name="displayIndex" use="optional"/>
-			<xs:attribute type="xs:boolean" name="developable" use="optional"/>
-			<xs:attribute type="xs:boolean" name="menuAccess" use="optional"/>
-			<xs:attribute type="xs:boolean" name="allowSecondaryTenants" use="optional"/>
-			<xs:attribute type="xs:boolean" name="custom" use="optional"/>
-		</xs:complexType>
-	</xs:element>
+<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="unqualified" elementFormDefault="qualified">
+  <!-- Applet Type -->
+  <xs:simpleType name="fcapplettype">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="MANAGE_ENTITYLIST"/>
+      <xs:enumeration value="MANAGE_ENTITYLIST_ASSIGN"/>
+      <xs:enumeration value="MANAGE_ENTITYLIST_SUBMISSION"/>
+      <xs:enumeration value="MANAGE_ENTITYLIST_SINGLEFORM"/>
+      <xs:enumeration value="MANAGE_LOADINGLIST"/>
+      <xs:enumeration value="HEADLESS_TABS"/>
+      <xs:enumeration value="CREATE_ENTITY"/>
+      <xs:enumeration value="CREATE_ENTITY_SINGLEFORM"/>
+      <xs:enumeration value="FORM_WIZARD"/>
+      <xs:enumeration value="LISTING"/>
+      <xs:enumeration value="MANAGE_PROPERTYLIST"/>
+      <xs:enumeration value="MY_WORKITEM"/>
+      <xs:enumeration value="TASK_EXECUTION"/>
+      <xs:enumeration value="DATA_IMPORT"/>
+      <xs:enumeration value="FACADE"/>
+      <xs:enumeration value="FACADE_MULTIPLE"/>
+      <xs:enumeration value="PATH_PAGE"/>
+      <xs:enumeration value="PATH_WINDOW"/>
+      <xs:enumeration value="REVIEW_WORKITEMS"/>
+      <xs:enumeration value="REVIEW_SINGLEFORMWORKITEMS"/>
+      <xs:enumeration value="REVIEW_WIZARDWORKITEMS"/>
+      <xs:enumeration value="STUDIO_FC_COMPONENT"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!-- Data Type -->
+  <xs:simpleType name="fcdatatype">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="CHAR"/>
+      <xs:enumeration value="BOOLEAN"/>
+      <xs:enumeration value="SHORT"/>
+      <xs:enumeration value="INTEGER"/>
+      <xs:enumeration value="LONG"/>
+      <xs:enumeration value="FLOAT"/>
+      <xs:enumeration value="DOUBLE"/>
+      <xs:enumeration value="DECIMAL"/>
+      <xs:enumeration value="DATE"/>
+      <xs:enumeration value="STRING"/>
+      <xs:enumeration value="TIMESTAMP"/>
+      <xs:enumeration value="TIMESTAMP_UTC"/>
+      <xs:enumeration value="CLOB"/>
+      <xs:enumeration value="BLOB"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!-- Input Type -->
+  <xs:simpleType name="fcinputtype">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="CHAR"/>
+      <xs:enumeration value="CHAR_ARRAY"/>
+      <xs:enumeration value="BOOLEAN"/>
+      <xs:enumeration value="BOOLEAN_ARRAY"/>
+      <xs:enumeration value="SHORT"/>
+      <xs:enumeration value="SHORT_ARRAY"/>
+      <xs:enumeration value="INTEGER"/>
+      <xs:enumeration value="INTEGER_ARRAY"/>
+      <xs:enumeration value="LONG"/>
+      <xs:enumeration value="LONG_ARRAY"/>
+      <xs:enumeration value="MAPPED"/>
+      <xs:enumeration value="FLOAT"/>
+      <xs:enumeration value="FLOAT_ARRAY"/>
+      <xs:enumeration value="DOUBLE"/>
+      <xs:enumeration value="DOUBLE_ARRAY"/>
+      <xs:enumeration value="DECIMAL"/>
+      <xs:enumeration value="DECIMAL_ARRAY"/>
+      <xs:enumeration value="DATE"/>
+      <xs:enumeration value="DATE_ARRAY"/>
+      <xs:enumeration value="DATETIME"/>
+      <xs:enumeration value="DATETIME_ARRAY"/>
+      <xs:enumeration value="STRING"/>
+      <xs:enumeration value="STRING_ARRAY"/>
+      <xs:enumeration value="FILE"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!-- Entity Field Data Type -->
+  <xs:simpleType name="fcfielddatatype">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="CHAR"/>
+      <xs:enumeration value="BOOLEAN"/>
+      <xs:enumeration value="BOOLEAN_ARRAY"/>
+      <xs:enumeration value="SHORT"/>
+      <xs:enumeration value="SHORT_ARRAY"/>
+      <xs:enumeration value="INTEGER"/>
+      <xs:enumeration value="INTEGER_ARRAY"/>
+      <xs:enumeration value="LONG"/>
+      <xs:enumeration value="LONG_ARRAY"/>
+      <xs:enumeration value="TENANT_ID"/>
+      <xs:enumeration value="MAPPED"/>
+      <xs:enumeration value="FLOAT"/>
+      <xs:enumeration value="FLOAT_ARRAY"/>
+      <xs:enumeration value="DOUBLE"/>
+      <xs:enumeration value="DOUBLE_ARRAY"/>
+      <xs:enumeration value="DECIMAL"/>
+      <xs:enumeration value="DECIMAL_ARRAY"/>
+      <xs:enumeration value="DATE"/>
+      <xs:enumeration value="DATE_ARRAY"/>
+      <xs:enumeration value="TIMESTAMP_UTC"/>
+      <xs:enumeration value="TIMESTAMP"/>
+      <xs:enumeration value="TIMESTAMP_ARRAY"/>
+      <xs:enumeration value="CLOB"/>
+      <xs:enumeration value="BLOB"/>
+      <xs:enumeration value="STRING"/>
+      <xs:enumeration value="STRING_ARRAY"/>
+      <xs:enumeration value="ENUM"/>
+      <xs:enumeration value="ENUM_REF"/>
+      <xs:enumeration value="ENUM_DYN"/>
+      <xs:enumeration value="REF"/>
+      <xs:enumeration value="REF_UNLINKABLE"/>
+      <xs:enumeration value="REF_FILEUPLOAD"/>
+      <xs:enumeration value="FOSTER_PARENT_ID"/>
+      <xs:enumeration value="FOSTER_PARENT_TYPE"/>
+      <xs:enumeration value="CATEGORY_COLUMN"/>
+      <xs:enumeration value="SCRATCH"/>
+      <xs:enumeration value="LIST_ONLY"/>
+      <xs:enumeration value="CHILD"/>
+      <xs:enumeration value="CHILD_LIST"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!-- Entity Base Type -->
+  <xs:simpleType name="fcentitybasetype">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="BASE_ENTITY"/>
+      <xs:enumeration value="BASE_VERSION_ENTITY"/>
+      <xs:enumeration value="BASE_AUDIT_ENTITY"/>
+      <xs:enumeration value="BASE_STATUS_ENTITY"/>
+      <xs:enumeration value="BASE_WORK_ENTITY"/>
+      <xs:enumeration value="BASE_STATUS_WORK_ENTITY"/>
+      <xs:enumeration value="BASE_NAMED_ENTITY"/>
+      <xs:enumeration value="BASE_CONFIG_ENTITY"/>
+      <xs:enumeration value="BASE_CONFIG_NAMED_ENTITY"/>
+      <xs:enumeration value="BASE_APPLICATION_ENTITY"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!-- Search Condition Type -->
+  <xs:simpleType name="fcsearchcondtype">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="SESSION_ATTRIBUTE"/>
+      <xs:enumeration value="EQUALS"/>
+      <xs:enumeration value="LESS_THAN"/>
+      <xs:enumeration value="LESS_OR_EQUAL"/>
+      <xs:enumeration value="GREATER_THAN"/>
+      <xs:enumeration value="GREATER_OR_EQUAL"/>
+      <xs:enumeration value="BEGINS_WITH"/>
+      <xs:enumeration value="ENDS_WITH"/>
+      <xs:enumeration value="LIKE"/>
+      <xs:enumeration value="ILIKE"/>
+      <xs:enumeration value="NOT_EQUALS"/>
+      <xs:enumeration value="NOT_LIKE"/>
+      <xs:enumeration value="NOT_BEGIN_WITH"/>
+      <xs:enumeration value="NOT_END_WITH"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!-- Filter Condition Type -->
+  <xs:simpleType name="fcfiltercondtype">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="EQUALS"/>
+      <xs:enumeration value="IEQUALS"/>
+      <xs:enumeration value="EQUALS_LINGUAL"/>
+      <xs:enumeration value="NOT_EQUALS"/>
+      <xs:enumeration value="NOT_EQUALS_LINGUAL"/>
+      <xs:enumeration value="INOT_EQUALS"/>
+      <xs:enumeration value="LESS_THAN"/>
+      <xs:enumeration value="LESS_THAN_LINGUAL"/>
+      <xs:enumeration value="LESS_OR_EQUAL"/>
+      <xs:enumeration value="LESS_OR_EQUAL_LINGUAL"/>
+      <xs:enumeration value="GREATER_THAN"/>
+      <xs:enumeration value="GREATER_THAN_LINGUAL"/>
+      <xs:enumeration value="GREATER_OR_EQUAL"/>
+      <xs:enumeration value="GREATER_OR_EQUAL_LINGUAL"/>
+      <xs:enumeration value="BETWEEN"/>
+      <xs:enumeration value="BETWEEN_LINGUAL"/>
+      <xs:enumeration value="NOT_BETWEEN"/>
+      <xs:enumeration value="NOT_BETWEEN_LINGUAL"/>
+      <xs:enumeration value="AMONGST"/>
+      <xs:enumeration value="NOT_AMONGST"/>
+      <xs:enumeration value="LIKE"/>
+      <xs:enumeration value="ILIKE"/>
+      <xs:enumeration value="NOT_LIKE"/>
+      <xs:enumeration value="BEGINS_WITH"/>
+      <xs:enumeration value="BEGINS_WITH"/>
+      <xs:enumeration value="NOT_BEGIN_WITH"/>
+      <xs:enumeration value="ENDS_WITH"/>
+      <xs:enumeration value="IENDS_WITH"/>
+      <xs:enumeration value="NOT_END_WITH"/>
+      <xs:enumeration value="IS_NULL"/>
+      <xs:enumeration value="IS_NOT_NULL"/>
+      <xs:enumeration value="EQUALS_FIELD"/>
+      <xs:enumeration value="NOT_EQUALS_FIELD"/>
+      <xs:enumeration value="EQUALS_SESSIONPARAM"/>
+      <xs:enumeration value="NOT_EQUALS_SESSIONPARAM"/>
+      <xs:enumeration value="LESS_THAN_FIELD"/>
+      <xs:enumeration value="LESS_OR_EQUAL_FIELD"/>
+      <xs:enumeration value="GREATER_THAN_FIELD"/>
+      <xs:enumeration value="GREATER_OR_EQUAL_FIELD"/>
+      <xs:enumeration value="BETWEEN_FIELD"/>
+      <xs:enumeration value="NOT_BETWEEN_FIELD"/>
+      <xs:enumeration value="LIKE_FIELD"/>
+      <xs:enumeration value="ILIKE_FIELD"/>
+      <xs:enumeration value="NOT_LIKE_FIELD"/>
+      <xs:enumeration value="BEGINS_WITH_FIELD"/>
+      <xs:enumeration value="IBEGINS_WITH_FIELD"/>
+      <xs:enumeration value="NOT_BEGIN_WITH_FIELD"/>
+      <xs:enumeration value="ENDS_WITH_FIELD"/>
+      <xs:enumeration value="IENDS_WITH_FIELD"/>
+      <xs:enumeration value="NOT_END_WITH_FIELD"/>
+      <xs:enumeration value="EQUALS_PARAM"/>
+      <xs:enumeration value="NOT_EQUALS_PARAM"/>
+      <xs:enumeration value="LESS_THAN_PARAM"/>
+      <xs:enumeration value="LESS_OR_EQUAL_PARAM"/>
+      <xs:enumeration value="GREATER_THAN_PARAM"/>
+      <xs:enumeration value="GREATER_OR_EQUAL_PARAM"/>
+      <xs:enumeration value="BETWEEN_PARAM"/>
+      <xs:enumeration value="NOT_BETWEEN_PARAM"/>
+      <xs:enumeration value="LIKE_PARAM"/>
+      <xs:enumeration value="ILIKE_PARAM"/>
+      <xs:enumeration value="NOT_LIKE_PARAM"/>
+      <xs:enumeration value="BEGINS_WITH_PARAM"/>
+      <xs:enumeration value="IBEGINS_WITH_PARAM"/>
+      <xs:enumeration value="NOT_BEGIN_WITH_PARAM"/>
+      <xs:enumeration value="ENDS_WITH_PARAM"/>
+      <xs:enumeration value="IENDS_WITH_PARAM"/>
+      <xs:enumeration value="NOT_END_WITH_PARAM"/>
+      <xs:enumeration value="EQUALS_COLLECTION"/>
+      <xs:enumeration value="NOT_EQUALS_COLLECTION"/>
+      <xs:enumeration value="LESS_THAN_COLLECTION"/>
+      <xs:enumeration value="LESS_OR_EQUAL_COLLECTION"/>
+      <xs:enumeration value="GREATER_THAN_COLLECTION"/>
+      <xs:enumeration value="GREATER_OR_EQUAL_COLLECTION"/>
+      <xs:enumeration value="AND"/>
+      <xs:enumeration value="OR"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!-- Tristate Type -->
+  <xs:simpleType name="fctristate">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="TRUE"/>
+      <xs:enumeration value="FALSE"/>
+      <xs:enumeration value="CONFORMING"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!-- Field Sequence -->
+  <xs:complexType name="fcfieldsequence">
+    <xs:sequence>
+      <xs:element name="entry" maxOccurs="unbounded" minOccurs="0">
+        <xs:complexType>
+          <xs:attribute type="xs:string" name="field" use="required"/>
+          <xs:attribute type="xs:string" name="formatter" use="optional"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <!-- Property Sequence-->
+  <xs:complexType name="fcpropertysequence">
+    <xs:sequence>
+      <xs:element name="entry" maxOccurs="unbounded" minOccurs="0">
+        <xs:complexType>
+          <xs:attribute type="xs:string" name="property" use="required"/>
+          <xs:attribute type="xs:string" name="label" use="required"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <!-- Restriction -->
+  <xs:complexType name="fcrestriction">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element name="restriction" type="fcrestriction"/>
+    </xs:choice>
+    <xs:attribute type="fcfiltercondtype" name="type" use="required"/>
+    <xs:attribute type="xs:string" name="field" use="optional"/>
+    <xs:attribute type="xs:string" name="paramA" use="optional"/>
+    <xs:attribute type="xs:string" name="paramB" use="optional"/>
+  </xs:complexType>
+  <!-- Filter -->
+  <xs:complexType name="fcfilter">
+    <xs:sequence>
+      <xs:element type="fcrestriction" name="restriction" maxOccurs="unbounded" minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute type="xs:string" name="name" use="optional"/>
+    <xs:attribute type="xs:string" name="description" use="optional"/>
+    <xs:attribute type="xs:string" name="label" use="optional"/>
+    <xs:attribute type="xs:string" name="filterGenerator" use="optional"/>
+    <xs:attribute type="xs:string" name="filterGeneratorRule" use="optional"/>
+    <xs:attribute type="xs:boolean" name="quickFilter" use="optional"/>
+  </xs:complexType>
+  <!-- Filter with Color -->
+  <xs:complexType name="fccolorfilter">
+    <xs:complexContent>
+      <xs:extension base="fcfilter">
+        <xs:attribute type="xs:string" name="rowColor" use="optional"/>
+        <xs:attribute type="xs:string" name="legendLabel" use="optional"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <!-- Set Values -->
+  <xs:complexType name="fcsetvalues">
+    <xs:sequence>
+      <xs:element name="setValue" maxOccurs="unbounded" minOccurs="0">
+        <xs:complexType>
+          <xs:attribute name="type" use="optional">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:enumeration value="NULL"/>
+                <xs:enumeration value="IMMEDIATE"/>
+                <xs:enumeration value="IMMEDIATE_LINGUAL"/>
+                <xs:enumeration value="IMMEDIATE_FIELD"/>
+                <xs:enumeration value="PROCESS_VARIABLE"/>
+                <xs:enumeration value="SESSION_PARAMETER"/>
+                <xs:enumeration value="GENERATOR"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+          <xs:attribute type="xs:string" name="field" use="required"/>
+          <xs:attribute type="xs:string" name="value" use="optional"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute type="xs:string" name="name" use="optional"/>
+    <xs:attribute type="xs:string" name="description" use="optional"/>
+    <xs:attribute type="xs:string" name="label" use="optional"/>
+  </xs:complexType>
+  <!-- Application -->
+  <xs:element name="application">
+    <xs:complexType>
+      <xs:all minOccurs="0" maxOccurs="1">
+        <!-- Reports -->
+        <xs:element name="reports" minOccurs="0">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="report" maxOccurs="unbounded" minOccurs="0">
+                <xs:complexType>
+                  <xs:attribute type="xs:string" name="configFile" use="required"/>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <!-- Notification Templates -->
+        <xs:element name="notifTemplates" minOccurs="0">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="notifTemplate" maxOccurs="unbounded" minOccurs="0">
+                <xs:complexType>
+                  <xs:attribute type="xs:string" name="configFile" use="required"/>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <!-- Workflows -->
+        <xs:element name="workflows" minOccurs="0">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="workflow" maxOccurs="unbounded" minOccurs="0">
+                <xs:complexType>
+                  <xs:attribute type="xs:string" name="configFile" use="required"/>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <!-- Applets -->
+        <xs:element name="applets" minOccurs="0">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="applet" maxOccurs="unbounded" minOccurs="0">
+                <xs:complexType mixed="true">
+                  <xs:all>
+                    <xs:element name="properties" minOccurs="0">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="property" maxOccurs="unbounded" minOccurs="0">
+                            <xs:complexType>
+                              <xs:attribute type="xs:string" name="name" use="required"/>
+                              <xs:attribute type="xs:string" name="value" use="optional"/>
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element name="routeToAppletItems" minOccurs="0">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="routeToAppletItem" maxOccurs="unbounded" minOccurs="0">
+                            <xs:complexType>
+                              <xs:attribute type="xs:string" name="routeToApplet" use="required"/>
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element name="alerts" minOccurs="0">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="alert" maxOccurs="unbounded" minOccurs="0">
+                            <xs:complexType>
+                              <xs:attribute type="xs:string" name="name" use="required"/>
+                              <xs:attribute type="xs:string" name="description" use="required"/>
+                              <xs:attribute type="xs:string" name="label" use="optional"/>
+                              <xs:attribute type="xs:string" name="sender" use="optional"/>
+                              <xs:attribute type="xs:string" name="template" use="optional"/>
+                              <xs:attribute type="xs:string" name="recipientPolicy" use="optional"/>
+                              <xs:attribute type="xs:string" name="recipientNameRule" use="optional"/>
+                              <xs:attribute type="xs:string" name="recipientContactRule" use="optional"/>
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element name="filters" minOccurs="0">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="filter" type="fcfilter" maxOccurs="unbounded" minOccurs="0"/>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element name="valuesset" minOccurs="0">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="values" maxOccurs="unbounded" minOccurs="0">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:element name="setValues" type="fcsetvalues" maxOccurs="1" minOccurs="0"/>
+                              </xs:sequence>
+                              <xs:attribute type="xs:string" name="name" use="required"/>
+                              <xs:attribute type="xs:string" name="description" use="required"/>
+                              <xs:attribute type="xs:string" name="label" use="optional"/>
+                              <xs:attribute type="xs:string" name="valueGenerator" use="optional"/>
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:all>
+                  <xs:attribute type="fcapplettype" name="type" use="required"/>
+                  <xs:attribute type="xs:string" name="name" use="required"/>
+                  <xs:attribute type="xs:string" name="description" use="required"/>
+                  <xs:attribute type="xs:string" name="label" use="required"/>
+                  <xs:attribute type="xs:string" name="entity" use="optional"/>
+                  <xs:attribute type="xs:string" name="icon" use="optional"/>
+                  <xs:attribute type="xs:string" name="path" use="optional"/>
+                  <xs:attribute type="xs:string" name="titleFormat" use="optional"/>
+                  <xs:attribute type="xs:integer" name="displayIndex" use="optional"/>
+                  <xs:attribute type="xs:boolean" name="menuAccess" use="optional"/>
+                  <xs:attribute type="xs:boolean" name="supportOpenInNewWindow" use="optional"/>
+                  <xs:attribute type="xs:boolean" name="allowSecondaryTenants" use="optional"/>
+                  <xs:attribute type="xs:string" name="routeToApplet" use="optional"/>
+                  <xs:attribute type="xs:string" name="baseField" use="optional"/>
+                  <xs:attribute type="xs:string" name="assignField" use="optional"/>
+                  <xs:attribute type="xs:string" name="assignDescField" use="optional"/>
+                  <xs:attribute type="xs:string" name="pseudoDeleteField" use="optional"/>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <!-- Widget Types -->
+        <xs:element name="widgetTypes" minOccurs="0">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="widgetType" maxOccurs="unbounded" minOccurs="0">
+                <xs:complexType>
+                  <xs:attribute type="fcdatatype" name="dataType" use="required"/>
+                  <xs:attribute type="fcinputtype" name="inputType" use="optional"/>
+                  <xs:attribute type="xs:string" name="name" use="required"/>
+                  <xs:attribute type="xs:string" name="description" use="required"/>
+                  <xs:attribute type="xs:string" name="editor" use="required"/>
+                  <xs:attribute type="xs:string" name="renderer" use="optional"/>
+                  <xs:attribute type="xs:boolean" name="stretch" use="optional"/>
+                  <xs:attribute type="xs:boolean" name="listOption" use="optional"/>
+                  <xs:attribute type="xs:boolean" name="enumOption" use="optional"/>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <!-- References -->
+        <xs:element name="references" minOccurs="0">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="reference" maxOccurs="unbounded" minOccurs="0">
+                <xs:complexType>
+                  <xs:all>
+                    <xs:element name="filters" minOccurs="0">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="filter" type="fcfilter" maxOccurs="1" minOccurs="0"/>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:all>
+                  <xs:attribute type="xs:string" name="name" use="required"/>
+                  <xs:attribute type="xs:string" name="description" use="required"/>
+                  <xs:attribute type="xs:string" name="entity" use="required"/>
+                  <xs:attribute type="xs:string" name="searchField" use="optional"/>
+                  <xs:attribute type="xs:string" name="orderField" use="optional"/>
+                  <xs:attribute type="xs:string" name="searchTable" use="optional"/>
+                  <xs:attribute type="xs:string" name="selectHandler" use="optional"/>
+                  <xs:attribute type="xs:string" name="listFormat" use="optional"/>
+                  <xs:attribute type="xs:string" name="filterGenerator" use="optional"/>
+                  <xs:attribute type="xs:string" name="filterGeneratorRule" use="optional"/>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <!-- Entities -->
+        <xs:element name="entities" minOccurs="0">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="entity" maxOccurs="unbounded" minOccurs="0">
+                <xs:complexType mixed="true">
+                  <xs:all>
+                    <xs:element name="fields" minOccurs="0">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="field" maxOccurs="unbounded" minOccurs="0">
+                            <xs:complexType>
+                              <xs:simpleContent>
+                                <xs:extension base="xs:string">
+                                  <xs:attribute type="fcfielddatatype" name="type" use="required"/>
+                                  <xs:attribute name="case" use="optional">
+                                    <xs:simpleType>
+                                      <xs:restriction base="xs:string">
+                                        <xs:enumeration value="LOWER"/>
+                                        <xs:enumeration value="UPPER"/>
+                                        <xs:enumeration value="CAMEL"/>
+                                        <xs:enumeration value="CAPITAL"/>
+                                        <xs:enumeration value="PATH"/>
+                                      </xs:restriction>
+                                    </xs:simpleType>
+                                  </xs:attribute>
+                                  <xs:attribute type="xs:string" name="name" use="required"/>
+                                  <xs:attribute type="xs:string" name="label" use="required"/>
+                                  <xs:attribute type="xs:string" name="inputLabel" use="optional"/>
+                                  <xs:attribute type="xs:string" name="inputWidget" use="optional"/>
+                                  <xs:attribute type="xs:string" name="category" use="optional"/>
+                                  <xs:attribute type="xs:integer" name="maxLen" use="optional"/>
+                                  <xs:attribute type="xs:boolean" name="trim" use="optional"/>
+                                  <xs:attribute type="xs:boolean" name="allowNegative" use="optional"/>
+                                  <xs:attribute type="xs:boolean" name="readOnly" use="optional"/>
+                                  <xs:attribute type="xs:boolean" name="nullable" use="optional"/>
+                                  <xs:attribute type="xs:boolean" name="auditable" use="optional"/>
+                                  <xs:attribute type="xs:boolean" name="reportable" use="optional"/>
+                                  <xs:attribute type="xs:boolean" name="descriptive" use="optional"/>
+                                  <xs:attribute type="xs:boolean" name="basicSearch" use="optional"/>
+                                  <xs:attribute type="xs:string" name="column" use="optional"/>
+                                  <xs:attribute type="xs:boolean" name="maintainAction" use="optional"/>
+                                  <xs:attribute type="xs:string" name="references" use="optional"/>
+                                  <xs:attribute type="xs:integer" name="minLen" use="optional"/>
+                                  <xs:attribute type="xs:integer" name="columns" use="optional"/>
+                                  <xs:attribute type="xs:integer" name="rows" use="optional"/>
+                                  <xs:attribute type="xs:integer" name="precision" use="optional"/>
+                                  <xs:attribute type="xs:integer" name="scale" use="optional"/>
+                                  <xs:attribute type="xs:string" name="key" use="optional"/>
+                                  <xs:attribute type="xs:string" name="property" use="optional"/>
+                                  <xs:attribute type="xs:string" name="mapped" use="optional"/>
+                                  <xs:attribute type="xs:string" name="jsonName" use="optional"/>
+                                  <xs:attribute type="xs:string" name="jsonFormatter" use="optional"/>
+                                </xs:extension>
+                              </xs:simpleContent>
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element name="expressions" minOccurs="0">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="expression" maxOccurs="unbounded" minOccurs="0">
+                            <xs:complexType>
+                              <xs:attribute type="xs:string" name="name" use="required"/>
+                              <xs:attribute type="xs:string" name="description" use="required"/>
+                              <xs:attribute type="xs:string" name="expression" use="required"/>
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element name="searchInputs" minOccurs="0">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="searchInput" maxOccurs="unbounded" minOccurs="0">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:element name="input" maxOccurs="unbounded" minOccurs="0">
+                                  <xs:complexType>
+                                    <xs:attribute type="fcsearchcondtype" name="type" use="required"/>
+                                    <xs:attribute type="xs:string" name="field" use="required"/>
+                                    <xs:attribute type="xs:string" name="widget" use="required"/>
+                                    <xs:attribute type="xs:string" name="label" use="required"/>
+                                  </xs:complexType>
+                                </xs:element>
+                              </xs:sequence>
+                              <xs:attribute type="xs:string" name="name" use="required"/>
+                              <xs:attribute type="xs:string" name="description" use="required"/>
+                              <xs:attribute type="xs:string" name="restrictionResolver" use="optional"/>
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element name="seriesset" minOccurs="0">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="series" maxOccurs="unbounded" minOccurs="0">
+                            <xs:complexType>
+                              <xs:attribute name="type" use="required">
+                                <xs:simpleType>
+                                  <xs:restriction base="xs:string">
+                                    <xs:enumeration value="COUNT"/>
+                                    <xs:enumeration value="SUM"/>
+                                    <xs:enumeration value="AVERAGE"/>
+                                    <xs:enumeration value="MINIMUM"/>
+                                    <xs:enumeration value="MAXIMUM"/>
+                                  </xs:restriction>
+                                </xs:simpleType>
+                              </xs:attribute>
+                              <xs:attribute type="xs:string" name="name" use="required"/>
+                              <xs:attribute type="xs:string" name="description" use="required"/>
+                              <xs:attribute type="xs:string" name="label" use="required"/>
+                              <xs:attribute type="xs:string" name="fieldName" use="required"/>
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element name="categories" minOccurs="0">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="category" type="fcfilter" maxOccurs="unbounded" minOccurs="0"/>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element name="uniqueConstraints" minOccurs="0">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="uniqueConstraint" maxOccurs="unbounded" minOccurs="0">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:element name="condition" maxOccurs="unbounded" minOccurs="0">
+                                  <xs:complexType>
+                                    <xs:attribute type="xs:string" name="field" use="required"/>
+                                    <xs:attribute type="xs:string" name="value" use="required"/>
+                                  </xs:complexType>
+                                </xs:element>
+                              </xs:sequence>
+                              <xs:attribute type="xs:string" name="name" use="required"/>
+                              <xs:attribute type="xs:string" name="description" use="required"/>
+                              <xs:attribute type="xs:string" name="fieldList" use="required"/>
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element name="attachments" minOccurs="0">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="attachment" maxOccurs="unbounded" minOccurs="0">
+                            <xs:complexType>
+                              <xs:attribute name="type" use="required">
+                                <xs:simpleType>
+                                  <xs:restriction base="xs:string">
+                                    <xs:enumeration value="AUDIO"/>
+                                    <xs:enumeration value="CSV"/>
+                                    <xs:enumeration value="EXCEL"/>
+                                    <xs:enumeration value="IMAGE"/>
+                                    <xs:enumeration value="IMAGE_PNG"/>
+                                    <xs:enumeration value="IMAGE_JPG"/>
+                                    <xs:enumeration value="IMAGE_GIF"/>
+                                    <xs:enumeration value="IMAGE_BMP"/>
+                                    <xs:enumeration value="PDF"/>
+                                    <xs:enumeration value="XML"/>
+                                    <xs:enumeration value="TEXT"/>
+                                    <xs:enumeration value="VIDEO"/>
+                                    <xs:enumeration value="WILDCARD"/>
+                                    <xs:enumeration value="WORD"/>
+                                  </xs:restriction>
+                                </xs:simpleType>
+                              </xs:attribute>
+                              <xs:attribute type="xs:string" name="name" use="required"/>
+                              <xs:attribute type="xs:string" name="description" use="required"/>
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element name="indexes" minOccurs="0">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="index" maxOccurs="unbounded" minOccurs="0">
+                            <xs:complexType>
+                              <xs:attribute type="xs:string" name="name" use="required"/>
+                              <xs:attribute type="xs:string" name="description" use="required"/>
+                              <xs:attribute type="xs:string" name="fieldList" use="required"/>
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element name="uploads" minOccurs="0">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="upload" maxOccurs="unbounded" minOccurs="0">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:element type="fcfieldsequence" name="fieldSequence" maxOccurs="1" minOccurs="0"/>
+                              </xs:sequence>
+                              <xs:attribute type="xs:string" name="name" use="required"/>
+                              <xs:attribute type="xs:string" name="description" use="required"/>
+                              <xs:attribute type="xs:string" name="label" use="optional"/>
+                              <xs:attribute name="onConstraint" use="required">
+                                <xs:simpleType>
+                                  <xs:restriction base="xs:string">
+                                    <xs:enumeration value="UPDATE"/>
+                                    <xs:enumeration value="SKIP"/>
+                                    <xs:enumeration value="FAIL"/>
+                                  </xs:restriction>
+                                </xs:simpleType>
+                              </xs:attribute>
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:all>
+                  <xs:attribute type="fcentitybasetype" name="baseType" use="optional"/>
+                  <xs:attribute type="xs:string" name="name" use="required"/>
+                  <xs:attribute type="xs:string" name="description" use="required"/>
+                  <xs:attribute type="xs:string" name="label" use="required"/>
+                  <xs:attribute type="xs:string" name="type" use="required"/>
+                  <xs:attribute type="xs:string" name="delegate" use="optional"/>
+                  <xs:attribute type="xs:string" name="table" use="optional"/>
+                  <xs:attribute type="xs:string" name="dataSourceName" use="optional"/>
+                  <xs:attribute type="xs:boolean" name="mapped" use="optional"/>
+                  <xs:attribute type="xs:boolean" name="auditable" use="optional"/>
+                  <xs:attribute type="xs:boolean" name="reportable" use="optional"/>
+                  <xs:attribute type="xs:boolean" name="actionPolicy" use="optional"/>
+                  <xs:attribute type="xs:boolean" name="changeEvents" use="optional"/>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <!-- Tables -->
+        <xs:element name="tables" minOccurs="0">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="table" maxOccurs="unbounded" minOccurs="0">
+                <xs:complexType>
+                  <xs:all>
+                    <xs:element name="columns" minOccurs="0">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="column" maxOccurs="unbounded" minOccurs="0">
+                            <xs:complexType>
+                              <xs:simpleContent>
+                                <xs:extension base="xs:string">
+                                  <xs:attribute type="xs:string" name="field" use="required"/>
+                                  <xs:attribute type="xs:string" name="label" use="optional"/>
+                                  <xs:attribute type="xs:string" name="renderWidget" use="optional"/>
+                                  <xs:attribute type="xs:string" name="linkAct" use="optional"/>
+                                  <xs:attribute type="xs:integer" name="widthRatio" use="optional"/>
+                                  <xs:attribute type="xs:boolean" name="switchOnChange" use="optional"/>
+                                  <xs:attribute type="xs:boolean" name="hiddenOnNull" use="optional"/>
+                                  <xs:attribute type="xs:boolean" name="hidden" use="optional"/>
+                                  <xs:attribute type="xs:boolean" name="disabled" use="optional"/>
+                                  <xs:attribute type="xs:boolean" name="editable" use="optional"/>
+                                  <xs:attribute type="xs:boolean" name="sortable" use="optional"/>
+                                  <xs:attribute type="xs:boolean" name="summary" use="optional"/>
+                                  <xs:attribute type="xs:string" name="symbol" use="optional"/>
+                                  <xs:attribute type="xs:string" name="order" use="optional"/>
+                                </xs:extension>
+                              </xs:simpleContent>
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element name="loadings" minOccurs="0">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="loading" maxOccurs="unbounded" minOccurs="0">
+                            <xs:complexType>
+                              <xs:attribute type="xs:string" name="name" use="required"/>
+                              <xs:attribute type="xs:string" name="description" use="required"/>
+                              <xs:attribute type="xs:string" name="label" use="optional"/>
+                              <xs:attribute type="xs:string" name="provider" use="required"/>
+                              <xs:attribute type="xs:integer" name="orderIndex" use="required"/>
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element name="actions" minOccurs="0">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="action" maxOccurs="unbounded" minOccurs="0">
+                            <xs:complexType>
+                              <xs:attribute type="xs:string" name="name" use="required"/>
+                              <xs:attribute type="xs:string" name="description" use="required"/>
+                              <xs:attribute type="xs:string" name="label" use="optional"/>
+                              <xs:attribute type="xs:string" name="policy" use="required"/>
+                              <xs:attribute type="xs:integer" name="orderIndex" use="optional"/>
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element name="quickFilters" minOccurs="0">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element type="fcfilter" name="quickFilter" maxOccurs="unbounded" minOccurs="0"/>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element name="filters" minOccurs="0">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element type="fccolorfilter" name="filter" maxOccurs="unbounded" minOccurs="0"/>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:all>
+                  <xs:attribute type="xs:string" name="name" use="required"/>
+                  <xs:attribute type="xs:string" name="description" use="required"/>
+                  <xs:attribute type="xs:string" name="label" use="required"/>
+                  <xs:attribute type="xs:string" name="entity" use="required"/>
+                  <xs:attribute type="xs:string" name="detailsPanel" use="optional"/>
+                  <xs:attribute type="xs:string" name="loadingSearchInput" use="optional"/>
+                  <xs:attribute type="xs:string" name="loadingFilterGen" use="optional"/>
+                  <xs:attribute type="xs:integer" name="sortHistory" use="optional"/>
+                  <xs:attribute type="xs:integer" name="itemsPerPage" use="optional"/>
+                  <xs:attribute type="xs:integer" name="summaryTitleColumns" use="optional"/>
+                  <xs:attribute type="xs:boolean" name="serialNo" use="optional"/>
+                  <xs:attribute type="xs:boolean" name="sortable" use="optional"/>
+                  <xs:attribute type="xs:boolean" name="showLabelHeader" use="optional"/>
+                  <xs:attribute type="xs:boolean" name="headerToUpperCase" use="optional"/>
+                  <xs:attribute type="xs:boolean" name="headerCenterAlign" use="optional"/>
+                  <xs:attribute type="xs:boolean" name="basicSearch" use="optional"/>
+                  <xs:attribute type="xs:boolean" name="totalSummary" use="optional"/>
+                  <xs:attribute type="xs:boolean" name="headerless" use="optional"/>
+                  <xs:attribute type="xs:boolean" name="multiSelect" use="optional"/>
+                  <xs:attribute type="xs:boolean" name="nonConforming" use="optional"/>
+                  <xs:attribute type="xs:boolean" name="fixedRows" use="optional"/>
+                  <xs:attribute type="xs:boolean" name="limitSelectToColumns" use="optional"/>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <!-- Workflow Channels -->
+        <xs:element name="workflow-channels" minOccurs="0">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="workflow-channel" maxOccurs="unbounded" minOccurs="0">
+                <xs:complexType>
+                  <xs:attribute type="xs:string" name="name" use="required"/>
+                  <xs:attribute type="xs:string" name="description" use="required"/>
+                  <xs:attribute type="xs:string" name="label" use="required"/>
+                  <xs:attribute type="xs:string" name="entity" use="required"/>
+                  <xs:attribute type="xs:string" name="destination" use="required"/>
+                  <xs:attribute type="xs:string" name="rule" use="optional"/>
+                  <xs:attribute name="direction" use="required">
+                    <xs:simpleType>
+                      <xs:restriction base="xs:string">
+                        <xs:enumeration value="INWARD"/>
+                        <xs:enumeration value="OUTWARD"/>
+                      </xs:restriction>
+                    </xs:simpleType>
+                  </xs:attribute>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <!-- Forms -->
+        <xs:element name="forms" minOccurs="0">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="form" maxOccurs="unbounded" minOccurs="0">
+                <xs:complexType>
+                  <xs:all>
+                    <xs:element name="annotations" minOccurs="0">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="annotation" maxOccurs="unbounded" minOccurs="0">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:element type="fcfilter" name="onCondition" maxOccurs="1" minOccurs="0"/>
+                              </xs:sequence>
+                              <xs:attribute name="type" use="optional">
+                                <xs:simpleType>
+                                  <xs:restriction base="xs:string">
+                                    <xs:enumeration value="INFO"/>
+                                    <xs:enumeration value="WARNING"/>
+                                    <xs:enumeration value="ERROR"/>
+                                  </xs:restriction>
+                                </xs:simpleType>
+                              </xs:attribute>
+                              <xs:attribute name="visibility" use="optional">
+                                <xs:simpleType>
+                                  <xs:restriction base="xs:string">
+                                    <xs:enumeration value="FIXED"/>
+                                    <xs:enumeration value="DISAPPEARING"/>
+                                    <xs:enumeration value="CLOSABLE"/>
+                                  </xs:restriction>
+                                </xs:simpleType>
+                              </xs:attribute>
+                              <xs:attribute type="xs:string" name="name" use="required"/>
+                              <xs:attribute type="xs:string" name="description" use="required"/>
+                              <xs:attribute type="xs:string" name="message" use="required"/>
+                              <xs:attribute type="xs:boolean" name="html" use="optional"/>
+                              <xs:attribute type="xs:boolean" name="directPlacement" use="optional"/>
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element name="actions" minOccurs="0">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="action" maxOccurs="unbounded" minOccurs="0">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:element type="fcfilter" name="onCondition" maxOccurs="1" minOccurs="0"/>
+                              </xs:sequence>
+                              <xs:attribute type="xs:string" name="name" use="required"/>
+                              <xs:attribute type="xs:string" name="description" use="required"/>
+                              <xs:attribute type="xs:string" name="label" use="optional"/>
+                              <xs:attribute name="type" use="required">
+                                <xs:simpleType>
+                                  <xs:restriction base="xs:string">
+                                    <xs:enumeration value="BUTTON"/>
+                                    <xs:enumeration value="LINK"/>
+                                  </xs:restriction>
+                                </xs:simpleType>
+                              </xs:attribute>
+                              <xs:attribute name="highlight" use="optional">
+                                <xs:simpleType>
+                                  <xs:restriction base="xs:string">
+                                    <xs:enumeration value="BLUE"/>
+                                    <xs:enumeration value="GREEN"/>
+                                    <xs:enumeration value="ORANGE"/>
+                                    <xs:enumeration value="RED"/>
+                                    <xs:enumeration value="GRAY"/>
+                                  </xs:restriction>
+                                </xs:simpleType>
+                              </xs:attribute>
+                              <xs:attribute type="xs:string" name="policy" use="optional"/>
+                              <xs:attribute type="xs:string" name="symbol" use="optional"/>
+                              <xs:attribute type="xs:string" name="styleClass" use="optional"/>
+                              <xs:attribute type="xs:integer" name="orderIndex" use="optional"/>
+                              <xs:attribute type="xs:boolean" name="showOnCreate" use="optional"/>
+                              <xs:attribute type="xs:boolean" name="showOnMaintain" use="optional"/>
+                              <xs:attribute type="xs:boolean" name="validateForm" use="optional"/>
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element name="tabs" minOccurs="0">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="tab" maxOccurs="unbounded" minOccurs="0">
+                            <xs:complexType mixed="true">
+                              <xs:sequence>
+                                <xs:element name="section" maxOccurs="unbounded" minOccurs="0">
+                                  <xs:complexType>
+                                    <xs:sequence>
+                                      <xs:element name="field" maxOccurs="unbounded" minOccurs="0">
+                                        <xs:complexType>
+                                          <xs:simpleContent>
+                                            <xs:extension base="xs:string">
+                                              <xs:attribute type="xs:string" name="name" use="required"/>
+                                              <xs:attribute type="xs:string" name="label" use="optional"/>
+                                              <xs:attribute type="xs:string" name="inputWidget" use="optional"/>
+                                              <xs:attribute type="xs:string" name="reference" use="optional"/>
+                                              <xs:attribute type="xs:string" name="previewForm" use="optional"/>
+                                              <xs:attribute name="color" use="optional">
+                                                <xs:simpleType>
+                                                  <xs:restriction base="xs:string">
+                                                    <xs:enumeration value="WHITE"/>
+                                                    <xs:enumeration value="RED"/>
+                                                    <xs:enumeration value="ORANGE"/>
+                                                    <xs:enumeration value="YELLOW"/>
+                                                    <xs:enumeration value="GREEN"/>
+                                                    <xs:enumeration value="CYAN"/>
+                                                    <xs:enumeration value="BLUE"/>
+                                                    <xs:enumeration value="PURPLE"/>
+                                                    <xs:enumeration value="NAVY_GRAY"/>
+                                                  </xs:restriction>
+                                                </xs:simpleType>
+                                              </xs:attribute>
+                                              <xs:attribute type="xs:integer" name="column" use="required"/>
+                                              <xs:attribute type="xs:boolean" name="switchOnChange" use="optional"/>
+                                              <xs:attribute type="xs:boolean" name="saveAs" use="optional"/>
+                                              <xs:attribute type="xs:boolean" name="required" use="optional"/>
+                                              <xs:attribute type="xs:boolean" name="visible" use="optional"/>
+                                              <xs:attribute type="xs:boolean" name="editable" use="optional"/>
+                                              <xs:attribute type="xs:boolean" name="disabled" use="optional"/>
+                                            </xs:extension>
+                                          </xs:simpleContent>
+                                        </xs:complexType>
+                                      </xs:element>
+                                    </xs:sequence>
+                                    <xs:attribute type="xs:string" name="name" use="required"/>
+                                    <xs:attribute type="xs:string" name="label" use="optional"/>
+                                    <xs:attribute type="xs:string" name="panel" use="optional"/>
+                                    <xs:attribute type="xs:string" name="icon" use="optional"/>
+                                    <xs:attribute name="columns" use="required">
+                                      <xs:simpleType>
+                                        <xs:restriction base="xs:string">
+                                          <xs:enumeration value="TYPE_1"/>
+                                          <xs:enumeration value="TYPE_2"/>
+                                          <xs:enumeration value="TYPE_1_2"/>
+                                          <xs:enumeration value="TYPE_2_1"/>
+                                          <xs:enumeration value="TYPE_3"/>
+                                          <xs:enumeration value="TYPE_4"/>
+                                          <xs:enumeration value="TYPE_5"/>
+                                        </xs:restriction>
+                                      </xs:simpleType>
+                                    </xs:attribute>
+                                    <xs:attribute type="xs:boolean" name="visible" use="optional"/>
+                                    <xs:attribute type="xs:boolean" name="editable" use="optional"/>
+                                    <xs:attribute type="xs:boolean" name="disabled" use="optional"/>
+                                  </xs:complexType>
+                                </xs:element>
+                              </xs:sequence>
+                              <xs:attribute name="contentType" use="required">
+                                <xs:simpleType>
+                                  <xs:restriction base="xs:string">
+                                    <xs:enumeration value="MINIFORM"/>
+                                    <xs:enumeration value="MINIFORM_CHANGELOG"/>
+                                    <xs:enumeration value="MINIFORM_MAPPED"/>
+                                    <xs:enumeration value="CHILD"/>
+                                    <xs:enumeration value="CHILD_LIST"/>
+                                    <xs:enumeration value="FILTER_CONDITION"/>
+                                    <xs:enumeration value="FIELD_SEQUENCE"/>
+                                    <xs:enumeration value="PROPERTY_SEQUENCE"/>
+                                    <xs:enumeration value="PARAM_VALUES"/>
+                                    <xs:enumeration value="PROPERTY_LIST"/>
+                                    <xs:enumeration value="USAGE_LIST"/>
+                                    <xs:enumeration value="SEARCH_INPUT"/>
+                                    <xs:enumeration value="SET_VALUES"/>
+                                    <xs:enumeration value="WIDGET_RULES"/>
+                                  </xs:restriction>
+                                </xs:simpleType>
+                              </xs:attribute>
+                              <xs:attribute type="xs:string" name="name" use="required"/>
+                              <xs:attribute type="xs:string" name="label" use="optional"/>
+                              <xs:attribute type="xs:string" name="applet" use="optional"/>
+                              <xs:attribute type="xs:string" name="mappedFieldName" use="optional"/>
+                              <xs:attribute type="xs:string" name="mappedForm" use="optional"/>
+                              <xs:attribute type="xs:string" name="reference" use="optional"/>
+                              <xs:attribute type="xs:string" name="filter" use="optional"/>
+                              <xs:attribute type="xs:string" name="editAction" use="optional"/>
+                              <xs:attribute type="xs:string" name="editFormless" use="optional"/>
+                              <xs:attribute type="xs:string" name="editFixedRows" use="optional"/>
+                              <xs:attribute type="xs:string" name="editAllowAddition" use="optional"/>
+                              <xs:attribute type="xs:boolean" name="ignoreParentCondition" use="optional"/>
+                              <xs:attribute type="xs:boolean" name="includeSysParam" use="optional"/>
+                              <xs:attribute type="xs:boolean" name="showSearch" use="optional"/>
+                              <xs:attribute type="xs:boolean" name="quickEdit" use="optional"/>
+                              <xs:attribute type="xs:boolean" name="quickOrder" use="optional"/>
+                              <xs:attribute type="xs:boolean" name="visible" use="optional"/>
+                              <xs:attribute type="xs:boolean" name="editable" use="optional"/>
+                              <xs:attribute type="xs:boolean" name="disabled" use="optional"/>
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element name="filters" minOccurs="0">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element type="fcfilter" name="filter" maxOccurs="unbounded" minOccurs="0"/>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element name="relatedLists" minOccurs="0">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="relatedList" maxOccurs="unbounded" minOccurs="0">
+                            <xs:complexType>
+                              <xs:attribute type="xs:string" name="name" use="required"/>
+                              <xs:attribute type="xs:string" name="description" use="required"/>
+                              <xs:attribute type="xs:string" name="label" use="optional"/>
+                              <xs:attribute type="xs:string" name="applet" use="optional"/>
+                              <xs:attribute type="xs:string" name="filter" use="optional"/>
+                              <xs:attribute type="xs:string" name="editAction" use="optional"/>
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element name="formStatePolicies" minOccurs="0">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="formStatePolicy" maxOccurs="unbounded" minOccurs="0">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:element type="fcfilter" name="onCondition" maxOccurs="1" minOccurs="0"/>
+                                <xs:element type="fcsetvalues" name="setValues" maxOccurs="1" minOccurs="0"/>
+                                <xs:element name="setStates" minOccurs="0">
+                                  <xs:complexType>
+                                    <xs:sequence>
+                                      <xs:element name="setState" maxOccurs="unbounded" minOccurs="0">
+                                        <xs:complexType>
+                                          <xs:simpleContent>
+                                            <xs:extension base="xs:string">
+                                              <xs:attribute name="type" use="required">
+                                                <xs:simpleType>
+                                                  <xs:restriction base="xs:string">
+                                                    <xs:enumeration value="ANNOTATION"/>
+                                                    <xs:enumeration value="TAB"/>
+                                                    <xs:enumeration value="SECTION"/>
+                                                    <xs:enumeration value="FIELD"/>
+                                                  </xs:restriction>
+                                                </xs:simpleType>
+                                              </xs:attribute>
+                                              <xs:attribute type="xs:string" name="target" use="required"/>
+                                              <xs:attribute type="fctristate" name="required" use="optional"/>
+                                              <xs:attribute type="fctristate" name="visible" use="optional"/>
+                                              <xs:attribute type="fctristate" name="editable" use="optional"/>
+                                              <xs:attribute type="fctristate" name="disabled" use="optional"/>
+                                            </xs:extension>
+                                          </xs:simpleContent>
+                                        </xs:complexType>
+                                      </xs:element>
+                                    </xs:sequence>
+                                  </xs:complexType>
+                                </xs:element>
+                              </xs:sequence>
+                              <xs:attribute type="xs:string" name="name" use="required"/>
+                              <xs:attribute type="xs:string" name="description" use="required"/>
+                              <xs:attribute type="xs:string" name="label" use="optional"/>
+                              <xs:attribute name="type" use="required">
+                                <xs:simpleType>
+                                  <xs:restriction base="xs:string">
+                                    <xs:enumeration value="ON_CREATE"/>
+                                    <xs:enumeration value="ON_SWITCH"/>
+                                    <xs:enumeration value="ON_FORM_CONSTRUCT_SET_VALUES"/>
+                                    <xs:enumeration value="ON_DELAYED_SET_VALUES"/>
+                                  </xs:restriction>
+                                </xs:simpleType>
+                              </xs:attribute>
+                              <xs:attribute type="xs:string" name="valueGenerator" use="optional"/>
+                              <xs:attribute type="xs:string" name="trigger" use="optional"/>
+                              <xs:attribute type="xs:integer" name="executionIndex" use="optional"/>
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element name="formWidgetRulesPolicies" minOccurs="0">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="formWidgetRulesPolicy" maxOccurs="unbounded" minOccurs="0">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:element type="fcfilter" name="onCondition" maxOccurs="1" minOccurs="0"/>
+                                <xs:element name="widgetRules" maxOccurs="1" minOccurs="0">
+                                  <xs:complexType>
+                                    <xs:sequence>
+                                      <xs:element name="entry" maxOccurs="unbounded" minOccurs="0">
+                                        <xs:complexType>
+                                          <xs:attribute type="xs:string" name="field" use="required"/>
+                                          <xs:attribute type="xs:string" name="widget" use="required"/>
+                                        </xs:complexType>
+                                      </xs:element>
+                                    </xs:sequence>
+                                  </xs:complexType>
+                                </xs:element>
+                              </xs:sequence>
+                              <xs:attribute type="xs:string" name="name" use="required"/>
+                              <xs:attribute type="xs:string" name="description" use="required"/>
+                              <xs:attribute type="xs:string" name="label" use="optional"/>
+                              <xs:attribute type="xs:integer" name="executionIndex" use="optional"/>
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element name="fieldValidationPolicies" minOccurs="0">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="fieldValidationPolicy" maxOccurs="unbounded" minOccurs="0">
+                            <xs:complexType>
+                              <xs:attribute type="xs:string" name="name" use="required"/>
+                              <xs:attribute type="xs:string" name="description" use="required"/>
+                              <xs:attribute type="xs:string" name="label" use="optional"/>
+                              <xs:attribute type="xs:string" name="fieldName" use="required"/>
+                              <xs:attribute type="xs:string" name="validator" use="required"/>
+                              <xs:attribute type="xs:string" name="rule" use="optional"/>
+                              <xs:attribute type="xs:integer" name="executionIndex" use="optional"/>
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element name="formValidationPolicies" minOccurs="0">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="formValidationPolicy" maxOccurs="unbounded" minOccurs="0">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:element type="fcfilter" name="errorCondition" minOccurs="0"/>
+                              </xs:sequence>
+                              <xs:attribute type="xs:string" name="name" use="required"/>
+                              <xs:attribute type="xs:string" name="description" use="required"/>
+                              <xs:attribute type="xs:string" name="label" use="optional"/>
+                              <xs:attribute type="xs:string" name="message" use="optional"/>
+                              <xs:attribute type="xs:string" name="target" use="optional"/>
+                              <xs:attribute type="xs:string" name="errorMatcher" use="optional"/>
+                              <xs:attribute type="xs:boolean" name="skippable" use="optional"/>
+                              <xs:attribute type="xs:integer" name="executionIndex" use="optional"/>
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element name="formReviewPolicies" minOccurs="0">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="formReviewPolicy" maxOccurs="unbounded" minOccurs="0">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:element type="fcfilter" name="errorCondition" minOccurs="0"/>
+                              </xs:sequence>
+                              <xs:attribute type="xs:string" name="name" use="required"/>
+                              <xs:attribute type="xs:string" name="description" use="required"/>
+                              <xs:attribute type="xs:string" name="label" use="optional"/>
+                              <xs:attribute type="xs:string" name="message" use="optional"/>
+                              <xs:attribute type="xs:string" name="target" use="optional"/>
+                              <xs:attribute type="xs:string" name="errorMatcher" use="optional"/>
+                              <xs:attribute type="xs:boolean" name="skippable" use="optional"/>
+                              <xs:attribute type="xs:integer" name="executionIndex" use="optional"/>
+                              <xs:attribute type="xs:string" name="events" use="optional"/>
+                              <xs:attribute name="messageType" use="required">
+                                <xs:simpleType>
+                                  <xs:restriction base="xs:string">
+                                    <xs:enumeration value="INFO"/>
+                                    <xs:enumeration value="WARNING"/>
+                                    <xs:enumeration value="ERROR"/>
+                                    <xs:enumeration value="PASS"/>
+                                  </xs:restriction>
+                                </xs:simpleType>
+                              </xs:attribute>
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:all>
+                  <xs:attribute name="type" use="optional">
+                    <xs:simpleType>
+                      <xs:restriction base="xs:string">
+                        <xs:enumeration value="INPUT"/>
+                        <xs:enumeration value="LISTING"/>
+                      </xs:restriction>
+                    </xs:simpleType>
+                  </xs:attribute>
+                  <xs:attribute type="xs:string" name="name" use="required"/>
+                  <xs:attribute type="xs:string" name="description" use="required"/>
+                  <xs:attribute type="xs:string" name="label" use="optional"/>
+                  <xs:attribute type="xs:string" name="entity" use="required"/>
+                  <xs:attribute type="xs:string" name="helpSheet" use="optional"/>
+                  <xs:attribute type="xs:string" name="titleFormat" use="optional"/>
+                  <xs:attribute type="xs:string" name="listingGenerator" use="optional"/>
+                  <xs:attribute type="xs:string" name="consolidatedValidation" use="optional"/>
+                  <xs:attribute type="xs:string" name="consolidatedReview" use="optional"/>
+                  <xs:attribute type="xs:string" name="consolidatedState" use="optional"/>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <!-- Charts -->
+        <xs:element name="charts" minOccurs="0">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="chart" maxOccurs="unbounded" minOccurs="0">
+                <xs:complexType>
+                  <xs:attribute name="type" use="required">
+                    <xs:simpleType>
+                      <xs:restriction base="xs:string">
+                        <xs:enumeration value="CARD"/>
+                        <xs:enumeration value="TABLE"/>
+                        <xs:enumeration value="LINE"/>
+                        <xs:enumeration value="AREA"/>
+                        <xs:enumeration value="COLUMN"/>
+                        <xs:enumeration value="BAR"/>
+                        <xs:enumeration value="RADAR"/>
+                        <xs:enumeration value="PIE"/>
+                        <xs:enumeration value="DONUT"/>
+                        <xs:enumeration value="POLAR_AREA"/>
+                      </xs:restriction>
+                    </xs:simpleType>
+                  </xs:attribute>
+                  <xs:attribute name="palette" use="optional">
+                    <xs:simpleType>
+                      <xs:restriction base="xs:string">
+                        <xs:enumeration value="PALETTE0"/>
+                        <xs:enumeration value="PALETTE1"/>
+                        <xs:enumeration value="PALETTE2"/>
+                        <xs:enumeration value="PALETTE3"/>
+                        <xs:enumeration value="PALETTE4"/>
+                        <xs:enumeration value="PALETTE5"/>
+                        <xs:enumeration value="PALETTE6"/>
+                        <xs:enumeration value="PALETTE7"/>
+                        <xs:enumeration value="PALETTE8"/>
+                        <xs:enumeration value="PALETTE9"/>
+                        <xs:enumeration value="PALETTE10"/>
+                      </xs:restriction>
+                    </xs:simpleType>
+                  </xs:attribute>
+                  <xs:attribute type="xs:string" name="name" use="required"/>
+                  <xs:attribute type="xs:string" name="description" use="required"/>
+                  <xs:attribute type="xs:string" name="label" use="optional"/>
+                  <xs:attribute type="xs:string" name="title" use="optional"/>
+                  <xs:attribute type="xs:string" name="subTitle" use="optional"/>
+                  <xs:attribute type="xs:string" name="provider" use="optional"/>
+                  <xs:attribute type="xs:integer" name="width" use="optional"/>
+                  <xs:attribute type="xs:integer" name="height" use="optional"/>
+                  <xs:attribute type="xs:boolean" name="stacked" use="optional"/>
+                  <xs:attribute type="xs:boolean" name="showGrid" use="optional"/>
+                  <xs:attribute type="xs:boolean" name="showDataLabels" use="optional"/>
+                  <xs:attribute type="xs:boolean" name="formatDataLabels" use="optional"/>
+                  <xs:attribute type="xs:boolean" name="formatYLabels" use="optional"/>
+                  <xs:attribute type="xs:boolean" name="smooth" use="optional"/>
+                  <xs:attribute type="xs:string" name="category" use="optional"/>
+                  <xs:attribute type="xs:string" name="series" use="optional"/>
+                  <xs:attribute type="xs:string" name="color" use="optional"/>
+                  <xs:attribute type="xs:string" name="rule" use="optional"/>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <!-- Chart Datasources -->
+        <xs:element name="chart-datasources" minOccurs="0">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="chart-datasource" maxOccurs="unbounded" minOccurs="0">
+                <xs:complexType>
+                  <xs:all>
+                    <xs:element type="xs:string" name="entity" minOccurs="0"/>
+                    <xs:element type="fcfilter" name="category-base" minOccurs="0"/>
+                    <xs:element type="fcpropertysequence" name="series" minOccurs="0"/>
+                    <xs:element type="fcpropertysequence" name="categories" minOccurs="0"/>
+                    <xs:element type="fcfieldsequence" name="fieldSequence" minOccurs="0"/>
+                  </xs:all>
+                  <xs:attribute name="type" use="required">
+                    <xs:simpleType>
+                      <xs:restriction base="xs:string">
+                        <xs:enumeration value="ENTITY"/>
+                      </xs:restriction>
+                    </xs:simpleType>
+                  </xs:attribute>
+                  <xs:attribute name="timeseries" use="optional">
+                    <xs:simpleType>
+                      <xs:restriction base="xs:string">
+                        <xs:enumeration value="HOUR"/>
+                        <xs:enumeration value="HOUR_OVER_DAY"/>
+                        <xs:enumeration value="HOUR_OVER_DAY_MERGED"/>
+                        <xs:enumeration value="DAY"/>
+                        <xs:enumeration value="DAY_OVER_WEEK"/>
+                        <xs:enumeration value="DAY_OVER_MONTH"/>
+                        <xs:enumeration value="DAY_OVER_YEAR"/>
+                        <xs:enumeration value="DAY_OVER_WEEK_MERGED"/>
+                        <xs:enumeration value="DAY_OVER_MONTH_MERGED"/>
+                        <xs:enumeration value="DAY_OVER_YEAR_MERGED"/>
+                        <xs:enumeration value="WEEK"/>
+                        <xs:enumeration value="WEEK_MERGED"/>
+                        <xs:enumeration value="MONTH"/>
+                        <xs:enumeration value="MONTH_MERGED"/>
+                        <xs:enumeration value="YEAR"/>
+                        <xs:enumeration value="YEAR_MERGED"/>
+                      </xs:restriction>
+                    </xs:simpleType>
+                  </xs:attribute>
+                  <xs:attribute type="xs:string" name="name" use="required"/>
+                  <xs:attribute type="xs:string" name="description" use="required"/>
+                  <xs:attribute type="xs:string" name="label" use="optional"/>
+                  <xs:attribute type="xs:integer" name="limit" use="optional"/>
+                  <xs:attribute type="xs:string" name="preferred-category-field" use="optional"/>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <!-- Dashboards -->
+        <xs:element name="dashboards" minOccurs="0">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="dashboard" maxOccurs="unbounded" minOccurs="0">
+                <xs:complexType>
+                  <xs:all>
+                    <xs:element name="dashboard-sections" minOccurs="0">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="dashboard-section" maxOccurs="unbounded" minOccurs="0">
+                            <xs:complexType>
+                              <xs:attribute name="type" use="required">
+                                <xs:simpleType>
+                                  <xs:restriction base="xs:string">
+                                    <xs:enumeration value="TYPE_1"/>
+                                    <xs:enumeration value="TYPE_1_1"/>
+                                    <xs:enumeration value="TYPE_1_2"/>
+                                    <xs:enumeration value="TYPE_2_1"/>
+                                    <xs:enumeration value="TYPE_1_1_1"/>
+                                    <xs:enumeration value="TYPE_1_3"/>
+                                    <xs:enumeration value="TYPE_1_1_2"/>
+                                    <xs:enumeration value="TYPE_1_2_1"/>
+                                    <xs:enumeration value="TYPE_2_1_1"/>
+                                    <xs:enumeration value="TYPE_3_1"/>
+                                    <xs:enumeration value="TYPE_1_1_1_1"/>
+                                    <xs:enumeration value="TYPE_1_1_1_1_1"/>
+                                    <xs:enumeration value="TYPE_1_1_1_1_1_1"/>
+                                  </xs:restriction>
+                                </xs:simpleType>
+                              </xs:attribute>
+                              <xs:attribute type="xs:integer" name="index" use="required"/>
+                              <xs:attribute type="xs:integer" name="height" use="optional"/>
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element name="dashboard-tiles" minOccurs="0">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="dashboard-tile" maxOccurs="unbounded" minOccurs="0">
+                            <xs:complexType>
+                              <xs:simpleContent>
+                                <xs:extension base="xs:string">
+                                  <xs:attribute name="type" use="required">
+                                    <xs:simpleType>
+                                      <xs:restriction base="xs:string">
+                                        <xs:enumeration value="SIMPLE"/>
+                                        <xs:enumeration value="SPARKLINE"/>
+                                      </xs:restriction>
+                                    </xs:simpleType>
+                                  </xs:attribute>
+                                  <xs:attribute type="xs:string" name="name" use="required"/>
+                                  <xs:attribute type="xs:string" name="description" use="required"/>
+                                  <xs:attribute type="xs:string" name="label" use="optional"/>
+                                  <xs:attribute type="xs:string" name="chart" use="required"/>
+                                  <xs:attribute type="xs:integer" name="section" use="required"/>
+                                  <xs:attribute type="xs:integer" name="index" use="required"/>
+                                </xs:extension>
+                              </xs:simpleContent>
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element name="dashboard-options" minOccurs="0">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="dashboard-option" maxOccurs="unbounded" minOccurs="0">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:element name="category-base">
+                                  <xs:complexType>
+                                    <xs:sequence>
+                                      <xs:element type="fcfilter" name="base-condition"/>
+                                    </xs:sequence>
+                                    <xs:attribute type="xs:string" name="chartDataSource" use="required"/>
+                                    <xs:attribute type="xs:string" name="entity" use="required"/>
+                                  </xs:complexType>
+                                </xs:element>
+                              </xs:sequence>
+                              <xs:attribute type="xs:string" name="name" use="required"/>
+                              <xs:attribute type="xs:string" name="description" use="required"/>
+                              <xs:attribute type="xs:string" name="label" use="optional"/>
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:all>
+                  <xs:attribute type="xs:string" name="name" use="required"/>
+                  <xs:attribute type="xs:string" name="description" use="required"/>
+                  <xs:attribute type="xs:string" name="label" use="optional"/>
+                  <xs:attribute type="xs:boolean" name="allowSecondaryTenants" use="optional"/>
+                  <xs:attribute type="xs:integer" name="sections" use="required"/>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:all>
+      <xs:attribute type="xs:string" name="name" use="required"/>
+      <xs:attribute type="xs:string" name="description" use="required"/>
+      <xs:attribute type="xs:string" name="label" use="required"/>
+      <xs:attribute type="xs:string" name="module" use="required"/>
+      <xs:attribute type="xs:integer" name="displayIndex" use="optional"/>
+      <xs:attribute type="xs:boolean" name="developable" use="optional"/>
+      <xs:attribute type="xs:boolean" name="menuAccess" use="optional"/>
+      <xs:attribute type="xs:boolean" name="allowSecondaryTenants" use="optional"/>
+      <xs:attribute type="xs:boolean" name="custom" use="optional"/>
+    </xs:complexType>
+  </xs:element>
 </xs:schema>
+
