@@ -26,40 +26,44 @@
 			description="$m{dashboard.dashboard.manage}"
 			label="$m{dashboard.dashboard.manage.label}" entity="dashboard"
 			type="MANAGE_ENTITYLIST" menuAccess="false">
-			<property name="page.alternateCaption"
-				value="$m{dashboard.dashboard.manage.label}" />
-			<!--property name="page.alternateSubCaption" value="$m{collaboration.collaborationlock}" 
-				/ -->
-			<property name="searchTable" value="dashboardTable" />
-			<property name="searchTable.report" value="false" />
-			<property name="searchTable.quickFilter" value="true" />
-			<property name="searchTable.actionFooter" value="true" />
+			<properties>
+				<property name="page.alternateCaption"
+					value="$m{dashboard.dashboard.manage.label}" />
+				<property name="searchTable" value="dashboardTable" />
+				<property name="searchTable.report" value="false" />
+				<property name="searchTable.quickFilter" value="true" />
+				<property name="searchTable.actionFooter" value="true" />
+			</properties>
 		</applet>
 	</applets>
 	<!-- Dashboards -->
 	<dashboards>
 		<dashboard name="sampleDashboard"
 			description="$m{dashboard.sampledashboard}" sections="2">
-			<dashboard-section type="TYPE_1_1_1_1" index="0" />
-			<dashboard-section type="TYPE_1_1" index="1" />
-			<dashboard-tile name="sampleTile1"
-				description="$m{dashboard.sampledashboard.sampletile1}"
-				type="SPARKLINE" chart="sampleChart1" section="0" index="0" />
-			<dashboard-tile name="sampleTile2"
-				description="$m{dashboard.sampledashboard.sampletile2}"
-				type="SPARKLINE" chart="sampleChart2" section="0" index="1" />
-			<dashboard-tile name="sampleTile3"
-				description="$m{dashboard.sampledashboard.sampletile3}"
-				type="SPARKLINE" chart="sampleChart3" section="0" index="2" />
-			<dashboard-tile name="sampleTile4"
-				description="$m{dashboard.sampledashboard.sampletile4}"
-				type="SPARKLINE" chart="sampleChart4" section="0" index="3" />
-			<dashboard-tile name="sampleTile5"
-				description="$m{dashboard.sampledashboard.sampletile5}"
-				type="SIMPLE" chart="sampleChart5" section="1" index="0" />
-			<dashboard-tile name="sampleTile6"
-				description="$m{dashboard.sampledashboard.sampletile6}"
-				type="SIMPLE" chart="sampleChart6" section="1" index="1" />
+			<dashboard-sections>
+				<dashboard-section type="TYPE_1_1_1_1" index="0" />
+				<dashboard-section type="TYPE_1_1" index="1" />
+			</dashboard-sections>
+			<dashboard-tiles>
+				<dashboard-tile name="sampleTile1"
+					description="$m{dashboard.sampledashboard.sampletile1}"
+					type="SPARKLINE" chart="sampleChart1" section="0" index="0" />
+				<dashboard-tile name="sampleTile2"
+					description="$m{dashboard.sampledashboard.sampletile2}"
+					type="SPARKLINE" chart="sampleChart2" section="0" index="1" />
+				<dashboard-tile name="sampleTile3"
+					description="$m{dashboard.sampledashboard.sampletile3}"
+					type="SPARKLINE" chart="sampleChart3" section="0" index="2" />
+				<dashboard-tile name="sampleTile4"
+					description="$m{dashboard.sampledashboard.sampletile4}"
+					type="SPARKLINE" chart="sampleChart4" section="0" index="3" />
+				<dashboard-tile name="sampleTile5"
+					description="$m{dashboard.sampledashboard.sampletile5}"
+					type="SIMPLE" chart="sampleChart5" section="1" index="0" />
+				<dashboard-tile name="sampleTile6"
+					description="$m{dashboard.sampledashboard.sampletile6}"
+					type="SIMPLE" chart="sampleChart6" section="1" index="1" />
+			</dashboard-tiles>
 		</dashboard>
 	</dashboards>
 	<!-- Charts -->
@@ -130,119 +134,129 @@
 			label="$m{dashboard.dashboard.label}"
 			type="com.flowcentraltech.flowcentral.dashboard.entities.Dashboard"
 			auditable="true" reportable="true" changeEvents="true">
-			<field name="sections" label="$m{dashboard.dashboard.sections}"
-				type="INTEGER" inputWidget="application.integer" />
-			<field name="allowSecondaryTenants"
-				label="$m{dashboard.dashboard.allowsecondarytenants}"
-				type="BOOLEAN" />
-			<field name="status" label="$m{dashboard.dashboard.status}"
-				type="ENUM_REF" references="statuslist"
-				inputWidget="application.enumlist" />
-			<field name="statusDesc"
-				label="$m{dashboard.dashboard.statusdesc}" type="LIST_ONLY"
-				key="status" property="description" />
-			<field name="sectionList"
-				label="$m{dashboard.dashboard.sections}" type="CHILD_LIST"
-				references="dashboardSectionRef" />
-			<field name="tileList" label="$m{dashboard.dashboard.tiles}"
-				type="CHILD_LIST" references="dashboardTileRef" />
-			<field name="optionsList"
-				label="$m{dashboard.dashboard.options}" type="CHILD_LIST"
-				references="dashboardOptionRef" />
+			<fields>
+				<field name="sections" label="$m{dashboard.dashboard.sections}"
+					type="INTEGER" inputWidget="application.integer" />
+				<field name="allowSecondaryTenants"
+					label="$m{dashboard.dashboard.allowsecondarytenants}"
+					type="BOOLEAN" />
+				<field name="status" label="$m{dashboard.dashboard.status}"
+					type="ENUM_REF" references="statuslist"
+					inputWidget="application.enumlist" />
+				<field name="statusDesc"
+					label="$m{dashboard.dashboard.statusdesc}" type="LIST_ONLY"
+					key="status" property="description" />
+				<field name="sectionList"
+					label="$m{dashboard.dashboard.sections}" type="CHILD_LIST"
+					references="dashboardSectionRef" />
+				<field name="tileList" label="$m{dashboard.dashboard.tiles}"
+					type="CHILD_LIST" references="dashboardTileRef" />
+				<field name="optionsList"
+					label="$m{dashboard.dashboard.options}" type="CHILD_LIST"
+					references="dashboardOptionRef" />
+			</fields>
 		</entity>
 		<entity name="dashboardOption"
 			description="$m{dashboard.dashboardoption}"
 			label="$m{dashboard.dashboardoption.label}"
 			type="com.flowcentraltech.flowcentral.dashboard.entities.DashboardOption"
 			auditable="true" reportable="true">
-			<field name="dashboardId"
-				label="$m{dashboard.dashboardoption.dashboardid}" type="REF"
-				references="dashboardRef"
-				inputLabel="$m{dashboard.dashboardoption.dashboard}"
-				inputWidget="application.entitysearch" />
-			<field name="name" label="$m{dashboard.dashboardoption.name}"
-				type="STRING" inputWidget="application.name" maxLen="64" />
-			<field name="description"
-				label="$m{dashboard.dashboardoption.description}" type="STRING"
-				inputWidget="application.text" maxLen="128" />
-			<field name="label" label="$m{dashboard.dashboardoption.label1}"
-				type="STRING" inputWidget="application.text" maxLen="96" />
-			<field name="applicationName"
-				label="$m{dashboard.dashboardoption.applicationname}"
-				type="LIST_ONLY"
-				key="dashboardId" property="applicationName" />
-			<field name="dashboardName"
-				label="$m{dashboard.dashboardoption.dashboardname}"
-				type="LIST_ONLY"
-				key="dashboardId" property="name" />
-			<field name="baseList"
-				label="$m{dashboard.dashboardoption.categorybases}"
-				type="CHILD_LIST" references="dashboardOptionCatBaseRef" />
+			<fields>
+				<field name="dashboardId"
+					label="$m{dashboard.dashboardoption.dashboardid}" type="REF"
+					references="dashboardRef"
+					inputLabel="$m{dashboard.dashboardoption.dashboard}"
+					inputWidget="application.entitysearch" />
+				<field name="name" label="$m{dashboard.dashboardoption.name}"
+					type="STRING" inputWidget="application.name" maxLen="64" />
+				<field name="description"
+					label="$m{dashboard.dashboardoption.description}" type="STRING"
+					inputWidget="application.text" maxLen="128" />
+				<field name="label" label="$m{dashboard.dashboardoption.label1}"
+					type="STRING" inputWidget="application.text" maxLen="96" />
+				<field name="applicationName"
+					label="$m{dashboard.dashboardoption.applicationname}"
+					type="LIST_ONLY"
+					key="dashboardId" property="applicationName" />
+				<field name="dashboardName"
+					label="$m{dashboard.dashboardoption.dashboardname}"
+					type="LIST_ONLY"
+					key="dashboardId" property="name" />
+				<field name="baseList"
+					label="$m{dashboard.dashboardoption.categorybases}"
+					type="CHILD_LIST" references="dashboardOptionCatBaseRef" />
+			</fields>
 		</entity>
 		<entity name="dashboardOptionCatBase"
 			description="$m{dashboard.dashboardoptioncatbase}"
 			label="$m{dashboard.dashboardoptioncatbase.label}"
 			type="com.flowcentraltech.flowcentral.dashboard.entities.DashboardOptionCategoryBase"
 			auditable="true" reportable="true">
-			<field name="dashboardOptionId"
-				label="$m{dashboard.dashboardoptioncatbase.dashboardoptionid}"
-				type="REF" references="dashboardOptionRef"
-				inputLabel="$m{dashboard.dashboardoptioncatbase.dashboardoption}"
-				inputWidget="application.entitysearch" />
-			<field name="chartDataSource"
-				label="$m{dashboard.dashboardoptioncatbase.chartdatasource}"
-				type="STRING" inputWidget="dashboard.chartdatasourcelist" />
-			<field name="entity"
-				label="$m{dashboard.dashboardoptioncatbase.entity}"
-				type="STRING" />
-			<field name="categoryBase"
-				label="$m{dashboard.dashboardoptioncatbase.categorybase}"
-				type="CHILD" category="dashboard-option"
-				references="application.appFilterRef" />
+			<fields>
+				<field name="dashboardOptionId"
+					label="$m{dashboard.dashboardoptioncatbase.dashboardoptionid}"
+					type="REF" references="dashboardOptionRef"
+					inputLabel="$m{dashboard.dashboardoptioncatbase.dashboardoption}"
+					inputWidget="application.entitysearch" />
+				<field name="chartDataSource"
+					label="$m{dashboard.dashboardoptioncatbase.chartdatasource}"
+					type="STRING" inputWidget="dashboard.chartdatasourcelist" />
+				<field name="entity"
+					label="$m{dashboard.dashboardoptioncatbase.entity}"
+					type="STRING" />
+				<field name="categoryBase"
+					label="$m{dashboard.dashboardoptioncatbase.categorybase}"
+					type="CHILD" category="dashboard-option"
+					references="application.appFilterRef" />
+			</fields>
 		</entity>
 		<entity name="dashboardSection"
 			description="$m{dashboard.dashboardsection}"
 			label="$m{dashboard.dashboardsection.label}"
 			type="com.flowcentraltech.flowcentral.dashboard.entities.DashboardSection"
 			auditable="true" reportable="true">
-			<field name="dashboardId"
-				label="$m{dashboard.dashboardsection.dashboardid}" type="REF"
-				references="dashboardRef"
-				inputLabel="$m{dashboard.dashboardsection.dashboard}"
-				inputWidget="application.entitysearch" />
-			<field name="index"
-				label="$m{dashboard.dashboardsection.index}" type="INTEGER"
-				inputWidget="application.integer" />
-			<field name="type" label="$m{dashboard.dashboardsection.type}"
-				type="ENUM_REF" references="dashboardcolumnstypelist"
-				inputWidget="application.enumlist" />
-			<field name="typeDesc"
-				label="$m{dashboard.dashboardsection.typedesc}" type="LIST_ONLY"
-				key="type" property="description" />
+			<fields>
+				<field name="dashboardId"
+					label="$m{dashboard.dashboardsection.dashboardid}" type="REF"
+					references="dashboardRef"
+					inputLabel="$m{dashboard.dashboardsection.dashboard}"
+					inputWidget="application.entitysearch" />
+				<field name="index"
+					label="$m{dashboard.dashboardsection.index}" type="INTEGER"
+					inputWidget="application.integer" />
+				<field name="type" label="$m{dashboard.dashboardsection.type}"
+					type="ENUM_REF" references="dashboardcolumnstypelist"
+					inputWidget="application.enumlist" />
+				<field name="typeDesc"
+					label="$m{dashboard.dashboardsection.typedesc}" type="LIST_ONLY"
+					key="type" property="description" />
+			</fields>
 		</entity>
 		<entity name="dashboardTile"
 			description="$m{dashboard.dashboardtile}"
 			label="$m{dashboard.dashboardtile.label}"
 			type="com.flowcentraltech.flowcentral.dashboard.entities.DashboardTile"
 			auditable="true" reportable="true" changeEvents="true">
-			<field name="dashboardId"
-				label="$m{dashboard.dashboardtile.dashboardid}" type="REF"
-				references="dashboardRef"
-				inputLabel="$m{dashboard.dashboardtile.dashboard}"
-				inputWidget="application.entitysearch" />
-			<field name="chart" label="$m{dashboard.dashboardtile.chart}"
-				type="STRING" inputWidget="chart.chartlist" maxLen="128" />
-			<field name="section"
-				label="$m{dashboard.dashboardtile.section}" type="INTEGER"
-				inputWidget="application.integer" />
-			<field name="index" label="$m{dashboard.dashboardtile.index}"
-				type="INTEGER" inputWidget="application.integer" />
-			<field name="type" label="$m{dashboard.dashboardtile.type}"
-				type="ENUM_REF" references="dashboardtiletypelist"
-				inputWidget="application.enumlist" />
-			<field name="typeDesc"
-				label="$m{dashboard.dashboardtile.typedesc}" type="LIST_ONLY"
-				key="type" property="description" />
+			<fields>
+				<field name="dashboardId"
+					label="$m{dashboard.dashboardtile.dashboardid}" type="REF"
+					references="dashboardRef"
+					inputLabel="$m{dashboard.dashboardtile.dashboard}"
+					inputWidget="application.entitysearch" />
+				<field name="chart" label="$m{dashboard.dashboardtile.chart}"
+					type="STRING" inputWidget="chart.chartlist" maxLen="128" />
+				<field name="section"
+					label="$m{dashboard.dashboardtile.section}" type="INTEGER"
+					inputWidget="application.integer" />
+				<field name="index" label="$m{dashboard.dashboardtile.index}"
+					type="INTEGER" inputWidget="application.integer" />
+				<field name="type" label="$m{dashboard.dashboardtile.type}"
+					type="ENUM_REF" references="dashboardtiletypelist"
+					inputWidget="application.enumlist" />
+				<field name="typeDesc"
+					label="$m{dashboard.dashboardtile.typedesc}" type="LIST_ONLY"
+					key="type" property="description" />
+			</fields>
 		</entity>
 	</entities>
 	<!-- Tables -->
@@ -251,22 +265,26 @@
 			description="$m{dashboard.dashboard.table}"
 			label="$m{dashboard.dashboard.table.label}" entity="dashboard"
 			itemsPerPage="20" multiSelect="true" serialNo="false">
-			<column field="applicationName"
-				renderWidget="application.text" widthRatio="1" />
-			<column field="name" renderWidget="application.text"
-				widthRatio="1" />
-			<column field="description" renderWidget="application.text"
-				widthRatio="1" />
-			<column field="statusDesc" renderWidget="application.text"
-				label="$m{dashboard.dashboard.status}" widthRatio="1" />
-			<action name="activateDashboards"
-				description="$m{dashboard.dashboard.table.activatedashboards}"
-				label="$m{dashboard.dashboard.table.table.activatedashboards.label}"
-				policy="activatedashboards-actionpolicy" />
-			<action name="deactivateDashboards"
-				description="$m{dashboard.dashboard.table.deactivatedashboards}"
-				label="$m{dashboard.dashboard.table.table.deactivatedashboards.label}"
-				policy="deactivatedashboards-actionpolicy" />
+			<columns>
+				<column field="applicationName"
+					renderWidget="application.text" widthRatio="1" />
+				<column field="name" renderWidget="application.text"
+					widthRatio="1" />
+				<column field="description" renderWidget="application.text"
+					widthRatio="1" />
+				<column field="statusDesc" renderWidget="application.text"
+					label="$m{dashboard.dashboard.status}" widthRatio="1" />
+			</columns>
+			<actions>
+				<action name="activateDashboards"
+					description="$m{dashboard.dashboard.table.activatedashboards}"
+					label="$m{dashboard.dashboard.table.table.activatedashboards.label}"
+					policy="activatedashboards-actionpolicy" />
+				<action name="deactivateDashboards"
+					description="$m{dashboard.dashboard.table.deactivatedashboards}"
+					label="$m{dashboard.dashboard.table.table.deactivatedashboards.label}"
+					policy="deactivatedashboards-actionpolicy" />
+			</actions>
 		</table>
 	</tables>
 </application>

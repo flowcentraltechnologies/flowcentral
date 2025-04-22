@@ -1,6 +1,8 @@
 <?xml version="1.0"?>
 <!-- Import application -->
-<application name="import"
+<application xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="file:///C:/Users/Lateef Ojulari/git/flowcentral/flowcentral-application/src/main/resources/flowcentral-application.xsd"
+	name="import"
 	description="$m{system.import.short.description}"
 	label="$m{system.import.label}" module="system" displayIndex="-8">
 </application>

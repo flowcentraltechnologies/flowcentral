@@ -536,6 +536,7 @@
                                   <xs:attribute type="xs:string" name="label" use="required"/>
                                   <xs:attribute type="xs:string" name="inputLabel" use="optional"/>
                                   <xs:attribute type="xs:string" name="inputWidget" use="optional"/>
+                                  <xs:attribute type="xs:string" name="inputListKey" use="optional"/>
                                   <xs:attribute type="xs:string" name="category" use="optional"/>
                                   <xs:attribute type="xs:integer" name="maxLen" use="optional"/>
                                   <xs:attribute type="xs:boolean" name="trim" use="optional"/>
