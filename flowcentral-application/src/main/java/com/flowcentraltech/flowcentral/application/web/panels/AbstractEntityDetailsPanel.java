@@ -26,12 +26,12 @@ import com.flowcentraltech.flowcentral.common.constants.FlowCentralResultMapping
 import com.flowcentraltech.flowcentral.common.data.GenerateListingReportOptions;
 import com.flowcentraltech.flowcentral.common.data.ReportOptions;
 import com.flowcentraltech.flowcentral.common.web.panels.AbstractDetailsPanel;
+import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.UplBinding;
 import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.data.ValueStoreReader;
-import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.report.Report;
 
 /**

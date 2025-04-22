@@ -15,10 +15,10 @@
  */
 package com.flowcentraltech.flowcentral.organization.entities;
 
-import com.flowcentraltech.flowcentral.common.entities.BaseStatusTenantEntity;
+import com.flowcentraltech.flowcentral.common.entities.BaseStatusEntity;
+import com.tcdng.unify.common.annotation.Table;
+import com.tcdng.unify.common.annotation.UniqueConstraint;
 import com.tcdng.unify.core.annotation.Column;
-import com.tcdng.unify.core.annotation.Table;
-import com.tcdng.unify.core.annotation.UniqueConstraint;
 
 /**
  * Represents country entity.
@@ -30,7 +30,7 @@ import com.tcdng.unify.core.annotation.UniqueConstraint;
     uniqueConstraints = {
             @UniqueConstraint({ "iso3Code" }),
             @UniqueConstraint({ "description" }) })
-public class Country extends BaseStatusTenantEntity {
+public class Country extends BaseStatusEntity {
 
     @Column(name = "COUNTRY_CD", length = 16)
     private String iso3Code;

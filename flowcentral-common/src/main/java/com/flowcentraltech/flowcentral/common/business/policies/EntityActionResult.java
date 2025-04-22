@@ -17,7 +17,7 @@
 package com.flowcentraltech.flowcentral.common.business.policies;
 
 import com.flowcentraltech.flowcentral.common.data.EntitySelectInfo;
-import com.tcdng.unify.core.database.Entity;
+import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.task.TaskSetup;
 import com.tcdng.unify.core.util.StringUtils;
 

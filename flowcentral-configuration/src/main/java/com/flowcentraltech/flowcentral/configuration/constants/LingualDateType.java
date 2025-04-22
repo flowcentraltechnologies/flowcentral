@@ -16,8 +16,8 @@
 package com.flowcentraltech.flowcentral.configuration.constants;
 
 import com.tcdng.unify.common.annotation.StaticList;
+import com.tcdng.unify.common.annotation.Table;
 import com.tcdng.unify.common.constants.EnumConst;
-import com.tcdng.unify.core.annotation.Table;
 import com.tcdng.unify.core.util.EnumUtils;
 
 /**
@@ -109,6 +109,10 @@ public enum LingualDateType implements EnumConst {
         return TODAY.code;
     }
 
+    public boolean isNow() {
+        return NOW.equals(this);
+    }
+    
     public static LingualDateType fromCode(String code) {
         return EnumUtils.fromCode(LingualDateType.class, code);
     }

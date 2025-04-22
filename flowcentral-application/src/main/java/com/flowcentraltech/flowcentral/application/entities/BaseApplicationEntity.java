@@ -17,14 +17,14 @@ package com.flowcentraltech.flowcentral.application.entities;
 
 import com.flowcentraltech.flowcentral.common.constants.DevelopmentVersionType;
 import com.flowcentraltech.flowcentral.common.entities.BaseConfigNamedEntity;
+import com.tcdng.unify.common.annotation.QueryRestriction;
+import com.tcdng.unify.common.annotation.UniqueConstraint;
+import com.tcdng.unify.common.annotation.UniqueConstraints;
 import com.tcdng.unify.core.annotation.Column;
 import com.tcdng.unify.core.annotation.DefaultQueryRestrictions;
 import com.tcdng.unify.core.annotation.ForeignKey;
 import com.tcdng.unify.core.annotation.ListOnly;
 import com.tcdng.unify.core.annotation.Policy;
-import com.tcdng.unify.core.annotation.QueryRestriction;
-import com.tcdng.unify.core.annotation.UniqueConstraint;
-import com.tcdng.unify.core.annotation.UniqueConstraints;
 
 /**
  * Convenient abstract base class for application definitions.

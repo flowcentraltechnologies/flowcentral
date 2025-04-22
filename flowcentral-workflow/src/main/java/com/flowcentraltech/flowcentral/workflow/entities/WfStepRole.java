@@ -17,14 +17,14 @@
 package com.flowcentraltech.flowcentral.workflow.entities;
 
 import com.flowcentraltech.flowcentral.common.constants.ConfigType;
-import com.flowcentraltech.flowcentral.common.constants.WfItemVersionType;
 import com.flowcentraltech.flowcentral.common.entities.BaseAuditEntity;
 import com.flowcentraltech.flowcentral.configuration.constants.WorkflowStepType;
 import com.flowcentraltech.flowcentral.organization.entities.Role;
+import com.tcdng.unify.common.annotation.Table;
+import com.tcdng.unify.common.annotation.UniqueConstraint;
+import com.tcdng.unify.common.constants.WfItemVersionType;
 import com.tcdng.unify.core.annotation.ForeignKey;
 import com.tcdng.unify.core.annotation.ListOnly;
-import com.tcdng.unify.core.annotation.Table;
-import com.tcdng.unify.core.annotation.UniqueConstraint;
 
 /**
  * Workflow step role entity.
@@ -67,6 +67,9 @@ public class WfStepRole extends BaseAuditEntity {
 
     @ListOnly(key = "wfStepId", property = "workflowLoadingTable")
     private String workflowLoadingTable;
+
+    @ListOnly(key = "wfStepId", property = "workflowRunnable")
+    private boolean workflowRunnable;
 
     @ListOnly(key = "wfStepId", property = "applicationId")
     private Long applicationId;
@@ -178,6 +181,14 @@ public class WfStepRole extends BaseAuditEntity {
 
     public void setWorkflowLoadingTable(String workflowLoadingTable) {
         this.workflowLoadingTable = workflowLoadingTable;
+    }
+
+    public boolean isWorkflowRunnable() {
+        return workflowRunnable;
+    }
+
+    public void setWorkflowRunnable(boolean workflowRunnable) {
+        this.workflowRunnable = workflowRunnable;
     }
 
     public String getEntityName() {

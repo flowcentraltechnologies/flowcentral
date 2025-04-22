@@ -19,9 +19,9 @@ package com.flowcentraltech.flowcentral.application.web.writers;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.web.widgets.CollapsibleInfo;
-import com.flowcentraltech.flowcentral.application.web.widgets.CollapsibleTableWidget;
 import com.flowcentraltech.flowcentral.application.web.widgets.CollapsibleInfo.Column;
 import com.flowcentraltech.flowcentral.application.web.widgets.CollapsibleInfo.Row;
+import com.flowcentraltech.flowcentral.application.web.widgets.CollapsibleTableWidget;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Writes;

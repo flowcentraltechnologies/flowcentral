@@ -18,9 +18,9 @@ package com.flowcentraltech.flowcentral.application.data;
 import com.flowcentraltech.flowcentral.common.data.EntityFieldAttributes;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldDataType;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldType;
+import com.tcdng.unify.common.data.Listable;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.constant.TextCase;
-import com.tcdng.unify.core.data.Listable;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.StringUtils;
 
@@ -175,6 +175,20 @@ public class EntityFieldDef implements Listable, EntityFieldAttributes {
         this.maintainLink = maintainLink;
         this.basicSearch = basicSearch;
         this.descriptive = descriptive;
+    }
+
+    public EntityFieldDef(String textWidget, String inputWidget, String ligualWidget, EntityFieldDataType dataType,
+            EntityFieldType type, int minLen, int maxLen, int precision, int scale, boolean allowNegative) {
+        this.textWidget = textWidget;
+        this.inputWidget = inputWidget;
+        this.ligualWidget = ligualWidget;
+        this.dataType = dataType;
+        this.type = type;
+        this.minLen = minLen;
+        this.maxLen = maxLen > 0 ? maxLen : 0;
+        this.precision = precision;
+        this.scale = scale;
+        this.allowNegative = allowNegative;
     }
 
     @Override
@@ -444,6 +458,10 @@ public class EntityFieldDef implements Listable, EntityFieldAttributes {
 
     public boolean isSupportSetValue() {
         return dataType.isSupportSetValue() && !isListOnly();
+    }
+
+    public boolean isArray() {
+        return dataType.isArray();
     }
 
     public boolean isPrimitive() {

@@ -25,6 +25,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -67,10 +68,12 @@ import com.flowcentraltech.flowcentral.common.input.StringInput;
 import com.flowcentraltech.flowcentral.common.util.CommonInputUtils;
 import com.flowcentraltech.flowcentral.common.util.LingualDateUtils;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldDataType;
+import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldType;
 import com.flowcentraltech.flowcentral.configuration.constants.LingualDateType;
 import com.flowcentraltech.flowcentral.configuration.constants.LingualStringType;
 import com.flowcentraltech.flowcentral.configuration.constants.SearchConditionType;
 import com.flowcentraltech.flowcentral.configuration.constants.SetValueType;
+import com.flowcentraltech.flowcentral.configuration.constants.SysParamType;
 import com.flowcentraltech.flowcentral.configuration.constants.WidgetColor;
 import com.flowcentraltech.flowcentral.configuration.xml.AppletFilterConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.EntitySearchInputConfig;
@@ -104,6 +107,7 @@ import com.tcdng.unify.core.criterion.Restriction;
 import com.tcdng.unify.core.criterion.SimpleRestriction;
 import com.tcdng.unify.core.criterion.SingleParamRestriction;
 import com.tcdng.unify.core.criterion.Update;
+import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.util.CalendarUtils;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.FilterUtils;
@@ -146,6 +150,15 @@ public final class InputWidgetUtils {
         map.put(EntityFieldDataType.REF, "application.entitylist");
         map.put(EntityFieldDataType.REF_UNLINKABLE, "application.entitylist");
         map.put(EntityFieldDataType.REF_FILEUPLOAD, "application.fileupload");
+        map.put(EntityFieldDataType.BOOLEAN_ARRAY, "application.textarea");
+        map.put(EntityFieldDataType.SHORT_ARRAY, "application.textarea");
+        map.put(EntityFieldDataType.INTEGER_ARRAY, "application.textarea");
+        map.put(EntityFieldDataType.LONG_ARRAY, "application.textarea");
+        map.put(EntityFieldDataType.FLOAT_ARRAY, "application.textarea");
+        map.put(EntityFieldDataType.DOUBLE_ARRAY, "application.textarea");
+        map.put(EntityFieldDataType.DECIMAL_ARRAY, "application.textarea");
+        map.put(EntityFieldDataType.DATE_ARRAY, "application.textarea");
+        map.put(EntityFieldDataType.STRING_ARRAY, "application.textarea");
         defaultFormInputWidgets = Collections.unmodifiableMap(map);
     }
 
@@ -162,16 +175,48 @@ public final class InputWidgetUtils {
         map.put(EntityFieldDataType.DOUBLE, "application.decimal");
         map.put(EntityFieldDataType.DECIMAL, "application.decimal");
         map.put(EntityFieldDataType.DATE, "application.date");
+        map.put(EntityFieldDataType.STRING, "application.text");
         map.put(EntityFieldDataType.TIMESTAMP_UTC, "application.datetime");
         map.put(EntityFieldDataType.TIMESTAMP, "application.datetime");
-        map.put(EntityFieldDataType.STRING, "application.text");
         map.put(EntityFieldDataType.ENUM, "application.text");
         map.put(EntityFieldDataType.ENUM_REF, "application.text");
         map.put(EntityFieldDataType.ENUM_DYN, "application.text");
         map.put(EntityFieldDataType.REF, "application.entitylist");
         map.put(EntityFieldDataType.REF_UNLINKABLE, "application.entitylist");
         map.put(EntityFieldDataType.REF_FILEUPLOAD, "application.fileupload");
+        map.put(EntityFieldDataType.BOOLEAN_ARRAY, "application.textarea");
+        map.put(EntityFieldDataType.SHORT_ARRAY, "application.textarea");
+        map.put(EntityFieldDataType.INTEGER_ARRAY, "application.textarea");
+        map.put(EntityFieldDataType.LONG_ARRAY, "application.textarea");
+        map.put(EntityFieldDataType.FLOAT_ARRAY, "application.textarea");
+        map.put(EntityFieldDataType.DOUBLE_ARRAY, "application.textarea");
+        map.put(EntityFieldDataType.DECIMAL_ARRAY, "application.textarea");
+        map.put(EntityFieldDataType.DATE_ARRAY, "application.textarea");
+        map.put(EntityFieldDataType.STRING_ARRAY, "application.textarea");
         defaultSyncFormInputWidgets = Collections.unmodifiableMap(map);
+    }
+
+    private static final Map<SysParamType, EntityFieldDef> entityFieldDefBySysParamType;
+
+    static {
+        final EntityFieldDef stringEntityFieldDef = new EntityFieldDef("application.text", "application.text",
+                "application.text", EntityFieldDataType.STRING, EntityFieldType.CUSTOM, 0, 0, 0, 0, false);
+
+        final EntityFieldDef numberEntityFieldDef = new EntityFieldDef("application.decimal", "application.decimal",
+                "application.decimal", EntityFieldDataType.DECIMAL, EntityFieldType.CUSTOM, 0, 0, 20, 2, true);
+
+        final EntityFieldDef boolEntityFieldDef = new EntityFieldDef("application.booleanlist",
+                "application.booleanlist", "application.booleanlist", EntityFieldDataType.BOOLEAN,
+                EntityFieldType.CUSTOM, 0, 0, 0, 0, false);
+
+        Map<SysParamType, EntityFieldDef> map = new HashMap<SysParamType, EntityFieldDef>();
+        map.put(SysParamType.BOOLEAN, boolEntityFieldDef);
+        map.put(SysParamType.CONTACT, stringEntityFieldDef);
+        map.put(SysParamType.NAME, stringEntityFieldDef);
+        map.put(SysParamType.NUMBER, numberEntityFieldDef);
+        map.put(SysParamType.STRING, stringEntityFieldDef);
+
+        entityFieldDefBySysParamType = Collections.unmodifiableMap(map);
     }
 
     private InputWidgetUtils() {
@@ -200,6 +245,10 @@ public final class InputWidgetUtils {
 
     public static boolean isEnumerationWidget(String widgetName) {
         return ENUMERATION_WIDGETS.contains(widgetName);
+    }
+
+    public static EntityFieldDef getEntityFieldDef(SysParamType sysParamType) {
+        return entityFieldDefBySysParamType.get(sysParamType);
     }
 
     public static String resolveEntityFieldWidget(final EntityFieldDef entityFieldDef) throws UnifyException {
@@ -237,13 +286,12 @@ public final class InputWidgetUtils {
         return null;
     }
 
-    public static AbstractInput<?> newInput(final AppletUtilities au, final EntityFieldDef entityFieldDef, boolean lingual, boolean search)
-            throws UnifyException {
+    public static AbstractInput<?> newInput(final AppletUtilities au, final EntityFieldDef entityFieldDef,
+            boolean lingual, boolean search) throws UnifyException {
         final EntityFieldDef _entityFieldDef = entityFieldDef.isWithResolvedTypeFieldDef()
                 ? entityFieldDef.getResolvedTypeFieldDef()
                 : entityFieldDef;
-        String widget = lingual ? _entityFieldDef.getLigualWidget()
-                : _entityFieldDef.getInputWidget();
+        String widget = lingual ? _entityFieldDef.getLigualWidget() : _entityFieldDef.getInputWidget();
         if (widget == null || (search && "application.textarea".equals(widget))) {
             widget = _entityFieldDef.getTextWidget();
         }
@@ -387,6 +435,7 @@ public final class InputWidgetUtils {
                 break;
             case "application.text":
             case "application.name":
+            case "application.componentname":
             case "application.path":
             case "application.alphanumeric":
             case "application.alphanumericwithspace":
@@ -419,7 +468,8 @@ public final class InputWidgetUtils {
             }
                 break;
             case "application.series": {
-                editor = String.format(editor, efa.getMinLen(), efa.getMaxLen(), efa.isTrim(), TextCase.UPPER.toString());
+                editor = String.format(editor, efa.getMinLen(), efa.getMaxLen(), efa.isTrim(),
+                        TextCase.UPPER.toString());
             }
                 break;
             case "application.fullname":
@@ -486,8 +536,8 @@ public final class InputWidgetUtils {
                 break;
             case "application.fileupload":
                 if (entityFieldDef != null) {
-                    editor = String.format(editor, entityFieldDef.getRefLongName(),
-                            entityFieldDef.getEntityLongName(), entityFieldDef.getFieldName());
+                    editor = String.format(editor, entityFieldDef.getRefLongName(), entityFieldDef.getEntityLongName(),
+                            entityFieldDef.getFieldName());
                 }
                 break;
             default:
@@ -515,7 +565,7 @@ public final class InputWidgetUtils {
                 }
             } else {
                 listCommand = FilterUtils.getFilterConditionTypeListCommand(
-                        _entityFieldDef.getDataType().dataType().javaClass(), listType,_entityFieldDef.isEnumGroup());
+                        _entityFieldDef.getDataType().dataType().javaClass(), listType, _entityFieldDef.isEnumGroup());
             }
 
             return String.format("!ui-select list:%s extStyleClass:$s{tcread} blankOption:$m{blank.none}", listCommand);
@@ -703,25 +753,25 @@ public final class InputWidgetUtils {
     public static String getFieldSequenceDefinition(FieldSequenceDef fieldSequenceDef) throws UnifyException {
         String result = null;
         if (fieldSequenceDef != null) {
-        try (StringWriter sw = new StringWriter(); BufferedWriter bw = new BufferedWriter(sw)) {
-            for (FieldSequenceEntryDef fieldSequenceEntryDef : fieldSequenceDef.getFieldSequenceList()) {
-                bw.write(fieldSequenceEntryDef.getFieldName());
-                bw.write(']');
-                if (fieldSequenceEntryDef.isWithStandardFormatCode()) {
-                    bw.write(fieldSequenceEntryDef.getStandardFormatCode());
+            try (StringWriter sw = new StringWriter(); BufferedWriter bw = new BufferedWriter(sw)) {
+                for (FieldSequenceEntryDef fieldSequenceEntryDef : fieldSequenceDef.getFieldSequenceList()) {
+                    bw.write(fieldSequenceEntryDef.getFieldName());
                     bw.write(']');
+                    if (fieldSequenceEntryDef.isWithStandardFormatCode()) {
+                        bw.write(fieldSequenceEntryDef.getStandardFormatCode());
+                        bw.write(']');
+                    }
+
+                    bw.newLine();
                 }
 
-                bw.newLine();
+                bw.flush();
+                result = sw.toString();
+            } catch (IOException e) {
+                throw new UnifyOperationException(e);
             }
+        }
 
-            bw.flush();
-            result = sw.toString();
-        } catch (IOException e) {
-            throw new UnifyOperationException(e);
-        }
-        }
-        
         return result;
     }
 
@@ -736,25 +786,25 @@ public final class InputWidgetUtils {
     public static String getFieldSequenceDefinition(FieldSequenceConfig fieldSequenceConfig) throws UnifyException {
         String result = null;
         if (fieldSequenceConfig != null) {
-        try (StringWriter sw = new StringWriter(); BufferedWriter bw = new BufferedWriter(sw)) {
-            for (FieldSequenceEntryConfig entry : fieldSequenceConfig.getEntryList()) {
-                bw.write(entry.getFieldName());
-                bw.write(']');
-                if (entry.getFormatter() != null) {
-                    bw.write(entry.getFormatter());
+            try (StringWriter sw = new StringWriter(); BufferedWriter bw = new BufferedWriter(sw)) {
+                for (FieldSequenceEntryConfig entry : fieldSequenceConfig.getEntryList()) {
+                    bw.write(entry.getFieldName());
                     bw.write(']');
+                    if (entry.getFormatter() != null) {
+                        bw.write(entry.getFormatter());
+                        bw.write(']');
+                    }
+
+                    bw.newLine();
                 }
 
-                bw.newLine();
+                bw.flush();
+                result = sw.toString();
+            } catch (IOException e) {
+                throw new UnifyOperationException(e);
             }
+        }
 
-            bw.flush();
-            result = sw.toString();
-        } catch (IOException e) {
-            throw new UnifyOperationException(e);
-        }
-        }
-        
         return result;
     }
 
@@ -900,14 +950,15 @@ public final class InputWidgetUtils {
 
     public static WidgetRulesConfig getWidgetRulesConfig(WidgetRulesDef widgetRulesDef) throws UnifyException {
         if (widgetRulesDef != null) {
-        List<WidgetRuleEntryConfig> entryList = new ArrayList<WidgetRuleEntryConfig>();
-        for (WidgetRuleEntryDef widgetRuleEntryDef : widgetRulesDef.getWidgetRuleEntryList()) {
-            entryList.add(new WidgetRuleEntryConfig(widgetRuleEntryDef.getFieldName(), widgetRuleEntryDef.getWidget()));
+            List<WidgetRuleEntryConfig> entryList = new ArrayList<WidgetRuleEntryConfig>();
+            for (WidgetRuleEntryDef widgetRuleEntryDef : widgetRulesDef.getWidgetRuleEntryList()) {
+                entryList.add(
+                        new WidgetRuleEntryConfig(widgetRuleEntryDef.getFieldName(), widgetRuleEntryDef.getWidget()));
+            }
+
+            return new WidgetRulesConfig(entryList);
         }
 
-        return new WidgetRulesConfig(entryList);
-        }
-        
         return null;
     }
 
@@ -922,50 +973,50 @@ public final class InputWidgetUtils {
     public static String getWidgetRulesDefinition(WidgetRulesConfig widgetRulesConfig) throws UnifyException {
         String result = null;
         if (widgetRulesConfig != null) {
-        try (StringWriter sw = new StringWriter(); BufferedWriter bw = new BufferedWriter(sw)) {
-            for (WidgetRuleEntryConfig entry : widgetRulesConfig.getEntryList()) {
-                bw.write(entry.getFieldName());
-                bw.write(']');
-                if (entry.getWidget() != null) {
-                    bw.write(entry.getWidget());
+            try (StringWriter sw = new StringWriter(); BufferedWriter bw = new BufferedWriter(sw)) {
+                for (WidgetRuleEntryConfig entry : widgetRulesConfig.getEntryList()) {
+                    bw.write(entry.getFieldName());
                     bw.write(']');
+                    if (entry.getWidget() != null) {
+                        bw.write(entry.getWidget());
+                        bw.write(']');
+                    }
+
+                    bw.newLine();
                 }
 
-                bw.newLine();
+                bw.flush();
+                result = sw.toString();
+            } catch (IOException e) {
+                throw new UnifyOperationException(e);
             }
+        }
 
-            bw.flush();
-            result = sw.toString();
-        } catch (IOException e) {
-            throw new UnifyOperationException(e);
-        }
-        }
-        
         return result;
     }
 
     public static String getWidgetRulesDefinition(WidgetRulesDef widgetRulesDef) throws UnifyException {
         String result = null;
         if (widgetRulesDef != null) {
-        try (StringWriter sw = new StringWriter(); BufferedWriter bw = new BufferedWriter(sw)) {
-            for (WidgetRuleEntryDef widgetRuleEntryDef : widgetRulesDef.getWidgetRuleEntryList()) {
-                bw.write(widgetRuleEntryDef.getFieldName());
-                bw.write(']');
-                if (widgetRuleEntryDef.isWithWidget()) {
-                    bw.write(widgetRuleEntryDef.getWidget());
+            try (StringWriter sw = new StringWriter(); BufferedWriter bw = new BufferedWriter(sw)) {
+                for (WidgetRuleEntryDef widgetRuleEntryDef : widgetRulesDef.getWidgetRuleEntryList()) {
+                    bw.write(widgetRuleEntryDef.getFieldName());
                     bw.write(']');
+                    if (widgetRuleEntryDef.isWithWidget()) {
+                        bw.write(widgetRuleEntryDef.getWidget());
+                        bw.write(']');
+                    }
+
+                    bw.newLine();
                 }
 
-                bw.newLine();
+                bw.flush();
+                result = sw.toString();
+            } catch (IOException e) {
+                throw new UnifyOperationException(e);
             }
+        }
 
-            bw.flush();
-            result = sw.toString();
-        } catch (IOException e) {
-            throw new UnifyOperationException(e);
-        }
-        }
-        
         return result;
     }
 
@@ -1267,7 +1318,7 @@ public final class InputWidgetUtils {
         }
 
         return InputWidgetUtils.getFilterDef(au, null, null,
-                new And().add(InputWidgetUtils.getRestriction(au, entityDef, filterDef, now)).add(restriction));
+                new And().add(InputWidgetUtils.getRestriction(au, entityDef, null, filterDef, now)).add(restriction));
     }
 
     public static FilterDef getFilterDef(AppletUtilities au, String name, String description, Restriction restriction)
@@ -1351,24 +1402,24 @@ public final class InputWidgetUtils {
     public static String getUpdateDefinition(Update update) throws UnifyException {
         String result = null;
         if (update != null) {
-        try (StringWriter sw = new StringWriter(); BufferedWriter bw = new BufferedWriter(sw)) {
-            for (Map.Entry<String, Object> entry : update.entrySet()) {
-                bw.write(entry.getKey());
-                bw.write(']');
-                if (entry.getValue() != null) {
-                    bw.write(DataUtils.convert(String.class, entry.getValue()));
+            try (StringWriter sw = new StringWriter(); BufferedWriter bw = new BufferedWriter(sw)) {
+                for (Map.Entry<String, Object> entry : update.entrySet()) {
+                    bw.write(entry.getKey());
                     bw.write(']');
+                    if (entry.getValue() != null) {
+                        bw.write(DataUtils.convert(String.class, entry.getValue()));
+                        bw.write(']');
+                    }
+                    bw.newLine();
                 }
-                bw.newLine();
-            }
 
-            bw.flush();
-            result = sw.toString();
-        } catch (IOException e) {
-            throw new UnifyOperationException(e);
+                bw.flush();
+                result = sw.toString();
+            } catch (IOException e) {
+                throw new UnifyOperationException(e);
+            }
         }
-        }
-        
+
         return result;
     }
 
@@ -1383,60 +1434,60 @@ public final class InputWidgetUtils {
     public static String getSearchInputDefinition(SearchInputsConfig searchInputsConfig) throws UnifyException {
         String result = null;
         if (searchInputsConfig != null) {
-        try (StringWriter sw = new StringWriter(); BufferedWriter bw = new BufferedWriter(sw);) {
-            if (!DataUtils.isBlank(searchInputsConfig.getInputList())) {
-                for (SearchInputConfig searchInputConfig : searchInputsConfig.getInputList()) {
-                    bw.write(searchInputConfig.getLabel());
-                    bw.write(']');
-                    bw.write(searchInputConfig.getField());
-                    bw.write(']');
-                    bw.write(searchInputConfig.getWidget());
-                    bw.write(']');
-                    if (searchInputConfig.getType() != null) {
-                        bw.write(searchInputConfig.getType().code());
+            try (StringWriter sw = new StringWriter(); BufferedWriter bw = new BufferedWriter(sw);) {
+                if (!DataUtils.isBlank(searchInputsConfig.getInputList())) {
+                    for (SearchInputConfig searchInputConfig : searchInputsConfig.getInputList()) {
+                        bw.write(searchInputConfig.getLabel());
                         bw.write(']');
+                        bw.write(searchInputConfig.getField());
+                        bw.write(']');
+                        bw.write(searchInputConfig.getWidget());
+                        bw.write(']');
+                        if (searchInputConfig.getType() != null) {
+                            bw.write(searchInputConfig.getType().code());
+                            bw.write(']');
+                        }
+                        bw.newLine();
                     }
-                    bw.newLine();
                 }
-            }
 
-            bw.flush();
-            result = sw.toString();
-        } catch (IOException e) {
-            throw new UnifyOperationException(e);
+                bw.flush();
+                result = sw.toString();
+            } catch (IOException e) {
+                throw new UnifyOperationException(e);
+            }
         }
-        }
-        
+
         return result;
     }
 
     public static String getSearchInputDefinition(SearchInputsDef searchInputsDef) throws UnifyException {
         String result = null;
         if (searchInputsDef != null) {
-        try (StringWriter sw = new StringWriter(); BufferedWriter bw = new BufferedWriter(sw);) {
-            if (!searchInputsDef.isBlank()) {
-                for (SearchInputDef searchInputDef : searchInputsDef.getSearchInputDefList()) {
-                    bw.write(searchInputDef.getLabel());
-                    bw.write(']');
-                    bw.write(searchInputDef.getFieldName());
-                    bw.write(']');
-                    bw.write(searchInputDef.getWidget());
-                    bw.write(']');
-                    if (searchInputDef.getType() != null) {
-                        bw.write(searchInputDef.getType().code());
+            try (StringWriter sw = new StringWriter(); BufferedWriter bw = new BufferedWriter(sw);) {
+                if (!searchInputsDef.isBlank()) {
+                    for (SearchInputDef searchInputDef : searchInputsDef.getSearchInputDefList()) {
+                        bw.write(searchInputDef.getLabel());
                         bw.write(']');
+                        bw.write(searchInputDef.getFieldName());
+                        bw.write(']');
+                        bw.write(searchInputDef.getWidget());
+                        bw.write(']');
+                        if (searchInputDef.getType() != null) {
+                            bw.write(searchInputDef.getType().code());
+                            bw.write(']');
+                        }
+                        bw.newLine();
                     }
-                    bw.newLine();
                 }
-            }
 
-            bw.flush();
-            result = sw.toString();
-        } catch (IOException e) {
-            throw new UnifyOperationException(e);
+                bw.flush();
+                result = sw.toString();
+            } catch (IOException e) {
+                throw new UnifyOperationException(e);
+            }
         }
-        }
-        
+
         return result;
     }
 
@@ -1493,25 +1544,26 @@ public final class InputWidgetUtils {
         return result;
     }
 
-    public static Restriction getRestriction(AppletUtilities au, EntityDef entityDef, FilterDef filterDef, Date now)
-            throws UnifyException {
-        return InputWidgetUtils.getRestriction(au, entityDef, filterDef, now, null);
+    public static Restriction getRestriction(AppletUtilities au, EntityDef entityDef, ValueStoreReader reader,
+            FilterDef filterDef, Date now) throws UnifyException {
+        return InputWidgetUtils.getRestriction(au, entityDef, reader, filterDef, now, null);
     }
 
-    public static Restriction getRestriction(AppletUtilities au, EntityDef entityDef, FilterDef filterDef, Date now,
-            Map<String, Object> parameters) throws UnifyException {
+    public static Restriction getRestriction(AppletUtilities au, EntityDef entityDef, ValueStoreReader reader,
+            FilterDef filterDef, Date now, Map<String, Object> parameters) throws UnifyException {
         if (filterDef != null) {
             List<FilterRestrictionDef> conditionList = filterDef.getFilterRestrictionDefList();
             if (!conditionList.isEmpty()) {
                 FilterRestrictionDef fo = conditionList.get(0);
                 if (conditionList.size() == 1 && !fo.getType().isCompound()) {
-                    ResolvedCondition resolved = InputWidgetUtils.resolveFieldParam(au, entityDef, fo,
+                    ResolvedCondition resolved = InputWidgetUtils.resolveFieldParam(au, entityDef, reader, fo,
                             au.specialParamProvider(), now, parameters);
                     return resolved.createSimpleCriteria();
                 }
 
                 CriteriaBuilder cb = new CriteriaBuilder();
-                addCompoundCriteria(au, cb, entityDef, filterDef, fo, 1, au.specialParamProvider(), now, parameters);
+                addCompoundCriteria(au, cb, entityDef, reader, filterDef, fo, 1, au.specialParamProvider(), now,
+                        parameters);
                 return cb.build();
             }
         }
@@ -1634,36 +1686,41 @@ public final class InputWidgetUtils {
             } else {
                 LingualDateType lingualType = DataUtils.convert(LingualDateType.class, (String) paramA);
                 if (lingualType != null) {
-                    DateRange range = LingualDateUtils.getDateRangeFromNow(now, lingualType);
-                    switch (type) {
-                        case EQUALS_LINGUAL:
-                            paramA = range.getFrom();
-                            paramB = range.getTo();
-                            type = FilterConditionType.BETWEEN;
-                            break;
-                        case NOT_EQUALS_LINGUAL:
-                            paramA = range.getFrom();
-                            paramB = range.getTo();
-                            type = FilterConditionType.NOT_BETWEEN;
-                            break;
-                        case GREATER_OR_EQUAL_LINGUAL:
-                            paramA = CalendarUtils.getMidnightDate(range.getFrom());
-                            type = FilterConditionType.GREATER_OR_EQUAL;
-                            break;
-                        case GREATER_THAN_LINGUAL:
-                            paramA = CalendarUtils.getLastSecondDate(range.getFrom());
-                            type = FilterConditionType.GREATER_THAN;
-                            break;
-                        case LESS_OR_EQUAL_LINGUAL:
-                            paramA = CalendarUtils.getLastSecondDate(range.getFrom());
-                            type = FilterConditionType.LESS_OR_EQUAL;
-                            break;
-                        case LESS_THAN_LINGUAL:
-                            paramA = CalendarUtils.getMidnightDate(range.getFrom());
-                            type = FilterConditionType.LESS_THAN;
-                            break;
-                        default:
-                            break;
+                    if (lingualType.isNow()) {
+                        paramA = now;
+                        paramB = now;
+                    } else {
+                        DateRange range = LingualDateUtils.getDateRangeFromNow(now, lingualType);
+                        switch (type) {
+                            case EQUALS_LINGUAL:
+                                paramA = range.getFrom();
+                                paramB = range.getTo();
+                                type = FilterConditionType.BETWEEN;
+                                break;
+                            case NOT_EQUALS_LINGUAL:
+                                paramA = range.getFrom();
+                                paramB = range.getTo();
+                                type = FilterConditionType.NOT_BETWEEN;
+                                break;
+                            case GREATER_OR_EQUAL_LINGUAL:
+                                paramA = CalendarUtils.getMidnightDate(range.getFrom());
+                                type = FilterConditionType.GREATER_OR_EQUAL;
+                                break;
+                            case GREATER_THAN_LINGUAL:
+                                paramA = CalendarUtils.getLastSecondDate(range.getFrom());
+                                type = FilterConditionType.GREATER_THAN;
+                                break;
+                            case LESS_OR_EQUAL_LINGUAL:
+                                paramA = CalendarUtils.getLastSecondDate(range.getFrom());
+                                type = FilterConditionType.LESS_OR_EQUAL;
+                                break;
+                            case LESS_THAN_LINGUAL:
+                                paramA = CalendarUtils.getMidnightDate(range.getFrom());
+                                type = FilterConditionType.LESS_THAN;
+                                break;
+                            default:
+                                break;
+                        }
                     }
                 } else {
                     type = null;
@@ -1726,8 +1783,8 @@ public final class InputWidgetUtils {
     }
 
     private static int addCompoundCriteria(AppletUtilities au, CriteriaBuilder cb, EntityDef entityDef,
-            FilterDef filterDef, FilterRestrictionDef fo, int nIndex, SpecialParamProvider specialParamProvider,
-            Date now, Map<String, Object> parameters) throws UnifyException {
+            ValueStoreReader reader, FilterDef filterDef, FilterRestrictionDef fo, int nIndex,
+            SpecialParamProvider specialParamProvider, Date now, Map<String, Object> parameters) throws UnifyException {
         if (FilterConditionType.AND.equals(fo.getType())) {
             cb.beginAnd();
         } else {
@@ -1742,10 +1799,10 @@ public final class InputWidgetUtils {
             FilterRestrictionDef sfo = conditionList.get(i);
             if (sfo.getDepth() > depth) {
                 if (sfo.getType().isCompound()) {
-                    i = addCompoundCriteria(au, cb, entityDef, filterDef, sfo, i + 1, specialParamProvider, now,
+                    i = addCompoundCriteria(au, cb, entityDef, reader, filterDef, sfo, i + 1, specialParamProvider, now,
                             parameters) - 1;
                 } else {
-                    addSimpleCriteria(au, cb, entityDef, filterDef, sfo, specialParamProvider, now, parameters);
+                    addSimpleCriteria(au, cb, entityDef, reader, filterDef, sfo, specialParamProvider, now, parameters);
                 }
             } else {
                 break;
@@ -1757,16 +1814,17 @@ public final class InputWidgetUtils {
     }
 
     private static void addSimpleCriteria(AppletUtilities au, CriteriaBuilder cb, EntityDef entityDef,
-            FilterDef filterDef, FilterRestrictionDef fo, SpecialParamProvider specialParamProvider, Date now,
-            Map<String, Object> parameters) throws UnifyException {
-        ResolvedCondition condition = InputWidgetUtils.resolveFieldParam(au, entityDef, fo, specialParamProvider, now,
-                parameters);
+            ValueStoreReader reader, FilterDef filterDef, FilterRestrictionDef fo,
+            SpecialParamProvider specialParamProvider, Date now, Map<String, Object> parameters) throws UnifyException {
+        ResolvedCondition condition = InputWidgetUtils.resolveFieldParam(au, entityDef, reader, fo,
+                specialParamProvider, now, parameters);
         condition.addSimpleCriteria(cb);
     }
 
     @SuppressWarnings("unchecked")
-    private static ResolvedCondition resolveFieldParam(AppletUtilities au, EntityDef entityDef, FilterRestrictionDef fo,
-            SpecialParamProvider specialParamProvider, Date now, Map<String, Object> parameters) throws UnifyException {
+    private static ResolvedCondition resolveFieldParam(AppletUtilities au, EntityDef entityDef, ValueStoreReader reader,
+            FilterRestrictionDef fo, SpecialParamProvider specialParamProvider, Date now,
+            Map<String, Object> parameters) throws UnifyException {
         FilterConditionType type = fo.getType();
         Object paramA = specialParamProvider.resolveSpecialParameter(fo.getParamA());
         Object paramB = specialParamProvider.resolveSpecialParameter(fo.getParamB());
@@ -1777,20 +1835,28 @@ public final class InputWidgetUtils {
                     paramA = au.getSessionAttribute(String.class, sessionParamtype.attribute());
                 }
             }
-        } 
-        
+        }
+
+        final String fieldName = fo.getFieldName();
+        final boolean isSysParam = SysParamType.isSysParam(fieldName);
+        final SysParamType sysParamType = isSysParam ? SysParamType.fromEncoded(fieldName) : null;
+        if (isSysParam && reader != null) {
+            reader.setTempValue(fieldName,
+                    au.system().getSysParameterValue(sysParamType.dataType(), SysParamType.getSysParamCode(fieldName)));
+        }
+
         if (!type.isFieldVal() && !type.isParameterVal()) {
-            EntityFieldDef _entityFieldDef = entityDef.getFieldDef(fo.getFieldName());
+            EntityFieldDef _entityFieldDef = isSysParam ? getEntityFieldDef(sysParamType)
+                    : entityDef.getFieldDef(fieldName);
             if (_entityFieldDef.isWithResolvedTypeFieldDef()) {
                 _entityFieldDef = _entityFieldDef.getResolvedTypeFieldDef();
             }
 
             if (type.isLingual() && _entityFieldDef.isString()) {
-                return InputWidgetUtils.resolveLingualStringCondition(fo.getFieldName(), _entityFieldDef, now, type,
-                        paramA, paramB);
-            } else if (_entityFieldDef.isTime()) {
-                return InputWidgetUtils.resolveDateCondition(fo.getFieldName(), _entityFieldDef, now, type, paramA,
+                return InputWidgetUtils.resolveLingualStringCondition(fieldName, _entityFieldDef, now, type, paramA,
                         paramB);
+            } else if (_entityFieldDef.isTime()) {
+                return InputWidgetUtils.resolveDateCondition(fieldName, _entityFieldDef, now, type, paramA, paramB);
             } else {
                 EntityFieldDataType fieldDataType = _entityFieldDef.getDataType();
                 Class<?> dataType = fieldDataType.dataType().javaClass();
@@ -1810,9 +1876,9 @@ public final class InputWidgetUtils {
         }
 
         if (parameters != null && type.isParameterVal()) {
-            return InputWidgetUtils.resolveParamCondition(fo.getFieldName(), type, paramA, paramB, parameters);
+            return InputWidgetUtils.resolveParamCondition(fieldName, type, paramA, paramB, parameters);
         }
 
-        return new ResolvedCondition(fo.getFieldName(), type, paramA, paramB);
+        return new ResolvedCondition(fieldName, type, paramA, paramB);
     }
 }

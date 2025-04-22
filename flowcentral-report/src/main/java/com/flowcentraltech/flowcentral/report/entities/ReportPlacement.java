@@ -16,10 +16,10 @@
 package com.flowcentraltech.flowcentral.report.entities;
 
 import com.flowcentraltech.flowcentral.common.entities.BaseEntity;
+import com.tcdng.unify.common.annotation.Table;
 import com.tcdng.unify.core.annotation.Column;
 import com.tcdng.unify.core.annotation.ForeignKey;
 import com.tcdng.unify.core.annotation.ListOnly;
-import com.tcdng.unify.core.annotation.Table;
 import com.tcdng.unify.core.constant.HAlignType;
 import com.tcdng.unify.core.constant.VAlignType;
 import com.tcdng.unify.core.constant.XOffsetType;

@@ -57,12 +57,6 @@ public class EntityCompositionWriter extends AbstractControlWriter {
             final Control fieldNameCtrl = entityCompositionWidget.getFieldNameCtrl();
             final Control columnCtrl = entityCompositionWidget.getColumnCtrl();
             final Control referencesCtrl = entityCompositionWidget.getReferencesCtrl();
-
-//            final Control addEntityCtrl = entityCompositionWidget.getAddEntityCtrl();
-//            final Control delEntityCtrl = entityCompositionWidget.getDelEntityCtrl();
-//
-//            final Control addFieldCtrl = entityCompositionWidget.getAddFieldCtrl();
-//            final Control delFieldCtrl = entityCompositionWidget.getDelFieldCtrl();
             
             final int len = valueStoreList.size();
             final String entityLabel = resolveSessionMessage("$m{entitycomposition.entity}");
@@ -94,12 +88,6 @@ public class EntityCompositionWriter extends AbstractControlWriter {
                 if (fieldType == null) {
                     writeCompositionItem(writer, lineValueStore, entityNameCtrl, entityLabel, "eccelll");
                     writeCompositionItem(writer, lineValueStore, entityTableCtrl, tableLabel, "eccelll");
-                    
-//                    writeActionItem(writer, lineValueStore, addEntityCtrl);
-//                    writeActionItem(writer, lineValueStore, addFieldCtrl);
-//                    if (i > 0) {
-//                        writeActionItem(writer, lineValueStore, delEntityCtrl);
-//                    }
                 } else {
                     if (fieldType.isChild() || fieldType.isChildList()) {
                         writeCompositionItem(writer, lineValueStore, fieldTypeCtrl, fieldLabel, "eccellll");
@@ -116,8 +104,6 @@ public class EntityCompositionWriter extends AbstractControlWriter {
                         writeCompositionItem(writer, lineValueStore, fieldNameCtrl, nameLabel, "eccellll");
                         writeCompositionItem(writer, lineValueStore, columnCtrl, colLabel, "eccellll");
                     }
-
-//                    writeActionItem(writer, lineValueStore, delFieldCtrl);
                 }
 
                 writer.write("</div>");
@@ -139,13 +125,6 @@ public class EntityCompositionWriter extends AbstractControlWriter {
         writer.writeStructureAndContent(ctrl);
         writer.write("</div>");
     }
-
-//    private void writeActionItem(ResponseWriter writer, ValueStore lineValueStore, Control ctrl) throws UnifyException {
-//        writer.write("<div class=\"eccell\">");
-//        ctrl.setValueStore(lineValueStore);
-//        writer.writeStructureAndContent(ctrl);
-//        writer.write("</div>");
-//    }
 
     @Override
     protected void doWriteBehavior(ResponseWriter writer, Widget widget, EventHandler[] handlers)

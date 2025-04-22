@@ -13,25 +13,19 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.connect.configuration.constants;
+
+package com.flowcentraltech.flowcentral.common.constants;
 
 /**
- * Interconnect entity base type.
+ * Transfer to remote task constants.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public enum ConnectEntityBaseType {
-    BASE_ENTITY,
-    BASE_VERSION_ENTITY,
-    BASE_AUDIT_ENTITY,
-    BASE_WORK_ENTITY;
+public interface TransferToRemoteTaskConstants {
 
-    public boolean isAuditType() {
-        return BASE_AUDIT_ENTITY.equals(this) || BASE_WORK_ENTITY.equals(this);
-    }
+    String TRANSFER_TO_REMOTE_TASK_NAME = "repository.transfertoremote.task";
 
-    public boolean isWorkEntityType() {
-        return BASE_WORK_ENTITY.equals(this);
-    }
+    String TRANSFER_ITEM = "transferItem";
+
 }

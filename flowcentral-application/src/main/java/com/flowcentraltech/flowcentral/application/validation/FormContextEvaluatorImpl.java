@@ -47,12 +47,12 @@ import com.flowcentraltech.flowcentral.common.data.TargetFormMessage;
 import com.flowcentraltech.flowcentral.common.data.TargetFormMessage.FieldTarget;
 import com.flowcentraltech.flowcentral.common.util.ValidationUtils;
 import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
+import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.data.ValueStoreReader;
-import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.database.Query;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.StringUtils;
@@ -278,75 +278,6 @@ public class FormContextEvaluatorImpl extends AbstractFlowCentralComponent imple
             }
         }
     }
-
-//    private void checkUniqueConstraints(VersionedEntityDef entityDef, Object inst, Map<String, Object> fieldsInScope,
-//            final boolean multiErrorMessages, final boolean isCreate, final boolean isUpdate) throws UnifyException {
-//        final Object id = DataUtils.getBeanProperty(Object.class, inst, "id");
-//        if (entityDef.isWithUniqueConstraints()) {
-//            if (isCreate || isUpdate) {
-//                final EntityClassDef entityClassDef = au.getEntityClassDef(entityDef.getLongName());
-//                final Long originalCopyId = entityClassDef.isWorkType()
-//                        ? DataUtils.getBeanProperty(Long.class, inst, "originalCopyId")
-//                        : null;
-//                for (UniqueConstraintDef constDef : entityDef.getUniqueConstraintList()) {
-//                    List<String> fieldList = constDef.getFieldList();
-//                    if (multiErrorMessages || !ctx.isWithFieldError(fieldList)) {
-//                        Query query = Query.of((Class<? extends Entity>) entityClassDef.getEntityClass());
-//                        if (isUpdate) {
-//                            query.addNotEquals("id", id);
-//                        }
-//
-//                        if (originalCopyId != null) {
-//                            query.addNotEquals("id", originalCopyId);
-//                        }
-//
-//                        for (String fieldName : fieldList) {
-//                            Object val = null;
-//                            if (!fieldsInScope.containsKey(fieldName)) {
-//                                val = DataUtils.getBeanProperty(Object.class, inst, fieldName);
-//                                fieldsInScope.put(fieldName, val);
-//                            } else {
-//                                val = fieldsInScope.get(fieldName);
-//                            }
-//
-//                            if (constDef.isCaseInsensitive() && val instanceof String) {
-//                                query.addIEquals(fieldName, (String) val);
-//                            } else {
-//                                query.addEquals(fieldName, val);
-//                            }
-//                        }
-//
-//                        if (constDef.isWithConditionList()) {
-//                            for (UniqueConditionDef ucd : constDef.getConditionList()) {
-//                                query.addRestriction(ucd.getRestriction());
-//                            }
-//                        }
-//
-//                        if (environmentService.countAll(query) > 0) {
-//                            StringBuilder sb = new StringBuilder();
-//                            boolean appendSym = false;
-//                            for (String fieldName : fieldList) {
-//                                if (appendSym) {
-//                                    sb.append(", ");
-//                                } else {
-//                                    appendSym = true;
-//                                }
-//
-//                                sb.append(entityDef.getFieldDef(fieldName).getFieldLabel()).append(" = ")
-//                                        .append(fieldsInScope.get(fieldName));
-//                            }
-//
-//                            String msg = getApplicationMessage("application.validation.uniqueconstraint",
-//                                    sb.toString());
-//                            for (String fieldName : fieldList) {
-//                                ctx.addValidationError(new FieldTarget(fieldName), msg);
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//    }
     
     @Override
     public ReviewResult reviewFormContext(FormContext ctx, FormValidationContext vCtx, FormReviewContext rCtx)

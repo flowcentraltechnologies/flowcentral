@@ -112,7 +112,7 @@ public class UIOptionsController extends AbstractSystemPageController<UIOptionsP
             fileAttachmentProvider.saveFileAttachment(FileAttachmentCategoryType.FILERESOURCE_CATEGORY,
                     SystemFileResourceConstants.FILERESOURCE_ENTITY_NAME,
                     SystemFileResourceConstants.FILERESOURCE_ENTITY_INST_ID,
-                    Attachment.newBuilder(type).name(resourceName).title("").data(resource).build());
+                    Attachment.newBuilder(type, false).name(resourceName).title("").data(resource).build());
         } else {
             fileAttachmentProvider.deleteFileAttachment(FileAttachmentCategoryType.FILERESOURCE_CATEGORY,
                     SystemFileResourceConstants.FILERESOURCE_ENTITY_NAME,

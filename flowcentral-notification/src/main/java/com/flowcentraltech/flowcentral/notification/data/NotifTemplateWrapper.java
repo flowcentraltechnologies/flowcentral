@@ -32,13 +32,13 @@ import com.tcdng.unify.core.data.ValueStoreReader;
 public interface NotifTemplateWrapper {
 
     NotifType getNotifType();
-    
+
     String getTemplateName();
-    
+
     String getEntity();
-    
+
     void setImportance(ImportanceType importance);
-    
+
     void addTORecipient(String name, String contact);
 
     void addCCRecipient(String name, String contact);
@@ -50,16 +50,30 @@ public interface NotifTemplateWrapper {
     void setFrom(String from);
 
     void addParams(ValueStoreReader reader) throws UnifyException;
-    
+
     void addParam(String name, Object val);
 
     void addAttachment(FileAttachmentType type, String name, String title, String fileName, byte[] data);
 
     void addAttachment(FileAttachmentType type, String name, String title, byte[] data);
 
+    void addAttachment(FileAttachmentType type, String name, String title, String fileName, String provider,
+            String sourceId);
+
+    void addAttachment(FileAttachmentType type, String name, String title, String provider, String sourceId);
+
+    void addAttachment(FileAttachmentType type, String name, String title, String fileName, byte[] data, boolean inline);
+
+    void addAttachment(FileAttachmentType type, String name, String title, byte[] data, boolean inline);
+
+    void addAttachment(FileAttachmentType type, String name, String title, String fileName, String provider,
+            String sourceId, boolean inline);
+
+    void addAttachment(FileAttachmentType type, String name, String title, String provider, String sourceId, boolean inline);
+
     void addAttachment(Attachment attachment);
 
     NotifMessage getMessage();
-    
+
     boolean isWithRecipients();
 }

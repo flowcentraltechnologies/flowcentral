@@ -36,7 +36,8 @@ public class WorkflowEditorPagePanel extends AbstractStudioEditorPagePanel {
         super.switchState();
 
         final boolean readOnly = isAppletContextReadOnly();
-        WorkflowEditor workflowEditor = getWorkflowEditorPage().getWorkflowEditor();
+        final WorkflowEditorPage workflowEditorPage = getWorkflowEditorPage();
+        final WorkflowEditor workflowEditor = workflowEditorPage.getWorkflowEditor();
         workflowEditor.setReadOnly(readOnly);
         if (!workflowEditor.isInitialized()) {
             workflowEditor.init(getWidgetByShortName("createStepPanel").getLongName(),
@@ -46,6 +47,8 @@ public class WorkflowEditorPagePanel extends AbstractStudioEditorPagePanel {
                     getWidgetByShortName("stepRoutingsCrudPanel").getLongName(),
                     getWidgetByShortName("stepUserActionsCrudPanel").getLongName());
         }
+        
+        setWidgetVisible("publishBtn", !workflowEditorPage.isPublished());
 
         boolean isEditable = !readOnly;
         setWidgetVisible("saveBtn", isEditable);

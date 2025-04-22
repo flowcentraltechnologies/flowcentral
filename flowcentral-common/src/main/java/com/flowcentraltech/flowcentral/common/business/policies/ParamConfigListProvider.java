@@ -19,9 +19,9 @@ package com.flowcentraltech.flowcentral.common.business.policies;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
+import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.ParamConfig;
-import com.tcdng.unify.core.database.Entity;
 
 /**
  * Parameter configuration list provider.

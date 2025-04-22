@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>com.flowcentraltech.flowcentral</groupId>
 		<artifactId>flowcentral</artifactId>
-		<version>4.0.1</version>
+		<version>4.0.2-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>flowcentral-connect-configuration</artifactId>
@@ -21,6 +21,11 @@
 
 	<dependencies>
 		<!-- Main dependencies -->
+		<dependency>
+			<groupId>com.tcdng.unify</groupId>
+			<artifactId>unify-common</artifactId>
+			<version>${unify.version}</version>
+		</dependency>
 		<!--XML-->
 		<dependency>
 		    <groupId>com.fasterxml.jackson.dataformat</groupId>

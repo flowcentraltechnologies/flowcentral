@@ -17,11 +17,11 @@ package com.flowcentraltech.flowcentral.report.entities;
 
 import java.util.List;
 
-import com.flowcentraltech.flowcentral.common.entities.BaseStatusTenantEntity;
+import com.flowcentraltech.flowcentral.common.entities.BaseStatusEntity;
+import com.tcdng.unify.common.annotation.Table;
+import com.tcdng.unify.common.annotation.UniqueConstraint;
 import com.tcdng.unify.core.annotation.ChildList;
 import com.tcdng.unify.core.annotation.Column;
-import com.tcdng.unify.core.annotation.Table;
-import com.tcdng.unify.core.annotation.UniqueConstraint;
 
 /**
  * Entity for storing report group information.
@@ -31,7 +31,7 @@ import com.tcdng.unify.core.annotation.UniqueConstraint;
  */
 @Table(name = "FC_REPORTGROUP",
         uniqueConstraints = { @UniqueConstraint({ "name" }), @UniqueConstraint({ "description" }) })
-public class ReportGroup extends BaseStatusTenantEntity {
+public class ReportGroup extends BaseStatusEntity {
 
     @Column(name = "REPORTGROUP_NM", length = 64)
     private String name;

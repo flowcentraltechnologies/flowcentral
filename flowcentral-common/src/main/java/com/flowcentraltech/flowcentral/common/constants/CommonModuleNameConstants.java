@@ -29,7 +29,5 @@ public interface CommonModuleNameConstants {
 
     String SYS_PARAM_GENERATOR = "common-sysparamgenerator";
 
-    String PROCESS_VARIABLE_GENERATOR = "common-processvariablegenerator";
-
     String CONFIGURED_REPORT_RESOURCE = "/resource/configuredreport";
 }

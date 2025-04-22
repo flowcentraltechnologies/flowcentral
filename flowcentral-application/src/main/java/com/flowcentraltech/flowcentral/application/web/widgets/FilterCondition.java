@@ -22,6 +22,7 @@ import com.flowcentraltech.flowcentral.application.data.LabelSuggestionDef;
 import com.flowcentraltech.flowcentral.application.data.WidgetTypeDef;
 import com.flowcentraltech.flowcentral.application.util.InputWidgetUtils;
 import com.flowcentraltech.flowcentral.common.input.AbstractInput;
+import com.flowcentraltech.flowcentral.configuration.constants.SysParamType;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.criterion.FilterConditionListType;
 import com.tcdng.unify.core.criterion.FilterConditionType;
@@ -70,8 +71,8 @@ public class FilterCondition {
     private boolean editable;
 
     public FilterCondition(AppletUtilities au, EntityDef entityDef, LabelSuggestionDef labelSuggestionDef,
-            String sessionParamWidget, Long ownerInstId, FilterConditionType type,
-            FilterConditionListType listType, int depth, boolean editable) {
+            String sessionParamWidget, Long ownerInstId, FilterConditionType type, FilterConditionListType listType,
+            int depth, boolean editable) {
         this.au = au;
         this.entityDef = entityDef;
         this.labelSuggestionDef = labelSuggestionDef;
@@ -181,7 +182,10 @@ public class FilterCondition {
             paramInputA = null;
             paramInputB = null;
         } else {
-            EntityFieldDef entityFieldDef = entityDef.getFieldDef(fieldName);
+            SysParamType sysParamType = SysParamType.isSysParam(fieldName) ? SysParamType.fromEncoded(fieldName) : null;
+            EntityFieldDef entityFieldDef = sysParamType != null ? InputWidgetUtils.getEntityFieldDef(sysParamType)
+                    : entityDef.getFieldDef(fieldName);
+
             typeSelector = InputWidgetUtils.getFilterConditionTypeSelectDescriptior(entityFieldDef, listType);
             if (type != null) {
                 if (!InputWidgetUtils.isSupportedFilterConditionType(entityFieldDef, type, listType)) {

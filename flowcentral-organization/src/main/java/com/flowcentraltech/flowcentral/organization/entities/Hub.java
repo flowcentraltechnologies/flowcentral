@@ -15,10 +15,10 @@
  */
 package com.flowcentraltech.flowcentral.organization.entities;
 
-import com.flowcentraltech.flowcentral.common.entities.BaseStatusTenantEntity;
+import com.flowcentraltech.flowcentral.common.entities.BaseStatusEntity;
+import com.tcdng.unify.common.annotation.Table;
+import com.tcdng.unify.common.annotation.UniqueConstraint;
 import com.tcdng.unify.core.annotation.Column;
-import com.tcdng.unify.core.annotation.Table;
-import com.tcdng.unify.core.annotation.UniqueConstraint;
 
 /**
  * Represents hub entity.
@@ -30,7 +30,7 @@ import com.tcdng.unify.core.annotation.UniqueConstraint;
     uniqueConstraints = {
             @UniqueConstraint({ "name" }),
             @UniqueConstraint({ "description" }) })
-public class Hub extends BaseStatusTenantEntity {
+public class Hub extends BaseStatusEntity {
 
     @Column(name = "HUB_NM", length = 32)
     private String name;

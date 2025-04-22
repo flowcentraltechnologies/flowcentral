@@ -15,8 +15,8 @@
  */
 package com.flowcentraltech.flowcentral.application.data;
 
+import com.tcdng.unify.common.data.Listable;
 import com.tcdng.unify.core.constant.FileAttachmentType;
-import com.tcdng.unify.core.data.Listable;
 
 /**
  * Entity attachment definition.

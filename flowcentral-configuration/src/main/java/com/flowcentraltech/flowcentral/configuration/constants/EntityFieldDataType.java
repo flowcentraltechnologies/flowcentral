@@ -15,12 +15,16 @@
  */
 package com.flowcentraltech.flowcentral.configuration.constants;
 
-import com.flowcentraltech.flowcentral.connect.configuration.constants.ConnectFieldDataType;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
 import com.tcdng.unify.common.annotation.StaticList;
+import com.tcdng.unify.common.annotation.Table;
+import com.tcdng.unify.common.constants.ConnectFieldDataType;
 import com.tcdng.unify.common.constants.EnumConst;
-import com.tcdng.unify.core.annotation.Table;
 import com.tcdng.unify.core.constant.DataType;
 import com.tcdng.unify.core.constant.HAlignType;
+import com.tcdng.unify.core.util.EntityTypeFieldInfo;
 import com.tcdng.unify.core.util.EnumUtils;
 
 /**
@@ -41,7 +45,8 @@ public enum EntityFieldDataType implements EnumConst {
             true,
             true,
             true,
-            true),
+            true,
+            false),
     BOOLEAN(
             "BL",
             DataType.BOOLEAN,
@@ -49,6 +54,17 @@ public enum EntityFieldDataType implements EnumConst {
             true,
             true,
             true,
+            true,
+            true,
+            false),
+    BOOLEAN_ARRAY(
+            "BLA",
+            DataType.BOOLEAN,
+            false,
+            true,
+            true,
+            false,
+            false,
             true,
             true),
     SHORT(
@@ -59,6 +75,17 @@ public enum EntityFieldDataType implements EnumConst {
             true,
             true,
             true,
+            true,
+            false),
+    SHORT_ARRAY(
+            "SHA",
+            DataType.SHORT,
+            true,
+            true,
+            true,
+            false,
+            false,
+            true,
             true),
     INTEGER(
             "IN",
@@ -67,6 +94,17 @@ public enum EntityFieldDataType implements EnumConst {
             true,
             true,
             true,
+            true,
+            true,
+            false),
+    INTEGER_ARRAY(
+            "INA",
+            DataType.INTEGER,
+            true,
+            true,
+            true,
+            false,
+            false,
             true,
             true),
     LONG(
@@ -77,6 +115,17 @@ public enum EntityFieldDataType implements EnumConst {
             true,
             true,
             true,
+            true,
+            false),
+    LONG_ARRAY(
+            "LNA",
+            DataType.LONG,
+            true,
+            true,
+            true,
+            false,
+            false,
+            true,
             true),
     TENANT_ID(
             "TD",
@@ -86,6 +135,7 @@ public enum EntityFieldDataType implements EnumConst {
             false,
             true,
             true,
+            false,
             false),
     MAPPED(
             "MD",
@@ -94,6 +144,7 @@ public enum EntityFieldDataType implements EnumConst {
             false,
             false,
             true,
+            false,
             false,
             false),
     FLOAT(
@@ -104,6 +155,17 @@ public enum EntityFieldDataType implements EnumConst {
             true,
             true,
             true,
+            true,
+            false),
+    FLOAT_ARRAY(
+            "FLA",
+            DataType.FLOAT,
+            true,
+            true,
+            true,
+            false,
+            false,
+            true,
             true),
     DOUBLE(
             "DB",
@@ -112,6 +174,17 @@ public enum EntityFieldDataType implements EnumConst {
             true,
             true,
             true,
+            true,
+            true,
+            false),
+    DOUBLE_ARRAY(
+            "DBA",
+            DataType.DOUBLE,
+            true,
+            true,
+            true,
+            false,
+            false,
             true,
             true),
     DECIMAL(
@@ -122,6 +195,17 @@ public enum EntityFieldDataType implements EnumConst {
             true,
             true,
             true,
+            true,
+            false),
+    DECIMAL_ARRAY(
+            "DCA",
+            DataType.DECIMAL,
+            true,
+            true,
+            true,
+            false,
+            false,
+            true,
             true),
     DATE(
             "DT",
@@ -130,6 +214,17 @@ public enum EntityFieldDataType implements EnumConst {
             true,
             true,
             true,
+            true,
+            true,
+            false),
+    DATE_ARRAY(
+            "DTA",
+            DataType.DATE,
+            false,
+            true,
+            true,
+            false,
+            false,
             true,
             true),
     TIMESTAMP_UTC(
@@ -140,11 +235,23 @@ public enum EntityFieldDataType implements EnumConst {
             true,
             true,
             true,
-            true),
+            true,
+            false),
     TIMESTAMP(
             "TS",
             DataType.TIMESTAMP,
             false,
+            true,
+            true,
+            true,
+            true,
+            true,
+            false),
+    TIMESTAMP_ARRAY(
+            "TSA",
+            DataType.TIMESTAMP,
+            false,
+            true,
             true,
             true,
             true,
@@ -158,13 +265,15 @@ public enum EntityFieldDataType implements EnumConst {
             true,
             true,
             true,
-            true),
+            true,
+            false),
     BLOB(
             "BT",
             DataType.BLOB,
             false,
             false,
             true,
+            false,
             false,
             false,
             false),
@@ -176,6 +285,17 @@ public enum EntityFieldDataType implements EnumConst {
             true,
             true,
             true,
+            true,
+            false),
+    STRING_ARRAY(
+            "STA",
+            DataType.STRING,
+            false,
+            true,
+            true,
+            false,
+            false,
+            true,
             true),
     ENUM(
             "EN",
@@ -185,7 +305,8 @@ public enum EntityFieldDataType implements EnumConst {
             true,
             true,
             true,
-            true),
+            true,
+            false),
     ENUM_REF(
             "ER",
             DataType.STRING,
@@ -194,7 +315,8 @@ public enum EntityFieldDataType implements EnumConst {
             true,
             true,
             true,
-            true),
+            true,
+            false),
     ENUM_DYN(
             "ED",
             DataType.STRING,
@@ -203,7 +325,8 @@ public enum EntityFieldDataType implements EnumConst {
             true,
             true,
             true,
-            true),
+            true,
+            false),
     REF(
             "RF",
             DataType.LONG,
@@ -212,6 +335,7 @@ public enum EntityFieldDataType implements EnumConst {
             true,
             true,
             true,
+            false,
             false),
     REF_UNLINKABLE(
             "UR",
@@ -221,6 +345,7 @@ public enum EntityFieldDataType implements EnumConst {
             true,
             true,
             true,
+            false,
             false),
     REF_FILEUPLOAD(
             "CU",
@@ -230,10 +355,12 @@ public enum EntityFieldDataType implements EnumConst {
             true,
             true,
             false,
+            false,
             false),
     FOSTER_PARENT_ID(
             "FI",
             DataType.LONG,
+            false,
             false,
             false,
             false,
@@ -248,10 +375,12 @@ public enum EntityFieldDataType implements EnumConst {
             false,
             false,
             false,
+            false,
             false),
     CATEGORY_COLUMN(
             "CC",
             DataType.STRING,
+            false,
             false,
             false,
             false,
@@ -266,6 +395,7 @@ public enum EntityFieldDataType implements EnumConst {
             false,
             false,
             true,
+            false,
             false),
     LIST_ONLY(
             "LO",
@@ -275,10 +405,12 @@ public enum EntityFieldDataType implements EnumConst {
             true,
             true,
             false,
-            true),
+            true,
+            false),
     CHILD(
             "CD",
             null,
+            false,
             false,
             false,
             false,
@@ -288,6 +420,7 @@ public enum EntityFieldDataType implements EnumConst {
     CHILD_LIST(
             "CL",
             null,
+            false,
             false,
             false,
             false,
@@ -311,8 +444,10 @@ public enum EntityFieldDataType implements EnumConst {
 
     private final boolean reportable;
 
+    private final boolean array;
+
     private EntityFieldDataType(String code, DataType dataType, boolean number, boolean tableView, boolean formView,
-            boolean supportFilter, boolean supportSetValue, boolean reportable) {
+            boolean supportFilter, boolean supportSetValue, boolean reportable, boolean array) {
         this.code = code;
         this.dataType = dataType;
         this.number = number;
@@ -321,6 +456,7 @@ public enum EntityFieldDataType implements EnumConst {
         this.supportFilter = supportFilter;
         this.supportSetValue = supportSetValue;
         this.reportable = reportable;
+        this.array = array;
     }
 
     @Override
@@ -359,6 +495,10 @@ public enum EntityFieldDataType implements EnumConst {
 
     public boolean isReportable() {
         return reportable;
+    }
+
+    public boolean isArray() {
+        return array;
     }
 
     public boolean isSupportLingual() {
@@ -467,8 +607,115 @@ public enum EntityFieldDataType implements EnumConst {
         return EnumUtils.fromName(EntityFieldDataType.class, name);
     }
 
+    public static EntityFieldDataType fromData(SimpleDateFormat dateFormatter, SimpleDateFormat dateTimeFormatter,
+            EntityTypeFieldInfo entityTypeFieldInfo) {
+        if (entityTypeFieldInfo.getType().isChild()) {
+            return EntityFieldDataType.CHILD;
+        }
+
+        if (entityTypeFieldInfo.getType().isChildList()) {
+            return EntityFieldDataType.CHILD_LIST;
+        }
+
+        DataType dataType = entityTypeFieldInfo.getDataType();
+        final boolean array = entityTypeFieldInfo.isArray();
+        if (dataType != null) {
+            if (dataType.isString()) {
+                try {
+                    dateTimeFormatter.parse(entityTypeFieldInfo.getSample());
+                    dataType = DataType.TIMESTAMP;
+                } catch (ParseException e) {
+                    try {
+                        dateFormatter.parse(entityTypeFieldInfo.getSample());
+                        dataType = DataType.DATE;
+                    } catch (ParseException e1) {
+                    }
+                }
+            }
+
+            EntityFieldDataType fieldDataType = EntityFieldDataType.fromName(dataType.name());
+            if (array && fieldDataType != null) {
+                fieldDataType = fieldDataType.array();
+            }
+
+            return fieldDataType;
+        }
+
+        return null;
+    }
+
     public static EntityFieldDataType fromInterconnect(ConnectFieldDataType dataType) {
         return dataType != null ? (dataType.isEnum() ? STRING : fromName(dataType.name())) : null;
+    }
+
+    private EntityFieldDataType array() {
+        switch (this) {
+            case BOOLEAN:
+            case BOOLEAN_ARRAY:
+                return BOOLEAN_ARRAY;
+            case CATEGORY_COLUMN:
+                break;
+            case CHAR:
+                break;
+            case CHILD:
+                break;
+            case CHILD_LIST:
+                break;
+            case CLOB:
+                break;
+            case DATE:
+            case DATE_ARRAY:
+                return DATE_ARRAY;
+            case DECIMAL:
+            case DECIMAL_ARRAY:
+                return DECIMAL_ARRAY;
+            case DOUBLE:
+            case DOUBLE_ARRAY:
+                return DOUBLE_ARRAY;
+            case ENUM:
+                break;
+            case ENUM_DYN:
+                break;
+            case ENUM_REF:
+                break;
+            case FLOAT:
+            case FLOAT_ARRAY:
+                return FLOAT_ARRAY;
+            case FOSTER_PARENT_ID:
+            case FOSTER_PARENT_TYPE:
+                break;
+            case INTEGER:
+            case INTEGER_ARRAY:
+                return INTEGER_ARRAY;
+            case LIST_ONLY:
+                break;
+            case LONG:
+            case LONG_ARRAY:
+                return LONG_ARRAY;
+            case MAPPED:
+            case REF:
+            case REF_FILEUPLOAD:
+            case REF_UNLINKABLE:
+            case SCRATCH:
+            case SHORT:
+            case SHORT_ARRAY:
+                return SHORT_ARRAY;
+            case STRING:
+            case STRING_ARRAY:
+                return STRING_ARRAY;
+            case TENANT_ID:
+                break;
+            case TIMESTAMP:
+            case TIMESTAMP_ARRAY:
+                return TIMESTAMP_ARRAY;
+            case TIMESTAMP_UTC:
+                break;
+            default:
+                break;
+
+        }
+
+        return this;
     }
 
 }

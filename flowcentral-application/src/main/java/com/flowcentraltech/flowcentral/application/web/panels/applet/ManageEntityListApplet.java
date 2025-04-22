@@ -28,7 +28,7 @@ import com.flowcentraltech.flowcentral.application.util.InputWidgetUtils;
 import com.flowcentraltech.flowcentral.application.web.controllers.AppletWidgetReferences;
 import com.flowcentraltech.flowcentral.application.web.data.FormContext;
 import com.flowcentraltech.flowcentral.application.web.panels.EntitySearch;
-import com.flowcentraltech.flowcentral.common.constants.WfItemVersionType;
+import com.tcdng.unify.common.constants.WfItemVersionType;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.criterion.Equals;
 import com.tcdng.unify.core.criterion.Restriction;

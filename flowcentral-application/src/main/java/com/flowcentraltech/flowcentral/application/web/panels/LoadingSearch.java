@@ -30,12 +30,12 @@ import com.flowcentraltech.flowcentral.application.web.widgets.SearchEntries;
 import com.flowcentraltech.flowcentral.application.web.widgets.SectorIcon;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
 import com.flowcentraltech.flowcentral.common.business.SpecialParamProvider;
-import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
+import com.tcdng.unify.common.database.Entity;
+import com.tcdng.unify.common.database.WorkEntity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.criterion.And;
 import com.tcdng.unify.core.criterion.Order;
 import com.tcdng.unify.core.criterion.Restriction;
-import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.web.ui.widget.data.ButtonGroupInfo;
 
 /**

@@ -15,6 +15,8 @@
  */
 package com.flowcentraltech.flowcentral.connect.common.data;
 
+import com.tcdng.unify.common.data.EntityDTO;
+
 /**
  * Get entity datasource response.
  * 

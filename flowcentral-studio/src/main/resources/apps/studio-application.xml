@@ -4,6 +4,10 @@
 	description="$m{studio.application.short.description}"
 	label="$m{studio.application.mainlabel}" module="studio"
 	displayIndex="1000">
+	<!-- Help Sheets-->
+	<helpSheets>
+		<helpSheet configFile="apps/help/sheet/notif-template-help-sheet.xml"/>
+	</helpSheets>
 	<!-- Widget Types -->
 	<widgetTypes>
 		<widgetType name="environmentdelegatelist"
@@ -80,7 +84,7 @@
 			description="$m{studio.widgettype.formhelpsheetlist}"
 			dataType="string" inputType="string"
 			editor="!ui-select list:studioformhelpsheetlist listParams:$l{entity} blankOption:$m{blank.none}"
-			renderer="!ui-label" />		
+			renderer="!ui-label" />
 		<widgetType name="formactionpolicylist"
 			description="$m{studio.widgettype.formactionpolicylist}"
 			dataType="string" inputType="string"
@@ -176,7 +180,8 @@
 			editor="!ui-select list:$s{rulelist} listParams:$l{filterGenerator} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="studiohelpentryfieldlist"
-			description="$m{studio.widgettype.studiohelpentryfieldlist}" dataType="long"
+			description="$m{studio.widgettype.studiohelpentryfieldlist}"
+			dataType="long"
 			inputType="string"
 			editor="!ui-select list:studiohelpentryfieldlist listKey:$s{name} listParams:$l{appHelpSheetId} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
@@ -271,7 +276,8 @@
 			editor="!ui-select list:$s{rulelist} listParams:$l{validation} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="formelementlist"
-			description="$m{studio.widgettype.formelementlist}" dataType="string"
+			description="$m{studio.widgettype.formelementlist}"
+			dataType="string"
 			inputType="string"
 			editor="!ui-dropdownchecklist list:studioformelementlist listParams:$l{appFormStatePolicyId type} columns:3"
 			renderer="!ui-label" />
@@ -597,17 +603,20 @@
 		</applet>
 		<applet name="takeSnapshot"
 			description="$m{studio.takesnapshotpage.manage}"
-			label="$m{studio.takesnapshotpage.manage.label}" icon="lock" type="path_page"
+			label="$m{studio.takesnapshotpage.manage.label}" icon="lock"
+			type="path_page"
 			path="/studio/takesnapshot/openPage" menuAccess="false">
 		</applet>
 		<applet name="uploadSnapshot"
 			description="$m{studio.uploadsnapshotpage.manage}"
-			label="$m{studio.uploadsnapshotpage.manage.label}" icon="lock" type="path_page"
+			label="$m{studio.uploadsnapshotpage.manage.label}" icon="lock"
+			type="path_page"
 			path="/studio/uploadsnapshot/openPage" menuAccess="false">
 		</applet>
 		<applet name="snapshots"
 			description="$m{studio.snapshotspage.manage}"
-			label="$m{studio.snapshotspage.manage.label}" icon="lock" type="path_page"
+			label="$m{studio.snapshotspage.manage.label}" icon="lock"
+			type="path_page"
 			path="/studio/snapshots/openPage" menuAccess="false">
 		</applet>
 		<applet name="createJsonEntity"
@@ -615,18 +624,22 @@
 			label="$m{studio.jsonentity.manage.label}" type="form_wizard"
 			entity="studio.studioJsonEntity" menuAccess="false">
 			<property name="createForm" value="studioJsonEntityForm" />
-			<property name="createForm.navigation.policy" value="createjsonentity-navigationpolicy" />
+			<property name="createForm.navigation.policy"
+				value="createjsonentity-navigationpolicy" />
 			<property name="wizardForm.completion" value="EXE" />
-			<property name="wizardForm.task.processor" value="createjsonentity-formwizardprocessor" />
+			<property name="wizardForm.task.processor"
+				value="createjsonentity-formwizardprocessor" />
 		</applet>
 		<applet name="createCsvEntity"
 			description="$m{studio.csventity.manage}"
 			label="$m{studio.csventity.manage.label}" type="form_wizard"
 			entity="studio.studioJsonEntity" menuAccess="false">
 			<property name="createForm" value="studioCsvEntityForm" />
-			<property name="createForm.navigation.policy" value="createcsventity-navigationpolicy" />
+			<property name="createForm.navigation.policy"
+				value="createcsventity-navigationpolicy" />
 			<property name="wizardForm.completion" value="EXE" />
-			<property name="wizardForm.task.processor" value="createcsventity-formwizardprocessor" />
+			<property name="wizardForm.task.processor"
+				value="createcsventity-formwizardprocessor" />
 		</applet>
 		<applet name="stuManageModule"
 			description="$m{studio.module.manage}"
@@ -1303,7 +1316,8 @@
 		<applet name="manageAppFormValidationPolicy"
 			description="$m{studio.appformvalidationpolicy.manage}"
 			label="$m{studio.appformvalidationpolicy.manage.label}"
-			type="manage_entitylist" entity="application.appFormValidationPolicy"
+			type="manage_entitylist"
+			entity="application.appFormValidationPolicy"
 			menuAccess="false">
 			<property name="searchTable"
 				value="appFormValidationPolicyTable" />
@@ -1480,7 +1494,8 @@
 		</applet>
 		<applet name="manageReportColumn"
 			description="$m{studio.reportcolumn.manage}"
-			label="$m{studio.reportcolumn.manage.label}" type="manage_entitylist"
+			label="$m{studio.reportcolumn.manage.label}"
+			type="manage_entitylist"
 			entity="report.reportColumn" menuAccess="false">
 			<property name="searchTable" value="reportColumnTable" />
 			<property name="searchTable.new" value="false" />
@@ -1573,7 +1588,8 @@
 				label="$m{studio.snapshotdetails.message}" type="string"
 				nullable="true" />
 			<field name="snapshotTypeDesc"
-				label="$m{studio.snapshotdetails.snapshottypedesc}" type="list_only"
+				label="$m{studio.snapshotdetails.snapshottypedesc}"
+				type="list_only"
 				key="snapshotType" property="description" />
 		</entity>
 		<entity name="studioSnapshot" description="$m{studio.snapshot}"
@@ -1610,7 +1626,8 @@
 				label="$m{studio.restoredetails.filename}" type="list_only"
 				key="snapshotDetailsId" property="fileName" />
 			<field name="taskStatusDesc"
-				label="$m{studio.restoredetails.taskstatusdesc}" type="list_only"
+				label="$m{studio.restoredetails.taskstatusdesc}"
+				type="list_only"
 				key="taskStatus" property="description" />
 		</entity>
 		<entity name="studioJsonEntity" description="$m{studio.jsonentity}"
@@ -1624,14 +1641,17 @@
 				references="application.applicationRef" basicSearch="true" />
 			<field name="baseType"
 				label="$m{studio.jsonentity.basetype}" type="enum_ref"
-				references="entitybasetypelist" inputWidget="application.enumlist" />
+				references="entitybasetypelist"
+				inputWidget="application.enumlist" />
 			<field name="entityName" maxLen="32"
 				label="$m{studio.jsonentity.entityname}" type="string"
 				nullable="true" />
 			<field name="dateFormatter" maxLen="64"
-				label="$m{studio.jsonentity.dateformatter}" type="string" nullable="true"/>
+				label="$m{studio.jsonentity.dateformatter}" type="string"
+				nullable="true" />
 			<field name="dateTimeFormatter" maxLen="64"
-				label="$m{studio.jsonentity.datetimeformatter}" type="string" nullable="true"/>
+				label="$m{studio.jsonentity.datetimeformatter}" type="string"
+				nullable="true" />
 			<field name="delegate" maxLen="64"
 				label="$m{studio.jsonentity.delegate}" type="string"
 				nullable="true" />
@@ -1643,19 +1663,20 @@
 				label="$m{studio.jsonentity.refinedstructure}" type="clob" />
 			<field name="generateEntity"
 				inputWidget="application.boolean"
-				label="$m{studio.jsonentity.generateentity}" type="boolean"/>
+				label="$m{studio.jsonentity.generateentity}" type="boolean" />
 			<field name="loadSourceJSON"
 				inputWidget="application.boolean"
-				label="$m{studio.jsonentity.loadsourcejson}" type="boolean"/>
+				label="$m{studio.jsonentity.loadsourcejson}" type="boolean" />
 			<field name="generateApplet"
 				inputWidget="application.boolean"
-				label="$m{studio.jsonentity.generateapplet}" type="boolean"/>
+				label="$m{studio.jsonentity.generateapplet}" type="boolean" />
 			<field name="generateRest"
 				inputWidget="application.boolean"
-				label="$m{studio.jsonentity.generaterest}" type="boolean"/>
+				label="$m{studio.jsonentity.generaterest}" type="boolean" />
 			<field name="generateImport"
 				inputWidget="application.boolean"
-				label="$m{studio.jsonentity.generateimport}" type="boolean" nullable="true"/>
+				label="$m{studio.jsonentity.generateimport}" type="boolean"
+				nullable="true" />
 			<field name="applicationName"
 				label="$m{studio.jsonentity.applicationname}"
 				type="list_only" key="applicationId" property="name" />
@@ -1722,7 +1743,8 @@
 		<table name="appEntityFieldTable"
 			description="$m{studio.appentityfield.table}"
 			label="$m{studio.appentityfield.table.label}"
-			entity="application.appEntityField" itemsPerPage="20" serialNo="true">
+			entity="application.appEntityField" itemsPerPage="20"
+			serialNo="true">
 			<column field="name" renderWidget="application.name"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="label" renderWidget="application.text"
@@ -1749,7 +1771,8 @@
 		<table name="appEntityFieldQuickEditTable"
 			description="$m{studio.appentityfield.table.quickedit}"
 			label="$m{studio.appentityfield.table.quickedit.label}"
-			entity="application.appEntityField" itemsPerPage="-1" serialNo="true">
+			entity="application.appEntityField" itemsPerPage="-1"
+			serialNo="true">
 			<column field="name" renderWidget="application.name"
 				widthRatio="3" />
 			<column field="dataTypeDesc" renderWidget="application.text"
@@ -1819,9 +1842,11 @@
 			entity="application.appEntityExpression" itemsPerPage="20"
 			serialNo="true">
 			<column field="name" renderWidget="application.name"
-				widthRatio="1" linkAct="maintainAct" />
+				widthRatio="1" linkAct="maintainAct" /> 
 			<column field="description" renderWidget="application.text"
-				widthRatio="1" />
+				widthRatio="2" />
+			<column field="expression" renderWidget="application.textarea"
+				widthRatio="2" />
 		</table>
 		<table name="appEntityUniqueConstraintTable"
 			description="$m{studio.appentityuniqueconstraint.table}"
@@ -1838,7 +1863,8 @@
 		<table name="appEntityIndexTable"
 			description="$m{studio.appentityindex.table}"
 			label="$m{studio.appentityindex.table.label}"
-			entity="application.appEntityIndex" itemsPerPage="20" serialNo="true">
+			entity="application.appEntityIndex" itemsPerPage="20"
+			serialNo="true">
 			<column field="name" renderWidget="application.name"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="description" renderWidget="application.text"
@@ -1896,7 +1922,8 @@
 				widthRatio="1" />
 			<column field="ownershipTypeDesc"
 				renderWidget="application.text"
-				label="$m{application.appappletfilter.ownershiptype}" widthRatio="1" />
+				label="$m{application.appappletfilter.ownershiptype}"
+				widthRatio="1" />
 			<column field="createDt" renderWidget="application.datetime"
 				widthRatio="1" />
 			<column field="updateDt" renderWidget="application.datetime"
@@ -1974,7 +2001,8 @@
 			<column field="rowColor" renderWidget="application.colorspan"
 				label="$m{application.apptablefilter.rowcolor}" widthRatio="1" />
 			<column field="legendLabel" renderWidget="application.text"
-				label="$m{application.apptablefilter.legendlabel}" widthRatio="1" />
+				label="$m{application.apptablefilter.legendlabel}"
+				widthRatio="1" />
 			<column field="createDt" renderWidget="application.datetime"
 				widthRatio="1" />
 			<column field="updateDt" renderWidget="application.datetime"
@@ -1992,7 +2020,8 @@
 				widthRatio="1" />
 			<column field="tabContentTypeDesc"
 				renderWidget="application.text"
-				label="$m{application.appformelement.tabcontenttype}" widthRatio="1" />
+				label="$m{application.appformelement.tabcontenttype}"
+				widthRatio="1" />
 			<column field="inputWidget" renderWidget="application.text"
 				widthRatio="1" />
 			<column field="visible" renderWidget="application.text"
@@ -2013,7 +2042,8 @@
 			<column field="typeDesc" renderWidget="application.text"
 				label="$m{application.appformannotation.type}" widthRatio="1" />
 			<column field="visibilityDesc" renderWidget="application.text"
-				label="$m{application.appformannotation.visibility}" widthRatio="1" />
+				label="$m{application.appformannotation.visibility}"
+				widthRatio="1" />
 			<column field="html" renderWidget="application.checkbox"
 				widthRatio="1" />
 			<column field="directPlacement"
@@ -2189,7 +2219,8 @@
 		</table>
 		<table name="wfStepTable"
 			description="$m{studio.workflow.step.table}"
-			label="$m{studio.workflow.step.table.label}" entity="workflow.wfStep"
+			label="$m{studio.workflow.step.table.label}"
+			entity="workflow.wfStep"
 			itemsPerPage="20" serialNo="true">
 			<column field="name" renderWidget="application.text"
 				widthRatio="1" linkAct="maintainAct" />
@@ -2289,7 +2320,8 @@
 			label="$m{studio.dashboardoptioncatbase.table.label}"
 			entity="dashboard.dashboardOptionCatBase">
 			<column field="chartDataSource"
-				renderWidget="application.text" widthRatio="1" linkAct="maintainAct" />
+				renderWidget="application.text" widthRatio="1"
+				linkAct="maintainAct" />
 			<column field="createDt" renderWidget="application.datetime"
 				widthRatio="1" />
 			<column field="updateDt" renderWidget="application.datetime"
@@ -2369,7 +2401,8 @@
 		<form name="stuModuleForm" description="$m{system.module.form}"
 			entity="system.module">
 			<tab name="basicDetails"
-				label="$m{system.module.form.basicdetails}" contentType="miniform">
+				label="$m{system.module.form.basicdetails}"
+				contentType="miniform">
 				<section name="details1" columns="type_2">
 					<field name="name" inputWidget="application.name" column="0"
 						required="true" editable="false" />
@@ -2379,7 +2412,8 @@
 						column="0" required="true" editable="false" />
 					<field name="sectorId" inputWidget="application.entitylist"
 						column="1" required="true" />
-					<field name="label" inputWidget="application.text" column="1"
+					<field name="label" inputWidget="application.text"
+						column="1"
 						required="true" />
 				</section>
 			</tab>
@@ -2410,7 +2444,8 @@
 						column="0" required="true" />
 					<field name="moduleId" inputWidget="application.entitylist"
 						column="1" required="true" />
-					<field name="label" inputWidget="application.text" column="1"
+					<field name="label" inputWidget="application.text"
+						column="1"
 						required="true" />
 					<field name="menuAccess" editable="false"
 						inputWidget="application.checkbox" column="1" />
@@ -2419,7 +2454,8 @@
 				</section>
 			</tab>
 			<tab name="usages" label="$m{studio.application.form.usages}"
-				contentType="usage_list" reference="application-usagelistprovider" />
+				contentType="usage_list"
+				reference="application-usagelistprovider" />
 			<tab name="changeLog" label="$m{application.form.audit}"
 				contentType="miniform_changelog" />
 			<formStatePolicy type="on_switch" name="onNewPolicy"
@@ -2442,46 +2478,59 @@
 				</setStates>
 			</formStatePolicy>
 		</form>
-		<form name="studioJsonEntityForm" description="$m{studio.jsonentity.form}"
+		<form name="studioJsonEntityForm"
+			description="$m{studio.jsonentity.form}"
 			entity="studioJsonEntity">
 			<tab name="basicDetails"
-				label="$m{studio.jsonentity.form.application}" contentType="miniform">
+				label="$m{studio.jsonentity.form.application}"
+				contentType="miniform">
 				<section name="structureDetails" columns="type_2"
-					label="$m{studio.jsonentity.form.application}" icon="application" >
-					<field name="applicationId" inputWidget="application.entitysearch" column="0"
+					label="$m{studio.jsonentity.form.application}"
+					icon="application">
+					<field name="applicationId"
+						inputWidget="application.entitysearch" column="0"
 						reference="studio.applicationDevelopableRef"
 						label="$m{studio.jsonentity.application}"
 						required="true" editable="true" />
 					<field name="entityName" inputWidget="application.name"
 						column="0" required="true" />
-					<field name="baseType" column="0" label="$m{studio.jsonentity.basetype}"
+					<field name="baseType" column="0"
+						label="$m{studio.jsonentity.basetype}"
 						required="true" editable="true" />
-					<field name="dateFormatter" inputWidget="studio.dateformatterlist"
+					<field name="dateFormatter"
+						inputWidget="studio.dateformatterlist"
 						column="0" required="false" />
-					<field name="dateTimeFormatter" inputWidget="studio.datetimeformatterlist"
+					<field name="dateTimeFormatter"
+						inputWidget="studio.datetimeformatterlist"
 						column="0" required="false" />
 					<field name="delegate" inputWidget="environmentdelegatelist"
 						column="0" />
 				</section>
 				<section name="source" columns="type_1"
-					label="$m{studio.jsonentity.form.source}" icon="file" >
-					<field name="sourceJson" inputWidget="application.textareaxlarge" column="0"
+					label="$m{studio.jsonentity.form.source}" icon="file">
+					<field name="sourceJson"
+						inputWidget="application.textareaxlarge" column="0"
 						required="true" editable="true" />
 				</section>
 				<section name="structure" columns="type_1"
 					label="$m{studio.jsonentity.form.structure}" icon="scroll">
-					<field name="refinedStructure" inputWidget="application.entitycomposition" column="0"
+					<field name="refinedStructure"
+						inputWidget="application.entitycomposition" column="0"
 						required="true" editable="true" />
 				</section>
 				<section name="options" columns="type_1"
 					label="$m{studio.jsonentity.form.options}" icon="rocket">
-					<field name="generateEntity" inputWidget="application.checkbox" column="0"
+					<field name="generateEntity"
+						inputWidget="application.checkbox" column="0"
 						disabled="true" />
-					<field name="loadSourceJSON" inputWidget="application.checkbox" column="0"
+					<field name="loadSourceJSON"
+						inputWidget="application.checkbox" column="0"
 						editable="true" />
-					<field name="generateApplet" inputWidget="application.checkbox" column="0"
+					<field name="generateApplet"
+						inputWidget="application.checkbox" column="0"
 						editable="true" />
-					<field name="generateRest" inputWidget="application.checkbox" column="0"
+					<field name="generateRest"
+						inputWidget="application.checkbox" column="0"
 						editable="true" />
 				</section>
 			</tab>
@@ -2492,43 +2541,57 @@
 		<form name="studioCsvEntityForm" description="$m{studio.csventity.form}"
 			entity="studioJsonEntity">
 			<tab name="basicDetails"
-				label="$m{studio.csventity.form.application}" contentType="miniform">
+				label="$m{studio.csventity.form.application}"
+				contentType="miniform">
 				<section name="structureDetails" columns="type_2"
-					label="$m{studio.csventity.form.application}" icon="application" >
-					<field name="applicationId" inputWidget="application.entitysearch" column="0"
+					label="$m{studio.csventity.form.application}"
+					icon="application">
+					<field name="applicationId"
+						inputWidget="application.entitysearch" column="0"
 						label="$m{studio.csventity.application}"
 						reference="studio.applicationDevelopableRef"
 						required="true" editable="true" />
 					<field name="entityName" inputWidget="application.name"
 						column="0" required="true" />
-					<field name="baseType" column="0" label="$m{studio.csventity.basetype}"
+					<field name="baseType" column="0"
+						label="$m{studio.csventity.basetype}"
 						required="true" editable="true" />
-					<field name="dateFormatter" inputWidget="studio.dateformatterlist"
+					<field name="dateFormatter"
+						inputWidget="studio.dateformatterlist"
 						column="0" required="false" />
-					<field name="dateTimeFormatter" inputWidget="studio.datetimeformatterlist"
+					<field name="dateTimeFormatter"
+						inputWidget="studio.datetimeformatterlist"
 						column="0" required="false" />
 					<field name="delegate" inputWidget="environmentdelegatelist"
 						column="0" />
 				</section>
 				<section name="source" columns="type_1"
-					label="$m{studio.csventity.form.source}" icon="file" >
-					<field name="sourceJson" inputWidget="application.textareaxlarge" column="0"
-						required="true" editable="true" label="$m{studio.csventity.sourcecsv}" />
+					label="$m{studio.csventity.form.source}" icon="file">
+					<field name="sourceJson"
+						inputWidget="application.textareaxlarge" column="0"
+						required="true" editable="true"
+						label="$m{studio.csventity.sourcecsv}" />
 				</section>
 				<section name="structure" columns="type_1"
 					label="$m{studio.csventity.form.structure}" icon="scroll">
-					<field name="refinedStructure" inputWidget="application.entitycomposition" column="0"
+					<field name="refinedStructure"
+						inputWidget="application.entitycomposition" column="0"
 						required="true" editable="true" />
 				</section>
 				<section name="options" columns="type_1"
 					label="$m{studio.csventity.form.options}" icon="rocket">
-					<field name="generateEntity" inputWidget="application.checkbox" column="0"
+					<field name="generateEntity"
+						inputWidget="application.checkbox" column="0"
 						disabled="true" />
-					<field name="loadSourceJSON" inputWidget="application.checkbox" column="0"
-						editable="true" label="$m{studio.csventity.loadsourcecsv}" />
-					<field name="generateApplet" inputWidget="application.checkbox" column="0"
+					<field name="loadSourceJSON"
+						inputWidget="application.checkbox" column="0"
+						editable="true"
+						label="$m{studio.csventity.loadsourcecsv}" />
+					<field name="generateApplet"
+						inputWidget="application.checkbox" column="0"
 						editable="true" />
-					<field name="generateRest" inputWidget="application.checkbox" column="0"
+					<field name="generateRest"
+						inputWidget="application.checkbox" column="0"
 						editable="true" />
 				</section>
 			</tab>
@@ -2559,35 +2622,41 @@
 					<field name="applicationId"
 						reference="studio.applicationDevelopableRef"
 						inputWidget="application.entitysearch" column="0"
-						label="$m{studio.application}" disabled="true" required="true"
+						label="$m{studio.application}" disabled="true"
+						required="true"
 						saveAs="true" />
 					<field name="type" inputWidget="applettypelist" column="0"
 						disabled="true" switchOnChange="true" required="true" />
-					<field name="name" inputWidget="application.name" column="0"
+					<field name="name" inputWidget="application.componentname" column="0"
 						required="true" saveAs="true" />
 					<field name="description" inputWidget="application.text"
 						column="0" required="true" saveAs="true" />
-					<field name="label" inputWidget="application.text" column="0"
+					<field name="label" inputWidget="application.text"
+						column="0"
 						required="true" />
 					<field name="configType" inputWidget="application.enumlist"
 						column="1" disabled="true" required="true" />
 					<field name="entity" inputWidget="studio.entitysearch"
-						column="1" required="true" switchOnChange="true" visible="false" />
+						column="1" required="true" switchOnChange="true"
+						visible="false" />
 					<field name="titleFormat"
 						inputWidget="application.texttemplate" column="1" />
 					<field name="baseField"
-						inputWidget="studio.entityreffieldlist" column="1" required="true"
+						inputWidget="studio.entityreffieldlist" column="1"
+						required="true"
 						visible="false" />
 					<field name="assignField"
 						inputWidget="studio.entityreffieldlist" column="1"
 						switchOnChange="true" required="true" visible="false" />
 					<field name="assignDescField"
-						inputWidget="studio.entityrefdesclist" column="1" visible="false" />
+						inputWidget="studio.entityrefdesclist" column="1"
+						visible="false" />
 					<field name="pseudoDeleteField"
 						inputWidget="studio.entitybooleanfieldlist" column="1"
 						visible="false" />
 					<field name="routeToApplet"
-						inputWidget="studio.facadeappletroutetoappletlist" column="1"
+						inputWidget="studio.facadeappletroutetoappletlist"
+						column="1"
 						required="true" visible="false" />
 					<field name="path" inputWidget="application.text" column="1"
 						visible="false" />
@@ -2627,7 +2696,7 @@
 				<errorCondition>
 					<restriction type="and">
 						<restriction type="amongst" field="type"
-							paramA="MEL|MEA|MLS|MLL|FWZ|CEN|CNS|DIM" />
+							paramA="MEL|MEA|MEB|MLS|MLL|FWZ|CEN|CNS|DIM" />
 						<restriction type="is_null" field="entity" />
 					</restriction>
 				</errorCondition>
@@ -2707,7 +2776,7 @@
 				description="$m{studio.appapplet.form.formstatepolicy.entity}">
 				<onCondition>
 					<restriction type="amongst" field="type"
-						paramA="MEL|MEA|MLS|MLL|FWZ|CEN|CNS|DIM" />
+						paramA="MEL|MEA|MEB|MLS|MLL|FWZ|CEN|CNS|DIM" />
 				</onCondition>
 				<setStates>
 					<setState type="field" target="entity" visible="true" />
@@ -2766,7 +2835,8 @@
 				<section name="routeToAppletDetails" columns="type_2">
 					<field name="appAppletId" column="0" required="true" />
 					<field name="routeToApplet"
-						inputWidget="studio.facadeappletroutetoappletlist" column="1"
+						inputWidget="studio.facadeappletroutetoappletlist"
+						column="1"
 						required="true" />
 				</section>
 			</tab>
@@ -2780,20 +2850,24 @@
 				label="$m{studio.appappletfilter.form.basicdetails}"
 				contentType="miniform">
 				<section name="filterDetails" columns="type_2">
-					<field name="name" inputWidget="application.name" column="0"
+					<field name="name" inputWidget="application.componentname" column="0"
 						required="true" />
 					<field name="description" inputWidget="application.text"
 						column="0" required="true" />
 					<field name="ownershipType"
-						inputWidget="application.enumlist" column="1" required="true" />
-					<field name="owner" inputWidget="application.text" column="1"
+						inputWidget="application.enumlist" column="1"
+						required="true" />
+					<field name="owner" inputWidget="application.text"
+						column="1"
 						disabled="true" />
 					<field name="preferredForm"
 						inputWidget="studio.appletformlist" column="1" />
 					<field name="preferredChildListApplet" switchOnChange="true"
-						inputWidget="studio.appletchildlistappletlist" column="1" />
+						inputWidget="studio.appletchildlistappletlist"
+						column="1" />
 					<field name="childListActionType"
-						inputWidget="application.enumlist" column="1" visible="false" />
+						inputWidget="application.enumlist" column="1"
+						visible="false" />
 					<field name="filterGenerator"
 						inputWidget="studio.appletfiltergeneratorlist"
 						switchOnChange="true" column="1" />
@@ -2826,12 +2900,13 @@
 				label="$m{studio.appappletsetvalues.form.basicdetails}"
 				contentType="miniform">
 				<section name="setValuesDetails" columns="type_2">
-					<field name="name" inputWidget="application.name" column="0"
+					<field name="name" inputWidget="application.componentname" column="0"
 						required="true" />
 					<field name="description" inputWidget="application.text"
 						column="0" required="true" />
 					<field name="valueGenerator"
-						inputWidget="studio.appletentitysetvaluesgenlist" column="1" />
+						inputWidget="studio.appletentitysetvaluesgenlist"
+						column="1" />
 				</section>
 			</tab>
 			<tab name="setValues"
@@ -2842,17 +2917,18 @@
 		</form>
 		<form name="appAppletAlertForm"
 			description="$m{studio.appappletalert.form}"
-			entity="application.appAppletAlert"> 
+			entity="application.appAppletAlert">
 			<tab name="basicDetails"
 				label="$m{studio.appappletalert.form.basicdetails}"
 				contentType="miniform">
 				<section name="setVaalertDetails" columns="type_2">
-					<field name="name" inputWidget="application.name" column="0"
+					<field name="name" inputWidget="application.componentname" column="0"
 						required="true" />
 					<field name="description" inputWidget="application.text"
 						column="0" required="true" />
 					<field name="sender"
-						inputWidget="studio.appletentitynotifsenderlist" required="true"
+						inputWidget="studio.appletentitynotifsenderlist"
+						required="true"
 						column="1" />
 					<field name="template"
 						inputWidget="studio.appletalerttemplatelist" column="1" />
@@ -2862,7 +2938,8 @@
 					<field name="recipientNameRule"
 						inputWidget="studio.wfrecipientnamerulelist" column="1" />
 					<field name="recipientContactRule"
-						inputWidget="studio.wfrecipientcontactrulelist" column="1" />
+						inputWidget="studio.wfrecipientcontactrulelist"
+						column="1" />
 				</section>
 			</tab>
 			<tab name="changeLog" label="$m{application.form.audit}"
@@ -2892,41 +2969,49 @@
 					<field name="applicationId"
 						reference="studio.applicationDevelopableRef"
 						inputWidget="application.entitysearch" column="0"
-						label="$m{studio.application}" disabled="true" required="true"
+						label="$m{studio.application}" disabled="true"
+						required="true"
 						saveAs="true" />
-					<field name="name" inputWidget="application.name" column="0"
+					<field name="name" inputWidget="application.componentname" column="0"
 						required="true" switchOnChange="true" saveAs="true" />
 					<field name="description" inputWidget="application.text"
 						column="0" required="true" saveAs="true" />
-					<field name="label" inputWidget="application.text" column="0"
+					<field name="label" inputWidget="application.text"
+						column="0"
 						required="true" />
 					<field name="configType" inputWidget="application.enumlist"
 						column="1" disabled="true" required="true" />
 					<field name="baseType" inputWidget="application.enumlist"
 						column="1" disabled="true" required="true" />
 					<field name="entityClass" inputWidget="application.text"
-						column="1" editable="false" required="true" saveAs="true" />
+						column="1" editable="false" required="true"
+						saveAs="true" />
 					<field name="tableName" inputWidget="application.text"
 						column="1" required="true" saveAs="true" />
+					<field name="dateFormatter"
+						inputWidget="studio.dateformatterlist"
+						column="1" required="false" />
+					<field name="dateTimeFormatter"
+						inputWidget="studio.datetimeformatterlist"
+						column="1" required="false" />
 					<field name="emailProducerConsumer"
-						inputWidget="application.emailproducerconsumerlist" column="1" />
+						inputWidget="application.emailproducerconsumerlist"
+						column="1" />
 					<field name="delegate" inputWidget="environmentdelegatelist"
 						column="1" switchOnChange="true" />
 					<field name="dataSourceName" inputWidget="application.text"
 						column="1" required="true" visible="false" />
-					<field name="dateFormatter" inputWidget="studio.dateformatterlist"
-						column="1" required="false" />
-					<field name="dateTimeFormatter" inputWidget="studio.datetimeformatterlist"
-						column="1" required="false" />
 				</section>
 				<section name="optionDetails" columns="type_1_2">
 					<field name="auditable" inputWidget="application.checkbox"
 						column="1" />
 					<field name="reportable" inputWidget="application.checkbox"
 						column="1" />
-					<field name="supportsChangeEvents" inputWidget="application.checkbox"
+					<field name="supportsChangeEvents"
+						inputWidget="application.checkbox"
 						column="2" />
-					<field name="actionPolicy" inputWidget="application.checkbox"
+					<field name="actionPolicy"
+						inputWidget="application.checkbox"
 						column="2" disabled="true" />
 				</section>
 			</tab>
@@ -2943,7 +3028,8 @@
 				reference="attachmentList" visible="false" />
 			<tab name="uniqueConstraints"
 				label="$m{studio.appentity.form.uniqueconstraints}"
-				contentType="child_list" applet="manageAppEntityUniqueConstraint"
+				contentType="child_list"
+				applet="manageAppEntityUniqueConstraint"
 				reference="uniqueConstraintList" />
 			<tab name="indexes" label="$m{studio.appentity.form.indexes}"
 				contentType="child_list" applet="manageAppEntityIndex"
@@ -3093,11 +3179,13 @@
 				<section name="entityFieldDetails" columns="type_2">
 					<field name="appEntityId"
 						inputWidget="application.entitysearch"
-						label="$m{application.appentityfield.appentity}" column="0"
+						label="$m{application.appentityfield.appentity}"
+						column="0"
 						required="true" />
 					<field name="name" inputWidget="application.javafieldname"
 						column="0" required="true" />
-					<field name="label" inputWidget="application.text" column="0"
+					<field name="label" inputWidget="application.text"
+						column="0"
 						required="true" />
 					<field name="dataType" inputWidget="entityfielddatatypelist"
 						column="0" required="true" switchOnChange="true" />
@@ -3109,13 +3197,20 @@
 						column="0" visible="false" switchOnChange="true" />
 					<field name="type" inputWidget="application.enumlist"
 						column="1" required="true" disabled="true" />
-					<field name="columnName" inputWidget="application.columnname"
+					<field name="columnName"
+						inputWidget="application.columnname"
 						column="1" required="false" />
+					<field name="jsonName" inputWidget="application.text"
+						column="1" />
+					<field name="jsonFormatter"
+						inputWidget="studio.jsonformatterlist" column="1" />
 					<field name="inputLabel" inputWidget="application.text"
 						column="1" required="false" />
-					<field name="inputWidget" inputWidget="entityfieldwidgetlist"
+					<field name="inputWidget"
+						inputWidget="entityfieldwidgetlist"
 						column="1" switchOnChange="true" />
-					<field name="suggestionType" inputWidget="suggestiontypelist"
+					<field name="suggestionType"
+						inputWidget="suggestiontypelist"
 						column="1" visible="false" />
 					<field name="inputListKey" inputWidget="application.text"
 						column="1" visible="false" />
@@ -3131,8 +3226,6 @@
 						column="1" visible="false" />
 					<field name="defaultVal" inputWidget="application.text"
 						column="1" visible="false" />
-					<field name="jsonName" inputWidget="application.text" column="1"/>
-					<field name="jsonFormatter" inputWidget="studio.jsonformatterlist" column="1"/>
 				</section>
 				<section name="optionDetails" columns="type_1_2">
 					<field name="auditable" inputWidget="application.checkbox"
@@ -3140,20 +3233,24 @@
 					<field name="reportable" inputWidget="application.checkbox"
 						column="1" visible="false" />
 					<field name="trim"
-						inputWidget="application.checkbox" column="1" visible="false" />
+						inputWidget="application.checkbox" column="1"
+						visible="false" />
 					<field name="allowNegative"
-						inputWidget="application.checkbox" column="1" visible="false" />
+						inputWidget="application.checkbox" column="1"
+						visible="false" />
 					<field name="readOnly" inputWidget="application.checkbox"
 						column="1" visible="false" />
 					<field name="nullable" inputWidget="application.checkbox"
 						column="1" visible="false" />
-					<field name="maintainLink" inputWidget="application.checkbox"
+					<field name="maintainLink"
+						inputWidget="application.checkbox"
 						column="2" visible="false" />
 					<field name="descriptive" inputWidget="application.checkbox"
 						column="2" visible="false" />
 					<field name="basicSearch" inputWidget="application.checkbox"
 						column="2" visible="false" />
-					<field name="branchScoping" inputWidget="application.checkbox"
+					<field name="branchScoping"
+						inputWidget="application.checkbox"
 						column="2" visible="false" />
 				</section>
 			</tab>
@@ -3219,7 +3316,8 @@
 				</onCondition>
 				<setStates>
 					<setState type="field"
-						target="references,defaultVal,nullable,basicSearch" visible="true" />
+						target="references,defaultVal,nullable,basicSearch"
+						visible="true" />
 				</setStates>
 			</formStatePolicy>
 			<formStatePolicy type="on_switch"
@@ -3318,7 +3416,8 @@
 				</onCondition>
 				<setStates>
 					<setState type="field"
-						target="nullable,auditable,reportable,basicSearch" visible="true" />
+						target="nullable,auditable,reportable,basicSearch"
+						visible="true" />
 				</setStates>
 			</formStatePolicy>
 			<formStatePolicy type="on_switch"
@@ -3378,13 +3477,15 @@
 				<section name="entitySeriesDetails" columns="type_2">
 					<field name="appEntityId"
 						inputWidget="application.entitysearch"
-						label="$m{application.appentityseries.appentity}" column="0"
+						label="$m{application.appentityseries.appentity}"
+						column="0"
 						required="true" />
-					<field name="name" inputWidget="application.name" column="0"
+					<field name="name" inputWidget="application.componentname" column="0"
 						required="true" />
 					<field name="description" inputWidget="application.text"
 						column="0" required="true" />
-					<field name="label" inputWidget="application.text" column="0"
+					<field name="label" inputWidget="application.text"
+						column="0"
 						required="true" />
 					<field name="type" column="1" required="true" />
 					<field name="fieldName" inputWidget="seriesentityfieldlist"
@@ -3406,13 +3507,15 @@
 				<section name="entityCategoryDetails" columns="type_2">
 					<field name="appEntityId"
 						inputWidget="application.entitysearch"
-						label="$m{application.appentitycategory.appentity}" column="0"
+						label="$m{application.appentitycategory.appentity}"
+						column="0"
 						required="true" />
-					<field name="name" inputWidget="application.name" column="0"
+					<field name="name" inputWidget="application.componentname" column="0"
 						required="true" />
 					<field name="description" inputWidget="application.text"
 						column="0" required="true" />
-					<field name="label" inputWidget="application.text" column="1"
+					<field name="label" inputWidget="application.text"
+						column="1"
 						required="true" />
 				</section>
 			</tab>
@@ -3434,9 +3537,10 @@
 				<section name="entityAttachmentDetails" columns="type_2">
 					<field name="appEntityId"
 						inputWidget="application.entitysearch"
-						label="$m{application.appentityattachment.appentity}" column="0"
+						label="$m{application.appentityattachment.appentity}"
+						column="0"
 						required="true" />
-					<field name="name" column="0" required="true" />
+					<field name="name" inputWidget="application.componentname" column="0" required="true" />
 					<field name="description" column="0" required="true" />
 					<field name="configType" inputWidget="application.enumlist"
 						column="1" disabled="true" required="true" />
@@ -3471,9 +3575,10 @@
 				<section name="entityExpressionDetails" columns="type_2">
 					<field name="appEntityId"
 						inputWidget="application.entitysearch"
-						label="$m{application.appentityexpression.appentity}" column="0"
+						label="$m{application.appentityexpression.appentity}"
+						column="0"
 						required="true" />
-					<field name="name" column="0" required="true" />
+					<field name="name" inputWidget="application.componentname" column="0" required="true" />
 					<field name="description" column="0" required="true" />
 					<field name="configType" inputWidget="application.enumlist"
 						column="1" disabled="true" required="true" />
@@ -3511,7 +3616,7 @@
 						inputWidget="application.entitysearch"
 						label="$m{application.appentityuniqueconstraint.appentity}"
 						column="0" required="true" />
-					<field name="name" column="0" required="true" />
+					<field name="name" inputWidget="application.componentname" column="0" required="true" />
 					<field name="description" column="0" required="true" />
 					<field name="configType" inputWidget="application.enumlist"
 						column="1" disabled="true" required="true" />
@@ -3548,9 +3653,10 @@
 				<section name="entityIndexDetails" columns="type_2">
 					<field name="appEntityId"
 						inputWidget="application.entitysearch"
-						label="$m{application.appentityindex.appentity}" column="0"
+						label="$m{application.appentityindex.appentity}"
+						column="0"
 						required="true" />
-					<field name="name" column="0" required="true" />
+					<field name="name" inputWidget="application.componentname" column="0" required="true" />
 					<field name="description" column="0" required="true" />
 					<field name="configType" inputWidget="application.enumlist"
 						column="1" disabled="true" required="true" />
@@ -3587,9 +3693,10 @@
 				<section name="entityUploadDetails" columns="type_2">
 					<field name="appEntityId"
 						inputWidget="application.entitysearch"
-						label="$m{application.appentityupload.appentity}" column="0"
+						label="$m{application.appentityupload.appentity}"
+						column="0"
 						required="true" />
-					<field name="name" column="0" required="true" />
+					<field name="name" inputWidget="application.componentname" column="0" required="true" />
 					<field name="description" column="0" required="true" />
 					<field name="configType" inputWidget="application.enumlist"
 						column="1" disabled="true" required="true" />
@@ -3624,16 +3731,18 @@
 				<section name="searchInputDetails" columns="type_2">
 					<field name="appEntityId"
 						inputWidget="application.entitysearch"
-						label="$m{application.appentitysearchinput.appentity}" column="0"
+						label="$m{application.appentitysearchinput.appentity}"
+						column="0"
 						required="true" />
-					<field name="name" inputWidget="application.name" column="0"
+					<field name="name" inputWidget="application.componentname" column="0"
 						required="true" />
 					<field name="description" inputWidget="application.text"
 						column="0" required="true" />
 					<field name="configType" inputWidget="application.enumlist"
 						column="1" disabled="true" required="true" />
 					<field name="restrictionResolver"
-						inputWidget="searchentriesrestrictionresolverlist" column="1" />
+						inputWidget="searchentriesrestrictionresolverlist"
+						column="1" />
 				</section>
 			</tab>
 			<tab name="inputs"
@@ -3665,13 +3774,15 @@
 					<field name="applicationId"
 						reference="studio.applicationDevelopableRef"
 						inputWidget="application.entitysearch" column="0"
-						label="$m{studio.application}" disabled="true" required="true"
+						label="$m{studio.application}" disabled="true"
+						required="true"
 						saveAs="true" />
-					<field name="name" inputWidget="application.name" column="0"
+					<field name="name" inputWidget="application.componentname" column="0"
 						required="true" saveAs="true" />
 					<field name="description" inputWidget="application.text"
 						column="1" required="true" saveAs="true" />
-					<field name="label" inputWidget="application.text" column="1"
+					<field name="label" inputWidget="application.text"
+						column="1"
 						required="true" />
 				</section>
 			</tab>
@@ -3688,7 +3799,8 @@
 				<section name="filterDetails" columns="type_2">
 					<field name="code" inputWidget="application.name" column="0"
 						required="true" />
-					<field name="label" inputWidget="application.text" column="1"
+					<field name="label" inputWidget="application.text"
+						column="1"
 						required="true" />
 				</section>
 			</tab>
@@ -3711,14 +3823,16 @@
 				description="$m{studio.common.form.annotation.static}"
 				message="$m{studio.common.form.annotation.static.message}" />
 			<tab name="basicDetails"
-				label="$m{studio.appref.form.basicdetails}" contentType="miniform">
+				label="$m{studio.appref.form.basicdetails}"
+				contentType="miniform">
 				<section name="refFormDetails" columns="type_2">
 					<field name="applicationId"
 						reference="studio.applicationDevelopableRef"
 						inputWidget="application.entitysearch" column="0"
-						label="$m{studio.application}" disabled="true" required="true"
+						label="$m{studio.application}" disabled="true"
+						required="true"
 						saveAs="true" />
-					<field name="name" inputWidget="application.name" column="0"
+					<field name="name" inputWidget="application.componentname" column="0"
 						required="true" saveAs="true" />
 					<field name="description" inputWidget="application.text"
 						column="0" required="true" saveAs="true" />
@@ -3740,7 +3854,8 @@
 						inputWidget="application.reffiltergeneratorsearch"
 						switchOnChange="true" column="1" />
 					<field name="filterGeneratorRule"
-						inputWidget="studio.reffiltergeneratorrulelist" column="1" />
+						inputWidget="studio.reffiltergeneratorrulelist"
+						column="1" />
 				</section>
 			</tab>
 			<tab name="filter" label="$m{studio.appref.form.filter}"
@@ -3798,12 +3913,14 @@
 				description="$m{studio.common.form.annotation.static}"
 				message="$m{studio.common.form.annotation.static.message}" />
 			<tab name="basicDetails"
-				label="$m{studio.appref.form.basicdetails}" contentType="miniform">
+				label="$m{studio.appref.form.basicdetails}"
+				contentType="miniform">
 				<section name="refFormDetails" columns="type_2">
 					<field name="applicationId"
 						reference="studio.applicationDevelopableRef"
 						inputWidget="application.entitysearch" column="0"
-						label="$m{studio.application}" disabled="true" required="true"
+						label="$m{studio.application}" disabled="true"
+						required="true"
 						saveAs="true" />
 					<field name="name" inputWidget="application.name" column="0"
 						required="true" saveAs="true" />
@@ -3863,15 +3980,17 @@
 				description="$m{studio.common.form.annotation.static}"
 				message="$m{studio.common.form.annotation.static.message}" />
 			<tab name="basicDetails"
-				label="$m{studio.chart.form.basicdetails}" contentType="miniform"
+				label="$m{studio.chart.form.basicdetails}"
+				contentType="miniform"
 				editable="true">
 				<section name="chartDetails" columns="type_2">
 					<field name="applicationId"
 						reference="studio.applicationDevelopableRef"
 						inputWidget="application.entitysearch" column="0"
-						label="$m{studio.application}" disabled="true" required="true"
+						label="$m{studio.application}" disabled="true"
+						required="true"
 						saveAs="true" />
-					<field name="name" inputWidget="application.name" column="0"
+					<field name="name" inputWidget="application.componentname" column="0"
 						required="true" saveAs="true" />
 					<field name="description" inputWidget="application.text"
 						column="0" required="true" saveAs="true" />
@@ -4007,9 +4126,10 @@
 					<field name="applicationId"
 						reference="studio.applicationDevelopableRef"
 						inputWidget="application.entitysearch" column="0"
-						label="$m{studio.application}" disabled="true" required="true"
+						label="$m{studio.application}" disabled="true"
+						required="true"
 						saveAs="true" />
-					<field name="name" inputWidget="application.name" column="0"
+					<field name="name" inputWidget="application.componentname" column="0"
 						required="true" saveAs="true" />
 					<field name="description" inputWidget="application.text"
 						column="0" required="true" saveAs="true" />
@@ -4022,7 +4142,8 @@
 						inputWidget="studio.entitycategoryfieldlist" column="1"
 						switchOnChange="true" />
 					<field name="timeSeriesType"
-						inputWidget="application.enumlist" column="1" visible="false" />
+						inputWidget="application.enumlist" column="1"
+						visible="false" />
 				</section>
 			</tab>
 			<tab name="series" label="$m{studio.chartdatasource.form.series}"
@@ -4106,9 +4227,10 @@
 					<field name="applicationId"
 						reference="studio.applicationDevelopableRef"
 						inputWidget="application.entitysearch" column="0"
-						label="$m{studio.application}" disabled="true" required="true"
+						label="$m{studio.application}" disabled="true"
+						required="true"
 						saveAs="true" />
-					<field name="name" inputWidget="application.name" column="0"
+					<field name="name" inputWidget="application.componentname" column="0"
 						required="true" saveAs="true" />
 					<field name="description" inputWidget="application.text"
 						column="0" required="true" saveAs="true" />
@@ -4169,8 +4291,9 @@
 				<section name="entityDetails" columns="type_2">
 					<field name="dashboardId"
 						inputWidget="application.entitysearch" column="0"
-						label="$m{dashboard.dashboardtile.dashboard}" required="true" />
-					<field name="name" column="0" required="true" />
+						label="$m{dashboard.dashboardtile.dashboard}"
+						required="true" />
+					<field name="name" inputWidget="application.componentname"  column="0" required="true" />
 					<field name="description" column="0" required="true" />
 					<field name="type" column="1" required="true" />
 					<field name="chart" column="1" required="true" />
@@ -4190,8 +4313,9 @@
 				<section name="basicDetails" columns="type_2">
 					<field name="dashboardId"
 						inputWidget="application.entitysearch" column="0"
-						label="$m{dashboard.dashboardoption.dashboard}" required="true" />
-					<field name="name" column="0" required="true" />
+						label="$m{dashboard.dashboardoption.dashboard}"
+						required="true" />
+					<field name="name" inputWidget="application.componentname"  column="0" required="true" />
 					<field name="description" column="0" required="true" />
 					<field name="label" column="1" required="true" />
 				</section>
@@ -4210,7 +4334,8 @@
 				contentType="miniform">
 				<section name="basicDetails" columns="type_2">
 					<field name="dashboardOptionId"
-						inputWidget="application.entitysearch" column="0" required="true" />
+						inputWidget="application.entitysearch" column="0"
+						required="true" />
 					<field name="entity" inputWidget="studio.entitybynamelist"
 						column="1" switchOnChange="true" required="true" />
 					<field name="chartDataSource" column="1" required="true"
@@ -4233,7 +4358,8 @@
 		</form>
 		<form name="notifTemplateForm"
 			description="$m{studio.notificationtemplate.form}"
-			entity="notification.notifTemplate">
+			entity="notification.notifTemplate"
+			helpSheet="studio.notifTemplateHelpSheet">
 			<action type="button" name="lockResource" symbol="lock"
 				styleClass="fc-actbutton"
 				description="$m{studio.common.form.action.lockresource}"
@@ -4254,9 +4380,10 @@
 					<field name="applicationId"
 						reference="studio.applicationDevelopableRef"
 						inputWidget="application.entitysearch" column="0"
-						label="$m{studio.application}" disabled="true" required="true"
+						label="$m{studio.application}" disabled="true"
+						required="true"
 						saveAs="true" />
-					<field name="name" inputWidget="application.name" column="0"
+					<field name="name" inputWidget="application.componentname" column="0"
 						required="true" saveAs="true" />
 					<field name="description" inputWidget="application.text"
 						column="0" required="true" saveAs="true" />
@@ -4265,21 +4392,26 @@
 					<field name="entity" inputWidget="studio.entitybynamelist"
 						column="1" />
 					<field name="notificationType"
-						inputWidget="application.enumlist" column="1" required="true" />
+						inputWidget="application.enumlist" column="1"
+						required="true"
+						switchOnChange="true" />
 					<field name="messageFormat"
-						inputWidget="application.enumlist" column="1" required="true" />
+						inputWidget="application.enumlist" column="1"
+						required="true"
+						disabled="true" />
 				</section>
 				<section name="messageDetails" columns="type_1">
 					<field name="subject" inputWidget="application.text"
 						column="0" required="true" />
 					<field name="template"
-						inputWidget="application.textarealarge" column="0" required="true" />
+						inputWidget="application.textarealarge" column="0"
+						required="true" />
 				</section>
 			</tab>
-			<tab name="params"
+			<!--tab name="params"
 				label="$m{studio.notificationtemplate.form.params}"
 				contentType="child_list" applet="manageNotifTemplateParam"
-				reference="paramList" />
+				reference="paramList" /-->
 			<tab name="changeLog" label="$m{application.form.audit}"
 				contentType="miniform_changelog" />
 			<formStatePolicy type="on_switch"
@@ -4311,9 +4443,44 @@
 				</onCondition>
 				<setStates>
 					<setState type="field"
-						target="name,description,entity,notificationType" disabled="true" />
+						target="name,description,entity,notificationType"
+						disabled="true" />
 				</setStates>
 			</formStatePolicy>
+			<formStatePolicy type="on_switch"
+				name="notificationTypeNotSMSPolicy"
+				description="$m{studio.notificationtemplate.form.formstatepolicy.notificationtype.notsms}">
+				<onCondition>
+					<restriction type="not_equals" field="notificationType"
+						paramA="SMS" />
+				</onCondition>
+				<setValues>
+					<setValue type="immediate" field="messageFormat" value="HTM" />
+				</setValues>
+			</formStatePolicy>
+			<formStatePolicy type="on_switch"
+				name="notificationTypeSMSPolicy"
+				description="$m{studio.notificationtemplate.form.formstatepolicy.notificationtype.sms}">
+				<onCondition>
+					<restriction type="equals" field="notificationType"
+						paramA="SMS" />
+				</onCondition>
+				<setValues>
+					<setValue type="immediate" field="messageFormat" value="PLT" />
+				</setValues>
+			</formStatePolicy>
+			<formWidgetRulesPolicy
+				name="templateWidgetRule"
+				description="$m{studio.notificationtemplate.form.formwidgetrulespolicy.template}">
+				<onCondition>
+					<restriction type="not_equals" field="notificationType"
+						paramA="SMS" />
+				</onCondition>
+				<widgetRules>
+					<entry field="template"
+						widget="application.richtexteditorlarge" />
+				</widgetRules>
+			</formWidgetRulesPolicy>
 		</form>
 		<form name="notifTemplateParamForm"
 			description="$m{studio.notificationtemplateparam.form}"
@@ -4322,9 +4489,10 @@
 				label="$m{studio.notificationtemplateparam.form.basicdetails}"
 				contentType="miniform" editable="true">
 				<section name="templateParamDetails" columns="type_2">
-					<field name="name" inputWidget="application.name" column="0"
+					<field name="name" inputWidget="application.componentname" column="0"
 						required="true" />
-					<field name="label" inputWidget="application.text" column="1"
+					<field name="label" inputWidget="application.text"
+						column="1"
 						required="true" />
 				</section>
 			</tab>
@@ -4354,9 +4522,10 @@
 					<field name="applicationId"
 						reference="studio.applicationDevelopableRef"
 						inputWidget="application.entitysearch" column="0"
-						label="$m{studio.application}" disabled="true" required="true"
+						label="$m{studio.application}" disabled="true"
+						required="true"
 						saveAs="true" />
-					<field name="name" inputWidget="application.name" column="0"
+					<field name="name" inputWidget="application.componentname" column="0"
 						required="true" saveAs="true" />
 					<field name="description" inputWidget="application.text"
 						column="0" required="true" saveAs="true" />
@@ -4408,7 +4577,8 @@
 				</onCondition>
 				<setStates>
 					<setState type="field"
-						target="name,description,entity,notificationType" disabled="true" />
+						target="name,description,entity,notificationType"
+						disabled="true" />
 				</setStates>
 			</formStatePolicy>
 		</form>
@@ -4419,9 +4589,10 @@
 				label="$m{studio.notificationlargetextparam.form.basicdetails}"
 				contentType="miniform" editable="true">
 				<section name="templateParamDetails" columns="type_2">
-					<field name="name" inputWidget="application.name" column="0"
+					<field name="name" inputWidget="application.componentname" column="0"
 						required="true" />
-					<field name="label" inputWidget="application.text" column="1"
+					<field name="label" inputWidget="application.text"
+						column="1"
 						required="true" />
 				</section>
 			</tab>
@@ -4452,13 +4623,15 @@
 					<field name="applicationId"
 						reference="studio.applicationDevelopableRef"
 						inputWidget="application.entitysearch" column="0"
-						label="$m{studio.application}" disabled="true" required="true"
+						label="$m{studio.application}" disabled="true"
+						required="true"
 						saveAs="true" />
-					<field name="name" inputWidget="application.name" column="0"
+					<field name="name" inputWidget="application.componentname" column="0"
 						required="true" saveAs="true" />
 					<field name="description" inputWidget="application.text"
 						column="0" required="true" saveAs="true" />
-					<field name="title" inputWidget="application.text" column="0"
+					<field name="title" inputWidget="application.text"
+						column="0"
 						required="true" />
 					<field name="configType" inputWidget="application.enumlist"
 						column="1" disabled="true" required="true" />
@@ -4475,7 +4648,8 @@
 					<field name="processor" inputWidget="application.text"
 						column="1" visible="false" />
 					<field name="letterGenerator"
-						inputWidget="studio.reportablelettergeneratorlist" column="1"
+						inputWidget="studio.reportablelettergeneratorlist"
+						column="1"
 						required="true" visible="false" />
 					<field name="showGrandFooter"
 						inputWidget="application.checkbox" column="1" />
@@ -4485,7 +4659,8 @@
 						column="1" />
 					<field name="underlineRows"
 						inputWidget="application.checkbox" column="1" />
-					<field name="shadeOddRows" inputWidget="application.checkbox"
+					<field name="shadeOddRows"
+						inputWidget="application.checkbox"
 						column="1" />
 				</section>
 				<section name="pageDetails" columns="type_2"
@@ -4639,7 +4814,8 @@
 				contentType="miniform">
 				<section name="basicDetails" columns="type_2">
 					<field name="reportConfigurationId"
-						inputWidget="application.entitysearch" column="0" required="true"
+						inputWidget="application.entitysearch" column="0"
+						required="true"
 						label="$m{report.reportcolumn.reportconfiguration}" />
 					<field name="fieldName"
 						inputWidget="studio.reportconfigfieldlist" column="0"
@@ -4677,7 +4853,8 @@
 				<section name="basicDetails" columns="type_2"
 					label="$m{studio.reportplacement.form.basicdetails}">
 					<field name="reportConfigurationId"
-						inputWidget="application.entitysearch" column="0" required="true"
+						inputWidget="application.entitysearch" column="0"
+						required="true"
 						label="$m{report.reportplacement.reportconfiguration}" />
 					<field name="type" inputWidget="application.enumlist"
 						column="0" required="true" switchOnChange="true" />
@@ -4687,10 +4864,12 @@
 					<field name="text" inputWidget="application.textarea"
 						column="0" required="true" visible="false" />
 					<field name="horizAlignType"
-						inputWidget="application.enumlist" column="1" visible="false"
+						inputWidget="application.enumlist" column="1"
+						visible="false"
 						required="true" />
 					<field name="vertAlignType"
-						inputWidget="application.enumlist" column="1" visible="false"
+						inputWidget="application.enumlist" column="1"
+						visible="false"
 						required="true" />
 					<field name="formatter" inputWidget="application.text"
 						column="1" visible="false" />
@@ -4745,12 +4924,14 @@
 				contentType="miniform">
 				<section name="basicDetails" columns="type_2">
 					<field name="reportConfigurationId"
-						inputWidget="application.entitysearch" column="0" required="true" />
-					<field name="name" inputWidget="application.name" column="0"
+						inputWidget="application.entitysearch" column="0"
+						required="true" />
+					<field name="name" inputWidget="application.componentname" column="0"
 						required="true" />
 					<field name="description" inputWidget="application.text"
 						column="0" required="true" />
-					<field name="label" inputWidget="application.text" column="0"
+					<field name="label" inputWidget="application.text"
+						column="0"
 						required="true" />
 					<field name="type" inputWidget="application.enumlist"
 						column="1" required="true" switchOnChange="true" />
@@ -4776,18 +4957,21 @@
 				label="$m{studio.common.form.action.unlockresource.label}"
 				policy="unlockresource-actionpolicy" showOnMaintain="true" />
 			<tab name="basicDetails"
-				label="$m{studio.apptable.form.basicdetails}" contentType="miniform">
+				label="$m{studio.apptable.form.basicdetails}"
+				contentType="miniform">
 				<section name="tableDetails" columns="type_2">
 					<field name="applicationId"
 						reference="studio.applicationDevelopableRef"
 						inputWidget="application.entitysearch" column="0"
-						label="$m{studio.application}" disabled="true" required="true"
+						label="$m{studio.application}" disabled="true"
+						required="true"
 						saveAs="true" />
-					<field name="name" inputWidget="application.name" column="0"
+					<field name="name" inputWidget="application.componentname" column="0"
 						required="true" saveAs="true" />
 					<field name="description" inputWidget="application.text"
 						column="0" required="true" saveAs="true" />
-					<field name="label" inputWidget="application.text" column="0" />
+					<field name="label" inputWidget="application.text"
+						column="0" />
 					<field name="configType" inputWidget="application.enumlist"
 						column="1" disabled="true" required="true" />
 					<field name="entity" inputWidget="studio.entitybynamelist"
@@ -4795,7 +4979,8 @@
 					<field name="loadingSearchInput"
 						inputWidget="studio.tablesearchinputlist" column="1" />
 					<field name="loadingFilterGen"
-						inputWidget="studio.tableworkitemfiltergenlist" column="1" />
+						inputWidget="studio.tableworkitemfiltergenlist"
+						column="1" />
 					<field name="detailsPanelName"
 						inputWidget="studio.detailspanellist" column="1" />
 					<field name="itemsPerPage" inputWidget="application.integer"
@@ -4822,7 +5007,8 @@
 						inputWidget="application.checkbox" column="2" />
 					<field name="basicSearch" inputWidget="application.checkbox"
 						column="2" />
-					<field name="totalSummary" inputWidget="application.checkbox"
+					<field name="totalSummary"
+						inputWidget="application.checkbox"
 						column="2" />
 					<field name="limitSelectToColumns"
 						inputWidget="application.checkbox" column="2" />
@@ -4896,8 +5082,10 @@
 				contentType="miniform">
 				<section name="tableColumnDetails" columns="type_2">
 					<field name="appTableId"
-						inputWidget="application.entitysearch" column="0" required="true" />
-					<field name="field" inputWidget="application.name" column="0"
+						inputWidget="application.entitysearch" column="0"
+						required="true" />
+					<field name="field" inputWidget="application.name"
+						column="0"
 						required="true" />
 					<field name="renderWidget" inputWidget="application.text"
 						column="0" required="true" />
@@ -4916,15 +5104,18 @@
 				contentType="miniform">
 				<section name="tableColumnDetails" columns="type_2">
 					<field name="appTableId"
-						inputWidget="application.entitysearch" column="0" required="true" />
-					<field name="name" inputWidget="application.name" column="0"
+						inputWidget="application.entitysearch" column="0"
+						required="true" />
+					<field name="name" inputWidget="application.componentname" column="0"
 						required="true" saveAs="true" />
 					<field name="description" inputWidget="application.text"
 						column="0" required="true" saveAs="true" />
-					<field name="label" inputWidget="application.text" column="0"
+					<field name="label" inputWidget="application.text"
+						column="0"
 						required="true" />
 					<field name="policy"
-						inputWidget="studio.tableentitylistactionpolicylist" column="1"
+						inputWidget="studio.tableentitylistactionpolicylist"
+						column="1"
 						required="true" />
 					<field name="orderIndex" inputWidget="application.integer"
 						column="1" />
@@ -4939,12 +5130,14 @@
 				contentType="miniform">
 				<section name="tableColumnDetails" columns="type_2">
 					<field name="appTableId"
-						inputWidget="application.entitysearch" column="0" required="true" />
-					<field name="name" inputWidget="application.name" column="0"
+						inputWidget="application.entitysearch" column="0"
+						required="true" />
+					<field name="name" inputWidget="application.componentname" column="0"
 						required="true" saveAs="true" />
 					<field name="description" inputWidget="application.text"
 						column="0" required="true" saveAs="true" />
-					<field name="label" inputWidget="application.text" column="0"
+					<field name="label" inputWidget="application.text"
+						column="0"
 						required="true" />
 					<field name="provider"
 						inputWidget="studio.tableloadingproviderlist" column="1"
@@ -4961,11 +5154,12 @@
 				label="$m{studio.apptablefilter.form.basicdetails}"
 				contentType="miniform">
 				<section name="filterDetails" columns="type_2">
-					<field name="name" inputWidget="application.name" column="0"
+					<field name="name" inputWidget="application.componentname" column="0"
 						required="true" />
 					<field name="description" inputWidget="application.text"
 						column="0" required="true" />
-					<field name="rowColor" inputWidget="studio.tablerowcolorlist"
+					<field name="rowColor"
+						inputWidget="studio.tablerowcolorlist"
 						column="1" />
 					<field name="legendLabel" inputWidget="application.text"
 						column="1" />
@@ -4996,12 +5190,14 @@
 				description="$m{studio.common.form.annotation.static}"
 				message="$m{studio.common.form.annotation.static.message}" />
 			<tab name="basicDetails"
-				label="$m{studio.appform.form.basicdetails}" contentType="miniform">
+				label="$m{studio.appform.form.basicdetails}"
+				contentType="miniform">
 				<section name="formDetails" columns="type_2">
 					<field name="applicationId"
 						reference="studio.applicationDevelopableRef"
 						inputWidget="application.entitysearch" column="0"
-						label="$m{studio.application}" disabled="true" required="true"
+						label="$m{studio.application}" disabled="true"
+						required="true"
 						saveAs="true" />
 					<field name="name" inputWidget="application.name" column="0"
 						required="true" saveAs="true" />
@@ -5020,7 +5216,8 @@
 					<field name="titleFormat"
 						inputWidget="application.texttemplate" column="1" />
 					<field name="consolidatedValidation"
-						inputWidget="studio.consformvalidationpolicylist" column="1"
+						inputWidget="studio.consformvalidationpolicylist"
+						column="1"
 						visible="false" />
 					<field name="consolidatedReview"
 						inputWidget="studio.consformreviewpolicylist" column="1"
@@ -5041,7 +5238,8 @@
 				contentType="child_list" applet="manageAppFormFilter"
 				reference="filterList" visible="false" />
 			<tab name="annotations"
-				label="$m{studio.appform.form.annotations}" contentType="child_list"
+				label="$m{studio.appform.form.annotations}"
+				contentType="child_list"
 				applet="manageAppFormAnnotation" reference="annotationList"
 				visible="false" />
 			<tab name="actions" label="$m{studio.appform.form.actions}"
@@ -5057,7 +5255,8 @@
 				reference="widgetRulesList" visible="false" />
 			<tab name="fieldValidationPolicies" quickOrder="true"
 				label="$m{studio.appform.form.fieldvalidationpolicies}"
-				contentType="child_list" applet="manageAppFormFieldValidationPolicy"
+				contentType="child_list"
+				applet="manageAppFormFieldValidationPolicy"
 				reference="fieldValidationList" visible="false" />
 			<tab name="fieldStatePolicies" quickOrder="true"
 				label="$m{studio.appform.form.fieldstatepolicies}"
@@ -5102,7 +5301,8 @@
 				</onCondition>
 				<setStates>
 					<setState type="field"
-						target="name,description,entity,searchField" disabled="true" />
+						target="name,description,entity,searchField"
+						disabled="true" />
 				</setStates>
 			</formStatePolicy>
 			<formStatePolicy type="on_switch"
@@ -5145,8 +5345,10 @@
 					<field name="type" inputWidget="application.enumlist"
 						column="0" required="true" />
 					<field name="tabContentType"
-						inputWidget="application.enumlist" column="0" required="true" />
-					<field name="label" inputWidget="application.text" column="0" />
+						inputWidget="application.enumlist" column="0"
+						required="true" />
+					<field name="label" inputWidget="application.text"
+						column="0" />
 					<field name="tabApplet" inputWidget="application.name"
 						column="0" />
 					<field name="tabReference" inputWidget="application.name"
@@ -5206,12 +5408,14 @@
 					<field name="description" inputWidget="application.text"
 						column="0" required="true" />
 					<field name="filterGenerator"
-						inputWidget="studio.formfiltergeneratorlist" switchOnChange="true"
+						inputWidget="studio.formfiltergeneratorlist"
+						switchOnChange="true"
 						column="1" />
 				</section>
 			</tab>
 			<tab name="condition"
-				label="$m{studio.appformfilter.form.condition}" reference="app_form"
+				label="$m{studio.appformfilter.form.condition}"
+				reference="app_form"
 				contentType="filter_condition" />
 			<tab name="changeLog" label="$m{application.form.audit}"
 				contentType="miniform_changelog" />
@@ -5224,9 +5428,10 @@
 				contentType="miniform">
 				<section name="formAnnotationDetails" columns="type_2">
 					<field name="appFormId" inputWidget="studio.formlist"
-						label="$m{application.appformelement.appform}" column="0"
+						label="$m{application.appformelement.appform}"
+						column="0"
 						required="true" disabled="true" />
-					<field name="name" inputWidget="application.name" column="0"
+					<field name="name" inputWidget="application.componentname" column="0"
 						required="true" />
 					<field name="description" inputWidget="application.text"
 						column="0" required="true" />
@@ -5256,13 +5461,15 @@
 				contentType="miniform">
 				<section name="formActionDetails" columns="type_2">
 					<field name="appFormId" inputWidget="studio.formlist"
-						label="$m{application.appformelement.appform}" column="0"
+						label="$m{application.appformelement.appform}"
+						column="0"
 						disabled="true" required="true" />
-					<field name="name" inputWidget="application.name" column="0"
+					<field name="name" inputWidget="application.componentname" column="0"
 						required="true" />
 					<field name="description" inputWidget="application.text"
 						column="0" required="true" />
-					<field name="label" inputWidget="application.text" column="0"
+					<field name="label" inputWidget="application.text"
+						column="0"
 						required="true" />
 					<field name="type" inputWidget="application.enumlist"
 						column="1" required="true" />
@@ -5273,11 +5480,13 @@
 						required="true" />
 					<field name="orderIndex" inputWidget="application.integer"
 						required="true" column="1" />
-					<field name="showOnCreate" inputWidget="application.checkbox"
+					<field name="showOnCreate"
+						inputWidget="application.checkbox"
 						column="1" />
 					<field name="showOnMaintain"
 						inputWidget="application.checkbox" column="1" />
-					<field name="validateForm" inputWidget="application.checkbox"
+					<field name="validateForm"
+						inputWidget="application.checkbox"
 						column="1" />
 				</section>
 			</tab>
@@ -5293,16 +5502,19 @@
 				contentType="miniform">
 				<section name="formRelatedListDetails" columns="type_2">
 					<field name="appFormId" inputWidget="studio.formlist"
-						label="$m{application.appformelement.appform}" column="0"
+						label="$m{application.appformelement.appform}"
+						column="0"
 						disabled="true" required="true" />
-					<field name="name" inputWidget="application.name" column="0"
+					<field name="name" inputWidget="application.componentname" column="0"
 						required="true" />
 					<field name="description" inputWidget="application.text"
 						column="0" required="true" />
-					<field name="label" inputWidget="application.text" column="0"
+					<field name="label" inputWidget="application.text"
+						column="0"
 						required="true" />
 					<field name="applet"
-						inputWidget="studio.formrelatedappletlist" switchOnChange="true"
+						inputWidget="studio.formrelatedappletlist"
+						switchOnChange="true"
 						column="1" required="true" />
 					<field name="filter"
 						inputWidget="studio.formappletfilterlist" column="1"
@@ -5322,15 +5534,17 @@
 					<field name="appFormId" inputWidget="studio.formlist"
 						disabled="true" column="0" required="true"
 						label="$m{application.appformstatepolicy.appform}" />
-					<field name="name" inputWidget="application.name" column="0"
+					<field name="name" inputWidget="application.componentname" column="0"
 						required="true" />
 					<field name="description" inputWidget="application.text"
 						column="0" required="true" />
 					<field name="type" inputWidget="application.enumlist"
 						switchOnChange="true" column="1" required="true" />
 					<field name="valueGenerator"
-						inputWidget="studio.formentitysetvaluesgenlist" column="1" />
-					<field name="trigger" inputWidget="studio.formstatefieldlist"
+						inputWidget="studio.formentitysetvaluesgenlist"
+						column="1" />
+					<field name="trigger"
+						inputWidget="studio.formstatefieldlist"
 						column="1" />
 				</section>
 			</tab>
@@ -5355,7 +5569,7 @@
 					<field name="appFormId" inputWidget="studio.formlist"
 						disabled="true" column="0" required="true"
 						label="$m{application.appformwidgetrulespolicy.appform}" />
-					<field name="name" inputWidget="application.name" column="0"
+					<field name="name" inputWidget="application.componentname" column="0"
 						required="true" />
 					<field name="description" inputWidget="application.text"
 						column="1" required="true" />
@@ -5363,7 +5577,8 @@
 			</tab>
 			<tab name="onCondition"
 				label="$m{studio.appformwidgetrulespolicy.form.oncondition}"
-				reference="app_formwidgetrulespolicy" contentType="filter_condition" />
+				reference="app_formwidgetrulespolicy"
+				contentType="filter_condition" />
 			<tab name="widgetRules"
 				label="$m{studio.appformwidgetrulespolicy.form.widgetrules}"
 				reference="app_formwidgetrulespolicy" contentType="widget_rules" />
@@ -5375,7 +5590,8 @@
 				label="$m{studio.appformsetstate.form.basicdetails}"
 				contentType="miniform">
 				<section name="setStateDetails" columns="type_2">
-					<field name="appFormStatePolicyId" disabled="true" column="0"
+					<field name="appFormStatePolicyId" disabled="true"
+						column="0"
 						required="true"
 						label="$m{application.appformsetstate.appformstatepolicy}" />
 					<field name="type" inputWidget="application.enumlist"
@@ -5411,7 +5627,8 @@
 				</onCondition>
 				<setStates>
 					<setState type="field"
-						target="required,visible,editable,disabled" disabled="false" />
+						target="required,visible,editable,disabled"
+						disabled="false" />
 				</setStates>
 			</formStatePolicy>
 		</form>
@@ -5424,19 +5641,22 @@
 				<section name="fieldValidationPolicyDetails"
 					columns="type_2">
 					<field name="appFormId" inputWidget="studio.formlist"
-						label="$m{application.appformelement.appform}" column="0"
+						label="$m{application.appformelement.appform}"
+						column="0"
 						disabled="true" required="true" />
-					<field name="name" inputWidget="application.name" column="0"
+					<field name="name" inputWidget="application.componentname" column="0"
 						required="true" />
 					<field name="description" inputWidget="application.text"
 						column="0" required="true" />
 					<field name="fieldName" inputWidget="studio.formfieldlist"
 						column="1" required="true" />
 					<field name="validation"
-						inputWidget="application.formvalidatorlist" switchOnChange="true"
+						inputWidget="application.formvalidatorlist"
+						switchOnChange="true"
 						column="1" required="true" />
 					<field name="rule"
-						inputWidget="studio.formfieldvalidationrulelist" column="1" />
+						inputWidget="studio.formfieldvalidationrulelist"
+						column="1" />
 				</section>
 			</tab>
 		</form>
@@ -5450,7 +5670,7 @@
 					<field name="appFormId" inputWidget="studio.formlist"
 						disabled="true" column="0" required="true"
 						label="$m{application.appformvalidationpolicy.appform}" />
-					<field name="name" inputWidget="application.name" column="0"
+					<field name="name" inputWidget="application.componentname" column="0"
 						required="true" />
 					<field name="description" inputWidget="application.text"
 						column="0" required="true" />
@@ -5466,7 +5686,8 @@
 			</tab>
 			<tab name="errorCondition"
 				label="$m{studio.appformvalidationpolicy.form.errorcondition}"
-				reference="app_formvalidationpolicy" contentType="filter_condition" />
+				reference="app_formvalidationpolicy"
+				contentType="filter_condition" />
 		</form>
 		<form name="appFormReviewPolicyForm"
 			description="$m{studio.appformreviewpolicy.form}"
@@ -5478,7 +5699,7 @@
 					<field name="appFormId" inputWidget="studio.formlist"
 						disabled="true" column="0" required="true"
 						label="$m{application.appformreviewpolicy.appform}" />
-					<field name="name" inputWidget="application.name" column="0"
+					<field name="name" inputWidget="application.componentname" column="0"
 						required="true" />
 					<field name="description" inputWidget="application.text"
 						column="0" required="true" />
@@ -5518,14 +5739,16 @@
 				description="$m{studio.common.form.annotation.static}"
 				message="$m{studio.common.form.annotation.static.message}" />
 			<tab name="basicDetails"
-				label="$m{studio.apphelpsheet.form.basicdetails}" contentType="miniform">
+				label="$m{studio.apphelpsheet.form.basicdetails}"
+				contentType="miniform">
 				<section name="formDetails" columns="type_2">
 					<field name="applicationId"
 						reference="studio.applicationDevelopableRef"
 						inputWidget="application.entitysearch" column="0"
-						label="$m{studio.application}" disabled="true" required="true"
+						label="$m{studio.application}" disabled="true"
+						required="true"
 						saveAs="true" />
-					<field name="name" inputWidget="application.name" column="0"
+					<field name="name" inputWidget="application.componentname" column="0"
 						required="true" saveAs="true" />
 					<field name="description" inputWidget="application.text"
 						column="0" required="true" saveAs="true" />
@@ -5535,13 +5758,14 @@
 						column="1" disabled="true" required="true" />
 					<field name="entity" inputWidget="studio.entitybynamelist"
 						column="1" required="true" switchOnChange="true" />
-					<field name="helpOverview" inputWidget="application.richtexteditormedium"
+					<field name="helpOverview"
+						inputWidget="application.richtexteditormedium"
 						column="1" />
 				</section>
 			</tab>
 			<tab name="entries" label="$m{studio.apphelpsheet.form.entries}"
 				contentType="child_list" applet="manageAppHelpEntry"
-				reference="entryList"/>
+				reference="entryList" />
 			<tab name="changeLog" label="$m{application.form.audit}"
 				contentType="miniform_changelog" />
 		</form>
@@ -5552,13 +5776,18 @@
 				label="$m{studio.apphelpentry.form.basicdetails}"
 				contentType="miniform">
 				<section name="helpEntryDetails" columns="type_2">
-					<field name="appHelpSheetId" inputWidget="application.entitysearch"
+					<field name="appHelpSheetId"
+						inputWidget="application.entitysearch"
 						disabled="true" column="0" required="true"
 						label="$m{application.apphelpentry.apphelpsheet}" />
-					<field name="fieldName" inputWidget="studiohelpentryfieldlist" column="0"
+					<field name="fieldName"
+						inputWidget="studiohelpentryfieldlist" column="1"
 						required="true" />
-					<field name="helpContent" inputWidget="application.richtexteditormedium"
-						column="1" required="true" />
+				</section>
+				<section name="helpEntryCont" columns="type_1">
+					<field name="helpContent"
+						inputWidget="application.richtexteditorlarge"
+						column="0" required="true" />
 				</section>
 			</tab>
 			<tab name="changeLog" label="$m{application.form.audit}"
@@ -5587,9 +5816,10 @@
 					<field name="applicationId"
 						reference="studio.applicationDevelopableRef"
 						inputWidget="application.entitysearch" column="0"
-						label="$m{studio.application}" disabled="true" required="true"
+						label="$m{studio.application}" disabled="true"
+						required="true"
 						saveAs="true" />
-					<field name="name" inputWidget="application.name" column="0"
+					<field name="name" inputWidget="application.componentname" column="0"
 						required="true" saveAs="true" />
 					<field name="description" inputWidget="application.text"
 						column="0" required="true" saveAs="true" />
@@ -5675,23 +5905,30 @@
 				description="$m{studio.common.form.action.unlockresource}"
 				label="$m{studio.common.form.action.unlockresource.label}"
 				policy="unlockresource-actionpolicy" showOnMaintain="true" />
+			<action type="button" name="publish" highlight="ORANGE"
+				description="$m{workflow.workflow.form.action.publish}"
+				label="$m{workflow.workflow.form.action.publish.label}"
+				policy="wfpublish-actionpolicy" showOnMaintain="true" />
 			<annotation name="staticAnnotation"
 				description="$m{studio.common.form.annotation.static}"
 				message="$m{studio.common.form.annotation.static.message}" />
 			<tab name="basicDetails"
-				label="$m{studio.workflow.form.basicdetails}" contentType="miniform"
+				label="$m{studio.workflow.form.basicdetails}"
+				contentType="miniform"
 				editable="true">
 				<section name="workflowDetails" columns="type_2">
 					<field name="applicationId"
 						reference="studio.applicationDevelopableRef"
 						inputWidget="application.entitysearch" column="0"
-						label="$m{studio.application}" disabled="true" required="true"
+						label="$m{studio.application}" disabled="true"
+						required="true"
 						saveAs="true" switchOnChange="true" />
-					<field name="name" inputWidget="application.name" column="0"
+					<field name="name" inputWidget="application.componentname" column="0"
 						required="true" saveAs="true" />
 					<field name="description" inputWidget="application.text"
 						column="0" required="true" saveAs="true" />
-					<field name="label" inputWidget="application.text" column="0"
+					<field name="label" inputWidget="application.text"
+						column="0"
 						required="true" />
 					<field name="configType" inputWidget="application.enumlist"
 						column="1" disabled="true" required="true" />
@@ -5710,7 +5947,8 @@
 				</section>
 			</tab>
 			<tab name="design" label="$m{studio.workflow.form.design}"
-				contentType="child_list" applet="manageWfStep" reference="stepList"
+				contentType="child_list" applet="manageWfStep"
+				reference="stepList"
 				editAction="/designChildItem" />
 			<tab name="filters" label="$m{studio.workflow.form.filters}"
 				contentType="child_list" applet="manageWorkflowFilter"
@@ -5774,17 +6012,19 @@
 				label="$m{studio.workflowfilter.form.basicdetails}"
 				contentType="miniform">
 				<section name="filterDetails" columns="type_2">
-					<field name="name" inputWidget="application.name" column="0"
+					<field name="name" inputWidget="application.componentname" column="0"
 						required="true" />
 					<field name="description" inputWidget="application.text"
 						column="1" required="true" />
 					<field name="filterGenerator"
-						inputWidget="studio.workflowfiltergeneratorlist" column="1" />
+						inputWidget="studio.workflowfiltergeneratorlist"
+						column="1" />
 				</section>
 			</tab>
 			<tab name="condition"
 				label="$m{studio.workflowfilter.form.condition}"
-				reference="workflow" contentType="filter_condition" />
+				reference="workflow" contentType="filter_condition"
+				includeSysParam="true" />
 			<tab name="changeLog" label="$m{application.form.audit}"
 				contentType="miniform_changelog" />
 		</form>
@@ -5795,7 +6035,7 @@
 				label="$m{studio.workflowsetvalues.form.basicdetails}"
 				contentType="miniform">
 				<section name="setValuesDetails" columns="type_2">
-					<field name="name" inputWidget="application.name" column="0"
+					<field name="name" inputWidget="application.componentname" column="0"
 						required="true" />
 					<field name="description" inputWidget="application.text"
 						column="0" required="true" />
@@ -5807,7 +6047,8 @@
 			</tab>
 			<tab name="condition"
 				label="$m{studio.workflowsetvalues.form.condition}"
-				reference="workflow" contentType="filter_condition" />
+				reference="workflow" contentType="filter_condition"
+				includeSysParam="true" />
 			<tab name="setValues"
 				label="$m{studio.workflowsetvalues.form.setvalues}"
 				reference="workflow" contentType="set_values" />
@@ -5822,12 +6063,14 @@
 				<section name="stepDetails" columns="type_2">
 					<field name="workflowId"
 						inputWidget="application.entitysearch" column="0"
-						label="$m{workflow.step.workflow}" disabled="true" required="true" />
-					<field name="name" inputWidget="application.name" column="0"
+						label="$m{workflow.step.workflow}" disabled="true"
+						required="true" />
+					<field name="name" inputWidget="application.componentname" column="0"
 						required="true" />
 					<field name="description" inputWidget="application.text"
 						column="0" required="true" />
-					<field name="label" inputWidget="application.text" column="0"
+					<field name="label" inputWidget="application.text"
+						column="0"
 						required="true" />
 					<field name="formName" inputWidget="studio.workflowformlist"
 						column="0" />
@@ -5836,7 +6079,8 @@
 					<field name="valueGenerator"
 						inputWidget="studio.wfentitysetvaluesgenlist" column="1" />
 					<field name="recordActionType"
-						inputWidget="application.enumlist" column="1" required="true"
+						inputWidget="application.enumlist" column="1"
+						required="true"
 						visible="false" />
 					<field name="policy" column="1" required="true"
 						visible="false" />
@@ -5847,7 +6091,8 @@
 						inputWidget="application.integer" column="1" />
 					<field name="criticalMinutes"
 						inputWidget="application.integer" column="1" />
-					<field name="expiryMinutes" inputWidget="application.integer"
+					<field name="expiryMinutes"
+						inputWidget="application.integer"
 						column="1" />
 					<field name="audit" inputWidget="application.checkbox"
 						column="1" />
@@ -5926,9 +6171,11 @@
 				label="$m{studio.workflow.steprouting.form.basicdetails}"
 				contentType="miniform" editable="false">
 				<section name="stepRoutingDetails" columns="type_2">
-					<field name="wfStepId" inputWidget="application.entitysearch"
-						column="0" label="$m{workflow.steprouting.step}" required="true" />
-					<field name="name" inputWidget="application.name" column="0"
+					<field name="wfStepId"
+						inputWidget="application.entitysearch"
+						column="0" label="$m{workflow.steprouting.step}"
+						required="true" />
+					<field name="name" inputWidget="application.componentname" column="0"
 						required="true" />
 					<field name="description" inputWidget="application.text"
 						column="0" required="true" />
@@ -5940,7 +6187,8 @@
 			</tab>
 			<tab name="routeCondition"
 				label="$m{studio.workflow.steprouting.form.oncondition}"
-				reference="wfstep_routing" contentType="filter_condition" />
+				reference="wfstep_routing" contentType="filter_condition"
+				includeSysParam="true" />
 		</form>
 		<form name="wfStepUserActionForm"
 			description="$m{studio.workflow.stepuseraction.form}"
@@ -5949,25 +6197,30 @@
 				label="$m{studio.workflow.stepuseraction.form.basicdetails}"
 				contentType="miniform" editable="false">
 				<section name="stepUserActionDetails" columns="type_2">
-					<field name="wfStepId" inputWidget="application.entitysearch"
+					<field name="wfStepId"
+						inputWidget="application.entitysearch"
 						column="0" label="$m{workflow.stepuseraction.step}"
 						required="true" />
-					<field name="name" inputWidget="application.name" column="0"
+					<field name="name" inputWidget="application.componentname" column="0"
 						required="true" />
 					<field name="description" inputWidget="application.text"
 						column="0" required="true" />
-					<field name="label" inputWidget="application.text" column="0" />
+					<field name="label" inputWidget="application.text"
+						column="0" />
 					<field name="commentRequirement"
-						inputWidget="application.enumlist" column="1" required="true" />
+						inputWidget="application.enumlist" column="1"
+						required="true" />
 					<field name="highlightType"
 						inputWidget="application.enumlist" column="1" />
 					<field name="nextStepName"
-						inputWidget="studio.wfsteproutetolist" column="1" required="true" />
+						inputWidget="studio.wfsteproutetolist" column="1"
+						required="true" />
 					<field name="orderIndex" inputWidget="application.integer"
 						column="1" required="true" />
 					<field name="formReview" inputWidget="application.checkbox"
 						column="1" />
-					<field name="validatePage" inputWidget="application.checkbox"
+					<field name="validatePage"
+						inputWidget="application.checkbox"
 						column="1" />
 				</section>
 			</tab>
@@ -5979,9 +6232,11 @@
 				label="$m{studio.workflow.stepalert.form.basicdetails}"
 				contentType="miniform" editable="false">
 				<section name="stepAlertDetails" columns="type_2">
-					<field name="wfStepId" inputWidget="application.entitysearch"
-						column="0" label="$m{workflow.stepalert.step}" required="true" />
-					<field name="name" inputWidget="application.name" column="0"
+					<field name="wfStepId"
+						inputWidget="application.entitysearch"
+						column="0" label="$m{workflow.stepalert.step}"
+						required="true" />
+					<field name="name" inputWidget="application.componentname" column="0"
 						required="true" />
 					<field name="description" inputWidget="application.text"
 						column="0" required="true" />
@@ -5996,11 +6251,13 @@
 					<field name="recipientNameRule"
 						inputWidget="studio.wfrecipientnamerulelist" column="0" />
 					<field name="recipientContactRule"
-						inputWidget="studio.wfrecipientcontactrulelist" column="0" />
+						inputWidget="studio.wfrecipientcontactrulelist"
+						column="0" />
 					<field name="type" inputWidget="application.enumlist"
 						column="1" required="true" />
 					<field name="notificationType"
-						inputWidget="application.enumlist" column="1" required="true" />
+						inputWidget="application.enumlist" column="1"
+						required="true" />
 					<field name="fireOnPrevStepName"
 						inputWidget="studio.wfstepreceivefromlist" column="1" />
 					<field name="fireOnConditionName"
@@ -6009,7 +6266,8 @@
 			</tab>
 			<tab name="fireOnCondition"
 				label="$m{studio.workflow.stepalert.form.oncondition}"
-				reference="wfstep_alert_fire_on" contentType="filter_condition" />
+				reference="wfstep_alert_fire_on" contentType="filter_condition"
+				includeSysParam="true" />
 		</form>
 	</forms>
 	<!-- Property Lists -->
@@ -6114,7 +6372,8 @@
 					required="false" />
 				<property name="createForm.submit.condition"
 					description="$m{studio.appappletprop.manageentity.createform.submitcondition}"
-					inputWidget="studio.propertyappletfilterlist" required="false" />
+					inputWidget="studio.propertyappletfilterlist"
+					required="false" />
 				<property name="createForm.submit"
 					description="$m{studio.appappletprop.createentity.createform.submit}"
 					inputWidget="application.checkbox" />
@@ -6133,7 +6392,8 @@
 					required="false" />
 				<property name="maintainForm.submit.condition"
 					description="$m{studio.appappletprop.manageentity.maintainform.submitcondition}"
-					inputWidget="studio.propertyappletfilterlist" required="false" />
+					inputWidget="studio.propertyappletfilterlist"
+					required="false" />
 				<property name="maintainForm.submit"
 					description="$m{studio.appappletprop.manageentity.maintainform.submit}"
 					inputWidget="application.checkbox" />
@@ -6230,7 +6490,8 @@
 					required="false" />
 				<property name="createForm.submit.condition"
 					description="$m{studio.appappletprop.manageentity.createform.submitcondition}"
-					inputWidget="studio.propertyappletfilterlist" required="false" />
+					inputWidget="studio.propertyappletfilterlist"
+					required="false" />
 				<property name="createForm.submit"
 					description="$m{studio.appappletprop.createentitysingleform.createform.submit}"
 					inputWidget="application.checkbox" />
@@ -6390,7 +6651,8 @@
 					inputWidget="application.text" />
 				<property name="listingForm"
 					description="$m{studio.appappletprop.manageentity.listingform}"
-					inputWidget="studio.propertyappletlistformlist" required="false" />
+					inputWidget="studio.propertyappletlistformlist"
+					required="false" />
 				<property name="createForm"
 					description="$m{studio.appappletprop.manageentity.createform}"
 					inputWidget="studio.propertyappletformlist" required="false" />
@@ -6646,7 +6908,8 @@
 					required="false" />
 				<property name="createForm.submit.condition"
 					description="$m{studio.appappletprop.manageentity.createform.submitcondition}"
-					inputWidget="studio.propertyappletfilterlist" required="false" />
+					inputWidget="studio.propertyappletfilterlist"
+					required="false" />
 				<property name="createForm.submit"
 					description="$m{studio.appappletprop.manageentity.createform.submit}"
 					inputWidget="application.checkbox" />
@@ -6665,7 +6928,8 @@
 					required="false" />
 				<property name="maintainForm.submit.condition"
 					description="$m{studio.appappletprop.manageentity.maintainform.submitcondition}"
-					inputWidget="studio.propertyappletfilterlist" required="false" />
+					inputWidget="studio.propertyappletfilterlist"
+					required="false" />
 				<property name="maintainForm.submit"
 					description="$m{studio.appappletprop.manageentity.maintainform.submit}"
 					inputWidget="application.checkbox" />
@@ -6740,7 +7004,8 @@
 					inputWidget="application.text" />
 				<property name="listingForm"
 					description="$m{studio.appappletprop.manageentitysingleform.listingform}"
-					inputWidget="studio.propertyappletlistformlist" required="false" />
+					inputWidget="studio.propertyappletlistformlist"
+					required="false" />
 				<property name="createForm.new.policy"
 					description="$m{studio.appappletprop.manageentitysingleform.createform.newpolicy}"
 					inputWidget="studio.propertyentityactionpolicylist" />
@@ -6930,7 +7195,8 @@
 					required="false" />
 				<property name="createForm.submit.condition"
 					description="$m{studio.appappletprop.manageentitysingleform.createform.submitcondition}"
-					inputWidget="studio.propertyappletfilterlist" required="false" />
+					inputWidget="studio.propertyappletfilterlist"
+					required="false" />
 				<property name="createForm.submit"
 					description="$m{studio.appappletprop.manageentitysingleform.createform.submit}"
 					inputWidget="application.checkbox" />
@@ -6949,7 +7215,8 @@
 					required="false" />
 				<property name="maintainForm.submit.condition"
 					description="$m{studio.appappletprop.manageentitysingleform.maintainform.submitcondition}"
-					inputWidget="studio.propertyappletfilterlist" required="false" />
+					inputWidget="studio.propertyappletfilterlist"
+					required="false" />
 				<property name="maintainForm.submit"
 					description="$m{studio.appappletprop.manageentitysingleform.maintainform.submit}"
 					inputWidget="application.checkbox" />
@@ -6988,6 +7255,77 @@
 					inputWidget="application.checkbox" />
 			</propertySet>
 		</propertyList>
+		<propertyList name="mebAppAppletPropList"
+			description="$m{studio.appappletprop.manageentitysubmit.propertylist}">
+			<propertySet
+				label="$m{studio.appappletprop.manageentity.searchproperties}">
+				<property name="searchTable"
+					description="$m{studio.appappletprop.manageentity.searchtable}"
+					inputWidget="studio.propertyapplettablelist" required="true" />
+				<property name="searchTable.searchOnCriteriaOnly"
+					description="$m{studio.appappletprop.manageentity.searchtable.searchoncriteriaonly}"
+					inputWidget="application.checkbox" />
+				<property name="searchTable.selectByConstraint"
+					description="$m{studio.appappletprop.manageentity.searchtable.selectbyconstraint}"
+					inputWidget="studio.propertyappletuniqueconstraintlist" />
+				<property name="baseRestriction"
+					description="$m{studio.appappletprop.manageentity.baserestriction}"
+					inputWidget="studio.propertyappletfilterlist" />
+				<property name="searchTable.quickFilter"
+					description="$m{studio.appappletprop.manageentity.searchtable.quickfilter}"
+					inputWidget="application.checkbox" />
+				<property name="searchTable.quickFilter.default"
+					description="$m{studio.appappletprop.manageentity.searchtable.quickfilterdef}"
+					inputWidget="studio.propertyappletquickfilterlist" />
+				<property name="searchTable.actionFooter"
+					description="$m{studio.appappletprop.manageentity.searchtable.actionfooter}"
+					inputWidget="application.checkbox" />
+				<property name="searchTable.report"
+					description="$m{studio.appappletprop.manageentity.searchtable.report}"
+					inputWidget="application.checkbox" />
+				<property name="searchTable.basicSearchOnly"
+					description="$m{studio.appappletprop.manageentity.searchtable.basicsearchonly}"
+					inputWidget="application.checkbox" />
+				<property name="searchTable.searchInput"
+					description="$m{studio.appappletprop.manageentity.searchtable.searchinput}"
+					inputWidget="studio.propertyappletsearchinputlist" />
+				<property name="searchTable.searchColumns"
+					description="$m{studio.appappletprop.manageentity.searchtable.searchcolumns}"
+					inputWidget="studio.propertyappletsingledigit" />
+			</propertySet>
+			<propertySet
+				label="$m{studio.appappletprop.manageentity.formproperties}">
+				<property name="listingForm"
+					description="$m{studio.appappletprop.manageentity.listingform}"
+					inputWidget="studio.propertyappletlistformlist"
+					required="false" />
+				<property name="maintainForm"
+					description="$m{studio.appappletprop.manageentity.maintainform}"
+					inputWidget="studio.propertyappletformlist" />
+				<property name="maintainForm.capture"
+					description="$m{studio.appappletprop.manageentity.maintainform.capture}"
+					inputWidget="application.checkbox" />
+				<property name="maintainForm.capture.attachmentprovider"
+					description="$m{studio.appappletprop.manageentity.maintainform.capture.attachmentprovider}"
+					inputWidget="studio.propertyappletattachmentproviderlist" />
+				<property name="maintainForm.attachments"
+					description="$m{studio.appappletprop.manageentity.maintainform.attachments}"
+					inputWidget="application.checkbox" />
+				<property name="maintainForm.attachments.adhoc"
+					description="$m{studio.appappletprop.manageentity.maintainform.attachments.adhoc}"
+					inputWidget="application.checkbox" />
+			</propertySet>
+			<propertySet
+				label="$m{studio.appappletprop.manageentity.workflowproperties}">
+				<property name="createForm.submit.caption"
+					description="$m{studio.appappletprop.manageentitysubmit.createform.submitcaption}"
+					inputWidget="application.text" />
+				<property name="maintainForm.submit.workflow.channel"
+					description="$m{studio.appappletprop.manageentitysubmit.maintainform.submitworkflow}"
+					inputWidget="studio.propertyappletworkflowchannellist"
+					required="false" />
+			</propertySet>
+		</propertyList>
 		<propertyList name="mplAppAppletPropList"
 			description="$m{studio.appappletprop.managepropertylist.propertylist}">
 			<propertySet
@@ -7024,10 +7362,12 @@
 				label="$m{studio.appappletprop.importdata.properties}">
 				<property name="importdata.configName"
 					description="$m{studio.appappletprop.importdata.property.uploadconfigname}"
-					inputWidget="studio.propertyappletloadconfiglist" required="true" />
+					inputWidget="studio.propertyappletloadconfiglist"
+					required="true" />
 				<property name="importdata.routeTo.appletName"
 					description="$m{studio.appappletprop.importdata.property.routetoapplet}"
-					inputWidget="studio.propertyroutetoappletlist" required="false" />
+					inputWidget="studio.propertyroutetoappletlist"
+					required="false" />
 			</propertySet>
 		</propertyList>
 		<propertyList name="ppgAppAppletPropList"
@@ -7055,6 +7395,7 @@
 			<choice name="mel" val="melAppAppletPropList" />
 			<choice name="mls" val="mlsAppAppletPropList" />
 			<choice name="mea" val="meaAppAppletPropList" />
+			<choice name="meb" val="mebAppAppletPropList" />
 			<choice name="mpl" val="mplAppAppletPropList" />
 			<choice name="hdl" val="hdlAppAppletPropList" />
 			<choice name="tex" val="texAppAppletPropList" />

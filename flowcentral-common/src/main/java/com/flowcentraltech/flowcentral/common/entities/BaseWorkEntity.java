@@ -17,16 +17,17 @@ package com.flowcentraltech.flowcentral.common.entities;
 
 import java.util.List;
 
-import com.flowcentraltech.flowcentral.common.constants.WfItemVersionType;
-import com.flowcentraltech.flowcentral.configuration.constants.ProcessingStatus;
+import com.tcdng.unify.common.annotation.QueryRestriction;
+import com.tcdng.unify.common.annotation.UniqueConstraints;
+import com.tcdng.unify.common.constants.ProcessingStatus;
+import com.tcdng.unify.common.constants.WfItemVersionType;
+import com.tcdng.unify.common.database.WorkEntity;
 import com.tcdng.unify.core.annotation.ChildList;
 import com.tcdng.unify.core.annotation.Column;
 import com.tcdng.unify.core.annotation.DefaultQueryRestrictions;
 import com.tcdng.unify.core.annotation.ForeignKey;
 import com.tcdng.unify.core.annotation.ListOnly;
 import com.tcdng.unify.core.annotation.Policy;
-import com.tcdng.unify.core.annotation.QueryRestriction;
-import com.tcdng.unify.core.annotation.UniqueConstraints;
 
 /**
  * Base class for all work entity.

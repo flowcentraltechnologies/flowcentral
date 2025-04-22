@@ -267,7 +267,7 @@
 		</applet>
 		<applet menuAccess="true"
 			routeToApplet="application.manageSuggestion" type="FACADE"
-			description="$m{system.suggestion.manage}"
+			description="$m{system.suggestion.manage}" icon="clipboard-check"
 			label="$m{system.suggestion.manage.label}" name="manageSuggestion" />
 		<applet menuAccess="true"
 			routeToApplet="dashboard.manageDashboard" type="FACADE"

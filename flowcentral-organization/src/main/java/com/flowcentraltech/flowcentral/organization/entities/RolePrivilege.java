@@ -16,12 +16,12 @@
 package com.flowcentraltech.flowcentral.organization.entities;
 
 import com.flowcentraltech.flowcentral.common.constants.ConfigType;
-import com.flowcentraltech.flowcentral.common.constants.WfItemVersionType;
-import com.flowcentraltech.flowcentral.common.entities.BaseAuditTenantEntity;
+import com.flowcentraltech.flowcentral.common.entities.BaseAuditEntity;
+import com.tcdng.unify.common.annotation.Table;
+import com.tcdng.unify.common.annotation.UniqueConstraint;
+import com.tcdng.unify.common.constants.WfItemVersionType;
 import com.tcdng.unify.core.annotation.ForeignKey;
 import com.tcdng.unify.core.annotation.ListOnly;
-import com.tcdng.unify.core.annotation.Table;
-import com.tcdng.unify.core.annotation.UniqueConstraint;
 import com.tcdng.unify.core.util.StringUtils;
 
 /**
@@ -31,7 +31,7 @@ import com.tcdng.unify.core.util.StringUtils;
  * @since 1.0
  */
 @Table(name = "FC_ROLEPRIVILEGE", uniqueConstraints = { @UniqueConstraint({ "roleId", "privilegeId" }) })
-public class RolePrivilege extends BaseAuditTenantEntity {
+public class RolePrivilege extends BaseAuditEntity {
 
     @ForeignKey(Role.class)
     private Long roleId;

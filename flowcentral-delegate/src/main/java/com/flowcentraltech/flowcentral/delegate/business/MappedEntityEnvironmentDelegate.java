@@ -26,12 +26,12 @@ import com.flowcentraltech.flowcentral.application.business.AbstractEnvironmentD
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleNameConstants;
 import com.flowcentraltech.flowcentral.connect.common.data.BaseResponse;
 import com.flowcentraltech.flowcentral.connect.common.data.DataSourceRequest;
-import com.flowcentraltech.flowcentral.connect.common.data.DelegateEntityListingDTO;
-import com.flowcentraltech.flowcentral.connect.common.data.EntityDTO;
+import com.tcdng.unify.common.data.DelegateEntityListingDTO;
+import com.tcdng.unify.common.data.EntityDTO;
+import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.criterion.Update;
-import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.database.Query;
 import com.tcdng.unify.core.util.DataUtils;
 
@@ -330,6 +330,11 @@ public class MappedEntityEnvironmentDelegate extends AbstractEnvironmentDelegate
     @Override
     public int delete(Class<? extends Entity> entityClass, Object id) throws UnifyException {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public List<Set<String>> getUniqueConstraints(Class<? extends Entity> entityClass) throws UnifyException {
+        return Collections.emptyList();
     }
 
     @Override

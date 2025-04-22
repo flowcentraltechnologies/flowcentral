@@ -25,10 +25,10 @@ import java.util.Map;
 
 import com.flowcentraltech.flowcentral.application.web.lists.AbstractApplicationListCommand;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldDataType;
+import com.tcdng.unify.common.data.Listable;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
-import com.tcdng.unify.core.data.Listable;
 import com.tcdng.unify.core.data.LocaleFactoryMap;
 import com.tcdng.unify.core.list.ListManager;
 
@@ -44,15 +44,18 @@ public class StudioEntityFieldDataTypeListCommand extends AbstractApplicationLis
     @Configurable
     private ListManager listManager;
 
-    private List<EntityFieldDataType> supportedTypeList = Collections.unmodifiableList(Arrays.asList(
-            EntityFieldDataType.REF, EntityFieldDataType.REF_UNLINKABLE, EntityFieldDataType.REF_FILEUPLOAD,
-            EntityFieldDataType.ENUM_REF, EntityFieldDataType.ENUM, EntityFieldDataType.ENUM_DYN,
-            EntityFieldDataType.LIST_ONLY, EntityFieldDataType.CHILD, EntityFieldDataType.CHILD_LIST,
-            EntityFieldDataType.STRING, EntityFieldDataType.CHAR, EntityFieldDataType.BOOLEAN, EntityFieldDataType.LONG,
-            EntityFieldDataType.INTEGER, EntityFieldDataType.SHORT, EntityFieldDataType.DECIMAL,
-            EntityFieldDataType.DOUBLE, EntityFieldDataType.FLOAT, EntityFieldDataType.DATE,
-            EntityFieldDataType.TIMESTAMP, EntityFieldDataType.TIMESTAMP_UTC, EntityFieldDataType.CLOB,
-            EntityFieldDataType.BLOB, EntityFieldDataType.MAPPED, EntityFieldDataType.TENANT_ID));
+    private List<EntityFieldDataType> supportedTypeList = Collections
+            .unmodifiableList(Arrays.asList(EntityFieldDataType.REF, EntityFieldDataType.REF_UNLINKABLE,
+                    EntityFieldDataType.REF_FILEUPLOAD, EntityFieldDataType.ENUM_REF, EntityFieldDataType.ENUM,
+                    EntityFieldDataType.ENUM_DYN, EntityFieldDataType.LIST_ONLY, EntityFieldDataType.CHILD,
+                    EntityFieldDataType.CHILD_LIST, EntityFieldDataType.STRING, EntityFieldDataType.STRING_ARRAY,
+                    EntityFieldDataType.CHAR, EntityFieldDataType.BOOLEAN, EntityFieldDataType.BOOLEAN_ARRAY,
+                    EntityFieldDataType.LONG, EntityFieldDataType.LONG_ARRAY, EntityFieldDataType.INTEGER,
+                    EntityFieldDataType.INTEGER_ARRAY, EntityFieldDataType.SHORT, EntityFieldDataType.SHORT_ARRAY,
+                    EntityFieldDataType.DECIMAL, EntityFieldDataType.DECIMAL_ARRAY, EntityFieldDataType.DOUBLE,
+                    EntityFieldDataType.DOUBLE_ARRAY, EntityFieldDataType.FLOAT, EntityFieldDataType.FLOAT_ARRAY,
+                    EntityFieldDataType.DATE, EntityFieldDataType.DATE_ARRAY, EntityFieldDataType.TIMESTAMP,
+                    EntityFieldDataType.TIMESTAMP_UTC, EntityFieldDataType.CLOB, EntityFieldDataType.BLOB));
 
     private LocaleFactoryMap<List<Listable>> listFactory;
 

@@ -118,8 +118,10 @@ public class StudioEntitySchemaManagerImpl extends AbstractEntitySchemaManager {
             appEntity.setDescription(entitySchema.getDescription());
             appEntity.setLabel(entitySchema.getDescription());
             appEntity.setTableName(entitySchema.getTableName());
-            final String entityClass = ApplicationCodeGenUtils.generateCustomEntityClassName(ConfigType.CUSTOM,
-                    np.getApplicationName(), np.getEntityName());
+            final String entityClass = entitySchema.isDynamic()
+                    ? ApplicationCodeGenUtils.generateCustomEntityClassName(ConfigType.CUSTOM, np.getApplicationName(),
+                            np.getEntityName())
+                    : entitySchema.getImplClass();
             appEntity.setEntityClass(entityClass);
             appEntity.setDataSourceName(entitySchema.getDataSourceAlias());
             appEntity.setDelegate(entitySchema.getDelegate());
@@ -207,6 +209,13 @@ public class StudioEntitySchemaManagerImpl extends AbstractEntitySchemaManager {
                 appEntity.setDataSourceName(entitySchema.getDataSourceAlias());
             }
 
+            appEntity.setBaseType(entitySchema.getBaseType());
+            appEntity.setConfigType(ConfigType.CUSTOM);
+            final String entityClass = entitySchema.isDynamic()
+                    ? ApplicationCodeGenUtils.generateCustomEntityClassName(ConfigType.CUSTOM, np.getApplicationName(),
+                            np.getEntityName())
+                    : entitySchema.getImplClass();
+            appEntity.setEntityClass(entityClass);
             appEntity.setActionPolicy(entitySchema.isActionPolicy());
 
             au.environment().updateLeanByIdVersion(appEntity);
@@ -327,7 +336,8 @@ public class StudioEntitySchemaManagerImpl extends AbstractEntitySchemaManager {
     }
 
     @Override
-    public String createDefaultAppletComponents(String applicationName, AppApplet appApplet, boolean child) throws UnifyException {
+    public String createDefaultAppletComponents(String applicationName, AppApplet appApplet, boolean child)
+            throws UnifyException {
         if (!appApplet.isIdBlank()) {
             return null;
         }
@@ -378,7 +388,7 @@ public class StudioEntitySchemaManagerImpl extends AbstractEntitySchemaManager {
                             if (child && entityFieldDef.isNonEnumForeignKey()) {
                                 continue;
                             }
-                            
+
                             AppTableColumn appTableColumn = new AppTableColumn();
                             appTableColumn.setField(entityFieldDef.getFieldName());
                             appTableColumn.setLabel(null);
@@ -486,7 +496,7 @@ public class StudioEntitySchemaManagerImpl extends AbstractEntitySchemaManager {
                                 if (child && entityFieldDef.isNonEnumForeignKey()) {
                                     continue;
                                 }
-                                
+
                                 appFormElement = new AppFormElement();
                                 appFormElement.setType(FormElementType.FIELD);
                                 appFormElement.setElementName(entityFieldDef.getFieldName());
@@ -567,28 +577,34 @@ public class StudioEntitySchemaManagerImpl extends AbstractEntitySchemaManager {
                 // Add applet properties
                 if (type.isEntityList()) {
                     appletPropList.add(new AppAppletProp(AppletPropertyConstants.SEARCH_TABLE, tableName));
-                    appletPropList.add(new AppAppletProp(AppletPropertyConstants.SEARCH_TABLE_NEW, "true"));
                     appletPropList.add(new AppAppletProp(AppletPropertyConstants.SEARCH_TABLE_QUICKFILTER, "true"));
                     appletPropList.add(new AppAppletProp(AppletPropertyConstants.SEARCH_TABLE_BASICSEARCHONLY, "true"));
                     if (entityDef.isReportable()) {
                         appletPropList.add(new AppAppletProp(AppletPropertyConstants.SEARCH_TABLE_REPORT, "true"));
                     }
 
-                    appletPropList.add(new AppAppletProp(AppletPropertyConstants.CREATE_FORM_SAVE_CLOSE, "true"));
+                    if (!type.isSubmission()) {
+                        appletPropList.add(new AppAppletProp(AppletPropertyConstants.SEARCH_TABLE_NEW, "true"));
+
+                        appletPropList.add(new AppAppletProp(AppletPropertyConstants.CREATE_FORM_SAVE, "true"));
+                        appletPropList.add(new AppAppletProp(AppletPropertyConstants.CREATE_FORM_SAVE_NEXT, "true"));
+                        appletPropList.add(new AppAppletProp(AppletPropertyConstants.CREATE_FORM_SAVE_CLOSE, "true"));
+
+                        appletPropList.add(new AppAppletProp(AppletPropertyConstants.MAINTAIN_FORM_UPDATE, "true"));
+                        appletPropList.add(new AppAppletProp(AppletPropertyConstants.MAINTAIN_FORM_DELETE, "true"));
+                    }
+                } else {
+                    appletPropList.add(new AppAppletProp(AppletPropertyConstants.CREATE_FORM_SAVE, "true"));
+                    appletPropList.add(new AppAppletProp(AppletPropertyConstants.CREATE_FORM_SAVE_NEXT, "true"));
+
+                    appletPropList.add(new AppAppletProp(AppletPropertyConstants.MAINTAIN_FORM_UPDATE, "true"));
+                    appletPropList.add(new AppAppletProp(AppletPropertyConstants.MAINTAIN_FORM_DELETE, "true"));
                 }
-
-                appletPropList.add(new AppAppletProp(AppletPropertyConstants.CREATE_FORM_SAVE, "true"));
-                appletPropList.add(new AppAppletProp(AppletPropertyConstants.CREATE_FORM_SAVE_NEXT, "true"));
-
-                appletPropList.add(new AppAppletProp(AppletPropertyConstants.MAINTAIN_FORM_UPDATE, "true"));
-                appletPropList.add(new AppAppletProp(AppletPropertyConstants.MAINTAIN_FORM_DELETE, "true"));
             }
 
             appApplet.setPropList(appletPropList);
-            
-            
-            return ApplicationNameUtils.getApplicationEntityLongName(applicationName,
-                    appApplet.getName());
+
+            return ApplicationNameUtils.getApplicationEntityLongName(applicationName, appApplet.getName());
         }
 
         return null;

@@ -150,13 +150,13 @@ public class WorkspaceModuleServiceImpl extends AbstractFlowCentralService
                 Workspace workspace = new Workspace(DefaultApplicationConstants.ROOT_WORKSPACE_ENTITY_ID,
                         DefaultApplicationConstants.ROOT_WORKSPACE_CODE,
                         DefaultApplicationConstants.ROOT_WORKSPACE_NAME,
-                        DefaultApplicationConstants.ROOT_WORKSPACE_DESC);
+                        resolveSessionMessage(DefaultApplicationConstants.ROOT_WORKSPACE_DESC));
                 environment().create(workspace);
                 final Long applicationId = applicationModuleService.getApplicationDef("workspace").getId();
                 appPrivilegeManager.registerPrivilege(ConfigType.STATIC, applicationId,
                         ApplicationPrivilegeConstants.APPLICATION_WORKSPACE_CATEGORY_CODE,
                         PrivilegeNameUtils.getWorkspacePrivilegeName(DefaultApplicationConstants.ROOT_WORKSPACE_CODE),
-                        DefaultApplicationConstants.ROOT_WORKSPACE_DESC);
+                        resolveSessionMessage(DefaultApplicationConstants.ROOT_WORKSPACE_DESC));
             }
         }
     }

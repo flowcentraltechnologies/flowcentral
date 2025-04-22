@@ -18,10 +18,10 @@ package com.flowcentraltech.flowcentral.workflow.entities;
 import com.flowcentraltech.flowcentral.application.entities.BaseApplicationEntity;
 import com.flowcentraltech.flowcentral.configuration.constants.ChannelDirectionType;
 import com.flowcentraltech.flowcentral.workflow.constants.WfChannelStatus;
+import com.tcdng.unify.common.annotation.Table;
 import com.tcdng.unify.core.annotation.Column;
 import com.tcdng.unify.core.annotation.ForeignKey;
 import com.tcdng.unify.core.annotation.ListOnly;
-import com.tcdng.unify.core.annotation.Table;
 
 /**
  * Application workflow channel entity.

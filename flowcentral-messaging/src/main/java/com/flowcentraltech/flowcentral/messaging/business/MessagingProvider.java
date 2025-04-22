@@ -19,8 +19,8 @@ import java.util.List;
 
 import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
 import com.flowcentraltech.flowcentral.common.data.SearchInput;
+import com.tcdng.unify.common.data.Listable;
 import com.tcdng.unify.core.UnifyException;
-import com.tcdng.unify.core.data.Listable;
 
 /**
  * Messaging provider.

@@ -15,13 +15,8 @@
  */
 package com.flowcentraltech.flowcentral.integration.rabbitmq;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-
 import java.util.ArrayList;
 import java.util.List;
-
-import org.junit.Test;
 
 import com.flowcentraltech.flowcentral.common.AbstractFlowCentralTest;
 import com.flowcentraltech.flowcentral.common.constants.RecordStatus;

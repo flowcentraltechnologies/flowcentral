@@ -16,7 +16,7 @@
 package com.flowcentraltech.flowcentral.workflow.data;
 
 import com.flowcentraltech.flowcentral.application.data.FilterDef;
-import com.tcdng.unify.core.data.Listable;
+import com.tcdng.unify.common.data.Listable;
 
 /**
  * Workflow filter definition.
@@ -50,4 +50,7 @@ public class WfFilterDef implements Listable {
         return filterDef.getName();
     }
 
+    public boolean isWithFilter() {
+        return filterDef != null;
+    }
 }

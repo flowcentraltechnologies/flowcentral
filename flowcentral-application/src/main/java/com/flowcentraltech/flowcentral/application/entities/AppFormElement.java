@@ -20,10 +20,10 @@ import com.flowcentraltech.flowcentral.configuration.constants.FormColumnsType;
 import com.flowcentraltech.flowcentral.configuration.constants.FormElementType;
 import com.flowcentraltech.flowcentral.configuration.constants.TabContentType;
 import com.flowcentraltech.flowcentral.configuration.constants.WidgetColor;
+import com.tcdng.unify.common.annotation.Table;
 import com.tcdng.unify.core.annotation.Column;
 import com.tcdng.unify.core.annotation.ForeignKey;
 import com.tcdng.unify.core.annotation.ListOnly;
-import com.tcdng.unify.core.annotation.Table;
 
 /**
  * Application form element entity;
@@ -112,6 +112,9 @@ public class AppFormElement extends BaseConfigEntity {
     @Column
     private boolean ignoreParentCondition;
 
+    @Column
+    private boolean includeSysParam;
+    
     @Column
     private boolean showSearch;
 
@@ -356,6 +359,14 @@ public class AppFormElement extends BaseConfigEntity {
 
     public void setIgnoreParentCondition(boolean ignoreParentCondition) {
         this.ignoreParentCondition = ignoreParentCondition;
+    }
+
+    public boolean isIncludeSysParam() {
+        return includeSysParam;
+    }
+
+    public void setIncludeSysParam(boolean includeSysParam) {
+        this.includeSysParam = includeSysParam;
     }
 
     public boolean isShowSearch() {

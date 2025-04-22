@@ -68,6 +68,7 @@ import com.flowcentraltech.flowcentral.application.entities.AppTableFilter;
 import com.flowcentraltech.flowcentral.application.entities.AppTableLoading;
 import com.flowcentraltech.flowcentral.application.entities.AppWidgetType;
 import com.flowcentraltech.flowcentral.application.entities.Application;
+import com.flowcentraltech.flowcentral.application.util.ApplicationCodeGenUtils;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.util.InputWidgetUtils;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldType;
@@ -142,6 +143,7 @@ import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.util.DataUtils;
+import com.tcdng.unify.core.util.StringUtils;
 
 /**
  * Application XML generator.
@@ -206,8 +208,7 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
         appConfig.setWfChannelsConfig(ctx.getWfChannelsConfig());
 
         // APIs
-        List<Long> apiIdList = applicationModuleService.findCustomAppComponentIdList(applicationName,
-                AppAPI.class);
+        List<Long> apiIdList = applicationModuleService.findCustomAppComponentIdList(applicationName, AppAPI.class);
         if (!DataUtils.isBlank(apiIdList)) {
             APIsConfig apisConfig = new APIsConfig();
             List<APIConfig> apiList = new ArrayList<APIConfig>();
@@ -226,14 +227,14 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                 apiConfig.setSupportDelete(appAPI.getSupportDelete());
                 apiConfig.setSupportRead(appAPI.getSupportRead());
                 apiConfig.setSupportUpdate(appAPI.getSupportUpdate());
-                
+
                 apiList.add(apiConfig);
             }
-            
+
             apisConfig.setApiList(apiList);
             appConfig.setApisConfig(apisConfig);
         }
-        
+
         // Applets
         List<Long> appletIdList = applicationModuleService.findCustomAppComponentIdList(applicationName,
                 AppApplet.class);
@@ -436,23 +437,28 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
         }
 
         // Entities
-        List<Long> entityIdList = applicationModuleService.findCustomAppComponentIdList(applicationName,
-                AppEntity.class);
+        List<Long> entityIdList = applicationModuleService.findCustomAppComponentIdList(applicationName, AppEntity.class);
         if (!DataUtils.isBlank(entityIdList)) {
             AppEntitiesConfig entitiesConfig = new AppEntitiesConfig();
             List<AppEntityConfig> entityList = new ArrayList<AppEntityConfig>();
             for (Long entityId : entityIdList) {
                 AppEntityConfig appEntityConfig = new AppEntityConfig();
                 AppEntity appEntity = applicationModuleService.findAppEntity(entityId);
+                final boolean isDirectDelegate = !StringUtils.isBlank(appEntity.getDelegate())
+                        && !ApplicationCodeGenUtils.isCustomClass(appEntity.getEntityClass());
                 descKey = getDescriptionKey(lowerCaseApplicationName, "entity", appEntity.getName());
                 labelKey = descKey + ".label";
                 final String entityDescKey = descKey;
                 ctx.addMessage(StaticMessageCategoryType.ENTITY, descKey, appEntity.getDescription());
                 ctx.addMessage(StaticMessageCategoryType.ENTITY, labelKey, appEntity.getLabel());
-                ctx.addEntity(ApplicationNameUtils.getApplicationEntityLongName(applicationName, appEntity.getName()));
-                appEntityConfig.setBaseType(ctx.isSnapshotMode() ? appEntity.getBaseType() : null);
-                appEntityConfig.setType(
-                        ctx.isSnapshotMode() ? appEntity.getEntityClass() : ctx.getExtensionEntityClassName(appEntity));
+                if (!isDirectDelegate) {
+                    ctx.addEntity(
+                            ApplicationNameUtils.getApplicationEntityLongName(applicationName, appEntity.getName()));
+                }
+
+                appEntityConfig.setBaseType(ctx.isSnapshotMode() || isDirectDelegate ? appEntity.getBaseType() : null);
+                appEntityConfig.setType(ctx.isSnapshotMode() || isDirectDelegate ? appEntity.getEntityClass()
+                        : ctx.getExtensionEntityClassName(appEntity));
                 appEntityConfig.setName(appEntity.getName());
                 appEntityConfig.setDescription("$m{" + descKey + "}");
                 appEntityConfig.setLabel("$m{" + labelKey + "}");
@@ -937,6 +943,7 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                         formTabConfig.setEditFixedRows(appFormElement.getEditFixedRows());
                         formTabConfig.setEditAllowAddition(appFormElement.getEditAllowAddition());
                         formTabConfig.setIgnoreParentCondition(appFormElement.isIgnoreParentCondition());
+                        formTabConfig.setIncludeSysParam(appFormElement.isIncludeSysParam());
                         formTabConfig.setShowSearch(appFormElement.isShowSearch());
                         formTabConfig.setQuickEdit(appFormElement.isQuickEdit());
                         formTabConfig.setQuickOrder(appFormElement.isQuickOrder());
@@ -985,7 +992,7 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                                         formFieldConfig.setInputWidget(appFormElement.getInputWidget());
                                         formFieldConfig.setReference(appFormElement.getInputReference());
                                         formFieldConfig.setPreviewForm(appFormElement.getPreviewForm());
-                                       formFieldConfig.setColumn(appFormElement.getFieldColumn());
+                                        formFieldConfig.setColumn(appFormElement.getFieldColumn());
                                         formFieldConfig.setSwitchOnChange(appFormElement.isSwitchOnChange());
                                         formFieldConfig.setSaveAs(appFormElement.isSaveAs());
                                         formFieldConfig.setRequired(appFormElement.isRequired());

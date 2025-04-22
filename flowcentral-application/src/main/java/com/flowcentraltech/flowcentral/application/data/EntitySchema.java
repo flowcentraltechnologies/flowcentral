@@ -33,6 +33,8 @@ public class EntitySchema {
 
     private String dataSourceAlias;
 
+    private String implClass;
+
     private String entity;
 
     private String name;
@@ -41,19 +43,24 @@ public class EntitySchema {
 
     private String tableName;
 
+    private boolean dynamic;
+
     private boolean actionPolicy;
 
     private List<EntityFieldSchema> fields;
 
-    public EntitySchema(EntityBaseType baseType, String delegate, String dataSourceAlias, String entity, String name,
-            String description, String tableName, boolean actionPolicy, List<EntityFieldSchema> fields) {
+    public EntitySchema(EntityBaseType baseType, String delegate, String dataSourceAlias, String implClass,
+            String entity, String name, String description, String tableName, boolean dynamic, boolean actionPolicy,
+            List<EntityFieldSchema> fields) {
         this.baseType = baseType;
         this.delegate = delegate;
         this.dataSourceAlias = dataSourceAlias;
+        this.implClass = implClass;
         this.entity = entity;
         this.name = name;
         this.description = description;
         this.tableName = tableName;
+        this.dynamic = dynamic;
         this.actionPolicy = actionPolicy;
         this.fields = fields;
     }
@@ -74,6 +81,10 @@ public class EntitySchema {
         return entity;
     }
 
+    public String getImplClass() {
+        return implClass;
+    }
+
     public String getName() {
         return name;
     }
@@ -84,6 +95,10 @@ public class EntitySchema {
 
     public String getTableName() {
         return tableName;
+    }
+
+    public boolean isDynamic() {
+        return dynamic;
     }
 
     public boolean isActionPolicy() {

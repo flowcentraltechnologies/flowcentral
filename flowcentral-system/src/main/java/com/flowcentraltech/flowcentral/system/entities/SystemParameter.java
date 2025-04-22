@@ -17,11 +17,11 @@ package com.flowcentraltech.flowcentral.system.entities;
 
 import com.flowcentraltech.flowcentral.common.entities.BaseAuditEntity;
 import com.flowcentraltech.flowcentral.configuration.constants.SysParamType;
+import com.tcdng.unify.common.annotation.Table;
+import com.tcdng.unify.common.annotation.UniqueConstraint;
 import com.tcdng.unify.core.annotation.Column;
 import com.tcdng.unify.core.annotation.ForeignKey;
 import com.tcdng.unify.core.annotation.ListOnly;
-import com.tcdng.unify.core.annotation.Table;
-import com.tcdng.unify.core.annotation.UniqueConstraint;
 
 /**
  * System parameter entity.
@@ -53,6 +53,9 @@ public class SystemParameter extends BaseAuditEntity {
 
     @Column(length = 256)
     private String editor;
+
+    @Column(name = "FILTER_NM", length = 64, nullable = true)
+    private String filterName;
 
     @Column
     private Boolean control;
@@ -131,6 +134,14 @@ public class SystemParameter extends BaseAuditEntity {
 
     public void setEditor(String editor) {
         this.editor = editor;
+    }
+
+    public String getFilterName() {
+        return filterName;
+    }
+
+    public void setFilterName(String filterName) {
+        this.filterName = filterName;
     }
 
     public Boolean getControl() {

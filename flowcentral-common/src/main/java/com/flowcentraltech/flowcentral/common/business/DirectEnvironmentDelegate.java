@@ -13,34 +13,14 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.connect.common.data;
-
-import java.util.List;
-
+package com.flowcentraltech.flowcentral.common.business;
 
 /**
- * Delegate listing DTO
+ * Direct environment delegate.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class DelegateEntityListingDTO {
-
-    private List<EntityListingDTO> listings;
-    
-    private List<RedirectErrorDTO> redirectErrors;
-
-    public DelegateEntityListingDTO(List<EntityListingDTO> listings, List<RedirectErrorDTO> redirectErrors) {
-        this.listings = listings;
-        this.redirectErrors = redirectErrors;
-    }
-
-    public List<EntityListingDTO> getListings() {
-        return listings;
-    }
-
-    public List<RedirectErrorDTO> getRedirectErrors() {
-        return redirectErrors;
-    }
+public interface DirectEnvironmentDelegate extends EnvironmentDelegate {
 
 }

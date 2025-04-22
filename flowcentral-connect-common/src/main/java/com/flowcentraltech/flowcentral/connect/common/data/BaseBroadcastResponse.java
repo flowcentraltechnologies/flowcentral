@@ -17,6 +17,8 @@ package com.flowcentraltech.flowcentral.connect.common.data;
 
 import java.util.List;
 
+import com.tcdng.unify.common.data.RedirectErrorDTO;
+
 /**
  * Flow central interconnect base broadcast response class.
  * 

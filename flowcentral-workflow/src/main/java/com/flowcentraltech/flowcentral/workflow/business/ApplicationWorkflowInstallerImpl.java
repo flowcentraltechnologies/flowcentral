@@ -124,6 +124,8 @@ public class ApplicationWorkflowInstallerImpl extends AbstractApplicationArtifac
                         workflow.setLabel(label);
                         workflow.setLoadingTable(wfConfig.getLoadingTable());
                         workflow.setSupportMultiItemAction(wfConfig.getSupportMultiItemAction());
+                        workflow.setPublished(wfConfig.getPublished());
+                        workflow.setRunnable(wfConfig.getRunnable());
                         workflow.setEntity(
                                 ApplicationNameUtils.ensureLongNameReference(applicationName, wfConfig.getEntity()));
                         workflow.setDeprecated(false);
@@ -136,6 +138,8 @@ public class ApplicationWorkflowInstallerImpl extends AbstractApplicationArtifac
                         oldWorkflow.setLabel(label);
                         oldWorkflow.setLoadingTable(wfConfig.getLoadingTable());
                         oldWorkflow.setSupportMultiItemAction(wfConfig.getSupportMultiItemAction());
+                        oldWorkflow.setPublished(wfConfig.getPublished());
+                        oldWorkflow.setRunnable(wfConfig.getRunnable());
                         oldWorkflow.setEntity(
                                 ApplicationNameUtils.ensureLongNameReference(applicationName, wfConfig.getEntity()));
                         oldWorkflow.setDeprecated(false);
@@ -276,6 +280,8 @@ public class ApplicationWorkflowInstallerImpl extends AbstractApplicationArtifac
                 workflow.setLabel(label);
                 workflow.setLoadingTable(wfConfig.getLoadingTable());
                 workflow.setSupportMultiItemAction(wfConfig.getSupportMultiItemAction());
+                workflow.setPublished(wfConfig.getPublished());
+                workflow.setRunnable(wfConfig.getRunnable());
                 workflow.setEntity(ApplicationNameUtils.ensureLongNameReference(applicationName, wfConfig.getEntity()));
                 workflow.setDeprecated(false);
                 workflow.setConfigType(ConfigType.CUSTOM);
@@ -536,6 +542,8 @@ public class ApplicationWorkflowInstallerImpl extends AbstractApplicationArtifac
                 wfStep.setAutoLoadConditionName(stepConfig.getAutoLoadCondition());
                 wfStep.setAttachmentProviderName(stepConfig.getAttachmentProvider());
                 wfStep.setNewCommentCaption(stepConfig.getNewCommentCaption());
+                wfStep.setWorkItemLoadingRestriction(stepConfig.getWorkItemLoadingRestriction());
+                wfStep.setEjectionRestriction(stepConfig.getEjectionRestriction());
                 wfStep.setPolicy(stepConfig.getPolicy());
                 wfStep.setValueGenerator(stepConfig.getValueGenerator());
                 wfStep.setAppletSetValuesName(stepConfig.getAppletSetValuesName());

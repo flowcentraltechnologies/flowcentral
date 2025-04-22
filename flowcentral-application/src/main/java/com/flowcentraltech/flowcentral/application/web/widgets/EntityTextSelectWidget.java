@@ -22,13 +22,13 @@ import com.flowcentraltech.flowcentral.application.data.RefDef;
 import com.flowcentraltech.flowcentral.application.web.panels.EntitySelect;
 import com.flowcentraltech.flowcentral.common.web.widgets.AbstractFlowCentralPopupTextField;
 import com.flowcentraltech.flowcentral.configuration.constants.TextType;
+import com.tcdng.unify.common.data.Listable;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.UplAttribute;
 import com.tcdng.unify.core.annotation.UplAttributes;
 import com.tcdng.unify.core.data.ListData;
-import com.tcdng.unify.core.data.Listable;
 import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.annotation.Action;
 import com.tcdng.unify.web.constant.ExtensionType;
@@ -51,6 +51,7 @@ import com.tcdng.unify.web.ui.widget.data.Popup;
         @UplAttribute(name = "filterBinding", type = String.class),
         @UplAttribute(name = "listKey", type = String.class),
         @UplAttribute(name = "space", type = boolean.class, defaultVal = "false"),
+        @UplAttribute(name = "dash", type = boolean.class, defaultVal = "false"),
         @UplAttribute(name = "special", type = boolean.class, defaultVal = "false"),
         @UplAttribute(name = "acceptPlus", type = boolean.class),
         @UplAttribute(name = "acceptMinus", type = boolean.class),
@@ -109,6 +110,10 @@ public class EntityTextSelectWidget extends AbstractFlowCentralPopupTextField {
 
     public String getFormPanelId() throws UnifyException {
         return getPageAttribute(String.class, "formPanel.id");
+    }
+
+    public boolean isDash() throws UnifyException {
+        return getUplAttribute(boolean.class, "dash");
     }
 
     public boolean isSpecial() throws UnifyException {

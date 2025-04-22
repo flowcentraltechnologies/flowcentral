@@ -29,12 +29,12 @@ import com.flowcentraltech.flowcentral.common.business.policies.ActionMode;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
 import com.flowcentraltech.flowcentral.common.business.policies.FormReviewContext;
 import com.flowcentraltech.flowcentral.common.business.policies.SweepingCommitPolicy;
-import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
 import com.flowcentraltech.flowcentral.configuration.constants.FormReviewType;
 import com.flowcentraltech.flowcentral.configuration.constants.RecordActionType;
+import com.tcdng.unify.common.database.Entity;
+import com.tcdng.unify.common.database.WorkEntity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.database.Database;
-import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.system.entities.AbstractSequencedEntity;
 import com.tcdng.unify.web.ui.widget.Page;
 

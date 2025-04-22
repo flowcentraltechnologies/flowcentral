@@ -92,9 +92,11 @@ import com.flowcentraltech.flowcentral.common.data.FormattedAudit;
 import com.flowcentraltech.flowcentral.common.data.FormatterOptions;
 import com.flowcentraltech.flowcentral.common.data.GenerateListingReportOptions;
 import com.flowcentraltech.flowcentral.common.data.ParamValuesDef;
-import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
 import com.flowcentraltech.flowcentral.configuration.constants.InputType;
 import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
+import com.tcdng.unify.common.data.Listable;
+import com.tcdng.unify.common.database.Entity;
+import com.tcdng.unify.common.database.WorkEntity;
 import com.tcdng.unify.common.util.StringToken;
 import com.tcdng.unify.core.UnifyComponent;
 import com.tcdng.unify.core.UnifyException;
@@ -102,14 +104,12 @@ import com.tcdng.unify.core.UserToken;
 import com.tcdng.unify.core.constant.DataType;
 import com.tcdng.unify.core.criterion.Restriction;
 import com.tcdng.unify.core.data.Formats;
-import com.tcdng.unify.core.data.Listable;
 import com.tcdng.unify.core.data.MapValues;
 import com.tcdng.unify.core.data.ParamConfig;
 import com.tcdng.unify.core.data.ParameterizedStringGenerator;
 import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.database.Database;
-import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.database.Query;
 import com.tcdng.unify.core.format.FormatHelper;
 import com.tcdng.unify.core.report.Report;
@@ -1540,12 +1540,15 @@ public interface AppletUtilities extends FlowCentralComponent {
      *                                the entity filter mode
      * @param isIgnoreParentCondition
      *                                ignore parent condition flag
+     * @param includeSysParam
+     *                                include system parameter filters
      * @return the entity filter
      * @throws UnifyException
      *                        if an error occurs
      */
     EntityFilter constructEntityFilter(FormContext ctx, SweepingCommitPolicy sweepingCommitPolicy, String tabName,
-            EntityDef ownerEntityDef, int entityFilterMode, boolean isIgnoreParentCondition) throws UnifyException;
+            EntityDef ownerEntityDef, int entityFilterMode, boolean isIgnoreParentCondition, boolean includeSysParam)
+            throws UnifyException;
 
     /**
      * Constructs entity search input.

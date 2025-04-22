@@ -17,6 +17,9 @@ package com.flowcentraltech.flowcentral.connect.common.data;
 
 import java.util.List;
 
+import com.tcdng.unify.common.data.EntityListingDTO;
+import com.tcdng.unify.common.data.RedirectErrorDTO;
+
 /**
  * Entity listing response.
  * 

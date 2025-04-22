@@ -44,12 +44,11 @@ import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldDataTy
 import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldType;
 import com.flowcentraltech.flowcentral.configuration.xml.FieldSequenceConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.FieldSequenceEntryConfig;
+import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.batch.ConstraintAction;
-import com.tcdng.unify.core.constant.DataType;
 import com.tcdng.unify.core.data.ValueStore;
-import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.task.TaskMonitor;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.NameUtils;
@@ -176,7 +175,7 @@ public abstract class AbstractCreateEntityFormWizardTaskProcessor extends Abstra
                 final String _entity = entityNames.get(0);
                 ApplicationEntityNameParts parts = ApplicationNameUtils.getApplicationEntityNameParts(_entity);
                 final String apiName = StringUtils.decapitalize(parts.getEntityName()) + "RestAPI";
-                final String apiDesc =  NameUtils.describeName(parts.getEntityName()) + " Rest API";
+                final String apiDesc = NameUtils.describeName(parts.getEntityName()) + " Rest API";
                 logDebug(taskMonitor, "Creating entity REST API...");
                 AppAPI appAPI = new AppAPI();
                 appAPI.setApplicationId(applicationId);
@@ -223,8 +222,7 @@ public abstract class AbstractCreateEntityFormWizardTaskProcessor extends Abstra
                 ? ApplicationNameUtils.ensureLongNameReference(applicationName, entry.getReferences()) + "Ref"
                 : null;
         if (entry.getFieldType().isTableColumn()) {
-            DataType _dataType = entry.getDataType();
-            dataType = EntityFieldDataType.fromName(_dataType.name());
+            dataType = entry.getDataType();
             appEntityField.setAuditable(true);
             appEntityField.setReportable(true);
         } else if (entry.getFieldType().isForeignKey()) {
@@ -243,7 +241,7 @@ public abstract class AbstractCreateEntityFormWizardTaskProcessor extends Abstra
         appEntityField.setInputWidget(InputWidgetUtils.getDefaultSyncEntityFieldWidget(dataType));
         appEntityField.setJsonName(entry.getJsonName());
         appEntityField.setJsonFormatter(entry.getFormatter());
-        
+
         // TODO Make available for input
         if (dataType.isDecimal()) {
             appEntityField.setPrecision(20);
@@ -263,20 +261,20 @@ public abstract class AbstractCreateEntityFormWizardTaskProcessor extends Abstra
             if (!importList.isEmpty()) {
                 FieldSequenceConfig fieldSequenceConfig = new FieldSequenceConfig();
                 List<FieldSequenceEntryConfig> entryList = new ArrayList<FieldSequenceEntryConfig>();
-                for (String fieldName: importList) {
+                for (String fieldName : importList) {
                     FieldSequenceEntryConfig fieldSequenceEntryConfig = new FieldSequenceEntryConfig();
                     fieldSequenceEntryConfig.setFieldName(fieldName);
                     fieldSequenceEntryConfig.setFormatter(null); // TODO
                     entryList.add(fieldSequenceEntryConfig);
                 }
-                
+
                 fieldSequenceConfig.setEntryList(entryList);
 
                 AppFieldSequence fieldSequence = new AppFieldSequence(
                         InputWidgetUtils.getFieldSequenceDefinition(fieldSequenceConfig));
-                
+
                 final String uploadName = StringUtils.decapitalize(appEntity.getName()) + "Upload";
-                final String uploadDesc =  NameUtils.describeName(appEntity.getName()) + " Upload";
+                final String uploadDesc = NameUtils.describeName(appEntity.getName()) + " Upload";
                 AppEntityUpload appEntityUpload = new AppEntityUpload();
                 appEntityUpload.setName(uploadName);
                 appEntityUpload.setDescription(uploadDesc);

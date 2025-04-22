@@ -54,10 +54,10 @@ import com.flowcentraltech.flowcentral.common.data.TargetFormState;
 import com.flowcentraltech.flowcentral.common.data.TargetFormTabStates;
 import com.flowcentraltech.flowcentral.common.data.ValidationErrors;
 import com.flowcentraltech.flowcentral.configuration.constants.FormReviewType;
+import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.data.ValueStoreReader;
-import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.filter.ObjectFilter;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.StringUtils;
@@ -300,7 +300,7 @@ public class FormContext extends AbstractContext implements  ValidationErrors {
     public void setInst(Object inst) throws UnifyException {
         appletContext.extractReference(entityDef, inst);
         this.inst = inst;
-        altFormTitle = formDef != null && isWithInst() && formDef.isWithTitleFormat()
+        altFormTitle = (formDef != null && isWithInst() && formDef.isWithTitleFormat())
                 ? appletContext.specialParamProvider()
                         .getStringGenerator(getFormValueStore().getReader(), getFormValueStore().getReader(),
                                 formDef.getTitleFormat())

@@ -19,10 +19,10 @@ import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.entities.BaseApplicationEntity;
 import com.flowcentraltech.flowcentral.configuration.constants.FontFamilyType;
+import com.tcdng.unify.common.annotation.ColumnType;
+import com.tcdng.unify.common.annotation.Table;
 import com.tcdng.unify.core.annotation.ChildList;
 import com.tcdng.unify.core.annotation.Column;
-import com.tcdng.unify.core.annotation.ColumnType;
-import com.tcdng.unify.core.annotation.Table;
 
 /**
  * Entity for storing notification large text information.

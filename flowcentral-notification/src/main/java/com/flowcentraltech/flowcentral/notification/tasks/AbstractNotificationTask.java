@@ -30,12 +30,12 @@ import com.flowcentraltech.flowcentral.common.data.GenerateListingReportOptions;
 import com.flowcentraltech.flowcentral.notification.business.NotificationModuleService;
 import com.flowcentraltech.flowcentral.notification.data.NotifLargeTextWrapper;
 import com.flowcentraltech.flowcentral.system.business.tasks.AbstractSchedulableTask;
+import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.constant.FileAttachmentType;
 import com.tcdng.unify.core.data.Formats;
 import com.tcdng.unify.core.data.ValueStoreReader;
-import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.util.IOUtils;
 
 /**
@@ -75,14 +75,14 @@ public abstract class AbstractNotificationTask extends AbstractSchedulableTask {
     protected Attachment createPdfAttachmentFromListing(String fileName, ValueStoreReader reader, String generator,
             FormListingOptions options) throws UnifyException {
         final byte[] report = appletUtilities.generateViewListingReportAsByteArray(reader, generator, options);
-        return Attachment.newBuilder(FileAttachmentType.PDF).fileName(fileName).title(fileName).name(fileName)
+        return Attachment.newBuilder(FileAttachmentType.PDF, false).fileName(fileName).title(fileName).name(fileName)
                 .data(report).build();
     }
 
     protected Attachment createPdfAttachmentFromListing(String fileName, ValueStoreReader reader,
             List<GenerateListingReportOptions> options) throws UnifyException {
         final byte[] report = appletUtilities.generateViewListingReportAsByteArray(reader, options);
-        return Attachment.newBuilder(FileAttachmentType.PDF).fileName(fileName).title(fileName).name(fileName)
+        return Attachment.newBuilder(FileAttachmentType.PDF, false).fileName(fileName).title(fileName).name(fileName)
                 .data(report).build();
     }
 
@@ -116,7 +116,7 @@ public abstract class AbstractNotificationTask extends AbstractSchedulableTask {
     protected Attachment createPdfAttachmentFromLetterListing(String fileName, ValueStoreReader reader,
             String letterGenerator) throws UnifyException {
         final byte[] report = appletUtilities.generateLetterListingReportAsByteArray(reader, letterGenerator);
-        return Attachment.newBuilder(FileAttachmentType.PDF).fileName(fileName).title(fileName).name(fileName)
+        return Attachment.newBuilder(FileAttachmentType.PDF, false).fileName(fileName).title(fileName).name(fileName)
                 .data(report).build();
     }
 
@@ -151,7 +151,7 @@ public abstract class AbstractNotificationTask extends AbstractSchedulableTask {
             throws UnifyException {
         final String fileName = IOUtils.getActualFileName(absoluteFileName);
         final byte[] file = IOUtils.readFileResourceInputStream(absoluteFileName);
-        return Attachment.newBuilder(type).fileName(fileName).title(fileName).name(fileName).data(file).build();
+        return Attachment.newBuilder(type, false).fileName(fileName).title(fileName).name(fileName).data(file).build();
     }
 
     private Attachment createAttachmentFromDetailListingReport(String fileName, ValueStoreReader reader,
@@ -159,7 +159,7 @@ public abstract class AbstractNotificationTask extends AbstractSchedulableTask {
             Map<String, Object> properties, Formats formats, boolean spreadSheet) throws UnifyException {
         final byte[] report = appletUtilities.generateDetailListingReportAsByteArray(reader, tableName, dataList,
                 detailsListingGenerator, properties, formats, spreadSheet);
-        return Attachment.newBuilder(spreadSheet ? FileAttachmentType.EXCEL : FileAttachmentType.PDF).fileName(fileName)
+        return Attachment.newBuilder(spreadSheet ? FileAttachmentType.EXCEL : FileAttachmentType.PDF, false).fileName(fileName)
                 .title(fileName).name(fileName).data(report).build();
     }
 
@@ -168,7 +168,7 @@ public abstract class AbstractNotificationTask extends AbstractSchedulableTask {
             int columns, boolean asSpreadSheet) throws UnifyException {
         final byte[] report = appletUtilities.generateDetailListingReportAsByteArray(reader, detailsCaseList,
                 detailsListingGenerator, properties, columns, asSpreadSheet);
-        return Attachment.newBuilder(asSpreadSheet ? FileAttachmentType.EXCEL : FileAttachmentType.PDF)
+        return Attachment.newBuilder(asSpreadSheet ? FileAttachmentType.EXCEL : FileAttachmentType.PDF, false)
                 .fileName(fileName).title(fileName).name(fileName).data(report).build();
     }
 }

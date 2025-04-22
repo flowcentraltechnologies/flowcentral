@@ -15,7 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.security.entities;
 
-import com.flowcentraltech.flowcentral.common.entities.BaseAuditTenantEntityQuery;
+import com.flowcentraltech.flowcentral.common.entities.BaseAuditEntityQuery;
 
 /**
  * Query class for password complexity records.
@@ -23,7 +23,7 @@ import com.flowcentraltech.flowcentral.common.entities.BaseAuditTenantEntityQuer
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class PasswordComplexityQuery extends BaseAuditTenantEntityQuery<PasswordComplexity> {
+public class PasswordComplexityQuery extends BaseAuditEntityQuery<PasswordComplexity> {
 
     public PasswordComplexityQuery() {
         super(PasswordComplexity.class);

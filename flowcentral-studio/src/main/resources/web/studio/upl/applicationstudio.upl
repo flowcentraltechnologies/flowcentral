@@ -16,6 +16,11 @@
 !ui-document layout:$d{!ui-desktoptype2 collapsibleSidebar:true} caption:$m{studio.application.document}
     headerPanel:$c{topBanner} menuPanel:$c{menuColPanel} contentPanel:$c{content}
     favicon:$s{web/images/favicon_studio.png}
+	styleSheet:$t{css/flowcentral.css}
+	styleSheet:$t{css/flowcentral-slim.css}
+	styleSheet:$t{css/flowcentral-theme.css}
+	script:$s{web/js/flowcentral-web.js}
+	script:$s{web/js/apexcharts.min.js}
 	script:$s{web/js/fabric.min.js}
 	script:$s{web/js/flowcentral-studio-web.js}
 	styleSheet:$t{css/flowcentral-studio.css}
@@ -66,8 +71,9 @@
 
 // Content
 !ui-contentpanel:content styleClassBinding:$e{fc-content-tabbed}
-	paths:$s{/applicationstudio/dashboard/openPage} tabbed:true
-	documentPath:$s{/applicationstudio} titleUppercase:false  
+	paths:$s{/applicationstudio/dashboard/openPage} stickyPaths:true
+	tabbed:true documentPath:$s{/applicationstudio}
+	titleUppercase:false  
 
 // New application dialog
 !fc-newapplicationdialogpanel:createApplicationPopup style:$s{width:740px;}
@@ -91,6 +97,9 @@
 
 // Quick form edit
 !fc-quickformeditpanel:quickFormEditPopup binding:$w{}
+
+// Help form panel
+!fc-helpformpanel:helpFormPopup binding:$w{}
 
 //Actions 
 !ui-post:userDetailsAct path:$n{/showUserDetails}

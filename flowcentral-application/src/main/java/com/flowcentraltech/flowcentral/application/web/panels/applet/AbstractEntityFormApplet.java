@@ -88,19 +88,20 @@ import com.flowcentraltech.flowcentral.common.business.policies.SweepingCommitPo
 import com.flowcentraltech.flowcentral.common.business.policies.TableActionResult;
 import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
 import com.flowcentraltech.flowcentral.common.constants.FileAttachmentCategoryType;
-import com.flowcentraltech.flowcentral.common.constants.WfItemVersionType;
 import com.flowcentraltech.flowcentral.common.data.AttachmentDetails;
 import com.flowcentraltech.flowcentral.common.data.AuditSnapshot;
 import com.flowcentraltech.flowcentral.common.data.FormListingOptions;
 import com.flowcentraltech.flowcentral.common.data.RowChangeInfo;
 import com.flowcentraltech.flowcentral.common.entities.BaseEntity;
 import com.flowcentraltech.flowcentral.common.entities.BaseWorkEntity;
-import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
 import com.flowcentraltech.flowcentral.configuration.constants.AppletType;
 import com.flowcentraltech.flowcentral.configuration.constants.AuditEventType;
 import com.flowcentraltech.flowcentral.configuration.constants.AuditSourceType;
 import com.flowcentraltech.flowcentral.configuration.constants.FormReviewType;
 import com.flowcentraltech.flowcentral.configuration.constants.RecordActionType;
+import com.tcdng.unify.common.constants.WfItemVersionType;
+import com.tcdng.unify.common.database.Entity;
+import com.tcdng.unify.common.database.WorkEntity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.UserToken;
 import com.tcdng.unify.core.criterion.Restriction;
@@ -110,7 +111,6 @@ import com.tcdng.unify.core.data.Formats;
 import com.tcdng.unify.core.data.IndexedTarget;
 import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.database.Database;
-import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.database.Query;
 import com.tcdng.unify.core.filter.ObjectFilter;
 import com.tcdng.unify.core.system.entities.AbstractSequencedEntity;
@@ -1190,7 +1190,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
                 && !((WorkEntity) form.getFormBean()).isInWorkflow();
     }
 
-    public boolean formBeanMatchAppletPropertyCondition(String conditionPropName) throws UnifyException {
+    public boolean matchFormBeanToAppletPropertyCondition(String conditionPropName) throws UnifyException {
         return au().formBeanMatchAppletPropertyCondition(getFormAppletDef(), form, conditionPropName);
     }
 

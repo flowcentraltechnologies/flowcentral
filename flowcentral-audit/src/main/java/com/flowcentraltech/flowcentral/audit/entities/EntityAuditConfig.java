@@ -18,12 +18,12 @@ package com.flowcentraltech.flowcentral.audit.entities;
 
 import com.flowcentraltech.flowcentral.common.entities.BaseStatusEntity;
 import com.flowcentraltech.flowcentral.configuration.constants.AuditSourceType;
+import com.tcdng.unify.common.annotation.Index;
+import com.tcdng.unify.common.annotation.Table;
+import com.tcdng.unify.common.annotation.UniqueConstraint;
 import com.tcdng.unify.core.annotation.Column;
 import com.tcdng.unify.core.annotation.ForeignKey;
-import com.tcdng.unify.core.annotation.Index;
 import com.tcdng.unify.core.annotation.ListOnly;
-import com.tcdng.unify.core.annotation.Table;
-import com.tcdng.unify.core.annotation.UniqueConstraint;
 
 /**
  * Entity audit configuration entity.

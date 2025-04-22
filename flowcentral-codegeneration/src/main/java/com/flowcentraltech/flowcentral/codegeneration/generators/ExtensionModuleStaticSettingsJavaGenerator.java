@@ -20,6 +20,8 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.zip.ZipOutputStream;
 
+import com.flowcentraltech.flowcentral.configuration.constants.AbstractExtensionModuleStaticSettings;
+import com.tcdng.unify.common.annotation.AutoDetect;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.util.StringUtils;
@@ -55,8 +57,8 @@ public class ExtensionModuleStaticSettingsJavaGenerator extends AbstractJavaArti
         pw.println();
 
         pw.println(
-                "import com.flowcentraltech.flowcentral.configuration.constants.AbstractExtensionModuleStaticSettings;");
-        pw.println("import com.tcdng.unify.core.annotation.AutoDetect;");
+                "import " + AbstractExtensionModuleStaticSettings.class.getName() + ";");
+        pw.println("import " + AutoDetect.class.getName() + ";");
         pw.println();
         pw.println();
 

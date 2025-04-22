@@ -15,7 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.notification.entities;
 
-import com.flowcentraltech.flowcentral.common.entities.BaseAuditTenantEntityQuery;
+import com.flowcentraltech.flowcentral.common.entities.BaseAuditEntityQuery;
 import com.flowcentraltech.flowcentral.notification.constants.NotificationInboxStatus;
 
 /**
@@ -24,7 +24,7 @@ import com.flowcentraltech.flowcentral.notification.constants.NotificationInboxS
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class NotificationInboxQuery extends BaseAuditTenantEntityQuery<NotificationInbox> {
+public class NotificationInboxQuery extends BaseAuditEntityQuery<NotificationInbox> {
 
     public NotificationInboxQuery() {
         super(NotificationInbox.class);

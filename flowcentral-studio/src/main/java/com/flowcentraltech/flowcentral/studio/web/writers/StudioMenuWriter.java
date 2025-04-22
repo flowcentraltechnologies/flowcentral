@@ -90,9 +90,9 @@ public class StudioMenuWriter extends AbstractPanelWriter {
                     StudioAppComponentType.ENUMERATION, StudioAppComponentType.WIDGET, StudioAppComponentType.API,
                     StudioAppComponentType.APPLET, StudioAppComponentType.TABLE, StudioAppComponentType.FORM,
                     StudioAppComponentType.HELP_SHEET, StudioAppComponentType.REPORT_CONFIGURATION,
-                    StudioAppComponentType.NOTIFICATION_TEMPLATE, /* StudioAppComponentType.NOTIFICATION_LARGETEXT, */
-                    StudioAppComponentType.DASHBOARD, StudioAppComponentType.CHART_DATASOURCE,
-                    StudioAppComponentType.CHART, StudioAppComponentType.WORKFLOW));
+                    StudioAppComponentType.NOTIFICATION_TEMPLATE, 
+                    StudioAppComponentType.CHART_DATASOURCE,
+                    StudioAppComponentType.CHART, StudioAppComponentType.DASHBOARD, StudioAppComponentType.WORKFLOW));
 
     @Override
     protected void doWriteStructureAndContent(ResponseWriter writer, Widget widget) throws UnifyException {

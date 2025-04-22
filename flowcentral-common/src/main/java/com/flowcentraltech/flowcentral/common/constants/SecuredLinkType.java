@@ -17,8 +17,8 @@
 package com.flowcentraltech.flowcentral.common.constants;
 
 import com.tcdng.unify.common.annotation.StaticList;
+import com.tcdng.unify.common.annotation.Table;
 import com.tcdng.unify.common.constants.EnumConst;
-import com.tcdng.unify.core.annotation.Table;
 import com.tcdng.unify.core.util.EnumUtils;
 
 /**
@@ -34,7 +34,9 @@ public enum SecuredLinkType implements EnumConst {
     LOGIN(
             "LGI"),
     WORKFLOW_DECISION(
-            "WFD");
+            "WFD"),
+    OPEN(
+            "OPN");
 
     private final String code;
 
@@ -58,6 +60,10 @@ public enum SecuredLinkType implements EnumConst {
 
     public boolean isWorkflowDecision() {
         return WORKFLOW_DECISION.equals(this);
+    }
+
+    public boolean isOpen() {
+        return OPEN.equals(this);
     }
     
     public static SecuredLinkType fromCode(String code) {

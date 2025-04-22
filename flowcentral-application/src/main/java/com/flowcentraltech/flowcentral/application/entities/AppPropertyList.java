@@ -17,8 +17,8 @@ package com.flowcentraltech.flowcentral.application.entities;
 
 import java.util.List;
 
+import com.tcdng.unify.common.annotation.Table;
 import com.tcdng.unify.core.annotation.ChildList;
-import com.tcdng.unify.core.annotation.Table;
 
 /**
  * Application property list entity.

@@ -24,6 +24,8 @@ import com.flowcentraltech.flowcentral.application.data.DelegateEntityInfo;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.web.widgets.EntitySearchWidget;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldDataType;
+import com.tcdng.unify.common.data.Listable;
+import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -32,8 +34,6 @@ import com.tcdng.unify.core.annotation.UplAttributes;
 import com.tcdng.unify.core.criterion.Amongst;
 import com.tcdng.unify.core.criterion.NotAmongst;
 import com.tcdng.unify.core.criterion.Restriction;
-import com.tcdng.unify.core.data.Listable;
-import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.database.Query;
 import com.tcdng.unify.core.list.ListManager;
 
@@ -82,20 +82,29 @@ public class EntityFieldRefSearchWidget extends EntitySearchWidget {
                 case LIST_ONLY:
                 case BLOB:
                 case BOOLEAN:
+                case BOOLEAN_ARRAY:
                 case CATEGORY_COLUMN:
                 case CLOB:
                 case DATE:
+                case DATE_ARRAY:
                 case DECIMAL:
+                case DECIMAL_ARRAY:
                 case DOUBLE:
+                case DOUBLE_ARRAY:
                 case CHAR:
                 case FLOAT:
+                case FLOAT_ARRAY:
                 case FOSTER_PARENT_ID:
                 case FOSTER_PARENT_TYPE:
                 case INTEGER:
+                case INTEGER_ARRAY:
                 case LONG:
+                case LONG_ARRAY:
                 case SCRATCH:
                 case SHORT:
+                case SHORT_ARRAY:
                 case STRING:
+                case STRING_ARRAY:
                 case TIMESTAMP:
                 case TIMESTAMP_UTC:
                 default:
@@ -150,20 +159,29 @@ public class EntityFieldRefSearchWidget extends EntitySearchWidget {
                 case LIST_ONLY:
                 case BLOB:
                 case BOOLEAN:
+                case BOOLEAN_ARRAY:
                 case CATEGORY_COLUMN:
                 case CLOB:
                 case DATE:
+                case DATE_ARRAY:
                 case DECIMAL:
+                case DECIMAL_ARRAY:
                 case DOUBLE:
+                case DOUBLE_ARRAY:
                 case CHAR:
                 case FLOAT:
+                case FLOAT_ARRAY:
                 case FOSTER_PARENT_ID:
                 case FOSTER_PARENT_TYPE:
                 case INTEGER:
+                case INTEGER_ARRAY:
                 case LONG:
+                case LONG_ARRAY:
                 case SCRATCH:
                 case SHORT:
+                case SHORT_ARRAY:
                 case STRING:
+                case STRING_ARRAY:
                 case TIMESTAMP:
                 case TIMESTAMP_UTC:
                 default:

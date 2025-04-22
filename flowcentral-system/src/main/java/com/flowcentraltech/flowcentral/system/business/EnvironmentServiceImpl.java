@@ -36,9 +36,10 @@ import com.flowcentraltech.flowcentral.common.business.policies.EntityListAction
 import com.flowcentraltech.flowcentral.common.business.policies.SweepingCommitPolicy;
 import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
 import com.flowcentraltech.flowcentral.common.entities.EntityWrapper;
-import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
 import com.flowcentraltech.flowcentral.configuration.constants.RecordActionType;
 import com.flowcentraltech.flowcentral.system.constants.SystemModuleNameConstants;
+import com.tcdng.unify.common.database.Entity;
+import com.tcdng.unify.common.database.WorkEntity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -50,7 +51,6 @@ import com.tcdng.unify.core.criterion.GroupingFunction;
 import com.tcdng.unify.core.criterion.Update;
 import com.tcdng.unify.core.database.Aggregation;
 import com.tcdng.unify.core.database.Database;
-import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.database.GroupingAggregation;
 import com.tcdng.unify.core.database.Query;
 import com.tcdng.unify.core.util.DataUtils;
@@ -76,6 +76,11 @@ public class EnvironmentServiceImpl extends AbstractBusinessService implements E
     @Override
     public Database getDatabase() throws UnifyException {
         return db();
+    }
+
+    @Override
+    public Database getDatabase(String datasource) throws UnifyException {
+        return db(datasource);
     }
 
     @Override
@@ -781,15 +786,15 @@ public class EnvironmentServiceImpl extends AbstractBusinessService implements E
         }
     }
 
-    private Database db(Class<? extends Entity> entityClass) throws UnifyException {
+    protected Database db(Class<? extends Entity> entityClass) throws UnifyException {
         EnvironmentDelegateHolder delegateInfo = environmentDelegateRegistrar.getEnvironmentDelegateInfo(entityClass);
         return delegateInfo != null ? (delegateInfo.isDirect() ? db(delegateInfo.getDataSourceName())
-                : delegateInfo.getEnvironmentDelegate()) : db();
+                : delegateInfo.getEnvironmentDelegate()) : super.db(entityClass);
     }
 
     private Database db_direct(Class<? extends Entity> entityClass) throws UnifyException {
         EnvironmentDelegateHolder delegateInfo = environmentDelegateRegistrar.getEnvironmentDelegateInfo(entityClass);
-        return delegateInfo != null ? db(delegateInfo.getDataSourceName()) : db();
+        return delegateInfo != null ? db(delegateInfo.getDataSourceName()) : super.db(entityClass);
     }
 
     private EntityActionResult executeEntityPreActionPolicy(EntityActionContext ctx) throws UnifyException {

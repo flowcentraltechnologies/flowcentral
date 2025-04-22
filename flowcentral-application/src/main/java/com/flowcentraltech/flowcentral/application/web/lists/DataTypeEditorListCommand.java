@@ -24,12 +24,12 @@ import java.util.Locale;
 import java.util.Map;
 
 import com.flowcentraltech.flowcentral.application.business.AdditionalDataTypeEditorProvider;
+import com.tcdng.unify.common.data.Listable;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.constant.DataType;
 import com.tcdng.unify.core.data.ListData;
-import com.tcdng.unify.core.data.Listable;
 import com.tcdng.unify.core.list.StringParam;
 
 /**

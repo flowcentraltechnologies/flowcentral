@@ -23,7 +23,7 @@ package com.flowcentraltech.flowcentral.common.constants;
  */
 public interface CommonGeneratorComponentConstants {
 
-    String SYSTEM_PARAMETER = "sysprm";
+    String SYSTEM_PARAMETER = "spg";
 
-    String PROCESS_VARIABLE = "prcvar";
+    String PROCESS_VARIABLE = "pvg";
 }

@@ -32,7 +32,6 @@ import com.flowcentraltech.flowcentral.common.business.PostBootSetup;
 import com.flowcentraltech.flowcentral.common.business.RolePrivilegeBackupAgent;
 import com.flowcentraltech.flowcentral.common.business.StudioProvider;
 import com.flowcentraltech.flowcentral.common.constants.ConfigType;
-import com.flowcentraltech.flowcentral.common.constants.WfItemVersionType;
 import com.flowcentraltech.flowcentral.common.data.BranchInfo;
 import com.flowcentraltech.flowcentral.configuration.constants.DefaultApplicationConstants;
 import com.flowcentraltech.flowcentral.configuration.data.ModuleInstall;
@@ -55,6 +54,7 @@ import com.flowcentraltech.flowcentral.organization.entities.Role;
 import com.flowcentraltech.flowcentral.organization.entities.RolePrivilege;
 import com.flowcentraltech.flowcentral.organization.entities.RolePrivilegeQuery;
 import com.flowcentraltech.flowcentral.organization.entities.RoleQuery;
+import com.tcdng.unify.common.constants.WfItemVersionType;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.UserToken;
 import com.tcdng.unify.core.annotation.Broadcast;
@@ -100,7 +100,7 @@ public class OrganizationModuleServiceImpl extends AbstractFlowCentralService
             {
                 @Override
                 protected TenantRolePrivileges create(Long tenantId, Object... arg2) throws Exception {
-                    return new TenantRolePrivileges(tenantId);
+                    return new TenantRolePrivileges();
                 }
             };
 
@@ -411,6 +411,11 @@ public class OrganizationModuleServiceImpl extends AbstractFlowCentralService
         return environment().value(Long.class, "id", new DepartmentQuery().code(departmentCode));
     }
 
+    @Override
+    public String getDepartmentCode(Long departmentId) throws UnifyException {
+        return environment().value(String.class, "code", new DepartmentQuery().id(departmentId));
+    }
+
     @Broadcast
     public synchronized void invalidateRolePrivilegesCache(String... roleCodes) throws UnifyException {
         for (TenantRolePrivileges tenantRolePrivileges : tenantRolePrivileges.values()) {
@@ -543,25 +548,22 @@ public class OrganizationModuleServiceImpl extends AbstractFlowCentralService
 
         private final FactoryMap<String, RolePrivileges> privilegesByRole;
 
-        private final Long tenantId;
-
-        public TenantRolePrivileges(Long _tenantId) {
-            this.tenantId = _tenantId;
+        public TenantRolePrivileges() {
             this.privilegesByRole = new StaleableFactoryMap<String, RolePrivileges>()
                 {
                     @Override
                     protected boolean stale(String roleCode, RolePrivileges rolePrivileges) throws Exception {
                         return rolePrivileges.getVersion() < environment().value(Long.class, "versionNo",
-                                new RoleQuery().code(roleCode).tenantId(tenantId));
+                                new RoleQuery().code(roleCode));
                     }
 
                     @Override
                     protected RolePrivileges create(String roleCode, Object... arg2) throws Exception {
                         Set<String> privileges = environment().valueSet(String.class, "privilegeCode",
                                 new RolePrivilegeQuery().roleWfItemVersionType(WfItemVersionType.ORIGINAL)
-                                        .roleCode(roleCode).tenantId(tenantId));
+                                        .roleCode(roleCode));
                         long version = environment().value(Long.class, "versionNo",
-                                new RoleQuery().code(roleCode).tenantId(tenantId));
+                                new RoleQuery().code(roleCode));
                         return new RolePrivileges(privileges, version);
                     }
                 };

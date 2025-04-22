@@ -106,6 +106,8 @@ public class WorkflowsXmlGenerator extends AbstractResourcesArtifactGenerator {
                 workflowConfig.setLabel("$m{" + labelKey + "}");
                 workflowConfig.setLoadingTable(workflow.getLoadingTable());
                 workflowConfig.setSupportMultiItemAction(workflow.isSupportMultiItemAction());
+                workflowConfig.setPublished(workflow.isPublished());
+                workflowConfig.setRunnable(workflow.isRunnable());
                 workflowConfig.setDescFormat(workflow.getDescFormat());
                 workflowConfig.setEntity(workflow.getEntity());
 
@@ -183,6 +185,7 @@ public class WorkflowsXmlGenerator extends AbstractResourcesArtifactGenerator {
                         wfStepConfig.setReadOnlyCondition(wfStep.getReadOnlyConditionName());
                         wfStepConfig.setAutoLoadCondition(wfStep.getAutoLoadConditionName());
                         wfStepConfig.setWorkItemLoadingRestriction(wfStep.getWorkItemLoadingRestriction());
+                        wfStepConfig.setEjectionRestriction(wfStep.getEjectionRestriction());
                         wfStepConfig.setAttachmentProvider(wfStep.getAttachmentProviderName());
                         wfStepConfig.setNewCommentCaption(wfStep.getNewCommentCaption());
                         wfStepConfig.setPolicy(wfStep.getPolicy());

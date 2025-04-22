@@ -20,9 +20,9 @@ import java.util.List;
 import java.util.Locale;
 
 import com.flowcentraltech.flowcentral.organization.entities.MappedWorkflowQuery;
+import com.tcdng.unify.common.data.Listable;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
-import com.tcdng.unify.core.data.Listable;
 import com.tcdng.unify.core.list.ZeroParams;
 
 /**
@@ -40,7 +40,8 @@ public class MappedWorkflowListCommand extends AbstractOrganizationListCommand<Z
 
     @Override
     public List<? extends Listable> execute(Locale locale, ZeroParams params) throws UnifyException {
-        return environment().findAll(new MappedWorkflowQuery().addOrder("description").ignoreEmptyCriteria(true));
+        return environment()
+                .findAll(new MappedWorkflowQuery().runnable().addOrder("description").ignoreEmptyCriteria(true));
     }
 
 }

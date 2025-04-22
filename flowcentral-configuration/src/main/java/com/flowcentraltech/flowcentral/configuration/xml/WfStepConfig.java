@@ -72,7 +72,10 @@ public class WfStepConfig extends BaseNameConfig {
     
     @JacksonXmlProperty(isAttribute = true)
     private String workItemLoadingRestriction;
-   
+    
+    @JacksonXmlProperty(isAttribute = true)
+    private String ejectionRestriction;
+    
     @JacksonXmlProperty(isAttribute = true)
     private String attachmentProvider;
 
@@ -224,6 +227,14 @@ public class WfStepConfig extends BaseNameConfig {
 
     public void setWorkItemLoadingRestriction(String workItemLoadingRestriction) {
         this.workItemLoadingRestriction = workItemLoadingRestriction;
+    }
+
+    public String getEjectionRestriction() {
+        return ejectionRestriction;
+    }
+
+    public void setEjectionRestriction(String ejectionRestriction) {
+        this.ejectionRestriction = ejectionRestriction;
     }
 
     public String getAttachmentProvider() {

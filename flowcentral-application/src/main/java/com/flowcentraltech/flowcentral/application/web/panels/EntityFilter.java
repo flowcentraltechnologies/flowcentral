@@ -50,12 +50,15 @@ public class EntityFilter extends AbstractPanelFormBinding {
     private String paramList;
 
     private FilterConditionListType listType;
+    
+    private boolean includeSysParam;
 
     public EntityFilter(FormContext ctx, SweepingCommitPolicy sweepingCommitPolicy, String tabName,
-            EntityDef ownerEntityDef, int mode, boolean ignoreConditionalDisabled) {
+            EntityDef ownerEntityDef, int mode, boolean ignoreConditionalDisabled, boolean includeSysParam) {
         super(ctx, sweepingCommitPolicy, tabName, ignoreConditionalDisabled);
         this.ownerEntityDef = ownerEntityDef;
         this.mode = mode;
+        this.includeSysParam = includeSysParam;
     }
 
     public Filter getFilter() {
@@ -76,6 +79,10 @@ public class EntityFilter extends AbstractPanelFormBinding {
 
     public void setParamList(String paramList) {
         this.paramList = paramList;
+    }
+
+    public boolean isIncludeSysParam() {
+        return includeSysParam;
     }
 
     public void load(EntityDef entityDef) throws UnifyException {

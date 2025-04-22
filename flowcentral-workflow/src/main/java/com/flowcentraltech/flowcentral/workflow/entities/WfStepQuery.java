@@ -56,6 +56,14 @@ public class WfStepQuery extends BaseConfigNamedEntityQuery<WfStep> {
                 new And().add(new Equals("type", WorkflowStepType.START)).add(new IsNotNull("autoLoadConditionName")));
     }
 
+    public WfStepQuery workflowRunnable(boolean workflowRunnable) {
+        return (WfStepQuery) addEquals("workflowRunnable", workflowRunnable);
+    }
+
+    public WfStepQuery withEjectionRestriction() {
+        return (WfStepQuery) addIsNotNull("ejectionRestriction");
+    }
+
     public WfStepQuery type(WorkflowStepType type) {
         return (WfStepQuery) addEquals("type", type);
     }

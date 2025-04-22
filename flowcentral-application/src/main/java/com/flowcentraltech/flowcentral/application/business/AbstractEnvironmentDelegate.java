@@ -42,11 +42,13 @@ import com.flowcentraltech.flowcentral.connect.common.constants.DataSourceOperat
 import com.flowcentraltech.flowcentral.connect.common.data.BaseResponse;
 import com.flowcentraltech.flowcentral.connect.common.data.DataSourceParam;
 import com.flowcentraltech.flowcentral.connect.common.data.DataSourceRequest;
-import com.flowcentraltech.flowcentral.connect.common.data.DelegateEntityListingDTO;
-import com.flowcentraltech.flowcentral.connect.common.data.EntityDTO;
 import com.flowcentraltech.flowcentral.connect.common.data.JsonDataSourceResponse;
 import com.flowcentraltech.flowcentral.connect.common.data.PseudoDataSourceResponse;
 import com.tcdng.unify.common.constants.EnumConst;
+import com.tcdng.unify.common.data.DelegateEntityListingDTO;
+import com.tcdng.unify.common.data.EntityDTO;
+import com.tcdng.unify.common.data.Listable;
+import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.UserToken;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -55,14 +57,12 @@ import com.tcdng.unify.core.criterion.AggregateFunction;
 import com.tcdng.unify.core.criterion.GroupingFunction;
 import com.tcdng.unify.core.criterion.Update;
 import com.tcdng.unify.core.data.BeanValueStore;
-import com.tcdng.unify.core.data.Listable;
 import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.database.Aggregation;
 import com.tcdng.unify.core.database.CallableProc;
 import com.tcdng.unify.core.database.DataSource;
 import com.tcdng.unify.core.database.DataSourceEntityListProvider;
 import com.tcdng.unify.core.database.DatabaseSession;
-import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.database.GroupingAggregation;
 import com.tcdng.unify.core.database.NativeUpdate;
 import com.tcdng.unify.core.database.Query;
@@ -97,7 +97,17 @@ public abstract class AbstractEnvironmentDelegate extends AbstractFlowCentralCom
     }
 
     @Override
-    public final DataSource getDataSource() throws UnifyException {
+    public final boolean isManaged() throws UnifyException {
+        return false;
+    }
+
+    @Override
+    public final <T extends Entity> boolean isOfThisDatabase(Class<T> entityClass) throws UnifyException {
+        return true;
+    }
+
+    @Override
+    public DataSource getDataSource() throws UnifyException {
         throw new UnsupportedOperationException();
     }
 
@@ -587,6 +597,12 @@ public abstract class AbstractEnvironmentDelegate extends AbstractFlowCentralCom
         DataSourceRequest req = new DataSourceRequest(DataSourceOperation.COUNT_ALL);
         setQueryDetails(req, query);
         return singleValueResultOperation(int.class, query.getEntityClass(), req);
+    }
+
+    @Override
+    public List<Set<String>> getUniqueConstraints(Class<? extends Entity> entityClass) throws UnifyException {
+        // TODO 
+        return Collections.emptyList();
     }
 
     @Override

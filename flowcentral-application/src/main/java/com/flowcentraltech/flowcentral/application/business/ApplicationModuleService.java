@@ -17,6 +17,7 @@ package com.flowcentraltech.flowcentral.application.business;
 
 import java.io.Reader;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import com.flowcentraltech.flowcentral.application.data.APIDef;
@@ -88,20 +89,20 @@ import com.flowcentraltech.flowcentral.common.constants.ConfigType;
 import com.flowcentraltech.flowcentral.common.constants.OwnershipType;
 import com.flowcentraltech.flowcentral.common.data.ParamValuesDef;
 import com.flowcentraltech.flowcentral.common.entities.EntityWrapper;
-import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityBaseType;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldDataType;
 import com.flowcentraltech.flowcentral.configuration.constants.FormElementType;
 import com.flowcentraltech.flowcentral.system.entities.Module;
+import com.tcdng.unify.common.data.Listable;
+import com.tcdng.unify.common.database.Entity;
+import com.tcdng.unify.common.database.WorkEntity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.criterion.Restriction;
-import com.tcdng.unify.core.data.Listable;
 import com.tcdng.unify.core.data.MapValues;
 import com.tcdng.unify.core.data.ParamConfig;
 import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.data.ValueStoreWriter;
-import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.database.Query;
 import com.tcdng.unify.core.database.dynamic.DynamicEntityInfo;
 import com.tcdng.unify.core.task.TaskMonitor;
@@ -114,6 +115,17 @@ import com.tcdng.unify.core.task.TaskMonitor;
  */
 public interface ApplicationModuleService extends FlowCentralService {
 
+    /**
+     * Gets process variables.
+     * 
+     * @param entity
+     *               optional entity long name
+     * @return the process variables
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    Map<String, Object> getProcessVariables(String entity) throws UnifyException;
+    
     /**
      * Checks if entity component is present.
      * 

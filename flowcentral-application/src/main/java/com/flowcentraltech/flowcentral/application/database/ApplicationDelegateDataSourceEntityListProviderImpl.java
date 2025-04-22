@@ -16,16 +16,19 @@
 package com.flowcentraltech.flowcentral.application.database;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleNameConstants;
 import com.flowcentraltech.flowcentral.application.data.DelegateEntityInfo;
+import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.database.AbstractDataSourceEntityListProvider;
-import com.tcdng.unify.core.database.Entity;
+import com.tcdng.unify.core.database.DataSourceEntityContext;
 
 /**
  * Application delegate datasource entity list provider..
@@ -53,13 +56,23 @@ public class ApplicationDelegateDataSourceEntityListProviderImpl extends Abstrac
     }
 
     @Override
-    public List<Class<?>> getTableEntityTypes(String dataSourceName) throws UnifyException {
-        List<String> entityAliases = getEntityAliasesByDataSource(dataSourceName);
-        return applicationModuleService.getDelegateEntities(entityAliases);
+    public DataSourceEntityContext getDataSourceEntityContext(List<String> datasources) throws UnifyException {
+        Map<String, List<Class<?>>> tableEnitiesByDataSource = new HashMap<String, List<Class<?>>>();
+        Map<String, List<Class<? extends Entity>>> viewEnitiesByDataSource = new HashMap<String, List<Class<? extends Entity>>>();
+
+        for (String datasource : datasources) {
+            // Entities
+            List<String> entityAliases = getEntityAliasesByDataSource(datasource);
+            List<Class<?>> tableEntities = applicationModuleService.getDelegateEntities(entityAliases);
+
+            // Views
+            List<Class<? extends Entity>> viewEntities = Collections.emptyList();
+            
+            tableEnitiesByDataSource.put(datasource, tableEntities);
+            viewEnitiesByDataSource.put(datasource, viewEntities);
+        }
+
+        return new DataSourceEntityContext(datasources, tableEnitiesByDataSource, viewEnitiesByDataSource);
     }
 
-    @Override
-    public List<Class<? extends Entity>> getViewEntityTypes(String dataSourceName) throws UnifyException {
-        return Collections.emptyList();
-    }
 }

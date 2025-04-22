@@ -22,13 +22,13 @@ import com.flowcentraltech.flowcentral.common.entities.BaseConfigNamedEntity;
 import com.flowcentraltech.flowcentral.configuration.constants.RecordActionType;
 import com.flowcentraltech.flowcentral.configuration.constants.WorkflowStepPriority;
 import com.flowcentraltech.flowcentral.configuration.constants.WorkflowStepType;
+import com.tcdng.unify.common.annotation.Table;
+import com.tcdng.unify.common.annotation.UniqueConstraint;
 import com.tcdng.unify.core.annotation.Child;
 import com.tcdng.unify.core.annotation.ChildList;
 import com.tcdng.unify.core.annotation.Column;
 import com.tcdng.unify.core.annotation.ForeignKey;
 import com.tcdng.unify.core.annotation.ListOnly;
-import com.tcdng.unify.core.annotation.Table;
-import com.tcdng.unify.core.annotation.UniqueConstraint;
 
 /**
  * Workflow step entity.
@@ -75,6 +75,9 @@ public class WfStep extends BaseConfigNamedEntity {
 
     @Column(name = "WORKITEM_LOADING_RESTR", length = 64, nullable = true)
     private String workItemLoadingRestriction;
+    
+    @Column(name = "EJECTION_RESTR", length = 64, nullable = true)
+    private String ejectionRestriction;
     
     @Column(name = "ATTACHMENT_PROVIDER_NM", length = 64, nullable = true)
     private String attachmentProviderName;
@@ -138,6 +141,9 @@ public class WfStep extends BaseConfigNamedEntity {
 
     @ListOnly(key = "priority", property = "description")
     private String priorityDesc;
+
+    @ListOnly(key = "workflowId", property = "runnable")
+    private boolean workflowRunnable;
 
     @ListOnly(key = "workflowId", property = "name")
     private String workflowName;
@@ -278,6 +284,14 @@ public class WfStep extends BaseConfigNamedEntity {
 
     public void setWorkItemLoadingRestriction(String workItemLoadingRestriction) {
         this.workItemLoadingRestriction = workItemLoadingRestriction;
+    }
+
+    public String getEjectionRestriction() {
+        return ejectionRestriction;
+    }
+
+    public void setEjectionRestriction(String ejectionRestriction) {
+        this.ejectionRestriction = ejectionRestriction;
     }
 
     public String getAttachmentProviderName() {
@@ -446,6 +460,14 @@ public class WfStep extends BaseConfigNamedEntity {
 
     public void setPriorityDesc(String priorityDesc) {
         this.priorityDesc = priorityDesc;
+    }
+
+    public boolean isWorkflowRunnable() {
+        return workflowRunnable;
+    }
+
+    public void setWorkflowRunnable(boolean workflowRunnable) {
+        this.workflowRunnable = workflowRunnable;
     }
 
     public String getWorkflowName() {

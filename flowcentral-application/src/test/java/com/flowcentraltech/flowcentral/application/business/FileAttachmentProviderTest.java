@@ -43,7 +43,7 @@ public class FileAttachmentProviderTest extends AbstractFlowCentralTest {
 
     @Test
     public void testSychFileAttachments() throws Exception {
-        Attachment attachment = Attachment.newBuilder(FileAttachmentType.IMAGE).name("disk").title("Disk")
+        Attachment attachment = Attachment.newBuilder(FileAttachmentType.IMAGE, false).name("disk").title("Disk")
                 .data(new byte[] { (byte) 0xbe, (byte) 0xba }).build();
         fileAttachmentProvider.saveFileAttachment(FileAttachmentCategoryType.FORM_CATEGORY, "application.application",
                 1L, attachment);

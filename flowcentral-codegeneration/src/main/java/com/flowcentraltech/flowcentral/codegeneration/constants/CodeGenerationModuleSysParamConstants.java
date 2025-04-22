@@ -47,4 +47,8 @@ public interface CodeGenerationModuleSysParamConstants {
 
     String ENABLE_SNAPSHOT_TO_REPOSITORY = "CDN-0012";
 
+    String SNAPSHOT_LOCAL_WORKING_FOLDER = "CDN-0013";
+
+    String ENABLE_SNAPSHOT_TO_LOCAL_WORKING_FOLDER = "CDN-0014";
+
 }

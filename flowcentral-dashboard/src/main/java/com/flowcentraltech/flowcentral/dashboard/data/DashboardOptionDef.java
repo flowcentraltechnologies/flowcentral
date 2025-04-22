@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.flowcentraltech.flowcentral.application.data.FilterDef;
-import com.tcdng.unify.core.data.Listable;
+import com.tcdng.unify.common.data.Listable;
 
 /**
  * Dashboard option definition object.

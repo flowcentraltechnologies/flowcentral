@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.flowcentraltech.flowcentral.configuration.constants.FormStatePolicyType;
-import com.tcdng.unify.core.data.Listable;
+import com.tcdng.unify.common.data.Listable;
 import com.tcdng.unify.core.util.DataUtils;
 
 /**

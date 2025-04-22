@@ -16,7 +16,7 @@
 
 package com.flowcentraltech.flowcentral.common.data;
 
-import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
+import com.tcdng.unify.common.database.WorkEntity;
 import com.tcdng.unify.core.data.BeanValueStore;
 import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.data.ValueStoreReader;

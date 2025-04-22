@@ -16,10 +16,10 @@
 package com.flowcentraltech.flowcentral.application.web.writers;
 
 import com.flowcentraltech.flowcentral.application.web.widgets.EntityTextSelectWidget;
+import com.tcdng.unify.common.data.Listable;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Writes;
-import com.tcdng.unify.core.data.Listable;
 import com.tcdng.unify.web.ui.util.WebRegexUtils;
 import com.tcdng.unify.web.ui.widget.EventHandler;
 import com.tcdng.unify.web.ui.widget.ResponseWriter;
@@ -80,7 +80,7 @@ public class EntityTextSelectWriter extends AbstractPopupTextFieldWriter {
         EntityTextSelectWidget entityTextSelect = (EntityTextSelectWidget) textField;
         switch (entityTextSelect.type()) {
             case ALPHANUMERIC:
-                return WebRegexUtils.getAlphanumericFormatRegex(entityTextSelect.isSpecial(),
+                return WebRegexUtils.getAlphanumericFormatRegex(entityTextSelect.isSpecial(), entityTextSelect.isDash(),
                         entityTextSelect.isSpace());
             case FULLNAME:
                 return WebRegexUtils.getFullNameFormatRegex(entityTextSelect.isSpecial());

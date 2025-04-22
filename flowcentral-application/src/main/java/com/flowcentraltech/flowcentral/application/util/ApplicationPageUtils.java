@@ -17,7 +17,6 @@ package com.flowcentraltech.flowcentral.application.util;
 
 import java.util.List;
 
-
 import com.flowcentraltech.flowcentral.configuration.constants.AppletType;
 import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.constant.UnifyWebRequestAttributeConstants;

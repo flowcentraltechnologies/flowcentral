@@ -17,8 +17,8 @@
 package com.flowcentraltech.flowcentral.studio.web.controllers;
 
 import com.flowcentraltech.flowcentral.common.business.LoginUserPhotoGenerator;
+import com.flowcentraltech.flowcentral.common.web.controllers.AbstractForwarderPageBean;
 import com.flowcentraltech.flowcentral.studio.web.data.CreateAppForm;
-import com.tcdng.unify.web.ui.AbstractPageBean;
 
 /**
  * Application studio page bean.
@@ -26,7 +26,7 @@ import com.tcdng.unify.web.ui.AbstractPageBean;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class ApplicationStudioPageBean extends AbstractPageBean {
+public class ApplicationStudioPageBean extends AbstractForwarderPageBean {
 
     private LoginUserPhotoGenerator userPhotoGenerator;
 

@@ -23,10 +23,10 @@ import java.util.Map;
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.business.EntityBasedFilterGenerator;
 import com.flowcentraltech.flowcentral.application.util.InputWidgetUtils;
+import com.tcdng.unify.common.data.Listable;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.criterion.FilterConditionType;
 import com.tcdng.unify.core.criterion.Restriction;
-import com.tcdng.unify.core.data.Listable;
 import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.filter.ObjectFilter;
 import com.tcdng.unify.core.util.DataUtils;
@@ -117,7 +117,7 @@ public class FilterDef implements Listable {
             return au.getComponent(EntityBasedFilterGenerator.class, filterGenerator).generate(valueStoreReader, null);
         }
 
-        return InputWidgetUtils.getRestriction(au, entityDef, this, now, parameters);
+        return InputWidgetUtils.getRestriction(au, entityDef, valueStoreReader, this, now, parameters);
     }
 
     public ObjectFilter getObjectFilter(EntityDef entityDef, ValueStoreReader valueStoreReader, Date now)

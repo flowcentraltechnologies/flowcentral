@@ -21,6 +21,7 @@ import java.io.PrintWriter;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
@@ -82,6 +83,8 @@ import com.flowcentraltech.flowcentral.system.entities.SectorQuery;
 import com.flowcentraltech.flowcentral.system.entities.SystemParameter;
 import com.flowcentraltech.flowcentral.system.entities.SystemParameterQuery;
 import com.flowcentraltech.flowcentral.system.util.LicenseUtils;
+import com.tcdng.unify.common.data.Listable;
+import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.common.util.StringToken;
 import com.tcdng.unify.core.Setting;
 import com.tcdng.unify.core.UnifyException;
@@ -99,13 +102,12 @@ import com.tcdng.unify.core.constant.FileAttachmentType;
 import com.tcdng.unify.core.constant.FrequencyUnit;
 import com.tcdng.unify.core.criterion.Update;
 import com.tcdng.unify.core.data.FactoryMap;
-import com.tcdng.unify.core.data.Listable;
+import com.tcdng.unify.core.data.ListData;
 import com.tcdng.unify.core.data.ParamGeneratorManager;
 import com.tcdng.unify.core.data.ParameterizedStringGenerator;
 import com.tcdng.unify.core.data.Period;
 import com.tcdng.unify.core.data.StaleableFactoryMap;
 import com.tcdng.unify.core.data.ValueStoreReader;
-import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.database.dynamic.sql.DynamicSqlDataSourceManager;
 import com.tcdng.unify.core.security.TwoWayStringCryptograph;
 import com.tcdng.unify.core.task.TaskExecLimit;
@@ -215,7 +217,7 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
                     String[] weekDays = DataUtils.convert(String[].class, scheduledTask.getWeekdays());
                     String[] days = DataUtils.convert(String[].class, scheduledTask.getDays());
                     String[] months = DataUtils.convert(String[].class, scheduledTask.getMonths());
-                    return new ScheduledTaskDef(scheduledTaskId, scheduledTask.getTenantId(),
+                    return new ScheduledTaskDef(scheduledTaskId,
                             scheduledTask.getUpdatedBy(), lock, scheduledTask.getDescription(),
                             scheduledTask.getTaskName(), startTimeOffset, endTimeOffset, repeatMillSecs, weekDays, days,
                             months, pvd, scheduledTask.getVersionNo());
@@ -249,6 +251,12 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
+    public SecuredLinkInfo getNewOpenLink(String title, String openUrl, Long entityId, int validityMinutes)
+            throws UnifyException {
+        return securedLinkManager.getNewOpenLink(title, openUrl, entityId, validityMinutes);
+    }
+
+    @Override
     public SecuredLinkInfo getNewSecuredLink(SecuredLinkType type, String title, String contentPath)
             throws UnifyException {
         final int expirationInMinutes = getSysParameterValue(int.class,
@@ -257,7 +265,8 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
-    public SecuredLinkInfo getNewSecuredLink(SecuredLinkType type, String title, String contentPath, String assignedLoginId) throws UnifyException {
+    public SecuredLinkInfo getNewSecuredLink(SecuredLinkType type, String title, String contentPath,
+            String assignedLoginId) throws UnifyException {
         final int expirationInMinutes = getSysParameterValue(int.class,
                 SystemModuleSysParamConstants.SECURED_LINK_EXPIRATION_MINUTES);
         return securedLinkManager.getNewSecuredLink(type, title, contentPath, assignedLoginId, expirationInMinutes);
@@ -338,6 +347,23 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
     public List<? extends Listable> getContactSystemParameters() throws UnifyException {
         return environment()
                 .listAll(new SystemParameterQuery().type(SysParamType.CONTACT).addSelect("code", "description"));
+    }
+
+    @Override
+    public List<? extends Listable> getFilterSystemParameters() throws UnifyException {
+        List<ListData> result = Collections.emptyList();
+        List<SystemParameter> params = environment().listAll(new SystemParameterQuery().addIsNotNull("filterName")
+                .addSelect("type", "code", "filterName").addOrder("filterName"));
+        if (!DataUtils.isBlank(params)) {
+            result = new ArrayList<ListData>();
+            for (SystemParameter systemParameter : params) {
+                final SysParamType type = systemParameter.getType();
+                result.add(new ListData(type.encodeFilterCode(systemParameter.getCode()),
+                        type.encodeFilterName(systemParameter.getFilterName())));
+            }
+        }
+
+        return result;
     }
 
     @Override
@@ -483,7 +509,7 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
                 .getLicenseEntryDef(featureCode).getStatus();
     }
 
-    @Periodic(PeriodicType.EON)
+    @Periodic(PeriodicType.EXTREME_SLOW)
     public void refreshLicense(TaskMonitor taskMonitor) throws UnifyException {
         licenseDefFactoryMap.clear();
     }
@@ -519,7 +545,7 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
             String license = writer.toString();
             String encLicense = cryptograph.encrypt(license);
 
-            final Attachment _attachment = Attachment.newBuilder(FileAttachmentType.TEXT).name(licenseName)
+            final Attachment _attachment = Attachment.newBuilder(FileAttachmentType.TEXT, false).name(licenseName)
                     .title(licenseName).fileName(licenseName).data(encLicense.getBytes()).build();
             fileAttachmentProvider.saveFileAttachment(FileAttachmentCategoryType.LICENSE_CATEGORY, "system.credential",
                     0L, _attachment);
@@ -566,7 +592,7 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
             final String licenseName = FileAttachmentCategoryType.LICENSE_CATEGORY.code();
             license = writer.toString();
             String encLicense = cryptograph.encrypt(license);
-            final Attachment _attachment = Attachment.newBuilder(FileAttachmentType.TEXT).name(licenseName)
+            final Attachment _attachment = Attachment.newBuilder(FileAttachmentType.TEXT, false).name(licenseName)
                     .title(licenseName).fileName(licenseName).data(encLicense.getBytes()).build();
             fileAttachmentProvider.saveFileAttachment(FileAttachmentCategoryType.LICENSE_CATEGORY, "system.credential",
                     0L, _attachment);
@@ -577,7 +603,7 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
         return 0;
     }
 
-    @Periodic(PeriodicType.NORMAL)
+    @Periodic(PeriodicType.FAST)
     @Synchronized(lock = SCHEDULED_TASK_EXECUTION_LOCK, waitForLock = false)
     public void triggerScheduledTasksForExecution(TaskMonitor taskMonitor) throws UnifyException {
         // If periodic task is canceled or scheduler is disabled cancel all scheduled
@@ -615,7 +641,7 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
                     taskLock);
             Map<String, Object> taskParameters = new HashMap<String, Object>();
             taskParameters.put(TaskParameterConstants.USER_LOGIN_ID, scheduledTaskDef.getUserLoginId());
-            taskParameters.put(TaskParameterConstants.TENANT_ID, scheduledTaskDef.getTenantId());
+            taskParameters.put(TaskParameterConstants.TENANT_ID, Entity.PRIMARY_TENANT_ID);
             taskParameters.put(TaskParameterConstants.LOCK_TO_TRY, taskLock);
             taskParameters.put(SystemSchedTaskConstants.SCHEDULEDTASK_ID, scheduledTaskId);
 
@@ -814,6 +840,7 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
                     sysParameter.setValue(sysParamConfig.getDefaultVal());
                     sysParameter.setDefaultValue(sysParamConfig.getDefaultVal());
                     sysParameter.setEditor(sysParamConfig.getEditor());
+                    sysParameter.setFilterName(sysParamConfig.getFilterName());
                     sysParameter.setType(sysParamConfig.getType());
                     sysParameter.setControl(sysParamConfig.isControl());
                     sysParameter.setEditable(sysParamConfig.isEditable());
@@ -822,6 +849,7 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
                     oldSysParameter.setDescription(resolveApplicationMessage(sysParamConfig.getDescription()));
                     oldSysParameter.setDefaultValue(sysParamConfig.getDefaultVal());
                     oldSysParameter.setEditor(sysParamConfig.getEditor());
+                    oldSysParameter.setFilterName(sysParamConfig.getFilterName());
                     oldSysParameter.setType(sysParamConfig.getType());
                     oldSysParameter.setControl(sysParamConfig.isControl());
                     oldSysParameter.setEditable(sysParamConfig.isEditable());

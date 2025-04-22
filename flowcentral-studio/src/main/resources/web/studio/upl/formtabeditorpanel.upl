@@ -24,7 +24,7 @@
     formCaptionSuffix:$s{:} formBinding:$g{dialogFormBinding} formColumns:2
 	formSection:$d{!ui-section components:$c{frmContType frmName frmLabel
 		frmReference frmApplet frmFilter frmMappedField frmMappedForm frmEditAction frmEditFixedRows frmEditViewOnly frmEditAllowAddition
-		frmIgnoreParentCondition frmShowSearch frmQuickEdit frmQuickOrder frmVisible frmEditable frmDisabled}}
+		frmIgnoreParentCondition frmIncludeSysParam frmShowSearch frmQuickEdit frmQuickOrder frmVisible frmEditable frmDisabled}}
 
 !ui-select:frmContType styleClass:$e{fc-formfield} caption:$m{formeditor.tab.contenttype}
 	list:studiotabcontenttypelist blankOption:$s{} binding:contentType required:true
@@ -54,6 +54,8 @@
 	list:studioformfilterlist listParams:$l{form} blankOption:$s{} binding:editFixedRows
 !ui-checkbox:frmIgnoreParentCondition caption:$m{formeditor.tab.ignoreparentcondition}
 	binding:ignoreParentCondition layoutCaption:true
+!ui-checkbox:frmIncludeSysParam caption:$m{formeditor.tab.includesysparam}
+	binding:includeSysParam layoutCaption:true
 !ui-checkbox:frmShowSearch caption:$m{formeditor.tab.showsearch} binding:showSearch layoutCaption:true
 !ui-checkbox:frmQuickEdit caption:$m{formeditor.tab.quickedit} binding:quickEdit layoutCaption:true
 !ui-checkbox:frmQuickOrder caption:$m{formeditor.tab.quickorder} binding:quickOrder layoutCaption:true

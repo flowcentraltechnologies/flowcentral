@@ -20,6 +20,7 @@ import java.util.List;
 import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
 import com.flowcentraltech.flowcentral.common.data.Recipient;
 import com.flowcentraltech.flowcentral.configuration.constants.NotifType;
+import com.tcdng.unify.common.util.ProcessVariableUtils;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.ValueStoreReader;
 
@@ -31,11 +32,11 @@ import com.tcdng.unify.core.data.ValueStoreReader;
  */
 public interface NotificationAlertSender extends FlowCentralComponent {
 
-    String TEMPLATE_VARIABLE = "rsvTemplate";
+    String TEMPLATE_VARIABLE = ProcessVariableUtils.getVariable("template");
 
-    String WFITEM_LINK_VARIABLE = "rsvWfitemLink";
+    String WFITEM_LINK_VARIABLE = ProcessVariableUtils.getVariable("wfItemLink");
 
-    String WFITEM_HTMLLINK_VARIABLE = "rsvWfitemHtmlLink";
+    String WFITEM_HTMLLINK_VARIABLE = ProcessVariableUtils.getVariable("wfItemHtmlLink");
 
     /**
      * Gets the notification type for this sender.

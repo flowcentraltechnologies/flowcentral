@@ -183,6 +183,20 @@ public interface SecurityModuleService extends FlowCentralService, UserLoginActi
     List<UserRoleInfo> findConsolidatedUserRoles(String userLoginId, Date activeAt) throws UnifyException;
 
     /**
+     * Finds consolidated third-party user roles. Combines user roles and all the
+     * roles for the groups the user belongs to, if any.
+     * 
+     * @param userLoginId
+     *                    the user login ID
+     * @param activeAt
+     *                    active time
+     * @return the user consolidated role information
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    List<UserRoleInfo> findConsolidatedThirdpartyUserRoles(String userLoginId, Date activeAt) throws UnifyException;
+    
+    /**
      * Gets associated branches by hub with branch itself included.
      * 
      * @param branchCode

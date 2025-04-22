@@ -23,10 +23,10 @@ import com.flowcentraltech.flowcentral.chart.constants.ChartModuleNameConstants;
 import com.flowcentraltech.flowcentral.chart.data.AbstractChartDetailsProvider;
 import com.flowcentraltech.flowcentral.chart.data.ChartDetails;
 import com.flowcentraltech.flowcentral.chart.entities.ChartSnapshotQuery;
+import com.tcdng.unify.common.data.Listable;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.criterion.Restriction;
-import com.tcdng.unify.core.data.Listable;
 
 /**
  * Chart snapshot chart details provider.

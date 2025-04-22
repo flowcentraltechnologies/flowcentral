@@ -17,6 +17,7 @@ package com.flowcentraltech.flowcentral.security.templatewrappers;
 
 import com.flowcentraltech.flowcentral.notification.data.BaseNotifTemplateWrapper;
 import com.flowcentraltech.flowcentral.notification.data.NotifTemplateDef;
+import com.tcdng.unify.common.util.ProcessVariableUtils;
 
 /**
  * User welcome notification template wrapper.
@@ -29,7 +30,7 @@ public class UserWelcomeTemplateWrapper extends BaseNotifTemplateWrapper {
     public static final String __TEMPLATE_NAME = "security.userWelcome";
     private static final String FULL_NAME = "fullName";
     private static final String LOGIN_ID = "loginId";
-    private static final String PLAIN_PASSWORD = "plainPassword";
+    private static final String PLAIN_PASSWORD = ProcessVariableUtils.getVariable("plainPassword");
 
     public UserWelcomeTemplateWrapper(NotifTemplateDef notifTemplateDef) {
         super(notifTemplateDef);

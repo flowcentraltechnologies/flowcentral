@@ -17,10 +17,10 @@
 package com.flowcentraltech.flowcentral.common.business;
 
 import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
+import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.criterion.Restriction;
 import com.tcdng.unify.core.criterion.Update;
-import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.database.Query;
 
 /**

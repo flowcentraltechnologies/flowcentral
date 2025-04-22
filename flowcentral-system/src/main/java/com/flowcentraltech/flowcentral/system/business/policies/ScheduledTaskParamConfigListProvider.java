@@ -22,11 +22,11 @@ import java.util.List;
 import com.flowcentraltech.flowcentral.common.business.policies.AbstractParamConfigListProvider;
 import com.flowcentraltech.flowcentral.system.constants.SystemModuleNameConstants;
 import com.flowcentraltech.flowcentral.system.entities.ScheduledTask;
+import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.data.ParamConfig;
-import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.task.TaskManager;
 import com.tcdng.unify.core.util.StringUtils;
 

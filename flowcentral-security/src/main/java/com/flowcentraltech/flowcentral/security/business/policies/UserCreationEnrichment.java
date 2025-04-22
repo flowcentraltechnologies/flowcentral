@@ -24,10 +24,10 @@ import com.flowcentraltech.flowcentral.common.annotation.EntityReferences;
 import com.flowcentraltech.flowcentral.common.business.policies.AbstractWfEnrichmentPolicy;
 import com.flowcentraltech.flowcentral.security.constants.SecurityModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
+import com.tcdng.unify.common.data.Listable;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
-import com.tcdng.unify.core.data.Listable;
 import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.data.ValueStoreWriter;
 import com.tcdng.unify.core.security.OneWayStringCryptograph;
@@ -58,11 +58,11 @@ public class UserCreationEnrichment extends AbstractWfEnrichmentPolicy {
             int passwordLength = systemModuleService.getSysParameterValue(int.class,
                     SecurityModuleSysParamConstants.USER_PASSWORD_LENGTH);
 
-            String plainPassword = passwordGenerator.generatePassword(wfItemReader.read(String.class, "loginId"),
+            final String plainPassword = passwordGenerator.generatePassword(wfItemReader.read(String.class, "loginId"),
                     passwordLength);
-            String encryptedPassword = passwordCryptograph.encrypt(plainPassword);
-            wfItemWriter.setTempValue("plainPassword", plainPassword);
-            wfItemWriter.write("password", encryptedPassword);
+            final String encryptedPassword = passwordCryptograph.encrypt(plainPassword);
+            setProcessVariable(wfItemWriter, "plainPassword", plainPassword);
+            setProperty(wfItemWriter, "password", encryptedPassword);
         }
     }
 

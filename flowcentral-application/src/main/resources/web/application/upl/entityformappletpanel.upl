@@ -18,16 +18,6 @@
 
 !ui-hidden:maintainActHolder eventHandler:$d{!ui-event event:onclick action:$c{maintainAct}}
 
-// Floating Form
-//!fc-headerwithtabsformpanel:popupFormPanel styleClass:$e{fc-floating-form} binding:form
-//	moreCenterComponents:$c{displayCounterLabel}
-//	moreActionButtons:$c{formAttachmentBtn frmDiffBtn frmActionBtns submitNextBtn submitCloseBtn saveAsBtn saveBtn saveNextBtn saveCloseBtn}
-//	moreActionButtons:$c{updateBtn updateCloseBtn deleteBtn cancelBtn overviewBtn prevBtn nextBtn}
-//	altActionButtons:$c{frmActionBtns submitNextBtn submitCloseBtn saveBtn saveNextBtn saveCloseBtn}
-//	altActionButtons:$c{updateBtn updateCloseBtn deleteBtn cancelBtn}
-//	moreMemoryComponents:$c{focusMemory tabMemory}
-//	switchOnChangeEventHandler:$d{!ui-event event:onchange action:$c{switchOnChangeAct}}
-
 // Form
 !fc-headerwithtabsformpanel:formPanel binding:form
 	moreCenterComponents:$c{displayCounterLabel}
@@ -158,7 +148,9 @@
 !ui-postcommand:saveNextAct command:saveAndNext components:$c{formPanel}
 !ui-postcommand:saveCloseAct command:saveAndClose components:$c{formPanel}
 !ui-postcommand:submitAct command:submit components:$c{formPanel}
+	 confirm:$m{entityformappletpanel.confirm.submit}
 !ui-postcommand:submitNextAct command:submitAndNext components:$c{formPanel}
+	 confirm:$m{entityformappletpanel.confirm.submit}
 !ui-postcommand:updateAct command:update components:$c{formPanel}
 !ui-postcommand:updateCloseAct command:updateAndClose components:$c{formPanel}
 !ui-postcommand:deleteAct command:delete confirm:$m{entityformappletpanel.confirm.delete}

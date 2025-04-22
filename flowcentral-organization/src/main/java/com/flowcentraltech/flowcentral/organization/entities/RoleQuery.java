@@ -16,8 +16,9 @@
 package com.flowcentraltech.flowcentral.organization.entities;
 
 import java.util.Date;
+import java.util.List;
 
-import com.flowcentraltech.flowcentral.common.entities.BaseStatusWorkTenantEntityQuery;
+import com.flowcentraltech.flowcentral.common.entities.BaseStatusWorkEntityQuery;
 import com.tcdng.unify.core.criterion.OrBuilder;
 
 /**
@@ -26,7 +27,7 @@ import com.tcdng.unify.core.criterion.OrBuilder;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class RoleQuery extends BaseStatusWorkTenantEntityQuery<Role> {
+public class RoleQuery extends BaseStatusWorkEntityQuery<Role> {
 
     public RoleQuery() {
         super(Role.class);
@@ -44,6 +45,10 @@ public class RoleQuery extends BaseStatusWorkTenantEntityQuery<Role> {
 
     public RoleQuery departmentId(Long departmentId) {
         return (RoleQuery) addEquals("departmentId", departmentId);
+    }
+
+    public RoleQuery codeIn(List<String> codeList) {
+        return (RoleQuery) addAmongst("code", codeList);
     }
 
     public RoleQuery code(String code) {

@@ -26,12 +26,12 @@ import com.flowcentraltech.flowcentral.system.data.LicenseDef;
 import com.flowcentraltech.flowcentral.system.entities.Credential;
 import com.flowcentraltech.flowcentral.system.entities.CredentialQuery;
 import com.flowcentraltech.flowcentral.system.entities.DownloadLog;
-import com.flowcentraltech.flowcentral.system.entities.Module;
-import com.flowcentraltech.flowcentral.system.entities.ModuleQuery;
 import com.flowcentraltech.flowcentral.system.entities.MappedTenant;
 import com.flowcentraltech.flowcentral.system.entities.MappedTenantQuery;
+import com.flowcentraltech.flowcentral.system.entities.Module;
+import com.flowcentraltech.flowcentral.system.entities.ModuleQuery;
+import com.tcdng.unify.common.data.Listable;
 import com.tcdng.unify.core.UnifyException;
-import com.tcdng.unify.core.data.Listable;
 
 /**
  * System module service.
@@ -40,6 +40,24 @@ import com.tcdng.unify.core.data.Listable;
  * @since 1.0
  */
 public interface SystemModuleService extends FlowCentralService {
+
+    /**
+     * Creates a new open link.
+     * 
+     * @param title
+     *                        the title (optional)
+     * @param openUrl
+     *                        the open URL
+     * @param entityId
+     *                        the target entity ID
+     * @param validityMinutes
+     *                        the validity minutes
+     * @return the secured link information
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    SecuredLinkInfo getNewOpenLink(String title, String openUrl, Long entityId, int validityMinutes)
+            throws UnifyException;
 
     /**
      * Creates a new a secured link.
@@ -299,11 +317,20 @@ public interface SystemModuleService extends FlowCentralService {
     List<? extends Listable> getNamesSystemParameters() throws UnifyException;
 
     /**
-     * Get contact system parameters.
+     * Gets contact system parameters.
      * 
      * @return list of contact system parameters
      * @throws UnifyException
      *                        if an error occurs
      */
     List<? extends Listable> getContactSystemParameters() throws UnifyException;
+    
+    /**
+     * Gets filter system parameters.
+     * 
+     * @return list of filter system parameters
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    List<? extends Listable> getFilterSystemParameters() throws UnifyException;
 }

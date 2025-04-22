@@ -15,7 +15,6 @@
  */
 package com.flowcentraltech.flowcentral.messaging.os.data;
 
-import com.tcdng.unify.core.util.StringUtils;
 
 /**
  * OS messaging access.
@@ -126,6 +125,6 @@ public class OSMessagingAccess {
     }
 
     public boolean isWithAuthorization() {
-        return !StringUtils.isBlank(authorization);
+        return authorization != null && !authorization.trim().isEmpty();
     }
 }

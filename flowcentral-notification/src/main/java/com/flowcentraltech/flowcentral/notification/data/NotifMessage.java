@@ -57,7 +57,7 @@ public class NotifMessage {
     private List<Recipient> recipients;
 
     private List<Attachment> attachments;
-    
+
     private int sendDelayInMinutes;
 
     private NotifMessage(ImportanceType importance, NotifType notifType, NotifMessageFormat format, String from,
@@ -163,7 +163,7 @@ public class NotifMessage {
         private List<Recipient> recipients;
 
         private List<Attachment> attachments;
-        
+
         private int sendDelayInMinutes;
 
         private Builder(String template) {
@@ -246,13 +246,29 @@ public class NotifMessage {
             return this;
         }
 
-        public Builder addAttachment(FileAttachmentType type, String name, String title, String fileName, byte[] data) {
-            attachments.add(Attachment.newBuilder(type).name(name).title(title).fileName(fileName).data(data).build());
+        public Builder addAttachment(FileAttachmentType type, String name, String title, String fileName, byte[] data,
+                boolean inline) {
+            attachments.add(
+                    Attachment.newBuilder(type, inline).name(name).title(title).fileName(fileName).data(data).build());
             return this;
         }
 
-        public Builder addAttachment(FileAttachmentType type, String name, String title, byte[] data) {
-            attachments.add(Attachment.newBuilder(type).name(name).title(title).data(data).build());
+        public Builder addAttachment(FileAttachmentType type, String name, String title, byte[] data, boolean inline) {
+            attachments.add(Attachment.newBuilder(type, inline).name(name).title(title).data(data).build());
+            return this;
+        }
+
+        public Builder addAttachment(FileAttachmentType type, String name, String title, String fileName,
+                String provider, String sourceId, boolean inline) {
+            attachments.add(Attachment.newBuilder(type, inline).name(name).title(title).fileName(fileName)
+                    .source(provider, sourceId).build());
+            return this;
+        }
+
+        public Builder addAttachment(FileAttachmentType type, String name, String title, String provider,
+                String sourceId, boolean inline) {
+            attachments.add(
+                    Attachment.newBuilder(type, inline).name(name).title(title).source(provider, sourceId).build());
             return this;
         }
 

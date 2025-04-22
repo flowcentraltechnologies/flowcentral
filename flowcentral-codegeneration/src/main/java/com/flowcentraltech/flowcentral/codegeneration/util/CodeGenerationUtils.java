@@ -43,10 +43,10 @@ import com.flowcentraltech.flowcentral.notification.data.NotifTemplateDef;
 import com.flowcentraltech.flowcentral.notification.util.DynamicNotifLargeTextInfo;
 import com.flowcentraltech.flowcentral.notification.util.DynamicNotifTemplateInfo;
 import com.flowcentraltech.flowcentral.notification.util.NotificationCodeGenUtils;
+import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.constant.DynamicEntityFieldType;
 import com.tcdng.unify.core.data.ValueStore;
-import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.database.dynamic.DynamicEntityInfo;
 import com.tcdng.unify.core.database.dynamic.DynamicFieldInfo;
 import com.tcdng.unify.core.util.SqlUtils;
@@ -66,6 +66,7 @@ public final class CodeGenerationUtils {
     static {
         Set<String> reserved = new HashSet<String>(ApplicationEntityUtils.RESERVED_BASE_FIELDS);
         reserved.remove("id");
+        reserved.remove("status");
         RESERVED_BASE_FIELDS = Collections.unmodifiableSet(reserved);
     }
 

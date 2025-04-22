@@ -18,15 +18,15 @@ package com.flowcentraltech.flowcentral.workflow.business.policies;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.common.business.policies.EntityListActionContext;
-import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
 import com.flowcentraltech.flowcentral.workflow.constants.WfReviewMode;
 import com.flowcentraltech.flowcentral.workflow.constants.WorkflowModuleNameConstants;
 import com.flowcentraltech.flowcentral.workflow.entities.WfItemQuery;
 import com.flowcentraltech.flowcentral.workflow.util.WorkflowNameUtils;
 import com.flowcentraltech.flowcentral.workflow.util.WorkflowNameUtils.WfStepLongNameParts;
+import com.tcdng.unify.common.database.Entity;
+import com.tcdng.unify.common.database.WorkEntity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
-import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.util.StringUtils;
 
 /**

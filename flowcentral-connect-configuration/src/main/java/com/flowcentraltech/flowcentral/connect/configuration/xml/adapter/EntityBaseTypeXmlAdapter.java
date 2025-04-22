@@ -24,7 +24,7 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
-import com.flowcentraltech.flowcentral.connect.configuration.constants.ConnectEntityBaseType;
+import com.tcdng.unify.common.constants.ConnectEntityBaseType;
 
 /**
  * Interconnect entity base type XML adapter.

@@ -15,6 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.delegate.business;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -24,12 +25,12 @@ import com.flowcentraltech.flowcentral.application.business.AbstractEnvironmentD
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleNameConstants;
 import com.flowcentraltech.flowcentral.connect.common.data.BaseResponse;
 import com.flowcentraltech.flowcentral.connect.common.data.DataSourceRequest;
-import com.flowcentraltech.flowcentral.connect.common.data.DelegateEntityListingDTO;
-import com.flowcentraltech.flowcentral.connect.common.data.EntityDTO;
+import com.tcdng.unify.common.data.DelegateEntityListingDTO;
+import com.tcdng.unify.common.data.EntityDTO;
+import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.criterion.Update;
-import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.database.Query;
 
 /**
@@ -297,8 +298,12 @@ public class TableLoadingEnvironmentDelegate extends AbstractEnvironmentDelegate
 
     @Override
     public <T extends Entity>  int countAll(Query<T> query) throws UnifyException {
-        // TODO
         return 0;
+    }
+
+    @Override
+    public List<Set<String>> getUniqueConstraints(Class<? extends Entity> arg0) throws UnifyException {
+        return Collections.emptyList();
     }
 
     @Override

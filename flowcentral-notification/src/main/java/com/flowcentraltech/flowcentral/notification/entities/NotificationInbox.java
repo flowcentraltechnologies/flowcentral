@@ -15,13 +15,13 @@
  */
 package com.flowcentraltech.flowcentral.notification.entities;
 
-import com.flowcentraltech.flowcentral.common.entities.BaseAuditTenantEntity;
+import com.flowcentraltech.flowcentral.common.entities.BaseAuditEntity;
 import com.flowcentraltech.flowcentral.notification.constants.NotificationInboxStatus;
+import com.tcdng.unify.common.annotation.ColumnType;
+import com.tcdng.unify.common.annotation.Table;
 import com.tcdng.unify.core.annotation.Column;
-import com.tcdng.unify.core.annotation.ColumnType;
 import com.tcdng.unify.core.annotation.ForeignKey;
 import com.tcdng.unify.core.annotation.ListOnly;
-import com.tcdng.unify.core.annotation.Table;
 
 /**
  * Notification inbox entity.
@@ -30,7 +30,7 @@ import com.tcdng.unify.core.annotation.Table;
  * @since 1.0
  */
 @Table(name = "FC_NOTIFINBOX")
-public class NotificationInbox extends BaseAuditTenantEntity {
+public class NotificationInbox extends BaseAuditEntity {
 
     @ForeignKey(name = "REC_ST")
     private NotificationInboxStatus status;

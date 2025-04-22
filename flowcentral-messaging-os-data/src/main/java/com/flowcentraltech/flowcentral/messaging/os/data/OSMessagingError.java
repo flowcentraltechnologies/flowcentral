@@ -15,8 +15,6 @@
  */
 package com.flowcentraltech.flowcentral.messaging.os.data;
 
-import com.tcdng.unify.core.util.StringUtils;
-
 /**
  * OS messaging error.
  * 
@@ -47,6 +45,6 @@ public class OSMessagingError {
     }
 
     public boolean isErrorPresent() {
-        return !StringUtils.isBlank(errorCode);
+        return errorCode != null && !errorCode.trim().isEmpty();
     }
  }

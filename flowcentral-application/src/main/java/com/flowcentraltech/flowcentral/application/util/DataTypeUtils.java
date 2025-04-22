@@ -21,8 +21,8 @@ import java.util.List;
 
 import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldDataType;
 import com.tcdng.unify.common.constants.StandardFormatType;
+import com.tcdng.unify.common.data.Listable;
 import com.tcdng.unify.core.data.ListData;
-import com.tcdng.unify.core.data.Listable;
 
 /**
  * Data type utilities.
@@ -44,6 +44,19 @@ public class DataTypeUtils {
             case REF_FILEUPLOAD:
             case CLOB:
                 break;
+            case BOOLEAN_ARRAY:
+            case SHORT_ARRAY:
+            case INTEGER_ARRAY:
+            case LONG_ARRAY:
+            case FLOAT_ARRAY:
+            case DOUBLE_ARRAY:
+            case DECIMAL_ARRAY:
+            case DATE_ARRAY:
+            case STRING_ARRAY:
+                list = getListables(
+                        StandardFormatType.COMMA_ARRAY,
+                        StandardFormatType.PIPE_ARRAY);
+               break;
             case DECIMAL:
             case DOUBLE:
             case FLOAT:

@@ -33,6 +33,10 @@ public final class WorkflowNameUtils {
 
     public static final String RESERVED_WORKFLOW_WIZARD_PREFIX = ApplicationNameUtils.RESERVED_FC_PREFIX + "wfz_";
 
+    public static final String RESERVED_WORKFLOW_NAME_PUBLISHED_SUFFIX = "_wRunnable";
+
+    public static final String RESERVED_WORKFLOW_DESCRIPTION_PUBLISHED_SUFFIX = " (Published)";
+
     private static final FactoryMap<String, WfAppletNameParts> wfAppletNameParts;
 
     private static final FactoryMap<String, WfStepLongNameParts> wfStepLongNameParts;
@@ -80,6 +84,19 @@ public final class WorkflowNameUtils {
 
     }
 
+    public static String getWorkflowRunnableName(String workflowName) {
+        if (!workflowName.endsWith(RESERVED_WORKFLOW_NAME_PUBLISHED_SUFFIX)
+                && !ApplicationNameUtils.isWorkflowCopyName(workflowName)) {
+            return workflowName + RESERVED_WORKFLOW_NAME_PUBLISHED_SUFFIX;
+        }
+
+        return workflowName;
+    }
+
+    public static String getWorkflowRunnableDescription(String workflowDesc) {
+        return workflowDesc + RESERVED_WORKFLOW_DESCRIPTION_PUBLISHED_SUFFIX;
+    }
+    
     public static String getWfStepLongName(String workflowLongName, String stepName) {
         return StringUtils.dotify(workflowLongName, stepName);
     }

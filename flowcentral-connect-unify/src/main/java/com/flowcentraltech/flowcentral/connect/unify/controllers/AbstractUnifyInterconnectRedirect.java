@@ -33,7 +33,6 @@ import com.flowcentraltech.flowcentral.connect.common.data.BaseResponse;
 import com.flowcentraltech.flowcentral.connect.common.data.DataSourceRequest;
 import com.flowcentraltech.flowcentral.connect.common.data.DetectEntityRequest;
 import com.flowcentraltech.flowcentral.connect.common.data.DetectEntityResponse;
-import com.flowcentraltech.flowcentral.connect.common.data.EntityListingDTO;
 import com.flowcentraltech.flowcentral.connect.common.data.EntityListingRequest;
 import com.flowcentraltech.flowcentral.connect.common.data.EntityListingResponse;
 import com.flowcentraltech.flowcentral.connect.common.data.GetEntityRequest;
@@ -41,7 +40,8 @@ import com.flowcentraltech.flowcentral.connect.common.data.GetEntityResponse;
 import com.flowcentraltech.flowcentral.connect.common.data.JsonDataSourceResponse;
 import com.flowcentraltech.flowcentral.connect.common.data.JsonProcedureResponse;
 import com.flowcentraltech.flowcentral.connect.common.data.ProcedureRequest;
-import com.flowcentraltech.flowcentral.connect.common.data.RedirectErrorDTO;
+import com.tcdng.unify.common.data.EntityListingDTO;
+import com.tcdng.unify.common.data.RedirectErrorDTO;
 import com.tcdng.unify.core.AbstractUnifyComponent;
 import com.tcdng.unify.core.UnifyException;
 

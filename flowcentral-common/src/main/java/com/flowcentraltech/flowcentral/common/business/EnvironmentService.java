@@ -27,6 +27,7 @@ import com.flowcentraltech.flowcentral.common.business.policies.EntityListAction
 import com.flowcentraltech.flowcentral.common.business.policies.SweepingCommitPolicy;
 import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
 import com.flowcentraltech.flowcentral.common.entities.EntityWrapper;
+import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.business.BusinessService;
 import com.tcdng.unify.core.criterion.AggregateFunction;
@@ -34,7 +35,6 @@ import com.tcdng.unify.core.criterion.GroupingFunction;
 import com.tcdng.unify.core.criterion.Update;
 import com.tcdng.unify.core.database.Aggregation;
 import com.tcdng.unify.core.database.Database;
-import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.database.GroupingAggregation;
 import com.tcdng.unify.core.database.Query;
 
@@ -54,6 +54,16 @@ public interface EnvironmentService extends BusinessService {
      *                        if an error occurs
      */
     Database getDatabase() throws UnifyException;
+
+    /**
+     * Gets the environment database.
+     * 
+     * @param datasource the data source
+     * @return the environment database
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    Database getDatabase(String datasource) throws UnifyException;
 
     /**
      * Clears roll back on current transactions in database session.

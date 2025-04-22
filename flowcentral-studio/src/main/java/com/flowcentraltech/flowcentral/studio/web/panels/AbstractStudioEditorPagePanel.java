@@ -23,10 +23,10 @@ import com.flowcentraltech.flowcentral.common.business.CollaborationProvider;
 import com.flowcentraltech.flowcentral.common.constants.CollaborationType;
 import com.flowcentraltech.flowcentral.common.web.panels.AbstractFlowCentralPanel;
 import com.flowcentraltech.flowcentral.studio.web.panels.applet.StudioAppComponentApplet;
+import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.UplBinding;
-import com.tcdng.unify.core.database.Entity;
 
 /**
  * Convenient abstract base class for studio editor page panel.

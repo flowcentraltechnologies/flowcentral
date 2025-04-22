@@ -28,8 +28,8 @@ import com.flowcentraltech.flowcentral.studio.business.StudioModuleService;
 import com.flowcentraltech.flowcentral.studio.constants.StudioAppComponentType;
 import com.flowcentraltech.flowcentral.studio.constants.StudioAppletPropertyConstants;
 import com.flowcentraltech.flowcentral.studio.constants.StudioSessionAttributeConstants;
+import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.UnifyException;
-import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.web.ui.widget.Page;
 
 /**
@@ -84,9 +84,12 @@ public class StudioAppComponentApplet extends AbstractEntityFormApplet {
     }
 
     public void ensureClearOnNew() throws UnifyException {
-        Long instId = getCurrFormAppletDef().getPropValue(Long.class, StudioAppletPropertyConstants.ENTITY_INST_ID);
-        if (instId == null || instId.longValue() == 0L) {
-            constructNewForm();
+        // Apply only to root Fixes general exception  17/03/25
+        if (isRootForm()) {
+            Long instId = getCurrFormAppletDef().getPropValue(Long.class, StudioAppletPropertyConstants.ENTITY_INST_ID);
+            if (instId == null || instId.longValue() == 0L) {
+                constructNewForm();
+            }
         }
     }
     

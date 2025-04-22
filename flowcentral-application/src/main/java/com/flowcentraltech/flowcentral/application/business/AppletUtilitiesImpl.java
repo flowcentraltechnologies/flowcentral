@@ -127,7 +127,6 @@ import com.flowcentraltech.flowcentral.common.constants.CollaborationType;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralApplicationAttributeConstants;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants;
 import com.flowcentraltech.flowcentral.common.constants.OwnershipType;
-import com.flowcentraltech.flowcentral.common.constants.WfItemVersionType;
 import com.flowcentraltech.flowcentral.common.data.AuditSnapshot;
 import com.flowcentraltech.flowcentral.common.data.EntityAuditInfo;
 import com.flowcentraltech.flowcentral.common.data.EntityAuditSnapshot;
@@ -140,7 +139,6 @@ import com.flowcentraltech.flowcentral.common.data.FormatterOptions;
 import com.flowcentraltech.flowcentral.common.data.GenerateListingReportOptions;
 import com.flowcentraltech.flowcentral.common.data.ParamValuesDef;
 import com.flowcentraltech.flowcentral.common.entities.BaseVersionEntity;
-import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
 import com.flowcentraltech.flowcentral.common.util.RestrictionUtils;
 import com.flowcentraltech.flowcentral.common.web.util.EntityConfigurationUtils;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityChildCategoryType;
@@ -150,6 +148,10 @@ import com.flowcentraltech.flowcentral.configuration.constants.RecordActionType;
 import com.flowcentraltech.flowcentral.configuration.constants.RendererType;
 import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
 import com.tcdng.unify.common.constants.EnumConst;
+import com.tcdng.unify.common.constants.WfItemVersionType;
+import com.tcdng.unify.common.data.Listable;
+import com.tcdng.unify.common.database.Entity;
+import com.tcdng.unify.common.database.WorkEntity;
 import com.tcdng.unify.common.util.StringToken;
 import com.tcdng.unify.core.UnifyComponent;
 import com.tcdng.unify.core.UnifyComponentConfig;
@@ -171,14 +173,12 @@ import com.tcdng.unify.core.criterion.Update;
 import com.tcdng.unify.core.data.BeanValueStore;
 import com.tcdng.unify.core.data.FactoryMap;
 import com.tcdng.unify.core.data.Formats;
-import com.tcdng.unify.core.data.Listable;
 import com.tcdng.unify.core.data.MapValues;
 import com.tcdng.unify.core.data.ParamConfig;
 import com.tcdng.unify.core.data.ParameterizedStringGenerator;
 import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.database.Database;
-import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.database.Query;
 import com.tcdng.unify.core.filter.ObjectFilter;
 import com.tcdng.unify.core.format.FormatHelper;
@@ -1234,9 +1234,9 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
                         EntityDef _entityDef = getEntityDef(appletContext.getReference(categoryType));
                         EntityFilter _entityFilter = constructEntityFilter(formContext, sweepingCommitPolicy,
                                 formTabDef.getName(), formDef.getEntityDef(), EntityFilter.ENABLE_ALL,
-                                formTabDef.isIgnoreParentCondition());
+                                formTabDef.isIgnoreParentCondition(), formTabDef.isIncludeSysParam());
                         _entityFilter.setListType(categoryType.listType());
-                        _entityFilter.setParamList(categoryType.paramList());
+                        _entityFilter.setParamList(categoryType.paramList()); 
                         _entityFilter.setCategory(categoryType.category());
                         _entityFilter.setOwnerInstId((Long) inst.getId());
                         _entityFilter.load(_entityDef);
@@ -1970,12 +1970,12 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
 
     @Override
     public EntityFilter constructEntityFilter(FormContext ctx, SweepingCommitPolicy sweepingCommitPolicy,
-            String tabName, EntityDef ownerEntityDef, int entityFilterMode, boolean isIgnoreParentCondition)
+            String tabName, EntityDef ownerEntityDef, int entityFilterMode, boolean isIgnoreParentCondition, boolean includeSysParam)
             throws UnifyException {
-        logDebug("Constructing entity filter for [{0}] using entity definition [{1}]...", tabName,
-                ownerEntityDef.getLongName());
+        logDebug("Constructing entity filter for [{0}] using entity definition [{1}] with system parameter [{2}]...", tabName,
+                ownerEntityDef.getLongName(), includeSysParam);
         return new EntityFilter(ctx, sweepingCommitPolicy, tabName, ownerEntityDef, entityFilterMode,
-                isIgnoreParentCondition);
+                isIgnoreParentCondition, includeSysParam);
     }
 
     @Override
@@ -2988,6 +2988,15 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
                 case STRING:
                 case TIMESTAMP:
                 case TIMESTAMP_UTC:
+                case BOOLEAN_ARRAY:
+                case SHORT_ARRAY:
+                case INTEGER_ARRAY:
+                case LONG_ARRAY:
+                case FLOAT_ARRAY:
+                case DOUBLE_ARRAY:
+                case DECIMAL_ARRAY:
+                case DATE_ARRAY:
+                case STRING_ARRAY:
                 default:
                     break;
 

@@ -24,9 +24,9 @@ import java.util.Locale;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationPrivilegeConstants;
 import com.flowcentraltech.flowcentral.organization.entities.PrivilegeCategoryQuery;
 import com.flowcentraltech.flowcentral.organization.web.lists.AbstractOrganizationListCommand;
+import com.tcdng.unify.common.data.Listable;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
-import com.tcdng.unify.core.data.Listable;
 import com.tcdng.unify.core.list.ZeroParams;
 
 /**
