@@ -337,6 +337,18 @@
             </xs:sequence>
           </xs:complexType>
         </xs:element>
+        <!-- Help sheets -->
+        <xs:element name="helpSheets" minOccurs="0">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="helpSheet" maxOccurs="unbounded" minOccurs="0">
+                <xs:complexType>
+                  <xs:attribute type="xs:string" name="configFile" use="required"/>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
         <!-- Notification Templates -->
         <xs:element name="notifTemplates" minOccurs="0">
           <xs:complexType>
@@ -385,7 +397,7 @@
                         <xs:sequence>
                           <xs:element name="routeToAppletItem" maxOccurs="unbounded" minOccurs="0">
                             <xs:complexType>
-                              <xs:attribute type="xs:string" name="routeToApplet" use="required"/>
+                              <xs:attribute type="xs:string" name="applet" use="required"/>
                             </xs:complexType>
                           </xs:element>
                         </xs:sequence>
@@ -482,15 +494,9 @@
             <xs:sequence>
               <xs:element name="reference" maxOccurs="unbounded" minOccurs="0">
                 <xs:complexType>
-                  <xs:all>
-                    <xs:element name="filters" minOccurs="0">
-                      <xs:complexType>
-                        <xs:sequence>
-                          <xs:element name="filter" type="fcfilter" maxOccurs="1" minOccurs="0"/>
-                        </xs:sequence>
-                      </xs:complexType>
-                    </xs:element>
-                  </xs:all>
+                  <xs:sequence>
+                    <xs:element name="filter" type="fcfilter" maxOccurs="1" minOccurs="0"/>
+                  </xs:sequence>
                   <xs:attribute type="xs:string" name="name" use="required"/>
                   <xs:attribute type="xs:string" name="description" use="required"/>
                   <xs:attribute type="xs:string" name="entity" use="required"/>
@@ -1102,9 +1108,9 @@
                         <xs:sequence>
                           <xs:element name="formStatePolicy" maxOccurs="unbounded" minOccurs="0">
                             <xs:complexType>
-                              <xs:sequence>
-                                <xs:element type="fcfilter" name="onCondition" maxOccurs="1" minOccurs="0"/>
-                                <xs:element type="fcsetvalues" name="setValues" maxOccurs="1" minOccurs="0"/>
+                              <xs:all>
+                                <xs:element type="fcfilter" name="onCondition" minOccurs="0"/>
+                                <xs:element type="fcsetvalues" name="setValues" minOccurs="0"/>
                                 <xs:element name="setStates" minOccurs="0">
                                   <xs:complexType>
                                     <xs:sequence>
@@ -1134,7 +1140,7 @@
                                     </xs:sequence>
                                   </xs:complexType>
                                 </xs:element>
-                              </xs:sequence>
+                              </xs:all>
                               <xs:attribute type="xs:string" name="name" use="required"/>
                               <xs:attribute type="xs:string" name="description" use="required"/>
                               <xs:attribute type="xs:string" name="label" use="optional"/>
@@ -1494,6 +1500,159 @@
             </xs:sequence>
           </xs:complexType>
         </xs:element>
+        <!-- Property Lists-->
+		<xs:element name="propertyLists" minOccurs="0">
+			<xs:complexType>
+				<xs:sequence>
+					<xs:element name="propertyList" maxOccurs="unbounded" minOccurs="0">
+						<xs:complexType>
+							<xs:sequence>
+								<xs:element name="propertySet" maxOccurs="unbounded" minOccurs="0">
+									<xs:complexType>
+										<xs:sequence>
+											<xs:element name="property" maxOccurs="unbounded" minOccurs="0">
+												<xs:complexType>
+													<xs:attribute type="xs:string" name="name" use="required"/>
+													<xs:attribute type="xs:string" name="description" use="required"/>
+													<xs:attribute type="xs:string" name="inputWidget" use="required"/>
+													<xs:attribute type="xs:string" name="references" use="optional"/>
+													<xs:attribute type="xs:string" name="defaultVal" use="optional"/>
+													<xs:attribute type="xs:boolean" name="required" use="optional"/>
+													<xs:attribute type="xs:boolean" name="mask" use="optional"/>
+													<xs:attribute type="xs:boolean" name="encrypt" use="optional"/>
+												</xs:complexType>
+											</xs:element>
+										</xs:sequence>
+										<xs:attribute type="xs:string" name="label" use="required"/>
+									</xs:complexType>
+								</xs:element>
+							</xs:sequence>
+							<xs:attribute type="xs:string" name="name" use="required"/>
+							<xs:attribute type="xs:string" name="description" use="required"/>
+						</xs:complexType>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+		</xs:element>
+		<!-- Property Rules -->
+		<xs:element name="propertyRules" minOccurs="0">
+			<xs:complexType>
+				<xs:sequence>
+					<xs:element name="propertyRule" maxOccurs="unbounded" minOccurs="0">
+						<xs:complexType>
+							<xs:sequence>
+								<xs:element name="choice" maxOccurs="unbounded" minOccurs="0">
+									<xs:complexType>
+										<xs:attribute type="xs:string" name="name" use="required"/>
+										<xs:attribute type="xs:string" name="val" use="required"/>
+									</xs:complexType>
+								</xs:element>
+							</xs:sequence>
+							<xs:attribute type="xs:string" name="name" use="required"/>
+							<xs:attribute type="xs:string" name="description" use="required"/>
+							<xs:attribute type="xs:string" name="entity" use="required"/>
+							<xs:attribute type="xs:string" name="choiceField" use="required"/>
+							<xs:attribute type="xs:string" name="listField" use="required"/>
+							<xs:attribute type="xs:string" name="propNameField" use="required"/>
+							<xs:attribute type="xs:string" name="propValField" use="required"/>
+							<xs:attribute type="xs:boolean" name="ignoreCase" use="optional"/>
+						</xs:complexType>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+		</xs:element>
+		<!-- Assignment Page -->
+		<xs:element name="assignmentPages" minOccurs="0">
+			<xs:complexType>
+				<xs:sequence>
+					<xs:element name="assignmentPage" maxOccurs="unbounded" minOccurs="0">
+						<xs:complexType>
+							<xs:attribute type="xs:string" name="name" use="required"/>
+							<xs:attribute type="xs:string" name="description" use="required"/>
+							<xs:attribute type="xs:string" name="label" use="required"/>
+							<xs:attribute type="xs:string" name="entity" use="required"/>
+							<xs:attribute type="xs:string" name="baseField" use="required"/>
+							<xs:attribute type="xs:string" name="assignField" use="required"/>
+							<xs:attribute type="xs:string" name="assignCaption" use="required"/>
+							<xs:attribute type="xs:string" name="unassignCaption" use="required"/>
+							<xs:attribute type="xs:string" name="assignList" use="required"/>
+							<xs:attribute type="xs:string" name="unassignList" use="required"/>
+							<xs:attribute type="xs:string" name="commitPolicy" use="optional"/>
+							<xs:attribute type="xs:string" name="filterCaption1" use="optional"/>
+							<xs:attribute type="xs:string" name="filterCaption2" use="optional"/>
+							<xs:attribute type="xs:string" name="filterList1" use="optional"/>
+							<xs:attribute type="xs:string" name="filterList2" use="optional"/>
+							<xs:attribute type="xs:string" name="ruleDescField" use="optional"/>
+						</xs:complexType>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+		</xs:element>
+		<!-- APIs -->
+		<xs:element name="apis" minOccurs="0">
+			<xs:complexType>
+				<xs:sequence>
+					<xs:element name="api" maxOccurs="unbounded" minOccurs="0">
+						<xs:complexType>
+							<xs:attribute name="type" use="required">
+	                            <xs:simpleType>
+	                              <xs:restriction base="xs:string">
+	                                <xs:enumeration value="REST_CRUD"/>
+	                              </xs:restriction>
+	                            </xs:simpleType>
+	                          </xs:attribute>
+							<xs:attribute type="xs:string" name="name" use="required"/>
+							<xs:attribute type="xs:string" name="description" use="required"/>
+							<xs:attribute type="xs:string" name="label" use="optional"/>
+							<xs:attribute type="xs:string" name="entity" use="required"/>
+							<xs:attribute type="xs:string" name="applet" use="required"/>
+							<xs:attribute type="xs:boolean" name="supportCreate" use="optional"/>
+							<xs:attribute type="xs:boolean" name="supportRead" use="optional"/>
+							<xs:attribute type="xs:boolean" name="supportUpdate" use="optional"/>
+							<xs:attribute type="xs:boolean" name="supportDelete" use="optional"/>
+						</xs:complexType>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+		</xs:element>
+		<!-- Enumerations -->
+		<xs:element name="enumerations" minOccurs="0">
+			<xs:complexType>
+				<xs:sequence>
+					<xs:element name="enumeration" maxOccurs="unbounded" minOccurs="0">
+						<xs:complexType>
+							<xs:sequence>
+								<xs:element name="item" maxOccurs="unbounded" minOccurs="0">
+									<xs:complexType>
+										<xs:attribute type="xs:string" name="code" use="required"/>
+										<xs:attribute type="xs:string" name="label" use="required"/>
+										<xs:attribute type="xs:integer" name="displayIndex" use="optional"/>
+									</xs:complexType>
+								</xs:element>
+							</xs:sequence>
+							<xs:attribute type="xs:string" name="name" use="required"/>
+							<xs:attribute type="xs:string" name="description" use="required"/>
+							<xs:attribute type="xs:string" name="label" use="optional"/>
+						</xs:complexType>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+		</xs:element>
+		<!-- Suggestion Types -->
+		<xs:element name="suggestionTypes" minOccurs="0">
+			<xs:complexType>
+				<xs:sequence>
+					<xs:element name="suggestionType" maxOccurs="unbounded" minOccurs="0">
+						<xs:complexType>
+							<xs:attribute type="xs:string" name="name" use="required"/>
+							<xs:attribute type="xs:string" name="description" use="required"/>
+							<xs:attribute type="xs:string" name="label" use="optional"/>
+							<xs:attribute type="xs:string" name="parent" use="optional"/>
+						</xs:complexType>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+		</xs:element>
       </xs:all>
       <xs:attribute type="xs:string" name="name" use="required"/>
       <xs:attribute type="xs:string" name="description" use="required"/>

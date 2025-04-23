@@ -63,11 +63,11 @@ public class AppConfig extends BaseNameConfig {
     @JacksonXmlProperty(localName = "applets")
     private AppletsConfig appletsConfig;
     
-    @JacksonXmlProperty(localName = "apis")
-    private APIsConfig apisConfig;
-    
     @JacksonXmlProperty(localName = "helpSheets")
     private AppHelpSheetsConfig helpSheetsConfig;
+    
+    @JacksonXmlProperty(localName = "apis")
+    private APIsConfig apisConfig;
     
     @JacksonXmlProperty(localName = "enumerations")
     private EnumerationsConfig enumerationsConfig;

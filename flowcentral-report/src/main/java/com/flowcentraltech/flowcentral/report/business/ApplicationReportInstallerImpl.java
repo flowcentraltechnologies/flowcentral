@@ -420,8 +420,8 @@ public class ApplicationReportInstallerImpl extends AbstractApplicationArtifactI
         List<ReportableField> reportableFieldList = new ArrayList<ReportableField>();
         Class<? extends Entity> entityClass = EntityTypeUtils.isReservedType(appEntityConfig.getType()) ? null
                 : (Class<? extends Entity>) ReflectUtils.classForName(appEntityConfig.getType());
-        if (!DataUtils.isBlank(appEntityConfig.getEntityFieldList())) {
-            for (EntityFieldConfig rfd : appEntityConfig.getEntityFieldList()) {
+        if (appEntityConfig.getFields() != null && !DataUtils.isBlank(appEntityConfig.getFields().getEntityFieldList())) {
+            for (EntityFieldConfig rfd : appEntityConfig.getFields().getEntityFieldList()) {
                 if (rfd.getReportable() && !EntityFieldDataType.SCRATCH.equals(rfd.getType())) {
                     DataType dataType = rfd.getType().dataType();
                     if (dataType != null) {

@@ -86,23 +86,37 @@ import com.flowcentraltech.flowcentral.configuration.xml.AppFormsConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppTableConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppTablesConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppletAlertConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.AppletAlertsConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppletConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppletFilterConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.AppletFiltersConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppletPropConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.AppletPropsConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppletRouteToAppletConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.AppletRouteToAppletsConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppletSetValuesConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.AppletValuesSetConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppletsConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.ChoiceConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.EntityAttachmentConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.EntityAttachmentsConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.EntityCategoriesConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.EntityCategoryConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.EntityExpressionConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.EntityExpressionsConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.EntityFieldConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.EntityFieldsConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.EntityIndexConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.EntityIndexesConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.EntitySearchInputConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.EntitySearchInputsConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.EntitySeriesConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.EntitySeriesSetConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.EntityUniqueConditionConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.EntityUniqueConstraintConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.EntityUniqueConstraintsConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.EntityUploadConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.EntityUploadsConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.EnumerationConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.EnumerationItemConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.EnumerationsConfig;
@@ -276,7 +290,7 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                         propList.add(propConfig);
                     }
 
-                    appletConfig.setPropList(propList);
+                    appletConfig.setProperties(new AppletPropsConfig(propList));
                 }
 
                 // Route to applets
@@ -288,7 +302,7 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                         routeToAppletList.add(appletRouteToAppletConfig);
                     }
 
-                    appletConfig.setRouteToAppletList(routeToAppletList);
+                    appletConfig.setRouteToAppletItems(new AppletRouteToAppletsConfig(routeToAppletList));
                 }
 
                 // Filters
@@ -303,7 +317,7 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                         filterList.add(filterConfig);
                     }
 
-                    appletConfig.setFilterList(filterList);
+                    appletConfig.setFilters(new AppletFiltersConfig(filterList));
                 }
 
                 // Set values
@@ -319,7 +333,7 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                         valuesList.add(appletSetValuesConfig);
                     }
 
-                    appletConfig.setValuesList(valuesList);
+                    appletConfig.setValuesSet(new AppletValuesSetConfig(valuesList));
                 }
 
                 // Alerts
@@ -337,7 +351,7 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                         alertList.add(appletAlertConfig);
                     }
 
-                    appletConfig.setAlertList(alertList);
+                    appletConfig.setAlerts(new AppletAlertsConfig(alertList));
                 }
 
                 appletList.add(appletConfig);
@@ -529,7 +543,7 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                         }
                     }
 
-                    appEntityConfig.setEntityFieldList(entityFieldConfigList);
+                    appEntityConfig.setFields(new EntityFieldsConfig(entityFieldConfigList));
                 }
 
                 // Series
@@ -549,7 +563,7 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                         seriesList.add(entitySeriesConfig);
                     }
 
-                    appEntityConfig.setSeriesList(seriesList);
+                    appEntityConfig.setSeriesSet(new EntitySeriesSetConfig(seriesList));
                 }
 
                 // Categories
@@ -571,7 +585,7 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                         categoryList.add(entityCategoryConfig);
                     }
 
-                    appEntityConfig.setCategoryList(categoryList);
+                    appEntityConfig.setCategories(new EntityCategoriesConfig(categoryList));
                 }
 
                 // Attachments
@@ -587,7 +601,7 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                         attachmentConfigList.add(entityAttachmentConfig);
                     }
 
-                    appEntityConfig.setAttachmentList(attachmentConfigList);
+                    appEntityConfig.setAttachments(new EntityAttachmentsConfig(attachmentConfigList));
                 }
 
                 // Expressions
@@ -603,7 +617,7 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                         expressionList.add(entityExpressionConfig);
                     }
 
-                    appEntityConfig.setExpressionList(expressionList);
+                    appEntityConfig.setExpressions(new EntityExpressionsConfig(expressionList));
                 }
 
                 // Unique Constraints
@@ -634,7 +648,7 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                         uniqueConstraintList.add(entityUniqueConstraintConfig);
                     }
 
-                    appEntityConfig.setUniqueConstraintList(uniqueConstraintList);
+                    appEntityConfig.setUniqueConstraints(new EntityUniqueConstraintsConfig(uniqueConstraintList));
                 }
 
                 // Indexes
@@ -650,7 +664,7 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                         indexList.add(entityIndexConfig);
                     }
 
-                    appEntityConfig.setIndexList(indexList);
+                    appEntityConfig.setIndexes(new EntityIndexesConfig(indexList));
                 }
 
                 // Upload configuration
@@ -668,7 +682,7 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                         uploadList.add(entityUploadConfig);
                     }
 
-                    appEntityConfig.setUploadList(uploadList);
+                    appEntityConfig.setUploads(new EntityUploadsConfig(uploadList));
                 }
 
                 // Search Inputs
@@ -687,7 +701,7 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                         searchInputList.add(entitySearchInputConfig);
                     }
 
-                    appEntityConfig.setSearchInputList(searchInputList);
+                    appEntityConfig.setSearchInputs(new EntitySearchInputsConfig(searchInputList));
                 }
 
                 entityList.add(appEntityConfig);
