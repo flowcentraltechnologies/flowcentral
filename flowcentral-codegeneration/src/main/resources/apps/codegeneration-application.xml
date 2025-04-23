@@ -1,7 +1,10 @@
 <?xml version="1.0"?>
 <!-- Code generation application -->
-<application  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:noNamespaceSchemaLocation="file:///C:/Users/Lateef Ojulari/git/flowcentral/flowcentral-application/src/main/resources/flowcentral-application.xsd" name="codegeneration"
+<application
+	xmlns="http://flowcentraltech.com/schema-common"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://flowcentraltech.com/schema-common file:///C:/data/flowcentral-application-4.0.0.xsd"
+    name="codegeneration"
 	description="$m{codegeneration.short.description}"
 	label="$m{codegeneration.label}" module="codegeneration">
 	<!-- Applets -->

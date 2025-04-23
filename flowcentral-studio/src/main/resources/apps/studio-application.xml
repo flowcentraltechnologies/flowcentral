@@ -1,7 +1,9 @@
 <?xml version="1.0"?>
 <!-- Studio application -->
-<application xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:noNamespaceSchemaLocation="file:///C:/Users/Lateef Ojulari/git/flowcentral/flowcentral-application/src/main/resources/flowcentral-application.xsd"
+<application
+	xmlns="http://flowcentraltech.com/schema-common"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://flowcentraltech.com/schema-common file:///C:/data/flowcentral-application-4.0.0.xsd"
 	name="studio"
 	description="$m{studio.application.short.description}"
 	label="$m{studio.application.mainlabel}" module="studio"
@@ -1656,12 +1658,10 @@
 			searchField="description"
 			description="$m{studio.reference.applicationdevelopableref}"
 			name="applicationDevelopableRef">
-			<filters>
-				<filter>
-					<restriction field="developable" paramA="true"
-						type="EQUALS" />
-				</filter>
-			</filters>
+			<filter>
+				<restriction field="developable" paramA="true"
+					type="EQUALS" />
+			</filter>
 		</reference>
 		<reference name="studioSnapshotDetailsRef"
 			description="$m{studio.snapshotdetails.reference}"
