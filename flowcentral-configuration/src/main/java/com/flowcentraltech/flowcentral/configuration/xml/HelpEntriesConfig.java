@@ -16,44 +16,40 @@
 
 package com.flowcentraltech.flowcentral.configuration.xml;
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
-import com.tcdng.unify.core.util.xml.adapter.CDataXmlAdapter;
 
 /**
- * Help entry configuration.
+ * Help entries configuration.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
 @JsonInclude(value = Include.NON_NULL, content = Include.NON_EMPTY)
-public class HelpEntryConfig extends BaseConfig {
+public class HelpEntriesConfig extends BaseConfig {
 
-    @JacksonXmlProperty(isAttribute = true, localName = "field")
-    private String fieldName;
+    @JacksonXmlElementWrapper(useWrapping = false)
+    @JacksonXmlProperty(localName = "entry")
+    private List<HelpEntryConfig> entryList;
 
-    @JsonSerialize(using = CDataXmlAdapter.Serializer.class)
-    @JsonDeserialize(using = CDataXmlAdapter.Deserializer.class)
-    @JacksonXmlProperty(localName = "content")
-    private String helpContent;
-
-    public String getFieldName() {
-        return fieldName;
+    public HelpEntriesConfig(List<HelpEntryConfig> entryList) {
+        this.entryList = entryList;
     }
 
-    public void setFieldName(String fieldName) {
-        this.fieldName = fieldName;
+    public HelpEntriesConfig() {
+
     }
 
-    public String getHelpContent() {
-        return helpContent;
+    public List<HelpEntryConfig> getEntryList() {
+        return entryList;
     }
 
-    public void setHelpContent(String helpContent) {
-        this.helpContent = helpContent;
+    public void setEntryList(List<HelpEntryConfig> entryList) {
+        this.entryList = entryList;
     }
 
 }

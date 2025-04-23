@@ -1,7 +1,11 @@
 <?xml version="1.0"?>
 <!-- User creation approval pending notification -->
-<notifTemplate name="userCreationApprovalPending" description="$m{security.user.creation.approval}"
-	type="email" format="html" entity="user">
+<notifTemplate
+	xmlns="http://flowcentraltech.com/schema-common"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://flowcentraltech.com/schema-common file:///C:/data/flowcentral-notificationtemplate-4.0.0.xsd"
+	name="userCreationApprovalPending" description="$m{security.user.creation.approval}"
+	type="EMAIL" format="HTML" entity="user">
 	<subject><![CDATA[$m{security.user.creation.approval.required.subject}]]></subject>
 	<body><![CDATA[$m{security.user.creation.approval.required.body}]]></body>
 </notifTemplate>

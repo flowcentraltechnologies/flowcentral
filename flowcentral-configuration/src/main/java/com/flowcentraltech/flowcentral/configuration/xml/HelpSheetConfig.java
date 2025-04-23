@@ -16,13 +16,10 @@
 
 package com.flowcentraltech.flowcentral.configuration.xml;
 
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import com.tcdng.unify.core.util.xml.adapter.CDataXmlAdapter;
@@ -45,9 +42,8 @@ public class HelpSheetConfig extends BaseNameConfig {
     @JacksonXmlProperty
     private String helpOverview;
 
-    @JacksonXmlElementWrapper(useWrapping = false)
-    @JacksonXmlProperty(localName = "entry")
-    private List<HelpEntryConfig> entryList;
+    @JacksonXmlProperty
+    private HelpEntriesConfig entries;
 
     public String getEntity() {
         return entity;
@@ -65,12 +61,12 @@ public class HelpSheetConfig extends BaseNameConfig {
         this.helpOverview = helpOverview;
     }
 
-    public List<HelpEntryConfig> getEntryList() {
-        return entryList;
+    public HelpEntriesConfig getEntries() {
+        return entries;
     }
 
-    public void setEntryList(List<HelpEntryConfig> entryList) {
-        this.entryList = entryList;
+    public void setEntries(HelpEntriesConfig entries) {
+        this.entries = entries;
     }
 
 }

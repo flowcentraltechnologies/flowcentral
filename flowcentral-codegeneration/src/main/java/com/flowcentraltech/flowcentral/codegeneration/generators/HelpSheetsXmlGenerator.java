@@ -25,6 +25,7 @@ import com.flowcentraltech.flowcentral.application.entities.AppHelpEntry;
 import com.flowcentraltech.flowcentral.application.entities.AppHelpSheet;
 import com.flowcentraltech.flowcentral.configuration.xml.AppHelpSheetConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppHelpSheetsConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.HelpEntriesConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.HelpEntryConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.HelpSheetConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.util.ConfigurationUtils;
@@ -86,7 +87,7 @@ public class HelpSheetsXmlGenerator extends AbstractResourcesArtifactGenerator {
                     entryList.add(eConfig);
                 }
                 
-                helpSheetConfig.setEntryList(entryList);
+                helpSheetConfig.setEntries(new HelpEntriesConfig(entryList));
                 
                 ConfigurationUtils.writeConfigNoEscape(helpSheetConfig, zos);
                 closeEntry(zos);

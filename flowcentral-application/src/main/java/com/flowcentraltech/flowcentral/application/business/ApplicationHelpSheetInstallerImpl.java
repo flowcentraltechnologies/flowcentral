@@ -166,9 +166,9 @@ public class ApplicationHelpSheetInstallerImpl extends AbstractApplicationArtifa
     private void populateChildList(AppHelpSheet appHelpSheet, HelpSheetConfig helpSheetConfig)
             throws UnifyException {
         List<AppHelpEntry> entryList = null;
-        if (!DataUtils.isBlank(helpSheetConfig.getEntryList())) {
+        if (helpSheetConfig.getEntries() != null && !DataUtils.isBlank(helpSheetConfig.getEntries().getEntryList())) {
             entryList = new ArrayList<AppHelpEntry>();
-            for (HelpEntryConfig entryConfig : helpSheetConfig.getEntryList()) {
+            for (HelpEntryConfig entryConfig : helpSheetConfig.getEntries().getEntryList()) {
                 AppHelpEntry entry = new AppHelpEntry();
                 entry.setFieldName(entryConfig.getFieldName());
                 entry.setHelpContent(entryConfig.getHelpContent());

@@ -1,8 +1,16 @@
-<helpSheet name="notifTemplateHelpSheet" description="Notification Template Help Sheet" label="Notification Template Help Sheet" entity="notification.notifTemplate">
-  <entry fieldName="subject">
-    <helpContent>&lt;![CDATA[&lt;div>Put the subject of your notification here. Use placeholders for sections that will be replaced with content at runtime.&lt;/div>&lt;div>A placeholder begins with double open brace characters followed by the placeholder directive and then terminated with double closing brace characters.&lt;/div>&lt;div>&lt;br>&lt;/div>&lt;div>1. Directives with a field name reference fields in the backing entity bean.&lt;/div>&lt;div>2. Directives prefixed with &lt;b>pv:&lt;/b> an the a process variable name reference process variables.&lt;/div>&lt;div>&lt;div>3. Directives prefixed with &lt;b>pvg: &lt;/b>and then a process variable generator name reference process variable generators.&lt;/div>&lt;div>&lt;div>4. Directives prefixed with &lt;b>spg:&lt;/b> and then a system parameter code reference system parameters.&lt;/div>&lt;div>&lt;br>&lt;/div>&lt;div>&lt;br>&lt;/div>&lt;/div>&lt;/div>]]&gt;</helpContent>
-  </entry>
-  <entry fieldName="template">
-    <helpContent>&lt;![CDATA[&lt;div>Put the body of your notification here. Use placeholders for sections that will be replaced with content at runtime.&lt;/div>&lt;div>A placeholder begins with double open brace characters followed by the placeholder directive and then terminated with double closing brace characters.&lt;/div>&lt;div>&lt;br>&lt;/div>&lt;div>1. Directives with a field name reference fields in the backing entity bean.&lt;/div>&lt;div>2. Directives prefixed with &lt;b>pv:&lt;/b> an the a process variable name reference process variables.&lt;/div>&lt;div>&lt;div>3. Directives prefixed with &lt;b>pvg: &lt;/b>and then a process variable generator name reference process variable generators.&lt;/div>&lt;div>&lt;div>4. Directives prefixed with &lt;b>spg:&lt;/b> and then a system parameter code reference system parameters.&lt;/div>&lt;div>&lt;br>&lt;/div>&lt;div>&lt;br>&lt;/div>&lt;/div>&lt;/div>]]&gt;</helpContent>
-  </entry>
+<helpSheet
+	xmlns="http://flowcentraltech.com/schema-common"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://flowcentraltech.com/schema-common file:///C:/data/flowcentral-helpsheet-4.0.0.xsd"
+	name="notifTemplateHelpSheet"
+	description="Notification Template Help Sheet"
+	label="Notification Template Help Sheet" entity="notification.notifTemplate">
+	<entries>
+	  <entry field="subject"> 
+	    <content>&lt;![CDATA[&lt;div>Put the subject of your notification here. Use placeholders for sections that will be replaced with content at runtime.&lt;/div>&lt;div>A placeholder begins with double open brace characters followed by the placeholder directive and then terminated with double closing brace characters.&lt;/div>&lt;div>&lt;br>&lt;/div>&lt;div>1. Directives with a field name reference fields in the backing entity bean.&lt;/div>&lt;div>2. Directives prefixed with &lt;b>pv:&lt;/b> an the a process variable name reference process variables.&lt;/div>&lt;div>&lt;div>3. Directives prefixed with &lt;b>pvg: &lt;/b>and then a process variable generator name reference process variable generators.&lt;/div>&lt;div>&lt;div>4. Directives prefixed with &lt;b>spg:&lt;/b> and then a system parameter code reference system parameters.&lt;/div>&lt;div>&lt;br>&lt;/div>&lt;div>&lt;br>&lt;/div>&lt;/div>&lt;/div>]]&gt;</content>
+	  </entry>
+	  <entry field="template">
+	    <content>&lt;![CDATA[&lt;div>Put the body of your notification here. Use placeholders for sections that will be replaced with content at runtime.&lt;/div>&lt;div>A placeholder begins with double open brace characters followed by the placeholder directive and then terminated with double closing brace characters.&lt;/div>&lt;div>&lt;br>&lt;/div>&lt;div>1. Directives with a field name reference fields in the backing entity bean.&lt;/div>&lt;div>2. Directives prefixed with &lt;b>pv:&lt;/b> an the a process variable name reference process variables.&lt;/div>&lt;div>&lt;div>3. Directives prefixed with &lt;b>pvg: &lt;/b>and then a process variable generator name reference process variable generators.&lt;/div>&lt;div>&lt;div>4. Directives prefixed with &lt;b>spg:&lt;/b> and then a system parameter code reference system parameters.&lt;/div>&lt;div>&lt;br>&lt;/div>&lt;div>&lt;br>&lt;/div>&lt;/div>&lt;/div>]]&gt;</content>
+	  </entry>
+	</entries>
 </helpSheet>
