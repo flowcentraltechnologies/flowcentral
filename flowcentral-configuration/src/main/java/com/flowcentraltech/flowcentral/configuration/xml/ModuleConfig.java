@@ -28,7 +28,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
  */
 @JsonInclude(value = Include.NON_NULL, content = Include.NON_EMPTY)
 @JacksonXmlRootElement(localName = "module")
-public class ModuleConfig extends BaseNameConfig {
+public class ModuleConfig extends BaseRootConfig {
 
     @JacksonXmlProperty(isAttribute = true)
     private String shortCode;
@@ -43,6 +43,7 @@ public class ModuleConfig extends BaseNameConfig {
     private SysParamsConfig sysParamsConfig;
 
     public ModuleConfig() {
+        super("flowcentral-module-4.0.0.xsd");
         this.principal = true;
     }
     

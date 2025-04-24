@@ -39,7 +39,7 @@ import com.tcdng.unify.core.util.xml.adapter.CDataXmlAdapter;
  */
 @JsonInclude(value = Include.NON_NULL, content = Include.NON_EMPTY)
 @JacksonXmlRootElement(localName = "notifTemplate")
-public class NotifTemplateConfig extends BaseNameConfig {
+public class NotifTemplateConfig extends BaseRootConfig {
 
     @JsonSerialize(using = NotificationTypeXmlAdapter.Serializer.class)
     @JsonDeserialize(using = NotificationTypeXmlAdapter.Deserializer.class)
@@ -69,6 +69,7 @@ public class NotifTemplateConfig extends BaseNameConfig {
     private List<NotifTemplateParamConfig> paramList;
     
     public NotifTemplateConfig() {
+        super("flowcentral-notificationtemplate-4.0.0.xsd");
         messageFormat = NotifMessageFormat.PLAIN_TEXT;
     }
 

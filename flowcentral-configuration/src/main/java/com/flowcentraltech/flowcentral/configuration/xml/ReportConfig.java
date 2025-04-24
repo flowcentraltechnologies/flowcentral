@@ -34,7 +34,7 @@ import com.tcdng.unify.core.constant.PageSizeType;
  */
 @JsonInclude(value = Include.NON_NULL, content = Include.NON_EMPTY)
 @JacksonXmlRootElement(localName = "report")
-public class ReportConfig extends BaseNameConfig {
+public class ReportConfig extends BaseRootConfig {
 
     @JsonSerialize(using = ReportConfigTypeXmlAdapter.Serializer.class)
     @JsonDeserialize(using = ReportConfigTypeXmlAdapter.Deserializer.class)
@@ -113,6 +113,7 @@ public class ReportConfig extends BaseNameConfig {
     private Boolean allowSecondaryTenants;
 
     public ReportConfig() {
+        super("flowcentral-report-4.0.0.xsd");
         this.type = ReportConfigType.TABULAR;
         this.sizeType = PageSizeType.A4;
         this.showGrandFooter = Boolean.FALSE;

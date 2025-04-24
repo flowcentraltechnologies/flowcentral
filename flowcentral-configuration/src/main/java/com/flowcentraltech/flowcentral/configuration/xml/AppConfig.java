@@ -28,7 +28,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
  */
 @JsonInclude(value = Include.NON_NULL, content = Include.NON_EMPTY)
 @JacksonXmlRootElement(localName = "application")
-public class AppConfig extends BaseNameConfig {
+public class AppConfig extends BaseRootConfig {
 
     @JacksonXmlProperty(isAttribute = true)
     private String module;
@@ -115,6 +115,7 @@ public class AppConfig extends BaseNameConfig {
     private Boolean custom;
     
     public AppConfig() {
+        super("flowcentral-application-4.0.0.xsd");
         this.menuAccess = Boolean.TRUE;
         this.developable = Boolean.FALSE;
         this.custom = Boolean.FALSE;

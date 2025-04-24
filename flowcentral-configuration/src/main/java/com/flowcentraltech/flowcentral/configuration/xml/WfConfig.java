@@ -29,7 +29,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
  */
 @JsonInclude(value = Include.NON_NULL, content = Include.NON_EMPTY)
 @JacksonXmlRootElement(localName = "workflow")
-public class WfConfig extends BaseNameConfig {
+public class WfConfig extends BaseRootConfig {
 
     @JacksonXmlProperty(localName = "steps")
     private WfStepsConfig stepsConfig;
@@ -59,6 +59,7 @@ public class WfConfig extends BaseNameConfig {
     private WfValuesSetConfig values;
     
     public WfConfig() {
+        super("flowcentral-workflow-4.0.0.xsd");
         this.supportMultiItemAction = Boolean.FALSE;
         this.published = Boolean.FALSE;
         this.runnable = Boolean.FALSE;

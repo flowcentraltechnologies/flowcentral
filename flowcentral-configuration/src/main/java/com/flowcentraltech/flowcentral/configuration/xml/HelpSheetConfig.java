@@ -32,7 +32,7 @@ import com.tcdng.unify.core.util.xml.adapter.CDataXmlAdapter;
  */
 @JsonInclude(value = Include.NON_NULL, content = Include.NON_EMPTY)
 @JacksonXmlRootElement(localName = "helpSheet")
-public class HelpSheetConfig extends BaseNameConfig {
+public class HelpSheetConfig extends BaseRootConfig {
 
     @JacksonXmlProperty(isAttribute = true)
     private String entity;
@@ -45,6 +45,10 @@ public class HelpSheetConfig extends BaseNameConfig {
     @JacksonXmlProperty
     private HelpEntriesConfig entries;
 
+    public HelpSheetConfig() {
+        super("flowcentral-helpsheet-4.0.0.xsd");
+    }
+    
     public String getEntity() {
         return entity;
     }
