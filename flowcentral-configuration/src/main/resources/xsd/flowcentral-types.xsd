@@ -1,0 +1,345 @@
+<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+   	targetNamespace="http://flowcentraltech.com/schema-common"
+   	xmlns="http://flowcentraltech.com/schema-common"
+	attributeFormDefault="unqualified" elementFormDefault="qualified">
+  <!-- Horizontal Alignment -->
+    <xs:simpleType name="halign">
+      <xs:restriction base="xs:string">
+        <xs:enumeration value="LEFT"/>
+        <xs:enumeration value="CENTER"/>
+        <xs:enumeration value="RIGHT"/>
+        <xs:enumeration value="JUSTIFIED"/>
+      </xs:restriction>
+    </xs:simpleType>
+  <!-- Vertical Alignment -->
+    <xs:simpleType name="valign">
+      <xs:restriction base="xs:string">
+        <xs:enumeration value="TOP"/>
+        <xs:enumeration value="MIDDLE"/>
+        <xs:enumeration value="BOTTOM"/>
+      </xs:restriction>
+    </xs:simpleType>
+  <!-- Applet Type -->
+  <xs:simpleType name="applettype">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="MANAGE_ENTITYLIST"/>
+      <xs:enumeration value="MANAGE_ENTITYLIST_ASSIGN"/>
+      <xs:enumeration value="MANAGE_ENTITYLIST_SUBMISSION"/>
+      <xs:enumeration value="MANAGE_ENTITYLIST_SINGLEFORM"/>
+      <xs:enumeration value="MANAGE_LOADINGLIST"/>
+      <xs:enumeration value="HEADLESS_TABS"/>
+      <xs:enumeration value="CREATE_ENTITY"/>
+      <xs:enumeration value="CREATE_ENTITY_SINGLEFORM"/>
+      <xs:enumeration value="FORM_WIZARD"/>
+      <xs:enumeration value="LISTING"/>
+      <xs:enumeration value="MANAGE_PROPERTYLIST"/>
+      <xs:enumeration value="MY_WORKITEM"/>
+      <xs:enumeration value="TASK_EXECUTION"/>
+      <xs:enumeration value="DATA_IMPORT"/>
+      <xs:enumeration value="FACADE"/>
+      <xs:enumeration value="FACADE_MULTIPLE"/>
+      <xs:enumeration value="PATH_PAGE"/>
+      <xs:enumeration value="PATH_WINDOW"/>
+      <xs:enumeration value="REVIEW_WORKITEMS"/>
+      <xs:enumeration value="REVIEW_SINGLEFORMWORKITEMS"/>
+      <xs:enumeration value="REVIEW_WIZARDWORKITEMS"/>
+      <xs:enumeration value="STUDIO_FC_COMPONENT"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!-- Data Type -->
+  <xs:simpleType name="datatype">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="CHAR"/>
+      <xs:enumeration value="BOOLEAN"/>
+      <xs:enumeration value="SHORT"/>
+      <xs:enumeration value="INTEGER"/>
+      <xs:enumeration value="LONG"/>
+      <xs:enumeration value="FLOAT"/>
+      <xs:enumeration value="DOUBLE"/>
+      <xs:enumeration value="DECIMAL"/>
+      <xs:enumeration value="DATE"/>
+      <xs:enumeration value="STRING"/>
+      <xs:enumeration value="TIMESTAMP"/>
+      <xs:enumeration value="TIMESTAMP_UTC"/>
+      <xs:enumeration value="CLOB"/>
+      <xs:enumeration value="BLOB"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!-- Input Type -->
+  <xs:simpleType name="inputtype">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="CHAR"/>
+      <xs:enumeration value="CHAR_ARRAY"/>
+      <xs:enumeration value="BOOLEAN"/>
+      <xs:enumeration value="BOOLEAN_ARRAY"/>
+      <xs:enumeration value="SHORT"/>
+      <xs:enumeration value="SHORT_ARRAY"/>
+      <xs:enumeration value="INTEGER"/>
+      <xs:enumeration value="INTEGER_ARRAY"/>
+      <xs:enumeration value="LONG"/>
+      <xs:enumeration value="LONG_ARRAY"/>
+      <xs:enumeration value="MAPPED"/>
+      <xs:enumeration value="FLOAT"/>
+      <xs:enumeration value="FLOAT_ARRAY"/>
+      <xs:enumeration value="DOUBLE"/>
+      <xs:enumeration value="DOUBLE_ARRAY"/>
+      <xs:enumeration value="DECIMAL"/>
+      <xs:enumeration value="DECIMAL_ARRAY"/>
+      <xs:enumeration value="DATE"/>
+      <xs:enumeration value="DATE_ARRAY"/>
+      <xs:enumeration value="DATETIME"/>
+      <xs:enumeration value="DATETIME_ARRAY"/>
+      <xs:enumeration value="STRING"/>
+      <xs:enumeration value="STRING_ARRAY"/>
+      <xs:enumeration value="FILE"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!-- Entity Field Data Type -->
+  <xs:simpleType name="fielddatatype">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="CHAR"/>
+      <xs:enumeration value="BOOLEAN"/>
+      <xs:enumeration value="BOOLEAN_ARRAY"/>
+      <xs:enumeration value="SHORT"/>
+      <xs:enumeration value="SHORT_ARRAY"/>
+      <xs:enumeration value="INTEGER"/>
+      <xs:enumeration value="INTEGER_ARRAY"/>
+      <xs:enumeration value="LONG"/>
+      <xs:enumeration value="LONG_ARRAY"/>
+      <xs:enumeration value="TENANT_ID"/>
+      <xs:enumeration value="MAPPED"/>
+      <xs:enumeration value="FLOAT"/>
+      <xs:enumeration value="FLOAT_ARRAY"/>
+      <xs:enumeration value="DOUBLE"/>
+      <xs:enumeration value="DOUBLE_ARRAY"/>
+      <xs:enumeration value="DECIMAL"/>
+      <xs:enumeration value="DECIMAL_ARRAY"/>
+      <xs:enumeration value="DATE"/>
+      <xs:enumeration value="DATE_ARRAY"/>
+      <xs:enumeration value="TIMESTAMP_UTC"/>
+      <xs:enumeration value="TIMESTAMP"/>
+      <xs:enumeration value="TIMESTAMP_ARRAY"/>
+      <xs:enumeration value="CLOB"/>
+      <xs:enumeration value="BLOB"/>
+      <xs:enumeration value="STRING"/>
+      <xs:enumeration value="STRING_ARRAY"/>
+      <xs:enumeration value="ENUM"/>
+      <xs:enumeration value="ENUM_REF"/>
+      <xs:enumeration value="ENUM_DYN"/>
+      <xs:enumeration value="REF"/>
+      <xs:enumeration value="REF_UNLINKABLE"/>
+      <xs:enumeration value="REF_FILEUPLOAD"/>
+      <xs:enumeration value="FOSTER_PARENT_ID"/>
+      <xs:enumeration value="FOSTER_PARENT_TYPE"/>
+      <xs:enumeration value="CATEGORY_COLUMN"/>
+      <xs:enumeration value="SCRATCH"/>
+      <xs:enumeration value="LIST_ONLY"/>
+      <xs:enumeration value="CHILD"/>
+      <xs:enumeration value="CHILD_LIST"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!-- Entity Base Type -->
+  <xs:simpleType name="entitybasetype">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="BASE_ENTITY"/>
+      <xs:enumeration value="BASE_VERSION_ENTITY"/>
+      <xs:enumeration value="BASE_AUDIT_ENTITY"/>
+      <xs:enumeration value="BASE_STATUS_ENTITY"/>
+      <xs:enumeration value="BASE_WORK_ENTITY"/>
+      <xs:enumeration value="BASE_STATUS_WORK_ENTITY"/>
+      <xs:enumeration value="BASE_NAMED_ENTITY"/>
+      <xs:enumeration value="BASE_CONFIG_ENTITY"/>
+      <xs:enumeration value="BASE_CONFIG_NAMED_ENTITY"/>
+      <xs:enumeration value="BASE_APPLICATION_ENTITY"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!-- Search Condition Type -->
+  <xs:simpleType name="searchcondtype">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="SESSION_ATTRIBUTE"/>
+      <xs:enumeration value="EQUALS"/>
+      <xs:enumeration value="LESS_THAN"/>
+      <xs:enumeration value="LESS_OR_EQUAL"/>
+      <xs:enumeration value="GREATER_THAN"/>
+      <xs:enumeration value="GREATER_OR_EQUAL"/>
+      <xs:enumeration value="BEGINS_WITH"/>
+      <xs:enumeration value="ENDS_WITH"/>
+      <xs:enumeration value="LIKE"/>
+      <xs:enumeration value="ILIKE"/>
+      <xs:enumeration value="NOT_EQUALS"/>
+      <xs:enumeration value="NOT_LIKE"/>
+      <xs:enumeration value="NOT_BEGIN_WITH"/>
+      <xs:enumeration value="NOT_END_WITH"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!-- Filter Condition Type -->
+  <xs:simpleType name="filtercondtype">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="EQUALS"/>
+      <xs:enumeration value="IEQUALS"/>
+      <xs:enumeration value="EQUALS_LINGUAL"/>
+      <xs:enumeration value="NOT_EQUALS"/>
+      <xs:enumeration value="NOT_EQUALS_LINGUAL"/>
+      <xs:enumeration value="INOT_EQUALS"/>
+      <xs:enumeration value="LESS_THAN"/>
+      <xs:enumeration value="LESS_THAN_LINGUAL"/>
+      <xs:enumeration value="LESS_OR_EQUAL"/>
+      <xs:enumeration value="LESS_OR_EQUAL_LINGUAL"/>
+      <xs:enumeration value="GREATER_THAN"/>
+      <xs:enumeration value="GREATER_THAN_LINGUAL"/>
+      <xs:enumeration value="GREATER_OR_EQUAL"/>
+      <xs:enumeration value="GREATER_OR_EQUAL_LINGUAL"/>
+      <xs:enumeration value="BETWEEN"/>
+      <xs:enumeration value="BETWEEN_LINGUAL"/>
+      <xs:enumeration value="NOT_BETWEEN"/>
+      <xs:enumeration value="NOT_BETWEEN_LINGUAL"/>
+      <xs:enumeration value="AMONGST"/>
+      <xs:enumeration value="NOT_AMONGST"/>
+      <xs:enumeration value="LIKE"/>
+      <xs:enumeration value="ILIKE"/>
+      <xs:enumeration value="NOT_LIKE"/>
+      <xs:enumeration value="BEGINS_WITH"/>
+      <xs:enumeration value="BEGINS_WITH"/>
+      <xs:enumeration value="NOT_BEGIN_WITH"/>
+      <xs:enumeration value="ENDS_WITH"/>
+      <xs:enumeration value="IENDS_WITH"/>
+      <xs:enumeration value="NOT_END_WITH"/>
+      <xs:enumeration value="IS_NULL"/>
+      <xs:enumeration value="IS_NOT_NULL"/>
+      <xs:enumeration value="EQUALS_FIELD"/>
+      <xs:enumeration value="NOT_EQUALS_FIELD"/>
+      <xs:enumeration value="EQUALS_SESSIONPARAM"/>
+      <xs:enumeration value="NOT_EQUALS_SESSIONPARAM"/>
+      <xs:enumeration value="LESS_THAN_FIELD"/>
+      <xs:enumeration value="LESS_OR_EQUAL_FIELD"/>
+      <xs:enumeration value="GREATER_THAN_FIELD"/>
+      <xs:enumeration value="GREATER_OR_EQUAL_FIELD"/>
+      <xs:enumeration value="BETWEEN_FIELD"/>
+      <xs:enumeration value="NOT_BETWEEN_FIELD"/>
+      <xs:enumeration value="LIKE_FIELD"/>
+      <xs:enumeration value="ILIKE_FIELD"/>
+      <xs:enumeration value="NOT_LIKE_FIELD"/>
+      <xs:enumeration value="BEGINS_WITH_FIELD"/>
+      <xs:enumeration value="IBEGINS_WITH_FIELD"/>
+      <xs:enumeration value="NOT_BEGIN_WITH_FIELD"/>
+      <xs:enumeration value="ENDS_WITH_FIELD"/>
+      <xs:enumeration value="IENDS_WITH_FIELD"/>
+      <xs:enumeration value="NOT_END_WITH_FIELD"/>
+      <xs:enumeration value="EQUALS_PARAM"/>
+      <xs:enumeration value="NOT_EQUALS_PARAM"/>
+      <xs:enumeration value="LESS_THAN_PARAM"/>
+      <xs:enumeration value="LESS_OR_EQUAL_PARAM"/>
+      <xs:enumeration value="GREATER_THAN_PARAM"/>
+      <xs:enumeration value="GREATER_OR_EQUAL_PARAM"/>
+      <xs:enumeration value="BETWEEN_PARAM"/>
+      <xs:enumeration value="NOT_BETWEEN_PARAM"/>
+      <xs:enumeration value="LIKE_PARAM"/>
+      <xs:enumeration value="ILIKE_PARAM"/>
+      <xs:enumeration value="NOT_LIKE_PARAM"/>
+      <xs:enumeration value="BEGINS_WITH_PARAM"/>
+      <xs:enumeration value="IBEGINS_WITH_PARAM"/>
+      <xs:enumeration value="NOT_BEGIN_WITH_PARAM"/>
+      <xs:enumeration value="ENDS_WITH_PARAM"/>
+      <xs:enumeration value="IENDS_WITH_PARAM"/>
+      <xs:enumeration value="NOT_END_WITH_PARAM"/>
+      <xs:enumeration value="EQUALS_COLLECTION"/>
+      <xs:enumeration value="NOT_EQUALS_COLLECTION"/>
+      <xs:enumeration value="LESS_THAN_COLLECTION"/>
+      <xs:enumeration value="LESS_OR_EQUAL_COLLECTION"/>
+      <xs:enumeration value="GREATER_THAN_COLLECTION"/>
+      <xs:enumeration value="GREATER_OR_EQUAL_COLLECTION"/>
+      <xs:enumeration value="AND"/>
+      <xs:enumeration value="OR"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!-- Tristate Type -->
+  <xs:simpleType name="tristate">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="TRUE"/>
+      <xs:enumeration value="FALSE"/>
+      <xs:enumeration value="CONFORMING"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!-- Field Sequence -->
+  <xs:complexType name="fieldsequence">
+    <xs:sequence>
+      <xs:element name="entry" maxOccurs="unbounded" minOccurs="0">
+        <xs:complexType>
+          <xs:attribute type="xs:string" name="field" use="required"/>
+          <xs:attribute type="xs:string" name="formatter" use="optional"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <!-- Property Sequence-->
+  <xs:complexType name="propertysequence">
+    <xs:sequence>
+      <xs:element name="entry" maxOccurs="unbounded" minOccurs="0">
+        <xs:complexType>
+          <xs:attribute type="xs:string" name="property" use="required"/>
+          <xs:attribute type="xs:string" name="label" use="required"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <!-- Restriction -->
+  <xs:complexType name="restriction">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element name="restriction" type="restriction"/>
+    </xs:choice>
+    <xs:attribute type="filtercondtype" name="type" use="required"/>
+    <xs:attribute type="xs:string" name="field" use="optional"/>
+    <xs:attribute type="xs:string" name="paramA" use="optional"/>
+    <xs:attribute type="xs:string" name="paramB" use="optional"/>
+  </xs:complexType>
+  <!-- Filter -->
+  <xs:complexType name="filter">
+    <xs:sequence>
+      <xs:element type="restriction" name="restriction" maxOccurs="unbounded" minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute type="xs:string" name="name" use="optional"/>
+    <xs:attribute type="xs:string" name="description" use="optional"/>
+    <xs:attribute type="xs:string" name="label" use="optional"/>
+    <xs:attribute type="xs:string" name="filterGenerator" use="optional"/>
+    <xs:attribute type="xs:string" name="filterGeneratorRule" use="optional"/>
+    <xs:attribute type="xs:boolean" name="quickFilter" use="optional"/>
+  </xs:complexType>
+  <!-- Filter with Color -->
+  <xs:complexType name="colorfilter">
+    <xs:complexContent>
+      <xs:extension base="filter">
+        <xs:attribute type="xs:string" name="rowColor" use="optional"/>
+        <xs:attribute type="xs:string" name="legendLabel" use="optional"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <!-- Set Values -->
+  <xs:complexType name="setvalues">
+    <xs:sequence>
+      <xs:element name="setValue" maxOccurs="unbounded" minOccurs="0">
+        <xs:complexType>
+          <xs:attribute name="type" use="optional">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:enumeration value="NULL"/>
+                <xs:enumeration value="IMMEDIATE"/>
+                <xs:enumeration value="IMMEDIATE_LINGUAL"/>
+                <xs:enumeration value="IMMEDIATE_FIELD"/>
+                <xs:enumeration value="PROCESS_VARIABLE"/>
+                <xs:enumeration value="SESSION_PARAMETER"/>
+                <xs:enumeration value="GENERATOR"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+          <xs:attribute type="xs:string" name="field" use="required"/>
+          <xs:attribute type="xs:string" name="value" use="optional"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute type="xs:string" name="name" use="optional"/>
+    <xs:attribute type="xs:string" name="description" use="optional"/>
+    <xs:attribute type="xs:string" name="label" use="optional"/>
+  </xs:complexType>
+</xs:schema>
+

@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+   	targetNamespace="http://flowcentraltech.com/schema-common"
+   	xmlns="http://flowcentraltech.com/schema-common"
+	attributeFormDefault="unqualified" elementFormDefault="qualified">
+  <xs:include schemaLocation="flowcentral-interconnect-types.xsd"/>
+  <!-- Interconnect -->
+  <xs:element name="interconnect">
+    <xs:complexType>
+      <xs:all>
+        <xs:element type="entities" name="entities" minOccurs="0"/>
+        <xs:element name="interconnect-applications" minOccurs="0">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="interconnect-application" maxOccurs="unbounded" minOccurs="0">
+                <xs:complexType>
+                  <xs:attribute type="xs:string" name="config-file"/>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+	        <xs:attribute type="xs:string" name="application" use="optional"/>
+          </xs:complexType>
+        </xs:element>
+      </xs:all>
+      <xs:attribute type="xs:string" name="name" use="required"/>
+      <xs:attribute type="xs:string" name="description" use="required"/>
+      <xs:attribute type="xs:string" name="redirect" use="optional"/>
+      <xs:attribute type="xs:string" name="dataSourceAlias" use="optional"/>
+      <xs:attribute type="xs:string" name="entityManagerFactory" use="optional"/>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
+
