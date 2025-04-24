@@ -3,7 +3,7 @@
 <module
 	xmlns="http://flowcentraltech.com/schema-common"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://flowcentraltech.com/schema-common file:///C:/data/flowcentral-module-4.0.0.xsd"
+	xsi:schemaLocation="http://flowcentraltech.com/schema-common https://schema.flowcentralplatform.com/xsd/flowcentral-module-4.0.0.xsd"
 	name="system" description="$m{system.module}"
 	shortCode="SYS" label="$m{system.label}">
 	<!-- applications -->

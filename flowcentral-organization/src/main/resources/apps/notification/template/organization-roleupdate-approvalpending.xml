@@ -3,7 +3,7 @@
 <notifTemplate
 	xmlns="http://flowcentraltech.com/schema-common"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://flowcentraltech.com/schema-common file:///C:/data/flowcentral-notificationtemplate-4.0.0.xsd"
+	xsi:schemaLocation="http://flowcentraltech.com/schema-common https://schema.flowcentralplatform.com/xsd/flowcentral-notificationtemplate-4.0.0.xsd"
 	name="roleUpdateApprovalPending" description="$m{organization.role.update.approval}"
 	type="EMAIL" format="HTML" entity="role">
 	<subject><![CDATA[$m{organization.role.update.approval.required.subject}]]></subject>
