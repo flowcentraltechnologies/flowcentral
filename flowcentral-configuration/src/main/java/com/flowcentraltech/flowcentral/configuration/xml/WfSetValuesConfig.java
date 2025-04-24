@@ -40,7 +40,7 @@ public class WfSetValuesConfig extends BaseNameConfig {
     @JacksonXmlProperty()
     private FilterConfig onCondition;
 
-    @JacksonXmlProperty(localName = "setValue")
+    @JacksonXmlProperty
     private SetValuesConfig setValues;
 
     @JacksonXmlProperty(isAttribute = true)

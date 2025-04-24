@@ -1,6 +1,10 @@
 <?xml version="1.0"?>
 <!-- Code generation module configuration -->
-<module name="codegeneration" description="$m{codegeneration.module}" shortCode="CDN"
+<module
+	xmlns="http://flowcentraltech.com/schema-common"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://flowcentraltech.com/schema-common file:///C:/data/flowcentral-module-4.0.0.xsd"
+	name="codegeneration" description="$m{codegeneration.module}" shortCode="CDN"
 	label="$m{codegeneration.label}">
 	<!-- applications -->
 	<applications>
@@ -9,8 +13,6 @@
 			longDescription="$m{codegeneration.long.description}" autoInstall="true"
 			configFile="apps/codegeneration-application.xml" />
 	</applications>
-
-	<!-- Privileges -->
 
 	<!-- System Parameters -->
 	<sysParameters>

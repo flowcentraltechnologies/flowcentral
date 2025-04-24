@@ -444,12 +444,12 @@ public class ApplicationWorkflowInstallerImpl extends AbstractApplicationArtifac
             throws UnifyException {
         // Filters
         List<WorkflowFilter> filterList = null;
-        if (!DataUtils.isBlank(wfConfig.getFilterList())) {
+        if (wfConfig.getFilters() != null && !DataUtils.isBlank(wfConfig.getFilters().getFilterList())) {
             filterList = new ArrayList<WorkflowFilter>();
             Map<String, WorkflowFilter> map = restore || workflow.isIdBlank() ? Collections.emptyMap()
                     : environment().findAllMap(String.class, "name",
                             new WorkflowFilterQuery().workflowId(workflow.getId()));
-            for (WfFilterConfig filterConfig : wfConfig.getFilterList()) {
+            for (WfFilterConfig filterConfig : wfConfig.getFilters().getFilterList()) {
                 WorkflowFilter oldWorkflowFilter = map.get(filterConfig.getName());
                 if (oldWorkflowFilter == null) {
                     WorkflowFilter workflowFilter = new WorkflowFilter();
@@ -475,12 +475,12 @@ public class ApplicationWorkflowInstallerImpl extends AbstractApplicationArtifac
 
         // Workflow set values
         List<WorkflowSetValues> setValuesList = null;
-        if (!DataUtils.isBlank(wfConfig.getSetValuesList())) {
+        if (wfConfig.getValues() != null && !DataUtils.isBlank(wfConfig.getValues().getSetValuesList())) {
             setValuesList = new ArrayList<WorkflowSetValues>();
             Map<String, WorkflowSetValues> map = restore || workflow.isIdBlank() ? Collections.emptyMap()
                     : environment().findAllMap(String.class, "name",
                             new WorkflowSetValuesQuery().workflowId(workflow.getId()));
-            for (WfSetValuesConfig wfSetValuesConfig : wfConfig.getSetValuesList()) {
+            for (WfSetValuesConfig wfSetValuesConfig : wfConfig.getValues().getSetValuesList()) {
                 WorkflowSetValues oldWorkflowSetValues = map.get(wfSetValuesConfig.getName());
                 if (oldWorkflowSetValues == null) {
                     WorkflowSetValues workflowSetValues = new WorkflowSetValues();

@@ -1,6 +1,10 @@
 <?xml version="1.0"?>
 <!-- Master notification module configuration -->
-<module name="notification" description="$m{notification.module}"
+<module
+	xmlns="http://flowcentraltech.com/schema-common"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://flowcentraltech.com/schema-common file:///C:/data/flowcentral-module-4.0.0.xsd"
+	name="notification" description="$m{notification.module}"
 	shortCode="NOT" label="$m{notification.label}">
 	<!-- Applications -->
 	<applications>
@@ -18,13 +22,13 @@
 			editable="true" />
 		<sysParameter code="NOT-0002" defaultVal="15"
 			description="$m{notification.sysparam.notificationmaximumtries}"
-			editor="!ui-integer precision:2" type="number" editable="true" />
+			editor="!ui-integer precision:2" type="NUMBER" editable="true" />
 		<sysParameter code="NOT-0003" defaultVal="1"
 			description="$m{notification.sysparam.notificationretryminutes}"
-			editor="!ui-integer precision:2" type="number" editable="true" />
+			editor="!ui-integer precision:2" type="NUMBER" editable="true" />
 		<sysParameter code="NOT-0004" defaultVal="20"
 			description="$m{notification.sysparam.notificationmaxbatchsize}"
-			editor="!ui-integer precision:2" type="number" editable="true" />
+			editor="!ui-integer precision:2" type="NUMBER" editable="true" />
 		<sysParameter code="NOT-0005" defaultVal="false"
 			description="$m{notification.sysparam.notificationtestmodeenabled}"
 			editor="!ui-select list:booleanlist" type="BOOLEAN" control="true"

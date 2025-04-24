@@ -16,11 +16,8 @@
 
 package com.flowcentraltech.flowcentral.configuration.xml;
 
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 
@@ -55,13 +52,11 @@ public class WfConfig extends BaseNameConfig {
     @JacksonXmlProperty(isAttribute = true)
     private Boolean runnable;
 
-    @JacksonXmlElementWrapper(useWrapping = false)
-    @JacksonXmlProperty(localName = "filter")
-    private List<WfFilterConfig> filterList;
+    @JacksonXmlProperty
+    private WfFiltersConfig filters;
 
-    @JacksonXmlElementWrapper(useWrapping = false)
-    @JacksonXmlProperty(localName = "setValues")
-    private List<WfSetValuesConfig> setValuesList;
+    @JacksonXmlProperty(localName = "valuesset")
+    private WfValuesSetConfig values;
     
     public WfConfig() {
         this.supportMultiItemAction = Boolean.FALSE;
@@ -125,20 +120,20 @@ public class WfConfig extends BaseNameConfig {
         this.runnable = runnable;
     }
 
-    public List<WfFilterConfig> getFilterList() {
-        return filterList;
+    public WfFiltersConfig getFilters() {
+        return filters;
     }
 
-    public void setFilterList(List<WfFilterConfig> filterList) {
-        this.filterList = filterList;
+    public void setFilters(WfFiltersConfig filters) {
+        this.filters = filters;
     }
 
-    public List<WfSetValuesConfig> getSetValuesList() {
-        return setValuesList;
+    public WfValuesSetConfig getValues() {
+        return values;
     }
 
-    public void setSetValuesList(List<WfSetValuesConfig> setValuesList) {
-        this.setValuesList = setValuesList;
+    public void setValues(WfValuesSetConfig values) {
+        this.values = values;
     }
 
 }

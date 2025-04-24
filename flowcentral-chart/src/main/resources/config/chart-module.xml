@@ -1,6 +1,10 @@
 <?xml version="1.0"?>
 <!-- Master chart module configuration -->
-<module name="chart" description="$m{chart.module}" shortCode="CHT"
+<module
+	xmlns="http://flowcentraltech.com/schema-common"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://flowcentraltech.com/schema-common file:///C:/data/flowcentral-module-4.0.0.xsd"
+	name="chart" description="$m{chart.module}" shortCode="CHT"
 	label="$m{chart.label}">
 	<!-- Applications -->
 	<applications>

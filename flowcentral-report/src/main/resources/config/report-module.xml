@@ -1,6 +1,10 @@
 <?xml version="1.0"?>
 <!-- Master report module configuration -->
-<module name="report" description="$m{report.module}" shortCode="RPT"
+<module
+	xmlns="http://flowcentraltech.com/schema-common"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://flowcentraltech.com/schema-common file:///C:/data/flowcentral-module-4.0.0.xsd"
+	name="report" description="$m{report.module}" shortCode="RPT"
 	label="$m{report.label}">
 	<!-- Applications -->
 	<applications>
@@ -25,6 +29,6 @@
 			editor="!ui-text size:40" type="STRING" editable="true"/>
 		<sysParameter code="RPT-0005" defaultVal="2"
 			description="$m{report.sysparam.reportlistingcolumns}"
-			editor="!ui-select list:onetotenlist" type="number" editable="true"/>
+			editor="!ui-select list:onetotenlist" type="NUMBER" editable="true"/>
 	</sysParameters>
 </module>

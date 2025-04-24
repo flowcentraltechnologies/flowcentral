@@ -1,6 +1,10 @@
 <?xml version="1.0"?>
 <!-- Master organization module configuration -->
-<module name="organization" description="$m{organization.module}"
+<module
+	xmlns="http://flowcentraltech.com/schema-common"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://flowcentraltech.com/schema-common file:///C:/data/flowcentral-module-4.0.0.xsd"
+	name="organization" description="$m{organization.module}"
 	shortCode="ORG" label="$m{organization.label}">
 	<!-- Applications -->
 	<applications>

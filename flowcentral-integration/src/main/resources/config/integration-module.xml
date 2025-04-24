@@ -1,6 +1,10 @@
 <?xml version="1.0"?>
 <!-- Integration module configuration -->
-<module name="integration" description="$m{integration.module}"
+<module
+	xmlns="http://flowcentraltech.com/schema-common"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://flowcentraltech.com/schema-common file:///C:/data/flowcentral-module-4.0.0.xsd"
+	name="integration" description="$m{integration.module}"
 	shortCode="INT" label="$m{integration.label}">
 	<!-- Applications -->
 	<applications>

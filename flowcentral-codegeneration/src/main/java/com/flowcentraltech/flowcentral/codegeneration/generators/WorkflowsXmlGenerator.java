@@ -32,6 +32,7 @@ import com.flowcentraltech.flowcentral.configuration.xml.WfChannelConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.WfChannelsConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.WfConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.WfFilterConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.WfFiltersConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.WfRoutingConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.WfRoutingsConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.WfSetValuesConfig;
@@ -39,6 +40,7 @@ import com.flowcentraltech.flowcentral.configuration.xml.WfStepConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.WfStepsConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.WfUserActionConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.WfUserActionsConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.WfValuesSetConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.WfWizardConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.WfWizardStepConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.util.ConfigurationUtils;
@@ -123,7 +125,7 @@ public class WorkflowsXmlGenerator extends AbstractResourcesArtifactGenerator {
                         filterList.add(filterConfig);
                     }
 
-                    workflowConfig.setFilterList(filterList);
+                    workflowConfig.setFilters(new WfFiltersConfig(filterList));
                  }
 
                 // Set values
@@ -144,7 +146,7 @@ public class WorkflowsXmlGenerator extends AbstractResourcesArtifactGenerator {
                         setValuesList.add(wfSetValuesConfig);
                     }
 
-                    workflowConfig.setSetValuesList(setValuesList);
+                    workflowConfig.setValues(new WfValuesSetConfig(setValuesList));
                 }
 
                 // Steps

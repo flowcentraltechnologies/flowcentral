@@ -1,6 +1,10 @@
 <?xml version="1.0"?>
 <!-- Security module configuration -->
-<module name="security" description="$m{security.module}" shortCode="SEC"
+<module
+	xmlns="http://flowcentraltech.com/schema-common"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://flowcentraltech.com/schema-common file:///C:/data/flowcentral-module-4.0.0.xsd"
+	name="security" description="$m{security.module}" shortCode="SEC"
 	label="$m{security.label}">
 	<!-- Applications -->
 	<applications>
@@ -16,26 +20,26 @@
 			editor="!ui-select list:booleanlist" type="BOOLEAN" editable="true" />
 		<sysParameter code="SEC-0002" defaultVal="6"
 			description="$m{security.sysparam.passwordhistlen}"
-			editor="!ui-integer precision:2" type="number" editable="true" />
+			editor="!ui-integer precision:2" type="NUMBER" editable="true" />
 		<sysParameter code="SEC-0003" defaultVal="false"
 			description="$m{security.sysparam.enablepasswordexpiry}"
 			editor="!ui-select list:booleanlist" type="BOOLEAN" editable="true" />
 		<sysParameter code="SEC-0004" defaultVal="30"
 			description="$m{security.sysparam.passwordexpirydays}"
-			editor="!ui-integer precision:3" type="number" editable="true" />
+			editor="!ui-integer precision:3" type="NUMBER" editable="true" />
 		<sysParameter code="SEC-0005" defaultVal="true"
 			description="$m{security.sysparam.enableaccountlock}"
 			editor="!ui-select list:booleanlist" type="BOOLEAN" editable="true" />
 		<sysParameter code="SEC-0006" defaultVal="4"
 			description="$m{security.sysparam.maxlogintries}"
-			editor="!ui-integer precision:2" type="number" editable="true" />
+			editor="!ui-integer precision:2" type="NUMBER" editable="true" />
 		<sysParameter code="SEC-0007"
 			defaultVal="lowercaseprincipal-passwordgenerator"
 			description="$m{security.sysparam.userpasswordgenerator}"
 			editor="!ui-select list:passwordgeneratorlist" type="STRING" editable="true" />
 		<sysParameter code="SEC-0008" defaultVal="8"
 			description="$m{security.sysparam.userpasswordlength}"
-			editor="!ui-integer precision:2" type="number" editable="true" />
+			editor="!ui-integer precision:2" type="NUMBER" editable="true" />
 		<sysParameter code="SEC-0009" defaultVal="false"
 			description="$m{security.sysparam.userpasswordsendemail}"
 			editor="!ui-select list:booleanlist" type="BOOLEAN" editable="true" />
@@ -54,10 +58,10 @@
 		<sysParameter code="SEC-000E" defaultVal="/application"
 			description="$m{security.sysparam.applicationkey}"
 			editor="!ui-text maxLen:48" type="STRING" editable="true" />
-		<sysParameter code="SEC-000F" type="contact"
+		<sysParameter code="SEC-000F" type="CONTACT"
 			description="$m{security.sysparam.administratoremail}"
 			editor="!ui-text size:40" editable="true" />
-		<sysParameter code="SEC-0010" type="name" defaultVal="Administrator"
+		<sysParameter code="SEC-0010" type="NAME" defaultVal="Administrator"
 			description="$m{security.sysparam.administratorname}"
 			editor="!ui-text size:24" editable="true" />
 		<sysParameter code="SEC-0011" defaultVal="false"

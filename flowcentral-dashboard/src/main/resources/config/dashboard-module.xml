@@ -1,6 +1,10 @@
 <?xml version="1.0"?>
 <!-- Dashboard module configuration -->
-<module name="dashboard" description="$m{dashboard.module}"
+<module
+	xmlns="http://flowcentraltech.com/schema-common"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://flowcentraltech.com/schema-common file:///C:/data/flowcentral-module-4.0.0.xsd"
+	name="dashboard" description="$m{dashboard.module}"
 	shortCode="DSH" label="$m{dashboard.label}">
 	<!-- Applications -->
 	<applications>

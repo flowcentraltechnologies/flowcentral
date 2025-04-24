@@ -43,7 +43,7 @@ public class SysParamConfig extends BaseCodeConfig {
     @JacksonXmlProperty(isAttribute = true)
     private String defaultVal;
 
-    @JacksonXmlProperty(isAttribute = true)
+    @JacksonXmlProperty(isAttribute = true, localName = "filter")
     private String filterName;
 
     @JacksonXmlProperty(isAttribute = true)

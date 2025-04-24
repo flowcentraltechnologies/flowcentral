@@ -1,6 +1,10 @@
 <?xml version="1.0"?>
 <!-- Application module configuration -->
-<module name="application" description="$m{application.module}"
+<module
+	xmlns="http://flowcentraltech.com/schema-common"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://flowcentraltech.com/schema-common file:///C:/data/flowcentral-module-4.0.0.xsd"
+	name="application" description="$m{application.module}"
 	shortCode="APP" label="$m{application.label}">
 	<!-- Applications -->
 	<applications>
@@ -22,7 +26,7 @@
 			editor="!ui-select list:booleanlist" type="BOOLEAN" editable="true" />
 		<sysParameter code="APP-0004" defaultVal="studio"
 			description="$m{application.sysparam.studioapplicationname}"
-			editor="!ui-text" type="name" />
+			editor="!ui-text" type="NAME" />
 		<sysParameter code="APP-0005" defaultVal="true"
 			description="$m{application.sysparam.studiomenuenabled}"
 			editor="!ui-select list:booleanlist" type="BOOLEAN" editable="true" />
@@ -31,7 +35,7 @@
 			editor="!ui-text" type="STRING" editable="true" />
 		<sysParameter code="APP-0007" defaultVal="import"
 			description="$m{application.sysparam.importapplicationname}"
-			editor="!ui-text" type="name" />
+			editor="!ui-text" type="NAME" />
 		<sysParameter code="APP-0008" defaultVal="false"
 			description="$m{application.sysparam.tabbedcontent}"
 			editor="!ui-select list:booleanlist" type="BOOLEAN" editable="true" />
@@ -76,10 +80,10 @@
 			editor="!ui-select list:booleanlist" type="BOOLEAN" editable="true" />
 		<sysParameter code="APP-0016" defaultVal="4"
 			description="$m{application.sysparam.searchentrycolumns}"
-			editor="!ui-integer precision:1" type="number" editable="true" />
+			editor="!ui-integer precision:1" type="NUMBER" editable="true" />
 		<sysParameter code="APP-0017" defaultVal="25"
 			description="$m{application.sysparam.searchminimumitemsperpage}"
-			editor="!ui-integer precision:2" type="number" editable="true" />
+			editor="!ui-integer precision:2" type="NUMBER" editable="true" />
 		<sysParameter code="APP-0018" defaultVal="true"
 			description="$m{application.sysparam.highlatencyindication}"
 			editor="!ui-select list:booleanlist" type="BOOLEAN" editable="true" />
@@ -127,7 +131,7 @@
 			editor="!ui-select list:booleanlist" type="BOOLEAN" editable="true" />
 		<sysParameter code="APP-0027" defaultVal="5"
 			description="$m{application.sysparam.messagevisibilitytimeout}"
-			editor="!ui-integer precision:2" type="number" editable="true" />
+			editor="!ui-integer precision:2" type="NUMBER" editable="true" />
 		<sysParameter code="APP-0028" defaultVal="false"
 			description="$m{application.sysparam.enablemultierrormessages}"
 			editor="!ui-select list:booleanlist" type="BOOLEAN" editable="true" />
