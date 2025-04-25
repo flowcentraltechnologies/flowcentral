@@ -15,13 +15,10 @@
  */
 package com.flowcentraltech.flowcentral.configuration.xml;
 
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.flowcentraltech.flowcentral.configuration.constants.FormType;
 import com.flowcentraltech.flowcentral.configuration.xml.adapter.FormTypeXmlAdapter;
@@ -35,45 +32,35 @@ import com.flowcentraltech.flowcentral.configuration.xml.adapter.FormTypeXmlAdap
 @JsonInclude(value = Include.NON_NULL, content = Include.NON_EMPTY)
 public class AppFormConfig extends BaseNameConfig {
 
-    @JacksonXmlElementWrapper(useWrapping = false)
-    @JacksonXmlProperty(localName = "filter")
-    private List<FormFilterConfig> filterList;
+    @JacksonXmlProperty
+    private FormFiltersConfig filters;
     
-    @JacksonXmlElementWrapper(useWrapping = false)
-    @JacksonXmlProperty(localName = "annotation")
-    private List<FormAnnotationConfig> annotationList;
+    @JacksonXmlProperty
+    private FormAnnotationsConfig annotations;
 
-    @JacksonXmlElementWrapper(useWrapping = false)
-    @JacksonXmlProperty(localName = "action")
-    private List<FormActionConfig> actionList;
+    @JacksonXmlProperty
+    private FormActionsConfig actions;
 
-    @JacksonXmlElementWrapper(useWrapping = false)
-    @JacksonXmlProperty(localName = "tab")
-    private List<FormTabConfig> tabList;
+    @JacksonXmlProperty
+    private FormTabsConfig tabs;
 
-    @JacksonXmlElementWrapper(useWrapping = false)
-    @JacksonXmlProperty(localName = "relatedList")
-    private List<RelatedListConfig> relatedList;
+    @JacksonXmlProperty
+    private RelatedListsConfig relatedLists;
 
-    @JacksonXmlElementWrapper(useWrapping = false)
-    @JacksonXmlProperty(localName = "formStatePolicy")
-    private List<FormStatePolicyConfig> formStatePolicyList;
+    @JacksonXmlProperty
+    private FormStatePoliciesConfig formStatePolicies;
 
-    @JacksonXmlElementWrapper(useWrapping = false)
-    @JacksonXmlProperty(localName = "formWidgetRulesPolicy")
-    private List<FormWidgetRulesPolicyConfig> widgetRulesPolicyList;
+    @JacksonXmlProperty
+    private FormWidgetRulesPoliciesConfig widgetRulesPolicies;
 
-    @JacksonXmlElementWrapper(useWrapping = false)
-    @JacksonXmlProperty(localName = "fieldValidationPolicy")
-    private List<FieldValidationPolicyConfig> fieldValidationPolicyList;
+    @JacksonXmlProperty
+    private FieldValidationPoliciesConfig fieldValidationPolicies;
 
-    @JacksonXmlElementWrapper(useWrapping = false)
-    @JacksonXmlProperty(localName = "formValidationPolicy")
-    private List<FormValidationPolicyConfig> formValidationPolicyList;
+    @JacksonXmlProperty
+    private FormValidationPoliciesConfig formValidationPolicies;
 
-    @JacksonXmlElementWrapper(useWrapping = false)
-    @JacksonXmlProperty(localName = "formReviewPolicy")
-    private List<FormReviewPolicyConfig> formReviewPolicyList;
+    @JacksonXmlProperty
+    private FormReviewPoliciesConfig formReviewPolicies;
 
     @JsonSerialize(using = FormTypeXmlAdapter.Serializer.class)
     @JsonDeserialize(using = FormTypeXmlAdapter.Deserializer.class)
@@ -105,84 +92,84 @@ public class AppFormConfig extends BaseNameConfig {
         this.type = FormType.INPUT;
     }
 
-    public List<FormFilterConfig> getFilterList() {
-        return filterList;
+    public FormFiltersConfig getFilters() {
+        return filters;
     }
 
-    public void setFilterList(List<FormFilterConfig> filterList) {
-        this.filterList = filterList;
-    }
-    
-    public List<FormAnnotationConfig> getAnnotationList() {
-        return annotationList;
+    public void setFilters(FormFiltersConfig filters) {
+        this.filters = filters;
     }
 
-    public void setAnnotationList(List<FormAnnotationConfig> annotationList) {
-        this.annotationList = annotationList;
+    public FormAnnotationsConfig getAnnotations() {
+        return annotations;
     }
 
-    public List<FormActionConfig> getActionList() {
-        return actionList;
+    public void setAnnotations(FormAnnotationsConfig annotations) {
+        this.annotations = annotations;
     }
 
-    public void setActionList(List<FormActionConfig> actionList) {
-        this.actionList = actionList;
+    public FormActionsConfig getActions() {
+        return actions;
     }
 
-    public List<FormTabConfig> getTabList() {
-        return tabList;
+    public void setActions(FormActionsConfig actions) {
+        this.actions = actions;
     }
 
-    public void setTabList(List<FormTabConfig> tabList) {
-        this.tabList = tabList;
+    public FormTabsConfig getTabs() {
+        return tabs;
     }
 
-    public List<RelatedListConfig> getRelatedList() {
-        return relatedList;
+    public void setTabs(FormTabsConfig tabs) {
+        this.tabs = tabs;
     }
 
-    public void setRelatedList(List<RelatedListConfig> relatedList) {
-        this.relatedList = relatedList;
+    public RelatedListsConfig getRelatedLists() {
+        return relatedLists;
     }
 
-    public List<FormStatePolicyConfig> getFormStatePolicyList() {
-        return formStatePolicyList;
+    public void setRelatedLists(RelatedListsConfig relatedLists) {
+        this.relatedLists = relatedLists;
     }
 
-    public void setFormStatePolicyList(List<FormStatePolicyConfig> formStatePolicyList) {
-        this.formStatePolicyList = formStatePolicyList;
+    public FormStatePoliciesConfig getFormStatePolicies() {
+        return formStatePolicies;
     }
 
-    public List<FormWidgetRulesPolicyConfig> getWidgetRulesPolicyList() {
-        return widgetRulesPolicyList;
+    public void setFormStatePolicies(FormStatePoliciesConfig formStatePolicies) {
+        this.formStatePolicies = formStatePolicies;
     }
 
-    public void setWidgetRulesPolicyList(List<FormWidgetRulesPolicyConfig> widgetRulesPolicyList) {
-        this.widgetRulesPolicyList = widgetRulesPolicyList;
+    public FormWidgetRulesPoliciesConfig getWidgetRulesPolicies() {
+        return widgetRulesPolicies;
     }
 
-    public List<FieldValidationPolicyConfig> getFieldValidationPolicyList() {
-        return fieldValidationPolicyList;
+    public void setWidgetRulesPolicies(FormWidgetRulesPoliciesConfig widgetRulesPolicies) {
+        this.widgetRulesPolicies = widgetRulesPolicies;
     }
 
-    public void setFieldValidationPolicyList(List<FieldValidationPolicyConfig> fieldValidationPolicyList) {
-        this.fieldValidationPolicyList = fieldValidationPolicyList;
+    public FieldValidationPoliciesConfig getFieldValidationPolicies() {
+        return fieldValidationPolicies;
     }
 
-    public List<FormValidationPolicyConfig> getFormValidationPolicyList() {
-        return formValidationPolicyList;
+    public void setFieldValidationPolicies(FieldValidationPoliciesConfig fieldValidationPolicies) {
+        this.fieldValidationPolicies = fieldValidationPolicies;
     }
 
-    public void setFormValidationPolicyList(List<FormValidationPolicyConfig> formValidationPolicyList) {
-        this.formValidationPolicyList = formValidationPolicyList;
+    public FormValidationPoliciesConfig getFormValidationPolicies() {
+        return formValidationPolicies;
     }
 
-    public List<FormReviewPolicyConfig> getFormReviewPolicyList() {
-        return formReviewPolicyList;
+    public void setFormValidationPolicies(FormValidationPoliciesConfig formValidationPolicies) {
+        this.formValidationPolicies = formValidationPolicies;
     }
 
-    public void setFormReviewPolicyList(List<FormReviewPolicyConfig> formReviewPolicyList) {
-        this.formReviewPolicyList = formReviewPolicyList;
+    public FormReviewPoliciesConfig getFormReviewPolicies() {
+        return formReviewPolicies;
+    }
+
+    public void setFormReviewPolicies(FormReviewPoliciesConfig formReviewPolicies) {
+        this.formReviewPolicies = formReviewPolicies;
     }
 
     public FormType getType() {

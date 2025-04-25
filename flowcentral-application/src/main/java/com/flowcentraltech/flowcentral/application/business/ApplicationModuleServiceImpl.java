@@ -6441,7 +6441,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     private void populateChildList(AppTable appTable, String applicationName, AppTableConfig appTableConfig,
             boolean restore) throws UnifyException {
         List<AppTableColumn> columnList = new ArrayList<AppTableColumn>();
-        for (TableColumnConfig tableColumnConfig : appTableConfig.getColumnList()) {
+        for (TableColumnConfig tableColumnConfig : appTableConfig.getColumns().getColumnList()) {
             AppTableColumn appTableColumn = new AppTableColumn();
             appTableColumn.setField(tableColumnConfig.getField());
             appTableColumn.setLabel(resolveApplicationMessage(tableColumnConfig.getLabel()));
@@ -6465,12 +6465,12 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         appTable.setColumnList(columnList);
 
         List<AppTableFilter> filterList = null;
-        if (!DataUtils.isBlank(appTableConfig.getFilterList())) {
+        if (appTableConfig.getFilters() != null && !DataUtils.isBlank(appTableConfig.getFilters().getFilterList())) {
             filterList = new ArrayList<AppTableFilter>();
             Map<String, AppTableFilter> map = restore || appTable.isIdBlank() ? Collections.emptyMap()
                     : environment().findAllMap(String.class, "name",
                             new AppTableFilterQuery().appTableId(appTable.getId()));
-            for (TableFilterConfig filterConfig : appTableConfig.getFilterList()) {
+            for (TableFilterConfig filterConfig : appTableConfig.getFilters().getFilterList()) {
                 if (!DataUtils.isBlank(filterConfig.getRestrictionList())) {
                     AppTableFilter oldAppTableFilter = map.get(filterConfig.getName());
                     if (oldAppTableFilter == null) {
@@ -6500,12 +6500,12 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         appTable.setFilterList(filterList);
 
         List<AppTableAction> actionList = null;
-        if (!DataUtils.isBlank(appTableConfig.getActionList())) {
+        if (appTableConfig.getActions() != null && !DataUtils.isBlank(appTableConfig.getActions().getActionList())) {
             actionList = new ArrayList<AppTableAction>();
             Map<String, AppTableAction> map = restore || appTable.isIdBlank() ? Collections.emptyMap()
                     : environment().findAllMap(String.class, "name",
                             new AppTableActionQuery().appTableId(appTable.getId()));
-            for (TableActionConfig tableActionConfig : appTableConfig.getActionList()) {
+            for (TableActionConfig tableActionConfig : appTableConfig.getActions().getActionList()) {
                 AppTableAction oldAppTableAction = map.get(tableActionConfig.getName());
                 if (oldAppTableAction == null) {
                     AppTableAction appTableAction = new AppTableAction();
@@ -6530,12 +6530,12 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         appTable.setActionList(actionList);
 
         List<AppTableLoading> loadingList = null;
-        if (!DataUtils.isBlank(appTableConfig.getLoadingList())) {
+        if (appTableConfig.getLoadings() != null && !DataUtils.isBlank(appTableConfig.getLoadings().getLoadingList())) {
             loadingList = new ArrayList<AppTableLoading>();
             Map<String, AppTableLoading> map = restore || appTable.isIdBlank() ? Collections.emptyMap()
                     : environment().findAllMap(String.class, "name",
                             new AppTableLoadingQuery().appTableId(appTable.getId()));
-            for (TableLoadingConfig tableLoadingConfig : appTableConfig.getLoadingList()) {
+            for (TableLoadingConfig tableLoadingConfig : appTableConfig.getLoadings().getLoadingList()) {
                 AppTableLoading oldAppTableLoading = map.get(tableLoadingConfig.getName());
                 if (oldAppTableLoading == null) {
                     AppTableLoading appTableLoading = new AppTableLoading();
@@ -6563,12 +6563,12 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             final String applicationName, final boolean restore) throws UnifyException {
         // Filters
         List<AppFormFilter> filterList = null;
-        if (!DataUtils.isBlank(appFormConfig.getFilterList())) {
+        if (appFormConfig.getFilters() != null && !DataUtils.isBlank(appFormConfig.getFilters().getFilterList())) {
             filterList = new ArrayList<AppFormFilter>();
             Map<String, AppFormFilter> map = restore || appForm.isIdBlank() ? Collections.emptyMap()
                     : environment().findAllMap(String.class, "name",
                             new AppFormFilterQuery().appFormId(appForm.getId()));
-            for (FormFilterConfig filterConfig : appFormConfig.getFilterList()) {
+            for (FormFilterConfig filterConfig : appFormConfig.getFilters().getFilterList()) {
                 AppFormFilter oldAppFormFilter = map.get(filterConfig.getName());
                 if (oldAppFormFilter == null) {
                     AppFormFilter appFormFilter = new AppFormFilter();
@@ -6594,12 +6594,13 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
         // Form annotations
         List<AppFormAnnotation> annotationList = null;
-        if (!DataUtils.isBlank(appFormConfig.getAnnotationList())) {
+        if (appFormConfig.getAnnotations() != null
+                && !DataUtils.isBlank(appFormConfig.getAnnotations().getAnnotationList())) {
             annotationList = new ArrayList<AppFormAnnotation>();
             Map<String, AppFormAnnotation> map = restore || appForm.isIdBlank() ? Collections.emptyMap()
                     : environment().findAllMap(String.class, "name",
                             new AppFormAnnotationQuery().appFormId(appForm.getId()));
-            for (FormAnnotationConfig formAnnotationConfig : appFormConfig.getAnnotationList()) {
+            for (FormAnnotationConfig formAnnotationConfig : appFormConfig.getAnnotations().getAnnotationList()) {
                 AppFormAnnotation oldAppFormAnnotation = map.get(formAnnotationConfig.getName());
                 String description = resolveApplicationMessage(formAnnotationConfig.getDescription());
                 String message = resolveApplicationMessage(formAnnotationConfig.getMessage());
@@ -6635,12 +6636,12 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
         // Form actions
         List<AppFormAction> actionList = null;
-        if (!DataUtils.isBlank(appFormConfig.getActionList())) {
+        if (appFormConfig.getActions() != null && !DataUtils.isBlank(appFormConfig.getActions().getActionList())) {
             actionList = new ArrayList<AppFormAction>();
             Map<String, AppFormAction> map = restore || appForm.isIdBlank() ? Collections.emptyMap()
                     : environment().findAllMap(String.class, "name",
                             new AppFormActionQuery().appFormId(appForm.getId()));
-            for (FormActionConfig formActionConfig : appFormConfig.getActionList()) {
+            for (FormActionConfig formActionConfig : appFormConfig.getActions().getActionList()) {
                 AppFormAction oldAppFormAction = map.get(formActionConfig.getName());
                 String description = resolveApplicationMessage(formActionConfig.getDescription());
                 String label = resolveApplicationMessage(formActionConfig.getLabel());
@@ -6692,7 +6693,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
         // Form elements
         List<AppFormElement> elementList = new ArrayList<AppFormElement>();
-        for (FormTabConfig formTabConfig : appFormConfig.getTabList()) {
+        for (FormTabConfig formTabConfig : appFormConfig.getTabs().getTabList()) {
             // Tab
             AppFormElement appFormElement = new AppFormElement();
             appFormElement.setType(FormElementType.TAB);
@@ -6770,12 +6771,13 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
         // Related lists
         List<AppFormRelatedList> relatedList = null;
-        if (!DataUtils.isBlank(appFormConfig.getRelatedList())) {
+        if (appFormConfig.getRelatedLists() != null
+                && !DataUtils.isBlank(appFormConfig.getRelatedLists().getRelatedList())) {
             relatedList = new ArrayList<AppFormRelatedList>();
             Map<String, AppFormRelatedList> map = restore || appForm.isIdBlank() ? Collections.emptyMap()
                     : environment().findAllMap(String.class, "name",
                             new AppFormRelatedListQuery().appFormId(appForm.getId()));
-            for (RelatedListConfig relatedListConfig : appFormConfig.getRelatedList()) {
+            for (RelatedListConfig relatedListConfig : appFormConfig.getRelatedLists().getRelatedList()) {
                 AppFormRelatedList oldAppFormRelatedList = map.get(relatedListConfig.getName());
                 if (oldAppFormRelatedList == null) {
                     AppFormRelatedList appFormRelatedList = new AppFormRelatedList();
@@ -6806,12 +6808,14 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
         // Form state policies
         List<AppFormStatePolicy> fieldStateList = null;
-        if (!DataUtils.isBlank(appFormConfig.getFormStatePolicyList())) {
+        if (appFormConfig.getFormStatePolicies() != null
+                && !DataUtils.isBlank(appFormConfig.getFormStatePolicies().getFormStatePolicyList())) {
             fieldStateList = new ArrayList<AppFormStatePolicy>();
             Map<String, AppFormStatePolicy> map = restore || appForm.isIdBlank() ? Collections.emptyMap()
                     : environment().findAllMap(String.class, "name",
                             new AppFormStatePolicyQuery().appFormId(appForm.getId()));
-            for (FormStatePolicyConfig formStatePolicyConfig : appFormConfig.getFormStatePolicyList()) {
+            for (FormStatePolicyConfig formStatePolicyConfig : appFormConfig.getFormStatePolicies()
+                    .getFormStatePolicyList()) {
                 AppFormStatePolicy oldAppFormStatePolicy = map.get(formStatePolicyConfig.getName());
                 if (oldAppFormStatePolicy == null) {
                     AppFormStatePolicy appFormStatePolicy = new AppFormStatePolicy();
@@ -6849,12 +6853,14 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
         // Form widget rule policies
         List<AppFormWidgetRulesPolicy> widgetRulesList = null;
-        if (!DataUtils.isBlank(appFormConfig.getWidgetRulesPolicyList())) {
+        if (appFormConfig.getWidgetRulesPolicies() != null
+                && !DataUtils.isBlank(appFormConfig.getWidgetRulesPolicies().getWidgetRulesPolicyList())) {
             widgetRulesList = new ArrayList<AppFormWidgetRulesPolicy>();
             Map<String, AppFormWidgetRulesPolicy> map = restore || appForm.isIdBlank() ? Collections.emptyMap()
                     : environment().findAllMap(String.class, "name",
                             new AppFormWidgetRulesPolicyQuery().appFormId(appForm.getId()));
-            for (FormWidgetRulesPolicyConfig formWidgetRulesPolicyConfig : appFormConfig.getWidgetRulesPolicyList()) {
+            for (FormWidgetRulesPolicyConfig formWidgetRulesPolicyConfig : appFormConfig.getWidgetRulesPolicies()
+                    .getWidgetRulesPolicyList()) {
                 AppFormWidgetRulesPolicy oldAppFormWidgetRulesPolicy = map.get(formWidgetRulesPolicyConfig.getName());
                 if (oldAppFormWidgetRulesPolicy == null) {
                     AppFormWidgetRulesPolicy appFormWidgetRulesPolicy = new AppFormWidgetRulesPolicy();
@@ -6886,12 +6892,13 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
         // Form field validation policies
         List<AppFormFieldValidationPolicy> fieldValidationList = null;
-        if (!DataUtils.isBlank(appFormConfig.getFieldValidationPolicyList())) {
+        if (appFormConfig.getFieldValidationPolicies() != null
+                && !DataUtils.isBlank(appFormConfig.getFieldValidationPolicies().getFieldValidationPolicyList())) {
             fieldValidationList = new ArrayList<AppFormFieldValidationPolicy>();
             Map<String, AppFormFieldValidationPolicy> map = restore || appForm.isIdBlank() ? Collections.emptyMap()
                     : environment().findAllMap(String.class, "name",
                             new AppFormFieldValidationPolicyQuery().appFormId(appForm.getId()));
-            for (FieldValidationPolicyConfig fieldValidationPolicyConfig : appFormConfig
+            for (FieldValidationPolicyConfig fieldValidationPolicyConfig : appFormConfig.getFieldValidationPolicies()
                     .getFieldValidationPolicyList()) {
                 AppFormFieldValidationPolicy oldAppFormFieldValidationPolicy = map
                         .get(fieldValidationPolicyConfig.getName());
@@ -6923,12 +6930,14 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
         // Form validation policies
         List<AppFormValidationPolicy> formValidationList = null;
-        if (!DataUtils.isBlank(appFormConfig.getFormValidationPolicyList())) {
+        if (appFormConfig.getFormValidationPolicies() != null
+                && !DataUtils.isBlank(appFormConfig.getFormValidationPolicies().getFormValidationPolicyList())) {
             formValidationList = new ArrayList<AppFormValidationPolicy>();
             Map<String, AppFormValidationPolicy> map = restore || appForm.isIdBlank() ? Collections.emptyMap()
                     : environment().findAllMap(String.class, "name",
                             new AppFormValidationPolicyQuery().appFormId(appForm.getId()));
-            for (FormValidationPolicyConfig formValidationPolicyConfig : appFormConfig.getFormValidationPolicyList()) {
+            for (FormValidationPolicyConfig formValidationPolicyConfig : appFormConfig.getFormValidationPolicies()
+                    .getFormValidationPolicyList()) {
                 AppFormValidationPolicy oldAppFormValidationPolicy = map.get(formValidationPolicyConfig.getName());
                 if (oldAppFormValidationPolicy == null) {
                     AppFormValidationPolicy appFormValidationPolicy = new AppFormValidationPolicy();
@@ -6964,12 +6973,14 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
         // Form review policies
         List<AppFormReviewPolicy> formReviewList = null;
-        if (!DataUtils.isBlank(appFormConfig.getFormReviewPolicyList())) {
+        if (appFormConfig.getFormReviewPolicies() != null
+                && !DataUtils.isBlank(appFormConfig.getFormReviewPolicies().getFormReviewPolicyList())) {
             formReviewList = new ArrayList<AppFormReviewPolicy>();
             Map<String, AppFormReviewPolicy> map = restore || appForm.isIdBlank() ? Collections.emptyMap()
                     : environment().findAllMap(String.class, "name",
                             new AppFormReviewPolicyQuery().appFormId(appForm.getId()));
-            for (FormReviewPolicyConfig formReviewPolicyConfig : appFormConfig.getFormReviewPolicyList()) {
+            for (FormReviewPolicyConfig formReviewPolicyConfig : appFormConfig.getFormReviewPolicies()
+                    .getFormReviewPolicyList()) {
                 AppFormReviewPolicy oldAppFormReviewPolicy = map.get(formReviewPolicyConfig.getName());
                 if (oldAppFormReviewPolicy == null) {
                     AppFormReviewPolicy appFormReviewPolicy = new AppFormReviewPolicy();

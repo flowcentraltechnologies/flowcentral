@@ -25,7 +25,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
  * @since 1.0
  */
 @JacksonXmlRootElement(localName = "application")
-public class ApplicationConfig {
+public class ApplicationConfig extends BaseRootConfig {
 
     @JacksonXmlProperty(isAttribute = true)
     private String name;
@@ -44,6 +44,10 @@ public class ApplicationConfig {
 
     @JacksonXmlProperty(localName = "entities")
     private EntitiesConfig entitiesConfig;
+
+    public ApplicationConfig() {
+        super("flowcentral-interconnect-application-4.0.0.xsd");
+    }
 
     public String getName() {
         return name;

@@ -25,7 +25,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
  * @since 1.0
  */
 @JacksonXmlRootElement(localName = "interconnect")
-public class InterconnectConfig {
+public class InterconnectConfig extends BaseRootConfig {
 
     @JacksonXmlProperty(isAttribute = true)
     private String name;
@@ -47,6 +47,10 @@ public class InterconnectConfig {
 
     @JacksonXmlProperty(localName = "interconnect-applications")
     private InterconnectAppConfigs interconnectAppConfigs;
+
+    public InterconnectConfig() {
+        super("flowcentral-interconnect-4.0.0.xsd");
+    }
 
     public String getName() {
         return name;

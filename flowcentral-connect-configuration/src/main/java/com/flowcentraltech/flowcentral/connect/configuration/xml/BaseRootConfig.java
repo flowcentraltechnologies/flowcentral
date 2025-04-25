@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.configuration.xml;
+package com.flowcentraltech.flowcentral.connect.configuration.xml;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
@@ -23,7 +23,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class BaseRootConfig extends BaseNameConfig {
+public abstract class BaseRootConfig {
 
     @JacksonXmlProperty(isAttribute = true)
     private final String xmlns;

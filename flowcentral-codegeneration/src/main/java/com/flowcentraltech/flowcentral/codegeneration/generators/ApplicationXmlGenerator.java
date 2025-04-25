@@ -120,17 +120,26 @@ import com.flowcentraltech.flowcentral.configuration.xml.EntityUploadsConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.EnumerationConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.EnumerationItemConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.EnumerationsConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.FieldValidationPoliciesConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.FieldValidationPolicyConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.FilterConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.FormActionConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.FormActionsConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.FormAnnotationConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.FormAnnotationsConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.FormFieldConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.FormFilterConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.FormFiltersConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.FormReviewPoliciesConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.FormReviewPolicyConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.FormSectionConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.FormStatePoliciesConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.FormStatePolicyConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.FormTabConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.FormTabsConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.FormValidationPoliciesConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.FormValidationPolicyConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.FormWidgetRulesPoliciesConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.FormWidgetRulesPolicyConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.ModuleAppConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.PropertyListConfig;
@@ -142,14 +151,19 @@ import com.flowcentraltech.flowcentral.configuration.xml.PropertySetConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.RefConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.RefsConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.RelatedListConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.RelatedListsConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.SetStateConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.SetStatesConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.SuggestionTypeConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.SuggestionTypesConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.TableActionConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.TableActionsConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.TableColumnConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.TableColumnsConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.TableFilterConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.TableFiltersConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.TableLoadingConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.TableLoadingsConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.WidgetTypeConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.WidgetTypesConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.util.ConfigurationUtils;
@@ -775,7 +789,7 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                         columnList.add(tableColumnConfig);
                     }
 
-                    appTableConfig.setColumnList(columnList);
+                    appTableConfig.setColumns(new TableColumnsConfig(columnList));
                 }
 
                 // Filters
@@ -790,7 +804,7 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                         filterList.add(tableFilterConfig);
                     }
 
-                    appTableConfig.setFilterList(filterList);
+                    appTableConfig.setFilters(new TableFiltersConfig(filterList));
                 }
 
                 // Actions
@@ -810,7 +824,7 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                         actionList.add(tableActionConfig);
                     }
 
-                    appTableConfig.setActionList(actionList);
+                    appTableConfig.setActions(new TableActionsConfig(actionList));
                 }
 
                 // Loading
@@ -830,7 +844,7 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                         loadingList.add(tableLoadingConfig);
                     }
 
-                    appTableConfig.setLoadingList(loadingList);
+                    appTableConfig.setLoadings(new TableLoadingsConfig(loadingList));
                 }
 
                 tableConfigList.add(appTableConfig);
@@ -876,7 +890,7 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                         filterList.add(filterConfig);
                     }
 
-                    appFormConfig.setFilterList(filterList);
+                    appFormConfig.setFilters(new FormFiltersConfig(filterList));
                 }
 
                 // Annotations
@@ -901,7 +915,7 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                         annotationConfigList.add(formAnnotationConfig);
                     }
 
-                    appFormConfig.setAnnotationList(annotationConfigList);
+                    appFormConfig.setAnnotations(new FormAnnotationsConfig(annotationConfigList));
                 }
 
                 // Form actions
@@ -930,7 +944,7 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                         actionConfigList.add(formActionConfig);
                     }
 
-                    appFormConfig.setActionList(actionConfigList);
+                    appFormConfig.setActions(new FormActionsConfig(actionConfigList));
                 }
 
                 // Form elements
@@ -1034,7 +1048,7 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                         tabConfigList.add(formTabConfig);
                     }
 
-                    appFormConfig.setTabList(tabConfigList);
+                    appFormConfig.setTabs(new FormTabsConfig(tabConfigList));
                 }
 
                 // Related Lists
@@ -1055,7 +1069,7 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                         relatedConfigList.add(relatedListConfig);
                     }
 
-                    appFormConfig.setRelatedList(relatedConfigList);
+                    appFormConfig.setRelatedLists(new RelatedListsConfig(relatedConfigList));
                 }
 
                 // Form State Policies
@@ -1097,7 +1111,7 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                         formStatePolicyConfigList.add(formStatePolicyConfig);
                     }
 
-                    appFormConfig.setFormStatePolicyList(formStatePolicyConfigList);
+                    appFormConfig.setFormStatePolicies(new FormStatePoliciesConfig(formStatePolicyConfigList));
                 }
 
                 // Form widget rule policies
@@ -1119,7 +1133,7 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                         widgetRulesPolicyList.add(formWidgetRulesPolicyConfig);
                     }
 
-                    appFormConfig.setWidgetRulesPolicyList(widgetRulesPolicyList);
+                    appFormConfig.setWidgetRulesPolicies(new FormWidgetRulesPoliciesConfig(widgetRulesPolicyList));
                 }
 
                 // Form field validation policies
@@ -1140,7 +1154,7 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                         fieldValidationPolicyConfigList.add(fieldValidationPolicyConfig);
                     }
 
-                    appFormConfig.setFieldValidationPolicyList(fieldValidationPolicyConfigList);
+                    appFormConfig.setFieldValidationPolicies(new FieldValidationPoliciesConfig(fieldValidationPolicyConfigList));
                 }
 
                 // Form validation policies
@@ -1164,7 +1178,7 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                         formValidationPolicyList.add(formValidationPolicyConfig);
                     }
 
-                    appFormConfig.setFormValidationPolicyList(formValidationPolicyList);
+                    appFormConfig.setFormValidationPolicies(new FormValidationPoliciesConfig(formValidationPolicyList));
                 }
 
                 // Form review policies
@@ -1190,7 +1204,7 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                         formReviewPolicyList.add(formReviewPolicyConfig);
                     }
 
-                    appFormConfig.setFormReviewPolicyList(formReviewPolicyList);
+                    appFormConfig.setFormReviewPolicies(new FormReviewPoliciesConfig(formReviewPolicyList));
                 }
 
                 formConfigList.add(appFormConfig);
