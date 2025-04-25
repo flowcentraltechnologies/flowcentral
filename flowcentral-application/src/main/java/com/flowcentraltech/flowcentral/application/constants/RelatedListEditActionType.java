@@ -25,7 +25,7 @@ import com.tcdng.unify.core.util.EnumUtils;
  * Related list edit action type list.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Table("FC_RELLISTEDITACTIONTYPE")
 @StaticList(name = "rellisteditactionlist", description = "$m{staticlist.rellisteditactionlist}")

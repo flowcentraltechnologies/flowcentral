@@ -54,7 +54,7 @@ import com.tcdng.unify.web.ui.widget.data.DialogCrudInfo;
  * Workflow editor object.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class WorkflowEditor {
 

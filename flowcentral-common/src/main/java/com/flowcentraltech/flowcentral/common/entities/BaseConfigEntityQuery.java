@@ -22,7 +22,7 @@ import com.tcdng.unify.core.criterion.CompoundRestriction;
  * Base query object for base configuration entity sub-classes.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public abstract class BaseConfigEntityQuery<T extends BaseConfigEntity> extends BaseAuditEntityQuery<T> {
 

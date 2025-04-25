@@ -20,7 +20,7 @@ package com.flowcentraltech.flowcentral.configuration.constants;
  * Convenient abstract base class for principal module static settings
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public abstract class AbstractPrincipalModuleStaticSettings extends AbstractFlowCentralStaticSettings {
 

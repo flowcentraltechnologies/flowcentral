@@ -25,7 +25,7 @@ import com.tcdng.unify.core.util.EnumUtils;
  * Direction type.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Table("FC_DIRECTIONTYPE")
 @StaticList(name = "directiontypelist", description = "$m{staticlist.directiontypelist}")

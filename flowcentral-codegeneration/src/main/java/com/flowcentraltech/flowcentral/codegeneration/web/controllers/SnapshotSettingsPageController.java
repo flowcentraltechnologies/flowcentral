@@ -33,7 +33,7 @@ import com.tcdng.unify.web.constant.Secured;
  * Snapshot settings page controller.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("/codegeneration/snapshotsettings")
 @UplBinding("web/codegeneration/upl/snapshotsettingspage.upl")

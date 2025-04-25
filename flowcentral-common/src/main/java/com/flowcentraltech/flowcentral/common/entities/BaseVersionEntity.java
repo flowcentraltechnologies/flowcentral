@@ -22,7 +22,7 @@ import com.tcdng.unify.core.annotation.Version;
  * Base class for entities with version number.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Policy("baseversion-entitypolicy")
 public abstract class BaseVersionEntity extends BaseEntity {

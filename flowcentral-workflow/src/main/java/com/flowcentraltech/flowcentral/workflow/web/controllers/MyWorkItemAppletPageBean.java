@@ -22,7 +22,7 @@ import com.flowcentraltech.flowcentral.workflow.web.panels.applet.MyWorkItemAppl
  * My work item page bean.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class MyWorkItemAppletPageBean extends AbstractLoadingAppletPageBean<MyWorkItemApplet> {
 

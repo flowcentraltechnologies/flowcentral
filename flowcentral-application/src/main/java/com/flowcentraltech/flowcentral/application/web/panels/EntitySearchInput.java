@@ -28,7 +28,7 @@ import com.tcdng.unify.core.constant.Editable;
  * Entity search input object.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class EntitySearchInput extends AbstractPanelFormBinding {
 

@@ -30,7 +30,7 @@ import com.tcdng.unify.core.UnifyException;
  * Configuration loader component.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public interface ConfigurationLoader extends UnifyComponent {
 

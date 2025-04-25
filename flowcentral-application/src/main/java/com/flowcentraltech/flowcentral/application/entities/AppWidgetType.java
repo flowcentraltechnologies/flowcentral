@@ -26,7 +26,7 @@ import com.tcdng.unify.core.constant.DataType;
  * Application widget type entity;
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Table(name = "FC_WIDGETTYPE")
 public class AppWidgetType extends BaseApplicationEntity {

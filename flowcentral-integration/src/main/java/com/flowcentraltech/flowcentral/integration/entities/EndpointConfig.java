@@ -33,7 +33,7 @@ import com.tcdng.unify.core.annotation.Policy;
  * End-point configuration.
  *
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Policy("endpointconfig-entitypolicy")
 @Table(name = "FC_ENDPOINTCONFIG",

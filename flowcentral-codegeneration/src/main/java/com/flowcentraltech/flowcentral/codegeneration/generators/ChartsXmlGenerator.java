@@ -37,7 +37,7 @@ import com.tcdng.unify.core.util.DataUtils;
  * Charts XML Generator.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("charts-xml-generator")
 public class ChartsXmlGenerator extends AbstractStaticModuleArtifactGenerator {

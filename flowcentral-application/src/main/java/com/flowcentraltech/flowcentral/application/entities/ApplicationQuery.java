@@ -21,7 +21,7 @@ import com.flowcentraltech.flowcentral.common.entities.BaseConfigNamedEntityQuer
  * Application query object.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class ApplicationQuery extends BaseConfigNamedEntityQuery<Application> {
 

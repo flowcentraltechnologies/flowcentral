@@ -24,7 +24,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
  * Module configuration.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @JsonInclude(value = Include.NON_NULL, content = Include.NON_EMPTY)
 @JacksonXmlRootElement(localName = "module")

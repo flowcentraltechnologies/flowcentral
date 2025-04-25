@@ -26,7 +26,7 @@ import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldType;
  * Application entity field query.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class AppEntityFieldQuery extends BaseConfigEntityQuery<AppEntityField> {
 

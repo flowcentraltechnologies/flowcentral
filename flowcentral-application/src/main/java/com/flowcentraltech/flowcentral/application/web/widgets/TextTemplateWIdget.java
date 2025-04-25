@@ -28,7 +28,7 @@ import com.tcdng.unify.web.ui.widget.data.Popup;
  * Text template widget.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("fc-texttemplate")
 @UplAttributes({ @UplAttribute(name = "buttonSymbol", type = String.class, defaultVal = "text"),

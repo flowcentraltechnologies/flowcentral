@@ -23,7 +23,7 @@ import com.tcdng.unify.common.util.ProcessVariableUtils;
  * User welcome notification template wrapper.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class UserWelcomeTemplateWrapper extends BaseNotifTemplateWrapper {
     

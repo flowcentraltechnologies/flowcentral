@@ -32,7 +32,7 @@ import com.tcdng.unify.core.annotation.Configurable;
  * Workflow publish action policy.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @EntityReferences({ "workflow.workflow" })
 @Component(name = "wfpublish-actionpolicy", description = "$m{workflow.entityactionpolicy.publish}")

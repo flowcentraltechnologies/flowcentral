@@ -32,7 +32,7 @@ import com.tcdng.unify.core.annotation.Configurable;
  * Release collaboration locks action policy.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("releasecollaborationlocks-actionpolicy")
 public class ReleaseCollaborationLocksActionPolicy extends AbstractEntityListActionPolicy {

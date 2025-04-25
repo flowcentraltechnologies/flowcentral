@@ -43,7 +43,7 @@ import com.tcdng.unify.web.ui.widget.data.TaskMonitorInfo;
  * Convenient base class for application panels.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public abstract class AbstractApplicationPanel extends AbstractFlowCentralPanel {
 

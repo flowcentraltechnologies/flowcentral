@@ -21,7 +21,7 @@ import com.flowcentraltech.flowcentral.configuration.constants.AppletType;
  * Create entity detached applet definition
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class CreateEntityDetachedAppletDef extends AbstractDetachedAppletDef {
 

@@ -24,7 +24,7 @@ import com.tcdng.unify.core.util.EnumUtils;
  * Importance type enumeration.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Table("FC_IMPORTANCETYPE")
 @StaticList(name = "importancetypelist", description = "$m{staticlist.importancetypelist}")

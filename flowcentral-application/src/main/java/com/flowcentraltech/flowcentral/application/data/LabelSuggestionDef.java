@@ -22,7 +22,7 @@ import java.util.Map;
  * Label suggestions definition.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class LabelSuggestionDef {
 

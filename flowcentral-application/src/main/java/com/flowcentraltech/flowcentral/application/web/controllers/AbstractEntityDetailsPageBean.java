@@ -23,7 +23,7 @@ import com.flowcentraltech.flowcentral.application.web.widgets.EntityListTable;
  * Convenient abstract base class for entity details page beans.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public abstract class AbstractEntityDetailsPageBean extends AbstractAppletPageBean<ManageEntityDetailsApplet> {
     

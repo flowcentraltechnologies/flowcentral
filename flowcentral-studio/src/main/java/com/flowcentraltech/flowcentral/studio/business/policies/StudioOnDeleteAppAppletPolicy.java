@@ -34,7 +34,7 @@ import com.tcdng.unify.core.annotation.Component;
  * Studio on delete application applet policy.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @EntityReferences({ "application.appApplet" })
 @Component("studioondeleteappapplet-policy")

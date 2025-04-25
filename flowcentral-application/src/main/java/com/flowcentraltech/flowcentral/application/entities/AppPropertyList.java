@@ -24,7 +24,7 @@ import com.tcdng.unify.core.annotation.ChildList;
  * Application property list entity.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Table(name = "FC_PROPLIST")
 public class AppPropertyList extends BaseApplicationEntity {

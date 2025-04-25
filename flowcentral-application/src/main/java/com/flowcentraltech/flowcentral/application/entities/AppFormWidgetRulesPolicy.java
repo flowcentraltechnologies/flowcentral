@@ -25,7 +25,7 @@ import com.tcdng.unify.core.annotation.ForeignKey;
  * Application form widget rules policy entity;
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Table(name = "FC_FORMWIDGETRULESPOLICY")
 public class AppFormWidgetRulesPolicy extends BaseConfigNamedEntity {

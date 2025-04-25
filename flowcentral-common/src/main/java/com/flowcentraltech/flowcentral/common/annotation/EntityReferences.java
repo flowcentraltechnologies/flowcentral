@@ -24,7 +24,7 @@ import java.lang.annotation.Target;
  * Annotation used for specifying entity references information.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)

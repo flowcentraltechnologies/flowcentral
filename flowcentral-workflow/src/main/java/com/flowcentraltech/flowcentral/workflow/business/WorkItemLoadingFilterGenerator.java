@@ -24,7 +24,7 @@ import com.tcdng.unify.core.criterion.Restriction;
  * Work-item loading filter generator.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public interface WorkItemLoadingFilterGenerator extends FlowCentralComponent {
 

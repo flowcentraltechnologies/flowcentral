@@ -30,7 +30,7 @@ import com.tcdng.unify.core.data.ValueStore;
  * Chart data source entity generator.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @EntityReferences({ "dashboard.dashboardOptionCatBase" })
 @Component(name = "chartdatasource-entitygenerator", description = "Chart Data Source Entity Generator")

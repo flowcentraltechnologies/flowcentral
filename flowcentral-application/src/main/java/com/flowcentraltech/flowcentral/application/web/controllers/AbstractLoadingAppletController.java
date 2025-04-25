@@ -31,7 +31,7 @@ import com.tcdng.unify.web.ui.widget.Page;
  * Abstract loading applet controller.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public abstract class AbstractLoadingAppletController<T extends AbstractLoadingApplet, U extends AbstractLoadingAppletPageBean<T>>
         extends AbstractEntityFormAppletController<T, U> { 

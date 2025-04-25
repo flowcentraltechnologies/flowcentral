@@ -52,7 +52,7 @@ import com.tcdng.unify.web.ui.widget.writer.AbstractWidgetWriter;
  * Chart writer.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Writes(ChartWidget.class)
 @Component("fc-chart-writer")

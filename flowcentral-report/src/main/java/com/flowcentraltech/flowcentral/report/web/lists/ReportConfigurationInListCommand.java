@@ -29,7 +29,7 @@ import com.tcdng.unify.web.data.AssignParams;
  * Report configuration in list command.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("reportconfigurationinlist")
 public class ReportConfigurationInListCommand extends AbstractReportListCommand<AssignParams> {

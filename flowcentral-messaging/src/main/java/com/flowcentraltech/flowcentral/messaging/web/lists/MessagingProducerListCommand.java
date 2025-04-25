@@ -24,7 +24,7 @@ import com.tcdng.unify.core.list.ZeroParams;
  * Messaging producer list commands.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("messagingproducerlist")
 public class MessagingProducerListCommand extends AbstractFlowCentralTypeListCommand<MessagingProducer, ZeroParams> {

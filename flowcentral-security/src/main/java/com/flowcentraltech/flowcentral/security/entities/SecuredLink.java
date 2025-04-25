@@ -29,7 +29,7 @@ import com.tcdng.unify.core.annotation.ListOnly;
  * Secured link.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Table("FC_SECUREDLINK")
 public class SecuredLink extends BaseAuditEntity {

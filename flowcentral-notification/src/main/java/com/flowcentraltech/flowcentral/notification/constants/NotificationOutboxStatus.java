@@ -24,7 +24,7 @@ import com.tcdng.unify.core.util.EnumUtils;
  * Notification outbox status constants.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Table("FC_NOTIFOUTBOXSTATUS")
 @StaticList(name = "notificationoutboxstatuslist", description = "$m{staticlist.notificationoutboxstatuslist}")

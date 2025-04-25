@@ -26,7 +26,7 @@ import com.tcdng.unify.core.batch.ConstraintAction;
  * Application entity upload configuration.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Table(name = "FC_ENTITYUPLOAD")
 public class AppEntityUpload extends BaseConfigNamedEntity {

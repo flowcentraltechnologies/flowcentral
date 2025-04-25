@@ -36,7 +36,7 @@ import com.tcdng.unify.web.ui.widget.writer.AbstractControlWriter;
  * Workflow editor widget writer.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Writes(WorkflowEditorWidget.class)
 @Component("fc-workfloweditor-writer")

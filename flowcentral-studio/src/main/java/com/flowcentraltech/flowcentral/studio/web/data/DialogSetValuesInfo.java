@@ -22,7 +22,7 @@ import com.flowcentraltech.flowcentral.application.web.widgets.SetValueEntries;
  * Dialog set values info.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class DialogSetValuesInfo {
 

@@ -35,7 +35,7 @@ import com.tcdng.unify.core.util.DataUtils;
  * Studio on create application form policy.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("studiooncreateappform-policy")
 public class StudioOnCreateAppFormPolicy extends StudioOnCreateComponentPolicy {

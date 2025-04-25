@@ -20,7 +20,7 @@ package com.flowcentraltech.flowcentral.notification.constants;
  * Notification module audit constants.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public interface NotificationModuleAuditConstants {
 

@@ -29,7 +29,7 @@ import com.tcdng.unify.core.annotation.Configurable;
  * Studio on create application applet policy.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("studiooncreateappapplet-policy")
 public class StudioOnCreateAppAppletPolicy extends StudioOnCreateComponentPolicy {

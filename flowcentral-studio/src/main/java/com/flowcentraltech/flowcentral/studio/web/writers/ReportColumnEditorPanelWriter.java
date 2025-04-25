@@ -29,7 +29,7 @@ import com.tcdng.unify.web.ui.widget.writer.panel.DetachedPanelWriter;
  * Report column editor panel writer.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Writes(ReportColumnEditorPanel.class)
 @Component("reportcolumneditorpanel-writer")

@@ -36,7 +36,7 @@ import com.tcdng.unify.core.list.ListManager;
  * Studio applet type list command
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("studioapplettypelist")
 public class StudioAppletTypeListCommand extends AbstractApplicationListCommand<ConfigTypeParams> {

@@ -23,7 +23,7 @@ import com.tcdng.unify.core.util.EnumUtils;
  * Replication element type.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public enum ReplicationElementType implements EnumConst {
     

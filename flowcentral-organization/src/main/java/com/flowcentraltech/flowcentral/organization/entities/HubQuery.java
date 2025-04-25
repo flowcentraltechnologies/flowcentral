@@ -21,7 +21,7 @@ import com.flowcentraltech.flowcentral.common.entities.BaseStatusEntityQuery;
  * Query class for hubs.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class HubQuery extends BaseStatusEntityQuery<Hub> {
 

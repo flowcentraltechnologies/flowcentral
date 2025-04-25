@@ -29,7 +29,7 @@ import com.tcdng.unify.core.constant.RequirementType;
  * Workflow step user action entity.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Table(name = "FC_WORKSTEPUSERACTION", uniqueConstraints = { @UniqueConstraint({ "wfStepId", "name" }),
         @UniqueConstraint({ "wfStepId", "description" }), @UniqueConstraint({ "wfStepId", "label" }) })

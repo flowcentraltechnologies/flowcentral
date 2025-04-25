@@ -24,7 +24,7 @@ import com.tcdng.unify.core.util.EnumUtils;
  * Development version type enumeration.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Table("FC_DEVVERSIONTYPE")
 @StaticList(name = "developmentversiontypelist", description = "$m{staticlist.developmentversiontypelist}")

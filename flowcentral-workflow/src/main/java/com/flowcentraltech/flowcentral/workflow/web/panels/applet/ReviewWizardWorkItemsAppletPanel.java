@@ -26,7 +26,7 @@ import com.tcdng.unify.web.annotation.Action;
  * Review wizard work items applet panel.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("fc-reviewwizardworkitemsappletpanel")
 @UplBinding("web/workflow/upl/reviewwizardworkitemsappletpanel.upl")

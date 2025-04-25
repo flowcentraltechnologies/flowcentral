@@ -29,7 +29,7 @@ import com.tcdng.unify.core.system.entities.AbstractSequencedEntity;
  * Convenient abstract base class for flowcentral tests.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public abstract class AbstractFlowCentralTest extends AbstractUnifyComponentTest {
 

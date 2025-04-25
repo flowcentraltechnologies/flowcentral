@@ -24,7 +24,7 @@ import com.flowcentraltech.flowcentral.common.entities.BaseConfigNamedEntityQuer
  * Convenient abstract base class for application definition query.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public abstract class BaseApplicationEntityQuery<T extends BaseApplicationEntity>
         extends BaseConfigNamedEntityQuery<T> {

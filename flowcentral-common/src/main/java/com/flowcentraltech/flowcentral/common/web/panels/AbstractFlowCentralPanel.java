@@ -24,7 +24,7 @@ import com.tcdng.unify.web.ui.widget.AbstractPanel;
  * Convenient abstract base class for flowcentral panels.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public abstract class AbstractFlowCentralPanel extends AbstractPanel {
 

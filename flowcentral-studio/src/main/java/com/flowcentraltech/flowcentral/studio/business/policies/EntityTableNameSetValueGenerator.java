@@ -30,7 +30,7 @@ import com.tcdng.unify.core.data.ValueStore;
  * Studio entity table name set value generator.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @EntityReferences({ "application.appEntity" })
 @Component(name = "studioentitytablename-generator", description = "$m{studio.setvaluegenerator.entitytablename}")

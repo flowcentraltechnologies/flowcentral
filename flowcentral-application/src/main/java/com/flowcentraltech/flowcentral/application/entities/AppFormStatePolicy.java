@@ -31,7 +31,7 @@ import com.tcdng.unify.core.annotation.ListOnly;
  * Application form state policy entity;
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Table(name = "FC_FORMSTATEPOLICY",
     uniqueConstraints = { @UniqueConstraint({ "appFormId", "name" }) })

@@ -28,7 +28,7 @@ import com.tcdng.unify.core.util.ReflectUtils;
  * Convenient abstract base class for OS messaging processors.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public abstract class AbstractOSMessagingProcessor<T extends BaseOSMessagingResp, U extends BaseOSMessagingReq>
         extends AbstractFlowCentralComponent implements OSMessagingProcessor<T, U> {

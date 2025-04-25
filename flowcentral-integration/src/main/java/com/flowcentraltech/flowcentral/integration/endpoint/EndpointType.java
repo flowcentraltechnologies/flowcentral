@@ -23,7 +23,7 @@ import com.tcdng.unify.core.util.EnumUtils;
  * Transport type enumeration.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @StaticList(name = "endpointtypelist", description = "$m{staticlist.endpointtypelist}")
 public enum EndpointType implements EnumConst {

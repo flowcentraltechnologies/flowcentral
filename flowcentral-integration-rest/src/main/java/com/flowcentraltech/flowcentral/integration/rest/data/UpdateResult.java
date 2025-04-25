@@ -19,7 +19,7 @@ package com.flowcentraltech.flowcentral.integration.rest.data;
  * Update result.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class UpdateResult extends AbstractResult {
 

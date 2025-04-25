@@ -46,7 +46,7 @@ import com.tcdng.unify.web.ui.widget.ContentPanel;
  * Application studio controller.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("/applicationstudio")
 @UplBinding("web/studio/upl/applicationstudio.upl")

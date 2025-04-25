@@ -23,7 +23,7 @@ import com.flowcentraltech.flowcentral.common.entities.BaseAuditEntityQuery;
  * Query class for user login event records.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class UserLoginEventQuery extends BaseAuditEntityQuery<UserLoginEvent> {
 

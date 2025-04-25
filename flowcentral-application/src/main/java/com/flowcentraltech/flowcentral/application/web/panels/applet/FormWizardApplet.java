@@ -42,7 +42,7 @@ import com.tcdng.unify.web.ui.widget.Page;
  * For wizard applet object.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class FormWizardApplet extends AbstractApplet implements SweepingCommitPolicy {
 

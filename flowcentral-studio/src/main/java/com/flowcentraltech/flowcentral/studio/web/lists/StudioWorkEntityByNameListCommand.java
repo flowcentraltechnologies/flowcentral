@@ -38,7 +38,7 @@ import com.tcdng.unify.core.util.QueryUtils;
  * Studio work entity by name list command
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("studioworkentitybynamelist")
 public class StudioWorkEntityByNameListCommand extends AbstractApplicationListCommand<LongParam> {

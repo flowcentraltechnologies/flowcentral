@@ -22,7 +22,7 @@ import com.tcdng.unify.core.data.FileAttachmentsInfo;
  * Entity file attachments
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class EntityFileAttachments {
 

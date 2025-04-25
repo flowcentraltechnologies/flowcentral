@@ -30,7 +30,7 @@ import com.tcdng.unify.core.annotation.Policy;
  * Scheduled task entity.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Policy("scheduledtask-entitypolicy")
 @Table(name = "FC_SCHEDULEDTASK", uniqueConstraints = { @UniqueConstraint({ "description" }) })

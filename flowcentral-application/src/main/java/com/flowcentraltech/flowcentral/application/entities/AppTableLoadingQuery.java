@@ -22,7 +22,7 @@ import com.flowcentraltech.flowcentral.common.entities.BaseConfigNamedEntityQuer
  * Application table loading query.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class AppTableLoadingQuery extends BaseConfigNamedEntityQuery<AppTableLoading> {
 

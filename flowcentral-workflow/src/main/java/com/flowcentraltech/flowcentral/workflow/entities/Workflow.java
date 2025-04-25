@@ -28,7 +28,7 @@ import com.tcdng.unify.core.annotation.Policy;
  * Workflow entity.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Policy("workflowpolicy")
 @Table(name = "FC_WORKFLOW")

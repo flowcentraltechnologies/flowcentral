@@ -46,7 +46,7 @@ import com.tcdng.unify.web.ui.constant.PageRequestParameterConstants;
  * Convenient abstract base class for application forwarder controllers.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public abstract class AbstractApplicationForwarderController<T extends AbstractForwarderPageBean>
         extends AbstractForwarderController<T> {

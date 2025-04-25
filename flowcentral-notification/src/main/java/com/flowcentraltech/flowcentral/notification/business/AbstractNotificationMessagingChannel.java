@@ -25,7 +25,7 @@ import com.tcdng.unify.core.annotation.Configurable;
  * Convenient abstract base class for notification messaging channels.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public abstract class AbstractNotificationMessagingChannel extends AbstractFlowCentralComponent
         implements NotificationMessagingChannel {

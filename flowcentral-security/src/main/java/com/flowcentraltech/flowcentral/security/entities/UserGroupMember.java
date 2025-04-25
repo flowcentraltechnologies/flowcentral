@@ -27,7 +27,7 @@ import com.tcdng.unify.core.util.StringUtils;
  * Entity for storing user group member information.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Table(name = "FC_USERGROUPMEMBER", uniqueConstraints = { @UniqueConstraint({ "userGroupId", "userId" }) })
 public class UserGroupMember extends BaseAuditEntity implements Describable {

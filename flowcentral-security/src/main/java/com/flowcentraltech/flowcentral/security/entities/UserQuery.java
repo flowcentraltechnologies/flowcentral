@@ -24,7 +24,7 @@ import com.flowcentraltech.flowcentral.configuration.constants.DefaultApplicatio
  * Query class for user records.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class UserQuery extends BaseStatusWorkEntityQuery<User> {
 

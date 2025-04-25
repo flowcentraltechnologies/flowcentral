@@ -32,7 +32,7 @@ import com.tcdng.unify.core.constant.PageSizeType;
  * Report configuration data. Represents a report setup.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Table(name = "FC_REPORTCONFIG")
 public class ReportConfiguration extends BaseApplicationEntity {

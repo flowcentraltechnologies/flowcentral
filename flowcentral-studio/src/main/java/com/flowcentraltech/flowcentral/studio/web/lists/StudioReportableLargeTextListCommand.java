@@ -33,7 +33,7 @@ import com.tcdng.unify.core.list.StringParam;
  * Studio reportable large text list command.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("studioreportablelargetextlist")
 public class StudioReportableLargeTextListCommand extends AbstractFlowCentralListCommand<StringParam> {

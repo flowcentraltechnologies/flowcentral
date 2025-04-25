@@ -20,7 +20,7 @@ package com.flowcentraltech.flowcentral.configuration.constants;
  * Workflow step color enumeration.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public enum WorkflowStepColor {
     

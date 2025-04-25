@@ -31,7 +31,7 @@ import com.tcdng.unify.core.data.ParamConfig;
  * Active MQ integration module service tests.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class ActiveMQIntegrationModuleServiceTest extends AbstractFlowCentralTest {
 

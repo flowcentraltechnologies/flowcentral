@@ -34,7 +34,7 @@ import com.tcdng.unify.core.criterion.Restriction;
  * Applet utilities tests.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class AppletUtilitiesTest extends AbstractFlowCentralTest {
 

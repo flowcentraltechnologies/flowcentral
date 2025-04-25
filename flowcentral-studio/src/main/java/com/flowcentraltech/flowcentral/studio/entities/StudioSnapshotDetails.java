@@ -27,7 +27,7 @@ import com.tcdng.unify.core.annotation.ListOnly;
  * Studio snapshot details entity.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Table("FC_STUDIOSNAPSHOTDTLS")
 public class StudioSnapshotDetails extends BaseAuditEntity {

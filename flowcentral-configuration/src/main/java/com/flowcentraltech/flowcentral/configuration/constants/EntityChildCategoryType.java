@@ -24,7 +24,7 @@ import com.tcdng.unify.core.util.EnumUtils;
  * Entity child category type
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public enum EntityChildCategoryType implements EnumConst {
 

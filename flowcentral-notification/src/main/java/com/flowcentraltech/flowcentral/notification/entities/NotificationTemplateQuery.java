@@ -24,7 +24,7 @@ import com.tcdng.unify.core.criterion.Or;
  * Query class for notification template records.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class NotificationTemplateQuery extends BaseApplicationEntityQuery<NotificationTemplate> {
 

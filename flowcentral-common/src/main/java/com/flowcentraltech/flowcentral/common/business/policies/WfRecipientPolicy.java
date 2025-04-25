@@ -27,7 +27,7 @@ import com.tcdng.unify.core.data.ValueStoreReader;
  * Workflow item recipient policy.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public interface WfRecipientPolicy extends FlowCentralComponent {
 

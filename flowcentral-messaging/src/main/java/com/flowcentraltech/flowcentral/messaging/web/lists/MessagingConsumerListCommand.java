@@ -24,7 +24,7 @@ import com.tcdng.unify.core.list.ZeroParams;
  * Messaging consumer list commands.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("messagingconsumerlist")
 public class MessagingConsumerListCommand extends AbstractFlowCentralTypeListCommand<MessagingConsumer, ZeroParams> {

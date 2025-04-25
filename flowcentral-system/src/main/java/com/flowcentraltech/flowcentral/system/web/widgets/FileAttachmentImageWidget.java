@@ -29,7 +29,7 @@ import com.tcdng.unify.web.ui.widget.Control;
  * File attachment image.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("fc-fileattachmentimage")
 @UplAttributes({ @UplAttribute(name = "category", type = String.class, mandatory = true),

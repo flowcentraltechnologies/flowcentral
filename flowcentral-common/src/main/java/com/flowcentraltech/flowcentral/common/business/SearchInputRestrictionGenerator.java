@@ -25,7 +25,7 @@ import com.tcdng.unify.core.criterion.Restriction;
  * Search input restriction generator component.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public interface SearchInputRestrictionGenerator extends FlowCentralComponent {
 

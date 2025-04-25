@@ -45,7 +45,7 @@ import com.flowcentraltech.flowcentral.connect.springboot.service.SpringBootInte
  * Flow central spring boot interconnect controller.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @RestController
 @RequestMapping(FlowCentralInterconnectConstants.INTERCONNECT_CONTROLLER)

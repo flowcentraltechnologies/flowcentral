@@ -28,7 +28,7 @@ import com.tcdng.unify.web.ui.widget.panel.AbstractDialogPanel;
  * Workflow step edit panel.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("fc-wfstepeditpanel")
 @UplBinding("web/studio/upl/wfstepeditpanel.upl")

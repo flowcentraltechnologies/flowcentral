@@ -31,7 +31,7 @@ import com.tcdng.unify.core.util.TypeInfo;
  * Extension module component names Java class generator.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("extension-module-componentnames-java-generator")
 public class ExtensionModuleComponentNamesJavaGenerator extends AbstractJavaArtifactGenerator {

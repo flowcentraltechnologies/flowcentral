@@ -32,7 +32,7 @@ import com.tcdng.unify.web.constant.Secured;
  * Application studio controller.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("/studio/applicationreplication")
 @UplBinding("web/studio/upl/applicationreplicationpage.upl")

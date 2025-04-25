@@ -23,7 +23,7 @@ import com.tcdng.unify.core.data.ValueStoreReader;
  * Convenient base class for summary panels.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public abstract class AbstractSummaryPanel extends AbstractFlowCentralStandalonePanel implements SummaryPanel {
 

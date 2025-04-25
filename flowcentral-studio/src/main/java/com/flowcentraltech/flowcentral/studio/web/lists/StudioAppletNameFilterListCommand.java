@@ -30,7 +30,7 @@ import com.tcdng.unify.core.list.StringParam;
  * Studio applet name filter list command
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("studioappletnamefilterlist")
 public class StudioAppletNameFilterListCommand extends AbstractApplicationListCommand<StringParam> {

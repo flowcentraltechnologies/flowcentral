@@ -29,7 +29,7 @@ import com.tcdng.unify.core.annotation.ListOnly;
  * Application property set entity.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Table(name = "FC_PROPSET", uniqueConstraints = { @UniqueConstraint({ "appPropertyListId", "label" }) })
 public class AppPropertySet extends BaseEntity {

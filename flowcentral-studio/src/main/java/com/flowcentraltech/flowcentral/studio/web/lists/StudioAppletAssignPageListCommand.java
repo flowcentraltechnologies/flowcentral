@@ -32,7 +32,7 @@ import com.tcdng.unify.core.util.StringUtils;
  * Studio applet assignment page list command
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("studioappletassignpagelist")
 public class StudioAppletAssignPageListCommand extends AbstractApplicationListCommand<LongParam> {

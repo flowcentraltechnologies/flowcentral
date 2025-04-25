@@ -42,7 +42,7 @@ import com.tcdng.unify.core.annotation.Transactional;
  * Implementation of collaboration module service.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Transactional
 @Component(CollaborationModuleNameConstants.COLLABORATION_MODULE_SERVICE)

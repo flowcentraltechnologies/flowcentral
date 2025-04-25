@@ -40,7 +40,7 @@ import com.tcdng.unify.core.annotation.Configurable;
  * Studio lock resource action policy.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component(name = "lockresource-actionpolicy", description = "$m{studio.entityactionpolicy.lockresource}")
 public class StudioLockResourceActionPolicy extends AbstractCollaborationFormActionPolicy {

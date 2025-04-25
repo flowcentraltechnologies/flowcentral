@@ -22,7 +22,7 @@ import com.flowcentraltech.flowcentral.chart.data.ChartConfiguration;
  * Dashboard slot definition object.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class DashboardSlotDef implements ChartConfiguration {
 

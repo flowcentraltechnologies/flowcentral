@@ -34,7 +34,7 @@ import com.tcdng.unify.core.annotation.Policy;
  * Entity for storing user information.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Policy("userpolicy")
 @Table(name = "FC_USER", uniqueConstraints = { @UniqueConstraint({ "loginId" }) })

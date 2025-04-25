@@ -22,7 +22,7 @@ import com.tcdng.unify.core.application.FeatureDefinition;
  * Application installation configuration.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class ApplicationInstall implements FeatureDefinition {
 

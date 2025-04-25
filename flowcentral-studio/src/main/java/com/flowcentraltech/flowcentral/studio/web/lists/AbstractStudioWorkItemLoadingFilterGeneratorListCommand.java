@@ -25,7 +25,7 @@ import com.tcdng.unify.core.list.StringParam;
  * Base class for studio work-item loading filter generator list command.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public abstract class AbstractStudioWorkItemLoadingFilterGeneratorListCommand
         extends AbstractEntityTypeListCommand<WorkItemLoadingFilterGenerator, StringParam> {

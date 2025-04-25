@@ -24,7 +24,7 @@ import com.tcdng.unify.core.util.EnumUtils;
  * Session parameter type enumeration.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Table("FC_SESSIONPARAMTYPE")
 @StaticList(name = "sessionparamtypelist", description = "$m{staticlist.sessionparamtypelist}")

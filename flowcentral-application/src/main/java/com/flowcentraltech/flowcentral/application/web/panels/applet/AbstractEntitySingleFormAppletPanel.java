@@ -55,7 +55,7 @@ import com.tcdng.unify.web.ui.widget.data.Popup;
  * Convenient abstract base panel for entity single form applet panels.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @UplBinding("web/application/upl/entitysingleformappletpanel.upl")
 public abstract class AbstractEntitySingleFormAppletPanel extends AbstractAppletPanel {

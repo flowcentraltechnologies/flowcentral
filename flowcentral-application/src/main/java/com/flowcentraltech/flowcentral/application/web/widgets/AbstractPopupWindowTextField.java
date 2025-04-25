@@ -27,7 +27,7 @@ import com.tcdng.unify.web.ui.widget.data.Popup;
  * Convenient abstract base class for popup window text widget.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public abstract class AbstractPopupWindowTextField extends AbstractFlowCentralPopupTextField {
 

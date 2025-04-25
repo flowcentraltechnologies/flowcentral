@@ -24,7 +24,7 @@ import com.tcdng.unify.common.data.Listable;
  * Base class for application entity definition
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public abstract class BaseApplicationEntityDef implements Listable, VersionedEntityDef {
 

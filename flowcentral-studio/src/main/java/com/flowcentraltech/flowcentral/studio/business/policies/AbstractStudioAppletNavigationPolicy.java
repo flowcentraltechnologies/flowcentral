@@ -25,7 +25,7 @@ import com.tcdng.unify.core.annotation.Configurable;
  * Convenient abstract base class for studio applet navigation policies.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public abstract class AbstractStudioAppletNavigationPolicy extends AbstractFormWizardNavigationPolicy {
 

@@ -22,7 +22,7 @@ import com.tcdng.unify.core.UnifyException;
  * Listing applet page bean.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class ListingAppletPageBean extends AbstractAppletPageBean<ListingApplet> {
 

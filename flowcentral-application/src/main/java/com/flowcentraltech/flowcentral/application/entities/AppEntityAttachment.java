@@ -25,7 +25,7 @@ import com.tcdng.unify.core.constant.FileAttachmentType;
  * Application entity attachment configuration.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Table(name = "FC_ENTITYATTACHMENT")
 public class AppEntityAttachment extends BaseConfigNamedEntity {

@@ -37,7 +37,7 @@ import com.tcdng.unify.core.util.StringUtils;
  * Convenient abstract base class for entity type search widget.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @UplAttributes({
         @UplAttribute(name = "ref", type = String[].class, defaultVal = "$l{}"),

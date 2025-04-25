@@ -21,7 +21,7 @@ import com.flowcentraltech.flowcentral.common.entities.BaseAuditEntityQuery;
  * Dashboard option category base query.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class DashboardOptionCategoryBaseQuery extends BaseAuditEntityQuery<DashboardOptionCategoryBase> {
 

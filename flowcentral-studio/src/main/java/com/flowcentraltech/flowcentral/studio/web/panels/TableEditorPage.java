@@ -40,7 +40,7 @@ import com.tcdng.unify.core.database.Query;
  * Table editor page.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class TableEditorPage extends AbstractStudioEditorPage implements TabSheetEventHandler {
 

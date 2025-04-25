@@ -26,7 +26,7 @@ import com.tcdng.unify.core.util.StringUtils;
  * Mapped role interactive workflow step entity.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Mapped("default-mappedrolewfstepprovider")
 @TableName("FC_MAPPEDROLEWFSTEP")

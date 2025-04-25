@@ -36,7 +36,7 @@ import com.tcdng.unify.web.ControllerFinder;
  * Implementation of integration REST module service.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Transactional
 @Component(IntegrationRestModuleNameConstants.INTEGRATION_REST_MODULE_SERVICE)

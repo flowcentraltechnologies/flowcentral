@@ -39,7 +39,7 @@ import com.tcdng.unify.web.ui.widget.data.TaskMonitorInfo;
  * Loading search panel.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("fc-loadingsearchpanel")
 @UplBinding("web/application/upl/loadingsearchpanel.upl")

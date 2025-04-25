@@ -28,7 +28,7 @@ import com.tcdng.unify.core.data.ValueStoreReader;
  * Convenient abstract base class for consolidated form state policies.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public abstract class AbstractConsolidatedFormStatePolicy extends AbstractFlowCentralComponent
         implements ConsolidatedFormStatePolicy {

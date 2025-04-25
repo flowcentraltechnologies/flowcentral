@@ -26,7 +26,7 @@ import com.tcdng.unify.core.annotation.Policy;
  * Base class for audit entities.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Policy("baseaudit-entitypolicy")
 public abstract class BaseAuditEntity extends BaseVersionEntity {

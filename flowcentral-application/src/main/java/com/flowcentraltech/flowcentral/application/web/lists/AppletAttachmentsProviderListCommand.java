@@ -28,7 +28,7 @@ import com.tcdng.unify.core.list.LongParam;
  * Applet attachments provider list command.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("appletattachmentproviderlist")
 public class AppletAttachmentsProviderListCommand extends AbstractEntityTypeListCommand<AttachmentsProvider, LongParam> {

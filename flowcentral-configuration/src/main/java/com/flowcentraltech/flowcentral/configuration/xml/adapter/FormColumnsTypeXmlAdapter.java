@@ -24,7 +24,7 @@ import com.tcdng.unify.core.util.xml.AbstractEnumConstXmlAdapter;
  * Form columns type XML adapter.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class FormColumnsTypeXmlAdapter extends AbstractEnumConstXmlAdapter {
     

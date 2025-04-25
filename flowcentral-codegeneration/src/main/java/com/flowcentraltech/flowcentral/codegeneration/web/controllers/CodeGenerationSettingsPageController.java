@@ -33,7 +33,7 @@ import com.tcdng.unify.web.constant.Secured;
  * Code generation settings page controller.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("/codegeneration/codegenrationsettings")
 @UplBinding("web/codegeneration/upl/codegenrationsettingspage.upl")

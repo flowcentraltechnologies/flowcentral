@@ -28,7 +28,7 @@ import com.tcdng.unify.core.list.LongParam;
  * Studio applet entity notification sender list command
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("studioappletentitynotifsenderlist")
 public class StudioAppletEntityNotifSenderListCommand

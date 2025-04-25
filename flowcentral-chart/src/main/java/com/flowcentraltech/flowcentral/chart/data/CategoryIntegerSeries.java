@@ -25,7 +25,7 @@ import com.flowcentraltech.flowcentral.configuration.constants.ChartSeriesDataTy
  * Category integer series.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class CategoryIntegerSeries extends AbstractCategorySeries<Integer> {
 

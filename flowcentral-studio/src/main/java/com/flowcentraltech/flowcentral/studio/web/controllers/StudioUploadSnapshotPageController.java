@@ -40,7 +40,7 @@ import com.tcdng.unify.web.ui.widget.data.Hint.MODE;
  * Upload snapshot page controller.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("/studio/uploadsnapshot")
 @UplBinding("web/studio/upl/uploadsnapshotpage.upl")

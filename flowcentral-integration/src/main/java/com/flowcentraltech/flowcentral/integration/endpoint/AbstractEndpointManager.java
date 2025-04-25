@@ -22,7 +22,7 @@ import com.tcdng.unify.core.UnifyException;
  * Convenient base class for end-point factory.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public abstract class AbstractEndpointManager extends AbstractFlowCentralComponent implements EndpointManager {
 

@@ -32,7 +32,7 @@ import com.tcdng.unify.core.annotation.Configurable;
  * Workflow recipient contact rule list command.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("wfrecipientcontactrulelist")
 public class WfRecipientContactRuleListCommand extends AbstractWorkflowListCommand<WfRecipientPolicyParams> {

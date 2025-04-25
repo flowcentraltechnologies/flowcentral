@@ -22,7 +22,7 @@ import com.tcdng.unify.core.AbstractUnifyComponent;
  * Convenient abstract base class for flowcentral entity action policies.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public abstract class AbstractUnifyEntityActionPolicy<T> extends AbstractUnifyComponent
         implements UnifyEntityActionPolicy<T> {

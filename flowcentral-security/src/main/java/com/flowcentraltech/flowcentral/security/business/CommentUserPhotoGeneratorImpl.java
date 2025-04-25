@@ -26,7 +26,7 @@ import com.tcdng.unify.core.annotation.Component;
  * Comment user photo generator implementation.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component(ApplicationModuleNameConstants.COMMENT_USER_PHOTO_GENERATOR)
 public class CommentUserPhotoGeneratorImpl extends AbstractUserPhotoGenerator implements CommentUserPhotoGenerator {

@@ -24,7 +24,7 @@ import com.tcdng.unify.web.ui.widget.panel.AbstractDialogPanel;
  * Workflow step set values panel.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("fc-wfstepsetvaluespanel")
 @UplBinding("web/studio/upl/wfstepsetvaluespanel.upl")

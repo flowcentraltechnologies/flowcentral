@@ -28,7 +28,7 @@ import com.tcdng.unify.core.annotation.UplBinding;
  * Entity single form panel.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("fc-entitysingleformpanel")
 @UplBinding("web/application/upl/entitysingleformpanel.upl")

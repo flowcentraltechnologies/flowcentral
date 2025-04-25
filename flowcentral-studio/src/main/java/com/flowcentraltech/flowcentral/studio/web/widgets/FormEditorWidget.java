@@ -34,7 +34,7 @@ import com.tcdng.unify.web.ui.widget.Control;
  * Form editor widget.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("fc-formeditor")
 @UplAttributes({ @UplAttribute(name = "choiceWidth", type = String.class, defaultVal = "260px") })

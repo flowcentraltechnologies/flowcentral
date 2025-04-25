@@ -25,7 +25,7 @@ import com.tcdng.unify.core.annotation.Column;
  * Application property rule entity.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Table(name = "FC_PROPRULE")
 public class AppPropertyRule extends BaseApplicationEntity {

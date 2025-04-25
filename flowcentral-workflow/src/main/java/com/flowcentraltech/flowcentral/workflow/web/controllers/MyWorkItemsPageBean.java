@@ -23,7 +23,7 @@ import com.tcdng.unify.core.UnifyException;
  * Workflow my work items page bean.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class MyWorkItemsPageBean extends AbstractEntityFormAppletPageBean<MyWorkItemsApplet> {
 

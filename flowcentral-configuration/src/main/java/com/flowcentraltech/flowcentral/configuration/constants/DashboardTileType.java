@@ -24,7 +24,7 @@ import com.tcdng.unify.core.util.EnumUtils;
  * Dashboard tile type constants.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Table("FC_DASHBOARDTILETYPE")
 @StaticList(name = "dashboardtiletypelist", description = "$m{staticlist.dashboardtiletypelist}")

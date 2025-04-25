@@ -28,7 +28,7 @@ import com.tcdng.unify.core.UnifyException;
  * Abstract base class for form binding objects.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public abstract class AbstractPanelFormBinding {
 

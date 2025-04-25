@@ -27,7 +27,7 @@ import com.tcdng.unify.core.annotation.ListOnly;
  * Application entity series.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Table(name = "FC_ENTITYSERIES", uniqueConstraints = { @UniqueConstraint({ "appEntityId", "name" }),
         @UniqueConstraint({ "appEntityId", "description" }) })

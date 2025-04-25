@@ -27,7 +27,7 @@ import com.tcdng.unify.core.util.StringUtils;
  * User login event information.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Table(name = "FC_USERLOGINEVENT")
 public class UserLoginEvent extends BaseAuditEntity {

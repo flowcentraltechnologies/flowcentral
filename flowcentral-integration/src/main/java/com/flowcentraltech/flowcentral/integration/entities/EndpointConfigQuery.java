@@ -22,7 +22,7 @@ import com.flowcentraltech.flowcentral.integration.endpoint.EndpointType;
  * End-point configuration query.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class EndpointConfigQuery extends BaseStatusEntityQuery<EndpointConfig> {
 

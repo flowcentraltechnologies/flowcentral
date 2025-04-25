@@ -30,7 +30,7 @@ import com.tcdng.unify.core.util.DataUtils;
  * End-point definition
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class EndpointDef implements VersionedEntityDef {
 

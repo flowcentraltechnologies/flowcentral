@@ -45,7 +45,7 @@ import com.tcdng.unify.core.util.DataUtils;
  * Dashboards XML Generator.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("dashboards-xml-generator")
 public class DashboardsXmlGenerator extends AbstractStaticModuleArtifactGenerator {

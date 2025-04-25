@@ -19,7 +19,7 @@ package com.flowcentraltech.flowcentral.common.constants;
  * Keys for storing certain values in request scope.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public interface FlowCentralRequestAttributeConstants {
 

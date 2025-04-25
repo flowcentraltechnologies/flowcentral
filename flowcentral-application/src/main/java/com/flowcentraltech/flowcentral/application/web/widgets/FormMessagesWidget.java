@@ -27,7 +27,7 @@ import com.tcdng.unify.core.annotation.Component;
  * Form messages widget.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("fc-formmessages")
 public class FormMessagesWidget extends AbstractFlowCentralControl {

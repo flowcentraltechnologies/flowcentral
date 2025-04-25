@@ -21,7 +21,7 @@ import com.flowcentraltech.flowcentral.common.entities.BaseEntityQuery;
  * Query class for mapped role interactive workflow steps.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class MappedRoleWfStepQuery extends BaseEntityQuery<MappedRoleWfStep> {
 

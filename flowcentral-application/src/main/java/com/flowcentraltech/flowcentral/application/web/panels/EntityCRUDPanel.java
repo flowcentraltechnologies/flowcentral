@@ -23,7 +23,7 @@ import com.tcdng.unify.core.annotation.UplBinding;
  * Entity CRUD panel
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("fc-entitycrudpanel")
 @UplBinding("web/application/upl/entitycrudpanel.upl")

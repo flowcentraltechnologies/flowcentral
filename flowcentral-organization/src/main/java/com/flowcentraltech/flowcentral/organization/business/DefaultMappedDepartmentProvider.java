@@ -26,7 +26,7 @@ import com.tcdng.unify.core.data.ValueStore;
  * Default mapped department provider
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("default-mappeddepartmentprovider")
 public class DefaultMappedDepartmentProvider

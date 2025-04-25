@@ -23,7 +23,7 @@ import com.flowcentraltech.flowcentral.common.entities.BaseStatusEntityQuery;
  * Query class for branches.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class BranchQuery extends BaseStatusEntityQuery<Branch> {
 

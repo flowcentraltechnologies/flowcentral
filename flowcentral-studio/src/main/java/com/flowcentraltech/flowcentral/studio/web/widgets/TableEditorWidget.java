@@ -33,7 +33,7 @@ import com.tcdng.unify.web.ui.widget.Control;
  * Table editor widget.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("fc-tableeditor")
 @UplAttributes({ @UplAttribute(name = "choiceWidth", type = String.class, defaultVal = "200px") })

@@ -19,7 +19,7 @@ package com.flowcentraltech.flowcentral.application.entities;
  * Application references query.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class AppRefQuery extends BaseApplicationEntityQuery<AppRef> {
 

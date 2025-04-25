@@ -39,7 +39,7 @@ import com.tcdng.unify.web.ui.widget.data.Hint.MODE;
  * Extension module static files generation page controller.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("/codegeneration/extensionmodulestaticfilesgeneration")
 @UplBinding("web/codegeneration/upl/extensionmodulestaticfilesgenerationpage.upl")

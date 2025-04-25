@@ -31,7 +31,7 @@ import com.tcdng.unify.core.annotation.Component;
  * Extension snapshot XML generator.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("extension-snapshot-xml-generator")
 public class ExtensionSnapshotXmlGenerator extends AbstractStaticArtifactGenerator {

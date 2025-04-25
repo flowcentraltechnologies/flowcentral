@@ -37,7 +37,7 @@ import com.tcdng.unify.core.util.StringUtils;
  * Application query encoder.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("application-queryencoder")
 public class ApplicationQueryEncoder extends AbstractFlowCentralComponent implements QueryEncoder {

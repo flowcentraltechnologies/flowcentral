@@ -25,7 +25,7 @@ import com.tcdng.unify.core.annotation.ForeignKey;
  * Application table loading entity.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Table(name = "FC_TABLELOADING", uniqueConstraints = { @UniqueConstraint({ "appTableId", "name" }) })
 public class AppTableLoading extends BaseConfigNamedEntity {

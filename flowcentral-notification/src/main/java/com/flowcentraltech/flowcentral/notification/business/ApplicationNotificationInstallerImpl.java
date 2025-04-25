@@ -54,7 +54,7 @@ import com.tcdng.unify.core.util.DataUtils;
  * Application notification installer.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component(NotificationModuleNameConstants.APPLICATION_NOTIFICATION_INSTALLER)
 public class ApplicationNotificationInstallerImpl extends AbstractApplicationArtifactInstaller {

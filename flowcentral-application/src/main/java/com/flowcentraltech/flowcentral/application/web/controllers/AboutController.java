@@ -25,7 +25,7 @@ import com.tcdng.unify.core.annotation.Component;
  * About controller.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component(ApplicationModulePathConstants.ABOUT)
 public class AboutController extends AbstractFlowCentralPopupPageController<About> {

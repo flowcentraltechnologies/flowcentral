@@ -26,7 +26,7 @@ import com.tcdng.unify.core.data.ValueStoreReader;
  * Inline CRUD table policy.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public interface InlineCRUDTablePolicy<T extends InlineCRUDEntry> extends EntryTablePolicy {
 

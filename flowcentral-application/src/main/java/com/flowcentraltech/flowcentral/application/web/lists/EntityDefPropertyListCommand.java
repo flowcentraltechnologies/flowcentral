@@ -28,7 +28,7 @@ import com.tcdng.unify.core.annotation.Component;
  * Entity definition property list command.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("entitydefpropertylist")
 public class EntityDefPropertyListCommand extends AbstractFlowCentralListCommand<EntityDefPropertyListParams> {

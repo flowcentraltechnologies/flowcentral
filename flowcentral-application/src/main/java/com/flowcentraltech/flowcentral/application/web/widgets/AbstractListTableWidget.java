@@ -21,7 +21,7 @@ import java.util.List;
  * Abstract base class for list table widgets.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public abstract class AbstractListTableWidget<T extends AbstractListTable<U>, U> extends AbstractTableWidget<T, U, List<? extends U>> {
 

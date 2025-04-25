@@ -26,7 +26,7 @@ import com.tcdng.unify.web.annotation.Action;
  * Edit property list panel.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("fc-editpropertylistpanel")
 @UplBinding("web/application/upl/editpropertylistpanel.upl")

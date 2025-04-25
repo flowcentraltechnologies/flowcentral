@@ -24,7 +24,7 @@ import com.tcdng.unify.core.util.EnumUtils;
  * Form columns type constants.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Table("FC_FORMCOLUMNSTYPE")
 @StaticList(name = "formcolumnstypelist", description = "$m{staticlist.formcolumnstypelist}")

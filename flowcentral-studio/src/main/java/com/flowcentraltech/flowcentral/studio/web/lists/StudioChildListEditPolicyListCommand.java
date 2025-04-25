@@ -28,7 +28,7 @@ import com.tcdng.unify.core.list.LongParam;
  * Studio child list edit policy list command
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("studioappletchildlisteditpolicylist")
 public class StudioChildListEditPolicyListCommand extends AbstractEntityTypeListCommand<ChildListEditPolicy, LongParam> {

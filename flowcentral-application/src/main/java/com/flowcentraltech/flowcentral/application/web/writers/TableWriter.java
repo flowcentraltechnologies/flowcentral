@@ -60,7 +60,7 @@ import com.tcdng.unify.web.ui.widget.writer.AbstractControlWriter;
  * Table widget writer.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Writes(AbstractTableWidget.class)
 @Component("fc-table-writer")

@@ -33,7 +33,7 @@ import com.tcdng.unify.core.database.Query;
  * Search input field widget definition list command.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("searchinputfieldwidgetlist")
 public class SearchInputFieldWidgetListCommand extends AbstractApplicationListCommand<EntityDefFieldListParams> {

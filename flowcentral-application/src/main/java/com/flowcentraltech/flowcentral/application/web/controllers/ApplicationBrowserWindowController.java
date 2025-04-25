@@ -40,7 +40,7 @@ import com.tcdng.unify.web.ui.widget.ContentPanel;
  * Application browser window controller.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Singleton(false)
 @Component(ApplicationModulePathConstants.APPLICATION_BROWSER_WINDOW)

@@ -21,7 +21,7 @@ import com.flowcentraltech.flowcentral.common.entities.BaseConfigNamedEntityQuer
  * Application entity unique constraint query.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class AppEntityUniqueConstraintQuery extends BaseConfigNamedEntityQuery<AppEntityUniqueConstraint> {
 

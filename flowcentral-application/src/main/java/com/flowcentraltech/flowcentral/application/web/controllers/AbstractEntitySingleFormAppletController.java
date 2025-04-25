@@ -24,7 +24,7 @@ import com.tcdng.unify.web.constant.Secured;
  * Abstract base class for entity form applet controllers.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public abstract class AbstractEntitySingleFormAppletController<T extends AbstractEntitySingleFormApplet, U extends AbstractEntitySingleFormAppletPageBean<T>>
         extends AbstractAppletController<U> {

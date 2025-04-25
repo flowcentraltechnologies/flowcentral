@@ -24,7 +24,7 @@ import com.tcdng.unify.core.constant.TriState;
  * Form state rule interface.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public interface FormStateRule {
 

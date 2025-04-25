@@ -32,7 +32,7 @@ import com.tcdng.unify.web.ui.widget.data.TaskMonitorInfo;
  * Convenient abstract base class for entity action policies.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public abstract class AbstractEntityActionPolicy extends AbstractFlowCentralComponent implements EntityActionPolicy {
 

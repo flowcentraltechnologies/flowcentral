@@ -47,7 +47,7 @@ import com.tcdng.unify.web.ui.widget.data.ColorLegendInfo;
  * Entity table object.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class LoadingTable extends AbstractTable<LoadingParams, Entity> {
 

@@ -26,7 +26,7 @@ import com.tcdng.unify.core.annotation.Configurable;
  * Convenient abstract base class for entity select handlers.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public abstract class AbstractEntitySelectHandler extends AbstractFlowCentralComponent implements EntitySelectHandler {
     

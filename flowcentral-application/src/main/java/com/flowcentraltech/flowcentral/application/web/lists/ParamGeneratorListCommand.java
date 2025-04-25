@@ -24,7 +24,7 @@ import com.tcdng.unify.core.data.ParamGenerator;
  * Param generator list command.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("paramgeneratorlist")
 public class ParamGeneratorListCommand extends AbstractEntityTypeListCommand<ParamGenerator, EntityDefListParams> {

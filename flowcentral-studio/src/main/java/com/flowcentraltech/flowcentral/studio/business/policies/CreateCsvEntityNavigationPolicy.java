@@ -42,7 +42,7 @@ import com.tcdng.unify.core.util.EntityTypeUtils;
  * Create CSV entity navigation policy.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @EntityReferences({ "studio.studioJsonEntity" })
 @Component(name = "createcsventity-navigationpolicy", description = "Create CSV Entity Nav, Policy")

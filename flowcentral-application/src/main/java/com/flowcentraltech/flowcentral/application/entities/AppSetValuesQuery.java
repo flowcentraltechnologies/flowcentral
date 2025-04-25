@@ -21,7 +21,7 @@ import com.flowcentraltech.flowcentral.common.entities.BaseAuditEntityQuery;
  * Application set values query.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class AppSetValuesQuery extends BaseAuditEntityQuery<AppSetValues> {
 

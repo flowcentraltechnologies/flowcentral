@@ -22,7 +22,7 @@ import com.tcdng.unify.core.UnifyException;
  * Abstract base class for entity form applet page beans.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public abstract class AbstractEntityFormAppletPageBean<T extends AbstractEntityFormApplet>
         extends AbstractAppletPageBean<T> {

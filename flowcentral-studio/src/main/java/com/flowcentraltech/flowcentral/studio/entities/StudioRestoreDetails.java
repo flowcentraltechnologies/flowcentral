@@ -27,7 +27,7 @@ import com.tcdng.unify.core.task.TaskStatus;
  * Studio restore details entity.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Table("FC_STUDIORESTOREDTLS")
 public class StudioRestoreDetails extends BaseAuditEntity {

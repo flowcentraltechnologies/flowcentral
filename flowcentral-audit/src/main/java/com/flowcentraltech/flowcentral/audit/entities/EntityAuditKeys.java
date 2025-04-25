@@ -30,7 +30,7 @@ import com.tcdng.unify.core.annotation.ListOnly;
  * Entity audit keys entity.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Table(name = "FC_ENTITYAUDITKEYS",
         indexes = { @Index({ "keyA" }), @Index({ "keyB" }), @Index({ "keyC" }), @Index({ "keyD" }) })

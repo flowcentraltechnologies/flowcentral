@@ -20,7 +20,7 @@ package com.flowcentraltech.flowcentral.application.constants;
  * Listing color type.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public enum ListingColorType {
 

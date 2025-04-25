@@ -32,7 +32,7 @@ import com.tcdng.unify.core.util.StringUtils;
  * Studio entity table list command
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("studioentitytablelist")
 public class StudioEntityTableListCommand extends AbstractApplicationListCommand<StringParam> {

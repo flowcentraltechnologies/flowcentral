@@ -33,7 +33,7 @@ import com.tcdng.unify.core.annotation.Mapped;
  * Entity for storing role information.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Table(name = "FC_ROLE", uniqueConstraints = {
         @UniqueConstraint({ "code" }),

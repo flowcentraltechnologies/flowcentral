@@ -34,7 +34,7 @@ import com.tcdng.unify.core.database.Query;
  * Convenient abstract base class for pseudo entities environment delegates.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public abstract class AbstractPseudoEntityEnvironmentDelegate<T extends Entity> extends AbstractEnvironmentDelegate {
 

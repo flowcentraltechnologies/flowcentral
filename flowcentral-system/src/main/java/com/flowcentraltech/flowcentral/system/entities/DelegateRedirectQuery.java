@@ -24,7 +24,7 @@ import com.flowcentraltech.flowcentral.configuration.constants.SysParamType;
  * Module application query.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class DelegateRedirectQuery extends BaseAuditEntityQuery<DelegateRedirect> {
 

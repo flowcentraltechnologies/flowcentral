@@ -23,7 +23,7 @@ import com.tcdng.unify.core.list.StringParam;
  * Convenient abstract base class for entity type list command.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public abstract class AbstractEntityParamTypeListCommand<T extends UnifyComponent>
         extends AbstractEntityTypeListCommand<T, StringParam> {

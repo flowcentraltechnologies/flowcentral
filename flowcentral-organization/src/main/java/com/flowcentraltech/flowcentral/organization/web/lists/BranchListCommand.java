@@ -28,7 +28,7 @@ import com.tcdng.unify.core.list.ZeroParams;
  * Branch list command.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("branchlist")
 public class BranchListCommand extends AbstractOrganizationListCommand<ZeroParams> {

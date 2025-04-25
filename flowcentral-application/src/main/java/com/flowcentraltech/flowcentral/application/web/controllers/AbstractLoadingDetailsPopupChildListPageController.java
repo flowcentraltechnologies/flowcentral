@@ -35,7 +35,7 @@ import com.tcdng.unify.web.ui.widget.data.Popup;
  * controllers.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @UplBinding("web/application/upl/loadingdetailspopupchildlistpage.upl")
 @ResultMappings({

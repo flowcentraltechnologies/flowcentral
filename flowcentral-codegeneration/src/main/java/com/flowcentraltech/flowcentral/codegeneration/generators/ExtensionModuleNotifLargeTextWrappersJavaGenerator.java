@@ -34,7 +34,7 @@ import com.tcdng.unify.core.util.TypeInfo;
  * Extension module notification large text wrappers Java class generator.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("extension-module-largetextwrappers-java-generator")
 public class ExtensionModuleNotifLargeTextWrappersJavaGenerator extends AbstractJavaArtifactGenerator {

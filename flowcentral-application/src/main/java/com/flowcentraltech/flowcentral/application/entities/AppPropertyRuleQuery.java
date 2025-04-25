@@ -19,7 +19,7 @@ package com.flowcentraltech.flowcentral.application.entities;
  * Application property rule query.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class AppPropertyRuleQuery extends BaseApplicationEntityQuery<AppPropertyRule> {
 

@@ -37,7 +37,7 @@ import com.tcdng.unify.core.annotation.Configurable;
  * System parameter update action policy.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @EntityReferences({ "system.sysParam" })
 @Component(name = "sysparam-updateactionpolicy", description = "$m{system.entityactionpolicy.sysparamupdate}")

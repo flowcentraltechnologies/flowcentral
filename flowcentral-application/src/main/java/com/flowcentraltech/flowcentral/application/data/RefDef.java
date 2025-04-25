@@ -26,7 +26,7 @@ import com.tcdng.unify.core.util.StringUtils;
  * Reference definition
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class RefDef extends BaseApplicationEntityDef {
 

@@ -33,7 +33,7 @@ import com.tcdng.unify.core.annotation.Policy;
  * Base class for all work entity.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Policy("basework-entitypolicy")
 @DefaultQueryRestrictions({ @QueryRestriction(field = "wfItemVersionType", value = "ORN") })

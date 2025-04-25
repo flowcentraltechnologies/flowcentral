@@ -36,7 +36,7 @@ import com.tcdng.unify.web.ui.widget.writer.AbstractControlWriter;
  * Entity composition widget writer.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Writes(EntityCompositionWidget.class)
 @Component("fc-entitycomposition-writer")

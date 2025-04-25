@@ -22,7 +22,7 @@ import com.tcdng.unify.core.annotation.Component;
  * Mobile validator.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component(name = "fc-mobilevalidator", description = "$m{application.validator.mobileno}")
 public class MobileValidator extends AbstractRegexValidator {

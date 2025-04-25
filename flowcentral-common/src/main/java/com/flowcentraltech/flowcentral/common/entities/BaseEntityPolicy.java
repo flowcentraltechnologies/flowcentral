@@ -28,7 +28,7 @@ import com.tcdng.unify.core.system.entities.SequencedEntityPolicy;
  * Base entity policy.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("base-entitypolicy")
 public class BaseEntityPolicy extends SequencedEntityPolicy {

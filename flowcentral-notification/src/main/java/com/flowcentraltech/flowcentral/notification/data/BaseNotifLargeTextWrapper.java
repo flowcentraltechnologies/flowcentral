@@ -22,7 +22,7 @@ import java.util.Map;
  * Convenient abstract base class for notification large text wrappers.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public abstract class BaseNotifLargeTextWrapper implements NotifLargeTextWrapper {
 

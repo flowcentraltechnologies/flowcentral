@@ -23,7 +23,7 @@ import com.tcdng.unify.common.data.RedirectErrorDTO;
  * Flow central interconnect base broadcast response class.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public abstract class BaseBroadcastResponse extends BaseResponse {
 

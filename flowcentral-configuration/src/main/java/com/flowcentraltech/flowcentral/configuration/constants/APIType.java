@@ -25,7 +25,7 @@ import com.tcdng.unify.core.util.EnumUtils;
  * API type.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Table("FC_APITYPE")
 @StaticList(name = "apitypelist", description = "$m{staticlist.apitypelist}")

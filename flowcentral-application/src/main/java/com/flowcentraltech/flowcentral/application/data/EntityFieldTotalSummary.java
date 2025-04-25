@@ -23,7 +23,7 @@ import com.tcdng.unify.web.ui.widget.Widget;
  * Entity field total summary.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class EntityFieldTotalSummary {
 

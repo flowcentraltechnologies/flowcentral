@@ -37,7 +37,7 @@ import com.tcdng.unify.core.UnifyException;
  * Notification business service.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public interface NotificationModuleService extends FlowCentralService {
 

@@ -24,7 +24,7 @@ import com.tcdng.unify.core.list.ZeroParams;
  * Repository provider list command.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("repositoryproviderlist")
 public class RepositoryProviderListCommand extends AbstractFlowCentralTypeListCommand<RepositoryProvider, ZeroParams> {

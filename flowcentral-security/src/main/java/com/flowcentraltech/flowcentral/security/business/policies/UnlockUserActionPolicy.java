@@ -31,7 +31,7 @@ import com.tcdng.unify.core.annotation.Configurable;
  * Unlock user action policy.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @EntityReferences({ "security.user" })
 @Component(name = "unlockuser-actionpolicy", description = "$m{security.entityactionpolicy.unlockuser}")

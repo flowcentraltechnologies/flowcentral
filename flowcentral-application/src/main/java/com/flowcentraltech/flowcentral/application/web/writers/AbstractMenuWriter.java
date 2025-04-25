@@ -42,7 +42,7 @@ import com.tcdng.unify.web.ui.widget.writer.AbstractPanelWriter;
  * Convenient abstract base class for menu writers.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public abstract class AbstractMenuWriter extends AbstractPanelWriter {
 

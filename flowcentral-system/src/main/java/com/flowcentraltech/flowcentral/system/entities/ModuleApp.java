@@ -26,7 +26,7 @@ import com.tcdng.unify.core.annotation.ListOnly;
  * Module application entity.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Table(name = "FC_MODULEAPP",
         uniqueConstraints = { @UniqueConstraint({ "name" }), @UniqueConstraint({ "shortDescription" }) })

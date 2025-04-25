@@ -25,7 +25,7 @@ import com.tcdng.unify.core.annotation.UplBinding;
  * New application dialog panel.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("fc-newapplicationdialogpanel")
 @UplBinding("web/studio/upl/newapplicationdialogpanel.upl")

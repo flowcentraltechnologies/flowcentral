@@ -30,7 +30,7 @@ import com.tcdng.unify.core.report.ReportPlacementType;
  * Report placement.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Table(name = "FC_REPORTPLACEMENT")
 public class ReportPlacement extends BaseEntity {

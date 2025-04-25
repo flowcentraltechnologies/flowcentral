@@ -23,7 +23,7 @@ import com.tcdng.unify.core.util.StringUtils;
  * Entity audit configuration definition
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class EntityAuditConfigDef implements VersionedEntityDef {
 

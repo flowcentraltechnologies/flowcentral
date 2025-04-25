@@ -44,7 +44,7 @@ import com.tcdng.unify.core.util.StringUtils;
  * Entity audit trail entries resolver.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @EntityReferences({ "audit.entityAuditKeys" })
 @Component(name = "entityaudit-trailrestrictionresolver", description = "Entity Audit Trail Restriction Resolver")

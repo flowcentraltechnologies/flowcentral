@@ -24,7 +24,7 @@ import com.tcdng.unify.core.util.EnumUtils;
  * Studio table row color list.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @StaticList(name = "studiotablerowcolorlist", description="Studio Table Row Color List")
 public enum StudioTableRowColorType implements EnumConst {

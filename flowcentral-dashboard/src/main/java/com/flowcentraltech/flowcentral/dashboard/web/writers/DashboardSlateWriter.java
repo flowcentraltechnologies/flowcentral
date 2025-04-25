@@ -30,7 +30,7 @@ import com.tcdng.unify.web.ui.widget.writer.AbstractControlWriter;
  * Dashboard slate writer.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Writes(DashboardSlateWidget.class)
 @Component("fc-dashboardslate-writer")

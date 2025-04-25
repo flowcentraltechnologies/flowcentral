@@ -24,7 +24,7 @@ import com.flowcentraltech.flowcentral.notification.data.NotifChannelDef;
  * Notification messaging channel.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public interface NotificationMessagingChannel extends FlowCentralComponent {
 

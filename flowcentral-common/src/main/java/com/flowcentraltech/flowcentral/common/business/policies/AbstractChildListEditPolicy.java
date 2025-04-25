@@ -26,7 +26,7 @@ import com.tcdng.unify.core.UnifyException;
  * Convenient abstract base class for child list edit policies.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public abstract class AbstractChildListEditPolicy extends AbstractEntryTablePolicy implements ChildListEditPolicy {
 

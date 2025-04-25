@@ -29,7 +29,7 @@ import com.tcdng.unify.core.list.ZeroParams;
  * Privilege category list command.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("privilegecategorylist")
 public class PrivilegeCategoryListCommand extends AbstractOrganizationListCommand<ZeroParams> {

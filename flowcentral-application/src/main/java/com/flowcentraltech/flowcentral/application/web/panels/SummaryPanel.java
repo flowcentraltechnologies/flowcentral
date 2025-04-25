@@ -24,7 +24,7 @@ import com.tcdng.unify.web.ui.widget.panel.StandalonePanel;
  * Summary panel.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public interface SummaryPanel extends StandalonePanel {
 

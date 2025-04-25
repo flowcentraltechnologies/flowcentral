@@ -25,7 +25,7 @@ import com.tcdng.unify.core.annotation.Column;
  * Application enumeration entity.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Table("FC_ENUMERATION")
 public class AppEnumeration extends BaseApplicationEntity {

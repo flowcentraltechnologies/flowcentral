@@ -20,7 +20,7 @@ package com.flowcentraltech.flowcentral.application.util;
  * Privilege name parts.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class PrivilegeNameParts {
 

@@ -29,7 +29,7 @@ import com.tcdng.unify.core.list.ZeroParams;
  * Remote repository configuration list command.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("remoterepoconfiglist")
 public class RemoteRepoConfigListCommand extends AbstractRepositoryListCommand<ZeroParams> {

@@ -23,7 +23,7 @@ import com.tcdng.unify.core.report.ReportPageProperties;
  * Listing report generator properties.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class ListingReportGeneratorProperties {
 

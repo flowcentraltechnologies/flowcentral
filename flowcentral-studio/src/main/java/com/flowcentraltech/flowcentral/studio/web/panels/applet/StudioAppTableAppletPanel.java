@@ -26,7 +26,7 @@ import com.tcdng.unify.web.annotation.Action;
  * Studio application table applet panel.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("fc-studioapptableappletpanel")
 @UplBinding("web/studio/upl/studioapptableappletpanel.upl")

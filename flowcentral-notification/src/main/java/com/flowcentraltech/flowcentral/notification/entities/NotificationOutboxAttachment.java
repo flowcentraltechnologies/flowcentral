@@ -26,7 +26,7 @@ import com.tcdng.unify.core.constant.FileAttachmentType;
  * Notification attachment entity.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Table(name = "FC_NOTIFOUTBOXATTACH")
 public class NotificationOutboxAttachment extends BaseAuditEntity {

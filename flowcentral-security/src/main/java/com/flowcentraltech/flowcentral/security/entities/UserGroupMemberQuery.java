@@ -23,7 +23,7 @@ import com.flowcentraltech.flowcentral.common.entities.BaseAuditEntityQuery;
  * Query class for user group members.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class UserGroupMemberQuery extends BaseAuditEntityQuery<UserGroupMember> {
 

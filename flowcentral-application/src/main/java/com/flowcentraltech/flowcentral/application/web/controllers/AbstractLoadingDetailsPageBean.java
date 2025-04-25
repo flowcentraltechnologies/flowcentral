@@ -23,7 +23,7 @@ import com.flowcentraltech.flowcentral.application.web.widgets.LoadingTable;
  * Convenient abstract base class for loading details page beans.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public abstract class AbstractLoadingDetailsPageBean extends AbstractAppletPageBean<ManageLoadingDetailsApplet> {
 

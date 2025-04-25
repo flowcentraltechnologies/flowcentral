@@ -40,7 +40,7 @@ import com.tcdng.unify.web.ui.widget.data.Hint.MODE;
  * Change password controller.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("/security/changepassword")
 @UplBinding("web/security/upl/changepassword.upl")

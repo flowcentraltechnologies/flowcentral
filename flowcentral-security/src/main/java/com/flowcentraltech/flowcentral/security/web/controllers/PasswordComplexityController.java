@@ -31,7 +31,7 @@ import com.tcdng.unify.web.constant.Secured;
  * Password complexity controller.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("/security/passwordcomplexity")
 @UplBinding("web/security/upl/passwordcomplexity.upl")

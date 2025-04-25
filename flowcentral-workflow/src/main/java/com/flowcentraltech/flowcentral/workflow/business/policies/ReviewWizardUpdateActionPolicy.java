@@ -34,7 +34,7 @@ import com.tcdng.unify.core.annotation.Configurable;
  * Review wizard update action policy.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component(WorkflowModuleNameConstants.REVIEW_WIZARD_UPDATE_ACTION_POLICY)
 public class ReviewWizardUpdateActionPolicy extends AbstractEntityActionPolicy {

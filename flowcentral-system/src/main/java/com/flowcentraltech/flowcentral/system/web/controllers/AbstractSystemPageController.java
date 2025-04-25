@@ -28,7 +28,7 @@ import com.tcdng.unify.web.ui.AbstractPageBean;
  * Convenient abstract base class for system module page controllers.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public abstract class AbstractSystemPageController<T extends AbstractPageBean> extends AbstractFlowCentralPageController<T> {
 

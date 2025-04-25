@@ -29,7 +29,7 @@ import com.tcdng.unify.core.list.ZeroParams;
  * Developable application list command.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("devapplicationlist")
 public class DevApplicationListCommand extends AbstractApplicationListCommand<ZeroParams> {

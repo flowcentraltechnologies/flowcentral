@@ -24,7 +24,7 @@ import com.tcdng.unify.core.util.EnumUtils;
  * Record status enumeration.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Table("FC_RECORDSTATUS")
 @StaticList(name = "statuslist", description = "$m{staticlist.statuslist}")

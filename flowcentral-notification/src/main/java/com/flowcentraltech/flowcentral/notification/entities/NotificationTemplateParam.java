@@ -25,7 +25,7 @@ import com.tcdng.unify.core.annotation.ForeignKey;
  * Notification template parameter entity.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Table(name = "FC_NOTIFTEMPLATEPRM", uniqueConstraints = { @UniqueConstraint({ "notificationTemplateId", "name" }) })
 public class NotificationTemplateParam extends BaseAuditEntity {

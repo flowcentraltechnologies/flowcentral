@@ -28,7 +28,7 @@ import com.tcdng.unify.core.annotation.ListOnly;
  * Chart snapshot series entity.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Table(name = "FC_CHARTSNAPSHOTSERIES")
 public class ChartSnapshotSeries extends BaseEntity {

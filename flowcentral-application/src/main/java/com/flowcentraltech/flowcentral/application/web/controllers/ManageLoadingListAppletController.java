@@ -29,7 +29,7 @@ import com.tcdng.unify.web.constant.Secured;
  * Manage loading list applet controller.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component(FlowCentralAppletPathConstants.MANAGE_LOADINGLIST)
 @UplBinding("web/application/upl/manageloadinglistappletpage.upl")

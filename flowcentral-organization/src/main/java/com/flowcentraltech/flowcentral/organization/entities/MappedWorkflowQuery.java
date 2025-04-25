@@ -21,7 +21,7 @@ import com.flowcentraltech.flowcentral.application.entities.BaseApplicationEntit
  * Query class for mapped workflow steps.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class MappedWorkflowQuery extends BaseApplicationEntityQuery<MappedWorkflow> {
 

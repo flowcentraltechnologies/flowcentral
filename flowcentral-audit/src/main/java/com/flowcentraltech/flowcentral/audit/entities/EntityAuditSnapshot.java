@@ -26,7 +26,7 @@ import com.tcdng.unify.core.annotation.ForeignKey;
  * Entity audit snapshot entity.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Table("FC_ENTITYAUDITSNAPSHOT")
 public class EntityAuditSnapshot extends BaseAuditEntity {

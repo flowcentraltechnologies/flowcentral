@@ -21,7 +21,7 @@ import com.tcdng.unify.core.constant.FileAttachmentType;
  * File attachment query class;
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class FileAttachmentQuery extends BaseAuditEntityQuery<FileAttachment> {
 

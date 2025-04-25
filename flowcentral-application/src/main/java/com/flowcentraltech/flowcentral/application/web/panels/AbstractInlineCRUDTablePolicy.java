@@ -30,7 +30,7 @@ import com.tcdng.unify.web.ui.widget.Panel;
  * Convenient abstract base class for inline CRUD table policies
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public abstract class AbstractInlineCRUDTablePolicy<T extends InlineCRUDEntry> extends AbstractEntryTablePolicy
         implements InlineCRUDTablePolicy<T> {

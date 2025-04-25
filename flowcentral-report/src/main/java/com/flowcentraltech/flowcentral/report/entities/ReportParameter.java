@@ -27,7 +27,7 @@ import com.tcdng.unify.core.constant.DataType;
  * Report parameter.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Table(name = "FC_REPORTPARAM", uniqueConstraints = { @UniqueConstraint({ "reportConfigurationId", "name" }) })
 public class ReportParameter extends BaseEntity {

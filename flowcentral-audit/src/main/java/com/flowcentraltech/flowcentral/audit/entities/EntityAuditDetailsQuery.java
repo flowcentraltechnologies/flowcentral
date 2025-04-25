@@ -22,7 +22,7 @@ import com.flowcentraltech.flowcentral.configuration.constants.AuditEventType;
  * Entity audit details query.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class EntityAuditDetailsQuery extends BaseAuditEntityQuery<EntityAuditDetails> {
 

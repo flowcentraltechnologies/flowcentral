@@ -30,7 +30,7 @@ import com.tcdng.unify.core.annotation.Configurable;
  * Extension module XML generator.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("extension-module-xml-generator")
 public class ExtensionModuleXmlGenerator extends AbstractResourcesArtifactGenerator {

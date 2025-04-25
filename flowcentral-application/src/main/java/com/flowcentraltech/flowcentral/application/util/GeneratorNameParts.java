@@ -20,7 +20,7 @@ package com.flowcentraltech.flowcentral.application.util;
  * Generator name parts.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class GeneratorNameParts {
 

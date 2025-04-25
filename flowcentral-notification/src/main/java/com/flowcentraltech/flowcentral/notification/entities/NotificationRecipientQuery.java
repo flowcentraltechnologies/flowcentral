@@ -21,7 +21,7 @@ import com.flowcentraltech.flowcentral.common.entities.BaseVersionEntityQuery;
  * Notification recipient query class;
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class NotificationRecipientQuery extends BaseVersionEntityQuery<NotificationRecipient> {
 

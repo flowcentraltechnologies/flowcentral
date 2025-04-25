@@ -21,7 +21,7 @@ import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldDataTy
  * Entity field schema.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class EntityFieldSchema {
 

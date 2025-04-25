@@ -34,7 +34,7 @@ import com.tcdng.unify.core.util.StringUtils;
  * Suggestion text search.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("fc-suggestiontextsearch")
 @UplAttributes({ @UplAttribute(name = "ref", type = String.class, defaultVal = "application.appSuggestionRef"),

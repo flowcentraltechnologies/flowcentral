@@ -27,7 +27,7 @@ import com.tcdng.unify.core.database.Query;
  * Represents a query encoder
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public interface QueryEncoder extends FlowCentralComponent {
 

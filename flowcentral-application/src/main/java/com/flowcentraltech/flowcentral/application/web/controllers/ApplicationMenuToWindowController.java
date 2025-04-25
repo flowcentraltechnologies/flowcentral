@@ -39,7 +39,7 @@ import com.tcdng.unify.web.ui.AbstractPageController;
  * Application menu-to-window controller.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component(ApplicationModulePathConstants.APPLICATION_MENU_TO_WINDOW)
 @UplBinding("web/application/upl/applicationmenutowindow.upl")

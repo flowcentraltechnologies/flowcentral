@@ -36,7 +36,7 @@ import com.tcdng.unify.core.notification.SmsServerConfig;
  * SMS notification messaging channel.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component(NotificationModuleNameConstants.SMSMESSAGINGCHANNEL)
 public class SmsNotificationMessagingChannel extends AbstractNotificationMessagingChannel {

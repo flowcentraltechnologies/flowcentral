@@ -28,7 +28,7 @@ import com.tcdng.unify.core.annotation.FosterParentType;
  * Application search input.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Table(name = "FC_SEARCHINPUT", indexes = { @Index(value = { "entity" }), @Index(value = { "category" }) })
 public class AppSearchInput extends BaseAuditEntity {

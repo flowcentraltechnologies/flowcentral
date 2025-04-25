@@ -24,7 +24,7 @@ import com.tcdng.unify.web.ui.widget.control.AbstractPopupTextField;
  * Convenient abstract base class for flowcentral popup text fields.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public abstract class AbstractFlowCentralPopupTextField extends AbstractPopupTextField {
 

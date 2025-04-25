@@ -20,7 +20,7 @@ package com.flowcentraltech.flowcentral.audit.constants;
  * Audit module session attributes.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public interface AuditModuleSessionAttributes {
 

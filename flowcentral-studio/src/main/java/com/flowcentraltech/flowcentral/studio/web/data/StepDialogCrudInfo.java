@@ -25,7 +25,7 @@ import com.tcdng.unify.web.ui.widget.data.DialogCrudInfo;
  * Step dialog information object.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class StepDialogCrudInfo<T> extends DialogCrudInfo<T> {
 

@@ -30,7 +30,7 @@ import com.tcdng.unify.core.annotation.Configurable;
  * Entity name exists validator.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component(name = "fc-entitynameexistvalidator", description = "$m{application.validator.uniqueentity}")
 public class EntityNameExistsValidator extends AbstractValidator {

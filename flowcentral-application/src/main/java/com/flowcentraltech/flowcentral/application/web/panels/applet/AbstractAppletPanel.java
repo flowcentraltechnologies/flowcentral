@@ -56,7 +56,7 @@ import com.tcdng.unify.web.ui.widget.data.Popup;
  * Convenient abstract base panel for applet panels.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public abstract class AbstractAppletPanel extends AbstractApplicationSwitchPanel {
 

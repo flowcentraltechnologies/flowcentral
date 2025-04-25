@@ -24,7 +24,7 @@ import com.tcdng.unify.core.util.EnumUtils;
  * Lingual string type constants.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Table("FC_LINGUALSTRINGTYPE")
 @StaticList(name = "lingualstringtypelist", description = "$m{staticlist.lingualstringtypelist}")

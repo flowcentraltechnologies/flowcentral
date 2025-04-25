@@ -29,7 +29,7 @@ import com.tcdng.unify.core.list.ZeroParams;
  * OS messaging end-point list command.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("osmessagingendpointlist")
 public class OSMessagingEndpointListCommand extends AbstractOSMessagingListCommand<ZeroParams> {

@@ -24,7 +24,7 @@ import com.tcdng.unify.core.util.DataUtils;
  * Convenient abstract base class for single form panels.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public abstract class AbstractSingleFormPanel<T extends AbstractSingleFormBean> extends AbstractFlowCentralStandalonePanel
         implements SingleFormPanel<T> {

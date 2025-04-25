@@ -20,7 +20,7 @@ package com.flowcentraltech.flowcentral.codegeneration.generators;
  * Static message category type.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public enum StaticMessageCategoryType {
     HEADER("Header"),

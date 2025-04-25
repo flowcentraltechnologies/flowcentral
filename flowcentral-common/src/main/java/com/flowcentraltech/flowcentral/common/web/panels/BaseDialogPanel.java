@@ -21,7 +21,7 @@ import com.tcdng.unify.web.ui.widget.panel.AbstractDialogPanel;
  * Convenient base class for dialog panels in flow central context.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public abstract class BaseDialogPanel extends AbstractDialogPanel {
 

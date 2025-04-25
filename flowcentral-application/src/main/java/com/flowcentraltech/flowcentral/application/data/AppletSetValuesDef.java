@@ -21,7 +21,7 @@ import com.tcdng.unify.common.data.Listable;
  * Applet set values definition.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class AppletSetValuesDef implements Listable {
 

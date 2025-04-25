@@ -23,7 +23,7 @@ import com.tcdng.unify.core.util.EnumUtils;
  * Product category constants.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @StaticList(name = "productcategorylist", description = "Product Category List")
 public enum ProductCategory implements EnumConst {

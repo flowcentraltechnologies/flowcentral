@@ -24,7 +24,7 @@ import com.tcdng.unify.core.util.EnumUtils;
  * Form wizard completion type list.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @StaticList(name = "formwizardcompletiontypelist", description = "$m{staticlist.formwizardcompletiontypelist}")
 public enum FormWizardCompletionType implements EnumConst {

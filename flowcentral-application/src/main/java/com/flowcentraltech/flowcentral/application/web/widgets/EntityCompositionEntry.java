@@ -23,7 +23,7 @@ import com.tcdng.unify.core.constant.DynamicEntityFieldType;
  * Entity composition entry.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class EntityCompositionEntry {
 

@@ -38,7 +38,7 @@ import com.tcdng.unify.core.report.Report;
  * Convenient abstract base class for entity details panels.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @UplBinding("web/application/upl/entitydetailspanel.upl")
 public abstract class AbstractEntityDetailsPanel extends AbstractDetailsPanel<Entity> {

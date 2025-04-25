@@ -24,7 +24,7 @@ import com.tcdng.unify.core.data.ValueStoreReader;
  * Convenient abstract base class for notification template entity alert sender.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public abstract class AbstractNotificationTemplateEntityAlertSender<T extends NotifTemplateWrapper, U extends EntityWrapper>
         extends AbstractNotificationTemplateAlertSender<T> {

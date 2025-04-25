@@ -23,7 +23,7 @@ import com.tcdng.unify.core.annotation.Component;
  * Progress bar widget.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("fc-progressbar")
 public class ProgressBar extends AbstractFlowCentralControl {

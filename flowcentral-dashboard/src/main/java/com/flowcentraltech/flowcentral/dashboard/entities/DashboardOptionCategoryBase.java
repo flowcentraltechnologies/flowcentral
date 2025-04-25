@@ -27,7 +27,7 @@ import com.tcdng.unify.core.annotation.ForeignKey;
  * Dashboard option category base entity.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Table("FC_DASHBOARDOPTIONCATBASE")
 public class DashboardOptionCategoryBase extends BaseAuditEntity {

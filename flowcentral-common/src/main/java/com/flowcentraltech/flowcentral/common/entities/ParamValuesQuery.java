@@ -19,7 +19,7 @@ package com.flowcentraltech.flowcentral.common.entities;
  * Common parameter values query.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class ParamValuesQuery extends BaseAuditEntityQuery<ParamValues> {
 

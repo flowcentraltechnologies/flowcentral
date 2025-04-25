@@ -40,7 +40,7 @@ import com.tcdng.unify.web.ui.widget.data.Hint.MODE;
  * Licensing page controller.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("/system/licensing")
 @UplBinding("web/system/upl/licensingpage.upl")

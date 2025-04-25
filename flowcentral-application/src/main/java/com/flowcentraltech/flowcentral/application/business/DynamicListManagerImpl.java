@@ -41,7 +41,7 @@ import com.tcdng.unify.core.list.AbstractDynamicListManager;
  * Default implementation of dynamic list manager.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component(ApplicationModuleNameConstants.APPLICATION_DYNAMICLIST_MANAGER)
 public class DynamicListManagerImpl extends AbstractDynamicListManager {

@@ -56,7 +56,7 @@ import com.tcdng.unify.web.http.HttpRequestHeaders;
  * REST JSON controller processor.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component(IntegrationRestModuleNameConstants.RESTJSONCRUD_PROCESSOR)
 public class RestJsonCRUDControllerProcessorImpl extends AbstractHttpCRUDControllerProcessor

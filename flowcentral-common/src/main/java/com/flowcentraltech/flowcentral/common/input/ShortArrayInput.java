@@ -20,7 +20,7 @@ package com.flowcentraltech.flowcentral.common.input;
  * Short array input.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class ShortArrayInput extends AbstractArrayInput<Short[]> {
 

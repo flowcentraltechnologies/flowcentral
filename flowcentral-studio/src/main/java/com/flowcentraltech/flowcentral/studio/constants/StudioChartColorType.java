@@ -24,7 +24,7 @@ import com.tcdng.unify.core.util.EnumUtils;
  * Studio chart color list.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @StaticList(name = "studiochartcolorlist", description="Studio Chart Color List")
 public enum StudioChartColorType implements EnumConst {

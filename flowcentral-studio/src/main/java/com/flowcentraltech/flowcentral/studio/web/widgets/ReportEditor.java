@@ -25,7 +25,7 @@ import com.flowcentraltech.flowcentral.application.data.EntityDef;
  * Report editor object.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class ReportEditor {
 

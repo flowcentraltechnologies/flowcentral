@@ -35,7 +35,7 @@ import com.tcdng.unify.common.data.EntityInfo;
  * Flowcentral spring boot interconnect.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component
 public class SpringBootInterconnect extends AbstractInterconnect {

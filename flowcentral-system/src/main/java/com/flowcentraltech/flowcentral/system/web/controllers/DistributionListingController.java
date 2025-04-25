@@ -28,7 +28,7 @@ import com.tcdng.unify.web.constant.Secured;
  * Distribution listing controller.
  * 
  * @author Lateef Ojulari
- * @since 1.0
+ * @since 4.1
  */
 @Component("/system/distributionlisting")
 @UplBinding("web/system/upl/distributionlisting.upl")

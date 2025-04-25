@@ -33,7 +33,7 @@ import com.tcdng.unify.core.database.Query;
  * Studio on update application entity policy.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("studioonupdateappentity-policy")
 public class StudioOnUpdateAppEntityPolicy extends StudioOnCreateComponentPolicy {

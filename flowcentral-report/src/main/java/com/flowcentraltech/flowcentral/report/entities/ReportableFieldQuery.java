@@ -23,7 +23,7 @@ import com.flowcentraltech.flowcentral.common.entities.BaseEntityQuery;
  * Query class for reportable fields.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class ReportableFieldQuery extends BaseEntityQuery<ReportableField> {
 

@@ -24,7 +24,7 @@ import com.tcdng.unify.core.util.EnumUtils;
  * Sector status enumeration.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Table("FC_SECTORSTATUS")
 @StaticList(name = "sectorstatuslist", description = "$m{staticlist.sectorstatuslist}")

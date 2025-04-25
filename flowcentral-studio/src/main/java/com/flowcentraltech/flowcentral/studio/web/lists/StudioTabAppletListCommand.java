@@ -31,7 +31,7 @@ import com.tcdng.unify.core.annotation.Component;
  * Studio tab applet list command
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("studiotabappletlist")
 public class StudioTabAppletListCommand extends AbstractApplicationListCommand<AppletParams> {

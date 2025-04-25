@@ -25,7 +25,7 @@ import com.tcdng.unify.core.annotation.ForeignKey;
  * Notification channel property entity.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Table(name = "FC_CHANNELPROP", uniqueConstraints = { @UniqueConstraint({ "notificationChannelId", "name" }) })
 public class NotificationChannelProp extends BaseEntity {

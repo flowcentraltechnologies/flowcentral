@@ -28,7 +28,7 @@ import com.tcdng.unify.core.annotation.ListOnly;
  * A sector is one or more system modules.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Table(name = "FC_SECTOR", uniqueConstraints = { @UniqueConstraint({ "name" }), @UniqueConstraint({ "description" }),
         @UniqueConstraint({ "shortCode" }) })

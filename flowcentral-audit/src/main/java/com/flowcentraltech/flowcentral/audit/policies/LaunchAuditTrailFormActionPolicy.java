@@ -33,7 +33,7 @@ import com.tcdng.unify.core.data.ValueStoreReader;
  * Form action policy for launching audit trail applet.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @EntityReferences({ "audit.entityAuditKeys" })
 @Component(name = "launchaudittrail-actionpolicy", description = "Launch audit trail Action Policy")

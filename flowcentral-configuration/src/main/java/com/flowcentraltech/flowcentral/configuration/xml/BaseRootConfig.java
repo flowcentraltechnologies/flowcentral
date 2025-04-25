@@ -21,7 +21,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
  * Convenient abstract base class for named configurations.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public abstract class BaseRootConfig extends BaseNameConfig {
 

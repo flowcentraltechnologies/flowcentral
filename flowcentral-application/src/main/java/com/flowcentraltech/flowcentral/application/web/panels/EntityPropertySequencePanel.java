@@ -25,7 +25,7 @@ import com.tcdng.unify.web.annotation.Action;
  * Entity property sequence panel.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("fc-entitypropertysequencepanel")
 @UplBinding("web/application/upl/entitypropertysequencepanel.upl")

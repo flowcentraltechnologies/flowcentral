@@ -28,7 +28,7 @@ import com.tcdng.unify.web.ui.widget.Control;
  * Field sequence widget.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("fc-fieldsequence")
 public class FieldSequenceWidget extends AbstractValueListWidget<FieldSequenceEntry> {

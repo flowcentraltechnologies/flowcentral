@@ -24,7 +24,7 @@ import com.tcdng.unify.core.criterion.Restriction;
  * Chart details provider.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public interface ChartDetailsProvider extends RuleListComponent {
 

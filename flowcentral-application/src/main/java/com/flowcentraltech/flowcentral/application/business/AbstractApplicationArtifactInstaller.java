@@ -34,7 +34,7 @@ import com.tcdng.unify.core.task.TaskMonitor;
  * Convenient abstract base class for application artifact installer.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public abstract class AbstractApplicationArtifactInstaller extends AbstractFlowCentralComponent
         implements ApplicationArtifactInstaller {

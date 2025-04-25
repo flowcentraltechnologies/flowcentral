@@ -30,7 +30,7 @@ import com.tcdng.unify.core.list.StringParam;
  * Studio table search input list command
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("studiotablesearchinputlist")
 public class StudioTableSearchInputListCommand extends AbstractApplicationListCommand<StringParam> {

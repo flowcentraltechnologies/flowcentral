@@ -27,7 +27,7 @@ import com.tcdng.unify.common.data.Listable;
  * Dashboard option definition object.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class DashboardOptionDef implements Listable {
 

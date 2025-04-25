@@ -22,7 +22,7 @@ import java.util.List;
  * Read event instance.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class JsonReadEvent<T> {
 

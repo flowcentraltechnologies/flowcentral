@@ -24,7 +24,7 @@ import com.tcdng.unify.core.database.Database;
  * Sweeping commit policy.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public interface SweepingCommitPolicy {
 

@@ -30,7 +30,7 @@ import com.flowcentraltech.flowcentral.configuration.xml.adapter.UIActionTypeXml
  * Form action configuration.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @JsonInclude(value = Include.NON_NULL, content = Include.NON_EMPTY)
 public class FormActionConfig extends BaseNameConfig {

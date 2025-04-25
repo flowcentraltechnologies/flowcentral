@@ -23,7 +23,7 @@ import com.tcdng.unify.core.UnifyException;
  * Convenient abstract base class for workflow binary policies.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public abstract class AbstractWfBinaryPolicy extends AbstractFlowCentralComponent implements WfBinaryPolicy {
 

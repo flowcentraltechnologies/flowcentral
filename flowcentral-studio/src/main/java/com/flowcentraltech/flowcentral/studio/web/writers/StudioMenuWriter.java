@@ -45,7 +45,7 @@ import com.tcdng.unify.web.ui.widget.writer.AbstractPanelWriter;
  * Studio menu writer.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Writes(StudioMenuWidget.class)
 @Component("fc-studiomenu-writer")

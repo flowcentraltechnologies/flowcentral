@@ -26,7 +26,7 @@ import com.tcdng.unify.web.ui.widget.data.Popup;
  * Entity multi-select panel.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("fc-entitymultiselectpanel")
 @UplBinding("web/application/upl/entitymultiselectpanel.upl")

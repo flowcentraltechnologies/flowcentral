@@ -37,7 +37,7 @@ import com.tcdng.unify.core.util.DataUtils;
  * Studio workflow step receive from list command
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("studiowfstepreceivefromlist")
 public class StudioWfStepReceiveFromListCommand extends AbstractApplicationListCommand<LongParam> {

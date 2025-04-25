@@ -29,7 +29,7 @@ import com.tcdng.unify.web.ui.WebUIApplicationComponents;
  * Base class for flowCentral components.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public abstract class AbstractFlowCentralComponent extends AbstractUnifyComponent implements FlowCentralComponent {
 

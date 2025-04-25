@@ -21,7 +21,7 @@ import com.flowcentraltech.flowcentral.common.entities.BaseAuditEntityQuery;
  * Application widget rules query.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class AppWidgetRulesQuery extends BaseAuditEntityQuery<AppWidgetRules> {
 

@@ -22,7 +22,7 @@ import com.tcdng.unify.core.UnifyException;
  * Convenient abstract base class for OS messaging access managers.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public abstract class AbstractOSMessagingAccessManager extends AbstractFlowCentralService
         implements OSMessagingAccessManager {

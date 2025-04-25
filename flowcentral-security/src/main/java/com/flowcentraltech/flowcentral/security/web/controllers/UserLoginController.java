@@ -59,7 +59,7 @@ import com.tcdng.unify.web.ui.widget.panel.SwitchPanel;
  * User login controller.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("/security/loginpage")
 @UplBinding("web/security/upl/login.upl")

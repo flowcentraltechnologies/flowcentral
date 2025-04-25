@@ -25,7 +25,7 @@ import com.tcdng.unify.web.annotation.Action;
  * Form editor page panel.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("fc-formeditorpagepanel")
 @UplBinding("web/studio/upl/formeditorpagepanel.upl")

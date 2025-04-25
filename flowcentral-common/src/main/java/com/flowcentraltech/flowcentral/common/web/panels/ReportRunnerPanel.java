@@ -27,7 +27,7 @@ import com.tcdng.unify.web.ui.widget.data.Popup;
  * Basic panel for presenting and capturing report options.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("fc-reportrunnerpanel")
 @UplBinding("web/common/upl/reportrunnerpanel.upl")

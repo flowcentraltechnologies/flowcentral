@@ -33,7 +33,7 @@ import com.tcdng.unify.core.util.StringUtils;
  * End-point parameter configuration list provider.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component(IntegrationModuleNameConstants.ENDPOINT_PARAMCONFIGPROVIDER)
 public class EndpointParamConfigListProvider extends AbstractParamConfigListProvider {

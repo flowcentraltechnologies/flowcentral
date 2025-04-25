@@ -22,7 +22,7 @@ import com.flowcentraltech.flowcentral.configuration.constants.AuditSourceType;
  * Entity audit configuration query.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class EntityAuditConfigQuery extends BaseStatusEntityQuery<EntityAuditConfig> {
 

@@ -34,7 +34,7 @@ import com.tcdng.unify.web.ui.widget.writer.AbstractControlWriter;
  * Input array widget writer.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Writes(InputArrayWidget.class)
 @Component("fc-inputarray-writer")

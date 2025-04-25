@@ -32,7 +32,7 @@ import com.tcdng.unify.web.ui.AbstractOpenWindowPageControllerResponse;
  * Open in browser window response.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("openinbrowserwindowresponse")
 public class OpenInBrowserWindowResponse extends AbstractOpenWindowPageControllerResponse {

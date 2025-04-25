@@ -35,7 +35,7 @@ import com.tcdng.unify.web.ui.widget.Control;
  * Dashboard editor widget.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("fc-dashboardeditor")
 @UplAttributes({ @UplAttribute(name = "choiceWidth", type = String.class, defaultVal = "260px") })

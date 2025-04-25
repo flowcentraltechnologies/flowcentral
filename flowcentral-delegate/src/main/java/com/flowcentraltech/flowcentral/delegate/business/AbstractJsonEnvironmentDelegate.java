@@ -37,7 +37,7 @@ import com.tcdng.unify.core.util.StringUtils;
  * Convenient abstract base class for JSON based protocol environment delegates.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public abstract class AbstractJsonEnvironmentDelegate extends AbstractSynchronizableEnvironmentDelegate {
 

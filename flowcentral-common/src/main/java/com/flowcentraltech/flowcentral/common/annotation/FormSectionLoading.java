@@ -24,7 +24,7 @@ import java.lang.annotation.Target;
  * Annotation used to indicate a panel's form section loading.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)

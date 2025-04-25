@@ -21,7 +21,7 @@ import com.flowcentraltech.flowcentral.common.input.AbstractInput;
  * Input array entry.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class InputArrayEntry {
 

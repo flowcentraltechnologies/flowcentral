@@ -34,7 +34,7 @@ import com.tcdng.unify.core.security.PasswordGenerator;
  * User new action policy.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @EntityReferences({ "security.user" })
 @Component(name = "user-newactionpolicy", description = "$m{security.entityactionpolicy.newuser}")

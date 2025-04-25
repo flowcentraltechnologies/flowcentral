@@ -21,7 +21,7 @@ import com.flowcentraltech.flowcentral.connect.common.constants.RestrictionType;
  * Resolve condition.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class ResolvedCondition {
 

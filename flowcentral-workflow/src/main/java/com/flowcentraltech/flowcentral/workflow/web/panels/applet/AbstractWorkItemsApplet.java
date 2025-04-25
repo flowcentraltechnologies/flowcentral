@@ -39,7 +39,7 @@ import com.tcdng.unify.web.ui.widget.data.ButtonInfo;
  * Convenient abstract work items applet.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class AbstractWorkItemsApplet extends ManageLoadingListApplet {
 

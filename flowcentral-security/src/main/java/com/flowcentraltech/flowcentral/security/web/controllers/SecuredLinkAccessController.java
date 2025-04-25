@@ -44,7 +44,7 @@ import com.tcdng.unify.web.constant.Secured;
  * Secured link access controller.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component(SecurityModuleNameConstants.SECURED_LINK_ACCESS_CONTROLLER)
 @UplBinding("web/security/upl/securedlinkaccess.upl")

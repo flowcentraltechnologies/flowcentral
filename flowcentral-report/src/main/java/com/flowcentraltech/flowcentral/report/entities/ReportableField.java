@@ -24,7 +24,7 @@ import com.tcdng.unify.core.annotation.ForeignKey;
  * Entity for storing reportable field information.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Table(name = "FC_REPORTABLEFLD")
 public class ReportableField extends BaseEntity {

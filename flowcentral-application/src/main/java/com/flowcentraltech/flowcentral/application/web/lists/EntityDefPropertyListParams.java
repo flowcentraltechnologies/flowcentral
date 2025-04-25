@@ -23,7 +23,7 @@ import com.tcdng.unify.core.list.AbstractListParam;
  * Entity definition property list parameters.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class EntityDefPropertyListParams extends AbstractListParam {
 

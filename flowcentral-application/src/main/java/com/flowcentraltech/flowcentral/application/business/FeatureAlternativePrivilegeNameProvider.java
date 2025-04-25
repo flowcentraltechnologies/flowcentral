@@ -27,7 +27,7 @@ import com.tcdng.unify.core.data.AlternativePrivilege;
  * Feature alternative privilege provider.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component(ApplicationModuleNameConstants.FEATURE_ALTERNATIVE_PRIVILEGE_PROVIDER)
 public class FeatureAlternativePrivilegeNameProvider extends AbstractAlternativePrivilegeProvider {

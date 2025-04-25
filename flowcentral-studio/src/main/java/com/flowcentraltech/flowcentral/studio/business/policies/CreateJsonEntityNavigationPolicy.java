@@ -42,7 +42,7 @@ import com.tcdng.unify.core.util.EntityTypeUtils;
  * Create JSON entity navigation policy.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @EntityReferences({ "studio.studioJsonEntity" })
 @Component(name = "createjsonentity-navigationpolicy", description = "Create JSON Entity Nav, Policy")

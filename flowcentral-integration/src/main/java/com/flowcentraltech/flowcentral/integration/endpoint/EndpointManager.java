@@ -25,7 +25,7 @@ import com.tcdng.unify.core.UnifyException;
  * End-point manager.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public interface EndpointManager extends FlowCentralComponent {
 

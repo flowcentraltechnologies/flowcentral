@@ -51,7 +51,7 @@ import com.tcdng.unify.common.data.RedirectErrorDTO;
  * Convenient abstract base class for interconnect redirects
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public abstract class AbstractSpringBootInterconnectRedirect implements SpringBootInterconnectRedirect {
 

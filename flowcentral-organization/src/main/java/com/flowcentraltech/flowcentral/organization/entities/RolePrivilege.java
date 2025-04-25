@@ -28,7 +28,7 @@ import com.tcdng.unify.core.util.StringUtils;
  * Role privilege entity.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Table(name = "FC_ROLEPRIVILEGE", uniqueConstraints = { @UniqueConstraint({ "roleId", "privilegeId" }) })
 public class RolePrivilege extends BaseAuditEntity {

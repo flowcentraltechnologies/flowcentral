@@ -30,7 +30,7 @@ import com.tcdng.unify.core.annotation.ListOnly;
  * Workflow step role entity.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Table(name = "FC_WORKSTEPROLE", uniqueConstraints = { @UniqueConstraint({ "wfStepId", "roleId" }) })
 public class WfStepRole extends BaseAuditEntity {

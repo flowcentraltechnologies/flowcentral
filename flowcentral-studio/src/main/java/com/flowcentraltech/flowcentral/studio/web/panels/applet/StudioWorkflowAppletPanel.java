@@ -26,7 +26,7 @@ import com.tcdng.unify.web.annotation.Action;
  * Studio workflow applet panel.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("fc-studioworkflowappletpanel")
 @UplBinding("web/studio/upl/studioworkflowappletpanel.upl")

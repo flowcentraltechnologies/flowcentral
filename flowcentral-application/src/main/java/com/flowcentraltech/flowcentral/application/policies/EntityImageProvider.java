@@ -32,7 +32,7 @@ import com.tcdng.unify.core.util.DataUtils;
  * Entity image provider.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component(ApplicationModuleNameConstants.ENTITY_IMAGE_PROVIDER)
 public class EntityImageProvider extends AbstractImageProvider {

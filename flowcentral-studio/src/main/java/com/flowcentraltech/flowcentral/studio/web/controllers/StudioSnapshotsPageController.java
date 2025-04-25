@@ -38,7 +38,7 @@ import com.tcdng.unify.web.constant.Secured;
  * Snapshots page controller.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("/studio/snapshots")
 @UplBinding("web/studio/upl/snapshotspage.upl")

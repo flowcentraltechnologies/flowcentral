@@ -36,7 +36,7 @@ import com.tcdng.unify.core.list.LongParam;
  * Studio workflow filter list command
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("studioworkflowfilterlist")
 public class StudioWorkflowFilterListCommand extends AbstractApplicationListCommand<LongParam> {

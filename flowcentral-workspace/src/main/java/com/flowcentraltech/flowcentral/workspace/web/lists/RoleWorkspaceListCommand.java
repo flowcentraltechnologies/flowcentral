@@ -28,7 +28,7 @@ import com.tcdng.unify.core.list.ZeroParams;
  * Role workspace list.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("roleworkspacelist")
 public class RoleWorkspaceListCommand extends AbstractWorkspaceListCommand<ZeroParams> {

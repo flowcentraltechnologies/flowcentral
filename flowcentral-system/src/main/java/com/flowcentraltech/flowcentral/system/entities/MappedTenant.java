@@ -24,7 +24,7 @@ import com.tcdng.unify.core.annotation.TableName;
  * Mapped tenant entity.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Mapped
 @TableName("FC_MAPPEDTENANT")

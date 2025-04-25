@@ -27,7 +27,7 @@ import com.tcdng.unify.core.constant.Editable;
  * Entity field sequence object.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class EntityFieldSequence extends AbstractPanelFormBinding {
 

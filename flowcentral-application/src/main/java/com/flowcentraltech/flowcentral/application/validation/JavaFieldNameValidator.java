@@ -22,7 +22,7 @@ import com.tcdng.unify.core.annotation.Component;
  * Java field name validator.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component(name = "fc-javafieldnamevalidator", description = "$m{application.validator.javafieldname}")
 public class JavaFieldNameValidator extends AbstractRegexValidator {

@@ -21,7 +21,7 @@ import com.flowcentraltech.flowcentral.common.entities.BaseConfigNamedEntityQuer
  * Workflow filter query.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class WorkflowFilterQuery extends BaseConfigNamedEntityQuery<WorkflowFilter> {
 

@@ -28,7 +28,7 @@ import com.tcdng.unify.core.constant.VAlignType;
  * Report column.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Table(name = "FC_REPORTCOLUMN")
 public class ReportColumn extends BaseEntity {

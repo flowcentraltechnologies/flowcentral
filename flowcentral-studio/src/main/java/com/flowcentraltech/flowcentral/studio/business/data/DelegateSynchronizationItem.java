@@ -20,7 +20,7 @@ package com.flowcentraltech.flowcentral.studio.business.data;
  * Delegate synchronization item.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class DelegateSynchronizationItem {
 

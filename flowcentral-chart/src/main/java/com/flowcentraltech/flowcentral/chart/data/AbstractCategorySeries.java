@@ -25,7 +25,7 @@ import com.tcdng.unify.core.util.json.JsonWriter;
  * Abstract base class for category series.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public abstract class AbstractCategorySeries<U extends Number> extends AbstractSeries<String, U> {
 

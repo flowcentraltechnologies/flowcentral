@@ -24,7 +24,7 @@ import com.tcdng.unify.core.list.AbstractTypeListCommand;
  * Workflow recipient policy list command.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("wfrecipientpolicylist")
 public class WfRecipientPolicyListCommand extends AbstractTypeListCommand<WfRecipientPolicy> {

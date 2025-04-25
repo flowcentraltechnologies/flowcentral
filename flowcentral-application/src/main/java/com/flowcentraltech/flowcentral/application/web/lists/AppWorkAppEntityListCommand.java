@@ -31,7 +31,7 @@ import com.tcdng.unify.core.list.LongParam;
  * Application work application list command.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("appworkappentitylist")
 public class AppWorkAppEntityListCommand extends AbstractApplicationListCommand<LongParam> {

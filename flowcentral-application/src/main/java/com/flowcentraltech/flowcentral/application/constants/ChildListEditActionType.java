@@ -25,7 +25,7 @@ import com.tcdng.unify.core.util.EnumUtils;
  * Child list edit action type list.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Table("FC_CHILDLISTEDITACTIONTYPE")
 @StaticList(name = "childlisteditactionlist", description = "$m{staticlist.childlisteditactionlist}")

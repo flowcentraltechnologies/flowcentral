@@ -30,7 +30,7 @@ import com.tcdng.unify.core.annotation.UplBinding;
  * Errors panel.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("fc-errorspanel")
 @UplBinding("web/application/upl/errorspanel.upl")

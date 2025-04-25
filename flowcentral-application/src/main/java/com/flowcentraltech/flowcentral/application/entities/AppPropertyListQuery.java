@@ -19,7 +19,7 @@ package com.flowcentraltech.flowcentral.application.entities;
  * Application property list query.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class AppPropertyListQuery extends BaseApplicationEntityQuery<AppPropertyList> {
 

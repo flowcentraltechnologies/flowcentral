@@ -23,7 +23,7 @@ import com.tcdng.unify.core.annotation.UplBinding;
  * Property list panel.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("fc-propertylistpanel")
 @UplBinding("web/application/upl/propertylistpanel.upl")

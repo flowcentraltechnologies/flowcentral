@@ -26,7 +26,7 @@ import com.tcdng.unify.core.annotation.ListOnly;
  * Entity for storing collaboration lock history information.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Table("FC_COLLABORATIONLOCKHIST")
 public class CollaborationLockHistory extends BaseAuditEntity {

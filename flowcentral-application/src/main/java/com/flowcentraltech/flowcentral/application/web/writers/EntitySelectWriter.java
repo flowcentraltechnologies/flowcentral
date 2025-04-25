@@ -30,7 +30,7 @@ import com.tcdng.unify.web.ui.widget.writer.control.AbstractPopupTextFieldWriter
  * Entity select widget writer.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Writes(EntitySelectWidget.class)
 @Component("entityselect-writer")

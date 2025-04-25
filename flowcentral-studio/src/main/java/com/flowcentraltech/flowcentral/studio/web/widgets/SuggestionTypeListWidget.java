@@ -25,7 +25,7 @@ import com.tcdng.unify.core.annotation.UplAttributes;
  * Suggestion type list widget.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("fc-suggestiontypelist")
 @UplAttributes({

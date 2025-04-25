@@ -19,7 +19,7 @@ package com.flowcentraltech.flowcentral.collaboration.constants;
  * Collaboration module system parameter constants.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public interface CollaborationModuleSysParamConstants {
 

@@ -36,7 +36,7 @@ import com.tcdng.unify.web.ui.widget.writer.AbstractWidgetWriter;
  * Entity audit snapshot view writer.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Writes(EntityAuditSnapshotViewWidget.class)
 @Component("entityauditsnapshotview-writer")

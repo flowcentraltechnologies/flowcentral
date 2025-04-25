@@ -21,7 +21,7 @@ import com.flowcentraltech.flowcentral.application.entities.BaseApplicationEntit
  * Report configuration query.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class ReportConfigurationQuery extends BaseApplicationEntityQuery<ReportConfiguration> {
 

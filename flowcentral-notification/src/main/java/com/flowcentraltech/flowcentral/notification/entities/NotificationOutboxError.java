@@ -25,7 +25,7 @@ import com.tcdng.unify.core.annotation.ForeignKey;
  * Notification outbox error.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Table(name = "FC_NOTIFOUTBOXERROR")
 public class NotificationOutboxError extends BaseAuditEntity {

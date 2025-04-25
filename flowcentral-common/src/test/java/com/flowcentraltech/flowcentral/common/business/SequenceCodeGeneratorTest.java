@@ -36,7 +36,7 @@ import com.flowcentraltech.flowcentral.common.data.SequencePartDef;
  * Sequence code generator tests
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class SequenceCodeGeneratorTest extends AbstractFlowCentralTest {
 

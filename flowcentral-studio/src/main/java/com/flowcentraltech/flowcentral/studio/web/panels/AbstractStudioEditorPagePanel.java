@@ -32,7 +32,7 @@ import com.tcdng.unify.core.annotation.UplBinding;
  * Convenient abstract base class for studio editor page panel.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @UplBinding("web/studio/upl/studioeditorpagepanel.upl")
 public abstract class AbstractStudioEditorPagePanel extends AbstractFlowCentralPanel {

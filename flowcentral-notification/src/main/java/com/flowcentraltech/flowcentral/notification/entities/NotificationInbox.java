@@ -27,7 +27,7 @@ import com.tcdng.unify.core.annotation.ListOnly;
  * Notification inbox entity.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Table(name = "FC_NOTIFINBOX")
 public class NotificationInbox extends BaseAuditEntity {

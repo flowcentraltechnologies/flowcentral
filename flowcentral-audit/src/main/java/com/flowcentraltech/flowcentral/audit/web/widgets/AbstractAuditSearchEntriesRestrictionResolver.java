@@ -24,7 +24,7 @@ import com.tcdng.unify.core.annotation.Configurable;
  * resolvers.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public abstract class AbstractAuditSearchEntriesRestrictionResolver extends AbstractSearchEntriesRestrictionResolver {
 

@@ -43,7 +43,7 @@ import com.tcdng.unify.web.ui.widget.data.Hint.MODE;
  * Take snapshot page controller.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("/studio/takesnapshot")
 @UplBinding("web/studio/upl/takesnapshotpage.upl")

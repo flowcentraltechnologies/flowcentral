@@ -25,7 +25,7 @@ import com.tcdng.unify.core.data.ValueStoreWriter;
  * Workflow enrichment policy.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public interface WfEnrichmentPolicy extends RuleListComponent {
 

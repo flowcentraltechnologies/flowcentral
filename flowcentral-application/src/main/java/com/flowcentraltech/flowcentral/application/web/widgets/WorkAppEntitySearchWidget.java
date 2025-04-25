@@ -28,7 +28,7 @@ import com.tcdng.unify.core.database.Query;
  * Work application entity search widget.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("fc-workappentitysearch")
 @UplAttributes({ @UplAttribute(name = "ref", type = String[].class, defaultVal = "application.appEntity"),

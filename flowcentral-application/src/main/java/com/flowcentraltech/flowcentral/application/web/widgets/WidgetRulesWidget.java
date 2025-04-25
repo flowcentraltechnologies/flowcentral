@@ -28,7 +28,7 @@ import com.tcdng.unify.web.ui.widget.Control;
  * Widget rules widget.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("fc-widgetrules")
 public class WidgetRulesWidget extends AbstractValueListWidget<WidgetRuleEntry> {

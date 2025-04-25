@@ -25,7 +25,7 @@ import com.tcdng.unify.core.annotation.Parameters;
  * Abstract REST end-point.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Parameters({
     @Parameter(name = RestEndpointConstants.CREDENTIAL_NAME, description = "$m{restendpoint.credential}",

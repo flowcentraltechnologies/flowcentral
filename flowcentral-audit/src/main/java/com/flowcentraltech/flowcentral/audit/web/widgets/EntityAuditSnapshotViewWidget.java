@@ -23,7 +23,7 @@ import com.tcdng.unify.web.ui.widget.AbstractWidget;
  * Entity audit snapshot view widget..
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("fc-entityauditsnapshotview")
 public class EntityAuditSnapshotViewWidget extends AbstractWidget {

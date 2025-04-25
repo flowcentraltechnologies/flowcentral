@@ -24,7 +24,7 @@ import com.tcdng.unify.core.util.EnumUtils;
  * Configuration type enumeration.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Table("FC_CONFIGTYPE")
 @StaticList(name = "configtypelist", description = "$m{staticlist.configtypelist}")

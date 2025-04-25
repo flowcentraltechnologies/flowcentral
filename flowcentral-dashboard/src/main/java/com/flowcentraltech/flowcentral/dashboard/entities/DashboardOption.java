@@ -29,7 +29,7 @@ import com.tcdng.unify.core.annotation.ListOnly;
  * Dashboard option entity.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Table("FC_DASHBOARDOPTION")
 public class DashboardOption extends BaseAuditEntity {

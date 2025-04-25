@@ -45,7 +45,7 @@ import com.tcdng.unify.web.ui.widget.WriteWork;
  * Applet menu writer.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Writes(AppletMenuWidget.class)
 @Component("fc-appletmenu-writer")

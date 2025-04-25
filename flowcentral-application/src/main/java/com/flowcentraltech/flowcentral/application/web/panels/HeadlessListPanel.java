@@ -22,7 +22,7 @@ import com.tcdng.unify.core.annotation.UplBinding;
  * Headless list panel.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("fc-headlesslistpanel")
 @UplBinding("web/application/upl/headlesslistpanel.upl")

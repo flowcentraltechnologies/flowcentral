@@ -24,7 +24,7 @@ import com.tcdng.unify.core.list.ListParam;
  * Convenient abstract base class for os messaging module list commands.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public abstract class AbstractOSMessagingListCommand<T extends ListParam> extends AbstractFlowCentralListCommand<T> {
 

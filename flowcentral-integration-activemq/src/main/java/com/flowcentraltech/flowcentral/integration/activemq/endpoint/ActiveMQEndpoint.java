@@ -35,7 +35,7 @@ import com.tcdng.unify.core.util.StringUtils;
  * Active MQ end-point.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component(name = "activemq-endpoint", description = "$m{endpoint.activemq}")
 @Parameters({

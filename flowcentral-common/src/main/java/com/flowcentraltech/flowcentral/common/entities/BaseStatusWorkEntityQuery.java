@@ -21,7 +21,7 @@ import com.flowcentraltech.flowcentral.common.constants.RecordStatus;
  * Base query object for base work entity sub-classes.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public abstract class BaseStatusWorkEntityQuery<T extends BaseStatusWorkEntity> extends BaseWorkEntityQuery<T> {
 

@@ -26,7 +26,7 @@ import com.tcdng.unify.web.annotation.Action;
  * Usage search panel.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("fc-usagesearchpanel")
 @UplBinding("web/application/upl/usagesearchpanel.upl")

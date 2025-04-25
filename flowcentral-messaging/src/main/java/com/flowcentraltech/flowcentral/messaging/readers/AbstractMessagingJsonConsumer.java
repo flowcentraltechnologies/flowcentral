@@ -23,7 +23,7 @@ import com.tcdng.unify.core.UnifyException;
  * Messaging JSON consumer.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public abstract class AbstractMessagingJsonConsumer<T> extends AbstractMessagingConsumer {
 

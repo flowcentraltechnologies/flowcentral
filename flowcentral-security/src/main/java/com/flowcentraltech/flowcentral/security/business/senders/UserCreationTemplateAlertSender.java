@@ -31,7 +31,7 @@ import com.tcdng.unify.core.data.ValueStoreReader;
  * User creation template alert sender.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @EntityReferences({ "security.user" })
 @Component("usercreation-alertsender")

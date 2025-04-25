@@ -22,7 +22,7 @@ import com.tcdng.unify.core.annotation.UplBinding;
  * PanelImpl used for manually ordering records.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("fc-recordorderpanel")
 @UplBinding("web/common/upl/recordorderpanel.upl")

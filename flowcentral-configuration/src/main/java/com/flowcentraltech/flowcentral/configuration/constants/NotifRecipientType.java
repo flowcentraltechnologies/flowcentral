@@ -26,7 +26,7 @@ import com.tcdng.unify.core.util.EnumUtils;
  * Notification recipient type.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Table("FC_NOTIFRECIPIENTTYPE")
 @StaticList(name = "notificationrecipienttypelist", description = "$m{staticlist.notificationrecipienttypelist}")

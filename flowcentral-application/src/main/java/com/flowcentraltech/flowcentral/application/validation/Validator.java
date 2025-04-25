@@ -23,7 +23,7 @@ import com.tcdng.unify.core.UnifyException;
  * Validator component.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public interface Validator extends RuleListComponent {
 

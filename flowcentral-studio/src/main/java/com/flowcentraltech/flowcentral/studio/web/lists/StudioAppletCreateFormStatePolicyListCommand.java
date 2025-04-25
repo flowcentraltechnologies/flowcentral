@@ -30,7 +30,7 @@ import com.tcdng.unify.core.list.StringParam;
  * Studio applet create form state policy list command
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("studioappletcreateformstatepolicylist")
 public class StudioAppletCreateFormStatePolicyListCommand extends AbstractApplicationListCommand<StringParam> {

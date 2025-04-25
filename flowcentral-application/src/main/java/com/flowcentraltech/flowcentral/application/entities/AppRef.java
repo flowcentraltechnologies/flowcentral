@@ -24,7 +24,7 @@ import com.tcdng.unify.core.annotation.Column;
  * Application reference entity.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Table(name = "FC_REF", indexes = { @Index("entity") })
 public class AppRef extends BaseApplicationEntity {

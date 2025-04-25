@@ -22,7 +22,7 @@ import com.flowcentraltech.flowcentral.common.entities.BaseAuditEntityQuery;
  * Dashboard section query.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class DashboardSectionQuery extends BaseAuditEntityQuery<DashboardSection> {
 

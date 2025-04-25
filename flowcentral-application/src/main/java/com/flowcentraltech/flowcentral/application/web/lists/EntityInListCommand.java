@@ -35,7 +35,7 @@ import com.tcdng.unify.web.data.AssignParams;
  * Role in list command.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("entityinlist")
 public class EntityInListCommand extends AbstractApplicationListCommand<AssignParams> {

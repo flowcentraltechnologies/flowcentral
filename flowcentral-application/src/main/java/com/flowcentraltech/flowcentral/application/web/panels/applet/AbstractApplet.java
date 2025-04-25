@@ -55,7 +55,7 @@ import com.tcdng.unify.web.ui.widget.Page;
  * Convenient abstract base class for applet objects.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public abstract class AbstractApplet {
 

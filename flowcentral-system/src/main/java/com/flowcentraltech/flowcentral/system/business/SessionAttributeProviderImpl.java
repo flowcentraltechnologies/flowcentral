@@ -27,7 +27,7 @@ import com.tcdng.unify.core.annotation.Configurable;
  * Session attribute provider implementation.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component(SystemModuleNameConstants.SESSION_ATTRIBUTE_PROVIDER)
 public class SessionAttributeProviderImpl extends AbstractSessionAttributeProvider {

@@ -35,7 +35,7 @@ import com.tcdng.unify.web.ui.widget.writer.AbstractControlWriter;
  * Search inputs widget writer.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Writes(SearchInputsWidget.class)
 @Component("fc-searchinputs-writer")

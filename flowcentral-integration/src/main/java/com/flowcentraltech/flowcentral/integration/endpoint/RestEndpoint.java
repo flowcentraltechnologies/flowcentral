@@ -19,7 +19,7 @@ package com.flowcentraltech.flowcentral.integration.endpoint;
  * REST end-point.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public interface RestEndpoint extends Endpoint {
 

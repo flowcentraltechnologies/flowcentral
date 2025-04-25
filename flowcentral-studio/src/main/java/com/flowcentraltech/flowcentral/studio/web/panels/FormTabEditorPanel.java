@@ -30,7 +30,7 @@ import com.tcdng.unify.web.ui.widget.panel.AbstractDialogPanel;
  * Form tab editor panel.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("fc-formtabeditorpanel")
 @UplBinding("web/studio/upl/formtabeditorpanel.upl")

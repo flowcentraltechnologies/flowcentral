@@ -26,7 +26,7 @@ import com.tcdng.unify.core.UnifyException;
  * Secured link manager.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public interface SecuredLinkManager extends FlowCentralComponent {
     

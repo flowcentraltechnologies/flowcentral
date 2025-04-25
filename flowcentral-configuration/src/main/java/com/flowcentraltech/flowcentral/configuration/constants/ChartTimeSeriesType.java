@@ -25,7 +25,7 @@ import com.tcdng.unify.core.util.EnumUtils;
  * Chart time series type constants.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Table("FC_CHARTTIMESERIESTYPE")
 @StaticList(name = "charttimeseriestypelist", description = "$m{staticlist.charttimeseriestypelist}")

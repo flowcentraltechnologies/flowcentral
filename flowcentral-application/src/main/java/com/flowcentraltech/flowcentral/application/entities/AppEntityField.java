@@ -32,7 +32,7 @@ import com.tcdng.unify.core.constant.TextCase;
  * Application entity field.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Policy("appentityfield-entitypolicy")
 @Table(name = "FC_ENTITYFIELD", uniqueConstraints = { @UniqueConstraint({ "appEntityId", "name" }) },

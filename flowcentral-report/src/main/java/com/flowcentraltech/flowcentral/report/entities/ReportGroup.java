@@ -27,7 +27,7 @@ import com.tcdng.unify.core.annotation.Column;
  * Entity for storing report group information.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Table(name = "FC_REPORTGROUP",
         uniqueConstraints = { @UniqueConstraint({ "name" }), @UniqueConstraint({ "description" }) })

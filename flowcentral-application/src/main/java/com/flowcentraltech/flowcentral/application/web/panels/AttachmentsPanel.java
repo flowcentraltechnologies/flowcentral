@@ -47,7 +47,7 @@ import com.tcdng.unify.web.ui.widget.Widget;
  * Attachments panel.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("fc-attachmentspanel")
 @UplBinding("web/application/upl/attachmentspanel.upl")

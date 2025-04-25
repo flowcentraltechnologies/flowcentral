@@ -28,7 +28,7 @@ import com.tcdng.unify.web.ui.AbstractPageController;
  * Application home controller.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component(SecurityModuleNameConstants.APPLICATION_HOME_CONTROLLER)
 @UplBinding("web/security/upl/applicationhome.upl")

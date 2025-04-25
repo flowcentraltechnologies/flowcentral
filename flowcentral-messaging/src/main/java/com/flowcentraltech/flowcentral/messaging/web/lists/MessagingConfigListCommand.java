@@ -29,7 +29,7 @@ import com.tcdng.unify.core.list.ZeroParams;
  * Messaging configuration list commands.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("messagingconfiglist")
 public class MessagingConfigListCommand extends AbstractMessagingProviderListCommand<ZeroParams> {

@@ -21,7 +21,7 @@ import com.flowcentraltech.flowcentral.configuration.xml.HelpSheetConfig;
  * Help sheet installation configuration.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class HelpSheetInstall {
 

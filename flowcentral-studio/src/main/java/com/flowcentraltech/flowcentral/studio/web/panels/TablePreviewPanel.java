@@ -23,7 +23,7 @@ import com.tcdng.unify.core.annotation.UplBinding;
  * Table preview panel.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("fc-tablepreviewpanel")
 @UplBinding("web/studio/upl/tablepreviewpanel.upl")

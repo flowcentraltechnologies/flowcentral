@@ -22,7 +22,7 @@ import com.flowcentraltech.flowcentral.common.entities.BaseConfigNamedEntityQuer
  * Application applet alert query.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class AppAppletAlertQuery extends BaseConfigNamedEntityQuery<AppAppletAlert> {
 

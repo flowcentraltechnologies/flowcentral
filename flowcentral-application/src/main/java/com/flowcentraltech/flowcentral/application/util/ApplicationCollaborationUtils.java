@@ -32,7 +32,7 @@ import com.flowcentraltech.flowcentral.common.constants.CollaborationType;
  * Application collaboration utilities.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public final class ApplicationCollaborationUtils {
 

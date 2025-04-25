@@ -29,7 +29,7 @@ import com.tcdng.unify.core.util.DataUtils;
  * Lingual date utilities.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public final class LingualDateUtils {
 

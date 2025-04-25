@@ -28,7 +28,7 @@ import com.tcdng.unify.web.ui.constant.MessageType;
  * Entry table message.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class EntryTableMessage {
 

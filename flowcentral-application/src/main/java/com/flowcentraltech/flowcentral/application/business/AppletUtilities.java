@@ -123,7 +123,7 @@ import com.tcdng.unify.web.ui.widget.data.Hint.MODE;
  * Applet utilities component.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public interface AppletUtilities extends FlowCentralComponent {
 

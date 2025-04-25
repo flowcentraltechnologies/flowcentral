@@ -34,7 +34,7 @@ import com.tcdng.unify.web.ui.widget.Widget;
  * Dashboard slate widget.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("fc-dashboardslate")
 public class DashboardSlateWidget extends AbstractFlowCentralMultiControl {

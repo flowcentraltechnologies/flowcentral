@@ -37,7 +37,7 @@ import com.tcdng.unify.core.util.ReflectUtils;
  * Inline CRUD object.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class InlineCRUD<T extends InlineCRUDEntry> {
 

@@ -22,7 +22,7 @@ import com.flowcentraltech.flowcentral.studio.constants.StudioSnapshotType;
  * Studio snapshot details query.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class StudioSnapshotDetailsQuery extends BaseAuditEntityQuery<StudioSnapshotDetails> {
 

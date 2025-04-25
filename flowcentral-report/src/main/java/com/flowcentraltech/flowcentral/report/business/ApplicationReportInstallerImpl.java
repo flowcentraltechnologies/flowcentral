@@ -77,7 +77,7 @@ import com.tcdng.unify.core.util.StringUtils;
  * Application reports installer.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component(ReportModuleNameConstants.APPLICATION_REPORT_INSTALLER)
 public class ApplicationReportInstallerImpl extends AbstractApplicationArtifactInstaller {

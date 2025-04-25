@@ -29,7 +29,7 @@ import com.tcdng.unify.core.util.DataUtils;
  * Scheduled task entity policy
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("scheduledtask-entitypolicy")
 public class ScheduledTaskPolicy extends BaseStatusEntityPolicy {

@@ -21,7 +21,7 @@ import java.util.List;
  * REST email request object.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class RestEmailRequest {
 

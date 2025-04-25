@@ -25,7 +25,7 @@ import com.tcdng.unify.core.annotation.ListOnly;
  * Application form related list entity.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Table(name = "FC_FORMRELLIST")
 public class AppFormRelatedList extends BaseConfigNamedEntity {

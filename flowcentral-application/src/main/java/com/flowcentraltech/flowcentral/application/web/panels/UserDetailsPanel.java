@@ -25,7 +25,7 @@ import com.tcdng.unify.core.annotation.UplBinding;
  * Panel for showing user details.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("fc-userdetailspanel")
 @UplBinding("web/application/upl/userdetailspanel.upl")

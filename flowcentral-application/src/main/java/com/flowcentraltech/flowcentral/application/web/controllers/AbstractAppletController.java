@@ -49,7 +49,7 @@ import com.tcdng.unify.web.constant.Secured;
  * Convenient abstract base class for applet controllers.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @ResultMappings({
     @ResultMapping(name = "refreshapplet",

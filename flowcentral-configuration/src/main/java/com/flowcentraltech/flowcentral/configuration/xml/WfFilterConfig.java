@@ -22,7 +22,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
  * Workflow filter configuration.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @JsonInclude(value = Include.NON_NULL, content = Include.NON_EMPTY)
 public class WfFilterConfig extends FilterConfig {

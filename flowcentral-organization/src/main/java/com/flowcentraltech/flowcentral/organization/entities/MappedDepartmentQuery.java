@@ -21,7 +21,7 @@ import com.flowcentraltech.flowcentral.common.entities.BaseEntityQuery;
  * Query class for mapped departments.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class MappedDepartmentQuery extends BaseEntityQuery<MappedDepartment> {
 

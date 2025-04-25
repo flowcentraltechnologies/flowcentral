@@ -24,7 +24,7 @@ import com.tcdng.unify.core.util.EnumUtils;
  * System Date Format Type enumeration.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Table("FC_SYSDATEFORMATTYPE")
 @StaticList(name = "sysdateformattypelist", description = "$m{staticlist.sysdateformattypelist}")

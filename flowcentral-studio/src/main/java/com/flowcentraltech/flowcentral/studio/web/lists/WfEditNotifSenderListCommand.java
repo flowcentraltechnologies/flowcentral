@@ -26,7 +26,7 @@ import com.tcdng.unify.core.list.StringParam;
  * Workflow editor notification sender list command
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("wfeditnotifsenderlist")
 public class WfEditNotifSenderListCommand extends AbstractEntityTypeListCommand<NotificationAlertSender, StringParam> {

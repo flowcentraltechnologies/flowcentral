@@ -30,7 +30,7 @@ import com.tcdng.unify.web.data.AssignParams;
  * Privilege in list command.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("privilegeinlist")
 public class PrivilegeInListCommand extends AbstractOrganizationListCommand<AssignParams> {

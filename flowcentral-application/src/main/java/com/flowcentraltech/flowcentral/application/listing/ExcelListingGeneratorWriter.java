@@ -49,7 +49,7 @@ import com.tcdng.unify.core.util.ImageUtils;
  * Excel Listing generator writer.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class ExcelListingGeneratorWriter extends AbstractListingGeneratorWriter {
 

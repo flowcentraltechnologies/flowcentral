@@ -37,7 +37,7 @@ import com.tcdng.unify.core.security.PasswordGenerator;
  * User creation enrichment.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @EntityReferences({ "security.user" }) 
 @Component(name = "usercreation-enrichment", description = "$m{security.enrichmentpolicy.usercreation}")

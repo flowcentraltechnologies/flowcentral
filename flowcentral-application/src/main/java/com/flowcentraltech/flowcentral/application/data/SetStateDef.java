@@ -27,7 +27,7 @@ import com.tcdng.unify.core.util.DataUtils;
  * Application set state definition.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class SetStateDef implements FormStateRule {
 

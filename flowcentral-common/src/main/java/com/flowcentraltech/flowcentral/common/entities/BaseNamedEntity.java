@@ -22,7 +22,7 @@ import com.tcdng.unify.core.annotation.Column;
  * Base named entity.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public abstract class BaseNamedEntity extends BaseAuditEntity {
 

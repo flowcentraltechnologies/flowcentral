@@ -35,7 +35,7 @@ import com.tcdng.unify.core.util.StringUtils;
  * Studio applet integer field list command
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("studioappletintegerfieldlist")
 public class StudioAppletIntegerFieldListCommand extends AbstractApplicationListCommand<LongParam> {

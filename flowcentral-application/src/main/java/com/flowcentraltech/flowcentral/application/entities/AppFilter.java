@@ -28,7 +28,7 @@ import com.tcdng.unify.core.annotation.FosterParentType;
  * Application filter.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Table(name = "FC_FILTER", indexes = { @Index(value = { "entity" }), @Index(value = { "category" }) })
 public class AppFilter extends BaseAuditEntity {

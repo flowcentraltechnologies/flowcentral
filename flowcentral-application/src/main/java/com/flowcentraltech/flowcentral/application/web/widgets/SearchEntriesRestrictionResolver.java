@@ -25,7 +25,7 @@ import com.tcdng.unify.core.criterion.Restriction;
  * Search entries restriction resolver.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public interface SearchEntriesRestrictionResolver extends FlowCentralComponent {
 

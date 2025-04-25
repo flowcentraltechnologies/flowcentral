@@ -25,7 +25,7 @@ import com.tcdng.unify.web.ui.AbstractPageBean;
  * Studio snapshots page bean.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class StudioSnapshotsPageBean extends AbstractPageBean {
     

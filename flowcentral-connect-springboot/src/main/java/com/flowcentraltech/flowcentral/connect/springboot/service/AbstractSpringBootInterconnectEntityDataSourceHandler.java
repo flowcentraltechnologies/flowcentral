@@ -27,7 +27,7 @@ import com.flowcentraltech.flowcentral.connect.springboot.SpringBootInterconnect
  * Convenient abstract base class for Flowcentral spring boot interconnect data source entity handler.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public abstract class AbstractSpringBootInterconnectEntityDataSourceHandler
         implements SpringBootInterconnectEntityDataSourceHandler {

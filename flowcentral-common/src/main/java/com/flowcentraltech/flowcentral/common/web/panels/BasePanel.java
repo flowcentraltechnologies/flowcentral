@@ -19,7 +19,7 @@ package com.flowcentraltech.flowcentral.common.web.panels;
  * Convenient base class for panels in flowCentral context.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public abstract class BasePanel extends AbstractFlowCentralPanel {
 

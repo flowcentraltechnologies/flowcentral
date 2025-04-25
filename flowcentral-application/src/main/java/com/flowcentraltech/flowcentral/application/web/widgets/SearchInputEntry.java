@@ -25,7 +25,7 @@ import com.tcdng.unify.core.util.StringUtils;
  * Search input entry.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class SearchInputEntry {
 

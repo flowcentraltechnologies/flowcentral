@@ -45,7 +45,7 @@ import com.tcdng.unify.core.util.DataUtils;
  * Default end-point manager implementation.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component(IntegrationModuleNameConstants.ENDPOINT_MANAGER)
 public class EndpointManagerImpl extends AbstractEndpointManager {

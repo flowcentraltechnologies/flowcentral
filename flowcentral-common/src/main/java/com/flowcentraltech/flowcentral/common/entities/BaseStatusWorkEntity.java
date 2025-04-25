@@ -25,7 +25,7 @@ import com.tcdng.unify.core.annotation.Policy;
  * Base class for work entity with status.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Policy("basestatuswork-entitypolicy")
 public abstract class BaseStatusWorkEntity extends BaseWorkEntity {

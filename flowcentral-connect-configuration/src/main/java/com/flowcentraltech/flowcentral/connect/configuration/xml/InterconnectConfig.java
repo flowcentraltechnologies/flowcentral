@@ -22,7 +22,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
  * Interconnect configuration.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @JacksonXmlRootElement(localName = "interconnect")
 public class InterconnectConfig extends BaseRootConfig {

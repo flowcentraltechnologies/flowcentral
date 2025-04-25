@@ -24,7 +24,7 @@ import com.tcdng.unify.web.ui.widget.AbstractValueListMultiControl;
  * Convenient abstract base class for flowcentral value list multi-control widgets.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public abstract class AbstractFlowCentralValueListMultiControl<T, U> extends AbstractValueListMultiControl<T, U> {
 

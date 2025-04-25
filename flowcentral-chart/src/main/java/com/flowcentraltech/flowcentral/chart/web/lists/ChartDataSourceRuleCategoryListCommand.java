@@ -33,7 +33,7 @@ import com.tcdng.unify.core.list.StringParam;
  * Chart data source rule category list command.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("chartdatasourcerulecategorylist")
 public class ChartDataSourceRuleCategoryListCommand extends AbstractListCommand<StringParam> {

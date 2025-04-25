@@ -28,7 +28,7 @@ import com.tcdng.unify.web.data.AssignParams;
  * User not in list command.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("usernotinlist")
 public class UserNotInListCommand extends AbstractSecurityListCommand<AssignParams> {

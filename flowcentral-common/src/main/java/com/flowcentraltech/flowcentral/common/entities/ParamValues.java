@@ -28,7 +28,7 @@ import com.tcdng.unify.core.annotation.FosterParentType;
  * Common parameter values entity.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Table(name = "FC_PARAMVALUES", indexes = { @Index(value = { "entity" }), @Index(value = { "category" }) })
 public class ParamValues extends BaseAuditEntity {

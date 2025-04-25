@@ -45,7 +45,7 @@ import com.tcdng.unify.core.util.DataUtils;
  * Application help sheet installer.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component(ApplicationModuleNameConstants.APPLICATION_HELPSHEET_INSTALLER)
 public class ApplicationHelpSheetInstallerImpl extends AbstractApplicationArtifactInstaller {

@@ -31,7 +31,7 @@ import com.tcdng.unify.core.data.ValueStoreReader;
  * System parameter workflow recipient policy
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component(name = "sysparam-wfrecipientpolicy", description = "$m{workflow.recipientpolicy.systemparameter}")
 public class SysParamWfRecipientPolicy extends AbstractWfRecipientPolicy {

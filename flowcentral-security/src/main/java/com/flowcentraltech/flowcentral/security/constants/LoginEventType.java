@@ -25,7 +25,7 @@ import com.tcdng.unify.core.util.EnumUtils;
  * Login event type..
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Table("FC_LOGINEVENTYPE")
 @StaticList(name = "logineventtypelist", description = "$m{staticlist.logineventtypelist}")

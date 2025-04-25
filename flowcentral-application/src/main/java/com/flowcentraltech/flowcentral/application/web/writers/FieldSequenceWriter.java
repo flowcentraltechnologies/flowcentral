@@ -36,7 +36,7 @@ import com.tcdng.unify.web.ui.widget.writer.AbstractControlWriter;
  * Field sequence widget writer.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Writes(FieldSequenceWidget.class)
 @Component("fc-fieldsequence-writer")

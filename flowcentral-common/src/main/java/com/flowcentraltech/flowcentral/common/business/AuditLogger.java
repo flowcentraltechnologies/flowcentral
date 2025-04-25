@@ -24,7 +24,7 @@ import com.flowcentraltech.flowcentral.configuration.constants.AuditSourceType;
  * Audit logger.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public interface AuditLogger extends FlowCentralComponent {
 

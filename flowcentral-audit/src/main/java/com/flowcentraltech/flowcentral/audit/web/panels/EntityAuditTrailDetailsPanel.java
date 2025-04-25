@@ -26,7 +26,7 @@ import com.tcdng.unify.web.annotation.Action;
  * Entity audit trail detail panel.
  * 
  * @author Lateef Ojulari
- * @since 1.0
+ * @since 4.1
  */
 @EntityReferences("audit.entityAuditKeys")
 @Component("fc-entityaudittraildetailspanel")

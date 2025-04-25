@@ -30,7 +30,7 @@ import com.tcdng.unify.core.util.StringUtils;
  * Extension module static settings Java class generator.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("extension-module-static-settings-java-generator")
 public class ExtensionModuleStaticSettingsJavaGenerator extends AbstractJavaArtifactGenerator {

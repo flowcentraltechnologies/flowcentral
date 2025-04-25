@@ -31,7 +31,7 @@ import com.tcdng.unify.core.util.EnumUtils;
  * Entity field data type.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Table("FC_ENTITYFIELDDATATYPE")
 @StaticList(name = "entityfielddatatypelist", description = "$m{staticlist.entityfielddatatypelist}")

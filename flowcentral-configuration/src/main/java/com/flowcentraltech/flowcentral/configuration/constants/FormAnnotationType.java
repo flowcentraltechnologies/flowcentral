@@ -26,7 +26,7 @@ import com.tcdng.unify.web.ui.constant.MessageType;
  * Form annotation type.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Table("FC_FORMANNOTATIONTYPE")
 @StaticList(name = "formannotationtypelist", description = "$m{staticlist.formannotationtypelist}")

@@ -23,7 +23,7 @@ import com.tcdng.unify.core.annotation.ForeignKey;
  * File attachment document entity.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Table(name = "FC_FILEATTACHMENTDOC")
 public class FileAttachmentDoc extends BaseEntity {

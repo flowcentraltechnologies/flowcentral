@@ -22,7 +22,7 @@ import com.flowcentraltech.flowcentral.configuration.constants.NotifType;
  * Notification channel query class;
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class NotificationChannelQuery extends BaseStatusEntityQuery<NotificationChannel> {
 

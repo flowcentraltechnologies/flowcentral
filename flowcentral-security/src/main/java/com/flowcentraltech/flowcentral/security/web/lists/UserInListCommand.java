@@ -29,7 +29,7 @@ import com.tcdng.unify.web.data.AssignParams;
  * User in list command.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("userinlist")
 public class UserInListCommand extends AbstractSecurityListCommand<AssignParams> {

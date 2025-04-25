@@ -33,7 +33,7 @@ import com.tcdng.unify.core.list.StringParam;
  * Chart data source rule series list command.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("chartdatasourceruleserieslist")
 public class ChartDataSourceRuleSeriesListCommand extends AbstractListCommand<StringParam> {

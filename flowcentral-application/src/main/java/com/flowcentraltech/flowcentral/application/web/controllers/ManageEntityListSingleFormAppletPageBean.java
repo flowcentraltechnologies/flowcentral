@@ -22,7 +22,7 @@ import com.tcdng.unify.core.UnifyException;
  * Manage entity list single form applet page bean.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class ManageEntityListSingleFormAppletPageBean extends AbstractEntitySingleFormAppletPageBean<ManageEntityListSingleFormApplet> {
 

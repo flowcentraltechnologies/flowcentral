@@ -26,7 +26,7 @@ import com.tcdng.unify.core.annotation.Column;
  * Workflow transition queue entity.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Table(name = "FC_WORKTRANSITIONQUEUE")
 public class WfTransitionQueue extends BaseEntity {

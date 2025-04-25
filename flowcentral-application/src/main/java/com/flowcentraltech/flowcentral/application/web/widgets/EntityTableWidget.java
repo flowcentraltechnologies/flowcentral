@@ -30,7 +30,7 @@ import com.tcdng.unify.core.util.DataUtils;
  * Entity table widget.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("fc-entitytable")
 public class EntityTableWidget extends AbstractTableWidget<EntityTable, Entity, Restriction> {

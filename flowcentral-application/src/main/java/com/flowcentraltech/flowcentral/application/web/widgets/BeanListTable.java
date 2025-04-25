@@ -23,7 +23,7 @@ import com.flowcentraltech.flowcentral.application.data.TableDef;
  * Bean list table object.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class BeanListTable extends AbstractListTable<Object> {
 

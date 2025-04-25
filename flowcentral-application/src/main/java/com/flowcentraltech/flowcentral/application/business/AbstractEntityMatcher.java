@@ -26,7 +26,7 @@ import com.tcdng.unify.core.annotation.Configurable;
  * Convenient abstract base class for entity matchers.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public abstract class AbstractEntityMatcher extends AbstractFlowCentralComponent implements EntityMatcher {
     

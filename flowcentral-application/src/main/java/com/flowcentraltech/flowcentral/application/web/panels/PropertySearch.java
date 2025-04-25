@@ -31,7 +31,7 @@ import com.tcdng.unify.core.util.DataUtils;
  * Property search object.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class PropertySearch extends AbstractPanelFormBinding {
 

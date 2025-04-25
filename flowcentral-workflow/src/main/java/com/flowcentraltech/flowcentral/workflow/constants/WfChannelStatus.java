@@ -25,7 +25,7 @@ import com.tcdng.unify.core.util.EnumUtils;
  * Workflow channel status
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Table("FC_WFCHANNELSTATUS")
 @StaticList(name = "wfchannelstatuslist", description = "$m{staticlist.wfchannelstatuslist}")

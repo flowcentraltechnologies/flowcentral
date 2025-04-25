@@ -33,7 +33,7 @@ import com.tcdng.unify.core.list.StringParam;
  * Workflow editor notification template list command
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("wfeditnotiftemplatelist")
 public class WfEditNotifTemplateListCommand extends AbstractApplicationListCommand<StringParam> {

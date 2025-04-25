@@ -24,7 +24,7 @@ import com.tcdng.unify.web.ui.AbstractPopupPageController;
  * Convenient abstract base class for flowcentral popup page controllers.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public abstract class AbstractFlowCentralPopupPageController<T> extends AbstractPopupPageController<T> {
 

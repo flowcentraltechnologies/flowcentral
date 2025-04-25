@@ -21,7 +21,7 @@ import com.tcdng.unify.core.annotation.Component;
  * Studio workflow filter generator list command
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("studioworkflowfiltergeneratorlist")
 public class StudioWfFilterGeneratorListCommand extends AbstractStudioFilterGeneratorListCommand {

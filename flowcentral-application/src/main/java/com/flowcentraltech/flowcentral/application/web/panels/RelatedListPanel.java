@@ -22,7 +22,7 @@ import com.tcdng.unify.core.annotation.UplBinding;
  * Related list panel.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("fc-relatedlistpanel")
 @UplBinding("web/application/upl/relatedlistpanel.upl")

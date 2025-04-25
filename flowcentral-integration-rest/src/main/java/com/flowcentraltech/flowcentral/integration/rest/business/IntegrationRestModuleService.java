@@ -21,7 +21,7 @@ import com.flowcentraltech.flowcentral.common.business.FlowCentralService;
  * Integration REST module service.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public interface IntegrationRestModuleService extends FlowCentralService  {
 

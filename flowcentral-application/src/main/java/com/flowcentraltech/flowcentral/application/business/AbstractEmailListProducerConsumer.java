@@ -21,7 +21,7 @@ package com.flowcentraltech.flowcentral.application.business;
  * producer-consumers.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public abstract class AbstractEmailListProducerConsumer extends AbstractEntityInputValueListProducerConsumer
         implements EmailListProducerConsumer {

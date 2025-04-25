@@ -26,7 +26,7 @@ import com.tcdng.unify.core.UnifyException;
  * Convenient abstract base class for form wizard navigation policies.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public abstract class AbstractFormWizardNavigationPolicy extends AbstractFlowCentralComponent
         implements FormWizardNavigationPolicy {

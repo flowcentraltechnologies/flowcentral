@@ -30,7 +30,7 @@ import com.tcdng.unify.web.data.AssignParams;
  * Mapped workflow step in list command.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("mappedwfstepinlist")
 public class MappedWfStepInListCommand extends AbstractOrganizationListCommand<AssignParams> {

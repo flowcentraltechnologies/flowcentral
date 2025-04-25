@@ -30,7 +30,7 @@ import com.tcdng.unify.web.ui.widget.panel.AbstractDialogPanel;
  * Form section editor panel.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("fc-formsectioneditorpanel")
 @UplBinding("web/studio/upl/formsectioneditorpanel.upl")

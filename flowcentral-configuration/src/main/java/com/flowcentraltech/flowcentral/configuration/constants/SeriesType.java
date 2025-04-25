@@ -26,7 +26,7 @@ import com.tcdng.unify.core.util.EnumUtils;
  * Series type enumeration.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Table("FC_SERIESTYPE")
 @StaticList(name = "seriestypelist", description = "$m{staticlist.seriestypelist}")

@@ -28,7 +28,7 @@ import com.tcdng.unify.web.ui.widget.Page;
  * Headless tabs form applet object.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class HeadlessTabsFormApplet extends AbstractEntityFormApplet {
 

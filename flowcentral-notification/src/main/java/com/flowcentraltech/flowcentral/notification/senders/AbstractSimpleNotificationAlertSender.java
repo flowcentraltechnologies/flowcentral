@@ -34,7 +34,7 @@ import com.tcdng.unify.core.util.StringUtils;
  * Convenient base class for simple alert sender.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public abstract class AbstractSimpleNotificationAlertSender extends AbstractNotificationAlertSender {
 

@@ -44,7 +44,7 @@ import com.tcdng.unify.web.constant.ExtensionType;
  * Convenient abstract base class for entity lists.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @UplAttributes({ @UplAttribute(name = "ref", type = String[].class, mandatory = true),
         @UplAttribute(name = "direct", type = boolean.class, defaultVal = "true"),

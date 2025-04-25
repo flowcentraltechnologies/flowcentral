@@ -23,7 +23,7 @@ import com.tcdng.unify.common.util.ProcessVariableUtils;
  * User password reset notification template wrapper.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class UserPasswordResetTemplateWrapper extends BaseNotifTemplateWrapper {
     

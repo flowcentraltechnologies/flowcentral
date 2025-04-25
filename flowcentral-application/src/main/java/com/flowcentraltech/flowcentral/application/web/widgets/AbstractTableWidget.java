@@ -61,7 +61,7 @@ import com.tcdng.unify.web.ui.widget.panel.StandalonePanel;
  * Convenient abstract base class for table widgets.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @UplAttributes({
         @UplAttribute(name = "contentDependentList", type = UplElementReferences.class),

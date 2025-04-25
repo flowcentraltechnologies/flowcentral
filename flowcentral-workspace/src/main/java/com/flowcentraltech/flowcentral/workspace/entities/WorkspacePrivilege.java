@@ -27,7 +27,7 @@ import com.tcdng.unify.core.util.StringUtils;
  * Workspace privilege entity.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Table(name = "FC_WORKSPACEPRIVILEGE", uniqueConstraints = { @UniqueConstraint({ "workspaceId", "privilegeId" }) })
 public class WorkspacePrivilege extends BaseAuditEntity {

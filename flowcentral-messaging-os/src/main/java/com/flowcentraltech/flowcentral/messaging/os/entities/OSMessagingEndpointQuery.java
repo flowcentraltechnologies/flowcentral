@@ -21,7 +21,7 @@ import com.flowcentraltech.flowcentral.common.entities.BaseStatusEntityQuery;
  * OS messaging end-point query.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class OSMessagingEndpointQuery extends BaseStatusEntityQuery<OSMessagingEndpoint> {
 

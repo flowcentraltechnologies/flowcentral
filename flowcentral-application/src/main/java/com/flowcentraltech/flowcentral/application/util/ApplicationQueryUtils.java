@@ -33,7 +33,7 @@ import com.tcdng.unify.core.database.Query;
  * Application query utilities.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public final class ApplicationQueryUtils {
 

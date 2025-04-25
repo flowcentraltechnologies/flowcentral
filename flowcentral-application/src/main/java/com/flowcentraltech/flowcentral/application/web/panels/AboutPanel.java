@@ -24,7 +24,7 @@ import com.tcdng.unify.core.annotation.UplBinding;
  * About panel.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("fc-aboutpanel")
 @UplBinding("web/application/upl/aboutpanel.upl")

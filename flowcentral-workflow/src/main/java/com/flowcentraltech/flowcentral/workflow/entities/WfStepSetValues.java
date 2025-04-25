@@ -27,7 +27,7 @@ import com.tcdng.unify.core.annotation.ListOnly;
  * Workflow step set values entity.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Table(name = "FC_WORKSTEPSETVALUES")
 public class WfStepSetValues extends BaseAuditEntity {

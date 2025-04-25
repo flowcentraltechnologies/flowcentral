@@ -23,7 +23,7 @@ import com.tcdng.unify.core.resource.ImageGenerator;
  * File attachment image generator.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public interface FileAttachmentImageGenerator extends ImageGenerator {
 

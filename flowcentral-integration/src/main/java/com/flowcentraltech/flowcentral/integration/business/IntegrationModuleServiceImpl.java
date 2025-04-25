@@ -45,7 +45,7 @@ import com.tcdng.unify.core.util.StringUtils;
  * Implementation of integration module service.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Transactional
 @Component(IntegrationModuleNameConstants.INTEGRATION_MODULE_SERVICE)

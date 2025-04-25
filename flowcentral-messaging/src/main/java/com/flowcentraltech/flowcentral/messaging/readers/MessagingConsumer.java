@@ -23,7 +23,7 @@ import com.tcdng.unify.core.UnifyException;
  * Messaging consumer.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public interface MessagingConsumer extends FlowCentralComponent {
 

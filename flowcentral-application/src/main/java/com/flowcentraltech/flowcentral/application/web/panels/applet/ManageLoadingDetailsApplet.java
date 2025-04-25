@@ -31,7 +31,7 @@ import com.tcdng.unify.web.ui.widget.Page;
  * Manage loading details applet object.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class ManageLoadingDetailsApplet extends AbstractApplet {
 

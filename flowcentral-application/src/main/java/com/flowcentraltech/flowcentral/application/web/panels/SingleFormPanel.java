@@ -27,7 +27,7 @@ import com.tcdng.unify.web.ui.widget.panel.StandalonePanel;
  * Single form panel
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public interface SingleFormPanel<T extends SingleFormBean> extends StandalonePanel {
 

@@ -26,7 +26,7 @@ import com.tcdng.unify.core.annotation.Column;
  * Application workflow wizard entity.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Table(name = "FC_WORKWIZARD")
 public class WfWizard extends BaseApplicationEntity {

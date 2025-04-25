@@ -22,7 +22,7 @@ import com.flowcentraltech.flowcentral.common.entities.BaseConfigEntityQuery;
  * Application property rule choice query.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class AppPropertyRuleChoiceQuery extends BaseConfigEntityQuery<AppPropertyRuleChoice> {
 

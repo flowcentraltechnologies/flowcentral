@@ -38,7 +38,7 @@ import com.tcdng.unify.core.util.DataUtils;
  * Convenient abstract base class for delegate workflow process policy.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public abstract class AbstractDelegateWfProcessPolicy extends AbstractWfProcessPolicy {
 

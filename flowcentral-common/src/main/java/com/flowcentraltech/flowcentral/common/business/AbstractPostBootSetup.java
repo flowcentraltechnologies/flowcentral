@@ -23,7 +23,7 @@ import com.tcdng.unify.core.UnifyException;
  * Convenient abstract base class for post-boot setup components.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public abstract class AbstractPostBootSetup extends AbstractFlowCentralComponent implements PostBootSetup {
 

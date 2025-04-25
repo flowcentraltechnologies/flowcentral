@@ -24,7 +24,7 @@ import com.tcdng.unify.core.util.EnumUtils;
  * Delegate redirect type list.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @StaticList(name = "delegateredirecttypelist", description="Delegate Redirect Type List")
 public enum DelegateRedirectType implements EnumConst {

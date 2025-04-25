@@ -27,7 +27,7 @@ import com.tcdng.unify.core.util.StringUtils;
  * Test product bean.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Table
 public class LocationProduct extends BaseAuditEntity {

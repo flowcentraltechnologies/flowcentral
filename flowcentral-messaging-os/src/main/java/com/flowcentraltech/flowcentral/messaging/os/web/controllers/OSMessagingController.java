@@ -40,7 +40,7 @@ import com.tcdng.unify.web.http.HttpRequestHeaders;
  * OS Messaging Controller.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component(OSMessagingModuleNameConstants.OSMESSAGING_CONTROLLER)
 public class OSMessagingController extends AbstractPlainJsonController {

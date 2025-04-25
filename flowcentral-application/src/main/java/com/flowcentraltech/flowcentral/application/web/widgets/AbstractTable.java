@@ -56,7 +56,7 @@ import com.tcdng.unify.web.ui.widget.data.ButtonInfo;
  * Convenient abstract base class for table object.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public abstract class AbstractTable<T, U> {
 

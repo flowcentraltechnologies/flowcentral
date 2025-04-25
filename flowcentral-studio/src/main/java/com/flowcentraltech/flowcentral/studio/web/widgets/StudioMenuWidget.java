@@ -32,7 +32,7 @@ import com.tcdng.unify.web.ui.widget.data.RefreshSection;
  * Studio menu widget.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("fc-studiomenu")
 @UplAttributes({ @UplAttribute(name = "searchable", type = boolean.class, defaultVal = "false") })

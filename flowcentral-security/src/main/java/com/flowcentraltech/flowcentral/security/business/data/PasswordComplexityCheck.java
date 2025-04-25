@@ -19,7 +19,7 @@ package com.flowcentraltech.flowcentral.security.business.data;
  * Password complexity check.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class PasswordComplexityCheck {
 

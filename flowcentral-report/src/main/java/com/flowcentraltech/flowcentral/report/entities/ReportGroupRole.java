@@ -31,7 +31,7 @@ import com.tcdng.unify.core.util.StringUtils;
  * Entity for storing report group role information.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Table(name = "FC_REPORTGROUPROLE", uniqueConstraints = { @UniqueConstraint({ "reportGroupId", "roleId" }) })
 public class ReportGroupRole extends BaseAuditEntity implements Describable {

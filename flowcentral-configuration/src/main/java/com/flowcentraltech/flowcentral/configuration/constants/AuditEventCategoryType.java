@@ -27,7 +27,7 @@ import com.tcdng.unify.core.util.EnumUtils;
  * Audit event category type constants.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Table("FC_AUDITEVENTCATTYPE")
 @StaticList(name = "auditeventcattypelist", description = "$m{staticlist.auditeventcattypelist}")

@@ -21,7 +21,7 @@ import com.flowcentraltech.flowcentral.configuration.xml.ReportConfig;
  * Report restore configuration.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class ReportRestore extends ReportInstall {
 

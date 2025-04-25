@@ -23,7 +23,7 @@ import com.tcdng.unify.core.list.AbstractListParam;
  * Property list parameters.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class PropertyListParams extends AbstractListParam {
 

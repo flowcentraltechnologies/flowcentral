@@ -19,7 +19,7 @@ package com.flowcentraltech.flowcentral.connect.common.data;
  * Flow central interconnect base request class.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public abstract class BaseRequest {
     

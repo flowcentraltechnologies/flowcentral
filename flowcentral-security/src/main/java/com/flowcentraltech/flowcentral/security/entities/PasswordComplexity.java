@@ -23,7 +23,7 @@ import com.tcdng.unify.core.annotation.Column;
  * Entity for storing password complexity.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Table("FC_PASSWORDCOMPLEXITY")
 public class PasswordComplexity extends BaseAuditEntity {

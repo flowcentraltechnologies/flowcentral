@@ -28,7 +28,7 @@ import com.tcdng.unify.core.data.ParamGenerator;
  * FlowCentral parameter generator manager.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component(CommonModuleNameConstants.PARAMGENERATORMANAGER)
 public class FlowCentralParamGeneratorManager extends AbstractParamGeneratorManager {

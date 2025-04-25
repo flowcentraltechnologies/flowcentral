@@ -23,7 +23,7 @@ import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs;
  * Convenient abstract base class for studio editor pages.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public abstract class AbstractStudioEditorPage {
 

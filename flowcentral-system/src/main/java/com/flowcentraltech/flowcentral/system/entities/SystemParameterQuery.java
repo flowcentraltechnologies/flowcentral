@@ -24,7 +24,7 @@ import com.flowcentraltech.flowcentral.configuration.constants.SysParamType;
  * System parameter query.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class SystemParameterQuery extends BaseAuditEntityQuery<SystemParameter> {
 

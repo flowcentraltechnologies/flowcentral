@@ -27,7 +27,7 @@ import com.tcdng.unify.core.constant.HAlignType;
  * Annotation used for specifying managed field format information.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)

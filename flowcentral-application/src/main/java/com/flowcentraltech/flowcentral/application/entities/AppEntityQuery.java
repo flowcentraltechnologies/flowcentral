@@ -21,7 +21,7 @@ import com.flowcentraltech.flowcentral.application.util.ApplicationEntityUtils;
  * Application entity query.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class AppEntityQuery extends BaseApplicationEntityQuery<AppEntity> {
 

@@ -21,7 +21,7 @@ import com.flowcentraltech.flowcentral.common.constants.RecordStatus;
  * Base query object for base status entity sub-classes.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public abstract class BaseStatusEntityQuery<T extends BaseStatusEntity> extends BaseAuditEntityQuery<T> {
 

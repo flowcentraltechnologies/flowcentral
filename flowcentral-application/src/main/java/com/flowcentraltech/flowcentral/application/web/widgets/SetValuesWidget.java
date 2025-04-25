@@ -29,7 +29,7 @@ import com.tcdng.unify.web.ui.widget.control.DynamicField;
  * Set values widget.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("fc-setvalues")
 public class SetValuesWidget extends AbstractValueListWidget<SetValueEntry> {

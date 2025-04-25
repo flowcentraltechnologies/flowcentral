@@ -22,7 +22,7 @@ import com.tcdng.unify.common.constants.WfItemVersionType;
  * Base query object for base work entity sub-classes.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public abstract class BaseWorkEntityQuery<T extends BaseWorkEntity> extends BaseAuditEntityQuery<T> {
 

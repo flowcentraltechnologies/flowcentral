@@ -58,7 +58,7 @@ import com.tcdng.unify.core.util.StringUtils;
  * Chart data source chart details provider.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component(name = ChartModuleNameConstants.CHARTDATASOURCE_PROVIDER, description = "$m{chartdatasource.provider}")
 public class ChartDataSourceChartDetailsProvider extends AbstractChartDetailsProvider {

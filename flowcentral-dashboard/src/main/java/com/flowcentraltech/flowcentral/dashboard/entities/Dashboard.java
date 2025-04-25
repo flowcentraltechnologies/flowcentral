@@ -30,7 +30,7 @@ import com.tcdng.unify.core.annotation.ListOnly;
  * Dashboard entity.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Table(name = "FC_DASHBOARD")
 public class Dashboard extends BaseApplicationEntity {

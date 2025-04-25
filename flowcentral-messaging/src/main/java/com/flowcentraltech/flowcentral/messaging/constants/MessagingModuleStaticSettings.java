@@ -23,7 +23,7 @@ import com.tcdng.unify.common.annotation.AutoDetect;
  * Messaging module static settings.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @AutoDetect
 public class MessagingModuleStaticSettings extends AbstractFlowCentralStaticSettings {

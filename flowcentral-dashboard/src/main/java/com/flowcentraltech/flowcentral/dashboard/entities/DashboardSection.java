@@ -27,7 +27,7 @@ import com.tcdng.unify.core.annotation.ListOnly;
  * Dashboard section entity.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Table("FC_DASHBOARDSECTION")
 public class DashboardSection extends BaseAuditEntity {

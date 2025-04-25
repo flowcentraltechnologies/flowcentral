@@ -25,7 +25,7 @@ import com.tcdng.unify.core.util.EnumUtils;
  * Usage type.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Table("FC_USAGETYPE")
 @StaticList(name = "usagetypelist", description = "$m{staticlist.usagetypelist}")

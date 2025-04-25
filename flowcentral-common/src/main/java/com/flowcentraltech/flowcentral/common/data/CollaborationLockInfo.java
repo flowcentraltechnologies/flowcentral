@@ -24,7 +24,7 @@ import com.flowcentraltech.flowcentral.common.constants.CollaborationType;
  * Collaboration lock information
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class CollaborationLockInfo {
 

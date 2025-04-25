@@ -26,7 +26,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
  * Entity fields configuration.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @JsonInclude(value = Include.NON_NULL, content = Include.NON_EMPTY)
 public class EntityFieldsConfig extends BaseConfig {

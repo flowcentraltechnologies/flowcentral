@@ -25,7 +25,7 @@ import com.tcdng.unify.core.annotation.Policy;
  * Base configuration named entity.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Policy("baseconfignamed-entitypolicy")
 public abstract class BaseConfigNamedEntity extends BaseNamedEntity implements ConfigEntity {

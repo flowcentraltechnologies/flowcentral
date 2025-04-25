@@ -37,7 +37,7 @@ import com.tcdng.unify.web.ui.widget.writer.AbstractControlWriter;
  * Token sequence widget writer.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Writes(TokenSequenceWidget.class)
 @Component("fc-tokensequence-writer")

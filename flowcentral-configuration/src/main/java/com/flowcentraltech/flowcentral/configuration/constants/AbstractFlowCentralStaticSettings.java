@@ -21,7 +21,7 @@ import com.tcdng.unify.common.constants.AbstractUnifyStaticSettings;
  * Convenient abstract base class for flowcentral static settings.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public abstract class AbstractFlowCentralStaticSettings extends AbstractUnifyStaticSettings
         implements FlowCentralStaticSettings {

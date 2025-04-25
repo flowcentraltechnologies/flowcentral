@@ -27,7 +27,7 @@ import com.tcdng.unify.web.ui.widget.data.Hint.MODE;
  * Entry table page panel.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("fc-entrytablepagepanel")
 @UplBinding("web/application/upl/entrytablepagepanel.upl")

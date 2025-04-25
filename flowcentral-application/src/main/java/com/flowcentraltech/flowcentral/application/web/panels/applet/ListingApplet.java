@@ -46,7 +46,7 @@ import com.tcdng.unify.web.ui.widget.Page;
  * Listing applet object.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class ListingApplet extends AbstractApplet implements SweepingCommitPolicy {
 

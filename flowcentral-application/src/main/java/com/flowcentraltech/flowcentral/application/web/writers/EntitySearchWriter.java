@@ -38,7 +38,7 @@ import com.tcdng.unify.web.ui.widget.writer.control.AbstractPopupTextFieldWriter
  * Entity search widget writer.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Writes(EntitySearchWidget.class)
 @Component("entitysearch-writer")

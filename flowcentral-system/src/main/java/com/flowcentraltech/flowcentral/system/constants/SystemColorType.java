@@ -24,7 +24,7 @@ import com.tcdng.unify.core.util.EnumUtils;
  * System color list.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @StaticList(name = "systemcolorlist", description="SystemColor List")
 public enum SystemColorType implements EnumConst {

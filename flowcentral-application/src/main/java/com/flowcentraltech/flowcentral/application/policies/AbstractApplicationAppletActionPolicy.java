@@ -27,7 +27,7 @@ import com.tcdng.unify.core.annotation.Configurable;
  * Convenient abstract application entity action policy.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public abstract class AbstractApplicationAppletActionPolicy extends AbstractAppletActionPolicy {
 

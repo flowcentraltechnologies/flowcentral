@@ -21,7 +21,7 @@ import com.flowcentraltech.flowcentral.common.entities.BaseAuditEntityQuery;
  * End-point path query.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class EndpointPathQuery extends BaseAuditEntityQuery<EndpointPath> {
 

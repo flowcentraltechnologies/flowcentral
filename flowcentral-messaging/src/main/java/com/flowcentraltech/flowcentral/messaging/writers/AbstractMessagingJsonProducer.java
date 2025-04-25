@@ -27,7 +27,7 @@ import com.tcdng.unify.core.util.DataUtils;
  * Messaging JSON producer.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public abstract class AbstractMessagingJsonProducer<T> extends AbstractMessagingProducer {
 

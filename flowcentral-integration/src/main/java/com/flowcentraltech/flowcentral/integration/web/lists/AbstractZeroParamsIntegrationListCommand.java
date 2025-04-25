@@ -21,7 +21,7 @@ import com.tcdng.unify.core.list.ZeroParams;
  * Abstract base class for zero parameters integration module list commands.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public abstract class AbstractZeroParamsIntegrationListCommand extends AbstractIntegrationListCommand<ZeroParams> {
 

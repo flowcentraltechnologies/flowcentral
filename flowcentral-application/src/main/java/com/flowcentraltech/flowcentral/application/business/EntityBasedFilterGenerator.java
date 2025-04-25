@@ -25,7 +25,7 @@ import com.tcdng.unify.core.data.ValueStoreReader;
  * Entity based filter generator.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public interface EntityBasedFilterGenerator extends RuleListComponent {
 

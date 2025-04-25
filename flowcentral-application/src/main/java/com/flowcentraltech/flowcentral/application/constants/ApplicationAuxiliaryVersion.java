@@ -22,7 +22,7 @@ import com.tcdng.unify.common.annotation.AutoDetect;
  * Application auxiliary version.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @AutoDetect
 public class ApplicationAuxiliaryVersion implements com.tcdng.unify.core.application.ApplicationAuxiliaryVersion {

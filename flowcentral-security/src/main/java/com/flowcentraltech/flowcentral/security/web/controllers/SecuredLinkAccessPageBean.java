@@ -22,7 +22,7 @@ import com.flowcentraltech.flowcentral.common.web.controllers.AbstractForwarderP
  * Secured link access page bean.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class SecuredLinkAccessPageBean extends AbstractForwarderPageBean {
 

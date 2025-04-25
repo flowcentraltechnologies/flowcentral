@@ -26,7 +26,7 @@ import com.tcdng.unify.core.annotation.Component;
  * Base configuration entity policy.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("baseconfig-entitypolicy")
 public class BaseConfigEntityPolicy extends BaseAuditEntityPolicy {

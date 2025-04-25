@@ -28,7 +28,7 @@ import com.tcdng.unify.common.constants.ConnectEntityBaseType;
  * Entity configuration.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class EntityConfig {
 

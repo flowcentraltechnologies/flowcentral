@@ -20,7 +20,7 @@ package com.flowcentraltech.flowcentral.common.business.policies;
  * User action mode..
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public enum ActionMode {
     ACTION_ONLY,

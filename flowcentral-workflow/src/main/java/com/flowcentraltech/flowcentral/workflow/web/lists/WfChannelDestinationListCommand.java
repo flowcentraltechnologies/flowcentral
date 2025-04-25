@@ -30,7 +30,7 @@ import com.tcdng.unify.core.annotation.Component;
  * Workflow channel destination list command.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("wfchanneldestinationlist")
 public class WfChannelDestinationListCommand extends AbstractWorkflowListCommand<WfChannelDestinationParams> {

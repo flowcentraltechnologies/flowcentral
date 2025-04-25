@@ -22,7 +22,7 @@ import com.flowcentraltech.flowcentral.common.data.VersionedEntityDef;
  * Application definition.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class ApplicationDef implements VersionedEntityDef {
 

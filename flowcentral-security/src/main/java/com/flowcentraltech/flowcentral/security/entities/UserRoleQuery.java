@@ -28,7 +28,7 @@ import com.tcdng.unify.core.util.CalendarUtils;
  * Query class for user roles.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class UserRoleQuery extends BaseAuditEntityQuery<UserRole> {
 

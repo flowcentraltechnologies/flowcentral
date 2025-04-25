@@ -26,7 +26,7 @@ import com.tcdng.unify.core.util.EnumUtils;
  * Process variable list.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Table("FC_PROCESSVARIABLE")
 @StaticList(name = "processvariablelist", description = "$m{staticlist.processvariablelist}")

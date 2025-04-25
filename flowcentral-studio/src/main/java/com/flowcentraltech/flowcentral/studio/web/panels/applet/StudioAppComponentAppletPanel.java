@@ -24,7 +24,7 @@ import com.tcdng.unify.core.annotation.UplBinding;
  * Studio application component applet panel.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("fc-studioappcomponentappletpanel")
 @UplBinding("web/studio/upl/studioappcomponentappletpanel.upl")

@@ -40,7 +40,7 @@ import com.tcdng.unify.core.util.StringUtils;
  * Entity audit search entries resolver.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @EntityReferences({ "audit.entityAuditKeys" })
 @Component(name = "entityaudit-searchrestrictionresolver", description = "Entity Audit Search Restriction Resolver")

@@ -48,7 +48,7 @@ import com.tcdng.unify.core.criterion.RestrictionTranslator;
  * Filter object test.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class FilterTest extends AbstractFlowCentralTest {
 

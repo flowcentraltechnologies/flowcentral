@@ -22,7 +22,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
  * Application configuration.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @JacksonXmlRootElement(localName = "application")
 public class ApplicationConfig extends BaseRootConfig {

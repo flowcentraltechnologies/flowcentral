@@ -34,7 +34,7 @@ import com.tcdng.unify.core.list.LongParam;
  * Studio help entry field list command
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("studiohelpentryfieldlist")
 public class StudioHelpEntryFieldListCommand extends AbstractApplicationListCommand<LongParam> {

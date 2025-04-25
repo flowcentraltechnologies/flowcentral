@@ -20,7 +20,7 @@ package com.flowcentraltech.flowcentral.codegeneration.generators;
  * Convenient abstract base class for java artifact generator.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public abstract class AbstractJavaArtifactGenerator extends AbstractStaticModuleArtifactGenerator {
 

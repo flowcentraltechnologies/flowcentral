@@ -23,7 +23,7 @@ import com.flowcentraltech.flowcentral.connect.common.constants.FlowCentralInter
  * Convenient abstract base class for interconnect environment delegates.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public abstract class AbstractInterconnectEnvironmentDelegate extends AbstractHttpPostEnvironmentDelegate {
 

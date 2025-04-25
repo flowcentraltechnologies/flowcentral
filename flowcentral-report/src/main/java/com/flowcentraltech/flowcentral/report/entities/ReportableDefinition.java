@@ -27,7 +27,7 @@ import com.tcdng.unify.core.annotation.Column;
  * Entity for storing reportable definition information.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Table(name = "FC_REPORTABLEDEF", uniqueConstraints = { @UniqueConstraint({ "name" }) })
 public class ReportableDefinition extends BaseApplicationEntity {

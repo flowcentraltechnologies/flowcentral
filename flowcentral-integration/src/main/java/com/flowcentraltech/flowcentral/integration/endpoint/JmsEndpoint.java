@@ -19,7 +19,7 @@ package com.flowcentraltech.flowcentral.integration.endpoint;
  * JMS end-point.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public interface JmsEndpoint extends Endpoint {
 

@@ -25,7 +25,7 @@ import com.tcdng.unify.core.annotation.ForeignKey;
  * Notification large text parameter entity.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Table(name = "FC_NOTIFLARGETEXTPRM", uniqueConstraints = { @UniqueConstraint({ "notifLargeTextId", "name" }) })
 public class NotificationLargeTextParam extends BaseAuditEntity {

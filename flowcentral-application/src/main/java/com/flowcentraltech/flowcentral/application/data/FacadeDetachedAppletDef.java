@@ -19,7 +19,7 @@ package com.flowcentraltech.flowcentral.application.data;
  * Facade entity detached applet definition
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class FacadeDetachedAppletDef extends AbstractDetachedAppletDef {
 

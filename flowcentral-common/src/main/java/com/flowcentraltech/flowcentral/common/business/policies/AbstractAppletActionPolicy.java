@@ -20,7 +20,7 @@ package com.flowcentraltech.flowcentral.common.business.policies;
  * Convenient abstract base class for applet action policies.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public abstract class AbstractAppletActionPolicy extends AbstractEntityActionPolicy implements AppletActionPolicy {
 

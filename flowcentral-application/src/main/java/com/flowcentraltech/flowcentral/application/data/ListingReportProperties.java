@@ -21,7 +21,7 @@ import java.util.Map;
  * Listing report properties.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class ListingReportProperties extends ListingProperties {
 

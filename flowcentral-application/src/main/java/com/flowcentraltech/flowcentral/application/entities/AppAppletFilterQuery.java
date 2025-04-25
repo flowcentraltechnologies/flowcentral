@@ -25,7 +25,7 @@ import com.tcdng.unify.core.criterion.Or;
  * Application applet filter query.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class AppAppletFilterQuery extends BaseConfigNamedEntityQuery<AppAppletFilter> {
 

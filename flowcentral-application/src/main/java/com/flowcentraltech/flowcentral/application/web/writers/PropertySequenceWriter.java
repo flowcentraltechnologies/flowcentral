@@ -37,7 +37,7 @@ import com.tcdng.unify.web.ui.widget.writer.AbstractControlWriter;
  * Property sequence widget writer.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Writes(PropertySequenceWidget.class)
 @Component("fc-propertysequence-writer")

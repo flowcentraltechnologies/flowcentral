@@ -26,7 +26,7 @@ import com.tcdng.unify.web.constant.Secured;
  * Convenient abstract base class for page forwarders.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @ResultMappings({
         @ResultMapping(name = "forwardtopath", response = { "!forwardresponse pathBinding:$s{targetPath}" })})

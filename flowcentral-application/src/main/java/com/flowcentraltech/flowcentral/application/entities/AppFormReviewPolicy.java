@@ -27,7 +27,7 @@ import com.tcdng.unify.web.ui.constant.MessageType;
  * Application form review policy entity.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Table(name = "FC_FORMREVIEWPOLICY")
 public class AppFormReviewPolicy extends BaseConfigNamedEntity {

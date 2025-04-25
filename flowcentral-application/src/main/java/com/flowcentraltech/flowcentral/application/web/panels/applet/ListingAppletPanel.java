@@ -33,7 +33,7 @@ import com.tcdng.unify.web.ui.widget.data.Hint.MODE;
  * Listing applet panel.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("fc-listingappletpanel")
 @UplBinding("web/application/upl/listingappletpanel.upl")

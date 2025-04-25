@@ -24,7 +24,7 @@ import com.tcdng.unify.web.ui.widget.AbstractMultiControl;
  * Convenient abstract base class for flowcentral multi-control widgets.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public abstract class AbstractFlowCentralMultiControl extends AbstractMultiControl {
 

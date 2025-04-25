@@ -29,7 +29,7 @@ import com.tcdng.unify.web.ui.AbstractPageController;
  * Studio application dashboard controller.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("/applicationstudio/dashboard")
 @UplBinding("web/studio/upl/studiodashboard.upl")

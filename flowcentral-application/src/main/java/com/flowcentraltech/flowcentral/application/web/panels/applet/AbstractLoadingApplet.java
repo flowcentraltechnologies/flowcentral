@@ -48,7 +48,7 @@ import com.tcdng.unify.web.ui.widget.Page;
  * Abstract base class for loading applet object.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public abstract class AbstractLoadingApplet extends AbstractEntityFormApplet {
 

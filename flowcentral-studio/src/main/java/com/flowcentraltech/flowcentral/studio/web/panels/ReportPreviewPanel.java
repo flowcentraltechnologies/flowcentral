@@ -23,7 +23,7 @@ import com.tcdng.unify.core.annotation.UplBinding;
  * Report preview panel.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("fc-reportpreviewpanel")
 @UplBinding("web/studio/upl/reportpreviewpanel.upl")

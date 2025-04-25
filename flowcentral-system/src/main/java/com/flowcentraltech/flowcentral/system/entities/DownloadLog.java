@@ -24,7 +24,7 @@ import com.tcdng.unify.core.annotation.Column;
  * Download log entity.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Table("FC_DOWNLOADLOG")
 public class DownloadLog extends BaseAuditEntity {

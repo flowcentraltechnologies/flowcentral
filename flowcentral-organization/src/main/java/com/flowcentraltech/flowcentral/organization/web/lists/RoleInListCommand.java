@@ -29,7 +29,7 @@ import com.tcdng.unify.web.data.AssignParams;
  * Role in list command.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("roleinlist")
 public class RoleInListCommand extends AbstractOrganizationListCommand<AssignParams> {

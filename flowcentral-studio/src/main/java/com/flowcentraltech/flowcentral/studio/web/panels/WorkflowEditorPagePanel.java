@@ -25,7 +25,7 @@ import com.tcdng.unify.web.annotation.Action;
  * Workflow editor page panel.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("fc-workfloweditorpagepanel")
 @UplBinding("web/studio/upl/workfloweditorpagepanel.upl")

@@ -29,7 +29,7 @@ import com.tcdng.unify.core.annotation.Component;
  * Extension module messages generator.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("extension-module-messages-generator")
 public class ExtensionModuleMessagesGenerator extends AbstractResourcesArtifactGenerator {

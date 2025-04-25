@@ -32,7 +32,7 @@ import com.tcdng.unify.core.annotation.Configurable;
  * User data entity policy.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("userpolicy")
 public class UserPolicy extends BaseStatusWorkEntityPolicy {

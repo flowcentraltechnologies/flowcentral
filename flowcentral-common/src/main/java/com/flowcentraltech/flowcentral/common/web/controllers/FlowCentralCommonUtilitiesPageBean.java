@@ -22,7 +22,7 @@ import com.tcdng.unify.web.ui.CommonUtilitiesPageBean;
  * Flow central common utilities page bean.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class FlowCentralCommonUtilitiesPageBean extends CommonUtilitiesPageBean {
 

@@ -25,7 +25,7 @@ import com.tcdng.unify.web.ui.widget.panel.DetachedPanel;
  * Report column editor panel.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("fc-reportcolumneditorpanel")
 @UplBinding("web/studio/upl/reportcolumneditorpanel.upl")

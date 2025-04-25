@@ -23,7 +23,7 @@ import com.tcdng.unify.core.annotation.UplBinding;
  * Panel for generating license request.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("fc-generatelicenserequestpanel")
 @UplBinding("web/system/upl/generatelicenserequestpanel.upl")

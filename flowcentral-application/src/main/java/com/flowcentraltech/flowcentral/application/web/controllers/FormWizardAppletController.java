@@ -28,7 +28,7 @@ import com.tcdng.unify.web.constant.Secured;
  * Form wizard applet controller.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component(FlowCentralAppletPathConstants.FORM_WIZARD)
 @UplBinding("web/application/upl/formwizardappletpage.upl")

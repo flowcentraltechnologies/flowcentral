@@ -126,7 +126,7 @@ import com.tcdng.unify.web.ui.widget.data.Hint.MODE;
  * Abstract entity form applet object.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public abstract class AbstractEntityFormApplet extends AbstractApplet implements SweepingCommitPolicy {
 

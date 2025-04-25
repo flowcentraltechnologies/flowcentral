@@ -21,7 +21,7 @@ import com.flowcentraltech.flowcentral.common.entities.BaseAuditEntityQuery;
  * Query class for notification template parameter records.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class NotificationTemplateParamQuery extends BaseAuditEntityQuery<NotificationTemplateParam> {
 

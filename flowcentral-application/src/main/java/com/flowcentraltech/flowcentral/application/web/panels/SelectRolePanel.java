@@ -24,7 +24,7 @@ import com.tcdng.unify.core.annotation.UplBinding;
  * Panel for presenting and selecting user role.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("fc-selectrolepanel")
 @UplBinding("web/application/upl/selectrolepanel.upl")

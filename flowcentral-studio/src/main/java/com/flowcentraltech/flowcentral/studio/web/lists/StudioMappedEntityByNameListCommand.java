@@ -32,7 +32,7 @@ import com.tcdng.unify.core.list.ZeroParams;
  * Studio mapped entity by name list command
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("studiomappedentitybynamelist")
 public class StudioMappedEntityByNameListCommand extends AbstractApplicationListCommand<ZeroParams> {

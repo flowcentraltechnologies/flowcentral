@@ -24,7 +24,7 @@ import com.tcdng.unify.web.annotation.Action;
  * Convenient abstract base class for CRUD panels.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @UplBinding("web/application/upl/crudpanel.upl")
 public class AbstractCRUDPanel<T extends AbstractCRUD<?>> extends AbstractFlowCentralPanel {

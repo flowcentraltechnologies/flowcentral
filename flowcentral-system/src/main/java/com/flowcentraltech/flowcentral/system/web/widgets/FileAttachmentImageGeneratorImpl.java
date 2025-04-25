@@ -33,7 +33,7 @@ import com.tcdng.unify.core.resource.ImageFormat;
  * Implementation of file attachment image generator.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Singleton(false)
 @Component("fileattachment-imagegenerator")

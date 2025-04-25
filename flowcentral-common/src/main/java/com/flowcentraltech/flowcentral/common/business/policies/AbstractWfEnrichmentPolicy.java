@@ -27,7 +27,7 @@ import com.tcdng.unify.core.data.ValueStoreWriter;
  * Convenient abstract base class for workflow enrichment policies.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public abstract class AbstractWfEnrichmentPolicy extends AbstractFlowCentralComponent implements WfEnrichmentPolicy {
 

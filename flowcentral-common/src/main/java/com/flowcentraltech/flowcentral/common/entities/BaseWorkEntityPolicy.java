@@ -27,7 +27,7 @@ import com.tcdng.unify.core.annotation.Component;
  * Base status work entity policy.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("basework-entitypolicy")
 public class BaseWorkEntityPolicy extends BaseAuditEntityPolicy {

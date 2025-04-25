@@ -25,7 +25,7 @@ import com.tcdng.unify.core.util.EnumUtils;
  * Visibility type.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Table("FC_VISIBILITYTYPE")
 @StaticList(name = "visibilitytypelist", description = "$m{staticlist.visibilitytypelist}")

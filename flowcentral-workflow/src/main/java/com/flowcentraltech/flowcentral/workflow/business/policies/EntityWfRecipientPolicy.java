@@ -29,7 +29,7 @@ import com.tcdng.unify.core.data.ValueStoreReader;
  * Entity workflow recipient policy
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component(name = "entity-wfrecipientpolicy", description = "$m{workflow.recipientpolicy.entity}")
 public class EntityWfRecipientPolicy extends AbstractWfRecipientPolicy {

@@ -29,7 +29,7 @@ import com.tcdng.unify.core.annotation.FosterParentType;
  * Application widget rules entity.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Table(name = "FC_WIDGETRULES", indexes = { @Index(value = { "entity" }), @Index(value = { "category" }) })
 public class AppWidgetRules extends BaseAuditEntity {

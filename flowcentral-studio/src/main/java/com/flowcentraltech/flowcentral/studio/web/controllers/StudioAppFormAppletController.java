@@ -34,7 +34,7 @@ import com.tcdng.unify.web.constant.Secured;
  * Studio application form applet controller.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("/studioappformapplet")
 @UplBinding("web/studio/upl/studioappformappletpage.upl")

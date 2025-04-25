@@ -35,7 +35,7 @@ import com.tcdng.unify.core.util.TypeInfo;
  * Extension module entity wrappers Java class generator.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("extension-module-entitywrappers-java-generator")
 public class ExtensionModuleEntityWrappersJavaGenerator extends AbstractJavaArtifactGenerator {

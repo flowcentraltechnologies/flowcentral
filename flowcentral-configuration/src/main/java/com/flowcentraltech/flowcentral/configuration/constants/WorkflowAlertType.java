@@ -24,7 +24,7 @@ import com.tcdng.unify.core.util.EnumUtils;
  * Workflow alert type constants.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Table("FC_WFALERTTYPE")
 @StaticList(name = "wfalerttypelist", description = "$m{staticlist.wfalerttypelist}")

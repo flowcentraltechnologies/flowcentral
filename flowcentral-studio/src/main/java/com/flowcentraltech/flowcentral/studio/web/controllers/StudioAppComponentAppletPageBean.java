@@ -22,7 +22,7 @@ import com.flowcentraltech.flowcentral.studio.web.panels.applet.StudioAppCompone
  * Studio application component applet page bean.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class StudioAppComponentAppletPageBean extends AbstractEntityFormAppletPageBean<StudioAppComponentApplet> {
 

@@ -27,7 +27,7 @@ import com.tcdng.unify.core.util.xml.adapter.FileAttachmentTypeXmlAdapter;
  * Entity attachment configuration.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @JsonInclude(value = Include.NON_NULL, content = Include.NON_EMPTY)
 public class EntityAttachmentConfig extends BaseConfig {

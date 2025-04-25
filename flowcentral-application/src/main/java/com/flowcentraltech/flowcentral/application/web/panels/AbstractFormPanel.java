@@ -28,7 +28,7 @@ import com.tcdng.unify.web.ui.widget.EventHandler;
  * Convenient abstract base class for form panels.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @UplBinding("web/application/upl/formpanel.upl")
 public abstract class AbstractFormPanel extends AbstractApplicationPanel implements FormPanel {

@@ -28,7 +28,7 @@ import com.tcdng.unify.core.list.LongParam;
  * Applet wizard task processor list command.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("wizardtaskprocessorlist")
 public class AppletWizardTaskProcessorListCommand extends AbstractEntityTypeListCommand<FormWizardTaskProcessor, LongParam> {

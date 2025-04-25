@@ -29,7 +29,7 @@ import com.tcdng.unify.core.regex.RegexPatternStore;
  * Convenient abstract base class for regex validators.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public abstract class AbstractRegexValidator extends AbstractValidator {
 

@@ -34,7 +34,7 @@ import com.tcdng.unify.core.util.StringUtils;
  * Scheduled task parameter configuration list provider.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component(SystemModuleNameConstants.SCHEDULEDTASK_PARAMCONFIGPROVIDER)
 public class ScheduledTaskParamConfigListProvider extends AbstractParamConfigListProvider {

@@ -48,7 +48,7 @@ import com.tcdng.unify.core.util.CalendarUtils;
  * Tests input widget utilities class.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class InputWidgetUtilsTest extends AbstractUnifyComponentTest {
 

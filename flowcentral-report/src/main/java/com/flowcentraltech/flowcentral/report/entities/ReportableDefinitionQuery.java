@@ -21,7 +21,7 @@ import com.flowcentraltech.flowcentral.application.entities.BaseApplicationEntit
  * Query class for reportable definition records.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class ReportableDefinitionQuery extends BaseApplicationEntityQuery<ReportableDefinition> {
 

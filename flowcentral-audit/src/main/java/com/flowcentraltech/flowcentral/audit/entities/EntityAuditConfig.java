@@ -29,7 +29,7 @@ import com.tcdng.unify.core.annotation.ListOnly;
  * Entity audit configuration entity.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Table(name = "FC_ENTITYAUDITCONFIG", indexes = { @Index({ "sourceType" }), @Index({ "entity" }) },
         uniqueConstraints = { @UniqueConstraint({ "name" }), @UniqueConstraint({ "description" }) })

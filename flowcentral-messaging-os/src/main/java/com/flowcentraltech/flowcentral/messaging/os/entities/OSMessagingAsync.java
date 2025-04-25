@@ -27,7 +27,7 @@ import com.tcdng.unify.core.annotation.Column;
  * OS messaging async.
  *
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Table(name = "FC_OSMESSAGINGASYNC",
         indexes = { @Index({ "endpoint" }) })

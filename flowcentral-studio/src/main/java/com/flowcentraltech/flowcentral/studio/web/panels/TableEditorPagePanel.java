@@ -25,7 +25,7 @@ import com.tcdng.unify.web.annotation.Action;
  * Table editor page panel.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("fc-tableeditorpagepanel")
 @UplBinding("web/studio/upl/tableeditorpagepanel.upl")

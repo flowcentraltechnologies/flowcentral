@@ -27,7 +27,7 @@ import com.tcdng.unify.core.annotation.Preferred;
   * Application attribute provider implementation.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Preferred
 @Component(SystemModuleNameConstants.APPLICATION_ATTRIBUTE_PROVIDER)

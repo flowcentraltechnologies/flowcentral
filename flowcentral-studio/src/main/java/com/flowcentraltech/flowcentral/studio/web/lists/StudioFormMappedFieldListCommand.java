@@ -31,7 +31,7 @@ import com.tcdng.unify.core.list.StringParam;
  * Studio form mapped field list command
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("studioformmappedfieldlist")
 public class StudioFormMappedFieldListCommand extends AbstractApplicationListCommand<StringParam> {

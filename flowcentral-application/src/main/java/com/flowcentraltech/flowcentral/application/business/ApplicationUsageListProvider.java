@@ -28,7 +28,7 @@ import com.tcdng.unify.core.data.ValueStoreReader;
  * Application usage list provider.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("application-usagelistprovider")
 public class ApplicationUsageListProvider extends AbstractUsageListProvider {

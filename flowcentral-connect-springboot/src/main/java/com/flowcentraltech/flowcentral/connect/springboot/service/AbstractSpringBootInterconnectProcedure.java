@@ -19,7 +19,7 @@ package com.flowcentraltech.flowcentral.connect.springboot.service;
  * Convenient abstract base class for Flow central spring boot interconnect procedures.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public abstract class AbstractSpringBootInterconnectProcedure implements SpringBootInterconnectProcedure {
 

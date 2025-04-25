@@ -25,7 +25,7 @@ import com.tcdng.unify.core.annotation.Configurable;
  * policies.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public abstract class AbstractApplicationConsolidatedFormStatePolicy extends AbstractConsolidatedFormStatePolicy {
 

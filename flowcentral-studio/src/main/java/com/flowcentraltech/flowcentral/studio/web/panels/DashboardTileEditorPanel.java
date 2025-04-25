@@ -29,7 +29,7 @@ import com.tcdng.unify.web.ui.widget.panel.AbstractDialogPanel;
  * Dashboard tile editor panel.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("fc-dashboardtileeditorpanel")
 @UplBinding("web/studio/upl/dashboardtileeditorpanel.upl")

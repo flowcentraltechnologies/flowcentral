@@ -22,7 +22,7 @@ import com.tcdng.unify.core.UnifyException;
  * Base class for audit loggers.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public abstract class AbstractAuditLogger extends AbstractFlowCentralComponent implements AuditLogger {
 

@@ -34,7 +34,7 @@ import com.tcdng.unify.web.ui.widget.data.Hint.MODE;
  * Manage entity list applet controller.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component(FlowCentralAppletPathConstants.MANAGE_ENTITYLIST)
 @UplBinding("web/application/upl/manageentitylistappletpage.upl")

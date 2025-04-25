@@ -33,7 +33,7 @@ import com.tcdng.unify.core.util.DataUtils;
  * Studio on create application entity policy.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("studiooncreateappentity-policy")
 public class StudioOnCreateAppEntityPolicy extends StudioOnCreateComponentPolicy {

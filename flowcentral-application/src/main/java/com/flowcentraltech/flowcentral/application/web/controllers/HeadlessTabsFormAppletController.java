@@ -29,7 +29,7 @@ import com.tcdng.unify.web.constant.Secured;
  * Headless tabs form applet controller.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component(FlowCentralAppletPathConstants.HEADLESS_TABS)
 @UplBinding("web/application/upl/headlesstabsformappletpage.upl")

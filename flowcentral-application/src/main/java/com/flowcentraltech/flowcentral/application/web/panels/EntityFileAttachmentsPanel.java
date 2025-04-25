@@ -24,7 +24,7 @@ import com.tcdng.unify.core.annotation.UplBinding;
  * Entity file attachments panel.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("fc-entityfileattachmentspanel")
 @UplBinding("web/application/upl/entityfileattachmentspanel.upl")

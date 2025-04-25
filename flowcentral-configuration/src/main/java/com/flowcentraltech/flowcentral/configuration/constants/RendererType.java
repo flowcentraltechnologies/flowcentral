@@ -19,7 +19,7 @@ package com.flowcentraltech.flowcentral.configuration.constants;
  * Renderer type constants.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public enum RendererType {
 

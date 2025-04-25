@@ -35,7 +35,7 @@ import com.tcdng.unify.web.ui.widget.Control;
  * Workflow editor widget.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("fc-workfloweditor")
 @UplAttributes({ @UplAttribute(name = "choiceWidth", type = String.class, defaultVal = "240px") })

@@ -24,7 +24,7 @@ import com.tcdng.unify.core.annotation.Component;
  * Sector icon widget.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("fc-sectoricon")
 public class SectorIconWidget extends AbstractFlowCentralControl {

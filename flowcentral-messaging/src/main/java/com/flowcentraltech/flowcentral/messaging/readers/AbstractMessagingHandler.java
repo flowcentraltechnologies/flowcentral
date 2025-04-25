@@ -22,7 +22,7 @@ import com.tcdng.unify.core.UnifyException;
  * Messaging handler.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public abstract class AbstractMessagingHandler<T> extends AbstractFlowCentralComponent implements MessagingHandler {
 

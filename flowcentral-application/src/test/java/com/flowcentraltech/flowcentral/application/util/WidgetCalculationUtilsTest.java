@@ -24,7 +24,7 @@ import org.junit.Test;
  * Tests widget calculation utilities class.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class WidgetCalculationUtilsTest {
 

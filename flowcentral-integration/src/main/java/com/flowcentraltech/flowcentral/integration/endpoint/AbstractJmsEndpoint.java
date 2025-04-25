@@ -40,7 +40,7 @@ import com.tcdng.unify.core.util.StringUtils;
  * Abstract JMS end-point.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Parameters({ @Parameter(name = JmsEndpointConstants.CREDENTIAL_NAME, description = "$m{jmsendpoint.credential}",
         editor = "!ui-select list:$s{credentiallist} listKey:$s{name} blankOption:$s{}", type = String.class,

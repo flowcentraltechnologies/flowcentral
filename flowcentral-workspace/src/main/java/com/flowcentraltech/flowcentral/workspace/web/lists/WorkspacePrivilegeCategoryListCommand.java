@@ -33,7 +33,7 @@ import com.tcdng.unify.core.list.ZeroParams;
  * Workspace privilege category list command.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("workspaceprivilegecategorylist")
 public class WorkspacePrivilegeCategoryListCommand extends AbstractOrganizationListCommand<ZeroParams> {

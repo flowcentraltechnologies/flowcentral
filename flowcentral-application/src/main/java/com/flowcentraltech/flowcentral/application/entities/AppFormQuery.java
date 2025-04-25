@@ -21,7 +21,7 @@ import com.flowcentraltech.flowcentral.configuration.constants.FormType;
  * Application form query.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class AppFormQuery extends BaseApplicationEntityQuery<AppForm> {
 

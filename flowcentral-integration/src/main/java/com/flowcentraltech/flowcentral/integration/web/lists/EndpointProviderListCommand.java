@@ -27,7 +27,7 @@ import com.tcdng.unify.core.list.AbstractParamTypeListCommand;
  * End-point provider list command.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("endpointproviderlist")
 public class EndpointProviderListCommand extends AbstractParamTypeListCommand<EndpointTypeParam> {

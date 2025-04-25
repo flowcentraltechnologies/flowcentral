@@ -25,7 +25,7 @@ import com.tcdng.unify.core.annotation.Component;
  * Logged in user photo generator implementation.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component(ApplicationModuleNameConstants.LOGIN_USER_PHOTO_GENERATOR)
 public class LoginUserPhotoGeneratorImpl extends AbstractUserPhotoGenerator implements LoginUserPhotoGenerator {

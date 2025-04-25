@@ -19,7 +19,7 @@ package com.flowcentraltech.flowcentral.application.data;
  * Request open tab information.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class RequestOpenTabInfo {
 

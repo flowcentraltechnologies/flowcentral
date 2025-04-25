@@ -21,7 +21,7 @@ import com.flowcentraltech.flowcentral.common.entities.BaseStatusEntityQuery;
  * Query class for user group records.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class UserGroupQuery extends BaseStatusEntityQuery<UserGroup> {
 

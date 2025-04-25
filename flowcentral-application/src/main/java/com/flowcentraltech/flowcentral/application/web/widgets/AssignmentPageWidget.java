@@ -29,7 +29,7 @@ import com.tcdng.unify.web.ui.widget.Control;
  * Assignment page widget.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("fc-assignmentpage")
 public class AssignmentPageWidget extends AbstractFlowCentralMultiControl {

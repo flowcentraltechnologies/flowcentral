@@ -25,7 +25,7 @@ import com.tcdng.unify.common.constants.ConnectFieldDataType;
  * Entity field configuration.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class EntityFieldConfig {
 

@@ -26,7 +26,7 @@ import com.tcdng.unify.core.annotation.ListOnly;
  * Application applet alert entity;
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Table(name = "FC_APPLETALERT", uniqueConstraints = { @UniqueConstraint({ "appAppletId", "name" }),
         @UniqueConstraint({ "appAppletId", "description" }) })

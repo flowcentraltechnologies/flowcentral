@@ -39,7 +39,7 @@ import com.tcdng.unify.core.util.NameUtils;
  * Studio on create workflow policy.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("studiooncreateworkflow-policy")
 public class StudioOnCreateWorkflowPolicy extends StudioOnCreateComponentPolicy {

@@ -22,7 +22,7 @@ import com.flowcentraltech.flowcentral.common.entities.BaseEntityQuery;
  * Workflow transition queue.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class WfTransitionQueueQuery extends BaseEntityQuery<WfTransitionQueue> {
 

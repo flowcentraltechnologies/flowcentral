@@ -24,7 +24,7 @@ import com.tcdng.unify.core.util.EnumUtils;
  * Font family type enumeration.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Table("FC_FONTFAMILYTYPE")
 @StaticList(name = "fontfamilylist", description = "$m{staticlist.fontfamilylist}")
