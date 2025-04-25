@@ -15,11 +15,8 @@
  */
 package com.flowcentraltech.flowcentral.configuration.xml;
 
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
@@ -37,17 +34,14 @@ public class AppDashboardConfig extends BaseNameConfig {
     @JacksonXmlProperty(isAttribute = true)
     private int sections;
 
-    @JacksonXmlElementWrapper(useWrapping = false)
-    @JacksonXmlProperty(localName = "dashboard-section")
-    private List<DashboardSectionConfig> sectionList;
+    @JacksonXmlProperty(localName = "dashboard-sections")
+    private DashboardSectionsConfig sectionList;
     
-    @JacksonXmlElementWrapper(useWrapping = false)
-    @JacksonXmlProperty(localName = "dashboard-tile")
-    private List<DashboardTileConfig> tileList;
+    @JacksonXmlProperty(localName = "dashboard-tiles")
+    private DashboardTilesConfig tiles;
     
-    @JacksonXmlElementWrapper(useWrapping = false)
-    @JacksonXmlProperty(localName = "dashboard-option")
-    private List<DashboardOptionConfig> optionsList;
+    @JacksonXmlProperty(localName = "dashboard-options")
+    private DashboardOptionsConfig options;
 
     public AppDashboardConfig() {
         this.allowSecondaryTenants = Boolean.FALSE;
@@ -69,28 +63,28 @@ public class AppDashboardConfig extends BaseNameConfig {
         this.sections = sections;
     }
 
-    public List<DashboardSectionConfig> getSectionList() {
+    public DashboardSectionsConfig getSectionList() {
         return sectionList;
     }
 
-    public void setSectionList(List<DashboardSectionConfig> sectionList) {
+    public void setSectionList(DashboardSectionsConfig sectionList) {
         this.sectionList = sectionList;
     }
 
-    public List<DashboardTileConfig> getTileList() {
-        return tileList;
+    public DashboardTilesConfig getTiles() {
+        return tiles;
     }
 
-    public void setTileList(List<DashboardTileConfig> tileList) {
-        this.tileList = tileList;
+    public void setTiles(DashboardTilesConfig tiles) {
+        this.tiles = tiles;
     }
 
-    public List<DashboardOptionConfig> getOptionsList() {
-        return optionsList;
+    public DashboardOptionsConfig getOptions() {
+        return options;
     }
 
-    public void setOptionsList(List<DashboardOptionConfig> optionsList) {
-        this.optionsList = optionsList;
+    public void setOptions(DashboardOptionsConfig options) {
+        this.options = options;
     }
 
 }

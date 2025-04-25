@@ -1133,7 +1133,7 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                         widgetRulesPolicyList.add(formWidgetRulesPolicyConfig);
                     }
 
-                    appFormConfig.setWidgetRulesPolicies(new FormWidgetRulesPoliciesConfig(widgetRulesPolicyList));
+                    appFormConfig.setFormWidgetRulesPolicies(new FormWidgetRulesPoliciesConfig(widgetRulesPolicyList));
                 }
 
                 // Form field validation policies

@@ -183,9 +183,9 @@ public class ApplicationDashboardInstallerImpl extends AbstractApplicationArtifa
     private void populateChildList(AppDashboardConfig dashboardConfig, Dashboard dashboard, String applicationName, boolean restore)
             throws UnifyException {
         List<DashboardSection> sectionList = null;
-        if (!DataUtils.isBlank(dashboardConfig.getSectionList())) {
+        if (dashboardConfig.getSectionList() != null && !DataUtils.isBlank(dashboardConfig.getSectionList().getSectionList())) {
             sectionList = new ArrayList<DashboardSection>();
-            for (DashboardSectionConfig dashboardSectionConfig : dashboardConfig.getSectionList()) {
+            for (DashboardSectionConfig dashboardSectionConfig : dashboardConfig.getSectionList().getSectionList()) {
                 DashboardSection dashboardSection = new DashboardSection();
                 dashboardSection.setType(dashboardSectionConfig.getType());
                 dashboardSection.setIndex(dashboardSectionConfig.getIndex());
@@ -197,12 +197,12 @@ public class ApplicationDashboardInstallerImpl extends AbstractApplicationArtifa
         dashboard.setSectionList(sectionList);
 
         List<DashboardTile> tileList = null;
-        if (!DataUtils.isBlank(dashboardConfig.getTileList())) {
+        if (dashboardConfig.getTiles() != null && !DataUtils.isBlank(dashboardConfig.getTiles().getTileList())) {
             tileList = new ArrayList<DashboardTile>();
             Map<String, DashboardTile> map = restore || dashboard.isIdBlank() ? Collections.emptyMap()
                     : environment().findAllMap(String.class, "name",
                             new DashboardTileQuery().dashboardId(dashboard.getId()));
-            for (DashboardTileConfig dashboardTileConfig : dashboardConfig.getTileList()) {
+            for (DashboardTileConfig dashboardTileConfig : dashboardConfig.getTiles().getTileList()) {
                 DashboardTile oldDashboardTile = map.get(dashboardTileConfig.getName());
                 if (oldDashboardTile == null) {
                     DashboardTile dashboardTile = new DashboardTile();
@@ -233,12 +233,12 @@ public class ApplicationDashboardInstallerImpl extends AbstractApplicationArtifa
         dashboard.setTileList(tileList);
 
         List<DashboardOption> optionList = null;
-        if (!DataUtils.isBlank(dashboardConfig.getOptionsList())) {
+        if (dashboardConfig.getOptions() != null && !DataUtils.isBlank(dashboardConfig.getOptions().getOptionsList())) {
             optionList = new ArrayList<DashboardOption>();
             Map<String, DashboardOption> map = restore || dashboard.isIdBlank() ? Collections.emptyMap()
                     : environment().findAllMap(String.class, "name",
                             new DashboardOptionQuery().dashboardId(dashboard.getId()));
-            for (DashboardOptionConfig dashboardOptionConfig : dashboardConfig.getOptionsList()) {
+            for (DashboardOptionConfig dashboardOptionConfig : dashboardConfig.getOptions().getOptionsList()) {
                 DashboardOption oldDashboardOption = map.get(dashboardOptionConfig.getName());
                 if (oldDashboardOption == null) {
                     DashboardOption dashboardOption = new DashboardOption();

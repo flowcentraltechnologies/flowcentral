@@ -51,7 +51,7 @@ public class AppFormConfig extends BaseNameConfig {
     private FormStatePoliciesConfig formStatePolicies;
 
     @JacksonXmlProperty
-    private FormWidgetRulesPoliciesConfig widgetRulesPolicies;
+    private FormWidgetRulesPoliciesConfig formWidgetRulesPolicies;
 
     @JacksonXmlProperty
     private FieldValidationPoliciesConfig fieldValidationPolicies;
@@ -140,12 +140,12 @@ public class AppFormConfig extends BaseNameConfig {
         this.formStatePolicies = formStatePolicies;
     }
 
-    public FormWidgetRulesPoliciesConfig getWidgetRulesPolicies() {
-        return widgetRulesPolicies;
+    public FormWidgetRulesPoliciesConfig getFormWidgetRulesPolicies() {
+        return formWidgetRulesPolicies;
     }
 
-    public void setWidgetRulesPolicies(FormWidgetRulesPoliciesConfig widgetRulesPolicies) {
-        this.widgetRulesPolicies = widgetRulesPolicies;
+    public void setFormWidgetRulesPolicies(FormWidgetRulesPoliciesConfig formWidgetRulesPolicies) {
+        this.formWidgetRulesPolicies = formWidgetRulesPolicies;
     }
 
     public FieldValidationPoliciesConfig getFieldValidationPolicies() {

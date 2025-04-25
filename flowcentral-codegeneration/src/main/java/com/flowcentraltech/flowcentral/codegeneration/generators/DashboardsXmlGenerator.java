@@ -25,8 +25,11 @@ import com.flowcentraltech.flowcentral.configuration.xml.AppDashboardConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppDashboardsConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.DashboardOptionCategoryBaseConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.DashboardOptionConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.DashboardOptionsConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.DashboardSectionConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.DashboardSectionsConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.DashboardTileConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.DashboardTilesConfig;
 import com.flowcentraltech.flowcentral.dashboard.business.DashboardModuleService;
 import com.flowcentraltech.flowcentral.dashboard.entities.Dashboard;
 import com.flowcentraltech.flowcentral.dashboard.entities.DashboardOption;
@@ -81,7 +84,7 @@ public class DashboardsXmlGenerator extends AbstractStaticModuleArtifactGenerato
                         sectionList.add(dashboardSectionConfig);
                     }
 
-                    appDashboardConfig.setSectionList(sectionList);
+                    appDashboardConfig.setSectionList(new DashboardSectionsConfig(sectionList));
                 }
 
                 // Tiles
@@ -102,7 +105,7 @@ public class DashboardsXmlGenerator extends AbstractStaticModuleArtifactGenerato
                         tileList.add(dashboardTileConfig);
                     }
 
-                    appDashboardConfig.setTileList(tileList);
+                    appDashboardConfig.setTiles(new DashboardTilesConfig(tileList));
                 }
 
                 // Options
@@ -138,7 +141,7 @@ public class DashboardsXmlGenerator extends AbstractStaticModuleArtifactGenerato
                         optionsList.add(dashboardOptionConfig);
                     }
 
-                    appDashboardConfig.setOptionsList(optionsList);
+                    appDashboardConfig.setOptions(new DashboardOptionsConfig(optionsList));
                 }
 
                 dashboardConfigList.add(appDashboardConfig);

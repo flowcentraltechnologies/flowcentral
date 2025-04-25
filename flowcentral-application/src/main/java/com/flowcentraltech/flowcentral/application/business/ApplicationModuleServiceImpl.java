@@ -6853,13 +6853,13 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
         // Form widget rule policies
         List<AppFormWidgetRulesPolicy> widgetRulesList = null;
-        if (appFormConfig.getWidgetRulesPolicies() != null
-                && !DataUtils.isBlank(appFormConfig.getWidgetRulesPolicies().getWidgetRulesPolicyList())) {
+        if (appFormConfig.getFormWidgetRulesPolicies() != null
+                && !DataUtils.isBlank(appFormConfig.getFormWidgetRulesPolicies().getWidgetRulesPolicyList())) {
             widgetRulesList = new ArrayList<AppFormWidgetRulesPolicy>();
             Map<String, AppFormWidgetRulesPolicy> map = restore || appForm.isIdBlank() ? Collections.emptyMap()
                     : environment().findAllMap(String.class, "name",
                             new AppFormWidgetRulesPolicyQuery().appFormId(appForm.getId()));
-            for (FormWidgetRulesPolicyConfig formWidgetRulesPolicyConfig : appFormConfig.getWidgetRulesPolicies()
+            for (FormWidgetRulesPolicyConfig formWidgetRulesPolicyConfig : appFormConfig.getFormWidgetRulesPolicies()
                     .getWidgetRulesPolicyList()) {
                 AppFormWidgetRulesPolicy oldAppFormWidgetRulesPolicy = map.get(formWidgetRulesPolicyConfig.getName());
                 if (oldAppFormWidgetRulesPolicy == null) {
