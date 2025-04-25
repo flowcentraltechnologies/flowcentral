@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 FlowCentral Technologies Limited.
+ * Copyright 2021-2025 FlowCentral Technologies Limited.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -25,6 +25,7 @@ import com.flowcentraltech.flowcentral.application.entities.AppHelpEntry;
 import com.flowcentraltech.flowcentral.application.entities.AppHelpSheet;
 import com.flowcentraltech.flowcentral.configuration.xml.AppHelpSheetConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppHelpSheetsConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.HelpEntriesConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.HelpEntryConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.HelpSheetConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.util.ConfigurationUtils;
@@ -39,7 +40,7 @@ import com.tcdng.unify.core.util.StringUtils;
  * Help sheets XML Generator.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("help-sheets-xml-generator")
 public class HelpSheetsXmlGenerator extends AbstractResourcesArtifactGenerator {
@@ -86,7 +87,7 @@ public class HelpSheetsXmlGenerator extends AbstractResourcesArtifactGenerator {
                     entryList.add(eConfig);
                 }
                 
-                helpSheetConfig.setEntryList(entryList);
+                helpSheetConfig.setEntries(new HelpEntriesConfig(entryList));
                 
                 ConfigurationUtils.writeConfigNoEscape(helpSheetConfig, zos);
                 closeEntry(zos);

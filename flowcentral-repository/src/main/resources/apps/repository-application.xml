@@ -1,13 +1,17 @@
 <?xml version="1.0"?>
 <!-- Repository application -->
-<application name="repository"
+<application
+	xmlns="http://flowcentraltech.com/schema-common"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://flowcentraltech.com/schema-common https://schema.flowcentralplatform.com/xsd/flowcentral-application-4.0.0.xsd"
+	name="repository"
 	description="$m{repository.short.description}" label="$m{repository.label}"
 	module="repository">
 	<!-- Widget Types -->
 	<widgetTypes>
 		<widgetType name="repositoryproviderlist"
-			description="$m{repository.widgettype.repositoryproviderlist}" dataType="string"
-			inputType="string"
+			description="$m{repository.widgettype.repositoryproviderlist}" dataType="STRING"
+			inputType="STRING"
 			editor="!ui-select list:repositoryproviderlist blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 	</widgetTypes>
@@ -16,18 +20,20 @@
 		<applet name="manageRemoteRepoConfig"
 			description="$m{repository.remoterepoconfig.manage}"
 			label="$m{repository.remoterepoconfig.manage.label}" icon="archive"
-			type="manage_entitylist" entity="remoteRepoConfig" menuAccess="true">
-			<property name="searchTable" value="repository.remoteRepoConfigTable" />
-			<property name="searchTable.report" value="false" />
-			<property name="searchTable.new" value="true" />
-			<property name="searchTable.basicSearchOnly" value="true" />
-			<property name="createForm" value="remoteRepoConfigForm" />
-			<property name="createForm.save" value="true" />
-			<property name="createForm.save.next" value="true" />
-			<property name="createForm.save.close" value="true" />
-			<property name="maintainForm" value="remoteRepoConfigForm" />
-			<property name="maintainForm.update" value="true" />
-			<property name="maintainForm.delete" value="true" />
+			type="MANAGE_ENTITYLIST" entity="remoteRepoConfig" menuAccess="true">
+			<properties>
+				<property name="searchTable" value="repository.remoteRepoConfigTable" />
+				<property name="searchTable.report" value="false" />
+				<property name="searchTable.new" value="true" />
+				<property name="searchTable.basicSearchOnly" value="true" />
+				<property name="createForm" value="remoteRepoConfigForm" />
+				<property name="createForm.save" value="true" />
+				<property name="createForm.save.next" value="true" />
+				<property name="createForm.save.close" value="true" />
+				<property name="maintainForm" value="remoteRepoConfigForm" />
+				<property name="maintainForm.update" value="true" />
+				<property name="maintainForm.delete" value="true" />
+			</properties>
 		</applet>
 	</applets>
 	<!-- References -->
@@ -42,32 +48,36 @@
 			label="$m{repository.remoterepoconfig.label}"
 			type="com.flowcentraltech.flowcentral.repository.entities.RemoteRepoConfig"
 			reportable="true" auditable="true">
-			<field name="name" label="$m{repository.remoterepoconfig.name}"
-				type="string" inputWidget="application.name" maxLen="64"
-				basicSearch="true" auditable="true"/>
-			<field name="description"
-				label="$m{repository.remoterepoconfig.description}" type="string"
-				inputWidget="application.text" maxLen="128" basicSearch="true" auditable="true"/>
-			<field name="remoteUrl" label="$m{repository.remoterepoconfig.remoteurl}"
-				type="string" inputWidget="application.textarea" maxLen="256"
-				auditable="true"/>
-			<field name="localRepoPath" label="$m{repository.remoterepoconfig.localrepopath}"
-				type="string" inputWidget="application.textarea" maxLen="256"
-				auditable="true"/>
-			<field name="userName" label="$m{repository.remoterepoconfig.username}"
-				type="string" inputWidget="application.text" maxLen="64"
-				auditable="true"/>
-			<field name="password" label="$m{repository.remoterepoconfig.password}"
-				type="string" inputWidget="application.password" maxLen="512"
-				auditable="true"/>
-			<field name="provider" label="$m{repository.remoterepoconfig.provider}"
-				type="string" inputWidget="repositoryproviderlist" maxLen="64"
-				auditable="true"/>
-			<uniqueConstraint name="nameUc"
-				description="$m{repository.remoterepoconfig.uc.name}" fieldList="name" />
-			<uniqueConstraint name="descUc"
-				description="$m{repository.remoterepoconfig.uc.description}"
-				fieldList="description" />
+			<fields>
+				<field name="name" label="$m{repository.remoterepoconfig.name}"
+					type="STRING" inputWidget="application.name" maxLen="64"
+					basicSearch="true" auditable="true"/>
+				<field name="description"
+					label="$m{repository.remoterepoconfig.description}" type="STRING"
+					inputWidget="application.text" maxLen="128" basicSearch="true" auditable="true"/>
+				<field name="remoteUrl" label="$m{repository.remoterepoconfig.remoteurl}"
+					type="STRING" inputWidget="application.textarea" maxLen="256"
+					auditable="true"/>
+				<field name="localRepoPath" label="$m{repository.remoterepoconfig.localrepopath}"
+					type="STRING" inputWidget="application.textarea" maxLen="256"
+					auditable="true"/>
+				<field name="userName" label="$m{repository.remoterepoconfig.username}"
+					type="STRING" inputWidget="application.text" maxLen="64"
+					auditable="true"/>
+				<field name="password" label="$m{repository.remoterepoconfig.password}"
+					type="STRING" inputWidget="application.password" maxLen="512"
+					auditable="true"/>
+				<field name="provider" label="$m{repository.remoterepoconfig.provider}"
+					type="STRING" inputWidget="repositoryproviderlist" maxLen="64"
+					auditable="true"/>
+			</fields>
+			<uniqueConstraints>
+				<uniqueConstraint name="nameUc"
+					description="$m{repository.remoterepoconfig.uc.name}" fieldList="name" />
+				<uniqueConstraint name="descUc"
+					description="$m{repository.remoterepoconfig.uc.description}"
+					fieldList="description" />
+			</uniqueConstraints>
 		</entity>
 	</entities>
 	<!-- Tables -->
@@ -76,57 +86,61 @@
 			description="$m{repository.remoterepoconfig.table}"
 			label="$m{repository.remoterepoconfig.label}" entity="remoteRepoConfig"
 			itemsPerPage="20" serialNo="true" basicSearch="true">
-			<column field="name" renderWidget="application.name"
-				widthRatio="1" linkAct="maintainAct" />
-			<column field="description" renderWidget="application.text"
-				widthRatio="1" />
-			<column field="remoteUrl" renderWidget="application.text"
-				widthRatio="1" />
-			<column field="localRepoPath" renderWidget="application.text"
-				widthRatio="1" />
-			<column field="provider" renderWidget="application.text"
-				widthRatio="1" />
-			<column field="createDt" renderWidget="application.datetime"
-				widthRatio="1" />
-			<column field="updateDt" renderWidget="application.datetime"
-				widthRatio="1" />
-			<column field="statusDesc" renderWidget="application.text"
-				label="$m{basestatusentity.field.label.status}" widthRatio="1" />
+			<columns>
+				<column field="name" renderWidget="application.name"
+					widthRatio="1" linkAct="maintainAct" />
+				<column field="description" renderWidget="application.text"
+					widthRatio="1" />
+				<column field="remoteUrl" renderWidget="application.text"
+					widthRatio="1" />
+				<column field="localRepoPath" renderWidget="application.text"
+					widthRatio="1" />
+				<column field="provider" renderWidget="application.text"
+					widthRatio="1" />
+				<column field="createDt" renderWidget="application.datetime"
+					widthRatio="1" />
+				<column field="updateDt" renderWidget="application.datetime"
+					widthRatio="1" />
+				<column field="statusDesc" renderWidget="application.text"
+					label="$m{basestatusentity.field.label.status}" widthRatio="1" />
+			</columns>
 		</table>
 	</tables>
 	<!-- Forms -->
 	<forms>
 		<form name="remoteRepoConfigForm"
 			description="$m{repository.remoterepoconfig.form}" entity="remoteRepoConfig">
-			<tab name="basicDetails"
-				label="$m{repository.remoterepoconfig.form.basicdetails}"
-				contentType="miniform">
-				<section name="remoteRepoConfig" label="$m{repository.remoterepoconfig.form.basicdetails}"
-					columns="type_2">
-					<field name="name" inputWidget="application.name" column="0"
-						required="true" />
-					<field name="description" inputWidget="application.text"
-						column="0" required="true" />
-					<field name="status" column="1" required="true" />
-				</section>
-				<section name="credentials" label="$m{repository.remoterepoconfig.form.credentials}"
-					columns="type_2">
-					<field name="userName" inputWidget="application.text" column="0"
-						required="true" />
-					<field name="password" column="1" required="true" />
-				</section>
-				<section name="hostDetails" label="$m{repository.remoterepoconfig.form.hostdetails}"
-					columns="type_2">
-					<field name="provider" column="0" required="true" />
-					<field name="remoteUrl" column="1" required="true" />
-				</section>
-				<section name="localDetails" label="$m{repository.remoterepoconfig.form.localdetails}"
-					columns="type_2">
-					<field name="localRepoPath" column="1" required="true" />
-				</section>
-			</tab>
-			<tab name="changeLog" label="$m{application.form.audit}"
-				contentType="miniform_changelog" />
+			<tabs>
+				<tab name="basicDetails"
+					label="$m{repository.remoterepoconfig.form.basicdetails}"
+					contentType="MINIFORM">
+					<section name="remoteRepoConfig" label="$m{repository.remoterepoconfig.form.basicdetails}"
+						columns="TYPE_2">
+						<field name="name" inputWidget="application.name" column="0"
+							required="true" />
+						<field name="description" inputWidget="application.text"
+							column="0" required="true" />
+						<field name="status" column="1" required="true" />
+					</section>
+					<section name="credentials" label="$m{repository.remoterepoconfig.form.credentials}"
+						columns="TYPE_2">
+						<field name="userName" inputWidget="application.text" column="0"
+							required="true" />
+						<field name="password" column="1" required="true" />
+					</section>
+					<section name="hostDetails" label="$m{repository.remoterepoconfig.form.hostdetails}"
+						columns="TYPE_2">
+						<field name="provider" column="0" required="true" />
+						<field name="remoteUrl" column="1" required="true" />
+					</section>
+					<section name="localDetails" label="$m{repository.remoterepoconfig.form.localdetails}"
+						columns="TYPE_2">
+						<field name="localRepoPath" column="1" required="true" />
+					</section>
+				</tab>
+				<tab name="changeLog" label="$m{application.form.audit}"
+					contentType="MINIFORM_CHANGELOG" />
+			</tabs>
 		</form>
 	</forms>
 </application>

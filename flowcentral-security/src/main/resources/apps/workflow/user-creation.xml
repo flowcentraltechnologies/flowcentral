@@ -1,10 +1,14 @@
 <?xml version="1.0"?>
 <!-- User Creation Workflow -->
-<workflow name="userCreation"
+<workflow
+	xmlns="http://flowcentraltech.com/schema-common"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://flowcentraltech.com/schema-common https://schema.flowcentralplatform.com/xsd/flowcentral-workflow-4.0.0.xsd"
+	name="userCreation"
 	description="$m{security.workflow.usercreation}"
 	label="$m{security.workflow.usercreation.label}" entity="user" published="true" runnable="true">
 	<steps>
-		<step type="start" name="start"
+		<step type="START" name="start"
 			description="$m{security.workflow.usercreation.step.start}"
 			label="$m{security.workflow.usercreation.step.start.label}"
 			nextStep="approval">
@@ -12,14 +16,14 @@
 				<setValue field="workflowStatus" value="AWA" />
 			</setValues>
 		</step>
-		<step type="user_action" name="approval"
+		<step type="USER_ACTION" name="approval"
 			description="$m{security.workflow.usercreation.step.approval}"
 			label="$m{security.workflow.usercreation.step.approval.label}"
 			applet="security.manageUser">
 			<alerts>
 				<alert name="userCreationApproval"
 					description="$m{security.workflow.usercreation.alert.approval}"
-					type="user_interact" channel="email"
+					type="USER_INTERACT"
 					generator="usercreation-alertsender" />
 			</alerts>
 			<userActions>
@@ -33,36 +37,36 @@
 					nextStep="deleteUser" highlight="RED" />
 			</userActions>
 		</step>
-		<step type="enrichment" name="prepareCreateUser"
+		<step type="ENRICHMENT" name="prepareCreateUser"
 			description="$m{security.workflow.usercreation.step.prepare}"
 			label="$m{security.workflow.usercreation.step.prepare.label}"
 			nextStep="createUser" policy="usercreation-enrichment">
 		</step>
-		<step type="record_action" name="createUser"
+		<step type="RECORD_ACTION" name="createUser"
 			description="$m{security.workflow.usercreation.step.creation}"
 			label="$m{security.workflow.usercreation.step.creation.label}"
-			nextStep="end" actionType="update">
+			nextStep="end" actionType="UPDATE">
 			<setValues>
 				<setValue field="workflowStatus" value="APR" />
 			</setValues>
 			<alerts>
 				<alert name="userWelcome"
 					description="$m{security.workflow.usercreation.alert.welcome}"
-					type="pass_through" channel="email"
+					type="PASS_THROUGH"
 					generator="userwelcome-alertsender"
 					recipientPolicy="entity-wfrecipientpolicy"
 					recipientNameRule="fullName" recipientContactRule="email" />
 			</alerts>
 		</step>
-		<step type="record_action" name="deleteUser"
+		<step type="RECORD_ACTION" name="deleteUser"
 			description="$m{security.workflow.usercreation.step.deletion}"
 			label="$m{security.workflow.usercreation.step.deletion.label}"
-			nextStep="end" actionType="delete">
+			nextStep="end" actionType="DELETE">
 		</step>
-		<step type="end" name="end"
+		<step type="END" name="end"
 			description="$m{security.workflow.usercreation.step.end}"
 			label="$m{security.workflow.usercreation.step.end.label}" />
-		<step type="error" name="error"
+		<step type="ERROR" name="error"
 			description="$m{security.workflow.usercreation.step.error}"
 			label="$m{security.workflow.usercreation.step.error.label}"
 			applet="security.manageUser">

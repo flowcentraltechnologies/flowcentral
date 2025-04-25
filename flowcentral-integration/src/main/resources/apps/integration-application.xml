@@ -1,13 +1,19 @@
 <?xml version="1.0"?>
 <!-- Integration application -->
-<application name="integration"
-	description="$m{integration.short.description}" label="$m{integration.label}"
+<application
+	xmlns="http://flowcentraltech.com/schema-common"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://flowcentraltech.com/schema-common https://schema.flowcentralplatform.com/xsd/flowcentral-application-4.0.0.xsd"
+	name="integration"
+	description="$m{integration.short.description}"
+	label="$m{integration.label}"
 	module="integration">
 	<!-- Widget Types -->
 	<widgetTypes>
 		<widgetType name="endpointproviderlist"
-			description="$m{integration.widgettype.endpointproviderlist}" dataType="string"
-			inputType="string"
+			description="$m{integration.widgettype.endpointproviderlist}"
+			dataType="STRING"
+			inputType="STRING"
 			editor="!ui-select list:endpointproviderlist listParams:$l{endpointType} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 	</widgetTypes>
@@ -15,205 +21,261 @@
 	<applets>
 		<applet name="manageEndpointConfig"
 			description="$m{integration.endpointconfig.manage}"
-			label="$m{integration.endpointconfig.manage.label}" icon="network-wired"
-			type="manage_entitylist" entity="endpointConfig" menuAccess="true">
-			<property name="searchTable" value="endpointConfigTable" />
-			<property name="searchTable.new" value="true" />
-			<property name="searchTable.report" value="true" />
-			<property name="searchTable.quickFilter" value="true" />
-			<property name="searchTable.basicSearchOnly" value="true" />
-			<property name="createForm" value="endpointConfigForm" />
-			<property name="createForm.save" value="true" />
-			<property name="createForm.save.next" value="true" />
-			<property name="createForm.save.close" value="true" />
-			<property name="maintainForm" value="endpointConfigForm" />
-			<property name="maintainForm.update" value="true" />
-			<property name="maintainForm.delete" value="true" />
+			label="$m{integration.endpointconfig.manage.label}"
+			icon="network-wired"
+			type="MANAGE_ENTITYLIST" entity="endpointConfig" menuAccess="true">
+			<properties>
+				<property name="searchTable" value="endpointConfigTable" />
+				<property name="searchTable.new" value="true" />
+				<property name="searchTable.report" value="true" />
+				<property name="searchTable.quickFilter" value="true" />
+				<property name="searchTable.basicSearchOnly" value="true" />
+				<property name="createForm" value="endpointConfigForm" />
+				<property name="createForm.save" value="true" />
+				<property name="createForm.save.next" value="true" />
+				<property name="createForm.save.close" value="true" />
+				<property name="maintainForm" value="endpointConfigForm" />
+				<property name="maintainForm.update" value="true" />
+				<property name="maintainForm.delete" value="true" />
+			</properties>
 		</applet>
 		<applet name="manageEndpointPath"
 			description="$m{integration.endpointpath.manage}"
-			label="$m{integration.endpointpath.manage.label}" icon="network-wired"
-			type="manage_entitylist" entity="endpointPath" menuAccess="false">
-			<property name="searchTable" value="endpointPathTable" />
-			<property name="searchTable.new" value="true" />
-			<property name="searchTable.report" value="false" />
-			<property name="createForm" value="endpointPathForm" />
-			<property name="createForm.save" value="true" />
-			<property name="createForm.save.next" value="true" />
-			<property name="createForm.save.close" value="true" />
-			<property name="maintainForm" value="endpointPathForm" />
-			<property name="maintainForm.update" value="true" />
-			<property name="maintainForm.delete" value="true" />
+			label="$m{integration.endpointpath.manage.label}"
+			icon="network-wired"
+			type="MANAGE_ENTITYLIST" entity="endpointPath" menuAccess="false">
+			<properties>
+				<property name="searchTable" value="endpointPathTable" />
+				<property name="searchTable.new" value="true" />
+				<property name="searchTable.report" value="false" />
+				<property name="createForm" value="endpointPathForm" />
+				<property name="createForm.save" value="true" />
+				<property name="createForm.save.next" value="true" />
+				<property name="createForm.save.close" value="true" />
+				<property name="maintainForm" value="endpointPathForm" />
+				<property name="maintainForm.update" value="true" />
+				<property name="maintainForm.delete" value="true" />
+			</properties>
 		</applet>
 	</applets>
 	<!-- References -->
 	<references>
 		<reference name="endpointConfigRef"
-			description="$m{integration.endpointconfig.reference}" entity="endpointConfig"
+			description="$m{integration.endpointconfig.reference}"
+			entity="endpointConfig"
 			searchField="description" />
 		<reference name="endpointPathRef"
-			description="$m{integration.endpointpath.reference}" entity="endpointPath"
+			description="$m{integration.endpointpath.reference}"
+			entity="endpointPath"
 			searchField="description" />
 	</references>
 	<!-- Entities -->
 	<entities>
-		<entity name="endpointConfig" description="$m{integration.endpointconfig}"
+		<entity name="endpointConfig"
+			description="$m{integration.endpointconfig}"
 			label="$m{integration.endpointconfig.label}"
-			type="com.flowcentraltech.flowcentral.integration.entities.EndpointConfig" auditable="true"
+			type="com.flowcentraltech.flowcentral.integration.entities.EndpointConfig"
+			auditable="true"
 			reportable="true">
-			<field name="endpointType" label="$m{integration.endpointconfig.endpointtype}"
-				type="enum_ref" references="endpointtypelist"
-				inputWidget="application.enumlist" basicSearch="true" />
-			<field name="name" label="$m{integration.endpointconfig.name}" type="string"
-				inputWidget="application.path" maxLen="64" basicSearch="true"/>
-			<field name="description" label="$m{integration.endpointconfig.description}"
-				type="string" inputWidget="application.text" maxLen="96" />
-			<field name="endpoint" label="$m{integration.endpointconfig.endpointprovider}"
-				type="string" inputWidget="endpointproviderlist" maxLen="64"/>
-			<field name="endpointTypeDesc" label="$m{integration.endpointconfig.endpointtypedesc}"
-				type="list_only" key="endpointType" property="description" />
-			<field name="pathList"
-				label="$m{integration.endpointconfig.paths}" type="child_list"
-				references="endpointPathRef" />
-			<uniqueConstraint name="nameUc"
-				description="$m{integration.endpointconfig.uc.name}"
-				fieldList="name" />
-			<uniqueConstraint name="descUc"
-				description="$m{integration.endpointconfig.uc.description}"
-				fieldList="description" />
+			<fields>
+				<field name="endpointType"
+					label="$m{integration.endpointconfig.endpointtype}"
+					type="ENUM_REF" references="endpointtypelist"
+					inputWidget="application.enumlist" basicSearch="true" />
+				<field name="name" label="$m{integration.endpointconfig.name}"
+					type="STRING"
+					inputWidget="application.path" maxLen="64" basicSearch="true" />
+				<field name="description"
+					label="$m{integration.endpointconfig.description}"
+					type="STRING" inputWidget="application.text" maxLen="96" />
+				<field name="endpoint"
+					label="$m{integration.endpointconfig.endpointprovider}"
+					type="STRING" inputWidget="endpointproviderlist" maxLen="64" />
+				<field name="endpointTypeDesc"
+					label="$m{integration.endpointconfig.endpointtypedesc}"
+					type="LIST_ONLY" key="endpointType" property="description" />
+				<field name="pathList"
+					label="$m{integration.endpointconfig.paths}" type="CHILD_LIST"
+					references="endpointPathRef" />
+			</fields>
+			<uniqueConstraints>
+				<uniqueConstraint name="nameUc"
+					description="$m{integration.endpointconfig.uc.name}"
+					fieldList="name" />
+				<uniqueConstraint name="descUc"
+					description="$m{integration.endpointconfig.uc.description}"
+					fieldList="description" />
+			</uniqueConstraints>
 		</entity>
 		<entity name="endpointPath" description="$m{integration.endpointpath}"
 			label="$m{integration.endpointpath.label}"
-			type="com.flowcentraltech.flowcentral.integration.entities.EndpointPath" auditable="true"
+			type="com.flowcentraltech.flowcentral.integration.entities.EndpointPath"
+			auditable="true"
 			reportable="true">
-			<field name="endpointConfigId" label="$m{integration.endpointpath.endpointconfigid}"
-				inputLabel="$m{integration.endpointpath.endpointconfig}" type="ref"
-				references="endpointConfigRef" inputWidget="application.entitysearch" />
-			<field name="direction" label="$m{integration.endpointpath.direction}"
-				type="enum_ref" references="directiontypelist"
-				inputWidget="application.enumlist"/>
-			<field name="name" label="$m{integration.endpointpath.name}" type="string"
-				inputWidget="application.path" maxLen="64"/>
-			<field name="description" label="$m{integration.endpointpath.description}"
-				type="string" inputWidget="application.text" maxLen="96" />
-			<field name="path" label="$m{integration.endpointpath.path}"
-				type="string" inputWidget="application.textarea" maxLen="128"/>
-			<field name="endpointType" label="$m{integration.endpointpath.endpointtype}"
-				type="list_only" key="endpointConfigId" property="endpointType" />
-			<field name="endpointConfigName" label="$m{integration.endpointpath.endpointconfigname}"
-				type="list_only" key="endpointConfigId" property="name" />
-			<field name="endpointConfigDesc" label="$m{integration.endpointpath.endpointconfigdesc}"
-				type="list_only" key="endpointConfigId" property="description" />
-			<field name="directionDesc" label="$m{integration.endpointpath.directiondesc}"
-				type="list_only" key="direction" property="description" />
-			<uniqueConstraint name="nameUc"
-				description="$m{integration.endpointpath.uc.name}"
-				fieldList="endpointConfigId,name" />
-			<uniqueConstraint name="descUc"
-				description="$m{integration.endpointpath.uc.description}"
-				fieldList="endpointConfigId,description" />
+			<fields>
+				<field name="endpointConfigId"
+					label="$m{integration.endpointpath.endpointconfigid}"
+					inputLabel="$m{integration.endpointpath.endpointconfig}"
+					type="REF"
+					references="endpointConfigRef"
+					inputWidget="application.entitysearch" />
+				<field name="direction"
+					label="$m{integration.endpointpath.direction}"
+					type="ENUM_REF" references="directiontypelist"
+					inputWidget="application.enumlist" />
+				<field name="name" label="$m{integration.endpointpath.name}"
+					type="STRING"
+					inputWidget="application.path" maxLen="64" />
+				<field name="description"
+					label="$m{integration.endpointpath.description}"
+					type="STRING" inputWidget="application.text" maxLen="96" />
+				<field name="path" label="$m{integration.endpointpath.path}"
+					type="STRING" inputWidget="application.textarea" maxLen="128" />
+				<field name="endpointType"
+					label="$m{integration.endpointpath.endpointtype}"
+					type="LIST_ONLY" key="endpointConfigId" property="endpointType" />
+				<field name="endpointConfigName"
+					label="$m{integration.endpointpath.endpointconfigname}"
+					type="LIST_ONLY" key="endpointConfigId" property="name" />
+				<field name="endpointConfigDesc"
+					label="$m{integration.endpointpath.endpointconfigdesc}"
+					type="LIST_ONLY" key="endpointConfigId" property="description" />
+				<field name="directionDesc"
+					label="$m{integration.endpointpath.directiondesc}"
+					type="LIST_ONLY" key="direction" property="description" />
+			</fields>
+			<uniqueConstraints>
+				<uniqueConstraint name="nameUc"
+					description="$m{integration.endpointpath.uc.name}"
+					fieldList="endpointConfigId,name" />
+				<uniqueConstraint name="descUc"
+					description="$m{integration.endpointpath.uc.description}"
+					fieldList="endpointConfigId,description" />
+			</uniqueConstraints>
 		</entity>
 	</entities>
 	<!-- Tables -->
 	<tables>
 		<table name="endpointConfigTable"
 			description="$m{integration.endpointconfig.table}"
-			label="$m{integration.endpointconfig.table.label}" entity="endpointConfig"
+			label="$m{integration.endpointconfig.table.label}"
+			entity="endpointConfig"
 			itemsPerPage="20" serialNo="true" basicSearch="true">
-			<column field="name" renderWidget="application.name"
-				widthRatio="1"  linkAct="maintainAct"/>
-			<column field="description" renderWidget="application.text"
-				widthRatio="1" />
-			<column field="endpoint" renderWidget="application.text"
-				widthRatio="1" />
-			<column field="endpointTypeDesc" renderWidget="application.text"
-				label="$m{integration.endpointconfig.endpointtype}" widthRatio="1" />
-			<column field="createDt" renderWidget="application.datetime"
-				widthRatio="1" />
-			<column field="updateDt" renderWidget="application.datetime"
-				widthRatio="1" />
+			<columns>
+				<column field="name" renderWidget="application.name"
+					widthRatio="1" linkAct="maintainAct" />
+				<column field="description" renderWidget="application.text"
+					widthRatio="1" />
+				<column field="endpoint" renderWidget="application.text"
+					widthRatio="1" />
+				<column field="endpointTypeDesc" renderWidget="application.text"
+					label="$m{integration.endpointconfig.endpointtype}"
+					widthRatio="1" />
+				<column field="createDt" renderWidget="application.datetime"
+					widthRatio="1" />
+				<column field="updateDt" renderWidget="application.datetime"
+					widthRatio="1" />
+			</columns>
 		</table>
 		<table name="endpointPathTable"
 			description="$m{integration.endpointpath.table}"
-			label="$m{integration.endpointpath.table.label}" entity="endpointPath"
+			label="$m{integration.endpointpath.table.label}"
+			entity="endpointPath"
 			itemsPerPage="20" serialNo="true">
-			<column field="name" renderWidget="application.name"
-				widthRatio="1"  linkAct="maintainAct"/>
-			<column field="description" renderWidget="application.text"
-				widthRatio="1" />
-			<column field="path" renderWidget="application.text"
-				widthRatio="1" />
-			<column field="directionDesc" renderWidget="application.text"
-				widthRatio="1" />
-			<column field="createDt" renderWidget="application.datetime"
-				widthRatio="1" />
-			<column field="updateDt" renderWidget="application.datetime"
-				widthRatio="1" />
+			<columns>
+				<column field="name" renderWidget="application.name"
+					widthRatio="1" linkAct="maintainAct" />
+				<column field="description" renderWidget="application.text"
+					widthRatio="1" />
+				<column field="path" renderWidget="application.text"
+					widthRatio="1" />
+				<column field="directionDesc" renderWidget="application.text"
+					widthRatio="1" />
+				<column field="createDt" renderWidget="application.datetime"
+					widthRatio="1" />
+				<column field="updateDt" renderWidget="application.datetime"
+					widthRatio="1" />
+			</columns>
 		</table>
 	</tables>
 	<!-- Forms -->
 	<forms>
 		<form name="endpointConfigForm"
-			description="$m{integration.endpointconfig.form}" entity="endpointConfig">
-			<tab name="basicDetails"
-				label="$m{integration.endpointconfig.form.basicdetails}" contentType="miniform">
-				<section name="endpointConfigDetails" columns="type_2">
-					<field name="name" column="0" required="true" />
-					<field name="description" column="0" required="true" />
-					<field name="endpointType" column="1" required="true" switchOnChange="true"/>
-					<field name="endpoint" column="1" required="true"
-						switchOnChange="true" />
-					<field name="status" column="1" required="true" />
-				</section>
-			</tab>
-			<tab name="endpointParams" label="$m{integration.endpointconfig.form.parameters}"
-				reference="endpoint-paramconfigprovider" contentType="param_values" />
-			<tab name="paths"
-				label="$m{integration.endpointconfig.form.paths}"
-				contentType="child_list" applet="manageEndpointPath"
-				reference="pathList" />
-			<tab name="changeLog" label="$m{application.form.audit}"
-				contentType="miniform_changelog" />
+			description="$m{integration.endpointconfig.form}"
+			entity="endpointConfig">
+			<tabs>
+				<tab name="basicDetails"
+					label="$m{integration.endpointconfig.form.basicdetails}"
+					contentType="MINIFORM">
+					<section name="endpointConfigDetails" columns="TYPE_2">
+						<field name="name" column="0" required="true" />
+						<field name="description" column="0" required="true" />
+						<field name="endpointType" column="1" required="true"
+							switchOnChange="true" />
+						<field name="endpoint" column="1" required="true"
+							switchOnChange="true" />
+						<field name="status" column="1" required="true" />
+					</section>
+				</tab>
+				<tab name="endpointParams"
+					label="$m{integration.endpointconfig.form.parameters}"
+					reference="endpoint-paramconfigprovider"
+					contentType="PARAM_VALUES" />
+				<tab name="paths"
+					label="$m{integration.endpointconfig.form.paths}"
+					contentType="CHILD_LIST" applet="manageEndpointPath"
+					reference="pathList" />
+				<tab name="changeLog" label="$m{application.form.audit}"
+					contentType="MINIFORM_CHANGELOG" />
+			</tabs>
 		</form>
 		<form name="endpointPathForm"
-			description="$m{integration.endpointpath.form}" entity="endpointPath">
-			<tab name="basicDetails"
-				label="$m{integration.endpointpath.form.basicdetails}" contentType="miniform">
-				<section name="endpointPathDetails" columns="type_2">
-					<field name="name" column="0" required="true" />
-					<field name="description" column="0" required="true" />
-					<field name="direction" column="1" required="true"/>
-					<field name="path" column="1" required="true"/>
-				</section>
-			</tab>
-			<tab name="changeLog" label="$m{application.form.audit}"
-				contentType="miniform_changelog" />
-			<formStatePolicy type="ON_SWITCH"
-				name="onCreateFormStatePolicy"
-				description="$m{integration.endpointpath.form.statepolicy.onswitch}">
-				<onCondition>
-					<restriction type="equals" paramA="RST" field="endpointType" />
-				</onCondition>
-				<setStates>
-					<setState type="field" target="direction"
-						disabled="true" />
-				</setStates>
-				<setValues>
-					<setValue field="direction" type="IMMEDIATE"
-						value="IN" />
-				</setValues>
-			</formStatePolicy>
-			<formWidgetRulesPolicy
-				name="restPathRules"
-				description="$m{integration.endpointpath.form.widgetrulespolicy.restpathrules}">
-				<onCondition>
-					<restriction type="equals" paramA="RST" field="endpointType" />
-				</onCondition>
-				<widgetRules>
-					<entry field="path"
-						widget="application.restapilist" />
-				</widgetRules>
-			</formWidgetRulesPolicy>
+			description="$m{integration.endpointpath.form}"
+			entity="endpointPath">
+			<tabs>
+				<tab name="basicDetails"
+					label="$m{integration.endpointpath.form.basicdetails}"
+					contentType="MINIFORM">
+					<section name="endpointPathDetails" columns="TYPE_2">
+						<field name="name" column="0" required="true" />
+						<field name="description" column="0" required="true" />
+						<field name="direction" column="1" required="true" />
+						<field name="path" column="1" required="true" />
+					</section>
+				</tab>
+				<tab name="changeLog" label="$m{application.form.audit}"
+					contentType="MINIFORM_CHANGELOG" />
+			</tabs>
+			<formStatePolicies>
+				<formStatePolicy type="ON_SWITCH"
+					name="onCreateFormStatePolicy"
+					description="$m{integration.endpointpath.form.statepolicy.onswitch}">
+					<onCondition>
+						<restriction type="EQUALS" paramA="RST" field="endpointType" />
+					</onCondition>
+					<setValues>
+						<setValue field="direction" type="IMMEDIATE"
+							value="IN" />
+					</setValues>
+					<setStates>
+						<setState type="FIELD" target="direction"
+							disabled="TRUE" />
+					</setStates>
+				</formStatePolicy>
+			</formStatePolicies>
+			<formWidgetRulesPolicies>
+				<formWidgetRulesPolicy
+					name="restPathRules"
+					description="$m{integration.endpointpath.form.widgetrulespolicy.restpathrules}">
+					<onCondition>
+						<restriction type="EQUALS" paramA="RST" field="endpointType" />
+					</onCondition>
+					<widgetRules>
+						<entry field="path"
+							widget="application.restapilist" />
+					</widgetRules>
+				</formWidgetRulesPolicy>
+			</formWidgetRulesPolicies>
 		</form>
 	</forms>
 </application>

@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 FlowCentral Technologies Limited.
+ * Copyright 2021-2025 FlowCentral Technologies Limited.
  * All rights reserved.
  * 
  * PROPRIETARY AND CONFIDENTIAL. USE IS SUBJECT TO LICENSE TERMS.
@@ -18,7 +18,7 @@ import com.tcdng.unify.core.util.EncodingUtils;
  * OS messaging endpoint entity policy.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("osmessagingendpoint-policy")
 public class OSMessagingEndpointPolicy extends BaseStatusEntityPolicy {

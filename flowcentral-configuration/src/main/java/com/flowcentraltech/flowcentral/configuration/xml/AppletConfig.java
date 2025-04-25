@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 FlowCentral Technologies Limited.
+ * Copyright 2021-2025 FlowCentral Technologies Limited.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -15,13 +15,10 @@
  */
 package com.flowcentraltech.flowcentral.configuration.xml;
 
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.flowcentraltech.flowcentral.configuration.constants.AppletType;
 import com.flowcentraltech.flowcentral.configuration.xml.adapter.AppletTypeXmlAdapter;
@@ -30,7 +27,7 @@ import com.flowcentraltech.flowcentral.configuration.xml.adapter.AppletTypeXmlAd
  * Applet configuration.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @JsonInclude(value = Include.NON_NULL, content = Include.NON_EMPTY)
 public class AppletConfig extends BaseNameConfig {
@@ -79,30 +76,25 @@ public class AppletConfig extends BaseNameConfig {
     @JacksonXmlProperty(isAttribute = true)
     private Boolean allowSecondaryTenants;
 
-    @JacksonXmlElementWrapper(useWrapping = false)
-    @JacksonXmlProperty(localName = "property")
-    private List<AppletPropConfig> propList;
+    @JacksonXmlProperty
+    private AppletPropsConfig properties;
 
-    @JacksonXmlElementWrapper(useWrapping = false)
-    @JacksonXmlProperty(localName = "routeToAppletItem")
-    private List<AppletRouteToAppletConfig> routeToAppletList;
+    @JacksonXmlProperty
+    private AppletRouteToAppletsConfig routeToAppletItems;
     
-    @JacksonXmlElementWrapper(useWrapping = false)
-    @JacksonXmlProperty(localName = "filter")
-    private List<AppletFilterConfig> filterList;
+    @JacksonXmlProperty
+    private AppletFiltersConfig filters;
 
-    @JacksonXmlElementWrapper(useWrapping = false)
-    @JacksonXmlProperty(localName = "values")
-    private List<AppletSetValuesConfig> valuesList;
+    @JacksonXmlProperty(localName = "valuesset")
+    private AppletValuesSetConfig valuesSet;
     
-    @JacksonXmlElementWrapper(useWrapping = false)
-    @JacksonXmlProperty(localName = "alert")
-    private List<AppletAlertConfig> alertList;
+    @JacksonXmlProperty
+    private AppletAlertsConfig alerts;
     
     public AppletConfig() {
         this.menuAccess = Boolean.FALSE;
         this.supportOpenInNewWindow = Boolean.FALSE;
-        this.allowSecondaryTenants = Boolean.FALSE;;
+        this.allowSecondaryTenants = Boolean.FALSE;
     }
     
     public AppletType getType() {
@@ -217,44 +209,44 @@ public class AppletConfig extends BaseNameConfig {
         this.displayIndex = displayIndex;
     }
 
-    public List<AppletPropConfig> getPropList() {
-        return propList;
+    public AppletPropsConfig getProperties() {
+        return properties;
     }
 
-    public void setPropList(List<AppletPropConfig> propList) {
-        this.propList = propList;
+    public void setProperties(AppletPropsConfig properties) {
+        this.properties = properties;
     }
 
-    public List<AppletRouteToAppletConfig> getRouteToAppletList() {
-        return routeToAppletList;
+    public AppletRouteToAppletsConfig getRouteToAppletItems() {
+        return routeToAppletItems;
     }
 
-    public void setRouteToAppletList(List<AppletRouteToAppletConfig> routeToAppletList) {
-        this.routeToAppletList = routeToAppletList;
+    public void setRouteToAppletItems(AppletRouteToAppletsConfig routeToAppletItems) {
+        this.routeToAppletItems = routeToAppletItems;
     }
 
-    public List<AppletFilterConfig> getFilterList() {
-        return filterList;
+    public AppletFiltersConfig getFilters() {
+        return filters;
     }
 
-    public void setFilterList(List<AppletFilterConfig> filterList) {
-        this.filterList = filterList;
+    public void setFilters(AppletFiltersConfig filters) {
+        this.filters = filters;
     }
 
-    public List<AppletSetValuesConfig> getValuesList() {
-        return valuesList;
+    public AppletValuesSetConfig getValuesSet() {
+        return valuesSet;
     }
 
-    public void setValuesList(List<AppletSetValuesConfig> valuesList) {
-        this.valuesList = valuesList;
+    public void setValuesSet(AppletValuesSetConfig valuesSet) {
+        this.valuesSet = valuesSet;
     }
 
-    public List<AppletAlertConfig> getAlertList() {
-        return alertList;
+    public AppletAlertsConfig getAlerts() {
+        return alerts;
     }
 
-    public void setAlertList(List<AppletAlertConfig> alertList) {
-        this.alertList = alertList;
+    public void setAlerts(AppletAlertsConfig alerts) {
+        this.alerts = alerts;
     }
 
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 FlowCentral Technologies Limited.
+ * Copyright 2021-2025 FlowCentral Technologies Limited.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -45,7 +45,7 @@ import com.tcdng.unify.core.util.DataUtils;
  * Application help sheet installer.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component(ApplicationModuleNameConstants.APPLICATION_HELPSHEET_INSTALLER)
 public class ApplicationHelpSheetInstallerImpl extends AbstractApplicationArtifactInstaller {
@@ -166,9 +166,9 @@ public class ApplicationHelpSheetInstallerImpl extends AbstractApplicationArtifa
     private void populateChildList(AppHelpSheet appHelpSheet, HelpSheetConfig helpSheetConfig)
             throws UnifyException {
         List<AppHelpEntry> entryList = null;
-        if (!DataUtils.isBlank(helpSheetConfig.getEntryList())) {
+        if (helpSheetConfig.getEntries() != null && !DataUtils.isBlank(helpSheetConfig.getEntries().getEntryList())) {
             entryList = new ArrayList<AppHelpEntry>();
-            for (HelpEntryConfig entryConfig : helpSheetConfig.getEntryList()) {
+            for (HelpEntryConfig entryConfig : helpSheetConfig.getEntries().getEntryList()) {
                 AppHelpEntry entry = new AppHelpEntry();
                 entry.setFieldName(entryConfig.getFieldName());
                 entry.setHelpContent(entryConfig.getHelpContent());

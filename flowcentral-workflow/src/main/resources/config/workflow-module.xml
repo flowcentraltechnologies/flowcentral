@@ -1,6 +1,10 @@
 <?xml version="1.0"?>
 <!-- Workflow module configuration -->
-<module name="workflow" description="$m{workflow.module}" shortCode="WRK"
+<module
+	xmlns="http://flowcentraltech.com/schema-common"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://flowcentraltech.com/schema-common https://schema.flowcentralplatform.com/xsd/flowcentral-module-4.0.0.xsd"
+	name="workflow" description="$m{workflow.module}" shortCode="WRK"
 	label="$m{workflow.label}">
 	<!-- Applications -->
 	<applications>
@@ -18,21 +22,21 @@
 	<sysParameters>
 		<sysParameter code="WF-0001" defaultVal="64"
 			description="$m{workflow.sysparam.processingbatchsize}"
-			editor="!ui-integer precision:2" type="number" editable="true" />
+			editor="!ui-integer precision:2" type="NUMBER" editable="true" />
 		<sysParameter code="WF-0002" defaultVal="64"
 			description="$m{workflow.sysparam.autoloadingbatchsize}"
-			editor="!ui-integer precision:2" type="number" editable="true" />
+			editor="!ui-integer precision:2" type="NUMBER" editable="true" />
 		<sysParameter code="WF-0003" defaultVal="true"
 			description="$m{workflow.sysparam.enableupdateonreview}"
-			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
+			editor="!ui-select list:booleanlist" type="BOOLEAN" editable="true" />
 		<sysParameter code="WF-0004" defaultVal="true"
 			description="$m{workflow.sysparam.enableautoloading}"
-			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
+			editor="!ui-select list:booleanlist" type="BOOLEAN" editable="true" />
 		<sysParameter code="WF-0005" defaultVal="64"
 			description="$m{workflow.sysparam.itemalertbatchsize}"
-			editor="!ui-integer precision:2" type="number" editable="true" />
+			editor="!ui-integer precision:2" type="NUMBER" editable="true" />
 		<sysParameter code="WF-0006" defaultVal="196"
 			description="$m{workflow.sysparam.itemejectionbatchsize}"
-			editor="!ui-integer precision:4" type="number" editable="true" />
+			editor="!ui-integer precision:4" type="NUMBER" editable="true" />
 	</sysParameters>
 </module>

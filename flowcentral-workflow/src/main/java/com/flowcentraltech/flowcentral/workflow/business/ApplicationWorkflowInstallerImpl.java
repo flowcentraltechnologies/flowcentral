@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 FlowCentral Technologies Limited.
+ * Copyright 2021-2025 FlowCentral Technologies Limited.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -83,7 +83,7 @@ import com.tcdng.unify.core.util.DataUtils;
  * Application workflow installer.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component(WorkflowModuleNameConstants.APPLICATION_WORKFLOW_INSTALLER)
 public class ApplicationWorkflowInstallerImpl extends AbstractApplicationArtifactInstaller {
@@ -444,12 +444,12 @@ public class ApplicationWorkflowInstallerImpl extends AbstractApplicationArtifac
             throws UnifyException {
         // Filters
         List<WorkflowFilter> filterList = null;
-        if (!DataUtils.isBlank(wfConfig.getFilterList())) {
+        if (wfConfig.getFilters() != null && !DataUtils.isBlank(wfConfig.getFilters().getFilterList())) {
             filterList = new ArrayList<WorkflowFilter>();
             Map<String, WorkflowFilter> map = restore || workflow.isIdBlank() ? Collections.emptyMap()
                     : environment().findAllMap(String.class, "name",
                             new WorkflowFilterQuery().workflowId(workflow.getId()));
-            for (WfFilterConfig filterConfig : wfConfig.getFilterList()) {
+            for (WfFilterConfig filterConfig : wfConfig.getFilters().getFilterList()) {
                 WorkflowFilter oldWorkflowFilter = map.get(filterConfig.getName());
                 if (oldWorkflowFilter == null) {
                     WorkflowFilter workflowFilter = new WorkflowFilter();
@@ -475,12 +475,12 @@ public class ApplicationWorkflowInstallerImpl extends AbstractApplicationArtifac
 
         // Workflow set values
         List<WorkflowSetValues> setValuesList = null;
-        if (!DataUtils.isBlank(wfConfig.getSetValuesList())) {
+        if (wfConfig.getValues() != null && !DataUtils.isBlank(wfConfig.getValues().getSetValuesList())) {
             setValuesList = new ArrayList<WorkflowSetValues>();
             Map<String, WorkflowSetValues> map = restore || workflow.isIdBlank() ? Collections.emptyMap()
                     : environment().findAllMap(String.class, "name",
                             new WorkflowSetValuesQuery().workflowId(workflow.getId()));
-            for (WfSetValuesConfig wfSetValuesConfig : wfConfig.getSetValuesList()) {
+            for (WfSetValuesConfig wfSetValuesConfig : wfConfig.getValues().getSetValuesList()) {
                 WorkflowSetValues oldWorkflowSetValues = map.get(wfSetValuesConfig.getName());
                 if (oldWorkflowSetValues == null) {
                     WorkflowSetValues workflowSetValues = new WorkflowSetValues();

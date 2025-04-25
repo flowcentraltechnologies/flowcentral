@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 FlowCentral Technologies Limited.
+ * Copyright 2021-2025 FlowCentral Technologies Limited.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -34,7 +34,7 @@ import com.tcdng.unify.core.constant.PageSizeType;
  */
 @JsonInclude(value = Include.NON_NULL, content = Include.NON_EMPTY)
 @JacksonXmlRootElement(localName = "report")
-public class ReportConfig extends BaseNameConfig {
+public class ReportConfig extends BaseRootConfig {
 
     @JsonSerialize(using = ReportConfigTypeXmlAdapter.Serializer.class)
     @JsonDeserialize(using = ReportConfigTypeXmlAdapter.Deserializer.class)
@@ -113,6 +113,7 @@ public class ReportConfig extends BaseNameConfig {
     private Boolean allowSecondaryTenants;
 
     public ReportConfig() {
+        super("flowcentral-report-4.0.0.xsd");
         this.type = ReportConfigType.TABULAR;
         this.sizeType = PageSizeType.A4;
         this.showGrandFooter = Boolean.FALSE;

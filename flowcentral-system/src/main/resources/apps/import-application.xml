@@ -1,6 +1,10 @@
 <?xml version="1.0"?>
 <!-- Import application -->
-<application name="import"
+<application
+	xmlns="http://flowcentraltech.com/schema-common"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://flowcentraltech.com/schema-common https://schema.flowcentralplatform.com/xsd/flowcentral-application-4.0.0.xsd"
+	name="import"
 	description="$m{system.import.short.description}"
 	label="$m{system.import.label}" module="system" displayIndex="-8">
 </application>

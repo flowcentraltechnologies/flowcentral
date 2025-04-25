@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 FlowCentral Technologies Limited.
+ * Copyright 2021-2025 FlowCentral Technologies Limited.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -15,13 +15,10 @@
  */
 package com.flowcentraltech.flowcentral.configuration.xml;
 
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityBaseType;
 import com.flowcentraltech.flowcentral.configuration.xml.adapter.EntityBaseTypeXmlAdapter;
@@ -30,7 +27,7 @@ import com.flowcentraltech.flowcentral.configuration.xml.adapter.EntityBaseTypeX
  * Entity configuration.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @JsonInclude(value = Include.NON_NULL, content = Include.NON_EMPTY)
 public class AppEntityConfig extends BaseNameConfig {
@@ -76,41 +73,32 @@ public class AppEntityConfig extends BaseNameConfig {
     @JacksonXmlProperty(isAttribute = true)
     private Boolean actionPolicy;
 
-    @JacksonXmlElementWrapper(useWrapping = false)
-    @JacksonXmlProperty(localName = "field")
-    private List<EntityFieldConfig> entityFieldList;
+    @JacksonXmlProperty
+    private EntityFieldsConfig fields;
 
-    @JacksonXmlElementWrapper(useWrapping = false)
-    @JacksonXmlProperty(localName = "attachment")
-    private List<EntityAttachmentConfig> attachmentList;
+    @JacksonXmlProperty
+    private EntityAttachmentsConfig attachments;
 
-    @JacksonXmlElementWrapper(useWrapping = false)
-    @JacksonXmlProperty(localName = "expression")
-    private List<EntityExpressionConfig> expressionList;
+    @JacksonXmlProperty
+    private EntityExpressionsConfig expressions;
     
-    @JacksonXmlElementWrapper(useWrapping = false)
-    @JacksonXmlProperty(localName = "uniqueConstraint")
-    private List<EntityUniqueConstraintConfig> uniqueConstraintList;
+    @JacksonXmlProperty
+    private EntityUniqueConstraintsConfig uniqueConstraints;
 
-    @JacksonXmlElementWrapper(useWrapping = false)
-    @JacksonXmlProperty(localName = "index")
-    private List<EntityIndexConfig> indexList;
+    @JacksonXmlProperty
+    private EntityIndexesConfig indexes;
 
-    @JacksonXmlElementWrapper(useWrapping = false)
-    @JacksonXmlProperty(localName = "upload")
-    private List<EntityUploadConfig> uploadList;
+    @JacksonXmlProperty
+    private EntityUploadsConfig uploads;
 
-    @JacksonXmlElementWrapper(useWrapping = false)
-    @JacksonXmlProperty(localName = "searchInput")
-    private List<EntitySearchInputConfig> searchInputList;
+    @JacksonXmlProperty
+    private EntitySearchInputsConfig searchInputs;
 
-    @JacksonXmlElementWrapper(useWrapping = false)
-    @JacksonXmlProperty(localName = "series")
-    private List<EntitySeriesConfig> seriesList;
+    @JacksonXmlProperty(localName = "seriesset")
+    private EntitySeriesSetConfig seriesSet;
 
-    @JacksonXmlElementWrapper(useWrapping = false)
-    @JacksonXmlProperty(localName = "category")
-    private List<EntityCategoryConfig> categoryList;
+    @JacksonXmlProperty
+    private EntityCategoriesConfig categories;
     
     public AppEntityConfig() {
         this.mapped = Boolean.FALSE;
@@ -224,76 +212,76 @@ public class AppEntityConfig extends BaseNameConfig {
         this.actionPolicy = actionPolicy;
     }
 
-    public List<EntityFieldConfig> getEntityFieldList() {
-        return entityFieldList;
+    public EntityFieldsConfig getFields() {
+        return fields;
     }
 
-    public void setEntityFieldList(List<EntityFieldConfig> entityFieldList) {
-        this.entityFieldList = entityFieldList;
+    public void setFields(EntityFieldsConfig fields) {
+        this.fields = fields;
     }
 
-    public List<EntityAttachmentConfig> getAttachmentList() {
-        return attachmentList;
+    public EntityAttachmentsConfig getAttachments() {
+        return attachments;
     }
 
-    public void setAttachmentList(List<EntityAttachmentConfig> attachmentList) {
-        this.attachmentList = attachmentList;
+    public void setAttachments(EntityAttachmentsConfig attachments) {
+        this.attachments = attachments;
     }
 
-    public List<EntityExpressionConfig> getExpressionList() {
-        return expressionList;
+    public EntityExpressionsConfig getExpressions() {
+        return expressions;
     }
 
-    public void setExpressionList(List<EntityExpressionConfig> expressionList) {
-        this.expressionList = expressionList;
+    public void setExpressions(EntityExpressionsConfig expressions) {
+        this.expressions = expressions;
     }
 
-    public List<EntityUniqueConstraintConfig> getUniqueConstraintList() {
-        return uniqueConstraintList;
+    public EntityUniqueConstraintsConfig getUniqueConstraints() {
+        return uniqueConstraints;
     }
 
-    public void setUniqueConstraintList(List<EntityUniqueConstraintConfig> uniqueConstraintList) {
-        this.uniqueConstraintList = uniqueConstraintList;
+    public void setUniqueConstraints(EntityUniqueConstraintsConfig uniqueConstraints) {
+        this.uniqueConstraints = uniqueConstraints;
     }
 
-    public List<EntityIndexConfig> getIndexList() {
-        return indexList;
+    public EntityIndexesConfig getIndexes() {
+        return indexes;
     }
 
-    public void setIndexList(List<EntityIndexConfig> indexList) {
-        this.indexList = indexList;
+    public void setIndexes(EntityIndexesConfig indexes) {
+        this.indexes = indexes;
     }
 
-    public List<EntityUploadConfig> getUploadList() {
-        return uploadList;
+    public EntityUploadsConfig getUploads() {
+        return uploads;
     }
 
-    public void setUploadList(List<EntityUploadConfig> uploadList) {
-        this.uploadList = uploadList;
+    public void setUploads(EntityUploadsConfig uploads) {
+        this.uploads = uploads;
     }
 
-    public List<EntitySearchInputConfig> getSearchInputList() {
-        return searchInputList;
+    public EntitySearchInputsConfig getSearchInputs() {
+        return searchInputs;
     }
 
-    public void setSearchInputList(List<EntitySearchInputConfig> searchInputList) {
-        this.searchInputList = searchInputList;
+    public void setSearchInputs(EntitySearchInputsConfig searchInputs) {
+        this.searchInputs = searchInputs;
     }
 
-    public List<EntitySeriesConfig> getSeriesList() {
-        return seriesList;
+    public EntitySeriesSetConfig getSeriesSet() {
+        return seriesSet;
     }
 
-    public void setSeriesList(List<EntitySeriesConfig> seriesList) {
-        this.seriesList = seriesList;
+    public void setSeriesSet(EntitySeriesSetConfig seriesSet) {
+        this.seriesSet = seriesSet;
     }
 
-    public List<EntityCategoryConfig> getCategoryList() {
-        return categoryList;
+    public EntityCategoriesConfig getCategories() {
+        return categories;
     }
 
-    public void setCategoryList(List<EntityCategoryConfig> categoryList) {
-        this.categoryList = categoryList;
+    public void setCategories(EntityCategoriesConfig categories) {
+        this.categories = categories;
     }
 
 }

@@ -1,6 +1,10 @@
 <?xml version="1.0"?>
 <!-- Master system module configuration -->
-<module name="system" description="$m{system.module}"
+<module
+	xmlns="http://flowcentraltech.com/schema-common"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://flowcentraltech.com/schema-common https://schema.flowcentralplatform.com/xsd/flowcentral-module-4.0.0.xsd"
+	name="system" description="$m{system.module}"
 	shortCode="SYS" label="$m{system.label}">
 	<!-- applications -->
 	<applications>
@@ -30,7 +34,7 @@
 			editor="!ui-text size:48" editable="true" />
 		<sysParameter code="SYS-0004" defaultVal="false"
 			description="$m{system.sysparam.scheduleranabled}"
-			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
+			editor="!ui-select list:booleanlist" type="BOOLEAN" editable="true" />
 		<sysParameter code="SYS-0005" defaultVal="5"
 			description="$m{system.sysparam.schedulertriggerexpiration}"
 			editor="!ui-integer precision:2" editable="true" />
@@ -39,7 +43,7 @@
 			editor="!ui-integer precision:2" editable="true" />
 		<sysParameter code="SYS-0007" defaultVal="true"
 			description="$m{system.sysparam.descriptivebuttons}"
-			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
+			editor="!ui-select list:booleanlist" type="BOOLEAN" editable="true" />
 		<sysParameter code="SYS-0008"
 			description="$m{system.sysparam.loginpagetitle}"
 			editor="!ui-textarea columns:32" editable="false" />
@@ -48,24 +52,24 @@
 			editor="!ui-textarea columns:32" editable="false" />
 		<sysParameter code="SYS-000A" defaultVal="false"
 			description="$m{system.sysparam.downloadpathlogging}"
-			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
+			editor="!ui-select list:booleanlist" type="BOOLEAN" editable="true" />
 		<sysParameter code="SYS-000B" defaultVal="false"
 			description="$m{system.sysparam.enableglobalaccountinginput}"
-			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
+			editor="!ui-select list:booleanlist" type="BOOLEAN" editable="true" />
 		<sysParameter code="SYS-000C"
 			description="$m{system.sysparam.actualprimarytenantid}"
-			editor="!ui-integer" type="number" editable="false" />
+			editor="!ui-integer" type="NUMBER" editable="false" />
 		<sysParameter code="SYS-000D" defaultVal="false"
 			description="$m{system.sysparam.usetenantdateformat}"
-			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
+			editor="!ui-select list:booleanlist" type="BOOLEAN" editable="true" />
 		<sysParameter code="SYS-000E"
 			description="$m{system.sysparam.systemdateformat}"
 			editor="!ui-select list:sysdateformattypelist blankOption:$s{}"
-			type="string" editable="true" />
+			type="STRING" editable="true" />
 		<sysParameter code="SYS-000F"
 			description="$m{system.sysparam.systemdatetimeformat}"
 			editor="!ui-select list:sysdatetimeformattypelist blankOption:$s{}"
-			type="string" editable="true" />
+			type="STRING" editable="true" />
 		<sysParameter code="SYS-0010" defaultVal="http://localhost:8080"
 			description="$m{system.sysparam.applicationbaseurl}"
 			editor="!ui-textarea rows:8" editable="true" />

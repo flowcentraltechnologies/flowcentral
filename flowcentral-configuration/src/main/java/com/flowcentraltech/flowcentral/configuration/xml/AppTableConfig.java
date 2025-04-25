@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 FlowCentral Technologies Limited.
+ * Copyright 2021-2025 FlowCentral Technologies Limited.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -15,18 +15,15 @@
  */
 package com.flowcentraltech.flowcentral.configuration.xml;
 
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * Table configuration
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @JsonInclude(value = Include.NON_NULL, content = Include.NON_EMPTY)
 public class AppTableConfig extends BaseNameConfig {
@@ -88,25 +85,20 @@ public class AppTableConfig extends BaseNameConfig {
     @JacksonXmlProperty(isAttribute = true)
     private Boolean limitSelectToColumns;
 
-    @JacksonXmlElementWrapper(useWrapping = false)
-    @JacksonXmlProperty(localName = "loading")
-    private List<TableLoadingConfig> loadingList;
+    @JacksonXmlProperty
+    private TableLoadingsConfig loadings;
 
-    @JacksonXmlElementWrapper(useWrapping = false)
-    @JacksonXmlProperty(localName = "action")
-    private List<TableActionConfig> actionList;
+    @JacksonXmlProperty
+    private TableActionsConfig actions;
 
-    @JacksonXmlElementWrapper(useWrapping = false)
-    @JacksonXmlProperty(localName = "column")
-    private List<TableColumnConfig> columnList;
+    @JacksonXmlProperty
+    private TableColumnsConfig columns;
 
-    @JacksonXmlElementWrapper(useWrapping = false)
-    @JacksonXmlProperty(localName = "quickFilter")
-    private List<FilterConfig> quickFilterList;
+    @JacksonXmlProperty
+    private TableQuickFiltersConfig quickFilters;
 
-    @JacksonXmlElementWrapper(useWrapping = false)
-    @JacksonXmlProperty(localName = "filter")
-    private List<TableFilterConfig> filterList;
+    @JacksonXmlProperty
+    private TableFiltersConfig filters;
 
     public AppTableConfig() {
         this.serialNo = Boolean.FALSE;
@@ -276,44 +268,44 @@ public class AppTableConfig extends BaseNameConfig {
         this.limitSelectToColumns = limitSelectToColumns;
     }
 
-    public List<TableLoadingConfig> getLoadingList() {
-        return loadingList;
+    public TableLoadingsConfig getLoadings() {
+        return loadings;
     }
 
-    public void setLoadingList(List<TableLoadingConfig> loadingList) {
-        this.loadingList = loadingList;
+    public void setLoadings(TableLoadingsConfig loadings) {
+        this.loadings = loadings;
     }
 
-    public List<TableActionConfig> getActionList() {
-        return actionList;
+    public TableActionsConfig getActions() {
+        return actions;
     }
 
-    public void setActionList(List<TableActionConfig> actionList) {
-        this.actionList = actionList;
+    public void setActions(TableActionsConfig actions) {
+        this.actions = actions;
     }
 
-    public List<TableColumnConfig> getColumnList() {
-        return columnList;
+    public TableColumnsConfig getColumns() {
+        return columns;
     }
 
-    public void setColumnList(List<TableColumnConfig> columnList) {
-        this.columnList = columnList;
+    public void setColumns(TableColumnsConfig columns) {
+        this.columns = columns;
     }
 
-    public List<FilterConfig> getQuickFilterList() {
-        return quickFilterList;
+    public TableQuickFiltersConfig getQuickFilters() {
+        return quickFilters;
     }
 
-    public void setQuickFilterList(List<FilterConfig> quickFilterList) {
-        this.quickFilterList = quickFilterList;
+    public void setQuickFilters(TableQuickFiltersConfig quickFilters) {
+        this.quickFilters = quickFilters;
     }
 
-    public List<TableFilterConfig> getFilterList() {
-        return filterList;
+    public TableFiltersConfig getFilters() {
+        return filters;
     }
 
-    public void setFilterList(List<TableFilterConfig> filterList) {
-        this.filterList = filterList;
+    public void setFilters(TableFiltersConfig filters) {
+        this.filters = filters;
     }
 
 }

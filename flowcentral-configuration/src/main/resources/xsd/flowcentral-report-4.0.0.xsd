@@ -1,0 +1,160 @@
+<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+   	targetNamespace="http://flowcentraltech.com/schema-common"
+   	xmlns="http://flowcentraltech.com/schema-common"
+	attributeFormDefault="unqualified" elementFormDefault="qualified">
+  <xs:include schemaLocation="flowcentral-types.xsd"/>
+  <!-- Report -->
+  <xs:element name="report">
+    <xs:complexType>
+      <xs:all minOccurs="0" maxOccurs="1">
+        <!-- Columns -->
+        <xs:element name="columns" minOccurs="0">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="column" maxOccurs="unbounded" minOccurs="0">
+                <xs:complexType>
+                  <xs:attribute type="xs:string" name="field" use="required"/>
+                  <xs:attribute name="order" use="optional">
+			        <xs:simpleType>
+			          <xs:restriction base="xs:string">
+			            <xs:enumeration value="ASCENDING"/>
+			            <xs:enumeration value="DESCENDING"/>
+			          </xs:restriction>
+			        </xs:simpleType>
+			      </xs:attribute>
+                  <xs:attribute type="halign" name="halign" use="optional"/>
+                  <xs:attribute type="valign" name="valign" use="optional"/>
+                  <xs:attribute type="xs:string" name="renderWidget" use="optional"/>
+                  <xs:attribute type="xs:string" name="description" use="optional"/>
+                  <xs:attribute type="xs:string" name="type" use="optional"/>
+                  <xs:attribute type="xs:string" name="formatter" use="optional"/>
+                  <xs:attribute type="xs:integer" name="width" use="optional"/>
+                  <xs:attribute type="xs:boolean" name="bold" use="optional"/>
+                  <xs:attribute type="xs:boolean" name="group" use="optional"/>
+                  <xs:attribute type="xs:boolean" name="groupOnNewPage" use="optional"/>
+                  <xs:attribute type="xs:boolean" name="sum" use="optional"/>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <!--Placements -->
+        <xs:element name="placements" minOccurs="0">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="placement" maxOccurs="unbounded" minOccurs="0">
+                <xs:complexType>
+                  <xs:attribute name="type" use="required">
+			        <xs:simpleType>
+			          <xs:restriction base="xs:string">
+			            <xs:enumeration value="FIELD"/>
+			            <xs:enumeration value="TEXT"/>
+			            <xs:enumeration value="LINE"/>
+			            <xs:enumeration value="RECTANGLE"/>
+			            <xs:enumeration value="IMAGE"/>
+			          </xs:restriction>
+			        </xs:simpleType>
+			      </xs:attribute>
+                  <xs:attribute type="halign" name="halign" use="optional"/>
+                  <xs:attribute type="valign" name="valign" use="optional"/>
+                  <xs:attribute name="x-offset" use="optional">
+			        <xs:simpleType>
+			          <xs:restriction base="xs:string">
+			            <xs:enumeration value="LEFT"/>
+			            <xs:enumeration value="RIGHT"/>
+			          </xs:restriction>
+			        </xs:simpleType>
+			      </xs:attribute>
+                  <xs:attribute name="y-offset" use="optional">
+			        <xs:simpleType>
+			          <xs:restriction base="xs:string">
+			            <xs:enumeration value="TOP"/>
+			            <xs:enumeration value="BOTTOM"/>
+			          </xs:restriction>
+			        </xs:simpleType>
+			      </xs:attribute>
+                  <xs:attribute type="xs:string" name="field" use="required"/>
+                  <xs:attribute type="xs:string" name="text" use="optional"/>
+                  <xs:attribute type="xs:string" name="formatter" use="optional"/>
+                  <xs:attribute type="xs:integer" name="x" use="optional"/>
+                  <xs:attribute type="xs:integer" name="y" use="optional"/>
+                  <xs:attribute type="xs:integer" name="width" use="optional"/>
+                  <xs:attribute type="xs:integer" name="height" use="optional"/>
+                  <xs:attribute type="xs:boolean" name="bold" use="optional"/>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <!-- Parameters -->
+        <xs:element name="parameters" minOccurs="0">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="parameter" maxOccurs="unbounded" minOccurs="0">
+                <xs:complexType>
+                  <xs:attribute type="datatype" name="type" use="required"/>
+                  <xs:attribute type="xs:string" name="name" use="required"/>
+                  <xs:attribute type="xs:string" name="description" use="optional"/>
+                  <xs:attribute type="xs:string" name="label" use="required"/>
+                  <xs:attribute type="xs:string" name="editor" use="required"/>
+                  <xs:attribute type="xs:string" name="defaultVal" use="optional"/>
+                  <xs:attribute type="xs:boolean" name="mandatory" use="optional"/>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <!-- Filter -->
+        <xs:element type="filter" name="filter" minOccurs="0"/>
+      </xs:all>
+      <xs:attribute name="type" use="optional">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="TABULAR"/>
+            <xs:enumeration value="CHART_SUMMARY"/>
+            <xs:enumeration value="PLACEMENT"/>
+            <xs:enumeration value="LETTER"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="sizeType" use="optional">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="A4"/>
+            <xs:enumeration value="A3"/>
+            <xs:enumeration value="B5"/>
+            <xs:enumeration value="B4"/>
+            <xs:enumeration value="JIS_B5"/>
+            <xs:enumeration value="JIS_B4"/>
+            <xs:enumeration value="LETTER"/>
+            <xs:enumeration value="LEGAL"/>
+            <xs:enumeration value="CUSTOM"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute type="xs:string" name="name" use="required"/>
+      <xs:attribute type="xs:string" name="description" use="required"/>
+      <xs:attribute type="xs:string" name="label" use="optional"/>
+      <xs:attribute type="xs:string" name="title" use="optional"/>
+      <xs:attribute type="xs:string" name="processor" use="optional"/>
+      <xs:attribute type="xs:string" name="reportable" use="optional"/>
+      <xs:attribute type="xs:string" name="template" use="optional"/>
+      <xs:attribute type="xs:string" name="letterGenerator" use="optional"/>
+      <xs:attribute type="xs:string" name="summaryDatasource" use="optional"/>
+      <xs:attribute type="xs:integer" name="width" use="optional"/>
+      <xs:attribute type="xs:integer" name="height" use="optional"/>
+      <xs:attribute type="xs:integer" name="marginTop" use="optional"/>
+      <xs:attribute type="xs:integer" name="marginBottom" use="optional"/>
+      <xs:attribute type="xs:integer" name="marginLeft" use="optional"/>
+      <xs:attribute type="xs:integer" name="marginRight" use="optional"/>
+      <xs:attribute type="xs:boolean" name="showGrandFooter" use="optional"/>
+      <xs:attribute type="xs:boolean" name="invertGroupColors" use="optional"/>
+      <xs:attribute type="xs:boolean" name="landscape" use="optional"/>
+      <xs:attribute type="xs:boolean" name="underlineRows" use="optional"/>
+      <xs:attribute type="xs:boolean" name="allowSecondaryTenants" use="optional"/>
+      <xs:attribute type="xs:boolean" name="custom" use="optional"/>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
+

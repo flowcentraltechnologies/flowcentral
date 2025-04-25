@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 FlowCentral Technologies Limited.
+ * Copyright 2021-2025 FlowCentral Technologies Limited.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -22,7 +22,6 @@ import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.data.APIDef;
-import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.EntityFieldDef;
@@ -57,7 +56,7 @@ import com.tcdng.unify.web.http.HttpRequestHeaders;
  * REST JSON controller processor.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component(IntegrationRestModuleNameConstants.RESTJSONCRUD_PROCESSOR)
 public class RestJsonCRUDControllerProcessorImpl extends AbstractHttpCRUDControllerProcessor
@@ -122,20 +121,27 @@ public class RestJsonCRUDControllerProcessorImpl extends AbstractHttpCRUDControl
 
         final APIDef apiDef = getAPIDef();
         final EntityClassDef entityClassDef = appletUtilities.getEntityClassDef(apiDef.getEntity());
-        Query<? extends Entity> query = appletUtilities.application().queryOf(apiDef.getEntity());
-        query.addEquals("id", resourceId);
-        if (appletUtilities.environment().countAll(query) == 0) {
-            return getNotFoundResponse();
-        }
-        
-        int deleted = appletUtilities.environment().delete((Class<? extends Entity>) entityClassDef.getEntityClass(),
-                resourceId);
-        if (deleted > 0) {
-            return getResponse(HttpResponseConstants.OK,
-                    new DeleteResult(entityClassDef.getEntityDef().getDescription(), resourceId));
+        if (resourceId != null) {
+            final int deleted = appletUtilities.environment()
+                    .delete((Class<? extends Entity>) entityClassDef.getEntityClass(), resourceId);
+            if (deleted > 0) {
+                return getResponse(HttpResponseConstants.OK,
+                        new DeleteResult(entityClassDef.getEntityDef().getDescription(), resourceId));
+            } else {
+                return getNotFoundResponse();
+            }
         }
 
-        return getNotFoundResponse();
+        Query<? extends Entity> query = appletUtilities.application().queryOf(apiDef.getEntity());
+        Response resp = setCriteria(entityClassDef.getEntityDef(), query, parameters);
+        if (resp == null) {
+            query.ignoreEmptyCriteria(true);
+            final int deleted = appletUtilities.environment().deleteAll(query);
+            return getResponse(HttpResponseConstants.OK,
+                    new DeleteResult(entityClassDef.getEntityDef().getDescription(), deleted));
+        }
+
+        return resp;
     }
 
     @SuppressWarnings("unchecked")
@@ -166,7 +172,7 @@ public class RestJsonCRUDControllerProcessorImpl extends AbstractHttpCRUDControl
             return getResponse(entityClassDef.getJsonComposition(appletUtilities), HttpResponseConstants.OK, list);
         }
 
-        return getBadRequestResponse(null);
+        return resp;
     }
 
     @SuppressWarnings("unchecked")
@@ -218,23 +224,16 @@ public class RestJsonCRUDControllerProcessorImpl extends AbstractHttpCRUDControl
 
     private class EntityItem {
 
-        private AppletDef appletDef;
-
         private EntityClassDef entityClassDef;
 
         private Entity inst;
 
         private List<String> errors;
 
-        public EntityItem(AppletDef appletDef, EntityClassDef entityClassDef, Entity inst, List<String> errors) {
-            this.appletDef = appletDef;
+        public EntityItem(EntityClassDef entityClassDef, Entity inst, List<String> errors) {
             this.entityClassDef = entityClassDef;
             this.inst = inst;
             this.errors = errors;
-        }
-
-        public AppletDef getAppletDef() {
-            return appletDef;
         }
 
         public EntityClassDef getEntityClassDef() {
@@ -256,14 +255,13 @@ public class RestJsonCRUDControllerProcessorImpl extends AbstractHttpCRUDControl
 
     private EntityItem getEntity(String body) throws UnifyException {
         final APIDef apiDef = getAPIDef();
-        final AppletDef appletDef = appletUtilities.getAppletDef(apiDef.getApplet());
         final EntityClassDef entityClassDef = appletUtilities.getEntityClassDef(apiDef.getEntity());
         final Entity inst = (Entity) DataUtils.fromJsonString(entityClassDef.getJsonComposition(appletUtilities),
                 entityClassDef.getEntityClass(), body);
         final List<String> errors = inst == null
                 ? Arrays.asList(resolveApplicationMessage("$m{restjsoncrud.comtrollerprocessor.nomessagebody}"))
                 : entityClassDef.validate(appletUtilities, inst);
-        return new EntityItem(appletDef, entityClassDef, inst, errors);
+        return new EntityItem(entityClassDef, inst, errors);
     }
 
     private APIDef getAPIDef() throws UnifyException {

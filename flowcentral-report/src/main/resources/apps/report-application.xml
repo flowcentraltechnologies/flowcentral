@@ -1,6 +1,10 @@
 <?xml version="1.0"?>
 <!-- Report application -->
-<application name="report"
+<application
+	xmlns="http://flowcentraltech.com/schema-common"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://flowcentraltech.com/schema-common https://schema.flowcentralplatform.com/xsd/flowcentral-application-4.0.0.xsd"
+	name="report"
 	description="$m{report.short.description}" label="$m{report.label}"
 	module="report">
 	<!-- Applets -->
@@ -8,45 +12,51 @@
 		<applet name="manageReportGroup"
 			description="$m{report.reportgroup.manage}"
 			label="$m{report.reportgroup.manage.label}" icon="users"
-			type="manage_entitylist" entity="reportGroup" menuAccess="true"
+			type="MANAGE_ENTITYLIST" entity="reportGroup" menuAccess="true"
 			allowSecondaryTenants="true">
-			<property name="searchTable" value="reportGroupTable" />
-			<property name="searchTable.new" value="true" />
-			<property name="searchTable.report" value="true" />
-			<property name="searchTable.quickFilter" value="true" />
-			<property name="searchTable.basicSearchOnly" value="true" />
-			<property name="createForm" value="reportGroupForm" />
-			<property name="createForm.save" value="true" />
-			<property name="createForm.save.next" value="true" />
-			<property name="createForm.save.close" value="true" />
-			<property name="maintainForm" value="reportGroupForm" />
-			<property name="maintainForm.update" value="true" />
-			<property name="maintainForm.delete" value="true" />
+			<properties>
+				<property name="searchTable" value="reportGroupTable" />
+				<property name="searchTable.new" value="true" />
+				<property name="searchTable.report" value="true" />
+				<property name="searchTable.quickFilter" value="true" />
+				<property name="searchTable.basicSearchOnly" value="true" />
+				<property name="createForm" value="reportGroupForm" />
+				<property name="createForm.save" value="true" />
+				<property name="createForm.save.next" value="true" />
+				<property name="createForm.save.close" value="true" />
+				<property name="maintainForm" value="reportGroupForm" />
+				<property name="maintainForm.update" value="true" />
+				<property name="maintainForm.delete" value="true" />
+			</properties>
 		</applet>
 		<applet name="manageReportGroupRole"
 			description="$m{report.reportgrouprole.manage}"
 			label="$m{report.reportgrouprole.manage.label}"
-			type="manage_entitylist_assign" entity="reportGroupRole"
+			type="MANAGE_ENTITYLIST_ASSIGN" entity="reportGroupRole"
 			baseField="reportGroupId" assignField="roleId">
-			<property name="searchTable" value="reportGroupRoleTable" />
-			<property name="searchTable.edit" value="true" />
-			<property name="assignmentPage"
-				value="reportGroupRoleAssignment" />
+			<properties>
+				<property name="searchTable" value="reportGroupRoleTable" />
+				<property name="searchTable.edit" value="true" />
+				<property name="assignmentPage"
+					value="reportGroupRoleAssignment" />
+			</properties>
 		</applet>
 		<applet name="manageReportGroupMember"
 			description="$m{report.reportgroupmember.manage}"
 			label="$m{report.reportgroupmember.manage.label}"
-			type="manage_entitylist_assign" entity="reportGroupMember"
+			type="MANAGE_ENTITYLIST_ASSIGN" entity="reportGroupMember"
 			baseField="reportGroupId" assignField="reportConfigurationId">
-			<property name="searchTable" value="reportGroupMemberTable" />
-			<property name="searchTable.edit" value="true" />
-			<property name="assignmentPage"
-				value="reportGroupMemberAssignment" />
+			<properties>
+				<property name="searchTable" value="reportGroupMemberTable" />
+				<property name="searchTable.edit" value="true" />
+				<property name="assignmentPage"
+					value="reportGroupMemberAssignment" />
+			</properties>
 		</applet>
 		<applet name="appReportListing"
 			description="$m{report.application.appreportlisting}"
 			label="$m{report.application.appreportlisting.label}" icon="copy"
-			type="path_page" path="/report/reportlisting/openPage"
+			type="PATH_PAGE" path="/report/reportlisting/openPage"
 			menuAccess="true" allowSecondaryTenants="true">
 		</applet>
 	</applets>
@@ -86,372 +96,400 @@
 			description="$m{report.reportabledefinition}"
 			label="$m{report.reportabledefinition.label}"
 			type="com.flowcentraltech.flowcentral.report.entities.ReportableDefinition">
-			<field name="title"
-				label="$m{report.reportabledefinition.title}" type="string"
-				maxLen="96" />
-			<field name="entity"
-				label="$m{report.reportabledefinition.entity}" type="string"
-				maxLen="128" />
-			<field name="fieldList"
-				label="$m{report.reportabledefinition.fields}" type="child_list"
-				references="reportableFieldRef" />
-			<uniqueConstraint name="nameUc"
-				description="$m{report.reportabledefinition.uc.name}"
-				fieldList="applicationId,name">
-				<condition field="devVersionType" value="CRN"/>
-			</uniqueConstraint>
-			<uniqueConstraint name="descUc"
-				description="$m{report.reportabledefinition.uc.description}"
-				fieldList="applicationId,description">
-				<condition field="devVersionType" value="CRN"/>
-			</uniqueConstraint>
+			<fields>
+				<field name="title"
+					label="$m{report.reportabledefinition.title}" type="STRING"
+					maxLen="96" />
+				<field name="entity"
+					label="$m{report.reportabledefinition.entity}" type="STRING"
+					maxLen="128" />
+				<field name="fieldList"
+					label="$m{report.reportabledefinition.fields}" type="CHILD_LIST"
+					references="reportableFieldRef" />
+			</fields>
+			<uniqueConstraints>
+				<uniqueConstraint name="nameUc"
+					description="$m{report.reportabledefinition.uc.name}"
+					fieldList="applicationId,name">
+					<condition field="devVersionType" value="CRN"/>
+				</uniqueConstraint>
+				<uniqueConstraint name="descUc"
+					description="$m{report.reportabledefinition.uc.description}"
+					fieldList="applicationId,description">
+					<condition field="devVersionType" value="CRN"/>
+				</uniqueConstraint>
+			</uniqueConstraints>
 		</entity>
 		<entity name="reportableField"
 			description="$m{report.reportablefield}"
 			label="$m{report.reportablefield.label}"
 			type="com.flowcentraltech.flowcentral.report.entities.ReportableField">
-			<field name="reportableId"
-				label="$m{report.reportablefield.reportableid}" type="ref"
-				references="reportableDefRef" inputWidget="application.entitylist" />
-			<field name="name" label="$m{report.reportablefield.name}"
-				type="string" maxLen="32" />
-			<field name="description"
-				label="$m{report.reportablefield.description}" type="string"
-				maxLen="96" nullable="true" />
-			<field name="type" label="$m{report.reportablefield.type}"
-				type="string" maxLen="128" nullable="true" />
-			<field name="formatter"
-				label="$m{report.reportablefield.formatter}" type="string"
-				maxLen="128" nullable="true" />
-			<field name="horizontalAlign"
-				label="$m{report.reportablefield.horizontalalign}" type="string"
-				nullable="true" maxLen="32" />
-			<field name="width" label="$m{report.reportablefield.width}"
-				type="integer" nullable="true" />
-			<field name="parameterOnly"
-				label="$m{report.reportablefield.parameteronly}" type="boolean" />
+			<fields>
+				<field name="reportableId"
+					label="$m{report.reportablefield.reportableid}" type="REF"
+					references="reportableDefRef" inputWidget="application.entitylist" />
+				<field name="name" label="$m{report.reportablefield.name}"
+					type="STRING" maxLen="32" />
+				<field name="description"
+					label="$m{report.reportablefield.description}" type="STRING"
+					maxLen="96" nullable="true" />
+				<field name="type" label="$m{report.reportablefield.type}"
+					type="STRING" maxLen="128" nullable="true" />
+				<field name="formatter"
+					label="$m{report.reportablefield.formatter}" type="STRING"
+					maxLen="128" nullable="true" />
+				<field name="horizontalAlign"
+					label="$m{report.reportablefield.horizontalalign}" type="STRING"
+					nullable="true" maxLen="32" />
+				<field name="width" label="$m{report.reportablefield.width}"
+					type="INTEGER" nullable="true" />
+				<field name="parameterOnly"
+					label="$m{report.reportablefield.parameteronly}" type="BOOLEAN" />
+			</fields>
 		</entity>
 		<entity name="reportConfig"
 			description="$m{report.reportconfiguration}"
 			label="$m{report.reportconfiguration.label}"
 			type="com.flowcentraltech.flowcentral.report.entities.ReportConfiguration" changeEvents = "true">
-			<field name="type" label="$m{report.reportconfiguration.type}"
-				type="enum_ref" references="reportconfigtypelist"
-				inputWidget="application.enumlist" />
-			<field name="sizeType"
-				label="$m{report.reportconfiguration.sizetype}" type="enum_ref"
-				references="pagesizetypelist" inputWidget="application.enumlist" />
-			<field name="reportable"
-				label="$m{report.reportconfiguration.reportable}" type="string"
-				maxLen="128" />
-			<field name="title"
-				label="$m{report.reportconfiguration.title}" type="string"
-				maxLen="96" />
-			<field name="summaryDatasource"
-				label="$m{report.reportconfiguration.summarydatasource}" type="string"
-				maxLen="64" nullable="true" />
-			<field name="template"
-				label="$m{report.reportconfiguration.template}" type="string"
-				maxLen="64" nullable="true" />
-			<field name="processor"
-				label="$m{report.reportconfiguration.processor}" type="string"
-				maxLen="64" nullable="true" />
-			<field name="letterGenerator"
-				label="$m{report.reportconfiguration.lettergenerator}" type="string"
-				maxLen="64" nullable="true" />
-			<field name="showGrandFooter"
-				label="$m{report.reportconfiguration.showgrandfooter}"
-				type="boolean" />
-			<field name="invertGroupColors"
-				label="$m{report.reportconfiguration.invertgroupcolors}"
-				type="boolean" />
-			<field name="width"
-				label="$m{report.reportconfiguration.width}" type="integer" />
-			<field name="height"
-				label="$m{report.reportconfiguration.height}" type="integer" />
-			<field name="marginRight"
-				label="$m{report.reportconfiguration.marginright}" type="integer" />
-			<field name="marginLeft"
-				label="$m{report.reportconfiguration.marginleft}" type="integer" />
-			<field name="marginBottom"
-				label="$m{report.reportconfiguration.marginbottom}" type="integer" />
-			<field name="marginTop"
-				label="$m{report.reportconfiguration.margintop}" type="integer" />
-			<field name="landscape"
-				label="$m{report.reportconfiguration.landscape}" type="boolean" />
-			<field name="underlineRows"
-				label="$m{report.reportconfiguration.underlinerows}" type="boolean" />
-			<field name="shadeOddRows"
-				label="$m{report.reportconfiguration.shadeoddrows}" type="boolean" />
-			<field name="typeDesc"
-				label="$m{report.reportconfiguration.typedesc}" type="list_only"
-				key="type" property="description" />
-			<field name="sizeTypeDesc"
-				label="$m{report.reportconfiguration.sizetypedesc}" type="list_only"
-				key="sizeType" property="description" />
-			<field name="filter"
-				label="$m{report.reportconfiguration.filter}" type="child"
-				category="report-config" references="application.appFilterRef"
-				nullable="true" />
-			<field name="columnList"
-				label="$m{report.reportconfiguration.columns}" type="child_list"
-				references="reportColumnRef" />
-			<field name="placementList"
-				label="$m{report.reportconfiguration.placements}" type="child_list"
-				references="reportPlacementRef" />
-			<field name="parameterList"
-				label="$m{report.reportconfiguration.parameters}" type="child_list"
-				references="reportParameterRef" />
-			<uniqueConstraint name="nameUc"
-				description="$m{report.reportconfiguration.uc.name}"
-				fieldList="applicationId,name">
-				<condition field="devVersionType" value="CRN"/>
-			</uniqueConstraint>
-			<uniqueConstraint name="descUc"
-				description="$m{report.reportconfiguration.uc.description}"
-				fieldList="applicationId,description">
-				<condition field="devVersionType" value="CRN"/>
-			</uniqueConstraint>
+			<fields>
+				<field name="type" label="$m{report.reportconfiguration.type}"
+					type="ENUM_REF" references="reportconfigtypelist"
+					inputWidget="application.enumlist" />
+				<field name="sizeType"
+					label="$m{report.reportconfiguration.sizetype}" type="ENUM_REF"
+					references="pagesizetypelist" inputWidget="application.enumlist" />
+				<field name="reportable"
+					label="$m{report.reportconfiguration.reportable}" type="STRING"
+					maxLen="128" />
+				<field name="title"
+					label="$m{report.reportconfiguration.title}" type="STRING"
+					maxLen="96" />
+				<field name="summaryDatasource"
+					label="$m{report.reportconfiguration.summarydatasource}" type="STRING"
+					maxLen="64" nullable="true" />
+				<field name="template"
+					label="$m{report.reportconfiguration.template}" type="STRING"
+					maxLen="64" nullable="true" />
+				<field name="processor"
+					label="$m{report.reportconfiguration.processor}" type="STRING"
+					maxLen="64" nullable="true" />
+				<field name="letterGenerator"
+					label="$m{report.reportconfiguration.lettergenerator}" type="STRING"
+					maxLen="64" nullable="true" />
+				<field name="showGrandFooter"
+					label="$m{report.reportconfiguration.showgrandfooter}"
+					type="BOOLEAN" />
+				<field name="invertGroupColors"
+					label="$m{report.reportconfiguration.invertgroupcolors}"
+					type="BOOLEAN" />
+				<field name="width"
+					label="$m{report.reportconfiguration.width}" type="INTEGER" />
+				<field name="height"
+					label="$m{report.reportconfiguration.height}" type="INTEGER" />
+				<field name="marginRight"
+					label="$m{report.reportconfiguration.marginright}" type="INTEGER" />
+				<field name="marginLeft"
+					label="$m{report.reportconfiguration.marginleft}" type="INTEGER" />
+				<field name="marginBottom"
+					label="$m{report.reportconfiguration.marginbottom}" type="INTEGER" />
+				<field name="marginTop"
+					label="$m{report.reportconfiguration.margintop}" type="INTEGER" />
+				<field name="landscape"
+					label="$m{report.reportconfiguration.landscape}" type="BOOLEAN" />
+				<field name="underlineRows"
+					label="$m{report.reportconfiguration.underlinerows}" type="BOOLEAN" />
+				<field name="shadeOddRows"
+					label="$m{report.reportconfiguration.shadeoddrows}" type="BOOLEAN" />
+				<field name="typeDesc"
+					label="$m{report.reportconfiguration.typedesc}" type="LIST_ONLY"
+					key="type" property="description" />
+				<field name="sizeTypeDesc"
+					label="$m{report.reportconfiguration.sizetypedesc}" type="LIST_ONLY"
+					key="sizeType" property="description" />
+				<field name="filter"
+					label="$m{report.reportconfiguration.filter}" type="CHILD"
+					category="report-config" references="application.appFilterRef"
+					nullable="true" />
+				<field name="columnList"
+					label="$m{report.reportconfiguration.columns}" type="CHILD_LIST"
+					references="reportColumnRef" />
+				<field name="placementList"
+					label="$m{report.reportconfiguration.placements}" type="CHILD_LIST"
+					references="reportPlacementRef" />
+				<field name="parameterList"
+					label="$m{report.reportconfiguration.parameters}" type="CHILD_LIST"
+					references="reportParameterRef" />
+			</fields>
+			<uniqueConstraints>
+				<uniqueConstraint name="nameUc"
+					description="$m{report.reportconfiguration.uc.name}"
+					fieldList="applicationId,name">
+					<condition field="devVersionType" value="CRN"/>
+				</uniqueConstraint>
+				<uniqueConstraint name="descUc"
+					description="$m{report.reportconfiguration.uc.description}"
+					fieldList="applicationId,description">
+					<condition field="devVersionType" value="CRN"/>
+				</uniqueConstraint>
+			</uniqueConstraints>
 		</entity>
 		<entity name="reportColumn"
 			description="$m{report.reportcolumn}"
 			label="$m{report.reportcolumn.label}"
 			type="com.flowcentraltech.flowcentral.report.entities.ReportColumn" changeEvents = "true">
-			<field name="reportConfigurationId"
-				label="$m{report.reportcolumn.reportconfigurationid}" type="ref"
-				references="reportConfigRef" inputWidget="application.entitylist" />
-			<field name="columnOrder"
-				label="$m{report.reportcolumn.columnorder}" type="enum_ref"
-				references="orderlist" inputWidget="application.enumlist"
-				nullable="true" />
-			<field name="horizAlignType"
-				label="$m{report.reportcolumn.horizaligntype}" type="enum_ref"
-				references="horizontalalignlist" inputWidget="application.enumlist"
-				nullable="true" />
-			<field name="vertAlignType"
-				label="$m{report.reportcolumn.vertaligntype}" type="enum_ref"
-				references="verticalalignlist" inputWidget="application.enumlist"
-				nullable="true" />
-			<field name="fieldName"
-				label="$m{report.reportcolumn.fieldname}" type="string" maxLen="32" />
-			<field name="description"
-				label="$m{report.reportcolumn.description}" type="string"
-				maxLen="48" />
-			<field name="type" label="$m{report.reportcolumn.type}"
-				type="string" nullable="true" maxLen="96" />
-			<field name="formatter"
-				label="$m{report.reportcolumn.formatter}" type="string" maxLen="64"
-				nullable="true" />
-			<field name="width" label="$m{report.reportcolumn.width}"
-				type="integer" />
-			<field name="bold" label="$m{report.reportcolumn.bold}"
-				type="boolean" />
-			<field name="group" label="$m{report.reportcolumn.group}"
-				type="boolean" />
-			<field name="groupOnNewPage"
-				label="$m{report.reportcolumn.grouponnewpage}" type="boolean" />
-			<field name="sum" label="$m{report.reportcolumn.sum}"
-				type="boolean" />
-			<field name="columnOrderDesc"
-				label="$m{report.reportcolumn.columnorderdesc}" type="list_only"
-				key="columnOrder" property="description" />
-			<field name="horizAlignTypeDesc"
-				label="$m{report.reportcolumn.horizaligntypedesc}" type="list_only"
-				key="horizAlignType" property="description" />
-			<field name="vertAlignTypeDesc"
-				label="$m{report.reportcolumn.vertaligntypedesc}" type="list_only"
-				key="vertAlignType" property="description" />
+			<fields>
+				<field name="reportConfigurationId"
+					label="$m{report.reportcolumn.reportconfigurationid}" type="REF"
+					references="reportConfigRef" inputWidget="application.entitylist" />
+				<field name="columnOrder"
+					label="$m{report.reportcolumn.columnorder}" type="ENUM_REF"
+					references="orderlist" inputWidget="application.enumlist"
+					nullable="true" />
+				<field name="horizAlignType"
+					label="$m{report.reportcolumn.horizaligntype}" type="ENUM_REF"
+					references="horizontalalignlist" inputWidget="application.enumlist"
+					nullable="true" />
+				<field name="vertAlignType"
+					label="$m{report.reportcolumn.vertaligntype}" type="ENUM_REF"
+					references="verticalalignlist" inputWidget="application.enumlist"
+					nullable="true" />
+				<field name="fieldName"
+					label="$m{report.reportcolumn.fieldname}" type="STRING" maxLen="32" />
+				<field name="description"
+					label="$m{report.reportcolumn.description}" type="STRING"
+					maxLen="48" />
+				<field name="type" label="$m{report.reportcolumn.type}"
+					type="STRING" nullable="true" maxLen="96" />
+				<field name="formatter"
+					label="$m{report.reportcolumn.formatter}" type="STRING" maxLen="64"
+					nullable="true" />
+				<field name="width" label="$m{report.reportcolumn.width}"
+					type="INTEGER" />
+				<field name="bold" label="$m{report.reportcolumn.bold}"
+					type="BOOLEAN" />
+				<field name="group" label="$m{report.reportcolumn.group}"
+					type="BOOLEAN" />
+				<field name="groupOnNewPage"
+					label="$m{report.reportcolumn.grouponnewpage}" type="BOOLEAN" />
+				<field name="sum" label="$m{report.reportcolumn.sum}"
+					type="BOOLEAN" />
+				<field name="columnOrderDesc"
+					label="$m{report.reportcolumn.columnorderdesc}" type="LIST_ONLY"
+					key="columnOrder" property="description" />
+				<field name="horizAlignTypeDesc"
+					label="$m{report.reportcolumn.horizaligntypedesc}" type="LIST_ONLY"
+					key="horizAlignType" property="description" />
+				<field name="vertAlignTypeDesc"
+					label="$m{report.reportcolumn.vertaligntypedesc}" type="LIST_ONLY"
+					key="vertAlignType" property="description" />
+			</fields>
 		</entity>
 		<entity name="reportPlacement"
 			description="$m{report.reportplacement}"
 			label="$m{report.reportplacement.label}"
 			type="com.flowcentraltech.flowcentral.report.entities.ReportPlacement" changeEvents = "true">
-			<field name="reportConfigurationId"
-				label="$m{report.reportplacement.reportconfigurationid}" type="ref"
-				references="reportConfigRef" inputWidget="application.entitylist" />
-			<field name="type" label="$m{report.reportplacement.type}"
-				type="enum_ref" references="reportplacementlist"
-				inputWidget="application.enumlist" />
-			<field name="horizAlignType"
-				label="$m{report.reportplacement.horizaligntype}" type="enum_ref"
-				references="horizontalalignlist" inputWidget="application.enumlist"
-				nullable="true" />
-			<field name="vertAlignType"
-				label="$m{report.reportplacement.vertaligntype}" type="enum_ref"
-				references="verticalalignlist" inputWidget="application.enumlist"
-				nullable="true" />
-			<field name="fieldName"
-				label="$m{report.reportplacement.fieldname}" type="string"
-				maxLen="32" nullable="true" />
-			<field name="text" label="$m{report.reportplacement.text}"
-				type="string" maxLen="512" nullable="true" />
-			<field name="formatter"
-				label="$m{report.reportplacement.formatter}" type="string"
-				maxLen="64" nullable="true" />
-			<field name="xOffsetType"
-				label="$m{report.reportplacement.xoffset}" type="enum_ref"
-				references="xoffsettypelist" inputWidget="application.enumlist" />
-			<field name="yOffsetType"
-				label="$m{report.reportplacement.yoffset}" type="enum_ref"
-				references="yoffsettypelist" inputWidget="application.enumlist" />
-			<field name="x" label="$m{report.reportplacement.x}"
-				type="integer" />
-			<field name="y" label="$m{report.reportplacement.y}"
-				type="integer" />
-			<field name="width" label="$m{report.reportplacement.width}"
-				type="integer" />
-			<field name="height" label="$m{report.reportplacement.height}"
-				type="integer" />
-			<field name="bold" label="$m{report.reportplacement.bold}"
-				type="boolean" />
-			<field name="typeDesc"
-				label="$m{report.reportplacement.typedesc}" type="list_only"
-				key="type" property="description" />
-			<field name="horizAlignTypeDesc"
-				label="$m{report.reportplacement.horizaligntypedesc}"
-				type="list_only" key="horizAlignType" property="description" />
-			<field name="vertAlignTypeDesc"
-				label="$m{report.reportplacement.vertaligntypedesc}"
-				type="list_only" key="vertAlignType" property="description" />
-			<field name="xOffsetTypeDesc"
-				label="$m{report.reportplacement.xoffsetdesc}" type="list_only"
-				key="xOffsetType" property="description" />
-			<field name="yOffsetTypeDesc"
-				label="$m{report.reportplacement.yoffsetdesc}" type="list_only"
-				key="yOffsetType" property="description" />
+			<fields>
+				<field name="reportConfigurationId"
+					label="$m{report.reportplacement.reportconfigurationid}" type="REF"
+					references="reportConfigRef" inputWidget="application.entitylist" />
+				<field name="type" label="$m{report.reportplacement.type}"
+					type="ENUM_REF" references="reportplacementlist"
+					inputWidget="application.enumlist" />
+				<field name="horizAlignType"
+					label="$m{report.reportplacement.horizaligntype}" type="ENUM_REF"
+					references="horizontalalignlist" inputWidget="application.enumlist"
+					nullable="true" />
+				<field name="vertAlignType"
+					label="$m{report.reportplacement.vertaligntype}" type="ENUM_REF"
+					references="verticalalignlist" inputWidget="application.enumlist"
+					nullable="true" />
+				<field name="fieldName"
+					label="$m{report.reportplacement.fieldname}" type="STRING"
+					maxLen="32" nullable="true" />
+				<field name="text" label="$m{report.reportplacement.text}"
+					type="STRING" maxLen="512" nullable="true" />
+				<field name="formatter"
+					label="$m{report.reportplacement.formatter}" type="STRING"
+					maxLen="64" nullable="true" />
+				<field name="xOffsetType"
+					label="$m{report.reportplacement.xoffset}" type="ENUM_REF"
+					references="xoffsettypelist" inputWidget="application.enumlist" />
+				<field name="yOffsetType"
+					label="$m{report.reportplacement.yoffset}" type="ENUM_REF"
+					references="yoffsettypelist" inputWidget="application.enumlist" />
+				<field name="x" label="$m{report.reportplacement.x}"
+					type="INTEGER" />
+				<field name="y" label="$m{report.reportplacement.y}"
+					type="INTEGER" />
+				<field name="width" label="$m{report.reportplacement.width}"
+					type="INTEGER" />
+				<field name="height" label="$m{report.reportplacement.height}"
+					type="INTEGER" />
+				<field name="bold" label="$m{report.reportplacement.bold}"
+					type="BOOLEAN" />
+				<field name="typeDesc"
+					label="$m{report.reportplacement.typedesc}" type="LIST_ONLY"
+					key="type" property="description" />
+				<field name="horizAlignTypeDesc"
+					label="$m{report.reportplacement.horizaligntypedesc}"
+					type="LIST_ONLY" key="horizAlignType" property="description" />
+				<field name="vertAlignTypeDesc"
+					label="$m{report.reportplacement.vertaligntypedesc}"
+					type="LIST_ONLY" key="vertAlignType" property="description" />
+				<field name="xOffsetTypeDesc"
+					label="$m{report.reportplacement.xoffsetdesc}" type="LIST_ONLY"
+					key="xOffsetType" property="description" />
+				<field name="yOffsetTypeDesc"
+					label="$m{report.reportplacement.yoffsetdesc}" type="LIST_ONLY"
+					key="yOffsetType" property="description" />
+			</fields>
 		</entity>
 		<entity name="reportParameter"
 			description="$m{report.reportparameter}"
 			label="$m{report.reportparameter.label}"
 			type="com.flowcentraltech.flowcentral.report.entities.ReportParameter" changeEvents = "true">
-			<field name="reportConfigurationId"
-				label="$m{report.reportparameter.reportconfigurationid}" type="ref"
-				references="reportConfigRef" inputWidget="application.entitylist" />
-			<field name="type" label="$m{report.reportparameter.type}"
-				type="enum_ref" references="datatypelist"
-				inputWidget="application.enumlist" />
-			<field name="name" label="$m{report.reportparameter.name}"
-				type="string" maxLen="32" />
-			<field name="description"
-				label="$m{report.reportparameter.description}" type="string"
-				maxLen="128" />
-			<field name="label"
-				label="$m{report.reportparameter.labelfield}" type="string"
-				maxLen="128" />
-			<field name="mandatory"
-				label="$m{report.reportparameter.mandatory}" type="boolean" />
-			<field name="defaultVal"
-				label="$m{report.reportparameter.defaultval}" type="string"
-				maxLen="128" nullable="true" />
-			<field name="editor" label="$m{report.reportparameter.editor}"
-				type="string" maxLen="128" nullable="true" />
-			<field name="typeDesc"
-				label="$m{report.reportparameter.typedesc}" type="list_only"
-				key="type" property="description" />
+			<fields>
+				<field name="reportConfigurationId"
+					label="$m{report.reportparameter.reportconfigurationid}" type="REF"
+					references="reportConfigRef" inputWidget="application.entitylist" />
+				<field name="type" label="$m{report.reportparameter.type}"
+					type="ENUM_REF" references="datatypelist"
+					inputWidget="application.enumlist" />
+				<field name="name" label="$m{report.reportparameter.name}"
+					type="STRING" maxLen="32" />
+				<field name="description"
+					label="$m{report.reportparameter.description}" type="STRING"
+					maxLen="128" />
+				<field name="label"
+					label="$m{report.reportparameter.labelfield}" type="STRING"
+					maxLen="128" />
+				<field name="mandatory"
+					label="$m{report.reportparameter.mandatory}" type="BOOLEAN" />
+				<field name="defaultVal"
+					label="$m{report.reportparameter.defaultval}" type="STRING"
+					maxLen="128" nullable="true" />
+				<field name="editor" label="$m{report.reportparameter.editor}"
+					type="STRING" maxLen="128" nullable="true" />
+				<field name="typeDesc"
+					label="$m{report.reportparameter.typedesc}" type="LIST_ONLY"
+					key="type" property="description" />
+			</fields>
 		</entity>
 		<entity name="reportGroup" description="$m{report.reportgroup}"
 			label="$m{report.reportgroup.label}"
 			type="com.flowcentraltech.flowcentral.report.entities.ReportGroup"
 			reportable="true" auditable="true" changeEvents = "true">
-			<field name="name" label="$m{report.reportgroup.name}"
-				type="string" inputWidget="application.name" maxLen="64"
-				basicSearch="true" auditable="true"/>
-			<field name="description"
-				label="$m{report.reportgroup.description}" type="string"
-				inputWidget="application.text" maxLen="96" basicSearch="true" auditable="true"/>
-			<field name="label" label="$m{report.reportgroup.fieldlabel}"
-				type="string" inputWidget="application.text" maxLen="64"
-				nullable="true" auditable="true"/>
-			<field name="reportGroupRoleList"
-				label="$m{report.reportgroup.reportgrouprolelist}" type="child_list"
-				references="reportGroupRoleRef" />
-			<field name="reportGroupMemberList"
-				label="$m{report.reportgroup.reportgroupmemberlist}" type="child_list"
-				references="reportGroupMemberRef" />
-			<uniqueConstraint name="nameUc"
-				description="$m{report.reportgroup.uc.name}" fieldList="name" />
-			<uniqueConstraint name="descUc"
-				description="$m{report.reportgroup.uc.description}"
-				fieldList="description" />
+			<fields>
+				<field name="name" label="$m{report.reportgroup.name}"
+					type="STRING" inputWidget="application.name" maxLen="64"
+					basicSearch="true" auditable="true"/>
+				<field name="description"
+					label="$m{report.reportgroup.description}" type="STRING"
+					inputWidget="application.text" maxLen="96" basicSearch="true" auditable="true"/>
+				<field name="label" label="$m{report.reportgroup.fieldlabel}"
+					type="STRING" inputWidget="application.text" maxLen="64"
+					nullable="true" auditable="true"/>
+				<field name="reportGroupRoleList"
+					label="$m{report.reportgroup.reportgrouprolelist}" type="CHILD_LIST"
+					references="reportGroupRoleRef" />
+				<field name="reportGroupMemberList"
+					label="$m{report.reportgroup.reportgroupmemberlist}" type="CHILD_LIST"
+					references="reportGroupMemberRef" />
+			</fields>
+			<uniqueConstraints>
+				<uniqueConstraint name="nameUc"
+					description="$m{report.reportgroup.uc.name}" fieldList="name" />
+				<uniqueConstraint name="descUc"
+					description="$m{report.reportgroup.uc.description}"
+					fieldList="description" />
+			</uniqueConstraints>
 		</entity>
 		<entity name="reportGroupRole"
 			description="$m{report.reportgrouprole}"
 			label="$m{report.reportgrouprole.label}"
 			type="com.flowcentraltech.flowcentral.report.entities.ReportGroupRole" auditable="true" changeEvents = "true">
-			<field name="reportGroupId"
-				label="$m{report.reportgrouprole.reportgroupid}" type="ref"
-				references="reportGroupRef"
-				inputLabel="$m{report.reportgrouprole.reportgroup}"
-				inputWidget="application.entitysearch" />
-			<field name="roleId" label="$m{report.reportgrouprole.roleid}"
-				type="ref" references="organization.roleRef"
-				inputLabel="$m{report.reportgrouprole.role}"
-				inputWidget="application.entitysearch" auditable="true"/>
-			<field name="reportGroupName"
-				label="$m{report.reportgrouprole.reportgroupname}" type="list_only"
-				key="reportGroupId" property="name" />
-			<field name="reportGroupDesc"
-				label="$m{report.reportgrouprole.reportgroupdesc}" type="list_only"
-				key="reportGroupId" property="description" />
-			<field name="reportGroupLabel"
-				label="$m{report.reportgrouprole.reportgrouplabel}" type="list_only"
-				key="reportGroupId" property="label" />
-			<field name="roleCode"
-				label="$m{report.reportgrouprole.rolecode}" type="list_only"
-				key="roleId" property="code" />
-			<field name="roleDesc"
-				label="$m{report.reportgrouprole.roledesc}" type="list_only"
-				key="roleId" property="description" />
-			<field name="activeBefore"
-				label="$m{report.reportgrouprole.roleactivebefore}" type="list_only"
-				key="roleId" property="activeBefore" />
-			<field name="activeAfter"
-				label="$m{report.reportgrouprole.roleactiveafter}" type="list_only"
-				key="roleId" property="activeAfter" />
-			<field name="departmentId"
-				label="$m{report.reportgrouprole.departmentid}" type="list_only"
-				key="roleId" property="departmentId" />
-			<uniqueConstraint name="roleUc"
-				description="$m{report.reportgrouprole.uc.role}"
-				fieldList="reportGroupId,roleId" />
+			<fields>
+				<field name="reportGroupId"
+					label="$m{report.reportgrouprole.reportgroupid}" type="REF"
+					references="reportGroupRef"
+					inputLabel="$m{report.reportgrouprole.reportgroup}"
+					inputWidget="application.entitysearch" />
+				<field name="roleId" label="$m{report.reportgrouprole.roleid}"
+					type="REF" references="organization.roleRef"
+					inputLabel="$m{report.reportgrouprole.role}"
+					inputWidget="application.entitysearch" auditable="true"/>
+				<field name="reportGroupName"
+					label="$m{report.reportgrouprole.reportgroupname}" type="LIST_ONLY"
+					key="reportGroupId" property="name" />
+				<field name="reportGroupDesc"
+					label="$m{report.reportgrouprole.reportgroupdesc}" type="LIST_ONLY"
+					key="reportGroupId" property="description" />
+				<field name="reportGroupLabel"
+					label="$m{report.reportgrouprole.reportgrouplabel}" type="LIST_ONLY"
+					key="reportGroupId" property="label" />
+				<field name="roleCode"
+					label="$m{report.reportgrouprole.rolecode}" type="LIST_ONLY"
+					key="roleId" property="code" />
+				<field name="roleDesc"
+					label="$m{report.reportgrouprole.roledesc}" type="LIST_ONLY"
+					key="roleId" property="description" />
+				<field name="activeBefore"
+					label="$m{report.reportgrouprole.roleactivebefore}" type="LIST_ONLY"
+					key="roleId" property="activeBefore" />
+				<field name="activeAfter"
+					label="$m{report.reportgrouprole.roleactiveafter}" type="LIST_ONLY"
+					key="roleId" property="activeAfter" />
+				<field name="departmentId"
+					label="$m{report.reportgrouprole.departmentid}" type="LIST_ONLY"
+					key="roleId" property="departmentId" />
+			</fields>
+			<uniqueConstraints>
+				<uniqueConstraint name="roleUc"
+					description="$m{report.reportgrouprole.uc.role}"
+					fieldList="reportGroupId,roleId" />
+			</uniqueConstraints>
 		</entity>
 		<entity name="reportGroupMember"
 			description="$m{report.reportgroupmember}"
 			label="$m{report.reportgroupmember.label}"
 			type="com.flowcentraltech.flowcentral.report.entities.ReportGroupMember" auditable="true" changeEvents = "true">
-			<field name="reportGroupId"
-				label="$m{report.reportgroupmember.reportgroupid}" type="ref"
-				references="reportGroupRef"
-				inputLabel="$m{report.reportgroupmember.reportgroup}"
-				inputWidget="application.entitysearch" basicSearch="true" />
-			<field name="reportConfigurationId"
-				label="$m{report.reportgroupmember.reportconfigurationid}" type="ref"
-				references="reportConfigRef" inputLabel="$m{report.reportgroupmember.reportconfiguration}"
-				inputWidget="application.entitysearch" auditable="true"/>
-			<field name="reportGroupName"
-				label="$m{report.reportgroupmember.reportgroupname}" type="list_only"
-				key="reportGroupId" property="name" />
-			<field name="reportGroupDesc"
-				label="$m{report.reportgroupmember.reportgroupdesc}" type="list_only"
-				key="reportGroupId" property="description" />
-			<field name="reportGroupLabel"
-				label="$m{report.reportgroupmember.reportgrouplabel}" type="list_only"
-				key="reportGroupId" property="label" />
-			<field name="applicationId"
-				label="$m{report.reportgroupmember.applicationid}" type="list_only"
-				key="reportConfigurationId" property="applicationId" />
-			<field name="reportConfigurationName"
-				label="$m{report.reportgroupmember.reportconfigurationname}" type="list_only"
-				key="reportConfigurationId" property="name" />
-			<field name="reportConfigurationDesc"
-				label="$m{report.reportgroupmember.reportconfigurationdesc}" type="list_only"
-				key="reportConfigurationId" property="description" />
-			<field name="configType"
-				label="$m{report.reportgroupmember.configtype}" type="list_only"
-				key="reportConfigurationId" property="configType" />
-			<uniqueConstraint name="reportConfigurationUc"
-				description="$m{report.reportgroupmember.uc.reportconfiguration}"
-				fieldList="reportGroupId,reportConfigurationId" />
+			<fields>
+				<field name="reportGroupId"
+					label="$m{report.reportgroupmember.reportgroupid}" type="REF"
+					references="reportGroupRef"
+					inputLabel="$m{report.reportgroupmember.reportgroup}"
+					inputWidget="application.entitysearch" basicSearch="true" />
+				<field name="reportConfigurationId"
+					label="$m{report.reportgroupmember.reportconfigurationid}" type="REF"
+					references="reportConfigRef" inputLabel="$m{report.reportgroupmember.reportconfiguration}"
+					inputWidget="application.entitysearch" auditable="true"/>
+				<field name="reportGroupName"
+					label="$m{report.reportgroupmember.reportgroupname}" type="LIST_ONLY"
+					key="reportGroupId" property="name" />
+				<field name="reportGroupDesc"
+					label="$m{report.reportgroupmember.reportgroupdesc}" type="LIST_ONLY"
+					key="reportGroupId" property="description" />
+				<field name="reportGroupLabel"
+					label="$m{report.reportgroupmember.reportgrouplabel}" type="LIST_ONLY"
+					key="reportGroupId" property="label" />
+				<field name="applicationId"
+					label="$m{report.reportgroupmember.applicationid}" type="LIST_ONLY"
+					key="reportConfigurationId" property="applicationId" />
+				<field name="reportConfigurationName"
+					label="$m{report.reportgroupmember.reportconfigurationname}" type="LIST_ONLY"
+					key="reportConfigurationId" property="name" />
+				<field name="reportConfigurationDesc"
+					label="$m{report.reportgroupmember.reportconfigurationdesc}" type="LIST_ONLY"
+					key="reportConfigurationId" property="description" />
+				<field name="configType"
+					label="$m{report.reportgroupmember.configtype}" type="LIST_ONLY"
+					key="reportConfigurationId" property="configType" />
+			</fields>
+			<uniqueConstraints>
+				<uniqueConstraint name="reportConfigurationUc"
+					description="$m{report.reportgroupmember.uc.reportconfiguration}"
+					fieldList="reportGroupId,reportConfigurationId" />
+			</uniqueConstraints>
 		</entity>
 	</entities>
 	<!-- Tables -->
@@ -460,74 +498,82 @@
 			description="$m{report.reportgroup.table}"
 			label="$m{report.reportgroup.table.label}" entity="reportGroup"
 			itemsPerPage="20" serialNo="true" basicSearch="true">
-			<column field="name" renderWidget="application.name"
-				widthRatio="1" linkAct="maintainAct" />
-			<column field="description" renderWidget="application.text"
-				widthRatio="1" />
-			<column field="label" renderWidget="application.text"
-				widthRatio="1" />
-			<column field="createDt" renderWidget="application.datetime"
-				widthRatio="1" />
-			<column field="updateDt" renderWidget="application.datetime"
-				widthRatio="1" />
-			<column field="statusDesc" renderWidget="application.text"
-				label="$m{basestatusentity.field.label.status}" widthRatio="1" />
+			<columns>
+				<column field="name" renderWidget="application.name"
+					widthRatio="1" linkAct="maintainAct" />
+				<column field="description" renderWidget="application.text"
+					widthRatio="1" />
+				<column field="label" renderWidget="application.text"
+					widthRatio="1" />
+				<column field="createDt" renderWidget="application.datetime"
+					widthRatio="1" />
+				<column field="updateDt" renderWidget="application.datetime"
+					widthRatio="1" />
+				<column field="statusDesc" renderWidget="application.text"
+					label="$m{basestatusentity.field.label.status}" widthRatio="1" />
+			</columns>
 		</table>
 		<table name="reportGroupRoleTable"
 			description="$m{report.reportgrouprole.table}"
 			label="$m{report.reportgrouprole.table.label}" entity="reportGroupRole"
 			itemsPerPage="20" serialNo="true">
-			<column field="roleDesc" renderWidget="application.text"
-				label="$m{report.reportgrouprole.role}" widthRatio="1" />
-			<column field="activeBefore" renderWidget="application.time"
-				widthRatio="1" />
-			<column field="activeAfter" renderWidget="application.time"
-				widthRatio="1" />
-			<column field="updatedBy" renderWidget="application.text"
-				label="$m{report.reportgrouprole.grantedby}" widthRatio="1" />
-			<column field="updateDt" renderWidget="application.datetime"
-				widthRatio="1" />
+			<columns>
+				<column field="roleDesc" renderWidget="application.text"
+					label="$m{report.reportgrouprole.role}" widthRatio="1" />
+				<column field="activeBefore" renderWidget="application.time"
+					widthRatio="1" />
+				<column field="activeAfter" renderWidget="application.time"
+					widthRatio="1" />
+				<column field="updatedBy" renderWidget="application.text"
+					label="$m{report.reportgrouprole.grantedby}" widthRatio="1" />
+				<column field="updateDt" renderWidget="application.datetime"
+					widthRatio="1" />
+			</columns>
 		</table>
 		<table name="reportGroupMemberTable"
 			description="$m{report.reportgroupmember.table}"
 			label="$m{report.reportgroupmember.table.label}"
 			entity="reportGroupMember" itemsPerPage="20" serialNo="true">
-			<column field="reportConfigurationName" renderWidget="application.text"
-				widthRatio="1" />
-			<column field="reportConfigurationDesc" renderWidget="application.text"
-				widthRatio="1" />
-			<column field="updatedBy" renderWidget="application.text"
-				label="$m{report.reportgroupmember.grantedby}" widthRatio="1" />
-			<column field="updateDt" renderWidget="application.datetime"
-				widthRatio="1" />
+			<columns>
+				<column field="reportConfigurationName" renderWidget="application.text"
+					widthRatio="1" />
+				<column field="reportConfigurationDesc" renderWidget="application.text"
+					widthRatio="1" />
+				<column field="updatedBy" renderWidget="application.text"
+					label="$m{report.reportgroupmember.grantedby}" widthRatio="1" />
+				<column field="updateDt" renderWidget="application.datetime"
+					widthRatio="1" />
+			</columns>
 		</table>
 	</tables>
 	<!-- Forms -->
 	<forms>
 		<form name="reportGroupForm"
 			description="$m{report.reportgroup.form}" entity="reportGroup">
-			<tab name="basicDetails"
-				label="$m{report.reportgroup.form.basicdetails}"
-				contentType="miniform">
-				<section name="reportGroupDetails" columns="type_2">
-					<field name="name" inputWidget="application.name" column="0"
-						required="true" />
-					<field name="description" inputWidget="application.text"
-						column="0" required="true" />
-					<field name="label" inputWidget="application.text" column="0"
-						required="true" />
-					<field name="status" inputWidget="application.enumlist"
-						column="1" required="true" />
-				</section>
-			</tab>
-			<tab name="members" label="$m{report.reportgroup.form.members}"
-				contentType="child_list" applet="manageReportGroupMember"
-				reference="reportGroupMemberList" />
-			<tab name="roles" label="$m{report.reportgroup.form.roles}"
-				contentType="child_list" applet="manageReportGroupRole"
-				reference="reportGroupRoleList" />
-			<tab name="changeLog" label="$m{application.form.audit}"
-				contentType="miniform_changelog" />
+			<tabs>
+				<tab name="basicDetails"
+					label="$m{report.reportgroup.form.basicdetails}"
+					contentType="MINIFORM">
+					<section name="reportGroupDetails" columns="TYPE_2">
+						<field name="name" inputWidget="application.name" column="0"
+							required="true" />
+						<field name="description" inputWidget="application.text"
+							column="0" required="true" />
+						<field name="label" inputWidget="application.text" column="0"
+							required="true" />
+						<field name="status" inputWidget="application.enumlist"
+							column="1" required="true" />
+					</section>
+				</tab>
+				<tab name="members" label="$m{report.reportgroup.form.members}"
+					contentType="CHILD_LIST" applet="manageReportGroupMember"
+					reference="reportGroupMemberList" />
+				<tab name="roles" label="$m{report.reportgroup.form.roles}"
+					contentType="CHILD_LIST" applet="manageReportGroupRole"
+					reference="reportGroupRoleList" />
+				<tab name="changeLog" label="$m{application.form.audit}"
+					contentType="MINIFORM_CHANGELOG" />
+			</tabs>
 		</form>
 	</forms>
 	<!-- Assignment Pages -->

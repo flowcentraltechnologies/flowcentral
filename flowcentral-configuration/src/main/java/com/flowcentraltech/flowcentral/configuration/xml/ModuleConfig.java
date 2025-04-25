@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 FlowCentral Technologies Limited.
+ * Copyright 2021-2025 FlowCentral Technologies Limited.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -24,11 +24,11 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
  * Module configuration.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @JsonInclude(value = Include.NON_NULL, content = Include.NON_EMPTY)
 @JacksonXmlRootElement(localName = "module")
-public class ModuleConfig extends BaseNameConfig {
+public class ModuleConfig extends BaseRootConfig {
 
     @JacksonXmlProperty(isAttribute = true)
     private String shortCode;
@@ -43,6 +43,7 @@ public class ModuleConfig extends BaseNameConfig {
     private SysParamsConfig sysParamsConfig;
 
     public ModuleConfig() {
+        super("flowcentral-module-4.0.0.xsd");
         this.principal = true;
     }
     

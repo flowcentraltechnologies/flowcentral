@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 FlowCentral Technologies Limited.
+ * Copyright 2021-2025 FlowCentral Technologies Limited.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -39,7 +39,7 @@ import com.tcdng.unify.web.ui.widget.data.Hint.MODE;
  * Extension module static files generation page controller.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component("/codegeneration/extensionmodulestaticfilesgeneration")
 @UplBinding("web/codegeneration/upl/extensionmodulestaticfilesgenerationpage.upl")

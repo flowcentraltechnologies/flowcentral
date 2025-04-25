@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 FlowCentral Technologies Limited.
+ * Copyright 2021-2025 FlowCentral Technologies Limited.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -19,19 +19,31 @@ package com.flowcentraltech.flowcentral.integration.rest.data;
  * Delete result.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 public class DeleteResult extends AbstractResult {
 
     private Long id;
 
+    private int deletedCount;
+
     public DeleteResult(String resource, Long id) {
         super("delete", resource);
         this.id = id;
+        this.deletedCount = 1;
+    }
+
+    public DeleteResult(String resource, int deletedCount) {
+        super("delete", resource);
+        this.deletedCount = deletedCount;
     }
 
     public Long getId() {
         return id;
+    }
+
+    public int getDeletedCount() {
+        return deletedCount;
     }
      
 }

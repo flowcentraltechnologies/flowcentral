@@ -1,6 +1,10 @@
 <?xml version="1.0"?>
 <!-- Master report module configuration -->
-<module name="report" description="$m{report.module}" shortCode="RPT"
+<module
+	xmlns="http://flowcentraltech.com/schema-common"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://flowcentraltech.com/schema-common https://schema.flowcentralplatform.com/xsd/flowcentral-module-4.0.0.xsd"
+	name="report" description="$m{report.module}" shortCode="RPT"
 	label="$m{report.label}">
 	<!-- Applications -->
 	<applications>
@@ -13,18 +17,18 @@
 	<sysParameters>
 		<sysParameter code="RPT-0001" defaultVal="web/report/templates/"
 			description="$m{report.sysparam.reporttemplatepath}" editor="!ui-text size:40"
-			type="string" editable="true"/>
+			type="STRING" editable="true"/>
 		<sysParameter code="RPT-0002" defaultVal="web/images/applicationloginbanner.png"
 			description="$m{report.sysparam.reportclientlogo}" editor="!ui-text size:40"
-			type="string" editable="true"/>
+			type="STRING" editable="true"/>
 		<sysParameter code="RPT-0003" defaultVal="dynamicreportportrait.jrxml"
 			description="$m{report.sysparam.dynamicreportportraittemplate}"
-			editor="!ui-text size:40" type="string" editable="true"/>
+			editor="!ui-text size:40" type="STRING" editable="true"/>
 		<sysParameter code="RPT-0004" defaultVal="dynamicreportlandscape.jrxml"
 			description="$m{report.sysparam.dynamicreportlandscapetemplate}"
-			editor="!ui-text size:40" type="string" editable="true"/>
+			editor="!ui-text size:40" type="STRING" editable="true"/>
 		<sysParameter code="RPT-0005" defaultVal="2"
 			description="$m{report.sysparam.reportlistingcolumns}"
-			editor="!ui-select list:onetotenlist" type="number" editable="true"/>
+			editor="!ui-select list:onetotenlist" type="NUMBER" editable="true"/>
 	</sysParameters>
 </module>

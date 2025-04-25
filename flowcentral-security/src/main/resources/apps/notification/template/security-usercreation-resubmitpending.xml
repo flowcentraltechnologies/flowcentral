@@ -1,7 +1,11 @@
 <?xml version="1.0"?>
 <!-- User creation resubmit pending notification -->
-<notifTemplate name="userCreationResubmitPending" description="$m{security.user.creation.resubmit}"
-	type="email" format="html" entity="user">
+<notifTemplate
+	xmlns="http://flowcentraltech.com/schema-common"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://flowcentraltech.com/schema-common https://schema.flowcentralplatform.com/xsd/flowcentral-notificationtemplate-4.0.0.xsd"
+	name="userCreationResubmitPending" description="$m{security.user.creation.resubmit}"
+	type="EMAIL" format="HTML" entity="user">
 	<subject><![CDATA[$m{security.user.creation.resubmit.required.subject}]]></subject>
 	<body><![CDATA[$m{security.user.creation.resubmit.required.body}]]></body>
 </notifTemplate>

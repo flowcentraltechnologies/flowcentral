@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 FlowCentral Technologies Limited.
+ * Copyright 2021-2025 FlowCentral Technologies Limited.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -77,7 +77,7 @@ import com.tcdng.unify.core.util.StringUtils;
  * Application reports installer.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Component(ReportModuleNameConstants.APPLICATION_REPORT_INSTALLER)
 public class ApplicationReportInstallerImpl extends AbstractApplicationArtifactInstaller {
@@ -420,8 +420,8 @@ public class ApplicationReportInstallerImpl extends AbstractApplicationArtifactI
         List<ReportableField> reportableFieldList = new ArrayList<ReportableField>();
         Class<? extends Entity> entityClass = EntityTypeUtils.isReservedType(appEntityConfig.getType()) ? null
                 : (Class<? extends Entity>) ReflectUtils.classForName(appEntityConfig.getType());
-        if (!DataUtils.isBlank(appEntityConfig.getEntityFieldList())) {
-            for (EntityFieldConfig rfd : appEntityConfig.getEntityFieldList()) {
+        if (appEntityConfig.getFields() != null && !DataUtils.isBlank(appEntityConfig.getFields().getEntityFieldList())) {
+            for (EntityFieldConfig rfd : appEntityConfig.getFields().getEntityFieldList()) {
                 if (rfd.getReportable() && !EntityFieldDataType.SCRATCH.equals(rfd.getType())) {
                     DataType dataType = rfd.getType().dataType();
                     if (dataType != null) {

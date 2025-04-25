@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 FlowCentral Technologies Limited.
+ * Copyright 2021-2025 FlowCentral Technologies Limited.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -30,7 +30,7 @@ import com.tcdng.unify.core.annotation.ListOnly;
  * Entity for storing collaboration lock information.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @since 4.1
  */
 @Table(name = "FC_COLLABORATIONLOCK", uniqueConstraints = { @UniqueConstraint({ "type", "resourceName" }) },
         indexes = { @Index({ "applicationName" }), @Index({ "resourceName" }) })
