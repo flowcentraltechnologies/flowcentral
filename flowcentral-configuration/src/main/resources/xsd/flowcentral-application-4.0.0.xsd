@@ -448,7 +448,6 @@
                   <xs:attribute type="xs:string" name="dateTimeFormatter" use="optional"/>
                   <xs:attribute type="xs:boolean" name="mapped" use="optional"/>
                   <xs:attribute type="xs:boolean" name="auditable" use="optional"/>
-                  <xs:attribute type="xs:boolean" name="auditable" use="optional"/>
                   <xs:attribute type="xs:boolean" name="reportable" use="optional"/>
                   <xs:attribute type="xs:boolean" name="actionPolicy" use="optional"/>
                   <xs:attribute type="xs:boolean" name="changeEvents" use="optional"/>
@@ -464,10 +463,10 @@
               <xs:element name="table" maxOccurs="unbounded" minOccurs="0">
                 <xs:complexType>
                   <xs:all>
-                    <xs:element name="columns" minOccurs="0">
+                    <xs:element name="columns" minOccurs="1">
                       <xs:complexType>
                         <xs:sequence>
-                          <xs:element name="column" maxOccurs="unbounded" minOccurs="0">
+                          <xs:element name="column" maxOccurs="unbounded" minOccurs="1">
                             <xs:complexType>
                               <xs:simpleContent>
                                 <xs:extension base="xs:string">
@@ -674,16 +673,16 @@
                         </xs:sequence>
                       </xs:complexType>
                     </xs:element>
-                    <xs:element name="tabs" minOccurs="0">
+                    <xs:element name="tabs" minOccurs="1">
                       <xs:complexType>
                         <xs:sequence>
-                          <xs:element name="tab" maxOccurs="unbounded" minOccurs="0">
+                          <xs:element name="tab" maxOccurs="unbounded" minOccurs="1">
                             <xs:complexType mixed="true">
                               <xs:sequence>
-                                <xs:element name="section" maxOccurs="unbounded" minOccurs="0">
+                                <xs:element name="section" maxOccurs="unbounded" minOccurs="1">
                                   <xs:complexType>
                                     <xs:sequence>
-                                      <xs:element name="field" maxOccurs="unbounded" minOccurs="0">
+                                      <xs:element name="field" maxOccurs="unbounded" minOccurs="1">
                                         <xs:complexType>
                                           <xs:simpleContent>
                                             <xs:extension base="xs:string">
