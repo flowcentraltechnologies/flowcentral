@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2025 FlowCentral Technologies Limited.
+ * Copyright (c) 2021-2025 FlowCentral Technologies Limited.
  * All rights reserved.
  * 
  * PROPRIETARY AND CONFIDENTIAL. USE IS SUBJECT TO LICENSE TERMS.
