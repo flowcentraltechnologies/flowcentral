@@ -326,21 +326,21 @@ public class RestJsonCRUDControllerProcessorImpl extends AbstractHttpCRUDControl
                                         JsonObjectComposition jsonComposition = entityDef
                                                 .getJsonComposition(appletUtilities);
                                         if (type.isRange()) {
-                                            paramA = DataUtils.getDateValue(jsonComposition, fieldName,
+                                            paramA = DataUtils.getDateValue(null, jsonComposition, fieldName,
                                                     (String) paramA);
-                                            paramB = DataUtils.getDateValue(jsonComposition, fieldName,
+                                            paramB = DataUtils.getDateValue(null, jsonComposition, fieldName,
                                                     (String) paramB);
                                         } else if (type.isAmongst()) {
                                             if (paramA != null) {
                                                 List<Date> _paramA = new ArrayList<Date>();
                                                 for (String _val : (List<String>) paramA) {
-                                                    _paramA.add((Date) DataUtils.getDateValue(jsonComposition,
+                                                    _paramA.add((Date) DataUtils.getDateValue(null, jsonComposition,
                                                             fieldName, _val));
                                                 }
                                                 paramA = _paramA;
                                             }
                                         } else {
-                                            paramA = DataUtils.getDateValue(jsonComposition, fieldName,
+                                            paramA = DataUtils.getDateValue(null, jsonComposition, fieldName,
                                                     (String) paramA);
                                         }
                                     }
