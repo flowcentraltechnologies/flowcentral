@@ -92,7 +92,10 @@ public class DataTypeUtils {
                         StandardFormatType.DATE_YYYYMMDD_SLASH,
                         StandardFormatType.DATE_DDMMYYYY_DASH,
                         StandardFormatType.DATE_MMDDYYYY_DASH,
-                        StandardFormatType.DATE_YYYYMMDD_DASH);
+                        StandardFormatType.DATE_YYYYMMDD_DASH,
+                        StandardFormatType.DATE_DDMMYYYY,
+                        StandardFormatType.DATE_MMDDYYYY,
+                        StandardFormatType.DATE_YYYYMMDD);
                 break;
             case TIMESTAMP:
             case TIMESTAMP_UTC:
@@ -103,6 +106,9 @@ public class DataTypeUtils {
                         StandardFormatType.DATETIME_DDMMYYYY_DASH,
                         StandardFormatType.DATETIME_MMDDYYYY_DASH,
                         StandardFormatType.DATETIME_YYYYMMDD_DASH,
+                        StandardFormatType.DATETIME_DDMMYYYY,
+                        StandardFormatType.DATETIME_MMDDYYYY,
+                        StandardFormatType.DATETIME_YYYYMMDD,
                         StandardFormatType.DATETIMEA_DDMMYYYY_SLASH,
                         StandardFormatType.DATETIMEA_MMDDYYYY_SLASH,
                         StandardFormatType.DATETIMEA_YYYYMMDD_SLASH,
