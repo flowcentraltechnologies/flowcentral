@@ -109,15 +109,13 @@ public abstract class AbstractApplet {
     }
 
     public String getPageAltCaption() throws UnifyException {
-        return !StringUtils.isBlank(altCaption) ? altCaption
-                : au.resolveSessionMessage(
-                        getRootAppletDef().getPropValue(String.class, AppletPropertyConstants.PAGE_ALTERNATE_CAPTION));
+        return au.resolveSessionMessage(!StringUtils.isBlank(altCaption) ? altCaption
+                : getRootAppletDef().getPropValue(String.class, AppletPropertyConstants.PAGE_ALTERNATE_CAPTION));
     }
 
     public String getPageAltSubCaption() throws UnifyException {
-        return !StringUtils.isBlank(altSubCaption) ? altSubCaption
-                : au.resolveSessionMessage(getRootAppletDef().getPropValue(String.class,
-                        AppletPropertyConstants.PAGE_ALTERNATE_SUBCAPTION));
+        return au.resolveSessionMessage(!StringUtils.isBlank(altSubCaption) ? altSubCaption
+                : getRootAppletDef().getPropValue(String.class, AppletPropertyConstants.PAGE_ALTERNATE_SUBCAPTION));
     }
 
     public AppletDef getRootAppletDef() throws UnifyException {
@@ -129,9 +127,9 @@ public abstract class AbstractApplet {
     }
 
     public void reload() throws UnifyException {
-        
+
     }
-    
+
     public boolean isAuditingEnabled() {
         return ctx.isAuditingEnabled();
     }
@@ -370,7 +368,7 @@ public abstract class AbstractApplet {
         result.setOpenPath(true);
 
         if (au().system().getSysParameterValue(boolean.class,
-                ApplicationModuleSysParamConstants.ENABLE_OPEN_TAB_IN_BROWSER)) { 
+                ApplicationModuleSysParamConstants.ENABLE_OPEN_TAB_IN_BROWSER)) {
             result.setTabName(parts.getExtAppletName());
             result.setOpenTab(true);
         }

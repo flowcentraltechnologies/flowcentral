@@ -4686,7 +4686,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             for (AppletConfig appletConfig : applicationConfig.getAppletsConfig().getAppletList()) {
                 AppApplet oldAppApplet = environment()
                         .findLean(new AppAppletQuery().applicationId(applicationId).name(appletConfig.getName()));
-                description = resolveApplicationMessage(appletConfig.getDescription());
+                description = appletConfig.getDescription();
                 String entity = ApplicationNameUtils.ensureLongNameReference(applicationName, appletConfig.getEntity());
                 if (oldAppApplet == null) {
                     logDebug("Installing new application applet [{0}]. Access = [{1}]...", appletConfig.getName(),

@@ -226,7 +226,7 @@ public class MiniFormWriter extends AbstractControlWriter {
             }
 
             writer.write(isClassicFormSection ? "<div class=\"mfsectionl\"><span>" : "<div class=\"mfsection\"><span>")
-                    .writeWithHtmlEscape(formSection.getLabel()).write("</span></div>");
+                    .writeWithHtmlEscape(resolveSessionMessage(formSection.getLabel())).write("</span></div>");
             if (ctx.isWithSectionError(formSection.getName())) {
                 writer.write("<div>");
                 for (String msg : ctx.getSectionError(formSection.getName())) {

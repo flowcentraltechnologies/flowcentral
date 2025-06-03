@@ -67,7 +67,7 @@ public class ManageEntityListApplet extends AbstractEntityFormApplet {
                     entitySearch.getEntityTable().getTableDef().getLabel()));
             appletDescription = au.resolveSessionMessage("$m{pagetitle.updatedraft}", super.getAppletDescription());
         } else {
-            appletDescription = super.getAppletDescription();
+            appletDescription = au.resolveSessionMessage(super.getAppletDescription());
         }
 
         if (isRootAppletPropWithValue(AppletPropertyConstants.BASE_RESTRICTION)) {
