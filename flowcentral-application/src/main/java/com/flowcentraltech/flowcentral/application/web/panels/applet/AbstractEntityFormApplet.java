@@ -1341,7 +1341,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
                 : null;
         final String beanTitle = !StringUtils.isBlank(createNewCaption) ? createNewCaption
                 : au().resolveSessionMessage(formMode.isCreate() ? "$m{form.newentity}" : "$m{form.maintainentity}",
-                        entityClassDef.getEntityDef().getDescription());
+                        au().resolveSessionMessage(entityClassDef.getEntityDef().getDescription()));
         FormDef formDef = getPreferredForm(PreferredFormType.INPUT_ONLY, _currentFormAppletDef, (Entity) inst,
                 formMode.formProperty());
         return constructForm(formDef, (Entity) inst, formMode, beanTitle, childFkFieldName, isChild);
@@ -1387,7 +1387,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
                 : !StringUtils.isBlank(createNewCaption) ? createNewCaption
                         : au().resolveSessionMessage(
                                 formMode.isCreate() ? "$m{form.newentity}" : "$m{form.maintainentity}",
-                                formDef.getEntityDef().getDescription());
+                                        au().resolveSessionMessage(formDef.getEntityDef().getDescription()));
         return constructForm(formDef, inst, formMode, beanTitle, childFkFieldName, isChild);
     }
 

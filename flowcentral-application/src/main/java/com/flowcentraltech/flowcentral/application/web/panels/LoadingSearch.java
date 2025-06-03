@@ -133,8 +133,8 @@ public class LoadingSearch {
         return loadingTable;
     }
 
-    public String getEntityTitle() {
-        return loadingTable.getTableDef().getLabel();
+    public String getEntityTitle() throws UnifyException {
+        return au().resolveSessionMessage(loadingTable.getTableDef().getLabel());
     }
 
     public EntityDef getEntityDef() {

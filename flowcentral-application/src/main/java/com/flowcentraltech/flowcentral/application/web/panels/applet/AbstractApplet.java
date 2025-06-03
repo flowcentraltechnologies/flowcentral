@@ -335,7 +335,7 @@ public abstract class AbstractApplet {
                 : !StringUtils.isBlank(createNewCaption) ? createNewCaption
                         : au.resolveSessionMessage(
                                 formMode.isCreate() ? "$m{form.newentity}" : "$m{form.maintainentity}",
-                                entityDef.getDescription());
+                                        au.resolveSessionMessage(entityDef.getDescription()));
         return constructSingleForm(inst, formMode, beanTitle);
     }
 

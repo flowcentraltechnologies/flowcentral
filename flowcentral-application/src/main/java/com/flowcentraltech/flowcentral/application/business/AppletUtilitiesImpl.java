@@ -1215,7 +1215,7 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
 
                         _entitySearch.setChildTabIndex(tabIndex);
                         _entitySearch.setExpandedMode(expanded);
-                       _entitySearch.setRelatedList(formTabDef.getApplet());
+                        _entitySearch.setRelatedList(formTabDef.getApplet());
                         _entitySearch.setBaseRestriction(childRestriction, specialParamProvider);
                         _entitySearch.applyFilterToSearch();
 
@@ -1236,7 +1236,7 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
                                 formTabDef.getName(), formDef.getEntityDef(), EntityFilter.ENABLE_ALL,
                                 formTabDef.isIgnoreParentCondition(), formTabDef.isIncludeSysParam());
                         _entityFilter.setListType(categoryType.listType());
-                        _entityFilter.setParamList(categoryType.paramList()); 
+                        _entityFilter.setParamList(categoryType.paramList());
                         _entityFilter.setCategory(categoryType.category());
                         _entityFilter.setOwnerInstId((Long) inst.getId());
                         _entityFilter.load(_entityDef);
@@ -1883,8 +1883,8 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
             if (!StringUtils.isBlank(addCaption)) {
                 _entitySearch.setEntityNewLabel(resolveSessionMessage(addCaption));
             } else {
-                _entitySearch.setEntityNewLabel(
-                        resolveSessionMessage("$m{entitysearch.button.new}", _tableDef.getEntityDef().getLabel()));
+                _entitySearch.setEntityNewLabel(resolveSessionMessage("$m{entitysearch.button.new}",
+                        resolveSessionMessage(_tableDef.getEntityDef().getLabel())));
             }
         }
 
@@ -1970,10 +1970,10 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
 
     @Override
     public EntityFilter constructEntityFilter(FormContext ctx, SweepingCommitPolicy sweepingCommitPolicy,
-            String tabName, EntityDef ownerEntityDef, int entityFilterMode, boolean isIgnoreParentCondition, boolean includeSysParam)
-            throws UnifyException {
-        logDebug("Constructing entity filter for [{0}] using entity definition [{1}] with system parameter [{2}]...", tabName,
-                ownerEntityDef.getLongName(), includeSysParam);
+            String tabName, EntityDef ownerEntityDef, int entityFilterMode, boolean isIgnoreParentCondition,
+            boolean includeSysParam) throws UnifyException {
+        logDebug("Constructing entity filter for [{0}] using entity definition [{1}] with system parameter [{2}]...",
+                tabName, ownerEntityDef.getLongName(), includeSysParam);
         return new EntityFilter(ctx, sweepingCommitPolicy, tabName, ownerEntityDef, entityFilterMode,
                 isIgnoreParentCondition, includeSysParam);
     }
