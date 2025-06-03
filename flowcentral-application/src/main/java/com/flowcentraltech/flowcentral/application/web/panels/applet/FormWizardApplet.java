@@ -57,11 +57,13 @@ public class FormWizardApplet extends AbstractApplet implements SweepingCommitPo
         final String formName = appletDef.getPropValue(String.class, AppletPropertyConstants.CREATE_FORM);
         final FormDef formDef = au.getFormDef(formName);
         final Entity inst = au.application().getEntityClassDef(appletDef.getEntity()).newInst();
+        final String appletDesc = au.resolveSessionMessage(appletDef.getDescription());
+        final String formLabel = au.resolveSessionMessage(formDef.getLabel());
         BreadCrumbs.Builder bcb = BreadCrumbs.newBuilder();
-        bcb.addHistoryCrumb(appletDef.getDescription(), formDef.getLabel(), 0);
+        bcb.addHistoryCrumb(appletDesc, formLabel, 0);
         BreadCrumbs crumbs = bcb.build();
 
-        this.formWizard = au.constructFormWizard(this, formDef, inst, appletDef.getDescription(), formDef.getLabel(), crumbs);
+        this.formWizard = au.constructFormWizard(this, formDef, inst, appletDesc, formLabel, crumbs);
         setAltSubCaption(au.resolveSessionMessage("$m{formwizardpanel.creation}"));
     }
     
