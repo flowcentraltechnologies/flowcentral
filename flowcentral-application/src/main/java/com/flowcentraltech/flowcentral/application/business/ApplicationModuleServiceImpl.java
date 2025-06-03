@@ -6115,7 +6115,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 } else {
                     oldAppEntityField.setDataType(entityFieldConfig.getType());
                     oldAppEntityField.setType(restore ? EntityFieldType.CUSTOM : EntityFieldType.STATIC);
-                    oldAppEntityField.setLabel(resolveApplicationMessage(entityFieldConfig.getLabel()));
+                    oldAppEntityField.setLabel(entityFieldConfig.getLabel());
                     String references = entityFieldConfig.getReferences();
                     if (entityFieldConfig.getType().isEntityRef()
                             || (!entityFieldConfig.getType().isEnumGroup() && !StringUtils.isBlank(references))) {
@@ -6129,9 +6129,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     oldAppEntityField.setKey(entityFieldConfig.getKey());
                     oldAppEntityField.setProperty(entityFieldConfig.getProperty());
                     oldAppEntityField.setCategory(entityFieldConfig.getCategory());
-                    String inputLabel = entityFieldConfig.getInputLabel() == null ? null
-                            : resolveApplicationMessage(entityFieldConfig.getInputLabel());
-                    oldAppEntityField.setInputLabel(inputLabel);
+                    oldAppEntityField.setInputLabel(entityFieldConfig.getInputLabel());
                     oldAppEntityField.setInputWidget(ApplicationNameUtils.ensureLongNameReference(applicationName,
                             entityFieldConfig.getInputWidget()));
                     oldAppEntityField.setSuggestionType(ApplicationNameUtils.ensureLongNameReference(applicationName,

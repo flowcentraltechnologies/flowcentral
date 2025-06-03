@@ -59,7 +59,7 @@ public class TabSheetWriter extends AbstractControlWriter {
                         writer.write("<div class=\"ttabx\">");
                         writer.write("<div class=\"ttabxc\">");
                         writer.write("<span>");
-                        writer.writeWithHtmlEscape(tabDef.getTabLabel());
+                        writer.writeWithHtmlEscape(resolveSessionMessage(tabDef.getTabLabel()));
                         writer.write("</span>");
                         writer.write("</div>");
 
@@ -80,8 +80,9 @@ public class TabSheetWriter extends AbstractControlWriter {
                 for (int i = 0; i < len; i++) {
                     if (tabSheet.getTabSheetItem(i).isVisible()) {
                         TabDef tabDef = tabDefList.get(i);
+                        final String tabLabel = resolveSessionMessage(tabDef.getTabLabel());
                         logDebug("Writing tab structure [{0}] with label [{1}]...", tabDef.getTabName(),
-                                tabDef.getTabLabel());
+                                tabLabel);
                         MessageType messageType = tabSheet.getReviewMessageType(tabDef.getTabName());
                         writer.write("<li id=\"").write(tabPrefix).write(i).write("\" class=\"");
                         writer.write(WidgetWriterUtils.getTabClass(i, currentIndex));
@@ -90,13 +91,13 @@ public class TabSheetWriter extends AbstractControlWriter {
                             writer.write("<img src=\"");
                             writer.writeFileImageContextURL(messageType.image());
                             writer.write("\">");
-                            writer.write("<span class=\"msg\">").writeWithHtmlEscape(tabDef.getTabLabel())
+                            writer.write("<span class=\"msg\">").writeWithHtmlEscape(tabLabel)
                                     .write("</span>");
                         } else if (tabDef.isErrors()) {
-                            writer.write("<span class=\"err\">").writeWithHtmlEscape(tabDef.getTabLabel())
+                            writer.write("<span class=\"err\">").writeWithHtmlEscape(tabLabel)
                                     .write("</span>");
                         } else {
-                            writer.writeWithHtmlEscape(tabDef.getTabLabel());
+                            writer.writeWithHtmlEscape(tabLabel);
                         }
 
                         writer.write("</li>");
