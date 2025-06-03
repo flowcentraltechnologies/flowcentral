@@ -261,7 +261,7 @@ public class AppletMenuWriter extends AbstractMenuWriter {
                         }
 
                         writer.write("<span class=\"lab\">");
-                        writer.writeWithHtmlEscape(applicationMenuDef.getLabel());
+                        writer.writeWithHtmlEscape(resolveSessionMessage(applicationMenuDef.getLabel()));
                         writer.write("</span></div>");
                         writer.write("<div id=\"submenu_").write(applicationId)
                                 .write(horizontal ? "\" class=\"hsubmenu submenu\" style=\"display:"

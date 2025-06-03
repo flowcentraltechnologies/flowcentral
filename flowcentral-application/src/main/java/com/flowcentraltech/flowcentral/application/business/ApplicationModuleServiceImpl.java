@@ -4576,7 +4576,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             application.setModuleId(moduleId.get());
             application.setName(applicationConfig.getName());
             application.setDescription(description);
-            application.setLabel(resolveApplicationMessage(applicationConfig.getLabel()));
+            application.setLabel(applicationConfig.getLabel());
             application.setDisplayIndex(applicationConfig.getDisplayIndex());
             application.setDevelopable(applicationConfig.getDevelopable());
             application.setMenuAccess(applicationConfig.getMenuAccess());
@@ -4587,7 +4587,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             logDebug(taskMonitor, "Upgrading application [{0}]...", description);
             oldApplication.setModuleId(moduleId.get());
             oldApplication.setDescription(description);
-            oldApplication.setLabel(resolveApplicationMessage(applicationConfig.getLabel()));
+            oldApplication.setLabel(applicationConfig.getLabel());
             oldApplication.setDevelopable(applicationConfig.getDevelopable());
             oldApplication.setMenuAccess(applicationConfig.getMenuAccess());
             oldApplication.setAllowSecondaryTenants(applicationConfig.getAllowSecondaryTenants());
@@ -4687,7 +4687,6 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 AppApplet oldAppApplet = environment()
                         .findLean(new AppAppletQuery().applicationId(applicationId).name(appletConfig.getName()));
                 description = resolveApplicationMessage(appletConfig.getDescription());
-                String label = resolveApplicationMessage(appletConfig.getLabel());
                 String entity = ApplicationNameUtils.ensureLongNameReference(applicationName, appletConfig.getEntity());
                 if (oldAppApplet == null) {
                     logDebug("Installing new application applet [{0}]. Access = [{1}]...", appletConfig.getName(),
@@ -4697,7 +4696,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appApplet.setDescription(description);
                     appApplet.setType(appletConfig.getType());
                     appApplet.setEntity(entity);
-                    appApplet.setLabel(label);
+                    appApplet.setLabel(appletConfig.getLabel());
                     appApplet.setIcon(appletConfig.getIcon());
                     appApplet.setRouteToApplet(appletConfig.getRouteToApplet());
                     appApplet.setPath(appletConfig.getPath());
@@ -4720,7 +4719,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     oldAppApplet.setDescription(description);
                     oldAppApplet.setType(appletConfig.getType());
                     oldAppApplet.setEntity(entity);
-                    oldAppApplet.setLabel(label);
+                    oldAppApplet.setLabel(appletConfig.getLabel());
                     oldAppApplet.setIcon(appletConfig.getIcon());
                     oldAppApplet.setRouteToApplet(appletConfig.getRouteToApplet());
                     oldAppApplet.setPath(appletConfig.getPath());
@@ -6052,7 +6051,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                         }
 
                         if (!StringUtils.isBlank(entityFieldConfig.getLabel())) {
-                            appEntityField.setLabel(resolveApplicationMessage(entityFieldConfig.getLabel()));
+                            appEntityField.setLabel(entityFieldConfig.getLabel());
                         }
 
                         continue;
@@ -6065,7 +6064,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appEntityField.setDataType(entityFieldConfig.getType());
                     appEntityField.setType(restore ? EntityFieldType.CUSTOM : EntityFieldType.STATIC);
                     appEntityField.setName(entityFieldConfig.getName());
-                    appEntityField.setLabel(resolveApplicationMessage(entityFieldConfig.getLabel()));
+                    appEntityField.setLabel(entityFieldConfig.getLabel());
                     String references = entityFieldConfig.getReferences();
                     if (entityFieldConfig.getType().isEntityRef()
                             || (!entityFieldConfig.getType().isEnumGroup() && !StringUtils.isBlank(references))) {
@@ -6079,9 +6078,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appEntityField.setKey(entityFieldConfig.getKey());
                     appEntityField.setProperty(entityFieldConfig.getProperty());
                     appEntityField.setCategory(entityFieldConfig.getCategory());
-                    String inputLabel = entityFieldConfig.getInputLabel() == null ? null
-                            : resolveApplicationMessage(entityFieldConfig.getInputLabel());
-                    appEntityField.setInputLabel(inputLabel);
+                    appEntityField.setInputLabel(entityFieldConfig.getInputLabel());
                     appEntityField.setInputWidget(ApplicationNameUtils.ensureLongNameReference(applicationName,
                             entityFieldConfig.getInputWidget()));
                     appEntityField.setSuggestionType(ApplicationNameUtils.ensureLongNameReference(applicationName,
@@ -6444,7 +6441,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         for (TableColumnConfig tableColumnConfig : appTableConfig.getColumns().getColumnList()) {
             AppTableColumn appTableColumn = new AppTableColumn();
             appTableColumn.setField(tableColumnConfig.getField());
-            appTableColumn.setLabel(resolveApplicationMessage(tableColumnConfig.getLabel()));
+            appTableColumn.setLabel(tableColumnConfig.getLabel());
             appTableColumn.setRenderWidget(
                     ApplicationNameUtils.ensureLongNameReference(applicationName, tableColumnConfig.getRenderWidget()));
             appTableColumn.setLinkAct(tableColumnConfig.getLinkAct());
@@ -6699,7 +6696,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             appFormElement.setType(FormElementType.TAB);
             appFormElement.setElementName(formTabConfig.getName());
             appFormElement.setTabContentType(formTabConfig.getContentType());
-            appFormElement.setLabel(resolveApplicationMessage(formTabConfig.getLabel()));
+            appFormElement.setLabel(formTabConfig.getLabel());
             appFormElement.setTabApplet(
                     ApplicationNameUtils.ensureLongNameReference(applicationName, formTabConfig.getApplet()));
             appFormElement.setTabReference(formTabConfig.getReference());
@@ -6728,7 +6725,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appFormElement.setType(FormElementType.SECTION);
                     appFormElement.setElementName(formSectionConfig.getName());
                     appFormElement.setSectionColumns(formSectionConfig.getColumns());
-                    appFormElement.setLabel(resolveApplicationMessage(formSectionConfig.getLabel()));
+                    appFormElement.setLabel(formSectionConfig.getLabel());
                     appFormElement.setIcon(formSectionConfig.getIcon());
                     appFormElement.setPanel(formSectionConfig.getPanel());
                     appFormElement.setVisible(formSectionConfig.getVisible());
@@ -6743,7 +6740,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                             appFormElement = new AppFormElement();
                             appFormElement.setType(FormElementType.FIELD);
                             appFormElement.setElementName(formFieldConfig.getName());
-                            appFormElement.setLabel(resolveApplicationMessage(formFieldConfig.getLabel()));
+                            appFormElement.setLabel(formFieldConfig.getLabel());
                             appFormElement.setInputWidget(ApplicationNameUtils.ensureLongNameReference(applicationName,
                                     formFieldConfig.getInputWidget()));
                             appFormElement.setInputReference(ApplicationNameUtils

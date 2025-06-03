@@ -112,7 +112,7 @@ public abstract class AbstractMenuWriter extends AbstractPanelWriter {
         writer.write("</span>");
         writer.write(appletDef.isWithSubApplets() ? "<span class=\"aclm\">" : "<span class=\"acl\">")
                 .writeWithHtmlEscape(draft ? resolveSessionMessage("$m{label.draft.applet}", appletDef.getLabel())
-                        : appletDef.getLabel())
+                        : resolveSessionMessage(appletDef.getLabel()))
                 .write("</span>");
         if (appletDef.isWithSubApplets()) {
             writer.write("<span class=\"icon\">");

@@ -253,7 +253,7 @@ public class TableDef extends BaseApplicationEntityDef {
         return filterDef;
     }
 
-    public String getFieldLabel(int index) {
+    public String getFieldLabel(int index) { 
         TableColumnDef columnDef = getVisibleColumnDef(index);
         if (columnDef.isWithLabel()) {
             return columnDef.getLabel();

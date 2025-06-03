@@ -275,7 +275,7 @@ public class MiniFormWriter extends AbstractControlWriter {
                 }
                 
                 if (chWidget.isLayoutCaption()) {
-                    writer.writeWithHtmlEscape(formWidget.getFieldLabel());
+                    writer.writeWithHtmlEscape(resolveSessionMessage(formWidget.getFieldLabel()));
                 }
                 
                 writer.write("</span>");
@@ -288,7 +288,7 @@ public class MiniFormWriter extends AbstractControlWriter {
                 writer.writeStructureAndContent(chWidget);
                 writer.write("<span class=\"mfclabel\">");
                 if (!chWidget.isLayoutCaption()) {
-                    writer.writeWithHtmlEscape(formWidget.getFieldLabel());
+                    writer.writeWithHtmlEscape(resolveSessionMessage(formWidget.getFieldLabel()));
                 }
                 writer.write("</span>");
                 
