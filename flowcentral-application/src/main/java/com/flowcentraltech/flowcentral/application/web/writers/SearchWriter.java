@@ -114,7 +114,7 @@ public class SearchWriter extends AbstractControlWriter {
         writer.write("<div class=\"sfpre").write("\">");
         writer.write(vertical ? "<div class=\"sflabelv\">" : "<div class=\"sflabel\">");
         writer.write("<span class=\"sfbasetxt\">");
-        writer.writeWithHtmlEscape(searchEntry.getLabel());
+        writer.writeWithHtmlEscape(resolveSessionMessage(searchEntry.getLabel()));
         if (captionSuffix != null) {
             writer.write(captionSuffix);
         }

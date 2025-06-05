@@ -557,7 +557,7 @@ public class TableWriter extends AbstractControlWriter {
                         }
                     }
 
-                    String caption = tableDef.getFieldLabel(columnIndex);
+                    String caption = resolveSessionMessage(tableDef.getFieldLabel(columnIndex));
                     if (caption != null && (sysHeaderUppercase || tableDef.isHeaderToUpperCase())) {
                         caption = caption.toUpperCase();
                     }

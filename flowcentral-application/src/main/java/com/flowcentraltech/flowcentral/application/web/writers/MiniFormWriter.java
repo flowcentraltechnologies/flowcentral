@@ -226,7 +226,7 @@ public class MiniFormWriter extends AbstractControlWriter {
             }
 
             writer.write(isClassicFormSection ? "<div class=\"mfsectionl\"><span>" : "<div class=\"mfsection\"><span>")
-                    .writeWithHtmlEscape(formSection.getLabel()).write("</span></div>");
+                    .writeWithHtmlEscape(resolveSessionMessage(formSection.getLabel())).write("</span></div>");
             if (ctx.isWithSectionError(formSection.getName())) {
                 writer.write("<div>");
                 for (String msg : ctx.getSectionError(formSection.getName())) {
@@ -275,7 +275,7 @@ public class MiniFormWriter extends AbstractControlWriter {
                 }
                 
                 if (chWidget.isLayoutCaption()) {
-                    writer.writeWithHtmlEscape(formWidget.getFieldLabel());
+                    writer.writeWithHtmlEscape(resolveSessionMessage(formWidget.getFieldLabel()));
                 }
                 
                 writer.write("</span>");
@@ -288,7 +288,7 @@ public class MiniFormWriter extends AbstractControlWriter {
                 writer.writeStructureAndContent(chWidget);
                 writer.write("<span class=\"mfclabel\">");
                 if (!chWidget.isLayoutCaption()) {
-                    writer.writeWithHtmlEscape(formWidget.getFieldLabel());
+                    writer.writeWithHtmlEscape(resolveSessionMessage(formWidget.getFieldLabel()));
                 }
                 writer.write("</span>");
                 

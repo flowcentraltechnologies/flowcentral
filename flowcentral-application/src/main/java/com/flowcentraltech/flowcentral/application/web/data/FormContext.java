@@ -71,7 +71,7 @@ import com.tcdng.unify.web.ui.widget.EventHandler;
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
-public class FormContext extends AbstractContext implements  ValidationErrors {
+public class FormContext extends AbstractContext implements ValidationErrors {
 
     public enum Mode {
         NORMAL,
@@ -306,8 +306,10 @@ public class FormContext extends AbstractContext implements  ValidationErrors {
                                 formDef.getTitleFormat())
                         .generate()
                 : (inst instanceof Entity && ((Entity) inst).getId() == null
-                        ? au().resolveSessionMessage("$m{form.newentity}", entityDef.getLabel())
-                        : au().resolveSessionMessage("$m{form.maintainentity}", entityDef.getLabel()));
+                        ? au().resolveSessionMessage("$m{form.newentity}",
+                                au().resolveSessionMessage(entityDef.getLabel()))
+                        : au().resolveSessionMessage("$m{form.maintainentity}",
+                                au().resolveSessionMessage(entityDef.getLabel())));
     }
 
     public Object getInst() {

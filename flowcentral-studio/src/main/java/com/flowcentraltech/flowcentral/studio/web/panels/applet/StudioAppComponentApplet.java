@@ -58,7 +58,7 @@ public class StudioAppComponentApplet extends AbstractEntityFormApplet {
         setCurrFormAppletDef(getRootAppletDef());
         StudioAppComponentType type = getCurrFormAppletDef().getPropValue(StudioAppComponentType.class,
                 StudioAppletPropertyConstants.ENTITY_TYPE);
-        this.instTitle = getCurrFormAppletDef().getDescription();
+        this.instTitle = au.resolveSessionMessage(getCurrFormAppletDef().getDescription());
         this.typeTitle = au.resolveSessionMessage(type.caption());
         Long instId = getCurrFormAppletDef().getPropValue(Long.class, StudioAppletPropertyConstants.ENTITY_INST_ID);
         if (instId == null || instId.longValue() == 0L) {

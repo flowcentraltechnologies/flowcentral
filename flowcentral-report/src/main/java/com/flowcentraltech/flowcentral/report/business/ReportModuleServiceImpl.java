@@ -372,7 +372,7 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService
                     if (entityDef.isNotDelegateListOnly(reportableField.getName())) {
                         final String formatter = resolveFormatter(entityClassDef, reportableField);
                         ReportColumnOptions remoteColumnOptions = new ReportColumnOptions(reportableField.getName(),
-                                defaultColumn.getCaption(), reportableField.getType(), formatter,
+                                resolveSessionMessage(defaultColumn.getCaption()), reportableField.getType(), formatter,
                                 HAlignType.fromName(reportableField.getHorizontalAlign()), reportableField.getWidth(),
                                 true);
                         reportOptions.addColumnOptions(remoteColumnOptions);
@@ -386,9 +386,9 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService
             if (entityDef.isNotDelegateListOnly(reportableField.getName())) {
                 final String formatter = resolveFormatter(entityClassDef, reportableField);
                 ReportColumnOptions remoteColumnOptions = new ReportColumnOptions(reportableField.getName(),
-                        reportableField.getDescription(), reportableField.getType(), formatter,
-                        HAlignType.fromName(reportableField.getHorizontalAlign()), reportableField.getWidth(),
-                        isSelectAll);
+                        resolveSessionMessage(entityDef.getFieldDef(reportableField.getName()).getFieldLabel()),
+                        reportableField.getType(), formatter, HAlignType.fromName(reportableField.getHorizontalAlign()),
+                        reportableField.getWidth(), isSelectAll);
                 reportOptions.addColumnOptions(remoteColumnOptions);
             }
         }

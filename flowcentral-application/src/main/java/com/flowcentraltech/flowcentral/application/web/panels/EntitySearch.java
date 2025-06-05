@@ -230,7 +230,7 @@ public class EntitySearch extends AbstractPanelFormBinding {
     }
 
     public String getEntityTitle() throws UnifyException {
-        return altTableLabel != null ? altTableLabel : entityTable.getTableDef().getLabel();
+        return altTableLabel != null ? altTableLabel : au().resolveSessionMessage(entityTable.getTableDef().getLabel());
     }
 
     public EntityDef getEntityDef() {
