@@ -692,10 +692,11 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                 .findLean(new AppTableQuery().applicationName(tnp.getApplicationName()).name(tnp.getEntityName()));
         final long tableVersionNo = appTable.getVersionNo();
         final ApplicationEntityNameParts anp = ApplicationNameUtils.getApplicationEntityNameParts(loadinAppletName);
-        final String loadingAppletDesc = resolveApplicationMessage("$m{workflow.myworkitems.loadingapplet.description}",
-                appTable.getDescription());
-        final String loadingAppletLabel = resolveApplicationMessage("$m{workflow.myworkitems.loadingapplet.label}",
-                appTable.getLabel());
+        final String loadingAppletDesc = resolveSessionMessage("$m{workflow.myworkitems.loadingapplet.description}",
+                resolveSessionMessage(appTable.getDescription()));
+        final String loadingAppletLabel = resolveSessionMessage("$m{workflow.myworkitems.loadingapplet.label}",
+                resolveSessionMessage(appTable.getLabel()));
+        
         AppApplet loadingApplet = environment()
                 .findLean(new AppAppletQuery().applicationName(anp.getApplicationName()).name(anp.getEntityName()));
         if (loadingApplet == null) {
@@ -899,8 +900,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             for (String loadingTableName : loadingTableNameList) {
                 final ApplicationEntityNameParts tnp = ApplicationNameUtils
                         .getApplicationEntityNameParts(loadingTableName);
-                final String label = environment().value(String.class, "label",
-                        new AppTableQuery().applicationName(tnp.getApplicationName()).name(tnp.getEntityName()));
+                final String label = resolveSessionMessage(environment().value(String.class, "label",
+                        new AppTableQuery().applicationName(tnp.getApplicationName()).name(tnp.getEntityName())));
                 workflowLoadingTableInfoList.add(new WorkflowLoadingTableInfo(loadingTableName, label));
             }
 

@@ -922,7 +922,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     if (ApplicationPredefinedTableConstants.PROPERTYITEM_TABLE.equals(longName)) {
                         TableDef.Builder tdb = TableDef.newBuilder(
                                 getEntityDef(ApplicationPredefinedEntityConstants.PROPERTYITEM_ENTITY),
-                                getApplicationMessage("application.propertyitem.table.label"), false, false,
+                                "$m{application.propertyitem.table.label}", false, false,
                                 ApplicationPredefinedTableConstants.PROPERTYITEM_TABLE,
                                 getApplicationMessage("application.propertyitem.table.description"), 0L, 1L);
                         tdb.classicLink(classicLink);
@@ -939,7 +939,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     if (ApplicationPredefinedTableConstants.USAGE_TABLE.equals(longName)) {
                         TableDef.Builder tdb = TableDef.newBuilder(
                                 getEntityDef(ApplicationPredefinedEntityConstants.USAGE_ENTITY),
-                                getApplicationMessage("application.usage.table.label"), true, true,
+                                "$m{application.usage.table.label}", true, true,
                                 ApplicationPredefinedTableConstants.USAGE_TABLE,
                                 getApplicationMessage("application.usage.table.description"), 0L, 1L);
                         tdb.classicLink(classicLink);
@@ -957,7 +957,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     if (ApplicationPredefinedTableConstants.ATTACHMENT_TABLE.equals(longName)) {
                         TableDef.Builder tdb = TableDef
                                 .newBuilder(getEntityDef(ApplicationPredefinedEntityConstants.ATTACHMENT_ENTITY),
-                                        getApplicationMessage("application.attachment.table.label"), false, false,
+                                        "$m{application.attachment.table.label}", false, false,
                                         ApplicationPredefinedTableConstants.ATTACHMENT_TABLE,
                                         getApplicationMessage("application.attachment.table.description"), 0L, 1L)
                                 .serialNo(true);
@@ -975,7 +975,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     if (ApplicationPredefinedTableConstants.SNAPSHOT_TABLE.equals(longName)) {
                         TableDef.Builder tdb = TableDef
                                 .newBuilder(getEntityDef(ApplicationPredefinedEntityConstants.SNAPSHOT_ENTITY),
-                                        getApplicationMessage("application.snapshotdetails.table.label"), false, false,
+                                        "$m{application.snapshotdetails.table.label}", false, false,
                                         ApplicationPredefinedTableConstants.SNAPSHOT_TABLE,
                                         getApplicationMessage("application.snapshotdetails.table.description"), 0L, 1L)
                                 .serialNo(true);
@@ -4576,7 +4576,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             application.setModuleId(moduleId.get());
             application.setName(applicationConfig.getName());
             application.setDescription(description);
-            application.setLabel(resolveApplicationMessage(applicationConfig.getLabel()));
+            application.setLabel(applicationConfig.getLabel());
             application.setDisplayIndex(applicationConfig.getDisplayIndex());
             application.setDevelopable(applicationConfig.getDevelopable());
             application.setMenuAccess(applicationConfig.getMenuAccess());
@@ -4587,7 +4587,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             logDebug(taskMonitor, "Upgrading application [{0}]...", description);
             oldApplication.setModuleId(moduleId.get());
             oldApplication.setDescription(description);
-            oldApplication.setLabel(resolveApplicationMessage(applicationConfig.getLabel()));
+            oldApplication.setLabel(applicationConfig.getLabel());
             oldApplication.setDevelopable(applicationConfig.getDevelopable());
             oldApplication.setMenuAccess(applicationConfig.getMenuAccess());
             oldApplication.setAllowSecondaryTenants(applicationConfig.getAllowSecondaryTenants());
@@ -4686,8 +4686,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             for (AppletConfig appletConfig : applicationConfig.getAppletsConfig().getAppletList()) {
                 AppApplet oldAppApplet = environment()
                         .findLean(new AppAppletQuery().applicationId(applicationId).name(appletConfig.getName()));
-                description = resolveApplicationMessage(appletConfig.getDescription());
-                String label = resolveApplicationMessage(appletConfig.getLabel());
+                description = appletConfig.getDescription();
                 String entity = ApplicationNameUtils.ensureLongNameReference(applicationName, appletConfig.getEntity());
                 if (oldAppApplet == null) {
                     logDebug("Installing new application applet [{0}]. Access = [{1}]...", appletConfig.getName(),
@@ -4697,7 +4696,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appApplet.setDescription(description);
                     appApplet.setType(appletConfig.getType());
                     appApplet.setEntity(entity);
-                    appApplet.setLabel(label);
+                    appApplet.setLabel(appletConfig.getLabel());
                     appApplet.setIcon(appletConfig.getIcon());
                     appApplet.setRouteToApplet(appletConfig.getRouteToApplet());
                     appApplet.setPath(appletConfig.getPath());
@@ -4720,7 +4719,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     oldAppApplet.setDescription(description);
                     oldAppApplet.setType(appletConfig.getType());
                     oldAppApplet.setEntity(entity);
-                    oldAppApplet.setLabel(label);
+                    oldAppApplet.setLabel(appletConfig.getLabel());
                     oldAppApplet.setIcon(appletConfig.getIcon());
                     oldAppApplet.setRouteToApplet(appletConfig.getRouteToApplet());
                     oldAppApplet.setPath(appletConfig.getPath());
@@ -4768,7 +4767,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appEnumeration.setId(null);
                     appEnumeration.setName(enumerationConfig.getName());
                     appEnumeration.setDescription(resolveApplicationMessage(enumerationConfig.getDescription()));
-                    appEnumeration.setLabel(resolveApplicationMessage(enumerationConfig.getLabel()));
+                    appEnumeration.setLabel(enumerationConfig.getLabel());
                     appEnumeration.setDeprecated(false);
                     appEnumeration.setConfigType(ConfigType.STATIC);
                     populateChildList(appEnumeration, enumerationConfig);
@@ -4776,7 +4775,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 } else {
                     logDebug("Upgrading application enumeration [{0}]...", enumerationConfig.getName());
                     oldAppEnumeration.setDescription(resolveApplicationMessage(enumerationConfig.getDescription()));
-                    oldAppEnumeration.setLabel(resolveApplicationMessage(enumerationConfig.getLabel()));
+                    oldAppEnumeration.setLabel(enumerationConfig.getLabel());
                     oldAppEnumeration.setDeprecated(false);
                     oldAppEnumeration.setConfigType(ConfigType.STATIC);
                     populateChildList(oldAppEnumeration, enumerationConfig);
@@ -4894,8 +4893,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             for (AppEntityConfig appEntityConfig : applicationConfig.getEntitiesConfig().getEntityList()) {
                 AppEntity oldAppEntity = environment()
                         .findLean(new AppEntityQuery().applicationId(applicationId).name(appEntityConfig.getName()));
-                description = resolveApplicationMessage(appEntityConfig.getDescription());
-                String label = resolveApplicationMessage(appEntityConfig.getLabel());
+                description = appEntityConfig.getDescription();
+                String label = appEntityConfig.getLabel();
                 Class<? extends BaseEntity> entityClass = (Class<? extends BaseEntity>) ReflectUtils
                         .classForName(appEntityConfig.getType());
                 String tableName = !StringUtils.isBlank(appEntityConfig.getDelegate()) ? appEntityConfig.getTable()
@@ -4989,7 +4988,6 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             appTable.setApplicationId(applicationId);
             for (AppTableConfig appTableConfig : applicationConfig.getTablesConfig().getTableList()) {
                 description = resolveApplicationMessage(appTableConfig.getDescription());
-                String label = resolveApplicationMessage(appTableConfig.getLabel());
                 AppTable oldAppTable = environment()
                         .findLean(new AppTableQuery().applicationId(applicationId).name(appTableConfig.getName()));
                 if (oldAppTable == null) {
@@ -4999,7 +4997,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                             ApplicationNameUtils.ensureLongNameReference(applicationName, appTableConfig.getEntity()));
                     appTable.setName(appTableConfig.getName());
                     appTable.setDescription(description);
-                    appTable.setLabel(label);
+                    appTable.setLabel(appTableConfig.getLabel());
                     appTable.setDetailsPanelName(appTableConfig.getDetailsPanelName());
                     appTable.setLoadingFilterGen(appTableConfig.getLoadingFilterGen());
                     appTable.setLoadingSearchInput(appTableConfig.getLoadingSearchInput());
@@ -5027,7 +5025,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     oldAppTable.setEntity(
                             ApplicationNameUtils.ensureLongNameReference(applicationName, appTableConfig.getEntity()));
                     oldAppTable.setDescription(description);
-                    oldAppTable.setLabel(label);
+                    oldAppTable.setLabel(appTableConfig.getLabel());
                     oldAppTable.setDetailsPanelName(appTableConfig.getDetailsPanelName());
                     oldAppTable.setLoadingFilterGen(appTableConfig.getLoadingFilterGen());
                     oldAppTable.setLoadingSearchInput(appTableConfig.getLoadingSearchInput());
@@ -6052,7 +6050,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                         }
 
                         if (!StringUtils.isBlank(entityFieldConfig.getLabel())) {
-                            appEntityField.setLabel(resolveApplicationMessage(entityFieldConfig.getLabel()));
+                            appEntityField.setLabel(entityFieldConfig.getLabel());
                         }
 
                         continue;
@@ -6065,7 +6063,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appEntityField.setDataType(entityFieldConfig.getType());
                     appEntityField.setType(restore ? EntityFieldType.CUSTOM : EntityFieldType.STATIC);
                     appEntityField.setName(entityFieldConfig.getName());
-                    appEntityField.setLabel(resolveApplicationMessage(entityFieldConfig.getLabel()));
+                    appEntityField.setLabel(entityFieldConfig.getLabel());
                     String references = entityFieldConfig.getReferences();
                     if (entityFieldConfig.getType().isEntityRef()
                             || (!entityFieldConfig.getType().isEnumGroup() && !StringUtils.isBlank(references))) {
@@ -6079,9 +6077,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appEntityField.setKey(entityFieldConfig.getKey());
                     appEntityField.setProperty(entityFieldConfig.getProperty());
                     appEntityField.setCategory(entityFieldConfig.getCategory());
-                    String inputLabel = entityFieldConfig.getInputLabel() == null ? null
-                            : resolveApplicationMessage(entityFieldConfig.getInputLabel());
-                    appEntityField.setInputLabel(inputLabel);
+                    appEntityField.setInputLabel(entityFieldConfig.getInputLabel());
                     appEntityField.setInputWidget(ApplicationNameUtils.ensureLongNameReference(applicationName,
                             entityFieldConfig.getInputWidget()));
                     appEntityField.setSuggestionType(ApplicationNameUtils.ensureLongNameReference(applicationName,
@@ -6118,7 +6114,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 } else {
                     oldAppEntityField.setDataType(entityFieldConfig.getType());
                     oldAppEntityField.setType(restore ? EntityFieldType.CUSTOM : EntityFieldType.STATIC);
-                    oldAppEntityField.setLabel(resolveApplicationMessage(entityFieldConfig.getLabel()));
+                    oldAppEntityField.setLabel(entityFieldConfig.getLabel());
                     String references = entityFieldConfig.getReferences();
                     if (entityFieldConfig.getType().isEntityRef()
                             || (!entityFieldConfig.getType().isEnumGroup() && !StringUtils.isBlank(references))) {
@@ -6132,9 +6128,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     oldAppEntityField.setKey(entityFieldConfig.getKey());
                     oldAppEntityField.setProperty(entityFieldConfig.getProperty());
                     oldAppEntityField.setCategory(entityFieldConfig.getCategory());
-                    String inputLabel = entityFieldConfig.getInputLabel() == null ? null
-                            : resolveApplicationMessage(entityFieldConfig.getInputLabel());
-                    oldAppEntityField.setInputLabel(inputLabel);
+                    oldAppEntityField.setInputLabel(entityFieldConfig.getInputLabel());
                     oldAppEntityField.setInputWidget(ApplicationNameUtils.ensureLongNameReference(applicationName,
                             entityFieldConfig.getInputWidget()));
                     oldAppEntityField.setSuggestionType(ApplicationNameUtils.ensureLongNameReference(applicationName,
@@ -6444,7 +6438,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         for (TableColumnConfig tableColumnConfig : appTableConfig.getColumns().getColumnList()) {
             AppTableColumn appTableColumn = new AppTableColumn();
             appTableColumn.setField(tableColumnConfig.getField());
-            appTableColumn.setLabel(resolveApplicationMessage(tableColumnConfig.getLabel()));
+            appTableColumn.setLabel(tableColumnConfig.getLabel());
             appTableColumn.setRenderWidget(
                     ApplicationNameUtils.ensureLongNameReference(applicationName, tableColumnConfig.getRenderWidget()));
             appTableColumn.setLinkAct(tableColumnConfig.getLinkAct());
@@ -6699,7 +6693,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             appFormElement.setType(FormElementType.TAB);
             appFormElement.setElementName(formTabConfig.getName());
             appFormElement.setTabContentType(formTabConfig.getContentType());
-            appFormElement.setLabel(resolveApplicationMessage(formTabConfig.getLabel()));
+            appFormElement.setLabel(formTabConfig.getLabel());
             appFormElement.setTabApplet(
                     ApplicationNameUtils.ensureLongNameReference(applicationName, formTabConfig.getApplet()));
             appFormElement.setTabReference(formTabConfig.getReference());
@@ -6728,7 +6722,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appFormElement.setType(FormElementType.SECTION);
                     appFormElement.setElementName(formSectionConfig.getName());
                     appFormElement.setSectionColumns(formSectionConfig.getColumns());
-                    appFormElement.setLabel(resolveApplicationMessage(formSectionConfig.getLabel()));
+                    appFormElement.setLabel(formSectionConfig.getLabel());
                     appFormElement.setIcon(formSectionConfig.getIcon());
                     appFormElement.setPanel(formSectionConfig.getPanel());
                     appFormElement.setVisible(formSectionConfig.getVisible());
@@ -6743,7 +6737,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                             appFormElement = new AppFormElement();
                             appFormElement.setType(FormElementType.FIELD);
                             appFormElement.setElementName(formFieldConfig.getName());
-                            appFormElement.setLabel(resolveApplicationMessage(formFieldConfig.getLabel()));
+                            appFormElement.setLabel(formFieldConfig.getLabel());
                             appFormElement.setInputWidget(ApplicationNameUtils.ensureLongNameReference(applicationName,
                                     formFieldConfig.getInputWidget()));
                             appFormElement.setInputReference(ApplicationNameUtils

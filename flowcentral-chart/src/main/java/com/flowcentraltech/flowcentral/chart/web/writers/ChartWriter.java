@@ -77,29 +77,31 @@ public class ChartWriter extends AbstractWidgetWriter {
         writeTagAttributes(writer, chartWidget);
         writer.write(">");
         if (chartDef.getType().isCard()) {
-            writer.write("<div class=\"card\">");
+            if (chartDetails.isWithSeries()) {
+                writer.write("<div class=\"card\">");
 
-            writer.write("<span class=\"title\">");
-            if (chartDef.isWithTitle()) {
-                writer.writeWithHtmlEscape(chartDef.getTitle());
+                writer.write("<span class=\"title\">");
+                if (chartDef.isWithTitle()) {
+                    writer.writeWithHtmlEscape(chartDef.getTitle());
+                }
+                writer.write("</span>");
+
+                writer.write("<span class=\"subtitle\">");
+                if (chartDef.isWithSubtitle()) {
+                    writer.writeWithHtmlEscape(chartDef.getSubTitle());
+                }
+                writer.write("</span>");
+
+                writer.write("<span class=\"content\" style=\"color:");
+                writer.write(chartDef.isWithColor() ? chartDef.getColor() : "#606060");
+                writer.write(";\">");
+                Number num = chartDetails.getSeries().get(chartDef.getSeries()).getData(chartDef.getCategory());
+                String fmt = ChartUtils.getFormattedCardValue(num);
+                writer.writeWithHtmlEscape(fmt);
+                writer.write("</span>");
+
+                writer.write("</div>");
             }
-            writer.write("</span>");
-
-            writer.write("<span class=\"subtitle\">");
-            if (chartDef.isWithSubtitle()) {
-                writer.writeWithHtmlEscape(chartDef.getSubTitle());
-            }
-            writer.write("</span>");
-
-            writer.write("<span class=\"content\" style=\"color:");
-            writer.write(chartDef.isWithColor() ? chartDef.getColor() : "#606060");
-            writer.write(";\">");
-            Number num = chartDetails.getSeries().get(chartDef.getSeries()).getData(chartDef.getCategory());
-            String fmt = ChartUtils.getFormattedCardValue(num);
-            writer.writeWithHtmlEscape(fmt);
-            writer.write("</span>");
-
-            writer.write("</div>");
         } else if (chartDef.getType().isTable()) {
             if (chartDetails.isWithTableSeries()) {
                 FormatterOptions.Instance options = FormatterOptions.DEFAULT.createInstance(getUnifyComponentContext());
@@ -218,8 +220,7 @@ public class ChartWriter extends AbstractWidgetWriter {
             this.cache = new HashMap<String, ChartDetails>();
         }
 
-        public ChartDetails getChartDetails(ChartConfiguration configuration, ChartDef chartDef)
-                throws UnifyException {
+        public ChartDetails getChartDetails(ChartConfiguration configuration, ChartDef chartDef) throws UnifyException {
             final String providerName = chartDef.getProvider();
             final String rule = chartDef.getRule();
             final String key = providerName + (!StringUtils.isBlank(rule) ? "." + rule : "");
@@ -228,12 +229,12 @@ public class ChartWriter extends AbstractWidgetWriter {
                 Restriction restriction = null;
                 ChartDetailsProvider provider = (ChartDetailsProvider) getComponent(providerName);
                 Set<String> seriesFieldInclusion = Collections.emptySet();
-                if (provider.isUsesChartDataSource()) {
+                if (provider.isUsesChartDataSource() && !StringUtils.isBlank(rule)) {
                     final ChartDataSourceDef chartDataSourceDef = chartModuleService.getChartDataSourceDef(rule);
                     final EntityDef entityDef = chartDataSourceDef.getEntityDef();
                     restriction = InputWidgetUtils.getRestriction(appletUtilities, entityDef, null,
                             configuration.getCatBase(chartDataSourceDef.getLongName()), chartModuleService.getNow());
-                    
+
                     seriesFieldInclusion = new HashSet<String>();
                     for (String seriesName : chartDef.getSeriesInclusion()) {
                         seriesFieldInclusion.add(entityDef.getEntitySeriesDef(seriesName).getFieldName());

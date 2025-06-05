@@ -65,8 +65,12 @@ public class ChartDataSourceChartDetailsProvider extends AbstractChartDetailsPro
 
     @Override
     public ChartDetails provide(String rule, Restriction restriction) throws UnifyException {
+        if (!StringUtils.isBlank(rule)) {
         ChartDataSourceDef chartDataSourceDef = chart().getChartDataSourceDef(rule);
         return getChartData(chartDataSourceDef, restriction);
+        }
+        
+        return ChartDetails.newBuilder(ChartCategoryDataType.STRING).build();
     }
 
     @Override

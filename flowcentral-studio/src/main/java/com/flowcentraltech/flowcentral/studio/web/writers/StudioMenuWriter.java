@@ -246,7 +246,7 @@ public class StudioMenuWriter extends AbstractPanelWriter {
                 if (isApplications || isCollaboration || isCodeGeneration || isSynchronization || isSnapshot
                         || isEntityTools || appletDef.isMenuAccess()) {
                     writer.write("<li id=\"item_").write(appletDef.getViewId()).write("\">");
-                    writer.write("<span>").writeWithHtmlEscape(appletDef.getLabel()).write("</span>");
+                    writer.write("<span>").writeWithHtmlEscape(resolveSessionMessage(appletDef.getLabel())).write("</span>");
                     writer.write("</li>");
                     mjw.beginObject();
                     mjw.write("id", "item_" + appletDef.getViewId());
