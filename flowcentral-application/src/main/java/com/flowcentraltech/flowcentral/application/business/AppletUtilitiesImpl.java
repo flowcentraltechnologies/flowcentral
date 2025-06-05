@@ -1920,7 +1920,7 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
         SectorIcon sectorIcon = getPageSectorIconByApplication(_rootAppletDef.getApplicationName());
         LoadingSearch loadingSearch = new LoadingSearch(ctx, sectorIcon, _tableDef, _rootAppletDef.getId(),
                 searchConfigName, preferredEvent, searchColumns, loadingSearchMode, showConditions);
-        loadingSearch.setEntitySubTitle(_rootAppletDef.getLabel());
+        loadingSearch.setEntitySubTitle(resolveSessionMessage(_rootAppletDef.getLabel()));
         return loadingSearch;
     }
 
