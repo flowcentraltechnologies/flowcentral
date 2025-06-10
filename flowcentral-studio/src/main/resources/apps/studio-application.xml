@@ -7859,6 +7859,18 @@
 				<property name="page.multiple"
 					description="$m{studio.appappletprop.pathpage.property.pagemultiple}"
 					inputWidget="application.checkbox" />
+				<property name="searchTable"
+					description="$m{studio.appappletprop.manageentity.searchtable}"
+					inputWidget="studio.propertyapplettablelist" required="true" />
+				<property name="searchTable.searchOnCriteriaOnly"
+					description="$m{studio.appappletprop.manageentity.searchtable.searchoncriteriaonly}"
+					inputWidget="application.checkbox" />
+				<property name="searchTable.searchInput"
+					description="$m{studio.appappletprop.manageloading.loadingtable.searchinput}"
+					inputWidget="studio.propertyappletsearchinputlist" />
+				<property name="searchTable.searchColumns"
+					description="$m{studio.appappletprop.manageloading.loadingtable.searchcolumns}"
+					inputWidget="studio.propertyappletsingledigit" />
 			</propertySet>
 		</propertyList>
 	</propertyLists>

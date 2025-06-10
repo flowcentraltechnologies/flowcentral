@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.constants.AppletRequestAttributeConstants;
 import com.flowcentraltech.flowcentral.application.data.EntityFieldDef;
 import com.flowcentraltech.flowcentral.application.data.EntityFieldTotalSummary;
@@ -36,12 +37,15 @@ import com.flowcentraltech.flowcentral.common.data.FormValidationErrors;
 import com.flowcentraltech.flowcentral.common.data.RowChangeInfo;
 import com.flowcentraltech.flowcentral.common.web.panels.DetailsPanel;
 import com.flowcentraltech.flowcentral.common.web.widgets.AbstractFlowCentralValueListMultiControl;
+import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.UplAttribute;
 import com.tcdng.unify.core.annotation.UplAttributes;
 import com.tcdng.unify.core.constant.DataType;
 import com.tcdng.unify.core.constant.OrderType;
 import com.tcdng.unify.core.criterion.Order;
+import com.tcdng.unify.core.criterion.Update;
+import com.tcdng.unify.core.data.IndexedTarget;
 import com.tcdng.unify.core.data.UniqueHistory;
 import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.upl.UplElementReferences;
@@ -53,6 +57,8 @@ import com.tcdng.unify.web.ui.util.DataTransferUtils;
 import com.tcdng.unify.web.ui.widget.Control;
 import com.tcdng.unify.web.ui.widget.EventHandler;
 import com.tcdng.unify.web.ui.widget.Page;
+import com.tcdng.unify.web.ui.widget.TargetControl;
+import com.tcdng.unify.web.ui.widget.TargetControlHandler;
 import com.tcdng.unify.web.ui.widget.UploadControl;
 import com.tcdng.unify.web.ui.widget.Widget;
 import com.tcdng.unify.web.ui.widget.panel.StandalonePanel;
@@ -86,7 +92,7 @@ import com.tcdng.unify.web.ui.widget.panel.StandalonePanel;
         @UplAttribute(name = "alternatingRows", type = boolean.class, defaultVal = "true"),
         @UplAttribute(name = "focusManagement", type = boolean.class, defaultVal = "true") })
 public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
-        extends AbstractFlowCentralValueListMultiControl<ValueStore, U> implements TableSelect<U> {
+        extends AbstractFlowCentralValueListMultiControl<ValueStore, U> implements TableSelect<U>, TargetControlHandler {
 
     public static final int ATTACH_SELECTED_INDEX = 0;
 
@@ -140,6 +146,8 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
 
     private Map<String, Widget> renderers;
 
+    private Widget choiceWidget;
+    
     public AbstractTableWidget(Class<T> tableClass, Class<U> itemClass) {
         this.tableClass = tableClass;
         this.itemClass = itemClass;
@@ -786,6 +794,30 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
         }
 
         return valueList;
+    }
+
+    public Widget getChoiceWidget() throws UnifyException {
+        if (choiceWidget == null) {
+            choiceWidget = addInternalChildWidget(
+                    "!ui-badge badgeInfoBinding:$s{_badgeInfo} alwaysValueIndex:true binding:$s{"
+                            + getTable().getChoiceFieldName() + "}");
+            ((TargetControl) choiceWidget).setHandler(this);
+        }
+
+        return choiceWidget;
+    }
+
+    @Override
+    public void handle(String target) throws UnifyException {
+        AbstractTable<?, ?> table = getTable();
+        if (table.isWithChoiceConfig()) {
+            IndexedTarget indexedTarget = getIndexedTarget(target);
+            final String nextCode = table.getChoiceBadgeInfo().nextCode(indexedTarget.getTarget());
+            final Entity inst = (Entity) table.getDisplayItem(indexedTarget.getValueIndex());
+            getComponent(AppletUtilities.class).updateEntity(inst.getClass(), (Long) inst.getId(),
+                    new Update().add(indexedTarget.getBinding(), nextCode));
+            table.reset();
+        }
     }
 
     @Override
