@@ -185,6 +185,7 @@ public class TableWriter extends AbstractControlWriter {
             final String uploadFlag = tableWidget.getUploadFlag();
             final boolean entryMode = table.isEntryMode();
             final int detailsIndex = table.getDetailsIndex();
+            final int choiceColumnIndex = table.getChoiceColumnIndex();
             final boolean details = tableWidget.isDetails() && detailsIndex >= 0;
             final boolean expandAllDetails = tableWidget.isDetails() && tableWidget.isExpandAllDetails();
             final boolean multiSelect = tableDef.isMultiSelect() || tableWidget.isMultiSelect();
@@ -212,14 +213,19 @@ public class TableWriter extends AbstractControlWriter {
             int len = valueList.size();
             for (int i = 0; i < len; i++) {
                 ValueStore valueStore = valueList.get(i);
+                if (table.isWithChoiceConfig()) {
+                    valueStore.setTempValue("_badgeInfo", table.getChoiceBadgeInfo());
+                }
+                
                 boolean matchRowFocus = focusWidgetId == null && lastRowChangeInfo != null
                         && lastRowChangeInfo.matchRowIndex(i);
-                int index = 0;
+                int columnIndex = 0;
                 for (ChildWidgetInfo widgetInfo : tableWidget.getChildWidgetInfos()) {
                     if (widgetInfo.isExternal() && widgetInfo.isControl()) {
-                        TableColumnDef tabelColumnDef = tableDef.getVisibleColumnDef(index);
-                        String fieldName = tabelColumnDef.getFieldName();
-                        Widget chWidget = widgetInfo.getWidget();
+                        TableColumnDef tabelColumnDef = tableDef.getVisibleColumnDef(columnIndex);
+                        final String fieldName = tabelColumnDef.getFieldName();
+                        Widget chWidget = columnIndex == choiceColumnIndex ? tableWidget.getChoiceWidget()
+                                : widgetInfo.getWidget();
                         if (isTableDisabled) {
                             chWidget.setEditable(false);
                             chWidget.setDisabled(true);
@@ -275,7 +281,7 @@ public class TableWriter extends AbstractControlWriter {
                             addPageAlias(tableWidgetId, chWidget);
                         }
 
-                        index++;
+                        columnIndex++;
                     }
                 }
 
@@ -435,10 +441,7 @@ public class TableWriter extends AbstractControlWriter {
     private int writeColumnGroup(ResponseWriter writer, AbstractTableWidget<?, ?, ?> tableWidget)
             throws UnifyException {
         int columnCount = 0;
-        /*
-         * final boolean isContainerEditable =
-         * tableWidget.isNotViewOnlyAndIsContainerEditable();
-         */
+
         final boolean isFixedRows = tableWidget.isContainerEditable() && tableWidget.isFixedRows();
         final boolean isActionColumn = /* isContainerEditable && */tableWidget.isActionColumn();
         final AbstractTable<?, ?> table = tableWidget.getTable(); // Must call this here to initialize table
@@ -486,12 +489,12 @@ public class TableWriter extends AbstractControlWriter {
             if (tableWidget.isMultiAction()) {
                 final int klen = tableWidget.getActionColumns();
                 for (int k = 0; k < klen; k++) {
-                    writer.write(mactions ? "<col class=\"cactionha\">": "<col class=\"cactionh\">");
+                    writer.write(mactions ? "<col class=\"cactionha\">" : "<col class=\"cactionh\">");
                 }
 
                 columnCount += klen;
             } else {
-                writer.write(mactions ? "<col class=\"cactionha\">": "<col class=\"cactionh\">");
+                writer.write(mactions ? "<col class=\"cactionha\">" : "<col class=\"cactionh\">");
                 columnCount++;
             }
         }
@@ -515,7 +518,10 @@ public class TableWriter extends AbstractControlWriter {
         writer.write("<tr>");
         final AbstractTable<?, ?> table = tableWidget.getTable();
         if (table != null) {
-            /*final boolean isContainerEditable = tableWidget.isNotViewOnlyAndIsContainerEditable();*/
+            /*
+             * final boolean isContainerEditable =
+             * tableWidget.isNotViewOnlyAndIsContainerEditable();
+             */
             final boolean isFixedRows = tableWidget.isContainerEditable() && tableWidget.isFixedRows();
             final TableDef tableDef = table.getTableDef();
             final boolean entryMode = table.isEntryMode();
@@ -637,10 +643,6 @@ public class TableWriter extends AbstractControlWriter {
     private void writeBodyRows(ResponseWriter writer, AbstractTableWidget<?, ?, ?> tableWidget) throws UnifyException {
         final AbstractTable<?, ?> table = tableWidget.getTable();
         if (table != null) {
-            /*
-             * final boolean isContainerEditable =
-             * tableWidget.isNotViewOnlyAndIsContainerEditable();
-             */
             final boolean entryMode = table.isEntryMode();
             final boolean supportSelect = !table.isFixedAssignment();
             final int pageIndex = table.getDispStartIndex() + 1;
@@ -659,6 +661,7 @@ public class TableWriter extends AbstractControlWriter {
                 final Control[] fixedCtrl = isFixedRows ? tableWidget.getFixedCtrl() : null;
                 final Control[] actionCtrl = tableWidget.getActionCtrl();
                 final int detailsIndex = table.getDetailsIndex();
+                final int choiceColumnIndex = table.getChoiceColumnIndex();
                 final boolean details = tableWidget.isDetails() && detailsIndex >= 0;
                 final boolean expandAllDetails = tableWidget.isDetails() && tableWidget.isExpandAllDetails();
                 final boolean alternatingRows = tableWidget.isAlternatingRows();
@@ -685,6 +688,10 @@ public class TableWriter extends AbstractControlWriter {
                 for (int i = 0; i < len; i++) {
                     ValueStore valueStore = valueList.get(i);
                     valueStore.setTempValue("parentReader", table.getParentReader());
+                    if (table.isWithChoiceConfig()) {
+                        valueStore.setTempValue("_badgeInfo", table.getChoiceBadgeInfo());
+                    }
+                    
                     if (entryMode) {
                         tableStateOverride[i] = table.getTableStateOverride(valueStore);
                     }
@@ -750,7 +757,8 @@ public class TableWriter extends AbstractControlWriter {
                             TableColumnDef tabelColumnDef = tableDef.getVisibleColumnDef(columnIndex);
                             String fieldName = tabelColumnDef.getFieldName();
 
-                            Widget chWidget = widgetInfo.getWidget();
+                            Widget chWidget = columnIndex == choiceColumnIndex ? tableWidget.getChoiceWidget()
+                                    : widgetInfo.getWidget();
                             if (entryMode) {
                                 chWidget.setEditable(
                                         tableStateOverride[i].isColumnEditable(fieldName, tabelColumnDef.isEditable()));

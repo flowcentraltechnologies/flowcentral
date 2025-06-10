@@ -49,6 +49,7 @@ import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm;
 import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm.FormMode;
 import com.flowcentraltech.flowcentral.application.web.panels.EntityCRUD;
 import com.flowcentraltech.flowcentral.application.web.panels.EntityChild;
+import com.flowcentraltech.flowcentral.application.web.panels.EntityChoice;
 import com.flowcentraltech.flowcentral.application.web.panels.EntityFieldSequence;
 import com.flowcentraltech.flowcentral.application.web.panels.EntityFilter;
 import com.flowcentraltech.flowcentral.application.web.panels.EntityParamValues;
@@ -103,6 +104,7 @@ import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.UserToken;
 import com.tcdng.unify.core.constant.DataType;
 import com.tcdng.unify.core.criterion.Restriction;
+import com.tcdng.unify.core.criterion.Update;
 import com.tcdng.unify.core.data.Formats;
 import com.tcdng.unify.core.data.MapValues;
 import com.tcdng.unify.core.data.ParamConfig;
@@ -1479,6 +1481,18 @@ public interface AppletUtilities extends FlowCentralComponent {
     LoadingSearch constructLoadingSearch(AppletContext ctx, int loadingSearchMode) throws UnifyException;
 
     /**
+     * Constructs entity choice.
+     * 
+     * @param appletName the applet name.
+     * @param entityChoiceMode
+     *                         the entity choice mode
+     * @return the entity choice
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    EntityChoice constructEntityChoice(String appletName, int entityChoiceMode) throws UnifyException;
+
+    /**
      * Constructs an entity select object.
      * 
      * @param refDef
@@ -2043,6 +2057,21 @@ public interface AppletUtilities extends FlowCentralComponent {
     EntityActionResult deleteEntityInstByFormContext(AppletDef formAppletDef, FormContext formContext,
             SweepingCommitPolicy scp) throws UnifyException;
 
+    /**
+     * Updates an entity type.
+     * 
+     * @param entityClass
+     *                    the entity class
+     * @param id
+     *                    the entity ID
+     * @param update
+     *                    the update object
+     * @return number of records updated
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    int updateEntity(Class<? extends Entity> entityClass, Long id, Update update) throws UnifyException;
+    
     /**
      * Performs on form construction.
      * 

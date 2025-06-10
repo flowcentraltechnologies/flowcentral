@@ -416,6 +416,20 @@ public class TableDef extends BaseApplicationEntityDef {
                 "Field with name [" + fieldName + "] is unknown for table definition [" + getLongName() + "].");
     }
 
+    public int getVisibleColumnIndex(String fieldName) {
+        int index = 0;
+        for (TableColumnDef tableColumnDef : visibleColumnDefList) {
+            if (tableColumnDef.getFieldName().equals(fieldName)) {
+                return index;
+            }
+            
+            index++;
+        }
+
+        throw new RuntimeException(
+                "Field with name [" + fieldName + "] is unknown for table definition [" + getLongName() + "].");
+    }
+
     public static Builder newBuilder(EntityDef entityDef) {
         return new Builder(entityDef);
     }

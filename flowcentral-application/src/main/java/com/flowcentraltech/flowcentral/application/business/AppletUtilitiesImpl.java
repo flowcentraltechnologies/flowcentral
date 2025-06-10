@@ -76,6 +76,7 @@ import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm;
 import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm.FormMode;
 import com.flowcentraltech.flowcentral.application.web.panels.EntityCRUD;
 import com.flowcentraltech.flowcentral.application.web.panels.EntityChild;
+import com.flowcentraltech.flowcentral.application.web.panels.EntityChoice;
 import com.flowcentraltech.flowcentral.application.web.panels.EntityFieldSequence;
 import com.flowcentraltech.flowcentral.application.web.panels.EntityFilter;
 import com.flowcentraltech.flowcentral.application.web.panels.EntityParamValues;
@@ -1925,6 +1926,17 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
     }
 
     @Override
+    public EntityChoice constructEntityChoice(String appletName, int entityChoiceMode) throws UnifyException {
+        logDebug("Constructing entity choice using applet definition [{0}]...", appletName);
+        final AppletDef _rootAppletDef = getAppletDef(appletName);
+        final TableDef _tableDef = getTableDef(
+                _rootAppletDef.getPropValue(String.class, AppletPropertyConstants.SEARCH_TABLE));
+        EntityChoice _entityChoice = new EntityChoice(this, _tableDef, entityChoiceMode);
+        _entityChoice.setPaginationLabel(resolveSessionMessage("$m{entitysearch.display.label}"));
+        return _entityChoice;
+    }
+
+    @Override
     public EntitySelect constructEntitySelect(RefDef refDef, ValueStore valueStore, String fieldNameA,
             String fieldNameB, String filter, int limit) throws UnifyException {
         logDebug("Constructing entity select using reference definition [{0}]...", refDef.getLongName());
@@ -2471,6 +2483,11 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
         }
 
         return entityActionResult;
+    }
+
+    @Override
+    public int updateEntity(Class<? extends Entity> entityClass, Long id, Update update) throws UnifyException {
+        return environment().updateById(entityClass, id, update);
     }
 
     @Override
