@@ -93,8 +93,6 @@ public abstract class AbstractTable<T, U> {
 
     private TableDef tableDef;
 
-    private ChoiceConfig choiceConfig;
-
     private T sourceObject;
 
     private List<U> dispItemList;
@@ -197,26 +195,6 @@ public abstract class AbstractTable<T, U> {
 
     public Restriction getRestriction(FilterType type, ValueStoreReader reader, Date now) throws UnifyException {
         return filterGroupDef != null ? filterGroupDef.getRestriction(type, reader, now) : null;
-    }
-
-    public void setChoiceConfig(BadgeInfo badgeInfo) throws UnifyException {
-        this.choiceConfig = new ChoiceConfig(badgeInfo, tableDef.getVisibleColumnIndex(badgeInfo.getPreferredField()));
-    }
-
-    public BadgeInfo getChoiceBadgeInfo() {
-        return choiceConfig != null ? choiceConfig.getChoiceBadgeInfo() : null;
-    }
-
-    public int getChoiceColumnIndex() {
-        return choiceConfig != null ? choiceConfig.getColumnIndex() : -1;
-    }
-
-    public String getChoiceFieldName() {
-        return choiceConfig != null ? choiceConfig.getChoiceBadgeInfo().getPreferredField() : null;
-    }
-
-    public boolean isWithChoiceConfig() {
-        return choiceConfig != null;
     }
 
     public void setTableSelect(TableSelect<?> tableSelect) {

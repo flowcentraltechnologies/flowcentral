@@ -16,6 +16,7 @@
 package com.flowcentraltech.flowcentral.application.data;
 
 import com.tcdng.unify.common.data.Listable;
+import com.tcdng.unify.core.constant.ColorScheme;
 
 /**
  * Enumeration item definition.
@@ -29,9 +30,12 @@ public class EnumerationItemDef implements Listable {
     
     private String label;
     
-    public EnumerationItemDef(String code, String label) {
+    private ColorScheme color;
+    
+    public EnumerationItemDef(String code, String label, ColorScheme color) {
         this.code = code;
         this.label = label;
+        this.color = color;
     }
 
     @Override
@@ -52,4 +56,11 @@ public class EnumerationItemDef implements Listable {
         return label;
     }
 
+    public ColorScheme getColor() {
+        return color;
+    }
+
+    public boolean isWithColor() {
+        return color != null;
+    }
 }

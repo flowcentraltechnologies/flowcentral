@@ -2704,6 +2704,13 @@
 				<field name="displayIndex"
 					label="$m{application.appenumerationitem.displayindex}"
 					type="INTEGER" />
+				<field name="color" nullable="true"
+					label="$m{application.appenumerationitem.color}"
+					references="colorschemelist"
+					type="ENUM_REF" inputWidget="application.enumlist" />
+				<field name="colorDesc"
+					label="$m{application.appenumerationitem.colordesc}"
+					type="LIST_ONLY" key="color" property="description"/>
 			</fields>
 			<uniqueConstraints>
 				<uniqueConstraint name="codeUc"

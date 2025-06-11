@@ -44,7 +44,7 @@ import com.tcdng.unify.core.list.AbstractDynamicListManager;
  * @since 4.1
  */
 @Component(ApplicationModuleNameConstants.APPLICATION_DYNAMICLIST_MANAGER)
-public class DynamicListManagerImpl extends AbstractDynamicListManager {
+public class DynamicListManagerImpl extends AbstractDynamicListManager implements DynamicEnumProvider {
 
     @Configurable
     private EnvironmentService environmentService;
@@ -70,7 +70,7 @@ public class DynamicListManagerImpl extends AbstractDynamicListManager {
                     
                     List<EnumerationItemDef> itemsList = new ArrayList<EnumerationItemDef>();
                     for (AppEnumerationItem item : appEnumeration.getItemList()) {
-                        itemsList.add(new EnumerationItemDef(item.getCode(), item.getLabel()));
+                        itemsList.add(new EnumerationItemDef(item.getCode(), item.getLabel(), item.getColor()));
                     }
 
                     return new EnumerationDef(nameParts, appEnumeration.getDescription(), appEnumeration.getId(),
@@ -79,6 +79,11 @@ public class DynamicListManagerImpl extends AbstractDynamicListManager {
             };
     }
     
+    @Override
+    public EnumerationDef getEnumerationDef(String longName) throws UnifyException {
+        return enumDefFactoryMap.get(longName);
+    }
+
     @Override
     public List<? extends Listable> getList(Locale locale, String listName, Object... params) throws UnifyException {
       return enumDefFactoryMap.get(listName).getItemsList();

@@ -185,7 +185,6 @@ public class TableWriter extends AbstractControlWriter {
             final String uploadFlag = tableWidget.getUploadFlag();
             final boolean entryMode = table.isEntryMode();
             final int detailsIndex = table.getDetailsIndex();
-            final int choiceColumnIndex = table.getChoiceColumnIndex();
             final boolean details = tableWidget.isDetails() && detailsIndex >= 0;
             final boolean expandAllDetails = tableWidget.isDetails() && tableWidget.isExpandAllDetails();
             final boolean multiSelect = tableDef.isMultiSelect() || tableWidget.isMultiSelect();
@@ -212,20 +211,19 @@ public class TableWriter extends AbstractControlWriter {
             List<ValueStore> valueList = tableWidget.getValueList();
             int len = valueList.size();
             for (int i = 0; i < len; i++) {
-                ValueStore valueStore = valueList.get(i);
-                if (table.isWithChoiceConfig()) {
-                    valueStore.setTempValue("_badgeInfo", table.getChoiceBadgeInfo());
-                }
-                
+                ValueStore valueStore = valueList.get(i);                
                 boolean matchRowFocus = focusWidgetId == null && lastRowChangeInfo != null
                         && lastRowChangeInfo.matchRowIndex(i);
                 int columnIndex = 0;
                 for (ChildWidgetInfo widgetInfo : tableWidget.getChildWidgetInfos()) {
                     if (widgetInfo.isExternal() && widgetInfo.isControl()) {
                         TableColumnDef tabelColumnDef = tableDef.getVisibleColumnDef(columnIndex);
+                        if (tabelColumnDef.isWithBadgeInfo()) {
+                            valueStore.setTempValue("__badgeInfo", tabelColumnDef.getBadgeInfo());
+                        }
+                        
                         final String fieldName = tabelColumnDef.getFieldName();
-                        Widget chWidget = columnIndex == choiceColumnIndex ? tableWidget.getChoiceWidget()
-                                : widgetInfo.getWidget();
+                        Widget chWidget = widgetInfo.getWidget();
                         if (isTableDisabled) {
                             chWidget.setEditable(false);
                             chWidget.setDisabled(true);
@@ -661,7 +659,6 @@ public class TableWriter extends AbstractControlWriter {
                 final Control[] fixedCtrl = isFixedRows ? tableWidget.getFixedCtrl() : null;
                 final Control[] actionCtrl = tableWidget.getActionCtrl();
                 final int detailsIndex = table.getDetailsIndex();
-                final int choiceColumnIndex = table.getChoiceColumnIndex();
                 final boolean details = tableWidget.isDetails() && detailsIndex >= 0;
                 final boolean expandAllDetails = tableWidget.isDetails() && tableWidget.isExpandAllDetails();
                 final boolean alternatingRows = tableWidget.isAlternatingRows();
@@ -688,10 +685,6 @@ public class TableWriter extends AbstractControlWriter {
                 for (int i = 0; i < len; i++) {
                     ValueStore valueStore = valueList.get(i);
                     valueStore.setTempValue("parentReader", table.getParentReader());
-                    if (table.isWithChoiceConfig()) {
-                        valueStore.setTempValue("_badgeInfo", table.getChoiceBadgeInfo());
-                    }
-                    
                     if (entryMode) {
                         tableStateOverride[i] = table.getTableStateOverride(valueStore);
                     }
@@ -755,10 +748,13 @@ public class TableWriter extends AbstractControlWriter {
                     for (ChildWidgetInfo widgetInfo : tableWidget.getChildWidgetInfos()) {
                         if (widgetInfo.isExternal() && widgetInfo.isControl()) {
                             TableColumnDef tabelColumnDef = tableDef.getVisibleColumnDef(columnIndex);
+                            if (tabelColumnDef.isWithBadgeInfo()) {
+                                valueStore.setTempValue("__badgeInfo", tabelColumnDef.getBadgeInfo());
+                            }
+                            
                             String fieldName = tabelColumnDef.getFieldName();
 
-                            Widget chWidget = columnIndex == choiceColumnIndex ? tableWidget.getChoiceWidget()
-                                    : widgetInfo.getWidget();
+                            Widget chWidget = widgetInfo.getWidget();
                             if (entryMode) {
                                 chWidget.setEditable(
                                         tableStateOverride[i].isColumnEditable(fieldName, tabelColumnDef.isEditable()));
