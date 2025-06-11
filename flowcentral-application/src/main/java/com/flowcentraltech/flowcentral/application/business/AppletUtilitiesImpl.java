@@ -76,7 +76,6 @@ import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm;
 import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm.FormMode;
 import com.flowcentraltech.flowcentral.application.web.panels.EntityCRUD;
 import com.flowcentraltech.flowcentral.application.web.panels.EntityChild;
-import com.flowcentraltech.flowcentral.application.web.panels.EntityChoice;
 import com.flowcentraltech.flowcentral.application.web.panels.EntityFieldSequence;
 import com.flowcentraltech.flowcentral.application.web.panels.EntityFilter;
 import com.flowcentraltech.flowcentral.application.web.panels.EntityParamValues;
@@ -221,6 +220,9 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
 
     @Configurable
     private EnvironmentService environmentService;
+
+    @Configurable
+    private DynamicEnumProvider dynamicEnumProvider;
 
     @Configurable
     private AuditLogger auditLogger;
@@ -679,6 +681,11 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
     @Override
     public ApplicationModuleService application() {
         return applicationModuleService;
+    }
+
+    @Override
+    public DynamicEnumProvider enumProvider() {
+        return dynamicEnumProvider;
     }
 
     @Override
@@ -1923,17 +1930,6 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
                 searchConfigName, preferredEvent, searchColumns, loadingSearchMode, showConditions);
         loadingSearch.setEntitySubTitle(resolveSessionMessage(_rootAppletDef.getLabel()));
         return loadingSearch;
-    }
-
-    @Override
-    public EntityChoice constructEntityChoice(String appletName, int entityChoiceMode) throws UnifyException {
-        logDebug("Constructing entity choice using applet definition [{0}]...", appletName);
-        final AppletDef _rootAppletDef = getAppletDef(appletName);
-        final TableDef _tableDef = getTableDef(
-                _rootAppletDef.getPropValue(String.class, AppletPropertyConstants.SEARCH_TABLE));
-        EntityChoice _entityChoice = new EntityChoice(this, _tableDef, entityChoiceMode);
-        _entityChoice.setPaginationLabel(resolveSessionMessage("$m{entitysearch.display.label}"));
-        return _entityChoice;
     }
 
     @Override

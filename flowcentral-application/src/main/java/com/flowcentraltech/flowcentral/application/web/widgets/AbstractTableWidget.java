@@ -145,8 +145,6 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
     private Set<Widget> inputs;
 
     private Map<String, Widget> renderers;
-
-    private Widget choiceWidget;
     
     public AbstractTableWidget(Class<T> tableClass, Class<U> itemClass) {
         this.tableClass = tableClass;
@@ -581,6 +579,7 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
                         standalonePanel = standalonePanel.getStandalonePanel();
                     }
 
+                    final boolean editable = isContainerEditable();
                     final boolean entryMode = table.isEntryMode();
                     for (TableColumnDef tableColumnDef : tableDef.getVisibleColumnDefList()) {
                         final boolean useCellEditor = tableColumnDef.isWithCellEditor() && tableColumnDef.isEditable();
@@ -590,6 +589,10 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
                                         ? "!ui-label binding:" + tableColumnDef.getFieldName()
                                         : tableColumnDef.getCellRenderer());
                         Widget widget = addExternalChildWidget(columnWidgetUpl);
+                        if (editable && tableColumnDef.isToggle() && widget instanceof TargetControl) {
+                            ((TargetControl) widget).setHandler(this);
+                        }
+                        
                         if (!_entry) {
                             EntityFieldDef entityFieldDef = tableDef.getFieldDef(tableColumnDef.getFieldName());
                             if (entityFieldDef.isNumber()) {
@@ -638,7 +641,7 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
                             if (entityFieldDef.isNumber()) {
                                 Widget renderer = getRenderer(table.isDisableLinks() && tableColumnDef.isWithLinkAct()
                                         ? "!ui-label binding:" + tableColumnDef.getFieldName()
-                                        : tableColumnDef.getCellRenderer());
+                                        : tableColumnDef.getCellRenderer(), tableColumnDef.isToggle());
                                 EntityFieldTotalSummary entityFieldTotalSummary = new EntityFieldTotalSummary(
                                         entityFieldDef, renderer);
                                 if (!tableDef.isWithSummaryFields()
@@ -796,23 +799,13 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
         return valueList;
     }
 
-    public Widget getChoiceWidget() throws UnifyException {
-        if (choiceWidget == null) {
-            choiceWidget = addInternalChildWidget(
-                    "!ui-badge badgeInfoBinding:$s{_badgeInfo} alwaysValueIndex:true binding:$s{"
-                            + getTable().getChoiceFieldName() + "}");
-            ((TargetControl) choiceWidget).setHandler(this);
-        }
-
-        return choiceWidget;
-    }
-
     @Override
     public void handle(String target) throws UnifyException {
         AbstractTable<?, ?> table = getTable();
-        if (table.isWithChoiceConfig()) {
-            IndexedTarget indexedTarget = getIndexedTarget(target);
-            final String nextCode = table.getChoiceBadgeInfo().nextCode(indexedTarget.getTarget());
+        IndexedTarget indexedTarget = getIndexedTarget(target);
+        TableColumnDef tableColumnDef = table.getTableDef().getVisibleColumnDef(indexedTarget.getBinding());
+        if (tableColumnDef.isWithBadgeInfo()) {
+            final String nextCode = tableColumnDef.getBadgeInfo().nextCode(indexedTarget.getTarget());
             final Entity inst = (Entity) table.getDisplayItem(indexedTarget.getValueIndex());
             getComponent(AppletUtilities.class).updateEntity(inst.getClass(), (Long) inst.getId(),
                     new Update().add(indexedTarget.getBinding(), nextCode));
@@ -963,7 +956,7 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
         renderers = null;
     }
 
-    private Widget getRenderer(String renderer) throws UnifyException {
+    private Widget getRenderer(String renderer, boolean toggle) throws UnifyException {
         if (renderers == null) {
             renderers = new HashMap<String, Widget>();
         }

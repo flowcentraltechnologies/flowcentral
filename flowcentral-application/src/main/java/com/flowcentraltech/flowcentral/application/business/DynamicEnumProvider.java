@@ -13,25 +13,29 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.application.web.controllers;
 
-import com.flowcentraltech.flowcentral.application.web.panels.applet.EntityChoiceApplet;
+package com.flowcentraltech.flowcentral.application.business;
+
+import com.flowcentraltech.flowcentral.application.data.EnumerationDef;
+import com.tcdng.unify.core.UnifyComponent;
 import com.tcdng.unify.core.UnifyException;
 
 /**
- * Convenient base class for entity choice page beans.
+ * Dynamic enumeration provider..
  * 
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
-public abstract class AbstractEntityChoicePageBean extends AbstractAppletPageBean<EntityChoiceApplet> {
+public interface DynamicEnumProvider extends UnifyComponent {
 
-    public EntityChoiceApplet getApplet() {
-        return super.getApplet();
-    }
-
-    @Override
-    public void setApplet(EntityChoiceApplet applet) throws UnifyException {
-        super.setApplet(applet);
-    }
+    /**
+     * Gets enumeration definition.
+     * 
+     * @param longName
+     *                 the enumeration long name
+     * @return the enumeration definition
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    EnumerationDef getEnumerationDef(String longName) throws UnifyException;
 }

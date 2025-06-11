@@ -49,7 +49,6 @@ import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm;
 import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm.FormMode;
 import com.flowcentraltech.flowcentral.application.web.panels.EntityCRUD;
 import com.flowcentraltech.flowcentral.application.web.panels.EntityChild;
-import com.flowcentraltech.flowcentral.application.web.panels.EntityChoice;
 import com.flowcentraltech.flowcentral.application.web.panels.EntityFieldSequence;
 import com.flowcentraltech.flowcentral.application.web.panels.EntityFilter;
 import com.flowcentraltech.flowcentral.application.web.panels.EntityParamValues;
@@ -589,6 +588,13 @@ public interface AppletUtilities extends FlowCentralComponent {
      */
     ApplicationModuleService application();
 
+    /**
+     * Gets dynamic enumeration provider.
+     * 
+     * @return the provider
+     */
+    DynamicEnumProvider enumProvider();
+    
     /**
      * Gets the application privilege manager.
      * 
@@ -1479,18 +1485,6 @@ public interface AppletUtilities extends FlowCentralComponent {
      *                        if an error occurs
      */
     LoadingSearch constructLoadingSearch(AppletContext ctx, int loadingSearchMode) throws UnifyException;
-
-    /**
-     * Constructs entity choice.
-     * 
-     * @param appletName the applet name.
-     * @param entityChoiceMode
-     *                         the entity choice mode
-     * @return the entity choice
-     * @throws UnifyException
-     *                        if an error occurs
-     */
-    EntityChoice constructEntityChoice(String appletName, int entityChoiceMode) throws UnifyException;
 
     /**
      * Constructs an entity select object.
