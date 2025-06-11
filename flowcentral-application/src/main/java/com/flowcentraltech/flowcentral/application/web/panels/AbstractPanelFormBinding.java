@@ -68,11 +68,11 @@ public abstract class AbstractPanelFormBinding {
         return ctx.getReviewMessages(tabName);
     }
 
-    protected boolean isTabEditable() {
+    public final boolean isTabEditable() {
         return ctx.isTabEditable(tabName, ignoreConditionalDisabled);
     }
 
-    protected boolean isTabDisabled() {
+    public final boolean isTabDisabled() {
         return ctx.isTabDisabled(tabName, ignoreConditionalDisabled);
     }
 }

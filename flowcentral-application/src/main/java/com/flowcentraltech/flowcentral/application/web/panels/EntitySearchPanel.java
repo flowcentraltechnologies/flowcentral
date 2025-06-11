@@ -140,6 +140,9 @@ public class EntitySearchPanel extends AbstractApplicationPanel {
             setDisabled("forwardBtn", entityTable.isAtLastPage());
             setDisabled("fastForwardBtn", entityTable.isAtLastPage());
 
+            setEditable("searchResultTbl", entitySearch.isTabEditable());
+            setDisabled("searchResultTbl", entitySearch.isTabDisabled());
+            
             if (!entityTable.isWithRefreshPanels()) {
                 entityTable.setRefreshPanelIds(new String[] { getWidgetByShortName("headerRightPanel").getId() });
             }
