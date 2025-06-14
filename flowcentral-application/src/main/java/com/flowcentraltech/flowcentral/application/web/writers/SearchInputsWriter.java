@@ -29,6 +29,7 @@ import com.tcdng.unify.web.ui.widget.Control;
 import com.tcdng.unify.web.ui.widget.EventHandler;
 import com.tcdng.unify.web.ui.widget.ResponseWriter;
 import com.tcdng.unify.web.ui.widget.Widget;
+import com.tcdng.unify.web.ui.widget.control.DynamicField;
 import com.tcdng.unify.web.ui.widget.writer.AbstractControlWriter;
 
 /**
@@ -54,6 +55,8 @@ public class SearchInputsWriter extends AbstractControlWriter {
             Control fieldSelectCtrl = searchInputsWidget.getFieldSelectCtrl();
             Control widgetCtrl = searchInputsWidget.getWidgetCtrl();
             Control conditionTypeCtrl = searchInputsWidget.getConditionTypeCtrl();
+            DynamicField defValCtrl = searchInputsWidget.getDefValCtrl();
+            Control fixedCtrl = searchInputsWidget.getFixedCtrl();
             Control moveUpCtrl = searchInputsWidget.getMoveUpCtrl();
             Control moveDownCtrl = searchInputsWidget.getMoveDownCtrl();
             Control deleteCtrl = searchInputsWidget.getDeleteCtrl();
@@ -64,6 +67,8 @@ public class SearchInputsWriter extends AbstractControlWriter {
             final String fieldLabel = resolveSessionMessage("$m{searchinputs.field}");
             final String widgetLabel = resolveSessionMessage("$m{searchinputs.widget}");
             final String conditionLabel = resolveSessionMessage("$m{searchinputs.condition}");
+            final String defValLabel = resolveSessionMessage("$m{searchinputs.default}");
+            final String fixedLabel = resolveSessionMessage("$m{searchinputs.fixed}");
             writer.write("<table class=\"editor\" style=\"display: block;width:100%;table-layout:fixed;\">");
             for (int i = 0; i < len; i++) {
                 ValueStore lineValueStore = valueStoreList.get(i);
@@ -76,14 +81,27 @@ public class SearchInputsWriter extends AbstractControlWriter {
                         writeValuesItem(writer, lineValueStore, widgetCtrl, widgetLabel);
                         if (sie.isWithWidget() && sie.isFieldInput()) {
                             writeValuesItem(writer, lineValueStore, conditionTypeCtrl, conditionLabel);
+                            if (sie.isWithDefValInput()) {
+                                writeValuesItem(writer, lineValueStore, defValCtrl, defValLabel);
+                                writeValuesItem(writer, lineValueStore, fixedCtrl, fixedLabel);
+                            } else {
+                                writeBlankValuesItem(writer);
+                                writeBlankValuesItem(writer);
+                            }
                         } else {
+                            writeBlankValuesItem(writer);
+                            writeBlankValuesItem(writer);
                             writeBlankValuesItem(writer);
                         }
                     } else {
                         writeBlankValuesItem(writer);
                         writeBlankValuesItem(writer);
+                        writeBlankValuesItem(writer);
+                        writeBlankValuesItem(writer);
                     }
                 } else {
+                    writeBlankValuesItem(writer);
+                    writeBlankValuesItem(writer);
                     writeBlankValuesItem(writer);
                     writeBlankValuesItem(writer);
                     writeBlankValuesItem(writer);
@@ -119,6 +137,8 @@ public class SearchInputsWriter extends AbstractControlWriter {
             Control fieldSelectCtrl = searchInputsWidget.getFieldSelectCtrl();
             Control widgetCtrl = searchInputsWidget.getWidgetCtrl();
             Control conditionTypeCtrl = searchInputsWidget.getConditionTypeCtrl();
+            DynamicField defValCtrl = searchInputsWidget.getDefValCtrl();
+            Control fixedCtrl = searchInputsWidget.getFixedCtrl();
             final int len = valueStoreList.size();
             for (int i = 0; i < len; i++) {
                 ValueStore lineValueStore = valueStoreList.get(i);
@@ -134,7 +154,13 @@ public class SearchInputsWriter extends AbstractControlWriter {
                         if (sie.isWithWidget() && sie.isFieldInput()) {
                             writeBehavior(writer, searchInputsWidget, lineValueStore, conditionTypeCtrl);
                             csb.add(conditionTypeCtrl.getId());
-                        }
+                            if (sie.isWithDefValInput()) {
+                                writeBehavior(writer, searchInputsWidget, lineValueStore, defValCtrl);
+                                writeBehavior(writer, searchInputsWidget, lineValueStore, fixedCtrl);
+                                csb.add(defValCtrl.getId());
+                                csb.add(fixedCtrl.getId());
+                            }
+                       }
                     }
                 }
             }
