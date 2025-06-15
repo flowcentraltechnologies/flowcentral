@@ -208,12 +208,12 @@ public class SearchInputsWriter extends AbstractControlWriter {
         writer.write("</span>");
     }
 
-    private void writeBehavior(ResponseWriter writer, SearchInputsWidget tokenSequenceWidget, ValueStore lineValueStore,
+    private void writeBehavior(ResponseWriter writer, SearchInputsWidget searchInputsWidget, ValueStore lineValueStore,
             Control ctrl) throws UnifyException {
         ctrl.setValueStore(lineValueStore);
         writer.writeBehavior(ctrl);
-        if (tokenSequenceWidget.isContainerEditable()) {
-            addPageAlias(tokenSequenceWidget.getId(), ctrl);
+        if (searchInputsWidget.isContainerEditable()) {
+            addPageAlias(searchInputsWidget.getId(), ctrl);
         }
     }
 }

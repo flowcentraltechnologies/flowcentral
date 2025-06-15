@@ -16,6 +16,7 @@
 package com.flowcentraltech.flowcentral.application.data;
 
 import com.flowcentraltech.flowcentral.configuration.constants.SearchConditionType;
+import com.tcdng.unify.core.util.StringUtils;
 
 /**
  * Search input definition.
@@ -69,6 +70,11 @@ public class SearchInputDef {
 
     public boolean isFixed() {
         return fixed;
+    }
+
+    @Override
+    public String toString() {
+        return StringUtils.toXmlString(this);
     }
 
 }

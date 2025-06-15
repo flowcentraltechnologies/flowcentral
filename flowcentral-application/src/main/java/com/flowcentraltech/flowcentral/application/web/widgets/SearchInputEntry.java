@@ -45,8 +45,6 @@ public class SearchInputEntry {
 
     private String label;
 
-    private String defVal;
-
     private AbstractInput<?> defValInput;
 
     private boolean fixed;
@@ -126,18 +124,6 @@ public class SearchInputEntry {
         return editable;
     }
 
-    public String getDefVal() {
-        return defVal;
-    }
-
-    public void setDefVal(String defVal) {
-        this.defVal = defVal;
-    }
-
-    public boolean isWithDefVal() {
-        return defVal != null;
-    }
-
     public boolean isFixed() {
         return fixed;
     }
@@ -157,6 +143,7 @@ public class SearchInputEntry {
     public void normalize(EntityDef entityDef) throws UnifyException {
         if (fieldName == null) {
             label = null;
+            defValInput = null;
         } else {
             if (label == null && fieldName.startsWith("f:")) {
                 label = entityDef.getFieldDef(fieldName.substring("f:".length())).getFieldLabel();
@@ -170,14 +157,16 @@ public class SearchInputEntry {
         if (widget == null) {
             defValInput = null;
             condition = null;
-            defVal = null;
             fixed = false;
         } else {
-            defValInput = evalInput(
-                    entityDef.getFieldDef(fieldName.startsWith("f:") ? fieldName.substring("f:".length()) : fieldName),
-                    defValInput);
+            if (condition != null) {
+                defValInput = evalInput(
+                        entityDef.getFieldDef(
+                                fieldName.startsWith("f:") ? fieldName.substring("f:".length()) : fieldName),
+                        defValInput);
+            }
         }
-        
+
         fieldChange = false;
     }
 
@@ -185,11 +174,13 @@ public class SearchInputEntry {
             throws UnifyException {
         final boolean search = false;
         if (currentIn == null) {
-            return InputWidgetUtils.newInput(au, entityFieldDef, condition.filterType().isLingual(), search);
+            return InputWidgetUtils.newInput(au, entityFieldDef,
+                    entityFieldDef.isDate() || entityFieldDef.isTimestamp(), search);
         }
 
         if (fieldChange) {
-            AbstractInput<?> newIn = InputWidgetUtils.newInput(au, entityFieldDef, condition.filterType().isLingual(), search);
+            AbstractInput<?> newIn = InputWidgetUtils.newInput(au, entityFieldDef,
+                    entityFieldDef.isDate() || entityFieldDef.isTimestamp(), search);
             if (!newIn.compatible(currentIn)) {
                 return newIn;
             }

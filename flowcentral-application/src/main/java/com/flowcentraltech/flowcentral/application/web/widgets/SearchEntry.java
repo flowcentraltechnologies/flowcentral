@@ -23,6 +23,8 @@ import com.flowcentraltech.flowcentral.application.util.InputWidgetUtils;
 import com.flowcentraltech.flowcentral.common.business.SearchInputRestrictionGenerator;
 import com.flowcentraltech.flowcentral.common.data.EntityFieldAttributes;
 import com.flowcentraltech.flowcentral.common.input.AbstractInput;
+import com.flowcentraltech.flowcentral.common.util.LingualDateUtils;
+import com.flowcentraltech.flowcentral.configuration.constants.LingualDateType;
 import com.flowcentraltech.flowcentral.configuration.constants.SearchConditionType;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.util.StringUtils;
@@ -49,12 +51,16 @@ public class SearchEntry implements EntityFieldAttributes {
 
     private String generator;
 
+    private String defVal;
+
+    private boolean fixed;
+
     private final String preferredEvent;
 
     private AbstractInput<?> paramInput;
 
     public SearchEntry(AppletUtilities au, EntityDef entityDef, String label, String fieldName,
-            SearchConditionType conditionType, String preferredEvent) {
+            SearchConditionType conditionType, String defVal, boolean fixed, String preferredEvent) {
         this.au = au;
         this.entityDef = entityDef;
         this.label = label;
@@ -66,14 +72,19 @@ public class SearchEntry implements EntityFieldAttributes {
 
         this.conditionType = conditionType;
         this.preferredEvent = preferredEvent;
+
+        this.defVal = defVal;
+        this.fixed = fixed;
     }
 
-    public SearchEntry(AppletUtilities au, EntityDef entityDef, String label, String generator,
-            String preferredEvent) {
+    public SearchEntry(AppletUtilities au, EntityDef entityDef, String label, String generator, String defVal,
+            boolean fixed, String preferredEvent) {
         this.au = au;
         this.entityDef = entityDef;
         this.label = label;
         this.generator = generator;
+        this.defVal = defVal;
+        this.fixed = fixed;
         this.preferredEvent = preferredEvent;
     }
 
@@ -131,8 +142,7 @@ public class SearchEntry implements EntityFieldAttributes {
     @Override
     public boolean isTrim() throws UnifyException {
         return isGeneratorEntry()
-                ? au.getComponent(SearchInputRestrictionGenerator.class, generator).getEntryAttributes()
-                        .isTrim()
+                ? au.getComponent(SearchInputRestrictionGenerator.class, generator).getEntryAttributes().isTrim()
                 : false;
     }
 
@@ -146,6 +156,18 @@ public class SearchEntry implements EntityFieldAttributes {
 
     public String getLabel() {
         return label;
+    }
+
+    public String getDefVal() {
+        return defVal;
+    }
+    
+    public boolean isWithDefVal() {
+        return !StringUtils.isBlank(defVal);
+    }
+
+    public boolean isFixed() {
+        return fixed;
     }
 
     public String getFieldName() {
@@ -204,8 +226,9 @@ public class SearchEntry implements EntityFieldAttributes {
         normalize(null);
     }
 
+    @SuppressWarnings("unchecked")
     public void normalize(WidgetTypeDef widgetTypeDef) throws UnifyException {
-        final EntityFieldDef entityFieldDef = isFieldEntry()
+        EntityFieldDef entityFieldDef = isFieldEntry()
                 ? (getEntityFieldDef().isWithResolvedTypeFieldDef() ? getEntityFieldDef().getResolvedTypeFieldDef()
                         : getEntityFieldDef())
                 : null;
@@ -217,6 +240,16 @@ public class SearchEntry implements EntityFieldAttributes {
             }
         } else {
             paramInput = evalInput(entityFieldDef);
+        }
+
+        if (defVal != null && isFieldEntry()) {
+           entityFieldDef = entityDef.getFieldDef(fieldName);
+            if (entityFieldDef.isDate() || entityFieldDef.isTimestamp()) {
+                ((AbstractInput<Object>) getParamInput())
+                        .setValue(LingualDateUtils.getDateFromNow(au.getNow(), LingualDateType.fromCode(defVal)));
+            } else { 
+                ((AbstractInput<Object>) getParamInput()).setStringValue(defVal);
+            }
         }
     }
 
