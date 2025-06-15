@@ -1094,6 +1094,8 @@ public final class InputWidgetUtils {
                 searchInputConfig.setField(searchInputDef.getFieldName());
                 searchInputConfig.setLabel(searchInputDef.getLabel());
                 searchInputConfig.setWidget(searchInputDef.getWidget());
+                searchInputConfig.setDefVal(searchInputDef.getDefVal());
+                searchInputConfig.setFixed(searchInputDef.isFixed());
                 inputList.add(searchInputConfig);
             }
 
@@ -1114,11 +1116,10 @@ public final class InputWidgetUtils {
                         String label = p[0];
                         String field = p[1];
                         String widget = p[2];
-                        SearchConditionType type = null;
-                        if (p.length > 3) {
-                            type = SearchConditionType.fromCode(p[3]);
-                        }
-                        sidb.addSearchInputDef(type, field, widget, label);
+                        SearchConditionType type = p.length > 3 ? SearchConditionType.fromCode(p[3]) : null;
+                        String defVal = p.length > 4 ? p[4] : null;
+                        boolean disabled =  p.length > 5 ? Boolean.valueOf(p[5]) : false;
+                        sidb.addSearchInputDef(type, field, widget, label, defVal, disabled);
                     }
                 } catch (IOException e) {
                     throw new UnifyOperationException(e);
@@ -1446,6 +1447,13 @@ public final class InputWidgetUtils {
                         if (searchInputConfig.getType() != null) {
                             bw.write(searchInputConfig.getType().code());
                             bw.write(']');
+                            
+                            if (searchInputConfig.getDefVal() != null) {
+                                bw.write(searchInputConfig.getDefVal());
+                                bw.write(']');
+                                bw.write(String.valueOf(searchInputConfig.getFixed()));
+                                bw.write(']');
+                            }
                         }
                         bw.newLine();
                     }
@@ -1475,7 +1483,13 @@ public final class InputWidgetUtils {
                         bw.write(']');
                         if (searchInputDef.getType() != null) {
                             bw.write(searchInputDef.getType().code());
-                            bw.write(']');
+                            bw.write(']');                            
+                            if (searchInputDef.getDefVal() != null) {
+                                bw.write(searchInputDef.getDefVal());
+                                bw.write(']');
+                                bw.write(String.valueOf(searchInputDef.isFixed()));
+                                bw.write(']');
+                            }
                         }
                         bw.newLine();
                     }

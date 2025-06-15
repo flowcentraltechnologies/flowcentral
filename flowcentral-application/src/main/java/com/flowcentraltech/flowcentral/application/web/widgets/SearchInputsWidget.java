@@ -23,6 +23,7 @@ import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.web.annotation.Action;
 import com.tcdng.unify.web.ui.widget.Control;
+import com.tcdng.unify.web.ui.widget.control.DynamicField;
 
 /**
  * Search inputs widget.
@@ -41,6 +42,10 @@ public class SearchInputsWidget extends AbstractValueListWidget<SearchInputEntry
 
     private Control conditionTypeCtrl;
 
+    private DynamicField defValCtrl;
+
+    private Control fixedCtrl;
+
     private Control moveUpCtrl;
 
     private Control moveDownCtrl;
@@ -56,6 +61,10 @@ public class SearchInputsWidget extends AbstractValueListWidget<SearchInputEntry
                 "!ui-select style:$s{width:100%;} blankOption:$s{} list:searchinputfieldwidgetlist listParams:$l{entityDef fieldName} binding:widget");
         conditionTypeCtrl = (Control) addInternalChildWidget(
                 "!ui-select style:$s{width:100%;} blankOption:$s{} list:searchinputconditionlist listParams:$l{entityDef fieldName} binding:condition");
+        defValCtrl = (DynamicField) addInternalChildWidget(
+                "!ui-dynamic style:$s{width:100%;} binding:defValInput.value descriptorBinding:defValInput.editor");
+        fixedCtrl = (Control) addInternalChildWidget(
+                "!ui-select style:$s{width:100%;} blankOption:$s{} list:booleanlist binding:fixed");
         moveUpCtrl = (Control) addInternalChildWidget(
                 "!ui-button alwaysValueIndex:true styleClass:$e{abutton} symbol:$s{arrow-up} hint:$m{button.moveup.hint} debounce:false");
         moveDownCtrl = (Control) addInternalChildWidget(
@@ -103,6 +112,14 @@ public class SearchInputsWidget extends AbstractValueListWidget<SearchInputEntry
 
     public Control getFieldSelectCtrl() {
         return fieldSelectCtrl;
+    }
+
+    public DynamicField getDefValCtrl() {
+        return defValCtrl;
+    }
+
+    public Control getFixedCtrl() {
+        return fixedCtrl;
     }
 
     public Control getMoveUpCtrl() {

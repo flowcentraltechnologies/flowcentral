@@ -46,6 +46,12 @@ public class SearchInputConfig extends BaseConfig {
     @JacksonXmlProperty(isAttribute = true)
     private String label;
 
+    @JacksonXmlProperty(isAttribute = true)
+    private String defVal;
+
+    @JacksonXmlProperty(isAttribute = true)
+    private boolean fixed;
+
     public SearchConditionType getType() {
         return type;
     }
@@ -76,6 +82,22 @@ public class SearchInputConfig extends BaseConfig {
 
     public void setLabel(String label) {
         this.label = label;
+    }
+
+    public String getDefVal() {
+        return defVal;
+    }
+
+    public void setDefVal(String defVal) {
+        this.defVal = defVal;
+    }
+
+    public boolean getFixed() {
+        return fixed;
+    }
+
+    public void setFixed(boolean fixed) {
+        this.fixed = fixed;
     }
 
 }

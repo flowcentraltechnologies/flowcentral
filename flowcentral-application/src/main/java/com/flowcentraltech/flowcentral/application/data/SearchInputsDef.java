@@ -110,8 +110,9 @@ public class SearchInputsDef implements Listable {
             return this;
         }
 
-        public Builder addSearchInputDef(SearchConditionType type, String fieldName, String widget, String label) {
-            searchInputDefList.add(new SearchInputDef(type, fieldName, widget, label));
+        public Builder addSearchInputDef(SearchConditionType type, String fieldName, String widget, String label,
+                String defVal, boolean fixed) {
+            searchInputDefList.add(new SearchInputDef(type, fieldName, widget, label, defVal, fixed));
             return this;
         }
 

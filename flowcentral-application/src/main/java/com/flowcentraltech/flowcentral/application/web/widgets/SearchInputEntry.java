@@ -15,10 +15,14 @@
  */
 package com.flowcentraltech.flowcentral.application.web.widgets;
 
+import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.EntityFieldDef;
+import com.flowcentraltech.flowcentral.application.util.InputWidgetUtils;
+import com.flowcentraltech.flowcentral.common.input.AbstractInput;
 import com.flowcentraltech.flowcentral.configuration.constants.SearchConditionType;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.StringUtils;
 
 /**
@@ -28,6 +32,8 @@ import com.tcdng.unify.core.util.StringUtils;
  * @since 4.1
  */
 public class SearchInputEntry {
+
+    private final AppletUtilities au;
 
     private EntityDef entityDef;
 
@@ -39,9 +45,16 @@ public class SearchInputEntry {
 
     private String label;
 
+    private AbstractInput<?> defValInput;
+
+    private boolean fixed;
+
+    private boolean fieldChange;
+
     private boolean editable;
 
-    public SearchInputEntry(EntityDef entityDef, boolean editable) {
+    public SearchInputEntry(AppletUtilities au, EntityDef entityDef, boolean editable) {
+        this.au = au;
         this.entityDef = entityDef;
         this.editable = editable;
     }
@@ -51,6 +64,7 @@ public class SearchInputEntry {
     }
 
     public void setFieldName(String fieldName) {
+        fieldChange = !DataUtils.equals(this.fieldName, fieldName);
         this.fieldName = fieldName;
     }
 
@@ -78,6 +92,14 @@ public class SearchInputEntry {
         this.label = label;
     }
 
+    public AbstractInput<?> getDefValInput() {
+        return defValInput;
+    }
+
+    public boolean isWithDefValInput() {
+        return defValInput != null;
+    }
+
     public EntityDef getEntityDef() {
         return entityDef;
     }
@@ -102,6 +124,14 @@ public class SearchInputEntry {
         return editable;
     }
 
+    public boolean isFixed() {
+        return fixed;
+    }
+
+    public void setFixed(boolean fixed) {
+        this.fixed = fixed;
+    }
+
     public boolean isFieldInput() {
         return fieldName != null && fieldName.startsWith("f:");
     }
@@ -113,6 +143,7 @@ public class SearchInputEntry {
     public void normalize(EntityDef entityDef) throws UnifyException {
         if (fieldName == null) {
             label = null;
+            defValInput = null;
         } else {
             if (label == null && fieldName.startsWith("f:")) {
                 label = entityDef.getFieldDef(fieldName.substring("f:".length())).getFieldLabel();
@@ -124,8 +155,38 @@ public class SearchInputEntry {
         }
 
         if (widget == null) {
+            defValInput = null;
             condition = null;
+            fixed = false;
+        } else {
+            if (condition != null) {
+                defValInput = evalInput(
+                        entityDef.getFieldDef(
+                                fieldName.startsWith("f:") ? fieldName.substring("f:".length()) : fieldName),
+                        defValInput);
+            }
         }
+
+        fieldChange = false;
+    }
+
+    private AbstractInput<?> evalInput(EntityFieldDef entityFieldDef, AbstractInput<?> currentIn)
+            throws UnifyException {
+        final boolean search = false;
+        if (currentIn == null) {
+            return InputWidgetUtils.newInput(au, entityFieldDef,
+                    entityFieldDef.isDate() || entityFieldDef.isTimestamp(), search);
+        }
+
+        if (fieldChange) {
+            AbstractInput<?> newIn = InputWidgetUtils.newInput(au, entityFieldDef,
+                    entityFieldDef.isDate() || entityFieldDef.isTimestamp(), search);
+            if (!newIn.compatible(currentIn)) {
+                return newIn;
+            }
+        }
+
+        return currentIn;
     }
 
     @Override

@@ -18,6 +18,11 @@
 			dataType="STRING" inputType="STRING"
 			editor="!ui-select blankOption:$s{} list:restapilist"
 			renderer="!ui-label" />
+		<widgetType name="restapisearch"
+			description="$m{application.widgettype.restapisearch}"
+			dataType="STRING" inputType="STRING"
+			editor="!fc-entitysearch ref:$s{application.appAPIRef} listKey:$s{longName}"
+			renderer="!ui-label" />
 		<widgetType name="datatypeeditorlist"
 			description="$m{application.widgettype.datatypeeditorlist}"
 			dataType="STRING" inputType="STRING"
