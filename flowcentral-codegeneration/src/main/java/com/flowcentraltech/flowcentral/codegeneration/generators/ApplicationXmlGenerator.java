@@ -912,7 +912,7 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                         descKey = getDescriptionKey(formDescKey, "formfilter", appFormFilter.getName());
                         ctx.addMessage(StaticMessageCategoryType.FORM, descKey, appFormFilter.getDescription());
                         filterConfig.setName(appFormFilter.getName());
-                        filterConfig.setDescription("$m{" + descKey + "}");
+                        filterConfig.setDescription(ctx.isSnapshotMode() ? appFormFilter.getDescription() : "$m{" + descKey + "}");
                         filterList.add(filterConfig);
                     }
 
