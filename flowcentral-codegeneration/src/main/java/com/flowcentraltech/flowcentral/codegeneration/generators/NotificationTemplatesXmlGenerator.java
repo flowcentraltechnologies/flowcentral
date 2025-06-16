@@ -75,7 +75,7 @@ public class NotificationTemplatesXmlGenerator extends AbstractResourcesArtifact
                 notifTemplateConfig.setNotifType(notifTemplate.getNotificationType());
                 notifTemplateConfig.setMessageFormat(notifTemplate.getMessageFormat());
                 notifTemplateConfig.setName(notifTemplate.getName());
-                notifTemplateConfig.setDescription("$m{" + descKey + "}");
+                notifTemplateConfig.setDescription(ctx.isSnapshotMode() ? notifTemplate.getDescription() :"$m{" + descKey + "}");
                 notifTemplateConfig.setEntity(notifTemplate.getEntity());
                 notifTemplateConfig.setSubject(notifTemplate.getSubject());
                 notifTemplateConfig.setBody(notifTemplate.getTemplate());
