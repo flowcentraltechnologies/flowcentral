@@ -17,7 +17,11 @@ package com.flowcentraltech.flowcentral.configuration.xml;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import com.tcdng.unify.core.constant.ColorScheme;
+import com.tcdng.unify.core.util.xml.adapter.ColorSchemeXmlAdapter;
 
 /**
  * Enumeration configuration.
@@ -37,6 +41,11 @@ public class EnumerationItemConfig extends BaseConfig {
     @JacksonXmlProperty(isAttribute = true)
     private Integer displayIndex;
     
+    @JsonSerialize(using = ColorSchemeXmlAdapter.Serializer.class)
+    @JsonDeserialize(using = ColorSchemeXmlAdapter.Deserializer.class)
+    @JacksonXmlProperty(isAttribute = true)
+    private ColorScheme color;
+   
     public String getCode() {
         return code;
     }
@@ -59,6 +68,14 @@ public class EnumerationItemConfig extends BaseConfig {
 
     public void setDisplayIndex(Integer displayIndex) {
         this.displayIndex = displayIndex;
+    }
+
+    public ColorScheme getColor() {
+        return color;
+    }
+
+    public void setColor(ColorScheme color) {
+        this.color = color;
     }
 
 }
