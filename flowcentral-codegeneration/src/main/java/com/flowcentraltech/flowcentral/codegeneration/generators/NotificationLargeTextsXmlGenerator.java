@@ -75,7 +75,7 @@ public class NotificationLargeTextsXmlGenerator extends AbstractResourcesArtifac
                 ctx.addMessage(StaticMessageCategoryType.NOTIFICATION, descKey, notifLargeText.getDescription());
 
                 notifLargeTextConfig.setName(notifLargeText.getName());
-                notifLargeTextConfig.setDescription("$m{" + descKey + "}");
+                notifLargeTextConfig.setDescription(ctx.isSnapshotMode() ? notifLargeText.getDescription() :"$m{" + descKey + "}");
                 notifLargeTextConfig.setEntity(notifLargeText.getEntity());
                 notifLargeTextConfig.setFontFamily(notifLargeText.getFontFamily());
                 notifLargeTextConfig.setFontSizeInPixels(notifLargeText.getFontSizeInPixels());

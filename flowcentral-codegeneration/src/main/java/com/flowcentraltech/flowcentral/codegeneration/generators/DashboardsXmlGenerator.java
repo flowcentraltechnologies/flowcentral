@@ -69,7 +69,7 @@ public class DashboardsXmlGenerator extends AbstractStaticModuleArtifactGenerato
                 ctx.addMessage(StaticMessageCategoryType.DASHBOARD, descKey, dashboard.getDescription());
 
                 appDashboardConfig.setName(dashboard.getName());
-                appDashboardConfig.setDescription("$m{" + descKey + "}");
+                appDashboardConfig.setDescription(ctx.isSnapshotMode() ? dashboard.getDescription() :"$m{" + descKey + "}");
                 appDashboardConfig.setSections(dashboard.getSections());
                 appDashboardConfig.setAllowSecondaryTenants(dashboard.isAllowSecondaryTenants());
 
@@ -99,7 +99,7 @@ public class DashboardsXmlGenerator extends AbstractStaticModuleArtifactGenerato
                         dashboardTileConfig.setType(dashboardTile.getType());
                         dashboardTileConfig.setChart(dashboardTile.getChart());
                         dashboardTileConfig.setName(dashboardTile.getName());
-                        dashboardTileConfig.setDescription("$m{" + descKey + "}");
+                        dashboardTileConfig.setDescription(ctx.isSnapshotMode() ? dashboardTile.getDescription() :"$m{" + descKey + "}");
                         dashboardTileConfig.setSection(dashboardTile.getSection());
                         dashboardTileConfig.setIndex(dashboardTile.getIndex());
                         tileList.add(dashboardTileConfig);
@@ -121,8 +121,8 @@ public class DashboardsXmlGenerator extends AbstractStaticModuleArtifactGenerato
                         ctx.addMessage(StaticMessageCategoryType.DASHBOARD, labelKey, dashboardOption.getLabel());
 
                         dashboardOptionConfig.setName(dashboardOption.getName());
-                        dashboardOptionConfig.setDescription("$m{" + descKey + "}");
-                        dashboardOptionConfig.setLabel("$m{" + labelKey + "}");
+                        dashboardOptionConfig.setDescription(ctx.isSnapshotMode() ? dashboardOption.getDescription() :"$m{" + descKey + "}");
+                        dashboardOptionConfig.setLabel(ctx.isSnapshotMode() ? dashboardOption.getLabel() :"$m{" + labelKey + "}");
 
                         if (!DataUtils.isBlank(dashboardOption.getBaseList())) {
                             List<DashboardOptionCategoryBaseConfig> baseList = new ArrayList<DashboardOptionCategoryBaseConfig>();
