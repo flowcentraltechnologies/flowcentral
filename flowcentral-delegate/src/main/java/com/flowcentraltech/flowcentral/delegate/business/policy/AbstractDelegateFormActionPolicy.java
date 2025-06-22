@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.delegate.business.policy;
 import java.util.Collection;
 import java.util.Collections;
 
+import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentDelegateRegistrar;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentDelegateUtilities;
 import com.flowcentraltech.flowcentral.common.business.policies.AbstractFormActionPolicy;
@@ -40,6 +41,9 @@ import com.tcdng.unify.core.util.DataUtils;
  * @since 4.1
  */
 public abstract class AbstractDelegateFormActionPolicy extends AbstractFormActionPolicy {
+
+    @Configurable
+    private ApplicationModuleService applicationModuleService;
 
     @Configurable
     private EnvironmentDelegateUtilities utilities;
@@ -97,6 +101,14 @@ public abstract class AbstractDelegateFormActionPolicy extends AbstractFormActio
         result.setSkipUpdate(skipUpdate);
         return result;
     }
+    
+    protected final ApplicationModuleService application() {
+        return applicationModuleService;
+    }
+
+    protected abstract String getEndpoint(ValueStoreReader reader) throws UnifyException;
+
+    protected abstract String sendToDelegateProcedureService(String jsonReq, String endpoint) throws UnifyException;
 
     private JsonProcedureResponse sendToDelegateProcedureService(ProcedureRequest req, String endpoint)
             throws UnifyException {
@@ -109,9 +121,5 @@ public abstract class AbstractDelegateFormActionPolicy extends AbstractFormActio
 
         return resp;
     }
-
-    protected abstract String getEndpoint(ValueStoreReader reader) throws UnifyException;
-
-    protected abstract String sendToDelegateProcedureService(String jsonReq, String endpoint) throws UnifyException;
 
 }

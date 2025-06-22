@@ -20,6 +20,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
+import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentDelegateRegistrar;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentDelegateUtilities;
 import com.flowcentraltech.flowcentral.common.business.policies.AbstractWfProcessPolicy;
@@ -40,6 +41,9 @@ import com.tcdng.unify.core.util.DataUtils;
  * @since 4.1
  */
 public abstract class AbstractDelegateWfProcessPolicy extends AbstractWfProcessPolicy {
+
+    @Configurable
+    private ApplicationModuleService applicationModuleService;
 
     @Configurable
     private EnvironmentDelegateUtilities utilities;
@@ -78,6 +82,10 @@ public abstract class AbstractDelegateWfProcessPolicy extends AbstractWfProcessP
         }
 
         return resp;
+    }
+    
+    protected final ApplicationModuleService application() {
+        return applicationModuleService;
     }
 
     protected abstract String getEndpoint(ValueStoreReader reader) throws UnifyException;
