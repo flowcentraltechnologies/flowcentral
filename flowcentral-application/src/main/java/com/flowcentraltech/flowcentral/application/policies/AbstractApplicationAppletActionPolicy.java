@@ -19,9 +19,9 @@ package com.flowcentraltech.flowcentral.application.policies;
 import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
 import com.flowcentraltech.flowcentral.common.business.policies.AbstractAppletActionPolicy;
 import com.flowcentraltech.flowcentral.common.constants.ConfigType;
-import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
+import com.tcdng.unify.core.data.ValueStoreReader;
 
 /**
  * Convenient abstract application entity action policy.
@@ -35,7 +35,7 @@ public abstract class AbstractApplicationAppletActionPolicy extends AbstractAppl
     private ApplicationModuleService applicationModuleService;
 
     @Override
-    public boolean checkAppliesTo(Entity inst) throws UnifyException {
+    public boolean checkAppliesTo(ValueStoreReader reader) throws UnifyException {
         return true;
     }
 

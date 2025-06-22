@@ -34,11 +34,9 @@ public abstract class AbstractHttpPostDelegateWfProcessPolicy extends AbstractDe
     }
 
     @Override
-    protected String sendToDelegateProcedureService(String jsonReq) throws UnifyException {
+    protected String sendToDelegateProcedureService(String jsonReq, String endpoint) throws UnifyException {
         return extractResult(IOUtils.postJsonToEndpoint(
-                getEndpoint() + FlowCentralInterconnectConstants.INTERCONNECT_CONTROLLER + "/procedure", jsonReq));
+                endpoint + FlowCentralInterconnectConstants.INTERCONNECT_CONTROLLER + "/procedure", jsonReq));
     }
-
-    protected abstract String getEndpoint() throws UnifyException;
 
 }

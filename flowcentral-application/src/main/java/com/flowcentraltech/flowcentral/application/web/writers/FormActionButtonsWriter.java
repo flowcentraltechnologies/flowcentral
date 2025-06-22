@@ -25,7 +25,6 @@ import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm.FormM
 import com.flowcentraltech.flowcentral.application.web.widgets.FormActionButtons;
 import com.flowcentraltech.flowcentral.common.business.ApplicationPrivilegeManager;
 import com.flowcentraltech.flowcentral.common.business.policies.FormActionPolicy;
-import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.UserToken;
 import com.tcdng.unify.core.annotation.Component;
@@ -64,7 +63,6 @@ public class FormActionButtonsWriter extends AbstractControlWriter {
         writer.write("<div class=\"fabrow\">");
 
         final FormContext formContext = ((AbstractForm) formActionButtons.getValueStore().getValueObject()).getCtx();
-        final Entity inst = (Entity) formContext.getInst();
         final ValueStore formValueStore = formContext.getFormValueStore();
         final ValueStoreReader formValueStoreReader = formValueStore.getReader();
         final Date now = formContext.au().getNow();
@@ -87,7 +85,8 @@ public class FormActionButtonsWriter extends AbstractControlWriter {
                 if ((formMode.isListing() || (formActionDef.isShowOnCreate() && formMode.isCreate())
                         || (formActionDef.isShowOnMaintain() && formMode.isMaintain()))
                         && (!formActionDef.isWithPolicy()
-                                || ((FormActionPolicy) getComponent(formActionDef.getPolicy())).checkAppliesTo(inst))
+                                || ((FormActionPolicy) getComponent(formActionDef.getPolicy()))
+                                        .checkAppliesTo(formValueStoreReader))
                         && (!formActionDef.isWithPrivilege() || applicationPrivilegeManager
                                 .isRoleWithPrivilege(userToken.getRoleCode(), formActionDef.getPrivilege()))) {
                     showActionSet.add(formActionDef.getName());

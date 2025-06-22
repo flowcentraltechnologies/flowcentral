@@ -14,7 +14,6 @@
  * the License.
  */
 
-
 package com.flowcentraltech.flowcentral.delegate.business.policy;
 
 import com.flowcentraltech.flowcentral.connect.common.constants.FlowCentralInterconnectConstants;
@@ -22,7 +21,8 @@ import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.util.IOUtils;
 
 /**
- * Convenient abstract base class for HTTP post delegate workflow enrichment policy.
+ * Convenient abstract base class for HTTP post delegate workflow enrichment
+ * policy.
  * 
  * @author FlowCentral Technologies Limited
  * @since 4.1
@@ -34,11 +34,9 @@ public abstract class AbstractHttpPostDelegateWfEnrichmentPolicy extends Abstrac
     }
 
     @Override
-    protected String sendToDelegateProcedureService(String jsonReq) throws UnifyException {
+    protected String sendToDelegateProcedureService(String jsonReq, String endpoint) throws UnifyException {
         return extractResult(IOUtils.postJsonToEndpoint(
-                getEndpoint() + FlowCentralInterconnectConstants.INTERCONNECT_CONTROLLER + "/procedure", jsonReq));
+                endpoint + FlowCentralInterconnectConstants.INTERCONNECT_CONTROLLER + "/procedure", jsonReq));
     }
-
-    protected abstract String getEndpoint() throws UnifyException;
 
 }

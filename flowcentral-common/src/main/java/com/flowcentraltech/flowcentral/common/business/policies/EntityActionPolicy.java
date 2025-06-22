@@ -17,8 +17,8 @@
 package com.flowcentraltech.flowcentral.common.business.policies;
 
 import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
-import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.data.ValueStoreReader;
 
 /**
  * Entity action policy.
@@ -31,13 +31,13 @@ public interface EntityActionPolicy extends FlowCentralComponent {
     /**
      * Checks if entity action applies to instance.
      * 
-     * @param inst
-     *             the entity instance
+     * @param reader
+     *             the entity instance reader
      * @return true if action applies otherwise false
      * @throws UnifyException
      *                        if an error occurs
      */
-    boolean checkAppliesTo(Entity inst) throws UnifyException;
+    boolean checkAppliesTo(ValueStoreReader reader) throws UnifyException;
 
     /**
      * Executes a pre-action operation.
