@@ -1112,8 +1112,8 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         return getResolvedForm().getBeanTitle();
     }
 
-    public String getAssignmentTitle() {
-        return assignmentPage != null ? assignmentTitle = assignmentPage.getMainTitle() : assignmentTitle;
+    public String getAssignmentTitle() throws UnifyException {
+        return assignmentPage != null ? assignmentTitle = au().resolveSessionMessage(assignmentPage.getMainTitle()) : assignmentTitle;
     }
 
     public String getAssignmentSubTitle() {

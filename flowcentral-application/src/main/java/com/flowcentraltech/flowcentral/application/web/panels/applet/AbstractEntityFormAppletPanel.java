@@ -1158,7 +1158,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
     }
 
     protected String getAssignmentTitle() throws UnifyException {
-        return resolveSessionMessage(getEntityFormApplet().getAssignmentTitle());
+        return getEntityFormApplet().getAssignmentTitle();
     }
 
     protected String getAssignmentSubTitle() throws UnifyException {
