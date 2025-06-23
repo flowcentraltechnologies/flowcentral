@@ -206,8 +206,8 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
         ctx.addMessage(StaticMessageCategoryType.HEADER, labelKey, application.getLabel());
         appConfig.setModule(ctx.getModuleName());
         appConfig.setName(application.getName());
-        appConfig.setDescription("$m{" + descKey + "}");
-        appConfig.setLabel("$m{" + labelKey + "}");
+        appConfig.setDescription(ctx.isSnapshotMode() ? application.getDescription() : "$m{" + descKey + "}");
+        appConfig.setLabel(ctx.isSnapshotMode() ? application.getLabel() : "$m{" + labelKey + "}");
         appConfig.setDisplayIndex(application.getDisplayIndex());
         appConfig.setDevelopable(true);
         appConfig.setMenuAccess(application.isMenuAccess());
@@ -217,8 +217,9 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
         // Module application configuration
         ModuleAppConfig moduleAppConfig = new ModuleAppConfig();
         moduleAppConfig.setName(applicationName);
-        moduleAppConfig.setLongDescription("$m{" + descKey + "}");
-        moduleAppConfig.setShortDescription("$m{" + descKey + "}");
+        moduleAppConfig.setLongDescription(ctx.isSnapshotMode() ? application.getDescription() : "$m{" + descKey + "}");
+        moduleAppConfig
+                .setShortDescription(ctx.isSnapshotMode() ? application.getDescription() : "$m{" + descKey + "}");
         moduleAppConfig.setConfigFile(APPS_FOLDER + filename);
         moduleAppConfig.setAutoInstall(true);
         ctx.addModuleAppConfig(moduleAppConfig);
@@ -247,7 +248,7 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                 labelKey = descKey + ".label";
                 ctx.addMessage(StaticMessageCategoryType.API, descKey, appAPI.getDescription());
                 apiConfig.setName(appAPI.getName());
-                apiConfig.setDescription("$m{" + descKey + "}");
+                apiConfig.setDescription(ctx.isSnapshotMode() ? appAPI.getDescription() : "$m{" + descKey + "}");
                 apiConfig.setType(appAPI.getType());
                 apiConfig.setEntity(appAPI.getEntity());
                 apiConfig.setApplet(appAPI.getApplet());
@@ -277,8 +278,8 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                 ctx.addMessage(StaticMessageCategoryType.APPLET, descKey, appApplet.getDescription());
                 ctx.addMessage(StaticMessageCategoryType.APPLET, labelKey, appApplet.getLabel());
                 appletConfig.setName(appApplet.getName());
-                appletConfig.setDescription("$m{" + descKey + "}");
-                appletConfig.setLabel("$m{" + labelKey + "}");
+                appletConfig.setDescription(ctx.isSnapshotMode() ? appApplet.getDescription() : "$m{" + descKey + "}");
+                appletConfig.setLabel(ctx.isSnapshotMode() ? appApplet.getLabel() : "$m{" + labelKey + "}");
                 appletConfig.setType(appApplet.getType());
                 appletConfig.setEntity(appApplet.getEntity());
                 appletConfig.setIcon(appApplet.getIcon());
@@ -327,7 +328,8 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                         String filterKey = getDescriptionKey(descKey, "appletfilter", appAppletFilter.getName());
                         ctx.addMessage(StaticMessageCategoryType.APPLET, filterKey, appAppletFilter.getDescription());
                         filterConfig.setName(appAppletFilter.getName());
-                        filterConfig.setDescription("$m{" + filterKey + "}");
+                        filterConfig.setDescription(
+                                ctx.isSnapshotMode() ? appAppletFilter.getDescription() : "$m{" + filterKey + "}");
                         filterList.add(filterConfig);
                     }
 
@@ -389,8 +391,9 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                 ctx.addMessage(StaticMessageCategoryType.ENUMERATION, descKey, appEnumeration.getDescription());
                 ctx.addMessage(StaticMessageCategoryType.ENUMERATION, labelKey, appEnumeration.getLabel());
                 enumerationConfig.setName(appEnumeration.getName());
-                enumerationConfig.setDescription("$m{" + descKey + "}");
-                enumerationConfig.setLabel("$m{" + labelKey + "}");
+                enumerationConfig
+                        .setDescription(ctx.isSnapshotMode() ? appEnumeration.getDescription() : "$m{" + descKey + "}");
+                enumerationConfig.setLabel(ctx.isSnapshotMode() ? appEnumeration.getLabel() : "$m{" + labelKey + "}");
 
                 List<EnumerationItemConfig> itemList = new ArrayList<EnumerationItemConfig>();
                 for (AppEnumerationItem appEnumerationItem : appEnumeration.getItemList()) {
@@ -398,6 +401,7 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                     enumerationItemConfig.setCode(appEnumerationItem.getCode());
                     enumerationItemConfig.setLabel(appEnumerationItem.getLabel());
                     enumerationItemConfig.setDisplayIndex(appEnumerationItem.getDisplayIndex());
+                    enumerationItemConfig.setColor(appEnumerationItem.getColor());
                     itemList.add(enumerationItemConfig);
                 }
 
@@ -423,7 +427,8 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                 widgetTypeConfig.setDataType(appWidgetType.getDataType());
                 widgetTypeConfig.setInputType(appWidgetType.getInputType());
                 widgetTypeConfig.setName(appWidgetType.getName());
-                widgetTypeConfig.setDescription("$m{" + descKey + "}");
+                widgetTypeConfig
+                        .setDescription(ctx.isSnapshotMode() ? appWidgetType.getDescription() : "$m{" + descKey + "}");
                 widgetTypeConfig.setEditor(appWidgetType.getEditor());
                 widgetTypeConfig.setRenderer(appWidgetType.getRenderer());
                 widgetTypeConfig.setStretch(appWidgetType.isStretch());
@@ -447,7 +452,7 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                 descKey = getDescriptionKey(lowerCaseApplicationName, "reference", appRef.getName());
                 ctx.addMessage(StaticMessageCategoryType.REF, descKey, appRef.getDescription());
                 refConfig.setName(appRef.getName());
-                refConfig.setDescription("$m{" + descKey + "}");
+                refConfig.setDescription(ctx.isSnapshotMode() ? appRef.getDescription() : "$m{" + descKey + "}");
                 refConfig.setEntity(appRef.getEntity());
                 refConfig.setOrderField(appRef.getOrderField());
                 refConfig.setSearchField(appRef.getSearchField());
@@ -465,7 +470,8 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
         }
 
         // Entities
-        List<Long> entityIdList = applicationModuleService.findCustomAppComponentIdList(applicationName, AppEntity.class);
+        List<Long> entityIdList = applicationModuleService.findCustomAppComponentIdList(applicationName,
+                AppEntity.class);
         if (!DataUtils.isBlank(entityIdList)) {
             AppEntitiesConfig entitiesConfig = new AppEntitiesConfig();
             List<AppEntityConfig> entityList = new ArrayList<AppEntityConfig>();
@@ -488,8 +494,9 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                 appEntityConfig.setType(ctx.isSnapshotMode() || isDirectDelegate ? appEntity.getEntityClass()
                         : ctx.getExtensionEntityClassName(appEntity));
                 appEntityConfig.setName(appEntity.getName());
-                appEntityConfig.setDescription("$m{" + descKey + "}");
-                appEntityConfig.setLabel("$m{" + labelKey + "}");
+                appEntityConfig
+                        .setDescription(ctx.isSnapshotMode() ? appEntity.getDescription() : "$m{" + descKey + "}");
+                appEntityConfig.setLabel(ctx.isSnapshotMode() ? appEntity.getLabel() : "$m{" + labelKey + "}");
                 appEntityConfig.setEmailProducerConsumer(appEntity.getEmailProducerConsumer());
                 appEntityConfig.setDelegate(appEntity.getDelegate());
                 appEntityConfig.setTable(appEntity.getTableName());
@@ -512,7 +519,8 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                             ctx.addMessage(StaticMessageCategoryType.ENTITY, labelKey, appEntityField.getLabel());
                             entityFieldConfig.setType(appEntityField.getDataType());
                             entityFieldConfig.setName(appEntityField.getName());
-                            entityFieldConfig.setLabel("$m{" + labelKey + "}");
+                            entityFieldConfig.setLabel(
+                                    ctx.isSnapshotMode() ? appEntityField.getLabel() : "$m{" + labelKey + "}");
                             entityFieldConfig.setColumnName(appEntityField.getColumnName());
                             entityFieldConfig.setReferences(appEntityField.getReferences());
                             entityFieldConfig.setKey(appEntityField.getKey());
@@ -523,7 +531,8 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                                         appEntityField.getInputLabel());
                                 ctx.addMessage(StaticMessageCategoryType.ENTITY, inLabelKey,
                                         appEntityField.getInputLabel());
-                                entityFieldConfig.setInputLabel("$m{" + inLabelKey + "}");
+                                entityFieldConfig.setInputLabel(ctx.isSnapshotMode() ? appEntityField.getInputLabel()
+                                        : "$m{" + inLabelKey + "}");
                             }
 
                             entityFieldConfig.setInputWidget(appEntityField.getInputWidget());
@@ -571,8 +580,10 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                         ctx.addMessage(StaticMessageCategoryType.ENTITY, labelKey, appEntitySeries.getLabel());
                         entitySeriesConfig.setType(appEntitySeries.getType());
                         entitySeriesConfig.setName(appEntitySeries.getName());
-                        entitySeriesConfig.setDescription("$m{" + descKey + "}");
-                        entitySeriesConfig.setLabel("$m{" + labelKey + "}");
+                        entitySeriesConfig.setDescription(
+                                ctx.isSnapshotMode() ? appEntitySeries.getDescription() : "$m{" + descKey + "}");
+                        entitySeriesConfig
+                                .setLabel(ctx.isSnapshotMode() ? appEntitySeries.getLabel() : "$m{" + labelKey + "}");
                         entitySeriesConfig.setFieldName(appEntitySeries.getFieldName());
                         seriesList.add(entitySeriesConfig);
                     }
@@ -590,8 +601,10 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                         ctx.addMessage(StaticMessageCategoryType.ENTITY, descKey, appEntityCategory.getDescription());
                         ctx.addMessage(StaticMessageCategoryType.ENTITY, labelKey, appEntityCategory.getLabel());
                         entityCategoryConfig.setName(appEntityCategory.getName());
-                        entityCategoryConfig.setDescription("$m{" + descKey + "}");
-                        entityCategoryConfig.setLabel("$m{" + labelKey + "}");
+                        entityCategoryConfig.setDescription(
+                                ctx.isSnapshotMode() ? appEntityCategory.getDescription() : "$m{" + descKey + "}");
+                        entityCategoryConfig
+                                .setLabel(ctx.isSnapshotMode() ? appEntityCategory.getLabel() : "$m{" + labelKey + "}");
                         FilterConfig filterConfig = InputWidgetUtils.getFilterConfig(au(),
                                 appEntityCategory.getFilter());
                         entityCategoryConfig
@@ -611,7 +624,8 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                         ctx.addMessage(StaticMessageCategoryType.ENTITY, descKey, appEntityAttachment.getDescription());
                         entityAttachmentConfig.setType(appEntityAttachment.getType());
                         entityAttachmentConfig.setName(appEntityAttachment.getName());
-                        entityAttachmentConfig.setDescription("$m{" + descKey + "}");
+                        entityAttachmentConfig.setDescription(
+                                ctx.isSnapshotMode() ? appEntityAttachment.getDescription() : "$m{" + descKey + "}");
                         attachmentConfigList.add(entityAttachmentConfig);
                     }
 
@@ -626,7 +640,8 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                         descKey = getDescriptionKey(entityDescKey, "expression", appEntityExpression.getName());
                         ctx.addMessage(StaticMessageCategoryType.ENTITY, descKey, appEntityExpression.getDescription());
                         entityExpressionConfig.setName(appEntityExpression.getName());
-                        entityExpressionConfig.setDescription("$m{" + descKey + "}");
+                        entityExpressionConfig.setDescription(
+                                ctx.isSnapshotMode() ? appEntityExpression.getDescription() : "$m{" + descKey + "}");
                         entityExpressionConfig.setExpression(appEntityExpression.getExpression());
                         expressionList.add(entityExpressionConfig);
                     }
@@ -644,7 +659,9 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                         ctx.addMessage(StaticMessageCategoryType.ENTITY, descKey,
                                 appEntityUniqueConstraint.getDescription());
                         entityUniqueConstraintConfig.setName(appEntityUniqueConstraint.getName());
-                        entityUniqueConstraintConfig.setDescription("$m{" + descKey + "}");
+                        entityUniqueConstraintConfig
+                                .setDescription(ctx.isSnapshotMode() ? appEntityUniqueConstraint.getDescription()
+                                        : "$m{" + descKey + "}");
                         entityUniqueConstraintConfig.setFieldList(appEntityUniqueConstraint.getFieldList());
                         if (!DataUtils.isBlank(appEntityUniqueConstraint.getConditionList())) {
                             List<EntityUniqueConditionConfig> conditionConfigList = new ArrayList<EntityUniqueConditionConfig>();
@@ -673,7 +690,8 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                         descKey = getDescriptionKey(entityDescKey, "index", appEntityIndex.getName());
                         ctx.addMessage(StaticMessageCategoryType.ENTITY, descKey, appEntityIndex.getDescription());
                         entityIndexConfig.setName(appEntityIndex.getName());
-                        entityIndexConfig.setDescription("$m{" + descKey + "}");
+                        entityIndexConfig.setDescription(
+                                ctx.isSnapshotMode() ? appEntityIndex.getDescription() : "$m{" + descKey + "}");
                         entityIndexConfig.setFieldList(appEntityIndex.getFieldList());
                         indexList.add(entityIndexConfig);
                     }
@@ -689,7 +707,8 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                         descKey = getDescriptionKey(entityDescKey, "upload", appEntityUpload.getName());
                         ctx.addMessage(StaticMessageCategoryType.ENTITY, descKey, appEntityUpload.getDescription());
                         entityUploadConfig.setName(appEntityUpload.getName());
-                        entityUploadConfig.setDescription("$m{" + descKey + "}");
+                        entityUploadConfig.setDescription(
+                                ctx.isSnapshotMode() ? appEntityUpload.getDescription() : "$m{" + descKey + "}");
                         entityUploadConfig.setConstraintAction(appEntityUpload.getConstraintAction());
                         entityUploadConfig.setFieldSequence(
                                 InputWidgetUtils.getFieldSequenceConfig(appEntityUpload.getFieldSequence()));
@@ -710,7 +729,9 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                         ctx.addMessage(StaticMessageCategoryType.ENTITY, searchInputKey,
                                 appEntitySearchInput.getDescription());
                         entitySearchInputConfig.setName(appEntitySearchInput.getName());
-                        entitySearchInputConfig.setDescription("$m{" + searchInputKey + "}");
+                        entitySearchInputConfig
+                                .setDescription(ctx.isSnapshotMode() ? appEntitySearchInput.getDescription()
+                                        : "$m{" + searchInputKey + "}");
                         entitySearchInputConfig.setRestrictionResolver(appEntitySearchInput.getRestrictionResolver());
                         searchInputList.add(entitySearchInputConfig);
                     }
@@ -740,8 +761,8 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                 ctx.addMessage(StaticMessageCategoryType.TABLE, descKey, appTable.getDescription());
                 ctx.addMessage(StaticMessageCategoryType.TABLE, labelKey, appTable.getLabel());
                 appTableConfig.setName(appTable.getName());
-                appTableConfig.setDescription("$m{" + descKey + "}");
-                appTableConfig.setLabel("$m{" + labelKey + "}");
+                appTableConfig.setDescription(ctx.isSnapshotMode() ? appTable.getDescription() : "$m{" + descKey + "}");
+                appTableConfig.setLabel(ctx.isSnapshotMode() ? appTable.getLabel() : "$m{" + labelKey + "}");
                 appTableConfig.setEntity(appTable.getEntity());
                 appTableConfig.setDetailsPanelName(appTable.getDetailsPanelName());
                 appTableConfig.setLoadingFilterGen(appTable.getLoadingFilterGen());
@@ -771,7 +792,8 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                         if (appTableColumn.getLabel() != null) {
                             labelKey = getDescriptionKey(tableDescKey, "column.label", appTableColumn.getLabel());
                             ctx.addMessage(StaticMessageCategoryType.TABLE, labelKey, appTableColumn.getLabel());
-                            tableColumnConfig.setLabel("$m{" + labelKey + "}");
+                            tableColumnConfig.setLabel(
+                                    ctx.isSnapshotMode() ? appTableColumn.getLabel() : "$m{" + labelKey + "}");
                         }
 
                         tableColumnConfig.setRenderWidget(appTableColumn.getRenderWidget());
@@ -800,7 +822,8 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                         String filterKey = getDescriptionKey(descKey, "tablefilter", appTableFilter.getName());
                         ctx.addMessage(StaticMessageCategoryType.TABLE, filterKey, appTableFilter.getDescription());
                         tableFilterConfig.setName(appTableFilter.getName());
-                        tableFilterConfig.setDescription("$m{" + filterKey + "}");
+                        tableFilterConfig.setDescription(
+                                ctx.isSnapshotMode() ? appTableFilter.getDescription() : "$m{" + filterKey + "}");
                         filterList.add(tableFilterConfig);
                     }
 
@@ -817,8 +840,10 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                         ctx.addMessage(StaticMessageCategoryType.TABLE, descKey, appTableAction.getDescription());
                         ctx.addMessage(StaticMessageCategoryType.TABLE, labelKey, appTableAction.getLabel());
                         tableActionConfig.setName(appTableAction.getName());
-                        tableActionConfig.setDescription("$m{" + descKey + "}");
-                        tableActionConfig.setLabel("$m{" + labelKey + "}");
+                        tableActionConfig.setDescription(
+                                ctx.isSnapshotMode() ? appTableAction.getDescription() : "$m{" + descKey + "}");
+                        tableActionConfig
+                                .setLabel(ctx.isSnapshotMode() ? appTableAction.getLabel() : "$m{" + labelKey + "}");
                         tableActionConfig.setPolicy(appTableAction.getPolicy());
                         tableActionConfig.setOrderIndex(appTableAction.getOrderIndex());
                         actionList.add(tableActionConfig);
@@ -837,8 +862,10 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                         ctx.addMessage(StaticMessageCategoryType.TABLE, descKey, appTableLoading.getDescription());
                         ctx.addMessage(StaticMessageCategoryType.TABLE, labelKey, appTableLoading.getLabel());
                         tableLoadingConfig.setName(appTableLoading.getName());
-                        tableLoadingConfig.setDescription("$m{" + descKey + "}");
-                        tableLoadingConfig.setLabel("$m{" + labelKey + "}");
+                        tableLoadingConfig.setDescription(
+                                ctx.isSnapshotMode() ? appTableLoading.getDescription() : "$m{" + descKey + "}");
+                        tableLoadingConfig
+                                .setLabel(ctx.isSnapshotMode() ? appTableLoading.getLabel() : "$m{" + labelKey + "}");
                         tableLoadingConfig.setProvider(appTableLoading.getProvider());
                         tableLoadingConfig.setOrderIndex(appTableLoading.getOrderIndex());
                         loadingList.add(tableLoadingConfig);
@@ -868,7 +895,7 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                 ctx.addMessage(StaticMessageCategoryType.FORM, descKey, appForm.getDescription());
                 appFormConfig.setType(appForm.getType());
                 appFormConfig.setName(appForm.getName());
-                appFormConfig.setDescription("$m{" + descKey + "}");
+                appFormConfig.setDescription(ctx.isSnapshotMode() ? appForm.getDescription() : "$m{" + descKey + "}");
                 appFormConfig.setEntity(appForm.getEntity());
                 appFormConfig.setLabel(appForm.getLabel());
                 appFormConfig.setHelpSheet(appForm.getHelpSheet());
@@ -886,7 +913,7 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                         descKey = getDescriptionKey(formDescKey, "formfilter", appFormFilter.getName());
                         ctx.addMessage(StaticMessageCategoryType.FORM, descKey, appFormFilter.getDescription());
                         filterConfig.setName(appFormFilter.getName());
-                        filterConfig.setDescription("$m{" + descKey + "}");
+                        filterConfig.setDescription(ctx.isSnapshotMode() ? appFormFilter.getDescription() : "$m{" + descKey + "}");
                         filterList.add(filterConfig);
                     }
 
@@ -906,8 +933,10 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                         formAnnotationConfig.setType(appFormAnnotation.getType());
                         formAnnotationConfig.setVisibility(appFormAnnotation.getVisibility());
                         formAnnotationConfig.setName(appFormAnnotation.getName());
-                        formAnnotationConfig.setDescription("$m{" + descKey + "}");
-                        formAnnotationConfig.setMessage("$m{" + msgKey + "}");
+                        formAnnotationConfig.setDescription(
+                                ctx.isSnapshotMode() ? appFormAnnotation.getDescription() : "$m{" + descKey + "}");
+                        formAnnotationConfig.setMessage(
+                                ctx.isSnapshotMode() ? appFormAnnotation.getMessage() : "$m{" + msgKey + "}");
                         formAnnotationConfig.setHtml(appFormAnnotation.isHtml());
                         formAnnotationConfig.setDirectPlacement(appFormAnnotation.isDirectPlacement());
                         formAnnotationConfig.setOnCondition(
@@ -928,8 +957,10 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                         ctx.addMessage(StaticMessageCategoryType.FORM, descKey, appFormAction.getDescription());
                         ctx.addMessage(StaticMessageCategoryType.FORM, labelKey, appFormAction.getLabel());
                         formActionConfig.setName(appFormAction.getName());
-                        formActionConfig.setDescription("$m{" + descKey + "}");
-                        formActionConfig.setLabel("$m{" + labelKey + "}");
+                        formActionConfig.setDescription(
+                                ctx.isSnapshotMode() ? appFormAction.getDescription() : "$m{" + descKey + "}");
+                        formActionConfig
+                                .setLabel(ctx.isSnapshotMode() ? appFormAction.getLabel() : "$m{" + labelKey + "}");
                         formActionConfig.setSymbol(appFormAction.getSymbol());
                         formActionConfig.setStyleClass(appFormAction.getStyleClass());
                         formActionConfig.setPolicy(appFormAction.getPolicy());
@@ -960,7 +991,8 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                         if (appFormElement.getLabel() != null) {
                             labelKey = getDescriptionKey(formDescKey, "tab.label", appFormElement.getLabel());
                             ctx.addMessage(StaticMessageCategoryType.FORM, labelKey, appFormElement.getLabel());
-                            formTabConfig.setLabel("$m{" + labelKey + "}");
+                            formTabConfig.setLabel(
+                                    ctx.isSnapshotMode() ? appFormElement.getLabel() : "$m{" + labelKey + "}");
                         }
 
                         formTabConfig.setApplet(appFormElement.getTabApplet());
@@ -994,7 +1026,8 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                                     labelKey = getDescriptionKey(formDescKey, "section.label",
                                             appFormElement.getLabel());
                                     ctx.addMessage(StaticMessageCategoryType.FORM, labelKey, appFormElement.getLabel());
-                                    formSectionConfig.setLabel("$m{" + labelKey + "}");
+                                    formSectionConfig.setLabel(
+                                            ctx.isSnapshotMode() ? appFormElement.getLabel() : "$m{" + labelKey + "}");
                                 }
 
                                 formSectionConfig.setIcon(appFormElement.getIcon());
@@ -1014,7 +1047,8 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                                                     appFormElement.getLabel());
                                             ctx.addMessage(StaticMessageCategoryType.FORM, labelKey,
                                                     appFormElement.getLabel());
-                                            formFieldConfig.setLabel("$m{" + labelKey + "}");
+                                            formFieldConfig.setLabel(ctx.isSnapshotMode() ? appFormElement.getLabel()
+                                                    : "$m{" + labelKey + "}");
                                         }
 
                                         formFieldConfig.setInputWidget(appFormElement.getInputWidget());
@@ -1061,8 +1095,10 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                         labelKey = getDescriptionKey(formDescKey, "relatedlist.label", appFormRelatedList.getLabel());
                         ctx.addMessage(StaticMessageCategoryType.FORM, descKey, appFormRelatedList.getDescription());
                         ctx.addMessage(StaticMessageCategoryType.FORM, labelKey, appFormRelatedList.getLabel());
-                        relatedListConfig.setDescription("$m{" + descKey + "}");
-                        relatedListConfig.setLabel("$m{" + labelKey + "}");
+                        relatedListConfig.setDescription(
+                                ctx.isSnapshotMode() ? appFormRelatedList.getDescription() : "$m{" + descKey + "}");
+                        relatedListConfig.setLabel(
+                                ctx.isSnapshotMode() ? appFormRelatedList.getLabel() : "$m{" + labelKey + "}");
                         relatedListConfig.setApplet(appFormRelatedList.getApplet());
                         relatedListConfig.setFilter(appFormRelatedList.getFilter());
                         relatedListConfig.setEditAction(appFormRelatedList.getEditAction());
@@ -1080,7 +1116,8 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                         formStatePolicyConfig.setName(appFormStatePolicy.getName());
                         descKey = getDescriptionKey(formDescKey, "statepolicy", appFormStatePolicy.getDescription());
                         ctx.addMessage(StaticMessageCategoryType.FORM, descKey, appFormStatePolicy.getDescription());
-                        formStatePolicyConfig.setDescription("$m{" + descKey + "}");
+                        formStatePolicyConfig.setDescription(
+                                ctx.isSnapshotMode() ? appFormStatePolicy.getDescription() : "$m{" + descKey + "}");
                         formStatePolicyConfig.setValueGenerator(appFormStatePolicy.getValueGenerator());
                         formStatePolicyConfig.setTrigger(appFormStatePolicy.getTrigger());
                         formStatePolicyConfig.setExecutionIndex(appFormStatePolicy.getExecutionIndex());
@@ -1124,7 +1161,9 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                                 appFormWidgetRulesPolicy.getDescription());
                         ctx.addMessage(StaticMessageCategoryType.FORM, descKey,
                                 appFormWidgetRulesPolicy.getDescription());
-                        formWidgetRulesPolicyConfig.setDescription("$m{" + descKey + "}");
+                        formWidgetRulesPolicyConfig
+                                .setDescription(ctx.isSnapshotMode() ? appFormWidgetRulesPolicy.getDescription()
+                                        : "$m{" + descKey + "}");
                         formWidgetRulesPolicyConfig.setExecutionIndex(appFormWidgetRulesPolicy.getExecutionIndex());
                         formWidgetRulesPolicyConfig.setOnCondition(
                                 InputWidgetUtils.getFilterConfig(au(), appFormWidgetRulesPolicy.getOnCondition()));
@@ -1146,7 +1185,9 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                                 appFormFieldValidationPolicy.getName());
                         ctx.addMessage(StaticMessageCategoryType.FORM, descKey,
                                 appFormFieldValidationPolicy.getDescription());
-                        fieldValidationPolicyConfig.setDescription("$m{" + descKey + "}");
+                        fieldValidationPolicyConfig
+                                .setDescription(ctx.isSnapshotMode() ? appFormFieldValidationPolicy.getDescription()
+                                        : "$m{" + descKey + "}");
                         fieldValidationPolicyConfig.setFieldName(appFormFieldValidationPolicy.getFieldName());
                         fieldValidationPolicyConfig.setValidator(appFormFieldValidationPolicy.getValidation());
                         fieldValidationPolicyConfig.setRule(appFormFieldValidationPolicy.getRule());
@@ -1154,7 +1195,8 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                         fieldValidationPolicyConfigList.add(fieldValidationPolicyConfig);
                     }
 
-                    appFormConfig.setFieldValidationPolicies(new FieldValidationPoliciesConfig(fieldValidationPolicyConfigList));
+                    appFormConfig.setFieldValidationPolicies(
+                            new FieldValidationPoliciesConfig(fieldValidationPolicyConfigList));
                 }
 
                 // Form validation policies
@@ -1168,8 +1210,11 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                         ctx.addMessage(StaticMessageCategoryType.FORM, descKey,
                                 appFormValidationPolicy.getDescription());
                         ctx.addMessage(StaticMessageCategoryType.FORM, msgKey, appFormValidationPolicy.getMessage());
-                        formValidationPolicyConfig.setDescription("$m{" + descKey + "}");
-                        formValidationPolicyConfig.setMessage("$m{" + msgKey + "}");
+                        formValidationPolicyConfig
+                                .setDescription(ctx.isSnapshotMode() ? appFormValidationPolicy.getDescription()
+                                        : "$m{" + descKey + "}");
+                        formValidationPolicyConfig.setMessage(
+                                ctx.isSnapshotMode() ? appFormValidationPolicy.getMessage() : "$m{" + msgKey + "}");
                         formValidationPolicyConfig.setTarget(appFormValidationPolicy.getTarget());
                         formValidationPolicyConfig.setExecutionIndex(appFormValidationPolicy.getExecutionIndex());
                         formValidationPolicyConfig.setErrorMatcher(appFormValidationPolicy.getErrorMatcher());
@@ -1191,8 +1236,10 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                         String msgKey = descKey + ".message";
                         ctx.addMessage(StaticMessageCategoryType.FORM, descKey, appFormReviewPolicy.getDescription());
                         ctx.addMessage(StaticMessageCategoryType.FORM, msgKey, appFormReviewPolicy.getMessage());
-                        formReviewPolicyConfig.setDescription("$m{" + descKey + "}");
-                        formReviewPolicyConfig.setMessage("$m{" + msgKey + "}");
+                        formReviewPolicyConfig.setDescription(
+                                ctx.isSnapshotMode() ? appFormReviewPolicy.getDescription() : "$m{" + descKey + "}");
+                        formReviewPolicyConfig.setMessage(
+                                ctx.isSnapshotMode() ? appFormReviewPolicy.getMessage() : "$m{" + msgKey + "}");
                         formReviewPolicyConfig.setMessageType(appFormReviewPolicy.getMessageType());
                         formReviewPolicyConfig.setEvents(appFormReviewPolicy.getFormEvents());
                         formReviewPolicyConfig.setTarget(appFormReviewPolicy.getTarget());
@@ -1228,7 +1275,8 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                 final String propertyDescKey = descKey;
                 ctx.addMessage(StaticMessageCategoryType.PROPERTY_LIST, descKey, appPropertyList.getDescription());
                 propertyListConfig.setName(appPropertyList.getName());
-                propertyListConfig.setDescription("$m{" + descKey + "}");
+                propertyListConfig.setDescription(
+                        ctx.isSnapshotMode() ? appPropertyList.getDescription() : "$m{" + descKey + "}");
 
                 // Property sets
                 if (!DataUtils.isBlank(appPropertyList.getItemSet())) {
@@ -1237,7 +1285,8 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                         PropertySetConfig propertySetConfig = new PropertySetConfig();
                         labelKey = getDescriptionKey(propertyDescKey, "set.label", appPropertySet.getLabel());
                         ctx.addMessage(StaticMessageCategoryType.PROPERTY_LIST, labelKey, appPropertySet.getLabel());
-                        propertySetConfig.setLabel("$m{" + labelKey + "}");
+                        propertySetConfig
+                                .setLabel(ctx.isSnapshotMode() ? appPropertySet.getLabel() : "$m{" + labelKey + "}");
 
                         // Property items
                         if (!DataUtils.isBlank(appPropertySet.getItemList())) {
@@ -1249,7 +1298,9 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                                 ctx.addMessage(StaticMessageCategoryType.PROPERTY_LIST, descKey,
                                         appPropertyListItem.getDescription());
                                 propertyListPropConfig.setName(appPropertyListItem.getName());
-                                propertyListPropConfig.setDescription("$m{" + descKey + "}");
+                                propertyListPropConfig
+                                        .setDescription(ctx.isSnapshotMode() ? appPropertyListItem.getDescription()
+                                                : "$m{" + descKey + "}");
                                 propertyListPropConfig.setInputWidget(appPropertyListItem.getInputWidget());
                                 propertyListPropConfig.setReferences(appPropertyListItem.getReferences());
                                 propertyListPropConfig.setDefaultVal(appPropertyListItem.getDefaultVal());
@@ -1288,7 +1339,8 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                 descKey = getDescriptionKey(lowerCaseApplicationName, "propertyrule", appPropertyRule.getName());
                 ctx.addMessage(StaticMessageCategoryType.PROPERTY_RULE, descKey, appPropertyRule.getDescription());
                 propertyRuleConfig.setName(appPropertyRule.getName());
-                propertyRuleConfig.setDescription("$m{" + descKey + "}");
+                propertyRuleConfig.setDescription(
+                        ctx.isSnapshotMode() ? appPropertyRule.getDescription() : "$m{" + descKey + "}");
                 propertyRuleConfig.setEntity(appPropertyRule.getEntity());
                 propertyRuleConfig.setChoiceField(appPropertyRule.getChoiceField());
                 propertyRuleConfig.setListField(appPropertyRule.getListField());
@@ -1332,21 +1384,25 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                 ctx.addMessage(StaticMessageCategoryType.ASSIGNMENT_PAGE, descKey, appAssignmentPage.getDescription());
                 ctx.addMessage(StaticMessageCategoryType.ASSIGNMENT_PAGE, labelKey, appAssignmentPage.getLabel());
                 appAssignmentPageConfig.setName(appAssignmentPage.getName());
-                appAssignmentPageConfig.setDescription("$m{" + descKey + "}");
-                appAssignmentPageConfig.setLabel("$m{" + labelKey + "}");
+                appAssignmentPageConfig.setDescription(
+                        ctx.isSnapshotMode() ? appAssignmentPage.getDescription() : "$m{" + descKey + "}");
+                appAssignmentPageConfig
+                        .setLabel(ctx.isSnapshotMode() ? appAssignmentPage.getLabel() : "$m{" + labelKey + "}");
                 appAssignmentPageConfig.setEntity(appAssignmentPage.getEntity());
                 if (appAssignmentPage.getFilterCaption1() != null) {
                     labelKey = descKey + ".filtercaption1";
                     ctx.addMessage(StaticMessageCategoryType.ASSIGNMENT_PAGE, labelKey,
                             appAssignmentPage.getFilterCaption1());
-                    appAssignmentPageConfig.setFilterCaption1("$m{" + labelKey + "}");
+                    appAssignmentPageConfig.setFilterCaption1(
+                            ctx.isSnapshotMode() ? appAssignmentPage.getFilterCaption1() : "$m{" + labelKey + "}");
                 }
 
                 if (appAssignmentPage.getFilterCaption2() != null) {
                     labelKey = descKey + ".filtercaption2";
                     ctx.addMessage(StaticMessageCategoryType.ASSIGNMENT_PAGE, labelKey,
                             appAssignmentPage.getFilterCaption2());
-                    appAssignmentPageConfig.setFilterCaption2("$m{" + labelKey + "}");
+                    appAssignmentPageConfig.setFilterCaption2(
+                            ctx.isSnapshotMode() ? appAssignmentPage.getFilterCaption2() : "$m{" + labelKey + "}");
                 }
 
                 appAssignmentPageConfig.setFilterList1(appAssignmentPage.getFilterList1());
@@ -1356,7 +1412,8 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                     labelKey = descKey + ".assigncaption";
                     ctx.addMessage(StaticMessageCategoryType.ASSIGNMENT_PAGE, labelKey,
                             appAssignmentPage.getAssignCaption());
-                    appAssignmentPageConfig.setAssignCaption("$m{" + labelKey + "}");
+                    appAssignmentPageConfig.setAssignCaption(
+                            ctx.isSnapshotMode() ? appAssignmentPage.getAssignCaption() : "$m{" + labelKey + "}");
                 }
 
                 appAssignmentPageConfig.setAssignList(appAssignmentPage.getAssignList());
@@ -1365,7 +1422,8 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                     labelKey = descKey + ".unassigncaption";
                     ctx.addMessage(StaticMessageCategoryType.ASSIGNMENT_PAGE, labelKey,
                             appAssignmentPage.getUnassignCaption());
-                    appAssignmentPageConfig.setUnassignCaption("$m{" + labelKey + "}");
+                    appAssignmentPageConfig.setUnassignCaption(
+                            ctx.isSnapshotMode() ? appAssignmentPage.getUnassignCaption() : "$m{" + labelKey + "}");
                 }
 
                 appAssignmentPageConfig.setUnassignList(appAssignmentPage.getUnassignList());
@@ -1394,7 +1452,8 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                 descKey = getDescriptionKey(lowerCaseApplicationName, "suggestiontype", appSuggestionType.getName());
                 ctx.addMessage(StaticMessageCategoryType.SUGGESTION, descKey, appSuggestionType.getDescription());
                 suggestionTypeConfig.setName(appSuggestionType.getName());
-                suggestionTypeConfig.setDescription("$m{" + descKey + "}");
+                suggestionTypeConfig.setDescription(
+                        ctx.isSnapshotMode() ? appSuggestionType.getDescription() : "$m{" + descKey + "}");
                 suggestionTypeConfig.setParent(appSuggestionType.getParent());
                 suggestionTypeList.add(suggestionTypeConfig);
             }

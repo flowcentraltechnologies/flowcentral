@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.constants.AppletRequestAttributeConstants;
 import com.flowcentraltech.flowcentral.application.data.EntityFieldDef;
 import com.flowcentraltech.flowcentral.application.data.EntityFieldTotalSummary;
@@ -36,12 +37,15 @@ import com.flowcentraltech.flowcentral.common.data.FormValidationErrors;
 import com.flowcentraltech.flowcentral.common.data.RowChangeInfo;
 import com.flowcentraltech.flowcentral.common.web.panels.DetailsPanel;
 import com.flowcentraltech.flowcentral.common.web.widgets.AbstractFlowCentralValueListMultiControl;
+import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.UplAttribute;
 import com.tcdng.unify.core.annotation.UplAttributes;
 import com.tcdng.unify.core.constant.DataType;
 import com.tcdng.unify.core.constant.OrderType;
 import com.tcdng.unify.core.criterion.Order;
+import com.tcdng.unify.core.criterion.Update;
+import com.tcdng.unify.core.data.IndexedTarget;
 import com.tcdng.unify.core.data.UniqueHistory;
 import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.upl.UplElementReferences;
@@ -53,6 +57,8 @@ import com.tcdng.unify.web.ui.util.DataTransferUtils;
 import com.tcdng.unify.web.ui.widget.Control;
 import com.tcdng.unify.web.ui.widget.EventHandler;
 import com.tcdng.unify.web.ui.widget.Page;
+import com.tcdng.unify.web.ui.widget.TargetControl;
+import com.tcdng.unify.web.ui.widget.TargetControlHandler;
 import com.tcdng.unify.web.ui.widget.UploadControl;
 import com.tcdng.unify.web.ui.widget.Widget;
 import com.tcdng.unify.web.ui.widget.panel.StandalonePanel;
@@ -86,7 +92,7 @@ import com.tcdng.unify.web.ui.widget.panel.StandalonePanel;
         @UplAttribute(name = "alternatingRows", type = boolean.class, defaultVal = "true"),
         @UplAttribute(name = "focusManagement", type = boolean.class, defaultVal = "true") })
 public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
-        extends AbstractFlowCentralValueListMultiControl<ValueStore, U> implements TableSelect<U> {
+        extends AbstractFlowCentralValueListMultiControl<ValueStore, U> implements TableSelect<U>, TargetControlHandler {
 
     public static final int ATTACH_SELECTED_INDEX = 0;
 
@@ -139,7 +145,7 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
     private Set<Widget> inputs;
 
     private Map<String, Widget> renderers;
-
+    
     public AbstractTableWidget(Class<T> tableClass, Class<U> itemClass) {
         this.tableClass = tableClass;
         this.itemClass = itemClass;
@@ -573,6 +579,7 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
                         standalonePanel = standalonePanel.getStandalonePanel();
                     }
 
+                    final boolean editable = isEditable();
                     final boolean entryMode = table.isEntryMode();
                     for (TableColumnDef tableColumnDef : tableDef.getVisibleColumnDefList()) {
                         final boolean useCellEditor = tableColumnDef.isWithCellEditor() && tableColumnDef.isEditable();
@@ -582,6 +589,10 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
                                         ? "!ui-label binding:" + tableColumnDef.getFieldName()
                                         : tableColumnDef.getCellRenderer());
                         Widget widget = addExternalChildWidget(columnWidgetUpl);
+                        if (editable && tableColumnDef.isToggle() && widget instanceof TargetControl) {
+                            ((TargetControl) widget).setHandler(this);
+                        }
+                        
                         if (!_entry) {
                             EntityFieldDef entityFieldDef = tableDef.getFieldDef(tableColumnDef.getFieldName());
                             if (entityFieldDef.isNumber()) {
@@ -630,7 +641,7 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
                             if (entityFieldDef.isNumber()) {
                                 Widget renderer = getRenderer(table.isDisableLinks() && tableColumnDef.isWithLinkAct()
                                         ? "!ui-label binding:" + tableColumnDef.getFieldName()
-                                        : tableColumnDef.getCellRenderer());
+                                        : tableColumnDef.getCellRenderer(), tableColumnDef.isToggle());
                                 EntityFieldTotalSummary entityFieldTotalSummary = new EntityFieldTotalSummary(
                                         entityFieldDef, renderer);
                                 if (!tableDef.isWithSummaryFields()
@@ -789,6 +800,20 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
     }
 
     @Override
+    public void handle(String target) throws UnifyException {
+        AbstractTable<?, ?> table = getTable();
+        IndexedTarget indexedTarget = getIndexedTarget(target);
+        TableColumnDef tableColumnDef = table.getTableDef().getVisibleColumnDef(indexedTarget.getBinding());
+        if (tableColumnDef.isWithBadgeInfo()) {
+            final String nextCode = tableColumnDef.getBadgeInfo().nextCode(indexedTarget.getTarget());
+            final Entity inst = (Entity) table.getDisplayItem(indexedTarget.getValueIndex());
+            getComponent(AppletUtilities.class).updateEntity(inst.getClass(), (Long) inst.getId(),
+                    new Update().add(indexedTarget.getBinding(), nextCode));
+            table.reset();
+        }
+    }
+
+    @Override
     protected void doOnPageConstruct() throws UnifyException {
         if (isMultiSelect()) {
             selectCtrl = createInternalHiddenControl("selected");
@@ -931,7 +956,7 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
         renderers = null;
     }
 
-    private Widget getRenderer(String renderer) throws UnifyException {
+    private Widget getRenderer(String renderer, boolean toggle) throws UnifyException {
         if (renderers == null) {
             renderers = new HashMap<String, Widget>();
         }

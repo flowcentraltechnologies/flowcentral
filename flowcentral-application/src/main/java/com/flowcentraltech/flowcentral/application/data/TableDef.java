@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.flowcentraltech.flowcentral.application.business.DynamicEnumProvider;
 import com.flowcentraltech.flowcentral.application.constants.LinkActConstants;
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityNameParts;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
@@ -35,6 +36,7 @@ import com.tcdng.unify.core.constant.OrderType;
 import com.tcdng.unify.core.criterion.Select;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.StringUtils;
+import com.tcdng.unify.web.ui.widget.data.BadgeInfo;
 import com.tcdng.unify.web.ui.widget.data.ButtonInfo;
 import com.tcdng.unify.web.ui.widget.data.ColorLegendInfo;
 
@@ -253,7 +255,7 @@ public class TableDef extends BaseApplicationEntityDef {
         return filterDef;
     }
 
-    public String getFieldLabel(int index) { 
+    public String getFieldLabel(int index) {
         TableColumnDef columnDef = getVisibleColumnDef(index);
         if (columnDef.isWithLabel()) {
             return columnDef.getLabel();
@@ -410,6 +412,20 @@ public class TableDef extends BaseApplicationEntityDef {
             if (tableColumnDef.getFieldName().equals(fieldName)) {
                 return tableColumnDef;
             }
+        }
+
+        throw new RuntimeException(
+                "Field with name [" + fieldName + "] is unknown for table definition [" + getLongName() + "].");
+    }
+
+    public int getVisibleColumnIndex(String fieldName) {
+        int index = 0;
+        for (TableColumnDef tableColumnDef : visibleColumnDefList) {
+            if (tableColumnDef.getFieldName().equals(fieldName)) {
+                return index;
+            }
+
+            index++;
         }
 
         throw new RuntimeException(
@@ -698,7 +714,7 @@ public class TableDef extends BaseApplicationEntityDef {
             return this;
         }
 
-        public TableDef build() throws UnifyException {
+        public TableDef build(DynamicEnumProvider dynamicEnumProvider) throws UnifyException {
             List<TableColumnDef> _visibleColumnDefList = new ArrayList<TableColumnDef>();
             int usedPercent = 0;
             final int len = visibleColumnDefList.size();
@@ -707,6 +723,7 @@ public class TableDef extends BaseApplicationEntityDef {
             for (int i = 0; i < len; i++) {
                 TableColumnDef tempColumnDef = visibleColumnDefList.get(i);
                 TableColumnDef tableColumnDef = null;
+                BadgeInfo badgeInfo = null;
                 String fieldName = tempColumnDef.getFieldName();
                 String renderer = tempColumnDef.getRenderer();
                 String editor = !StringUtils.isBlank(tempColumnDef.getEditor())
@@ -714,6 +731,7 @@ public class TableDef extends BaseApplicationEntityDef {
                         : null;
                 String linkAct = tempColumnDef.getLinkAct();
                 String symbol = tempColumnDef.getSymbol();
+                final boolean toggle = LinkActConstants.TOGGLE_ACTION.equals(linkAct);
                 if (tempColumnDef.isWithLinkAct()) {
                     String formatter = "";
                     int fromIndex = renderer.indexOf("formatter");
@@ -731,29 +749,36 @@ public class TableDef extends BaseApplicationEntityDef {
                     if (LinkActConstants.BUTTON_ACTION.equals(linkAct)) {
                         final String symbolAttr = tempColumnDef.isWithSymbol() ? " symbol:$s{" + symbol + "}" : "";
                         renderer = "!ui-button" + symbolAttr + "  binding:" + fieldName
-                                + " alwaysValueIndex:true copyEventHandlers:true eventHandler:$d{!ui-event event:onclick action:$c{" + linkAct
-                                + "}}";
+                                + " alwaysValueIndex:true copyEventHandlers:true eventHandler:$d{!ui-event event:onclick action:$c{"
+                                + linkAct + "}}";
                     } else {
-                        String styleClass = classLink
-                                ? (entityFieldDef.getDataType().isNumber()
-                                        ? " styleClass:$e{link-right ui-link-classic}"
-                                        : " styleClass:$e{ui-link-classic}")
-                                : (entityFieldDef.getDataType().isNumber() ? " styleClass:$e{link-right}" : "");
-                        renderer = "!ui-link debounce:true preferredCaptionBinding:" + fieldName + formatter
-                                + " binding:" + fieldName + styleClass
-                                + " alwaysValueIndex:true copyEventHandlers:true eventHandler:$d{!ui-event event:onclick action:$c{" + linkAct
-                                + "}}";
+                        if (entityFieldDef.isEnumDynamic()) {
+                            badgeInfo = dynamicEnumProvider.getEnumerationDef(entityFieldDef.getReferences())
+                                    .getBadgeInfo();
+                            renderer = "!ui-badge badgeInfoBinding:$s{__badgeInfo} alwaysValueIndex:true binding:$s{"
+                                    + fieldName + "}";
+                        } else {
+                            String styleClass = classLink
+                                    ? (entityFieldDef.getDataType().isNumber()
+                                            ? " styleClass:$e{link-right ui-link-classic}"
+                                            : " styleClass:$e{ui-link-classic}")
+                                    : (entityFieldDef.getDataType().isNumber() ? " styleClass:$e{link-right}" : "");
+                            renderer = "!ui-link debounce:true preferredCaptionBinding:" + fieldName + formatter
+                                    + " binding:" + fieldName + styleClass
+                                    + " alwaysValueIndex:true copyEventHandlers:true eventHandler:$d{!ui-event event:onclick action:$c{"
+                                    + linkAct + "}}";
+                        }
                     }
                 } else {
                     renderer = renderer + " binding:" + fieldName;
                 }
 
-                tableColumnDef = new TableColumnDef(tempColumnDef.getLabel(), fieldName, "width:" + widths[i] + "%;",
-                        renderer, editor, tempColumnDef.getRenderer(), tempColumnDef.getEditor(), linkAct, symbol,
-                        tempColumnDef.getOrder(), tempColumnDef.getWidthRatio(), (100 - usedPercent),
-                        tempColumnDef.isSwitchOnChange(), tempColumnDef.isHiddenOnNull(), tempColumnDef.isHidden(),
-                        tempColumnDef.isDisabled(), tempColumnDef.isEditable(), tempColumnDef.isSortable(),
-                        tempColumnDef.isSummary());
+                tableColumnDef = new TableColumnDef(badgeInfo, tempColumnDef.getLabel(), fieldName,
+                        "width:" + widths[i] + "%;", renderer, editor, tempColumnDef.getRenderer(),
+                        tempColumnDef.getEditor(), linkAct, symbol, tempColumnDef.getOrder(),
+                        tempColumnDef.getWidthRatio(), (100 - usedPercent), tempColumnDef.isSwitchOnChange(),
+                        tempColumnDef.isHiddenOnNull(), tempColumnDef.isHidden(), tempColumnDef.isDisabled(),
+                        tempColumnDef.isEditable(), tempColumnDef.isSortable(), tempColumnDef.isSummary(), toggle);
 
                 _visibleColumnDefList.add(tableColumnDef);
                 columnDefList.add(tableColumnDef);

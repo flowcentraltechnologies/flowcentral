@@ -126,9 +126,15 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
     }
 
     private static final List<String> APPLICATION_ARTIFACT_GENERATORS = Collections.unmodifiableList(
-            Arrays.asList("charts-xml-generator", "dashboards-xml-generator", "notification-templates-xml-generator",
-                    "notification-largetexts-xml-generator", "reports-xml-generator", "workflows-xml-generator",
-                    "help-sheets-xml-generator", "application-xml-generator"));
+            Arrays.asList(
+                    "charts-xml-generator",
+                    "dashboards-xml-generator",
+                    "notification-templates-xml-generator",
+                    "notification-largetexts-xml-generator",
+                    "reports-xml-generator",
+                    "workflows-xml-generator",
+                    "help-sheets-xml-generator",
+                    "application-xml-generator"));
 
     @Taskable(name = CodeGenerationTaskConstants.GENERATE_EXTENSION_MODULE_FILES_TASK_NAME,
             description = "Generate Extension Module Files Task",
@@ -282,11 +288,11 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
                     generator.generate(moduleCtx, moduleName, zos);
 
                     // Generate messages
-                    addTaskMessage(taskMonitor, "Generating messages for module [{0}]...", moduleName);
-                    addTaskMessage(taskMonitor, "Executing artifact generator [{0}]...",
-                            "extension-module-messages-generator");
-                    generator = (StaticModuleArtifactGenerator) getComponent("extension-module-messages-generator");
-                    generator.generate(moduleCtx, moduleName, zos);
+//                    addTaskMessage(taskMonitor, "Generating messages for module [{0}]...", moduleName);
+//                    addTaskMessage(taskMonitor, "Executing artifact generator [{0}]...",
+//                            "extension-module-messages-generator");
+//                    generator = (StaticModuleArtifactGenerator) getComponent("extension-module-messages-generator");
+//                    generator.generate(moduleCtx, moduleName, zos);
                 }
             }
 

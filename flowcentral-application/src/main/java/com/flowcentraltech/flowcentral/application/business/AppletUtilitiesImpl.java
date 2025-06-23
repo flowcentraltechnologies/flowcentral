@@ -222,6 +222,9 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
     private EnvironmentService environmentService;
 
     @Configurable
+    private DynamicEnumProvider dynamicEnumProvider;
+
+    @Configurable
     private AuditLogger auditLogger;
 
     @Configurable
@@ -678,6 +681,11 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
     @Override
     public ApplicationModuleService application() {
         return applicationModuleService;
+    }
+
+    @Override
+    public DynamicEnumProvider enumProvider() {
+        return dynamicEnumProvider;
     }
 
     @Override
@@ -2471,6 +2479,11 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
         }
 
         return entityActionResult;
+    }
+
+    @Override
+    public int updateEntity(Class<? extends Entity> entityClass, Long id, Update update) throws UnifyException {
+        return environment().updateById(entityClass, id, update);
     }
 
     @Override

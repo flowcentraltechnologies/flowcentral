@@ -30,7 +30,7 @@ import com.tcdng.unify.core.annotation.Column;
 @Table("FC_ENUMERATION")
 public class AppEnumeration extends BaseApplicationEntity {
 
-    @Column(name = "ENUM_LABEL")
+    @Column(name = "ENUM_LABEL", length = 128)
     private String label;
     
     @ChildList

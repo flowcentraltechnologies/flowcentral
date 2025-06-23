@@ -98,7 +98,7 @@ public class FilterCondition {
     }
 
     public void setFieldName(String fieldName) {
-        this.fieldChange = !DataUtils.equals(this.fieldName, fieldName);
+        fieldChange = !DataUtils.equals(this.fieldName, fieldName);
         this.fieldName = fieldName;
     }
 

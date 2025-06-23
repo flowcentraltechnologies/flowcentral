@@ -103,6 +103,7 @@ import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.UserToken;
 import com.tcdng.unify.core.constant.DataType;
 import com.tcdng.unify.core.criterion.Restriction;
+import com.tcdng.unify.core.criterion.Update;
 import com.tcdng.unify.core.data.Formats;
 import com.tcdng.unify.core.data.MapValues;
 import com.tcdng.unify.core.data.ParamConfig;
@@ -587,6 +588,13 @@ public interface AppletUtilities extends FlowCentralComponent {
      */
     ApplicationModuleService application();
 
+    /**
+     * Gets dynamic enumeration provider.
+     * 
+     * @return the provider
+     */
+    DynamicEnumProvider enumProvider();
+    
     /**
      * Gets the application privilege manager.
      * 
@@ -2043,6 +2051,21 @@ public interface AppletUtilities extends FlowCentralComponent {
     EntityActionResult deleteEntityInstByFormContext(AppletDef formAppletDef, FormContext formContext,
             SweepingCommitPolicy scp) throws UnifyException;
 
+    /**
+     * Updates an entity type.
+     * 
+     * @param entityClass
+     *                    the entity class
+     * @param id
+     *                    the entity ID
+     * @param update
+     *                    the update object
+     * @return number of records updated
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    int updateEntity(Class<? extends Entity> entityClass, Long id, Update update) throws UnifyException;
+    
     /**
      * Performs on form construction.
      * 

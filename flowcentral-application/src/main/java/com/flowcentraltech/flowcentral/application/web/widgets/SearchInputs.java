@@ -59,9 +59,9 @@ public class SearchInputs {
     }
 
     public int addSearchInputEntry(SearchConditionType condition, String fieldName, String widget, String label,
-            Editable editable) throws UnifyException {
-        SearchInputEntry sie = new SearchInputEntry(entityDef, editable.isTrue());
-        setFieldAndInputParams(sie, condition, fieldName, widget, label);
+            String defVal, boolean fixed, Editable editable) throws UnifyException {
+        SearchInputEntry sie = new SearchInputEntry(au, entityDef, editable.isTrue());
+        setFieldAndInputParams(sie, condition, fieldName, widget, label, defVal, fixed);
         entryList.add(sie);
         return entryList.size() - 1;
     }
@@ -121,7 +121,7 @@ public class SearchInputs {
 
         SearchInputEntry last = entryList.get(entryList.size() - 1);
         if (last.isWithFieldName()) {
-            entryList.add(new SearchInputEntry(entityDef, true));
+            entryList.add(new SearchInputEntry(au, entityDef, true));
         }
     }
 
@@ -132,9 +132,11 @@ public class SearchInputs {
             for (int i = 0; i < lim; i++) {
                 SearchInputEntry sie = entryList.get(i);
                 if (sie.isValidEntry()) {
-                    sidb.addSearchInputDef(sie.getCondition(), sie.getFieldName(), sie.getWidget(), sie.getLabel());
+                    sidb.addSearchInputDef(sie.getCondition(), sie.getFieldName(), sie.getWidget(), sie.getLabel(),
+                            sie.isWithDefValInput() ? sie.getDefValInput().getStringValue(): null, sie.isFixed());
                 }
             }
+
             return sidb.build();
         }
 
@@ -145,22 +147,27 @@ public class SearchInputs {
         if (searchInputsDef != null) {
             for (SearchInputDef searchInputDef : searchInputsDef.getSearchInputDefList()) {
                 final String label = au.resolveSessionMessage(searchInputDef.getLabel());
-                SearchInputEntry sie = new SearchInputEntry(entityDef, editable.isTrue());
+                SearchInputEntry sie = new SearchInputEntry(au, entityDef, editable.isTrue());
                 setFieldAndInputParams(sie, searchInputDef.getType(), searchInputDef.getFieldName(),
-                        searchInputDef.getWidget(), label);
+                        searchInputDef.getWidget(), label, searchInputDef.getDefVal(), searchInputDef.isFixed());
                 entryList.add(sie);
             }
         }
 
-        entryList.add(new SearchInputEntry(entityDef, editable.isTrue()));
+        entryList.add(new SearchInputEntry(au, entityDef, editable.isTrue()));
     }
 
     private void setFieldAndInputParams(SearchInputEntry sie, SearchConditionType type, String fieldName, String widget,
-            String label) throws UnifyException {
+            String label, String defVal, boolean fixed) throws UnifyException {
         sie.setCondition(type);
         sie.setFieldName(fieldName);
         sie.setLabel(label);
         sie.setWidget(widget);
         sie.normalize(entityDef);
+        if (sie.isWithDefValInput()) {
+            sie.getDefValInput().setStringValue(defVal);
+        }
+        
+        sie.setFixed(fixed);
     }
 }

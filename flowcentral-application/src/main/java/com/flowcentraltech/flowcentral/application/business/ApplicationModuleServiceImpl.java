@@ -329,7 +329,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
     @Configurable("application-usagelistprovider")
     private UsageListProvider usageListProvider;
-
+    
     @Configurable
     private EnvironmentDelegateUtilities environmentDelegateUtilities;
 
@@ -933,7 +933,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                         tdb.addColumnDef(getApplicationMessage("application.propertyitem.value"), "displayValue",
                                 renderer, 2, false);
                         tdb.itemsPerPage(-1);
-                        return tdb.build();
+                        return tdb.build(appletUtilities.enumProvider());
                     }
 
                     if (ApplicationPredefinedTableConstants.USAGE_TABLE.equals(longName)) {
@@ -951,7 +951,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                         tdb.addColumnDef("usedFor", renderer, 3, true);
                         tdb.addColumnDef("usage", renderer, 3, true);
                         tdb.itemsPerPage(25); // TODO
-                        return tdb.build();
+                        return tdb.build(appletUtilities.enumProvider());
                     }
 
                     if (ApplicationPredefinedTableConstants.ATTACHMENT_TABLE.equals(longName)) {
@@ -969,7 +969,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                                 "!ui-booleanlabel onTrue:$m{label.mandatory} onFalse:$m{label.optional}", 2, false);
                         tdb.addColumnDef("createdOn", "!ui-label", 2, false);
                         tdb.itemsPerPage(-1);
-                        return tdb.build();
+                        return tdb.build(appletUtilities.enumProvider());
                     }
 
                     if (ApplicationPredefinedTableConstants.SNAPSHOT_TABLE.equals(longName)) {
@@ -991,7 +991,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                         tdb.headerToUpperCase(true);
                         tdb.headerCenterAlign(true);
                         tdb.itemsPerPage(-1);
-                        return tdb.build();
+                        return tdb.build(appletUtilities.enumProvider());
                     }
 
                     AppTable appTable = getApplicationEntity(AppTable.class, longName);
@@ -1056,7 +1056,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     tdb.limitSelectToColumns(appTable.isLimitSelectToColumns());
 
                     appletUtilities.ensureWorkflowUserInteractionLoadingApplet(longName, false);
-                    return tdb.build();
+                    return tdb.build(appletUtilities.enumProvider());
                 }
 
             };
@@ -5833,6 +5833,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 appEnumerationItem.setCode(itemConfig.getCode());
                 appEnumerationItem.setLabel(itemConfig.getLabel());
                 appEnumerationItem.setDisplayIndex(itemConfig.getDisplayIndex());
+                appEnumerationItem.setColor(itemConfig.getColor());
                 itemList.add(appEnumerationItem);
             }
         }

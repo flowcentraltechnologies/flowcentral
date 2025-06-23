@@ -88,9 +88,9 @@ public class ReportsXmlGenerator extends AbstractResourcesArtifactGenerator {
                 reportConfig.setSummaryDatasource(reportConfiguration.getSummaryDatasource());
                 reportConfig.setSizeType(reportConfiguration.getSizeType());
                 reportConfig.setName(reportConfiguration.getName());
-                reportConfig.setDescription("$m{" + descKey + "}");
+                reportConfig.setDescription(ctx.isSnapshotMode() ? reportConfiguration.getDescription() :"$m{" + descKey + "}");
                 reportConfig.setReportable(reportConfiguration.getReportable());
-                reportConfig.setTitle("$m{" + titleKey + "}");
+                reportConfig.setTitle(ctx.isSnapshotMode() ? reportConfiguration.getTitle() :"$m{" + titleKey + "}");
                 reportConfig.setTemplate(reportConfiguration.getTemplate());
                 reportConfig.setWidth(reportConfiguration.getWidth());
                 reportConfig.setHeight(reportConfiguration.getHeight());
@@ -171,7 +171,7 @@ public class ReportsXmlGenerator extends AbstractResourcesArtifactGenerator {
                             descKey = getDescriptionKey(lowerCaseApplicationName, "reportparameter",
                                     reportParameter.getName());
                             ctx.addMessage(StaticMessageCategoryType.REPORT, descKey, reportParameter.getDescription());
-                            parameterConfig.setDescription("$m{" + descKey + "}");
+                            parameterConfig.setDescription(ctx.isSnapshotMode() ? reportParameter.getDescription() :"$m{" + descKey + "}");
                         }
 
                         parameterConfig.setEditor(reportParameter.getEditor());

@@ -272,7 +272,7 @@
 					</onCondition>
 					<widgetRules>
 						<entry field="path"
-							widget="application.restapilist" />
+							widget="application.restapisearch" />
 					</widgetRules>
 				</formWidgetRulesPolicy>
 			</formWidgetRulesPolicies>

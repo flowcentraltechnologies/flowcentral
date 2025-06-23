@@ -116,7 +116,9 @@ public class SearchEntries {
     public void clear() {
         if (entryList != null) {
             for (SearchEntry searchEntry : entryList) {
-                searchEntry.getParamInput().setValue(null);
+                if (!searchEntry.isFixed()) {
+                    searchEntry.getParamInput().setValue(null);
+                }
             }
         }
     }
@@ -266,12 +268,12 @@ public class SearchEntries {
                     final String label = au.resolveSessionMessage(searchInputDef.getLabel());
                     final SearchEntry searchEntry = searchInputDef.getFieldName().startsWith("s:")
                             ? new SearchEntry(au, entityDef, label, searchInputDef.getFieldName().substring(2),
-                                    SearchConditionType.SESSION_ATTRIBUTE, preferredEvent)
+                                    SearchConditionType.SESSION_ATTRIBUTE, searchInputDef.getDefVal(), searchInputDef.isFixed(), preferredEvent)
                             : (searchInputDef.getFieldName().startsWith("f:")
                                     ? new SearchEntry(au, entityDef, label, searchInputDef.getFieldName().substring(2),
-                                            searchInputDef.getType(), preferredEvent)
+                                            searchInputDef.getType(), searchInputDef.getDefVal(), searchInputDef.isFixed(), preferredEvent)
                                     : new SearchEntry(au, entityDef, label,
-                                            searchInputDef.getFieldName().substring(2), preferredEvent));
+                                            searchInputDef.getFieldName().substring(2), searchInputDef.getDefVal(), searchInputDef.isFixed(), preferredEvent));
                     WidgetTypeDef widgetTypeDef = au.getWidgetTypeDef(searchInputDef.getWidget());
                     searchEntry.normalize(widgetTypeDef);
                     entryList.add(searchEntry);
@@ -289,7 +291,7 @@ public class SearchEntries {
                             ? SearchConditionType.ILIKE
                             : SearchConditionType.EQUALS;
                     SearchEntry searchEntry = new SearchEntry(au, entityDef, label, entityFieldDef.getFieldName(),
-                            conditionType, preferredEvent);
+                            conditionType, null, false, preferredEvent);
                     searchEntry.normalize();
                     entryList.add(searchEntry);
                 }
