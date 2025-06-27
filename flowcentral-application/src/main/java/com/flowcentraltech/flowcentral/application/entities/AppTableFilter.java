@@ -42,6 +42,9 @@ public class AppTableFilter extends BaseConfigNamedEntity {
     private String legendLabel;
     
     @Column(length = 64, nullable = true)
+    private Integer executionIndex;
+    
+    @Column(length = 64, nullable = true)
     private String filterGenerator;
 
     @Column(length = 64, nullable = true)
@@ -108,4 +111,12 @@ public class AppTableFilter extends BaseConfigNamedEntity {
         this.filter = filter;
     }
 
+
+    public Integer getExecutionIndex() {
+        return executionIndex;
+    }
+
+    public void setExecutionIndex(Integer executionIndex) {
+        this.executionIndex = executionIndex;
+    }
 }

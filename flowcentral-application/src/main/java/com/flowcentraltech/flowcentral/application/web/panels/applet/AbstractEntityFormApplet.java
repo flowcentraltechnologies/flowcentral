@@ -1112,8 +1112,8 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         return getResolvedForm().getBeanTitle();
     }
 
-    public String getAssignmentTitle() {
-        return assignmentPage != null ? assignmentTitle = assignmentPage.getMainTitle() : assignmentTitle;
+    public String getAssignmentTitle() throws UnifyException {
+        return assignmentPage != null ? assignmentTitle = au().resolveSessionMessage(assignmentPage.getMainTitle()) : assignmentTitle;
     }
 
     public String getAssignmentSubTitle() {
@@ -1245,7 +1245,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         SectorIcon sectorIcon = getSectorIcon();
         BreadCrumbs breadCrumbs = form.getBreadCrumbs().advance();
         EntityClassDef entityClassDef = getEntityClassDef(assignPageDef.getEntity());
-        breadCrumbs.setLastCrumbTitle(entityClassDef.getEntityDef().getDescription());
+        breadCrumbs.setLastCrumbTitle(au().resolveSessionMessage(entityClassDef.getEntityDef().getDescription()));
         breadCrumbs.setLastCrumbSubTitle(subTitle);
         final String pseudoDeleteField = _appletDef.getPropValue(boolean.class,
                 AppletPropertyConstants.ASSIGNMENT_PSEUDO_DELETE) ? _appletDef.getPseudoDeleteField() : null;

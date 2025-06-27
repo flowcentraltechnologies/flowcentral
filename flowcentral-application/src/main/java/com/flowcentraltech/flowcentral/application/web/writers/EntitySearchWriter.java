@@ -129,7 +129,7 @@ public class EntitySearchWriter extends AbstractPopupTextFieldWriter {
                     } else {
                         keys[i] = listable.getListKey();
                     }
-                    labels[i] = listable.getListDescription();
+                    labels[i] = resolveSessionMessage(listable.getListDescription());                    
                 }
 
                 work.set(EntitySearchWidget.WORK_SELECTIDS, selectIds);

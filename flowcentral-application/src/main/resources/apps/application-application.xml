@@ -1936,6 +1936,9 @@
 					label="$m{application.apptablefilter.legendlabel}"
 					type="STRING"
 					nullable="true" />
+				<field name="executionIndex"
+					label="$m{application.apptablefilter.executionindex}"
+					type="INTEGER" />					
 				<field name="filterGenerator"
 					label="$m{application.apptablefilter.filtergenerator}"
 					type="STRING"

@@ -82,12 +82,12 @@ public class FormEditorWriter extends AbstractControlWriter {
             if (entityFieldDef.isFormViewable()) {
                 writer.write("<div class=\"fld\" id=\"").write(formEditorWidget.getChoiceId()).write(i)
                         .write("\"><span>");
-                writer.writeWithHtmlEscape(entityFieldDef.getFieldLabel());
+                writer.writeWithHtmlEscape(resolveSessionMessage(entityFieldDef.getFieldLabel()));
                 writer.write("</span></div>");
 
                 jsonWriter.beginObject();
-                jsonWriter.write("fldLabel", entityFieldDef.getFieldLabel());
-                jsonWriter.write("fldNm", entityFieldDef.getFieldName());
+                jsonWriter.write("fldLabel", resolveSessionMessage(entityFieldDef.getFieldLabel()));
+                jsonWriter.write("fldNm", entityFieldDef.getFieldName());                
                 jsonWriter.endObject();
 
                 i++;
