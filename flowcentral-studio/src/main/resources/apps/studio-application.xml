@@ -1212,6 +1212,7 @@
 				<property name="maintainForm" value="appTableFilterForm" />
 				<property name="maintainForm.update" value="true" />
 				<property name="maintainForm.delete" value="true" />
+				<property name="quickOrder.field" value="executionIndex" />
 			</properties>
 		</applet>
 		<applet name="manageAppFormElement"
@@ -2163,6 +2164,8 @@
 				<column field="legendLabel" renderWidget="application.text"
 					label="$m{application.apptablefilter.legendlabel}"
 					widthRatio="1" />
+				<column field="executionIndex" renderWidget="application.text"
+					widthRatio="1" order="ASC" />
 				<column field="createDt" renderWidget="application.datetime"
 					widthRatio="1" />
 				<column field="updateDt" renderWidget="application.datetime"
@@ -5425,7 +5428,7 @@
 			<tab name="design" label="$m{studio.apptable.form.design}"
 				contentType="CHILD_LIST" applet="manageAppTableColumn"
 				reference="columnList" editAction="/designChildItem" />
-			<tab name="filters" label="$m{studio.apptable.form.filters}"
+			<tab name="filters" label="$m{studio.apptable.form.filters}" quickOrder="true"
 				contentType="CHILD_LIST" applet="manageAppTableFilter"
 				reference="filterList" />
 			<tab name="actions" label="$m{studio.apptable.form.actions}"
@@ -5584,7 +5587,7 @@
 						switchOnChange="true" column="1" />
 				</section>
 			</tab>
-			<tab name="condition"
+			<tab name="condition" 
 				label="$m{studio.apptablefilter.form.condition}"
 				reference="app_table" contentType="FILTER_CONDITION" />
 			<tab name="changeLog" label="$m{application.form.audit}"
@@ -5657,7 +5660,7 @@
 				reference="elementList" editAction="/designChildItem"
 				visible="false" />
 			<tab name="filters" label="$m{studio.appform.form.filters}"
-				contentType="CHILD_LIST" applet="manageAppFormFilter"
+				contentType="CHILD_LIST" applet="manageAppFormFilter" 
 				reference="filterList" visible="false" />
 			<tab name="annotations"
 				label="$m{studio.appform.form.annotations}"
