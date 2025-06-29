@@ -6946,10 +6946,10 @@
 					inputWidget="application.text" />
 				<property name="createForm.submit.buttonhighlight"
 					description="$m{studio.appappletprop.manageentitysingleform.createform.submitbuttonhighlight}"
-					inputWidget="application.checkbox" />
+					inputWidget="application.checkbox" disabled="true"/>
 				<property name="entityForm.submit.close"
 					description="$m{studio.appappletprop.manageentitysingleform.entityform.submitclose}"
-					inputWidget="application.checkbox" />
+					inputWidget="application.checkbox" disabled="true"/>
 				<property name="createForm.submit.policy"
 					description="$m{studio.appappletprop.createentity.createform.submitpolicy}"
 					inputWidget="studio.propertyentityactionpolicylist" />
@@ -6957,26 +6957,15 @@
 					description="$m{studio.appappletprop.createentity.createform.submitworkflow}"
 					inputWidget="studio.propertyappletworkflowchannellist"
 					required="false" />
-				<property name="createForm.submit.condition"
-					description="$m{studio.appappletprop.manageentity.createform.submitcondition}"
-					inputWidget="studio.propertyappletfilterlist"
-					required="false" />
 				<property name="createForm.submit"
 					description="$m{studio.appappletprop.createentity.createform.submit}"
-					inputWidget="application.checkbox" />
+					inputWidget="application.checkbox" disabled="true"/>
 				<property name="createForm.submitnext"
 					description="$m{studio.appappletprop.createentity.createform.submitnext}"
 					inputWidget="application.checkbox" />
 				<property name="createForm.submit.validate"
 					description="$m{studio.appappletprop.createentity.createform.submitvalidate}"
 					inputWidget="application.checkbox" />
-				<property name="maintainForm.submit.policy"
-					description="$m{studio.appappletprop.manageentity.maintainform.submitpolicy}"
-					inputWidget="studio.propertyentityactionpolicylist" />
-				<property name="maintainForm.submit.workflow.channel"
-					description="$m{studio.appappletprop.manageentity.maintainform.submitworkflow}"
-					inputWidget="studio.propertyappletworkflowchannellist"
-					required="false" />
 			</propertySet>
 		</propertyList>
 		<propertyList name="cnsAppAppletPropList"
