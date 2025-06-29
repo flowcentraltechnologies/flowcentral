@@ -2991,7 +2991,7 @@
 				description="$m{studio.appapplet.form.formstatepolicy.entity}">
 				<onCondition>
 					<restriction type="AMONGST" field="type"
-						paramA="MEL|MEA|MEB|MLS|MLL|FWZ|CEN|CNS|DIM" />
+						paramA="MEL|MEA|MEB|MLS|MLL|FWZ|CEN|CEB|CNS|DIM" />
 				</onCondition>
 				<setStates>
 					<setState type="FIELD" target="entity" visible="TRUE" />
@@ -3049,7 +3049,7 @@
 				<errorCondition>
 					<restriction type="AND">
 						<restriction type="AMONGST" field="type"
-							paramA="MEL|MEA|MEB|MLS|MLL|FWZ|CEN|CNS|DIM" />
+							paramA="MEL|MEA|MEB|MLS|MLL|FWZ|CEN|CEB|CNS|DIM" />
 						<restriction type="IS_NULL" field="entity" />
 					</restriction>
 				</errorCondition>
