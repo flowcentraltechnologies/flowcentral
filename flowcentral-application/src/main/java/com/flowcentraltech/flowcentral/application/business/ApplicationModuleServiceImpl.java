@@ -4459,6 +4459,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             query.addILike("label", appletFilter);
         }
 
+        query.addEquals("deprecated", Boolean.FALSE);
         List<AppApplet> appAppletList = environment().listAll(query);
         if (!DataUtils.isBlank(appAppletList)) {
             List<AppletDef> resultList = new ArrayList<AppletDef>();
@@ -4484,6 +4485,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             query.addILike("label", appletFilter);
         }
 
+        query.addEquals("deprecated", Boolean.FALSE);
         List<String> appAppletList = environment().valueList(String.class, "name", query);
         if (!DataUtils.isBlank(appAppletList)) {
             List<AppletDef> resultList = new ArrayList<AppletDef>();
