@@ -174,6 +174,7 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
                         case HEADLESS_TABS:
                         case MANAGE_PROPERTYLIST:
                         case CREATE_ENTITY:
+                        case CREATE_ENTITY_SUBMISSION:
                         case CREATE_ENTITY_SINGLEFORM:
                         case FORM_WIZARD:
                         case LISTING:
