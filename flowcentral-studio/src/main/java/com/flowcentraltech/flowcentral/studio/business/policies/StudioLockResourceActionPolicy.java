@@ -31,10 +31,10 @@ import com.flowcentraltech.flowcentral.common.data.CollaborationLockedResourceIn
 import com.flowcentraltech.flowcentral.organization.entities.MappedBranch;
 import com.flowcentraltech.flowcentral.security.business.SecurityModuleService;
 import com.flowcentraltech.flowcentral.security.entities.User;
-import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
+import com.tcdng.unify.core.data.ValueStoreReader;
 
 /**
  * Studio lock resource action policy.
@@ -52,8 +52,8 @@ public class StudioLockResourceActionPolicy extends AbstractCollaborationFormAct
     private RequestUserPhotoGenerator requestUserPhotoGenerator;
 
     @Override
-    public boolean checkAppliesTo(Entity inst) throws UnifyException {
-        final BaseApplicationEntity _appInst = (BaseApplicationEntity) inst;
+    public boolean checkAppliesTo(ValueStoreReader reader) throws UnifyException {
+        final BaseApplicationEntity _appInst = (BaseApplicationEntity) reader.getValueObject();
         if (isCollaboration()) {
             final ConfigType configType = _appInst.getConfigType();
             if (!configType.isStatic()) {

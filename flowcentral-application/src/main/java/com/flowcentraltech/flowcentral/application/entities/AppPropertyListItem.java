@@ -57,6 +57,9 @@ public class AppPropertyListItem extends BaseEntity {
     @Column
     private boolean encrypt;
 
+    @Column
+    private boolean disabled;
+
     @ListOnly(key = "appPropertySetId", property = "label")
     private String appPropertySetLabel;
 
@@ -127,6 +130,14 @@ public class AppPropertyListItem extends BaseEntity {
 
     public void setEncrypt(boolean encrypt) {
         this.encrypt = encrypt;
+    }
+
+    public boolean isDisabled() {
+        return disabled;
+    }
+
+    public void setDisabled(boolean disabled) {
+        this.disabled = disabled;
     }
 
     public String getAppPropertySetLabel() {

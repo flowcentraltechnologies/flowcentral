@@ -570,6 +570,26 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
+    public void checkSubmitToWorkflowChannel(String workflowChannelName, WorkEntity inst) throws UnifyException {
+        WfChannelDef wfChannelDef = getWfChannelDef(workflowChannelName);
+        if (WfChannelStatus.CLOSED.equals(wfChannelDef.getStatus())) {
+            throwOperationErrorException(new Exception("Workflow channel is closed."));
+        }
+
+        if (WfChannelStatus.SUSPENDED.equals(wfChannelDef.getStatus())) {
+            throwOperationErrorException(new Exception("Workflow channel is suspended."));
+        }
+        
+        WfDef wfDef = getWfDef(wfChannelDef.getDestination());
+        final EntityClassDef entityClassDef = appletUtil.getEntityClassDef(wfDef.getEntity());
+        if (!entityClassDef.isCompatible(inst)) {
+            Class<?> clazz = inst != null ? inst.getClass() : null;
+            throw new UnifyException(WorkflowModuleErrorConstants.CANNOT_SUBMIT_INST_TO_INCOMPATIBLE_WORKFLOW, clazz,
+                    wfDef.getName(), wfDef.getApplicationName());
+        }
+    }
+
+    @Override
     public EntityActionResult submitToWorkflowChannel(EntityDef entityDef, String workflowChannelName, WorkEntity inst,
             String policyName) throws UnifyException {
         EntityActionContext ctx = new EntityActionContext(entityDef, inst, policyName);

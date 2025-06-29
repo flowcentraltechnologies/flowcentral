@@ -1307,6 +1307,7 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                                 propertyListPropConfig.setRequired(appPropertyListItem.isRequired());
                                 propertyListPropConfig.setMask(appPropertyListItem.isMask());
                                 propertyListPropConfig.setEncrypt(appPropertyListItem.isEncrypt());
+                                propertyListPropConfig.setDisabled(appPropertyListItem.isDisabled());
                                 propList.add(propertyListPropConfig);
                             }
 

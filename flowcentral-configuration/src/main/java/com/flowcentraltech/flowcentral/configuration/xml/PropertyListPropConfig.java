@@ -52,6 +52,9 @@ public class PropertyListPropConfig extends BaseConfig {
     @JacksonXmlProperty(isAttribute = true)
     private boolean encrypt;
 
+    @JacksonXmlProperty(isAttribute = true)
+    private boolean disabled;
+
     public String getName() {
         return name;
     }
@@ -114,6 +117,14 @@ public class PropertyListPropConfig extends BaseConfig {
 
     public void setEncrypt(boolean encrypt) {
         this.encrypt = encrypt;
+    }
+
+    public boolean isDisabled() {
+        return disabled;
+    }
+
+    public void setDisabled(boolean disabled) {
+        this.disabled = disabled;
     }
 
 }

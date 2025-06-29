@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.Locale;
 
 import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
-import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
 import com.flowcentraltech.flowcentral.common.business.policies.AbstractWfProcessPolicy;
 import com.tcdng.unify.common.data.Listable;
 import com.tcdng.unify.core.UnifyException;
@@ -38,15 +37,8 @@ public abstract class AbstractApplicationWfProcessPolicy extends AbstractWfProce
     @Configurable
     private ApplicationModuleService applicationModuleService;
 
-    @Configurable
-    private EnvironmentService environmentService;
-
-    protected ApplicationModuleService application() {
+    protected final ApplicationModuleService application() {
         return applicationModuleService;
-    }
-    
-    protected EnvironmentService environment() {
-        return environmentService;
     }
 
     @Override

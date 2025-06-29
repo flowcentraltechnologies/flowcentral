@@ -47,7 +47,7 @@ public abstract class AbstractEntityActionPolicy extends AbstractFlowCentralComp
 
     @Override
     public final EntityActionResult executePreAction(EntityActionContext ctx) throws UnifyException {
-        if (checkAppliesTo(ctx.getInst())) {
+        if (checkAppliesTo(ctx.getReader())) {
             return doExecutePreAction(ctx);
         }
         
@@ -57,7 +57,7 @@ public abstract class AbstractEntityActionPolicy extends AbstractFlowCentralComp
     @Override
     public final EntityActionResult executePostAction(EntityActionContext ctx) throws UnifyException {
         EntityActionResult entityActionResult = null;
-        if (checkAppliesTo(ctx.getInst())) {
+        if (checkAppliesTo(ctx.getReader())) {
             entityActionResult = doExecutePostAction(ctx);
         }
 

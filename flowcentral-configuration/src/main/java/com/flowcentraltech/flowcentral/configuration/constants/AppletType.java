@@ -69,6 +69,11 @@ public enum AppletType implements EnumConst {
             FlowCentralAppletPathConstants.CREATE_ENTITY,
             true,
             true),
+    CREATE_ENTITY_SUBMISSION(
+            "CEB",
+            FlowCentralAppletPathConstants.CREATE_ENTITY,
+            true,
+            true),
     CREATE_ENTITY_SINGLEFORM(
             "CNS",
             FlowCentralAppletPathConstants.CREATE_ENTITY_SINGLEFORM,
@@ -145,13 +150,13 @@ public enum AppletType implements EnumConst {
             true,
             true);
 
-    public static final List<AppletType> MANAGE_ENTITY_LIST_TYPES = Collections
-            .unmodifiableList(Arrays.asList(MANAGE_ENTITYLIST, MANAGE_ENTITYLIST_ASSIGN, MANAGE_ENTITYLIST_SUBMISSION, MANAGE_ENTITYLIST_SINGLEFORM));
+    public static final List<AppletType> MANAGE_ENTITY_LIST_TYPES = Collections.unmodifiableList(Arrays.asList(
+            MANAGE_ENTITYLIST, MANAGE_ENTITYLIST_ASSIGN, MANAGE_ENTITYLIST_SUBMISSION, MANAGE_ENTITYLIST_SINGLEFORM));
 
-    public static final List<AppletType> UNRESERVED_LIST = Collections
-            .unmodifiableList(Arrays.asList(MANAGE_ENTITYLIST, MANAGE_ENTITYLIST_ASSIGN, MANAGE_ENTITYLIST_SUBMISSION, MANAGE_ENTITYLIST_SINGLEFORM,
-                    MANAGE_LOADINGLIST, HEADLESS_TABS, CREATE_ENTITY, CREATE_ENTITY_SINGLEFORM, FORM_WIZARD, LISTING,
-                    TASK_EXECUTION, FACADE, FACADE_MULTIPLE, PATH_WINDOW, PATH_PAGE));
+    public static final List<AppletType> UNRESERVED_LIST = Collections.unmodifiableList(Arrays.asList(MANAGE_ENTITYLIST,
+            MANAGE_ENTITYLIST_ASSIGN, MANAGE_ENTITYLIST_SUBMISSION, MANAGE_ENTITYLIST_SINGLEFORM, MANAGE_LOADINGLIST,
+            HEADLESS_TABS, CREATE_ENTITY, CREATE_ENTITY_SUBMISSION, CREATE_ENTITY_SINGLEFORM, FORM_WIZARD, LISTING, TASK_EXECUTION, FACADE,
+            FACADE_MULTIPLE, PATH_WINDOW, PATH_PAGE));
 
     private final String code;
 
@@ -221,7 +226,7 @@ public enum AppletType implements EnumConst {
     }
 
     public boolean isSubmission() {
-        return MANAGE_ENTITYLIST_SUBMISSION.equals(this);
+        return MANAGE_ENTITYLIST_SUBMISSION.equals(this) || CREATE_ENTITY_SUBMISSION.equals(this);
     }
 
     public boolean isSingleForm() {
@@ -229,7 +234,8 @@ public enum AppletType implements EnumConst {
     }
 
     public boolean isCreate() {
-        return CREATE_ENTITY.equals(this) || CREATE_ENTITY_SINGLEFORM.equals(this);
+        return CREATE_ENTITY.equals(this) || CREATE_ENTITY_SUBMISSION.equals(this)
+                || CREATE_ENTITY_SINGLEFORM.equals(this);
     }
 
     public boolean isStudioComponent() {

@@ -34,12 +34,16 @@ public class PropertyListItem {
 
     private String editor;
 
-    public PropertyListItem(String name, String description, String value, String displayValue, String editor) {
+    private boolean disabled;
+    
+    public PropertyListItem(String name, String description, String value, String displayValue, String editor,
+            boolean disabled) {
         this.name = name;
         this.description = description;
         this.value = value;
         this.displayValue = displayValue;
         this.editor = editor;
+        this.disabled = disabled;
     }
 
     public String getName() {
@@ -60,5 +64,9 @@ public class PropertyListItem {
 
     public String getEditor() {
         return editor;
+    }
+
+    public boolean isDisabled() {
+        return disabled;
     }
 }

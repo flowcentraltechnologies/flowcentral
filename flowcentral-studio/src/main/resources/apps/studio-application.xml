@@ -2991,7 +2991,7 @@
 				description="$m{studio.appapplet.form.formstatepolicy.entity}">
 				<onCondition>
 					<restriction type="AMONGST" field="type"
-						paramA="MEL|MEA|MEB|MLS|MLL|FWZ|CEN|CNS|DIM" />
+						paramA="MEL|MEA|MEB|MLS|MLL|FWZ|CEN|CEB|CNS|DIM" />
 				</onCondition>
 				<setStates>
 					<setState type="FIELD" target="entity" visible="TRUE" />
@@ -3049,7 +3049,7 @@
 				<errorCondition>
 					<restriction type="AND">
 						<restriction type="AMONGST" field="type"
-							paramA="MEL|MEA|MEB|MLS|MLL|FWZ|CEN|CNS|DIM" />
+							paramA="MEL|MEA|MEB|MLS|MLL|FWZ|CEN|CEB|CNS|DIM" />
 						<restriction type="IS_NULL" field="entity" />
 					</restriction>
 				</errorCondition>
@@ -6895,6 +6895,79 @@
 					inputWidget="application.checkbox" />
 			</propertySet>
 		</propertyList>
+		<propertyList name="cebAppAppletPropList"
+			description="$m{studio.appappletprop.createentitysubmission.propertylist}">
+			<propertySet
+				label="$m{studio.appappletprop.createentity.searchproperties}">
+				<property name="page.alternateCaption"
+					description="$m{studio.appappletprop.createentity.pagealtcaption}"
+					inputWidget="application.text" />
+				<property name="page.alternateSubCaption"
+					description="$m{studio.appappletprop.createentity.pagealtsubcaption}"
+					inputWidget="application.text" />
+				<property name="page.multiple"
+					description="$m{studio.appappletprop.pathpage.property.pagemultiple}"
+					inputWidget="application.checkbox" />
+			</propertySet>
+			<propertySet
+				label="$m{studio.appappletprop.createentity.formproperties}">
+				<property name="createForm.new.caption"
+					description="$m{studio.appappletprop.createentity.createform.newcaption}"
+					inputWidget="application.text" />
+				<property name="createForm"
+					description="$m{studio.appappletprop.createentity.createform}"
+					inputWidget="studio.propertyappletformlist" required="false" />
+				<property name="createForm.new.policy"
+					description="$m{studio.appappletprop.createentity.createform.newpolicy}"
+					inputWidget="studio.propertyentityactionpolicylist" />
+				<property name="createForm.onCreate.state.policy"
+					description="$m{studio.appappletprop.createentity.createform.formstatepolicy}"
+					inputWidget="studio.propertyappletcreateformstatepolicylist" />
+				<property name="maintainForm.capture"
+					description="$m{studio.appappletprop.createentity.maintainform.capture}"
+					inputWidget="application.checkbox" />
+				<property name="maintainForm.capture.attachmentprovider"
+					description="$m{studio.appappletprop.createentity.maintainform.capture.attachmentprovider}"
+					inputWidget="studio.propertyappletattachmentproviderlist" />
+				<property name="maintainForm.attachments"
+					description="$m{studio.appappletprop.createentity.maintainform.attachments}"
+					inputWidget="application.checkbox" />
+				<property name="maintainForm.attachments.adhoc"
+					description="$m{studio.appappletprop.createentity.maintainform.attachments.adhoc}"
+					inputWidget="application.checkbox" />
+			</propertySet>
+			<propertySet
+				label="$m{studio.appappletprop.createentity.workflowproperties}">
+				<property name="createForm.submit.caption"
+					description="$m{studio.appappletprop.manageentitysingleform.createform.submitcaption}"
+					inputWidget="application.text" />
+				<property name="createForm.submitnext.caption"
+					description="$m{studio.appappletprop.manageentitysingleform.createform.submitnextcaption}"
+					inputWidget="application.text" />
+				<property name="createForm.submit.buttonhighlight"
+					description="$m{studio.appappletprop.manageentitysingleform.createform.submitbuttonhighlight}"
+					inputWidget="application.checkbox" disabled="true"/>
+				<property name="entityForm.submit.close"
+					description="$m{studio.appappletprop.manageentitysingleform.entityform.submitclose}"
+					inputWidget="application.checkbox" disabled="true"/>
+				<property name="createForm.submit.policy"
+					description="$m{studio.appappletprop.createentity.createform.submitpolicy}"
+					inputWidget="studio.propertyentityactionpolicylist" />
+				<property name="createForm.submit.workflow.channel"
+					description="$m{studio.appappletprop.createentity.createform.submitworkflow}"
+					inputWidget="studio.propertyappletworkflowchannellist"
+					required="false" />
+				<property name="createForm.submit"
+					description="$m{studio.appappletprop.createentity.createform.submit}"
+					inputWidget="application.checkbox" disabled="true"/>
+				<property name="createForm.submitnext"
+					description="$m{studio.appappletprop.createentity.createform.submitnext}"
+					inputWidget="application.checkbox" />
+				<property name="createForm.submit.validate"
+					description="$m{studio.appappletprop.createentity.createform.submitvalidate}"
+					inputWidget="application.checkbox" />
+			</propertySet>
+		</propertyList>
 		<propertyList name="cnsAppAppletPropList"
 			description="$m{studio.appappletprop.createentitysingleform.propertylist}">
 			<propertySet
@@ -7892,6 +7965,7 @@
 			ignoreCase="true">
 			<choice name="fwz" val="fwzAppAppletPropList" />
 			<choice name="cen" val="cenAppAppletPropList" />
+			<choice name="ceb" val="cebAppAppletPropList" />
 			<choice name="cns" val="cnsAppAppletPropList" />
 			<choice name="mll" val="mllAppAppletPropList" />
 			<choice name="mel" val="melAppAppletPropList" />

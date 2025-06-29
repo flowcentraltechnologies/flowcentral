@@ -329,7 +329,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
     @Configurable("application-usagelistprovider")
     private UsageListProvider usageListProvider;
-    
+
     @Configurable
     private EnvironmentDelegateUtilities environmentDelegateUtilities;
 
@@ -1351,7 +1351,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                                     entityFieldDef);
                             pldb.addItemDef(entityFieldDef, widgetTypeDef, set.getLabel(), listItem.getDescription(),
                                     renderer, listItem.getDefaultVal(), listItem.isRequired(), listItem.isMask(),
-                                    listItem.isEncrypt());
+                                    listItem.isEncrypt(), listItem.isDisabled());
                         }
                     }
 
@@ -2711,7 +2711,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     @Override
     public PropertyRuleDef getPropertyRuleDef(String propertyRuleName) throws UnifyException {
         return propertyRuleDefMap.get(propertyRuleName);
-    }
+    } 
 
     @Override
     public List<PropertyListItem> getPropertyListItems(Entity entityInst, String childFkFieldName,
@@ -2739,7 +2739,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 }
 
                 resultList.add(new PropertyListItem(propertyListItemDef.getName(), propertyListItemDef.getDescription(),
-                        value, displayValue, propertyListItemDef.getWidgetTypeDef().getLongName()));
+                        value, displayValue, propertyListItemDef.getWidgetTypeDef().getLongName(),
+                        propertyListItemDef.isDisabled()));
             }
 
             return resultList;
@@ -2760,6 +2761,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 if (value != null && propertyListItemDef.isEncrypt()) {
                     value = twoWayStringCryptograph.decrypt(value);
                 }
+                
                 values.addValue(propertyListItemDef.getName(), String.class, value);
             }
         }
@@ -4457,6 +4459,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             query.addILike("label", appletFilter);
         }
 
+        query.addEquals("deprecated", Boolean.FALSE);
         List<AppApplet> appAppletList = environment().listAll(query);
         if (!DataUtils.isBlank(appAppletList)) {
             List<AppletDef> resultList = new ArrayList<AppletDef>();
@@ -4482,6 +4485,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             query.addILike("label", appletFilter);
         }
 
+        query.addEquals("deprecated", Boolean.FALSE);
         List<String> appAppletList = environment().valueList(String.class, "name", query);
         if (!DataUtils.isBlank(appAppletList)) {
             List<AppletDef> resultList = new ArrayList<AppletDef>();
@@ -7094,6 +7098,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                         item.setRequired(propConfig.isRequired());
                         item.setMask(propConfig.isMask());
                         item.setEncrypt(propConfig.isEncrypt());
+                        item.setDisabled(propConfig.isDisabled());
                         itemList.add(item);
                     }
                 }
